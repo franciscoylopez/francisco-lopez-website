@@ -46,3 +46,27 @@ Efecto reservado al logo / monograma, no a la UI general.
 ## Qué cuestionar
 
 Si una petición de UI implica meter un color de marca en un slot semántico neutro, romper contraste, o usar un pastel como color de acción, deténte y avísalo en vez de ejecutarlo.
+
+## Logo
+
+Componente: `components/ui/logo.tsx` → `<Logo />`.
+
+### Variantes
+
+- **`split`** (por defecto): firma de marca — tres círculos superpuestos (cian, morado, contorno principal) en ligero desplazamiento. Reservada para tamaños donde el trazo se distinga con claridad; a tamaño pequeño el split se empasta visualmente y debe usarse `flat` en su lugar.
+- **`flat`**: símbolo monocromo (círculo + base), sin split. Es el fallback seguro para tamaños pequeños o contextos de bajo contraste.
+
+### Props
+
+- `variant`: `"split" | "flat"` (default `"split"`).
+- `showWordmark`: `boolean` (default `false`) — añade "Francisco López" en Bricolage junto al símbolo, en lockup horizontal.
+- `forceColor`: `"theme" | "white" | "black"` (default `"theme"`) — `"theme"` hereda `var(--foreground)` y cambia solo con claro/oscuro; `"white"`/`"black"` fuerzan monocromía absoluta (incluida la variante `split`, que pierde el efecto split si el color está forzado, porque un split a un solo color no tiene sentido).
+- `className`: para tamaño/estilo desde el consumidor.
+
+### Color y temas
+
+El logo hereda claro/oscuro automáticamente: usa los tokens `var(--foreground)`, `var(--brand-cyan-split)` (#16BDBD) y `var(--brand-purple-split)` (#9B87F5), que ya conmutan entre `:root` y `.dark` en `globals.css`. No requiere lógica de tema en el propio componente.
+
+### Pendiente de fase de diseño
+
+Dónde usar cada variante (header, footer, mobile, favicon, redes...) y a qué tamaño se considera "pequeño" para el corte split→flat se decidirá al diseñar la web, no ahora.
