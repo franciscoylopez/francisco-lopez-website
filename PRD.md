@@ -109,7 +109,10 @@ Recorrido conceptual: Discovery → Prototipo → Construcción → Medición.
 4. **Más allá del PM** — cofundador, growth, marketing.
 5. **Toolkit** — herramientas agrupadas por categoría.
 6. **Trayectoria + Formación** — dos columnas, escaneable.
-7. **Contacto** — email, teléfono, LinkedIn, descargar CV.
+7. **Contacto** — email, teléfono, LinkedIn, descargar CV. *(ampliado — ver decisión abajo)*
+8. **Footer** — Brand Kit + Accesibilidad.
+
+**Decisión (2026-07-17):** se confirman las 4 secciones adicionales que estaban pendientes (ver sección 12). **Brand Kit** y **Accesibilidad** viven en el **footer** (bloque 8 de arriba). **Sobre mí** (sección nueva, no listada arriba) y **Contacto ampliado** (expande el bloque 7) tienen ubicación propia dentro del flujo de página — el layout exacto se define en la fase de diseño (Claude Design), no aquí.
 
 ---
 
@@ -187,6 +190,8 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Analítica.**
 
 **Riesgo de diseño a vigilar:** el brief pide evitar "portfolio tipo freelancer", pero un Toolkit resuelto como grid de logos cae justo en ese patrón. La cita de arriba ayuda en el copy, pero la solución real es de diseño (fase Claude Design): evitar el grid de logos, priorizar cómo se usa cada herramienta sobre qué herramienta es.
 
+**Tratamiento visual (resuelto 2026-07-17):** tarjetas agrupadas por categoría (las 5 de arriba), cada una con icono monocromo `lucide-react` (hereda `foreground`, sin color de marca) + nombre + una frase en primera persona de cómo se usa esa herramienta (no descripción genérica del producto). Se descartó explícitamente el logo a color: entra en conflicto con "Evitar" (sección 6, "logos de empresas a color") y con la disciplina de color de `BRAND.md` (los tokens semánticos neutros no admiten colores de marca ajenos). Referencia de moodboard: [Referencias — Tools](https://app.notion.com/p/39f2caec08be8090bf5bf6cb39ee63e2) (las 3 opciones usan logo a color + tarjeta; se adapta la estructura — agrupación por categoría, ritmo de tarjeta — sin el logo a color).
+
 ### 8.5 Trayectoria
 
 | Empresa | Rol | Periodo |
@@ -195,11 +200,13 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Analítica.**
 | KUOTIP | Cofounder & Product | Feb 2024 – Nov 2024 |
 | INDYA | Product Lead | Ene 2022 – Dic 2023 |
 | Freepik | Product Manager | Oct 2021 – Dic 2021 |
-| TheTool | Cofounder & Product Manager | May 2016 – Oct 2021 |
-| PICKASO | COO | Sep 2015 – Dic 2016 |
+| **Shutapp Projects** — TheTool | Cofounder & Product Manager | May 2016 – Oct 2021 |
+| **Shutapp Projects** — PICKASO | COO | Sep 2015 – Dic 2016 |
 | Marketing & Growth (Ontecnia, Havas Media, Searchmedia, Miss Conversion) | Digital Marketing / Performance | 2009 – 2015 |
 
-**Resuelto (2026-07-16):** PICKASO y TheTool no son un solapamiento accidental — ambos son proyectos de **Shutapp Projects**. Entré en PICKASO (agencia de marketing de apps) por dos motivos: profesionalizar la empresa y mejorar su cartera de servicios, y conocer desde dentro el mercado de apps y sus herramientas — el background que hizo posible fundar TheTool con criterio. Además, la mejora de facturación que impulsé en PICKASO sustentó financieramente el arranque de TheTool. Es decir: la agencia fue a la vez la escuela de mercado y el motor financiero del SaaS. Pendiente decidir el tratamiento visual (nota inline en el timeline, o agrupar ambas entradas bajo "Shutapp Projects"), pero el contenido ya no es un riesgo — es una prueba más de mentalidad Builder.
+**Resuelto (2026-07-16):** PICKASO y TheTool no son un solapamiento accidental — ambos son proyectos de **Shutapp Projects**. Entré en PICKASO (agencia de marketing de apps) por dos motivos: profesionalizar la empresa y mejorar su cartera de servicios, y conocer desde dentro el mercado de apps y sus herramientas — el background que hizo posible fundar TheTool con criterio. Además, la mejora de facturación que impulsé en PICKASO sustentó financieramente el arranque de TheTool. Es decir: la agencia fue a la vez la escuela de mercado y el motor financiero del SaaS.
+
+**Tratamiento visual (resuelto 2026-07-17):** se agrupan ambas entradas bajo el paraguas **"Shutapp Projects"** en el timeline (ver tabla arriba), en vez de dejarlas como dos filas independientes con una nota inline. Motivo: la duda sobre el solapamiento de fechas ya ha surgido en entrevistas reales — merece la pena resolverla visualmente desde el principio para evitar que un reclutador la interprete como un error o una inconsistencia del CV.
 
 ### 8.6 Formación
 
@@ -208,9 +215,9 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Analítica.**
 - Scrum & Agile Leadership — theUncoding (2021).
 
 **Marketing**
-- ⚠️ Discrepancia entre fuentes, pendiente de verificar (ver Decisiones pendientes):
-  - Versión Brief: *Máster en Comunicación Digital — ESIC.*
-  - Versión CV: *Máster en Comunicación Digital — Olea Europea (2001)* + *Gestión Comercial y Marketing — ESIC (2000)* (dos formaciones distintas).
+- **Resuelto (2026-07-17):** se confirma la versión CV (dos formaciones distintas, no una sola como decía el Brief):
+  - *Máster en Comunicación Digital — Olea Europea (2001).*
+  - *Gestión Comercial y Marketing — ESIC (2000).*
 
 ---
 
@@ -231,7 +238,7 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Analítica.**
   - % de scroll / profundidad de página vista, como proxy de si el contenido "profundo" (Selected Work, Trayectoria) se está leyendo y no solo el Hero.
   - Clics en "Descargar CV" (Hero y Contacto) — proxy de interés fuerte que no siempre llega a contacto directo (ej. un CPO se descarga el CV para compartirlo internamente antes de escribir).
 - **Herramienta:** Microsoft Clarity — **se adelanta de V2 a V1** (ver Roadmap, sección 13): sin medición desde el día 1 no hay forma de evaluar si V1 funcionó antes de invertir en V2. Clarity da profundidad de scroll de forma nativa; los clics en `mailto:`/`tel:`/descarga de CV se leen vía heatmaps/grabaciones de sesión, no como contador limpio de conversiones — eso llega con GA4 en V2.
-- **Pendiente:** Clarity usa cookies de sesión → en España requiere aviso de cookies/consentimiento, no contemplado hasta ahora en el alcance V1 (ver Decisiones pendientes).
+- **Aviso de cookies (resuelto 2026-07-17):** Clarity usa cookies de sesión → en España requiere consentimiento. Se implementa un **banner simple de consentimiento** (aceptar/rechazar) antes de cargar Clarity — se prioriza cumplimiento robusto y estándar sobre el minimalismo visual. Pendiente de implementación técnica (ver Roadmap V1, sección 13).
 
 ---
 
@@ -261,14 +268,14 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Analítica.**
 | Aspecto demasiado junior | **Mitigado (2026-07-16):** cada caso de Selected Work (8.1) incluye ahora una línea "Seniority" con autoridad real (socio con voto en TheTool, reporting a CEO en Emendu, liderazgo por influencia en INDYA) — evidencia concreta en vez de narrar solo el proceso. |
 | Exceso de minimalismo | Sin criterio definido de cuándo se ha cruzado la línea. Pendiente definir en fase de diseño qué señala "demasiado minimalista" (ej. falta de jerarquía, ausencia de prueba social) para poder detectarlo al revisar el diseño. |
 | Sobrevalorar certificaciones IA | Mitigado: el bloque de uso de IA se movió de "Formación" (8.6) a "Toolkit" (8.4) para no listarlo al nivel de un máster — ver decisión en 8.4. |
-| Denominaciones incorrectas de formación | Riesgo ya materializado — discrepancia Brief/CV documentada en 8.6, pendiente de verificar con el usuario antes de publicar. |
+| Denominaciones incorrectas de formación | **Resuelto (2026-07-17):** confirmada la versión CV — ver 8.6. |
 
 ---
 
 ## 12. Decisiones pendientes
 
-- Secciones adicionales: "Sobre mí", "Brand Kit", "Contacto", "Sección accesibilidad" — el roadmap (sección 13) ya sitúa página de Contacto y de Accesibilidad en V2, y el Brand Kit dentro de V1; confirmar si esto sigue vigente o cambia.
-- Verificar denominación correcta de la formación en Comunicación Digital (ESIC vs. Olea Europea, ver 8.6).
+- ~~Secciones adicionales: "Sobre mí", "Brand Kit", "Contacto", "Sección accesibilidad"~~ — **resuelto** (ver sección 7): las 4 se trabajan en V1, no en V2. Brand Kit y Accesibilidad van en el footer; Sobre mí y Contacto ampliado tienen ubicación propia, pendiente de definir en diseño. Esto cambia el roadmap (sección 13): las "página de contacto" y "página de accesibilidad" que estaban en V2 quedan resueltas antes, como footer/sección en V1.
+- ~~Verificar denominación correcta de la formación en Comunicación Digital~~ — **resuelto** (ver 8.6): versión CV, dos formaciones (Olea Europea 2001 + ESIC 2000).
 - ~~Confirmar si el teléfono se publica en la web~~ — **resuelto** (ver sección 10): sí, en Contacto, porque es canal de la métrica primaria de éxito.
 - Casos de estudio: contenido base ya definido en este PRD (TheTool, INDYA, Emendu); pendiente validar la redacción final antes de publicar.
 - Foto profesional (pendiente sesión).
@@ -276,21 +283,23 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Analítica.**
 - Dominio propio (V2).
 - Sistema de diseño de la página (layout/composición) — pendiente, se resuelve en fase de diseño.
 - ~~No hay métrica de éxito definida para la propia web~~ — **resuelto** (ver sección 9): métrica primaria = clics en contacto (email/teléfono); secundaria = % de scroll, medido con Microsoft Clarity desde V1.
-- **Aviso de cookies/consentimiento pendiente de resolver.** Microsoft Clarity usa cookies de sesión — al medir desde V1 y estar dirigido a audiencia en España, hace falta definir cómo se informa/consciente (banner simple vs. configuración cookieless de Clarity).
+- ~~Aviso de cookies/consentimiento pendiente de resolver~~ — **resuelto** (ver sección 9): banner simple de consentimiento antes de cargar Clarity. Queda pendiente su implementación técnica, no la decisión.
 - ~~No hay ICP de la empresa objetivo~~ — **resuelto** (ver sección 4): SaaS con PMF ya validado, con equipo/función de producto real, IA integrada en el día a día, remoto o híbrido fuerte, en España.
 - ~~Señales de seniority explícitas~~ — **resuelto** (ver 8.1 y 11): añadida una línea "Seniority" por caso en Selected Work (autoridad de socio en TheTool, reporting a CEO en Emendu, liderazgo por influencia en INDYA). Nota: no se incluyeron cifras de presupuesto/P&L — el usuario no las aportó; se puede añadir más adelante si aporta valor, no es bloqueante.
-- ~~Solapamiento de fechas Pickaso/TheTool en la Trayectoria~~ — **resuelto** (ver 8.3 y 8.5): ambos son proyectos de Shutapp Projects, PICKASO financió y dio contexto de mercado para TheTool. Solo queda pendiente el tratamiento visual en el timeline, no el contenido.
+- ~~Solapamiento de fechas Pickaso/TheTool en la Trayectoria~~ — **resuelto** (ver 8.3 y 8.5): ambos son proyectos de Shutapp Projects, PICKASO financió y dio contexto de mercado para TheTool. Tratamiento visual también resuelto (2026-07-17): se agrupan bajo "Shutapp Projects" en el timeline.
 
 ---
 
 ## 13. Roadmap
 
 **V1**
-- Portfolio con seniority, en español, en Vercel, editorial, preparado para i18n, incluye brandkit.
+- Portfolio con seniority, en español, en Vercel, editorial, preparado para i18n.
+- Brand Kit y Accesibilidad en el footer; secciones Sobre mí y Contacto ampliado con ubicación propia (resuelto 2026-07-17, ver sección 7) — layout pendiente de fase de diseño.
 - Medición con Microsoft Clarity (adelantado desde V2, ver sección 9) — sin esto no se puede evaluar si V1 funcionó.
+- Banner de consentimiento de cookies (resuelto 2026-07-17, ver sección 9/12), previo a la carga de Clarity.
 
 **V2**
-- Inglés · dominio propio · página de contacto · página de accesibilidad · CV en PDF con identidad visual propia · medición ampliada (Google Tag Manager, Google Analytics, Search Console).
+- Inglés · dominio propio · CV en PDF con identidad visual propia · medición ampliada (Google Tag Manager, Google Analytics, Search Console).
 
 **V3**
 - IA conversacional.
@@ -310,7 +319,7 @@ Tras leer Brief y CV en detalle, se identificaron tensiones y vacíos que no est
 - **Métricas de éxito de la web:** no había forma de evaluar si V1 funcionaba antes de invertir en V2. **Resuelto**: métrica primaria = clics en contacto (email/teléfono); secundarias = % de scroll de página + clics en "Descargar CV", medido con Microsoft Clarity desde V1 (adelantado desde V2). Como consecuencia, se resolvió también que el teléfono se publica en Contacto (era decisión pendiente aparte) y surgió un pendiente nuevo: aviso de cookies para Clarity en audiencia española. Incorporado a secciones 7, 9, 10 y 13.
 - **Señales de seniority:** no había evidencia sistematizada de autoridad real, solo narración de proceso — la mitigación directa al riesgo "aspecto demasiado junior" (sección 11). **Resuelto** con contexto real del usuario: TheTool (socio 1 de 4, voz y voto, liderazgo de facto del equipo no-código), Emendu (reporta al CEO, equipo de liderazgo junto a Ops/Finanzas/Tech), INDYA (reporta a CPO/cofundador, liderazgo por influencia sin autoridad formal). Añadido como línea "Seniority" en cada caso de 8.1. No se aportaron cifras de presupuesto/P&L — queda abierto si se quiere añadir más adelante, no bloqueante.
 
-Con esto, todos los vacíos detectados en el análisis crítico inicial quedan resueltos. Pendiente abierto de esta ronda: aviso de cookies/consentimiento para Clarity (ver sección 12).
+Con esto, todos los vacíos detectados en el análisis crítico inicial quedan resueltos, incluido el aviso de cookies/consentimiento para Clarity (banner simple, resuelto 2026-07-17, ver sección 12).
 
 ---
 
