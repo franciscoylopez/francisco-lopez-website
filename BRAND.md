@@ -25,6 +25,7 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
    - Son DECORATIVOS: fondos de sección, detalles, ilustración, gráficos.
    - `brand-*-soft` (los pasteles) son de bajo contraste: NO los uses como color de texto, de botón ni de cualquier elemento que deba leerse. Solo relleno decorativo.
    - `brand-cyan` manda; `brand-purple` es apoyo, con cuentagotas.
+   - `brand-purple-accent` (oklch(0.62 0.16 290)): variante de `brand-purple` ajustada para servir como texto/acento legible en **secciones con fondo invertido** (fondo = `foreground`, texto = `background`), donde el `brand-purple` estándar no llega a AA de texto grande en ambas direcciones de tema. Úsalo solo ahí — como acento de texto grande (≥3:1, no como texto corrido ≥4.5:1) sobre esos fondos invertidos. Fuera de ese contexto, sigue usando `brand-purple`.
 
 ## Accesibilidad (no negociable)
 

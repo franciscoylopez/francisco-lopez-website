@@ -45,6 +45,7 @@
   --brand-purple-soft: oklch(0.8151 0.0776 295.46);  /* #C6B9F0 pastel */
   --brand-cyan-split: oklch(0.7242 0.1208 194.82);   /* #16BDBD split   */
   --brand-purple-split: oklch(0.6889 0.1581 289.96); /* #9B87F5 split   */
+  --brand-purple-accent: oklch(0.62 0.16 290);       /* morado accesible como texto/acento sobre fondos invertidos (claro y oscuro) */
 
   --chart-1: var(--brand-cyan);
   --chart-2: var(--brand-purple);
@@ -85,6 +86,7 @@
   --brand-purple-soft: oklch(0.8151 0.0776 295.46);
   --brand-cyan-split: oklch(0.7242 0.1208 194.82);
   --brand-purple-split: oklch(0.6889 0.1581 289.96);
+  --brand-purple-accent: oklch(0.62 0.16 290);
 }
 
 /* Expone los tokens como utilidades de Tailwind (bg-primary, text-brand-cyan…) */
@@ -120,6 +122,7 @@
   --color-brand-purple-soft: var(--brand-purple-soft);
   --color-brand-cyan-split: var(--brand-cyan-split);
   --color-brand-purple-split: var(--brand-purple-split);
+  --color-brand-purple-accent: var(--brand-purple-accent);
 
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
