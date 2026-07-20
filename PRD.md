@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.3** (2026-07-20): tras cerrar el diseño de Más allá del PM y Trayectoria, Francisco revisó el conjunto y planteó una segunda ronda de ajustes de contenido y arquitectura — logos reales de empresa/herramienta/institución, nuevo paso "Lanzamiento" en Cómo trabajo, recategorización de Toolkit, y repriorización (Sobre mí entero a V2, Accesibilidad a V2, nuevas páginas Brand Kit/Sistema de diseño) — ver sección 16.
 
 **Fuentes originales:** ver sección [Fuentes](#fuentes) al final.
 
@@ -81,7 +82,9 @@ Recorrido conceptual: Discovery → Prototipo → Construcción → Medición.
 
 "B2B / B2C" no va en el Hero — aparece en los casos de estudio (Hitos/Trayectoria).
 
-**Decisión (2026-07-19, ver sección 15):** el Hero deja de llevar CTA propio — se queda solo con kicker, headline, subheadline y foto, para invitar a explorar el resto de la página en vez de quedarse arriba. Descargar CV, Sobre mí y el toggle Claro/Oscuro pasan a un **nav sticky** presente en toda la página (ver sección 7); LinkedIn se queda únicamente en el footer. Al ser sticky, el CV sigue disponible en todo momento — no hay pérdida real de conversión temprana, solo cambia de sitio visual.
+**Decisión (2026-07-19, ver sección 15):** el Hero deja de llevar CTA propio — se queda solo con kicker, headline, subheadline y foto, para invitar a explorar el resto de la página en vez de quedarse arriba. Descargar CV y el toggle Claro/Oscuro pasan a un **nav sticky** presente en toda la página (ver sección 7); LinkedIn se queda únicamente en el footer. Al ser sticky, el CV sigue disponible en todo momento — no hay pérdida real de conversión temprana, solo cambia de sitio visual.
+
+**Actualizado 2026-07-20 (ver sección 16):** "Sobre mí" sale del nav sticky en V1 — la página completa se pospone a V2 (ver sección 16), así que no tiene sentido un enlace a una página que no existe. El nav de V1 queda con Descargar CV + toggle de tema únicamente; "Sobre mí" vuelve al nav cuando la página exista en V2.
 
 ---
 
@@ -122,16 +125,16 @@ Recorrido conceptual: Discovery → Prototipo → Construcción → Medición.
 
 **Arquitectura vigente (2026-07-19 — ver decisión "Análisis de mejora V1" más abajo y sección 15):**
 
-1. **Nav (sticky, presente en todo el scroll)** — logo `flat` compacto desde la carga; al hacer scroll cambia a `split` a color sin círculo, con altura igualada a la de los demás controles del nav (ver sección 6); Descargar CV; Sobre mí (enlace a página propia); toggle Claro/Oscuro (solo icono, ver sección 11). En mobile, CV y Sobre mí colapsan detrás de un icono de menú. LinkedIn no vive aquí.
+1. **Nav (sticky, presente en todo el scroll)** — logo `flat` compacto desde la carga; al hacer scroll cambia a `split` a color sin círculo, con altura igualada a la de los demás controles del nav (ver sección 6); Descargar CV; toggle Claro/Oscuro (solo icono, ver sección 11). *(Actualizado 2026-07-20, ver sección 16: "Sobre mí" sale del nav en V1 — la página se pospone entera a V2 — vuelve al nav cuando exista.)* En mobile, CV colapsa detrás de un icono de menú. LinkedIn no vive aquí.
 2. **Hero** — foto, headline, subheadline. Sin CTA propio (ver sección 5).
-3. **Hitos** *(sustituye a "Selected Work")* — filas escaneables (icono monocromo + nombre + una línea de impacto/resultado + año). El exit de TheTool es el hito destacado. Sigue siendo la red de seguridad para el lector que escanea rápido (ver decisión en sección 4): va justo después del Hero.
-4. **Cómo trabajo** — el proceso: Investigar → Prototipar → Construir → Medir.
-5. **Más allá del PM** — reformulado como pieza narrativa (cofundador, growth, marketing) que no repite los proyectos ya vistos en Hitos; forma visual concreta pendiente de fase de diseño.
-6. **Toolkit** — herramientas agrupadas por categoría.
+3. **Hitos** *(sustituye a "Selected Work")* — filas escaneables (nombre + una línea de impacto/resultado + año, sin icono — ver sección 16). El exit de TheTool es el hito destacado. Sigue siendo la red de seguridad para el lector que escanea rápido (ver decisión en sección 4): va justo después del Hero.
+4. **Cómo trabajo** — el proceso: Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica (paso "Lanzamiento" añadido 2026-07-20, ver sección 16).
+5. **Más allá del PM** — reformulado como pieza narrativa (cofundador, growth, marketing) que no repite los proyectos ya vistos en Hitos; diseño cerrado (ver 8.3).
+6. **Toolkit** — herramientas agrupadas por categoría, con logos reales monocromo (ver 8.4 y sección 16).
 7. **Trayectoria** *(promovida en jerarquía, por encima de Toolkit)* — cronología con 1-2 frases de qué trabajo se hizo y con qué autoridad (seniority) por experiencia; incluye un CTA secundario de Descargar CV (cubre el nav oculto tras el menú hamburguesa en mobile).
 8. **Formación** — sección independiente, escaneable.
 9. **Contacto** — email, teléfono, LinkedIn, descargar CV.
-10. **Footer** — Brand Kit + Sistema de diseño + Accesibilidad + LinkedIn.
+10. **Footer** — Brand Kit + Sistema de diseño + LinkedIn *(Accesibilidad se retira de V1, ver sección 16)*.
 
 **Sobre mí** no es una sección de este flujo — ver decisión abajo: es una **página propia con URL**, enlazada desde el nav, con contenido de tono personal. No compite por posición en la lista de arriba, igual que Brand Kit y Sistema de diseño ya son páginas propias enlazadas desde el footer.
 
@@ -146,6 +149,8 @@ Recorrido conceptual: Discovery → Prototipo → Construcción → Medición.
 **Diseño Claude Design — Contacto (resuelto 2026-07-18):** se descarta la referencia de moodboard `contacto.webp` — trae un formulario (Nombre/Email/Empresa/Mensaje) y una foto grande decorativa, y ambas cosas chocan con decisiones ya tomadas: no hay formulario en V1 (sección 9, "no hay forma de medir conversión real, solo el clic") y no hay fotografía secundaria en la página (solo la del Hero). En su lugar se reutiliza el mismo patrón fila+divisor de Trayectoria: 4 filas (Email, Teléfono, LinkedIn, CV), cada una un enlace completo clicable (`mailto:`, `tel:+34629832720`, LinkedIn en pestaña nueva, CV con `href="#"` como placeholder hasta que exista el PDF).
 
 **Diseño Claude Design — Footer (resuelto 2026-07-18):** tarea añadida fuera del backlog original (gap de planificación detectado esta sesión — el footer nunca tuvo tarea propia pese a estar en la arquitectura de página). Se revisaron 5 referencias de moodboard (`footer-1` a `footer-5`); se descartan las de tipo SaaS multi-página con 4-5 columnas de navegación (`footer-1`, `footer-2`, `footer-4`) por sobredimensionar una web de una sola página — justo el riesgo de "portfolio tipo freelancer" que la sección 6 pide evitar. Se toman ideas puntuales de `footer-3` (fila de utilidades, selector de idioma) y `footer-5` (baja densidad). Layout final: **una sola fila**, no el bloque de dos pisos de las referencias — logo en variante `flat` + copyright a la izquierda, los 3 enlaces (Brand Kit, Sistema de diseño, Accesibilidad) en el centro, LinkedIn a la derecha. Sin GitHub (no hay perfil en los datos del candidato, sección 10). Sin texto de cierre/tagline, coherente con la regla de espacio en blanco (sección 6). Se deja hueco conceptual junto a los 3 enlaces para el selector de idioma de V2 (i18n), sin construir un control no funcional en V1.
+
+**Actualizado 2026-07-20 (ver sección 16):** el enlace **Accesibilidad se retira del footer en V1** — vuelve en V2 con el contenido completo de la página (declaración WCAG, contacto para reportar problemas), en vez de publicarlo antes vacío o a medias. El footer de V1 queda con 2 enlaces centrales (Brand Kit, Sistema de diseño) en vez de 3 — ajuste pendiente sobre el diseño ya cerrado.
 
 **Gap detectado (2026-07-18):** "Sobre mí" — mencionado en la decisión del 2026-07-17 de arriba como sección con "ubicación propia dentro del flujo de página" — nunca llegó a tener tarea en Notion ni se ha construido en el mockup. Trayectoria, Formación, Contacto y Footer ya cierran la página sin que exista un hueco para ella. **Resuelto 2026-07-19** — ver decisión "Análisis de mejora V1" justo abajo: no es sección del flujo, es página propia.
 
@@ -169,7 +174,7 @@ Recorrido conceptual: Discovery → Prototipo → Construcción → Medición.
 
 *(hasta 2026-07-19 se llamaba "Selected Work" — ver decisión de sustitución en sección 7 y el debate completo en sección 15.)*
 
-Formato: fila escaneable = icono monocromo + nombre + **una línea de impacto/resultado** + año. Base de contenido: la lista "Logros" de la sección 10.
+Formato: fila escaneable = nombre + **una línea de impacto/resultado** + año, **sin icono** (ver sección 16 — se retiró el icono monocromo original: no tenía relación directa con cada hito y metía ruido en una sección pensada para quick-scan puro). Base de contenido: la lista "Logros" de la sección 10.
 
 **Redacción final (validada 2026-07-19):** un hito = un reconocimiento/resultado externo, no un resumen por empresa — orden **cronológico descendente** (más reciente primero), igual que la referencia de moodboard `hitos.webp` (formato "Awards"):
 
@@ -223,7 +228,9 @@ KUOTIP se queda fuera de Hitos, igual que se quedó fuera de Selected Work (ver 
 
 ### 8.2 Cómo trabajo
 
-Proceso: **Discovery → UX → Prototipado → Desarrollo → Analítica.**
+Proceso: **Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica.**
+
+**Paso "Lanzamiento" añadido (resuelto 2026-07-20, ver sección 16):** nuevo paso entre Desarrollo y Analítica — cubre experimentación (A/B testing), despliegues progresivos y feature flags. Encaja con el ICP de la sección 4 (SaaS con producto real, no early-stage) al demostrar rigor de release management, no solo de construcción. Redacción exacta (nombre del paso y frase descriptiva) pendiente de cuando se ajuste esta sección en Claude Design.
 
 ### 8.3 Más allá del PM
 
@@ -251,7 +258,7 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 **Growth** (experiencia 2009–2015, base analítica y de experimentación que define su enfoque actual como PM)
 - SEO / SEM / CRO / Marketing Digital.
 - Ontecnia (proyecto Malavida.com): crecimiento orgánico de 3,2M → 9,4M visitas mensuales; transición de modelo de negocio (de instaladores intrusivos a contenido de valor + monetización por vídeo).
-- Havas Media, Searchmedia, Miss Conversion: adquisición y performance en agencias líderes.
+- Havas Media, Increnta, Miss Conversion: adquisición y performance en agencias líderes. *(Searchmedia se renombró a Increnta — actualizado 2026-07-20, ver sección 16.)*
 
 ### 8.4 Toolkit
 
@@ -259,17 +266,26 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 **Redacción final (validada 2026-07-19):** se afiló en vez de quitar — la primera frase se mantiene (justifica el porqué del tratamiento sin logos/certificaciones, ver más abajo) y la segunda la convierte en lead-in personal hacia las tarjetas, en vez de una sentencia suelta genérica. Ver decisión "Pendiente (2026-07-19)" más abajo.
 
-- **Analítica / usuarios:** Amplitude, Google Analytics.
-- **Gestión:** Jira, Notion, Miro.
-- **Diseño y desarrollo:** Figma, v0, Claude Code.
-- **Pagos:** Stripe.
-- **IA:** Anthropic API, Claude Code, MCP — uso práctico aplicado a producto (no listar como certificación formal; ver decisión abajo).
+**Recategorización (resuelto 2026-07-20, ver sección 16):** reemplaza la lista anterior por categorías y herramientas más específicas de cómo trabaja Francisco realmente:
 
-**Decisión (2026-07-16):** el uso de IA se movió aquí desde "Formación" (sección 8.6) — listarlo junto a un máster o un bootcamp sobredimensionaba una práctica de herramienta como si fuera una credencial formal, exactamente el riesgo que el propio brief señala ("sobrevalorar certificaciones IA", sección 11).
+- **Usuarios:** Amplitude, Google Analytics, Microsoft Clarity, Typeform.
+- **Gestión y Documentación:** Jira, Notion, Miro, Mermaid.js.
+- **Diseño y prototipado:** Claude Design, Figma, v0.
+- **Desarrollo:** Claude Code, VS Code, Vercel, GitHub.
+
+**Decisión (2026-07-20):** las categorías "Pagos" (Stripe) e "IA" (propia, con Anthropic API/Claude Code/MCP) del listado anterior desaparecen como tales para V1 — Claude Code y Claude Design quedan repartidos en Desarrollo/Diseño sin sección propia. La categoría "IA" vuelve a existir como propia cuando se aborde la IA conversacional en V3 (sección 2/13), momento en que sí aporta tener una categoría dedicada. Esto relaja parcialmente la mitigación de "sobrevalorar certificaciones IA" (sección 11) — se acepta conscientemente porque el objetivo aquí no es formación sino uso práctico, y ese uso sigue visible dentro de Desarrollo/Diseño aunque sin categoría destacada.
+
+**Decisión (2026-07-16, histórica):** el uso de IA se movió aquí desde "Formación" (sección 8.6) — listarlo junto a un máster o un bootcamp sobredimensionaba una práctica de herramienta como si fuera una credencial formal, exactamente el riesgo que el propio brief señala ("sobrevalorar certificaciones IA", sección 11). Esta decisión histórica ya no aplica igual tras el cambio de 2026-07-20 de arriba, pero se mantiene como registro de por qué IA vivió en Toolkit y no en Formación.
+
+**Logos reales monocromo (resuelto 2026-07-20, ver sección 16):** los iconos genéricos `lucide-react` se sustituyen por el logo real de cada herramienta, procesado a **un único color plano por tema** (versión para tema claro y versión para tema oscuro) — no el color de marca original de cada producto. Esto no rompe la regla de `BRAND.md` ("no logos de empresa a color"): sigue siendo monocromo, solo cambia de icono genérico a silueta real de marca. Los archivos de origen son `.webp` (no SVG como se pensaba en un primer momento), lo que implica procesarlos como raster (extraer silueta, recolorear, exportar PNG a tamaño unificado) en vez de editar un `fill` de vector — viable con `sharp` (ya en el proyecto), pero varios archivos no tienen canal alfa (fondo sólido en vez de transparente), así que necesitan una pasada de QA visual uno por uno, no un proceso por lotes ciego. **Pendiente:** falta el logo de Amplitude en la carpeta de origen.
+
+**Nueva frase de Toolkit (pendiente, ver sección 16):** sustituye a «Las herramientas son medios, no fines. Aquí tienes las que me ayudan a trabajar mejor y cumplir objetivos.» — no se localizó una frase ya definida en PRD ni Notion; se redacta cuando se aborde el ajuste de Toolkit.
 
 **Riesgo de diseño a vigilar:** el brief pide evitar "portfolio tipo freelancer", pero un Toolkit resuelto como grid de logos cae justo en ese patrón. La cita de arriba ayuda en el copy, pero la solución real es de diseño (fase Claude Design): evitar el grid de logos, priorizar cómo se usa cada herramienta sobre qué herramienta es.
 
 **Tratamiento visual (resuelto 2026-07-17):** tarjetas agrupadas por categoría (las 5 de arriba), cada una con icono monocromo `lucide-react` (hereda `foreground`, sin color de marca) + nombre + una frase en primera persona de cómo se usa esa herramienta (no descripción genérica del producto). Se descartó explícitamente el logo a color: entra en conflicto con "Evitar" (sección 6, "logos de empresas a color") y con la disciplina de color de `BRAND.md` (los tokens semánticos neutros no admiten colores de marca ajenos). Referencia de moodboard: [Referencias — Tools](https://app.notion.com/p/39f2caec08be8090bf5bf6cb39ee63e2) (las 3 opciones usan logo a color + tarjeta; se adapta la estructura — agrupación por categoría, ritmo de tarjeta — sin el logo a color).
+
+**Actualizado 2026-07-20 (ver sección 16):** el icono `lucide-react` de cada tarjeta se sustituye por el logo real de la herramienta en monocromo (ver decisión arriba) — sigue sin ser "logo a color", así que la regla de "Evitar" (sección 6) y de `BRAND.md` se mantiene intacta; solo cambia genérico por silueta real.
 
 **Navegación (resuelto 2026-07-17):** la primera versión mostraba las 5 categorías apiladas y visibles a la vez — demasiada información de golpe. Se corrige a **pestañas por categoría**: se ve una categoría (sus tarjetas) cada vez, cambiando entre Analítica/Gestión/Diseño y desarrollo/Pagos/IA mediante pestañas — más cercano a la referencia del moodboard, reduce la densidad visual y mantiene la coherencia con "muchísimo espacio en blanco" (sección 6). El contenido y los iconos monocromo no cambian, solo cómo se revela. Verificado en claro y oscuro; la pestaña activa usa `primary` (se corrigió una implementación inicial que usaba un color neutro, incumpliendo la regla de BRAND.md de que los estados activos usan `primary`).
 
@@ -301,7 +317,7 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 | Proyecto | Rol | Periodo | Resumen |
 |---|---|---|---|
 | Ontecnia — Malavida.com (portal internacional de software) | Digital Marketing Manager | 2009 – 2015 | Crecimiento orgánico de 3,2M → 9,4M visitas mensuales; llevé el modelo de negocio de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first. |
-| Havas Media, Searchmedia, Miss Conversion | Digital Marketing / Performance | 2009 – 2015 | Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto. |
+| Havas Media, Increnta, Miss Conversion | Digital Marketing / Performance | 2009 – 2015 | Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto. |
 
 **Resuelto (2026-07-16):** PICKASO y TheTool no son un solapamiento accidental — ambos son proyectos de **Shutapp Projects**. Entré en PICKASO (agencia de marketing de apps) por dos motivos: profesionalizar la empresa y mejorar su cartera de servicios, y conocer desde dentro el mercado de apps y sus herramientas — el background que hizo posible fundar TheTool con criterio. Además, la mejora de facturación que impulsé en PICKASO sustentó financieramente el arranque de TheTool. Es decir: la agencia fue a la vez la escuela de mercado y el motor financiero del SaaS.
 
@@ -310,6 +326,8 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 **Composición de página (resuelta 2026-07-18):** construida en Claude Design — ver decisión "Diseño Claude Design — Trayectoria + Formación" en sección 7. El patrón visual de fila+divisor **no cambia** con la ampliación de 2026-07-19: al quedarse en 1-2 frases por fila, el timeline ligero ya diseñado sigue sirviendo, solo se rediseña la posición de la sección en el flujo. La división en bloques Producto / Marketing & Growth (ver arriba) tampoco exige un componente nuevo — cada bloque es el mismo timeline con su frase de apertura encima; Shutapp Projects mantiene su tratamiento de fila padre + TheTool/PICKASO anidados sin cambios. Añade además un **CTA secundario "Descargar CV"** (cubre el hueco del nav sticky oculto tras el menú hamburguesa en mobile — ver sección 7).
 
 **Rediseño cerrado (validado 2026-07-20):** implementado en Claude Design — Trayectoria sube por encima de Toolkit en el orden de la página; los Resúmenes de las 8 filas (Producto + Marketing & Growth) y las dos frases de apertura de bloque reproducen el contenido validado sin desviaciones; Shutapp Projects gana un subtítulo descriptivo ("Proyecto empresarial · dos roles") para igualar la estructura visual con el resto de filas. Dos ajustes de una ronda de revisión: (1) el CTA "Descargar CV" se reubicó del final de la sección a la cabecera, alineado a la derecha junto a la frase de apertura de "Producto" — mismo patrón que el H2+cita de Toolkit — para que no quede desconectado y aparezca antes en el scroll mobile; (2) se añadió un salto de espacio mayor (no solo el divisor fino entre filas) antes de "Experiencia previa — Marketing & Growth", para que la transición de bloque se lea como tal. Diseño cerrado, listo para desarrollo.
+
+**Logos reales monocromo (resuelto 2026-07-20, ver sección 16):** el icono monocromo genérico de cada fila se sustituye por el logo real de la empresa, con el mismo tratamiento y las mismas dos versiones de tema que en Toolkit (ver 8.4). Cobertura: Emendu, KUOTIP, INDYA, Freepik, TheTool, PICKASO y Ontecnia (representa la fila "Ontecnia — Malavida.com" — Malavida no lleva marca propia en la web) tienen logo real. La fila **"Havas Media, Increnta, Miss Conversion" es la excepción**: al agrupar 3 empresas y no tener logo de Miss Conversion, mantiene el icono monocromo genérico original en vez de forzar un tratamiento mixto.
 
 ### 8.6 Formación
 
@@ -323,6 +341,8 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
   - *Gestión Comercial y Marketing — ESIC (2000).*
 
 **Composición de página (resuelta 2026-07-18):** construida en Claude Design — ver decisión "Diseño Claude Design — Trayectoria + Formación" en sección 7.
+
+**Logos reales monocromo (resuelto 2026-07-20, ver sección 16):** mismo tratamiento que Toolkit y Trayectoria (8.4/8.5) — el icono genérico de cada fila se sustituye por el logo real de la institución (TheHeroCamp, theUncoding, Olea Europea, ESIC), en monocromo, con versión clara y oscura. Cobertura completa, sin huecos de datos.
 
 ---
 
@@ -387,7 +407,7 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 - ~~Confirmar si el teléfono se publica en la web~~ — **resuelto** (ver sección 10): sí, en Contacto, porque es canal de la métrica primaria de éxito.
 - ~~Casos de estudio: contenido base ya definido en este PRD (TheTool, INDYA, Emendu); pendiente validar la redacción final antes de publicar.~~ — **reemplazado y resuelto (2026-07-19):** Selected Work ya no existe como sección; el contenido se redistribuyó en Hitos (8.1) y Trayectoria (8.5) — **ambos con redacción validada 2026-07-19.** Trayectoria además se dividió en dos bloques (Producto / Experiencia previa — Marketing & Growth), igual que ya hace Formación (8.6).
 - ~~Trayectoria — la fila de **Freepik** (Oct 2021 – Dic 2021) no tiene ningún resumen de contenido en el PRD~~ — **resuelto (2026-07-19):** Francisco aportó el contenido del CV (SaaS B2C/UGC, investigación de contributors, mejora de onboarding); redactado en 8.5.
-- **Pospuesto (2026-07-19):** contenido de la página **Sobre mí** — resuelto que es página propia con URL y tono personal (ver sección 7), pero falta definir qué entra exactamente (¿hobbies, valores, una foto distinta, una anécdota?). Francisco lo deja para más adelante; tarea marcada Blocked en Notion. Hay referencia de moodboard (`Sobre-mi.png`) con layout tipo "About Us" (headline + intro + collage de fotos de equipo/oficina) — es corporativa/de equipo y necesitará la misma adaptación que ya se hizo con `contacto.webp`: se toma el layout, se descarta el tono "we/team" y el collage de fotos ajenas al Hero (no hay sesión de fotos adicional planeada, sección 6).
+- ~~Pospuesto (2026-07-19): contenido de la página **Sobre mí**~~ — **actualizado 2026-07-20 (ver sección 16):** ya no es solo el contenido lo que se pospone — la página completa (contenido + diseño + desarrollo) se mueve a V2 (ver Roadmap, sección 13). Sigue sin definir qué entra exactamente (¿hobbies, valores, una foto distinta, una anécdota?); hay referencia de moodboard (`Sobre-mi.png`, layout tipo "About Us") que necesitará la misma adaptación que ya se hizo con `contacto.webp` (se descarta el tono "we/team" y el collage de fotos ajenas al Hero) cuando se retome en V2.
 - ~~Forma concreta de "Más allá del PM" como pieza narrativa~~ — **resuelto (2026-07-20, ver 8.3):** banda de manifiesto full-width, fondo `brand-purple-soft`, sin cifras, copy validado con foco en Founder (varios proyectos, un exit) y Growth como origen. Pendiente: prompt a Claude Design para explorar tratamientos visuales (tipografía/espaciado) del concepto ya cerrado.
 - ~~Afilar o quitar la cita del Toolkit ("Las herramientas son medios, no fines") — señalada en el análisis de mejora V1 como el eslabón más débil del copy actual~~ — **resuelto (2026-07-19, ver 8.4):** se afiló añadiendo un lead-in personal en vez de quitarla.
 - Foto profesional (pendiente sesión).
@@ -407,13 +427,16 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 **V1**
 - Portfolio con seniority, en español, en Vercel, editorial, preparado para i18n.
-- Brand Kit y Accesibilidad en el footer; Contacto ampliado con ubicación propia (resuelto 2026-07-17, ver sección 7) — layout pendiente de fase de diseño. Sobre mí es página propia con URL (resuelto 2026-07-19, ver sección 7) — contenido pendiente.
-- Arquitectura reestructurada 2026-07-19 (ver sección 15): Hitos sustituye a Selected Work, Trayectoria promovida, Más allá del PM reformulado, nav sticky con CV/Sobre mí/tema, reequilibrio de color (morado decorativo) y motion con propósito.
+- Brand Kit y Sistema de diseño como páginas propias enlazadas desde el footer (ver sección 7 y 16); Contacto ampliado con ubicación propia (resuelto 2026-07-17, ver sección 7).
+- Arquitectura reestructurada 2026-07-19 (ver sección 15): Hitos sustituye a Selected Work, Trayectoria promovida, Más allá del PM reformulado, nav sticky con CV/tema, reequilibrio de color (morado decorativo) y motion con propósito.
+- Segunda ronda de ajustes 2026-07-20 (ver sección 16): Hitos sin icono, paso "Lanzamiento" en Cómo trabajo, Toolkit recategorizado con logos reales monocromo, Trayectoria/Formación con logos reales monocromo.
 - Medición con Microsoft Clarity (adelantado desde V2, ver sección 9) — sin esto no se puede evaluar si V1 funcionó.
 - Banner de consentimiento de cookies (resuelto 2026-07-17, ver sección 9/12), previo a la carga de Clarity.
 
 **V2**
 - Inglés · dominio propio · CV en PDF con identidad visual propia · medición ampliada (Google Tag Manager, Google Analytics, Search Console).
+- **Página "Sobre mí" completa** (contenido + diseño + desarrollo + enlace de vuelta en el nav) — pospuesta entera desde V1 el 2026-07-20 (ver sección 16).
+- **Página de Accesibilidad** (enlace de footer + contenido completo: declaración WCAG, contacto para reportar problemas) — retirada de V1 el 2026-07-20 (ver sección 16).
 
 **V3**
 - IA conversacional.
@@ -462,6 +485,36 @@ Tras ver la V1 diseñada en Claude Design ya montada (no solo sobre el papel), F
 **Gap de proceso detectado y corregido (2026-07-19, al preparar el prompt de Hero+Hitos):** esta reescritura del PRD capturó el reequilibrio de color y el motion, pero dejó fuera la decisión de "presencia del logo" de la sección 2.2 del análisis (tamaño, momento de respiro, opción de avatar al hacer scroll). Corregido en sección 6: el logo usa comportamiento tipo avatar (grande en el Hero, compacto en el nav sticky al hacer scroll). Motivo de fondo: al condensar el análisis en decisiones del PRD es fácil perder matices si se parafrasea en vez de partir del texto original — para las tareas de diseño que quedan (Más allá del PM, Trayectoria, Sobre mí) se prioriza pasar a Claude Design el texto original de las secciones relevantes del análisis, no solo el resumen.
 
 **Proceso:** con el PRD y las tareas de Notion actualizados, el siguiente paso es ajustar el diseño en Claude Design (Hitos, nueva jerarquía, morado, motion, página Sobre mí) antes de arrancar el desarrollo (tarea "Setup + Hero + Hitos" del backlog).
+
+---
+
+## 16. Ajustes de contenido y prioridad (2026-07-20)
+
+Con "Más allá del PM" y Trayectoria ya cerrados en Claude Design, Francisco revisó el conjunto de lo construido y lo que queda por delante, y planteó una segunda ronda de ajustes — debatidos punto por punto antes de tocar el PRD.
+
+**Aceptado sin debate adicional:**
+- **Hitos sin icono:** el icono monocromo original no tenía relación directa con cada hito y metía ruido en una sección pensada para quick-scan puro — se retira (8.1).
+- **Nuevo paso "Lanzamiento" en Cómo trabajo**, entre Desarrollo y Analítica — cubre A/B testing, despliegues progresivos y feature flags; conecta con el ICP de la sección 4 (SaaS con producto real valora rigor de release management). Nombre y copy exactos del paso pendientes de redacción (8.2).
+- **Formación con logos reales monocromo** — cobertura completa (TheHeroCamp, theUncoding, Olea Europea, ESIC), sin huecos de datos (8.6).
+
+**Debatido y resuelto con matices:**
+- **Toolkit — recategorización:** nuevas categorías (Usuarios / Gestión y Documentación / Diseño y prototipado / Desarrollo) más específicas que las anteriores. Se preguntó explícitamente si la categoría "IA" debía mantenerse propia (es una de las tres cartas de posicionamiento del brief, sección 1) — **decisión: no en V1**, Claude Code/Claude Design quedan repartidos en Desarrollo/Diseño sin categoría propia; **"IA" vuelve a existir como categoría dedicada en V3**, cuando se aborde la IA conversacional. Igualmente se cae la categoría "Pagos" (Stripe).
+- **Toolkit y Trayectoria — logos reales monocromo:** se confirmó explícitamente que "que todos los logos tengan el mismo color" significa monocromo unificado (un color plano por tema, versión clara y versión oscura), no el color de marca original — esto **no** rompe la regla de `BRAND.md` de "no logos de empresa a color", solo cambia icono genérico por silueta real. Corrección de dato importante: los archivos de origen son `.webp` (raster), no SVG como se asumía — el proyecto ya tiene `sharp` instalado para procesarlos, pero varios no tienen canal alfa y necesitarán QA visual uno por uno.
+- **Toolkit — falta el logo de Amplitude** en la carpeta de origen (`Logos Web/Tools`) — pendiente de añadir.
+- **Toolkit — nueva frase de cabecera:** Francisco creía recordar una frase ya definida para reemplazar «Las herramientas son medios, no fines...» — revisado el PRD y Notion, no existe tal frase en ningún sitio. Se redactará cuando se aborde el ajuste de Toolkit en Claude Design.
+- **Trayectoria — datos de la carpeta de logos (`Logos Web/Empresas`):** al comparar contra las 8 filas del PRD (8.5) faltaban 3 logos (Ontecnia, Searchmedia, Miss Conversion) y sobraba uno sin explicar (`increnta.webp`). Resuelto: Ontecnia se añadió a la carpeta; `increnta.webp` es Searchmedia renombrada (cambio de nombre real de la empresa, no un error) — el PRD pasa a decir "Increnta" en la fila de Marketing & Growth (8.3 y 8.5); Miss Conversion y el logo separado de Malavida no se añaden a la web.
+- **Trayectoria — fila multi-empresa ("Havas Media, Increnta, Miss Conversion"):** con logo real para 2 de las 3 empresas pero no las 3, se evaluaron tres opciones (mostrar los 2 logos disponibles y dejar la tercera en texto / mantener el icono genérico solo en esta fila / partir la fila en varias). **Se elige mantener el icono genérico** solo en esta fila multi-empresa — el resto de filas de Trayectoria usa logo real (8.5).
+- **Repriorización — "Sobre mí" a V2 entero:** no solo el contenido (ya pospuesto desde 2026-07-19) sino la página completa — diseño y desarrollo también se mueven a V2. Efecto colateral detectado: el nav sticky ya validado incluía "Sobre mí" como uno de sus 3 elementos — se retira del nav en V1 (queda con CV + toggle de tema) y vuelve cuando la página exista en V2 (secciones 5 y 7).
+- **Repriorización — Accesibilidad fuera del footer en V1:** revierte la decisión resuelta el 2026-07-17 (Accesibilidad vivía en el footer en V1) — se pospone a V2 con el contenido completo (declaración WCAG, contacto para reportar problemas) en vez de publicarla antes vacía. El footer de V1 pasa de 3 a 2 enlaces centrales (Brand Kit, Sistema de diseño) — ajuste pendiente sobre el diseño del footer ya cerrado (sección 7).
+- **Páginas Brand Kit y Sistema de diseño:** confirmado adaptar los dos archivos ya documentados (`BRAND.md` y el export de "Sistema de diseño" de Claude Design) en páginas propias enlazadas desde el footer. Sistema de diseño ya tenía tarea en Notion (Sprint 2); **Brand Kit como página construida no tenía tarea propia** — solo existía como archivo, nunca se planificó como página web — se crea ahora.
+
+**Pendiente, sin resolver en esta sesión:**
+- Responsive — Francisco reportó varios fallos vistos navegando la V1 construida; pendiente de capturas concretas antes de abordarlo como tarea.
+- Nombre y copy exactos del paso "Lanzamiento" de Cómo trabajo.
+- Nueva frase de cabecera de Toolkit.
+- Añadir el logo de Amplitude a la carpeta de origen.
+
+**Efecto sobre el desbloqueo del desarrollo:** mover "Sobre mí" a V2 elimina esa dependencia de "Desarrollo Claude Code — Setup + Nav sticky + Hero + Hitos", pero los ajustes de Hitos (quitar icono) y nav (quitar "Sobre mí") reabren el diseño de esa misma tarea — el efecto neto no es un desbloqueo inmediato, sigue pendiente una pasada de diseño antes de empezar código (ver tareas de Notion).
 
 ---
 
