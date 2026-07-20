@@ -354,6 +354,8 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 **Logos reales monocromo (resuelto 2026-07-20, ver sección 16):** mismo tratamiento que Toolkit y Trayectoria (8.4/8.5) — el icono genérico de cada fila se sustituye por el logo real de la institución (TheHeroCamp, theUncoding, Olea Europea, ESIC), en monocromo, con versión clara y oscura. Cobertura completa, sin huecos de datos.
 
+**Cierre de diseño (validado 2026-07-20):** los 4 logos subidos y confirmados por Francisco. Contacto no se tocó en esta pasada.
+
 ---
 
 ## 9. Sistema técnico
@@ -518,13 +520,13 @@ Con "Más allá del PM" y Trayectoria ya cerrados en Claude Design, Francisco re
 - **Repriorización — Accesibilidad fuera del footer en V1:** revierte la decisión resuelta el 2026-07-17 (Accesibilidad vivía en el footer en V1) — se pospone a V2 con el contenido completo (declaración WCAG, contacto para reportar problemas) en vez de publicarla antes vacía. El footer de V1 pasa de 3 a 2 enlaces centrales (Brand Kit, Sistema de diseño) — ajuste pendiente sobre el diseño del footer ya cerrado (sección 7).
 - **Páginas Brand Kit y Sistema de diseño:** confirmado adaptar los dos archivos ya documentados (`BRAND.md` y el export de "Sistema de diseño" de Claude Design) en páginas propias enlazadas desde el footer. Sistema de diseño ya tenía tarea en Notion (Sprint 2); **Brand Kit como página construida no tenía tarea propia** — solo existía como archivo, nunca se planificó como página web — se crea ahora.
 
+**Cerrado a lo largo de la sesión (2026-07-20):** las 4 tareas de diseño reabiertas por esta ronda de ajustes se cerraron una a una: Rediseño Hero + Hitos (icono fuera, nav sin "Sobre mí", hamburguesa mobile se mantiene para futuros CV/Sobre mí/idioma), Cómo trabajo + Toolkit (paso Lanzamiento con copy validado, recategorización + logos reales + nueva frase, logo de Amplitude corregido tras detectarse ruido de compresión), Rediseño de Trayectoria (7 logos reales, fila Havas/Increnta/Miss Conversion sin icono) y Trayectoria+Formación+Contacto (4 logos de Formación). Solo queda pendiente **Footer** (quitar el enlace de Accesibilidad, de 3 a 2 enlaces centrales) para completar esta ronda.
+
 **Pendiente, sin resolver en esta sesión:**
 - Responsive — Francisco reportó varios fallos vistos navegando la V1 construida; pendiente de capturas concretas antes de abordarlo como tarea.
-- Nombre y copy exactos del paso "Lanzamiento" de Cómo trabajo.
-- Nueva frase de cabecera de Toolkit.
-- Añadir el logo de Amplitude a la carpeta de origen.
+- Ajuste de Footer (quitar enlace de Accesibilidad).
 
-**Efecto sobre el desbloqueo del desarrollo:** mover "Sobre mí" a V2 elimina esa dependencia de "Desarrollo Claude Code — Setup + Nav sticky + Hero + Hitos", pero los ajustes de Hitos (quitar icono) y nav (quitar "Sobre mí") reabren el diseño de esa misma tarea — el efecto neto no es un desbloqueo inmediato, sigue pendiente una pasada de diseño antes de empezar código (ver tareas de Notion).
+**Efecto sobre el desbloqueo del desarrollo:** con Hero+Hitos, Cómo trabajo+Toolkit y Trayectoria+Formación ya cerrados de nuevo, y "Sobre mí" fuera del alcance de V1, solo el ajuste de Footer sigue pendiente antes de que "Desarrollo Claude Code — Setup + Nav sticky + Hero + Hitos" quede totalmente desbloqueada.
 
 ---
 
