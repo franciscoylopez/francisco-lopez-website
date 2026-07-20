@@ -230,7 +230,10 @@ KUOTIP se queda fuera de Hitos, igual que se quedó fuera de Selected Work (ver 
 
 Proceso: **Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica.**
 
-**Paso "Lanzamiento" añadido (resuelto 2026-07-20, ver sección 16):** nuevo paso entre Desarrollo y Analítica — cubre experimentación (A/B testing), despliegues progresivos y feature flags. Encaja con el ICP de la sección 4 (SaaS con producto real, no early-stage) al demostrar rigor de release management, no solo de construcción. Redacción exacta (nombre del paso y frase descriptiva) pendiente de cuando se ajuste esta sección en Claude Design.
+**Paso "Lanzamiento" añadido (resuelto 2026-07-20, ver sección 16):** nuevo paso entre Desarrollo y Analítica — cubre experimentación (A/B testing), despliegues progresivos y feature flags. Encaja con el ICP de la sección 4 (SaaS con producto real, no early-stage) al demostrar rigor de release management, no solo de construcción.
+
+**Copy validado (2026-07-20):**
+> Lanzamiento — Despliego con control: feature flags, rollout progresivo y A/B testing antes de exponer el cambio a todos los usuarios.
 
 ### 8.3 Más allá del PM
 
@@ -279,7 +282,12 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 **Logos reales monocromo (resuelto 2026-07-20, ver sección 16):** los iconos genéricos `lucide-react` se sustituyen por el logo real de cada herramienta, procesado a **un único color plano por tema** (versión para tema claro y versión para tema oscuro) — no el color de marca original de cada producto. Esto no rompe la regla de `BRAND.md` ("no logos de empresa a color"): sigue siendo monocromo, solo cambia de icono genérico a silueta real de marca. Los archivos de origen son `.webp` (no SVG como se pensaba en un primer momento), lo que implica procesarlos como raster (extraer silueta, recolorear, exportar PNG a tamaño unificado) en vez de editar un `fill` de vector — viable con `sharp` (ya en el proyecto), pero varios archivos no tienen canal alfa (fondo sólido en vez de transparente), así que necesitan una pasada de QA visual uno por uno, no un proceso por lotes ciego. **Pendiente:** falta el logo de Amplitude en la carpeta de origen.
 
-**Nueva frase de Toolkit (pendiente, ver sección 16):** sustituye a «Las herramientas son medios, no fines. Aquí tienes las que me ayudan a trabajar mejor y cumplir objetivos.» — no se localizó una frase ya definida en PRD ni Notion; se redacta cuando se aborde el ajuste de Toolkit.
+**Nueva frase de Toolkit (validada 2026-07-20, ver sección 16):** sustituye a «Las herramientas son medios, no fines. Aquí tienes las que me ayudan a trabajar mejor y cumplir objetivos.»
+
+**Copy validado:**
+> Las herramientas son medios, no fines. Estas son algunas que me han ayudado a hacer mejor mi trabajo y conseguir mis objetivos.
+
+**Cambio de layout (2026-07-20):** la frase pasa a ir **debajo** del H2 "Toolkit" (no al lado, como el patrón que comparte con Trayectoria/Toolkit hasta ahora) — decisión explícita de Francisco, solo para esta sección.
 
 **Riesgo de diseño a vigilar:** el brief pide evitar "portfolio tipo freelancer", pero un Toolkit resuelto como grid de logos cae justo en ese patrón. La cita de arriba ayuda en el copy, pero la solución real es de diseño (fase Claude Design): evitar el grid de logos, priorizar cómo se usa cada herramienta sobre qué herramienta es.
 
