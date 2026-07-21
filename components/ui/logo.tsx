@@ -24,11 +24,14 @@ export function Logo({
 
   return (
     <span className={cn("inline-flex items-center gap-3", className)}>
+      {/* viewBox recortado a los límites justos del símbolo flat: la altura
+          renderizada es exactamente la altura del símbolo (ver BRAND.md).
+          overflow-visible deja asomar las capas del split, que sobresalen. */}
       <svg
-        viewBox="0 0 120 120"
+        viewBox="31 17 58 70"
         fill="none"
         aria-hidden="true"
-        className="h-full w-auto"
+        className="h-full w-auto overflow-visible"
       >
         {showSplit && (
           <>

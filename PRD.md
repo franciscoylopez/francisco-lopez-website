@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.4** (2026-07-21): antes de abordar el footer, Francisco cuestionó si el logo se estaba usando de forma coherente con lo que documentarán las páginas Brand Kit y Sistema de diseño. Se auditaron los tres usos construidos, se descubrió que `BRAND.md` nunca cerró la tabla de uso del logo, y se cerró — ver sección 17.
 > **V1.3** (2026-07-20): tras cerrar el diseño de Más allá del PM y Trayectoria, Francisco revisó el conjunto y planteó una segunda ronda de ajustes de contenido y arquitectura — logos reales de empresa/herramienta/institución, nuevo paso "Lanzamiento" en Cómo trabajo, recategorización de Toolkit, y repriorización (Sobre mí entero a V2, Accesibilidad a V2, nuevas páginas Brand Kit/Sistema de diseño) — ver sección 16.
 
 **Fuentes originales:** ver sección [Fuentes](#fuentes) al final.
@@ -111,11 +112,31 @@ Recorrido conceptual: Discovery → Prototipo → Construcción → Medición.
 
 **Presencia del logo (resuelto 2026-07-19, ver sección 15):** el logo apenas se apreciaba a tamaño de header — no tenía ningún momento donde respirara a buen tamaño. *Gap de proceso:* esta decisión ya estaba en el análisis original (sección 2.2, "Marca y color") pero no se incorporó en la reescritura del PRD del 2026-07-19 — corregido ahora.
 
-**Comportamiento final (validado 2026-07-19, tras tres rondas de revisión en vivo sobre el primer resultado de Claude Design):**
-- El **nav sticky es el único responsable** de la presencia del logo en toda la página — no hay un logo adicional en el Hero (ver sección 5). Un primer intento puso también un logo grande en el Hero, pero al estar visible a la vez que el logo del nav en la carga inicial, generaba ruido/redundancia (dos marcas iguales, mismo trabajo, una encima de otra) — se retiró del Hero.
-- Al **cargar la página** (sin scroll), el nav muestra la variante `flat` compacta, en su círculo, junto al nombre "Francisco López" — nunca vacío.
-- Al **hacer scroll**, el nav cambia a la variante `split` a color, **sin el círculo** que la recorta y sin el texto del nombre, con altura igualada a la de los demás controles del nav (CV, menú, toggle) — no puede quedar más bajo que ellos. Este es el único "momento donde la marca respira" del sitio; no hace falta un segundo sitio para lo mismo.
-- **Mobile:** "Descargar CV" y "Sobre mí" colapsan los dos detrás de un icono de menú (☰) — en la barra de mobile solo quedan siempre visibles el logo, el icono de menú y el toggle de tema, sin texto partido en dos líneas.
+**Comportamiento final (validado 2026-07-19, tras tres rondas de revisión en vivo sobre el primer resultado de Claude Design; ~~corregido 2026-07-21~~ — ver "Sistema de uso del logo" justo debajo):**
+- El **nav sticky es el único responsable** de la presencia del logo en toda la página — no hay un logo adicional en el Hero (ver sección 5). Un primer intento puso también un logo grande en el Hero, pero al estar visible a la vez que el logo del nav en la carga inicial, generaba ruido/redundancia (dos marcas iguales, mismo trabajo, una encima de otra) — se retiró del Hero. *(Sigue vigente.)*
+- ~~Al **cargar la página** (sin scroll), el nav muestra la variante `flat` compacta, en su círculo, junto al nombre "Francisco López".~~ *(Corregido 2026-07-21: los dos estados estaban invertidos — ver abajo.)*
+- ~~Al **hacer scroll**, el nav cambia a la variante `split` a color, sin el círculo que la recorta y sin el texto del nombre.~~ *(Corregido 2026-07-21.)*
+- **Mobile:** "Descargar CV" y "Sobre mí" colapsan los dos detrás de un icono de menú (☰) — en la barra de mobile solo quedan siempre visibles el logo, el icono de menú y el toggle de tema, sin texto partido en dos líneas. *(Sigue vigente.)*
+
+**Sistema de uso del logo (cerrado 2026-07-21 — la tabla completa vive en `BRAND.md`, aquí solo la decisión y el porqué):**
+
+Al revisar los tres usos ya construidos (nav sin scroll, nav con scroll, footer) se midió que ninguno era coherente con los otros, y la causa de raíz era que **`BRAND.md` había dejado explícitamente sin cerrar** dónde y a qué tamaño usar cada variante ("se decidirá al diseñar la web, no ahora"). Los tres usos eran decisiones sueltas de tres sesiones distintas, no la aplicación de un sistema. Cerrado ahora, tras dos rondas de tableros de calibración en Claude Design.
+
+Lo que se midió:
+- **El `viewBox` mentía.** Era `"0 0 120 120"` pero el símbolo solo ocupaba el 58% de la altura, así que todo consumidor lo infradimensionaba un ~42% sin saberlo. Recortado a `"30 16 60 72"`.
+- **El logo pesaba menos que los iconos ajenos.** En el footer medía 12×15px junto a un icono de LinkedIn de 18×18px, al mismo tamaño visual que el símbolo `©` de al lado.
+- **El `split` se usaba a 24px**, muy por debajo de donde funciona. Una escalera de 24→128px en ambos temas situó el umbral en **64px**: por debajo de ~3px de creciente de color, el efecto se lee como error de registro de imprenta, no como firma.
+
+La decisión y su matiz importante: **el PRD ya quería un momento de marca en el nav, pero tenía los dos estados del revés** — puso el `split` en el estado comprimido (donde no cabe) y el `flat` en el estado con sitio. No se revierte esa intención, se corrige:
+
+- **Al cargar:** barra de 80px, logo `split` a 48px + wordmark "Francisco López" a ~22px. Este es el único momento donde la marca respira, y cae above the fold, que es donde el PRD dice que se juega el partido (sección 3).
+- **Al hacer scroll:** barra de 64px, logo `flat` a 28px, sin wordmark. La transición es **continua** (no un corte), y las capas de color se extinguen antes de que el símbolo baje del umbral del split, para que nunca se renderice el estado ambiguo. Es el umbral aplicado en movimiento: el `split` existe exactamente mientras hay sitio para él. El wordmark se desvanece en opacidad manteniendo su ancho: una primera implementación animaba el `max-width` y recortaba el nombre a mitad de letra ("Francisco Lo"), que se leía como un bug de truncado.
+- **Móvil:** verificado a 375px — el símbolo no desequilibra la barra estrecha, no hace falta regla aparte.
+
+**Ajuste de tamaño (2026-07-21, tras verlo en la página real):** el primer valor fue `split` a 64px en barra de 96px. Al navegarlo en vivo, Francisco lo percibió grande y desproporcionado respecto al wordmark. Al medirlo, las dos percepciones eran la misma: el símbolo había crecido de 24 a 64px pero el wordmark seguía en ~18px, dejando el lockup al **29%**, por debajo del rango normal del 40-45%. De ahí salieron dos cambios: una regla nueva de proporción del lockup (ahora en `BRAND.md`) y una comparativa de cuatro tamaños en el nav real. Resultado: **48px**, con el umbral del split corregido de 64 a 48 — ver el porqué del cambio de umbral en `BRAND.md`, regla 1. Beneficio colateral: la barra baja de 96 a 80px, 16px más de above the fold.
+- **Motion:** esto no abre frente nuevo respecto a la regla de la sección 6 ("una vez al entrar en viewport, nunca en bucle"). El nav ya cambiaba con el scroll en el diseño validado; el cambio es que ahora es continuo en vez de un corte seco, que es menos agresivo, no más. Con `prefers-reduced-motion`, salto entre estados sin interpolar.
+
+**Descartado en el proceso:** duplicar el `split` en el footer (deja el logo flotando con ~246px de vacío, desconecta el copyright y rompe la fila única de baja densidad) y ensanchar el desplazamiento del split para que entrase en el nav compacto (cambiaría el monograma para que quepa donde no cabe, dejando de ser el "ligero desplazamiento" que define `BRAND.md`).
 
 **Cerrado 2026-07-19:** diseño de Hero + Hitos + nav sticky validado y aprobado tras tres rondas de correcciones (comportamiento del logo, colapso mobile, alineación de la fila destacada de Hitos) — ver tarea de Notion.
 
@@ -151,6 +172,10 @@ Recorrido conceptual: Discovery → Prototipo → Construcción → Medición.
 **Diseño Claude Design — Footer (resuelto 2026-07-18):** tarea añadida fuera del backlog original (gap de planificación detectado esta sesión — el footer nunca tuvo tarea propia pese a estar en la arquitectura de página). Se revisaron 5 referencias de moodboard (`footer-1` a `footer-5`); se descartan las de tipo SaaS multi-página con 4-5 columnas de navegación (`footer-1`, `footer-2`, `footer-4`) por sobredimensionar una web de una sola página — justo el riesgo de "portfolio tipo freelancer" que la sección 6 pide evitar. Se toman ideas puntuales de `footer-3` (fila de utilidades, selector de idioma) y `footer-5` (baja densidad). Layout final: **una sola fila**, no el bloque de dos pisos de las referencias — logo en variante `flat` + copyright a la izquierda, los 3 enlaces (Brand Kit, Sistema de diseño, Accesibilidad) en el centro, LinkedIn a la derecha. Sin GitHub (no hay perfil en los datos del candidato, sección 10). Sin texto de cierre/tagline, coherente con la regla de espacio en blanco (sección 6). Se deja hueco conceptual junto a los 3 enlaces para el selector de idioma de V2 (i18n), sin construir un control no funcional en V1.
 
 **Actualizado 2026-07-20 (ver sección 16):** el enlace **Accesibilidad se retira del footer en V1** — vuelve en V2 con el contenido completo de la página (declaración WCAG, contacto para reportar problemas), en vez de publicarlo antes vacío o a medias. El footer de V1 queda con 2 enlaces centrales (Brand Kit, Sistema de diseño) en vez de 3 — ajuste pendiente sobre el diseño ya cerrado.
+
+**Dos correcciones más al footer (detectadas 2026-07-21 al calibrar el logo, ver sección 6):**
+- **Centrado óptico del grupo de enlaces.** El diseño construido usa `justify-between` con tres grupos de anchos muy dispares (bloque izquierdo 197px, LinkedIn 18px), así que el grupo del medio se desplaza hacia el lado estrecho: medido, caía **90px a la derecha** del centro real de la fila (8,9%). Con 3 enlaces el grupo era más ancho y lo disimulaba; con 2 se nota. Debe centrarse ópticamente sobre el ancho total de la fila, no repartirse con `justify-between`. Corrección ya verificada en el tablero de calibración: desviación resultante de 0,5px.
+- **Tamaño del logo: `flat` a 32px** (ver tabla de uso en `BRAND.md`). El construido lo dejaba a 15px, por debajo del icono de LinkedIn de 18px que lo acompaña y al mismo peso visual que el símbolo `©` de al lado. Se evaluó y descartó usar aquí el `split` a 64px (ver sección 6).
 
 **Gap detectado (2026-07-18):** "Sobre mí" — mencionado en la decisión del 2026-07-17 de arriba como sección con "ubicación propia dentro del flujo de página" — nunca llegó a tener tarea en Notion ni se ha construido en el mockup. Trayectoria, Formación, Contacto y Footer ya cierran la página sin que exista un hueco para ella. **Resuelto 2026-07-19** — ver decisión "Análisis de mejora V1" justo abajo: no es sección del flujo, es página propia.
 
@@ -524,9 +549,39 @@ Con "Más allá del PM" y Trayectoria ya cerrados en Claude Design, Francisco re
 
 **Pendiente, sin resolver en esta sesión:**
 - Responsive — Francisco reportó varios fallos vistos navegando la V1 construida; pendiente de capturas concretas antes de abordarlo como tarea.
-- Ajuste de Footer (quitar enlace de Accesibilidad).
+- ~~Ajuste de Footer (quitar enlace de Accesibilidad).~~ **Cerrado 2026-07-21**, junto con dos correcciones más que salieron al calibrar el logo (centrado óptico de los enlaces y tamaño del logo) — ver sección 7 y 17.
 
-**Efecto sobre el desbloqueo del desarrollo:** con Hero+Hitos, Cómo trabajo+Toolkit y Trayectoria+Formación ya cerrados de nuevo, y "Sobre mí" fuera del alcance de V1, solo el ajuste de Footer sigue pendiente antes de que "Desarrollo Claude Code — Setup + Nav sticky + Hero + Hitos" quede totalmente desbloqueada.
+**Efecto sobre el desbloqueo del desarrollo:** ~~solo el ajuste de Footer sigue pendiente~~ — **actualizado 2026-07-21: ninguna sección de la home tiene ya diseño pendiente.** Footer y el nav sticky (rediseñado por el sistema de uso del logo, sección 17) se cerraron el mismo día, así que "Desarrollo Claude Code — Setup + Nav sticky + Hero + Hitos" queda totalmente desbloqueada, y con ella los otros dos bloques de build.
+
+Siguen abiertas dos tareas de diseño de V1 que **no bloquean el build de la home**: la **sesión de fotografía profesional** (el Hero se puede construir con placeholder y sustituir la foto después) y la **página Brand Kit**, que es una página aparte enlazada desde el footer, no una sección de la home.
+
+---
+
+## 17. Sistema de uso del logo (2026-07-21)
+
+Al ir a abordar el ajuste del footer — la última tarea de diseño pendiente — Francisco paró y planteó una duda previa: si el logo se estaba usando de forma coherente con lo que van a documentar las páginas Brand Kit y Sistema de diseño. La duda era correcta y destapó un problema de raíz.
+
+**Diagnóstico.** Se midieron los tres usos ya construidos y ninguno era coherente con los otros: nav sin scroll `flat` a 12×15px metido en un contenedor circular, nav con scroll `split` a 24×29px, footer `flat` a 12×15px. Tres variantes, tres tamaños, tres tratamientos. La causa no era de ejecución: **`BRAND.md` había dejado explícitamente abierto** dónde usar cada variante y a qué tamaño cortar el split ("se decidirá al diseñar la web, no ahora"), y ese pendiente nunca se cerró. Los tres usos eran decisiones sueltas de tres sesiones distintas.
+
+Esto importaba justo ahora porque Brand Kit y Sistema de diseño son las páginas que **documentan** esa regla, y son parte del argumento de "criterio de diseño" del sitio (sección 1). Habrían congelado tres usos incoherentes como si fueran el sistema.
+
+**Hallazgos medidos:**
+- El `viewBox` del componente era `"0 0 120 120"` pero el símbolo solo ocupaba el 58% de la altura → todo consumidor lo infradimensionaba un ~42% sin saberlo. Es el origen mecánico de que los tres usos salieran pequeños.
+- En el footer el logo medía 12×15px junto a un icono de LinkedIn de 18×18px: la marca propia pesaba menos que el icono de una red social ajena, y lo mismo que el símbolo `©` contiguo.
+- El color era correcto (`rgb(33,38,43)` = `--foreground`) en todos los usos. Lo que fallaba era el grosor: a 15px el trazo cae a 1,3px y el antialiasing lo lava a gris.
+- El `split` se usaba a 24px, donde no se lee. En modo oscuro va incluso peor a tamaño pequeño, porque las capas de color quedan más cerca en luminancia del fondo que del trazo blanco.
+- El grupo de enlaces del footer caía 90px a la derecha del centro real de la fila (ver sección 7).
+- Faltaba una regla de **proporción del lockup**: nadie había fijado cuánto debe medir el wordmark respecto al símbolo, así que al crecer el símbolo el texto se quedó atrás.
+
+**Resuelto:** tabla de uso completa y siete reglas, escritas en `BRAND.md`. El nav corrige la inversión de sus dos estados (`split` 48px al cargar, `flat` 28px con scroll) — ver el detalle y el razonamiento en la sección 6. `viewBox` del componente recortado a `"31 17 58 70"` con `overflow-visible`.
+
+**Método, y un error que corregir.** Tres rondas de tableros de calibración en Claude Design (escalera de tamaños → maquetas de las aplicaciones → comparativa de tamaños del nav), para decidir los umbrales viendo el efecto en vez de por argumento. Merece la pena repetirlo cuando una decisión dependa de un límite perceptivo y no de una preferencia.
+
+Pero la primera escalera falló en un punto: situó el umbral del split en 64px, y al aplicarlo resultó ser 48px. La causa es de método — **una escalera de calibración es un juicio comparativo (todos los tamaños en el mismo golpe de vista) y el uso real es aislado**, así que la rejilla es sistemáticamente más severa que la realidad. Corolario para las próximas decisiones perceptivas: la rejilla sirve para acotar el rango, pero el número final se confirma en el contexto donde va a vivir.
+
+**Descartado:** duplicar el `split` en el footer, y ensanchar el desplazamiento del split para que entrase en el nav compacto (ver sección 6).
+
+**Cerrado 2026-07-21:** nav y footer aplicados a la web y validados en vivo por Francisco. Con esto **ninguna sección de la home tiene ya diseño pendiente** y los tres bloques de desarrollo quedan desbloqueados (ver sección 16). Siguen abiertas la sesión de fotografía y la página Brand Kit, que no bloquean el build.
 
 ---
 

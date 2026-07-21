@@ -68,6 +68,35 @@ Componente: `components/ui/logo.tsx` → `<Logo />`.
 
 El logo hereda claro/oscuro automáticamente: usa los tokens `var(--foreground)`, `var(--brand-cyan-split)` (#16BDBD) y `var(--brand-purple-split)` (#9B87F5), que ya conmutan entre `:root` y `.dark` en `globals.css`. No requiere lógica de tema en el propio componente.
 
-### Pendiente de fase de diseño
+### Tabla de uso (cerrada 2026-07-21)
 
-Dónde usar cada variante (header, footer, mobile, favicon, redes...) y a qué tamaño se considera "pequeño" para el corte split→flat se decidirá al diseñar la web, no ahora.
+Todos los tamaños son **altura visible del símbolo** (borde superior del círculo → borde inferior de la base), no altura de la caja SVG. El `viewBox` está recortado a `"30 16 60 72"` precisamente para que ambas coincidan: antes era `"0 0 120 120"` y el símbolo solo ocupaba el 58% de la altura, así que cualquier `h-10` renderizaba 23px en vez de 40 e infradimensionaba el logo un ~42% sin avisar.
+
+| Contexto | Variante | Símbolo | Wordmark | Barra |
+|---|---|---|---|---|
+| Nav — al cargar | `split` | 48px | sí, ~22px | 80px |
+| Nav — con scroll | `flat` | 28px | no | 64px |
+| Footer | `flat` | 32px | no | — |
+| Brand Kit (hero de página) | `split` | ≥120px | opcional | — |
+| OG image / redes | `split` | ≥200px | sí | — |
+| Favicon | `flat` | 32px / 16px | no | — |
+
+### Reglas de uso
+
+1. **Umbral split → flat: 48px.** Por debajo, siempre `flat`. El desplazamiento de las capas de color es el 5,1% de la altura del símbolo, así que a 48px el creciente mide ~2,5px — suficiente para leerse como capa de color deliberada. A 32px baja a 1,6px y se convierte en fleco sucio; a 24px desaparece.
+
+   *Por qué 48 y no 64 (corregido 2026-07-21, el mismo día):* la primera medición, sobre una escalera de 24→128px con todos los tamaños en el mismo golpe de vista, situó el corte en 64px. Al probarlo en el nav real resultó demasiado conservador: **la escalera es un juicio comparativo y el uso real es aislado.** Puesto en una barra, sin las versiones grandes al lado para compararlo, el split a 48px se lee sin problema. Lección de método: valida los umbrales perceptivos en el contexto donde van a vivir, no solo en una rejilla de calibración.
+
+   Matiz que sí cambia con el tamaño: a 64px+ el split se lee como *tres círculos superpuestos*; a 48px se lee como *un halo de color deliberado*. Para el nav, la segunda lectura basta. Para una pieza donde la firma sea el asunto (Brand Kit, OG image), usa tamaños donde se aprecie la construcción.
+2. **Tamaño mínimo del componente: 24px.** El trazo es el 8,6% de la altura: a 24px son 2,1px y aguanta; a 15px son 1,3px y el antialiasing lo lava a gris pese a llevar el color correcto. El favicon de 16px necesita **asset propio con el trazo engordado**, no el componente reescalado.
+3. **Sin contenedor circular.** El símbolo ya *es* un círculo; anidarlo en otro lo convierte en una diana y lo encoge al ~35% de su huella.
+4. **El logo nunca mide menos que los iconos de UI contiguos.** Si comparte fila con un icono de 18px, el logo va por encima de esa cifra.
+5. **Proporción del lockup: el wordmark va entre el 40% y el 45% de la altura del símbolo.** Es la regla que faltaba y la causa real de que un logo de 64px se percibiera "demasiado grande": el símbolo creció y el texto no, dejando el lockup al 29% — por debajo del rango normal — así que el logo parecía flotar solo en vez de leerse con el nombre como una unidad. Si cambia el tamaño del símbolo, el wordmark cambia con él.
+6. **Transición del nav.** Al hacer scroll, símbolo y barra escalan de forma continua (48→28px y 80→64px) y el wordmark se desvanece **en opacidad manteniendo su ancho completo**: nunca se anima el `max-width`, porque recorta glifos a mitad de letra y se lee como un bug de truncado. El hueco del layout se colapsa después. La opacidad de las capas de color **decae más rápido que la escala: extinguidas antes de que el símbolo baje del umbral del split**, para que la transición no renderice nunca el estado ambiguo donde el split parece un error de registro.
+7. **`prefers-reduced-motion`:** salto seco entre los dos estados del nav, sin interpolar.
+
+### Dónde respira la marca
+
+El `split` es la firma y solo existe a partir de 48px, así que tiene **un** sitio en la web, no varios: el nav al cargar la página, above the fold. Al hacer scroll se comprime a `flat` y desaparece hasta que se vuelve arriba.
+
+Se evaluó y **se descartó** duplicarlo en el footer (2026-07-21): un `split` de 64px ahí dejaba el logo flotando con ~246px de vacío a su derecha, desconectaba el copyright y rompía la fila única de baja densidad. Además, si el nav ya abre con la firma, cerrar con ella es repetición, no refuerzo.
