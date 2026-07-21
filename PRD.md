@@ -590,6 +590,10 @@ Pero la primera escalera falló en un punto: situó el umbral del split en 64px,
 
 **Cerrado 2026-07-21:** nav y footer aplicados a la web y validados en vivo por Francisco. Con esto **ninguna sección de la home tiene ya diseño pendiente** y los tres bloques de desarrollo quedan desbloqueados (ver sección 16). Siguen abiertas la sesión de fotografía y la página Brand Kit, que no bloquean el build.
 
+**Breadcrumb en páginas internas (resuelto 2026-07-21, al cerrar Brand Kit):** toda página fuera del home lleva breadcrumb visible sobre el H1 — Brand Kit, Sistema de diseño, y en su momento Sobre mí y Accesibilidad. Requisitos: `<nav aria-label="Ruta">` con lista ordenada, el nivel actual sin enlace y con `aria-current="page"`, separadores decorativos ocultos al lector, área táctil de 44×44px y foco visible. Se resuelve como componente reutilizable, no pieza por página. **Colocación:** pertenece a la cabecera, no al contenido — la primera versión quedó a 102px del nav y a 34px del kicker, leyéndose como parte del bloque del titular; corregido a 45px y 96px, invirtiendo la proporción.
+
+**Tercera regla sobregeneralizada del día (2026-07-21):** el breadcrumb salió con "Inicio" en cian porque `BRAND.md` decía "botones, enlaces, foco y estados activos usan `primary`" sin distinguir enlace de contenido de navegación de chrome — y el nav de al lado ya usaba `foreground` para "Descargar CV". Matizado en `BRAND.md`. Junto con el umbral del split (64→48px) y la proporción del lockup (40-45% → dos casos), son tres reglas escritas en absoluto el mismo día que en realidad dependían del contexto. **Patrón a vigilar:** al enunciar una regla a partir de un solo caso observado, comprobar antes si el sistema ya tiene otro caso que la contradiga.
+
 ---
 
 ## 18. Reorganización de sprints y alcance de V1 (2026-07-21)

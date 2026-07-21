@@ -19,7 +19,12 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 
 1. **Tokens semánticos de shadcn** (`primary`, `secondary`, `muted`, `accent`, `border`…).
    - `secondary`, `accent` y `muted` son NEUTROS a propósito. Nunca los pintes de cian ni de morado.
-   - El color de acción es `primary` (cian). Botones, enlaces, foco y estados activos usan `primary`.
+   - El color de acción es `primary` (cian): botones, foco y estados activos.
+   - **Enlaces: depende de si son contenido o chrome.**
+     - **Contenido** (dentro del cuerpo de una sección, en medio del texto): `primary`. Es donde el cian hace su trabajo, señalar que ahí hay una acción en un sitio donde no se espera.
+     - **Chrome de navegación** (nav, breadcrumb, footer, menús): `foreground` o `muted-foreground`, nunca `primary`. En un bloque cuya función *entera* es navegar, el cian no distingue nada: solo mete ruido. Se leen como enlace por su posición, y el subrayado al pasar por encima o al recibir foco basta como afordancia.
+
+     *Matizado 2026-07-21:* la redacción anterior decía "botones, enlaces, foco y estados activos usan `primary`", sin distinguir. Producía un breadcrumb con "Inicio" en cian (#0B7C7C) justo debajo de un nav que ya usaba `foreground` (#21262B) para "Descargar CV" — dos elementos de chrome contiguos con criterios distintos, y el que se salía era el que seguía la regla al pie de la letra.
 
 2. **Tokens de marca** (`brand-cyan`, `brand-purple`, `brand-cyan-soft`, `brand-purple-soft`).
    - Son DECORATIVOS: fondos de sección, detalles, ilustración, gráficos.
