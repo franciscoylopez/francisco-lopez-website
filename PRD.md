@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.5** (2026-07-21): reorganización de sprints y ampliación del alcance de V1 — Sobre mí y Accesibilidad vuelven a V1, el responsive pasa a ser tarea de diseño, y Brand Kit y Sistema de diseño se montan como páginas en Sprint 1 — ver sección 18.
 > **V1.4** (2026-07-21): antes de abordar el footer, Francisco cuestionó si el logo se estaba usando de forma coherente con lo que documentarán las páginas Brand Kit y Sistema de diseño. Se auditaron los tres usos construidos, se descubrió que `BRAND.md` nunca cerró la tabla de uso del logo, y se cerró — ver sección 17.
 > **V1.3** (2026-07-20): tras cerrar el diseño de Más allá del PM y Trayectoria, Francisco revisó el conjunto y planteó una segunda ronda de ajustes de contenido y arquitectura — logos reales de empresa/herramienta/institución, nuevo paso "Lanzamiento" en Cómo trabajo, recategorización de Toolkit, y repriorización (Sobre mí entero a V2, Accesibilidad a V2, nuevas páginas Brand Kit/Sistema de diseño) — ver sección 16.
 
@@ -470,10 +471,12 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 - Medición con Microsoft Clarity (adelantado desde V2, ver sección 9) — sin esto no se puede evaluar si V1 funcionó.
 - Banner de consentimiento de cookies (resuelto 2026-07-17, ver sección 9/12), previo a la carga de Clarity.
 
+- **Páginas propias:** Brand Kit, Sistema de diseño, ~~y en V2~~ **Sobre mí y Accesibilidad** — estas dos devueltas a V1 el 2026-07-21 (ver sección 18).
+
 **V2**
-- Inglés · dominio propio · CV en PDF con identidad visual propia · medición ampliada (Google Tag Manager, Google Analytics, Search Console).
-- **Página "Sobre mí" completa** (contenido + diseño + desarrollo + enlace de vuelta en el nav) — pospuesta entera desde V1 el 2026-07-20 (ver sección 16).
-- **Página de Accesibilidad** (enlace de footer + contenido completo: declaración WCAG, contacto para reportar problemas) — retirada de V1 el 2026-07-20 (ver sección 16).
+- Inglés · dominio propio · CV en PDF con identidad visual propia · medición ampliada (Google Tag Manager, Google Analytics, Search Console) · página de Contacto ampliada.
+- ~~**Página "Sobre mí" completa** — pospuesta entera desde V1 el 2026-07-20 (ver sección 16).~~ **Revertido 2026-07-21: vuelve a V1** (ver sección 18).
+- ~~**Página de Accesibilidad** — retirada de V1 el 2026-07-20 (ver sección 16).~~ **Revertido 2026-07-21: vuelve a V1** (ver sección 18).
 
 **V3**
 - IA conversacional.
@@ -582,6 +585,32 @@ Pero la primera escalera falló en un punto: situó el umbral del split en 64px,
 **Descartado:** duplicar el `split` en el footer, y ensanchar el desplazamiento del split para que entrase en el nav compacto (ver sección 6).
 
 **Cerrado 2026-07-21:** nav y footer aplicados a la web y validados en vivo por Francisco. Con esto **ninguna sección de la home tiene ya diseño pendiente** y los tres bloques de desarrollo quedan desbloqueados (ver sección 16). Siguen abiertas la sesión de fotografía y la página Brand Kit, que no bloquean el build.
+
+---
+
+## 18. Reorganización de sprints y alcance de V1 (2026-07-21)
+
+Con el diseño de la home cerrado, Francisco replanteó el reparto por sprints. Decisiones:
+
+**Sprint 1 (hasta 24 jul) — cerrar diseño.** Responsive, Brand Kit, Sistema de diseño y la sesión de fotografía.
+- **Responsive pasa de Código a Diseño y sube a Sprint 1.** Criterio de Francisco, y es correcto: el responsive es primero una decisión de diseño (qué colapsa, qué se reordena, qué desaparece por breakpoint) y solo después una implementación. Se aborda en Claude Design. La pasada de QA responsive del tercer bloque de desarrollo no lo duplica: pasa a ser *verificar que el código cumple lo definido aquí*.
+- **Brand Kit y Sistema de diseño se montan como páginas ya**, no más adelante: hoy en la web solo existen los enlaces del footer, sin página detrás. La tarea de Sistema de diseño se reclasifica de Código/S a Diseño/M — no es solo limpiar el chrome de editor y enlazar, es integrar y adaptar el contenido a una página. Buen momento para Brand Kit: `BRAND.md` se amplió el mismo día con la tabla de uso del logo y las 7 reglas (sección 17), así que la página nace con el contenido completo.
+
+**Sprint 2 (27-31 jul) — desarrollo.** Los tres bloques de build de la home, más **Sobre mí y Accesibilidad, que vuelven a V1**.
+
+**Sprint 3 (3-7 ago) — lanzamiento.** Clarity, banner de cookies, tracking de clics, deploy de V1, y la analítica ampliada (dominio, GTM, GA4, Search Console).
+
+**Sprint 4 (10-14 ago) — cola de V2/V3.** i18n, CV en PDF, Contacto ampliada e investigación de la IA conversacional.
+
+**Sobre mí y Accesibilidad vuelven a V1 — revierte la decisión del 2026-07-20 (sección 16).** Se construyen en Sprint 2, por delante del deploy (Sprint 3), así que salen publicadas con V1: su `Versión` pasa de V2 a V1, porque etiquetar como V2 algo que se despliega en el lanzamiento sería falsear el roadmap.
+
+*Contrapunto planteado y descartado por Francisco:* Sprint 2 lleva ya tres bloques de build de talla L —la semana entera— y añadir dos páginas nuevas lo desborda; además, el 2026-07-20 se sacaron de V1 justo para publicar antes. Se propuso llevarlas a Sprint 4, después del deploy, lo que además las habría dejado como V2 sin tocar etiquetas. **Francisco decide mantenerlas en Sprint 2 y meter más horas si hace falta.** Queda registrado el riesgo asumido: V1 sale más completa pero más tarde.
+
+**Riesgo real, distinto del de capacidad:** ninguna de las dos páginas tiene contenido escrito — la tarea de contenido de Sobre mí llevaba en Blocked desde el 2026-07-19 por decisión del propio Francisco, y la de Accesibilidad estaba sin definir. Eso no se resuelve con horas de build: es texto que solo puede escribir él, y bloquea diseño y desarrollo. Ambas quedan marcadas como ruta crítica de Sprint 2.
+
+**Dependencia de orden en Accesibilidad:** el nivel WCAG que declare esa página tiene que corresponderse con lo que la web cumpla de verdad, así que se redacta después (o a la vez que) la pasada de QA de accesibilidad. Declarar AA sin haberlo verificado sería lo contrario de lo que la página pretende demostrar.
+
+**Gaps detectados al reorganizar** (tres tareas creadas): no existía tarea de **diseño** de la página de Accesibilidad (sí de contenido) — el mismo hueco que tuvo Brand Kit; ningún bloque de desarrollo cubría las **cuatro páginas propias con URL**, solo las secciones de la home; y el **reajuste de nav y footer** para recuperar los enlaces de Sobre mí y Accesibilidad no estaba en ninguna parte. Ese último toca dos zonas cerradas el mismo día: el nav pasa de 2 a 3 elementos (verificar en sus dos estados y en móvil) y el footer vuelve de 2 a 3 enlaces (reverificar el centrado óptico, sección 7).
 
 ---
 
