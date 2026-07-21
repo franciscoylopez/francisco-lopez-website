@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.6** (2026-07-22): se construye la página Brand Kit, la primera de las cuatro páginas propias, y se consolida todo el diseño en una sola fuente con componentes compartidos — ver sección 19.
 > **V1.5** (2026-07-21): reorganización de sprints y ampliación del alcance de V1 — Sobre mí y Accesibilidad vuelven a V1, el responsive pasa a ser tarea de diseño, y Brand Kit y Sistema de diseño se montan como páginas en Sprint 1 — ver sección 18.
 > **V1.4** (2026-07-21): antes de abordar el footer, Francisco cuestionó si el logo se estaba usando de forma coherente con lo que documentarán las páginas Brand Kit y Sistema de diseño. Se auditaron los tres usos construidos, se descubrió que `BRAND.md` nunca cerró la tabla de uso del logo, y se cerró — ver sección 17.
 > **V1.3** (2026-07-20): tras cerrar el diseño de Más allá del PM y Trayectoria, Francisco revisó el conjunto y planteó una segunda ronda de ajustes de contenido y arquitectura — logos reales de empresa/herramienta/institución, nuevo paso "Lanzamiento" en Cómo trabajo, recategorización de Toolkit, y repriorización (Sobre mí entero a V2, Accesibilidad a V2, nuevas páginas Brand Kit/Sistema de diseño) — ver sección 16.
@@ -619,6 +620,26 @@ Con el diseño de la home cerrado, Francisco replanteó el reparto por sprints. 
 **Dependencia de orden en Accesibilidad:** el nivel WCAG que declare esa página tiene que corresponderse con lo que la web cumpla de verdad, así que se redacta después (o a la vez que) la pasada de QA de accesibilidad. Declarar AA sin haberlo verificado sería lo contrario de lo que la página pretende demostrar.
 
 **Gaps detectados al reorganizar** (tres tareas creadas): no existía tarea de **diseño** de la página de Accesibilidad (sí de contenido) — el mismo hueco que tuvo Brand Kit; ningún bloque de desarrollo cubría las **cuatro páginas propias con URL**, solo las secciones de la home; y el **reajuste de nav y footer** para recuperar los enlaces de Sobre mí y Accesibilidad no estaba en ninguna parte. Ese último toca dos zonas cerradas el mismo día: el nav pasa de 2 a 3 elementos (verificar en sus dos estados y en móvil) y el footer vuelve de 2 a 3 enlaces (reverificar el centrado óptico, sección 7).
+
+---
+
+## 19. Página Brand Kit y consolidación del diseño (2026-07-21/22)
+
+Primera de las cuatro páginas propias que se construye. Parte del Brand Kit que ya existía en Claude Design (6 secciones: Concepto, Logotipo, Color, Tipografía, Aplicaciones, Uso correcto e incorrecto), que se mantiene como esqueleto porque la estructura era buena, y se corrige todo lo demás.
+
+**Lo que estaba mal en la base.** Cuatro colores desviados de los tokens — hueso, oscuro y los dos pasteles; el logo reconstruido con `div`s y `mix-blend-mode`, de modo que el split de la página de marca no se veía como el split de la marca; y ninguna de las reglas de la sección 17, por ser la página anterior a ellas. Se corrigió en dos rondas, más una tercera de nombres de token: la página documentaba `--bk-pastel-cyan`, que no existe.
+
+**Sección 06, reescrita con los errores reales del sistema.** En vez de una rejilla de ✓/✗ genéricos, los siete fallos que tuvo esta marca, con su antes/después, la cifra que los detectó y su corrección: el `viewBox` que mentía, el split a 24px, el favicon sin compensar, el logo pesando menos que un icono de LinkedIn, el lockup al 29%, el círculo dentro del círculo y los cuatro colores de la propia página. Convierte la página en prueba de criterio, que es lo que la sección 1 pide que demuestre la web.
+
+**Hero — la marca en uso, no la marca repetida.** El primer hero repetía el lockup a 200px del que ya lleva el nav: el mismo error que la sección 6 había resuelto para el Hero de la home, reproducido en otra página. Se sustituye por una composición que enseña la marca aplicada — una ventana de navegador dibujada a trazo, con el favicon en la pestaña y el nav dentro a sus proporciones reales, flanqueada por dos superficies de color.
+
+La idea que la ordena es de Francisco: **que la composición reproduzca la anatomía del logo.** Centro relleno de `foreground` entre dos flancos en `brand-cyan-soft` y `brand-purple-soft`. Como el centro conmuta con el tema y los flancos son fijos, el juego se produce solo en claro y en oscuro — es el mismo mecanismo de las dos capas que gobierna el logo, aplicado a escala de composición. Se usan los pasteles y no los colores del split: un panel es un fondo, y pintar dos superficies grandes con la firma sería aplicarla a la UI general.
+
+**Consolidación — una sola fuente para el diseño del sitio.** El trabajo estaba repartido en varias páginas de Claude Design, con la del Brand Kit fuera del documento del sitio. Se consolida todo en "Web personal", con el nav, el footer y el breadcrumb como **componentes compartidos, no copias**. El motivo no es de orden: es el mismo problema que causó tres bugs en dos días (el kit dibujado aparte del componente, los cuatro colores desviados, los nombres de token inventados) — una fuente duplicada acaba divergiendo. Y tiene efecto inmediato: en Sprint 2, cuando exista Accesibilidad, el footer pasa de 2 a 3 enlaces; con componentes compartidos ese cambio se hace una vez.
+
+**Criterio de proceso que queda fijado:** una sola fuente para el diseño del sitio, igual que `scripts/logo-kit/geometry.js` es la única para la geometría del logo. Las páginas de calibración se conservan como registro de decisiones, pero fuera del sitio. Y los prompts de integración se lanzan **desde el destino, no desde el origen**: desde la página de origen, los componentes que el agente tiene delante son precisamente las copias que hay que eliminar.
+
+**Verificación.** Las tres primeras rondas se midieron sobre capturas: proporciones del mockup, ratios de contraste —incluidos los de `--brand-purple-accent`, 3,96:1 y 3,48:1, exactos al segundo decimal—, colapso de la tabla en móvil y centrado óptico. La ronda final de consolidación la da por buena Francisco tras revisarla en los tres entornos; no está medida.
 
 ---
 
