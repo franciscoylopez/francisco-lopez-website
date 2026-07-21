@@ -51,10 +51,18 @@ kit original.
 **Colores fijos.** Los SVG llevan hex, no tokens CSS, para que sean portables
 fuera de la web. La versión con tokens que conmutan es el componente.
 
-## Pendiente de decisión
+## El lockup va al 60%, y es correcto
 
-El lockup tiene el wordmark al **60% de la altura del símbolo**, y la regla 5 de
-`BRAND.md` pide 40-45%. Se detectó al reconstruir el kit y **no se ha tocado**:
-cambiarlo altera un asset que ya está en uso, y decidir si el lockup suelto
-puede ser más protagonista del texto que el lockup del nav es una decisión de
-marca, no una corrección técnica.
+El wordmark del lockup mide el **60% de la altura del símbolo**. La primera
+redacción de la regla 5 de `BRAND.md` pedía 40-45% para todo, y al reconstruir
+el kit pareció una incoherencia. No lo era: **la regla estaba
+sobregeneralizada**, no el asset.
+
+Enfrentados los dos a 80px de alto, el 44% deja el nombre en pie de foto. El nav
+no es un lockup —son dos elementos sueltos en una fila, que además se
+descomponen al hacer scroll— mientras que este sí lo es, con las proporciones
+bloqueadas dentro de un asset cerrado que se usa a 200px o más y donde leer el
+nombre es el objetivo.
+
+Regla 5 matizada en consecuencia (2026-07-21): 40-45% compuestos en UI, ~60%
+lockup cerrado.

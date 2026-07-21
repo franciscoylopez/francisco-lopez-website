@@ -584,6 +584,10 @@ Pero la primera escalera falló en un punto: situó el umbral del split en 64px,
 
 **Descartado:** duplicar el `split` en el footer, y ensanchar el desplazamiento del split para que entrase en el nav compacto (ver sección 6).
 
+**Reconstrucción del kit descargable (2026-07-21, al preparar la página Brand Kit):** el kit de logo (`francisco-lopez-logo-kit/`) se había dibujado a mano, aparte del componente, y los dos habían derivado — los 12 SVG arrastraban el mismo `viewBox` acolchado que el componente corrigió esa mañana, y el favicon de 16px era el de 32 reescalado sin compensar el trazo (8,2% de cobertura de tinta frente a 8,1%: idénticos). En vez de parchearlos, el kit pasa a **generarse** desde `scripts/logo-kit/`, a partir de una definición de geometría que replica `logo.tsx` — parchearlos los dejaba arreglados hoy y divergiendo otra vez mañana. Salida en `public/logo-kit/`: 12 SVG, 36 PNG y 7 favicons, que son los que la página Brand Kit ofrecerá en descarga.
+
+**Regla 5 matizada el mismo día que se escribió:** al reconstruir el kit se vio que su lockup lleva el wordmark al 60% de la altura del símbolo, mientras la regla pedía 40-45% para todo. Enfrentados visualmente, el 44% dejaba el nombre en pie de foto: **la regla estaba sobregeneralizada, no el asset.** Se había escrito a partir de un solo caso, el del nav — que no es un lockup, sino dos elementos sueltos en una fila que además se descomponen al hacer scroll. Queda partida en dos: 40-45% para símbolo y texto compuestos en UI, ~60% para el lockup cerrado, que se usa a 200px o más y donde leer el nombre es el objetivo. Mismo patrón de error que el umbral del split: generalizar de una sola observación.
+
 **Cerrado 2026-07-21:** nav y footer aplicados a la web y validados en vivo por Francisco. Con esto **ninguna sección de la home tiene ya diseño pendiente** y los tres bloques de desarrollo quedan desbloqueados (ver sección 16). Siguen abiertas la sesión de fotografía y la página Brand Kit, que no bloquean el build.
 
 ---
