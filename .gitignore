@@ -24,6 +24,10 @@
 .DS_Store
 *.pem
 
+# archivos de trabajo desechables (scripts de un rato, previews de QA, borradores).
+# Lo que merezca conservarse sale de aqui a scripts/ o docs/ - ver scripts/logos/.
+/scratch
+
 # debug
 npm-debug.log*
 yarn-debug.log*
