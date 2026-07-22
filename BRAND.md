@@ -36,7 +36,9 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI).
 - Los pasteles (`*-soft`) no pasan contraste como primer plano. Si necesitas texto sobre un fondo pastel, usa `foreground` (gris/hueso), nunca otro pastel.
-- Cian primario: usa `#0B7C7C` en claro y `#3FC9C4` en oscuro (ya resuelto en los tokens; no lo hardcodees).
+- Cian primario: `#005E5F` en claro y `#3FC9C4` en oscuro (ya resuelto en los tokens; no lo hardcodees).
+
+  *Ajustado 2026-07-22:* el cian claro era `#0B7C7C`, que daba **4,53:1** como texto sobre el fondo — pasaba AA por 0,03. Aprobado raspado: cualquier retoque futuro del cian o del fondo lo tumbaba sin que nadie se enterase, y como botón estaba aún más justo (4,81:1). Al comparar las opciones se vio que llegar a AAA costaba un oscurecimiento **visualmente indistinguible**, así que quedarse en AA era dejar margen sobre la mesa por nada. Ahora da **7,01:1 como texto y 7,44:1 sobre botón**, y `primary` es AAA en los dos temas (oscuro ya estaba en 8,36:1). `--brand-cyan` se mueve con él para que no queden dos cianes casi iguales con nombres distintos. **El `brand-cyan-split` del logo (#16BDBD) no se toca:** es otro token, no tiene requisito de contraste y la firma no se negocia.
 
 ## Modo oscuro
 

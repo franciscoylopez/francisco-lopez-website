@@ -21,7 +21,7 @@
   --popover-foreground: oklch(0.2657 0.0118 248.27);
 
   /* --- Acción: cian primario (pasa AA con texto claro) --- */
-  --primary: oklch(0.5319 0.0886 194.82);       /* #0B7C7C */
+  --primary: oklch(0.43 0.0886 194.82);         /* #005E5F — AAA: 7,01:1 como texto y 7,44:1 sobre boton */
   --primary-foreground: oklch(0.9855 0.0057 84.57);
 
   /* --- Secundarios/mudos: NEUTROS a propósito (no marca) --- */
@@ -36,10 +36,10 @@
 
   --border: oklch(0.901 0.0142 88.69);
   --input: oklch(0.901 0.0142 88.69);
-  --ring: oklch(0.5319 0.0886 194.82);          /* foco = cian primario */
+  --ring: oklch(0.43 0.0886 194.82);            /* foco = cian primario */
 
   /* --- CAPA DE MARCA (decorativo / logo, NO tocar por shadcn) --- */
-  --brand-cyan: oklch(0.5319 0.0886 194.82);         /* #0B7C7C */
+  --brand-cyan: oklch(0.43 0.0886 194.82);           /* #005E5F — identico a primary a proposito */
   --brand-purple: oklch(0.6889 0.1581 289.96);       /* #9B87F5 */
   --brand-cyan-soft: oklch(0.8694 0.0592 192.12);    /* #A7E1DE pastel */
   --brand-purple-soft: oklch(0.8151 0.0776 295.46);  /* #C6B9F0 pastel */
@@ -69,7 +69,7 @@
   --secondary: oklch(0.3063 0.0152 252.34);
   --secondary-foreground: oklch(0.9653 0.0102 81.8);
   --muted: oklch(0.3063 0.0152 252.34);
-  --muted-foreground: oklch(0.7245 0.0116 95.22);
+  --muted-foreground: oklch(0.7295 0.0116 95.22); /* AAA (7,08:1) sobre --background oscuro; a 0.7245 se quedaba en 6,95 */
   --accent: oklch(0.3063 0.0152 252.34);
   --accent-foreground: oklch(0.9653 0.0102 81.8);
 
