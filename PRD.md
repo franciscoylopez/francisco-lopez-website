@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.7** (2026-07-22): se construye la página Design System, con la sección de Accesibilidad convertida en checklist de cierre, y el sistema de color entero pasa a AAA en ambos temas — ver sección 20.
 > **V1.6** (2026-07-22): se construye la página Brand Kit, la primera de las cuatro páginas propias, y se consolida todo el diseño en una sola fuente con componentes compartidos — ver sección 19.
 > **V1.5** (2026-07-21): reorganización de sprints y ampliación del alcance de V1 — Sobre mí y Accesibilidad vuelven a V1, el responsive pasa a ser tarea de diseño, y Brand Kit y Sistema de diseño se montan como páginas en Sprint 1 — ver sección 18.
 > **V1.4** (2026-07-21): antes de abordar el footer, Francisco cuestionó si el logo se estaba usando de forma coherente con lo que documentarán las páginas Brand Kit y Sistema de diseño. Se auditaron los tres usos construidos, se descubrió que `BRAND.md` nunca cerró la tabla de uso del logo, y se cerró — ver sección 17.
@@ -157,7 +158,7 @@ La decisión y su matiz importante: **el PRD ya quería un momento de marca en e
 7. **Toolkit** — herramientas agrupadas por categoría, con logos reales monocromo (ver 8.4 y sección 16).
 8. **Formación** — sección independiente, escaneable.
 9. **Contacto** — email, teléfono, LinkedIn, descargar CV.
-10. **Footer** — Brand Kit + Sistema de diseño + LinkedIn *(Accesibilidad se retira de V1, ver sección 16)*.
+10. **Footer** — Brand Kit + Design System + LinkedIn *(Accesibilidad se retira de V1, ver sección 16; la página se renombró de "Sistema de diseño" a **Design System** el 2026-07-22, ver sección 20)*.
 
 *(Corregido 2026-07-22: la lista tenía Toolkit en el 6 y Trayectoria en el 7, contradiciendo su propia anotación de "promovida por encima de Toolkit" y lo que dice 8.5. El orden real, implementado y validado el 2026-07-20, es Trayectoria antes que Toolkit; la lista numerada se quedó sin actualizar el 19 de julio. Se detectó al auditar la página de Sistema de diseño, cuyo "Esqueleto navegable" arrastraba el mismo orden viejo.)*
 
@@ -642,6 +643,41 @@ La idea que la ordena es de Francisco: **que la composición reproduzca la anato
 **Criterio de proceso que queda fijado:** una sola fuente para el diseño del sitio, igual que `scripts/logo-kit/geometry.js` es la única para la geometría del logo. Las páginas de calibración se conservan como registro de decisiones, pero fuera del sitio. Y los prompts de integración se lanzan **desde el destino, no desde el origen**: desde la página de origen, los componentes que el agente tiene delante son precisamente las copias que hay que eliminar.
 
 **Verificación.** Las tres primeras rondas se midieron sobre capturas: proporciones del mockup, ratios de contraste —incluidos los de `--brand-purple-accent`, 3,96:1 y 3,48:1, exactos al segundo decimal—, colapso de la tabla en móvil y centrado óptico. La ronda final de consolidación la da por buena Francisco tras revisarla en los tres entornos; no está medida.
+
+---
+
+## 20. Página Design System y sistema en AAA (2026-07-22)
+
+Segunda de las cuatro páginas propias. Parte del documento "Sistema de diseño global" que ya existía en Claude Design — nueve secciones cuyo contenido de fondo (rejilla, breakpoints, escala de espaciado y tipográfica) era sólido y se conserva.
+
+**Siete desfases corregidos.** La página llevaba tres días sin tocarse y había quedado por detrás de sus propias decisiones: decía "Selected Work" —renombrado a Hitos el 19 de julio— tanto en el esqueleto navegable como en la muestra de H1; el esqueleto listaba "Sobre mí" como sección de la home, juntaba Trayectoria y Formación en una, y ponía Toolkit antes que Trayectoria; le faltaba `--brand-purple-accent` y seis de los siete tokens de marca en el bloque `.dark`; y su regla de color afirmaba que los tonos de marca "nunca texto ni UI", falso desde que existe `brand-purple-accent`. Más el chrome de editor (`density`, `readingMeasure`) que arrastraba desde el 17 de julio.
+
+**Un dato que se contradecía con Brand Kit:** esta página daba el contraste del texto principal como 12,8:1 y Brand Kit como 13,8:1. El valor real es 13,79:1, así que la equivocada era la que documenta la accesibilidad medida.
+
+**La sección de Accesibilidad pasa de descriptiva a checklist verificable.** Es el cambio de fondo: deja de describir y pasa a ser **la lista con la que se cierra cada página del sitio** — contraste medido con cifra, foco visible, 44×44px, jerarquía de encabezados, breadcrumb en páginas internas, nada codificado solo por color, `prefers-reduced-motion` y alternativas textuales. Resuelve el "no debemos olvidarnos nunca de esto" de una forma que no depende de acordarse.
+
+**Frontera con la futura página de Accesibilidad**, dibujada para no repetir el solape de Brand Kit: aquí el criterio interno y las mediciones, para quien construye o audita; allí la declaración pública —nivel que cumple el sitio y cómo reportar un problema—, para un visitante. La página de Accesibilidad no puede escribirse antes que la checklist: declara un nivel de conformidad que solo se sabe después de auditar.
+
+**Renombrada a "Design System"** (2026-07-22) para equipararla a Brand Kit: nombre de página en inglés, kicker en español con la categoría. Cambiado en los tres sitios —H1, breadcrumb y enlace del footer— porque tener un nombre en la navegación y otro en la página significa clicar una cosa y aterrizar en otra. Al ser el footer un componente compartido, el cambio se propagó solo a todas las páginas: la prueba de que la consolidación de la sección 19 funciona.
+
+**Dos datos de la cabecera que no eran ciertos:**
+- *"42rem · Medida de lectura (~68 car.)"* — medido sobre la tipografía real, Inter da **7,38px por carácter**, así que 42rem son **~91 caracteres**, no 68. La prueba estaba en la propia página: una línea de 85 caracteres cabe en un renglón ocupando 627 de los 672px. El error viene de confundir caracteres con la unidad CSS `ch`. Corregido, y añadido el contexto de que 91 está por encima del rango clásico de 45-75 — es una decisión consciente y la página gana diciéndolo.
+- *"4→5 · Breakpoints"* — un dato que parecía un rango junto a una lista de cinco nombres. Separado en lo que son: **4 breakpoints** (640, 768, 1024, 1280) que producen **5 tramos** (base, sm, md, lg, xl).
+
+**El sistema entero pasa a AAA.** Al preparar la checklist se midió el estado real y aparecieron tres pares que no llegaban:
+
+| | Antes | Ahora |
+|---|---|---|
+| `primary` claro, como texto | 4,53:1 — AA por 0,03 | **7,01:1 AAA** |
+| `primary` claro, sobre botón | 4,81:1 | **7,44:1 AAA** |
+| `muted-foreground` oscuro | 6,95:1 | **7,08:1 AAA** |
+| `muted-foreground` claro | 5,87:1 | **7,12:1 AAA** |
+
+Los dos primeros salen del mismo cambio: `--primary` de `#0B7C7C` a `#005E5F`. Pasaba AA por tres centésimas —cualquier retoque futuro del cian o del fondo lo tumbaba sin que nadie se enterase— y llegar a AAA costaba un oscurecimiento visualmente indistinguible. `--brand-cyan` y `--ring` se movieron con él para no dejar dos cianes casi iguales con nombres distintos. **El `brand-cyan-split` del logo no se tocó:** es otro token, no tiene requisito de contraste, y la firma no se negocia.
+
+El de `muted-foreground` en claro fue el único que **no era gratis** —el gris se nota algo más oscuro y ese token existe para leerse como secundario— y se aplicó igualmente porque la distancia con el texto principal (13,79:1) sigue siendo enorme. Resultado: **ningún par del sistema se queda en AA**.
+
+**Pendiente de traslado al repo:** los cinco tokens de layout que define esta página (`--container`, `--page-x`, `--gutter`, `--measure`, `--section-y`) no existen en `globals.css`. Anotado como requisito explícito en la tarea de Setup del build (ver sección 18).
 
 ---
 
