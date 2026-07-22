@@ -153,11 +153,13 @@ La decisión y su matiz importante: **el PRD ya quería un momento de marca en e
 3. **Hitos** *(sustituye a "Selected Work")* — filas escaneables (nombre + una línea de impacto/resultado + año, sin icono — ver sección 16). El exit de TheTool es el hito destacado. Sigue siendo la red de seguridad para el lector que escanea rápido (ver decisión en sección 4): va justo después del Hero.
 4. **Cómo trabajo** — el proceso: Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica (paso "Lanzamiento" añadido 2026-07-20, ver sección 16).
 5. **Más allá del PM** — reformulado como pieza narrativa (cofundador, growth, marketing) que no repite los proyectos ya vistos en Hitos; diseño cerrado (ver 8.3).
-6. **Toolkit** — herramientas agrupadas por categoría, con logos reales monocromo (ver 8.4 y sección 16).
-7. **Trayectoria** *(promovida en jerarquía, por encima de Toolkit)* — cronología con 1-2 frases de qué trabajo se hizo y con qué autoridad (seniority) por experiencia; incluye un CTA secundario de Descargar CV (cubre el nav oculto tras el menú hamburguesa en mobile).
+6. **Trayectoria** *(promovida en jerarquía por encima de Toolkit el 2026-07-19)* — cronología con 1-2 frases de qué trabajo se hizo y con qué autoridad (seniority) por experiencia; incluye un CTA secundario de Descargar CV (cubre el nav oculto tras el menú hamburguesa en mobile).
+7. **Toolkit** — herramientas agrupadas por categoría, con logos reales monocromo (ver 8.4 y sección 16).
 8. **Formación** — sección independiente, escaneable.
 9. **Contacto** — email, teléfono, LinkedIn, descargar CV.
 10. **Footer** — Brand Kit + Sistema de diseño + LinkedIn *(Accesibilidad se retira de V1, ver sección 16)*.
+
+*(Corregido 2026-07-22: la lista tenía Toolkit en el 6 y Trayectoria en el 7, contradiciendo su propia anotación de "promovida por encima de Toolkit" y lo que dice 8.5. El orden real, implementado y validado el 2026-07-20, es Trayectoria antes que Toolkit; la lista numerada se quedó sin actualizar el 19 de julio. Se detectó al auditar la página de Sistema de diseño, cuyo "Esqueleto navegable" arrastraba el mismo orden viejo.)*
 
 **Sobre mí** no es una sección de este flujo — ver decisión abajo: es una **página propia con URL**, enlazada desde el nav, con contenido de tono personal. No compite por posición en la lista de arriba, igual que Brand Kit y Sistema de diseño ya son páginas propias enlazadas desde el footer.
 
