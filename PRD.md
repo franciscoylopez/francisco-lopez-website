@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.8** (2026-07-22): pasada de responsive de la home —seis secciones que no apilaban en móvil por la misma causa— y ronda de ajustes de contenido, incluida la corrección del email y el LinkedIn, que estaban mal en la web — ver sección 21.
 > **V1.7** (2026-07-22): se construye la página Design System, con la sección de Accesibilidad convertida en checklist de cierre, y el sistema de color entero pasa a AAA en ambos temas — ver sección 20.
 > **V1.6** (2026-07-22): se construye la página Brand Kit, la primera de las cuatro páginas propias, y se consolida todo el diseño en una sola fuente con componentes compartidos — ver sección 19.
 > **V1.5** (2026-07-21): reorganización de sprints y ampliación del alcance de V1 — Sobre mí y Accesibilidad vuelven a V1, el responsive pasa a ser tarea de diseño, y Brand Kit y Sistema de diseño se montan como páginas en Sprint 1 — ver sección 18.
@@ -211,7 +212,7 @@ Formato: fila escaneable = nombre + **una línea de impacto/resultado** + año, 
 - **2026 — Emendu**: Partnership estratégico con Sesame HR.
 - **2023 — INDYA**: Churn mensual 16% → 10%, activación primer mes +28%.
 - **2022 — INDYA**: Seleccionada por Apple App Store Foundations.
-- **2021 — TheTool**: Exit → adquirida por AppRadar. *(hito destacado — candidato al acento decorativo morado, ver sección 6/15)*
+- **2021 — TheTool**: Adquirida por AppRadar + chip **EXIT** en color. *(hito destacado — ver el tratamiento final en la sección 21)*
 - **2019 — TheTool**: Nominado a Mejor Software ASO de Europa (App Promotion Summit).
 
 Al nombrar "Sesame HR" explícitamente aquí, se confirma que el anonimizado "un player grande de HR" del detalle de proceso de abajo (histórico, sección 8.3) fue solo por no repetir el nombre en el copy narrativo — no hay problema de confidencialidad en nombrarlo.
@@ -264,6 +265,11 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Lanzamiento → A
 
 **Copy validado (2026-07-20):**
 > Lanzamiento — Despliego con control: feature flags, rollout progresivo y A/B testing antes de exponer el cambio a todos los usuarios.
+
+**Párrafo de entrada de la sección (actualizado 2026-07-22):**
+> Un método end-to-end: del problema al dato que confirma que el objetivo se ha cumplido. Seis etapas que se retroalimentan.
+
+*El anterior decía "Cinco etapas" y llevaba desactualizado desde que se añadió Lanzamiento el 2026-07-20. No era solo una mejora de redacción: el dato estaba mal.*
 
 ### 8.3 Más allá del PM
 
@@ -340,7 +346,9 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 **Redacción final (validada 2026-07-19):**
 
 **Producto**
-> Diez años liderando producto en SaaS B2B y B2C — de cofundador con exit a Product Manager en scale-ups — con foco constante en discovery, UX y resultados medibles.
+> Diez años liderando producto en SaaS B2B y B2C — de cofundador con exit a Product Manager en startups y scale-ups — con foco constante en discovery, UX y resultados medibles.
+
+*(Actualizado 2026-07-22: se añade "startups y" — la frase solo decía scale-ups y dejaba fuera media trayectoria.)*
 
 | Empresa | Rol | Periodo | Resumen |
 |---|---|---|---|
@@ -348,7 +356,7 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 | KUOTIP | Cofounder & Product | Feb 2024 – Nov 2024 | Validé el problema de fraude en reviews y diseñé el MVP con verificación por voz e IA; como cofundador, apoyé a la CEO en el fundraising pre-seed. |
 | INDYA | Product Lead | Ene 2022 – Dic 2023 | Rediseñé pricing y onboarding para mejorar activación y reducir churn; reportaba al CPO/cofundador, liderazgo por influencia sin autoridad formal. |
 | Freepik | Product Manager | Oct 2021 – Dic 2021 | Investigué y definí funcionalidades para el área de contributors; mejoré el onboarding (registro, emailing, calidad de perfiles) a partir de análisis cualitativo y cuantitativo con diseño. |
-| **Shutapp Projects** — TheTool | Cofounder & Product Manager | May 2016 – Oct 2021 | Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo no-código (backend, frontend, diseño). |
+| **Shutapp Projects** — TheTool | Cofounder & Product | May 2016 – Oct 2021 | Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo no-código (backend, frontend, diseño). |
 | **Shutapp Projects** — PICKASO | COO | Sep 2015 – Dic 2016 | Profesionalicé estructura y cartera de servicios de la agencia; ese trabajo financió el arranque de TheTool. |
 
 **Experiencia previa — Marketing & Growth (2009–2015)**
@@ -678,6 +686,48 @@ Los dos primeros salen del mismo cambio: `--primary` de `#0B7C7C` a `#005E5F`. P
 El de `muted-foreground` en claro fue el único que **no era gratis** —el gris se nota algo más oscuro y ese token existe para leerse como secundario— y se aplicó igualmente porque la distancia con el texto principal (13,79:1) sigue siendo enorme. Resultado: **ningún par del sistema se queda en AA**.
 
 **Pendiente de traslado al repo:** los cinco tokens de layout que define esta página (`--container`, `--page-x`, `--gutter`, `--measure`, `--section-y`) no existen en `globals.css`. Anotado como requisito explícito en la tarea de Setup del build (ver sección 18).
+
+---
+
+## 21. Pasada de responsive y ronda de contenido (2026-07-22)
+
+### Responsive: una sola regla que no se aplicaba en seis sitios
+
+Los fallos reportados no eran seis problemas distintos sino **el mismo, repetido**: rejillas de dos columnas de escritorio que no se apilaban en móvil. Hitos conservaba las columnas de tabla con sus cabeceras; Cómo trabajo y Formación mantenían el `aside` en `sticky`, de modo que el título quedaba clavado y se superponía encima del contenido —ilegibles los dos textos—; Trayectoria dejaba la columna de fecha ocupando media pantalla y partía los resúmenes en quince renglones de dos palabras; Toolkit mantenía dos tarjetas por fila a 375px; y Contacto partía el correo a mitad de palabra en cuatro trozos.
+
+**La regla ya estaba escrita y bien**, en la página Design System cerrada esa misma mañana: *"el contenido vive en una rejilla `aside + contenido` que se apila en móvil"*, *"`sticky` en escritorio"*, y el tramo `base` de la tabla de breakpoints diciendo *"una columna, todo apilado"*. No hubo que decidir nada nuevo: hubo que aplicar lo que el sistema ya decía.
+
+**Contacto era el más grave** aunque no lo pareciera: el clic en el correo es la métrica primaria de éxito de la web (sección 9), y era el elemento peor presentado en móvil. Se detectó porque, siendo la causa sistémica, se predijo que Contacto usaba el mismo patrón fila+divisor que Trayectoria (decisión del 2026-07-18) y debía estar afectado. Lo estaba.
+
+El Hero se revisó y estaba correcto. Nav y footer se habían rehecho el día anterior.
+
+### Ronda de contenido
+
+Ocho ajustes, con tres cosas que aparecieron al revisarlos:
+
+- **Los datos de contacto de la web estaban mal** y el PRD los tenía bien: el sitio se había desviado de la fuente. Corregidos el email y el LinkedIn, tanto en el texto visible como en los `href`.
+- **El párrafo de Cómo trabajo estaba desactualizado**, no solo mejorable: decía "Cinco etapas" cuando son seis desde el 2026-07-20 (ver 8.2).
+- **El cargo de TheTool aparecía con tres redacciones distintas** — "Cofundador & Product Manager" en la web, "Cofundador & Product Manager" en 8.1 y "Cofounder & Product Manager" en la tabla de 8.5. Unificado a **"Cofounder & Product"**, que además alinea con el formato que ya usaba KUOTIP.
+
+**Los enlaces de Contacto no tenían estado interactivo** más allá del cursor. No era un detalle estético: el punto 2 de la checklist de accesibilidad que publica el propio sitio exige foco visible en todo elemento interactivo, así que la home incumplía su propia norma.
+
+Y al medir el hover ya implementado apareció algo que solo se ve midiendo los estados interactivos, no los de reposo: **el hover bajaba el contraste de 7,10:1 a 6,42:1**, sacando el enlace del AAA que se había conseguido esa misma mañana. La causa era que oscurecía el fondo sin oscurecer el texto. Corregido haciendo que el valor pase a `foreground` al interactuar: sube a **11,36:1**, y de paso el hover se nota más — en esta paleta todos los neutros están a 1,1-1,2:1 entre sí, así que la señal visible solo puede darla el texto, no el fondo.
+
+### Dos decisiones de diseño
+
+**Hitos — la deduplicación se probó y se revirtió.** Se quitó el nombre de empresa de la segunda aparición de INDYA y TheTool, pero las filas resultantes quedaban con la columna NOMBRE vacía y nada indicaba que pertenecían a la empresa de arriba: se leía como dato que falta, no como continuación. La repetición era mejor que la ambigüedad.
+
+**Hitos — el destacado del exit pasa de fondo a movimiento.** La banda en morado claro a lo ancho de la fila se retira: `BRAND.md` dice que el morado es apoyo "con cuentagotas" y una banda no lo es. La frase y el chip EXIT se quedan, pero **el chip entra con retardo** (250-300ms tras el reveal de su fila, una sola vez, sin bucle, y visible desde el inicio con `prefers-reduced-motion`). La jerarquía la marca el tiempo, no el color — aplicación directa de la regla de motion de la sección 6.
+
+*Efecto colateral a vigilar:* es el segundo recorte al morado, y viene de una decisión que se tomó en su día precisamente porque el morado no aparecía lo suficiente (sección 15). Sigue existiendo en el chip de Split del Brand Kit, en el acento sobre "Exit" de Más allá del PM y en el flanco de la composición del Brand Kit, pero conviene no seguir restándole sitios sin darse cuenta.
+
+### Un cambio de copy con una consecuencia
+
+El párrafo de Contacto pasa a:
+
+> Senior Product Manager con experiencia en SaaS, siempre busco impacto real para los usuarios y conseguir los objetivos de la empresa. Si encaja, escríbeme o llámame directamente.
+
+El anterior —*"Busco un rol de Senior Product Manager en un SaaS con producto real y equipo detrás"*— era **el único sitio de la web donde aparecía el ICP** definido en la sección 4. El nuevo describe qué es en vez de qué busca, y pierde ese filtro. Cambio consciente, con el matiz registrado por si más adelante interesa recuperar el filtro sin volver al tono anterior.
 
 ---
 
