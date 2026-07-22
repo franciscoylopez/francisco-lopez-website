@@ -34,7 +34,7 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 
 ## Accesibilidad (no negociable)
 
-- Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI).
+- Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el suelo, no el objetivo:** se empuja a AAA siempre que se pueda. Estado a 2026-07-22, todo medido: texto principal 13,79:1 claro y 15,32:1 oscuro; `primary` como texto 7,01:1 y 8,36:1; texto sobre botón 7,44:1 y 8,36:1; `muted-foreground` 7,12:1 y 7,08:1. **Todo el sistema está en AAA en ambos temas**, sin ningún par en AA suelto.
 - Los pasteles (`*-soft`) no pasan contraste como primer plano. Si necesitas texto sobre un fondo pastel, usa `foreground` (gris/hueso), nunca otro pastel.
 - Cian primario: `#005E5F` en claro y `#3FC9C4` en oscuro (ya resuelto en los tokens; no lo hardcodees).
 

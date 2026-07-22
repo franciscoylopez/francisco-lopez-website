@@ -76,7 +76,7 @@
   --secondary: oklch(0.9316 0.0128 86.83);
   --secondary-foreground: oklch(0.2657 0.0118 248.27);
   --muted: oklch(0.9316 0.0128 86.83);
-  --muted-foreground: oklch(0.4815 0.0064 95.19);
+  --muted-foreground: oklch(0.4365 0.0064 95.19); /* AAA (7,12:1) sobre --background claro; a 0.4815 se quedaba en 5,87 */
   --accent: oklch(0.9316 0.0128 86.83);
   --accent-foreground: oklch(0.2657 0.0118 248.27);
 
