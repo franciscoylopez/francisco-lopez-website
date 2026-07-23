@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.9** (2026-07-23): reenfoque a lanzar V1 lo antes posible y priorización con MoSCoW en un tablero enlazado aparte. Sobre mí y Accesibilidad vuelven a V2, GA4 pasa a ser la medición del lanzamiento (Clarity queda para lo cualitativo), la arquitectura i18n es Must desde la primera línea, y los sprints se reorganizan a seis — ver sección 22.
 > **V1.8** (2026-07-22): pasada de responsive de la home —seis secciones que no apilaban en móvil por la misma causa— y ronda de ajustes de contenido, incluida la corrección del email y el LinkedIn, que estaban mal en la web — ver sección 21.
 > **V1.7** (2026-07-22): se construye la página Design System, con la sección de Accesibilidad convertida en checklist de cierre, y el sistema de color entero pasa a AAA en ambos temas — ver sección 20.
 > **V1.6** (2026-07-22): se construye la página Brand Kit, la primera de las cuatro páginas propias, y se consolida todo el diseño en una sola fuente con componentes compartidos — ver sección 19.
@@ -473,6 +474,8 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 ---
 
+> **Actualizado 2026-07-23 (ver §22):** reenfoque a lanzar V1 ASAP. Sobre mí y Accesibilidad **vuelven a V2** (revierte §18); GA4/GTM y el dominio propio entran en el lanzamiento como V1; Clarity pasa a V2 (cualitativo); se añaden Sprint 5 y 6.
+
 ## 13. Roadmap
 
 **V1**
@@ -610,6 +613,8 @@ Pero la primera escalera falló en un punto: situó el umbral del split en 64px,
 
 ## 18. Reorganización de sprints y alcance de V1 (2026-07-21)
 
+> **Superado en parte por §22 (2026-07-23):** los sprints se reorganizan a seis y Sobre mí/Accesibilidad vuelven a V2. Lo de abajo queda como registro histórico.
+
 Con el diseño de la home cerrado, Francisco replanteó el reparto por sprints. Decisiones:
 
 **Sprint 1 (hasta 24 jul) — cerrar diseño.** Responsive, Brand Kit, Sistema de diseño y la sesión de fotografía.
@@ -728,6 +733,40 @@ El párrafo de Contacto pasa a:
 > Senior Product Manager con experiencia en SaaS, siempre busco impacto real para los usuarios y conseguir los objetivos de la empresa. Si encaja, escríbeme o llámame directamente.
 
 El anterior —*"Busco un rol de Senior Product Manager en un SaaS con producto real y equipo detrás"*— era **el único sitio de la web donde aparecía el ICP** definido en la sección 4. El nuevo describe qué es en vez de qué busca, y pierde ese filtro. Cambio consciente, con el matiz registrado por si más adelante interesa recuperar el filtro sin volver al tono anterior.
+
+---
+
+## 22. Reenfoque a lanzar V1 ASAP y priorización MoSCoW (2026-07-23)
+
+Con el diseño de la home y las páginas de sistema cerrado, Francisco reenfocó la ejecución: **desarrollar y publicar V1 lo antes posible con todo lo ya diseñado, compartirla, y a partir de ahí optimizar** (marca: CV en PDF, firma de email, header de LinkedIn) y **seguir** (nuevas páginas, más métricas). El diseño de secciones nuevas deja de bloquear el lanzamiento.
+
+**Corte de lanzamiento.** El primer deploy de V1 lleva: home completa + Brand Kit + Design System + SEO/OG + medición. **Sobre mí y Accesibilidad salen del lanzamiento y vuelven a V2** — revierte lo decidido en §18 (2026-07-21), que las había traído a V1. Es el cuarto movimiento de estas dos páginas (fuera de V1 el 20-jul, dentro el 21-jul, y ahora otra vez fuera); la razón es que son las únicas piezas de V1 bloqueadas por contenido sin escribir, y sacarlas limpia el camino a producción. Con esto se descarta el esquema "V1.0/V1.1": lanzamiento = V1, todo lo diferido = V2.
+
+**Priorización con MoSCoW, en un tablero aparte.** A petición de Francisco, la priorización vive en un **tablero enlazado** (linked view) de la base *Tareas — Web personal*, agrupado por una propiedad nueva `MoSCoW`, en la página "[Priorización MoSCoW — corte de lanzamiento](https://app.notion.com/p/3a62caec08be81989325c9fce678de5b)" dentro de *New Website*. Son las mismas tareas, no copias; mover una tarjeta no toca Sprint ni Prioridad del tablero de ejecución. Regla adoptada: **todo lo que queda en Could es V2.**
+
+**Tareas nuevas** (gaps detectados al reenfocar): SEO técnico base (metadata, Open Graph, cards por página — dejar preparado sin planificar contenidos ni enlaces), plantilla + imágenes OG por página, política de cookies / aviso de privacidad (Legal), integrar el CV PDF actual (wiring del botón), firma de email con la marca, y header de LinkedIn con la marca. Las dos últimas son piezas externas a la web, en paralelo.
+
+**Medición (revierte el criterio de Clarity de §9).** Como el dominio propio entra en el lanzamiento, **GA4 + GTM se adelantan a V1** como capa de medición: miden las métricas de éxito (clics mailto/tel/CV, scroll) como conversiones limpias, mejor que Clarity. **Clarity baja a Could/V2** y queda para lo cualitativo (heatmaps, grabaciones, mapas de atención) en la fase de optimización. El **consentimiento de cookies (banner + política) viaja con GA4, no con Clarity** — GA4 también usa cookies y requiere consentimiento en España. GA4 corre también sobre `.vercel.app`, así que **medir no depende del dominio**.
+
+**Dominio.** Se mantiene en el lanzamiento (Must, V1) por imagen/marca, ya desacoplado de la medición.
+
+**CV.** Se usa el **PDF actual** en el lanzamiento — integrado en el repo en `public/cv/francisco-lopez-cv-es.pdf` (sufijo `-es` para dejar sitio a `-en`). El rediseño con identidad propia sigue como tarea paralela (V2).
+
+**i18n desde la primera línea.** La **arquitectura** i18n (routing con locale, ES + EN, cero strings hardcodeados) es **Must desde la primera línea de código** — escrito como requisito "NO OMITIR" en la tarea de Setup, aplica a todo el build. La **traducción** del contenido a inglés es aparte y es V2. Arquitectura ahora, traducción después.
+
+**Regla de coherencia de tareas.** Por página, **contenido ≤ diseño ≤ desarrollo** en prioridad (mismo nivel MoSCoW; el desarrollo no puede ir por delante de su diseño o su contenido), y **nunca una tarea de desarrollo que agrupe varias páginas** (no se puede priorizar limpio). Se detectó porque el bundle "Páginas secundarias" mezclaba Must (Brand Kit + Design System) con Could (Sobre mí + Accesibilidad); se **partió** en dos tareas.
+
+**Reorganización de sprints (supersede §18).** Seis sprints, monótonos con MoSCoW:
+
+| Sprint | Foco | MoSCoW |
+|---|---|---|
+| 2 (27-31 jul) | Build home + Brand Kit/Design System + SEO/OG + CV wiring | Must |
+| 3 (3-7 ago) | Lanzamiento: Deploy + Dominio + DNS, y medición (GTM → GA4 → consentimiento → tracking → Search Console) | Must → Should |
+| 4 (10-14 ago) | Marca (firma email, LinkedIn, CV rebrand) + i18n research + contenido/diseño de Sobre mí y Accesibilidad | Should → Could |
+| 5 (17-21 ago, nuevo) | Dev de Sobre mí + Accesibilidad → reajuste nav/footer + Clarity + Contacto ampliada | Could → Wont |
+| 6 (24-28 ago, nuevo) | IA conversacional | Wont |
+
+**Prioridad renumerada 10→39**, monótona: **Must 10-20 · Should 21-30 · Could 31-37 · Wont 38-39**. Tres incongruencias corregidas en el reparto: el tracking de clics quedaba antes que el GA4/GTM del que depende (ahora después); el dev de Sobre mí/Accesibilidad quedaba en el mismo sprint que su diseño (ahora en el siguiente); y las tareas nuevas estaban sin sprint ni prioridad.
 
 ---
 
