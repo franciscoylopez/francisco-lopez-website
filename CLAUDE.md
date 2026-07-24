@@ -1,6 +1,7 @@
 @AGENTS.md
 @BRAND.md
 @PRD.md
+@DECISIONS.md
 
 # Seguimiento de tareas (Notion)
 
@@ -18,3 +19,29 @@ Al empezar una sesión de desarrollo:
 - **`Prioridad` es un orden global de ejecución, no una etiqueta de importancia.** Números bajos = antes. Debe ser coherente con el orden de sprints: todo lo del sprint 1 va por delante de todo lo del 2, y así sucesivamente. Dentro de cada sprint, ordena por dependencia — primero lo que desbloquea a otras tareas.
 - Las tareas cerradas conservan su prioridad histórica (por debajo de 10); las abiertas van de 10 en adelante. Si al reordenar hace falta hueco, renumera el bloque abierto entero en vez de meter decimales.
 - **`Versión` refleja en qué release sale la tarea de verdad, no dónde se planificó.** Si una tarea se construye antes del deploy de V1, es V1 — aunque en su día se pospusiera a V2.
+
+# Fase de desarrollo — convenciones (V1 build)
+
+Las **decisiones** técnicas viven en `DECISIONS.md` (fuente de verdad; hay copia espejo en Notion). Esto son las **reglas** que aplican al escribir código, no negociables salvo que una decisión nueva las cambie.
+
+- **Registro de decisiones.** Producto/diseño/alcance → `PRD.md`. Técnica transversal → `DECISIONS.md` (+ espejo en Notion). Convenciones → este archivo. "Por qué" del código → mensaje de commit/PR. Progreso por tarea → notas de Notion (actualiza `Estado` al empezar y al cerrar).
+- **i18n desde la primera línea.** Cero strings hardcodeados: todo texto sale del diccionario tipado. Locale en `app/[lang]/`, ES sin prefijo (`/`), EN en `/en`. Enrutado en `proxy.ts` (Next 16), no `middleware.ts`. Nombrar assets con locale cuando aplique.
+- **Server por defecto.** `"use client"` solo en islas interactivas (nav, reveals, contadores, tabs, toggle de tema, preview de dispositivo). Todo lo demás, Server Component.
+- **Responsive en CSS/Tailwind**, no en JS. Breakpoints alineados con Tailwind (sm 640 / md 768 / lg 1024 / xl 1280). El contenido apila en móvil; nada de `matchMedia` para maquetar.
+- **Tokens, no hex.** Solo tokens de `app/globals.css` (`brand-globals.css` está deprecado). Respeta la regla de dos capas de `BRAND.md`: `primary` (cian) es el único color de acción; el morado es decorativo. Nunca inventes colores.
+- **Objetivos no funcionales** (criterios de aceptación, no aspiraciones): PageSpeed/Lighthouse >90; desktop **y** mobile optimizados; accesibilidad AA de suelo, empujar AAA. `next/image` para imágenes, `next/font` para fuentes, minimizar JS de cliente.
+
+## Checklist de accesibilidad — gate de cierre de cada página/sección
+
+Antes de dar por cerrada una página o sección, verificar los 8 puntos (es la lista que publica el propio Design System del sitio):
+
+1. **Contraste medido, con cifra, en ambos temas.** AA es el suelo; AAA siempre que se alcance sin coste visual. Verificar también los estados interactivos (hover/focus), no solo el reposo.
+2. **Foco visible:** anillo de 2px con `var(--ring)` y offset de 2px en todo elemento interactivo. Nunca `outline:none` sin sustituto.
+3. **Objetivos táctiles ≥ 44×44px**, también en controles pequeños (breadcrumb, toggle de tema).
+4. **Un solo `h1` por página** y jerarquía `h2`–`h4` sin saltos. El orden de lectura = el orden del DOM.
+5. **Breadcrumb** en toda página interna: `<nav aria-label>`, lista ordenada, `aria-current="page"` en el nivel actual.
+6. **Nada codificado solo por color:** todo estado/categoría distinguido por color lleva además texto o forma.
+7. **`prefers-reduced-motion`** respetado en toda animación (reveals, contadores, transición del nav).
+8. **Alternativas textuales:** `alt` y etiquetas donde informan, `aria-hidden` en lo decorativo.
+
+Verificación real por página con la skill `claude-in-chrome`: Lighthouse (desktop + mobile) + axe, en claro y oscuro.
