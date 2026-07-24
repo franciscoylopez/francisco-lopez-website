@@ -123,3 +123,30 @@ responsive manual).
 **Contexto.** Proporcionado a "lanzar V1 ASAP": herramientas que garantizan limpieza/perf/a11y sin
 frenar el lanzamiento. ESLint (`core-web-vitals` + `typescript`) ya cubre reglas de jsx-a11y y de
 rendimiento; `strict` ya está activo.
+
+## D12 · Branching y releases — 2026-07-24
+**Decisión.** Trunk-based con ramas cortas → PR → `main`. Naming `<tipo>/<scope-en-kebab>` con tipos
+alineados a Conventional Commits: `feat/`, `fix/`, `perf/`, `a11y/`, `refactor/`, `chore/`, `docs/`,
+`seo/` (kebab-case, en inglés, cortas; ej. `feat/nav-sticky`, `perf/hero-lcp`). Pre-deploy:
+`feat/build-v1` se mantiene como rama de integración del andamiaje (aceptable porque `main` aún no
+está en producción). **Al conectar Vercel, trocear por bloque** (`feat/setup-i18n`, `feat/nav`, …)
+→ PR → preview → merge. Post-launch: `main` = producción protegida, ramas cortas siempre, y **tags
+de release** `vX.Y.Z` en cada deploy para tener puntos de retorno.
+
+**Contexto.** Dev en solitario + Vercel: Gitflow (develop/release/hotfix) es sobre-ingeniería;
+las ramas largas son anti-patrón (merges big-bang, drift, revisión imposible). El rigor de ramas
+cortas importa sobre todo **después** del primer deploy, cuando `main` = producción.
+
+## D13 · Entornos y staging = Vercel Previews — 2026-07-24
+**Decisión.** No hay entorno de staging pesado separado. Los **Vercel Preview Deployments** (uno por
+rama/PR, build idéntico a producción) son el staging de facto. **Conectar Vercel temprano** (previews
+en `.vercel.app`) para QA continuo de perf/OG/analítica durante todo el build — el deploy "oficial" +
+dominio siguen en Sprint 3. **Lighthouse se mide contra build de producción** (el preview de Vercel o
+`next build && next start`), **nunca `next dev`** (dev mode da cifras engañosas). La **analítica se
+gatea por entorno** (`VERCEL_ENV === 'production'`) o propiedad GA4 aparte, para no ensuciar los datos
+de producción con tráfico de dev/preview.
+
+**Contexto.** Portfolio solo-dev: un staging persistente sería sobre-ingeniería, pero hay
+validaciones que no se pueden hacer en local — consentimiento/cookies/GA4 (dominios y cookies
+reales), OG cards (los scrapers necesitan URL pública), y el número real de Lighthouse sobre infra
+desplegada. Los previews cubren las tres gratis.
