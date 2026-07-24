@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.10** (2026-07-23): se cierra el Sprint 1. La foto del Hero se resuelve con una imagen generada con IA a partir de una foto de Francisco (recorte 4:5) en vez de una sesión de estudio, y se fijan las notas de uso para el build — ver sección 23.
 > **V1.9** (2026-07-23): reenfoque a lanzar V1 lo antes posible y priorización con MoSCoW en un tablero enlazado aparte. Sobre mí y Accesibilidad vuelven a V2, GA4 pasa a ser la medición del lanzamiento (Clarity queda para lo cualitativo), la arquitectura i18n es Must desde la primera línea, y los sprints se reorganizan a seis — ver sección 22.
 > **V1.8** (2026-07-22): pasada de responsive de la home —seis secciones que no apilaban en móvil por la misma causa— y ronda de ajustes de contenido, incluida la corrección del email y el LinkedIn, que estaban mal en la web — ver sección 21.
 > **V1.7** (2026-07-22): se construye la página Design System, con la sección de Accesibilidad convertida en checklist de cierre, y el sistema de color entero pasa a AAA en ambos temas — ver sección 20.
@@ -461,7 +462,7 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 - ~~Pospuesto (2026-07-19): contenido de la página **Sobre mí**~~ — **actualizado 2026-07-20 (ver sección 16):** ya no es solo el contenido lo que se pospone — la página completa (contenido + diseño + desarrollo) se mueve a V2 (ver Roadmap, sección 13). Sigue sin definir qué entra exactamente (¿hobbies, valores, una foto distinta, una anécdota?); hay referencia de moodboard (`Sobre-mi.png`, layout tipo "About Us") que necesitará la misma adaptación que ya se hizo con `contacto.webp` (se descarta el tono "we/team" y el collage de fotos ajenas al Hero) cuando se retome en V2.
 - ~~Forma concreta de "Más allá del PM" como pieza narrativa~~ — **resuelto (2026-07-20, ver 8.3):** banda de manifiesto full-width, fondo `brand-purple-soft`, sin cifras, copy validado con foco en Founder (varios proyectos, un exit) y Growth como origen. Pendiente: prompt a Claude Design para explorar tratamientos visuales (tipografía/espaciado) del concepto ya cerrado.
 - ~~Afilar o quitar la cita del Toolkit ("Las herramientas son medios, no fines") — señalada en el análisis de mejora V1 como el eslabón más débil del copy actual~~ — **resuelto (2026-07-19, ver 8.4):** se afiló añadiendo un lead-in personal en vez de quitarla.
-- Foto profesional (pendiente sesión).
+- ~~Foto profesional (pendiente sesión)~~ — **resuelto 2026-07-23 (ver §23):** imagen generada con IA a partir de una foto suya, recorte 4:5; assets en `public/img/` y `public/og/`.
 - Diseño final del CV en PDF con identidad visual propia.
 - Dominio propio (V2).
 - ~~Sistema de diseño de la página (layout/composición)~~ — **resuelto por bloques** (ver sección 7): Hero, Hitos, Cómo trabajo, Más allá del PM, Toolkit, Trayectoria, Formación, Contacto y Footer ya tienen composición decidida (aunque Hero, Hitos, Trayectoria y Más allá del PM quedan pendientes de **rediseño** en Claude Design tras el análisis de mejora V1 de 2026-07-19 — ver sección 15 y tareas de Notion). El contenido de Hitos y Trayectoria ya está validado (ver arriba); solo falta el desarrollo en código y el rediseño visual.
@@ -767,6 +768,20 @@ Con el diseño de la home y las páginas de sistema cerrado, Francisco reenfocó
 | 6 (24-28 ago, nuevo) | IA conversacional | Wont |
 
 **Prioridad renumerada 10→39**, monótona: **Must 10-20 · Should 21-30 · Could 31-37 · Wont 38-39**. Tres incongruencias corregidas en el reparto: el tracking de clics quedaba antes que el GA4/GTM del que depende (ahora después); el dev de Sobre mí/Accesibilidad quedaba en el mismo sprint que su diseño (ahora en el siguiente); y las tareas nuevas estaban sin sprint ni prioridad.
+
+---
+
+## 23. Cierre de Sprint 1 y foto del Hero (2026-07-23)
+
+**Sprint 1 cerrado.** Todo el diseño estaba ya resuelto (home, responsive, Brand Kit, Design System, sistema de uso del logo); la única tarea abierta era la foto. El siguiente es el **Sprint 2 (build de la home)**, que se abre al arrancar desarrollo (sus tareas pasan de "Sin empezar" a "To-Do" en ese momento).
+
+**Foto del Hero — resuelta de otra forma.** En vez de la sesión de estudio que pedían §6 y `BRAND.md` (y la tarea original), Francisco produjo la imagen a partir de una foto suya trabajada con IA (ChatGPT/Gemini/Magnific). Se eligió la versión limpia ("estudio3", sin marca de agua), plano de estudio con fondo negro y camisa blanca. Recorte **4:5** para el Hero. Assets ya preparados en el repo: `public/img/francisco-hero-4x5.webp` (614×768) y `public/og/og-home-1200x630.jpg` (OG 1200×630).
+
+**Notas de uso para el desarrollo (Sprint 2), validadas viendo el Hero montado en Claude Design en claro y oscuro:**
+- **Tamaño:** mostrar la foto a **≤460 px de ancho en desktop** (nítida de verdad a ≤300 px en 2x). El origen es 1376×768 recortado a 614×768, así que por encima de ~500 px se ablanda en retina. En mobile, a ancho de columna (~340 px) va sobrada.
+- **Ratio:** fijar **4:5 en los dos breakpoints** (desktop y mobile) y que el **punto focal —la cara— mande en ambos**; evitar que `object-fit: cover` con contenedores de ratio distinto cambie el encuadre entre versiones.
+- **Temas:** fondo negro sólido → en claro es tarjeta oscura rotunda, en oscuro es una tarjeta que hace saltar la figura; **mantener el borde redondeado sutil** que la define en oscuro (los dos negros —foto y fondo— no son idénticos).
+- **Mejora futura:** reexportar si llega un máster de mayor resolución (≥3000-4000 px), sin tocar el diseño.
 
 ---
 
