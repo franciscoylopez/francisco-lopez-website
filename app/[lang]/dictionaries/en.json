@@ -4,12 +4,30 @@
     "description": "Senior Product Manager with 10+ years in B2B and B2C SaaS, and one exit (TheTool → AppRadar). From discovery to data: I research, prototype, build and measure."
   },
   "nav": {
+    "homeAria": "Home — Francisco López",
     "downloadCv": "Download CV",
+    "menu": "Menu",
     "toggleTheme": "Toggle theme"
   },
   "hero": {
     "kicker": "Senior Product Manager · UX · SaaS · Applied AI",
     "headline": "From discovery to data.",
-    "subheadline": "I research, prototype, build and measure."
+    "subheadline": "I research, prototype, build and measure.",
+    "photoAlt": "Portrait of Francisco López"
+  },
+  "hitos": {
+    "eyebrow": "Key moments",
+    "title": "Milestones",
+    "meta": "2019 — 2026 · 5 milestones",
+    "colName": "Name",
+    "colImpact": "Impact",
+    "colYear": "Year",
+    "exitChip": "Exit",
+    "emenduImpact": "Strategic partnership with Sesame HR.",
+    "indyaLabel1": "Monthly churn",
+    "indyaLabel2": "first-month activation",
+    "indyaApple": "Selected for Apple App Store Foundations.",
+    "thetoolAcquired": "Acquired by AppRadar.",
+    "thetoolNomination": "Nominated for Best ASO Software in Europe (App Promotion Summit)."
   }
 }

@@ -61,16 +61,17 @@
   --radius: 0.625rem;
   color-scheme: light;
 
-  /* --- Tokens de layout (Design System §20 · trasladados 2026-07-26, D4) --- */
+  /* --- Tokens de layout (Design System §20 · trasladados 2026-07-26, D4;
+         valores confirmados contra Web personal.dc.html) --- */
   --container: 1360px; /* ancho máx. del grid de 12 columnas */
   --measure: 42rem; /* medida de lectura (~91 car. en Inter) */
   --section-y: clamp(4.5rem, 9vw, 9rem); /* ritmo vertical: 72 → 144px */
-  --page-x: clamp(
-    1.25rem,
-    5vw,
-    2.5rem
-  ); /* gutter de página: 20 → 40px · PROVISIONAL, confirmar contra Web personal.dc.html al maquetar secciones */
-  --gutter: 2rem; /* separación entre columnas · PROVISIONAL, confirmar contra Web personal.dc.html al maquetar secciones */
+  --page-x: clamp(1.25rem, 5vw, 2.5rem); /* gutter de página: 20 → 40px */
+  --gutter: clamp(
+    1rem,
+    2.2vw,
+    1.5rem
+  ); /* separación entre columnas: 16 → 24px */
 
   /* --- Neutros + superficies (blanco hueso / gris) --- */
   --background: oklch(0.9653 0.0102 81.8); /* #F7F3EC blanco hueso */
@@ -203,5 +204,71 @@
   h4 {
     font-family: var(--font-display);
     font-weight: 600;
+  }
+  /* Foco visible AA (checklist a11y §20, punto 2): anillo de 2px + offset 2px. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+}
+
+/* === Capa de motion (PRD §6/§21) — "una vez al entrar en viewport, nunca en
+   bucle". La clase `reveal-on` la añade el island de cliente solo si NO hay
+   prefers-reduced-motion; sin JS o con reduced-motion, el contenido se queda
+   visible (opacity:1), nunca oculto. === */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-on [data-reveal][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+/* Chip EXIT: entra con retardo tras el reveal de su fila (PRD §21). */
+.reveal-on [data-reveal] .exit-chip {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s,
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s;
+}
+.reveal-on [data-reveal][data-shown] .exit-chip {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on [data-reveal],
+  .reveal-on [data-reveal] .exit-chip {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hitos — fila responsive (D7: en CSS, no en JS). Móvil: grid que apila el
+   impacto bajo el nombre. ≥768px (md): flex, todo en una fila. */
+.hitos-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "idx name year"
+    "impact impact impact";
+  gap: 0.35rem 0.9rem;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .hitos-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.5rem;
+    grid-template-areas: none;
   }
 }

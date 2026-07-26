@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 import "../globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { locales, isLocale } from "@/lib/i18n/config";
 import { getDictionary } from "./dictionaries";
 
@@ -127,8 +126,6 @@ export default async function RootLayout({
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
 
-  const dict = await getDictionary(lang);
-
   return (
     <html
       lang={lang}
@@ -137,11 +134,6 @@ export default async function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          {/* Toggle flotante provisional — se integra en el Nav sticky en el
-              siguiente sub-paso de esta tarea. */}
-          <div className="fixed top-4 right-4 z-50">
-            <ThemeToggle label={dict.nav.toggleTheme} />
-          </div>
           {children}
         </ThemeProvider>
       </body>
