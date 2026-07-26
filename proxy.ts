@@ -1,0 +1,37 @@
+import { NextResponse, type NextRequest } from "next/server";
+
+import { defaultLocale } from "@/lib/i18n/config";
+
+// D3: Next 16 renombra `middleware` → `proxy` (misma funcionalidad). El propio
+// doc de i18n del paquete usa `export function proxy`.
+//
+// Enrutado de locale as-needed (D2):
+//   - `/en`, `/en/...`  → se sirven tal cual (árbol app/[lang] con lang="en").
+//   - `/es`, `/es/...`  → NO son canónicos (el español va sin prefijo) → redirect
+//                          a la ruta sin `/es`.
+//   - resto              → español por defecto: rewrite interno a `/es/...` sin
+//                          cambiar la URL del navegador (la raíz sirve ES directo,
+//                          sin redirect).
+export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (pathname === "/en" || pathname.startsWith("/en/")) {
+    return NextResponse.next();
+  }
+
+  if (pathname === "/es" || pathname.startsWith("/es/")) {
+    const url = request.nextUrl.clone();
+    url.pathname = pathname.slice("/es".length) || "/";
+    return NextResponse.redirect(url);
+  }
+
+  const url = request.nextUrl.clone();
+  url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
+  return NextResponse.rewrite(url);
+}
+
+export const config = {
+  // No corre en assets internos (_next), API, ni rutas con extensión de archivo
+  // (favicon.ico, /og/*.jpg, /img/*.webp, /cv/*.pdf, …).
+  matcher: ["/((?!_next|api|.*\\..*).*)"],
+};

@@ -1,0 +1,15 @@
+{
+  "meta": {
+    "title": "Francisco López — Senior Product Manager",
+    "description": "Senior Product Manager con más de 10 años en SaaS B2B y B2C, y un exit (TheTool → AppRadar). Del discovery al dato: investigo, prototipo, construyo y mido."
+  },
+  "nav": {
+    "downloadCv": "Descargar CV",
+    "toggleTheme": "Cambiar tema"
+  },
+  "hero": {
+    "kicker": "Senior Product Manager · UX · SaaS · IA aplicada",
+    "headline": "Del discovery al dato.",
+    "subheadline": "Investigo, prototipo, construyo y mido."
+  }
+}

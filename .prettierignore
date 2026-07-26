@@ -1,0 +1,12 @@
+.next
+node_modules
+public
+*.pdf
+package-lock.json
+
+# Docs mantenidos a mano (fuente de verdad) — no reformatear
+*.md
+
+# Tooling Node y CSS deprecado — fuera del formateo de la app
+scripts
+brand-globals.css
