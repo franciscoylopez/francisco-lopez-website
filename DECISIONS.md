@@ -150,3 +150,17 @@ de producción con tráfico de dev/preview.
 validaciones que no se pueden hacer en local — consentimiento/cookies/GA4 (dominios y cookies
 reales), OG cards (los scrapers necesitan URL pública), y el número real de Lighthouse sobre infra
 desplegada. Los previews cubren las tres gratis.
+
+**Realizado 2026-07-27.** Vercel conectado al repo (proyecto `francisco-lopez-website`, cuenta
+personal Hobby): previews automáticos por push. `main` = producción (hoy el starter de Next hasta
+que se mergee `feat/build-v1`); la home se revisa en el preview de la rama. **Protección de
+deployments (Vercel Authentication) desactivada** para que los previews sean públicos — necesario
+para medir con PageSpeed Insights y para que los scrapers de OG los lean; es un portfolio público,
+sin nada sensible en el preview. `SITE_URL` (metadataBase/OG/canonical) resuelve
+`NEXT_PUBLIC_SITE_URL` → `https://$VERCEL_URL` → `localhost`, para URLs absolutas en cada preview sin
+configurar nada a mano. **Lighthouse — cómo:** PSI sin API key topa la cuota diaria (429); se corre
+en local contra el preview (o `next start`) con `CHROME_PATH='C:\Program Files\Google\Chrome\Application\chrome.exe'`
+(el error de `chrome-launcher` al cerrar es ruido; el audit completa y escribe el JSON). **QA de la
+home V1 (P13):** Lighthouse desktop 100/100/100, mobile Perf 93 / A11y 100 / BP 100; axe 0
+violaciones en claro y oscuro; CLS 0; LCP mobile 3,1s (foto del Hero, a vigilar). El SEO 66 es
+artefacto del preview (Vercel lo marca `noindex`) + tarea de SEO técnico pendiente, no un defecto.
