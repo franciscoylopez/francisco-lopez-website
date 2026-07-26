@@ -21,9 +21,15 @@ const bricolage = Bricolage_Grotesque({
   weight: ["400", "600"],
 });
 
-// El dominio propio llega en el sprint de lanzamiento (D9). Hasta entonces,
-// override por env para que OG/canonical funcionen en los previews de Vercel.
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+// El dominio propio llega en el sprint de lanzamiento (D9). Hasta entonces:
+// NEXT_PUBLIC_SITE_URL si se define; si no, la URL del deployment de Vercel
+// (VERCEL_URL, sin protocolo) para que OG/canonical sean absolutos en cada
+// preview sin configurar nada; en local, localhost.
+const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL
+    ? `https://${process.env.VERCEL_URL}`
+    : "http://localhost:3000");
 
 type LangParams = { params: Promise<{ lang: string }> };
 
