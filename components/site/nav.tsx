@@ -94,7 +94,10 @@ export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
           </span>
         </a>
 
-        <nav className="flex items-center gap-1.5">
+        {/* Grupo de controles (CV + menú + tema): no es navegación de sitio, así
+            que <div> — evita un segundo landmark de navegación sin nombre único
+            (el único <nav> es el del footer). */}
+        <div className="flex items-center gap-1.5">
           <a
             href={cvHref}
             download
@@ -120,7 +123,7 @@ export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
             <Moon className="size-[18px] dark:hidden" aria-hidden="true" />
             <Sun className="hidden size-[18px] dark:block" aria-hidden="true" />
           </button>
-        </nav>
+        </div>
       </div>
 
       {menuOpen && (

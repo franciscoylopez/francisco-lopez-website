@@ -30,13 +30,13 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-self-center">
           <a
             href={`${base}/brand-kit`}
-            className="text-muted-foreground hover:text-foreground text-[0.9rem] transition-colors"
+            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
           >
             {dict.brandKit}
           </a>
           <a
             href={`${base}/design-system`}
-            className="text-muted-foreground hover:text-foreground text-[0.9rem] transition-colors"
+            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
           >
             {dict.designSystem}
           </a>
