@@ -98,7 +98,7 @@ export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
           <a
             href={cvHref}
             download
-            className="text-foreground hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-semibold whitespace-nowrap sm:inline-flex"
+            className="text-foreground hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-semibold whitespace-nowrap underline-offset-4 hover:underline focus-visible:underline sm:inline-flex"
           >
             {dict.downloadCv}
           </a>
@@ -130,7 +130,7 @@ export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
               href={cvHref}
               download
               onClick={() => setMenuOpen(false)}
-              className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-semibold"
+              className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-semibold underline-offset-4 hover:underline focus-visible:underline"
             >
               {dict.downloadCv}
             </a>

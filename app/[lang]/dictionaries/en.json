@@ -29,5 +29,236 @@
     "indyaApple": "Selected for Apple App Store Foundations.",
     "thetoolAcquired": "Acquired by AppRadar.",
     "thetoolNomination": "Nominated for Best ASO Software in Europe (App Promotion Summit)."
+  },
+  "proceso": {
+    "eyebrow": "Process",
+    "title": "How I work",
+    "intro": "An end-to-end method: from the problem to the data that confirms the goal was met. Six stages that feed one another.",
+    "steps": [
+      {
+        "title": "Discovery",
+        "desc": "Interviews, data and business context to separate the real problem from the symptom before proposing a solution."
+      },
+      {
+        "title": "UX",
+        "desc": "I turn findings into architecture and flows: what the user sees, in what order and why."
+      },
+      {
+        "title": "Prototyping",
+        "desc": "Clickable prototypes to validate with real users before committing development."
+      },
+      {
+        "title": "Development",
+        "desc": "Functional definition and coordination with the technical team, from roadmap to release."
+      },
+      {
+        "title": "Launch",
+        "desc": "I ship with control: feature flags, progressive rollout and A/B testing before exposing the change to every user."
+      },
+      {
+        "title": "Analytics",
+        "desc": "Instrumentation and metrics to measure real impact and feed the next discovery."
+      }
+    ]
+  },
+  "masAlla": {
+    "eyebrow": "Beyond the PM",
+    "line1a": "Founder more than once. ",
+    "exitWord": "Exit",
+    "line1b": " once. From what didn't work out, I learned what no framework teaches.",
+    "line2": "Before that, years acquiring users — before measuring product, I understood how you attract them."
+  },
+  "trayectoria": {
+    "eyebrow": "Career",
+    "title": "Career",
+    "cta": "Download CV",
+    "productoLabel": "Product",
+    "productoIntro": "Ten years leading product in B2B and B2C SaaS — from founder with an exit to Product Manager at startups and scale-ups — with a constant focus on discovery, UX and measurable results.",
+    "shutappTitle": "Shutapp Projects",
+    "shutappPeriod": "2015 — 2021",
+    "shutappSubtitle": "One venture · two roles",
+    "previoLabel": "Earlier experience — Marketing & Growth",
+    "previoIntro": "This earlier stage in marketing and growth builds the analytical, experimentation and user-first foundation that defines my approach as a Product Manager.",
+    "producto": [
+      {
+        "period": "Feb 2025 — Present",
+        "role": "Product Manager",
+        "company": "Emendu",
+        "desc": "Led the digitalization of Sales & Operations and evolved the LISA AI agent; I report directly to the CEO, on the leadership team alongside Operations, Finance and Tech."
+      },
+      {
+        "period": "Feb 2024 — Nov 2024",
+        "role": "Cofounder & Product",
+        "company": "KUOTIP",
+        "desc": "Validated the review-fraud problem and designed the MVP with voice verification and AI; as cofounder, I supported the CEO in the pre-seed fundraising."
+      },
+      {
+        "period": "Jan 2022 — Dec 2023",
+        "role": "Product Lead",
+        "company": "INDYA",
+        "desc": "Redesigned pricing and onboarding to improve activation and reduce churn; reported to the CPO/cofounder, leading by influence without formal authority."
+      },
+      {
+        "period": "Oct 2021 — Dec 2021",
+        "role": "Product Manager",
+        "company": "Freepik",
+        "desc": "Researched and defined features for the contributors area; improved onboarding (sign-up, emailing, profile quality) from qualitative and quantitative analysis with design."
+      }
+    ],
+    "nested": [
+      {
+        "period": "May 2016 — Oct 2021",
+        "role": "Cofounder & Product",
+        "company": "TheTool",
+        "desc": "Cofounder with a vote on the key decisions; led product, roadmap and the no-code team (backend, frontend, design)."
+      },
+      {
+        "period": "Sep 2015 — Dec 2016",
+        "role": "COO",
+        "company": "PICKASO",
+        "desc": "Professionalized the agency's structure and service portfolio; that work funded the launch of TheTool."
+      }
+    ],
+    "previo": [
+      {
+        "period": "2009 — 2015",
+        "role": "Digital Marketing Manager",
+        "company": "Ontecnia — Malavida.com (international software portal)",
+        "desc": "Organic growth from 3.2M to 9.4M monthly visits; shifted the business model from intrusive installers to valuable content and video monetization — the start of my turn toward product-first."
+      },
+      {
+        "period": "2009 — 2015",
+        "role": "Digital Marketing / Performance",
+        "company": "Havas Media · Increnta · Miss Conversion",
+        "desc": "Acquisition and performance at leading agencies — the analytics, CRO, UX and leadership foundation that enabled the jump to product."
+      }
+    ]
+  },
+  "toolkit": {
+    "eyebrow": "Tools",
+    "title": "Toolkit",
+    "intro": "Tools are means, not ends. These are some that have helped me do my job better and hit my goals.",
+    "categories": [
+      {
+        "label": "Users",
+        "tools": [
+          {
+            "name": "Amplitude",
+            "desc": "I define funnels and cohorts to see where and why users drop off."
+          },
+          {
+            "name": "Google Analytics",
+            "desc": "Acquisition and aggregate behavior at the top of the funnel."
+          },
+          {
+            "name": "Microsoft Clarity",
+            "desc": "Heatmaps and recordings to see the real friction on screen."
+          },
+          {
+            "name": "Typeform",
+            "desc": "Surveys and concept tests to validate hypotheses before building."
+          }
+        ]
+      },
+      {
+        "label": "Management & Documentation",
+        "tools": [
+          {
+            "name": "Jira",
+            "desc": "I organize roadmap and sprints, with traceability from discovery to delivery."
+          },
+          {
+            "name": "Notion",
+            "desc": "My source of truth for specs, decisions and living documentation."
+          },
+          {
+            "name": "Miro",
+            "desc": "I map user journeys and facilitate discovery and prioritization with the team."
+          },
+          {
+            "name": "Mermaid.js",
+            "desc": "I document flows as versionable diagrams alongside the specs."
+          }
+        ]
+      },
+      {
+        "label": "Design & prototyping",
+        "tools": [
+          {
+            "name": "Claude Design",
+            "desc": "I explore visual direction and generate clickable mockups very early."
+          },
+          {
+            "name": "Figma",
+            "desc": "I prototype clickable flows and align with design before building."
+          },
+          {
+            "name": "v0",
+            "desc": "I generate first UI versions to iterate fast on real ideas."
+          }
+        ]
+      },
+      {
+        "label": "Development",
+        "tools": [
+          {
+            "name": "Claude Code",
+            "desc": "I build functional prototypes and automate tasks myself."
+          },
+          {
+            "name": "VS Code",
+            "desc": "My editor to read the code and make small changes."
+          },
+          {
+            "name": "Vercel",
+            "desc": "I deploy prototypes and previews to validate in minutes."
+          },
+          {
+            "name": "GitHub",
+            "desc": "I follow PRs, releases and issues close to the development pulse."
+          }
+        ]
+      }
+    ]
+  },
+  "formacion": {
+    "eyebrow": "Learning",
+    "title": "Education",
+    "intro": "A foundation in marketing and communication, updated with specific training in product and agile methodologies.",
+    "productoLabel": "Product",
+    "marketingLabel": "Marketing",
+    "producto": [
+      { "title": "Product Management", "institution": "TheHeroCamp · 2021" },
+      {
+        "title": "Scrum & Agile Leadership",
+        "institution": "theUncoding · 2021"
+      }
+    ],
+    "marketing": [
+      {
+        "title": "Master's in Digital Communication",
+        "institution": "Olea Europea · 2001"
+      },
+      {
+        "title": "Commercial Management & Marketing",
+        "institution": "ESIC · 2000"
+      }
+    ]
+  },
+  "contacto": {
+    "eyebrow": "Contact",
+    "title": "Shall we talk?",
+    "intro": "Senior Product Manager with SaaS experience, always chasing real impact for users and hitting the company's goals. If it's a fit, write or call me directly.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
+    "linkedinLabel": "LinkedIn",
+    "cvLabel": "CV",
+    "cvValue": "Download PDF"
+  },
+  "footer": {
+    "copyright": "© 2026 Francisco López",
+    "brandKit": "Brand Kit",
+    "designSystem": "Design System",
+    "linkedinAria": "LinkedIn"
   }
 }

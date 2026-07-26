@@ -272,3 +272,73 @@
     grid-template-areas: none;
   }
 }
+
+/* Trayectoria — filas fecha / contenido / logo. Móvil: una columna apilada, el
+   logo se oculta. ≥768px (md): tres columnas (D7). */
+.tray-grid,
+.tray-grid-nested {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .tray-grid {
+    grid-template-columns: minmax(0, 10.5rem) minmax(0, 1fr) auto;
+    gap: clamp(1rem, 4vw, 3rem);
+  }
+  .tray-grid-nested {
+    grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr) auto;
+    gap: clamp(0.75rem, 3vw, 2rem);
+  }
+}
+
+/* Contacto — filas fila+divisor. Móvil: valor en segunda línea. ≥768px (md): una
+   fila. Hover/foco oscurece el fondo y sube el valor a --foreground para no perder
+   contraste AAA (§21); la flecha se desplaza (respeta reduced-motion). */
+.contact-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "ic lb ar"
+    "vl vl vl";
+  gap: 0.3rem 0.9rem;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .contact-grid {
+    grid-template-columns: auto minmax(0, 10rem) minmax(0, 1fr) auto;
+    grid-template-areas: "ic lb vl ar";
+    gap: clamp(0.9rem, 3vw, 2rem);
+  }
+}
+.contact-row {
+  transition: background 0.15s ease;
+}
+.contact-row:hover,
+.contact-row:focus-visible {
+  background: var(--border);
+}
+.contact-row:hover .contact-val,
+.contact-row:focus-visible .contact-val {
+  color: var(--foreground);
+}
+.contact-arrow {
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s ease;
+}
+.contact-row:hover .contact-arrow,
+.contact-row:focus-visible .contact-arrow {
+  color: var(--foreground);
+  transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-arrow {
+    transition: color 0.15s ease;
+  }
+  .contact-row:hover .contact-arrow,
+  .contact-row:focus-visible .contact-arrow {
+    transform: none;
+  }
+}

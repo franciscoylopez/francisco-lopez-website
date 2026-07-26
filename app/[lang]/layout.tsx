@@ -16,7 +16,9 @@ const inter = Inter({
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["600"],
+  // 600 para titulares (BRAND.md); 400 solo para la línea de cierre de "Más allá
+  // del PM", que el diseño validado (§8.3) compone en Bricolage ligera.
+  weight: ["400", "600"],
 });
 
 // El dominio propio llega en el sprint de lanzamiento (D9). Hasta entonces,
