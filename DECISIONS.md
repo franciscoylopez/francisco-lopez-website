@@ -105,7 +105,9 @@ se sacan para no retrasar el lanzamiento.
 ## D10 · Política de documentación de la fase de desarrollo — 2026-07-24
 **Decisión.** Producto/diseño/alcance → `PRD.md`. Técnica transversal → este `DECISIONS.md`
 (fuente de verdad en repo, copia en Notion para seguimiento). Convenciones que aplican en adelante →
-`CLAUDE.md`. "Por qué" del código → mensajes de commit/PR. Progreso por tarea → notas de Notion.
+`CLAUDE.md`. `README.md` → entrada/overview del repo (qué es, stack, arranque, estructura, mapa de
+docs), **mantenido al día conforme evoluciona el proyecto** (no es un one-off del lanzamiento).
+"Por qué" del código → mensajes de commit/PR. Progreso por tarea → notas de Notion.
 
 **Contexto.** El PRD se `@`-importa en `CLAUDE.md`, así que se carga entero cada sesión; meterle
 decisiones de dev (más numerosas y de menor vida útil) encarece todas las sesiones para siempre y
