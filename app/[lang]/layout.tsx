@@ -6,6 +6,7 @@ import "../globals.css";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { locales, isLocale } from "@/lib/i18n/config";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 import { getDictionary } from "./dictionaries";
 
 const inter = Inter({
@@ -20,16 +21,6 @@ const bricolage = Bricolage_Grotesque({
   // del PM", que el diseño validado (§8.3) compone en Bricolage ligera.
   weight: ["400", "600"],
 });
-
-// El dominio propio llega en el sprint de lanzamiento (D9). Hasta entonces:
-// NEXT_PUBLIC_SITE_URL si se define; si no, la URL del deployment de Vercel
-// (VERCEL_URL, sin protocolo) para que OG/canonical sean absolutos en cada
-// preview sin configurar nada; en local, localhost.
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL
-    ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000");
 
 type LangParams = { params: Promise<{ lang: string }> };
 
@@ -72,17 +63,23 @@ export async function generateMetadata({
       title: dict.meta.title,
       description: dict.meta.description,
       url: canonical,
-      siteName: "Francisco López",
+      siteName: SITE_NAME,
       locale: lang === "es" ? "es_ES" : "en_US",
       type: "website",
       images: [
         {
-          url: "/og/og-home-1200x630.jpg",
+          url: `/api/og?card=home&lang=${lang}`,
           width: 1200,
           height: 630,
           alt: dict.meta.title,
         },
       ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.title,
+      description: dict.meta.description,
+      images: [`/api/og?card=home&lang=${lang}`],
     },
     icons: {
       icon: [
