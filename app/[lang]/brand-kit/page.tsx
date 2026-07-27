@@ -80,6 +80,7 @@ export default async function BrandKitPage({ params }: LangParams) {
           dict={dict.brandKit}
           breadcrumb={dict.breadcrumb}
           homeHref={homeHref}
+          lang={lang}
         />
       </RevealRoot>
       <Footer dict={dict.footer} lang={lang} />

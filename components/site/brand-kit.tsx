@@ -147,10 +147,12 @@ export function BrandKit({
   dict,
   breadcrumb,
   homeHref,
+  lang,
 }: {
   dict: BrandKitDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
+  lang: string;
 }) {
   const t = dict;
 
@@ -709,15 +711,17 @@ export function BrandKit({
               <p className="text-muted-foreground m-0 mb-[1.2rem] text-[0.88rem] leading-[1.55]">
                 {t.aplicaciones.og.desc}
               </p>
-              <div
-                className="border-border bg-background mb-[1.2rem] flex items-center justify-center gap-4 rounded-[var(--radius-lg)] border p-6"
-                style={{ aspectRatio: "1200 / 630" }}
-              >
-                <Glyph variant="split" h={70} />
-                <span className="font-display text-[clamp(1.1rem,4vw,1.9rem)] font-semibold tracking-[-0.01em]">
-                  Francisco López
-                </span>
-              </div>
+              {/* Preview = la imagen OG real generada (/api/og), no un mockup: es
+                  la misma que se sirve a las redes, así que no puede divergir. De
+                  fondo de marca fijo (no conmuta con el tema, como la OG real). */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={`/api/og?card=brand-kit&lang=${lang}`}
+                width={1200}
+                height={630}
+                alt={t.aplicaciones.og.previewAlt}
+                className="border-border mb-[1.2rem] block w-full rounded-[var(--radius-lg)] border"
+              />
               <div className="flex flex-wrap gap-2">
                 <DlThemed pair={pngPair("lockup-split", 1024)} tone="primary">
                   {t.aplicaciones.og.dl1}

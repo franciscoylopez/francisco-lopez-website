@@ -553,8 +553,9 @@
       },
       "og": {
         "title": "OG image · social",
-        "desc": "Split at ≥200px with wordmark. At that size the color breathes and the brand reads whole in the feed.",
-        "dl1": "Lockup split · PNG 1024"
+        "desc": "The real card served to social: split logo, wordmark, title and kicker over the brand background. Fixed in light and dark — each page generates its own. The lockup below is the piece that builds it.",
+        "dl1": "Lockup split · PNG 1024",
+        "previewAlt": "Brand Open Graph image: split logo, wordmark and title over a dark background"
       },
       "pngNote": "The PNG suffix names the ink, not the background. tintaOscura (dark ink) goes over light backgrounds; tintaClara (light ink) over dark ones. Available at 256 / 512 / 1024 px."
     },

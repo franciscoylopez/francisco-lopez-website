@@ -553,8 +553,9 @@
       },
       "og": {
         "title": "OG image · redes",
-        "desc": "Split a ≥200px con wordmark. A ese tamaño el color respira y la marca se lee entera en el feed.",
-        "dl1": "Lockup split · PNG 1024"
+        "desc": "La tarjeta real que se sirve a las redes: logo split, wordmark, título y kicker sobre el fondo de marca. Fija en claro y oscuro — la genera cada página. El lockup de abajo es la pieza con la que se construye.",
+        "dl1": "Lockup split · PNG 1024",
+        "previewAlt": "Imagen Open Graph de marca: logo split, wordmark y título sobre fondo oscuro"
       },
       "pngNote": "El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos claros; tintaClara sobre fondos oscuros. Disponibles en 256 / 512 / 1024 px."
     },
