@@ -29,7 +29,7 @@ export default async function Home({ params }: LangParams) {
 
   return (
     <>
-      <Nav dict={dict.nav} cvHref={CV_HREF} />
+      <Nav dict={dict.nav} cvHref={CV_HREF} lang={lang} />
       <RevealRoot>
         <main>
           <Hero dict={dict.hero} />

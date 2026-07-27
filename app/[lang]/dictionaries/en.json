@@ -7,7 +7,9 @@
     "homeAria": "Home — Francisco López",
     "downloadCv": "Download CV",
     "menu": "Menu",
-    "toggleTheme": "Toggle theme"
+    "toggleTheme": "Toggle theme",
+    "switchLanguage": "View in Spanish",
+    "switchLanguageShort": "ES"
   },
   "hero": {
     "kicker": "Senior Product Manager · UX · SaaS · Applied AI",
@@ -260,5 +262,748 @@
     "brandKit": "Brand Kit",
     "designSystem": "Design System",
     "linkedinAria": "LinkedIn"
+  },
+  "breadcrumb": {
+    "routeLabel": "Breadcrumb",
+    "home": "Home"
+  },
+  "brandKit": {
+    "meta": {
+      "title": "Brand Kit — Francisco López",
+      "description": "Francisco López's identity system: logo and geometry, the two-layer palette, typography and the rules that govern its use. Downloadable in light and dark."
+    },
+    "crumb": "Brand Kit",
+    "hero": {
+      "kicker": "Brand identity",
+      "title": "Brand Kit",
+      "lead": "Francisco López's identity system: the logo and its exact geometry, the palette with its two layers, the typography and the rules that govern its use. All downloadable, in light and dark."
+    },
+    "concepto": {
+      "num": "01 — Concept",
+      "title": "A two-layer brand",
+      "lead": "The symbol is a ring over a base: a lens, an eyelet, a zero. The split version offsets two color layers —cyan and purple— behind the ink stroke. It's not decoration: it's the signature of the method. From discovery to data, two planes that separate and realign into a single clean shape.",
+      "plano": {
+        "title": "Flat",
+        "desc": "A single ink layer. For small UI, favicon and monochrome."
+      },
+      "split": {
+        "title": "Split",
+        "desc": "Three stacked strokes, no blend. Only at ≥48px, where color reads as a layer."
+      }
+    },
+    "logotipo": {
+      "num": "02 — Logotype",
+      "title": "The logo and its rules",
+      "lead": "Two compositions —symbol alone and lockup with wordmark— each in flat and split. Cropped exactly to the ink: the height you give it is the real height of the symbol.",
+      "svgShort": "SVG",
+      "cards": {
+        "symSplit": {
+          "name": "Symbol · Split",
+          "meta": "Inline in markup · 382 B · sized by height.",
+          "svg": "Symbol split · SVG"
+        },
+        "symPlano": {
+          "name": "Symbol · Flat",
+          "meta": "Inline in markup · 220 B · sized by height.",
+          "svg": "Symbol flat · SVG"
+        },
+        "symMono": {
+          "name": "Symbol · Mono",
+          "meta": "One pure ink · 220 B · sized by height.",
+          "negro": "Black",
+          "blanco": "White"
+        },
+        "lockSplit": {
+          "name": "Lockup · Split",
+          "meta": "Never inline · 23 KB outlined · sized by width.",
+          "svg": "Lockup split · SVG"
+        },
+        "lockPlano": {
+          "name": "Lockup · Flat",
+          "meta": "Never inline · 23 KB outlined · sized by width.",
+          "svg": "Lockup flat · SVG"
+        }
+      },
+      "usage": {
+        "title": "Usage table",
+        "sub": "All sizes are the visible height of the symbol.",
+        "cols": {
+          "ctx": "Context",
+          "variant": "Variant",
+          "sym": "Symbol",
+          "word": "Wordmark",
+          "bar": "Bar"
+        },
+        "rows": [
+          {
+            "ctx": "Nav — on load",
+            "variant": "Split",
+            "on": true,
+            "sym": "48px",
+            "word": "Yes · ~22px",
+            "bar": "80px"
+          },
+          {
+            "ctx": "Nav — on scroll",
+            "variant": "Flat",
+            "on": false,
+            "sym": "28px",
+            "word": "No",
+            "bar": "64px"
+          },
+          {
+            "ctx": "Footer",
+            "variant": "Flat",
+            "on": false,
+            "sym": "32px",
+            "word": "No",
+            "bar": "—"
+          },
+          {
+            "ctx": "Brand Kit (hero)",
+            "variant": "Split",
+            "on": true,
+            "sym": "≥120px",
+            "word": "Optional",
+            "bar": "—"
+          },
+          {
+            "ctx": "OG image / social",
+            "variant": "Split",
+            "on": true,
+            "sym": "≥200px",
+            "word": "Yes",
+            "bar": "—"
+          },
+          {
+            "ctx": "Favicon",
+            "variant": "Flat",
+            "on": false,
+            "sym": "32 / 16px",
+            "word": "No",
+            "bar": "—"
+          }
+        ]
+      },
+      "rules": {
+        "title": "The seven rules",
+        "items": [
+          {
+            "title": "Split → flat threshold: 48px",
+            "body": "The color offset is 5.1% of the symbol height, so at 48px the crescent measures 2.5px. Below that it reads as dirty fringing, not as a layer."
+          },
+          {
+            "title": "Minimum size: 24px",
+            "body": "The stroke is 8.6% of the height: at 24px that's 2.1px and holds; at 15px it's 1.3px and antialiasing washes it to gray."
+          },
+          {
+            "title": "No circular container",
+            "body": "The symbol is already a circle. Putting it inside another shrinks it and turns it into a target."
+          },
+          {
+            "title": "Never smaller than adjacent UI",
+            "body": "It's the brand, not just another icon. It must weigh at least as much as the LinkedIn or © next to it."
+          },
+          {
+            "title": "Symbol/wordmark proportion",
+            "body": "40–45% composed in UI, ~60% in a closed lockup. Outside that range the symbol floats alone or the wordmark dominates."
+          },
+          {
+            "title": "Nav transition: continuous",
+            "body": "Color extinguishes before dropping below 48px and the wordmark fades in opacity without clipping glyphs. It never passes through a mis-registration state."
+          },
+          {
+            "title": "prefers-reduced-motion: jump",
+            "body": "No interpolation: it jumps between states at once, with no intermediate transition. The symbol goes from 48px to 28px and the bar from 80px to 64px — two distinct measures."
+          }
+        ]
+      },
+      "ladder": {
+        "kicker": "Rule 1 · the threshold, seen",
+        "title": "Where the split stops working",
+        "lead": "The color crescent is 5.1% of the height. Below 48px it reads as dirty registration, not as a layer. The ladder shows it on its own.",
+        "crescent": "crescent",
+        "works": "Works",
+        "dirty": "Dirty fringe"
+      }
+    },
+    "color": {
+      "num": "03 — Color",
+      "title": "Palette and two layers",
+      "lead": "The two-layer rule: an ink layer (background + stroke) that switches with the theme, and a color layer (cyan + purple) that only appears in the split and doesn't change between light and dark. Each swatch carries its token, its hex and its measured contrast ratio. Switch the theme with the nav toggle to watch the ink layer flip.",
+      "swapConmuta": "Switches",
+      "swapFijo": "Fixed",
+      "items": [
+        {
+          "name": "Background",
+          "token": "--background",
+          "hex": "#F7F3EC · #191D21",
+          "swap": "conmuta",
+          "sample": "var(--background)",
+          "sampleFg": "var(--foreground)",
+          "ratio": "Ink over it · 13.8:1 · AAA",
+          "note": "Base surface"
+        },
+        {
+          "name": "Ink",
+          "token": "--foreground",
+          "hex": "#21262B · #F7F3EC",
+          "swap": "conmuta",
+          "sample": "var(--foreground)",
+          "sampleFg": "var(--background)",
+          "ratio": "Body text · 13.8:1 · AAA",
+          "note": "Text and stroke"
+        },
+        {
+          "name": "Primary cyan",
+          "token": "--primary · --brand-cyan",
+          "hex": "#005E5F · #3FC9C4",
+          "swap": "conmuta",
+          "sample": "var(--primary)",
+          "sampleFg": "var(--primary-foreground)",
+          "ratio": "7.01:1 text · 7.44:1 button (light) · 8.36:1 dark · AAA",
+          "note": "Links and accent"
+        },
+        {
+          "name": "Purple",
+          "token": "--brand-purple",
+          "hex": "#9B87F5",
+          "swap": "fijo",
+          "sample": "var(--brand-purple)",
+          "sampleFg": "#21262B",
+          "ratio": "Decorative · ink over it",
+          "note": "Tints and highlights"
+        },
+        {
+          "name": "Purple accent",
+          "token": "--brand-purple-accent",
+          "hex": "oklch(0.62 0.16 290)",
+          "swap": "fijo",
+          "sample": "var(--brand-purple-accent)",
+          "sampleFg": "#F7F3EC",
+          "ratio": "On inverted bg · 3.96:1 light · 3.48:1 dark · AA-large",
+          "note": "Text/accent over ink"
+        },
+        {
+          "name": "Split cyan",
+          "token": "--brand-cyan-split",
+          "hex": "#16BDBD",
+          "swap": "fijo",
+          "sample": "var(--brand-cyan-split)",
+          "sampleFg": "#21262B",
+          "ratio": "Logo layer only",
+          "note": "Never as text"
+        },
+        {
+          "name": "Split purple",
+          "token": "--brand-purple-split",
+          "hex": "#9B87F5",
+          "swap": "fijo",
+          "sample": "var(--brand-purple-split)",
+          "sampleFg": "#21262B",
+          "ratio": "Logo layer only",
+          "note": "Never as text"
+        },
+        {
+          "name": "Pastel cyan",
+          "token": "--brand-cyan-soft",
+          "hex": "#A7E1DE",
+          "swap": "fijo",
+          "sample": "var(--brand-cyan-soft)",
+          "sampleFg": "#21262B",
+          "ratio": "Ink over it · 10.5:1 · AAA",
+          "note": "Background, never text"
+        },
+        {
+          "name": "Pastel purple",
+          "token": "--brand-purple-soft",
+          "hex": "#C6B9F0",
+          "swap": "fijo",
+          "sample": "var(--brand-purple-soft)",
+          "sampleFg": "#21262B",
+          "ratio": "Ink over it · 8.4:1 · AAA",
+          "note": "Background, never text"
+        }
+      ],
+      "pastelNote": "Pastels never as text color. They're backgrounds. If text goes over a pastel, always in foreground (ink) — never the other way around."
+    },
+    "tipografia": {
+      "num": "04 — Typography",
+      "title": "Two typefaces, two jobs",
+      "lead": "What the typefaces are and why, as a brand asset. The scale, sizes and line heights live in the Design System.",
+      "bricolage": {
+        "name": "Bricolage Grotesque",
+        "tag": "Display · weights 600 / 700",
+        "desc": "A grotesque with character — humanist details and slight irregularities that give it personality without losing rigor. It's the voice of headlines and the wordmark: firm, contemporary, recognizable."
+      },
+      "inter": {
+        "name": "Inter",
+        "tag": "Text · weights 400 / 500 / 600",
+        "desc": "Neutral, with very high on-screen legibility at any size. It does the quiet work: body, labels, data and UI. Let Bricolage carry the voice while it sustains the reading."
+      }
+    },
+    "aplicaciones": {
+      "num": "05 — Applications",
+      "title": "The brand in its place",
+      "lead": "Where the logo lives and how each piece is downloaded. The symbol PNG is sized by height and the lockup PNG by width — it's not obvious, which is why it's stated here.",
+      "favicon": {
+        "title": "Favicon",
+        "desc": "A dedicated asset, not a rescale. At 16px the stroke rises to 10 units for optical compensation. Flat, centered.",
+        "ico": "favicon.ico"
+      },
+      "og": {
+        "title": "OG image · social",
+        "desc": "Split at ≥200px with wordmark. At that size the color breathes and the brand reads whole in the feed.",
+        "dl1": "Lockup split · PNG 1024"
+      },
+      "pngNote": "The PNG suffix names the ink, not the background. tintaOscura (dark ink) goes over light backgrounds; tintaClara (light ink) over dark ones. Available at 256 / 512 / 1024 px."
+    },
+    "uso": {
+      "num": "06 — Correct and incorrect use",
+      "title": "The real mistakes of this system",
+      "lead": "Not a catalog of generic ✓ / ✗: the failures this brand actually had, the figure that caught them and how they were fixed. A record of judgment.",
+      "fixLabel": "Fix:",
+      "cases": [
+        {
+          "title": "The viewBox that lied",
+          "chip": "height:40px → 23px · −42%",
+          "before": "Before · 23px",
+          "after": "After · 40px",
+          "desc": "It was \"0 0 120 120\" but the ink filled only 58% of the height. Everyone who used the component undersized it without knowing.",
+          "fix": "viewBox cropped to the ink — the height you give IS the symbol's."
+        },
+        {
+          "title": "The split used at 24px",
+          "chip": "color crescent = 1.2px",
+          "before": "Before · split 24px",
+          "after": "After · flat <48, split ≥48",
+          "desc": "At that height the offset read as a print registration error, not a signature.",
+          "fix": "split → flat threshold at 48px (rule 1). Below it, the flat variant."
+        },
+        {
+          "title": "The favicon with no optical compensation",
+          "chip": "8.2% ink at 16px vs 8.1% at 32px",
+          "before": "Before · 32 rescaled to 16",
+          "after": "After · dedicated 16px",
+          "desc": "The 16px one was the 32px rescaled; at that size the stroke washed out to gray.",
+          "fix": "dedicated 16px asset with stroke-width 10 instead of 6."
+        },
+        {
+          "title": "The logo weighing less than a foreign icon",
+          "chip": "12×15px next to LinkedIn 18×18px",
+          "before": "Before · logo 12×15",
+          "after": "After · logo ≥ icon",
+          "desc": "In the footer the brand sat below a UI icon and at the same visual weight as the © next to it.",
+          "fix": "the logo is never smaller than adjacent icons (rule 4)."
+        },
+        {
+          "title": "The lockup at 29%",
+          "chip": "symbol 24→64px, wordmark at 18px",
+          "before": "Before · wordmark at 29%",
+          "after": "After · ~60% proportion",
+          "desc": "The symbol grew and the wordmark lagged behind. The logo wasn't big: it was alone.",
+          "fix": "controlled symbol/wordmark proportion (rule 5)."
+        },
+        {
+          "title": "The circle inside the circle",
+          "chip": "symbol at 35% of its footprint",
+          "before": "Before · at 35% of its footprint",
+          "after": "After · no container",
+          "desc": "The nav put the symbol inside a circular container, turning it into a target.",
+          "fix": "no circular container — the symbol is already a circle (rule 3)."
+        },
+        {
+          "title": "The four colors of this page",
+          "chip": "4 drifted tokens",
+          "before": "Before · drifted",
+          "after": "After · tokens",
+          "desc": "The page documenting color was the one that had it wrong: bone, dark and the two pastels.",
+          "fix": "#F5F3EE→#F7F3EC · #181B1F→#191D21 · pastel cyan #CFEFEE→#A7E1DE · pastel purple #E6E0FB→#C6B9F0."
+        }
+      ],
+      "boundaryNote": "Identity goes here: what the brand is and how it's used. The engineering rigor —grid, breakpoints, spacing scale, motion and the full accessibility measurement— lives in the Design System."
+    }
+  },
+  "designSystem": {
+    "meta": {
+      "title": "Design System — Francisco López",
+      "description": "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy, light/dark, motion and the full accessibility measurement."
+    },
+    "crumb": "Design System",
+    "hero": {
+      "kicker": "Design system",
+      "title": "Design System",
+      "lead": "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy and light/dark behavior. It doesn't define any section's content — it defines how everything inside breathes. It's the internal criterion the site is built and audited against.",
+      "statContainer": "Max container width",
+      "statBreakpoints": "Breakpoints",
+      "statBreakpointsList": "640 · 768 · 1024 · 1280",
+      "statMeasure": "Reading measure (~91 char.)",
+      "statA11y": "Accessibility target"
+    },
+    "rejilla": {
+      "num": "(01)",
+      "title": "Page grid",
+      "showGrid": "Show grid",
+      "hideGrid": "Hide grid",
+      "lead": "A wide container for layout; a narrow reading measure for running text.",
+      "baseLabel": "Base grid:",
+      "baseVal": "12 columns",
+      "gutterLabel": "Gutter:",
+      "gutterVal": "var(--gutter) · 16–24px",
+      "hint": "The band marks the 12 columns — use the «grid» button above to toggle it.",
+      "cards": [
+        {
+          "title": "Container",
+          "body": "Max 1360px, centered. Above xl the margins grow; the content never stretches."
+        },
+        {
+          "title": "Margins (page-x)",
+          "body": "clamp(1.25rem, 5vw, 2.5rem) — 20px on mobile, up to 40px on desktop."
+        },
+        {
+          "title": "Reading measure",
+          "body": "Running text never exceeds 42rem (~91 char.) even when the container is wide. The classic comfortable measure runs 45 to 75 characters, so 91 is above it — a conscious wide-container decision, not an oversight."
+        }
+      ]
+    },
+    "tokens": {
+      "num": "(02)",
+      "title": "Layout tokens",
+      "lead": "This page's own contribution. They don't exist anywhere else in the system and move to the repository when the site is built.",
+      "copyLabel": ":root { }",
+      "copyHint": "Copy at a glance",
+      "items": [
+        { "name": "--container", "val": "1360px" },
+        { "name": "--page-x", "val": "clamp(1.25rem, 5vw, 2.5rem)" },
+        { "name": "--gutter", "val": "clamp(1rem, 2.2vw, 1.5rem)" },
+        { "name": "--measure", "val": "42rem" },
+        { "name": "--section-y", "val": "clamp(4.5rem, 9vw, 9rem)" }
+      ],
+      "cards": [
+        {
+          "title": "Fixed, not editable in production",
+          "body": "--section-y and --measure have fixed values: clamp(4.5rem, 9vw, 9rem) and 42rem. There's no tuning panel anymore — the rhythm is the same across the whole site."
+        },
+        {
+          "title": "Defined once",
+          "body": "They live in the site's :root alongside the color tokens; each page consumes them. Changing a value here changes it everywhere."
+        }
+      ]
+    },
+    "breakpoints": {
+      "num": "(03)",
+      "title": "Breakpoints",
+      "cols": {
+        "token": "Token / min-width",
+        "ctx": "Context",
+        "change": "What changes in the layout"
+      },
+      "rows": [
+        {
+          "token": "base",
+          "min": "0 – 639px",
+          "ctx": "Mobile",
+          "change": "One column, everything stacked. aside above the content. Type at the clamp minimum."
+        },
+        {
+          "token": "sm",
+          "min": "≥ 640px",
+          "ctx": "Large mobile",
+          "change": "Buttons and metadata in a row; still one content column."
+        },
+        {
+          "token": "md",
+          "min": "≥ 768px",
+          "ctx": "Tablet",
+          "change": "The aside + content two-column grid appears. Margins grow."
+        },
+        {
+          "token": "lg",
+          "min": "≥ 1024px",
+          "ctx": "Desktop",
+          "change": "Full 12-column grid; aside can go sticky; 3-card grids."
+        },
+        {
+          "token": "xl",
+          "min": "≥ 1280px",
+          "ctx": "Wide desktop",
+          "change": "Container caps at 1360px, centered. Margins absorb the extra width."
+        }
+      ],
+      "note": "They match the repo's Tailwind scale. This document also applies fluid type and spacing with clamp(): between breakpoints the size interpolates continuously, with no abrupt jumps."
+    },
+    "ritmo": {
+      "num": "(04)",
+      "title": "Vertical rhythm and spacing",
+      "lead": "A 4px base scale (Tailwind). The air between sections is the primary tool of hierarchy.",
+      "scaleTitle": "Spacing scale",
+      "rhythmTitle": "Rhythm between sections",
+      "sectionYLabel": "--section-y · clamp(72 → 144px)",
+      "spacing": [
+        { "name": "2xs", "px": "8px", "w": "5%" },
+        { "name": "xs", "px": "12px", "w": "8%" },
+        { "name": "sm", "px": "16px", "w": "11%" },
+        { "name": "md", "px": "24px", "w": "17%" },
+        { "name": "lg", "px": "32px", "w": "23%" },
+        { "name": "xl", "px": "48px", "w": "34%" },
+        { "name": "2xl", "px": "64px", "w": "46%" },
+        { "name": "3xl", "px": "96px", "w": "68%" },
+        { "name": "4xl", "px": "128px", "w": "90%" }
+      ],
+      "rhythm": [
+        "Between major sections: --section-y — 72px mobile → 144px desktop.",
+        "Section title → content: 40px (2.5rem).",
+        "Between blocks within a section: 24–32px. Optional hairline divider.",
+        "Every section opens with a 1px var(--border) divider full width."
+      ]
+    },
+    "tipografia": {
+      "num": "(05)",
+      "title": "Type hierarchy",
+      "lead": "Bricolage Grotesque (600) for headlines · Inter for text and UI. Fluid sizes: mobile = clamp minimum, desktop = maximum.",
+      "cols": {
+        "level": "Level",
+        "font": "Font",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "lh": "Line height",
+        "use": "Use"
+      },
+      "rows": [
+        {
+          "name": "Display",
+          "font": "Bricolage 600",
+          "desktop": "80px / 5rem",
+          "mobile": "44px",
+          "lh": "1.0",
+          "use": "Hero only",
+          "sample": "Discovery",
+          "kind": "display"
+        },
+        {
+          "name": "H1",
+          "font": "Bricolage 600",
+          "desktop": "52px / 3.25rem",
+          "mobile": "32px",
+          "lh": "1.05",
+          "use": "Section title",
+          "sample": "Milestones",
+          "kind": "h1"
+        },
+        {
+          "name": "H2",
+          "font": "Bricolage 600",
+          "desktop": "32px / 2rem",
+          "mobile": "24px",
+          "lh": "1.15",
+          "use": "Subsection",
+          "sample": "How I work",
+          "kind": "h2"
+        },
+        {
+          "name": "H3",
+          "font": "Bricolage 600",
+          "desktop": "20px / 1.25rem",
+          "mobile": "18px",
+          "lh": "1.3",
+          "use": "Card / case title",
+          "sample": "TheTool — SaaS B2B",
+          "kind": "h3"
+        },
+        {
+          "name": "H4",
+          "font": "Bricolage 600",
+          "desktop": "16px / 1rem",
+          "mobile": "16px",
+          "lh": "1.4",
+          "use": "Minor heading",
+          "sample": "Results",
+          "kind": "h4"
+        },
+        {
+          "name": "Body L",
+          "font": "Inter 400",
+          "desktop": "18px / 1.125rem",
+          "mobile": "17px",
+          "lh": "1.6",
+          "use": "Subheadline, intro",
+          "sample": "I research, prototype, build and measure.",
+          "kind": "bodyL"
+        },
+        {
+          "name": "Body",
+          "font": "Inter 400",
+          "desktop": "16px / 1rem",
+          "mobile": "16px",
+          "lh": "1.65",
+          "use": "Running text (max 42rem)",
+          "sample": "Senior Product Manager with 10+ years in B2B and B2C SaaS.",
+          "kind": "body"
+        },
+        {
+          "name": "Small / meta",
+          "font": "Inter 400–500",
+          "desktop": "14px",
+          "mobile": "14px",
+          "lh": "1.5",
+          "use": "Dates, captions, labels",
+          "sample": "Cofounder & PM · May 2016 – Oct 2021",
+          "kind": "small"
+        },
+        {
+          "name": "Eyebrow",
+          "font": "Inter 600 · UPPER",
+          "desktop": "13px",
+          "mobile": "13px",
+          "lh": "1.4",
+          "use": "Kicker above title",
+          "sample": "SENIOR PRODUCT MANAGER · UX · SAAS",
+          "kind": "eyebrow"
+        }
+      ]
+    },
+    "claroscuro": {
+      "num": "(06)",
+      "title": "Light and dark",
+      "lead": "Same skeleton, same surface hierarchy: background → card → border. No heavy shadows — depth comes from hairlines and surface contrast. Light is warm paper; dark is deep blue.",
+      "lightLabel": "Light mode",
+      "darkLabel": "Dark mode",
+      "sampleHeadline": "From discovery to data.",
+      "cta": "Download CV",
+      "lightTokens": "bg #F7F3EC · card #FCFAF6 · border #E7E4DD",
+      "darkTokens": "bg #191D21 · card #21262B · border #2C333B",
+      "ruleTitle": "Color rule",
+      "rule": [
+        "primary is the only action color. secondary / muted / accent stay neutral.",
+        "Links, in two rules: primary for content links; foreground / muted-foreground for navigation chrome (nav, breadcrumb, footer).",
+        "Brand tones decorate or sign the logo — with one exception: brand-purple-accent is a brand tone used as text over inverted backgrounds (AA-large, ≥3:1). Splits and pastels, never as text."
+      ],
+      "ruleFoot": "Use the header toggle to see this same page in both modes."
+    },
+    "movimiento": {
+      "num": "(07)",
+      "title": "Motion",
+      "timings": [
+        { "k": "150ms", "v": "Micro-interactions: hover, focus, buttons." },
+        { "k": "250ms", "v": "State changes: accordions, tabs." },
+        { "k": "600ms", "v": "Section scroll-reveal on entry." },
+        { "k": "easing", "v": "cubic-bezier(.4, 0, .2, 1) — standard." }
+      ],
+      "bullets": [
+        "Reveal = fade + 12px rise, staggered ~60ms between children.",
+        "Restrained motion: it never competes with the content.",
+        "prefers-reduced-motion: transforms and auto-scroll are disabled. Content always appears, even if the JS fails."
+      ],
+      "demoLabel": "Scroll-reveal demo",
+      "replay": "Replay ▸",
+      "navTitle": "Nav transition — shared across the whole site",
+      "navBullets": [
+        "Symbol 48 → 28px and bar 80 → 64px, continuously with scroll.",
+        "The split's color layers extinguish before the symbol drops below 48px — it never passes through a mis-registration state.",
+        "The wordmark fades in opacity without clipping glyphs: the gap only collapses once it's invisible.",
+        "prefers-reduced-motion: a jump between states, no interpolation."
+      ],
+      "navState1": "on load · 80px",
+      "navState2": "on scroll · 64px · flat",
+      "navFoot": "It's the transition you're seeing right now in this page's header."
+    },
+    "accesibilidad": {
+      "num": "(08)",
+      "title": "Accessibility",
+      "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost.",
+      "contrastTitle": "Measured contrast",
+      "contrastCols": {
+        "measure": "Measurement",
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "contrastRows": [
+        {
+          "label": "Body text",
+          "note": "foreground over background",
+          "light": "13.79:1",
+          "lightLv": "AAA",
+          "dark": "15.32:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "primary as text",
+          "note": "links and accent",
+          "light": "7.01:1",
+          "lightLv": "AAA",
+          "dark": "8.36:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "Text on button",
+          "note": "primary-foreground over primary",
+          "light": "7.44:1",
+          "lightLv": "AAA",
+          "dark": "8.36:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "muted-foreground",
+          "note": "muted over background",
+          "light": "7.12:1",
+          "lightLv": "AAA",
+          "dark": "7.08:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "brand-purple-accent",
+          "note": "Large text only (≥3:1) over inverted bg",
+          "light": "3.96:1",
+          "lightLv": "",
+          "dark": "3.48:1",
+          "darkLv": ""
+        }
+      ],
+      "contrastNote": "With this change, every text pair in the system reaches AAA in light and dark — none is left at AA. The one intentional exception is brand-purple-accent, which passes only as large text (≥3:1) over inverted backgrounds, never as body.",
+      "checklistTitle": "Closing checklist",
+      "checklist": [
+        "Measured contrast, with a figure, in both themes. AA is the non-negotiable floor; AAA whenever it's reached without visual cost.",
+        "Visible focus: a 2px ring with var(--ring) and a 2px offset on every interactive element. Never outline:none without a replacement.",
+        "Touch targets of 44×44px minimum, including small controls like the breadcrumb or the theme toggle.",
+        "A single h1 per page and an h2–h4 hierarchy with no skips. Reading order is DOM order.",
+        "Breadcrumb on every internal page, with <nav aria-label>, an ordered list and aria-current=\"page\" on the current level.",
+        "Nothing encoded by color alone: any state or category distinguished by color also carries text or shape.",
+        "prefers-reduced-motion respected in every animation.",
+        "Text alternatives: alt and labels where they inform, aria-hidden on the decorative."
+      ],
+      "boundaryHere": {
+        "tag": "Here · Design System",
+        "body": "The internal criteria and the measurements. For whoever builds or audits the site."
+      },
+      "boundaryNext": {
+        "tag": "Accessibility page",
+        "badge": "Coming soon",
+        "body": "The public statement: the level the site meets and how to report a problem. For a visitor. It doesn't live here."
+      }
+    },
+    "esqueleto": {
+      "num": "(09)",
+      "title": "Navigable skeleton",
+      "devGroupLabel": "Device preview",
+      "devFull": "Desktop",
+      "devTablet": "Tablet",
+      "devMobile": "Mobile",
+      "lead": "A schematic mockup of the home with placeholders — no defined content. It only demonstrates the vertical rhythm and grid shared by Hero, Milestones, How I work and the rest of the sections.",
+      "mobileNote": "The mobile version is shown. The Desktop / Tablet / Mobile comparison is available on wide screens.",
+      "rows": [
+        { "idx": "(01)", "name": "Hero", "h": "clamp(9rem,22vw,15rem)" },
+        { "idx": "(02)", "name": "Milestones", "h": "clamp(11rem,26vw,18rem)" },
+        { "idx": "(03)", "name": "How I work", "h": "clamp(8rem,18vw,12rem)" },
+        {
+          "idx": "(04)",
+          "name": "Beyond the PM",
+          "h": "clamp(8rem,18vw,12rem)"
+        },
+        { "idx": "(05)", "name": "Career", "h": "clamp(9rem,20vw,13rem)" },
+        { "idx": "(06)", "name": "Education", "h": "clamp(7rem,16vw,10rem)" },
+        { "idx": "(07)", "name": "Toolkit", "h": "clamp(9rem,20vw,13rem)" },
+        { "idx": "(08)", "name": "Contact", "h": "clamp(8rem,18vw,12rem)" }
+      ]
+    }
   }
 }

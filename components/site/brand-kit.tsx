@@ -1,0 +1,1248 @@
+import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { Logo } from "@/components/ui/logo";
+import { cn } from "@/lib/utils";
+
+import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+
+type BrandKitDict = Dictionary["brandKit"];
+
+// Página Brand Kit (PRD §19). Traducida de design/web-personal.dc.html (D1).
+// Server Component completo: la única interacción es el reveal (RevealRoot, en la
+// page) y las descargas dependientes de tema, que se resuelven con dos <a>
+// conmutados por CSS (dark:hidden / hidden dark:inline-flex), sin JS (D7). La
+// énfasis inline del diseño (<strong> a media frase) se renderiza en texto plano.
+
+// --- Assets del logo-kit. La tinta sigue el tema: claro → tinta oscura sobre
+//     fondo claro; oscuro → tinta clara sobre fondo oscuro (public/logo-kit/**). ---
+const svgPair = (n: string) => ({
+  light: `/logo-kit/svg/${n}-claro.svg`,
+  dark: `/logo-kit/svg/${n}-oscuro.svg`,
+});
+const pngPair = (n: string, sz: number) => ({
+  light: `/logo-kit/png/${n}-tintaOscura-${sz}.png`,
+  dark: `/logo-kit/png/${n}-tintaClara-${sz}.png`,
+});
+const favPair = (sz: number) => ({
+  light: `/logo-kit/favicon/favicon-claro-${sz}.png`,
+  dark: `/logo-kit/favicon/favicon-oscuro-${sz}.png`,
+});
+const monoSvg = (n: string) => `/logo-kit/svg/${n}.svg`;
+const monoPng = (n: string, sz: number) => `/logo-kit/png/${n}-${sz}.png`;
+
+function DownloadIcon() {
+  return (
+    <svg
+      width="15"
+      height="15"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <path d="M7 10l5 5 5-5" />
+      <path d="M12 15V3" />
+    </svg>
+  );
+}
+
+const DL_BASE =
+  "inline-flex min-h-[40px] items-center justify-center gap-[0.4rem] rounded-[var(--radius-md)] text-[0.8rem] font-semibold";
+const DL_PRIMARY = "border-primary text-primary border px-[0.85rem]";
+const DL_NEUTRAL =
+  "border-border bg-background text-foreground border px-[0.75rem]";
+
+// Descarga con href único (assets neutros al tema: mono negro/blanco).
+function Dl({
+  href,
+  tone = "neutral",
+  icon = false,
+  children,
+}: {
+  href: string;
+  tone?: "primary" | "neutral";
+  icon?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <a
+      href={href}
+      download
+      className={cn(DL_BASE, tone === "primary" ? DL_PRIMARY : DL_NEUTRAL)}
+    >
+      {icon && <DownloadIcon />}
+      {children}
+    </a>
+  );
+}
+
+// Descarga dependiente de tema: dos <a> conmutados por CSS (sin JS).
+function DlThemed({
+  pair,
+  tone = "neutral",
+  icon = false,
+  children,
+}: {
+  pair: { light: string; dark: string };
+  tone?: "primary" | "neutral";
+  icon?: boolean;
+  children: React.ReactNode;
+}) {
+  const cls = cn(DL_BASE, tone === "primary" ? DL_PRIMARY : DL_NEUTRAL);
+  return (
+    <>
+      <a href={pair.light} download className={cn(cls, "dark:hidden")}>
+        {icon && <DownloadIcon />}
+        {children}
+      </a>
+      <a
+        href={pair.dark}
+        download
+        className={cn(cls, "hidden dark:inline-flex")}
+      >
+        {icon && <DownloadIcon />}
+        {children}
+      </a>
+    </>
+  );
+}
+
+// Glifo dimensionado por altura (reutiliza el componente Logo, fuente única de la
+// geometría). `h` en px.
+function Glyph({
+  variant,
+  h,
+  mono,
+}: {
+  variant: "split" | "flat";
+  h: number;
+  mono?: "black" | "white";
+}) {
+  return (
+    <span className="block shrink-0" style={{ height: `${h}px` }}>
+      <Logo
+        variant={variant}
+        forceColor={mono ?? "theme"}
+        className="h-full gap-0"
+      />
+    </span>
+  );
+}
+
+const CARD =
+  "border-border bg-card rounded-[var(--radius-xl)] border overflow-hidden";
+const SECTION = "border-border border-t py-[var(--section-y)]";
+const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
+const NUM =
+  "text-muted-foreground m-0 mb-3 font-mono text-[0.8rem] tracking-[0.04em]";
+const H2 =
+  "font-display m-0 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.022em]";
+const LEAD =
+  "text-muted-foreground mt-[1.4rem] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
+
+export function BrandKit({
+  dict,
+  breadcrumb,
+  homeHref,
+}: {
+  dict: BrandKitDict;
+  breadcrumb: BreadcrumbDict;
+  homeHref: string;
+}) {
+  const t = dict;
+
+  return (
+    <main id="top">
+      {/* ===================== HERO ===================== */}
+      <section className="py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)]">
+        <div className={WRAP}>
+          <div data-reveal className="mb-[clamp(3rem,6vw,4.5rem)]">
+            <Breadcrumb
+              routeLabel={breadcrumb.routeLabel}
+              items={[
+                { label: breadcrumb.home, href: homeHref },
+                { label: t.crumb },
+              ]}
+            />
+          </div>
+          <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
+              <p
+                data-reveal
+                className="text-muted-foreground m-0 mb-5 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
+              >
+                {t.hero.kicker}
+              </p>
+              <h1
+                data-reveal
+                className="font-display m-0 text-[clamp(2.75rem,7vw,5rem)] leading-[1.0] font-semibold tracking-[-0.025em]"
+              >
+                {t.hero.title}
+              </h1>
+              <p
+                data-reveal
+                className="text-muted-foreground mt-6 max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
+              >
+                {t.hero.lead}
+              </p>
+            </div>
+            {/* Composición: la anatomía del logo aplicada a escala (PRD §19).
+                Centro foreground que conmuta, flancos pastel fijos. Decorativa. */}
+            <div
+              aria-hidden="true"
+              className="flex flex-[1_1_26rem] items-center justify-center"
+            >
+              <div className="relative w-[min(21rem,100%)]">
+                <div
+                  data-reveal
+                  className="absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+                  style={{ transitionDelay: "0.16s" }}
+                >
+                  <div
+                    className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-[14px]"
+                    style={{ transform: "rotate(-6deg)" }}
+                  >
+                    <Glyph variant="flat" h={27} />
+                  </div>
+                </div>
+                <div
+                  data-reveal
+                  className="absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+                  style={{ transitionDelay: "0.24s" }}
+                >
+                  <div
+                    className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-[14px]"
+                    style={{ transform: "rotate(6deg)" }}
+                  >
+                    <Glyph variant="flat" h={27} />
+                  </div>
+                </div>
+                <BrowserMockup />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== 01 CONCEPTO ===================== */}
+      <section className={SECTION}>
+        <div className={WRAP}>
+          <div
+            data-reveal
+            className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
+          >
+            <p className={NUM}>{t.concepto.num}</p>
+            <h2 className={H2}>{t.concepto.title}</h2>
+            <p className={LEAD}>{t.concepto.lead}</p>
+          </div>
+          <div
+            data-reveal
+            className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]"
+          >
+            {[
+              { variant: "flat" as const, c: t.concepto.plano },
+              { variant: "split" as const, c: t.concepto.split },
+            ].map((it) => (
+              <div
+                key={it.c.title}
+                className="border-border bg-card flex min-h-64 flex-col items-center justify-center gap-5 rounded-[var(--radius-xl)] border p-8"
+              >
+                <Glyph variant={it.variant} h={120} />
+                <div className="text-center">
+                  <div className="font-display text-[1.15rem] font-semibold">
+                    {it.c.title}
+                  </div>
+                  <p className="text-muted-foreground m-0 mt-[0.3rem] text-[0.9rem]">
+                    {it.c.desc}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== 02 LOGOTIPO ===================== */}
+      <section className={SECTION}>
+        <div className={WRAP}>
+          <div
+            data-reveal
+            className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
+          >
+            <p className={NUM}>{t.logotipo.num}</p>
+            <h2 className={H2}>{t.logotipo.title}</h2>
+            <p className={LEAD}>{t.logotipo.lead}</p>
+          </div>
+
+          {/* Fila 1 — símbolos */}
+          <div
+            data-reveal
+            className="mb-[var(--gutter)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] items-stretch gap-[var(--gutter)]"
+          >
+            <VariantCard
+              glyph={<Glyph variant="split" h={96} />}
+              name={t.logotipo.cards.symSplit.name}
+              meta={t.logotipo.cards.symSplit.meta}
+            >
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={svgPair("simbolo-split")} tone="primary" icon>
+                  {t.logotipo.cards.symSplit.svg}
+                </DlThemed>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={pngPair("simbolo-split", 1024)}>
+                  PNG 1024
+                </DlThemed>
+                <DlThemed pair={pngPair("simbolo-split", 512)}>512</DlThemed>
+                <DlThemed pair={pngPair("simbolo-split", 256)}>256</DlThemed>
+              </div>
+            </VariantCard>
+
+            <VariantCard
+              glyph={<Glyph variant="flat" h={96} />}
+              name={t.logotipo.cards.symPlano.name}
+              meta={t.logotipo.cards.symPlano.meta}
+            >
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={svgPair("simbolo-plano")} tone="primary" icon>
+                  {t.logotipo.cards.symPlano.svg}
+                </DlThemed>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={pngPair("simbolo-plano", 1024)}>
+                  PNG 1024
+                </DlThemed>
+                <DlThemed pair={pngPair("simbolo-plano", 512)}>512</DlThemed>
+                <DlThemed pair={pngPair("simbolo-plano", 256)}>256</DlThemed>
+              </div>
+            </VariantCard>
+
+            {/* símbolo mono — negro/blanco, neutros al tema */}
+            <div className={cn(CARD, "flex flex-col")}>
+              <div className="border-border flex min-h-44 border-b">
+                <div className="flex flex-1 items-center justify-center bg-white p-8">
+                  <Glyph variant="flat" h={66} mono="black" />
+                </div>
+                <div
+                  className="flex flex-1 items-center justify-center p-8"
+                  style={{ background: "#191D21" }}
+                >
+                  <Glyph variant="flat" h={66} mono="white" />
+                </div>
+              </div>
+              <div className="flex flex-1 flex-col px-5 pt-[1.15rem] pb-[1.35rem]">
+                <div className="font-display text-[1.05rem] font-semibold">
+                  {t.logotipo.cards.symMono.name}
+                </div>
+                <p className="text-muted-foreground mt-1 mb-[0.9rem] text-[0.82rem]">
+                  {t.logotipo.cards.symMono.meta}
+                </p>
+                <div className="mt-auto flex flex-col gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-muted-foreground w-[3.1rem] flex-none text-[0.76rem] font-semibold">
+                      {t.logotipo.cards.symMono.negro}
+                    </span>
+                    <Dl href={monoSvg("simbolo-mono-negro")} tone="primary">
+                      SVG
+                    </Dl>
+                    <Dl href={monoPng("simbolo-mono-negro", 1024)}>1024</Dl>
+                    <Dl href={monoPng("simbolo-mono-negro", 512)}>512</Dl>
+                    <Dl href={monoPng("simbolo-mono-negro", 256)}>256</Dl>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="text-muted-foreground w-[3.1rem] flex-none text-[0.76rem] font-semibold">
+                      {t.logotipo.cards.symMono.blanco}
+                    </span>
+                    <Dl href={monoSvg("simbolo-mono-blanco")} tone="primary">
+                      SVG
+                    </Dl>
+                    <Dl href={monoPng("simbolo-mono-blanco", 1024)}>1024</Dl>
+                    <Dl href={monoPng("simbolo-mono-blanco", 512)}>512</Dl>
+                    <Dl href={monoPng("simbolo-mono-blanco", 256)}>256</Dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Fila 2 — lockups */}
+          <div
+            data-reveal
+            className="mb-[clamp(3rem,6vw,5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))] items-stretch gap-[var(--gutter)]"
+          >
+            <VariantCard
+              glyph={<Lockup variant="split" />}
+              name={t.logotipo.cards.lockSplit.name}
+              meta={t.logotipo.cards.lockSplit.meta}
+            >
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={svgPair("lockup-split")} tone="primary" icon>
+                  {t.logotipo.cards.lockSplit.svg}
+                </DlThemed>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={pngPair("lockup-split", 1024)}>
+                  PNG 1024
+                </DlThemed>
+                <DlThemed pair={pngPair("lockup-split", 512)}>512</DlThemed>
+                <DlThemed pair={pngPair("lockup-split", 256)}>256</DlThemed>
+              </div>
+            </VariantCard>
+
+            <VariantCard
+              glyph={<Lockup variant="flat" />}
+              name={t.logotipo.cards.lockPlano.name}
+              meta={t.logotipo.cards.lockPlano.meta}
+            >
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={svgPair("lockup-plano")} tone="primary" icon>
+                  {t.logotipo.cards.lockPlano.svg}
+                </DlThemed>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={pngPair("lockup-plano", 1024)}>
+                  PNG 1024
+                </DlThemed>
+                <DlThemed pair={pngPair("lockup-plano", 512)}>512</DlThemed>
+                <DlThemed pair={pngPair("lockup-plano", 256)}>256</DlThemed>
+              </div>
+            </VariantCard>
+          </div>
+
+          {/* Tabla de uso */}
+          <div data-reveal className="mb-[clamp(3rem,6vw,5rem)]">
+            <h3 className="font-display m-0 mb-[0.4rem] text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold tracking-[-0.015em]">
+              {t.logotipo.usage.title}
+            </h3>
+            <p className="text-muted-foreground m-0 mb-6 text-[0.95rem]">
+              {t.logotipo.usage.sub}
+            </p>
+            {/* tabla ≥md */}
+            <div className="border-border hidden overflow-hidden rounded-[var(--radius-lg)] border md:block">
+              <div className="bg-card border-border text-muted-foreground grid grid-cols-[1.4fr_0.8fr_0.9fr_1fr_0.7fr] gap-4 border-b px-5 py-[0.9rem] text-[0.72rem] font-semibold tracking-[0.06em] uppercase">
+                <span>{t.logotipo.usage.cols.ctx}</span>
+                <span>{t.logotipo.usage.cols.variant}</span>
+                <span>{t.logotipo.usage.cols.sym}</span>
+                <span>{t.logotipo.usage.cols.word}</span>
+                <span>{t.logotipo.usage.cols.bar}</span>
+              </div>
+              {t.logotipo.usage.rows.map((r) => (
+                <div
+                  key={r.ctx}
+                  className="border-border grid grid-cols-[1.4fr_0.8fr_0.9fr_1fr_0.7fr] items-center gap-4 border-b px-5 py-[0.95rem] text-[0.92rem] last:border-b-0"
+                >
+                  <span className="font-semibold">{r.ctx}</span>
+                  <span>
+                    <VariantBadge on={r.on}>{r.variant}</VariantBadge>
+                  </span>
+                  <span className="text-foreground tabular-nums">{r.sym}</span>
+                  <span className="text-muted-foreground">{r.word}</span>
+                  <span className="text-muted-foreground tabular-nums">
+                    {r.bar}
+                  </span>
+                </div>
+              ))}
+            </div>
+            {/* tarjetas <md */}
+            <div className="flex flex-col gap-[0.85rem] md:hidden">
+              {t.logotipo.usage.rows.map((r) => (
+                <div
+                  key={r.ctx}
+                  className="border-border bg-card rounded-[var(--radius-lg)] border p-4"
+                >
+                  <div className="mb-[0.7rem] flex items-center justify-between gap-3">
+                    <span className="font-display text-[1.05rem] font-semibold">
+                      {r.ctx}
+                    </span>
+                    <VariantBadge on={r.on}>{r.variant}</VariantBadge>
+                  </div>
+                  <div className="flex flex-col gap-[0.35rem] text-[0.88rem]">
+                    <UsageKV k={t.logotipo.usage.cols.sym} v={r.sym} />
+                    <UsageKV k={t.logotipo.usage.cols.word} v={r.word} />
+                    <UsageKV k={t.logotipo.usage.cols.bar} v={r.bar} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Las siete reglas */}
+          <div data-reveal className="mb-[clamp(3rem,6vw,5rem)]">
+            <h3 className="font-display m-0 mb-6 text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold tracking-[-0.015em]">
+              {t.logotipo.rules.title}
+            </h3>
+            <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-[var(--gutter)]">
+              {t.logotipo.rules.items.map((r, i) => (
+                <div
+                  key={r.title}
+                  className="border-border bg-card rounded-[var(--radius-lg)] border px-[1.4rem] py-[1.35rem]"
+                >
+                  <div className="mb-[0.6rem] flex items-center gap-[0.7rem]">
+                    <span className="bg-foreground text-background inline-flex h-[1.9rem] w-[1.9rem] flex-none items-center justify-center rounded-[var(--radius-md)] font-mono text-[0.85rem] font-semibold">
+                      {i + 1}
+                    </span>
+                    <h4 className="font-display m-0 text-[1.05rem] leading-[1.25] font-semibold tracking-[-0.01em]">
+                      {r.title}
+                    </h4>
+                  </div>
+                  <p className="text-muted-foreground m-0 text-[0.9rem] leading-[1.6] text-pretty">
+                    {r.body}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Escalera del split (regla 1) */}
+          <div
+            data-reveal
+            className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.5rem,3vw,2.5rem)]"
+          >
+            <div className="mb-8 max-w-[var(--measure)]">
+              <p className="text-muted-foreground m-0 mb-2 font-mono text-[0.78rem]">
+                {t.logotipo.ladder.kicker}
+              </p>
+              <h3 className="font-display m-0 mb-[0.6rem] text-[clamp(1.2rem,2vw,1.5rem)] font-semibold tracking-[-0.015em]">
+                {t.logotipo.ladder.title}
+              </h3>
+              <p className="text-muted-foreground m-0 text-[0.92rem] leading-[1.6]">
+                {t.logotipo.ladder.lead}
+              </p>
+            </div>
+            <div className="flex flex-wrap items-end gap-[clamp(1.25rem,4vw,3rem)]">
+              {[24, 32, 48, 64, 96].map((h) => {
+                const works = h >= 48;
+                return (
+                  <div
+                    key={h}
+                    className="flex flex-col items-center gap-[0.9rem]"
+                  >
+                    <div className="flex h-24 items-end justify-center">
+                      <Glyph variant="split" h={h} />
+                    </div>
+                    <div className="text-center">
+                      <div className="font-mono text-[0.85rem] font-semibold">
+                        {h}px
+                      </div>
+                      <div className="text-muted-foreground text-[0.72rem]">
+                        {t.logotipo.ladder.crescent}{" "}
+                        {(h * 0.051).toFixed(1).replace(".", ",")}px
+                      </div>
+                      <div
+                        className={cn(
+                          "mt-[0.35rem] text-[0.68rem] font-semibold tracking-[0.04em] uppercase",
+                          works ? "text-primary" : "text-brand-purple-accent",
+                        )}
+                      >
+                        {works
+                          ? t.logotipo.ladder.works
+                          : t.logotipo.ladder.dirty}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== 03 COLOR ===================== */}
+      <section className={SECTION}>
+        <div className={WRAP}>
+          <div
+            data-reveal
+            className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
+          >
+            <p className={NUM}>{t.color.num}</p>
+            <h2 className={H2}>{t.color.title}</h2>
+            <p className={LEAD}>{t.color.lead}</p>
+          </div>
+          <div
+            data-reveal
+            className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-[var(--gutter)]"
+          >
+            {t.color.items.map((c) => (
+              <div
+                key={c.name}
+                className="border-border bg-card overflow-hidden rounded-[var(--radius-lg)] border"
+              >
+                <div
+                  className="border-border flex h-[118px] items-end border-b p-[0.85rem]"
+                  style={{ background: c.sample }}
+                >
+                  <span
+                    className="font-display text-[1.5rem] font-semibold"
+                    style={{ color: c.sampleFg }}
+                  >
+                    Aa
+                  </span>
+                </div>
+                <div className="px-4 pt-[0.9rem] pb-[1.1rem]">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="font-display text-[0.98rem] font-semibold">
+                      {c.name}
+                    </div>
+                    <span
+                      className={cn(
+                        "flex-none rounded-full px-2 py-[0.1rem] text-[0.66rem] font-semibold tracking-[0.02em]",
+                        c.swap === "conmuta"
+                          ? "text-foreground"
+                          : "bg-muted text-muted-foreground",
+                      )}
+                      style={
+                        c.swap === "conmuta"
+                          ? {
+                              background:
+                                "color-mix(in oklch, var(--brand-cyan), transparent 82%)",
+                            }
+                          : undefined
+                      }
+                    >
+                      {c.swap === "conmuta"
+                        ? t.color.swapConmuta
+                        : t.color.swapFijo}
+                    </span>
+                  </div>
+                  <code className="text-muted-foreground mt-[0.35rem] block font-mono text-[0.76rem]">
+                    {c.token}
+                  </code>
+                  <code className="text-foreground mt-[0.15rem] block font-mono text-[0.78rem]">
+                    {c.hex}
+                  </code>
+                  <div className="border-border text-muted-foreground mt-[0.6rem] border-t border-dashed pt-[0.6rem] text-[0.78rem]">
+                    {c.ratio}
+                  </div>
+                  <div className="text-muted-foreground mt-[0.2rem] text-[0.76rem]">
+                    {c.note}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <Callout data-reveal accent="purple">
+            {t.color.pastelNote}
+          </Callout>
+        </div>
+      </section>
+
+      {/* ===================== 04 TIPOGRAFÍA ===================== */}
+      <section className={SECTION}>
+        <div className={WRAP}>
+          <div
+            data-reveal
+            className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
+          >
+            <p className={NUM}>{t.tipografia.num}</p>
+            <h2 className={H2}>{t.tipografia.title}</h2>
+            <p className={LEAD}>{t.tipografia.lead}</p>
+          </div>
+          <div
+            data-reveal
+            className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr))] gap-[var(--gutter)]"
+          >
+            <TypeCard face="display" data={t.tipografia.bricolage} />
+            <TypeCard face="sans" data={t.tipografia.inter} />
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== 05 APLICACIONES ===================== */}
+      <section className={SECTION}>
+        <div className={WRAP}>
+          <div
+            data-reveal
+            className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
+          >
+            <p className={NUM}>{t.aplicaciones.num}</p>
+            <h2 className={H2}>{t.aplicaciones.title}</h2>
+            <p className={LEAD}>{t.aplicaciones.lead}</p>
+          </div>
+          <div
+            data-reveal
+            className="mb-8 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]"
+          >
+            {/* favicon */}
+            <div className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.4rem,3vw,1.9rem)]">
+              <div className="font-display mb-[0.35rem] text-[1.15rem] font-semibold">
+                {t.aplicaciones.favicon.title}
+              </div>
+              <p className="text-muted-foreground m-0 mb-[1.2rem] text-[0.88rem] leading-[1.55]">
+                {t.aplicaciones.favicon.desc}
+              </p>
+              <div className="mb-[1.2rem] flex items-end gap-6">
+                {[48, 32, 16].map((sz) => (
+                  <div key={sz} className="flex flex-col items-center gap-2">
+                    <span
+                      className="border-border bg-background inline-flex items-center justify-center border"
+                      style={{
+                        width: `${sz}px`,
+                        height: `${sz}px`,
+                        borderRadius: sz >= 48 ? 8 : sz >= 32 ? 6 : 4,
+                      }}
+                    >
+                      <Glyph variant="flat" h={Math.round(sz * 0.62)} />
+                    </span>
+                    <span className="text-muted-foreground font-mono text-[0.72rem]">
+                      {sz}
+                    </span>
+                  </div>
+                ))}
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Dl href="/logo-kit/favicon/favicon.ico" tone="primary">
+                  {t.aplicaciones.favicon.ico}
+                </Dl>
+                <DlThemed pair={favPair(32)}>PNG 32</DlThemed>
+                <DlThemed pair={favPair(16)}>PNG 16</DlThemed>
+              </div>
+            </div>
+
+            {/* OG / redes */}
+            <div className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.4rem,3vw,1.9rem)]">
+              <div className="font-display mb-[0.35rem] text-[1.15rem] font-semibold">
+                {t.aplicaciones.og.title}
+              </div>
+              <p className="text-muted-foreground m-0 mb-[1.2rem] text-[0.88rem] leading-[1.55]">
+                {t.aplicaciones.og.desc}
+              </p>
+              <div
+                className="border-border bg-background mb-[1.2rem] flex items-center justify-center gap-4 rounded-[var(--radius-lg)] border p-6"
+                style={{ aspectRatio: "1200 / 630" }}
+              >
+                <Glyph variant="split" h={70} />
+                <span className="font-display text-[clamp(1.1rem,4vw,1.9rem)] font-semibold tracking-[-0.01em]">
+                  Francisco López
+                </span>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <DlThemed pair={pngPair("lockup-split", 1024)} tone="primary">
+                  {t.aplicaciones.og.dl1}
+                </DlThemed>
+                <DlThemed pair={svgPair("lockup-split")}>SVG</DlThemed>
+              </div>
+            </div>
+          </div>
+          <Callout data-reveal accent="primary">
+            {t.aplicaciones.pngNote}
+          </Callout>
+        </div>
+      </section>
+
+      {/* ===================== 06 USO ===================== */}
+      <section className={SECTION}>
+        <div className={WRAP}>
+          <div
+            data-reveal
+            className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
+          >
+            <p className={NUM}>{t.uso.num}</p>
+            <h2 className={H2}>{t.uso.title}</h2>
+            <p className={LEAD}>{t.uso.lead}</p>
+          </div>
+          <div data-reveal className="flex flex-col gap-[var(--gutter)]">
+            {t.uso.cases.map((c, i) => (
+              <div
+                key={c.title}
+                className="border-border bg-card grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))] overflow-hidden rounded-[var(--radius-xl)] border"
+              >
+                <div className="grid grid-cols-2">
+                  <div className="border-border flex flex-col items-center justify-center gap-3 border-r px-4 py-7">
+                    <ErrorVisual index={i} side="before" />
+                    <span className="text-muted-foreground text-[0.7rem] font-semibold tracking-[0.05em] uppercase">
+                      {c.before}
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center justify-center gap-3 px-4 py-7">
+                    <ErrorVisual index={i} side="after" />
+                    <span className="text-primary text-[0.7rem] font-semibold tracking-[0.05em] uppercase">
+                      {c.after}
+                    </span>
+                  </div>
+                </div>
+                <div className="border-border border-t p-[clamp(1.35rem,3vw,1.85rem)]">
+                  <h3 className="font-display m-0 mb-[0.6rem] text-[1.2rem] font-semibold tracking-[-0.01em]">
+                    {c.title}
+                  </h3>
+                  <span
+                    className="text-foreground mb-[0.7rem] inline-block rounded-full px-[0.6rem] py-1 font-mono text-[0.72rem] font-semibold"
+                    style={{
+                      background:
+                        "color-mix(in oklch, var(--brand-purple), transparent 82%)",
+                    }}
+                  >
+                    {c.chip}
+                  </span>
+                  <p className="text-muted-foreground m-0 mb-[0.55rem] text-[0.9rem] leading-[1.6]">
+                    {c.desc}
+                  </p>
+                  <p className="text-foreground m-0 text-[0.9rem] leading-[1.6]">
+                    <strong className="font-semibold">{t.uso.fixLabel}</strong>{" "}
+                    {c.fix}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <div
+            data-reveal
+            className="border-border bg-card mt-10 max-w-[var(--measure)] rounded-[var(--radius-md)] border px-[1.35rem] py-[1.15rem]"
+          >
+            <p className="text-muted-foreground m-0 text-[0.92rem] leading-[1.6]">
+              {t.uso.boundaryNote}
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
+// --- Subcomponentes ---
+
+function VariantCard({
+  glyph,
+  name,
+  meta,
+  children,
+}: {
+  glyph: React.ReactNode;
+  name: string;
+  meta: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className={cn(CARD, "flex flex-col")}>
+      <div className="border-border flex min-h-44 items-center justify-center border-b p-8">
+        {glyph}
+      </div>
+      <div className="flex flex-1 flex-col px-5 pt-[1.15rem] pb-[1.35rem]">
+        <div className="font-display text-[1.05rem] font-semibold">{name}</div>
+        <p className="text-muted-foreground mt-1 mb-[0.9rem] text-[0.82rem]">
+          {meta}
+        </p>
+        <div className="mt-auto flex flex-col gap-2">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+function Lockup({ variant }: { variant: "split" | "flat" }) {
+  return (
+    <span className="inline-flex items-center gap-3">
+      <Glyph variant={variant} h={60} />
+      <span className="font-display text-[1.6rem] font-semibold tracking-[-0.01em] whitespace-nowrap">
+        Francisco López
+      </span>
+    </span>
+  );
+}
+
+function VariantBadge({
+  on,
+  children,
+}: {
+  on: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <span
+      className={cn(
+        "inline-flex items-center rounded-full px-[0.55rem] py-[0.15rem] text-[0.72rem] font-semibold",
+        on ? "text-foreground" : "bg-muted text-muted-foreground",
+      )}
+      style={
+        on
+          ? {
+              background:
+                "color-mix(in oklch, var(--brand-purple), transparent 82%)",
+            }
+          : undefined
+      }
+    >
+      {children}
+    </span>
+  );
+}
+
+function UsageKV({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex items-baseline justify-between gap-4">
+      <span className="text-muted-foreground">{k}</span>
+      <span className="text-right tabular-nums">{v}</span>
+    </div>
+  );
+}
+
+function Callout({
+  accent,
+  children,
+  ...rest
+}: {
+  accent: "primary" | "purple";
+  children: React.ReactNode;
+} & React.HTMLAttributes<HTMLDivElement>) {
+  const color =
+    accent === "primary" ? "var(--primary)" : "var(--brand-purple-accent)";
+  return (
+    <div
+      {...rest}
+      className="border-border bg-card mt-8 flex max-w-[var(--measure)] items-start gap-[0.85rem] rounded-[var(--radius-md)] border px-[1.35rem] py-[1.15rem]"
+      style={{ borderLeft: `3px solid ${color}` }}
+    >
+      <svg
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke={color}
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        className="mt-[0.1rem] flex-none"
+        aria-hidden="true"
+      >
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 16v-4M12 8h.01" />
+      </svg>
+      <p className="text-foreground m-0 text-[0.92rem] leading-[1.6]">
+        {children}
+      </p>
+    </div>
+  );
+}
+
+function TypeCard({
+  face,
+  data,
+}: {
+  face: "display" | "sans";
+  data: { name: string; tag: string; desc: string };
+}) {
+  const fam = face === "display" ? "font-display" : "font-sans";
+  return (
+    <div className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.5rem,3vw,2.25rem)]">
+      <div
+        className={cn(
+          fam,
+          "text-[clamp(4rem,9vw,6rem)] leading-[0.95] tracking-[-0.03em]",
+          face === "display" ? "font-bold" : "font-semibold",
+        )}
+      >
+        Aa
+      </div>
+      <div className="font-display mt-4 text-[1.4rem] font-semibold tracking-[-0.01em]">
+        {data.name}
+      </div>
+      <p className="text-muted-foreground mt-2 mb-[1.1rem] text-[0.72rem] font-semibold tracking-[0.06em] uppercase">
+        {data.tag}
+      </p>
+      <p className="text-muted-foreground m-0 mb-[1.1rem] text-[0.95rem] leading-[1.6] text-pretty">
+        {data.desc}
+      </p>
+      <p
+        className={cn(
+          fam,
+          "m-0 text-[1.25rem] font-semibold tracking-[-0.01em]",
+        )}
+      >
+        ABCDEFGHIJKLM
+        <br />
+        abcdefghijklm 0123456789
+      </p>
+    </div>
+  );
+}
+
+// Composición decorativa del hero: ventana de navegador con el chrome a trazo
+// invertido sobre una superficie foreground. Reproduce la anatomía del logo.
+function BrowserMockup() {
+  const line = (t: number) =>
+    `color-mix(in srgb, var(--background), transparent ${t}%)`;
+  return (
+    <div
+      data-reveal
+      className="relative z-[2] w-full overflow-hidden rounded-[12px]"
+      style={{ background: "var(--foreground)" }}
+    >
+      {/* pestañas */}
+      <div
+        className="flex h-[38px] items-end px-[10px]"
+        style={{ borderBottom: `1px solid ${line(72)}` }}
+      >
+        <div
+          className="flex h-[28px] items-center gap-2 px-3"
+          style={{
+            border: `1px solid ${line(55)}`,
+            borderBottom: "none",
+            borderRadius: "7px 7px 0 0",
+          }}
+        >
+          <svg
+            viewBox="31 17 58 70"
+            width="12"
+            height="14"
+            fill="none"
+            className="block flex-none"
+            aria-hidden="true"
+          >
+            <circle
+              cx="60"
+              cy="46"
+              r="26"
+              stroke="var(--background)"
+              strokeWidth="6"
+            />
+            <rect
+              x="42"
+              y="82"
+              width="36"
+              height="5"
+              rx="2.5"
+              fill="var(--background)"
+            />
+          </svg>
+          <span
+            className="h-[2px] w-[44px] rounded-[1px]"
+            style={{ background: line(45) }}
+          />
+        </div>
+      </div>
+      {/* barra de direcciones */}
+      <div
+        className="flex h-[28px] items-center px-3"
+        style={{ borderBottom: `1px solid ${line(72)}` }}
+      >
+        <span
+          className="h-[13px] flex-1 rounded-[6.5px]"
+          style={{ border: `1px solid ${line(55)}` }}
+        />
+      </div>
+      {/* nav del sitio con proporciones reales */}
+      <div
+        className="flex h-[34px] items-center justify-between px-3"
+        style={{ borderBottom: `1px solid ${line(72)}` }}
+      >
+        <span className="inline-flex items-center gap-[7px]">
+          <svg
+            viewBox="28 15 64 72"
+            width="18"
+            height="20"
+            fill="none"
+            className="block flex-none overflow-visible"
+            aria-hidden="true"
+          >
+            <circle
+              cx="57"
+              cy="44"
+              r="26"
+              stroke="var(--brand-cyan-split)"
+              strokeWidth="6"
+            />
+            <circle
+              cx="63"
+              cy="48"
+              r="26"
+              stroke="var(--brand-purple-split)"
+              strokeWidth="6"
+            />
+            <circle
+              cx="60"
+              cy="46"
+              r="26"
+              stroke="var(--background)"
+              strokeWidth="6"
+            />
+            <rect
+              x="42"
+              y="82"
+              width="36"
+              height="5"
+              rx="2.5"
+              fill="var(--background)"
+            />
+          </svg>
+          <span
+            className="font-display text-[9px] leading-none font-semibold tracking-[-0.01em]"
+            style={{ color: "var(--background)" }}
+          >
+            Francisco López
+          </span>
+        </span>
+        <span className="inline-flex items-center gap-[6px]">
+          <span
+            className="h-[12px] w-[40px] rounded-[6px]"
+            style={{ border: `1px solid ${line(45)}` }}
+          />
+          <span
+            className="h-[12px] w-[12px] rounded-[4px]"
+            style={{ border: `1px solid ${line(45)}` }}
+          />
+        </span>
+      </div>
+      {/* contenido esquemático */}
+      <div className="flex flex-col gap-[13px] px-[14px] pt-5 pb-6">
+        <span
+          className="h-[3px] w-[46%] rounded-[1.5px]"
+          style={{ background: line(30) }}
+        />
+        {["90%", "78%", "84%", "62%"].map((w, i) => (
+          <span
+            key={i}
+            className="h-[2px] rounded-[1px]"
+            style={{ width: w, background: line(58) }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Visuales antes/después de los 7 errores (§06). Reutilizan el glifo salvo los
+// casos con formas ajenas (favicon 16 engordado, LinkedIn, muestras de color).
+function ErrorVisual({
+  index,
+  side,
+}: {
+  index: number;
+  side: "before" | "after";
+}) {
+  const before = side === "before";
+  switch (index) {
+    case 0: // viewBox: flat en caja de 80px, 23px vs 40px
+      return (
+        <span
+          className={cn(
+            "inline-flex h-20 w-20 items-center justify-center rounded-[8px]",
+            before
+              ? "border-border border border-dashed"
+              : "border-primary border",
+          )}
+        >
+          <Glyph variant="flat" h={before ? 23 : 40} />
+        </span>
+      );
+    case 1: // split @24 vs flat<48/split>=48
+      return (
+        <span className="flex h-[52px] items-end">
+          <Glyph variant="split" h={before ? 24 : 48} />
+        </span>
+      );
+    case 2: // favicon: 32-reescalado (trazo fino) vs dedicado 16 (trazo grueso)
+      return before ? (
+        <svg
+          viewBox="31 17 58 70"
+          width="58"
+          height="70"
+          fill="none"
+          className="block"
+          aria-hidden="true"
+        >
+          <circle
+            cx="60"
+            cy="46"
+            r="26"
+            stroke="var(--foreground)"
+            strokeWidth="3.5"
+          />
+          <rect
+            x="43.5"
+            y="82.5"
+            width="33"
+            height="3.5"
+            rx="1.75"
+            fill="var(--foreground)"
+          />
+        </svg>
+      ) : (
+        <svg
+          viewBox="0 0 80 80"
+          width="70"
+          height="70"
+          fill="none"
+          className="block"
+          aria-hidden="true"
+        >
+          <g transform="translate(-20,-12)">
+            <circle
+              cx="60"
+              cy="46"
+              r="26"
+              stroke="var(--foreground)"
+              strokeWidth="10"
+            />
+            <rect
+              x="42"
+              y="82"
+              width="36"
+              height="5"
+              rx="2.5"
+              fill="var(--foreground)"
+            />
+          </g>
+        </svg>
+      );
+    case 3: // peso: logo pequeño vs mayor, junto a LinkedIn
+      return (
+        <span className="inline-flex items-center gap-[0.65rem]">
+          <Glyph variant="flat" h={before ? 15 : 25} />
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="var(--muted-foreground)"
+            aria-hidden="true"
+          >
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z" />
+          </svg>
+        </span>
+      );
+    case 4: // lockup 29% vs ~60%
+      return (
+        <span className="inline-flex items-center gap-[0.5rem]">
+          <Glyph variant="flat" h={before ? 48 : 40} />
+          <span
+            className={cn(
+              "font-display font-semibold tracking-[-0.01em]",
+              before ? "text-[0.75rem]" : "text-[1.15rem]",
+            )}
+          >
+            Francisco López
+          </span>
+        </span>
+      );
+    case 5: // círculo dentro del círculo
+      return before ? (
+        <span className="border-border bg-background inline-flex h-[72px] w-[72px] items-center justify-center rounded-full border">
+          <Glyph variant="flat" h={25} />
+        </span>
+      ) : (
+        <span className="inline-flex h-[72px] w-[72px] items-center justify-center">
+          <Glyph variant="flat" h={60} />
+        </span>
+      );
+    case 6: // colores desviados vs tokens
+      return before ? (
+        <span className="inline-flex gap-[0.4rem]">
+          <span
+            className="border-border h-[34px] w-[34px] rounded-[8px] border"
+            style={{ background: "#CFEFEE" }}
+          />
+          <span
+            className="border-border h-[34px] w-[34px] rounded-[8px] border"
+            style={{ background: "#E6E0FB" }}
+          />
+        </span>
+      ) : (
+        <span className="inline-flex gap-[0.4rem]">
+          <span className="border-border bg-brand-cyan-soft h-[34px] w-[34px] rounded-[8px] border" />
+          <span className="border-border bg-brand-purple-soft h-[34px] w-[34px] rounded-[8px] border" />
+        </span>
+      );
+    default:
+      return null;
+  }
+}

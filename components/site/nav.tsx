@@ -1,6 +1,7 @@
 "use client";
 
 import { Menu, Moon, Sun } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
@@ -11,6 +12,8 @@ export type NavDict = {
   downloadCv: string;
   menu: string;
   toggleTheme: string;
+  switchLanguage: string;
+  switchLanguageShort: string;
 };
 
 // Nav sticky (BRAND.md regla 6 · PRD §6). Transición continua con el scroll:
@@ -18,10 +21,34 @@ export type NavDict = {
 //   símbolo 48→28px · capas del split se extinguen a p/0.05 · wordmark a p/0.45 ·
 //   barra 80→64px. Con prefers-reduced-motion salta en scrollY>48 (sin interpolar).
 // CV/hamburguesa alternan por CSS (D7: responsive en CSS, no en JS).
-export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
+// `homeHref` por defecto es "#top" (scroll al inicio en la home); las páginas
+// internas pasan la URL de la home para que el logo navegue de vuelta.
+export function Nav({
+  dict,
+  cvHref,
+  homeHref = "#top",
+  lang,
+}: {
+  dict: NavDict;
+  cvHref: string;
+  homeHref?: string;
+  lang: string;
+}) {
   const { resolvedTheme, setTheme } = useTheme();
+  const pathname = usePathname() || "/";
   const [p, setP] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  // Selector de idioma (toggle al otro locale conservando la página actual, D2):
+  // ES sin prefijo, EN en /en. Enlace <a> nativo → navegación completa, para que
+  // el SSR sirva el diccionario del nuevo locale y `<html lang>` se actualice.
+  // Se despoja cualquier segmento de locale inicial: en el prerender estático
+  // usePathname trae la ruta interna con prefijo (/es/..., /en/...), mientras que
+  // en runtime el ES va sin prefijo (/...). Quitando /es|/en el subpath es el
+  // mismo en ambos casos → sin desajuste de hidratación.
+  const subpath = pathname.replace(/^\/(es|en)(?=\/|$)/, "") || "/";
+  const altHref =
+    lang === "en" ? subpath : subpath === "/" ? "/en" : `/en${subpath}`;
 
   useEffect(() => {
     const reduce = window.matchMedia?.(
@@ -70,7 +97,7 @@ export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
         style={{ minHeight: `${barMinHeight}px` }}
       >
         <a
-          href="#top"
+          href={homeHref}
           aria-label={dict.homeAria}
           className="text-foreground inline-flex items-center no-underline"
         >
@@ -105,6 +132,14 @@ export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
           >
             {dict.downloadCv}
           </a>
+          <a
+            href={altHref}
+            hrefLang={lang === "en" ? "es" : "en"}
+            aria-label={dict.switchLanguage}
+            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground hidden min-h-[44px] items-center px-[0.6rem] text-[0.85rem] font-medium underline-offset-4 hover:underline focus-visible:underline sm:inline-flex"
+          >
+            {dict.switchLanguageShort}
+          </a>
           <button
             type="button"
             aria-label={dict.menu}
@@ -136,6 +171,15 @@ export function Nav({ dict, cvHref }: { dict: NavDict; cvHref: string }) {
               className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-semibold underline-offset-4 hover:underline focus-visible:underline"
             >
               {dict.downloadCv}
+            </a>
+            <a
+              href={altHref}
+              hrefLang={lang === "en" ? "es" : "en"}
+              aria-label={dict.switchLanguage}
+              onClick={() => setMenuOpen(false)}
+              className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-medium underline-offset-4 hover:underline focus-visible:underline"
+            >
+              {dict.switchLanguageShort}
             </a>
           </div>
         </div>

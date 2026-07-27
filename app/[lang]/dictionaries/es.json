@@ -7,7 +7,9 @@
     "homeAria": "Inicio — Francisco López",
     "downloadCv": "Descargar CV",
     "menu": "Menú",
-    "toggleTheme": "Cambiar tema"
+    "toggleTheme": "Cambiar tema",
+    "switchLanguage": "Ver en inglés",
+    "switchLanguageShort": "EN"
   },
   "hero": {
     "kicker": "Senior Product Manager · UX · SaaS · IA aplicada",
@@ -260,5 +262,752 @@
     "brandKit": "Brand Kit",
     "designSystem": "Design System",
     "linkedinAria": "LinkedIn"
+  },
+  "breadcrumb": {
+    "routeLabel": "Ruta",
+    "home": "Inicio"
+  },
+  "brandKit": {
+    "meta": {
+      "title": "Brand Kit — Francisco López",
+      "description": "El sistema de identidad de Francisco López: logo y geometría, la paleta de dos capas, tipografía y las reglas que gobiernan su uso. Descargable en claro y oscuro."
+    },
+    "crumb": "Brand Kit",
+    "hero": {
+      "kicker": "Identidad de marca",
+      "title": "Brand Kit",
+      "lead": "El sistema de identidad de Francisco López: el logo y su geometría exacta, la paleta con sus dos capas, la tipografía y las reglas que gobiernan su uso. Todo descargable, en claro y oscuro."
+    },
+    "concepto": {
+      "num": "01 — Concepto",
+      "title": "Una marca de dos capas",
+      "lead": "El símbolo es un anillo sobre una base: una lente, un ojal, un cero. La versión split desplaza dos capas de color —cian y morado— tras el trazo de tinta. No es decoración: es la firma del método. Del discovery al dato, dos planos que se separan y vuelven a alinearse en una sola forma limpia.",
+      "plano": {
+        "title": "Plano",
+        "desc": "Una sola capa de tinta. Para UI pequeña, favicon y monocromo."
+      },
+      "split": {
+        "title": "Split",
+        "desc": "Tres trazos apilados sin blend. Solo a ≥48px, donde el color se lee como capa."
+      }
+    },
+    "logotipo": {
+      "num": "02 — Logotipo",
+      "title": "El logo y sus reglas",
+      "lead": "Dos composiciones —símbolo solo y lockup con wordmark— cada una en plano y split. Recortadas exactas a la tinta: la altura que le das es la altura real del símbolo.",
+      "svgShort": "SVG",
+      "cards": {
+        "symSplit": {
+          "name": "Símbolo · Split",
+          "meta": "Inline en el marcado · 382 B · dimensionado por altura.",
+          "svg": "Símbolo split · SVG"
+        },
+        "symPlano": {
+          "name": "Símbolo · Plano",
+          "meta": "Inline en el marcado · 220 B · dimensionado por altura.",
+          "svg": "Símbolo plano · SVG"
+        },
+        "symMono": {
+          "name": "Símbolo · Mono",
+          "meta": "Una tinta pura · 220 B · dimensionado por altura.",
+          "negro": "Negro",
+          "blanco": "Blanco"
+        },
+        "lockSplit": {
+          "name": "Lockup · Split",
+          "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho.",
+          "svg": "Lockup split · SVG"
+        },
+        "lockPlano": {
+          "name": "Lockup · Plano",
+          "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho.",
+          "svg": "Lockup plano · SVG"
+        }
+      },
+      "usage": {
+        "title": "Tabla de uso",
+        "sub": "Todos los tamaños son la altura visible del símbolo.",
+        "cols": {
+          "ctx": "Contexto",
+          "variant": "Variante",
+          "sym": "Símbolo",
+          "word": "Wordmark",
+          "bar": "Barra"
+        },
+        "rows": [
+          {
+            "ctx": "Nav — al cargar",
+            "variant": "Split",
+            "on": true,
+            "sym": "48px",
+            "word": "Sí · ~22px",
+            "bar": "80px"
+          },
+          {
+            "ctx": "Nav — con scroll",
+            "variant": "Flat",
+            "on": false,
+            "sym": "28px",
+            "word": "No",
+            "bar": "64px"
+          },
+          {
+            "ctx": "Footer",
+            "variant": "Flat",
+            "on": false,
+            "sym": "32px",
+            "word": "No",
+            "bar": "—"
+          },
+          {
+            "ctx": "Brand Kit (hero)",
+            "variant": "Split",
+            "on": true,
+            "sym": "≥120px",
+            "word": "Opcional",
+            "bar": "—"
+          },
+          {
+            "ctx": "OG image / redes",
+            "variant": "Split",
+            "on": true,
+            "sym": "≥200px",
+            "word": "Sí",
+            "bar": "—"
+          },
+          {
+            "ctx": "Favicon",
+            "variant": "Flat",
+            "on": false,
+            "sym": "32 / 16px",
+            "word": "No",
+            "bar": "—"
+          }
+        ]
+      },
+      "rules": {
+        "title": "Las siete reglas",
+        "items": [
+          {
+            "title": "Umbral split → flat: 48px",
+            "body": "El desplazamiento de color es el 5,1% de la altura del símbolo, así que a 48px el creciente mide 2,5px. Por debajo se lee como fleco sucio, no como capa."
+          },
+          {
+            "title": "Tamaño mínimo: 24px",
+            "body": "El trazo es el 8,6% de la altura: a 24px son 2,1px y aguanta; a 15px son 1,3px y el antialiasing lo lava a gris."
+          },
+          {
+            "title": "Sin contenedor circular",
+            "body": "El símbolo ya es un círculo. Meterlo en otro lo reduce y lo convierte en una diana."
+          },
+          {
+            "title": "Nunca menor que la UI contigua",
+            "body": "Es la marca, no un icono más. Debe pesar al menos tanto como el LinkedIn o el © de al lado."
+          },
+          {
+            "title": "Proporción símbolo/wordmark",
+            "body": "40–45% compuestos en UI, ~60% en lockup cerrado. Fuera de ese rango el símbolo flota solo o el wordmark domina."
+          },
+          {
+            "title": "Transición del nav: continua",
+            "body": "El color se extingue antes de bajar de 48px y el wordmark se desvanece en opacidad sin recortar glifos. Nunca pasa por un estado de mala registración."
+          },
+          {
+            "title": "prefers-reduced-motion: salto",
+            "body": "Sin interpolar: se salta entre estados de golpe, sin transición intermedia. El símbolo pasa de 48px a 28px y la barra, de 80px a 64px — dos medidas distintas."
+          }
+        ]
+      },
+      "ladder": {
+        "kicker": "Regla 1 · el umbral, visto",
+        "title": "Dónde deja de funcionar el split",
+        "lead": "El creciente de color mide el 5,1% de la altura. Por debajo de 48px se lee como registro sucio, no como capa. La escalera lo enseña sola.",
+        "crescent": "creciente",
+        "works": "Funciona",
+        "dirty": "Fleco sucio"
+      }
+    },
+    "color": {
+      "num": "03 — Color",
+      "title": "Paleta y dos capas",
+      "lead": "La regla de las dos capas: una capa de tinta (fondo + trazo) que conmuta con el tema, y una capa de color (cian + morado) que solo aparece en el split y no cambia entre claro y oscuro. Cada muestra lleva su token, su hex y su ratio de contraste medido. Cambia el tema con el toggle del nav para ver la capa de tinta conmutar.",
+      "swapConmuta": "Conmuta",
+      "swapFijo": "Fijo",
+      "items": [
+        {
+          "name": "Fondo",
+          "token": "--background",
+          "hex": "#F7F3EC · #191D21",
+          "swap": "conmuta",
+          "sample": "var(--background)",
+          "sampleFg": "var(--foreground)",
+          "ratio": "Tinta encima · 13,8:1 · AAA",
+          "note": "Fondo base"
+        },
+        {
+          "name": "Tinta",
+          "token": "--foreground",
+          "hex": "#21262B · #F7F3EC",
+          "swap": "conmuta",
+          "sample": "var(--foreground)",
+          "sampleFg": "var(--background)",
+          "ratio": "Texto principal · 13,8:1 · AAA",
+          "note": "Texto y trazo"
+        },
+        {
+          "name": "Cian primario",
+          "token": "--primary · --brand-cyan",
+          "hex": "#005E5F · #3FC9C4",
+          "swap": "conmuta",
+          "sample": "var(--primary)",
+          "sampleFg": "var(--primary-foreground)",
+          "ratio": "7,01:1 texto · 7,44:1 botón (claro) · 8,36:1 oscuro · AAA",
+          "note": "Enlaces y acento"
+        },
+        {
+          "name": "Morado",
+          "token": "--brand-purple",
+          "hex": "#9B87F5",
+          "swap": "fijo",
+          "sample": "var(--brand-purple)",
+          "sampleFg": "#21262B",
+          "ratio": "Decorativo · tinta encima",
+          "note": "Tintes y realces"
+        },
+        {
+          "name": "Morado acento",
+          "token": "--brand-purple-accent",
+          "hex": "oklch(0.62 0.16 290)",
+          "swap": "fijo",
+          "sample": "var(--brand-purple-accent)",
+          "sampleFg": "#F7F3EC",
+          "ratio": "Sobre fondo invertido · 3,96:1 claro · 3,48:1 oscuro · AA-large",
+          "note": "Texto/acento sobre tinta"
+        },
+        {
+          "name": "Split cian",
+          "token": "--brand-cyan-split",
+          "hex": "#16BDBD",
+          "swap": "fijo",
+          "sample": "var(--brand-cyan-split)",
+          "sampleFg": "#21262B",
+          "ratio": "Solo capa de logo",
+          "note": "Nunca como texto"
+        },
+        {
+          "name": "Split morado",
+          "token": "--brand-purple-split",
+          "hex": "#9B87F5",
+          "swap": "fijo",
+          "sample": "var(--brand-purple-split)",
+          "sampleFg": "#21262B",
+          "ratio": "Solo capa de logo",
+          "note": "Nunca como texto"
+        },
+        {
+          "name": "Pastel cian",
+          "token": "--brand-cyan-soft",
+          "hex": "#A7E1DE",
+          "swap": "fijo",
+          "sample": "var(--brand-cyan-soft)",
+          "sampleFg": "#21262B",
+          "ratio": "Tinta encima · 10,5:1 · AAA",
+          "note": "Fondo, nunca texto"
+        },
+        {
+          "name": "Pastel morado",
+          "token": "--brand-purple-soft",
+          "hex": "#C6B9F0",
+          "swap": "fijo",
+          "sample": "var(--brand-purple-soft)",
+          "sampleFg": "#21262B",
+          "ratio": "Tinta encima · 8,4:1 · AAA",
+          "note": "Fondo, nunca texto"
+        }
+      ],
+      "pastelNote": "Los pasteles nunca como color de texto. Son fondos. Si va texto sobre un pastel, siempre en foreground (tinta) — nunca al revés."
+    },
+    "tipografia": {
+      "num": "04 — Tipografía",
+      "title": "Dos tipos, dos trabajos",
+      "lead": "Qué tipos son y por qué, como activo de marca. La escala, tamaños e interlineados viven en el Design System.",
+      "bricolage": {
+        "name": "Bricolage Grotesque",
+        "tag": "Display · pesos 600 / 700",
+        "desc": "Grotesca de carácter, con detalles humanistas y ligeras irregularidades que le dan personalidad sin perder rigor. Es la voz de los titulares y del wordmark: firme, contemporánea, reconocible."
+      },
+      "inter": {
+        "name": "Inter",
+        "tag": "Texto · pesos 400 / 500 / 600",
+        "desc": "Neutra, de altísima legibilidad en pantalla a cualquier tamaño. Hace el trabajo silencioso: cuerpo, etiquetas, datos y UI. Deja que Bricolage lleve la voz y ella sostiene la lectura."
+      }
+    },
+    "aplicaciones": {
+      "num": "05 — Aplicaciones",
+      "title": "La marca en su sitio",
+      "lead": "Dónde vive el logo y cómo se descarga cada pieza. El PNG del símbolo se dimensiona por altura y el del lockup por ancho — no es evidente, por eso se dice aquí.",
+      "favicon": {
+        "title": "Favicon",
+        "desc": "Asset dedicado, no un reescalado. A 16px el trazo sube a 10 unidades para compensar ópticamente. Plano, centrado.",
+        "ico": "favicon.ico"
+      },
+      "og": {
+        "title": "OG image · redes",
+        "desc": "Split a ≥200px con wordmark. A ese tamaño el color respira y la marca se lee entera en el feed.",
+        "dl1": "Lockup split · PNG 1024"
+      },
+      "pngNote": "El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos claros; tintaClara sobre fondos oscuros. Disponibles en 256 / 512 / 1024 px."
+    },
+    "uso": {
+      "num": "06 — Uso correcto e incorrecto",
+      "title": "Los errores reales de este sistema",
+      "lead": "No un catálogo de ✓ / ✗ genéricos: los fallos que tuvo esta marca, la cifra que los detectó y cómo se corrigieron. Un registro de criterio.",
+      "fixLabel": "Corrección:",
+      "cases": [
+        {
+          "title": "El viewBox que mentía",
+          "chip": "height:40px → 23px · −42%",
+          "before": "Antes · 23px",
+          "after": "Después · 40px",
+          "desc": "Era \"0 0 120 120\" pero la tinta ocupaba solo el 58% del alto. Todo el que usó el componente lo infradimensionó sin saberlo.",
+          "fix": "viewBox recortado a la tinta — la altura que das ES la del símbolo."
+        },
+        {
+          "title": "El split usado a 24px",
+          "chip": "creciente de color = 1,2px",
+          "before": "Antes · split 24px",
+          "after": "Después · flat <48, split ≥48",
+          "desc": "A esa altura el desplazamiento se leía como error de registro de imprenta, no como firma.",
+          "fix": "umbral split → flat a 48px (regla 1). Por debajo, variante plana."
+        },
+        {
+          "title": "El favicon sin compensación óptica",
+          "chip": "8,2% de tinta a 16px vs 8,1% a 32px",
+          "before": "Antes · 32 reescalado a 16",
+          "after": "Después · dedicado 16px",
+          "desc": "El de 16px era el de 32 reescalado; a ese tamaño el trazo se lavaba a gris.",
+          "fix": "asset dedicado a 16px con stroke-width 10 en vez de 6."
+        },
+        {
+          "title": "El logo pesando menos que un icono ajeno",
+          "chip": "12×15px junto a LinkedIn 18×18px",
+          "before": "Antes · logo 12×15",
+          "after": "Después · logo ≥ icono",
+          "desc": "En el footer la marca quedaba por debajo de un icono de UI y al mismo peso visual que el © contiguo.",
+          "fix": "el logo nunca mide menos que los iconos contiguos (regla 4)."
+        },
+        {
+          "title": "El lockup al 29%",
+          "chip": "símbolo 24→64px, wordmark en 18px",
+          "before": "Antes · wordmark al 29%",
+          "after": "Después · proporción ~60%",
+          "desc": "El símbolo creció y el wordmark se quedó atrás. El logo no era grande: estaba solo.",
+          "fix": "proporción símbolo/wordmark controlada (regla 5)."
+        },
+        {
+          "title": "El círculo dentro del círculo",
+          "chip": "símbolo al 35% de su huella",
+          "before": "Antes · al 35% de su huella",
+          "after": "Después · sin contenedor",
+          "desc": "El nav metía el símbolo en un contenedor circular, convirtiéndolo en una diana.",
+          "fix": "sin contenedor circular — el símbolo ya es un círculo (regla 3)."
+        },
+        {
+          "title": "Los cuatro colores de esta página",
+          "chip": "4 tokens desviados",
+          "before": "Antes · desviados",
+          "after": "Después · tokens",
+          "desc": "La página que documenta el color era la que lo tenía mal: hueso, oscuro y los dos pasteles.",
+          "fix": "#F5F3EE→#F7F3EC · #181B1F→#191D21 · pastel cian #CFEFEE→#A7E1DE · pastel morado #E6E0FB→#C6B9F0."
+        }
+      ],
+      "boundaryNote": "Aquí va la identidad: qué es la marca y cómo se usa. El rigor de ingeniería —rejilla, breakpoints, escala de espaciado, motion y la medición completa de accesibilidad— vive en el Design System."
+    }
+  },
+  "designSystem": {
+    "meta": {
+      "title": "Design System — Francisco López",
+      "description": "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica, claro/oscuro, movimiento y la medición completa de accesibilidad."
+    },
+    "crumb": "Design System",
+    "hero": {
+      "kicker": "Sistema de diseño",
+      "title": "Design System",
+      "lead": "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica y comportamiento en claro y oscuro. No define el contenido de ninguna sección — define cómo respira todo lo que va dentro. Es el criterio interno con el que se construye y se audita.",
+      "statContainer": "Ancho máximo del contenedor",
+      "statBreakpoints": "Breakpoints",
+      "statBreakpointsList": "640 · 768 · 1024 · 1280",
+      "statMeasure": "Medida de lectura (~91 car.)",
+      "statA11y": "Objetivo de accesibilidad"
+    },
+    "rejilla": {
+      "num": "(01)",
+      "title": "Rejilla de página",
+      "showGrid": "Mostrar rejilla",
+      "hideGrid": "Ocultar rejilla",
+      "lead": "Contenedor amplio para maquetación; medida de lectura estrecha para el texto corrido.",
+      "baseLabel": "Rejilla base:",
+      "baseVal": "12 columnas",
+      "gutterLabel": "Medianil:",
+      "gutterVal": "var(--gutter) · 16–24px",
+      "hint": "La franja marca las 12 columnas — usa el botón «rejilla» de arriba para alternarla.",
+      "cards": [
+        {
+          "title": "Contenedor",
+          "body": "Máximo 1360px, centrado. Por encima de xl los márgenes crecen; nunca se estira el contenido."
+        },
+        {
+          "title": "Márgenes (page-x)",
+          "body": "clamp(1.25rem, 5vw, 2.5rem) — 20px en móvil, hasta 40px en escritorio."
+        },
+        {
+          "title": "Medida de lectura",
+          "body": "El texto corrido nunca supera 42rem (~91 car.) aunque el contenedor sea ancho. La medida clásica cómoda va de 45 a 75 caracteres, así que 91 queda por encima — decisión consciente de contenedor amplio, no descuido."
+        }
+      ]
+    },
+    "tokens": {
+      "num": "(02)",
+      "title": "Tokens de layout",
+      "lead": "La aportación propia de esta página. No existen en ningún otro sitio del sistema y pasan al repositorio al montar la web.",
+      "copyLabel": ":root { }",
+      "copyHint": "Copia de un vistazo",
+      "items": [
+        { "name": "--container", "val": "1360px" },
+        { "name": "--page-x", "val": "clamp(1.25rem, 5vw, 2.5rem)" },
+        { "name": "--gutter", "val": "clamp(1rem, 2.2vw, 1.5rem)" },
+        { "name": "--measure", "val": "42rem" },
+        { "name": "--section-y", "val": "clamp(4.5rem, 9vw, 9rem)" }
+      ],
+      "cards": [
+        {
+          "title": "Fijos, no editables en producción",
+          "body": "--section-y y --measure tienen valor fijo: clamp(4.5rem, 9vw, 9rem) y 42rem. Ya no hay panel de ajuste — el ritmo es el mismo en todo el sitio."
+        },
+        {
+          "title": "Definidos una sola vez",
+          "body": "Viven en el :root del sitio junto a los tokens de color; cada página los consume. Cambiar un valor aquí lo cambia en todas partes."
+        }
+      ]
+    },
+    "breakpoints": {
+      "num": "(03)",
+      "title": "Breakpoints",
+      "cols": {
+        "token": "Token / min-width",
+        "ctx": "Contexto",
+        "change": "Qué cambia en el layout"
+      },
+      "rows": [
+        {
+          "token": "base",
+          "min": "0 – 639px",
+          "ctx": "Móvil",
+          "change": "Una columna, todo apilado. aside encima del contenido. Tipografía en el mínimo del clamp."
+        },
+        {
+          "token": "sm",
+          "min": "≥ 640px",
+          "ctx": "Móvil grande",
+          "change": "Botones y metadatos en fila; sigue una columna de contenido."
+        },
+        {
+          "token": "md",
+          "min": "≥ 768px",
+          "ctx": "Tablet",
+          "change": "Aparece la retícula aside + contenido a dos columnas. Márgenes crecen."
+        },
+        {
+          "token": "lg",
+          "min": "≥ 1024px",
+          "ctx": "Escritorio",
+          "change": "Rejilla de 12 col completa; aside puede quedar sticky; grids de 3 tarjetas."
+        },
+        {
+          "token": "xl",
+          "min": "≥ 1280px",
+          "ctx": "Escritorio amplio",
+          "change": "Contenedor tope 1360px, centrado. Los márgenes absorben el ancho extra."
+        }
+      ],
+      "note": "Coinciden con la escala de Tailwind del repo. Este documento aplica además tipografía y espaciado fluidos con clamp(): entre breakpoints el tamaño interpola de forma continua, sin saltos bruscos."
+    },
+    "ritmo": {
+      "num": "(04)",
+      "title": "Ritmo vertical y espaciado",
+      "lead": "Escala de base 4px (Tailwind). El aire entre secciones es la herramienta principal de jerarquía.",
+      "scaleTitle": "Escala de espaciado",
+      "rhythmTitle": "Ritmo entre secciones",
+      "sectionYLabel": "--section-y · clamp(72 → 144px)",
+      "spacing": [
+        { "name": "2xs", "px": "8px", "w": "5%" },
+        { "name": "xs", "px": "12px", "w": "8%" },
+        { "name": "sm", "px": "16px", "w": "11%" },
+        { "name": "md", "px": "24px", "w": "17%" },
+        { "name": "lg", "px": "32px", "w": "23%" },
+        { "name": "xl", "px": "48px", "w": "34%" },
+        { "name": "2xl", "px": "64px", "w": "46%" },
+        { "name": "3xl", "px": "96px", "w": "68%" },
+        { "name": "4xl", "px": "128px", "w": "90%" }
+      ],
+      "rhythm": [
+        "Entre secciones mayores: --section-y — 72px móvil → 144px escritorio.",
+        "Título de sección → contenido: 40px (2.5rem).",
+        "Entre bloques dentro de sección: 24–32px. Divisor hairline opcional.",
+        "Cada sección abre con un divisor de 1px var(--border) a todo el ancho."
+      ]
+    },
+    "tipografia": {
+      "num": "(05)",
+      "title": "Jerarquía tipográfica",
+      "lead": "Bricolage Grotesque (600) para titulares · Inter para texto y UI. Tamaños fluidos: móvil = mínimo del clamp, escritorio = máximo.",
+      "cols": {
+        "level": "Nivel",
+        "font": "Fuente",
+        "desktop": "Escritorio",
+        "mobile": "Móvil",
+        "lh": "Interlineado",
+        "use": "Uso"
+      },
+      "rows": [
+        {
+          "name": "Display",
+          "font": "Bricolage 600",
+          "desktop": "80px / 5rem",
+          "mobile": "44px",
+          "lh": "1.0",
+          "use": "Solo Hero",
+          "sample": "Discovery",
+          "kind": "display"
+        },
+        {
+          "name": "H1",
+          "font": "Bricolage 600",
+          "desktop": "52px / 3.25rem",
+          "mobile": "32px",
+          "lh": "1.05",
+          "use": "Título de sección",
+          "sample": "Hitos",
+          "kind": "h1"
+        },
+        {
+          "name": "H2",
+          "font": "Bricolage 600",
+          "desktop": "32px / 2rem",
+          "mobile": "24px",
+          "lh": "1.15",
+          "use": "Subsección",
+          "sample": "Cómo trabajo",
+          "kind": "h2"
+        },
+        {
+          "name": "H3",
+          "font": "Bricolage 600",
+          "desktop": "20px / 1.25rem",
+          "mobile": "18px",
+          "lh": "1.3",
+          "use": "Título de tarjeta / caso",
+          "sample": "TheTool — SaaS B2B",
+          "kind": "h3"
+        },
+        {
+          "name": "H4",
+          "font": "Bricolage 600",
+          "desktop": "16px / 1rem",
+          "mobile": "16px",
+          "lh": "1.4",
+          "use": "Encabezado menor",
+          "sample": "Resultados",
+          "kind": "h4"
+        },
+        {
+          "name": "Body L",
+          "font": "Inter 400",
+          "desktop": "18px / 1.125rem",
+          "mobile": "17px",
+          "lh": "1.6",
+          "use": "Subheadline, intro",
+          "sample": "Investigo, prototipo, construyo y mido.",
+          "kind": "bodyL"
+        },
+        {
+          "name": "Body",
+          "font": "Inter 400",
+          "desktop": "16px / 1rem",
+          "mobile": "16px",
+          "lh": "1.65",
+          "use": "Texto corrido (máx 42rem)",
+          "sample": "Senior Product Manager con más de 10 años en SaaS B2B y B2C.",
+          "kind": "body"
+        },
+        {
+          "name": "Small / meta",
+          "font": "Inter 400–500",
+          "desktop": "14px",
+          "mobile": "14px",
+          "lh": "1.5",
+          "use": "Fechas, pies, etiquetas",
+          "sample": "Cofundador & PM · May 2016 – Oct 2021",
+          "kind": "small"
+        },
+        {
+          "name": "Eyebrow",
+          "font": "Inter 600 · UPPER",
+          "desktop": "13px",
+          "mobile": "13px",
+          "lh": "1.4",
+          "use": "Kicker sobre título",
+          "sample": "SENIOR PRODUCT MANAGER · UX · SAAS",
+          "kind": "eyebrow"
+        }
+      ]
+    },
+    "claroscuro": {
+      "num": "(06)",
+      "title": "Claro y oscuro",
+      "lead": "Mismo esqueleto, misma jerarquía de superficies: fondo → tarjeta → borde. Sin sombras pesadas — la profundidad la dan los hairlines y el contraste de superficie. El claro es papel cálido; el oscuro, azul profundo.",
+      "lightLabel": "Modo claro",
+      "darkLabel": "Modo oscuro",
+      "sampleHeadline": "Del discovery al dato.",
+      "cta": "Descargar CV",
+      "lightTokens": "bg #F7F3EC · card #FCFAF6 · border #E7E4DD",
+      "darkTokens": "bg #191D21 · card #21262B · border #2C333B",
+      "ruleTitle": "Regla de color",
+      "rule": [
+        "primary es el único color de acción. secondary / muted / accent permanecen neutros.",
+        "Enlaces, en dos reglas: primary para enlaces de contenido; foreground / muted-foreground para la navegación de chrome (nav, breadcrumb, footer).",
+        "Los tonos de marca decoran o firman el logo — con una excepción: brand-purple-accent es un tono de marca usado como texto sobre fondos invertidos (AA-large, ≥3:1). Splits y pasteles, nunca como texto."
+      ],
+      "ruleFoot": "Usa el conmutador de la cabecera para ver esta misma página en ambos modos."
+    },
+    "movimiento": {
+      "num": "(07)",
+      "title": "Movimiento",
+      "timings": [
+        { "k": "150ms", "v": "Microinteracciones: hover, foco, botones." },
+        { "k": "250ms", "v": "Cambios de estado: acordeones, tabs." },
+        { "k": "600ms", "v": "Scroll-reveal de entrada de sección." },
+        { "k": "easing", "v": "cubic-bezier(.4, 0, .2, 1) — estándar." }
+      ],
+      "bullets": [
+        "Reveal = fundido + subida de 12px, escalonado ~60ms entre hijos.",
+        "Movimiento sobrio: nunca compite con el contenido.",
+        "prefers-reduced-motion: se desactivan transformaciones y auto-scroll. El contenido aparece siempre, aunque falle el JS."
+      ],
+      "demoLabel": "Demo de scroll-reveal",
+      "replay": "Repetir ▸",
+      "navTitle": "Transición del nav — compartida por todo el sitio",
+      "navBullets": [
+        "Símbolo 48 → 28px y barra 80 → 64px, de forma continua con el scroll.",
+        "Las capas de color del split se extinguen antes de que el símbolo baje de 48px — nunca pasa por un estado de mala registración.",
+        "El wordmark se desvanece en opacidad sin recortar glifos: el hueco solo se colapsa cuando ya es invisible.",
+        "prefers-reduced-motion: salto entre estados, sin interpolar."
+      ],
+      "navState1": "al cargar · 80px",
+      "navState2": "con scroll · 64px · flat",
+      "navFoot": "Es la transición que ves ahora mismo en la cabecera de esta página."
+    },
+    "accesibilidad": {
+      "num": "(08)",
+      "title": "Accesibilidad",
+      "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual.",
+      "contrastTitle": "Contraste medido",
+      "contrastCols": {
+        "measure": "Medición",
+        "light": "Claro",
+        "dark": "Oscuro"
+      },
+      "contrastRows": [
+        {
+          "label": "Texto principal",
+          "note": "foreground sobre background",
+          "light": "13,79:1",
+          "lightLv": "AAA",
+          "dark": "15,32:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "primary como texto",
+          "note": "enlaces y acento",
+          "light": "7,01:1",
+          "lightLv": "AAA",
+          "dark": "8,36:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "Texto sobre botón",
+          "note": "primary-foreground sobre primary",
+          "light": "7,44:1",
+          "lightLv": "AAA",
+          "dark": "8,36:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "muted-foreground",
+          "note": "muted sobre background",
+          "light": "7,12:1",
+          "lightLv": "AAA",
+          "dark": "7,08:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "brand-purple-accent",
+          "note": "Solo texto grande (≥3:1) sobre fondo invertido",
+          "light": "3,96:1",
+          "lightLv": "",
+          "dark": "3,48:1",
+          "darkLv": ""
+        }
+      ],
+      "contrastNote": "Con este cambio, todos los pares de texto del sistema alcanzan AAA en claro y oscuro — ya no queda ninguno en AA. La única excepción intencionada es brand-purple-accent, que cumple solo como texto grande (≥3:1) sobre fondos invertidos, nunca como cuerpo.",
+      "checklistTitle": "Checklist de cierre",
+      "checklist": [
+        "Contraste medido, con cifra, en ambos temas. AA es el suelo no negociable; AAA siempre que se alcance sin coste visual.",
+        "Foco visible: anillo de 2px con var(--ring) y offset de 2px en todo elemento interactivo. Nunca outline:none sin sustituto.",
+        "Objetivos táctiles de 44×44px como mínimo, también en controles pequeños como el breadcrumb o el toggle de tema.",
+        "Un solo h1 por página y jerarquía h2–h4 sin saltos. El orden de lectura es el orden del DOM.",
+        "Breadcrumb en toda página interna, con <nav aria-label>, lista ordenada y aria-current=\"page\" en el nivel actual.",
+        "Nada codificado solo por color: todo estado o categoría que se distinga por color lleva además texto o forma.",
+        "prefers-reduced-motion respetado en toda animación.",
+        "Alternativas textuales: alt y etiquetas donde informan, aria-hidden en lo decorativo."
+      ],
+      "boundaryHere": {
+        "tag": "Aquí · Design System",
+        "body": "El criterio interno y las mediciones. Para quien construye o audita el sitio."
+      },
+      "boundaryNext": {
+        "tag": "Página de Accesibilidad",
+        "badge": "Próximamente",
+        "body": "La declaración pública: el nivel que cumple el sitio y cómo reportar un problema. Para un visitante. No vive aquí."
+      }
+    },
+    "esqueleto": {
+      "num": "(09)",
+      "title": "Esqueleto navegable",
+      "devGroupLabel": "Vista previa por dispositivo",
+      "devFull": "Escritorio",
+      "devTablet": "Tablet",
+      "devMobile": "Móvil",
+      "lead": "Maqueta esquemática de la home con placeholders — sin contenido definido. Solo demuestra el ritmo vertical y la retícula que comparten Hero, Hitos, Cómo trabajo y el resto de secciones.",
+      "mobileNote": "Se muestra la versión móvil. La comparativa entre Escritorio, Tablet y Móvil está disponible en pantallas anchas.",
+      "rows": [
+        { "idx": "(01)", "name": "Hero", "h": "clamp(9rem,22vw,15rem)" },
+        { "idx": "(02)", "name": "Hitos", "h": "clamp(11rem,26vw,18rem)" },
+        {
+          "idx": "(03)",
+          "name": "Cómo trabajo",
+          "h": "clamp(8rem,18vw,12rem)"
+        },
+        {
+          "idx": "(04)",
+          "name": "Más allá del PM",
+          "h": "clamp(8rem,18vw,12rem)"
+        },
+        { "idx": "(05)", "name": "Trayectoria", "h": "clamp(9rem,20vw,13rem)" },
+        { "idx": "(06)", "name": "Formación", "h": "clamp(7rem,16vw,10rem)" },
+        { "idx": "(07)", "name": "Toolkit", "h": "clamp(9rem,20vw,13rem)" },
+        { "idx": "(08)", "name": "Contacto", "h": "clamp(8rem,18vw,12rem)" }
+      ]
+    }
   }
 }
