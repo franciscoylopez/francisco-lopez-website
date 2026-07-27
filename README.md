@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Francisco López — Web personal
 
-## Getting Started
+Portfolio y CV en línea de **Francisco López**, Senior Product Manager. La propia
+web actúa como prueba de criterio técnico y de diseño: rápida, accesible, bilingüe
+y con un sistema de marca propio.
 
-First, run the development server:
+🔗 **En producción:** https://franciscolopez.es
+
+## Stack
+
+- **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`)
+- **Tailwind CSS v4** + **shadcn/ui** (base-ui) · **lucide-react**
+- **next-themes** (claro/oscuro, `system` por defecto)
+- Desplegado en **Vercel** (`main` = producción)
+
+## Características
+
+- **i18n ES/EN** desde la primera línea: español sin prefijo (`/`), inglés en
+  `/en`, diccionarios tipados y cero strings hardcodeados.
+- **Modo claro/oscuro** con tokens OKLCH; todo el sistema de color en **WCAG AAA**.
+- **SEO técnico**: metadata + `canonical` + `hreflang` por página, `robots.txt` y
+  `sitemap.xml` (gateados por entorno), JSON-LD.
+- **Imágenes Open Graph** de marca generadas al vuelo (`/api/og`, `next/og`).
+- **Rendimiento**: PageSpeed 98–100, CLS 0. Server Components por defecto y
+  responsive en CSS (JS de cliente solo en las islas interactivas).
+
+## Desarrollo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Otros scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build      # build de producción
+npm run start      # sirve el build de producción
+npm run lint       # ESLint
+npm run typecheck  # tsc --noEmit
+npm run format     # Prettier
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+> **Lighthouse/PageSpeed** se mide contra el build de producción
+> (`next build && next start` o el preview de Vercel), nunca contra `next dev`.
 
-## Learn More
+## Estructura
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/[lang]/            Rutas por locale (home, brand-kit, design-system) + layout y diccionarios
+app/api/og/            Generación de imágenes OG (ImageResponse)
+app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
+components/site/        Secciones de la web (nav, hero, footer, breadcrumb, páginas…)
+components/ui/          Primitivas (logo, button)
+lib/                   i18n, site (SITE_URL) y utils
+proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
+public/                Assets: logo-kit, cv, img, og, favicons
+design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
+scripts/logo-kit/      Generación del kit de logo desde su geometría
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Documentación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+El "porqué" del proyecto vive en documentos dedicados:
 
-## Deploy on Vercel
+- **[PRD.md](./PRD.md)** — producto, diseño y alcance.
+- **[DECISIONS.md](./DECISIONS.md)** — decisiones técnicas del build (ADR-lite).
+- **[BRAND.md](./BRAND.md)** — sistema de marca (color, tipografía, logo).
+- **[CLAUDE.md](./CLAUDE.md)** — convenciones de código (i18n, tokens, a11y, SEO).
+- **[AGENTS.md](./AGENTS.md)** — aviso: este Next tiene breaking changes; leer los
+  docs del paquete antes de tocar APIs.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Despliegue
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Vercel, con **previews por rama/PR** y `main` = producción (`franciscolopez.es`).
+Flujo: ramas cortas → PR → merge; tag `vX.Y.Z` por release.
