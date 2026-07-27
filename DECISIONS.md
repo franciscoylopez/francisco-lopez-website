@@ -182,6 +182,12 @@ nombre + rol, dos paneles); Brand Kit/Design System, plantilla de marca (split +
 + kicker + flancos pastel). El preview "OG image · redes" del Brand Kit usa la imagen REAL
 (`<img src="/api/og?…">`), no un mockup, para que no pueda divergir del formato servido.
 
+**Convención derivada (2026-07-27).** El SEO y el marcado de datos estructurados (JSON-LD Schema.org)
+por página pasan a ser **criterio de cierre de cada página nueva**, al mismo nivel que performance,
+accesibilidad y responsive. La regla vive en `CLAUDE.md` (convenciones del build), junto a sus
+hermanas. Pendiente de completar el marcado existente: ver la tarea "Enriquecer datos estructurados
+(Schema.org / JSON-LD)" — `BreadcrumbList` en páginas internas + enriquecer `Person`/`ProfilePage`.
+
 ## D15 · SITE_URL estable en producción (`VERCEL_PROJECT_PRODUCTION_URL`) — 2026-07-27
 **Decisión.** En `lib/site.ts`, precedencia de la URL base: `NEXT_PUBLIC_SITE_URL` → en producción
 `VERCEL_PROJECT_PRODUCTION_URL` (URL/dominio ESTABLE de producción) → `VERCEL_URL` (efímera,
