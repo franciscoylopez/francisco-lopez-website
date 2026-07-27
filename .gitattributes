@@ -1,0 +1,5 @@
+# El export de Claude Design (design/*.dc.html) es la fuente de verdad del diseño
+# (ver DECISIONS.md D1): material de referencia, no código que se despliega. Se
+# marca como "documentation" para que GitHub/Linguist lo excluya de las
+# estadísticas de lenguaje del repo, que así reflejan el código real (TypeScript).
+design/** linguist-documentation
