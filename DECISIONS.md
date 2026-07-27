@@ -164,3 +164,41 @@ en local contra el preview (o `next start`) con `CHROME_PATH='C:\Program Files\G
 home V1 (P13):** Lighthouse desktop 100/100/100, mobile Perf 93 / A11y 100 / BP 100; axe 0
 violaciones en claro y oscuro; CLS 0; LCP mobile 3,1s (foto del Hero, a vigilar). El SEO 66 es
 artefacto del preview (Vercel lo marca `noindex`) + tarea de SEO técnico pendiente, no un defecto.
+
+## D14 · Imágenes OG generadas con ImageResponse bajo `/api/og` — 2026-07-27
+**Decisión.** Las Open Graph (1200×630) se generan por código con `ImageResponse` (`next/og`,
+Satori) en una **route handler** `app/api/og/route.tsx`, parametrizada por
+`?card=<home|brand-kit|design-system>&lang=<es|en>`. Cada página referencia la suya en su metadata
+(`openGraph.images` + `twitter.images`). Fuentes reales en `assets/fonts/*.woff` (Bricolage 600,
+Inter 400/600) leídas con `fs`; el logo split como SVG data-URI. `next.config.ts` →
+`outputFileTracingIncludes` para `/api/og` (fuentes + foto), porque el tracing no detecta el
+`readFileSync(join(process.cwd(), …))` y en Vercel faltarían los assets en el bundle serverless.
+
+**Contexto — por qué route handler y no el file-convention `opengraph-image.tsx`.** El
+`opengraph-image` vive dentro del segmento `[lang]` y su URL (`/es/opengraph-image`) choca con el
+rewrite de locale de `proxy.ts` (que redirige `/es/*`). `/api/*` está EXCLUIDO del matcher del
+proxy → se sirve directo, sin colisión ni doble `og:image`. La home es tarjeta compuesta (foto +
+nombre + rol, dos paneles); Brand Kit/Design System, plantilla de marca (split + wordmark + título
++ kicker + flancos pastel). El preview "OG image · redes" del Brand Kit usa la imagen REAL
+(`<img src="/api/og?…">`), no un mockup, para que no pueda divergir del formato servido.
+
+## D15 · SITE_URL estable en producción (`VERCEL_PROJECT_PRODUCTION_URL`) — 2026-07-27
+**Decisión.** En `lib/site.ts`, precedencia de la URL base: `NEXT_PUBLIC_SITE_URL` → en producción
+`VERCEL_PROJECT_PRODUCTION_URL` (URL/dominio ESTABLE de producción) → `VERCEL_URL` (efímera,
+correcta para previews) → `localhost`. Fuente única de `metadataBase`, canonical, OG, sitemap y
+robots. Reemplaza al fallback simple a `VERCEL_URL` de D13.
+
+**Contexto.** `VERCEL_URL` es la URL única de CADA deployment (cambia en cada deploy). Al lanzar,
+canonical/OG/sitemap/robots apuntaban a `francisco-lopez-website-<hash>.vercel.app` — malo para SEO
+(canónico cambiante por release). `VERCEL_PROJECT_PRODUCTION_URL` es estable y **Vercel la asigna al
+dominio propio en cuanto se conecta**, así que al añadir el dominio el canónico lo sigue solo, sin
+tocar código ni env vars. Hotfix post-lanzamiento (PR #2).
+
+## D16 · V1 en producción — 2026-07-27 (registro)
+**Hecho.** `feat/build-v1` → `main` (PR #1, `423173c`) + hotfix SITE_URL (PR #2, `f474130`).
+Producción en `https://francisco-lopez-website.vercel.app`, tag **`v1.0.0`**. QA en prod: rutas
+ES/EN 200, `/es`→`/`, robots `Allow`, OG serverless 200; Lighthouse mobile Perf 98 / A11y 100 / BP
+100 / SEO 100, axe 0 violaciones. `main` = producción: en adelante ramas cortas → PR → merge (D12).
+**`gh` CLI instalado y autenticado** → PRs se crean/mergean desde la sesión. Siguiente: dominio
+propio **franciscolopez.es** (GoDaddy, comprado 2026-07-27) → DNS/SSL en Vercel; al asignarlo, D15
+hace que canonical/OG/sitemap pasen al dominio automáticamente (sin cambios de código).
