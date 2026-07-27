@@ -59,24 +59,41 @@
 
 :root {
   --radius: 0.625rem;
+  color-scheme: light;
+
+  /* --- Tokens de layout (Design System §20 · trasladados 2026-07-26, D4;
+         valores confirmados contra Web personal.dc.html) --- */
+  --container: 1360px; /* ancho máx. del grid de 12 columnas */
+  --measure: 42rem; /* medida de lectura (~91 car. en Inter) */
+  --section-y: clamp(4.5rem, 9vw, 9rem); /* ritmo vertical: 72 → 144px */
+  --page-x: clamp(1.25rem, 5vw, 2.5rem); /* gutter de página: 20 → 40px */
+  --gutter: clamp(
+    1rem,
+    2.2vw,
+    1.5rem
+  ); /* separación entre columnas: 16 → 24px */
 
   /* --- Neutros + superficies (blanco hueso / gris) --- */
-  --background: oklch(0.9653 0.0102 81.8);      /* #F7F3EC blanco hueso */
-  --foreground: oklch(0.2657 0.0118 248.27);    /* #21262B gris oscuro  */
+  --background: oklch(0.9653 0.0102 81.8); /* #F7F3EC blanco hueso */
+  --foreground: oklch(0.2657 0.0118 248.27); /* #21262B gris oscuro  */
   --card: oklch(0.9855 0.0057 84.57);
   --card-foreground: oklch(0.2657 0.0118 248.27);
   --popover: oklch(0.9855 0.0057 84.57);
   --popover-foreground: oklch(0.2657 0.0118 248.27);
 
   /* --- Acción: cian primario (pasa AA con texto claro) --- */
-  --primary: oklch(0.43 0.0886 194.82);         /* #005E5F — AAA: 7,01:1 como texto y 7,44:1 sobre boton */
+  --primary: oklch(
+    0.43 0.0886 194.82
+  ); /* #005E5F — AAA: 7,01:1 como texto y 7,44:1 sobre boton */
   --primary-foreground: oklch(0.9855 0.0057 84.57);
 
   /* --- Secundarios/mudos: NEUTROS a propósito (no marca) --- */
   --secondary: oklch(0.9316 0.0128 86.83);
   --secondary-foreground: oklch(0.2657 0.0118 248.27);
   --muted: oklch(0.9316 0.0128 86.83);
-  --muted-foreground: oklch(0.4365 0.0064 95.19); /* AAA (7,12:1) sobre --background claro; a 0.4815 se quedaba en 5,87 */
+  --muted-foreground: oklch(
+    0.4365 0.0064 95.19
+  ); /* AAA (7,12:1) sobre --background claro; a 0.4815 se quedaba en 5,87 */
   --accent: oklch(0.9316 0.0128 86.83);
   --accent-foreground: oklch(0.2657 0.0118 248.27);
 
@@ -84,7 +101,7 @@
 
   --border: oklch(0.901 0.0142 88.69);
   --input: oklch(0.901 0.0142 88.69);
-  --ring: oklch(0.43 0.0886 194.82);            /* foco = cian primario */
+  --ring: oklch(0.43 0.0886 194.82); /* foco = cian primario */
 
   --chart-1: var(--brand-cyan);
   --chart-2: var(--brand-purple);
@@ -103,31 +120,39 @@
   --sidebar-ring: var(--ring);
 
   /* --- CAPA DE MARCA (decorativo / logo, NO tocar por shadcn) --- */
-  --brand-cyan: oklch(0.43 0.0886 194.82);           /* #005E5F — identico a primary a proposito */
-  --brand-purple: oklch(0.6889 0.1581 289.96);       /* #9B87F5 */
-  --brand-cyan-soft: oklch(0.8694 0.0592 192.12);    /* #A7E1DE pastel */
-  --brand-purple-soft: oklch(0.8151 0.0776 295.46);  /* #C6B9F0 pastel */
-  --brand-cyan-split: oklch(0.7242 0.1208 194.82);   /* #16BDBD split   */
+  --brand-cyan: oklch(
+    0.43 0.0886 194.82
+  ); /* #005E5F — identico a primary a proposito */
+  --brand-purple: oklch(0.6889 0.1581 289.96); /* #9B87F5 */
+  --brand-cyan-soft: oklch(0.8694 0.0592 192.12); /* #A7E1DE pastel */
+  --brand-purple-soft: oklch(0.8151 0.0776 295.46); /* #C6B9F0 pastel */
+  --brand-cyan-split: oklch(0.7242 0.1208 194.82); /* #16BDBD split   */
   --brand-purple-split: oklch(0.6889 0.1581 289.96); /* #9B87F5 split   */
-  --brand-purple-accent: oklch(0.62 0.16 290);       /* morado accesible como texto/acento sobre fondos invertidos (claro y oscuro) */
+  --brand-purple-accent: oklch(
+    0.62 0.16 290
+  ); /* morado accesible como texto/acento sobre fondos invertidos (claro y oscuro) */
 }
 
 .dark {
-  --background: oklch(0.2283 0.0098 248.26);    /* #191D21 */
-  --foreground: oklch(0.9653 0.0102 81.8);      /* #F7F3EC */
-  --card: oklch(0.2657 0.0118 248.27);          /* #21262B */
+  color-scheme: dark;
+
+  --background: oklch(0.2283 0.0098 248.26); /* #191D21 */
+  --foreground: oklch(0.9653 0.0102 81.8); /* #F7F3EC */
+  --card: oklch(0.2657 0.0118 248.27); /* #21262B */
   --card-foreground: oklch(0.9653 0.0102 81.8);
   --popover: oklch(0.2657 0.0118 248.27);
   --popover-foreground: oklch(0.9653 0.0102 81.8);
 
   /* cian aclarado para no apagarse sobre fondo oscuro */
-  --primary: oklch(0.7626 0.1156 191.46);       /* #3FC9C4 */
+  --primary: oklch(0.7626 0.1156 191.46); /* #3FC9C4 */
   --primary-foreground: oklch(0.2283 0.0098 248.26);
 
   --secondary: oklch(0.3063 0.0152 252.34);
   --secondary-foreground: oklch(0.9653 0.0102 81.8);
   --muted: oklch(0.3063 0.0152 252.34);
-  --muted-foreground: oklch(0.7295 0.0116 95.22); /* AAA (7,08:1) sobre --background oscuro; a 0.7245 se quedaba en 6,95 */
+  --muted-foreground: oklch(
+    0.7295 0.0116 95.22
+  ); /* AAA (7,08:1) sobre --background oscuro; a 0.7245 se quedaba en 6,95 */
   --accent: oklch(0.3063 0.0152 252.34);
   --accent-foreground: oklch(0.9653 0.0102 81.8);
 
@@ -173,8 +198,147 @@
   html {
     @apply font-sans;
   }
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
     font-weight: 600;
+  }
+  /* Foco visible AA (checklist a11y §20, punto 2): anillo de 2px + offset 2px. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+}
+
+/* === Capa de motion (PRD §6/§21) — "una vez al entrar en viewport, nunca en
+   bucle". La clase `reveal-on` la añade el island de cliente solo si NO hay
+   prefers-reduced-motion; sin JS o con reduced-motion, el contenido se queda
+   visible (opacity:1), nunca oculto. === */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-on [data-reveal][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+/* Chip EXIT: entra con retardo tras el reveal de su fila (PRD §21). */
+.reveal-on [data-reveal] .exit-chip {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s,
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s;
+}
+.reveal-on [data-reveal][data-shown] .exit-chip {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal-on [data-reveal],
+  .reveal-on [data-reveal] .exit-chip {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Hitos — fila responsive (D7: en CSS, no en JS). Móvil: grid que apila el
+   impacto bajo el nombre. ≥768px (md): flex, todo en una fila. */
+.hitos-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "idx name year"
+    "impact impact impact";
+  gap: 0.35rem 0.9rem;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .hitos-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.5rem;
+    grid-template-areas: none;
+  }
+}
+
+/* Trayectoria — filas fecha / contenido / logo. Móvil: una columna apilada, el
+   logo se oculta. ≥768px (md): tres columnas (D7). */
+.tray-grid,
+.tray-grid-nested {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .tray-grid {
+    grid-template-columns: minmax(0, 10.5rem) minmax(0, 1fr) auto;
+    gap: clamp(1rem, 4vw, 3rem);
+  }
+  .tray-grid-nested {
+    grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr) auto;
+    gap: clamp(0.75rem, 3vw, 2rem);
+  }
+}
+
+/* Contacto — filas fila+divisor. Móvil: valor en segunda línea. ≥768px (md): una
+   fila. Hover/foco oscurece el fondo y sube el valor a --foreground para no perder
+   contraste AAA (§21); la flecha se desplaza (respeta reduced-motion). */
+.contact-grid {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "ic lb ar"
+    "vl vl vl";
+  gap: 0.3rem 0.9rem;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .contact-grid {
+    grid-template-columns: auto minmax(0, 10rem) minmax(0, 1fr) auto;
+    grid-template-areas: "ic lb vl ar";
+    gap: clamp(0.9rem, 3vw, 2rem);
+  }
+}
+.contact-row {
+  transition: background 0.15s ease;
+}
+.contact-row:hover,
+.contact-row:focus-visible {
+  background: var(--border);
+}
+.contact-row:hover .contact-val,
+.contact-row:focus-visible .contact-val {
+  color: var(--foreground);
+}
+.contact-arrow {
+  transition:
+    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.15s ease;
+}
+.contact-row:hover .contact-arrow,
+.contact-row:focus-visible .contact-arrow {
+  color: var(--foreground);
+  transform: translate(2px, -2px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .contact-arrow {
+    transition: color 0.15s ease;
+  }
+  .contact-row:hover .contact-arrow,
+  .contact-row:focus-visible .contact-arrow {
+    transform: none;
   }
 }

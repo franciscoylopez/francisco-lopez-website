@@ -1,4 +1,14 @@
 /* ============================================================
+   ⚠️  DEPRECADO — 2026-07-24. NO EDITAR NI IMPORTAR.
+
+   Fuente ÚNICA de tokens del sitio: app/globals.css.
+   Este archivo NO lo importa la app (la app usa app/globals.css).
+   Se conserva solo como referencia histórica del sistema de marca
+   de dos capas. Cualquier cambio de tokens —color o layout— va en
+   app/globals.css, nunca aquí. No se borra por decisión de
+   Francisco (consolidar + documentar como deprecado, no eliminar).
+   ============================================================
+
    Marca personal — tema shadcn/ui (Tailwind v4 · OKLCH)
    Capa 1: tokens semánticos de shadcn (neutros + cian primario)
    Capa 2: tokens de marca (--brand-*) para pasteles y split

@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Tooling Node (generación del logo-kit, scripts sueltos): no es código de la
+    // app y usa require()/APIs de Node — fuera del lint de Next.
+    "scripts/**",
+    "scratch/**",
   ]),
 ]);
 
