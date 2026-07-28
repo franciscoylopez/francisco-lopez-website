@@ -262,3 +262,29 @@ la categoría Analíticas (es la razón de todo el aparato de consentimiento). G
 cablea en P24; hasta entonces, aceptar Analíticas fija el consentimiento pero no hay
 tag que escriba cookies. Conviene desplegar P24 cerca para que la política sea
 literal, o desplegar P22+P23+P24 juntas.
+
+## D19 · Optimización post-lanzamiento: analítica diferida + SEO afinado — 2026-07-28
+**Decisión.** Tras medir producción con GTM+GA4 ya cargando:
+- **GTM pasa de `afterInteractive` a `lazyOnload`** (supersede la estrategia de D17).
+  GTM+GA4 (~143 KiB) en la ventana interactiva subían el TBT móvil a ~390 ms y
+  bajaban PageSpeed a 88. Con `lazyOnload` (carga en tiempo ocioso) el TBT baja a
+  120-260 ms y el Perf vuelve a >90. GTM sigue cargando (verificado: contenedor
+  inicializado, `gtm.js`/`dom`/`load`) y el consentimiento NO se afecta: el default
+  denegado lo fija `consent-init` (script inline) en el parseo, antes que GTM. La
+  medición (page_view/scroll/clics) ocurre igual tras la interactividad.
+- **El sitemap incluye `/cookies`** (faltaba; el array de rutas se había quedado en
+  3). Con sus alternates hreflang es/en; `priority` 0.3 (legal).
+- **El enlace de política del banner deja de ser "Más información"** (texto genérico
+  que Lighthouse marca como `link-text`) → "Consulta la política de cookies" /
+  "Read the cookie policy". Descriptivo: recupera SEO 100 y mejora la accesibilidad.
+
+**Contexto — GA4 en producción (registro).** GA4 (`G-MEG5BP629K`, propiedad propia
+bajo la cuenta "Francisco López", NO la de la agencia) se configuró como Etiqueta de
+Google dentro de GTM (Initialization - All Pages) y se publicó. Consent Mode
+verificado en vivo: sin consentimiento 0 cookies `_ga`; con consentimiento, hits
+`gcs=G111` e ingesta confirmada en Tiempo real (page_view/scroll/user_engagement/
+file_download). GA4 ↔ Search Console vinculado. La medición mejorada ya captura
+scroll y descarga de CV de fábrica → cubre dos métricas de éxito del PRD §9.
+
+**Resultado.** Producción: Desktop 100/100/100/100; Móvil Perf 91-94 / A11y 100 /
+BP 100 / SEO 100. Cumple el objetivo D8 (>90 desktop+móvil). Tags v1.0.1 → v1.0.4.
