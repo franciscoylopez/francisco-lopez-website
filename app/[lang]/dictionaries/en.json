@@ -261,7 +261,38 @@
     "copyright": "© 2026 Francisco López",
     "brandKit": "Brand Kit",
     "designSystem": "Design System",
+    "cookies": "Cookies",
     "linkedinAria": "LinkedIn"
+  },
+  "consent": {
+    "region": "Cookie consent",
+    "title": "Your privacy",
+    "description": "I use analytics cookies to understand how the site is used and improve it. You can accept all, reject them, or choose what you allow.",
+    "policyLink": "Learn more",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "preferences": "Preferences",
+    "savePreferences": "Save preferences",
+    "close": "Close",
+    "prefs": {
+      "title": "Cookie preferences",
+      "intro": "Choose which categories you allow. Necessary cookies can't be turned off."
+    },
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "description": "Essential for the site to work. They store no personal data and need no consent.",
+        "badge": "Always on"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Measure in aggregate how the site is used (page views, clicks) to improve it. Google Analytics."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Allow personalising and measuring campaigns. Not used today; the control stays available in case they're enabled."
+      }
+    }
   },
   "breadcrumb": {
     "routeLabel": "Breadcrumb",

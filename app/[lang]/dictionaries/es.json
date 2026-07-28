@@ -261,7 +261,38 @@
     "copyright": "© 2026 Francisco López",
     "brandKit": "Brand Kit",
     "designSystem": "Design System",
+    "cookies": "Cookies",
     "linkedinAria": "LinkedIn"
+  },
+  "consent": {
+    "region": "Consentimiento de cookies",
+    "title": "Tu privacidad",
+    "description": "Uso cookies de analítica para entender cómo se usa la web y mejorarla. Puedes aceptarlas todas, rechazarlas o elegir qué permites.",
+    "policyLink": "Más información",
+    "acceptAll": "Aceptar todo",
+    "rejectAll": "Rechazar todo",
+    "preferences": "Preferencias",
+    "savePreferences": "Guardar preferencias",
+    "close": "Cerrar",
+    "prefs": {
+      "title": "Preferencias de cookies",
+      "intro": "Elige qué categorías permites. Las necesarias no se pueden desactivar."
+    },
+    "categories": {
+      "necessary": {
+        "title": "Necesarias",
+        "description": "Imprescindibles para que la web funcione. No guardan datos personales ni requieren consentimiento.",
+        "badge": "Siempre activas"
+      },
+      "analytics": {
+        "title": "Analíticas",
+        "description": "Miden de forma agregada cómo se usa la web (páginas vistas, clics) para mejorarla. Google Analytics."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Permiten personalizar y medir campañas. Hoy no se usan; el control queda disponible por si se activan."
+      }
+    }
   },
   "breadcrumb": {
     "routeLabel": "Ruta",
