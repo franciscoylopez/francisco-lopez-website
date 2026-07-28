@@ -71,7 +71,7 @@
     "line2": "Before that, years acquiring users — before measuring product, I understood how you attract them."
   },
   "trayectoria": {
-    "eyebrow": "Career",
+    "eyebrow": "Journey",
     "title": "Career",
     "cta": "Download CV",
     "productoLabel": "Product",
@@ -731,7 +731,7 @@
     },
     "crumb": "Design System",
     "hero": {
-      "kicker": "Design system",
+      "kicker": "Design foundations",
       "title": "Design System",
       "lead": "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy and light/dark behavior. It doesn't define any section's content — it defines how everything inside breathes. It's the internal criterion the site is built and audited against.",
       "statContainer": "Max container width",
