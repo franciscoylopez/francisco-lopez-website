@@ -20,3 +20,12 @@ export const SITE_URL =
 export const SITE_NAME = "Francisco López";
 
 export const LINKEDIN_URL = "https://www.linkedin.com/in/franciscolopez1975/";
+
+// ID del contenedor de Google Tag Manager (P21), solo cuando la analítica debe
+// correr: en producción (D13 — nunca en dev/preview, para no ensuciar los datos) y
+// con NEXT_PUBLIC_GTM_ID definido en el entorno de Vercel. Devuelve `undefined` en
+// cualquier otro caso, y el layout omite el contenedor por completo.
+export const GTM_ID =
+  process.env.VERCEL_ENV === "production"
+    ? process.env.NEXT_PUBLIC_GTM_ID
+    : undefined;
