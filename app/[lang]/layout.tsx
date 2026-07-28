@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 
 import "../globals.css";
 
+import { ConsentInit } from "@/components/analytics/consent-init";
 import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
+import { ConsentBanner } from "@/components/site/consent-banner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { locales, isLocale } from "@/lib/i18n/config";
 import { GTM_ID, SITE_NAME, SITE_URL } from "@/lib/site";
@@ -132,6 +134,8 @@ export default async function RootLayout({
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
 
+  const dict = await getDictionary(lang);
+
   return (
     <html
       lang={lang}
@@ -139,7 +143,14 @@ export default async function RootLayout({
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
+        {/* Analítica y consentimiento solo en producción (D13). ConsentInit va
+            antes que GTM (beforeInteractive) para fijar el default denegado. */}
+        {GTM_ID && (
+          <>
+            <ConsentInit />
+            <GoogleTagManager gtmId={GTM_ID} />
+          </>
+        )}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -148,6 +159,7 @@ export default async function RootLayout({
         >
           {children}
         </ThemeProvider>
+        {GTM_ID && <ConsentBanner dict={dict.consent} lang={lang} />}
       </body>
     </html>
   );

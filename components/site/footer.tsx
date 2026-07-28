@@ -6,6 +6,7 @@ export type FooterDict = {
   copyright: string;
   brandKit: string;
   designSystem: string;
+  cookies: string;
   linkedinAria: string;
 };
 
@@ -39,6 +40,12 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
             className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
           >
             {dict.designSystem}
+          </a>
+          <a
+            href={`${base}/cookies`}
+            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
+          >
+            {dict.cookies}
           </a>
         </nav>
 
