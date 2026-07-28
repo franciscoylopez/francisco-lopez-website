@@ -55,8 +55,8 @@ const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
     en: { title: "Brand Kit", kicker: "Brand identity" },
   },
   "design-system": {
-    es: { title: "Design System", kicker: "Sistema de diseño" },
-    en: { title: "Design System", kicker: "Design system" },
+    es: { title: "Design System", kicker: "Fundamentos de diseño" },
+    en: { title: "Design System", kicker: "Design foundations" },
   },
   cookies: {
     es: { title: "Política de cookies", kicker: "Legal" },

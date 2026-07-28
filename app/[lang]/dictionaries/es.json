@@ -731,7 +731,7 @@
     },
     "crumb": "Design System",
     "hero": {
-      "kicker": "Sistema de diseño",
+      "kicker": "Fundamentos de diseño",
       "title": "Design System",
       "lead": "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica y comportamiento en claro y oscuro. No define el contenido de ninguna sección — define cómo respira todo lo que va dentro. Es el criterio interno con el que se construye y se audita.",
       "statContainer": "Ancho máximo del contenedor",
