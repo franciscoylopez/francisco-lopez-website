@@ -111,10 +111,10 @@ export function ConsentBanner({
         <div
           role="region"
           aria-label={dict.region}
-          className="consent-enter fixed inset-x-0 bottom-0 z-[60] px-[var(--page-x)] pb-[max(1rem,env(safe-area-inset-bottom))]"
+          className="consent-enter fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[var(--page-x)] z-[60] w-[calc(100%-2*var(--page-x))] max-w-[40rem]"
         >
-          <div className="border-border bg-card mx-auto flex max-w-[var(--container)] flex-col gap-4 rounded-xl border p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)] md:flex-row md:items-center md:gap-6 md:p-6">
-            <div className="min-w-0 flex-1">
+          <div className="border-border bg-card flex flex-col gap-4 rounded-xl border p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+            <div className="min-w-0">
               <p className="font-display text-foreground text-[1.05rem] font-semibold">
                 {dict.title}
               </p>
@@ -128,7 +128,7 @@ export function ConsentBanner({
                 </a>
               </p>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap md:flex-nowrap md:justify-end">
+            <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 className={BTN_GHOST}

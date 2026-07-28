@@ -294,6 +294,74 @@
       }
     }
   },
+  "cookies": {
+    "meta": {
+      "title": "Política de cookies — Francisco López",
+      "description": "Qué cookies y tecnologías usa franciscolopez.es, con qué finalidad, y cómo gestionar o retirar tu consentimiento."
+    },
+    "crumb": "Cookies",
+    "kicker": "Legal",
+    "title": "Política de cookies",
+    "updated": "Última actualización: 28 de julio de 2026",
+    "lead": "Esta web usa el mínimo de cookies y tecnologías similares. Aquí te explico cuáles, para qué sirven y cómo controlarlas. Ninguna cookie de analítica se activa sin tu consentimiento.",
+    "whatHeading": "Qué son las cookies",
+    "whatBody": "Las cookies son pequeños archivos que un sitio guarda en tu navegador. También se usan tecnologías equivalentes, como el almacenamiento local del navegador (localStorage). Unas son imprescindibles para que la web funcione; otras, como las de analítica, solo se usan si das tu permiso.",
+    "useHeading": "Qué usamos en esta web",
+    "useIntro": "Este es el detalle de lo que puede cargarse, agrupado por categoría:",
+    "table": {
+      "name": "Nombre",
+      "provider": "Proveedor",
+      "purpose": "Finalidad",
+      "duration": "Duración",
+      "category": "Categoría"
+    },
+    "rows": [
+      {
+        "name": "flm-consent",
+        "provider": "franciscolopez.es",
+        "purpose": "Guarda tu decisión sobre las cookies para no volver a preguntártelo.",
+        "duration": "Persistente",
+        "category": "Necesaria"
+      },
+      {
+        "name": "Contenedor (GTM)",
+        "provider": "Google",
+        "purpose": "Gestiona la carga de las demás etiquetas. No almacena datos por sí mismo.",
+        "duration": "—",
+        "category": "Necesaria"
+      },
+      {
+        "name": "_ga",
+        "provider": "Google Analytics",
+        "purpose": "Distingue usuarios de forma agregada para medir el uso de la web.",
+        "duration": "2 años",
+        "category": "Analítica"
+      },
+      {
+        "name": "_ga_*",
+        "provider": "Google Analytics",
+        "purpose": "Mantiene el estado de la sesión de medición.",
+        "duration": "2 años",
+        "category": "Analítica"
+      }
+    ],
+    "tableNote": "«flm-consent» se guarda en el almacenamiento local del navegador (localStorage); técnicamente no es una cookie, pero se incluye por transparencia. Hoy no se usan cookies de marketing ni de publicidad.",
+    "legalHeading": "Base legal",
+    "legalBody": "Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las de analítica solo se cargan con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web.",
+    "manageHeading": "Cómo gestionar o retirar tu consentimiento",
+    "manageBody": "La primera vez que visitas la web aparece un aviso para aceptar, rechazar o elegir por categoría. Puedes cambiar tu decisión —incluida la analítica— cuando quieras desde el botón de aquí abajo:",
+    "manageButton": "Gestionar preferencias de cookies",
+    "manageBrowser": "También puedes bloquear o borrar cookies desde la configuración de tu navegador.",
+    "thirdHeading": "Terceros",
+    "thirdBody": "La analítica la proporciona Google (Google Tag Manager y Google Analytics), que trata los datos conforme a sus propias políticas. Puedes consultarlas en",
+    "thirdLinkLabel": "las políticas de privacidad de Google",
+    "retentionHeading": "Conservación de los datos",
+    "retentionBody": "Tu decisión de consentimiento se guarda en tu navegador hasta que la cambies o borres los datos del sitio. Los datos de analítica agregada los conserva Google según la configuración de la propiedad (por defecto, un máximo de 14 meses a nivel de usuario).",
+    "changesHeading": "Cambios en esta política",
+    "changesBody": "Actualizaré esta página cuando cambien las herramientas que usa la web. La fecha del principio refleja la última revisión.",
+    "contactHeading": "Contacto",
+    "contactBody": "Si tienes cualquier duda sobre esta política o quieres ejercer tus derechos de protección de datos, escríbeme a"
+  },
   "breadcrumb": {
     "routeLabel": "Ruta",
     "home": "Inicio"

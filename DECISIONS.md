@@ -236,3 +236,29 @@ cookies. Orden del tablero (21→22→…→24) coherente con esto.
 añadir `NEXT_PUBLIC_GTM_ID` al entorno **Production** de Vercel. Hasta entonces el código
 es inerte (no-op) en todos los entornos. Verificación en vivo tras el deploy con la var
 puesta: GTM Preview/Tag Assistant + inspección de red a `googletagmanager.com/gtm.js`.
+
+## D18 · Página de política de cookies como documento vivo — 2026-07-28
+**Decisión.** La política de cookies (P23) es una página propia i18n en `/cookies`
+(`app/[lang]/cookies/`, componente `cookies-policy.tsx`), con la misma estructura de
+página interna que Brand Kit / Design System (Nav + Footer + Breadcrumb compartidos,
+RevealRoot). Cumple el criterio de cierre de SEO: `BreadcrumbList` JSON-LD + metadata
+por locale + tarjeta OG propia (`card=cookies` en `/api/og`). El footer enlaza
+**"Cookies" → la página** (no abre el diálogo); el botón "Gestionar preferencias" de
+la propia página reabre el centro de preferencias (dispara `OPEN_CONSENT_EVENT`).
+
+**Mantenimiento (criterio de cierre, NO opcional).** La tabla de la página documenta
+lo que carga la web HOY: `flm-consent` (localStorage), contenedor GTM y, bajo
+consentimiento, Google Analytics (`_ga`/`_ga_*`). **Al añadir cualquier herramienta
+nueva que use cookies o almacenamiento** —Microsoft Clarity está previsto (Could/V2)—
+hay que **añadir su fila a la tabla y actualizar la fecha `updated`** del diccionario
+(ES y EN). Marcado con un comentario MANTENIMIENTO en `cookies-policy.tsx`.
+
+**Banner (ajuste 2026-07-28).** A petición de Francisco, el banner deja de ocupar el
+ancho completo: card compacto anclado abajo a la izquierda (`max-w-[40rem]`), con los
+botones apilados. El resto del comportamiento de P22 (D17) no cambia.
+
+**Frontera con GA4 (P24).** La política ya lista Google Analytics como herramienta de
+la categoría Analíticas (es la razón de todo el aparato de consentimiento). GA4 se
+cablea en P24; hasta entonces, aceptar Analíticas fija el consentimiento pero no hay
+tag que escriba cookies. Conviene desplegar P24 cerca para que la política sea
+literal, o desplegar P22+P23+P24 juntas.

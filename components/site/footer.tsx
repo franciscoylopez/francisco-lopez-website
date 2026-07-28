@@ -1,7 +1,5 @@
 import { Logo } from "@/components/ui/logo";
-import { GTM_ID } from "@/lib/site";
 
-import { ConsentPreferencesButton } from "./consent-preferences-button";
 import { LinkedinIcon } from "./icons";
 
 export type FooterDict = {
@@ -43,9 +41,12 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
           >
             {dict.designSystem}
           </a>
-          {/* Solo en producción, donde la analítica (y por tanto el consentimiento)
-              corre de verdad — el ConsentBanner que escucha el evento va gateado igual. */}
-          {GTM_ID && <ConsentPreferencesButton label={dict.cookies} />}
+          <a
+            href={`${base}/cookies`}
+            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
+          >
+            {dict.cookies}
+          </a>
         </nav>
 
         <a
