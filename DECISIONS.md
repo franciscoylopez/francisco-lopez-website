@@ -210,3 +210,29 @@ ES/EN 200, `/es`→`/`, robots `Allow`, OG serverless 200; Lighthouse mobile Per
 **`gh` CLI instalado y autenticado** → PRs se crean/mergean desde la sesión. Siguiente: dominio
 propio **franciscolopez.es** (GoDaddy, comprado 2026-07-27) → DNS/SSL en Vercel; al asignarlo, D15
 hace que canonical/OG/sitemap pasen al dominio automáticamente (sin cambios de código).
+
+## D17 · Analítica cargada con `next/script`, gateada a producción, consent-ready — 2026-07-28
+**Decisión.** Google Tag Manager (P21) se instala con `next/script` (estrategia
+`afterInteractive`, la que el doc de Next recomienda para tag managers), en un client
+component `components/analytics/google-tag-manager.tsx`, renderizado una vez en el
+layout de `[lang]`. **Sin `@next/third-parties`** (dependencia innecesaria: el snippet
+es trivial y así se controla el orden de carga para el consent mode de P22). GTM es el
+contenedor único de GA4 (P24) y de los eventos de clic mailto/tel/CV (P25) — no se mete
+gtag directo.
+
+**Gate de entorno (D13).** El contenedor solo se carga si `VERCEL_ENV === "production"`
+**y** `NEXT_PUBLIC_GTM_ID` está definida (`lib/site.ts` → `GTM_ID`; el layout omite el
+componente si es `undefined`). Así dev y preview no emiten analítica y no ensucian los
+datos. La var es `NEXT_PUBLIC_*` porque el ID se inyecta en cliente; no es secreto.
+Documentada en `.env.example` (nuevo; `.gitignore` excepciona `!.env.example`).
+
+**Consentimiento (frontera con P22).** El contenedor GTM por sí solo NO deja cookies
+—solo lo hacen los tags que dispara (GA4)—, así que instalarlo ahora es conforme aunque
+el banner no exista todavía. El Consent Mode v2 (default `denied` + update al aceptar) y
+el banner llegan en P22, ANTES de añadir el tag de GA4 (P24), que es lo que escribiría
+cookies. Orden del tablero (21→22→…→24) coherente con esto.
+
+**Pendiente de Francisco para activarlo:** crear la cuenta/contenedor GTM (GTM-XXXXXXX) y
+añadir `NEXT_PUBLIC_GTM_ID` al entorno **Production** de Vercel. Hasta entonces el código
+es inerte (no-op) en todos los entornos. Verificación en vivo tras el deploy con la var
+puesta: GTM Preview/Tag Assistant + inspección de red a `googletagmanager.com/gtm.js`.

@@ -4,9 +4,10 @@ import { notFound } from "next/navigation";
 
 import "../globals.css";
 
+import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
 import { ThemeProvider } from "@/components/theme-provider";
 import { locales, isLocale } from "@/lib/i18n/config";
-import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { GTM_ID, SITE_NAME, SITE_URL } from "@/lib/site";
 import { getDictionary } from "./dictionaries";
 
 const inter = Inter({
@@ -138,6 +139,7 @@ export default async function RootLayout({
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {GTM_ID && <GoogleTagManager gtmId={GTM_ID} />}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
