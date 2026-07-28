@@ -8,11 +8,12 @@ import { Hero } from "@/components/site/hero";
 import { Hitos } from "@/components/site/hitos";
 import { MasAlla } from "@/components/site/mas-alla";
 import { Nav } from "@/components/site/nav";
+import { JsonLd } from "@/components/site/json-ld";
 import { RevealRoot } from "@/components/site/reveal-root";
 import { Toolkit } from "@/components/site/toolkit";
 import { Trayectoria } from "@/components/site/trayectoria";
 import { isLocale } from "@/lib/i18n/config";
-import { LINKEDIN_URL, SITE_NAME, SITE_URL } from "@/lib/site";
+import { profilePageLd } from "@/lib/structured-data";
 import { getDictionary } from "./dictionaries";
 
 type LangParams = { params: Promise<{ lang: string }> };
@@ -28,30 +29,10 @@ export default async function Home({ params }: LangParams) {
 
   const dict = await getDictionary(lang);
 
-  // JSON-LD Person (SEO técnico, P15): entidad principal del sitio, en la home.
-  const personLd = {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: SITE_NAME,
-    jobTitle: "Senior Product Manager",
-    url: `${SITE_URL}${lang === "es" ? "/" : "/en"}`,
-    image: `${SITE_URL}/img/francisco-hero-4x5.webp`,
-    description: dict.meta.description,
-    sameAs: [LINKEDIN_URL],
-    knowsLanguage: ["es", "en"],
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Valencia",
-      addressCountry: "ES",
-    },
-  };
-
+  // JSON-LD ProfilePage + Person (SEO técnico, D14): entidad principal del sitio.
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personLd) }}
-      />
+      <JsonLd data={profilePageLd(lang, dict.meta.description)} />
       <Nav dict={dict.nav} cvHref={CV_HREF} lang={lang} />
       <RevealRoot>
         <main>
