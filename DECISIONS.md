@@ -288,3 +288,24 @@ scroll y descarga de CV de fábrica → cubre dos métricas de éxito del PRD §
 
 **Resultado.** Producción: Desktop 100/100/100/100; Móvil Perf 91-94 / A11y 100 /
 BP 100 / SEO 100. Cumple el objetivo D8 (>90 desktop+móvil). Tags v1.0.1 → v1.0.4.
+
+## D20 · Revisión de copy ES↔EN — `es.json` fuente de verdad, EN no literal — 2026-07-28
+**Decisión.** El copy se revisa en dos capas: (1) los textos ES son correctos y
+comunican, (2) el EN tiene sentido, no es traducción literal ni redundante.
+**`es.json` es la fuente de verdad**; el `en.json` se revisa contra él, no al revés.
+Regla de redacción derivada: el `kicker`/`eyebrow` de una sección **no repite su
+título** (fijada también en `CLAUDE.md`).
+
+**Contexto.** La web ya estaba traducida a EN (inglés real, hecho en el build de
+Brand Kit/Design System, no placeholder), así que la tarea P29 dejó de ser
+"investigar la traducción" y pasó a ser una pasada de revisión de todo el copy. Se
+detectaron y corrigieron 2 redundancias `kicker`/título (PR #17): Design System
+`Sistema de diseño`→`Fundamentos de diseño` (EN `Design system`→`Design foundations`)
+y Trayectoria eyebrow `Career`→`Journey` (el título `Career` se mantiene).
+
+**Registro / pendiente.** La revisión completa del copy ES vive en la página de
+Notion «Textos ES — revisión de copy» (dentro de *New Website*): tabla por
+página/bloque con una columna «Texto nuevo» para que Francisco marque cambios.
+Cuando la rellene → aplicar a `es.json` → re-traducir los EN afectados → deploy.
+Tarea P29 (i18n) en **Blocked** a la espera de ese input. La **traducción de
+contenido nuevo** a EN sigue siendo V2 (D2); esto es solo la revisión de lo ya escrito.

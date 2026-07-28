@@ -62,6 +62,7 @@ proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy
 public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 scripts/logo-kit/      Generación del kit de logo desde su geometría
+brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 ```
 
 ## Documentación
