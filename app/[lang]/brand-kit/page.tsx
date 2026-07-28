@@ -3,9 +3,11 @@ import { notFound } from "next/navigation";
 
 import { BrandKit } from "@/components/site/brand-kit";
 import { Footer } from "@/components/site/footer";
+import { JsonLd } from "@/components/site/json-ld";
 import { Nav } from "@/components/site/nav";
 import { RevealRoot } from "@/components/site/reveal-root";
 import { locales, isLocale } from "@/lib/i18n/config";
+import { breadcrumbLd, homeUrl } from "@/lib/structured-data";
 import { getDictionary } from "../dictionaries";
 
 type LangParams = { params: Promise<{ lang: string }> };
@@ -72,8 +74,15 @@ export default async function BrandKitPage({ params }: LangParams) {
   const dict = await getDictionary(lang);
   const homeHref = lang === "es" ? "/" : `/${lang}`;
 
+  // BreadcrumbList: mismo camino que el breadcrumb visible (Inicio › Brand Kit).
+  const breadcrumbData = breadcrumbLd([
+    { name: dict.breadcrumb.home, url: homeUrl(lang) },
+    { name: dict.brandKit.crumb },
+  ]);
+
   return (
     <>
+      <JsonLd data={breadcrumbData} />
       <Nav dict={dict.nav} cvHref={CV_HREF} homeHref={homeHref} lang={lang} />
       <RevealRoot>
         <BrandKit
