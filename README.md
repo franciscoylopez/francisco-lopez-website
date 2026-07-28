@@ -19,10 +19,14 @@ y con un sistema de marca propio.
   `/en`, diccionarios tipados y cero strings hardcodeados.
 - **Modo claro/oscuro** con tokens OKLCH; todo el sistema de color en **WCAG AAA**.
 - **SEO técnico**: metadata + `canonical` + `hreflang` por página, `robots.txt` y
-  `sitemap.xml` (gateados por entorno), JSON-LD.
+  `sitemap.xml` (gateados por entorno) y datos estructurados JSON-LD
+  (`ProfilePage`/`Person` en la home, `BreadcrumbList` en páginas internas).
 - **Imágenes Open Graph** de marca generadas al vuelo (`/api/og`, `next/og`).
-- **Rendimiento**: PageSpeed 98–100, CLS 0. Server Components por defecto y
-  responsive en CSS (JS de cliente solo en las islas interactivas).
+- **Analítica y consentimiento**: Google Tag Manager + GA4 con **Consent Mode v2**
+  y banner de consentimiento granular (RGPD), con página propia de **política de
+  cookies**. Toda la analítica va gateada a producción; nada mide sin consentimiento.
+- **Rendimiento**: PageSpeed 100 (desktop) / >90 (móvil), CLS 0. Server Components
+  por defecto y responsive en CSS (JS de cliente solo en las islas interactivas).
 
 ## Desarrollo
 
@@ -47,12 +51,13 @@ npm run format     # Prettier
 ## Estructura
 
 ```
-app/[lang]/            Rutas por locale (home, brand-kit, design-system) + layout y diccionarios
+app/[lang]/            Rutas por locale (home, brand-kit, design-system, cookies) + layout y diccionarios
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
-components/site/        Secciones de la web (nav, hero, footer, breadcrumb, páginas…)
+components/site/        Secciones de la web (nav, hero, footer, breadcrumb, banner de cookies, páginas…)
+components/analytics/   GTM + Consent Mode (init) — gateado a producción
 components/ui/          Primitivas (logo, button)
-lib/                   i18n, site (SITE_URL) y utils
+lib/                   i18n, site (SITE_URL), consentimiento, datos estructurados y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
