@@ -87,8 +87,10 @@ export default async function DesignSystemPage({ params }: LangParams) {
       <RevealRoot>
         <DesignSystem
           dict={dict.designSystem}
+          related={dict.related}
           breadcrumb={dict.breadcrumb}
           homeHref={homeHref}
+          lang={lang}
         />
       </RevealRoot>
       <Footer dict={dict.footer} lang={lang} />

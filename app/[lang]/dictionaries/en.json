@@ -366,6 +366,24 @@
     "routeLabel": "Breadcrumb",
     "home": "Home"
   },
+  "related": {
+    "eyebrow": "From the same system",
+    "comingSoon": "Coming soon",
+    "pages": {
+      "brandKit": {
+        "name": "Brand Kit",
+        "desc": "The identity: the logo and its geometry, the two-layer palette, the typography and the rules that govern its use."
+      },
+      "designSystem": {
+        "name": "Design System",
+        "desc": "The skeleton: grid, layout tokens, vertical rhythm, typography, motion and measured accessibility."
+      },
+      "accesibilidad": {
+        "name": "Accessibility",
+        "desc": "The public statement: the conformance level the site meets and how to report a problem."
+      }
+    }
+  },
   "brandKit": {
     "meta": {
       "title": "Brand Kit — Francisco López",
@@ -720,8 +738,7 @@
           "desc": "The page documenting color was the one that had it wrong: bone, dark and the two pastels.",
           "fix": "#F5F3EE→#F7F3EC · #181B1F→#191D21 · pastel cyan #CFEFEE→#A7E1DE · pastel purple #E6E0FB→#C6B9F0."
         }
-      ],
-      "boundaryNote": "Identity goes here: what the brand is and how it's used. The engineering rigor —grid, breakpoints, spacing scale, motion and the full accessibility measurement— lives in the Design System."
+      ]
     }
   },
   "designSystem": {
@@ -1010,7 +1027,7 @@
     "accesibilidad": {
       "num": "(08)",
       "title": "Accessibility",
-      "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost.",
+      "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost. It's the internal criterion the site is built and audited against; the public conformance statement will live on the Accessibility page.",
       "contrastTitle": "Measured contrast",
       "contrastCols": {
         "measure": "Measurement",
@@ -1070,16 +1087,7 @@
         "Nothing encoded by color alone: any state or category distinguished by color also carries text or shape.",
         "prefers-reduced-motion respected in every animation.",
         "Text alternatives: alt and labels where they inform, aria-hidden on the decorative."
-      ],
-      "boundaryHere": {
-        "tag": "Here · Design System",
-        "body": "The internal criteria and the measurements. For whoever builds or audits the site."
-      },
-      "boundaryNext": {
-        "tag": "Accessibility page",
-        "badge": "Coming soon",
-        "body": "The public statement: the level the site meets and how to report a problem. For a visitor. It doesn't live here."
-      }
+      ]
     },
     "esqueleto": {
       "num": "(09)",

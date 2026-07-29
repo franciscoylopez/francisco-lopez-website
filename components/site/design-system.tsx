@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
+import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type DesignSystemDict = Dictionary["designSystem"];
 
@@ -64,12 +65,16 @@ function CheckIcon() {
 
 export function DesignSystem({
   dict,
+  related,
   breadcrumb,
   homeHref,
+  lang,
 }: {
   dict: DesignSystemDict;
+  related: RelatedDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
+  lang: string;
 }) {
   const t = dict;
 
@@ -584,34 +589,6 @@ export function DesignSystem({
               </li>
             ))}
           </ol>
-
-          <div className="mt-10 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
-            <div
-              className="border-primary rounded-[var(--radius-lg)] border px-[1.4rem] py-5"
-              style={{
-                background:
-                  "color-mix(in oklch, var(--primary), transparent 94%)",
-              }}
-            >
-              <span className="text-primary text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
-                {t.accesibilidad.boundaryHere.tag}
-              </span>
-              <p className="text-foreground m-0 mt-[0.55rem] text-[0.9rem] leading-[1.55]">
-                {t.accesibilidad.boundaryHere.body}
-              </p>
-            </div>
-            <div className="border-border bg-card rounded-[var(--radius-lg)] border border-dashed px-[1.4rem] py-5">
-              <span className="text-muted-foreground inline-flex items-center gap-2 text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
-                {t.accesibilidad.boundaryNext.tag}
-                <span className="bg-muted text-muted-foreground rounded-full px-[0.45rem] py-[0.1rem] tracking-[0.02em]">
-                  {t.accesibilidad.boundaryNext.badge}
-                </span>
-              </span>
-              <p className="text-muted-foreground m-0 mt-[0.55rem] text-[0.9rem] leading-[1.55]">
-                {t.accesibilidad.boundaryNext.body}
-              </p>
-            </div>
-          </div>
         </div>
       </section>
 
@@ -642,6 +619,8 @@ export function DesignSystem({
           />
         </div>
       </section>
+
+      <RelatedPages dict={related} current="designSystem" lang={lang} />
     </main>
   );
 }

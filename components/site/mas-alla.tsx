@@ -11,6 +11,13 @@ export type MasAllaDict = {
 // usan --brand-purple-accent (AA-large verificado sobre fondos invertidos). Los
 // textos apagados se mezclan en sRGB para no perder el tono (ver Nav).
 export function MasAlla({ dict }: { dict: MasAllaDict }) {
+  // Mantener el acento y su cláusula corta ("Exit once." / "Exit una vez.")
+  // como una unidad que no rompe: si no, el color queda colgando al final de
+  // una línea y la palabra siguiente cae sola en la de abajo. Se corta en el
+  // primer punto de line1b; el resto de la frase fluye con normalidad.
+  const dot = dict.line1b.indexOf(".");
+  const clause = dot === -1 ? dict.line1b : dict.line1b.slice(0, dot + 1);
+  const rest = dot === -1 ? "" : dict.line1b.slice(dot + 1);
   return (
     <section
       id="mas-alla"
@@ -31,10 +38,13 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
           className="font-display m-0 max-w-[20ch] text-[clamp(1.9rem,4.6vw,3.75rem)] leading-[1.12] font-semibold tracking-[-0.022em] text-pretty"
         >
           {dict.line1a}
-          <span style={{ color: "var(--brand-purple-accent)" }}>
-            {dict.exitWord}
+          <span className="whitespace-nowrap">
+            <span style={{ color: "var(--brand-purple-accent)" }}>
+              {dict.exitWord}
+            </span>
+            {clause}
           </span>
-          {dict.line1b}
+          {rest}
         </p>
         <div
           data-reveal

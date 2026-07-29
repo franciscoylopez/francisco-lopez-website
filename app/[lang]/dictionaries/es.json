@@ -366,6 +366,24 @@
     "routeLabel": "Ruta",
     "home": "Inicio"
   },
+  "related": {
+    "eyebrow": "Del mismo sistema",
+    "comingSoon": "Próximamente",
+    "pages": {
+      "brandKit": {
+        "name": "Brand Kit",
+        "desc": "La identidad: el logo y su geometría, la paleta de dos capas, la tipografía y las reglas que gobiernan su uso."
+      },
+      "designSystem": {
+        "name": "Design System",
+        "desc": "El esqueleto: rejilla, tokens de layout, ritmo vertical, tipografía, motion y la accesibilidad medida."
+      },
+      "accesibilidad": {
+        "name": "Accesibilidad",
+        "desc": "La declaración pública: el nivel de conformidad que cumple el sitio y cómo reportar un problema."
+      }
+    }
+  },
   "brandKit": {
     "meta": {
       "title": "Brand Kit — Francisco López",
@@ -720,8 +738,7 @@
           "desc": "La página que documenta el color era la que lo tenía mal: hueso, oscuro y los dos pasteles.",
           "fix": "#F5F3EE→#F7F3EC · #181B1F→#191D21 · pastel cian #CFEFEE→#A7E1DE · pastel morado #E6E0FB→#C6B9F0."
         }
-      ],
-      "boundaryNote": "Aquí va la identidad: qué es la marca y cómo se usa. El rigor de ingeniería —rejilla, breakpoints, escala de espaciado, motion y la medición completa de accesibilidad— vive en el Design System."
+      ]
     }
   },
   "designSystem": {
@@ -1010,7 +1027,7 @@
     "accesibilidad": {
       "num": "(08)",
       "title": "Accesibilidad",
-      "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual.",
+      "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual. Es el criterio interno con el que se construye y audita el sitio; la declaración pública de conformidad vivirá en la página de Accesibilidad.",
       "contrastTitle": "Contraste medido",
       "contrastCols": {
         "measure": "Medición",
@@ -1070,16 +1087,7 @@
         "Nada codificado solo por color: todo estado o categoría que se distinga por color lleva además texto o forma.",
         "prefers-reduced-motion respetado en toda animación.",
         "Alternativas textuales: alt y etiquetas donde informan, aria-hidden en lo decorativo."
-      ],
-      "boundaryHere": {
-        "tag": "Aquí · Design System",
-        "body": "El criterio interno y las mediciones. Para quien construye o audita el sitio."
-      },
-      "boundaryNext": {
-        "tag": "Página de Accesibilidad",
-        "badge": "Próximamente",
-        "body": "La declaración pública: el nivel que cumple el sitio y cómo reportar un problema. Para un visitante. No vive aquí."
-      }
+      ]
     },
     "esqueleto": {
       "num": "(09)",
