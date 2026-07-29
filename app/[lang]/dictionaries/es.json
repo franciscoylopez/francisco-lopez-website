@@ -47,7 +47,7 @@
       },
       {
         "title": "Prototipado",
-        "desc": "Prototipos navegables para validar con usuarios reales antes de comprometer desarrollo."
+        "desc": "Prototipos navegables para facilitar la comprensión antes de comprometer desarrollo."
       },
       {
         "title": "Desarrollo",
@@ -55,7 +55,7 @@
       },
       {
         "title": "Lanzamiento",
-        "desc": "Despliego con control: feature flags, rollout progresivo y A/B testing antes de exponer el cambio a todos los usuarios."
+        "desc": "Despliegue selectivo: Standard o feature flags, rollout progresivo y A/B testing para evaluar la consecución del objetivo."
       },
       {
         "title": "Analítica",
@@ -68,7 +68,7 @@
     "line1a": "Cofundador varias veces. ",
     "exitWord": "Exit",
     "line1b": " una vez. De lo que no salió, aprendí lo que ningún framework enseña.",
-    "line2": "Antes de eso, años captando usuarios — antes de medir producto, entendí cómo se atrae."
+    "line2": "Antes de eso, años captando usuarios, antes de medir producto, entendí cómo atraerlos."
   },
   "trayectoria": {
     "eyebrow": "Recorrido",
@@ -86,7 +86,7 @@
         "period": "Feb 2025 — Actualidad",
         "role": "Product Manager",
         "company": "Emendu",
-        "desc": "Lideré la digitalización de Sales & Operaciones y evolucioné el agente IA LISA; reporto directamente al CEO, en el equipo de liderazgo junto a Operaciones, Finanzas y Tech."
+        "desc": "Lideré la digitalización de Sales & Operaciones y evolucioné el agente IA LISA; miembro del equipo de liderazgo junto a Dirección, Operaciones, Finanzas y Tech."
       },
       {
         "period": "Feb 2024 — Nov 2024",
@@ -98,13 +98,13 @@
         "period": "Ene 2022 — Dic 2023",
         "role": "Product Lead",
         "company": "INDYA",
-        "desc": "Rediseñé pricing y onboarding para mejorar activación y reducir churn; reportaba al CPO/cofundador, liderazgo por influencia sin autoridad formal."
+        "desc": "Rediseñé pricing y onboarding para mejorar activación y reducir churn; liderazgo del equipo y optimización de la entrega de valor mediante procesos y agilidad."
       },
       {
         "period": "Oct 2021 — Dic 2021",
         "role": "Product Manager",
         "company": "Freepik",
-        "desc": "Investigué y definí funcionalidades para el área de contributors; mejoré el onboarding (registro, emailing, calidad de perfiles) a partir de análisis cualitativo y cuantitativo con diseño."
+        "desc": "Investigué y definí funcionalidades para el área de contributors a partir de análisis cualitativo y cuantitativo. Gestión de los OKR del squad."
       }
     ],
     "nested": [
@@ -112,24 +112,24 @@
         "period": "May 2016 — Oct 2021",
         "role": "Cofounder & Product",
         "company": "TheTool",
-        "desc": "Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo no-código (backend, frontend, diseño)."
+        "desc": "Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo de desarrollo (backend, frontend, diseño)."
       },
       {
         "period": "Sep 2015 — Dic 2016",
         "role": "COO",
         "company": "PICKASO",
-        "desc": "Profesionalicé estructura y cartera de servicios de la agencia; ese trabajo financió el arranque de TheTool."
+        "desc": "Profesionalicé estructura y cartera de servicios de la agencia; realicé la investigación de mercado de los futuros competidores de TheTool."
       }
     ],
     "previo": [
       {
-        "period": "2009 — 2015",
+        "period": "Sep 2013 — Sep 2015",
         "role": "Digital Marketing Manager",
-        "company": "Ontecnia — Malavida.com (portal internacional de software)",
+        "company": "Ontecnia (Malavida, Lecturalia, BonViveur…)",
         "desc": "Crecimiento orgánico de 3,2M → 9,4M visitas mensuales; llevé el modelo de negocio de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first."
       },
       {
-        "period": "2009 — 2015",
+        "period": "2009 — 2013",
         "role": "Digital Marketing / Performance",
         "company": "Havas Media · Increnta · Miss Conversion",
         "desc": "Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto."
@@ -158,7 +158,7 @@
           },
           {
             "name": "Typeform",
-            "desc": "Encuestas y tests de concepto para validar hipótesis antes de construir."
+            "desc": "Encuestas y entrevistas para validar hipótesis antes de construir."
           }
         ]
       },
@@ -192,7 +192,7 @@
           },
           {
             "name": "Figma",
-            "desc": "Prototipo flujos navegables y alineo con diseño antes de construir."
+            "desc": "Espacio común con diseño donde nos alineamos antes de construir."
           },
           {
             "name": "v0",
@@ -205,11 +205,11 @@
         "tools": [
           {
             "name": "Claude Code",
-            "desc": "Construyo prototipos funcionales y automatizo tareas yo mismo."
+            "desc": "Construyo herramientas, creo prototipos y automatizo tareas."
           },
           {
             "name": "VS Code",
-            "desc": "Mi editor para leer el código y tocar cambios pequeños."
+            "desc": "Mi editor de código, vinculado a Claude Code."
           },
           {
             "name": "Vercel",
@@ -217,7 +217,7 @@
           },
           {
             "name": "GitHub",
-            "desc": "Sigo PRs, releases e issues cerca del pulso del desarrollo."
+            "desc": "Documento el desarrollo para facilitar el análisis técnico."
           }
         ]
       }
@@ -380,7 +380,7 @@
     "concepto": {
       "num": "01 — Concepto",
       "title": "Una marca de dos capas",
-      "lead": "El símbolo es un anillo sobre una base: una lente, un ojal, un cero. La versión split desplaza dos capas de color —cian y morado— tras el trazo de tinta. No es decoración: es la firma del método. Del discovery al dato, dos planos que se separan y vuelven a alinearse en una sola forma limpia.",
+      "lead": "El símbolo es un anillo, el foco que descansa sobre una base sólida: criterio de producto construido sobre una fundación estable. No es decoración: es la firma del método. Del discovery al dato, dos planos que se separan y vuelven a alinearse en una sola forma limpia.",
       "plano": {
         "title": "Plano",
         "desc": "Una sola capa de tinta. Para UI pequeña, favicon y monocromo."
@@ -661,7 +661,7 @@
     "uso": {
       "num": "06 — Uso correcto e incorrecto",
       "title": "Los errores reales de este sistema",
-      "lead": "No un catálogo de ✓ / ✗ genéricos: los fallos que tuvo esta marca, la cifra que los detectó y cómo se corrigieron. Un registro de criterio.",
+      "lead": "No un catálogo de ✓ / ✗ genéricos: los fallos que tuvo esta marca en el proceso, la cifra que los detectó y cómo se corrigieron.",
       "fixLabel": "Corrección:",
       "cases": [
         {
