@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.12** (2026-07-29): arranque del CV en PDF con identidad propia (generado desde el diccionario, bloque `cv`) y cierre del gap del deep-dive por experiencia —que nunca fue tarea y ahora sí—, con el que el CV comparte fuente de contenido — ver sección 25.
 > **V1.11** (2026-07-29): pasada de revisión de copy ES↔EN (P29) — cambios validados en Notion aplicados al sitio (`es.json` fuente de verdad, EN revisado contra el ES) y reconciliados en §8.2, §8.3 y la tabla de §8.5 — ver sección 24.
 > **V1.10** (2026-07-23): se cierra el Sprint 1. La foto del Hero se resuelve con una imagen generada con IA a partir de una foto de Francisco (recorte 4:5) en vez de una sesión de estudio, y se fijan las notas de uso para el build — ver sección 23.
 > **V1.9** (2026-07-23): reenfoque a lanzar V1 lo antes posible y priorización con MoSCoW en un tablero enlazado aparte. Sobre mí y Accesibilidad vuelven a V2, GA4 pasa a ser la medición del lanzamiento (Clarity queda para lo cualitativo), la arquitectura i18n es Must desde la primera línea, y los sprints se reorganizan a seis — ver sección 22.
@@ -798,6 +799,20 @@ Pasada de revisión de todo el copy ya escrito (no traducción de contenido nuev
 **Efecto a vigilar sobre §11 (riesgo "aspecto demasiado junior"):** al quitar las líneas de reporting de Emendu e INDYA, la evidencia de autoridad en Trayectoria se sostiene ahora en "miembro del equipo de liderazgo" (Emendu), "liderazgo del equipo" (INDYA) y "voz y voto" (TheTool). Sigue habiendo señal de seniority, solo que reformulada — no se rompe la mitigación, pero queda menos explícita. Las líneas de reporting siguen en los datos de fondo de §8.1 (insumo/deep-dive), que no se tocan porque el hecho no cambió, solo salió del copy visible.
 
 **Coherencia de datos:** la descripción de Ontecnia mantiene la métrica "3,2M → 9,4M visitas mensuales" (específica de Malavida), ahora atribuida a la ventana Sep 2013 – Sep 2015.
+
+---
+
+## 25. Planificación del CV en PDF y deep-dive por experiencia (2026-07-29)
+
+Se arranca la tarea del **CV con identidad propia** (V2, "En progreso"). Planificado antes de generar nada; el detalle técnico vive en `DECISIONS.md` D22, aquí solo lo de producto/contenido.
+
+**Enfoque:** el CV se **genera desde el diccionario** (bloque `cv` nuevo), no se diseña a mano — misma disciplina de fuente única del resto del sistema. Formato: **2 páginas**, cabecera de marca + **foto** (`Fran_Avatar.png`, rectángulo de esquinas redondeadas) + **cuerpo a una columna maximizado para ATS** (sin sidebar), **bilingüe ES/EN**, online-only (colores de marca libres, no se imprime).
+
+**El CV lleva contenido más rico que la web.** La web es deliberadamente escueta ("una línea de impacto"); un lector de HR necesita más. El contenido rico (summary + bullets con métricas y keywords ATS) se toma del **CV de Google Docs** (ver Fuentes) reconciliado con los hechos del sitio, y vive en el bloque `cv`. Los hechos (fechas, empresas, roles, formación, contacto) se reusan del diccionario, no se duplican.
+
+**Deep-dive por experiencia — gap cerrado.** Estaba previsto en §4/§7/§15 como V2/V3 pero **nunca llegó a ser tarea**; ahora tiene tareas de **diseño** y **desarrollo** (V2/Could). Decisión clave: **el bloque `cv` es su fuente de contenido** — el CV y el deep-dive son dos presentaciones del mismo detalle por experiencia, autorado una vez. Por eso el CV se construye ya sin esperar al deep-dive: no es contenido temporal, es su origen.
+
+**Pendiente (siguiente sesión):** primera acción, leer el `francisco-lopez-cv-es.pdf` actual (poppler ya instalado, ver D22) para contrastar con el borrador; después, que Francisco enriquezca el borrador de contenido y resuelva 6 confirmaciones abiertas (ARPU, título de TheTool, hub de tools de Emendu, nombrar Sesame HR, huecos de métrica, profundidad de bullets). Contexto completo en la tarea de Notion "Diseñar CV en PDF con identidad visual propia".
 
 ---
 
