@@ -336,3 +336,37 @@ corresponde por tipo" (D14). La señal correcta es HTML semántico, ya presente.
 **Contexto.** Mismo principio de fuente única que el resto del sistema (D1/D4): un
 componente y un bloque de diccionario, no copias por página — que es justo lo que
 había divergido en las menciones anteriores.
+
+## D22 · CV en PDF generado desde el diccionario (react-pdf, ATS) — 2026-07-29
+**Decisión.** El CV con identidad propia (tarea V2) se **genera por código desde una
+sola fuente**, no se diseña a mano: contenido del diccionario i18n (bloque `cv` nuevo)
++ tokens/fuentes de marca → PDF. Mismo principio de fuente única que D1/D4.
+- **Motor: `@react-pdf/renderer`** — PDF con **texto real seleccionable** (ATS-friendly),
+  fuentes propias (Bricolage/Inter woff), control de paginación A4. **Explícitamente NO**
+  Satori/`ImageResponse` (D14): eso produce raster, inservible para un CV que un ATS
+  debe parsear.
+- **Layout:** cabecera de marca (lockup + foto + nombre/rol/contacto) + **cuerpo a una
+  columna**, ATS-maximizado (sin sidebar; orden de lectura = orden del árbol de
+  componentes). **2 páginas.** Online-only → libertad de color de marca.
+- **Ejecución:** script de build/local que genera y **commitea** `public/cv/…-es.pdf` y
+  `…-en.pdf` (el botón Descargar CV ya apunta ahí; el sufijo `-es` ya dejaba sitio al
+  `-en`). Bilingüe. No ruta on-demand (evita Chromium serverless).
+- **Foto:** `Fran_Avatar.png` (cuadrada, coherente con el Hero) procesada con `sharp` a
+  **rectángulo de esquinas redondeadas**.
+
+**Modelo de contenido.** Los **hechos** (fechas, empresas, roles, formación, contacto)
+se **reusan** del diccionario; el **texto rico del CV** (summary + bullets con
+métricas/keywords ATS, más detallado que la web —deliberadamente escueta—) vive en un
+**bloque `cv`** bilingüe nuevo. Fuente del contenido: el CV de Google Docs (más rico que
+el sitio) reconciliado con los hechos del sitio. **El mismo bloque `cv` es el origen del
+deep-dive por experiencia** (gap del PRD §4/§7/§15, ahora con tareas de diseño y
+desarrollo V2/Could): CV y deep-dive son dos presentaciones del mismo contenido.
+
+**Tooling.** Instalado **poppler** (`winget install oschwartz10612.Poppler`) para que el
+Read de PDFs del entorno funcione (rasteriza páginas con `pdftoppm`); requiere reiniciar
+la sesión para que el PATH surta efecto.
+
+**Contexto.** El CV es el entregable más ligado al propósito del sitio (facilitar el
+cambio de trabajo, PRD §1/§2). Se decidió construirlo ya —sin esperar al deep-dive—
+autorando el contenido rico una vez, estructurado para reutilizarse: no es trabajo
+temporal, es el origen del deep-dive.
