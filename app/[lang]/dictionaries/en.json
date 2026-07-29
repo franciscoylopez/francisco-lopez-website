@@ -47,7 +47,7 @@
       },
       {
         "title": "Prototyping",
-        "desc": "Clickable prototypes to validate with real users before committing development."
+        "desc": "Clickable prototypes to build shared understanding before committing development."
       },
       {
         "title": "Development",
@@ -55,7 +55,7 @@
       },
       {
         "title": "Launch",
-        "desc": "I ship with control: feature flags, progressive rollout and A/B testing before exposing the change to every user."
+        "desc": "Selective deployment: standard or feature flags, progressive rollout and A/B testing to assess whether the goal was met."
       },
       {
         "title": "Analytics",
@@ -65,10 +65,10 @@
   },
   "masAlla": {
     "eyebrow": "Beyond the PM",
-    "line1a": "Founder more than once. ",
+    "line1a": "Founder several times. ",
     "exitWord": "Exit",
     "line1b": " once. From what didn't work out, I learned what no framework teaches.",
-    "line2": "Before that, years acquiring users — before measuring product, I understood how you attract them."
+    "line2": "Before that, years acquiring users; before measuring product, I understood how to attract them."
   },
   "trayectoria": {
     "eyebrow": "Journey",
@@ -86,7 +86,7 @@
         "period": "Feb 2025 — Present",
         "role": "Product Manager",
         "company": "Emendu",
-        "desc": "Led the digitalization of Sales & Operations and evolved the LISA AI agent; I report directly to the CEO, on the leadership team alongside Operations, Finance and Tech."
+        "desc": "Led the digitalization of Sales & Operations and evolved the LISA AI agent; member of the leadership team alongside Management, Operations, Finance and Tech."
       },
       {
         "period": "Feb 2024 — Nov 2024",
@@ -98,13 +98,13 @@
         "period": "Jan 2022 — Dec 2023",
         "role": "Product Lead",
         "company": "INDYA",
-        "desc": "Redesigned pricing and onboarding to improve activation and reduce churn; reported to the CPO/cofounder, leading by influence without formal authority."
+        "desc": "Redesigned pricing and onboarding to improve activation and reduce churn; led the team and optimized value delivery through process and agility."
       },
       {
         "period": "Oct 2021 — Dec 2021",
         "role": "Product Manager",
         "company": "Freepik",
-        "desc": "Researched and defined features for the contributors area; improved onboarding (sign-up, emailing, profile quality) from qualitative and quantitative analysis with design."
+        "desc": "Researched and defined features for the contributors area from qualitative and quantitative analysis. Managed the squad's OKRs."
       }
     ],
     "nested": [
@@ -112,24 +112,24 @@
         "period": "May 2016 — Oct 2021",
         "role": "Cofounder & Product",
         "company": "TheTool",
-        "desc": "Cofounder with a vote on the key decisions; led product, roadmap and the no-code team (backend, frontend, design)."
+        "desc": "Cofounder with a vote on the key decisions; led product, roadmap and the development team (backend, frontend, design)."
       },
       {
         "period": "Sep 2015 — Dec 2016",
         "role": "COO",
         "company": "PICKASO",
-        "desc": "Professionalized the agency's structure and service portfolio; that work funded the launch of TheTool."
+        "desc": "Professionalized the agency's structure and service portfolio; ran the market research on TheTool's future competitors."
       }
     ],
     "previo": [
       {
-        "period": "2009 — 2015",
+        "period": "Sep 2013 — Sep 2015",
         "role": "Digital Marketing Manager",
-        "company": "Ontecnia — Malavida.com (international software portal)",
+        "company": "Ontecnia (Malavida, Lecturalia, BonViveur…)",
         "desc": "Organic growth from 3.2M to 9.4M monthly visits; shifted the business model from intrusive installers to valuable content and video monetization — the start of my turn toward product-first."
       },
       {
-        "period": "2009 — 2015",
+        "period": "2009 — 2013",
         "role": "Digital Marketing / Performance",
         "company": "Havas Media · Increnta · Miss Conversion",
         "desc": "Acquisition and performance at leading agencies — the analytics, CRO, UX and leadership foundation that enabled the jump to product."
@@ -158,7 +158,7 @@
           },
           {
             "name": "Typeform",
-            "desc": "Surveys and concept tests to validate hypotheses before building."
+            "desc": "Surveys and interviews to validate hypotheses before building."
           }
         ]
       },
@@ -192,7 +192,7 @@
           },
           {
             "name": "Figma",
-            "desc": "I prototype clickable flows and align with design before building."
+            "desc": "A shared space with design where we align before building."
           },
           {
             "name": "v0",
@@ -205,11 +205,11 @@
         "tools": [
           {
             "name": "Claude Code",
-            "desc": "I build functional prototypes and automate tasks myself."
+            "desc": "I build tools, create prototypes and automate tasks."
           },
           {
             "name": "VS Code",
-            "desc": "My editor to read the code and make small changes."
+            "desc": "My code editor, linked to Claude Code."
           },
           {
             "name": "Vercel",
@@ -217,7 +217,7 @@
           },
           {
             "name": "GitHub",
-            "desc": "I follow PRs, releases and issues close to the development pulse."
+            "desc": "I document development to make technical review easier."
           }
         ]
       }
@@ -380,7 +380,7 @@
     "concepto": {
       "num": "01 — Concept",
       "title": "A two-layer brand",
-      "lead": "The symbol is a ring over a base: a lens, an eyelet, a zero. The split version offsets two color layers —cyan and purple— behind the ink stroke. It's not decoration: it's the signature of the method. From discovery to data, two planes that separate and realign into a single clean shape.",
+      "lead": "The symbol is a ring, the focus resting on a solid base: product judgment built on a stable foundation. It's not decoration: it's the signature of the method. From discovery to data, two planes that separate and realign into a single clean shape.",
       "plano": {
         "title": "Flat",
         "desc": "A single ink layer. For small UI, favicon and monochrome."
@@ -661,7 +661,7 @@
     "uso": {
       "num": "06 — Correct and incorrect use",
       "title": "The real mistakes of this system",
-      "lead": "Not a catalog of generic ✓ / ✗: the failures this brand actually had, the figure that caught them and how they were fixed. A record of judgment.",
+      "lead": "Not a catalog of generic ✓ / ✗: the failures this brand had in the process, the figure that caught them and how they were fixed.",
       "fixLabel": "Fix:",
       "cases": [
         {

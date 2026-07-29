@@ -4,6 +4,7 @@
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
+> **V1.11** (2026-07-29): pasada de revisión de copy ES↔EN (P29) — cambios validados en Notion aplicados al sitio (`es.json` fuente de verdad, EN revisado contra el ES) y reconciliados en §8.2, §8.3 y la tabla de §8.5 — ver sección 24.
 > **V1.10** (2026-07-23): se cierra el Sprint 1. La foto del Hero se resuelve con una imagen generada con IA a partir de una foto de Francisco (recorte 4:5) en vez de una sesión de estudio, y se fijan las notas de uso para el build — ver sección 23.
 > **V1.9** (2026-07-23): reenfoque a lanzar V1 lo antes posible y priorización con MoSCoW en un tablero enlazado aparte. Sobre mí y Accesibilidad vuelven a V2, GA4 pasa a ser la medición del lanzamiento (Clarity queda para lo cualitativo), la arquitectura i18n es Must desde la primera línea, y los sprints se reorganizan a seis — ver sección 22.
 > **V1.8** (2026-07-22): pasada de responsive de la home —seis secciones que no apilaban en móvil por la misma causa— y ronda de ajustes de contenido, incluida la corrección del email y el LinkedIn, que estaban mal en la web — ver sección 21.
@@ -266,7 +267,7 @@ Proceso: **Discovery → UX → Prototipado → Desarrollo → Lanzamiento → A
 **Paso "Lanzamiento" añadido (resuelto 2026-07-20, ver sección 16):** nuevo paso entre Desarrollo y Analítica — cubre experimentación (A/B testing), despliegues progresivos y feature flags. Encaja con el ICP de la sección 4 (SaaS con producto real, no early-stage) al demostrar rigor de release management, no solo de construcción.
 
 **Copy validado (2026-07-20):**
-> Lanzamiento — Despliego con control: feature flags, rollout progresivo y A/B testing antes de exponer el cambio a todos los usuarios.
+> Lanzamiento — Despliegue selectivo: Standard o feature flags, rollout progresivo y A/B testing para evaluar la consecución del objetivo.
 
 **Párrafo de entrada de la sección (actualizado 2026-07-22):**
 > Un método end-to-end: del problema al dato que confirma que el objetivo se ha cumplido. Seis etapas que se retroalimentan.
@@ -283,7 +284,7 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 **Copy validado:**
 > Cofundador varias veces. Exit una vez. De lo que no salió, aprendí lo que ningún framework enseña.
-> Antes de eso, años captando usuarios — antes de medir producto, entendí cómo se atrae.
+> Antes de eso, años captando usuarios, antes de medir producto, entendí cómo atraerlos.
 
 **Estructura de color y kicker (resuelto 2026-07-20):** `brand-purple-soft` y `brand-purple` no cambian entre temas (ver `globals.css`/BRAND.md, "los pasteles se mantienen entre temas") — con fondo pastel fijo, la sección ya rompe monotonía en modo oscuro de forma natural (queda como "isla clara" sobre página oscura) pero en modo claro es solo un cambio de tono sutil, no una inversión real. Se deja a Claude Design **explorar ambas estructuras** en el mismo prompt: (a) fondo pastel fijo, morado como fondo protagonista; (b) inversión explícita — fondo/texto intercambian los tokens `foreground`/`background` (oscura en claro, clara en oscuro, simétrica en ambos temas), con el morado degradado a acento puntual — verificando en este caso el contraste AA del acento morado contra ambos fondos invertidos. La sección lleva además un **kicker visible "Más allá del PM"**, discreto, igual que el kicker del Hero — consistencia estructural y heading accesible sin competir con el titular grande.
 
@@ -354,20 +355,20 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 | Empresa | Rol | Periodo | Resumen |
 |---|---|---|---|
-| Emendu | Product Manager | Feb 2025 – Actualidad | Lideré la digitalización de Sales & Operaciones y evolucioné el agente IA LISA; reporto directamente al CEO, en el equipo de liderazgo junto a Operaciones, Finanzas y Tech. |
+| Emendu | Product Manager | Feb 2025 – Actualidad | Lideré la digitalización de Sales & Operaciones y evolucioné el agente IA LISA; miembro del equipo de liderazgo junto a Dirección, Operaciones, Finanzas y Tech. |
 | KUOTIP | Cofounder & Product | Feb 2024 – Nov 2024 | Validé el problema de fraude en reviews y diseñé el MVP con verificación por voz e IA; como cofundador, apoyé a la CEO en el fundraising pre-seed. |
-| INDYA | Product Lead | Ene 2022 – Dic 2023 | Rediseñé pricing y onboarding para mejorar activación y reducir churn; reportaba al CPO/cofundador, liderazgo por influencia sin autoridad formal. |
-| Freepik | Product Manager | Oct 2021 – Dic 2021 | Investigué y definí funcionalidades para el área de contributors; mejoré el onboarding (registro, emailing, calidad de perfiles) a partir de análisis cualitativo y cuantitativo con diseño. |
-| **Shutapp Projects** — TheTool | Cofounder & Product | May 2016 – Oct 2021 | Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo no-código (backend, frontend, diseño). |
-| **Shutapp Projects** — PICKASO | COO | Sep 2015 – Dic 2016 | Profesionalicé estructura y cartera de servicios de la agencia; ese trabajo financió el arranque de TheTool. |
+| INDYA | Product Lead | Ene 2022 – Dic 2023 | Rediseñé pricing y onboarding para mejorar activación y reducir churn; liderazgo del equipo y optimización de la entrega de valor mediante procesos y agilidad. |
+| Freepik | Product Manager | Oct 2021 – Dic 2021 | Investigué y definí funcionalidades para el área de contributors a partir de análisis cualitativo y cuantitativo. Gestión de los OKR del squad. |
+| **Shutapp Projects** — TheTool | Cofounder & Product | May 2016 – Oct 2021 | Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo de desarrollo (backend, frontend, diseño). |
+| **Shutapp Projects** — PICKASO | COO | Sep 2015 – Dic 2016 | Profesionalicé estructura y cartera de servicios de la agencia; realicé la investigación de mercado de los futuros competidores de TheTool. |
 
 **Experiencia previa — Marketing & Growth (2009–2015)**
 > Esta etapa previa en marketing y growth construye la base analítica, de experimentación y user-first que define mi enfoque como Product Manager.
 
 | Proyecto | Rol | Periodo | Resumen |
 |---|---|---|---|
-| Ontecnia — Malavida.com (portal internacional de software) | Digital Marketing Manager | 2009 – 2015 | Crecimiento orgánico de 3,2M → 9,4M visitas mensuales; llevé el modelo de negocio de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first. |
-| Havas Media, Increnta, Miss Conversion | Digital Marketing / Performance | 2009 – 2015 | Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto. |
+| Ontecnia (Malavida, Lecturalia, BonViveur…) | Digital Marketing Manager | Sep 2013 – Sep 2015 | Crecimiento orgánico de 3,2M → 9,4M visitas mensuales; llevé el modelo de negocio de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first. |
+| Havas Media, Increnta, Miss Conversion | Digital Marketing / Performance | 2009 – 2013 | Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto. |
 
 **Resuelto (2026-07-16):** PICKASO y TheTool no son un solapamiento accidental — ambos son proyectos de **Shutapp Projects**. Entré en PICKASO (agencia de marketing de apps) por dos motivos: profesionalizar la empresa y mejorar su cartera de servicios, y conocer desde dentro el mercado de apps y sus herramientas — el background que hizo posible fundar TheTool con criterio. Además, la mejora de facturación que impulsé en PICKASO sustentó financieramente el arranque de TheTool. Es decir: la agencia fue a la vez la escuela de mercado y el motor financiero del SaaS.
 
@@ -782,6 +783,21 @@ Con el diseño de la home y las páginas de sistema cerrado, Francisco reenfocó
 - **Ratio:** fijar **4:5 en los dos breakpoints** (desktop y mobile) y que el **punto focal —la cara— mande en ambos**; evitar que `object-fit: cover` con contenedores de ratio distinto cambie el encuadre entre versiones.
 - **Temas:** fondo negro sólido → en claro es tarjeta oscura rotunda, en oscuro es una tarjeta que hace saltar la figura; **mantener el borde redondeado sutil** que la define en oscuro (los dos negros —foto y fondo— no son idénticos).
 - **Mejora futura:** reexportar si llega un máster de mayor resolución (≥3000-4000 px), sin tocar el diseño.
+
+---
+
+## 24. Revisión de copy ES↔EN (P29) (2026-07-29)
+
+Pasada de revisión de todo el copy ya escrito (no traducción de contenido nuevo, que sigue siendo V2 — ver `DECISIONS.md` D20). Francisco marcó los cambios en la página de Notion «[Textos ES — revisión de copy](https://app.notion.com/p/3ab2caec08be8115a067c64b210123b0)»; se aplicaron a `es.json` (fuente de verdad) y el EN se revisó contra el ES, no literal. Este PRD se reconcilia con el copy resultante en §8.2, §8.3 y la tabla de §8.5.
+
+**Cambios de copy con contenido (no solo forma):**
+- **Cómo trabajo (§8.2):** Prototipado pasa de "validar con usuarios reales" a "facilitar la comprensión"; Lanzamiento se reescribe a "Despliegue selectivo: Standard o feature flags… para evaluar la consecución del objetivo".
+- **Más allá del PM (§8.3):** cierre de la línea de growth a "…entendí cómo atraerlos" (y en EN, `Founder several times. Exit once.` — fiel a "varias veces" y sin la repetición "once" que arrastraba la versión anterior).
+- **Trayectoria (§8.5):** Emendu e INDYA **dejan de citar la línea de reporting** ("reporto al CEO" / "reportaba al CPO"); la autoridad se expresa ahora como pertenencia al equipo de liderazgo (Emendu) y liderazgo de equipo (INDYA). Freepik cambia el foco a análisis + gestión de OKR del squad. TheTool: "equipo no-código" → "equipo de desarrollo". PICKASO: "financió el arranque de TheTool" → "investigación de mercado de los futuros competidores de TheTool". Ontecnia: la fila pasa a "Ontecnia (Malavida, Lecturalia, BonViveur…)", Sep 2013 – Sep 2015; la fila de Havas/Increnta/Miss Conversion se acota a 2009 – 2013.
+
+**Efecto a vigilar sobre §11 (riesgo "aspecto demasiado junior"):** al quitar las líneas de reporting de Emendu e INDYA, la evidencia de autoridad en Trayectoria se sostiene ahora en "miembro del equipo de liderazgo" (Emendu), "liderazgo del equipo" (INDYA) y "voz y voto" (TheTool). Sigue habiendo señal de seniority, solo que reformulada — no se rompe la mitigación, pero queda menos explícita. Las líneas de reporting siguen en los datos de fondo de §8.1 (insumo/deep-dive), que no se tocan porque el hecho no cambió, solo salió del copy visible.
+
+**Coherencia de datos:** la descripción de Ontecnia mantiene la métrica "3,2M → 9,4M visitas mensuales" (específica de Malavida), ahora atribuida a la ventana Sep 2013 – Sep 2015.
 
 ---
 
