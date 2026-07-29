@@ -309,3 +309,30 @@ página/bloque con una columna «Texto nuevo» para que Francisco marque cambios
 Cuando la rellene → aplicar a `es.json` → re-traducir los EN afectados → deploy.
 Tarea P29 (i18n) en **Blocked** a la espera de ese input. La **traducción de
 contenido nuevo** a EN sigue siendo V2 (D2); esto es solo la revisión de lo ya escrito.
+
+## D21 · Enlaces entre páginas hermanas con componente compartido — 2026-07-29
+**Decisión.** Las tres páginas secundarias del sistema (Brand Kit, Design System y
+la futura Accesibilidad) son **hermanas**: cada una enlaza a las **otras dos** desde
+la **misma ubicación** (cierre del `<main>`, antes del footer) y con el **mismo
+formato**, vía un componente compartido `components/site/related-pages.tsx`
+(dict-driven, bloque `related` en i18n — divisor + eyebrow "Del mismo sistema" +
+rejilla de 2 tarjetas). Sustituye a los avisos ad-hoc previos, incoherentes entre sí:
+Brand Kit tenía una caja de prosa (solo → Design System, sin enlace real) y Design
+System dos tarjetas "Aquí / Página de Accesibilidad" a media página (bloque 08, solo
+→ Accesibilidad). **Accesibilidad**, aún no construida, aparece como tarjeta
+"Próximamente" apagada y sin enlace; al crearla se le da su ruta en el array `PAGES`
+del componente y renderiza `<RelatedPages current="accesibilidad">` (anotado en su
+tarea de dev). El matiz de alcance que hacían las tarjetas boundary de Design System
+(criterio interno **aquí** vs declaración pública en la **futura** página de
+Accesibilidad) se conserva condensado en una frase del `lead` de su sección de
+Accesibilidad (opción 1: sin duplicar navegación).
+
+**Sin datos estructurados para "related" (evaluado y descartado).** No se añade JSON-LD
+(`WebPage.relatedLink`, `SiteNavigationElement`, `ItemList`): ninguno es elegible para
+rich results, el descubrimiento ya lo dan los `<a href>` reales dentro del
+`<nav aria-labelledby>`, y añadirlo iría contra la regla de "solo el marcado que
+corresponde por tipo" (D14). La señal correcta es HTML semántico, ya presente.
+
+**Contexto.** Mismo principio de fuente única que el resto del sistema (D1/D4): un
+componente y un bloque de diccionario, no copias por página — que es justo lo que
+había divergido en las menciones anteriores.

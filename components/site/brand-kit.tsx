@@ -3,6 +3,7 @@ import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type BrandKitDict = Dictionary["brandKit"];
 
@@ -145,11 +146,13 @@ const LEAD =
 
 export function BrandKit({
   dict,
+  related,
   breadcrumb,
   homeHref,
   lang,
 }: {
   dict: BrandKitDict;
+  related: RelatedDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
   lang: string;
@@ -791,16 +794,10 @@ export function BrandKit({
               </div>
             ))}
           </div>
-          <div
-            data-reveal
-            className="border-border bg-card mt-10 max-w-[var(--measure)] rounded-[var(--radius-md)] border px-[1.35rem] py-[1.15rem]"
-          >
-            <p className="text-muted-foreground m-0 text-[0.92rem] leading-[1.6]">
-              {t.uso.boundaryNote}
-            </p>
-          </div>
         </div>
       </section>
+
+      <RelatedPages dict={related} current="brandKit" lang={lang} />
     </main>
   );
 }
