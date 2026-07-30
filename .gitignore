@@ -45,3 +45,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude Code — config local de máquina (las skills del proyecto SÍ se versionan)
+.claude/settings.local.json

@@ -409,3 +409,27 @@ INDYA: CPO y cofundador; Freepik: Head of Product; TheTool: 1 de 4 socios; PICKA
 línea, no aportada); CTO→Tech Lead unificado en Emendu; hub de tools de Emendu con métrica
 (−38% tiempo de gestión operativa); Habilidades y Toolkit en bloques separados; Toolkit =
 categorías + nombres del sitio (§8.4), sin descripción.
+
+**Escalabilidad — single-source de hechos + tooling (2026-07-30).** Para que un
+futuro cambio de carrera (nuevo trabajo, toolkit, formación) no obligue a recordar
+especificaciones ni a duplicar datos, se separó el CV en dos capas:
+- **Hechos** (periodos, roles, formación, toolkit) → **se leen del diccionario i18n**
+  (`scripts/cv/facts.ts`), no se autoran en el CV. El CV **EN hereda los hechos ya
+  traducidos** de `en.json` (periodos "Present", formación en inglés…). Con esto web y
+  CV no pueden divergir en los hechos. Efecto colateral (buscado): el CV EN se alineó a
+  la web en dos strings que tenía distintos (ESIC "Commercial Management & Marketing",
+  "Design & prototyping"). El join CV↔diccionario es por `company` (por prefijo, cubre
+  "Ontecnia (Malavida…)"); si no encuentra match, **lanza error** en generación (mejor
+  fallar que un CV incoherente).
+- **Texto rico** (summary, bullets, métricas, reporting, context, skills, milestones,
+  ui, contacto) → sigue autorado en `scripts/cv/content.{es,en}.ts` (ES fuente, EN no
+  literal). Es lo irreducible del CV y el origen del deep-dive. *(Reemplaza el
+  "refinamiento" anterior: ya no es todo el contenido el que está fuera del diccionario,
+  solo lo rico; los hechos ya están single-sourced.)*
+- **Guard de 2 páginas**: `generate.tsx` cuenta páginas y avisa con ⚠ si algún CV supera
+  2 (objetivo PRD §25; 3 se acepta con OK explícito). Deja de depender de la memoria.
+- **`npm run cv`** regenera ambos PDFs.
+- **Skill `update-cv`** (`.claude/skills/update-cv/SKILL.md`): playbook completo del
+  flujo (qué editar según el cambio → regenerar → verificar 2 págs → entregar PDF →
+  commit/PR/deploy). Es el punto de entrada para no tener que redar especificaciones
+  dentro de un año.
