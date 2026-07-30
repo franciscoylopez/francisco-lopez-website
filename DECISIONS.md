@@ -431,5 +431,5 @@ especificaciones ni a duplicar datos, se separó el CV en dos capas:
 - **`npm run cv`** regenera ambos PDFs.
 - **Skill `update-cv`** (`.claude/skills/update-cv/SKILL.md`): playbook completo del
   flujo (qué editar según el cambio → regenerar → verificar 2 págs → entregar PDF →
-  commit/PR/deploy). Es el punto de entrada para no tener que redar especificaciones
+  commit/PR/deploy). Es el punto de entrada para no tener que dar especificaciones
   dentro de un año.

@@ -27,6 +27,9 @@ y con un sistema de marca propio.
   cookies**. Toda la analítica va gateada a producción; nada mide sin consentimiento.
 - **Rendimiento**: PageSpeed 100 (desktop) / >90 (móvil), CLS 0. Server Components
   por defecto y responsive en CSS (JS de cliente solo en las islas interactivas).
+- **CV en PDF bilingüe** (ES/EN) generado por código con identidad de marca y texto
+  seleccionable (ATS). Los hechos (roles, fechas, formación, toolkit) se leen del
+  diccionario i18n; el CV solo autora el texto rico. `npm run cv` regenera ambos.
 
 ## Desarrollo
 
@@ -43,6 +46,7 @@ npm run start      # sirve el build de producción
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 npm run format     # Prettier
+npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
 ```
 
 > **Lighthouse/PageSpeed** se mide contra el build de producción
@@ -62,7 +66,9 @@ proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy
 public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 scripts/logo-kit/      Generación del kit de logo desde su geometría
+scripts/cv/            Generador del CV en PDF (react-pdf); hechos del diccionario + texto rico autorado
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
+.claude/skills/        Skills del proyecto (update-cv, close-session)
 ```
 
 ## Documentación
