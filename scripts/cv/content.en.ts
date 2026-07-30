@@ -1,10 +1,11 @@
-// CV content (EN) — reviewed against the Spanish source, not a literal
-// translation (D20). ES (content.es.ts) is the source of truth for shape and
-// facts; this file mirrors its structure with idiomatic English.
+// Authored CV content (EN) — reviewed against the Spanish source, not literal
+// (D20). Facts (periods, roles, education, toolkit) are NOT here: they come from
+// en.json via facts.ts (single-source, D22), already in English. `company` is the
+// join key with the dictionary.
 
-import type { CV } from "./types";
+import type { CvContent } from "./types";
 
-export const cv: CV = {
+export const content: CvContent = {
   name: "Francisco López",
   role: "Senior Product Manager · SaaS B2B & B2C",
   subject: "Senior Product Manager · SaaS B2B & B2C",
@@ -41,9 +42,7 @@ export const cv: CV = {
   experience: [
     {
       company: "Emendu",
-      role: "Product Manager",
       context: "SaaS B2B · IT Management",
-      period: "Feb 2025 — Present",
       reporting: "Member of the leadership team (Management, Operations, Tech & Finance)",
       bullets: [
         "Led the product's evolution: from a Sales & Operations–centred organisation with manual processes to a digital, API-first system.",
@@ -56,9 +55,7 @@ export const cv: CV = {
     },
     {
       company: "KUOTIP",
-      role: "Cofounder & Product",
       context: "SaaS B2B · AI / Reviews",
-      period: "Feb 2024 — Nov 2024",
       reporting: "Cofounder · alongside the CEO and CTO",
       bullets: [
         "Validated the problem with users and brands: fraud, manipulation and rising costs on traditional platforms.",
@@ -68,9 +65,7 @@ export const cv: CV = {
     },
     {
       company: "INDYA",
-      role: "Product Lead",
       context: "SaaS B2C · Health tech",
-      period: "Jan 2022 — Dec 2023",
       reporting: "Reported to the CPO and cofounder · leadership through influence",
       bullets: [
         "Co-defined the growth strategy focused on activation, engagement and retention.",
@@ -83,9 +78,7 @@ export const cv: CV = {
     },
     {
       company: "Freepik",
-      role: "Product Manager",
       context: "SaaS B2C · UGC",
-      period: "Oct 2021 — Dec 2021",
       reporting: "Reported to the Head of Product",
       bullets: [
         "Researched and defined features for the contributors area from qualitative and quantitative analysis.",
@@ -95,10 +88,7 @@ export const cv: CV = {
     },
     {
       company: "TheTool",
-      role: "Cofounder & Product",
       context: "SaaS B2B · ASO",
-      period: "May 2016 — Oct 2021",
-      project: "Shutapp Projects",
       reporting: "Cofounder (1 of 4 partners) · voice and vote on key decisions",
       bullets: [
         "Cofounder responsible for vision, MVP design, validation and launch of the paid version.",
@@ -111,10 +101,7 @@ export const cv: CV = {
     },
     {
       company: "PICKASO",
-      role: "COO",
       context: "App Marketing · Agency",
-      period: "Sep 2015 — Dec 2016",
-      project: "Shutapp Projects",
       bullets: [
         "Professionalised the agency's structure, processes and service portfolio.",
         "Repositioned the brand and value proposition.",
@@ -129,9 +116,7 @@ export const cv: CV = {
     roles: [
       {
         company: "Ontecnia",
-        role: "Digital Marketing Manager",
         context: "Malavida.com",
-        period: "Sep 2013 — Sep 2015",
         bullets: [
           "Organic growth from 3.2M to 9.4M monthly visits.",
           "Drove the business-model shift: from intrusive installers to valuable content and video monetisation — the start of my move towards product-first.",
@@ -139,9 +124,7 @@ export const cv: CV = {
       },
       {
         company: "Havas Media · Increnta · Miss Conversion",
-        role: "Digital Marketing / Performance",
         context: "",
-        period: "2009 — 2013",
         bullets: [
           "Acquisition and performance at leading agencies — the analytics, CRO, UX and leadership base that enabled the move into product.",
         ],
@@ -149,24 +132,10 @@ export const cv: CV = {
     ],
   },
 
-  education: [
-    { title: "Product Management", institution: "TheHeroCamp · 2021" },
-    { title: "Scrum & Agile Leadership", institution: "theUncoding · 2021" },
-    { title: "Master's in Digital Communication", institution: "Olea Europea · 2001" },
-    { title: "Business Management & Marketing", institution: "ESIC · 2000" },
-  ],
-
   skills: [
     { label: "SaaS Product", value: "Strategy, metrics, pricing, experimentation, discovery, roadmapping." },
     { label: "UX & Design", value: "Collaboration with Product Designers, usability, prototyping, qualitative research." },
     { label: "Leadership", value: "Stakeholder management, communication, cross-functional teams." },
     { label: "Applied AI", value: "Conversational agents, LLMs, AI-assisted experiences, in-house development." },
-  ],
-
-  tools: [
-    { label: "Users", names: ["Amplitude", "Google Analytics", "Microsoft Clarity", "Typeform"] },
-    { label: "Management & Documentation", names: ["Jira", "Notion", "Miro", "Mermaid.js"] },
-    { label: "Design & Prototyping", names: ["Claude Design", "Figma", "v0"] },
-    { label: "Development", names: ["Claude Code", "VS Code", "Vercel", "GitHub"] },
   ],
 };

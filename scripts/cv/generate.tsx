@@ -24,9 +24,10 @@ import {
   renderToFile,
 } from "@react-pdf/renderer";
 import React from "react";
-import { cv as cvEs } from "./content.es";
-import { cv as cvEn } from "./content.en";
-import type { CV, Job } from "./types";
+import { content as esContent } from "./content.es";
+import { content as enContent } from "./content.en";
+import type { CV, CvContent, Job, AuthoredJob } from "./types";
+import { loadDict, buildEducation, buildTools, experienceFacts, previousFacts, matchFact, type FactRow } from "./facts";
 
 const ROOT = process.cwd();
 const asset = (p: string) => path.join(ROOT, p);
@@ -326,23 +327,71 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
   );
 }
 
-const LOCALES: { lang: "es" | "en"; data: CV }[] = [
-  { lang: "es", data: cvEs },
-  { lang: "en", data: cvEn },
+// Fusiona un rol autorado con sus hechos del diccionario (rol, periodo, proyecto).
+function mergeJob(a: AuthoredJob, facts: FactRow[]): Job {
+  const f = matchFact(facts, a.company);
+  return { ...a, role: f.role, period: f.period, project: f.project };
+}
+
+// Ensambla el CV FUSIONADO (autorado + hechos del diccionario del locale).
+function assemble(lang: "es" | "en", content: CvContent): CV {
+  const dict = loadDict(lang);
+  const expFacts = experienceFacts(dict);
+  const prevFacts = previousFacts(dict);
+  return {
+    name: content.name,
+    role: content.role,
+    subject: content.subject,
+    ui: content.ui,
+    contact: content.contact,
+    summary: content.summary,
+    skills: content.skills,
+    milestones: content.milestones,
+    experience: content.experience.map((a) => mergeJob(a, expFacts)),
+    previous: {
+      intro: content.previous.intro,
+      roles: content.previous.roles.map((a) => mergeJob(a, prevFacts)),
+    },
+    education: buildEducation(dict),
+    tools: buildTools(dict),
+  };
+}
+
+// Cuenta páginas del PDF sin dependencias externas (los objetos /Type /Page van
+// en claro en la salida de react-pdf). Sirve de guard de la restricción de 2 págs.
+function countPages(file: string): number {
+  const s = fs.readFileSync(file, "latin1");
+  return (s.match(/\/Type\s*\/Page(?![s])/g) || []).length || 1;
+}
+
+const LOCALES: { lang: "es" | "en"; content: CvContent }[] = [
+  { lang: "es", content: esContent },
+  { lang: "en", content: enContent },
 ];
 
 async function main() {
   let failures = 0;
-  for (const { lang, data } of LOCALES) {
+  let overflow = false;
+  for (const { lang, content } of LOCALES) {
     const out = asset(`public/cv/francisco-lopez-cv-${lang}.pdf`);
     try {
+      const data = assemble(lang, content);
       await renderToFile(<Cv data={data} lang={lang} />, out);
-      console.log("CV generado →", out);
+      const pages = countPages(out);
+      console.log(`CV ${lang.toUpperCase()} generado → ${out}  (${pages} pág${pages === 1 ? "" : "s"})`);
+      if (pages > 2) {
+        overflow = true;
+        console.warn(
+          `  ⚠  ATENCIÓN: el CV ${lang.toUpperCase()} ocupa ${pages} páginas (objetivo: 2). ` +
+            `Recorta bullets o aprieta el espaciado en generate.tsx, o acepta 3 págs conscientemente (PRD §25, conf 6).`,
+        );
+      }
     } catch (e) {
       failures++;
       console.error(`Error generando ${lang} (¿PDF abierto en un visor?):`, (e as Error).message);
     }
   }
+  if (overflow) console.warn("\n⚠  Algún CV supera las 2 páginas — revísalo antes de publicar.");
   if (failures) process.exit(1);
 }
 

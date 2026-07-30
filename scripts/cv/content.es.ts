@@ -1,19 +1,15 @@
-// Contenido del CV (ES) — validado con Francisco en la página de Notion
-// «CV — enriquecimiento de contenido (bloque `cv`)» (2026-07-30) + ronda de
-// finetuning posterior.
-//
-// Fuente única del CV (D22). Los HECHOS (periodos, roles, empresas, formación)
-// reproducen los de es.json (trayectoria/formacion); el TEXTO RICO (summary,
-// bullets, métricas) es el autorado del CV, más detallado que la web. El destino
-// final es el bloque `cv` del diccionario i18n cuando exista el deep-dive por
-// experiencia que lo consuma en runtime (V2/Could); hasta entonces vive aquí,
-// junto al generador, sin cargar contenido no usado en cada render del sitio.
+// Contenido AUTORADO del CV (ES) — solo lo exclusivo del CV. Los HECHOS
+// (periodos, roles, formación, toolkit) NO están aquí: se derivan del diccionario
+// i18n en facts.ts (single-source, D22), para que web y CV no diverjan. `company`
+// es la clave de unión con el diccionario (trayectoria).
 //
 // El ES es la fuente de verdad de la forma; content.en.ts se revisa contra él (D20).
+// El texto rico del CV (summary, bullets con métricas, reporting) es más detallado
+// que la web y es también el origen del futuro deep-dive por experiencia.
 
-import type { CV } from "./types";
+import type { CvContent } from "./types";
 
-export const cv: CV = {
+export const content: CvContent = {
   name: "Francisco López",
   role: "Senior Product Manager · SaaS B2B & B2C",
   subject: "Senior Product Manager · SaaS B2B & B2C",
@@ -39,7 +35,7 @@ export const cv: CV = {
   summary:
     "Senior Product Manager con más de 10 años construyendo y escalando productos SaaS B2B y B2C, con experiencia end-to-end desde idea, MVP, crecimiento y data. Especializado en estrategia de producto, UX, métricas SaaS, IA aplicada y pricing. Trabajo estrechamente con diseño, tecnología y negocio para crear productos coherentes, escalables y con una experiencia de uso fantástica.",
 
-  // Formato web (Hitos, §8.1): un reconocimiento/resultado por fila, cronológico descendente.
+  // Curados (no derivables limpiamente del bloque hitos del diccionario).
   milestones: [
     { year: "2026", company: "Emendu", impact: "Partnership estratégico con Sesame HR." },
     { year: "2023", company: "INDYA", impact: "Churn mensual del 16% al 10% · activación primer mes +28%." },
@@ -48,12 +44,11 @@ export const cv: CV = {
     { year: "2019", company: "TheTool", impact: "Nominado a Mejor Software ASO de Europa (App Promotion Summit)." },
   ],
 
+  // Experiencia: `company` une con el diccionario (de ahí salen rol y periodo).
   experience: [
     {
       company: "Emendu",
-      role: "Product Manager",
       context: "SaaS B2B · IT Management",
-      period: "Feb 2025 — Actualidad",
       reporting: "Miembro del equipo de liderazgo (Dirección, Operaciones, Tech & Finanzas)",
       bullets: [
         "Lideré la evolución del producto: de una organización centrada en Sales & Operaciones con operativa manual a un sistema digital y apificado.",
@@ -66,9 +61,7 @@ export const cv: CV = {
     },
     {
       company: "KUOTIP",
-      role: "Cofounder & Product",
       context: "SaaS B2B · IA / Reviews",
-      period: "Feb 2024 — Nov 2024",
       reporting: "Cofundador · junto a la CEO y el CTO",
       bullets: [
         "Validé el problema desde usuarios y marcas: fraude, manipulación y costes crecientes en plataformas tradicionales.",
@@ -78,9 +71,7 @@ export const cv: CV = {
     },
     {
       company: "INDYA",
-      role: "Product Lead",
       context: "SaaS B2C · Health tech",
-      period: "Ene 2022 — Dic 2023",
       reporting: "Reporté al CPO y cofundador · liderazgo por influencia",
       bullets: [
         "Co-definí la estrategia de crecimiento enfocada en activación, engagement y retención.",
@@ -93,9 +84,7 @@ export const cv: CV = {
     },
     {
       company: "Freepik",
-      role: "Product Manager",
       context: "SaaS B2C · UGC",
-      period: "Oct 2021 — Dic 2021",
       reporting: "Reporté a la Head of Product",
       bullets: [
         "Investigué y definí funcionalidades para el área de contributors a partir de análisis cualitativo y cuantitativo.",
@@ -105,10 +94,7 @@ export const cv: CV = {
     },
     {
       company: "TheTool",
-      role: "Cofounder & Product",
       context: "SaaS B2B · ASO",
-      period: "May 2016 — Oct 2021",
-      project: "Shutapp Projects",
       reporting: "Cofundador (1 de 4 socios) · voz y voto en las decisiones clave",
       bullets: [
         "Cofundador responsable de visión, diseño del MVP, validación y lanzamiento de la versión de pago.",
@@ -121,10 +107,7 @@ export const cv: CV = {
     },
     {
       company: "PICKASO",
-      role: "COO",
       context: "App Marketing · Agencia",
-      period: "Sep 2015 — Dic 2016",
-      project: "Shutapp Projects",
       bullets: [
         "Profesionalicé estructura, procesos y cartera de servicios de la agencia.",
         "Reposicioné marca y propuesta de valor.",
@@ -139,9 +122,7 @@ export const cv: CV = {
     roles: [
       {
         company: "Ontecnia",
-        role: "Digital Marketing Manager",
         context: "Malavida.com",
-        period: "Sep 2013 — Sep 2015",
         bullets: [
           "Crecimiento orgánico de 3,2M a 9,4M visitas mensuales.",
           "Impulsé la transición del modelo de negocio: de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first.",
@@ -149,9 +130,7 @@ export const cv: CV = {
       },
       {
         company: "Havas Media · Increnta · Miss Conversion",
-        role: "Digital Marketing / Performance",
         context: "",
-        period: "2009 — 2013",
         bullets: [
           "Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto.",
         ],
@@ -159,25 +138,10 @@ export const cv: CV = {
     ],
   },
 
-  education: [
-    { title: "Product Management", institution: "TheHeroCamp · 2021" },
-    { title: "Scrum & Agile Leadership", institution: "theUncoding · 2021" },
-    { title: "Máster en Comunicación Digital", institution: "Olea Europea · 2001" },
-    { title: "Gestión Comercial y Marketing", institution: "ESIC · 2000" },
-  ],
-
   skills: [
     { label: "Producto SaaS", value: "Estrategia, métricas, pricing, experimentación, discovery, roadmapping." },
     { label: "UX & Diseño", value: "Colaboración con Product Designers, usabilidad, prototipos, research cualitativo." },
     { label: "Liderazgo", value: "Stakeholder management, comunicación, equipos multidisciplinares." },
     { label: "IA Aplicada", value: "Agentes conversacionales, LLMs, experiencias asistidas por IA, desarrollo interno." },
-  ],
-
-  // Toolkit de la web (§8.4): categoría + nombre, sin descripción (decisión G).
-  tools: [
-    { label: "Usuarios", names: ["Amplitude", "Google Analytics", "Microsoft Clarity", "Typeform"] },
-    { label: "Gestión y Documentación", names: ["Jira", "Notion", "Miro", "Mermaid.js"] },
-    { label: "Diseño y prototipado", names: ["Claude Design", "Figma", "v0"] },
-    { label: "Desarrollo", names: ["Claude Code", "VS Code", "Vercel", "GitHub"] },
   ],
 };

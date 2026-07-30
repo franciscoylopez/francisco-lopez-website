@@ -1,16 +1,28 @@
-// Forma del contenido del CV, compartida por content.es.ts y content.en.ts.
-// El ES es la fuente de verdad de la forma; el EN se revisa contra él (D20).
+// Tipos del CV.
+//
+// Dos capas (D22, single-source de hechos):
+//  - CvContent = lo AUTORADO, exclusivo del CV (summary, bullets, reporting,
+//    context, skills, milestones, ui, contacto). Vive en content.{es,en}.ts.
+//  - Los HECHOS (periodos, roles, formación, toolkit) NO se autoran aquí: se
+//    leen del diccionario i18n (facts.ts) para que web y CV nunca diverjan.
+//  - CV = el resultado FUSIONADO (autorado + hechos) que consume el generador.
+//    `company` es además la clave de unión con el diccionario.
 
 export type Bullet = string;
 
-export interface Job {
-  company: string;
-  role: string;
-  context: string; // p. ej. "SaaS B2B · IT Management"
-  period: string;
-  reporting?: string; // línea de meta bajo el rol (decisión E)
-  project?: string; // p. ej. "Shutapp Projects"
+// Rol tal como se autora (sin periodo/rol/proyecto: esos son hechos del diccionario).
+export interface AuthoredJob {
+  company: string; // clave de unión con el diccionario + display
+  context: string; // p. ej. "SaaS B2B · IT Management" (metadato propio del CV)
+  reporting?: string;
   bullets: Bullet[];
+}
+
+// Rol ya fusionado (autorado + hechos), lo que se renderiza.
+export interface Job extends AuthoredJob {
+  role: string; // del diccionario
+  period: string; // del diccionario
+  project?: string; // del diccionario (agrupación Shutapp Projects)
 }
 
 export interface Milestone {
@@ -35,7 +47,6 @@ export interface ToolRow {
   names: string[];
 }
 
-// Etiquetas de UI del CV (títulos de sección) — traducibles.
 export interface CvUi {
   profile: string;
   milestones: string;
@@ -46,18 +57,35 @@ export interface CvUi {
   toolkit: string;
 }
 
+export interface Contact {
+  email: string;
+  phone: string;
+  web: string;
+  linkedin: string;
+  location: string;
+}
+
+// Contenido AUTORADO del CV (sin hechos derivables del diccionario).
+export interface CvContent {
+  name: string;
+  role: string;
+  subject: string;
+  ui: CvUi;
+  contact: Contact;
+  summary: string;
+  milestones: Milestone[];
+  skills: SkillRow[];
+  experience: AuthoredJob[];
+  previous: { intro: string; roles: AuthoredJob[] };
+}
+
+// CV FUSIONADO que consume el generador (autorado + hechos del diccionario).
 export interface CV {
   name: string;
   role: string;
-  subject: string; // metadato del PDF
+  subject: string;
   ui: CvUi;
-  contact: {
-    email: string;
-    phone: string;
-    web: string;
-    linkedin: string;
-    location: string;
-  };
+  contact: Contact;
   summary: string;
   milestones: Milestone[];
   experience: Job[];
