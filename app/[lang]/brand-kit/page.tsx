@@ -7,7 +7,6 @@ import { JsonLd } from "@/components/site/json-ld";
 import { Nav } from "@/components/site/nav";
 import { RevealRoot } from "@/components/site/reveal-root";
 import { locales, isLocale } from "@/lib/i18n/config";
-import { cvPath } from "@/lib/site";
 import { breadcrumbLd, homeUrl } from "@/lib/structured-data";
 import { getDictionary } from "../dictionaries";
 
@@ -82,7 +81,7 @@ export default async function BrandKitPage({ params }: LangParams) {
   return (
     <>
       <JsonLd data={breadcrumbData} />
-      <Nav dict={dict.nav} cvHref={cvPath(lang)} homeHref={homeHref} lang={lang} />
+      <Nav dict={dict.nav} homeHref={homeHref} lang={lang} />
       <RevealRoot>
         <BrandKit
           dict={dict.brandKit}

@@ -8,8 +8,6 @@
 //      sin tocar código.
 //   3) VERCEL_URL — la URL única del deployment: correcta para los previews de rama.
 //   4) localhost en desarrollo.
-import type { Locale } from "@/lib/i18n/config";
-
 const vercelHost =
   process.env.VERCEL_ENV === "production"
     ? (process.env.VERCEL_PROJECT_PRODUCTION_URL ?? process.env.VERCEL_URL)
@@ -22,10 +20,6 @@ export const SITE_URL =
 export const SITE_NAME = "Francisco López";
 
 export const LINKEDIN_URL = "https://www.linkedin.com/in/franciscolopez1975/";
-
-// Ruta del PDF del CV por locale (D22): ES → -es.pdf, EN → -en.pdf. Los dos assets
-// se generan con scripts/cv/generate.tsx. Cada página sirve el de su idioma.
-export const cvPath = (lang: Locale): string => `/cv/francisco-lopez-cv-${lang}.pdf`;
 
 // ID del contenedor de Google Tag Manager (P21), solo cuando la analítica debe
 // correr: en producción (D13 — nunca en dev/preview, para no ensuciar los datos) y

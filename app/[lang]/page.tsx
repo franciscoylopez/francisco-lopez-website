@@ -12,8 +12,7 @@ import { JsonLd } from "@/components/site/json-ld";
 import { RevealRoot } from "@/components/site/reveal-root";
 import { Toolkit } from "@/components/site/toolkit";
 import { Trayectoria } from "@/components/site/trayectoria";
-import { isLocale } from "@/lib/i18n/config";
-import { cvPath } from "@/lib/site";
+import { isLocale, cvPath } from "@/lib/i18n/config";
 import { profilePageLd } from "@/lib/structured-data";
 import { getDictionary } from "./dictionaries";
 
@@ -25,13 +24,15 @@ export default async function Home({ params }: LangParams) {
   if (!isLocale(lang)) notFound();
 
   const dict = await getDictionary(lang);
+  // El Nav deriva su propio enlace del CV; aquí solo se necesita para los otros
+  // dos puntos del home (CTA de Trayectoria y Contacto).
   const cvHref = cvPath(lang);
 
   // JSON-LD ProfilePage + Person (SEO técnico, D14): entidad principal del sitio.
   return (
     <>
       <JsonLd data={profilePageLd(lang, dict.meta.description)} />
-      <Nav dict={dict.nav} cvHref={cvHref} lang={lang} />
+      <Nav dict={dict.nav} lang={lang} />
       <RevealRoot>
         <main>
           <Hero dict={dict.hero} />

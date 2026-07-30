@@ -393,10 +393,13 @@ consumidor. **El pliegue al diccionario se hace cuando exista el deep-dive por e
 (V2/Could) —su consumidor runtime—, que es lo que justifica esa ubicación. Sigue siendo
 fuente única (un módulo por locale) y sigue siendo el origen del deep-dive.
 
-**Cableado por locale.** `lib/site.ts` → `cvPath(lang)` (`/cv/francisco-lopez-cv-${lang}.pdf`).
-Reemplaza al `CV_HREF` fijo a `-es` que había en las 4 páginas (home, brand-kit,
-design-system, cookies): ahora cada locale sirve su PDF en los 3 puntos de clic del home
-(nav, CTA de Trayectoria, Contacto) y en el nav de las secundarias.
+**Cableado por locale.** `lib/i18n/config.ts` → `cvPath(lang)`
+(`/cv/francisco-lopez-cv-${lang}.pdf`), **fuente única de la ruta** (client/edge-safe, sin
+`server-only`). El **Nav (menú) deriva su propio enlace** del `lang` que ya recibe, así que
+las páginas ya **no** le pasan `cvHref`; solo el `home` referencia `cvPath`, para los otros
+dos puntos del CV que no son el menú (CTA de Trayectoria y Contacto). Reemplaza al `CV_HREF`
+fijo a `-es` que estaba **duplicado como string en las 4 páginas** (home, brand-kit,
+design-system, cookies) —justo el riesgo de divergencia que se evita al centralizarlo—.
 
 **Ajustes de contenido validados (2026-07-30).** Cabecera → Senior Product Manager;
 TheTool → "Cofounder & Product"; Searchmedia → Increnta; Sesame HR nombrado; ARPU fuera
