@@ -75,7 +75,8 @@ brand-assets/          Piezas de marca fuera de la web (firma de email, header d
 
 El "porqué" del proyecto vive en documentos dedicados:
 
-- **[PRD.md](./PRD.md)** — producto, diseño y alcance.
+- **[PRD-Live.md](./PRD-Live.md)** — spec viva: qué es el producto hoy y qué cumple.
+- **[PRD-Historical.md](./PRD-Historical.md)** — registro histórico de decisiones de producto/diseño/alcance (el "por qué").
 - **[DECISIONS.md](./DECISIONS.md)** — decisiones técnicas del build (ADR-lite).
 - **[BRAND.md](./BRAND.md)** — sistema de marca (color, tipografía, logo).
 - **[CLAUDE.md](./CLAUDE.md)** — convenciones de código (i18n, tokens, a11y, SEO).

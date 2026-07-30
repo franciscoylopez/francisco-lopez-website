@@ -86,7 +86,7 @@ ficheros existen** en `public/cv/`.
   deliberado: prefiere fallar a generar un CV con datos incoherentes.
 - **Assets**: la foto redondeada está en `assets/cv/`; las fuentes en
   `assets/fonts/`. Si cambia la foto de origen, reprocésala con `sharp` (ver D22).
-- **Docs**: si el cambio altera una decisión, actualiza `DECISIONS.md` / `PRD.md`;
+- **Docs**: si el cambio altera una decisión, actualiza `DECISIONS.md` / `PRD-Live.md` (o `PRD-Historical.md`);
   si hay tarea en Notion, refléjalo.
 
 ## 7 · Mapa de ficheros

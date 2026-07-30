@@ -1,6 +1,12 @@
-# PRD — Web personal de Francisco López
+# PRD Historical — Web personal de Francisco López
 
-> Documento de referencia único para diseñar (Claude Design) y desarrollar esta web.
+> **Registro histórico de decisiones de producto/diseño/alcance** — secciones fechadas,
+> debates y cosas revertidas, en orden cronológico. Es el "por qué" completo. Para el
+> **estado actual del producto** (qué es y qué cumple hoy), ver **[PRD-Live.md](./PRD-Live.md)**,
+> que es la spec viva y el documento que se `@`-importa en cada sesión. Este archivo
+> vive **solo en el repo** (no tiene espejo en Notion).
+
+> Documento de referencia para diseñar (Claude Design) y desarrollar esta web.
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
 > **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
 > **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
