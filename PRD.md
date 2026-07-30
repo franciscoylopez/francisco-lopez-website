@@ -814,6 +814,8 @@ Se arranca la tarea del **CV con identidad propia** (V2, "En progreso"). Planifi
 
 **Pendiente (siguiente sesión):** primera acción, leer el `francisco-lopez-cv-es.pdf` actual (poppler ya instalado, ver D22) para contrastar con el borrador; después, que Francisco enriquezca el borrador de contenido y resuelva 6 confirmaciones abiertas (ARPU, título de TheTool, hub de tools de Emendu, nombrar Sesame HR, huecos de métrica, profundidad de bullets). Contexto completo en la tarea de Notion "Diseñar CV en PDF con identidad visual propia".
 
+**Cerrado 2026-07-30.** CV bilingüe generado por código, 2 páginas, ATS, con identidad de marca propia — detalle técnico y de contenido en `DECISIONS.md` D22 (bloque "Realizado 2026-07-30"). El contenido se enriqueció y validó en la página de Notion «CV — enriquecimiento de contenido (bloque `cv`)» (bajo *New Website*) con las 6 confirmaciones resueltas (ARPU fuera, TheTool "Cofounder & Product", hub de Emendu incluido con −38%, Sesame HR nombrado, profundidad 5-6 bullets) más una ronda de finetuning (logo split en color en lockup, fondo hueso, reporting por rol, Habilidades/Toolkit separados). Ambos PDFs (`-es`/`-en`) cableados por locale en la web vía `cvPath(lang)`. **Único hueco pendiente:** reporting de PICKASO (no aportado; el rol queda sin esa línea). El deep-dive por experiencia sigue como tarea aparte (V2/Could) y compartirá esta fuente de contenido cuando se construya.
+
 ---
 
 ## Fuentes
