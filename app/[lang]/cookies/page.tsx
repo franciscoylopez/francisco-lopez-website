@@ -12,7 +12,6 @@ import { getDictionary } from "../dictionaries";
 
 type LangParams = { params: Promise<{ lang: string }> };
 
-const CV_HREF = "/cv/francisco-lopez-cv-es.pdf";
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -78,7 +77,7 @@ export default async function CookiesPage({ params }: LangParams) {
   return (
     <>
       <JsonLd data={breadcrumbData} />
-      <Nav dict={dict.nav} cvHref={CV_HREF} homeHref={homeHref} lang={lang} />
+      <Nav dict={dict.nav} homeHref={homeHref} lang={lang} />
       <RevealRoot>
         <CookiesPolicy
           dict={dict.cookies}

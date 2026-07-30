@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 import { Logo } from "@/components/ui/logo";
+import { cvPath, type Locale } from "@/lib/i18n/config";
 
 export type NavDict = {
   homeAria: string;
@@ -25,15 +26,17 @@ export type NavDict = {
 // internas pasan la URL de la home para que el logo navegue de vuelta.
 export function Nav({
   dict,
-  cvHref,
   homeHref = "#top",
   lang,
 }: {
   dict: NavDict;
-  cvHref: string;
   homeHref?: string;
-  lang: string;
+  lang: Locale;
 }) {
+  // El menú deriva su propio enlace del CV a partir del locale (fuente única
+  // cvPath). Las otras apariciones del CV en el home (CTA de Trayectoria y
+  // Contacto) lo resuelven igual desde la página.
+  const cvHref = cvPath(lang);
   const { resolvedTheme, setTheme } = useTheme();
   const pathname = usePathname() || "/";
   const [p, setP] = useState(0);

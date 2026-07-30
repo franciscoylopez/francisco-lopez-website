@@ -370,3 +370,42 @@ la sesión para que el PATH surta efecto.
 cambio de trabajo, PRD §1/§2). Se decidió construirlo ya —sin esperar al deep-dive—
 autorando el contenido rico una vez, estructurado para reutilizarse: no es trabajo
 temporal, es el origen del deep-dive.
+
+**Realizado 2026-07-30.** CV bilingüe (ES + EN) generado y en el repo:
+`public/cv/francisco-lopez-cv-es.pdf` y `…-en.pdf`, **2 páginas cada uno**, texto
+seleccionable (ATS, verificado con `pdftotext`), enlaces funcionales embebidos
+(`mailto`/`tel`/web/LinkedIn). Generador `scripts/cv/generate.tsx` (`@react-pdf/renderer`
++ `tsx`, devDeps), multi-locale: recorre ES/EN y escribe ambos PDFs. Marca aplicada:
+lockup logo split en color + nombre en una línea, fondo hueso de marca `#F7F3EC`
+(evaluado vs blanco: coherente con el sistema, tinta a 13,79:1 AAA, la foto oscura
+resalta; online-only, sin requisito de impresión), cian como único acento, chip "Exit"
+en morado (único uso), avatar redondeado (`sharp` desde `Fran/Fotos/Francisco-Lopez-Avatar.png`
+→ `assets/cv/francisco-avatar-rounded.png`). Fuentes de marca woff (Bricolage 600, Inter
+400/600) vía `Font.register`; la flecha "→" se evitó (fuera del subset) usando lenguaje
+natural.
+
+**Refinamiento sobre la ubicación del contenido.** El texto rico vive en
+`scripts/cv/content.{es,en}.ts` (forma compartida en `types.ts`; **ES fuente de verdad,
+EN revisado contra el ES no literal, D20**), *no* en el bloque `cv` del diccionario i18n
+todavía. Motivo: el único consumidor hoy es el generador offline (co-ubicado en
+`scripts/cv/`); meterlo en el diccionario runtime cargaría ~8 KB por render del sitio sin
+consumidor. **El pliegue al diccionario se hace cuando exista el deep-dive por experiencia**
+(V2/Could) —su consumidor runtime—, que es lo que justifica esa ubicación. Sigue siendo
+fuente única (un módulo por locale) y sigue siendo el origen del deep-dive.
+
+**Cableado por locale.** `lib/i18n/config.ts` → `cvPath(lang)`
+(`/cv/francisco-lopez-cv-${lang}.pdf`), **fuente única de la ruta** (client/edge-safe, sin
+`server-only`). El **Nav (menú) deriva su propio enlace** del `lang` que ya recibe, así que
+las páginas ya **no** le pasan `cvHref`; solo el `home` referencia `cvPath`, para los otros
+dos puntos del CV que no son el menú (CTA de Trayectoria y Contacto). Reemplaza al `CV_HREF`
+fijo a `-es` que estaba **duplicado como string en las 4 páginas** (home, brand-kit,
+design-system, cookies) —justo el riesgo de divergencia que se evita al centralizarlo—.
+
+**Ajustes de contenido validados (2026-07-30).** Cabecera → Senior Product Manager;
+TheTool → "Cofounder & Product"; Searchmedia → Increnta; Sesame HR nombrado; ARPU fuera
+de INDYA (sin cifra); reporting por rol como línea de meta (Emendu: miembro del equipo de
+liderazgo —Dirección, Operaciones, Tech & Finanzas—; KUOTIP: cofundador junto a CEO y CTO;
+INDYA: CPO y cofundador; Freepik: Head of Product; TheTool: 1 de 4 socios; PICKASO sin
+línea, no aportada); CTO→Tech Lead unificado en Emendu; hub de tools de Emendu con métrica
+(−38% tiempo de gestión operativa); Habilidades y Toolkit en bloques separados; Toolkit =
+categorías + nombres del sitio (§8.4), sin descripción.
