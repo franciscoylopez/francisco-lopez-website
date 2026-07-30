@@ -136,7 +136,10 @@ const s = StyleSheet.create({
   skillRow: { flexDirection: "row", marginBottom: 3 },
   skillLabel: { fontFamily: "Inter", fontWeight: 600, fontSize: 9, color: C.ink, width: 118 },
   skillValue: { flex: 1, fontSize: 9, color: C.ink, lineHeight: 1.4 },
-  toolLabel: { fontFamily: "Inter", fontWeight: 600, fontSize: 9, color: C.cyan, width: 118 },
+  // Igual que skillLabel: tinta en negrita, no cian. El cian es el color de acción
+  // (BRAND.md); estas etiquetas de categoría no son acciones y deben leerse como las
+  // de Habilidades.
+  toolLabel: { fontFamily: "Inter", fontWeight: 600, fontSize: 9, color: C.ink, width: 118 },
 });
 
 function LogoMark({ size = 42 }: { size?: number }) {
