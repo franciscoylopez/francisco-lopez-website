@@ -1,11 +1,13 @@
 # DECISIONS — Registro de decisiones técnicas (V1 build)
 
-> **Fuente de verdad: este archivo del repo.** Hay una copia espejo en Notion
-> ([Decisions](https://app.notion.com/p/Decisions-3a72caec08be800b96d1cf5e6e11fa2c),
-> dentro de *New Website*) solo para seguimiento cómodo; si algo difiere, manda el repo.
+> **Vive solo en el repo (sin espejo en Notion).** Es la fuente de verdad de las
+> decisiones técnicas. *(El espejo de Notion se retiró el 2026-07-30: en Notion solo se
+> mantiene el `PRD-Live.md` para comprobación cómoda; DECISIONS y el PRD histórico viven
+> solo como `.md` en el repo.)*
 >
-> Alcance: decisiones **técnicas/de implementación** de la fase de desarrollo. Las
-> decisiones de **producto/diseño/alcance** siguen en `PRD.md`. Las **convenciones**
+> Alcance: decisiones **técnicas/de implementación** de la fase de desarrollo. El
+> **estado** de producto/diseño/alcance vive en `PRD-Live.md` y su **registro histórico**
+> en `PRD-Historical.md`. Las **convenciones**
 > que aplican en adelante están en `CLAUDE.md`. El "por qué" de cada trozo de código
 > vive en los mensajes de commit/PR; el progreso por tarea, en Notion.
 >
@@ -103,8 +105,10 @@ van a V2** (PRD §22 revierte §18). Sin esquema V1.0/V1.1: lanzamiento = V1, to
 se sacan para no retrasar el lanzamiento.
 
 ## D10 · Política de documentación de la fase de desarrollo — 2026-07-24
-**Decisión.** Producto/diseño/alcance → `PRD.md`. Técnica transversal → este `DECISIONS.md`
-(fuente de verdad en repo, copia en Notion para seguimiento). Convenciones que aplican en adelante →
+**Decisión.** Producto/diseño/alcance → **estado** en `PRD-Live.md` (spec viva, `@`-importada
+en cada sesión; único doc con espejo en Notion) + **histórico** en `PRD-Historical.md` (solo repo).
+Técnica transversal → este `DECISIONS.md` (fuente de verdad, **solo repo**; espejo de Notion
+retirado el 2026-07-30). Convenciones que aplican en adelante →
 `CLAUDE.md`. `README.md` → entrada/overview del repo (qué es, stack, arranque, estructura, mapa de
 docs), **mantenido al día conforme evoluciona el proyecto** (no es un one-off del lanzamiento).
 "Por qué" del código → mensajes de commit/PR. Progreso por tarea → notas de Notion.
