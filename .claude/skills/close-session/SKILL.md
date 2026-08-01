@@ -57,8 +57,8 @@ nada ni escribes de más.
    herramientas `notion-*`; convenciones del workspace — páginas nuevas bajo *New Website*,
    iconos nativos de Notion, sin emojis.)
 3. **Tablero de tareas**: actualiza `Estado` (To-Do → En progreso → Listo; al cerrar
-   sprint, lo terminado → Archivado y lo pendiente → "Sin empezar" del siguiente),
-   `Prioridad` y `Sprint` según las **reglas del tablero** de `CLAUDE.md` (no
+   una etapa, lo terminado → Archivado; el resto sigue abierto en su etapa),
+   `Prioridad` y `Etapa` según las **reglas del tablero** de `CLAUDE.md` (no
    negociables). Una tarea a la vez, estado al día.
 4. **Commit** de los cambios de repo en rama corta → PR (D12); no directo a `main`.
 

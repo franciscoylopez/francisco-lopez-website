@@ -3,7 +3,7 @@ name: sprint-review
 description: >
   Revisión técnica crítica del codebase con mirada de developer externo que lo ve por
   primera vez: calidad de código, escalabilidad, deuda técnica, resiliencia, drift
-  docs↔código y huecos en PRD/DECISIONS. Invócalo al CERRAR UN SPRINT (o si Francisco lo
+  docs↔código y huecos en PRD/DECISIONS. Invócalo al CERRAR UNA ETAPA/FASE (o si Francisco lo
   pide) para que las mejoras se detecten de forma recurrente sin depender de acordarse.
   Termina proponiendo y creando tareas para los hallazgos reales, sin duplicar las ya
   tareadas. No es una review de un diff/PR (eso es /code-review), sino del proyecto entero.
