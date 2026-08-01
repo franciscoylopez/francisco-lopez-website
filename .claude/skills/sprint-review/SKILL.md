@@ -37,11 +37,19 @@ como diario en vez de spec viva, espejos de Notion que se desincronizan solos.
 5. **Escalabilidad**: patrones que hoy no duelen pero dolerán con más páginas/lógica; fuentes
    únicas vs duplicación; a11y/perf ¿manual o automatizado?
 6. **Resiliencia**: 404/500 propios, manejo de errores, estados de carga.
-7. **Drift docs↔código**: ¿los docs marcan "pendiente" algo ya hecho (o al revés)?, ¿referencias rotas?
-8. **Docs**: ¿`PRD-Live.md` refleja el estado real?, ¿`DECISIONS.md` al día?, ¿huecos/dudas de
+7. **Seguridad**: `npm audit` (vulnerabilidades de dependencias) y si hay escaneo
+   automatizado; **cabeceras de seguridad** en `next.config` (CSP, `X-Frame-Options`/
+   `frame-ancestors`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`,
+   HSTS); **secretos** (grep de claves/tokens; `.env*` gitignored, nada commiteado);
+   `dangerouslySetInnerHTML` (¿escapa `<`?, ¿entra dato no confiable?); **rutas públicas /
+   API con params** (¿allowlist y validación?); y **superficie nueva** (formularios,
+   uploads, auth, server actions) → validación/sanitización de input no confiado,
+   rate-limiting, CSRF, y su efecto en la CSP.
+8. **Drift docs↔código**: ¿los docs marcan "pendiente" algo ya hecho (o al revés)?, ¿referencias rotas?
+9. **Docs**: ¿`PRD-Live.md` refleja el estado real?, ¿`DECISIONS.md` al día?, ¿huecos/dudas de
    producto o técnica que poner sobre la mesa?, ¿algún doc sobra, falta, o hay que simplificar?
-9. **Limpieza**: archivos muertos/deprecados; contenido en carpetas que no le tocan.
-10. **Dinámica/proceso**: qué revela el estado del repo sobre cómo se trabaja (fricciones que se
+10. **Limpieza**: archivos muertos/deprecados; contenido en carpetas que no le tocan.
+11. **Dinámica/proceso**: qué revela el estado del repo sobre cómo se trabaja (fricciones que se
     repiten, pasos manuales frágiles) — alimenta la mejora continua de la forma de trabajar.
 
 Herramientas: `Bash`/`Grep`/`Glob` para el barrido; `Read` para los archivos grandes y los
