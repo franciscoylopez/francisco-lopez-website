@@ -824,6 +824,28 @@ Se arranca la tarea del **CV con identidad propia** (V2, "En progreso"). Planifi
 
 ---
 
+## 26. Fase V2+: análisis crítico y cambios de metodología (2026-08-01)
+
+Con la V1 en producción, antes de diseñar/desarrollar las secciones nuevas (Sobre mí, Accesibilidad, Contacto avanzado), se hizo una tanda de **análisis críticos con mirada externa** (developer / diseñador / copywriter / seguridad) y se ajustó la forma de trabajar. Detalle técnico en `DECISIONS.md`; metodología en `CLAUDE.md`; hallazgos convertidos en tareas del tablero.
+
+**Análisis → tareas:**
+- **Desarrollo**: base sólida y disciplinada; huecos de *andamiaje* (sin CI, sin páginas de error propias, drift de docs, `shadcn` mal ubicado). → etapa *Cimientos técnicos*.
+- **Diseño**: ejecución sobresaliente pero dentro de un lenguaje muy de género; color infrautilizado, ritmo de secciones repetitivo, sin un gesto-firma memorable. → tareas (links animados, franja-CTA de cierre, footer estructurado, gesto-firma).
+- **Copy**: correcto pero seguro; el copy más flojo es el de más valor (Contacto/CTA, que perdió el ICP en §24) y habla de él, no al lector. → posicionamiento (ICP + exit) + copy en la franja-CTA.
+- **Seguridad**: superficie pequeña y bien higienizada (secretos limpios, ruta OG asegurada); faltan cabeceras de seguridad y hay un CVE de `sharp`. → tareas.
+
+**Cambios de metodología:**
+- **Diseño en código** para las secciones nuevas (D1 *superseded*): el sistema vive en el repo, no en Claude Design.
+- **Etapas temáticas sin fechas** (Sprint → Etapa): dirigen `MoSCoW` + `Prioridad` + `Tamaño`. Cerrar una etapa dispara el skill `sprint-review`.
+- **Dos carriles**: el *build* avanza por etapas (activa: Cimientos técnicos); el *contenido* que solo escribe Francisco (Sobre mí, Accesibilidad) corre en paralelo por delante.
+- **Adiciones**: contenido primero, bucle medir→aprender por etapa, Definition of Done por sección, revisión con IA en los PR grandes, disciplina shippear-vs-pulir.
+
+**Reestructura de docs**: PRD dividido en `PRD-Live.md` (spec viva, único espejo en Notion) + `PRD-Historical.md` (este, solo repo); espejo de DECISIONS retirado de Notion. Tres skills operativos: `update-cv`, `close-session`, `sprint-review`.
+
+**Estado al cerrar**: arranca la etapa *Cimientos técnicos* (build, CI primero) en paralelo al contenido de Sobre mí (borrador creado en Notion, pendiente del texto personal de Francisco).
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
