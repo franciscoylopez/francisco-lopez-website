@@ -24,6 +24,18 @@ Al empezar una sesión de desarrollo:
 - **Una tarea a la vez, en su orden de prioridad, con el `Estado` al día — nada de construir por delante del tablero.** Antes de tocar código, la tarea correspondiente se pone en "En progreso"; al terminarla, "Listo". No se salta una tarea de prioridad menor (número más bajo) para empezar otra posterior, aunque compartan trabajo. Si un mismo esfuerzo cubre varias tareas (p. ej. el build de la home repartido en 2-3 tareas de secciones), se **abren y se cierran una a una** conforme se avanza, no en bloque al final. *(Añadido 2026-07-27: se construyó la home entera saltándose la P11.5 —conectar Vercel, de prioridad anterior— y sin ir moviendo Estados; el tablero quedó desincronizado de la realidad y hubo que reconstruir el mapeo a posteriori. La disciplina no es burocracia: es lo que mantiene el tablero como fuente fiable de en qué punto está el proyecto.)*
 - **Al cerrar un sprint, sus tareas terminadas pasan a "Archivado".** "Listo" queda reservado a lo terminado del **sprint activo**; el histórico completado de sprints anteriores se archiva (sigue en la base, solo sale de las columnas activas). Lo que quede sin hacer se mueve al siguiente sprint como "Sin empezar". **Además, al cerrar un sprint invoca el skill `sprint-review`**: una revisión técnica crítica del codebase (developer externo, mirada fresca) que detecta deuda/huecos y propone tareas, para que la mejora del andamiaje y de la dinámica no dependa de acordarse de pedirla.
 
+### Gestión de etapas — cuándo se cierra una y se dispara `sprint-review`
+
+Sin fechas, la **etapa en curso** es la fase temática de menor `Prioridad` con tareas abiertas (Cimientos técnicos va primera). Se trabaja **una etapa a la vez**, en orden. Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara ("cerramos Cimientos"). Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** (ver abajo). "Listo" queda solo para lo terminado de la etapa en curso.
+
+### Metodología de trabajo (fase V2+)
+
+- **Contenido primero** en secciones bloqueadas por contenido (Sobre mí, Accesibilidad): el texto es el cuello de botella real y solo lo escribe Francisco. Desbloquear el contenido **antes o en paralelo** al diseño/dev; Claude puede redactar un borrador editable (como el CV o Sobre mí) para arrancarlo.
+- **Bucle medir→aprender.** Al cerrar cada etapa, revisar los números de GA4 (clics de contacto, descargas de CV, scroll) para informar la priorización. Construir **y** medir — es lo que predica la web ("del discovery al dato").
+- **Definition of Done por sección.** Cada tarea de sección nueva hereda el checklist de cierre (los 8 puntos de accesibilidad + SEO/JSON-LD + PageSpeed + responsive + seguridad). Misma vara para todas.
+- **Revisión con IA en los PR grandes.** Sin segundo revisor humano, usa `/code-review` (o ultrareview) en cambios sustanciales como segundo par de ojos.
+- **Shippear vs. pulir.** Deja explícito qué es "suficiente para shippear la sección" vs. "pulido"; el pulido va a *Optimización* (Could) y **no bloquea el envío**. Que las secciones salgan en vez de dorarse.
+
 # Fase de desarrollo — convenciones (V1 build)
 
 Las **decisiones** técnicas viven en `DECISIONS.md` (fuente de verdad; hay copia espejo en Notion). Esto son las **reglas** que aplican al escribir código, no negociables salvo que una decisión nueva las cambie.
