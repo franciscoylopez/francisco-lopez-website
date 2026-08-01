@@ -18,6 +18,17 @@
 ---
 
 ## D1 · El diseño se traduce, no se copia — 2026-07-24
+
+> **Superado para la fase V2+ (2026-08-01).** Este flujo aplicó a la V1, cuando **no
+> existía sistema** y había que explorar el lenguaje visual desde cero en Claude Design.
+> Ya no aplica: el sistema de diseño vive en el repo (tokens en `globals.css`, la página
+> **Design System**, y componentes compartidos), es **más rico que el mockup** y es ahora
+> la fuente de diseño. **Las secciones nuevas se diseñan en código** (Claude Code, iterando
+> en navegador), reusando el sistema. Claude Design queda como **cuaderno de bocetos
+> desechable** para movimientos visuales *nuevos* (gesto-firma, franja-CTA, layouts
+> novedosos), **nunca como fuente viva** — mantenerlo en paralelo reintroduce la divergencia
+> que D1/D4/D19 combaten. La decisión original se conserva abajo como registro.
+
 **Decisión.** El diseño de V1 (home + Brand Kit + Design System, con nav/footer/breadcrumb
 compartidos) vive en Claude Design, proyecto "New Website", archivo `Web personal.dc.html`.
 Es la fuente fiel de lo aprobado y se **traduce** a Next, no se reproduce de memoria desde el PRD.
