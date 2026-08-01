@@ -26,7 +26,7 @@ Al empezar una sesión de desarrollo:
 
 ### Gestión de etapas — cuándo se cierra una y se dispara `sprint-review`
 
-Sin fechas, la **etapa en curso** es la fase temática de menor `Prioridad` con tareas abiertas (Cimientos técnicos va primera). Se trabaja **una etapa a la vez**, en orden. Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara ("cerramos Cimientos"). Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** (ver abajo). "Listo" queda solo para lo terminado de la etapa en curso.
+Sin fechas, la **etapa en curso** es la fase temática de menor `Prioridad` con tareas abiertas (Cimientos técnicos va primera). Se trabaja **una etapa a la vez**, en orden, **pero en dos carriles**: el *build* (técnico/diseño/dev) avanza una etapa cada vez; el *contenido* que solo escribe Francisco (Sobre mí, Accesibilidad) corre **en paralelo, por delante**, para desbloquear las secciones futuras (el "contenido primero"). Por eso `To-Do`/`En progreso` cubren la **etapa de build activa** *y* el **carril de contenido en marcha**; todo lo demás (build de secciones futuras, optimización) va en `Sin empezar`. Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara ("cerramos Cimientos"). Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** (ver abajo). "Listo" queda solo para lo terminado de la etapa en curso.
 
 ### Metodología de trabajo (fase V2+)
 
