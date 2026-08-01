@@ -95,7 +95,10 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 ## 9. Fuera del alcance actual (V2+)
 
-- Páginas **Sobre mí** y **Accesibilidad** (bloqueadas por contenido sin escribir).
+- Páginas **Sobre mí** y **Accesibilidad**. *(**Sobre mí**: contenido escrito y validado,
+  y la página ya **construida en código** — falta elegir/recortar las fotos reales y
+  enlazarla en el nav para publicarla; sigue V2. **Accesibilidad**: aún bloqueada por
+  contenido sin escribir.)*
 - **Deep-dive por experiencia** (comparte fuente de contenido con el CV).
 - **Contacto ampliada**.
 - **Traducción de contenido nuevo a EN** (la arquitectura i18n ya está; la traducción se

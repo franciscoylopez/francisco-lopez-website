@@ -846,6 +846,20 @@ Con la V1 en producción, antes de diseñar/desarrollar las secciones nuevas (So
 
 ---
 
+## 27. Sobre mí: contenido y diseño en código (2026-08-01)
+
+Primera pieza del carril de contenido que sale adelante: se desbloqueó y construyó la página **Sobre mí** (V2).
+
+**Contenido (P31).** Ángulo: *la persona detrás del PM*, no un segundo CV. Se partió del **texto en bruto de Francisco** —más personal que el andamiaje de 5 bloques que se había propuesto— y se pulió a una estructura de **4 movimientos**: apertura + cita-firma («Un tipo al que le gusta entender su mundo / No me gustan las cosas que no tienen menú de opciones») → *Cómo llegué a Producto* (marketing/growth → PM, con el arranque del *Libro rojo de la publicidad*) → *repostería* (enlazada a la mente de producto: cada receta = un lanzamiento) → *montaña* (el yo no tecnológico) → cierre con CTA a Contacto. ES fuente de verdad + EN no literal (D20). Validado en la página «Sobre mí — borrador de contenido» (Notion).
+
+**Diseño en código (P33).** Tratamiento **editorial sobrio**, iterado con Francisco en localhost (no capturas). Decisiones: la cita-firma va **sobre la foto** de apertura full-width (scrim para contraste; en móvil se oculta la 2ª frase); **intro y cierre** a media columna a la izquierda (opening/closing); *Cómo llegué a Producto* a **ancho completo** (sin foto, no una columna centrada — corrección tras un primer intento centrado que Francisco descartó); repostería/montaña en **zigzag** con foto 4:5 y un **panel de marca pastel** desplazado detrás (cian/morado, decorativo, sin tocar el color de acción, respondiendo al "poco uso de marca" del análisis V2+); **negrita/cursiva y un enlace** desde el diccionario vía un render de markup ligero (ver DECISIONS D23).
+
+**Pendiente para publicar (P35).** Fotos reales (hoy placeholders al ratio) + enlace en el nav (P36) + gate de a11y/SEO. La otra mitad de P35 (Accesibilidad) sigue bloqueada por su contenido (P32) y su diseño (P34).
+
+**Estado al cerrar**: Sobre mí lista salvo fotos (en el tejado de Francisco). Mañana arranca *Cimientos técnicos* (P30.1, CI de PRs) mientras Francisco redacta el contenido de Accesibilidad (P32) en paralelo.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

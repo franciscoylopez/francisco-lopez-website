@@ -448,3 +448,19 @@ especificaciones ni a duplicar datos, se separó el CV en dos capas:
   flujo (qué editar según el cambio → regenerar → verificar 2 págs → entregar PDF →
   commit/PR/deploy). Es el punto de entrada para no tener que dar especificaciones
   dentro de un año.
+
+## D23 · Copy con énfasis inline en el diccionario vía render de markup ligero — 2026-08-01
+**Decisión.** El copy que necesita **negrita, cursiva o enlaces embebidos** sigue viviendo
+como **strings en el diccionario i18n** (no como JSX hardcodeado ni HTML), con una
+convención de markup mínima —`**negrita**`, `*cursiva*`, `[texto](url)`— que un pequeño
+render (`Rich`, hoy en `components/site/sobre-mi.tsx`) parsea a nodos React. Enlaces
+`http(s)` → `target="_blank" rel="noopener noreferrer"`; los enlaces de contenido en cian
+(`primary`, regla de BRAND). Plano, sin anidamiento, que es lo que la página necesita.
+
+**Contexto.** «Sobre mí» pide énfasis tipográfico y un enlace al *Libro rojo de la
+publicidad* dentro de la prosa. Meter ese formato como JSX rompería "cero strings
+hardcodeados" (D11) —el texto dejaría de estar en el diccionario, fuente de verdad ES→EN—,
+y guardar HTML en el JSON abriría la puerta a inyección y a `dangerouslySetInnerHTML`. El
+markup ligero mantiene el copy en el diccionario, tipado y revisable ES↔EN (D20), y el
+render controla el estilo. Si otra sección lo necesita, se promueve `Rich` a un módulo
+compartido (`lib/` o `components/site/`); hoy vive co-ubicado con su único consumidor.
