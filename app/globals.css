@@ -273,6 +273,27 @@
   }
 }
 
+/* 404 — el "0" del número hace "florecer" la firma: las capas de color del split (el
+   <g> de los anillos cian/morado) suben su opacidad sobre el aro base, que ya está
+   visible. Puro CSS (sin JS/rAF): corre en la carga sin depender de hidratación.
+   Reduced-motion: split ya visible, sin interpolar (BRAND.md regla 7). */
+@keyframes split-bloom {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.split-zero > g {
+  animation: split-bloom 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+@media (prefers-reduced-motion: reduce) {
+  .split-zero > g {
+    animation: none;
+  }
+}
+
 /* Hitos — fila responsive (D7: en CSS, no en JS). Móvil: grid que apila el
    impacto bajo el nombre. ≥768px (md): flex, todo en una fila. */
 .hitos-row {

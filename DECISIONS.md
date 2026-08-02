@@ -537,3 +537,22 @@ error), 404 real (HTTP 404) en ES y EN, `<html lang>` correcto por locale.
 nombre de ruta de prueba como `__boom` da 404 por convención, no por bug. Detalle menor
 pendiente: en `global-error` el `<title>` no siempre sustituye al del documento previo
 (cosmético, ruta de 500 poco frecuente).
+
+**Rediseño del 404 con marca (2026-08-02, asimétrico 404 vs error).** Tras verlo,
+Francisco pidió darle protagonismo de marca al 404 (no al error). El `global-not-found`
+deja de ser minimalista y pasa a ser una página SANA con **Nav + Footer** (salidas
+reales, toggle de tema e idioma) envueltos en `ThemeProvider` —que además sustituye al
+script de tema manual y hace funcionar el toggle—. El hero es el propio **"404"**: los
+dos "4" en Bricolage y el **"0" convertido en el círculo con split** (anillos
+cian/morado + aro base, SIN la barra: no es el logo, es el número), con `role="img"
+aria-label="404"`. El split **"florece"** al cargar con un keyframe CSS puro
+(`split-bloom` sobre `.split-zero > g`, globals.css), no rAF: se descartó la primera
+versión con `requestAnimationFrame` porque un tab en segundo plano lo pausa —además CSS
+es lo correcto para una animación de entrada— y respeta `prefers-reduced-motion` (split
+ya visible, sin interpolar). Componentes: `components/site/split-404.tsx`. La **pantalla
+de error (500) se queda minimalista** (SystemMessage, sin Nav/Footer): es una pantalla
+de recuperación que no debe depender de la maquinaria que puede haber fallado —la
+asimetría es deliberada—. Se evaluó y se **mantuvo el doble split** (Nav + "0") en el
+404: poner el logo del Nav en flat solo para esta página era sobreingeniería. QA: axe 0
+violaciones claro/oscuro, HTTP 404 real ES/EN. El `[lang]/not-found.tsx` anidado (solo
+salta con `notFound()` explícito, hoy inexistente) queda como fallback minimalista.

@@ -4,7 +4,12 @@ import { headers } from "next/headers";
 
 import "./globals.css";
 
-import { SystemMessage, SYSTEM_BTN_PRIMARY } from "@/components/site/system-message";
+import { getDictionary } from "@/app/[lang]/dictionaries";
+import { Footer } from "@/components/site/footer";
+import { Nav } from "@/components/site/nav";
+import { Split404 } from "@/components/site/split-404";
+import { SYSTEM_BTN_PRIMARY } from "@/components/site/system-message";
+import { ThemeProvider } from "@/components/theme-provider";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import { getSystemMessages } from "@/lib/i18n/system-messages";
 
@@ -12,7 +17,12 @@ import { getSystemMessages } from "@/lib/i18n/system-messages";
 // nivel superior (app/[lang]/layout.tsx), caso en el que la doc de Next descarta
 // componer el 404 con layout+not-found anidados y recomienda `global-not-found`
 // (activado con experimental.globalNotFound). Al saltarse el render normal, esta
-// página debe traer sus propias dependencias globales: fuentes, estilos y tema.
+// página trae sus propias dependencias globales: fuentes, estilos y ThemeProvider.
+//
+// A diferencia de la pantalla de error (minimalista, autónoma), el 404 es una página
+// SANA —no ha fallado nada, el usuario erró la URL—, así que lleva Nav + Footer
+// (salidas reales, toggle de tema e idioma) y un hero con el split de marca: un
+// momento para que la firma respire.
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const bricolage = Bricolage_Grotesque({
@@ -26,15 +36,10 @@ export const metadata: Metadata = {
   title: "404 — Francisco López",
 };
 
-// Fija la clase `.dark` antes de pintar según la preferencia guardada (next-themes,
-// storageKey "theme") o el esquema del sistema, para que el 404 respete el tema sin
-// flash. Réplica mínima del script que inyecta el ThemeProvider en el layout normal,
-// que aquí no se ejecuta.
-const themeInit = `(function(){try{var e=localStorage.getItem('theme');if(e==='dark'||((e===null||e==='system')&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');}catch(e){}})()`;
-
 export default async function GlobalNotFound() {
   const header = (await headers()).get("x-locale") ?? "";
   const lang = isLocale(header) ? header : defaultLocale;
+  const dict = await getDictionary(lang);
   const t = getSystemMessages(lang);
   const homeHref = lang === "es" ? "/" : `/${lang}`;
 
@@ -45,18 +50,34 @@ export default async function GlobalNotFound() {
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="bg-background text-foreground flex min-h-full flex-col">
-        <script dangerouslySetInnerHTML={{ __html: themeInit }} />
-        <SystemMessage
-          homeHref={homeHref}
-          homeAria={t.homeAria}
-          eyebrow={t.notFound.code}
-          title={t.notFound.title}
-          body={t.notFound.body}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
         >
-          <a href={homeHref} className={SYSTEM_BTN_PRIMARY}>
-            {t.home}
-          </a>
-        </SystemMessage>
+          <Nav dict={dict.nav} homeHref={homeHref} lang={lang} />
+          <main className="mx-auto flex w-full max-w-[var(--container)] flex-1 flex-col items-center justify-center gap-7 px-[var(--page-x)] py-20 text-center">
+            {/* Hero: el "404" como pieza central, con el "0" convertido en el círculo
+                con split que florece en la carga (Split404 · .split-zero, globals.css). */}
+            <Split404 className="text-[clamp(4.5rem,17vw,10rem)]" />
+            <div className="animate-in fade-in slide-in-from-bottom-3 flex flex-col items-center gap-3 duration-700 motion-reduce:animate-none">
+              <h1 className="font-display text-[clamp(1.35rem,3.4vw,1.9rem)] font-semibold tracking-[-0.01em] text-balance">
+                {t.notFound.title}
+              </h1>
+              <p className="text-muted-foreground max-w-[42ch] text-[1.02rem] text-pretty">
+                {t.notFound.body}
+              </p>
+            </div>
+            <a
+              href={homeHref}
+              className={`${SYSTEM_BTN_PRIMARY} animate-in fade-in duration-700 motion-reduce:animate-none`}
+            >
+              {t.home}
+            </a>
+          </main>
+          <Footer dict={dict.footer} lang={lang} />
+        </ThemeProvider>
       </body>
     </html>
   );
