@@ -1,0 +1,35 @@
+# Escaneo automatizado de dependencias (tarea P30.5).
+# Dependabot abre PRs cuando hay avisos de seguridad o versiones nuevas, para que la
+# deuda de deps se detecte sola y no dependa de acordarse de correr `npm audit`.
+# Coherente con el argumento de rigor técnico del sitio (PRD §1).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    # Prefijos alineados con Conventional Commits del repo (DECISIONS D12).
+    commit-message:
+      prefix: chore
+      prefix-development: chore
+    groups:
+      # Agrupa el ecosistema Next en un solo PR para no fragmentar los bumps acoplados
+      # (next, eslint-config-next, @next/*, react/react-dom).
+      next:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+          - "@next/*"
+          - "react"
+          - "react-dom"
+
+  # Mantener al día las propias GitHub Actions (checkout, setup-node…) del CI.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci
