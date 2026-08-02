@@ -265,39 +265,62 @@ function ConsentRow({
 }) {
   const locked = !onChange;
   const titleId = `consent-cat-${title.replace(/\s+/g, "-").toLowerCase()}`;
-  return (
-    <li className="border-border flex items-start justify-between gap-4 rounded-lg border p-3.5">
-      <div className="min-w-0">
-        <p
-          id={titleId}
-          className="text-foreground text-[0.95rem] font-semibold"
-        >
-          {title}
-        </p>
-        <p className="text-muted-foreground mt-0.5 text-[0.85rem] leading-relaxed">
-          {description}
-        </p>
-      </div>
-      {locked ? (
+
+  // Categoría necesaria: switch fijo, sin control real; badge "siempre activas".
+  if (locked) {
+    return (
+      <li className="border-border flex items-start justify-between gap-4 rounded-lg border p-3.5">
+        <div className="min-w-0">
+          <p className="text-foreground text-[0.95rem] font-semibold">{title}</p>
+          <p className="text-muted-foreground mt-0.5 text-[0.85rem] leading-relaxed">
+            {description}
+          </p>
+        </div>
         <span className="text-muted-foreground border-border bg-muted mt-0.5 shrink-0 rounded-full border px-2.5 py-1 text-[0.75rem] font-medium">
           {badge}
         </span>
-      ) : (
-        <label className="inline-flex min-h-[44px] shrink-0 cursor-pointer items-center">
+      </li>
+    );
+  }
+
+  // El <label> envuelve el título/descripción visibles (no un texto vacío): así el
+  // control tiene una etiqueta con texto real —sin el "empty form label" que marcaba
+  // WAVE— y toda la fila es área clicable. `aria-labelledby` acota el nombre accesible
+  // al título; la descripción va como `aria-describedby`.
+  const descId = `${titleId}-desc`;
+  return (
+    <li className="border-border rounded-lg border">
+      <label className="flex cursor-pointer items-start justify-between gap-4 p-3.5">
+        <div className="min-w-0">
+          <p
+            id={titleId}
+            className="text-foreground text-[0.95rem] font-semibold"
+          >
+            {title}
+          </p>
+          <p
+            id={descId}
+            className="text-muted-foreground mt-0.5 text-[0.85rem] leading-relaxed"
+          >
+            {description}
+          </p>
+        </div>
+        <span className="inline-flex min-h-[44px] shrink-0 items-center">
           <input
             type="checkbox"
             role="switch"
             className="peer sr-only"
             checked={checked}
             aria-labelledby={titleId}
+            aria-describedby={descId}
             onChange={(e) => onChange(e.target.checked)}
           />
           <span
             aria-hidden="true"
             className="bg-muted peer-checked:bg-primary peer-focus-visible:ring-ring relative h-6 w-11 rounded-full transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-transform peer-checked:after:translate-x-5 motion-reduce:transition-none motion-reduce:after:transition-none"
           />
-        </label>
-      )}
+        </span>
+      </label>
     </li>
   );
 }

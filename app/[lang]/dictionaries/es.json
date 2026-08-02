@@ -6,6 +6,7 @@
   "nav": {
     "homeAria": "Inicio — Francisco López",
     "downloadCv": "Descargar CV",
+    "sobreMi": "Sobre mí",
     "menu": "Menú",
     "toggleTheme": "Cambiar tema",
     "switchLanguage": "Ver en inglés",
@@ -261,6 +262,7 @@
     "copyright": "© 2026 Francisco López",
     "brandKit": "Brand Kit",
     "designSystem": "Design System",
+    "accesibilidad": "Accesibilidad",
     "cookies": "Cookies",
     "linkedinAria": "LinkedIn"
   },
@@ -1116,6 +1118,186 @@
         { "idx": "(07)", "name": "Toolkit", "h": "clamp(9rem,20vw,13rem)" },
         { "idx": "(08)", "name": "Contacto", "h": "clamp(8rem,18vw,12rem)" }
       ]
+    }
+  },
+  "sobreMi": {
+    "meta": {
+      "title": "Sobre mí — Francisco López",
+      "description": "La persona detrás del PM: cómo llegué a Producto desde el marketing y el growth, la repostería, la montaña y hacia dónde voy ahora."
+    },
+    "crumb": "Sobre mí",
+    "kicker": "Quién hay detrás",
+    "title": "Sobre mí",
+    "photoAlt": "Retrato de Francisco López",
+    "quote": "Un tipo al que le gusta entender su mundo.",
+    "quoteSub": "No me gustan las cosas que no tienen menú de opciones.",
+    "intro": [
+      "Soy Francisco López. Un tipo familiar, padre afortunado de dos hijos, amante de las cheesecakes que de vez en cuando sube montañas.",
+      "Llevo más de diez años haciendo producto pero, como la mayoría de los PMs, empecé por otros caminos. Vayamos un poco atrás…"
+    ],
+    "product": {
+      "heading": "Cómo llegué a Producto",
+      "body": [
+        "Desde pequeño me gustaban más los anuncios que muchos de los programas que echaban en la tele. Uno de mis juegos era acertar el anuncio antes que nadie de la familia. Algo de aquello quedó en mí —y en mis padres—: a los 15 años me regalaron [El libro rojo de la publicidad](https://www.amazon.es/libro-rojo-publicidad-actualizada-Seller/dp/8466353208/), de Luis Bassat. Mientras otros leían aventuras o ciencia ficción, yo disfrutaba leyendo estrategias de campañas que había visto por la tele, descubriendo a alguien que te contaba el *behind the scenes* de esos anuncios con los que yo jugaba.",
+        "El camino parecía lógico: cuando llegó el momento, me puse a estudiar marketing en ESIC. Me encantó, pero nunca llegué a aplicarlo. ¿Por qué? Porque apareció algo que lo cambió todo. Algo que se llamaba **Internet**, no sé si te suena. Para mí fue un cambio de modelo mental: podías impactar en los usuarios *y* conocer los datos en tiempo real. A mi cabeza analítica eso le bastó para saber que ese era el camino. Empecé en el departamento de nuevos canales de Bancaja —haciendo webs, alimentándolas, mirando datos (antes de Google Analytics)— y entonces llegó el posicionamiento en buscadores, y una cosa muy cool que por entonces se llamaba *AdWords*…",
+        "El resto ya lo habrás visto en mi trayectoria: agencias pequeñas, medianas y gigantes, alguna etapa de freelance, docencia y ponencias en congresos de marketing digital. Mi primera gran etapa profesional.",
+        "Todo iba bien, pero algo me decía que no era suficiente. Me había convertido en un experto en atraer usuarios, y no dejaba de rondarme una pregunta: ¿por qué unos compran y otros no? ¿Qué hace que vuelvan? ¿Por qué usan solo una parte de la web y no descubren esa otra sección que es la clave? Aún no lo sabía, pero el camino ya estaba marcado: **era un tipo de Producto.**"
+      ]
+    },
+    "baking": {
+      "heading": "Más allá del trabajo: la repostería",
+      "photoAlt": "Francisco López haciendo repostería",
+      "body": [
+        "Fuera de la oficina, mi gran pasión está en la cocina. En concreto, la repostería. Me pierde un tiramisú fino, un brownie goloso, algo tan sencillo y tradicional como un flan bien hecho; recetas que vienen de lejos como un *american pie*, o algo tan especial como un *strudel*. Y más aún descubrir cosas cuando viajo: ¿cómo he podido vivir tanto tiempo sin saber lo que era un *cannolo* siciliano? Pero por encima de todo eso, me pierden las **cheesecakes**.",
+        "Muchas veces me preguntan cuál es mi cheesecake. Y mi respuesta siempre es la misma: ¿cuál de todas? Hay muchísimas, y lo mejor de la repostería es que siempre puedes hacerla tuya. Ahí, inevitablemente, se me cruza la mente de producto. Cada receta tiene sus pasos y sus tiempos, pero cada horno es un mundo y los ingredientes nunca son iguales —yo compro una marca, tú otra, y el resultado cambia—. **Cada receta es un lanzamiento**, y cada iteración debería ser mejor. Pero para eso no basta con tu opinión sesgada de creador: necesitas la de tus usuarios (sí, los que se las comen)."
+      ],
+      "aside": "Esta sabe más a queso, me encanta. La base de galleta estaba mejor con ese toque de nuez. La mermelada de mango con el queso azul la lleva a otro nivel.",
+      "bodyAfter": [
+        "Y así vas puliendo una receta que cayó en tus manos y que haces tuya, paso a paso. Como en producto, no todos los experimentos salen bien, pero todos forman parte del camino."
+      ]
+    },
+    "mountain": {
+      "heading": "Más allá del trabajo: la montaña",
+      "photoAlt": "Francisco López en la montaña",
+      "body": [
+        "Mi otra gran pasión es la montaña. Y esta, al contrario que la repostería, no tiene nada que ver con producto ni con tecnología: es la forma en la que encuentro paz mental.",
+        "Preparar la ruta, madrugar sabiendo que vas a pasar frío, empezar a moverte y coger ritmo. No pensar en nada ni en nadie: solo tú, una buena cuesta y naturaleza. Descubrir pequeños sonidos y olores que no son los de todos los días. *No hay pantalla, no hay Spotify, no hay Jira.* Solo otra cima que alcanzar, que siempre es el mejor momento. Cansado pero feliz, sentado en una piedra con los pies colgando, mirando el horizonte, la magnitud de la montaña, respirando aire puro y sabiendo que lo has conseguido.",
+        "Un trago de agua, unas nueces y una mandarina, y de vuelta. Esta vez en descenso, con otro objetivo: el trabajo ya está hecho, ahora toca la recompensa. Ese bar de pueblo con una barbacoa donde las cosas se hacen como se han hecho siempre, y donde en un par de horas te estarán esperando con un bocado bien merecido."
+      ]
+    },
+    "now": {
+      "heading": "Dónde estoy ahora",
+      "body": [
+        "Si has llegado hasta aquí, ya me conoces un poco mejor —y gracias por hacerlo—. Sigo siendo un PM al que le gusta resolver problemas; mejor dicho, encontrarlos y resolverlos de una forma que sea satisfactoria para los usuarios, que su experiencia sea increíble y que, por supuesto, cumpla los objetivos del negocio. Si algo de todo esto te encaja, me encantará conocerte."
+      ],
+      "ctaPre": "Así que… ¿por qué no ",
+      "ctaLink": "hablamos",
+      "ctaPost": "?"
+    }
+  },
+  "accesibilidad": {
+    "meta": {
+      "title": "Accesibilidad — Francisco López",
+      "description": "Cómo está construida esta web para ser usable por todas las personas: WCAG 2.2 AA cumplido, sistema de color en AAA y las medidas concretas que lo respaldan, verificadas con axe y Lighthouse."
+    },
+    "crumb": "Accesibilidad",
+    "hero": {
+      "kicker": "Compromiso",
+      "title": "Accesibilidad",
+      "lead": "Aquí la accesibilidad es un criterio de cierre, no un extra: cualquier persona —con ratón, teclado o lector de pantalla, con o sin visión del color— puede leer y navegar esta web sin barreras. Y no es una promesa: está medido.",
+      "statConformidad": "Conformidad WCAG 2.2",
+      "statColor": "Sistema de color",
+      "statAxe": "Violaciones axe",
+      "statLighthouse": "Lighthouse a11y"
+    },
+    "conformance": {
+      "num": "(01)",
+      "heading": "Nivel de conformidad",
+      "note": "El contraste está medido, no estimado. El texto principal alcanza 13,79:1 en claro y 15,32:1 en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
+      "rows": [
+        { "label": "Estándar", "value": "WCAG 2.2, niveles A y AA." },
+        { "label": "Estado", "value": "AA cumplido en todo el sitio." },
+        {
+          "label": "Sistema de color",
+          "value": "AAA en claro y oscuro, con el contraste medido."
+        }
+      ]
+    },
+    "measures": {
+      "num": "(02)",
+      "heading": "Qué se ha hecho",
+      "intro": "Las mismas comprobaciones con las que se cierra cada página del Design System, en lenguaje llano y con el criterio WCAG que cubre cada una.",
+      "items": [
+        {
+          "title": "Contraste medido en ambos temas",
+          "body": "Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco.",
+          "wcag": "WCAG 1.4.3 · 1.4.11"
+        },
+        {
+          "title": "Foco siempre visible",
+          "body": "Cada elemento interactivo muestra un anillo de foco de 2 px con separación; nunca se elimina el indicador sin sustituto.",
+          "wcag": "WCAG 2.4.7"
+        },
+        {
+          "title": "Áreas de pulsación amplias",
+          "body": "Los objetivos táctiles miden al menos 44×44 px, también en controles pequeños como la miga de pan o el cambio de tema.",
+          "wcag": "WCAG 2.5.8 (superado)"
+        },
+        {
+          "title": "Estructura y orden lógicos",
+          "body": "Un solo título principal por página y una jerarquía sin saltos; el orden de lectura coincide con el del código, para lectores de pantalla y navegación por teclado.",
+          "wcag": "WCAG 1.3.1 · 2.4.6"
+        },
+        {
+          "title": "Ubicación clara",
+          "body": "Las páginas internas llevan una miga de pan (breadcrumb) que indica dónde estás dentro del sitio.",
+          "wcag": "WCAG 2.4.8"
+        },
+        {
+          "title": "Nunca solo el color",
+          "body": "Ningún estado o categoría se distingue únicamente por color: siempre hay además texto o forma.",
+          "wcag": "WCAG 1.4.1"
+        },
+        {
+          "title": "Respeto al movimiento reducido",
+          "body": "Si tu sistema pide menos animación, las transiciones y los reveals se desactivan.",
+          "wcag": "WCAG 2.3.3"
+        },
+        {
+          "title": "Alternativas textuales",
+          "body": "Las imágenes que informan llevan texto alternativo; lo decorativo se oculta a la tecnología de asistencia.",
+          "wcag": "WCAG 1.1.1"
+        }
+      ]
+    },
+    "verify": {
+      "num": "(03)",
+      "heading": "Cómo se verifica",
+      "intro": "No es una autoevaluación de palabra. Cada página se comprueba, en modo claro y oscuro, con herramientas reales.",
+      "items": [
+        {
+          "tool": "axe-core",
+          "result": "Motor de reglas WCAG. 0 violaciones en la home y en las páginas internas."
+        },
+        {
+          "tool": "Lighthouse",
+          "result": "Auditoría de accesibilidad. Puntuación 100 en producción."
+        },
+        {
+          "tool": "Contraste medido",
+          "result": "Color a color, con cifra, no «a ojo»."
+        },
+        {
+          "tool": "Teclado y foco",
+          "result": "Revisión manual de la navegación por teclado y del orden de foco."
+        }
+      ]
+    },
+    "limits": {
+      "num": "(04)",
+      "heading": "Límites conocidos y mejora continua",
+      "intro": "Ser honesto también es accesibilidad.",
+      "items": [
+        {
+          "title": "Contacto directo",
+          "body": "El contacto es por email y teléfono (aún no hay formulario); ambos son enlaces directos y accesibles."
+        },
+        {
+          "title": "CV en PDF",
+          "body": "Es texto seleccionable y etiquetado, pero un PDF nunca iguala a una página web en accesibilidad. Si lo necesitas en otro formato, escríbeme."
+        },
+        {
+          "title": "Mejora continua",
+          "body": "El sistema de color ya está en AAA y se revisa en cada cambio para no perder ese nivel."
+        }
+      ]
+    },
+    "report": {
+      "num": "(05)",
+      "heading": "¿Encuentras una barrera?",
+      "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, quiero saberlo: es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
+      "emailLabel": "Escríbeme a",
+      "updated": "Última revisión de accesibilidad: 2 de agosto de 2026."
     }
   }
 }

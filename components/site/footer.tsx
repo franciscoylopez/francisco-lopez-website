@@ -6,6 +6,7 @@ export type FooterDict = {
   copyright: string;
   brandKit: string;
   designSystem: string;
+  accesibilidad: string;
   cookies: string;
   linkedinAria: string;
 };
@@ -13,9 +14,9 @@ export type FooterDict = {
 const LINKEDIN_URL = "https://www.linkedin.com/in/franciscolopez1975/";
 
 // Footer compartido (PRD §7/§17). Una fila de baja densidad: logo flat 32px +
-// copyright · enlaces (Brand Kit / Design System) ópticamente centrados · LinkedIn.
-// Enlaces de chrome en foreground/muted (no primary, BRAND.md). Las rutas de Brand
-// Kit y Design System se construyen en su propia tarea (hoy 404 hasta entonces).
+// copyright · enlaces (Brand Kit / Design System / Accesibilidad / Cookies)
+// ópticamente centrados · LinkedIn. Enlaces de chrome en foreground/muted (no
+// primary, BRAND.md).
 export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
   const base = lang === "es" ? "" : `/${lang}`;
   return (
@@ -40,6 +41,12 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
             className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
           >
             {dict.designSystem}
+          </a>
+          <a
+            href={`${base}/accesibilidad`}
+            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
+          >
+            {dict.accesibilidad}
           </a>
           <a
             href={`${base}/cookies`}
