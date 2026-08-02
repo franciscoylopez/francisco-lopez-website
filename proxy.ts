@@ -12,11 +12,20 @@ import { defaultLocale } from "@/lib/i18n/config";
 //   - resto              → español por defecto: rewrite interno a `/es/...` sin
 //                          cambiar la URL del navegador (la raíz sirve ES directo,
 //                          sin redirect).
+// Cabecera con el locale detectado. La lee `not-found.tsx` (server component), que
+// no recibe `params` y no puede deducir el idioma de otra forma. Se propaga en la
+// request reescrita/pasada, no en la respuesta.
+function withLocale(request: NextRequest, locale: string) {
+  const headers = new Headers(request.headers);
+  headers.set("x-locale", locale);
+  return headers;
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return NextResponse.next();
+    return NextResponse.next({ request: { headers: withLocale(request, "en") } });
   }
 
   if (pathname === "/es" || pathname.startsWith("/es/")) {
@@ -27,7 +36,9 @@ export function proxy(request: NextRequest) {
 
   const url = request.nextUrl.clone();
   url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
-  return NextResponse.rewrite(url);
+  return NextResponse.rewrite(url, {
+    request: { headers: withLocale(request, defaultLocale) },
+  });
 }
 
 export const config = {
