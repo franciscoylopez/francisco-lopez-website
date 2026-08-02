@@ -70,6 +70,14 @@ referencia "brand-globals" en su contenido; las menciones en texto estaban solo 
 Notion, ya corregidas. Divergencia a reconciliar (manda el repo): el diseño aclara `--brand-purple`
 en `.dark` y usa los `brand-*-soft` en hex; el repo los mantiene.
 
+**Completado (2026-08-02).** Consolidación cerrada, y la decisión original quedó **superada en
+dos puntos** (el texto de arriba se conserva como registro):
+- **Los 5 tokens de layout ya están en `app/globals.css`** (`--container` 1360px, `--measure`
+  42rem, `--section-y`, `--page-x`, `--gutter`); no falta nada por trasladar.
+- **`brand-globals.css` sí se borró**, no se mantuvo como DEPRECADO: era huérfano y sin
+  referencias, así que se eliminó en el **PR #26** («eliminar brand-globals.css (deprecado,
+  huérfano)»). `app/globals.css` es hoy la única fuente de tokens, sin archivo espejo.
+
 ## D5 · Dark mode = `system` por defecto + toggle — 2026-07-24
 **Decisión.** `next-themes` con `defaultTheme="system"` (respeta el SO) + toggle que sobreescribe.
 Añadir `color-scheme` en `:root` y `<meta name="theme-color">` por esquema.
