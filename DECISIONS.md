@@ -565,7 +565,7 @@ asimetría es deliberada—. Se evaluó y se **mantuvo el doble split** (Nav + "
 violaciones claro/oscuro, HTTP 404 real ES/EN. El `[lang]/not-found.tsx` anidado (solo
 salta con `notFound()` explícito, hoy inexistente) queda como fallback minimalista.
 
-## D26 · Cabeceras de seguridad Fase 1; CSP diferida — 2026-08-02
+## D26 · Cabeceras de seguridad Fase 1; CSP «A+ barato» (Fase 2) implementada, estricta diferida — 2026-08-02
 **Decisión.** `next.config.ts` sirve, en todas las rutas (`/:path*`), un conjunto de
 cabeceras de seguridad **triviales y sin riesgo** (Fase 1): `X-Content-Type-Options:
 nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`,
@@ -590,3 +590,55 @@ es JSON-LD con datos estáticos del diccionario) → no hay vector de XSS. La Fa
 hueco más barato de cerrar y coherente con el argumento de rigor (PRD §1); la CSP estricta
 sería sobreingeniería para el estado actual. Decisión de alcance tomada con Francisco tras
 ver que securityheaders.com daba **A** con el único aviso siendo la CSP ausente.
+
+**Implementada la Fase 2 «A+ barato» (2026-08-02, P37.9).** La CSP ya se **sirve en
+producción** (`next.config.ts`): las cuatro directivas gratis y sin riesgo (`object-src
+'none'`, `base-uri 'self'`, `form-action 'self'`, `frame-ancestors 'none'`) + allowlist de
+GTM/GA4 en `script-src`/`connect-src`/`img-src`/`frame-src`, manteniendo `'unsafe-inline'`
+en `script-src` (sigue siendo insignia, no protección de XSS fuerte). Detalles de
+implementación:
+- **Solo en builds de producción** (`process.env.NODE_ENV === "production"`, que incluye el
+  preview de Vercel). En `next dev` se **omite**: el HMR usa `eval` y `'unsafe-eval'` no
+  debe entrar en la política real. Ventaja: el preview de Vercel sí la sirve, así que los
+  recursos propios del sitio se verifican contra la CSP antes del merge.
+- **Rollout enforce + verificación en prod** (acordado con Francisco, resuelve el «a debatir»
+  de Report-Only): GTM/GA4 solo cargan en producción, así que su allowlist no se puede probar
+  en el preview. Se desplegó enforcing con el allowlist documentado de Google y se verificó
+  **en vivo**: cabecera servida, `gtm.js`/`gtag/js` cargan (200), el beacon de GA4 sale con
+  `gcs=G111` (consentimiento) y la consola queda **sin ninguna violación CSP** en home y
+  página interna (local + preview + prod).
+- **La CSP estricta (nonces) sigue diferida a V3** con la IA conversacional, sin cambios.
+
+## D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot — 2026-08-02
+**Decisión.** Cierre de la deuda de dependencias de la etapa Cimientos (P30.5 + P37.72),
+más el escaneo automatizado que la mantiene a raya:
+- **sharp forzado a `^0.35.3` con `overrides` en `package.json`.** Los CVEs de libvips
+  (CVE-2026-33327/33328/35590/35591, *high*) se parchean en sharp 0.35.0+. sharp entra como
+  dependencia **opcional de Next**, y todas las `next@16.2.x` (incl. la última) declaran
+  `sharp ^0.34.5` = `>=0.34.5 <0.35.0` → la propia rama vulnerable; un bump de Next no basta.
+  El `overrides` fuerza el sharp parcheado en todo el árbol sin subir Next. **Revisar el
+  override al subir a un Next que ya traiga sharp ≥0.35** (16.3+), para no dejar un pin
+  manual olvidado. Binding nativo (Windows) verificado tras el bump.
+- **shadcn movido de `dependencies` a `devDependencies`** (no se pudo *quitar*, la otra
+  opción de la tarea). Aunque el paquete `shadcn` es un CLI que no se importa en JS, **sí se
+  usa en build**: `app/globals.css` hace `@import "shadcn/tailwind.css"` (keyframes +
+  `@custom-variant` de los componentes base-ui). Eliminarlo rompe el build; su sitio correcto
+  es devDependencies —como `tailwindcss`/`@tailwindcss/postcss`/`typescript`, que Vercel ya
+  instala al construir—. Efecto: saca su cadena transitiva (`@modelcontextprotocol/sdk`,
+  `@hono/node-server`, `fast-uri`) del árbol de **producción** (`npm audit --omit=dev` más
+  limpio).
+- **Dependabot** (`.github/dependabot.yml`) como escaneo de dependencias automatizado: PRs
+  semanales para **npm** + **github-actions**, ecosistema Next agrupado, prefijos alineados a
+  Conventional Commits (D12). Requiere activar *Dependabot alerts* + *security updates* en los
+  ajustes del repo (toggle de GitHub; los *version updates* los habilita el yml). Sustituye a
+  "acordarse de correr `npm audit`".
+
+**Alcance / lo que queda.** Se parcheó **solo sharp** de los *high* (decisión de Francisco).
+Los HIGH propios de **Next** (SSRF/DoS/bypass de proxy con locale) + **postcss** se aplazaron:
+los recogerá Dependabot con el bump de Next (ya empezó a abrir PRs por su cuenta). `brace-
+expansion` (high, dev-only, toolchain de ESLint) también queda para Dependabot.
+
+**Contexto.** Coherente con el argumento de rigor del sitio (PRD §1) sin sobre-parchear: el
+riesgo *práctico* de sharp hoy es bajo (solo procesa imágenes propias, cero input no
+confiable), pero es un *high* barato de cerrar, y el escaneo automatizado evita que la deuda
+de deps vuelva a acumularse en silencio.
