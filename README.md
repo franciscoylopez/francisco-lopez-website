@@ -33,7 +33,8 @@ y con un sistema de marca propio.
 - **Páginas de error 404 y 500** con marca e i18n: el 404 con el "0" del número
   convertido en el círculo del split, que "florece" al cargar (CSS, reduced-motion safe).
 - **Seguridad y calidad**: cabeceras de seguridad (nosniff, X-Frame-Options,
-  Referrer-Policy, Permissions-Policy, HSTS) y **CI** en cada PR (GitHub Actions:
+  Referrer-Policy, Permissions-Policy, HSTS y **CSP** «A+ barato»), **escaneo de
+  dependencias** automatizado (**Dependabot**) y **CI** en cada PR (GitHub Actions:
   typecheck + lint + build) — nada que no compile entra en `main`.
 
 ## Desarrollo
@@ -65,6 +66,7 @@ app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
 .github/workflows/     CI (GitHub Actions): typecheck + lint + build en cada PR
+.github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
 components/site/        Secciones de la web (nav, hero, footer, breadcrumb, banner de cookies, páginas…)
 components/analytics/   GTM + Consent Mode (init) — gateado a producción
 components/ui/          Primitivas (logo, button)

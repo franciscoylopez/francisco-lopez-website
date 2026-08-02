@@ -43,7 +43,8 @@ V1 lanzada. En vivo:
 - **SEO técnico + Open Graph** por página, **medición** (GA4/GTM + consentimiento RGPD),
   **dominio propio**.
 - **Páginas de error 404/500 con marca e i18n** (el 404 con el "0" del split animado) y
-  **cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS).
+  **cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy,
+  HSTS y CSP «A+ barato»).
 
 ### Estructura de la home (orden actual)
 
@@ -74,8 +75,11 @@ Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas.
 - **Medición**: GA4/GTM gateado a producción y a consentimiento. Métricas de éxito →
   §7.
 - **Calidad / seguridad**: CI (GitHub Actions) que corre typecheck + lint + build en cada
-  PR (nada que no compile entra en `main`); cabeceras de seguridad servidas (nosniff,
-  X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS). Detalle en `DECISIONS.md`.
+  PR (nada que no compile entra en `main`); **escaneo de dependencias automatizado
+  (Dependabot)**; cabeceras de seguridad servidas (nosniff, X-Frame-Options, Referrer-Policy,
+  Permissions-Policy, HSTS **y CSP «A+ barato»**: directivas base + allowlist GTM/GA4,
+  manteniendo `'unsafe-inline'`; la CSP estricta con nonces va con la IA conversacional de
+  V3). Detalle en `DECISIONS.md`.
 
 ## 6. CV en PDF
 
@@ -109,5 +113,5 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 - **Optimización continua**: Microsoft Clarity (cualitativo), más métricas, marca externa
   (firma de email, header de LinkedIn), rediseño de assets.
 
-Las mejoras técnicas pendientes (tests automatizados, escaneo de dependencias, CSP, etc.)
+Las mejoras técnicas pendientes (tests automatizados, CSP estricta con nonces, etc.)
 viven en el tablero de tareas; el porqué de cada decisión de producto, en **[PRD-Historical.md](./PRD-Historical.md)**.
