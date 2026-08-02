@@ -1,11 +1,37 @@
 import type { NextConfig } from "next";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 
+// Content-Security-Policy — Fase 2 «A+ barato» (tarea 37.9). Mantiene `'unsafe-inline'`
+// en script-src (los scripts inline del sitio: consent-init, init de tema, loader de GTM),
+// así que NO es protección de XSS fuerte — eso sería la CSP estricta con nonces, diferida
+// a V3 (D26). Lo que sí aporta, gratis y sin romper nada: bloquear <object>/<embed>
+// (object-src 'none'), fijar la base de URLs (base-uri 'self'), limitar destinos de
+// formularios (form-action 'self') y prohibir el embedding (frame-ancestors 'none'). El
+// allowlist de GTM/GA4 (script/connect/img/frame) evita romper la analítica. Sube
+// securityheaders.com de A a A+.
+const csp = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  // gtm.js se sirve desde googletagmanager; 'unsafe-inline' cubre los scripts inline del sitio.
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com",
+  // GA4 envía las medidas (beacon/fetch) a *.google-analytics.com y *.analytics.google.com.
+  "connect-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com",
+  // Pixel de GA + data: para imágenes inline; el resto de imágenes son propias.
+  "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com",
+  // 'unsafe-inline' para los style attributes inline (transiciones del nav, reveals, iframe de GTM).
+  "style-src 'self' 'unsafe-inline'",
+  // next/font auto-hospeda las fuentes; no hay orígenes externos de fuentes.
+  "font-src 'self'",
+  // <noscript> de GTM inyecta un iframe a googletagmanager/ns.html.
+  "frame-src https://www.googletagmanager.com",
+].join("; ");
+
 // Cabeceras de seguridad — Fase 1 (tarea 30.4): las triviales y sin riesgo. Riesgo
 // bajo hoy (portfolio estático, sin auth, sin formularios ni input de usuario), pero
 // es el hueco más barato de cerrar y un sitio que argumenta rigor debería servirlas.
-// La CSP (Fase 2) va aparte: no es trivial con GTM/GA4 + scripts inline (consent-init,
-// JSON-LD) y hay que elegir enfoque sin romper analítica ni consentimiento.
 const securityHeaders = [
   // No adivinar el MIME: evita que un recurso servido como texto se ejecute como script.
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -24,6 +50,11 @@ const securityHeaders = [
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains",
   },
+  // La CSP solo se sirve en builds de producción (incluye el preview de Vercel). En
+  // `next dev` se omite: el HMR usa `eval` y 'unsafe-eval' no debe entrar en la política.
+  ...(process.env.NODE_ENV === "production"
+    ? [{ key: "Content-Security-Policy", value: csp }]
+    : []),
 ];
 
 const nextConfig: NextConfig = {
