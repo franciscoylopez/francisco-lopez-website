@@ -1,6 +1,9 @@
+import Image from "next/image";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { Rich } from "./rich";
 
 type SobreMiDict = Dictionary["sobreMi"];
 
@@ -16,11 +19,11 @@ const PROSE = "max-w-[var(--measure)]";
 // titular → prosa centrada → dos aficiones en zigzag con foto 4:5 enmarcada por un
 // recurso de marca (panel pastel desplazado) → cierre con CTA a Contacto.
 //
-// IMÁGENES (diseño→dev): hoy van como placeholders con el ratio correcto. La
-// selección y el recorte de las fotos reales (varias versiones por escena) se
-// resuelven en la fase de assets; cada hueco marca dónde entra el <Image> y su
-// `photoAlt` ya vive en el diccionario. No va en RelatedPages: "Sobre mí" no es
-// página del sistema de diseño; se enlaza desde el nav (P36).
+// IMÁGENES: fotos reales en public/img (WebP), servidas con next/image (fill +
+// object-cover), mismo patrón que el Hero. Apertura landscape (retrato editorial,
+// sujeto a la derecha → object-position lo mantiene); repostería y montaña
+// recortadas a 4:5. El `photoAlt` de cada una vive en el diccionario. No va en
+// RelatedPages: "Sobre mí" no es página del sistema de diseño; se enlaza desde el nav.
 export function SobreMi({
   dict,
   breadcrumb,
@@ -46,15 +49,19 @@ export function SobreMi({
           </div>
 
           {/* Apertura: cita-firma sobre la foto. El scrim garantiza contraste del
-              texto sobre cualquier foto; en móvil se oculta la 2ª frase. El <Image>
-              real (Francisco-Lopez-Sobre-Mi, versión TBD) sustituye al placeholder. */}
+              texto sobre la foto; en móvil se oculta la 2ª frase. object-position
+              mantiene la cara (arriba) y al sujeto (a la derecha) al recortar. */}
           <figure
             data-reveal
-            className="relative m-0 overflow-hidden rounded-[var(--radius-lg)]"
+            className="relative m-0 h-[clamp(15rem,42vw,32rem)] overflow-hidden rounded-[var(--radius-lg)]"
           >
-            <ImagePlaceholder
+            <Image
+              src="/img/francisco-sobre-mi-apertura.webp"
               alt={t.photoAlt}
-              className="h-[clamp(15rem,42vw,32rem)] w-full"
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-[62%_28%]"
             />
             <div
               aria-hidden
@@ -118,6 +125,7 @@ export function SobreMi({
         accent="cyan"
         heading={t.baking.heading}
         photoAlt={t.baking.photoAlt}
+        photoSrc="/img/francisco-reposteria-4x5.webp"
       >
         <Body paragraphs={t.baking.body} />
         <p className="border-border text-foreground/85 my-6 border-l-2 pl-5 text-[1.0625rem] leading-[1.7] italic">
@@ -132,6 +140,7 @@ export function SobreMi({
         accent="purple"
         heading={t.mountain.heading}
         photoAlt={t.mountain.photoAlt}
+        photoSrc="/img/francisco-montana-4x5.webp"
       >
         <Body paragraphs={t.mountain.body} />
       </HobbyBlock>
@@ -179,50 +188,6 @@ function Body({ paragraphs }: { paragraphs: readonly string[] }) {
   );
 }
 
-// Mini-render de markup inline para el copy del diccionario: **negrita**, *cursiva*
-// y [texto](url). Plano (sin anidamiento), suficiente para el énfasis editorial de
-// esta página, y mantiene el copy como strings en el diccionario (fuente de verdad).
-const RICH_TOKEN = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g;
-
-function Rich({ text }: { text: string }) {
-  const parts = text.split(RICH_TOKEN).filter((p) => p !== "");
-  return (
-    <>
-      {parts.map((part, i) => {
-        const link = /^\[([^\]]+)\]\(([^)]+)\)$/.exec(part);
-        if (link) {
-          const label = link[1] ?? "";
-          const href = link[2] ?? "";
-          const external = /^https?:\/\//.test(href);
-          return (
-            <a
-              key={i}
-              href={href}
-              {...(external
-                ? { target: "_blank", rel: "noopener noreferrer" }
-                : {})}
-              className="text-primary underline underline-offset-4 hover:no-underline"
-            >
-              {label}
-            </a>
-          );
-        }
-        if (part.startsWith("**") && part.endsWith("**")) {
-          return (
-            <strong key={i} className="text-foreground font-semibold">
-              {part.slice(2, -2)}
-            </strong>
-          );
-        }
-        if (part.startsWith("*") && part.endsWith("*")) {
-          return <em key={i}>{part.slice(1, -1)}</em>;
-        }
-        return <span key={i}>{part}</span>;
-      })}
-    </>
-  );
-}
-
 // Bloque de afición: prosa + foto 4:5, alternando lado en desktop (zigzag). En
 // móvil la imagen va arriba y el texto debajo. La foto se enmarca con un panel de
 // marca desplazado detrás (decorativo: pastel cian/morado según BRAND, sin tocar
@@ -232,12 +197,14 @@ function HobbyBlock({
   accent,
   heading,
   photoAlt,
+  photoSrc,
   children,
 }: {
   imageSide: "left" | "right";
   accent: "cyan" | "purple";
   heading: string;
   photoAlt: string;
+  photoSrc: string;
   children: React.ReactNode;
 }) {
   const textOrder = imageSide === "right" ? "md:order-1" : "md:order-2";
@@ -263,51 +230,19 @@ function HobbyBlock({
                 aria-hidden
                 className={`absolute inset-0 rounded-[var(--radius-lg)] ${accentColor} ${accentOffset}`}
               />
-              <ImagePlaceholder
-                alt={photoAlt}
-                className="border-border relative aspect-[4/5] w-full rounded-[var(--radius-lg)] border"
-              />
+              <div className="border-border relative aspect-[4/5] w-full overflow-hidden rounded-[var(--radius-lg)] border">
+                <Image
+                  src={photoSrc}
+                  alt={photoAlt}
+                  fill
+                  sizes="(max-width: 767px) 100vw, 384px"
+                  className="object-cover"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
     </section>
-  );
-}
-
-// Hueco de imagen mientras no hay foto elegida. Caja neutra al ratio correcto con
-// un glifo decorativo; cuando llegue el asset se sustituye por <Image fill> y este
-// componente desaparece. `alt` viaja para no perder la alternativa textual.
-function ImagePlaceholder({
-  alt,
-  className = "",
-  ...rest
-}: {
-  alt: string;
-  className?: string;
-} & React.HTMLAttributes<HTMLDivElement>) {
-  return (
-    <div
-      role="img"
-      aria-label={alt}
-      className={`bg-muted text-muted-foreground/40 flex items-center justify-center overflow-hidden ${className}`}
-      {...rest}
-    >
-      <svg
-        width="48"
-        height="48"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <rect x="3" y="3" width="18" height="18" rx="2" />
-        <circle cx="9" cy="9" r="2" />
-        <path d="m21 15-3.5-3.5a2 2 0 0 0-2.8 0L5 21" />
-      </svg>
-    </div>
   );
 }
