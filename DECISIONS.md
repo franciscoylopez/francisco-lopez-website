@@ -556,3 +556,29 @@ asimetría es deliberada—. Se evaluó y se **mantuvo el doble split** (Nav + "
 404: poner el logo del Nav en flat solo para esta página era sobreingeniería. QA: axe 0
 violaciones claro/oscuro, HTTP 404 real ES/EN. El `[lang]/not-found.tsx` anidado (solo
 salta con `notFound()` explícito, hoy inexistente) queda como fallback minimalista.
+
+## D26 · Cabeceras de seguridad Fase 1; CSP diferida — 2026-08-02
+**Decisión.** `next.config.ts` sirve, en todas las rutas (`/:path*`), un conjunto de
+cabeceras de seguridad **triviales y sin riesgo** (Fase 1): `X-Content-Type-Options:
+nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: strict-origin-when-cross-origin`,
+`Permissions-Policy: camera=(), microphone=(), geolocation=()` y `Strict-Transport-
+Security: max-age=63072000; includeSubDomains`. El **HSTS va sin `preload`** a propósito:
+entrar en la lista de preload es difícil de revertir; se puede añadir más adelante.
+
+**La CSP (Content-Security-Policy) se difiere**, en dos escalones:
+- **«A+ barato»** (tarea propia, baja prioridad P37.9): allowlist de orígenes conocidos +
+  las directivas gratis y sin riesgo (`object-src 'none'`, `base-uri 'self'`,
+  `form-action 'self'`, `frame-ancestors 'none'`), manteniendo `'unsafe-inline'` en
+  `script-src`. Sube securityheaders.com de **A** a **A+** con protección real de bajo
+  coste, pero el `script-src` sigue flojo (honesto: eso es más insignia que protección).
+- **CSP estricta** (nonces por request, sin `'unsafe-inline'`): protección de XSS de
+  verdad, pero fuerza render dinámico (peaje de perf sobre el estático/SSG) y arriesga
+  romper GTM/GA4 + los scripts inline (consent-init, JSON-LD). Se retoma **cuando exista
+  contenido dinámico/con input**, en particular la IA conversacional de V3.
+
+**Contexto.** El beneficio *práctico* de la CSP hoy es casi nulo: portfolio estático, sin
+auth, sin formularios, sin input no confiable al DOM (el único `dangerouslySetInnerHTML`
+es JSON-LD con datos estáticos del diccionario) → no hay vector de XSS. La Fase 1 es el
+hueco más barato de cerrar y coherente con el argumento de rigor (PRD §1); la CSP estricta
+sería sobreingeniería para el estado actual. Decisión de alcance tomada con Francisco tras
+ver que securityheaders.com daba **A** con el único aviso siendo la CSP ausente.
