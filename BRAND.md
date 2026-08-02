@@ -111,6 +111,6 @@ Todos los tamaños son **altura visible del símbolo** (borde superior del círc
 
 ### Dónde respira la marca
 
-El `split` es la firma y solo existe a partir de 48px, así que tiene **un** sitio en la web, no varios: el nav al cargar la página, above the fold. Al hacer scroll se comprime a `flat` y desaparece hasta que se vuelve arriba.
+El `split` es la firma y solo existe a partir de 48px, así que aparece en **sitios contados** —momentos de marca deliberados—, no en cualquier parte. Hoy son dos, ambos above the fold: (1) el **nav al cargar** la página (al hacer scroll se comprime a `flat` y desaparece hasta que se vuelve arriba), y (2) el **"0" del "404"** en la página de error 404, donde el split "florece" en la carga con una animación CSS (el número *es* la firma; ver `DECISIONS.md` D25). El matiz de la regla no es "una sola vez", sino "solo donde es un gesto consciente": por eso el nav *y* el "0" pueden convivir en el 404 sin que sea repetición.
 
 Se evaluó y **se descartó** duplicarlo en el footer (2026-07-21): un `split` de 64px ahí dejaba el logo flotando con ~246px de vacío a su derecha, desconectaba el copyright y rompía la fila única de baja densidad. Además, si el nav ya abre con la firma, cerrar con ella es repetición, no refuerzo.

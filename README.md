@@ -30,6 +30,11 @@ y con un sistema de marca propio.
 - **CV en PDF bilingüe** (ES/EN) generado por código con identidad de marca y texto
   seleccionable (ATS). Los hechos (roles, fechas, formación, toolkit) se leen del
   diccionario i18n; el CV solo autora el texto rico. `npm run cv` regenera ambos.
+- **Páginas de error 404 y 500** con marca e i18n: el 404 con el "0" del número
+  convertido en el círculo del split, que "florece" al cargar (CSS, reduced-motion safe).
+- **Seguridad y calidad**: cabeceras de seguridad (nosniff, X-Frame-Options,
+  Referrer-Policy, Permissions-Policy, HSTS) y **CI** en cada PR (GitHub Actions:
+  typecheck + lint + build) — nada que no compile entra en `main`.
 
 ## Desarrollo
 
@@ -55,9 +60,11 @@ npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
 ## Estructura
 
 ```
-app/[lang]/            Rutas por locale (home, sobre-mi, brand-kit, design-system, accesibilidad, cookies) + layout y diccionarios
+app/[lang]/            Rutas por locale (home, sobre-mi, brand-kit, design-system, accesibilidad, cookies) + layout, diccionarios, not-found/error
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
+app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
+.github/workflows/     CI (GitHub Actions): typecheck + lint + build en cada PR
 components/site/        Secciones de la web (nav, hero, footer, breadcrumb, banner de cookies, páginas…)
 components/analytics/   GTM + Consent Mode (init) — gateado a producción
 components/ui/          Primitivas (logo, button)
@@ -86,4 +93,5 @@ El "porqué" del proyecto vive en documentos dedicados:
 ## Despliegue
 
 Vercel, con **previews por rama/PR** y `main` = producción (`franciscolopez.es`).
-Flujo: ramas cortas → PR → merge; tag `vX.Y.Z` por release.
+Flujo: ramas cortas → PR → merge; tag `vX.Y.Z` por release. Cada PR pasa por **CI**
+(GitHub Actions): typecheck + lint + build.
