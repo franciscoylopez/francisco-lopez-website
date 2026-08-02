@@ -505,3 +505,35 @@ no sobre `next dev`. Registrado a raíz de esta sesión:
 accesibilidad que declara AA sin haberlo verificado sería justo lo contrario. La disciplina
 —medir en ambos temas, reconciliar herramientas, declarar solo lo verificado— es el
 contenido de la página tanto como el texto.
+
+## D25 · Páginas 404/error de marca con `global-not-found` + `global-error` (root layout dinámico) — 2026-08-02
+**Decisión.** El 404 y el error boundary de marca se sirven con las convenciones
+**globales** de Next —`app/global-not-found.tsx` (flag `experimental.globalNotFound`)
+y `app/global-error.tsx`—, no solo con `not-found.tsx`/`error.tsx` anidados bajo
+`[lang]`. Ambas globales son **autónomas**: definen su propio `<html>/<body>`, importan
+`globals.css` y las fuentes (`next/font`), y fijan el tema con un script inline mínimo
+(réplica del ThemeProvider, que aquí no corre). El copy vive en un módulo tipado propio
+`lib/i18n/system-messages.ts` (ES fuente + EN, precedente D22), consumido por un shell
+presentacional puro `components/site/system-message.tsx` reutilizable en servidor y
+cliente. El proxy fija una cabecera `x-locale` que lee `not-found.tsx`/`global-not-found`
+(server, sin `params`); el error boundary (cliente) deduce el locale con `usePathname`.
+Se mantienen además `app/[lang]/not-found.tsx` y `app/[lang]/error.tsx` (usa el prop
+`unstable_retry`, v16.2) para `notFound()`/errores de cliente dentro del layout con tema.
+
+**Contexto — por qué las globales y no solo las anidadas.** El root layout de este sitio
+es un **segmento dinámico de nivel superior** (`app/[lang]/layout.tsx`); no hay
+`app/layout.tsx`. La propia doc de Next (`not-found.md`, `error.md`) señala este caso
+como aquel en el que **no se puede componer un 404/500 consistente** con
+`layout.js`+`not-found.js`/`error.js` anidados, y recomienda `global-not-found` /
+`global-error`. Verificado empíricamente: una URL desconocida o un throw en SSR se
+renderizaban con el shell por defecto de Next (`<html id="__next_error__">`, sin marca)
+pese a existir los archivos anidados. Con las globales, el 404 se sirve **con marca en el
+propio SSR** (notFound controlado) y el 500 **se recupera a la versión de marca al
+hidratar** (un throw durante el streaming SSR emite el fallback por defecto y el error
+boundary de cliente toma el relevo). QA: axe 0 violaciones en claro y oscuro (404 y
+error), 404 real (HTTP 404) en ES y EN, `<html lang>` correcto por locale.
+
+**Nota.** Carpetas con prefijo `_` son privadas en Next (excluidas del enrutado): un
+nombre de ruta de prueba como `__boom` da 404 por convención, no por bug. Detalle menor
+pendiente: en `global-error` el `<title>` no siempre sustituye al del documento previo
+(cosmético, ruta de 500 poco frecuente).
