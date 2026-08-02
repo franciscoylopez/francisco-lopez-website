@@ -113,5 +113,5 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 - **Optimización continua**: Microsoft Clarity (cualitativo), más métricas, marca externa
   (firma de email, header de LinkedIn), rediseño de assets.
 
-Las mejoras técnicas pendientes (tests automatizados, escaneo de dependencias, CSP, etc.)
+Las mejoras técnicas pendientes (tests automatizados, CSP estricta con nonces, etc.)
 viven en el tablero de tareas; el porqué de cada decisión de producto, en **[PRD-Historical.md](./PRD-Historical.md)**.
