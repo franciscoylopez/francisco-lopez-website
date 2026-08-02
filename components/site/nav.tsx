@@ -11,6 +11,7 @@ import { cvPath, type Locale } from "@/lib/i18n/config";
 export type NavDict = {
   homeAria: string;
   downloadCv: string;
+  sobreMi: string;
   menu: string;
   toggleTheme: string;
   switchLanguage: string;
@@ -37,6 +38,7 @@ export function Nav({
   // cvPath). Las otras apariciones del CV en el home (CTA de Trayectoria y
   // Contacto) lo resuelven igual desde la página.
   const cvHref = cvPath(lang);
+  const sobreMiHref = `${lang === "es" ? "" : `/${lang}`}/sobre-mi`;
   const { resolvedTheme, setTheme } = useTheme();
   const pathname = usePathname() || "/";
   const [p, setP] = useState(0);
@@ -52,6 +54,7 @@ export function Nav({
   const subpath = pathname.replace(/^\/(es|en)(?=\/|$)/, "") || "/";
   const altHref =
     lang === "en" ? subpath : subpath === "/" ? "/en" : `/en${subpath}`;
+  const isSobreMi = subpath === "/sobre-mi";
 
   useEffect(() => {
     const reduce = window.matchMedia?.(
@@ -136,6 +139,13 @@ export function Nav({
             {dict.downloadCv}
           </a>
           <a
+            href={sobreMiHref}
+            aria-current={isSobreMi ? "page" : undefined}
+            className="text-foreground hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap underline-offset-4 hover:underline focus-visible:underline aria-[current=page]:underline sm:inline-flex"
+          >
+            {dict.sobreMi}
+          </a>
+          <a
             href={altHref}
             hrefLang={lang === "en" ? "es" : "en"}
             aria-label={dict.switchLanguage}
@@ -174,6 +184,14 @@ export function Nav({
               className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-semibold underline-offset-4 hover:underline focus-visible:underline"
             >
               {dict.downloadCv}
+            </a>
+            <a
+              href={sobreMiHref}
+              aria-current={isSobreMi ? "page" : undefined}
+              onClick={() => setMenuOpen(false)}
+              className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-medium underline-offset-4 hover:underline focus-visible:underline aria-[current=page]:underline"
+            >
+              {dict.sobreMi}
             </a>
             <a
               href={altHref}

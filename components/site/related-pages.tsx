@@ -4,14 +4,13 @@ export type RelatedDict = Dictionary["related"];
 
 type PageKey = "brandKit" | "designSystem" | "accesibilidad";
 
-// Orden canónico del sistema. Accesibilidad todavía no existe como página
-// (path: null) → su tarjeta sale en "Próximamente", apagada y sin enlace. Al
-// construirla, basta darle su ruta aquí; las otras dos páginas no se tocan
-// (una sola fuente para la relación).
+// Orden canónico del sistema. Las tres páginas existen; cada una enlaza a las otras
+// dos desde una sola fuente (este array). Si alguna dejara de existir, `path: null`
+// la devolvería al estado "Próximamente" sin tocar las demás.
 const PAGES: { key: PageKey; path: string | null }[] = [
   { key: "brandKit", path: "/brand-kit" },
   { key: "designSystem", path: "/design-system" },
-  { key: "accesibilidad", path: null },
+  { key: "accesibilidad", path: "/accesibilidad" },
 ];
 
 const LINK_CARD =

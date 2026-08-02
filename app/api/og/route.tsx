@@ -37,7 +37,13 @@ function splitLogoDataUri() {
 }
 
 type Lang = "es" | "en";
-type Card = "home" | "brand-kit" | "design-system" | "cookies" | "sobre-mi";
+type Card =
+  | "home"
+  | "brand-kit"
+  | "design-system"
+  | "cookies"
+  | "sobre-mi"
+  | "accesibilidad";
 
 const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
   home: {
@@ -65,6 +71,10 @@ const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
   "sobre-mi": {
     es: { title: "Sobre mí", kicker: "Quién hay detrás" },
     en: { title: "About me", kicker: "The person behind" },
+  },
+  accesibilidad: {
+    es: { title: "Accesibilidad", kicker: "Compromiso" },
+    en: { title: "Accessibility", kicker: "Commitment" },
   },
 };
 
@@ -269,7 +279,8 @@ export function GET(request: NextRequest) {
     cardParam === "brand-kit" ||
     cardParam === "design-system" ||
     cardParam === "cookies" ||
-    cardParam === "sobre-mi"
+    cardParam === "sobre-mi" ||
+    cardParam === "accesibilidad"
       ? cardParam
       : "home";
   const lang: Lang = searchParams.get("lang") === "en" ? "en" : "es";
