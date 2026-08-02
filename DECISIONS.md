@@ -642,3 +642,37 @@ expansion` (high, dev-only, toolchain de ESLint) también queda para Dependabot.
 riesgo *práctico* de sharp hoy es bajo (solo procesa imágenes propias, cero input no
 confiable), pero es un *high* barato de cerrar, y el escaneo automatizado evita que la deuda
 de deps vuelva a acumularse en silencio.
+
+## D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda — 2026-08-03
+**Decisión.** Para bajar el coste de tokens por sesión, `CLAUDE.md` solo `@`-importa las
+**reglas activas**; el registro histórico y el detalle enciclopédico se consultan **a
+demanda** (Read/Grep):
+- **`DECISIONS.md` se de-importa** de `CLAUDE.md` (era `@`-importado). En su lugar, `CLAUDE.md`
+  lleva un **índice de una línea por D-entry** (~400 tok en vez de ~11.800) que preserva la
+  señal «esta decisión existe» para saber cuándo hacerle `grep`. Convención: antes de tocar un
+  subsistema con ADR, `grep`/Read de su D-entry. `DECISIONS.md` no cambia de contenido; sigue
+  siendo la fuente de verdad en el repo. **Al añadir una D-entry nueva, añadir su línea al
+  índice de `CLAUDE.md`.**
+- **`BRAND.md` se parte**: el core de reglas (dos capas de color, tipografía, tokens, a11y,
+  modo oscuro, regla mínima del split) sigue `@`-importado; la **enciclopedia del logo** (tabla
+  de uso, umbrales, proporciones, transición del nav, rationale fechado) pasa a **`BRAND-logo.md`**
+  (nuevo, no importado, consultado al tocar el logo).
+- **Tabla de modelo por tarea** en `CLAUDE.md` (Opus = criterio/diseño; Sonnet = mecánico/docs/
+  tablero; Haiku = trivial) + convención de avisar a nivel de bloque, no de micro-tarea.
+- **Higiene de sesión** documentada: lecturas dirigidas (`offset`/`limit`, `grep` del D-número),
+  una sesión por bloque + `/clear` entre tareas, concisión por defecto, disciplina de alcance.
+
+**Contexto.** Medido: los docs `@`-importados sumaban ~19.300 tok fijos por sesión, con
+`DECISIONS.md` (~11.800, append-only) como el 60% y creciendo sin límite — el mismo coste que
+**D10** evitó para el PRD, reintroducido en otro archivo. `PRD-Historical.md` (~30.800 tok) ya
+hacía lo correcto (no importado). El coste se paga al arrancar cada sesión y al llenar la
+ventana de contexto (dispara antes la summarización). El recorte lleva el fijo a ~6.000 tok
+**sin perder reglas activas** (las reglas viven en `CLAUDE.md`/`BRAND.md`/`PRD-Live.md`; solo la
+*historia/detalle* se mueve a demanda).
+
+**Descartado (evaluado con Francisco).** Indexación MCP (CodeGraph/GitNexus/Obsidian) —
+resuelve un problema de código grande que este repo no tiene; Grep/Glob + memoria ya son
+indexación-lite. Caveman (estilo telegráfico) — se adopta el principio de concisión, no la
+herramienta. Ponytail (gating de alcance) — ya existe como convención (memoria + plan mode).
+Las tres son la versión pesada de algo cuya versión ligera ya está en el flujo; añadirlas sería
+sobreingeniería a esta escala.
