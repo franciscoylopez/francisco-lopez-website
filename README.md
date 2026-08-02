@@ -55,7 +55,7 @@ npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
 ## Estructura
 
 ```
-app/[lang]/            Rutas por locale (home, brand-kit, design-system, cookies) + layout y diccionarios
+app/[lang]/            Rutas por locale (home, sobre-mi, brand-kit, design-system, accesibilidad, cookies) + layout y diccionarios
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 components/site/        Secciones de la web (nav, hero, footer, breadcrumb, banner de cookies, páginas…)

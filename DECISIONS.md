@@ -352,6 +352,12 @@ corresponde por tipo" (D14). La señal correcta es HTML semántico, ya presente.
 componente y un bloque de diccionario, no copias por página — que es justo lo que
 había divergido en las menciones anteriores.
 
+**Realizado 2026-08-02.** La página de **Accesibilidad ya existe**: su ruta entra en el
+array `PAGES` de `related-pages.tsx` (`accesibilidad → /accesibilidad`) y renderiza
+`<RelatedPages current="accesibilidad">`. Con ello **las tres hermanas se enlazan entre
+sí** y se retira el tile «Próximamente». El matiz de alcance (criterio interno del Design
+System vs declaración pública) se materializa en la propia página de Accesibilidad (D24).
+
 ## D22 · CV en PDF generado desde el diccionario (react-pdf, ATS) — 2026-07-29
 **Decisión.** El CV con identidad propia (tarea V2) se **genera por código desde una
 sola fuente**, no se diseña a mano: contenido del diccionario i18n (bloque `cv` nuevo)
@@ -464,3 +470,38 @@ y guardar HTML en el JSON abriría la puerta a inyección y a `dangerouslySetInn
 markup ligero mantiene el copy en el diccionario, tipado y revisable ES↔EN (D20), y el
 render controla el estilo. Si otra sección lo necesita, se promueve `Rich` a un módulo
 compartido (`lib/` o `components/site/`); hoy vive co-ubicado con su único consumidor.
+
+**Promovido 2026-08-02.** `Rich` se movió a `components/site/rich.tsx` (módulo compartido)
+al aparecer un segundo contexto que lo pedía. Curiosidad: la página de Accesibilidad, que
+motivó la promoción, acabó **sin** usarlo (su rediseño a tarjetas no lleva markup inline),
+así que hoy `sobre-mi.tsx` sigue siendo el único consumidor — pero el helper ya vive en su
+sitio para el siguiente que lo necesite, sin duplicar.
+
+## D24 · Página de Accesibilidad: declaración pública verificada, no autoevaluación — 2026-08-02
+**Decisión.** La página de Accesibilidad es la **declaración pública de conformidad** del
+sitio, y **solo declara lo que está medido**: WCAG 2.2 **AA cumplido** + sistema de color
+en **AAA** (con cifras de contraste reales), las 8 medidas del checklist con su criterio
+WCAG, las herramientas de verificación (axe/Lighthouse) y el canal para **reportar una
+barrera**. La cifra/fecha de conformidad se fija **tras el QA de accesibilidad**, nunca de
+memoria. Es el contrapunto público del criterio interno de la sección 08 del Design System
+(la frontera que anticipaba D21). Visualmente es **hermana** de Brand Kit / Design System
+(hero + fila de datos, secciones numeradas, encabezado a la izquierda y contenido a ancho
+completo), no una página de prosa a media columna (D21/D1: reusar el sistema).
+
+**Metodología de verificación (estándar del proyecto, afinado).** El gate de a11y es
+**axe-core en claro y oscuro** + **Lighthouse** sobre **build de producción** (D8/D11/D13),
+no sobre `next dev`. Registrado a raíz de esta sesión:
+- **axe es la autoridad**; WAVE sirve como *spot-check* complementario (aporta señales que
+  axe no da, p. ej. «empty form label»), pero sus avisos se reconcilian contra axe, no se
+  aplican a ciegas.
+- **WCAG Checker (wcag-checker-app) descartado**: en una web JS-heavy capturó la página de
+  error de Next (`__next_error__`) y reportó fallos de esa página, no del sitio. No fiable
+  para SPAs/SSR; no se usa.
+- **El `is-crawlable` de Lighthouse baja el SEO fuera de producción** (robots pone `noindex`
+  en preview/local por D13); es artefacto conocido, en producción da 100. No confundir con
+  un defecto.
+
+**Contexto.** El propósito del sitio es demostrar criterio (PRD §1): una página de
+accesibilidad que declara AA sin haberlo verificado sería justo lo contrario. La disciplina
+—medir en ambos temas, reconciliar herramientas, declarar solo lo verificado— es el
+contenido de la página tanto como el texto.

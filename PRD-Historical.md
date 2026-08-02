@@ -860,6 +860,24 @@ Primera pieza del carril de contenido que sale adelante: se desbloqueó y constr
 
 ---
 
+## 28. Publicación de Sobre mí + Accesibilidad (2026-08-02)
+
+Se cierra el carril de contenido V2: **Sobre mí (con fotos reales) y la página de Accesibilidad salen a producción** (`franciscolopez.es`, tag v1.2.0, PR #34).
+
+**Metodología *audit-first* para Accesibilidad.** Antes de escribir, se corrió una **auditoría verificada** de la web en producción: **axe-core en claro y oscuro** (0 violaciones en home y páginas internas) reconciliada con el WAVE de Francisco. Dos hallazgos: (1) el **WCAG Checker** que había usado era inválido —capturó la página de error de Next (`__next_error__`), no el sitio—, descartado; (2) WAVE marcaba 2 «empty form label» reales: los **toggles del banner de consentimiento**, cuyo `<label>` no tenía texto (nombre accesible sí, vía `aria-labelledby`; por eso axe lo aprobaba). Se corrigió antes de declarar conformidad. La referencia de Francisco (la página de accesibilidad del design system de Banc Sabadell, *Galatea*) resultó ser **guidelines de sistema, no una declaración legal**: se adaptó su espíritu (compromiso + principios WCAG + medidas por criterio) al caso propio.
+
+**Página de Accesibilidad.** Es la **declaración pública de conformidad** —contrapunto del criterio interno de la sección 08 del Design System (D21)—: nivel **WCAG 2.2 AA cumplido**, sistema de color en **AAA** (medido), las 8 medidas del checklist con su criterio WCAG, cómo se verifica (axe/Lighthouse) y **cómo reportar una barrera** (email). La cifra/fecha de conformidad se fija **tras el QA**, no de memoria. Primer intento en formato prosa a media columna (tipo Cookies); **rediseñado** a petición de Francisco para alinearlo con sus hermanas (hero con composición a la derecha + fila de datos, secciones numeradas 01–05, encabezado a la izquierda y contenido a ancho completo). La composición del hero es **autorreferencial** (tarjeta de contraste AAA, checklist, muestra del anillo de foco 2px), decorativa.
+
+**Sobre mí — fotos.** Las tres escenas dejan de ser placeholders: Francisco eligió las fotos, procesadas a **WebP con sharp** (de ~2 MB PNG a 65–131 KB) y servidas con `next/image` (apertura landscape con `object-position`, repostería/montaña en recorte 4:5).
+
+**Arquitectura de navegación.** Decisión de IA: **Sobre mí al nav** (contenido a descubrir, tras «Descargar CV», con `aria-current`) y **Accesibilidad al footer** (página de confianza/utilidad, junto a Brand Kit/Design System/Cookies). Las tres páginas de sistema ya se enlazan entre sí (RelatedPages; retirado el tile «Próximamente»).
+
+**QA (build de producción).** Ambas páginas: Lighthouse desktop 100/100/100, móvil Perf 93–96 / A11y 100 / BP 100; axe 0 violaciones en claro y oscuro. El SEO local bajo es el artefacto `is-crawlable` (robots bloquea indexación fuera de producción, D13); en prod, 100.
+
+**Estado al cerrar**: carril de contenido V2 cerrado (Sobre mí + Accesibilidad en vivo). El carril de build sigue en *Cimientos técnicos* (P30.x). El `sprint-review` se difiere a cuando cierre Cimientos, para hacer **una** revisión de codebase que lo cubra todo (no dos solapadas).
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

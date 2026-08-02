@@ -37,15 +37,16 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
 
 V1 lanzada. En vivo:
 - **Home** (una sola página), en **ES (raíz `/`) y EN (`/en`)**.
-- Páginas propias: **Brand Kit**, **Design System**, **Política de cookies**.
+- Páginas propias: **Sobre mí**, **Brand Kit**, **Design System**, **Accesibilidad**,
+  **Política de cookies**.
 - **CV en PDF bilingüe** (ES/EN) descargable, con identidad de marca, generado por código.
 - **SEO técnico + Open Graph** por página, **medición** (GA4/GTM + consentimiento RGPD),
   **dominio propio**.
 
 ### Estructura de la home (orden actual)
 
-1. **Nav sticky** — logo (split→flat al scroll), Descargar CV, toggle claro/oscuro; en
-   móvil CV colapsa tras menú.
+1. **Nav sticky** — logo (split→flat al scroll), Descargar CV, Sobre mí, toggle
+   claro/oscuro; en móvil CV y Sobre mí colapsan tras menú.
 2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio.
 3. **Hitos** — 5 reconocimientos, cronológico descendente; chip "Exit" en el de TheTool.
 4. **Cómo trabajo** — 6 etapas: Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica.
@@ -54,7 +55,7 @@ V1 lanzada. En vivo:
 7. **Toolkit** — 4 categorías (Usuarios / Gestión y Documentación / Diseño y prototipado / Desarrollo) en pestañas, logos reales monocromo.
 8. **Formación** — Producto + Marketing.
 9. **Contacto** — email, teléfono, LinkedIn, CV (todos enlaces clicables).
-10. **Footer** — Brand Kit, Design System, LinkedIn.
+10. **Footer** — Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn.
 
 Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas.
 
@@ -95,10 +96,6 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 ## 9. Fuera del alcance actual (V2+)
 
-- Páginas **Sobre mí** y **Accesibilidad**. *(**Sobre mí**: contenido escrito y validado,
-  y la página ya **construida en código** — falta elegir/recortar las fotos reales y
-  enlazarla en el nav para publicarla; sigue V2. **Accesibilidad**: aún bloqueada por
-  contenido sin escribir.)*
 - **Deep-dive por experiencia** (comparte fuente de contenido con el CV).
 - **Contacto ampliada**.
 - **Traducción de contenido nuevo a EN** (la arquitectura i18n ya está; la traducción se
