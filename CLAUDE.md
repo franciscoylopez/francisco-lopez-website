@@ -1,7 +1,69 @@
 @AGENTS.md
 @BRAND.md
 @PRD-Live.md
-@DECISIONS.md
+
+# Eficiencia de sesión y arquitectura de contexto
+
+> **Principio rector: reglas → en contexto siempre; historia y detalle exhaustivo → a demanda (grep/Read).** Es la misma distinción que separa `PRD-Live.md` (`@`-importado) de `PRD-Historical.md` (a demanda). El coste de tokens de una sesión lo domina lo que se `@`-importa en cada arranque; por eso solo se precargan las **reglas activas**, no el registro histórico.
+
+## Régimen de docs (qué se carga y qué se consulta)
+
+- **`@`-importados (siempre en contexto):** `AGENTS.md`, `BRAND.md` (core de reglas), `PRD-Live.md`, y este `CLAUDE.md`.
+- **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), `BRAND-logo.md` (enciclopedia del logo).
+- **Convención de mitigación:** antes de tocar un subsistema con ADR, hacer `grep`/Read de su D-entry en `DECISIONS.md` — así no se pierde ninguna regla, solo deja de estar precargada. El índice de abajo dice qué D-entries existen.
+
+## Índice de `DECISIONS.md` (contenido a demanda, no cargado)
+
+- D1 · El diseño se traduce, no se copia (superado en V2+)
+- D2 · i18n nativo `app/[lang]`, ES sin prefijo + `/en`
+- D3 · Next 16 usa `proxy.ts`, no `middleware.ts`
+- D4 · Fuente única de tokens = `app/globals.css`; `brand-globals.css` borrado
+- D5 · Dark mode = `system` por defecto + toggle
+- D6 · shadcn ya integrado; componentes donde aporten a11y
+- D7 · Responsive en CSS, no en JS; Server Components por defecto
+- D8 · No funcionales: PageSpeed >90, desktop+mobile, AA→AAA
+- D9 · Alcance de V1 (home + Brand Kit + Design System + SEO/OG + medición + dominio)
+- D10 · Política de documentación de la fase de desarrollo
+- D11 · Andamiaje de calidad del build (i18n tipado, sin tests en V1)
+- D12 · Branching y releases (trunk-based, ramas cortas, tags `vX.Y.Z`)
+- D13 · Entornos y staging = Vercel Previews
+- D14 · Imágenes OG con `ImageResponse` bajo `/api/og`
+- D15 · SITE_URL estable en prod (`VERCEL_PROJECT_PRODUCTION_URL`)
+- D16 · V1 en producción (registro)
+- D17 · Analítica con `next/script`, gateada a prod, consent-ready (GTM)
+- D18 · Página de política de cookies como documento vivo
+- D19 · Optimización post-lanzamiento: GTM `lazyOnload` + SEO afinado
+- D20 · Revisión de copy ES↔EN — `es.json` fuente de verdad, EN no literal
+- D21 · Enlaces entre páginas hermanas con componente compartido
+- D22 · CV en PDF generado desde el diccionario (react-pdf, ATS)
+- D23 · Copy con énfasis inline vía render de markup ligero (`Rich`)
+- D24 · Página de Accesibilidad: declaración pública verificada
+- D25 · Páginas 404/error de marca (`global-not-found` + `global-error`)
+- D26 · Cabeceras de seguridad Fase 1; CSP «A+ barato» implementada
+- D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot
+- D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda
+
+*(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
+
+## Modelo por tarea
+
+Tabla de modelo por defecto según el trabajo. **Convención:** al empezar un bloque, coteja el tipo de tarea con esta tabla y **avisa a nivel de bloque/sesión** (no por micro-tarea) — «esto lo haría en Sonnet, ¿cambias con `/model`?». Cambiar de modelo mantiene la conversación. Es la palanca de menor ROI por fricción: mantenerla ligera, sin conmutación por micro-tarea.
+
+| Trabajo | Modelo |
+|---|---|
+| Diseño de sección, arquitectura, decisiones de marca/producto, sprint-review, copy ES↔EN (es criterio, D20) | **Opus** |
+| Tablero de Notion, cableado de componentes, refactors mecánicos, actualización de docs, regenerar CV | **Sonnet** |
+| Tareas triviales/repetitivas sin criterio | **Haiku** |
+
+Micro-tarea mecánica dentro de una sesión Opus → delegar a un subagente con modelo barato **solo si es "chunky"** (el arranque en frío no compensa para un one-liner).
+
+## Higiene de sesión
+
+- **Lecturas dirigidas:** preferir Grep / Read con `offset`/`limit` sobre leer archivos enteros — sobre todo `PRD-Historical.md` (~30k tok) y `DECISIONS.md`. Para una decisión concreta, `grep` del D-número, no cargar el archivo.
+- **Una sesión por bloque coherente;** `/clear` entre tareas no relacionadas para no arrastrar historial/tool-outputs acumulados.
+- **No re-leer tras editar** (el harness ya rastrea el estado del archivo).
+- **Concisión por defecto:** liderar con la respuesta, cortar preámbulos y recaps, tablas/bullets sobre párrafos; extenderse cuando se pida.
+- **Disciplina de alcance:** hacer lo pedido, **señalar** lo adyacente, dejar que Francisco decida — no construir de más.
 
 # Seguimiento de tareas (Notion)
 
@@ -40,7 +102,7 @@ Sin fechas, la **etapa en curso** es la fase temática de menor `Prioridad` con 
 
 Las **decisiones** técnicas viven en `DECISIONS.md` (fuente de verdad; hay copia espejo en Notion). Esto son las **reglas** que aplican al escribir código, no negociables salvo que una decisión nueva las cambie.
 
-- **Registro de decisiones.** Producto/diseño/alcance → **estado** en `PRD-Live.md` (spec viva, la que se `@`-importa; con espejo en Notion) y **registro histórico** de decisiones en `PRD-Historical.md` (solo repo). Técnica transversal → `DECISIONS.md` (solo repo; **sin espejo en Notion**). Convenciones → este archivo. `README.md` → entrada al repo (qué es, stack, arranque, estructura, mapa de docs), **mantenido al día conforme evoluciona el proyecto** — no es un one-off del lanzamiento: al añadir capacidades, o cambiar stack/estructura/scripts, se actualiza. "Por qué" del código → mensaje de commit/PR. Progreso por tarea → notas de Notion (actualiza `Estado` al empezar y al cerrar).
+- **Registro de decisiones.** Producto/diseño/alcance → **estado** en `PRD-Live.md` (spec viva, la que se `@`-importa; con espejo en Notion) y **registro histórico** de decisiones en `PRD-Historical.md` (solo repo). Técnica transversal → `DECISIONS.md` (solo repo; **sin espejo en Notion**; **consultado a demanda vía Read/Grep, NO `@`-importado** — ver «Eficiencia de sesión y arquitectura de contexto» arriba). Convenciones → este archivo. `README.md` → entrada al repo (qué es, stack, arranque, estructura, mapa de docs), **mantenido al día conforme evoluciona el proyecto** — no es un one-off del lanzamiento: al añadir capacidades, o cambiar stack/estructura/scripts, se actualiza. "Por qué" del código → mensaje de commit/PR. Progreso por tarea → notas de Notion (actualiza `Estado` al empezar y al cerrar).
 - **Cierre de sesión.** Cuando Francisco indique que se cierra la sesión ("cerramos sesión por ahora", "lo dejamos por hoy" o similar), invoca el skill `close-session`: revisa qué documentación toca actualizar y hazlo — `PRD-Live.md` (+ su espejo en Notion), `PRD-Historical.md` y `DECISIONS.md` (solo repo), `README.md`, el tablero de tareas y, si aplica, `CLAUDE.md`/`BRAND.md`. Es la red de seguridad para que nada quede sin documentar.
 - **i18n desde la primera línea.** Cero strings hardcodeados: todo texto sale del diccionario tipado. Locale en `app/[lang]/`, ES sin prefijo (`/`), EN en `/en`. Enrutado en `proxy.ts` (Next 16), no `middleware.ts`. Nombrar assets con locale cuando aplique. **`es.json` es la fuente de verdad del copy; el EN se revisa contra el ES (no traducción literal)** — y, como regla de redacción de ambos, el `kicker`/`eyebrow` de una sección no repite su título (ej. no "Design system / Design System").
 - **Server por defecto.** `"use client"` solo en islas interactivas (nav, reveals, contadores, tabs, toggle de tema, preview de dispositivo). Todo lo demás, Server Component.

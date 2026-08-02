@@ -87,7 +87,8 @@ El "porqué" del proyecto vive en documentos dedicados:
 - **[PRD-Live.md](./PRD-Live.md)** — spec viva: qué es el producto hoy y qué cumple.
 - **[PRD-Historical.md](./PRD-Historical.md)** — registro histórico de decisiones de producto/diseño/alcance (el "por qué").
 - **[DECISIONS.md](./DECISIONS.md)** — decisiones técnicas del build (ADR-lite).
-- **[BRAND.md](./BRAND.md)** — sistema de marca (color, tipografía, logo).
+- **[BRAND.md](./BRAND.md)** — sistema de marca: reglas siempre activas (color, tipografía, tokens, a11y).
+- **[BRAND-logo.md](./BRAND-logo.md)** — apéndice de marca: enciclopedia del logo y la firma split (referencia a demanda).
 - **[CLAUDE.md](./CLAUDE.md)** — convenciones de código (i18n, tokens, a11y, SEO).
 - **[AGENTS.md](./AGENTS.md)** — aviso: este Next tiene breaking changes; leer los
   docs del paquete antes de tocar APIs.
