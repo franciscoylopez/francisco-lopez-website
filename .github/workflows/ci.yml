@@ -1,0 +1,42 @@
+name: CI
+
+# Gate de calidad en cada PR a main: typecheck + lint + build. Hoy nada bloquea el
+# merge salvo el preview de Vercel (que no es un gate); esto impide meter a main
+# código que no compila o no pasa el linter. Coherente con el argumento de rigor
+# técnico del sitio (PRD §1).
+
+on:
+  pull_request:
+    branches: [main]
+  # También en push directo a main como red de seguridad (hotfixes, merges de otras vías).
+  push:
+    branches: [main]
+
+# Un push nuevo a la misma rama cancela el run anterior en curso.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: typecheck · lint · build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build
