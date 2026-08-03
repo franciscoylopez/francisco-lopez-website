@@ -801,3 +801,32 @@ etiqueta, no asumir que heredarlo es automático.
 **Verificación.** PR #68 + #69 (CSP) y PR #70 (documentación de cookies) mergeados a
 `main`. Confirmado en `franciscolopez.es`: sin violaciones de CSP, Clarity gateado a
 consentimiento, PageSpeed Prácticas recomendadas en 100.
+
+## D33 · `/llms.txt` — un solo archivo, en español, generado desde el diccionario (P37.5) — 2026-08-03
+**Decisión.** Se implementa `app/llms.txt/route.ts` (Route Handler, patrón `app/rss.xml/route.ts`
+de la propia documentación de Next: carpeta con punto literal en el nombre → sirve en
+`/llms.txt`). El `proxy.ts` ya excluye cualquier ruta con extensión de archivo (D3), así
+que no necesita gating de locale ni tocar el matcher. `export const dynamic =
+"force-static"` porque el contenido no depende de la request — se prerenderiza en build,
+igual que `sitemap.ts`.
+
+**Un solo archivo, no uno por locale.** llms.txt (convención emergente de llmstxt.org, no
+un estándar ratificado) no tiene mecanismo de negociación de idioma como el hreflang del
+sitemap. Un único `/llms.txt` en español —el locale por defecto sin prefijo (D2)— con
+enlaces `(EN)` a la versión inglesa de cada página evita la complejidad de rutas
+por-locale para una convención de adopción incierta.
+
+**Generado desde la fuente, no copiado a mano.** El contenido (títulos/descripciones de
+página, párrafo de posicionamiento, trayectoria de producto, contacto) se lee
+directamente de `es.json` (incluido `contacto.intro`, el mismo texto de cierre que usa
+la franja-CTA de la home — ver D29), `lib/contact.ts`, `lib/site.ts` y
+`lib/i18n/config.ts` (`cvPath`) — la única prosa propia del archivo es el conector del
+exit de TheTool. Así el archivo no puede divergir del contenido real de la web sin que
+también cambie la propia web (mismo objetivo que motivó la tarea: evitar una copia a
+mano que se desincroniza). Ajustado en revisión: la primera versión parafraseaba el
+posicionamiento en vez de reutilizar `contacto.intro` — dos redacciones del mismo mensaje
+que podían divergir con el tiempo.
+
+**Alcance.** Solo la trayectoria de Producto (no Marketing & Growth ni Formación) y los
+hitos se resumen como el hecho del exit, no la tabla completa — es un resumen curado
+para LLMs, no un volcado del CV; el CV en PDF (enlazado) cubre el detalle completo.

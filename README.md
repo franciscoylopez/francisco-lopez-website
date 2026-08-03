@@ -21,6 +21,8 @@ y con un sistema de marca propio.
 - **SEO técnico**: metadata + `canonical` + `hreflang` por página, `robots.txt` y
   `sitemap.xml` (gateados por entorno) y datos estructurados JSON-LD
   (`ProfilePage`/`Person` en la home, `BreadcrumbList` en páginas internas).
+- **`llms.txt`**: resumen curado para LLMs/agentes IA, generado desde el diccionario
+  i18n y los datos de contacto (sin copia a mano que pueda divergir).
 - **Imágenes Open Graph** de marca generadas al vuelo (`/api/og`, `next/og`).
 - **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**
   (cualitativo: heatmaps, grabaciones) con **Consent Mode v2** y banner de
@@ -67,6 +69,7 @@ npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
 app/[lang]/            Rutas por locale (home, sobre-mi, brand-kit, design-system, accesibilidad, cookies) + layout, diccionarios, not-found/error
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
+app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i18n
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
 .github/workflows/     CI (GitHub Actions): typecheck + lint + build en cada PR
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)

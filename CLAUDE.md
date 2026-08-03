@@ -46,6 +46,7 @@
 - D30 · Texto atenuado sobre fondos que no son `--background` (bandas): recalcular, no reusar el token
 - D31 · Tracking de clics mailto/tel vía dataLayer (P30); GTM Vista previa solo funciona en producción
 - D32 · CSP con allowlist para Microsoft Clarity (3 directivas); `c.bing.com` fuera a propósito (P37)
+- D33 · `/llms.txt` — un solo archivo, en español, generado desde el diccionario (P37.5)
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
