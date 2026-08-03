@@ -14,6 +14,12 @@ updates:
     commit-message:
       prefix: chore
       prefix-development: chore
+    ignore:
+      # TypeScript 7.x es el nuevo compilador nativo (Go), aún preview: no expone la
+      # API de compilador que Next 16 necesita y rompe el build (Dependabot PR #47).
+      # Se ignoran los bumps mayores hasta que Next soporte oficialmente TS 7.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
     groups:
       # Agrupa el ecosistema Next en un solo PR para no fragmentar los bumps acoplados
       # (next, eslint-config-next, @next/*, react/react-dom).
