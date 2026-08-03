@@ -676,3 +676,66 @@ indexación-lite. Caveman (estilo telegráfico) — se adopta el principio de co
 herramienta. Ponytail (gating de alcance) — ya existe como convención (memoria + plan mode).
 Las tres son la versión pesada de algo cuya versión ligera ya está en el flujo; añadirlas sería
 sobreingeniería a esta escala.
+
+## D29 · Superficie de contacto unificada: dato, patrón y jerarquía — 2026-08-03
+**Decisión.** El contacto deja de ser tres implementaciones que se parecían y pasa a ser
+**una**, en tres capas:
+- **Dato → `lib/contact.ts`.** Fuente única de email, teléfono (`tel:` + display) y LinkedIn
+  (url + display). Antes el email estaba hardcodeado en 4 sitios, el teléfono en 2 y LinkedIn
+  en 4 — y `lib/site.ts` ya exportaba `LINKEDIN_URL`, pero footer y contacto lo **ignoraban
+  redefiniéndolo**. Misma disciplina que los tokens (D4) y `cvPath` (D22). `LINKEDIN_URL` se
+  muda de `lib/site.ts` a `lib/contact.ts`.
+- **Patrón → `components/site/contact-actions.tsx`.** Un componente compartido para las tres
+  superficies: la franja de cierre de la home, el cierre de Sobre mí y el «reportar una
+  barrera» de Accesibilidad. Antes divergían: lista de 4 filas / enlace a `/#contacto` /
+  outline con el email entero dentro del botón.
+- **Jerarquía → el email es el único botón SÓLIDO del sitio**, un escalón por encima del
+  outline de Descargar CV (Trayectoria). Los clics de contacto son la métrica primaria
+  (PRD §7) y hasta ahora nada señalaba cuál era *la* acción: la lista de filas trataba email
+  y CV como iguales.
+
+**Consecuencias.** (1) El tracking de clics se cablea en **un** punto y no en tres — por eso
+esta tarea se hizo ANTES que la instrumentación, no después. (2) `Sobre mí` deja de mandar al
+usuario de vuelta a `/#contacto`: la acción vive en la propia página. (3) La dirección de
+email bajo el botón se muestra **solo en Accesibilidad** (`showAddress`): junto a un botón que
+ya dice «Escríbeme» es redundante, y donde hay teléfono y LinkedIn al lado tampoco hace de
+plan B; en Accesibilidad el bloque *es* el canal de reporte y no hay otro camino.
+
+**Copy.** El diccionario gana `emailCta` y `cvCta`; se retiran `emailLabel`, `cvLabel` y
+`cvValue`, que morían con la lista de filas.
+
+## D30 · Texto atenuado sobre fondos que no son `--background` — 2026-08-03
+**Decisión.** `--muted-foreground` (y cualquier atenuado calibrado contra `--background`) **no
+se usa sobre una banda o tarjeta de color**. Sobre un fondo distinto hay que **recalcular**, y
+el patrón por defecto es **mezclar el texto con el propio fondo** en vez de tirar del token:
+
+```css
+:root            { --contact-dim: var(--muted-foreground); }
+.contact-band    { --contact-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted)); }
+```
+
+**Por qué.** `--muted-foreground` está afinado contra `--background` (AAA: 7,12:1 claro /
+7,08:1 oscuro). Sobre la franja de contacto (fondo `--muted`) cae a **6,44:1 / 5,56:1** — AA
+suelto, en contra de lo que afirma `BRAND.md` y de lo que **publica** la página de
+Accesibilidad. No es cosa del color de banda elegido: con `card` tampoco se salva (6,37:1 en
+oscuro). Al 85% de mezcla con la banda da **8,17:1 / 9,17:1**, AAA en ambos temas; al 80% ya se
+quedaba en 6,99:1 en claro.
+
+**Regla general que generaliza.** Es el mismo fallo que el de los pasteles: **un valor fijo
+sobre un fondo cuyo color efectivo cambia con el tema**. Al construir cualquier banda:
+1. Un solo nivel de atenuado; la jerarquía la hace el **tamaño/peso**, no el color.
+2. Medir **componiendo el alfa sobre el fondo real** (un `color-mix` con `transparent` produce
+   alfa: leerlo sin componer da una cifra falsa y optimista).
+3. Medir con **carga limpia por tema**. Conmutar el tema en caliente da falsos positivos: las
+   transiciones de `background-color` dejan texto de un tema sobre fondo del otro.
+4. No dejar el margen justo. El umbral no es el objetivo (ver el cian de 2026-07-22).
+
+**Estados interactivos.** El hover del botón sólido **no** se hace con `opacity` ni
+`bg-primary/90`, que bajan el contraste al mezclar con el fondo. Se mezcla hacia
+`--foreground`, que en ambos temas se aleja de `--primary-foreground` (en claro oscurece bajo
+texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,28→8,04 claro,
+8,36→8,92 oscuro).
+
+**Aplicado retroactivamente.** La regla destapó un fallo **preexistente** en la banda de «Más
+allá del PM»: eyebrow al 58% → **4,07:1 en oscuro**, por debajo de AA. Corregido al 80%
+(9,24:1 / 8,31:1) en la misma sesión, porque contradecía dos afirmaciones públicas del sitio.

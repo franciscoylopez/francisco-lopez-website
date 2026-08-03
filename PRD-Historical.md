@@ -878,6 +878,26 @@ Se cierra el carril de contenido V2: **Sobre mí (con fotos reales) y la página
 
 ---
 
+## 29. Contacto: copy al ICP y una sola superficie (2026-08-03)
+
+Arranca la etapa **Contacto avanzado** con la secuencia que dejó el `sprint-review`: **contenido → cimiento → diseño → instrumentación**, deliberadamente en ese orden.
+
+**Copy de cierre (P27).** El bloque de Contacto tenía un texto genérico que no hablaba a nadie en concreto («Senior Product Manager con experiencia en SaaS, siempre busco impacto real…»). Se reescribe para **hablarle a la empresa**, no al reverso de una criba: *«Si en tu empresa el producto está en el centro y construís experiencias increíbles para vuestros usuarios —a través del discovery, la IA aplicada y el dato—, creo que encajamos»*. La tríada **discovery · IA aplicada · dato** hace de *bookend* con el headline del Hero («Del discovery al dato») y mete la IA, que es filtro real del ICP. El eyebrow pasa de «Contacto» a **«El siguiente paso»** para enmarcar el bloque como cierre sin repetir el título.
+
+**El exit se queda implícito.** Se evaluó nombrar TheTool → AppRadar en la franja —es el último bloque, donde el *reveal gradual* podría cobrarse— y Francisco decidió que no: sigue viviendo solo en Hitos y en «Más allá del PM». La franja habla de encaje, no de credenciales.
+
+**Una sola superficie de contacto (P28 + P29).** Los tres puntos de contacto del sitio habían divergido: la home era una lista de cuatro filas que trataba email y CV como iguales; Sobre mí cerraba con un enlace a `/#contacto` que **devolvía al usuario a la home** a buscar la sección; y Accesibilidad usaba un outline con la dirección de email entera metida dentro del botón. Se unifican en un componente compartido, con el dato centralizado en `lib/contact.ts` (el email estaba hardcodeado en cuatro sitios, y `lib/site.ts` ya exportaba un `LINKEDIN_URL` que footer y contacto ignoraban redefiniéndolo). El bloque de la home se convierte en **franja-CTA de cierre**, y el email pasa a ser el **único botón sólido del sitio**: los clics de contacto son la métrica primaria (§7) y hasta entonces nada señalaba cuál era *la* acción. Efecto lateral buscado: el tracking se cablea en un punto y no en tres — por eso la instrumentación se dejó para el final.
+
+**Redundancia detectada por Francisco.** La primera versión ponía la dirección de email bajo el botón «Escríbeme». Su lectura —que es repetir el mismo mensaje— se acepta para la home y Sobre mí (donde teléfono y LinkedIn ya hacen de plan B si el `mailto:` no abre) y se conserva **solo en Accesibilidad**, donde el bloque *es* el canal de reporte y no hay otro camino al lado.
+
+**Accesibilidad: dos trampas del mismo tipo.** Construir la franja destapó que **`--muted-foreground` está calibrado contra `--background`**: sobre una banda de color cae a AA suelto (6,44:1 / 5,56:1) y habría roto el «todo AAA» que declara `BRAND.md` y que la página de Accesibilidad **publica**. Se resuelve mezclando el atenuado con la propia banda (D30). Verificando, axe destapó el **mismo patrón ya en producción**: el eyebrow de «Más allá del PM» daba **4,07:1 en tema oscuro** —por debajo de AA—, porque su mezcla estaba fija mientras el fondo efectivo de la banda cambia con el tema. Francisco optó por arreglarlo en el momento en vez de documentar la excepción, para que las dos afirmaciones públicas volvieran a ser ciertas: corregido al 80% (9,24:1 / 8,31:1).
+
+**Método que deja poso.** Medir el contraste **en el DOM y con carga limpia por tema** — conmutar el tema en caliente daba cinco falsos positivos, con texto de un tema sobre fondo del otro por las transiciones de color a medias. Y componer el alfa sobre el fondo real: un `color-mix` con `transparent` leído sin componer da una cifra falsa y optimista.
+
+**Estado al cerrar**: P27, P28 y P29 en producción; la etapa **sigue abierta** con el tracking de clics (P30) pendiente y el fix de contraste (P30.5) cerrado en la misma sesión.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

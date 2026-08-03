@@ -57,10 +57,17 @@ V1 lanzada. En vivo:
 6. **Trayectoria** — bloque Producto + bloque Experiencia previa (Marketing & Growth); logos reales monocromo; CTA Descargar CV.
 7. **Toolkit** — 4 categorías (Usuarios / Gestión y Documentación / Diseño y prototipado / Desarrollo) en pestañas, logos reales monocromo.
 8. **Formación** — Producto + Marketing.
-9. **Contacto** — email, teléfono, LinkedIn, CV (todos enlaces clicables).
+9. **Franja-CTA de cierre** — banda de fondo propio con copy de posicionamiento al ICP;
+   el email es la acción destacada (único botón sólido del sitio) y teléfono, LinkedIn y
+   CV la acompañan como canales de apoyo.
 10. **Footer** — Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn.
 
 Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas.
+
+**Las tres superficies de contacto comparten un solo patrón** (franja de la home, cierre
+de Sobre mí y «reportar una barrera» de Accesibilidad): mismo componente, mismos datos y
+misma jerarquía, de modo que Sobre mí resuelve el contacto en la propia página en vez de
+devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
 
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 

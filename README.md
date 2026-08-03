@@ -70,7 +70,7 @@ app/global-*           404/500 de marca e i18n (global-not-found, global-error):
 components/site/        Secciones de la web (nav, hero, footer, breadcrumb, banner de cookies, páginas…)
 components/analytics/   GTM + Consent Mode (init) — gateado a producción
 components/ui/          Primitivas (logo, button)
-lib/                   i18n, site (SITE_URL), consentimiento, datos estructurados y utils
+lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), consentimiento, datos estructurados y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
