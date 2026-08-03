@@ -25,6 +25,8 @@ y con un sistema de marca propio.
 - **Analítica y consentimiento**: Google Tag Manager + GA4 con **Consent Mode v2**
   y banner de consentimiento granular (RGPD), con página propia de **política de
   cookies**. Toda la analítica va gateada a producción; nada mide sin consentimiento.
+  Tracking de clics de contacto (mailto/tel) vía `dataLayer`; descarga de CV y scroll
+  ya los captura GA4 de fábrica.
 - **Rendimiento**: PageSpeed 100 (desktop) / >90 (móvil), CLS 0. Server Components
   por defecto y responsive en CSS (JS de cliente solo en las islas interactivas).
 - **CV en PDF bilingüe** (ES/EN) generado por código con identidad de marca y texto
@@ -70,7 +72,7 @@ app/global-*           404/500 de marca e i18n (global-not-found, global-error):
 components/site/        Secciones de la web (nav, hero, footer, breadcrumb, banner de cookies, páginas…)
 components/analytics/   GTM + Consent Mode (init) — gateado a producción
 components/ui/          Primitivas (logo, button)
-lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), consentimiento, datos estructurados y utils
+lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
