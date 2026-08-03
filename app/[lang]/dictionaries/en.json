@@ -303,7 +303,7 @@
     "crumb": "Cookies",
     "kicker": "Legal",
     "title": "Cookie policy",
-    "updated": "Last updated: 28 July 2026",
+    "updated": "Last updated: 3 August 2026",
     "lead": "This site uses the minimum of cookies and similar technologies. Here's what they are, what they're for, and how to control them. No analytics cookie loads without your consent.",
     "whatHeading": "What cookies are",
     "whatBody": "Cookies are small files a site stores in your browser. Equivalent technologies are also used, such as the browser's local storage (localStorage). Some are essential for the site to work; others, like analytics, are only used if you allow them.",
@@ -344,6 +344,20 @@
         "purpose": "Keeps the measurement session state.",
         "duration": "2 years",
         "category": "Analytics"
+      },
+      {
+        "name": "_clck",
+        "provider": "Microsoft Clarity",
+        "purpose": "Identifies the browser across visits to link your recorded sessions and heatmaps.",
+        "duration": "1 year",
+        "category": "Analytics"
+      },
+      {
+        "name": "_clsk",
+        "provider": "Microsoft Clarity",
+        "purpose": "Connects multiple page views into a single recording session.",
+        "duration": "1 day",
+        "category": "Analytics"
       }
     ],
     "tableNote": "“flm-consent” is kept in the browser's local storage (localStorage); it's technically not a cookie, but it's listed here for transparency. No marketing or advertising cookies are used today.",
@@ -354,8 +368,10 @@
     "manageButton": "Manage cookie preferences",
     "manageBrowser": "You can also block or delete cookies from your browser settings.",
     "thirdHeading": "Third parties",
-    "thirdBody": "Analytics is provided by Google (Google Tag Manager and Google Analytics), which processes data under its own policies. You can read them at",
+    "thirdBody": "Analytics is provided by Google (Google Tag Manager and Google Analytics) and Microsoft (Clarity), which process data under their own policies. You can read them at",
     "thirdLinkLabel": "Google's privacy policies",
+    "thirdBody2": "and at",
+    "thirdLink2Label": "Microsoft's privacy statement",
     "retentionHeading": "Data retention",
     "retentionBody": "Your consent choice is stored in your browser until you change it or clear the site data. Aggregate analytics data is retained by Google according to the property settings (by default, a maximum of 14 months at user level).",
     "changesHeading": "Changes to this policy",

@@ -12,15 +12,15 @@ const PROSE = "max-w-[var(--measure)]";
 
 const GOOGLE_POLICIES_URL =
   "https://policies.google.com/technologies/partner-sites";
+const MICROSOFT_PRIVACY_URL = "https://privacy.microsoft.com/privacystatement";
 
 // Página de política de cookies / aviso de privacidad (P23). Documenta lo que la web
 // carga HOY: el almacenamiento de consentimiento (localStorage), el contenedor de
-// Google Tag Manager y, bajo consentimiento, Google Analytics.
+// Google Tag Manager y, bajo consentimiento, Google Analytics + Microsoft Clarity (P37).
 //
-// MANTENIMIENTO: al añadir una herramienta nueva que use cookies o almacenamiento
-// (p. ej. Microsoft Clarity, previsto en V2), hay que AÑADIR su fila a la tabla y
-// actualizar la fecha de `updated` en el diccionario. Es criterio de cierre de esa
-// tarea, no un extra.
+// MANTENIMIENTO: al añadir una herramienta nueva que use cookies o almacenamiento,
+// hay que AÑADIR su fila a la tabla y actualizar la fecha de `updated` en el
+// diccionario. Es criterio de cierre de esa tarea, no un extra.
 export function CookiesPolicy({
   dict,
   breadcrumb,
@@ -133,6 +133,15 @@ export function CookiesPolicy({
                   className="text-foreground underline underline-offset-4"
                 >
                   {t.thirdLinkLabel}
+                </a>{" "}
+                {t.thirdBody2}{" "}
+                <a
+                  href={MICROSOFT_PRIVACY_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground underline underline-offset-4"
+                >
+                  {t.thirdLink2Label}
                 </a>
                 .
               </p>
