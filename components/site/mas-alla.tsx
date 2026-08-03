@@ -10,6 +10,15 @@ export type MasAllaDict = {
 // foreground, texto = background), simétrica en ambos temas. "Exit" y el divisor
 // usan --brand-purple-accent (AA-large verificado sobre fondos invertidos). Los
 // textos apagados se mezclan en sRGB para no perder el tono (ver Nav).
+//
+// EL 80% NO ES ARBITRARIO. El eyebrow estaba al 58% y en tema OSCURO daba 4,07:1
+// (axe lo cazaba: AA pide 4,5 a 13px) — el fondo efectivo de la banda es
+// `--foreground`, que cambia de luminosidad con el tema mientras la mezcla se
+// quedaba fija. El umbral AAA está en el 75%, pero ahí quedaba en 7,05:1: el
+// mismo margen de nada que ya tumbó al cian viejo (BRAND.md, 2026-07-22). Al 80%
+// da 9,32:1 en claro y 8,34:1 en oscuro. Un solo nivel de atenuado para los dos
+// textos: la jerarquía la hace el tamaño, no el color (misma regla que la franja
+// de contacto, D30).
 export function MasAlla({ dict }: { dict: MasAllaDict }) {
   // Mantener el acento y su cláusula corta ("Exit once." / "Exit una vez.")
   // como una unidad que no rompe: si no, el color queda colgando al final de
@@ -28,7 +37,7 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
           data-reveal
           className="m-0 mb-[clamp(1.75rem,4vw,3rem)] text-[0.8125rem] font-semibold tracking-[0.11em] uppercase"
           style={{
-            color: "color-mix(in srgb, var(--background) 58%, transparent)",
+            color: "color-mix(in srgb, var(--background) 80%, transparent)",
           }}
         >
           {dict.eyebrow}
@@ -56,7 +65,7 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
           data-reveal
           className="font-display m-0 text-[clamp(1.125rem,1.6vw,1.25rem)] leading-[1.45] font-normal tracking-[0.01em] text-balance"
           style={{
-            color: "color-mix(in srgb, var(--background) 78%, transparent)",
+            color: "color-mix(in srgb, var(--background) 80%, transparent)",
           }}
         >
           {dict.line2}
