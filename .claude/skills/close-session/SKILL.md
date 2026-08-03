@@ -24,9 +24,10 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 |---|---|---|
 | **Estado** de producto / diseño / alcance | `PRD-Live.md` (spec viva, `@`-importada) | **Único espejo en Notion:** [PRD Live](https://app.notion.com/p/3ad2caec08be8122b6a4cc379874ed0c) |
 | **Registro histórico** de producto / diseño / alcance | `PRD-Historical.md` | Solo repo (sin espejo) |
-| Decisión técnica / de implementación | `DECISIONS.md` (formato ADR-lite) | Solo repo (sin espejo) |
+| Decisión técnica / de implementación | `DECISIONS.md` (formato ADR-lite) | Solo repo (sin espejo; **a demanda vía Read/Grep, NO `@`-importado** — D28) |
 | Convención que aplica en adelante | `CLAUDE.md` | — (se `@`-importa, se carga cada sesión) |
-| Regla de identidad / marca | `BRAND.md` | — |
+| Regla de identidad / marca (core) | `BRAND.md` | — (se `@`-importa) |
+| Detalle exhaustivo del logo (tabla de uso, umbrales split→flat, proporciones, rationale) | `BRAND-logo.md` | — (**a demanda**, NO `@`-importado — D28) |
 | Overview / stack / estructura / scripts / capacidades nuevas | `README.md` | GitHub. Mantenido al día, **no** es un one-off |
 | Progreso, estados y prioridades de tareas | Tablero Notion "Tareas — Web personal" | [Tablero](https://app.notion.com/p/f3ee9a949c58482888423d5917087962) · vista [MoSCoW](https://app.notion.com/p/3a62caec08be81989325c9fce678de5b) |
 | "Por qué" de un trozo de código | Mensaje de commit / PR | — |
@@ -39,7 +40,7 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
   página de Notion. *(El espejo de Decisions y el del PRD histórico se retiraron el 2026-07-30.)*
 - No dupliques: cada cosa en su documento. **Estado** de producto → `PRD-Live.md`;
   **histórico** de decisiones de producto → `PRD-Historical.md`; técnica → `DECISIONS.md`;
-  convención → `CLAUDE.md`; marca → `BRAND.md`.
+  convención → `CLAUDE.md`; marca (core) → `BRAND.md`; detalle del logo → `BRAND-logo.md`.
 - **Fechas relativas → absolutas** (p. ej. "hoy" → la fecha real).
 - Si algo es ambiguo (¿PRD o DECISIONS? ¿cambia una decisión previa, que se marca
   *Revertida* y se enlaza la nueva?), **pregúntale a Francisco** antes de escribir.
@@ -51,7 +52,7 @@ nada ni escribes de más.
 
 ## Paso 3 · Aplica
 1. **Repo**: edita `PRD-Live.md` / `PRD-Historical.md` / `DECISIONS.md` / `README.md` /
-   `CLAUDE.md` / `BRAND.md` según lo acordado.
+   `CLAUDE.md` / `BRAND.md` / `BRAND-logo.md` según lo acordado.
 2. **Espejo Notion (solo PRD Live)**: si tocaste `PRD-Live.md`, refleja el cambio en su
    página de Notion. `PRD-Historical.md` y `DECISIONS.md` **no se espejan**. (Usa las
    herramientas `notion-*`; convenciones del workspace — páginas nuevas bajo *New Website*,
