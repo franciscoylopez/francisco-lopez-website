@@ -3,6 +3,7 @@ import Image from "next/image";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { ContactActions, type ContactActionsDict } from "./contact-actions";
 import { Rich } from "./rich";
 
 type SobreMiDict = Dictionary["sobreMi"];
@@ -26,12 +27,16 @@ const PROSE = "max-w-[var(--measure)]";
 // RelatedPages: "Sobre mí" no es página del sistema de diseño; se enlaza desde el nav.
 export function SobreMi({
   dict,
+  contacto,
   breadcrumb,
   homeHref,
+  cvHref,
 }: {
   dict: SobreMiDict;
+  contacto: ContactActionsDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
+  cvHref: string;
 }) {
   const t = dict;
   return (
@@ -145,7 +150,10 @@ export function SobreMi({
         <Body paragraphs={t.mountain.body} />
       </HobbyBlock>
 
-      {/* Cierre + CTA a Contacto (enlace de contenido → primary). */}
+      {/* Cierre + superficie de contacto. Antes la frase enlazaba a `/#contacto`:
+          mandaba de vuelta a la home a buscar la sección. Ahora la acción está
+          AQUÍ, con el mismo patrón compartido que la franja de la home y que
+          Accesibilidad; la frase se queda como remate, ya sin enlace. */}
       <section className="py-[clamp(3rem,6vw,5rem)] pb-[var(--section-y)]">
         <div className={WRAP}>
           <div data-reveal className={PROSE}>
@@ -153,14 +161,12 @@ export function SobreMi({
             <Body paragraphs={t.now.body} />
             <p className="mt-6 text-[clamp(1.125rem,1.8vw,1.35rem)] leading-[1.5]">
               {t.now.ctaPre}
-              <a
-                href={`${homeHref}#contacto`}
-                className="text-primary font-semibold underline underline-offset-4 hover:no-underline"
-              >
-                {t.now.ctaLink}
-              </a>
+              <span className="font-semibold">{t.now.ctaLink}</span>
               {t.now.ctaPost}
             </p>
+          </div>
+          <div data-reveal className="mt-[clamp(2rem,4vw,2.75rem)]">
+            <ContactActions dict={contacto} cvHref={cvHref} />
           </div>
         </div>
       </section>

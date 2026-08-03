@@ -252,11 +252,10 @@
     "eyebrow": "El siguiente paso",
     "title": "¿Hablamos?",
     "intro": "Si en tu empresa el producto está en el centro y construís experiencias increíbles para vuestros usuarios —a través del discovery, la IA aplicada y el dato—, creo que encajamos. Senior Product Manager con 10+ años en SaaS B2B y B2C, cómodo en remoto o híbrido desde España. Escríbeme o llámame directamente.",
-    "emailLabel": "Email",
+    "emailCta": "Escríbeme",
     "phoneLabel": "Teléfono",
     "linkedinLabel": "LinkedIn",
-    "cvLabel": "CV",
-    "cvValue": "Descargar en PDF"
+    "cvCta": "Descargar CV"
   },
   "footer": {
     "copyright": "© 2026 Francisco López",
@@ -1296,7 +1295,7 @@
       "num": "(05)",
       "heading": "¿Encuentras una barrera?",
       "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, quiero saberlo: es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
-      "emailLabel": "Escríbeme a",
+      "emailCta": "Escríbeme",
       "updated": "Última revisión de accesibilidad: 2 de agosto de 2026."
     }
   }

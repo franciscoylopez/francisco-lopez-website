@@ -252,11 +252,10 @@
     "eyebrow": "The next step",
     "title": "Let's talk",
     "intro": "If product sits at the core of your company and you're building genuinely great experiences for your users —through discovery, applied AI and data—, I think we'd be a good fit. Senior Product Manager with 10+ years in B2B and B2C SaaS, happy working remote or hybrid, based in Spain. Email or call me directly.",
-    "emailLabel": "Email",
+    "emailCta": "Email me",
     "phoneLabel": "Phone",
     "linkedinLabel": "LinkedIn",
-    "cvLabel": "CV",
-    "cvValue": "Download PDF"
+    "cvCta": "Download CV"
   },
   "footer": {
     "copyright": "© 2026 Francisco López",
@@ -1292,7 +1291,7 @@
       "num": "(05)",
       "heading": "Run into a barrier?",
       "body": "If anything on this site is hard to use with your assistive technology, I want to know: it's the best way to fix it. Tell me which page you were on, what happened and what assistive tech you use, and I'll get back to you.",
-      "emailLabel": "Email me at",
+      "emailCta": "Email me",
       "updated": "Last accessibility review: 2 August 2026."
     }
   }
