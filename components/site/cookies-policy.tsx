@@ -1,4 +1,5 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { EMAIL } from "@/lib/contact";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ConsentPreferencesButton } from "./consent-preferences-button";
@@ -9,7 +10,6 @@ const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
 // Prosa a la medida de lectura del sistema (Design System §20).
 const PROSE = "max-w-[var(--measure)]";
 
-const EMAIL = "franciscojavier.lopezmartinez@gmail.com";
 const GOOGLE_POLICIES_URL =
   "https://policies.google.com/technologies/partner-sites";
 

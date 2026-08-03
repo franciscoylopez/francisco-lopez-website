@@ -1,4 +1,5 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { EMAIL } from "@/lib/contact";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
@@ -9,8 +10,6 @@ type AccesibilidadDict = Dictionary["accesibilidad"];
 const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
 const SECTION = "border-border border-t py-[var(--section-y)]";
 const CARD = "border-border bg-card rounded-[var(--radius-lg)] border";
-
-const EMAIL = "franciscojavier.lopezmartinez@gmail.com";
 
 // Página de Accesibilidad (PRD §9, V2). Hermana de Brand Kit / Design System (D21):
 // mismo lenguaje visual —hero con composición a la derecha + fila de datos, secciones

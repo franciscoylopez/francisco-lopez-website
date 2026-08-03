@@ -5,12 +5,9 @@
 //   - Páginas internas: BreadcrumbList (elegible → se valida con la Rich Results Test).
 // URLs SIEMPRE absolutas vía SITE_URL (los rastreadores no resuelven relativas en JSON-LD).
 
+import { EMAIL, LINKEDIN_URL, PHONE_TEL as TELEPHONE } from "@/lib/contact";
 import type { Locale } from "@/lib/i18n/config";
-import { LINKEDIN_URL, SITE_NAME, SITE_URL } from "@/lib/site";
-
-// Datos del candidato (PRD §10) — canal público, ya visibles en Contacto.
-const EMAIL = "franciscojavier.lopezmartinez@gmail.com";
-const TELEPHONE = "+34629832720";
+import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Especialidades declaradas en el PRD §10.
 const KNOWS_ABOUT = [

@@ -1,6 +1,14 @@
 import { ArrowUpRight, Download, Mail, Phone } from "lucide-react";
 import type { ReactNode } from "react";
 
+import {
+  EMAIL,
+  LINKEDIN_DISPLAY,
+  LINKEDIN_URL,
+  PHONE_DISPLAY,
+  PHONE_TEL,
+} from "@/lib/contact";
+
 import { LinkedinIcon } from "./icons";
 
 export type ContactoDict = {
@@ -13,12 +21,6 @@ export type ContactoDict = {
   cvLabel: string;
   cvValue: string;
 };
-
-const EMAIL = "franciscojavier.lopezmartinez@gmail.com";
-const PHONE_TEL = "+34629832720";
-const PHONE_DISPLAY = "629 832 720";
-const LINKEDIN_URL = "https://www.linkedin.com/in/franciscolopez1975/";
-const LINKEDIN_DISPLAY = "linkedin.com/in/franciscolopez1975";
 
 function Row({
   href,

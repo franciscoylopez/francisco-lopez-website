@@ -1,4 +1,5 @@
 import { Logo } from "@/components/ui/logo";
+import { LINKEDIN_URL } from "@/lib/contact";
 
 import { LinkedinIcon } from "./icons";
 
@@ -10,8 +11,6 @@ export type FooterDict = {
   cookies: string;
   linkedinAria: string;
 };
-
-const LINKEDIN_URL = "https://www.linkedin.com/in/franciscolopez1975/";
 
 // Footer compartido (PRD §7/§17). Una fila de baja densidad: logo flat 32px +
 // copyright · enlaces (Brand Kit / Design System / Accesibilidad / Cookies)
