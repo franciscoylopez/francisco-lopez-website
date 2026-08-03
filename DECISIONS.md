@@ -767,3 +767,37 @@ recibe el evento y `window.google_tag_manager` existe. GTM: variable `DLV - cont
 activador `CE - contact_click` (Custom Event), etiqueta `GA4 Event - contact_click`, publicada.
 GA4: dimensión personalizada `Contact method` (ámbito Evento, parámetro `contact_method`)
 creada. Verificado con hits reales en DebugView antes de dar la tarea por cerrada.
+
+## D32 · CSP con allowlist para Microsoft Clarity; `c.bing.com` fuera a propósito (P37) — 2026-08-03
+**Decisión.** La CSP «A+ barato» (D26) amplía su allowlist con `https://www.clarity.ms` y
+`https://*.clarity.ms` en **tres** directivas — `script-src` (el tag), `connect-src`
+(las llamadas de la sesión) e **`img-src`** (el beacon `c.gif`) — porque Clarity, a
+diferencia de GA4, usa las tres vías a la vez. El primer intento solo cubrió
+script-src/connect-src (PR #68) y PageSpeed siguió marcando aviso; el beacon de imagen
+necesitó un segundo PR (#69). Mismo patrón que GA4/GTM en D26, sin introducir dominios
+nuevos de riesgo (`*.clarity.ms` es tan amplio como ya lo era `*.google-analytics.com`).
+
+**`c.bing.com` (Microsoft Ads/UET) queda deliberadamente fuera del allowlist.** Clarity
+trae una integración nativa con Microsoft Advertising que, si está activada en el
+proyecto (clarity.microsoft.com → Configuración), dispara un píxel a `c.bing.com/c.gif`
+sin que exista ninguna etiqueta de Bing en GTM — confirmado revisando el listado de
+etiquetas del contenedor (solo GA4, el evento de contacto y Clarity). Francisco no
+quería ese tracking cruzado con publicidad y desactivó la integración en el propio
+dashboard de Clarity, no en GTM ni en el repo. La CSP se deja bloqueando `c.bing.com`
+a propósito: si la integración se reactivase por error (p. ej. al reconectar el
+proyecto), el bloqueo lo delata de inmediato en PageSpeed en vez de pasar desapercibido.
+
+**El bug real no estaba en la CSP.** Con la CSP corregida, una prueba en vivo (borrar
+`localStorage` de consentimiento y recargar) mostró que Clarity se disparaba igual con
+`analytics_storage: denied` — el Consent Mode v2 del código (D17) es correcto, pero la
+etiqueta "Microsoft Clarity - Official" en GTM tenía su **Configuración de
+consentimiento (BETA)** en "Sin establecer". Se corrige en GTM (no en el repo): exigir
+`analytics_storage` granted como comprobación adicional. Verificado de nuevo en vivo:
+denegado → cero peticiones a Clarity; concedido → carga con `200`. Queda como
+recordatorio operativo: una integración añadida vía GTM puede tener su propio gate de
+consentimiento *independiente* del Consent Mode global, y hay que revisarlo por
+etiqueta, no asumir que heredarlo es automático.
+
+**Verificación.** PR #68 + #69 (CSP) y PR #70 (documentación de cookies) mergeados a
+`main`. Confirmado en `franciscolopez.es`: sin violaciones de CSP, Clarity gateado a
+consentimiento, PageSpeed Prácticas recomendadas en 100.

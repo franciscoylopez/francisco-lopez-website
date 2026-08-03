@@ -79,8 +79,9 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
 - **No funcionales**: PageSpeed/Lighthouse **>90 desktop y móvil**; accesibilidad **AA
   de suelo, AAA objetivo** (el sistema de color entero está en AAA); **SEO + JSON-LD por
   página** como criterio de cierre.
-- **Medición**: GA4/GTM gateado a producción y a consentimiento. Métricas de éxito →
-  §7.
+- **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
+  sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
+  de éxito → §7.
 - **Calidad / seguridad**: CI (GitHub Actions) que corre typecheck + lint + build en cada
   PR (nada que no compile entra en `main`); **escaneo de dependencias automatizado
   (Dependabot)**; cabeceras de seguridad servidas (nosniff, X-Frame-Options, Referrer-Policy,
@@ -117,8 +118,8 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 - **Traducción de contenido nuevo a EN** (la arquitectura i18n ya está; la traducción se
   hace a medida que se añade contenido).
 - **IA conversacional** "Pregúntale a mi carrera" (V3).
-- **Optimización continua**: Microsoft Clarity (cualitativo), más métricas, marca externa
-  (firma de email, header de LinkedIn), rediseño de assets.
+- **Optimización continua**: más métricas, marca externa (firma de email, header de
+  LinkedIn), rediseño de assets.
 
 Las mejoras técnicas pendientes (tests automatizados, CSP estricta con nonces, etc.)
 viven en el tablero de tareas; el porqué de cada decisión de producto, en **[PRD-Historical.md](./PRD-Historical.md)**.

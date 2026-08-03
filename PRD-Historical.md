@@ -898,6 +898,22 @@ Arranca la etapa **Contacto avanzado** con la secuencia que dejó el `sprint-rev
 
 ---
 
+## 30. Microsoft Clarity: alta, fugas de CSP y gating de consentimiento (2026-08-03)
+
+Francisco da de alta **Microsoft Clarity** (P37, adelantado desde *Optimización* porque ya estaba de alta y vinculado a GTM/GA4) y aparece con un aviso en PageSpeed que dispara toda la sesión.
+
+**Dos fugas de CSP, no una.** La CSP «A+ barato» (D26) solo tenía allowlist para GTM/GA4; Clarity se cargaba desde `clarity.ms` y se bloqueaba entero. El primer fix (`script-src`/`connect-src`, PR #68) hizo que el script cargara, pero PageSpeed **seguía marcando el mismo aviso** — resultó ser un segundo bloqueo, distinto: el beacon de imagen `c.clarity.ms/c.gif`, gobernado por `img-src`, que el primer fix no tocó (PR #69). La lección operativa: un aviso de "errores de consola" en PageSpeed puede agrupar violaciones de CSP *distintas* bajo el mismo título — hay que expandir el detalle y mirar la URL/directiva exactas en cada iteración, no asumir que es la misma causa.
+
+**El bug de verdad: Clarity no respetaba el Consent Mode.** Se probó en vivo borrando el consentimiento guardado (`localStorage`) y recargando: con `analytics_storage: denied` (el estado por defecto antes de aceptar el banner), **Clarity se disparaba igual** — estaba grabando sesiones sin consentimiento, pese a que la arquitectura de Consent Mode v2 (D17) está bien implementada en el código. La causa no estaba en el repo: la etiqueta "Microsoft Clarity - Official" en GTM tenía su **Configuración de consentimiento (BETA)** en "Sin establecer". Francisco lo corrigió en GTM (exigir `analytics_storage` granted) y se volvió a verificar en vivo el mismo par de pruebas: denegado → cero peticiones a Clarity; concedido → carga con `200`.
+
+**Efecto colateral no buscado: un píxel de Microsoft Ads.** Durante la investigación apareció un tercer bloqueo de CSP, `c.bing.com/c.gif` (Microsoft Ads/UET), sin relación con `clarity.ms`. El listado de etiquetas de GTM confirmó que no hay ninguna etiqueta de Bing — el píxel salía del propio proyecto de Clarity, vía su integración nativa con Microsoft Advertising. Francisco decidió que no lo quería y lo desactivó en `clarity.microsoft.com` (Configuración del proyecto), confirmado después. La CSP se deja **sin** `c.bing.com` en el allowlist a propósito (D32): si esa integración se reactivase algún día por error, el bloqueo actúa como red de seguridad y lo delataría de inmediato en PageSpeed.
+
+**Documentación de cookies puesta al día.** La página de cookies llevaba desde julio con un comentario de mantenimiento avisando de que Clarity llegaría "en V2" — llegó, y la tabla + el texto de «Terceros» (que solo mencionaba a Google) se actualizaron para reflejar la realidad: filas `_clck`/`_clsk` (Analítica), y Microsoft añadido junto a Google como tercero, con enlace a su declaración de privacidad. ES/EN en paridad (D20).
+
+**Estado al cerrar**: Clarity en producción, gateado a consentimiento, sin avisos de CSP (PageSpeed Prácticas recomendadas: 100). P37 movido de *Optimización* a Listo. Sin tareas pendientes — Francisco confirmó el toggle de Microsoft Advertising desactivado en el propio dashboard de Clarity.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

@@ -22,9 +22,10 @@ y con un sistema de marca propio.
   `sitemap.xml` (gateados por entorno) y datos estructurados JSON-LD
   (`ProfilePage`/`Person` en la home, `BreadcrumbList` en páginas internas).
 - **Imágenes Open Graph** de marca generadas al vuelo (`/api/og`, `next/og`).
-- **Analítica y consentimiento**: Google Tag Manager + GA4 con **Consent Mode v2**
-  y banner de consentimiento granular (RGPD), con página propia de **política de
-  cookies**. Toda la analítica va gateada a producción; nada mide sin consentimiento.
+- **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**
+  (cualitativo: heatmaps, grabaciones) con **Consent Mode v2** y banner de
+  consentimiento granular (RGPD), con página propia de **política de cookies**. Toda
+  la analítica va gateada a producción y a consentimiento; nada mide sin él.
   Tracking de clics de contacto (mailto/tel) vía `dataLayer`; descarga de CV y scroll
   ya los captura GA4 de fábrica.
 - **Rendimiento**: PageSpeed 100 (desktop) / >90 (móvil), CLS 0. Server Components
