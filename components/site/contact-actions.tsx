@@ -1,5 +1,8 @@
+"use client";
+
 import { Download, Mail, Phone } from "lucide-react";
 
+import { trackContactClick } from "@/lib/analytics";
 import {
   EMAIL,
   LINKEDIN_DISPLAY,
@@ -49,6 +52,7 @@ export function EmailCta({
     <div className={className}>
       <a
         href={`mailto:${EMAIL}`}
+        onClick={() => trackContactClick("email")}
         className="contact-cta bg-primary text-primary-foreground inline-flex min-h-[48px] items-center gap-[0.6rem] rounded-md px-[1.6rem] text-[1rem] font-semibold no-underline"
       >
         {label}
@@ -88,6 +92,7 @@ export function ContactSecondary({
         <a
           href={`tel:${PHONE_TEL}`}
           aria-label={`${dict.phoneLabel}: ${PHONE_DISPLAY}`}
+          onClick={() => trackContactClick("phone")}
           className={link}
         >
           <Phone className={icon} aria-hidden="true" />
