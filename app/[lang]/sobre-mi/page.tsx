@@ -6,7 +6,7 @@ import { JsonLd } from "@/components/site/json-ld";
 import { Nav } from "@/components/site/nav";
 import { RevealRoot } from "@/components/site/reveal-root";
 import { SobreMi } from "@/components/site/sobre-mi";
-import { locales, isLocale } from "@/lib/i18n/config";
+import { locales, isLocale, cvPath } from "@/lib/i18n/config";
 import { breadcrumbLd, homeUrl } from "@/lib/structured-data";
 import { getDictionary } from "../dictionaries";
 
@@ -84,8 +84,10 @@ export default async function SobreMiPage({ params }: LangParams) {
       <RevealRoot>
         <SobreMi
           dict={dict.sobreMi}
+          contacto={dict.contacto}
           breadcrumb={dict.breadcrumb}
           homeHref={homeHref}
+          cvHref={cvPath(lang)}
         />
       </RevealRoot>
       <Footer dict={dict.footer} lang={lang} />

@@ -1,8 +1,8 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { EMAIL } from "@/lib/contact";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { EmailCta } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type AccesibilidadDict = Dictionary["accesibilidad"];
@@ -179,12 +179,7 @@ export function Accesibilidad({
             <p className="text-foreground/90 m-0 text-[1.0625rem] leading-[1.7]">
               {t.report.body}
             </p>
-            <a
-              href={`mailto:${EMAIL}`}
-              className="border-primary text-primary hover:bg-primary/10 mt-6 inline-flex min-h-[44px] items-center justify-center rounded-[var(--radius-md)] border px-[1.1rem] text-[0.95rem] font-semibold transition-colors"
-            >
-              {t.report.emailLabel} {EMAIL}
-            </a>
+            <EmailCta label={t.report.emailCta} showAddress className="mt-6" />
             <p className="text-muted-foreground m-0 mt-6 text-[0.85rem]">
               {t.report.updated}
             </p>
