@@ -21,8 +21,8 @@ const csp = [
   // GA4 envía las medidas (beacon/fetch) a *.google-analytics.com y *.analytics.google.com;
   // Clarity envía sus grabaciones/heatmaps a *.clarity.ms.
   "connect-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.clarity.ms https://*.clarity.ms",
-  // Pixel de GA + data: para imágenes inline; el resto de imágenes son propias.
-  "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com",
+  // Pixel de GA + el beacon de imagen de Clarity (c.clarity.ms/c.gif) + data: para imágenes inline.
+  "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://*.clarity.ms",
   // 'unsafe-inline' para los style attributes inline (transiciones del nav, reveals, iframe de GTM).
   "style-src 'self' 'unsafe-inline'",
   // next/font auto-hospeda las fuentes; no hay orígenes externos de fuentes.
