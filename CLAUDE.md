@@ -42,6 +42,8 @@
 - D26 · Cabeceras de seguridad Fase 1; CSP «A+ barato» implementada
 - D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot
 - D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda
+- D29 · Superficie de contacto unificada: `lib/contact.ts` + `contact-actions.tsx` + jerarquía sólido/outline
+- D30 · Texto atenuado sobre fondos que no son `--background` (bandas): recalcular, no reusar el token
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
