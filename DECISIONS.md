@@ -739,3 +739,31 @@ texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,28�
 **Aplicado retroactivamente.** La regla destapó un fallo **preexistente** en la banda de «Más
 allá del PM»: eyebrow al 58% → **4,07:1 en oscuro**, por debajo de AA. Corregido al 80%
 (9,24:1 / 8,31:1) en la misma sesión, porque contradecía dos afirmaciones públicas del sitio.
+
+## D31 · Tracking de clics mailto/tel vía dataLayer (P30) — 2026-08-03
+**Decisión.** `lib/analytics.ts` (nuevo) expone `trackContactClick("email"|"phone")`, que
+empuja `{event:"contact_click", contact_method}` al `dataLayer` — un objeto plano, no el
+patrón `gtag(...)`/`arguments` de `consent.ts` (D17), porque esto es un evento de negocio
+propio, no una llamada a la API de Consent Mode que gtag.js sepa interpretar. Cableado en los
+dos anchors compartidos de `contact-actions.tsx` (D29): `mailto:` en `EmailCta`, `tel:` en
+`ContactSecondary`. Como D29 ya unificó las tres superficies en ese componente, la
+instrumentación vive en un solo sitio. La descarga de CV no necesitó código: GA4 ya la captura
+de fábrica como `file_download` (D19).
+
+**Consecuencia arquitectónica.** `contact-actions.tsx` pasa a `"use client"` — dejó de ser
+un Server Component puro porque ahora tiene interactividad real (el `onClick` de tracking),
+mismo criterio que ya aplicaba a `nav.tsx` (D7: islas donde hace falta, no en todo lo demás).
+
+**Aprendizaje operativo — dónde se puede probar con GTM Vista previa.** El contenedor de GTM
+solo se carga si `VERCEL_ENV === "production"` (D13/D17): **nunca** en local ni en un preview
+de Vercel. La Vista previa/Debug de GTM depende de que el contenedor esté inyectado en la
+página, así que **solo funciona contra producción** — probarla contra un preview de rama no
+sirve (el contenedor ni siquiera está ahí) y no es un fallo de configuración. Es seguro probar
+en vivo sin afectar datos reales: la Vista previa inyecta el workspace en *borrador* solo en la
+sesión del navegador conectado, y no escribe en GA4 con normalidad hasta publicar el contenedor.
+
+**Verificación.** PR #66 (merge a `main`) → confirmado en `franciscolopez.es` que el `dataLayer`
+recibe el evento y `window.google_tag_manager` existe. GTM: variable `DLV - contact_method`,
+activador `CE - contact_click` (Custom Event), etiqueta `GA4 Event - contact_click`, publicada.
+GA4: dimensión personalizada `Contact method` (ámbito Evento, parámetro `contact_method`)
+creada. Verificado con hits reales en DebugView antes de dar la tarea por cerrada.

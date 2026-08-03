@@ -44,6 +44,7 @@
 - D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda
 - D29 · Superficie de contacto unificada: `lib/contact.ts` + `contact-actions.tsx` + jerarquía sólido/outline
 - D30 · Texto atenuado sobre fondos que no son `--background` (bandas): recalcular, no reusar el token
+- D31 · Tracking de clics mailto/tel vía dataLayer (P30); GTM Vista previa solo funciona en producción
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
