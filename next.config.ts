@@ -15,10 +15,12 @@ const csp = [
   "object-src 'none'",
   "form-action 'self'",
   "frame-ancestors 'none'",
-  // gtm.js se sirve desde googletagmanager; 'unsafe-inline' cubre los scripts inline del sitio.
-  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com",
-  // GA4 envía las medidas (beacon/fetch) a *.google-analytics.com y *.analytics.google.com.
-  "connect-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com",
+  // gtm.js se sirve desde googletagmanager; el tag de Clarity (P37) se sirve desde clarity.ms;
+  // 'unsafe-inline' cubre los scripts inline del sitio.
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.clarity.ms https://*.clarity.ms",
+  // GA4 envía las medidas (beacon/fetch) a *.google-analytics.com y *.analytics.google.com;
+  // Clarity envía sus grabaciones/heatmaps a *.clarity.ms.
+  "connect-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.clarity.ms https://*.clarity.ms",
   // Pixel de GA + data: para imágenes inline; el resto de imágenes son propias.
   "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com",
   // 'unsafe-inline' para los style attributes inline (transiciones del nav, reveals, iframe de GTM).
