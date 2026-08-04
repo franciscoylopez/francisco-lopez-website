@@ -958,11 +958,24 @@ controles solo-icono sin hover (toggle de tema, LinkedIn del footer), el CTA "Ge
 preferencias de cookies" con un uso a revisar, y refrescar Brand Kit/Design System para
 que reflejen el nuevo tratamiento de enlaces.
 
+**Dos hotfixes tras revisar el Preview de Vercel**, no visibles en local con datos de
+prueba cortos: (1) el pill de `ContactSecondary` en la home vivía dentro de
+`.contact-band` (fondo ya `--muted`) y el hover, que pintaba ese mismo `--muted`, se
+volvía invisible — en Sobre mí no se notaba porque esa franja no lleva `bg-muted`. (2)
+El primer arreglo saltó a `--card` como fondo del pill ahí dentro, un token demasiado
+claro/frío que rompía con el tono cálido del resto del sistema y leía como un recuadro
+blanco suelto. Resuelto con un `--chrome-hover-bg` sensible al fondo (mismo patrón que
+`--contact-dim`): `--muted` por defecto, y dentro de `.contact-band` un mix de
+`--foreground` al 10% sobre la propia banda — oscurece en claro, aclara en oscuro,
+igual dirección que ya tiene el pill por defecto en cada tema.
+
 **Estado al cerrar**: implementado y verificado (build/lint/typecheck limpios,
-comprobación visual en Chrome claro/oscuro) en `rich.tsx`, `cookies-policy.tsx`,
-`contact-actions.tsx`, `nav.tsx`, `breadcrumb.tsx`, `footer.tsx`, `consent-banner.tsx` y
-`consent-preferences-button.tsx`. Rama `feat/p37-55-links-hover`, PR #73. Pendiente:
-verificación real de contraste con axe/Lighthouse sobre los componentes en producción.
+comprobación visual en Chrome claro/oscuro, y en el Preview real de Vercel) en
+`rich.tsx`, `cookies-policy.tsx`, `contact-actions.tsx`, `nav.tsx`, `breadcrumb.tsx`,
+`footer.tsx`, `consent-banner.tsx` y `consent-preferences-button.tsx`. Rama
+`feat/p37-55-links-hover`, PR #73, con el visto bueno de Francisco sobre el preview.
+Pendiente: verificación real de contraste con axe/Lighthouse sobre los componentes en
+producción.
 
 ---
 
