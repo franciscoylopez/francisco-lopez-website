@@ -979,6 +979,56 @@ producción.
 
 ---
 
+## 32. Consecuencias de P37.55: chrome completo y el sistema documentado (2026-08-04)
+
+Sesión de seguimiento a P37.55, con las cuatro tareas que el propio cambio de enlaces
+había dejado abiertas (P37.56–P37.59). Todas se acumularon en la misma rama
+`feat/p37-55-links-hover` para subir a producción de una vez, junto con P37.55.
+
+**Coherencia del chrome.** Los enlaces del nav no compartían peso tipográfico
+(«Descargar CV» iba en `font-semibold` frente al `font-medium` del resto) y los
+controles **solo icono** —toggle de tema, hamburguesa, LinkedIn del footer— no tenían
+**ningún** estado hover: eran lo único del chrome que no respondía al cursor. Se unificó
+el peso y se creó `.icon-chrome`, que reusa la misma pastilla que el chrome con
+etiqueta. Regla nueva en `BRAND.md`.
+
+**El CTA de cookies.** «Gestionar preferencias de cookies» reutilizaba el outline
+neutro del propio diálogo de consentimiento, un tratamiento pensado para convivir con
+el botón sólido «Guardar» ahí dentro. En la página de Cookies vive solo en el cuerpo del
+texto —el mismo caso que «Descargar CV» en Trayectoria—, así que pasó a
+outline-primary. De ahí salió la **jerarquía de hover** ahora escrita en `BRAND.md`:
+sólido / outline-primary / outline neutro, con los toggles como caso aparte.
+
+**El hueco de documentación.** La tarea asumía que Brand Kit y Design System enseñaban
+el patrón de enlaces antiguo y que había que actualizarlo. Al revisarlas resultó que
+**ninguna de las dos documentaba los enlaces en absoluto**: el patrón solo vivía en
+`BRAND.md`. Se añadió al Design System la sección **(08) Enlaces**, con los tres
+tratamientos en demo viva (hover real, no capturas), el porqué de reservar el cian al
+momento de interacción y la excepción de la franja de contacto. Accesibilidad pasó a
+(09) y Esqueleto a (10).
+
+**Auditoría de CTA de ambas páginas**, a petición de Francisco, que sospechaba que no
+seguían la norma — acertó. Cuatro controles sin hover: el toggle de rejilla, las tres
+pestañas de dispositivo, el botón «Repetir» del reveal y los chips de descarga del
+Brand Kit. Estos últimos, además, estaban a **40px de alto**, por debajo del mínimo de
+44px que publica la checklist de accesibilidad **de ese mismo Design System**. Al
+arreglar los toggles se vio que darles el relleno pleno los volvía indistinguibles del
+estado activo (`aria-pressed`), de ahí el tinte como tratamiento propio de toggles.
+
+**Una corrección de diagnóstico.** El fallo de `.icon-chrome` se atribuyó primero a que
+la utilidad `bg-card` le ganaba en la cascada, y así se escribió en el comentario del
+CSS y en el mensaje de commit. Al ir a documentarlo en el cierre de sesión, la
+afirmación contradecía a D34 y se verificó en el navegador: **era falsa**. La causa real
+era la transición, no la cascada (D35). Queda como recordatorio de que un diagnóstico
+que contradice una decisión ya registrada hay que comprobarlo antes de escribirlo, no
+después.
+
+**Estado al cerrar**: build, lint y typecheck limpios; verificación visual en Chrome de
+los tres patrones y de los CTA corregidos, en claro y oscuro, ES y EN. Sube a producción
+junto con P37.55.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

@@ -478,11 +478,15 @@
 
 /* Controles de chrome solo-icono (toggle de tema, hamburguesa, LinkedIn del
    footer): mismo hover de pastilla que `.link-chrome` (P37.57). El fondo de
-   reposo también vive aquí (`--card`, o `transparent` si el caller no pasa
-   `--icon-chrome-bg`) en vez de dejarlo en la utilidad `bg-card`: medido en
-   el propio Chrome, la utilidad (capa `utilities`) seguía ganándole al hover
-   de esta clase pese a no estar en `@layer` — con las dos declaraciones en la
-   misma regla no hay pulso de cascada que perder. */
+   reposo vive aquí (`--card` vía `--icon-chrome-bg`, o `transparent` si el
+   caller no lo pasa) en vez de dejarlo en la utilidad `bg-card`.
+   El motivo NO es de cascada —una clase sin `@layer` sí gana a las utilidades,
+   D34 se sostiene— sino de transición: con el reposo en `bg-card` y el hover
+   aquí, `transition: background-color` dejaba el elemento clavado en el color
+   de reposo y el hover no llegaba nunca (medido en Chrome; al quitar la
+   transición en caliente, sin mover el ratón, saltaba al color de hover al
+   instante). Los dos extremos de una transición tienen que pertenecer a la
+   misma regla que la declara. Ver D35. */
 .icon-chrome {
   background-color: var(--icon-chrome-bg, transparent);
   transition: background-color 0.18s ease;

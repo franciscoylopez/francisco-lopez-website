@@ -30,6 +30,18 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 
      *Excepción 2026-08-04 (P37.55):* `ContactSecondary` (teléfono/LinkedIn/CV en la franja de contacto) son acciones, no navegación, así que por regla les tocaría H1 — pero llevan tratamiento de **chrome** (`.link-chrome`, sin subrayado) porque H1 ahí generaba ruido visual: subrayado permanente + un hover propio justo al lado del CTA sólido de email competían entre sí en vez de leerse como su acompañamiento. Es una excepción puntual a la regla de dos capas, no un tercer criterio — probablemente se resuelva de otra forma el día que exista una sección de contacto dedicada (hoy es una franja compartida entre home/Sobre mí/Accesibilidad, D29).
 
+     - **Controles de chrome solo icono** (toggle de tema, hamburguesa, iconos de redes): la **misma pastilla** que el chrome con etiqueta (`.icon-chrome`), sobre el objetivo táctil de 44px completo. Un control sin texto necesita la misma afordancia que uno con etiqueta; si no, es lo único del chrome que no responde al cursor. *(Añadido 2026-08-04, P37.57: estos controles no tenían ningún estado hover.)*
+
+## Jerarquía de hover en botones y CTA
+
+Tres tratamientos, y no son intercambiables:
+
+- **CTA sólido** (`bg-primary`): la acción destacada de la página. Hover = `bg-primary/90`. Hoy solo el email de la franja de contacto.
+- **CTA outline-primary** (`border-primary` + `text-primary`): acciones de contenido que viven solas, sin otro CTA al lado con el que competir — «Descargar CV» de Trayectoria, «Gestionar preferencias» de Cookies, chips de descarga del Brand Kit. Hover = **el relleno cian pleno**, texto a `primary-foreground`.
+- **Outline neutro** (`border-border` + `bg-background`): controles de utilidad y botones que conviven con un sólido dentro del mismo grupo (los del diálogo de consentimiento, «Repetir» del Design System). Hover = pastilla `muted`, nunca cian.
+
+**Toggles y controles segmentados** (`aria-pressed`) son el caso aparte: en ellos el **relleno pleno ya significa «activo»**, así que el hover del estado apagado usa un **tinte** (`bg-primary/10`), no el relleno — si no, hover y seleccionado se ven igual y el control deja de comunicar en qué estado está. *(Fijado 2026-08-04, P37.59, al detectar que los toggles del Design System no tenían hover y que ponerles el relleno los volvía indistinguibles del estado activo.)*
+
 2. **Tokens de marca** (`brand-cyan`, `brand-purple`, `brand-cyan-soft`, `brand-purple-soft`).
    - Son DECORATIVOS: fondos de sección, detalles, ilustración, gráficos.
    - `brand-*-soft` (los pasteles) son de bajo contraste: NO los uses como color de texto, de botón ni de cualquier elemento que deba leerse. Solo relleno decorativo.
