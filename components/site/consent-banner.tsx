@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { DIALOG_ACTIONS } from "@/components/site/layout";
 import { actionVariants } from "@/components/ui/action";
 import {
   type ConsentChoice,
@@ -223,7 +224,7 @@ export function ConsentBanner({
             />
           </ul>
 
-          <div className="mt-6 flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:justify-end">
+          <div className={DIALOG_ACTIONS}>
             <button
               type="button"
               className={BTN_OUTLINE}

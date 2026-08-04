@@ -49,7 +49,7 @@
 - D33 · `/llms.txt` — un solo archivo, en español, generado desde el diccionario (P37.5)
 - D34 · Clases de componente en `globals.css` van sin `@layer` en este proyecto (Tailwind v4)
 - D35 · Los dos extremos de una `transition` van en la misma regla que la declara
-- D36 · Capa de componentes: `action.tsx` (variantes de acción) + `layout.ts` (WRAP/SECTION/CARD/PANEL)
+- D36 · Capa de componentes: `action.tsx` (variantes de acción) + `layout.ts` (WRAP/SECTION/CARD/PANEL/DIALOG_ACTIONS)
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 

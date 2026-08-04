@@ -946,7 +946,21 @@ duplicado idéntico en **dieciocho** sitios y `SECTION` en ocho.
   compitiendo). Se exporta el `cva` y no un componente `<Action>` a propósito: la mitad
   de los call sites son `<a>` y la otra mitad `<button>`, y un wrapper con
   `render`/`asChild` añadiría indirección sin quitar ninguna decisión de encima.
-- **`components/site/layout.ts`** — `WRAP`, `SECTION`, `PROSE`, `CARD`, `PANEL`.
+- **`components/site/layout.ts`** — `WRAP`, `SECTION`, `PROSE`, `CARD`, `PANEL`,
+  `DIALOG_ACTIONS`.
+
+**Ampliado 2026-08-04 (P37.5986): `DIALOG_ACTIONS`, y el motivo por el que hace falta.**
+Migrar el botón a la variante cambió sus métricas —de `px-4` a `px-[1.35rem]`, 33,6px más
+por fila de tres— y **nadie volvió a mirar los contenedores que agrupan botones**. En el
+diálogo de consentimiento la fila pasó a necesitar 496px con 462px disponibles, así que
+«Guardar preferencias» caía sola a una segunda línea alineada a la derecha: se leía como un
+desajuste en el primer elemento que ve un visitante. La lección que generaliza es que **una
+capa de componentes no cubre las composiciones**: al cambiar el tamaño de una pieza hay que
+re-verificar los grupos que la contienen, y el sitio donde eso se arregla es la capa de
+layout, no el call site. `DIALOG_ACTIONS` apila las acciones a ancho completo en vez de
+encogerlas para que quepan, porque la fila solo cabría por poco y **solo en algunos
+idiomas** (los labels EN son más cortos que los ES): un layout que depende del largo del
+texto se rompe con el siguiente cambio de copy sin avisar.
 
 Se borra `components/ui/button.tsx`: sin usos, con un cuarto mecanismo de foco y un
 hover (`bg-primary/90` → en realidad `/80`) que contradecía la regla.
