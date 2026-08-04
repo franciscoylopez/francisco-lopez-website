@@ -747,8 +747,9 @@ sobre un fondo cuyo color efectivo cambia con el tema**. Al construir cualquier 
 **Estados interactivos.** El hover del botón sólido **no** se hace con `opacity` ni
 `bg-primary/90`, que bajan el contraste al mezclar con el fondo. Se mezcla hacia
 `--foreground`, que en ambos temas se aleja de `--primary-foreground` (en claro oscurece bajo
-texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,28→8,04 claro,
-8,36→8,92 oscuro).
+texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,67→8,42 claro,
+8,36→8,93 oscuro — cifras revisadas en P37.598, cuando se corrigió el token del cian claro;
+las de esta entrada, 7,28→8,04, estaban calculadas sobre el cian anterior).
 
 **Aplicado retroactivamente.** La regla destapó un fallo **preexistente** en la banda de «Más
 allá del PM»: eyebrow al 58% → **4,07:1 en oscuro**, por debajo de AA. Corregido al 80%

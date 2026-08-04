@@ -594,11 +594,11 @@
         {
           "name": "Cian primario",
           "token": "--primary · --brand-cyan",
-          "hex": "#005E5F · #3FC9C4",
+          "hex": "#235859 · #3FC9C4",
           "swap": "conmuta",
           "sample": "var(--primary)",
           "sampleFg": "var(--primary-foreground)",
-          "ratio": "7,01:1 texto · 7,44:1 botón (claro) · 8,36:1 oscuro · AAA",
+          "ratio": "7,22:1 texto · 7,67:1 botón (claro) · 8,36:1 oscuro · AAA",
           "note": "Enlaces y acento"
         },
         {
@@ -1224,7 +1224,7 @@
         {
           "label": "primary como texto",
           "note": "enlaces y acento",
-          "light": "7,01:1",
+          "light": "7,22:1",
           "lightLv": "AAA",
           "dark": "8,36:1",
           "darkLv": "AAA"
@@ -1232,7 +1232,7 @@
         {
           "label": "Texto sobre botón",
           "note": "primary-foreground sobre primary",
-          "light": "7,44:1",
+          "light": "7,67:1",
           "lightLv": "AAA",
           "dark": "8,36:1",
           "darkLv": "AAA"

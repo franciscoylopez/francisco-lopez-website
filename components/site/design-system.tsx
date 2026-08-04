@@ -236,7 +236,11 @@ export function DesignSystem({
                     key={tok.name}
                     className="flex flex-wrap gap-x-3 gap-y-1"
                   >
-                    <span style={{ color: "var(--brand-cyan-split)" }}>
+                    {/* El panel invierte con el tema (su fondo es `--foreground`),
+                        así que el acento no puede ser fijo: usa el cian del OTRO
+                        tema. Antes era `--brand-cyan-split`, que en oscuro caía a
+                        2,09:1 sobre el panel en hueso. */}
+                    <span style={{ color: "var(--primary-on-inverted)" }}>
                       {tok.name}:
                     </span>
                     <span

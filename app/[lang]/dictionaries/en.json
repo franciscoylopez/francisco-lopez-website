@@ -594,11 +594,11 @@
         {
           "name": "Primary cyan",
           "token": "--primary · --brand-cyan",
-          "hex": "#005E5F · #3FC9C4",
+          "hex": "#235859 · #3FC9C4",
           "swap": "conmuta",
           "sample": "var(--primary)",
           "sampleFg": "var(--primary-foreground)",
-          "ratio": "7.01:1 text · 7.44:1 button (light) · 8.36:1 dark · AAA",
+          "ratio": "7.22:1 text · 7.67:1 button (light) · 8.36:1 dark · AAA",
           "note": "Links and accent"
         },
         {
@@ -1225,7 +1225,7 @@
         {
           "label": "primary as text",
           "note": "links and accent",
-          "light": "7.01:1",
+          "light": "7.22:1",
           "lightLv": "AAA",
           "dark": "8.36:1",
           "darkLv": "AAA"
@@ -1233,7 +1233,7 @@
         {
           "label": "Text on button",
           "note": "primary-foreground over primary",
-          "light": "7.44:1",
+          "light": "7.67:1",
           "lightLv": "AAA",
           "dark": "8.36:1",
           "darkLv": "AAA"

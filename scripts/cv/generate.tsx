@@ -37,7 +37,7 @@ const AVATAR = `data:image/png;base64,${fs.readFileSync(asset("assets/cv/francis
 const C = {
   ink: "#21262B",
   paper: "#F7F3EC", // fondo hueso de marca (--background claro) — online-only
-  cyan: "#005E5F", // primary — único color de acción
+  cyan: "#235859", // primary — único color de acción (P37.598: era #005E5F)
   purple: "#9B87F5", // decorativo, con cuentagotas (solo chip Exit)
   purpleAccent: "#6D5AC7",
   muted: "#565B62", // texto secundario legible sobre hueso

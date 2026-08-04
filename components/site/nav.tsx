@@ -151,7 +151,10 @@ export function Nav({
             href={altHref}
             hrefLang={lang === "en" ? "es" : "en"}
             aria-label={dict.switchLanguage}
-            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground link-chrome hidden min-h-[44px] items-center px-[0.6rem] text-[0.85rem] font-medium sm:inline-flex"
+            // `min-w-[44px]`: la etiqueta es de dos letras («EN»/«ES»), así que el
+            // ancho lo daba el texto y se quedaba en 38px — alto correcto, ancho no
+            // (P37.598). El objetivo táctil son las DOS dimensiones.
+            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground link-chrome hidden min-h-[44px] min-w-[44px] items-center justify-center px-[0.6rem] text-[0.85rem] font-medium sm:inline-flex"
           >
             {dict.switchLanguageShort}
           </a>
