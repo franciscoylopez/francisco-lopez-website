@@ -700,13 +700,14 @@ Los dos primeros salen del mismo cambio: `--primary` de `#0B7C7C` a `#005E5F`. P
 El de `muted-foreground` en claro fue el único que **no era gratis** —el gris se nota algo más oscuro y ese token existe para leerse como secundario— y se aplicó igualmente porque la distancia con el texto principal (13,79:1) sigue siendo enorme. Resultado: **ningún par del sistema se queda en AA**.
 
 > **Corregido el 2026-08-04 (P37.598): las dos primeras filas de esa tabla eran falsas.** El
-> token quedó en `oklch(0.43 0.0886 194.82)`, que renderiza `#215e5f` y no el `#005E5F` que
-> se documentó; medido sobre el color real daba **6,69:1 como texto** (AA, no AAA) y 7,10:1
-> sobre botón. Ni siquiera el hex documentado llegaba: 6,86:1. La medición de julio se hizo
-> sobre un color que nunca se envió, y la cifra viajó de aquí a `BRAND.md`, al Design System,
-> al Brand Kit y a la página de Accesibilidad. Se corrigió bajando el token a
-> `oklch(0.41 0.0886 194.82)` → `#235859`, que sí da **7,22:1 y 7,67:1**. Detalle y método en
-> `BRAND.md` (§Accesibilidad) y en `DECISIONS.md` D30.
+> cian de julio se pintaba como `#005E5F` —el hex documentado **era correcto**— pero eso da
+> **6,86:1 como texto**: AA, no AAA. El 7,01 nunca fue alcanzable con ese color; se calculó
+> mal y viajó de aquí a `BRAND.md`, al Design System, al Brand Kit y a la página de
+> Accesibilidad. La segunda fila (7,44 sobre botón) también estaba mal: lo pintado eran
+> **7,28**, que es justo lo que decía `DECISIONS.md` D30. Corregido bajando el token a
+> `oklch(0.41 0.0886 194.82)`, que se pinta `#005859` y da **7,43:1 y 7,88:1**. El método
+> para medirlo sin equivocarse —los cianes de esta marca caen fuera del gamut sRGB y hay que
+> recortar antes de calcular— está en `BRAND.md` §Accesibilidad.
 
 **Pendiente de traslado al repo:** los cinco tokens de layout que define esta página (`--container`, `--page-x`, `--gutter`, `--measure`, `--section-y`) no existen en `globals.css`. Anotado como requisito explícito en la tarea de Setup del build (ver sección 18).
 
