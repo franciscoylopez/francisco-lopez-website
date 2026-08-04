@@ -37,9 +37,15 @@ const BTN_OUTLINE = actionVariants({ variant: "outline-neutral" });
 const BTN_GHOST = actionVariants({ variant: "ghost" });
 
 // Banner de consentimiento + centro de preferencias granular (P22). Isla de cliente:
-// el default denegado ya lo fijó consent-init (beforeInteractive) antes de GTM; aquí
-// se recoge la elección, se persiste y se aplica al Consent Mode. Solo se monta en
-// producción (gate por GTM_ID en el layout).
+// en producción el default denegado ya lo fijó consent-init (beforeInteractive) antes
+// de GTM; aquí se recoge la elección, se persiste y se aplica al Consent Mode.
+//
+// Se monta en TODOS los entornos desde P37.5975 (antes solo en producción, colgado
+// del gate de GTM). Fuera de producción no hay contenedor que lea el `dataLayer`, así
+// que aplicar el consentimiento es un no-op y lo único que ocurre de verdad es la
+// escritura en `localStorage` — pero la interfaz existe y se puede revisar, que es lo
+// que no pasaba: era la única superficie del sitio imposible de mirar antes de
+// publicarla.
 export function ConsentBanner({
   dict,
   lang,

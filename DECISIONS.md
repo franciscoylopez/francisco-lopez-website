@@ -249,6 +249,20 @@ componente si es `undefined`). Así dev y preview no emiten analítica y no ensu
 datos. La var es `NEXT_PUBLIC_*` porque el ID se inyecta en cliente; no es secreto.
 Documentada en `.env.example` (nuevo; `.gitignore` excepciona `!.env.example`).
 
+> **Matizado 2026-08-04 (P37.5975): este gate manda sobre la analítica, no sobre la UI
+> de consentimiento.** El `<ConsentBanner>` colgaba del mismo `GTM_ID`, y el efecto
+> era que el banner, el diálogo de preferencias, sus cuatro botones y el switch —una
+> superficie de interfaz entera— **solo existían en producción**: no se podían revisar
+> ni en dev ni en preview, es decir, solo *después* de publicarlos. Se destapó al
+> arreglar la bolita del switch (P37.593), que fallaba el 3:1 de componente en dos de
+> las cuatro combinaciones y hubo que verificar inyectando el markup a mano en otra
+> página, porque el componente real no era observable en ningún entorno revisable.
+> Ahora la UI se monta en todos los entornos y el contenedor sigue gateado. Montarla
+> fuera de producción no emite nada: sin GTM, `applyConsent` empuja al `dataLayer` que
+> nadie lee y `saveConsent` escribe en `localStorage`. **La regla que queda: gatear lo
+> que se mide, nunca lo que se dibuja** — si una interfaz solo existe en producción, su
+> primera revisión llega tarde por definición.
+
 **Consentimiento (frontera con P22).** El contenedor GTM por sí solo NO deja cookies
 —solo lo hacen los tags que dispara (GA4)—, así que instalarlo ahora es conforme aunque
 el banner no exista todavía. El Consent Mode v2 (default `denied` + update al aceptar) y
