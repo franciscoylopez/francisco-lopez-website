@@ -79,8 +79,13 @@ export function ContactSecondary({
   cvHref: string;
   className?: string;
 }) {
+  // Excepción a la regla de dos capas de BRAND.md: aunque son acciones (no
+  // navegación), llevan tratamiento de chrome (`.link-chrome`, sin subrayado) en
+  // vez de contenido — el subrayado + hover propio al lado del CTA sólido
+  // generaba ruido visual (feedback 2026-08-04). Probablemente se resuelva de
+  // otra forma cuando exista una sección de contacto dedicada.
   const link =
-    "text-foreground inline-flex min-h-[44px] items-center gap-[0.55rem] text-[0.95rem] no-underline underline-offset-4 hover:underline focus-visible:underline";
+    "link-chrome text-foreground inline-flex min-h-[44px] items-center gap-[0.55rem] px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.95rem]";
   const icon = "size-[17px] flex-none";
   return (
     <ul

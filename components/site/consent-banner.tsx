@@ -122,7 +122,7 @@ export function ConsentBanner({
                 {dict.description}{" "}
                 <a
                   href={policyHref}
-                  className="text-foreground underline underline-offset-4"
+                  className="link-content link-content--underline"
                 >
                   {dict.policyLink}
                 </a>

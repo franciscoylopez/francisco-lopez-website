@@ -2,7 +2,8 @@
 // y [texto](url). Plano (sin anidamiento), suficiente para el énfasis editorial de
 // las páginas de contenido, y mantiene el copy como strings en el diccionario
 // (fuente de verdad ES→EN). Enlaces http(s) → target/rel de seguridad; enlaces de
-// contenido en `primary` (regla de BRAND). Ver D23.
+// contenido con `.link-content--underline` (reposo neutro, cian en hover — regla
+// de BRAND.md matizada 2026-08-04 / P37.55). Ver D23.
 const RICH_TOKEN = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g;
 
 export function Rich({ text }: { text: string }) {
@@ -22,7 +23,7 @@ export function Rich({ text }: { text: string }) {
               {...(external
                 ? { target: "_blank", rel: "noopener noreferrer" }
                 : {})}
-              className="text-primary underline underline-offset-4 hover:no-underline"
+              className="link-content link-content--underline"
             >
               {label}
             </a>

@@ -130,7 +130,7 @@ export function CookiesPolicy({
                   href={GOOGLE_POLICIES_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground underline underline-offset-4"
+                  className="link-content link-content--underline"
                 >
                   {t.thirdLinkLabel}
                 </a>{" "}
@@ -139,7 +139,7 @@ export function CookiesPolicy({
                   href={MICROSOFT_PRIVACY_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground underline underline-offset-4"
+                  className="link-content link-content--underline"
                 >
                   {t.thirdLink2Label}
                 </a>
@@ -163,7 +163,7 @@ export function CookiesPolicy({
                 {t.contactBody}{" "}
                 <a
                   href={`mailto:${EMAIL}`}
-                  className="text-foreground underline underline-offset-4"
+                  className="link-content link-content--underline"
                 >
                   {EMAIL}
                 </a>

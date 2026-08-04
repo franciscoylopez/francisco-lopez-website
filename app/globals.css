@@ -384,3 +384,78 @@
     transform: none;
   }
 }
+
+/* Enlaces de contenido — reposo neutro (`foreground`), el cian entra al interactuar.
+   Sustituye a "texto en `primary` siempre" (BRAND.md, matizado 2026-08-04 / P37.55):
+   relleno sólido que crece desde abajo + texto invertido a `primary-foreground` en
+   hover/focus, reutilizando el par ya verificado AAA de "texto sobre botón"
+   (7,44:1 claro / 8,36:1 oscuro). `box-decoration-break: clone` para que el relleno
+   no se rompa si la frase del enlace cae partida en dos líneas.
+   Sin `@layer` a propósito (como `.contact-cta` arriba): en Tailwind v4 una clase
+   sin capa gana siempre a las utilidades, así que si algún día un caller mezcla
+   esta clase con `px-*`/`py-*` propios, gana esta — hay que evitar esa combinación
+   en vez de confiar en la cascada. */
+.link-content {
+  color: var(--foreground);
+  border-radius: 4px;
+  padding: 0.05em 0.3em;
+  margin: 0 -0.3em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  background-image: linear-gradient(var(--primary), var(--primary));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0%;
+  transition:
+    background-size 0.3s ease,
+    color 0.3s ease 0.08s;
+}
+.link-content:hover,
+.link-content:focus-visible {
+  background-size: 100% 100%;
+  color: var(--primary-foreground);
+}
+/* Modificador solo para enlaces de texto corrido (sin icono): el subrayado es la
+   afordancia en reposo; en icono + etiqueta (p. ej. ContactSecondary) el propio
+   icono ya cumple esa función y el subrayado sobraría bajo el glifo. */
+.link-content--underline {
+  text-decoration: underline;
+  text-decoration-color: var(--primary);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  transition:
+    background-size 0.3s ease,
+    color 0.3s ease 0.08s,
+    text-decoration-color 0.22s ease;
+}
+.link-content--underline:hover,
+.link-content--underline:focus-visible {
+  text-decoration-color: transparent;
+}
+@media (prefers-reduced-motion: reduce) {
+  .link-content,
+  .link-content--underline {
+    transition: none;
+  }
+}
+
+/* Enlaces de chrome (nav/breadcrumb/footer) — nunca `primary`, ni en texto ni en
+   fondo (BRAND.md). Pastilla `--muted` en hover/focus, sin depender del color.
+   No lleva padding/margin propio (a diferencia de `.link-content`): cada caller ya
+   trae su propia utilidad de espaciado (`px-[0.85rem]` en nav, etc.) y, al no
+   estar en `@layer`, esta clase la pisaría si la trajera. La pastilla usa la caja
+   que ya define cada componente. */
+.link-chrome {
+  border-radius: 7px;
+  background-color: transparent;
+  transition: background-color 0.18s ease;
+}
+.link-chrome:hover,
+.link-chrome:focus-visible {
+  background-color: var(--muted);
+}
+@media (prefers-reduced-motion: reduce) {
+  .link-chrome {
+    transition: none;
+  }
+}

@@ -16,7 +16,7 @@ export function ConsentPreferencesButton({
   const className =
     variant === "button"
       ? "border-border bg-background text-foreground hover:bg-muted inline-flex min-h-[44px] items-center justify-center rounded-lg border px-4 text-[0.9rem] font-semibold transition-colors"
-      : "text-muted-foreground hover:text-foreground focus-visible:text-foreground cursor-pointer text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline";
+      : "text-muted-foreground hover:text-foreground focus-visible:text-foreground link-chrome cursor-pointer px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]";
   return (
     <button
       type="button"
