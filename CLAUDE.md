@@ -47,6 +47,8 @@
 - D31 · Tracking de clics mailto/tel vía dataLayer (P30); GTM Vista previa solo funciona en producción
 - D32 · CSP con allowlist para Microsoft Clarity (3 directivas); `c.bing.com` fuera a propósito (P37)
 - D33 · `/llms.txt` — un solo archivo, en español, generado desde el diccionario (P37.5)
+- D34 · Clases de componente en `globals.css` van sin `@layer` en este proyecto (Tailwind v4)
+- D35 · Los dos extremos de una `transition` van en la misma regla que la declara
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 

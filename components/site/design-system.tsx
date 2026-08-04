@@ -63,6 +63,43 @@ function CheckIcon() {
   );
 }
 
+// Glifos de la demo de chrome solo-icono (§08). Locales a la página: son la
+// ilustración del patrón, no los controles reales del nav (esos viven en Nav).
+function MoonGlyph() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+    </svg>
+  );
+}
+
+function MenuGlyph() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      aria-hidden="true"
+    >
+      <path d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+  );
+}
+
 export function DesignSystem({
   dict,
   related,
@@ -504,7 +541,106 @@ export function DesignSystem({
         </div>
       </section>
 
-      {/* ===================== (08) ACCESIBILIDAD ===================== */}
+      {/* ===================== (08) ENLACES ===================== */}
+      <section data-reveal className={SECTION}>
+        <div className={WRAP}>
+          <SectionHead num={t.enlaces.num} title={t.enlaces.title} />
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.enlaces.lead}
+          </p>
+          <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">
+            {t.enlaces.cases.map((c, i) => (
+              <div
+                key={c.cls}
+                className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+              >
+                {/* Demo vivo: el hover real de cada clase, no una captura. */}
+                <div className="bg-background flex min-h-[7.5rem] items-center justify-center px-5 py-7">
+                  {i === 0 && (
+                    <p className="m-0 text-center text-[0.95rem] leading-[1.7]">
+                      {t.enlaces.demoContentBefore}{" "}
+                      <a
+                        href="#top"
+                        className="link-content link-content--underline"
+                      >
+                        {t.enlaces.demoContentLink}
+                      </a>{" "}
+                      {t.enlaces.demoContentAfter}
+                    </p>
+                  )}
+                  {i === 1 && (
+                    <div className="flex flex-wrap items-center justify-center gap-1">
+                      {t.enlaces.demoChromeItems.map((item) => (
+                        <a
+                          key={item}
+                          href="#top"
+                          className="text-foreground link-chrome inline-flex min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium"
+                        >
+                          {item}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                  {i === 2 && (
+                    <div className="flex items-center gap-1.5">
+                      <a
+                        href="#top"
+                        aria-label={c.kicker}
+                        className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border"
+                      >
+                        <MoonGlyph />
+                      </a>
+                      <a
+                        href="#top"
+                        aria-label={c.cls}
+                        className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border"
+                      >
+                        <MenuGlyph />
+                      </a>
+                    </div>
+                  )}
+                </div>
+                <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
+                  <div className="mb-[0.7rem] flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <span className="text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
+                      {c.kicker}
+                    </span>
+                    <code className="text-muted-foreground font-mono text-[0.74rem]">
+                      {c.cls}
+                    </code>
+                  </div>
+                  <p className="text-foreground m-0 text-[0.88rem] leading-[1.6]">
+                    {c.rule}
+                  </p>
+                  <p className="text-muted-foreground border-border m-0 mt-[0.8rem] border-t border-dashed pt-[0.8rem] text-[0.82rem] leading-[1.55]">
+                    {c.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-muted-foreground m-0 mt-4 text-[0.8rem]">
+            {t.enlaces.hint}
+          </p>
+          <div
+            className={cn(CARD, "mt-8 max-w-[var(--measure)] px-[1.4rem] py-5")}
+          >
+            <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
+              {t.enlaces.ruleTitle}
+            </h3>
+            <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
+              {t.enlaces.rule.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+            <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
+              {t.enlaces.ruleFoot}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== (09) ACCESIBILIDAD ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHead
@@ -592,7 +728,7 @@ export function DesignSystem({
         </div>
       </section>
 
-      {/* ===================== (09) ESQUELETO ===================== */}
+      {/* ===================== (10) ESQUELETO ===================== */}
       <section
         data-reveal
         className={SECTION}

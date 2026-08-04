@@ -31,25 +31,25 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-self-center">
           <a
             href={`${base}/brand-kit`}
-            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
+            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
           >
             {dict.brandKit}
           </a>
           <a
             href={`${base}/design-system`}
-            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
+            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
           >
             {dict.designSystem}
           </a>
           <a
             href={`${base}/accesibilidad`}
-            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
+            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
           >
             {dict.accesibilidad}
           </a>
           <a
             href={`${base}/cookies`}
-            className="text-muted-foreground text-[0.9rem] underline-offset-4 hover:underline focus-visible:underline"
+            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
           >
             {dict.cookies}
           </a>
@@ -60,7 +60,7 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={dict.linkedinAria}
-          className="border-border text-foreground inline-flex h-10 w-10 flex-none items-center justify-center rounded-md border md:justify-self-end"
+          className="border-border text-foreground icon-chrome inline-flex h-10 w-10 flex-none items-center justify-center rounded-md border md:justify-self-end"
         >
           <LinkedinIcon className="size-[18px]" />
         </a>

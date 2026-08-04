@@ -27,7 +27,7 @@ export function Breadcrumb({
               {item.href && !last ? (
                 <a
                   href={item.href}
-                  className="text-muted-foreground inline-flex min-h-[44px] items-center underline-offset-4 hover:underline focus-visible:underline"
+                  className="text-muted-foreground link-chrome inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem]"
                 >
                   {item.label}
                 </a>

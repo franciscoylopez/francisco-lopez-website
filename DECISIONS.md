@@ -830,3 +830,67 @@ que podían divergir con el tiempo.
 **Alcance.** Solo la trayectoria de Producto (no Marketing & Growth ni Formación) y los
 hitos se resumen como el hecho del exit, no la tabla completa — es un resumen curado
 para LLMs, no un volcado del CV; el CV en PDF (enlazado) cubre el detalle completo.
+
+## D34 · Clases de componente en `globals.css` van sin `@layer` en este proyecto (Tailwind v4) — 2026-08-04
+
+**Decisión.** Las clases CSS reutilizables que se añaden a mano en `app/globals.css`
+(`.contact-cta`, `.link-content`, `.link-chrome`…) se escriben **sin** envolver en
+`@layer components { }`. Van como reglas normales, igual que `.contact-cta` ya hacía
+antes de esta decisión — ese era el precedente correcto, no una excepción.
+
+**Contexto.** Al construir `.link-content`/`.link-chrome` para P37.55 se probó primero
+envolverlas en `@layer components`, razonando que así una utilidad de Tailwind en el
+mismo elemento (p. ej. `px-[0.85rem]` del nav) ganaría en caso de conflicto de padding,
+en vez de que la clase de componente pisara la utilidad sin querer. El resultado real
+fue el opuesto y más grave: Tailwind v4, en el `@import "tailwindcss"` de este proyecto,
+no registra un layer `components` — así que `@layer components { }` creaba un layer
+nuevo de **menor prioridad que todo lo demás**, y ninguna propiedad de `.link-content`
+se aplicaba, ni siquiera las que no conflictuaban con ninguna utilidad (`background-image`,
+`text-decoration`, `border-radius`…). El bug era silencioso: sin error de build, sin
+warning — se confirmó con `getComputedStyle` en el navegador (`textDecorationLine: "none"`
+pese a que la clase sí estaba en el DOM).
+
+**Regla derivada.** Escribir las clases de componente sin `@layer`, y si una clase nueva
+necesita ceder una propiedad concreta (como el padding) a la utilidad que ya trae cada
+caller, **no declarar esa propiedad en la clase compartida** — dejar que cada sitio de
+uso la aporte por su cuenta (así se resolvió para `.link-chrome`: no lleva
+padding/margin propio, cada componente que la usa trae el suyo). Cascada explícita por
+ausencia de la propiedad, no por capas.
+
+## D35 · Los dos extremos de una `transition` van en la misma regla que la declara — 2026-08-04
+
+**Decisión.** Si una clase de `globals.css` declara `transition: <prop>` y define el
+valor de `<prop>` en `:hover`/`:focus-visible`, **el valor de reposo también tiene que
+salir de esa misma clase** — no de una utilidad de Tailwind puesta en el mismo elemento.
+Cuando el valor de reposo lo aporta el caller, se pasa por variable con fallback
+(`background-color: var(--icon-chrome-bg, transparent)` y el caller trae
+`[--icon-chrome-bg:var(--card)]`), no por una utilidad `bg-*`.
+
+**Contexto.** Al construir `.icon-chrome` (P37.57) los controles solo-icono llevaban
+`bg-card` (utilidad) para el reposo y `.icon-chrome:hover` para la pastilla, con
+`transition: background-color 0.18s` en la clase. El hover **no llegaba nunca**: el
+elemento se quedaba clavado en `--card`, también pasados 600 ms.
+
+**Diagnóstico — y el descarte de la hipótesis equivocada.** El primer diagnóstico fue
+que la utilidad `bg-card` (capa `utilities`) le ganaba a la clase sin capa, y así se
+escribió en el comentario del CSS y en el mensaje de commit. **Es falso**, y se
+comprobó en el navegador aislando las variables:
+
+| Caso | Reposo | Hover | Transición | Resultado |
+|---|---|---|---|---|
+| A | `bg-card` (utilidad) | color literal, sin capa | no | **funciona** |
+| B | `bg-card` (utilidad) | `var(--chrome-hover-bg)`, sin capa | no | **funciona** |
+| C | `bg-card` (utilidad) | color literal, sin capa | sí | **falla** |
+
+A y B descartan la cascada (una clase sin `@layer` sí gana a las utilidades — **D34 se
+sostiene**) y descartan que el problema fuera usar una `var()`. C aísla la transición
+como única causa. La prueba definitiva: con el elemento en hover y clavado en el color
+de reposo, poner `transition: none` por JS **sin mover el ratón** lo salta al color de
+hover al instante — es decir, la cascada siempre se resolvió bien; lo que no ocurría
+era la transición.
+
+**Regla derivada.** Al añadir una clase con `transition`, comprobar que el valor de
+reposo de esa propiedad lo declara la propia clase. Es el mismo tipo de fallo silencioso
+que D34 (sin error de build ni warning, solo un estado que no se aplica) y se detecta
+igual: midiendo con `getComputedStyle` en el navegador, no leyendo el CSS. Complementa a
+D34: aquella dice *dónde* declarar; esta, *qué* hay que declarar junto.
