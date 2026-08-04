@@ -52,9 +52,12 @@ export function GridDemo({
           aria-pressed={show}
           className={cn(
             "border-primary inline-flex min-h-[44px] items-center gap-[0.45rem] rounded-[var(--radius-md)] border px-4 text-[0.82rem] font-semibold transition-colors",
+            // El relleno pleno de primary ya significa «activo» (aria-pressed):
+            // el hover del estado apagado usa un tinte, no el relleno, para no
+            // leerse como seleccionado bajo el cursor.
             show
-              ? "bg-primary text-primary-foreground"
-              : "text-primary bg-transparent",
+              ? "bg-primary text-primary-foreground hover:bg-primary/90"
+              : "text-primary bg-transparent hover:bg-primary/10",
           )}
         >
           <span
@@ -160,7 +163,7 @@ export function RevealDemo({
         <button
           type="button"
           onClick={replay}
-          className="border-border bg-background text-foreground inline-flex min-h-[44px] items-center rounded-[var(--radius-md)] border px-3 text-[0.78rem] font-medium"
+          className="border-border bg-background text-foreground hover:bg-muted inline-flex min-h-[44px] items-center rounded-[var(--radius-md)] border px-3 text-[0.78rem] font-medium transition-colors"
         >
           {replayLabel}
         </button>
@@ -199,7 +202,11 @@ export function DevicePreview({
   const segBtn = (on: boolean) =>
     cn(
       "border-primary inline-flex min-h-[44px] items-center justify-center gap-[0.45rem] rounded-[var(--radius-md)] border px-4 text-[0.82rem] font-semibold transition-colors",
-      on ? "bg-primary text-primary-foreground" : "text-primary bg-transparent",
+      // Mismo criterio que el toggle de rejilla: el relleno pleno es el estado
+      // seleccionado, así que el hover del resto de segmentos es un tinte.
+      on
+        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+        : "text-primary bg-transparent hover:bg-primary/10",
     );
 
   return (

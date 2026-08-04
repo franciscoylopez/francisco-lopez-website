@@ -231,7 +231,10 @@
     "productoLabel": "Product",
     "marketingLabel": "Marketing",
     "producto": [
-      { "title": "Product Management", "institution": "TheHeroCamp · 2021" },
+      {
+        "title": "Product Management",
+        "institution": "TheHeroCamp · 2021"
+      },
       {
         "title": "Scrum & Agile Leadership",
         "institution": "theUncoding · 2021"
@@ -807,11 +810,26 @@
       "copyLabel": ":root { }",
       "copyHint": "Copy at a glance",
       "items": [
-        { "name": "--container", "val": "1360px" },
-        { "name": "--page-x", "val": "clamp(1.25rem, 5vw, 2.5rem)" },
-        { "name": "--gutter", "val": "clamp(1rem, 2.2vw, 1.5rem)" },
-        { "name": "--measure", "val": "42rem" },
-        { "name": "--section-y", "val": "clamp(4.5rem, 9vw, 9rem)" }
+        {
+          "name": "--container",
+          "val": "1360px"
+        },
+        {
+          "name": "--page-x",
+          "val": "clamp(1.25rem, 5vw, 2.5rem)"
+        },
+        {
+          "name": "--gutter",
+          "val": "clamp(1rem, 2.2vw, 1.5rem)"
+        },
+        {
+          "name": "--measure",
+          "val": "42rem"
+        },
+        {
+          "name": "--section-y",
+          "val": "clamp(4.5rem, 9vw, 9rem)"
+        }
       ],
       "cards": [
         {
@@ -874,15 +892,51 @@
       "rhythmTitle": "Rhythm between sections",
       "sectionYLabel": "--section-y · clamp(72 → 144px)",
       "spacing": [
-        { "name": "2xs", "px": "8px", "w": "5%" },
-        { "name": "xs", "px": "12px", "w": "8%" },
-        { "name": "sm", "px": "16px", "w": "11%" },
-        { "name": "md", "px": "24px", "w": "17%" },
-        { "name": "lg", "px": "32px", "w": "23%" },
-        { "name": "xl", "px": "48px", "w": "34%" },
-        { "name": "2xl", "px": "64px", "w": "46%" },
-        { "name": "3xl", "px": "96px", "w": "68%" },
-        { "name": "4xl", "px": "128px", "w": "90%" }
+        {
+          "name": "2xs",
+          "px": "8px",
+          "w": "5%"
+        },
+        {
+          "name": "xs",
+          "px": "12px",
+          "w": "8%"
+        },
+        {
+          "name": "sm",
+          "px": "16px",
+          "w": "11%"
+        },
+        {
+          "name": "md",
+          "px": "24px",
+          "w": "17%"
+        },
+        {
+          "name": "lg",
+          "px": "32px",
+          "w": "23%"
+        },
+        {
+          "name": "xl",
+          "px": "48px",
+          "w": "34%"
+        },
+        {
+          "name": "2xl",
+          "px": "64px",
+          "w": "46%"
+        },
+        {
+          "name": "3xl",
+          "px": "96px",
+          "w": "68%"
+        },
+        {
+          "name": "4xl",
+          "px": "128px",
+          "w": "90%"
+        }
       ],
       "rhythm": [
         "Between major sections: --section-y — 72px mobile → 144px desktop.",
@@ -1018,10 +1072,22 @@
       "num": "(07)",
       "title": "Motion",
       "timings": [
-        { "k": "150ms", "v": "Micro-interactions: hover, focus, buttons." },
-        { "k": "250ms", "v": "State changes: accordions, tabs." },
-        { "k": "600ms", "v": "Section scroll-reveal on entry." },
-        { "k": "easing", "v": "cubic-bezier(.4, 0, .2, 1) — standard." }
+        {
+          "k": "150ms",
+          "v": "Micro-interactions: hover, focus, buttons."
+        },
+        {
+          "k": "250ms",
+          "v": "State changes: accordions, tabs."
+        },
+        {
+          "k": "600ms",
+          "v": "Section scroll-reveal on entry."
+        },
+        {
+          "k": "easing",
+          "v": "cubic-bezier(.4, 0, .2, 1) — standard."
+        }
       ],
       "bullets": [
         "Reveal = fade + 12px rise, staggered ~60ms between children.",
@@ -1041,8 +1107,49 @@
       "navState2": "on scroll · 64px · flat",
       "navFoot": "It's the transition you're seeing right now in this page's header."
     },
-    "accesibilidad": {
+    "enlaces": {
       "num": "(08)",
+      "title": "Links",
+      "lead": "How a link looks follows from what it does, not from where it sits. Inside content, cyan is the reward for interacting; inside a block that is already navigation, cyan tells you nothing and only adds noise.",
+      "hint": "Hover over them ▸",
+      "cases": [
+        {
+          "kicker": "Content",
+          "cls": ".link-content",
+          "rule": "At rest, foreground text with a thin primary underline. On hover or focus, a solid fill grows from the bottom up and the text flips to primary-foreground.",
+          "note": "It reuses the already-verified «text on button» contrast pair (AAA in both themes) rather than inventing a new one."
+        },
+        {
+          "kicker": "Navigation chrome",
+          "cls": ".link-chrome",
+          "rule": "Nav, breadcrumb, footer and menus: foreground or muted-foreground, never primary. On hover and focus, a muted background pill.",
+          "note": "Their position already reads as a link. Colour is not what carries the state — the pill works just as well without telling hues apart."
+        },
+        {
+          "kicker": "Icon-only chrome",
+          "cls": ".icon-chrome",
+          "rule": "Theme toggle, menu and social icons: the same pill as the rest of the chrome, filling the full 44px touch target.",
+          "note": "A control without a label needs the same affordance as one with text — otherwise it is the only piece of chrome that ignores the cursor."
+        }
+      ],
+      "demoContentBefore": "Every decision on this page is",
+      "demoContentLink": "documented and measured",
+      "demoContentAfter": "before it reaches the code.",
+      "demoChromeItems": [
+        "Home",
+        "About",
+        "Brand Kit"
+      ],
+      "ruleTitle": "Why cyan does not live in the text",
+      "rule": [
+        "Cyan is the system's only action colour: if it also tints every link at rest, it stops signalling anything.",
+        "Holding it back for the moment of interaction turns it back into a signal instead of a paragraph colour.",
+        "No state is encoded by colour alone: underline, fill and pill are changes of shape, not of hue."
+      ],
+      "ruleFoot": "A deliberate exception: the channels in the contact band (phone, LinkedIn, CV) are actions rather than navigation, yet they take the chrome treatment — a permanent underline next to the solid email button competed with it instead of supporting it."
+    },
+    "accesibilidad": {
+      "num": "(09)",
       "title": "Accessibility",
       "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost. It's the internal criterion the site is built and audited against; the public conformance statement will live on the Accessibility page.",
       "contrastTitle": "Measured contrast",
@@ -1107,7 +1214,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(09)",
+      "num": "(10)",
       "title": "Navigable skeleton",
       "devGroupLabel": "Device preview",
       "devFull": "Desktop",
@@ -1116,18 +1223,46 @@
       "lead": "A schematic mockup of the home with placeholders — no defined content. It only demonstrates the vertical rhythm and grid shared by Hero, Milestones, How I work and the rest of the sections.",
       "mobileNote": "The mobile version is shown. The Desktop / Tablet / Mobile comparison is available on wide screens.",
       "rows": [
-        { "idx": "(01)", "name": "Hero", "h": "clamp(9rem,22vw,15rem)" },
-        { "idx": "(02)", "name": "Milestones", "h": "clamp(11rem,26vw,18rem)" },
-        { "idx": "(03)", "name": "How I work", "h": "clamp(8rem,18vw,12rem)" },
+        {
+          "idx": "(01)",
+          "name": "Hero",
+          "h": "clamp(9rem,22vw,15rem)"
+        },
+        {
+          "idx": "(02)",
+          "name": "Milestones",
+          "h": "clamp(11rem,26vw,18rem)"
+        },
+        {
+          "idx": "(03)",
+          "name": "How I work",
+          "h": "clamp(8rem,18vw,12rem)"
+        },
         {
           "idx": "(04)",
           "name": "Beyond the PM",
           "h": "clamp(8rem,18vw,12rem)"
         },
-        { "idx": "(05)", "name": "Career", "h": "clamp(9rem,20vw,13rem)" },
-        { "idx": "(06)", "name": "Education", "h": "clamp(7rem,16vw,10rem)" },
-        { "idx": "(07)", "name": "Toolkit", "h": "clamp(9rem,20vw,13rem)" },
-        { "idx": "(08)", "name": "Contact", "h": "clamp(8rem,18vw,12rem)" }
+        {
+          "idx": "(05)",
+          "name": "Career",
+          "h": "clamp(9rem,20vw,13rem)"
+        },
+        {
+          "idx": "(06)",
+          "name": "Education",
+          "h": "clamp(7rem,16vw,10rem)"
+        },
+        {
+          "idx": "(07)",
+          "name": "Toolkit",
+          "h": "clamp(9rem,20vw,13rem)"
+        },
+        {
+          "idx": "(08)",
+          "name": "Contact",
+          "h": "clamp(8rem,18vw,12rem)"
+        }
       ]
     }
   },
@@ -1206,8 +1341,14 @@
       "heading": "Conformance level",
       "note": "Contrast is measured, not estimated. Body text reaches 13.79:1 in light and 15.32:1 in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1 — cleared with room to spare.",
       "rows": [
-        { "label": "Standard", "value": "WCAG 2.2, levels A and AA." },
-        { "label": "Status", "value": "AA met across the whole site." },
+        {
+          "label": "Standard",
+          "value": "WCAG 2.2, levels A and AA."
+        },
+        {
+          "label": "Status",
+          "value": "AA met across the whole site."
+        },
         {
           "label": "Colour system",
           "value": "AAA in light and dark, with contrast measured."

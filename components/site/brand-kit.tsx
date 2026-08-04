@@ -50,11 +50,16 @@ function DownloadIcon() {
   );
 }
 
+// Chips de descarga. `min-h-[44px]` es el objetivo táctil mínimo del sitio (punto 3
+// de la checklist que publica el propio Design System) — estaban a 40px. El hover
+// sigue el mismo par que el resto de CTA: outline-primary se rellena de cian, el
+// outline neutro se apoya en la pastilla `muted` del chrome (P37.59).
 const DL_BASE =
-  "inline-flex min-h-[40px] items-center justify-center gap-[0.4rem] rounded-[var(--radius-md)] text-[0.8rem] font-semibold";
-const DL_PRIMARY = "border-primary text-primary border px-[0.85rem]";
+  "inline-flex min-h-[44px] items-center justify-center gap-[0.4rem] rounded-[var(--radius-md)] text-[0.8rem] font-semibold transition-colors";
+const DL_PRIMARY =
+  "border-primary text-primary hover:bg-primary hover:text-primary-foreground border px-[0.85rem]";
 const DL_NEUTRAL =
-  "border-border bg-background text-foreground border px-[0.75rem]";
+  "border-border bg-background text-foreground hover:bg-muted border px-[0.75rem]";
 
 // Descarga con href único (assets neutros al tema: mono negro/blanco).
 function Dl({

@@ -231,7 +231,10 @@
     "productoLabel": "Producto",
     "marketingLabel": "Marketing",
     "producto": [
-      { "title": "Product Management", "institution": "TheHeroCamp · 2021" },
+      {
+        "title": "Product Management",
+        "institution": "TheHeroCamp · 2021"
+      },
       {
         "title": "Scrum & Agile Leadership",
         "institution": "theUncoding · 2021"
@@ -807,11 +810,26 @@
       "copyLabel": ":root { }",
       "copyHint": "Copia de un vistazo",
       "items": [
-        { "name": "--container", "val": "1360px" },
-        { "name": "--page-x", "val": "clamp(1.25rem, 5vw, 2.5rem)" },
-        { "name": "--gutter", "val": "clamp(1rem, 2.2vw, 1.5rem)" },
-        { "name": "--measure", "val": "42rem" },
-        { "name": "--section-y", "val": "clamp(4.5rem, 9vw, 9rem)" }
+        {
+          "name": "--container",
+          "val": "1360px"
+        },
+        {
+          "name": "--page-x",
+          "val": "clamp(1.25rem, 5vw, 2.5rem)"
+        },
+        {
+          "name": "--gutter",
+          "val": "clamp(1rem, 2.2vw, 1.5rem)"
+        },
+        {
+          "name": "--measure",
+          "val": "42rem"
+        },
+        {
+          "name": "--section-y",
+          "val": "clamp(4.5rem, 9vw, 9rem)"
+        }
       ],
       "cards": [
         {
@@ -874,15 +892,51 @@
       "rhythmTitle": "Ritmo entre secciones",
       "sectionYLabel": "--section-y · clamp(72 → 144px)",
       "spacing": [
-        { "name": "2xs", "px": "8px", "w": "5%" },
-        { "name": "xs", "px": "12px", "w": "8%" },
-        { "name": "sm", "px": "16px", "w": "11%" },
-        { "name": "md", "px": "24px", "w": "17%" },
-        { "name": "lg", "px": "32px", "w": "23%" },
-        { "name": "xl", "px": "48px", "w": "34%" },
-        { "name": "2xl", "px": "64px", "w": "46%" },
-        { "name": "3xl", "px": "96px", "w": "68%" },
-        { "name": "4xl", "px": "128px", "w": "90%" }
+        {
+          "name": "2xs",
+          "px": "8px",
+          "w": "5%"
+        },
+        {
+          "name": "xs",
+          "px": "12px",
+          "w": "8%"
+        },
+        {
+          "name": "sm",
+          "px": "16px",
+          "w": "11%"
+        },
+        {
+          "name": "md",
+          "px": "24px",
+          "w": "17%"
+        },
+        {
+          "name": "lg",
+          "px": "32px",
+          "w": "23%"
+        },
+        {
+          "name": "xl",
+          "px": "48px",
+          "w": "34%"
+        },
+        {
+          "name": "2xl",
+          "px": "64px",
+          "w": "46%"
+        },
+        {
+          "name": "3xl",
+          "px": "96px",
+          "w": "68%"
+        },
+        {
+          "name": "4xl",
+          "px": "128px",
+          "w": "90%"
+        }
       ],
       "rhythm": [
         "Entre secciones mayores: --section-y — 72px móvil → 144px escritorio.",
@@ -1018,10 +1072,22 @@
       "num": "(07)",
       "title": "Movimiento",
       "timings": [
-        { "k": "150ms", "v": "Microinteracciones: hover, foco, botones." },
-        { "k": "250ms", "v": "Cambios de estado: acordeones, tabs." },
-        { "k": "600ms", "v": "Scroll-reveal de entrada de sección." },
-        { "k": "easing", "v": "cubic-bezier(.4, 0, .2, 1) — estándar." }
+        {
+          "k": "150ms",
+          "v": "Microinteracciones: hover, foco, botones."
+        },
+        {
+          "k": "250ms",
+          "v": "Cambios de estado: acordeones, tabs."
+        },
+        {
+          "k": "600ms",
+          "v": "Scroll-reveal de entrada de sección."
+        },
+        {
+          "k": "easing",
+          "v": "cubic-bezier(.4, 0, .2, 1) — estándar."
+        }
       ],
       "bullets": [
         "Reveal = fundido + subida de 12px, escalonado ~60ms entre hijos.",
@@ -1041,8 +1107,49 @@
       "navState2": "con scroll · 64px · flat",
       "navFoot": "Es la transición que ves ahora mismo en la cabecera de esta página."
     },
-    "accesibilidad": {
+    "enlaces": {
       "num": "(08)",
+      "title": "Enlaces",
+      "lead": "El tratamiento de un enlace lo decide su función, no el sitio donde cae. Si es contenido, el cian aparece como recompensa de la interacción; si su bloque entero ya es navegación, el cian no distingue nada y sobra.",
+      "hint": "Pasa el cursor por encima ▸",
+      "cases": [
+        {
+          "kicker": "Contenido",
+          "cls": ".link-content",
+          "rule": "En reposo, texto en foreground con un subrayado fino en primary. Al recibir cursor o foco, un relleno sólido crece de abajo arriba y el texto se invierte a primary-foreground.",
+          "note": "Reutiliza el par de contraste ya verificado de «texto sobre botón» (AAA en ambos temas) en vez de inventar uno nuevo."
+        },
+        {
+          "kicker": "Chrome de navegación",
+          "cls": ".link-chrome",
+          "rule": "Nav, breadcrumb, footer y menús: foreground o muted-foreground, nunca primary. En hover y foco, una pastilla de fondo muted.",
+          "note": "Se leen como enlace por su posición. El color no es lo que marca el estado — la pastilla funciona igual sin distinguir tonos."
+        },
+        {
+          "kicker": "Chrome solo icono",
+          "cls": ".icon-chrome",
+          "rule": "Toggle de tema, menú y redes: la misma pastilla que el resto del chrome, ocupando el objetivo táctil de 44px completo.",
+          "note": "Un control sin etiqueta necesita la misma afordancia que uno con texto; si no, es lo único del chrome que no responde al cursor."
+        }
+      ],
+      "demoContentBefore": "Cada decisión de esta página está",
+      "demoContentLink": "documentada y medida",
+      "demoContentAfter": "antes de llegar al código.",
+      "demoChromeItems": [
+        "Inicio",
+        "Sobre mí",
+        "Brand Kit"
+      ],
+      "ruleTitle": "Por qué el cian no vive en el texto",
+      "rule": [
+        "El cian es el único color de acción del sistema: si además tiñe todo enlace en reposo, deja de señalar nada.",
+        "Reservarlo al momento de la interacción lo devuelve a ser una señal, no un color de párrafo.",
+        "Ningún estado se codifica solo por color: subrayado, relleno y pastilla son cambios de forma, no de tono."
+      ],
+      "ruleFoot": "Excepción consciente: los canales de la franja de contacto (teléfono, LinkedIn, CV) son acciones, no navegación, pero llevan tratamiento de chrome — un subrayado permanente junto al botón sólido de email competía con él en vez de acompañarlo."
+    },
+    "accesibilidad": {
+      "num": "(09)",
       "title": "Accesibilidad",
       "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual. Es el criterio interno con el que se construye y audita el sitio; la declaración pública de conformidad vivirá en la página de Accesibilidad.",
       "contrastTitle": "Contraste medido",
@@ -1107,7 +1214,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(09)",
+      "num": "(10)",
       "title": "Esqueleto navegable",
       "devGroupLabel": "Vista previa por dispositivo",
       "devFull": "Escritorio",
@@ -1116,8 +1223,16 @@
       "lead": "Maqueta esquemática de la home con placeholders — sin contenido definido. Solo demuestra el ritmo vertical y la retícula que comparten Hero, Hitos, Cómo trabajo y el resto de secciones.",
       "mobileNote": "Se muestra la versión móvil. La comparativa entre Escritorio, Tablet y Móvil está disponible en pantallas anchas.",
       "rows": [
-        { "idx": "(01)", "name": "Hero", "h": "clamp(9rem,22vw,15rem)" },
-        { "idx": "(02)", "name": "Hitos", "h": "clamp(11rem,26vw,18rem)" },
+        {
+          "idx": "(01)",
+          "name": "Hero",
+          "h": "clamp(9rem,22vw,15rem)"
+        },
+        {
+          "idx": "(02)",
+          "name": "Hitos",
+          "h": "clamp(11rem,26vw,18rem)"
+        },
         {
           "idx": "(03)",
           "name": "Cómo trabajo",
@@ -1128,10 +1243,26 @@
           "name": "Más allá del PM",
           "h": "clamp(8rem,18vw,12rem)"
         },
-        { "idx": "(05)", "name": "Trayectoria", "h": "clamp(9rem,20vw,13rem)" },
-        { "idx": "(06)", "name": "Formación", "h": "clamp(7rem,16vw,10rem)" },
-        { "idx": "(07)", "name": "Toolkit", "h": "clamp(9rem,20vw,13rem)" },
-        { "idx": "(08)", "name": "Contacto", "h": "clamp(8rem,18vw,12rem)" }
+        {
+          "idx": "(05)",
+          "name": "Trayectoria",
+          "h": "clamp(9rem,20vw,13rem)"
+        },
+        {
+          "idx": "(06)",
+          "name": "Formación",
+          "h": "clamp(7rem,16vw,10rem)"
+        },
+        {
+          "idx": "(07)",
+          "name": "Toolkit",
+          "h": "clamp(9rem,20vw,13rem)"
+        },
+        {
+          "idx": "(08)",
+          "name": "Contacto",
+          "h": "clamp(8rem,18vw,12rem)"
+        }
       ]
     }
   },
@@ -1210,8 +1341,14 @@
       "heading": "Nivel de conformidad",
       "note": "El contraste está medido, no estimado. El texto principal alcanza 13,79:1 en claro y 15,32:1 en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
       "rows": [
-        { "label": "Estándar", "value": "WCAG 2.2, niveles A y AA." },
-        { "label": "Estado", "value": "AA cumplido en todo el sitio." },
+        {
+          "label": "Estándar",
+          "value": "WCAG 2.2, niveles A y AA."
+        },
+        {
+          "label": "Estado",
+          "value": "AA cumplido en todo el sitio."
+        },
         {
           "label": "Sistema de color",
           "value": "AAA en claro y oscuro, con el contraste medido."
