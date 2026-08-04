@@ -62,7 +62,10 @@ V1 lanzada. En vivo:
    CV la acompañan como canales de apoyo.
 10. **Footer** — Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn.
 
-Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas.
+Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas. El **Design System**
+documenta el sistema en once secciones; desde el 2026-08-04 publica también **«Botones y
+acciones»**, con las variantes reales del sitio como demo — si una variante cambia, la
+página cambia con ella.
 
 **Las tres superficies de contacto comparten un solo patrón** (franja de la home, cierre
 de Sobre mí y «reportar una barrera» de Accesibilidad): mismo componente, mismos datos y
@@ -76,9 +79,19 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   `README.md` y `DECISIONS.md`.
 - **Marca**: regla de dos capas (cian = único color de acción; morado decorativo con
   cuentagotas), tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
+- **Capa de componentes**: todo elemento accionable —botón, chip, toggle, pestaña,
+  control de icono— sale de `components/ui/action.tsx`, y las cajas y ritmos comunes de
+  `components/site/layout.ts`. **Ninguno se escribe con clases sueltas**: si un caso no
+  encaja en una variante, se crea la variante; la excepción se documenta con fecha. Es
+  lo que hace que un cambio de hover, de radio o del objetivo táctil llegue a todo el
+  sitio a la vez. Detalle en `BRAND.md` y `DECISIONS.md` D36.
 - **No funcionales**: PageSpeed/Lighthouse **>90 desktop y móvil**; accesibilidad **AA
-  de suelo, AAA objetivo** (el sistema de color entero está en AAA); **SEO + JSON-LD por
-  página** como criterio de cierre.
+  de suelo, AAA objetivo**; **SEO + JSON-LD por página** como criterio de cierre.
+  Estado verificado el 2026-08-04: **todos los pares de color en reposo están en AAA en
+  ambos temas**, con una única excepción documentada —el hover del toggle apagado, en AA
+  holgado— y **0 violaciones de axe** en las seis páginas, en claro y oscuro, incluido el
+  diálogo de consentimiento. Las cifras publicadas se miden sobre el color que el
+  navegador pinta; el método está en `BRAND.md` §Accesibilidad.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.
