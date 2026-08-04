@@ -894,3 +894,60 @@ reposo de esa propiedad lo declara la propia clase. Es el mismo tipo de fallo si
 que D34 (sin error de build ni warning, solo un estado que no se aplica) y se detecta
 igual: midiendo con `getComputedStyle` en el navegador, no leyendo el CSS. Complementa a
 D34: aquella dice *dónde* declarar; esta, *qué* hay que declarar junto.
+
+---
+
+## D36 · Capa de componentes: variantes de acción y primitivas de layout — 2026-08-04
+
+**Contexto.** La auditoría de diseño previa a construir secciones nuevas (P37.591) buscaba
+incoherencias de CTA y encontró la causa: entre los tokens de `globals.css` y las páginas
+**no había capa de componentes**. `components/ui/button.tsx` (shadcn) llevaba en el repo
+desde el principio con **cero usos**, y cada botón era una cadena de Tailwind escrita a
+mano donde vivía. Resultado medido: **seis** definiciones distintas de «botón base» en
+seis archivos, dos radios para la misma cosa (8px y 10px), **cuatro** hovers para la
+variante «sólido» —incluido «ninguno», en las pestañas del Toolkit—, el suelo táctil de
+44px reescrito catorce veces (con el footer fuera, a 40px, en todas las páginas), `WRAP`
+duplicado idéntico en **dieciocho** sitios y `SECTION` en ocho.
+
+**Decisión.** Dos archivos, y todo control pasa por ellos:
+
+- **`components/ui/action.tsx`** — un `cva` con siete variantes (`solid`,
+  `outline-primary`, `outline-neutral`, `ghost`, `toggle-primary`, `toggle-neutral`,
+  `icon`) y cuatro tamaños. El suelo de 44px y el radio único de acción viven **dentro**
+  del componente. El foco **no** se declara ahí: lo pone la regla global
+  `:focus-visible`, y ninguna variante la sobrescribe (había tres mecanismos de foco
+  compitiendo). Se exporta el `cva` y no un componente `<Action>` a propósito: la mitad
+  de los call sites son `<a>` y la otra mitad `<button>`, y un wrapper con
+  `render`/`asChild` añadiría indirección sin quitar ninguna decisión de encima.
+- **`components/site/layout.ts`** — `WRAP`, `SECTION`, `PROSE`, `CARD`, `PANEL`.
+
+Se borra `components/ui/button.tsx`: sin usos, con un cuarto mecanismo de foco y un
+hover (`bg-primary/90` → en realidad `/80`) que contradecía la regla.
+
+**Las reglas visuales que esto fija** (el porqué de cada variante) viven en `BRAND.md`,
+no aquí: hover del sólido con `color-mix`, las dos variantes de control con estado y la
+regla de que ningún control se escribe a mano.
+
+**Dos hallazgos del refactor que valen más que el refactor.**
+
+1. **«Mismo nombre, valores distintos» no es lo mismo que «cadena repetida».** La
+   auditoría reportó «tres `CARD` con dos radios» como incoherencia. Mirando los usos,
+   eran **dos cajas distintas y una no sabía que lo era**: `CARD` (radio lg, 10px) es el
+   bloque de contenido *dentro* de una sección; `PANEL` (radio xl, 14px,
+   `overflow-hidden`) es el contenedor de showcase que *enmarca* una demostración. El
+   radio mayor no es decoración sino **jerarquía de anidamiento** — un panel contiene
+   tarjetas, su esquina tiene que ser más abierta. `brand-kit` usaba el panel llamándolo
+   `CARD`, y ese nombre equivocado era justo lo que hacía parecer que el sistema se
+   contradecía. **Unificar los valores habría roto la jerarquía**: lo que faltaba era un
+   nombre, no una corrección.
+2. **Agrupar por atributo ARIA agrupa por accidente.** P37.59 metió el toggle de rejilla
+   y los tabs de dispositivo en la misma regla porque ambos usan `aria-pressed` — pero
+   uno es un interruptor suelto y el otro un segmentado de alternativas, y quieren
+   tratamientos distintos. A la vez dejó fuera las pestañas del Toolkit por usar
+   `aria-selected`. El criterio útil resultó ser la **forma** del control, no su marcado.
+
+**Regla derivada.** Antes de escribir una cadena de clases en un elemento interactivo o
+en una caja de layout, mirar si ya existe la variante. Si no existe, se crea. Si el caso
+es una excepción, la decide Francisco y se documenta con fecha en `BRAND.md`. La señal de
+que el sistema se está rompiendo no es que algo se vea mal: es que la misma decisión
+aparece escrita en dos sitios.

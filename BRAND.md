@@ -34,13 +34,45 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 
 ## Jerarquía de hover en botones y CTA
 
-Tres tratamientos, y no son intercambiables:
+> **Estas reglas no se escriben a mano.** Viven en `components/ui/action.tsx` (variantes
+> `solid` · `outline-primary` · `outline-neutral` · `ghost` · `toggle-primary` ·
+> `toggle-neutral` · `icon`), que es la única fuente del aspecto de todo elemento
+> accionable. Lo de abajo explica **por qué** cada variante es como es; para aplicarlas,
+> se usa la variante. Ver «Ningún control se escribe a mano» al final de esta sección.
 
-- **CTA sólido** (`bg-primary`): la acción destacada de la página. Hover = `bg-primary/90`. Hoy solo el email de la franja de contacto.
+- **CTA sólido** (`bg-primary`): la acción destacada de la página. Hover = el relleno se mezcla hacia `--foreground` (`color-mix(in srgb, var(--primary) 88%, var(--foreground))`). Hoy solo el email de la franja de contacto.
 - **CTA outline-primary** (`border-primary` + `text-primary`): acciones de contenido que viven solas, sin otro CTA al lado con el que competir — «Descargar CV» de Trayectoria, «Gestionar preferencias» de Cookies, chips de descarga del Brand Kit. Hover = **el relleno cian pleno**, texto a `primary-foreground`.
 - **Outline neutro** (`border-border` + `bg-background`): controles de utilidad y botones que conviven con un sólido dentro del mismo grupo (los del diálogo de consentimiento, «Repetir» del Design System). Hover = pastilla `muted`, nunca cian.
 
-**Toggles y controles segmentados** (`aria-pressed`) son el caso aparte: en ellos el **relleno pleno ya significa «activo»**, así que el hover del estado apagado usa un **tinte** (`bg-primary/10`), no el relleno — si no, hover y seleccionado se ven igual y el control deja de comunicar en qué estado está. *(Fijado 2026-08-04, P37.59, al detectar que los toggles del Design System no tenían hover y que ponerles el relleno los volvía indistinguibles del estado activo.)*
+*Corregido 2026-08-04 (P37.596):* la regla del sólido decía «Hover = `bg-primary/90`», y el CTA insignia del sitio no la cumplía —usaba el `color-mix`—. El incumplidor tenía razón: `/90` **baja** el contraste del texto sobre el botón, mientras que mezclar hacia `--foreground` lo **sube** en ambos temas (en claro oscurece bajo texto hueso; en oscuro aclara bajo texto carbón). Medido: **7,28 → 8,04 en claro y 8,36 → 8,92 en oscuro**. Se corrigió la regla, no el botón, y ahora todos los sólidos lo heredan vía la variante `solid`.
+
+> **Lo que este error enseña sobre los documentos, no sobre el botón.** La regla correcta
+> ya estaba escrita desde el 2026-08-03 en `DECISIONS.md` **D30**, que dice textualmente
+> que el hover del sólido *no* se hace con `bg-primary/90`. O sea: durante un día
+> `BRAND.md` y `DECISIONS.md` **afirmaban lo contrario el uno del otro**, y el código
+> seguía a uno de los dos. No fue un fallo de criterio sino de **propagación**: la
+> decisión se registró donde se tomó y nadie cruzó los cuatro documentos de reglas
+> (`BRAND.md` ↔ `globals.css` ↔ página Design System ↔ Brand Kit). Es el primer chequeo
+> que debe hacer la revisión de diseño — antes de mirar un solo componente.
+
+### Controles con estado (toggles, segmentados y pestañas)
+
+En un control con estado el **relleno pleno ya significa «activo»**, así que el encendido reusa el sólido y el apagado nunca puede rellenarse igual. Cuál de las dos variantes toca se decide por la **forma** del control, no por su contenido ni por cuántos segmentos tenga:
+
+- **`toggle-primary` — interruptor suelto.** Un único control que enciende o apaga algo que antes no estaba (el toggle de rejilla del Design System). No tiene pares al lado, así que el cian no compite con nada. Apagado = `border-primary` con **tinte** en hover (`bg-primary/10`), nunca el relleno: con el relleno, hover y encendido se verían igual y el control dejaría de comunicar en qué estado está.
+- **`toggle-neutral` — grupo de alternativas excluyentes.** Varios botones de los que exactamente uno está activo, para elegir cómo mirar un contenido que ya está en pantalla (pestañas del Toolkit, tabs de dispositivo del Esqueleto navegable). Apagado = el mismo **outline neutro**, y ahí el hover **sí** puede ser la pastilla plena: `muted` no se parece en nada al cian del seleccionado, no hay ambigüedad que evitar. Es el mismo eje que separa contenido de chrome: en un bloque cuya función entera es elegir qué mirar, el cian no distingue nada — y multiplicado por tres o cuatro se come la sección.
+
+*Fijado 2026-08-04 en tres pasadas.* En **P37.59** se detectó que los toggles del Design System no tenían hover y que ponerles el relleno los volvía indistinguibles del estado activo; la regla se escribió mirando solo `aria-pressed`, y por eso las **pestañas del Toolkit** (`aria-selected`) se quedaron fuera del sistema, sin hover en la seleccionada y con `secondary` en la inactiva. En **P37.592**, al meterlas, la fila pasó de un cian a cuatro y se comía la sección en oscuro → nace `toggle-neutral`. Y acto seguido se vio que los **tabs de dispositivo** seguían en cian por arrastre —P37.59 los había agrupado con el toggle de rejilla porque ambos usan `aria-pressed`, cuando uno es un interruptor y el otro un segmentado—. La primera redacción del criterio («¿quién es el protagonista?») falló al segundo caso que le tocó; por eso ahora mira la forma, que se comprueba de un vistazo.
+
+### Controles con dos fondos: el color se toma del fondo, no se fija
+
+Cuando una pieza se apoya sobre un fondo que **cambia por tema y por estado**, no vale elegirle un color: hay que derivarlo del fondo que tiene debajo. La bolita del switch de consentimiento es el caso de referencia — era `bg-white` fijo y fallaba el 3:1 de componente en dos de las cuatro combinaciones (1,22:1 en claro-apagado, 2,03:1 en oscuro-encendido), y **ningún token que conmute con el tema lo arreglaba**. La regla que sí funciona: la pieza es el `foreground` de su propio carril — `--foreground` sobre el carril apagado (`--muted`), `--primary-foreground` sobre el encendido (`--primary`). Da 12,47:1 / 12,04:1 y 7,10:1 / 8,36:1. *(P37.593; mismo patrón que `--contact-dim` y `--chrome-hover-bg`, ver D30.)*
+
+### Ningún control se escribe a mano
+
+**Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como `ContactSecondary` más arriba). No es burocracia: la auditoría de 2026-08-04 encontró **seis** definiciones distintas de «botón base» en seis archivos, dos radios, cuatro hovers para la misma variante y el suelo táctil de 44px reescrito catorce veces —del que el footer se había salido sin que nadie se enterara—, mientras `components/ui/button.tsx` llevaba desde el principio en el repo con cero usos.
+
+El motivo de fondo, que conviene recordar antes de escribir la siguiente regla: los **enlaces** son coherentes porque hicieron el recorrido completo —regla → clase CSS → sección publicada en el Design System → uso— y por eso son difíciles de incumplir sin querer. Los **botones** se quedaron en el primer paso, y había que acordarse de ellos. Una regla que hay que recordar es una regla que se incumple.
 
 2. **Tokens de marca** (`brand-cyan`, `brand-purple`, `brand-cyan-soft`, `brand-purple-soft`).
    - Son DECORATIVOS: fondos de sección, detalles, ilustración, gráficos.
