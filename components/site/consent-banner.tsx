@@ -315,7 +315,20 @@ function ConsentRow({
           />
           <span
             aria-hidden="true"
-            className="bg-muted peer-checked:bg-primary peer-focus-visible:ring-ring relative h-6 w-11 rounded-full transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-transform peer-checked:after:translate-x-5 motion-reduce:transition-none motion-reduce:after:transition-none"
+            // La bolita es el `foreground` de su propio carril: `--foreground`
+            // sobre el carril apagado (`--muted`), `--primary-foreground` sobre el
+            // encendido (`--primary`). Antes era `bg-white` fijo — el único color
+            // hardcodeado del sitio y el único que no conmutaba con el tema— y
+            // fallaba el 3:1 de componente en DOS de las cuatro combinaciones:
+            // 1,22:1 en claro-apagado (bolita blanca sobre carril casi blanco) y
+            // 2,03:1 en oscuro-encendido (blanca sobre el cian aclarado). Medido en
+            // navegador, no estimado; con los tokens da 12,47/12,04 apagado y
+            // 7,10/8,36 encendido — este último es el par «texto sobre botón» que
+            // BRAND.md ya tenía verificado.
+            // El anillo de foco lleva su offset del color de la superficie que hay
+            // detrás (`--card`, la del diálogo): sin declararlo, Tailwind usa blanco
+            // y en tema oscuro dibujaba un halo claro alrededor del control.
+            className="bg-muted peer-checked:bg-primary peer-focus-visible:ring-ring peer-focus-visible:ring-offset-card relative h-6 w-11 rounded-full transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-foreground after:shadow-sm after:transition-transform peer-checked:after:bg-primary-foreground peer-checked:after:translate-x-5 motion-reduce:transition-none motion-reduce:after:transition-none"
           />
         </span>
       </label>

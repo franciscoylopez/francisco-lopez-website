@@ -13,8 +13,13 @@ const PAGES: { key: PageKey; path: string | null }[] = [
   { key: "accesibilidad", path: "/accesibilidad" },
 ];
 
+// El foco NO se declara aquí: lo pone la regla global `:focus-visible` de
+// globals.css, igual que en el resto del sitio. Antes esta card se lo sustituía
+// por su propio `ring` (`focus-visible:outline-none` + `ring-2 ring-offset-2`),
+// que además dejaba el color del offset sin declarar — y el default de Tailwind es
+// blanco, así que en tema oscuro aparecía un halo claro entre la card y el anillo.
 const LINK_CARD =
-  "group border-border bg-card hover:bg-muted focus-visible:ring-ring block rounded-[var(--radius-lg)] border px-[1.4rem] py-[1.2rem] transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none";
+  "group border-border bg-card hover:bg-muted block rounded-[var(--radius-lg)] border px-[1.4rem] py-[1.2rem] transition-colors";
 
 function ArrowIcon() {
   return (
