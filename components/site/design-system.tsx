@@ -644,7 +644,166 @@ export function DesignSystem({
         </div>
       </section>
 
-      {/* ===================== (09) ACCESIBILIDAD ===================== */}
+      {/* ===================== (09) BOTONES Y ACCIONES =====================
+          Hermana de (08): la otra mitad de la capa interactiva. Existe porque los
+          enlaces eran coherentes y los botones no, y la diferencia era justo esta
+          página — los enlaces habían hecho el recorrido regla → clase → sección
+          publicada → uso, y los botones se habían quedado en el primer paso
+          (P37.597). Los demos son los MISMOS `actionVariants` que usa el sitio: si
+          una variante cambia, esta página cambia con ella y no puede mentir. */}
+      <section data-reveal className={SECTION}>
+        <div className={WRAP}>
+          <SectionHead num={t.botones.num} title={t.botones.title} />
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.botones.lead}
+          </p>
+          <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">
+            {t.botones.cases.map((c, i) => (
+              <div
+                key={c.cls}
+                className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+              >
+                <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
+                  {i === 0 && (
+                    <a
+                      href="#top"
+                      className={actionVariants({ variant: "solid" })}
+                    >
+                      {t.botones.demoSolid}
+                    </a>
+                  )}
+                  {i === 1 && (
+                    <a
+                      href="#top"
+                      className={actionVariants({ variant: "outline-primary" })}
+                    >
+                      {t.botones.demoOutlinePrimary}
+                    </a>
+                  )}
+                  {i === 2 && (
+                    <>
+                      <a
+                        href="#top"
+                        className={actionVariants({
+                          variant: "outline-neutral",
+                        })}
+                      >
+                        {t.botones.demoNeutral}
+                      </a>
+                      <a
+                        href="#top"
+                        className={actionVariants({ variant: "ghost" })}
+                      >
+                        {t.botones.demoGhost}
+                      </a>
+                    </>
+                  )}
+                  {/* Los dos casos con estado se muestran con <span>, no con
+                      botones: su demostración es ver los dos estados A LA VEZ, y
+                      un botón que no hace nada sería un control inerte y
+                      focalizable puesto ahí solo para ilustrar. El hover sigue
+                      funcionando —es CSS— así que no se pierde nada. */}
+                  {i === 3 && (
+                    <>
+                      <span
+                        className={actionVariants({
+                          variant: "toggle-primary",
+                          on: true,
+                          size: "sm",
+                        })}
+                      >
+                        {t.botones.stateOn}
+                      </span>
+                      <span
+                        className={actionVariants({
+                          variant: "toggle-primary",
+                          on: false,
+                          size: "sm",
+                        })}
+                      >
+                        {t.botones.stateOff}
+                      </span>
+                    </>
+                  )}
+                  {i === 4 &&
+                    t.botones.demoSegments.map((seg, j) => (
+                      <span
+                        key={seg}
+                        className={actionVariants({
+                          variant: "toggle-neutral",
+                          on: j === 0,
+                          size: "sm",
+                        })}
+                      >
+                        {seg}
+                      </span>
+                    ))}
+                  {i === 5 && (
+                    <>
+                      <a
+                        href="#top"
+                        aria-label={c.kicker}
+                        className={cn(
+                          actionVariants({ variant: "icon", size: "icon" }),
+                          "[--icon-chrome-bg:var(--card)]",
+                        )}
+                      >
+                        <MoonGlyph />
+                      </a>
+                      <a
+                        href="#top"
+                        aria-label={c.cls}
+                        className={cn(
+                          actionVariants({ variant: "icon", size: "icon" }),
+                          "[--icon-chrome-bg:var(--card)]",
+                        )}
+                      >
+                        <MenuGlyph />
+                      </a>
+                    </>
+                  )}
+                </div>
+                <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
+                  <div className="mb-[0.7rem] flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                    <span className="text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
+                      {c.kicker}
+                    </span>
+                    <code className="text-muted-foreground font-mono text-[0.74rem]">
+                      {c.cls}
+                    </code>
+                  </div>
+                  <p className="text-foreground m-0 text-[0.88rem] leading-[1.6]">
+                    {c.rule}
+                  </p>
+                  <p className="text-muted-foreground border-border m-0 mt-[0.8rem] border-t border-dashed pt-[0.8rem] text-[0.82rem] leading-[1.55]">
+                    {c.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-muted-foreground m-0 mt-4 text-[0.8rem]">
+            {t.botones.hint}
+          </p>
+          <div
+            className={cn(CARD, "mt-8 max-w-[var(--measure)] px-[1.4rem] py-5")}
+          >
+            <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
+              {t.botones.ruleTitle}
+            </h3>
+            <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
+              {t.botones.rule.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+            <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
+              {t.botones.ruleFoot}
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== (10) ACCESIBILIDAD ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHead
@@ -732,7 +891,7 @@ export function DesignSystem({
         </div>
       </section>
 
-      {/* ===================== (10) ESQUELETO ===================== */}
+      {/* ===================== (11) ESQUELETO ===================== */}
       <section
         data-reveal
         className={SECTION}

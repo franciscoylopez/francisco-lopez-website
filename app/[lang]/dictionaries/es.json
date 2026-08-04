@@ -1135,11 +1135,7 @@
       "demoContentBefore": "Cada decisión de esta página está",
       "demoContentLink": "documentada y medida",
       "demoContentAfter": "antes de llegar al código.",
-      "demoChromeItems": [
-        "Inicio",
-        "Sobre mí",
-        "Brand Kit"
-      ],
+      "demoChromeItems": ["Inicio", "Sobre mí", "Brand Kit"],
       "ruleTitle": "Por qué el cian no vive en el texto",
       "rule": [
         "El cian es el único color de acción del sistema: si además tiñe todo enlace en reposo, deja de señalar nada.",
@@ -1148,8 +1144,66 @@
       ],
       "ruleFoot": "Excepción consciente: los canales de la franja de contacto (teléfono, LinkedIn, CV) son acciones, no navegación, pero llevan tratamiento de chrome — un subrayado permanente junto al botón sólido de email competía con él en vez de acompañarlo."
     },
-    "accesibilidad": {
+    "botones": {
       "num": "(09)",
+      "title": "Botones y acciones",
+      "lead": "Un botón no elige su aspecto: lo elige su papel en la pantalla. Cuántas acciones compiten a su lado, y si además lleva estado, deciden la variante — y la variante ya trae resueltos el hover, el foco y el objetivo táctil.",
+      "hint": "Pasa el cursor por encima ▸",
+      "cases": [
+        {
+          "kicker": "Acción destacada",
+          "cls": "solid",
+          "rule": "El único relleno cian de la pantalla. Al pasar el cursor, el relleno se mezcla hacia el color de texto en vez de aclararse.",
+          "note": "Mezclar sube el contraste del texto en hover; bajar la opacidad lo habría bajado. Hoy solo lo lleva el email de la franja de contacto."
+        },
+        {
+          "kicker": "Acción de contenido",
+          "cls": "outline-primary",
+          "rule": "Cian en el borde y el texto, que en hover se convierte en el relleno pleno. Para acciones que viven solas, sin otro botón al lado con el que competir.",
+          "note": "Descargar el CV, gestionar las preferencias de cookies y las descargas del Brand Kit."
+        },
+        {
+          "kicker": "Utilidad",
+          "cls": "outline-neutral · ghost",
+          "rule": "Sin cian: borde neutro o sin caja, y una pastilla gris al pasar el cursor. Es lo que lleva un botón que convive con uno sólido en el mismo grupo.",
+          "note": "Si el cian apareciera aquí, dos botones del mismo grupo reclamarían ser la acción principal."
+        },
+        {
+          "kicker": "Interruptor",
+          "cls": "toggle-primary",
+          "rule": "Un control suelto que enciende algo que no estaba. Encendido, relleno pleno; apagado, borde cian con un tinte al pasar el cursor — nunca el relleno.",
+          "note": "Si el apagado se rellenara en hover se vería igual que el encendido, y el control dejaría de decir en qué estado está."
+        },
+        {
+          "kicker": "Grupo de alternativas",
+          "cls": "toggle-neutral",
+          "rule": "Varios segmentos de los que exactamente uno está activo. El activo va en cian sólido; el resto, en neutro.",
+          "note": "El grupo sirve para elegir cómo mirar un contenido que ya está en pantalla. Pintarlos todos de cian no distingue nada y se come la sección."
+        },
+        {
+          "kicker": "Solo icono",
+          "cls": "icon",
+          "rule": "Controles sin etiqueta: la misma pastilla que el resto del chrome, ocupando los 44px completos del objetivo táctil.",
+          "note": "El tamaño mínimo vive en el componente, no en cada llamada. Cuando se escribía a mano, el icono del footer se quedó en 40px."
+        }
+      ],
+      "demoSolid": "Escríbeme",
+      "demoOutlinePrimary": "Descargar CV",
+      "demoNeutral": "Cancelar",
+      "demoGhost": "Preferencias",
+      "demoSegments": ["Escritorio", "Tablet", "Móvil"],
+      "stateOn": "Activo",
+      "stateOff": "Inactivo",
+      "ruleTitle": "Por qué esto es un componente y no una convención",
+      "rule": [
+        "Antes de existir, la misma decisión estaba escrita a mano en seis archivos: dos radios para la misma caja, cuatro comportamientos de hover para el mismo botón y el objetivo táctil de 44px copiado catorce veces.",
+        "Ningún control se escribe con clases sueltas. Si un caso no encaja en ninguna variante, se crea la variante; si es una excepción, se documenta con fecha.",
+        "Cambiar un hover es cambiar una línea, y llega a todos los botones del sitio a la vez."
+      ],
+      "ruleFoot": "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio. Antes convivían tres, y una de ellas dibujaba un halo blanco en tema oscuro."
+    },
+    "accesibilidad": {
+      "num": "(10)",
       "title": "Accesibilidad",
       "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual. Es el criterio interno con el que se construye y audita el sitio; la declaración pública de conformidad vivirá en la página de Accesibilidad.",
       "contrastTitle": "Contraste medido",
@@ -1214,7 +1268,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(10)",
+      "num": "(11)",
       "title": "Esqueleto navegable",
       "devGroupLabel": "Vista previa por dispositivo",
       "devFull": "Escritorio",

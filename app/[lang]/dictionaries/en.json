@@ -1135,11 +1135,7 @@
       "demoContentBefore": "Every decision on this page is",
       "demoContentLink": "documented and measured",
       "demoContentAfter": "before it reaches the code.",
-      "demoChromeItems": [
-        "Home",
-        "About",
-        "Brand Kit"
-      ],
+      "demoChromeItems": ["Home", "About", "Brand Kit"],
       "ruleTitle": "Why cyan does not live in the text",
       "rule": [
         "Cyan is the system's only action colour: if it also tints every link at rest, it stops signalling anything.",
@@ -1148,8 +1144,67 @@
       ],
       "ruleFoot": "A deliberate exception: the channels in the contact band (phone, LinkedIn, CV) are actions rather than navigation, yet they take the chrome treatment — a permanent underline next to the solid email button competed with it instead of supporting it."
     },
-    "accesibilidad": {
+    "botones": {
       "num": "(09)",
+      "title": "Buttons and actions",
+      "lead": "A button doesn't pick how it looks — its job on the screen does. How many actions compete beside it, and whether it carries state, decide the variant, and the variant already has hover, focus and touch target settled.",
+      "hint": "Hover to see it ▸",
+      "cases": [
+        {
+          "kicker": "Primary action",
+          "cls": "solid",
+          "rule": "The only cyan fill on the screen. On hover the fill blends towards the text colour instead of lightening.",
+          "note": "Blending raises the text contrast on hover; dropping the opacity would have lowered it. Today only the email in the contact band uses it."
+        },
+        {
+          "kicker": "Content action",
+          "cls": "outline-primary",
+          "rule": "Cyan border and text, turning into the full fill on hover. For actions that stand alone, with no other button beside them to compete with.",
+          "note": "Downloading the CV, managing cookie preferences and the Brand Kit downloads."
+        },
+        {
+          "kicker": "Utility",
+          "cls": "outline-neutral · ghost",
+          "rule": "No cyan: a neutral border or no box at all, plus a grey pill on hover. This is what a button wears when it sits next to a solid one in the same group.",
+          "note": "If cyan showed up here, two buttons in the same group would both claim to be the main action."
+        },
+        {
+          "kicker": "Switch",
+          "cls": "toggle-primary",
+          "rule": "A single control that turns on something that wasn't there. On, full fill; off, cyan border with a tint on hover — never the fill.",
+          "note": "If the off state filled on hover it would look identical to the on state, and the control would stop saying which one it's in."
+        },
+        {
+          "kicker": "Set of alternatives",
+          "cls": "toggle-neutral",
+          "rule": "Several segments where exactly one is active. The active one takes the solid cyan; the rest stay neutral.",
+          "note": "The group picks how to look at content that's already on screen. Painting them all cyan distinguishes nothing and swallows the section."
+        },
+        {
+          "kicker": "Icon only",
+          "cls": "icon",
+          "rule": "Controls with no label: the same pill as the rest of the chrome, filling the full 44px touch target.",
+          "note": "The minimum size lives in the component, not in each call. Back when it was written by hand, the footer icon was left at 40px."
+        }
+      ],
+      "demoSolid": "Email me",
+      "demoOutlinePrimary": "Download CV",
+      "demoNeutral": "Cancel",
+      "demoGhost": "Preferences",
+
+      "demoSegments": ["Desktop", "Tablet", "Mobile"],
+      "stateOn": "Active",
+      "stateOff": "Inactive",
+      "ruleTitle": "Why this is a component and not a convention",
+      "rule": [
+        "Before it existed, the same decision was hand-written across six files: two radii for the same box, four hover behaviours for the same button, and the 44px touch target copied fourteen times.",
+        "No control is written with loose classes. If a case fits no variant, the variant gets created; if it's an exception, it gets documented with a date.",
+        "Changing a hover means changing one line, and it reaches every button on the site at once."
+      ],
+      "ruleFoot": "No variant declares focus: a single global rule does, the same one everywhere. Three used to coexist, and one of them drew a white halo in dark mode."
+    },
+    "accesibilidad": {
+      "num": "(10)",
       "title": "Accessibility",
       "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost. It's the internal criterion the site is built and audited against; the public conformance statement will live on the Accessibility page.",
       "contrastTitle": "Measured contrast",
@@ -1214,7 +1269,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(10)",
+      "num": "(11)",
       "title": "Navigable skeleton",
       "devGroupLabel": "Device preview",
       "devFull": "Desktop",
