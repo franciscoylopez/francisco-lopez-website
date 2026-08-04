@@ -1,3 +1,5 @@
+import { Download, Mail } from "lucide-react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
@@ -664,12 +666,20 @@ export function DesignSystem({
                 className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
               >
                 <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
+                  {/* Con su icono, como los botones reales de los que toman la
+                      etiqueta: el de contacto de la home y el de Trayectoria. El
+                      icono no lo pone la variante sino quien la usa —por eso cada
+                      uno lleva el suyo y los de utilidad no llevan ninguno—, pero
+                      enseñar «Escríbeme» sin su sobre sería enseñar un botón que
+                      no existe en el sitio, en la página cuyo valor entero es que
+                      lo que muestra es lo que hay. */}
                   {i === 0 && (
                     <a
                       href="#top"
                       className={actionVariants({ variant: "solid" })}
                     >
                       {t.botones.demoSolid}
+                      <Mail className="size-[18px]" aria-hidden="true" />
                     </a>
                   )}
                   {i === 1 && (
@@ -677,6 +687,7 @@ export function DesignSystem({
                       href="#top"
                       className={actionVariants({ variant: "outline-primary" })}
                     >
+                      <Download className="size-[17px]" aria-hidden="true" />
                       {t.botones.demoOutlinePrimary}
                     </a>
                   )}
