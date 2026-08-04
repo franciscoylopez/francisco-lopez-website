@@ -82,14 +82,16 @@
   --popover-foreground: oklch(0.2657 0.0118 248.27);
 
   /* --- Acción: cian primario --- */
-  /* Medido en navegador 2026-08-04 (P37.598): 7,22:1 como texto sobre --background
-     y 7,66:1 sobre boton. AAA en ambos, con margen.
-     Bajó de L 0.43 a L 0.41 porque el valor anterior NO cumplía lo que la web
-     publicaba: rendía 6,69:1 como texto (AA, no AAA). El fallo no fue una deriva
-     del token respecto al doc — el hex documentado (#005E5F) tampoco llegaba (6,86)
-     y además no era el color que este oklch produce (#215e5f). La cifra de 7,01 no
-     era alcanzable con ese cian; se midió sobre algo que nunca se envió. */
-  --primary: oklch(0.41 0.0886 194.82); /* #235859 */
+  /* Se pinta como #005859 (este oklch cae algo FUERA del gamut sRGB, así que el
+     navegador lo recorta; el hex es el color resultante, no el nominal).
+     Medido 2026-08-04 (P37.598): 7,43:1 como texto sobre --background y 7,88:1
+     sobre boton. AAA en ambos, con margen.
+     Bajó de L 0.43 a L 0.41 porque el anterior —que se pintaba como #005E5F— daba
+     6,86:1 como texto: AA, no AAA, mientras la web publicaba 7,01. El hex que
+     documentaba BRAND.md SÍ era el correcto; lo que estaba mal era la cifra.
+     Cuidado al medir esto: un color fuera de gamut sale con componentes negativas
+     en `color(srgb ...)`, y leerlas sin recortar da un valor que no existe. */
+  --primary: oklch(0.41 0.0886 194.82); /* se pinta #005859 */
   --primary-foreground: oklch(0.9855 0.0057 84.57);
 
   /* --- Secundarios/mudos: NEUTROS a propósito (no marca) --- */
@@ -127,7 +129,7 @@
   /* --- CAPA DE MARCA (decorativo / logo, NO tocar por shadcn) --- */
   --brand-cyan: oklch(
     0.41 0.0886 194.82
-  ); /* #235859 — identico a primary a proposito */
+  ); /* se pinta #005859 — identico a primary a proposito */
   --brand-purple: oklch(0.6889 0.1581 289.96); /* #9B87F5 */
   --brand-cyan-soft: oklch(0.8694 0.0592 192.12); /* #A7E1DE pastel */
   --brand-purple-soft: oklch(0.8151 0.0776 295.46); /* #C6B9F0 pastel */
