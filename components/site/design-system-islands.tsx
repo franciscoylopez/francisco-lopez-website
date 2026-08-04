@@ -53,7 +53,11 @@ export function GridDemo({
           // El relleno pleno de primary ya significa «activo» (aria-pressed): el
           // hover del estado apagado usa un tinte, no el relleno, para no leerse
           // como seleccionado bajo el cursor. Lo resuelve la variante `toggle`.
-          className={actionVariants({ variant: "toggle", on: show, size: "sm" })}
+          className={actionVariants({
+            variant: "toggle-primary",
+            on: show,
+            size: "sm",
+          })}
         >
           <span
             aria-hidden="true"
@@ -198,7 +202,7 @@ export function DevicePreview({
   // variante: el relleno pleno es el estado seleccionado, así que el hover del
   // resto de segmentos es un tinte.
   const segBtn = (on: boolean) =>
-    actionVariants({ variant: "toggle", on, size: "sm" });
+    actionVariants({ variant: "toggle-primary", on, size: "sm" });
 
   return (
     <>

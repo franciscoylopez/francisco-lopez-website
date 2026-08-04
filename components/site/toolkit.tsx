@@ -94,14 +94,14 @@ export function Toolkit({ dict }: { dict: ToolkitDict }) {
                 aria-controls={`${uid}-panel-${i}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(i)}
-                // Pestañas = control con estado, igual que un toggle: el relleno
-                // pleno significa «seleccionada» y por eso la no seleccionada usa
-                // un tinte en hover, no el relleno. Estaban fuera del sistema —la
-                // seleccionada no tenía hover y la inactiva usaba `secondary` en vez
-                // de `muted`— porque la regla de BRAND.md solo hablaba de
+                // Pestañas = control con estado. Neutro y no cian: el grupo filtra
+                // sobre el contenido que viene debajo, que es el protagonista —
+                // cuatro segmentos en cian se comían la sección. Estaban fuera del
+                // sistema (la seleccionada sin hover, la inactiva con `secondary` en
+                // vez de `muted`) porque la regla de BRAND.md solo hablaba de
                 // `aria-pressed` y estas usan `aria-selected` (P37.596).
                 className={actionVariants({
-                  variant: "toggle",
+                  variant: "toggle-neutral",
                   on: selected,
                 })}
               >

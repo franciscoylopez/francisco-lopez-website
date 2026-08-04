@@ -32,6 +32,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 const SOLID =
   "bg-primary text-primary-foreground hover:bg-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))] focus-visible:bg-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))]";
 
+// Compartido por la variante `outline-neutral` y por el estado apagado de
+// `toggle-neutral`: son el mismo control, con y sin estado.
+const OUTLINE_NEUTRAL =
+  "border-border bg-background text-foreground border hover:bg-muted focus-visible:bg-muted";
+
 export const actionVariants = cva(
   // Base. El radio es único para toda acción (`--radius-md`, 8px): antes convivían
   // 10px en consent/error y 8px en el resto sin que la diferencia significara nada.
@@ -54,12 +59,24 @@ export const actionVariants = cva(
         // Utilidad, o botón que convive con un sólido dentro del mismo grupo:
         // cancelar, cerrar, Repetir, chips neutros. Hover = pastilla `muted`,
         // nunca cian.
-        "outline-neutral":
-          "border-border bg-background text-foreground border hover:bg-muted focus-visible:bg-muted",
+        "outline-neutral": OUTLINE_NEUTRAL,
         // Tercera opción de un grupo, sin caja en reposo (Rechazar todo).
         ghost: "text-foreground hover:bg-muted focus-visible:bg-muted",
-        // Toggles, segmentados Y pestañas — ver `on` abajo.
-        toggle: "",
+        // Controles CON ESTADO (`aria-pressed` o `aria-selected`) — ver `on` abajo.
+        // Cuál de las dos se usa NO depende de cuántos segmentos haya, sino de qué
+        // es el control respecto a lo que tiene al lado:
+        //   · `toggle-primary` cuando el segmento ES la acción de su sección —
+        //     encender la rejilla, reencuadrar una demo del Design System. Ahí el
+        //     control es el protagonista y el cian dice «esto se toca».
+        //   · `toggle-neutral` cuando el grupo filtra o navega sobre un contenido
+        //     que ya está ahí y que es el protagonista (las pestañas del Toolkit).
+        //     Es el mismo criterio que separa contenido de chrome en BRAND.md: en
+        //     un bloque cuya función entera es elegir qué mirar, el cian no
+        //     distingue nada — solo repite. (Fijado 2026-08-04 al migrar: con
+        //     `toggle-primary`, la fila de cuatro pestañas del Toolkit pasaba de un
+        //     cian a cuatro y se comía la sección, sobre todo en oscuro.)
+        "toggle-primary": "",
+        "toggle-neutral": "",
         // Controles solo-icono del chrome (tema, hamburguesa, LinkedIn del footer,
         // cerrar diálogo). El hover de pastilla lo resuelve `.icon-chrome`, que ya
         // es sensible al fondo vía `--chrome-hover-bg` y declara reposo y hover en
@@ -73,22 +90,28 @@ export const actionVariants = cva(
         lg: "min-h-[48px] px-[1.6rem] text-[1rem]",
         icon: "min-h-[44px] min-w-[44px]",
       },
-      // Estado de `variant: "toggle"`. Se ignora en el resto de variantes.
+      // Estado de las variantes `toggle-*`. Se ignora en el resto.
       on: { true: "", false: "" },
     },
     compoundVariants: [
-      // En un control con estado, el relleno pleno YA significa «activo»: el
-      // encendido reusa el sólido (mismo hover, misma promesa de contraste)...
-      { variant: "toggle", on: true, class: SOLID },
-      // ...y el apagado usa un TINTE en hover, no el relleno — si usara el relleno,
+      // El encendido es el mismo sólido en las dos: el relleno pleno YA significa
+      // «activo», y reusa su hover y su promesa de contraste.
+      { variant: "toggle-primary", on: true, class: SOLID },
+      { variant: "toggle-neutral", on: true, class: SOLID },
+      // Apagado en la versión cian: TINTE en hover, no relleno — con el relleno,
       // hover y seleccionado se verían igual y el control dejaría de comunicar en
       // qué estado está (BRAND.md, fijado en P37.59).
       {
-        variant: "toggle",
+        variant: "toggle-primary",
         on: false,
         class:
           "border-primary text-primary border bg-transparent hover:bg-primary/10 focus-visible:bg-primary/10",
       },
+      // Apagado en la versión neutra: es literalmente `outline-neutral`. Aquí el
+      // hover SÍ puede ser la pastilla plena en vez de un tinte, porque `muted` no
+      // se parece en nada al cian sólido del seleccionado — no hay ambigüedad que
+      // evitar.
+      { variant: "toggle-neutral", on: false, class: OUTLINE_NEUTRAL },
     ],
     defaultVariants: { size: "md" },
   },
