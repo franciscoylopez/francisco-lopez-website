@@ -175,7 +175,7 @@ export function ConsentBanner({
               // tenía — se escapó en P37.57, que sí cubrió nav y footer.
               className={cn(
                 actionVariants({ variant: "icon", size: "icon" }),
-                "[--icon-chrome-bg:var(--background)] -mt-1 -mr-1",
+                "-mt-1 -mr-1 [--icon-chrome-bg:var(--background)]",
               )}
             >
               <svg
@@ -269,7 +269,9 @@ function ConsentRow({
     return (
       <li className="border-border flex items-start justify-between gap-4 rounded-lg border p-3.5">
         <div className="min-w-0">
-          <p className="text-foreground text-[0.95rem] font-semibold">{title}</p>
+          <p className="text-foreground text-[0.95rem] font-semibold">
+            {title}
+          </p>
           <p className="text-muted-foreground mt-0.5 text-[0.85rem] leading-relaxed">
             {description}
           </p>
@@ -328,7 +330,7 @@ function ConsentRow({
             // El anillo de foco lleva su offset del color de la superficie que hay
             // detrás (`--card`, la del diálogo): sin declararlo, Tailwind usa blanco
             // y en tema oscuro dibujaba un halo claro alrededor del control.
-            className="bg-muted peer-checked:bg-primary peer-focus-visible:ring-ring peer-focus-visible:ring-offset-card relative h-6 w-11 rounded-full transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-foreground after:shadow-sm after:transition-transform peer-checked:after:bg-primary-foreground peer-checked:after:translate-x-5 motion-reduce:transition-none motion-reduce:after:transition-none"
+            className="bg-muted peer-checked:bg-primary peer-focus-visible:ring-ring peer-focus-visible:ring-offset-card after:bg-foreground peer-checked:after:bg-primary-foreground relative h-6 w-11 rounded-full transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:shadow-sm after:transition-transform peer-checked:after:translate-x-5 motion-reduce:transition-none motion-reduce:after:transition-none"
           />
         </span>
       </label>

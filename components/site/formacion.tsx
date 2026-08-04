@@ -1,4 +1,5 @@
 import { BrandLogoBox } from "./brand-logo-box";
+import { SECTION, WRAP } from "./layout";
 
 type EduItem = { title: string; institution: string };
 export type FormacionDict = {
@@ -64,11 +65,8 @@ function Group({
 // real de la institución por fila. Mismo patrón responsive que Cómo trabajo (D7).
 export function Formacion({ dict }: { dict: FormacionDict }) {
   return (
-    <section
-      id="formacion"
-      className="border-border border-t py-[var(--section-y)]"
-    >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+    <section id="formacion" className={SECTION}>
+      <div className={WRAP}>
         <div className="flex flex-col gap-[clamp(2rem,5vw,4rem)] md:flex-row">
           <div
             data-reveal

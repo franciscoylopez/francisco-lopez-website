@@ -1,3 +1,5 @@
+import { WRAP } from "./layout";
+
 export type MasAllaDict = {
   eyebrow: string;
   line1a: string;
@@ -32,7 +34,7 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
       id="mas-alla"
       className="bg-foreground text-background py-[clamp(5rem,11vw,9.5rem)]"
     >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+      <div className={WRAP}>
         <p
           data-reveal
           className="m-0 mb-[clamp(1.75rem,4vw,3rem)] text-[0.8125rem] font-semibold tracking-[0.11em] uppercase"

@@ -4,6 +4,7 @@ import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
+import { SECTION, WRAP } from "./layout";
 
 type TrayRow = {
   period: string;
@@ -112,11 +113,8 @@ export function Trayectoria({
   cvHref: string;
 }) {
   return (
-    <section
-      id="trayectoria"
-      className="border-border border-t py-[var(--section-y)]"
-    >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+    <section id="trayectoria" className={SECTION}>
+      <div className={WRAP}>
         <div
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"

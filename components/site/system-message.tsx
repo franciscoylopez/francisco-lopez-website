@@ -11,7 +11,9 @@ import { Logo } from "@/components/ui/logo";
 // salen de la capa de acción del sistema (P37.592), así que un cambio de hover o de
 // radio les llega solo.
 export const SYSTEM_BTN_PRIMARY = actionVariants({ variant: "solid" });
-export const SYSTEM_BTN_OUTLINE = actionVariants({ variant: "outline-neutral" });
+export const SYSTEM_BTN_OUTLINE = actionVariants({
+  variant: "outline-neutral",
+});
 
 export function SystemMessage({
   homeHref,

@@ -3,12 +3,9 @@ import { EMAIL } from "@/lib/contact";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ConsentPreferencesButton } from "./consent-preferences-button";
+import { PROSE, WRAP } from "./layout";
 
 type CookiesDict = Dictionary["cookies"];
-
-const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
-// Prosa a la medida de lectura del sistema (Design System §20).
-const PROSE = "max-w-[var(--measure)]";
 
 const GOOGLE_POLICIES_URL =
   "https://policies.google.com/technologies/partner-sites";

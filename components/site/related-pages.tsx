@@ -1,4 +1,7 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { cn } from "@/lib/utils";
+
+import { CARD, WRAP } from "./layout";
 
 export type RelatedDict = Dictionary["related"];
 
@@ -18,8 +21,10 @@ const PAGES: { key: PageKey; path: string | null }[] = [
 // por su propio `ring` (`focus-visible:outline-none` + `ring-2 ring-offset-2`),
 // que además dejaba el color del offset sin declarar — y el default de Tailwind es
 // blanco, así que en tema oscuro aparecía un halo claro entre la card y el anillo.
-const LINK_CARD =
-  "group border-border bg-card hover:bg-muted block rounded-[var(--radius-lg)] border px-[1.4rem] py-[1.2rem] transition-colors";
+const LINK_CARD = cn(
+  CARD,
+  "group hover:bg-muted block px-[1.4rem] py-[1.2rem] transition-colors",
+);
 
 function ArrowIcon() {
   return (
@@ -61,7 +66,9 @@ export function RelatedPages({
       <nav
         data-reveal
         aria-labelledby={headingId}
-        className="mx-auto max-w-[var(--container)] px-[var(--page-x)] py-[clamp(3.5rem,7vw,6rem)]"
+        // Ritmo vertical propio, más corto que `SECTION`: es un cierre de página,
+        // no una sección de contenido.
+        className={cn(WRAP, "py-[clamp(3.5rem,7vw,6rem)]")}
       >
         <p
           id={headingId}

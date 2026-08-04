@@ -3,6 +3,9 @@
 import { useRef, useState } from "react";
 
 import { actionVariants } from "@/components/ui/action";
+import { cn } from "@/lib/utils";
+
+import { PANEL } from "./layout";
 
 // Las tres piezas interactivas del Design System (D7: JS solo en islas). El resto
 // de la página es Server Component.
@@ -73,7 +76,7 @@ export function GridDemo({
       <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
         {lead}
       </p>
-      <div className="border-border bg-card relative overflow-hidden rounded-[var(--radius-xl)] border">
+      <div className={cn(PANEL, "relative")}>
         <div className="px-[var(--page-x)] py-10">
           <div className="relative">
             <div
@@ -156,7 +159,7 @@ export function RevealDemo({
   };
 
   return (
-    <div className="border-border bg-card rounded-[var(--radius-xl)] border p-6">
+    <div className={cn(PANEL, "p-6")}>
       <div className="mb-4 flex items-center justify-between">
         <span className="text-muted-foreground text-[0.8rem]">{demoLabel}</span>
         <button

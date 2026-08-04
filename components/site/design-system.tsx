@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
+import { CARD, PANEL, SECTION, WRAP } from "./layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type DesignSystemDict = Dictionary["designSystem"];
@@ -12,10 +13,6 @@ type DesignSystemDict = Dictionary["designSystem"];
 // Server Component salvo tres islas interactivas (design-system-islands.tsx):
 // toggle de rejilla, demo de reveal y tabs de dispositivo. La sección de
 // Accesibilidad es la checklist de cierre de todo el sitio (§20).
-
-const SECTION = "border-border border-t py-[var(--section-y)]";
-const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
-const CARD = "border-border bg-card rounded-[var(--radius-lg)] border";
 
 const SAMPLE: Record<string, string> = {
   display:
@@ -266,7 +263,7 @@ export function DesignSystem({
         <div className={WRAP}>
           <SectionHead num={t.breakpoints.num} title={t.breakpoints.title} />
           {/* tabla ≥md */}
-          <div className="border-border bg-card hidden overflow-hidden rounded-[var(--radius-xl)] border md:block">
+          <div className={cn(PANEL, "hidden md:block")}>
             <div className="border-border text-muted-foreground grid grid-cols-[minmax(6rem,0.7fr)_minmax(6rem,0.8fr)_minmax(10rem,1.6fr)] gap-[var(--gutter)] border-b px-[var(--page-x)] py-[0.85rem] text-[0.72rem] tracking-[0.05em] uppercase">
               <span>{t.breakpoints.cols.token}</span>
               <span>{t.breakpoints.cols.ctx}</span>
@@ -352,7 +349,7 @@ export function DesignSystem({
               <h3 className="font-display m-0 mb-4 text-[1rem] font-semibold">
                 {t.ritmo.rhythmTitle}
               </h3>
-              <div className="border-border bg-card overflow-hidden rounded-[var(--radius-xl)] border">
+              <div className={PANEL}>
                 <div className="border-border border-b border-dashed px-[var(--page-x)] py-6">
                   <div className="bg-muted h-[1.4rem] w-[60%] rounded-[var(--radius-sm)]" />
                 </div>
@@ -661,7 +658,7 @@ export function DesignSystem({
           <h3 className="font-display m-0 mt-8 mb-4 text-[1rem] font-semibold">
             {t.accesibilidad.contrastTitle}
           </h3>
-          <div className="border-border bg-card overflow-hidden rounded-[var(--radius-xl)] border">
+          <div className={PANEL}>
             <div className="border-border text-muted-foreground flex flex-wrap gap-x-4 gap-y-[0.4rem] border-b px-[var(--page-x)] py-[0.85rem] text-[0.72rem] tracking-[0.05em] uppercase">
               <span className="min-w-40 flex-[2_1_12rem]">
                 {t.accesibilidad.contrastCols.measure}

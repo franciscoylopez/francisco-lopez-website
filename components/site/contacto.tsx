@@ -1,4 +1,5 @@
 import { ContactActions, type ContactActionsDict } from "./contact-actions";
+import { WRAP } from "./layout";
 
 export type ContactoDict = ContactActionsDict & {
   eyebrow: string;
@@ -25,7 +26,7 @@ export function Contacto({
       id="contacto"
       className="contact-band bg-muted py-[clamp(4.5rem,10vw,8rem)]"
     >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+      <div className={WRAP}>
         <div data-reveal className="max-w-[var(--measure)]">
           <p className="contact-dim m-0 mb-3 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase">
             {dict.eyebrow}
