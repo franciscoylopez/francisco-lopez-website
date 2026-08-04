@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { actionVariants } from "@/components/ui/action";
 
 // Las tres piezas interactivas del Design System (D7: JS solo en islas). El resto
 // de la página es Server Component.
@@ -50,15 +50,10 @@ export function GridDemo({
           type="button"
           onClick={() => setShow((s) => !s)}
           aria-pressed={show}
-          className={cn(
-            "border-primary inline-flex min-h-[44px] items-center gap-[0.45rem] rounded-[var(--radius-md)] border px-4 text-[0.82rem] font-semibold transition-colors",
-            // El relleno pleno de primary ya significa «activo» (aria-pressed):
-            // el hover del estado apagado usa un tinte, no el relleno, para no
-            // leerse como seleccionado bajo el cursor.
-            show
-              ? "bg-primary text-primary-foreground hover:bg-primary/90"
-              : "text-primary bg-transparent hover:bg-primary/10",
-          )}
+          // El relleno pleno de primary ya significa «activo» (aria-pressed): el
+          // hover del estado apagado usa un tinte, no el relleno, para no leerse
+          // como seleccionado bajo el cursor. Lo resuelve la variante `toggle`.
+          className={actionVariants({ variant: "toggle", on: show, size: "sm" })}
         >
           <span
             aria-hidden="true"
@@ -163,7 +158,7 @@ export function RevealDemo({
         <button
           type="button"
           onClick={replay}
-          className="border-border bg-background text-foreground hover:bg-muted inline-flex min-h-[44px] items-center rounded-[var(--radius-md)] border px-3 text-[0.78rem] font-medium transition-colors"
+          className={actionVariants({ variant: "outline-neutral", size: "sm" })}
         >
           {replayLabel}
         </button>
@@ -199,15 +194,11 @@ export function DevicePreview({
   const maxWidth =
     dev === "mobile" ? "390px" : dev === "tablet" ? "768px" : "100%";
 
+  // Mismo criterio que el toggle de rejilla —y ahora, literalmente, la misma
+  // variante: el relleno pleno es el estado seleccionado, así que el hover del
+  // resto de segmentos es un tinte.
   const segBtn = (on: boolean) =>
-    cn(
-      "border-primary inline-flex min-h-[44px] items-center justify-center gap-[0.45rem] rounded-[var(--radius-md)] border px-4 text-[0.82rem] font-semibold transition-colors",
-      // Mismo criterio que el toggle de rejilla: el relleno pleno es el estado
-      // seleccionado, así que el hover del resto de segmentos es un tinte.
-      on
-        ? "bg-primary text-primary-foreground hover:bg-primary/90"
-        : "text-primary bg-transparent hover:bg-primary/10",
-    );
+    actionVariants({ variant: "toggle", on, size: "sm" });
 
   return (
     <>

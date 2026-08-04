@@ -1,5 +1,8 @@
 import { Download } from "lucide-react";
 
+import { actionVariants } from "@/components/ui/action";
+import { cn } from "@/lib/utils";
+
 import { BrandLogoBox } from "./brand-logo-box";
 
 type TrayRow = {
@@ -142,7 +145,10 @@ export function Trayectoria({
           <a
             href={cvHref}
             download
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground inline-flex min-h-[44px] flex-none items-center gap-[0.55rem] rounded-md border px-[1.35rem] text-[0.92rem] font-semibold transition-colors"
+            className={cn(
+              actionVariants({ variant: "outline-primary" }),
+              "flex-none",
+            )}
           >
             <Download className="size-[17px]" aria-hidden="true" />
             {dict.cta}

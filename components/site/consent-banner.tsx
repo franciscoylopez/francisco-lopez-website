@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { actionVariants } from "@/components/ui/action";
 import {
   type ConsentChoice,
   OPEN_CONSENT_EVENT,
@@ -28,20 +29,12 @@ export type ConsentDict = {
   };
 };
 
-const BTN =
-  "inline-flex min-h-[44px] items-center justify-center rounded-lg px-4 text-[0.9rem] font-semibold transition-colors";
-const BTN_PRIMARY = cn(
-  BTN,
-  "bg-primary text-primary-foreground hover:bg-primary/90",
-);
-const BTN_OUTLINE = cn(
-  BTN,
-  "border-border bg-background text-foreground hover:bg-muted border",
-);
-const BTN_GHOST = cn(
-  BTN,
-  "text-foreground hover:bg-muted underline-offset-4 hover:underline",
-);
+// Los tres botones del banner salen de la capa de acción del sistema (P37.592). El
+// ghost pierde el subrayado en hover que tenía de más: su afordancia es la pastilla,
+// igual que la del outline neutro con el que convive.
+const BTN_PRIMARY = actionVariants({ variant: "solid" });
+const BTN_OUTLINE = actionVariants({ variant: "outline-neutral" });
+const BTN_GHOST = actionVariants({ variant: "ghost" });
 
 // Banner de consentimiento + centro de preferencias granular (P22). Isla de cliente:
 // el default denegado ya lo fijó consent-init (beforeInteractive) antes de GTM; aquí
@@ -178,7 +171,12 @@ export function ConsentBanner({
               type="button"
               aria-label={dict.close}
               onClick={() => setPrefsOpen(false)}
-              className="border-border bg-background text-foreground -mt-1 -mr-1 inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border"
+              // Solo-icono: misma pastilla de hover que el resto del chrome. No la
+              // tenía — se escapó en P37.57, que sí cubrió nav y footer.
+              className={cn(
+                actionVariants({ variant: "icon", size: "icon" }),
+                "[--icon-chrome-bg:var(--background)] -mt-1 -mr-1",
+              )}
             >
               <svg
                 width="18"

@@ -2,7 +2,7 @@
 
 import { useId, useRef, useState } from "react";
 
-import { cn } from "@/lib/utils";
+import { actionVariants } from "@/components/ui/action";
 import { BrandLogoBox } from "./brand-logo-box";
 
 type Tool = { name: string; desc: string };
@@ -94,12 +94,16 @@ export function Toolkit({ dict }: { dict: ToolkitDict }) {
                 aria-controls={`${uid}-panel-${i}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(i)}
-                className={cn(
-                  "inline-flex min-h-[44px] items-center rounded-md px-4 text-[0.9rem] font-semibold transition-colors",
-                  selected
-                    ? "bg-primary text-primary-foreground"
-                    : "border-border text-foreground hover:bg-secondary border",
-                )}
+                // Pestañas = control con estado, igual que un toggle: el relleno
+                // pleno significa «seleccionada» y por eso la no seleccionada usa
+                // un tinte en hover, no el relleno. Estaban fuera del sistema —la
+                // seleccionada no tenía hover y la inactiva usaba `secondary` en vez
+                // de `muted`— porque la regla de BRAND.md solo hablaba de
+                // `aria-pressed` y estas usan `aria-selected` (P37.596).
+                className={actionVariants({
+                  variant: "toggle",
+                  on: selected,
+                })}
               >
                 {cat.label}
               </button>

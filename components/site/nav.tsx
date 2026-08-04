@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 import { cvPath, type Locale } from "@/lib/i18n/config";
+import { cn } from "@/lib/utils";
 
 export type NavDict = {
   homeAria: string;
@@ -158,7 +160,10 @@ export function Nav({
             aria-label={dict.menu}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
-            className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border sm:hidden"
+            className={cn(
+              actionVariants({ variant: "icon", size: "icon" }),
+              "[--icon-chrome-bg:var(--card)] sm:hidden",
+            )}
           >
             <Menu className="size-[18px]" aria-hidden="true" />
           </button>
@@ -166,7 +171,10 @@ export function Nav({
             type="button"
             aria-label={dict.toggleTheme}
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] ml-0.5 inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border"
+            className={cn(
+              actionVariants({ variant: "icon", size: "icon" }),
+              "[--icon-chrome-bg:var(--card)] ml-0.5",
+            )}
           >
             <Moon className="size-[18px] dark:hidden" aria-hidden="true" />
             <Sun className="hidden size-[18px] dark:block" aria-hidden="true" />

@@ -1,5 +1,7 @@
+import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 import { LINKEDIN_URL } from "@/lib/contact";
+import { cn } from "@/lib/utils";
 
 import { LinkedinIcon } from "./icons";
 
@@ -60,7 +62,13 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={dict.linkedinAria}
-          className="border-border text-foreground icon-chrome inline-flex h-10 w-10 flex-none items-center justify-center rounded-md border md:justify-self-end"
+          // Estaba a 40×40px, por debajo del mínimo de 44 que publica la propia
+          // checklist de Accesibilidad del sitio (P37.595). Ahora el suelo lo pone
+          // la variante y no depende de que nadie se acuerde.
+          className={cn(
+            actionVariants({ variant: "icon", size: "icon" }),
+            "flex-none md:justify-self-end",
+          )}
         >
           <LinkedinIcon className="size-[18px]" />
         </a>

@@ -1,4 +1,5 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
@@ -50,16 +51,13 @@ function DownloadIcon() {
   );
 }
 
-// Chips de descarga. `min-h-[44px]` es el objetivo táctil mínimo del sitio (punto 3
-// de la checklist que publica el propio Design System) — estaban a 40px. El hover
-// sigue el mismo par que el resto de CTA: outline-primary se rellena de cian, el
-// outline neutro se apoya en la pastilla `muted` del chrome (P37.59).
-const DL_BASE =
-  "inline-flex min-h-[44px] items-center justify-center gap-[0.4rem] rounded-[var(--radius-md)] text-[0.8rem] font-semibold transition-colors";
-const DL_PRIMARY =
-  "border-primary text-primary hover:bg-primary hover:text-primary-foreground border px-[0.85rem]";
-const DL_NEUTRAL =
-  "border-border bg-background text-foreground hover:bg-muted border px-[0.75rem]";
+// Chips de descarga. Salen de la capa de acción del sistema (P37.592), que ya trae
+// el objetivo táctil de 44px —punto 3 de la checklist que publica el propio Design
+// System; estos chips estaban a 40px hasta P37.59— y el par de hover correcto:
+// outline-primary se rellena de cian, el outline neutro se apoya en la pastilla
+// `muted` del chrome.
+const DL_PRIMARY = actionVariants({ variant: "outline-primary", size: "sm" });
+const DL_NEUTRAL = actionVariants({ variant: "outline-neutral", size: "sm" });
 
 // Descarga con href único (assets neutros al tema: mono negro/blanco).
 function Dl({
@@ -77,7 +75,7 @@ function Dl({
     <a
       href={href}
       download
-      className={cn(DL_BASE, tone === "primary" ? DL_PRIMARY : DL_NEUTRAL)}
+      className={tone === "primary" ? DL_PRIMARY : DL_NEUTRAL}
     >
       {icon && <DownloadIcon />}
       {children}
@@ -97,7 +95,7 @@ function DlThemed({
   icon?: boolean;
   children: React.ReactNode;
 }) {
-  const cls = cn(DL_BASE, tone === "primary" ? DL_PRIMARY : DL_NEUTRAL);
+  const cls = tone === "primary" ? DL_PRIMARY : DL_NEUTRAL;
   return (
     <>
       <a href={pair.light} download className={cn(cls, "dark:hidden")}>

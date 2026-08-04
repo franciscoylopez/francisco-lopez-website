@@ -1,4 +1,5 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
@@ -586,14 +587,20 @@ export function DesignSystem({
                       <a
                         href="#top"
                         aria-label={c.kicker}
-                        className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border"
+                        className={cn(
+                          actionVariants({ variant: "icon", size: "icon" }),
+                          "[--icon-chrome-bg:var(--card)]",
+                        )}
                       >
                         <MoonGlyph />
                       </a>
                       <a
                         href="#top"
                         aria-label={c.cls}
-                        className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-md border"
+                        className={cn(
+                          actionVariants({ variant: "icon", size: "icon" }),
+                          "[--icon-chrome-bg:var(--card)]",
+                        )}
                       >
                         <MenuGlyph />
                       </a>
