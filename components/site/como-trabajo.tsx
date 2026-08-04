@@ -1,3 +1,5 @@
+import { SECTION, WRAP } from "./layout";
+
 export type ProcesoDict = {
   eyebrow: string;
   title: string;
@@ -10,11 +12,8 @@ export type ProcesoDict = {
 // apila en móvil, aside sticky ≥md.
 export function ComoTrabajo({ dict }: { dict: ProcesoDict }) {
   return (
-    <section
-      id="proceso"
-      className="border-border border-t py-[var(--section-y)]"
-    >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+    <section id="proceso" className={SECTION}>
+      <div className={WRAP}>
         <div className="flex flex-col gap-[clamp(2rem,5vw,4rem)] md:flex-row">
           <div
             data-reveal

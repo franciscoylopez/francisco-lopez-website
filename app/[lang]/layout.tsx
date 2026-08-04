@@ -143,8 +143,9 @@ export default async function RootLayout({
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        {/* Analítica y consentimiento solo en producción (D13). ConsentInit va
-            antes que GTM (beforeInteractive) para fijar el default denegado. */}
+        {/* Analítica solo en producción (D13). ConsentInit va antes que GTM
+            (beforeInteractive) para fijar el default denegado; sin contenedor que
+            lo lea no tiene nada que hacer, así que comparte gate con él. */}
         {GTM_ID && (
           <>
             <ConsentInit />
@@ -159,7 +160,11 @@ export default async function RootLayout({
         >
           {children}
         </ThemeProvider>
-        {GTM_ID && <ConsentBanner dict={dict.consent} lang={lang} />}
+        {/* La UI de consentimiento se monta en TODOS los entornos (P37.5975). No
+            comparte gate con la analítica: no envía nada a ningún sitio, y colgarla
+            de `GTM_ID` dejaba un modal con cuatro botones y un switch que solo
+            existía en producción — imposible de revisar antes de publicarlo. */}
+        <ConsentBanner dict={dict.consent} lang={lang} />
       </body>
     </html>
   );

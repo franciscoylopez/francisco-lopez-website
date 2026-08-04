@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { actionVariants } from "@/components/ui/action";
 import {
   type ConsentChoice,
   OPEN_CONSENT_EVENT,
@@ -28,25 +29,23 @@ export type ConsentDict = {
   };
 };
 
-const BTN =
-  "inline-flex min-h-[44px] items-center justify-center rounded-lg px-4 text-[0.9rem] font-semibold transition-colors";
-const BTN_PRIMARY = cn(
-  BTN,
-  "bg-primary text-primary-foreground hover:bg-primary/90",
-);
-const BTN_OUTLINE = cn(
-  BTN,
-  "border-border bg-background text-foreground hover:bg-muted border",
-);
-const BTN_GHOST = cn(
-  BTN,
-  "text-foreground hover:bg-muted underline-offset-4 hover:underline",
-);
+// Los tres botones del banner salen de la capa de acción del sistema (P37.592). El
+// ghost pierde el subrayado en hover que tenía de más: su afordancia es la pastilla,
+// igual que la del outline neutro con el que convive.
+const BTN_PRIMARY = actionVariants({ variant: "solid" });
+const BTN_OUTLINE = actionVariants({ variant: "outline-neutral" });
+const BTN_GHOST = actionVariants({ variant: "ghost" });
 
 // Banner de consentimiento + centro de preferencias granular (P22). Isla de cliente:
-// el default denegado ya lo fijó consent-init (beforeInteractive) antes de GTM; aquí
-// se recoge la elección, se persiste y se aplica al Consent Mode. Solo se monta en
-// producción (gate por GTM_ID en el layout).
+// en producción el default denegado ya lo fijó consent-init (beforeInteractive) antes
+// de GTM; aquí se recoge la elección, se persiste y se aplica al Consent Mode.
+//
+// Se monta en TODOS los entornos desde P37.5975 (antes solo en producción, colgado
+// del gate de GTM). Fuera de producción no hay contenedor que lea el `dataLayer`, así
+// que aplicar el consentimiento es un no-op y lo único que ocurre de verdad es la
+// escritura en `localStorage` — pero la interfaz existe y se puede revisar, que es lo
+// que no pasaba: era la única superficie del sitio imposible de mirar antes de
+// publicarla.
 export function ConsentBanner({
   dict,
   lang,
@@ -178,7 +177,12 @@ export function ConsentBanner({
               type="button"
               aria-label={dict.close}
               onClick={() => setPrefsOpen(false)}
-              className="border-border bg-background text-foreground -mt-1 -mr-1 inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border"
+              // Solo-icono: misma pastilla de hover que el resto del chrome. No la
+              // tenía — se escapó en P37.57, que sí cubrió nav y footer.
+              className={cn(
+                actionVariants({ variant: "icon", size: "icon" }),
+                "-mt-1 -mr-1 [--icon-chrome-bg:var(--background)]",
+              )}
             >
               <svg
                 width="18"
@@ -271,7 +275,9 @@ function ConsentRow({
     return (
       <li className="border-border flex items-start justify-between gap-4 rounded-lg border p-3.5">
         <div className="min-w-0">
-          <p className="text-foreground text-[0.95rem] font-semibold">{title}</p>
+          <p className="text-foreground text-[0.95rem] font-semibold">
+            {title}
+          </p>
           <p className="text-muted-foreground mt-0.5 text-[0.85rem] leading-relaxed">
             {description}
           </p>
@@ -290,7 +296,14 @@ function ConsentRow({
   const descId = `${titleId}-desc`;
   return (
     <li className="border-border rounded-lg border">
-      <label className="flex cursor-pointer items-start justify-between gap-4 p-3.5">
+      {/* `items-center`: el control gobierna la fila entera, así que se centra
+          contra ella. Estaba en `items-start`, y como el switch vive dentro de su
+          objetivo táctil de 44px, su centro caía ~11px por debajo del centro del
+          título: ni alineado con el título ni centrado en la fila. Se veía sobre
+          todo con descripciones de tres líneas (modal estrecho). El desajuste era
+          previo; lo destapó darle contraste a la bolita en P37.593 — con la bolita
+          blanca sobre carril casi blanco (1,22:1) no se distinguía dónde estaba. */}
+      <label className="flex cursor-pointer items-center justify-between gap-4 p-3.5">
         <div className="min-w-0">
           <p
             id={titleId}
@@ -317,7 +330,20 @@ function ConsentRow({
           />
           <span
             aria-hidden="true"
-            className="bg-muted peer-checked:bg-primary peer-focus-visible:ring-ring relative h-6 w-11 rounded-full transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow-sm after:transition-transform peer-checked:after:translate-x-5 motion-reduce:transition-none motion-reduce:after:transition-none"
+            // La bolita es el `foreground` de su propio carril: `--foreground`
+            // sobre el carril apagado (`--muted`), `--primary-foreground` sobre el
+            // encendido (`--primary`). Antes era `bg-white` fijo — el único color
+            // hardcodeado del sitio y el único que no conmutaba con el tema— y
+            // fallaba el 3:1 de componente en DOS de las cuatro combinaciones:
+            // 1,22:1 en claro-apagado (bolita blanca sobre carril casi blanco) y
+            // 2,03:1 en oscuro-encendido (blanca sobre el cian aclarado). Medido en
+            // navegador, no estimado; con los tokens da 12,47/12,04 apagado y
+            // 7,10/8,36 encendido — este último es el par «texto sobre botón» que
+            // BRAND.md ya tenía verificado.
+            // El anillo de foco lleva su offset del color de la superficie que hay
+            // detrás (`--card`, la del diálogo): sin declararlo, Tailwind usa blanco
+            // y en tema oscuro dibujaba un halo claro alrededor del control.
+            className="bg-muted peer-checked:bg-primary peer-focus-visible:ring-ring peer-focus-visible:ring-offset-card after:bg-foreground peer-checked:after:bg-primary-foreground relative h-6 w-11 rounded-full transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 after:absolute after:top-0.5 after:left-0.5 after:h-5 after:w-5 after:rounded-full after:shadow-sm after:transition-transform peer-checked:after:translate-x-5 motion-reduce:transition-none motion-reduce:after:transition-none"
           />
         </span>
       </label>

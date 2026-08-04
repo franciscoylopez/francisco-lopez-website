@@ -23,6 +23,18 @@ export const SITE_NAME = "Francisco López";
 // correr: en producción (D13 — nunca en dev/preview, para no ensuciar los datos) y
 // con NEXT_PUBLIC_GTM_ID definido en el entorno de Vercel. Devuelve `undefined` en
 // cualquier otro caso, y el layout omite el contenedor por completo.
+//
+// OJO: este gate manda sobre la ANALÍTICA, no sobre la UI de consentimiento. El
+// banner y el diálogo de preferencias se montan en todos los entornos (P37.5975).
+// Colgaban de aquí, y el efecto era que una superficie entera de interfaz —modal,
+// cuatro botones y un switch— solo existía en producción: no se podía revisar ni en
+// dev ni en preview, o sea, solo DESPUÉS de publicarla. Se vio al arreglar la bolita
+// del switch en P37.593, que fallaba el 3:1 y hubo que verificarla inyectando el
+// markup a mano en otra página porque el componente real no era observable.
+// Montarla fuera de producción no envía nada a ningún sitio: sin GTM cargado,
+// `applyConsent` empuja al `dataLayer` que nadie lee y `saveConsent` escribe en
+// `localStorage`. D13 se mantiene intacta — lo que se separa es qué se dibuja de
+// qué se mide.
 export const GTM_ID =
   process.env.VERCEL_ENV === "production"
     ? process.env.NEXT_PUBLIC_GTM_ID

@@ -4,16 +4,15 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ContactActions, type ContactActionsDict } from "./contact-actions";
+import { PROSE, WRAP } from "./layout";
 import { Rich } from "./rich";
 
 type SobreMiDict = Dictionary["sobreMi"];
 
-const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
-// Prosa a la medida de lectura del sistema (Design System §20), alineada a la
-// izquierda. La usan el opening (intro) y el closing (Dónde estoy ahora): poco
-// texto, media columna. "Cómo llegué a Producto" NO la usa —ocupa el ancho
-// completo del contenedor, como los bloques con foto pero sin la mitad de imagen.
-const PROSE = "max-w-[var(--measure)]";
+// `PROSE` (medida de lectura) la usan el opening (intro) y el closing (Dónde estoy
+// ahora): poco texto, media columna, alineada a la izquierda. "Cómo llegué a
+// Producto" NO la usa — ocupa el ancho completo del contenedor, como los bloques
+// con foto pero sin la mitad de imagen.
 
 // Página "Sobre mí" (PRD §9, V2). La persona detrás del PM. Tratamiento editorial:
 // apertura full-width con la cita-firma SOBRE la foto (scrim para contraste) →

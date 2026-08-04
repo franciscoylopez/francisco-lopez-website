@@ -1,6 +1,10 @@
 import { Download } from "lucide-react";
 
+import { actionVariants } from "@/components/ui/action";
+import { cn } from "@/lib/utils";
+
 import { BrandLogoBox } from "./brand-logo-box";
+import { SECTION, WRAP } from "./layout";
 
 type TrayRow = {
   period: string;
@@ -109,11 +113,8 @@ export function Trayectoria({
   cvHref: string;
 }) {
   return (
-    <section
-      id="trayectoria"
-      className="border-border border-t py-[var(--section-y)]"
-    >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+    <section id="trayectoria" className={SECTION}>
+      <div className={WRAP}>
         <div
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
@@ -142,7 +143,10 @@ export function Trayectoria({
           <a
             href={cvHref}
             download
-            className="border-primary text-primary hover:bg-primary hover:text-primary-foreground inline-flex min-h-[44px] flex-none items-center gap-[0.55rem] rounded-md border px-[1.35rem] text-[0.92rem] font-semibold transition-colors"
+            className={cn(
+              actionVariants({ variant: "outline-primary" }),
+              "flex-none",
+            )}
           >
             <Download className="size-[17px]" aria-hidden="true" />
             {dict.cta}

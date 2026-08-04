@@ -2,7 +2,9 @@
 
 import { Download, Mail, Phone } from "lucide-react";
 
+import { actionVariants } from "@/components/ui/action";
 import { trackContactClick } from "@/lib/analytics";
+import { cn } from "@/lib/utils";
 import {
   EMAIL,
   LINKEDIN_DISPLAY,
@@ -53,7 +55,10 @@ export function EmailCta({
       <a
         href={`mailto:${EMAIL}`}
         onClick={() => trackContactClick("email")}
-        className="contact-cta bg-primary text-primary-foreground inline-flex min-h-[48px] items-center gap-[0.6rem] rounded-md px-[1.6rem] text-[1rem] font-semibold no-underline"
+        className={cn(
+          actionVariants({ variant: "solid", size: "lg" }),
+          "contact-cta",
+        )}
       >
         {label}
         <Mail className="contact-cta-icon size-[18px]" aria-hidden="true" />

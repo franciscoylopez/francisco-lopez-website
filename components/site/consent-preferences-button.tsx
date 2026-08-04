@@ -1,5 +1,6 @@
 "use client";
 
+import { actionVariants } from "@/components/ui/action";
 import { OPEN_CONSENT_EVENT } from "@/lib/consent";
 
 // Reabre el centro de preferencias de cookies (RGPD: retirar el consentimiento debe
@@ -21,7 +22,7 @@ export function ConsentPreferencesButton({
 }) {
   const className =
     variant === "button"
-      ? "border-primary text-primary hover:bg-primary hover:text-primary-foreground inline-flex min-h-[44px] items-center justify-center rounded-md border px-[1.35rem] text-[0.92rem] font-semibold transition-colors"
+      ? actionVariants({ variant: "outline-primary" })
       : "text-muted-foreground hover:text-foreground focus-visible:text-foreground link-chrome cursor-pointer px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]";
   return (
     <button

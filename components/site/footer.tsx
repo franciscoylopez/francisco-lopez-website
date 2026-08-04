@@ -1,5 +1,7 @@
+import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 import { LINKEDIN_URL } from "@/lib/contact";
+import { cn } from "@/lib/utils";
 
 import { LinkedinIcon } from "./icons";
 
@@ -31,25 +33,25 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-self-center">
           <a
             href={`${base}/brand-kit`}
-            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
+            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
           >
             {dict.brandKit}
           </a>
           <a
             href={`${base}/design-system`}
-            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
+            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
           >
             {dict.designSystem}
           </a>
           <a
             href={`${base}/accesibilidad`}
-            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
+            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
           >
             {dict.accesibilidad}
           </a>
           <a
             href={`${base}/cookies`}
-            className="text-muted-foreground link-chrome px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.9rem]"
+            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
           >
             {dict.cookies}
           </a>
@@ -60,7 +62,13 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={dict.linkedinAria}
-          className="border-border text-foreground icon-chrome inline-flex h-10 w-10 flex-none items-center justify-center rounded-md border md:justify-self-end"
+          // Estaba a 40×40px, por debajo del mínimo de 44 que publica la propia
+          // checklist de Accesibilidad del sitio (P37.595). Ahora el suelo lo pone
+          // la variante y no depende de que nadie se acuerde.
+          className={cn(
+            actionVariants({ variant: "icon", size: "icon" }),
+            "flex-none md:justify-self-end",
+          )}
         >
           <LinkedinIcon className="size-[18px]" />
         </a>

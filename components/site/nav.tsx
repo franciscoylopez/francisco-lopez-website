@@ -5,8 +5,10 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 import { cvPath, type Locale } from "@/lib/i18n/config";
+import { cn } from "@/lib/utils";
 
 export type NavDict = {
   homeAria: string;
@@ -134,14 +136,14 @@ export function Nav({
           <a
             href={cvHref}
             download
-            className="text-foreground hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap link-chrome sm:inline-flex"
+            className="text-foreground link-chrome hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap sm:inline-flex"
           >
             {dict.downloadCv}
           </a>
           <a
             href={sobreMiHref}
             aria-current={isSobreMi ? "page" : undefined}
-            className="text-foreground hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap link-chrome aria-[current=page]:underline sm:inline-flex"
+            className="text-foreground link-chrome hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap aria-[current=page]:underline sm:inline-flex"
           >
             {dict.sobreMi}
           </a>
@@ -149,7 +151,10 @@ export function Nav({
             href={altHref}
             hrefLang={lang === "en" ? "es" : "en"}
             aria-label={dict.switchLanguage}
-            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground hidden min-h-[44px] items-center px-[0.6rem] text-[0.85rem] font-medium link-chrome sm:inline-flex"
+            // `min-w-[44px]`: la etiqueta es de dos letras («EN»/«ES»), así que el
+            // ancho lo daba el texto y se quedaba en 38px — alto correcto, ancho no
+            // (P37.598). El objetivo táctil son las DOS dimensiones.
+            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground link-chrome hidden min-h-[44px] min-w-[44px] items-center justify-center px-[0.6rem] text-[0.85rem] font-medium sm:inline-flex"
           >
             {dict.switchLanguageShort}
           </a>
@@ -158,7 +163,10 @@ export function Nav({
             aria-label={dict.menu}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
-            className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border sm:hidden"
+            className={cn(
+              actionVariants({ variant: "icon", size: "icon" }),
+              "[--icon-chrome-bg:var(--card)] sm:hidden",
+            )}
           >
             <Menu className="size-[18px]" aria-hidden="true" />
           </button>
@@ -166,7 +174,10 @@ export function Nav({
             type="button"
             aria-label={dict.toggleTheme}
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] ml-0.5 inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border"
+            className={cn(
+              actionVariants({ variant: "icon", size: "icon" }),
+              "ml-0.5 [--icon-chrome-bg:var(--card)]",
+            )}
           >
             <Moon className="size-[18px] dark:hidden" aria-hidden="true" />
             <Sun className="hidden size-[18px] dark:block" aria-hidden="true" />
@@ -181,7 +192,7 @@ export function Nav({
               href={cvHref}
               download
               onClick={() => setMenuOpen(false)}
-              className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-medium link-chrome"
+              className="text-foreground link-chrome inline-flex min-h-[44px] items-center text-[0.95rem] font-medium"
             >
               {dict.downloadCv}
             </a>
@@ -189,7 +200,7 @@ export function Nav({
               href={sobreMiHref}
               aria-current={isSobreMi ? "page" : undefined}
               onClick={() => setMenuOpen(false)}
-              className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-medium link-chrome aria-[current=page]:underline"
+              className="text-foreground link-chrome inline-flex min-h-[44px] items-center text-[0.95rem] font-medium aria-[current=page]:underline"
             >
               {dict.sobreMi}
             </a>
@@ -198,7 +209,7 @@ export function Nav({
               hrefLang={lang === "en" ? "es" : "en"}
               aria-label={dict.switchLanguage}
               onClick={() => setMenuOpen(false)}
-              className="text-foreground inline-flex min-h-[44px] items-center text-[0.95rem] font-medium link-chrome"
+              className="text-foreground link-chrome inline-flex min-h-[44px] items-center text-[0.95rem] font-medium"
             >
               {dict.switchLanguageShort}
             </a>

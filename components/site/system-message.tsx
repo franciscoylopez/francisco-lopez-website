@@ -1,5 +1,5 @@
+import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
-import { cn } from "@/lib/utils";
 
 // Shell presentacional de las páginas-sistema (404 y error). Puro —sin hooks ni
 // "use client"— para renderizarse igual en el not-found de servidor y dentro del
@@ -7,18 +7,13 @@ import { cn } from "@/lib/utils";
 // (enlace al inicio), eyebrow opcional, título, cuerpo y ranura de acciones. No lleva
 // Nav/Footer: son pantallas de recuperación, se mantienen ligeras y autónomas.
 
-const BTN =
-  "inline-flex min-h-[44px] items-center justify-center rounded-lg px-5 text-[0.92rem] font-semibold transition-colors";
-
-// Botones compartidos por not-found y error → estilo único, sin divergencia.
-export const SYSTEM_BTN_PRIMARY = cn(
-  BTN,
-  "bg-primary text-primary-foreground hover:bg-primary/90",
-);
-export const SYSTEM_BTN_OUTLINE = cn(
-  BTN,
-  "border-border bg-background text-foreground hover:bg-muted border",
-);
+// Botones compartidos por not-found y error. Ya no definen su propio "botón base":
+// salen de la capa de acción del sistema (P37.592), así que un cambio de hover o de
+// radio les llega solo.
+export const SYSTEM_BTN_PRIMARY = actionVariants({ variant: "solid" });
+export const SYSTEM_BTN_OUTLINE = actionVariants({
+  variant: "outline-neutral",
+});
 
 export function SystemMessage({
   homeHref,

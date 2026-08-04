@@ -81,10 +81,15 @@
   --popover: oklch(0.9855 0.0057 84.57);
   --popover-foreground: oklch(0.2657 0.0118 248.27);
 
-  /* --- Acción: cian primario (pasa AA con texto claro) --- */
-  --primary: oklch(
-    0.43 0.0886 194.82
-  ); /* #005E5F — AAA: 7,01:1 como texto y 7,44:1 sobre boton */
+  /* --- Acción: cian primario --- */
+  /* Medido en navegador 2026-08-04 (P37.598): 7,22:1 como texto sobre --background
+     y 7,66:1 sobre boton. AAA en ambos, con margen.
+     Bajó de L 0.43 a L 0.41 porque el valor anterior NO cumplía lo que la web
+     publicaba: rendía 6,69:1 como texto (AA, no AAA). El fallo no fue una deriva
+     del token respecto al doc — el hex documentado (#005E5F) tampoco llegaba (6,86)
+     y además no era el color que este oklch produce (#215e5f). La cifra de 7,01 no
+     era alcanzable con ese cian; se midió sobre algo que nunca se envió. */
+  --primary: oklch(0.41 0.0886 194.82); /* #235859 */
   --primary-foreground: oklch(0.9855 0.0057 84.57);
 
   /* --- Secundarios/mudos: NEUTROS a propósito (no marca) --- */
@@ -101,7 +106,7 @@
 
   --border: oklch(0.901 0.0142 88.69);
   --input: oklch(0.901 0.0142 88.69);
-  --ring: oklch(0.43 0.0886 194.82); /* foco = cian primario */
+  --ring: oklch(0.41 0.0886 194.82); /* foco = cian primario */
 
   --chart-1: var(--brand-cyan);
   --chart-2: var(--brand-purple);
@@ -121,8 +126,8 @@
 
   /* --- CAPA DE MARCA (decorativo / logo, NO tocar por shadcn) --- */
   --brand-cyan: oklch(
-    0.43 0.0886 194.82
-  ); /* #005E5F — identico a primary a proposito */
+    0.41 0.0886 194.82
+  ); /* #235859 — identico a primary a proposito */
   --brand-purple: oklch(0.6889 0.1581 289.96); /* #9B87F5 */
   --brand-cyan-soft: oklch(0.8694 0.0592 192.12); /* #A7E1DE pastel */
   --brand-purple-soft: oklch(0.8151 0.0776 295.46); /* #C6B9F0 pastel */
@@ -131,6 +136,21 @@
   --brand-purple-accent: oklch(
     0.62 0.16 290
   ); /* morado accesible como texto/acento sobre fondos invertidos (claro y oscuro) */
+
+  /* Cian legible sobre fondos INVERTIDOS (bloques cuyo fondo es `--foreground`).
+     Es, literalmente, el cian del OTRO tema: sobre una superficie invertida el
+     "primer plano" es `--background`, así que el acento tiene que ser el que ese
+     otro tema ya tiene calibrado. Un cian fijo no puede servir para los dos casos
+     —necesita ser claro sobre carbón y oscuro sobre hueso—, que es la misma
+     imposibilidad de la bolita del switch (P37.593). Hermano de
+     `--brand-purple-accent`, que existe por esta misma razón.
+     Añadido en P37.598: el bloque de código del Design System pintaba los nombres
+     de token con `--brand-cyan-split` FIJO y, al invertirse el panel en tema
+     oscuro, daba 2,09:1 — fallo AA y, además, uso del split del logo como texto de
+     UI, que BRAND.md prohíbe. */
+  --primary-on-inverted: oklch(
+    0.7626 0.1156 191.46
+  ); /* el cian del tema oscuro */
 }
 
 .dark {
@@ -186,6 +206,7 @@
   --brand-cyan-split: oklch(0.7242 0.1208 194.82);
   --brand-purple-split: oklch(0.6889 0.1581 289.96);
   --brand-purple-accent: oklch(0.62 0.16 290);
+  --primary-on-inverted: oklch(0.41 0.0886 194.82); /* el cian del tema claro */
 }
 
 @layer base {
@@ -355,18 +376,16 @@
 /* CTA de email — único botón sólido `primary` del sitio: un escalón por encima
    del outline de Descargar CV (Trayectoria), para que la jerarquía diga cuál es
    LA acción (los clics de contacto son la métrica primaria, PRD §7).
-   El hover mezcla el relleno hacia `--foreground`, que en AMBOS temas se aleja de
-   `--primary-foreground` (en claro oscurece bajo texto hueso; en oscuro aclara
-   bajo texto carbón): el contraste del texto sube en hover, nunca baja. */
-.contact-cta {
-  transition:
-    background-color 0.15s ease,
-    transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.contact-cta:hover,
-.contact-cta:focus-visible {
-  background-color: color-mix(in srgb, var(--primary) 88%, var(--foreground));
-}
+
+   Desde P37.592 esta clase YA NO pinta el hover: el relleno y su mezcla hacia
+   `--foreground` los aporta la variante `solid` de `components/ui/action.tsx`, que
+   es donde vive ahora esa decisión para todos los sólidos del sitio (era el único
+   botón que la tenía bien, así que el sistema la adoptó de aquí). Lo que queda es
+   el empujón del icono, que es propio de este CTA y de ningún otro.
+
+   Reposo, hover y `transition` del fondo son ahora las TRES utilidades de la
+   variante, en el mismo elemento: no se reparte entre clase y utilidad, que es
+   justo el reparto que rompía la transición en D35. */
 .contact-cta-icon {
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -374,10 +393,13 @@
 .contact-cta:focus-visible .contact-cta-icon {
   transform: translateX(2px);
 }
+/* Reduced-motion: se anula SOLO el desplazamiento del icono. El cambio de color
+   del fondo se queda —no es movimiento— y ya no se toca desde aquí: tocarlo
+   significaría redeclarar la `transition` del fondo en una clase mientras sus dos
+   extremos viven en utilidades, el reparto exacto que dejó un hover clavado en D35. */
 @media (prefers-reduced-motion: reduce) {
-  .contact-cta,
   .contact-cta-icon {
-    transition: background-color 0.15s ease;
+    transition: none;
   }
   .contact-cta:hover .contact-cta-icon,
   .contact-cta:focus-visible .contact-cta-icon {

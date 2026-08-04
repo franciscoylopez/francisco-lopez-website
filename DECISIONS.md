@@ -249,6 +249,20 @@ componente si es `undefined`). Así dev y preview no emiten analítica y no ensu
 datos. La var es `NEXT_PUBLIC_*` porque el ID se inyecta en cliente; no es secreto.
 Documentada en `.env.example` (nuevo; `.gitignore` excepciona `!.env.example`).
 
+> **Matizado 2026-08-04 (P37.5975): este gate manda sobre la analítica, no sobre la UI
+> de consentimiento.** El `<ConsentBanner>` colgaba del mismo `GTM_ID`, y el efecto
+> era que el banner, el diálogo de preferencias, sus cuatro botones y el switch —una
+> superficie de interfaz entera— **solo existían en producción**: no se podían revisar
+> ni en dev ni en preview, es decir, solo *después* de publicarlos. Se destapó al
+> arreglar la bolita del switch (P37.593), que fallaba el 3:1 de componente en dos de
+> las cuatro combinaciones y hubo que verificar inyectando el markup a mano en otra
+> página, porque el componente real no era observable en ningún entorno revisable.
+> Ahora la UI se monta en todos los entornos y el contenedor sigue gateado. Montarla
+> fuera de producción no emite nada: sin GTM, `applyConsent` empuja al `dataLayer` que
+> nadie lee y `saveConsent` escribe en `localStorage`. **La regla que queda: gatear lo
+> que se mide, nunca lo que se dibuja** — si una interfaz solo existe en producción, su
+> primera revisión llega tarde por definición.
+
 **Consentimiento (frontera con P22).** El contenedor GTM por sí solo NO deja cookies
 —solo lo hacen los tags que dispara (GA4)—, así que instalarlo ahora es conforme aunque
 el banner no exista todavía. El Consent Mode v2 (default `denied` + update al aceptar) y
@@ -733,8 +747,9 @@ sobre un fondo cuyo color efectivo cambia con el tema**. Al construir cualquier 
 **Estados interactivos.** El hover del botón sólido **no** se hace con `opacity` ni
 `bg-primary/90`, que bajan el contraste al mezclar con el fondo. Se mezcla hacia
 `--foreground`, que en ambos temas se aleja de `--primary-foreground` (en claro oscurece bajo
-texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,28→8,04 claro,
-8,36→8,92 oscuro).
+texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,67→8,42 claro,
+8,36→8,93 oscuro — cifras revisadas en P37.598, cuando se corrigió el token del cian claro;
+las de esta entrada, 7,28→8,04, estaban calculadas sobre el cian anterior).
 
 **Aplicado retroactivamente.** La regla destapó un fallo **preexistente** en la banda de «Más
 allá del PM»: eyebrow al 58% → **4,07:1 en oscuro**, por debajo de AA. Corregido al 80%
@@ -894,3 +909,60 @@ reposo de esa propiedad lo declara la propia clase. Es el mismo tipo de fallo si
 que D34 (sin error de build ni warning, solo un estado que no se aplica) y se detecta
 igual: midiendo con `getComputedStyle` en el navegador, no leyendo el CSS. Complementa a
 D34: aquella dice *dónde* declarar; esta, *qué* hay que declarar junto.
+
+---
+
+## D36 · Capa de componentes: variantes de acción y primitivas de layout — 2026-08-04
+
+**Contexto.** La auditoría de diseño previa a construir secciones nuevas (P37.591) buscaba
+incoherencias de CTA y encontró la causa: entre los tokens de `globals.css` y las páginas
+**no había capa de componentes**. `components/ui/button.tsx` (shadcn) llevaba en el repo
+desde el principio con **cero usos**, y cada botón era una cadena de Tailwind escrita a
+mano donde vivía. Resultado medido: **seis** definiciones distintas de «botón base» en
+seis archivos, dos radios para la misma cosa (8px y 10px), **cuatro** hovers para la
+variante «sólido» —incluido «ninguno», en las pestañas del Toolkit—, el suelo táctil de
+44px reescrito catorce veces (con el footer fuera, a 40px, en todas las páginas), `WRAP`
+duplicado idéntico en **dieciocho** sitios y `SECTION` en ocho.
+
+**Decisión.** Dos archivos, y todo control pasa por ellos:
+
+- **`components/ui/action.tsx`** — un `cva` con siete variantes (`solid`,
+  `outline-primary`, `outline-neutral`, `ghost`, `toggle-primary`, `toggle-neutral`,
+  `icon`) y cuatro tamaños. El suelo de 44px y el radio único de acción viven **dentro**
+  del componente. El foco **no** se declara ahí: lo pone la regla global
+  `:focus-visible`, y ninguna variante la sobrescribe (había tres mecanismos de foco
+  compitiendo). Se exporta el `cva` y no un componente `<Action>` a propósito: la mitad
+  de los call sites son `<a>` y la otra mitad `<button>`, y un wrapper con
+  `render`/`asChild` añadiría indirección sin quitar ninguna decisión de encima.
+- **`components/site/layout.ts`** — `WRAP`, `SECTION`, `PROSE`, `CARD`, `PANEL`.
+
+Se borra `components/ui/button.tsx`: sin usos, con un cuarto mecanismo de foco y un
+hover (`bg-primary/90` → en realidad `/80`) que contradecía la regla.
+
+**Las reglas visuales que esto fija** (el porqué de cada variante) viven en `BRAND.md`,
+no aquí: hover del sólido con `color-mix`, las dos variantes de control con estado y la
+regla de que ningún control se escribe a mano.
+
+**Dos hallazgos del refactor que valen más que el refactor.**
+
+1. **«Mismo nombre, valores distintos» no es lo mismo que «cadena repetida».** La
+   auditoría reportó «tres `CARD` con dos radios» como incoherencia. Mirando los usos,
+   eran **dos cajas distintas y una no sabía que lo era**: `CARD` (radio lg, 10px) es el
+   bloque de contenido *dentro* de una sección; `PANEL` (radio xl, 14px,
+   `overflow-hidden`) es el contenedor de showcase que *enmarca* una demostración. El
+   radio mayor no es decoración sino **jerarquía de anidamiento** — un panel contiene
+   tarjetas, su esquina tiene que ser más abierta. `brand-kit` usaba el panel llamándolo
+   `CARD`, y ese nombre equivocado era justo lo que hacía parecer que el sistema se
+   contradecía. **Unificar los valores habría roto la jerarquía**: lo que faltaba era un
+   nombre, no una corrección.
+2. **Agrupar por atributo ARIA agrupa por accidente.** P37.59 metió el toggle de rejilla
+   y los tabs de dispositivo en la misma regla porque ambos usan `aria-pressed` — pero
+   uno es un interruptor suelto y el otro un segmentado de alternativas, y quieren
+   tratamientos distintos. A la vez dejó fuera las pestañas del Toolkit por usar
+   `aria-selected`. El criterio útil resultó ser la **forma** del control, no su marcado.
+
+**Regla derivada.** Antes de escribir una cadena de clases en un elemento interactivo o
+en una caja de layout, mirar si ya existe la variante. Si no existe, se crea. Si el caso
+es una excepción, la decide Francisco y se documenta con fecha en `BRAND.md`. La señal de
+que el sistema se está rompiendo no es que algo se vea mal: es que la misma decisión
+aparece escrita en dos sitios.

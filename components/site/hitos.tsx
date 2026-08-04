@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { SECTION, WRAP } from "./layout";
 
 export type HitosDict = {
   eyebrow: string;
@@ -72,11 +73,8 @@ function Row({
 // el chip EXIT con reveal retardado.
 export function Hitos({ dict }: { dict: HitosDict }) {
   return (
-    <section
-      id="hitos"
-      className="border-border border-t py-[var(--section-y)]"
-    >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+    <section id="hitos" className={SECTION}>
+      <div className={WRAP}>
         <div
           data-reveal
           className="mb-[clamp(2rem,4vw,3rem)] flex flex-wrap items-end justify-between gap-x-6 gap-y-4"

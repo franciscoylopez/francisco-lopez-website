@@ -1,8 +1,10 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { CARD, PANEL, SECTION, WRAP } from "./layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type BrandKitDict = Dictionary["brandKit"];
@@ -50,16 +52,13 @@ function DownloadIcon() {
   );
 }
 
-// Chips de descarga. `min-h-[44px]` es el objetivo táctil mínimo del sitio (punto 3
-// de la checklist que publica el propio Design System) — estaban a 40px. El hover
-// sigue el mismo par que el resto de CTA: outline-primary se rellena de cian, el
-// outline neutro se apoya en la pastilla `muted` del chrome (P37.59).
-const DL_BASE =
-  "inline-flex min-h-[44px] items-center justify-center gap-[0.4rem] rounded-[var(--radius-md)] text-[0.8rem] font-semibold transition-colors";
-const DL_PRIMARY =
-  "border-primary text-primary hover:bg-primary hover:text-primary-foreground border px-[0.85rem]";
-const DL_NEUTRAL =
-  "border-border bg-background text-foreground hover:bg-muted border px-[0.75rem]";
+// Chips de descarga. Salen de la capa de acción del sistema (P37.592), que ya trae
+// el objetivo táctil de 44px —punto 3 de la checklist que publica el propio Design
+// System; estos chips estaban a 40px hasta P37.59— y el par de hover correcto:
+// outline-primary se rellena de cian, el outline neutro se apoya en la pastilla
+// `muted` del chrome.
+const DL_PRIMARY = actionVariants({ variant: "outline-primary", size: "sm" });
+const DL_NEUTRAL = actionVariants({ variant: "outline-neutral", size: "sm" });
 
 // Descarga con href único (assets neutros al tema: mono negro/blanco).
 function Dl({
@@ -77,7 +76,7 @@ function Dl({
     <a
       href={href}
       download
-      className={cn(DL_BASE, tone === "primary" ? DL_PRIMARY : DL_NEUTRAL)}
+      className={tone === "primary" ? DL_PRIMARY : DL_NEUTRAL}
     >
       {icon && <DownloadIcon />}
       {children}
@@ -97,7 +96,7 @@ function DlThemed({
   icon?: boolean;
   children: React.ReactNode;
 }) {
-  const cls = cn(DL_BASE, tone === "primary" ? DL_PRIMARY : DL_NEUTRAL);
+  const cls = tone === "primary" ? DL_PRIMARY : DL_NEUTRAL;
   return (
     <>
       <a href={pair.light} download className={cn(cls, "dark:hidden")}>
@@ -138,10 +137,10 @@ function Glyph({
   );
 }
 
-const CARD =
-  "border-border bg-card rounded-[var(--radius-xl)] border overflow-hidden";
-const SECTION = "border-border border-t py-[var(--section-y)]";
-const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
+// Tipografía de sección, propia de esta página. Las cajas y los ritmos comunes
+// (WRAP / SECTION / PANEL) vienen de `./layout`: lo que aquí se llamaba `CARD` era
+// en realidad el PANEL del sistema —radio xl y `overflow-hidden`— y ese nombre
+// equivocado era lo que hacía parecer que el sistema tenía tres tarjetas distintas.
 const NUM =
   "text-muted-foreground m-0 mb-3 font-mono text-[0.8rem] tracking-[0.04em]";
 const H2 =
@@ -258,7 +257,10 @@ export function BrandKit({
             ].map((it) => (
               <div
                 key={it.c.title}
-                className="border-border bg-card flex min-h-64 flex-col items-center justify-center gap-5 rounded-[var(--radius-xl)] border p-8"
+                className={cn(
+                  PANEL,
+                  "flex min-h-64 flex-col items-center justify-center gap-5 p-8",
+                )}
               >
                 <Glyph variant={it.variant} h={120} />
                 <div className="text-center">
@@ -331,7 +333,7 @@ export function BrandKit({
             </VariantCard>
 
             {/* símbolo mono — negro/blanco, neutros al tema */}
-            <div className={cn(CARD, "flex flex-col")}>
+            <div className={cn(PANEL, "flex flex-col")}>
               <div className="border-border flex min-h-44 border-b">
                 <div className="flex flex-1 items-center justify-center bg-white p-8">
                   <Glyph variant="flat" h={66} mono="black" />
@@ -459,10 +461,7 @@ export function BrandKit({
             {/* tarjetas <md */}
             <div className="flex flex-col gap-[0.85rem] md:hidden">
               {t.logotipo.usage.rows.map((r) => (
-                <div
-                  key={r.ctx}
-                  className="border-border bg-card rounded-[var(--radius-lg)] border p-4"
-                >
+                <div key={r.ctx} className={cn(CARD, "p-4")}>
                   <div className="mb-[0.7rem] flex items-center justify-between gap-3">
                     <span className="font-display text-[1.05rem] font-semibold">
                       {r.ctx}
@@ -488,7 +487,7 @@ export function BrandKit({
               {t.logotipo.rules.items.map((r, i) => (
                 <div
                   key={r.title}
-                  className="border-border bg-card rounded-[var(--radius-lg)] border px-[1.4rem] py-[1.35rem]"
+                  className={cn(CARD, "px-[1.4rem] py-[1.35rem]")}
                 >
                   <div className="mb-[0.6rem] flex items-center gap-[0.7rem]">
                     <span className="bg-foreground text-background inline-flex h-[1.9rem] w-[1.9rem] flex-none items-center justify-center rounded-[var(--radius-md)] font-mono text-[0.85rem] font-semibold">
@@ -509,7 +508,7 @@ export function BrandKit({
           {/* Escalera del split (regla 1) */}
           <div
             data-reveal
-            className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.5rem,3vw,2.5rem)]"
+            className={cn(PANEL, "p-[clamp(1.5rem,3vw,2.5rem)]")}
           >
             <div className="mb-8 max-w-[var(--measure)]">
               <p className="text-muted-foreground m-0 mb-2 font-mono text-[0.78rem]">
@@ -576,10 +575,7 @@ export function BrandKit({
             className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-[var(--gutter)]"
           >
             {t.color.items.map((c) => (
-              <div
-                key={c.name}
-                className="border-border bg-card overflow-hidden rounded-[var(--radius-lg)] border"
-              >
+              <div key={c.name} className={cn(CARD, "overflow-hidden")}>
                 <div
                   className="border-border flex h-[118px] items-end border-b p-[0.85rem]"
                   style={{ background: c.sample }}
@@ -676,7 +672,7 @@ export function BrandKit({
             className="mb-8 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]"
           >
             {/* favicon */}
-            <div className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.4rem,3vw,1.9rem)]">
+            <div className={cn(PANEL, "p-[clamp(1.4rem,3vw,1.9rem)]")}>
               <div className="font-display mb-[0.35rem] text-[1.15rem] font-semibold">
                 {t.aplicaciones.favicon.title}
               </div>
@@ -712,7 +708,7 @@ export function BrandKit({
             </div>
 
             {/* OG / redes */}
-            <div className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.4rem,3vw,1.9rem)]">
+            <div className={cn(PANEL, "p-[clamp(1.4rem,3vw,1.9rem)]")}>
               <div className="font-display mb-[0.35rem] text-[1.15rem] font-semibold">
                 {t.aplicaciones.og.title}
               </div>
@@ -759,7 +755,10 @@ export function BrandKit({
             {t.uso.cases.map((c, i) => (
               <div
                 key={c.title}
-                className="border-border bg-card grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))] overflow-hidden rounded-[var(--radius-xl)] border"
+                className={cn(
+                  PANEL,
+                  "grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))]",
+                )}
               >
                 <div className="grid grid-cols-2">
                   <div className="border-border flex flex-col items-center justify-center gap-3 border-r px-4 py-7">
@@ -821,7 +820,7 @@ function VariantCard({
   children: React.ReactNode;
 }) {
   return (
-    <div className={cn(CARD, "flex flex-col")}>
+    <div className={cn(PANEL, "flex flex-col")}>
       <div className="border-border flex min-h-44 items-center justify-center border-b p-8">
         {glyph}
       </div>
@@ -930,7 +929,7 @@ function TypeCard({
 }) {
   const fam = face === "display" ? "font-display" : "font-sans";
   return (
-    <div className="border-border bg-card rounded-[var(--radius-xl)] border p-[clamp(1.5rem,3vw,2.25rem)]">
+    <div className={cn(PANEL, "p-[clamp(1.5rem,3vw,2.25rem)]")}>
       <div
         className={cn(
           fam,

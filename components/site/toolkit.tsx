@@ -2,8 +2,11 @@
 
 import { useId, useRef, useState } from "react";
 
+import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
+
 import { BrandLogoBox } from "./brand-logo-box";
+import { CARD, SECTION, WRAP } from "./layout";
 
 type Tool = { name: string; desc: string };
 export type ToolkitDict = {
@@ -55,11 +58,8 @@ export function Toolkit({ dict }: { dict: ToolkitDict }) {
   };
 
   return (
-    <section
-      id="toolkit"
-      className="border-border border-t py-[var(--section-y)]"
-    >
-      <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)]">
+    <section id="toolkit" className={SECTION}>
+      <div className={WRAP}>
         <div data-reveal className="mb-[clamp(2.5rem,5vw,4rem)]">
           <p className="text-muted-foreground m-0 mb-3 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase">
             {dict.eyebrow}
@@ -94,12 +94,16 @@ export function Toolkit({ dict }: { dict: ToolkitDict }) {
                 aria-controls={`${uid}-panel-${i}`}
                 tabIndex={selected ? 0 : -1}
                 onClick={() => setActive(i)}
-                className={cn(
-                  "inline-flex min-h-[44px] items-center rounded-md px-4 text-[0.9rem] font-semibold transition-colors",
-                  selected
-                    ? "bg-primary text-primary-foreground"
-                    : "border-border text-foreground hover:bg-secondary border",
-                )}
+                // Pestañas = control con estado. Neutro y no cian: el grupo filtra
+                // sobre el contenido que viene debajo, que es el protagonista —
+                // cuatro segmentos en cian se comían la sección. Estaban fuera del
+                // sistema (la seleccionada sin hover, la inactiva con `secondary` en
+                // vez de `muted`) porque la regla de BRAND.md solo hablaba de
+                // `aria-pressed` y estas usan `aria-selected` (P37.596).
+                className={actionVariants({
+                  variant: "toggle-neutral",
+                  on: selected,
+                })}
               >
                 {cat.label}
               </button>
@@ -122,7 +126,10 @@ export function Toolkit({ dict }: { dict: ToolkitDict }) {
               {cat.tools.map((tool) => (
                 <div
                   key={tool.name}
-                  className="border-border bg-card flex items-start gap-[0.85rem] rounded-lg border px-[1.2rem] py-[1.1rem]"
+                  className={cn(
+                    CARD,
+                    "flex items-start gap-[0.85rem] px-[1.2rem] py-[1.1rem]",
+                  )}
                 >
                   <BrandLogoBox name={`tools/${LOGO[tool.name] ?? ""}`} />
                   <div>
