@@ -830,3 +830,29 @@ que podían divergir con el tiempo.
 **Alcance.** Solo la trayectoria de Producto (no Marketing & Growth ni Formación) y los
 hitos se resumen como el hecho del exit, no la tabla completa — es un resumen curado
 para LLMs, no un volcado del CV; el CV en PDF (enlazado) cubre el detalle completo.
+
+## D34 · Clases de componente en `globals.css` van sin `@layer` en este proyecto (Tailwind v4) — 2026-08-04
+
+**Decisión.** Las clases CSS reutilizables que se añaden a mano en `app/globals.css`
+(`.contact-cta`, `.link-content`, `.link-chrome`…) se escriben **sin** envolver en
+`@layer components { }`. Van como reglas normales, igual que `.contact-cta` ya hacía
+antes de esta decisión — ese era el precedente correcto, no una excepción.
+
+**Contexto.** Al construir `.link-content`/`.link-chrome` para P37.55 se probó primero
+envolverlas en `@layer components`, razonando que así una utilidad de Tailwind en el
+mismo elemento (p. ej. `px-[0.85rem]` del nav) ganaría en caso de conflicto de padding,
+en vez de que la clase de componente pisara la utilidad sin querer. El resultado real
+fue el opuesto y más grave: Tailwind v4, en el `@import "tailwindcss"` de este proyecto,
+no registra un layer `components` — así que `@layer components { }` creaba un layer
+nuevo de **menor prioridad que todo lo demás**, y ninguna propiedad de `.link-content`
+se aplicaba, ni siquiera las que no conflictuaban con ninguna utilidad (`background-image`,
+`text-decoration`, `border-radius`…). El bug era silencioso: sin error de build, sin
+warning — se confirmó con `getComputedStyle` en el navegador (`textDecorationLine: "none"`
+pese a que la clase sí estaba en el DOM).
+
+**Regla derivada.** Escribir las clases de componente sin `@layer`, y si una clase nueva
+necesita ceder una propiedad concreta (como el padding) a la utilidad que ya trae cada
+caller, **no declarar esa propiedad en la clase compartida** — dejar que cada sitio de
+uso la aporte por su cuenta (así se resolvió para `.link-chrome`: no lleva
+padding/margin propio, cada componente que la usa trae el suyo). Cascada explícita por
+ausencia de la propiedad, no por capas.

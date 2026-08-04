@@ -912,6 +912,58 @@ Francisco da de alta **Microsoft Clarity** (P37, adelantado desde *Optimización
 
 **Estado al cerrar**: Clarity en producción, gateado a consentimiento, sin avisos de CSP (PageSpeed Prácticas recomendadas: 100). P37 movido de *Optimización* a Listo. Sin tareas pendientes — Francisco confirmó el toggle de Microsoft Advertising desactivado en el propio dashboard de Clarity.
 
+## 31. Links con diseño y animación (P37.55) (2026-08-04)
+
+Los enlaces del sitio eran "100% estándar" (sin animación de hover) — la propia tarea
+los señalaba también como vehículo para la crítica de diseño #1: "el sitio es más gris
+que su marca".
+
+**Prototipado en Claude Artifact, no directo en código.** En vez de iterar sobre los
+componentes reales, se construyó un Artifact con los tokens reales de `globals.css`
+(claro/oscuro, toggle de `prefers-reduced-motion` incluido) y variantes lado a lado.
+Funcionó lo bastante bien como para que Francisco pidiera reutilizar el flujo en
+futuras decisiones de diseño — queda anotado en memoria como práctica a repetir. Las
+capturas de referencia que trajo Francisco (pares off/on de un garabato circular y de
+un relleno ascendente) se tomaron como spec visual directamente, sin necesidad de
+descripción textual previa.
+
+**Decisión de contenido: H1.** Enlaces dentro del cuerpo de texto pasan de "texto en
+`primary` siempre" a reposo neutro (`foreground` + subrayado fino en `primary`) con un
+relleno sólido que crece desde abajo y invierte el texto a `primary-foreground` en
+hover/focus — reutiliza el par de contraste ya verificado AAA de "texto sobre botón" en
+vez de inventar uno nuevo. Es un cambio de regla de marca real, documentado en
+`BRAND.md`. Una segunda variante (un garabato circular animado, "G") quedó descartada
+como estándar pero reservada para un uso puntual de énfasis.
+
+**Decisión de chrome: F.** Nav/breadcrumb/footer se quedan en `foreground`/
+`muted-foreground` de siempre, con una pastilla de fondo `--muted` en hover — se probó
+una variante con wash de cian y no aportó diferencia sustancial sobre la neutra.
+
+**Excepción de `ContactSecondary`.** Teléfono/LinkedIn/CV en la franja de contacto son
+acciones, no navegación, así que por regla les tocaría H1 — pero el relleno sólido
+generaba ruido visual justo al lado del CTA de email (competían por atención en vez de
+leerse como su acompañamiento). Se resolvió dándoles tratamiento de chrome como
+excepción documentada, no como un tercer criterio nuevo — a revisar de nuevo si algún
+día existe una sección de contacto dedicada (hoy es la franja compartida de D29).
+
+**Bug real encontrado en la implementación**, no solo de diseño: las clases nuevas se
+escribieron primero dentro de `@layer components`, pensando que así las utilidades de
+Tailwind ganarían en caso de conflicto — pero en este proyecto eso hizo que Tailwind
+ignorase la capa entera de forma silenciosa (sin error de build). Se corrigió
+devolviéndolas a reglas sin capa, como ya hacía `.contact-cta`. Registrado como D34.
+
+**Seguimiento.** La revisión de esta tarea destapó cuatro pulidos más, registrados como
+tareas nuevas en el tablero (P37.56–P37.59): grosor de texto inconsistente en el nav,
+controles solo-icono sin hover (toggle de tema, LinkedIn del footer), el CTA "Gestionar
+preferencias de cookies" con un uso a revisar, y refrescar Brand Kit/Design System para
+que reflejen el nuevo tratamiento de enlaces.
+
+**Estado al cerrar**: implementado y verificado (build/lint/typecheck limpios,
+comprobación visual en Chrome claro/oscuro) en `rich.tsx`, `cookies-policy.tsx`,
+`contact-actions.tsx`, `nav.tsx`, `breadcrumb.tsx`, `footer.tsx`, `consent-banner.tsx` y
+`consent-preferences-button.tsx`. Rama `feat/p37-55-links-hover`, PR #73. Pendiente:
+verificación real de contraste con axe/Lighthouse sobre los componentes en producción.
+
 ---
 
 ## Fuentes
