@@ -598,7 +598,7 @@
           "swap": "conmuta",
           "sample": "var(--primary)",
           "sampleFg": "var(--primary-foreground)",
-          "ratio": "7,43:1 texto · 7,88:1 botón (claro) · 8,36:1 oscuro · AAA",
+          "ratio": "7,47:1 texto · 7,93:1 botón (claro) · 8,36:1 oscuro · AAA",
           "note": "Enlaces y acento"
         },
         {
@@ -1172,7 +1172,7 @@
           "kicker": "Interruptor",
           "cls": "toggle-primary",
           "rule": "Un control suelto que enciende algo que no estaba. Encendido, relleno pleno; apagado, borde cian con un tinte al pasar el cursor — nunca el relleno.",
-          "note": "Si el apagado se rellenara en hover se vería igual que el encendido, y el control dejaría de decir en qué estado está."
+          "note": "Si el apagado se rellenara en hover se vería igual que el encendido, y el control dejaría de decir en qué estado está. En ese tinte el texto se oscurece un poco: es lo que lo lleva a AAA sin tener que apagar el tinte."
         },
         {
           "kicker": "Grupo de alternativas",
@@ -1224,7 +1224,7 @@
         {
           "label": "primary como texto",
           "note": "enlaces y acento",
-          "light": "7,43:1",
+          "light": "7,47:1",
           "lightLv": "AAA",
           "dark": "8,36:1",
           "darkLv": "AAA"
@@ -1232,17 +1232,33 @@
         {
           "label": "Texto sobre botón",
           "note": "primary-foreground sobre primary",
-          "light": "7,88:1",
+          "light": "7,93:1",
           "lightLv": "AAA",
           "dark": "8,36:1",
           "darkLv": "AAA"
         },
         {
+          "label": "Hover del botón sólido",
+          "note": "el relleno se mezcla hacia foreground",
+          "light": "8,64:1",
+          "lightLv": "AAA",
+          "dark": "8,92:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "Hover del toggle apagado",
+          "note": "el estado con menos margen del sistema",
+          "light": "7,21:1",
+          "lightLv": "AAA",
+          "dark": "7,80:1",
+          "darkLv": "AAA"
+        },
+        {
           "label": "muted-foreground",
           "note": "muted sobre background",
-          "light": "7,12:1",
+          "light": "7,10:1",
           "lightLv": "AAA",
-          "dark": "7,08:1",
+          "dark": "7,12:1",
           "darkLv": "AAA"
         },
         {
@@ -1254,7 +1270,7 @@
           "darkLv": ""
         }
       ],
-      "contrastNote": "Con este cambio, todos los pares de texto del sistema alcanzan AAA en claro y oscuro — ya no queda ninguno en AA. La única excepción intencionada es brand-purple-accent, que cumple solo como texto grande (≥3:1) sobre fondos invertidos, nunca como cuerpo.",
+      "contrastNote": "Todos los pares de texto del sistema alcanzan AAA en claro y oscuro, y no solo en reposo: los estados de hover también, que es donde suele escaparse. El último que faltaba era el hover del toggle apagado, y se resolvió moviendo el color del texto en vez de apagar el fondo — subir la cifra quitando la señal visual no es accesibilidad, es esconder el problema del informe. La única excepción intencionada es brand-purple-accent, que cumple solo como texto grande (≥3:1) sobre fondos invertidos, nunca como cuerpo.",
       "checklistTitle": "Checklist de cierre",
       "checklist": [
         "Contraste medido, con cifra, en ambos temas. AA es el suelo no negociable; AAA siempre que se alcance sin coste visual.",

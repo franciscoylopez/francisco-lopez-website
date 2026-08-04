@@ -87,9 +87,10 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   sitio a la vez. Detalle en `BRAND.md` y `DECISIONS.md` D36.
 - **No funcionales**: PageSpeed/Lighthouse **>90 desktop y móvil**; accesibilidad **AA
   de suelo, AAA objetivo**; **SEO + JSON-LD por página** como criterio de cierre.
-  Estado verificado el 2026-08-04: **todos los pares de color en reposo están en AAA en
-  ambos temas**, con una única excepción documentada —el hover del toggle apagado, en AA
-  holgado— y **0 violaciones de axe** en las seis páginas, en claro y oscuro, incluido el
+  Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
+  ambos temas, en reposo y en hover, sin excepciones** —la última que quedaba, el hover del
+  toggle apagado, se resolvió subiéndolo de 6,35/6,98 a 7,21/7,80 sin apagar la señal visual
+  del hover— y **0 violaciones de axe** en las seis páginas, en claro y oscuro, incluido el
   diálogo de consentimiento. Las cifras publicadas se miden sobre el color que el
   navegador pinta; el método está en `BRAND.md` §Accesibilidad.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de

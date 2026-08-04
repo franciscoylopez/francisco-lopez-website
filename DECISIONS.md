@@ -728,8 +728,8 @@ el patrón por defecto es **mezclar el texto con el propio fondo** en vez de tir
 .contact-band    { --contact-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted)); }
 ```
 
-**Por qué.** `--muted-foreground` está afinado contra `--background` (AAA: 7,12:1 claro /
-7,08:1 oscuro). Sobre la franja de contacto (fondo `--muted`) cae a **6,44:1 / 5,56:1** — AA
+**Por qué.** `--muted-foreground` está afinado contra `--background` (AAA: 7,10:1 claro /
+7,12:1 oscuro). Sobre la franja de contacto (fondo `--muted`) cae a **6,44:1 / 5,56:1** — AA
 suelto, en contra de lo que afirma `BRAND.md` y de lo que **publica** la página de
 Accesibilidad. No es cosa del color de banda elegido: con `card` tampoco se salva (6,37:1 en
 oscuro). Al 85% de mezcla con la banda da **8,17:1 / 9,17:1**, AAA en ambos temas; al 80% ya se
@@ -747,10 +747,21 @@ sobre un fondo cuyo color efectivo cambia con el tema**. Al construir cualquier 
 **Estados interactivos.** El hover del botón sólido **no** se hace con `opacity` ni
 `bg-primary/90`, que bajan el contraste al mezclar con el fondo. Se mezcla hacia
 `--foreground`, que en ambos temas se aleja de `--primary-foreground` (en claro oscurece bajo
-texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,88→8,59 claro,
-8,36→8,93 oscuro — cifras del cian corregido en P37.598; el 7,28 original de esta entrada
-era correcto para el cian de entonces, y resultó ser **la única cifra publicada del cian que
-sí cuadraba con lo que se pintaba**: el 7,44 de `BRAND.md` era el equivocado).
+texto hueso, en oscuro aclara bajo texto carbón): el contraste **sube** (7,93→8,64 claro,
+8,36→8,92 oscuro — cifras del cian corregido en P37.598 y re-medidas en P37.5985; el 7,28
+original de esta entrada era correcto para el cian de entonces, y resultó ser **la única cifra
+publicada del cian que sí cuadraba con lo que se pintaba**: el 7,44 de `BRAND.md` era el
+equivocado).
+
+**La mezcla del 12% se generaliza (P37.5985).** El mismo gesto resuelve el hover del
+`toggle-primary` apagado, que era la última excepción AAA del sistema (6,35 claro / 6,98
+oscuro): allí el cian no está en el relleno sino en el **texto**, así que lo que se mezcla es
+el texto, y con el velo al 8% da **7,21 / 7,80**. La lección que generaliza no es el número
+sino la dirección: cuando un par no llega, **mover el elemento que lleva el cian hacia
+`--foreground`** sube el contraste en los dos temas a la vez, mientras que retocar el alfa del
+velo tiene techo asintótico — un velo del propio color nunca puede subir el contraste de ese
+color. Corolario que se cumplió al medir: el velo **neutro** (`muted`), que parecía la vía
+natural, es la peor de todas (6,76 / 6,57).
 
 **Aplicado retroactivamente.** La regla destapó un fallo **preexistente** en la banda de «Más
 allá del PM»: eyebrow al 58% → **4,07:1 en oscuro**, por debajo de AA. Corregido al 80%

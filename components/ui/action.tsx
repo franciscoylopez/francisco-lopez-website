@@ -29,6 +29,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 // comportamiento que ya tenía `.contact-cta` y que ahora hereda todo el sistema —
 // `bg-primary/90`, que es lo que decía BRAND.md, lo baja. Se corrigió la regla, no
 // el botón (P37.596).
+// OJO al tocar este archivo: las cadenas de clases tienen que estar ESCRITAS
+// ENTERAS y literales. Tailwind escanea el código fuente como texto plano, así que
+// una clase construida por interpolación (`hover:bg-[${MIX}]`) no la ve nadie y la
+// utilidad no llega a generarse: el elemento se queda sin hover, en silencio y sin
+// error de compilación. Pasó al implementar P37.5985 —se factorizó el color-mix a
+// una constante y se cayeron a la vez el hover del sólido y el del toggle—, y solo
+// se detectó midiendo el color pintado en el navegador. Repetir el literal es feo;
+// que el CTA insignia del sitio pierda el hover sin avisar, más.
 const SOLID =
   "bg-primary text-primary-foreground hover:bg-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))] focus-visible:bg-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))]";
 
@@ -114,11 +122,20 @@ export const actionVariants = cva(
       // Apagado en la versión cian: TINTE en hover, no relleno — con el relleno,
       // hover y seleccionado se verían igual y el control dejaría de comunicar en
       // qué estado está (BRAND.md, fijado en P37.59).
+      //
+      // El tinte era `bg-primary/10` con el texto intacto, y era la ÚNICA excepción
+      // AAA del sistema: cian sobre un velo del propio cian da 6,35 claro / 6,98
+      // oscuro, y bajar el alfa tiene techo asintótico (pintar cian sobre cian no
+      // puede subir el contraste del cian). Lo que sí funciona es mover el TEXTO en
+      // vez del velo, con la misma mezcla que ya usa el sólido: 12% hacia
+      // `--foreground`. Con el velo al 8% da 7,21 claro / 7,80 oscuro — AAA en los
+      // dos temas, y el velo sigue siendo más perceptible que la pastilla `muted`
+      // que usa el resto de controles (ΔL* 4,7 vs 3,9 en claro). P37.5985.
       {
         variant: "toggle-primary",
         on: false,
         class:
-          "border-primary text-primary border bg-transparent hover:bg-primary/10 focus-visible:bg-primary/10",
+          "border-primary text-primary border bg-transparent hover:bg-[color-mix(in_oklab,var(--primary)_8%,transparent)] hover:text-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))] focus-visible:bg-[color-mix(in_oklab,var(--primary)_8%,transparent)] focus-visible:text-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))]",
       },
       // Apagado en la versión neutra: es literalmente `outline-neutral`. Aquí el
       // hover SÍ puede ser la pastilla plena en vez de un tinte, porque `muted` no
