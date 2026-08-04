@@ -440,11 +440,22 @@
 }
 
 /* Enlaces de chrome (nav/breadcrumb/footer) — nunca `primary`, ni en texto ni en
-   fondo (BRAND.md). Pastilla `--muted` en hover/focus, sin depender del color.
-   No lleva padding/margin propio (a diferencia de `.link-content`): cada caller ya
-   trae su propia utilidad de espaciado (`px-[0.85rem]` en nav, etc.) y, al no
-   estar en `@layer`, esta clase la pisaría si la trajera. La pastilla usa la caja
-   que ya define cada componente. */
+   fondo (BRAND.md). Pastilla en hover/focus, sin depender del color. No lleva
+   padding/margin propio (a diferencia de `.link-content`): cada caller ya trae su
+   propia utilidad de espaciado (`px-[0.85rem]` en nav, etc.) y, al no estar en
+   `@layer`, esta clase la pisaría si la trajera. La pastilla usa la caja que ya
+   define cada componente.
+   `--chrome-hover-bg` sensible al fondo, mismo patrón que `--contact-dim` arriba:
+   por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), pero dentro
+   de `.contact-band` (fondo YA `--muted`, ContactSecondary también usa esta clase
+   desde P37.55) el pill se volvía invisible — mismo color que su fondo. Ahí se
+   sube un escalón a `--card` para que siga habiendo contraste. */
+:root {
+  --chrome-hover-bg: var(--muted);
+}
+.contact-band {
+  --chrome-hover-bg: var(--card);
+}
 .link-chrome {
   border-radius: 7px;
   background-color: transparent;
@@ -452,7 +463,7 @@
 }
 .link-chrome:hover,
 .link-chrome:focus-visible {
-  background-color: var(--muted);
+  background-color: var(--chrome-hover-bg);
 }
 @media (prefers-reduced-motion: reduce) {
   .link-chrome {
