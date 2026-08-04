@@ -448,13 +448,18 @@
    `--chrome-hover-bg` sensible al fondo, mismo patrón que `--contact-dim` arriba:
    por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), pero dentro
    de `.contact-band` (fondo YA `--muted`, ContactSecondary también usa esta clase
-   desde P37.55) el pill se volvía invisible — mismo color que su fondo. Ahí se
-   sube un escalón a `--card` para que siga habiendo contraste. */
+   desde P37.55) el pill se volvía invisible — mismo color que su fondo.
+   Ajustado 2026-08-04: el primer intento usaba `--card` ahí dentro — un token fijo
+   mucho más claro que rompía con el tono cálido y sutil del pill de siempre (se
+   veía como un recuadro blanco suelto). En su lugar se mezcla `--foreground` un
+   10% sobre la PROPIA banda, igual que ya hace `--contact-dim`: en claro oscurece
+   un paso (mismo sentido que --muted respecto a --background), en oscuro aclara un
+   paso — la misma dirección que ya tiene el pill por defecto en cada tema. */
 :root {
   --chrome-hover-bg: var(--muted);
 }
 .contact-band {
-  --chrome-hover-bg: var(--card);
+  --chrome-hover-bg: color-mix(in srgb, var(--foreground) 10%, var(--muted));
 }
 .link-chrome {
   border-radius: 7px;
