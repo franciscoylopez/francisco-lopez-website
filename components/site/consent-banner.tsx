@@ -296,7 +296,14 @@ function ConsentRow({
   const descId = `${titleId}-desc`;
   return (
     <li className="border-border rounded-lg border">
-      <label className="flex cursor-pointer items-start justify-between gap-4 p-3.5">
+      {/* `items-center`: el control gobierna la fila entera, así que se centra
+          contra ella. Estaba en `items-start`, y como el switch vive dentro de su
+          objetivo táctil de 44px, su centro caía ~11px por debajo del centro del
+          título: ni alineado con el título ni centrado en la fila. Se veía sobre
+          todo con descripciones de tres líneas (modal estrecho). El desajuste era
+          previo; lo destapó darle contraste a la bolita en P37.593 — con la bolita
+          blanca sobre carril casi blanco (1,22:1) no se distinguía dónde estaba. */}
+      <label className="flex cursor-pointer items-center justify-between gap-4 p-3.5">
         <div className="min-w-0">
           <p
             id={titleId}
