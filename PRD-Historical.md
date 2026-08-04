@@ -1039,6 +1039,27 @@ junto con P37.55.
 
 ---
 
+## 33. Capa de acción y de layout: el sistema deja de escribirse a mano (2026-08-04)
+
+Antes de construir secciones nuevas, Francisco pidió una **auditoría de diseño** —cumplimiento del sistema y expresión de marca, sin copy— y de paso entender por qué los CTA se sentían descoordinados. La sospecha se quedó corta: **entre los tokens y las páginas no había capa de componentes**. `components/ui/button.tsx` llevaba en el repo desde el principio con **cero usos**, y cada botón era una cadena de Tailwind escrita donde vivía. Medido: 6 definiciones de «botón base» en 6 archivos, 2 radios para la misma caja, 4 hovers para la variante sólida —incluido *ninguno*—, el objetivo táctil de 44px copiado 14 veces (con el footer fuera, a 40px, en todas las páginas) y `WRAP` duplicado idéntico en 18 sitios.
+
+**Lo construido.** `components/ui/action.tsx` (7 variantes, 4 tamaños, con el suelo de 44px y el radio dentro) y `components/site/layout.ts` (WRAP · SECTION · PROSE · CARD · PANEL). Se publicó la sección **«Botones y acciones»** en el Design System, ES y EN, con demos que usan las variantes reales: si una cambia, la página cambia con ella y no puede mentir. Detalle técnico en `DECISIONS.md` **D36**; las reglas visuales, en `BRAND.md`.
+
+**Cuatro cosas que enseñó el proceso, y que valen más que el refactor:**
+
+1. **Los enlaces eran coherentes y los botones no, y la diferencia era esta página.** Los enlaces habían hecho el recorrido completo —regla → clase → sección publicada → uso— y por eso son difíciles de incumplir sin querer. Los botones se quedaron en el primer paso. *Una regla que hay que recordar es una regla que se incumple.*
+2. **«Mismo nombre con valores distintos» no es lo mismo que «cadena repetida».** El `CARD` con dos radios no era drift: eran **dos cajas y una no sabía que lo era**. El radio mayor del panel es jerarquía de anidamiento. Unificar los valores habría roto el sistema; lo que faltaba era un nombre.
+3. **Agrupar por atributo ARIA agrupa por accidente.** El toggle de rejilla y los tabs de dispositivo compartían regla por usar ambos `aria-pressed`, siendo un interruptor y un segmentado. La primera redacción del criterio nuevo («¿quién es el protagonista?») falló al segundo caso que le tocó; la definitiva mira la **forma** del control, que se comprueba de un vistazo. Lo detectó Francisco al ver los tabs del Esqueleto navegable.
+4. **Gatear lo que se mide, nunca lo que se dibuja.** El banner de consentimiento colgaba del gate de GTM, así que un modal con cuatro botones y un switch **solo existía en producción**: imposible de revisar antes de publicarlo. Separados los gates, se pudo auditar por primera vez.
+
+**El gate de accesibilidad encontró tres fallos, ninguno causado por esta tanda** —y uno llevaba trece días en producción: **el cian claro publicaba un AAA que no cumplía** (se pintaba `#005E5F` y daba 6,86:1, no los 7,01 documentados). Corregido a un cian que se pinta `#005859` y da 7,43:1. También: el bloque de código del Design System a 2,09:1 en oscuro —color fijo sobre un panel que invierte con el tema, resuelto con el token nuevo `--primary-on-inverted`— y los objetivos táctiles del footer y del selector de idioma.
+
+**Y un error propio, corregido en caliente.** La primera medición afirmó que el hex documentado estaba mal. No lo estaba: los cianes de esta marca caen **fuera del gamut sRGB**, el navegador los recorta al pintar, y el medidor leía las componentes negativas sin recortar —calculando sobre un color que no existe en pantalla—. Se detectó al verificar en producción, se rehízo con dos métodos independientes y se corrigieron las cifras (`v1.3.1`). El procedimiento para no repetirlo —validar la herramienta contra pares ya publicados antes de creerse un hallazgo— quedó escrito en `BRAND.md`. Nota curiosa: el 7,28:1 de D30 resultó ser **la única cifra del cian de todo el proyecto que cuadraba con lo que se pintaba**.
+
+**Estado al cerrar.** Dos releases en producción (`v1.3.0` y `v1.3.1`). axe: 0 violaciones en las seis páginas, en claro y oscuro, con el diálogo de consentimiento incluido. Lighthouse: 98/100 desktop y 92/100 móvil, CLS 0. Quedan abiertas la skill `design-review` —que esta sesión llenó de material—, la presencia del morado en la home y subir a AAA la última excepción que queda.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
