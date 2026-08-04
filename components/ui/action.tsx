@@ -62,19 +62,32 @@ export const actionVariants = cva(
         "outline-neutral": OUTLINE_NEUTRAL,
         // Tercera opción de un grupo, sin caja en reposo (Rechazar todo).
         ghost: "text-foreground hover:bg-muted focus-visible:bg-muted",
-        // Controles CON ESTADO (`aria-pressed` o `aria-selected`) — ver `on` abajo.
-        // Cuál de las dos se usa NO depende de cuántos segmentos haya, sino de qué
-        // es el control respecto a lo que tiene al lado:
-        //   · `toggle-primary` cuando el segmento ES la acción de su sección —
-        //     encender la rejilla, reencuadrar una demo del Design System. Ahí el
-        //     control es el protagonista y el cian dice «esto se toca».
-        //   · `toggle-neutral` cuando el grupo filtra o navega sobre un contenido
-        //     que ya está ahí y que es el protagonista (las pestañas del Toolkit).
-        //     Es el mismo criterio que separa contenido de chrome en BRAND.md: en
-        //     un bloque cuya función entera es elegir qué mirar, el cian no
-        //     distingue nada — solo repite. (Fijado 2026-08-04 al migrar: con
-        //     `toggle-primary`, la fila de cuatro pestañas del Toolkit pasaba de un
-        //     cian a cuatro y se comía la sección, sobre todo en oscuro.)
+        // Controles CON ESTADO — ver `on` abajo. Cuál de las dos se usa se decide
+        // por la FORMA del control, no por su contenido ni por cuántos segmentos
+        // tenga (una regla que obliga a contar es una regla que nadie aplica):
+        //
+        //   · `toggle-primary` — INTERRUPTOR SUELTO. Un único control que enciende
+        //     o apaga algo que antes no estaba: el toggle de rejilla del Design
+        //     System. El cian dice «esto se toca» y no compite con nada, porque no
+        //     tiene pares al lado. Apagado = tinte en hover, nunca relleno: con el
+        //     relleno, hover y encendido se verían igual y el control dejaría de
+        //     comunicar en qué estado está (BRAND.md, fijado en P37.59).
+        //
+        //   · `toggle-neutral` — GRUPO DE ALTERNATIVAS EXCLUYENTES. Varios botones
+        //     de los que exactamente uno está activo, para elegir cómo mirar un
+        //     contenido que ya está en pantalla: pestañas del Toolkit, tabs de
+        //     dispositivo del Esqueleto navegable. Aquí el cian no distingue nada
+        //     —todos los segmentos son igual de accionables— y multiplicado por
+        //     tres o cuatro se come la sección. Mismo eje que separa contenido de
+        //     chrome en BRAND.md.
+        //
+        // Fijado 2026-08-04 al migrar, en dos pasadas: primero con las pestañas del
+        // Toolkit (cuatro cianes en vez de uno, insufrible en oscuro) y enseguida
+        // con los tabs de dispositivo, que se habían quedado en cian por arrastre
+        // —P37.59 los había agrupado con el toggle de rejilla por ser ambos
+        // `aria-pressed`, cuando uno es un interruptor y el otro un segmentado—.
+        // Que la primera redacción de la regla ("¿quién es el protagonista?") ya
+        // fallara al segundo caso es el motivo de que ahora mire la forma.
         "toggle-primary": "",
         "toggle-neutral": "",
         // Controles solo-icono del chrome (tema, hamburguesa, LinkedIn del footer,

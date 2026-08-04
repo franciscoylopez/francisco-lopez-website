@@ -198,11 +198,12 @@ export function DevicePreview({
   const maxWidth =
     dev === "mobile" ? "390px" : dev === "tablet" ? "768px" : "100%";
 
-  // Mismo criterio que el toggle de rejilla —y ahora, literalmente, la misma
-  // variante: el relleno pleno es el estado seleccionado, así que el hover del
-  // resto de segmentos es un tinte.
+  // Neutro, igual que las pestañas del Toolkit: es un grupo de alternativas
+  // excluyentes que reencuadra una maqueta que ya está en pantalla — se elige cómo
+  // mirar el contenido, no se dispara una acción. El toggle de rejilla de arriba sí
+  // es cian porque es un interruptor suelto: enciende algo que no estaba.
   const segBtn = (on: boolean) =>
-    actionVariants({ variant: "toggle-primary", on, size: "sm" });
+    actionVariants({ variant: "toggle-neutral", on, size: "sm" });
 
   return (
     <>
