@@ -60,7 +60,7 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={dict.linkedinAria}
-          className="border-border text-foreground inline-flex h-10 w-10 flex-none items-center justify-center rounded-md border md:justify-self-end"
+          className="border-border text-foreground icon-chrome inline-flex h-10 w-10 flex-none items-center justify-center rounded-md border md:justify-self-end"
         >
           <LinkedinIcon className="size-[18px]" />
         </a>

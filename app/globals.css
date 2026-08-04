@@ -475,3 +475,24 @@
     transition: none;
   }
 }
+
+/* Controles de chrome solo-icono (toggle de tema, hamburguesa, LinkedIn del
+   footer): mismo hover de pastilla que `.link-chrome` (P37.57). El fondo de
+   reposo también vive aquí (`--card`, o `transparent` si el caller no pasa
+   `--icon-chrome-bg`) en vez de dejarlo en la utilidad `bg-card`: medido en
+   el propio Chrome, la utilidad (capa `utilities`) seguía ganándole al hover
+   de esta clase pese a no estar en `@layer` — con las dos declaraciones en la
+   misma regla no hay pulso de cascada que perder. */
+.icon-chrome {
+  background-color: var(--icon-chrome-bg, transparent);
+  transition: background-color 0.18s ease;
+}
+.icon-chrome:hover,
+.icon-chrome:focus-visible {
+  background-color: var(--chrome-hover-bg);
+}
+@media (prefers-reduced-motion: reduce) {
+  .icon-chrome {
+    transition: none;
+  }
+}

@@ -158,7 +158,7 @@ export function Nav({
             aria-label={dict.menu}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
-            className="border-border bg-card text-foreground inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border sm:hidden"
+            className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border sm:hidden"
           >
             <Menu className="size-[18px]" aria-hidden="true" />
           </button>
@@ -166,7 +166,7 @@ export function Nav({
             type="button"
             aria-label={dict.toggleTheme}
             onClick={() => setTheme(isDark ? "light" : "dark")}
-            className="border-border bg-card text-foreground ml-0.5 inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border"
+            className="border-border text-foreground icon-chrome [--icon-chrome-bg:var(--card)] ml-0.5 inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-md border"
           >
             <Moon className="size-[18px] dark:hidden" aria-hidden="true" />
             <Sun className="hidden size-[18px] dark:block" aria-hidden="true" />
