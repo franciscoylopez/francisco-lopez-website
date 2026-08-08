@@ -142,8 +142,13 @@ export const actionVariants = cva(
         // Controles solo-icono del chrome (tema, hamburguesa, LinkedIn del footer,
         // cerrar diálogo). El hover de pastilla lo resuelve `.icon-chrome`, que ya
         // es sensible al fondo vía `--chrome-hover-bg` y declara reposo y hover en
-        // la misma regla (D35). Sobre `--background` el caller añade
-        // `[--icon-chrome-bg:var(--card)]` para que la caja se vea en reposo.
+        // la misma regla (D35). El fondo de REPOSO también sale de ahí y por
+        // defecto es `--card`, que es el caso común (el control se apoya en
+        // `--background`): en el call site no se escribe nada. Solo el que vive
+        // sobre un card pasa `[--icon-chrome-bg:var(--background)]` — hoy, el
+        // cierre del diálogo de consentimiento. Hasta P37.5989 el defecto era
+        // `transparent` y los seis call sites normales repetían el `--card` a
+        // mano; el LinkedIn del footer no lo escribió y se quedó sin caja.
         icon: "icon-chrome border-border text-foreground border",
       },
       // El tamaño del icono va con el del texto y no lo escribe el call site

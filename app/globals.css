@@ -492,9 +492,20 @@
 
 /* Controles de chrome solo-icono (toggle de tema, hamburguesa, LinkedIn del
    footer): mismo hover de pastilla que `.link-chrome` (P37.57). El fondo de
-   reposo vive aquí (`--card` vía `--icon-chrome-bg`, o `transparent` si el
-   caller no lo pasa) en vez de dejarlo en la utilidad `bg-card`.
-   El motivo NO es de cascada —una clase sin `@layer` sí gana a las utilidades,
+   reposo vive aquí, no en la utilidad `bg-card` del punto de uso.
+
+   El valor POR DEFECTO es `--card`, que es el caso común: un control de icono
+   que se apoya en `--background`. Solo escribe algo el que vive sobre un card
+   —hoy el cierre del diálogo de consentimiento, que pasa `--background`—, o
+   sea, la excepción de verdad. Antes el defecto era `transparent` y los seis
+   call sites sobre `--background` repetían `[--icon-chrome-bg:var(--card)]`
+   a mano; el LinkedIn del footer se olvidó de escribirlo y se quedó SIN caja
+   en reposo, con el mismo aspecto en los dos temas que los demás tenían solo
+   por acordarse (P37.5989). El defecto no lo usaba nadie a propósito: era la
+   trampa donde caía el que no se acordaba.
+
+   Que viva aquí y no en una utilidad del punto de uso NO es de cascada —una
+   clase sin `@layer` sí gana a las utilidades,
    D34 se sostiene— sino de transición: con el reposo en `bg-card` y el hover
    aquí, `transition: background-color` dejaba el elemento clavado en el color
    de reposo y el hover no llegaba nunca (medido en Chrome; al quitar la
@@ -502,7 +513,7 @@
    instante). Los dos extremos de una transición tienen que pertenecer a la
    misma regla que la declara. Ver D35. */
 .icon-chrome {
-  background-color: var(--icon-chrome-bg, transparent);
+  background-color: var(--icon-chrome-bg, var(--card));
   transition: background-color 0.18s ease;
 }
 .icon-chrome:hover,

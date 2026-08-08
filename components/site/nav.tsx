@@ -171,7 +171,7 @@ export function Nav({
             onClick={() => setMenuOpen((o) => !o)}
             className={cn(
               actionVariants({ variant: "icon", size: "icon" }),
-              "[--icon-chrome-bg:var(--card)] sm:hidden",
+              "sm:hidden",
             )}
           >
             <Menu aria-hidden="true" />
@@ -182,7 +182,7 @@ export function Nav({
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className={cn(
               actionVariants({ variant: "icon", size: "icon" }),
-              "ml-0.5 [--icon-chrome-bg:var(--card)]",
+              "ml-0.5",
             )}
           >
             {/* Sin tamaño a mano: lo pone `size: "icon"` de la variante. */}

@@ -586,20 +586,20 @@ export function DesignSystem({
                       <a
                         href="#top"
                         aria-label={c.kicker}
-                        className={cn(
-                          actionVariants({ variant: "icon", size: "icon" }),
-                          "[--icon-chrome-bg:var(--card)]",
-                        )}
+                        className={actionVariants({
+                          variant: "icon",
+                          size: "icon",
+                        })}
                       >
                         <MoonGlyph />
                       </a>
                       <a
                         href="#top"
                         aria-label={c.cls}
-                        className={cn(
-                          actionVariants({ variant: "icon", size: "icon" }),
-                          "[--icon-chrome-bg:var(--card)]",
-                        )}
+                        className={actionVariants({
+                          variant: "icon",
+                          size: "icon",
+                        })}
                       >
                         <MenuGlyph />
                       </a>
@@ -759,20 +759,20 @@ export function DesignSystem({
                       <a
                         href="#top"
                         aria-label={c.kicker}
-                        className={cn(
-                          actionVariants({ variant: "icon", size: "icon" }),
-                          "[--icon-chrome-bg:var(--card)]",
-                        )}
+                        className={actionVariants({
+                          variant: "icon",
+                          size: "icon",
+                        })}
                       >
                         <MoonGlyph />
                       </a>
                       <a
                         href="#top"
                         aria-label={c.cls}
-                        className={cn(
-                          actionVariants({ variant: "icon", size: "icon" }),
-                          "[--icon-chrome-bg:var(--card)]",
-                        )}
+                        className={actionVariants({
+                          variant: "icon",
+                          size: "icon",
+                        })}
                       >
                         <MenuGlyph />
                       </a>
