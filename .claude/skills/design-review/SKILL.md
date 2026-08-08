@@ -93,6 +93,12 @@ Qué buscar:
 - **Cifras publicadas que no se sostienen.** Toda cifra de contraste que el sitio publica
   (Accesibilidad, Design System, Brand Kit, `BRAND.md`) se remide. Han viajado ya dos veces
   cifras equivocadas de un documento a los otros tres, una de ellas trece días en producción.
+  **El drift también va al revés:** en el disparo del 2026-08-08 las cuatro páginas
+  publicaban las cifras correctas y era `BRAND.md` el que llevaba las superadas, en dos
+  párrafos que su propia §Accesibilidad corrige más abajo. Un documento puede contradecirse
+  **consigo mismo**: cuando una corrección se escribe como nota fechada al final, los
+  párrafos de arriba siguen afirmando lo viejo. Comprueba que la corrección **sustituyó** las
+  cifras, no solo que las comentó.
 - **Demos que enseñan algo que no existe.** El empujón de 2px vivía en una clase llamada
   `.contact-cta` «propia de este CTA y de ningún otro», así que la demo de esa variante en el
   Design System mostraba un botón que el sitio no tenía. Toda demo se compara con su uso real.
@@ -110,9 +116,20 @@ antes de reportar**: estos greps tienen hits legítimos conocidos, y un informe 
 deja de servir como señal (el mismo motivo por el que `format:check` en rojo permanente no
 avisa de nada).
 
+**Antes de leer un solo hit: separa UI real de ilustración.** Este sitio dibuja mucho —
+maquetas de navegador, marcos de dispositivo, esqueletos, previsualizaciones de tema— y en
+un dibujo las reglas del sistema **no aplican igual**: un radio de 1px o una altura de 36px
+son correctos en una miniatura y absurdos en un control. Sin este filtro el barrido de
+`rounded-`/`hover:` devuelve ~120 hits de los que la mayoría son trazos de un dibujo, y el
+informe se vuelve ilegible. Pero el dibujo **no está exento de todo**: sigue prohibido que
+copie valores de token a mano (fila «valores de token copiados»), porque ahí es donde una
+corrección de color se queda sin propagar. Regla práctica: *¿esto se puede pulsar?* → sistema.
+*¿esto representa algo que se puede pulsar?* → dibujo, y se juzga por si **miente**.
+
 | Qué se busca | Patrón | Hits legítimos |
 |---|---|---|
 | Acciones sin variante | `<button`/`<a` con `className` que traiga `hover:` `rounded-` `border-` `px-` y **no** `actionVariants` | enlaces de contenido (`.link-content`) y de chrome (`.link-chrome`) |
+| **Valores de token copiados a mano** | `oklch(` · `rgb(` · `#[0-9a-f]{6}` fuera de `globals.css`, sobre todo dentro de `style={{ }}` | `logo.tsx`, `api/og/route.tsx` y las **previsualizaciones de tema** (necesitan pintar la paleta *contraria* a la vigente, que las CSS vars no dan) — **pero cada copia se compara con el token vivo, una por una** |
 | Suelo táctil a mano | `min-h-\[44px\]|min-w-\[44px\]` | `action.tsx`; call sites de `.link-chrome` (**ver nota**) |
 | Radios y cajas a mano | `rounded-\[var\(--radius` · `max-w-\[var\(--container\)\]` · `border-t.*py-\[var\(--section-y\)\]` | `layout.ts`, `globals.css` |
 | Hex en vez de token | `#[0-9a-fA-F]{6}` | `globals.css`, `logo.tsx`, `api/og/route.tsx` (Satori no lee CSS vars), muestras del Brand Kit |
@@ -121,6 +138,7 @@ avisa de nada).
 | Motion sin escape | `transition`/`animate-` sin `motion-reduce` ni `prefers-reduced-motion` cerca | los que lo declaran en `globals.css` |
 | **Clases interpoladas** | `className={\`` con `${` dentro de una utilidad | ninguno, nunca |
 | Inventario de controles con estado | `aria-pressed` · `aria-selected` · `role="tab"` | — |
+| **Inventario de glifos dibujados a mano** | `<svg` en todo `components/` y `app/`, **no** una lectura de `icons.tsx` | ilustraciones y maquetas; el logo |
 | Pasteles como primer plano | `brand-(cyan|purple)-soft` en `text-`/`border-` | solo relleno decorativo |
 
 **La clase interpolada merece su propia línea.** Tailwind escanea el código como texto
@@ -128,12 +146,20 @@ plano: una utilidad construida por interpolación no se genera, el elemento se q
 hover **sin error de compilación**, y solo se detecta midiendo el color pintado. Ya tumbó a
 la vez el hover del sólido y el del toggle.
 
-**Nota sobre `.link-chrome` (hallazgo vivo, verificado 2026-08-08).** 13 de sus 17 call
-sites reescriben `min-h-[44px]` a mano y hay **tres paddings horizontales distintos**
-(`0.6` / `0.85` / `0.9rem`) para el mismo tipo de enlace. Es la forma exacta del problema
-del botón, una capa más abajo: el enlace de chrome tiene una clase para su **aspecto** y
-ninguna capa para sus **métricas**. Mientras eso siga así, esos hits son «legítimos por
-convención» y hay que juzgarlos como el hallazgo que son, no filtrarlos.
+**Capas que todavía no existen (hallazgos vivos, medidos el 2026-08-08).** Sus hits son
+«legítimos por convención», así que hay que juzgarlos como el hallazgo que son, no filtrarlos:
+
+- **Enlace de chrome.** 13 de los 17 call sites de `.link-chrome` reescriben `min-h-[44px]` a
+  mano, con **tres paddings** (`0.6` / `0.85` / `0.9rem`). Tiene clase para su **aspecto** y
+  ninguna capa para sus **métricas**.
+- **Etiqueta / pastilla (badge).** Siete definiciones en seis archivos; medidas en pantalla,
+  cinco variantes reales (padding lateral 6,4 / 8 / 8,8 / 9,6px, vertical 1,6 / 1,92 / 2,4 /
+  4px, cuerpo 10,56 / 11,52px, alto 19 / 20,2 / 22 / 25,3px) y **tres de ellas conviven en la
+  misma página**. D36 cubrió acciones y cajas; la etiqueta no es ni una cosa ni la otra y se
+  quedó fuera.
+
+Ambos son la forma exacta del problema del botón, una capa más abajo. Si al correr la skill
+siguen ahí, se reportan otra vez: la señal no caduca porque ya se conozca.
 
 Y dos comprobaciones que no son grep:
 
@@ -168,10 +194,24 @@ y su offset · hover/focus · color en reposo y en interacción · métricas del
 borde y fondo · **el contenedor que la agrupa** (¿cabe la fila con el copy más largo, en ES
 y EN, a 320px?) · ritmo vertical.
 
-**Icono propio** (`components/site/icons.tsx`): artboard 24 y coordenadas en 2–22 · trazo 2,
-terminaciones redondas · **nada contorneado por debajo de 8 unidades** · **contraforma
-mínima de 6** en todo hueco que haya que leer · puntos dibujados con trazo, no `circle` ·
-verificado a tamaño real **junto a un lucide del mismo bloque**.
+**Icono propio:** artboard 24 y coordenadas en 2–22 · trazo 2, terminaciones redondas ·
+**nada contorneado por debajo de 8 unidades** · **contraforma mínima de 6** en todo hueco que
+haya que leer · puntos dibujados con trazo, no `circle` · verificado a tamaño real **junto a
+un lucide del mismo bloque**. Y tres preguntas que van antes que el dibujo:
+
+1. **¿Lucide lo trae?** Si sí, no se dibuja: se importa. Un glifo propio se justifica solo
+   por lo que lucide no exporta (hoy, iconos de marca).
+2. **¿Cuántos hay en total?** El inventario es el **grep de `<svg`**, no el contenido de
+   `icons.tsx`. La regla «si algún día hay más de dos iconos propios, publicarlos en el Brand
+   Kit» nunca se disparó porque asumía que los propios viven en ese archivo, y el disparo del
+   2026-08-08 encontró **seis más repartidos en cuatro archivos** — uno de ellos duplicado
+   byte a byte en dos páginas.
+3. **¿Cuánto trazo pinta?** El metro comparable no es el atributo `stroke-width` sino el
+   **grosor en píxeles**: `stroke-width × (ancho renderizado / ancho del viewBox)`. La familia
+   de este sitio pinta **1,42–1,50px** (lucide a 17 y 18px, el LinkedIn propio y la flecha de
+   páginas hermanas, todos dentro de la banda). Un glifo con trazo 3 a 15px pinta 1,88 y se
+   sale de la familia sin que ninguna revisión de código lo note. Es el equivalente para
+   forma de lo que el recorte de gamut es para color: **la cifra se mide sobre lo pintado**.
 
 **Color y tipografía:** solo tokens · regla de dos capas (cian = única acción, morado
 decorativo) · pasteles nunca como primer plano · texto atenuado sobre fondos que no son
@@ -194,6 +234,14 @@ siendo la misma variante sobre la misma superficie que el toggle del nav (corola
 Con la skill `claude-in-chrome`, sobre el sitio **servido** (`npm run dev` o la Preview de
 Vercel), y sobre el **CSS servido** cuando la duda es si una clase llegó a generarse.
 
+> **Cuidado: el navegador es el de Francisco, no un entorno de pruebas.** Provocar los
+> estados de abajo escribe en su perfil real — `localStorage.theme` es su preferencia de tema
+> y `flm-consent` es su **decisión de privacidad guardada**. Haz la pasada de estados en
+> **incógnito o en local**; si tocas algo en su perfil, anota el valor previo y **restáuralo**
+> al terminar, y no borres el consentimiento sin pedírselo. Además, su tema guardado decide
+> lo que mides: para medir el tema contrario hay que forzarlo y **recargar** (conmutar en
+> caliente da falsos positivos, D30).
+
 **Recorrido base:** las seis páginas × ES/EN × claro/oscuro. Anchos 320 · 375 · 768 · 1280.
 
 **Estados que hay que provocar a mano** (se caen del recorrido normal, y ahí estaban tres de
@@ -210,7 +258,10 @@ los cuatro hallazgos):
 - **404 y 500**, `zoom 400%`, y el toggle de tema en mitad de una animación.
 
 **Medición:** contraste sobre el color que el navegador pinta, recortando a [0,1] o leyendo
-el píxel de un `<canvas>` — los cianes de esta marca caen fuera de sRGB. Además, **la
+el píxel de un `<canvas>` — los cianes de esta marca caen fuera de sRGB. El método de canvas
++ composición del alfa sobre el fondo real está **validado** (2026-08-08): reproduce al
+céntimo los ocho pares publicados en los dos temas (13,79/15,32 · 7,10/7,12 · 7,47/8,36 ·
+7,93/8,36 · 8,64). Si tus cifras no cuadran con esas, el fallo es del medidor. Además, **la
 afordancia se mide**: subir contraste apagando un hover no es una mejora. Compara el ΔL\*
 del estado nuevo con un hover que el sitio ya dé por bueno (pastilla `muted`: 3,9 claro /
 9,0 oscuro).
