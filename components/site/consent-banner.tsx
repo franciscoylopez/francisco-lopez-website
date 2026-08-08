@@ -334,8 +334,9 @@ function ConsentRow({
             // BRAND.md ya tenía verificado.
             // Este control es la ÚNICA excepción a «ningún control se escribe a
             // mano»: está documentada con fecha en BRAND.md §Ningún control se
-            // escribe a mano, y caduca cuando P37.63 decida de dónde vienen los
-            // widgets con estado. Lo de arriba justifica el COLOR, no la excepción.
+            // escribe a mano. La regla de shadcn (D6) aplica hacia delante, así
+            // que no lo reescribe; la excepción caduca el día que aparezca un
+            // SEGUNDO switch. Lo de arriba justifica el COLOR, no la excepción.
             // El anillo de foco lleva su offset del color de la superficie que hay
             // detrás (`--card`, la del diálogo): sin declararlo, Tailwind usa blanco
             // y en tema oscuro dibujaba un halo claro alrededor del control.

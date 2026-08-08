@@ -9,7 +9,9 @@ y con un sistema de marca propio.
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`)
-- **Tailwind CSS v4** + **shadcn/ui** (base-ui) · **lucide-react**
+- **Tailwind CSS v4** · **lucide-react** · capa de componentes propia
+  (`components/ui/action.tsx` + `layout.ts`), con **shadcn/ui** configurado
+  (estilo `base-nova`) para los widgets con estado que vengan — ver `DECISIONS.md` D6
 - **next-themes** (claro/oscuro, `system` por defecto)
 - Desplegado en **Vercel** (`main` = producción)
 

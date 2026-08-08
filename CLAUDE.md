@@ -19,7 +19,7 @@
 - D3 · Next 16 usa `proxy.ts`, no `middleware.ts`
 - D4 · Fuente única de tokens = `app/globals.css`; `brand-globals.css` borrado
 - D5 · Dark mode = `system` por defecto + toggle
-- D6 · shadcn ya integrado; componentes donde aporten a11y
+- D6 · ¿shadcn lo trae? → no se escribe (regla hacia delante); `@base-ui/react` fuera hasta el primer componente
 - D7 · Responsive en CSS, no en JS; Server Components por defecto
 - D8 · No funcionales: PageSpeed >90, desktop+mobile, AA→AAA
 - D9 · Alcance de V1 (home + Brand Kit + Design System + SEO/OG + medición + dominio)
@@ -130,7 +130,7 @@ Antes de escribir markup nuevo, la cascada, en orden:
 
 1. **¿Existe ya la pieza?** — `components/ui/action.tsx` para todo lo accionable, `layout.ts` para cajas y ritmos (`WRAP`/`SECTION`/`CARD`/`PANEL`), los bloques de `components/site/`. → **Se usa.** No se replica su aspecto con clases sueltas.
 2. **¿No existe, pero el caso es del sistema?** → **Se crea la variante, no el caso.** Un botón que no encaja en ninguna variante no es un botón especial: es una variante que falta. Igual con un bloque que se va a repetir.
-3. **¿Es un widget con estado, foco atrapado o portal** (diálogo, popover, tooltip, combobox, menú, tabs)? → **Se trae de shadcn** y se le aplican nuestros tokens. El comportamiento de teclado y foco no se escribe a mano. *(Misma forma que la regla de iconos: «¿lucide lo trae? → no se dibuja».)*
+3. **¿Es un widget con estado, foco atrapado o portal** (diálogo, popover, tooltip, combobox, menú, tabs, scroll-area)? → **¿shadcn lo trae? → no se escribe.** Se trae con `npx shadcn@latest add <componente>` (estilo `base-nova`, ya configurado en `components.json`) y se le aplican nuestros tokens. El comportamiento de teclado y foco no se escribe a mano. *(Misma forma que la regla de iconos: «¿lucide lo trae? → no se dibuja».)* **Aplica hacia delante, no hacia atrás:** los widgets que hoy están a mano —el `<dialog>` nativo del consentimiento y su switch, las pestañas del Toolkit y los tabs de dispositivo del Design System— están bien hechos y no tienen deuda de accesibilidad; no se reescriben por cumplir la regla. Ver `DECISIONS.md` D6.
 4. **¿Nada de lo anterior encaja?** → Lo decide Francisco y se **documenta con fecha** en `BRAND.md`.
 
 **Señal de alarma:** si estás escribiendo una cadena de más de ~4 clases utilitarias para algo accionable, o para una caja que aparece más de una vez, estás en el paso 1 sin haberlo mirado.
