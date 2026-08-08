@@ -4,7 +4,9 @@ Reglas de identidad visual para este proyecto. Aplícalas siempre al generar UI.
 
 ## Stack
 
-Next.js + TypeScript + Tailwind (v4) + shadcn/ui. Iconos: lucide-react.
+Next.js + TypeScript + Tailwind (v4). La capa de componentes es **propia**
+(`components/ui/`); shadcn/ui está configurado y **sin usar** — entra solo para widgets
+con estado, foco atrapado o portal, y hacia delante (`DECISIONS.md` D6). Iconos: lucide-react.
 Los tokens viven en `app/globals.css`. No inventes colores fuera de esos tokens.
 
 ## Tipografía

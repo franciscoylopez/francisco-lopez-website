@@ -1095,6 +1095,24 @@ Tanda de cierre de los ajustes de diseño que dejó abiertos la auditoría (§33
 
 ---
 
+## 36. Los huecos de variante se cierran, y la regla de shadcn se acota (2026-08-08)
+
+Primera mitad del bloque de diseño que abrió §35 (P37.5993–P37.63, `v1.4.1`). Cinco tareas con **la misma forma**, que es lo que las agrupa: la pieza del sistema existía, no cubría el caso, y el caso se escribió a mano. La respuesta en los cinco fue cerrar el hueco, no afinar la excepción.
+
+**Lo que entró.** Los **seis glifos que lucide sí exporta** dejan de dibujarse —incluido el `check` duplicado byte a byte en dos páginas—, y la ilustración de peso pasa a usar el LinkedIn real del sitio, así que la demo ya no puede divergir de lo que documenta. **Una sola notación de radio** donde había tres. La **tarjeta mono del Brand Kit** era la única de su fila que no usaba `VariantCard`, y por eso no heredó el ensanchado de chips de P37.592 y su panel se partía: ahora son dos tarjetas y la fila son tres pares. Y **`InfoCard` había nacido dos veces**, en `design-system.tsx` y en `accesibilidad.tsx`, casi iguales pero no del todo —solo una tenía `mono`, solo una tenía su interlineado—, de modo que el mismo bloque se leía distinto según la página; unificada, con `bullets` y `foot`, cinco llamadas migradas.
+
+**D6 describía una intención y el documento la leía como estado.** La decisión de julio afirmaba que «shadcn está integrado y no hay que reimportarlo», y planificaba su `Tabs` para el Toolkit y su `Button` para los CTAs. El 2026-08-08 ninguna de las tres cosas era cierta: **shadcn no se usaba en absoluto** —`components/ui/` tiene `action.tsx` y `logo.tsx`, el `button.tsx` que llegó a existir se borró con cero usos, y las pestañas y el diálogo acabaron a mano—, y `@base-ui/react` llevaba meses en `dependencies` **sin un solo import**. Es el mismo defecto de forma que las cifras de contraste de §35: la regla no fallaba, fallaba que afirmaba algo que nadie volvió a comprobar.
+
+**La regla que la sustituye tiene dos acotaciones, y las dos importan más que la regla.** La primera es de **perímetro**: solo aplica a widgets con estado, foco atrapado o portal, que es donde el teclado y el ARIA son caros de escribir bien y baratos de romper sin enterarse; fuera de ahí manda la capa propia y shadcn no entra. La segunda es de **dirección**: aplica **hacia delante, no hacia atrás**. Los tres widgets que hoy están a mano —el `<dialog>` nativo, su switch con checkbox real, las pestañas con roving `tabIndex`— están bien hechos y con 0 violaciones de axe, así que reescribirlos sería cambiar código que funciona por satisfacer un documento. Sin esa segunda acotación, la regla habría generado tres refactors sin beneficio para el usuario.
+
+**Y la propagación, que es donde esta tanda ya se había quemado dos veces, esta vez sí se hizo.** La excepción fechada del switch en `BRAND.md` tenía como condición de salida **literal** «que P37.63 fije de dónde vienen los widgets con estado» — o sea que esta tarea la caducaba, y no por su contenido sino por existir. Revisada: no caduca por ahí (la regla hacia delante no la toca), sale el día que aparezca un segundo switch. De paso apareció que **tres documentos más** vendían shadcn/ui como parte del stack *en uso* —`README.md`, `BRAND.md` §Stack y `PRD-Live.md` §5—, todos heredados de la misma frase de julio.
+
+**La tanda se partió en dos, y la decisión fue de Francisco.** El plan era un solo deploy por tanda (evitar desplegar por tarea), pero al llegar aquí preguntó si convenía subir antes. El corte cae en una frontera real: lo hecho es *tapar huecos de variante*, y lo que queda —frontera `site/`↔`ui/`, `SectionHeader`, capa de etiqueta, métricas de `.link-chrome`, fuente única de valores— es *crear y mover capas*, con **31 call sites reescritos solo entre dos de esas tareas** y un movimiento de archivos que toca los imports de unos treinta. Mezclarlas dejaba un PR irrevisable y un rollback de todo o nada. Partir una tanda que ha crecido no incumple la regla del deploy por tanda: la respeta.
+
+**Estado al cerrar.** `v1.4.1` en producción, verificada en las tres páginas afectadas. Segunda ola preparada en `refactor/capas-del-sistema` (P37.6305 → P37.685, nueve tareas), con `design-review` reservada para su cierre —que además es donde toca, porque P37.68 *es* añadirle el punto de «contenedores de controles»—. Dependabot ha abierto por su cuenta los PRs de `hono` y `js-yaml` que P37.6305 iba a resolver a mano, más siete suyos acumulados sin revisar.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
