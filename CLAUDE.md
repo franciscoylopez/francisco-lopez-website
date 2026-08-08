@@ -104,6 +104,7 @@ Sin fechas, la **etapa en curso** es la fase temática de menor `Prioridad` con 
 - **Bucle medir→aprender.** Al cerrar cada etapa, revisar los números de GA4 (clics de contacto, descargas de CV, scroll) para informar la priorización. Construir **y** medir — es lo que predica la web ("del discovery al dato").
 - **Definition of Done por sección.** Cada tarea de sección nueva hereda el checklist de cierre (los 8 puntos de accesibilidad + SEO/JSON-LD + PageSpeed + responsive + seguridad). Misma vara para todas.
 - **Revisión con IA en los PR grandes.** Sin segundo revisor humano, usa `/code-review` (o ultrareview) en cambios sustanciales como segundo par de ojos.
+- **Revisión de diseño:** skill `design-review` (cumplimiento del sistema + expresión de marca, verificado en pantalla). **Disparo manual** — antes de construir secciones nuevas o de un release visual grande, o cuando Francisco lo pida; no va enganchada al cierre de etapa como `sprint-review` hasta que se valide.
 - **Shippear vs. pulir.** Deja explícito qué es "suficiente para shippear la sección" vs. "pulido"; el pulido va a *Optimización* (Could) y **no bloquea el envío**. Que las secciones salgan en vez de dorarse.
 
 # Fase de desarrollo — convenciones (V1 build)

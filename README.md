@@ -84,7 +84,7 @@ design/                Fuente fiel del diseño (export de Claude Design) — ref
 scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf); hechos del diccionario + texto rico autorado
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
-.claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review)
+.claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)
 ```
 
 ## Documentación
