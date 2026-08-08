@@ -1,9 +1,14 @@
 name: CI
 
-# Gate de calidad en cada PR a main: typecheck + lint + build. Hoy nada bloquea el
-# merge salvo el preview de Vercel (que no es un gate); esto impide meter a main
-# código que no compila o no pasa el linter. Coherente con el argumento de rigor
-# técnico del sitio (PRD §1).
+# Gate de calidad en cada PR a main: formato + typecheck + lint + build. Hoy nada
+# bloquea el merge salvo el preview de Vercel (que no es un gate); esto impide meter
+# a main código que no compila, no pasa el linter o no está formateado. Coherente
+# con el argumento de rigor técnico del sitio (PRD §1).
+#
+# `format:check` entra aquí en P37.5991, cuando dejó de estar rojo por defecto: con
+# CRLF en el working tree reportaba 57 falsos positivos, así que meterlo en CI habría
+# sido bloquear todos los PR por ruido. Un check solo sirve de gate si su verde
+# significa algo — y solo se mantiene verde si algo lo comprueba.
 
 on:
   pull_request:
@@ -19,7 +24,7 @@ concurrency:
 
 jobs:
   quality:
-    name: typecheck · lint · build
+    name: format · typecheck · lint · build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,6 +36,9 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      - name: Format
+        run: npm run format:check
 
       - name: Typecheck
         run: npm run typecheck

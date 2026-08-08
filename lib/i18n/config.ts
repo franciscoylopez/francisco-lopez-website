@@ -18,4 +18,5 @@ export function isLocale(value: string): value is Locale {
 // se generan con scripts/cv/generate.tsx. Vive aquí (client/edge-safe, sin
 // server-only) para que el Nav —client component— derive su propio enlace sin
 // importar lib/site. Fuente única de la ruta del CV.
-export const cvPath = (lang: Locale): string => `/cv/francisco-lopez-cv-${lang}.pdf`;
+export const cvPath = (lang: Locale): string =>
+  `/cv/francisco-lopez-cv-${lang}.pdf`;

@@ -25,7 +25,9 @@ export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return NextResponse.next({ request: { headers: withLocale(request, "en") } });
+    return NextResponse.next({
+      request: { headers: withLocale(request, "en") },
+    });
   }
 
   if (pathname === "/es" || pathname.startsWith("/es/")) {
