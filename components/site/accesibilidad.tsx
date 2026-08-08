@@ -1,7 +1,10 @@
+import { Check } from "lucide-react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { InfoCard } from "./info-card";
 import { CARD, SECTION, WRAP } from "./layout";
 import { EmailCta } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
@@ -116,7 +119,7 @@ export function Accesibilidad({
                         "color-mix(in oklch, var(--primary), transparent 86%)",
                     }}
                   >
-                    <CheckIcon />
+                    <Check className="size-[15px]" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -218,50 +221,6 @@ function Stat({ value, label }: { value: string; label: string }) {
   );
 }
 
-function InfoCard({
-  title,
-  body,
-  mono,
-}: {
-  title: string;
-  body: string;
-  mono?: boolean;
-}) {
-  return (
-    <div className={cn(CARD, "p-5")}>
-      <h3
-        className={cn(
-          "text-foreground m-0 mb-2 text-[1rem] font-semibold",
-          mono ? "font-mono text-[0.95rem]" : "font-display",
-        )}
-      >
-        {title}
-      </h3>
-      <p className="text-muted-foreground m-0 text-[0.88rem] leading-[1.6]">
-        {body}
-      </p>
-    </div>
-  );
-}
-
-function CheckIcon() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
 // Composición del hero (decorativa, aria-hidden): tres piezas superpuestas que
 // ilustran de qué habla la página —una tarjeta de contraste medido, una checklist
 // con marcas, y una muestra del anillo de foco de 2px— con el mismo tratamiento de
@@ -311,7 +270,7 @@ function HeroComposition() {
                     "color-mix(in oklch, var(--primary), transparent 86%)",
                 }}
               >
-                <CheckIcon />
+                <Check className="size-[15px]" />
               </span>
               <div
                 className="bg-muted h-[0.32rem] rounded-full"

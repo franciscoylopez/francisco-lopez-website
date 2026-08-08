@@ -1,5 +1,6 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { DIALOG_ACTIONS } from "@/components/site/layout";
@@ -186,16 +187,7 @@ export function ConsentBanner({
               )}
             >
               {/* Sin `width`/`height`: el tamaño lo pone `size: "icon"`. */}
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                <path d="M18 6 6 18M6 6l12 12" />
-              </svg>
+              <X />
             </button>
           </div>
 
@@ -338,8 +330,13 @@ function ConsentRow({
             // 1,22:1 en claro-apagado (bolita blanca sobre carril casi blanco) y
             // 2,03:1 en oscuro-encendido (blanca sobre el cian aclarado). Medido en
             // navegador, no estimado; con los tokens da 12,47/12,04 apagado y
-            // 7,10/8,36 encendido — este último es el par «texto sobre botón» que
+            // 7,93/8,36 encendido — este último es el par «texto sobre botón» que
             // BRAND.md ya tenía verificado.
+            // Este control es la ÚNICA excepción a «ningún control se escribe a
+            // mano»: está documentada con fecha en BRAND.md §Ningún control se
+            // escribe a mano. La regla de shadcn (D6) aplica hacia delante, así
+            // que no lo reescribe; la excepción caduca el día que aparezca un
+            // SEGUNDO switch. Lo de arriba justifica el COLOR, no la excepción.
             // El anillo de foco lleva su offset del color de la superficie que hay
             // detrás (`--card`, la del diálogo): sin declararlo, Tailwind usa blanco
             // y en tema oscuro dibujaba un halo claro alrededor del control.

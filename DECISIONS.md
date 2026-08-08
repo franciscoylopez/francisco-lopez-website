@@ -86,17 +86,49 @@ Añadir `color-scheme` en `:root` y `<meta name="theme-color">` por esquema.
 aparentar. La base ya evita el flash (`attribute="class"` + `suppressHydrationWarning`). El swap de
 logos claro/oscuro se hace por CSS puro (sin JS, sin parpadeo).
 
-## D6 · shadcn ya integrado; componentes donde aporten a11y — 2026-07-24
-**Decisión.** shadcn está integrado (estilo base-nova, primitivas `@base-ui/react`, iconos lucide);
-**no** hay que reimportarlo. Usar sus componentes donde ganan accesibilidad (Tabs para el Toolkit y
-el control de dispositivo del Design System; Button para CTAs); el resto de secciones, a medida con
-tokens. OK a reducir estilos inline a favor de componentes shadcn donde sea óptimo.
-**Iconos:** genéricos → `lucide-react`; logos de marca → PNG en `public/logos/**` (pares light/dark)
-con `next/image` + swap por tema; logo propio → `components/ui/logo.tsx`.
+## D6 · ¿shadcn lo trae? → no se escribe (regla hacia delante); `@base-ui/react` fuera hasta el primer componente — 2026-07-24, **reescrita 2026-08-08 (P37.63)**
+**Decisión.** Para **widgets con estado, foco atrapado o portal** —diálogo, popover, tooltip,
+combobox, menú, tabs, scroll-area— la regla es la simétrica de la de iconos («¿lucide lo trae? →
+no se dibuja»): **¿shadcn lo trae? → no se escribe.** Se trae con `npx shadcn@latest add
+<componente>` (estilo `base-nova`, ya configurado en `components.json`), se le aplican **nuestros**
+tokens, y si acaba siendo pieza del sistema se publica en el Design System. Es el **paso 3 de la
+«Regla de construcción»** de `CLAUDE.md`, que es donde vive la cascada completa; aquí queda el
+porqué y el estado de la dependencia.
 
-**Contexto.** El diseño es a medida y apenas consume la librería; forzarlo por shadcn no aporta.
-Pero Tabs/segmented controls a mano son un foco de bugs de accesibilidad (teclado, ARIA) — ahí
-base-ui lo da gratis y empuja el objetivo AA/AAA.
+- **Aplica hacia delante, no hacia atrás.** Los widgets que hoy están a mano se quedan: el
+  `<dialog>` nativo del consentimiento (`showModal()` atrapa el foco y da ESC de fábrica), su
+  switch (`input[type=checkbox][role=switch]` real, con label asociada) y las pestañas del Toolkit
+  y los tabs de dispositivo del Design System (roving `tabIndex`, `aria-selected`/`aria-pressed`).
+  **No hay deuda de accesibilidad ahí** —0 violaciones de axe en las seis páginas, diálogo
+  incluido—, así que reescribirlos sería cambiar código que funciona por cumplir una regla. El
+  próximo widget de este tipo, en cambio, se trae; la IA conversacional de V3 (popover, tooltip,
+  combobox, scroll-area) es el primer cliente previsible.
+- **`@base-ui/react` sale de `dependencies`.** Estaba declarado con **cero imports en todo el
+  repo**: una dependencia de producción que no se usaba. Verificado quitándolo: `npm run build`
+  compila y las 19 páginas se generan igual. Vuelve —y esa vez como dependencia de verdad— con el
+  primer `shadcn add`, que lo instala solo porque `base-nova` monta sobre Base UI. **No confundir
+  con el CSS:** `app/globals.css` hace `@import "shadcn/tailwind.css"`, que viene del paquete
+  **`shadcn`** (CLI, en devDependencies por D27) y no necesita el runtime de Base UI.
+
+**Iconos:** genéricos → `lucide-react`; logos de marca → PNG en `public/logos/**` (pares
+light/dark) con `next/image` + swap por tema; logo propio → `components/ui/logo.tsx`. Los glifos
+que lucide no exporta se dibujan siguiendo la regla de autoría de `BRAND.md` §Iconos propios.
+
+**Qué decía antes y por qué se cambia.** La redacción de julio afirmaba que «shadcn está integrado
+y no hay que reimportarlo», y planificaba usar su Tabs para el Toolkit y su Button para los CTAs.
+Ninguna de las tres cosas era cierta el 2026-08-08: **shadcn no se usa en absoluto**
+—`components/ui/` tiene `action.tsx` y `logo.tsx`, ninguno suyo; el `button.tsx` que sí llegó a
+existir se borró en P37.592 con cero usos; las pestañas y el diálogo acabaron escritos a mano—. La
+decisión describía una intención, no un estado, y el documento la leía como estado. Es el mismo
+defecto de forma que las cifras de contraste de `BRAND.md`: la regla no fallaba, fallaba que
+afirmaba algo que nadie volvió a comprobar.
+
+**Contexto.** El diseño es a medida y apenas consume la librería, así que la regla se acota a lo
+que de verdad compra algo: teclado, ARIA y gestión de foco, que son caros de escribir bien y
+baratos de romper sin enterarse. Fuera de ese perímetro —cualquier cosa sin estado ni foco
+atrapado— manda la capa propia (D36) y shadcn no entra. Acotarla también evita el fallo contrario:
+D6 aplicada en bloque habría obligado a reescribir tres widgets correctos para satisfacer un
+documento.
 
 ## D7 · Responsive en CSS, no en JS; Server Components por defecto — 2026-07-24
 **Decisión.** El responsive del diseño (hecho con JS `matchMedia` a 640/768px + swaps de estilo

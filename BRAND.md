@@ -93,6 +93,12 @@ Cuando una pieza se apoya sobre un fondo que **cambia por tema y por estado**, n
 
 El motivo de fondo, que conviene recordar antes de escribir la siguiente regla: los **enlaces** son coherentes porque hicieron el recorrido completo —regla → clase CSS → sección publicada en el Design System → uso— y por eso son difíciles de incumplir sin querer. Los **botones** se quedaron en el primer paso, y había que acordarse de ellos. Una regla que hay que recordar es una regla que se incumple.
 
+**Excepción fechada 2026-08-08 (P37.5996): el switch del diálogo de consentimiento.** `consent-banner.tsx` dibuja su interruptor con una cadena inline (`peer-checked`, `after:`, anillo de foco) y es **el único elemento interactivo del sitio fuera de la capa de componentes**. Se queda así por dos razones: hay **un** switch en todo el sitio —no hay repetición que factorizar, y una pieza con un solo call site solo añade indirección—, y la cascada de la «Regla de construcción» mandaría traerlo de **shadcn** (paso 3: widget con estado), que **aplica hacia delante y no hacia atrás**.
+
+*Actualizada 2026-08-08 (P37.63), que era su condición de salida.* La redacción anterior dejaba la excepción colgando de una decisión abierta: «sale en cuanto P37.63 fije de dónde vienen los widgets con estado». Ya está fijado —D6 reescrita— y el veredicto es que **este switch no se toca**: está bien hecho (`input[type=checkbox][role=switch]` real, con label asociada, 0 violaciones de axe) y la regla nueva no reescribe lo que funciona. Así que la excepción no caduca por ahí. Sale de ella cuando **aparezca un segundo switch** —entonces hay repetición que factorizar y el segundo se trae de shadcn, arrastrando al primero— o cuando este haya que rehacerlo por otro motivo.
+
+Lo que **no** es excepción es su color: la regla de la bolita («es el `foreground` de su propio carril») está resuelta y documentada arriba, en §Controles con dos fondos. Anotarlo importa porque el hallazgo que abrió esto fue justo esa confusión — el comentario del componente justificaba el **color** y se leyó como si justificara la **excepción**, que es otra pregunta. Un comentario que explica algo no responde necesariamente a lo que estás preguntando.
+
 2. **Tokens de marca** (`brand-cyan`, `brand-purple`, `brand-cyan-soft`, `brand-purple-soft`).
    - Son DECORATIVOS: fondos de sección, detalles, ilustración, gráficos.
    - `brand-*-soft` (los pasteles) son de bajo contraste: NO los uses como color de texto, de botón ni de cualquier elemento que deba leerse. Solo relleno decorativo.

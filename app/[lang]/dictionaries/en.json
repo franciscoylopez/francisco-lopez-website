@@ -444,11 +444,15 @@
           "meta": "Inline in markup · 220 B · sized by height.",
           "svg": "Symbol flat · SVG"
         },
-        "symMono": {
-          "name": "Symbol · Mono",
-          "meta": "One pure ink · 220 B · sized by height.",
-          "negro": "Black",
-          "blanco": "White"
+        "symMonoNegro": {
+          "name": "Symbol · Mono black",
+          "meta": "One pure ink · 220 B · for light backgrounds.",
+          "svg": "Mono black · SVG"
+        },
+        "symMonoBlanco": {
+          "name": "Symbol · Mono white",
+          "meta": "One pure ink · 220 B · for dark backgrounds.",
+          "svg": "Mono white · SVG"
         },
         "lockSplit": {
           "name": "Lockup · Split",

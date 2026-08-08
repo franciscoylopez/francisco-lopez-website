@@ -1,10 +1,13 @@
+import { Download, Info } from "lucide-react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import { CARD, PANEL, SECTION, WRAP } from "./layout";
+import { LinkedinIcon } from "./icons";
+import { CARD, PAIR, PANEL, SECTION, WRAP } from "./layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type BrandKitDict = Dictionary["brandKit"];
@@ -31,27 +34,6 @@ const favPair = (sz: number) => ({
 });
 const monoSvg = (n: string) => `/logo-kit/svg/${n}.svg`;
 const monoPng = (n: string, sz: number) => `/logo-kit/png/${n}-${sz}.png`;
-
-// Sin `width`/`height`: el tamaño lo pone `size: "sm"` de la variante (antes eran
-// 15px escritos aquí, mientras el mismo icono medía 17 en Trayectoria y 18 en el
-// CTA de contacto).
-function DownloadIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <path d="M7 10l5 5 5-5" />
-      <path d="M12 15V3" />
-    </svg>
-  );
-}
 
 // Chips de descarga. Salen de la capa de acción del sistema (P37.592), que ya trae
 // el objetivo táctil de 44px —punto 3 de la checklist que publica el propio Design
@@ -84,7 +66,7 @@ function Dl({
       download
       className={tone === "primary" ? DL_PRIMARY : DL_NEUTRAL}
     >
-      <DownloadIcon />
+      <Download />
       {children}
     </a>
   );
@@ -104,7 +86,7 @@ function DlThemed({
   return (
     <>
       <a href={pair.light} download className={cn(cls, "dark:hidden")}>
-        <DownloadIcon />
+        <Download />
         {children}
       </a>
       <a
@@ -112,7 +94,7 @@ function DlThemed({
         download
         className={cn(cls, "hidden dark:inline-flex")}
       >
-        <DownloadIcon />
+        <Download />
         {children}
       </a>
     </>
@@ -215,7 +197,7 @@ export function BrandKit({
                   style={{ transitionDelay: "0.16s" }}
                 >
                   <div
-                    className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-[14px]"
+                    className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
                     style={{ transform: "rotate(-6deg)" }}
                   >
                     <Glyph variant="flat" h={27} />
@@ -227,7 +209,7 @@ export function BrandKit({
                   style={{ transitionDelay: "0.24s" }}
                 >
                   <div
-                    className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-[14px]"
+                    className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
                     style={{ transform: "rotate(6deg)" }}
                   >
                     <Glyph variant="flat" h={27} />
@@ -293,11 +275,8 @@ export function BrandKit({
             <p className={LEAD}>{t.logotipo.lead}</p>
           </div>
 
-          {/* Fila 1 — símbolos */}
-          <div
-            data-reveal
-            className="mb-[var(--gutter)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] items-stretch gap-[var(--gutter)]"
-          >
+          {/* Fila 1 — símbolo split / plano */}
+          <div data-reveal className={cn(PAIR, "mb-[var(--gutter)]")}>
             <VariantCard
               glyph={<Glyph variant="split" h={96} />}
               name={t.logotipo.cards.symSplit.name}
@@ -335,60 +314,56 @@ export function BrandKit({
                 <DlThemed pair={pngPair("simbolo-plano", 256)}>256</DlThemed>
               </div>
             </VariantCard>
-
-            {/* símbolo mono — negro/blanco, neutros al tema */}
-            <div className={cn(PANEL, "flex flex-col")}>
-              <div className="border-border flex min-h-44 border-b">
-                <div className="flex flex-1 items-center justify-center bg-white p-8">
-                  <Glyph variant="flat" h={66} mono="black" />
-                </div>
-                <div
-                  className="flex flex-1 items-center justify-center p-8"
-                  style={{ background: "#191D21" }}
-                >
-                  <Glyph variant="flat" h={66} mono="white" />
-                </div>
-              </div>
-              <div className="flex flex-1 flex-col px-5 pt-[1.15rem] pb-[1.35rem]">
-                <div className="font-display text-[1.05rem] font-semibold">
-                  {t.logotipo.cards.symMono.name}
-                </div>
-                <p className="text-muted-foreground mt-1 mb-[0.9rem] text-[0.82rem]">
-                  {t.logotipo.cards.symMono.meta}
-                </p>
-                <div className="mt-auto flex flex-col gap-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-muted-foreground w-[3.1rem] flex-none text-[0.76rem] font-semibold">
-                      {t.logotipo.cards.symMono.negro}
-                    </span>
-                    <Dl href={monoSvg("simbolo-mono-negro")} tone="primary">
-                      SVG
-                    </Dl>
-                    <Dl href={monoPng("simbolo-mono-negro", 1024)}>1024</Dl>
-                    <Dl href={monoPng("simbolo-mono-negro", 512)}>512</Dl>
-                    <Dl href={monoPng("simbolo-mono-negro", 256)}>256</Dl>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-muted-foreground w-[3.1rem] flex-none text-[0.76rem] font-semibold">
-                      {t.logotipo.cards.symMono.blanco}
-                    </span>
-                    <Dl href={monoSvg("simbolo-mono-blanco")} tone="primary">
-                      SVG
-                    </Dl>
-                    <Dl href={monoPng("simbolo-mono-blanco", 1024)}>1024</Dl>
-                    <Dl href={monoPng("simbolo-mono-blanco", 512)}>512</Dl>
-                    <Dl href={monoPng("simbolo-mono-blanco", 256)}>256</Dl>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
-          {/* Fila 2 — lockups */}
-          <div
-            data-reveal
-            className="mb-[clamp(3rem,6vw,5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))] items-stretch gap-[var(--gutter)]"
-          >
+          {/* Fila 2 — símbolo mono: DOS tarjetas, no una partida. Hasta P37.61
+              compartían un solo panel con la previsualización dividida en
+              blanco/negro y ocho chips en dos filas etiquetadas. Era la única
+              tarjeta de la fila escrita a mano —las hermanas ya salían de
+              VariantCard—, así que no heredó el ensanchado de chips de P37.592 y
+              sus dos filas se partieron en cuatro. Separarlas borra la excepción
+              en vez de afinarla, y ponerlas en el MISMO par conserva lo que el
+              panel partido sí hacía bien: enseñar las dos tintas juntas. */}
+          <div data-reveal className={cn(PAIR, "mb-[var(--gutter)]")}>
+            <VariantCard
+              glyph={<Glyph variant="flat" h={96} mono="black" />}
+              name={t.logotipo.cards.symMonoNegro.name}
+              meta={t.logotipo.cards.symMonoNegro.meta}
+              surface="white"
+            >
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoSvg("simbolo-mono-negro")} tone="primary">
+                  {t.logotipo.cards.symMonoNegro.svg}
+                </Dl>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoPng("simbolo-mono-negro", 1024)}>PNG 1024</Dl>
+                <Dl href={monoPng("simbolo-mono-negro", 512)}>512</Dl>
+                <Dl href={monoPng("simbolo-mono-negro", 256)}>256</Dl>
+              </div>
+            </VariantCard>
+
+            <VariantCard
+              glyph={<Glyph variant="flat" h={96} mono="white" />}
+              name={t.logotipo.cards.symMonoBlanco.name}
+              meta={t.logotipo.cards.symMonoBlanco.meta}
+              surface="ink"
+            >
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoSvg("simbolo-mono-blanco")} tone="primary">
+                  {t.logotipo.cards.symMonoBlanco.svg}
+                </Dl>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoPng("simbolo-mono-blanco", 1024)}>PNG 1024</Dl>
+                <Dl href={monoPng("simbolo-mono-blanco", 512)}>512</Dl>
+                <Dl href={monoPng("simbolo-mono-blanco", 256)}>256</Dl>
+              </div>
+            </VariantCard>
+          </div>
+
+          {/* Fila 3 — lockups */}
+          <div data-reveal className={cn(PAIR, "mb-[clamp(3rem,6vw,5rem)]")}>
             <VariantCard
               glyph={<Lockup variant="split" />}
               name={t.logotipo.cards.lockSplit.name}
@@ -437,7 +412,7 @@ export function BrandKit({
               {t.logotipo.usage.sub}
             </p>
             {/* tabla ≥md */}
-            <div className="border-border hidden overflow-hidden rounded-[var(--radius-lg)] border md:block">
+            <div className="border-border hidden overflow-hidden rounded-lg border md:block">
               <div className="bg-card border-border text-muted-foreground grid grid-cols-[1.4fr_0.8fr_0.9fr_1fr_0.7fr] gap-4 border-b px-5 py-[0.9rem] text-[0.72rem] font-semibold tracking-[0.06em] uppercase">
                 <span>{t.logotipo.usage.cols.ctx}</span>
                 <span>{t.logotipo.usage.cols.variant}</span>
@@ -494,7 +469,7 @@ export function BrandKit({
                   className={cn(CARD, "px-[1.4rem] py-[1.35rem]")}
                 >
                   <div className="mb-[0.6rem] flex items-center gap-[0.7rem]">
-                    <span className="bg-foreground text-background inline-flex h-[1.9rem] w-[1.9rem] flex-none items-center justify-center rounded-[var(--radius-md)] font-mono text-[0.85rem] font-semibold">
+                    <span className="bg-foreground text-background inline-flex h-[1.9rem] w-[1.9rem] flex-none items-center justify-center rounded-md font-mono text-[0.85rem] font-semibold">
                       {i + 1}
                     </span>
                     <h4 className="font-display m-0 text-[1.05rem] leading-[1.25] font-semibold tracking-[-0.01em]">
@@ -728,7 +703,7 @@ export function BrandKit({
                 width={1200}
                 height={630}
                 alt={t.aplicaciones.og.previewAlt}
-                className="border-border mb-[1.2rem] block w-full rounded-[var(--radius-lg)] border"
+                className="border-border mb-[1.2rem] block w-full rounded-lg border"
               />
               <div className="flex flex-wrap gap-2">
                 <DlThemed pair={pngPair("lockup-split", 1024)} tone="primary">
@@ -812,20 +787,45 @@ export function BrandKit({
 
 // --- Subcomponentes ---
 
+// Superficie de la previsualización. `card` sigue al tema (es la del PANEL);
+// `white` e `ink` NO conmutan a propósito — los assets mono son de una tinta pura
+// y hay que verlos sobre el fondo para el que existen, no sobre el del tema. Es
+// la excepción al «nunca hardcodees hex» de BRAND.md, y vive aquí, en la pieza,
+// justamente para que ningún call site tenga que repetirla ni decidirla.
+// El anillo interior no es adorno: sin él, en CADA tema uno de los dos platos
+// desaparece dentro de la tarjeta —el blanco mide 1,04 contra `--card` en claro y
+// el ink 1,11 en oscuro— y la tarjeta mono queda idéntica a la de al lado, que es
+// justo la que enseña otra cosa. Su color se toma del plato, no se fija: es el
+// `foreground` de su propio carril al 18%, el mismo patrón que la bolita del
+// switch (D30). Medido: 1,45 claro / 1,78 oscuro, contra el 1,29 / 1,23 que ya da
+// por bueno el `--border` del sitio sobre `--card`.
+const PREVIEW_SURFACE = {
+  card: "",
+  white: "bg-white shadow-[inset_0_0_0_1px_rgba(25,29,33,0.18)]",
+  ink: "bg-[#191D21] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]",
+} as const;
+
 function VariantCard({
   glyph,
   name,
   meta,
+  surface = "card",
   children,
 }: {
   glyph: React.ReactNode;
   name: string;
   meta: string;
+  surface?: keyof typeof PREVIEW_SURFACE;
   children: React.ReactNode;
 }) {
   return (
     <div className={cn(PANEL, "flex flex-col")}>
-      <div className="border-border flex min-h-44 items-center justify-center border-b p-8">
+      <div
+        className={cn(
+          "border-border flex min-h-44 items-center justify-center border-b p-8",
+          PREVIEW_SURFACE[surface],
+        )}
+      >
         {glyph}
       </div>
       <div className="flex flex-1 flex-col px-5 pt-[1.15rem] pb-[1.35rem]">
@@ -899,24 +899,14 @@ function Callout({
   return (
     <div
       {...rest}
-      className="border-border bg-card mt-8 flex max-w-[var(--measure)] items-start gap-[0.85rem] rounded-[var(--radius-md)] border px-[1.35rem] py-[1.15rem]"
+      className="border-border bg-card mt-8 flex max-w-[var(--measure)] items-start gap-[0.85rem] rounded-md border px-[1.35rem] py-[1.15rem]"
       style={{ borderLeft: `3px solid ${color}` }}
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
+      <Info
         stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="mt-[0.1rem] flex-none"
+        className="mt-[0.1rem] size-5 flex-none"
         aria-hidden="true"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 16v-4M12 8h.01" />
-      </svg>
+      />
       <p className="text-foreground m-0 text-[0.92rem] leading-[1.6]">
         {children}
       </p>
@@ -1125,7 +1115,7 @@ function ErrorVisual({
       return (
         <span
           className={cn(
-            "inline-flex h-20 w-20 items-center justify-center rounded-[8px]",
+            "inline-flex h-20 w-20 items-center justify-center rounded-md",
             before
               ? "border-border border border-dashed"
               : "border-primary border",
@@ -1195,18 +1185,16 @@ function ErrorVisual({
         </svg>
       );
     case 3: // peso: logo pequeño vs mayor, junto a LinkedIn
+      // El vecino es el LinkedIn DEL SITIO (icons.tsx), no un dibujo propio de
+      // esta ilustración. Era el relleno macizo —el que P37.5989 sustituyó por no
+      // leerse en el footer—, así que la comparación se hacía contra un icono que
+      // en el sitio ya no existe: la ilustración defendía su regla usando como
+      // referencia algo que no está en ninguna pantalla. Mismo fallo que la luna y
+      // el menú de la demo de chrome, una capa más sutil (P37.5993).
       return (
-        <span className="inline-flex items-center gap-[0.65rem]">
+        <span className="text-muted-foreground inline-flex items-center gap-[0.65rem]">
           <Glyph variant="flat" h={before ? 15 : 25} />
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="var(--muted-foreground)"
-            aria-hidden="true"
-          >
-            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z" />
-          </svg>
+          <LinkedinIcon className="size-[18px]" />
         </span>
       );
     case 4: // lockup 29% vs ~60%
@@ -1237,18 +1225,18 @@ function ErrorVisual({
       return before ? (
         <span className="inline-flex gap-[0.4rem]">
           <span
-            className="border-border h-[34px] w-[34px] rounded-[8px] border"
+            className="border-border h-[34px] w-[34px] rounded-md border"
             style={{ background: "#CFEFEE" }}
           />
           <span
-            className="border-border h-[34px] w-[34px] rounded-[8px] border"
+            className="border-border h-[34px] w-[34px] rounded-md border"
             style={{ background: "#E6E0FB" }}
           />
         </span>
       ) : (
         <span className="inline-flex gap-[0.4rem]">
-          <span className="border-border bg-brand-cyan-soft h-[34px] w-[34px] rounded-[8px] border" />
-          <span className="border-border bg-brand-purple-soft h-[34px] w-[34px] rounded-[8px] border" />
+          <span className="border-border bg-brand-cyan-soft h-[34px] w-[34px] rounded-md border" />
+          <span className="border-border bg-brand-purple-soft h-[34px] w-[34px] rounded-md border" />
         </span>
       );
     default:

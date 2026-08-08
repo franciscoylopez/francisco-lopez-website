@@ -1,4 +1,4 @@
-import { Download, Mail } from "lucide-react";
+import { Check, Download, Mail, Menu, Moon } from "lucide-react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
-import { CARD, PANEL, SECTION, WRAP } from "./layout";
+import { InfoCard } from "./info-card";
+import { CARD, PAIR, PANEL, SECTION, WRAP } from "./layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type DesignSystemDict = Dictionary["designSystem"];
@@ -45,56 +46,10 @@ function SectionHead({ num, title }: { num: string; title: string }) {
   );
 }
 
-function CheckIcon() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-// Glifos de la demo de chrome solo-icono (§08). Locales a la página: son la
-// ilustración del patrón, no los controles reales del nav (esos viven en Nav).
-function MoonGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-    </svg>
-  );
-}
-
-function MenuGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      aria-hidden="true"
-    >
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  );
-}
+// Marca de verificación de las listas de esta página. `size-[15px]` porque vive
+// dentro de una pastilla teñida de 26px y no sale de la capa de acción — no es un
+// control, es un adorno de contenido.
+const CHECK = "size-[15px]";
 
 export function DesignSystem({
   dict,
@@ -197,7 +152,7 @@ export function DesignSystem({
           </p>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))] items-start gap-[var(--gutter)]">
             <div
-              className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+              className="border-border overflow-hidden rounded-xl border"
               style={{ background: "var(--foreground)" }}
             >
               <div
@@ -353,7 +308,7 @@ export function DesignSystem({
               </h3>
               <div className={PANEL}>
                 <div className="border-border border-b border-dashed px-[var(--page-x)] py-6">
-                  <div className="bg-muted h-[1.4rem] w-[60%] rounded-[var(--radius-sm)]" />
+                  <div className="bg-muted h-[1.4rem] w-[60%] rounded-sm" />
                 </div>
                 <div
                   className="flex h-[clamp(3rem,6vw,5rem)] items-center justify-center"
@@ -367,7 +322,7 @@ export function DesignSystem({
                   </span>
                 </div>
                 <div className="border-border border-t border-dashed px-[var(--page-x)] py-6">
-                  <div className="bg-muted h-[1.4rem] w-[45%] rounded-[var(--radius-sm)]" />
+                  <div className="bg-muted h-[1.4rem] w-[45%] rounded-sm" />
                 </div>
               </div>
               <ul className="text-muted-foreground m-0 mt-5 flex list-disc flex-col gap-[0.45rem] pl-[1.1rem] text-[0.88rem]">
@@ -387,7 +342,7 @@ export function DesignSystem({
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.tipografia.lead}
           </p>
-          <div className="border-border overflow-hidden rounded-[var(--radius-xl)] border">
+          <div className="border-border overflow-hidden rounded-xl border">
             {t.tipografia.rows.map((row, i) => (
               <div
                 key={row.name}
@@ -515,7 +470,7 @@ export function DesignSystem({
                 ))}
               </ul>
               <div className="flex min-w-[min(100%,15rem)] flex-[1_1_16rem] flex-col gap-[0.85rem]">
-                <div className="border-border bg-background flex h-20 items-center justify-between gap-4 rounded-[var(--radius-lg)] border px-5">
+                <div className="border-border bg-background flex h-20 items-center justify-between gap-4 rounded-lg border px-5">
                   <span className="inline-flex items-center gap-[0.6rem]">
                     <NavGlyph variant="split" h={48} />
                     <span className="font-display text-foreground text-[1.05rem] font-semibold tracking-[-0.01em]">
@@ -526,7 +481,7 @@ export function DesignSystem({
                     {t.movimiento.navState1}
                   </span>
                 </div>
-                <div className="border-border bg-background flex h-16 items-center justify-between gap-4 rounded-[var(--radius-lg)] border px-5">
+                <div className="border-border bg-background flex h-16 items-center justify-between gap-4 rounded-lg border px-5">
                   <NavGlyph variant="flat" h={28} />
                   <span className="text-muted-foreground font-mono text-[0.68rem]">
                     {t.movimiento.navState2}
@@ -552,7 +507,7 @@ export function DesignSystem({
             {t.enlaces.cases.map((c, i) => (
               <div
                 key={c.cls}
-                className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+                className="border-border overflow-hidden rounded-xl border"
               >
                 {/* Demo vivo: el hover real de cada clase, no una captura. */}
                 <div className="bg-background flex min-h-[7.5rem] items-center justify-center px-5 py-7">
@@ -591,7 +546,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MoonGlyph />
+                        <Moon />
                       </a>
                       <a
                         href="#top"
@@ -601,7 +556,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MenuGlyph />
+                        <Menu />
                       </a>
                     </div>
                   )}
@@ -663,7 +618,7 @@ export function DesignSystem({
             {t.botones.cases.map((c, i) => (
               <div
                 key={c.cls}
-                className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+                className="border-border overflow-hidden rounded-xl border"
               >
                 <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
                   {/* Con su icono, como los botones reales de los que toman la
@@ -764,7 +719,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MoonGlyph />
+                        <Moon />
                       </a>
                       <a
                         href="#top"
@@ -774,7 +729,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MenuGlyph />
+                        <Menu />
                       </a>
                     </>
                   )}
@@ -804,36 +759,22 @@ export function DesignSystem({
           {/* La regla del icono se publica aquí, no solo en BRAND.md (P37.5988).
               Es el paso que faltaba: los enlaces son difíciles de incumplir porque
               hicieron el recorrido completo regla → clase → sección publicada →
-              uso, y esta parte del botón se había quedado en el primer paso. */}
-          <div
-            className={cn(CARD, "mt-8 max-w-[var(--measure)] px-[1.4rem] py-5")}
-          >
-            <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
-              {t.botones.iconTitle}
-            </h3>
-            <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
-              {t.botones.iconRule.map((r) => (
-                <li key={r}>{r}</li>
-              ))}
-            </ul>
-            <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
-              {t.botones.iconFoot}
-            </p>
-          </div>
-          <div
-            className={cn(CARD, "mt-4 max-w-[var(--measure)] px-[1.4rem] py-5")}
-          >
-            <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
-              {t.botones.ruleTitle}
-            </h3>
-            <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
-              {t.botones.rule.map((r) => (
-                <li key={r}>{r}</li>
-              ))}
-            </ul>
-            <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
-              {t.botones.ruleFoot}
-            </p>
+              uso, y esta parte del botón se había quedado en el primer paso.
+
+              Las dos notas van en PAIR, no apiladas a la medida de lectura: son
+              dos reglas hermanas —cuándo lleva icono, y que ninguna se escribe a
+              mano— y apiladas dejaban media sección vacía a la derecha (P37.62). */}
+          <div className={cn(PAIR, "mt-8")}>
+            <InfoCard
+              title={t.botones.iconTitle}
+              bullets={t.botones.iconRule}
+              foot={t.botones.iconFoot}
+            />
+            <InfoCard
+              title={t.botones.ruleTitle}
+              bullets={t.botones.rule}
+              foot={t.botones.ruleFoot}
+            />
           </div>
         </div>
       </section>
@@ -910,7 +851,7 @@ export function DesignSystem({
                       "color-mix(in oklch, var(--primary), transparent 86%)",
                   }}
                 >
-                  <CheckIcon />
+                  <Check className={CHECK} />
                 </span>
                 <div className="flex-1">
                   <span className="text-muted-foreground font-mono text-[0.72rem]">
@@ -981,17 +922,6 @@ function Stat({
       <div className="text-muted-foreground mt-[0.35rem] text-[0.85rem]">
         {label}
       </div>
-    </div>
-  );
-}
-
-function InfoCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div className={cn(CARD, "p-5")}>
-      <h3 className="font-display m-0 mb-2 text-[1rem] font-semibold">
-        {title}
-      </h3>
-      <p className="text-muted-foreground m-0 text-[0.88rem]">{body}</p>
     </div>
   );
 }
@@ -1089,7 +1019,7 @@ function ThemeCard({
         };
   return (
     <div
-      className="overflow-hidden rounded-[var(--radius-xl)] border"
+      className="overflow-hidden rounded-xl border"
       style={{ borderColor: c.border, background: c.bg, color: c.fg }}
     >
       <div className="flex flex-col gap-4 px-6 py-[1.4rem]">
@@ -1103,7 +1033,7 @@ function ThemeCard({
           {headline}
         </span>
         <div
-          className="rounded-[var(--radius-lg)] border p-4"
+          className="rounded-lg border p-4"
           style={{ borderColor: c.innerBorder, background: c.innerBg }}
         >
           <div
@@ -1116,7 +1046,7 @@ function ThemeCard({
           />
         </div>
         <span
-          className="inline-flex min-h-9 items-center self-start rounded-[var(--radius-md)] px-[0.9rem] text-[0.82rem] font-medium"
+          className="inline-flex min-h-9 items-center self-start rounded-md px-[0.9rem] text-[0.82rem] font-medium"
           style={{ background: c.btnBg, color: c.btnFg }}
         >
           {cta}
