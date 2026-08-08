@@ -12,7 +12,6 @@ import { getDictionary } from "../dictionaries";
 
 type LangParams = { params: Promise<{ lang: string }> };
 
-
 // metadataBase, icons y viewport los aporta el layout de [lang]; aquí solo van los
 // campos propios de la página (title, description, alternates, OG). Las URLs
 // relativas de canonical/OG resuelven contra ese metadataBase heredado.

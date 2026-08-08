@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
-import { SystemMessage, SYSTEM_BTN_PRIMARY } from "@/components/site/system-message";
+import {
+  SystemMessage,
+  SYSTEM_BTN_PRIMARY,
+} from "@/components/site/system-message";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import { getSystemMessages } from "@/lib/i18n/system-messages";
 

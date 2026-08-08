@@ -12,7 +12,6 @@ import { getDictionary } from "../dictionaries";
 
 type LangParams = { params: Promise<{ lang: string }> };
 
-
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
