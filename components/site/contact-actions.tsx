@@ -31,6 +31,16 @@ export type ContactActionsDict = {
 // ÚNICO botón sólido del sitio; el resto de canales son enlaces de apoyo. El
 // tracking de clics (P30) se cablea aquí, en un solo sitio, no en tres.
 
+// Receta compartida de los enlaces de esta superficie: pastilla de chrome, suelo
+// táctil de 44px (checklist a11y §3) y área de clic ampliada sin que el padding
+// empuje el layout —los márgenes negativos lo compensan—. El COLOR y el tamaño de
+// texto los pone cada uso, porque los canales de apoyo van en `foreground` y la
+// dirección de email va atenuada. Existe como constante para que haya UNA receta:
+// estaba escrita una vez y al añadir el segundo uso habría pasado a estar dos veces,
+// que es exactamente como empezaron los seis «botones base» de la auditoría.
+const CONTACT_LINK =
+  "link-chrome inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem]";
+
 // Botón de email. `.contact-cta` resuelve hover/foco sin bajar contraste; el
 // anillo de foco lo pone la regla global.
 //
@@ -41,6 +51,15 @@ export type ContactActionsDict = {
 // no hay otro camino al lado, y esconder la dirección tras un `mailto:` sería
 // irónico justo en esa página: quien use tecnología de asistencia puede necesitar
 // escribir desde su propio cliente o anotarla.
+//
+// Esa dirección visible ADEMÁS es un `mailto:` desde P37.5987. Antes era texto
+// plano, y el motivo escrito arriba justificaba que se mostrara, no que no fuera
+// accionable — respondía a otra pregunta. Las dos cosas son compatibles: sigue
+// escrita y copiable (no se sustituye por «Escríbeme»), y encima se puede pulsar.
+// Lleva tratamiento de CHROME y no de contenido (H1) por el mismo motivo,
+// documentado, que `ContactSecondary` justo debajo: un subrayado permanente con su
+// propio hover a 15px de un CTA sólido compite con él en vez de acompañarlo. No es
+// un criterio nuevo, es el mismo caso.
 export function EmailCta({
   label,
   showAddress = false,
@@ -64,8 +83,14 @@ export function EmailCta({
         <Mail className="contact-cta-icon size-[18px]" aria-hidden="true" />
       </a>
       {showAddress && (
-        <p className="contact-dim m-0 mt-[0.9rem] text-[0.9rem] break-words">
-          {EMAIL}
+        <p className="m-0 mt-[0.9rem]">
+          <a
+            href={`mailto:${EMAIL}`}
+            onClick={() => trackContactClick("email")}
+            className={cn(CONTACT_LINK, "contact-dim text-[0.9rem] break-all")}
+          >
+            {EMAIL}
+          </a>
         </p>
       )}
     </div>
@@ -89,8 +114,7 @@ export function ContactSecondary({
   // vez de contenido — el subrayado + hover propio al lado del CTA sólido
   // generaba ruido visual (feedback 2026-08-04). Probablemente se resuelva de
   // otra forma cuando exista una sección de contacto dedicada.
-  const link =
-    "link-chrome text-foreground inline-flex min-h-[44px] items-center gap-[0.55rem] px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem] text-[0.95rem]";
+  const link = cn(CONTACT_LINK, "text-foreground gap-[0.55rem] text-[0.95rem]");
   const icon = "size-[17px] flex-none";
   return (
     <ul
