@@ -376,38 +376,27 @@
   color: var(--contact-dim);
 }
 
-/* CTA de email — único botón sólido `primary` del sitio: un escalón por encima
-   del outline de Descargar CV (Trayectoria), para que la jerarquía diga cuál es
-   LA acción (los clics de contacto son la métrica primaria, PRD §7).
+/* El CTA de email tenía aquí `.contact-cta` / `.contact-cta-icon`, y en P37.5988 se
+   borraron las dos. P37.592 ya les había quitado el hover del relleno (se lo lleva
+   la variante `solid`) y lo único que quedaba era el empujón de 2px del icono, que
+   se describía a sí mismo como «propio de este CTA y de ningún otro» — y por eso la
+   DEMO de ese mismo botón en el Design System no lo tenía: la página que documenta
+   la variante enseñaba un botón que no era el del sitio. Ahora el empujón es de la
+   variante `solid`, así que lo hereda cualquier sólido con icono, demo incluida.
 
-   Desde P37.592 esta clase YA NO pinta el hover: el relleno y su mezcla hacia
-   `--foreground` los aporta la variante `solid` de `components/ui/action.tsx`, que
-   es donde vive ahora esa decisión para todos los sólidos del sitio (era el único
-   botón que la tenía bien, así que el sistema la adoptó de aquí). Lo que queda es
-   el empujón del icono, que es propio de este CTA y de ningún otro.
+   Regla de la que sale: el icono marca que la acción saca al usuario de la página
+   (descarga, otra app, otro sitio). Vive en `components/ui/action.tsx`. */
 
-   Reposo, hover y `transition` del fondo son ahora las TRES utilidades de la
-   variante, en el mismo elemento: no se reparte entre clase y utilidad, que es
-   justo el reparto que rompía la transición en D35. */
-.contact-cta-icon {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.contact-cta:hover .contact-cta-icon,
-.contact-cta:focus-visible .contact-cta-icon {
-  transform: translateX(2px);
-}
-/* Reduced-motion: se anula SOLO el desplazamiento del icono. El cambio de color
-   del fondo se queda —no es movimiento— y ya no se toca desde aquí: tocarlo
-   significaría redeclarar la `transition` del fondo en una clase mientras sus dos
-   extremos viven en utilidades, el reparto exacto que dejó un hover clavado en D35. */
-@media (prefers-reduced-motion: reduce) {
-  .contact-cta-icon {
-    transition: none;
-  }
-  .contact-cta:hover .contact-cta-icon,
-  .contact-cta:focus-visible .contact-cta-icon {
-    transform: none;
-  }
+/* Iconos de los canales de chrome (teléfono, LinkedIn y CV de la franja de
+   contacto, CV del nav y de su menú móvil). Son enlaces de texto, no salen de
+   `actionVariants`, así que su tamaño se resuelve aquí — un solo sitio, como el de
+   las acciones con caja lo resuelve `size`. Antes estaba escrito a mano en cada
+   uso y había 15, 17 y 18px conviviendo sin que la diferencia significara nada.
+   `flex-none` porque el icono no debe encogerse cuando la etiqueta es larga. */
+.link-chrome svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
 }
 
 /* Enlaces de contenido — reposo neutro (`foreground`), el cian entra al interactuar.

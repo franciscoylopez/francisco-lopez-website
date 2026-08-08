@@ -1195,6 +1195,13 @@
       "demoSegments": ["Desktop", "Tablet", "Mobile"],
       "stateOn": "Active",
       "stateOff": "Inactive",
+      "iconTitle": "When an action gets an icon",
+      "iconRule": [
+        "One question does the work: does this action take me out of the page? Downloading a file, opening another app — mail, phone — or leaving for another site all get an icon.",
+        "Anything that happens inside the page goes without one: accept, save, close, pick a tab, move around the site. \"Manage preferences\" opens a dialog, so it stays bare.",
+        "The icon sits before the label, because it classifies the action. Only on the solid button does it sit after and travel two pixels on hover: there it marks the direction of the trip."
+      ],
+      "iconFoot": "Size, gap and side come from the variant, not from each call. Back when each call decided, the same download icon measured 15, 17 and 18 pixels in three places, and \"Download CV\" showed up with an icon in two of its three appearances.",
       "ruleTitle": "Why this is a component and not a convention",
       "rule": [
         "Before it existed, the same decision was hand-written across six files: two radii for the same box, four hover behaviours for the same button, and the 44px touch target copied fourteen times.",

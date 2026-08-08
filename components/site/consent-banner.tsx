@@ -185,9 +185,8 @@ export function ConsentBanner({
                 "-mt-1 -mr-1 [--icon-chrome-bg:var(--background)]",
               )}
             >
+              {/* Sin `width`/`height`: el tamaño lo pone `size: "icon"`. */}
               <svg
-                width="18"
-                height="18"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"

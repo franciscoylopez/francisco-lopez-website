@@ -68,8 +68,6 @@ function CheckIcon() {
 function MoonGlyph() {
   return (
     <svg
-      width="18"
-      height="18"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -86,8 +84,6 @@ function MoonGlyph() {
 function MenuGlyph() {
   return (
     <svg
-      width="18"
-      height="18"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -671,19 +667,24 @@ export function DesignSystem({
               >
                 <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
                   {/* Con su icono, como los botones reales de los que toman la
-                      etiqueta: el de contacto de la home y el de Trayectoria. El
-                      icono no lo pone la variante sino quien la usa —por eso cada
-                      uno lleva el suyo y los de utilidad no llevan ninguno—, pero
-                      enseñar «Escríbeme» sin su sobre sería enseñar un botón que
-                      no existe en el sitio, en la página cuyo valor entero es que
-                      lo que muestra es lo que hay. */}
+                      etiqueta: el de contacto de la home y el de Trayectoria. Lo
+                      llevan porque las dos acciones sacan al usuario de la página
+                      —una abre el correo, la otra descarga un archivo— y los de
+                      utilidad no lo llevan porque se resuelven aquí dentro; es
+                      exactamente la regla que la tarjeta explica al lado.
+                      El tamaño, la posición y el empujón ya no se escriben aquí:
+                      hasta P37.5988 este sólido llevaba su sobre a mano, detrás de
+                      la etiqueta y SIN el empujón de 2px que sí tenía el botón real
+                      —la página que documenta la variante enseñaba un botón que no
+                      existía—. Ahora es el mismo `actionVariants` y no puede
+                      mentir, que es el motivo entero de esta sección. */}
                   {i === 0 && (
                     <a
                       href="#top"
                       className={actionVariants({ variant: "solid" })}
                     >
+                      <Mail aria-hidden="true" />
                       {t.botones.demoSolid}
-                      <Mail className="size-[18px]" aria-hidden="true" />
                     </a>
                   )}
                   {i === 1 && (
@@ -691,7 +692,7 @@ export function DesignSystem({
                       href="#top"
                       className={actionVariants({ variant: "outline-primary" })}
                     >
-                      <Download className="size-[17px]" aria-hidden="true" />
+                      <Download aria-hidden="true" />
                       {t.botones.demoOutlinePrimary}
                     </a>
                   )}
@@ -800,8 +801,27 @@ export function DesignSystem({
           <p className="text-muted-foreground m-0 mt-4 text-[0.8rem]">
             {t.botones.hint}
           </p>
+          {/* La regla del icono se publica aquí, no solo en BRAND.md (P37.5988).
+              Es el paso que faltaba: los enlaces son difíciles de incumplir porque
+              hicieron el recorrido completo regla → clase → sección publicada →
+              uso, y esta parte del botón se había quedado en el primer paso. */}
           <div
             className={cn(CARD, "mt-8 max-w-[var(--measure)] px-[1.4rem] py-5")}
+          >
+            <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
+              {t.botones.iconTitle}
+            </h3>
+            <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
+              {t.botones.iconRule.map((r) => (
+                <li key={r}>{r}</li>
+              ))}
+            </ul>
+            <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
+              {t.botones.iconFoot}
+            </p>
+          </div>
+          <div
+            className={cn(CARD, "mt-4 max-w-[var(--measure)] px-[1.4rem] py-5")}
           >
             <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
               {t.botones.ruleTitle}

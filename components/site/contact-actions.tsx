@@ -74,13 +74,15 @@ export function EmailCta({
       <a
         href={`mailto:${EMAIL}`}
         onClick={() => trackContactClick("email")}
-        className={cn(
-          actionVariants({ variant: "solid", size: "lg" }),
-          "contact-cta",
-        )}
+        className={actionVariants({ variant: "solid", size: "lg" })}
       >
+        {/* El icono se escribe SIEMPRE primero; la variante `solid` es la que lo
+            manda detrás de la etiqueta y le da el empujón de 2px en hover. Antes
+            iba detrás en el JSX y con su tamaño y su clase de movimiento a mano
+            —`.contact-cta` en globals.css—, que es lo que hacía que la demo de
+            esta misma variante en el Design System no se moviera (P37.5988). */}
+        <Mail aria-hidden="true" />
         {label}
-        <Mail className="contact-cta-icon size-[18px]" aria-hidden="true" />
       </a>
       {showAddress && (
         <p className="m-0 mt-[0.9rem]">
@@ -114,8 +116,12 @@ export function ContactSecondary({
   // vez de contenido — el subrayado + hover propio al lado del CTA sólido
   // generaba ruido visual (feedback 2026-08-04). Probablemente se resuelva de
   // otra forma cuando exista una sección de contacto dedicada.
+  // Los tres llevan icono porque los tres sacan al usuario de la página: uno abre
+  // el marcador del teléfono, otro se va a LinkedIn y el tercero descarga un
+  // archivo (regla del icono, P37.5988). El tamaño ya no se escribe aquí: lo pone
+  // `.link-chrome svg` en globals.css, igual que `size` lo pone en las acciones
+  // con caja.
   const link = cn(CONTACT_LINK, "text-foreground gap-[0.55rem] text-[0.95rem]");
-  const icon = "size-[17px] flex-none";
   return (
     <ul
       // `gap-y` solo actúa cuando la fila envuelve (en móvil los tres canales no
@@ -129,7 +135,7 @@ export function ContactSecondary({
           onClick={() => trackContactClick("phone")}
           className={link}
         >
-          <Phone className={icon} aria-hidden="true" />
+          <Phone aria-hidden="true" />
           <span className="[font-variant-numeric:tabular-nums]">
             {PHONE_DISPLAY}
           </span>
@@ -143,13 +149,13 @@ export function ContactSecondary({
           aria-label={`${dict.linkedinLabel}: ${LINKEDIN_DISPLAY}`}
           className={link}
         >
-          <LinkedinIcon className={icon} aria-hidden="true" />
+          <LinkedinIcon />
           {dict.linkedinLabel}
         </a>
       </li>
       <li>
         <a href={cvHref} download className={link}>
-          <Download className={icon} aria-hidden="true" />
+          <Download aria-hidden="true" />
           {dict.cvCta}
         </a>
       </li>

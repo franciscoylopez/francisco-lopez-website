@@ -18,6 +18,27 @@ import { cva, type VariantProps } from "class-variance-authority";
 // documenta con fecha en BRAND.md (como ContactSecondary). Cambiar un hover pasa a
 // ser una línea aquí, y llega a todos los botones del sitio a la vez.
 //
+// CUÁNDO UNA ACCIÓN LLEVA ICONO (P37.5988). Una sola pregunta: ¿esto saca al
+// usuario de la página? Descargar un archivo, abrir otra aplicación (correo,
+// teléfono) o irse a otro sitio web → icono. Lo que ocurre dentro de la página
+// —aceptar, guardar, cerrar, elegir, filtrar, navegar por el sitio— va sin él.
+// Por eso «Escríbeme» y «Descargar CV» lo llevan en sus TRES apariciones cada uno,
+// y «Aceptar todo», «Gestionar preferencias» (abre un diálogo, no lleva a ningún
+// sitio), «Volver al inicio» y los grupos de pestañas no lo llevan en ninguna.
+//
+// El criterio mira la ACCIÓN, no la variante ni el sitio donde vive: el CV es una
+// descarga tanto en el nav como en Trayectoria, y hasta P37.5988 se veía de tres
+// formas distintas —sin icono en el nav, con icono en Trayectoria y en los canales
+// de contacto— porque cada punto de uso lo decidía por su cuenta.
+//
+// Lo mecánico lo resuelve este archivo, que es lo que impide que vuelva a
+// divergir: el TAMAÑO lo pone `size` (sm 16 · md 17 · lg 18 · icon 18; antes había
+// 15, 17 y 18 escritos a mano en cinco archivos) y la POSICIÓN la variante —el
+// icono se escribe SIEMPRE primero en el JSX y `solid` lo manda al otro lado, ver
+// SOLID_ICON—. En el call site no se escribe ni una clase: solo `<Download />`.
+// Queda fuera el enlace de contenido inline (`.link-content`): su afordancia es el
+// subrayado, y un glifo en medio de un párrafo rompe la línea base.
+//
 // Se exporta el `cva` y no un componente `<Action>` a propósito: la mitad de los
 // call sites son `<a>` (mailto, descargas, navegación) y la otra mitad `<button>`,
 // y forzar un wrapper con `render`/`asChild` solo añadiría indirección sin quitar
@@ -45,20 +66,40 @@ const SOLID =
 const OUTLINE_NEUTRAL =
   "border-border bg-background text-foreground border hover:bg-muted focus-visible:bg-muted";
 
+// El icono del CTA sólido: DETRÁS de la etiqueta y avanzando 2px al interactuar.
+// Vive aquí y no en el call site por lo de siempre —el orden en el JSX es una
+// decisión que hay que acordarse de tomar— y porque era la última pieza del botón
+// repartida entre dos capas: el empujón lo ponía `.contact-cta` en globals.css, así
+// que lo tenía el email de la franja de contacto y NO lo tenía la demo de la página
+// que documenta esa misma variante. Los dos extremos de la transición van en el
+// mismo sitio que la declara (D35), y `motion-reduce` anula solo el movimiento.
+// El selector no encuentra nada en un sólido sin icono, así que es inocuo.
+const SOLID_ICON =
+  "flex-row-reverse [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-[2px] focus-visible:[&_svg]:translate-x-[2px] motion-reduce:[&_svg]:transition-none motion-reduce:hover:[&_svg]:translate-x-0 motion-reduce:focus-visible:[&_svg]:translate-x-0";
+
 export const actionVariants = cva(
   // Base. El radio es único para toda acción (`--radius-md`, 8px): antes convivían
   // 10px en consent/error y 8px en el resto sin que la diferencia significara nada.
   // El foco NO se declara aquí: lo pone la regla global `:focus-visible` de
   // globals.css (2px `--ring` + offset 2px). Ninguna variante lo sobrescribe — el
   // sitio tenía tres mecanismos de foco compitiendo.
-  "inline-flex shrink-0 items-center justify-center gap-[0.5rem] rounded-md font-semibold whitespace-nowrap no-underline transition-colors",
+  "inline-flex shrink-0 items-center justify-center gap-[0.5rem] rounded-md font-semibold whitespace-nowrap no-underline transition-colors [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         // La acción destacada de la pantalla. Hoy: el email de la franja de
         // contacto (métrica primaria, PRD §7), aceptar cookies y el primario de
         // las páginas 404/500.
-        solid: SOLID,
+        // `SOLID_ICON` va solo aquí y no en la constante `SOLID`: los estados
+        // encendidos de los `toggle-*` la reusan, y alguno lleva un glifo delante
+        // de la etiqueta (el de rejilla del Design System) que no hay que voltear
+        // ni empujar — es un indicador de estado, no el destino de un viaje.
+        // Se componen como ARRAY y no con una plantilla `${SOLID} ${SOLID_ICON}`:
+        // ambas formas funcionan (las clases están escritas enteras dentro de cada
+        // constante, que es lo que Tailwind necesita ver), pero una plantilla en
+        // este archivo se parece demasiado a la interpolación que ya tumbó el hover
+        // del sólido en silencio. Aquí no se escriben plantillas de clases, punto.
+        solid: [SOLID, SOLID_ICON],
         // Acción de contenido que vive sola, sin otro CTA al lado con el que
         // competir: Descargar CV, Gestionar preferencias, chips de descarga del
         // Brand Kit. Hover = el relleno cian pleno (BRAND.md).
@@ -105,11 +146,14 @@ export const actionVariants = cva(
         // `[--icon-chrome-bg:var(--card)]` para que la caja se vea en reposo.
         icon: "icon-chrome border-border text-foreground border",
       },
+      // El tamaño del icono va con el del texto y no lo escribe el call site
+      // (`[&_svg]`, sin `>` a propósito: el glifo puede ir envuelto). `shrink-0`
+      // en la base impide que se comprima cuando la etiqueta es larga.
       size: {
-        sm: "min-h-[44px] px-[0.85rem] text-[0.8rem]",
-        md: "min-h-[44px] px-[1.35rem] text-[0.92rem]",
-        lg: "min-h-[48px] px-[1.6rem] text-[1rem]",
-        icon: "min-h-[44px] min-w-[44px]",
+        sm: "min-h-[44px] px-[0.85rem] text-[0.8rem] [&_svg]:size-[16px]",
+        md: "min-h-[44px] px-[1.35rem] text-[0.92rem] [&_svg]:size-[17px]",
+        lg: "min-h-[48px] px-[1.6rem] text-[1rem] [&_svg]:size-[18px]",
+        icon: "min-h-[44px] min-w-[44px] [&_svg]:size-[18px]",
       },
       // Estado de las variantes `toggle-*`. Se ignora en el resto.
       on: { true: "", false: "" },

@@ -1194,6 +1194,13 @@
       "demoSegments": ["Escritorio", "Tablet", "Móvil"],
       "stateOn": "Activo",
       "stateOff": "Inactivo",
+      "iconTitle": "Cuándo una acción lleva icono",
+      "iconRule": [
+        "Una sola pregunta: ¿esta acción me saca de la página? Descargar un archivo, abrir otra aplicación —el correo, el teléfono— o irse a otro sitio web llevan icono.",
+        "Todo lo que ocurre dentro de la página va sin él: aceptar, guardar, cerrar, elegir una pestaña o navegar por el sitio. «Gestionar preferencias» abre un diálogo, así que no lo lleva.",
+        "El icono va delante de la etiqueta, porque clasifica la acción. Solo en el botón sólido va detrás y avanza dos píxeles al pasar el cursor: ahí marca la dirección del viaje."
+      ],
+      "iconFoot": "El tamaño, el hueco y el lado los pone la variante, no cada uso. Cuando los ponía cada uso, el mismo icono de descarga medía 15, 17 y 18 píxeles en tres sitios del sitio, y «Descargar CV» aparecía con icono en dos de sus tres apariciones.",
       "ruleTitle": "Por qué esto es un componente y no una convención",
       "rule": [
         "Antes de existir, la misma decisión estaba escrita a mano en seis archivos: dos radios para la misma caja, cuatro comportamientos de hover para el mismo botón y el objetivo táctil de 44px copiado catorce veces.",
