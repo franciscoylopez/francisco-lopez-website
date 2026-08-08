@@ -6,6 +6,7 @@ import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { LinkedinIcon } from "./icons";
 import { CARD, PANEL, SECTION, WRAP } from "./layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
@@ -1166,18 +1167,16 @@ function ErrorVisual({
         </svg>
       );
     case 3: // peso: logo pequeño vs mayor, junto a LinkedIn
+      // El vecino es el LinkedIn DEL SITIO (icons.tsx), no un dibujo propio de
+      // esta ilustración. Era el relleno macizo —el que P37.5989 sustituyó por no
+      // leerse en el footer—, así que la comparación se hacía contra un icono que
+      // en el sitio ya no existe: la ilustración defendía su regla usando como
+      // referencia algo que no está en ninguna pantalla. Mismo fallo que la luna y
+      // el menú de la demo de chrome, una capa más sutil (P37.5993).
       return (
-        <span className="inline-flex items-center gap-[0.65rem]">
+        <span className="text-muted-foreground inline-flex items-center gap-[0.65rem]">
           <Glyph variant="flat" h={before ? 15 : 25} />
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="var(--muted-foreground)"
-            aria-hidden="true"
-          >
-            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45z" />
-          </svg>
+          <LinkedinIcon className="size-[18px]" />
         </span>
       );
     case 4: // lockup 29% vs ~60%
