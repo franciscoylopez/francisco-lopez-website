@@ -151,7 +151,7 @@ export function DesignSystem({
           </p>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))] items-start gap-[var(--gutter)]">
             <div
-              className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+              className="border-border overflow-hidden rounded-xl border"
               style={{ background: "var(--foreground)" }}
             >
               <div
@@ -307,7 +307,7 @@ export function DesignSystem({
               </h3>
               <div className={PANEL}>
                 <div className="border-border border-b border-dashed px-[var(--page-x)] py-6">
-                  <div className="bg-muted h-[1.4rem] w-[60%] rounded-[var(--radius-sm)]" />
+                  <div className="bg-muted h-[1.4rem] w-[60%] rounded-sm" />
                 </div>
                 <div
                   className="flex h-[clamp(3rem,6vw,5rem)] items-center justify-center"
@@ -321,7 +321,7 @@ export function DesignSystem({
                   </span>
                 </div>
                 <div className="border-border border-t border-dashed px-[var(--page-x)] py-6">
-                  <div className="bg-muted h-[1.4rem] w-[45%] rounded-[var(--radius-sm)]" />
+                  <div className="bg-muted h-[1.4rem] w-[45%] rounded-sm" />
                 </div>
               </div>
               <ul className="text-muted-foreground m-0 mt-5 flex list-disc flex-col gap-[0.45rem] pl-[1.1rem] text-[0.88rem]">
@@ -341,7 +341,7 @@ export function DesignSystem({
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.tipografia.lead}
           </p>
-          <div className="border-border overflow-hidden rounded-[var(--radius-xl)] border">
+          <div className="border-border overflow-hidden rounded-xl border">
             {t.tipografia.rows.map((row, i) => (
               <div
                 key={row.name}
@@ -469,7 +469,7 @@ export function DesignSystem({
                 ))}
               </ul>
               <div className="flex min-w-[min(100%,15rem)] flex-[1_1_16rem] flex-col gap-[0.85rem]">
-                <div className="border-border bg-background flex h-20 items-center justify-between gap-4 rounded-[var(--radius-lg)] border px-5">
+                <div className="border-border bg-background flex h-20 items-center justify-between gap-4 rounded-lg border px-5">
                   <span className="inline-flex items-center gap-[0.6rem]">
                     <NavGlyph variant="split" h={48} />
                     <span className="font-display text-foreground text-[1.05rem] font-semibold tracking-[-0.01em]">
@@ -480,7 +480,7 @@ export function DesignSystem({
                     {t.movimiento.navState1}
                   </span>
                 </div>
-                <div className="border-border bg-background flex h-16 items-center justify-between gap-4 rounded-[var(--radius-lg)] border px-5">
+                <div className="border-border bg-background flex h-16 items-center justify-between gap-4 rounded-lg border px-5">
                   <NavGlyph variant="flat" h={28} />
                   <span className="text-muted-foreground font-mono text-[0.68rem]">
                     {t.movimiento.navState2}
@@ -506,7 +506,7 @@ export function DesignSystem({
             {t.enlaces.cases.map((c, i) => (
               <div
                 key={c.cls}
-                className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+                className="border-border overflow-hidden rounded-xl border"
               >
                 {/* Demo vivo: el hover real de cada clase, no una captura. */}
                 <div className="bg-background flex min-h-[7.5rem] items-center justify-center px-5 py-7">
@@ -617,7 +617,7 @@ export function DesignSystem({
             {t.botones.cases.map((c, i) => (
               <div
                 key={c.cls}
-                className="border-border overflow-hidden rounded-[var(--radius-xl)] border"
+                className="border-border overflow-hidden rounded-xl border"
               >
                 <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
                   {/* Con su icono, como los botones reales de los que toman la
@@ -1043,7 +1043,7 @@ function ThemeCard({
         };
   return (
     <div
-      className="overflow-hidden rounded-[var(--radius-xl)] border"
+      className="overflow-hidden rounded-xl border"
       style={{ borderColor: c.border, background: c.bg, color: c.fg }}
     >
       <div className="flex flex-col gap-4 px-6 py-[1.4rem]">
@@ -1057,7 +1057,7 @@ function ThemeCard({
           {headline}
         </span>
         <div
-          className="rounded-[var(--radius-lg)] border p-4"
+          className="rounded-lg border p-4"
           style={{ borderColor: c.innerBorder, background: c.innerBg }}
         >
           <div
@@ -1070,7 +1070,7 @@ function ThemeCard({
           />
         </div>
         <span
-          className="inline-flex min-h-9 items-center self-start rounded-[var(--radius-md)] px-[0.9rem] text-[0.82rem] font-medium"
+          className="inline-flex min-h-9 items-center self-start rounded-md px-[0.9rem] text-[0.82rem] font-medium"
           style={{ background: c.btnBg, color: c.btnFg }}
         >
           {cta}

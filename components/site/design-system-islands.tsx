@@ -96,7 +96,7 @@ export function GridDemo({
               ))}
             </div>
             <div className="relative flex flex-col gap-[1.1rem]">
-              <div className="bg-muted h-[2.6rem] w-[min(100%,22rem)] rounded-[var(--radius-md)]" />
+              <div className="bg-muted h-[2.6rem] w-[min(100%,22rem)] rounded-md" />
               <div className="flex max-w-[var(--measure)] flex-col gap-[0.6rem]">
                 <div className="bg-muted h-[0.85rem] rounded-full" />
                 <div className="bg-muted h-[0.85rem] rounded-full" />
@@ -106,7 +106,7 @@ export function GridDemo({
                 {[0, 1, 2].map((i) => (
                   <div
                     key={i}
-                    className="border-border bg-background h-24 rounded-[var(--radius-lg)] border"
+                    className="border-border bg-background h-24 rounded-lg border"
                   />
                 ))}
               </div>
@@ -171,9 +171,9 @@ export function RevealDemo({
         </button>
       </div>
       <div ref={ref} className="flex flex-col gap-[0.6rem]">
-        <div className="demo-item bg-muted h-[2.2rem] rounded-[var(--radius-md)]" />
-        <div className="demo-item bg-muted h-[2.2rem] w-[85%] rounded-[var(--radius-md)]" />
-        <div className="demo-item bg-muted h-[2.2rem] w-[70%] rounded-[var(--radius-md)]" />
+        <div className="demo-item bg-muted h-[2.2rem] rounded-md" />
+        <div className="demo-item bg-muted h-[2.2rem] w-[85%] rounded-md" />
+        <div className="demo-item bg-muted h-[2.2rem] w-[70%] rounded-md" />
       </div>
     </div>
   );
@@ -244,7 +244,7 @@ export function DevicePreview({
       </div>
       <div className="flex justify-center">
         <div
-          className="border-border bg-background w-full overflow-hidden rounded-[var(--radius-2xl)] border transition-[max-width] duration-300"
+          className="border-border bg-background w-full overflow-hidden rounded-2xl border transition-[max-width] duration-300"
           style={{ maxWidth }}
         >
           <div className="border-border flex items-center justify-between border-b px-5 py-[0.85rem]">
@@ -269,7 +269,7 @@ export function DevicePreview({
                   </span>
                 </div>
                 <div
-                  className="border-border rounded-[var(--radius-lg)] border border-dashed"
+                  className="border-border rounded-lg border border-dashed"
                   style={{
                     height: sk.h,
                     background:

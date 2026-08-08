@@ -197,7 +197,7 @@ export function BrandKit({
                   style={{ transitionDelay: "0.16s" }}
                 >
                   <div
-                    className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-[14px]"
+                    className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
                     style={{ transform: "rotate(-6deg)" }}
                   >
                     <Glyph variant="flat" h={27} />
@@ -209,7 +209,7 @@ export function BrandKit({
                   style={{ transitionDelay: "0.24s" }}
                 >
                   <div
-                    className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-[14px]"
+                    className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
                     style={{ transform: "rotate(6deg)" }}
                   >
                     <Glyph variant="flat" h={27} />
@@ -419,7 +419,7 @@ export function BrandKit({
               {t.logotipo.usage.sub}
             </p>
             {/* tabla ≥md */}
-            <div className="border-border hidden overflow-hidden rounded-[var(--radius-lg)] border md:block">
+            <div className="border-border hidden overflow-hidden rounded-lg border md:block">
               <div className="bg-card border-border text-muted-foreground grid grid-cols-[1.4fr_0.8fr_0.9fr_1fr_0.7fr] gap-4 border-b px-5 py-[0.9rem] text-[0.72rem] font-semibold tracking-[0.06em] uppercase">
                 <span>{t.logotipo.usage.cols.ctx}</span>
                 <span>{t.logotipo.usage.cols.variant}</span>
@@ -476,7 +476,7 @@ export function BrandKit({
                   className={cn(CARD, "px-[1.4rem] py-[1.35rem]")}
                 >
                   <div className="mb-[0.6rem] flex items-center gap-[0.7rem]">
-                    <span className="bg-foreground text-background inline-flex h-[1.9rem] w-[1.9rem] flex-none items-center justify-center rounded-[var(--radius-md)] font-mono text-[0.85rem] font-semibold">
+                    <span className="bg-foreground text-background inline-flex h-[1.9rem] w-[1.9rem] flex-none items-center justify-center rounded-md font-mono text-[0.85rem] font-semibold">
                       {i + 1}
                     </span>
                     <h4 className="font-display m-0 text-[1.05rem] leading-[1.25] font-semibold tracking-[-0.01em]">
@@ -710,7 +710,7 @@ export function BrandKit({
                 width={1200}
                 height={630}
                 alt={t.aplicaciones.og.previewAlt}
-                className="border-border mb-[1.2rem] block w-full rounded-[var(--radius-lg)] border"
+                className="border-border mb-[1.2rem] block w-full rounded-lg border"
               />
               <div className="flex flex-wrap gap-2">
                 <DlThemed pair={pngPair("lockup-split", 1024)} tone="primary">
@@ -881,7 +881,7 @@ function Callout({
   return (
     <div
       {...rest}
-      className="border-border bg-card mt-8 flex max-w-[var(--measure)] items-start gap-[0.85rem] rounded-[var(--radius-md)] border px-[1.35rem] py-[1.15rem]"
+      className="border-border bg-card mt-8 flex max-w-[var(--measure)] items-start gap-[0.85rem] rounded-md border px-[1.35rem] py-[1.15rem]"
       style={{ borderLeft: `3px solid ${color}` }}
     >
       <Info
@@ -1097,7 +1097,7 @@ function ErrorVisual({
       return (
         <span
           className={cn(
-            "inline-flex h-20 w-20 items-center justify-center rounded-[8px]",
+            "inline-flex h-20 w-20 items-center justify-center rounded-md",
             before
               ? "border-border border border-dashed"
               : "border-primary border",
@@ -1207,18 +1207,18 @@ function ErrorVisual({
       return before ? (
         <span className="inline-flex gap-[0.4rem]">
           <span
-            className="border-border h-[34px] w-[34px] rounded-[8px] border"
+            className="border-border h-[34px] w-[34px] rounded-md border"
             style={{ background: "#CFEFEE" }}
           />
           <span
-            className="border-border h-[34px] w-[34px] rounded-[8px] border"
+            className="border-border h-[34px] w-[34px] rounded-md border"
             style={{ background: "#E6E0FB" }}
           />
         </span>
       ) : (
         <span className="inline-flex gap-[0.4rem]">
-          <span className="border-border bg-brand-cyan-soft h-[34px] w-[34px] rounded-[8px] border" />
-          <span className="border-border bg-brand-purple-soft h-[34px] w-[34px] rounded-[8px] border" />
+          <span className="border-border bg-brand-cyan-soft h-[34px] w-[34px] rounded-md border" />
+          <span className="border-border bg-brand-purple-soft h-[34px] w-[34px] rounded-md border" />
         </span>
       );
     default:

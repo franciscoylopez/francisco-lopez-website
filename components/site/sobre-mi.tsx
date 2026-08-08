@@ -57,7 +57,7 @@ export function SobreMi({
               mantiene la cara (arriba) y al sujeto (a la derecha) al recortar. */}
           <figure
             data-reveal
-            className="relative m-0 h-[clamp(15rem,42vw,32rem)] overflow-hidden rounded-[var(--radius-lg)]"
+            className="relative m-0 h-[clamp(15rem,42vw,32rem)] overflow-hidden rounded-lg"
           >
             <Image
               src="/img/francisco-sobre-mi-apertura.webp"
@@ -233,9 +233,9 @@ function HobbyBlock({
             <div className="relative mx-auto w-full max-w-[24rem]">
               <div
                 aria-hidden
-                className={`absolute inset-0 rounded-[var(--radius-lg)] ${accentColor} ${accentOffset}`}
+                className={`absolute inset-0 rounded-lg ${accentColor} ${accentOffset}`}
               />
-              <div className="border-border relative aspect-[4/5] w-full overflow-hidden rounded-[var(--radius-lg)] border">
+              <div className="border-border relative aspect-[4/5] w-full overflow-hidden rounded-lg border">
                 <Image
                   src={photoSrc}
                   alt={photoAlt}

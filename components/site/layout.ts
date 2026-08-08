@@ -24,7 +24,7 @@ export const PROSE = "max-w-[var(--measure)]";
  * Tarjeta pequeña — el bloque de contenido que vive DENTRO de una sección: una
  * medida de accesibilidad, un breakpoint, una nota. Radio `lg` (10px).
  */
-export const CARD = "border-border bg-card rounded-[var(--radius-lg)] border";
+export const CARD = "border-border bg-card rounded-lg border";
 
 /**
  * Panel grande — el contenedor de showcase que ENMARCA una demostración y suele
@@ -37,8 +37,7 @@ export const CARD = "border-border bg-card rounded-[var(--radius-lg)] border";
  * hay dentro. `brand-kit` ya usaba esta caja pero llamándola `CARD`, y por eso
  * parecía que el sistema tenía un `CARD` con dos radios distintos.
  */
-export const PANEL =
-  "border-border bg-card overflow-hidden rounded-[var(--radius-xl)] border";
+export const PANEL = "border-border bg-card overflow-hidden rounded-xl border";
 
 /**
  * Grupo de acciones de un diálogo: apiladas y a ancho completo, con la principal

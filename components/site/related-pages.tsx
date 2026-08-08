@@ -68,7 +68,7 @@ export function RelatedPages({
               return (
                 <div
                   key={key}
-                  className="border-border rounded-[var(--radius-lg)] border border-dashed px-[1.4rem] py-[1.2rem]"
+                  className="border-border rounded-lg border border-dashed px-[1.4rem] py-[1.2rem]"
                 >
                   <span className="text-muted-foreground flex items-center gap-2 text-[1rem] font-semibold">
                     {page.name}

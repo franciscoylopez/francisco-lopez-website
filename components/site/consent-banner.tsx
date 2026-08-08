@@ -330,8 +330,12 @@ function ConsentRow({
             // 1,22:1 en claro-apagado (bolita blanca sobre carril casi blanco) y
             // 2,03:1 en oscuro-encendido (blanca sobre el cian aclarado). Medido en
             // navegador, no estimado; con los tokens da 12,47/12,04 apagado y
-            // 7,10/8,36 encendido — este último es el par «texto sobre botón» que
+            // 7,93/8,36 encendido — este último es el par «texto sobre botón» que
             // BRAND.md ya tenía verificado.
+            // Este control es la ÚNICA excepción a «ningún control se escribe a
+            // mano»: está documentada con fecha en BRAND.md §Ningún control se
+            // escribe a mano, y caduca cuando P37.63 decida de dónde vienen los
+            // widgets con estado. Lo de arriba justifica el COLOR, no la excepción.
             // El anillo de foco lleva su offset del color de la superficie que hay
             // detrás (`--card`, la del diálogo): sin declararlo, Tailwind usa blanco
             // y en tema oscuro dibujaba un halo claro alrededor del control.
