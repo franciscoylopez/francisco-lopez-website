@@ -123,6 +123,19 @@ function Glyph({
   );
 }
 
+// Fila de DOS tarjetas de variante. Columnas explícitas, no `auto-fit`: cada par
+// es una unidad de sentido —split/plano, mono negro/mono blanco, los dos lockups—
+// y un par no debe romperse porque en la caja quepan tres. Es también la unidad de
+// reveal, para que las dos entren juntas.
+//
+// Antes eran dos rejillas `auto-fit` que repartían 4 + 2. Con seis tarjetas eso
+// dejaba la primera fila a cuatro columnas de 302px, tan estrechas que los chips
+// de PNG saltaban a una tercera línea que sus hermanas no tenían, y el reparto
+// desigual se leía como un descuadre. A dos columnas caben los tres PNG en una
+// línea y las filas dicen algo.
+const CARD_PAIR =
+  "grid grid-cols-1 items-stretch gap-[var(--gutter)] md:grid-cols-2";
+
 // Tipografía de sección, propia de esta página. Las cajas y los ritmos comunes
 // (WRAP / SECTION / PANEL) vienen de `./layout`: lo que aquí se llamaba `CARD` era
 // en realidad el PANEL del sistema —radio xl y `overflow-hidden`— y ese nombre
@@ -275,11 +288,8 @@ export function BrandKit({
             <p className={LEAD}>{t.logotipo.lead}</p>
           </div>
 
-          {/* Fila 1 — símbolos */}
-          <div
-            data-reveal
-            className="mb-[var(--gutter)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] items-stretch gap-[var(--gutter)]"
-          >
+          {/* Fila 1 — símbolo split / plano */}
+          <div data-reveal className={cn(CARD_PAIR, "mb-[var(--gutter)]")}>
             <VariantCard
               glyph={<Glyph variant="split" h={96} />}
               name={t.logotipo.cards.symSplit.name}
@@ -317,16 +327,17 @@ export function BrandKit({
                 <DlThemed pair={pngPair("simbolo-plano", 256)}>256</DlThemed>
               </div>
             </VariantCard>
+          </div>
 
-            {/* Símbolo mono: DOS tarjetas, no una partida. Los assets mono son
-                neutros al tema y hasta P37.61 compartían un solo panel con la
-                previsualización dividida en blanco/negro y ocho chips en dos
-                filas etiquetadas. Era la única tarjeta de la fila escrita a mano
-                —las hermanas ya salían de VariantCard—, así que no heredó el
-                ensanchado de chips de P37.592 y sus dos filas se partieron en
-                cuatro. Separarlas borra la excepción en vez de afinarla: cada
-                una tiene la misma anatomía que sus hermanas (1 preview + SVG +
-                3 PNG) y la fila entera pasa a cuatro columnas. */}
+          {/* Fila 2 — símbolo mono: DOS tarjetas, no una partida. Hasta P37.61
+              compartían un solo panel con la previsualización dividida en
+              blanco/negro y ocho chips en dos filas etiquetadas. Era la única
+              tarjeta de la fila escrita a mano —las hermanas ya salían de
+              VariantCard—, así que no heredó el ensanchado de chips de P37.592 y
+              sus dos filas se partieron en cuatro. Separarlas borra la excepción
+              en vez de afinarla, y ponerlas en el MISMO par conserva lo que el
+              panel partido sí hacía bien: enseñar las dos tintas juntas. */}
+          <div data-reveal className={cn(CARD_PAIR, "mb-[var(--gutter)]")}>
             <VariantCard
               glyph={<Glyph variant="flat" h={96} mono="black" />}
               name={t.logotipo.cards.symMonoNegro.name}
@@ -364,10 +375,10 @@ export function BrandKit({
             </VariantCard>
           </div>
 
-          {/* Fila 2 — lockups */}
+          {/* Fila 3 — lockups */}
           <div
             data-reveal
-            className="mb-[clamp(3rem,6vw,5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))] items-stretch gap-[var(--gutter)]"
+            className={cn(CARD_PAIR, "mb-[clamp(3rem,6vw,5rem)]")}
           >
             <VariantCard
               glyph={<Lockup variant="split" />}
