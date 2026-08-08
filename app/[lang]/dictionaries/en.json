@@ -598,7 +598,7 @@
           "swap": "conmuta",
           "sample": "var(--primary)",
           "sampleFg": "var(--primary-foreground)",
-          "ratio": "7.43:1 text · 7.88:1 button (light) · 8.36:1 dark · AAA",
+          "ratio": "7.47:1 text · 7.93:1 button (light) · 8.36:1 dark · AAA",
           "note": "Links and accent"
         },
         {
@@ -1172,7 +1172,7 @@
           "kicker": "Switch",
           "cls": "toggle-primary",
           "rule": "A single control that turns on something that wasn't there. On, full fill; off, cyan border with a tint on hover — never the fill.",
-          "note": "If the off state filled on hover it would look identical to the on state, and the control would stop saying which one it's in."
+          "note": "If the off state filled on hover it would look identical to the on state, and the control would stop saying which one it's in. Within that tint the text darkens slightly: that's what takes it to AAA without having to dim the tint."
         },
         {
           "kicker": "Set of alternatives",
@@ -1195,6 +1195,13 @@
       "demoSegments": ["Desktop", "Tablet", "Mobile"],
       "stateOn": "Active",
       "stateOff": "Inactive",
+      "iconTitle": "When an action gets an icon",
+      "iconRule": [
+        "One question does the work: does this action take me out of the page? Downloading a file, opening another app — mail, phone — or leaving for another site all get an icon.",
+        "Anything that happens inside the page goes without one: accept, save, close, pick a tab, move around the site. \"Manage preferences\" opens a dialog, so it stays bare.",
+        "The icon sits before the label, because it classifies the action. Only on the solid button does it sit after and travel two pixels on hover: there it marks the direction of the trip."
+      ],
+      "iconFoot": "Size, gap and side come from the variant, not from each call. Back when each call decided, the same download icon measured 15, 17 and 18 pixels in three places, and \"Download CV\" showed up with an icon in two of its three appearances.",
       "ruleTitle": "Why this is a component and not a convention",
       "rule": [
         "Before it existed, the same decision was hand-written across six files: two radii for the same box, four hover behaviours for the same button, and the 44px touch target copied fourteen times.",
@@ -1225,7 +1232,7 @@
         {
           "label": "primary as text",
           "note": "links and accent",
-          "light": "7.43:1",
+          "light": "7.47:1",
           "lightLv": "AAA",
           "dark": "8.36:1",
           "darkLv": "AAA"
@@ -1233,17 +1240,33 @@
         {
           "label": "Text on button",
           "note": "primary-foreground over primary",
-          "light": "7.88:1",
+          "light": "7.93:1",
           "lightLv": "AAA",
           "dark": "8.36:1",
           "darkLv": "AAA"
         },
         {
+          "label": "Solid button hover",
+          "note": "the fill mixes toward foreground",
+          "light": "8.64:1",
+          "lightLv": "AAA",
+          "dark": "8.92:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "Toggle-off hover",
+          "note": "the tightest state in the system",
+          "light": "7.21:1",
+          "lightLv": "AAA",
+          "dark": "7.80:1",
+          "darkLv": "AAA"
+        },
+        {
           "label": "muted-foreground",
           "note": "muted over background",
-          "light": "7.12:1",
+          "light": "7.10:1",
           "lightLv": "AAA",
-          "dark": "7.08:1",
+          "dark": "7.12:1",
           "darkLv": "AAA"
         },
         {
@@ -1255,7 +1278,7 @@
           "darkLv": ""
         }
       ],
-      "contrastNote": "With this change, every text pair in the system reaches AAA in light and dark — none is left at AA. The one intentional exception is brand-purple-accent, which passes only as large text (≥3:1) over inverted backgrounds, never as body.",
+      "contrastNote": "Every text pair in the system reaches AAA in light and dark, and not only at rest: hover states too, which is where this usually slips. The last one left was the toggle-off hover, fixed by moving the text colour rather than dimming the background — raising the number by removing the visual cue isn't accessibility, it's hiding the problem from the report. The one intentional exception is brand-purple-accent, which passes only as large text (≥3:1) over inverted backgrounds, never as body.",
       "checklistTitle": "Closing checklist",
       "checklist": [
         "Measured contrast, with a figure, in both themes. AA is the non-negotiable floor; AAA whenever it's reached without visual cost.",

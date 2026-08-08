@@ -70,7 +70,8 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
             "flex-none md:justify-self-end",
           )}
         >
-          <LinkedinIcon className="size-[18px]" />
+          {/* Sin tamaño a mano: lo pone `size: "icon"` de la variante. */}
+          <LinkedinIcon />
         </a>
       </div>
     </footer>

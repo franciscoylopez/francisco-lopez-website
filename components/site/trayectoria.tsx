@@ -148,7 +148,7 @@ export function Trayectoria({
               "flex-none",
             )}
           >
-            <Download className="size-[17px]" aria-hidden="true" />
+            <Download aria-hidden="true" />
             {dict.cta}
           </a>
         </div>

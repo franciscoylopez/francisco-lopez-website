@@ -39,3 +39,22 @@ export const CARD = "border-border bg-card rounded-[var(--radius-lg)] border";
  */
 export const PANEL =
   "border-border bg-card overflow-hidden rounded-[var(--radius-xl)] border";
+
+/**
+ * Grupo de acciones de un diálogo: apiladas y a ancho completo, con la principal
+ * abajo. NO es una fila que se parte cuando no cabe.
+ *
+ * Por qué apiladas y no en fila (P37.5986): el diálogo mide 512px como máximo, que
+ * dejan 462px de contenido, y sus tres acciones necesitan 496px — se salen por 34px
+ * y la tercera caía sola a una segunda línea, alineada a la derecha, leyéndose como
+ * un desajuste. La causa fue P37.592: al migrar a `actionVariants` los botones
+ * pasaron de `px-4` a `px-[1.35rem]`, o sea 33,6px más de fila. Se migró el botón y
+ * nadie volvió a mirar el contenedor que lo agrupa.
+ *
+ * Se apilan en vez de encogerlos a `size="sm"` porque la fila solo cabría por poco
+ * y **solo en algunos idiomas** —los labels en EN son más cortos que en ES—, así que
+ * volvería a romperse con el siguiente cambio de copy sin que nadie se entere. El
+ * apilado no depende del largo del texto: es estable en cualquier idioma y es además
+ * el layout que el diálogo ya usaba en móvil.
+ */
+export const DIALOG_ACTIONS = "mt-6 flex flex-col gap-2 [&>*]:w-full";

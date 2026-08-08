@@ -32,11 +32,12 @@ const favPair = (sz: number) => ({
 const monoSvg = (n: string) => `/logo-kit/svg/${n}.svg`;
 const monoPng = (n: string, sz: number) => `/logo-kit/png/${n}-${sz}.png`;
 
+// Sin `width`/`height`: el tamaño lo pone `size: "sm"` de la variante (antes eran
+// 15px escritos aquí, mientras el mismo icono medía 17 en Trayectoria y 18 en el
+// CTA de contacto).
 function DownloadIcon() {
   return (
     <svg
-      width="15"
-      height="15"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -61,15 +62,20 @@ const DL_PRIMARY = actionVariants({ variant: "outline-primary", size: "sm" });
 const DL_NEUTRAL = actionVariants({ variant: "outline-neutral", size: "sm" });
 
 // Descarga con href único (assets neutros al tema: mono negro/blanco).
+//
+// El icono ya no es opcional (P37.5988). Había una prop `icon` que cada uso ponía
+// o no, y el resultado era que dentro del MISMO panel el chip de SVG lo llevaba y
+// los de PNG no, aunque los cuatro descargan exactamente igual. La regla del icono
+// —lo lleva la acción que saca al usuario de la página— no admite matiz aquí:
+// estos componentes existen solo para descargar, así que el icono es suyo, no de
+// quien los invoca. Una decisión menos que tomar en cada llamada.
 function Dl({
   href,
   tone = "neutral",
-  icon = false,
   children,
 }: {
   href: string;
   tone?: "primary" | "neutral";
-  icon?: boolean;
   children: React.ReactNode;
 }) {
   return (
@@ -78,7 +84,7 @@ function Dl({
       download
       className={tone === "primary" ? DL_PRIMARY : DL_NEUTRAL}
     >
-      {icon && <DownloadIcon />}
+      <DownloadIcon />
       {children}
     </a>
   );
@@ -88,19 +94,17 @@ function Dl({
 function DlThemed({
   pair,
   tone = "neutral",
-  icon = false,
   children,
 }: {
   pair: { light: string; dark: string };
   tone?: "primary" | "neutral";
-  icon?: boolean;
   children: React.ReactNode;
 }) {
   const cls = tone === "primary" ? DL_PRIMARY : DL_NEUTRAL;
   return (
     <>
       <a href={pair.light} download className={cn(cls, "dark:hidden")}>
-        {icon && <DownloadIcon />}
+        <DownloadIcon />
         {children}
       </a>
       <a
@@ -108,7 +112,7 @@ function DlThemed({
         download
         className={cn(cls, "hidden dark:inline-flex")}
       >
-        {icon && <DownloadIcon />}
+        <DownloadIcon />
         {children}
       </a>
     </>
@@ -300,7 +304,7 @@ export function BrandKit({
               meta={t.logotipo.cards.symSplit.meta}
             >
               <div className="flex flex-wrap gap-2">
-                <DlThemed pair={svgPair("simbolo-split")} tone="primary" icon>
+                <DlThemed pair={svgPair("simbolo-split")} tone="primary">
                   {t.logotipo.cards.symSplit.svg}
                 </DlThemed>
               </div>
@@ -319,7 +323,7 @@ export function BrandKit({
               meta={t.logotipo.cards.symPlano.meta}
             >
               <div className="flex flex-wrap gap-2">
-                <DlThemed pair={svgPair("simbolo-plano")} tone="primary" icon>
+                <DlThemed pair={svgPair("simbolo-plano")} tone="primary">
                   {t.logotipo.cards.symPlano.svg}
                 </DlThemed>
               </div>
@@ -391,7 +395,7 @@ export function BrandKit({
               meta={t.logotipo.cards.lockSplit.meta}
             >
               <div className="flex flex-wrap gap-2">
-                <DlThemed pair={svgPair("lockup-split")} tone="primary" icon>
+                <DlThemed pair={svgPair("lockup-split")} tone="primary">
                   {t.logotipo.cards.lockSplit.svg}
                 </DlThemed>
               </div>
@@ -410,7 +414,7 @@ export function BrandKit({
               meta={t.logotipo.cards.lockPlano.meta}
             >
               <div className="flex flex-wrap gap-2">
-                <DlThemed pair={svgPair("lockup-plano")} tone="primary" icon>
+                <DlThemed pair={svgPair("lockup-plano")} tone="primary">
                   {t.logotipo.cards.lockPlano.svg}
                 </DlThemed>
               </div>

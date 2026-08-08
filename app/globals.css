@@ -84,8 +84,9 @@
   /* --- Acción: cian primario --- */
   /* Se pinta como #005859 (este oklch cae algo FUERA del gamut sRGB, así que el
      navegador lo recorta; el hex es el color resultante, no el nominal).
-     Medido 2026-08-04 (P37.598): 7,43:1 como texto sobre --background y 7,88:1
-     sobre boton. AAA en ambos, con margen.
+     Medido 2026-08-04 (P37.5985): 7,47:1 como texto sobre --background y 7,93:1
+     sobre boton. AAA en ambos, con margen. (P37.598 habia publicado 7,43 y 7,88
+     para este mismo token; al re-medirlas salieron unas centesimas mas altas.)
      Bajó de L 0.43 a L 0.41 porque el anterior —que se pintaba como #005E5F— daba
      6,86:1 como texto: AA, no AAA, mientras la web publicaba 7,01. El hex que
      documentaba BRAND.md SÍ era el correcto; lo que estaba mal era la cifra.
@@ -100,7 +101,7 @@
   --muted: oklch(0.9316 0.0128 86.83);
   --muted-foreground: oklch(
     0.4365 0.0064 95.19
-  ); /* AAA (7,12:1) sobre --background claro; a 0.4815 se quedaba en 5,87 */
+  ); /* AAA (7,10:1) sobre --background claro; a 0.4815 se quedaba en 5,87 */
   --accent: oklch(0.9316 0.0128 86.83);
   --accent-foreground: oklch(0.2657 0.0118 248.27);
 
@@ -174,7 +175,7 @@
   --muted: oklch(0.3063 0.0152 252.34);
   --muted-foreground: oklch(
     0.7295 0.0116 95.22
-  ); /* AAA (7,08:1) sobre --background oscuro; a 0.7245 se quedaba en 6,95 */
+  ); /* AAA (7,12:1) sobre --background oscuro; a 0.7245 se quedaba en 6,95 */
   --accent: oklch(0.3063 0.0152 252.34);
   --accent-foreground: oklch(0.9653 0.0102 81.8);
 
@@ -359,8 +360,8 @@
 }
 
 /* Contacto — texto atenuado sensible al fondo.
-   `--muted-foreground` está calibrado contra `--background` (AAA: 7,12:1 claro /
-   7,08:1 oscuro), así que sobre la franja (fondo `--muted`) se queda en AA suelto
+   `--muted-foreground` está calibrado contra `--background` (AAA: 7,10:1 claro /
+   7,12:1 oscuro), así que sobre la franja (fondo `--muted`) se queda en AA suelto
    (6,44:1 / 5,56:1) y rompería el "todo AAA" que declara BRAND.md y publica la
    página de Accesibilidad. Dentro de la franja, el atenuado se mezcla con la
    PROPIA banda al 85%, que mantiene AAA en ambos temas (8,15:1 / 9,16:1); el 80%
@@ -375,45 +376,34 @@
   color: var(--contact-dim);
 }
 
-/* CTA de email — único botón sólido `primary` del sitio: un escalón por encima
-   del outline de Descargar CV (Trayectoria), para que la jerarquía diga cuál es
-   LA acción (los clics de contacto son la métrica primaria, PRD §7).
+/* El CTA de email tenía aquí `.contact-cta` / `.contact-cta-icon`, y en P37.5988 se
+   borraron las dos. P37.592 ya les había quitado el hover del relleno (se lo lleva
+   la variante `solid`) y lo único que quedaba era el empujón de 2px del icono, que
+   se describía a sí mismo como «propio de este CTA y de ningún otro» — y por eso la
+   DEMO de ese mismo botón en el Design System no lo tenía: la página que documenta
+   la variante enseñaba un botón que no era el del sitio. Ahora el empujón es de la
+   variante `solid`, así que lo hereda cualquier sólido con icono, demo incluida.
 
-   Desde P37.592 esta clase YA NO pinta el hover: el relleno y su mezcla hacia
-   `--foreground` los aporta la variante `solid` de `components/ui/action.tsx`, que
-   es donde vive ahora esa decisión para todos los sólidos del sitio (era el único
-   botón que la tenía bien, así que el sistema la adoptó de aquí). Lo que queda es
-   el empujón del icono, que es propio de este CTA y de ningún otro.
+   Regla de la que sale: el icono marca que la acción saca al usuario de la página
+   (descarga, otra app, otro sitio). Vive en `components/ui/action.tsx`. */
 
-   Reposo, hover y `transition` del fondo son ahora las TRES utilidades de la
-   variante, en el mismo elemento: no se reparte entre clase y utilidad, que es
-   justo el reparto que rompía la transición en D35. */
-.contact-cta-icon {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.contact-cta:hover .contact-cta-icon,
-.contact-cta:focus-visible .contact-cta-icon {
-  transform: translateX(2px);
-}
-/* Reduced-motion: se anula SOLO el desplazamiento del icono. El cambio de color
-   del fondo se queda —no es movimiento— y ya no se toca desde aquí: tocarlo
-   significaría redeclarar la `transition` del fondo en una clase mientras sus dos
-   extremos viven en utilidades, el reparto exacto que dejó un hover clavado en D35. */
-@media (prefers-reduced-motion: reduce) {
-  .contact-cta-icon {
-    transition: none;
-  }
-  .contact-cta:hover .contact-cta-icon,
-  .contact-cta:focus-visible .contact-cta-icon {
-    transform: none;
-  }
+/* Iconos de los canales de chrome (teléfono, LinkedIn y CV de la franja de
+   contacto, CV del nav y de su menú móvil). Son enlaces de texto, no salen de
+   `actionVariants`, así que su tamaño se resuelve aquí — un solo sitio, como el de
+   las acciones con caja lo resuelve `size`. Antes estaba escrito a mano en cada
+   uso y había 15, 17 y 18px conviviendo sin que la diferencia significara nada.
+   `flex-none` porque el icono no debe encogerse cuando la etiqueta es larga. */
+.link-chrome svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
 }
 
 /* Enlaces de contenido — reposo neutro (`foreground`), el cian entra al interactuar.
    Sustituye a "texto en `primary` siempre" (BRAND.md, matizado 2026-08-04 / P37.55):
    relleno sólido que crece desde abajo + texto invertido a `primary-foreground` en
    hover/focus, reutilizando el par ya verificado AAA de "texto sobre botón"
-   (7,44:1 claro / 8,36:1 oscuro). `box-decoration-break: clone` para que el relleno
+   (7,93:1 claro / 8,36:1 oscuro). `box-decoration-break: clone` para que el relleno
    no se rompa si la frase del enlace cae partida en dos líneas.
    Sin `@layer` a propósito (como `.contact-cta` arriba): en Tailwind v4 una clase
    sin capa gana siempre a las utilidades, así que si algún día un caller mezcla
@@ -502,9 +492,20 @@
 
 /* Controles de chrome solo-icono (toggle de tema, hamburguesa, LinkedIn del
    footer): mismo hover de pastilla que `.link-chrome` (P37.57). El fondo de
-   reposo vive aquí (`--card` vía `--icon-chrome-bg`, o `transparent` si el
-   caller no lo pasa) en vez de dejarlo en la utilidad `bg-card`.
-   El motivo NO es de cascada —una clase sin `@layer` sí gana a las utilidades,
+   reposo vive aquí, no en la utilidad `bg-card` del punto de uso.
+
+   El valor POR DEFECTO es `--card`, que es el caso común: un control de icono
+   que se apoya en `--background`. Solo escribe algo el que vive sobre un card
+   —hoy el cierre del diálogo de consentimiento, que pasa `--background`—, o
+   sea, la excepción de verdad. Antes el defecto era `transparent` y los seis
+   call sites sobre `--background` repetían `[--icon-chrome-bg:var(--card)]`
+   a mano; el LinkedIn del footer se olvidó de escribirlo y se quedó SIN caja
+   en reposo, con el mismo aspecto en los dos temas que los demás tenían solo
+   por acordarse (P37.5989). El defecto no lo usaba nadie a propósito: era la
+   trampa donde caía el que no se acordaba.
+
+   Que viva aquí y no en una utilidad del punto de uso NO es de cascada —una
+   clase sin `@layer` sí gana a las utilidades,
    D34 se sostiene— sino de transición: con el reposo en `bg-card` y el hover
    aquí, `transition: background-color` dejaba el elemento clavado en el color
    de reposo y el hover no llegaba nunca (medido en Chrome; al quitar la
@@ -512,7 +513,7 @@
    instante). Los dos extremos de una transición tienen que pertenecer a la
    misma regla que la declara. Ver D35. */
 .icon-chrome {
-  background-color: var(--icon-chrome-bg, transparent);
+  background-color: var(--icon-chrome-bg, var(--card));
   transition: background-color 0.18s ease;
 }
 .icon-chrome:hover,

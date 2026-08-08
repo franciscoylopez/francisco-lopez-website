@@ -18,6 +18,27 @@ import { cva, type VariantProps } from "class-variance-authority";
 // documenta con fecha en BRAND.md (como ContactSecondary). Cambiar un hover pasa a
 // ser una línea aquí, y llega a todos los botones del sitio a la vez.
 //
+// CUÁNDO UNA ACCIÓN LLEVA ICONO (P37.5988). Una sola pregunta: ¿esto saca al
+// usuario de la página? Descargar un archivo, abrir otra aplicación (correo,
+// teléfono) o irse a otro sitio web → icono. Lo que ocurre dentro de la página
+// —aceptar, guardar, cerrar, elegir, filtrar, navegar por el sitio— va sin él.
+// Por eso «Escríbeme» y «Descargar CV» lo llevan en sus TRES apariciones cada uno,
+// y «Aceptar todo», «Gestionar preferencias» (abre un diálogo, no lleva a ningún
+// sitio), «Volver al inicio» y los grupos de pestañas no lo llevan en ninguna.
+//
+// El criterio mira la ACCIÓN, no la variante ni el sitio donde vive: el CV es una
+// descarga tanto en el nav como en Trayectoria, y hasta P37.5988 se veía de tres
+// formas distintas —sin icono en el nav, con icono en Trayectoria y en los canales
+// de contacto— porque cada punto de uso lo decidía por su cuenta.
+//
+// Lo mecánico lo resuelve este archivo, que es lo que impide que vuelva a
+// divergir: el TAMAÑO lo pone `size` (sm 16 · md 17 · lg 18 · icon 18; antes había
+// 15, 17 y 18 escritos a mano en cinco archivos) y la POSICIÓN la variante —el
+// icono se escribe SIEMPRE primero en el JSX y `solid` lo manda al otro lado, ver
+// SOLID_ICON—. En el call site no se escribe ni una clase: solo `<Download />`.
+// Queda fuera el enlace de contenido inline (`.link-content`): su afordancia es el
+// subrayado, y un glifo en medio de un párrafo rompe la línea base.
+//
 // Se exporta el `cva` y no un componente `<Action>` a propósito: la mitad de los
 // call sites son `<a>` (mailto, descargas, navegación) y la otra mitad `<button>`,
 // y forzar un wrapper con `render`/`asChild` solo añadiría indirección sin quitar
@@ -29,6 +50,14 @@ import { cva, type VariantProps } from "class-variance-authority";
 // comportamiento que ya tenía `.contact-cta` y que ahora hereda todo el sistema —
 // `bg-primary/90`, que es lo que decía BRAND.md, lo baja. Se corrigió la regla, no
 // el botón (P37.596).
+// OJO al tocar este archivo: las cadenas de clases tienen que estar ESCRITAS
+// ENTERAS y literales. Tailwind escanea el código fuente como texto plano, así que
+// una clase construida por interpolación (`hover:bg-[${MIX}]`) no la ve nadie y la
+// utilidad no llega a generarse: el elemento se queda sin hover, en silencio y sin
+// error de compilación. Pasó al implementar P37.5985 —se factorizó el color-mix a
+// una constante y se cayeron a la vez el hover del sólido y el del toggle—, y solo
+// se detectó midiendo el color pintado en el navegador. Repetir el literal es feo;
+// que el CTA insignia del sitio pierda el hover sin avisar, más.
 const SOLID =
   "bg-primary text-primary-foreground hover:bg-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))] focus-visible:bg-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))]";
 
@@ -37,20 +66,40 @@ const SOLID =
 const OUTLINE_NEUTRAL =
   "border-border bg-background text-foreground border hover:bg-muted focus-visible:bg-muted";
 
+// El icono del CTA sólido: DETRÁS de la etiqueta y avanzando 2px al interactuar.
+// Vive aquí y no en el call site por lo de siempre —el orden en el JSX es una
+// decisión que hay que acordarse de tomar— y porque era la última pieza del botón
+// repartida entre dos capas: el empujón lo ponía `.contact-cta` en globals.css, así
+// que lo tenía el email de la franja de contacto y NO lo tenía la demo de la página
+// que documenta esa misma variante. Los dos extremos de la transición van en el
+// mismo sitio que la declara (D35), y `motion-reduce` anula solo el movimiento.
+// El selector no encuentra nada en un sólido sin icono, así que es inocuo.
+const SOLID_ICON =
+  "flex-row-reverse [&_svg]:transition-transform [&_svg]:duration-200 hover:[&_svg]:translate-x-[2px] focus-visible:[&_svg]:translate-x-[2px] motion-reduce:[&_svg]:transition-none motion-reduce:hover:[&_svg]:translate-x-0 motion-reduce:focus-visible:[&_svg]:translate-x-0";
+
 export const actionVariants = cva(
   // Base. El radio es único para toda acción (`--radius-md`, 8px): antes convivían
   // 10px en consent/error y 8px en el resto sin que la diferencia significara nada.
   // El foco NO se declara aquí: lo pone la regla global `:focus-visible` de
   // globals.css (2px `--ring` + offset 2px). Ninguna variante lo sobrescribe — el
   // sitio tenía tres mecanismos de foco compitiendo.
-  "inline-flex shrink-0 items-center justify-center gap-[0.5rem] rounded-md font-semibold whitespace-nowrap no-underline transition-colors",
+  "inline-flex shrink-0 items-center justify-center gap-[0.5rem] rounded-md font-semibold whitespace-nowrap no-underline transition-colors [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         // La acción destacada de la pantalla. Hoy: el email de la franja de
         // contacto (métrica primaria, PRD §7), aceptar cookies y el primario de
         // las páginas 404/500.
-        solid: SOLID,
+        // `SOLID_ICON` va solo aquí y no en la constante `SOLID`: los estados
+        // encendidos de los `toggle-*` la reusan, y alguno lleva un glifo delante
+        // de la etiqueta (el de rejilla del Design System) que no hay que voltear
+        // ni empujar — es un indicador de estado, no el destino de un viaje.
+        // Se componen como ARRAY y no con una plantilla `${SOLID} ${SOLID_ICON}`:
+        // ambas formas funcionan (las clases están escritas enteras dentro de cada
+        // constante, que es lo que Tailwind necesita ver), pero una plantilla en
+        // este archivo se parece demasiado a la interpolación que ya tumbó el hover
+        // del sólido en silencio. Aquí no se escriben plantillas de clases, punto.
+        solid: [SOLID, SOLID_ICON],
         // Acción de contenido que vive sola, sin otro CTA al lado con el que
         // competir: Descargar CV, Gestionar preferencias, chips de descarga del
         // Brand Kit. Hover = el relleno cian pleno (BRAND.md).
@@ -93,15 +142,23 @@ export const actionVariants = cva(
         // Controles solo-icono del chrome (tema, hamburguesa, LinkedIn del footer,
         // cerrar diálogo). El hover de pastilla lo resuelve `.icon-chrome`, que ya
         // es sensible al fondo vía `--chrome-hover-bg` y declara reposo y hover en
-        // la misma regla (D35). Sobre `--background` el caller añade
-        // `[--icon-chrome-bg:var(--card)]` para que la caja se vea en reposo.
+        // la misma regla (D35). El fondo de REPOSO también sale de ahí y por
+        // defecto es `--card`, que es el caso común (el control se apoya en
+        // `--background`): en el call site no se escribe nada. Solo el que vive
+        // sobre un card pasa `[--icon-chrome-bg:var(--background)]` — hoy, el
+        // cierre del diálogo de consentimiento. Hasta P37.5989 el defecto era
+        // `transparent` y los seis call sites normales repetían el `--card` a
+        // mano; el LinkedIn del footer no lo escribió y se quedó sin caja.
         icon: "icon-chrome border-border text-foreground border",
       },
+      // El tamaño del icono va con el del texto y no lo escribe el call site
+      // (`[&_svg]`, sin `>` a propósito: el glifo puede ir envuelto). `shrink-0`
+      // en la base impide que se comprima cuando la etiqueta es larga.
       size: {
-        sm: "min-h-[44px] px-[0.85rem] text-[0.8rem]",
-        md: "min-h-[44px] px-[1.35rem] text-[0.92rem]",
-        lg: "min-h-[48px] px-[1.6rem] text-[1rem]",
-        icon: "min-h-[44px] min-w-[44px]",
+        sm: "min-h-[44px] px-[0.85rem] text-[0.8rem] [&_svg]:size-[16px]",
+        md: "min-h-[44px] px-[1.35rem] text-[0.92rem] [&_svg]:size-[17px]",
+        lg: "min-h-[48px] px-[1.6rem] text-[1rem] [&_svg]:size-[18px]",
+        icon: "min-h-[44px] min-w-[44px] [&_svg]:size-[18px]",
       },
       // Estado de las variantes `toggle-*`. Se ignora en el resto.
       on: { true: "", false: "" },
@@ -114,11 +171,20 @@ export const actionVariants = cva(
       // Apagado en la versión cian: TINTE en hover, no relleno — con el relleno,
       // hover y seleccionado se verían igual y el control dejaría de comunicar en
       // qué estado está (BRAND.md, fijado en P37.59).
+      //
+      // El tinte era `bg-primary/10` con el texto intacto, y era la ÚNICA excepción
+      // AAA del sistema: cian sobre un velo del propio cian da 6,35 claro / 6,98
+      // oscuro, y bajar el alfa tiene techo asintótico (pintar cian sobre cian no
+      // puede subir el contraste del cian). Lo que sí funciona es mover el TEXTO en
+      // vez del velo, con la misma mezcla que ya usa el sólido: 12% hacia
+      // `--foreground`. Con el velo al 8% da 7,21 claro / 7,80 oscuro — AAA en los
+      // dos temas, y el velo sigue siendo más perceptible que la pastilla `muted`
+      // que usa el resto de controles (ΔL* 4,7 vs 3,9 en claro). P37.5985.
       {
         variant: "toggle-primary",
         on: false,
         class:
-          "border-primary text-primary border bg-transparent hover:bg-primary/10 focus-visible:bg-primary/10",
+          "border-primary text-primary border bg-transparent hover:bg-[color-mix(in_oklab,var(--primary)_8%,transparent)] hover:text-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))] focus-visible:bg-[color-mix(in_oklab,var(--primary)_8%,transparent)] focus-visible:text-[color-mix(in_srgb,var(--primary)_88%,var(--foreground))]",
       },
       // Apagado en la versión neutra: es literalmente `outline-neutral`. Aquí el
       // hover SÍ puede ser la pastilla plena en vez de un tinte, porque `muted` no

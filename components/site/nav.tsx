@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Moon, Sun } from "lucide-react";
+import { Download, Menu, Moon, Sun } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
@@ -133,11 +133,17 @@ export function Nav({
             que <div> — evita un segundo landmark de navegación sin nombre único
             (el único <nav> es el del footer). */}
         <div className="flex items-center gap-1.5">
+          {/* Descarga un archivo → lleva icono (regla del icono, P37.5988). Era el
+              caso testigo del problema: el MISMO «Descargar CV» se veía de tres
+              formas —pelado aquí, con icono en Trayectoria y en los canales de
+              contacto— porque cada punto de uso lo decidía por su cuenta. El
+              tamaño lo pone `.link-chrome svg`, no esta clase. */}
           <a
             href={cvHref}
             download
-            className="text-foreground link-chrome hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap sm:inline-flex"
+            className="text-foreground link-chrome hidden min-h-[44px] items-center gap-[0.45rem] px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap sm:inline-flex"
           >
+            <Download aria-hidden="true" />
             {dict.downloadCv}
           </a>
           <a
@@ -165,10 +171,10 @@ export function Nav({
             onClick={() => setMenuOpen((o) => !o)}
             className={cn(
               actionVariants({ variant: "icon", size: "icon" }),
-              "[--icon-chrome-bg:var(--card)] sm:hidden",
+              "sm:hidden",
             )}
           >
-            <Menu className="size-[18px]" aria-hidden="true" />
+            <Menu aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -176,11 +182,12 @@ export function Nav({
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className={cn(
               actionVariants({ variant: "icon", size: "icon" }),
-              "ml-0.5 [--icon-chrome-bg:var(--card)]",
+              "ml-0.5",
             )}
           >
-            <Moon className="size-[18px] dark:hidden" aria-hidden="true" />
-            <Sun className="hidden size-[18px] dark:block" aria-hidden="true" />
+            {/* Sin tamaño a mano: lo pone `size: "icon"` de la variante. */}
+            <Moon className="dark:hidden" aria-hidden="true" />
+            <Sun className="hidden dark:block" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -192,8 +199,9 @@ export function Nav({
               href={cvHref}
               download
               onClick={() => setMenuOpen(false)}
-              className="text-foreground link-chrome inline-flex min-h-[44px] items-center text-[0.95rem] font-medium"
+              className="text-foreground link-chrome inline-flex min-h-[44px] items-center gap-[0.45rem] text-[0.95rem] font-medium"
             >
+              <Download aria-hidden="true" />
               {dict.downloadCv}
             </a>
             <a
