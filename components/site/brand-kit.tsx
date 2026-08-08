@@ -318,52 +318,50 @@ export function BrandKit({
               </div>
             </VariantCard>
 
-            {/* símbolo mono — negro/blanco, neutros al tema */}
-            <div className={cn(PANEL, "flex flex-col")}>
-              <div className="border-border flex min-h-44 border-b">
-                <div className="flex flex-1 items-center justify-center bg-white p-8">
-                  <Glyph variant="flat" h={66} mono="black" />
-                </div>
-                <div
-                  className="flex flex-1 items-center justify-center p-8"
-                  style={{ background: "#191D21" }}
-                >
-                  <Glyph variant="flat" h={66} mono="white" />
-                </div>
+            {/* Símbolo mono: DOS tarjetas, no una partida. Los assets mono son
+                neutros al tema y hasta P37.61 compartían un solo panel con la
+                previsualización dividida en blanco/negro y ocho chips en dos
+                filas etiquetadas. Era la única tarjeta de la fila escrita a mano
+                —las hermanas ya salían de VariantCard—, así que no heredó el
+                ensanchado de chips de P37.592 y sus dos filas se partieron en
+                cuatro. Separarlas borra la excepción en vez de afinarla: cada
+                una tiene la misma anatomía que sus hermanas (1 preview + SVG +
+                3 PNG) y la fila entera pasa a cuatro columnas. */}
+            <VariantCard
+              glyph={<Glyph variant="flat" h={96} mono="black" />}
+              name={t.logotipo.cards.symMonoNegro.name}
+              meta={t.logotipo.cards.symMonoNegro.meta}
+              surface="white"
+            >
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoSvg("simbolo-mono-negro")} tone="primary">
+                  {t.logotipo.cards.symMonoNegro.svg}
+                </Dl>
               </div>
-              <div className="flex flex-1 flex-col px-5 pt-[1.15rem] pb-[1.35rem]">
-                <div className="font-display text-[1.05rem] font-semibold">
-                  {t.logotipo.cards.symMono.name}
-                </div>
-                <p className="text-muted-foreground mt-1 mb-[0.9rem] text-[0.82rem]">
-                  {t.logotipo.cards.symMono.meta}
-                </p>
-                <div className="mt-auto flex flex-col gap-2">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-muted-foreground w-[3.1rem] flex-none text-[0.76rem] font-semibold">
-                      {t.logotipo.cards.symMono.negro}
-                    </span>
-                    <Dl href={monoSvg("simbolo-mono-negro")} tone="primary">
-                      SVG
-                    </Dl>
-                    <Dl href={monoPng("simbolo-mono-negro", 1024)}>1024</Dl>
-                    <Dl href={monoPng("simbolo-mono-negro", 512)}>512</Dl>
-                    <Dl href={monoPng("simbolo-mono-negro", 256)}>256</Dl>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-muted-foreground w-[3.1rem] flex-none text-[0.76rem] font-semibold">
-                      {t.logotipo.cards.symMono.blanco}
-                    </span>
-                    <Dl href={monoSvg("simbolo-mono-blanco")} tone="primary">
-                      SVG
-                    </Dl>
-                    <Dl href={monoPng("simbolo-mono-blanco", 1024)}>1024</Dl>
-                    <Dl href={monoPng("simbolo-mono-blanco", 512)}>512</Dl>
-                    <Dl href={monoPng("simbolo-mono-blanco", 256)}>256</Dl>
-                  </div>
-                </div>
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoPng("simbolo-mono-negro", 1024)}>PNG 1024</Dl>
+                <Dl href={monoPng("simbolo-mono-negro", 512)}>512</Dl>
+                <Dl href={monoPng("simbolo-mono-negro", 256)}>256</Dl>
               </div>
-            </div>
+            </VariantCard>
+
+            <VariantCard
+              glyph={<Glyph variant="flat" h={96} mono="white" />}
+              name={t.logotipo.cards.symMonoBlanco.name}
+              meta={t.logotipo.cards.symMonoBlanco.meta}
+              surface="ink"
+            >
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoSvg("simbolo-mono-blanco")} tone="primary">
+                  {t.logotipo.cards.symMonoBlanco.svg}
+                </Dl>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Dl href={monoPng("simbolo-mono-blanco", 1024)}>PNG 1024</Dl>
+                <Dl href={monoPng("simbolo-mono-blanco", 512)}>512</Dl>
+                <Dl href={monoPng("simbolo-mono-blanco", 256)}>256</Dl>
+              </div>
+            </VariantCard>
           </div>
 
           {/* Fila 2 — lockups */}
@@ -794,20 +792,45 @@ export function BrandKit({
 
 // --- Subcomponentes ---
 
+// Superficie de la previsualización. `card` sigue al tema (es la del PANEL);
+// `white` e `ink` NO conmutan a propósito — los assets mono son de una tinta pura
+// y hay que verlos sobre el fondo para el que existen, no sobre el del tema. Es
+// la excepción al «nunca hardcodees hex» de BRAND.md, y vive aquí, en la pieza,
+// justamente para que ningún call site tenga que repetirla ni decidirla.
+// El anillo interior no es adorno: sin él, en CADA tema uno de los dos platos
+// desaparece dentro de la tarjeta —el blanco mide 1,04 contra `--card` en claro y
+// el ink 1,11 en oscuro— y la tarjeta mono queda idéntica a la de al lado, que es
+// justo la que enseña otra cosa. Su color se toma del plato, no se fija: es el
+// `foreground` de su propio carril al 18%, el mismo patrón que la bolita del
+// switch (D30). Medido: 1,45 claro / 1,78 oscuro, contra el 1,29 / 1,23 que ya da
+// por bueno el `--border` del sitio sobre `--card`.
+const PREVIEW_SURFACE = {
+  card: "",
+  white: "bg-white shadow-[inset_0_0_0_1px_rgba(25,29,33,0.18)]",
+  ink: "bg-[#191D21] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]",
+} as const;
+
 function VariantCard({
   glyph,
   name,
   meta,
+  surface = "card",
   children,
 }: {
   glyph: React.ReactNode;
   name: string;
   meta: string;
+  surface?: keyof typeof PREVIEW_SURFACE;
   children: React.ReactNode;
 }) {
   return (
     <div className={cn(PANEL, "flex flex-col")}>
-      <div className="border-border flex min-h-44 items-center justify-center border-b p-8">
+      <div
+        className={cn(
+          "border-border flex min-h-44 items-center justify-center border-b p-8",
+          PREVIEW_SURFACE[surface],
+        )}
+      >
         {glyph}
       </div>
       <div className="flex flex-1 flex-col px-5 pt-[1.15rem] pb-[1.35rem]">
