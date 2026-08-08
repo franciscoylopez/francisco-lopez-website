@@ -73,6 +73,10 @@ puntos de entrada (routing, layout, `lib/`); cruza con `PRD-Live.md` / `PRD-Hist
 - El **archivado de tareas** del sprint que cierra (terminadas → Archivado; pendientes →
   "Sin empezar" del siguiente) sigue las reglas del tablero de `CLAUDE.md`; hazlo junto con
   esta revisión.
-- *(Futuro: podrían añadirse revisiones hermanas de Diseño y de Copy; esta cubre Desarrollo.)*
+- La revisión hermana de **Diseño** ya existe: skill `design-review` (cumplimiento del
+  sistema + expresión de marca, verificando en pantalla). Es de **disparo manual** hasta que
+  Francisco la valide, así que no se lanza sola al cerrar etapa — pero si esta revisión
+  encuentra drift visual o incoherencias de diseño, propónsela. *(Sigue pendiente una
+  hermana de Copy; esta cubre Desarrollo.)*
 
 Tablero de tareas y su data source: ver "Referencias rápidas" del skill `close-session`.

@@ -705,7 +705,8 @@ El de `muted-foreground` en claro fue el único que **no era gratis** —el gris
 > mal y viajó de aquí a `BRAND.md`, al Design System, al Brand Kit y a la página de
 > Accesibilidad. La segunda fila (7,44 sobre botón) también estaba mal: lo pintado eran
 > **7,28**, que es justo lo que decía `DECISIONS.md` D30. Corregido bajando el token a
-> `oklch(0.41 0.0886 194.82)`, que se pinta `#005859` y da **7,43:1 y 7,88:1**. El método
+> `oklch(0.41 0.0886 194.82)`, que se pinta `#005859` y da **7,43:1 y 7,88:1** *(re-medido en
+> P37.5985: **7,47 y 7,93** — centésimas, ningún veredicto cambia)*. El método
 > para medirlo sin equivocarse —los cianes de esta marca caen fuera del gamut sRGB y hay que
 > recortar antes de calcular— está en `BRAND.md` §Accesibilidad.
 
