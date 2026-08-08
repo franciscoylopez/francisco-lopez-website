@@ -889,9 +889,9 @@ ausencia de la propiedad, no por capas.
 **Decisión.** Si una clase de `globals.css` declara `transition: <prop>` y define el
 valor de `<prop>` en `:hover`/`:focus-visible`, **el valor de reposo también tiene que
 salir de esa misma clase** — no de una utilidad de Tailwind puesta en el mismo elemento.
-Cuando el valor de reposo lo aporta el caller, se pasa por variable con fallback
-(`background-color: var(--icon-chrome-bg, transparent)` y el caller trae
-`[--icon-chrome-bg:var(--card)]`), no por una utilidad `bg-*`.
+Cuando el valor de reposo depende del fondo sobre el que vive el control, se pasa por
+variable con fallback (`background-color: var(--icon-chrome-bg, var(--card))`), no por
+una utilidad `bg-*`.
 
 **Contexto.** Al construir `.icon-chrome` (P37.57) los controles solo-icono llevaban
 `bg-card` (utilidad) para el reposo y `.icon-chrome:hover` para la pastilla, con
@@ -921,6 +921,27 @@ reposo de esa propiedad lo declara la propia clase. Es el mismo tipo de fallo si
 que D34 (sin error de build ni warning, solo un estado que no se aplica) y se detecta
 igual: midiendo con `getComputedStyle` en el navegador, no leyendo el CSS. Complementa a
 D34: aquella dice *dónde* declarar; esta, *qué* hay que declarar junto.
+
+**Corolario — el defecto de un fallback es el caso común, no el neutro (2026-08-08,
+P37.5989).** La primera versión de esta regla puso **`transparent`** como fallback y dejó
+que **cada** caller escribiera `[--icon-chrome-bg:var(--card)]`. Seis lo escribieron y el
+séptimo —el LinkedIn del footer— se olvidó: se quedó sin caja en reposo, en los dos temas,
+y así estuvo tres semanas hasta que Francisco lo vio comparándolo con el toggle del nav.
+El fallback `transparent` **no lo usaba nadie a propósito**; era solo la trampa donde caía
+el que no se acordaba. Ahora el defecto es `--card` —el caso común, un control que se
+apoya en `--background`— y en el punto de uso no se escribe nada; solo escribe algo la
+excepción real: el cierre del diálogo de consentimiento, que vive sobre un card y pasa
+`--background`.
+
+La regla generalizable: **el valor por defecto de una variable con fallback tiene que ser
+el caso mayoritario, no el valor neutro.** El neutro parece la opción prudente porque no
+impone nada, pero convierte el caso normal en algo que hay que recordar — y multiplica por
+N las oportunidades de olvidarlo. Es la misma tesis que sostiene D36 y `BRAND.md`
+(«ningún control se escribe a mano»), aplicada al defecto de una variable CSS en vez de a
+una cadena de clases. Lo delator estaba **dos líneas más abajo en el mismo archivo**: el
+comentario que celebra que el suelo táctil de 44px del footer «ya no depende de que nadie
+se acuerde» (P37.595). Mismo elemento, mismo fallo, la lección aplicada a una propiedad y
+no a la de al lado.
 
 ---
 

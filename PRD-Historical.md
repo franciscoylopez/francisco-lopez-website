@@ -1060,6 +1060,22 @@ Antes de construir secciones nuevas, Francisco pidió una **auditoría de diseñ
 
 ---
 
+## 34. AAA sin excepciones y la regla del icono propio (2026-08-08)
+
+Tanda de cierre de los ajustes de diseño que dejó abiertos la auditoría (§33): cinco tareas, un solo deploy (`v1.4.0`).
+
+**Lo que entró.** La **última excepción AAA del sistema** —el hover del toggle apagado, que daba 6,35/6,98— sube a **7,21/7,80**, y el modo de conseguirlo importa más que la cifra: bajar el alfa del velo no servía porque tiene **techo asintótico** (pintar cian sobre cian no puede subir el contraste del cian; el máximo sin velo es 7,47), y el velo neutro que parecía la vía prometedora resultó ser **la peor de todas** al medirla. Lo que funcionó fue mover el **texto** en vez del velo, reusando una constante que ya existía (88/12, la del hover del sólido). Además: los tres botones del diálogo de consentimiento dejan de partirse en dos filas, la dirección de email de Accesibilidad pasa a ser un `mailto:`, y la **regla del icono entra en la variante** —se acaban las tres formas distintas de «Descargar CV» y los cuatro tamaños de glifo repartidos por cinco archivos—.
+
+**El icono propio, que era el trabajo de fondo.** lucide dejó de exportar iconos de marca por marca registrada, así que el LinkedIn se dibuja a mano — y se leía como una mancha sólida al lado del sol y la luna, a los mismos 18px y en la misma pastilla. No era el tamaño: metía **cinco carriles de 4 unidades en las 20 del área útil**, o sea contraformas de 2 unidades, 1,5px en pantalla. La «in» no cabe contorneada a ese grosor, así que ahora se dibuja **con** el trazo. De ahí sale lo que de verdad se entrega: la **regla de autoría de iconos propios** en `BRAND.md`, para el siguiente que haga falta.
+
+**Y un metro que se cayó al validarlo.** El candidato a norma era la densidad de tinta, y acompañaba: el icono roto era el más pesado de todos, 36,3% frente a la banda 14–32% de los lucide del sitio. Contrastado con un caso ya dado por bueno, se desmontó — **sobre su propia caja, `mail` pinta 45,8% y el icono roto 45,2%**, y `mail` se lee perfecto. La norma escrita acabó siendo el **hueco más estrecho**, que sí separa los dos casos. Es el mismo hábito que §33 estableció para el color (validar la herramienta contra pares publicados antes de creerse un hallazgo), aplicado por primera vez a una métrica de forma — y esta vez descartó la métrica, no el hallazgo.
+
+**Lo que encontró Francisco al revisar.** Que el LinkedIn del footer no tenía caja y el toggle del nav sí, **siendo la misma variante sobre la misma superficie**. La causa no era el footer sino el defecto: el fallback era `transparent`, los seis call sites normales escribían `--card` a mano y el séptimo se olvidó. Corregido en la variante, no en el footer. Queda como corolario de `DECISIONS.md` **D35**: *el valor por defecto de una variable con fallback tiene que ser el caso mayoritario, no el neutro* — el neutro parece prudente y lo que hace es convertir el caso normal en algo que hay que recordar.
+
+**Estado al cerrar.** `v1.4.0` en producción, verificada sobre el elemento real y sobre el CSS servido, en claro y oscuro. Quedan abiertas la skill `design-review` (siguiente en prioridad), y dos tareas nuevas que salieron del cierre: la alerta de Dependabot #15 —ReDoS en `hono`, transitiva de `shadcn` y **solo de desarrollo**, sin exposición en producción— y `format:check`, que está rojo en permanencia no por estilo sino por **finales de línea** (CRLF en el working tree contra el `endOfLine: lf` de Prettier); lanzar `prettier --write` habría producido un commit de 61 archivos sin un solo cambio real y que se revierte solo en el siguiente checkout.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
