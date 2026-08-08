@@ -95,7 +95,10 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   toggle apagado, se resolvió subiéndolo de 6,35/6,98 a 7,21/7,80 sin apagar la señal visual
   del hover— y **0 violaciones de axe** en las seis páginas, en claro y oscuro, incluido el
   diálogo de consentimiento. Las cifras publicadas se miden sobre el color que el
-  navegador pinta; el método está en `BRAND.md` §Accesibilidad.
+  navegador pinta; el método está en `BRAND.md` §Accesibilidad. **Re-verificadas el
+  2026-08-08** con un medidor independiente que reproduce al céntimo los ocho pares
+  publicados en los dos temas — las cifras que el sitio publica son fiables; lo que
+  quedaba desactualizado eran dos párrafos del propio `BRAND.md`, ya corregidos.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.
@@ -105,6 +108,12 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   Permissions-Policy, HSTS **y CSP «A+ barato»**: directivas base + allowlist GTM/GA4,
   manteniendo `'unsafe-inline'`; la CSP estricta con nonces va con la IA conversacional de
   V3). Detalle en `DECISIONS.md`.
+- **Revisiones recurrentes**: dos skills con mirada externa, para que la mejora no dependa
+  de acordarse — `sprint-review` (técnica, al cerrar etapa) y **`design-review`** (diseño:
+  cumplimiento del sistema + expresión de marca, verificando **en pantalla** y no solo en el
+  código; de disparo manual hasta validarla). La segunda nace de que cuatro incumplimientos
+  reales sobrevivieron a una auditoría por fallos de método, no de criterio, y su primer
+  disparo (2026-08-08) encontró seis cosas que ni axe ni el typecheck pueden ver.
 
 ## 6. CV en PDF
 
