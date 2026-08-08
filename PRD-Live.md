@@ -83,8 +83,11 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   control de icono— sale de `components/ui/action.tsx`, y las cajas y ritmos comunes de
   `components/site/layout.ts`. **Ninguno se escribe con clases sueltas**: si un caso no
   encaja en una variante, se crea la variante; la excepción se documenta con fecha. Es
-  lo que hace que un cambio de hover, de radio o del objetivo táctil llegue a todo el
-  sitio a la vez. Detalle en `BRAND.md` y `DECISIONS.md` D36.
+  lo que hace que un cambio de hover, de radio, del objetivo táctil, del icono que lleva
+  una acción o del fondo de reposo de un control solo-icono llegue a todo el sitio a la
+  vez. Los iconos son de **lucide**; los que lucide no trae —hoy LinkedIn— se dibujan a
+  mano siguiendo la **regla de autoría de iconos propios**, para que un icono del sitio
+  no se distinga de uno de la librería. Detalle en `BRAND.md` y `DECISIONS.md` D35/D36.
 - **No funcionales**: PageSpeed/Lighthouse **>90 desktop y móvil**; accesibilidad **AA
   de suelo, AAA objetivo**; **SEO + JSON-LD por página** como criterio de cierre.
   Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
