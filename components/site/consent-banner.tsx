@@ -1,5 +1,6 @@
 "use client";
 
+import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { DIALOG_ACTIONS } from "@/components/site/layout";
@@ -186,16 +187,7 @@ export function ConsentBanner({
               )}
             >
               {/* Sin `width`/`height`: el tamaño lo pone `size: "icon"`. */}
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
-                <path d="M18 6 6 18M6 6l12 12" />
-              </svg>
+              <X />
             </button>
           </div>
 

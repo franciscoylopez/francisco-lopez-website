@@ -1,3 +1,5 @@
+import { Check } from "lucide-react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
@@ -116,7 +118,7 @@ export function Accesibilidad({
                         "color-mix(in oklch, var(--primary), transparent 86%)",
                     }}
                   >
-                    <CheckIcon />
+                    <Check className="size-[15px]" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
@@ -244,24 +246,6 @@ function InfoCard({
   );
 }
 
-function CheckIcon() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
 // Composición del hero (decorativa, aria-hidden): tres piezas superpuestas que
 // ilustran de qué habla la página —una tarjeta de contraste medido, una checklist
 // con marcas, y una muestra del anillo de foco de 2px— con el mismo tratamiento de
@@ -311,7 +295,7 @@ function HeroComposition() {
                     "color-mix(in oklch, var(--primary), transparent 86%)",
                 }}
               >
-                <CheckIcon />
+                <Check className="size-[15px]" />
               </span>
               <div
                 className="bg-muted h-[0.32rem] rounded-full"

@@ -1,3 +1,5 @@
+import { Download, Info } from "lucide-react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
@@ -32,27 +34,6 @@ const favPair = (sz: number) => ({
 const monoSvg = (n: string) => `/logo-kit/svg/${n}.svg`;
 const monoPng = (n: string, sz: number) => `/logo-kit/png/${n}-${sz}.png`;
 
-// Sin `width`/`height`: el tamaño lo pone `size: "sm"` de la variante (antes eran
-// 15px escritos aquí, mientras el mismo icono medía 17 en Trayectoria y 18 en el
-// CTA de contacto).
-function DownloadIcon() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-      <path d="M7 10l5 5 5-5" />
-      <path d="M12 15V3" />
-    </svg>
-  );
-}
-
 // Chips de descarga. Salen de la capa de acción del sistema (P37.592), que ya trae
 // el objetivo táctil de 44px —punto 3 de la checklist que publica el propio Design
 // System; estos chips estaban a 40px hasta P37.59— y el par de hover correcto:
@@ -84,7 +65,7 @@ function Dl({
       download
       className={tone === "primary" ? DL_PRIMARY : DL_NEUTRAL}
     >
-      <DownloadIcon />
+      <Download />
       {children}
     </a>
   );
@@ -104,7 +85,7 @@ function DlThemed({
   return (
     <>
       <a href={pair.light} download className={cn(cls, "dark:hidden")}>
-        <DownloadIcon />
+        <Download />
         {children}
       </a>
       <a
@@ -112,7 +93,7 @@ function DlThemed({
         download
         className={cn(cls, "hidden dark:inline-flex")}
       >
-        <DownloadIcon />
+        <Download />
         {children}
       </a>
     </>
@@ -902,21 +883,11 @@ function Callout({
       className="border-border bg-card mt-8 flex max-w-[var(--measure)] items-start gap-[0.85rem] rounded-[var(--radius-md)] border px-[1.35rem] py-[1.15rem]"
       style={{ borderLeft: `3px solid ${color}` }}
     >
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
+      <Info
         stroke={color}
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="mt-[0.1rem] flex-none"
+        className="mt-[0.1rem] size-5 flex-none"
         aria-hidden="true"
-      >
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 16v-4M12 8h.01" />
-      </svg>
+      />
       <p className="text-foreground m-0 text-[0.92rem] leading-[1.6]">
         {children}
       </p>

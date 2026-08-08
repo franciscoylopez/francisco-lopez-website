@@ -1,3 +1,5 @@
+import { ArrowRight } from "lucide-react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
@@ -25,24 +27,6 @@ const LINK_CARD = cn(
   CARD,
   "group hover:bg-muted block px-[1.4rem] py-[1.2rem] transition-colors",
 );
-
-function ArrowIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M5 12h14M13 6l6 6-6 6" />
-    </svg>
-  );
-}
 
 // Enlaces a las páginas hermanas del sistema (Brand Kit · Design System ·
 // Accesibilidad). Compartido por las tres para que la relación se muestre desde
@@ -104,7 +88,7 @@ export function RelatedPages({
                 <span className="text-foreground flex items-center justify-between gap-2 text-[1rem] font-semibold">
                   {page.name}
                   <span className="text-muted-foreground transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5">
-                    <ArrowIcon />
+                    <ArrowRight className="size-[18px]" />
                   </span>
                 </span>
                 <p className="text-muted-foreground m-0 mt-[0.55rem] text-[0.9rem] leading-[1.55]">

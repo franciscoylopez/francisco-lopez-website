@@ -1,4 +1,4 @@
-import { Download, Mail } from "lucide-react";
+import { Check, Download, Mail, Menu, Moon } from "lucide-react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
@@ -45,56 +45,10 @@ function SectionHead({ num, title }: { num: string; title: string }) {
   );
 }
 
-function CheckIcon() {
-  return (
-    <svg
-      width="15"
-      height="15"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="3"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M20 6 9 17l-5-5" />
-    </svg>
-  );
-}
-
-// Glifos de la demo de chrome solo-icono (§08). Locales a la página: son la
-// ilustración del patrón, no los controles reales del nav (esos viven en Nav).
-function MoonGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      aria-hidden="true"
-    >
-      <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
-    </svg>
-  );
-}
-
-function MenuGlyph() {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      aria-hidden="true"
-    >
-      <path d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  );
-}
+// Marca de verificación de las listas de esta página. `size-[15px]` porque vive
+// dentro de una pastilla teñida de 26px y no sale de la capa de acción — no es un
+// control, es un adorno de contenido.
+const CHECK = "size-[15px]";
 
 export function DesignSystem({
   dict,
@@ -591,7 +545,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MoonGlyph />
+                        <Moon />
                       </a>
                       <a
                         href="#top"
@@ -601,7 +555,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MenuGlyph />
+                        <Menu />
                       </a>
                     </div>
                   )}
@@ -764,7 +718,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MoonGlyph />
+                        <Moon />
                       </a>
                       <a
                         href="#top"
@@ -774,7 +728,7 @@ export function DesignSystem({
                           size: "icon",
                         })}
                       >
-                        <MenuGlyph />
+                        <Menu />
                       </a>
                     </>
                   )}
@@ -910,7 +864,7 @@ export function DesignSystem({
                       "color-mix(in oklch, var(--primary), transparent 86%)",
                   }}
                 >
-                  <CheckIcon />
+                  <Check className={CHECK} />
                 </span>
                 <div className="flex-1">
                   <span className="text-muted-foreground font-mono text-[0.72rem]">
