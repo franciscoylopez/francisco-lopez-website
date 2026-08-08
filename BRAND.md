@@ -82,6 +82,13 @@ Cuando una pieza se apoya sobre un fondo que **cambia por tema y por estado**, n
 
 ### Ningún control se escribe a mano
 
+> **Caso particular de la «Regla de construcción» de `CLAUDE.md`** (2026-08-08), que
+> generaliza esto a todo lo que se construye —secciones, páginas, bloques— y añade el
+> paso de shadcn para widgets con estado, foco atrapado o portal. La cascada completa
+> vive **solo allí**; aquí queda el porqué específico de los controles. No se copia:
+> dos documentos afirmando la misma regla es exactamente lo que produjo el drift de
+> cuatro días de §Jerarquía de hover.
+
 **Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como `ContactSecondary` más arriba). No es burocracia: la auditoría de 2026-08-04 encontró **seis** definiciones distintas de «botón base» en seis archivos, dos radios, cuatro hovers para la misma variante y el suelo táctil de 44px reescrito catorce veces —del que el footer se había salido sin que nadie se enterara—, mientras `components/ui/button.tsx` llevaba desde el principio en el repo con cero usos.
 
 El motivo de fondo, que conviene recordar antes de escribir la siguiente regla: los **enlaces** son coherentes porque hicieron el recorrido completo —regla → clase CSS → sección publicada en el Design System → uso— y por eso son difíciles de incumplir sin querer. Los **botones** se quedaron en el primer paso, y había que acordarse de ellos. Una regla que hay que recordar es una regla que se incumple.
