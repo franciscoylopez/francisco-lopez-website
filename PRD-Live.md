@@ -74,9 +74,10 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
 
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 
-- **Stack / arquitectura**: Next 16 (App Router), TypeScript `strict`, Tailwind v4, shadcn/ui.
-  i18n nativo `app/[lang]`, diccionario tipado, cero strings hardcodeados. Detalle en
-  `README.md` y `DECISIONS.md`.
+- **Stack / arquitectura**: Next 16 (App Router), TypeScript `strict`, Tailwind v4, capa de
+  componentes propia. **shadcn/ui está configurado y sin usar**: entra solo para widgets con
+  estado, foco atrapado o portal, y hacia delante (D6). i18n nativo `app/[lang]`, diccionario
+  tipado, cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 - **Marca**: regla de dos capas (cian = único color de acción; morado decorativo con
   cuentagotas), tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 - **Capa de componentes**: todo elemento accionable —botón, chip, toggle, pestaña,
@@ -87,7 +88,10 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   una acción o del fondo de reposo de un control solo-icono llegue a todo el sitio a la
   vez. Los iconos son de **lucide**; los que lucide no trae —hoy LinkedIn— se dibujan a
   mano siguiendo la **regla de autoría de iconos propios**, para que un icono del sitio
-  no se distinga de uno de la librería. Detalle en `BRAND.md` y `DECISIONS.md` D35/D36.
+  no se distinga de uno de la librería. Los **widgets con estado, foco atrapado o portal**
+  (diálogo, popover, tabs) se traen de shadcn en vez de escribirse —misma forma que la regla
+  de iconos—, pero **hacia delante**: los que hoy están a mano funcionan, tienen 0 violaciones
+  de axe y no se reescriben. Detalle en `BRAND.md` y `DECISIONS.md` D6/D35/D36.
 - **No funcionales**: PageSpeed/Lighthouse **>90 desktop y móvil**; accesibilidad **AA
   de suelo, AAA objetivo**; **SEO + JSON-LD por página** como criterio de cierre.
   Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
