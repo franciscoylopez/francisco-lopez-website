@@ -1,3 +1,23 @@
+# Finales de línea: el repo es canónico en LF, también en el working tree de
+# Windows. Sin esto, core.autocrlf=true dejaba CRLF en disco mientras Prettier
+# (endOfLine: "lf" por defecto) esperaba LF, así que `format:check` reportaba 57
+# archivos "mal formateados" cuyo contenido era idéntico byte a byte salvo el
+# terminador. Un check en rojo permanente deja de ser una señal: tapa el fallo
+# real que venga detrás. La alternativa barata era endOfLine: "auto" en Prettier,
+# pero eso silencia el síntoma y deja los finales de línea sin gobernar.
+* text=auto eol=lf
+
+# Binarios: git los detecta solo, pero declararlos evita cualquier intento de
+# normalización sobre los assets de marca (el logo en PNG, el CV en PDF, las
+# fuentes) si alguna vez uno despista al autodetector.
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.woff binary
+*.woff2 binary
+
 # El export de Claude Design (design/*.dc.html) es la fuente de verdad del diseño
 # (ver DECISIONS.md D1): material de referencia, no código que se despliega. Se
 # marca como "documentation" para que GitHub/Linguist lo excluya de las
