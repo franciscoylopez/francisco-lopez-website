@@ -120,9 +120,32 @@ Las **decisiones** técnicas viven en `DECISIONS.md` (fuente de verdad; hay copi
 - **Objetivos no funcionales** (criterios de aceptación, no aspiraciones): PageSpeed/Lighthouse >90; desktop **y** mobile optimizados; accesibilidad AA de suelo, empujar AAA. `next/image` para imágenes, `next/font` para fuentes, minimizar JS de cliente.
 - **SEO y datos estructurados por página — criterio de cierre, no un extra.** Igual que el performance, la accesibilidad y el responsive, **al crear una página nueva** hay que resolver su SEO: metadata (title, description, `canonical`, `hreflang`, OG y Twitter por locale) **y el marcado JSON-LD de Schema.org que le corresponda por tipo** — p. ej. `BreadcrumbList` en páginas internas, enriquecer `Person`/`ProfilePage` en la home. Verificarlo con el **Schema Markup Validator** (tipos no elegibles para rich results, como `Person`) **y** la **Rich Results Test** (tipos elegibles, como `BreadcrumbList`), en ES y EN. URLs absolutas vía `SITE_URL` (`lib/site.ts`). Ver `DECISIONS.md` D14/D15.
 
+## Regla de construcción — nada nuevo se escribe a mano
+
+> Aplica a **todo lo que se construye**: una sección, una página, un bloque, un control. La regla de `BRAND.md` («ningún control nace de una cadena de clases inline») es el caso particular de esta.
+
+Antes de escribir markup nuevo, la cascada, en orden:
+
+1. **¿Existe ya la pieza?** — `components/ui/action.tsx` para todo lo accionable, `layout.ts` para cajas y ritmos (`WRAP`/`SECTION`/`CARD`/`PANEL`), los bloques de `components/site/`. → **Se usa.** No se replica su aspecto con clases sueltas.
+2. **¿No existe, pero el caso es del sistema?** → **Se crea la variante, no el caso.** Un botón que no encaja en ninguna variante no es un botón especial: es una variante que falta. Igual con un bloque que se va a repetir.
+3. **¿Es un widget con estado, foco atrapado o portal** (diálogo, popover, tooltip, combobox, menú, tabs)? → **Se trae de shadcn** y se le aplican nuestros tokens. El comportamiento de teclado y foco no se escribe a mano. *(Misma forma que la regla de iconos: «¿lucide lo trae? → no se dibuja».)*
+4. **¿Nada de lo anterior encaja?** → Lo decide Francisco y se **documenta con fecha** en `BRAND.md`.
+
+**Señal de alarma:** si estás escribiendo una cadena de más de ~4 clases utilitarias para algo accionable, o para una caja que aparece más de una vez, estás en el paso 1 sin haberlo mirado.
+
+**Al cerrar:** si el trabajo creó una variante o un bloque nuevo (paso 2), **se publica en el Design System antes de dar la tarea por hecha**. El recorrido completo —regla → componente → sección publicada → uso— es lo que hace que los enlaces sean difíciles de incumplir y lo que a los botones les faltaba.
+
+### Qué compra esto: la accesibilidad se hereda, no se vuelve a medir
+
+Con el gate cumplido, del checklist de 8 puntos de abajo solo hay que **verificar los que dependen del contenido**: **4** (un solo `h1`, jerarquía sin saltos), **5** (breadcrumb), **6** (nada codificado solo por color) y **8** (alternativas textuales). Esos los pone quien escribe la página, no el componente.
+
+Los otros cuatro —**1** contraste de los pares del sistema, **2** anillo de foco, **3** objetivo táctil de 44px, **7** `prefers-reduced-motion`— vienen dados por la pieza. Lo que se comprueba es que **se heredaron** (que el elemento sale de la variante), no se vuelven a medir. Y se comprueba **en pantalla**, no leyendo el JSX: es el punto 5 del método de `BRAND.md` §Accesibilidad («verifica la clase, no solo el color»), que existe justo porque una clase puede no estar aplicándose a nada sin dar error de compilación.
+
+**Se vuelve a medir solo si el trabajo introduce un par de color nuevo**, un fondo que no sea `--background`, o una animación propia. Ahí el punto 1 vuelve entero, con el método de `BRAND.md` §Accesibilidad.
+
 ## Checklist de accesibilidad — gate de cierre de cada página/sección
 
-Antes de dar por cerrada una página o sección, verificar los 8 puntos (es la lista que publica el propio Design System del sitio):
+Antes de dar por cerrada una página o sección, verificar los 8 puntos (es la lista que publica el propio Design System del sitio) — con la rebaja que permite la regla de construcción de arriba cuando todo sale de piezas existentes:
 
 1. **Contraste medido, con cifra, en ambos temas.** AA es el suelo; AAA siempre que se alcance sin coste visual. Verificar también los estados interactivos (hover/focus), no solo el reposo.
 2. **Foco visible:** anillo de 2px con `var(--ring)` y offset de 2px en todo elemento interactivo. Nunca `outline:none` sin sustituto.
