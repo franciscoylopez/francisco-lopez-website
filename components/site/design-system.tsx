@@ -6,7 +6,8 @@ import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
-import { CARD, PANEL, SECTION, WRAP } from "./layout";
+import { InfoCard } from "./info-card";
+import { CARD, PAIR, PANEL, SECTION, WRAP } from "./layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type DesignSystemDict = Dictionary["designSystem"];
@@ -758,36 +759,22 @@ export function DesignSystem({
           {/* La regla del icono se publica aquí, no solo en BRAND.md (P37.5988).
               Es el paso que faltaba: los enlaces son difíciles de incumplir porque
               hicieron el recorrido completo regla → clase → sección publicada →
-              uso, y esta parte del botón se había quedado en el primer paso. */}
-          <div
-            className={cn(CARD, "mt-8 max-w-[var(--measure)] px-[1.4rem] py-5")}
-          >
-            <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
-              {t.botones.iconTitle}
-            </h3>
-            <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
-              {t.botones.iconRule.map((r) => (
-                <li key={r}>{r}</li>
-              ))}
-            </ul>
-            <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
-              {t.botones.iconFoot}
-            </p>
-          </div>
-          <div
-            className={cn(CARD, "mt-4 max-w-[var(--measure)] px-[1.4rem] py-5")}
-          >
-            <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
-              {t.botones.ruleTitle}
-            </h3>
-            <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
-              {t.botones.rule.map((r) => (
-                <li key={r}>{r}</li>
-              ))}
-            </ul>
-            <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
-              {t.botones.ruleFoot}
-            </p>
+              uso, y esta parte del botón se había quedado en el primer paso.
+
+              Las dos notas van en PAIR, no apiladas a la medida de lectura: son
+              dos reglas hermanas —cuándo lleva icono, y que ninguna se escribe a
+              mano— y apiladas dejaban media sección vacía a la derecha (P37.62). */}
+          <div className={cn(PAIR, "mt-8")}>
+            <InfoCard
+              title={t.botones.iconTitle}
+              bullets={t.botones.iconRule}
+              foot={t.botones.iconFoot}
+            />
+            <InfoCard
+              title={t.botones.ruleTitle}
+              bullets={t.botones.rule}
+              foot={t.botones.ruleFoot}
+            />
           </div>
         </div>
       </section>
@@ -935,17 +922,6 @@ function Stat({
       <div className="text-muted-foreground mt-[0.35rem] text-[0.85rem]">
         {label}
       </div>
-    </div>
-  );
-}
-
-function InfoCard({ title, body }: { title: string; body: string }) {
-  return (
-    <div className={cn(CARD, "p-5")}>
-      <h3 className="font-display m-0 mb-2 text-[1rem] font-semibold">
-        {title}
-      </h3>
-      <p className="text-muted-foreground m-0 text-[0.88rem]">{body}</p>
     </div>
   );
 }

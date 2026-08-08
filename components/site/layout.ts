@@ -40,6 +40,20 @@ export const CARD = "border-border bg-card rounded-lg border";
 export const PANEL = "border-border bg-card overflow-hidden rounded-xl border";
 
 /**
+ * Fila de DOS tarjetas. Columnas explícitas, no `auto-fit`: un par es una pareja
+ * —split/plano, mono negro/mono blanco, las dos notas de una sección— y no debe
+ * romperse porque en la caja quepan tres. Es también la unidad de reveal, para que
+ * las dos entren juntas.
+ *
+ * Existe porque dos tarjetas apiladas a `max-w-[var(--measure)]` dentro de una
+ * sección a ancho completo dejan media pantalla vacía a la derecha y hacen crecer
+ * la página en vertical sin motivo (P37.62), y porque repartir seis tarjetas en
+ * 4 + 2 estrecha tanto la primera fila que sus chips saltan de línea (P37.61).
+ */
+export const PAIR =
+  "grid grid-cols-1 items-stretch gap-[var(--gutter)] md:grid-cols-2";
+
+/**
  * Grupo de acciones de un diálogo: apiladas y a ancho completo, con la principal
  * abajo. NO es una fila que se parte cuando no cabe.
  *

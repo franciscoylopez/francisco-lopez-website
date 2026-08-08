@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { LinkedinIcon } from "./icons";
-import { CARD, PANEL, SECTION, WRAP } from "./layout";
+import { CARD, PAIR, PANEL, SECTION, WRAP } from "./layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type BrandKitDict = Dictionary["brandKit"];
@@ -122,19 +122,6 @@ function Glyph({
     </span>
   );
 }
-
-// Fila de DOS tarjetas de variante. Columnas explícitas, no `auto-fit`: cada par
-// es una unidad de sentido —split/plano, mono negro/mono blanco, los dos lockups—
-// y un par no debe romperse porque en la caja quepan tres. Es también la unidad de
-// reveal, para que las dos entren juntas.
-//
-// Antes eran dos rejillas `auto-fit` que repartían 4 + 2. Con seis tarjetas eso
-// dejaba la primera fila a cuatro columnas de 302px, tan estrechas que los chips
-// de PNG saltaban a una tercera línea que sus hermanas no tenían, y el reparto
-// desigual se leía como un descuadre. A dos columnas caben los tres PNG en una
-// línea y las filas dicen algo.
-const CARD_PAIR =
-  "grid grid-cols-1 items-stretch gap-[var(--gutter)] md:grid-cols-2";
 
 // Tipografía de sección, propia de esta página. Las cajas y los ritmos comunes
 // (WRAP / SECTION / PANEL) vienen de `./layout`: lo que aquí se llamaba `CARD` era
@@ -289,7 +276,7 @@ export function BrandKit({
           </div>
 
           {/* Fila 1 — símbolo split / plano */}
-          <div data-reveal className={cn(CARD_PAIR, "mb-[var(--gutter)]")}>
+          <div data-reveal className={cn(PAIR, "mb-[var(--gutter)]")}>
             <VariantCard
               glyph={<Glyph variant="split" h={96} />}
               name={t.logotipo.cards.symSplit.name}
@@ -337,7 +324,7 @@ export function BrandKit({
               sus dos filas se partieron en cuatro. Separarlas borra la excepción
               en vez de afinarla, y ponerlas en el MISMO par conserva lo que el
               panel partido sí hacía bien: enseñar las dos tintas juntas. */}
-          <div data-reveal className={cn(CARD_PAIR, "mb-[var(--gutter)]")}>
+          <div data-reveal className={cn(PAIR, "mb-[var(--gutter)]")}>
             <VariantCard
               glyph={<Glyph variant="flat" h={96} mono="black" />}
               name={t.logotipo.cards.symMonoNegro.name}
@@ -376,10 +363,7 @@ export function BrandKit({
           </div>
 
           {/* Fila 3 — lockups */}
-          <div
-            data-reveal
-            className={cn(CARD_PAIR, "mb-[clamp(3rem,6vw,5rem)]")}
-          >
+          <div data-reveal className={cn(PAIR, "mb-[clamp(3rem,6vw,5rem)]")}>
             <VariantCard
               glyph={<Lockup variant="split" />}
               name={t.logotipo.cards.lockSplit.name}

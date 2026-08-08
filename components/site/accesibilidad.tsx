@@ -4,6 +4,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { InfoCard } from "./info-card";
 import { CARD, SECTION, WRAP } from "./layout";
 import { EmailCta } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
@@ -216,32 +217,6 @@ function Stat({ value, label }: { value: string; label: string }) {
       <div className="text-muted-foreground mt-[0.35rem] text-[0.85rem]">
         {label}
       </div>
-    </div>
-  );
-}
-
-function InfoCard({
-  title,
-  body,
-  mono,
-}: {
-  title: string;
-  body: string;
-  mono?: boolean;
-}) {
-  return (
-    <div className={cn(CARD, "p-5")}>
-      <h3
-        className={cn(
-          "text-foreground m-0 mb-2 text-[1rem] font-semibold",
-          mono ? "font-mono text-[0.95rem]" : "font-display",
-        )}
-      >
-        {title}
-      </h3>
-      <p className="text-muted-foreground m-0 text-[0.88rem] leading-[1.6]">
-        {body}
-      </p>
     </div>
   );
 }
