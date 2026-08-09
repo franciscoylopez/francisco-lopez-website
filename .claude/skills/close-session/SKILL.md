@@ -26,7 +26,8 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 | **Registro histórico** de producto / diseño / alcance | `PRD-Historical.md` | Solo repo (sin espejo) |
 | Decisión técnica / de implementación | `DECISIONS.md` (formato ADR-lite) | Solo repo (sin espejo; **a demanda vía Read/Grep, NO `@`-importado** — D28). **D-entry nuevo → su línea al índice de `CLAUDE.md`** |
 | Convención que aplica en adelante | `CLAUDE.md` | — (se `@`-importa, se carga cada sesión) |
-| Regla de identidad / marca (core) | `BRAND.md` | — (se `@`-importa) |
+| Regla de identidad / marca (core), en presente | `BRAND.md` | — (se `@`-importa) |
+| Porqué fechado de una regla de marca (qué se probó, qué falló) | `BRAND-historical.md` | — (**a demanda**, NO `@`-importado — D28) |
 | Detalle exhaustivo del logo (tabla de uso, umbrales split→flat, proporciones, rationale) | `BRAND-logo.md` | — (**a demanda**, NO `@`-importado — D28) |
 | Overview / stack / estructura / scripts / capacidades nuevas | `README.md` | GitHub. Mantenido al día, **no** es un one-off |
 | Progreso, estados y prioridades de tareas | Tablero Notion "Tareas — Web personal" | [Tablero](https://app.notion.com/p/f3ee9a949c58482888423d5917087962) · vista [MoSCoW](https://app.notion.com/p/3a62caec08be81989325c9fce678de5b) |
@@ -40,7 +41,7 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
   página de Notion. *(El espejo de Decisions y el del PRD histórico se retiraron el 2026-07-30.)*
 - No dupliques: cada cosa en su documento. **Estado** de producto → `PRD-Live.md`;
   **histórico** de decisiones de producto → `PRD-Historical.md`; técnica → `DECISIONS.md`;
-  convención → `CLAUDE.md`; marca (core) → `BRAND.md`; detalle del logo → `BRAND-logo.md`.
+  convención → `CLAUDE.md`; marca (core) → `BRAND.md`; el porqué fechado de esa regla → `BRAND-historical.md`; detalle del logo → `BRAND-logo.md`.
 - **Fechas relativas → absolutas** (p. ej. "hoy" → la fecha real).
 - Si algo es ambiguo (¿PRD o DECISIONS? ¿cambia una decisión previa, que se marca
   *Revertida* y se enlaza la nueva?), **pregúntale a Francisco** antes de escribir.
@@ -52,7 +53,7 @@ nada ni escribes de más.
 
 ## Paso 3 · Aplica
 1. **Repo**: edita `PRD-Live.md` / `PRD-Historical.md` / `DECISIONS.md` / `README.md` /
-   `CLAUDE.md` / `BRAND.md` / `BRAND-logo.md` según lo acordado. **Si añadiste un D-entry
+   `CLAUDE.md` / `BRAND.md` / `BRAND-historical.md` / `BRAND-logo.md` según lo acordado. **Si añadiste un D-entry
    nuevo a `DECISIONS.md`, añade también su línea al índice de `CLAUDE.md`** (D28): el
    índice es lo único que se carga en cada arranque, así que una decisión que no está en
    él es una decisión que nadie sabrá que existe para ir a leerla.
