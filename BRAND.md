@@ -39,6 +39,24 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
      texto grande en ambas direcciones de tema. Úsalo solo ahí — como acento de texto grande
      (≥3:1, no como texto corrido ≥4.5:1). Fuera de ese contexto, `brand-purple`.
 
+### El atenuado lo pone la superficie, no el punto de uso
+
+`--muted-foreground` está calibrado contra `--background` **y solo contra él**. Encima de
+cualquier otra superficie hay que recalcularlo, nunca reusarlo — es **D30**, y desde el
+2026-08-09 **ya no hay que acordarse**: la utilidad `text-muted-foreground` resuelve al
+atenuado del fondo donde cae, porque cada superficie redefine `--surface-dim` mezclando el
+texto un **85% hacia el fondo que tiene debajo** (D39).
+
+Lo que hay que saber al escribir UI:
+
+- **No se elige el color del texto atenuado.** Se escribe `text-muted-foreground` y ya. Dentro
+  de una tarjeta pesa más que fuera, y eso es correcto: es lo que hace falta para que se lea.
+- **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix` en vez de la utilidad—,
+  tiene que declarar a qué familia pertenece con `data-surface="card" | "muted" | "inverted" |
+  "page"`. Sin eso la capa no puede verlo, y ahí es donde se escaparon cuatro pares.
+- **Los pasteles siguen sin ser superficie de texto.** Esto resuelve los grises del sistema, no
+  convierte un `*-soft` en fondo legible.
+
 ### Enlaces: depende de si son contenido o chrome
 
 - **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en
@@ -103,7 +121,7 @@ un color: hay que derivarlo del fondo que tiene debajo. **Ningún token que conm
 lo arregla** — se comprobó con la bolita del switch de consentimiento, que es el caso de
 referencia. La regla que sí funciona: **la pieza es el `foreground` de su propio carril**
 —`--foreground` sobre el carril apagado (`--muted`), `--primary-foreground` sobre el encendido
-(`--primary`)—. Mismo patrón que `--contact-dim` y `--chrome-hover-bg` (D30).
+(`--primary`)—. Mismo patrón que `--surface-dim` y `--chrome-hover-bg` (D30, D39).
 
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
@@ -122,9 +140,11 @@ Una **etiqueta** (la pastilla no interactiva que rotula un título, una fila o u
 preferencia estética: es lo único que llega a AAA. Con el texto teñido sobre su propio velo
 **no hay alfa que lo salve** — es el techo asintótico de D30.
 
-Y en la **neutra**, el texto tampoco puede ser el `muted-foreground` del sistema, que está
-calibrado contra `--background`: encima de la pastilla cae a AA. Se mezcla un **85% hacia su
-propio fondo**, la misma fórmula de `--contact-dim` (D30).
+Y en la **neutra**, el texto tampoco puede ser el `muted-foreground` calibrado contra
+`--background`: encima de la pastilla caería a AA. Ya no hace falta pedirlo —desde el
+2026-08-09 la pastilla escribe `text-muted-foreground` y el **85% hacia su propio fondo** lo
+resuelve la superficie (§El atenuado lo pone la superficie, D39)—, pero el valor es el mismo
+píxel que antes se escribía a mano.
 
 ### Cuándo una acción lleva icono
 

@@ -793,11 +793,20 @@ plan B; en Accesibilidad el bloque *es* el canal de reporte y no hay otro camino
 `cvValue`, que morían con la lista de filas.
 
 ## D30 · Texto atenuado sobre fondos que no son `--background` — 2026-08-03
+
+> **GENERALIZADA POR [D39](#d39--el-atenuado-lo-resuelve-la-superficie-no-el-punto-de-uso--2026-08-09) (2026-08-09).** La regla de aquí es correcta y sigue vigente;
+> lo que cambia es **quién la aplica**. Dejó de escribirse en el punto de uso —el
+> `--contact-dim` de abajo ya no existe— y la resuelve el token `--surface-dim`, que cada
+> superficie redefine. Motivo: esta decisión nunca llegó a `--card`, la superficie
+> no-`--background` más común del sitio, y ahí el par daba 6,40:1 en oscuro. **Una regla que
+> hay que acordarse de aplicar es una regla que se incumple.**
+
 **Decisión.** `--muted-foreground` (y cualquier atenuado calibrado contra `--background`) **no
 se usa sobre una banda o tarjeta de color**. Sobre un fondo distinto hay que **recalcular**, y
 el patrón por defecto es **mezclar el texto con el propio fondo** en vez de tirar del token:
 
 ```css
+/* Forma original (2026-08-03). Hoy la escribe la superficie, no el call site — D39. */
 :root            { --contact-dim: var(--muted-foreground); }
 .contact-band    { --contact-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted)); }
 ```
@@ -1119,9 +1128,10 @@ resuelve.
 (`@/components/ui/layout`); dentro del mismo directorio, relativa (`./layout`). Antes
 convivían las dos formas para el mismo fichero.
 
-**La escalera completa, cerrada el 2026-08-09 (P37.65 y P37.655).** La capa de componentes
-no era `action.tsx` + `layout.ts`: eran los dos primeros peldaños de cuatro, y los otros dos
-se descubrieron por el mismo síntoma —la misma decisión escrita a mano N veces—.
+**La escalera completa, cerrada el 2026-08-09 (P37.65, P37.655 y P37.658).** La capa de
+componentes no era `action.tsx` + `layout.ts`: eran los dos primeros peldaños de **seis**, y
+los demás se descubrieron todos por el mismo síntoma —la misma decisión escrita a mano N
+veces—.
 
 | Capa | Archivo | Qué gobierna | Cuántas copias sustituyó |
 |---|---|---|---|
@@ -1129,7 +1139,12 @@ se descubrieron por el mismo síntoma —la misma decisión escrita a mano N vec
 | Chrome | `chrome.tsx` | el enlace de la **carpintería** | 14 call sites con métricas a mano |
 | Etiqueta | `badge.tsx` | el rótulo que **no se pulsa** | 8 pastillas en 6 archivos |
 | Cabecera | `heading.tsx` | eyebrow + titular | eyebrow ×14, título ×7, 6 huecos |
+| Tabla | `table.tsx` | la rejilla de **filas y celdas** | 4 cabeceras y 6 paddings de fila |
 | Layout | `layout.ts` | cajas y ritmos | `WRAP` ×18, `SECTION` ×8 |
+
+*(La sexta, `table.tsx`, se añadió el 2026-08-09 — **D40**. Llegó la última porque su
+síntoma vivía repartido entre tres páginas, una de ellas la política de cookies, que nadie
+mira cuando audita el sistema de diseño.)*
 
 **Dónde cae cada pieza se decide con DOS preguntas, no por parecido.**
 
@@ -1313,3 +1328,135 @@ cosa**, no una auditoría. Nadie los contaba como copias de un token porque son 
 color, y ninguna herramienta compara un párrafo con el píxel que tiene al lado. La lección
 práctica: **al inventariar copias de un valor, buscar también las que están escritas en
 prosa**, no solo las que pintan.
+
+---
+
+## D39 · El atenuado lo resuelve la superficie, no el punto de uso — 2026-08-09
+
+**Decisión.** `text-muted-foreground` deja de significar «este color» y pasa a significar
+**«el atenuado del fondo donde caiga este texto»**. Lo resuelve un token, `--surface-dim`,
+que la utilidad lee a través de `@theme inline`, y que cada superficie redefine con la
+fórmula de D30 —el texto mezclado un **85% hacia el fondo que tiene debajo**—:
+
+| Superficie | Cómo se declara | Claro | Oscuro |
+|---|---|---|---|
+| `--background` | `:root`, `.bg-background`, `[data-surface="page"]` | 7,10 | 7,12 |
+| `--card` / `--popover` | `.bg-card`, `.bg-popover`, `[data-surface="card"]` | 9,14 | 10,32 |
+| `--muted` / `--secondary` / `--accent` | sus utilidades, `[data-surface="muted"]` | 8,17 | 9,17 |
+| invertida (fondo `--foreground`) | `[data-surface="inverted"]` | 10,32 | 9,89 |
+
+**Contexto.** D30 existía desde el 2026-08-03 y era correcta, pero **nunca se aplicó a
+`--card`**, que es la superficie no-`--background` más común del sitio: 11 elementos solo en
+la home y al menos uno en cada una de las seis páginas. El par daba **6,40:1 en oscuro** —
+falla AAA— y sobre `--muted` 5,59. La asimetría es la parte que hay que entender: `--card` es
+más claro que `--background` en los DOS temas, así que en claro se aleja del texto oscuro (el
+contraste sube) y en oscuro se acerca al texto claro (baja). La misma jerarquía de
+superficies ayuda en un tema y estorba en el otro, y por eso no existe un token fijo que
+sirva para las dos.
+
+La regla ya estaba resuelta **dos veces por separado** —`--contact-dim` para la franja de
+contacto (P37.55) y un `color-mix` escrito a mano dentro de la etiqueta neutra (P37.655)—,
+las dos con la misma fórmula y ninguna cubriendo `--card`.
+
+**Por qué en el token y no en una clase.** `.contact-dim` había que escribirla en el punto de
+uso, así que **solo protegía a quien se acordaba**, y el sitio tiene 141 usos de
+`text-muted-foreground`. Con el token, la utilidad de siempre resuelve al color correcto por
+el mero hecho de estar dentro de la superficie, y una tarjeta nueva nace bien sin pedirlo.
+Es la forma concreta que toma aquí el objetivo del bloque: **que la accesibilidad se herede**.
+
+**Detalle de cascada que hay que saber para tocarlo.** `@theme inline` sustituye el token al
+compilar, así que `text-muted-foreground` compila a `color: var(--surface-dim)` y basta con
+redefinir esa variable en la superficie. **Redefinir `--muted-foreground` NO funcionaría**: el
+valor de una custom property se hereda ya sustituido, así que el descendiente vería el que se
+resolvió en `:root`.
+
+**`data-surface`, y por qué hizo falta.** La regla enganchada a la CLASE no ve las superficies
+que un elemento **se pinta a sí mismo**. Cuatro velos translúcidos escritos a mano —el chip
+numerado de «Cómo trabajo», la fila cebra de tipografía, la sección del esqueleto y el panel
+de tokens invertido— son la misma superficie sin llevar su utilidad, y se quedaban fuera con
+6,62–6,80 (el invertido, con **4,33 en oscuro, por debajo de AA**). El atributo declara a qué
+**familia** pertenece lo que ese elemento se pinta. Es el fallo de disparador de `BRAND.md`
+§Cómo se escribe una regla, cobrándose otra pieza: la condición miraba a la clase y la cosa
+ocurría en el estilo inline.
+
+**Consecuencias, las tres por consumir la fuente única.** Se retiran `--contact-dim` y
+`.contact-dim`; la etiqueta `neutral` deja su `color-mix` propio y usa `text-muted-foreground`
+(mismo píxel); y `eyebrowVariants` **pierde el eje `tone`**, porque `muted` y `band` pasaron a
+pintar igual y dos nombres para una sola cosa es como empieza el drift. La sección del Design
+System que documentaba ese eje enseña ahora el mecanismo que lo sustituye: el mismo rótulo,
+sin prop, sobre dos fondos distintos.
+
+**Por qué no se eligió un porcentaje por superficie.** Se calculó: apuntar a paridad de ratio
+(~7,5 en todas) exige cuatro constantes distintas, una por superficie y tema, y cada una hay
+que re-derivarla si cambia un token. El 85% es **relativo**, así que se ajusta solo al tema
+—en claro oscurece, en oscuro aclara— y es además la fórmula que ya publicaban la franja de
+contacto y la etiqueta neutra: adoptarla deja **una** regla en el sistema en vez de dos que
+se parecen. El coste aceptado es que el atenuado dentro de una tarjeta pesa más que fuera.
+
+**Estado.** Aplicado en las seis páginas. Censo del DOM sin ningún par bajo AAA en home,
+Sobre mí, Design System, Accesibilidad y Cookies, en claro y oscuro. Las cifras publicadas
+viven en `lib/design-values.ts` (D38): `mutedForeground`, `mutedOnCard`, `badgeNeutral` y
+`mutedOnInverted`, y la tabla del Design System pasa a publicar **trece** pares.
+
+---
+
+## D40 · Capa de tabla: `components/ui/table.tsx` — 2026-08-09
+
+**Decisión.** Ninguna tabla se maqueta en el punto de uso. `DataTable` + `TR` + `TD` para las
+tablas de **datos** —marcado real, con `caption`, `th scope="col"`, `th scope="row"` y
+`colgroup`— y `SPECIMEN_ROW` para las de **espécimen**, que se quedan en divs. **Un solo
+separador de fila en el sistema: el filete.** Un solo padding: **un gutter** —medio por lado
+entre columnas, uno entero contra el borde del panel—.
+
+**Contexto.** Sexta capa, y la última que quedaba con la forma que tuvieron el botón, el
+chrome, la etiqueta y la cabecera: **seis** tablas con **cuatro** definiciones distintas de
+fila de cabecera divergiendo en siete propiedades (layout, gap, padding lateral, padding
+vertical, tracking, peso y fondo), seis paddings de fila distintos y la plantilla de columnas
+escrita **dos veces por tabla** —cabecera y fila— y mantenida a mano para que coincidiera.
+
+**El inventario contó cinco, y eso es en sí el argumento de la capa.** Se hizo mirando el
+Design System y el Brand Kit, porque son las páginas que documentan el sistema; la sexta —la
+de la política de cookies, con su cuarta cabecera y sus `Th`/`Td` locales— estaba en la
+página que nadie asocia con diseño.
+
+**Por qué marcado real y no divs con grid.** No es cosmética: la de «Contraste medido» son
+trece filas por tres columnas de datos numéricos, y en divs un lector de pantalla no asocia
+celda con columna —se oye «13,79:1 AAA 15,32:1 AAA» sin saber cuál es el tema claro y cuál el
+oscuro—. **axe no lo marca**, porque un div no es una tabla rota: simplemente no es una tabla,
+y eso ninguna herramienta puede echarlo de menos. Las de espécimen se quedan en divs **a
+propósito**: cada metadato ya trae su etiqueta al lado (`TypeMeta`), así que son pares
+etiqueta-valor y no celdas que dependan de una cabecera para significar algo.
+
+**La pregunta de D36, que era condición de la tarea: ¿cebra y filete significan cosas
+distintas?** La hipótesis de partida —«la cebra ayuda cuando la fila es alta y hay muchas
+columnas»— no sobrevive al inventario: la «Tabla de uso» tiene cinco columnas y no la lleva.
+Se probó un eje mejor —la FORMA de la fila, un renglón de celdas frente a un bloque que se
+envuelve—, y bajo esa lectura la cebra se quedaba y se le daba también a Cabeceras.
+
+**Y entonces se midió, y la respuesta se dio la vuelta.** El velo daba un salto de **ΔL\* 1,02
+en claro** y 2,02 en oscuro, contra los **3,89 / 9,04** de la pastilla de hover, que es el
+escalón que este proyecto usa como referencia de «esto se ve» (`BRAND.md` §Cómo medir, punto
+4). La banda no agrupaba filas —su única justificación—: ponía un tinte **por debajo del
+umbral**, y por eso se leía como que algo no cuadraba en vez de como estructura. Subirla habría
+exigido construirla sobre `--muted`: superficie nueva, atenuado recalculado y par nuevo en el
+censo, para hacer un trabajo que el filete ya hacía.
+
+> **La lección, que es lo reutilizable: un argumento de diseño bien construido sigue siendo
+> una hipótesis hasta que se mide.** El de la forma de la fila era correcto en su
+> razonamiento y falso en su premisa —daba por hecho que la banda se veía—.
+
+**Dos cosas que solo se vieron en pantalla, ninguna detectada por herramienta:**
+
+1. `<th>` viene en **negrita y centrado** de la hoja del navegador, y al pasar a marcado real
+   eso se coló en las notas de cada fila, que ya tenían su peso decidido. Lo neutraliza la
+   capa: la semántica la elige `head`, el aspecto lo pone la variante.
+2. El padding lateral usaba `--page-x` (40px) en los extremos, heredado de las tablas con
+   rejilla del Design System, donde no se nota porque ocupan el ancho de página. Dentro de
+   `PROSE` (42rem) esos 80px se comían casi un cuarto de la tabla de cookies y su columna de
+   finalidad partía las frases en **dos palabras por línea** — peor que la tabla vieja, que
+   llevaba `px-4`. De ahí el gutter. `DataTable` recupera además el `minWidth` que la tabla
+   vieja tenía (`min-w-[34rem]`) y se había perdido al migrarla.
+
+**Publicado** como sección **(12) «Tablas»** del Design System, con la tabla de datos
+demostrada por una tabla real (Regla de construcción de `CLAUDE.md`). Accesibilidad pasa a
+(13) y Esqueleto a (14).
