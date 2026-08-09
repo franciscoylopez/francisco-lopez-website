@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { SECTION, WRAP } from "@/components/ui/layout";
+import { SectionHeader } from "@/components/ui/heading";
 
 export type HitosDict = {
   eyebrow: string;
@@ -80,12 +81,7 @@ export function Hitos({ dict }: { dict: HitosDict }) {
           className="mb-[clamp(2rem,4vw,3rem)] flex flex-wrap items-end justify-between gap-x-6 gap-y-4"
         >
           <div>
-            <p className="text-muted-foreground m-0 mb-3 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase">
-              {dict.eyebrow}
-            </p>
-            <h2 className="font-display m-0 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.022em]">
-              {dict.title}
-            </h2>
+            <SectionHeader eyebrow={dict.eyebrow} title={dict.title} />
           </div>
           <span className="text-muted-foreground font-mono text-[0.95rem]">
             {dict.meta}

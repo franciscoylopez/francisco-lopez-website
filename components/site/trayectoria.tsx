@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
 import { SECTION, WRAP } from "@/components/ui/layout";
+import { SectionHeader } from "@/components/ui/heading";
 
 type TrayRow = {
   period: string;
@@ -119,12 +120,7 @@ export function Trayectoria({
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <p className="text-muted-foreground m-0 mb-3 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase">
-            {dict.eyebrow}
-          </p>
-          <h2 className="font-display m-0 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.022em]">
-            {dict.title}
-          </h2>
+          <SectionHeader eyebrow={dict.eyebrow} title={dict.title} />
         </div>
 
         {/* Bloque Producto: intro + CTA */}

@@ -9,6 +9,7 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { LinkedinIcon } from "@/components/ui/icons";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 
 type BrandKitDict = Dictionary["brandKit"];
 
@@ -129,8 +130,8 @@ function Glyph({
 // equivocado era lo que hacía parecer que el sistema tenía tres tarjetas distintas.
 const NUM =
   "text-muted-foreground m-0 mb-3 font-mono text-[0.8rem] tracking-[0.04em]";
-const H2 =
-  "font-display m-0 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.022em]";
+// El título de sección sale de la capa de cabecera (P37.65): era una copia exacta.
+const H2 = titleVariants({ size: "section" });
 const LEAD =
   "text-muted-foreground mt-[1.4rem] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
 
@@ -165,18 +166,13 @@ export function BrandKit({
           </div>
           <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
             <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
-              <p
-                data-reveal
-                className="text-muted-foreground m-0 mb-5 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
-              >
-                {t.hero.kicker}
-              </p>
-              <h1
-                data-reveal
-                className="font-display m-0 text-[clamp(2.75rem,7vw,5rem)] leading-[1.0] font-semibold tracking-[-0.025em]"
-              >
-                {t.hero.title}
-              </h1>
+              <SectionHeader
+                eyebrow={t.hero.kicker}
+                title={t.hero.title}
+                level={1}
+                size="page"
+                reveal
+              />
               <p
                 data-reveal
                 className="text-muted-foreground mt-6 max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"

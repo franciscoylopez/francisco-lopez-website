@@ -4,6 +4,7 @@ import { EMAIL } from "@/lib/contact";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ConsentPreferencesButton } from "./consent-preferences-button";
 import { PROSE, WRAP } from "@/components/ui/layout";
+import { SectionHeader } from "@/components/ui/heading";
 
 type CookiesDict = Dictionary["cookies"];
 
@@ -43,12 +44,12 @@ export function CookiesPolicy({
           </div>
 
           <header data-reveal className={PROSE}>
-            <p className="text-muted-foreground m-0 mb-5 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase">
-              {t.kicker}
-            </p>
-            <h1 className="font-display m-0 text-[clamp(2.25rem,6vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.025em]">
-              {t.title}
-            </h1>
+            <SectionHeader
+              eyebrow={t.kicker}
+              title={t.title}
+              level={1}
+              size="page-sm"
+            />
             <p className="text-muted-foreground mt-4 text-[0.9rem]">
               {t.updated}
             </p>

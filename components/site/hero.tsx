@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { SectionHeader } from "@/components/ui/heading";
 
 export type HeroDict = {
   kicker: string;
@@ -22,18 +23,14 @@ export function Hero({ dict }: { dict: HeroDict }) {
       <div className="mx-auto w-full max-w-[var(--container)] px-[var(--page-x)]">
         <div className="flex flex-wrap items-center gap-[clamp(2rem,5vw,4rem)]">
           <div className="min-w-[min(100%,20rem)] flex-[1.15_1_26rem]">
-            <p
-              data-reveal
-              className="text-muted-foreground m-0 mb-6 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
-            >
-              {dict.kicker}
-            </p>
-            <h1
-              data-reveal
-              className="font-display m-0 max-w-[14ch] text-[clamp(2.75rem,7vw,5rem)] leading-none font-semibold tracking-[-0.025em]"
-            >
-              {dict.headline}
-            </h1>
+            <SectionHeader
+              eyebrow={dict.kicker}
+              title={dict.headline}
+              level={1}
+              size="page"
+              reveal
+              titleClassName="max-w-[14ch]"
+            />
             <p
               data-reveal
               className="text-muted-foreground mt-[1.6rem] max-w-[34ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"

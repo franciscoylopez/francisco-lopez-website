@@ -9,6 +9,7 @@ import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
 import { InfoCard } from "@/components/ui/info-card";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 
 type DesignSystemDict = Dictionary["designSystem"];
 
@@ -39,9 +40,7 @@ function SectionHead({ num, title }: { num: string; title: string }) {
       <span className="text-muted-foreground font-mono text-[0.8rem]">
         {num}
       </span>
-      <h2 className="font-display m-0 text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.02em]">
-        {title}
-      </h2>
+      <h2 className={titleVariants({ size: "section-sm" })}>{title}</h2>
     </div>
   );
 }
@@ -82,18 +81,13 @@ export function DesignSystem({
           </div>
           <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
             <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
-              <p
-                data-reveal
-                className="text-muted-foreground m-0 mb-5 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
-              >
-                {t.hero.kicker}
-              </p>
-              <h1
-                data-reveal
-                className="font-display m-0 text-[clamp(2.75rem,7vw,5rem)] leading-[1.0] font-semibold tracking-[-0.025em]"
-              >
-                {t.hero.title}
-              </h1>
+              <SectionHeader
+                eyebrow={t.hero.kicker}
+                title={t.hero.title}
+                level={1}
+                size="page"
+                reveal
+              />
               <p
                 data-reveal
                 className="text-muted-foreground mt-6 max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"

@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
+import { SectionHeader } from "@/components/ui/heading";
 
 type Tool = { name: string; desc: string };
 export type ToolkitDict = {
@@ -61,12 +62,7 @@ export function Toolkit({ dict }: { dict: ToolkitDict }) {
     <section id="toolkit" className={SECTION}>
       <div className={WRAP}>
         <div data-reveal className="mb-[clamp(2.5rem,5vw,4rem)]">
-          <p className="text-muted-foreground m-0 mb-3 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase">
-            {dict.eyebrow}
-          </p>
-          <h2 className="font-display m-0 text-[clamp(2.25rem,5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.022em]">
-            {dict.title}
-          </h2>
+          <SectionHeader eyebrow={dict.eyebrow} title={dict.title} />
           <p className="text-muted-foreground mt-[1.4rem] max-w-[56ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty">
             {dict.intro}
           </p>
