@@ -12,9 +12,11 @@ export type ContactoDict = ContactActionsDict & {
 // que trataba email y CV como iguales— y ahora cierra la home como banda: fondo
 // `muted` a sangre, copy de posicionamiento al ICP y UNA acción destacada.
 //
-// El fondo `muted` obliga a no usar `muted-foreground` encima (perdería AAA); el
-// atenuado sale de `--contact-dim`, que dentro de `.contact-band` se mezcla con la
-// banda al 85% — AAA en ambos temas. Ver el bloque "Contacto" de globals.css.
+// El fondo `muted` obliga a recalcular el atenuado —el token está calibrado contra
+// `--background` y encima de la banda perdería AAA—, pero eso ya no lo pide esta
+// sección: desde P37.6565 `text-muted-foreground` resuelve al atenuado de la
+// superficie donde cae, y `bg-muted` es una de ellas. Ver el bloque «Atenuado
+// sensible a la superficie» de globals.css.
 export function Contacto({
   dict,
   cvHref,
@@ -29,11 +31,7 @@ export function Contacto({
     >
       <div className={WRAP}>
         <div data-reveal className="max-w-[var(--measure)]">
-          <SectionHeader
-            eyebrow={dict.eyebrow}
-            title={dict.title}
-            tone="band"
-          />
+          <SectionHeader eyebrow={dict.eyebrow} title={dict.title} />
           <p className="mt-[1.4rem] text-[1.05rem] leading-[1.6] text-pretty">
             {dict.intro}
           </p>

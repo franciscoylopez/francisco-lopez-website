@@ -64,7 +64,7 @@ const SAMPLE: Record<string, string> = {
   body: "font-sans font-normal text-[1rem] leading-[1.65]",
   small:
     "font-sans font-normal text-[0.875rem] leading-[1.5] text-muted-foreground",
-  eyebrow: cn(eyebrowVariants({ tone: "muted" }), "font-sans leading-[1.4]"),
+  eyebrow: cn(eyebrowVariants(), "font-sans leading-[1.4]"),
 };
 
 /** Guarda para el tamaño de titular que llega desde el diccionario (§11). */
@@ -194,6 +194,13 @@ export function DesignSystem({
           </p>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))] items-start gap-[var(--gutter)]">
             <div
+              // Superficie invertida: su primer plano es `--background`, así que
+              // el atenuado se construye desde el otro extremo. Antes se escribían
+              // aquí tres transparencias a ojo y la del rótulo daba 4,33:1 en
+              // oscuro —por debajo de AA— sin que nada lo cazara: axe no sabe
+              // resolver `color-mix()` y archiva esos elementos en `incomplete`,
+              // que es donde nadie mira (P37.6565).
+              data-surface="inverted"
               className="border-border overflow-hidden rounded-xl border"
               style={{ background: "var(--foreground)" }}
             >
@@ -213,13 +220,7 @@ export function DesignSystem({
                 >
                   {t.tokens.copyLabel}
                 </span>
-                <span
-                  className="text-[0.68rem] tracking-[0.06em] uppercase"
-                  style={{
-                    color:
-                      "color-mix(in oklch,var(--background),transparent 40%)",
-                  }}
-                >
+                <span className="text-muted-foreground text-[0.68rem] tracking-[0.06em] uppercase">
                   {t.tokens.copyHint}
                 </span>
               </div>
@@ -388,6 +389,10 @@ export function DesignSystem({
             {t.tipografia.rows.map((row, i) => (
               <div
                 key={row.name}
+                // La fila cebra se pinta `--card` al 45%: es una superficie de la
+                // familia `card` aunque no lleve su utilidad, y sin decirlo su
+                // texto atenuado se quedaba en 6,80:1 en oscuro (P37.6565).
+                data-surface={i % 2 === 1 ? "card" : undefined}
                 className="border-border flex flex-wrap items-baseline gap-x-8 gap-y-4 border-b px-[var(--page-x)] py-6 last:border-b-0"
                 style={
                   i % 2 === 1
@@ -968,32 +973,29 @@ export function DesignSystem({
             })}
           </div>
 
-          <h3 className="font-display m-0 mt-10 mb-4 text-[1rem] font-semibold">
+          <h3 className="font-display m-0 mt-10 mb-2 text-[1rem] font-semibold">
             {t.cabeceras.toneTitle}
           </h3>
+          <p className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]">
+            {t.cabeceras.toneLead}
+          </p>
           <div className={PAIR}>
             {t.cabeceras.tones.map((tone) => {
-              const band = tone.tone === "band";
+              const band = tone.surface === "--muted";
               return (
-                <div key={tone.tone} className={cn(PANEL, "flex flex-col")}>
+                <div key={tone.surface} className={cn(PANEL, "flex flex-col")}>
                   <div
                     className={cn(
                       "flex flex-1 flex-col justify-center px-5 py-8",
-                      // `band` no es un color propio: es el atenuado recalculado
-                      // contra la superficie de debajo, así que el espécimen tiene
-                      // que traer también esa superficie (`.contact-band` define
-                      // `--contact-dim`; sin ella el tono no significa nada).
-                      band ? "contact-band bg-muted" : "bg-background",
+                      // La superficie ES la demo: los dos rótulos salen de la
+                      // MISMA clase, sin prop que los distinga, y se pintan
+                      // distinto solo porque el fondo que tienen debajo es otro
+                      // (`--surface-dim`, P37.6565). Por eso el espécimen tiene
+                      // que traer la superficie de verdad y no un color parecido.
+                      band ? "bg-muted" : "bg-background",
                     )}
                   >
-                    <p
-                      className={cn(
-                        eyebrowVariants({ tone: band ? "band" : "muted" }),
-                        "mb-3",
-                      )}
-                    >
-                      {tone.label}
-                    </p>
+                    <p className={cn(eyebrowVariants(), "mb-3")}>{tone.label}</p>
                     <span
                       className={cn(
                         titleVariants({ size: "section-sm" }),
@@ -1005,7 +1007,7 @@ export function DesignSystem({
                   </div>
                   <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
                     <code className="text-muted-foreground font-mono text-[0.74rem]">
-                      tone=&quot;{tone.tone}&quot;
+                      {tone.surface}
                     </code>
                     <p className="text-muted-foreground m-0 mt-[0.5rem] text-[0.82rem] leading-[1.55]">
                       {tone.note}
@@ -1125,6 +1127,9 @@ export function DesignSystem({
       {/* ===================== (12) ESQUELETO ===================== */}
       <section
         data-reveal
+        // Misma familia que la fila cebra: la sección se pinta su propio velo de
+        // `--card` y por eso tiene que declararlo (P37.6565).
+        data-surface="card"
         className={SECTION}
         style={{
           background: "color-mix(in srgb, var(--card), transparent 45%)",

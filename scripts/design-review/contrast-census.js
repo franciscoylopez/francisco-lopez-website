@@ -76,6 +76,44 @@ window.contrastCensus = () => {
     return base;
   }
 
+  /**
+   * ¿El fondo de este texto es una IMAGEN (foto, degradado)? Entonces no hay
+   * cifra que dar: `backdrop()` solo sabe componer `background-color`, así que
+   * ignora la foto y el velo en degradado que lleva encima, y devuelve el fondo
+   * de la página — que no es lo que hay detrás del texto.
+   *
+   * Añadido en P37.6565 tras un falso positivo del propio censo: el titular
+   * blanco sobre la foto de Sobre mí salía a **1,09:1** en claro, o sea el peor
+   * hallazgo de toda la auditoría, cuando lo que ocurre es que el medidor lo
+   * comparaba con el blanco hueso de la página en vez de con la foto. Se separan
+   * en `sinMedir` en lugar de descartarse: son los pares que hay que mirar a ojo,
+   * y esconderlos sería cambiar un fallo por otro que no sale en el informe.
+   */
+  const media = () =>
+    [...document.querySelectorAll("img, video, canvas, svg image")]
+      .map((n) => n.getBoundingClientRect())
+      .filter((r) => r.width > 0 && r.height > 0);
+
+  let mediaRects = null;
+
+  function overImage(el) {
+    // La comprobación es GEOMÉTRICA y no de cascada: se pregunta si el texto cae
+    // ENCIMA de una foto, que es el hecho. El primer intento miraba si algún
+    // ancestro tenía `background-image` y se equivocó en las dos direcciones —
+    // marcaba `.link-content` (cuyo relleno de hover ES un `background-image`, de
+    // tamaño cero en reposo) y NO marcaba el titular sobre la foto de Sobre mí,
+    // porque ahí la imagen es un HERMANO posicionado, no un fondo. Es el mismo
+    // error de disparador que este censo existe para no repetir.
+    if (mediaRects === null) mediaRects = media();
+    if (mediaRects.length === 0) return false;
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return false;
+    return mediaRects.some(
+      (m) =>
+        r.left < m.right && r.right > m.left && r.top < m.bottom && r.bottom > m.top,
+    );
+  }
+
   /** Un elemento cuenta si pinta texto propio y se ve. */
   function paintsText(el) {
     const cs = getComputedStyle(el);
@@ -141,10 +179,13 @@ window.contrastCensus = () => {
   }
 
   const pairs = new Map();
+  const sinMedir = new Map();
   const add = (state, el, fg, bg) => {
     const r = ratio(fg, bg);
     const key = `${state}|${fg.map(Math.round)}|${bg.map(Math.round)}`;
-    if (!pairs.has(key)) pairs.set(key, { state, ratio: r, ejemplo: label(el) });
+    const destino = overImage(el) ? sinMedir : pairs;
+    if (!destino.has(key))
+      destino.set(key, { state, ratio: r, ejemplo: label(el) });
   };
 
   // --- Reposo -------------------------------------------------------------
@@ -202,6 +243,9 @@ window.contrastCensus = () => {
     // AAA de texto normal. Lo que salga aquí, o sube o se documenta como excepción.
     bajoAAA: censo.filter((p) => p.ratio < 7),
     censo,
+    // Texto sobre imagen: el medidor no puede componer una foto, así que estos
+    // pares se listan aparte y se miran a ojo. Su `ratio` NO es una medición.
+    sinMedir: [...sinMedir.values()].sort((a, b) => a.ratio - b.ratio),
   };
   return resultado;
 };

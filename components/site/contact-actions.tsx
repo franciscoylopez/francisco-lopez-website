@@ -88,7 +88,7 @@ export function EmailCta({
             onClick={() => trackContactClick("email")}
             className={cn(
               chromeLinkVariants(),
-              "contact-dim text-[0.9rem] break-all",
+              "text-muted-foreground text-[0.9rem] break-all",
             )}
           >
             {EMAIL}

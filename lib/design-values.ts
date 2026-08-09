@@ -298,10 +298,33 @@ export const CONTRAST = {
   solidHover: { light: 8.64, dark: 8.92 },
   /** Hover del `toggle-primary` apagado: el estado con menos margen del sistema. */
   toggleHover: { light: 7.21, dark: 7.8 },
-  /** `--muted-foreground` sobre `--background`. */
+  /**
+   * LOS CUATRO ATENUADOS SON UN SOLO PAR VISTO SOBRE CUATRO SUPERFICIES, y por eso
+   * van juntos: `--surface-dim` recalcula el texto atenuado contra el fondo que
+   * tiene debajo (D30, generalizado en P37.6565). Antes solo existía el primero, y
+   * los otros tres —o no se medían, o los resolvía a mano quien se acordaba.
+   */
+  /** Sobre `--background`: el token tal cual, que está calibrado contra este fondo. */
   mutedForeground: { light: 7.1, dark: 7.12 },
-  /** Etiqueta neutra: el texto mezclado un 85% hacia su propio fondo (D30). */
+  /**
+   * Sobre `--card` y `--popover`: tarjetas, paneles y los velos que se pintan esa
+   * misma superficie. Es el que faltaba — con el token sin recalcular daba 6,40 en
+   * oscuro, y afectaba a todo texto atenuado dentro de una tarjeta en las seis
+   * páginas.
+   */
+  mutedOnCard: { light: 9.14, dark: 10.32 },
+  /**
+   * Sobre `--muted`: la franja de contacto y la etiqueta neutra. Las dos escribían
+   * esta misma fórmula por su cuenta antes de que la resolviera el token, así que
+   * la cifra no se mueve: es literalmente el mismo píxel que ya se publicaba.
+   */
   badgeNeutral: { light: 8.17, dark: 9.17 },
+  /**
+   * Sobre superficie INVERTIDA (fondo `--foreground`): el panel de tokens del
+   * Design System. Se construye desde el otro extremo —`--background` mezclado
+   * hacia `--foreground`—, igual que `--primary-on-inverted`.
+   */
+  mutedOnInverted: { light: 10.32, dark: 9.89 },
   /** Etiqueta teñida, en su peor emplazamiento de las dos (cian y morado). */
   badgeTinted: { light: 10.63, dark: 10.02 },
   /** Bolita del switch apagada: `--foreground` sobre el carril `--muted`. */
