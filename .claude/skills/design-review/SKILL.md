@@ -79,7 +79,8 @@ Las cuatro fuentes que tienen que decir lo mismo:
 
 | Fuente | Archivo |
 |---|---|
-| Reglas de marca — el **porqué**, nunca el valor | `BRAND.md` (+ `BRAND-logo.md`, `DECISIONS.md` D30/D34/D35/D36/D38) |
+| Reglas de marca, en presente | `BRAND.md` (+ `BRAND-logo.md`, `DECISIONS.md` D30/D34/D35/D36/D38) |
+| El **porqué** fechado de esas reglas | `BRAND-historical.md` — léelo antes de proponer cambiar una: casi todas nacieron corrigiendo algo |
 | Implementación — lo que el navegador **pinta** | `app/globals.css` · las cinco capas de `components/ui/` |
 | Valores **publicados** | `lib/design-values.ts` (D38) |
 | Documentación publicada | página **Design System** (`components/site/design-system.tsx`) |

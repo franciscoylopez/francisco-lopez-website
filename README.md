@@ -98,6 +98,7 @@ El "porqué" del proyecto vive en documentos dedicados:
 - **[PRD-Historical.md](./PRD-Historical.md)** — registro histórico de decisiones de producto/diseño/alcance (el "por qué").
 - **[DECISIONS.md](./DECISIONS.md)** — decisiones técnicas del build (ADR-lite).
 - **[BRAND.md](./BRAND.md)** — sistema de marca: reglas siempre activas (color, tipografía, tokens, a11y).
+- **[BRAND-historical.md](./BRAND-historical.md)** — el porqué fechado de las reglas de marca: qué se probó y qué falló antes de que quedaran escritas así (referencia a demanda).
 - **[BRAND-logo.md](./BRAND-logo.md)** — apéndice de marca: enciclopedia del logo y la firma split (referencia a demanda).
 - **[CLAUDE.md](./CLAUDE.md)** — convenciones de código (i18n, tokens, a11y, SEO).
 - **[AGENTS.md](./AGENTS.md)** — aviso: este Next tiene breaking changes; leer los

@@ -2,6 +2,12 @@
 
 Reglas de identidad visual para este proyecto. Aplícalas siempre al generar UI.
 
+> **Reglas en presente. El porqué fechado vive en [`BRAND-historical.md`](./BRAND-historical.md)**
+> *(partido el 2026-08-09, P37.685)* — qué se probó, qué se descartó y qué falló antes de que
+> cada regla quedara escrita así. **Se consulta a demanda; nunca se `@`-importa.** Léelo antes
+> de cambiar una regla de aquí: casi todas nacieron corrigiendo algo, y ahorra repetir un
+> experimento que ya salió mal.
+
 ## Stack
 
 Next.js + TypeScript + Tailwind (v4). La capa de componentes es **propia**
@@ -22,21 +28,46 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 1. **Tokens semánticos de shadcn** (`primary`, `secondary`, `muted`, `accent`, `border`…).
    - `secondary`, `accent` y `muted` son NEUTROS a propósito. Nunca los pintes de cian ni de morado.
    - El color de acción es `primary` (cian): botones, foco y estados activos.
-   - **Enlaces: depende de si son contenido o chrome.**
-     - **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en `foreground` con subrayado fino en `primary` (2px, offset amplio para librar descendentes como "p"/"y"); en hover/focus, un relleno sólido en `primary` crece de abajo arriba y el texto pasa a `primary-foreground` — variante **H1**. El cian entra como recompensa de la interacción, no como color permanente del texto.
-     - **Chrome de navegación** (nav, breadcrumb, footer, menús): `foreground` o `muted-foreground`, nunca `primary` — ni en el texto ni en el fondo de su estado hover. En un bloque cuya función *entera* es navegar, el cian no distingue nada: solo mete ruido. Se leen como enlace por su posición; el subrayado al pasar por encima o al recibir foco, y una pastilla de fondo `muted` en hover (variante **F**), bastan como afordancia — se probó una versión de F con wash de cian y no aportó diferencia sustancial, así que se descartó.
+2. **Tokens de marca** (`brand-cyan`, `brand-purple`, `brand-cyan-soft`, `brand-purple-soft`).
+   - Son DECORATIVOS: fondos de sección, detalles, ilustración, gráficos.
+   - `brand-*-soft` (los pasteles) son de bajo contraste: NO los uses como color de texto, de
+     botón ni de cualquier elemento que deba leerse. Solo relleno decorativo.
+   - `brand-cyan` manda; `brand-purple` es apoyo, con cuentagotas.
+   - `brand-purple-accent` (`oklch(0.62 0.16 290)`): variante de `brand-purple` ajustada para
+     servir como texto/acento legible en **secciones con fondo invertido** (fondo =
+     `foreground`, texto = `background`), donde el `brand-purple` estándar no llega a AA de
+     texto grande en ambas direcciones de tema. Úsalo solo ahí — como acento de texto grande
+     (≥3:1, no como texto corrido ≥4.5:1). Fuera de ese contexto, `brand-purple`.
 
-     *Matizado 2026-07-21:* la redacción anterior decía "botones, enlaces, foco y estados activos usan `primary`", sin distinguir. Producía un breadcrumb con "Inicio" en cian (#0B7C7C) justo debajo de un nav que ya usaba `foreground` (#21262B) para "Descargar CV" — dos elementos de chrome contiguos con criterios distintos, y el que se salía era el que seguía la regla al pie de la letra.
+### Enlaces: depende de si son contenido o chrome
 
-     *Matizado 2026-08-04 (P37.55):* la regla de contenido decía antes "texto en `primary` siempre". Se sustituyó tras prototipar variantes en un Claude Artifact (con capturas de referencia de Francisco) y compararlas en vivo, en los dos temas: se prefirió reservar el cian para el momento de interacción en vez de tenerlo como color de texto permanente. H1 reutiliza el par de contraste ya verificado AAA de "texto sobre botón" (7,93:1 claro / 8,36:1 oscuro) en vez de inventar uno nuevo. Queda en reserva una segunda variante ("G": un garabato circular dibujado a mano alrededor de la palabra en hover, con el subrayado de reposo retrayéndose hacia el punto donde nace el trazo) para un uso puntual de énfasis — no es el estándar de todos los links de contenido.
+- **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en
+  `foreground` con subrayado fino en `primary` (2px, offset amplio para librar descendentes
+  como «p»/«y»); en hover/focus, un relleno sólido en `primary` crece de abajo arriba y el
+  texto pasa a `primary-foreground` — variante **H1**. El cian entra como **recompensa de la
+  interacción**, no como color permanente del texto. *(Hay una variante «G» aparcada para un
+  uso puntual de énfasis, descrita en el histórico; no es el estándar y hoy no se usa.)*
+- **Chrome de navegación** (nav, breadcrumb, footer, menús): `foreground` o `muted-foreground`,
+  nunca `primary` — ni en el texto ni en el fondo de su estado hover. En un bloque cuya función
+  *entera* es navegar, el cian no distingue nada: solo mete ruido. Se leen como enlace por su
+  posición; el subrayado al pasar por encima o al recibir foco, y una pastilla de fondo `muted`
+  en hover (variante **F**), bastan como afordancia.
+- **El chrome secundario se aclara al interactuar.** Un enlace en `muted-foreground` sube a
+  `foreground` **en el mismo gesto en que aparece la pastilla** de hover. No es estética: sin
+  ese salto el par cae a AA justo en hover, que es el caso que prohíbe **D30**. Lo pone el
+  `tone: "muted"` de `components/ui/chrome.tsx`, no cada uso.
+- **Controles de chrome solo icono** (toggle de tema, hamburguesa, iconos de redes): la **misma
+  pastilla** que el chrome con etiqueta (`.icon-chrome`), sobre el objetivo táctil de 44px
+  completo. Un control sin texto necesita la misma afordancia que uno con etiqueta.
 
-     *Excepción 2026-08-04 (P37.55):* `ContactSecondary` (teléfono/LinkedIn/CV en la franja de contacto) son acciones, no navegación, así que por regla les tocaría H1 — pero llevan tratamiento de **chrome** (`.link-chrome`, sin subrayado) porque H1 ahí generaba ruido visual: subrayado permanente + un hover propio justo al lado del CTA sólido de email competían entre sí en vez de leerse como su acompañamiento. Es una excepción puntual a la regla de dos capas, no un tercer criterio — probablemente se resuelva de otra forma el día que exista una sección de contacto dedicada (hoy es una franja compartida entre home/Sobre mí/Accesibilidad, D29).
-
-     *Ampliada 2026-08-08 (P37.5987):* la **dirección de email visible** bajo el CTA en la página de Accesibilidad pasa a ser un `mailto:` —antes era texto plano— y entra en la misma excepción, por el mismo motivo y sin criterio nuevo: está a 15px del CTA sólido, que es exactamente la situación que la excepción describe. Lo que cambia no es la regla sino el alcance: el comentario que justificaba el texto plano explicaba por qué la dirección **se muestra**, no por qué **no era accionable** — respondía a otra pregunta, y la revisión lo dio por cerrado sin notarlo. Sigue escrita y copiable (que es lo que pedía el argumento original) y además se puede pulsar.
-
-     *Ampliado 2026-08-09 (P37.656): el chrome secundario se aclara al interactuar, y no por gusto.* El hover pinta una pastilla de `--muted` debajo del texto, así que un enlace en `muted-foreground` caía a **6,44 claro / 5,56 oscuro** justo en hover — el caso que prohíbe **D30**, el mismo que apareció en la etiqueta neutra un rato antes. Subir el texto a `foreground` **en el mismo gesto en que aparece la pastilla** lo lleva a **12,47 / 12,04** sin tocar el reposo (7,10 / 7,12). Cuatro de los siete usos ya lo hacían —el nav y el botón de preferencias—; el footer y el breadcrumb no, y **nadie podía ver la diferencia porque el par solo existe mientras el cursor está encima**. Ahora lo pone el `tone: "muted"` de la capa de chrome, no cada uso.
-
-    - **Controles de chrome solo icono** (toggle de tema, hamburguesa, iconos de redes): la **misma pastilla** que el chrome con etiqueta (`.icon-chrome`), sobre el objetivo táctil de 44px completo. Un control sin texto necesita la misma afordancia que uno con etiqueta; si no, es lo único del chrome que no responde al cursor. *(Añadido 2026-08-04, P37.57: estos controles no tenían ningún estado hover.)*
+> **Excepción viva — `ContactSecondary`** *(2026-08-04, ampliada el 08-08)*. Teléfono, LinkedIn
+> y CV de la franja de contacto, y la **dirección de email visible** bajo el CTA de
+> Accesibilidad, son acciones y no navegación, así que por regla les tocaría H1 — pero llevan
+> tratamiento de **chrome** (`.link-chrome`, sin subrayado). Motivo: están a 15px del CTA
+> sólido de email, y ahí H1 mete ruido —subrayado permanente + un hover propio— en vez de
+> leerse como su acompañamiento. Es una excepción puntual, **no un tercer criterio**;
+> probablemente se resuelva de otra forma el día que exista una sección de contacto dedicada
+> (hoy es una franja compartida entre home, Sobre mí y Accesibilidad, D29).
 
 ## Jerarquía de hover en botones y CTA
 
@@ -46,33 +77,33 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 > accionable. Lo de abajo explica **por qué** cada variante es como es; para aplicarlas,
 > se usa la variante. Ver «Ningún control se escribe a mano» al final de esta sección.
 
-- **CTA sólido** (`bg-primary`): la acción destacada de la página. Hover = el relleno se mezcla hacia `--foreground` (`color-mix(in srgb, var(--primary) 88%, var(--foreground))`). Hoy solo el email de la franja de contacto.
-- **CTA outline-primary** (`border-primary` + `text-primary`): acciones de contenido que viven solas, sin otro CTA al lado con el que competir — «Descargar CV» de Trayectoria, «Gestionar preferencias» de Cookies, chips de descarga del Brand Kit. Hover = **el relleno cian pleno**, texto a `primary-foreground`.
-- **Outline neutro** (`border-border` + `bg-background`): controles de utilidad y botones que conviven con un sólido dentro del mismo grupo (los del diálogo de consentimiento, «Repetir» del Design System). Hover = pastilla `muted`, nunca cian.
-
-*Corregido 2026-08-04 (P37.596):* la regla del sólido decía «Hover = `bg-primary/90`», y el CTA insignia del sitio no la cumplía —usaba el `color-mix`—. El incumplidor tenía razón: `/90` **baja** el contraste del texto sobre el botón, mientras que mezclar hacia `--foreground` lo **sube** en ambos temas (en claro oscurece bajo texto hueso; en oscuro aclara bajo texto carbón). Medido: **7,93 → 8,64 en claro y 8,36 → 8,92 en oscuro**. Se corrigió la regla, no el botón, y ahora todos los sólidos lo heredan vía la variante `solid`.
-
-> **Lo que este error enseña sobre los documentos, no sobre el botón.** La regla correcta
-> ya estaba escrita desde el 2026-08-03 en `DECISIONS.md` **D30**, que dice textualmente
-> que el hover del sólido *no* se hace con `bg-primary/90`. O sea: durante un día
-> `BRAND.md` y `DECISIONS.md` **afirmaban lo contrario el uno del otro**, y el código
-> seguía a uno de los dos. No fue un fallo de criterio sino de **propagación**: la
-> decisión se registró donde se tomó y nadie cruzó los cuatro documentos de reglas
-> (`BRAND.md` ↔ `globals.css` ↔ página Design System ↔ Brand Kit). Es el primer chequeo
-> que debe hacer la revisión de diseño — antes de mirar un solo componente.
+- **CTA sólido** (`bg-primary`): la acción destacada de la página. Hover = el relleno se mezcla
+  hacia `--foreground` (`color-mix(in srgb, var(--primary) 88%, var(--foreground))`), que
+  **sube** el contraste del texto encima en los dos temas; bajar la opacidad lo bajaría. Hoy
+  solo el email de la franja de contacto.
+- **CTA outline-primary** (`border-primary` + `text-primary`): acciones de contenido que viven
+  solas, sin otro CTA al lado con el que competir — «Descargar CV» de Trayectoria, «Gestionar
+  preferencias» de Cookies, chips de descarga del Brand Kit. Hover = **el relleno cian pleno**,
+  texto a `primary-foreground`.
+- **Outline neutro** (`border-border` + `bg-background`): controles de utilidad y botones que
+  conviven con un sólido dentro del mismo grupo (los del diálogo de consentimiento, «Repetir»
+  del Design System). Hover = pastilla `muted`, nunca cian.
 
 ### Controles con estado (toggles, segmentados y pestañas)
 
 En un control con estado el **relleno pleno ya significa «activo»**, así que el encendido reusa el sólido y el apagado nunca puede rellenarse igual. Cuál de las dos variantes toca se decide por la **forma** del control, no por su contenido ni por cuántos segmentos tenga:
 
-- **`toggle-primary` — interruptor suelto.** Un único control que enciende o apaga algo que antes no estaba (el toggle de rejilla del Design System). No tiene pares al lado, así que el cian no compite con nada. Apagado = `border-primary` con **tinte** en hover (velo del propio `primary` al 8%), nunca el relleno: con el relleno, hover y encendido se verían igual y el control dejaría de comunicar en qué estado está. En ese hover el **texto** se mezcla además un 12% hacia `--foreground` —la misma constante del hover del sólido—, que es lo que sube el par a AAA sin apagar el velo (ver §Accesibilidad, P37.5985).
+- **`toggle-primary` — interruptor suelto.** Un único control que enciende o apaga algo que antes no estaba (el toggle de rejilla del Design System). No tiene pares al lado, así que el cian no compite con nada. Apagado = `border-primary` con **tinte** en hover (velo del propio `primary` al 8%), nunca el relleno: con el relleno, hover y encendido se verían igual y el control dejaría de comunicar en qué estado está. En ese hover el **texto** se mezcla además un 12% hacia `--foreground` —la misma constante del hover del sólido—, que es lo que sube el par a AAA sin apagar el velo.
 - **`toggle-neutral` — grupo de alternativas excluyentes.** Varios botones de los que exactamente uno está activo, para elegir cómo mirar un contenido que ya está en pantalla (pestañas del Toolkit, tabs de dispositivo del Esqueleto navegable). Apagado = el mismo **outline neutro**, y ahí el hover **sí** puede ser la pastilla plena: `muted` no se parece en nada al cian del seleccionado, no hay ambigüedad que evitar. Es el mismo eje que separa contenido de chrome: en un bloque cuya función entera es elegir qué mirar, el cian no distingue nada — y multiplicado por tres o cuatro se come la sección.
-
-*Fijado 2026-08-04 en tres pasadas.* En **P37.59** se detectó que los toggles del Design System no tenían hover y que ponerles el relleno los volvía indistinguibles del estado activo; la regla se escribió mirando solo `aria-pressed`, y por eso las **pestañas del Toolkit** (`aria-selected`) se quedaron fuera del sistema, sin hover en la seleccionada y con `secondary` en la inactiva. En **P37.592**, al meterlas, la fila pasó de un cian a cuatro y se comía la sección en oscuro → nace `toggle-neutral`. Y acto seguido se vio que los **tabs de dispositivo** seguían en cian por arrastre —P37.59 los había agrupado con el toggle de rejilla porque ambos usan `aria-pressed`, cuando uno es un interruptor y el otro un segmentado—. La primera redacción del criterio («¿quién es el protagonista?») falló al segundo caso que le tocó; por eso ahora mira la forma, que se comprueba de un vistazo.
 
 ### Controles con dos fondos: el color se toma del fondo, no se fija
 
-Cuando una pieza se apoya sobre un fondo que **cambia por tema y por estado**, no vale elegirle un color: hay que derivarlo del fondo que tiene debajo. La bolita del switch de consentimiento es el caso de referencia — era `bg-white` fijo y fallaba el 3:1 de componente en dos de las cuatro combinaciones (1,22:1 en claro-apagado, 2,03:1 en oscuro-encendido), y **ningún token que conmute con el tema lo arreglaba**. La regla que sí funciona: la pieza es el `foreground` de su propio carril — `--foreground` sobre el carril apagado (`--muted`), `--primary-foreground` sobre el encendido (`--primary`). Da 12,47:1 / 12,04:1 y 7,93:1 / 8,36:1. *(P37.593; mismo patrón que `--contact-dim` y `--chrome-hover-bg`, ver D30.)*
+Cuando una pieza se apoya sobre un fondo que **cambia por tema y por estado**, no vale elegirle
+un color: hay que derivarlo del fondo que tiene debajo. **Ningún token que conmute con el tema
+lo arregla** — se comprobó con la bolita del switch de consentimiento, que es el caso de
+referencia. La regla que sí funciona: **la pieza es el `foreground` de su propio carril**
+—`--foreground` sobre el carril apagado (`--muted`), `--primary-foreground` sobre el encendido
+(`--primary`)—. Mismo patrón que `--contact-dim` y `--chrome-hover-bg` (D30).
 
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
@@ -80,15 +111,20 @@ Una **etiqueta** (la pastilla no interactiva que rotula un título, una fila o u
 
 - **`tone`** — `neutral` · `cyan` · `purple`. Los dos teñidos se llaman **por su color** y usan `--brand-cyan` / `--brand-purple`, no `--primary`/`--accent`: son la **segunda capa** de este documento (decorativa), y nombrarlos con vocabulario de la capa semántica es justo la mezcla que §Color prohíbe. `--brand-cyan` pinta idéntico a `--primary` a propósito, pero aquí el cian es relleno, no color de acción.
 
-  **Cuál de los dos teñidos toca** *(decidido 2026-08-09, cerrando la duda que dejó abierta P37.655)*: **cian = una medición o el comportamiento de un token** —«AAA», «Conmuta», la cifra del hero de Accesibilidad—; **morado = una cosa de la marca** —«Exit», «Split», la métrica del logo—. La duda venía de que «Split/Flat» y «Conmuta/Fijo» parecían el mismo papel por ser los dos binarios, y llevaban colores distintos dentro de la misma página. No lo son: uno describe **cómo se comporta un token** y el otro nombra **una variante del logo**. Es la lección `CARD`/`PANEL` de D36 —antes de unificar lo que se parece, mirar si significa cosas distintas— y aquí la respuesta fue que sí, así que no se movió ninguna. Los dos tonos están medidos y en AAA (morado 11,75 / 11,59, cian 11,23 / 10,02), o sea que la elección es de significado, nunca de contraste.
-- **`kind`** — `label` (versalitas, para un rótulo de estado: «EXIT», «PRÓXIMAMENTE») · `value` (caja normal, para un dato en prosa: «AAA», «Split») · `code` (monoespaciada, para un valor técnico: «13,79:1»). El `kind` se lleva también la **familia tipográfica**: era la última pieza que un call site tenía que acordarse de escribir, y la pastilla de contraste del Design System vive dentro de una celda `font-mono` y heredaba el mono sin querer.
+  **Cuál de los dos teñidos toca:** **cian = una medición o el comportamiento de un token**
+  —«AAA», «Conmuta», la cifra del hero de Accesibilidad—; **morado = una cosa de la marca**
+  —«Exit», «Split», la métrica del logo—. Los dos están en AAA, así que la elección es **de
+  significado, nunca de contraste**.
+- **`kind`** — `label` (versalitas, para un rótulo de estado: «EXIT», «PRÓXIMAMENTE») · `value` (caja normal, para un dato en prosa: «AAA», «Split») · `code` (monoespaciada, para un valor técnico: «13,79:1»). El `kind` se lleva también la **familia tipográfica**: era la última pieza que un call site tenía que acordarse de escribir.
 
-**La regla de color, que es la parte reutilizable: el texto de una pastilla teñida es SIEMPRE `--foreground`.** El velo dice de qué familia es; el texto solo tiene que leerse. No es preferencia estética, es lo único que llega a AAA:
+**La regla de color, que es la parte reutilizable: el texto de una pastilla teñida es SIEMPRE
+`--foreground`.** El velo dice de qué familia es; el texto solo tiene que leerse. No es
+preferencia estética: es lo único que llega a AAA. Con el texto teñido sobre su propio velo
+**no hay alfa que lo salve** — es el techo asintótico de D30.
 
-- **Neutra.** Era `bg-muted text-muted-foreground` → **6,44 / 5,56**. Es el caso exacto que prohíbe **D30** (un atenuado calibrado contra `--background`, usado sobre otra superficie), y se arregla con su misma fórmula —la de `--contact-dim`—: mezclar el texto un 85% hacia el propio fondo. **8,17 / 9,17.**
-- **Teñida.** Llevaba `text-primary` sobre un velo del propio cian → **6,07 / 5,46**, y **no hay alfa que lo salve**: es el techo asintótico de D30, y el mejor caso posible (velo al 10% con el texto mezclado un 12%) se queda en 7,30 claro pero **6,62 oscuro**. Con `--foreground`: **10,63 / 10,02** en el peor emplazamiento de las dos.
-
-*Fijado 2026-08-09 (P37.655), midiendo las **ocho** definiciones que había a mano en seis archivos —cinco anchos de padding, tres cuerpos, cuatro alturas, dos pesos, tres de ellas conviviendo en la misma página—.* Lo revelador no es el drift mecánico sino que **la peor medida de las ocho era la pastilla con la que el Design System marca «AAA»** en su tabla de contraste: llevaba desde su publicación ilustrando lo contrario de lo que dice. Ni axe ni el typecheck pueden verlo, porque el par solo existe al **componer dos `color-mix`** en el navegador — de ahí que el método de §Accesibilidad mida sobre el píxel pintado y no sobre el token. Y es el mismo defecto de forma que el del inventario de iconos: **la condición no era comprobable en el sitio donde de verdad ocurre.**
+Y en la **neutra**, el texto tampoco puede ser el `muted-foreground` del sistema, que está
+calibrado contra `--background`: encima de la pastilla cae a AA. Se mezcla un **85% hacia su
+propio fondo**, la misma fórmula de `--contact-dim` (D30).
 
 ### Cuándo una acción lleva icono
 
@@ -97,8 +133,6 @@ Una **etiqueta** (la pastilla no interactiva que rotula un título, una fila o u
 - **Posición: delante de la etiqueta**, porque el icono clasifica la acción («descargar», «teléfono»). **Excepción por forma, no por caso: la variante `solid`**, donde va detrás y avanza 2px en hover — ahí no clasifica nada (es la única acción de la pantalla), marca la dirección del viaje.
 - **Tamaño, hueco y lado no se escriben en el punto de uso.** Los pone la variante (`sm` 16 · `md` 17 · `lg` 18 · `icon` 18) y, en los canales de chrome, `.link-chrome svg`. En el call site se escribe `<Download />` y nada más — el icono va **siempre primero en el JSX** y es `solid` quien lo manda al otro lado.
 - **Queda fuera el enlace de contenido inline** (`.link-content`): su afordancia es el subrayado, y un glifo en medio de un párrafo rompe la línea base.
-
-*Fijado 2026-08-08 (P37.5988).* P37.592 unificó en `action.tsx` relleno, borde, radio, hover y suelo táctil, **pero el icono se quedó fuera de la variante** y cada punto de uso decidía por su cuenta si ponía uno, cuál, a qué tamaño y de qué lado. Resultado: el mismo «Descargar CV» pelado en el nav y con icono en Trayectoria y en contacto; dentro del **mismo panel** del Brand Kit, el chip de SVG con icono y los de PNG sin él; y `size-[15px]`, `size-[17px]` y `size-[18px]` para el mismo glifo repartidos por cinco archivos. El más revelador: el empujón de 2px vivía en una clase llamada `.contact-cta`, que se describía a sí misma como «propia de este CTA y de ningún otro» — así que **la demo de esa misma variante en el Design System enseñaba un botón que no existía en el sitio**. Es el patrón de siempre: una decisión que hay que recordar es una decisión que se incumple.
 
 ### Ningún control se escribe a mano
 
@@ -109,53 +143,69 @@ Una **etiqueta** (la pastilla no interactiva que rotula un título, una fila o u
 > dos documentos afirmando la misma regla es exactamente lo que produjo el drift de
 > cuatro días de §Jerarquía de hover.
 
-**Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como `ContactSecondary` más arriba). No es burocracia: la auditoría de 2026-08-04 encontró **seis** definiciones distintas de «botón base» en seis archivos, dos radios, cuatro hovers para la misma variante y el suelo táctil de 44px reescrito catorce veces —del que el footer se había salido sin que nadie se enterara—, mientras `components/ui/button.tsx` llevaba desde el principio en el repo con cero usos.
+**Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control
+de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea
+la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como
+`ContactSecondary` más arriba).
 
-El motivo de fondo, que conviene recordar antes de escribir la siguiente regla: los **enlaces** son coherentes porque hicieron el recorrido completo —regla → clase CSS → sección publicada en el Design System → uso— y por eso son difíciles de incumplir sin querer. Los **botones** se quedaron en el primer paso, y había que acordarse de ellos. Una regla que hay que recordar es una regla que se incumple.
-
-**Excepción fechada 2026-08-08 (P37.5996): el switch del diálogo de consentimiento.** `consent-banner.tsx` dibuja su interruptor con una cadena inline (`peer-checked`, `after:`, anillo de foco) y es **el único elemento interactivo del sitio fuera de la capa de componentes**. Se queda así por dos razones: hay **un** switch en todo el sitio —no hay repetición que factorizar, y una pieza con un solo call site solo añade indirección—, y la cascada de la «Regla de construcción» mandaría traerlo de **shadcn** (paso 3: widget con estado), que **aplica hacia delante y no hacia atrás**.
-
-*Actualizada 2026-08-08 (P37.63), que era su condición de salida.* La redacción anterior dejaba la excepción colgando de una decisión abierta: «sale en cuanto P37.63 fije de dónde vienen los widgets con estado». Ya está fijado —D6 reescrita— y el veredicto es que **este switch no se toca**: está bien hecho (`input[type=checkbox][role=switch]` real, con label asociada, 0 violaciones de axe) y la regla nueva no reescribe lo que funciona. Así que la excepción no caduca por ahí. Sale de ella cuando **aparezca un segundo switch** —entonces hay repetición que factorizar y el segundo se trae de shadcn, arrastrando al primero— o cuando este haya que rehacerlo por otro motivo.
-
-Lo que **no** es excepción es su color: la regla de la bolita («es el `foreground` de su propio carril») está resuelta y documentada arriba, en §Controles con dos fondos. Anotarlo importa porque el hallazgo que abrió esto fue justo esa confusión — el comentario del componente justificaba el **color** y se leyó como si justificara la **excepción**, que es otra pregunta. Un comentario que explica algo no responde necesariamente a lo que estás preguntando.
-
-2. **Tokens de marca** (`brand-cyan`, `brand-purple`, `brand-cyan-soft`, `brand-purple-soft`).
-   - Son DECORATIVOS: fondos de sección, detalles, ilustración, gráficos.
-   - `brand-*-soft` (los pasteles) son de bajo contraste: NO los uses como color de texto, de botón ni de cualquier elemento que deba leerse. Solo relleno decorativo.
-   - `brand-cyan` manda; `brand-purple` es apoyo, con cuentagotas.
-   - `brand-purple-accent` (oklch(0.62 0.16 290)): variante de `brand-purple` ajustada para servir como texto/acento legible en **secciones con fondo invertido** (fondo = `foreground`, texto = `background`), donde el `brand-purple` estándar no llega a AA de texto grande en ambas direcciones de tema. Úsalo solo ahí — como acento de texto grande (≥3:1, no como texto corrido ≥4.5:1) sobre esos fondos invertidos. Fuera de ese contexto, sigue usando `brand-purple`.
+> **Excepción viva — el switch del diálogo de consentimiento** *(2026-08-08, P37.5996)*.
+> `consent-banner.tsx` dibuja su interruptor con una cadena inline (`peer-checked`, `after:`,
+> anillo de foco) y es **el único elemento interactivo del sitio fuera de la capa de
+> componentes**. Se queda así porque hay **un** switch en todo el sitio —no hay repetición que
+> factorizar, y una pieza con un solo call site solo añade indirección— y porque la cascada de
+> la «Regla de construcción» mandaría traerlo de shadcn, que **aplica hacia delante, no hacia
+> atrás**.
+> **Condición de salida:** cuando aparezca un **segundo** switch —entonces hay repetición que
+> factorizar y el segundo se trae de shadcn, arrastrando al primero— o cuando este haya que
+> rehacerlo por otro motivo. Lo que **no** es excepción es su color: eso lo resuelve
+> §Controles con dos fondos.
 
 ## Accesibilidad (no negociable)
 
-- Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema están en AAA en ambos temas, en reposo y en hover. Sin excepciones**, salvo `brand-purple-accent`, que cumple solo como texto grande sobre fondos invertidos.
+- Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
+  suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
+  están en AAA en ambos temas, en reposo y en hover. Sin excepciones**, salvo
+  `brand-purple-accent`, que cumple solo como texto grande sobre fondos invertidos.
+- **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es
+  la fuente del **porqué** —qué par existe, por qué se eligió ese color y qué se probó antes—;
+  el **valor** lo tiene un solo sitio, del que beben las páginas que lo publican.
+- Los pasteles (`*-soft`) no pasan contraste como primer plano. Si necesitas texto sobre un
+  fondo pastel, usa `foreground` (gris/hueso), nunca otro pastel.
+- Cian primario: `#005859` en claro y `#3FC9C4` en oscuro (ya resuelto en los tokens; no lo
+  hardcodees).
 
-  **El censo con las cifras vive en `lib/design-values.ts`, no aquí** *(D38, 2026-08-09)*. Este documento es la fuente del **porqué** —qué par existe, por qué se eligió ese color y qué se probó antes—; el **valor** lo tiene un solo sitio, del que beben las páginas que lo publican. La lista de cifras que había en este párrafo era la cuarta copia de unos números que solo se pueden saber midiendo, y ya se demostró dos veces que las cuatro divergen: trece días publicando un 7,01:1 imposible (P37.598) y cuatro días en que **este mismo documento se contradecía a sí mismo** sobre el hover del sólido mientras las páginas llevaban la cifra correcta (P37.5985). Las cifras que aparecen más abajo en esta sección son **argumentos** —lo que se midió, lo que se descartó y por qué—, no el censo: describen decisiones ya tomadas y no pueden desincronizarse de nada.
+### Cómo se hace el censo de pares
 
-  *Los tres pares añadidos el 2026-08-09 no son nuevos:* existían desde siempre y **nadie los había contado como pares del sistema**, así que la frase de arriba llevaba tiempo siendo falsa sin que ninguna de las dos auditorías anteriores lo viera —daban 6,44 / 5,56 las etiquetas neutras, 6,07 / 5,46 las teñidas y 6,44 / 5,56 el hover del footer y el breadcrumb—. El motivo es de forma, no de criterio, y **los tres fallan por la misma razón**: un par que solo aparece al **componer un velo, o una pastilla de hover, sobre la superficie de debajo** no está en ninguna lista de tokens, así que un inventario hecho leyendo `globals.css` no puede encontrarlo. Los dos primeros ni siquiera se ven en una captura; el tercero solo existe mientras el cursor está encima.
+**Recorriendo el DOM de la página servida, no leyendo `globals.css`, y con los estados
+incluidos.** Un par que solo aparece al **componer** —un velo `color-mix` sobre la superficie
+de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así que un inventario
+hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
+`scripts/design-review/contrast-census.js`.
 
-  De ahí las dos consecuencias prácticas: **el censo de pares se hace recorriendo el DOM de la página servida**, igual que las cifras, y **incluye los estados**, no solo el reposo.
+### Cómo medir sin equivocarse
 
-  *Resuelta 2026-08-04 (P37.5985) la única que quedaba.* El hover del `toggle-primary` apagado —texto `primary` sobre un velo del propio `primary` al 10%— daba **6,35 claro / 6,98 oscuro**: AA holgado, pero no AAA. Bajar el alfa del velo no lo arregla, porque tiene techo asintótico: pintar cian sobre cian no puede subir el contraste del cian, y el máximo sin velo es 7,47. Tampoco lo arregla un velo neutro (`muted`), que era la vía que parecía más prometedora sobre el papel y al medirla resultó ser la peor —**6,76 / 6,57**, falla en los dos temas—: cian sobre gris contrasta menos que cian sobre el fondo.
-
-  Lo que sí funciona es mover el **texto** en vez del velo, con la misma mezcla que ya usaba el hover del sólido: 12% hacia `--foreground`. Con el velo al 8% da **7,21 / 7,80**. Dos cosas que hacen que la solución sea sistémica y no un parche: reusa una constante que ya existía (88/12) en vez de inventar otra, y el velo sigue siendo **más perceptible que la pastilla `muted`** que usan el resto de controles (ΔL\* 4,7 frente a 3,9 en claro), así que el contraste no se compró a costa de la afordancia.
-- Los pasteles (`*-soft`) no pasan contraste como primer plano. Si necesitas texto sobre un fondo pastel, usa `foreground` (gris/hueso), nunca otro pastel.
-- Cian primario: `#005859` en claro y `#3FC9C4` en oscuro (ya resuelto en los tokens; no lo hardcodees).
-
-  *Ajustado 2026-07-22:* el cian claro era `#0B7C7C`, que daba **4,53:1** como texto sobre el fondo — pasaba AA por 0,03. Aprobado raspado: cualquier retoque futuro del cian o del fondo lo tumbaba sin que nadie se enterase, y como botón estaba aún más justo (4,81:1). Al comparar las opciones se vio que llegar a AAA costaba un oscurecimiento **visualmente indistinguible**, así que quedarse en AA era dejar margen sobre la mesa por nada. `--brand-cyan` y `--ring` se mueven con él para que no queden dos cianes casi iguales con nombres distintos. **El `brand-cyan-split` del logo (#16BDBD) no se toca:** es otro token, no tiene requisito de contraste y la firma no se negocia.
-
-  *Corregido 2026-08-04 (P37.598): aquel ajuste no llegó a AAA, y la web llevaba trece días publicando que sí.* El cian de julio se pintaba como `#005E5F` —el hex documentado **era el correcto**— pero eso da **6,86:1 como texto**, por debajo del umbral AAA de 7. La cifra publicada, 7,01:1, no era alcanzable con ese color: se calculó mal en su momento y viajó desde aquí a la página de Accesibilidad, al Design System y al Brand Kit. *(La de «texto sobre botón» sí estaba bien en `DECISIONS.md` D30, que decía 7,28:1 — el 7,44 de este documento era el equivocado.)*
-  Se corrige bajando el token a `oklch(0.41 0.0886 194.82)`, que se pinta **`#005859`** y da **7,47:1 como texto y 7,93:1 sobre botón**. Es el mismo argumento de julio, ahora sí verificado: el oscurecimiento es visualmente indistinguible y devuelve el margen.
-
-  *Afinado 2026-08-04 (P37.5985).* Aquel gate publicó 7,43 y 7,88 para este mismo token; medido de nuevo con el método de abajo, lo que el navegador pinta son **7,47 y 7,93** (y el hover del sólido 8,64 / 8,92, no 8,59 / 8,93). Son centésimas y ningún veredicto AAA cambia, pero es el segundo documento seguido en que una cifra publicada no coincide con la medida — de ahí que la validación del punto 1 no sea opcional.
-
-  **Cómo medir esto sin equivocarse**, porque en esta misma sesión me equivoqué dos veces antes de acertar:
-
-  1. **Valida la herramienta contra pares ya publicados antes de creerte un hallazgo.** Los anclajes son **texto principal (13,79 claro / 15,32 oscuro)** y **la bolita apagada del switch (12,47 / 12,04)**: son pares sin cian, así que no dependen del recorte de gamut y tienen que reproducirse exactos. Si no lo hacen, el fallo es del método, no del color. *(Los pares que llevan cian sirven mal de anclaje — son justo los que se han corregido dos veces.)*
-  4. **La afordancia se mide también.** Subir contraste apagando un hover no es una mejora: es cambiar un incumplimiento por otro que no sale en el informe. Compara el ΔL\* del estado nuevo contra un hover que el sitio ya dé por bueno (la pastilla `muted`: 3,9 en claro, 9,0 en oscuro) antes de dar el cambio por cerrado.
-  5. **Verifica la clase, no solo el color.** Tailwind escanea el código como texto plano: una clase construida por interpolación no se genera y el elemento se queda sin hover, sin error de compilación. La cifra puede ser perfecta sobre el papel y no estar aplicándose a nada. Mide sobre el elemento real, en su estado real.
-  2. **Los cianes de esta marca caen ligeramente fuera del gamut sRGB.** El navegador los recorta al pintarlos, así que `getComputedStyle` devuelve `color(srgb ...)` con **componentes negativas**. Leerlas sin recortar a [0,1] da un color que no existe en pantalla — fue justo lo que me hizo afirmar que el token rendía `#215e5f`. Recorta siempre, o lee el píxel de un `<canvas>`, que ya viene recortado.
-  3. **La cifra se mide sobre el color que el navegador pinta**, nunca sobre el hex que uno cree tener ni sobre el valor nominal del `oklch`.
-  6. **Una cifra corregida se SUSTITUYE en todos los párrafos que la citan; no basta con anotarla al final.** Este documento pasó cuatro días afirmando 7,88 → 8,59 / 8,93 en §Jerarquía de hover mientras esta misma sección, más abajo, decía que lo medido era 7,93 → 8,64 / 8,92 — y las cuatro páginas publicadas llevaban ya las correctas. Lo encontró el primer disparo del skill `design-review` (2026-08-08), y la lección es la simétrica de la de julio: **el reglamento también se queda obsoleto**, y una nota fechada al pie no corrige el texto de arriba.
+1. **Valida la herramienta contra pares ya publicados antes de creerte un hallazgo.** Los
+   anclajes son **texto principal (13,79 claro / 15,32 oscuro)** y **la bolita apagada del
+   switch (12,47 / 12,04)**: son pares sin cian, así que no dependen del recorte de gamut y
+   tienen que reproducirse **exactos**. Si no lo hacen, el fallo es del método, no del color.
+   *(Los pares que llevan cian sirven mal de anclaje — son justo los que se han corregido dos
+   veces.)*
+2. **Los cianes de esta marca caen ligeramente fuera del gamut sRGB.** El navegador los recorta
+   al pintarlos, así que `getComputedStyle` devuelve `color(srgb …)` con **componentes
+   negativas**. Leerlas sin recortar a [0,1] da un color que no existe en pantalla. Recorta
+   siempre, o lee el píxel de un `<canvas>`, que ya viene recortado.
+3. **La cifra se mide sobre el color que el navegador pinta**, nunca sobre el hex que uno cree
+   tener ni sobre el valor nominal del `oklch`.
+4. **La afordancia se mide también.** Subir contraste apagando un hover no es una mejora: es
+   cambiar un incumplimiento por otro que no sale en el informe. Compara el ΔL\* del estado
+   nuevo contra un hover que el sitio ya dé por bueno (la pastilla `muted`: 3,9 en claro, 9,0
+   en oscuro) antes de dar el cambio por cerrado.
+5. **Verifica la clase, no solo el color.** Tailwind escanea el código como texto plano: una
+   clase construida por interpolación no se genera y el elemento se queda sin hover, **sin
+   error de compilación**. La cifra puede ser perfecta sobre el papel y no estar aplicándose a
+   nada. Mide sobre el elemento real, en su estado real.
+6. **Una cifra corregida se SUSTITUYE en todos los párrafos que la citan; no basta con anotarla
+   al final.** Una nota fechada al pie no corrige el texto de arriba.
 
 ## Modo oscuro
 
@@ -178,9 +228,14 @@ Componente: `components/ui/logo.tsx` → `<Logo />` (variantes `split`/`flat`, p
 
 ## Iconos propios
 
-Los iconos del sitio son de **lucide-react**. Desde la v1.24 lucide no exporta iconos de marca (LinkedIn, GitHub…) por marca registrada, así que esos se dibujan a mano en `components/ui/icons.tsx`. Un icono propio tiene que poder ponerse al lado de uno de lucide sin que se note cuál es cuál — y eso no sale de copiar los atributos del `<svg>`, que es justo lo que ya se hacía cuando el dibujo falló.
+Los iconos del sitio son de **lucide-react**. Desde la v1.24 lucide no exporta iconos de marca
+(LinkedIn, GitHub…) por marca registrada, así que esos se dibujan a mano en
+`components/ui/icons.tsx`. Un icono propio tiene que poder ponerse al lado de uno de lucide sin
+que se note cuál es cuál — y eso no sale de copiar los atributos del `<svg>`.
 
-**Antes de dibujar: ¿lucide lo trae?** Si la respuesta es sí, no se dibuja — se importa. Un glifo propio se justifica **solo** por lo que lucide no exporta. Parece obvio y es la regla que más se ha incumplido: el 2026-08-08 había en el sitio **seis glifos dibujados a mano que lucide sí trae** (`check` —duplicado byte a byte en dos páginas—, `download`, `moon`, `menu`, `arrow-right`, `x`), y dos de ellos eran copias de los iconos reales del nav usadas en la demo que documenta ese mismo patrón, o sea que la demo podía divergir del nav sin que nadie se enterara.
+**Antes de dibujar: ¿lucide lo trae?** Si la respuesta es sí, no se dibuja — se importa. Un
+glifo propio se justifica **solo** por lo que lucide no exporta. Parece obvio y es la regla que
+más se ha incumplido.
 
 - **Mismo artboard.** `viewBox="0 0 24 24"`, `fill="none"`, `stroke="currentColor"`, trazo **2**, terminaciones y uniones **redondas**. Todas las coordenadas dentro de **2–22** (el área útil de 20×20 de lucide; el trazo desborda hasta 1 y 23). No hay que llenarla: `user` ocupa 16×20 y no se ve pequeño.
 - **Nada se contornea por debajo de 8 unidades** (4× el trazo). Una forma más estrecha que eso se dibuja **con** el trazo, monolineal, en vez de rodearla con él. Lucide lo cumple sin excepción: su forma contorneada más estrecha es el disco del `sun`, que mide justo 8, y el borne del `battery` —que como contorno sería un saliente de 2— es una línea suelta.
@@ -190,8 +245,28 @@ Los iconos del sitio son de **lucide-react**. Desde la v1.24 lucide no exporta i
 - **El inventario de glifos propios es el `grep` de `<svg>`** en `components/` y `app/`, no el contenido de `icons.tsx`. De ahí se descuentan el logo y las **ilustraciones** (maquetas de navegador, marcos de dispositivo, esqueletos, el «0» del 404), que son dibujos y no iconos. Lo que quede son iconos propios, vivan donde vivan — y **su sitio es `components/ui/icons.tsx`**.
 - **Si hay más de dos iconos propios**, publicarlos en el Brand Kit — el recorrido completo (regla → uso → página publicada) es lo que hace que una regla deje de depender de que alguien se acuerde.
 
-  *Corregido 2026-08-08, en el primer disparo del skill `design-review`.* Esta regla llevaba cuatro días sin dispararse **teniendo siete iconos propios**, porque su condición se comprobaba leyendo `icons.tsx` —donde había uno— en vez de contando los que hay. Es el mismo defecto de forma que las cifras de contraste de §Accesibilidad: no fallaba el criterio, fallaba que **la condición no era medible en el sitio donde de verdad ocurre**. Una regla cuyo disparador mira al lugar equivocado no es una regla: es una nota.
+## Cómo se escribe una regla aquí
 
-*Fijado 2026-08-08 (P37.5989), al redibujar el de LinkedIn.* El original venía de lucide y tenía sus mismos atributos, pero metía **cinco carriles de 4 unidades en las 20 del área útil**: cada contraforma medía 2, o sea 1,5px a 18px. En el footer se leía como una mancha sólida al lado del sol y la luna. La «in» no cabe contorneada a este grosor —una barra legible pide 8 de ancho y no caben tres—, así que ahora se dibuja con el trazo: `M4 4h.01` · `M4 10v11` · `M12 21v-7a4 4 0 0 1 8 0v7`, con huecos de 6 (punto↔asta) y 8 (i↔n y contraforma de la n).
+Estas cinco no son de marca: son de **cómo redactar las de arriba**. Cada una salió de una
+regla que existía y aun así se incumplió, y el caso está en
+[`BRAND-historical.md`](./BRAND-historical.md).
 
-> **Sobre el metro, que es la parte reutilizable.** El primer candidato a norma fue la **densidad de tinta** (longitud del trazo × grosor sobre el artboard): el icono roto salía el más pesado de todos —36,3% frente a la banda de 14–32% de los lucide del sitio—, así que parecía explicado. Al validarlo contra un caso que ya damos por bueno, se cayó: **sobre su propia caja, `mail` pinta 45,8% y el icono roto 45,2%**, y `mail` se lee perfecto. La tinta describe el síntoma y sirve de sospecha; lo que decide es el **hueco más estrecho**. Es el mismo hábito que ya está escrito arriba para el contraste —valida la herramienta contra pares publicados antes de creerte un hallazgo—, aquí aplicado a una métrica de forma en vez de a una de color.
+1. **Una regla cuyo disparador mira al lugar equivocado no es una regla: es una nota.** La
+   condición tiene que ser comprobable **donde la cosa de verdad ocurre**. «Si hay más de dos
+   iconos propios» se comprobaba leyendo `icons.tsx` —donde había uno— mientras el sitio tenía
+   siete; el censo de contraste se hacía leyendo `globals.css`, donde los pares compuestos no
+   existen.
+2. **Una regla que hay que recordar es una regla que se incumple.** Lo que impide el drift es
+   el **recorrido completo** —regla → variante o clase → sección publicada en el Design System
+   → uso—, no la disciplina. Los enlaces lo hicieron entero y son coherentes; los botones se
+   quedaron en el primer paso.
+3. **Valida el metro antes de creerte el hallazgo.** Reproduce primero un caso que ya damos por
+   bueno. Se ha caído así un medidor de contraste (componentes fuera de gamut), una norma de
+   iconos (la «densidad de tinta») y un censo de pares (las reglas `:hover` dentro de
+   `@media`).
+4. **Antes de unificar dos valores que se parecen, mira si significan cosas distintas.** El
+   `CARD` con dos radios no era drift: eran dos cajas y a una le faltaba el nombre. Unificar
+   habría roto la jerarquía.
+5. **La misma decisión escrita en dos sitios acaba diciendo dos cosas.** Si una regla ya está
+   en `CLAUDE.md` o en `DECISIONS.md`, aquí va el puntero y el porqué específico, nunca la
+   copia.
