@@ -60,7 +60,8 @@ npm run start      # sirve el build de producción
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 npm run format     # Prettier
-npm run check:palette  # la paleta del código contra la de globals.css (D38)
+npm run check:palette  # la paleta del código contra la de globals.css, y que no
+                       # quede ninguna copia de un token fuera de su fuente (D38)
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
 ```
 
@@ -86,7 +87,8 @@ public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf); hechos del diccionario + texto rico autorado
-scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts contra la de globals.css (D38)
+scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts contra la de globals.css,
+                          y ningún hex de token copiado fuera de su fuente (D38)
 scripts/design-review/  Censo de pares de contraste del DOM servido (lo usa el skill design-review)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)

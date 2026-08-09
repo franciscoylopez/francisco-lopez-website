@@ -28,22 +28,35 @@ import { content as esContent } from "./content.es";
 import { content as enContent } from "./content.en";
 import type { CV, CvContent, Job, AuthoredJob } from "./types";
 import { loadDict, buildEducation, buildTools, experienceFacts, previousFacts, matchFact, type FactRow } from "./facts";
+import { brandHex, paletteHex } from "../../lib/design-values";
 
 const ROOT = process.cwd();
 const asset = (p: string) => path.join(ROOT, p);
 const AVATAR = `data:image/png;base64,${fs.readFileSync(asset("assets/cv/francisco-avatar-rounded.png")).toString("base64")}`;
 
 // --- Marca ---
+// El PDF no tiene tema: es un documento de una sola tinta, así que se lleva la
+// paleta CLARA. Los seis colores que son tokens se DERIVAN (P37.659); antes eran
+// hexes escritos a mano y `check:palette` no los miraba, que es exactamente cómo
+// el cian se quedó en `#005E5F` cuando P37.598 corrigió el token a `#005859` —
+// hubo que acordarse de propagarlo, y eso ya falló dos veces en este repo.
+// Los tres que NO son tokens se quedan escritos: existen solo para el papel.
+const LIGHT = paletteHex("light");
+const BRAND = brandHex();
+
 const C = {
-  ink: "#21262B",
-  paper: "#F7F3EC", // fondo hueso de marca (--background claro) — online-only
-  cyan: "#005859", // primary — único color de acción (P37.598: era #005E5F)
-  purple: "#9B87F5", // decorativo, con cuentagotas (solo chip Exit)
+  ink: LIGHT.foreground,
+  paper: LIGHT.background, // fondo hueso de marca — online-only
+  cyan: LIGHT.primary, // único color de acción
+  purple: BRAND["brand-purple"], // decorativo, con cuentagotas (solo chip Exit)
+  cyanSplit: BRAND["brand-cyan-split"], // capa de color del logo split (BRAND.md)
+  purpleSplit: BRAND["brand-purple-split"],
+  // Propios del PDF, sin token detrás: el acento morado del sitio conmuta con el
+  // tema (D41) y aquí no hay tema, y el atenuado y el filete están calibrados
+  // sobre el hueso del papel, no sobre las superficies de la web.
   purpleAccent: "#6D5AC7",
   muted: "#565B62", // texto secundario legible sobre hueso
   border: "#D9D0BE", // divisor sobre hueso (un punto más marcado que sobre blanco)
-  cyanSplit: "#16BDBD", // capa de color del logo split (BRAND.md)
-  purpleSplit: "#9B87F5",
 };
 
 Font.register({ family: "Bricolage", fonts: [{ src: asset("assets/fonts/bricolage-600.woff"), fontWeight: 600 }] });

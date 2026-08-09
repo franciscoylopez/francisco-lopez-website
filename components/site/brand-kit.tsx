@@ -4,7 +4,11 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/ui/logo";
-import { BRAND_SWATCHES, swatchRatioParts } from "@/lib/design-values";
+import {
+  BRAND_SWATCHES,
+  paletteHex,
+  swatchRatioParts,
+} from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
@@ -826,10 +830,23 @@ export function BrandKit({
 // `foreground` de su propio carril al 18%, el mismo patrón que la bolita del
 // switch (D30). Medido: 1,45 claro / 1,78 oscuro, contra el 1,29 / 1,23 que ya da
 // por bueno el `--border` del sitio sobre `--card`.
+// El plato `ink` va como `style` y no como clase arbitraria (P37.659). Tailwind
+// escanea el código como TEXTO PLANO, así que `bg-[${INK}]` no generaría ninguna
+// clase y el plato se quedaría transparente sin dar error de compilación — es el
+// punto 5 del método de `BRAND.md` §Accesibilidad. Un valor calculado solo puede
+// llegar por `style`. `bg-white` sí puede quedarse: el blanco puro no es un token.
+const INK = paletteHex("dark").background;
+
 const PREVIEW_SURFACE = {
-  card: "",
-  white: "bg-white shadow-[inset_0_0_0_1px_rgba(25,29,33,0.18)]",
-  ink: "bg-[#191D21] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]",
+  card: { class: "", style: undefined },
+  white: {
+    class: "bg-white shadow-[inset_0_0_0_1px_rgba(25,29,33,0.18)]",
+    style: undefined,
+  },
+  ink: {
+    class: "shadow-[inset_0_0_0_1px_rgba(255,255,255,0.18)]",
+    style: { background: INK },
+  },
 } as const;
 
 function VariantCard({
@@ -850,8 +867,9 @@ function VariantCard({
       <div
         className={cn(
           "border-border flex min-h-44 items-center justify-center border-b p-8",
-          PREVIEW_SURFACE[surface],
+          PREVIEW_SURFACE[surface].class,
         )}
+        style={PREVIEW_SURFACE[surface].style}
       >
         {glyph}
       </div>
