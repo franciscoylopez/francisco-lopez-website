@@ -4,7 +4,8 @@
 > estado actual. El **registro completo de decisiones y su porqué** (secciones
 > fechadas, debates, cosas revertidas) vive en **[PRD-Historical.md](./PRD-Historical.md)**.
 > Convenciones de código → `CLAUDE.md` · decisiones técnicas → `DECISIONS.md` ·
-> sistema de marca → `BRAND.md` · overview/stack → `README.md`.
+> sistema de marca → `BRAND.md` (su porqué fechado → `BRAND-historical.md`) ·
+> overview/stack → `README.md`.
 
 ## 1. Propósito
 
@@ -121,14 +122,24 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   sobre la superficie de debajo no aparece en ningún inventario de tokens**. Se encuentra
   recorriendo el DOM, no leyendo `globals.css` — y el tercero, además, solo existe mientras
   el cursor está encima. Corregidos a **8,17/9,17**, **10,63/10,02** y **12,47/12,04**; los
-  dos primeros publicados en la tabla del Design System, que lista **once** pares desde que se le
-añadieron los dos que le faltaban —la bolita del switch y el hover del chrome secundario—. El censo
-  completo —los trece medidos, incluidos los que ninguna página publica— vive desde el
-  2026-08-09 en `lib/design-values.ts` (D38), que es de donde leen las páginas: **la cifra
-  publicada y la del reglamento dejan de ser dos copias**. Sigue habiendo **0 violaciones de axe**
-  en home, Design System y Accesibilidad, ES y EN, claro y oscuro; **queda una en Brand Kit**
-  —`brand-purple-accent` como texto pequeño sobre `--card` en la escalera del logo— que es
-  preexistente, ajena a la capa de etiqueta y está tareada aparte.
+  dos primeros publicados en la tabla del Design System, que lista **once** pares desde que
+  se le añadieron los dos que le faltaban —la bolita del switch y el hover del chrome
+  secundario—. El censo completo —los trece medidos, incluidos los que ninguna página
+  publica— vive desde el 2026-08-09 en `lib/design-values.ts` (D38), que es de donde leen las
+  páginas: **la cifra publicada y la del reglamento dejan de ser dos copias**. Sigue habiendo
+  **0 violaciones de axe** en home, Design System y Accesibilidad, ES y EN, claro y oscuro.
+
+  **Dos incumplimientos abiertos, los dos preexistentes y tareados** (estado a 2026-08-09):
+  `brand-purple-accent` como texto pequeño en la escalera del logo del Brand Kit —la única
+  violación de axe que queda— y, **el que importa**, `--muted-foreground` sobre `--card`, que
+  da **6,40 en oscuro** frente a los 7,12 sobre `--background` que publica la tabla. Afecta a
+  todo texto atenuado dentro de una tarjeta, en las seis páginas, porque **D30 nunca se
+  aplicó a `--card`** — la superficie no-background más común del sitio. Pasa AA con holgura,
+  así que no es una barrera de uso; lo que deja de ser cierto es el «sin excepciones» de más
+  arriba. **Se deja publicado a propósito**: el arreglo va en la ola 3, con estimación de un
+  día, y matizar la frase en cuatro sitios para desmatizarla mañana es trabajo de ida y
+  vuelta. **La decisión caduca si la ola 3 se alarga** — es la situación de P37.598, que pasó
+  trece días publicando una cifra imposible. Detalle en `PRD-Historical.md` §37.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.

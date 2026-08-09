@@ -26,7 +26,7 @@
 - D9 · Alcance de V1 (home + Brand Kit + Design System + SEO/OG + medición + dominio)
 - D10 · Política de documentación de la fase de desarrollo
 - D11 · Andamiaje de calidad del build (i18n tipado, sin tests en V1)
-- D12 · Branching y releases (trunk-based, ramas cortas, tags `vX.Y.Z`)
+- D12 · Branching y releases (trunk-based, ramas cortas, tags `vX.Y.Z`); **cómo se integra un PR: squash si trae un commit, rebase si trae varios**
 - D13 · Entornos y staging = Vercel Previews
 - D14 · Imágenes OG con `ImageResponse` bajo `/api/og`
 - D15 · SITE_URL estable en prod (`VERCEL_PROJECT_PRODUCTION_URL`)
@@ -42,7 +42,7 @@
 - D25 · Páginas 404/error de marca (`global-not-found` + `global-error`)
 - D26 · Cabeceras de seguridad Fase 1; CSP «A+ barato» implementada
 - D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot
-- D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda
+- D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda; su tercera aplicación es el corte de `BRAND.md` (P37.685)
 - D29 · Superficie de contacto unificada: `lib/contact.ts` + `contact-actions.tsx` + jerarquía sólido/outline
 - D30 · Texto atenuado sobre fondos que no son `--background` (bandas): recalcular, no reusar el token
 - D31 · Tracking de clics mailto/tel vía dataLayer (P30); GTM Vista previa solo funciona en producción

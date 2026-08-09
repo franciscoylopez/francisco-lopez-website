@@ -86,6 +86,7 @@ design/                Fuente fiel del diseño (export de Claude Design) — ref
 scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf); hechos del diccionario + texto rico autorado
 scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts contra la de globals.css (D38)
+scripts/design-review/  Censo de pares de contraste del DOM servido (lo usa el skill design-review)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)
 ```
