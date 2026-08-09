@@ -1179,7 +1179,7 @@
           "size": "section-sm",
           "eyebrow": "Header layer",
           "sample": "Headers",
-          "use": "A section of a long index, like the thirteen on this page."
+          "use": "A section of a long index, like the fourteen on this page."
         }
       ],
       "toneTitle": "The label takes its grey from the surface",
@@ -1206,8 +1206,63 @@
       ],
       "ruleFoot": "The four sizes aren't drift, they're hierarchy: the h1 that opens a page isn't the h2 that opens a section, and merging them would break the ladder. It's the CARD/PANEL lesson — before merging values that look alike, check whether they mean different things."
     },
-    "accesibilidad": {
+    "tablas": {
       "num": "(12)",
+      "title": "Tables",
+      "lead": "A table on this site isn't laid out, it's declared. The layer owns the header row, the column widths, the paddings and the markup, so that the system's five tables read as one piece rather than five attempts.",
+      "dataTitle": "Data table",
+      "dataLead": "A grid of cells with column headers. It is real table markup, and that isn't cosmetic: the measured-contrast one is thirteen rows by three columns of numbers, and without cells tied to their column a screen reader reads a string of figures with no way to tell the light theme from the dark. No automated tool catches it, because a div isn't a broken table: it simply isn't a table.",
+      "demoCols": {
+        "part": "Piece",
+        "markup": "Markup",
+        "what": "What it solves"
+      },
+      "demoRows": [
+        {
+          "part": "The table's name",
+          "markup": "caption",
+          "what": "Says what the table is to whoever can't see it. It isn't painted: the heading above already says it on screen."
+        },
+        {
+          "part": "Column header",
+          "markup": "th scope=col",
+          "what": "One definition. Of the three that existed, each property takes the most common value."
+        },
+        {
+          "part": "Row name",
+          "markup": "th scope=row",
+          "what": "Ties every figure to its row: \"Dimmed text over card, light, 9.14:1\" instead of three loose numbers."
+        },
+        {
+          "part": "Column width",
+          "markup": "colgroup",
+          "what": "Declared once. With a grid it was written twice per table and kept in sync by hand."
+        }
+      ],
+      "shapeTitle": "Rule or band: the shape of the row decides",
+      "shapeLead": "The question before merging is always the same: are these two different things, or one doing something the others don't? Here they turned out to be two — but the axis wasn't the obvious one. It isn't the number of columns, it's whether the row fits on a single line.",
+      "shapes": [
+        {
+          "name": "rule",
+          "token": "DataTable",
+          "note": "A row that is one line of cells: breakpoints, logo usage, measured contrast. The hairline is enough, because the whole row fits on one line and the eye doesn't get lost."
+        },
+        {
+          "name": "band",
+          "token": "table-band",
+          "note": "A row that is a block which wraps: a large specimen with a grid of metadata beside it. Two tall rows sit further apart than the two halves of a single row, so the hairline groups nothing and the band is what says where each one starts and ends."
+        }
+      ],
+      "ruleTitle": "What the layer took with it",
+      "rule": [
+        "Three different header-row definitions diverging across seven properties: layout, gap, horizontal padding, vertical padding, tracking, weight and fill.",
+        "Five different vertical row paddings, none of which meant anything.",
+        "The column template written twice per table — header and row — and kept matching by hand."
+      ],
+      "ruleFoot": "The band carries its own dimmed colour, declared in the very rule that paints it. That's not a detail: the type table's text sat at 6.80:1 in dark precisely because the veil lived in one place and the colour in another."
+    },
+    "accesibilidad": {
+      "num": "(13)",
       "title": "Accessibility",
       "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost. It's the internal criterion the site is built and audited against; the public conformance statement will live on the Accessibility page.",
       "contrastTitle": "Measured contrast",
@@ -1297,7 +1352,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(13)",
+      "num": "(14)",
       "title": "Navigable skeleton",
       "devGroupLabel": "Device preview",
       "devFull": "Desktop",

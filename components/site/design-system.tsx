@@ -28,6 +28,7 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
 import { InfoCard } from "@/components/ui/info-card";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
+import { DataTable, SPECIMEN_ROW, TD, TR } from "@/components/ui/table";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 import {
   EYEBROW_GAP,
@@ -263,32 +264,32 @@ export function DesignSystem({
         <div className={WRAP}>
           <SectionHead num={t.breakpoints.num} title={t.breakpoints.title} />
           {/* tabla ≥md */}
-          <div className={cn(PANEL, "hidden md:block")}>
-            <div className="border-border text-muted-foreground grid grid-cols-[minmax(6rem,0.7fr)_minmax(6rem,0.8fr)_minmax(10rem,1.6fr)] gap-[var(--gutter)] border-b px-[var(--page-x)] py-[0.85rem] text-[0.72rem] tracking-[0.05em] uppercase">
-              <span>{t.breakpoints.cols.token}</span>
-              <span>{t.breakpoints.cols.ctx}</span>
-              <span>{t.breakpoints.cols.change}</span>
-            </div>
+          <DataTable
+            caption={t.breakpoints.title}
+            cols={[
+              { label: t.breakpoints.cols.token, width: "23%" },
+              { label: t.breakpoints.cols.ctx, width: "26%" },
+              { label: t.breakpoints.cols.change },
+            ]}
+            className="hidden md:block"
+          >
             {t.breakpoints.rows.map((bp) => (
-              <div
-                key={bp.token}
-                className="border-border grid grid-cols-[minmax(6rem,0.7fr)_minmax(6rem,0.8fr)_minmax(10rem,1.6fr)] items-start gap-[var(--gutter)] border-b px-[var(--page-x)] py-[1.1rem] last:border-b-0"
-              >
-                <span>
+              <TR key={bp.token}>
+                <TD head>
                   <code className="text-foreground font-mono text-[0.9rem] font-semibold">
                     {bp.token}
                   </code>
                   <span className="text-muted-foreground mt-[0.15rem] block text-[0.78rem]">
                     {breakpointRange(bp.token)}
                   </span>
-                </span>
-                <span className="text-[0.88rem] font-medium">{bp.ctx}</span>
-                <span className="text-muted-foreground text-[0.88rem]">
+                </TD>
+                <TD className="text-[0.88rem] font-medium">{bp.ctx}</TD>
+                <TD className="text-muted-foreground text-[0.88rem]">
                   {bp.change}
-                </span>
-              </div>
+                </TD>
+              </TR>
             ))}
-          </div>
+          </DataTable>
           {/* tarjetas <md */}
           <div className="flex flex-col gap-[0.85rem] md:hidden">
             {t.breakpoints.rows.map((bp) => (
@@ -385,24 +386,9 @@ export function DesignSystem({
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.tipografia.lead}
           </p>
-          <div className="border-border overflow-hidden rounded-xl border">
-            {t.tipografia.rows.map((row, i) => (
-              <div
-                key={row.name}
-                // La fila cebra se pinta `--card` al 45%: es una superficie de la
-                // familia `card` aunque no lleve su utilidad, y sin decirlo su
-                // texto atenuado se quedaba en 6,80:1 en oscuro (P37.6565).
-                data-surface={i % 2 === 1 ? "card" : undefined}
-                className="border-border flex flex-wrap items-baseline gap-x-8 gap-y-4 border-b px-[var(--page-x)] py-6 last:border-b-0"
-                style={
-                  i % 2 === 1
-                    ? {
-                        background:
-                          "color-mix(in srgb, var(--card), transparent 55%)",
-                      }
-                    : undefined
-                }
-              >
+          <div className="border-border table-band overflow-hidden rounded-xl border">
+            {t.tipografia.rows.map((row) => (
+              <div key={row.name} className={SPECIMEN_ROW}>
                 <div className="min-w-[min(100%,14rem)] flex-[1_1_16rem] overflow-hidden">
                   <span
                     className={cn("text-foreground block", SAMPLE[row.kind])}
@@ -935,14 +921,11 @@ export function DesignSystem({
               esquema de encabezados de la página —un lector de pantalla los
               anunciaría como secciones que no existen—, que es el mismo motivo
               por el que §(05) enseña la escala tipográfica en <span>. */}
-          <div className={PANEL}>
+          <div className={cn(PANEL, "table-band")}>
             {t.cabeceras.sizes.map((s) => {
               if (!isTitleSize(s.size)) return null;
               return (
-                <div
-                  key={s.size}
-                  className="border-border flex flex-wrap items-baseline gap-x-8 gap-y-5 border-b px-[var(--page-x)] py-7 last:border-b-0"
-                >
+                <div key={s.size} className={SPECIMEN_ROW}>
                   <div className="min-w-[min(100%,14rem)] flex-[1_1_18rem] overflow-hidden">
                     <p className={cn(eyebrowVariants(), EYEBROW_GAP[s.size])}>
                       {s.eyebrow}
@@ -995,7 +978,9 @@ export function DesignSystem({
                       band ? "bg-muted" : "bg-background",
                     )}
                   >
-                    <p className={cn(eyebrowVariants(), "mb-3")}>{tone.label}</p>
+                    <p className={cn(eyebrowVariants(), "mb-3")}>
+                      {tone.label}
+                    </p>
                     <span
                       className={cn(
                         titleVariants({ size: "section-sm" }),
@@ -1028,7 +1013,95 @@ export function DesignSystem({
         </div>
       </section>
 
-      {/* ===================== (12) ACCESIBILIDAD ===================== */}
+      {/* ===================== (12) TABLAS ===================== */}
+      <section data-reveal className={SECTION}>
+        <div className={WRAP}>
+          <SectionHead num={t.tablas.num} title={t.tablas.title} />
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.tablas.lead}
+          </p>
+
+          <h3 className="font-display m-0 mb-2 text-[1rem] font-semibold">
+            {t.tablas.dataTitle}
+          </h3>
+          <p className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]">
+            {t.tablas.dataLead}
+          </p>
+          {/* La demo es una tabla de verdad y con la pieza de verdad: si la capa
+              cambia, este espécimen cambia con ella y no puede mentir. */}
+          <DataTable
+            caption={t.tablas.dataTitle}
+            cols={[
+              { label: t.tablas.demoCols.part, width: "34%" },
+              { label: t.tablas.demoCols.markup, width: "26%" },
+              { label: t.tablas.demoCols.what },
+            ]}
+          >
+            {t.tablas.demoRows.map((r) => (
+              <TR key={r.markup}>
+                <TD head className="text-foreground font-medium">
+                  {r.part}
+                </TD>
+                <TD>
+                  <code className="font-mono text-[0.85rem]">{r.markup}</code>
+                </TD>
+                <TD className="text-muted-foreground text-[0.88rem]">
+                  {r.what}
+                </TD>
+              </TR>
+            ))}
+          </DataTable>
+
+          <h3 className="font-display m-0 mt-10 mb-2 text-[1rem] font-semibold">
+            {t.tablas.shapeTitle}
+          </h3>
+          <p className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]">
+            {t.tablas.shapeLead}
+          </p>
+          <div className={PAIR}>
+            {t.tablas.shapes.map((s) => (
+              <div key={s.name} className={cn(PANEL, "flex flex-col")}>
+                <div
+                  className={cn(
+                    "flex-1 py-2",
+                    s.name === "band" && "table-band",
+                  )}
+                >
+                  {[0, 1, 2].map((i) => (
+                    <div
+                      key={i}
+                      className="border-border flex items-center gap-3 border-b px-5 py-[0.7rem] text-[0.82rem] last:border-b-0"
+                    >
+                      <span className="text-muted-foreground font-mono text-[0.72rem]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="bg-muted h-[0.55rem] flex-1 rounded-sm" />
+                    </div>
+                  ))}
+                </div>
+                <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
+                  <code className="text-muted-foreground font-mono text-[0.74rem]">
+                    {s.token}
+                  </code>
+                  <p className="text-muted-foreground m-0 mt-[0.5rem] text-[0.82rem] leading-[1.55]">
+                    {s.note}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 max-w-[var(--measure)]">
+            <InfoCard
+              title={t.tablas.ruleTitle}
+              bullets={t.tablas.rule}
+              foot={t.tablas.ruleFoot}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== (13) ACCESIBILIDAD ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHead
@@ -1042,48 +1115,41 @@ export function DesignSystem({
           <h3 className="font-display m-0 mt-8 mb-4 text-[1rem] font-semibold">
             {t.accesibilidad.contrastTitle}
           </h3>
-          <div className={PANEL}>
-            <div className="border-border text-muted-foreground flex flex-wrap gap-x-4 gap-y-[0.4rem] border-b px-[var(--page-x)] py-[0.85rem] text-[0.72rem] tracking-[0.05em] uppercase">
-              <span className="min-w-40 flex-[2_1_12rem]">
-                {t.accesibilidad.contrastCols.measure}
-              </span>
-              <span className="min-w-24 flex-[1_1_7rem]">
-                {t.accesibilidad.contrastCols.light}
-              </span>
-              <span className="min-w-24 flex-[1_1_7rem]">
-                {t.accesibilidad.contrastCols.dark}
-              </span>
-            </div>
+          <DataTable
+            caption={t.accesibilidad.contrastTitle}
+            cols={[
+              { label: t.accesibilidad.contrastCols.measure, width: "50%" },
+              { label: t.accesibilidad.contrastCols.light, width: "25%" },
+              { label: t.accesibilidad.contrastCols.dark, width: "25%" },
+            ]}
+          >
             {t.accesibilidad.contrastRows.map((r) => {
               // La fila la nombra el copy; la cifra y el nivel salen del censo.
               if (!isContrastId(r.id)) return null;
               const id = r.id;
               return (
-                <div
-                  key={r.id}
-                  className="border-border flex flex-wrap items-baseline gap-x-4 gap-y-[0.4rem] border-b px-[var(--page-x)] py-4 last:border-b-0"
-                >
-                  <span className="min-w-40 flex-[2_1_12rem]">
+                <TR key={r.id}>
+                  <TD head>
                     <span className="text-foreground font-medium">
                       {r.label}
                     </span>
                     <span className="text-muted-foreground mt-[0.15rem] block text-[0.78rem]">
                       {r.note}
                     </span>
-                  </span>
+                  </TD>
                   {(["light", "dark"] as const).map((theme) => (
-                    <span
+                    <TD
                       key={theme}
-                      className="text-foreground min-w-24 flex-[1_1_7rem] font-mono text-[0.9rem]"
+                      className="text-foreground font-mono text-[0.9rem]"
                     >
                       {ratioText(id, theme, lang)}
                       <ContrastBadge lv={levelOf(id, theme)} />
-                    </span>
+                    </TD>
                   ))}
-                </div>
+                </TR>
               );
             })}
-          </div>
+          </DataTable>
           <p className="text-muted-foreground m-0 mt-4 max-w-[var(--measure)] text-[0.85rem]">
             {t.accesibilidad.contrastNote}
           </p>
@@ -1124,7 +1190,7 @@ export function DesignSystem({
         </div>
       </section>
 
-      {/* ===================== (12) ESQUELETO ===================== */}
+      {/* ===================== (14) ESQUELETO ===================== */}
       <section
         data-reveal
         // Misma familia que la fila cebra: la sección se pinta su propio velo de

@@ -451,6 +451,20 @@
    Regla de la que sale: el icono marca que la acción saca al usuario de la página
    (descarga, otra app, otro sitio). Vive en `components/ui/action.tsx`. */
 
+/* Banda de las tablas de ESPÉCIMEN (`components/ui/table.tsx`, P37.658). El porqué
+   —cuándo una tabla se separa con filete y cuándo con banda— vive allí; aquí está
+   solo lo que no cabe en una utilidad: es una regla de `nth-child` sobre el
+   contenedor, no una clase que se pueda poner en la fila.
+
+   LAS DOS DECLARACIONES VAN JUNTAS A PROPÓSITO. El velo es una superficie de la
+   familia `card`, así que arrastra su propio atenuado; tenerlo en otro sitio es
+   literalmente cómo el texto de esta misma tabla se quedó en 6,80:1 en oscuro
+   hasta P37.6565. Misma lección que D35 con los dos extremos de una transición. */
+.table-band > *:nth-child(even) {
+  background: color-mix(in srgb, var(--card), transparent 55%);
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--card));
+}
+
 /* Iconos de los canales de chrome (teléfono, LinkedIn y CV de la franja de
    contacto, CV del nav y de su menú móvil). Son enlaces de texto, no salen de
    `actionVariants`, así que su tamaño se resuelve aquí — un solo sitio, como el de

@@ -1179,7 +1179,7 @@
           "size": "section-sm",
           "eyebrow": "Capa de cabecera",
           "sample": "Cabeceras",
-          "use": "Sección de un índice largo, como las trece de esta página."
+          "use": "Sección de un índice largo, como las catorce de esta página."
         }
       ],
       "toneTitle": "El rótulo toma su gris de la superficie",
@@ -1206,8 +1206,63 @@
       ],
       "ruleFoot": "Los cuatro tamaños no son deriva, son jerarquía: el h1 que abre una página no es lo mismo que el h2 que abre una sección, y unificarlos rompería la escalera. Es la lección de CARD y PANEL — antes de unificar valores que se parecen, mirar si significan cosas distintas."
     },
-    "accesibilidad": {
+    "tablas": {
       "num": "(12)",
+      "title": "Tablas",
+      "lead": "Una tabla del sitio no se maqueta: se declara. La capa pone la fila de cabecera, el ancho de columna, los paddings y el marcado, para que las cinco tablas del sistema se lean como la misma pieza y no como cinco intentos.",
+      "dataTitle": "Tabla de datos",
+      "dataLead": "Rejilla de celdas con cabecera de columna. Es marcado de tabla de verdad, y eso no es cosmética: en la de contraste medido son trece filas por tres columnas de números, y sin celdas asociadas a su columna un lector de pantalla las lee como una ristra de cifras sin saber cuál es el tema claro y cuál el oscuro. Ninguna herramienta automática lo detecta, porque un div no es una tabla rota: simplemente no es una tabla.",
+      "demoCols": {
+        "part": "Pieza",
+        "markup": "Marcado",
+        "what": "Qué resuelve"
+      },
+      "demoRows": [
+        {
+          "part": "Nombre de la tabla",
+          "markup": "caption",
+          "what": "Dice qué es la tabla a quien no la ve. No se pinta: el titular de encima ya lo dice en pantalla."
+        },
+        {
+          "part": "Cabecera de columna",
+          "markup": "th scope=col",
+          "what": "Una sola definición. De las tres que había se toma la moda de cada propiedad."
+        },
+        {
+          "part": "Nombre de la fila",
+          "markup": "th scope=row",
+          "what": "Ata cada cifra a su fila: «Atenuado sobre card, claro, 9,14:1» en vez de tres números sueltos."
+        },
+        {
+          "part": "Ancho de columna",
+          "markup": "colgroup",
+          "what": "Se declara una vez. Con rejilla estaba escrito dos veces por tabla y había que hacerlos coincidir a mano."
+        }
+      ],
+      "shapeTitle": "Filete o banda: lo decide la forma de la fila",
+      "shapeLead": "La pregunta antes de unificar es siempre la misma: ¿son dos cosas distintas o es una haciendo algo que las otras no? Aquí resultaron ser dos, pero el eje no era el que parecía — no es el número de columnas, es si la fila cabe en un renglón.",
+      "shapes": [
+        {
+          "name": "rule",
+          "token": "DataTable",
+          "note": "Fila de una línea de celdas: breakpoints, uso del logo, contraste medido. El filete basta, porque la fila entera cabe en un renglón y el ojo no se pierde."
+        },
+        {
+          "name": "band",
+          "token": "table-band",
+          "note": "Fila que es un bloque que se envuelve: un espécimen grande y una rejilla de metadatos al lado. Entre dos filas altas hay más distancia que entre las dos mitades de una misma fila, así que el filete no agrupa nada y la banda es la que dice dónde empieza y acaba cada una."
+        }
+      ],
+      "ruleTitle": "Qué se llevó por delante la capa",
+      "rule": [
+        "Tres definiciones distintas de fila de cabecera que divergían en siete propiedades: layout, gap, padding lateral, padding vertical, tracking, peso y fondo.",
+        "Cinco paddings verticales de fila distintos, ninguno de los cuales significaba nada.",
+        "La plantilla de columnas escrita dos veces por tabla —cabecera y fila— y mantenida a mano para que coincidiera."
+      ],
+      "ruleFoot": "La banda arrastra su propio atenuado, declarado en la misma regla que la pinta. No es un detalle: el texto de la tabla de tipografía se quedó en 6,80:1 en oscuro precisamente por tener el velo en un sitio y el color en otro."
+    },
+    "accesibilidad": {
+      "num": "(13)",
       "title": "Accesibilidad",
       "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual. Es el criterio interno con el que se construye y audita el sitio; la declaración pública de conformidad vivirá en la página de Accesibilidad.",
       "contrastTitle": "Contraste medido",
@@ -1297,7 +1352,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(13)",
+      "num": "(14)",
       "title": "Esqueleto navegable",
       "devGroupLabel": "Vista previa por dispositivo",
       "devFull": "Escritorio",
