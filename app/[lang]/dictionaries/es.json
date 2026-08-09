@@ -1239,27 +1239,14 @@
           "what": "Se declara una vez. Con rejilla estaba escrito dos veces por tabla y había que hacerlos coincidir a mano."
         }
       ],
-      "shapeTitle": "Filete o banda: lo decide la forma de la fila",
-      "shapeLead": "La pregunta antes de unificar es siempre la misma: ¿son dos cosas distintas o es una haciendo algo que las otras no? Aquí resultaron ser dos, pero el eje no era el que parecía — no es el número de columnas, es si la fila cabe en un renglón.",
-      "shapes": [
-        {
-          "name": "rule",
-          "token": "DataTable",
-          "note": "Fila de una línea de celdas: breakpoints, uso del logo, contraste medido. El filete basta, porque la fila entera cabe en un renglón y el ojo no se pierde."
-        },
-        {
-          "name": "band",
-          "token": "table-band",
-          "note": "Fila que es un bloque que se envuelve: un espécimen grande y una rejilla de metadatos al lado. Entre dos filas altas hay más distancia que entre las dos mitades de una misma fila, así que el filete no agrupa nada y la banda es la que dice dónde empieza y acaba cada una."
-        }
-      ],
       "ruleTitle": "Qué se llevó por delante la capa",
       "rule": [
         "Tres definiciones distintas de fila de cabecera que divergían en siete propiedades: layout, gap, padding lateral, padding vertical, tracking, peso y fondo.",
         "Cinco paddings verticales de fila distintos, ninguno de los cuales significaba nada.",
-        "La plantilla de columnas escrita dos veces por tabla —cabecera y fila— y mantenida a mano para que coincidiera."
+        "La plantilla de columnas escrita dos veces por tabla —cabecera y fila— y mantenida a mano para que coincidiera.",
+        "La cebra que llevaba una sola tabla. Hay un separador de tabla en el sistema, y es el filete."
       ],
-      "ruleFoot": "La banda arrastra su propio atenuado, declarado en la misma regla que la pinta. No es un detalle: el texto de la tabla de tipografía se quedó en 6,80:1 en oscuro precisamente por tener el velo en un sitio y el color en otro."
+      "ruleFoot": "Esa cebra tenía a su favor un argumento razonable —una fila alta que se envuelve no la agrupa un filete— y aun así se borró al medirla: daba un salto de 1,02 en claro, contra los 3,89 de la pastilla de hover, que es el escalón que este sitio usa como referencia de que algo se ve. No estaba agrupando filas; estaba poniendo un tinte por debajo del umbral. Un argumento de diseño bien construido sigue siendo una hipótesis hasta que se mide."
     },
     "accesibilidad": {
       "num": "(13)",

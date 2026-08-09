@@ -1239,27 +1239,14 @@
           "what": "Declared once. With a grid it was written twice per table and kept in sync by hand."
         }
       ],
-      "shapeTitle": "Rule or band: the shape of the row decides",
-      "shapeLead": "The question before merging is always the same: are these two different things, or one doing something the others don't? Here they turned out to be two — but the axis wasn't the obvious one. It isn't the number of columns, it's whether the row fits on a single line.",
-      "shapes": [
-        {
-          "name": "rule",
-          "token": "DataTable",
-          "note": "A row that is one line of cells: breakpoints, logo usage, measured contrast. The hairline is enough, because the whole row fits on one line and the eye doesn't get lost."
-        },
-        {
-          "name": "band",
-          "token": "table-band",
-          "note": "A row that is a block which wraps: a large specimen with a grid of metadata beside it. Two tall rows sit further apart than the two halves of a single row, so the hairline groups nothing and the band is what says where each one starts and ends."
-        }
-      ],
       "ruleTitle": "What the layer took with it",
       "rule": [
         "Three different header-row definitions diverging across seven properties: layout, gap, horizontal padding, vertical padding, tracking, weight and fill.",
         "Five different vertical row paddings, none of which meant anything.",
-        "The column template written twice per table — header and row — and kept matching by hand."
+        "The column template written twice per table — header and row — and kept matching by hand.",
+        "The zebra striping a single table carried. There is one table separator in this system, and it's the hairline."
       ],
-      "ruleFoot": "The band carries its own dimmed colour, declared in the very rule that paints it. That's not a detail: the type table's text sat at 6.80:1 in dark precisely because the veil lived in one place and the colour in another."
+      "ruleFoot": "That zebra had a reasonable argument behind it — a hairline doesn't group a tall row that wraps — and it was deleted anyway once measured: it stepped 1.02 in light, against the 3.89 of the hover pill, which is the step this site uses as its reference for something being visible. It wasn't grouping rows; it was laying down a tint below the threshold. A well-built design argument is still a hypothesis until it's measured."
     },
     "accesibilidad": {
       "num": "(13)",

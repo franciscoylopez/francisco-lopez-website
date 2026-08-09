@@ -451,19 +451,14 @@
    Regla de la que sale: el icono marca que la acción saca al usuario de la página
    (descarga, otra app, otro sitio). Vive en `components/ui/action.tsx`. */
 
-/* Banda de las tablas de ESPÉCIMEN (`components/ui/table.tsx`, P37.658). El porqué
-   —cuándo una tabla se separa con filete y cuándo con banda— vive allí; aquí está
-   solo lo que no cabe en una utilidad: es una regla de `nth-child` sobre el
-   contenedor, no una clase que se pueda poner en la fila.
-
-   LAS DOS DECLARACIONES VAN JUNTAS A PROPÓSITO. El velo es una superficie de la
-   familia `card`, así que arrastra su propio atenuado; tenerlo en otro sitio es
-   literalmente cómo el texto de esta misma tabla se quedó en 6,80:1 en oscuro
-   hasta P37.6565. Misma lección que D35 con los dos extremos de una transición. */
-.table-band > *:nth-child(even) {
-  background: color-mix(in srgb, var(--card), transparent 55%);
-  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--card));
-}
+/* Aquí vivió `.table-band`, la cebra de las tablas de espécimen, entre dos ratos
+   del 2026-08-09 (P37.658). Se borró al MEDIRLA: el velo daba un salto de ΔL*
+   **1,02 en claro** y 2,02 en oscuro, contra los 3,89 / 9,04 de la pastilla de
+   hover, que es el escalón que este proyecto usa como referencia de «esto se ve».
+   O sea que no estaba agrupando filas —que era su única justificación—: estaba
+   poniendo un tinte por debajo del umbral, y así es como se detectó, porque se leía
+   como que algo no cuadraba. El separador de tabla del sistema es el filete, uno y
+   solo uno. Ver `components/ui/table.tsx`. */
 
 /* Iconos de los canales de chrome (teléfono, LinkedIn y CV de la franja de
    contacto, CV del nav y de su menú móvil). Son enlaces de texto, no salen de
