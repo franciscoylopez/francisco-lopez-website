@@ -540,10 +540,22 @@ export function BrandKit({
                         {t.logotipo.ladder.crescent}{" "}
                         {(h * 0.051).toFixed(1).replace(".", ",")}px
                       </div>
+                      {/* El peldaño que no sirve se ATENÚA, no se tiñe (P37.657).
+                          Llevaba `brand-purple-accent` a 10,88px sobre `--card`:
+                          3,70 claro y 3,96 oscuro, o sea fallo de AA, y encima un
+                          uso del token fuera de su regla (existe solo para fondos
+                          invertidos y texto grande). Y no era cuestión de elegir
+                          otro morado: el estándar da 2,81 en claro, peor todavía.
+                          Ningún morado de esta marca es texto pequeño sobre una
+                          tarjeta clara. `text-muted-foreground` da 9,14 y 10,32 sin
+                          par nuevo —lo resuelve `--surface-dim` de la tarjeta
+                          (D39)— y dice lo que hay que decir: este peldaño está
+                          degradado, no en error. La distinción no queda codificada
+                          por color: cada estado lleva su propia palabra. */}
                       <div
                         className={cn(
                           "mt-[0.35rem] text-[0.68rem] font-semibold tracking-[0.04em] uppercase",
-                          works ? "text-primary" : "text-brand-purple-accent",
+                          works ? "text-primary" : "text-muted-foreground",
                         )}
                       >
                         {works
@@ -892,8 +904,15 @@ function Callout({
   accent: "primary" | "purple";
   children: React.ReactNode;
 } & React.HTMLAttributes<HTMLDivElement>) {
-  const color =
-    accent === "primary" ? "var(--primary)" : "var(--brand-purple-accent)";
+  // El acento morado es `--brand-purple`, no `--brand-purple-accent` (P37.657).
+  // Este callout vive sobre `--card`, y el accent existe SOLO para fondos
+  // invertidos — la propia regla de BRAND.md dice que fuera de ahí va el morado
+  // estándar. Antes daba igual de lejos (los dos morados se parecían); desde que
+  // el accent conmuta con el tema, usarlo aquí lo dejaría en 2,07 claro / 1,91
+  // oscuro, o sea invisible sobre la tarjeta. El filete y el icono son
+  // decoración —el icono es `aria-hidden` y el texto lleva el mensaje entero—,
+  // así que no hay umbral que cumplir; lo que hay que cumplir es la regla.
+  const color = accent === "primary" ? "var(--primary)" : "var(--brand-purple)";
   return (
     <div
       {...rest}

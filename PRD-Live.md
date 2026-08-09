@@ -151,18 +151,36 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   Design System, que pasa a listar **trece** pares. De paso cayó un par que nadie había
   medido: el rótulo del panel de tokens invertido daba **4,33 en oscuro, por debajo de AA**.
 
-  **Un incumplimiento abierto, preexistente y tareado** (estado a 2026-08-09): los rótulos
-  de la **escalera split→flat del logo, en el Brand Kit**. La tarea (**P37.657**) se abrió
-  por un solo par —`brand-purple-accent` a 3,69, la única violación de axe que queda— pero
-  al re-medir son **cuatro**: 3,49 y 3,70/3,96 en morado, y **5,21 y 6,57 en cian**, que la
-  salvedad publicada («salvo `brand-purple-accent`») no cubre. Ninguno conmuta con el tema,
-  que es parte del problema: son colores de marca fijos sobre una superficie que sí conmuta.
-  **Se deja publicada la frase «sin excepciones» a propósito**: Francisco decidió el
-  2026-08-09 meter P37.657 en la ola 3 y arreglar el fondo en vez de matizar el texto en
-  cuatro sitios para desmatizarlo después. Es la misma decisión que se tomó con el atenuado
-  sobre `--card`, y aquella se cumplió: subió al día siguiente. **La decisión caduca si la
-  ola 3 se alarga** — es la situación de P37.598, que pasó trece días publicando una cifra
-  imposible. Detalle en `PRD-Historical.md` §37.
+  **CERRADO el 2026-08-10 (P37.657): «sin excepciones» ya es literal.** Era el último
+  incumplimiento abierto —los rótulos de la escalera split→flat del Brand Kit— y al medirlo
+  resultó ser dos problemas distintos que el censo había apilado en uno. **De los «cuatro
+  pares» que el PRD daba por incumplimiento, solo uno lo era**: los otros tres son los «Aa»
+  de las muestras de color, de 24px y peso 600 —texto grande, donde AAA es 4,5 y no 7—, así
+  que 5,21 y 6,57 **cumplían**; los marcaba el censo por aplicar el umbral de texto normal a
+  todo. Lección de método, la cuarta de la misma familia: *un umbral mal aplicado inventa
+  hallazgos igual que un metro mal calibrado*.
+
+  El que sí fallaba —`brand-purple-accent` a 10,88px sobre `--card`, 3,70/3,96— no se
+  arreglaba eligiendo otro morado: el estándar da **2,81** en claro, peor todavía. Ningún
+  morado de esta marca puede ser texto pequeño sobre una tarjeta clara, así que el rótulo
+  pasa a `text-muted-foreground` (**9,14/10,32**, heredado de D39 sin par nuevo): el peldaño
+  que no sirve se **atenúa**, no se tiñe.
+
+  Y tirando de ese hilo cayó la excepción de fondo, que llevaba abierta desde que el token
+  existe. `brand-purple-accent` **no podía ser AAA siendo fijo, y no por ser morado**: la
+  banda invertida se pinta sobre `--foreground`, que salta de carbón (luminancia 0,019) a
+  hueso (0,899) al cambiar de tema, y **un solo color contra las dos superficies topa en
+  √13,79 = 3,71:1** — la media geométrica de sus contrastes. El valor de entonces (3,96/3,49)
+  estaba justo en ese óptimo: no se eligió mal, se eligió lo mejor de un problema sin
+  solución. Se resuelve **haciendo que el token conmute**, el patrón que
+  `--primary-on-inverted` ya usaba —y cuyo comentario en `globals.css` llevaba meses llamando
+  a `brand-purple-accent` «su hermano, que existe por esta misma razón»—: el cian conmutó y
+  funcionó; el morado se quedó fijo y topó con el techo. Ahora **7,04 claro / 7,21 oscuro**,
+  AAA de texto normal, sin la coletilla «solo texto grande». Detalle en `DECISIONS.md` D41.
+
+  Verificado el 2026-08-10: censo del DOM con el metro validado (13,79 / 15,32) **sin ningún
+  par bajo AAA** en home y Brand Kit, y **0 violaciones de axe** en home, Brand Kit y Design
+  System, ES y EN, claro y oscuro.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.

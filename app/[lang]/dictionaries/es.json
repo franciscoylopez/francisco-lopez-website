@@ -960,7 +960,7 @@
       "rule": [
         "primary es el único color de acción. secondary / muted / accent permanecen neutros.",
         "Enlaces, en dos reglas: primary para enlaces de contenido; foreground / muted-foreground para la navegación de chrome (nav, breadcrumb, footer).",
-        "Los tonos de marca decoran o firman el logo — con una excepción: brand-purple-accent es un tono de marca usado como texto sobre fondos invertidos (AA-large, ≥3:1). Splits y pasteles, nunca como texto."
+        "Los tonos de marca decoran o firman el logo — con una excepción: brand-purple-accent es un tono de marca usado como texto sobre fondos invertidos, y conmuta con el tema porque un color fijo no puede leerse sobre los dos. Splits y pasteles, nunca como texto."
       ],
       "ruleFoot": "Usa el conmutador de la cabecera para ver esta misma página en ambos modos."
     },
@@ -1322,10 +1322,10 @@
         {
           "id": "purpleAccent",
           "label": "brand-purple-accent",
-          "note": "Solo texto grande (≥3:1) sobre fondo invertido"
+          "note": "Sobre fondo invertido; conmuta con el tema para llegar a AAA"
         }
       ],
-      "contrastNote": "Todos los pares de texto del sistema alcanzan AAA en claro y oscuro, y no solo en reposo: los estados de hover también, que es donde suele escaparse. El último que faltaba era el hover del toggle apagado, y se resolvió moviendo el color del texto en vez de apagar el fondo — subir la cifra quitando la señal visual no es accesibilidad, es esconder el problema del informe. La única excepción intencionada es brand-purple-accent, que cumple solo como texto grande (≥3:1) sobre fondos invertidos, nunca como cuerpo.",
+      "contrastNote": "Todos los pares de texto del sistema alcanzan AAA en claro y oscuro, y no solo en reposo: los estados de hover también, que es donde suele escaparse. Ya no hay excepciones. La última en caer fue brand-purple-accent, el morado de las bandas invertidas, y no se arreglaba eligiendo otro morado: el fondo de esas bandas es el propio texto de la página, así que salta de carbón a hueso al cambiar de tema, y contra las dos superficies a la vez ningún color fijo puede pasar de 3,71:1 — no por ser morado, sino por aritmética. Se resolvió dándole dos valores, uno por tema, como ya hacía el cian de esos mismos fondos.",
       "checklistTitle": "Checklist de cierre",
       "checklist": [
         "Contraste medido, con cifra, en ambos temas. AA es el suelo no negociable; AAA siempre que se alcance sin coste visual.",

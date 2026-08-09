@@ -331,8 +331,14 @@ export const CONTRAST = {
   switchKnobOff: { light: 12.47, dark: 12.04 },
   /** Hover del chrome secundario: `--foreground` sobre la pastilla `--muted`. */
   chromeHover: { light: 12.47, dark: 12.04 },
-  /** `--brand-purple-accent` sobre fondo invertido. Solo como texto grande. */
-  purpleAccent: { light: 3.96, dark: 3.48, size: "large" },
+  /**
+   * `--brand-purple-accent` sobre fondo invertido. Dejó de ser «solo texto grande»
+   * en P37.657: el token conmuta con el tema y el par sube de 3,96/3,49 a 7,04/7,21.
+   * Era la última salvedad del «todos en AAA» y la única que no se podía arreglar
+   * ajustando el color — un color fijo topa en 3,71:1 contra las dos superficies
+   * invertidas. El cálculo está en `globals.css`, junto al token.
+   */
+  purpleAccent: { light: 7.04, dark: 7.21 },
   /** Tinta sobre el pastel cian. No conmuta: los dos colores son fijos. */
   inkOnCyanSoft: { light: 10.5, dark: null, decimals: 1 },
   /** Tinta sobre el pastel morado. Tampoco conmuta. */
@@ -512,10 +518,15 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
   {
     id: "purpleAccent",
     token: "--brand-purple-accent",
-    hex: "oklch(0.62 0.16 290)",
-    swaps: false,
+    hex: "#B7A3FF · #583DA6",
+    swaps: true,
     sample: "var(--brand-purple-accent)",
-    sampleFg: "#F7F3EC",
+    // El «Aa» se pinta con `--foreground`, que es LA SUPERFICIE donde este token
+    // vive de verdad (la banda invertida usa `--foreground` de fondo). Así la
+    // muestra enseña exactamente el par que la tabla publica —7,04 y 7,21— en vez
+    // de un par inventado para la muestra: antes iba fijo a `#F7F3EC` y daba 3,49,
+    // que era uno de los pares bajo AAA que encontró el censo de P37.657.
+    sampleFg: "var(--foreground)",
     ratioLabel: "onInverted",
     figures: [
       { ref: "purpleAccent", theme: "light", qualifier: "inLight" },

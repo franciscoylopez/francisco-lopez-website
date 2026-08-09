@@ -10,8 +10,12 @@ export type MasAllaDict = {
 
 // Más allá del PM (PRD §8.3). Banda de manifiesto con fondo invertido (bg =
 // foreground, texto = background), simétrica en ambos temas. "Exit" y el divisor
-// usan --brand-purple-accent (AA-large verificado sobre fondos invertidos). Los
-// textos apagados se mezclan en sRGB para no perder el tono (ver Nav).
+// usan --brand-purple-accent, que desde P37.657 CONMUTA con el tema y da 7,04
+// claro / 7,21 oscuro — AAA de texto normal. Antes era un color fijo y se quedaba
+// en 3,96/3,49: el fondo de esta banda es --foreground, o sea que salta de carbón
+// a hueso, y ningún color fijo puede pasar de 3,71:1 contra las dos superficies
+// (el cálculo, en globals.css). Los textos apagados se mezclan en sRGB para no
+// perder el tono (ver Nav).
 //
 // EL 80% NO ES ARBITRARIO. El eyebrow estaba al 58% y en tema OSCURO daba 4,07:1
 // (axe lo cazaba: AA pide 4,5 a 13px) — el fondo efectivo de la banda es

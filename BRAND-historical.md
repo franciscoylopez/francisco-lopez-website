@@ -314,3 +314,19 @@ que nadie asocia con diseño. Al migrarla apareció además un fallo de la capa 
 padding lateral usaba `--page-x` (40px), heredado de las tablas a ancho de página, y dentro de
 una columna de lectura de 42rem esos 80px se comían casi un cuarto de la tabla. **La capa nueva
 había dejado esa tabla peor que como estaba**, y solo se vio comparándola con producción.
+
+## El morado de los fondos invertidos
+
+**2026-08-10 (P37.657).** `brand-purple-accent` se publicó desde el principio con una salvedad
+—«cumple solo como texto grande (≥3:1) sobre fondos invertidos»— y era la única grieta en el
+«todos los pares en AAA, sin excepciones». Al ir a cerrarla se vio que **la salvedad no era del
+morado**: las secciones invertidas se pintan sobre `--foreground`, que salta de carbón a hueso
+con el tema, y contra esas dos superficies a la vez **ningún color fijo puede pasar de
+3,71:1** (la media geométrica de sus contrastes). El valor que teníamos daba 3,96 y 3,49, media
+geométrica 3,72: estaba **en el óptimo**. Se probó lo obvio primero —cambiarlo por el morado
+estándar— y era peor: 2,81 sobre tarjeta clara.
+
+Lo que lo desbloqueó no fue elegir mejor el color, sino dejar de exigirle que fuera uno solo.
+El token conmuta con el tema y sube a **7,04/7,21**. **El cálculo completo, los dos call sites
+que usaban el token fuera de su regla y la lección de método sobre los umbrales del censo están
+en `DECISIONS.md` D41** — aquí no se copian, que es la regla 5 de «Cómo se escribe una regla».

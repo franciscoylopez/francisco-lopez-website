@@ -33,11 +33,17 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
    - `brand-*-soft` (los pasteles) son de bajo contraste: NO los uses como color de texto, de
      botón ni de cualquier elemento que deba leerse. Solo relleno decorativo.
    - `brand-cyan` manda; `brand-purple` es apoyo, con cuentagotas.
-   - `brand-purple-accent` (`oklch(0.62 0.16 290)`): variante de `brand-purple` ajustada para
-     servir como texto/acento legible en **secciones con fondo invertido** (fondo =
-     `foreground`, texto = `background`), donde el `brand-purple` estándar no llega a AA de
-     texto grande en ambas direcciones de tema. Úsalo solo ahí — como acento de texto grande
-     (≥3:1, no como texto corrido ≥4.5:1). Fuera de ese contexto, `brand-purple`.
+   - `brand-purple-accent`: variante de `brand-purple` ajustada para servir como texto/acento
+     legible en **secciones con fondo invertido** (fondo = `foreground`, texto =
+     `background`), donde el `brand-purple` estándar no llega. Úsalo **solo ahí**; fuera de
+     ese contexto, `brand-purple`.
+     **Es el único token de marca que CONMUTA con el tema** (`0.78` en claro, `0.45` en
+     oscuro), y tiene que hacerlo: el fondo de esas secciones *es* `--foreground`, así que
+     salta de carbón a hueso. Un color fijo no puede pasar de **3,71:1** contra las dos
+     superficies —es la media geométrica de sus contrastes, no una estimación—, así que la
+     salvedad «solo texto grande» que arrastró hasta el 2026-08-09 no era del morado: era de
+     cualquier color fijo. Al conmutar da **7,04 / 7,21** y entra en AAA sin coletilla. Mismo
+     patrón que `--primary-on-inverted`.
 
 ### El atenuado lo pone la superficie, no el punto de uso
 
@@ -184,8 +190,10 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
-  están en AAA en ambos temas, en reposo y en hover. Sin excepciones**, salvo
-  `brand-purple-accent`, que cumple solo como texto grande sobre fondos invertidos.
+  están en AAA en ambos temas, en reposo y en hover. Sin excepciones** — la última que
+  quedaba, `brand-purple-accent`, dejó de serlo el 2026-08-10 al hacerlo conmutar con el tema
+  (§Color): la salvedad no era del morado, era de cualquier color fijo puesto sobre dos
+  superficies opuestas.
 - **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es
   la fuente del **porqué** —qué par existe, por qué se eligió ese color y qué se probó antes—;
   el **valor** lo tiene un solo sitio, del que beben las páginas que lo publican.
