@@ -1242,3 +1242,34 @@ tipo: se levantó el sitio construido y se compararon las **19 cifras de la tabl
 nueve pies de muestra** en ES y EN contra lo publicado antes. Todo tenía que salir carácter
 por carácter igual salvo las correcciones buscadas. Un diff de la página servida prueba
 más que leer el diff del código —es la misma idea que el gate de P37.69.
+
+**Ampliada 2026-08-09 (P37.6605) — las copias que SÍ son legítimas, y qué las vigila.**
+Dos consumidores no pueden pedir el color con `var(--…)`: el **mock de tema** del Design
+System pinta las dos paletas a la vez y las CSS vars solo dan la del tema activo, y las
+**imágenes OG** las genera Satori, que no lee CSS vars ni resuelve `oklch`. Ahí la copia es
+inevitable. Lo que no lo era es que **cada uno tuviera la suya**: el mock llevaba nueve
+valores por tema, las OG ocho y el pie de cada tarjeta tres más, y de esos **cinco habían
+divergido** —el cian claro del mock seguía en el valor anterior a P37.598, y las OG y los
+pies citaban un atenuado y dos bordes de una generación previa de la paleta—.
+
+La forma de la solución, que es lo reutilizable: **una sola copia, en el módulo, con el
+mismo texto `oklch` que el CSS**, y el hex que necesita Satori **derivado** por código
+(`oklchToHex`) en vez de escrito. Así no queda ni un hex a mano en todo el repo, y el único
+sitio donde puede haber deriva es un fichero de veinticuatro líneas.
+
+**Y sobre todo: un guardián que mira el invariante donde ocurre.** `npm run check:palette`
+corre en CI antes del build y compara los 24 tokens del módulo con `globals.css` carácter a
+carácter, verifica que la conversión reproduce lo que pinta Chrome (16 valores medidos, con
+tolerancia de un paso de 8 bits porque uno cae justo en el filo del redondeo) y falla si se
+añade un token que nadie ha medido. Se validó **inyectando el bug original**: lo caza. Sin
+eso, el registro de esta decisión sería otra nota que hay que recordar — que es exactamente
+lo que D37 identificó como el patrón de fondo de este repo.
+
+**El detalle que más enseña no es el cian.** Dos de los hexes equivocados eran **texto**: el
+pie que cita `bg … · card … · border …` bajo cada tarjeta del mock. Vivían en el
+diccionario, con los mismos seis caracteres en ES y en EN —o sea que la prueba literal de
+arriba ya decía que no eran copy— y **los destapó una captura de pantalla tomada para otra
+cosa**, no una auditoría. Nadie los contaba como copias de un token porque son texto, no
+color, y ninguna herramienta compara un párrafo con el píxel que tiene al lado. La lección
+práctica: **al inventariar copias de un valor, buscar también las que están escritas en
+prosa**, no solo las que pintan.

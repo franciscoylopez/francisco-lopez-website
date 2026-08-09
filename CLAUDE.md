@@ -51,7 +51,7 @@
 - D35 · Los dos extremos de una `transition` van en la misma regla que la declara
 - D36 · Capa de componentes: las cinco capas (`action.tsx` · `chrome.tsx` · `badge.tsx` · `heading.tsx` · `layout.ts`); frontera `ui/`↔`site/` (¿la pieza sabe algo de este sitio?) y, dentro, ¿se pulsa? → ¿tiene caja?
 - D37 · Endurecimiento del workflow de CI (permissions, persist-credentials, pinning por SHA); qué plugins audita Qlty y por qué un check de PR no ve lo que no se toca
-- D38 · Fuente única de los valores publicados (`lib/design-values.ts`): ejecutable / publicada / del porqué; el diccionario solo lleva copy
+- D38 · Fuente única de los valores publicados (`lib/design-values.ts`): ejecutable / publicada / del porqué; el diccionario solo lleva copy; paleta única para mock de tema y OG, con guardián en CI (`npm run check:palette`)
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 

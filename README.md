@@ -59,6 +59,7 @@ npm run start      # sirve el build de producción
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 npm run format     # Prettier
+npm run check:palette  # la paleta del código contra la de globals.css (D38)
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
 ```
 
@@ -73,7 +74,7 @@ app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i18n
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
-.github/workflows/     CI (GitHub Actions): typecheck + lint + build en cada PR
+.github/workflows/     CI (GitHub Actions): format + typecheck + lint + paleta + build en cada PR
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
 components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36
 components/site/        Piezas que SÍ saben de este sitio: bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
@@ -84,6 +85,7 @@ public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf); hechos del diccionario + texto rico autorado
+scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts contra la de globals.css (D38)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)
 ```
