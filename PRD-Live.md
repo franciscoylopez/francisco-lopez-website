@@ -63,9 +63,9 @@ V1 lanzada. En vivo:
 10. **Footer** — Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn.
 
 Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas. El **Design System**
-documenta el sistema en once secciones; desde el 2026-08-04 publica también **«Botones y
-acciones»**, con las variantes reales del sitio como demo — si una variante cambia, la
-página cambia con ella.
+documenta el sistema en doce secciones; desde el 2026-08-04 publica **«Botones y acciones»**
+y desde el 2026-08-09 **«Etiquetas»**, las dos con las piezas reales del sitio como demo —
+si una variante cambia, la página cambia con ella y no puede mentir.
 
 **Las tres superficies de contacto comparten un solo patrón** (franja de la home, cierre
 de Sobre mí y «reportar una barrera» de Accesibilidad): mismo componente, mismos datos y
@@ -80,9 +80,13 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   tipado, cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 - **Marca**: regla de dos capas (cian = único color de acción; morado decorativo con
   cuentagotas), tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
-- **Capa de componentes**: todo elemento accionable —botón, chip, toggle, pestaña,
-  control de icono— sale de `components/ui/action.tsx`, y las cajas y ritmos comunes de
-  `components/ui/layout.ts`. **Ninguno se escribe con clases sueltas**: si un caso no
+- **Capa de componentes — cuatro capas**: todo elemento accionable —botón, chip, toggle,
+  pestaña, control de icono— sale de `components/ui/action.tsx`; el **rótulo que no se
+  pulsa** (la pastilla de «Exit», «AAA», «13,79:1») de `components/ui/badge.tsx`; el par
+  **eyebrow + titular** de `components/ui/heading.tsx`; y las cajas y ritmos comunes de
+  `components/ui/layout.ts`. Entre acción y etiqueta decide una sola pregunta —**¿se
+  pulsa?**—, porque sin pulsación no hay estado, hover, foco ni suelo táctil, y media base
+  de la variante de acción no significaría nada. **Ninguno se escribe con clases sueltas**: si un caso no
   encaja en una variante, se crea la variante; la excepción se documenta con fecha. Es
   lo que hace que un cambio de hover, de radio, del objetivo táctil, del icono que lleva
   una acción o del fondo de reposo de un control solo-icono llegue a todo el sitio a la
@@ -103,6 +107,15 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   2026-08-08** con un medidor independiente que reproduce al céntimo los ocho pares
   publicados en los dos temas — las cifras que el sitio publica son fiables; lo que
   quedaba desactualizado eran dos párrafos del propio `BRAND.md`, ya corregidos.
+  **Ampliado el 2026-08-09 (P37.655): el censo de pares tenía dos huecos**, los de la
+  pastilla —6,44/5,56 la neutra y 6,07/5,46 la teñida—, que ninguna de las dos auditorías
+  anteriores vio porque **un par que solo existe al componer un velo sobre la superficie de
+  debajo no aparece en ningún inventario de tokens**: se encuentra recorriendo el DOM, no
+  leyendo `globals.css`. Corregidos a **8,17/9,17 y 10,63/10,02** y publicados en la tabla
+  del Design System, que ahora lista **diez** pares. Sigue habiendo **0 violaciones de axe**
+  en home, Design System y Accesibilidad, ES y EN, claro y oscuro; **queda una en Brand Kit**
+  —`brand-purple-accent` como texto pequeño sobre `--card` en la escalera del logo, 3,69:1—
+  que es preexistente, ajena a la capa de etiqueta y está tareada aparte.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.

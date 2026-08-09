@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
+import { Badge } from "@/components/ui/badge";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
@@ -241,15 +242,9 @@ function HeroComposition() {
           <div className="font-display text-foreground mt-1 text-[2rem] leading-none">
             AAA
           </div>
-          <div
-            className="text-primary mt-2 inline-flex items-center rounded-full px-2 py-[0.15rem] font-mono text-[0.68rem] font-semibold"
-            style={{
-              background:
-                "color-mix(in oklch, var(--primary), transparent 86%)",
-            }}
-          >
+          <Badge tone="cyan" kind="code" className="mt-2">
             13,79:1
-          </div>
+          </Badge>
         </div>
         {/* medio: checklist */}
         <div

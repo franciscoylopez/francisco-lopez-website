@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 import { CARD, WRAP } from "@/components/ui/layout";
 import { eyebrowVariants } from "@/components/ui/heading";
+import { Badge } from "@/components/ui/badge";
 
 export type RelatedDict = Dictionary["related"];
 
@@ -75,9 +76,7 @@ export function RelatedPages({
                 >
                   <span className="text-muted-foreground flex items-center gap-2 text-[1rem] font-semibold">
                     {page.name}
-                    <span className="bg-muted rounded-full px-[0.5rem] py-[0.1rem] text-[0.68rem] tracking-[0.03em] uppercase">
-                      {dict.comingSoon}
-                    </span>
+                    <Badge kind="label">{dict.comingSoon}</Badge>
                   </span>
                   <p className="text-muted-foreground m-0 mt-[0.55rem] text-[0.9rem] leading-[1.55]">
                     {page.desc}

@@ -2,6 +2,7 @@ import { Download, Info } from "lucide-react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
+import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
@@ -567,26 +568,11 @@ export function BrandKit({
                     <div className="font-display text-[0.98rem] font-semibold">
                       {c.name}
                     </div>
-                    <span
-                      className={cn(
-                        "flex-none rounded-full px-2 py-[0.1rem] text-[0.66rem] font-semibold tracking-[0.02em]",
-                        c.swap === "conmuta"
-                          ? "text-foreground"
-                          : "bg-muted text-muted-foreground",
-                      )}
-                      style={
-                        c.swap === "conmuta"
-                          ? {
-                              background:
-                                "color-mix(in oklch, var(--brand-cyan), transparent 82%)",
-                            }
-                          : undefined
-                      }
-                    >
+                    <Badge tone={c.swap === "conmuta" ? "cyan" : "neutral"}>
                       {c.swap === "conmuta"
                         ? t.color.swapConmuta
                         : t.color.swapFijo}
-                    </span>
+                    </Badge>
                   </div>
                   <code className="text-muted-foreground mt-[0.35rem] block font-mono text-[0.76rem]">
                     {c.token}
@@ -753,15 +739,9 @@ export function BrandKit({
                   <h3 className="font-display m-0 mb-[0.6rem] text-[1.2rem] font-semibold tracking-[-0.01em]">
                     {c.title}
                   </h3>
-                  <span
-                    className="text-foreground mb-[0.7rem] inline-block rounded-full px-[0.6rem] py-1 font-mono text-[0.72rem] font-semibold"
-                    style={{
-                      background:
-                        "color-mix(in oklch, var(--brand-purple), transparent 82%)",
-                    }}
-                  >
+                  <Badge tone="purple" kind="code" className="mb-[0.7rem]">
                     {c.chip}
-                  </span>
+                  </Badge>
                   <p className="text-muted-foreground m-0 mb-[0.55rem] text-[0.9rem] leading-[1.6]">
                     {c.desc}
                   </p>
@@ -853,24 +833,7 @@ function VariantBadge({
   on: boolean;
   children: React.ReactNode;
 }) {
-  return (
-    <span
-      className={cn(
-        "inline-flex items-center rounded-full px-[0.55rem] py-[0.15rem] text-[0.72rem] font-semibold",
-        on ? "text-foreground" : "bg-muted text-muted-foreground",
-      )}
-      style={
-        on
-          ? {
-              background:
-                "color-mix(in oklch, var(--brand-purple), transparent 82%)",
-            }
-          : undefined
-      }
-    >
-      {children}
-    </span>
-  );
+  return <Badge tone={on ? "purple" : "neutral"}>{children}</Badge>;
 }
 
 function UsageKV({ k, v }: { k: string; v: string }) {

@@ -1060,7 +1060,8 @@ El criterio es **una sola pregunta: ¿la pieza sabe algo de ESTE sitio?** —su 
 rutas, sus datos, sus secciones—.
 
 - **No lo sabe → `components/ui/`.** Se llevaría a otro proyecto con solo los tokens.
-  Hoy: `action.tsx`, `layout.ts`, `logo.tsx`, `icons.tsx`, `rich.tsx`, `info-card.tsx`.
+  Hoy: `action.tsx`, `badge.tsx`, `heading.tsx`, `layout.ts`, `logo.tsx`, `icons.tsx`,
+  `rich.tsx`, `info-card.tsx`.
 - **Lo sabe → `components/site/`.** Bloques reutilizables (`nav`, `footer`, `breadcrumb`,
   `contact-actions`, `related-pages`, `system-message`) y secciones de página (`hero`,
   `hitos`, `toolkit`, `trayectoria`…).
@@ -1077,6 +1078,32 @@ resuelve.
 **Convención de import que se sigue de la frontera:** entre directorios, ruta absoluta
 (`@/components/ui/layout`); dentro del mismo directorio, relativa (`./layout`). Antes
 convivían las dos formas para el mismo fichero.
+
+**La escalera completa, cerrada el 2026-08-09 (P37.65 y P37.655).** La capa de componentes
+no era `action.tsx` + `layout.ts`: eran los dos primeros peldaños de cuatro, y los otros dos
+se descubrieron por el mismo síntoma —la misma decisión escrita a mano N veces—.
+
+| Capa | Archivo | Qué gobierna | Cuántas copias sustituyó |
+|---|---|---|---|
+| Acción | `action.tsx` | todo lo pulsable | 6 definiciones de «botón base» |
+| Layout | `layout.ts` | cajas y ritmos | `WRAP` ×18, `SECTION` ×8 |
+| Cabecera | `heading.tsx` | eyebrow + titular | eyebrow ×14, título ×7, 6 huecos |
+| Etiqueta | `badge.tsx` | el rótulo que no se pulsa | 8 pastillas en 6 archivos |
+
+**Dónde cae cada pieza se decide por una pregunta, no por parecido: ¿se pulsa?** La etiqueta
+se parece mucho a un chip —caja pequeña, radio pleno, texto corto— y por eso la tentación era
+meterla en `action.tsx` como una variante más. No lo es: sin pulsación no hay estado, ni
+hover, ni anillo de foco, ni suelo táctil de 44px, o sea que **media base de la variante de
+acción no significaría nada** y la mitad de las variantes tendrían que ignorarla. Es la
+lección `CARD`/`PANEL` de esta misma entrada aplicada al revés: allí faltaba un **nombre**
+para dos cosas que se creían una; aquí sobra el **parecido** entre dos cosas que nunca fueron
+la misma.
+
+Dentro de `badge.tsx`, el mismo criterio separa variante de drift: **`kind`** (versalitas /
+prosa / monoespaciada) significa algo y se queda; los cuatro altos, los cinco paddings y los
+tres cuerpos no significaban nada y se unifican en la moda de cada grupo —así ninguna
+pastilla del sitio se mueve más de 1px—. La **regla de color** que sale de ahí (el velo es la
+señal, el texto siempre `--foreground`) vive en `BRAND.md`, no aquí, como todas las visuales.
 
 ## D37 · Endurecimiento del workflow de CI, y qué audita de verdad este repo — 2026-08-09
 

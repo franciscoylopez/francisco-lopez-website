@@ -1213,8 +1213,51 @@
       ],
       "ruleFoot": "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio. Antes convivían tres, y una de ellas dibujaba un halo blanco en tema oscuro."
     },
-    "accesibilidad": {
+    "etiquetas": {
       "num": "(10)",
+      "title": "Etiquetas",
+      "lead": "Una etiqueta rotula, no se pulsa: por eso no sale de la capa de acción y no tiene ni estado, ni hover, ni objetivo táctil. Solo tiene que leerse. El velo de color dice de qué familia es, y el texto va siempre en el color de texto normal — que es lo único que llega a AAA encima de un fondo teñido.",
+      "cases": [
+        {
+          "kicker": "Sin carga",
+          "cls": "neutral",
+          "demo": ["Fijo", "Próximamente"],
+          "rule": "Lo que acompaña sin destacar: un estado, una nota al margen, la mitad apagada de un par.",
+          "note": "Su texto no puede ser el gris atenuado del sistema, que está calibrado contra el fondo de la página: encima de la pastilla se queda en 6,44:1. Mezclado con ese mismo fondo da 8,17:1."
+        },
+        {
+          "kicker": "Dato verificado",
+          "cls": "cyan",
+          "demo": ["AAA", "Conmuta"],
+          "rule": "Velo de cian para lo que se ha medido o lo que se cumple. El cian está en el fondo; en el texto, nunca.",
+          "note": "Con el texto en cian encima de su propio velo, el par se queda en 6,07:1 — y bajar el velo no lo arregla, porque pintar cian sobre cian no puede subir el contraste del cian."
+        },
+        {
+          "kicker": "Distintivo de marca",
+          "cls": "purple",
+          "demo": ["Exit", "Split"],
+          "rule": "Velo de morado para lo que señala una singularidad: un hito de la trayectoria, una variante del logo.",
+          "note": "El morado es decorativo y nunca es color de acción, así que aquí solo puede aparecer como relleno."
+        },
+        {
+          "kicker": "Tres registros",
+          "cls": "label · value · code",
+          "demo": ["Exit", "Split", "13,79:1"],
+          "rule": "Versalitas para un rótulo de estado, caja normal para un dato en prosa, monoespaciada para un valor técnico.",
+          "note": "Es lo único que cambia de una etiqueta a otra. El alto, el cuerpo, el radio y el padding son los mismos para todas, y ya no los decide cada página."
+        }
+      ],
+      "ruleTitle": "Por qué es una capa aparte",
+      "rule": [
+        "No está en la capa de acción porque una etiqueta no es una acción: no se pulsa. Media base de un botón —suelo táctil, anillo de foco, estados— no significaría nada aquí.",
+        "Antes de existir había ocho pastillas escritas a mano en seis archivos, con cinco anchos de padding, tres cuerpos de letra y cuatro alturas distintas. Tres de ellas convivían en la misma página.",
+        "Una diferencia que significa algo es una variante; una que no significa nada es un valor a unificar. La monoespaciada de los valores técnicos se queda; los cuatro altos, no."
+      ],
+      "ruleFoot": "El texto de las dos teñidas es el color de texto normal, no el color del velo. Es lo que las lleva a 10,63:1 en claro y 10,02:1 en oscuro; con el texto teñido se quedaban en 6,07 y 5,46 — la peor medida del sistema estaba, precisamente, en la pastilla que marca «AAA» en la tabla de aquí abajo.",
+      "hint": "Son las mismas etiquetas que usa el sitio: si una cambia, esta sección cambia con ella."
+    },
+    "accesibilidad": {
+      "num": "(11)",
       "title": "Accesibilidad",
       "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual. Es el criterio interno con el que se construye y audita el sitio; la declaración pública de conformidad vivirá en la página de Accesibilidad.",
       "contrastTitle": "Contraste medido",
@@ -1273,6 +1316,22 @@
           "darkLv": "AAA"
         },
         {
+          "label": "Etiqueta neutra",
+          "note": "el texto se mezcla con su propio fondo",
+          "light": "8,17:1",
+          "lightLv": "AAA",
+          "dark": "9,17:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "Etiqueta teñida",
+          "note": "la peor de las dos, cian y morado",
+          "light": "10,63:1",
+          "lightLv": "AAA",
+          "dark": "10,02:1",
+          "darkLv": "AAA"
+        },
+        {
           "label": "brand-purple-accent",
           "note": "Solo texto grande (≥3:1) sobre fondo invertido",
           "light": "3,96:1",
@@ -1295,7 +1354,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(11)",
+      "num": "(12)",
       "title": "Esqueleto navegable",
       "devGroupLabel": "Vista previa por dispositivo",
       "devFull": "Escritorio",
