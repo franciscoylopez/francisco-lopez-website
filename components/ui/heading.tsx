@@ -76,8 +76,12 @@ export const titleVariants = cva("font-display m-0 font-semibold", {
   defaultVariants: { size: "section" },
 });
 
-/** Hueco eyebrow→título, derivado del tamaño. Ver la nota de arriba. */
-const EYEBROW_GAP = {
+/**
+ * Hueco eyebrow→título, derivado del tamaño. Ver la nota de arriba. Se exporta
+ * para que la sección que documenta esta capa en el Design System enseñe el
+ * valor real y no una copia suya (P37.66).
+ */
+export const EYEBROW_GAP = {
   page: "mb-5",
   "page-sm": "mb-5",
   section: "mb-3",

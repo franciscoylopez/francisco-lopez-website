@@ -27,7 +27,12 @@ import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
 import { InfoCard } from "@/components/ui/info-card";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
-import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import {
+  EYEBROW_GAP,
+  eyebrowVariants,
+  SectionHeader,
+  titleVariants,
+} from "@/components/ui/heading";
 
 type DesignSystemDict = Dictionary["designSystem"];
 
@@ -36,10 +41,19 @@ type DesignSystemDict = Dictionary["designSystem"];
 // toggle de rejilla, demo de reveal y tabs de dispositivo. La sección de
 // Accesibilidad es la checklist de cierre de todo el sitio (§20).
 
+// Especímenes de la escala tipográfica (§05). Un espécimen es explícito a
+// propósito —está para demostrar cada propiedad, así que la escribe— pero los
+// tres niveles que YA son una variante del sistema se COMPONEN desde ella en vez
+// de reescribir su valor: si la variante cambia, el espécimen cambia con ella y
+// no puede mentir. Lo que el espécimen añade encima es lo que quiere enseñar y la
+// variante no fija (la familia y el interlineado del eyebrow, que hereda).
+//
+// Los niveles h2–h4, body y small no tienen variante todavía: son la escala en
+// crudo, y por eso siguen escritos. Cuando alguno se convierta en variante, su
+// entrada aquí pasa a componerse igual (P37.66).
 const SAMPLE: Record<string, string> = {
-  display:
-    "font-display font-semibold text-[clamp(2.75rem,7vw,5rem)] leading-[1.0] tracking-[-0.025em]",
-  h1: "font-display font-semibold text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] tracking-[-0.02em]",
+  display: titleVariants({ size: "page" }),
+  h1: titleVariants({ size: "section-sm" }),
   h2: "font-display font-semibold text-[clamp(1.5rem,3vw,2rem)] leading-[1.15] tracking-[-0.015em]",
   h3: "font-display font-semibold text-[clamp(1.125rem,1.6vw,1.25rem)] leading-[1.3]",
   h4: "font-display font-semibold text-[1rem] leading-[1.4]",
@@ -48,9 +62,13 @@ const SAMPLE: Record<string, string> = {
   body: "font-sans font-normal text-[1rem] leading-[1.65]",
   small:
     "font-sans font-normal text-[0.875rem] leading-[1.5] text-muted-foreground",
-  eyebrow:
-    "font-sans font-semibold text-[0.8125rem] leading-[1.4] tracking-[0.09em] uppercase text-muted-foreground",
+  eyebrow: cn(eyebrowVariants({ tone: "muted" }), "font-sans leading-[1.4]"),
 };
+
+/** Guarda para el tamaño de titular que llega desde el diccionario (§11). */
+function isTitleSize(value: string): value is keyof typeof EYEBROW_GAP {
+  return value in EYEBROW_GAP;
+}
 
 function SectionHead({ num, title }: { num: string; title: string }) {
   return (
@@ -899,7 +917,116 @@ export function DesignSystem({
         </div>
       </section>
 
-      {/* ===================== (11) ACCESIBILIDAD ===================== */}
+      {/* ===================== (11) CABECERAS ===================== */}
+      <section data-reveal className={SECTION}>
+        <div className={WRAP}>
+          <SectionHead num={t.cabeceras.num} title={t.cabeceras.title} />
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.cabeceras.lead}
+          </p>
+
+          {/* Los cuatro tamaños, renderizados con las variantes REALES. Van sobre
+              <span> y <p>, no sobre <h1>/<h2>: un espécimen no debe entrar en el
+              esquema de encabezados de la página —un lector de pantalla los
+              anunciaría como secciones que no existen—, que es el mismo motivo
+              por el que §(05) enseña la escala tipográfica en <span>. */}
+          <div className={PANEL}>
+            {t.cabeceras.sizes.map((s) => {
+              if (!isTitleSize(s.size)) return null;
+              return (
+                <div
+                  key={s.size}
+                  className="border-border flex flex-wrap items-baseline gap-x-8 gap-y-5 border-b px-[var(--page-x)] py-7 last:border-b-0"
+                >
+                  <div className="min-w-[min(100%,14rem)] flex-[1_1_18rem] overflow-hidden">
+                    <p className={cn(eyebrowVariants(), EYEBROW_GAP[s.size])}>
+                      {s.eyebrow}
+                    </p>
+                    <span
+                      className={cn(
+                        titleVariants({ size: s.size }),
+                        "text-foreground block",
+                      )}
+                    >
+                      {s.sample}
+                    </span>
+                  </div>
+                  <div className="grid flex-[1_1_16rem] [grid-template-columns:repeat(auto-fit,minmax(7.5rem,1fr))] content-start gap-x-5 gap-y-[0.9rem]">
+                    <TypeMeta
+                      label={t.cabeceras.cols.gap}
+                      value={EYEBROW_GAP[s.size]}
+                      mono
+                    />
+                    <TypeMeta
+                      label={t.cabeceras.cols.use}
+                      value={s.use}
+                      muted
+                    />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <h3 className="font-display m-0 mt-10 mb-4 text-[1rem] font-semibold">
+            {t.cabeceras.toneTitle}
+          </h3>
+          <div className={PAIR}>
+            {t.cabeceras.tones.map((tone) => {
+              const band = tone.tone === "band";
+              return (
+                <div key={tone.tone} className={cn(PANEL, "flex flex-col")}>
+                  <div
+                    className={cn(
+                      "flex flex-1 flex-col justify-center px-5 py-8",
+                      // `band` no es un color propio: es el atenuado recalculado
+                      // contra la superficie de debajo, así que el espécimen tiene
+                      // que traer también esa superficie (`.contact-band` define
+                      // `--contact-dim`; sin ella el tono no significa nada).
+                      band ? "contact-band bg-muted" : "bg-background",
+                    )}
+                  >
+                    <p
+                      className={cn(
+                        eyebrowVariants({ tone: band ? "band" : "muted" }),
+                        "mb-3",
+                      )}
+                    >
+                      {tone.label}
+                    </p>
+                    <span
+                      className={cn(
+                        titleVariants({ size: "section-sm" }),
+                        "block text-[1.5rem]",
+                      )}
+                    >
+                      {tone.sample}
+                    </span>
+                  </div>
+                  <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
+                    <code className="text-muted-foreground font-mono text-[0.74rem]">
+                      tone=&quot;{tone.tone}&quot;
+                    </code>
+                    <p className="text-muted-foreground m-0 mt-[0.5rem] text-[0.82rem] leading-[1.55]">
+                      {tone.note}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="mt-8 max-w-[var(--measure)]">
+            <InfoCard
+              title={t.cabeceras.ruleTitle}
+              bullets={t.cabeceras.rule}
+              foot={t.cabeceras.ruleFoot}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== (12) ACCESIBILIDAD ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHead
