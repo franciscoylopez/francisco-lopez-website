@@ -27,9 +27,12 @@ jobs:
     name: format · typecheck · lint · build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
+      # Las acciones se fijan por SHA de commit, no por tag: un tag es un puntero
+      # movible, así que `@v7` es «lo que su dueño diga hoy». Dependabot mantiene el
+      # SHA al día y actualiza el comentario de versión con él.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
-      - uses: actions/setup-node@v7
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
           node-version: 22
           cache: npm
