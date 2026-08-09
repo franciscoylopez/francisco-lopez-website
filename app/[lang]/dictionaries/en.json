@@ -1150,8 +1150,65 @@
       "ruleFoot": "The text on both tinted labels is the ordinary text colour, not the colour of the wash. That's what takes them to {badgeTinted.light} in light and {badgeTinted.dark} in dark; with tinted text they sat at 6.07 and 5.46 — the worst pair in the system was, of all things, the pill that marks “AAA” in the table just below.",
       "hint": "These are the same labels the site uses: if one changes, this section changes with it."
     },
-    "accesibilidad": {
+    "cabeceras": {
       "num": "(11)",
+      "title": "Headers",
+      "lead": "Every page and every section opens the same way: a short label above, a headline below. The pair comes from a single piece, so the size of the headline also decides the gap that separates it from the label — whoever writes the section doesn't pick it.",
+      "cols": {
+        "use": "Where it's used",
+        "gap": "Gap to the label"
+      },
+      "sizes": [
+        {
+          "size": "page",
+          "eyebrow": "Design fundamentals",
+          "sample": "Design System",
+          "use": "The h1 that opens a page: the home, Accessibility, Brand Kit and this one."
+        },
+        {
+          "size": "page-sm",
+          "eyebrow": "Who's behind this",
+          "sample": "About me",
+          "use": "The h1 of the long-read pages: About me and the cookie policy."
+        },
+        {
+          "size": "section",
+          "eyebrow": "Journey",
+          "sample": "Career",
+          "use": "The h2 that opens a section inside a page."
+        },
+        {
+          "size": "section-sm",
+          "eyebrow": "Header layer",
+          "sample": "Headers",
+          "use": "A section of a long index, like the thirteen on this page."
+        }
+      ],
+      "toneTitle": "The label's two tones",
+      "tones": [
+        {
+          "tone": "muted",
+          "label": "Design fundamentals",
+          "sample": "On the page background",
+          "note": "The default case: the system dimmed grey over --background."
+        },
+        {
+          "tone": "band",
+          "label": "The next step",
+          "sample": "On the contact band",
+          "note": "That grey is tuned against the page background, so over any other surface it has to be recomputed, not reused: here it blends into the band itself (D30)."
+        }
+      ],
+      "ruleTitle": "What the variant decides and what the call site does",
+      "rule": [
+        "The size picks the gap between label and headline. There used to be six values for that one relationship, spread across fourteen files.",
+        "Line height lives in the variant: the hero wrote leading-none and everything else leading-[1.0] — the same value in two notations.",
+        "The call site only sets what depends on the content: the max width in characters, or the text-balance of a headline that breaks badly."
+      ],
+      "ruleFoot": "The four sizes aren't drift, they're hierarchy: the h1 that opens a page isn't the h2 that opens a section, and merging them would break the ladder. It's the CARD/PANEL lesson — before merging values that look alike, check whether they mean different things."
+    },
+    "accesibilidad": {
+      "num": "(12)",
       "title": "Accessibility",
       "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost. It's the internal criterion the site is built and audited against; the public conformance statement will live on the Accessibility page.",
       "contrastTitle": "Measured contrast",
@@ -1221,7 +1278,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(12)",
+      "num": "(13)",
       "title": "Navigable skeleton",
       "devGroupLabel": "Device preview",
       "devFull": "Desktop",
