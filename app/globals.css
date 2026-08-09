@@ -475,8 +475,18 @@
 .contact-band {
   --chrome-hover-bg: color-mix(in srgb, var(--foreground) 10%, var(--muted));
 }
+/* Solo el ASPECTO de la pastilla: el color de reposo, el de hover (sensible al
+   fondo vía `--chrome-hover-bg`) y la transición, con sus dos extremos en la misma
+   regla (D35). Las MÉTRICAS —suelo táctil, padding, márgenes compensatorios— ya no
+   están aquí ni en los call sites: las pone `chromeLinkVariants`
+   (`components/ui/chrome.tsx`, P37.656).
+
+   El `border-radius: 7px` que había aquí se borró en esa misma tarea: era un píxel
+   menos que el `rounded-md` (8px) de todo lo demás sin que la diferencia significara
+   nada (hallazgo de P37.5996). Ahora lo trae la base de la variante con la utilidad
+   del token, que es la notación única de `CLAUDE.md` — y como esta clase va sin
+   `@layer` (D34), dejar el valor aquí habría seguido ganándole a la utilidad. */
 .link-chrome {
-  border-radius: 7px;
   background-color: transparent;
   transition: background-color 0.18s ease;
 }

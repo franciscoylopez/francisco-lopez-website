@@ -1060,8 +1060,8 @@ El criterio es **una sola pregunta: ¿la pieza sabe algo de ESTE sitio?** —su 
 rutas, sus datos, sus secciones—.
 
 - **No lo sabe → `components/ui/`.** Se llevaría a otro proyecto con solo los tokens.
-  Hoy: `action.tsx`, `badge.tsx`, `heading.tsx`, `layout.ts`, `logo.tsx`, `icons.tsx`,
-  `rich.tsx`, `info-card.tsx`.
+  Hoy: `action.tsx`, `badge.tsx`, `chrome.tsx`, `heading.tsx`, `layout.ts`, `logo.tsx`,
+  `icons.tsx`, `rich.tsx`, `info-card.tsx`.
 - **Lo sabe → `components/site/`.** Bloques reutilizables (`nav`, `footer`, `breadcrumb`,
   `contact-actions`, `related-pages`, `system-message`) y secciones de página (`hero`,
   `hitos`, `toolkit`, `trayectoria`…).
@@ -1085,19 +1085,39 @@ se descubrieron por el mismo síntoma —la misma decisión escrita a mano N vec
 
 | Capa | Archivo | Qué gobierna | Cuántas copias sustituyó |
 |---|---|---|---|
-| Acción | `action.tsx` | todo lo pulsable | 6 definiciones de «botón base» |
-| Layout | `layout.ts` | cajas y ritmos | `WRAP` ×18, `SECTION` ×8 |
+| Acción | `action.tsx` | el control **con caja** | 6 definiciones de «botón base» |
+| Chrome | `chrome.tsx` | el enlace de la **carpintería** | 14 call sites con métricas a mano |
+| Etiqueta | `badge.tsx` | el rótulo que **no se pulsa** | 8 pastillas en 6 archivos |
 | Cabecera | `heading.tsx` | eyebrow + titular | eyebrow ×14, título ×7, 6 huecos |
-| Etiqueta | `badge.tsx` | el rótulo que no se pulsa | 8 pastillas en 6 archivos |
+| Layout | `layout.ts` | cajas y ritmos | `WRAP` ×18, `SECTION` ×8 |
 
-**Dónde cae cada pieza se decide por una pregunta, no por parecido: ¿se pulsa?** La etiqueta
-se parece mucho a un chip —caja pequeña, radio pleno, texto corto— y por eso la tentación era
-meterla en `action.tsx` como una variante más. No lo es: sin pulsación no hay estado, ni
-hover, ni anillo de foco, ni suelo táctil de 44px, o sea que **media base de la variante de
-acción no significaría nada** y la mitad de las variantes tendrían que ignorarla. Es la
-lección `CARD`/`PANEL` de esta misma entrada aplicada al revés: allí faltaba un **nombre**
-para dos cosas que se creían una; aquí sobra el **parecido** entre dos cosas que nunca fueron
-la misma.
+**Dónde cae cada pieza se decide con DOS preguntas, no por parecido.**
+
+**1. ¿Se pulsa?** Si no → `badge.tsx`. La etiqueta se parece mucho a un chip —caja pequeña,
+radio pleno, texto corto— y por eso la tentación era meterla en `action.tsx` como una variante
+más. No lo es: sin pulsación no hay estado, ni hover, ni anillo de foco, ni suelo táctil, o
+sea que **media base de la variante de acción no significaría nada** y la mitad de las
+variantes tendrían que ignorarla. Es la lección `CARD`/`PANEL` de esta misma entrada aplicada
+al revés: allí faltaba un **nombre** para dos cosas que se creían una; aquí sobra el
+**parecido** entre dos cosas que nunca fueron la misma.
+
+**2. Si se pulsa, ¿tiene caja propia?** Sí → `action.tsx`. No → `chrome.tsx`. La base de
+`action.tsx` describe un control con caja: `justify-center`, `font-semibold`, `rounded-md` y
+padding sacado de la escala de tamaño. Un enlace de chrome es texto dentro de la carpintería
+de navegación: en reposo no tiene caja —la pastilla solo aparece al interactuar—, su peso es
+500, y en dos de sus tres formas **el padding va cancelado por márgenes negativos** para no
+empujar la línea en la que vive. Eso no es un matiz de un botón, es lo contrario.
+
+El control de chrome **solo icono** confirma la regla en vez de contradecirla: se queda en
+`action.tsx` (`variant: "icon"`) porque sí tiene caja —borde, `--card` en reposo, 44×44—. La
+frontera no es el sitio donde vive el control, es su forma.
+
+*Por qué no se metió el chrome en `action.tsx`, que era la otra opción evaluada:* obligaba a
+sacar `font-semibold` de la base —que las siete variantes de caja tendrían que volver a
+declarar, o cargarlo el eje `size`, dejando fuera a los nueve call sites que hoy se apoyan en
+`size: "md"` por defecto— o a confiar en que una clase sin `@layer` gane a la utilidad (D34).
+Las dos hacen más frágil el archivo que gobierna **todos** los botones del sitio para alojar a
+una familia que `BRAND.md` trata como distinta desde el principio («contenido vs chrome»).
 
 Dentro de `badge.tsx`, el mismo criterio separa variante de drift: **`kind`** (versalitas /
 prosa / monoespaciada) significa algo y se queda; los cuatro altos, los cinco paddings y los

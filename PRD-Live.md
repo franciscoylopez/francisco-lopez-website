@@ -80,13 +80,15 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   tipado, cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 - **Marca**: regla de dos capas (cian = único color de acción; morado decorativo con
   cuentagotas), tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
-- **Capa de componentes — cuatro capas**: todo elemento accionable —botón, chip, toggle,
-  pestaña, control de icono— sale de `components/ui/action.tsx`; el **rótulo que no se
-  pulsa** (la pastilla de «Exit», «AAA», «13,79:1») de `components/ui/badge.tsx`; el par
-  **eyebrow + titular** de `components/ui/heading.tsx`; y las cajas y ritmos comunes de
-  `components/ui/layout.ts`. Entre acción y etiqueta decide una sola pregunta —**¿se
-  pulsa?**—, porque sin pulsación no hay estado, hover, foco ni suelo táctil, y media base
-  de la variante de acción no significaría nada. **Ninguno se escribe con clases sueltas**: si un caso no
+- **Capa de componentes — cinco capas**: el control **con caja** —botón, chip, toggle,
+  pestaña, control de icono— sale de `components/ui/action.tsx`; el **enlace de la
+  carpintería de navegación** (nav, menú móvil, breadcrumb, footer, canales de contacto) de
+  `components/ui/chrome.tsx`; el **rótulo que no se pulsa** (la pastilla de «Exit», «AAA»,
+  «13,79:1») de `components/ui/badge.tsx`; el par **eyebrow + titular** de
+  `components/ui/heading.tsx`; y las cajas y ritmos comunes de `components/ui/layout.ts`.
+  Cuál toca se decide con dos preguntas —**¿se pulsa?** y, si sí, **¿tiene caja propia?**—,
+  no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
+  tampoco. **Ninguno se escribe con clases sueltas**: si un caso no
   encaja en una variante, se crea la variante; la excepción se documenta con fecha. Es
   lo que hace que un cambio de hover, de radio, del objetivo táctil, del icono que lleva
   una acción o del fondo de reposo de un control solo-icono llegue a todo el sitio a la
@@ -107,12 +109,15 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   2026-08-08** con un medidor independiente que reproduce al céntimo los ocho pares
   publicados en los dos temas — las cifras que el sitio publica son fiables; lo que
   quedaba desactualizado eran dos párrafos del propio `BRAND.md`, ya corregidos.
-  **Ampliado el 2026-08-09 (P37.655): el censo de pares tenía dos huecos**, los de la
-  pastilla —6,44/5,56 la neutra y 6,07/5,46 la teñida—, que ninguna de las dos auditorías
-  anteriores vio porque **un par que solo existe al componer un velo sobre la superficie de
-  debajo no aparece en ningún inventario de tokens**: se encuentra recorriendo el DOM, no
-  leyendo `globals.css`. Corregidos a **8,17/9,17 y 10,63/10,02** y publicados en la tabla
-  del Design System, que ahora lista **diez** pares. Sigue habiendo **0 violaciones de axe**
+  **Ampliado el 2026-08-09 (P37.655 y P37.656): el censo de pares tenía tres huecos** —las
+  dos pastillas (6,44/5,56 la neutra y 6,07/5,46 la teñida) y el hover del chrome secundario
+  del footer y el breadcrumb (6,44/5,56)—, que ninguna de las dos auditorías anteriores vio
+  por la misma razón: **un par que solo existe al componer un velo, o una pastilla de hover,
+  sobre la superficie de debajo no aparece en ningún inventario de tokens**. Se encuentra
+  recorriendo el DOM, no leyendo `globals.css` — y el tercero, además, solo existe mientras
+  el cursor está encima. Corregidos a **8,17/9,17**, **10,63/10,02** y **12,47/12,04**; los
+  dos primeros publicados en la tabla del Design System, que ahora lista **diez** pares.
+  Sigue habiendo **0 violaciones de axe**
   en home, Design System y Accesibilidad, ES y EN, claro y oscuro; **queda una en Brand Kit**
   —`brand-purple-accent` como texto pequeño sobre `--card` en la escalera del logo, 3,69:1—
   que es preexistente, ajena a la capa de etiqueta y está tareada aparte.
