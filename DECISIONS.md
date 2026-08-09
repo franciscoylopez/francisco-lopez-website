@@ -1045,3 +1045,59 @@ en una caja de layout, mirar si ya existe la variante. Si no existe, se crea. Si
 es una excepción, la decide Francisco y se documenta con fecha en `BRAND.md`. La señal de
 que el sistema se está rompiendo no es que algo se vea mal: es que la misma decisión
 aparece escrita en dos sitios.
+
+## D37 · Endurecimiento del workflow de CI, y qué audita de verdad este repo — 2026-08-09
+
+**Contexto.** P37.6305 iba de cerrar seis alertas de Dependabot. Las tres dependencias
+—`nanoid`, `js-yaml`, `hono`— resultaron ser transitivas y con las versiones parcheadas
+dentro del rango semver que ya declaraban sus padres, así que se cerraron con un `npm
+update` del lockfile: **sin `overrides` y sin tocar `package.json`**, que es el desenlace
+que D27 dejaba como plan A. Lo que importa no es eso, sino lo que apareció al despachar
+de paso el bump de `actions/checkout` y `actions/setup-node`.
+
+**Al meter `.github/workflows/ci.yml` en el diff, el check de qlty pasó de «No blocking
+issues» a «2 blocking issues, including 2 vulnerabilities».** Los dos hallazgos eran de
+**zizmor** y **llevaban ahí desde que existe el fichero**:
+
+- `zizmor/excessive-permissions` — el workflow no declaraba `permissions`, así que su
+  `GITHUB_TOKEN` heredaba el permiso por defecto del repositorio, que puede ser de
+  **escritura**, para un job que solo lee el repo (ni publica, ni comenta, ni releasea).
+- `zizmor/artipacked` — `actions/checkout` deja el token en `.git/config` para que los
+  pasos siguientes puedan usarlo. Ninguno lo necesita aquí, y ese fichero viaja dentro de
+  cualquier artefacto que se suba desde el workspace.
+
+**Decisión.** Los dos se cierran en el workflow —`permissions: contents: read` a nivel de
+workflow y `persist-credentials: false` en el checkout— y las acciones quedan **fijadas
+por SHA de commit** con el tag en un comentario al lado (`@3d3c42e… # v7.0.1`). Un tag es
+un puntero movible: `@v7` significa «lo que su dueño diga hoy». Dependabot mantiene el
+hash al día y reescribe el comentario, así que el pinning no cuesta mantenimiento.
+
+**El hallazgo que vale más que los hallazgos: un check de PR solo mira lo que el PR toca.**
+Estas dos vulnerabilidades no las descubrió una auditoría ni un escaneo programado —las
+destapó que alguien editara el fichero **por un motivo que no tenía nada que ver**. De ahí
+se sigue algo incómodo: **todo fichero que lleve tiempo sin tocarse puede tener hallazgos
+latentes**, y su probabilidad de salir a la luz no depende de su riesgo sino de la
+casualidad de que se edite. Es la misma forma que el cian superado del `ThemePreview`
+(P37.6605) y que la regla de iconos propios cuyo disparador miraba al fichero equivocado
+(`BRAND.md` §Iconos propios): **no falla el criterio, falla que nada lo comprueba donde
+la cosa ocurre**. La contramedida no es acordarse: es que algo mire el repo entero de
+forma periódica, no solo el diff.
+
+**Qué audita este repo, que hasta ahora no estaba escrito en ninguna parte.** Qlty corre
+siete plugins: `actionlint`, `eslint` (fijado a 9.39.5), `osv-scanner`, `prettier`
+(3.9.6), `ripgrep` (modo comentario), `trufflehog` y `zizmor`; con `[smells] mode =
+"comment"`. **Su `qlty.toml` vive en Qlty Cloud y no está versionado en el repo**, de modo
+que la configuración de lo que nos analiza es invisible desde el código y se desincroniza
+sin avisar — subir eslint a 10 en `package.json` dejaría dos sitios en desacuerdo y uno de
+ellos no se ve. Es la misma forma de problema que P37.66 (valores copiados que divergen),
+aquí aplicada a la config del análisis. Traerlo al repo está tareado aparte; el propio
+fichero lo recomienda («We recommend you to commit this file to your repository»).
+
+**Nota de método, porque el camino fue malo.** Se descartaron dos hipótesis con datos
+—`npm audit` a 0, y las **749** dependencias del lockfile consultadas una a una contra la
+API de OSV, cero hallazgos— y la tercera (`unpinned-uses`) se dio por buena **sin leerla**,
+porque la página de issues de qlty se quedaba cargando. Se fijaron las acciones por SHA y
+el contador no se movió; el hallazgo real solo apareció al abrir la página en el navegador.
+**Una hipótesis que sobrevive por descarte sigue siendo una hipótesis**, y «las otras dos
+no eran» no es evidencia de la tercera. El pinning se quedó igualmente porque es correcto
+por su cuenta, pero se llegó a él por el camino equivocado.
