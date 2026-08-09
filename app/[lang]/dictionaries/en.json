@@ -1244,6 +1244,11 @@
           "note": "the tightest state in the system"
         },
         {
+          "id": "chromeHover",
+          "label": "Secondary chrome hover",
+          "note": "the text rises to foreground with the pill"
+        },
+        {
           "id": "mutedForeground",
           "label": "muted-foreground",
           "note": "muted over background"
@@ -1257,6 +1262,11 @@
           "id": "badgeTinted",
           "label": "Tinted label",
           "note": "the worse of the two, cyan and purple"
+        },
+        {
+          "id": "switchKnobOff",
+          "label": "Switch knob, off",
+          "note": "foreground over its own track; when on it reuses the button pair"
         },
         {
           "id": "purpleAccent",

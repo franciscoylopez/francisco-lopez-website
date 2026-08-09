@@ -1244,6 +1244,11 @@
           "note": "el estado con menos margen del sistema"
         },
         {
+          "id": "chromeHover",
+          "label": "Hover del chrome secundario",
+          "note": "el texto sube a foreground con la pastilla"
+        },
+        {
           "id": "mutedForeground",
           "label": "muted-foreground",
           "note": "muted sobre background"
@@ -1257,6 +1262,11 @@
           "id": "badgeTinted",
           "label": "Etiqueta teñida",
           "note": "la peor de las dos, cian y morado"
+        },
+        {
+          "id": "switchKnobOff",
+          "label": "Bolita del switch apagada",
+          "note": "foreground sobre su propio carril; encendida reusa el par del botón"
         },
         {
           "id": "purpleAccent",
