@@ -112,10 +112,7 @@ export function CookiesPolicy({
             <Section heading={t.manageHeading}>
               <p>{t.manageBody}</p>
               <div className="mt-5">
-                <ConsentPreferencesButton
-                  label={t.manageButton}
-                  variant="button"
-                />
+                <ConsentPreferencesButton label={t.manageButton} />
               </div>
               <p className="mt-4">{t.manageBrowser}</p>
             </Section>
