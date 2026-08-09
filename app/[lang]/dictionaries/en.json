@@ -960,7 +960,7 @@
       "rule": [
         "primary is the only action color. secondary / muted / accent stay neutral.",
         "Links, in two rules: primary for content links; foreground / muted-foreground for navigation chrome (nav, breadcrumb, footer).",
-        "Brand tones decorate or sign the logo — with one exception: brand-purple-accent is a brand tone used as text over inverted backgrounds (AA-large, ≥3:1). Splits and pastels, never as text."
+        "Brand tones decorate or sign the logo — with one exception: brand-purple-accent is a brand tone used as text over inverted backgrounds, and it swaps with the theme because no fixed colour reads on both. Splits and pastels, never as text."
       ],
       "ruleFoot": "Use the header toggle to see this same page in both modes."
     },
@@ -1322,10 +1322,10 @@
         {
           "id": "purpleAccent",
           "label": "brand-purple-accent",
-          "note": "Large text only (≥3:1) over inverted bg"
+          "note": "Over inverted bg; swaps with the theme to reach AAA"
         }
       ],
-      "contrastNote": "Every text pair in the system reaches AAA in light and dark, and not only at rest: hover states too, which is where this usually slips. The last one left was the toggle-off hover, fixed by moving the text colour rather than dimming the background — raising the number by removing the visual cue isn't accessibility, it's hiding the problem from the report. The one intentional exception is brand-purple-accent, which passes only as large text (≥3:1) over inverted backgrounds, never as body.",
+      "contrastNote": "Every text pair in the system reaches AAA in light and dark, and not only at rest: hover states too, which is where this usually slips. There are no exceptions left. The last to fall was brand-purple-accent, the purple of the inverted bands, and picking a different purple was never going to fix it: those bands are painted in the page's own ink, so their background flips from charcoal to bone with the theme — and against both surfaces at once no fixed colour can beat 3.71:1. That's arithmetic, not pigment. The fix was to give it two values, one per theme, exactly as the cyan on those same backgrounds already did.",
       "checklistTitle": "Closing checklist",
       "checklist": [
         "Measured contrast, with a figure, in both themes. AA is the non-negotiable floor; AAA whenever it's reached without visual cost.",

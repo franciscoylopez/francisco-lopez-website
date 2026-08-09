@@ -1460,3 +1460,70 @@ censo, para hacer un trabajo que el filete ya hacía.
 **Publicado** como sección **(12) «Tablas»** del Design System, con la tabla de datos
 demostrada por una tabla real (Regla de construcción de `CLAUDE.md`). Accesibilidad pasa a
 (13) y Esqueleto a (14).
+
+---
+
+## D41 · Un color fijo no puede servir a dos superficies opuestas: `--brand-purple-accent` conmuta — 2026-08-10
+
+**Decisión.** `--brand-purple-accent` pasa a tener **dos valores, uno por tema**
+(`oklch(0.78 0.16 290)` en claro, `oklch(0.45 0.16 290)` en oscuro) y sube de 3,96/3,49 a
+**7,04/7,21** — AAA de texto normal, sin la salvedad «solo texto grande» que arrastraba desde
+que existe. Es el único token de la **capa de marca** que conmuta, y es correcto que lo haga.
+
+**El porqué, que es aritmética y no criterio.** El token vive sobre las secciones de fondo
+invertido, cuyo fondo **es** `--foreground`. Ese fondo salta de carbón (luminancia relativa
+**0,019**) a hueso (**0,899**) al cambiar de tema, así que un color fijo tiene que servir a
+las dos superficies a la vez. Eso acota el techo de forma exacta:
+
+> el mejor contraste que un color fijo puede dar contra ambas es
+> **√((0,899+0,05)/(0,019+0,05)) = √13,79 = 3,71:1**, la media geométrica de los dos.
+
+AAA-large (4,5) exigiría una luminancia **≥0,2598 y ≤0,1610 simultáneamente**: ventana vacía.
+Y no es cosa del morado —**ningún color de ningún tono** lo cumple—. El valor anterior,
+`oklch(0.62 0.16 290)` fijo, daba 3,96 y 3,49: media geométrica 3,72, o sea **estaba en el
+óptimo**. No se eligió mal; se eligió lo mejor de un problema sin solución, y la salvedad
+publicada durante meses describía el techo, no el color.
+
+**Lo que hace que esto sea una decisión y no un ajuste:** el patrón ya existía en el repo.
+`--primary-on-inverted` (P37.598) resolvió exactamente este problema para el cian —«es,
+literalmente, el cian del OTRO tema»— y su comentario en `globals.css` llevaba desde entonces
+llamando a `--brand-purple-accent` **«hermano, que existe por esta misma razón»**. Los dos
+hermanos tomaron caminos distintos: el cian conmutó y funcionó, el morado se quedó fijo y topó
+con el techo. Generaliza a una regla: **cuando una pieza se apoya en una superficie que
+conmuta, el color se deriva de la superficie; fijarlo es aceptar un techo.** Misma familia que
+D30/D39 (el atenuado lo resuelve la superficie) y que la bolita del switch (P37.593).
+
+**Dos call sites cayeron con el cambio, los dos por la misma razón: usaban el token fuera de
+su regla**, sobre `--card` en vez de sobre fondo invertido. Mientras el token era fijo la
+infracción no se veía —los dos morados se parecían—; al conmutar, el mismo código habría
+dejado el elemento invisible sobre la tarjeta.
+
+1. **El rótulo de la escalera del logo** (Brand Kit), a 10,88px: era el fallo de AA que abrió
+   P37.657 (3,70/3,96). No se arregla con otro morado —el estándar da **2,81** en claro—:
+   ningún morado de esta marca es texto pequeño sobre una tarjeta clara. Pasa a
+   `text-muted-foreground` (**9,14/10,32**, heredado de D39 sin par nuevo). El peldaño que no
+   sirve se **atenúa**, no se tiñe; y la distinción no queda codificada por color, porque cada
+   estado lleva su propia palabra.
+2. **El filete y el icono del `Callout` morado** del Brand Kit: pasan a `--brand-purple`, que
+   es lo que la propia regla manda fuera de fondos invertidos. Habrían quedado en 2,07/1,91.
+
+**Y un tercer sitio mejoró solo:** la muestra de color del Brand Kit pinta su «Aa» con
+`--foreground`, o sea **la superficie donde el token vive de verdad**, así que el espécimen
+demuestra exactamente el par que la tabla publica (7,04/7,21) en vez del 3,49 que enseñaba
+antes con un primer plano elegido para la muestra.
+
+**Lección de método (la cuarta de la misma familia): un umbral mal aplicado inventa hallazgos
+igual que un metro mal calibrado.** El censo marca como «bajo AAA» todo lo que no llega a 7:1,
+sin mirar el tamaño del texto. Por eso el PRD publicó «cuatro pares incumpliendo en la escalera
+del logo» cuando era **uno**: los otros tres eran los «Aa» de las muestras, de 24px y peso 600
+—texto grande, donde AAA es 4,5—, y dos de ellos (5,21 y 6,57) **cumplían de sobra**. Ninguno
+estaba siquiera en la escalera. `scripts/design-review/contrast-census.js` no lee el tamaño de
+fuente para elegir umbral; hasta que lo haga, su `bajoAAA` es una **lista de candidatos**, no
+de incumplimientos.
+
+**Verificación.** Censo del DOM con el metro validado contra sus anclajes (13,79 claro / 15,32
+oscuro, exactos) en home y Brand Kit: ningún par bajo AAA con el umbral que le toca a cada uno.
+0 violaciones de axe en home, Brand Kit y Design System, ES y EN, claro y oscuro. **Ojo al
+medir con axe: hay que congelar las transiciones igual que hace el censo** — sin eso, conmutar
+el tema y lanzar axe da siete violaciones fantasma (`#005859` sobre `#191d21`) que son el
+tema a medio interpolar, exactamente el fallo que el censo documenta y que axe no evita.

@@ -140,9 +140,26 @@
   --brand-purple-soft: oklch(0.8151 0.0776 295.46); /* #C6B9F0 pastel */
   --brand-cyan-split: oklch(0.7242 0.1208 194.82); /* #16BDBD split   */
   --brand-purple-split: oklch(0.6889 0.1581 289.96); /* #9B87F5 split   */
+  /* Morado legible sobre fondos INVERTIDOS (bloques cuyo fondo es `--foreground`):
+     hoy, la palabra «Exit» y su filete en la banda de manifiesto. CONMUTA con el
+     tema, y no es una preferencia: el fondo de esa banda ES `--foreground`, así que
+     salta de carbón (luminancia 0,019) a hueso (0,899) al cambiar de tema. Aquí va
+     el morado CLARO, porque en tema claro la banda es la oscura.
+
+     POR QUÉ NO PUEDE SER FIJO — el techo está calculado, no estimado. Un solo color
+     que sirva a las dos superficies no puede pasar de √13,79 = 3,71:1, la media
+     geométrica de los dos contrastes. AAA-large exigiría una luminancia ≥0,2598 y
+     ≤0,1610 A LA VEZ: ventana vacía, y para cualquier tono — no es cosa del morado.
+     El valor anterior —`oklch(0.62 0.16 290)` fijo, 3,96 claro y 3,49 oscuro— estaba
+     justo EN ese óptimo: no se eligió mal, se eligió lo mejor de un problema sin
+     solución. Corregido en P37.657 aplicándole el tratamiento de
+     `--primary-on-inverted`, que es su hermano y ya lo decía en el comentario de
+     abajo: el cian conmutó y funcionó; el morado se quedó fijo y topó con el techo.
+     Ahora 7,04 en claro y 7,21 en oscuro — AAA de texto normal, sin la coletilla
+     «solo texto grande» que arrastraba desde que existe. */
   --brand-purple-accent: oklch(
-    0.62 0.16 290
-  ); /* morado accesible como texto/acento sobre fondos invertidos (claro y oscuro) */
+    0.78 0.16 290
+  ); /* se pinta #B7A3FF sobre carbón */
 
   /* Cian legible sobre fondos INVERTIDOS (bloques cuyo fondo es `--foreground`).
      Es, literalmente, el cian del OTRO tema: sobre una superficie invertida el
@@ -212,7 +229,9 @@
   --brand-purple-soft: oklch(0.8151 0.0776 295.46);
   --brand-cyan-split: oklch(0.7242 0.1208 194.82);
   --brand-purple-split: oklch(0.6889 0.1581 289.96);
-  --brand-purple-accent: oklch(0.62 0.16 290);
+  /* El morado OSCURO: en tema oscuro la banda invertida es la de fondo hueso.
+     Mismo motivo y mismo cálculo que en claro (ver arriba). Se pinta #583DA6. */
+  --brand-purple-accent: oklch(0.45 0.16 290);
   --primary-on-inverted: oklch(0.41 0.0886 194.82); /* el cian del tema claro */
 }
 
