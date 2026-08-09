@@ -6,6 +6,7 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ContactActions, type ContactActionsDict } from "./contact-actions";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
+import { SectionHeader } from "@/components/ui/heading";
 
 type SobreMiDict = Dictionary["sobreMi"];
 
@@ -86,12 +87,12 @@ export function SobreMi({
             data-reveal
             className={`${PROSE} mt-[clamp(2.5rem,5vw,3.5rem)]`}
           >
-            <p className="text-muted-foreground m-0 mb-4 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase">
-              {t.kicker}
-            </p>
-            <h1 className="font-display m-0 text-[clamp(2.25rem,6vw,3.5rem)] leading-[1.05] font-semibold tracking-[-0.025em]">
-              {t.title}
-            </h1>
+            <SectionHeader
+              eyebrow={t.kicker}
+              title={t.title}
+              level={1}
+              size="page-sm"
+            />
           </header>
 
           {/* Intro. */}

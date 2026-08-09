@@ -4,6 +4,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
 import { CARD, WRAP } from "@/components/ui/layout";
+import { eyebrowVariants } from "@/components/ui/heading";
 
 export type RelatedDict = Dictionary["related"];
 
@@ -56,7 +57,9 @@ export function RelatedPages({
       >
         <p
           id={headingId}
-          className="text-muted-foreground m-0 mb-[clamp(1.25rem,3vw,2rem)] text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
+          // Rótulo suelto: no abre una cabecera, así que no usa `SectionHeader` ni
+          // su hueco —el margen es hasta la rejilla de tarjetas, no hasta un título.
+          className={cn(eyebrowVariants(), "mb-[clamp(1.25rem,3vw,2rem)]")}
         >
           {dict.eyebrow}
         </p>

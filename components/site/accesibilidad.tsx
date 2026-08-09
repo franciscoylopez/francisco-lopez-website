@@ -8,6 +8,7 @@ import { InfoCard } from "@/components/ui/info-card";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { EmailCta } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
+import { SectionHeader } from "@/components/ui/heading";
 
 type AccesibilidadDict = Dictionary["accesibilidad"];
 
@@ -51,18 +52,13 @@ export function Accesibilidad({
           </div>
           <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
             <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
-              <p
-                data-reveal
-                className="text-muted-foreground m-0 mb-5 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
-              >
-                {t.hero.kicker}
-              </p>
-              <h1
-                data-reveal
-                className="font-display m-0 text-[clamp(2.75rem,7vw,5rem)] leading-[1.0] font-semibold tracking-[-0.025em]"
-              >
-                {t.hero.title}
-              </h1>
+              <SectionHeader
+                eyebrow={t.hero.kicker}
+                title={t.hero.title}
+                level={1}
+                size="page"
+                reveal
+              />
               <p
                 data-reveal
                 className="text-muted-foreground mt-6 max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
