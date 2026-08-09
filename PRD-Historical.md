@@ -1113,6 +1113,36 @@ Primera mitad del bloque de diseño que abrió §35 (P37.5993–P37.63, `v1.4.1`
 
 ---
 
+## 37. Las capas que faltaban, y la fuente única de lo que el sitio dice de sí mismo (2026-08-09)
+
+Segunda mitad del bloque que abrió §35 (P37.6305 → P37.685, **`v1.5.0`**). Si la primera ola *tapaba huecos de variante*, esta **crea capas y mueve la verdad de sitio**. Nueve tareas, 21 commits.
+
+**Las tres capas que faltaban.** `chrome.tsx` para el enlace de la carpintería de navegación, `badge.tsx` para el rótulo que no se pulsa, `heading.tsx` para el par eyebrow + titular. Con `action.tsx` y `layout.ts` son las cinco de **D36**, y el criterio para elegir dejó de ser el parecido: **¿se pulsa?** y, si sí, **¿tiene caja propia?** Un chip que solo rotula no es un botón pequeño, y un enlace de nav tampoco. Las tres las destapó una versión anterior del skill `design-review` listándolas como «capas que todavía no existen» **con su conteo** — que es el formato que ya ha funcionado tres veces y por eso se quedó escrito en la skill.
+
+**Las páginas dejan de leer sus valores del diccionario (D38).** Design System y Brand Kit se venden como reflejo del código y leían de `es.json`. Cada cifra de contraste vivía en cuatro sitios y ninguno se puede verificar sin volver a medir. Ahora hay tres fuentes con papeles distintos: la **ejecutable** (`globals.css` + las cinco capas), la **publicada** (`lib/design-values.ts`) y la **del porqué** (`BRAND.md`, nunca el valor). La línea de corte quedó literal, para que no haga falta criterio: **si una entrada de `es.json` y su gemela de `en.json` son carácter por carácter la misma, no es copy — es un valor con dos copias.**
+
+**Y por primera vez algo lo vigila.** `npm run check:palette` corre en CI antes del build: coteja 24 tokens con `globals.css` carácter a carácter y verifica que la conversión `oklch`→hex reproduce lo que pinta Chrome. Se validó **inyectando el bug original** y lo cazó. Es la diferencia entre registrar una decisión y hacerla incumplible: todo lo anterior de este bloque dependía de que alguien se acordara.
+
+**Lo que apareció al medir, que es más que lo que se fue a arreglar.** Cinco pares de contraste por debajo de AAA que ninguna auditoría anterior había visto —las dos pastillas, el hover del chrome secundario y dos `color-mix` del Design System, uno de ellos a **4,33:1 en oscuro, por debajo de AA**—; el Brand Kit publicando **13,8:1** para el mismo par que el Design System publicaba como **13,79:1**; y **cinco copias divergidas de un token**, incluido el cian anterior a P37.598 en el mock de tema.
+
+**Los tres fallos de método que explican todo lo anterior, y que ya están escritos donde se disparan:**
+
+1. **Un par que solo existe al COMPONER** —un velo sobre la superficie de debajo, una pastilla de hover— no aparece en ningún inventario de tokens. El censo se hace recorriendo el DOM de la página servida y **con los estados incluidos**; el script vive en `scripts/design-review/contrast-census.js` después de haberse escrito a mano tres veces.
+2. **axe no sabe resolver `color-mix()`**: mete esos elementos en `incomplete`, no en `violations`, y se abstiene de juzgarlos. En el Design System son ocho. Todas las auditorías anteriores —y las dos primeras de esta sesión— leyeron solo `violations`. Lo que la máquina no puede ver no sale como problema: **sale como silencio.**
+3. **Dos de los valores divergidos eran texto**, no color: el pie que cita `bg … · card … · border …` bajo el mock de tema. Los destapó una captura tomada para otra cosa. Nadie los contaba como copias de un token porque no pintan nada, y ninguna herramienta compara un párrafo con el píxel que tiene al lado.
+
+**`BRAND.md` se parte.** Era el documento más pesado de los que se `@`-importan en cada arranque —5.954 palabras, más que `CLAUDE.md` y `PRD-Live.md` juntos— y la mitad era arqueología. Queda en **3.530** y el total precargado baja de ~11.400 a ~9.000. Al partirlo salieron dos defectos que llevaban meses: el **ítem 2 de la regla de dos capas estaba cien líneas por debajo del ítem 1**, detrás de cuatro secciones de nivel 2 —o sea que «la regla de las dos capas» no se leía como una lista—, y el método de medición iba numerado 1-4-5-2-3-6. Y una sección nueva, **«Cómo se escribe una regla aquí»**, con las cinco lecciones de método que se habrían perdido al archivar los párrafos que las contenían.
+
+**El cierre con `design-review`, y lo que valida.** Se disparó sobre la rama antes del merge, estrenando sus dos puntos nuevos. El de «contenedores de controles» cazó a la primera que **el banner de consentimiento no cabía a 320px** —tres botones en tres líneas de 133/148/136px— que es exactamente la forma que P37.5986 rechazó para el **diálogo** y arregló con `DIALOG_ACTIONS`: se arregló el diálogo y nadie volvió a mirar el banner, ochenta líneas más arriba del mismo archivo. El censo, al validarse, encontró un bug en sí mismo (Tailwind envuelve `hover:` en `@media (hover: hover)` y un bucle plano lo salta) que habría reportado como hallazgo un par que está en 12,47. Francisco encontró navegando otras tres.
+
+**Una afirmación inexacta que se deja publicada a propósito, y conviene que conste.** El censo destapó que `--muted-foreground` sobre `--card` da **6,40 en oscuro** —contra los 7,12 sobre `--background` que publica la tabla— en las seis páginas, porque **D30 nunca se aplicó a `--card`**, que es la superficie no-background más común del sitio. Lo interesante es la asimetría: en claro `--card` es más claro que `--background` y el contraste sube a 7,53; en oscuro también es más claro, pero como el texto es claro, baja. La misma jerarquía de superficies ayuda en un tema y estorba en el otro.
+
+Eso hace falsa, por tercera vez, la frase «todos los pares del sistema están en AAA, sin excepciones» que aparece en `BRAND.md`, en `PRD-Live.md`, en la tabla del Design System y en la página de Accesibilidad. **Se decidió no matizarla** (Francisco, 2026-08-09): el arreglo entra en la ola 3 y sube en un día, así que matizar el texto en cuatro sitios para desmatizarlo mañana es trabajo de ida y vuelta y deja dos redacciones fechadas donde debería haber una. **La decisión tiene fecha de caducidad**: si la ola 3 se alarga, hay que matizar — es literalmente la situación de P37.598, que pasó trece días publicando un 7,01:1 que ningún color podía dar.
+
+**Estado al cerrar.** `v1.5.0` en producción, verificada sirviendo las secciones nuevas y las cifras corregidas. La etapa *Optimización* sigue abierta. **Ola 3 definida**: P37.69 (extraer subcomponentes de los showcase, con su gate de diff de HTML) más los tres hallazgos del `design-review` —el atenuado sobre `--card` (Must), la capa de tabla y los dos hex fuera del guardián—, con estimación de un día.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

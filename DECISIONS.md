@@ -194,6 +194,20 @@ de release** `vX.Y.Z` en cada deploy para tener puntos de retorno.
 las ramas largas son anti-patrón (merges big-bang, drift, revisión imposible). El rigor de ramas
 cortas importa sobre todo **después** del primer deploy, cuando `main` = producción.
 
+**Ampliada 2026-08-09 (P37.685) — cómo se integra cada PR, que estaba en la práctica y no escrito.**
+`main` es **lineal**: no hay merge commits desde el PR #18. Lo que decide el método es cuántos
+commits trae la rama, no su tamaño:
+
+- **PR de un commit** → **squash**, que deja el `(#N)` en el asunto y lo enlaza con su PR.
+- **PR de varios commits** → **rebase**. Cada commit de una tanda es una tarea con su porqué
+  escrito; aplastarlos convertiría veinte razonamientos en un párrafo. La ola 2 entró así, con
+  sus 21 commits (`v1.5.0`).
+
+**Por qué no merge commit.** Con un solo desarrollador la burbuja no informa de nada —no hubo dos
+líneas de trabajo que reconciliar— y rompe la lectura lineal de `git log`, que aquí se usa como
+registro real de en qué orden pasaron las cosas.
+
+
 ## D13 · Entornos y staging = Vercel Previews — 2026-07-24
 **Decisión.** No hay entorno de staging pesado separado. Los **Vercel Preview Deployments** (uno por
 rama/PR, build idéntico a producción) son el staging de facto. **Conectar Vercel temprano** (previews
@@ -724,6 +738,32 @@ indexación-lite. Caveman (estilo telegráfico) — se adopta el principio de co
 herramienta. Ponytail (gating de alcance) — ya existe como convención (memoria + plan mode).
 Las tres son la versión pesada de algo cuya versión ligera ya está en el flujo; añadirlas sería
 sobreingeniería a esta escala.
+
+**Tercera aplicación, 2026-08-09 (P37.685): `BRAND.md` → `BRAND.md` + `BRAND-historical.md`.**
+Mismo corte que el PRD, y por el mismo motivo. `BRAND.md` era el documento más pesado de los
+`@`-importados —**5.954 palabras**, más que `CLAUDE.md` y `PRD-Live.md` juntos— y **la mitad era
+arqueología**: diecisiete párrafos fechados de «esto falló antes». Queda en **3.530** (−41%) y el
+total precargado en cada arranque baja de ~11.400 a **~9.000** (−21%).
+
+**El riesgo del corte, y cómo se mitigó.** Partir un reglamento puede dejar **una regla viva solo
+en el histórico** — y este proyecto ya sufrió la versión simétrica: el drift de cuatro días de
+§Jerarquía de hover fue exactamente *un párrafo histórico contradiciendo al vigente*. Se revisó
+entrada por entrada y se **subieron a presente** cinco reglas que estaban enterradas en prosa
+fechada (la excepción viva de `ContactSecondary`, la del switch con su condición de salida, el
+chrome que se aclara al interactuar, el criterio de los dos teñidos y la fórmula del 85% de la
+etiqueta neutra). Además se comprobó **mecánicamente**: se extrajeron del documento viejo todas
+las frases normativas no fechadas y se buscaron en el nuevo.
+
+**Regla que queda para el siguiente corte de este tipo:** el histórico abre declarando que **no
+contiene ninguna regla viva**, y que si algo de allí parece enunciar una que el documento vigente
+no tiene, eso es un fallo del corte que se arregla en el vigente — nunca una regla que se aplique
+desde el archivo.
+
+**Y un efecto colateral que justifica el corte por sí solo:** al recorrer el documento entero
+aparecieron dos defectos estructurales que llevaban meses invisibles porque nadie lo leía de
+principio a fin — el **ítem 2 de la regla de dos capas estaba cien líneas por debajo del ítem 1**,
+detrás de cuatro secciones de nivel 2, y el método de medición iba numerado 1-4-5-2-3-6.
+
 
 ## D29 · Superficie de contacto unificada: dato, patrón y jerarquía — 2026-08-03
 **Decisión.** El contacto deja de ser tres implementaciones que se parecían y pasa a ser
