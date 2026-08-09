@@ -13,7 +13,7 @@ import {
   PHONE_TEL,
 } from "@/lib/contact";
 
-import { LinkedinIcon } from "./icons";
+import { LinkedinIcon } from "@/components/ui/icons";
 
 export type ContactActionsDict = {
   emailCta: string;

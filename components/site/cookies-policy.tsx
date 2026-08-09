@@ -3,7 +3,7 @@ import { EMAIL } from "@/lib/contact";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ConsentPreferencesButton } from "./consent-preferences-button";
-import { PROSE, WRAP } from "./layout";
+import { PROSE, WRAP } from "@/components/ui/layout";
 
 type CookiesDict = Dictionary["cookies"];
 

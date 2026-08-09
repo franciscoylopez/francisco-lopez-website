@@ -6,8 +6,8 @@ import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { DevicePreview, GridDemo, RevealDemo } from "./design-system-islands";
-import { InfoCard } from "./info-card";
-import { CARD, PAIR, PANEL, SECTION, WRAP } from "./layout";
+import { InfoCard } from "@/components/ui/info-card";
+import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type DesignSystemDict = Dictionary["designSystem"];

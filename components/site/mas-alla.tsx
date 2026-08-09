@@ -1,4 +1,4 @@
-import { WRAP } from "./layout";
+import { WRAP } from "@/components/ui/layout";
 
 export type MasAllaDict = {
   eyebrow: string;

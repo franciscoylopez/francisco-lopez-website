@@ -1,5 +1,5 @@
 import { BrandLogoBox } from "./brand-logo-box";
-import { SECTION, WRAP } from "./layout";
+import { SECTION, WRAP } from "@/components/ui/layout";
 
 type EduItem = { title: string; institution: string };
 export type FormacionDict = {

@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
-import { CARD, WRAP } from "./layout";
+import { CARD, WRAP } from "@/components/ui/layout";
 
 export type RelatedDict = Dictionary["related"];
 

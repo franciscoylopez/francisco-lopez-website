@@ -1,5 +1,5 @@
 import { ContactActions, type ContactActionsDict } from "./contact-actions";
-import { WRAP } from "./layout";
+import { WRAP } from "@/components/ui/layout";
 
 export type ContactoDict = ContactActionsDict & {
   eyebrow: string;

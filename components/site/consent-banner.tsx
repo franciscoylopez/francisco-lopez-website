@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { DIALOG_ACTIONS } from "@/components/site/layout";
+import { DIALOG_ACTIONS } from "@/components/ui/layout";
 import { actionVariants } from "@/components/ui/action";
 import {
   type ConsentChoice,

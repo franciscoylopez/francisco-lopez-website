@@ -49,7 +49,7 @@
 - D33 · `/llms.txt` — un solo archivo, en español, generado desde el diccionario (P37.5)
 - D34 · Clases de componente en `globals.css` van sin `@layer` en este proyecto (Tailwind v4)
 - D35 · Los dos extremos de una `transition` van en la misma regla que la declara
-- D36 · Capa de componentes: `action.tsx` (variantes de acción) + `layout.ts` (WRAP/SECTION/CARD/PANEL/DIALOG_ACTIONS)
+- D36 · Capa de componentes: `action.tsx` (variantes de acción) + `layout.ts` (WRAP/SECTION/CARD/PANEL/DIALOG_ACTIONS); frontera `ui/`↔`site/` (¿la pieza sabe algo de este sitio?)
 - D37 · Endurecimiento del workflow de CI (permissions, persist-credentials, pinning por SHA); qué plugins audita Qlty y por qué un check de PR no ve lo que no se toca
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
@@ -129,7 +129,7 @@ Las **decisiones** técnicas viven en `DECISIONS.md` (fuente de verdad; hay copi
 
 Antes de escribir markup nuevo, la cascada, en orden:
 
-1. **¿Existe ya la pieza?** — `components/ui/action.tsx` para todo lo accionable, `layout.ts` para cajas y ritmos (`WRAP`/`SECTION`/`CARD`/`PANEL`), los bloques de `components/site/`. → **Se usa.** No se replica su aspecto con clases sueltas.
+1. **¿Existe ya la pieza?** — `components/ui/action.tsx` para todo lo accionable, `components/ui/layout.ts` para cajas y ritmos (`WRAP`/`SECTION`/`CARD`/`PANEL`/`PAIR`), el resto de primitivas de `components/ui/` (`icons`, `rich`, `info-card`), los bloques de `components/site/`. → **Se usa.** No se replica su aspecto con clases sueltas. **Dónde va lo nuevo:** ¿la pieza sabe algo de ESTE sitio (copy, rutas, datos, secciones)? No → `ui/`. Sí → `site/` (D36).
 2. **¿No existe, pero el caso es del sistema?** → **Se crea la variante, no el caso.** Un botón que no encaja en ninguna variante no es un botón especial: es una variante que falta. Igual con un bloque que se va a repetir.
 3. **¿Es un widget con estado, foco atrapado o portal** (diálogo, popover, tooltip, combobox, menú, tabs, scroll-area)? → **¿shadcn lo trae? → no se escribe.** Se trae con `npx shadcn@latest add <componente>` (estilo `base-nova`, ya configurado en `components.json`) y se le aplican nuestros tokens. El comportamiento de teclado y foco no se escribe a mano. *(Misma forma que la regla de iconos: «¿lucide lo trae? → no se dibuja».)* **Aplica hacia delante, no hacia atrás:** los widgets que hoy están a mano —el `<dialog>` nativo del consentimiento y su switch, las pestañas del Toolkit y los tabs de dispositivo del Design System— están bien hechos y no tienen deuda de accesibilidad; no se reescriben por cumplir la regla. Ver `DECISIONS.md` D6.
 4. **¿Nada de lo anterior encaja?** → Lo decide Francisco y se **documenta con fecha** en `BRAND.md`.

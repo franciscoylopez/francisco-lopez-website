@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
 
-import { PANEL } from "./layout";
+import { PANEL } from "@/components/ui/layout";
 
 // Las tres piezas interactivas del Design System (D7: JS solo en islas). El resto
 // de la página es Server Component.

@@ -6,8 +6,8 @@ import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import { LinkedinIcon } from "./icons";
-import { CARD, PAIR, PANEL, SECTION, WRAP } from "./layout";
+import { LinkedinIcon } from "@/components/ui/icons";
+import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 
 type BrandKitDict = Dictionary["brandKit"];

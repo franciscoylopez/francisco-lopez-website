@@ -4,7 +4,7 @@ import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
-import { SECTION, WRAP } from "./layout";
+import { SECTION, WRAP } from "@/components/ui/layout";
 
 type TrayRow = {
   period: string;
