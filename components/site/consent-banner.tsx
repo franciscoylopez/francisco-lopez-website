@@ -3,7 +3,7 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
-import { DIALOG_ACTIONS } from "@/components/ui/layout";
+import { BANNER_ACTIONS, DIALOG_ACTIONS } from "@/components/ui/layout";
 import { actionVariants } from "@/components/ui/action";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -130,7 +130,7 @@ export function ConsentBanner({
                 </a>
               </p>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className={BANNER_ACTIONS}>
               <button
                 type="button"
                 className={BTN_GHOST}

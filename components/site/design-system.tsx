@@ -1290,11 +1290,19 @@ function ThemeCard({
             style={{ background: c.bar }}
           />
         </div>
+        {/* El CTA del mock lleva su icono, y no por decoración: la acción es
+            «Descargar CV», que saca al usuario de la página, así que por la regla
+            de §Cuándo una acción lleva icono le toca — y en la variante `solid` va
+            DETRÁS de la etiqueta. Sin él, esta maqueta enseñaba un botón que el
+            sitio no tiene, que es justo lo que la Fase 0 de `design-review` busca.
+            Lo que NO lleva es hover ni el empujón de 2px: es un `<span>`, no se
+            pulsa, y darle afordancia de control sería mentir en el otro sentido. */}
         <span
-          className="inline-flex min-h-9 items-center self-start rounded-md px-[0.9rem] text-[0.82rem] font-medium"
+          className="inline-flex min-h-9 items-center gap-[0.5rem] self-start rounded-md px-[0.9rem] text-[0.82rem] font-medium"
           style={{ background: c.btnBg, color: c.btnFg }}
         >
           {cta}
+          <Download className="size-4 shrink-0" />
         </span>
       </div>
       <div

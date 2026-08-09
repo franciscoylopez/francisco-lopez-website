@@ -71,3 +71,25 @@ export const PAIR =
  * el layout que el diálogo ya usaba en móvil.
  */
 export const DIALOG_ACTIONS = "mt-6 flex flex-col gap-2 [&>*]:w-full";
+
+/**
+ * Grupo de acciones de una tarjeta que solo es estrecha EN MÓVIL: apiladas y a
+ * ancho completo por debajo de `sm`, en fila a partir de ahí. Hoy, el banner de
+ * consentimiento.
+ *
+ * Son dos exports y no uno porque son dos necesidades distintas, no dos nombres
+ * para lo mismo (la lección `CARD`/`PANEL`): el **diálogo** mide 512px SIEMPRE y
+ * sus tres acciones piden 496 —no caben ni en escritorio—, así que se apila
+ * incondicionalmente. El **banner** llega a 640px, donde la fila cabe de sobra y
+ * apilarla a ancho completo la haría pesada; el problema aparece solo a 320px,
+ * con la tarjeta en 280 y 240 de contenido.
+ *
+ * Por qué existe (P37.68, primer disparo del punto «contenedores de controles»):
+ * el banner llevaba `flex flex-wrap gap-2` y a 320px sus tres botones caían en
+ * **tres líneas de 133 / 148 / 136px**, alineados a la izquierda y desiguales —
+ * exactamente la forma que P37.5986 rechazó para el diálogo y arregló con
+ * `DIALOG_ACTIONS`. Se arregló el diálogo y **nadie volvió a mirar el banner**,
+ * que está en el mismo archivo ochenta líneas más arriba.
+ */
+export const BANNER_ACTIONS =
+  "flex flex-col gap-2 [&>*]:w-full sm:flex-row sm:[&>*]:w-auto";

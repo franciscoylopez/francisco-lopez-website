@@ -297,8 +297,12 @@ export function BrandKit({
                 <DlThemed pair={pngPair("simbolo-split", 1024)}>
                   PNG 1024
                 </DlThemed>
-                <DlThemed pair={pngPair("simbolo-split", 512)}>512</DlThemed>
-                <DlThemed pair={pngPair("simbolo-split", 256)}>256</DlThemed>
+                <DlThemed pair={pngPair("simbolo-split", 512)}>
+                  PNG 512
+                </DlThemed>
+                <DlThemed pair={pngPair("simbolo-split", 256)}>
+                  PNG 256
+                </DlThemed>
               </div>
             </VariantCard>
 
@@ -316,8 +320,12 @@ export function BrandKit({
                 <DlThemed pair={pngPair("simbolo-plano", 1024)}>
                   PNG 1024
                 </DlThemed>
-                <DlThemed pair={pngPair("simbolo-plano", 512)}>512</DlThemed>
-                <DlThemed pair={pngPair("simbolo-plano", 256)}>256</DlThemed>
+                <DlThemed pair={pngPair("simbolo-plano", 512)}>
+                  PNG 512
+                </DlThemed>
+                <DlThemed pair={pngPair("simbolo-plano", 256)}>
+                  PNG 256
+                </DlThemed>
               </div>
             </VariantCard>
           </div>
@@ -344,8 +352,8 @@ export function BrandKit({
               </div>
               <div className="flex flex-wrap gap-2">
                 <Dl href={monoPng("simbolo-mono-negro", 1024)}>PNG 1024</Dl>
-                <Dl href={monoPng("simbolo-mono-negro", 512)}>512</Dl>
-                <Dl href={monoPng("simbolo-mono-negro", 256)}>256</Dl>
+                <Dl href={monoPng("simbolo-mono-negro", 512)}>PNG 512</Dl>
+                <Dl href={monoPng("simbolo-mono-negro", 256)}>PNG 256</Dl>
               </div>
             </VariantCard>
 
@@ -362,8 +370,8 @@ export function BrandKit({
               </div>
               <div className="flex flex-wrap gap-2">
                 <Dl href={monoPng("simbolo-mono-blanco", 1024)}>PNG 1024</Dl>
-                <Dl href={monoPng("simbolo-mono-blanco", 512)}>512</Dl>
-                <Dl href={monoPng("simbolo-mono-blanco", 256)}>256</Dl>
+                <Dl href={monoPng("simbolo-mono-blanco", 512)}>PNG 512</Dl>
+                <Dl href={monoPng("simbolo-mono-blanco", 256)}>PNG 256</Dl>
               </div>
             </VariantCard>
           </div>
@@ -384,8 +392,8 @@ export function BrandKit({
                 <DlThemed pair={pngPair("lockup-split", 1024)}>
                   PNG 1024
                 </DlThemed>
-                <DlThemed pair={pngPair("lockup-split", 512)}>512</DlThemed>
-                <DlThemed pair={pngPair("lockup-split", 256)}>256</DlThemed>
+                <DlThemed pair={pngPair("lockup-split", 512)}>PNG 512</DlThemed>
+                <DlThemed pair={pngPair("lockup-split", 256)}>PNG 256</DlThemed>
               </div>
             </VariantCard>
 
@@ -403,8 +411,8 @@ export function BrandKit({
                 <DlThemed pair={pngPair("lockup-plano", 1024)}>
                   PNG 1024
                 </DlThemed>
-                <DlThemed pair={pngPair("lockup-plano", 512)}>512</DlThemed>
-                <DlThemed pair={pngPair("lockup-plano", 256)}>256</DlThemed>
+                <DlThemed pair={pngPair("lockup-plano", 512)}>PNG 512</DlThemed>
+                <DlThemed pair={pngPair("lockup-plano", 256)}>PNG 256</DlThemed>
               </div>
             </VariantCard>
           </div>
@@ -704,11 +712,18 @@ export function BrandKit({
                 alt={t.aplicaciones.og.previewAlt}
                 className="border-border mb-[1.2rem] block w-full rounded-lg border"
               />
+              {/* Mismo orden y misma jerarquía que las otras cuatro tarjetas de
+                  descarga: el SVG es la pieza canónica y va en `primary`; los PNG
+                  son la alternativa y van en neutro. Aquí estaban al revés —PNG
+                  1024 destacado y el SVG de chip pequeño— sin motivo: el lockup
+                  que se descarga es el mismo. */}
               <div className="flex flex-wrap gap-2">
-                <DlThemed pair={pngPair("lockup-split", 1024)} tone="primary">
-                  {t.aplicaciones.og.dl1}
+                <DlThemed pair={svgPair("lockup-split")} tone="primary">
+                  {t.aplicaciones.og.dlSvg}
                 </DlThemed>
-                <DlThemed pair={svgPair("lockup-split")}>SVG</DlThemed>
+                <DlThemed pair={pngPair("lockup-split", 1024)}>
+                  PNG 1024
+                </DlThemed>
               </div>
             </div>
           </div>
