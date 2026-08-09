@@ -1,0 +1,453 @@
+// Fuente única de los VALORES que el sitio publica sobre sí mismo (P37.66).
+//
+// EL REPARTO, que es lo que hay que recordar: `globals.css`, `action.tsx`,
+// `chrome.tsx`, `badge.tsx`, `heading.tsx` y `layout.ts` son la fuente EJECUTABLE
+// —lo que el navegador pinta—; este archivo es la fuente PUBLICADA —lo que las
+// páginas afirman sobre ella—; y `BRAND.md` es la fuente del PORQUÉ, nunca del
+// valor. El diccionario, a partir de aquí, solo lleva copy.
+//
+// Por qué existe. Design System y Brand Kit se venden como reflejo del código,
+// pero no leían del código: leían de `es.json` y `en.json`. Cada cifra de
+// contraste vivía en CUATRO sitios —los dos diccionarios, `BRAND.md` y
+// `DECISIONS.md`— y ninguno de los cuatro se puede verificar sin volver a medir.
+// Ese reparto ya falló dos veces del mismo modo: el sitio publicó trece días un
+// 7,01:1 que ningún color podía dar (P37.598), y `BRAND.md` pasó cuatro días
+// contradiciéndose a sí mismo sobre el hover del sólido (P37.5985). Acordarse de
+// propagar no es una solución: es la ausencia de una.
+//
+// LA LÍNEA — qué sale del diccionario y qué se queda. Sale lo que no tiene texto
+// que traducir: un token, un hex, un breakpoint, una cifra medida. Se queda todo
+// lo que un traductor tocaría: nombres, notas, rótulos de columna, prosa. La
+// prueba es literal — si una entrada de `es.json` y su gemela de `en.json` son
+// carácter por carácter la misma, no es copy, es un valor con dos copias.
+//
+// LA CIFRA SE GUARDA COMO NÚMERO, NO COMO TEXTO. Antes se escribía «13,79:1» en
+// español y «13.79:1» en inglés, o sea que la coma decimal era la razón por la
+// que el dato vivía en el diccionario. Aquí es un `number` y el separador lo pone
+// `Intl.NumberFormat` en el punto de render (`ratioText`), que es donde
+// corresponde.
+//
+// Y EL NIVEL WCAG SE DERIVA, no se escribe. `AAA`/`AA` es una función del número
+// y del tamaño de texto — la misma función para todos los pares—, así que
+// tenerlo escrito al lado solo abre la puerta a que un día no coincidan.
+
+import type { Locale } from "@/lib/i18n/config";
+
+/* -------------------------------------------------------------------------- */
+/* Tokens de layout                                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Los cinco tokens propios de este sitio, tal como están escritos en el `:root`
+ * de `app/globals.css`. Se publican en la sección «Tokens de layout» del Design
+ * System y alimentan sus estadísticas de portada.
+ */
+export const LAYOUT_TOKENS = [
+  { name: "--container", value: "1360px" },
+  { name: "--page-x", value: "clamp(1.25rem, 5vw, 2.5rem)" },
+  { name: "--gutter", value: "clamp(1rem, 2.2vw, 1.5rem)" },
+  { name: "--measure", value: "42rem" },
+  { name: "--section-y", value: "clamp(4.5rem, 9vw, 9rem)" },
+] as const;
+
+/** Ancho máximo del contenedor, sin unidad, para la estadística de portada. */
+export const CONTAINER_PX = 1360;
+
+/** Medida de lectura en `rem`, sin unidad, para la estadística de portada. */
+export const MEASURE_REM = 42;
+
+/** Rangos legibles de `--gutter` y `--section-y`, que la página cita en px. */
+export const GUTTER_RANGE_PX = "16–24px";
+export const SECTION_Y_RANGE_PX = "72 → 144px";
+
+/* -------------------------------------------------------------------------- */
+/* Breakpoints                                                                 */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * La escala de Tailwind del repo. `min` es el `min-width` en px; `base` no tiene
+ * y por eso su rango se compone con el `min` del siguiente. La tabla de la página
+ * y la lista de la portada salen de aquí, que antes eran dos copias sueltas.
+ */
+export const BREAKPOINTS = [
+  { token: "base", min: null },
+  { token: "sm", min: 640 },
+  { token: "md", min: 768 },
+  { token: "lg", min: 1024 },
+  { token: "xl", min: 1280 },
+] as const;
+
+export type BreakpointToken = (typeof BREAKPOINTS)[number]["token"];
+
+/** Cuántos breakpoints con `min-width` hay — «4» en la portada. */
+export const BREAKPOINT_COUNT = BREAKPOINTS.filter(
+  (b) => b.min !== null,
+).length;
+
+/**
+ * El rango que cubre un breakpoint, ya formateado: `0 – 639px` para `base` y
+ * `≥ 640px` para los demás. El «639» se calcula, no se escribe — era el único
+ * número de la tabla que había que recordar actualizar a mano.
+ */
+export function breakpointRange(token: string): string {
+  const i = BREAKPOINTS.findIndex((b) => b.token === token);
+  const bp = BREAKPOINTS[i];
+  if (!bp) return "";
+  if (bp.min === null) {
+    const next = BREAKPOINTS[i + 1];
+    return next?.min ? `0 – ${next.min - 1}px` : "";
+  }
+  return `≥ ${bp.min}px`;
+}
+
+/* -------------------------------------------------------------------------- */
+/* Escala de espaciado                                                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Escala de base 4px (Tailwind) que ilustra la sección de ritmo vertical. `bar`
+ * es el ancho de la barra del espécimen en porcentaje: es una coordenada del
+ * dibujo, ajustada a ojo, no una función de `px` — por eso va escrita y no
+ * calculada (misma excepción que los radios de las ilustraciones, `CLAUDE.md`).
+ */
+export const SPACING_SCALE = [
+  { name: "2xs", px: 8, bar: "5%" },
+  { name: "xs", px: 12, bar: "8%" },
+  { name: "sm", px: 16, bar: "11%" },
+  { name: "md", px: 24, bar: "17%" },
+  { name: "lg", px: 32, bar: "23%" },
+  { name: "xl", px: 48, bar: "34%" },
+  { name: "2xl", px: 64, bar: "46%" },
+  { name: "3xl", px: 96, bar: "68%" },
+  { name: "4xl", px: 128, bar: "90%" },
+] as const;
+
+/* -------------------------------------------------------------------------- */
+/* Contraste medido                                                            */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * MÉTODO Y FECHA, que van pegados al número porque sin ellos no significa nada:
+ * medido el **2026-08-09** sobre el sitio servido, recorriendo el DOM y leyendo
+ * el color que el navegador PINTA —no el valor nominal del `oklch`, que en los
+ * cianes de esta marca cae fuera del gamut sRGB y se recorta al pintarse—. El
+ * procedimiento completo, con los dos anclajes de validación, está en `BRAND.md`
+ * §Accesibilidad.
+ *
+ * EL CENSO INCLUYE LOS ESTADOS, no solo el reposo, y se hace recorriendo el DOM
+ * en vez de leyendo `globals.css`: los tres pares que se escaparon a las dos
+ * auditorías anteriores (etiqueta neutra, etiqueta teñida y hover del chrome
+ * secundario) solo existen al COMPONER un velo o una pastilla de hover sobre la
+ * superficie de debajo, así que no aparecen en ningún inventario de tokens.
+ */
+export const MEASURED_ON = "2026-08-09";
+
+type Measurement = {
+  /** Ratio en tema claro. */
+  light: number;
+  /** Ratio en tema oscuro, o `null` si el par no conmuta (ambos colores fijos). */
+  dark: number | null;
+  /** `large` = el par solo se publica como texto grande (umbrales 3:1 / 4,5:1). */
+  size?: "large";
+  /**
+   * Con cuántos decimales se midió. Por defecto 2, que es la precisión del censo.
+   * Va aquí y no en el formateador porque es una propiedad del DATO: «7,10» dice
+   * que se midió a la centésima y salió cero, y «10,5» dice que se midió a la
+   * décima. Dejar que `Intl` recorte el cero de 7,10 pierde esa información, y
+   * rellenarlo en 10,5 inventa un decimal que nadie midió.
+   */
+  decimals?: 1;
+};
+
+/**
+ * El censo de pares del sistema. La clave es el identificador con el que lo
+ * llaman las páginas; el copy que lo describe vive en el diccionario.
+ */
+export const CONTRAST = {
+  /** `--foreground` sobre `--background`. Anclaje de validación del método. */
+  bodyText: { light: 13.79, dark: 15.32 },
+  /** `--primary` como color de texto: enlaces y acento. */
+  primaryText: { light: 7.47, dark: 8.36 },
+  /** `--primary-foreground` sobre `--primary`: el texto de un botón sólido. */
+  buttonText: { light: 7.93, dark: 8.36 },
+  /** Hover del sólido, con el relleno mezclado un 12% hacia `--foreground`. */
+  solidHover: { light: 8.64, dark: 8.92 },
+  /** Hover del `toggle-primary` apagado: el estado con menos margen del sistema. */
+  toggleHover: { light: 7.21, dark: 7.8 },
+  /** `--muted-foreground` sobre `--background`. */
+  mutedForeground: { light: 7.1, dark: 7.12 },
+  /** Etiqueta neutra: el texto mezclado un 85% hacia su propio fondo (D30). */
+  badgeNeutral: { light: 8.17, dark: 9.17 },
+  /** Etiqueta teñida, en su peor emplazamiento de las dos (cian y morado). */
+  badgeTinted: { light: 10.63, dark: 10.02 },
+  /** Bolita del switch apagada: `--foreground` sobre el carril `--muted`. */
+  switchKnobOff: { light: 12.47, dark: 12.04 },
+  /** Hover del chrome secundario: `--foreground` sobre la pastilla `--muted`. */
+  chromeHover: { light: 12.47, dark: 12.04 },
+  /** `--brand-purple-accent` sobre fondo invertido. Solo como texto grande. */
+  purpleAccent: { light: 3.96, dark: 3.48, size: "large" },
+  /** Tinta sobre el pastel cian. No conmuta: los dos colores son fijos. */
+  inkOnCyanSoft: { light: 10.5, dark: null, decimals: 1 },
+  /** Tinta sobre el pastel morado. Tampoco conmuta. */
+  inkOnPurpleSoft: { light: 8.4, dark: null, decimals: 1 },
+} as const satisfies Record<string, Measurement>;
+
+export type ContrastId = keyof typeof CONTRAST;
+export type Theme = "light" | "dark";
+
+/** Guarda para consumir un identificador que viene del diccionario. */
+export function isContrastId(value: string): value is ContrastId {
+  return value in CONTRAST;
+}
+
+/** Ensancha la entrada literal a `Measurement`, para poder leer el `size` opcional. */
+const measurementOf = (id: ContrastId): Measurement => CONTRAST[id];
+
+/** La cifra de un par en un tema. Un par que no conmuta rinde la misma en los dos. */
+export function ratioOf(id: ContrastId, theme: Theme): number {
+  const m = measurementOf(id);
+  return theme === "dark" ? (m.dark ?? m.light) : m.light;
+}
+
+/**
+ * El nivel WCAG que alcanza una cifra. Se deriva porque es una función del número
+ * —7:1 y 4,5:1 para texto normal; 4,5:1 y 3:1 para texto grande—, no un juicio.
+ * `null` cuando no llega ni a AA.
+ */
+export function wcagLevel(
+  ratio: number,
+  size?: "large",
+): "AAA" | "AA" | "AA-large" | null {
+  if (size === "large") {
+    if (ratio >= 4.5) return "AAA";
+    return ratio >= 3 ? "AA-large" : null;
+  }
+  if (ratio >= 7) return "AAA";
+  return ratio >= 4.5 ? "AA" : null;
+}
+
+/** El nivel de un par del censo en un tema. */
+export function levelOf(id: ContrastId, theme: Theme) {
+  return wcagLevel(ratioOf(id, theme), measurementOf(id).size);
+}
+
+/**
+ * La cifra, formateada para leerse: coma decimal en español, punto en inglés.
+ * Es el motivo por el que los números vivían en el diccionario, y se resuelve
+ * donde toca. Los decimales son fijos —los que dice el dato— para que «7,10» no
+ * se publique como «7,1».
+ */
+function formatRatio(value: number, locale: Locale, decimals: number): string {
+  return `${new Intl.NumberFormat(locale, {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  }).format(value)}:1`;
+}
+
+/** La cifra publicable de un par del censo: valor, precisión y separador. */
+export function ratioText(
+  id: ContrastId,
+  theme: Theme,
+  locale: Locale,
+): string {
+  return formatRatio(
+    ratioOf(id, theme),
+    locale,
+    measurementOf(id).decimals ?? 2,
+  );
+}
+
+const RATIO_PLACEHOLDER = /\{([a-zA-Z]+)\.(light|dark)\}/g;
+
+/**
+ * Sustituye `{par.tema}` por la cifra formateada dentro de una frase del
+ * diccionario — «alcanza {bodyText.light} en claro». Es para la PROSA que
+ * argumenta con un valor vivo, que si no sería otra copia más del número.
+ *
+ * NO se aplica a las cifras HISTÓRICAS que el copy cita para contar qué se
+ * arregló («se quedaba en 6,44:1»): describen un estado que ya no existe, así
+ * que no pueden desincronizarse de nada. Son parte de la frase, no un dato.
+ */
+export function fillRatios(text: string, locale: Locale): string {
+  return text.replace(RATIO_PLACEHOLDER, (match, id: string, theme: string) =>
+    isContrastId(id) ? ratioText(id, theme as Theme, locale) : match,
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/* Muestras de color del Brand Kit                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Una cifra publicada bajo una muestra: de qué par del censo sale, en qué tema, y
+ * con qué matiz se rotula (la clave del rótulo vive en el diccionario, porque el
+ * matiz sí se traduce).
+ */
+type SwatchFigure = {
+  ref: ContrastId;
+  theme: Theme;
+  /** Clave en `color.ratioLabels` del diccionario: «texto», «botón (claro)»… */
+  qualifier?: string;
+};
+
+type Swatch = {
+  id: string;
+  /** Nombre del token, tal cual se escribe en `globals.css`. */
+  token: string;
+  /** Cómo se pinta. Dos valores separados por «·» cuando conmuta con el tema. */
+  hex: string;
+  /** `true` = pertenece a la capa de tinta, que conmuta con el tema. */
+  swaps: boolean;
+  /** Fondo de la muestra y color de la «Aa» que va encima. */
+  sample: string;
+  sampleFg: string;
+  /** Rótulo del pie de la muestra, en `color.ratioLabels`. */
+  ratioLabel?: string;
+  /** Cifras que se publican. Vacío = la muestra no es un par de texto. */
+  figures: SwatchFigure[];
+};
+
+/**
+ * La rejilla de la sección «Color» del Brand Kit. Los nombres y las notas de cada
+ * muestra son copy y siguen en el diccionario; esto es lo que se puede verificar
+ * contra el CSS o contra una medición.
+ *
+ * EL TONO DE LA PASTILLA se deriva de `swaps` y no se escribe: cian para
+ * «Conmuta», neutro para «Fijo». Decidido el 2026-08-09 que ahí el cian es
+ * correcto —cian = medición o comportamiento de un token; morado = cosa de la
+ * marca—, así que «Split/Flat» de la tabla del logo se queda en morado aunque
+ * también sea un binario: no hacen el mismo papel (`BRAND.md` §Etiquetas).
+ */
+export const BRAND_SWATCHES: readonly Swatch[] = [
+  {
+    id: "background",
+    token: "--background",
+    hex: "#F7F3EC · #191D21",
+    swaps: true,
+    sample: "var(--background)",
+    sampleFg: "var(--foreground)",
+    ratioLabel: "inkOver",
+    figures: [{ ref: "bodyText", theme: "light" }],
+  },
+  {
+    id: "foreground",
+    token: "--foreground",
+    hex: "#21262B · #F7F3EC",
+    swaps: true,
+    sample: "var(--foreground)",
+    sampleFg: "var(--background)",
+    ratioLabel: "bodyText",
+    figures: [{ ref: "bodyText", theme: "light" }],
+  },
+  {
+    id: "primary",
+    token: "--primary · --brand-cyan",
+    hex: "#005859 · #3FC9C4",
+    swaps: true,
+    sample: "var(--primary)",
+    sampleFg: "var(--primary-foreground)",
+    figures: [
+      { ref: "primaryText", theme: "light", qualifier: "asText" },
+      { ref: "buttonText", theme: "light", qualifier: "asButtonLight" },
+      { ref: "primaryText", theme: "dark", qualifier: "inDark" },
+    ],
+  },
+  {
+    id: "purple",
+    token: "--brand-purple",
+    hex: "#9B87F5",
+    swaps: false,
+    sample: "var(--brand-purple)",
+    sampleFg: "#21262B",
+    ratioLabel: "decorative",
+    figures: [],
+  },
+  {
+    id: "purpleAccent",
+    token: "--brand-purple-accent",
+    hex: "oklch(0.62 0.16 290)",
+    swaps: false,
+    sample: "var(--brand-purple-accent)",
+    sampleFg: "#F7F3EC",
+    ratioLabel: "onInverted",
+    figures: [
+      { ref: "purpleAccent", theme: "light", qualifier: "inLight" },
+      { ref: "purpleAccent", theme: "dark", qualifier: "inDark" },
+    ],
+  },
+  {
+    id: "cyanSplit",
+    token: "--brand-cyan-split",
+    hex: "#16BDBD",
+    swaps: false,
+    sample: "var(--brand-cyan-split)",
+    sampleFg: "#21262B",
+    ratioLabel: "logoOnly",
+    figures: [],
+  },
+  {
+    id: "purpleSplit",
+    token: "--brand-purple-split",
+    hex: "#9B87F5",
+    swaps: false,
+    sample: "var(--brand-purple-split)",
+    sampleFg: "#21262B",
+    ratioLabel: "logoOnly",
+    figures: [],
+  },
+  {
+    id: "cyanSoft",
+    token: "--brand-cyan-soft",
+    hex: "#A7E1DE",
+    swaps: false,
+    sample: "var(--brand-cyan-soft)",
+    sampleFg: "#21262B",
+    ratioLabel: "inkOver",
+    figures: [{ ref: "inkOnCyanSoft", theme: "light" }],
+  },
+  {
+    id: "purpleSoft",
+    token: "--brand-purple-soft",
+    hex: "#C6B9F0",
+    swaps: false,
+    sample: "var(--brand-purple-soft)",
+    sampleFg: "#21262B",
+    ratioLabel: "inkOver",
+    figures: [{ ref: "inkOnPurpleSoft", theme: "light" }],
+  },
+];
+
+/**
+ * El pie de una muestra, ya compuesto: rótulo · cifras con su matiz · nivel WCAG.
+ * El nivel sale de la PEOR de las cifras publicadas, que es la que manda, y se
+ * omite cuando la muestra no publica ninguna (los splits y el morado decorativo).
+ */
+export function swatchRatioParts(
+  swatch: Swatch,
+  locale: Locale,
+  label: (key: string) => string,
+): string[] {
+  const parts: string[] = [];
+  if (swatch.ratioLabel) parts.push(label(swatch.ratioLabel));
+
+  for (const f of swatch.figures) {
+    const figure = ratioText(f.ref, f.theme, locale);
+    parts.push(f.qualifier ? `${figure} ${label(f.qualifier)}` : figure);
+  }
+
+  const worst = swatch.figures.reduce<number | null>(
+    (min, f) => Math.min(min ?? Infinity, ratioOf(f.ref, f.theme)),
+    null,
+  );
+  if (worst !== null) {
+    const size = swatch.figures.some(
+      (f) => measurementOf(f.ref).size === "large",
+    )
+      ? ("large" as const)
+      : undefined;
+    const level = wcagLevel(worst, size);
+    if (level) parts.push(level);
+  }
+
+  return parts;
+}

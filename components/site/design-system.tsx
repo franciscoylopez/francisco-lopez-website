@@ -4,6 +4,22 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { Badge } from "@/components/ui/badge";
 import { chromeLinkVariants } from "@/components/ui/chrome";
+import {
+  BREAKPOINT_COUNT,
+  BREAKPOINTS,
+  breakpointRange,
+  CONTAINER_PX,
+  fillRatios,
+  GUTTER_RANGE_PX,
+  isContrastId,
+  LAYOUT_TOKENS,
+  levelOf,
+  MEASURE_REM,
+  ratioText,
+  SECTION_Y_RANGE_PX,
+  SPACING_SCALE,
+} from "@/lib/design-values";
+import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
@@ -63,7 +79,7 @@ export function DesignSystem({
   related: RelatedDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
-  lang: string;
+  lang: Locale;
 }) {
   const t = dict;
 
@@ -104,13 +120,23 @@ export function DesignSystem({
             data-reveal
             className="border-border mt-[clamp(3rem,6vw,4.5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-[var(--gutter)] border-t pt-8"
           >
-            <Stat value="1360" unit="px" label={t.hero.statContainer} />
             <Stat
-              value="4"
-              unit={` ${t.hero.statBreakpoints}`}
-              label={t.hero.statBreakpointsList}
+              value={String(CONTAINER_PX)}
+              unit="px"
+              label={t.hero.statContainer}
             />
-            <Stat value="42" unit="rem" label={t.hero.statMeasure} />
+            <Stat
+              value={String(BREAKPOINT_COUNT)}
+              unit={` ${t.hero.statBreakpoints}`}
+              label={BREAKPOINTS.filter((b) => b.min !== null)
+                .map((b) => b.min)
+                .join(" · ")}
+            />
+            <Stat
+              value={String(MEASURE_REM)}
+              unit="rem"
+              label={t.hero.statMeasure}
+            />
             <Stat value="AA→AAA" label={t.hero.statA11y} />
           </div>
         </div>
@@ -128,7 +154,7 @@ export function DesignSystem({
             baseLabel={t.rejilla.baseLabel}
             baseVal={t.rejilla.baseVal}
             gutterLabel={t.rejilla.gutterLabel}
-            gutterVal={t.rejilla.gutterVal}
+            gutterVal={`var(--gutter) · ${GUTTER_RANGE_PX}`}
             hint={t.rejilla.hint}
           />
           <div className="mt-8 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]">
@@ -178,7 +204,7 @@ export function DesignSystem({
                 </span>
               </div>
               <div className="flex flex-col gap-[0.55rem] p-5 font-mono text-[clamp(0.8rem,1.4vw,0.92rem)] leading-[1.5]">
-                {t.tokens.items.map((tok) => (
+                {LAYOUT_TOKENS.map((tok) => (
                   <div
                     key={tok.name}
                     className="flex flex-wrap gap-x-3 gap-y-1"
@@ -196,7 +222,7 @@ export function DesignSystem({
                           "color-mix(in oklch,var(--background),transparent 18%)",
                       }}
                     >
-                      {tok.val};
+                      {tok.value};
                     </span>
                   </div>
                 ))}
@@ -232,7 +258,7 @@ export function DesignSystem({
                     {bp.token}
                   </code>
                   <span className="text-muted-foreground mt-[0.15rem] block text-[0.78rem]">
-                    {bp.min}
+                    {breakpointRange(bp.token)}
                   </span>
                 </span>
                 <span className="text-[0.88rem] font-medium">{bp.ctx}</span>
@@ -251,7 +277,7 @@ export function DesignSystem({
                     {bp.token}
                   </code>
                   <span className="text-muted-foreground text-[0.8rem]">
-                    {bp.min}
+                    {breakpointRange(bp.token)}
                   </span>
                 </div>
                 <div className="mt-[0.35rem] text-[0.9rem] font-medium">
@@ -282,17 +308,17 @@ export function DesignSystem({
                 {t.ritmo.scaleTitle}
               </h3>
               <div className="flex flex-col gap-[0.55rem]">
-                {t.ritmo.spacing.map((s) => (
+                {SPACING_SCALE.map((s) => (
                   <div key={s.name} className="flex items-center gap-4">
                     <span className="text-muted-foreground w-14 flex-shrink-0 font-mono text-[0.78rem]">
                       {s.name}
                     </span>
                     <span className="text-foreground w-12 flex-shrink-0 text-[0.78rem]">
-                      {s.px}
+                      {s.px}px
                     </span>
                     <span
                       className="bg-primary h-[0.85rem] rounded-[2px]"
-                      style={{ width: s.w }}
+                      style={{ width: s.bar }}
                     />
                   </div>
                 ))}
@@ -314,7 +340,7 @@ export function DesignSystem({
                   }}
                 >
                   <span className="text-muted-foreground font-mono text-[0.75rem]">
-                    {t.ritmo.sectionYLabel}
+                    --section-y · clamp({SECTION_Y_RANGE_PX})
                   </span>
                 </div>
                 <div className="border-border border-t border-dashed px-[var(--page-x)] py-6">
@@ -797,58 +823,68 @@ export function DesignSystem({
               registros. Es el mismo problema que resolvió `PAIR` (P37.61/62): el
               número de columnas se elige por cuántas piezas hay, no por defecto. */}
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] items-start gap-[var(--gutter)]">
-            {t.etiquetas.cases.map((c, i) => (
-              <div
-                key={c.cls}
-                className="border-border overflow-hidden rounded-xl border"
-              >
-                <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
-                  {/* Las tres primeras tarjetas enseñan un TONO con dos ejemplos
+            {t.etiquetas.cases.map((c, i) => {
+              // La cuarta tarjeta cierra con una cifra REAL del censo —la misma
+              // que publica la tabla de (12)—, no con una escrita a mano: es un
+              // espécimen del registro `code`, y un espécimen que miente sobre el
+              // dato que ilustra es exactamente lo que arregla P37.66.
+              const demo =
+                i === 3
+                  ? [...c.demo, ratioText("bodyText", "light", lang)]
+                  : c.demo;
+              return (
+                <div
+                  key={c.cls}
+                  className="border-border overflow-hidden rounded-xl border"
+                >
+                  <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
+                    {/* Las tres primeras tarjetas enseñan un TONO con dos ejemplos
                       reales; la cuarta enseña los tres `kind` sobre un mismo tono,
                       que es el eje que de verdad significa algo. Por eso el mapeo
                       va por índice y no por una prop en el diccionario: el copy
                       describe la variante, no la elige. */}
-                  {c.demo.map((d, j) => (
-                    <Badge
-                      key={d}
-                      tone={
-                        i === 0
-                          ? "neutral"
-                          : i === 1
-                            ? "cyan"
-                            : i === 2
-                              ? "purple"
-                              : "neutral"
-                      }
-                      kind={
-                        i === 3
-                          ? ((["label", "value", "code"] as const)[j] ??
-                            "value")
-                          : "value"
-                      }
-                    >
-                      {d}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
-                  <div className="mb-[0.7rem] flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                    <span className="text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
-                      {c.kicker}
-                    </span>
-                    <code className="text-muted-foreground font-mono text-[0.74rem]">
-                      {c.cls}
-                    </code>
+                    {demo.map((d, j) => (
+                      <Badge
+                        key={d}
+                        tone={
+                          i === 0
+                            ? "neutral"
+                            : i === 1
+                              ? "cyan"
+                              : i === 2
+                                ? "purple"
+                                : "neutral"
+                        }
+                        kind={
+                          i === 3
+                            ? ((["label", "value", "code"] as const)[j] ??
+                              "value")
+                            : "value"
+                        }
+                      >
+                        {d}
+                      </Badge>
+                    ))}
                   </div>
-                  <p className="text-foreground m-0 text-[0.88rem] leading-[1.6]">
-                    {c.rule}
-                  </p>
-                  <p className="text-muted-foreground border-border m-0 mt-[0.8rem] border-t border-dashed pt-[0.8rem] text-[0.82rem] leading-[1.55]">
-                    {c.note}
-                  </p>
+                  <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
+                    <div className="mb-[0.7rem] flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                      <span className="text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
+                        {c.kicker}
+                      </span>
+                      <code className="text-muted-foreground font-mono text-[0.74rem]">
+                        {c.cls}
+                      </code>
+                    </div>
+                    <p className="text-foreground m-0 text-[0.88rem] leading-[1.6]">
+                      {c.rule}
+                    </p>
+                    <p className="text-muted-foreground border-border m-0 mt-[0.8rem] border-t border-dashed pt-[0.8rem] text-[0.82rem] leading-[1.55]">
+                      {fillRatios(c.note, lang)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <p className="text-muted-foreground m-0 mt-4 text-[0.8rem]">
             {t.etiquetas.hint}
@@ -857,7 +893,7 @@ export function DesignSystem({
             <InfoCard
               title={t.etiquetas.ruleTitle}
               bullets={t.etiquetas.rule}
-              foot={t.etiquetas.ruleFoot}
+              foot={fillRatios(t.etiquetas.ruleFoot, lang)}
             />
           </div>
         </div>
@@ -889,27 +925,35 @@ export function DesignSystem({
                 {t.accesibilidad.contrastCols.dark}
               </span>
             </div>
-            {t.accesibilidad.contrastRows.map((r) => (
-              <div
-                key={r.label}
-                className="border-border flex flex-wrap items-baseline gap-x-4 gap-y-[0.4rem] border-b px-[var(--page-x)] py-4 last:border-b-0"
-              >
-                <span className="min-w-40 flex-[2_1_12rem]">
-                  <span className="text-foreground font-medium">{r.label}</span>
-                  <span className="text-muted-foreground mt-[0.15rem] block text-[0.78rem]">
-                    {r.note}
+            {t.accesibilidad.contrastRows.map((r) => {
+              // La fila la nombra el copy; la cifra y el nivel salen del censo.
+              if (!isContrastId(r.id)) return null;
+              const id = r.id;
+              return (
+                <div
+                  key={r.id}
+                  className="border-border flex flex-wrap items-baseline gap-x-4 gap-y-[0.4rem] border-b px-[var(--page-x)] py-4 last:border-b-0"
+                >
+                  <span className="min-w-40 flex-[2_1_12rem]">
+                    <span className="text-foreground font-medium">
+                      {r.label}
+                    </span>
+                    <span className="text-muted-foreground mt-[0.15rem] block text-[0.78rem]">
+                      {r.note}
+                    </span>
                   </span>
-                </span>
-                <span className="text-foreground min-w-24 flex-[1_1_7rem] font-mono text-[0.9rem]">
-                  {r.light}
-                  <ContrastBadge lv={r.lightLv} />
-                </span>
-                <span className="text-foreground min-w-24 flex-[1_1_7rem] font-mono text-[0.9rem]">
-                  {r.dark}
-                  <ContrastBadge lv={r.darkLv} />
-                </span>
-              </div>
-            ))}
+                  {(["light", "dark"] as const).map((theme) => (
+                    <span
+                      key={theme}
+                      className="text-foreground min-w-24 flex-[1_1_7rem] font-mono text-[0.9rem]"
+                    >
+                      {ratioText(id, theme, lang)}
+                      <ContrastBadge lv={levelOf(id, theme)} />
+                    </span>
+                  ))}
+                </div>
+              );
+            })}
           </div>
           <p className="text-muted-foreground m-0 mt-4 max-w-[var(--measure)] text-[0.85rem]">
             {t.accesibilidad.contrastNote}
@@ -1039,7 +1083,7 @@ function TypeMeta({
   );
 }
 
-function ContrastBadge({ lv }: { lv: string }) {
+function ContrastBadge({ lv }: { lv: string | null }) {
   if (!lv) return null;
   return (
     <Badge tone={lv === "AAA" ? "cyan" : "neutral"} className="ml-[0.35rem]">

@@ -4,6 +4,8 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
+import { fillRatios } from "@/lib/design-values";
+import type { Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
@@ -34,7 +36,7 @@ export function Accesibilidad({
   related: RelatedDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
-  lang: string;
+  lang: Locale;
 }) {
   const t = dict;
   return (
@@ -87,7 +89,7 @@ export function Accesibilidad({
         <div className={WRAP}>
           <SectionHead num={t.conformance.num} title={t.conformance.heading} />
           <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            {t.conformance.note}
+            {fillRatios(t.conformance.note, lang)}
           </p>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
             {t.conformance.rows.map((r) => (

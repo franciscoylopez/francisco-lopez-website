@@ -4,6 +4,8 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/ui/logo";
+import { BRAND_SWATCHES, swatchRatioParts } from "@/lib/design-values";
+import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
@@ -136,6 +138,12 @@ const H2 = titleVariants({ size: "section" });
 const LEAD =
   "text-muted-foreground mt-[1.4rem] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
 
+// Los VALORES de la rejilla de color (token, hex, muestra y sus cifras medidas)
+// salen de `lib/design-values.ts`; el diccionario solo conserva el nombre y la
+// nota de cada muestra, que es lo único que un traductor toca (P37.66).
+const SWATCH: Record<string, (typeof BRAND_SWATCHES)[number] | undefined> =
+  Object.fromEntries(BRAND_SWATCHES.map((s) => [s.id, s]));
+
 export function BrandKit({
   dict,
   related,
@@ -147,9 +155,10 @@ export function BrandKit({
   related: RelatedDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
-  lang: string;
+  lang: Locale;
 }) {
   const t = dict;
+  const ratioLabels: Record<string, string> = t.color.ratioLabels;
 
   return (
     <main id="top">
@@ -550,45 +559,53 @@ export function BrandKit({
             data-reveal
             className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-[var(--gutter)]"
           >
-            {t.color.items.map((c) => (
-              <div key={c.name} className={cn(CARD, "overflow-hidden")}>
-                <div
-                  className="border-border flex h-[118px] items-end border-b p-[0.85rem]"
-                  style={{ background: c.sample }}
-                >
-                  <span
-                    className="font-display text-[1.5rem] font-semibold"
-                    style={{ color: c.sampleFg }}
+            {t.color.items.map((c) => {
+              // El copy manda QUÉ muestras se publican; el módulo, cuánto valen.
+              const s = SWATCH[c.id];
+              if (!s) return null;
+              const ratio = swatchRatioParts(
+                s,
+                lang,
+                (k) => ratioLabels[k] ?? k,
+              ).join(" · ");
+              return (
+                <div key={c.id} className={cn(CARD, "overflow-hidden")}>
+                  <div
+                    className="border-border flex h-[118px] items-end border-b p-[0.85rem]"
+                    style={{ background: s.sample }}
                   >
-                    Aa
-                  </span>
-                </div>
-                <div className="px-4 pt-[0.9rem] pb-[1.1rem]">
-                  <div className="flex items-center justify-between gap-2">
-                    <div className="font-display text-[0.98rem] font-semibold">
-                      {c.name}
+                    <span
+                      className="font-display text-[1.5rem] font-semibold"
+                      style={{ color: s.sampleFg }}
+                    >
+                      Aa
+                    </span>
+                  </div>
+                  <div className="px-4 pt-[0.9rem] pb-[1.1rem]">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="font-display text-[0.98rem] font-semibold">
+                        {c.name}
+                      </div>
+                      <Badge tone={s.swaps ? "cyan" : "neutral"}>
+                        {s.swaps ? t.color.swapConmuta : t.color.swapFijo}
+                      </Badge>
                     </div>
-                    <Badge tone={c.swap === "conmuta" ? "cyan" : "neutral"}>
-                      {c.swap === "conmuta"
-                        ? t.color.swapConmuta
-                        : t.color.swapFijo}
-                    </Badge>
-                  </div>
-                  <code className="text-muted-foreground mt-[0.35rem] block font-mono text-[0.76rem]">
-                    {c.token}
-                  </code>
-                  <code className="text-foreground mt-[0.15rem] block font-mono text-[0.78rem]">
-                    {c.hex}
-                  </code>
-                  <div className="border-border text-muted-foreground mt-[0.6rem] border-t border-dashed pt-[0.6rem] text-[0.78rem]">
-                    {c.ratio}
-                  </div>
-                  <div className="text-muted-foreground mt-[0.2rem] text-[0.76rem]">
-                    {c.note}
+                    <code className="text-muted-foreground mt-[0.35rem] block font-mono text-[0.76rem]">
+                      {s.token}
+                    </code>
+                    <code className="text-foreground mt-[0.15rem] block font-mono text-[0.78rem]">
+                      {s.hex}
+                    </code>
+                    <div className="border-border text-muted-foreground mt-[0.6rem] border-t border-dashed pt-[0.6rem] text-[0.78rem]">
+                      {ratio}
+                    </div>
+                    <div className="text-muted-foreground mt-[0.2rem] text-[0.76rem]">
+                      {c.note}
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <Callout data-reveal accent="purple">
             {t.color.pastelNote}
