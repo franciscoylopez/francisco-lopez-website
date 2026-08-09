@@ -82,7 +82,7 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   cuentagotas), tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 - **Capa de componentes**: todo elemento accionable —botón, chip, toggle, pestaña,
   control de icono— sale de `components/ui/action.tsx`, y las cajas y ritmos comunes de
-  `components/site/layout.ts`. **Ninguno se escribe con clases sueltas**: si un caso no
+  `components/ui/layout.ts`. **Ninguno se escribe con clases sueltas**: si un caso no
   encaja en una variante, se crea la variante; la excepción se documenta con fecha. Es
   lo que hace que un cambio de hover, de radio, del objetivo táctil, del icono que lleva
   una acción o del fondo de reposo de un control solo-icono llegue a todo el sitio a la

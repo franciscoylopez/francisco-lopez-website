@@ -80,7 +80,7 @@ Las cuatro fuentes que tienen que decir lo mismo:
 | Fuente | Archivo |
 |---|---|
 | Reglas de marca | `BRAND.md` (+ `BRAND-logo.md`, `DECISIONS.md` D30/D34/D35/D36) |
-| Implementación | `app/globals.css` · `components/ui/action.tsx` · `components/site/layout.ts` |
+| Implementación | `app/globals.css` · `components/ui/action.tsx` · `components/ui/layout.ts` |
 | Documentación publicada | página **Design System** (`components/site/design-system.tsx`) |
 | Assets publicados | página **Brand Kit** (`components/site/brand-kit.tsx`) |
 | Cifras publicadas | página **Accesibilidad** (`components/site/accesibilidad.tsx`) |

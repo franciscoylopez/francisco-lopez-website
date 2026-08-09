@@ -6,7 +6,7 @@ import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
-import { CARD, SECTION, WRAP } from "./layout";
+import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 
 type Tool = { name: string; desc: string };
 export type ToolkitDict = {

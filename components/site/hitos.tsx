@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { SECTION, WRAP } from "./layout";
+import { SECTION, WRAP } from "@/components/ui/layout";
 
 export type HitosDict = {
   eyebrow: string;

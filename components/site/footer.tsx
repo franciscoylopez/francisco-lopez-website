@@ -3,7 +3,7 @@ import { Logo } from "@/components/ui/logo";
 import { LINKEDIN_URL } from "@/lib/contact";
 import { cn } from "@/lib/utils";
 
-import { LinkedinIcon } from "./icons";
+import { LinkedinIcon } from "@/components/ui/icons";
 
 export type FooterDict = {
   copyright: string;

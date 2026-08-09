@@ -1,4 +1,4 @@
-import { SECTION, WRAP } from "./layout";
+import { SECTION, WRAP } from "@/components/ui/layout";
 
 export type ProcesoDict = {
   eyebrow: string;

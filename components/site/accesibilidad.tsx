@@ -4,8 +4,8 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import { InfoCard } from "./info-card";
-import { CARD, SECTION, WRAP } from "./layout";
+import { InfoCard } from "@/components/ui/info-card";
+import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { EmailCta } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 

@@ -526,6 +526,8 @@ render controla el estilo. Si otra sección lo necesita, se promueve `Rich` a un
 compartido (`lib/` o `components/site/`); hoy vive co-ubicado con su único consumidor.
 
 **Promovido 2026-08-02.** `Rich` se movió a `components/site/rich.tsx` (módulo compartido)
+*—y de ahí a `components/ui/rich.tsx` el 2026-08-09, al fijarse la frontera `ui/`↔`site/`
+de D36: no sabe nada del contenido, solo renderiza el markup que le pasen—*
 al aparecer un segundo contexto que lo pedía. Curiosidad: la página de Accesibilidad, que
 motivó la promoción, acabó **sin** usarlo (su rediseño a tarjetas no lleva markup inline),
 así que hoy `sobre-mi.tsx` sigue siendo el único consumidor — pero el helper ya vive en su
@@ -999,8 +1001,9 @@ duplicado idéntico en **dieciocho** sitios y `SECTION` en ocho.
   compitiendo). Se exporta el `cva` y no un componente `<Action>` a propósito: la mitad
   de los call sites son `<a>` y la otra mitad `<button>`, y un wrapper con
   `render`/`asChild` añadiría indirección sin quitar ninguna decisión de encima.
-- **`components/site/layout.ts`** — `WRAP`, `SECTION`, `PROSE`, `CARD`, `PANEL`,
-  `DIALOG_ACTIONS`.
+- **`components/ui/layout.ts`** — `WRAP`, `SECTION`, `PROSE`, `CARD`, `PANEL`, `PAIR`,
+  `DIALOG_ACTIONS`. *(Nació en `components/site/`; se movió a `ui/` el 2026-08-09 con la
+  frontera de abajo.)*
 
 **Ampliado 2026-08-04 (P37.5986): `DIALOG_ACTIONS`, y el motivo por el que hace falta.**
 Migrar el botón a la variante cambió sus métricas —de `px-4` a `px-[1.35rem]`, 33,6px más
@@ -1045,6 +1048,35 @@ en una caja de layout, mirar si ya existe la variante. Si no existe, se crea. Si
 es una excepción, la decide Francisco y se documenta con fecha en `BRAND.md`. La señal de
 que el sistema se está rompiendo no es que algo se vea mal: es que la misma decisión
 aparece escrita en dos sitios.
+
+**Ampliado 2026-08-09 (P37.64): dónde vive cada pieza — la frontera `ui/` ↔ `site/`.**
+La capa existía pero no su domicilio: `components/site/` tenía 29 archivos y `ui/` dos, y
+`site/` mezclaba **tres niveles** —primitivas sin conocimiento del contenido, bloques
+reutilizables y secciones de página—, de modo que el nombre del directorio ya no decía
+nada sobre lo que había dentro. `layout.ts` era el caso flagrante: tan primitivo como
+`action.tsx` y con dieciséis importadores, pero archivado junto a `hero.tsx`.
+
+El criterio es **una sola pregunta: ¿la pieza sabe algo de ESTE sitio?** —su copy, sus
+rutas, sus datos, sus secciones—.
+
+- **No lo sabe → `components/ui/`.** Se llevaría a otro proyecto con solo los tokens.
+  Hoy: `action.tsx`, `layout.ts`, `logo.tsx`, `icons.tsx`, `rich.tsx`, `info-card.tsx`.
+- **Lo sabe → `components/site/`.** Bloques reutilizables (`nav`, `footer`, `breadcrumb`,
+  `contact-actions`, `related-pages`, `system-message`) y secciones de página (`hero`,
+  `hitos`, `toolkit`, `trayectoria`…).
+
+Los casos que **parecen** primitivas y no lo son, porque enseñan dónde cae la línea:
+`brand-logo-box.tsx` hardcodea `/logos/${name}-{light,dark}.png` —sabe dónde viven los
+assets de este sitio—; `reveal-root.tsx` implementa las convenciones `data-reveal` y
+`data-count` **de este sitio**; `split-404.tsx` es la ilustración de una página concreta.
+Ninguno se mueve. `json-ld.tsx` es el caso raro que se queda por otro motivo: no sabe nada
+del contenido, pero tampoco emite UI, y `ui/` es la capa **visual** —meterlo ahí volvería
+a hacer que el nombre del directorio no signifique nada, que es justo el problema que esto
+resuelve.
+
+**Convención de import que se sigue de la frontera:** entre directorios, ruta absoluta
+(`@/components/ui/layout`); dentro del mismo directorio, relativa (`./layout`). Antes
+convivían las dos formas para el mismo fichero.
 
 ## D37 · Endurecimiento del workflow de CI, y qué audita de verdad este repo — 2026-08-09
 

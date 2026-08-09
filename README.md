@@ -75,10 +75,9 @@ app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i1
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
 .github/workflows/     CI (GitHub Actions): typecheck + lint + build en cada PR
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
-components/site/        Secciones de la web (nav, hero, footer, breadcrumb, banner de cookies, páginas…)
-components/site/layout.ts  Primitivas de layout compartidas: WRAP, SECTION, PROSE, CARD, PANEL
+components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (variantes de todo lo accionable), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36
+components/site/        Piezas que SÍ saben de este sitio: bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
-components/ui/          Primitivas: logo y action.tsx (variantes de todo elemento accionable — ver BRAND.md y DECISIONS D36)
 lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, favicons

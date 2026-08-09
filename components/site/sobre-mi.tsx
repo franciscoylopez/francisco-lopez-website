@@ -4,8 +4,8 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ContactActions, type ContactActionsDict } from "./contact-actions";
-import { PROSE, WRAP } from "./layout";
-import { Rich } from "./rich";
+import { PROSE, WRAP } from "@/components/ui/layout";
+import { Rich } from "@/components/ui/rich";
 
 type SobreMiDict = Dictionary["sobreMi"];
 
