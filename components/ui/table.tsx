@@ -14,26 +14,28 @@ import { PANEL } from "./layout";
 // LA PREGUNTA DE D36 PRIMERO: ¿la cebra y el filete significan cosas distintas, o
 // es una tabla haciendo algo que las otras no?
 //
-// La hipótesis con la que se abrió la tarea —«la cebra ayuda cuando la fila es alta
-// y hay muchas columnas»— NO sobrevive al inventario tal cual estaba escrita: la
-// «Tabla de uso» del Brand Kit tiene CINCO columnas y no la lleva, y la de
-// Cabeceras tiene filas igual de altas que la de tipografía y tampoco. Lo que
-// correlaciona con la cebra no es el número de columnas.
+// Respuesta: **es una tabla haciendo algo que las otras no**, y encima no lo estaba
+// haciendo. Hay UN separador de tabla en el sistema, el filete.
 //
-// Lo que sí separa dos cosas de verdad es LA FORMA DE LA FILA:
+// Cómo se llegó ahí, porque el camino importa más que la conclusión. La hipótesis
+// con la que se abrió la tarea —«la cebra ayuda cuando la fila es alta y hay muchas
+// columnas»— no sobrevive al inventario: la «Tabla de uso» tiene CINCO columnas y
+// no la lleva. Así que se probó un eje mejor: la FORMA de la fila —un renglón de
+// celdas frente a un bloque que se envuelve—, y bajo esa lectura la cebra se quedó
+// y se le dio también a Cabeceras, que tiene la misma forma.
 //
-//   · Fila de UNA LÍNEA de celdas —breakpoints, uso del logo, contraste medido—.
-//     El filete basta: la fila entera cabe en un renglón y el ojo no se pierde.
-//     Es `DataTable`.
-//   · Fila que es un BLOQUE que se envuelve —un espécimen grande a la izquierda y
-//     una rejilla de metadatos que reflowea a la derecha, en tipografía y en
-//     cabeceras—. Ahí el filete no agrupa nada: entre dos filas altas hay más
-//     distancia que entre las dos mitades de una misma fila, y la banda es lo que
-//     dice dónde empieza y acaba cada una. Es `SPECIMEN_ROW` + `table-band`.
+// Y entonces Francisco la miró en pantalla y no le cuadró, así que se MIDIÓ: el
+// velo daba un salto de **ΔL* 1,02 en claro** y 2,02 en oscuro, contra los 3,89 /
+// 9,04 de la pastilla de hover, que es el escalón que este proyecto usa como
+// referencia de «esto se ve» (`BRAND.md` §Cómo medir, punto 4). O sea que la banda
+// no agrupaba filas —su única justificación—: ponía un tinte por debajo del umbral,
+// y por eso se leía como que algo no cuadraba en vez de como estructura.
 //
-// O sea que SÍ son dos cosas —como CARD y PANEL—, pero el eje no era el que decía
-// la hipótesis, y la que estaba mal era la de Cabeceras, que se queda sin banda
-// teniendo la misma forma que la de tipografía. Por eso la gana al unificar.
+// LA LECCIÓN, que es la reutilizable: un argumento de diseño bien construido —y el
+// de la forma de la fila lo era— sigue siendo una hipótesis hasta que se mide.
+// Subirla habría exigido construir la banda sobre `--muted`, o sea una superficie
+// nueva con su atenuado recalculado y su par en el censo, para hacer un trabajo que
+// el filete ya hace. Lo barato y lo correcto coincidían.
 // ───────────────────────────────────────────────────────────────────────────────
 //
 // POR QUÉ ES `<table>` DE VERDAD Y NO DIVS CON GRID. No es cosmética: la de
@@ -175,10 +177,8 @@ export function TD({
  * celdas. Unifica los dos ritmos que había —`gap-y-4 py-6` en tipografía y
  * `gap-y-5 py-7` en cabeceras— sin que la diferencia significara nada.
  *
- * La BANDA no va aquí sino en `.table-band` (`globals.css`), sobre el contenedor:
- * es una regla de `nth-child`, y además el velo y el atenuado que ese velo obliga
- * a recalcular tienen que ir declarados juntos — separarlos es exactamente cómo el
- * atenuado de esta misma tabla se quedó en 6,80:1 hasta P37.6565.
+ * Se separa con FILETE, igual que `DataTable`: es el único separador de tabla del
+ * sistema. La cebra que llevaba la de tipografía se midió y se borró — ver arriba.
  */
 export const SPECIMEN_ROW =
   "border-border flex flex-wrap items-baseline gap-x-8 gap-y-4 border-b px-[var(--page-x)] py-6 last:border-b-0";

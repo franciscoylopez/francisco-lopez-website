@@ -386,7 +386,7 @@ export function DesignSystem({
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.tipografia.lead}
           </p>
-          <div className="border-border table-band overflow-hidden rounded-xl border">
+          <div className="border-border overflow-hidden rounded-xl border">
             {t.tipografia.rows.map((row) => (
               <div key={row.name} className={SPECIMEN_ROW}>
                 <div className="min-w-[min(100%,14rem)] flex-[1_1_16rem] overflow-hidden">
@@ -921,7 +921,7 @@ export function DesignSystem({
               esquema de encabezados de la página —un lector de pantalla los
               anunciaría como secciones que no existen—, que es el mismo motivo
               por el que §(05) enseña la escala tipográfica en <span>. */}
-          <div className={cn(PANEL, "table-band")}>
+          <div className={PANEL}>
             {t.cabeceras.sizes.map((s) => {
               if (!isTitleSize(s.size)) return null;
               return (
@@ -1051,45 +1051,6 @@ export function DesignSystem({
               </TR>
             ))}
           </DataTable>
-
-          <h3 className="font-display m-0 mt-10 mb-2 text-[1rem] font-semibold">
-            {t.tablas.shapeTitle}
-          </h3>
-          <p className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]">
-            {t.tablas.shapeLead}
-          </p>
-          <div className={PAIR}>
-            {t.tablas.shapes.map((s) => (
-              <div key={s.name} className={cn(PANEL, "flex flex-col")}>
-                <div
-                  className={cn(
-                    "flex-1 py-2",
-                    s.name === "band" && "table-band",
-                  )}
-                >
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="border-border flex items-center gap-3 border-b px-5 py-[0.7rem] text-[0.82rem] last:border-b-0"
-                    >
-                      <span className="text-muted-foreground font-mono text-[0.72rem]">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="bg-muted h-[0.55rem] flex-1 rounded-sm" />
-                    </div>
-                  ))}
-                </div>
-                <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
-                  <code className="text-muted-foreground font-mono text-[0.74rem]">
-                    {s.token}
-                  </code>
-                  <p className="text-muted-foreground m-0 mt-[0.5rem] text-[0.82rem] leading-[1.55]">
-                    {s.note}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
 
           <div className="mt-8 max-w-[var(--measure)]">
             <InfoCard
