@@ -50,6 +50,7 @@
 - D34 · Clases de componente en `globals.css` van sin `@layer` en este proyecto (Tailwind v4)
 - D35 · Los dos extremos de una `transition` van en la misma regla que la declara
 - D36 · Capa de componentes: `action.tsx` (variantes de acción) + `layout.ts` (WRAP/SECTION/CARD/PANEL/DIALOG_ACTIONS)
+- D37 · Endurecimiento del workflow de CI (permissions, persist-credentials, pinning por SHA); qué plugins audita Qlty y por qué un check de PR no ve lo que no se toca
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
