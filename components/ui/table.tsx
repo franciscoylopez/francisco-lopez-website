@@ -5,10 +5,15 @@ import { PANEL } from "./layout";
 
 // Capa de tabla (P37.658). Sexta capa del sistema, y la última que quedaba con la
 // forma que tuvieron el botón, el chrome, la etiqueta y la cabecera antes de tener
-// la suya: cinco tablas, TRES definiciones distintas de fila de cabecera que
-// divergían en siete propiedades (layout, gap, padding lateral, padding vertical,
-// tracking, peso y fondo) y cinco paddings de fila distintos, ninguno de los cuales
-// significaba nada.
+// la suya: SEIS tablas —no cinco: el inventario contó las del Design System y el
+// Brand Kit y se dejó la de la política de cookies, que vive en otra página— con
+// CUATRO definiciones distintas de fila de cabecera divergiendo en siete
+// propiedades (layout, gap, padding lateral, padding vertical, tracking, peso y
+// fondo) y seis paddings de fila distintos, ninguno de los cuales significaba nada.
+//
+// Que el inventario se dejara una es en sí el argumento de la capa: se hizo
+// mirando dos páginas, porque son las que documentan el sistema, y la tabla que
+// faltaba estaba en la que nadie asocia con diseño.
 //
 // ───────────────────────────────────────────────────────────────────────────────
 // LA PREGUNTA DE D36 PRIMERO: ¿la cebra y el filete significan cosas distintas, o
@@ -64,25 +69,33 @@ export type Col = {
 };
 
 /**
- * La celda de cabecera, en UNA definición. De las tres que había se toma la moda
- * en cada propiedad —`var(--page-x)` en el borde, 0,85rem de alto, tracking 0,05em—
- * y se resuelven las dos que no la tenían: el peso queda `font-semibold` (es un
+ * La celda de cabecera, en UNA definición — cuatro, contando la de la tabla de
+ * cookies, que el inventario no vio porque vive en otra página. De las que había se
+ * toma la moda en cada propiedad —0,85rem de alto, tracking 0,05em— y se resuelven
+ * las dos que no la tenían: el peso queda `font-semibold` (es un
  * `<th>`, y era lo único que una de las tres decía en voz alta) y el fondo se
  * quita, porque el `bg-card` que llevaba la del Brand Kit era invisible dentro de
  * un `PANEL` —que ya es `bg-card`— y solo se veía por estar esa tabla fuera de uno.
  * Ahora está dentro, como las demás.
  */
 const HEAD_CELL =
-  "border-border text-muted-foreground border-b px-[calc(var(--gutter)/2)] py-[0.85rem] text-[0.72rem] font-semibold tracking-[0.05em] uppercase first:pl-[var(--page-x)] last:pr-[var(--page-x)]";
+  "border-border text-muted-foreground border-b px-[calc(var(--gutter)/2)] py-[0.85rem] text-[0.72rem] font-semibold tracking-[0.05em] uppercase first:pl-[var(--gutter)] last:pr-[var(--gutter)]";
 
 /**
- * La celda de datos. El padding lateral es medio gutter por lado —que compone el
- * gutter entero entre columnas, igual que el `gap` de la versión con grid— y el
- * de los extremos es el de la página, para que la tabla respire contra el borde
- * del panel.
+ * La celda de datos. UN GUTTER EN TODAS PARTES: medio por lado, que compone el
+ * gutter entero entre columnas —igual que el `gap` de la versión con grid— y uno
+ * entero contra el borde del panel.
+ *
+ * Los extremos usaban `--page-x` (40px), heredado de las tablas con rejilla del
+ * Design System, y ahí no se notaba porque ocupan el ancho de página. En la de
+ * cookies, que vive dentro de `PROSE` (42rem), esos 80px de los dos extremos se
+ * comían casi un cuarto de la tabla y la columna de finalidad partía sus frases en
+ * dos palabras por línea. Y no era una tabla nueva estrenando el problema: la vieja
+ * llevaba `px-4`, así que el cambio la empeoró. Con el gutter, la de cookies queda
+ * incluso algo más ancha que antes y las cuatro del Design System aprietan 16px.
  */
 const CELL =
-  "border-border border-b px-[calc(var(--gutter)/2)] py-4 text-left align-top font-normal first:pl-[var(--page-x)] last:pr-[var(--page-x)]";
+  "border-border border-b px-[calc(var(--gutter)/2)] py-4 text-left align-top font-normal first:pl-[var(--gutter)] last:pr-[var(--gutter)]";
 
 /**
  * Tabla de DATOS: rejilla de celdas con cabecera de columna. Scroll horizontal
@@ -92,6 +105,7 @@ const CELL =
 export function DataTable({
   caption,
   cols,
+  minWidth,
   children,
   className,
 }: {
@@ -102,13 +116,24 @@ export function DataTable({
    */
   caption: string;
   cols: readonly Col[];
+  /**
+   * Ancho por debajo del cual la tabla deja de encogerse y empieza a scrollear.
+   * Solo lo necesita la que vive en una columna de LECTURA —la de cookies, cinco
+   * columnas dentro de `PROSE` (42rem)—: sin suelo, el navegador reparte el ancho
+   * disponible y la columna de propósito acaba partiendo cada frase en palabras
+   * sueltas. Las del Design System ocupan el ancho de página y no lo usan.
+   */
+  minWidth?: string;
   children: ReactNode;
   className?: string;
 }) {
   return (
     <div className={cn(PANEL, className)}>
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse text-left">
+        <table
+          className="w-full border-collapse text-left"
+          style={minWidth ? { minWidth } : undefined}
+        >
           <caption className="sr-only">{caption}</caption>
           <colgroup>
             {cols.map((c) => (

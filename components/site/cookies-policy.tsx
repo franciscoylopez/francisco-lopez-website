@@ -4,6 +4,7 @@ import { EMAIL } from "@/lib/contact";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ConsentPreferencesButton } from "./consent-preferences-button";
 import { PROSE, WRAP } from "@/components/ui/layout";
+import { DataTable, TD, TR } from "@/components/ui/table";
 import { SectionHeader } from "@/components/ui/heading";
 
 type CookiesDict = Dictionary["cookies"];
@@ -69,35 +70,38 @@ export function CookiesPolicy({
             {/* Qué usamos + tabla */}
             <Section heading={t.useHeading}>
               <p>{t.useIntro}</p>
-              <div className="border-border mt-5 overflow-x-auto rounded-xl border">
-                <table className="w-full min-w-[34rem] border-collapse text-left text-[0.9rem]">
-                  <thead>
-                    <tr className="border-border bg-muted/50 border-b">
-                      <Th>{t.table.name}</Th>
-                      <Th>{t.table.provider}</Th>
-                      <Th>{t.table.purpose}</Th>
-                      <Th>{t.table.duration}</Th>
-                      <Th>{t.table.category}</Th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {t.rows.map((row) => (
-                      <tr
-                        key={row.name}
-                        className="border-border border-b last:border-0"
-                      >
-                        <Td>
-                          <code className="text-[0.85rem]">{row.name}</code>
-                        </Td>
-                        <Td>{row.provider}</Td>
-                        <Td className="text-muted-foreground">{row.purpose}</Td>
-                        <Td className="whitespace-nowrap">{row.duration}</Td>
-                        <Td className="whitespace-nowrap">{row.category}</Td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {/* La SEXTA tabla del sitio, que el inventario de P37.658 no contó
+                  —vive en otra página— y que por tanto tenía una CUARTA definición
+                  de cabecera propia, con su `bg-muted/50`, su `px-4 py-3` y sus
+                  `Th`/`Td` locales. Sale de la capa como las demás. */}
+              <DataTable
+                caption={t.useHeading}
+                // Sin anchos: en una columna de lectura de 42rem, cinco columnas
+                // repartidas a porcentaje estrangulan la de propósito —que es la
+                // única con frases— y parte cada una en palabras sueltas. Aquí
+                // reparte el navegador por contenido, y el suelo lo pone `minWidth`.
+                cols={[
+                  { label: t.table.name },
+                  { label: t.table.provider },
+                  { label: t.table.purpose },
+                  { label: t.table.duration },
+                  { label: t.table.category },
+                ]}
+                minWidth="34rem"
+                className="mt-5"
+              >
+                {t.rows.map((row) => (
+                  <TR key={row.name}>
+                    <TD head>
+                      <code className="text-[0.85rem]">{row.name}</code>
+                    </TD>
+                    <TD>{row.provider}</TD>
+                    <TD className="text-muted-foreground">{row.purpose}</TD>
+                    <TD className="whitespace-nowrap">{row.duration}</TD>
+                    <TD className="whitespace-nowrap">{row.category}</TD>
+                  </TR>
+                ))}
+              </DataTable>
               <p className="text-muted-foreground mt-3 text-[0.85rem] leading-relaxed">
                 {t.tableNote}
               </p>
@@ -189,22 +193,4 @@ function Section({
       </div>
     </section>
   );
-}
-
-function Th({ children }: { children: React.ReactNode }) {
-  return (
-    <th scope="col" className="text-foreground px-4 py-3 font-semibold">
-      {children}
-    </th>
-  );
-}
-
-function Td({
-  children,
-  className = "",
-}: {
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return <td className={`px-4 py-3 align-top ${className}`}>{children}</td>;
 }
