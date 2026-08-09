@@ -79,8 +79,9 @@ Las cuatro fuentes que tienen que decir lo mismo:
 
 | Fuente | Archivo |
 |---|---|
-| Reglas de marca | `BRAND.md` (+ `BRAND-logo.md`, `DECISIONS.md` D30/D34/D35/D36) |
-| Implementación | `app/globals.css` · `components/ui/action.tsx` · `components/ui/layout.ts` |
+| Reglas de marca — el **porqué**, nunca el valor | `BRAND.md` (+ `BRAND-logo.md`, `DECISIONS.md` D30/D34/D35/D36/D38) |
+| Implementación — lo que el navegador **pinta** | `app/globals.css` · las cinco capas de `components/ui/` |
+| Valores **publicados** | `lib/design-values.ts` (D38) |
 | Documentación publicada | página **Design System** (`components/site/design-system.tsx`) |
 | Assets publicados | página **Brand Kit** (`components/site/brand-kit.tsx`) |
 | Cifras publicadas | página **Accesibilidad** (`components/site/accesibilidad.tsx`) |
@@ -90,9 +91,13 @@ Qué buscar:
 - **Contradicciones entre documentos.** Una regla enunciada en uno y negada en otro. Si
   código y documento discrepan, **decide cuál tiene razón antes de corregir**: en P37.596 el
   incumplidor tenía razón y se corrigió la regla, no el botón.
-- **Cifras publicadas que no se sostienen.** Toda cifra de contraste que el sitio publica
-  (Accesibilidad, Design System, Brand Kit, `BRAND.md`) se remide. Han viajado ya dos veces
-  cifras equivocadas de un documento a los otros tres, una de ellas trece días en producción.
+- **Cifras publicadas que no se sostienen.** Toda cifra de contraste que el sitio publica se
+  remide. Han viajado ya dos veces cifras equivocadas de un documento a los otros tres, una de
+  ellas trece días en producción. **Desde D38 esto es más barato de comprobar y más grave si
+  falla:** las páginas leen sus valores de `lib/design-values.ts`, así que una cifra publicada
+  que no cuadre con la medición apunta a **un** sitio, no a cuatro — y una cifra escrita
+  **fuera** de ese módulo (en el diccionario, en un comentario, en prosa) es hallazgo por sí
+  sola, sin necesidad de medirla.
   **El drift también va al revés:** en el disparo del 2026-08-08 las cuatro páginas
   publicaban las cifras correctas y era `BRAND.md` el que llevaba las superadas, en dos
   párrafos que su propia §Accesibilidad corrige más abajo. Un documento puede contradecirse
@@ -129,37 +134,49 @@ corrección de color se queda sin propagar. Regla práctica: *¿esto se puede pu
 | Qué se busca | Patrón | Hits legítimos |
 |---|---|---|
 | Acciones sin variante | `<button`/`<a` con `className` que traiga `hover:` `rounded-` `border-` `px-` y **no** `actionVariants` | enlaces de contenido (`.link-content`) y de chrome (`.link-chrome`) |
-| **Valores de token copiados a mano** | `oklch(` · `rgb(` · `#[0-9a-f]{6}` fuera de `globals.css`, sobre todo dentro de `style={{ }}` | `logo.tsx`, `api/og/route.tsx` y las **previsualizaciones de tema** (necesitan pintar la paleta *contraria* a la vigente, que las CSS vars no dan) — **pero cada copia se compara con el token vivo, una por una** |
-| Suelo táctil a mano | `min-h-\[44px\]|min-w-\[44px\]` | `action.tsx`; call sites de `.link-chrome` (**ver nota**) |
+| **Valores de token copiados a mano** | `oklch(` · `rgb(` · `#[0-9a-f]{6}` fuera de `globals.css`, sobre todo dentro de `style={{ }}` | solo `logo.tsx`. Los otros dos que necesitan la paleta *contraria* a la vigente —el mock de tema y `api/og`— consumen `PALETTE` (D38), y **`npm run check:palette` la coteja con `globals.css` en CI**. Un `oklch(` nuevo fuera de ahí es hallazgo |
+| Suelo táctil a mano | `min-h-\[44px\]` · `min-w-\[44px\]` | `action.tsx` y `chrome.tsx`; nadie más |
 | Radios y cajas a mano | `rounded-\[var\(--radius` · `max-w-\[var\(--container\)\]` · `border-t.*py-\[var\(--section-y\)\]` | `layout.ts`, `globals.css` |
-| Hex en vez de token | `#[0-9a-fA-F]{6}` | `globals.css`, `logo.tsx`, `api/og/route.tsx` (Satori no lee CSS vars), muestras del Brand Kit |
+| Hex en vez de token | `#[0-9a-fA-F]{6}` | `globals.css` y `logo.tsx`. **Búscalo también en el diccionario y en la prosa**: dos hexes falsos vivían en el pie de las tarjetas del mock de tema, como texto, y los destapó una captura tomada para otra cosa (P37.6605). Nadie los contaba como copias de un token porque no pintan nada — y ninguna herramienta compara un párrafo con el píxel que tiene al lado |
 | Iconos dimensionados en el call site | `size-\[1[0-9]px\]` sobre `svg` | `action.tsx`, `.link-chrome svg` en `globals.css` |
 | Foco compitiendo | `outline-none` · `focus:` sin `focus-visible:` | ninguno (el foco es una sola regla global) |
 | Motion sin escape | `transition`/`animate-` sin `motion-reduce` ni `prefers-reduced-motion` cerca | los que lo declaran en `globals.css` |
 | **Clases interpoladas** | `className={\`` con `${` dentro de una utilidad | ninguno, nunca |
 | Inventario de controles con estado | `aria-pressed` · `aria-selected` · `role="tab"` | — |
 | **Inventario de glifos dibujados a mano** | `<svg` en todo `components/` y `app/`, **no** una lectura de `icons.tsx` | ilustraciones y maquetas; el logo |
-| Pasteles como primer plano | `brand-(cyan|purple)-soft` en `text-`/`border-` | solo relleno decorativo |
+| Pasteles como primer plano | `brand-(cyan\|purple)-soft` en `text-`/`border-` | solo relleno decorativo |
 
 **La clase interpolada merece su propia línea.** Tailwind escanea el código como texto
 plano: una utilidad construida por interpolación no se genera, el elemento se queda sin
 hover **sin error de compilación**, y solo se detecta midiendo el color pintado. Ya tumbó a
 la vez el hover del sólido y el del toggle.
 
-**Capas que todavía no existen (hallazgos vivos, medidos el 2026-08-08).** Sus hits son
-«legítimos por convención», así que hay que juzgarlos como el hallazgo que son, no filtrarlos:
+**Las cinco capas que hoy existen** (D36), y de las que tiene que salir todo. Si un hit no
+sale de una de ellas, es hallazgo:
 
-- **Enlace de chrome.** 13 de los 17 call sites de `.link-chrome` reescriben `min-h-[44px]` a
-  mano, con **tres paddings** (`0.6` / `0.85` / `0.9rem`). Tiene clase para su **aspecto** y
-  ninguna capa para sus **métricas**.
-- **Etiqueta / pastilla (badge).** Siete definiciones en seis archivos; medidas en pantalla,
-  cinco variantes reales (padding lateral 6,4 / 8 / 8,8 / 9,6px, vertical 1,6 / 1,92 / 2,4 /
-  4px, cuerpo 10,56 / 11,52px, alto 19 / 20,2 / 22 / 25,3px) y **tres de ellas conviven en la
-  misma página**. D36 cubrió acciones y cajas; la etiqueta no es ni una cosa ni la otra y se
-  quedó fuera.
+| Capa | Archivo | Qué manda |
+|---|---|---|
+| Acción | `components/ui/action.tsx` | el control **con caja**: botón, chip, toggle, pestaña, control de icono |
+| Chrome | `components/ui/chrome.tsx` | el enlace de la **carpintería de navegación** (`shape` × `tone`) |
+| Etiqueta | `components/ui/badge.tsx` | el rótulo que **no se pulsa** (`tone` × `kind`) |
+| Cabecera | `components/ui/heading.tsx` | el par **eyebrow + titular**, con su hueco |
+| Layout | `components/ui/layout.ts` | cajas y ritmos (`WRAP`/`SECTION`/`CARD`/`PANEL`/`PAIR`) |
 
-Ambos son la forma exacta del problema del botón, una capa más abajo. Si al correr la skill
-siguen ahí, se reportan otra vez: la señal no caduca porque ya se conozca.
+Cuál toca se decide con **dos preguntas** —¿se pulsa? y, si sí, ¿tiene caja propia?—, no por
+parecido. Y **dónde va lo nuevo** con una tercera: ¿la pieza sabe algo de ESTE sitio (copy,
+rutas, datos)? No → `ui/`. Sí → `site/`.
+
+> Las tres últimas nacieron entre el 2026-08-08 y el 09, y las tres las destapó una versión
+> anterior de esta skill listándolas aquí como «capas que todavía no existen». **Si al correr
+> la skill encuentras una familia de piezas que se repite sin capa propia, escríbela aquí con
+> su conteo**: es el formato que ya ha funcionado tres veces.
+
+**Valores publicados: no se leen del diccionario.** Desde D38 los tokens de layout, los
+breakpoints, el censo de contraste y la paleta viven en `lib/design-values.ts`, y `npm run
+check:palette` verifica en CI que coinciden con `globals.css`. Dos consecuencias para el
+barrido: una cifra o un hex **escrito en `es.json`/`en.json` es hallazgo** (la prueba es
+literal — si la entrada ES y la EN son carácter por carácter la misma, no es copy), y **el
+`grep` de hex ya no tiene hits legítimos** fuera de `globals.css` y `logo.tsx`.
 
 Y dos comprobaciones que no son grep:
 
@@ -191,8 +208,35 @@ dos temas · comportamiento con la etiqueta más larga (ES suele ser más largo 
 y su offset · hover/focus · color en reposo y en interacción · métricas del área táctil.
 
 **Caja / layout:** ¿sale de `layout.ts`? · radio y su lugar en la jerarquía de anidamiento ·
-borde y fondo · **el contenedor que la agrupa** (¿cabe la fila con el copy más largo, en ES
-y EN, a 320px?) · ritmo vertical.
+borde y fondo · ritmo vertical.
+
+**Contenedor de controles — se revisa SIEMPRE que cambien las métricas de un control.**
+No es una fila más de la matriz: es un paso obligatorio que se dispara desde otra. Cambiar
+el padding, la altura o el icono de una variante **cambia el ancho de todo lo que la usa**,
+y la caja que lo agrupa no se entera. Cuatro apariciones del mismo fallo:
+
+| Caso | Qué pasó |
+|---|---|
+| `DIALOG_ACTIONS` (P37.5986) | migrar el botón lo engordó 33,6px; las tres acciones pedían 496px en un diálogo de 462 y la tercera caía sola a otra línea |
+| Tarjeta mono del Brand Kit (P37.61) | una tarjeta de la fila dejó de salir del mismo componente que sus hermanas |
+| Los dos bloques de nota del Design System (P37.62) | dos tarjetas a `--measure` dentro de una sección a ancho completo → media pantalla vacía |
+| Reparto 4 + 2 (2026-08-08) | tras arreglar la anterior, en la fila de cuatro los chips saltaban de línea. **Lo cazó Francisco a ojo, no la skill** |
+
+Las tres preguntas, en este orden:
+
+1. **¿Sigue cabiendo la fila?** Con el copy **más largo de los dos idiomas** (ES suele ganar),
+   al ancho real del contenedor, a 320px. Súmalo: `n × (padding + texto + icono + hueco)`.
+   Que quepa hoy en tu ventana no es la comprobación.
+2. **¿Siguen todas las piezas de la fila saliendo del mismo componente?** Una fila donde una
+   tarjeta se escribió a mano se ve idéntica hasta que la variante cambia.
+3. **¿El reparto de columnas sigue teniendo sentido con las piezas que hay AHORA?** El número
+   de columnas se elige por cuántas piezas hay, no por defecto: `auto-fit` con el mismo
+   `minmax` deja 4 + 2 cuando hay seis y una fila apretada cuando hay cuatro. Si un cambio
+   añadió o quitó una pieza, el `minmax` se recalcula. Ese es el que se escapó cuatro veces.
+
+**La razón de fondo, que vale para más cosas:** el sistema garantiza la pieza, no la
+composición. Una capa de componentes hace que el control sea correcto **en aislamiento** —y
+eso es exactamente lo que deja de mirarse cuando la revisión da la capa por buena.
 
 **Icono propio:** artboard 24 y coordenadas en 2–22 · trazo 2, terminaciones redondas ·
 **nada contorneado por debajo de 8 unidades** · **contraforma mínima de 6** en todo hueco que
@@ -257,11 +301,53 @@ los cuatro hallazgos):
 - **Grupos de botones con el copy más largo** de los dos idiomas.
 - **404 y 500**, `zoom 400%`, y el toggle de tema en mitad de una animación.
 
+### El censo de pares de contraste
+
+**Se recorre el DOM de la página servida. No se lee `globals.css`, ni la tabla publicada.**
+
+Es el punto que más ha costado: las auditorías de 2026-08-04 y 2026-08-08 firmaron un «todos
+los pares en AAA, sin excepciones» que era falso, y se les escaparon **tres** —etiqueta
+neutra 6,44/5,56, etiqueta teñida 6,07/5,46, hover del chrome secundario 6,44/5,56—. Los tres
+por la misma razón, y no fue descuido: **un par que solo aparece al COMPONER** —un velo
+`color-mix` sobre la superficie de debajo, o una pastilla de hover— **no está en ningún
+inventario de tokens**, así que un censo hecho leyendo el CSS no puede encontrarlo por muy
+cuidadoso que sea. Es el defecto de forma de siempre: el disparador miraba al sitio
+equivocado.
+
+**El script está escrito: `scripts/design-review/contrast-census.js`.** Se inyecta en la
+página cargada y devuelve el censo ordenado por ratio con los que bajan de 7. Se escribió a
+mano tres veces antes de quedarse ahí; no lo reescribas.
+
+Cinco reglas, y las cinco costaron un error:
+
+1. **Cada elemento con texto sobre un fondo propio es un par**, exista o no un token con ese
+   nombre.
+2. **Incluye los estados**, no solo el reposo. El hover no se simula —no sobrevive entre
+   llamadas—: se **leen las declaraciones reales** de las reglas `:hover` y se aplican a un
+   clon. Y hay que **bajar por las reglas de grupo**: Tailwind v4 envuelve sus utilidades
+   `hover:` en `@media (hover: hover)`, y un bucle plano sobre `cssRules` las salta enteras.
+   Con ese fallo el censo daba **6,42** para el hover del chrome secundario —veía la pastilla
+   y no el texto subiendo a `foreground`, que es la mitad que lo arregla— y habría reportado
+   como hallazgo un par que está en 12,47.
+3. **El fondo efectivo se compone subiendo por la cadena de padres** hasta el primer
+   `background-color` opaco, y los alfas se componen encima (D30 punto 2). Leer un `color-mix`
+   con `transparent` sin componer da una cifra falsa y optimista.
+4. **Contrasta el número de pares del DOM con el de filas de la tabla publicada** en el Design
+   System. Si el DOM tiene más, la tabla está incompleta — que es literalmente lo que pasaba.
+5. **Valida el medidor contra los anclajes SIN cian** antes de creerte nada: texto principal
+   13,79 claro / 15,32 oscuro, exactos. Son pares que no dependen del recorte de gamut. Si no
+   salen, el fallo es del medidor (ver la regla 2: ya pasó).
+
+> **Y lee el `incomplete` de axe, no solo el `violations`.** Descubierto el 2026-08-09
+> disparando el script: axe **no sabe resolver `color-mix()`**, así que mete esos elementos en
+> `incomplete` y se abstiene de juzgarlos. En el Design System son **ocho**, y ahí estaba un
+> par a **4,33:1 en oscuro** —por debajo de AA— mientras el informe decía «0 violaciones».
+> Todas las auditorías anteriores leyeron solo `violations`. Es el mismo agujero que el resto
+> de este apartado, ahora en la herramienta: **lo que la máquina no puede ver no aparece como
+> problema, aparece como silencio.**
+
 **Medición:** contraste sobre el color que el navegador pinta, recortando a [0,1] o leyendo
-el píxel de un `<canvas>` — los cianes de esta marca caen fuera de sRGB. El método de canvas
-+ composición del alfa sobre el fondo real está **validado** (2026-08-08): reproduce al
-céntimo los ocho pares publicados en los dos temas (13,79/15,32 · 7,10/7,12 · 7,47/8,36 ·
-7,93/8,36 · 8,64). Si tus cifras no cuadran con esas, el fallo es del medidor. Además, **la
+el píxel de un `<canvas>` — los cianes de esta marca caen fuera de sRGB. Además, **la
 afordancia se mide**: subir contraste apagando un hover no es una mejora. Compara el ΔL\*
 del estado nuevo con un hover que el sitio ya dé por bueno (pastilla `muted`: 3,9 claro /
 9,0 oscuro).
