@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { DIALOG_ACTIONS } from "@/components/ui/layout";
 import { actionVariants } from "@/components/ui/action";
+import { Badge } from "@/components/ui/badge";
 import {
   type ConsentChoice,
   OPEN_CONSENT_EVENT,
@@ -274,9 +275,7 @@ function ConsentRow({
             {description}
           </p>
         </div>
-        <span className="text-muted-foreground border-border bg-muted mt-0.5 shrink-0 rounded-full border px-2.5 py-1 text-[0.75rem] font-medium">
-          {badge}
-        </span>
+        <Badge className="mt-0.5">{badge}</Badge>
       </li>
     );
   }

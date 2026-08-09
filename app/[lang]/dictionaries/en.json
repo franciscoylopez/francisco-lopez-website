@@ -1214,8 +1214,51 @@
       ],
       "ruleFoot": "No variant declares focus: a single global rule does, the same one everywhere. Three used to coexist, and one of them drew a white halo in dark mode."
     },
-    "accesibilidad": {
+    "etiquetas": {
       "num": "(10)",
+      "title": "Labels",
+      "lead": "A label states something; it isn't pressed. That's why it sits outside the action layer, with no state, no hover and no touch target — its only job is to be read. The tinted wash says which family it belongs to, and the text always takes the ordinary text colour, which is the only thing that reaches AAA on top of a tint.",
+      "cases": [
+        {
+          "kicker": "No weight",
+          "cls": "neutral",
+          "demo": ["Fixed", "Coming soon"],
+          "rule": "What tags along without standing out: a status, a note in the margin, the off half of a pair.",
+          "note": "Its text can't be the system's dimmed grey, which is tuned against the page background: on top of the pill it drops to 6.44:1. Blended into that same fill it gives 8.17:1."
+        },
+        {
+          "kicker": "Verified figure",
+          "cls": "cyan",
+          "demo": ["AAA", "Switches"],
+          "rule": "A cyan wash for what has been measured, or what passes. The cyan lives in the fill — never in the text.",
+          "note": "With cyan text over its own wash the pair sits at 6.07:1, and thinning the wash doesn't help: painting cyan over cyan can't raise the contrast of cyan."
+        },
+        {
+          "kicker": "Brand mark",
+          "cls": "purple",
+          "demo": ["Exit", "Split"],
+          "rule": "A purple wash for what flags something singular: a career milestone, a variant of the logo.",
+          "note": "Purple is decorative and is never an action colour, so here it can only show up as fill."
+        },
+        {
+          "kicker": "Three registers",
+          "cls": "label · value · code",
+          "demo": ["Exit", "Split", "13.79:1"],
+          "rule": "Small caps for a status tag, ordinary case for a figure in prose, monospace for a technical value.",
+          "note": "That's the only thing that changes from one label to the next. Height, size, radius and padding are the same for all of them, and no longer decided page by page."
+        }
+      ],
+      "ruleTitle": "Why this is its own layer",
+      "rule": [
+        "It isn't in the action layer because a label isn't an action: it can't be pressed. Half of a button's base — touch floor, focus ring, states — would mean nothing here.",
+        "Before it existed there were eight pills written by hand across six files, with five padding widths, three text sizes and four different heights. Three of them shared a single page.",
+        "A difference that means something is a variant; one that means nothing is a value to unify. The monospace for technical values stays; the four heights don't."
+      ],
+      "ruleFoot": "The text on both tinted labels is the ordinary text colour, not the colour of the wash. That's what takes them to 10.63:1 in light and 10.02:1 in dark; with tinted text they sat at 6.07 and 5.46 — the worst pair in the system was, of all things, the pill that marks “AAA” in the table just below.",
+      "hint": "These are the same labels the site uses: if one changes, this section changes with it."
+    },
+    "accesibilidad": {
+      "num": "(11)",
       "title": "Accessibility",
       "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost. It's the internal criterion the site is built and audited against; the public conformance statement will live on the Accessibility page.",
       "contrastTitle": "Measured contrast",
@@ -1274,6 +1317,22 @@
           "darkLv": "AAA"
         },
         {
+          "label": "Neutral label",
+          "note": "the text blends into its own fill",
+          "light": "8.17:1",
+          "lightLv": "AAA",
+          "dark": "9.17:1",
+          "darkLv": "AAA"
+        },
+        {
+          "label": "Tinted label",
+          "note": "the worse of the two, cyan and purple",
+          "light": "10.63:1",
+          "lightLv": "AAA",
+          "dark": "10.02:1",
+          "darkLv": "AAA"
+        },
+        {
           "label": "brand-purple-accent",
           "note": "Large text only (≥3:1) over inverted bg",
           "light": "3.96:1",
@@ -1296,7 +1355,7 @@
       ]
     },
     "esqueleto": {
-      "num": "(11)",
+      "num": "(12)",
       "title": "Navigable skeleton",
       "devGroupLabel": "Device preview",
       "devFull": "Desktop",

@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
+import { Badge } from "@/components/ui/badge";
 
 export type HitosDict = {
   eyebrow: string;
@@ -123,15 +124,9 @@ export function Hitos({ dict }: { dict: HitosDict }) {
 
         <Row idx="(04)" name="TheTool" year="2021" emphasizeImpact boldYear>
           {dict.thetoolAcquired}
-          <span
-            className="exit-chip text-foreground ml-2 inline-flex items-center rounded-full px-2 py-[0.12rem] align-middle text-[0.66rem] font-semibold tracking-[0.05em] uppercase"
-            style={{
-              background:
-                "color-mix(in oklch, var(--brand-purple), transparent 80%)",
-            }}
-          >
+          <Badge tone="purple" kind="label" className="exit-chip ml-2">
             {dict.exitChip}
-          </span>
+          </Badge>
         </Row>
 
         <Row idx="(05)" name="TheTool" year="2019">
