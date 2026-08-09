@@ -8,6 +8,7 @@ import { ConsentInit } from "@/components/analytics/consent-init";
 import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { ThemeProvider } from "@/components/theme-provider";
+import { paletteHex } from "@/lib/design-values";
 import { locales, isLocale } from "@/lib/i18n/config";
 import { GTM_ID, SITE_NAME, SITE_URL } from "@/lib/site";
 import { getDictionary } from "./dictionaries";
@@ -32,11 +33,21 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
+// `themeColor` pinta la barra del navegador en móvil, y Next exige un color
+// literal —no admite `var(--background)`—, así que la copia es inevitable. Lo que
+// no lo era es escribirla a mano: se deriva de la paleta única (P37.659), igual
+// que las imágenes OG. Antes eran dos hexes sueltos que `check:palette` no miraba.
 export const viewport: Viewport = {
   colorScheme: "light dark",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F7F3EC" },
-    { media: "(prefers-color-scheme: dark)", color: "#191D21" },
+    {
+      media: "(prefers-color-scheme: light)",
+      color: paletteHex("light").background,
+    },
+    {
+      media: "(prefers-color-scheme: dark)",
+      color: paletteHex("dark").background,
+    },
   ],
 };
 

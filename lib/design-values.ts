@@ -75,6 +75,12 @@ export const PALETTE = {
     "muted-foreground": "oklch(0.4365 0.0064 95.19)",
     primary: "oklch(0.41 0.0886 194.82)",
     "primary-foreground": "oklch(0.9855 0.0057 84.57)",
+    // Los dos tokens de MARCA que conmutan, y por eso viven aquí y no en
+    // `BRAND_PALETTE` (P37.659): el cian se aclara en oscuro, y el acento morado
+    // pasó a conmutar en P37.657/D41. Estaban fuera de las dos paletas, o sea
+    // fuera del alcance de `check:palette`, que es justo el agujero de esta tarea.
+    "brand-cyan": "oklch(0.41 0.0886 194.82)",
+    "brand-purple-accent": "oklch(0.78 0.16 290)",
   },
   dark: {
     background: "oklch(0.2283 0.0098 248.26)",
@@ -85,6 +91,8 @@ export const PALETTE = {
     "muted-foreground": "oklch(0.7295 0.0116 95.22)",
     primary: "oklch(0.7626 0.1156 191.46)",
     "primary-foreground": "oklch(0.2283 0.0098 248.26)",
+    "brand-cyan": "oklch(0.7626 0.1156 191.46)",
+    "brand-purple-accent": "oklch(0.45 0.16 290)",
   },
 } as const satisfies Record<Theme, Record<string, string>>;
 
@@ -97,6 +105,9 @@ export const BRAND_PALETTE = {
   "brand-purple-split": "oklch(0.6889 0.1581 289.96)",
   "brand-cyan-soft": "oklch(0.8694 0.0592 192.12)",
   "brand-purple-soft": "oklch(0.8151 0.0776 295.46)",
+  // El morado decorativo estándar sí vale lo mismo en los dos temas, así que su
+  // sitio es este y no `PALETTE` (añadido en P37.659, ver el comentario de allí).
+  "brand-purple": "oklch(0.6889 0.1581 289.96)",
 } as const satisfies Record<string, string>;
 
 export type PaletteToken = keyof (typeof PALETTE)["light"];

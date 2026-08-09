@@ -1329,6 +1329,47 @@ color, y ninguna herramienta compara un párrafo con el píxel que tiene al lado
 práctica: **al inventariar copias de un valor, buscar también las que están escritas en
 prosa**, no solo las que pintan.
 
+### Ampliación 2026-08-10 (P37.659): el guardián pasa de «las copias conocidas coinciden» a «no hay copias»
+
+El guardián verificaba que las copias que **ya conocía** seguían cuadrando. No verificaba que
+no apareciesen **nuevas**, y habían aparecido dos sin que nada las viera: el `themeColor` de
+`app/[lang]/layout.tsx` (Next exige un literal, no admite `var(--background)`) y el plato mono
+del Brand Kit (`bg-[#191D21]`). Las dos, `--background` escrito a mano. Ahora se derivan de
+`paletteHex()`.
+
+**Y faltaban tres tokens en la paleta del módulo**, o sea fuera del alcance del guardián por
+completo: `--brand-cyan` y `--brand-purple-accent` —los dos **conmutan**, así que van a
+`PALETTE`— y `--brand-purple`, que no conmuta y va a `BRAND_PALETTE`. Que el acento morado
+estuviera fuera es especialmente feo: D41 acababa de cambiarle los dos valores y nada lo
+vigilaba.
+
+**La decisión de diseño que hace que esto funcione: se buscan VALORES, no patrones.** Un grep
+de `#rrggbb` con lista de excepciones era lo obvio y es lo que falla: habría marcado el blanco
+y el negro puros del logo mono y, peor, `#CFEFEE` / `#E6E0FB` — los «colores desviados» que el
+Brand Kit enseña **a propósito** como ejemplo de lo que no hay que hacer. Una lista de
+excepciones que crece con cada ilustración acaba siendo un `// disable` de facto. La pregunta
+correcta es la exacta: **¿este literal vale lo mismo que un token?** Si vale, es una copia,
+esté donde esté; si no, no es asunto del guardián. La lista de permitidos queda en **dos**
+archivos, cada uno con su motivo: el propio `check-palette.ts` (es su tabla de referencia) y
+`lib/design-values.ts` (publica los hexes **como texto** en las tablas del sitio).
+
+Los comentarios se descartan antes de buscar: un hex citado en una explicación —y este repo
+está lleno de ellas— no es una copia viva.
+
+**Un tercer sitio se destapó al encender el guardián: el generador del CV**, con seis copias.
+No estaba en el alcance de la tarea y es el caso que más lo justifica, porque **ya había
+divergido una vez**: su comentario decía literalmente «`cyan: "#005859"` — *(P37.598: era
+#005E5F)*», o sea que cuando se corrigió el token hubo que acordarse de propagarlo a mano.
+Ahora deriva los seis; los tres que **no** son tokens (`purpleAccent`, `muted`, `border`) se
+quedan escritos, porque están calibrados sobre el papel y no sobre las superficies de la web.
+Verificado que los seis derivados son idénticos carácter a carácter a los literales que
+sustituyen, y que los dos PDFs siguen saliendo a 2 páginas.
+
+**Validado disparándolo**: se inyectó una copia falsa de `--foreground` en `mas-alla.tsx` y el
+guardián la cazó, nombrando además los **dos** tokens que comparten ese hex (`--foreground` en
+claro es `--card` en oscuro) — un mensaje que señala un token plausible pero equivocado es la
+peor clase de aviso.
+
 ---
 
 ## D39 · El atenuado lo resuelve la superficie, no el punto de uso — 2026-08-09

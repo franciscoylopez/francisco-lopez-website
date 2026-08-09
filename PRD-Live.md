@@ -185,8 +185,10 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.
 - **Calidad / seguridad**: CI (GitHub Actions) que corre formato + typecheck + lint + **paleta** +
-  build en cada PR (nada que no compile entra en `main`; y ninguna copia de un valor de token
-  puede divergir del token sin que el check lo cace — D38); **escaneo de dependencias automatizado
+  build en cada PR (nada que no compile entra en `main`; y desde el 2026-08-10 el check no solo
+  comprueba que las copias conocidas cuadren, sino que **no queda ninguna copia de un valor de
+  token fuera de su fuente** — busca valores, no patrones, para no marcar los colores que el
+  Brand Kit desvía a propósito; D38); **escaneo de dependencias automatizado
   (Dependabot)**; cabeceras de seguridad servidas (nosniff, X-Frame-Options, Referrer-Policy,
   Permissions-Policy, HSTS **y CSP «A+ barato»**: directivas base + allowlist GTM/GA4,
   manteniendo `'unsafe-inline'`; la CSP estricta con nonces va con la IA conversacional de
