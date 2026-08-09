@@ -386,7 +386,13 @@ export function DesignSystem({
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.tipografia.lead}
           </p>
-          <div className="border-border overflow-hidden rounded-xl border">
+          {/* `PANEL` y no su copia a mano: este contenedor era literalmente
+              `PANEL` menos el `bg-card`, así que era la única de las seis tablas
+              del sitio apoyada en el fondo de la página. Con la cebra encima no se
+              notaba —el velo de las filas pares fingía la superficie que faltaba—;
+              al quitarla quedó a la vista. El drift no lo introdujo la cebra: lo
+              tapaba. */}
+          <div className={PANEL}>
             {t.tipografia.rows.map((row) => (
               <div key={row.name} className={SPECIMEN_ROW}>
                 <div className="min-w-[min(100%,14rem)] flex-[1_1_16rem] overflow-hidden">
