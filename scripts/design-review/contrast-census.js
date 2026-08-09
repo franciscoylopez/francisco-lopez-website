@@ -29,6 +29,27 @@
 window.contrastCensus = () => {
   const round = (n) => Math.round(n * 100) / 100;
 
+  // LO PRIMERO: congelar transiciones y animaciones, y forzar el reflow que las
+  // resuelve al estado final. Sin esto, el censo MIDE A MEDIO CAMINO.
+  //
+  // No es teórico: llamarlo dos veces conmutando el tema —que es el uso que este
+  // archivo documenta arriba y la mitad del trabajo de una auditoría— daba cuatro
+  // pares fantasma de 1,06 · 1,11 · 1,42 · 2,05 en la segunda llamada, o sea el
+  // aspecto exacto de un fallo catastrófico, y la página estaba perfecta: eran las
+  // tarjetas y los enlaces todavía interpolando su color. `.link-content` tarda
+  // 380ms (0,3s con 0,08s de retardo), así que cualquier espera «prudente» de 300 o
+  // 400ms cae justo dentro. Esperar más no es la solución —es la misma apuesta con
+  // otro número—; la solución es que no haya nada que esperar.
+  //
+  // Vale también para el pase de hover: el clon adopta el estado final de golpe en
+  // vez de arrancar una transición que nadie va a esperar. Es la lección de D35 —
+  // un elemento se quedaba clavado en su color de reposo— vista desde el medidor.
+  const freeze = document.createElement("style");
+  freeze.textContent =
+    "*,*::before,*::after{transition:none !important;animation:none !important;}";
+  document.head.appendChild(freeze);
+  void document.body.offsetHeight;
+
   /** El píxel que el navegador pinta, ya recortado a sRGB. */
   function paint(css) {
     const cv = document.createElement("canvas");
@@ -247,5 +268,6 @@ window.contrastCensus = () => {
     // pares se listan aparte y se miran a ojo. Su `ratio` NO es una medición.
     sinMedir: [...sinMedir.values()].sort((a, b) => a.ratio - b.ratio),
   };
+  freeze.remove();
   return resultado;
 };

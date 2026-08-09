@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { LinkedinIcon } from "@/components/ui/icons";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
+import { DataTable, TD, TR } from "@/components/ui/table";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 
@@ -426,31 +427,37 @@ export function BrandKit({
               {t.logotipo.usage.sub}
             </p>
             {/* tabla ≥md */}
-            <div className="border-border hidden overflow-hidden rounded-lg border md:block">
-              <div className="bg-card border-border text-muted-foreground grid grid-cols-[1.4fr_0.8fr_0.9fr_1fr_0.7fr] gap-4 border-b px-5 py-[0.9rem] text-[0.72rem] font-semibold tracking-[0.06em] uppercase">
-                <span>{t.logotipo.usage.cols.ctx}</span>
-                <span>{t.logotipo.usage.cols.variant}</span>
-                <span>{t.logotipo.usage.cols.sym}</span>
-                <span>{t.logotipo.usage.cols.word}</span>
-                <span>{t.logotipo.usage.cols.bar}</span>
-              </div>
+            <DataTable
+              caption={t.logotipo.usage.title}
+              cols={[
+                { label: t.logotipo.usage.cols.ctx, width: "29%" },
+                { label: t.logotipo.usage.cols.variant, width: "17%" },
+                { label: t.logotipo.usage.cols.sym, width: "18%" },
+                { label: t.logotipo.usage.cols.word, width: "21%" },
+                { label: t.logotipo.usage.cols.bar },
+              ]}
+              className="hidden md:block"
+            >
               {t.logotipo.usage.rows.map((r) => (
-                <div
-                  key={r.ctx}
-                  className="border-border grid grid-cols-[1.4fr_0.8fr_0.9fr_1fr_0.7fr] items-center gap-4 border-b px-5 py-[0.95rem] text-[0.92rem] last:border-b-0"
-                >
-                  <span className="font-semibold">{r.ctx}</span>
-                  <span>
+                <TR key={r.ctx}>
+                  <TD head className="text-[0.92rem] font-semibold">
+                    {r.ctx}
+                  </TD>
+                  <TD>
                     <VariantBadge on={r.on}>{r.variant}</VariantBadge>
-                  </span>
-                  <span className="text-foreground tabular-nums">{r.sym}</span>
-                  <span className="text-muted-foreground">{r.word}</span>
-                  <span className="text-muted-foreground tabular-nums">
+                  </TD>
+                  <TD className="text-foreground text-[0.92rem] tabular-nums">
+                    {r.sym}
+                  </TD>
+                  <TD className="text-muted-foreground text-[0.92rem]">
+                    {r.word}
+                  </TD>
+                  <TD className="text-muted-foreground text-[0.92rem] tabular-nums">
                     {r.bar}
-                  </span>
-                </div>
+                  </TD>
+                </TR>
               ))}
-            </div>
+            </DataTable>
             {/* tarjetas <md */}
             <div className="flex flex-col gap-[0.85rem] md:hidden">
               {t.logotipo.usage.rows.map((r) => (
