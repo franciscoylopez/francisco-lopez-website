@@ -33,18 +33,19 @@ import { cn } from "@/lib/utils";
 // cambiado dónde se escriben. Se toma la moda de cada grupo, así que diez de los
 // catorce usos no se mueven y los cuatro que sí lo hacen cambian 4px o menos.
 
-/** Rótulo superior de una cabecera. `band` es para fondos que no son `--background` (D30). */
+/**
+ * Rótulo superior de una cabecera.
+ *
+ * TENÍA UN EJE `tone` con dos valores —`muted` para `--background` y `band` para
+ * la franja de contacto— y P37.6565 se lo llevó por delante: el atenuado ya no se
+ * elige, se deriva de la superficie donde cae el rótulo (`--surface-dim` en
+ * `globals.css`). Las dos variantes pasaron a pintar el mismo color y dejar dos
+ * nombres para una sola cosa es exactamente cómo empieza el drift. El caso sigue
+ * existiendo y la página que lo documenta lo enseña mejor que antes: el mismo
+ * rótulo, sin prop, sobre dos fondos distintos.
+ */
 export const eyebrowVariants = cva(
-  "m-0 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase",
-  {
-    variants: {
-      tone: {
-        muted: "text-muted-foreground",
-        band: "contact-dim",
-      },
-    },
-    defaultVariants: { tone: "muted" },
-  },
+  "text-muted-foreground m-0 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase",
 );
 
 /**
@@ -89,14 +90,12 @@ export const EYEBROW_GAP = {
 } as const;
 
 type Size = NonNullable<VariantProps<typeof titleVariants>["size"]>;
-type Tone = NonNullable<VariantProps<typeof eyebrowVariants>["tone"]>;
 
 export function SectionHeader({
   eyebrow,
   title,
   level = 2,
   size = "section",
-  tone = "muted",
   reveal = false,
   titleClassName,
   children,
@@ -106,7 +105,6 @@ export function SectionHeader({
   /** `1` para el h1 de una página, `2` para el que abre una sección. */
   level?: 1 | 2;
   size?: Size;
-  tone?: Tone;
   /**
    * Marca la cabecera como objetivo del island de motion. Va en los DOS elementos,
    * que es como lo escriben los cuatro heros que lo usan: el rótulo y el titular
@@ -125,7 +123,7 @@ export function SectionHeader({
       {eyebrow ? (
         <p
           {...(reveal ? { "data-reveal": true } : {})}
-          className={cn(eyebrowVariants({ tone }), EYEBROW_GAP[size])}
+          className={cn(eyebrowVariants(), EYEBROW_GAP[size])}
         >
           {eyebrow}
         </p>

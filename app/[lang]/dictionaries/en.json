@@ -1182,19 +1182,20 @@
           "use": "A section of a long index, like the thirteen on this page."
         }
       ],
-      "toneTitle": "The label's two tones",
+      "toneTitle": "The label takes its grey from the surface",
+      "toneLead": "Both labels below come from the same class, with nothing at the call site to tell them apart. They render differently because the surface underneath is not the same.",
       "tones": [
         {
-          "tone": "muted",
+          "surface": "--background",
           "label": "Design fundamentals",
           "sample": "On the page background",
-          "note": "The default case: the system dimmed grey over --background."
+          "note": "The default case: the system's dimmed grey, tuned against precisely this background."
         },
         {
-          "tone": "band",
+          "surface": "--muted",
           "label": "The next step",
           "sample": "On the contact band",
-          "note": "That grey is tuned against the page background, so over any other surface it has to be recomputed, not reused: here it blends into the band itself (D30)."
+          "note": "Over any other surface that grey has to be recomputed, not reused (D30): it blends 85% into the surface underneath. This used to be a prop you had to remember; now the token resolves it."
         }
       ],
       "ruleTitle": "What the variant decides and what the call site does",
@@ -1248,13 +1249,23 @@
         },
         {
           "id": "mutedForeground",
-          "label": "muted-foreground",
-          "note": "muted over background"
+          "label": "Dimmed text over background",
+          "note": "the token as-is: it is tuned against this surface"
+        },
+        {
+          "id": "mutedOnCard",
+          "label": "Dimmed text over card",
+          "note": "cards and panels: recomputed against their own fill"
         },
         {
           "id": "badgeNeutral",
-          "label": "Neutral label",
-          "note": "the text blends into its own fill"
+          "label": "Dimmed text over muted",
+          "note": "the contact band and the neutral label"
+        },
+        {
+          "id": "mutedOnInverted",
+          "label": "Dimmed text over an inverted surface",
+          "note": "built from the other end, like the inverted cyan"
         },
         {
           "id": "badgeTinted",

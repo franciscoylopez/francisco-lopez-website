@@ -1182,19 +1182,20 @@
           "use": "Sección de un índice largo, como las trece de esta página."
         }
       ],
-      "toneTitle": "Los dos tonos del rótulo",
+      "toneTitle": "El rótulo toma su gris de la superficie",
+      "toneLead": "Los dos rótulos de abajo salen de la misma clase, sin nada que los distinga en el punto de uso. Se pintan distinto porque el fondo que tienen debajo es otro.",
       "tones": [
         {
-          "tone": "muted",
+          "surface": "--background",
           "label": "Fundamentos de diseño",
           "sample": "Sobre el fondo de la página",
-          "note": "El caso por defecto: el gris atenuado del sistema sobre --background."
+          "note": "El caso por defecto: el gris atenuado del sistema, que está calibrado precisamente contra este fondo."
         },
         {
-          "tone": "band",
+          "surface": "--muted",
           "label": "El siguiente paso",
           "sample": "Sobre la franja de contacto",
-          "note": "Ese gris está calibrado contra el fondo de la página, así que encima de otra superficie hay que recalcularlo, no reusarlo: aquí se mezcla con la propia banda (D30)."
+          "note": "Encima de cualquier otra superficie ese gris hay que recalcularlo, no reusarlo (D30): se mezcla un 85% hacia el fondo de debajo. Antes había que pedirlo con una prop y solo lo tenía quien se acordaba; ahora lo resuelve el token."
         }
       ],
       "ruleTitle": "Qué decide la variante y qué el punto de uso",
@@ -1248,13 +1249,23 @@
         },
         {
           "id": "mutedForeground",
-          "label": "muted-foreground",
-          "note": "muted sobre background"
+          "label": "Atenuado sobre background",
+          "note": "el token tal cual: está calibrado contra este fondo"
+        },
+        {
+          "id": "mutedOnCard",
+          "label": "Atenuado sobre card",
+          "note": "tarjetas y paneles: se recalcula contra su propio fondo"
         },
         {
           "id": "badgeNeutral",
-          "label": "Etiqueta neutra",
-          "note": "el texto se mezcla con su propio fondo"
+          "label": "Atenuado sobre muted",
+          "note": "la franja de contacto y la etiqueta neutra"
+        },
+        {
+          "id": "mutedOnInverted",
+          "label": "Atenuado sobre fondo invertido",
+          "note": "se construye desde el otro extremo, como el cian invertido"
         },
         {
           "id": "badgeTinted",

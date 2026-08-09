@@ -75,9 +75,14 @@ export const badgeVariants = cva(
   {
     variants: {
       tone: {
-        /** Sin carga: lo que no destaca. El texto sigue el patrón de D30. */
-        neutral:
-          "bg-muted text-[color-mix(in_srgb,var(--foreground)_85%,var(--muted))]",
+        /**
+         * Sin carga: lo que no destaca. El texto sale de `text-muted-foreground`
+         * y no de un `color-mix` propio porque desde P37.6565 la utilidad YA es
+         * sensible a la superficie: dentro de `bg-muted` resuelve al mismo color
+         * que esta pastilla escribía a mano. Mismo píxel, un sitio menos donde
+         * mantener la fórmula.
+         */
+        neutral: "bg-muted text-muted-foreground",
         /** Teñida de cian. Hoy: «AAA», «conmuta», la cifra del hero de Accesibilidad. */
         cyan: "bg-[color-mix(in_oklch,var(--brand-cyan),transparent_84%)] text-foreground",
         /** Teñida de morado. Hoy: «Exit», «Split», la métrica del logo. */

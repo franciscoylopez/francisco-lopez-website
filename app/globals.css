@@ -28,7 +28,11 @@
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
+  /* La utilidad `text-muted-foreground` NO lee el token directamente: lee
+     `--surface-dim`, que es el atenuado de la superficie donde cae el texto.
+     Sobre `--background` vale exactamente `--muted-foreground`; sobre las demás
+     se recalcula. Ver el bloque «Atenuado sensible a la superficie» abajo. */
+  --color-muted-foreground: var(--surface-dim);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-secondary: var(--secondary);
@@ -359,21 +363,81 @@
   }
 }
 
-/* Contacto — texto atenuado sensible al fondo.
-   `--muted-foreground` está calibrado contra `--background` (AAA: 7,10:1 claro /
-   7,12:1 oscuro), así que sobre la franja (fondo `--muted`) se queda en AA suelto
-   (6,44:1 / 5,56:1) y rompería el "todo AAA" que declara BRAND.md y publica la
-   página de Accesibilidad. Dentro de la franja, el atenuado se mezcla con la
-   PROPIA banda al 85%, que mantiene AAA en ambos temas (8,15:1 / 9,16:1); el 80%
-   ya se quedaba en 6,99:1 en claro. Fuera de la franja vale el token de siempre. */
+/* ATENUADO SENSIBLE A LA SUPERFICIE — la aplicación general de D30 (P37.6565).
+   `--muted-foreground` está calibrado contra `--background` y solo contra él
+   (AAA: 7,10:1 claro / 7,12:1 oscuro). Encima de cualquier otra superficie la
+   cifra cambia, y no siempre a mejor: sobre `--card` da 7,53 en claro pero
+   **6,40 en oscuro**, y sobre `--muted` 6,42 / 5,59. La asimetría es la parte
+   que hay que entender: `--card` es más claro que `--background` en LOS DOS
+   temas, así que en claro se aleja del texto oscuro (sube) y en oscuro se acerca
+   al texto claro (baja). La misma jerarquía de superficies ayuda en un tema y
+   estorba en el otro — por eso no hay un token fijo que valga para las dos.
+
+   Esta regla ya existía y ya estaba resuelta DOS veces, cada una por su cuenta:
+   `--contact-dim` para la franja de contacto (P37.55) y un `color-mix` escrito a
+   mano dentro de la etiqueta neutra (P37.655). Las dos con la misma fórmula, y
+   ninguna de las dos cubría `--card`, que es la superficie no-`--background` más
+   común del sitio: 11 elementos solo en la home y al menos uno en cada una de las
+   seis páginas. Se generaliza aquí, así que el atenuado deja de ser algo que un
+   call site tiene que acordarse de pedir.
+
+   LA FÓRMULA es la de D30 y no se elige por superficie: el texto se mezcla un 85%
+   hacia el fondo que tiene DEBAJO. Al ser relativa se ajusta sola al tema (en
+   claro oscurece, en oscuro aclara) y no necesita un número por superficie. El 80%
+   ya se quedaba en 6,99:1 sobre `--muted` en claro; el 85% deja AAA con margen en
+   los cuatro cruces.
+
+   POR QUÉ VA EN EL TOKEN Y NO EN UNA CLASE: `.contact-dim` había que escribirla en
+   el punto de uso, así que solo protegía a quien se acordaba —y el sitio tiene 141
+   usos de `text-muted-foreground`—. Aquí la utilidad de siempre resuelve al color
+   correcto por el mero hecho de estar dentro de la superficie, y una tarjeta nueva
+   nace bien sin que nadie lo pida. Es lo que hace que la accesibilidad se herede.
+
+   Nota de cascada 1: `@theme inline` sustituye el token al compilar, así que
+   `text-muted-foreground` compila a `color: var(--surface-dim)` y basta con
+   redefinir la variable en la superficie. Redefinir `--muted-foreground` NO
+   funcionaría: el valor de una custom property se hereda ya sustituido, así que
+   el descendiente vería el que se resolvió en `:root`.
+
+   Nota de cascada 2, y es la que hay que tener presente al añadir superficies:
+   `data-surface` ES PARA LO QUE PINTA SU PROPIA SUPERFICIE. La utilidad cubre el
+   caso normal, pero el sitio tiene velos translúcidos escritos a mano —`--card` al
+   45% bajo una fila cebra, al 55% bajo la sección del esqueleto, el chip numerado
+   de «Cómo trabajo»— que son esa misma superficie y no llevan su clase, así que
+   la regla no podía verlos: se quedaban con el atenuado de la página y caían a
+   6,73–6,80 en oscuro. El atributo dice a qué FAMILIA pertenece la superficie que
+   ese elemento se pinta, que es justo lo que la clase ya no cuenta. Es el fallo de
+   disparador que describe `BRAND.md` §Cómo se escribe una regla: la condición
+   miraba a la clase y la cosa ocurría en el estilo inline. */
 :root {
-  --contact-dim: var(--muted-foreground);
+  --surface-dim: var(--muted-foreground);
 }
-.contact-band {
-  --contact-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
+.bg-card,
+.bg-popover,
+[data-surface="card"] {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--card));
 }
-.contact-dim {
-  color: var(--contact-dim);
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+[data-surface="muted"] {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
+}
+/* Superficie INVERTIDA (fondo = `--foreground`): ahí el primer plano es
+   `--background`, así que el atenuado se construye con la misma fórmula pero
+   partiendo del otro extremo. Hermano de `--primary-on-inverted`, que existe por
+   esta misma razón, y sustituye a los `color-mix(--background, transparent N%)`
+   que el panel de tokens escribía a ojo — uno de ellos daba 4,33:1 en oscuro, por
+   debajo de AA. */
+[data-surface="inverted"] {
+  --surface-dim: color-mix(in srgb, var(--background) 85%, var(--foreground));
+}
+/* Vuelta al valor de siempre para el bloque que se apoya otra vez en el fondo de
+   la página dentro de una superficie (una caja `bg-background` dentro de un panel).
+   Sin esta línea heredaría el atenuado de la tarjeta que lo envuelve. */
+.bg-background,
+[data-surface="page"] {
+  --surface-dim: var(--muted-foreground);
 }
 
 /* El CTA de email tenía aquí `.contact-cta` / `.contact-cta-icon`, y en P37.5988 se
@@ -459,14 +523,14 @@
    propia utilidad de espaciado (`px-[0.85rem]` en nav, etc.) y, al no estar en
    `@layer`, esta clase la pisaría si la trajera. La pastilla usa la caja que ya
    define cada componente.
-   `--chrome-hover-bg` sensible al fondo, mismo patrón que `--contact-dim` arriba:
+   `--chrome-hover-bg` sensible al fondo, mismo patrón que `--surface-dim` arriba:
    por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), pero dentro
    de `.contact-band` (fondo YA `--muted`, ContactSecondary también usa esta clase
    desde P37.55) el pill se volvía invisible — mismo color que su fondo.
    Ajustado 2026-08-04: el primer intento usaba `--card` ahí dentro — un token fijo
    mucho más claro que rompía con el tono cálido y sutil del pill de siempre (se
    veía como un recuadro blanco suelto). En su lugar se mezcla `--foreground` un
-   10% sobre la PROPIA banda, igual que ya hace `--contact-dim`: en claro oscurece
+   10% sobre la PROPIA banda, igual que ya hace `--surface-dim`: en claro oscurece
    un paso (mismo sentido que --muted respecto a --background), en oscuro aclara un
    paso — la misma dirección que ya tiene el pill por defecto en cada tema. */
 :root {
