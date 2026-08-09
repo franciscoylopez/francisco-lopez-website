@@ -121,7 +121,8 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   sobre la superficie de debajo no aparece en ningún inventario de tokens**. Se encuentra
   recorriendo el DOM, no leyendo `globals.css` — y el tercero, además, solo existe mientras
   el cursor está encima. Corregidos a **8,17/9,17**, **10,63/10,02** y **12,47/12,04**; los
-  dos primeros publicados en la tabla del Design System, que lista **nueve** pares. El censo
+  dos primeros publicados en la tabla del Design System, que lista **once** pares desde que se le
+añadieron los dos que le faltaban —la bolita del switch y el hover del chrome secundario—. El censo
   completo —los trece medidos, incluidos los que ninguna página publica— vive desde el
   2026-08-09 en `lib/design-values.ts` (D38), que es de donde leen las páginas: **la cifra
   publicada y la del reglamento dejan de ser dos copias**. Sigue habiendo **0 violaciones de axe**
