@@ -1,3 +1,5 @@
+import { chromeLinkVariants } from "@/components/ui/chrome";
+
 export type BreadcrumbDict = {
   routeLabel: string;
   home: string;
@@ -27,11 +29,16 @@ export function Breadcrumb({
               {item.href && !last ? (
                 <a
                   href={item.href}
-                  className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem]"
+                  className={chromeLinkVariants({ tone: "muted" })}
                 >
                   {item.label}
                 </a>
               ) : (
+                // El nivel actual NO sale de `chromeLinkVariants`: no es un
+                // enlace —no se pulsa— y la variante le daría una pastilla de
+                // hover sobre algo que no responde. Solo comparte el alto de 44px,
+                // para que la fila no cambie de altura cuando el breadcrumb tiene
+                // un único nivel.
                 <span
                   aria-current="page"
                   className="text-foreground inline-flex min-h-[44px] items-center font-medium"

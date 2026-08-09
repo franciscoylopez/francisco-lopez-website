@@ -1,4 +1,5 @@
 import { actionVariants } from "@/components/ui/action";
+import { chromeLinkVariants } from "@/components/ui/chrome";
 import { Logo } from "@/components/ui/logo";
 import { LINKEDIN_URL } from "@/lib/contact";
 import { cn } from "@/lib/utils";
@@ -30,31 +31,26 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
           </span>
         </div>
 
+        {/* El tamaño de texto (0,9rem) es la tipografía de esta fila, no una
+            métrica del enlace, así que se queda aquí — ver la nota de `chrome.tsx`. */}
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-self-center">
-          <a
-            href={`${base}/brand-kit`}
-            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
-          >
-            {dict.brandKit}
-          </a>
-          <a
-            href={`${base}/design-system`}
-            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
-          >
-            {dict.designSystem}
-          </a>
-          <a
-            href={`${base}/accesibilidad`}
-            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
-          >
-            {dict.accesibilidad}
-          </a>
-          <a
-            href={`${base}/cookies`}
-            className="text-muted-foreground link-chrome -mx-[0.6rem] -my-[0.35rem] inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] text-[0.9rem]"
-          >
-            {dict.cookies}
-          </a>
+          {[
+            { href: `${base}/brand-kit`, label: dict.brandKit },
+            { href: `${base}/design-system`, label: dict.designSystem },
+            { href: `${base}/accesibilidad`, label: dict.accesibilidad },
+            { href: `${base}/cookies`, label: dict.cookies },
+          ].map((l) => (
+            <a
+              key={l.href}
+              href={l.href}
+              className={cn(
+                chromeLinkVariants({ tone: "muted" }),
+                "text-[0.9rem]",
+              )}
+            >
+              {l.label}
+            </a>
+          ))}
         </nav>
 
         <a

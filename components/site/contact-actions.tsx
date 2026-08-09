@@ -3,6 +3,7 @@
 import { Download, Mail, Phone } from "lucide-react";
 
 import { actionVariants } from "@/components/ui/action";
+import { chromeLinkVariants } from "@/components/ui/chrome";
 import { trackContactClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import {
@@ -31,15 +32,11 @@ export type ContactActionsDict = {
 // ÚNICO botón sólido del sitio; el resto de canales son enlaces de apoyo. El
 // tracking de clics (P30) se cablea aquí, en un solo sitio, no en tres.
 
-// Receta compartida de los enlaces de esta superficie: pastilla de chrome, suelo
-// táctil de 44px (checklist a11y §3) y área de clic ampliada sin que el padding
-// empuje el layout —los márgenes negativos lo compensan—. El COLOR y el tamaño de
-// texto los pone cada uso, porque los canales de apoyo van en `foreground` y la
-// dirección de email va atenuada. Existe como constante para que haya UNA receta:
-// estaba escrita una vez y al añadir el segundo uso habría pasado a estar dos veces,
-// que es exactamente como empezaron los seis «botones base» de la auditoría.
-const CONTACT_LINK =
-  "link-chrome inline-flex min-h-[44px] items-center px-[0.6rem] py-[0.35rem] -mx-[0.6rem] -my-[0.35rem]";
+// La receta de estos enlaces ya no vive aquí: es `shape: "inline"` de la capa de
+// chrome (P37.656). Era una constante local con la métrica escrita a mano —suelo
+// de 44px y área de clic ampliada con márgenes negativos— y existía por el motivo
+// correcto (que hubiera UNA receta), pero de las catorce del sitio: la capa la
+// generaliza. Aquí solo queda el tamaño de texto, que es tipografía de la sección.
 
 // Botón de email. `.contact-cta` resuelve hover/foco sin bajar contraste; el
 // anillo de foco lo pone la regla global.
@@ -89,7 +86,10 @@ export function EmailCta({
           <a
             href={`mailto:${EMAIL}`}
             onClick={() => trackContactClick("email")}
-            className={cn(CONTACT_LINK, "contact-dim text-[0.9rem] break-all")}
+            className={cn(
+              chromeLinkVariants(),
+              "contact-dim text-[0.9rem] break-all",
+            )}
           >
             {EMAIL}
           </a>
@@ -121,7 +121,7 @@ export function ContactSecondary({
   // archivo (regla del icono, P37.5988). El tamaño ya no se escribe aquí: lo pone
   // `.link-chrome svg` en globals.css, igual que `size` lo pone en las acciones
   // con caja.
-  const link = cn(CONTACT_LINK, "text-foreground gap-[0.55rem] text-[0.95rem]");
+  const link = cn(chromeLinkVariants(), "text-[0.95rem]");
   return (
     <ul
       // `gap-y` solo actúa cuando la fila envuelve (en móvil los tres canales no

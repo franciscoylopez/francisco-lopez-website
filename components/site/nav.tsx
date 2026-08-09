@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
 import { actionVariants } from "@/components/ui/action";
+import { chromeLinkVariants } from "@/components/ui/chrome";
 import { Logo } from "@/components/ui/logo";
 import { cvPath, type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -138,10 +139,15 @@ export function Nav({
               formas —pelado aquí, con icono en Trayectoria y en los canales de
               contacto— porque cada punto de uso lo decidía por su cuenta. El
               tamaño lo pone `.link-chrome svg`, no esta clase. */}
+          {/* `hidden sm:inline-flex` pisa el `inline-flex` de la variante en el
+              breakpoint pequeño: es visibilidad, no métrica, y por eso sigue aquí. */}
           <a
             href={cvHref}
             download
-            className="text-foreground link-chrome hidden min-h-[44px] items-center gap-[0.45rem] px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap sm:inline-flex"
+            className={cn(
+              chromeLinkVariants({ shape: "bar" }),
+              "hidden text-[0.88rem] sm:inline-flex",
+            )}
           >
             <Download aria-hidden="true" />
             {dict.downloadCv}
@@ -149,7 +155,10 @@ export function Nav({
           <a
             href={sobreMiHref}
             aria-current={isSobreMi ? "page" : undefined}
-            className="text-foreground link-chrome hidden min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium whitespace-nowrap aria-[current=page]:underline sm:inline-flex"
+            className={cn(
+              chromeLinkVariants({ shape: "bar" }),
+              "hidden text-[0.88rem] aria-[current=page]:underline sm:inline-flex",
+            )}
           >
             {dict.sobreMi}
           </a>
@@ -157,10 +166,17 @@ export function Nav({
             href={altHref}
             hrefLang={lang === "en" ? "es" : "en"}
             aria-label={dict.switchLanguage}
-            // `min-w-[44px]`: la etiqueta es de dos letras («EN»/«ES»), así que el
-            // ancho lo daba el texto y se quedaba en 38px — alto correcto, ancho no
-            // (P37.598). El objetivo táctil son las DOS dimensiones.
-            className="text-muted-foreground hover:text-foreground focus-visible:text-foreground link-chrome hidden min-h-[44px] min-w-[44px] items-center justify-center px-[0.6rem] text-[0.85rem] font-medium sm:inline-flex"
+            // `min-w-[44px]` + `justify-center` se quedan en el call site y NO
+            // suben a la variante: hay un solo control así en todo el sitio, y una
+            // variante con un único uso solo añade indirección (misma decisión que
+            // el switch del consentimiento, BRAND.md). El motivo, de P37.598: la
+            // etiqueta son dos letras («EN»/«ES»), así que el ancho lo daba el
+            // texto y se quedaba en 38px — alto correcto, ancho no. El objetivo
+            // táctil son las DOS dimensiones.
+            className={cn(
+              chromeLinkVariants({ shape: "bar", tone: "muted" }),
+              "hidden min-w-[44px] justify-center px-[0.6rem] text-[0.85rem] sm:inline-flex",
+            )}
           >
             {dict.switchLanguageShort}
           </a>
@@ -199,7 +215,10 @@ export function Nav({
               href={cvHref}
               download
               onClick={() => setMenuOpen(false)}
-              className="text-foreground link-chrome inline-flex min-h-[44px] items-center gap-[0.45rem] text-[0.95rem] font-medium"
+              className={cn(
+                chromeLinkVariants({ shape: "stack" }),
+                "text-[0.95rem]",
+              )}
             >
               <Download aria-hidden="true" />
               {dict.downloadCv}
@@ -208,7 +227,10 @@ export function Nav({
               href={sobreMiHref}
               aria-current={isSobreMi ? "page" : undefined}
               onClick={() => setMenuOpen(false)}
-              className="text-foreground link-chrome inline-flex min-h-[44px] items-center text-[0.95rem] font-medium aria-[current=page]:underline"
+              className={cn(
+                chromeLinkVariants({ shape: "stack" }),
+                "text-[0.95rem] aria-[current=page]:underline",
+              )}
             >
               {dict.sobreMi}
             </a>
@@ -217,7 +239,10 @@ export function Nav({
               hrefLang={lang === "en" ? "es" : "en"}
               aria-label={dict.switchLanguage}
               onClick={() => setMenuOpen(false)}
-              className="text-foreground link-chrome inline-flex min-h-[44px] items-center text-[0.95rem] font-medium"
+              className={cn(
+                chromeLinkVariants({ shape: "stack" }),
+                "text-[0.95rem]",
+              )}
             >
               {dict.switchLanguageShort}
             </a>

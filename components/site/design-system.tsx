@@ -3,6 +3,7 @@ import { Check, Download, Mail, Menu, Moon } from "lucide-react";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { Badge } from "@/components/ui/badge";
+import { chromeLinkVariants } from "@/components/ui/chrome";
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
@@ -524,7 +525,10 @@ export function DesignSystem({
                         <a
                           key={item}
                           href="#top"
-                          className="text-foreground link-chrome inline-flex min-h-[44px] items-center px-[0.85rem] text-[0.88rem] font-medium"
+                          className={cn(
+                            chromeLinkVariants({ shape: "bar" }),
+                            "text-[0.88rem]",
+                          )}
                         >
                           {item}
                         </a>
