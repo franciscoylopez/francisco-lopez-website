@@ -34,6 +34,130 @@
 import type { Locale } from "@/lib/i18n/config";
 
 /* -------------------------------------------------------------------------- */
+/* Las dos paletas                                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Los tokens de color de los DOS temas, con el mismo texto `oklch` que tienen en
+ * `app/globals.css`. Aquí no hay ni un hex escrito a mano: el que necesitan los
+ * consumidores lo deriva `paletteHex()` haciendo la misma conversión que el
+ * navegador.
+ *
+ * POR QUÉ ESTA COPIA ES LEGÍTIMA Y LAS OTRAS NO (P37.6605). En una página normal
+ * el color se pide con `var(--primary)` y no hay copia que mantener. Estos dos
+ * consumidores no pueden:
+ *
+ * - **El mock de tema del Design System** pinta las dos paletas a la vez, y las
+ *   CSS vars solo dan la del tema activo. Ya existía el precedente en el propio
+ *   sistema: `--primary-on-inverted` expone «el cian del otro tema».
+ * - **Las imágenes OG** (`app/api/og/route.tsx`) las genera Satori, que no lee
+ *   CSS vars ni resuelve `oklch`.
+ *
+ * Lo que no era legítimo es que cada uno tuviera **su** copia. El mock llevaba
+ * nueve valores por tema y las OG ocho; de los 26, **tres** habían divergido sin
+ * que nada lo notara: el cian claro del mock seguía en `oklch(0.43 …)` —el que se
+ * corrigió el 2026-08-04 por publicar un AAA que no cumplía (P37.598)—, y las OG
+ * pintaban un atenuado y un borde de una generación anterior de la paleta.
+ *
+ * Y POR QUÉ NADIE LO VIO, que es la parte reutilizable: **ninguna herramienta que
+ * corremos puede verlo.** axe pasa —en el mock el cian es fondo de botón, no
+ * texto, así que el par daba AAA igual— y el typecheck ve una cadena válida. Solo
+ * se detecta comparando valor contra valor, que es justo lo que ahora hace
+ * `npm run check:palette` en cada PR: el guardián no está aquí, está en CI.
+ */
+export const PALETTE = {
+  light: {
+    background: "oklch(0.9653 0.0102 81.8)",
+    foreground: "oklch(0.2657 0.0118 248.27)",
+    card: "oklch(0.9855 0.0057 84.57)",
+    border: "oklch(0.901 0.0142 88.69)",
+    muted: "oklch(0.9316 0.0128 86.83)",
+    "muted-foreground": "oklch(0.4365 0.0064 95.19)",
+    primary: "oklch(0.41 0.0886 194.82)",
+    "primary-foreground": "oklch(0.9855 0.0057 84.57)",
+  },
+  dark: {
+    background: "oklch(0.2283 0.0098 248.26)",
+    foreground: "oklch(0.9653 0.0102 81.8)",
+    card: "oklch(0.2657 0.0118 248.27)",
+    border: "oklch(0.3252 0.0157 248.31)",
+    muted: "oklch(0.3063 0.0152 252.34)",
+    "muted-foreground": "oklch(0.7295 0.0116 95.22)",
+    primary: "oklch(0.7626 0.1156 191.46)",
+    "primary-foreground": "oklch(0.2283 0.0098 248.26)",
+  },
+} as const satisfies Record<Theme, Record<string, string>>;
+
+/**
+ * Tokens de marca, que NO conmutan con el tema: valen lo mismo en los dos. Los
+ * consumen las imágenes OG, que llevan fondo de marca fijo.
+ */
+export const BRAND_PALETTE = {
+  "brand-cyan-split": "oklch(0.7242 0.1208 194.82)",
+  "brand-purple-split": "oklch(0.6889 0.1581 289.96)",
+  "brand-cyan-soft": "oklch(0.8694 0.0592 192.12)",
+  "brand-purple-soft": "oklch(0.8151 0.0776 295.46)",
+} as const satisfies Record<string, string>;
+
+export type PaletteToken = keyof (typeof PALETTE)["light"];
+export type BrandToken = keyof typeof BRAND_PALETTE;
+
+/**
+ * `oklch(…)` → el `#rrggbb` que el navegador PINTA. Es conversión estándar
+ * —oklch → oklab → LMS → sRGB lineal → gamma— y termina **recortando a [0,1]**,
+ * que es el paso que importa aquí: los cianes de esta marca caen ligeramente
+ * fuera del gamut sRGB, y sin recortar sale un color que no existe en pantalla
+ * (`BRAND.md` §Accesibilidad lo cuenta como el error que ya se cometió una vez).
+ *
+ * Validada contra el navegador: `scripts/check-palette.mjs` compara los 20
+ * valores de aquí con lo que Chrome pinta, y esa misma comprobación reprodujo
+ * exactamente los 17 hex medidos a mano el 2026-08-09.
+ */
+export function oklchToHex(css: string): string {
+  const m = /oklch\(\s*([\d.]+)\s+([\d.]+)\s+([\d.]+)\s*\)/.exec(css);
+  if (!m) throw new Error(`No es un color oklch: ${css}`);
+  const L = Number(m[1]);
+  const C = Number(m[2]);
+  const h = (Number(m[3]) * Math.PI) / 180;
+
+  const a = C * Math.cos(h);
+  const b = C * Math.sin(h);
+
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const mm = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+
+  const lin = [
+    4.0767416621 * l - 3.3077115913 * mm + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * mm - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * mm + 1.707614701 * s,
+  ];
+
+  return `#${lin
+    .map((v) => {
+      const srgb = v <= 0.0031308 ? 12.92 * v : 1.055 * v ** (1 / 2.4) - 0.055;
+      const byte = Math.round(Math.min(1, Math.max(0, srgb)) * 255);
+      return byte.toString(16).padStart(2, "0");
+    })
+    .join("")
+    .toUpperCase()}`;
+}
+
+/** La paleta de un tema, ya en hex, para quien no puede resolver `oklch`. */
+export function paletteHex(theme: Theme): Record<PaletteToken, string> {
+  return Object.fromEntries(
+    Object.entries(PALETTE[theme]).map(([k, v]) => [k, oklchToHex(v)]),
+  ) as Record<PaletteToken, string>;
+}
+
+/** Los tokens de marca en hex. No conmutan, así que no llevan tema. */
+export function brandHex(): Record<BrandToken, string> {
+  return Object.fromEntries(
+    Object.entries(BRAND_PALETTE).map(([k, v]) => [k, oklchToHex(v)]),
+  ) as Record<BrandToken, string>;
+}
+
+/* -------------------------------------------------------------------------- */
 /* Tokens de layout                                                            */
 /* -------------------------------------------------------------------------- */
 

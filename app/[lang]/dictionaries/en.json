@@ -956,8 +956,6 @@
       "darkLabel": "Dark mode",
       "sampleHeadline": "From discovery to data.",
       "cta": "Download CV",
-      "lightTokens": "bg #F7F3EC · card #FCFAF6 · border #E7E4DD",
-      "darkTokens": "bg #191D21 · card #21262B · border #2C333B",
       "ruleTitle": "Color rule",
       "rule": [
         "primary is the only action color. secondary / muted / accent stay neutral.",
