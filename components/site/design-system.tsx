@@ -15,6 +15,8 @@ import {
   LAYOUT_TOKENS,
   levelOf,
   MEASURE_REM,
+  PALETTE,
+  paletteHex,
   ratioText,
   SECTION_Y_RANGE_PX,
   SPACING_SCALE,
@@ -442,14 +444,12 @@ export function DesignSystem({
               modeLabel={t.claroscuro.lightLabel}
               headline={t.claroscuro.sampleHeadline}
               cta={t.claroscuro.cta}
-              tokens={t.claroscuro.lightTokens}
             />
             <ThemeCard
               variant="dark"
               modeLabel={t.claroscuro.darkLabel}
               headline={t.claroscuro.sampleHeadline}
               cta={t.claroscuro.cta}
-              tokens={t.claroscuro.darkTokens}
             />
           </div>
           <div
@@ -1219,45 +1219,49 @@ function ContrastBadge({ lv }: { lv: string | null }) {
   );
 }
 
-// Tarjeta de tema fijo (§06): muestra claro y oscuro con valores oklch literales,
-// independientes del tema activo, para enseñar ambas superficies a la vez.
+// Tarjeta de tema fijo (§06): muestra claro y oscuro con la paleta literal,
+// independiente del tema activo, para enseñar ambas superficies a la vez.
 function ThemeCard({
   variant,
   modeLabel,
   headline,
   cta,
-  tokens,
 }: {
   variant: "light" | "dark";
   modeLabel: string;
   headline: string;
   cta: string;
-  tokens: string;
 }) {
-  const c =
-    variant === "light"
-      ? {
-          border: "oklch(0.901 0.0142 88.69)",
-          bg: "oklch(0.9653 0.0102 81.8)",
-          fg: "oklch(0.2657 0.0118 248.27)",
-          eyebrow: "oklch(0.4365 0.0064 95.19)",
-          innerBorder: "oklch(0.901 0.0142 88.69)",
-          innerBg: "oklch(0.9855 0.0057 84.57)",
-          bar: "oklch(0.9316 0.0128 86.83)",
-          btnBg: "oklch(0.43 0.0886 194.82)",
-          btnFg: "oklch(0.9855 0.0057 84.57)",
-        }
-      : {
-          border: "oklch(0.3252 0.0157 248.31)",
-          bg: "oklch(0.2283 0.0098 248.26)",
-          fg: "oklch(0.9653 0.0102 81.8)",
-          eyebrow: "oklch(0.7295 0.0116 95.22)",
-          innerBorder: "oklch(0.3252 0.0157 248.31)",
-          innerBg: "oklch(0.2657 0.0118 248.27)",
-          bar: "oklch(0.3063 0.0152 252.34)",
-          btnBg: "oklch(0.7626 0.1156 191.46)",
-          btnFg: "oklch(0.2283 0.0098 248.26)",
-        };
+  // Los dieciocho valores que había aquí escritos a mano —nueve por tema— salen
+  // de `PALETTE` (P37.6605). El mock no puede usar `var(--…)` porque pinta las
+  // DOS paletas a la vez y las CSS vars solo dan la del tema activo; lo que no
+  // podía era tener su propia copia: el cian claro llevaba días en el valor
+  // anterior a P37.598, o sea que la página que documenta el sistema de color
+  // enseñaba justo el color que se corrigió por publicar un AAA que no cumplía.
+  // Ahora `npm run check:palette` no deja que vuelva a pasar.
+  const p = PALETTE[variant];
+  const c = {
+    border: p.border,
+    bg: p.background,
+    fg: p.foreground,
+    eyebrow: p["muted-foreground"],
+    innerBorder: p.border,
+    innerBg: p.card,
+    bar: p.muted,
+    btnBg: p.primary,
+    btnFg: p["primary-foreground"],
+  };
+
+  // El pie de la tarjeta cita tres hexes. Estaban escritos en el diccionario —los
+  // mismos seis caracteres en ES y en EN, o sea que nunca fueron copy (D38)— y DOS
+  // de los seis mentían: `#E7E4DD` y `#2C333B` por `#E2DED4` y `#2E353C`. Los
+  // destapó una captura de esta misma pantalla mientras se arreglaba el cian de
+  // arriba, no una auditoría: nadie los había contado como copias de un token
+  // porque son texto, no color, y ninguna herramienta compara un párrafo con el
+  // píxel que tiene al lado. Ahora se derivan del mismo sitio que los pinta.
+  const hex = paletteHex(variant);
+  const caption = `bg ${hex.background} · card ${hex.card} · border ${hex.border}`;
+
   return (
     <div
       className="overflow-hidden rounded-xl border"
@@ -1297,7 +1301,7 @@ function ThemeCard({
         className="border-t px-6 py-[0.65rem] font-mono text-[0.72rem]"
         style={{ borderColor: c.border, color: c.eyebrow }}
       >
-        {tokens}
+        {caption}
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 
+import { brandHex, paletteHex } from "@/lib/design-values";
+
 // Generación de imágenes OG (1200×630) con la marca (P16). Route handler bajo
 // /api/og: el proxy excluye /api (D3), así que se sirve directo sin rewrite de
 // locale ni conflicto con el file-convention de Next. PNG determinista con las
@@ -20,14 +22,24 @@ const photoDataUri = `data:image/jpeg;base64,${readFileSync(
   join(process.cwd(), "public/og/og-home-1200x630.jpg"),
 ).toString("base64")}`;
 
-// Colores (tokens del tema oscuro, la OG lleva fondo de marca fijo).
-const BG = "#191D21";
-const INK = "#F7F3EC";
-const MUTED = "#9CA3AC";
-const CYAN_SPLIT = "#16BDBD";
-const PURPLE_SPLIT = "#9B87F5";
-const CYAN_SOFT = "#A7E1DE";
-const PURPLE_SOFT = "#C6B9F0";
+// Colores: tokens del tema oscuro (la OG lleva fondo de marca fijo), derivados de
+// la paleta única. Satori no lee CSS vars ni resuelve `oklch`, así que necesita el
+// hex — pero lo calcula `paletteHex()`, no una mano (P37.6605). De las ocho
+// constantes que había aquí, DOS habían divergido del token sin que nada lo
+// notara: el atenuado era `#9CA3AC`, de una generación anterior de la paleta, que
+// además daba 6,66:1 sobre el fondo de marca en vez de los 7,12:1 del token; y el
+// borde de la tarjeta compuesta, `#2C333B` en vez de `#2E353C`.
+const DARK = paletteHex("dark");
+const BRAND = brandHex();
+
+const BG = DARK.background;
+const INK = DARK.foreground;
+const MUTED = DARK["muted-foreground"];
+const BORDER = DARK.border;
+const CYAN_SPLIT = BRAND["brand-cyan-split"];
+const PURPLE_SPLIT = BRAND["brand-purple-split"];
+const CYAN_SOFT = BRAND["brand-cyan-soft"];
+const PURPLE_SOFT = BRAND["brand-purple-soft"];
 
 // Logo split como SVG (tinta clara sobre fondo oscuro) → data URI para <img>,
 // que resvg rasteriza sin las limitaciones SVG de Satori.
@@ -144,7 +156,7 @@ function HomeCard({ lang }: { lang: Lang }) {
           width: 600,
           height: 630,
           background: BG,
-          borderLeft: "1px solid #2C333B",
+          borderLeft: `1px solid ${BORDER}`,
           padding: "0 72px",
           gap: 26,
         }}

@@ -956,8 +956,6 @@
       "darkLabel": "Modo oscuro",
       "sampleHeadline": "Del discovery al dato.",
       "cta": "Descargar CV",
-      "lightTokens": "bg #F7F3EC · card #FCFAF6 · border #E7E4DD",
-      "darkTokens": "bg #191D21 · card #21262B · border #2C333B",
       "ruleTitle": "Regla de color",
       "rule": [
         "primary es el único color de acción. secondary / muted / accent permanecen neutros.",
