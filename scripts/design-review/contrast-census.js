@@ -1,10 +1,16 @@
 // Censo de pares de contraste de una página SERVIDA (P37.68).
 //
-// CÓMO SE USA: se pega entero en la consola del navegador —o se inyecta con
-// `javascript_tool` desde la skill `claude-in-chrome`— sobre la página ya
-// cargada. No es un script de Node y no puede serlo: la mitad de los pares de
-// este sitio **no existen hasta que el navegador compone** un `color-mix` sobre
-// la superficie que tiene debajo, así que solo se ven en el DOM pintado.
+// CÓMO SE USA: define `window.contrastCensus()`, que se llama sobre la página ya
+// cargada y devuelve el censo. Se puede pegar en la consola, o —para recorrer
+// varias páginas sin repetir la inyección— copiarlo a `public/censo.js` y
+// cargarlo con un `<script src>`. **No vale `eval()`**: la CSP del sitio no
+// permite `unsafe-eval`, y eso está bien.
+//
+// No es un script de Node y no puede serlo: la mitad de los pares de este sitio
+// **no existen hasta que el navegador compone** un `color-mix` sobre la
+// superficie que tiene debajo, así que solo se ven en el DOM pintado. Se expone
+// como función y no como IIFE para poder llamarlo dos veces sin recargar —
+// conmutar el tema y volver a medir es la mitad del trabajo.
 //
 // POR QUÉ EXISTE. Las auditorías de 2026-08-04 y 2026-08-08 dieron por bueno un
 // «todos los pares en AAA, sin excepciones» que era falso: se les escaparon tres
@@ -20,7 +26,7 @@
 // Se escribió tres veces a mano (P37.655, P37.656 y P37.6605) antes de quedarse
 // aquí. Que el trabajo deje algo detrás es más barato que volver a escribirlo.
 
-(() => {
+window.contrastCensus = () => {
   const round = (n) => Math.round(n * 100) / 100;
 
   /** El píxel que el navegador pinta, ya recortado a sRGB. */
@@ -197,6 +203,5 @@
     bajoAAA: censo.filter((p) => p.ratio < 7),
     censo,
   };
-  console.table(resultado.censo);
   return resultado;
-})();
+};
