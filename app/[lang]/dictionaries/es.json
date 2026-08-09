@@ -574,95 +574,61 @@
       "lead": "La regla de las dos capas: una capa de tinta (fondo + trazo) que conmuta con el tema, y una capa de color (cian + morado) que solo aparece en el split y no cambia entre claro y oscuro. Cada muestra lleva su token, su hex y su ratio de contraste medido. Cambia el tema con el toggle del nav para ver la capa de tinta conmutar.",
       "swapConmuta": "Conmuta",
       "swapFijo": "Fijo",
+      "ratioLabels": {
+        "inkOver": "Tinta encima",
+        "bodyText": "Texto principal",
+        "asText": "texto",
+        "asButtonLight": "botón (claro)",
+        "inLight": "claro",
+        "inDark": "oscuro",
+        "decorative": "Decorativo · tinta encima",
+        "onInverted": "Sobre fondo invertido",
+        "logoOnly": "Solo capa de logo"
+      },
       "items": [
         {
+          "id": "background",
           "name": "Fondo",
-          "token": "--background",
-          "hex": "#F7F3EC · #191D21",
-          "swap": "conmuta",
-          "sample": "var(--background)",
-          "sampleFg": "var(--foreground)",
-          "ratio": "Tinta encima · 13,8:1 · AAA",
           "note": "Fondo base"
         },
         {
+          "id": "foreground",
           "name": "Tinta",
-          "token": "--foreground",
-          "hex": "#21262B · #F7F3EC",
-          "swap": "conmuta",
-          "sample": "var(--foreground)",
-          "sampleFg": "var(--background)",
-          "ratio": "Texto principal · 13,8:1 · AAA",
           "note": "Texto y trazo"
         },
         {
+          "id": "primary",
           "name": "Cian primario",
-          "token": "--primary · --brand-cyan",
-          "hex": "#005859 · #3FC9C4",
-          "swap": "conmuta",
-          "sample": "var(--primary)",
-          "sampleFg": "var(--primary-foreground)",
-          "ratio": "7,47:1 texto · 7,93:1 botón (claro) · 8,36:1 oscuro · AAA",
           "note": "Enlaces y acento"
         },
         {
+          "id": "purple",
           "name": "Morado",
-          "token": "--brand-purple",
-          "hex": "#9B87F5",
-          "swap": "fijo",
-          "sample": "var(--brand-purple)",
-          "sampleFg": "#21262B",
-          "ratio": "Decorativo · tinta encima",
           "note": "Tintes y realces"
         },
         {
+          "id": "purpleAccent",
           "name": "Morado acento",
-          "token": "--brand-purple-accent",
-          "hex": "oklch(0.62 0.16 290)",
-          "swap": "fijo",
-          "sample": "var(--brand-purple-accent)",
-          "sampleFg": "#F7F3EC",
-          "ratio": "Sobre fondo invertido · 3,96:1 claro · 3,48:1 oscuro · AA-large",
           "note": "Texto/acento sobre tinta"
         },
         {
+          "id": "cyanSplit",
           "name": "Split cian",
-          "token": "--brand-cyan-split",
-          "hex": "#16BDBD",
-          "swap": "fijo",
-          "sample": "var(--brand-cyan-split)",
-          "sampleFg": "#21262B",
-          "ratio": "Solo capa de logo",
           "note": "Nunca como texto"
         },
         {
+          "id": "purpleSplit",
           "name": "Split morado",
-          "token": "--brand-purple-split",
-          "hex": "#9B87F5",
-          "swap": "fijo",
-          "sample": "var(--brand-purple-split)",
-          "sampleFg": "#21262B",
-          "ratio": "Solo capa de logo",
           "note": "Nunca como texto"
         },
         {
+          "id": "cyanSoft",
           "name": "Pastel cian",
-          "token": "--brand-cyan-soft",
-          "hex": "#A7E1DE",
-          "swap": "fijo",
-          "sample": "var(--brand-cyan-soft)",
-          "sampleFg": "#21262B",
-          "ratio": "Tinta encima · 10,5:1 · AAA",
           "note": "Fondo, nunca texto"
         },
         {
+          "id": "purpleSoft",
           "name": "Pastel morado",
-          "token": "--brand-purple-soft",
-          "hex": "#C6B9F0",
-          "swap": "fijo",
-          "sample": "var(--brand-purple-soft)",
-          "sampleFg": "#21262B",
-          "ratio": "Tinta encima · 8,4:1 · AAA",
           "note": "Fondo, nunca texto"
         }
       ],
@@ -777,7 +743,6 @@
       "lead": "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica y comportamiento en claro y oscuro. No define el contenido de ninguna sección — define cómo respira todo lo que va dentro. Es el criterio interno con el que se construye y se audita.",
       "statContainer": "Ancho máximo del contenedor",
       "statBreakpoints": "Breakpoints",
-      "statBreakpointsList": "640 · 768 · 1024 · 1280",
       "statMeasure": "Medida de lectura (~91 car.)",
       "statA11y": "Objetivo de accesibilidad"
     },
@@ -790,7 +755,6 @@
       "baseLabel": "Rejilla base:",
       "baseVal": "12 columnas",
       "gutterLabel": "Medianil:",
-      "gutterVal": "var(--gutter) · 16–24px",
       "hint": "La franja marca las 12 columnas — usa el botón «rejilla» de arriba para alternarla.",
       "cards": [
         {
@@ -813,28 +777,6 @@
       "lead": "La aportación propia de esta página. No existen en ningún otro sitio del sistema y pasan al repositorio al montar la web.",
       "copyLabel": ":root { }",
       "copyHint": "Copia de un vistazo",
-      "items": [
-        {
-          "name": "--container",
-          "val": "1360px"
-        },
-        {
-          "name": "--page-x",
-          "val": "clamp(1.25rem, 5vw, 2.5rem)"
-        },
-        {
-          "name": "--gutter",
-          "val": "clamp(1rem, 2.2vw, 1.5rem)"
-        },
-        {
-          "name": "--measure",
-          "val": "42rem"
-        },
-        {
-          "name": "--section-y",
-          "val": "clamp(4.5rem, 9vw, 9rem)"
-        }
-      ],
       "cards": [
         {
           "title": "Fijos, no editables en producción",
@@ -894,54 +836,6 @@
       "lead": "Escala de base 4px (Tailwind). El aire entre secciones es la herramienta principal de jerarquía.",
       "scaleTitle": "Escala de espaciado",
       "rhythmTitle": "Ritmo entre secciones",
-      "sectionYLabel": "--section-y · clamp(72 → 144px)",
-      "spacing": [
-        {
-          "name": "2xs",
-          "px": "8px",
-          "w": "5%"
-        },
-        {
-          "name": "xs",
-          "px": "12px",
-          "w": "8%"
-        },
-        {
-          "name": "sm",
-          "px": "16px",
-          "w": "11%"
-        },
-        {
-          "name": "md",
-          "px": "24px",
-          "w": "17%"
-        },
-        {
-          "name": "lg",
-          "px": "32px",
-          "w": "23%"
-        },
-        {
-          "name": "xl",
-          "px": "48px",
-          "w": "34%"
-        },
-        {
-          "name": "2xl",
-          "px": "64px",
-          "w": "46%"
-        },
-        {
-          "name": "3xl",
-          "px": "96px",
-          "w": "68%"
-        },
-        {
-          "name": "4xl",
-          "px": "128px",
-          "w": "90%"
-        }
-      ],
       "rhythm": [
         "Entre secciones mayores: --section-y — 72px móvil → 144px escritorio.",
         "Título de sección → contenido: 40px (2.5rem).",
@@ -1223,7 +1117,7 @@
           "cls": "neutral",
           "demo": ["Fijo", "Próximamente"],
           "rule": "Lo que acompaña sin destacar: un estado, una nota al margen, la mitad apagada de un par.",
-          "note": "Su texto no puede ser el gris atenuado del sistema, que está calibrado contra el fondo de la página: encima de la pastilla se queda en 6,44:1. Mezclado con ese mismo fondo da 8,17:1."
+          "note": "Su texto no puede ser el gris atenuado del sistema, que está calibrado contra el fondo de la página: encima de la pastilla se queda en 6,44:1. Mezclado con ese mismo fondo da {badgeNeutral.light}."
         },
         {
           "kicker": "Dato verificado",
@@ -1242,7 +1136,7 @@
         {
           "kicker": "Tres registros",
           "cls": "label · value · code",
-          "demo": ["Exit", "Split", "13,79:1"],
+          "demo": ["Exit", "Split"],
           "rule": "Versalitas para un rótulo de estado, caja normal para un dato en prosa, monoespaciada para un valor técnico.",
           "note": "Es lo único que cambia de una etiqueta a otra. El alto, el cuerpo, el radio y el padding son los mismos para todas, y ya no los decide cada página."
         }
@@ -1253,7 +1147,7 @@
         "Antes de existir había ocho pastillas escritas a mano en seis archivos, con cinco anchos de padding, tres cuerpos de letra y cuatro alturas distintas. Tres de ellas convivían en la misma página.",
         "Una diferencia que significa algo es una variante; una que no significa nada es un valor a unificar. La monoespaciada de los valores técnicos se queda; los cuatro altos, no."
       ],
-      "ruleFoot": "El texto de las dos teñidas es el color de texto normal, no el color del velo. Es lo que las lleva a 10,63:1 en claro y 10,02:1 en oscuro; con el texto teñido se quedaban en 6,07 y 5,46 — la peor medida del sistema estaba, precisamente, en la pastilla que marca «AAA» en la tabla de aquí abajo.",
+      "ruleFoot": "El texto de las dos teñidas es el color de texto normal, no el color del velo. Es lo que las lleva a {badgeTinted.light} en claro y {badgeTinted.dark} en oscuro; con el texto teñido se quedaban en 6,07 y 5,46 — la peor medida del sistema estaba, precisamente, en la pastilla que marca «AAA» en la tabla de aquí abajo.",
       "hint": "Son las mismas etiquetas que usa el sitio: si una cambia, esta sección cambia con ella."
     },
     "accesibilidad": {
@@ -1268,76 +1162,49 @@
       },
       "contrastRows": [
         {
+          "id": "bodyText",
           "label": "Texto principal",
-          "note": "foreground sobre background",
-          "light": "13,79:1",
-          "lightLv": "AAA",
-          "dark": "15,32:1",
-          "darkLv": "AAA"
+          "note": "foreground sobre background"
         },
         {
+          "id": "primaryText",
           "label": "primary como texto",
-          "note": "enlaces y acento",
-          "light": "7,47:1",
-          "lightLv": "AAA",
-          "dark": "8,36:1",
-          "darkLv": "AAA"
+          "note": "enlaces y acento"
         },
         {
+          "id": "buttonText",
           "label": "Texto sobre botón",
-          "note": "primary-foreground sobre primary",
-          "light": "7,93:1",
-          "lightLv": "AAA",
-          "dark": "8,36:1",
-          "darkLv": "AAA"
+          "note": "primary-foreground sobre primary"
         },
         {
+          "id": "solidHover",
           "label": "Hover del botón sólido",
-          "note": "el relleno se mezcla hacia foreground",
-          "light": "8,64:1",
-          "lightLv": "AAA",
-          "dark": "8,92:1",
-          "darkLv": "AAA"
+          "note": "el relleno se mezcla hacia foreground"
         },
         {
+          "id": "toggleHover",
           "label": "Hover del toggle apagado",
-          "note": "el estado con menos margen del sistema",
-          "light": "7,21:1",
-          "lightLv": "AAA",
-          "dark": "7,80:1",
-          "darkLv": "AAA"
+          "note": "el estado con menos margen del sistema"
         },
         {
+          "id": "mutedForeground",
           "label": "muted-foreground",
-          "note": "muted sobre background",
-          "light": "7,10:1",
-          "lightLv": "AAA",
-          "dark": "7,12:1",
-          "darkLv": "AAA"
+          "note": "muted sobre background"
         },
         {
+          "id": "badgeNeutral",
           "label": "Etiqueta neutra",
-          "note": "el texto se mezcla con su propio fondo",
-          "light": "8,17:1",
-          "lightLv": "AAA",
-          "dark": "9,17:1",
-          "darkLv": "AAA"
+          "note": "el texto se mezcla con su propio fondo"
         },
         {
+          "id": "badgeTinted",
           "label": "Etiqueta teñida",
-          "note": "la peor de las dos, cian y morado",
-          "light": "10,63:1",
-          "lightLv": "AAA",
-          "dark": "10,02:1",
-          "darkLv": "AAA"
+          "note": "la peor de las dos, cian y morado"
         },
         {
+          "id": "purpleAccent",
           "label": "brand-purple-accent",
-          "note": "Solo texto grande (≥3:1) sobre fondo invertido",
-          "light": "3,96:1",
-          "lightLv": "",
-          "dark": "3,48:1",
-          "darkLv": ""
+          "note": "Solo texto grande (≥3:1) sobre fondo invertido"
         }
       ],
       "contrastNote": "Todos los pares de texto del sistema alcanzan AAA en claro y oscuro, y no solo en reposo: los estados de hover también, que es donde suele escaparse. El último que faltaba era el hover del toggle apagado, y se resolvió moviendo el color del texto en vez de apagar el fondo — subir la cifra quitando la señal visual no es accesibilidad, es esconder el problema del informe. La única excepción intencionada es brand-purple-accent, que cumple solo como texto grande (≥3:1) sobre fondos invertidos, nunca como cuerpo.",
@@ -1479,7 +1346,7 @@
     "conformance": {
       "num": "(01)",
       "heading": "Nivel de conformidad",
-      "note": "El contraste está medido, no estimado. El texto principal alcanza 13,79:1 en claro y 15,32:1 en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
+      "note": "El contraste está medido, no estimado. El texto principal alcanza {bodyText.light} en claro y {bodyText.dark} en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
       "rows": [
         {
           "label": "Estándar",
