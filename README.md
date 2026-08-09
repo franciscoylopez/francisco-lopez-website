@@ -75,10 +75,10 @@ app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i1
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
 .github/workflows/     CI (GitHub Actions): typecheck + lint + build en cada PR
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
-components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (variantes de todo lo accionable), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36
+components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36
 components/site/        Piezas que SÍ saben de este sitio: bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
-lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados y utils
+lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados, design-values (fuente única de lo que el sitio publica sobre sí mismo: tokens, breakpoints y contraste medido — D38) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega

@@ -1180,3 +1180,65 @@ el contador no se movió; el hallazgo real solo apareció al abrir la página en
 **Una hipótesis que sobrevive por descarte sigue siendo una hipótesis**, y «las otras dos
 no eran» no es evidencia de la tercera. El pinning se quedó igualmente porque es correcto
 por su cuenta, pero se llegó a él por el camino equivocado.
+
+---
+
+## D38 · Fuente única de los valores publicados: `lib/design-values.ts` — 2026-08-09
+
+**Contexto.** Design System y Brand Kit se venden como el reflejo del código, y no leían
+del código: leían de `es.json` y `en.json`. Cada cifra de contraste vivía en **cuatro**
+sitios —los dos diccionarios, `BRAND.md` y este archivo— y ninguno de los cuatro se puede
+verificar sin volver a medir. El reparto ya había fallado dos veces del mismo modo: el
+sitio publicó **trece días** un 7,01:1 que ningún color podía dar (P37.598), y `BRAND.md`
+pasó **cuatro días** contradiciéndose a sí mismo sobre el hover del sólido (P37.5985), con
+las páginas publicando la cifra correcta y el reglamento la vieja. En ambos casos la causa
+fue la misma y no fue de criterio: **acordarse de propagar no es una solución, es la
+ausencia de una.**
+
+**Decisión — el reparto en tres, que es lo que hay que recordar:**
+
+| Fuente | Qué manda | Dónde |
+|---|---|---|
+| **Ejecutable** | El valor que el navegador pinta | `globals.css` + la capa de componentes (`action` · `chrome` · `badge` · `heading` · `layout`) |
+| **Publicada** | Lo que las páginas afirman sobre ella | **`lib/design-values.ts`** |
+| **Del porqué** | Por qué el valor es ese | `BRAND.md` — **nunca** el valor |
+
+El diccionario, a partir de aquí, **solo lleva copy**.
+
+**La línea de corte es literal, y por eso es aplicable sin criterio:** sale del diccionario
+lo que no tiene texto que traducir. Si una entrada de `es.json` y su gemela de `en.json`
+son carácter por carácter la misma, no es copy — es un valor con dos copias. Eso se llevó
+al módulo los cinco tokens de layout, los breakpoints, la escala de espaciado, el censo de
+pares medidos y los campos técnicos de la rejilla de color del Brand Kit (`token`, `hex`,
+`sample`, `swap`). Se quedan los nombres, las notas, los rótulos de columna y la prosa.
+
+**Tres cosas dejan de escribirse a mano, y las tres importan por el mismo motivo:**
+
+- **El separador decimal.** Era, literalmente, la razón por la que las cifras vivían en el
+  diccionario: coma en español, punto en inglés. Ahora la cifra es un `number` y el
+  separador lo pone `Intl.NumberFormat` en el render. **La precisión va con el dato, no
+  con el formateador**: «7,10» dice que se midió a la centésima y salió cero, y «10,5» que
+  se midió a la décima; dejar que `Intl` recorte el cero pierde información y rellenarlo
+  inventa un decimal que nadie midió.
+- **El nivel WCAG.** `AAA`/`AA` es una función del número y del tamaño de texto —la misma
+  para todos los pares—, así que se deriva. Tenerlo escrito al lado del número solo abre la
+  puerta a que un día no coincidan. Efecto visible: la fila de `brand-purple-accent`, que
+  llevaba la celda de nivel **vacía**, ahora publica `AA-large` en los dos temas.
+- **Las cifras que la prosa cita para argumentar**, vía `{par.tema}` en el copy. Con una
+  excepción deliberada: las cifras **históricas** («se quedaba en 6,44:1») se quedan
+  escritas, porque describen un estado que ya no existe y por tanto no pueden
+  desincronizarse de nada. Son parte de la frase, no un dato.
+
+**Lo que el refactor destapó, que es el argumento entero en una línea:** el Brand Kit
+publicaba **13,8:1** para exactamente el mismo par que la tabla del Design System publicaba
+como **13,79:1**, en la misma web, a dos secciones de distancia. Ninguna de las dos estaba
+mal medida; simplemente eran dos copias, y dos copias divergen. Es el mismo defecto de
+forma que D37 registra para el `qlty.toml` no versionado y que `BRAND.md` §Iconos propios
+registra para la regla cuyo disparador miraba al fichero equivocado: **no falla el
+criterio, falla que nada lo comprueba donde la cosa ocurre.**
+
+**Método de verificación del propio refactor**, que conviene reusar en el siguiente de este
+tipo: se levantó el sitio construido y se compararon las **19 cifras de la tabla y los
+nueve pies de muestra** en ES y EN contra lo publicado antes. Todo tenía que salir carácter
+por carácter igual salvo las correcciones buscadas. Un diff de la página servida prueba
+más que leer el diff del código —es la misma idea que el gate de P37.69.

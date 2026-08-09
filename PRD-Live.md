@@ -63,9 +63,14 @@ V1 lanzada. En vivo:
 10. **Footer** — Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn.
 
 Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas. El **Design System**
-documenta el sistema en doce secciones; desde el 2026-08-04 publica **«Botones y acciones»**
-y desde el 2026-08-09 **«Etiquetas»**, las dos con las piezas reales del sitio como demo —
-si una variante cambia, la página cambia con ella y no puede mentir.
+documenta el sistema en trece secciones; desde el 2026-08-04 publica **«Botones y acciones»**
+y desde el 2026-08-09 **«Etiquetas»** y **«Cabeceras»**, las tres con las piezas reales del
+sitio como demo — si una variante cambia, la página cambia con ella y no puede mentir. Eso
+dejó de ser una aspiración el 2026-08-09: **las páginas ya no leen sus valores del
+diccionario**, sino de `lib/design-values.ts` (D38), que es la fuente única de lo que el
+sitio publica sobre sí mismo —tokens de layout, breakpoints y el censo de pares de
+contraste medidos—. El diccionario se queda solo con el copy, y el separador decimal y el
+nivel WCAG se derivan en el render en vez de escribirse.
 
 **Las tres superficies de contacto comparten un solo patrón** (franja de la home, cierre
 de Sobre mí y «reportar una barrera» de Accesibilidad): mismo componente, mismos datos y
@@ -116,11 +121,13 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   sobre la superficie de debajo no aparece en ningún inventario de tokens**. Se encuentra
   recorriendo el DOM, no leyendo `globals.css` — y el tercero, además, solo existe mientras
   el cursor está encima. Corregidos a **8,17/9,17**, **10,63/10,02** y **12,47/12,04**; los
-  dos primeros publicados en la tabla del Design System, que ahora lista **diez** pares.
-  Sigue habiendo **0 violaciones de axe**
+  dos primeros publicados en la tabla del Design System, que lista **nueve** pares. El censo
+  completo —los trece medidos, incluidos los que ninguna página publica— vive desde el
+  2026-08-09 en `lib/design-values.ts` (D38), que es de donde leen las páginas: **la cifra
+  publicada y la del reglamento dejan de ser dos copias**. Sigue habiendo **0 violaciones de axe**
   en home, Design System y Accesibilidad, ES y EN, claro y oscuro; **queda una en Brand Kit**
-  —`brand-purple-accent` como texto pequeño sobre `--card` en la escalera del logo, 3,69:1—
-  que es preexistente, ajena a la capa de etiqueta y está tareada aparte.
+  —`brand-purple-accent` como texto pequeño sobre `--card` en la escalera del logo— que es
+  preexistente, ajena a la capa de etiqueta y está tareada aparte.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.
