@@ -89,7 +89,11 @@ export function RelatedPages({
               <a key={key} href={`${base}${path}`} className={LINK_CARD}>
                 <span className="text-foreground flex items-center justify-between gap-2 text-[1rem] font-semibold">
                   {page.name}
-                  <span className="text-muted-foreground transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5">
+                  {/* El mismo empujón que la variante `solid` da a su icono, y con
+                      el mismo escape: era el ÚNICO transform animado del sitio sin
+                      `motion-reduce` (P37.68). El gesto estaba copiado; la excepción
+                      de movimiento, no. */}
+                  <span className="text-muted-foreground transition-transform group-hover:translate-x-0.5 group-focus-visible:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover:translate-x-0 motion-reduce:group-focus-visible:translate-x-0">
                     <ArrowRight className="size-[18px]" />
                   </span>
                 </span>
