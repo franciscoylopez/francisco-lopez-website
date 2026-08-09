@@ -1141,6 +1141,38 @@ Eso hace falsa, por tercera vez, la frase «todos los pares del sistema están e
 
 **Estado al cerrar.** `v1.5.0` en producción, verificada sirviendo las secciones nuevas y las cifras corregidas. La etapa *Optimización* sigue abierta. **Ola 3 definida**: P37.69 (extraer subcomponentes de los showcase, con su gate de diff de HTML) más los tres hallazgos del `design-review` —el atenuado sobre `--card` (Must), la capa de tabla y los dos hex fuera del guardián—, con estimación de un día.
 
+## 38. La ola 3, primera mitad: el atenuado se hereda y las tablas dejan de escribirse a mano (2026-08-09)
+
+Tercera y última ola del bloque de diseño, en `refactor/ola-3`. De sus cuatro tareas se cierran las dos primeras; quedan P37.659 y P37.69, y entra una quinta (ver el cierre).
+
+**P37.6565 — el atenuado lo resuelve la superficie.** El incumplimiento que importaba de la ola anterior: `--muted-foreground` sobre `--card` daba **6,40 en oscuro** en las seis páginas. La regla que lo arregla ya existía —D30, del 2026-08-03— y ya estaba resuelta **dos veces por separado**: `--contact-dim` para la franja de contacto y un `color-mix` a mano dentro de la etiqueta neutra. Ninguna de las dos cubría `--card`.
+
+Lo que cambia no es la regla sino **quién la aplica**: `text-muted-foreground` pasa a resolver al atenuado del fondo donde cae, porque cada superficie redefine `--surface-dim` (D39). **Cero call sites tocados** — los 141 usos heredan el arreglo, y una tarjeta nueva nace bien sin pedirlo. Es la forma concreta del objetivo declarado del bloque: que la accesibilidad se herede en vez de volver a medirse.
+
+Medido en el DOM con el metro validado contra sus anclajes (13,79 / 15,32 exactos), seis páginas × dos temas: `background` 7,10/7,12 (sin cambio, es su fondo de calibración), **`card` 9,14/10,32** (era 7,53/**6,40**), `muted` 8,17/9,17 (el mismo píxel que ya publicaba la etiqueta neutra) y fondo invertido 10,32/9,89 (era 5,92/**4,33**, por debajo de AA — un par que ninguna auditoría había mirado).
+
+**Lo que costó encontrar, y es lo reutilizable:** una regla enganchada a la **clase** no ve las superficies que un elemento se pinta a sí mismo. Cuatro velos translúcidos escritos a mano —el chip numerado de «Cómo trabajo», la fila cebra de tipografía, la sección del esqueleto y el panel de tokens invertido— eran esa misma superficie sin llevar su utilidad. De ahí `data-surface`. Es el tercer caso del mismo error de disparador, después del inventario de iconos y del censo de pares.
+
+Tres cosas se retiran por consumir la fuente única: `--contact-dim`/`.contact-dim`, el `color-mix` propio de la etiqueta neutra y **el eje `tone` de `eyebrowVariants`** —`muted` y `band` pasaron a pintar igual—. La sección del Design System que documentaba ese eje enseña ahora el mecanismo que lo sustituye: el mismo rótulo, sin prop, sobre dos fondos distintos.
+
+**P37.658 — capa de tabla.** Sexta capa del sistema (D40) y la última con la forma que tuvieron el botón, el chrome, la etiqueta y la cabecera. La tarea exigía responder antes la pregunta de D36 —¿cebra y filete significan cosas distintas?—, y la respuesta tardó **tres intentos**, que es lo interesante del episodio:
+
+1. La hipótesis de partida («la cebra ayuda cuando hay muchas columnas») **no sobrevivió al inventario**: la «Tabla de uso» tiene cinco columnas y no la lleva.
+2. Se buscó un eje mejor y se encontró uno bueno —**la forma de la fila**: un renglón de celdas frente a un bloque que se envuelve—, bajo el cual la cebra se quedaba y se le daba también a la tabla de Cabeceras.
+3. **Francisco la miró en pantalla y no le cuadró.** Al medirla, el velo daba un salto de **ΔL\* 1,02 en claro** contra los 3,89 de la pastilla de hover, que es el escalón que el propio sitio usa como referencia de «esto se ve». No agrupaba filas: ponía un tinte bajo el umbral. Se borró de las dos.
+
+> **La lección: un argumento de diseño bien construido sigue siendo una hipótesis hasta que se mide.** El de la forma de la fila era impecable en su razonamiento y falso en su premisa — daba por hecho que la banda se veía.
+
+Y quitarla destapó dos cosas más, ninguna detectada por herramienta. La tabla de tipografía era **la única de las seis apoyada en el fondo de la página**: su contenedor era `PANEL` copiado a mano sin el `bg-card`, y el velo de las filas pares **fingía la superficie que faltaba**. Y apareció una **sexta tabla** que el inventario no contó —la de la política de cookies, con una cuarta definición de cabecera—: el inventario se hizo mirando el Design System y el Brand Kit, que son las páginas que documentan el sistema, y la que faltaba estaba en la que nadie asocia con diseño. Al migrarla se vio además que la capa recién escrita **la dejaba peor que como estaba** (su padding lateral de `--page-x` se comía un cuarto del ancho dentro de una columna de lectura), y eso solo se detectó comparándola con producción.
+
+Las tres tablas de datos pasan a marcado real —`caption`, `th scope="col"`, `th scope="row"`, `colgroup`—, que no es cosmética: sin celdas atadas a su columna, la tabla de contraste se oye como una ristra de cifras sin saber cuál es el tema claro. **axe no lo marca**, porque un div no es una tabla rota: simplemente no es una tabla. Publicado como sección **(12) «Tablas»** del Design System; Accesibilidad pasa a (13) y Esqueleto a (14).
+
+**El medidor falló dos veces antes que la página, y las dos se arreglaron.** Primero daba **1,09:1** al titular sobre la foto de Sobre mí —su peor hallazgo, y falso: comparaba el texto con el fondo de la página en vez de con la foto—; esos pares van ahora a `sinMedir`, separados pero no escondidos, con una comprobación **geométrica** (el primer intento miraba `background-image` en la cascada y fallaba en las dos direcciones). Y después resultó que **medía mientras la transición de tema aún corría**: llamarlo dos veces conmutando el tema —el uso que el propio archivo documenta— inventaba cuatro pares de 1,06 · 1,11 · 1,42 · 2,05 con la página perfecta, porque `.link-content` tarda 380ms y cualquier espera «prudente» de 400ms cae dentro. Ahora congela transiciones y animaciones antes de medir: no se espera más, se quita lo que había que esperar. Validado disparándolo contra el caso original.
+
+**Estado al cerrar la sesión.** Cuatro commits en `refactor/ola-3`, sin mergear. Censo del DOM sin ningún par bajo AAA en home, Sobre mí, Design System, Accesibilidad y Cookies, en claro y oscuro.
+
+**La ola 3 crece a tres tareas pendientes.** Al re-medir el Brand Kit se vio que **P37.657 se quedaba corta**: la abrió un solo par (`brand-purple-accent` a 3,69) y en la escalera del logo hay **cuatro** bajo AAA, incluidos **dos rótulos cian a 5,21 y 6,57** que la salvedad publicada no cubre. Francisco decidió (2026-08-09) **meterla en esta ola y arreglar el fondo en vez de matizar el texto** en los cuatro sitios donde el sitio afirma «AAA sin excepciones». Es la misma decisión que se tomó con el atenuado sobre `--card` — y aquella se cumplió: subió al día siguiente. **Caduca igual**: si la ola se alarga, hay que matizar. Orden restante: P37.657 → P37.659 → P37.69.
+
 ---
 
 ## Fuentes

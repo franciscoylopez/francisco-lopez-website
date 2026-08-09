@@ -9,9 +9,10 @@ y con un sistema de marca propio.
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`)
-- **Tailwind CSS v4** · **lucide-react** · capa de componentes propia
-  (`components/ui/action.tsx` + `layout.ts`), con **shadcn/ui** configurado
-  (estilo `base-nova`) para los widgets con estado que vengan — ver `DECISIONS.md` D6
+- **Tailwind CSS v4** · **lucide-react** · capa de componentes propia en seis piezas
+  (`action` · `chrome` · `badge` · `heading` · `table` · `layout`), con **shadcn/ui**
+  configurado (estilo `base-nova`) para los widgets con estado que vengan — ver
+  `DECISIONS.md` D6 y D36
 - **next-themes** (claro/oscuro, `system` por defecto)
 - Desplegado en **Vercel** (`main` = producción)
 
@@ -76,7 +77,7 @@ app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i1
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
 .github/workflows/     CI (GitHub Actions): format + typecheck + lint + paleta + build en cada PR
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
-components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36
+components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), table.tsx (DataTable/TR/TD para datos, SPECIMEN_ROW para especímenes), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36/D40
 components/site/        Piezas que SÍ saben de este sitio: bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
 lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados, design-values (fuente única de lo que el sitio publica sobre sí mismo: tokens, breakpoints y contraste medido — D38) y utils

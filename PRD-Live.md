@@ -64,9 +64,10 @@ V1 lanzada. En vivo:
 10. **Footer** — Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn.
 
 Páginas fuera de la home llevan breadcrumb y enlaces entre hermanas. El **Design System**
-documenta el sistema en trece secciones; desde el 2026-08-04 publica **«Botones y acciones»**
-y desde el 2026-08-09 **«Etiquetas»** y **«Cabeceras»**, las tres con las piezas reales del
-sitio como demo — si una variante cambia, la página cambia con ella y no puede mentir. Eso
+documenta el sistema en catorce secciones; desde el 2026-08-04 publica **«Botones y acciones»**
+y desde el 2026-08-09 **«Etiquetas»**, **«Cabeceras»** y **«Tablas»**, las cuatro con las
+piezas reales del sitio como demo — si una variante cambia, la página cambia con ella y no
+puede mentir. Eso
 dejó de ser una aspiración el 2026-08-09: **las páginas ya no leen sus valores del
 diccionario**, sino de `lib/design-values.ts` (D38), que es la fuente única de lo que el
 sitio publica sobre sí mismo —tokens de layout, breakpoints y el censo de pares de
@@ -86,12 +87,15 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   tipado, cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 - **Marca**: regla de dos capas (cian = único color de acción; morado decorativo con
   cuentagotas), tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
-- **Capa de componentes — cinco capas**: el control **con caja** —botón, chip, toggle,
+- **Capa de componentes — seis capas**: el control **con caja** —botón, chip, toggle,
   pestaña, control de icono— sale de `components/ui/action.tsx`; el **enlace de la
   carpintería de navegación** (nav, menú móvil, breadcrumb, footer, canales de contacto) de
   `components/ui/chrome.tsx`; el **rótulo que no se pulsa** (la pastilla de «Exit», «AAA»,
   «13,79:1») de `components/ui/badge.tsx`; el par **eyebrow + titular** de
-  `components/ui/heading.tsx`; y las cajas y ritmos comunes de `components/ui/layout.ts`.
+  `components/ui/heading.tsx`; la **rejilla de filas y celdas** de `components/ui/table.tsx`
+  —marcado de tabla real cuando son datos, para que un lector de pantalla ate cada cifra a su
+  columna; divs cuando son especímenes—; y las cajas y ritmos comunes de
+  `components/ui/layout.ts`.
   Cuál toca se decide con dos preguntas —**¿se pulsa?** y, si sí, **¿tiene caja propia?**—,
   no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
   tampoco. **Ninguno se escribe con clases sueltas**: si un caso no
@@ -103,7 +107,15 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   no se distinga de uno de la librería. Los **widgets con estado, foco atrapado o portal**
   (diálogo, popover, tabs) se traen de shadcn en vez de escribirse —misma forma que la regla
   de iconos—, pero **hacia delante**: los que hoy están a mano funcionan, tienen 0 violaciones
-  de axe y no se reescriben. Detalle en `BRAND.md` y `DECISIONS.md` D6/D35/D36.
+  de axe y no se reescriben. Detalle en `BRAND.md` y `DECISIONS.md` D6/D35/D36/D40.
+- **El atenuado lo resuelve la superficie, no el punto de uso** (2026-08-09, D39). La
+  utilidad `text-muted-foreground` dejó de significar «este gris» y pasa a significar «el
+  atenuado del fondo donde caiga este texto»: cada superficie redefine `--surface-dim`
+  mezclando el texto un 85% hacia su propio fondo. Es la generalización de D30, que existía
+  desde el 2026-08-03 y **nunca se había aplicado a `--card`** —la superficie no-`background`
+  más común del sitio—, donde el par daba 6,40:1 en oscuro. Los 141 usos de la utilidad
+  heredaron el arreglo sin tocar un solo call site, y una tarjeta nueva nace bien sin pedirlo.
+  Es la forma concreta del objetivo del bloque: **que la accesibilidad se herede**.
 - **No funcionales**: PageSpeed/Lighthouse **>90 desktop y móvil**; accesibilidad **AA
   de suelo, AAA objetivo**; **SEO + JSON-LD por página** como criterio de cierre.
   Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
@@ -129,17 +141,28 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   páginas: **la cifra publicada y la del reglamento dejan de ser dos copias**. Sigue habiendo
   **0 violaciones de axe** en home, Design System y Accesibilidad, ES y EN, claro y oscuro.
 
-  **Dos incumplimientos abiertos, los dos preexistentes y tareados** (estado a 2026-08-09):
-  `brand-purple-accent` como texto pequeño en la escalera del logo del Brand Kit —la única
-  violación de axe que queda— y, **el que importa**, `--muted-foreground` sobre `--card`, que
-  da **6,40 en oscuro** frente a los 7,12 sobre `--background` que publica la tabla. Afecta a
-  todo texto atenuado dentro de una tarjeta, en las seis páginas, porque **D30 nunca se
-  aplicó a `--card`** — la superficie no-background más común del sitio. Pasa AA con holgura,
-  así que no es una barrera de uso; lo que deja de ser cierto es el «sin excepciones» de más
-  arriba. **Se deja publicado a propósito**: el arreglo va en la ola 3, con estimación de un
-  día, y matizar la frase en cuatro sitios para desmatizarla mañana es trabajo de ida y
-  vuelta. **La decisión caduca si la ola 3 se alarga** — es la situación de P37.598, que pasó
-  trece días publicando una cifra imposible. Detalle en `PRD-Historical.md` §37.
+  **RESUELTO el 2026-08-09 (P37.6565): el atenuado sobre `--card`.** Era el incumplimiento
+  que importaba —6,40 en oscuro, en todo texto atenuado dentro de una tarjeta y en las seis
+  páginas— y se cierra generalizando D30 a un token de superficie (D39, arriba). El censo
+  del DOM, con el metro validado contra sus anclajes, no deja **ningún par bajo AAA** en
+  home, Sobre mí, Design System, Accesibilidad y Cookies, en claro y oscuro. La familia
+  completa del atenuado —7,10/7,12 sobre `background`, **9,14/10,32 sobre `card`**,
+  8,17/9,17 sobre `muted` y 10,32/9,89 sobre fondo invertido— se publica en la tabla del
+  Design System, que pasa a listar **trece** pares. De paso cayó un par que nadie había
+  medido: el rótulo del panel de tokens invertido daba **4,33 en oscuro, por debajo de AA**.
+
+  **Un incumplimiento abierto, preexistente y tareado** (estado a 2026-08-09): los rótulos
+  de la **escalera split→flat del logo, en el Brand Kit**. La tarea (**P37.657**) se abrió
+  por un solo par —`brand-purple-accent` a 3,69, la única violación de axe que queda— pero
+  al re-medir son **cuatro**: 3,49 y 3,70/3,96 en morado, y **5,21 y 6,57 en cian**, que la
+  salvedad publicada («salvo `brand-purple-accent`») no cubre. Ninguno conmuta con el tema,
+  que es parte del problema: son colores de marca fijos sobre una superficie que sí conmuta.
+  **Se deja publicada la frase «sin excepciones» a propósito**: Francisco decidió el
+  2026-08-09 meter P37.657 en la ola 3 y arreglar el fondo en vez de matizar el texto en
+  cuatro sitios para desmatizarlo después. Es la misma decisión que se tomó con el atenuado
+  sobre `--card`, y aquella se cumplió: subió al día siguiente. **La decisión caduca si la
+  ola 3 se alarga** — es la situación de P37.598, que pasó trece días publicando una cifra
+  imposible. Detalle en `PRD-Historical.md` §37.
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.

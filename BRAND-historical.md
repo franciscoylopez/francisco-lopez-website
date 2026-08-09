@@ -239,3 +239,78 @@ que lucide sí trae** (`check` —duplicado byte a byte en dos páginas—, `dow
 `menu`, `arrow-right`, `x`), y dos de ellos eran copias de los iconos reales del nav usadas en
 la demo que documenta ese mismo patrón: la demo podía divergir del nav sin que nadie se
 enterara.
+
+## El atenuado sensible a la superficie
+
+**2026-08-09 (P37.6565) — por qué la regla pasó del punto de uso al token.** D30 se escribió
+el 2026-08-03 y era correcta: un atenuado calibrado contra `--background` no se reusa sobre
+otra superficie. Lo que falló fue **quién tenía que aplicarla**. La regla vivía en una clase,
+`.contact-dim`, que había que escribir en el punto de uso — así que protegía exactamente a los
+sitios donde alguien se acordó. El sitio tiene **141 usos de `text-muted-foreground`**, y la
+superficie más común que no es `--background` —`--card`— nunca la recibió: el par daba **6,40:1
+en oscuro**, por debajo de AAA, en las seis páginas.
+
+La forma del fallo es la de siempre en este documento: *una regla que hay que recordar es una
+regla que se incumple*. La corrección no fue medir mejor ni escribir la regla más claro, fue
+**quitarla del punto de uso**: `text-muted-foreground` compila a `var(--surface-dim)` y cada
+superficie redefine ese token. Un `<div class="bg-card">` nuevo trae el atenuado correcto sin
+que nadie lo pida.
+
+**Lo que se probó y se descartó: un porcentaje por superficie.** La alternativa era apuntar a
+*paridad de ratio* —que el atenuado diera ~7,5 sobre cualquier fondo, para que pesara igual en
+todas partes— y salía: 20% de `--foreground` sobre `--card`, 35% sobre `--muted`. Se descartó
+por dos motivos. Uno, son **cuatro constantes** (superficie × tema) que hay que re-derivar cada
+vez que se mueva un token. Dos, y el que decidió: el 85% hacia el propio fondo **ya era la
+fórmula publicada** por la franja de contacto y por la etiqueta neutra, así que la paridad de
+ratio habría metido una segunda regla que se parece a la primera — justo lo que produce el
+drift que este documento persigue. El coste aceptado, con los ojos abiertos, es que el
+atenuado dentro de una tarjeta pesa más que fuera (9,14 frente a 7,10 en claro).
+
+**El fallo de disparador, otra vez.** La regla enganchada a la **clase** no ve las superficies
+que un elemento se pinta a sí mismo con un `color-mix` inline. Cuatro velos escritos a mano
+—el chip numerado de «Cómo trabajo», la fila cebra de tipografía, la sección del esqueleto y el
+panel de tokens invertido— eran esa misma superficie sin llevar su utilidad, y se quedaron
+fuera con 6,62–6,80; el invertido, con **4,33 en oscuro, por debajo de AA**. De ahí
+`data-surface`. Es el mismo error que ya se había cobrado el inventario de iconos (se leía
+`icons.tsx` teniendo el sitio siete glifos repartidos) y el censo de pares (se leía
+`globals.css`, donde los pares compuestos no existen): **la condición miraba a un sitio y la
+cosa ocurría en otro**.
+
+## Tablas
+
+**2026-08-09 (P37.658) — la cebra que se borró al medirla, y es la mejor lección de la tanda.**
+La tarea preguntaba lo que manda D36: ¿la cebra y el filete significan cosas distintas, o es
+una tabla haciendo algo que las otras no? La hipótesis de partida —«la cebra ayuda cuando la
+fila es alta y hay muchas columnas»— **no sobrevivió al inventario**: la «Tabla de uso» del
+Brand Kit tiene cinco columnas y no la lleva.
+
+Así que se buscó un eje mejor, y se encontró uno bueno: **la forma de la fila**. Una fila de
+una línea de celdas se separa bien con un filete; una fila que es un bloque que se envuelve
+—espécimen grande a la izquierda, rejilla de metadatos a la derecha— no, porque entre dos filas
+altas hay más distancia que entre las dos mitades de una misma fila. Bajo esa lectura la cebra
+se quedaba, y se le dio también a la tabla de Cabeceras, que tiene la misma forma.
+
+**Y entonces Francisco la miró en pantalla y no le cuadró, así que se midió.** El velo daba un
+salto de **ΔL\* 1,02 en claro** y 2,02 en oscuro, contra los **3,89 / 9,04** de la pastilla de
+hover, que es el escalón que este documento usa como referencia de «esto se ve»
+(§Accesibilidad, punto 4 del método). La banda **no estaba agrupando filas** —su única
+justificación—: ponía un tinte por debajo del umbral, y por eso se leía como que algo no
+cuadraba en vez de como estructura. Se borró de las dos.
+
+> **La lección: un argumento de diseño bien construido sigue siendo una hipótesis hasta que se
+> mide.** El de la forma de la fila era impecable en su razonamiento y falso en su premisa —daba
+> por hecho que la banda se veía—. Ninguna de las dos hipótesis, ni la de las columnas ni la de
+> la forma, se cayó por discutirla mejor: las dos se cayeron con un número.
+
+**Lo que la cebra estaba tapando.** Al quitarla se vio que la tabla de tipografía era la única
+de las seis apoyada en el fondo de la página: su contenedor era `PANEL` copiado a mano y sin el
+`bg-card`. El velo de las filas pares **fingía la superficie que faltaba**, así que el drift no
+lo introdujo quitar la cebra — llevaba ahí desde siempre, escondido detrás de ella.
+
+**Y una sexta tabla que el inventario no contó.** Se hizo mirando el Design System y el Brand
+Kit, porque son las páginas que documentan el sistema. La que faltaba —la de la política de
+cookies, con una **cuarta** definición de cabecera y sus `Th`/`Td` locales— estaba en la página
+que nadie asocia con diseño. Al migrarla apareció además un fallo de la capa recién escrita: su
+padding lateral usaba `--page-x` (40px), heredado de las tablas a ancho de página, y dentro de
+una columna de lectura de 42rem esos 80px se comían casi un cuarto de la tabla. **La capa nueva
+había dejado esa tabla peor que como estaba**, y solo se vio comparándola con producción.
