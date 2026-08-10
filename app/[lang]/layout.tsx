@@ -10,7 +10,8 @@ import { ConsentBanner } from "@/components/site/consent-banner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { paletteHex } from "@/lib/design-values";
 import { locales, isLocale } from "@/lib/i18n/config";
-import { GTM_ID, SITE_NAME, SITE_URL } from "@/lib/site";
+import { pageMetadata } from "@/lib/page-meta";
+import { GTM_ID, SITE_URL } from "@/lib/site";
 import { getDictionary } from "./dictionaries";
 
 const inter = Inter({
@@ -58,43 +59,14 @@ export async function generateMetadata({
   if (!isLocale(lang)) notFound();
 
   const dict = await getDictionary(lang);
-  const canonical = lang === "es" ? "/" : "/en";
 
+  // La metadata de la home sale del MISMO helper que las cinco internas (D45):
+  // sin slug —la home es la raíz del locale— y con la tarjeta OG `home`. Lo que
+  // el helper no cubre y sí es del layout: `metadataBase` (contra el que resuelven
+  // todas las URLs relativas de abajo) e `icons`, que se heredan en todo el sitio.
   return {
+    ...pageMetadata({ lang, meta: dict.meta, ogCard: "home" }),
     metadataBase: new URL(SITE_URL),
-    title: dict.meta.title,
-    description: dict.meta.description,
-    alternates: {
-      canonical,
-      // hreflang emparejando / <-> /en (D2), con x-default al español.
-      languages: {
-        es: "/",
-        en: "/en",
-        "x-default": "/",
-      },
-    },
-    openGraph: {
-      title: dict.meta.title,
-      description: dict.meta.description,
-      url: canonical,
-      siteName: SITE_NAME,
-      locale: lang === "es" ? "es_ES" : "en_US",
-      type: "website",
-      images: [
-        {
-          url: `/api/og?card=home&lang=${lang}`,
-          width: 1200,
-          height: 630,
-          alt: dict.meta.title,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: dict.meta.title,
-      description: dict.meta.description,
-      images: [`/api/og?card=home&lang=${lang}`],
-    },
     icons: {
       icon: [
         {

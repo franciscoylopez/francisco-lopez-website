@@ -12,7 +12,7 @@
     "cv": "tsx scripts/cv/generate.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "gate:showcase": "tsx scripts/showcase-html-diff.ts"
+    "gate:html": "tsx scripts/page-html-diff.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
