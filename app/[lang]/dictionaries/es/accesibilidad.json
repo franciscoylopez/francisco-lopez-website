@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "title": "Accesibilidad — Francisco López",
+    "description": "Cómo está construida esta web para ser usable por todas las personas: WCAG 2.2 AA cumplido, sistema de color en AAA y las medidas concretas que lo respaldan, verificadas con axe y Lighthouse."
+  },
+  "crumb": "Accesibilidad",
+  "hero": {
+    "kicker": "Compromiso",
+    "title": "Accesibilidad",
+    "lead": "Aquí la accesibilidad es un criterio de cierre, no un extra: cualquier persona —con ratón, teclado o lector de pantalla, con o sin visión del color— puede leer y navegar esta web sin barreras. Y no es una promesa: está medido.",
+    "statConformidad": "Conformidad WCAG 2.2",
+    "statColor": "Sistema de color",
+    "statAxe": "Violaciones axe",
+    "statLighthouse": "Lighthouse a11y"
+  },
+  "conformance": {
+    "num": "01 — Conformidad",
+    "heading": "WCAG 2.2 AA cumplido, con el contraste medido",
+    "intro": "El contraste está medido, no estimado. El texto principal alcanza {bodyText.light} en claro y {bodyText.dark} en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
+    "rows": [
+      {
+        "label": "Estándar",
+        "value": "WCAG 2.2, niveles A y AA."
+      },
+      {
+        "label": "Estado",
+        "value": "AA cumplido en todo el sitio."
+      },
+      {
+        "label": "Sistema de color",
+        "value": "AAA en claro y oscuro, con el contraste medido."
+      }
+    ]
+  },
+  "measures": {
+    "num": "02 — Qué se ha hecho",
+    "heading": "Las mismas comprobaciones que cierran cada página",
+    "intro": "En lenguaje llano y con el criterio WCAG que cubre cada una.",
+    "items": [
+      {
+        "title": "Contraste medido en ambos temas",
+        "body": "Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco.",
+        "wcag": "WCAG 1.4.3 · 1.4.11"
+      },
+      {
+        "title": "Foco siempre visible",
+        "body": "Cada elemento interactivo muestra un anillo de foco de 2 px con separación; nunca se elimina el indicador sin sustituto.",
+        "wcag": "WCAG 2.4.7"
+      },
+      {
+        "title": "Áreas de pulsación amplias",
+        "body": "Los objetivos táctiles miden al menos 44×44 px, también en controles pequeños como la miga de pan o el cambio de tema.",
+        "wcag": "WCAG 2.5.8 (superado)"
+      },
+      {
+        "title": "Estructura y orden lógicos",
+        "body": "Un solo título principal por página y una jerarquía sin saltos; el orden de lectura coincide con el del código, para lectores de pantalla y navegación por teclado.",
+        "wcag": "WCAG 1.3.1 · 2.4.6"
+      },
+      {
+        "title": "Ubicación clara",
+        "body": "Las páginas internas llevan una miga de pan (breadcrumb) que indica dónde estás dentro del sitio.",
+        "wcag": "WCAG 2.4.8"
+      },
+      {
+        "title": "Nunca solo el color",
+        "body": "Ningún estado o categoría se distingue únicamente por color: siempre hay además texto o forma.",
+        "wcag": "WCAG 1.4.1"
+      },
+      {
+        "title": "Respeto al movimiento reducido",
+        "body": "Si tu sistema pide menos animación, las transiciones y los reveals se desactivan.",
+        "wcag": "WCAG 2.3.3"
+      },
+      {
+        "title": "Alternativas textuales",
+        "body": "Las imágenes que informan llevan texto alternativo; lo decorativo se oculta a la tecnología de asistencia.",
+        "wcag": "WCAG 1.1.1"
+      }
+    ]
+  },
+  "verify": {
+    "num": "03 — Verificación",
+    "heading": "No es una autoevaluación de palabra",
+    "intro": "Cada página se comprueba, en modo claro y oscuro, con herramientas reales.",
+    "items": [
+      {
+        "tool": "axe-core",
+        "result": "Motor de reglas WCAG. 0 violaciones en la home y en las páginas internas."
+      },
+      {
+        "tool": "Lighthouse",
+        "result": "Auditoría de accesibilidad. Puntuación 100 en producción."
+      },
+      {
+        "tool": "Contraste medido",
+        "result": "Color a color, con cifra, no «a ojo»."
+      },
+      {
+        "tool": "Teclado y foco",
+        "result": "Revisión manual de la navegación por teclado y del orden de foco."
+      }
+    ]
+  },
+  "limits": {
+    "num": "04 — Límites",
+    "heading": "Ser honesto también es accesibilidad",
+    "intro": "Lo que todavía no cumple, y qué falta para que cumpla.",
+    "items": [
+      {
+        "title": "Contacto directo",
+        "body": "El contacto es por email y teléfono (aún no hay formulario); ambos son enlaces directos y accesibles."
+      },
+      {
+        "title": "CV en PDF",
+        "body": "Es texto seleccionable y etiquetado, pero un PDF nunca iguala a una página web en accesibilidad. Si lo necesitas en otro formato, escríbeme."
+      },
+      {
+        "title": "Mejora continua",
+        "body": "El sistema de color ya está en AAA y se revisa en cada cambio para no perder ese nivel."
+      }
+    ]
+  },
+  "report": {
+    "num": "05 — Contacto",
+    "heading": "Si algo te bloquea, quiero saberlo",
+    "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
+    "emailCta": "Escríbeme",
+    "updated": "Última revisión de accesibilidad: 2 de agosto de 2026."
+  }
+}

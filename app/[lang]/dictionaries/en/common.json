@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "title": "Francisco López — Senior Product Manager",
+    "description": "Senior Product Manager with 10+ years in B2B and B2C SaaS, and one exit (TheTool → AppRadar). From discovery to data: I research, prototype, build and measure."
+  },
+  "nav": {
+    "skipToContent": "Skip to content",
+    "homeAria": "Home — Francisco López",
+    "downloadCv": "Download CV",
+    "sobreMi": "About me",
+    "menu": "Menu",
+    "toggleTheme": "Toggle theme",
+    "switchLanguage": "View in Spanish",
+    "switchLanguageShort": "ES"
+  },
+  "footer": {
+    "copyright": "© 2026 Francisco López",
+    "brandKit": "Brand Kit",
+    "designSystem": "Design System",
+    "accesibilidad": "Accessibility",
+    "cookies": "Cookies",
+    "linkedinAria": "LinkedIn"
+  },
+  "breadcrumb": {
+    "routeLabel": "Breadcrumb",
+    "home": "Home"
+  },
+  "related": {
+    "eyebrow": "From the same system",
+    "comingSoon": "Coming soon",
+    "pages": {
+      "brandKit": {
+        "name": "Brand Kit",
+        "desc": "The identity: the logo and its geometry, the two-layer palette, the typography and the rules that govern its use."
+      },
+      "designSystem": {
+        "name": "Design System",
+        "desc": "The skeleton: grid, layout tokens, vertical rhythm, typography, motion and measured accessibility."
+      },
+      "accesibilidad": {
+        "name": "Accessibility",
+        "desc": "The public statement: the conformance level the site meets and how to report a problem."
+      }
+    }
+  },
+  "consent": {
+    "region": "Cookie consent",
+    "title": "Your privacy",
+    "description": "I use analytics cookies to understand how the site is used and improve it. You can accept all, reject them, or choose what you allow.",
+    "policyLink": "Read the cookie policy",
+    "acceptAll": "Accept all",
+    "rejectAll": "Reject all",
+    "preferences": "Preferences",
+    "savePreferences": "Save preferences",
+    "close": "Close",
+    "prefs": {
+      "title": "Cookie preferences",
+      "intro": "Choose which categories you allow. Necessary cookies can't be turned off."
+    },
+    "categories": {
+      "necessary": {
+        "title": "Necessary",
+        "description": "Essential for the site to work. They store no personal data and need no consent.",
+        "badge": "Always on"
+      },
+      "analytics": {
+        "title": "Analytics",
+        "description": "Measure in aggregate how the site is used (page views, clicks) to improve it. Google Analytics."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Allow personalising and measuring campaigns. Not used today; the control stays available in case they're enabled."
+      }
+    }
+  },
+  "contacto": {
+    "eyebrow": "The next step",
+    "title": "Let's talk",
+    "intro": "If product sits at the core of your company and you're building genuinely great experiences for your users —through discovery, applied AI and data—, I think we'd be a good fit. Senior Product Manager with 10+ years in B2B and B2C SaaS, happy working remote or hybrid, based in Spain. Email or call me directly.",
+    "emailCta": "Email me",
+    "phoneLabel": "Phone",
+    "linkedinLabel": "LinkedIn",
+    "cvCta": "Download CV"
+  }
+}

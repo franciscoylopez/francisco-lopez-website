@@ -1,0 +1,241 @@
+{
+  "hero": {
+    "kicker": "Senior Product Manager · UX · SaaS · IA aplicada",
+    "headline": "Del discovery al dato.",
+    "subheadline": "Investigo, prototipo, construyo y mido.",
+    "photoAlt": "Retrato de Francisco López"
+  },
+  "hitos": {
+    "eyebrow": "Momentos clave",
+    "title": "Hitos",
+    "meta": "2019 — 2026 · 5 hitos",
+    "colName": "Nombre",
+    "colImpact": "Impacto",
+    "colYear": "Año",
+    "exitChip": "Exit",
+    "emenduImpact": "Partnership estratégico con Sesame HR.",
+    "indyaLabel1": "Churn mensual",
+    "indyaLabel2": "activación primer mes",
+    "indyaApple": "Seleccionada por Apple App Store Foundations.",
+    "thetoolAcquired": "Adquirida por AppRadar.",
+    "thetoolNomination": "Nominado a Mejor Software ASO de Europa (App Promotion Summit)."
+  },
+  "proceso": {
+    "eyebrow": "Proceso",
+    "title": "Cómo trabajo",
+    "intro": "Un método end-to-end: del problema al dato que confirma que el objetivo se ha cumplido. Seis etapas que se retroalimentan.",
+    "steps": [
+      {
+        "title": "Discovery",
+        "desc": "Entrevistas, datos y contexto de negocio para separar el problema real del síntoma antes de proponer solución."
+      },
+      {
+        "title": "UX",
+        "desc": "Traduzco los hallazgos en arquitectura y flujos: qué ve el usuario, en qué orden y por qué."
+      },
+      {
+        "title": "Prototipado",
+        "desc": "Prototipos navegables para facilitar la comprensión antes de comprometer desarrollo."
+      },
+      {
+        "title": "Desarrollo",
+        "desc": "Definición funcional y coordinación con el equipo técnico, del roadmap al release."
+      },
+      {
+        "title": "Lanzamiento",
+        "desc": "Despliegue selectivo: Standard o feature flags, rollout progresivo y A/B testing para evaluar la consecución del objetivo."
+      },
+      {
+        "title": "Analítica",
+        "desc": "Instrumentación y métricas para medir el impacto real y alimentar el siguiente discovery."
+      }
+    ]
+  },
+  "masAlla": {
+    "eyebrow": "Más allá del PM",
+    "line1a": "Cofundador varias veces. ",
+    "exitWord": "Exit",
+    "line1b": " una vez. De lo que no salió, aprendí lo que ningún framework enseña.",
+    "line2": "Antes de eso, años captando usuarios, antes de medir producto, entendí cómo atraerlos."
+  },
+  "trayectoria": {
+    "eyebrow": "Recorrido",
+    "title": "Trayectoria",
+    "cta": "Descargar CV",
+    "productoLabel": "Producto",
+    "productoIntro": "Diez años liderando producto en SaaS B2B y B2C — de cofundador con exit a Product Manager en startups y scale-ups — con foco constante en discovery, UX y resultados medibles.",
+    "shutappTitle": "Shutapp Projects",
+    "shutappPeriod": "2015 — 2021",
+    "shutappSubtitle": "Proyecto empresarial · dos roles",
+    "previoLabel": "Experiencia previa — Marketing & Growth",
+    "previoIntro": "Esta etapa previa en marketing y growth construye la base analítica, de experimentación y user-first que define mi enfoque como Product Manager.",
+    "producto": [
+      {
+        "period": "Feb 2025 — Actualidad",
+        "role": "Product Manager",
+        "company": "Emendu",
+        "desc": "Lideré la digitalización de Sales & Operaciones y evolucioné el agente IA LISA; miembro del equipo de liderazgo junto a Dirección, Operaciones, Finanzas y Tech."
+      },
+      {
+        "period": "Feb 2024 — Nov 2024",
+        "role": "Cofounder & Product",
+        "company": "KUOTIP",
+        "desc": "Validé el problema de fraude en reviews y diseñé el MVP con verificación por voz e IA; como cofundador, apoyé a la CEO en el fundraising pre-seed."
+      },
+      {
+        "period": "Ene 2022 — Dic 2023",
+        "role": "Product Lead",
+        "company": "INDYA",
+        "desc": "Rediseñé pricing y onboarding para mejorar activación y reducir churn; liderazgo del equipo y optimización de la entrega de valor mediante procesos y agilidad."
+      },
+      {
+        "period": "Oct 2021 — Dic 2021",
+        "role": "Product Manager",
+        "company": "Freepik",
+        "desc": "Investigué y definí funcionalidades para el área de contributors a partir de análisis cualitativo y cuantitativo. Gestión de los OKR del squad."
+      }
+    ],
+    "nested": [
+      {
+        "period": "May 2016 — Oct 2021",
+        "role": "Cofounder & Product",
+        "company": "TheTool",
+        "desc": "Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo de desarrollo (backend, frontend, diseño)."
+      },
+      {
+        "period": "Sep 2015 — Dic 2016",
+        "role": "COO",
+        "company": "PICKASO",
+        "desc": "Profesionalicé estructura y cartera de servicios de la agencia; realicé la investigación de mercado de los futuros competidores de TheTool."
+      }
+    ],
+    "previo": [
+      {
+        "period": "Sep 2013 — Sep 2015",
+        "role": "Digital Marketing Manager",
+        "company": "Ontecnia (Malavida, Lecturalia, BonViveur…)",
+        "desc": "Crecimiento orgánico de 3,2M → 9,4M visitas mensuales; llevé el modelo de negocio de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first."
+      },
+      {
+        "period": "2009 — 2013",
+        "role": "Digital Marketing / Performance",
+        "company": "Havas Media · Increnta · Miss Conversion",
+        "desc": "Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto."
+      }
+    ]
+  },
+  "toolkit": {
+    "eyebrow": "Herramientas",
+    "title": "Toolkit",
+    "intro": "Las herramientas son medios, no fines. Estas son algunas que me han ayudado a hacer mejor mi trabajo y conseguir mis objetivos.",
+    "categories": [
+      {
+        "label": "Usuarios",
+        "tools": [
+          {
+            "name": "Amplitude",
+            "desc": "Defino funnels y cohortes para ver dónde y por qué caen los usuarios."
+          },
+          {
+            "name": "Google Analytics",
+            "desc": "Adquisición y comportamiento agregado en la parte alta del funnel."
+          },
+          {
+            "name": "Microsoft Clarity",
+            "desc": "Heatmaps y grabaciones para ver la fricción real en pantalla."
+          },
+          {
+            "name": "Typeform",
+            "desc": "Encuestas y entrevistas para validar hipótesis antes de construir."
+          }
+        ]
+      },
+      {
+        "label": "Gestión y Documentación",
+        "tools": [
+          {
+            "name": "Jira",
+            "desc": "Organizo roadmap y sprints, con trazabilidad entre discovery y entrega."
+          },
+          {
+            "name": "Notion",
+            "desc": "Mi fuente de verdad para specs, decisiones y documentación viva."
+          },
+          {
+            "name": "Miro",
+            "desc": "Mapeo user journeys y facilito discovery y priorización con el equipo."
+          },
+          {
+            "name": "Mermaid.js",
+            "desc": "Documento flujos como diagramas versionables junto a las specs."
+          }
+        ]
+      },
+      {
+        "label": "Diseño y prototipado",
+        "tools": [
+          {
+            "name": "Claude Design",
+            "desc": "Exploro dirección visual y genero mockups navegables muy pronto."
+          },
+          {
+            "name": "Figma",
+            "desc": "Espacio común con diseño donde nos alineamos antes de construir."
+          },
+          {
+            "name": "v0",
+            "desc": "Genero primeras versiones de UI para iterar rápido sobre ideas reales."
+          }
+        ]
+      },
+      {
+        "label": "Desarrollo",
+        "tools": [
+          {
+            "name": "Claude Code",
+            "desc": "Construyo herramientas, creo prototipos y automatizo tareas."
+          },
+          {
+            "name": "VS Code",
+            "desc": "Mi editor de código, vinculado a Claude Code."
+          },
+          {
+            "name": "Vercel",
+            "desc": "Despliego prototipos y previews para validar en minutos."
+          },
+          {
+            "name": "GitHub",
+            "desc": "Documento el desarrollo para facilitar el análisis técnico."
+          }
+        ]
+      }
+    ]
+  },
+  "formacion": {
+    "eyebrow": "Aprendizaje",
+    "title": "Formación",
+    "intro": "Base en marketing y comunicación, actualizada con formación específica en producto y metodologías ágiles.",
+    "productoLabel": "Producto",
+    "marketingLabel": "Marketing",
+    "producto": [
+      {
+        "title": "Product Management",
+        "institution": "TheHeroCamp · 2021"
+      },
+      {
+        "title": "Scrum & Agile Leadership",
+        "institution": "theUncoding · 2021"
+      }
+    ],
+    "marketing": [
+      {
+        "title": "Máster en Comunicación Digital",
+        "institution": "Olea Europea · 2001"
+      },
+      {
+        "title": "Gestión Comercial y Marketing",
+        "institution": "ESIC · 2000"
+      }
+    ]
+  }
+}

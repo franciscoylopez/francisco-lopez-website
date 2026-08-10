@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 
 import "./globals.css";
 
-import { getDictionary } from "@/app/[lang]/dictionaries";
+import { getCommon } from "@/app/[lang]/dictionaries";
 import { Footer } from "@/components/site/footer";
 import { Nav } from "@/components/site/nav";
 import { SkipLink, MAIN_ID } from "@/components/site/skip-link";
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
 export default async function GlobalNotFound() {
   const header = (await headers()).get("x-locale") ?? "";
   const lang = isLocale(header) ? header : defaultLocale;
-  const dict = await getDictionary(lang);
+  const dict = await getCommon(lang);
   const t = getSystemMessages(lang);
   const homeHref = lang === "es" ? "/" : `/${lang}`;
 

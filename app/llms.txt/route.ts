@@ -2,7 +2,26 @@ import { EMAIL, LINKEDIN_URL, PHONE_TEL } from "@/lib/contact";
 import { cvPath } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 
-import es from "../[lang]/dictionaries/es.json";
+import esCommon from "../[lang]/dictionaries/es/common.json";
+import esHome from "../[lang]/dictionaries/es/home.json";
+import esSobreMi from "../[lang]/dictionaries/es/sobre-mi.json";
+import esBrandKit from "../[lang]/dictionaries/es/brand-kit.json";
+import esDesignSystem from "../[lang]/dictionaries/es/design-system.json";
+import esAccesibilidad from "../[lang]/dictionaries/es/accesibilidad.json";
+import esCookies from "../[lang]/dictionaries/es/cookies.json";
+
+// Este archivo habla de TODAS las páginas, así que es el único sitio que sigue
+// necesitando el diccionario entero (P46). Se recompone aquí, y es barato: la ruta
+// es estática (○), o sea que esto corre en build y una sola vez.
+const es = {
+  ...esCommon,
+  ...esHome,
+  sobreMi: esSobreMi,
+  brandKit: esBrandKit,
+  designSystem: esDesignSystem,
+  accesibilidad: esAccesibilidad,
+  cookies: esCookies,
+};
 
 // /llms.txt — convención emergente (llmstxt.org), no un estándar ratificado.
 // Generado desde el diccionario i18n y lib/contact·lib/site (misma fuente que la

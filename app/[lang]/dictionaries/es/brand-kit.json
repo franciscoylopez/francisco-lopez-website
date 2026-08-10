@@ -1,0 +1,327 @@
+{
+  "meta": {
+    "title": "Brand Kit — Francisco López",
+    "description": "El sistema de identidad de Francisco López: logo y geometría, la paleta de dos capas, tipografía y las reglas que gobiernan su uso. Descargable en claro y oscuro."
+  },
+  "crumb": "Brand Kit",
+  "hero": {
+    "kicker": "Identidad de marca",
+    "title": "Brand Kit",
+    "lead": "El sistema de identidad de Francisco López: el logo y su geometría exacta, la paleta con sus dos capas, la tipografía y las reglas que gobiernan su uso. Todo descargable, en claro y oscuro."
+  },
+  "concepto": {
+    "num": "01 — Concepto",
+    "title": "Una marca de dos capas",
+    "lead": "El símbolo es un anillo, el foco que descansa sobre una base sólida: criterio de producto construido sobre una fundación estable. No es decoración: es la firma del método. Del discovery al dato, dos planos que se separan y vuelven a alinearse en una sola forma limpia.",
+    "plano": {
+      "title": "Plano",
+      "desc": "Una sola capa de tinta. Para UI pequeña, favicon y monocromo."
+    },
+    "split": {
+      "title": "Split",
+      "desc": "Tres trazos apilados sin blend. Solo a ≥48px, donde el color se lee como capa."
+    }
+  },
+  "logotipo": {
+    "num": "02 — Logotipo",
+    "title": "El logo y sus reglas",
+    "lead": "Dos composiciones —símbolo solo y lockup con wordmark— cada una en plano y split. Recortadas exactas a la tinta: la altura que le das es la altura real del símbolo.",
+    "svgShort": "SVG",
+    "cards": {
+      "symSplit": {
+        "name": "Símbolo · Split",
+        "meta": "Inline en el marcado · 382 B · dimensionado por altura.",
+        "svg": "Símbolo split · SVG"
+      },
+      "symPlano": {
+        "name": "Símbolo · Plano",
+        "meta": "Inline en el marcado · 220 B · dimensionado por altura.",
+        "svg": "Símbolo plano · SVG"
+      },
+      "symMonoNegro": {
+        "name": "Símbolo · Mono negro",
+        "meta": "Una tinta pura · 220 B · para fondos claros.",
+        "svg": "Mono negro · SVG"
+      },
+      "symMonoBlanco": {
+        "name": "Símbolo · Mono blanco",
+        "meta": "Una tinta pura · 220 B · para fondos oscuros.",
+        "svg": "Mono blanco · SVG"
+      },
+      "lockSplit": {
+        "name": "Lockup · Split",
+        "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho.",
+        "svg": "Lockup split · SVG"
+      },
+      "lockPlano": {
+        "name": "Lockup · Plano",
+        "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho.",
+        "svg": "Lockup plano · SVG"
+      }
+    },
+    "usage": {
+      "title": "Tabla de uso",
+      "sub": "Todos los tamaños son la altura visible del símbolo.",
+      "cols": {
+        "ctx": "Contexto",
+        "variant": "Variante",
+        "sym": "Símbolo",
+        "word": "Wordmark",
+        "bar": "Barra"
+      },
+      "rows": [
+        {
+          "ctx": "Nav — al cargar",
+          "variant": "Split",
+          "on": true,
+          "sym": "48px",
+          "word": "Sí · ~22px",
+          "bar": "80px"
+        },
+        {
+          "ctx": "Nav — con scroll",
+          "variant": "Flat",
+          "on": false,
+          "sym": "28px",
+          "word": "No",
+          "bar": "64px"
+        },
+        {
+          "ctx": "Footer",
+          "variant": "Flat",
+          "on": false,
+          "sym": "32px",
+          "word": "No",
+          "bar": "—"
+        },
+        {
+          "ctx": "Brand Kit (hero)",
+          "variant": "Split",
+          "on": true,
+          "sym": "≥120px",
+          "word": "Opcional",
+          "bar": "—"
+        },
+        {
+          "ctx": "OG image / redes",
+          "variant": "Split",
+          "on": true,
+          "sym": "≥200px",
+          "word": "Sí",
+          "bar": "—"
+        },
+        {
+          "ctx": "Favicon",
+          "variant": "Flat",
+          "on": false,
+          "sym": "32 / 16px",
+          "word": "No",
+          "bar": "—"
+        }
+      ]
+    },
+    "rules": {
+      "title": "Las siete reglas",
+      "items": [
+        {
+          "title": "Umbral split → flat: 48px",
+          "body": "El desplazamiento de color es el 5,1% de la altura del símbolo, así que a 48px el creciente mide 2,5px. Por debajo se lee como fleco sucio, no como capa."
+        },
+        {
+          "title": "Tamaño mínimo: 24px",
+          "body": "El trazo es el 8,6% de la altura: a 24px son 2,1px y aguanta; a 15px son 1,3px y el antialiasing lo lava a gris."
+        },
+        {
+          "title": "Sin contenedor circular",
+          "body": "El símbolo ya es un círculo. Meterlo en otro lo reduce y lo convierte en una diana."
+        },
+        {
+          "title": "Nunca menor que la UI contigua",
+          "body": "Es la marca, no un icono más. Debe pesar al menos tanto como el LinkedIn o el © de al lado."
+        },
+        {
+          "title": "Proporción símbolo/wordmark",
+          "body": "40–45% compuestos en UI, ~60% en lockup cerrado. Fuera de ese rango el símbolo flota solo o el wordmark domina."
+        },
+        {
+          "title": "Transición del nav: continua",
+          "body": "El color se extingue antes de bajar de 48px y el wordmark se desvanece en opacidad sin recortar glifos. Nunca pasa por un estado de mala registración."
+        },
+        {
+          "title": "prefers-reduced-motion: salto",
+          "body": "Sin interpolar: se salta entre estados de golpe, sin transición intermedia. El símbolo pasa de 48px a 28px y la barra, de 80px a 64px — dos medidas distintas."
+        }
+      ]
+    },
+    "ladder": {
+      "kicker": "Regla 1 · el umbral, visto",
+      "title": "Dónde deja de funcionar el split",
+      "lead": "El creciente de color mide el 5,1% de la altura. Por debajo de 48px se lee como registro sucio, no como capa. La escalera lo enseña sola.",
+      "crescent": "creciente",
+      "works": "Funciona",
+      "dirty": "Fleco sucio"
+    }
+  },
+  "color": {
+    "num": "03 — Color",
+    "title": "Paleta y dos capas",
+    "lead": "La regla de las dos capas: una capa de tinta (fondo + trazo) que conmuta con el tema, y una capa de color (cian + morado) que solo aparece en el split y no cambia entre claro y oscuro. Cada muestra lleva su token, su hex y su ratio de contraste medido. Cambia el tema con el toggle del nav para ver la capa de tinta conmutar.",
+    "swapConmuta": "Conmuta",
+    "swapFijo": "Fijo",
+    "ratioLabels": {
+      "inkOver": "Tinta encima",
+      "bodyText": "Texto principal",
+      "asText": "texto",
+      "asButtonLight": "botón (claro)",
+      "inLight": "claro",
+      "inDark": "oscuro",
+      "decorative": "Decorativo · tinta encima",
+      "onInverted": "Sobre fondo invertido",
+      "logoOnly": "Solo capa de logo"
+    },
+    "items": [
+      {
+        "id": "background",
+        "name": "Fondo",
+        "note": "Fondo base"
+      },
+      {
+        "id": "foreground",
+        "name": "Tinta",
+        "note": "Texto y trazo"
+      },
+      {
+        "id": "primary",
+        "name": "Cian primario",
+        "note": "Enlaces y acento"
+      },
+      {
+        "id": "purple",
+        "name": "Morado",
+        "note": "Tintes y realces"
+      },
+      {
+        "id": "purpleAccent",
+        "name": "Morado acento",
+        "note": "Texto/acento sobre tinta"
+      },
+      {
+        "id": "cyanSplit",
+        "name": "Split cian",
+        "note": "Nunca como texto"
+      },
+      {
+        "id": "purpleSplit",
+        "name": "Split morado",
+        "note": "Nunca como texto"
+      },
+      {
+        "id": "cyanSoft",
+        "name": "Pastel cian",
+        "note": "Fondo, nunca texto"
+      },
+      {
+        "id": "purpleSoft",
+        "name": "Pastel morado",
+        "note": "Fondo, nunca texto"
+      }
+    ],
+    "pastelNote": "Los pasteles nunca como color de texto. Son fondos. Si va texto sobre un pastel, siempre en foreground (tinta) — nunca al revés."
+  },
+  "tipografia": {
+    "num": "04 — Tipografía",
+    "title": "Dos tipos, dos trabajos",
+    "lead": "Qué tipos son y por qué, como activo de marca. La escala, tamaños e interlineados viven en el Design System.",
+    "bricolage": {
+      "name": "Bricolage Grotesque",
+      "tag": "Display · pesos 600 / 700",
+      "desc": "Grotesca de carácter, con detalles humanistas y ligeras irregularidades que le dan personalidad sin perder rigor. Es la voz de los titulares y del wordmark: firme, contemporánea, reconocible."
+    },
+    "inter": {
+      "name": "Inter",
+      "tag": "Texto · pesos 400 / 500 / 600",
+      "desc": "Neutra, de altísima legibilidad en pantalla a cualquier tamaño. Hace el trabajo silencioso: cuerpo, etiquetas, datos y UI. Deja que Bricolage lleve la voz y ella sostiene la lectura."
+    }
+  },
+  "aplicaciones": {
+    "num": "05 — Aplicaciones",
+    "title": "La marca en su sitio",
+    "lead": "Dónde vive el logo y cómo se descarga cada pieza. El PNG del símbolo se dimensiona por altura y el del lockup por ancho — no es evidente, por eso se dice aquí.",
+    "favicon": {
+      "title": "Favicon",
+      "desc": "Asset dedicado, no un reescalado. A 16px el trazo sube a 10 unidades para compensar ópticamente. Plano, centrado.",
+      "ico": "favicon.ico"
+    },
+    "og": {
+      "title": "OG image · redes",
+      "desc": "La tarjeta real que se sirve a las redes: logo split, wordmark, título y kicker sobre el fondo de marca. Fija en claro y oscuro — la genera cada página. El lockup de abajo es la pieza con la que se construye.",
+      "previewAlt": "Imagen Open Graph de marca: logo split, wordmark y título sobre fondo oscuro",
+      "dlSvg": "Lockup split · SVG"
+    },
+    "pngNote": "El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos claros; tintaClara sobre fondos oscuros. Disponibles en 256 / 512 / 1024 px."
+  },
+  "uso": {
+    "num": "06 — Uso correcto e incorrecto",
+    "title": "Los errores reales de este sistema",
+    "lead": "No un catálogo de ✓ / ✗ genéricos: los fallos que tuvo esta marca en el proceso, la cifra que los detectó y cómo se corrigieron.",
+    "fixLabel": "Corrección:",
+    "cases": [
+      {
+        "title": "El viewBox que mentía",
+        "chip": "height:40px → 23px · −42%",
+        "before": "Antes · 23px",
+        "after": "Después · 40px",
+        "desc": "Era \"0 0 120 120\" pero la tinta ocupaba solo el 58% del alto. Todo el que usó el componente lo infradimensionó sin saberlo.",
+        "fix": "viewBox recortado a la tinta — la altura que das ES la del símbolo."
+      },
+      {
+        "title": "El split usado a 24px",
+        "chip": "creciente de color = 1,2px",
+        "before": "Antes · split 24px",
+        "after": "Después · flat <48, split ≥48",
+        "desc": "A esa altura el desplazamiento se leía como error de registro de imprenta, no como firma.",
+        "fix": "umbral split → flat a 48px (regla 1). Por debajo, variante plana."
+      },
+      {
+        "title": "El favicon sin compensación óptica",
+        "chip": "8,2% de tinta a 16px vs 8,1% a 32px",
+        "before": "Antes · 32 reescalado a 16",
+        "after": "Después · dedicado 16px",
+        "desc": "El de 16px era el de 32 reescalado; a ese tamaño el trazo se lavaba a gris.",
+        "fix": "asset dedicado a 16px con stroke-width 10 en vez de 6."
+      },
+      {
+        "title": "El logo pesando menos que un icono ajeno",
+        "chip": "12×15px junto a LinkedIn 18×18px",
+        "before": "Antes · logo 12×15",
+        "after": "Después · logo ≥ icono",
+        "desc": "En el footer la marca quedaba por debajo de un icono de UI y al mismo peso visual que el © contiguo.",
+        "fix": "el logo nunca mide menos que los iconos contiguos (regla 4)."
+      },
+      {
+        "title": "El lockup al 29%",
+        "chip": "símbolo 24→64px, wordmark en 18px",
+        "before": "Antes · wordmark al 29%",
+        "after": "Después · proporción ~60%",
+        "desc": "El símbolo creció y el wordmark se quedó atrás. El logo no era grande: estaba solo.",
+        "fix": "proporción símbolo/wordmark controlada (regla 5)."
+      },
+      {
+        "title": "El círculo dentro del círculo",
+        "chip": "símbolo al 35% de su huella",
+        "before": "Antes · al 35% de su huella",
+        "after": "Después · sin contenedor",
+        "desc": "El nav metía el símbolo en un contenedor circular, convirtiéndolo en una diana.",
+        "fix": "sin contenedor circular — el símbolo ya es un círculo (regla 3)."
+      },
+      {
+        "title": "Los cuatro colores de esta página",
+        "chip": "4 tokens desviados",
+        "before": "Antes · desviados",
+        "after": "Después · tokens",
+        "desc": "La página que documenta el color era la que lo tenía mal: hueso, oscuro y los dos pasteles.",
+        "fix": "#F5F3EE→#F7F3EC · #181B1F→#191D21 · pastel cian #CFEFEE→#A7E1DE · pastel morado #E6E0FB→#C6B9F0."
+      }
+    ]
+  }
+}
