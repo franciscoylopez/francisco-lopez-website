@@ -60,11 +60,15 @@ export function SobreMi({
             data-reveal
             className="relative m-0 h-[clamp(15rem,42vw,32rem)] overflow-hidden rounded-lg"
           >
+            {/* Misma corrección que el hero de la home: `priority` está
+                deprecado en Next 16 y ya no pone `fetchpriority` en el <img>
+                (D47). Esta es la apertura de la página, o sea su LCP. */}
             <Image
               src="/img/francisco-sobre-mi-apertura.webp"
               alt={t.photoAlt}
               fill
-              priority
+              fetchPriority="high"
+              loading="eager"
               sizes="100vw"
               className="object-cover object-[62%_28%]"
             />
