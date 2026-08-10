@@ -1233,6 +1233,64 @@ Cerrado el bloque de diseño, Francisco planteó volver a construir valor para e
 
 ---
 
+## 41. El andamiaje del deep-dive: lo que se construye antes de tener nada que enseñar (2026-08-10)
+
+**Primer despliegue del sprint 1**, el que el plan de §40 separó a propósito del contenido:
+nueve tareas (P40→P46.5) y una décima que apareció midiendo, todas en producción en un solo
+merge. Ninguna añade una sección visible, y ese es el punto: **son las siete páginas del
+deep-dive las que se benefician, y todavía no existen.** El detalle técnico está en
+`DECISIONS.md` D44–D49; aquí queda lo que es de producto.
+
+**Los dos cambios que un visitante nota.** El primero: **el primer pliegue ya no entra con
+animación**. El fade-up de la home ocultaba la foto del hero DESPUÉS de haberla pintado, para
+devolverla con una transición de 600 ms, y el LCP se registra en el primer frame con opacidad
+mayor que cero — o sea que la métrica principal de rendimiento la pagaba una animación
+decorativa: **2.090 ms de «retraso de renderizado»** sobre un LCP en el que la red aportaba 50.
+No hay forma de conservar las dos cosas: un elemento que empieza en `opacity: 0` retrasa el LCP
+por definición. Y al mirarlo de cerca, la regla del propio proyecto ya lo decía —*«una vez al
+**entrar** en viewport»*—: lo que ya estaba ahí al cargar no ha entrado. El segundo: **la 404
+minimalista desaparece**. Había dos —una mínima sin nav y otra rica con el «0» del split, Nav y
+Footer— y resultó que la mínima costaba que **las seis páginas del sitio se renderizaran en cada
+petición** en vez de servirse estáticas, por un `headers()` que leía el idioma. Se borró: ahora
+siempre sale la buena, y de regalo el build estático emite los preloads de las fuentes que el
+dinámico no emitía.
+
+**Lo que cambia para el trabajo que viene, que es el motivo de todo.** Una página del sitio ya
+no se escribe: se compone. El canonical, los tres `hreflang`, el Open Graph y el marco entero
+salen de una sola fuente, y el `<main>` con su enlace de salto lo pone la capa — así que las
+siete páginas del deep-dive **nacen con el SEO correcto, accesibles y estáticas sin que nadie
+tenga que acordarse**. Es la diferencia entre una regla escrita y una regla que se cumple sola,
+que es la distinción que este proyecto lleva persiguiendo desde la ola de diseño.
+
+**Se cerró el único incumplimiento de nivel A que tenía el sitio** —faltaba el enlace de salto
+(WCAG 2.4.1)— y merece nota porque **ninguna de las tres auditorías anteriores lo vio**: axe no
+lo detecta, su regla `bypass` se da por satisfecha con landmarks o encabezados, y el sitio los
+tiene. Lo encontró un validador genérico. En una web que publica una página de conformidad con
+cifras medidas, el hueco no era la falta en sí, sino que **el checklist que el propio sitio
+publica tiene ocho puntos y ninguno es ese** — corregirlo es copy en ES y EN y queda tareado.
+
+**Y ahora se mide sin pedir favores.** `npm run psi` trae PageSpeed a la terminal con el
+desglose del LCP, no solo la nota: el resultado en producción es **100/100 en escritorio** y
+móvil por debajo, con el objetivo del PRD (>90 en las dos) cumplido. Se decidió **no** meterlo
+como puerta de CI: dos ejecuciones seguidas dieron 96 y 94, y un gate en el que no se confía se
+acaba ignorando.
+
+**Del contenido, lo que sí avanzó.** Se entregó el **borrador editable del deep-dive** —la
+plantilla de seis piezas, un borrador en prosa por experiencia y tres diagramas propuestos—, con
+los huecos marcados en dos colores: lo que solo puede escribir Francisco y lo que se dedujo del
+CV y hay que confirmar. La recomendación de alcance: **tres a fondo** (Emendu, INDYA, TheTool) y
+tres sostenidas por la base del CV, porque seis narrativas largas son el cuello de botella real
+del sprint.
+
+**Estado al cerrar.** Catorce commits en `main`, uno por tarea, desplegados. **Cinco tareas
+nuevas** salieron del trabajo y quedaron abiertas con su verificación hecha: el checklist
+publicado sin el bypass, el segundo de retraso de renderizado que el arreglo no se llevó, el
+gate de formato que no mira `scripts/`, la sección 14 del Design System fuera de la capa, y —ya
+cerrada— la de medición. El sprint sigue abierto: **el contenido es lo único que queda entre el
+andamiaje y las seis páginas.**
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
