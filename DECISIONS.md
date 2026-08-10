@@ -2023,3 +2023,47 @@ LCP—; los otros 30 siguen en manos del `IntersectionObserver`.
 > Es la tercera vez en dos días que una medida por este canal sale falsa por el estado de la
 > ventana (D46 fue la del `:focus`): **el metro tiene un modo de fallo conocido y hay que
 > comprobarlo antes de creerse la lectura.**
+
+## D48 · El diccionario se parte por página, conservando el guardián de tipos — 2026-08-10
+
+**Decisión.** `app/[lang]/dictionaries/{es,en}.json` —un único archivo de 1.580 líneas y 76 KB
+por locale— pasa a ser **una carpeta por locale con siete archivos**: `common.json` (lo que
+necesita toda página: metadata, nav, footer, breadcrumb, related, consentimiento y contacto),
+`home.json` y uno por cada página propia. Cada página carga **su rama y la común**, no el resto.
+
+**El reparto, medido antes de partir.** `designSystem` era el **44%** del archivo y `brandKit`
+el **17%**: el **61% del diccionario eran las dos páginas showcase**, las que menos visitas
+tienen. La home usaba ~9 KB de los 59,5 que parseaba.
+
+**Lo que esto NO arregla, y hay que decirlo porque la tarea lo daba por hecho.** Nada de esto
+llegaba al cliente: el módulo es `server-only` y a los componentes de cliente solo se les pasa
+la rama que renderizan. Y desde que las seis páginas se prerenderizan (D25, el mismo día),
+parsear de más es un coste de **build**. Las razones que quedan son las buenas, pero no son de
+rendimiento: **el deep-dive añade siete páginas de contenido**, y editar copy en un archivo de
+1.580 líneas es una invitación al conflicto.
+
+**La restricción que no se negocia — y que decidió la forma.** Los tipos se derivan del JSON
+**español** y cada cargador se anota con ese tipo, así que si `en` pierde una clave que `es`
+tiene, **el build falla** (D11). El helper `cargador<T>` recibe el tipo **explícito** y no lo
+infiere a propósito: inferirlo de los dos cargadores daría la **unión** de ambos, y una unión no
+falla cuando a `en` le falta algo — que es justo lo único que este módulo tiene que garantizar.
+**Verificado disparándolo:** borrando `nav.skipToContent` de `en/common.json`, el typecheck
+falla y **nombra la clave que falta**.
+
+**La forma es lo que hace que el cambio no se note fuera del módulo.** Los archivos de página
+guardan su rama **desenvuelta** —`brand-kit.json` *es* el objeto `brandKit`— y el tipo
+`Dictionary` se recompone en `dictionaries.ts` como la intersección de todas. Así los **25
+componentes** tipados con `Dictionary["designSystem"]["tablas"]` y compañía **no cambian ni una
+línea**: lo que se parte es la **carga**, no la forma.
+
+**Dos consumidores fuera de las páginas, y los dos siguen bien:**
+
+- **`/llms.txt`** habla de todas las páginas, así que es el único sitio que sigue necesitando el
+  diccionario entero. Se recompone ahí con siete imports estáticos, y es barato: la ruta es
+  estática, o sea que corre en build una sola vez.
+- **El generador del CV** (`scripts/cv/facts.ts`) leía el JSON del locale **desde disco**. Los
+  hechos que usa —trayectoria, formación, toolkit— viven ahora en `home.json`. Es la clase de
+  rotura que un typecheck no ve, porque la ruta es una cadena.
+
+**Gate:** el HTML servido de las **doce variantes es idéntico**, `/llms.txt` sale **byte a byte
+igual** (3.836 bytes) y los dos PDF del CV se regeneran con el mismo tamaño exacto.

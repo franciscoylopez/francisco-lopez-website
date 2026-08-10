@@ -5,7 +5,7 @@ import { BrandKit } from "@/components/site/brand-kit";
 import { PageShell } from "@/components/site/page-shell";
 import { locales, isLocale, pagePath } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
-import { getDictionary } from "../dictionaries";
+import { getCommon, getBrandKit } from "../dictionaries";
 
 type LangParams = { params: Promise<{ lang: string }> };
 
@@ -21,22 +21,22 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
 
-  const dict = await getDictionary(lang);
-  return pageMetadata({ lang, slug: SLUG, meta: dict.brandKit.meta });
+  const t = await getBrandKit(lang);
+  return pageMetadata({ lang, slug: SLUG, meta: t.meta });
 }
 
 export default async function BrandKitPage({ params }: LangParams) {
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
 
-  const dict = await getDictionary(lang);
+  const [common, t] = await Promise.all([getCommon(lang), getBrandKit(lang)]);
 
   return (
-    <PageShell dict={dict} lang={lang} crumb={dict.brandKit.crumb}>
+    <PageShell dict={common} lang={lang} crumb={t.crumb}>
       <BrandKit
-        dict={dict.brandKit}
-        related={dict.related}
-        breadcrumb={dict.breadcrumb}
+        dict={t}
+        related={common.related}
+        breadcrumb={common.breadcrumb}
         homeHref={pagePath(lang)}
         lang={lang}
       />

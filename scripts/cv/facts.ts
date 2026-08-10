@@ -30,7 +30,16 @@ interface DictFacts {
 }
 
 export function loadDict(lang: "es" | "en"): DictFacts {
-  const p = path.join(process.cwd(), "app", "[lang]", "dictionaries", `${lang}.json`);
+  // Los hechos que usa el CV —trayectoria, formacion, toolkit— viven en la rama
+  // `home` desde que el diccionario se partió por página (P46).
+  const p = path.join(
+    process.cwd(),
+    "app",
+    "[lang]",
+    "dictionaries",
+    lang,
+    "home.json",
+  );
   return JSON.parse(fs.readFileSync(p, "utf8")) as DictFacts;
 }
 

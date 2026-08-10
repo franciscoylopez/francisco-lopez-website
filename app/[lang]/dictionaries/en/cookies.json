@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "title": "Cookie policy — Francisco López",
+    "description": "What cookies and technologies franciscolopez.es uses, why, and how to manage or withdraw your consent."
+  },
+  "crumb": "Cookies",
+  "kicker": "Legal",
+  "title": "Cookie policy",
+  "updated": "Last updated: 3 August 2026",
+  "lead": "This site uses the minimum of cookies and similar technologies. Here's what they are, what they're for, and how to control them. No analytics cookie loads without your consent.",
+  "whatHeading": "What cookies are",
+  "whatBody": "Cookies are small files a site stores in your browser. Equivalent technologies are also used, such as the browser's local storage (localStorage). Some are essential for the site to work; others, like analytics, are only used if you allow them.",
+  "useHeading": "What this site uses",
+  "useIntro": "Here's the detail of what may load, grouped by category:",
+  "table": {
+    "name": "Name",
+    "provider": "Provider",
+    "purpose": "Purpose",
+    "duration": "Duration",
+    "category": "Category"
+  },
+  "rows": [
+    {
+      "name": "flm-consent",
+      "provider": "franciscolopez.es",
+      "purpose": "Stores your cookie choice so you're not asked again.",
+      "duration": "Persistent",
+      "category": "Necessary"
+    },
+    {
+      "name": "Container (GTM)",
+      "provider": "Google",
+      "purpose": "Manages the loading of the other tags. Stores no data on its own.",
+      "duration": "—",
+      "category": "Necessary"
+    },
+    {
+      "name": "_ga",
+      "provider": "Google Analytics",
+      "purpose": "Distinguishes users in aggregate to measure site usage.",
+      "duration": "2 years",
+      "category": "Analytics"
+    },
+    {
+      "name": "_ga_*",
+      "provider": "Google Analytics",
+      "purpose": "Keeps the measurement session state.",
+      "duration": "2 years",
+      "category": "Analytics"
+    },
+    {
+      "name": "_clck",
+      "provider": "Microsoft Clarity",
+      "purpose": "Identifies the browser across visits to link your recorded sessions and heatmaps.",
+      "duration": "1 year",
+      "category": "Analytics"
+    },
+    {
+      "name": "_clsk",
+      "provider": "Microsoft Clarity",
+      "purpose": "Connects multiple page views into a single recording session.",
+      "duration": "1 day",
+      "category": "Analytics"
+    }
+  ],
+  "tableNote": "“flm-consent” is kept in the browser's local storage (localStorage); it's technically not a cookie, but it's listed here for transparency. No marketing or advertising cookies are used today.",
+  "legalHeading": "Legal basis",
+  "legalBody": "Necessary cookies load so the site can work and need no consent. Analytics cookies only load with your prior consent, which you can give, deny or withdraw at any time without affecting how the site works.",
+  "manageHeading": "How to manage or withdraw your consent",
+  "manageBody": "The first time you visit, a notice lets you accept, reject or choose by category. You can change your choice —including analytics— at any time from the button below:",
+  "manageButton": "Manage cookie preferences",
+  "manageBrowser": "You can also block or delete cookies from your browser settings.",
+  "thirdHeading": "Third parties",
+  "thirdBody": "Analytics is provided by Google (Google Tag Manager and Google Analytics) and Microsoft (Clarity), which process data under their own policies. You can read them at",
+  "thirdLinkLabel": "Google's privacy policies",
+  "thirdBody2": "and at",
+  "thirdLink2Label": "Microsoft's privacy statement",
+  "retentionHeading": "Data retention",
+  "retentionBody": "Your consent choice is stored in your browser until you change it or clear the site data. Aggregate analytics data is retained by Google according to the property settings (by default, a maximum of 14 months at user level).",
+  "changesHeading": "Changes to this policy",
+  "changesBody": "I'll update this page whenever the tools the site uses change. The date at the top reflects the latest revision.",
+  "contactHeading": "Contact",
+  "contactBody": "If you have any questions about this policy or want to exercise your data protection rights, email me at"
+}

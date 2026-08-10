@@ -77,7 +77,8 @@ npm run gate:html           # …y comprueba que un refactor no lo cambió (D42,
 ## Estructura
 
 ```
-app/[lang]/            Rutas por locale (home, sobre-mi, brand-kit, design-system, accesibilidad, cookies) + layout, diccionarios, not-found/error
+app/[lang]/            Rutas por locale (home, sobre-mi, brand-kit, design-system, accesibilidad, cookies) + layout y error boundary
+app/[lang]/dictionaries/{es,en}/  Diccionario PARTIDO POR PÁGINA (D48): common + una rama por página. Cada página carga la suya; los tipos salen del ES y una clave que falte en EN rompe el build
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i18n

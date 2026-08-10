@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "title": "Accessibility — Francisco López",
+    "description": "How this site is built to be usable by everyone: WCAG 2.2 AA met, a colour system at AAA, and the concrete measures behind it, verified with axe and Lighthouse."
+  },
+  "crumb": "Accessibility",
+  "hero": {
+    "kicker": "Commitment",
+    "title": "Accessibility",
+    "lead": "Here accessibility is a release gate, not an add-on: anyone —using a mouse, a keyboard or a screen reader, with or without colour vision— can read and navigate this site without barriers. And it's not a promise: it's measured.",
+    "statConformidad": "WCAG 2.2 conformance",
+    "statColor": "Colour system",
+    "statAxe": "axe violations",
+    "statLighthouse": "Lighthouse a11y"
+  },
+  "conformance": {
+    "num": "01 — Conformance",
+    "heading": "WCAG 2.2 AA met, with contrast measured",
+    "intro": "Contrast is measured, not estimated. Body text reaches {bodyText.light} in light and {bodyText.dark} in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1 — cleared with room to spare.",
+    "rows": [
+      {
+        "label": "Standard",
+        "value": "WCAG 2.2, levels A and AA."
+      },
+      {
+        "label": "Status",
+        "value": "AA met across the whole site."
+      },
+      {
+        "label": "Colour system",
+        "value": "AAA in light and dark, with contrast measured."
+      }
+    ]
+  },
+  "measures": {
+    "num": "02 — What's been done",
+    "heading": "The same checks that close every page",
+    "intro": "In plain language and with the WCAG criterion each one covers.",
+    "items": [
+      {
+        "title": "Contrast measured in both themes",
+        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states.",
+        "wcag": "WCAG 1.4.3 · 1.4.11"
+      },
+      {
+        "title": "Focus always visible",
+        "body": "Every interactive element shows a 2px focus ring with an offset; the indicator is never removed without a replacement.",
+        "wcag": "WCAG 2.4.7"
+      },
+      {
+        "title": "Generous tap areas",
+        "body": "Touch targets are at least 44×44px, including small controls like the breadcrumb or the theme switch.",
+        "wcag": "WCAG 2.5.8 (exceeded)"
+      },
+      {
+        "title": "Logical structure and order",
+        "body": "A single main heading per page and a hierarchy with no skipped levels; reading order matches source order, for screen readers and keyboard navigation.",
+        "wcag": "WCAG 1.3.1 · 2.4.6"
+      },
+      {
+        "title": "Clear location",
+        "body": "Inner pages carry a breadcrumb that shows where you are within the site.",
+        "wcag": "WCAG 2.4.8"
+      },
+      {
+        "title": "Never colour alone",
+        "body": "No state or category is signalled by colour only: there's always text or shape as well.",
+        "wcag": "WCAG 1.4.1"
+      },
+      {
+        "title": "Reduced motion respected",
+        "body": "If your system asks for less animation, transitions and reveals are turned off.",
+        "wcag": "WCAG 2.3.3"
+      },
+      {
+        "title": "Text alternatives",
+        "body": "Images that carry meaning have alt text; decorative ones are hidden from assistive technology.",
+        "wcag": "WCAG 1.1.1"
+      }
+    ]
+  },
+  "verify": {
+    "num": "03 — Verification",
+    "heading": "Not a self-assessment taken on trust",
+    "intro": "Every page is checked, in light and dark mode, with real tools.",
+    "items": [
+      {
+        "tool": "axe-core",
+        "result": "WCAG rules engine. 0 violations on the home and inner pages."
+      },
+      {
+        "tool": "Lighthouse",
+        "result": "Accessibility audit. A score of 100 in production."
+      },
+      {
+        "tool": "Contrast measured",
+        "result": "Colour by colour, with a number, not by eye."
+      },
+      {
+        "tool": "Keyboard & focus",
+        "result": "Manual review of keyboard navigation and focus order."
+      }
+    ]
+  },
+  "limits": {
+    "num": "04 — Limits",
+    "heading": "Being honest is part of accessibility too",
+    "intro": "What doesn't measure up yet, and what it would take.",
+    "items": [
+      {
+        "title": "Direct contact",
+        "body": "Contact is by email and phone (there's no form yet); both are direct, accessible links."
+      },
+      {
+        "title": "CV in PDF",
+        "body": "It's selectable, tagged text, but a PDF never matches a web page for accessibility. If you need it in another format, email me."
+      },
+      {
+        "title": "Continuous improvement",
+        "body": "The colour system is already at AAA and is re-checked on every change so it doesn't slip."
+      }
+    ]
+  },
+  "report": {
+    "num": "05 — Contact",
+    "heading": "If something blocks you, I want to know",
+    "body": "If anything on this site is hard to use with your assistive technology, it's the best way to fix it. Tell me which page you were on, what happened and what assistive tech you use, and I'll get back to you.",
+    "emailCta": "Email me",
+    "updated": "Last accessibility review: 2 August 2026."
+  }
+}

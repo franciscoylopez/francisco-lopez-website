@@ -13,7 +13,7 @@ import { paletteHex } from "@/lib/design-values";
 import { locales, isLocale } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
 import { GTM_ID, SITE_URL } from "@/lib/site";
-import { getDictionary } from "./dictionaries";
+import { getCommon } from "./dictionaries";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -59,7 +59,7 @@ export async function generateMetadata({
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
 
-  const dict = await getDictionary(lang);
+  const dict = await getCommon(lang);
 
   // La metadata de la home sale del MISMO helper que las cinco internas (D45):
   // sin slug —la home es la raíz del locale— y con la tarjeta OG `home`. Lo que
@@ -118,7 +118,7 @@ export default async function RootLayout({
   const { lang } = await params;
   if (!isLocale(lang)) notFound();
 
-  const dict = await getDictionary(lang);
+  const dict = await getCommon(lang);
 
   return (
     <html
