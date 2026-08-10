@@ -1631,6 +1631,20 @@ puede fallar no es un gate.
 Esto es además la **semilla del arnés de tests** (P37.75), y la razón de no haberlo metido en
 esta ola: para este trabajo, un snapshot total es más fuerte que unas aserciones elegidas.
 
+### El límite de «diff vacío = correcto», que se aprendió al día siguiente
+
+**El gate solo garantiza lo que garantiza: que el HTML no cambió.** En el momento en que el
+cambio ES intencionado, el diff deja de ser un veredicto y pasa a ser una lista que hay que
+leer — y leerla no es lo mismo que entenderla. **D43** es el contraejemplo, y ocurrió en el
+commit siguiente: al sustituir la cabecera numerada desapareció del diff la línea del
+`<div class="mb-4 …">` que envolvía al `SectionHead`. Se dio por buena, porque **un envoltorio
+que se borra es exactamente lo que ese refactor debía hacer** — y con él se fue el hueco de
+16px entre el titular y su entradilla, en 19 secciones. Lo cazó medirlo en pantalla, no el
+diff que lo contenía.
+
+Así que la propiedad es más estrecha de lo que suena: **diff vacío = correcto; diff no vacío =
+hay que mirar la página**. No hay lectura de diff que sustituya eso.
+
 **Lo que este commit NO hace, a propósito:** unificar las tres formas de cabecera numerada que
 tienen Design System, Accesibilidad y Brand Kit. Cambiar el rótulo **es** un cambio de copy —el
 eyebrow no puede repetir el título—, así que va en P37.695, commit aparte y misma rama. Mezclarlo

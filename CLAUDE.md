@@ -56,7 +56,7 @@
 - D39 · El atenuado lo resuelve la superficie (`--surface-dim`), no el punto de uso — generaliza D30; `data-surface` para lo que se pinta su propio velo; retira `--contact-dim` y el eje `tone` del eyebrow
 - D40 · Capa de tabla (`components/ui/table.tsx`): marcado real para tablas de datos, divs para las de espécimen; un separador (el filete) y un gutter de padding
 - D43 · Toda página y toda sección abren igual: el ordinal dentro del eyebrow; eran CUATRO copias privadas de la cabecera numerada, no tres; las 19 con entradilla; el hueco titular→entradilla, pendiente de subir a la capa
-- D42 · Los showcase se parten por sección (carpeta + `index.tsx` + `NN-nombre.tsx` + `shared.tsx`); por qué se descartó «datos + renderer»; y el gate del refactor = **diff del HTML servido** de las cuatro variantes (`npm run gate:showcase`), validado disparándolo
+- D42 · Los showcase se parten por sección (carpeta + `index.tsx` + `NN-nombre.tsx` + `shared.tsx`); por qué se descartó «datos + renderer»; y el gate del refactor = **diff del HTML servido** de las cuatro variantes (`npm run gate:showcase`), validado disparándolo — **con su límite: diff vacío = correcto, diff no vacío = hay que mirar la página**
 - D41 · Un color fijo no puede servir a dos superficies opuestas: `--brand-purple-accent` conmuta con el tema (techo de un color fijo = √13,79 = 3,71:1); el atenuado sustituye al morado en la escalera del logo; y el umbral del censo depende del tamaño del texto
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
