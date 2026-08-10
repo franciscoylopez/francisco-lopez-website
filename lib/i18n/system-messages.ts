@@ -1,6 +1,6 @@
 // Copy de las páginas-sistema (404 y error). Vive FUERA del diccionario runtime
 // (es.json / en.json) a propósito, siguiendo el precedente de D22 (el texto rico del
-// CV vive en scripts/cv/content.*.ts, no en el diccionario): el error boundary es un
+// CV vive en content/cv/content.*.ts, no en el diccionario): el error boundary es un
 // componente de CLIENTE que se renderiza justo cuando el pipeline normal puede estar
 // roto, así que no debe depender de getDictionary (server-only) ni arrastrar los
 // diccionarios completos al bundle de cliente. Módulo pequeño, tipado, con ES como

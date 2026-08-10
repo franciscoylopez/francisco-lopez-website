@@ -88,12 +88,13 @@ components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (t
 components/site/        Piezas que SÍ saben de este sitio: bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN: index.tsx (el orden), NN-nombre.tsx (cada sección con sus subcomponentes) y shared.tsx (lo que cruza) — D42
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
+content/cv/            Texto rico autorado del CV (ES/EN) + sus tipos. Fuera de scripts/ porque app/ no puede importar de ahí: es también el origen del deep-dive por experiencia (D22)
 lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados, design-values (fuente única de lo que el sitio publica sobre sí mismo: tokens, breakpoints y contraste medido — D38) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 scripts/logo-kit/      Generación del kit de logo desde su geometría
-scripts/cv/            Generador del CV en PDF (react-pdf); hechos del diccionario + texto rico autorado
+scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts (hechos leídos del diccionario); el texto rico vive en content/cv/
 scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts contra la de globals.css,
                           y ningún hex de token copiado fuera de su fuente (D38)
 scripts/design-review/  Censo de pares de contraste del DOM servido (lo usa el skill design-review)

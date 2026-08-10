@@ -523,6 +523,28 @@ especificaciones ni a duplicar datos, se separó el CV en dos capas:
   commit/PR/deploy). Es el punto de entrada para no tener que dar especificaciones
   dentro de un año.
 
+**El texto rico se muda a `content/cv/` — 2026-08-10.** Llegó el consumidor runtime que
+el «refinamiento» de arriba estaba esperando (el deep-dive por experiencia, primer sprint
+de V2) y **la respuesta no es la que aquel párrafo daba**: no se pliega al diccionario.
+`content.{es,en}.ts` y `types.ts` pasan de `scripts/cv/` a **`content/cv/`**; `facts.ts` y
+`generate.tsx` se quedan en `scripts/` y leen de la nueva ubicación.
+
+- **Por qué salir de `scripts/`:** `app/` no puede importar de ahí. `scripts/` es
+  herramienta de build (se ejecuta con `tsx`, lee del disco con `node:fs`, escribe PDFs);
+  el contenido rico, en cambio, es **contenido de la app** desde el momento en que una
+  página lo renderiza. Co-ubicarlo con su único consumidor era correcto mientras ese
+  consumidor fuera offline; con dos consumidores de naturaleza distinta, la ubicación la
+  manda el dato, no la herramienta.
+- **Por qué NO al diccionario**, que era el plan escrito: el diccionario se quedó **solo
+  con el copy de la interfaz** al fijarse D38, y su carga es todo-o-nada (el `import()`
+  dinámico de `dictionaries.ts` trae el JSON entero, no la rama que se usa). Meter ahí
+  ~8 KB de texto rico lo pagarían las páginas que no lo usan — el mismo motivo que lo
+  mantuvo fuera en julio, que no ha cambiado por tener consumidor.
+- **Lo que no se toca:** `company` sigue siendo la clave de unión con el diccionario y el
+  join sigue lanzando error si no encuentra match. El PDF regenerado sale byte a byte del
+  mismo tamaño (470.463 / 469.412) — solo cambia la fecha de creación que embebe
+  `@react-pdf/renderer`, así que los PDF del repo no se recommitean.
+
 ## D23 · Copy con énfasis inline en el diccionario vía render de markup ligero — 2026-08-01
 **Decisión.** El copy que necesita **negrita, cursiva o enlaces embebidos** sigue viviendo
 como **strings en el diccionario i18n** (no como JSX hardcodeado ni HTML), con una

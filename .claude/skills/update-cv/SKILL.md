@@ -21,7 +21,7 @@ coordinada, y **nunca hay que duplicar hechos**.
 
 | Cambio | Editar | Notas |
 |---|---|---|
-| **Nuevo trabajo / cambio de rol, empresa o fechas** | `app/[lang]/dictionaries/es.json` **y** `en.json` → bloque `trayectoria` (facts + copy de la web) **y** `scripts/cv/content.es.ts` / `content.en.ts` → array `experience` (context + reporting + bullets del CV) | El CV une por la clave `company`. La misma empresa debe existir en ambos sitios (ver §6). El rol/periodo del CV salen del diccionario: **no** los escribas en el CV. |
+| **Nuevo trabajo / cambio de rol, empresa o fechas** | `app/[lang]/dictionaries/es.json` **y** `en.json` → bloque `trayectoria` (facts + copy de la web) **y** `content/cv/content.es.ts` / `content.en.ts` → array `experience` (context + reporting + bullets del CV) | El CV une por la clave `company`. La misma empresa debe existir en ambos sitios (ver §6). El rol/periodo del CV salen del diccionario: **no** los escribas en el CV. |
 | **Nueva formación** | Solo diccionario `formacion` (es + en) | El CV la hereda automáticamente. |
 | **Nuevo item de toolkit / categoría** | Solo diccionario `toolkit` (es + en) | El CV toma categoría + nombre (sin descripción). |
 | **Nuevo hito** | Diccionario `hitos` (web) **y** `content.{es,en}.ts` → `milestones` | Los hitos del CV son una lista curada (no derivable limpiamente del bloque `hitos`). |
@@ -91,10 +91,12 @@ ficheros existen** en `public/cv/`.
 
 ## 7 · Mapa de ficheros
 
-- `scripts/cv/content.{es,en}.ts` — texto rico autorado (fuente ES).
+- `content/cv/content.{es,en}.ts` — texto rico autorado (fuente ES). **Vive en `content/`,
+  no en `scripts/`**, desde el 2026-08-10: lo lee también la app (deep-dive por
+  experiencia) y `app/` no puede importar de `scripts/` (D22).
+- `content/cv/types.ts` — tipos.
 - `scripts/cv/facts.ts` — lee los hechos del diccionario (formación, toolkit, roles/periodos).
 - `scripts/cv/generate.tsx` — ensambla y renderiza; guard de páginas; estilos de marca.
-- `scripts/cv/types.ts` — tipos.
 - `app/[lang]/dictionaries/{es,en}.json` — diccionario (fuente de los hechos + web).
 - `lib/i18n/config.ts` → `cvPath(lang)` — ruta del PDF por locale.
 - `public/cv/francisco-lopez-cv-{es,en}.pdf` — salida (se commitea).

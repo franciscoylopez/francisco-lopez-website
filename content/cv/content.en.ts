@@ -1,7 +1,7 @@
 // Authored CV content (EN) — reviewed against the Spanish source, not literal
 // (D20). Facts (periods, roles, education, toolkit) are NOT here: they come from
-// en.json via facts.ts (single-source, D22), already in English. `company` is the
-// join key with the dictionary.
+// en.json via scripts/cv/facts.ts (single-source, D22), already in English.
+// `company` is the join key with the dictionary.
 
 import type { CvContent } from "./types";
 
@@ -32,18 +32,40 @@ export const content: CvContent = {
     "Senior Product Manager with 10+ years building and scaling B2B and B2C SaaS products, end-to-end from idea and MVP to growth and data. Specialised in product strategy, UX, SaaS metrics, applied AI and pricing. I work closely with design, engineering and business to build coherent, scalable products with an outstanding user experience.",
 
   milestones: [
-    { year: "2026", company: "Emendu", impact: "Strategic partnership with Sesame HR." },
-    { year: "2023", company: "INDYA", impact: "Monthly churn from 16% to 10% · first-month activation +28%." },
-    { year: "2022", company: "INDYA", impact: "Selected for Apple App Store Foundations." },
-    { year: "2021", company: "TheTool", impact: "Acquired by AppRadar.", exit: true },
-    { year: "2019", company: "TheTool", impact: "Nominated Best ASO Software in Europe (App Promotion Summit)." },
+    {
+      year: "2026",
+      company: "Emendu",
+      impact: "Strategic partnership with Sesame HR.",
+    },
+    {
+      year: "2023",
+      company: "INDYA",
+      impact: "Monthly churn from 16% to 10% · first-month activation +28%.",
+    },
+    {
+      year: "2022",
+      company: "INDYA",
+      impact: "Selected for Apple App Store Foundations.",
+    },
+    {
+      year: "2021",
+      company: "TheTool",
+      impact: "Acquired by AppRadar.",
+      exit: true,
+    },
+    {
+      year: "2019",
+      company: "TheTool",
+      impact: "Nominated Best ASO Software in Europe (App Promotion Summit).",
+    },
   ],
 
   experience: [
     {
       company: "Emendu",
       context: "SaaS B2B · IT Management",
-      reporting: "Member of the leadership team (Management, Operations, Tech & Finance)",
+      reporting:
+        "Member of the leadership team (Management, Operations, Tech & Finance)",
       bullets: [
         "Led the product's evolution: from a Sales & Operations–centred organisation with manual processes to a digital, API-first system.",
         "Defined the end-to-end product strategy: redefined the ICP through discovery and reoriented the user experience (onboarding and key flows).",
@@ -66,7 +88,8 @@ export const content: CvContent = {
     {
       company: "INDYA",
       context: "SaaS B2C · Health tech",
-      reporting: "Reported to the CPO and cofounder · leadership through influence",
+      reporting:
+        "Reported to the CPO and cofounder · leadership through influence",
       bullets: [
         "Co-defined the growth strategy focused on activation, engagement and retention.",
         "Introduced systematic user research (interviews, post-churn surveys, continuous analysis).",
@@ -89,7 +112,8 @@ export const content: CvContent = {
     {
       company: "TheTool",
       context: "SaaS B2B · ASO",
-      reporting: "Cofounder (1 of 4 partners) · voice and vote on key decisions",
+      reporting:
+        "Cofounder (1 of 4 partners) · voice and vote on key decisions",
       bullets: [
         "Cofounder responsible for vision, MVP design, validation and launch of the paid version.",
         "Designed and evolved key features: installs/ASO correlation, tracking dashboards, ASO score, international analysis, timeline and bulk monitoring.",
@@ -133,9 +157,24 @@ export const content: CvContent = {
   },
 
   skills: [
-    { label: "SaaS Product", value: "Strategy, metrics, pricing, experimentation, discovery, roadmapping." },
-    { label: "UX & Design", value: "Collaboration with Product Designers, usability, prototyping, qualitative research." },
-    { label: "Leadership", value: "Stakeholder management, communication, cross-functional teams." },
-    { label: "Applied AI", value: "Conversational agents, LLMs, AI-assisted experiences, in-house development." },
+    {
+      label: "SaaS Product",
+      value:
+        "Strategy, metrics, pricing, experimentation, discovery, roadmapping.",
+    },
+    {
+      label: "UX & Design",
+      value:
+        "Collaboration with Product Designers, usability, prototyping, qualitative research.",
+    },
+    {
+      label: "Leadership",
+      value: "Stakeholder management, communication, cross-functional teams.",
+    },
+    {
+      label: "Applied AI",
+      value:
+        "Conversational agents, LLMs, AI-assisted experiences, in-house development.",
+    },
   ],
 };

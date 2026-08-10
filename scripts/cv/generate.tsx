@@ -1,6 +1,6 @@
 /**
- * Generador del CV en PDF (D22). Fuente única: `content.es.ts` (texto rico) +
- * hechos que reproducen es.json. Motor @react-pdf/renderer → texto real
+ * Generador del CV en PDF (D22). Fuente única: `content/cv/content.es.ts` (texto
+ * rico) + hechos que reproducen es.json. Motor @react-pdf/renderer → texto real
  * seleccionable (ATS), fuentes de marca, cuerpo a una columna.
  *
  *   npx tsx scripts/cv/generate.tsx
@@ -24,9 +24,9 @@ import {
   renderToFile,
 } from "@react-pdf/renderer";
 import React from "react";
-import { content as esContent } from "./content.es";
-import { content as enContent } from "./content.en";
-import type { CV, CvContent, Job, AuthoredJob } from "./types";
+import { content as esContent } from "../../content/cv/content.es";
+import { content as enContent } from "../../content/cv/content.en";
+import type { CV, CvContent, Job, AuthoredJob } from "../../content/cv/types";
 import { loadDict, buildEducation, buildTools, experienceFacts, previousFacts, matchFact, type FactRow } from "./facts";
 import { brandHex, paletteHex } from "../../lib/design-values";
 
