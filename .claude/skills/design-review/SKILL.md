@@ -175,7 +175,7 @@ rutas, datos)? No → `ui/`. Sí → `site/`.
 **Valores publicados: no se leen del diccionario.** Desde D38 los tokens de layout, los
 breakpoints, el censo de contraste y la paleta viven en `lib/design-values.ts`, y `npm run
 check:palette` verifica en CI que coinciden con `globals.css`. Dos consecuencias para el
-barrido: una cifra o un hex **escrito en `es.json`/`en.json` es hallazgo** (la prueba es
+barrido: una cifra o un hex **escrito en el diccionario (`dictionaries/{es,en}/*.json`) es hallazgo** (la prueba es
 literal — si la entrada ES y la EN son carácter por carácter la misma, no es copy), y **el
 `grep` de hex ya no tiene hits legítimos** fuera de `globals.css` y `logo.tsx`.
 

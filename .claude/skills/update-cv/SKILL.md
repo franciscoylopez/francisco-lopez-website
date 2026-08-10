@@ -21,7 +21,7 @@ coordinada, y **nunca hay que duplicar hechos**.
 
 | Cambio | Editar | Notas |
 |---|---|---|
-| **Nuevo trabajo / cambio de rol, empresa o fechas** | `app/[lang]/dictionaries/es.json` **y** `en.json` → bloque `trayectoria` (facts + copy de la web) **y** `content/cv/content.es.ts` / `content.en.ts` → array `experience` (context + reporting + bullets del CV) | El CV une por la clave `company`. La misma empresa debe existir en ambos sitios (ver §6). El rol/periodo del CV salen del diccionario: **no** los escribas en el CV. |
+| **Nuevo trabajo / cambio de rol, empresa o fechas** | **TRES sitios**: `app/[lang]/dictionaries/{es,en}/home.json` → bloque `trayectoria` (facts + copy de la web) · `content/cv/content.{es,en}.ts` → array `experience` (context + reporting + bullets del CV) · **`content/experiences.ts` → `EXPERIENCES`** (logo y slug) | El CV une por la clave `company`, y la misma empresa debe existir en los tres (ver §6). El rol/periodo del CV salen del diccionario: **no** los escribas en el CV. **Si olvidas `content/experiences.ts`, `npm run build` FALLA** — `experienceOf()` lanza a propósito (D44): mejor romper la build que servir el logo de otra empresa. |
 | **Nueva formación** | Solo diccionario `formacion` (es + en) | El CV la hereda automáticamente. |
 | **Nuevo item de toolkit / categoría** | Solo diccionario `toolkit` (es + en) | El CV toma categoría + nombre (sin descripción). |
 | **Nuevo hito** | Diccionario `hitos` (web) **y** `content.{es,en}.ts` → `milestones` | Los hitos del CV son una lista curada (no derivable limpiamente del bloque `hitos`). |
@@ -97,6 +97,10 @@ ficheros existen** en `public/cv/`.
 - `content/cv/types.ts` — tipos.
 - `scripts/cv/facts.ts` — lee los hechos del diccionario (formación, toolkit, roles/periodos).
 - `scripts/cv/generate.tsx` — ensambla y renderiza; guard de páginas; estilos de marca.
-- `app/[lang]/dictionaries/{es,en}.json` — diccionario (fuente de los hechos + web).
+- `app/[lang]/dictionaries/{es,en}/home.json` — la rama del diccionario con los hechos
+  (trayectoria, formación, toolkit) y el copy de la home. **El diccionario está partido por
+  página desde el 2026-08-10 (D48)**: ya no hay un `es.json` único.
+- `content/experiences.ts` — logo y slug por experiencia, unidos por `company` (D44). Se toca
+  al añadir o quitar una experiencia; si falta, el build falla.
 - `lib/i18n/config.ts` → `cvPath(lang)` — ruta del PDF por locale.
 - `public/cv/francisco-lopez-cv-{es,en}.pdf` — salida (se commitea).
