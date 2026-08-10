@@ -20,35 +20,53 @@
 // componer un velo o una pastilla de hover, porque no hay ningún token con ese
 // nombre. Y el tercero, además, solo existe mientras el cursor está encima.
 //
-// De ahí las dos reglas que este script implementa y que son el punto entero:
-// **el censo se recorre por el DOM**, y **incluye los estados**.
+// De ahí las TRES reglas que este script implementa y que son el punto entero:
+// **el censo se recorre por el DOM**, **incluye los estados** y **cada par se
+// puntúa contra el umbral que le toca por su tamaño de texto** (P37.6595).
 //
 // Se escribió tres veces a mano (P37.655, P37.656 y P37.6605) antes de quedarse
 // aquí. Que el trabajo deje algo detrás es más barato que volver a escribirlo.
 
-window.contrastCensus = () => {
-  const round = (n) => Math.round(n * 100) / 100;
-
-  // LO PRIMERO: congelar transiciones y animaciones, y forzar el reflow que las
-  // resuelve al estado final. Sin esto, el censo MIDE A MEDIO CAMINO.
-  //
-  // No es teórico: llamarlo dos veces conmutando el tema —que es el uso que este
-  // archivo documenta arriba y la mitad del trabajo de una auditoría— daba cuatro
-  // pares fantasma de 1,06 · 1,11 · 1,42 · 2,05 en la segunda llamada, o sea el
-  // aspecto exacto de un fallo catastrófico, y la página estaba perfecta: eran las
-  // tarjetas y los enlaces todavía interpolando su color. `.link-content` tarda
-  // 380ms (0,3s con 0,08s de retardo), así que cualquier espera «prudente» de 300 o
-  // 400ms cae justo dentro. Esperar más no es la solución —es la misma apuesta con
-  // otro número—; la solución es que no haya nada que esperar.
-  //
-  // Vale también para el pase de hover: el clon adopta el estado final de golpe en
-  // vez de arrancar una transición que nadie va a esperar. Es la lección de D35 —
-  // un elemento se quedaba clavado en su color de reposo— vista desde el medidor.
+/**
+ * Congela transiciones y animaciones, y fuerza el reflow que las resuelve al
+ * estado final. Devuelve la función que lo deshace. Sin esto se MIDE A MEDIO
+ * CAMINO.
+ *
+ * No es teórico: llamar al censo dos veces conmutando el tema —que es el uso que
+ * este archivo documenta arriba y la mitad del trabajo de una auditoría— daba
+ * cuatro pares fantasma de 1,06 · 1,11 · 1,42 · 2,05 en la segunda llamada, o sea
+ * el aspecto exacto de un fallo catastrófico, y la página estaba perfecta: eran
+ * las tarjetas y los enlaces todavía interpolando su color. `.link-content` tarda
+ * 380ms (0,3s con 0,08s de retardo), así que cualquier espera «prudente» de 300 o
+ * 400ms cae justo dentro. Esperar más no es la solución —es la misma apuesta con
+ * otro número—; la solución es que no haya nada que esperar.
+ *
+ * Vale también para el pase de hover: el clon adopta el estado final de golpe en
+ * vez de arrancar una transición que nadie va a esperar. Es la lección de D35 —
+ * un elemento se quedaba clavado en su color de reposo— vista desde el medidor.
+ *
+ * ESTÁ SUELTA A PROPÓSITO (P37.6595): **axe la necesita igual y no la tenía**.
+ * Conmutar el tema y lanzar axe sin congelar da siete violaciones fantasma
+ * (`#005859` sobre `#191d21`) con la página perfecta — el mismo fallo, en la otra
+ * herramienta. Antes de un `axe.run()`:
+ *
+ *     const descongelar = window.freezeMotion();
+ *     const r = await axe.run();
+ *     descongelar();
+ */
+window.freezeMotion = () => {
   const freeze = document.createElement("style");
   freeze.textContent =
     "*,*::before,*::after{transition:none !important;animation:none !important;}";
   document.head.appendChild(freeze);
   void document.body.offsetHeight;
+  return () => freeze.remove();
+};
+
+window.contrastCensus = () => {
+  const round = (n) => Math.round(n * 100) / 100;
+
+  const descongelar = window.freezeMotion();
 
   /** El píxel que el navegador pinta, ya recortado a sRGB. */
   function paint(css) {
@@ -199,14 +217,63 @@ window.contrastCensus = () => {
     return out;
   }
 
+  /**
+   * El umbral que le toca a ESTE texto, que depende de su tamaño. WCAG llama
+   * «grande» a ≥18pt (24px), o ≥14pt (18,66px) con peso ≥700, y ahí AAA es 4,5 y
+   * AA es 3 — no 7 y 4,5.
+   *
+   * Añadido en P37.6595, y es la cuarta vez que el medidor falla antes que la
+   * página. Hasta aquí el censo puntuaba TODO contra 7:1, así que su `bajoAAA`
+   * era una lista de candidatos vendida como lista de incumplimientos: el PRD
+   * llegó a publicar «cuatro pares incumpliendo en la escalera del logo» cuando
+   * era **uno** —los otros tres eran los «Aa» de las muestras de color, de 24px y
+   * peso 600, y dos de ellos (5,21 y 6,57) cumplían de sobra—. Un umbral mal
+   * aplicado inventa hallazgos igual que un metro mal calibrado (D41).
+   */
+  function umbralDe(el) {
+    const cs = getComputedStyle(el);
+    const px = round(parseFloat(cs.fontSize));
+    const peso = parseInt(cs.fontWeight, 10) || 400;
+    const grande = px >= 24 || (px >= 18.66 && peso >= 700);
+    return { px, peso, grande, AA: grande ? 3 : 4.5, AAA: grande ? 4.5 : 7 };
+  }
+
   const pairs = new Map();
   const sinMedir = new Map();
-  const add = (state, el, fg, bg) => {
+  const add = (state, medido, fg, bg) => {
     const r = ratio(fg, bg);
-    const key = `${state}|${fg.map(Math.round)}|${bg.map(Math.round)}`;
-    const destino = overImage(el) ? sinMedir : pairs;
+    const u = umbralDe(medido);
+    // El umbral entra en la CLAVE, no solo en el resultado. Sin él, dos textos
+    // del mismo color sobre el mismo fondo colapsan en una fila — y si la
+    // primera que llega es la grande, la pequeña (que es la que puede fallar)
+    // desaparece del censo sin dejar rastro. Es el mismo agujero que este script
+    // existe para tapar, una capa más adentro.
+    const key = `${state}|${fg.map(Math.round)}|${bg.map(Math.round)}|${u.AAA}`;
+    // Sobre una imagen no hay cifra que dar, así que tampoco hay veredicto: se
+    // etiqueta como tal en vez de dejar que el `ratio` falso se convierta en un
+    // «FALLA AA». Sería inventar un hallazgo, que es lo que este bloque corrige.
+    const sobreImagen = overImage(medido);
+    const destino = sobreImagen ? sinMedir : pairs;
     if (!destino.has(key))
-      destino.set(key, { state, ratio: r, ejemplo: label(el) });
+      destino.set(key, {
+        state,
+        ratio: r,
+        px: u.px,
+        peso: u.peso,
+        umbralAAA: u.AAA,
+        // Cuánto le sobra (o le falta) contra SU umbral. Con umbrales mixtos, el
+        // ratio más bajo ya no es el peor par: 5,21 a 24px va sobrado y 6,40 a
+        // 11px falla. Por eso el censo se ordena por esto y no por `ratio`.
+        holgura: sobreImagen ? null : round(r - u.AAA),
+        nivel: sobreImagen
+          ? "sin medir · fondo con imagen"
+          : r >= u.AAA
+            ? "AAA"
+            : r >= u.AA
+              ? "AA"
+              : "FALLA AA",
+        ejemplo: label(medido),
+      });
   };
 
   // --- Reposo -------------------------------------------------------------
@@ -240,7 +307,9 @@ window.contrastCensus = () => {
     if (target) {
       const bg = backdrop(target);
       const fg = paint(getComputedStyle(target).color);
-      add("hover", el, fg[3] === 1 ? fg.slice(0, 3) : over(fg, bg), bg);
+      // El tamaño se lee del CLON, que es quien pinta el texto: la regla `:hover`
+      // puede cambiar el cuerpo o el peso, y con ellos el umbral.
+      add("hover", target, fg[3] === 1 ? fg.slice(0, 3) : over(fg, bg), bg);
     }
     clone.remove();
   }
@@ -256,18 +325,23 @@ window.contrastCensus = () => {
     ? 15.32
     : 13.79;
 
-  const censo = [...pairs.values()].sort((a, b) => a.ratio - b.ratio);
+  // Ordenado por HOLGURA contra el umbral de cada uno, no por ratio: con
+  // umbrales mixtos, el par más apretado no es el de la cifra más baja.
+  const censo = [...pairs.values()].sort((a, b) => a.holgura - b.holgura);
   const resultado = {
     metro: ancla === esperado ? `OK (${ancla})` : `SOSPECHOSO: ${ancla} ≠ ${esperado}`,
     tema: document.documentElement.classList.contains("dark") ? "oscuro" : "claro",
     pares: censo.length,
-    // AAA de texto normal. Lo que salga aquí, o sube o se documenta como excepción.
-    bajoAAA: censo.filter((p) => p.ratio < 7),
+    // Cada uno contra el umbral que le toca por su tamaño (7 / 4,5 y 4,5 / 3).
+    // Esto ya son incumplimientos, no candidatos: lo que salga aquí, o sube o se
+    // documenta como excepción con fecha.
+    bajoAA: censo.filter((p) => p.nivel === "FALLA AA"),
+    bajoAAA: censo.filter((p) => p.nivel !== "AAA"),
     censo,
     // Texto sobre imagen: el medidor no puede componer una foto, así que estos
     // pares se listan aparte y se miran a ojo. Su `ratio` NO es una medición.
     sinMedir: [...sinMedir.values()].sort((a, b) => a.ratio - b.ratio),
   };
-  freeze.remove();
+  descongelar();
   return resultado;
 };

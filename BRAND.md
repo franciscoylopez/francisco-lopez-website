@@ -234,6 +234,12 @@ hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script e
    nada. Mide sobre el elemento real, en su estado real.
 6. **Una cifra corregida se SUSTITUYE en todos los párrafos que la citan; no basta con anotarla
    al final.** Una nota fechada al pie no corrige el texto de arriba.
+7. **La cifra no dice nada sin el umbral, y el umbral lo pone el TAMAÑO del texto.** WCAG llama
+   grande a ≥24px, o ≥18,66px con peso ≥700: ahí AAA es 4,5 y AA es 3, no 7 y 4,5. Puntuarlo
+   todo contra 7:1 hizo publicar cuatro incumplimientos donde había **uno** (D41). El censo ya
+   lo aplica y ordena por **holgura**, no por ratio — con umbrales mixtos, la cifra más baja no
+   señala al peor par. *Un umbral mal aplicado inventa hallazgos igual que un metro mal
+   calibrado.*
 
 ## Modo oscuro
 

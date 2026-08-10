@@ -316,10 +316,11 @@ cuidadoso que sea. Es el defecto de forma de siempre: el disparador miraba al si
 equivocado.
 
 **El script está escrito: `scripts/design-review/contrast-census.js`.** Se inyecta en la
-página cargada y devuelve el censo ordenado por ratio con los que bajan de 7. Se escribió a
+página cargada y devuelve el censo ordenado por **holgura contra el umbral de cada par**, con
+los que no llegan a AAA (`bajoAAA`) y los que no llegan ni a AA (`bajoAA`). Se escribió a
 mano tres veces antes de quedarse ahí; no lo reescribas.
 
-Cinco reglas, y las cinco costaron un error:
+Seis reglas, y las seis costaron un error:
 
 1. **Cada elemento con texto sobre un fondo propio es un par**, exista o no un token con ese
    nombre.
@@ -338,6 +339,13 @@ Cinco reglas, y las cinco costaron un error:
 5. **Valida el medidor contra los anclajes SIN cian** antes de creerte nada: texto principal
    13,79 claro / 15,32 oscuro, exactos. Son pares que no dependen del recorte de gamut. Si no
    salen, el fallo es del medidor (ver la regla 2: ya pasó).
+6. **El umbral lo decide el TAMAÑO del texto, no la lista.** WCAG llama grande a ≥24px, o
+   ≥18,66px con peso ≥700, y ahí AAA es 4,5 y AA es 3. Puntuarlo todo contra 7:1 hizo que el
+   PRD publicara **cuatro pares incumpliendo cuando era uno**: los otros tres eran «Aa» de
+   24px, y dos cumplían de sobra (5,21 y 6,57). *Un umbral mal aplicado inventa hallazgos
+   igual que un metro mal calibrado* (D41). El script ya lo hace desde P37.6595 —cada fila
+   lleva su `px`, su `peso`, su `umbralAAA` y su `holgura`—, y por eso **se ordena por holgura
+   y no por ratio**: con umbrales mixtos, la cifra más baja ya no es el peor par.
 
 > **Y lee el `incomplete` de axe, no solo el `violations`.** Descubierto el 2026-08-09
 > disparando el script: axe **no sabe resolver `color-mix()`**, así que mete esos elementos en
@@ -346,6 +354,15 @@ Cinco reglas, y las cinco costaron un error:
 > Todas las auditorías anteriores leyeron solo `violations`. Es el mismo agujero que el resto
 > de este apartado, ahora en la herramienta: **lo que la máquina no puede ver no aparece como
 > problema, aparece como silencio.**
+
+> **Y congela las transiciones ANTES de lanzar axe**, con el `window.freezeMotion()` que
+> exporta el mismo script. Conmutar el tema y medir sin congelar da **siete violaciones
+> fantasma** (`#005859` sobre `#191d21`) con la página perfecta: es el tema a medio
+> interpolar. El censo lo hace por dentro desde siempre; axe no puede saberlo solo.
+>
+>     const undo = window.freezeMotion();
+>     const r = await axe.run();
+>     undo();
 
 **Medición:** contraste sobre el color que el navegador pinta, recortando a [0,1] o leyendo
 el píxel de un `<canvas>` — los cianes de esta marca caen fuera de sRGB. Además, **la
