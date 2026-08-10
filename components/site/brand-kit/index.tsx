@@ -36,7 +36,7 @@ export function BrandKit({
   const t = dict;
 
   return (
-    <main id="top">
+    <>
       <Hero
         t={t.hero}
         crumb={t.crumb}
@@ -51,6 +51,6 @@ export function BrandKit({
       <Uso t={t.uso} />
 
       <RelatedPages dict={related} current="brandKit" lang={lang} />
-    </main>
+    </>
   );
 }

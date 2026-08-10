@@ -1822,3 +1822,73 @@ comprobación con el nuevo, mismo `npm run build && npm start`).
 del `x-default` de `pageMetadata`, el diff señala **las doce páginas a la vez**. Las dos mitades
 de la prueba importan — que salga vacío dice que el refactor es transparente; que una sola
 mutación rompa las doce dice que **ahora hay de verdad una sola fuente**, que era el objetivo.
+
+## D46 · El enlace de salto, y el `<main>` sube al shell — 2026-08-10
+
+**Decisión.** Toda página del sitio abre con un **enlace de salto** (`components/site/skip-link.tsx`)
+como **primer hijo del `<body>`**, y el `<main>` —con `id="main"` y `tabIndex={-1}`— lo pone
+**`PageShell`**, no cada componente de contenido. Cierra WCAG 2.4.1 «Bypass Blocks», **nivel A**,
+que era el único incumplimiento de ese nivel que tenía el sitio.
+
+**Por qué no lo vio ninguna auditoría, que es la parte que importa.** **axe no lo detecta.** Su
+regla `bypass` se da por satisfecha si la página tiene landmarks o encabezados, y este sitio
+tiene los dos: el informe salía en verde con el fallo dentro. Las tres auditorías anteriores
+—dos de contraste y una de diseño— leyeron ese verde. Es la cuarta vez que el proyecto se
+tropieza con lo mismo por el otro lado: **un medidor que da verde no prueba que no falte nada**,
+igual que un metro mal calibrado inventa hallazgos (D41) y que un censo leído del CSS no ve los
+pares que solo existen al componer (D39). Aquí el silencio no era ausencia de problema, era
+ausencia de pregunta. Lo encontró un validador externo genérico, no la herramienta especializada.
+
+**El `<main>` sube a `PageShell` (extiende D45).** Estaba escrito cinco veces en los componentes
+de contenido —con un `id="top"` que no era destino de nada— y una sexta en la home. Sube porque:
+
+- **El `<main>` es marco, no contenido.** Es la misma frontera que ya separaba `PageShell` de lo
+  que va dentro.
+- **Y sobre todo: el enlace de salto necesita destino en TODA página.** Puesto en el shell, una
+  página nueva nace con él — y hay siete a punto de entrar (el deep-dive). Es la forma concreta
+  del objetivo que el PRD §5 lleva escrito desde D39: *que la accesibilidad se herede*, no que
+  se recuerde.
+- Las dos superficies que no pasan por el shell —`SystemMessage` (404/error) y el 404 global—
+  ponen el suyo, y las tres importan `MAIN_ID` de un sitio: el id y el `href` que lo apunta son
+  dos extremos que solo funcionan juntos.
+
+**`id="top"` se retira de los cinco `<main>`.** Un elemento no puede llevar dos ids, y `top` no
+era destino de nada: los diez enlaces demo de `08-enlaces` y `09-botones` lo usan como href
+inocuo y ahora resuelven a la parte superior del documento, que es el comportamiento que
+anuncian. **El `id="top"` de la home no se toca**: lo lleva la sección del hero y es lo que hace
+que el logo del nav suba en vez de navegar.
+
+**Fuera de pantalla con `translate`, no con `sr-only`.** El patrón canónico
+—`sr-only focus:not-sr-only`— depende de qué utilidad de `position` gana en el CSS generado, y
+eso **no se puede leer en el código**: si `not-sr-only` (static) sale después de `absolute`, el
+enlace aparece en el sitio equivocado y nadie se entera hasta que alguien tabula. Un `translate`
+es determinista. Sin transición a propósito: así no hay nada que anular con
+`prefers-reduced-motion`.
+
+**El aspecto sale de `outline-neutral`** (Regla de construcción): es un control de utilidad, y
+el sólido está reservado al CTA de contacto. El anillo lo pone la regla global `:focus-visible`.
+
+### Cómo se verificó, y el error de método que apareció al hacerlo
+
+- **Las 14 rutas servidas** —seis páginas × dos idiomas, más los dos 404— tienen el enlace como
+  **primer elemento focalizable**, un solo `<main>`, con `id="main"` y `tabindex="-1"`.
+- **En pantalla, en los dos temas:** al recibir foco el enlace entra a (12, 12), mide **178×44**
+  (suelo táctil) y lleva el anillo de **2px** del sistema. Activarlo deja el foco en
+  `MAIN#main` — comprobado, no deducido.
+- **El gate de HTML (D45) enseña exactamente tres cambios y ninguno más**: `+<main id="main"
+  tabindex="-1">` ×12, `-<main id="top">` ×10 y `-<main>` ×2, y el enlace ×12. Lo demás que sale
+  en el diff son los `useId` de las pestañas del Toolkit, que se desplazan porque el árbol tiene
+  un nodo nuevo.
+
+> **El error de método, que merece quedar escrito:** las tres primeras medidas dieron «el enlace
+> no aparece al recibir foco» y «no tiene anillo». Era falso: **`:focus` no casa si la ventana
+> del navegador no tiene el foco del sistema**, y la automatización la deja sin él. El
+> `getBoundingClientRect` decía −56 y el `outline-style` decía `none` con el CSS perfecto. Un
+> clic real en la página antes de medir, y las tres cifras cambiaron. *Valida el metro antes de
+> creerte el hallazgo* — esta vez el hallazgo falso era un fallo, no un acierto.
+
+**Lo que este trabajo NO cierra, y hay que decidir:** el checklist de accesibilidad que el sitio
+**publica** tiene ocho puntos y **ninguno es el bypass**. Por eso nadie lo echó de menos: la
+regla no miraba donde ocurre la cosa (`BRAND.md` §Cómo se escribe una regla, punto 1). Añadirlo
+toca `CLAUDE.md` **y** copy publicado en ES y EN del Design System, así que se propone como
+tarea aparte en vez de colarlo aquí.

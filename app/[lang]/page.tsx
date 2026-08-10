@@ -34,7 +34,7 @@ export default async function Home({ params }: LangParams) {
       lang={lang}
       jsonLd={profilePageLd(lang, dict.meta.description)}
     >
-      <main>
+      <>
         <Hero dict={dict.hero} />
         <Hitos dict={dict.hitos} />
         <ComoTrabajo dict={dict.proceso} />
@@ -43,7 +43,7 @@ export default async function Home({ params }: LangParams) {
         <Toolkit dict={dict.toolkit} />
         <Formacion dict={dict.formacion} />
         <Contacto dict={dict.contacto} cvHref={cvHref} />
-      </main>
+      </>
     </PageShell>
   );
 }

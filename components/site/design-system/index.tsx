@@ -52,7 +52,7 @@ export function DesignSystem({
   const t = dict;
 
   return (
-    <main id="top">
+    <>
       <Hero
         t={t.hero}
         crumb={t.crumb}
@@ -75,6 +75,6 @@ export function DesignSystem({
       <Esqueleto t={t.esqueleto} />
 
       <RelatedPages dict={related} current="designSystem" lang={lang} />
-    </main>
+    </>
   );
 }

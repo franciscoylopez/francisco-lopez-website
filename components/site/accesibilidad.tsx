@@ -40,7 +40,7 @@ export function Accesibilidad({
 }) {
   const t = dict;
   return (
-    <main id="top">
+    <>
       {/* ===================== HERO ===================== */}
       <section className="py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)]">
         <div className={WRAP}>
@@ -207,7 +207,7 @@ export function Accesibilidad({
       </section>
 
       <RelatedPages dict={related} current="accesibilidad" lang={lang} />
-    </main>
+    </>
   );
 }
 

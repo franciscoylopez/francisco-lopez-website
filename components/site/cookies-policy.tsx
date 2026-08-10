@@ -31,7 +31,7 @@ export function CookiesPolicy({
 }) {
   const t = dict;
   return (
-    <main id="top">
+    <>
       <section className="py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)]">
         <div className={WRAP}>
           <div data-reveal className="mb-[clamp(2.5rem,5vw,3.5rem)]">
@@ -172,7 +172,7 @@ export function CookiesPolicy({
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }
 
