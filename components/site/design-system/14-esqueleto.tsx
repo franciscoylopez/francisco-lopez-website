@@ -21,12 +21,16 @@ export function Esqueleto({
       }}
     >
       <div className={WRAP}>
-        <div className="mb-10 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-4">
-          <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
-        </div>
-        <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem]">
-          {t.lead}
-        </p>
+        {/* La cabecera va SUELTA, no dentro de un flex. `SectionHeader` devuelve un
+            fragmento con dos hermanos —rótulo y titular—, así que un contenedor
+            `flex justify-between` los convierte en dos ítems y los separa a los
+            extremos de la fila: era el resto del envoltorio que aquí sostenía un
+            control que hoy vive dentro de `DevicePreview`. */}
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.lead}
+          </p>
+        </SectionHeader>
         <p className="text-muted-foreground border-primary m-0 mb-8 max-w-[var(--measure)] border-l-2 pl-[0.9rem] text-[0.88rem] md:hidden">
           {t.mobileNote}
         </p>
