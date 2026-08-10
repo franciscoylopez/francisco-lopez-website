@@ -39,7 +39,7 @@
 - D22 · CV en PDF generado desde el diccionario (react-pdf, ATS)
 - D23 · Copy con énfasis inline vía render de markup ligero (`Rich`)
 - D24 · Página de Accesibilidad: declaración pública verificada
-- D25 · Páginas 404/error de marca (`global-not-found` + `global-error`)
+- D25 · Páginas 404/error de marca (`global-not-found` + `global-error`); **el `not-found` anidado se borró (2026-08-10): su `headers()` volvía dinámico todo `[lang]` y las seis páginas eran `ƒ` en vez de `●`**
 - D26 · Cabeceras de seguridad Fase 1; CSP «A+ barato» implementada
 - D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot
 - D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda; su tercera aplicación es el corte de `BRAND.md` (P37.685)
