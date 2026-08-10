@@ -51,10 +51,17 @@ function apiKey(): string | undefined {
  */
 async function huellaDelDespliegue(url: string) {
   const res = await fetch(url);
+  // SIN ESTAS DOS GUARDAS LA HUELLA MIENTE, y miente hacia el lado malo: una
+  // página de protección de despliegue, un 404 o cualquier cuerpo sin assets
+  // dejan la lista vacía, y el SHA-256 de la cadena vacía es SIEMPRE EL MISMO.
+  // O sea que el script diría «la huella no ha cambiado» en cada ejecución — justo
+  // la señal falsa que la huella existe para evitar (D49).
+  if (!res.ok) throw new Error(`la URL respondió ${res.status}`);
   const html = await res.text();
   const assets = [...html.matchAll(/\/_next\/static\/[^"']+/g)]
     .map((m) => m[0])
     .sort();
+  if (!assets.length) throw new Error("la respuesta no trae assets de /_next");
   return {
     huella: createHash("sha256")
       .update(assets.join("\n"))
@@ -199,14 +206,25 @@ async function main() {
     );
     process.exit(2);
   }
+  // Un `--solo` que no se reconoce NO cae de vuelta a «las dos»: eso gastaría dos
+  // llamadas de una cuota limitada y el doble de espera sin decir que la bandera se
+  // ignoró. Basta escribir `--solo=mobile` en inglés, o `--solo=móvil` con tilde.
   const solo = args.find((a) => a.startsWith("--solo="))?.split("=")[1];
-  const estrategias = (
-    solo === "movil"
-      ? ["mobile"]
-      : solo === "escritorio"
-        ? ["desktop"]
-        : ["mobile", "desktop"]
-  ) as ("mobile" | "desktop")[];
+  const POR_BANDERA = {
+    movil: ["mobile"],
+    escritorio: ["desktop"],
+  } as const satisfies Record<string, readonly ("mobile" | "desktop")[]>;
+
+  if (solo !== undefined && !(solo in POR_BANDERA)) {
+    console.error(
+      `\n--solo=${solo} no se reconoce. Valores válidos: movil · escritorio.\n` +
+        "Sin la bandera se miden las dos.\n",
+    );
+    process.exit(2);
+  }
+  const estrategias: readonly ("mobile" | "desktop")[] = solo
+    ? POR_BANDERA[solo as keyof typeof POR_BANDERA]
+    : ["mobile", "desktop"];
 
   const key = apiKey();
   console.log(`\n${url}`);

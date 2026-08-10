@@ -6,7 +6,7 @@
 // URLs SIEMPRE absolutas vía SITE_URL (los rastreadores no resuelven relativas en JSON-LD).
 
 import { EMAIL, LINKEDIN_URL, PHONE_TEL as TELEPHONE } from "@/lib/contact";
-import type { Locale } from "@/lib/i18n/config";
+import { pagePath, type Locale } from "@/lib/i18n/config";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Especialidades declaradas en el PRD §10.
@@ -24,10 +24,17 @@ const KNOWS_ABOUT = [
   "MRR",
 ];
 
-// URL absoluta de la home por locale (ES en la raíz, EN en /en — D2).
-export function homeUrl(lang: Locale): string {
-  return `${SITE_URL}${lang === "es" ? "/" : `/${lang}`}`;
+// URL absoluta de una página por locale (ES en la raíz, EN en /en — D2). La parte
+// relativa sale de `pagePath`, la MISMA fuente que el canonical y los hreflang: si
+// el JSON-LD derivara la ruta por su cuenta, un locale nuevo entraría en la
+// metadata y no aquí, y nada lo detectaría — un string de URL no lo typechequea
+// nadie.
+export function pageUrl(lang: Locale, slug = ""): string {
+  return `${SITE_URL}${pagePath(lang, slug)}`;
 }
+
+/** La home de un locale. Azúcar sobre `pageUrl`, que es lo que casi todo usa. */
+export const homeUrl = (lang: Locale): string => pageUrl(lang);
 
 // ProfilePage + Person: la entidad principal del sitio, en la home.
 export function profilePageLd(lang: Locale, description: string) {

@@ -50,9 +50,17 @@ export const EXPERIENCES: Experience[] = [
  * Lanza si no encuentra match.
  */
 export function experienceOf(company: string): Experience {
-  const hit = EXPERIENCES.find(
-    (e) => company === e.company || company.startsWith(e.company),
-  );
+  // POR LONGITUD DESCENDENTE, no en orden de array. Con `startsWith` y el primer
+  // match, registrar «Emendu» y más tarde «Emendu Health» haría que la segunda
+  // resolviera en silencio a la primera — y se llevaría su logo Y su slug. O sea,
+  // exactamente la desalineación silenciosa que este módulo existe para matar,
+  // reaparecida en una ventana más estrecha: el mapeo por índice se cambió por uno
+  // por nombre con el mismo modo de fallo. Ganando siempre el prefijo más largo,
+  // no hay ambigüedad posible. (Hoy no hay colisión; esto es para que siga sin
+  // haberla.)
+  const hit = [...EXPERIENCES]
+    .sort((a, b) => b.company.length - a.company.length)
+    .find((e) => company === e.company || company.startsWith(e.company));
   if (!hit) {
     throw new Error(
       `Trayectoria: no encuentro la experiencia de "${company}" en content/experiences.ts. ` +
