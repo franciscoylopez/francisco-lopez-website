@@ -649,6 +649,42 @@ asimetría es deliberada—. Se evaluó y se **mantuvo el doble split** (Nav + "
 violaciones claro/oscuro, HTTP 404 real ES/EN. El `[lang]/not-found.tsx` anidado (solo
 salta con `notFound()` explícito, hoy inexistente) queda como fallback minimalista.
 
+### Ese fallback costaba el sitio entero en estático — se borra (2026-08-10)
+
+**El párrafo de arriba ya lo decía sin saber lo que costaba:** el `not-found` anidado
+«solo salta con `notFound()` explícito, hoy inexistente». Lo que no decía es que, para
+saber el locale, leía `headers()` —la única vía documentada, porque
+**`not-found` no acepta props**— y **eso volvía dinámico TODO el segmento `[lang]`**. Las
+seis páginas del sitio salían como **ƒ (server-rendered on demand)** en el build, teniendo
+`generateStaticParams` y sin usar ninguna API dinámica ellas mismas.
+
+Se borra `app/[lang]/not-found.tsx`. Lo captura `global-not-found`, que según la doc «maneja
+cualquier URL no coincidente de toda la aplicación» — y que además es **la 404 buena**: la del
+hero con el «0» del split, Nav y Footer, frente al `SystemMessage` mínimo que se quedaba
+detrás. O sea que la página que se pierde era la peor de las dos.
+
+**Lo verificado, en este orden:**
+
+1. **Causa aislada:** quitando solo la llamada a `headers()`, las seis rutas pasan de `ƒ` a
+   `●` prerenderizadas por locale. No es una hipótesis, es un build.
+2. **Nada se rompe:** `/ruta-inexistente` y `/en/ruta-inexistente` siguen devolviendo **HTTP
+   404** con `<html lang>` correcto, el titular en su idioma, el enlace de salto de D46 y la
+   404 rica con Nav y Footer.
+3. **Y el HTML mejora.** El gate de D45 comparando el build estático contra el dinámico da un
+   solo cambio, y a favor: **24 `<link rel="preload" as="font">` que el dinámico no emitía**,
+   dos por página. Estático deja a Next resolver las fuentes en build.
+
+**Lo que queda como riesgo aceptado:** un `notFound()` lanzado desde dentro de `[lang]` —hoy
+solo el guardián defensivo `if (!isLocale(lang))`, inalcanzable porque el proxy reescribe
+cualquier prefijo desconocido— caería en el 404 por defecto de Next en vez de en el de marca.
+Cambiar eso costaba el estático de las seis páginas, que es lo que se estaba pagando.
+
+**Y de paso corrige el argumento de la tarea que lo destapó (P46, partir el diccionario):** con
+las páginas prerenderizadas, parsear el diccionario entero pasa a ser un coste de **build**, no
+de arranque en frío. A P46 le quedan sus razones buenas —el contenido se multiplica con las
+siete páginas del deep-dive y editar copy en 1.580 líneas invita a conflictos—, que no son de
+rendimiento.
+
 ## D26 · Cabeceras de seguridad Fase 1; CSP «A+ barato» (Fase 2) implementada, estricta diferida — 2026-08-02
 **Decisión.** `next.config.ts` sirve, en todas las rutas (`/:path*`), un conjunto de
 cabeceras de seguridad **triviales y sin riesgo** (Fase 1): `X-Content-Type-Options:
