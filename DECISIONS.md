@@ -1892,3 +1892,49 @@ el sólido está reservado al CTA de contacto. El anillo lo pone la regla global
 regla no miraba donde ocurre la cosa (`BRAND.md` §Cómo se escribe una regla, punto 1). Añadirlo
 toca `CLAUDE.md` **y** copy publicado en ES y EN del Design System, así que se propone como
 tarea aparte en vez de colarlo aquí.
+
+## D47 · Lo que ya está en pantalla no se anima: el LCP no lo paga el reveal — 2026-08-10
+
+**Decisión.** `RevealRoot` marca como mostrados (`data-shown`) los `[data-reveal]` que están en
+el primer pliegue **antes** de encender la clase `reveal-on`. Efecto: el contenido del primer
+pliegue **no hace fade-up** — se queda como lo pintó el servidor— y todo lo demás sigue
+revelándose al llegar a él.
+
+**El orden es la corrección entera.** Como estaba, el HTML llegaba con el contenido visible, se
+descargaba y ejecutaba el JS, hidrataba, y **entonces `reveal-on` ocultaba lo que ya estaba
+pintado** para devolverlo con una transición de 600 ms. El LCP se registra en el primer frame
+con opacidad > 0, así que la métrica principal de rendimiento la estaba pagando una animación
+decorativa.
+
+**El diagnóstico, con las cifras del desglose de PageSpeed:** TTFB 120 ms + retraso de carga
+280 ms + carga del recurso 50 ms + **retraso de renderizado 2.090 ms**. El 80% del LCP no era
+red. Medido en local sobre el build de producción, el mismo patrón, más marcado: imagen
+descargada a los 99 ms, **LCP a los 4.032 ms**.
+
+**Y el aviso de PageSpeed apuntaba al sitio equivocado.** Señalaba `fetchPriority` en la imagen
+del hero, y la imagen ya lo tenía todo: `priority` (que emite `fetchpriority=high`,
+`loading=eager` y el `preload`), `fill` y `sizes`. Perseguir el aviso no habría arreglado nada.
+*La sospecha de que «algo falla, me extraña que PageSpeed falle en esto» era correcta.*
+
+**Se arregla el patrón, no el caso.** La alternativa era quitarle `data-reveal` al hero, que
+arregla la home y deja el problema en cada página con contenido en el primer pliegue — y hay
+**34 elementos con `data-reveal`** solo en la home. Con esto, cualquier página nueva nace bien.
+
+**El coste, que es visible y por eso se decide y no se cuela:** el primer pliegue ya no entra
+con animación. No hay forma de evitarlo —un elemento que empieza en `opacity: 0` retrasa el LCP
+por definición—, y además es lo que la regla decía desde el principio: *«una vez al **entrar** en
+viewport»* (PRD §21). Lo que ya estaba ahí al cargar no ha entrado.
+
+**Verificado:** en la home, de los 34 `[data-reveal]`, los **4 del primer pliegue** quedan
+marcados antes de encender la clase y su opacidad computada es **1** —incluida la imagen del
+LCP—; los otros 30 siguen en manos del `IntersectionObserver`.
+
+> **Lo que NO se pudo medir aquí, y hace falta decirlo:** la pestaña que conduce la
+> automatización corre con `visibilityState: "hidden"`, y con la página oculta el navegador **no
+> emite entradas de LCP, congela `requestAnimationFrame` y no dispara `IntersectionObserver`**.
+> Se comprobó que el problema es del entorno y no del cambio creando **un IO nuevo con las
+> mismas opciones**: tampoco dispara. O sea que el reveal al scrollear no se ha podido ejercitar
+> aquí, y la cifra de LCP tiene que salir de **PageSpeed contra el Preview**, móvil y escritorio.
+> Es la tercera vez en dos días que una medida por este canal sale falsa por el estado de la
+> ventana (D46 fue la del `:focus`): **el metro tiene un modo de fallo conocido y hay que
+> comprobarlo antes de creerse la lectura.**

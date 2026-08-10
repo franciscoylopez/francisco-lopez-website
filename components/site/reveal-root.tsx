@@ -7,6 +7,20 @@ import { useEffect, useRef, type ReactNode } from "react";
 // ease-out-cubic). Con prefers-reduced-motion NO añade la clase: el contenido y los
 // números se quedan tal cual los renderizó el servidor (visibles, sin animar). Sin
 // JS, igual: nunca se oculta nada.
+//
+// LO QUE YA ESTÁ EN PANTALLA NO SE ANIMA (P44). Se marca como mostrado ANTES de
+// encender `reveal-on`, así que nunca llega a ocultarse. El orden es la corrección
+// entera: al revés —que es como estaba— el HTML llegaba con el contenido visible,
+// se hidrataba, y entonces lo YA PINTADO se ocultaba para volver con una
+// transición de 600 ms. El LCP se registra en el primer frame con opacidad > 0, así
+// que la métrica principal de rendimiento la estaba pagando una animación
+// decorativa: 2.090 ms de «retraso de renderizado» en PageSpeed, con la imagen del
+// hero descargada a los 50 ms.
+//
+// Y es lo que la regla decía desde el principio: «una vez al ENTRAR en viewport».
+// Lo que ya estaba ahí al cargar no ha entrado. El efecto visible —que el primer
+// pliegue deja de hacer fade-up— es el precio, y no hay forma de evitarlo: un
+// elemento que empieza en `opacity: 0` retrasa el LCP por definición.
 export function RevealRoot({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -17,6 +31,19 @@ export function RevealRoot({ children }: { children: ReactNode }) {
       "(prefers-reduced-motion: reduce)",
     ).matches;
     if (reduce) return;
+
+    const revelables = [...root.querySelectorAll("[data-reveal]")];
+
+    // Primero: lo visible en el primer pliegue queda mostrado. Va ANTES de la
+    // clase — la regla `[data-shown]` gana en especificidad, así que la opacidad
+    // de estos elementos nunca cambia de 1 y no hay repintado que retrase el LCP.
+    const alturaVentana = window.innerHeight;
+    for (const el of revelables) {
+      const r = el.getBoundingClientRect();
+      if (r.top < alturaVentana && r.bottom > 0) {
+        el.setAttribute("data-shown", "1");
+      }
+    }
 
     root.classList.add("reveal-on");
 
@@ -31,9 +58,9 @@ export function RevealRoot({ children }: { children: ReactNode }) {
       },
       { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
     );
-    root
-      .querySelectorAll("[data-reveal]")
-      .forEach((el) => revealIO.observe(el));
+    for (const el of revelables) {
+      if (!el.hasAttribute("data-shown")) revealIO.observe(el);
+    }
 
     const animateCount = (el: Element) => {
       const to = Number.parseFloat(el.getAttribute("data-count") ?? "");
