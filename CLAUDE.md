@@ -93,7 +93,17 @@ Al empezar una sesión de desarrollo:
 
 ## Reglas del tablero (no negociables)
 
-> **Modelo actualizado (2026-08-01): sin fechas.** Se dejaron los sprints datados —eran ficción, vamos más rápido que cualquier calendario y no hay equipo que coordinar—. El campo pasó a **`Etapa`** (fases temáticas: *Cimientos técnicos · Sobre mí · Accesibilidad · Contacto avanzado · Optimización · IA conversacional (V3)*; lo de V1 en *"V1 (entregado)"*). **Lo que dirige la ejecución es `MoSCoW` + `Prioridad` (orden) + `Tamaño`**, no el calendario. En las reglas de abajo, donde diga "sprint" léase **"etapa/fase"**, y "sprint activo" = **la etapa en curso**.
+> **Modelo actualizado (2026-08-01): sin fechas.** Se dejaron los sprints datados —eran ficción, vamos más rápido que cualquier calendario y no hay equipo que coordinar—. El campo pasó a **`Etapa`**. **Lo que dirige la ejecución es `MoSCoW` + `Prioridad` (orden) + `Tamaño`**, no el calendario. En las reglas de abajo, donde diga "sprint" léase **"etapa/fase"**, y "sprint activo" = **la etapa en curso**.
+
+> **Qué significa `Etapa` (revisado el 2026-08-10).** Dejó de ser una lista de fases temáticas —había degenerado: 16 de 20 tareas abiertas estaban en *"Optimización"*, así que el eje ya no discriminaba nada— y pasa a contestar **una sola pregunta: ¿esto está comprometido o esperando?** Dos familias en el mismo campo:
+>
+> - **Sprints** (lo comprometido, con su orden): *Deep-dive · Cómo se ha creado · Footer y contacto*.
+> - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad*.
+> - **Cerradas** (solo archivadas, no se usan para tareas nuevas): *V1 (entregado) · Cimientos técnicos · Sobre mí · Contacto avanzado · Optimización · IA conversacional*.
+>
+> **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote. El coste asumido: al entrar en un sprint se pierde de qué bloque venía; lo llevan el nombre y las notas, y añadir una séptima propiedad sería peor.
+
+> **`Versión` ≠ `Etapa`.** La etapa dice *cuándo se hace*; la versión, *en qué release sale*. Desde el 2026-08-10: **V2** = los tres sprints de arriba · **V3** = la deuda y mejoras por bloque · **V4** = la IA conversacional. Ver `PRD-Live.md` §9.
 
 - **"To-Do", "En progreso" y "Blocked" están reservados al sprint activo.** Toda tarea de un sprint futuro va en **"Sin empezar"**, sin excepción. Al abrir un sprint nuevo, sus tareas pasan de "Sin empezar" a "To-Do"; al cerrarlo, lo que quede sin hacer se mueve al siguiente sprint y vuelve a "Sin empezar".
 - **`Prioridad` es un orden global de ejecución, no una etiqueta de importancia.** Números bajos = antes. Debe ser coherente con el orden de sprints: todo lo del sprint 1 va por delante de todo lo del 2, y así sucesivamente. Dentro de cada sprint, ordena por dependencia — primero lo que desbloquea a otras tareas.
@@ -104,7 +114,7 @@ Al empezar una sesión de desarrollo:
 
 ### Gestión de etapas — cuándo se cierra una y se dispara `sprint-review`
 
-Sin fechas, la **etapa en curso** es la fase temática de menor `Prioridad` con tareas abiertas (Cimientos técnicos va primera). Se trabaja **una etapa a la vez**, en orden, **pero en dos carriles**: el *build* (técnico/diseño/dev) avanza una etapa cada vez; el *contenido* que solo escribe Francisco (Sobre mí, Accesibilidad) corre **en paralelo, por delante**, para desbloquear las secciones futuras (el "contenido primero"). Por eso `To-Do`/`En progreso` cubren la **etapa de build activa** *y* el **carril de contenido en marcha**; todo lo demás (build de secciones futuras, optimización) va en `Sin empezar`. Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara ("cerramos Cimientos"). Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** (ver abajo). "Listo" queda solo para lo terminado de la etapa en curso.
+Sin fechas, la **etapa en curso** es el sprint de menor `Prioridad` con tareas abiertas (hoy, *Deep-dive*). Se trabaja **una etapa a la vez**, en orden, **pero en dos carriles**: el *build* (técnico/diseño/dev) avanza una etapa cada vez; el *contenido* que solo escribe Francisco corre **en paralelo, por delante**, para desbloquear las secciones futuras (el "contenido primero" — hoy, la definición de Contacto ampliada, que es del sprint 3 y ya está en `To-Do`). Por eso `To-Do`/`En progreso` cubren la **etapa de build activa** *y* el **carril de contenido en marcha**; todo lo demás —sprints futuros y bloques— va en `Sin empezar`. Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara ("cerramos Cimientos"). Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** (ver abajo). "Listo" queda solo para lo terminado de la etapa en curso.
 
 ### Metodología de trabajo (fase V2+)
 
