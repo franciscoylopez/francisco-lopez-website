@@ -1723,3 +1723,45 @@ Lo cazó medirlo en pantalla. Restaurado a 16 en las 19.
 > documentado como «entradilla u otro contenido bajo el titular» que **nadie usa**: ahí es donde
 > va. No entra aquí porque es una decisión de API al final de una ola larga, y porque tocaría
 > también el `mt-[1.4rem]` del Brand Kit.
+
+## D44 · Lo que de una experiencia no es copy vive en `content/`, y la unión es por nombre — 2026-08-10
+
+**Decisión.** Los datos de una experiencia que **no son copy** —hoy su **logo** y el **slug** de
+su página— viven en **`content/experiences.ts`**, no en el diccionario i18n ni dentro del TSX que
+los pinta. La unión entre las tres fuentes que hoy describen una experiencia es **por `company`**,
+la clave que el CV ya usaba (D22), y **por prefijo** para absorber la forma de display del
+diccionario («Ontecnia (Malavida, Lecturalia, BonViveur…)»). Si una fila no encuentra su
+experiencia, **se lanza**.
+
+**Las tres fuentes, y por qué son tres y no una:**
+
+| Fuente | Qué guarda | Por qué ahí |
+|---|---|---|
+| `app/[lang]/dictionaries/{es,en}.json` | periodo, rol, empresa, descripción | Es copy, y es lo único que el diccionario guarda desde D38 |
+| `content/cv/content.{es,en}.ts` | el texto rico (bullets con métricas, `context`, `reporting`) | Autorado, más detallado que la web, y origen del deep-dive (D22) |
+| `content/experiences.ts` | logo y slug | No es copy ni es texto: no se traduce, así que no puede vivir por locale |
+
+**El problema que corrige.** Los logos eran **tres arrays posicionales dentro de
+`components/site/trayectoria.tsx`**, mapeados **por índice** contra los arrays del diccionario.
+Añadir una experiencia, reordenar dos o borrar una desalineaba los logos **en silencio**: sin
+error de compilación, sin nada que lo detectara, y con el fallo visible solo para quien conociera
+los logos de memoria. Es el mismo olor que D38 resolvió para los tokens —**un valor que vive
+fuera de su fuente**—, y se corrige igual: el logo pasa a ser un campo del dato y la fila lo pide
+por su nombre.
+
+**Por qué el slug no se deriva del nombre.** `slugify("Ontecnia (Malavida, Lecturalia,
+BonViveur…)")` no da nada usable, y el slug es una **URL pública**: una regla de derivación que
+un día produzca otra cadena rompe enlaces sin avisar. Se escribe, y es `null` en las dos entradas
+de Marketing & Growth, que no tienen página propia a propósito (PRD §3).
+
+**Por qué lanza en vez de no pintar nada.** Es la lección de `matchFact` (D22): romper la build
+es mejor que servir el logo de otra empresa. **Verificado disparándolo** —añadida una fila con
+una empresa sin registrar, la home devuelve 500 nombrando la empresa que falta—, que es la regla
+de `BRAND.md` §Cómo se escribe una regla: un guardián que nadie ha visto saltar no se sabe si
+salta.
+
+**Gate del cambio.** El HTML servido de la home (ES y EN) es **idéntico** antes y después, con
+las normalizaciones de D42. Y el invariante nuevo se comprobó **al revés que el gate**:
+reordenando a mano dos experiencias del diccionario en cada bloque, los logos siguen a su
+empresa. La home no está todavía en `npm run gate:showcase` —lo extiende P42—, así que esta
+verificación se hizo con un snapshot equivalente hecho a mano.
