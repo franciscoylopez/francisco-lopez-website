@@ -32,7 +32,10 @@ function apiKey(): string | undefined {
     const linea = readFileSync(".env.local", "utf8")
       .split(/\r?\n/)
       .find((l) => l.trimStart().startsWith("PSI_API_KEY="));
-    return linea?.slice(linea.indexOf("=") + 1).trim().replace(/^["']|["']$/g, "");
+    return linea
+      ?.slice(linea.indexOf("=") + 1)
+      .trim()
+      .replace(/^["']|["']$/g, "");
   } catch {
     return undefined;
   }
@@ -64,6 +67,15 @@ async function huellaDelDespliegue(url: string) {
 
 const ms = (n: number | undefined) =>
   n === undefined ? "—" : Math.round(n) + " ms";
+
+/** Modos que Lighthouse no puntúa: son contexto, no aprobado ni suspenso. */
+const SIN_NOTA = ["informative", "notApplicable", "manual"];
+
+/** Una auditoría «que no pasa»: puntuada, por debajo de 0,9. */
+const noPasa = (au: Auditoria) =>
+  au.score !== null &&
+  au.score < 0.9 &&
+  !SIN_NOTA.includes(au.scoreDisplayMode ?? "");
 
 /**
  * Una fase del desglose del LCP. Los nombres de campo cambiaron con la auditoría:
@@ -168,14 +180,7 @@ async function mide(url: string, strategy: "mobile" | "desktop", key?: string) {
   }
 
   const fallan = Object.entries(a)
-    .filter(
-      ([, au]) =>
-        au.score !== null &&
-        au.score < 0.9 &&
-        au.scoreDisplayMode !== "informative" &&
-        au.scoreDisplayMode !== "notApplicable" &&
-        au.scoreDisplayMode !== "manual",
-    )
+    .filter(([, au]) => noPasa(au))
     .map(([id, au]) => `    · ${au.title ?? id}`);
   console.log(
     fallan.length
