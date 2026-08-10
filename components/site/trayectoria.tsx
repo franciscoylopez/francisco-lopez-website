@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { BrandLogoBox } from "./brand-logo-box";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
+import { experienceOf } from "@/content/experiences";
 
 type TrayRow = {
   period: string;
@@ -30,27 +31,21 @@ export type TrayectoriaDict = {
   previo: TrayRow[];
 };
 
-// Los nombres de archivo de logo son datos (mapeados por posición); null = fila
-// sin logo (Havas · Increnta · Miss Conversion, §8.5).
-const PRODUCTO_LOGOS = [
-  "companies/emendu",
-  "companies/kuotip",
-  "companies/indya",
-  "companies/freepik",
-];
-const NESTED_LOGOS = ["companies/thetool", "companies/pickaso"];
-const PREVIO_LOGOS: (string | null)[] = ["companies/ontecnia", null];
-
-function LogoCell({ name }: { name: string | null }) {
-  if (!name) return null;
+// El logo NO es un dato de la fila: se busca por el nombre de la empresa en
+// `content/experiences.ts`, que es su fuente única. Antes eran tres arrays
+// posicionales aquí mismo, unidos por índice contra los del diccionario —
+// reordenar una experiencia desalineaba los logos en silencio.
+function LogoCell({ company }: { company: string }) {
+  const { logo } = experienceOf(company);
+  if (!logo) return null;
   return (
     <span className="hidden justify-self-end md:block">
-      <BrandLogoBox name={name} />
+      <BrandLogoBox name={logo} />
     </span>
   );
 }
 
-function Row({ row, logo }: { row: TrayRow; logo: string | null }) {
+function Row({ row }: { row: TrayRow }) {
   return (
     <div className="tray-grid border-border border-b py-[clamp(1.35rem,3vw,1.85rem)]">
       <p className="text-muted-foreground m-0 pt-[0.15rem] text-[0.9rem] whitespace-nowrap [font-variant-numeric:tabular-nums]">
@@ -67,12 +62,12 @@ function Row({ row, logo }: { row: TrayRow; logo: string | null }) {
           {row.desc}
         </p>
       </div>
-      <LogoCell name={logo} />
+      <LogoCell company={row.company} />
     </div>
   );
 }
 
-function NestedRow({ row, logo }: { row: TrayRow; logo: string | null }) {
+function NestedRow({ row }: { row: TrayRow }) {
   return (
     <div className="tray-grid-nested relative">
       {/* conector horizontal hacia el borde vertical del contenedor */}
@@ -98,7 +93,7 @@ function NestedRow({ row, logo }: { row: TrayRow; logo: string | null }) {
           {row.desc}
         </p>
       </div>
-      <LogoCell name={logo} />
+      <LogoCell company={row.company} />
     </div>
   );
 }
@@ -150,8 +145,8 @@ export function Trayectoria({
         </div>
 
         <div data-reveal className="border-border border-t">
-          {dict.producto.map((row, i) => (
-            <Row key={row.company} row={row} logo={PRODUCTO_LOGOS[i] ?? null} />
+          {dict.producto.map((row) => (
+            <Row key={row.company} row={row} />
           ))}
 
           {/* Shutapp Projects — fila padre con roles anidados */}
@@ -176,12 +171,8 @@ export function Trayectoria({
                 paddingLeft: "clamp(1rem, 2.5vw, 1.75rem)",
               }}
             >
-              {dict.nested.map((row, i) => (
-                <NestedRow
-                  key={row.company}
-                  row={row}
-                  logo={NESTED_LOGOS[i] ?? null}
-                />
+              {dict.nested.map((row) => (
+                <NestedRow key={row.company} row={row} />
               ))}
             </div>
           </div>
@@ -206,8 +197,8 @@ export function Trayectoria({
           {dict.previoIntro}
         </p>
         <div data-reveal className="border-border border-t">
-          {dict.previo.map((row, i) => (
-            <Row key={row.company} row={row} logo={PREVIO_LOGOS[i] ?? null} />
+          {dict.previo.map((row) => (
+            <Row key={row.company} row={row} />
           ))}
         </div>
       </div>
