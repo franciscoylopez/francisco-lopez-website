@@ -30,8 +30,9 @@ export function Color({
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <SectionHeader eyebrow={t.num} title={t.title} size="section" />
-          <p className={LEAD}>{t.lead}</p>
+          <SectionHeader eyebrow={t.num} title={t.title} size="section">
+            <p className={LEAD}>{t.lead}</p>
+          </SectionHeader>
         </div>
         <div
           data-reveal

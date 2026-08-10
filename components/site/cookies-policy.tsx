@@ -50,10 +50,9 @@ export function CookiesPolicy({
               title={t.title}
               level={1}
               size="page-sm"
-            />
-            <p className="text-muted-foreground mt-4 text-[0.9rem]">
-              {t.updated}
-            </p>
+            >
+              <p className="text-muted-foreground text-[0.9rem]">{t.updated}</p>
+            </SectionHeader>
             <p className="mt-6 text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6]">
               {t.lead}
             </p>

@@ -22,10 +22,11 @@ export function Etiquetas({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
-        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
-          {t.lead}
-        </p>
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.lead}
+          </p>
+        </SectionHeader>
         {/* Cuatro tarjetas, no seis como en (09): con el `minmax` de aquella
             sección caben tres por fila y la cuarta se quedaba sola dejando dos
             tercios de fila vacíos. A 15rem entran las cuatro en una sola fila y

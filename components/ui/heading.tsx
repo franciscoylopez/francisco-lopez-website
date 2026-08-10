@@ -89,6 +89,45 @@ export const EYEBROW_GAP = {
   "section-sm": "mb-3",
 } as const;
 
+/**
+ * Hueco título→entradilla, el peldaño de abajo del anterior y por el mismo
+ * argumento: lo pone el TAMAÑO, no el call site (P45). Lo llevaba el punto de
+ * uso —28 `mt-*` escritos a mano— desde que P37.695 mató a `SectionHead` y se
+ * llevó con él el `mb-4` de su envoltorio.
+ *
+ * AL MEDIRLOS APARECIÓ QUE NO ERAN 32 DECISIONES, SINO CUATRO — y que el hueco
+ * YA SEGUÍA AL TAMAÑO, sin que nadie se hubiera dado cuenta:
+ *
+ *   · `page` → 24px en los tres heros.
+ *   · `page-sm` → 16px en Cookies.
+ *   · `section` → **22,4px (`1.4rem`) en los diez sitios que lo usan**: las seis
+ *     secciones del Brand Kit y las cuatro de la home.
+ *   · `section-sm` → 16px en las dieciocho del Design System y Accesibilidad.
+ *
+ * El `1.4rem` parecía el drift más evidente —un valor a mano entre un montón de
+ * `mt-4`— y era justo lo contrario: el valor correcto de OTRO tamaño. Es la
+ * lección `CARD`/`PANEL` de D36 por tercera vez, y aquí el que significaba otra
+ * cosa era el que más pinta de error tenía.
+ *
+ * **Por eso no se normaliza a `mb-5`, que era la tentación.** No es un paso de la
+ * escala de Tailwind, pero es la moda de su grupo —diez de diez— y bajarlo a
+ * 20px movería diez sitios publicados para ganar una cifra redonda. Lo que esta
+ * tarea arregla es que estuviera escrito diez veces, no cuánto mide; centralizado
+ * aquí, cambiarlo es una línea el día que sea una decisión de diseño y no un
+ * refactor. Ningún píxel se mueve.
+ *
+ * Va como margen INFERIOR del titular y no como superior de la entradilla: así
+ * cada elemento de la cabecera carga el hueco hacia el de abajo, igual que
+ * `EYEBROW_GAP`, y el slot `children` no necesita envoltorio — o sea, ni un nodo
+ * nuevo en el DOM de las páginas que ya están publicadas.
+ */
+export const LEAD_GAP = {
+  page: "mb-6",
+  "page-sm": "mb-4",
+  section: "mb-[1.4rem]",
+  "section-sm": "mb-4",
+} as const;
+
 type Size = NonNullable<VariantProps<typeof titleVariants>["size"]>;
 
 export function SectionHeader({
@@ -113,7 +152,10 @@ export function SectionHeader({
   reveal?: boolean;
   /** Solo para lo que depende del contenido: `max-w-[14ch]`, `text-balance`. */
   titleClassName?: string;
-  /** Entradilla u otro contenido bajo el titular. */
+  /**
+   * Entradilla u otro contenido bajo el titular. El hueco que la separa del
+   * titular lo pone `LEAD_GAP` según el `size`: en el call site no se escribe.
+   */
   children?: ReactNode;
 }) {
   const Title = level === 1 ? "h1" : "h2";
@@ -130,7 +172,11 @@ export function SectionHeader({
       ) : null}
       <Title
         {...(reveal ? { "data-reveal": true } : {})}
-        className={cn(titleVariants({ size }), titleClassName)}
+        className={cn(
+          titleVariants({ size }),
+          children ? LEAD_GAP[size] : null,
+          titleClassName,
+        )}
       >
         {title}
       </Title>

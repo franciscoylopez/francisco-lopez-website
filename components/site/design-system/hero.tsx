@@ -153,13 +153,14 @@ export function Hero({
               level={1}
               size="page"
               reveal
-            />
-            <p
-              data-reveal
-              className="text-muted-foreground mt-6 max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
             >
-              {t.lead}
-            </p>
+              <p
+                data-reveal
+                className="text-muted-foreground max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+              >
+                {t.lead}
+              </p>
+            </SectionHeader>
           </div>
           <HeroComposition />
         </div>

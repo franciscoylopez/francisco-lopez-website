@@ -73,10 +73,11 @@ export function Formacion({ dict }: { dict: FormacionDict }) {
             data-reveal
             className="min-w-[min(100%,17rem)] self-start md:sticky md:top-[5.5rem] md:flex-[1_1_18rem]"
           >
-            <SectionHeader eyebrow={dict.eyebrow} title={dict.title} />
-            <p className="text-muted-foreground mt-[1.4rem] max-w-[32ch] text-base leading-[1.6]">
-              {dict.intro}
-            </p>
+            <SectionHeader eyebrow={dict.eyebrow} title={dict.title}>
+              <p className="text-muted-foreground max-w-[32ch] text-base leading-[1.6]">
+                {dict.intro}
+              </p>
+            </SectionHeader>
           </div>
 
           <div

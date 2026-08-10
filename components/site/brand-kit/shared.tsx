@@ -45,7 +45,7 @@ export const monoPng = (n: string, sz: number) =>
 // `SectionHeader`, así que el rótulo de estas seis secciones es el mismo que el
 // del hero de esta misma página, que ya lo usaba.
 export const LEAD =
-  "text-muted-foreground mt-[1.4rem] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
+  "text-muted-foreground text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
 
 // Descarga con href único (assets neutros al tema: mono negro/blanco).
 //

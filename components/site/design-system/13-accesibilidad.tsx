@@ -33,10 +33,11 @@ export function Accesibilidad({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
-        <p className="text-muted-foreground m-0 mt-4 mb-6 max-w-[var(--measure)] text-[0.95rem]">
-          {t.lead}
-        </p>
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+          <p className="text-muted-foreground m-0 mb-6 max-w-[var(--measure)] text-[0.95rem]">
+            {t.lead}
+          </p>
+        </SectionHeader>
 
         <h3 className="font-display m-0 mt-8 mb-4 text-[1rem] font-semibold">
           {t.contrastTitle}

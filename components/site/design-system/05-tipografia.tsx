@@ -42,10 +42,11 @@ export function Tipografia({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
-        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
-          {t.lead}
-        </p>
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.lead}
+          </p>
+        </SectionHeader>
         {/* `PANEL` y no su copia a mano: este contenedor era literalmente
             `PANEL` menos el `bg-card`, así que era la única de las seis tablas
             del sitio apoyada en el fondo de la página. Con la cebra encima no se

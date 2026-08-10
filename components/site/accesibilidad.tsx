@@ -61,13 +61,14 @@ export function Accesibilidad({
                 level={1}
                 size="page"
                 reveal
-              />
-              <p
-                data-reveal
-                className="text-muted-foreground mt-6 max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
               >
-                {t.hero.lead}
-              </p>
+                <p
+                  data-reveal
+                  className="text-muted-foreground max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+                >
+                  {t.hero.lead}
+                </p>
+              </SectionHeader>
             </div>
             <HeroComposition />
           </div>
@@ -91,10 +92,11 @@ export function Accesibilidad({
             eyebrow={t.conformance.num}
             title={t.conformance.heading}
             size="section-sm"
-          />
-          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            {fillRatios(t.conformance.intro, lang)}
-          </p>
+          >
+            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {fillRatios(t.conformance.intro, lang)}
+            </p>
+          </SectionHeader>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
             {t.conformance.rows.map((r) => (
               <InfoCard key={r.label} title={r.label} body={r.value} />
@@ -110,10 +112,11 @@ export function Accesibilidad({
             eyebrow={t.measures.num}
             title={t.measures.heading}
             size="section-sm"
-          />
-          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            {t.measures.intro}
-          </p>
+          >
+            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {t.measures.intro}
+            </p>
+          </SectionHeader>
           <ol className="m-0 grid list-none [grid-template-columns:repeat(auto-fill,minmax(min(100%,21rem),1fr))] gap-3 p-0">
             {t.measures.items.map((c) => (
               <li key={c.title} className={cn(CARD, "px-[1.15rem] py-4")}>
@@ -155,10 +158,11 @@ export function Accesibilidad({
             eyebrow={t.verify.num}
             title={t.verify.heading}
             size="section-sm"
-          />
-          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            {t.verify.intro}
-          </p>
+          >
+            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {t.verify.intro}
+            </p>
+          </SectionHeader>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]">
             {t.verify.items.map((v) => (
               <InfoCard key={v.tool} title={v.tool} body={v.result} mono />
@@ -174,10 +178,11 @@ export function Accesibilidad({
             eyebrow={t.limits.num}
             title={t.limits.heading}
             size="section-sm"
-          />
-          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            {t.limits.intro}
-          </p>
+          >
+            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {t.limits.intro}
+            </p>
+          </SectionHeader>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] gap-[var(--gutter)]">
             {t.limits.items.map((l) => (
               <InfoCard key={l.title} title={l.title} body={l.body} />
@@ -193,16 +198,21 @@ export function Accesibilidad({
             eyebrow={t.report.num}
             title={t.report.heading}
             size="section-sm"
-          />
-          <div className="mt-4 max-w-[var(--measure)]">
-            <p className="text-foreground/90 m-0 text-[1.0625rem] leading-[1.7]">
-              {t.report.body}
-            </p>
-            <EmailCta label={t.report.emailCta} showAddress className="mt-6" />
-            <p className="text-muted-foreground m-0 mt-6 text-[0.85rem]">
-              {t.report.updated}
-            </p>
-          </div>
+          >
+            <div className="max-w-[var(--measure)]">
+              <p className="text-foreground/90 m-0 text-[1.0625rem] leading-[1.7]">
+                {t.report.body}
+              </p>
+              <EmailCta
+                label={t.report.emailCta}
+                showAddress
+                className="mt-6"
+              />
+              <p className="text-muted-foreground m-0 mt-6 text-[0.85rem]">
+                {t.report.updated}
+              </p>
+            </div>
+          </SectionHeader>
         </div>
       </section>
 

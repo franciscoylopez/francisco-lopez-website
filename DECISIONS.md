@@ -1719,12 +1719,41 @@ HTML lo enseñaba —la línea del `<div class="mb-4 …">` desaparecía— y au
 porque un envoltorio que se borra es exactamente lo que un refactor de este tipo debe hacer.
 Lo cazó medirlo en pantalla. Restaurado a 16 en las 19.
 
-> **Pendiente, y es la versión de fondo:** ese hueco debería ponerlo **la capa**, como ya hace
-> `EYEBROW_GAP` con el de rótulo→titular y por el mismo argumento («lo pone el tamaño, no el
-> call site»). Hoy son 19 `mt-4` escritos a mano. `SectionHeader` tiene un slot `children`
-> documentado como «entradilla u otro contenido bajo el titular» que **nadie usa**: ahí es donde
-> va. No entra aquí porque es una decisión de API al final de una ola larga, y porque tocaría
-> también el `mt-[1.4rem]` del Brand Kit.
+> **RESUELTO el 2026-08-10 (P45): `LEAD_GAP`.** El hueco lo pone la capa, como ya hacía
+> `EYEBROW_GAP` con el de rótulo→titular y por el mismo argumento. Las entradillas entran por el
+> slot `children` —que estaba documentado y no usaba nadie— y el hueco sale del `size`. Va como
+> margen **inferior del titular** y no superior de la entradilla: así cada elemento carga el
+> hueco hacia el de abajo, igual que `EYEBROW_GAP`, y el slot no necesita envoltorio — ni un
+> nodo nuevo en el DOM de páginas ya publicadas.
+>
+> **Y no eran 19 `mt-4`, eran 32 huecos escritos a mano — pero solo CUATRO decisiones.** Al
+> medirlos apareció que **el hueco ya seguía al tamaño y nadie se había dado cuenta**: `page`
+> 24px en los tres heros, `page-sm` 16px en Cookies, `section` **22,4px en los diez sitios que
+> lo usan** (las seis secciones del Brand Kit *y las cuatro de la home*, que este diagnóstico no
+> había contado) y `section-sm` 16px en las dieciocho del Design System y Accesibilidad.
+>
+> **El `1.4rem` del Brand Kit, que era el sospechoso principal, resultó ser el valor correcto de
+> otro tamaño.** Por eso NO se normaliza a `mb-5`, que era la tentación: no es un paso de la
+> escala de Tailwind, pero es la moda de su grupo —diez de diez— y bajarlo a 20px movería diez
+> sitios publicados a cambio de una cifra redonda. Lo que esta tarea arregla es que estuviera
+> escrito diez veces, no cuánto mide. Tercera vez que aplica la lección `CARD`/`PANEL` de D36
+> —*antes de unificar dos valores que se parecen, mirar si significan cosas distintas*— y la
+> primera en que el que significaba otra cosa era el que más pinta de error tenía.
+>
+> **Gate:** las doce variantes cambian **solo** `mt-4→mb-4`, `mt-6→mb-6` y
+> `mt-[1.4rem]→mb-[1.4rem]`, comprobado emparejando cada línea del diff por su texto sin clases:
+> **cero líneas con el texto cambiado y ningún otro cambio de clase**. O sea, una traducción 1:1
+> del margen — **no se mueve un píxel**.
+>
+> **Lo que queda fuera, con su motivo:** la sección 14 del Design System (el esqueleto navegable)
+> tiene su `SectionHeader` dentro de un envoltorio flex con `mb-10`, así que su entradilla **no
+> es hermana del titular** y su `mt-4` no es esta relación. Meterla por el slot la metería
+> dentro de la fila flex. Es el único call site que sigue escribiendo el hueco a mano.
+>
+> **Y el «drift» de los `mb` de las entradillas (`mb-10` ×10, `mb-8`, `mb-6`) no es drift.** Es
+> la relación de abajo —entradilla→contenido— y depende de qué venga después: la de la sección 13
+> lleva `mb-6` porque le sigue un `<h3>` con su propio `mt-8`, y la de Accesibilidad `mb-8`
+> porque le siguen rejillas de tarjetas. Se miró antes de tocar, que era la pregunta.
 
 ## D44 · Lo que de una experiencia no es copy vive en `content/`, y la unión es por nombre — 2026-08-10
 
