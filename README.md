@@ -65,7 +65,14 @@ npm run check:palette  # la paleta del código contra la de globals.css, y que n
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
 npm run gate:html -- save   # instantánea del HTML de las 6 páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
+npm run psi -- <url>        # PageSpeed sobre el Preview o producción, móvil y escritorio (D49)
 ```
+
+> **`npm run psi`** necesita una **URL pública** (el Preview de Vercel o producción, nunca
+> localhost) y una clave gratuita de la API en `PSI_API_KEY` — ver `.env.example` para cómo
+> obtenerla. Imprime la nota, las métricas, el **desglose del LCP por fases** y los avisos que
+> no pasan. La primera línea es la **huella del despliegue**: si no cambió tras un push, estás
+> midiendo el build anterior.
 
 > El **gate de HTML** necesita el sitio servido (`npm run build && npm start`),
 > y la línea base y la comprobación tienen que salir del mismo modo — dev y prod
@@ -99,6 +106,8 @@ scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts (hechos le
 scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts contra la de globals.css,
                           y ningún hex de token copiado fuera de su fuente (D38)
 scripts/design-review/  Censo de pares de contraste del DOM servido (lo usa el skill design-review)
+scripts/psi.ts         PageSpeed Insights desde la terminal: nota, métricas, desglose del LCP
+                       y huella del despliegue medido (D49)
 scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 6 páginas (ES/EN) no
                            puede cambiar. Semilla del arnés de tests (D42, ampliado en D45)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega

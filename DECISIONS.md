@@ -2067,3 +2067,33 @@ línea**: lo que se parte es la **carga**, no la forma.
 
 **Gate:** el HTML servido de las **doce variantes es idéntico**, `/llms.txt` sale **byte a byte
 igual** (3.836 bytes) y los dos PDF del CV se regeneran con el mismo tamaño exacto.
+
+## D49 · El número de rendimiento se mide desde la terminal, y a demanda — 2026-08-10
+
+**Decisión.** `npm run psi -- <url>` (script `scripts/psi.ts`) consulta la API de PageSpeed
+Insights sobre una URL **pública** —el Preview de Vercel o producción— y imprime lo que se
+mira: la nota, las métricas, **el desglose del LCP por fases** y los avisos que no pasan. La
+clave de la API vive en `PSI_API_KEY` dentro de `.env.local`; sin ella la API devuelve 429 casi
+siempre.
+
+**Por qué existe.** Arreglar el LCP del hero (D47) costó tres idas y vueltas para una sola
+cifra —diagnóstico en local, PageSpeed a mano sobre el Preview, resultado de vuelta— y **la
+primera vuelta midió un despliegue que aún no tenía el arreglo dentro**, así que la conclusión
+fue falsa. Y en local no se puede medir: la pestaña que conduce la automatización corre con
+`visibilityState: "hidden"` y el navegador no emite entradas de LCP con la página oculta.
+
+**El desglose del LCP es la razón de fondo, no un adorno.** En D47 el aviso que la herramienta
+destacaba —`fetchpriority`— era legítimo pero pequeño; el problema de verdad, 2.090 ms de
+«retraso de renderizado», estaba en el desglose. Un script que imprimiera solo la nota habría
+ocultado exactamente lo que hacía falta ver.
+
+**Y contra qué despliegue se mide, que es la otra mitad.** El script imprime una **huella**: el
+hash de los assets de `/_next/static` que sirve la página. Si no cambia tras un push, se está
+midiendo el build anterior. Se eligió así, y **no** una cabecera con el SHA del commit, porque
+el sitio mantiene una postura deliberada sobre lo que publica en sus cabeceras (D26) y una
+huella contesta la pregunta operativa sin revelar nada.
+
+**A demanda, NO como gate de CI — y es una decisión, no una omisión.** PSI mide desde
+infraestructura de Google con variabilidad alta entre ejecuciones: como puerta de un PR daría
+rojos falsos, y un gate en el que no se confía se acaba ignorando o desactivando, que es peor
+que no tenerlo. El número entra en la conversación cuando se toca algo de rendimiento.
