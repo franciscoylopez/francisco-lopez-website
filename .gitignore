@@ -28,11 +28,11 @@
 # Lo que merezca conservarse sale de aqui a scripts/ o docs/ - ver scripts/logos/.
 /scratch
 
-# Instantáneas del gate de refactor de los showcase (scripts/showcase-html-diff.ts).
+# Instantáneas del gate de refactor (scripts/page-html-diff.ts).
 # No se versionan: son una línea base de UN refactor concreto, y cualquier cambio
 # de copy las invalida a propósito. El script sí, las fotos no.
-/scripts/.showcase-baseline
-/scripts/.showcase-actual
+/scripts/.html-baseline
+/scripts/.html-actual
 
 # debug
 npm-debug.log*

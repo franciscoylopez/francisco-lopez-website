@@ -1627,13 +1627,15 @@ con otro nombre.
 monolitos en ~950 y ~700 y crea **asimetría**, que es peor de mantener que cualquiera de las dos
 formas consistentes — dónde vive una sección dependería de si era grande el día del refactor.
 
-### El gate: `scripts/showcase-html-diff.ts`
+### El gate: `scripts/page-html-diff.ts`
 
 **Un refactor que mueve 2.800 líneas de markup necesita una prueba de que no cambió nada, y unas
 aserciones elegidas a mano solo comprueban lo que a alguien se le ocurrió comprobar.** El gate
-captura el **HTML servido** de las cuatro variantes (las dos páginas × ES/EN), lo normaliza y lo
-compara: `npm run gate:showcase -- save` antes, `npm run gate:showcase` después. Diff vacío =
-correcto **por construcción**, sin re-disparar `design-review`.
+captura el **HTML servido**, lo normaliza y lo compara: `npm run gate:html -- save` antes,
+`npm run gate:html` después. Diff vacío = correcto **por construcción**, sin re-disparar
+`design-review`. *(Nació cubriendo las cuatro variantes de los dos showcase, con el nombre
+`showcase-html-diff.ts` y el comando `gate:showcase`; **D45 lo amplía a las doce** —las seis
+páginas × ES/EN— y lo renombra, porque el andamiaje que refactoriza es de todas.)*
 
 Tres decisiones de normalización, y ninguna es cosmética:
 
@@ -1763,5 +1765,60 @@ salta.
 **Gate del cambio.** El HTML servido de la home (ES y EN) es **idéntico** antes y después, con
 las normalizaciones de D42. Y el invariante nuevo se comprobó **al revés que el gate**:
 reordenando a mano dos experiencias del diccionario en cada bloque, los logos siguen a su
-empresa. La home no está todavía en `npm run gate:showcase` —lo extiende P42—, así que esta
+empresa. La home no estaba todavía en el gate —la metió D45 el mismo día—, así que esta
 verificación se hizo con un snapshot equivalente hecho a mano.
+
+## D45 · El andamiaje de página sale de un helper, no de seis copias — 2026-08-10
+
+**Decisión.** La **metadata** de página la construye `lib/page-meta.ts` → `pageMetadata({lang,
+slug, meta, ogCard?, ogType?})`, y el **marco** (JSON-LD, nav, isla de motion y footer) lo pone
+`components/site/page-shell.tsx` → `<PageShell>`. El emparejamiento **ruta↔locale** lo resuelve
+`pagePath(lang, slug)` en `lib/i18n/config.ts`, fuente única de la que salen el canonical, los
+tres `hreflang` y el enlace del logo al inicio.
+
+**El problema.** Las cinco `page.tsx` internas **y el layout** repetían el mismo bloque
+—`LangParams`, `generateStaticParams`, el doble `isLocale`+`notFound`, el doble `getDictionary`,
+el ternario `lang === "es" ? "/x" : "/en/x"`, `alternates.languages` con sus tres claves, el
+`openGraph` entero, un `twitter` que lo duplica campo a campo, el `homeHref`, el `breadcrumbLd` y
+el marco `JsonLd`/`Nav`/`RevealRoot`/`Footer`—. Las variables reales eran **cuatro**: slug, rama
+del diccionario, tarjeta OG y `type`. Mismo diagnóstico que D43 («eran cuatro copias privadas de
+la cabecera numerada») **una capa más arriba**: se refactorizó la capa de componentes y la de
+página se quedó escribiéndose a mano.
+
+**Por qué ahora y no cuando se detectó.** El deep-dive añade siete páginas. Y lo que se rompe en
+ese bloque **no lo caza nada**: un `hreflang` mal copiado, un `canonical` apuntando al slug de
+otra página o un `x-default` olvidado no los ve el typecheck, ni el linter, ni axe. Solo Google,
+tarde. Es deuda con un multiplicador a punto de aplicarse.
+
+**Lo que NO se unificó, a propósito:**
+
+- **`generateStaticParams` y el `await params` + `isLocale`** se quedan en cada página. Son la
+  frontera con el framework: esconderlos detrás de una fábrica ahorra cuatro líneas y a cambio
+  hace que una `page.tsx` deje de parecerse a una `page.tsx` de Next. Y un error ahí **falla
+  ruidosamente**, que es justo lo contrario del caso que motiva esta decisión.
+- **`metadataBase` e `icons`** siguen en el layout: se heredan en todo el sitio y no son de
+  página. El layout compone —`{...pageMetadata(…), metadataBase, icons}`— en vez de repetir.
+- **El `<main>`** sigue en cada componente de contenido. Moverlo al shell es la decisión de P43
+  (el skip link), no de esta.
+
+**PageShell tiene dos modos y el tipo obliga a elegir uno** (unión discriminada): con `crumb` es
+una página interna —el `BreadcrumbList` se **deriva** y el logo del nav navega a la home— y con
+`jsonLd` es la home, que trae el suyo y deja al logo su `#top`. Es la diferencia real entre las
+dos, y ahora está en el tipo en vez de en la memoria de quien copie el archivo.
+
+### El gate se amplía a las doce variantes, y se valida rompiéndolo
+
+`scripts/showcase-html-diff.ts` pasa a `scripts/page-html-diff.ts` y `npm run gate:showcase` a
+**`npm run gate:html`**: cubría los dos showcase porque era el refactor que había delante, y lo
+que este toca es el andamiaje **común**, así que el gate tiene que ver lo común. Doce variantes =
+seis páginas × dos idiomas. Y hay una razón de fondo para que el nombre cambiara: lo que un
+helper de metadata rompe **no está en el `<body>`** sino en el `<head>`, que este snapshot ya
+comparaba entero sin que nadie lo hubiera aprovechado.
+
+**Resultado: diff vacío en las doce, en modo producción** (línea base con el árbol anterior,
+comprobación con el nuevo, mismo `npm run build && npm start`).
+
+**Y el gate se validó disparándolo** (`BRAND.md` §Cómo se escribe una regla): borrando la línea
+del `x-default` de `pageMetadata`, el diff señala **las doce páginas a la vez**. Las dos mitades
+de la prueba importan — que salga vacío dice que el refactor es transparente; que una sola
+mutación rompa las doce dice que **ahora hay de verdad una sola fuente**, que era el objetivo.
