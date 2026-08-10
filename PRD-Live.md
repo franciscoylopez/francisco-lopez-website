@@ -211,8 +211,9 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   Brand Kit desvía a propósito; D38); **escaneo de dependencias automatizado
   (Dependabot)**; cabeceras de seguridad servidas (nosniff, X-Frame-Options, Referrer-Policy,
   Permissions-Policy, HSTS **y CSP «A+ barato»**: directivas base + allowlist GTM/GA4,
-  manteniendo `'unsafe-inline'`; la CSP estricta con nonces va con la IA conversacional de
-  V3). Detalle en `DECISIONS.md`.
+  manteniendo `'unsafe-inline'`; la CSP estricta con nonces va con la IA conversacional,
+  hoy V4 — o antes, si la página de Contacto ampliada incorpora un formulario y con él un
+  endpoint externo). Detalle en `DECISIONS.md`.
 - **Revisiones recurrentes**: dos skills con mirada externa, para que la mejora no dependa
   de acordarse — `sprint-review` (técnica, al cerrar etapa) y **`design-review`** (diseño:
   cumplimiento del sistema + expresión de marca, verificando **en pantalla** y no solo en el
@@ -242,15 +243,50 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 - Email: `franciscojavier.lopezmartinez@gmail.com` · Teléfono: 629 832 720
 - LinkedIn: `linkedin.com/in/franciscolopez1975` · Valencia
 
-## 9. Fuera del alcance actual (V2+)
+## 9. Alcance por versión
 
-- **Deep-dive por experiencia** (comparte fuente de contenido con el CV).
-- **Contacto ampliada**.
-- **Traducción de contenido nuevo a EN** (la arquitectura i18n ya está; la traducción se
-  hace a medida que se añade contenido).
-- **IA conversacional** "Pregúntale a mi carrera" (V3).
-- **Optimización continua**: más métricas, marca externa (firma de email, header de
-  LinkedIn), rediseño de assets.
+*(Replanificado el 2026-08-10. El detalle ejecutable —orden, dependencias y tamaños— vive en
+el tablero de tareas; aquí solo qué entra en cada release y qué queda fuera.)*
 
-Las mejoras técnicas pendientes (tests automatizados, CSP estricta con nonces, etc.)
-viven en el tablero de tareas; el porqué de cada decisión de producto, en **[PRD-Historical.md](./PRD-Historical.md)**.
+### V2 — en curso: tres sprints de valor para el visitante
+
+Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
+
+1. **Deep-dive por experiencia** — seis páginas (solo las experiencias de producto: Emendu,
+   KUOTIP, INDYA, Freepik, TheTool, PICKASO) en `/trayectoria/[slug]`, más un índice
+   `/trayectoria`. Las dos entradas de Marketing & Growth se quedan como están en Trayectoria:
+   un deep-dive ahí diluiría el orden del posicionamiento de §3. **Comparte fuente de contenido
+   con el CV** —los bullets con métricas ya existen— y sale en **dos despliegues**: primero el
+   andamiaje (helper de página, `slug` estable, skip link, LCP del hero), luego las páginas.
+2. **«Cómo se ha creado esta página»** — una página con estructura y metadata de artículo
+   (`TechArticle`) contando el proceso: marca, stack, sistema de componentes, accesibilidad,
+   metodología, revisiones y medición. **No es un blog** y no habrá índice de artículos ni feed.
+   Es la pieza que enseña el *proceso* donde el resto del sitio enseña el *resultado*, y por eso
+   habla a los tres perfiles a la vez (producto, técnico, UX/UI).
+3. **Footer estructurado y Contacto ampliada** — el footer va el último **porque necesita que
+   existan las secciones que crean los dos sprints anteriores**; hoy sólo tiene cuatro enlaces.
+   De Contacto ampliada, lo primero es definir qué añade sobre la franja compartida de D29:
+   si la respuesta es «nada», la conclusión legítima es reforzar la franja y no construir la
+   página.
+
+**Traducción de contenido nuevo a EN**: la arquitectura i18n ya está; la traducción se hace a
+medida que se añade contenido, revisando el EN contra el ES y no al revés (D20).
+
+### V3 — deuda técnica y mejoras por bloque
+
+Sin fecha ni compromiso de release conjunto: entran en el sprint que las toque o cuando dejen de
+poder esperar. Agrupadas por dónde viven — *General* (higiene de validadores, Dependabot, `qlty`,
+tests cuando aparezca la primera lógica de negocio real), *Home* (gesto-firma de marca, presencia
+del morado, kicker del Hero, `WebSite` en JSON-LD), *Brand Kit*, *Design System* (copy-to-clipboard
+de tokens, simulador de foco) y *Accesibilidad*.
+
+### V4 — IA conversacional
+
+**«Pregúntale a mi carrera»** — sin definir: modelo, arquitectura, datos, coste y UX. Arrastra la
+CSP estricta con nonces (§5).
+
+### Fuera de alcance, sin versión asignada
+
+- **Marca externa**: firma de email, header de LinkedIn, rediseño de assets.
+
+El porqué de cada decisión de producto, en **[PRD-Historical.md](./PRD-Historical.md)**.
