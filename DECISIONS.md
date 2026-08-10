@@ -2014,6 +2014,24 @@ viewport»* (PRD §21). Lo que ya estaba ahí al cargar no ha entrado.
 marcados antes de encender la clase y su opacidad computada es **1** —incluida la imagen del
 LCP—; los otros 30 siguen en manos del `IntersectionObserver`.
 
+**MEDIDO el 2026-08-10 sobre el Preview, ya con `npm run psi` (D49):**
+
+| | antes | después |
+|---|---|---|
+| Retraso de renderizado (móvil) | **2.090 ms** | **~1.090 ms** |
+| LCP móvil | — | 2,6–3,0 s · nota **94–96**/100 |
+| LCP escritorio | — | 0,7 s · nota **100**/100 · render delay 235 ms |
+
+**El arreglo se llevó por delante la mitad del problema, no el problema entero.** El retraso de
+renderizado sigue siendo el **81% del LCP en móvil**, así que queda un segundo largo que no lo
+causaba el reveal — y que hay que perseguir aparte, con los avisos que el propio informe deja
+señalados (`Render-blocking requests`, `Forced reflow`, `Legacy JavaScript`). Lo que sí cierra
+esta decisión es que **la parte que el reveal pagaba ya no se paga**, y que el aviso de
+`fetchpriority` (`lcp-discovery-insight`) pasa a **puntuar 1**.
+
+*Nota de método, y es la razón de no meter esto en CI (D49): dos ejecuciones seguidas dieron
+96/94 y 2,6/3,0 s. La variabilidad de PSI es de ese orden.*
+
 > **Lo que NO se pudo medir aquí, y hace falta decirlo:** la pestaña que conduce la
 > automatización corre con `visibilityState: "hidden"`, y con la página oculta el navegador **no
 > emite entradas de LCP, congela `requestAnimationFrame` y no dispara `IntersectionObserver`**.

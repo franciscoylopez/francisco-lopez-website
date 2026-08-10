@@ -65,6 +65,18 @@ async function huellaDelDespliegue(url: string) {
 const ms = (n: number | undefined) =>
   n === undefined ? "—" : Math.round(n) + " ms";
 
+/**
+ * Una fase del desglose del LCP. Los nombres de campo cambiaron con la auditoría:
+ * Lighthouse 13 usa `label`/`duration`; la versión anterior, `phase`/`timing`. Se
+ * aceptan los dos para que el script no se quede mudo con un cambio de versión.
+ */
+interface FaseLcp {
+  label?: string;
+  phase?: string;
+  duration?: number;
+  timing?: number;
+}
+
 interface Auditoria {
   id?: string;
   title?: string;
@@ -72,7 +84,7 @@ interface Auditoria {
   scoreDisplayMode?: string;
   displayValue?: string;
   numericValue?: number;
-  details?: { items?: { phase?: string; timing?: number; percent?: string }[] };
+  details?: { items?: (FaseLcp | { items?: FaseLcp[] })[] };
 }
 
 async function mide(url: string, strategy: "mobile" | "desktop", key?: string) {
@@ -122,16 +134,37 @@ async function mide(url: string, strategy: "mobile" | "desktop", key?: string) {
 
   // El desglose del LCP: la cifra que resolvió D47. Sin él, un LCP alto no dice
   // si el problema es la red o algo que tapa el elemento después de pintarlo.
-  const fases = a["largest-contentful-paint-element"]?.details?.items?.find(
-    (i) => Array.isArray((i as { items?: unknown[] }).items),
-  ) as { items?: { phase?: string; timing?: number; percent?: string }[] } | undefined;
-  if (fases?.items?.length) {
+  //
+  // OJO CON EL NOMBRE DE LA AUDITORÍA: en Lighthouse 13 pasó a llamarse
+  // `lcp-breakdown-insight`; antes era `largest-contentful-paint-element`. La
+  // primera versión de este script usaba el nombre viejo y el desglose no salía
+  // —sin error, sin aviso—, que es el mismo tropiezo que el `priority` de Next 16
+  // (D47): código escrito contra una API recordada en vez de comprobada. Por eso
+  // ahora se buscan los dos nombres y, si no aparece ninguno, SE DICE: un desglose
+  // que falta en silencio parece un desglose sin nada que contar.
+  const desglose =
+    a["lcp-breakdown-insight"] ?? a["largest-contentful-paint-element"];
+  const tabla = desglose?.details?.items?.find((i) =>
+    Array.isArray((i as { items?: unknown[] }).items),
+  ) as { items?: FaseLcp[] } | undefined;
+
+  if (tabla?.items?.length) {
+    const total = tabla.items.reduce(
+      (s, f) => s + (f.duration ?? f.timing ?? 0),
+      0,
+    );
     console.log("  Desglose del LCP:");
-    for (const f of fases.items) {
+    for (const f of tabla.items) {
+      const t = f.duration ?? f.timing ?? 0;
+      const pct = total ? Math.round((t / total) * 100) : 0;
       console.log(
-        `    ${(f.phase ?? "").padEnd(26)} ${ms(f.timing).padStart(8)}  ${f.percent ?? ""}`,
+        `    ${(f.label ?? f.phase ?? "").padEnd(24)} ${ms(t).padStart(9)}   ${String(pct).padStart(3)}%`,
       );
     }
+  } else {
+    console.log(
+      "  Desglose del LCP: NO DISPONIBLE — ¿cambió otra vez el id de la auditoría?",
+    );
   }
 
   const fallan = Object.entries(a)
