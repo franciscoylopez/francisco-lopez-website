@@ -1558,9 +1558,18 @@ igual que un metro mal calibrado.** El censo marca como «bajo AAA» todo lo que
 sin mirar el tamaño del texto. Por eso el PRD publicó «cuatro pares incumpliendo en la escalera
 del logo» cuando era **uno**: los otros tres eran los «Aa» de las muestras, de 24px y peso 600
 —texto grande, donde AAA es 4,5—, y dos de ellos (5,21 y 6,57) **cumplían de sobra**. Ninguno
-estaba siquiera en la escalera. `scripts/design-review/contrast-census.js` no lee el tamaño de
-fuente para elegir umbral; hasta que lo haga, su `bajoAAA` es una **lista de candidatos**, no
-de incumplimientos.
+estaba siquiera en la escalera.
+
+**Corregido el mismo día en P37.6595:** `scripts/design-review/contrast-census.js` lee ya el
+tamaño y el peso de cada texto y aplica el umbral que le toca (≥24px, o ≥18,66px con peso
+≥700 → AAA 4,5 / AA 3), así que su `bajoAAA` volvió a ser una lista de incumplimientos. Tres
+consecuencias que no son cosméticas: el **umbral entra en la clave de deduplicación** —si no,
+un texto grande enmascara a uno pequeño de los mismos colores, que es el que puede fallar—;
+el censo **se ordena por holgura contra su propio umbral** y no por ratio, porque con umbrales
+mixtos la cifra más baja ya no señala al peor par (7,10 a 13,6px aprieta más que 5,21 a 24px);
+y los pares sobre imagen dejan de llevar veredicto, porque su `ratio` nunca fue una medición.
+De paso, el congelado de transiciones se extrae a `window.freezeMotion()` para poder usarlo
+antes de un `axe.run()` — medido: **7 violaciones fantasma sin él, 0 con él**, misma página.
 
 **Verificación.** Censo del DOM con el metro validado contra sus anclajes (13,79 claro / 15,32
 oscuro, exactos) en home y Brand Kit: ningún par bajo AAA con el umbral que le toca a cada uno.

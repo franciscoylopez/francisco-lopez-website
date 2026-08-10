@@ -158,7 +158,12 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   de las muestras de color, de 24px y peso 600 —texto grande, donde AAA es 4,5 y no 7—, así
   que 5,21 y 6,57 **cumplían**; los marcaba el censo por aplicar el umbral de texto normal a
   todo. Lección de método, la cuarta de la misma familia: *un umbral mal aplicado inventa
-  hallazgos igual que un metro mal calibrado*.
+  hallazgos igual que un metro mal calibrado*. **Y esa se arregló el mismo día (P37.6595):**
+  el censo lee ya el tamaño y el peso de cada texto, puntúa contra el umbral que le toca y
+  ordena por **holgura** en vez de por cifra, así que su lista dejó de ser de candidatos para
+  volver a ser de incumplimientos. El congelado de transiciones —que el censo hacía por
+  dentro— se saca a una función reutilizable para poder usarlo también **antes de axe**: sin
+  él, conmutar el tema y medir da **siete violaciones fantasma** con la página perfecta.
 
   El que sí fallaba —`brand-purple-accent` a 10,88px sobre `--card`, 3,70/3,96— no se
   arreglaba eligiendo otro morado: el estándar da **2,81** en claro, peor todavía. Ningún
