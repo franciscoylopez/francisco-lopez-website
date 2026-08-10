@@ -1911,10 +1911,30 @@ decorativa.
 red. Medido en local sobre el build de producción, el mismo patrón, más marcado: imagen
 descargada a los 99 ms, **LCP a los 4.032 ms**.
 
-**Y el aviso de PageSpeed apuntaba al sitio equivocado.** Señalaba `fetchPriority` en la imagen
-del hero, y la imagen ya lo tenía todo: `priority` (que emite `fetchpriority=high`,
-`loading=eager` y el `preload`), `fill` y `sizes`. Perseguir el aviso no habría arreglado nada.
-*La sospecha de que «algo falla, me extraña que PageSpeed falle en esto» era correcta.*
+### El aviso de `fetchPriority` era LEGÍTIMO, y eso se descubrió tarde
+
+La primera versión de esta decisión —y la nota de la tarea que la originó— decían que el aviso
+de PageSpeed apuntaba al sitio equivocado, porque «la imagen ya lo tiene todo: `priority`, que
+emite `fetchpriority=high`, `loading=eager` y el `preload`». **Eso es cierto en Next 15 y falso
+en Next 16**, que es el que corre aquí. Se vio al mirar el HTML **servido** del Preview después
+de desplegar el arreglo del reveal y comprobar que el aviso seguía ahí:
+
+- El `<img>` salía **sin `fetchpriority` y sin `loading`**. Lo único que `priority` producía era
+  el `<link rel="preload" as="image">`.
+- La doc que el propio repo lleva en `node_modules/next/dist/docs` lo dice sin rodeos: desde la
+  v16 **`priority` está deprecado** en favor de `preload`, y *«en la mayoría de los casos
+  deberías usar `loading="eager"` o `fetchPriority="high"` en vez de `preload`»*.
+
+Así que eran **dos defectos y no uno**: el retraso de renderizado (2.090 ms, el que dominaba) y
+un atributo que el framework dejó de poner cuando nadie miraba. Los dos hero del sitio —home y
+Sobre mí, que son el LCP de sus páginas— pasan a declarar `fetchPriority="high"` y
+`loading="eager"` explícitamente; el `preload` se sigue emitiendo.
+
+**La lección es la de `AGENTS.md`, y esta vez costó una afirmación equivocada:** *this is NOT
+the Next.js you know*. Lo que un prop hacía en la versión anterior no es lo que hace en esta, y
+la comprobación correcta no era leer el JSX —donde `priority` estaba puesto— sino **leer el HTML
+que sale por el cable**. Mismo patrón que D39 y D46: *la regla que mira al sitio equivocado no
+detecta nada*.
 
 **Se arregla el patrón, no el caso.** La alternativa era quitarle `data-reveal` al hero, que
 arregla la home y deja el problema en cada página con contenido en el primer pliegue — y hay

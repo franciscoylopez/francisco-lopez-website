@@ -44,11 +44,18 @@ export function Hero({ dict }: { dict: HeroDict }) {
             className="flex min-w-[min(100%,17rem)] flex-[0.85_1_18rem] justify-center md:justify-end"
           >
             <div className="border-border bg-card relative aspect-[4/5] w-full max-w-[26rem] overflow-hidden rounded-2xl border md:h-[min(34rem,64svh)] md:w-auto md:max-w-none">
+              {/* Es el elemento LCP de la home. En Next 16 `priority` está
+                  DEPRECADO y ya no hace lo que hacía: solo emite el
+                  <link rel="preload">, y deja el <img> SIN `fetchpriority` ni
+                  `loading` (comprobado en el HTML servido del Preview). La doc
+                  del propio Next dice que se use `loading="eager"` o
+                  `fetchPriority="high"` en su lugar. Ver DECISIONS.md D47. */}
               <Image
                 src="/img/francisco-hero-4x5.webp"
                 alt={dict.photoAlt}
                 fill
-                priority
+                fetchPriority="high"
+                loading="eager"
                 sizes="(max-width: 767px) 100vw, 460px"
                 className="object-cover"
               />
