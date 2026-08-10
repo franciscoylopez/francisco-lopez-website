@@ -5,7 +5,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import type { EducationItem, ToolRow } from "./types";
+import type { EducationItem, ToolRow } from "../../content/cv/types";
 
 // Forma mínima del diccionario que consume el CV (solo los campos que usa).
 interface DictJob {

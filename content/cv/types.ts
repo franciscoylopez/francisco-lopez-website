@@ -1,5 +1,10 @@
 // Tipos del CV.
 //
+// Vive en `content/`, no en `scripts/`: el texto rico del CV es también el origen
+// del deep-dive por experiencia, y `app/` no puede importar de `scripts/` (que es
+// herramienta de build, no contenido de la app). El generador del PDF sigue en
+// `scripts/cv/` y lee de aquí.
+//
 // Dos capas (D22, single-source de hechos):
 //  - CvContent = lo AUTORADO, exclusivo del CV (summary, bullets, reporting,
 //    context, skills, milestones, ui, contacto). Vive en content.{es,en}.ts.

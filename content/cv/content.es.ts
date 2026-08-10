@@ -1,11 +1,12 @@
 // Contenido AUTORADO del CV (ES) — solo lo exclusivo del CV. Los HECHOS
 // (periodos, roles, formación, toolkit) NO están aquí: se derivan del diccionario
-// i18n en facts.ts (single-source, D22), para que web y CV no diverjan. `company`
-// es la clave de unión con el diccionario (trayectoria).
+// i18n en scripts/cv/facts.ts (single-source, D22), para que web y CV no diverjan.
+// `company` es la clave de unión con el diccionario (trayectoria).
 //
 // El ES es la fuente de verdad de la forma; content.en.ts se revisa contra él (D20).
 // El texto rico del CV (summary, bullets con métricas, reporting) es más detallado
-// que la web y es también el origen del futuro deep-dive por experiencia.
+// que la web y es también el origen del deep-dive por experiencia — por eso este
+// archivo vive en `content/` y no en `scripts/`.
 
 import type { CvContent } from "./types";
 
@@ -37,11 +38,32 @@ export const content: CvContent = {
 
   // Curados (no derivables limpiamente del bloque hitos del diccionario).
   milestones: [
-    { year: "2026", company: "Emendu", impact: "Partnership estratégico con Sesame HR." },
-    { year: "2023", company: "INDYA", impact: "Churn mensual del 16% al 10% · activación primer mes +28%." },
-    { year: "2022", company: "INDYA", impact: "Seleccionada por Apple App Store Foundations." },
-    { year: "2021", company: "TheTool", impact: "Adquirida por AppRadar.", exit: true },
-    { year: "2019", company: "TheTool", impact: "Nominado a Mejor Software ASO de Europa (App Promotion Summit)." },
+    {
+      year: "2026",
+      company: "Emendu",
+      impact: "Partnership estratégico con Sesame HR.",
+    },
+    {
+      year: "2023",
+      company: "INDYA",
+      impact: "Churn mensual del 16% al 10% · activación primer mes +28%.",
+    },
+    {
+      year: "2022",
+      company: "INDYA",
+      impact: "Seleccionada por Apple App Store Foundations.",
+    },
+    {
+      year: "2021",
+      company: "TheTool",
+      impact: "Adquirida por AppRadar.",
+      exit: true,
+    },
+    {
+      year: "2019",
+      company: "TheTool",
+      impact: "Nominado a Mejor Software ASO de Europa (App Promotion Summit).",
+    },
   ],
 
   // Experiencia: `company` une con el diccionario (de ahí salen rol y periodo).
@@ -49,7 +71,8 @@ export const content: CvContent = {
     {
       company: "Emendu",
       context: "SaaS B2B · IT Management",
-      reporting: "Miembro del equipo de liderazgo (Dirección, Operaciones, Tech & Finanzas)",
+      reporting:
+        "Miembro del equipo de liderazgo (Dirección, Operaciones, Tech & Finanzas)",
       bullets: [
         "Lideré la evolución del producto: de una organización centrada en Sales & Operaciones con operativa manual a un sistema digital y apificado.",
         "Definí la estrategia de producto end-to-end: redefiní el ICP mediante discovery y reorienté la experiencia de usuario (onboarding y flujos clave).",
@@ -95,7 +118,8 @@ export const content: CvContent = {
     {
       company: "TheTool",
       context: "SaaS B2B · ASO",
-      reporting: "Cofundador (1 de 4 socios) · voz y voto en las decisiones clave",
+      reporting:
+        "Cofundador (1 de 4 socios) · voz y voto en las decisiones clave",
       bullets: [
         "Cofundador responsable de visión, diseño del MVP, validación y lanzamiento de la versión de pago.",
         "Diseñé y evolucioné funcionalidades clave: correlación instalaciones/ASO, dashboards de tracking, ASO score, análisis internacional, timeline y monitorización masiva.",
@@ -139,9 +163,25 @@ export const content: CvContent = {
   },
 
   skills: [
-    { label: "Producto SaaS", value: "Estrategia, métricas, pricing, experimentación, discovery, roadmapping." },
-    { label: "UX & Diseño", value: "Colaboración con Product Designers, usabilidad, prototipos, research cualitativo." },
-    { label: "Liderazgo", value: "Stakeholder management, comunicación, equipos multidisciplinares." },
-    { label: "IA Aplicada", value: "Agentes conversacionales, LLMs, experiencias asistidas por IA, desarrollo interno." },
+    {
+      label: "Producto SaaS",
+      value:
+        "Estrategia, métricas, pricing, experimentación, discovery, roadmapping.",
+    },
+    {
+      label: "UX & Diseño",
+      value:
+        "Colaboración con Product Designers, usabilidad, prototipos, research cualitativo.",
+    },
+    {
+      label: "Liderazgo",
+      value:
+        "Stakeholder management, comunicación, equipos multidisciplinares.",
+    },
+    {
+      label: "IA Aplicada",
+      value:
+        "Agentes conversacionales, LLMs, experiencias asistidas por IA, desarrollo interno.",
+    },
   ],
 };
