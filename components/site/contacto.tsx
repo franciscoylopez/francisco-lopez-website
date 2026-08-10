@@ -31,10 +31,11 @@ export function Contacto({
     >
       <div className={WRAP}>
         <div data-reveal className="max-w-[var(--measure)]">
-          <SectionHeader eyebrow={dict.eyebrow} title={dict.title} />
-          <p className="mt-[1.4rem] text-[1.05rem] leading-[1.6] text-pretty">
-            {dict.intro}
-          </p>
+          <SectionHeader eyebrow={dict.eyebrow} title={dict.title}>
+            <p className="text-[1.05rem] leading-[1.6] text-pretty">
+              {dict.intro}
+            </p>
+          </SectionHeader>
         </div>
 
         <div data-reveal className="mt-[clamp(2.25rem,4.5vw,3rem)]">

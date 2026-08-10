@@ -2,6 +2,7 @@ import { type Dictionary } from "@/app/[lang]/dictionaries";
 import {
   EYEBROW_GAP,
   eyebrowVariants,
+  LEAD_GAP,
   SectionHeader,
   titleVariants,
 } from "@/components/ui/heading";
@@ -25,10 +26,11 @@ export function Cabeceras({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
-        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
-          {t.lead}
-        </p>
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.lead}
+          </p>
+        </SectionHeader>
 
         {/* Los cuatro tamaños, renderizados con las variantes REALES. Van sobre
             <span> y <p>, no sobre <h1>/<h2>: un espécimen no debe entrar en el
@@ -57,6 +59,14 @@ export function Cabeceras({
                   <TypeMeta
                     label={t.cols.gap}
                     value={EYEBROW_GAP[s.size]}
+                    mono
+                  />
+                  {/* El segundo hueco de la cabecera, publicado desde que existe
+                      la constante (P45): la página documentaba la mitad de la
+                      capa. Sale de `LEAD_GAP`, no de una copia suya. */}
+                  <TypeMeta
+                    label={t.cols.leadGap}
+                    value={LEAD_GAP[s.size]}
                     mono
                   />
                   <TypeMeta label={t.cols.use} value={s.use} muted />

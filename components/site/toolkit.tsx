@@ -62,10 +62,11 @@ export function Toolkit({ dict }: { dict: ToolkitDict }) {
     <section id="toolkit" className={SECTION}>
       <div className={WRAP}>
         <div data-reveal className="mb-[clamp(2.5rem,5vw,4rem)]">
-          <SectionHeader eyebrow={dict.eyebrow} title={dict.title} />
-          <p className="text-muted-foreground mt-[1.4rem] max-w-[56ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty">
-            {dict.intro}
-          </p>
+          <SectionHeader eyebrow={dict.eyebrow} title={dict.title}>
+            <p className="text-muted-foreground max-w-[56ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty">
+              {dict.intro}
+            </p>
+          </SectionHeader>
         </div>
 
         <div

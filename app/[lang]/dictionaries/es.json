@@ -1154,6 +1154,7 @@
       "title": "Toda página y toda sección abren igual",
       "lead": "Un rótulo corto encima y un titular debajo. El par sale de una sola pieza, así que el tamaño del titular decide también el hueco que lo separa del rótulo — no lo elige quien escribe la sección.",
       "cols": {
+        "leadGap": "Hueco a la entradilla",
         "use": "Dónde se usa",
         "gap": "Hueco al rótulo"
       },

@@ -14,13 +14,14 @@ export function Breakpoints({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
-        {/* La entradilla estaba escrita, pero al PIE de la sección, bajo la
-            tabla: era una nota a lo que ya habías leído en vez de la frase que
-            te prepara para leerlo. Sube a su sitio (P37.695). */}
-        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
-          {t.lead}
-        </p>
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+          {/* La entradilla estaba escrita, pero al PIE de la sección, bajo la
+              tabla: era una nota a lo que ya habías leído en vez de la frase que
+              te prepara para leerlo. Sube a su sitio (P37.695). */}
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.lead}
+          </p>
+        </SectionHeader>
         {/* tabla ≥md */}
         <DataTable
           caption={t.title}

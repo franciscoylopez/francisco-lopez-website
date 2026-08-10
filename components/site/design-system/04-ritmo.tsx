@@ -8,10 +8,11 @@ export function Ritmo({ t }: { t: Dictionary["designSystem"]["ritmo"] }) {
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
-        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
-          {t.lead}
-        </p>
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+          <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+            {t.lead}
+          </p>
+        </SectionHeader>
         <div className="flex flex-wrap gap-10">
           <div className="min-w-[min(100%,20rem)] flex-[1_1_22rem]">
             <h3 className="font-display m-0 mb-4 text-[1rem] font-semibold">

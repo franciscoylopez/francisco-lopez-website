@@ -1154,6 +1154,7 @@
       "title": "Every page and every section opens the same way",
       "lead": "A short label above, a headline below. The pair comes from a single piece, so the size of the headline also decides the gap that separates it from the label — whoever writes the section doesn't pick it.",
       "cols": {
+        "leadGap": "Gap to the lead",
         "use": "Where it's used",
         "gap": "Gap to the label"
       },

@@ -180,13 +180,14 @@ export function Hero({
               level={1}
               size="page"
               reveal
-            />
-            <p
-              data-reveal
-              className="text-muted-foreground mt-6 max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
             >
-              {t.lead}
-            </p>
+              <p
+                data-reveal
+                className="text-muted-foreground max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
+              >
+                {t.lead}
+              </p>
+            </SectionHeader>
           </div>
           {/* Composición: la anatomía del logo aplicada a escala (PRD §19).
               Centro foreground que conmuta, flancos pastel fijos. Decorativa. */}
