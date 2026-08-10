@@ -96,6 +96,15 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   —marcado de tabla real cuando son datos, para que un lector de pantalla ate cada cifra a su
   columna; divs cuando son especímenes—; y las cajas y ritmos comunes de
   `components/ui/layout.ts`.
+  **Y las tres páginas abren igual** (2026-08-10, D43). El Design System publicaba en su
+  sección de Cabeceras que «toda página y toda sección abren igual: un rótulo corto encima de un
+  titular» y abría sus catorce de otra manera; Accesibilidad, igual. Eran **cuatro** copias
+  privadas de la cabecera numerada, dos de ellas con las clases del titular escritas a mano.
+  Ahora las 19 salen de `SectionHeader`, con el ordinal dentro del rótulo (`01 — Rejilla`) y el
+  titular convertido en la afirmación que ya estaba escrita —en primera posición de la
+  entradilla, de donde sube—. Y **las 19 llevan entradilla**: el Brand Kit la tenía en sus seis
+  y era parte de por qué se leía como un sistema.
+
   **Y las dos páginas que publican todo esto se leen** (2026-08-10, D42): Design System y
   Brand Kit eran archivos de 1.512 y 1.280 líneas y pasan a ser **carpetas con un archivo por
   sección**, ninguno por encima de 391. El corte lo decidió una medición —9 de los 13

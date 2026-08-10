@@ -1,7 +1,7 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { DevicePreview } from "../design-system-islands";
-import { SectionHead } from "./shared";
 
 /* ===================== (14) ESQUELETO ===================== */
 export function Esqueleto({
@@ -22,9 +22,9 @@ export function Esqueleto({
     >
       <div className={WRAP}>
         <div className="mb-10 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-4">
-          <SectionHead num={t.num} title={t.title} />
+          <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
         </div>
-        <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem]">
+        <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         <p className="text-muted-foreground border-primary m-0 mb-8 max-w-[var(--measure)] border-l-2 pl-[0.9rem] text-[0.88rem] md:hidden">

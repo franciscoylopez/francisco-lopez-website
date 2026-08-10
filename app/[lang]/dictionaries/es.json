@@ -747,11 +747,11 @@
       "statA11y": "Objetivo de accesibilidad"
     },
     "rejilla": {
-      "num": "(01)",
-      "title": "Rejilla de página",
+      "num": "01 — Rejilla",
+      "title": "Ancha para maquetar, estrecha para leer",
       "showGrid": "Mostrar rejilla",
       "hideGrid": "Ocultar rejilla",
-      "lead": "Contenedor amplio para maquetación; medida de lectura estrecha para el texto corrido.",
+      "lead": "El texto corrido nunca usa el ancho del contenedor: se lee en la medida estrecha.",
       "baseLabel": "Rejilla base:",
       "baseVal": "12 columnas",
       "gutterLabel": "Medianil:",
@@ -772,9 +772,9 @@
       ]
     },
     "tokens": {
-      "num": "(02)",
-      "title": "Tokens de layout",
-      "lead": "La aportación propia de esta página. No existen en ningún otro sitio del sistema y pasan al repositorio al montar la web.",
+      "num": "02 — Tokens de layout",
+      "title": "Lo que este sistema le añade a Tailwind",
+      "lead": "No existen en ningún otro sitio del sistema y pasan al repositorio al montar la web.",
       "copyLabel": ":root { }",
       "copyHint": "Copia de un vistazo",
       "cards": [
@@ -789,8 +789,9 @@
       ]
     },
     "breakpoints": {
-      "num": "(03)",
-      "title": "Breakpoints",
+      "num": "03 — Breakpoints",
+      "title": "Entre un corte y el siguiente no salta nada",
+      "lead": "Coinciden con la escala de Tailwind del repo. La tipografía y el espaciado son fluidos con clamp(), así que el tamaño interpola de forma continua.",
       "cols": {
         "token": "Token / min-width",
         "ctx": "Contexto",
@@ -827,13 +828,12 @@
           "ctx": "Escritorio amplio",
           "change": "Contenedor tope 1360px, centrado. Los márgenes absorben el ancho extra."
         }
-      ],
-      "note": "Coinciden con la escala de Tailwind del repo. Este documento aplica además tipografía y espaciado fluidos con clamp(): entre breakpoints el tamaño interpola de forma continua, sin saltos bruscos."
+      ]
     },
     "ritmo": {
-      "num": "(04)",
-      "title": "Ritmo vertical y espaciado",
-      "lead": "Escala de base 4px (Tailwind). El aire entre secciones es la herramienta principal de jerarquía.",
+      "num": "04 — Ritmo y espaciado",
+      "title": "El aire es la herramienta de jerarquía",
+      "lead": "Escala de base 4px (Tailwind).",
       "scaleTitle": "Escala de espaciado",
       "rhythmTitle": "Ritmo entre secciones",
       "rhythm": [
@@ -844,9 +844,9 @@
       ]
     },
     "tipografia": {
-      "num": "(05)",
-      "title": "Jerarquía tipográfica",
-      "lead": "Bricolage Grotesque (600) para titulares · Inter para texto y UI. Tamaños fluidos: móvil = mínimo del clamp, escritorio = máximo.",
+      "num": "05 — Tipografía",
+      "title": "El tamaño lo decide el ancho, no el dispositivo",
+      "lead": "Bricolage Grotesque (600) para titulares · Inter para texto y UI. Móvil = mínimo del clamp, escritorio = máximo.",
       "cols": {
         "level": "Nivel",
         "font": "Fuente",
@@ -949,9 +949,9 @@
       ]
     },
     "claroscuro": {
-      "num": "(06)",
-      "title": "Claro y oscuro",
-      "lead": "Mismo esqueleto, misma jerarquía de superficies: fondo → tarjeta → borde. Sin sombras pesadas — la profundidad la dan los hairlines y el contraste de superficie. El claro es papel cálido; el oscuro, azul profundo.",
+      "num": "06 — Claro y oscuro",
+      "title": "La profundidad la dan los filetes, no las sombras",
+      "lead": "Mismo esqueleto, misma jerarquía de superficies: fondo → tarjeta → borde. El claro es papel cálido; el oscuro, azul profundo.",
       "lightLabel": "Modo claro",
       "darkLabel": "Modo oscuro",
       "sampleHeadline": "Del discovery al dato.",
@@ -965,8 +965,9 @@
       "ruleFoot": "Usa el conmutador de la cabecera para ver esta misma página en ambos modos."
     },
     "movimiento": {
-      "num": "(07)",
-      "title": "Movimiento",
+      "num": "07 — Movimiento",
+      "title": "Sobrio: nunca compite con el contenido",
+      "lead": "Las duraciones no se eligen por gusto: cada una corresponde a un tipo de cambio en pantalla.",
       "timings": [
         {
           "k": "150ms",
@@ -987,7 +988,6 @@
       ],
       "bullets": [
         "Reveal = fundido + subida de 12px, escalonado ~60ms entre hijos.",
-        "Movimiento sobrio: nunca compite con el contenido.",
         "prefers-reduced-motion: se desactivan transformaciones y auto-scroll. El contenido aparece siempre, aunque falle el JS."
       ],
       "demoLabel": "Demo de scroll-reveal",
@@ -1004,9 +1004,9 @@
       "navFoot": "Es la transición que ves ahora mismo en la cabecera de esta página."
     },
     "enlaces": {
-      "num": "(08)",
-      "title": "Enlaces",
-      "lead": "El tratamiento de un enlace lo decide su función, no el sitio donde cae. Si es contenido, el cian aparece como recompensa de la interacción; si su bloque entero ya es navegación, el cian no distingue nada y sobra.",
+      "num": "08 — Enlaces",
+      "title": "Lo decide su función, no dónde cae",
+      "lead": "Si es contenido, el cian aparece como recompensa de la interacción; si su bloque entero ya es navegación, el cian no distingue nada y sobra.",
       "hint": "Pasa el cursor por encima ▸",
       "cases": [
         {
@@ -1041,9 +1041,9 @@
       "ruleFoot": "Excepción consciente: los canales de la franja de contacto (teléfono, LinkedIn, CV) son acciones, no navegación, pero llevan tratamiento de chrome — un subrayado permanente junto al botón sólido de email competía con él en vez de acompañarlo."
     },
     "botones": {
-      "num": "(09)",
-      "title": "Botones y acciones",
-      "lead": "Un botón no elige su aspecto: lo elige su papel en la pantalla. Cuántas acciones compiten a su lado, y si además lleva estado, deciden la variante — y la variante ya trae resueltos el hover, el foco y el objetivo táctil.",
+      "num": "09 — Botones y acciones",
+      "title": "Un botón no elige su aspecto: lo elige su papel",
+      "lead": "Cuántas acciones compiten a su lado, y si además lleva estado, deciden la variante — y la variante ya trae resueltos el hover, el foco y el objetivo táctil.",
       "hint": "Pasa el cursor por encima ▸",
       "cases": [
         {
@@ -1106,9 +1106,9 @@
       "ruleFoot": "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio. Antes convivían tres, y una de ellas dibujaba un halo blanco en tema oscuro."
     },
     "etiquetas": {
-      "num": "(10)",
-      "title": "Etiquetas",
-      "lead": "Una etiqueta rotula, no se pulsa: por eso no sale de la capa de acción y no tiene ni estado, ni hover, ni objetivo táctil. Solo tiene que leerse. El velo de color dice de qué familia es, y el texto va siempre en el color de texto normal — que es lo único que llega a AAA encima de un fondo teñido.",
+      "num": "10 — Etiquetas",
+      "title": "Rotula, no se pulsa",
+      "lead": "No sale de la capa de acción y no tiene ni estado, ni hover, ni objetivo táctil. Solo tiene que leerse. El velo de color dice de qué familia es, y el texto va siempre en el color de texto normal — que es lo único que llega a AAA encima de un fondo teñido.",
       "cases": [
         {
           "kicker": "Sin carga",
@@ -1149,9 +1149,9 @@
       "hint": "Son las mismas etiquetas que usa el sitio: si una cambia, esta sección cambia con ella."
     },
     "cabeceras": {
-      "num": "(11)",
-      "title": "Cabeceras",
-      "lead": "Toda página y toda sección abren igual: un rótulo corto encima y un titular debajo. El par sale de una sola pieza, así que el tamaño del titular decide también el hueco que lo separa del rótulo — no lo elige quien escribe la sección.",
+      "num": "11 — Cabeceras",
+      "title": "Toda página y toda sección abren igual",
+      "lead": "Un rótulo corto encima y un titular debajo. El par sale de una sola pieza, así que el tamaño del titular decide también el hueco que lo separa del rótulo — no lo elige quien escribe la sección.",
       "cols": {
         "use": "Dónde se usa",
         "gap": "Hueco al rótulo"
@@ -1207,9 +1207,9 @@
       "ruleFoot": "Los cuatro tamaños no son deriva, son jerarquía: el h1 que abre una página no es lo mismo que el h2 que abre una sección, y unificarlos rompería la escalera. Es la lección de CARD y PANEL — antes de unificar valores que se parecen, mirar si significan cosas distintas."
     },
     "tablas": {
-      "num": "(12)",
-      "title": "Tablas",
-      "lead": "Una tabla del sitio no se maqueta: se declara. La capa pone la fila de cabecera, el ancho de columna, los paddings y el marcado, para que las cinco tablas del sistema se lean como la misma pieza y no como cinco intentos.",
+      "num": "12 — Tablas",
+      "title": "Una tabla no se maqueta: se declara",
+      "lead": "La capa pone la fila de cabecera, el ancho de columna, los paddings y el marcado, para que las cinco tablas del sistema se lean como la misma pieza y no como cinco intentos.",
       "dataTitle": "Tabla de datos",
       "dataLead": "Rejilla de celdas con cabecera de columna. Es marcado de tabla de verdad, y eso no es cosmética: en la de contraste medido son trece filas por tres columnas de números, y sin celdas asociadas a su columna un lector de pantalla las lee como una ristra de cifras sin saber cuál es el tema claro y cuál el oscuro. Ninguna herramienta automática lo detecta, porque un div no es una tabla rota: simplemente no es una tabla.",
       "demoCols": {
@@ -1249,9 +1249,9 @@
       "ruleFoot": "Esa cebra tenía a su favor un argumento razonable —una fila alta que se envuelve no la agrupa un filete— y aun así se borró al medirla: daba un salto de 1,02 en claro, contra los 3,89 de la pastilla de hover, que es el escalón que este sitio usa como referencia de que algo se ve. No estaba agrupando filas; estaba poniendo un tinte por debajo del umbral. Un argumento de diseño bien construido sigue siendo una hipótesis hasta que se mide."
     },
     "accesibilidad": {
-      "num": "(13)",
-      "title": "Accesibilidad",
-      "lead": "La lista con la que se cierra cada página del sitio. AA como suelo no negociable; AAA siempre que se alcance sin coste visual. Es el criterio interno con el que se construye y audita el sitio; la declaración pública de conformidad vivirá en la página de Accesibilidad.",
+      "num": "13 — Checklist de cierre",
+      "title": "AA es el suelo, no el objetivo",
+      "lead": "La lista con la que se cierra cada página del sitio. Es el criterio interno con el que se construye y audita el sitio; la declaración pública de conformidad vive en la página de Accesibilidad.",
       "contrastTitle": "Contraste medido",
       "contrastCols": {
         "measure": "Medición",
@@ -1339,13 +1339,13 @@
       ]
     },
     "esqueleto": {
-      "num": "(14)",
-      "title": "Esqueleto navegable",
+      "num": "14 — Esqueleto navegable",
+      "title": "La home sin contenido, para ver el ritmo",
       "devGroupLabel": "Vista previa por dispositivo",
       "devFull": "Escritorio",
       "devTablet": "Tablet",
       "devMobile": "Móvil",
-      "lead": "Maqueta esquemática de la home con placeholders — sin contenido definido. Solo demuestra el ritmo vertical y la retícula que comparten Hero, Hitos, Cómo trabajo y el resto de secciones.",
+      "lead": "Maqueta esquemática con placeholders: solo demuestra el ritmo vertical y la retícula que comparten Hero, Hitos, Cómo trabajo y el resto de secciones.",
       "mobileNote": "Se muestra la versión móvil. La comparativa entre Escritorio, Tablet y Móvil está disponible en pantallas anchas.",
       "rows": [
         {
@@ -1462,9 +1462,9 @@
       "statLighthouse": "Lighthouse a11y"
     },
     "conformance": {
-      "num": "(01)",
-      "heading": "Nivel de conformidad",
-      "note": "El contraste está medido, no estimado. El texto principal alcanza {bodyText.light} en claro y {bodyText.dark} en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
+      "num": "01 — Conformidad",
+      "heading": "WCAG 2.2 AA cumplido, con el contraste medido",
+      "intro": "El contraste está medido, no estimado. El texto principal alcanza {bodyText.light} en claro y {bodyText.dark} en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
       "rows": [
         {
           "label": "Estándar",
@@ -1481,9 +1481,9 @@
       ]
     },
     "measures": {
-      "num": "(02)",
-      "heading": "Qué se ha hecho",
-      "intro": "Las mismas comprobaciones con las que se cierra cada página del Design System, en lenguaje llano y con el criterio WCAG que cubre cada una.",
+      "num": "02 — Qué se ha hecho",
+      "heading": "Las mismas comprobaciones que cierran cada página",
+      "intro": "En lenguaje llano y con el criterio WCAG que cubre cada una.",
       "items": [
         {
           "title": "Contraste medido en ambos temas",
@@ -1528,9 +1528,9 @@
       ]
     },
     "verify": {
-      "num": "(03)",
-      "heading": "Cómo se verifica",
-      "intro": "No es una autoevaluación de palabra. Cada página se comprueba, en modo claro y oscuro, con herramientas reales.",
+      "num": "03 — Verificación",
+      "heading": "No es una autoevaluación de palabra",
+      "intro": "Cada página se comprueba, en modo claro y oscuro, con herramientas reales.",
       "items": [
         {
           "tool": "axe-core",
@@ -1551,9 +1551,9 @@
       ]
     },
     "limits": {
-      "num": "(04)",
-      "heading": "Límites conocidos y mejora continua",
-      "intro": "Ser honesto también es accesibilidad.",
+      "num": "04 — Límites",
+      "heading": "Ser honesto también es accesibilidad",
+      "intro": "Lo que todavía no cumple, y qué falta para que cumpla.",
       "items": [
         {
           "title": "Contacto directo",
@@ -1570,9 +1570,9 @@
       ]
     },
     "report": {
-      "num": "(05)",
-      "heading": "¿Encuentras una barrera?",
-      "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, quiero saberlo: es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
+      "num": "05 — Contacto",
+      "heading": "Si algo te bloquea, quiero saberlo",
+      "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
       "emailCta": "Escríbeme",
       "updated": "Última revisión de accesibilidad: 2 de agosto de 2026."
     }

@@ -747,11 +747,11 @@
       "statA11y": "Accessibility target"
     },
     "rejilla": {
-      "num": "(01)",
-      "title": "Page grid",
+      "num": "01 — Grid",
+      "title": "Wide to lay out, narrow to read",
       "showGrid": "Show grid",
       "hideGrid": "Hide grid",
-      "lead": "A wide container for layout; a narrow reading measure for running text.",
+      "lead": "Running text never uses the container width: it sits at the reading measure.",
       "baseLabel": "Base grid:",
       "baseVal": "12 columns",
       "gutterLabel": "Gutter:",
@@ -772,9 +772,9 @@
       ]
     },
     "tokens": {
-      "num": "(02)",
-      "title": "Layout tokens",
-      "lead": "This page's own contribution. They don't exist anywhere else in the system and move to the repository when the site is built.",
+      "num": "02 — Layout tokens",
+      "title": "What this system adds on top of Tailwind",
+      "lead": "They don't exist anywhere else in the system and move to the repository when the site is built.",
       "copyLabel": ":root { }",
       "copyHint": "Copy at a glance",
       "cards": [
@@ -789,8 +789,9 @@
       ]
     },
     "breakpoints": {
-      "num": "(03)",
-      "title": "Breakpoints",
+      "num": "03 — Breakpoints",
+      "title": "Nothing jumps between one breakpoint and the next",
+      "lead": "They match the repo's Tailwind scale. Type and spacing are fluid with clamp(), so sizes interpolate continuously.",
       "cols": {
         "token": "Token / min-width",
         "ctx": "Context",
@@ -827,13 +828,12 @@
           "ctx": "Wide desktop",
           "change": "Container caps at 1360px, centered. Margins absorb the extra width."
         }
-      ],
-      "note": "They match the repo's Tailwind scale. This document also applies fluid type and spacing with clamp(): between breakpoints the size interpolates continuously, with no abrupt jumps."
+      ]
     },
     "ritmo": {
-      "num": "(04)",
-      "title": "Vertical rhythm and spacing",
-      "lead": "A 4px base scale (Tailwind). The air between sections is the primary tool of hierarchy.",
+      "num": "04 — Rhythm and spacing",
+      "title": "Whitespace is the hierarchy tool",
+      "lead": "A 4px base scale (Tailwind).",
       "scaleTitle": "Spacing scale",
       "rhythmTitle": "Rhythm between sections",
       "rhythm": [
@@ -844,9 +844,9 @@
       ]
     },
     "tipografia": {
-      "num": "(05)",
-      "title": "Type hierarchy",
-      "lead": "Bricolage Grotesque (600) for headlines · Inter for text and UI. Fluid sizes: mobile = clamp minimum, desktop = maximum.",
+      "num": "05 — Typography",
+      "title": "Width decides the size, not the device",
+      "lead": "Bricolage Grotesque (600) for headlines · Inter for text and UI. Mobile = clamp minimum, desktop = maximum.",
       "cols": {
         "level": "Level",
         "font": "Font",
@@ -949,9 +949,9 @@
       ]
     },
     "claroscuro": {
-      "num": "(06)",
-      "title": "Light and dark",
-      "lead": "Same skeleton, same surface hierarchy: background → card → border. No heavy shadows — depth comes from hairlines and surface contrast. Light is warm paper; dark is deep blue.",
+      "num": "06 — Light and dark",
+      "title": "Depth comes from hairlines, not shadows",
+      "lead": "Same skeleton, same surface hierarchy: background → card → border. Light is warm paper; dark is deep blue.",
       "lightLabel": "Light mode",
       "darkLabel": "Dark mode",
       "sampleHeadline": "From discovery to data.",
@@ -965,8 +965,9 @@
       "ruleFoot": "Use the header toggle to see this same page in both modes."
     },
     "movimiento": {
-      "num": "(07)",
-      "title": "Motion",
+      "num": "07 — Motion",
+      "title": "Restrained — it never competes with the content",
+      "lead": "Durations aren't picked by taste: each one matches a kind of change on screen.",
       "timings": [
         {
           "k": "150ms",
@@ -987,7 +988,6 @@
       ],
       "bullets": [
         "Reveal = fade + 12px rise, staggered ~60ms between children.",
-        "Restrained motion: it never competes with the content.",
         "prefers-reduced-motion: transforms and auto-scroll are disabled. Content always appears, even if the JS fails."
       ],
       "demoLabel": "Scroll-reveal demo",
@@ -1004,9 +1004,9 @@
       "navFoot": "It's the transition you're seeing right now in this page's header."
     },
     "enlaces": {
-      "num": "(08)",
-      "title": "Links",
-      "lead": "How a link looks follows from what it does, not from where it sits. Inside content, cyan is the reward for interacting; inside a block that is already navigation, cyan tells you nothing and only adds noise.",
+      "num": "08 — Links",
+      "title": "Its function decides, not where it sits",
+      "lead": "Inside content, cyan is the reward for interacting; inside a block that is already navigation, cyan tells you nothing and only adds noise.",
       "hint": "Hover over them ▸",
       "cases": [
         {
@@ -1041,9 +1041,9 @@
       "ruleFoot": "A deliberate exception: the channels in the contact band (phone, LinkedIn, CV) are actions rather than navigation, yet they take the chrome treatment — a permanent underline next to the solid email button competed with it instead of supporting it."
     },
     "botones": {
-      "num": "(09)",
-      "title": "Buttons and actions",
-      "lead": "A button doesn't pick how it looks — its job on the screen does. How many actions compete beside it, and whether it carries state, decide the variant, and the variant already has hover, focus and touch target settled.",
+      "num": "09 — Buttons and actions",
+      "title": "A button doesn't pick its look — its role does",
+      "lead": "How many actions compete beside it, and whether it carries state, decide the variant, and the variant already has hover, focus and touch target settled.",
       "hint": "Hover to see it ▸",
       "cases": [
         {
@@ -1106,9 +1106,9 @@
       "ruleFoot": "No variant declares focus: a single global rule does, the same one everywhere. Three used to coexist, and one of them drew a white halo in dark mode."
     },
     "etiquetas": {
-      "num": "(10)",
-      "title": "Labels",
-      "lead": "A label states something; it isn't pressed. That's why it sits outside the action layer, with no state, no hover and no touch target — its only job is to be read. The tinted wash says which family it belongs to, and the text always takes the ordinary text colour, which is the only thing that reaches AAA on top of a tint.",
+      "num": "10 — Labels",
+      "title": "It labels; it isn't pressed",
+      "lead": "It sits outside the action layer, with no state, no hover and no touch target — its only job is to be read. The tinted wash says which family it belongs to, and the text always takes the ordinary text colour, which is the only thing that reaches AAA on top of a tint.",
       "cases": [
         {
           "kicker": "No weight",
@@ -1149,9 +1149,9 @@
       "hint": "These are the same labels the site uses: if one changes, this section changes with it."
     },
     "cabeceras": {
-      "num": "(11)",
-      "title": "Headers",
-      "lead": "Every page and every section opens the same way: a short label above, a headline below. The pair comes from a single piece, so the size of the headline also decides the gap that separates it from the label — whoever writes the section doesn't pick it.",
+      "num": "11 — Headers",
+      "title": "Every page and every section opens the same way",
+      "lead": "A short label above, a headline below. The pair comes from a single piece, so the size of the headline also decides the gap that separates it from the label — whoever writes the section doesn't pick it.",
       "cols": {
         "use": "Where it's used",
         "gap": "Gap to the label"
@@ -1207,9 +1207,9 @@
       "ruleFoot": "The four sizes aren't drift, they're hierarchy: the h1 that opens a page isn't the h2 that opens a section, and merging them would break the ladder. It's the CARD/PANEL lesson — before merging values that look alike, check whether they mean different things."
     },
     "tablas": {
-      "num": "(12)",
-      "title": "Tables",
-      "lead": "A table on this site isn't laid out, it's declared. The layer owns the header row, the column widths, the paddings and the markup, so that the system's five tables read as one piece rather than five attempts.",
+      "num": "12 — Tables",
+      "title": "A table isn't laid out — it's declared",
+      "lead": "The layer owns the header row, the column widths, the paddings and the markup, so that the system's five tables read as one piece rather than five attempts.",
       "dataTitle": "Data table",
       "dataLead": "A grid of cells with column headers. It is real table markup, and that isn't cosmetic: the measured-contrast one is thirteen rows by three columns of numbers, and without cells tied to their column a screen reader reads a string of figures with no way to tell the light theme from the dark. No automated tool catches it, because a div isn't a broken table: it simply isn't a table.",
       "demoCols": {
@@ -1249,9 +1249,9 @@
       "ruleFoot": "That zebra had a reasonable argument behind it — a hairline doesn't group a tall row that wraps — and it was deleted anyway once measured: it stepped 1.02 in light, against the 3.89 of the hover pill, which is the step this site uses as its reference for something being visible. It wasn't grouping rows; it was laying down a tint below the threshold. A well-built design argument is still a hypothesis until it's measured."
     },
     "accesibilidad": {
-      "num": "(13)",
-      "title": "Accessibility",
-      "lead": "The list each page of the site closes with. AA as a non-negotiable floor; AAA whenever it's reached without visual cost. It's the internal criterion the site is built and audited against; the public conformance statement will live on the Accessibility page.",
+      "num": "13 — Closing checklist",
+      "title": "AA is the floor, not the goal",
+      "lead": "The list each page of the site closes with. It's the internal criterion the site is built and audited against; the public conformance statement lives on the Accessibility page.",
       "contrastTitle": "Measured contrast",
       "contrastCols": {
         "measure": "Measurement",
@@ -1339,13 +1339,13 @@
       ]
     },
     "esqueleto": {
-      "num": "(14)",
-      "title": "Navigable skeleton",
+      "num": "14 — Navigable skeleton",
+      "title": "The home page with no content, so the rhythm shows",
       "devGroupLabel": "Device preview",
       "devFull": "Desktop",
       "devTablet": "Tablet",
       "devMobile": "Mobile",
-      "lead": "A schematic mockup of the home with placeholders — no defined content. It only demonstrates the vertical rhythm and grid shared by Hero, Milestones, How I work and the rest of the sections.",
+      "lead": "A schematic mockup with placeholders: it only demonstrates the vertical rhythm and grid shared by Hero, Milestones, How I work and the rest of the sections.",
       "mobileNote": "The mobile version is shown. The Desktop / Tablet / Mobile comparison is available on wide screens.",
       "rows": [
         {
@@ -1462,9 +1462,9 @@
       "statLighthouse": "Lighthouse a11y"
     },
     "conformance": {
-      "num": "(01)",
-      "heading": "Conformance level",
-      "note": "Contrast is measured, not estimated. Body text reaches {bodyText.light} in light and {bodyText.dark} in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1 — cleared with room to spare.",
+      "num": "01 — Conformance",
+      "heading": "WCAG 2.2 AA met, with contrast measured",
+      "intro": "Contrast is measured, not estimated. Body text reaches {bodyText.light} in light and {bodyText.dark} in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1 — cleared with room to spare.",
       "rows": [
         {
           "label": "Standard",
@@ -1481,9 +1481,9 @@
       ]
     },
     "measures": {
-      "num": "(02)",
-      "heading": "What's been done",
-      "intro": "The same checks that close every page of the Design System, in plain language and with the WCAG criterion each one covers.",
+      "num": "02 — What's been done",
+      "heading": "The same checks that close every page",
+      "intro": "In plain language and with the WCAG criterion each one covers.",
       "items": [
         {
           "title": "Contrast measured in both themes",
@@ -1528,9 +1528,9 @@
       ]
     },
     "verify": {
-      "num": "(03)",
-      "heading": "How it's verified",
-      "intro": "This isn't a self-assessment on trust. Every page is checked, in light and dark mode, with real tools.",
+      "num": "03 — Verification",
+      "heading": "Not a self-assessment taken on trust",
+      "intro": "Every page is checked, in light and dark mode, with real tools.",
       "items": [
         {
           "tool": "axe-core",
@@ -1551,9 +1551,9 @@
       ]
     },
     "limits": {
-      "num": "(04)",
-      "heading": "Known limits and continuous improvement",
-      "intro": "Being honest is part of accessibility too.",
+      "num": "04 — Limits",
+      "heading": "Being honest is part of accessibility too",
+      "intro": "What doesn't measure up yet, and what it would take.",
       "items": [
         {
           "title": "Direct contact",
@@ -1570,9 +1570,9 @@
       ]
     },
     "report": {
-      "num": "(05)",
-      "heading": "Run into a barrier?",
-      "body": "If anything on this site is hard to use with your assistive technology, I want to know: it's the best way to fix it. Tell me which page you were on, what happened and what assistive tech you use, and I'll get back to you.",
+      "num": "05 — Contact",
+      "heading": "If something blocks you, I want to know",
+      "body": "If anything on this site is hard to use with your assistive technology, it's the best way to fix it. Tell me which page you were on, what happened and what assistive tech you use, and I'll get back to you.",
       "emailCta": "Email me",
       "updated": "Last accessibility review: 2 August 2026."
     }

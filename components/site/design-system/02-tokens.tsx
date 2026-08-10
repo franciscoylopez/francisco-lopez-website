@@ -1,16 +1,16 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { LAYOUT_TOKENS } from "@/lib/design-values";
-import { SectionHead } from "./shared";
 
 /* ===================== (02) TOKENS ===================== */
 export function Tokens({ t }: { t: Dictionary["designSystem"]["tokens"] }) {
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,22rem),1fr))] items-start gap-[var(--gutter)]">

@@ -1,18 +1,18 @@
 import { Menu, Moon } from "lucide-react";
+import { SectionHeader } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { chromeLinkVariants } from "@/components/ui/chrome";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "./shared";
 
 /* ===================== (08) ENLACES ===================== */
 export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">

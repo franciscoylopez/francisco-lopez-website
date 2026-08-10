@@ -2,13 +2,14 @@ import { type Dictionary } from "@/app/[lang]/dictionaries";
 import {
   EYEBROW_GAP,
   eyebrowVariants,
+  SectionHeader,
   titleVariants,
 } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { SPECIMEN_ROW } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { SectionHead, TypeMeta } from "./shared";
+import { TypeMeta } from "./shared";
 
 /* ===================== (11) CABECERAS ===================== */
 /** Guarda para el tamaño de titular que llega desde el diccionario (§11). */
@@ -24,8 +25,8 @@ export function Cabeceras({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
 

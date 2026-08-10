@@ -1,9 +1,9 @@
 import { Download } from "lucide-react";
+import { SectionHeader } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { PALETTE, paletteHex } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "./shared";
 
 /* ===================== (06) CLARO / OSCURO ===================== */
 // Tarjeta de tema fijo (§06): muestra claro y oscuro con la paleta literal,
@@ -110,8 +110,8 @@ export function Claroscuro({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-[var(--gutter)]">

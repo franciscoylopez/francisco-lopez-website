@@ -1635,3 +1635,55 @@ esta ola: para este trabajo, un snapshot total es más fuerte que unas asercione
 tienen Design System, Accesibilidad y Brand Kit. Cambiar el rótulo **es** un cambio de copy —el
 eyebrow no puede repetir el título—, así que va en P37.695, commit aparte y misma rama. Mezclarlo
 aquí habría costado la propiedad que hace barato este refactor: diff vacío = correcto.
+
+## D43 · Toda página y toda sección abren igual: el ordinal va dentro del eyebrow — 2026-08-10
+
+**Decisión.** Las **19 secciones numeradas** del Design System y de Accesibilidad pasan a abrir
+como el resto del sitio: `SectionHeader` con **rótulo + titular**, el ordinal dentro del rótulo
+(`01 — Rejilla`) y el titular convertido en una **afirmación** (`Ancha para maquetar, estrecha
+para leer`). El Brand Kit ya tenía esa estructura y conserva su copy; lo que cambia allí es el
+aspecto del rótulo.
+
+**El hallazgo, que era mayor de lo que parecía.** No eran tres formas de numerar: eran **cuatro
+copias privadas** de la cabecera numerada —`design-system/shared.tsx`, `accesibilidad.tsx`,
+`brand-kit/shared.tsx` y una cuarta dentro de `design-system-islands.tsx`, la más fácil de
+perder de vista porque la sección 01 dibuja la suya ahí para que el toggle de rejilla quepa en
+la misma fila—. Dos de las cuatro **escribían a mano las clases de `section-sm`** en vez de usar
+la variante, así que un cambio en `titleVariants` no las habría alcanzado.
+
+**Y la diferencia no era de formato, era de qué dice cada slot.** El Design System ponía el
+*tema* en el titular («Rejilla de página») y solo el ordinal en el rótulo; el Brand Kit ponía
+ordinal + tema en el rótulo y una *afirmación* en el titular. La segunda forma **es el
+`SectionHeader` del sitio**: el mismo par con el que abren la home y los cuatro heros. Las otras
+dos se habían inventado un slot de número monoespaciado que no existe en ningún otro sitio — y
+el remate es que el Design System **publica en su sección (11)** que «toda página y toda sección
+abren igual» mientras abría sus catorce de otra manera. La página que publica la regla era la
+que la incumplía, misma forma que D41.
+
+**Por eso es una tarea de contenido y no un refactor:** al subir el tema al rótulo, el titular
+queda vacío y hay que escribirlo. Son 19 titulares × 2 idiomas. **Pero casi ninguno es nuevo**:
+la afirmación ya estaba escrita en la entradilla, en primera posición, y lo que se hace es
+promoverla; la entradilla se queda con la elaboración. En doce de las diecinueve el cambio es
+exactamente ese corte.
+
+**Las entradillas, que es lo que lo cierra.** El Brand Kit tenía las suyas **6 de 6**, y eso era
+parte de por qué se leía como un sistema; el Design System iba 12/14 y a Accesibilidad la
+propuesta inicial le quitaba una. Ahora **las 19 llevan entradilla**, y las tres que faltaban se
+resolvieron con material que ya existía: la de Breakpoints estaba escrita **al pie** de la
+sección (una nota a lo que ya habías leído, en vez de la frase que te prepara para leerlo) y
+sube a su sitio; Movimiento —la única sección del sitio sin prosa de ningún tipo— estrena una
+que presenta su tabla de duraciones; y la de Límites era **una sola frase** que era justo el
+mejor titular de la página, así que sube y se escribe otra debajo.
+
+**Un detalle que solo se ve mirando la página.** Al morir `SectionHead` se fue con él el `mb-4`
+de su envoltorio, y el titular quedó **pegado a la entradilla: 0px** donde había 16. El diff de
+HTML lo enseñaba —la línea del `<div class="mb-4 …">` desaparecía— y aun así pasó por bueno,
+porque un envoltorio que se borra es exactamente lo que un refactor de este tipo debe hacer.
+Lo cazó medirlo en pantalla. Restaurado a 16 en las 19.
+
+> **Pendiente, y es la versión de fondo:** ese hueco debería ponerlo **la capa**, como ya hace
+> `EYEBROW_GAP` con el de rótulo→titular y por el mismo argumento («lo pone el tamaño, no el
+> call site»). Hoy son 19 `mt-4` escritos a mano. `SectionHeader` tiene un slot `children`
+> documentado como «entradilla u otro contenido bajo el titular» que **nadie usa**: ahí es donde
+> va. No entra aquí porque es una decisión de API al final de una ola larga, y porque tocaría
+> también el `mt-[1.4rem]` del Brand Kit.

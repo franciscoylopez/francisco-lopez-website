@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 
 import { actionVariants } from "@/components/ui/action";
+import { SectionHeader } from "@/components/ui/heading";
 import { cn } from "@/lib/utils";
 
 import { PANEL } from "@/components/ui/layout";
@@ -40,14 +41,14 @@ export function GridDemo({
 
   return (
     <>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-        <div className="flex items-baseline gap-4">
-          <span className="text-muted-foreground font-mono text-[0.8rem]">
-            {num}
-          </span>
-          <h2 className="font-display m-0 text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.02em]">
-            {title}
-          </h2>
+      {/* La CUARTA copia privada de la cabecera numerada (P37.695), y la más
+          fácil de perder de vista: la sección 01 dibuja la suya aquí dentro
+          porque el toggle de rejilla va en la misma fila. Como la de
+          Accesibilidad, escribía a mano las clases de `section-sm` en vez de
+          usar la variante. */}
+      <div className="mb-4 flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
+        <div>
+          <SectionHeader eyebrow={num} title={title} size="section-sm" />
         </div>
         <button
           type="button"
@@ -73,7 +74,7 @@ export function GridDemo({
           {show ? hideLabel : showLabel}
         </button>
       </div>
-      <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+      <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
         {lead}
       </p>
       <div className={cn(PANEL, "relative")}>

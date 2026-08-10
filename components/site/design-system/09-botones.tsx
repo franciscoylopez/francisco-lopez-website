@@ -1,10 +1,10 @@
 import { Download, Mail, Menu, Moon } from "lucide-react";
+import { SectionHeader } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "./shared";
 
 /* ===================== (09) BOTONES Y ACCIONES =====================
     Hermana de (08): la otra mitad de la capa interactiva. Existe porque los
@@ -17,8 +17,8 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">

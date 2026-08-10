@@ -1,4 +1,5 @@
 import { Check } from "lucide-react";
+import { SectionHeader } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { Badge } from "@/components/ui/badge";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
@@ -6,7 +7,6 @@ import { DataTable, TD, TR } from "@/components/ui/table";
 import { isContrastId, levelOf, ratioText } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "./shared";
 
 /* ===================== (13) ACCESIBILIDAD ===================== */
 // Marca de verificación de las listas de esta página. `size-[15px]` porque vive
@@ -33,8 +33,8 @@ export function Accesibilidad({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-6 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-6 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
 
