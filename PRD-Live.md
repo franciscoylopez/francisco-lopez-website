@@ -79,6 +79,14 @@ de Sobre mí y «reportar una barrera» de Accesibilidad): mismo componente, mis
 misma jerarquía, de modo que Sobre mí resuelve el contacto en la propia página en vez de
 devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
 
+**Y desde el 2026-08-10, una página no se escribe: se compone.** El andamiaje —metadata y
+marco— dejó de copiarse: `pageMetadata` deriva canonical, los tres `hreflang`, OG y Twitter
+de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de motion, el `<main>` y footer
+(D45/D46). Las **seis páginas se prerenderizan** por locale desde que se retiró el
+`not-found` anidado que las volvía dinámicas a todas (D25), y el **diccionario está partido
+por página** (D48). Es lo que hace que las siete páginas del deep-dive nazcan con el
+`hreflang` correcto, con enlace de salto y estáticas, sin que nadie tenga que acordarse.
+
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 
 - **Stack / arquitectura**: Next 16 (App Router), TypeScript `strict`, Tailwind v4, capa de
@@ -123,6 +131,12 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   (diálogo, popover, tabs) se traen de shadcn en vez de escribirse —misma forma que la regla
   de iconos—, pero **hacia delante**: los que hoy están a mano funcionan, tienen 0 violaciones
   de axe y no se reescriben. Detalle en `BRAND.md` y `DECISIONS.md` D6/D35/D36/D40.
+  **Y encima de las seis, la capa de página** (2026-08-10): `lib/page-meta.ts` para la
+  metadata y `components/site/page-shell.tsx` para el marco, que además pone el `<main>`
+  con su `id` — así el enlace de salto tiene destino en toda página, incluidas las que aún
+  no existen. El hueco titular→entradilla también subió a la capa (`LEAD_GAP`): eran 32
+  márgenes escritos a mano que resultaron ser cuatro decisiones, una por tamaño.
+  D45/D46/D47.
 - **El atenuado lo resuelve la superficie, no el punto de uso** (2026-08-09, D39). La
   utilidad `text-muted-foreground` dejó de significar «este gris» y pasa a significar «el
   atenuado del fondo donde caiga este texto»: cada superficie redefine `--surface-dim`
@@ -133,6 +147,22 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   Es la forma concreta del objetivo del bloque: **que la accesibilidad se herede**.
 - **No funcionales**: PageSpeed/Lighthouse **>90 desktop y móvil**; accesibilidad **AA
   de suelo, AAA objetivo**; **SEO + JSON-LD por página** como criterio de cierre.
+
+  **Medido el 2026-08-10 con `npm run psi`** (D49), que consulta PageSpeed desde la
+  terminal y publica el **desglose del LCP**, no solo la nota: **100/100 en escritorio**
+  (LCP 0,7 s) y **94-96 en móvil** (LCP 2,6-3,0 s). El objetivo se cumple en las dos. Del
+  LCP móvil, el **81% sigue siendo retraso de renderizado** —bajó de 2.090 a ~1.090 ms al
+  dejar de ocultar el primer pliegue para animarlo (D47)—, así que ahí queda margen, no
+  incumplimiento.
+
+  **Y se cerró el único incumplimiento de nivel A que tenía el sitio** (2026-08-10): faltaba
+  el **enlace de salto** de WCAG 2.4.1. No lo vio ninguna de las tres auditorías anteriores
+  porque **axe no lo detecta** —su regla `bypass` se da por satisfecha con landmarks o
+  encabezados, y el sitio los tiene—; lo encontró un validador genérico. Lo pone ahora la
+  capa de página, así que una página nueva nace con él (D46). **El checklist que el sitio
+  PUBLICA sigue teniendo ocho puntos y ninguno es el bypass**: corregirlo es copy en ES y EN
+  y está tareado.
+
   Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
   ambos temas, en reposo y en hover, sin excepciones** —la última que quedaba, el hover del
   toggle apagado, se resolvió subiéndolo de 6,35/6,98 a 7,21/7,80 sin apagar la señal visual
@@ -214,6 +244,13 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   manteniendo `'unsafe-inline'`; la CSP estricta con nonces va con la IA conversacional,
   hoy V4 — o antes, si la página de Contacto ampliada incorpora un formulario y con él un
   endpoint externo). Detalle en `DECISIONS.md`.
+
+  **Y un gate que no es de CI pero es el que más ha cazado**: `npm run gate:html` compara el
+  **HTML servido de las seis páginas × dos idiomas** antes y después de un refactor. Diff
+  vacío = transparente por construcción. Nació cubriendo los dos showcase (D42) y se amplió a
+  todas cuando el refactor pasó a ser el andamiaje común (D45), que es donde vive lo que nadie
+  revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe. **Se valida
+  rompiéndolo**: borrando una línea de `pageMetadata`, el diff señala las doce a la vez.
 - **Revisiones recurrentes**: dos skills con mirada externa, para que la mejora no dependa
   de acordarse — `sprint-review` (técnica, al cerrar etapa) y **`design-review`** (diseño:
   cumplimiento del sistema + expresión de marca, verificando **en pantalla** y no solo en el
