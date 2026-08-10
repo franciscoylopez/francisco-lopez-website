@@ -1,10 +1,11 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { BRAND_SWATCHES, swatchRatioParts } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
-import { Callout, H2, LEAD, NUM } from "./shared";
+import { Callout, LEAD } from "./shared";
 
 /* ===================== 03 COLOR ===================== */
 // Los VALORES de la rejilla de color (token, hex, muestra y sus cifras medidas)
@@ -29,8 +30,7 @@ export function Color({
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <p className={NUM}>{t.num}</p>
-          <h2 className={H2}>{t.title}</h2>
+          <SectionHeader eyebrow={t.num} title={t.title} size="section" />
           <p className={LEAD}>{t.lead}</p>
         </div>
         <div

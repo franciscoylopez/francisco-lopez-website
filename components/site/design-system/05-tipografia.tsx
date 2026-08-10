@@ -1,9 +1,13 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { eyebrowVariants, titleVariants } from "@/components/ui/heading";
+import {
+  eyebrowVariants,
+  SectionHeader,
+  titleVariants,
+} from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { SPECIMEN_ROW } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { SectionHead, TypeMeta } from "./shared";
+import { TypeMeta } from "./shared";
 
 /* ===================== (05) TIPOGRAFÍA ===================== */
 // Especímenes de la escala tipográfica (§05). Un espécimen es explícito a
@@ -38,8 +42,8 @@ export function Tipografia({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         {/* `PANEL` y no su copia a mano: este contenedor era literalmente

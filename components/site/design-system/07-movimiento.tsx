@@ -1,7 +1,7 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { RevealDemo } from "../design-system-islands";
-import { SectionHead } from "./shared";
 
 /* ===================== (07) MOVIMIENTO ===================== */
 // Glifo del nav (§07 transición) — split/flat dimensionado por altura.
@@ -82,7 +82,13 @@ export function Movimiento({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        {/* Era la única sección del sitio sin prosa de ningún tipo: abría con
+            una palabra y una tabla de duraciones. La entradilla es nueva y su
+            trabajo es presentar esa tabla (P37.695). */}
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+          {t.lead}
+        </p>
         <div className="flex flex-wrap gap-10">
           <div className="min-w-[min(100%,18rem)] flex-[1_1_20rem]">
             <div className="grid grid-cols-[auto_1fr] items-baseline gap-x-6 gap-y-[0.6rem] text-[0.9rem]">

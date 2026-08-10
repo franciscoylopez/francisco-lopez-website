@@ -1,15 +1,15 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { SECTION_Y_RANGE_PX, SPACING_SCALE } from "@/lib/design-values";
-import { SectionHead } from "./shared";
 
 /* ===================== (04) RITMO ===================== */
 export function Ritmo({ t }: { t: Dictionary["designSystem"]["ritmo"] }) {
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         <div className="flex flex-wrap gap-10">

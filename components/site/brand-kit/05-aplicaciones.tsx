@@ -1,4 +1,5 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -8,9 +9,7 @@ import {
   DlThemed,
   favPair,
   Glyph,
-  H2,
   LEAD,
-  NUM,
   pngPair,
   svgPair,
 } from "./shared";
@@ -30,8 +29,7 @@ export function Aplicaciones({
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <p className={NUM}>{t.num}</p>
-          <h2 className={H2}>{t.title}</h2>
+          <SectionHeader eyebrow={t.num} title={t.title} size="section" />
           <p className={LEAD}>{t.lead}</p>
         </div>
         <div

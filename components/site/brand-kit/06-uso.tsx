@@ -1,9 +1,10 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { LinkedinIcon } from "@/components/ui/icons";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
-import { Glyph, H2, LEAD, NUM } from "./shared";
+import { Glyph, LEAD } from "./shared";
 
 /* ===================== 06 USO ===================== */
 // Visuales antes/después de los 7 errores (§06). Reutilizan el glifo salvo los
@@ -158,8 +159,7 @@ export function Uso({ t }: { t: Dictionary["brandKit"]["uso"] }) {
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <p className={NUM}>{t.num}</p>
-          <h2 className={H2}>{t.title}</h2>
+          <SectionHeader eyebrow={t.num} title={t.title} size="section" />
           <p className={LEAD}>{t.lead}</p>
         </div>
         <div data-reveal className="flex flex-col gap-[var(--gutter)]">

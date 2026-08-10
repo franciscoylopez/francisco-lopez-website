@@ -1,10 +1,10 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { InfoCard } from "@/components/ui/info-card";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { fillRatios, ratioText } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
-import { SectionHead } from "./shared";
 
 /* ===================== (10) ETIQUETAS =====================
     La tercera capa del sistema, publicada aquí por el mismo motivo que (09):
@@ -22,8 +22,8 @@ export function Etiquetas({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
-        <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
           {t.lead}
         </p>
         {/* Cuatro tarjetas, no seis como en (09): con el `minmax` de aquella

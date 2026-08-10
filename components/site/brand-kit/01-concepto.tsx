@@ -1,7 +1,8 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
-import { Glyph, H2, LEAD, NUM } from "./shared";
+import { Glyph, LEAD } from "./shared";
 
 /* ===================== 01 CONCEPTO ===================== */
 export function Concepto({ t }: { t: Dictionary["brandKit"]["concepto"] }) {
@@ -12,8 +13,7 @@ export function Concepto({ t }: { t: Dictionary["brandKit"]["concepto"] }) {
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <p className={NUM}>{t.num}</p>
-          <h2 className={H2}>{t.title}</h2>
+          <SectionHeader eyebrow={t.num} title={t.title} size="section" />
           <p className={LEAD}>{t.lead}</p>
         </div>
         <div

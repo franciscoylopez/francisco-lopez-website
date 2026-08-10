@@ -1,9 +1,9 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { breakpointRange } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
-import { SectionHead } from "./shared";
 
 /* ===================== (03) BREAKPOINTS ===================== */
 export function Breakpoints({
@@ -14,7 +14,13 @@ export function Breakpoints({
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
-        <SectionHead num={t.num} title={t.title} />
+        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm" />
+        {/* La entradilla estaba escrita, pero al PIE de la sección, bajo la
+            tabla: era una nota a lo que ya habías leído en vez de la frase que
+            te prepara para leerlo. Sube a su sitio (P37.695). */}
+        <p className="text-muted-foreground m-0 mt-4 mb-10 max-w-[var(--measure)] text-[0.95rem]">
+          {t.lead}
+        </p>
         {/* tabla ≥md */}
         <DataTable
           caption={t.title}
@@ -63,9 +69,6 @@ export function Breakpoints({
             </div>
           ))}
         </div>
-        <p className="text-muted-foreground m-0 mt-5 max-w-[var(--measure)] text-[0.85rem]">
-          {t.note}
-        </p>
       </div>
     </section>
   );

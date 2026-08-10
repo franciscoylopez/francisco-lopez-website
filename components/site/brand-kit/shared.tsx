@@ -1,7 +1,6 @@
 import { Download, Info } from "lucide-react";
 
 import { actionVariants } from "@/components/ui/action";
-import { titleVariants } from "@/components/ui/heading";
 import { Logo } from "@/components/ui/logo";
 import { cn } from "@/lib/utils";
 
@@ -35,14 +34,16 @@ export const monoSvg = (n: string) => `/logo-kit/svg/${n}.svg`;
 export const monoPng = (n: string, sz: number) =>
   `/logo-kit/png/${n}-${sz}.png`;
 
-// Tipografía de sección, propia de esta página. Las cajas y los ritmos comunes
+// Entradilla de sección, propia de esta página. Las cajas y los ritmos comunes
 // (WRAP / SECTION / PANEL) vienen de `./layout`: lo que aquí se llamaba `CARD` era
 // en realidad el PANEL del sistema —radio xl y `overflow-hidden`— y ese nombre
 // equivocado era lo que hacía parecer que el sistema tenía tres tarjetas distintas.
-export const NUM =
-  "text-muted-foreground m-0 mb-3 font-mono text-[0.8rem] tracking-[0.04em]";
-// El título de sección sale de la capa de cabecera (P37.65): era una copia exacta.
-export const H2 = titleVariants({ size: "section" });
+//
+// AQUÍ VIVÍAN `NUM` y `H2` (P37.695). El titular ya salía de la capa de cabecera
+// desde P37.65, pero el rótulo seguía siendo un `<p>` monoespaciado suelto — la
+// tercera copia privada de la cabecera numerada. Ahora el par entero sale de
+// `SectionHeader`, así que el rótulo de estas seis secciones es el mismo que el
+// del hero de esta misma página, que ya lo usaba.
 export const LEAD =
   "text-muted-foreground mt-[1.4rem] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
 

@@ -1,4 +1,5 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { DataTable, TD, TR } from "@/components/ui/table";
@@ -10,9 +11,7 @@ import {
   Glyph,
   monoPng,
   monoSvg,
-  H2,
   LEAD,
-  NUM,
   pngPair,
   svgPair,
 } from "./shared";
@@ -122,8 +121,7 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <p className={NUM}>{t.num}</p>
-          <h2 className={H2}>{t.title}</h2>
+          <SectionHeader eyebrow={t.num} title={t.title} size="section" />
           <p className={LEAD}>{t.lead}</p>
         </div>
 

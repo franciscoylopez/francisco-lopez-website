@@ -17,7 +17,7 @@ type AccesibilidadDict = Dictionary["accesibilidad"];
 
 // Página de Accesibilidad (PRD §9, V2). Hermana de Brand Kit / Design System (D21):
 // mismo lenguaje visual —hero con composición a la derecha + fila de datos, secciones
-// numeradas con `SectionHead`, encabezado grande a la izquierda y contenido a ancho
+// numeradas con `SectionHeader`, encabezado grande a la izquierda y contenido a ancho
 // completo—, breadcrumb, RelatedPages y JSON-LD BreadcrumbList. Es la declaración
 // PÚBLICA de conformidad (el nivel WCAG que cumple el sitio y cómo reportar una
 // barrera), contrapunto del criterio interno de la sección 08 del Design System.
@@ -87,9 +87,13 @@ export function Accesibilidad({
       {/* ===================== (01) NIVEL DE CONFORMIDAD ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
-          <SectionHead num={t.conformance.num} title={t.conformance.heading} />
-          <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            {fillRatios(t.conformance.note, lang)}
+          <SectionHeader
+            eyebrow={t.conformance.num}
+            title={t.conformance.heading}
+            size="section-sm"
+          />
+          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            {fillRatios(t.conformance.intro, lang)}
           </p>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
             {t.conformance.rows.map((r) => (
@@ -102,8 +106,12 @@ export function Accesibilidad({
       {/* ===================== (02) QUÉ SE HA HECHO ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
-          <SectionHead num={t.measures.num} title={t.measures.heading} />
-          <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+          <SectionHeader
+            eyebrow={t.measures.num}
+            title={t.measures.heading}
+            size="section-sm"
+          />
+          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             {t.measures.intro}
           </p>
           <ol className="m-0 grid list-none [grid-template-columns:repeat(auto-fill,minmax(min(100%,21rem),1fr))] gap-3 p-0">
@@ -143,8 +151,12 @@ export function Accesibilidad({
       {/* ===================== (03) CÓMO SE VERIFICA ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
-          <SectionHead num={t.verify.num} title={t.verify.heading} />
-          <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+          <SectionHeader
+            eyebrow={t.verify.num}
+            title={t.verify.heading}
+            size="section-sm"
+          />
+          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             {t.verify.intro}
           </p>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]">
@@ -158,8 +170,12 @@ export function Accesibilidad({
       {/* ===================== (04) LÍMITES CONOCIDOS ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
-          <SectionHead num={t.limits.num} title={t.limits.heading} />
-          <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+          <SectionHeader
+            eyebrow={t.limits.num}
+            title={t.limits.heading}
+            size="section-sm"
+          />
+          <p className="text-muted-foreground m-0 mt-4 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             {t.limits.intro}
           </p>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] gap-[var(--gutter)]">
@@ -173,8 +189,12 @@ export function Accesibilidad({
       {/* ===================== (05) REPORTAR UNA BARRERA ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
-          <SectionHead num={t.report.num} title={t.report.heading} />
-          <div className="max-w-[var(--measure)]">
+          <SectionHeader
+            eyebrow={t.report.num}
+            title={t.report.heading}
+            size="section-sm"
+          />
+          <div className="mt-4 max-w-[var(--measure)]">
             <p className="text-foreground/90 m-0 text-[1.0625rem] leading-[1.7]">
               {t.report.body}
             </p>
@@ -192,22 +212,6 @@ export function Accesibilidad({
 }
 
 // --- Subcomponentes ---
-
-// Encabezado numerado de sección (mismo patrón que Design System): número mono +
-// título grande, alineado a la izquierda; el contenido de la sección va debajo, a
-// ancho completo.
-function SectionHead({ num, title }: { num: string; title: string }) {
-  return (
-    <div className="mb-4 flex items-baseline gap-4">
-      <span className="text-muted-foreground font-mono text-[0.8rem]">
-        {num}
-      </span>
-      <h2 className="font-display m-0 text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] font-semibold tracking-[-0.02em]">
-        {title}
-      </h2>
-    </div>
-  );
-}
 
 function Stat({ value, label }: { value: string; label: string }) {
   return (
