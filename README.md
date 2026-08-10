@@ -63,7 +63,13 @@ npm run format     # Prettier
 npm run check:palette  # la paleta del código contra la de globals.css, y que no
                        # quede ninguna copia de un token fuera de su fuente (D38)
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
+npm run gate:showcase -- save   # instantánea del HTML de brand-kit y design-system
+npm run gate:showcase           # …y comprueba que un refactor no lo cambió (D42)
 ```
+
+> El **gate de los showcase** necesita el sitio servido (`npm run build && npm start`),
+> y la línea base y la comprobación tienen que salir del mismo modo — dev y prod
+> emiten HTML distinto. `BASE_URL` cambia el puerto.
 
 > **Lighthouse/PageSpeed** se mide contra el build de producción
 > (`next build && next start` o el preview de Vercel), nunca contra `next dev`.
@@ -80,6 +86,7 @@ app/global-*           404/500 de marca e i18n (global-not-found, global-error):
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
 components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), table.tsx (DataTable/TR/TD para datos, SPECIMEN_ROW para especímenes), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36/D40
 components/site/        Piezas que SÍ saben de este sitio: bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
+components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN: index.tsx (el orden), NN-nombre.tsx (cada sección con sus subcomponentes) y shared.tsx (lo que cruza) — D42
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
 lib/                   i18n, site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados, design-values (fuente única de lo que el sitio publica sobre sí mismo: tokens, breakpoints y contraste medido — D38) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
@@ -90,6 +97,8 @@ scripts/cv/            Generador del CV en PDF (react-pdf); hechos del diccionar
 scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts contra la de globals.css,
                           y ningún hex de token copiado fuera de su fuente (D38)
 scripts/design-review/  Censo de pares de contraste del DOM servido (lo usa el skill design-review)
+scripts/showcase-html-diff.ts  Gate de refactor: el HTML servido de brand-kit y design-system
+                               (ES/EN) no puede cambiar. Semilla del arnés de tests (D42)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)
 ```
