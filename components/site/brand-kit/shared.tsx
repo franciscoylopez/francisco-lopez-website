@@ -107,6 +107,15 @@ export function DlThemed({
 
 // Glifo dimensionado por altura (reutiliza el componente Logo, fuente única de la
 // geometría). `h` en px.
+//
+// EL ENVOLTORIO ES FLEX Y NO BLOCK, y no es cosmético (P37.695). `Logo` es
+// `inline-flex`, así que dentro de un envoltorio `block` es una caja EN LÍNEA:
+// no rellena su hueco, se apoya en la línea de texto, y la altura de esa línea
+// la manda el `line-height` heredado —24px—, no el glifo. Mientras el glifo mide
+// ≥24px no se nota; por debajo, la línea gana y lo empuja hacia abajo. Se veía
+// en el espécimen de favicon de 16px, donde el glifo (10px) caía 8px y se salía
+// del marco. Con el envoltorio en `flex` el `Logo` pasa a ser un ítem flex y la
+// línea de texto deja de existir.
 export function Glyph({
   variant,
   h,
@@ -117,7 +126,7 @@ export function Glyph({
   mono?: "black" | "white";
 }) {
   return (
-    <span className="block shrink-0" style={{ height: `${h}px` }}>
+    <span className="flex shrink-0" style={{ height: `${h}px` }}>
       <Logo
         variant={variant}
         forceColor={mono ?? "theme"}
