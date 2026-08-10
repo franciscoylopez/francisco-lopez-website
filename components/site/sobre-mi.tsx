@@ -40,7 +40,7 @@ export function SobreMi({
 }) {
   const t = dict;
   return (
-    <main id="top">
+    <>
       <div className="py-[clamp(1.5rem,3vw,1.75rem)]">
         <div className={WRAP}>
           <div data-reveal className="mb-[clamp(2rem,4vw,3rem)]">
@@ -170,7 +170,7 @@ export function SobreMi({
           </div>
         </div>
       </section>
-    </main>
+    </>
   );
 }
 

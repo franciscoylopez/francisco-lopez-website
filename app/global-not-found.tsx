@@ -7,6 +7,7 @@ import "./globals.css";
 import { getDictionary } from "@/app/[lang]/dictionaries";
 import { Footer } from "@/components/site/footer";
 import { Nav } from "@/components/site/nav";
+import { SkipLink, MAIN_ID } from "@/components/site/skip-link";
 import { Split404 } from "@/components/site/split-404";
 import { SYSTEM_BTN_PRIMARY } from "@/components/site/system-message";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -50,6 +51,10 @@ export default async function GlobalNotFound() {
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="bg-background text-foreground flex min-h-full flex-col">
+        {/* Esta página se salta el layout de [lang], así que trae su propio
+            enlace de salto: monta el Nav entero, o sea que tiene el mismo bloque
+            repetido que bypasear. No estaba en la lista de la tarea. */}
+        <SkipLink label={dict.nav.skipToContent} />
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -57,7 +62,11 @@ export default async function GlobalNotFound() {
           disableTransitionOnChange
         >
           <Nav dict={dict.nav} homeHref={homeHref} lang={lang} />
-          <main className="mx-auto flex w-full max-w-[var(--container)] flex-1 flex-col items-center justify-center gap-7 px-[var(--page-x)] py-20 text-center">
+          <main
+            id={MAIN_ID}
+            tabIndex={-1}
+            className="mx-auto flex w-full max-w-[var(--container)] flex-1 flex-col items-center justify-center gap-7 px-[var(--page-x)] py-20 text-center"
+          >
             {/* Hero: el "404" como pieza central, con el "0" convertido en el círculo
                 con split que florece en la carga (Split404 · .split-zero, globals.css). */}
             <Split404 className="text-[clamp(4.5rem,17vw,10rem)]" />

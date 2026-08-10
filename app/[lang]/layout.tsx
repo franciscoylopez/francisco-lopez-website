@@ -7,6 +7,7 @@ import "../globals.css";
 import { ConsentInit } from "@/components/analytics/consent-init";
 import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
 import { ConsentBanner } from "@/components/site/consent-banner";
+import { SkipLink } from "@/components/site/skip-link";
 import { ThemeProvider } from "@/components/theme-provider";
 import { paletteHex } from "@/lib/design-values";
 import { locales, isLocale } from "@/lib/i18n/config";
@@ -126,6 +127,9 @@ export default async function RootLayout({
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
+        {/* Primer hijo del <body>, por delante del bloque de GTM: es lo primero
+            que tiene que recibir el foco al tabular (WCAG 2.4.1, nivel A). */}
+        <SkipLink label={dict.nav.skipToContent} />
         {/* Analítica solo en producción (D13). ConsentInit va antes que GTM
             (beforeInteractive) para fijar el default denegado; sin contenedor que
             lo lea no tiene nada que hacer, así que comparte gate con él. */}
