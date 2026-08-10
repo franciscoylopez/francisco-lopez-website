@@ -55,6 +55,7 @@
 - D38 · Fuente única de los valores publicados (`lib/design-values.ts`): ejecutable / publicada / del porqué; el diccionario solo lleva copy; paleta única para mock de tema y OG, con guardián en CI (`npm run check:palette`). **Ampliado (P37.659): el guardián ya no comprueba solo que las copias conocidas cuadren, sino que no queda ninguna copia de un valor de token fuera de su fuente — buscando VALORES, no patrones**
 - D39 · El atenuado lo resuelve la superficie (`--surface-dim`), no el punto de uso — generaliza D30; `data-surface` para lo que se pinta su propio velo; retira `--contact-dim` y el eje `tone` del eyebrow
 - D40 · Capa de tabla (`components/ui/table.tsx`): marcado real para tablas de datos, divs para las de espécimen; un separador (el filete) y un gutter de padding
+- D42 · Los showcase se parten por sección (carpeta + `index.tsx` + `NN-nombre.tsx` + `shared.tsx`); por qué se descartó «datos + renderer»; y el gate del refactor = **diff del HTML servido** de las cuatro variantes (`npm run gate:showcase`), validado disparándolo
 - D41 · Un color fijo no puede servir a dos superficies opuestas: `--brand-purple-accent` conmuta con el tema (techo de un color fijo = √13,79 = 3,71:1); el atenuado sustituye al morado en la escalera del logo; y el umbral del censo depende del tamaño del texto
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*

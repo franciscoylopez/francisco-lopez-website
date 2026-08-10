@@ -96,6 +96,12 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
   —marcado de tabla real cuando son datos, para que un lector de pantalla ate cada cifra a su
   columna; divs cuando son especímenes—; y las cajas y ritmos comunes de
   `components/ui/layout.ts`.
+  **Y las dos páginas que publican todo esto se leen** (2026-08-10, D42): Design System y
+  Brand Kit eran archivos de 1.512 y 1.280 líneas y pasan a ser **carpetas con un archivo por
+  sección**, ninguno por encima de 391. El corte lo decidió una medición —9 de los 13
+  subcomponentes auxiliares se usaban en una sola sección, así que la sección ya era la unidad
+  natural— y lo verificó un **diff del HTML servido de las cuatro variantes**, que salió vacío:
+  el refactor es transparente por construcción, no por revisión.
   Cuál toca se decide con dos preguntas —**¿se pulsa?** y, si sí, **¿tiene caja propia?**—,
   no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
   tampoco. **Ninguno se escribe con clases sueltas**: si un caso no

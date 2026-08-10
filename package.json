@@ -11,7 +11,8 @@
     "check:palette": "tsx scripts/check-palette.ts",
     "cv": "tsx scripts/cv/generate.tsx",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "gate:showcase": "tsx scripts/showcase-html-diff.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

@@ -1577,3 +1577,61 @@ oscuro, exactos) en home y Brand Kit: ningún par bajo AAA con el umbral que le 
 medir con axe: hay que congelar las transiciones igual que hace el censo** — sin eso, conmutar
 el tema y lanzar axe da siete violaciones fantasma (`#005859` sobre `#191d21`) que son el
 tema a medio interpolar, exactamente el fallo que el censo documenta y que axe no evita.
+
+## D42 · Los showcase se parten por sección, y el gate del refactor es un diff de HTML — 2026-08-10
+
+**Decisión.** `design-system.tsx` (1.512 líneas) y `brand-kit.tsx` (1.280) dejan de ser archivos
+y pasan a ser **carpetas con un archivo por sección** —`index.tsx` con el orden, `NN-nombre.tsx`
+por sección, `shared.tsx` con lo poco que cruza—. Ninguno de los 29 archivos resultantes pasa de
+391 líneas, y el mayor es la sección del logotipo, que ya era 299 dentro del monolito.
+
+**El dato que lo decidió, medido antes de tocar código:** de los 13 subcomponentes auxiliares
+que tenían entre las dos páginas, **9 se usaban en una sola sección**. La sección ya era la
+unidad natural de agrupación; solo que no estaba escrita así. Por eso `Stat`, `ThemeCard`,
+`NavGlyph`, `ContrastBadge`, `VariantCard`, `Lockup`, `UsageKV`, `TypeCard`, `BrowserMockup` y
+`ErrorVisual` viajan con su sección, y en `shared.tsx` queda solo lo que de verdad se comparte
+(`SectionHead` y `TypeMeta` en uno; los tres rótulos, los chips de descarga, `Glyph`, `Dl`,
+`DlThemed` y `Callout` en el otro).
+
+**Descartado «secciones como datos + renderer»**, que era la alternativa real y no una de paja.
+Los cuerpos **no comparten forma**: van de 21 a 299 líneas sin patrón común, así que cada `Body`
+acabaría siendo un componente por sección igualmente —no ahorra archivos, añade una capa—, el
+envoltorio que factoriza son cuatro líneas y la numeración ya viene del diccionario. Sería la
+opción correcta si las secciones fueran homogéneas; medido, no lo son. Y tiene un riesgo de
+forma: «secciones como datos» empuja a meter el markup dentro del array, y el monolito vuelve
+con otro nombre.
+
+**Descartada también la extracción parcial** (solo las cuatro secciones grandes): dejaría los
+monolitos en ~950 y ~700 y crea **asimetría**, que es peor de mantener que cualquiera de las dos
+formas consistentes — dónde vive una sección dependería de si era grande el día del refactor.
+
+### El gate: `scripts/showcase-html-diff.ts`
+
+**Un refactor que mueve 2.800 líneas de markup necesita una prueba de que no cambió nada, y unas
+aserciones elegidas a mano solo comprueban lo que a alguien se le ocurrió comprobar.** El gate
+captura el **HTML servido** de las cuatro variantes (las dos páginas × ES/EN), lo normaliza y lo
+compara: `npm run gate:showcase -- save` antes, `npm run gate:showcase` después. Diff vacío =
+correcto **por construcción**, sin re-disparar `design-review`.
+
+Tres decisiones de normalización, y ninguna es cosmética:
+
+1. **Los `<script>` se van enteros.** Llevan la carga de React Server Components, que codifica el
+   árbol de módulos: cambia al partir un archivo aunque el DOM sea idéntico. Es justo el cambio
+   que el gate no debe vigilar.
+2. **Los assets de `/_next` se anonimizan**: su hash cambia con el orden de los archivos fuente.
+3. **El salto de línea se mete SOLO donde dos etiquetas ya iban pegadas** (`><`). Es una
+   partición sin pérdida: el espacio entre elementos inline —el que decide si dos palabras salen
+   juntas— se conserva y entra en la comparación. Colapsarlo escondería el fallo típico de mover
+   JSX de sitio.
+
+**El gate se validó disparándolo antes de fiarse de él:** con una mutación de un solo carácter
+en una clase (`gap-4` → `gap-5`) sale con código 1 y señala la línea exacta. Un gate que no
+puede fallar no es un gate.
+
+Esto es además la **semilla del arnés de tests** (P37.75), y la razón de no haberlo metido en
+esta ola: para este trabajo, un snapshot total es más fuerte que unas aserciones elegidas.
+
+**Lo que este commit NO hace, a propósito:** unificar las tres formas de cabecera numerada que
+tienen Design System, Accesibilidad y Brand Kit. Cambiar el rótulo **es** un cambio de copy —el
+eyebrow no puede repetir el título—, así que va en P37.695, commit aparte y misma rama. Mezclarlo
+aquí habría costado la propiedad que hace barato este refactor: diff vacío = correcto.
