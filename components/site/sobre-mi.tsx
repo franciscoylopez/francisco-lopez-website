@@ -54,11 +54,27 @@ export function SobreMi({
           </div>
 
           {/* Apertura: cita-firma sobre la foto. El scrim garantiza contraste del
-              texto sobre la foto; en móvil se oculta la 2ª frase. object-position
-              mantiene la cara (arriba) y al sujeto (a la derecha) al recortar. */}
+              texto sobre la foto; en móvil se oculta la 2ª frase.
+
+              La foto es de cuerpo entero y el sujeto ocupa 778 de sus 941px de
+              alto, así que la banda se dimensiona para que quepa ENTERO: el
+              `clamp` mantiene una ventana de ~855px de la fuente en todo el
+              rango (por eso 46vw, no 42), y `object-[68%_100%]` ancla abajo —
+              deja 13px de suelo bajo los zapatos y 43-150px de aire sobre la
+              cabeza según el ancho. Por debajo de ~520px de viewport el recorte
+              pasa a ser horizontal y el 68% conserva al sujeto, que está a la
+              derecha. Con la banda más corta se cortaba por la rodilla.
+
+              El scrim es más profundo que el de la foto anterior (85/40 frente a
+              75/25) porque esta pared es blanca donde la otra era gris oscuro:
+              con el gradiente antiguo el par texto-blanco/fondo caía a 3,81 en
+              la cita y 6,93 en el subtítulo. Medido sobre el píxel compuesto —el
+              par no existe en ningún token—, ahora da 5,92 y 10,31 en escritorio
+              y 5,42 en móvil, AAA con sus umbrales (4,5 el texto grande de la
+              cita, 7 el normal del subtítulo). */}
           <figure
             data-reveal
-            className="relative m-0 h-[clamp(15rem,42vw,32rem)] overflow-hidden rounded-lg"
+            className="relative m-0 h-[clamp(15rem,46vw,41rem)] overflow-hidden rounded-lg"
           >
             {/* Misma corrección que el hero de la home: `priority` está
                 deprecado en Next 16 y ya no pone `fetchpriority` en el <img>
@@ -70,11 +86,11 @@ export function SobreMi({
               fetchPriority="high"
               loading="eager"
               sizes="100vw"
-              className="object-cover object-[62%_28%]"
+              className="object-cover object-[68%_100%]"
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
             />
             <figcaption className="absolute inset-x-0 bottom-0 p-[clamp(1.5rem,4vw,3rem)]">
               <p className="font-display m-0 max-w-[24ch] text-[clamp(1.5rem,3.4vw,2.4rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-balance text-white">
