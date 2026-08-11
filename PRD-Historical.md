@@ -1291,6 +1291,77 @@ andamiaje y las seis páginas.**
 
 ---
 
+## 42. La estructura de un deep-dive: ocho piezas, y las dos libres son las que importan (2026-08-11)
+
+Sesión **solo de contenido**: cero código. Francisco escribió en bruto su primera experiencia
+—Emendu— sobre el borrador editable de §41, y lo que devolvió no era la plantilla de seis piezas
+rellenada: era un relato **más un caso de estudio completo** del partnership con Sesame HR. De
+reescribir eso salió la estructura definitiva, que ya no es la propuesta en §41.
+
+**Ocho secciones, y la novedad no es el número: es que dos son libres.** El espinazo fijo
+—Datos · En un minuto · El encargo · Cómo trabajé · Ahora/Cómo terminó · Lo que me llevo— es lo
+que hace que las seis páginas se lean como una serie. En medio van **La historia** (el recorrido
+del proyecto) y **El caso** (un episodio con formato propio, solo en Emendu, INDYA y TheTool).
+La petición de Francisco fue explícita: *«no sé si es conveniente que todos los deep-dives tengan
+la misma estructura; cada proyecto tiene su historia»*. Tiene razón, y la consecuencia técnica
+llega antes que la de contenido: **una página con cuerpo libre no puede ser una plantilla de
+secciones con nombre**, tiene que ser un marco fijo más una secuencia de bloques. Y el juego de
+bloques tiene que ser **cerrado** —prosa, lista, fila de métricas, diagrama, artefacto,
+destacado— o cada página acaba siendo un one-off y se deshace el sistema, que es exactamente lo
+que la Regla de construcción existe para evitar.
+
+**El bloque de bullets del principio, y el error que casi mete.** Lo pidió Francisco: un
+deep-dive es largo, y quien entra un minuto necesita la foto antes de decidir si sigue. El
+primer intento lo resolvió mal: seleccionó las tres cifras del caso —partnership, trazabilidad,
+tiempo manual— y con ello **dejó fuera dos de los seis temas del CV**, LISA y el hub de
+herramientas internas. La corrección la puso Francisco y es la regla que queda: **un bullet por
+bullet del CV, misma cobertura y mismo orden, con la forma «tema + explicación breve + dato»**.
+El CV es la versión corta del mismo contenido, no otra selección — y las cifras del caso se
+meten **dentro** del bullet al que pertenecen en vez de ocupar hueco propio.
+
+**«Lo que me llevo» se decidió dos veces, y la segunda es la buena.** Primero quedó como cierre
+de la pieza que lo produjo: el caso donde lo hay, la historia donde no. Francisco lo discutió con
+un argumento mejor: *lo que te llevas de dieciocho meses pesa más que lo que aprendiste montando
+una integración*. Así que pasa a **sección fija y última** —la única que le habla al siguiente
+empleador y no al anterior, que es el mejor sitio para terminar una página de portfolio— y va
+detrás de «Ahora» porque un aprendizaje tiene que ir después de todo lo que lo produjo. Al
+moverla se vio lo que el encuadre anterior tapaba: **los tres aprendizajes escritos venían todos
+del caso**, o sea de siete semanas, presentados como el poso de año y medio. Entra uno del arco
+de 2025 y sale «human-in-the-loop», que no era un aprendizaje sino una decisión técnica ya
+contada donde toca. El riesgo de toda sección obligatoria es que se rellene con genérico de
+LinkedIn, y la regla que lo evita es comprobable: **un aprendizaje tiene que poder señalar a algo
+escrito más arriba en la misma página; si no puede, no es un aprendizaje, es una frase.**
+
+**Los diagramas no son lo que §41 proponía.** Allí se dibujaron tres para explicar *cómo* se
+trabajó; Francisco los quería al revés: **los artefactos reales**, los de verdad. Y existen —los
+product specs de la integración, con sus diagramas de estados—, lo que cambia el problema de
+sitio: deja de ser «qué dibujo» y pasa a ser **qué se puede publicar**. El partnership se puede
+nombrar porque es público; las métricas internas y los proveedores y precios que aparecen en los
+specs, no necesariamente. Y el sitio no renderiza diagramas como código, así que el mecanismo
+—redibujar con los tokens, en ambos temas, con alternativa textual— es una decisión pendiente.
+
+**El hallazgo con consecuencia, que no era de contenido.** Al preguntar Francisco si los cambios
+en los bullets se reflejarían en el CV y en Trayectoria, la respuesta resultó ser que no: cada
+experiencia se cuenta hoy en **tres longitudes que viven en tres archivos sin relación** —la
+frase de la home, los bullets del CV y, con el deep-dive, los bullets ampliados—, seis strings
+contando los dos idiomas, y **nada en el build detecta que divergen**. Ya hay drift: la frase
+que la home muestra de Emendu no menciona ni el ICP, ni el partnership, ni el paso de 0 a más de
+50 clientes. Es el mismo olor de D38 y D44 —un valor que vive fuera de su fuente se desalinea en
+silencio— y quedó tareada **por delante del desarrollo de las páginas**, porque es ese desarrollo
+el que crea la tercera copia.
+
+**Estado al cerrar.** La estructura está cerrada y Emendu tiene una reescritura completa, con
+cuatro cifras resueltas por el camino —el plazo son 5 semanas y no 7; el 23% es el porcentaje de
+operaciones que quedaba registrado o medido; el destino baja de un 100% redondo a **+90%**, más
+creíble; y de 23 a 90 son **67 puntos porcentuales**, no «+77%»—. Alcance confirmado: **seis
+deep-dives, con caso de estudio en Emendu, INDYA y TheTool**. Lo único que queda entre esto y las
+páginas sigue siendo la redacción, que solo puede hacer Francisco: de Emendu faltan la magnitud
+de la empresa, qué le pidieron al entrar, cómo se decidía ante un comité que venía de Sales y
+Operaciones, y una cifra para LISA — el único de los seis bullets sin número, que con los otros
+cinco numerados canta.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

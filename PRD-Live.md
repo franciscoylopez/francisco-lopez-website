@@ -295,6 +295,26 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    un deep-dive ahí diluiría el orden del posicionamiento de §3. **Comparte fuente de contenido
    con el CV** —los bullets con métricas ya existen— y sale en **dos despliegues**: primero el
    andamiaje (helper de página, `slug` estable, skip link, LCP del hero), luego las páginas.
+
+   **Estructura de una página de deep-dive** (cerrada el 2026-08-11): ocho secciones, de las que
+   **seis son fijas** —Datos · En un minuto · El encargo · Cómo trabajé · Ahora/Cómo terminó ·
+   Lo que me llevo— y **dos libres**: *La historia* (el recorrido del proyecto) y *El caso* (un
+   episodio con formato propio, solo en Emendu, INDYA y TheTool). El espinazo fijo es lo que hace
+   que las seis páginas se lean como una serie; el cuerpo libre, lo que evita contar seis
+   experiencias distintas con el mismo molde. Dos reglas lo sostienen: **«En un minuto» lleva un
+   bullet por bullet del CV** —misma cobertura, dos longitudes, de modo que el CV es la versión
+   corta del mismo contenido y no otra selección—, y **un aprendizaje tiene que poder señalar a
+   algo escrito más arriba en la página**, o no es un aprendizaje. Los diagramas son **artefactos
+   reales del trabajo**, no ilustraciones del método — lo que traslada el problema de qué dibujar
+   a qué se puede publicar.
+
+   Dos consecuencias abiertas: con el cuerpo libre, la página no puede ser una plantilla de
+   secciones con nombre, sino un marco fijo más una **secuencia de bloques de juego cerrado**
+   (prosa · lista · fila de métricas · diagrama · artefacto · destacado). Y cada experiencia se
+   cuenta hoy en tres longitudes que viven en **tres archivos sin relación** —la frase de
+   Trayectoria, los bullets del CV y los ampliados del deep-dive, seis strings con los dos
+   idiomas—, sin que nada en el build detecte que divergen; ya hay drift en la home. Está tareado
+   por delante del desarrollo de las páginas, que es lo que crea la tercera copia.
 2. **«Cómo se ha creado esta página»** — una página con estructura y metadata de artículo
    (`TechArticle`) contando el proceso: marca, stack, sistema de componentes, accesibilidad,
    metodología, revisiones y medición. **No es un blog** y no habrá índice de artículos ni feed.
