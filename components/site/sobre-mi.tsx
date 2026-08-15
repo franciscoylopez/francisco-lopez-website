@@ -56,25 +56,49 @@ export function SobreMi({
           {/* Apertura: cita-firma sobre la foto. El scrim garantiza contraste del
               texto sobre la foto; en móvil se oculta la 2ª frase.
 
-              La foto es de cuerpo entero y el sujeto ocupa 778 de sus 941px de
-              alto, así que la banda se dimensiona para que quepa ENTERO: el
-              `clamp` mantiene una ventana de ~855px de la fuente en todo el
-              rango (por eso 46vw, no 42), y `object-[68%_100%]` ancla abajo —
-              deja 13px de suelo bajo los zapatos y 43-150px de aire sobre la
-              cabeza según el ancho. Por debajo de ~520px de viewport el recorte
-              pasa a ser horizontal y el 68% conserva al sujeto, que está a la
-              derecha. Con la banda más corta se cortaba por la rodilla.
+              La foto es de cuerpo entero y el sujeto ocupa las filas 66→844 de
+              los 857px de alto de la fuente, lo que impone una restricción dura:
+              para que salga ENTERO, la banda tiene que medir 0,505 × su ancho.
+              De ahí salen los dos números del `clamp`: el tope —41rem, 656px—
+              cubre los 646 que pide el ancho máximo de contenido (1280px), y el
+              48vw mantiene la proporción por debajo de ese tope. Con 46vw la
+              banda se quedaba hasta 21px corta entre 900 y 1426px de viewport y
+              recortaba los zapatos; el `min()` con `100svh` sigue mandando en
+              cuanto la pantalla es baja, así que subirlo no alarga nada ahí.
 
-              El scrim es más profundo que el de la foto anterior (85/40 frente a
+              Pero esa altura no siempre cabe sobre el pliegue, y ahí es donde se
+              cortaba. La cabecera y el breadcrumb ocupan 12,5rem fijos, y un 1920
+              con el escalado de Windows al 125% deja 1536×~740 de viewport CSS;
+              al 150%, 1280×~618. Con la banda a 656 la foto se salía por abajo y
+              la cita quedaba partida por el borde de la ventana. De ahí el
+              `min(48vw, 100svh - 14rem)` dentro del `clamp`: manda el más pequeño
+              de los dos, así que en pantalla grande sale la figura completa y en
+              un portátil la banda se acorta —12,5rem de andamiaje + 1,5 de aire—
+              en vez de salirse. El suelo de 15rem del `clamp` protege el móvil.
+
+              Y para que al acortarse recorte por los pies y NUNCA por la
+              cabeza, la fuente viene recortada 84px por arriba —exactamente el
+              aire que dejaba la banda a ancho máximo, así que en pantalla
+              grande no cambia nada— y `object-[68%_0%]` ancla arriba. Un solo
+              porcentaje no puede hacer las dos cosas: anclado abajo, la altura
+              de portátil decapitaba. Por debajo de ~520px de viewport el
+              recorte pasa a ser horizontal, sale la figura entera igual, y el
+              68% conserva al sujeto, que está a la derecha.
+
+              El scrim es más profundo que el de la foto anterior (85/55 frente a
               75/25) porque esta pared es blanca donde la otra era gris oscuro:
               con el gradiente antiguo el par texto-blanco/fondo caía a 3,81 en
-              la cita y 6,93 en el subtítulo. Medido sobre el píxel compuesto —el
-              par no existe en ningún token—, ahora da 5,92 y 10,31 en escritorio
-              y 5,42 en móvil, AAA con sus umbrales (4,5 el texto grande de la
-              cita, 7 el normal del subtítulo). */}
+              la cita y 6,93 en el subtítulo. Y sus paradas se topan en px
+              (`min(60%, 13rem)` · `min(100%, 22rem)`) en vez de ir solo en
+              porcentaje: así el velo cubre la cita y poco más, mida lo que mida
+              la banda, en vez de estirarse con ella. Medido sobre el píxel
+              compuesto —el par no existe en ningún token—, el peor caso de todo
+              el rango de alturas (656 → 394) da 5,44 en la cita y 7,28 en el
+              subtítulo, y 8,96 en la cita del móvil: AAA con sus umbrales (4,5 el
+              texto grande de la cita, 7 el normal del subtítulo). */}
           <figure
             data-reveal
-            className="relative m-0 h-[clamp(15rem,46vw,41rem)] overflow-hidden rounded-lg"
+            className="relative m-0 h-[clamp(15rem,min(48vw,100svh_-_14rem),41rem)] overflow-hidden rounded-lg"
           >
             {/* Misma corrección que el hero de la home: `priority` está
                 deprecado en Next 16 y ya no pone `fetchpriority` en el <img>
@@ -86,11 +110,11 @@ export function SobreMi({
               fetchPriority="high"
               loading="eager"
               sizes="100vw"
-              className="object-cover object-[68%_100%]"
+              className="object-cover object-[68%_0%]"
             />
             <div
               aria-hidden
-              className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent"
+              className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0,rgba(0,0,0,0.55)_min(60%,13rem),transparent_min(100%,22rem))]"
             />
             <figcaption className="absolute inset-x-0 bottom-0 p-[clamp(1.5rem,4vw,3rem)]">
               <p className="font-display m-0 max-w-[24ch] text-[clamp(1.5rem,3.4vw,2.4rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-balance text-white">
