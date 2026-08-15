@@ -163,6 +163,15 @@ por página** (D48). Es lo que hace que las siete páginas del deep-dive nazcan 
   PUBLICA sigue teniendo ocho puntos y ninguno es el bypass**: corregirlo es copy en ES y EN
   y está tareado.
 
+  **Y un tercer hueco de la misma familia, cerrado el 2026-08-15: el escalado de Windows.**
+  La foto de apertura de Sobre mí se dimensionaba solo por el ancho, así que en un 1920 con el
+  escalado al 125% (1536×~740 de viewport CSS) o al 150% (1280×~618) se salía del pliegue y la
+  cita quedaba partida por el borde de la ventana. No lo ve ninguna de las puertas que tiene el
+  sitio —ni Lighthouse, ni axe, ni el diff de HTML, ni PSI—, porque **ninguna mira una
+  combinación de ancho y alto que el desarrollador no tiene delante**: el ancho es el de
+  siempre y lo que cambia es el alto. Lo reportó un lector con esa pantalla. El arreglo y su
+  aritmética, en `DECISIONS.md` D50; el patrón vuelve en los hero del deep-dive.
+
   Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
   ambos temas, en reposo y en hover, sin excepciones** —la última que quedaba, el hover del
   toggle apagado, se resolvió subiéndolo de 6,35/6,98 a 7,21/7,80 sin apagar la señal visual
@@ -295,6 +304,11 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    un deep-dive ahí diluiría el orden del posicionamiento de §3. **Comparte fuente de contenido
    con el CV** —los bullets con métricas ya existen— y sale en **dos despliegues**: primero el
    andamiaje (helper de página, `slug` estable, skip link, LCP del hero), luego las páginas.
+   **Cada página son cinco secciones** (Datos · En un minuto · La historia · El caso, opcional ·
+   Aprendizajes) con un presupuesto de 700-900 palabras, 1.200 con caso. La homogeneidad entre
+   las seis la dan el marco y la longitud, no los títulos: dentro de «La historia» los
+   subapartados son libres, porque si no, una experiencia de tres meses de hace cuatro años sale
+   con secciones medio vacías al lado de una de cinco años. Detalle en `PRD-Historical.md` §42.
 2. **«Cómo se ha creado esta página»** — una página con estructura y metadata de artículo
    (`TechArticle`) contando el proceso: marca, stack, sistema de componentes, accesibilidad,
    metodología, revisiones y medición. **No es un blog** y no habrá índice de artículos ni feed.
@@ -321,6 +335,13 @@ de tokens, simulador de foco) y *Accesibilidad*.
 
 **«Pregúntale a mi carrera»** — sin definir: modelo, arquitectura, datos, coste y UX. Arrastra la
 CSP estricta con nonces (§5).
+
+**Su corpus ya tiene un límite, fijado el 2026-08-15 antes de que exista el agente: lo que no
+va por escrito en el sitio, tampoco va aquí.** Un agente público publica igual que una página,
+y además responde sin Francisco delante y en frases que no puede revisar — así que no sirve
+como papelera de lo que se cuenta en una entrevista y no en abierto (motivos de salida,
+problemas internos, límites de un equipo). **V4 absorbe profundidad sobre lo que ya es público,
+no discreción.** Es la regla 9 del formato de deep-dive; el porqué, en `PRD-Historical.md` §42.
 
 ### Fuera de alcance, sin versión asignada
 

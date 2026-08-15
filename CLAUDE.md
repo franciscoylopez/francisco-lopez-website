@@ -63,6 +63,7 @@
 - D46 · Enlace de salto (WCAG 2.4.1, nivel A — **axe no lo detecta**) y el `<main>` sube a `PageShell` con `id="main"`; por qué `translate` y no `sr-only`; el `id="top"` de los cinco `<main>` se retira y el del hero de la home se queda
 - D45 · El andamiaje de página no se escribe a mano: `pageMetadata` (canonical, hreflang, OG y Twitter derivados de `pagePath`) + `<PageShell>` (JSON-LD, nav, motion, footer, con dos modos en el tipo); qué se dejó fuera a propósito (`generateStaticParams`, `metadataBase`/`icons`, el `<main>`)
 - D44 · Lo que de una experiencia no es copy (logo, slug) vive en `content/experiences.ts`; la unión con el diccionario y con el CV es por `company` y **lanza** si no hay match — mata el mapeo por índice
+- D50 · Una banda dimensionada por `vw` no cabe necesariamente sobre el pliegue: el alto lo pone `min(48vw, 100svh − 14rem)` porque el andamiaje que va delante es un offset FIJO (12,5rem), no proporcional; el escalado de Windows mueve el alto sin tocar la resolución (1920@125% = 1536×~740; @150% = 1280×~618); y al acortarse hay que elegir por dónde recorta — se ancla arriba y se recorta la fuente, porque un solo `object-position` no preserva cabeza y pies
 - D41 · Un color fijo no puede servir a dos superficies opuestas: `--brand-purple-accent` conmuta con el tema (techo de un color fijo = √13,79 = 3,71:1); el atenuado sustituye al morado en la escalera del logo; y el umbral del censo depende del tamaño del texto
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*

@@ -1291,6 +1291,64 @@ andamiaje y las seis páginas.**
 
 ---
 
+## 42. El deep-dive baja de ocho secciones a cinco, y aparece una línea de discreción (2026-08-15)
+
+El formato de ocho secciones se había cerrado el 11-ago escribiendo Emendu, que era la
+prueba. Escribir INDYA con él —y releer KUOTIP, que ya estaba redactada— destapó que el
+problema no era de redacción sino **de forma**, y por tres motivos distintos:
+
+1. **Las páginas no se parecen entre sí, y no por estilo: por recorrido y por memoria.**
+   Emendu son cinco años de detalle fresco; Freepik, tres meses de hace cuatro años. Con ocho
+   secciones fijas, esa diferencia se convierte en secciones medio vacías — que es peor que
+   no tenerlas. KUOTIP tenía dos.
+2. **Se estaban haciendo muy largas.** Emendu pasaba de 1.900 palabras. Eso ya no es una
+   página de portfolio, es un documento, y el lector al que va dirigida no lo termina.
+3. **Una sección fija obliga a contestar.** «Cómo terminó» pregunta por qué saliste de cada
+   sitio, y hay salidas que se cuentan en una entrevista y no por escrito. Con la sección
+   fija, la única salida era mentir o dejarla coja.
+
+**La estructura pasa a cinco:** Datos · En un minuto · La historia · El caso (opcional) ·
+Aprendizajes. «El objetivo», «Cómo trabajé» y «Cómo terminó» dejan de ser secciones y bajan a
+**subapartado de La historia cuando en esa experiencia sean lo interesante**, sin aparecer
+cuando no lo sean.
+
+**Lo que cambia de fondo es de dónde viene la homogeneidad.** Antes la daban las secciones
+—las seis páginas con los mismos ocho títulos—; ahora la dan **el marco y la longitud**
+(mismas cinco secciones, mismo presupuesto de palabras, mismo número de cifras) y dentro de
+La historia cada experiencia cuenta lo que tiene. Es lo que permite que un deep-dive de tres
+meses y uno de cinco años se lean como la misma serie sin que el corto parezca incompleto.
+
+**Dos reglas cambian y cuatro nacen.** La de las cifras pasa de «una por bullet» a **dos o
+tres en toda la sección, cuando corresponda** —suelo y techo iguales, para que una
+experiencia antigua no parezca floja cuando solo es antigua—, y la que separaba método de
+cronología se retira con las secciones. Nacen: **el final no es una sección, aparece solo si
+enseña algo** (el de KUOTIP —«nos dimos un año, no llegó la tracción, fuimos fieles a lo
+acordado»— es el mejor párrafo de su página); **una cifra de volumen no es una cifra de
+comportamiento**; y un **presupuesto de 700-900 palabras, 1.200 con caso**, porque la
+estructura sola no acorta nada.
+
+**Y la cuarta es la que tiene alcance más allá del deep-dive: la línea de discreción.** Lo
+que se cuenta en una entrevista —motivos de salida, problemas internos, límites del equipo o
+del servicio— no se escribe en una página pública: una conversación tiene contexto, matiz y
+un interlocutor que pregunta, y la página no tiene ninguna de las tres. **Y no vale aparcarlo
+en «ya lo contará el bot»**: el agente conversacional de V4 también publica, y además
+responde sin Francisco delante y en frases que no puede revisar. Lo que V4 absorbe es
+**profundidad sobre lo que ya es público**, no discreción — lo que acota su corpus antes de
+que exista.
+
+Esa regla se aplicó el mismo día a INDYA, y su efecto es la regla del anclaje funcionando al
+revés: al retirar la saturación del servicio, **cayó el aprendizaje que dependía de ella**
+—«cuando la escalabilidad depende de personas, el producto no te salva del cuello de
+botella»— porque ya no podía señalar a nada escrito arriba. La página se queda con tres, que
+es lo que la regla pide.
+
+Se reescribieron **las tres primeras experiencias** con el formato nuevo (Emendu 1.190
+palabras, KUOTIP 760, INDYA 1.150), elegidas para marcar el rango: dos con caso y una sin él,
+una de cinco años y una de diez meses. Las otras tres no se escriben hasta que el formato
+esté validado sobre esas.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
