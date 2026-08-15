@@ -2163,3 +2163,106 @@ variante que sirve `next/image`, 5,58/7,37.
 
 **Dónde vuelve a aplicar.** En los hero de las siete páginas del deep-dive. Es el mismo patrón
 —imagen grande de apertura con texto encima— y el mismo error está a un `clamp` de distancia.
+
+## D51 · Una herramienta externa entra por el trabajo que resuelve, no por lo buena que sea — 2026-08-16
+
+**Decisión.** Se evaluaron **32 plugins y skills** de terceros (Vercel, Anthropic, Emil
+Kowalski, GreenSock, HeyGen, Remotion y otros) contra el trabajo que tiene por delante el
+proyecto. Entran **cuatro**; seis quedan aparcadas con caso de uso; **veintidós se
+descartan**. La adopción que importa es `agent-browser`, y la parte reutilizable de todo
+esto es el criterio, no la lista.
+
+**El criterio, en cuatro preguntas.** Ninguna es «¿es buena?»:
+
+1. **¿Qué trabajo abierto resuelve?** Si no se puede nombrar el trabajo, no entra. Se
+   levantó un mapa de siete trabajos (ver, widgets, ilustraciones, motion, auditoría,
+   contenido, disparar los gates) y cada candidata se puntuó contra uno.
+2. **¿Hay algo propio que ya lo haga mejor?** Este proyecto llega con cuatro gates
+   (`gate:html`, `check:palette`, `psi`, `contrast-census`), cuatro skills y un régimen de
+   contexto documentado. La mayoría de candidatas resuelven problemas que aquí no existen.
+3. **¿Cuánto cuesta en cada arranque, y añade una segunda fuente de reglas?** Es D28
+   aplicado a las herramientas.
+4. **¿Se puede validar disparándola?** Nada entra sin reproducir antes un resultado que ya
+   damos por bueno.
+
+**El patrón que salió repetido en tres bloques independientes, y que es la conclusión
+transferible:** *lo que encaja en este proyecto es de **cero JS de cliente** y **se ata a un
+evento**; lo que peor encaja **añade cliente** o **añade una segunda fuente de reglas**.*
+No se buscó — apareció tres veces por separado, así que sirve de heurística de entrada para
+la próxima candidata.
+
+Los tres descartes que mejor lo ilustran, porque los tres eran tentadores:
+
+- **`code-simplifier`** duplica el `/simplify` que Claude Code ya trae **y** codifica el
+  `CLAUDE.md` de Anthropic —preferir `function`, módulos ES con extensiones, evitar
+  `try/catch`—. Que aquí ya se use `export function` 78 veces frente a 5 arrow es
+  coincidencia, no alineación. Segunda fuente de convenciones: es la regla 5 de `BRAND.md`
+  en versión ejecutable.
+- **`claude-mem`** auto-captura la sesión e **inyecta contexto en SessionStart**, que es
+  exactamente lo que D28 combate: reglas precargadas, historia a demanda. Va en dirección
+  contraria a la arquitectura, no es que sea peor.
+- **`headroom`** ataca la preocupación nº1 del proyecto —la economía de tokens— pero su
+  ganancia real para agentes de código es **15-20%** (el 60-95% es para JSON, que aquí casi
+  no hay), reescribe lo que llega al modelo e instala Serena a scope de usuario. Y el
+  problema **ya se resolvió mejor y sin pérdida**: partir `BRAND.md` (5.954→3.530 palabras),
+  disciplina de `@`-import y diccionario por página son victorias estructurales; esto es un
+  parche con pérdida sobre algo arreglado en el origen.
+
+**La adopción: `agent-browser` (`vercel-labs/agent-browser`, v0.34.0).** CLI nativo en Rust
+que conduce **su propio Chrome por CDP**. No sustituye a `claude-in-chrome` —eso sigue para
+lo que necesita el navegador con sesión—; sustituye la parte de **medir y capturar**, que es
+donde `claude-in-chrome` falla: en una pestaña oculta no funcionan `:focus`, LCP, rAF ni
+IntersectionObserver.
+
+Lo que desbloquea, comando a comando:
+
+| Comando | Qué resuelve |
+|---|---|
+| `set viewport 1536 740` | **D50 reproducible**: el escalado de Windows al 125% y 150%, sin depender de la pantalla que uno tenga delante |
+| `set media dark` · `light reduced-motion` | Puntos 1, 2, 6 y 7 del checklist en ambos temas **y** con motion reducido |
+| `a11y --tags wcag2a,wcag2aa` | axe-core nativo; hoy es un paso manual por página × idioma × tema |
+| `vitals --json` | LCP/CLS/TTFB/FCP/INP + hidratación, con la pestaña en primer plano |
+| `snapshot -i` | Árbol de accesibilidad con refs, para verificar el orden de lectura |
+
+**Validado disparándolo, como exige el criterio 4.** Dos resultados ya conocidos,
+reproducidos el 2026-08-16: la home da **0 violaciones** (axe-core 4.12.1, 25 passes, 0
+incomplete), y la aritmética de D50 cuadra — la fórmula predice `min(48vw, 100svh−14rem)` =
+**516px** a 1536×740 y la banda mide **514**. Si no hubiera reproducido lo conocido, el fallo
+sería del metro y no del sitio; es el punto 1 de `BRAND.md` §Cómo medir sin equivocarse.
+
+**Límite conocido, y su forma de trabajo.** La **navegación inicial** no funciona dentro del
+sandbox de la sesión: el CLI llega a la red, pero el Chrome que lanza como subproceso no.
+Todo lo demás sí, porque opera sobre una página ya cargada en el daemon. El flujo real es
+**abrir la URL una vez desde la terminal** (`!agent-browser open <url>`) y conducir desde ahí:
+snapshot, clics, cambio de tema, capturas.
+
+**Lo que habilita y aún no se ha hecho.** `gate:html` caza drift de marcado; el **visual** no
+lo caza nada. Capturas a viewport fijo × dos temas extienden ese patrón a lo que se ve. Idea,
+no compromiso.
+
+**Las otras tres adopciones.** `claude-code-setup` (oficial, solo lectura: analiza el repo y
+propone hooks — interesa porque los cuatro gates hoy se disparan porque alguien se acuerda,
+que es la regla 2 de `BRAND.md`); `typescript-lsp` (go-to-definition y diagnósticos reales
+sobre un repo `strict`); y las **skills de motion de Emil Kowalski**, de las que la que
+importa es `review-animations`: diez reglas mecánicas con `STANDARDS.md` de curvas y
+duraciones que **ya coinciden con las del proyecto** —solo `transform`/`opacity`, `ease-out`
+al entrar, <300 ms— así que no traen doctrina ajena, ponen **cifras** a lo que `BRAND.md`
+afirma sin ellas. Y traen un matiz mejor que el actual: `prefers-reduced-motion` significa
+*más suave, no cero* —conservar opacidad y color, quitar el desplazamiento—, donde hoy el
+sitio lo trata como interruptor.
+
+**Dónde se instala cada cosa, que no es obvio y se comprobó.** `.claude/skills/` **está
+rastreado por git** en este repo (las cuatro skills propias están commiteadas), así que una
+skill de terceros instalada a nivel proyecto deja archivos sin rastrear dentro de un
+directorio rastreado y acaba colándose en un commit. Las de terceros van **globales**
+(`~/.claude/skills/`, bandera `-g`); las del proyecto siguen en el repo. Los plugins no son
+archivos: se listan con `claude plugin list`. Y `agent-browser` no es ni skill ni plugin,
+es un binario global de npm.
+
+**Lo que NO se decidió aquí.** El cambio del método de verificación en `CLAUDE.md` —que hoy
+dice «Lighthouse + axe con `claude-in-chrome`»— es su propia tarea, en el sprint del
+deep-dive y **por delante del diseño**: no es solo para verificar las siete páginas nuevas,
+es para diseñarlas, porque D50 vuelve en sus hero y el alto hay que comprobarlo mientras se
+dibuja. Y la técnica de motion elegida para las ilustraciones —`animation-timeline: view()`
+en CSS, cero JS de hilo principal y mejora progresiva por diseño— **no se registra todavía
+como decisión porque no está validada**: primero se prueba sobre una ilustración.

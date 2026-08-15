@@ -166,11 +166,21 @@ por página** (D48). Es lo que hace que las siete páginas del deep-dive nazcan 
   **Y un tercer hueco de la misma familia, cerrado el 2026-08-15: el escalado de Windows.**
   La foto de apertura de Sobre mí se dimensionaba solo por el ancho, así que en un 1920 con el
   escalado al 125% (1536×~740 de viewport CSS) o al 150% (1280×~618) se salía del pliegue y la
-  cita quedaba partida por el borde de la ventana. No lo ve ninguna de las puertas que tiene el
-  sitio —ni Lighthouse, ni axe, ni el diff de HTML, ni PSI—, porque **ninguna mira una
-  combinación de ancho y alto que el desarrollador no tiene delante**: el ancho es el de
-  siempre y lo que cambia es el alto. Lo reportó un lector con esa pantalla. El arreglo y su
-  aritmética, en `DECISIONS.md` D50; el patrón vuelve en los hero del deep-dive.
+  cita quedaba partida por el borde de la ventana. No lo vio ninguna de las puertas que tenía
+  entonces el sitio —ni Lighthouse, ni axe, ni el diff de HTML, ni PSI—, porque **ninguna
+  miraba una combinación de ancho y alto que el desarrollador no tiene delante**: el ancho es
+  el de siempre y lo que cambia es el alto. Lo reportó un lector con esa pantalla. El arreglo
+  y su aritmética, en `DECISIONS.md` D50; el patrón vuelve en los hero del deep-dive.
+
+  **Y desde el 2026-08-16 ya hay una puerta que lo ve** (D51). `agent-browser` fija el
+  viewport, conmuta el tema y emula `prefers-reduced-motion` desde la terminal, así que la
+  combinación de ancho y alto que nadie tiene delante pasa a ser comprobable: se reprodujo
+  D50 a 1536×740 y la aritmética cuadró —la fórmula predice 516px y la banda mide 514—. Trae
+  además axe-core nativo y las Web Vitals con la pestaña en primer plano, que es justo lo que
+  una pestaña oculta no puede medir. **Que la herramienta exista no cambia todavía el método
+  publicado:** cambiarlo en `CLAUDE.md` es su propia tarea, y va **por delante del diseño**
+  del deep-dive, no detrás — porque el patrón de D50 vuelve en sus siete hero y el alto hay
+  que comprobarlo mientras se dibuja, no al cerrar.
 
   Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
   ambos temas, en reposo y en hover, sin excepciones** —la última que quedaba, el hover del

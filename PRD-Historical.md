@@ -1349,6 +1349,50 @@ esté validado sobre esas.
 
 ---
 
+## 43. El vídeo no va dentro de la página, y por qué eso es una decisión de producto (2026-08-16)
+
+Al evaluar herramientas externas (el criterio y la lista completa, en `DECISIONS.md` D51)
+apareció una idea de Francisco que no era de herramienta sino de producto: **cuando los
+deep-dive estén escritos, montar un vídeo con ese contenido y la marca del sitio —colores,
+tipografías—, como forma rápida de entenderlos y de fomentar su lectura.**
+
+**El matiz que decide dónde vive.** Dentro de la página, un vídeo **no fomenta la lectura:
+la sustituye**. Nadie ve noventa segundos y después lee novecientas palabras. Y competiría
+con una pieza que ya está diseñada para ese trabajo exacto: **«En un minuto»**, la segunda de
+las cinco secciones de cada deep-dive (§42). Como texto gana en todo lo que aquí importa —se
+escanea, y el lector de 5-10 segundos de §2 **no puede escanear un vídeo**; lo indexa Google;
+existe en ES y EN; es accesible; y cuesta cero LCP—.
+
+**Fuera del sitio, en cambio, hace exactamente lo que se le pide:** aparece en un feed, se
+reproduce solo, tiene alcance y **manda tráfico al deep-dive**. Eso sí es fomentar la
+lectura. Así que la idea es buena y su casa es **LinkedIn**, no `/trayectoria/[slug]`.
+
+Es la casilla que el PRD deja como «marca externa, fuera de alcance y sin versión» — y
+resulta ser, de todo lo evaluado ese día, lo que más rendimiento daría por hora invertida,
+porque **sirve al objetivo declarado en §1 (facilitar el cambio de trabajo) sin tocar la
+arquitectura del sitio**: no paga LCP, ni tema, ni reduced-motion, ni accesibilidad de
+página.
+
+**Y por lo mismo, el vídeo queda descartado para animar las ilustraciones conceptuales.** Un
+MP4 no conmuta con el tema —el sitio entero lo hace—, no responde a `prefers-reduced-motion`
+—punto 7 del checklist, no negociable— y no es scrubable. Sería un retroceso en las tres
+propiedades que el sitio protege. Para eso la respuesta es CSS.
+
+**La herramienta, si llega, es Remotion**, y por una razón que es del proyecto y no del
+mercado: importaría el mismo `EXPERIENCES` de `content/experiences.ts` del que ya beben la
+web y el CV, de modo que el vídeo sería el **tercer artefacto generado desde la misma
+fuente** — el patrón de D22, D38 y D44. Su render parametrizado (una composición × seis
+juegos de props) hace además que seis vídeos cuesten casi lo mismo que uno. Se descartó
+HyperFrames: reusa el CSS del sitio pero no sus **datos**.
+
+**La decisión con fecha de caducidad, tomada el mismo día.** Si «En un minuto» se escribiera
+con restricción de guion —unas 60-80 palabras, una métrica dura, un cierre que funcione dicho
+en voz alta—, el vídeo saldría casi gratis después. **Francisco decidió escribirlo libre**,
+sin condicionar el copy de la página por una pieza que quizá no se haga. Coste asumido y
+explícito: si el vídeo llega, habrá que derivar seis guiones de los seis textos.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
