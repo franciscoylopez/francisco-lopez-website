@@ -2115,3 +2115,51 @@ huella contesta la pregunta operativa sin revelar nada.
 infraestructura de Google con variabilidad alta entre ejecuciones: como puerta de un PR daría
 rojos falsos, y un gate en el que no se confía se acaba ignorando o desactivando, que es peor
 que no tenerlo. El número entra en la conversación cuando se toca algo de rendimiento.
+
+## D50 · Una banda dimensionada por `vw` no cabe necesariamente sobre el pliegue — 2026-08-15
+
+**Decisión.** La foto de apertura de «Sobre mí» mide
+`clamp(15rem, min(48vw, 100svh - 14rem), 41rem)`. El segundo término del `min` es el que
+faltaba: **el alto disponible**, no el ancho.
+
+**El problema, que no se ve en una pantalla de escritorio grande.** Dimensionar una banda
+solo por `vw` ignora que el alto del viewport varía de forma independiente — y el escalado
+de Windows lo mueve **sin tocar la resolución física**. Un 1920 al 125% da 1536×~740 de
+viewport CSS; al 150%, 1280×~618. En los tres casos el `clamp` topaba en 41rem = 656px, así
+que la banda medía lo mismo y en los dos últimos se salía por abajo: la cita-firma, que vive
+sobre la foto, quedaba partida por el borde de la ventana.
+
+**Por qué un `svh` proporcional no vale y sí uno con offset fijo.** El elemento no empieza
+arriba del viewport: la cabecera y el breadcrumb le comen **12,5rem constantes**. Un `68svh`
+—que fue el primer intento— aplica un descuento proporcional a un estorbo que es fijo, así
+que sobra alto en pantallas altas y falta en las bajas. `100svh - 14rem` (12,5 de andamiaje
++ 1,5 de aire) descuenta lo que de verdad hay delante. Se usa `svh` y no `vh`/`dvh`: es el
+viewport pequeño, estable, sin reflow al recoger la barra del navegador.
+
+**Y al acortarse hay que elegir por dónde recorta.** Un solo `object-position` no puede
+preservar cabeza y pies a la vez: anclado abajo, la altura de portátil decapitaba. Se ancla
+**arriba** (`object-[68%_0%]`) y la fuente se recorta 84px por su parte superior —exactamente
+el aire que sobraba a ancho máximo—, de modo que en pantalla grande no cambia nada y lo que
+se pierde al acortar son los pies.
+
+**La aritmética que fija los dos números del `clamp`.** El sujeto ocupa las filas 66→844 de
+las 857 de la fuente, así que la figura entera pide **0,505 × el ancho**. El ancho máximo de
+contenido es 1280px (`--container` 1360 menos el gutter), o sea 646px, y el tope de 41rem =
+656px los cubre. El `46vw` inicial se quedaba hasta **21px corto** entre 900 y 1426px de
+viewport —recortaba los zapatos—; `48vw` cubre el rango entero y no alarga nada en pantalla
+baja, porque ahí manda el término `svh`.
+
+**El scrim, con las paradas topadas en px.** `min(60%, 13rem)` y `min(100%, 22rem)` en vez de
+porcentajes puros: así el velo cubre la cita y poco más, mida lo que mida la banda, en vez de
+estirarse con ella.
+
+**El par de contraste no existe en ningún token, así que se mide sobre el píxel compuesto.**
+Texto blanco sobre foto + gradiente, en todo el rango de alturas (656→394) y en móvil:
+**5,44** la cita (38,4px w600 → texto grande, AAA 4,5), **7,28** el subtítulo (19,2px w400 →
+texto normal, AAA 7) y **8,96** la cita del móvil. Metro validado con dos métodos
+independientes sobre el mismo caso, como pide `BRAND.md` §Cómo medir sin equivocarse: un
+script en Node sobre la fuente da 5,47/7,32 y un `<canvas>` del propio navegador sobre la
+variante que sirve `next/image`, 5,58/7,37.
+
+**Dónde vuelve a aplicar.** En los hero de las siete páginas del deep-dive. Es el mismo patrón
+—imagen grande de apertura con texto encima— y el mismo error está a un `clamp` de distancia.
