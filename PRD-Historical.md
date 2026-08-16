@@ -1420,6 +1420,20 @@ consecuencias que se asumen: dos de los tres bullets del CV de PICKASO se quedan
 donde ampliarse, y en Trayectoria el bloque **Shutapp Projects** —que agrupa los dos roles—
 tendrá una fila que enlaza y otra que no, un caso que el diseño del índice aún no ha visto.
 
+*Ejecutado ese mismo día (P47.7), y el coste asumido resultó ser **la mitad** del que se había
+escrito.* Al mirar los bullets uno a uno, **solo uno estaba huérfano de verdad**: el primero
+—profesionalizar la agencia— ya estaba dentro de la narrativa desde el segundo párrafo, y el
+tercero —la base de conocimiento de mercado— estaba cubierto en esencia por el discovery de
+cuatro entradas, aunque sin las palabras «investigación de sus futuros competidores». El que
+no estaba en ningún sitio era el segundo, reposicionar marca y propuesta de valor. Se resolvió
+con **18 palabras** dentro de la frase que ya existía, y la página quedó en ~1.220: dentro del
+techo redondeado y **sin margen** para lo siguiente. *Un coste estimado sin desglosar se
+sobrestima igual que se subestima* — es la misma familia que el metro descalibrado del
+presupuesto de palabras, tres párrafos más abajo, y las dos aparecieron el mismo día. La otra
+consecuencia sigue abierta **a propósito y con destino**: no se puede mirar en pantalla porque
+el campo `slug` aún no tiene ningún consumidor, así que se hereda al diseño (P48), anotada en
+su tarea y en el propio comentario del campo para que no dependa de acordarse.
+
 **§43 se afina: un vídeo sí puede ir dentro de una página, si es prueba y no resumen.** El
 día anterior se había decidido que el vídeo vive fuera del sitio. Al llegar a la entrada de
 Pau Gasol en el accionariado de INDYA, Francisco pidió incrustarlo, y tiene razón sin que la
