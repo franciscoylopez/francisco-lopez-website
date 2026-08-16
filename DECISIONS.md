@@ -2327,6 +2327,25 @@ advertencia («el navegador es el de Francisco, no un entorno de pruebas») es p
 `agent-browser` no tiene, porque conduce su propio Chrome con perfil limpio. Migrar esa fase es
 su propia tarea, no esta.
 
+*Migrada el mismo día (P47.8), y no en V3 como se había propuesto: `design-review` se dispara
+**antes** de construir secciones nuevas, así que corría **sobre** el diseño del deep-dive con el
+metro retirado. La Fase 3 pasa a **llamar** a `viewport-verifier` para el barrido medible y se
+queda solo con los estados a mano y el criterio de diseño; el aviso sobre el perfil de Francisco
+queda reducido a su única excepción real (`--profile Default` para una Preview protegida). Tres
+cosas que salieron al hacerlo:*
+
+- *El **`incomplete` de axe**: `viewport-verifier` mandaba no volcarlo, y es exactamente donde
+  se escondía un par a **4,33:1 en oscuro** mientras el informe decía «0 violaciones» —axe no
+  resuelve `color-mix()` y se abstiene—. Corregido: ahora se reporta con sus selectores. Mismo
+  fallo de forma que todo lo demás de esta tanda, esta vez **dentro de la herramienta**.*
+- *`hover`, `focus` y `press Tab` **existen de verdad** y la pestaña está en primer plano, así
+  que los estados se pueden provocar en lugar de leerse del CSS. Eso **puede** hacer innecesaria
+  la regla 2 del censo; queda escrito como hipótesis a comprobar contra un par publicado, no
+  como cambio de método.*
+- *No hay comando de **zoom**, y `set viewport` no lo sustituye (da reflow, no escalado de
+  texto). Es el único estado del recorrido que sigue necesitando un navegador de verdad, y está
+  escrito como tal en vez de darse por cubierto.*
+
 **Límite conocido, heredado de D51.** La navegación inicial no funciona dentro del sandbox: la
 URL se abre una vez desde la terminal (`!agent-browser open <url>`) y a partir de ahí se conduce
 normal. Un comando que cuelga es ese síntoma y **no se reintenta**.
