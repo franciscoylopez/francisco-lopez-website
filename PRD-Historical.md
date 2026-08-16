@@ -1351,6 +1351,12 @@ esté validado sobre esas.
 
 ## 43. El vídeo no va dentro de la página, y por qué eso es una decisión de producto (2026-08-16)
 
+> **Afinado el mismo día en §44: la regla es sobre el vídeo-RESUMEN, no sobre todo vídeo.**
+> Un clip de terceros que funciona como **prueba dentro de la narración** —el anuncio de la
+> entrada de Pau Gasol, en INDYA— sí va incrustado. Lo que sigue explica por qué un
+> vídeo-resumen no, y el criterio que separa los dos casos es **qué trabajo hace el vídeo en
+> la página**: si sustituye la lectura, fuera; si la respalda, dentro.
+
 Al evaluar herramientas externas (el criterio y la lista completa, en `DECISIONS.md` D51)
 apareció una idea de Francisco que no era de herramienta sino de producto: **cuando los
 deep-dive estén escritos, montar un vídeo con ese contenido y la marca del sitio —colores,
@@ -1390,6 +1396,66 @@ con restricción de guion —unas 60-80 palabras, una métrica dura, un cierre q
 en voz alta—, el vídeo saldría casi gratis después. **Francisco decidió escribirlo libre**,
 sin condicionar el copy de la página por una pieza que quizá no se haga. Coste asumido y
 explícito: si el vídeo llega, habrá que derivar seis guiones de los seis textos.
+
+---
+
+## 44. Las cinco narrativas escritas, y tres cosas que solo se ven escribiéndolas (2026-08-16)
+
+Francisco escribió en bruto Freepik y TheTool —las dos que faltaban— y retocó las tres ya
+reescritas. De la pasada de orden, jerarquía y redacción salieron las cinco narrativas en
+español: **Emendu ~1.160 y TheTool ~1.200 con caso, INDYA ~1.150 con caso, KUOTIP ~760 y
+Freepik ~710 sin él.** El formato de §42 aguanta el rango entero y ninguna se lee como
+versión incompleta de otra, que era la prueba que se le pedía.
+
+Lo que sigue son las tres cosas que **no se podían decidir en el documento de formato**,
+porque solo aparecen al aplicarlo.
+
+**PICKASO se queda sin página, y la razón es de contenido, no de alcance.** Francisco
+simplemente no la escribió, «porque forma parte de la historia de TheTool», y al redactar
+TheTool quedó demostrado: la agencia es su primer capítulo —la que necesitaba una
+herramienta que no existía y la que financió construirla—, y el rol de profesionalizarla
+está dentro de esa narrativa desde el segundo párrafo. Una página propia habría tenido que
+empezar explicando por qué existe. El deep-dive pasa de **seis páginas a cinco**, con dos
+consecuencias que se asumen: dos de los tres bullets del CV de PICKASO se quedan sin sitio
+donde ampliarse, y en Trayectoria el bloque **Shutapp Projects** —que agrupa los dos roles—
+tendrá una fila que enlaza y otra que no, un caso que el diseño del índice aún no ha visto.
+
+**§43 se afina: un vídeo sí puede ir dentro de una página, si es prueba y no resumen.** El
+día anterior se había decidido que el vídeo vive fuera del sitio. Al llegar a la entrada de
+Pau Gasol en el accionariado de INDYA, Francisco pidió incrustarlo, y tiene razón sin que la
+regla de §43 se caiga: **lo que §43 descarta es un vídeo-resumen del deep-dive**, que
+*sustituye* la lectura y compite con «En un minuto», la pieza diseñada para ese trabajo
+exacto. Un clip de terceros dentro de la narración hace lo contrario — es **evidencia**,
+dura segundos de atención y no sustituye a nada. La distinción no es el formato, es **qué
+trabajo hace el vídeo en la página**. El coste sí es real y convierte a INDYA en la única de
+las cinco con trabajo técnico propio: `frame-src` a `youtube-nocookie.com` (primera
+ampliación de la CSP desde Clarity, D32, con su mismo criterio de allowlist mínima), facade
+de póster + play para no pagar cientos de KB antes de que nadie pulse, gate de
+consentimiento y línea en la política de cookies (D18), y `title` en el iframe.
+
+**El presupuesto de palabras se estaba midiendo con dos metros distintos.** La regla 11 de
+§42 fija 700-900 palabras, 1.200 con caso. Al escribir TheTool, el conteo daba 1.466 y la
+página parecía incumplir por un 22% — así que había que amputarla. Antes de recortar se
+validó el metro contra **INDYA, una página ya dada por buena**: etiquetada «~1.150», mide
+**1.401** con `wc -w`. Las etiquetas cuentan prosa; `wc` cuenta también viñetas, títulos y
+marcas de markdown, y la diferencia es sistemática (~18%). En la escala de las etiquetas,
+TheTool estaba **justo en el techo**, no por encima. *Un techo comparado contra una escala
+que no es la suya inventa un incumplimiento igual que un metro descalibrado* — es la misma
+lección que `BRAND.md` §Accesibilidad lleva escrita para el contraste, los iconos y el censo
+de pares, apareciendo por primera vez **fuera del color**. Y su coste concreto habría sido
+tirar prosa buena para cumplir un número que ya se cumplía.
+
+**Una asimetría que se deja escrita a propósito.** El 38% del hub de herramientas de Emendu
+se queda **solo en el CV**: subirlo a «En un minuto» dejaba la sección en cuatro cifras
+(regla 2 pide dos o tres) y bajarlo a un párrafo lo dejaba apareciendo una vez y de pasada
+(regla 5). No es drift con el −24% del caso —son dos medidas de dos cosas: tiempo manual en
+la operativa frente a lo que ahorra el hub en reports, informes y propuestas—, y por eso se
+anota aquí en vez de «corregirse».
+
+**Cerrado también un dato que llevaba mal en producción:** KUOTIP termina en **diciembre** de
+2024, no en noviembre. El inglés además escribía «Nov», que es la misma abreviatura en los dos
+idiomas — por eso la discrepancia era invisible al revisar la traducción. Una fecha que se
+escribe igual en ES y EN es una fecha que nadie revisa.
 
 ---
 
