@@ -84,8 +84,9 @@ marco— dejó de copiarse: `pageMetadata` deriva canonical, los tres `hreflang`
 de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de motion, el `<main>` y footer
 (D45/D46). Las **seis páginas se prerenderizan** por locale desde que se retiró el
 `not-found` anidado que las volvía dinámicas a todas (D25), y el **diccionario está partido
-por página** (D48). Es lo que hace que las siete páginas del deep-dive nazcan con el
-`hreflang` correcto, con enlace de salto y estáticas, sin que nadie tenga que acordarse.
+por página** (D48). Es lo que hace que las seis páginas del deep-dive —cinco experiencias y
+su índice— nazcan con el `hreflang` correcto, con enlace de salto y estáticas, sin que nadie
+tenga que acordarse.
 
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 
@@ -308,17 +309,29 @@ el tablero de tareas; aquí solo qué entra en cada release y qué queda fuera.)
 
 Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
 
-1. **Deep-dive por experiencia** — seis páginas (solo las experiencias de producto: Emendu,
-   KUOTIP, INDYA, Freepik, TheTool, PICKASO) en `/trayectoria/[slug]`, más un índice
-   `/trayectoria`. Las dos entradas de Marketing & Growth se quedan como están en Trayectoria:
-   un deep-dive ahí diluiría el orden del posicionamiento de §3. **Comparte fuente de contenido
-   con el CV** —los bullets con métricas ya existen— y sale en **dos despliegues**: primero el
-   andamiaje (helper de página, `slug` estable, skip link, LCP del hero), luego las páginas.
+1. **Deep-dive por experiencia** — **cinco** páginas (Emendu, KUOTIP, INDYA, Freepik y
+   TheTool) en `/trayectoria/[slug]`, más un índice `/trayectoria`. Las dos entradas de
+   Marketing & Growth se quedan como están en Trayectoria: un deep-dive ahí diluiría el orden
+   del posicionamiento de §3. **Y PICKASO tampoco tiene página, por una razón que no es de
+   alcance sino de contenido** (2026-08-16): es el primer capítulo de la historia de TheTool
+   —la agencia que necesitaba una herramienta que no existía y que financió su construcción—,
+   no una experiencia con historia separable. Se descubrió escribiéndola: al redactar TheTool,
+   PICKASO ya estaba dentro. **Comparte fuente de contenido con el CV** —los bullets con
+   métricas ya existen— y sale en **dos despliegues**: primero el andamiaje (helper de página,
+   `slug` estable, skip link, LCP del hero), luego las páginas.
    **Cada página son cinco secciones** (Datos · En un minuto · La historia · El caso, opcional ·
    Aprendizajes) con un presupuesto de 700-900 palabras, 1.200 con caso. La homogeneidad entre
-   las seis la dan el marco y la longitud, no los títulos: dentro de «La historia» los
+   las cinco la dan el marco y la longitud, no los títulos: dentro de «La historia» los
    subapartados son libres, porque si no, una experiencia de tres meses de hace cuatro años sale
    con secciones medio vacías al lado de una de cinco años. Detalle en `PRD-Historical.md` §42.
+
+   **Las cinco narrativas en español están escritas** (2026-08-16): Emendu ~1.160 y TheTool
+   ~1.200 con caso, INDYA ~1.150 con caso, KUOTIP ~760 y Freepik ~710 sin él. El formato
+   aguanta el rango entero —de tres meses a cinco años y medio con exit— y ninguna se lee como
+   versión incompleta de otra, que era justamente la prueba. Queda abierto lo que solo se
+   cierra viendo las páginas montadas: los **artefactos** (hoy solo Emendu tiene dos
+   identificados), tres cifras sin acotar, la pasada de erratas y el EN contra el ES (D20).
+   Detalle en `PRD-Historical.md` §44.
 2. **«Cómo se ha creado esta página»** — una página con estructura y metadata de artículo
    (`TechArticle`) contando el proceso: marca, stack, sistema de componentes, accesibilidad,
    metodología, revisiones y medición. **No es un blog** y no habrá índice de artículos ni feed.
