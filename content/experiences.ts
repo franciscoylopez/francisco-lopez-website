@@ -21,9 +21,21 @@ export interface Experience {
   company: string;
   /**
    * Slug de su página de deep-dive, estable y neutro al idioma (el sitio no
-   * traduce segmentos de ruta). `null` = no tiene página propia: las dos
-   * entradas de Marketing & Growth se quedan en Trayectoria, porque un deep-dive
-   * ahí diluiría el orden del posicionamiento (PRD §3).
+   * traduce segmentos de ruta). `null` = no tiene página propia, y hoy eso pasa
+   * por DOS razones distintas que conviene no confundir:
+   *
+   * - **De alcance** — las dos entradas de Marketing & Growth se quedan en
+   *   Trayectoria, porque un deep-dive ahí diluiría el orden del posicionamiento
+   *   (PRD §3: PM → cofundador con exit → ADN Growth).
+   * - **De contenido** — PICKASO sí es producto y aun así no tiene página: es el
+   *   primer capítulo de la historia de TheTool (la agencia que necesitaba una
+   *   herramienta que no existía y que financió su construcción), no una
+   *   experiencia con historia separable. Se descubrió ESCRIBIÉNDOLA: al redactar
+   *   TheTool, PICKASO ya estaba dentro (2026-08-16, PRD-Historical §44).
+   *
+   * OJO AL DISEÑO DEL DEEP-DIVE: PICKASO y TheTool son las dos filas anidadas
+   * bajo «Shutapp Projects», así que dentro de un mismo grupo visual una enlaza a
+   * su página y la otra no. La fila sin enlace no puede leerse como un fallo.
    */
   slug: string | null;
   /** Nombre del asset en `public/logos/`. `null` = fila sin logo (PRD §8.5). */
@@ -36,7 +48,7 @@ export const EXPERIENCES: Experience[] = [
   { company: "INDYA", slug: "indya", logo: "companies/indya" },
   { company: "Freepik", slug: "freepik", logo: "companies/freepik" },
   { company: "TheTool", slug: "thetool", logo: "companies/thetool" },
-  { company: "PICKASO", slug: "pickaso", logo: "companies/pickaso" },
+  { company: "PICKASO", slug: null, logo: "companies/pickaso" },
   { company: "Ontecnia", slug: null, logo: "companies/ontecnia" },
   { company: "Havas Media", slug: null, logo: null },
 ];
