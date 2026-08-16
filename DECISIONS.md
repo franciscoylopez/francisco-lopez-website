@@ -2263,6 +2263,68 @@ es un binario global de npm.
 dice «Lighthouse + axe con `claude-in-chrome`»— es su propia tarea, en el sprint del
 deep-dive y **por delante del diseño**: no es solo para verificar las siete páginas nuevas,
 es para diseñarlas, porque D50 vuelve en sus hero y el alto hay que comprobarlo mientras se
-dibuja. Y la técnica de motion elegida para las ilustraciones —`animation-timeline: view()`
+dibuja. *(Hecho el mismo día en **D52**, que además encontró que la frase vieja tenía cuatro
+cosas mal y solo una era la herramienta.)* Y la técnica de motion elegida para las ilustraciones —`animation-timeline: view()`
 en CSS, cero JS de hilo principal y mejora progresiva por diseño— **no se registra todavía
 como decisión porque no está validada**: primero se prueba sobre una ilustración.
+
+## D52 · El gate de accesibilidad deja de dispararse una sola vez, y el eje que le faltaba era el alto — 2026-08-16
+
+**Decisión.** El método de verificación de `CLAUDE.md` §Checklist de accesibilidad —«Verificación
+real por página con la skill `claude-in-chrome`: Lighthouse (desktop + mobile) + axe, en claro y
+oscuro»— se sustituye por **`agent-browser` conducido por el subagente `viewport-verifier`**
+(`.claude/agents/viewport-verifier.md`). Es la mitad de documento de lo que D51 dejó
+explícitamente fuera; la mitad de herramienta se hizo en el commit `2db3984`.
+
+**Por qué se cambia, que no es «hay una herramienta nueva» —criterio 1 de D51: qué trabajo
+resuelve.** La frase vieja tenía cuatro cosas mal, y solo una es la herramienta:
+
+1. **Medía en una pestaña oculta.** `:focus`, el LCP, `rAF` y el `IntersectionObserver` no
+   funcionan ahí, así que media docena de los puntos del checklist se estaban comprobando con
+   un metro que no puede leerlos.
+2. **Su único eje era el tema.** «En claro y oscuro» nombra el color y no dice nada del
+   viewport — y el hueco que llegó a producción (D50) era una combinación de **ancho y alto**
+   que el desarrollador no tiene delante: el ancho es el de siempre y lo que cambia es el alto.
+3. **Confundía dos medidas en una palabra.** «Lighthouse» era a la vez la **nota** de PageSpeed
+   (criterio de aceptación >90, que se mide contra producción con `npm run psi`, D49) y el
+   **axe** que trae dentro. Separarlas es lo que impide que adoptar `vitals` —que da métricas,
+   no nota— rebaje el criterio sin que nadie lo note.
+4. **Se disparaba una vez, al cerrar.** La lección de D50 es que el alto de una banda
+   dimensionada por `vw` hay que comprobarlo **mientras se dibuja**: al cerrar ya es un
+   rediseño, no un ajuste.
+
+**Lo que cambia de forma, no solo de herramienta: el gate pasa a tener dos disparos.** Uno
+**mientras se dibuja** —solo si la sección lleva banda o hero por `vw`— y otro **al cerrar**.
+Es la regla 1 de `BRAND.md` §Cómo se escribe una regla aplicada al momento en vez de al lugar:
+un disparador que llega tarde no es una regla, es una nota.
+
+**Por qué lo conduce un subagente y no el hilo principal.** El deep-dive son cinco páginas más
+el índice × 2 idiomas × 2 temas × 4 viewports: a mano no se sostiene, y el volcado de axe y de
+los snapshots comido por la sesión padre es justo lo que D28 evita. `viewport-verifier` mide y
+reporta —no edita, no decide si un hallazgo merece tarea— y devuelve un informe corto.
+
+**Lo que NO cambia, y conviene que se lea:**
+
+- **Los 8 puntos publicados**, que son los que el propio Design System del sitio publica. El
+  método de verificarlos cambia; la lista, no.
+- **La rebaja de «la accesibilidad se hereda»** (`CLAUDE.md`): con todo saliendo de piezas
+  existentes solo se verifican los cuatro puntos que dependen del contenido.
+- **La nota de PageSpeed sigue saliendo de `npm run psi`** contra producción, a demanda y no
+  como gate de CI (D49).
+
+**Lo que queda a mano porque ninguna herramienta lo ve.** El **enlace de salto** de WCAG 2.4.1:
+la regla `bypass` de axe se da por satisfecha con landmarks o encabezados y este sitio los tiene,
+así que el único incumplimiento de nivel A que ha tenido el sitio sobrevivió a tres auditorías
+(D46). El método nuevo no puede quedarse en «correr axe» — se comprueba a mano que el enlace
+existe y que su destino está en la página.
+
+**`claude-in-chrome` no se retira.** Sigue siendo la herramienta de lo que necesita el navegador
+**con sesión**: el diálogo de consentimiento con su `localStorage`, una Preview autenticada. La
+Fase 3 de `design-review` está escrita sobre eso y se queda como está — con la nota de que su
+advertencia («el navegador es el de Francisco, no un entorno de pruebas») es precisamente lo que
+`agent-browser` no tiene, porque conduce su propio Chrome con perfil limpio. Migrar esa fase es
+su propia tarea, no esta.
+
+**Límite conocido, heredado de D51.** La navegación inicial no funciona dentro del sandbox: la
+URL se abre una vez desde la terminal (`!agent-browser open <url>`) y a partir de ahí se conduce
+normal. Un comando que cuelga es ese síntoma y **no se reintenta**.

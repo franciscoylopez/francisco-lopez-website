@@ -370,9 +370,11 @@ afordancia se mide**: subir contraste apagando un hover no es una mejora. Compar
 del estado nuevo con un hover que el sitio ya dé por bueno (pastilla `muted`: 3,9 claro /
 9,0 oscuro).
 
-**Gate de cierre:** los 8 puntos de accesibilidad de `CLAUDE.md`, axe y Lighthouse
-(desktop + móvil) en claro y oscuro. Un fallo aquí puede ser **preexistente**: la auditoría
-de P37.591 encontró tres, ninguno causado por la tanda que se estaba revisando.
+**Gate de cierre:** los 8 puntos de accesibilidad de `CLAUDE.md` **con el método que ese
+documento publica** — no lo repitas aquí; desde el 2026-08-16 es `agent-browser` conducido por
+el subagente `viewport-verifier`, con dos disparos y matriz de viewport (D52). Un fallo aquí
+puede ser **preexistente**: la auditoría de P37.591 encontró tres, ninguno causado por la
+tanda que se estaba revisando.
 
 ---
 

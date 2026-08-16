@@ -66,6 +66,7 @@
 - D50 · Una banda dimensionada por `vw` no cabe necesariamente sobre el pliegue: el alto lo pone `min(48vw, 100svh − 14rem)` porque el andamiaje que va delante es un offset FIJO (12,5rem), no proporcional; el escalado de Windows mueve el alto sin tocar la resolución (1920@125% = 1536×~740; @150% = 1280×~618); y al acortarse hay que elegir por dónde recorta — se ancla arriba y se recorta la fuente, porque un solo `object-position` no preserva cabeza y pies
 - D41 · Un color fijo no puede servir a dos superficies opuestas: `--brand-purple-accent` conmuta con el tema (techo de un color fijo = √13,79 = 3,71:1); el atenuado sustituye al morado en la escalera del logo; y el umbral del censo depende del tamaño del texto
 - D51 · Una herramienta externa entra por el **trabajo que resuelve**, no por lo buena que sea: el criterio en cuatro preguntas, y el patrón que salió repetido en tres bloques —**lo que encaja es de cero JS de cliente y se ata a un evento; lo que peor encaja añade cliente o una segunda fuente de reglas**—; de 32 candidatas entran 4; `agent-browser` mide lo que la pestaña oculta no puede (D50 reproducible, axe, vitals, dos temas) y **se validó reproduciendo dos resultados conocidos**; su límite es la navegación inicial dentro del sandbox; y `.claude/skills/` está rastreado por git, así que lo de terceros va global
+- D52 · El gate de accesibilidad deja de dispararse una sola vez: `agent-browser` conducido por el subagente `viewport-verifier` sustituye a «Lighthouse + axe con `claude-in-chrome`»; **el eje que faltaba era el alto, no el tema** (D50), así que hay disparo *mientras se dibuja* y disparo *al cerrar*; «Lighthouse» confundía la **nota** de PageSpeed (que sigue en `npm run psi`, D49) con el axe que trae dentro; el **enlace de salto** sigue a mano porque axe no lo ve (D46); y `claude-in-chrome` se queda para lo que necesita sesión
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
@@ -184,4 +185,14 @@ Antes de dar por cerrada una página o sección, verificar los 8 puntos (es la l
 7. **`prefers-reduced-motion`** respetado en toda animación (reveals, contadores, transición del nav).
 8. **Alternativas textuales:** `alt` y etiquetas donde informan, `aria-hidden` en lo decorativo.
 
-Verificación real por página con la skill `claude-in-chrome`: Lighthouse (desktop + mobile) + axe, en claro y oscuro.
+### Cómo se verifica
+
+*(Cambiado el 2026-08-16, D52. Antes: «con la skill `claude-in-chrome`: Lighthouse desktop + mobile + axe, en claro y oscuro» — un metro que mide en una pestaña **oculta**, con el tema como único eje y disparado una sola vez, al cerrar.)*
+
+Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer plano, donde `:focus`, el LCP, `rAF` y el `IntersectionObserver` sí funcionan— y **conducido por el subagente `viewport-verifier`**, que ya lleva la matriz (cuatro viewports × dos temas + `reduced-motion`), congela el motion antes de medir y devuelve **hallazgos, no el volcado**. No se conduce a mano.
+
+- **Se dispara dos veces, y la primera no es al cerrar.** Si la sección lleva banda o hero dimensionado por `vw`, **mientras se dibuja**: el eje que faltaba no era el tema, era el **alto**, y por ahí se coló D50 (`1536×740` y `1280×618` son un 1920 con el escalado de Windows al 125% y al 150%). Al cerrar, el resto del checklist.
+- **Precondición:** la URL se abre **una vez desde la terminal** (`!agent-browser open <url>`) — dentro del sandbox la navegación inicial no funciona, y un comando que cuelga es ese mismo síntoma, no un reintento.
+- **Lo que no tapa, y sigue a mano:** el **enlace de salto** de WCAG 2.4.1, que axe no detecta (D46); la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49); y los puntos **4, 5, 6 y 8**, que los pone quien escribe la página.
+
+`claude-in-chrome` no se retira: se queda para lo que necesita el navegador **con sesión** —consentimiento guardado, Preview autenticada—, que es la Fase 3 de `design-review`.
