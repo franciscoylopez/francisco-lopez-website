@@ -330,3 +330,26 @@ Lo que lo desbloqueó no fue elegir mejor el color, sino dejar de exigirle que f
 El token conmuta con el tema y sube a **7,04/7,21**. **El cálculo completo, los dos call sites
 que usaban el token fuera de su regla y la lección de método sobre los umbrales del censo están
 en `DECISIONS.md` D41** — aquí no se copian, que es la regla 5 de «Cómo se escribe una regla».
+
+## Cómo se escribe una regla
+
+**2026-08-16 (P47.5) — la regla 1 gana un segundo eje: el momento.** Nació de tres casos que
+eran todos del mismo tipo —el disparador miraba a un **sitio** y la cosa ocurría en otro:
+`icons.tsx` frente a los siete glifos repartidos, `globals.css` frente a los pares que solo
+existen al componer, y la clase frente a las superficies pintadas con un `color-mix` inline.
+
+Lo que apareció al cambiar el método de verificación es el mismo fallo en el **eje del
+tiempo**. El gate de accesibilidad se disparaba una vez, **al cerrar** una página. Para siete
+de sus ocho puntos eso está bien; para el alto de una banda dimensionada por `vw`, no —**al
+cerrar ya no es un ajuste, es un rediseño**, y ese es exactamente el precio que se pagó con
+D50: el arreglo llegó desde producción y desde un lector con otra pantalla. Por eso el gate
+pasa a tener dos disparos y el primero es *mientras se dibuja*.
+
+**Lo que hace que merezca ampliar la regla en vez de anotarlo:** un disparador tardío es
+**invisible en la revisión**, igual que uno mal situado. Nadie lee un checklist y piensa
+«esto llega tarde» — se lee y se cumple, y el hallazgo aparece igualmente, solo que cuando
+arreglarlo cuesta diez veces más. Es el mismo motivo por el que la regla 1 existía ya: no es
+que la regla estuviera mal escrita, es que **se cumplía y aun así no servía**.
+
+El detalle de qué se cambió y por qué —incluidas las otras tres cosas que la frase vieja tenía
+mal, y solo una era la herramienta— está en **`DECISIONS.md` D52**; aquí no se copia (regla 5).

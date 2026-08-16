@@ -340,6 +340,12 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    versión incompleta de otra, que era justamente la prueba. Queda abierto lo que solo se
    cierra viendo las páginas montadas: los **artefactos** (hoy solo Emendu tiene dos
    identificados), tres cifras sin acotar, la pasada de erratas y el EN contra el ES (D20).
+   **PICKASO ya está ejecutado** (`slug: null`) y su cabo de contenido, cerrado: de los tres
+   bullets de su CV solo uno estaba huérfano de verdad, y TheTool ganó 18 palabras para
+   recogerlo — la página queda en ~1.220, dentro del techo y sin margen. Lo único que la
+   decisión deja pendiente es de diseño: en Trayectoria, las dos filas anidadas de «Shutapp
+   Projects» pasan a comportarse distinto —una enlaza a su deep-dive y la otra no— y eso
+   **solo se puede juzgar en pantalla**, así que va con el diseño de la plantilla y no antes.
    Detalle en `PRD-Historical.md` §44.
 2. **«Cómo se ha creado esta página»** — una página con estructura y metadata de artículo
    (`TechArticle`) contando el proceso: marca, stack, sistema de componentes, accesibilidad,

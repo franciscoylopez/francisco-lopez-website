@@ -285,11 +285,16 @@ Estas cinco no son de marca: son de **cómo redactar las de arriba**. Cada una s
 regla que existía y aun así se incumplió, y el caso está en
 [`BRAND-historical.md`](./BRAND-historical.md).
 
-1. **Una regla cuyo disparador mira al lugar equivocado no es una regla: es una nota.** La
-   condición tiene que ser comprobable **donde la cosa de verdad ocurre**. «Si hay más de dos
-   iconos propios» se comprobaba leyendo `icons.tsx` —donde había uno— mientras el sitio tenía
-   siete; el censo de contraste se hacía leyendo `globals.css`, donde los pares compuestos no
-   existen.
+1. **Una regla cuyo disparador mira al lugar —o al momento— equivocado no es una regla: es una
+   nota.** La condición tiene que ser comprobable **donde** y **cuando** la cosa de verdad
+   ocurre.
+   **De lugar:** «si hay más de dos iconos propios» se comprobaba leyendo `icons.tsx` —donde
+   había uno— mientras el sitio tenía siete; el censo de contraste se hacía leyendo
+   `globals.css`, donde los pares compuestos no existen.
+   **De momento** *(añadido el 2026-08-16)*: el gate de accesibilidad se disparaba **al
+   cerrar** una sección, y al cerrar el alto de una banda dimensionada por `vw` ya no es un
+   ajuste, es un rediseño. Por eso pasó a tener **dos** disparos, y el primero es *mientras se
+   dibuja* (D50, D52).
 2. **Una regla que hay que recordar es una regla que se incumple.** Lo que impide el drift es
    el **recorrido completo** —regla → variante o clase → sección publicada en el Design System
    → uso—, no la disciplina. Los enlaces lo hicieron entero y son coherentes; los botones se
