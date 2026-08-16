@@ -276,31 +276,83 @@ siendo la misma variante sobre la misma superficie que el toggle del nav (corola
 
 ## Fase 3 — Verificación en pantalla
 
-Con la skill `claude-in-chrome`, sobre el sitio **servido** (`npm run dev` o la Preview de
-Vercel), y sobre el **CSS servido** cuando la duda es si una clase llegó a generarse.
+*(Migrada el 2026-08-16, D52. Antes: `claude-in-chrome` sobre el navegador de Francisco, con
+anchos sueltos y sin altos.)*
 
-> **Cuidado: el navegador es el de Francisco, no un entorno de pruebas.** Provocar los
-> estados de abajo escribe en su perfil real — `localStorage.theme` es su preferencia de tema
-> y `flm-consent` es su **decisión de privacidad guardada**. Haz la pasada de estados en
-> **incógnito o en local**; si tocas algo en su perfil, anota el valor previo y **restáuralo**
-> al terminar, y no borres el consentimiento sin pedírselo. Además, su tema guardado decide
-> lo que mides: para medir el tema contrario hay que forzarlo y **recargar** (conmutar en
-> caliente da falsos positivos, D30).
+Con **`agent-browser`**, sobre el sitio **servido en local** —`npm run build && npm start`, no
+`dev`: lo que se mide es el build de producción (D8/D13)— y sobre el **CSS servido** cuando la
+duda es si una clase llegó a generarse.
 
-**Recorrido base:** las seis páginas × ES/EN × claro/oscuro. Anchos 320 · 375 · 768 · 1280.
+**Precondición:** la URL se abre **una vez desde la terminal** (`!agent-browser open <url>`).
+La navegación inicial no funciona dentro del sandbox, y un comando que cuelga es ese mismo
+síntoma: **no lo reintentes**, dilo y para.
+
+### Quién mide qué — y no se solapan
+
+- **`viewport-verifier`** (subagente) hace **el barrido medible**: axe por tema con el motion
+  congelado, la aritmética del pliegue de D50, el orden de lectura y los vitals, en su matriz
+  de viewports. **Se le llama; no se reescribe aquí lo que él hace** — y devuelve hallazgos en
+  vez del volcado, así que su salida no se come la sesión (D28).
+- **Esta fase** hace lo que él no puede: **los estados que hay que provocar** y el **criterio de
+  diseño**, que es lo suyo. Un subagente te dice que un par da 6,4; no te dice que el cian está
+  compitiendo consigo mismo en un grupo de cuatro pestañas.
+- **El censo de pares de abajo se queda aquí**, porque es el **porqué** de las seis reglas del
+  script. `viewport-verifier` solo lo dispara, y solo si el trabajo introdujo un par nuevo.
+
+> **Lo que ya no hay que vigilar, y conviene saber por qué desapareció.** Hasta el 2026-08-16
+> esta fase abría con un aviso: *el navegador es el de Francisco, no un entorno de pruebas* —
+> provocar los estados escribía en su perfil real (`localStorage.theme` es su preferencia de
+> tema; `flm-consent`, su **decisión de privacidad guardada**), así que había que ir en
+> incógnito, anotar valores y restaurarlos. `agent-browser` conduce **su propio Chrome con
+> perfil limpio**: el aviso **deja de hacer falta en vez de tener que cumplirse**.
+>
+> Dos regalos de paso. El **diálogo de consentimiento sale solo**, porque no hay decisión
+> previa que borrar — era el estado más caro de provocar y ahora es el estado por defecto. Y el
+> tema se fija con `set media`, sin recargar y sin el falso positivo de conmutarlo en caliente
+> (D30).
+>
+> **La excepción viva:** `--profile Default` reutiliza la sesión de Chrome de Francisco, y ahí
+> vuelve el aviso entero. Se usa **solo** si hay que entrar en una Preview de Vercel protegida;
+> contra local no hace falta nunca.
+
+**Recorrido base:** las seis páginas × ES/EN × claro/oscuro. Y **el viewport lleva alto**, que
+es justo lo que faltaba: una lista de anchos no puede ver el caso de D50, donde el ancho es el
+de siempre y **lo que cambia es el alto**.
+
+| Viewport | Qué representa |
+|---|---|
+| `1920 1080` | escritorio sin escalar |
+| `1536 740` | 1920 con el escalado de Windows al **125%** ← el caso de D50 |
+| `1280 618` | 1920 al **150%** |
+| `768 1024` | tablet |
+| `390 844` | móvil |
+| `320 568` | el móvil pequeño, que es donde revienta el copy largo |
+
+```bash
+agent-browser set viewport 1536 740
+agent-browser set media dark
+agent-browser set media light reduced-motion
+```
 
 **Estados que hay que provocar a mano** (se caen del recorrido normal, y ahí estaban tres de
 los cuatro hallazgos):
 
-- **Diálogo de consentimiento sin decisión previa** — borra el `localStorage` del consent
-  para que vuelva a salir; y el panel de preferencias, con su switch en los cuatro cruces
-  (tema × encendido/apagado).
-- **Hover y focus-visible** de cada control, incluido el foco por teclado recorriendo la
-  página con Tab (orden de lectura = orden del DOM).
+- **Diálogo de consentimiento** — sale solo con perfil limpio. Provoca además el **panel de
+  preferencias**, con su switch en los cuatro cruces (tema × encendido/apagado).
+- **Hover y focus-visible** de cada control, y el foco por teclado recorriendo la página con
+  `press Tab` (orden de lectura = orden del DOM). **Aquí sí se pueden provocar de verdad**:
+  existen `hover <sel>`, `focus <sel>` y `press Tab`, y la pestaña está **en primer plano**, que
+  es donde `:focus` funciona y donde `claude-in-chrome` no llegaba. *Lo que esto puede hacer
+  innecesario —el truco de leer las declaraciones `:hover` del CSS, regla 2 del censo— **no se
+  da por bueno hasta comprobarlo**: se compara contra un par ya publicado antes de cambiar el
+  método.*
 - **Nav en scroll** (split→flat) y **menú móvil abierto**.
-- **Reveals antes de dispararse** y con `prefers-reduced-motion` activo.
+- **Reveals antes de dispararse** y con `set media <tema> reduced-motion`.
 - **Grupos de botones con el copy más largo** de los dos idiomas.
-- **404 y 500**, `zoom 400%`, y el toggle de tema en mitad de una animación.
+- **404 y 500**, y el toggle de tema en mitad de una animación.
+- **`zoom 400%`** — **`agent-browser` no lo hace**: no tiene comando de zoom, y `set viewport`
+  no es lo mismo (reflow sí, escalado de texto no). Es el único estado de esta lista que sigue
+  necesitando un navegador de verdad. No lo des por comprobado si no lo has mirado ahí.
 
 ### El censo de pares de contraste
 
@@ -319,6 +371,11 @@ equivocado.
 página cargada y devuelve el censo ordenado por **holgura contra el umbral de cada par**, con
 los que no llegan a AAA (`bajoAAA`) y los que no llegan ni a AA (`bajoAA`). Se escribió a
 mano tres veces antes de quedarse ahí; no lo reescribas.
+
+```bash
+agent-browser eval --stdin < scripts/design-review/contrast-census.js
+agent-browser eval "JSON.stringify(window.contrastCensus())"
+```
 
 Seis reglas, y las seis costaron un error:
 
@@ -360,9 +417,17 @@ Seis reglas, y las seis costaron un error:
 > fantasma** (`#005859` sobre `#191d21`) con la página perfecta: es el tema a medio
 > interpolar. El censo lo hace por dentro desde siempre; axe no puede saberlo solo.
 >
->     const undo = window.freezeMotion();
->     const r = await axe.run();
->     undo();
+> Con `agent-browser` son tres llamadas, porque `a11y` corre axe **por su cuenta** y no puede
+> envolverlo en el `freezeMotion` como hacía la versión inyectada:
+>
+> ```bash
+> agent-browser eval "window.__unfreeze = window.freezeMotion(); 'frozen'"
+> agent-browser a11y --tags wcag2a,wcag2aa --json
+> agent-browser eval "window.__unfreeze(); 'thawed'"
+> ```
+>
+> **Y esperar «un poco más» no sustituye a congelar:** `.link-content` tarda 380 ms, así que
+> cualquier espera prudente de 300-400 ms cae justo dentro de la interpolación.
 
 **Medición:** contraste sobre el color que el navegador pinta, recortando a [0,1] o leyendo
 el píxel de un `<canvas>` — los cianes de esta marca caen fuera de sRGB. Además, **la
@@ -428,6 +493,10 @@ arregla cambiando texto, señálalo y pásalo como tarea de Contenido.
 
 - `sprint-review` cubre lo **técnico** (código, escalabilidad, deuda, andamiaje); esta cubre
   el **diseño**. Se solapan en el drift docs↔código: si una ya lo reportó, la otra no repite.
+- **`viewport-verifier`** (subagente, no skill) es **el instrumento de la Fase 3**, no un flujo
+  paralelo: mide y reporta, no decide. Se le llama desde aquí para el barrido medible; el
+  criterio de diseño y los estados a mano se quedan en esta skill. Si alguna vez esta skill
+  empieza a explicar cómo se corre axe, es que se ha copiado algo que debía llamar.
 - `/code-review` revisa un diff; esta revisa el sitio publicado.
 - `close-session` cierra la **documentación** de la sesión — al terminar una revisión de
   diseño con cambios, es el que se encarga de que las reglas nuevas queden escritas.

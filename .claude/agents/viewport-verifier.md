@@ -110,11 +110,18 @@ Y comprueba lo que de verdad falló en producción: que **el elemento que cierra
 agent-browser a11y --tags wcag2a,wcag2aa --json
 ```
 
-Reporta **solo violaciones**, con regla, impacto y selector. No vuelques los `passes` ni los
-`incomplete` salvo que haya cero violaciones y quieras dar la cifra de referencia (la home
-daba 0 violaciones, 25 passes, 0 incomplete con axe-core 4.12.1).
+Reporta **las violaciones** con regla, impacto y selector, y **el recuento de `incomplete` con
+sus selectores**. Los `passes` no se vuelcan (solo su cifra, como referencia: la home daba 0
+violaciones, 25 passes, 0 incomplete con axe-core 4.12.1).
 
-**Y recuerda su punto ciego:** axe **no detecta** el enlace de salto de WCAG 2.4.1 — su regla
+**El `incomplete` no es ruido, es donde se esconde lo que axe no sabe juzgar.** No resuelve
+`color-mix()`, así que mete esos elementos ahí y se abstiene — en el Design System eran
+**ocho**, y entre ellos un par a **4,33:1 en oscuro**, por debajo de AA, mientras el informe
+decía «0 violaciones». Tres auditorías leyeron solo `violations`. *Lo que la máquina no puede
+ver no aparece como problema: aparece como silencio.* Si hay `incomplete`, dilo y di sobre qué
+elementos, aunque no puedas juzgarlos tú.
+
+**Y su otro punto ciego:** axe **no detecta** el enlace de salto de WCAG 2.4.1 — su regla
 `bypass` se da por satisfecha con landmarks o encabezados, y este sitio los tiene. Comprueba a
 mano que existe y que su destino (`#main`) está en la página.
 
@@ -149,6 +156,11 @@ El censo ya puntúa cada par contra el umbral que le toca **por el tamaño del t
 por **holgura**, no por ratio. No repuntúes tú: con umbrales mixtos, la cifra más baja no
 señala al peor par, y puntuarlo todo contra 7:1 ya hizo publicar cuatro incumplimientos donde
 había uno.
+
+*Aquí va solo lo operativo. **El porqué de las seis reglas del censo** —por qué el hover se lee
+del CSS en vez de simularse, por qué el fondo se compone subiendo por los padres, por qué los
+anclajes son esos— vive en `.claude/skills/design-review/SKILL.md` §El censo de pares de
+contraste, y no se copia (regla 5 de `BRAND.md`).*
 
 ## El informe
 
