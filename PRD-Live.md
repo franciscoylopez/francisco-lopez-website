@@ -178,10 +178,19 @@ tenga que acordarse.
   combinación de ancho y alto que nadie tiene delante pasa a ser comprobable: se reprodujo
   D50 a 1536×740 y la aritmética cuadró —la fórmula predice 516px y la banda mide 514—. Trae
   además axe-core nativo y las Web Vitals con la pestaña en primer plano, que es justo lo que
-  una pestaña oculta no puede medir. **Que la herramienta exista no cambia todavía el método
-  publicado:** cambiarlo en `CLAUDE.md` es su propia tarea, y va **por delante del diseño**
-  del deep-dive, no detrás — porque el patrón de D50 vuelve en sus siete hero y el alto hay
-  que comprobarlo mientras se dibuja, no al cerrar.
+  una pestaña oculta no puede medir.
+
+  **Y el método publicado ya es ese** (2026-08-16, D52). El gate de accesibilidad de
+  `CLAUDE.md` deja de decir «Lighthouse + axe con `claude-in-chrome`» y pasa a `agent-browser`
+  conducido por un subagente, `viewport-verifier`, que lleva la matriz de cuatro viewports ×
+  dos temas y devuelve hallazgos en vez del volcado. El cambio no es de herramienta sino **de
+  forma**: el gate pasa a tener **dos disparos** —uno *mientras se dibuja* una banda o un hero
+  dimensionado por `vw`, otro *al cerrar*—, porque el eje que le faltaba no era el tema, era el
+  **alto**, y al cerrar ya es un rediseño. De paso se separa lo que «Lighthouse» juntaba: la
+  **nota** de PageSpeed sigue saliendo de `npm run psi` contra producción (D49), no de
+  `vitals`, que da métricas. Y el **enlace de salto** sigue comprobándose a mano, porque axe no
+  lo ve. Va **por delante del diseño** del deep-dive y no detrás: el patrón de D50 vuelve en
+  los hero de sus seis páginas.
 
   Estado verificado el 2026-08-04: **todos los pares de color del sistema están en AAA en
   ambos temas, en reposo y en hover, sin excepciones** —la última que quedaba, el hover del

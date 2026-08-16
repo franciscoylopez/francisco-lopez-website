@@ -112,6 +112,9 @@ scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 6 páginas (
                            puede cambiar. Semilla del arnés de tests (D42, ampliado en D45)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)
+.claude/agents/        Subagentes del proyecto: viewport-verifier (mide una página servida con
+                       agent-browser — axe por tema, la aritmética del pliegue de D50 y los
+                       vitals; mide y reporta, no edita) — D52
 ```
 
 ## Documentación
