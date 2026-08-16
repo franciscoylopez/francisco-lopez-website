@@ -2161,8 +2161,10 @@ independientes sobre el mismo caso, como pide `BRAND.md` §Cómo medir sin equiv
 script en Node sobre la fuente da 5,47/7,32 y un `<canvas>` del propio navegador sobre la
 variante que sirve `next/image`, 5,58/7,37.
 
-**Dónde vuelve a aplicar.** En los hero de las siete páginas del deep-dive. Es el mismo patrón
-—imagen grande de apertura con texto encima— y el mismo error está a un `clamp` de distancia.
+**Dónde vuelve a aplicar.** En los hero de las **seis** páginas del deep-dive —cinco
+experiencias y su índice; eran siete hasta que PICKASO se quedó sin página el 2026-08-16, ver
+`content/experiences.ts`—. Es el mismo patrón —imagen grande de apertura con texto encima— y el
+mismo error está a un `clamp` de distancia.
 
 ## D51 · Una herramienta externa entra por el trabajo que resuelve, no por lo buena que sea — 2026-08-16
 

@@ -21,8 +21,10 @@ import type esCookies from "./dictionaries/es/cookies.json";
 // cliente. El módulo es `server-only` y a los componentes de cliente solo se les
 // pasa la rama que renderizan. Además, desde que las seis páginas se
 // prerenderizan (D25), parsear de más es un coste de BUILD. Las razones que
-// quedan, que son las buenas: el deep-dive añade siete páginas de contenido, y
-// editar copy en un archivo de 1.580 líneas es una invitación al conflicto.
+// quedan, que son las buenas: el deep-dive añade seis páginas de contenido —cinco
+// experiencias y su índice; PICKASO se quedó sin página el 2026-08-16, ver
+// `content/experiences.ts`—, y editar copy en un archivo de 1.580 líneas es una
+// invitación al conflicto.
 //
 // LA RESTRICCIÓN QUE NO SE NEGOCIA: la derivación de tipos. Los tipos salen del
 // JSON **español** y los cargadores se anotan con ese tipo, así que si `en`
