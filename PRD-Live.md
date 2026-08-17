@@ -364,6 +364,17 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    «Habilidades» y recortar prosa se probaron y **no servían**, porque cada empleo va con
    `wrap={false}` y salta entero.
 
+   **Y con ello se fijó cuál es la fuente cuando dos superficies discrepan: el deep-dive** (D58).
+   Sus `Datos` se auditaron **contra las páginas de Notion**, no contra el repo, y las cinco
+   coinciden — así que las cuatro divergencias restantes estaban en las otras dos superficies. Una
+   era una **fecha**: KUOTIP terminaba en noviembre en la home y en diciembre en su página, y **el
+   valor equivocado se estaba sirviendo en seis sitios** —la fila de Trayectoria y las tarjetas de
+   «siguiente experiencia» de Emendu e INDYA, en los dos idiomas— mientras la propia página de
+   KUOTIP publicaba el bueno. *Un dato duplicado no falla donde se escribe: falla donde se lee.*
+   Rol, periodo, sector y reporting suben también al registro; el diccionario del deep-dive se
+   queda con `tamano`, las filas de Trayectoria con `company` y el CV con la sola decisión de a
+   qué experiencias da papel.
+
    **Y dos afirmaciones publicadas quedaron señaladas como sin respaldo**, que es el saldo honesto
    de la sesión: la regla del **control sobre imagen** promete «siempre pasa uno de los dos
    bordes» y con un metro más estricto —el peor de 144 ángulos del perímetro— no se sostiene
