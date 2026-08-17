@@ -2349,3 +2349,156 @@ cosas que salieron al hacerlo:*
 **Límite conocido, heredado de D51.** La navegación inicial no funciona dentro del sandbox: la
 URL se abre una vez desde la terminal (`!agent-browser open <url>`) y a partir de ahí se conduce
 normal. Un comando que cuelga es ese síntoma y **no se reintenta**.
+
+---
+
+## D53 · La plantilla del deep-dive: una forma para cinco páginas, y el tipo como guardián — 2026-08-17
+
+**Contexto.** P48 monta la plantilla única de `/trayectoria/[slug]`. No son cinco diseños: es
+una forma que renderiza cinco contenidos, porque la homogeneidad de la serie la dan el marco y
+la longitud y no los títulos (PRD-Historical §42). Eso obliga a decidir dónde vive el contenido
+y quién garantiza que las cinco tienen la misma forma.
+
+**Decisión.**
+
+**El contenido va al diccionario, partido por experiencia** (`dictionaries/{es,en}/trayectoria/`),
+más una rama `comun.json` con lo que comparten: los rótulos de las cinco secciones y los cinco
+campos de Datos. Es copy de página, así que le toca la regla de cero strings hardcodeados; el
+dibujo de un artefacto no, y por eso vive fuera (D54).
+
+**Y su tipo es una INTERFAZ EXPLÍCITA, no `typeof` del JSON español.** Es la única rama del
+diccionario que lo hace, y la razón es concreta: aquí no hay un archivo por página sino **cinco
+archivos que tienen que compartir forma**. Con `typeof emendu.json`, la forma la fijaría la
+primera experiencia que se escribió y las otras cuatro cuadrarían por casualidad. Con la
+interfaz declarada, `caso` y `resultados` son opcionales **porque el formato dice que lo son**
+—«El caso» solo aparece donde hay historia de verdad— y no porque a un archivo le falten.
+Sigue haciendo el trabajo de siempre: los cargadores se anotan con ella, así que **una clave que
+falte en `en` rompe el build** (D11). Comprobado rompiéndolo.
+
+**El registro de diccionarios va tecleado por `ExperienceSlug`**, y para eso `EXPERIENCES` pasa
+de `: Experience[]` a **`as const satisfies readonly Experience[]`**: la anotación clásica
+borraba los literales, así que `slug` valía `string` y cualquier cadena pasaba por slug válido.
+Con la unión real, registrar el diccionario de una experiencia que no existe es un error de
+tipos. Nació `Partial` —mientras solo estaban escritas dos— y dejó de serlo al entrar las cinco:
+ahora **añadir una experiencia con `slug` y olvidar su diccionario rompe el build**, que es lo
+que impide que la sexta se quede fuera de `generateStaticParams` y del sitemap sin que nadie se
+entere. Es el modo de fallo que D44 mata en los logos, una capa más arriba.
+
+**Tres piezas del sistema crecen, ninguna se copia:**
+
+- **`heading.tsx` estrena el tamaño `sub` y `level: 3`.** «La historia» es la primera sección
+  del sitio con jerarquía de tres niveles —sus subapartados son libres y cambian de una
+  experiencia a otra—, y no podían ser `section-sm` (que abre una sección) ni un `<p>` en
+  negrita (que no es un encabezado y rompería el punto 4 del checklist). El nivel es semántica
+  y el tamaño es aspecto: separarlos es lo que permite que el `<h3>` de «Resultados» se vea
+  pequeño sin dejar de encabezar.
+- **`PageShell` gana `parents`**, para el primer breadcrumb de tres niveles del sitio
+  (Inicio › Trayectoria › Empresa). Va en el shell y no en la página porque el breadcrumb
+  **visible** y el `BreadcrumbList` son dos listas distintas escritas en dos sitios: derivando
+  una de la otra no pueden divergir, y un ancestro olvidado en el JSON-LD no lo ve nadie.
+- **`ui/page-closer.tsx`** sube el cierre de página entero —sección, rótulo y rejilla de
+  tarjetas— desde `site/related-pages.tsx`, al aparecer el segundo caso: el paso a la
+  experiencia anterior y siguiente. Sube **entero** y no solo la tarjeta porque lo que no puede
+  divergir es el **formato** del cierre: el ritmo vertical propio, el filete y el hueco del
+  rótulo. Si solo subiera la tarjeta, el segundo caso volvería a decidir esas tres cosas por su
+  cuenta — que es como empezó el drift de las cabeceras (D43).
+
+**La flecha del cierre apunta a donde va, y su posición también.** En la tarjeta de «experiencia
+anterior» la flecha mira a la izquierda **y va delante del nombre**: una flecha que apunta a la
+izquierda pegada al borde derecho no dice nada. Lo que se lee como «anterior» es el conjunto de
+dirección y posición —el patrón de paginación de siempre—, y con las dos tarjetas juntas no hace
+falta leer el rótulo para saber cuál es cuál.
+
+**Lo que el gate de HTML cazó, y por qué importa.** El refactor de `related-pages` salió
+transparente a la primera, pero al añadir la dirección de la flecha compuse una clase con
+`cn()` — y `cn` concatena en tiempo de ejecución, así que `justify-between` se fue al final de
+la cadena. Pinta idéntico y es **otro HTML** en las tres páginas del sistema. `npm run gate:html`
+lo marcó al instante. Se arregla escribiendo la cadena entera en cada rama, que además es lo que
+Tailwind necesita: escanea el código como texto plano y una clase compuesta por interpolación no
+se genera, **sin dar error** (punto 5 del método de `BRAND.md`). *Un gate sin criterio propio es
+justo el que no te deja decidir por tu cuenta que un cambio «da igual».*
+
+**Lo que NO se duplica.** El cierre enseña el rol y el periodo de las vecinas, y esos salen de
+la **misma rama del diccionario que los pinta en Trayectoria**, unidos por `company`. Escribirlos
+en el diccionario del deep-dive habría sido la cuarta copia del mismo hecho — justo lo que P48.5
+está abierta para arreglar.
+
+---
+
+## D54 · Un artefacto se enseña, no se recrea: el diagrama real, saneado y en línea — 2026-08-17
+
+**Contexto.** El deep-dive publica artefactos, y la política del formato ya decía qué son:
+**reales, no ilustraciones del método**; uno por página como techo; sin proveedores ni importes;
+SVG en línea; nunca una captura de Notion.
+
+**Lo que se probó primero y se descartó.** Se dibujó a mano un diagrama de estados con los
+tokens del sitio: seis cajas, tipografía de la casa, colores de marca, conmutando con el tema.
+Quedaba bien y **estaba mal**. Francisco lo dijo en una frase que es el criterio entero: *«si un
+CPO ve esto, no ve mi trabajo»*. Un redibujo cumple la letra de la política —SVG, pocos nodos—
+y **incumple su espíritu**: es exactamente una ilustración del método. El artefacto real —el
+diagrama de estados del módulo MDM que Francisco escribió para el equipo de desarrollo dentro de
+un product spec— tiene dieciséis estados en cinco grupos, y su valor está en que es el
+entregable, no en que sea bonito.
+
+**Decisión: se publica el render REAL de Mermaid, saneado por un traductor.**
+
+- **`content/artefactos/<nombre>.mmd` es la fuente de verdad del dibujo**; el `.svg` de al lado
+  es su render. Si el diagrama cambia, se regenera — el artefacto no se edita. Mismo patrón que
+  el CV (D22) y los valores publicados (D38).
+- **El render lo hace `mermaid.live`, a mano, y no hay tubería.** Meter
+  `@mermaid-js/mermaid-cli` en devDependencies arrastra Puppeteer y su Chromium (~150 MB) para
+  **un** diagrama: el criterio de D51 dice que una herramienta entra por el trabajo que resuelve.
+  Y `mermaid.live` renderiza **en el navegador**, con el diagrama en el fragmento de la URL, así
+  que un documento interno no se sube a ningún servidor — que sí habría pasado con
+  `mermaid.ink`.
+- **`scripts/artefacto-svg.ts` traduce el export**, y las tres cosas que quita no son
+  cosméticas: (1) un `<?xml-stylesheet?>` a **cdnjs**, que la CSP no permite y sería la primera
+  petición a un tercero de esa página; (2) la **paleta en hex fijo**, que no conmutaría con el
+  tema —remapeada a tokens—; (3) el **estado de pan/zoom del editor**, cocido en una `matrix()`
+  y sin `viewBox`, o sea el dibujo donde el editor lo dejó.
+- **Va INLINE y no como `<img src>`**, y es por lo mismo del punto 2: un SVG servido como imagen
+  es un documento aparte y no ve las variables CSS de la página, así que se quedaría con los
+  colores cocidos. En línea, cada `var(--brand-cyan)` resuelve contra los tokens. Se lee del
+  disco en build (`lib/artefacto.ts`), que en páginas estáticas ocurre una vez.
+- **El morado se quedó fuera del dibujo**, y no por gusto: `--brand-purple` da **2,65 contra
+  `--background` y 2,81 contra `--card` en tema claro**, por debajo del 3:1 que WCAG 1.4.11 pide
+  a un gráfico que hay que entender. Es la misma cifra que D41 ya había medido en los rótulos del
+  Brand Kit. El cian sí llega (7,47 / 8,36).
+- **El artefacto NO se traduce.** En la página inglesa sale el diagrama en español, como se
+  entregó. Traducir un documento real lo convierte en una recreación. Lo que sí va en los dos
+  idiomas es su título, su pie y la alternativa en prosa.
+- **La alternativa textual no describe el dibujo: lo CUENTA.** El `<svg>` va `aria-hidden`
+  —un lector de pantalla no puede seguir flechas— y delante va la secuencia en prosa,
+  visualmente oculta.
+
+**El techo de ocho nodos se rompe a propósito.** La política lo fijó **antes de que nadie
+hubiera visto un artefacto real**, y protegía la legibilidad; a un mapa de módulo lo que lo hace
+legible es **estar agrupado**, no tener pocos nodos. Es la regla 1 de `BRAND.md` otra vez: un
+disparador que mira al sitio equivocado.
+
+**Y los dos fallos del traductor, que son la misma lección dos veces.** Ninguno dio error; los
+dos se vieron en pantalla:
+
+1. **La caja salía corta y el panel recortaba 586px** —la última banda entera—. El cálculo leía
+   cada `rect` como si sus coordenadas fueran absolutas, y en Mermaid **solo lo son las de los
+   clusters**: las de los nodos van centradas en el origen dentro de un `<g transform="translate(cx,cy)">`.
+   Un nodo en y=1.400 se contabilizaba como si estuviera en y=-22. Ahora se acumulan los
+   `translate` de los grupos que envuelven cada forma. No protestó nada porque el SVG lleva
+   `overflow:visible`: pintaba fuera de su caja y el `overflow-hidden` del panel lo cortaba.
+2. **Las etiquetas salían cortadas** («MODULO_RENTING_ACTI», «CONFIRMACIC») porque el traductor
+   cambiaba la tipografía a la del sitio. **Mermaid calcula el ancho de cada caja midiendo el
+   texto con su propia fuente**, y esos anchos vienen cocidos en el SVG: cambiar la fuente
+   después mueve las métricas y deja el texto sin sitio.
+
+*Las dos son la misma que el redibujo, en pequeño: **tocar un artefacto para que combine mejor
+con la página acaba estropeando el artefacto.** Está escrito en el script para que no vuelva.*
+
+**Coste asumido y medido.** La página de Emendu pasa a **229 KB de HTML**, de los que ~62 son el
+SVG. No toca el LCP —cuyo elemento es el h1, 284 ms— porque el diagrama está muy por debajo del
+pliegue, pero es un salto real y queda tareado medirlo con `npm run psi` (D49) antes de cerrar.
+
+**Lo que queda abierto, y es de Francisco.** El SVG publicado lleva el estado `BAJA_NINJONE`: se
+exportó del diagrama original y no del sanitizado que hay en el `.mmd`, donde ese estado se llama
+`BAJA_PROVEEDOR_MDM`. Francisco lo revisó y decidió que entra igual —el nombre está mal escrito y
+no es el del proveedor—, así que la sanitización queda como pendiente de reexport y no como
+bloqueo.

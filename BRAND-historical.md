@@ -353,3 +353,44 @@ que la regla estuviera mal escrita, es que **se cumplía y aun así no servía**
 
 El detalle de qué se cambió y por qué —incluidas las otras tres cosas que la frase vieja tenía
 mal, y solo una era la herramienta— está en **`DECISIONS.md` D52**; aquí no se copia (regla 5).
+
+---
+
+## El morado como gráfico, y la tercera vez del mismo peldaño (2026-08-17)
+
+**La regla nueva está en `BRAND.md` §El morado decorativo no vale como elemento gráfico.** Aquí,
+lo que costó descubrirla y por qué merece estar escrita.
+
+**Cómo apareció.** El primer artefacto del deep-dive es un diagrama de estados, y §Color deja
+entrar ahí los tokens de marca sin discusión: la lista dice «ilustración, gráficos». Así que se
+dibujó con el reparto que la marca manda —**el cian lleva, el morado apoya**— y se dejó escrito
+en el componente que ese reparto era «exactamente el que manda la marca». Lo era. Y aun así el
+gate lo tumbó: **2,65 contra `--background` y 2,81 contra `--card` en tema claro**, por debajo
+del 3:1 que WCAG 1.4.11 pide a un gráfico que hay que entender.
+
+**La lección de método, que es la que vale para la próxima:** *la marca manda el reparto, no el
+contraste.* Dos reglas del documento pueden ser ciertas a la vez y aun así no componerse —«el
+morado es decorativo y apoya» + «los gráficos pueden llevar color de marca» no implica «el
+morado puede llevar información en un gráfico»—. La composición hay que medirla, igual que se
+mide un par que solo existe al superponer un velo.
+
+**Y el número no era nuevo.** El 2,81 es *exactamente* el que D41 midió el 2026-08-10 al retirar
+el morado de los rótulos de la escalera del Brand Kit. O sea que el mismo hallazgo llegó dos
+veces por dos puertas distintas —una vez como texto pequeño sobre tarjeta, otra como trazo de un
+diagrama— porque la primera se anotó como decisión de aquel caso y no como propiedad del color.
+Ahora está escrita como lo segundo.
+
+**La salida es la misma de D41, y por eso se escribe la regla en vez de la excepción: el peldaño
+que no llega se atenúa, no se tiñe.** Va por tres —el rótulo de la escalera split→flat, el
+atenuado de las tarjetas y ahora el arco de vuelta del diagrama—, y en las tres el resultado
+fue mejor que el original: `--muted-foreground` se recalcula por superficie (D39), así que no
+hay que elegirlo.
+
+**Lo que NO se perdió al quitar el color**, y conviene decirlo porque es lo que hace barata la
+regla: los dos caminos del diagrama ya se distinguían por el **trazo** —continuo contra
+discontinuo— y por su **etiqueta**. El punto 6 del checklist se cumplía sin el color, así que
+retirarlo no costó ni una unidad de información. *Cuando quitar un color no cuesta nada,
+probablemente ese color no estaba diciendo nada.*
+
+El detalle técnico —qué mide el gate, cómo se sanea el SVG y por qué el artefacto no se
+redibuja— está en **`DECISIONS.md` D54**; aquí no se copia (regla 5).
