@@ -9,8 +9,6 @@ import type { EducationItem, ToolRow } from "../../content/cv/types";
 
 // Forma mínima del diccionario que consume el CV (solo los campos que usa).
 interface DictJob {
-  period: string;
-  role: string;
   company: string;
 }
 interface DictFacts {
@@ -57,10 +55,13 @@ export function buildTools(dict: DictFacts): ToolRow[] {
   }));
 }
 
+// EL ROL Y EL PERIODO YA NO SALEN DE AQUÍ (P48.55): viven en el registro por
+// experiencia, junto al sector, el reporting y los bullets. Lo que el diccionario
+// sigue aportando de una fila es lo único que es suyo — el PROYECTO PARAGUAS de
+// los roles anidados («Shutapp Projects»), que es una agrupación de la home y no
+// un hecho de la experiencia.
 export interface FactRow {
   company: string;
-  role: string;
-  period: string;
   project?: string;
 }
 
@@ -68,18 +69,16 @@ export interface FactRow {
 // paraguas resuelto para los roles anidados.
 export function experienceFacts(dict: DictFacts): FactRow[] {
   return [
-    ...dict.trayectoria.producto.map((j) => ({ company: j.company, role: j.role, period: j.period })),
+    ...dict.trayectoria.producto.map((j) => ({ company: j.company })),
     ...dict.trayectoria.nested.map((j) => ({
       company: j.company,
-      role: j.role,
-      period: j.period,
       project: dict.trayectoria.shutappTitle,
     })),
   ];
 }
 
 export function previousFacts(dict: DictFacts): FactRow[] {
-  return dict.trayectoria.previo.map((j) => ({ company: j.company, role: j.role, period: j.period }));
+  return dict.trayectoria.previo.map((j) => ({ company: j.company }));
 }
 
 // Une un rol autorado (por su clave `company`) con sus hechos del diccionario.

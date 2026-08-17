@@ -15,19 +15,25 @@
 
 export type Bullet = string;
 
-// Rol tal como se autora. Ya no lleva NI los hechos (periodo, rol, proyecto: del
-// diccionario) NI los bullets (de `content/experience-copy/`, P48.5), así que lo
-// que queda aquí es solo lo que existe únicamente en el papel.
+// Rol tal como se autora, que a estas alturas es SOLO SU NOMBRE: los bullets, el
+// sector y el reporting salen del registro por experiencia (P48.5 y P48.55) y el
+// proyecto paraguas del diccionario. Lo que este archivo aporta de una experiencia
+// es su PRESENCIA y su ORDEN en el CV — nada más.
+//
+// Que se haya quedado en un solo campo no es un residuo: es la señal de que la
+// experiencia se cuenta en un sitio y el CV solo decide a cuáles da papel.
 export interface AuthoredJob {
   company: string; // clave de unión con el diccionario, el registro y el display
-  context: string; // p. ej. "SaaS B2B · IT Management" (metadato propio del CV)
-  reporting?: string;
 }
 
 // Rol ya fusionado (autorado + hechos + bullets), lo que se renderiza.
 export interface Job extends AuthoredJob {
-  role: string; // del diccionario
-  period: string; // del diccionario
+  role: string; // del registro por experiencia
+  period: string; // del registro por experiencia
+  /** Sector; en el registro es `sector`, en el papel se lee como contexto. */
+  context: string;
+  /** La versión LARGA del reporting; la corta la pinta el deep-dive. */
+  reporting?: string;
   project?: string; // del diccionario (agrupación Shutapp Projects)
   /**
    * Del registro por experiencia. Cada uno es la versión CORTA de un bullet de

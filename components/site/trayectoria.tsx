@@ -8,7 +8,7 @@ import { type Locale, pagePath } from "@/lib/i18n/config";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
 import { experienceOf } from "@/content/experiences";
-import { shortOf } from "@/content/experience-copy";
+import { factsOf, shortOf } from "@/content/experience-copy";
 
 // LA FILA NO LLEVA SU DESCRIPCIÓN, igual que no lleva su logo ni su `slug`: sale
 // del registro por experiencia, buscada por `company` (P48.5). Esa frase es una
@@ -17,9 +17,12 @@ import { shortOf } from "@/content/experience-copy";
 // había forma de ver que había dejado de decir lo que dice el deep-dive. La de
 // INDYA lo demostraba: hablaba de «pricing y onboarding» cuando el titular de su
 // página es literalmente «no sobre features».
+// LA FILA SE QUEDA SOLO CON `company`, que además es su etiqueta: el diccionario
+// la lleva en forma de display («Ontecnia (Malavida, Lecturalia, BonViveur…)») y
+// el registro en forma corta, unidas por prefijo. Rol y periodo también salen del
+// registro desde P48.55 — mientras cada superficie escribía el suyo, KUOTIP
+// terminaba en NOVIEMBRE aquí y en DICIEMBRE en su deep-dive.
 type TrayRow = {
-  period: string;
-  role: string;
   company: string;
 };
 
@@ -95,15 +98,16 @@ function LogoCell({ company }: { company: string }) {
 }
 
 function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
+  const { role, period } = factsOf(lang, row.company);
   return (
     <div className="tray-grid border-border border-b py-[clamp(1.35rem,3vw,1.85rem)]">
       <p className="text-muted-foreground m-0 pt-[0.15rem] text-[0.9rem] whitespace-nowrap [font-variant-numeric:tabular-nums]">
-        {row.period}
+        {period}
       </p>
       <div>
         <div className="font-display text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
           <CaseLink company={row.company} lang={lang}>
-            {row.role}
+            {role}
           </CaseLink>
         </div>
         <div className="text-muted-foreground mt-1 text-[0.9rem]">
@@ -119,6 +123,7 @@ function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
 }
 
 function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
+  const { role, period } = factsOf(lang, row.company);
   return (
     <div className="tray-grid-nested relative">
       {/* conector horizontal hacia el borde vertical del contenedor */}
@@ -131,12 +136,12 @@ function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
         }}
       />
       <p className="text-muted-foreground m-0 pt-[0.15rem] text-[0.85rem] whitespace-nowrap [font-variant-numeric:tabular-nums]">
-        {row.period}
+        {period}
       </p>
       <div>
         <div className="font-display text-[clamp(0.98rem,1.4vw,1.15rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
           <CaseLink company={row.company} lang={lang}>
-            {row.role}
+            {role}
           </CaseLink>
         </div>
         <div className="text-muted-foreground mt-[0.2rem] text-[0.88rem]">

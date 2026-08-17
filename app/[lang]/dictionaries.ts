@@ -147,13 +147,14 @@ export interface DeepDiveDict {
   eyebrow: string;
   /** El h1: la afirmación de la experiencia, no el nombre de la empresa. */
   title: string;
-  datos: {
-    rol: string;
-    periodo: string;
-    sector: string;
-    tamano: string;
-    reporting: string;
-  };
+  /**
+   * SOLO EL TAMAÑO. Los otros cuatro datos —rol, periodo, sector y reporting— se
+   * pintan también en Trayectoria o en el CV, así que escribirlos aquí era una
+   * copia, y una que ya había divergido cuatro veces: KUOTIP terminaba en
+   * noviembre según la home y en diciembre según esta página. Salen del registro
+   * por experiencia (P48.55). `tamano` se queda porque no lo publica nadie más.
+   */
+  datos: { tamano: string };
   /**
    * Solo el TÍTULO. Los bullets viven en `content/experience-copy/`, donde cada
    * uno está emparejado con su versión corta del CV: son el mismo hecho a dos

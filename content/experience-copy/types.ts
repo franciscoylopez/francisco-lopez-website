@@ -55,6 +55,40 @@ export interface ExperienceBullet {
 
 export interface ExperienceCopy {
   /**
+   * El rol. Aparece en la fila de Trayectoria, en los Datos del deep-dive y en el
+   * CV — tres superficies, una sola escritura.
+   */
+  role: string;
+  /**
+   * El periodo. Se localiza («Actualidad»/«Present», «Ene»/«Jan»), así que vive en
+   * el registro por idioma y no en `content/experiences.ts`.
+   *
+   * ES LA COPIA QUE MÁS CARO SALIÓ: mientras el diccionario y el deep-dive lo
+   * escribían por separado, KUOTIP terminaba en **noviembre** según la home y en
+   * **diciembre** según su página — o sea que el CV y el deep-dive publicaban
+   * fechas distintas de la misma experiencia. Gana el deep-dive, que es la fuente
+   * (P48.55).
+   */
+  period: string;
+  /**
+   * El sector. Es `datos.sector` del deep-dive y `context` del CV a la vez.
+   *
+   * En las tres experiencias SIN página —PICKASO y las dos de Marketing & Growth—
+   * no hay Datos que alimentar, así que aquí vive lo que el CV llamaba `context`
+   * y que no siempre es un sector («Malavida.com»). Es el mismo campo, con un
+   * solo consumidor.
+   */
+  sector: string;
+  /**
+   * A quién se reporta, **a dos longitudes** — la corta para los Datos del
+   * deep-dive, la larga para el CV. Mismo patrón que los bullets, y por la misma
+   * razón: es un hecho que se cuenta dos veces, así que se escribe una.
+   *
+   * Ausente donde no aplica (PICKASO y las dos de Marketing & Growth, que en el
+   * CV tampoco lo llevan).
+   */
+  reporting?: { deep: string; cv: string };
+  /**
    * La frase de la fila de Trayectoria en la home. Una sola, con la TESIS de la
    * experiencia — no un resumen de los bullets.
    *

@@ -29,7 +29,11 @@ import { content as enContent } from "../../content/cv/content.en";
 import type { CV, CvContent, Job, AuthoredJob } from "../../content/cv/types";
 import { loadDict, buildEducation, buildTools, experienceFacts, previousFacts, matchFact, type FactRow } from "./facts";
 import { brandHex, paletteHex } from "../../lib/design-values";
-import { cvBullets } from "../../content/experience-copy";
+import {
+  cvBullets,
+  factsOf,
+  reportingOf,
+} from "../../content/experience-copy";
 
 const ROOT = process.cwd();
 const asset = (p: string) => path.join(ROOT, p);
@@ -347,10 +351,13 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
 // imprimir en el papel los bullets de otra empresa.
 function mergeJob(a: AuthoredJob, facts: FactRow[], lang: "es" | "en"): Job {
   const f = matchFact(facts, a.company);
+  const { role, period, sector } = factsOf(lang, a.company);
   return {
     ...a,
-    role: f.role,
-    period: f.period,
+    role,
+    period,
+    context: sector,
+    reporting: reportingOf(lang, a.company, "cv"),
     project: f.project,
     bullets: cvBullets(lang, a.company),
   };

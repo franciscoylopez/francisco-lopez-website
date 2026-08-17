@@ -63,35 +63,21 @@ export const content: CvContent = {
   experience: [
     {
       company: "Emendu",
-      context: "SaaS B2B · IT Management",
-      reporting:
-        "Member of the leadership team (Management, Operations, Tech & Finance)",
     },
     {
       company: "KUOTIP",
-      context: "SaaS B2B · AI / Reviews",
-      reporting: "Cofounder · alongside the CEO and CTO",
     },
     {
       company: "INDYA",
-      context: "SaaS B2C · Health tech",
-      reporting:
-        "Reported to the CPO and cofounder · leadership through influence",
     },
     {
       company: "Freepik",
-      context: "SaaS B2C · UGC",
-      reporting: "Reported to the Head of Product",
     },
     {
       company: "TheTool",
-      context: "SaaS B2B · ASO",
-      reporting:
-        "Cofounder (1 of 4 partners) · voice and vote on key decisions",
     },
     {
       company: "PICKASO",
-      context: "App Marketing · Agency",
     },
   ],
 
@@ -101,11 +87,9 @@ export const content: CvContent = {
     roles: [
       {
         company: "Ontecnia",
-        context: "Malavida.com",
       },
       {
         company: "Havas Media · Increnta · Miss Conversion",
-        context: "",
       },
     ],
   },
