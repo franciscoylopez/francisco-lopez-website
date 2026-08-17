@@ -205,10 +205,39 @@ function Artefacto({
             lector de pantalla no puede seguir flechas, así que no se etiqueta el
             dibujo, se CUENTA lo que dice (punto 8 del checklist). */}
         <p className="sr-only">{description}</p>
-        {/* El diagrama es ancho de verdad —2.235 unidades— así que scrollea
-            dentro de su panel en vez de encogerse hasta ser ilegible. El cuerpo
-            de la página nunca scrollea en horizontal. */}
-        <div className="overflow-x-auto p-[var(--gutter)]">
+        {/* EL DIAGRAMA CABE EN SU PANEL, y solo scrollea por debajo de 46rem.
+            Se probaron las tres y se eligió viéndolas servidas (2026-08-18,
+            Francisco):
+
+             - A 1:1 con scroll horizontal (mínimo = las 2.192 unidades del
+               dibujo) el texto se lee, pero el diagrama **se sale**: en una
+               pantalla normal solo entra la mitad, y una máquina de estados que
+               no se ve entera deja de contar lo que vino a contar — que es la
+               forma del proceso, no cada etiqueta.
+             - A ancho de panel se ve entero. Es lo que se queda.
+
+            LO QUE SÍ ERA UN FALLO, y es de donde venía la sensación de «se ve
+            diminuto», NO estaba aquí: el `viewBox` publicado venía un 40% más
+            ancho y un 55% más alto que el dibujo, así que el grafo ocupaba dos
+            tercios de su propio lienzo y el resto del panel salía vacío. Ver
+            `scripts/artefacto-svg.ts`. Corregido eso, a ancho de panel el
+            diagrama gana un 42% sin tocar nada más.
+
+            SI LAS ETIQUETAS DE FLECHA (10px) se quedan cortas, la palanca NO es
+            escalar el dibujo: es renderizarlo con una tipografía mayor —Mermaid
+            recalcula el layout y las cajas crecen con ella—, que es distinto de
+            cambiar la fuente después del render, lo que D54 prohíbe.
+
+            Y AUNQUE SOLO SCROLLE EN MÓVIL, la región es operable con teclado:
+            lleva `tabIndex` y nombre accesible. Sin eso, quien navega con
+            teclado no llega a lo que queda fuera (WCAG 2.1.1) — el `sr-only` de
+            arriba cuenta el diagrama, pero no lo mueve. */}
+        <div
+          className="overflow-x-auto p-[var(--gutter)]"
+          tabIndex={0}
+          role="group"
+          aria-label={title}
+        >
           <div
             className="[&>svg]:block [&>svg]:h-auto [&>svg]:w-full [&>svg]:min-w-[46rem]"
             // El SVG viene de `content/artefactos/`, generado por

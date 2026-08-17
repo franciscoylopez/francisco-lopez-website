@@ -35,6 +35,7 @@
         "title": "Apple, Gasol y las apps donde ya vivía el usuario",
         "paras": [
           "El tándem con el product designer fue una de las piezas del salto, y no tardó en verse desde fuera: Apple se fijó en la app y nos incorporó a **Apple App Store Foundations**, su programa de mentoría. De ahí salimos siendo **una de las primeras empresas de Europa en lanzar widgets** —una funcionalidad que Android tenía desde hacía años y que en iOS se estrenaba entonces— y destacados en la App Store: para el usuario, resolver la nutrición del día sin abrir la app; para nosotros, visibilidad que no se compra.",
+          "Y nos integramos donde el usuario ya estaba —**Apple Health**, **Salud conectada**, **Strava** y **TrainingPeaks**—. El beneficio directo era no tener que contar dos veces lo mismo, pero el grande fue para el servicio: el equipo de nutrición pasó a planificar **sobre el rendimiento real, no sobre lo que el cliente recordaba**.",
           "Todas estas acciones marcan un camino de trabajo bien hecho, y eso da sus frutos: en los clientes y en el tipo de socio que se acerca. Poco después, nada menos que [Pau Gasol entró en el accionariado](https://getindya.com/pau-gasol-indya/). Lo relevante no fue el importe: fue lo que significaba para un cliente que entrena."
         ],
         "video": {
@@ -43,10 +44,7 @@
           "title": "Pau Gasol se une a INDYA",
           "playLabel": "Reproducir el vídeo",
           "nota": "Al pulsar, el vídeo se carga desde YouTube y se aplican sus condiciones."
-        },
-        "cierre": [
-          "Y nos integramos donde el usuario ya estaba —**Apple Health**, **Salud conectada**, **Strava** y **TrainingPeaks**—. El beneficio directo era no tener que contar dos veces lo mismo, pero el grande fue para el servicio: el equipo de nutrición pasó a planificar **sobre el rendimiento real, no sobre lo que el cliente recordaba**."
-        ]
+        }
       }
     ]
   },
