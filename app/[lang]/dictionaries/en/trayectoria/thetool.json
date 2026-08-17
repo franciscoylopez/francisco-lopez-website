@@ -34,7 +34,7 @@
         "paras": [
           "Analysing the entire App Store and Google Play daily is not simple, and putting that data into the product solidly is less so. It showed: sprints shipped fine, but the scraping bugs appeared **during launch week**, after the nightly crons ran.",
           "So we changed the sprint: **monthly, three weeks of development and one of external testing** with PickASO's ASO consultants and with a customer or two. Less delivery cadence, and stable value. And we turned the cost around with **TheTool Monthly**, a monthly communication with every new feature explained step by step: on the 1st there was something new and you knew how to use it. Stability stopped being an internal constraint and became something the customer noticed.",
-          "With delivery stable we could go back to product, with a focus we passed on to the whole team: give the customer the maximum information about their competitors. Out of that came **decoding the real install numbers behind the «1 M – 5 M» band** that Google Play publishes as a black box, and with it a whole line of market analysis on verified data — sector and trend reports, some of which made it onto national television news."
+          "With delivery stable we could go back to product, with a focus we passed on to the whole team: give the customer the maximum information about their competitors. Out of that came **decoding the real install numbers behind the “1 M – 5 M” band** that Google Play publishes as a black box, and with it a whole line of market analysis on verified data — sector and trend reports, some of which made it onto national television news."
         ],
         "video": {
           "id": "rf79VTlAdUM",
@@ -67,7 +67,7 @@
       "items": [
         {
           "value": "+30%",
-          "desc": "MRR"
+          "desc": "MRR in 2 months"
         },
         {
           "value": "3 days",

@@ -105,7 +105,7 @@ const s = StyleSheet.create({
   headerRule: { height: 2, backgroundColor: C.cyan, marginTop: 10, marginBottom: 2 },
 
   // Secciones
-  section: { marginTop: 6 },
+  section: { marginTop: 4 },
   sectionDivider: { borderTopWidth: 1, borderTopColor: C.border, marginBottom: 5 },
   sectionTitleRow: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
   sectionAccent: { width: 12, height: 3, backgroundColor: C.cyan, marginRight: 7 },

@@ -22,7 +22,7 @@
     "baseLabel": "Base grid:",
     "baseVal": "12 columns",
     "gutterLabel": "Gutter:",
-    "hint": "The band marks the 12 columns — use the «grid» button above to toggle it.",
+    "hint": "The band marks the 12 columns — use the “grid” button above to toggle it.",
     "cards": [
       {
         "title": "Container",
@@ -280,7 +280,7 @@
         "kicker": "Content",
         "cls": ".link-content",
         "rule": "At rest, foreground text with a thin primary underline. On hover or focus, a solid fill grows from the bottom up and the text flips to primary-foreground.",
-        "note": "It reuses the already-verified «text on button» contrast pair (AAA in both themes) rather than inventing a new one."
+        "note": "It reuses the already-verified “text on button” contrast pair (AAA in both themes) rather than inventing a new one."
       },
       {
         "kicker": "Navigation chrome",

@@ -20,7 +20,7 @@
         "paras": [
           "Emendu sold and operated soundly doing things by hand. It was a **sales-led company with a SaaS on top**, and the brief was not to manage a roadmap: it was to turn a brand-new SaaS into the company's main business model.",
           "Underneath sat an assumption nobody had challenged: the renting customer base was taken to be, one by one, the SaaS customer base. To test it I joined the sales team in **more than 20 meetings** and interviewed **10 companies that were not in the pipeline**. The assumption proved shaky, and that explained the weak uptake among those users: they used the beta, but never became paying customers.",
-          "The finding split the market in two. Companies with in-house IT already covered almost everything we offered. In those without it, IT work fell on HR, on the office manager, on the CEO or on «whoever was around». That is where the ICP came from —**companies of 20 to 150 employees with no in-house IT**, with at least one of three pains: device management, remote support and no technical criteria to decide— and with it the whole 2025 roadmap: evolving the SaaS towards those pains, focusing on remote support, reorienting LISA and rewriting the product's language for whoever was actually going to use it."
+          "The finding split the market in two. Companies with in-house IT already covered almost everything we offered. In those without it, IT work fell on HR, on the office manager, on the CEO or on “whoever was around”. That is where the ICP came from —**companies of 20 to 150 employees with no in-house IT**, with at least one of three pains: device management, remote support and no technical criteria to decide— and with it the whole 2025 roadmap: evolving the SaaS towards those pains, focusing on remote support, reorienting LISA and rewriting the product's language for whoever was actually going to use it."
         ]
       },
       {
@@ -34,14 +34,14 @@
         "title": "When engineering is the scarce resource, I build it myself",
         "paras": [
           "With the engineering team focused on the foundations and the agency winding down, what internal stakeholders were asking for had no way out. Instead of queueing it, I built it with **Claude Code**: a renting financial calculator and a proposal system integrated with HubSpot for Sales, report generation from the MDM for Account Managers, and a presentation design system for the whole company. Not for me: each piece has its own team.",
-          "It is also where AI stopped being a lookup tool. Analysing interviews with AI let me review not only the user but **myself as an interviewer**; V0 put working prototypes in customers' hands in the time it used to take to describe them."
+          "It is also where AI stopped being a lookup tool. Analysing interviews with AI let me review not only the user but **myself as an interviewer**; v0 put working prototypes in customers' hands in the time it used to take to describe them."
         ]
       },
       {
         "title": "From efficiency to channel",
         "paras": [
           "With the technical roadmap on the table, **Sesame HR** appeared, and it changed the nature of the project. Until then, digitising the operation was **efficiency**: tidying up internally, removing manual work, being able to measure. A project like that has a known ceiling.",
-          "A partnership changes it at the root. When a third party is going to consume your operation from inside their own product, that operation can no longer be «our processes, now documented» and has to become **an interface**: data contracts, explicit states and behaviour that does not depend on someone in Operations knowing what to do. The very thing that was going to make Emendu more efficient inside becomes, outside, an **acquisition channel**.",
+          "A partnership changes it at the root. When a third party is going to consume your operation from inside their own product, that operation can no longer be “our processes, now documented” and has to become **an interface**: data contracts, explicit states and behaviour that does not depend on someone in Operations knowing what to do. The very thing that was going to make Emendu more efficient inside becomes, outside, an **acquisition channel**.",
           "Phase 2 —MDM— is in development today and the API work advances module by module: every integration that lands removes one manual step. Next is **replicating the model in other sectors**, so that partnerships become a channel and not an isolated deal."
         ]
       }
