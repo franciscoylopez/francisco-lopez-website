@@ -4,6 +4,7 @@ import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
+import { type Locale, pagePath } from "@/lib/i18n/config";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
 import { experienceOf } from "@/content/experiences";
@@ -31,6 +32,47 @@ export type TrayectoriaDict = {
   previo: TrayRow[];
 };
 
+// EL ENLACE AL DEEP-DIVE SALE DEL REGISTRO, no del diccionario: `slug` es el
+// campo que `content/experiences.ts` creó para esto (D44) y una fila enlaza si —y
+// solo si— su experiencia tiene página. Escribir la lista de cuáles enlazan sería
+// el mismo modo de fallo que ese módulo existe para matar.
+//
+// EL ENLACE ES EL ROL, no una línea aparte («Ver el caso →»), y es una decisión
+// tomada VIENDO LAS DOS EN PANTALLA con un prototipo desechable (2026-08-17,
+// Francisco). Lo que se estaba juzgando era el caso raro del bloque: bajo
+// «Shutapp Projects» hay dos filas hermanas y solo una tiene página, así que
+// PICKASO es la única sin subrayar dentro de su grupo. Se eligió A sabiéndolo.
+//
+// El subrayado lo pone `.link-content--underline`, no `.link-content` a secas:
+// esa clase sola resuelve el relleno del hover y deja el reposo SIN afordancia
+// —el primer montaje del prototipo salió así y los enlaces no se distinguían del
+// texto—. Y es enlace de CONTENIDO y no de chrome porque no es carpintería de
+// navegación: es una entrada de la trayectoria que además lleva a su caso.
+// Y LA RUTA NO SE ESCRIBE: sale de `pagePath`, que es la fuente única del
+// emparejamiento ruta↔locale (D45). Escribir `/trayectoria/${slug}` aquí habría
+// dado un enlace roto en inglés —el sitio no traduce el segmento, pero sí lleva
+// el prefijo `/en`— y es justo el ternario que D45 borró de cinco sitios.
+function CaseLink({
+  company,
+  lang,
+  children,
+}: {
+  company: string;
+  lang: Locale;
+  children: React.ReactNode;
+}) {
+  const { slug } = experienceOf(company);
+  if (!slug) return <>{children}</>;
+  return (
+    <a
+      href={pagePath(lang, `trayectoria/${slug}`)}
+      className="link-content link-content--underline"
+    >
+      {children}
+    </a>
+  );
+}
+
 // El logo NO es un dato de la fila: se busca por el nombre de la empresa en
 // `content/experiences.ts`, que es su fuente única. Antes eran tres arrays
 // posicionales aquí mismo, unidos por índice contra los del diccionario —
@@ -45,7 +87,7 @@ function LogoCell({ company }: { company: string }) {
   );
 }
 
-function Row({ row }: { row: TrayRow }) {
+function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
   return (
     <div className="tray-grid border-border border-b py-[clamp(1.35rem,3vw,1.85rem)]">
       <p className="text-muted-foreground m-0 pt-[0.15rem] text-[0.9rem] whitespace-nowrap [font-variant-numeric:tabular-nums]">
@@ -53,7 +95,9 @@ function Row({ row }: { row: TrayRow }) {
       </p>
       <div>
         <div className="font-display text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
-          {row.role}
+          <CaseLink company={row.company} lang={lang}>
+            {row.role}
+          </CaseLink>
         </div>
         <div className="text-muted-foreground mt-1 text-[0.9rem]">
           {row.company}
@@ -67,7 +111,7 @@ function Row({ row }: { row: TrayRow }) {
   );
 }
 
-function NestedRow({ row }: { row: TrayRow }) {
+function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
   return (
     <div className="tray-grid-nested relative">
       {/* conector horizontal hacia el borde vertical del contenedor */}
@@ -84,7 +128,9 @@ function NestedRow({ row }: { row: TrayRow }) {
       </p>
       <div>
         <div className="font-display text-[clamp(0.98rem,1.4vw,1.15rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
-          {row.role}
+          <CaseLink company={row.company} lang={lang}>
+            {row.role}
+          </CaseLink>
         </div>
         <div className="text-muted-foreground mt-[0.2rem] text-[0.88rem]">
           {row.company}
@@ -104,9 +150,11 @@ function NestedRow({ row }: { row: TrayRow }) {
 export function Trayectoria({
   dict,
   cvHref,
+  lang,
 }: {
   dict: TrayectoriaDict;
   cvHref: string;
+  lang: Locale;
 }) {
   return (
     <section id="trayectoria" className={SECTION}>
@@ -146,7 +194,7 @@ export function Trayectoria({
 
         <div data-reveal className="border-border border-t">
           {dict.producto.map((row) => (
-            <Row key={row.company} row={row} />
+            <Row key={row.company} row={row} lang={lang} />
           ))}
 
           {/* Shutapp Projects — fila padre con roles anidados */}
@@ -172,7 +220,7 @@ export function Trayectoria({
               }}
             >
               {dict.nested.map((row) => (
-                <NestedRow key={row.company} row={row} />
+                <NestedRow key={row.company} row={row} lang={lang} />
               ))}
             </div>
           </div>
@@ -198,7 +246,7 @@ export function Trayectoria({
         </p>
         <div data-reveal className="border-border border-t">
           {dict.previo.map((row) => (
-            <Row key={row.company} row={row} />
+            <Row key={row.company} row={row} lang={lang} />
           ))}
         </div>
       </div>
