@@ -126,7 +126,33 @@ function cajaDelGrafo(fuente: string) {
   };
 }
 
-const caja = cajaDelGrafo(svg);
+/**
+ * La caja que se publica: **la del propio SVG si la trae**, y solo si no, la
+ * calculada.
+ *
+ * POR QUÉ, y es un fallo que costó ver (2026-08-18). `cajaDelGrafo` existe porque
+ * el export de mermaid.live **no traía `viewBox`**: había que deducirlo. El de
+ * `mermaid-cli` sí lo trae, y es autoritativo —lo calcula Mermaid, que es quien
+ * ha colocado cada nodo—. Recalcularlo encima daba una caja **un 40% más ancha y
+ * un 55% más alta** que el dibujo (3070×2692 frente a 2192×1742), así que el
+ * grafo ocupaba dos tercios de su propio lienzo: en la página se veía **al 40%
+ * de escala, ilegible, y con la mitad del panel vacía**.
+ *
+ * No lo cazó nada automático —el SVG era válido, los colores correctos y el
+ * guardián de literales pasaba— sino mirar la página. El `viewBox` es de las
+ * pocas cosas de un SVG que no se pueden verificar sin verlo.
+ */
+const propio = /viewBox="\s*([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s*"/.exec(
+  svg,
+);
+const caja = propio
+  ? {
+      x: Math.round(Number(propio[1])),
+      y: Math.round(Number(propio[2])),
+      w: Math.round(Number(propio[3])),
+      h: Math.round(Number(propio[4])),
+    }
+  : cajaDelGrafo(svg);
 
 // 1 · Fuera la declaración XML y la hoja de estilos externa.
 svg = svg.replace(/<\?xml[^>]*\?>\s*/g, "");
