@@ -42,7 +42,13 @@ export interface Experience {
   logo: string | null;
 }
 
-export const EXPERIENCES: Experience[] = [
+// `as const satisfies` y no `: Experience[]`: la anotación clásica borraba los
+// literales, así que `slug` valía `string` y cualquier cadena pasaba por slug
+// válido. Con esto, `ExperienceSlug` es la unión real de las cinco y el registro
+// de diccionarios del deep-dive no puede referirse a una experiencia que no
+// existe — el mismo modo de fallo silencioso que este módulo mata en los logos,
+// una capa más arriba.
+export const EXPERIENCES = [
   { company: "Emendu", slug: "emendu", logo: "companies/emendu" },
   { company: "KUOTIP", slug: "kuotip", logo: "companies/kuotip" },
   { company: "INDYA", slug: "indya", logo: "companies/indya" },
@@ -51,7 +57,10 @@ export const EXPERIENCES: Experience[] = [
   { company: "PICKASO", slug: null, logo: "companies/pickaso" },
   { company: "Ontecnia", slug: null, logo: "companies/ontecnia" },
   { company: "Havas Media", slug: null, logo: null },
-];
+] as const satisfies readonly Experience[];
+
+/** Los slugs que SÍ tienen página, como unión de literales. */
+export type ExperienceSlug = NonNullable<(typeof EXPERIENCES)[number]["slug"]>;
 
 /**
  * Busca la experiencia de una fila del diccionario por su nombre de empresa.

@@ -9,6 +9,8 @@ import type esBrandKit from "./dictionaries/es/brand-kit.json";
 import type esDesignSystem from "./dictionaries/es/design-system.json";
 import type esAccesibilidad from "./dictionaries/es/accesibilidad.json";
 import type esCookies from "./dictionaries/es/cookies.json";
+import type esTrayectoriaComun from "./dictionaries/es/trayectoria/comun.json";
+import type { ExperienceSlug } from "@/content/experiences";
 
 // Diccionario i18n, PARTIDO POR PÁGINA (P46). Era un único JSON de 1.580 líneas y
 // 76 KB por locale del que cada página cargaba el 100% para usar su trozo.
@@ -111,3 +113,166 @@ export const getCookies = cargador<CookiesDict>({
   es: () => import("./dictionaries/es/cookies.json").then((m) => m.default),
   en: () => import("./dictionaries/en/cookies.json").then((m) => m.default),
 });
+
+/** Lo que comparten las cinco experiencias y su índice: rótulos, no contenido. */
+export type TrayectoriaComunDict = typeof esTrayectoriaComun;
+
+export const getTrayectoriaComun = cargador<TrayectoriaComunDict>({
+  es: () =>
+    import("./dictionaries/es/trayectoria/comun.json").then((m) => m.default),
+  en: () =>
+    import("./dictionaries/en/trayectoria/comun.json").then((m) => m.default),
+});
+
+/**
+ * La forma de UNA experiencia del deep-dive (P48). Es el único diccionario que se
+ * declara como interfaz en vez de derivarse con `typeof` del JSON español, y por
+ * una razón concreta: aquí no hay un archivo por página sino **cinco archivos que
+ * tienen que compartir forma**, porque una sola plantilla los renderiza. Con
+ * `typeof emendu` la forma la fijaría la primera experiencia que se escribió, y
+ * las otras cuatro cuadrarían por casualidad.
+ *
+ * Sigue haciendo el trabajo que el diccionario tiene que hacer: los cargadores se
+ * anotan con este tipo, así que **si a `en` le falta una clave que `es` tiene, el
+ * build falla** (D11) — lo mismo que garantiza `cargador`, por el mismo mecanismo.
+ *
+ * `caso` es OPCIONAL a propósito: es la cuarta de las cinco secciones y solo
+ * aparece «donde hay historia de verdad» (PRD-Historical §42). Freepik no lo
+ * lleva, y esa ausencia es del formato, no un hueco por rellenar.
+ */
+export interface DeepDiveDict {
+  meta: { title: string; description: string };
+  crumb: string;
+  /** Rótulo de la apertura: empresa · sector. */
+  eyebrow: string;
+  /** El h1: la afirmación de la experiencia, no el nombre de la empresa. */
+  title: string;
+  datos: {
+    rol: string;
+    periodo: string;
+    sector: string;
+    tamano: string;
+    reporting: string;
+  };
+  minuto: { title: string; items: string[] };
+  historia: { title: string; bloques: { title: string; paras: string[] }[] };
+  caso?: {
+    title: string;
+    paras: string[];
+    /**
+     * El artefacto de la página, si lo tiene. La política del deep-dive pide que
+     * sea REAL —no una ilustración del método—, uno por página como techo, ocho
+     * nodos como máximo, sin proveedores ni importes. El DIBUJO vive en código
+     * (`ui/flow-diagram.tsx`): aquí solo lo que es copy, que es lo único que se
+     * traduce.
+     */
+    artefacto?: {
+      title: string;
+      caption: string;
+      /** La secuencia contada en prosa, para quien no ve el dibujo. */
+      description: string;
+      /**
+       * Nombre del archivo en `content/artefactos/` (sin extensión). El dibujo
+       * NO vive en el diccionario: es un documento real, renderizado desde su
+       * `.mmd`, y aquí solo va lo que es copy.
+       *
+       * Y POR ESO NO SE TRADUCE. El artefacto se enseña **como se entregó**, en
+       * el idioma en que se escribió: traducir un documento real para la versión
+       * inglesa lo convertiría en una recreación, que es justo lo que la
+       * política de artefactos prohíbe. Lo que sí va en los dos idiomas es su
+       * título, su pie y la alternativa en prosa.
+       */
+      svg: string;
+    };
+    /**
+     * Las cifras del caso, si las tiene sueltas. Opcional por lo mismo que
+     * `caso`: hay casos cuyo resultado se cuenta en prosa porque la cifra sola no
+     * dice nada sin lo que la rodea. Forzar una tabla ahí sería rellenar.
+     */
+    resultados?: {
+      title: string;
+      items: { value: string; desc: string }[];
+    };
+    cierre: string[];
+  };
+  aprendizajes: { title: string; items: { title: string; text: string }[] };
+}
+
+/**
+ * El registro va tecleado por `ExperienceSlug` —la unión derivada de
+ * `content/experiences.ts` (D44)—, así que no se puede registrar el diccionario
+ * de una experiencia que no existe.
+ *
+ * YA NO ES `Partial`: nació siéndolo, mientras solo estaban escritas Emendu y
+ * Freepik —la más larga con caso y la más corta sin él, elegidas para cubrir el
+ * rango—, y dejó de serlo al entrar las cinco. Con el `Record` completo, añadir
+ * una experiencia con `slug` a `content/experiences.ts` y olvidar su diccionario
+ * **rompe el build**, que es lo que impide que la sexta se quede fuera del
+ * sitemap y de `generateStaticParams` sin que nadie se entere.
+ */
+const experienceDicts: Record<
+  ExperienceSlug,
+  Record<Locale, () => Promise<DeepDiveDict>>
+> = {
+  emendu: {
+    es: () =>
+      import("./dictionaries/es/trayectoria/emendu.json").then(
+        (m) => m.default,
+      ),
+    en: () =>
+      import("./dictionaries/en/trayectoria/emendu.json").then(
+        (m) => m.default,
+      ),
+  },
+  kuotip: {
+    es: () =>
+      import("./dictionaries/es/trayectoria/kuotip.json").then(
+        (m) => m.default,
+      ),
+    en: () =>
+      import("./dictionaries/en/trayectoria/kuotip.json").then(
+        (m) => m.default,
+      ),
+  },
+  indya: {
+    es: () =>
+      import("./dictionaries/es/trayectoria/indya.json").then((m) => m.default),
+    en: () =>
+      import("./dictionaries/en/trayectoria/indya.json").then((m) => m.default),
+  },
+  thetool: {
+    es: () =>
+      import("./dictionaries/es/trayectoria/thetool.json").then(
+        (m) => m.default,
+      ),
+    en: () =>
+      import("./dictionaries/en/trayectoria/thetool.json").then(
+        (m) => m.default,
+      ),
+  },
+  freepik: {
+    es: () =>
+      import("./dictionaries/es/trayectoria/freepik.json").then(
+        (m) => m.default,
+      ),
+    en: () =>
+      import("./dictionaries/en/trayectoria/freepik.json").then(
+        (m) => m.default,
+      ),
+  },
+};
+
+/**
+ * Los slugs que HOY tienen página, derivados del registro y no escritos. Con el
+ * `Partial` fuera (P49) son exactamente los cinco de `EXPERIENCES`, así que
+ * `generateStaticParams` no puede quedarse corto sin que el typecheck lo diga.
+ */
+export const experienceSlugs = Object.keys(experienceDicts) as ExperienceSlug[];
+
+/** `undefined` = esa experiencia no tiene página; la ruta responde 404. */
+export function getExperience(
+  lang: Locale,
+  slug: string,
+): Promise<DeepDiveDict> | undefined {
+  return experienceDicts[slug as ExperienceSlug]?.[lang]();
+}

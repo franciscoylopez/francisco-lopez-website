@@ -1,0 +1,22 @@
+{
+  "datosLabels": {
+    "rol": "Rol",
+    "periodo": "Periodo",
+    "sector": "Sector",
+    "tamano": "Tamaño",
+    "reporting": "Reporting"
+  },
+  "secciones": {
+    "minuto": "En un minuto",
+    "historia": "La historia",
+    "caso": "El caso",
+    "aprendizajes": "Aprendizajes"
+  },
+  "crumbIndice": "Trayectoria",
+  "nav": {
+    "eyebrow": "Seguir leyendo",
+    "anterior": "Experiencia anterior",
+    "siguiente": "Experiencia siguiente",
+    "proximamente": "Próximamente"
+  }
+}
