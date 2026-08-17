@@ -1597,6 +1597,68 @@ de Francisco o va detrás de su visto bueno: los **artefactos de las otras cuatr
 accesibilidad** sobre las seis URLs × dos temas, `npm run psi` por el peso de Emendu, las dos
 filas de «Shutapp Projects» en Trayectoria y la pasada de erratas y del EN contra el ES.
 
+## 47. El cierre del deep-dive: cuatro ajustes en pantalla y tres metros descalibrados (2026-08-17)
+
+Segunda sesión con las cinco páginas servidas delante. **P48 se cierra**, y lo que la cerró no fue
+escribir más código sino mirar.
+
+**Los cuatro ajustes, y ninguno se vio leyendo el diff.** La apertura no ocupaba el pliegue, así
+que en cualquier pantalla por encima de ~700px de alto asomaba la sección siguiente; «En un
+minuto» y «Aprendizajes» eran listas a 1.280px, donde la viñeta y el final de línea quedan
+demasiado lejos para leerse como lista; el pie de los vídeos era una nota de auditoría escrita
+para el autor y no para el lector; y **Trayectoria no enlazaba a ninguna de las cinco páginas**,
+que llevaba abierto desde que existen. Detalle técnico en `DECISIONS.md` D56.
+
+**La decisión de las filas de «Shutapp Projects», por fin tomada, y cómo.** El caso llevaba
+heredándose desde P47.7 sin poder juzgarse, porque para verlo hacía falta un enlace que aún no
+existía. Se montó un **prototipo desechable** con los dos tratamientos y se capturaron los dos:
+con el rol enlazado, PICKASO queda como el único sin subrayar de su grupo anidado; con un enlace
+explícito debajo, su ausencia no se nota porque nadie echa de menos una afordancia opcional. El
+análisis recomendaba la segunda; **Francisco eligió la primera, sabiendo el coste**, y ese es el
+tratamiento que hereda P49.
+
+**Los textos volvieron de Notion con una cifra cerrada.** Emendu, INDYA y Freepik cambian; KUOTIP
+y TheTool no. Lo importante no es el volumen sino que **INDYA acota su ×2,2**: era una de las tres
+cifras abiertas y un incumplimiento de la regla 10 del formato —volumen no es comportamiento—, y
+ahora distingue más usuarios de más uso (del 34% al 52% que los registran). De paso cayeron dos
+afirmaciones falsas que nadie había ido a comprobar: el pie del artefacto decía «Redibujado con
+los tokens del sitio» cuando D54 había decidido **exactamente lo contrario**, y la política de
+cookies decía que solo INDYA incrusta vídeo cuando ya son dos.
+
+**Y el saldo de método, que es lo que esta sesión deja de verdad: tres metros descalibrados, uno
+tras otro.**
+
+1. **El límite de `agent-browser` no era la navegación inicial, era el sandbox entero.** D51
+   publicaba un remedio caro —abrir la URL desde la terminal— para un diagnóstico correcto en el
+   síntoma y equivocado en el alcance. Las tres observaciones que lo fundaron eran ciertas y
+   encajaban con la conclusión errónea porque **el paso que las separa nunca se dio**: al abrir
+   desde fuera, la sesión seguía conduciendo desde fuera. El coste no fue teórico — la copia de
+   esa regla en el subagente mandaba parar y pedir la URL, y por eso el gate se detuvo sin llegar
+   a medir nada.
+2. **La regla del control sobre imagen depende del metro con el que se mida.** D55 muestrea
+   puntos concretos del perímetro y concluye que siempre pasa uno de los dos bordes; midiendo el
+   **peor de 144 ángulos**, ninguno llega a 3:1 en ninguna de las dos páginas. No se desmienten:
+   miden cosas distintas, y la pregunta abierta es cuál manda. Lo que sí es seguro es que **la
+   frase publicada promete más de lo que el componente garantiza**, y que hay un estado sin medir
+   —en hover el velo se apaga entero—.
+3. **El censo de contraste dejó de ver los hover.** Decide si una regla es de grupo con
+   `if (rule.cssRules)`, y desde que Chrome soporta CSS Nesting **toda** regla expone
+   `cssRules`: encuentra 0 reglas de hover donde hay 21. Así que «todos los pares en AAA en
+   reposo **y en hover**» lleva tiempo sin respaldo en su segunda mitad. Y es **la segunda vez que
+   esta misma función falla por la misma causa**: ya se arregló para las utilidades que Tailwind
+   envuelve en `@media`, con un test de «esto es una regla de grupo» que el navegador invalidó
+   después.
+
+La lección que generaliza las tres, y que va a `BRAND.md`: **un metro que devuelve una lista
+vacía parece un aprobado**. Los tres fallaron en silencio y ninguno dio error; los tres se
+encontraron porque un resultado no reproducía algo ya conocido.
+
+**Estado al cerrar.** P48 en **Listo**, cuatro commits en `feat/deep-dive-plantilla` (PR #111,
+sin mergear — el despliegue va con toda la tanda). Abiertas: **P48.7** (artefactos de las otras
+cuatro, erratas, EN), **P50.3** (PSI del peso de Emendu, necesita URL pública), **P50.35** (el
+botón de play), **P50.36** (el censo de hover) y **P59.5** (llevar la apertura al resto de
+páginas, ya en el sprint siguiente).
+
 ---
 
 ## Fuentes

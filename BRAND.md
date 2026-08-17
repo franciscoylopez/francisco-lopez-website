@@ -168,6 +168,16 @@ Dos piezas, y ninguna sobra:
 Es la misma idea que §El atenuado lo pone la superficie y que §Controles con dos fondos: **la
 pieza se define contra su propio carril**. Las cifras y el barrido, en `DECISIONS.md` D55.
 
+> **SIN RESPALDO desde el 2026-08-17, y por eso está escrito aquí y no solo en la tarea.** La
+> primera mitad de la regla —el borde **interno** de los dos tonos no depende de lo que haya
+> detrás— se reproduce exacta: **7,93 claro / 8,36 oscuro**. La segunda —«siempre hay un borde
+> que pasa aunque cambie cuál»— **depende del metro**: se midió muestreando puntos concretos del
+> perímetro, y midiendo el **peor de 144 ángulos** ningún borde externo llega a 3:1 en ninguna de
+> las dos páginas. Probablemente no sea incumplimiento —WCAG 1.4.11 pide que el componente se
+> distinga, no que pase cada punto del contorno— pero **la frase promete más de lo que el
+> componente garantiza**, y hay un estado que no se midió: en `:hover` el velo se apaga entero.
+> Hasta que se resuelva (tarea P50.35), esta regla se usa sabiendo eso. Cifras en D55.
+
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
 Una **etiqueta** (la pastilla no interactiva que rotula un título, una fila o un dato) sale de `components/ui/badge.tsx`, no de `action.tsx`: no se pulsa, así que no tiene estado, ni hover, ni suelo táctil de 44px. Dos ejes, y ninguno se escribe en el punto de uso:
@@ -229,7 +239,8 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
-  están en AAA en ambos temas, en reposo y en hover. Sin excepciones** — la última que
+  están en AAA en ambos temas, en reposo y en hover. Sin excepciones** *(la mitad del hover
+  lleva sin medirse desde que el censo se rompió — ver el aviso de §Cómo se hace el censo)* — la última que
   quedaba, `brand-purple-accent`, dejó de serlo el 2026-08-10 al hacerlo conmutar con el tema
   (§Color): la salvedad no era del morado, era de cualquier color fijo puesto sobre dos
   superficies opuestas.
@@ -248,6 +259,21 @@ incluidos.** Un par que solo aparece al **componer** —un velo `color-mix` sobr
 de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así que un inventario
 hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
 `scripts/design-review/contrast-census.js`.
+
+> **ROTO PARA LOS HOVER desde el 2026-08-17 (medido, no supuesto).** `hoverDeclarations()`
+> decide si una regla es de grupo con `if (rule.cssRules)`, y **desde que Chrome soporta CSS
+> Nesting toda regla normal expone `cssRules`** —vacío—, así que la condición es siempre cierta
+> y el selector nunca llega a comprobarse. En la página servida: el censo encuentra **0** reglas
+> con `:hover`; **hay 21**. Consecuencia directa: la afirmación de arriba —«en reposo **y en
+> hover**, sin excepciones»— **está hoy sin respaldo en su segunda mitad**. No hay ningún
+> incumplimiento conocido, pero tampoco hay medición. Tarea P50.36; el arreglo se valida
+> reproduciendo su ancla (12,47 / 12,04), no leyendo el código.
+>
+> Y es **la segunda vez que esta misma función falla por lo mismo**: ya se arregló una vez porque
+> un bucle plano se saltaba las utilidades `hover:` que Tailwind envuelve en `@media`. Se corrigió
+> el síntoma con un test de «esto es una regla de grupo» que el navegador invalidó después. La
+> lección que sí generaliza: **un metro que devuelve una lista vacía parece un aprobado**, así que
+> tiene que afirmar cuánto ha encontrado y fallar si es cero.
 
 ### Cómo medir sin equivocarse
 
