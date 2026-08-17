@@ -1,0 +1,75 @@
+%% Artefacto del deep-dive de Emendu (P48): el diagrama de estados del módulo MDM
+%% que Francisco escribió para el equipo de desarrollo, dentro del product spec
+%% «PS - HR MDM Integration».
+%%
+%% ESTE ARCHIVO ES LA FUENTE DE VERDAD DEL DIBUJO. El SVG publicado
+%% (`public/artefactos/emendu-mdm.svg`) es su render: si el diagrama cambia, se
+%% vuelve a renderizar desde aquí y se sustituye el SVG. Es el mismo patrón que
+%% el CV (D22) y los valores publicados (D38): el artefacto no se edita, se
+%% regenera.
+%%
+%% CÓMO SE REGENERA, y por qué no hay script: es UN diagrama, una vez. Meter
+%% `@mermaid-js/mermaid-cli` en devDependencies arrastra Puppeteer y su Chromium
+%% (~150 MB) para un render puntual, y el criterio de D51 dice que una
+%% herramienta entra por el trabajo que resuelve. Se exporta a mano desde
+%% https://mermaid.live —que renderiza EN EL NAVEGADOR, con el diagrama en el
+%% fragmento de la URL, así que no se sube a ningún servidor— con Actions → SVG.
+%%
+%% SANITIZADO RESPECTO AL ORIGINAL, y la diferencia importa: el estado
+%% `BAJA_NINJONE` nombraba al proveedor de MDM. El propio spec declara esa marca
+%% fuera de alcance y explícitamente invisible para el cliente final, así que
+%% publicarla aquí filtraría una decisión técnica y comercial que Emendu ha
+%% decidido no enseñar. El estado pasa a llamarse `BAJA_PROVEEDOR_MDM`: dice lo
+%% mismo del flujo y no dice con quién.
+
+stateDiagram-v2
+[*] --> MODULO_RENTING_ACTIVO
+
+    state "ACTIVACION - Flujo 0" as ACTIVACION {
+        MODULO_RENTING_ACTIVO --> SECCION_MDM : Superadmin accede
+        SECCION_MDM --> CONFIRMACION : muestra dispositivos activables y precio
+        CONFIRMACION --> MDM_ACTIVO : confirma
+        CONFIRMACION --> SECCION_MDM : cancela
+    }
+
+    MDM_ACTIVO --> MODULO_MDM_PARQUE : expone modulo MDM
+    MDM_ACTIVO --> INVENTARIO_DISPOSITIVO : expone tab MDM en Inventario
+    MDM_ACTIVO --> ENROLLMENT : ordenadores quedan pendientes de instalacion
+
+    state "MODULO MDM - sistema y parque" as MODULO_MDM_PARQUE {
+        DASHBOARD_AGREGADO : Dashboard MDM - vista consolidada del parque
+        SOFTWARE_Y_PAQUETES : Flujo 4 - catalogo y paquetes declarativos
+        POLITICAS_GESTION : Flujo 5 - politicas Empresa y por equipo
+        EQUIPOS_GESTION : Flujo 7 - fuente unica consumida por Renting
+        CONFIG_MODULO : tab Configuracion - cancelacion del modulo
+    }
+
+    state "INVENTARIO con tab MDM - entidad y dispositivo" as INVENTARIO_DISPOSITIVO {
+        TAB_GENERAL : datos administrativos del activo
+        TAB_MDM : Flujos 2-3-4-5 a nivel dispositivo
+        TAB_HISTORICO : Linea de tiempo derivada - Impactos Transversales 3.8
+    }
+
+    state "ENROLLMENT - Flujo 1" as ENROLLMENT {
+        [*] --> PENDING_INSTALLATION : ordenadores activables
+        [*] --> NOT_ELIGIBLE : smartphones, tablets y accesorios
+        PENDING_INSTALLATION --> ACTIVE : empleado instala Emendu Link
+        ACTIVE --> DISCONNECTED : agente sin conexion prolongada
+        DISCONNECTED --> ACTIVE : agente reconecta
+        DISCONNECTED --> PENDING_INSTALLATION : agente desinstalado por baja
+    }
+
+    INVENTARIO_DISPOSITIVO --> ENROLLMENT : gestion del estado del dispositivo
+
+    MODULO_MDM_PARQUE --> INVENTARIO_DISPOSITIVO : cross-flow desde Dashboard al detalle
+    INVENTARIO_DISPOSITIVO --> MODULO_MDM_PARQUE : cross-flow instalar software y ver politicas
+
+    CONFIG_MODULO --> CANCELACION_PROGRAMADA : Superadmin inicia cancelacion
+
+    state "CANCELACION - Flujo 6" as CANCELACION {
+        CANCELACION_PROGRAMADA --> MDM_ACTIVO : reactiva antes del fin de periodo
+        CANCELACION_PROGRAMADA --> BAJA_PROVEEDOR_MDM : fin del periodo
+        BAJA_PROVEEDOR_MDM --> MODULO_CANCELADO : offboarding completado, dispositivos a no elegibles
+    }
+
+    MODULO_CANCELADO --> [*]
