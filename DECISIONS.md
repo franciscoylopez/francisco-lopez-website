@@ -2601,6 +2601,53 @@ que es idempotente para los pasos ya aplicados (mismo `viewBox`, diff de una lí
 `<style>`). Funciona, pero deja la entrada del traductor sin versionar: **queda por decidir si el
 export crudo debe guardarse** cuando llegue el segundo artefacto.
 
+### Ampliado el 2026-08-18 · el render deja de ser manual, y el `viewBox` no se puede verificar sin verlo
+
+**Esto revierte lo que este mismo ADR argumentaba, y el matiz importa: el criterio de D51 no
+cambia — lo que era falso es el supuesto.** La cabecera del `.mmd` decía que no había script
+porque «es UN diagrama, una vez» y porque `@mermaid-js/mermaid-cli` arrastra Puppeteer y su
+Chromium. **No fue una vez.** El SVG publicado se había exportado del diagrama **sin sanear**, así
+que llevaba el estado `BAJA_NINJONE` —el nombre del proveedor de MDM, que el product spec declara
+invisible para el cliente final— mientras la fuente `.mmd` sí estaba saneada. Es exactamente el
+error que se cuela por un paso manual. Ahora: **`npm run artefacto`**.
+
+- **No se descarga ningún Chromium.** `scripts/mermaid-puppeteer.json` declara
+  `channel: "chrome"`, o sea el Chrome ya instalado. Se llegó ahí porque npm bloqueó el
+  `postinstall` de Puppeteer; el bloqueo resultó ser mejor solución que aprobarlo.
+- **El render sigue siendo LOCAL**, que era la condición real que hacía válido mermaid.live
+  frente a mermaid.ink: el diagrama no sale a ningún servidor. Y es **determinista** — dos
+  ejecuciones dan el mismo byte, así que regenerar no ensucia el diff.
+
+**EL FALLO QUE ESTO DESTAPÓ, y es el que generaliza: `cajaDelGrafo` estaba pisando un `viewBox`
+mejor que el suyo.** Esa función existe porque el export de mermaid.live **no traía `viewBox`** y
+había que deducirlo. El de `mermaid-cli` sí lo trae, y es autoritativo: lo calcula Mermaid, que es
+quien ha colocado cada nodo. Recalcularlo encima daba **3.070×2.692 frente a 2.192×1.742** —un 40%
+más ancho y un 55% más alto que el dibujo—, así que el grafo ocupaba **dos tercios de su propio
+lienzo**: en la página, un diagrama al 40% de escala con la mitad del panel vacía. Ahora se usa el
+propio cuando lo hay y el cálculo queda de respaldo.
+
+**No lo cazó nada automático** —el SVG era válido, los colores estaban en tokens y el guardián de
+literales pasaba— **sino mirar la página**. Es la misma familia que el resto de metros de este
+repo, con un límite nuevo que conviene recordar: *el `viewBox` es de las pocas cosas de un SVG que
+no se pueden verificar sin verlo*, porque nada de lo que se puede comprobar en el archivo cambia
+cuando está mal.
+
+**Y el tamaño en la página NO era un fallo, era una decisión sin tomar.** El contenedor decía en
+su comentario que el diagrama «scrollea dentro de su panel en vez de encogerse hasta ser
+ilegible» y hacía lo contrario: con `w-full` y un mínimo de 46rem solo scrollaba por debajo de
+736px. Se probaron las dos **viéndolas servidas** (Francisco): a 1:1 con scroll horizontal el
+texto se lee pero el diagrama **se sale**, y en una pantalla normal solo entra la mitad — *una
+máquina de estados que no se ve entera deja de contar lo que vino a contar, que es la forma del
+proceso, no cada etiqueta*. Se queda **a ancho de panel**, que con el `viewBox` ya corregido llena
+la caja y gana un 42% sin tocar nada más. Si las etiquetas de flecha (10px) se quedan cortas, la
+palanca **no es escalar el dibujo**: es renderizarlo con una tipografía mayor —Mermaid recalcula
+el layout y las cajas crecen con ella—, que es distinto de cambiar la fuente **después** del
+render, lo que este mismo ADR prohíbe.
+
+De paso, la región que scrollea pasa a ser **operable con teclado** (`tabIndex` + nombre
+accesible). Solo scrollea en móvil, pero ahí quien navega con teclado no llegaba a lo que queda
+fuera (WCAG 2.1.1). Hueco preexistente que el experimento del 1:1 hizo evidente.
+
 ---
 
 ## D55 · Un vídeo de terceros entra con facade, y el clic es el gate — 2026-08-17
