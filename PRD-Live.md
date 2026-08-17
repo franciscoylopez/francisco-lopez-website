@@ -274,6 +274,13 @@ tenga que acordarse.
   hoy V4 — o antes, si la página de Contacto ampliada incorpora un formulario y con él un
   endpoint externo). Detalle en `DECISIONS.md`.
 
+  **La CSP se amplió por segunda vez el 2026-08-17** (la primera fue Clarity, D32): `frame-src`
+  suma `youtube-nocookie.com` por los vídeos del deep-dive, con el mismo criterio de allowlist
+  mínima —el origen exacto, nunca el comodín— y con el dominio que **no escribe cookies
+  publicitarias**. La política de cookies gana su sección de «vídeo incrustado», **fuera de la
+  tabla**: un marco que no existe hasta que alguien pulsa no tiene nombre, ni proveedor activo,
+  ni duración (D55).
+
   **Y un gate que no es de CI pero es el que más ha cazado**: `npm run gate:html` compara el
   **HTML servido de las seis páginas × dos idiomas** antes y después de un refactor. Diff
   vacío = transparente por construcción. Nació cubriendo los dos showcase (D42) y se amplió a
@@ -333,6 +340,16 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    las cinco la dan el marco y la longitud, no los títulos: dentro de «La historia» los
    subapartados son libres, porque si no, una experiencia de tres meses de hace cuatro años sale
    con secciones medio vacías al lado de una de cinco años. Detalle en `PRD-Historical.md` §42.
+
+   **Las cinco páginas están montadas y revisadas en pantalla** (2026-08-17). Además del texto,
+   dos experiencias enseñan algo que no es prosa: **KUOTIP su dashboard** —al lado del párrafo que
+   afirma que las reseñas «parecían de hace veinte años», porque una captura de producto se
+   reconoce y no se lee— y **INDYA y TheTool un vídeo incrustado**. El vídeo entra por la regla de
+   §43 —es prueba y no resumen— y con su letra pequeña: **facade** (hasta que alguien pulsa no hay
+   iframe, ni JS de terceros, ni una petición a Google), póster auto-hospedado, `frame-src` a
+   `youtube-nocookie` y sección propia en la política de cookies. El **clic es el gate de
+   consentimiento**, que es más estricto que colgarlo de una categoría: quien acepta todas las
+   cookies tampoco carga YouTube sin pulsar. Detalle en `DECISIONS.md` D55.
 
    **Las cinco narrativas en español están escritas** (2026-08-16): Emendu ~1.160 y TheTool
    ~1.200 con caso, INDYA ~1.150 con caso, KUOTIP ~760 y Freepik ~710 sin él. El formato

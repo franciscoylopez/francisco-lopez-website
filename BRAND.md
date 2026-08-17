@@ -146,6 +146,28 @@ referencia. La regla que sí funciona: **la pieza es el `foreground` de su propi
 —`--foreground` sobre el carril apagado (`--muted`), `--primary-foreground` sobre el encendido
 (`--primary`)—. Mismo patrón que `--surface-dim` y `--chrome-hover-bg` (D30, D39).
 
+### Un control sobre una imagen no puede fijar su color
+
+*(2026-08-17, midiendo el botón de play de los vídeos del deep-dive.)* §Controles con dos fondos
+resuelve el caso en que el fondo **cambia por tema y por estado**, y todos sus fondos son tokens.
+Un control encima de una **imagen** es el mismo problema con el fondo fuera del sistema: ahí no
+hay token que ajustar, porque el fondo lo decide el póster. **Un color fijo no puede garantizar
+el 3:1 que WCAG 1.4.11 pide a un componente**, y no es teoría: el póster de TheTool es el teal de
+su marca, casi el cian del sitio, y el disco de play medía **2,81 en oscuro y 2,59 en claro**.
+
+Dos piezas, y ninguna sobra:
+
+- **Un velo entre la imagen y el control, del color del FONDO** (`--background`), nunca negro. El
+  negro arregla oscuro y empeora claro —acerca el póster al cian oscuro del tema claro—, que es
+  la firma de D41. El del fondo **oscurece en oscuro y aclara en claro**: aleja la imagen del
+  control en los dos temas. Su opacidad **se mide contra la peor imagen real**, no se elige.
+- **El control, de dos tonos** —relleno `--primary` + anillo `--primary-foreground`—, para que
+  siempre haya un borde que pase aunque cambie cuál. El borde interno de esos dos es un par de
+  tokens del sistema, así que **no depende de lo que haya detrás**.
+
+Es la misma idea que §El atenuado lo pone la superficie y que §Controles con dos fondos: **la
+pieza se define contra su propio carril**. Las cifras y el barrido, en `DECISIONS.md` D55.
+
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
 Una **etiqueta** (la pastilla no interactiva que rotula un título, una fila o un dato) sale de `components/ui/badge.tsx`, no de `action.tsx`: no se pulsa, así que no tiene estado, ni hover, ni suelo táctil de 44px. Dos ejes, y ninguno se escribe en el punto de uso:
