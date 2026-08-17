@@ -18,10 +18,10 @@ import { SectionHeader } from "@/components/ui/heading";
 // LA APERTURA ES TIPOGRÁFICA Y SIN IMAGEN, y es una decisión, no una carencia:
 //
 //  - El h1 no es el nombre de la empresa sino la AFIRMACIÓN de la experiencia
-//    («No se elige una empresa, se elige un squad»). El nombre ya está en el
-//    rótulo, en el breadcrumb y en el título del navegador; gastarle el h1 sería
-//    repetirlo tres veces y no decir nada. Es la misma regla con la que D43 sacó
-//    el titular de las 19 secciones del sitio.
+//    («Gran empresa, mal momento»). El nombre ya está en el rótulo, en el
+//    breadcrumb y en el título del navegador; gastarle el h1 sería repetirlo
+//    tres veces y no decir nada. Es la misma regla con la que D43 sacó el
+//    titular de las 19 secciones del sitio.
 //  - Sin imagen, la apertura no paga LCP: el LCP es el propio h1 (284 ms medidos
 //    en local), no una foto que descargar.
 //
