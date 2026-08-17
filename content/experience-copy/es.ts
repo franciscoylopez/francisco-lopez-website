@@ -161,8 +161,8 @@ export const copy: ExperienceCopyMap = {
         deep: "**Diseñé y evolucioné las funcionalidades que nos diferenciaron:** correlación entre instalaciones y ASO, dashboards de tracking, ASO score, análisis internacional, timeline de competidores y monitorización masiva.",
       },
       {
-        cv: "En 3 días convertimos una beta oculta de Google Play en funcionalidad abierta: 7 meses antes que el mercado y un +30% de MRR.",
-        deep: "**En 3 días convertimos una beta oculta de Google Play en una funcionalidad abierta a todos nuestros clientes** — la tuvimos **7 meses** antes que el mercado y nos dio un **+30% de MRR**.",
+        cv: "En 3 días convertimos una beta oculta de Google Play en funcionalidad abierta: 7 meses antes que el mercado y un +30% de MRR en 2 meses.",
+        deep: "**En 3 días convertimos una beta oculta de Google Play en una funcionalidad abierta a todos nuestros clientes** — la tuvimos **7 meses** antes que el mercado y nos dio un **+30% de MRR en 2 meses**.",
       },
       {
         cv: "Lideré roadmap, discovery, definición funcional y la coordinación con desarrollo, marketing y customer success.",

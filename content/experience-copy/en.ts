@@ -157,8 +157,8 @@ export const copy: ExperienceCopyMap = {
         deep: "**I designed and evolved the features that set us apart:** correlation between installs and ASO, tracking dashboards, ASO score, international analysis, competitor timeline and bulk monitoring.",
       },
       {
-        cv: "In 3 days we turned a hidden Google Play beta into an open feature: 7 months before the market and +30% MRR.",
-        deep: "**In 3 days we turned a hidden Google Play beta into a feature open to all our customers** — we had it **7 months** before the market and it gave us **+30% MRR**.",
+        cv: "In 3 days we turned a hidden Google Play beta into an open feature: 7 months before the market and +30% MRR in 2 months.",
+        deep: "**In 3 days we turned a hidden Google Play beta into a feature open to all our customers** — we had it **7 months** before the market and it gave us **+30% MRR in 2 months**.",
       },
       {
         cv: "Led roadmap, discovery, functional definition and coordination with development, marketing and CS.",
