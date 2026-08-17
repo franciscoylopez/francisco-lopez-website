@@ -14,6 +14,13 @@ import type { ExperienceCopyMap } from "./types";
 
 export const copy: ExperienceCopyMap = {
   Emendu: {
+    role: "Product Manager",
+    period: "Feb 2025 — Actualidad",
+    sector: "SaaS B2B · IT Management",
+    reporting: {
+      deep: "Miembro del equipo de liderazgo",
+      cv: "Miembro del equipo de liderazgo (Dirección, Operaciones, Tech & Finanzas)",
+    },
     short:
       "Convertí un SaaS recién creado en el modelo de negocio de la compañía: redefiní el ICP, digitalicé la operación y abrí canal con el partnership de Sesame HR.",
     bullets: [
@@ -44,6 +51,13 @@ export const copy: ExperienceCopyMap = {
     ],
   },
   KUOTIP: {
+    role: "Cofounder & Product",
+    period: "Feb 2024 — Dic 2024",
+    sector: "Customer Reviews",
+    reporting: {
+      deep: "Cofundador, 1 de 3 socios",
+      cv: "Cofundador (1 de 3 socios) · junto a la CEO y el CTO",
+    },
     short:
       "Validé el fraude en reviews con usuarios y marcas antes de construir nada; definí el MVP con verificación por voz e IA y apoyé a la CEO en el fundraising pre-seed.",
     bullets: [
@@ -66,6 +80,13 @@ export const copy: ExperienceCopyMap = {
     ],
   },
   INDYA: {
+    role: "Product Lead",
+    period: "Ene 2022 — Dic 2023",
+    sector: "SaaS B2C · Health tech",
+    reporting: {
+      deep: "CPO y CTO",
+      cv: "Reporté al CPO y al CTO · liderazgo por influencia",
+    },
     short:
       "Ordené el crecimiento sobre el ciclo de vida y no sobre funcionalidades: del 16% al 10% de churn mensual, con activación, engagement y retención como palancas del roadmap.",
     bullets: [
@@ -96,6 +117,13 @@ export const copy: ExperienceCopyMap = {
     ],
   },
   Freepik: {
+    role: "Product Manager",
+    period: "Oct 2021 — Dic 2021",
+    sector: "SaaS B2C · UGC",
+    reporting: {
+      deep: "Head of Product",
+      cv: "Reporté a la Head of Product",
+    },
     short:
       "Investigué y definí funcionalidades para el área de contributors; rediseñé el registro y el onboarding, donde el 75% desistía, y gestioné los OKR del squad.",
     bullets: [
@@ -114,6 +142,13 @@ export const copy: ExperienceCopyMap = {
     ],
   },
   TheTool: {
+    role: "Cofounder & Product",
+    period: "May 2016 — Oct 2021",
+    sector: "SaaS B2B · ASO",
+    reporting: {
+      deep: "Cofundador, 1 de 4 socios",
+      cv: "Cofundador (1 de 4 socios) · voz y voto en las decisiones clave",
+    },
     short:
       "Cofundador y responsable de producto de cero a la venta: visión, MVP, roadmap y el equipo de desarrollo, hasta la adquisición por AppRadar en 2021.",
     bullets: [
@@ -144,6 +179,9 @@ export const copy: ExperienceCopyMap = {
     ],
   },
   PICKASO: {
+    role: "COO",
+    period: "Sep 2015 — Dic 2016",
+    sector: "App Marketing · Agencia",
     short:
       "Profesionalicé estructura y cartera de servicios de la agencia; realicé la investigación de mercado de los futuros competidores de TheTool.",
     bullets: [
@@ -157,6 +195,9 @@ export const copy: ExperienceCopyMap = {
     ],
   },
   Ontecnia: {
+    role: "Digital Marketing Manager",
+    period: "Sep 2013 — Sep 2015",
+    sector: "Malavida.com",
     short:
       "Crecimiento orgánico de 3,2M → 9,4M visitas mensuales; llevé el modelo de negocio de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first.",
     bullets: [
@@ -167,6 +208,9 @@ export const copy: ExperienceCopyMap = {
     ],
   },
   "Havas Media": {
+    role: "Digital Marketing / Performance",
+    period: "2009 — 2013",
+    sector: "",
     short:
       "Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto.",
     bullets: [

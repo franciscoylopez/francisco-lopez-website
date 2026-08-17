@@ -71,47 +71,31 @@
     "previoIntro": "This earlier stage in marketing and growth builds the analytical, experimentation and user-first foundation that defines my approach as a Product Manager.",
     "producto": [
       {
-        "period": "Feb 2025 — Present",
-        "role": "Product Manager",
         "company": "Emendu"
       },
       {
-        "period": "Feb 2024 — Nov 2024",
-        "role": "Cofounder & Product",
         "company": "KUOTIP"
       },
       {
-        "period": "Jan 2022 — Dec 2023",
-        "role": "Product Lead",
         "company": "INDYA"
       },
       {
-        "period": "Oct 2021 — Dec 2021",
-        "role": "Product Manager",
         "company": "Freepik"
       }
     ],
     "nested": [
       {
-        "period": "May 2016 — Oct 2021",
-        "role": "Cofounder & Product",
         "company": "TheTool"
       },
       {
-        "period": "Sep 2015 — Dec 2016",
-        "role": "COO",
         "company": "PICKASO"
       }
     ],
     "previo": [
       {
-        "period": "Sep 2013 — Sep 2015",
-        "role": "Digital Marketing Manager",
         "company": "Ontecnia (Malavida, Lecturalia, BonViveur…)"
       },
       {
-        "period": "2009 — 2013",
-        "role": "Digital Marketing / Performance",
         "company": "Havas Media · Increnta · Miss Conversion"
       }
     ]

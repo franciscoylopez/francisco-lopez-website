@@ -6,7 +6,12 @@ import type {
 import Image from "next/image";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import { deepBulletsOfSlug } from "@/content/experience-copy";
+import {
+  companyOfSlug,
+  deepBulletsOfSlug,
+  factsOf,
+  reportingOf,
+} from "@/content/experience-copy";
 import type { Locale } from "@/lib/i18n/config";
 import { CARD, PANEL, PROSE, SECTION, WRAP } from "@/components/ui/layout";
 import { artefactoSvg } from "@/lib/artefacto";
@@ -134,19 +139,32 @@ function Seccion({
  * del equipo de liderazgo» en vez de dos textos seguidos (D40, que reserva el
  * marcado de tabla para lo que de verdad tiene columnas).
  */
+// CUATRO DE LOS CINCO DATOS SALEN DEL REGISTRO (P48.55), no del diccionario: rol,
+// periodo, sector y reporting se pintan también en Trayectoria o en el CV, así que
+// escribirlos aquí era una copia — y ya había divergido en cuatro sitios, uno de
+// ellos una FECHA. El único que se queda en el diccionario es `tamano`, que no lo
+// publica nadie más.
 function Datos({
   datos,
   labels,
+  lang,
+  company,
 }: {
   datos: DeepDiveDict["datos"];
   labels: TrayectoriaComunDict["datosLabels"];
+  lang: Locale;
+  company: string;
 }) {
+  const { role, period, sector } = factsOf(lang, company);
   const filas = [
-    { label: labels.rol, value: datos.rol },
-    { label: labels.periodo, value: datos.periodo },
-    { label: labels.sector, value: datos.sector },
+    { label: labels.rol, value: role },
+    { label: labels.periodo, value: period },
+    { label: labels.sector, value: sector },
     { label: labels.tamano, value: datos.tamano },
-    { label: labels.reporting, value: datos.reporting },
+    {
+      label: labels.reporting,
+      value: reportingOf(lang, company, "deep") ?? "",
+    },
   ];
 
   return (
@@ -356,6 +374,9 @@ export function DeepDive({
   // El ordinal se cuenta al vuelo porque «El caso» es opcional. Ver la nota de
   // arriba.
   let n = 0;
+  // Los hechos de la experiencia se buscan por su empresa, no por el slug: la
+  // clave de unión del registro es `company` desde que existe el CV (D44).
+  const company = companyOfSlug(slug);
   const siguiente = () => ++n;
 
   return (
@@ -435,7 +456,12 @@ export function DeepDive({
             </header>
 
             <div data-reveal className="mt-[clamp(2.5rem,5vw,3.5rem)]">
-              <Datos datos={t.datos} labels={comun.datosLabels} />
+              <Datos
+                datos={t.datos}
+                labels={comun.datosLabels}
+                lang={lang}
+                company={company}
+              />
             </div>
           </div>
         </div>

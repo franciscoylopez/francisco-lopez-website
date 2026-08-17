@@ -1,8 +1,9 @@
 import type { TrayectoriaComunDict } from "@/app/[lang]/dictionaries";
 import { EXPERIENCES } from "@/content/experiences";
+import { factsOf } from "@/content/experience-copy";
+import type { Locale } from "@/lib/i18n/config";
 
 import { PageCloser, type CloserItem } from "@/components/ui/page-closer";
-import type { TrayectoriaDict } from "./trayectoria";
 
 // Paso a la experiencia ANTERIOR y SIGUIENTE, como cierre de cada deep-dive
 // (P48). Mismo formato que el cierre de las tres páginas del sistema — es
@@ -15,42 +16,25 @@ import type { TrayectoriaDict } from "./trayectoria";
 // reciente): Emendu, que es la actual, solo tiene anterior. Ninguna de las dos
 // direcciones se escribe en ningún sitio.
 //
-// Y EL COPY DE CADA TARJETA NO SE DUPLICA. El rol y el periodo salen de la MISMA
-// rama del diccionario que los pinta en Trayectoria, unidos por `company` — la
-// clave de este proyecto desde que existe el CV. Escribirlos aquí habría sido la
-// cuarta copia del mismo hecho, que es justo lo que P48.5 está abierta para
-// arreglar: no tiene sentido crear el problema en la tarea de al lado.
+// Y EL COPY DE CADA TARJETA NO SE DUPLICA. El rol y el periodo salen del REGISTRO
+// POR EXPERIENCIA (P48.55), que es de donde los leen también la fila de
+// Trayectoria y el CV, unidos por `company` — la clave de este proyecto desde que
+// existe el CV. Antes se leían de la rama `trayectoria` del diccionario de la
+// home, que era una de las copias que P48.55 retiró: por eso esta página ya no
+// necesita cargar `getHome`.
 
 /** Las experiencias que tienen página, en el orden canónico. */
 const CON_PAGINA = EXPERIENCES.filter((e) => e.slug !== null);
 
-/**
- * La fila de Trayectoria de una experiencia. Une por prefijo, igual que
- * `experienceOf` y que el CV, y **lanza** si no hay match: mejor romper la build
- * que enseñar el rol de otra empresa.
- */
-function filaDe(tray: TrayectoriaDict, company: string) {
-  const hit = [...tray.producto, ...tray.nested].find(
-    (r) => r.company === company || r.company.startsWith(company),
-  );
-  if (!hit) {
-    throw new Error(
-      `Deep-dive: no encuentro la fila de "${company}" en el diccionario de Trayectoria. ` +
-        `¿Se renombró una empresa en un sitio y no en el otro?`,
-    );
-  }
-  return hit;
-}
-
 export function DeepDiveNav({
   slug,
-  tray,
+  lang,
   comun,
   hrefDe,
   disponibles,
 }: {
   slug: string;
-  tray: TrayectoriaDict;
+  lang: Locale;
   comun: TrayectoriaComunDict;
   /** Ruta de una experiencia, ya con el locale resuelto. */
   hrefDe: (slug: string) => string;
@@ -83,7 +67,7 @@ export function DeepDiveNav({
 
   const items: CloserItem[] = vecinas.flatMap(({ exp, kicker, direction }) => {
     if (!exp?.slug) return [];
-    const fila = filaDe(tray, exp.company);
+    const fila = factsOf(lang, exp.company);
     const existe = disponibles.includes(exp.slug);
     return [
       {

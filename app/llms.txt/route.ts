@@ -1,7 +1,7 @@
 import { EMAIL, LINKEDIN_URL, PHONE_TEL } from "@/lib/contact";
 import { cvPath } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
-import { shortOf } from "@/content/experience-copy";
+import { factsOf, shortOf } from "@/content/experience-copy";
 
 import esCommon from "../[lang]/dictionaries/es/common.json";
 import esHome from "../[lang]/dictionaries/es/home.json";
@@ -79,7 +79,8 @@ function trayectoriaList(): string {
   // experiencia (P48.5), que es donde vive emparejada con el bullet del CV y con
   // su gemelo del deep-dive. `llms.txt` es español y estático, así que pide el ES
   // directamente — es la misma fuente que lee la home.
-  return TRAYECTORIA.map(({ period, role, company }) => {
+  return TRAYECTORIA.map(({ company }) => {
+    const { role, period } = factsOf("es", company);
     const exitNote =
       company === "TheTool" ? " — exit, adquirida por AppRadar." : "";
     return `- ${company} — ${role} (${period}): ${shortOf("es", company)}${exitNote}`;

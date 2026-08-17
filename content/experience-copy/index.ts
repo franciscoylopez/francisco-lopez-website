@@ -60,6 +60,34 @@ export function shortOf(lang: Locale, company: string): string {
   return copyOf(lang, company).short;
 }
 
+/**
+ * Los hechos de una experiencia que se pintan en más de una superficie. Los tres
+ * consumidores —la fila de Trayectoria, los Datos del deep-dive y el CV— leen de
+ * aquí, así que **no pueden decir cosas distintas**. Mientras cada uno guardaba
+ * su copia, KUOTIP terminaba en noviembre en la home y en diciembre en su página
+ * (P48.55).
+ */
+export function factsOf(
+  lang: Locale,
+  company: string,
+): { role: string; period: string; sector: string } {
+  const { role, period, sector } = copyOf(lang, company);
+  return { role, period, sector };
+}
+
+/**
+ * El reporting en la longitud que toca. `"deep"` es la corta de los Datos y
+ * `"cv"` la larga del papel; `undefined` donde no aplica (PICKASO y las dos de
+ * Marketing & Growth).
+ */
+export function reportingOf(
+  lang: Locale,
+  company: string,
+  donde: "deep" | "cv",
+): string | undefined {
+  return copyOf(lang, company).reporting?.[donde];
+}
+
 /** Los bullets del CV, en el orden del deep-dive. */
 export function cvBullets(lang: Locale, company: string): string[] {
   return copyOf(lang, company).bullets.map((b) => b.cv);
@@ -71,6 +99,14 @@ export function cvBullets(lang: Locale, company: string): string[] {
  * el slug no está registrado, por la misma razón que `experienceOf`.
  */
 export function deepBulletsOfSlug(lang: Locale, slug: string): string[] {
+  return deepBullets(lang, companyOfSlug(slug));
+}
+
+/**
+ * La empresa a la que pertenece un slug. Lanza si no está registrado — una página
+ * de deep-dive sin experiencia detrás no es un caso que deba servirse a medias.
+ */
+export function companyOfSlug(slug: string): Company {
   const hit = EXPERIENCES.find((e) => e.slug === slug);
   if (!hit) {
     throw new Error(
@@ -80,7 +116,7 @@ export function deepBulletsOfSlug(lang: Locale, slug: string): string[] {
           .join(" · ")}`,
     );
   }
-  return deepBullets(lang, hit.company);
+  return hit.company;
 }
 
 /**

@@ -72,13 +72,50 @@ for (const { company, slug } of EXPERIENCES) {
       continue;
     }
     if (!porIdioma[lang].short?.trim()) {
-      fallo(`[${company}/${lang}] la frase de Trayectoria (\`short\`) está vacía.`);
+      fallo(
+        `[${company}/${lang}] la frase de Trayectoria (\`short\`) está vacía.`,
+      );
     }
     if (porIdioma[lang].bullets.length === 0) {
       fallo(`[${company}/${lang}] no tiene ningún bullet.`);
     }
+    // Los hechos que se pintan en más de una superficie (P48.55). `sector` puede
+    // ser vacío —Havas Media no tiene—, los otros dos no.
+    for (const campo of ["role", "period"] as const) {
+      if (!porIdioma[lang][campo]?.trim()) {
+        fallo(`[${company}/${lang}] le falta \`${campo}\`.`);
+      }
+    }
+    // El reporting sigue la misma regla que la versión larga de un bullet: lo
+    // lleva quien tiene página, porque es quien pinta los Datos.
+    const rep = porIdioma[lang].reporting;
+    if (slug !== null && !rep?.deep?.trim()) {
+      fallo(
+        `[${company}/${lang}] tiene página (/trayectoria/${slug}) pero no tiene \`reporting.deep\`, que es lo que pintan sus Datos.`,
+      );
+    }
+    if (slug === null && rep !== undefined) {
+      fallo(
+        `[${company}/${lang}] tiene \`reporting\` pero no tiene página de deep-dive ni lo lleva en el CV. Ese texto no lo renderiza nadie.`,
+      );
+    }
   }
   if (locales.some((l) => !porIdioma[l as Locale])) continue;
+
+  // 0 · El rol NO se traduce en este sitio («Product Manager», «Cofounder &
+  // Product»), así que si ES y EN divergen es una errata, no una traducción. El
+  // periodo SÍ se traduce («Actualidad»/«Present»), así que ese no se compara.
+  const [a0, b0] = locales as unknown as [Locale, Locale];
+  if (
+    porIdioma[a0] &&
+    porIdioma[b0] &&
+    porIdioma[a0].role !== porIdioma[b0].role
+  ) {
+    fallo(
+      `[${company}] el rol difiere entre idiomas: ${a0}="${porIdioma[a0].role}" y ${b0}="${porIdioma[b0].role}". ` +
+        `Los roles de este sitio no se traducen.`,
+    );
+  }
 
   // 1 · Cobertura entre idiomas.
   const [a, b] = locales as unknown as [Locale, Locale];

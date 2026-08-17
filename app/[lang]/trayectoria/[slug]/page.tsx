@@ -11,7 +11,6 @@ import {
   experienceSlugs,
   getCommon,
   getExperience,
-  getHome,
   getTrayectoriaComun,
 } from "../../dictionaries";
 
@@ -61,14 +60,13 @@ export default async function ExperiencePage({ params }: Params) {
   const dict = getExperience(lang, slug);
   if (!dict) notFound();
 
-  // `getHome` no es un descuido: el cierre de la página enseña el rol y el
-  // periodo de las experiencias vecinas, y esos viven en la rama `trayectoria`
-  // del diccionario de la home, que es quien los pinta. Cargarla aquí cuesta un
-  // parseo en build y evita una cuarta copia del mismo hecho (ver `DeepDiveNav`).
-  const [common, comun, home, t] = await Promise.all([
+  // Ya no hace falta `getHome`: el rol y el periodo de las vecinas los da el
+  // registro por experiencia (P48.55), que es la fuente única de esos hechos
+  // desde que dejaron de escribirse en tres sitios. Esta página se ahorra el
+  // parseo del diccionario de la home en build.
+  const [common, comun, t] = await Promise.all([
     getCommon(lang),
     getTrayectoriaComun(lang),
-    getHome(lang),
     dict,
   ]);
 
@@ -90,7 +88,7 @@ export default async function ExperiencePage({ params }: Params) {
       />
       <DeepDiveNav
         slug={slug}
-        tray={home.trayectoria}
+        lang={lang}
         comun={comun}
         hrefDe={(s) => pagePath(lang, `${BASE}/${s}`)}
         disponibles={experienceSlugs}
