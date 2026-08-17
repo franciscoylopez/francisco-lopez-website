@@ -11,7 +11,7 @@
     "periodo": "Feb 2024 — Dec 2024",
     "sector": "Customer Reviews",
     "tamano": "4 people",
-    "reporting": "Co-founder, 1 of 3 partners · full vote"
+    "reporting": "Co-founder, 1 of 3 partners"
   },
   "minuto": {
     "title": "Validating both sides before building anything",
@@ -38,9 +38,15 @@
         "paras": [
           "**That you are you.** We partnered with a voice recognition company that identified people unambiguously and left a real signature. That blocked multiple accounts from the same person and helped detect anomalous behaviour.",
           "**That reviews are actually useful.** What good are 5,000 reviews if the user only reads the last ten? AI helped a lot there: summaries of all of them and sentiment classification about the brand. And once that worked, the possibilities opened up on their own — being able to **talk** to the reviews, spot patterns, «this product is for you if…».",
-          "**That they do not look twenty years old.** We had tackled two problems and the look was still the same five-to-one star chart with the occasional low-quality photo. The third path was to bring the weight of social and micro-influencers into reviews, and make it **last**: a B2B2C block where brands ran product trial campaigns with a base of micro-influencers who gave their honest opinion in visually rich reviews.",
+          "**That they do not look twenty years old.** We had tackled two problems and the look was still the same five-to-one star chart with the occasional low-quality photo. The third path was to bring the weight of social and micro-influencers into reviews, and make it **last**: a B2B2C block where brands ran product trial campaigns with a base of micro-influencers who gave their honest opinion in visually rich reviews."
+        ],
+        "cierre": [
           "Identity verification + content that helps + a current format. With those three pieces we had the base to change a broken industry where brands invest large budgets, so we hired a product designer and an external development team led by our CTO, set up two-week sprints with clear milestones, and went out to raise."
-        ]
+        ],
+        "imagen": {
+          "src": "/img/kuotip-dashboard.webp",
+          "alt": "KUOTIP dashboard: last month's review count, average rating and verification rate; below, the star distribution, the monthly trend of the three metrics, and the status of product campaigns with micro-influencers."
+        }
       },
       {
         "title": "The year we gave ourselves",
