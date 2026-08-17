@@ -341,7 +341,26 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    subapartados son libres, porque si no, una experiencia de tres meses de hace cuatro años sale
    con secciones medio vacías al lado de una de cinco años. Detalle en `PRD-Historical.md` §42.
 
-   **Las cinco páginas están montadas y revisadas en pantalla** (2026-08-17). Además del texto,
+   **Las cinco páginas están montadas, revisadas por Francisco y con el gate de accesibilidad
+   pasado** (2026-08-17). La segunda pasada cerró el diseño: la **apertura ocupa el pliegue**
+   —hasta entonces, en cuanto la ventana pasaba de ~700px de alto asomaba la sección siguiente y
+   la primera vista dejaba de ser una portada (D56)—, «En un minuto» y «Aprendizajes» bajan a
+   media columna por ser la entrada y el cierre, y **Trayectoria enlaza por fin a los cinco deep-
+   dives**: el rol es el enlace, decidido viendo las dos alternativas servidas, y asumiendo que
+   PICKASO queda como la única fila sin enlace de su grupo. El **gate (D52), disparado dos
+   veces**, da 0 violaciones de axe en home y las cinco páginas × dos temas, la segunda sección
+   por debajo del pliegue en los cuatro viewports sin recortar nada, y el par nuevo del enlace en
+   AAA (7,93/8,36 en hover) por reutilizar pares ya verificados.
+
+   **Y dos afirmaciones publicadas quedaron señaladas como sin respaldo**, que es el saldo honesto
+   de la sesión: la regla del **control sobre imagen** promete «siempre pasa uno de los dos
+   bordes» y con un metro más estricto —el peor de 144 ángulos del perímetro— no se sostiene
+   (D55, aviso); y **el censo de contraste dejó de ver los hover** —encuentra 0 reglas donde hay
+   21, porque desde CSS Nesting toda regla expone `cssRules`—, así que la mitad «y en hover» de
+   §5 está hoy sin medición. Ninguna de las dos es un incumplimiento conocido; las dos están
+   tareadas (P50.35 y P50.36) y anotadas en `BRAND.md` donde vive la regla.
+
+   **Lo anterior, del primer montaje (2026-08-17).** Además del texto,
    dos experiencias enseñan algo que no es prosa: **KUOTIP su dashboard** —al lado del párrafo que
    afirma que las reseñas «parecían de hace veinte años», porque una captura de producto se
    reconoce y no se lee— y **INDYA y TheTool un vídeo incrustado**. El vídeo entra por la regla de

@@ -2688,3 +2688,85 @@ arriba y abajo.
 **Coste de contenido que se asume.** El póster de INDYA lleva «PAU GASOL SE UNE A INDYA» quemado
 en español, y el vídeo también lo es. En la página inglesa el `title` lo avisa, pero el fotograma
 seguirá en español — coherente con la regla del artefacto (se enseña como se entregó, D54).
+
+**AVISO FECHADO (2026-08-17, gate de cierre de P48): la promesa de arriba depende del metro, y
+con un metro más estricto no se sostiene.** Las cifras de la tabla se muestrean en puntos
+concretos del perímetro (225° y sus vecinos). Volviendo a medir con el **peor de 144 ángulos**
+—barriendo el perímetro entero— ningún borde externo llega a 3:1 en ninguna de las dos páginas:
+anillo↔póster **1,49 claro / 1,66 oscuro** en INDYA y **1,00 / 2,02** en TheTool; disco↔póster
+**2,46 / 1,83** y **2,84 / 1,08**. Lo que sí se reproduce exacto es el borde **interno**:
+**7,93 / 8,36**, porque es un par de tokens y no depende del póster.
+
+No es que una medición desmienta a la otra: **miden cosas distintas**, y la pregunta abierta es
+cuál es la autoritativa. WCAG 1.4.11 no exige que pase cada punto del contorno, sino que el
+componente **se distinga** —y con un borde interno a 7,93 se distingue—, así que probablemente no
+hay incumplimiento; lo que hay es una regla publicada que promete «siempre pasa uno de los dos
+bordes» y describe una garantía que el componente no da en el peor punto.
+
+Y aparece un estado que esta decisión no midió: **en `:hover` el velo se apaga entero**
+(`.video-facade:hover::after { opacity: 0 }`), así que el momento en que el fondo es más hostil
+es justo el que el 0,35 no cubre. **Tarea abierta P50.35**, con las tres decisiones en orden
+—corregir la afirmación, corregir el componente, o recalibrar contra el peor póster y los dos
+estados—. *Nota de geometría para quien la retome: en hover el disco escala 1,08, así que
+muestrear con el radio de reposo cae DENTRO del disco y devuelve `disco↔anillo = 1,00` — el mismo
+fallo que la lección 2 de arriba, en su segunda visita.*
+
+---
+
+## D56 · La apertura ocupa el pliegue, y `mx-auto` deja de significar lo que significaba — 2026-08-17
+
+**Contexto.** Revisando las cinco páginas del deep-dive servidas, en cuanto la ventana pasa de
+unos 700px de alto asomaban por debajo de la apertura el rótulo de «01 — En un minuto» y su primer
+bullet. La primera vista dejaba de ser una portada para ser portada más principio de otra sección
+— «exceso de texto», en la lectura de Francisco, y tenía razón: el problema no era el contenido,
+era que dos unidades de lectura compartían pliegue.
+
+**La aritmética, que es la mitad del porqué.** El bloque de apertura del deep-dive termina
+**siempre en 537px**: es tipográfico —eyebrow, h1 a dos líneas con `max-w-[20ch]`, y el `<dl>` de
+Datos— y no depende del ancho. Así que lo que sobra crece con el alto de la ventana y solo con
+él: **203px a 1536×740, 543 a 1920×1080 y 903 a 2560×1440**. Es el mismo eje de D50 —el **alto**,
+no el ancho— llegando por la puerta contraria: allí faltaba sitio, aquí sobra.
+
+**La decisión.** `md:min-h-[calc(100svh-5rem)]` en el contenedor de la apertura, con el grupo
+titular+datos centrado (`my-auto`) en el hueco que deja el breadcrumb.
+
+- **La constante no es nueva.** `5rem` y el guard `md:` son los que ya usa el hero de la home
+  (`components/site/hero.tsx`), que es el precedente del que sale esto. Inventar otra habría
+  puesto dos alturas de nav en el código, que es el olor de D38.
+- **Es `min-h` y no `h`, y eso es lo que lo hace seguro.** En una ventana baja —1280×618, que es
+  un 1920 con el escalado de Windows al 150%— el contenido natural ya no cabe, la regla no aplica
+  y por tanto **no puede recortar nada**. D50 al revés: allí un alto proporcional se comía el
+  contenido; aquí solo puede añadir aire por debajo. Verificado: margen real de 43-54px en las
+  cinco páginas a 1280×618.
+- **Centrado y no anclado abajo, y esto se decidió viéndolo.** El primer montaje anclaba los Datos
+  al borde inferior (`mt-auto`). Sobre el papel era mejor —conserva la composición del portátil y
+  el aire crece entre titular y datos—; en pantalla, a 1920×1080 deja **~550px de vacío seguido**
+  que no se lee como una portada que respira sino como un agujero. Centrado, ese aire se reparte
+  arriba y abajo del grupo y la composición aguanta de 618 a 1440px de alto.
+
+**Y la trampa, que es la parte reutilizable.** Al volver **flex** el contenedor, el `mx-auto` del
+`WRAP` **cambia de significado**: deja de ser «centra una caja de ancho completo» y pasa a ser un
+margen automático del eje transversal, que **por especificación desactiva el `stretch`**. Sin
+estirado, la caja se encoge a su contenido —**1.138px medidos a 1.530 de ventana, en vez de
+1.360**— y `mx-auto` la centra ahí, desalineada del nav, que sigue en 85. Se arregla declarando
+`w-full`, para que vuelva a mandar el `max-w` del propio `WRAP`.
+
+Lo que hay que llevarse no es el `w-full`: es que **una regla de layout puede cambiar de
+significado por el contexto de su padre sin dar un solo error de compilación**, y por tanto no se
+detecta leyendo el diff. Lo vio Francisco mirando la página, con el breadcrumb desplazado 111px.
+Es el punto 5 de `BRAND.md` §Cómo medir sin equivocarse —«verifica la clase, no solo el color»—
+aplicado a la maquetación.
+
+**De paso, dos secciones cambian de ancho.** «En un minuto» y «Aprendizajes» pasan a `PROSE`. El
+cuerpo del deep-dive va a ancho de contenedor por decisión anterior, pero estas dos no son cuerpo:
+son la **entrada** y el **cierre**, que es el tratamiento que aquella decisión ya les reservaba. Y
+son **listas**: a 1.280px la viñeta y el final de línea quedan demasiado lejos para que la lista
+se lea como lista. La prosa aguanta el ancho porque tiene líneas seguidas que arrastran la vista;
+un párrafo por punto, no.
+
+**Verificado con el gate (D52) en su segundo disparo**: la segunda sección arranca justo bajo el
+borde en 1920×1080, 1536×740 y 1280×618, sin recortar nada; nav y contenido alineados en los
+cuatro viewports; `PROSE` no desborda a 390px; **0 violaciones de axe** en home y las cinco
+páginas, en los dos temas. **Pendiente de llevarlo a Brand Kit, Design System, Accesibilidad y
+Cookies** (tarea P59.5) — y ahí no se aplica a ciegas: sus aperturas son de alto **variable**,
+así que hay que medir cada una.
