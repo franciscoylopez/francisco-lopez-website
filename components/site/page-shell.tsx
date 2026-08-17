@@ -43,7 +43,24 @@ type PageShellProps = {
   dict: ShellDict;
   lang: Locale;
   children: ReactNode;
-} & ({ crumb: string; jsonLd?: never } | { crumb?: never; jsonLd: object });
+} & (
+  | {
+      crumb: string;
+      /**
+       * Niveles INTERMEDIOS entre la home y el actual, con su URL absoluta. Hoy
+       * solo las páginas del deep-dive, que son las primeras de tres niveles
+       * (Inicio › Trayectoria › Empresa): el resto de internas cuelgan de la raíz.
+       *
+       * Va aquí y no en cada página porque el breadcrumb VISIBLE y el
+       * `BreadcrumbList` tienen que decir lo mismo, y son dos listas distintas
+       * escritas en dos sitios. Cuando el shell deriva una de la otra, no pueden
+       * divergir; el ancestro que se olvide en el JSON-LD no lo ve nadie.
+       */
+      parents?: { name: string; url: string }[];
+      jsonLd?: never;
+    }
+  | { crumb?: never; parents?: never; jsonLd: object }
+);
 
 export function PageShell(props: PageShellProps) {
   const { dict, lang, children } = props;
@@ -53,6 +70,7 @@ export function PageShell(props: PageShellProps) {
       ? props.jsonLd
       : breadcrumbLd([
           { name: dict.breadcrumb.home, url: homeUrl(lang) },
+          ...(props.parents ?? []),
           { name: props.crumb },
         ]);
 

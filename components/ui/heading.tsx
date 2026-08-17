@@ -72,6 +72,15 @@ export const titleVariants = cva("font-display m-0 font-semibold", {
        */
       "section-sm":
         "text-[clamp(2rem,4vw,3.25rem)] leading-[1.05] tracking-[-0.02em]",
+      /**
+       * h3: el subapartado DENTRO de una sección. Nace con «La historia» del
+       * deep-dive (P48), que es la primera sección del sitio con jerarquía de tres
+       * niveles: sus subapartados son libres y cambian de una experiencia a otra
+       * (PRD-Historical §42), así que no podían ser `section-sm` —que abre una
+       * sección— ni un `<p>` en negrita, que no es un encabezado y rompería la
+       * jerarquía del punto 4 del checklist.
+       */
+      sub: "text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.25] tracking-[-0.015em]",
     },
   },
   defaultVariants: { size: "section" },
@@ -87,6 +96,7 @@ export const EYEBROW_GAP = {
   "page-sm": "mb-5",
   section: "mb-3",
   "section-sm": "mb-3",
+  sub: "mb-2",
 } as const;
 
 /**
@@ -126,6 +136,7 @@ export const LEAD_GAP = {
   "page-sm": "mb-4",
   section: "mb-[1.4rem]",
   "section-sm": "mb-4",
+  sub: "mb-3",
 } as const;
 
 type Size = NonNullable<VariantProps<typeof titleVariants>["size"]>;
@@ -141,8 +152,13 @@ export function SectionHeader({
 }: {
   eyebrow?: ReactNode;
   title: ReactNode;
-  /** `1` para el h1 de una página, `2` para el que abre una sección. */
-  level?: 1 | 2;
+  /**
+   * `1` para el h1 de una página, `2` para el que abre una sección, `3` para el
+   * subapartado dentro de ella. El nivel es SEMÁNTICA y `size` es aspecto: van
+   * juntos casi siempre, pero separarlos es lo que permite que la jerarquía del
+   * DOM no dependa de cuánto mide el texto (punto 4 del checklist).
+   */
+  level?: 1 | 2 | 3;
   size?: Size;
   /**
    * Marca la cabecera como objetivo del island de motion. Va en los DOS elementos,
@@ -158,7 +174,7 @@ export function SectionHeader({
    */
   children?: ReactNode;
 }) {
-  const Title = level === 1 ? "h1" : "h2";
+  const Title = `h${level}` as const;
 
   return (
     <>

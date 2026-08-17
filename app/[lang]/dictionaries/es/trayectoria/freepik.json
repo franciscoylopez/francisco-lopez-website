@@ -1,0 +1,76 @@
+{
+  "meta": {
+    "title": "Freepik — No se elige una empresa, se elige un squad",
+    "description": "Tres meses en el squad de contributors de Freepik: investigación sin analítica de producto, rediseño de un registro donde el 75% desistía, y por qué el encaje pesa más que el nombre."
+  },
+  "crumb": "Freepik",
+  "eyebrow": "Freepik · SaaS B2C · UGC",
+  "title": "No se elige una empresa, se elige un squad",
+  "datos": {
+    "rol": "Product Manager",
+    "periodo": "Oct 2021 — Dic 2021",
+    "sector": "SaaS B2C · UGC",
+    "tamano": "~400 personas",
+    "reporting": "Head of Product"
+  },
+  "minuto": {
+    "title": "Tres meses en el squad de contributors",
+    "items": [
+      "**Investigación y definición de funcionalidades para el área de contributors**, con análisis cualitativo y cuantitativo. La herramienta de analítica de producto se estaba eligiendo justo entonces, así que la evidencia salió de encuestas, entrevistas y el discovery del trimestre anterior.",
+      "**Rediseño del registro y el onboarding del contributor**, donde el **75% desistía o se quedaba bloqueado**: flujo simplificado y una secuencia de emails que acompaña cada paso hasta la aprobación del perfil.",
+      "**Gestión de los OKR del squad** — el primer sistema de objetivos trimestrales con el que trabajé de forma reglada, y en una empresa que se los tomaba en serio."
+    ]
+  },
+  "historia": {
+    "title": "Tres meses que empiezan un año antes",
+    "bloques": [
+      {
+        "title": "Ordenar la cabeza antes del siguiente reto",
+        "paras": [
+          "Salí de TheTool después de cinco años: mi primer proyecto de producto, empezado desde cero y recorrido entero hasta la venta. Quería un reto nuevo, pero antes quería ordenar la cabeza — había aprendido media década por necesidad y sobre la marcha, sin contrastar casi nada.",
+          "Así que me formé de forma reglada, y en ese orden. Primero agilidad: un máster en Scrum con TheUncoding, con las certificaciones de Product Owner y Scrum Master, porque era el marco dentro del que iba a trabajar en cualquier sitio. Después producto, con el programa de Product Management de The Hero Camp. Lo que me llevé no fue tanto lo nuevo como el nombre y el porqué de cosas que ya había hecho en TheTool sin saber que se llamaban así. Antes de terminar el curso apareció Freepik."
+        ]
+      },
+      {
+        "title": "Por qué Freepik y por qué contributors",
+        "paras": [
+          "Freepik era lo contrario de lo que venía de hacer: unas 400 personas, un producto con años de recorrido, unos resultados que la pandemia había catapultado y un equipo de producto que estaba reorganizándose y creciendo. Sobre el papel era justo lo que buscaba — proyecto grande, mucho dato y, por primera vez, otros PM con los que debatir y alinearme.",
+          "Aterricé en el squad de **contributors**: el área que consigue los recursos gráficos de freelances y creadores individuales de todo el mundo. Es media ecuación de un marketplace de contenido, y hasta entonces había crecido de forma orgánica."
+        ]
+      },
+      {
+        "title": "Sin analítica de producto, con mucha gente a la que preguntar",
+        "paras": [
+          "La herramienta de analítica de producto se estaba eligiendo en ese momento, así que la evidencia había que buscarla en otra parte. Reconstruí el discovery del trimestre anterior —encuestas, entrevistas y datos internos—, que era la base con la que iba a definir y gestionar los OKR del primer trimestre, y me sumé a la encuesta de fin de año que Freepik lanzaba a sus contributors.",
+          "Ahí aprendí lo que cambia el volumen. Una encuesta en Freepik devuelve cientos de respuestas en pocos días, y ninguna escueta: es una ventaja enorme y, a la vez, un trabajo de análisis que no se parece en nada a leer quince entrevistas.",
+          "De todo aquello salió la primera iniciativa, que además coincidía con la prueba técnica que había hecho para entrar: **el 75% de los contributors desistía o se quedaba bloqueado en el registro**. Rediseñamos el flujo, simplificamos el proceso y montamos una secuencia de emails que acompañaba cada paso, con dos objetivos — bajar ese 75% y reducir el tiempo hasta la aprobación del perfil."
+        ]
+      },
+      {
+        "title": "Por qué duraron tres meses",
+        "paras": [
+          "A los tres meses tenía dudas: poca producción, poco impacto y muchas reuniones con gente que, en muchos casos, estaba recién aterrizada como yo. Probablemente fuera lo normal en un scaleup en hipercrecimiento reorganizando su equipo de producto. Pero yo no estaba aportando valor ni recibiéndolo, y esa no es mi forma de trabajar.",
+          "En ese momento apareció INDYA, un proyecto mucho más pequeño con la ambición de ser la mejor app de nutrición del mercado. **Lo que me dijo que era el momento de moverme no fue la oferta: fue lo poco que me costó decidirme.**",
+          "Nada que reprochar a Freepik. Llegué en el momento equivocado al squad equivocado, y eso se confirmó después: el área de contributors no tuvo continuidad y sus objetivos se reenfocaron hacia la adquisición de empresas de recursos gráficos."
+        ]
+      }
+    ]
+  },
+  "aprendizajes": {
+    "title": "Tres cosas que me llevo de tres meses",
+    "items": [
+      {
+        "title": "No se elige una empresa, se elige un squad.",
+        "text": "Freepik era una gran empresa y aun así no era mi sitio. En qué área entras, qué objetivos tiene y cuánta continuidad se le ve pesan más que el nombre — y son justo lo que no se mira cuando el nombre impresiona."
+      },
+      {
+        "title": "El volumen cambia el método, no solo la muestra.",
+        "text": "Cientos de respuestas largas en pocos días son una ventaja que casi ningún proyecto tiene, pero piden otra forma de analizar: con quince entrevistas lees; con cuatrocientas respuestas, categorizas antes de leer."
+      },
+      {
+        "title": "Un sistema de OKR bien hecho se reconoce en cuanto lo ves.",
+        "text": "Fue el primer sitio donde los encontré tomados en serio y bien estructurados, y la diferencia con un sistema de objetivos de adorno es que estos se usan para decir que no."
+      }
+    ]
+  }
+}
