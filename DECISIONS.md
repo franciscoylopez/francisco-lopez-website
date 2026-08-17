@@ -2423,6 +2423,32 @@ la **misma rama del diccionario que los pinta en Trayectoria**, unidos por `comp
 en el diccionario del deep-dive habría sido la cuarta copia del mismo hecho — justo lo que P48.5
 está abierta para arreglar.
 
+### Ampliación (2026-08-17) — el bloque de historia aprende a llevar media, y el corte es de contenido
+
+Al montar KUOTIP e INDYA, el bloque de «La historia» gana **tres campos opcionales**: `imagen`
+(captura de producto), `video` (clip de terceros, D55) y `cierre`. Ninguna experiencia los lleva
+por omisión, que es lo que mantiene la plantilla única.
+
+**`imagen` va AL LADO del texto y no debajo, y el criterio no es de gusto.** Debajo, a ancho de
+contenedor, la captura mide 1.280px y se lee entera —es lo que hace el artefacto de Emendu, que
+incluso scrollea antes que encogerse—. Pero **un artefacto hay que LEERLO nodo a nodo y una
+captura de producto hay que RECONOCERLA**: a 544px se pierde la letra pequeña del dashboard y
+siguen legibles el nombre, la navegación y las tres cifras grandes, que es lo que la imagen viene
+a decir. Y decide el contexto: va pegada al párrafo que afirma que las reseñas «seguían
+pareciendo de hace veinte años», así que al lado la afirmación y su prueba se leen a la vez.
+
+**`cierre` es la parte reutilizable.** Saca del grid los párrafos que corren a ancho de página por
+debajo de la media, y el corte es **explícito y no «el último párrafo»** porque no es una regla de
+maquetación sino **de contenido**: `paras` es lo que la imagen ilustra —las tres piezas— y `cierre`
+es lo que viene DESPUÉS de haberlas enumerado. Sin ese corte, la columna de texto se alarga por
+debajo de la imagen y centrarla en vertical deja de significar nada. Mismo vocabulario que
+`caso.cierre`, que hace exactamente esto detrás del artefacto y de los resultados.
+
+**El orden del DOM es texto → media en los dos breakpoints**, así que el orden de lectura no
+depende del grid (punto 4 del checklist). El detalle en morado —panel `-soft` desplazado por
+detrás del marco, `aria-hidden`, retirado en móvil— es el gesto que ya enmarca las fotos de Sobre
+mí, y es morado y no cian porque **el cian es el color de acción y ahí no hay nada que pulsar**.
+
 ---
 
 ## D54 · Un artefacto se enseña, no se recrea: el diagrama real, saneado y en línea — 2026-08-17
@@ -2502,3 +2528,137 @@ exportó del diagrama original y no del sanitizado que hay en el `.mmd`, donde e
 `BAJA_PROVEEDOR_MDM`. Francisco lo revisó y decidió que entra igual —el nombre está mal escrito y
 no es el del proveedor—, así que la sanitización queda como pendiente de reexport y no como
 bloqueo.
+
+### Ampliación (2026-08-17) — el traductor tenía huecos, y la lista de conocidos falla en silencio
+
+El punto 3 de arriba decía que la paleta en hex fijo «se remapea a tokens». **Era cierto para los
+hex largos de Mermaid y falso para el resto.** Al mirar el diagrama servido en **tema oscuro** —no
+al leer el código— aparecían **cinco rectángulos blancos**: los cuerpos de los clusters. En el
+archivo publicado quedaban **17 declaraciones de color literal**: `fill:#333` en forma corta (la
+tabla mapeaba solo `#333333`), tres `fill:white`, dos `fill:black`, cuatro `rgba(232,232,232,.8)`
+de las pastillas de arista y hasta un `color:red`, que es con el que Mermaid marca una etiqueta
+que no ha sabido resolver.
+
+No lo cazó nada de lo que había: **ni el typecheck, ni el linter, ni `gate:html`** —el HTML era
+idéntico; el que estaba mal era el color— **ni el gate de accesibilidad**, porque el texto sobre
+los slabs se leía sin problema. Lo que fallaba no era el contraste: era que el modo oscuro, que
+es obligatorio, no se aplicaba.
+
+**Lo que se corrige, y el criterio de cada mapeo:**
+
+- **`white` → `var(--card)`, no `var(--background)`.** El «blanco» de Mermaid es su **lienzo**, y
+  aquí el lienzo es el panel que envuelve al diagrama, que se pinta `bg-card`. Lo que Mermaid
+  deja en blanco —cuerpo del cluster, hueco del estado final, estado compuesto— son **huecos**,
+  no superficies nuevas. El relleno de NODO se queda en `--background`, un peldaño por debajo del
+  panel en los dos temas, que es lo que hace que la caja se vea.
+- **`rgba(232,232,232,.8)` → `var(--muted)`, no `--card`.** Esa pastilla existe para tapar la
+  flecha que pasa por detrás del texto; fundida con el lienzo dejaría de hacer su único trabajo.
+- **`black`, `red`, `#333` → `var(--foreground)`**; y las `filter:drop-shadow(… rgba(185,185,185) …)`
+  del tema `neo` se retiran igual que ya se retiraban las del atributo — hoy están inertes, pero
+  un artefacto que use `neo` las heredaría.
+
+**Y la parte que importa: el guardián.** Ampliar la tabla arregla este archivo y no el siguiente.
+Una **lista de colores conocidos falla en silencio**, que es exactamente lo que pasó. Así que el
+script ya no comprueba que los conocidos cuadren, sino que **no queda NINGÚN literal**: cualquier
+`fill`/`stroke`/`color`/`background-color`/`flood-color`/`stop-color` cuyo valor no sea
+`var(--…)`, `none`, `transparent` o `currentColor` **aborta la generación** con la lista y no
+escribe el archivo. Es el mismo giro que D38 le dio al guardián de la paleta: **buscar la
+ausencia, no comprobar las copias conocidas.**
+
+*Validado disparándolo* (la regla 3 de `BRAND.md`): con `fill:#ff00aa` y `color:rebeccapurple`
+inyectados, sale con código 1, los lista y no escribe. También caza un remapeo a medias — con
+`#9370DBff` deja `var(--brand-cyan)ff`, que tampoco pasa el permitido.
+
+**Consecuencia operativa que conviene saber:** el **export crudo de `mermaid.live` no está en el
+repo**, solo su resultado. La regeneración se hizo pasando el propio SVG saneado por el traductor,
+que es idempotente para los pasos ya aplicados (mismo `viewBox`, diff de una línea dentro del
+`<style>`). Funciona, pero deja la entrada del traductor sin versionar: **queda por decidir si el
+export crudo debe guardarse** cuando llegue el segundo artefacto.
+
+---
+
+## D55 · Un vídeo de terceros entra con facade, y el clic es el gate — 2026-08-17
+
+**Contexto.** §43 decidió primero que el vídeo vive fuera del sitio, y al día siguiente se afinó:
+**un vídeo sí puede ir dentro si es PRUEBA y no resumen.** Un vídeo-resumen del deep-dive
+*sustituye* la lectura y compite con «En un minuto», que es la pieza diseñada para ese trabajo
+exacto; un clip de terceros dentro de la narración hace lo contrario — es evidencia, dura
+segundos y no sustituye a nada. **Lo que decide no es el formato, es qué trabajo hace el vídeo en
+la página.** Con ese criterio entran dos: la entrada de Pau Gasol en el accionariado de INDYA y
+el vídeo de producto de TheTool.
+
+**Decisión: `components/ui/video-embed.tsx`, con facade y sin nada de terceros hasta el clic.**
+
+- **Facade.** Hasta que alguien pulsa **no hay iframe en el DOM**, ni JS de YouTube, ni una sola
+  petición a Google. Verificado sobre el HTML servido de las dos páginas: cero `<iframe>`; la
+  única aparición de «youtube» es el texto del pie. El reproductor son cientos de KB antes de que
+  nadie decida verlo; con el facade se pagan ~40 KB de póster y nada más.
+- **El póster se auto-hospeda.** Tirar del thumbnail de `i.ytimg.com` haría **justo la petición a
+  un tercero que el facade viene a evitar**, y encima obligaría a ampliar `img-src`. Se descarga
+  una vez, se convierte a WebP y se versiona en `public/img/`.
+- **CSP: `frame-src` suma `https://www.youtube-nocookie.com`.** Es **la segunda ampliación de la
+  CSP desde Clarity** (D32) y con su mismo criterio: el origen exacto que hace falta, nunca el
+  comodín. Y es `-nocookie` y no `youtube.com` por una diferencia que no es cosmética: el dominio
+  normal escribe cookies publicitarias en cuanto se pinta el iframe.
+- **El clic ES el gate de consentimiento**, y no se cuelga de una categoría de `lib/consent.ts`.
+  Antes del clic no hay nada que consentir —ningún almacenamiento, ninguna petición—, y el clic
+  es un acto explícito e informado porque el pie dice qué va a pasar al pulsar. **Es más estricto
+  que gatearlo por categoría, no menos: quien acepte todas las cookies tampoco carga YouTube sin
+  pulsar.**
+- **Línea en la política de cookies** (D18): sección propia, **fuera de la tabla**. No tiene
+  nombre, ni proveedor activo, ni duración mientras nadie lo reproduzca, así que meterlo en la
+  rejilla obligaría a inventarse las tres columnas.
+- **`title` en el iframe** —es lo único que un lector de pantalla tiene para saber qué hay dentro
+  del marco— y `aria-label` en el botón. El póster va con `alt=""` porque el botón ya está
+  nombrado: repetirlo lo anunciaría dos veces.
+
+**Y el fallo que solo se veía mirándolo: el disco de play desaparecía.** El póster de TheTool es
+el teal de su marca, casi el cian del sitio. Medido sobre píxeles pintados, el disco daba **2,81
+en oscuro y 2,59 en claro** contra él — por debajo del **3:1 que WCAG 1.4.11 pide a un
+componente**. No lo ve axe (no evalúa contraste de gráficos), no lo ve el typecheck y no lo ve
+`gate:html`.
+
+*Un control de color FIJO sobre un fondo ARBITRARIO no puede garantizar el umbral.* Es D41 otra
+vez, pero con el fondo fuera del sistema de tokens: ahí no hay un token que ajustar. Se resuelve
+con **dos piezas, y ninguna sobra**:
+
+1. **Velo sobre el póster, de `--background` y nunca negro.** Un velo negro arregla oscuro y
+   **empeora claro** (1,45 → 1,05), porque acerca el póster al cian oscuro del tema claro. El del
+   fondo sirve porque **oscurece en oscuro y aclara en claro**: aleja el póster del disco en los
+   dos temas. El **0,35 está medido, no elegido** — 0,25 falla en claro (2,85) y 0,30 se queda
+   justo en 3,00, sin holgura.
+2. **Anillo de `--primary-foreground` en el disco**, porque el velo solo no cubre cualquier
+   póster. Con el control de **dos tonos** siempre hay un borde que pasa, aunque cambie cuál:
+
+   | página | tema | disco/póster | anillo/póster | anillo/disco |
+   |---|---|---|---|---|
+   | TheTool | oscuro | **3,50** | 2,39 | 8,36 |
+   | TheTool | claro | **3,22** | 2,46 | 7,93 |
+   | INDYA | oscuro | 2,73 | **3,06** | 8,36 |
+   | INDYA | claro | **3,97** | 2,00 | 7,93 |
+
+   El de INDYA en oscuro **lo salva el anillo y no el disco**: su póster es un tono piel/madera de
+   luminancia media, justo la zona donde el cian claro del tema oscuro se le acerca. Ese caso es
+   la razón de que el anillo exista. El borde interno anillo/disco es **8,36 / 7,93 siempre**,
+   porque es un par de tokens del sistema y no depende de lo que haya detrás. La regla en presente
+   está en `BRAND.md` §Un control sobre una imagen; el porqué fechado, en `BRAND-historical.md`.
+
+**Dos lecciones de método, las dos de la misma familia.** *(Regla 3 de `BRAND.md`: valida el
+metro antes de creerte el hallazgo.)*
+
+1. **El modelo aritmético daba 3,56 donde la pantalla daba 2,81.** El modelo partía de un teal
+   muestreado en otro punto del póster. Las cifras publicadas son las de los píxeles pintados, y
+   **sustituidas**, no anotadas al pie (regla 6).
+2. **El primer muestreo del anillo caía sobre el triángulo** y daba `anillo/disco = 1,01`, que es
+   imposible. Se corrigió muestreando en polares a 225° —fuera del glifo, que va centrado y 3px a
+   la derecha— y **detectando el anillo por barrido radial** en vez de a un radio fijo, porque
+   `getBoundingClientRect` **no incluye el `box-shadow`**. La señal de que el metro quedó
+   calibrado: el anillo sale exactamente `--primary-foreground` en los dos temas.
+
+**El póster de TheTool venía con bandas de letterbox**, y se recortaron **midiendo filas y no a
+ojo**: el fotograma útil es 640×336 (1,9:1), no 16:9. Un recorte «de 60px» dejaba 12px de negro
+arriba y abajo.
+
+**Coste de contenido que se asume.** El póster de INDYA lleva «PAU GASOL SE UNE A INDYA» quemado
+en español, y el vídeo también lo es. En la página inglesa el `title` lo avisa, pero el fotograma
+seguirá en español — coherente con la regla del artefacto (se enseña como se entregó, D54).

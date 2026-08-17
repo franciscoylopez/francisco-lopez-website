@@ -1549,6 +1549,56 @@ código habría visto.*
 
 ---
 
+## 46. La primera pasada de Francisco sobre las cinco páginas montadas (2026-08-17)
+
+Sesión de revisión con las páginas servidas delante. Cinco tandas de ajustes, y **tres de ellas
+destaparon algo que no era lo que se pedía**.
+
+**Los tres titulares.** KUOTIP, INDYA y Freepik cambian de h1 —«La oportunidad perdida de cambiar
+una industria», «Cambiando la nutrición deportiva desde producto», «Gran empresa, mal momento»—.
+Los tres anteriores cumplían la regla (el h1 es la afirmación de la experiencia, no el nombre de
+la empresa) y aun así decían menos. De paso quedó a la vista una asimetría que **no se toca**: en
+«En un minuto», Emendu/KUOTIP/INDYA titulan con la *misión* y Freepik/TheTool con la
+*descripción*; y cuatro de los cinco Aprendizajes usan la construcción «N cosas que me llevo de
+X». Se señaló y Francisco decidió dejarlo — es cadencia de una sección que se repite, no drift.
+
+**El artefacto no conmutaba, y la decisión que lo publicaba lo daba por resuelto.** D54 afirmaba
+que el traductor remapea la paleta fija a tokens. Era cierto para los hex largos de Mermaid y
+falso para el residuo: quedaban 17 declaraciones literales y **cinco rectángulos blancos** que en
+tema oscuro dejaban el diagrama con pinta de captura pegada sobre la página. *Una decisión escrita
+no es una verificación*: lo encontró mirar la página en oscuro, no releer el ADR. El arreglo no
+fue ampliar la lista de colores conocidos —eso arregla este archivo y no el siguiente— sino un
+guardián que comprueba la **ausencia** de literales (D54, ampliación).
+
+**Y el vídeo, que era una petición de contenido y salió con letra pequeña.** §43 ya había decidido
+que un vídeo entra si es prueba y no resumen, y con qué condiciones. Entran dos —Pau Gasol en el
+accionariado de INDYA, y el vídeo de producto de TheTool— con facade, póster auto-hospedado, CSP
+propia y sección nueva en la política de cookies. El gate de consentimiento se resolvió con
+**click-to-load** en vez de colgarlo de una categoría: antes del clic no hay nada que consentir, y
+así **ni siquiera quien acepta todas las cookies carga YouTube sin pulsar**. Detalle en D55.
+
+**Lo que encontró comprobarlo en pantalla, que es lo que justifica el método.** El disco de play
+**desaparecía** sobre el póster de TheTool —su teal de marca es casi el cian del sitio—: 2,81 en
+oscuro y 2,59 en claro, por debajo del 3:1 de WCAG 1.4.11. No lo ve axe, que no evalúa contraste
+de gráficos; no lo ve el typecheck; no lo ve `gate:html`, que compara marcado. **Es el cuarto
+hueco de la misma familia que el sitio se ha encontrado** —tras el atenuado sobre `--card`, el
+escalado de Windows y el alto del pliegue—: *un problema que ninguna puerta automática mira,
+porque todas miran otra cosa.*
+
+Y dos correcciones de método dentro de esa misma medición, las dos por el metro y no por el
+criterio: un modelo aritmético que daba 3,56 donde la pantalla daba 2,81, y un muestreo del anillo
+que caía sobre el triángulo y devolvía un `1,01` imposible. Las cifras publicadas son las de los
+píxeles pintados. *El porqué fechado, en `BRAND-historical.md`.*
+
+**Estado al cerrar.** P48 sigue **en progreso**. Lo hecho: los tres titulares, KUOTIP con su
+captura, INDYA y TheTool con su vídeo, los tres `reporting` que envolvían, el enlace de Gasol que
+sacaba asteriscos (límite conocido de `Rich`, D23) y el traductor con guardián. Lo que falta es
+de Francisco o va detrás de su visto bueno: los **artefactos de las otras cuatro**, el **gate de
+accesibilidad** sobre las seis URLs × dos temas, `npm run psi` por el peso de Emendu, las dos
+filas de «Shutapp Projects» en Trayectoria y la pasada de erratas y del EN contra el ES.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

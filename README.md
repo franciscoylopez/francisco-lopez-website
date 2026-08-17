@@ -97,7 +97,7 @@ app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i1
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
 .github/workflows/     CI (GitHub Actions): format + typecheck + lint + paleta + build en cada PR
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
-components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), table.tsx (DataTable/TR/TD para datos, SPECIMEN_ROW para especímenes), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card — ver BRAND.md y DECISIONS D36/D40
+components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), table.tsx (DataTable/TR/TD para datos, SPECIMEN_ROW para especímenes), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card, video-embed (vídeo de terceros con facade: sin iframe hasta el clic — D55) — ver BRAND.md y DECISIONS D36/D40
 components/site/        Piezas que SÍ saben de este sitio: page-shell.tsx (el marco común de toda página: JSON-LD, nav, isla de motion, el <main> y footer — D45/D46), skip-link.tsx (enlace de salto, WCAG 2.4.1 nivel A), bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN: index.tsx (el orden), NN-nombre.tsx (cada sección con sus subcomponentes) y shared.tsx (lo que cruza) — D42
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
@@ -118,7 +118,9 @@ scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 6 páginas (
                            puede cambiar. Semilla del arnés de tests (D42, ampliado en D45)
 scripts/artefacto-svg.ts   Traductor del export de mermaid.live al SVG que el sitio sirve:
                            le quita la hoja de estilos externa (que la CSP no permite), el
-                           pan/zoom del editor y la paleta fija, y calcula el viewBox real (D54)
+                           pan/zoom del editor y la paleta fija, y calcula el viewBox real.
+                           Aborta si queda UN solo color literal: el guardián busca la
+                           ausencia, no comprueba las copias conocidas (D54)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)
 .claude/agents/        Subagentes del proyecto: viewport-verifier (mide una página servida con

@@ -394,3 +394,60 @@ probablemente ese color no estaba diciendo nada.*
 
 El detalle técnico —qué mide el gate, cómo se sanea el SVG y por qué el artefacto no se
 redibuja— está en **`DECISIONS.md` D54**; aquí no se copia (regla 5).
+
+## Un control sobre una imagen no puede fijar su color (2026-08-17)
+
+**El caso.** Los deep-dive de INDYA y TheTool incrustan un vídeo con facade: un póster con un
+disco de play encima. El disco es `--primary` con su `--primary-foreground` dentro, que es el uso
+correcto del cian —reproducir es una acción, no decoración—. Y sobre el póster de TheTool **no se
+veía**: su teal de marca es casi el cian del sitio.
+
+**Medido sobre los píxeles que el navegador pinta: 2,81 en oscuro y 2,59 en claro.** Por debajo
+del **3:1 que WCAG 1.4.11 pide a un componente de interfaz**. Nada de lo que había lo veía: axe
+no evalúa contraste de gráficos, el typecheck no ve colores y `gate:html` compara marcado, no
+píxeles. Se vio mirando la página.
+
+**Lo primero que se probó, y por qué no valía.** Un velo negro sobre el póster. Arregla oscuro
+—oscurece el teal y el cian claro despega— y **empeora claro**: en tema claro `--primary` es un
+cian oscuro (`#005859`), así que oscurecer el póster lo acerca en vez de alejarlo. De 1,45 bajaba
+a 1,05. Es exactamente D41 otra vez: **un valor fijo no puede servir a dos superficies opuestas**,
+solo que aquí la superficie es una imagen y no un token.
+
+**Lo que sí funciona: el velo es del FONDO.** `--background` oscurece en tema oscuro y aclara en
+tema claro, así que **aleja la imagen del control en los dos**. Misma familia que `--surface-dim`
+(D39) y que la bolita del switch (§Controles con dos fondos): la pieza se define contra su propio
+carril, no contra lo que le toque detrás.
+
+**La opacidad se midió, no se eligió.** Barrido sobre el peor póster:
+
+| velo | oscuro | claro | |
+|---|---|---|---|
+| 0,25 | 3,05 | 2,85 | falla |
+| 0,30 | 3,23 | 3,00 | justo en el umbral, sin holgura |
+| **0,35** | **3,50** | **3,22** | el elegido |
+| 0,40 | 3,76 | 3,44 | lava el póster de más |
+
+**Y aun así el velo solo no basta**, porque el póster siguiente puede ser cualquier cosa. De ahí
+el **control de dos tonos**: relleno `--primary` + anillo `--primary-foreground`. Con los dos,
+siempre hay un borde que pasa aunque cambie cuál — en INDYA/oscuro lo salva **el anillo (3,06)** y
+no el disco (2,73), porque su póster es un tono piel/madera de luminancia media, justo donde el
+cian claro del tema oscuro se le acerca. El borde interno anillo/disco mide **8,36 / 7,93
+siempre**, porque son dos tokens del sistema.
+
+**Las dos veces que el metro estuvo mal, que es la parte que más enseña.** *(Regla 3: valida el
+metro antes de creerte el hallazgo — aquí aplicada al revés, porque el hallazgo era real y lo
+malo eran las cifras.)*
+
+1. **El modelo aritmético daba 3,56 donde la pantalla daba 2,81.** Componía el velo sobre un teal
+   muestreado en otro punto del póster, más oscuro que el de la zona del disco. *Un modelo del
+   color no es una medida del color.* Las cifras publicadas salen de los píxeles pintados y se
+   **sustituyeron** en todos los sitios que las citaban, no se anotaron al pie (regla 6).
+2. **El primer muestreo del anillo caía sobre el triángulo** del play y devolvía
+   `anillo/disco = 1,01` — un número imposible que delataba el fallo. Dos causas: el glifo va
+   centrado y desplazado 3px a la derecha, y `getBoundingClientRect` **no incluye el
+   `box-shadow`**, así que el radio del anillo no se puede calcular desde la caja. Se corrigió
+   muestreando en polares a 225° y **detectando el anillo por barrido radial**. La señal de que
+   quedó calibrado: el anillo sale exactamente `--primary-foreground` en los dos temas.
+
+La regla en presente está en **`BRAND.md` §Un control sobre una imagen**; el detalle técnico del
+componente —facade, CSP, consentimiento— en **`DECISIONS.md` D55**. Aquí no se copian (regla 5).
