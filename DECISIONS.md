@@ -2232,11 +2232,34 @@ incomplete), y la aritmética de D50 cuadra — la fórmula predice `min(48vw, 1
 **516px** a 1536×740 y la banda mide **514**. Si no hubiera reproducido lo conocido, el fallo
 sería del metro y no del sitio; es el punto 1 de `BRAND.md` §Cómo medir sin equivocarse.
 
-**Límite conocido, y su forma de trabajo.** La **navegación inicial** no funciona dentro del
+**Límite conocido, y su forma de trabajo.** ~~La **navegación inicial** no funciona dentro del
 sandbox de la sesión: el CLI llega a la red, pero el Chrome que lanza como subproceso no.
 Todo lo demás sí, porque opera sobre una página ya cargada en el daemon. El flujo real es
-**abrir la URL una vez desde la terminal** (`!agent-browser open <url>`) y conducir desde ahí:
-snapshot, clics, cambio de tema, capturas.
+**abrir la URL una vez desde la terminal** (`!agent-browser open <url>`) y conducir desde
+ahí.~~
+
+**CORREGIDO el 2026-08-17.** El diagnóstico de arriba era el correcto para el síntoma
+observado y **equivocado en su alcance**, y la diferencia importa porque el remedio que
+publicaba —abrir la URL desde la terminal— es más caro y no hace falta. Lo que no funciona
+bajo el sandbox no es la navegación inicial: es **cualquier comando que tenga que hablar con
+el daemon**. Medido en la sesión del 2026-08-17: con el sandbox activo, `agent-browser eval`
+se cuelga igual que `open`, y se cuelga **incluso con una página ya cargada** —justo el caso
+que la versión anterior daba por bueno—. Con el sandbox de la herramienta Bash desactivado
+funciona **todo**, `open` incluido.
+
+Por qué se vio así la primera vez: se probó `open` (falló), se abrió la URL desde la terminal
+(funcionó) y se condujo desde ahí (funcionó). Las tres observaciones son ciertas y encajan con
+la conclusión errónea, porque **el paso que las separa —conducir con el sandbox activo— nunca
+se dio**: al abrir desde la terminal, la sesión seguía conduciendo desde fuera. Es la regla 3
+de `BRAND.md` aplicada a un límite en vez de a un hallazgo: *el metro se valida reproduciendo
+el caso que ya das por bueno*, y aquí el caso «ya bueno» no se reprodujo nunca dentro del
+sandbox.
+
+**El flujo real, entonces:** conducir `agent-browser` con el sandbox desactivado, sin
+precondición de terminal y sin límite sobre qué comandos valen. `Bash(agent-browser *)` está
+en el allowlist de `.claude/settings.local.json`. **Y el síntoma sigue siendo el mismo, solo
+cambia la causa: un comando de `agent-browser` que cuelga es el sandbox, no el daemon — no se
+reintenta, se desactiva.**
 
 **Lo que habilita y aún no se ha hecho.** `gate:html` caza drift de marcado; el **visual** no
 lo caza nada. Capturas a viewport fijo × dos temas extienden ese patrón a lo que se ve. Idea,
@@ -2346,9 +2369,12 @@ cosas que salieron al hacerlo:*
   texto). Es el único estado del recorrido que sigue necesitando un navegador de verdad, y está
   escrito como tal en vez de darse por cubierto.*
 
-**Límite conocido, heredado de D51.** La navegación inicial no funciona dentro del sandbox: la
-URL se abre una vez desde la terminal (`!agent-browser open <url>`) y a partir de ahí se conduce
-normal. Un comando que cuelga es ese síntoma y **no se reintenta**.
+**Límite conocido, heredado de D51 — y corregido con él el 2026-08-17.** No es la navegación
+inicial: es que **ningún comando de `agent-browser` habla con el daemon bajo el sandbox de
+Bash**, ni siquiera con la página ya cargada. Se conduce con el sandbox desactivado y sin
+precondición de terminal. El síntoma no cambia —un comando que cuelga es eso y **no se
+reintenta**—, cambia el remedio: se desactiva el sandbox, no se abre la URL desde fuera. Ver
+D51, «Límite conocido».
 
 ---
 
