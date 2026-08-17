@@ -352,6 +352,18 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    por debajo del pliegue en los cuatro viewports sin recortar nada, y el par nuevo del enlace en
    AAA (7,93/8,36 en hover) por reutilizar pares ya verificados.
 
+   **Y desde el 2026-08-17, una experiencia se cuenta una sola vez** (D57). De cada una se
+   contaba lo mismo en tres longitudes —la frase de Trayectoria, el bullet del CV y su gemelo de
+   «En un minuto»— repartidas en tres archivos que nada ataba, y habían divergido **ocho veces**:
+   siete cifras existían solo en el deep-dive, una solo en el CV, KUOTIP tenía 3 bullets en el CV
+   y 4 en su página, y el CV afirmaba «construí el MVP» donde la página dice «definí el MVP junto
+   al product designer». Ahora el bullet corto y el largo son **el mismo elemento del array**
+   (`content/experience-copy/`), así que el emparejamiento 1:1 que el formato pedía deja de ser
+   convención; un guardián en CI comprueba cobertura y cifras **afirmando cuánto ha mirado**; y el
+   CV vuelve a caber en dos páginas por **margen entre bloques**, no por interlineado — quitar
+   «Habilidades» y recortar prosa se probaron y **no servían**, porque cada empleo va con
+   `wrap={false}` y salta entero.
+
    **Y dos afirmaciones publicadas quedaron señaladas como sin respaldo**, que es el saldo honesto
    de la sesión: la regla del **control sobre imagen** promete «siempre pasa uno de los dos
    bordes» y con un metro más estricto —el peor de 144 ángulos del perímetro— no se sostiene

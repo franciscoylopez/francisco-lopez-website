@@ -2770,3 +2770,94 @@ cuatro viewports; `PROSE` no desborda a 390px; **0 violaciones de axe** en home 
 páginas, en los dos temas. **Pendiente de llevarlo a Brand Kit, Design System, Accesibilidad y
 Cookies** (tarea P59.5) — y ahí no se aplica a ciegas: sus aperturas son de alto **variable**,
 así que hay que medir cada una.
+
+---
+
+## D57 · Las tres longitudes de una experiencia son un solo dato — 2026-08-17
+
+**El problema, y no era hipotético.** De una experiencia se cuenta **lo mismo en tres
+longitudes**: la frase de la fila de Trayectoria en la home, el bullet del CV y su gemelo largo
+de «En un minuto» en el deep-dive. Hasta hoy vivían en **tres archivos sin relación** —
+`dictionaries/{es,en}/home.json`, `content/cv/content.{es,en}.ts` y
+`dictionaries/{es,en}/trayectoria/<slug>.json`—, seis strings por experiencia contando idiomas, y
+**nada en el build los ataba**: ni el typecheck, ni el linter, ni `gate:html`.
+
+Al derivarlas las cinco aparecieron **ocho divergencias reales**:
+
+- **Siete cifras que solo existían en el deep-dive** — `+13% de conversión` y `+5% de ARPU`
+  (INDYA), `75%` (Freepik), `23% → 90%`, `0 → +50 clientes` y `7 semanas de producto` (Emendu),
+  `7 meses antes que el mercado` (TheTool).
+- **Una que solo existía en el CV**: el `38%` del hub de Emendu. La regla 1 del formato de
+  deep-dive dice que esto funciona **en las dos direcciones** y **nunca se había ejecutado en
+  esa**; ahora el deep-dive la adopta.
+- **Una cobertura descuadrada**: KUOTIP tenía **3** bullets en el CV y **4** en su página.
+- **Una divergencia de HECHO**, que es la que ninguna comparación de cifras habría cazado: el CV
+  decía «**construí** el MVP con una UI visual moderna» y el deep-dive «**definí** el MVP **junto
+  al product designer**». No es la misma afirmación.
+
+**La pieza: el emparejamiento deja de ser convención y pasa a ser estructura.** En
+`content/experience-copy/` el bullet corto y el largo son **el mismo elemento del array**
+(`{ cv, deep }`), así que no se puede escribir uno sin su pareja porque son el mismo objeto. Es
+el giro de **D44** aplicado al copy — la unión deja de ser posicional entre dos listas y pasa a
+ser un campo del dato — y el de **D38** aplicado a las cifras: se busca la **ausencia**, no el
+patrón. `ExperienceCopyMap` es un `Record` sobre la **unión** de empresas registradas, así que
+añadir una experiencia sin copy no compila (mismo mecanismo que `DeepDiveDict`, D53).
+
+**Dónde vive, y por qué en `content/` y no en el diccionario.** El precedente ya estaba escrito:
+el comentario de `content/cv/types.ts` dice que el CV vive en `content/` y no en `scripts/`
+*«porque el texto rico del CV es también el origen del deep-dive»*, y `trayectoria.tsx` ya componía
+cada fila mezclando diccionario + `experienceOf()`. Añadir la descripción a ese lado es lo que la
+fila **ya hacía con el logo**. El diccionario se queda con lo que es copy de **una** página: el
+título de la sección, sí; sus bullets, no.
+
+**Cuatro consumidores, ninguno con copia**: `components/site/trayectoria.tsx`,
+`components/site/deep-dive.tsx` (que gana `lang` y `slug`), `scripts/cv/generate.tsx` — donde
+`AuthoredJob` pierde `bullets` y `Job` los recibe en la fusión, igual que ya recibía rol y
+periodo— y **`app/llms.txt/route.ts`, que no estaba en el inventario y lo encontró el typecheck**.
+
+**El guardián** (`npm run check:experiencias`, en CI) comprueba lo que la estructura no puede:
+misma cobertura en ES y EN; versión larga **exactamente** en quien tiene página (`slug !== null`,
+así que PICKASO está excluida **a propósito** y no por olvido); ninguna cifra en una longitud que
+falte en la otra; y que la frase de la home no cite una cifra que ningún bullet respalda. Compara
+**solo cifras con forma de métrica** (porcentajes y magnitudes con sufijo), porque el bullet largo
+lleva legítimamente números que el corto no —«fase 1», «de 20 a 150 empleados»— y compararlos
+todos lo convertiría en ruido.
+
+**Se validó disparándolo, y cazó algo de verdad**: el script one-off que generó el registro
+emparejaba mal INDYA y TheTool —buscaba `company:` desde el principio del archivo y daba con los
+`milestones`, que repiten los mismos nombres—, así que las dos se llevaron los bullets de Emendu.
+Después se rompieron los cuatro modos de fallo a mano y los cuatro dispararon. **Y afirma cuánto
+ha mirado** —8 experiencias · 62 bullets · 50 pares de cifras— **fallando si es cero**: es la
+lección de los tres metros descalibrados de este repo (el medidor fuera de gamut, el umbral por
+tamaño de texto y las reglas `:hover` del censo), *una lista vacía parece un aprobado*.
+
+**El CV vuelve a caber en 2 páginas, y las dos palancas evidentes no servían.** Los bullets
+derivados lo mandaban a 3. Medido, no supuesto:
+
+- **Quitar «Habilidades» no devuelve nada** (sigue en 3): estaba en la **cola que desborda**, no
+  en la presión. Habilidades y Toolkit caían las dos en la página 3; quitar la primera solo deja a
+  la segunda sola allí.
+- **Recortar prosa tampoco** (sigue en 3): cada empleo se renderiza con `wrap={false}`, así que el
+  bloque **salta entero o no salta**. Se recortaron las cinco experiencias sin perder una sola
+  cifra y la página 2 pasó de 71 a 70 fragmentos de texto.
+- **Lo que sí cabe es margen ENTRE bloques con el interlineado INTACTO** —decisión de Francisco, y
+  el criterio correcto: el interlineado es legibilidad, el margen entre bloques es solo aire—:
+  entre bullets `1,4 → 0,8`, entre empleos `4,5 → 3,5`, entre filas de Habilidades/Toolkit `3 → 2`.
+  Bajar el interlineado a 1,34 o a 1,32 **sin tocar nada más no cabía**: se podía tocar y no servía
+  de nada. Y el umbral es abrupto —`1,0 / 3,8` no cabe y `0,8 / 3,5` sí—, que es el `wrap={false}`
+  otra vez: por eso todo fallaba de golpe en vez de acercarse.
+
+**El gate como prueba, con el matiz que importa.** `gate:html` se amplía a **22 variantes** (entran
+las cinco del deep-dive × dos idiomas, que son justo las que cambian; estaba tareado en P49 y se
+adelanta porque hacía falta aquí). **No sale vacío, y no debía**: este refactor mueve copy *y* lo
+corrige a la vez. Lo que prueba es que **solo cambia lo previsto** — 18 de las 22 idénticas byte a
+byte, y las 4 que cambian son exactamente las cinco frases de Trayectoria y el `38%` de Emendu.
+
+**Lo que NO resuelve, dicho para que no se dé por cubierto.** `datos.rol`, `datos.periodo`,
+`datos.sector` y `datos.reporting` del deep-dive siguen siendo copias a mano de hechos que ya
+tienen fuente (el diccionario y el CV), y al compararlos aparecieron **cuatro divergencias más**,
+una de ellas una **fecha**: KUOTIP termina en **noviembre** según el diccionario y en **diciembre**
+según su deep-dive. Son de hecho, no de longitud, así que las decide Francisco y no un refactor
+(tarea **P48.55**). Y el guardián tampoco puede ver que dos textos **digan** lo mismo: «construí»
+y «definí junto al product designer» tienen las mismas cifras (ninguna) y afirman cosas distintas.
+Eso lo ve una persona — y por eso las dos versiones se editan **una al lado de la otra**.
