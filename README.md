@@ -38,6 +38,11 @@ y con un sistema de marca propio.
 - **CV en PDF bilingüe** (ES/EN) generado por código con identidad de marca y texto
   seleccionable (ATS). Los hechos (roles, fechas, formación, toolkit) se leen del
   diccionario i18n; el CV solo autora el texto rico. `npm run cv` regenera ambos.
+- **Deep-dive por experiencia** (`/trayectoria/[slug]`, en construcción): una plantilla única
+  renderiza las cinco páginas —Datos · En un minuto · La historia · El caso · Aprendizajes— con
+  el contenido en el diccionario partido por experiencia. Los **artefactos son documentos
+  reales**, no recreaciones: el diagrama de estados se publica renderizado desde su Mermaid
+  original y saneado, en línea para que conmute con el tema (D53/D54).
 - **Páginas de error 404 y 500** con marca e i18n: el 404 con el "0" del número
   convertido en el círculo del split, que "florece" al cargar (CSS, reduced-motion safe).
 - **Seguridad y calidad**: cabeceras de seguridad (nosniff, X-Frame-Options,
@@ -97,6 +102,7 @@ components/site/        Piezas que SÍ saben de este sitio: page-shell.tsx (el m
 components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN: index.tsx (el orden), NN-nombre.tsx (cada sección con sus subcomponentes) y shared.tsx (lo que cruza) — D42
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
 content/               Contenido y datos de la app que NO son copy del diccionario: cv/ (texto rico autorado del CV, ES/EN — también el origen del deep-dive, D22) y experiences.ts (logo y slug por experiencia, unidos por `company`, D44)
+content/artefactos/    Los artefactos del deep-dive: el `.mmd` es la FUENTE del dibujo y el `.svg` de al lado su render saneado — se regenera, no se edita (D54)
 lib/                   i18n (locales + pagePath, la fuente única de ruta↔locale), page-meta (metadata de página: canonical, hreflang, OG y Twitter derivados — D45), site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados, design-values (fuente única de lo que el sitio publica sobre sí mismo: tokens, breakpoints y contraste medido — D38) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, favicons
@@ -110,6 +116,9 @@ scripts/psi.ts         PageSpeed Insights desde la terminal: nota, métricas, de
                        y huella del despliegue medido (D49)
 scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 6 páginas (ES/EN) no
                            puede cambiar. Semilla del arnés de tests (D42, ampliado en D45)
+scripts/artefacto-svg.ts   Traductor del export de mermaid.live al SVG que el sitio sirve:
+                           le quita la hoja de estilos externa (que la CSP no permite), el
+                           pan/zoom del editor y la paleta fija, y calcula el viewBox real (D54)
 brand-assets/          Piezas de marca fuera de la web (firma de email, header de LinkedIn) — no se despliega
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review)
 .claude/agents/        Subagentes del proyecto: viewport-verifier (mide una página servida con

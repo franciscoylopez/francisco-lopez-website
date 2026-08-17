@@ -1473,6 +1473,82 @@ escribe igual en ES y EN es una fecha que nadie revisa.
 
 ---
 
+---
+
+## 45. La plantilla del deep-dive, y un artefacto que no se recrea (2026-08-17)
+
+Primera sesión de **diseño en código** del deep-dive (P48). Las cinco páginas están montadas y
+servidas en local —diez variantes contando idiomas, todas prerenderizadas—, con las cinco
+narrativas traídas de Notion al diccionario y escritas también en inglés. Lo técnico está en
+`DECISIONS.md` D53 y D54; aquí queda lo que es de producto.
+
+**La apertura no lleva imagen, y el h1 no es el nombre de la empresa.** Se eligió apertura
+tipográfica —rótulo con empresa y sector, titular con **la afirmación de la experiencia**, y los
+cinco Datos debajo— por tres razones que se sostienen juntas: el nombre ya está en el rótulo, en
+el breadcrumb y en el título del navegador, así que gastarle el h1 sería repetirlo tres veces;
+sin foto la apertura no paga LCP; y **escala a cinco páginas sin que ninguna pese más que otra**,
+que con el logo de cada empresa no pasaba —Freepik y KUOTIP no pesan igual— y es justo lo que §42
+evita.
+
+**El cuerpo va a ancho de contenedor, no a la medida de lectura.** Lo corrigió Francisco viendo
+la primera versión servida: `PROSE` ocupa el 52% del ancho y a lo largo de una página entera no
+se lee como columna de lectura, se lee como media página vacía, y además alarga el scroll. La
+media columna queda como tratamiento de **entradas y cierres**. Coste medido y aceptado a
+sabiendas: **150-160 caracteres por línea** a 1536px, frente a los ~91 para los que está
+calibrado `--measure`. Queda tareado decidir si se acota.
+
+**«En un minuto» sobre superficie propia: probado y descartado.** El argumento a favor era bueno
+sobre el papel —es la sección escrita para el lector de 5-10 segundos de §2, así que una caja
+propia diría en el diseño lo que ya dice el contenido— y en pantalla no funcionó: a ancho de
+contenedor la caja sale mucho más ancha que alta y deja de leerse como tarjeta. Queda anotado en
+el componente para que no se reproponga como idea nueva.
+
+**Cada página cierra con el paso a la anterior y la siguiente**, con el mismo formato que el
+cierre de Brand Kit, Design System y Accesibilidad — y con la misma pieza, no con una copia que
+se le parezca. Detalle en D53.
+
+**Y la decisión de la sesión: un artefacto se enseña, no se recrea.** El primer intento fue
+dibujar el diagrama de estados a mano con los tokens del sitio: quedaba integrado, conmutaba con
+el tema y **estaba mal**. Francisco lo cerró en una frase — *«si un CPO ve esto, no ve mi
+trabajo»*. Un redibujo cumple la letra de la política de artefactos (SVG en línea, pocos nodos) y
+**incumple su espíritu**, que la propia política dice en su primera línea: *reales, no
+ilustraciones del método*. Se publica el render real de Mermaid del diagrama que Francisco
+escribió para el equipo de desarrollo, saneado para que no pida nada a terceros y conmute con el
+tema.
+
+De ahí salen tres reglas de contenido que valen para las otras cuatro páginas:
+
+1. **El techo de ocho nodos se rompe a propósito.** Se fijó antes de que nadie hubiera visto un
+   artefacto real, y protegía la legibilidad; a un mapa de módulo lo que lo hace legible es
+   **estar agrupado**, no tener pocos nodos.
+2. **El artefacto no se traduce.** En la página inglesa sale el diagrama en español, como se
+   entregó. Traducirlo lo convertiría en una recreación. Sí van en los dos idiomas su título, su
+   pie y la alternativa en prosa.
+3. **La línea de discreción se aplica también a los artefactos, y ahí sube el listón.** El
+   diagrama vive dentro de un product spec **de un producto sin lanzar**, con modelo de
+   facturación, alternativas de pricing con importes, riesgos comerciales y compañeros con
+   nombre. Nada de eso sale en la página: el diagrama describe la estructura del módulo, no el
+   negocio. Pero deja claro que el «permiso de publicación» que P48.7 tenía abierto para las
+   métricas ya no es solo de métricas.
+
+**Lo que queda abierto al cerrar la sesión**, y es lo que le da forma a la siguiente: los
+artefactos de las otras cuatro experiencias —solo Emendu tiene el suyo—; los **titulares de
+sección y los h1**, que son copy derivado de las narrativas y necesitan el visto bueno de
+Francisco; la **captura del lowfi navegable**, que es el artefacto más elocuente para un CPO y
+el que más permiso necesita porque es trabajo de Emendu sobre una integración sin lanzar; y el
+**peso**, que sube a 229 KB de HTML en la página de Emendu —unos 62 son el SVG— y hay que medir
+con PSI antes de dar la sección por cerrada.
+
+**Dos cosas que el método cazó y que valen como registro.** El gate de accesibilidad, en su
+primer disparo *mientras se dibuja*, tumbó una afirmación escrita en el propio código: que sin
+banda dimensionada por `vw` el modo de fallo de D50 desaparecía. No desaparece — **el eje nunca
+fue `vw`, era el alto**, y una apertura tipográfica tiene su propia forma de crecer: a 1280×618
+los Datos de Emendu se salían 21,55px por debajo del borde. Y el gate de HTML marcó un cambio
+que «daba igual» y no daba igual. *Las dos puertas encontraron algo que ninguna revisión de
+código habría visto.*
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

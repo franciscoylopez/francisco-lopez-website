@@ -45,6 +45,23 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
      cualquier color fijo. Al conmutar da **7,04 / 7,21** y entra en AAA sin coletilla. Mismo
      patrón que `--primary-on-inverted`.
 
+### El morado decorativo no vale como elemento gráfico
+
+*(2026-08-17, midiendo el primer artefacto del deep-dive.)* Un diagrama es de los pocos sitios
+donde §Color deja entrar los tokens de marca —«fondos de sección, detalles, **ilustración,
+gráficos**»—, y ahí el umbral no es el de texto: WCAG 1.4.11 pide **3:1** a un gráfico que hay
+que entender. **`--brand-purple` no llega en tema claro: 2,65 contra `--background` y 2,81
+contra `--card`.** En oscuro sí (5,79 / 5,21), y esa asimetría es la firma del problema — el
+morado de esta marca es FIJO, y el único que conmuta (`--brand-purple-accent`) lo hace para la
+banda invertida, o sea al revés de lo que aquí haría falta.
+
+**El cian sí llega y con holgura: 7,47 / 8,36 contra `--background`, 7,93 / 7,53 contra `--card`.**
+Así que en un gráfico **el cian lleva la información y lo que no llega se atenúa**
+(`--muted-foreground`), nunca se tiñe de morado — y la distinción entre dos caminos la hacen
+además el trazo y la etiqueta, que es lo que cumple el punto 6 del checklist sin depender del
+color. El 2,81 no es nuevo: es exactamente el que D41 midió al retirar el morado de los rótulos
+del Brand Kit, llegando por otra puerta.
+
 ### El atenuado lo pone la superficie, no el punto de uso
 
 `--muted-foreground` está calibrado contra `--background` **y solo contra él**. Encima de
