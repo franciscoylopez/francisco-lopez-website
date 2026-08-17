@@ -375,6 +375,27 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    queda con `tamano`, las filas de Trayectoria con `company` y el CV con la sola decisión de a
    qué experiencias da papel.
 
+   **Y el contenido del deep-dive queda cerrado** (2026-08-18). El `+30% de MRR` de TheTool —la
+   última cifra sin ventana— queda **acotado a 2 meses**; se decide que **solo Emendu lleva
+   artefacto** y que el resto queda cubierto con vídeo o captura (decidir que no llevan también
+   cierra el hueco); y la **pasada de erratas** encuentra que la prosa estaba limpia y que lo que
+   quedaba eran, sobre todo, **contradicciones con el propio sitio** —`V0` donde el toolkit
+   escribe `v0`, `TheUncoding` y `The Hero Camp` donde Formación escribe `theUncoding` y
+   `TheHeroCamp`, y `PickASO` doce veces donde el resto del sitio escribe `PICKASO`—. Es el tipo
+   de errata que una lectura no caza, porque cada página por separado se lee bien.
+
+   La **revisión EN contra el ES** (D20) se hace y encuentra poco, que es la buena noticia: el
+   inglés no era traducción literal y su ortografía era consistente. Lo que sí había: **siete
+   comillas españolas `«»` dentro de textos ingleses**, dos de ellas fuera del deep-dive. La
+   **forma** se comparó campo a campo — las cinco páginas tienen la misma estructura y todas las
+   cifras coinciden.
+
+   **Y las páginas de Notion vuelven a decir lo que dice la web.** Se habían separado —las
+   correcciones se aplicaban al repositorio y no a la fuente—, que es justo lo que invalida a
+   Notion como fuente en el sentido de D58. Al resincronizar aparecieron tres divergencias que no
+   eran erratas: un titular que decía «Tres cosas» con cuatro aprendizajes, un bloque con los
+   párrafos en otro orden y una página con los niveles de título cambiados.
+
    **Y dos afirmaciones publicadas quedaron señaladas como sin respaldo**, que es el saldo honesto
    de la sesión: la regla del **control sobre imagen** promete «siempre pasa uno de los dos
    bordes» y con un metro más estricto —el peor de 144 ángulos del perímetro— no se sostiene

@@ -67,11 +67,21 @@ npm run typecheck  # tsc --noEmit
 npm run format     # Prettier
 npm run check:palette  # la paleta del código contra la de globals.css, y que no
                        # quede ninguna copia de un token fuera de su fuente (D38)
+npm run check:experiencias  # que las TRES longitudes de cada experiencia cuadren:
+                            # misma cobertura en ES y EN, versión larga solo donde
+                            # hay deep-dive, y ninguna cifra en una y no en la otra (D57)
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
-npm run gate:html -- save   # instantánea del HTML de las 6 páginas × 2 idiomas
+npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
+npm run gate:html -- save   # instantánea del HTML de las 11 páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
 npm run psi -- <url>        # PageSpeed sobre el Preview o producción, móvil y escritorio (D49)
 ```
+
+> **`npm run artefacto`** usa `@mermaid-js/mermaid-cli`, que necesita un navegador.
+> `scripts/mermaid-puppeteer.json` declara `channel: "chrome"`, o sea **el Chrome que ya
+> tengas instalado**: no se descarga ningún Chromium. El render es local —el diagrama no
+> sale a ningún servidor— y **determinista**, así que regenerar sin cambiar el `.mmd` no
+> ensucia el diff.
 
 > **`npm run psi`** necesita una **URL pública** (el Preview de Vercel o producción, nunca
 > localhost) y una clave gratuita de la API en `PSI_API_KEY` — ver `.env.example` para cómo
@@ -101,7 +111,8 @@ components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (t
 components/site/        Piezas que SÍ saben de este sitio: page-shell.tsx (el marco común de toda página: JSON-LD, nav, isla de motion, el <main> y footer — D45/D46), skip-link.tsx (enlace de salto, WCAG 2.4.1 nivel A), bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN: index.tsx (el orden), NN-nombre.tsx (cada sección con sus subcomponentes) y shared.tsx (lo que cruza) — D42
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
-content/               Contenido y datos de la app que NO son copy del diccionario: cv/ (texto rico autorado del CV, ES/EN — también el origen del deep-dive, D22) y experiences.ts (logo y slug por experiencia, unidos por `company`, D44)
+content/               Contenido y datos de la app que NO son copy del diccionario: cv/ (lo exclusivo del papel — resumen, hitos, habilidades; D22) y experiences.ts (logo y slug por experiencia, unidos por `company`, D44)
+content/experience-copy/  De una experiencia, TODO lo que se cuenta en más de una superficie: la frase de Trayectoria, el bullet del CV y su gemelo de «En un minuto» —los dos últimos, el MISMO elemento del array— más rol, periodo, sector y reporting. Home, CV, deep-dive y llms.txt leen de aquí (D57, D58)
 content/artefactos/    Los artefactos del deep-dive: el `.mmd` es la FUENTE del dibujo y el `.svg` de al lado su render saneado — se regenera, no se edita (D54)
 lib/                   i18n (locales + pagePath, la fuente única de ruta↔locale), page-meta (metadata de página: canonical, hreflang, OG y Twitter derivados — D45), site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados, design-values (fuente única de lo que el sitio publica sobre sí mismo: tokens, breakpoints y contraste medido — D38) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
