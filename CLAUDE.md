@@ -74,6 +74,8 @@
 
 - D56 · **La apertura ocupa el pliegue**, y `mx-auto` deja de significar lo que significaba: el bloque de apertura del deep-dive termina SIEMPRE en 537px (es tipográfico), así que lo que sobra crece solo con el ALTO —203px a 1536×740, 903 a 2560×1440— y por ahí asomaba la segunda sección; `md:min-h-[calc(100svh−5rem)]` con la constante del hero de la home, y `min-h` y no `h` porque en ventana baja no puede recortar (D50 al revés); **centrado y no anclado abajo, decidido viéndolo** (anclado dejaba ~550px de vacío seguido); y la trampa reutilizable — al volver flex el padre, `mx-auto` pasa a ser margen del eje transversal y **desactiva el `stretch`**, la caja se encoge a 1.138px y se desalinea del nav, sin un solo error de compilación
 
+- D57 · **Las tres longitudes de una experiencia son un solo dato**: la frase de Trayectoria, el bullet del CV y su gemelo de «En un minuto» vivían en tres archivos y habían divergido OCHO veces —siete cifras solo en el deep-dive, una solo en el CV, una cobertura descuadrada (KUOTIP 3↔4) y una de HECHO («construí» vs «definí junto al product designer»)—; `content/experience-copy/` los hace el MISMO elemento del array (giro de D44 aplicado al copy), cuatro consumidores leen de ahí —uno lo encontró el typecheck: `llms.txt`—, y el guardián `check:experiencias` busca la AUSENCIA de cifras (giro de D38) **afirmando cuánto ha mirado**; el CV vuelve a 2 páginas por margen ENTRE bloques y no por interlineado, porque `wrap={false}` hace que un empleo salte entero — quitar «Habilidades» y recortar prosa NO servían, medido
+
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
 ## Modelo por tarea
