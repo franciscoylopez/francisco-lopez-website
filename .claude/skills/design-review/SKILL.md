@@ -283,9 +283,11 @@ Con **`agent-browser`**, sobre el sitio **servido en local** —`npm run build &
 `dev`: lo que se mide es el build de producción (D8/D13)— y sobre el **CSS servido** cuando la
 duda es si una clase llegó a generarse.
 
-**Precondición:** la URL se abre **una vez desde la terminal** (`!agent-browser open <url>`).
-La navegación inicial no funciona dentro del sandbox, y un comando que cuelga es ese mismo
-síntoma: **no lo reintentes**, dilo y para.
+**Precondición:** `agent-browser` se conduce con el **sandbox de Bash desactivado**
+(`dangerouslyDisableSandbox: true`). Bajo el sandbox no llega al daemon **ningún** comando, ni
+con la página ya cargada; sin él funciona todo, navegación incluida. Un comando que cuelga es
+ese síntoma: **no lo reintentes igual**, repítelo sin sandbox. *(Corregido el 2026-08-17;
+antes pedía abrir la URL desde la terminal. D51.)*
 
 ### Quién mide qué — y no se solapan
 

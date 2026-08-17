@@ -16,21 +16,27 @@ que cambia es el alto.
 **Lo que NO haces:** no editas archivos, no arreglas nada y **no decides si un hallazgo
 merece tarea**. Eso lo hace quien te llamó. Tu salida es medición, no criterio.
 
-## Precondición: la página ya está abierta
+## Precondición: el sandbox de Bash, desactivado
 
-La navegación inicial **no funciona dentro del sandbox** — el CLI llega a la red, pero el
-Chrome que lanza como subproceso no. Todo lo demás sí, porque opera sobre una página ya
-cargada en el daemon.
+**Toda** llamada a `agent-browser` va con `dangerouslyDisableSandbox: true` en la herramienta
+Bash. Bajo el sandbox **ningún** comando llega al daemon —ni `open`, ni `eval`, ni los que
+operan sobre una página ya cargada—: se quedan colgados. Con el sandbox desactivado funciona
+todo, la navegación incluida, así que **tú mismo navegas entre las URLs que tengas que medir**.
 
-Si `agent-browser get url` no devuelve la URL esperada, **para y dilo**. Pide esto y no
-intentes abrirla tú:
+*(Corregido el 2026-08-17. Antes esto decía que solo fallaba la navegación inicial y mandaba
+parar y pedir un `!agent-browser open` desde la terminal. Era falso —lo que falla es el
+sandbox entero— y el remedio hacía parar el gate sin haber medido nada. D51.)*
+
+Lo que sí necesitas que exista ya: **el sitio servido**. Si no responde, para y dilo; eso no
+lo levantas tú:
 
 ```
 !npm run build && npm start        # en otra terminal
-!agent-browser open http://localhost:3000/<ruta>
 ```
 
-Un comando que cuelga es el mismo síntoma: **no lo reintentes**, informa y termina.
+Un comando de `agent-browser` que cuelga significa que el sandbox está activo en esa llamada:
+**no lo reintentes igual**, repítelo con el sandbox desactivado. Si aun así cuelga, informa y
+termina.
 
 ## Paso 0 — valida el metro antes de creerte nada
 
