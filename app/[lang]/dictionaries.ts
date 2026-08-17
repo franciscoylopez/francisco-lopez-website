@@ -172,8 +172,33 @@ export interface DeepDiveDict {
        */
       imagen?: { src: string; alt: string };
       /**
+       * Vídeo de terceros incrustado, si el bloque lo lleva. Hoy solo INDYA (la
+       * entrada de Pau Gasol en el accionariado).
+       *
+       * SE ADMITE PORQUE ES PRUEBA, NO RESUMEN — y esa es la distinción entera de
+       * §43. Un vídeo-resumen del deep-dive *sustituye* la lectura y compite con
+       * «En un minuto», que es la pieza diseñada para ese trabajo exacto; un clip
+       * de terceros dentro de la narración hace lo contrario: es evidencia, dura
+       * segundos y no sustituye a nada. Lo que decide no es el formato, es qué
+       * trabajo hace el vídeo en la página.
+       *
+       * `id` y `poster` no se traducen (mismo archivo y mismo vídeo en los dos
+       * idiomas); `title`, `playLabel` y `nota` sí, porque es lo que se lee y lo
+       * que oye un lector de pantalla.
+       */
+      video?: {
+        /** Id de YouTube. */
+        id: string;
+        /** Póster auto-hospedado en `public/img/`, nunca `i.ytimg.com`. */
+        poster: string;
+        title: string;
+        playLabel: string;
+        /** Pie que avisa de qué pasa al pulsar: es lo que hace informado el clic. */
+        nota: string;
+      };
+      /**
        * Los párrafos que salen del grid y corren a ANCHO DE PÁGINA por debajo de
-       * la captura. El corte es explícito y no «el último párrafo», porque no es
+       * la captura o del vídeo. El corte es explícito y no «el último párrafo», porque no es
        * una regla de maquetación sino de contenido: `paras` es lo que la imagen
        * ilustra —las tres piezas— y `cierre` es lo que viene DESPUÉS de haberlas
        * enumerado. Sin ese corte, la imagen se centra contra un texto que ya no

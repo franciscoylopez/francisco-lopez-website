@@ -11,7 +11,7 @@
     "periodo": "Ene 2022 — Dic 2023",
     "sector": "SaaS B2C · Health tech",
     "tamano": "De 13 a 27 personas",
-    "reporting": "Al CPO y CTO — los dos cargos en la misma persona"
+    "reporting": "CPO/CTO"
   },
   "minuto": {
     "title": "Crecimiento sobre el ciclo de vida, no sobre funcionalidades",
@@ -47,7 +47,16 @@
         "title": "Apple, Gasol y las apps donde ya vivía el usuario",
         "paras": [
           "El tándem con el product designer fue una de las piezas del salto, y no tardó en verse desde fuera: Apple se fijó en la app y nos incorporó a **Apple App Store Foundations**, su programa de mentoría. De ahí salimos siendo **una de las primeras empresas de Europa en lanzar widgets** —una funcionalidad que Android tenía desde hacía años y que en iOS se estrenaba entonces— y destacados en la App Store: para el usuario, resolver la nutrición del día sin abrir la app; para nosotros, visibilidad que no se compra.",
-          "Poco después [**Pau Gasol entró en el accionariado**](https://getindya.com/pau-gasol-indya/). Lo relevante no fue el importe: fue lo que significaba para un cliente que entrena.",
+          "Poco después [Pau Gasol entró en el accionariado](https://getindya.com/pau-gasol-indya/). Lo relevante no fue el importe: fue lo que significaba para un cliente que entrena."
+        ],
+        "video": {
+          "id": "RsHJ6ejTfIE",
+          "poster": "/img/indya-gasol-poster.webp",
+          "title": "Pau Gasol se une a INDYA",
+          "playLabel": "Reproducir el vídeo",
+          "nota": "Al pulsar play, el vídeo se carga desde YouTube (youtube-nocookie.com) y se aplican sus condiciones. Hasta entonces esta página no hace ninguna petición a Google."
+        },
+        "cierre": [
           "Y nos integramos donde el usuario ya estaba —**Apple Health**, **Salud conectada**, **Strava** y **TrainingPeaks**—. El beneficio directo era no tener que contar dos veces lo mismo, pero el grande fue para el servicio: el equipo de nutrición pasó a planificar **sobre el rendimiento real, no sobre lo que el cliente recordaba**."
         ]
       }

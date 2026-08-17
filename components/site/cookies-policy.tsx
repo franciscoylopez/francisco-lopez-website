@@ -145,6 +145,15 @@ export function CookiesPolicy({
               </p>
             </Section>
 
+            {/* Vídeo incrustado. Va DESPUÉS de Terceros y en su propia sección
+                porque no es una cookie que esta web ponga: es un marco de YouTube
+                que no existe hasta que el visitante pulsa play, así que no cabe en
+                la tabla de arriba —no tiene nombre, ni proveedor activo, ni
+                duración mientras nadie lo reproduzca—. Ver `ui/video-embed.tsx`. */}
+            <Section heading={t.embedHeading}>
+              <p>{t.embedBody}</p>
+            </Section>
+
             {/* Conservación */}
             <Section heading={t.retentionHeading}>
               <p>{t.retentionBody}</p>
