@@ -39,7 +39,7 @@ export default async function Home({ params }: LangParams) {
         <Hitos dict={t.hitos} />
         <ComoTrabajo dict={t.proceso} />
         <MasAlla dict={t.masAlla} />
-        <Trayectoria dict={t.trayectoria} cvHref={cvHref} />
+        <Trayectoria dict={t.trayectoria} cvHref={cvHref} lang={lang} />
         <Toolkit dict={t.toolkit} />
         <Formacion dict={t.formacion} />
         <Contacto dict={common.contacto} cvHref={cvHref} />
