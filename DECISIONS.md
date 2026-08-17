@@ -2861,3 +2861,67 @@ según su deep-dive. Son de hecho, no de longitud, así que las decide Francisco
 (tarea **P48.55**). Y el guardián tampoco puede ver que dos textos **digan** lo mismo: «construí»
 y «definí junto al product designer» tienen las mismas cifras (ninguna) y afirman cosas distintas.
 Eso lo ve una persona — y por eso las dos versiones se editan **una al lado de la otra**.
+
+---
+
+## D58 · El deep-dive es la fuente de los hechos de una experiencia — 2026-08-17
+
+**Ampliación de D57, y con una regla nueva que la decide: cuando dos superficies discrepan sobre
+un hecho de una experiencia, gana el deep-dive** (Francisco, 2026-08-17). Su contenido se autora
+en Notion y de ahí baja al diccionario; las otras dos superficies —la fila de Trayectoria y el
+CV— son derivadas, no fuentes.
+
+**La auditoría se hizo contra el original, no contra el repo.** Los `Datos` de las cinco páginas
+se compararon **una a una con sus páginas de Notion**, y las cinco coinciden. O sea que las cuatro
+divergencias no estaban en el deep-dive: estaban en las otras dos superficies, y el arreglo es
+propagar desde él.
+
+| Hecho | Decía la copia | Dice el deep-dive (y Notion) |
+|---|---|---|
+| **KUOTIP, periodo** | `Feb 2024 — Nov 2024` (home) | **`Feb 2024 — Dic 2024`** |
+| **KUOTIP, sector** | `SaaS B2B · IA / Reviews` (CV) | **`Customer Reviews`** |
+| **KUOTIP, reporting** | `Cofundador · junto a la CEO y el CTO` (CV) | **`Cofundador, 1 de 3 socios`** |
+| **INDYA, reporting** | `Reporté al CPO y cofundador` (CV) | **`CPO / CTO`** |
+
+**La fecha no era cosmética: se servía mal en seis sitios.** Lo midió `gate:html` — la fila de
+Trayectoria en los dos idiomas y las tarjetas de «siguiente experiencia» de **Emendu** y de
+**INDYA**, que son las vecinas que enlazan a KUOTIP, también en los dos idiomas. Mientras tanto la
+propia página de KUOTIP publicaba la buena. **Un dato duplicado no falla donde se escribe: falla
+donde se lee**, y por eso el recuento no es «una fecha mal» sino seis.
+
+**Los cuatro hechos suben al registro** (`content/experience-copy/`), junto a las tres longitudes
+del copy que ya guardaba:
+
+- **`role`** y **`period`** — se pintaban en Trayectoria, en los Datos y en el CV. `period` se
+  localiza («Actualidad»/«Present»), así que va en el registro por idioma y no en
+  `content/experiences.ts`, que es el registro **sin idioma** (logo y slug, D44).
+- **`sector`** — era `datos.sector` y el `context` del CV **a la vez**. En las tres experiencias
+  sin página guarda lo que el CV llamaba `context`, que no siempre es un sector («Malavida.com»):
+  es el mismo campo con un solo consumidor.
+- **`reporting`** — a **dos longitudes**, `{ deep, cv }`, exactamente el mismo patrón que los
+  bullets y por la misma razón.
+
+**Lo que queda en cada sitio, que es la parte que enseña si el corte está bien hecho:**
+
+- El **diccionario del deep-dive** se queda con `datos: { tamano }` — el único de los cinco que no
+  publica nadie más.
+- Las **filas de Trayectoria** en `home.json` se quedan con **`company` y nada más**, que además
+  es su etiqueta: el diccionario la lleva en forma de display («Ontecnia (Malavida…)») y el
+  registro en forma corta, unidas por prefijo.
+- **`AuthoredJob`** del CV se queda en **un solo campo**. No es un residuo: es la señal de que la
+  experiencia se cuenta en un sitio y lo que el CV aporta de ella es su **presencia y su orden**.
+- Y la página de deep-dive **deja de cargar `getHome`**: el rol y el periodo de las vecinas los da
+  el registro, así que se ahorra ese parseo en build. El comentario que justificaba esa carga
+  —«evita una cuarta copia del mismo hecho»— describía el problema con precisión; lo que no podía
+  hacer era resolverlo.
+
+**El guardián gana tres comprobaciones**, validadas rompiéndolas: `role` y `period` presentes;
+`reporting.deep` **⟺** la experiencia tiene página; y **el rol no puede diferir entre idiomas** —
+los roles de este sitio no se traducen («Product Manager», «Cofounder & Product»), así que una
+diferencia ahí es una errata, no una traducción. El **periodo no se compara entre idiomas**, que
+ese sí se localiza.
+
+**Verificado con `gate:html`: 16 de las 22 variantes idénticas byte a byte.** Las seis que cambian
+son las cinco frases de Trayectoria y el `38%` de Emendu (de D57) más las seis apariciones de la
+fecha corregida. Mover cuatro campos fuera de los **diez** diccionarios del deep-dive salió
+**transparente**: ninguna de sus páginas cambió un byte.

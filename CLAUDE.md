@@ -76,6 +76,8 @@
 
 - D57 · **Las tres longitudes de una experiencia son un solo dato**: la frase de Trayectoria, el bullet del CV y su gemelo de «En un minuto» vivían en tres archivos y habían divergido OCHO veces —siete cifras solo en el deep-dive, una solo en el CV, una cobertura descuadrada (KUOTIP 3↔4) y una de HECHO («construí» vs «definí junto al product designer»)—; `content/experience-copy/` los hace el MISMO elemento del array (giro de D44 aplicado al copy), cuatro consumidores leen de ahí —uno lo encontró el typecheck: `llms.txt`—, y el guardián `check:experiencias` busca la AUSENCIA de cifras (giro de D38) **afirmando cuánto ha mirado**; el CV vuelve a 2 páginas por margen ENTRE bloques y no por interlineado, porque `wrap={false}` hace que un empleo salte entero — quitar «Habilidades» y recortar prosa NO servían, medido
 
+- D58 · **El deep-dive es la fuente de los hechos de una experiencia** (amplía D57): cuando dos superficies discrepan, gana el deep-dive —auditado contra las páginas de NOTION, no contra el repo, y las cinco coinciden—; las cuatro divergencias eran de las otras dos superficies, y **la fecha de KUOTIP se servía mal en SEIS sitios** (un dato duplicado no falla donde se escribe, falla donde se lee); `role`/`period`/`sector`/`reporting` suben al registro, `datos` se queda en `tamano`, las filas de la home en `company` y `AuthoredJob` en un solo campo; la página deja de cargar `getHome`
+
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
 ## Modelo por tarea
