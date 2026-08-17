@@ -76,7 +76,7 @@
   "thirdBody2": "and at",
   "thirdLink2Label": "Microsoft's privacy statement",
   "embedHeading": "Embedded video",
-  "embedBody": "The INDYA deep-dive embeds a video hosted on YouTube. It does not load on its own: until you press play, the page shows a still image served from this domain and makes no request to Google. Once you press play, the video loads from youtube-nocookie.com —YouTube's domain that does not write advertising cookies— and Google's terms and privacy policy apply from that point on.",
+  "embedBody": "The INDYA and TheTool deep-dives embed a video hosted on YouTube. It does not load on its own: until you press play, the page shows a still image served from this domain and makes no request to Google. Once you press play, the video loads from youtube-nocookie.com —YouTube's domain that does not write advertising cookies— and Google's terms and privacy policy apply from that point on.",
   "retentionHeading": "Data retention",
   "retentionBody": "Your consent choice is stored in your browser until you change it or clear the site data. Aggregate analytics data is retained by Google according to the property settings (by default, a maximum of 14 months at user level).",
   "changesHeading": "Changes to this policy",
