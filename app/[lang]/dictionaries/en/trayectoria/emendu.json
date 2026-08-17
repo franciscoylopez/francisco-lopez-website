@@ -14,15 +14,7 @@
     "reporting": "Member of the leadership team"
   },
   "minuto": {
-    "title": "Giving a brand-new SaaS a business model",
-    "items": [
-      "**End-to-end product strategy, starting with the ICP.** I redefined it through discovery outside the sales pipeline —companies of 20 to 150 employees with no in-house IT— and used it to reorient onboarding and the key flows: **from 0 to more than 50 SaaS customers** in the first year.",
-      "**From a manual operation to a digital, API-first system.** Sales, Accounts and Operations worked outside the software and the operation left almost no trace: **from 23% to 90% pipeline traceability**.",
-      "**Strategic partnership with Sesame HR**, led together with the Tech Lead: embedding the entire renting and MDM flow inside an HR software. **Phase 1 delivered in 7 product weeks**, and a new acquisition channel for Emendu.",
-      "**LISA, the AI agent:** from an inconsistent system to a working agent, with dynamic access to data, living documentation and multilingual capabilities.",
-      "**From an outsourced SaaS to an in-house engineering team.** The Bubble platform had validated the model, but it was slowing down precisely the two highest-value areas. I pushed for the change and took part in hiring the Tech Lead.",
-      "**As a product builder, I built the internal tooling hub**, developed with Claude Code for reports, briefs and proposals."
-    ]
+    "title": "Giving a brand-new SaaS a business model"
   },
   "historia": {
     "title": "Making the SaaS stop being an add-on",

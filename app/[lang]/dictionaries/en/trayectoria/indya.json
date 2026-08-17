@@ -14,15 +14,7 @@
     "reporting": "CPO and CTO"
   },
   "minuto": {
-    "title": "Growth built on the lifecycle, not on features",
-    "items": [
-      "**Growth strategy built on the lifecycle, not on features.** I co-defined the three levers —activation, engagement and retention— and the roadmap and the team's OKRs were organised around them.",
-      "**A user research practice where there was none.** Interviews, surveys and post-churn analysis on a continuous cadence: INDYA had a very good data structure and very little conversation with its users.",
-      "**Monthly churn from 16% to 10%.** Several fronts at once to understand and tackle both voluntary and involuntary churn: product work combined with customer success.",
-      "**First-month activation: +28%.** Onboarding, personalisation and value comprehension — so a new user understands what the app is for before the motivation that made them download it wears off.",
-      "**Pricing redesign with A/B testing.** I unified plans and removed entry barriers: **+13% conversion and +5% ARPU**, without touching retention.",
-      "**More consistent delivery.** From Trello to Jira, agile ceremonies actually run as such, explicit delivery and approval criteria, sprints with a single focus, and retrospectives to improve as a team."
-    ]
+    "title": "Growth built on the lifecycle, not on features"
   },
   "historia": {
     "title": "From a service's software to a product",

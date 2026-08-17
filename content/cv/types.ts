@@ -15,19 +15,26 @@
 
 export type Bullet = string;
 
-// Rol tal como se autora (sin periodo/rol/proyecto: esos son hechos del diccionario).
+// Rol tal como se autora. Ya no lleva NI los hechos (periodo, rol, proyecto: del
+// diccionario) NI los bullets (de `content/experience-copy/`, P48.5), así que lo
+// que queda aquí es solo lo que existe únicamente en el papel.
 export interface AuthoredJob {
-  company: string; // clave de unión con el diccionario + display
+  company: string; // clave de unión con el diccionario, el registro y el display
   context: string; // p. ej. "SaaS B2B · IT Management" (metadato propio del CV)
   reporting?: string;
-  bullets: Bullet[];
 }
 
-// Rol ya fusionado (autorado + hechos), lo que se renderiza.
+// Rol ya fusionado (autorado + hechos + bullets), lo que se renderiza.
 export interface Job extends AuthoredJob {
   role: string; // del diccionario
   period: string; // del diccionario
   project?: string; // del diccionario (agrupación Shutapp Projects)
+  /**
+   * Del registro por experiencia. Cada uno es la versión CORTA de un bullet de
+   * «En un minuto» del deep-dive, y los dos viven en el mismo objeto para que no
+   * puedan divergir sin que se vea (P48.5).
+   */
+  bullets: Bullet[];
 }
 
 export interface Milestone {

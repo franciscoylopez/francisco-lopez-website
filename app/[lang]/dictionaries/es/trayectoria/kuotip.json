@@ -14,13 +14,7 @@
     "reporting": "Cofundador, 1 de 3 socios"
   },
   "minuto": {
-    "title": "Validar los dos lados antes de construir nada",
-    "items": [
-      "**Validé el problema por los dos lados del mercado**, usuarios y marcas: fraude, manipulación y costes crecientes en las plataformas tradicionales. **Más de 30 entrevistas a usuarios y 15 a empresas**, que además de confirmar la hipótesis nos eligieron el go-to-market.",
-      "**Diseñé los flujos completos del producto**, integrando verificación de identidad por voz y resúmenes automáticos con IA.",
-      "**Definí el MVP junto al product designer**, con una UI enfocada al sector elegido y pensada para un formato visual, no para el gráfico de estrellas de siempre.",
-      "**Apoyé a la CEO en estrategia y en las reuniones con fondos pre-seed.**"
-    ]
+    "title": "Validar los dos lados antes de construir nada"
   },
   "historia": {
     "title": "Tres piezas para arreglar una industria rota",

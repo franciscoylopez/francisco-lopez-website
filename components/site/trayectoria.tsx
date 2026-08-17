@@ -8,12 +8,19 @@ import { type Locale, pagePath } from "@/lib/i18n/config";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
 import { experienceOf } from "@/content/experiences";
+import { shortOf } from "@/content/experience-copy";
 
+// LA FILA NO LLEVA SU DESCRIPCIÓN, igual que no lleva su logo ni su `slug`: sale
+// del registro por experiencia, buscada por `company` (P48.5). Esa frase es una
+// de las TRES longitudes en que se cuenta lo mismo —la otra es el bullet del CV y
+// la tercera su gemelo de «En un minuto»—, y mientras vivió en el diccionario no
+// había forma de ver que había dejado de decir lo que dice el deep-dive. La de
+// INDYA lo demostraba: hablaba de «pricing y onboarding» cuando el titular de su
+// página es literalmente «no sobre features».
 type TrayRow = {
   period: string;
   role: string;
   company: string;
-  desc: string;
 };
 
 export type TrayectoriaDict = {
@@ -103,7 +110,7 @@ function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
           {row.company}
         </div>
         <p className="text-muted-foreground m-0 mt-[0.7rem] max-w-[60ch] text-[0.92rem] leading-[1.6] text-pretty">
-          {row.desc}
+          {shortOf(lang, row.company)}
         </p>
       </div>
       <LogoCell company={row.company} />
@@ -136,7 +143,7 @@ function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
           {row.company}
         </div>
         <p className="text-muted-foreground m-0 mt-[0.6rem] max-w-[58ch] text-[0.9rem] leading-[1.6] text-pretty">
-          {row.desc}
+          {shortOf(lang, row.company)}
         </p>
       </div>
       <LogoCell company={row.company} />

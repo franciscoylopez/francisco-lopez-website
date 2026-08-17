@@ -68,5 +68,15 @@ jobs:
       - name: Palette
         run: npm run check:palette
 
+      # De una experiencia se cuenta lo mismo en tres longitudes —la frase de
+      # Trayectoria, el bullet del CV y su gemelo del deep-dive— y ahora viven en
+      # el mismo objeto (P48.5). Lo que la estructura no puede garantizar lo
+      # comprueba esto: que ES y EN tengan la misma cobertura, que tenga versión
+      # larga quien tiene página, y que una cifra no viva en una longitud y falte
+      # en la otra. Mismo giro que la paleta —se busca la AUSENCIA, no el patrón—
+      # y por la misma razón: ocho divergencias reales que no veía nadie.
+      - name: Experiencias
+        run: npm run check:experiencias
+
       - name: Build
         run: npm run build

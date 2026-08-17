@@ -41,7 +41,16 @@ const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const BASELINE = join("scripts", ".html-baseline");
 const ACTUAL = join("scripts", ".html-actual");
 
-/** Las doce variantes: las seis páginas del sitio × los dos idiomas. */
+/**
+ * Las veintidós variantes: las seis páginas del sitio y las cinco del deep-dive,
+ * × los dos idiomas.
+ *
+ * LAS DEL DEEP-DIVE ENTRAN CON P48.5, y no por completismo: ese refactor saca los
+ * bullets de «En un minuto» del diccionario y los lleva al registro por
+ * experiencia, así que las páginas que de verdad cambian son estas cinco. Un gate
+ * que no mira lo que se está moviendo no es un gate. (Añadirlas estaba tareado en
+ * P49; se adelanta porque hace falta aquí.)
+ */
 const ROUTES = [
   "/",
   "/sobre-mi",
@@ -49,12 +58,22 @@ const ROUTES = [
   "/design-system",
   "/accesibilidad",
   "/cookies",
+  "/trayectoria/emendu",
+  "/trayectoria/kuotip",
+  "/trayectoria/indya",
+  "/trayectoria/freepik",
+  "/trayectoria/thetool",
   "/en",
   "/en/sobre-mi",
   "/en/brand-kit",
   "/en/design-system",
   "/en/accesibilidad",
   "/en/cookies",
+  "/en/trayectoria/emendu",
+  "/en/trayectoria/kuotip",
+  "/en/trayectoria/indya",
+  "/en/trayectoria/freepik",
+  "/en/trayectoria/thetool",
 ] as const;
 
 const slug = (route: string) =>

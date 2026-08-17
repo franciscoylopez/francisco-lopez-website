@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "check:palette": "tsx scripts/check-palette.ts",
+    "check:experiencias": "tsx scripts/check-experience-copy.ts",
     "cv": "tsx scripts/cv/generate.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
