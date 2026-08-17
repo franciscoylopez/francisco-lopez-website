@@ -6,7 +6,7 @@ import type {
 import Image from "next/image";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import { CARD, PANEL, SECTION, WRAP } from "@/components/ui/layout";
+import { CARD, PANEL, PROSE, SECTION, WRAP } from "@/components/ui/layout";
 import { artefactoSvg } from "@/lib/artefacto";
 import { Rich } from "@/components/ui/rich";
 import { SectionHeader } from "@/components/ui/heading";
@@ -348,8 +348,38 @@ export function DeepDive({
 
   return (
     <>
-      <div className="py-[clamp(1.5rem,3vw,1.75rem)]">
-        <div className={WRAP}>
+      {/* LA APERTURA OCUPA EL PLIEGUE, y el `min-h` no es decoración: sin él, en
+          cuanto la ventana pasa de ~700px de alto asoma el rótulo de «01 — En un
+          minuto» y su primer bullet, y la primera vista deja de ser una portada
+          para ser portada + principio de otra sección. Medido el 2026-08-17: el
+          bloque de apertura termina SIEMPRE en 537px (es tipográfico, no depende
+          del ancho), así que sobran 203px a 1536×740, 543 a 1920×1080 y 903 a
+          2560×1440 — y ahí es donde se cuela el segundo bloque.
+
+          `calc(100svh − 5rem)` y `md:` son los MISMOS que el hero de la home
+          (`site/hero.tsx`), no una constante nueva: 5rem es el alto del header
+          sticky y el guard de `md` deja el móvil fuera, donde llenar el pliegue
+          no compra nada.
+
+          Y es `min-h`, no `h`: en una ventana baja (1280×618, el 1920 con el
+          escalado de Windows al 150%) el contenido natural ya no cabe y la regla
+          no aplica, así que NO puede recortar nada. Es la lección de D50 al
+          revés — allí un alto proporcional podía comerse el contenido; aquí solo
+          puede añadir aire por debajo. */}
+      <div className="flex flex-col py-[clamp(1.5rem,3vw,1.75rem)] md:min-h-[calc(100svh-5rem)]">
+        {/* `w-full` NO SOBRA, y su ausencia costó un desplazamiento de 111px en
+            todo el bloque —breadcrumb incluido— que se vio en pantalla y no en el
+            código: al volver FLEX el contenedor de arriba, el `mx-auto` de `WRAP`
+            deja de ser «centra la caja de 1.360» y pasa a ser un margen automático
+            del eje transversal, que por especificación DESACTIVA el `stretch`. Sin
+            estirado, la caja se encoge a su contenido (1.138px medidos a 1.530 de
+            ventana) y el `mx-auto` la centra ahí, desalineada del nav, que sigue a
+            85. Declarando el ancho, el `max-w` del propio `WRAP` vuelve a mandar.
+
+            La lección es de método y ya está en `BRAND.md` §Cómo medir: una regla
+            de layout puede cambiar de significado por el contexto del padre sin
+            dar ni un error de compilación. */}
+        <div className={`${WRAP} flex w-full flex-1 flex-col`}>
           <div data-reveal className="mb-[clamp(2rem,4vw,3rem)]">
             <Breadcrumb
               routeLabel={breadcrumb.routeLabel}
@@ -361,27 +391,40 @@ export function DeepDive({
             />
           </div>
 
-          {/* La apertura SÍ es media columna: es la entrada, y el `max-w` del
-              titular es lo que la dibuja. Ver la nota de `Seccion`. */}
-          <header>
-            <SectionHeader
-              eyebrow={t.eyebrow}
-              title={t.title}
-              level={1}
-              size="page"
-              reveal
-              // 20ch y no 15: con 15 el titular caía a TRES líneas de 80px, y
-              // esas tres líneas eran las que empujaban los Datos 21,55px por
-              // debajo del borde a 1280×618. Con 20 entra en dos en las dos
-              // afirmaciones escritas, que además es lo que hace que las cinco
-              // aperturas pesen parecido en vez de depender de cuántas palabras
-              // tenga cada frase.
-              titleClassName="max-w-[20ch] text-balance"
-            />
-          </header>
+          {/* EL GRUPO TITULAR + DATOS SE CENTRA en el hueco que deja el
+              breadcrumb (`my-auto`), y no se ancla abajo. Se probaron las dos
+              viéndolas servidas a 1920×1080: con los Datos anclados al borde
+              inferior quedaban ~550px de vacío seguido entre el titular y ellos,
+              que no se lee como una portada que respira sino como un agujero.
+              Centrado, ese mismo aire se reparte arriba y abajo del grupo y la
+              composición aguanta de 618px a 1440px de alto. Es lo que ya hace el
+              hero de la home (`site/hero.tsx`, `flex items-center`); la
+              diferencia es que aquí el breadcrumb se queda arriba, porque es
+              carpintería y no parte de la portada.
 
-          <div data-reveal className="mt-[clamp(2.5rem,5vw,3.5rem)]">
-            <Datos datos={t.datos} labels={comun.datosLabels} />
+              El hueco titular→datos vuelve a ser `mt`, no `pt`: al no haber
+              margen automático que lo absorba, el margen normal ya vale. */}
+          <div className="my-auto">
+            <header>
+              <SectionHeader
+                eyebrow={t.eyebrow}
+                title={t.title}
+                level={1}
+                size="page"
+                reveal
+                // 20ch y no 15: con 15 el titular caía a TRES líneas de 80px, y
+                // esas tres líneas eran las que empujaban los Datos 21,55px por
+                // debajo del borde a 1280×618. Con 20 entra en dos en las dos
+                // afirmaciones escritas, que además es lo que hace que las cinco
+                // aperturas pesen parecido en vez de depender de cuántas
+                // palabras tenga cada frase.
+                titleClassName="max-w-[20ch] text-balance"
+              />
+            </header>
+
+            <div data-reveal className="mt-[clamp(2.5rem,5vw,3.5rem)]">
+              <Datos datos={t.datos} labels={comun.datosLabels} />
+            </div>
           </div>
         </div>
       </div>
@@ -391,11 +434,18 @@ export function DeepDive({
         label={comun.secciones.minuto}
         title={t.minuto.title}
       >
-        {/* Los discos en cian son DECORACIÓN, no información: lo que dice el
-            bullet es su texto, y el marcador solo lo puntea. Es el hueco que
-            `BRAND.md` deja abierto para los tokens de marca —«detalles»— y el
-            que da color a la sección sin teñir nada que haya que leer. */}
-        <ul className="text-foreground/90 marker:text-brand-cyan m-0 flex list-disc flex-col gap-[0.9rem] p-0 pl-[1.1rem]">
+        {/* MEDIA COLUMNA, y aquí sí. El cuerpo del deep-dive va a ancho de
+            contenedor (ver la nota de `Seccion`), pero esta sección y la de
+            Aprendizajes no son cuerpo: son la ENTRADA y el CIERRE de la página,
+            que es justo el tratamiento que aquella decisión les reservó. Y son
+            listas: un bullet a 1.280px deja la viñeta y el final de la línea a
+            medio metro uno del otro, así que la lista deja de leerse como lista.
+            La prosa aguanta el ancho porque tiene varias líneas seguidas que
+            arrastran la vista; una lista de un párrafo por punto, no.
+            (2026-08-17, revisión de Francisco sobre la página servida.) */}
+        <ul
+          className={`${PROSE} text-foreground/90 marker:text-brand-cyan m-0 flex list-disc flex-col gap-[0.9rem] p-0 pl-[1.1rem]`}
+        >
           {t.minuto.items.map((item, i) => (
             <li key={i} className="text-[1.0625rem] leading-[1.7]">
               <Rich text={item} />
@@ -441,7 +491,9 @@ export function DeepDive({
         {/* Lista ORDENADA: los aprendizajes van numerados en el documento de
             formato y se citan por su número. El marcador lo pinta la lista, no
             un dígito escrito en el texto. */}
-        <ol className="text-foreground/90 m-0 flex list-decimal flex-col gap-6 p-0 pl-[1.35rem] marker:font-semibold">
+        <ol
+          className={`${PROSE} text-foreground/90 m-0 flex list-decimal flex-col gap-6 p-0 pl-[1.35rem] marker:font-semibold`}
+        >
           {t.aprendizajes.items.map((a) => (
             <li key={a.title} className="text-[1.0625rem] leading-[1.75]">
               <strong className="text-foreground font-semibold">
