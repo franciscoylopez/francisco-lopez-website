@@ -627,3 +627,88 @@
     transition: none;
   }
 }
+
+/* Facade del vídeo incrustado (`components/ui/video-embed.tsx`, P48). El aspecto
+   vive aquí y no en clases sueltas del punto de uso por D35: los dos extremos de
+   cada transición tienen que pertenecer a la regla que la declara.
+
+   El disco de play es `--primary` con su `--primary-foreground` encima, y es el
+   uso correcto del cian: reproducir es una ACCIÓN, no decoración.
+
+   POR QUÉ EL PÓSTER LLEVA VELO, Y POR QUÉ EL VELO ES `--background` Y NO NEGRO.
+   Un control de color FIJO sobre un póster ARBITRARIO no puede garantizar el 3:1
+   que WCAG 1.4.11 pide a un componente, y no es teoría: el póster de TheTool es el
+   teal de su marca, casi el cian del sitio, y sin velo el disco medía **2,81 en
+   oscuro y 2,59 en claro** contra él. Un velo NEGRO arregla oscuro y empeora
+   claro, que es la firma de D41 —un valor fijo no sirve a dos superficies
+   opuestas—. El velo del FONDO sí sirve: oscurece en oscuro y aclara en claro, o
+   sea aleja el póster del disco en los DOS temas, que es lo que hace falta.
+
+   EL 0,35 ESTÁ MEDIDO, NO ELEGIDO. Barrido sobre los píxeles que el navegador
+   pinta —no sobre el modelo, que se equivocó por partir de un teal más oscuro que
+   el real—, con el póster de TheTool:
+
+     velo   oscuro   claro
+     0,25    3,05     2,85  ✗
+     0,30    3,23     3,00  ← justo en el umbral, sin holgura
+     0,35    3,50     3,22  ✔
+     0,40    3,76     3,44
+
+   Y ENCIMA EL DISCO LLEVA ANILLO, porque el velo solo no cubre cualquier póster.
+   El control es de DOS TONOS —disco `--primary` + anillo `--primary-foreground`—
+   y eso hace que SIEMPRE haya un borde que pasa, aunque cambie cuál según el
+   póster y el tema. Medido sobre los dos pósters reales, con el velo puesto:
+
+     página   tema     disco/póster   anillo/póster   anillo/disco
+     TheTool  oscuro     3,50 ✔          2,39            8,36
+     TheTool  claro      3,22 ✔          2,46            7,93
+     INDYA    oscuro     2,73            3,06 ✔          8,36
+     INDYA    claro      3,97 ✔          2,00            7,93
+
+   El de INDYA en oscuro lo salva el ANILLO, no el disco: su póster es un tono
+   piel/madera de luminancia media, justo la zona donde el cian claro del tema
+   oscuro se le acerca. Ese caso es la razón de que el anillo exista.
+
+   El borde interno anillo/disco es **8,36 / 7,93 siempre**, porque es un par de
+   tokens del sistema y no depende de lo que haya detrás. Mismo principio que
+   `BRAND.md` §Controles con dos fondos: la pieza se define contra su propio
+   carril, no contra el fondo que le toque. */
+.video-facade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--background);
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+.video-facade:hover::after,
+.video-facade:focus-visible::after {
+  opacity: 0;
+}
+/* El `translate(-50%,-50%)` del centrado vive AQUÍ y no en las utilidades
+   `-translate-x-1/2 -translate-y-1/2` del punto de uso, que es justo el fallo que
+   D35 describe: con el reposo en una utilidad y el hover en esta regla, el
+   `transform` del hover sustituye al del centrado entero y el disco daría un salto
+   al esquinazo antes de escalar. Los dos extremos, en la misma regla. */
+.video-play {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  /* El anillo va en `box-shadow` y no en `border` para no entrar en la caja: el
+     centrado es geométrico y un borde de 3px lo descuadraría 3px. */
+  box-shadow: 0 0 0 3px var(--primary-foreground);
+  /* Por encima del velo, que es un `::after` del botón y por tanto se pinta
+     después de los hijos. */
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease;
+}
+.video-facade:hover .video-play,
+.video-facade:focus-visible .video-play {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+@media (prefers-reduced-motion: reduce) {
+  .video-facade::after,
+  .video-play {
+    transition: none;
+  }
+}

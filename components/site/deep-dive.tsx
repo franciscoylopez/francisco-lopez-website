@@ -10,6 +10,7 @@ import { CARD, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { artefactoSvg } from "@/lib/artefacto";
 import { Rich } from "@/components/ui/rich";
 import { SectionHeader } from "@/components/ui/heading";
+import { VideoEmbed } from "@/components/ui/video-embed";
 
 // PLANTILLA ÚNICA del deep-dive por experiencia (P48). Una sola forma renderiza
 // las cinco: la homogeneidad de la serie no la dan los títulos —los subapartados
@@ -225,6 +226,7 @@ function BloqueHistoria({
   title,
   paras,
   imagen,
+  video,
   cierre,
 }: DeepDiveDict["historia"]["bloques"][number]) {
   const prosa = (
@@ -232,6 +234,22 @@ function BloqueHistoria({
       <Body paragraphs={paras} />
     </SectionHeader>
   );
+  // El vídeo NO entra en el grid de la captura: va a lo ancho y por debajo de la
+  // prosa que lo nombra, porque es la prueba de lo que se acaba de leer. Hoy
+  // ningún bloque lleva las dos cosas, y si algún día lleva, este es el orden.
+  const clip = video ? (
+    <figure className="m-0 mx-auto mt-6 max-w-[46rem]">
+      <VideoEmbed
+        id={video.id}
+        poster={video.poster}
+        title={video.title}
+        playLabel={video.playLabel}
+      />
+      <figcaption className="text-muted-foreground m-0 mt-3 text-[0.9rem] leading-[1.55] text-pretty">
+        {video.nota}
+      </figcaption>
+    </figure>
+  ) : null;
   // `mt-5` y no un hueco de sección: es el MISMO paso que `Body` deja entre dos
   // párrafos, porque esto es el párrafo siguiente y no un apartado nuevo.
   const remate = cierre ? (
@@ -244,6 +262,7 @@ function BloqueHistoria({
     return (
       <div>
         {prosa}
+        {clip}
         {remate}
       </div>
     );
@@ -274,6 +293,7 @@ function BloqueHistoria({
           </div>
         </div>
       </div>
+      {clip}
       {remate}
     </div>
   );

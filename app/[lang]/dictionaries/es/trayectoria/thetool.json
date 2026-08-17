@@ -11,7 +11,7 @@
     "periodo": "May 2016 — Oct 2021",
     "sector": "SaaS B2B · ASO",
     "tamano": "De 4 a 24 personas",
-    "reporting": "Cofundador, 1 de 4 socios · voz y voto"
+    "reporting": "Cofundador, 1 de 4 socios"
   },
   "minuto": {
     "title": "Cinco años y medio de producto, de cero a la venta",
@@ -47,7 +47,14 @@
           "Analizar a diario la App Store y Google Play enteras no es sencillo, y meter ese dato en el producto de forma sólida, menos. Se notaba: los sprints se lanzaban bien, pero los bugs del scraping aparecían **en la semana del lanzamiento**, después de correr los crons nocturnos.",
           "Así que cambiamos el sprint: **mensual, tres semanas de desarrollo y una de testing externo** con los consultores ASO de PickASO y con algún cliente. Menos cadencia de entrega, y valor estable. Y le dimos la vuelta al coste con **TheTool Monthly**, una comunicación mensual con cada funcionalidad nueva explicada paso a paso: el día 1 había algo nuevo y sabías cómo usarlo. La estabilidad dejó de ser una restricción interna y pasó a ser algo que el cliente notaba.",
           "Con la entrega estable pudimos volver a producto, con un foco que trasladamos a todo el equipo: dar al cliente el máximo de información sobre sus competidores. De ahí salió **descifrar el número real de instalaciones detrás del tramo «1 M – 5 M»** que Google Play publica como caja negra, y con él una línea entera de análisis de mercado con dato verificado — informes sectoriales y de tendencias, alguno de los cuales llegó a los informativos de televisión nacional."
-        ]
+        ],
+        "video": {
+          "id": "rf79VTlAdUM",
+          "poster": "/img/thetool-video-poster.webp",
+          "title": "TheTool, la herramienta de App Store Optimization",
+          "playLabel": "Reproducir el vídeo",
+          "nota": "Al pulsar play, el vídeo se carga desde YouTube (youtube-nocookie.com) y se aplican sus condiciones. Hasta entonces esta página no hace ninguna petición a Google."
+        }
       },
       {
         "title": "La pieza que llegó tarde, y la ronda que no llegó",

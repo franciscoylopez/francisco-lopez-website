@@ -11,7 +11,7 @@
     "periodo": "Jan 2022 — Dec 2023",
     "sector": "B2C SaaS · Health tech",
     "tamano": "From 13 to 27 people",
-    "reporting": "To the CPO and CTO — both roles in the same person"
+    "reporting": "CPO/CTO"
   },
   "minuto": {
     "title": "Growth built on the lifecycle, not on features",
@@ -47,7 +47,16 @@
         "title": "Apple, Gasol and the apps where the user already lived",
         "paras": [
           "The pairing with the product designer was one of the pieces behind the jump, and it did not take long to be noticed from outside: Apple spotted the app and brought us into **Apple App Store Foundations**, its mentoring programme. We came out of it as **one of the first companies in Europe to ship widgets** —a feature Android had had for years and that was just launching on iOS— and featured on the App Store: for the user, sorting the day's nutrition without opening the app; for us, visibility money cannot buy.",
-          "Shortly after, [**Pau Gasol became a shareholder**](https://getindya.com/pau-gasol-indya/). What mattered was not the amount: it was what it meant to a client who trains.",
+          "Shortly after, [Pau Gasol became a shareholder](https://getindya.com/pau-gasol-indya/). What mattered was not the amount: it was what it meant to a client who trains."
+        ],
+        "video": {
+          "id": "RsHJ6ejTfIE",
+          "poster": "/img/indya-gasol-poster.webp",
+          "title": "Pau Gasol joins INDYA (in Spanish)",
+          "playLabel": "Play the video",
+          "nota": "Pressing play loads the video from YouTube (youtube-nocookie.com) under their terms. Until then this page makes no request to Google."
+        },
+        "cierre": [
           "And we integrated where the user already was —**Apple Health**, **Health Connect**, **Strava** and **TrainingPeaks**—. The direct benefit was not having to log the same thing twice, but the big one was for the service: the nutrition team began planning **on real performance, not on what the client remembered**."
         ]
       }

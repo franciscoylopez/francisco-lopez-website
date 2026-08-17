@@ -27,8 +27,17 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
   // next/font auto-hospeda las fuentes; no hay orígenes externos de fuentes.
   "font-src 'self'",
-  // <noscript> de GTM inyecta un iframe a googletagmanager/ns.html.
-  "frame-src https://www.googletagmanager.com",
+  // <noscript> de GTM inyecta un iframe a googletagmanager/ns.html; y el vídeo de
+  // Pau Gasol del deep-dive de INDYA se incrusta desde youtube-nocookie (§43).
+  //
+  // ES `youtube-nocookie.com` Y NO `youtube.com`, y la diferencia no es cosmética:
+  // el dominio normal escribe cookies de publicidad en cuanto se pinta el iframe;
+  // el `-nocookie` no toca almacenamiento hasta que alguien le da al play. Junto
+  // con el facade —el iframe no existe en el DOM hasta el clic— eso deja la página
+  // SIN una sola petición a Google mientras nadie pulse. Primera ampliación de la
+  // CSP desde Clarity (D32) y con su mismo criterio: se añade el origen exacto que
+  // hace falta, no el comodín.
+  "frame-src https://www.googletagmanager.com https://www.youtube-nocookie.com",
 ].join("; ");
 
 // Cabeceras de seguridad — Fase 1 (tarea 30.4): las triviales y sin riesgo. Riesgo

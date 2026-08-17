@@ -11,7 +11,7 @@
     "periodo": "May 2016 — Oct 2021",
     "sector": "B2B SaaS · ASO",
     "tamano": "From 4 to 24 people",
-    "reporting": "Co-founder, 1 of 4 partners · full vote"
+    "reporting": "Co-founder, 1 of 4 partners"
   },
   "minuto": {
     "title": "Five and a half years of product, from zero to the sale",
@@ -47,7 +47,14 @@
           "Analysing the entire App Store and Google Play daily is not simple, and putting that data into the product solidly is less so. It showed: sprints shipped fine, but the scraping bugs appeared **during launch week**, after the nightly crons ran.",
           "So we changed the sprint: **monthly, three weeks of development and one of external testing** with PickASO's ASO consultants and with a customer or two. Less delivery cadence, and stable value. And we turned the cost around with **TheTool Monthly**, a monthly communication with every new feature explained step by step: on the 1st there was something new and you knew how to use it. Stability stopped being an internal constraint and became something the customer noticed.",
           "With delivery stable we could go back to product, with a focus we passed on to the whole team: give the customer the maximum information about their competitors. Out of that came **decoding the real install numbers behind the «1 M – 5 M» band** that Google Play publishes as a black box, and with it a whole line of market analysis on verified data — sector and trend reports, some of which made it onto national television news."
-        ]
+        ],
+        "video": {
+          "id": "rf79VTlAdUM",
+          "poster": "/img/thetool-video-poster.webp",
+          "title": "TheTool, the App Store Optimization tool",
+          "playLabel": "Play the video",
+          "nota": "Pressing play loads the video from YouTube (youtube-nocookie.com) under their terms. Until then this page makes no request to Google."
+        }
       },
       {
         "title": "The piece that arrived late, and the round that never did",
