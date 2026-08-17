@@ -3,6 +3,8 @@ import type {
   TrayectoriaComunDict,
 } from "@/app/[lang]/dictionaries";
 
+import Image from "next/image";
+
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { CARD, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { artefactoSvg } from "@/lib/artefacto";
@@ -196,6 +198,88 @@ function Artefacto({
 }
 
 /**
+ * Un bloque de «La historia». Sin captura es una columna de prosa a ancho de
+ * contenedor; con captura se parte en dos y la imagen va a la DERECHA.
+ *
+ * POR QUÉ AL LADO Y NO DEBAJO. Debajo, a ancho de contenedor, la captura mide
+ * 1.280px y se lee entera —es lo que hace el artefacto de Emendu, que además
+ * scrollea antes que encogerse—. Pero un artefacto y una captura de producto no
+ * piden lo mismo: el diagrama hay que LEERLO nodo a nodo, y esta captura hay que
+ * RECONOCERLA. A media columna (624px, o sea 0,27 del máster de 2.268) siguen
+ * legibles el nombre, la navegación y las tres cifras grandes; se pierde la letra
+ * pequeña («142.879 All time»), que no es lo que la imagen viene a decir. A
+ * cambio, al lado del párrafo que afirma que el formato de las reseñas «parece de
+ * hace veinte años», la prueba y la afirmación se leen a la vez.
+ *
+ * EL ORDEN DEL DOM ES TEXTO → IMAGEN en los dos breakpoints, así que el orden de
+ * lectura no depende del grid (punto 4 del checklist). En móvil apila sin más.
+ *
+ * Y `cierre` SALE DEL GRID: corre a ancho de página por debajo de la captura. La
+ * imagen se centra contra lo que ilustra —las tres piezas— y no contra el párrafo
+ * que viene después de haberlas enumerado, que ya no habla de ella. Sin ese corte
+ * el bloque queda descuadrado: la columna de texto se alarga por debajo de la
+ * imagen y el centrado deja de significar nada (2026-08-17, revisión de Francisco
+ * sobre la página servida).
+ */
+function BloqueHistoria({
+  title,
+  paras,
+  imagen,
+  cierre,
+}: DeepDiveDict["historia"]["bloques"][number]) {
+  const prosa = (
+    <SectionHeader title={title} level={3} size="sub">
+      <Body paragraphs={paras} />
+    </SectionHeader>
+  );
+  // `mt-5` y no un hueco de sección: es el MISMO paso que `Body` deja entre dos
+  // párrafos, porque esto es el párrafo siguiente y no un apartado nuevo.
+  const remate = cierre ? (
+    <div className="mt-5">
+      <Body paragraphs={cierre} />
+    </div>
+  ) : null;
+
+  if (!imagen)
+    return (
+      <div>
+        {prosa}
+        {remate}
+      </div>
+    );
+
+  return (
+    <div>
+      <div className="grid items-center gap-[clamp(1.75rem,4vw,3rem)] md:grid-cols-2">
+        <div>{prosa}</div>
+        {/* El panel pastel desplazado es el mismo gesto que enmarca las fotos de
+            Sobre mí: DECORACIÓN, del hueco que `BRAND.md` §Color deja a los
+            tokens de marca. Es `-soft`, así que no lleva nada que haya que leer,
+            y se retira en móvil para no robar aire. Morado y no cian porque el
+            cian es el color de acción y aquí no hay nada que pulsar. */}
+        <div className="relative mx-auto w-full max-w-[34rem]">
+          <div
+            aria-hidden
+            className="bg-brand-purple-soft absolute inset-0 rounded-lg md:translate-x-3 md:translate-y-3"
+          />
+          <div className="border-border relative overflow-hidden rounded-lg border">
+            <Image
+              src={imagen.src}
+              alt={imagen.alt}
+              width={1600}
+              height={1039}
+              sizes="(max-width: 767px) 100vw, 544px"
+              className="block h-auto w-full"
+            />
+          </div>
+        </div>
+      </div>
+      {remate}
+    </div>
+  );
+}
+
+/**
  * Las cifras del caso. Tres tarjetas y no una tabla, por lo mismo que `Datos`: no
  * hay columnas que comparar, hay tres medidas sueltas de la misma entrega. La
  * cifra va en `font-display` porque es lo que el lector rápido de §2 se lleva si
@@ -307,11 +391,7 @@ export function DeepDive({
       >
         <div className="flex flex-col gap-[clamp(2rem,4vw,2.75rem)]">
           {t.historia.bloques.map((b) => (
-            <div key={b.title}>
-              <SectionHeader title={b.title} level={3} size="sub">
-                <Body paragraphs={b.paras} />
-              </SectionHeader>
-            </div>
+            <BloqueHistoria key={b.title} {...b} />
           ))}
         </div>
       </Seccion>

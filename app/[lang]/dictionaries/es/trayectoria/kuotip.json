@@ -11,7 +11,7 @@
     "periodo": "Feb 2024 — Dic 2024",
     "sector": "Customer Reviews",
     "tamano": "4 personas",
-    "reporting": "Cofundador, 1 de 3 socios · voz y voto"
+    "reporting": "Cofundador, 1 de 3 socios"
   },
   "minuto": {
     "title": "Validar los dos lados antes de construir nada",
@@ -38,9 +38,15 @@
         "paras": [
           "**Que tú seas tú.** Nos aliamos con una empresa de reconocimiento de voz que identificaba de forma inequívoca y dejaba una marca real. Eso impedía las cuentas múltiples de una misma persona y servía para detectar comportamientos anómalos.",
           "**Que las reseñas sirvan de algo.** ¿De qué sirven 5.000 reseñas si el usuario solo lee las diez últimas? Ahí la IA ayudaba mucho: resúmenes de todas ellas y catalogación del sentimiento sobre la marca. Y comprobado eso, las posibilidades se abrían solas — poder **hablar** con las reseñas, identificar patrones, «este producto es para ti si…».",
-          "**Que no parezcan de hace veinte años.** Habíamos atajado dos problemas y el aspecto seguía siendo el mismo gráfico de cinco a una estrellas con alguna foto de dudosa calidad. La tercera vía era llevar el peso de las redes y los microinfluencers a las reseñas, y hacer que **perdurase**: un bloque B2B2C donde las marcas lanzaban campañas de prueba de producto a una base de microinfluencers que opinaban libremente con reseñas de alta calidad visual.",
+          "**Que no parezcan de hace veinte años.** Habíamos atajado dos problemas y el aspecto seguía siendo el mismo gráfico de cinco a una estrellas con alguna foto de dudosa calidad. La tercera vía era llevar el peso de las redes y los microinfluencers a las reseñas, y hacer que **perdurase**: un bloque B2B2C donde las marcas lanzaban campañas de prueba de producto a una base de microinfluencers que opinaban libremente con reseñas de alta calidad visual."
+        ],
+        "cierre": [
           "Verificación de identidad + contenido que sirve + formato actual. Con esas tres piezas teníamos la base para cambiar una industria rota en la que las marcas invierten presupuestos grandes, así que contratamos product designer y un equipo de desarrollo externo liderado por nuestro CTO, montamos sprints de dos semanas con hitos claros y salimos a buscar ronda."
-        ]
+        ],
+        "imagen": {
+          "src": "/img/kuotip-dashboard.webp",
+          "alt": "Dashboard de KUOTIP: el resumen de reseñas del último mes, la valoración media y el porcentaje de verificación; debajo, la distribución por estrellas, la evolución mensual de las tres métricas y el estado de las campañas de producto con microinfluencers."
+        }
       },
       {
         "title": "El año que nos dimos",

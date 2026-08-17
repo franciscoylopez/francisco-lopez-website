@@ -155,16 +155,44 @@ export interface DeepDiveDict {
     reporting: string;
   };
   minuto: { title: string; items: string[] };
-  historia: { title: string; bloques: { title: string; paras: string[] }[] };
+  historia: {
+    title: string;
+    bloques: {
+      title: string;
+      paras: string[];
+      /**
+       * Captura de producto que acompaña al bloque, si la hay. OPCIONAL como
+       * `caso`: una experiencia enseña interfaz cuando la tiene y cuando el
+       * bloque habla de ella, no por rellenar el hueco.
+       *
+       * `src` no es copy y aun así vive aquí, igual que el `svg` del artefacto:
+       * es el mismo archivo en los dos idiomas, y sacarlo a `content/` obligaría
+       * a un segundo registro para una sola imagen. Lo que SÍ se traduce es el
+       * `alt`, que es lo que lee quien no ve la captura (punto 8 del checklist).
+       */
+      imagen?: { src: string; alt: string };
+      /**
+       * Los párrafos que salen del grid y corren a ANCHO DE PÁGINA por debajo de
+       * la captura. El corte es explícito y no «el último párrafo», porque no es
+       * una regla de maquetación sino de contenido: `paras` es lo que la imagen
+       * ilustra —las tres piezas— y `cierre` es lo que viene DESPUÉS de haberlas
+       * enumerado. Sin ese corte, la imagen se centra contra un texto que ya no
+       * habla de ella y el bloque queda descuadrado.
+       *
+       * Mismo vocabulario que `caso.cierre`, que hace exactamente esto mismo
+       * detrás del artefacto y de los resultados.
+       */
+      cierre?: string[];
+    }[];
+  };
   caso?: {
     title: string;
     paras: string[];
     /**
      * El artefacto de la página, si lo tiene. La política del deep-dive pide que
-     * sea REAL —no una ilustración del método—, uno por página como techo, ocho
-     * nodos como máximo, sin proveedores ni importes. El DIBUJO vive en código
-     * (`ui/flow-diagram.tsx`): aquí solo lo que es copy, que es lo único que se
-     * traduce.
+     * sea REAL —no una ilustración del método—, uno por página como techo, sin
+     * proveedores ni importes. El DIBUJO vive en `content/artefactos/`, generado
+     * desde su `.mmd`: aquí solo lo que es copy, que es lo único que se traduce.
      */
     artefacto?: {
       title: string;
