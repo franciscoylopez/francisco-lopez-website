@@ -14,15 +14,7 @@
     "reporting": "CPO y CTO"
   },
   "minuto": {
-    "title": "Crecimiento sobre el ciclo de vida, no sobre features",
-    "items": [
-      "**Estrategia de crecimiento sobre el ciclo de vida, no sobre funcionalidades.** Co-definí las tres palancas —activación, engagement y retención— y con ellas se ordenaron el roadmap y los OKR del equipo.",
-      "**Práctica de user research donde no había ninguna.** Entrevistas, encuestas y análisis post-churn en cadencia continua: INDYA tenía una estructura de datos muy buena y poca conversación con sus usuarios.",
-      "**Churn mensual del 16% al 10%.** Varios frentes a la vez para entender y atajar el churn voluntario y el involuntario: acciones de producto combinadas con customer success.",
-      "**Activación del primer mes: +28%.** Onboarding, personalización y comprensión de valor — que el usuario nuevo entienda para qué sirve la app antes de que se le pase la motivación con la que se la descargó.",
-      "**Rediseño del pricing con A/B testing.** Unifiqué planes y quité barreras de entrada: **+13% de conversión y +5% de ARPU**, sin tocar la retención.",
-      "**Delivery más consistente.** De Trello a Jira, ceremonias ágiles de verdad, criterios de entrega y aprobación, sprints con un solo foco y retrospectivas para mejorar como equipo."
-    ]
+    "title": "Crecimiento sobre el ciclo de vida, no sobre features"
   },
   "historia": {
     "title": "De software de un servicio a producto",

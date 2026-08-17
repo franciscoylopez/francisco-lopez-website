@@ -85,6 +85,8 @@ export default async function ExperiencePage({ params }: Params) {
         breadcrumb={common.breadcrumb}
         homeHref={pagePath(lang)}
         indexHref={pagePath(lang, BASE)}
+        lang={lang}
+        slug={slug}
       />
       <DeepDiveNav
         slug={slug}

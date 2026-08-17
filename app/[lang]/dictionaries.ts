@@ -154,7 +154,14 @@ export interface DeepDiveDict {
     tamano: string;
     reporting: string;
   };
-  minuto: { title: string; items: string[] };
+  /**
+   * Solo el TÍTULO. Los bullets viven en `content/experience-copy/`, donde cada
+   * uno está emparejado con su versión corta del CV: son el mismo hecho a dos
+   * longitudes y la regla 1 del formato pide que se muevan juntos (P48.5).
+   * Mientras vivieron aquí, siete cifras existían solo en esta versión y una
+   * solo en la del CV, y nada en el build podía verlo.
+   */
+  minuto: { title: string };
   historia: {
     title: string;
     bloques: {

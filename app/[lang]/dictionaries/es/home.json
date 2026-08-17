@@ -73,54 +73,46 @@
       {
         "period": "Feb 2025 — Actualidad",
         "role": "Product Manager",
-        "company": "Emendu",
-        "desc": "Lideré la digitalización de Sales & Operaciones y evolucioné el agente IA LISA; miembro del equipo de liderazgo junto a Dirección, Operaciones, Finanzas y Tech."
+        "company": "Emendu"
       },
       {
         "period": "Feb 2024 — Nov 2024",
         "role": "Cofounder & Product",
-        "company": "KUOTIP",
-        "desc": "Validé el problema de fraude en reviews y diseñé el MVP con verificación por voz e IA; como cofundador, apoyé a la CEO en el fundraising pre-seed."
+        "company": "KUOTIP"
       },
       {
         "period": "Ene 2022 — Dic 2023",
         "role": "Product Lead",
-        "company": "INDYA",
-        "desc": "Rediseñé pricing y onboarding para mejorar activación y reducir churn; liderazgo del equipo y optimización de la entrega de valor mediante procesos y agilidad."
+        "company": "INDYA"
       },
       {
         "period": "Oct 2021 — Dic 2021",
         "role": "Product Manager",
-        "company": "Freepik",
-        "desc": "Investigué y definí funcionalidades para el área de contributors a partir de análisis cualitativo y cuantitativo. Gestión de los OKR del squad."
+        "company": "Freepik"
       }
     ],
     "nested": [
       {
         "period": "May 2016 — Oct 2021",
         "role": "Cofounder & Product",
-        "company": "TheTool",
-        "desc": "Cofundador con voz y voto en las decisiones clave; lideré producto, roadmap y el equipo de desarrollo (backend, frontend, diseño)."
+        "company": "TheTool"
       },
       {
         "period": "Sep 2015 — Dic 2016",
         "role": "COO",
-        "company": "PICKASO",
-        "desc": "Profesionalicé estructura y cartera de servicios de la agencia; realicé la investigación de mercado de los futuros competidores de TheTool."
+        "company": "PICKASO"
       }
     ],
     "previo": [
       {
         "period": "Sep 2013 — Sep 2015",
         "role": "Digital Marketing Manager",
-        "company": "Ontecnia (Malavida, Lecturalia, BonViveur…)",
-        "desc": "Crecimiento orgánico de 3,2M → 9,4M visitas mensuales; llevé el modelo de negocio de instaladores intrusivos a contenido de valor y monetización por vídeo — el inicio de mi giro hacia product-first."
+        "company": "Ontecnia (Malavida, Lecturalia, BonViveur…)"
       },
       {
         "period": "2009 — 2013",
         "role": "Digital Marketing / Performance",
-        "company": "Havas Media · Increnta · Miss Conversion",
-        "desc": "Adquisición y performance en agencias líderes — la base de analítica, CRO, UX y liderazgo que facilitó el salto a producto."
+        "company": "Havas Media · Increnta · Miss Conversion"
       }
     ]
   },

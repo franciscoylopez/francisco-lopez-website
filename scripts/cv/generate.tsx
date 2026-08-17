@@ -29,6 +29,7 @@ import { content as enContent } from "../../content/cv/content.en";
 import type { CV, CvContent, Job, AuthoredJob } from "../../content/cv/types";
 import { loadDict, buildEducation, buildTools, experienceFacts, previousFacts, matchFact, type FactRow } from "./facts";
 import { brandHex, paletteHex } from "../../lib/design-values";
+import { cvBullets } from "../../content/experience-copy";
 
 const ROOT = process.cwd();
 const asset = (p: string) => path.join(ROOT, p);
@@ -127,7 +128,7 @@ const s = StyleSheet.create({
   },
 
   // Experiencia
-  job: { marginBottom: 4.5 },
+  job: { marginBottom: 3.5 },
   jobHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
   jobHeadLeft: { flex: 1, paddingRight: 10 },
   jobCompany: { fontFamily: "Bricolage", fontWeight: 600, fontSize: 10.5, color: C.ink },
@@ -135,7 +136,7 @@ const s = StyleSheet.create({
   jobContext: { fontSize: 9, color: C.muted },
   jobPeriod: { fontSize: 8.5, color: C.muted, fontFamily: "Inter" },
   jobMeta: { fontSize: 8, color: C.muted, marginTop: 1, marginBottom: 2.5 },
-  bulletRow: { flexDirection: "row", marginBottom: 1.4, paddingRight: 2 },
+  bulletRow: { flexDirection: "row", marginBottom: 0.8, paddingRight: 2 },
   bulletDot: { width: 3, height: 3, borderRadius: 1.5, backgroundColor: C.cyan, marginTop: 4.2, marginRight: 6 },
   bulletText: { flex: 1, fontSize: 9, lineHeight: 1.36, color: C.ink },
 
@@ -147,7 +148,7 @@ const s = StyleSheet.create({
   eduItem: { marginBottom: 3.5 },
   eduTitle: { fontFamily: "Inter", fontWeight: 600, fontSize: 9.5, color: C.ink },
   eduInst: { fontSize: 8.5, color: C.muted, marginTop: 0.5 },
-  skillRow: { flexDirection: "row", marginBottom: 3 },
+  skillRow: { flexDirection: "row", marginBottom: 2 },
   skillLabel: { fontFamily: "Inter", fontWeight: 600, fontSize: 9, color: C.ink, width: 118 },
   skillValue: { flex: 1, fontSize: 9, color: C.ink, lineHeight: 1.4 },
   // Igual que skillLabel: tinta en negrita, no cian. El cian es el color de acción
@@ -340,10 +341,19 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
   );
 }
 
-// Fusiona un rol autorado con sus hechos del diccionario (rol, periodo, proyecto).
-function mergeJob(a: AuthoredJob, facts: FactRow[]): Job {
+// Fusiona un rol autorado con sus hechos del diccionario (rol, periodo, proyecto)
+// y con sus bullets del registro por experiencia (P48.5). Las tres fuentes se unen
+// por `company`, y las tres LANZAN si no hay match: mejor romper la generación que
+// imprimir en el papel los bullets de otra empresa.
+function mergeJob(a: AuthoredJob, facts: FactRow[], lang: "es" | "en"): Job {
   const f = matchFact(facts, a.company);
-  return { ...a, role: f.role, period: f.period, project: f.project };
+  return {
+    ...a,
+    role: f.role,
+    period: f.period,
+    project: f.project,
+    bullets: cvBullets(lang, a.company),
+  };
 }
 
 // Ensambla el CV FUSIONADO (autorado + hechos del diccionario del locale).
@@ -360,10 +370,10 @@ function assemble(lang: "es" | "en", content: CvContent): CV {
     summary: content.summary,
     skills: content.skills,
     milestones: content.milestones,
-    experience: content.experience.map((a) => mergeJob(a, expFacts)),
+    experience: content.experience.map((a) => mergeJob(a, expFacts, lang)),
     previous: {
       intro: content.previous.intro,
-      roles: content.previous.roles.map((a) => mergeJob(a, prevFacts)),
+      roles: content.previous.roles.map((a) => mergeJob(a, prevFacts, lang)),
     },
     education: buildEducation(dict),
     tools: buildTools(dict),

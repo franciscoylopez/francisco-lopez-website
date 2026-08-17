@@ -14,15 +14,7 @@
     "reporting": "Miembro del equipo de liderazgo"
   },
   "minuto": {
-    "title": "Darle a un SaaS recién creado un modelo de negocio",
-    "items": [
-      "**Estrategia de producto end-to-end, empezando por el ICP.** Lo redefiní con discovery fuera del pipeline comercial —empresas de 20 a 150 empleados sin IT interno— y reorienté con él el onboarding y los flujos clave: **de 0 a más de 50 clientes** de SaaS en el primer año.",
-      "**De operativa manual a sistema digital y apificado.** Sales, Accounts y Operaciones trabajaban fuera del software y la operativa apenas dejaba rastro: **del 23% al 90% de trazabilidad** del pipeline.",
-      "**Partnership estratégico con Sesame HR**, liderado junto al Tech Lead: integrar en un software de RRHH todo el flujo de renting y MDM. **Fase 1 entregada en 7 semanas de producto**, y un canal de adquisición nuevo para Emendu.",
-      "**LISA, el agente de IA:** de un sistema inconsistente a un agente funcional, con acceso dinámico a datos, documentación viva y capacidades multilingües.",
-      "**Del SaaS de agencia externa a equipo técnico propio.** La plataforma en Bubble había validado el modelo, pero frenaba justo las dos áreas de más valor. Empujé el cambio y participé en la incorporación del Tech Lead.",
-      "**Como product builder, construí el hub de herramientas internas**, desarrollado con Claude Code para reports, informes y propuestas."
-    ]
+    "title": "Darle a un SaaS recién creado un modelo de negocio"
   },
   "historia": {
     "title": "Cómo hacer que el SaaS dejara de ser un añadido",

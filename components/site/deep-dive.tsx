@@ -6,6 +6,8 @@ import type {
 import Image from "next/image";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { deepBulletsOfSlug } from "@/content/experience-copy";
+import type { Locale } from "@/lib/i18n/config";
 import { CARD, PANEL, PROSE, SECTION, WRAP } from "@/components/ui/layout";
 import { artefactoSvg } from "@/lib/artefacto";
 import { Rich } from "@/components/ui/rich";
@@ -55,6 +57,14 @@ type DeepDiveProps = {
   breadcrumb: BreadcrumbDict;
   homeHref: string;
   indexHref: string;
+  /**
+   * Los dos que «En un minuto» necesita y el diccionario ya no tiene: sus bullets
+   * salen del registro por experiencia (P48.5), donde cada uno vive emparejado
+   * con su versión corta del CV. El diccionario se queda con el TÍTULO de la
+   * sección, que sí es copy de esta página y de nadie más.
+   */
+  lang: Locale;
+  slug: string;
 };
 
 /** Prosa del cuerpo, con el mismo pie que la otra página larga del sitio. */
@@ -340,6 +350,8 @@ export function DeepDive({
   breadcrumb,
   homeHref,
   indexHref,
+  lang,
+  slug,
 }: DeepDiveProps) {
   // El ordinal se cuenta al vuelo porque «El caso» es opcional. Ver la nota de
   // arriba.
@@ -446,7 +458,7 @@ export function DeepDive({
         <ul
           className={`${PROSE} text-foreground/90 marker:text-brand-cyan m-0 flex list-disc flex-col gap-[0.9rem] p-0 pl-[1.1rem]`}
         >
-          {t.minuto.items.map((item, i) => (
+          {deepBulletsOfSlug(lang, slug).map((item, i) => (
             <li key={i} className="text-[1.0625rem] leading-[1.7]">
               <Rich text={item} />
             </li>
