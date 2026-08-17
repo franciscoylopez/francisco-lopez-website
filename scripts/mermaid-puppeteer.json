@@ -1,0 +1,4 @@
+{
+  "channel": "chrome",
+  "args": ["--no-sandbox"]
+}

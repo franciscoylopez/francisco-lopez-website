@@ -3,17 +3,27 @@
 %% «PS - HR MDM Integration».
 %%
 %% ESTE ARCHIVO ES LA FUENTE DE VERDAD DEL DIBUJO. El SVG publicado
-%% (`public/artefactos/emendu-mdm.svg`) es su render: si el diagrama cambia, se
+%% (`content/artefactos/emendu-mdm.svg`) es su render: si el diagrama cambia, se
 %% vuelve a renderizar desde aquí y se sustituye el SVG. Es el mismo patrón que
 %% el CV (D22) y los valores publicados (D38): el artefacto no se edita, se
 %% regenera.
 %%
-%% CÓMO SE REGENERA, y por qué no hay script: es UN diagrama, una vez. Meter
-%% `@mermaid-js/mermaid-cli` en devDependencies arrastra Puppeteer y su Chromium
-%% (~150 MB) para un render puntual, y el criterio de D51 dice que una
-%% herramienta entra por el trabajo que resuelve. Se exporta a mano desde
-%% https://mermaid.live —que renderiza EN EL NAVEGADOR, con el diagrama en el
-%% fragmento de la URL, así que no se sube a ningún servidor— con Actions → SVG.
+%% CÓMO SE REGENERA:   npm run artefacto
+%%
+%% AQUÍ DECÍA QUE NO HABÍA SCRIPT, y el argumento era «es UN diagrama, una vez»:
+%% `@mermaid-js/mermaid-cli` arrastra Puppeteer y su Chromium (~150 MB) para un
+%% render puntual, así que se exportaba a mano desde https://mermaid.live. Se
+%% revirtió el 2026-08-17 (Francisco), y no porque el criterio de D51 fuera malo
+%% sino porque el SUPUESTO era falso: no fue una vez. El primer export se hizo
+%% del diagrama SIN SANEAR y se publicó nombrando al proveedor de MDM, que es
+%% exactamente el error que se cuela por un paso manual. La herramienta sigue
+%% entrando por el trabajo que resuelve; lo que cambió es que el trabajo resultó
+%% ser recurrente.
+%%
+%% Y NO SE DESCARGA NINGÚN CHROMIUM: `scripts/mermaid-puppeteer.json` declara
+%% `channel: "chrome"`, o sea el Chrome que ya está instalado. El render sigue
+%% siendo LOCAL, que era la condición que hacía válido mermaid.live frente a
+%% mermaid.ink — el diagrama no sale a ningún servidor.
 %%
 %% SANITIZADO RESPECTO AL ORIGINAL, y la diferencia importa: el estado
 %% `BAJA_NINJONE` nombraba al proveedor de MDM. El propio spec declara esa marca

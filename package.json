@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:palette": "tsx scripts/check-palette.ts",
     "check:experiencias": "tsx scripts/check-experience-copy.ts",
+    "artefacto": "mmdc -i content/artefactos/emendu-mdm.mmd -o scripts/.artefacto-raw.svg -p scripts/mermaid-puppeteer.json && tsx scripts/artefacto-svg.ts scripts/.artefacto-raw.svg content/artefactos/emendu-mdm.svg",
     "cv": "tsx scripts/cv/generate.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -42,6 +43,7 @@
     }
   },
   "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.16.0",
     "@next/bundle-analyzer": "^16.2.12",
     "@react-pdf/renderer": "^4.5.1",
     "@tailwindcss/postcss": "^4",

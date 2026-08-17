@@ -54,3 +54,4 @@ next-env.d.ts
 
 # Claude Code — config local de máquina (las skills del proyecto SÍ se versionan)
 .claude/settings.local.json
+/scripts/.artefacto-raw.svg
