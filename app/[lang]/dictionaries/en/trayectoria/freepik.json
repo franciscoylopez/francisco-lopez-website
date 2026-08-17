@@ -28,7 +28,7 @@
         "title": "Getting my head in order before the next challenge",
         "paras": [
           "I left TheTool after five years: my first product project, started from scratch and followed all the way to the sale. I wanted a new challenge, but first I wanted to get my head in order — I had spent half a decade learning out of necessity and on the fly, with almost nothing contrasted.",
-          "So I trained formally, and in that order. Agility first: a Scrum master's programme with TheUncoding, with the Product Owner and Scrum Master certifications, because that was the framework I would be working inside anywhere. Product second, with The Hero Camp's Product Management programme. What I took away was not so much the new as the name and the why of things I had already done at TheTool without knowing they were called that. Freepik came up before the course was over."
+          "So I trained formally, and in that order. Agility first: a Scrum master's programme with TheUncoding, with the Product Owner and Scrum Master certifications, because that was the framework I would be working inside anywhere. Product second, with The Hero Camp's Product Management programme. What I took away was not so much the new as the name and the why of things I had already done at TheTool. Freepik came up before the course was over."
         ]
       },
       {
@@ -42,12 +42,12 @@
         "title": "No product analytics, plenty of people to ask",
         "paras": [
           "The product analytics tool was being chosen right then, so the evidence had to be found elsewhere. I rebuilt the previous quarter's discovery —surveys, interviews and internal data—, which was the base I would use to define and manage the first quarter's OKRs, and I joined the year-end survey Freepik ran with its contributors.",
-          "That is where I learned what volume changes. A survey at Freepik returns hundreds of responses in a few days, and none of them short: an enormous advantage and, at the same time, an analysis job that looks nothing like reading fifteen interviews.",
+          "That is where I learned what volume changes. A survey at Freepik returns hundreds of responses in a few days, an enormous advantage and, at the same time, an analysis job that looks nothing like reading fifteen interviews.",
           "Out of all that came the first initiative, which also matched the take-home exercise I had done to get in: **75% of contributors dropped off or got stuck during sign-up**. We redesigned the flow, simplified the process and set up an email sequence walking through every step, with two goals — bringing that 75% down and reducing time to profile approval."
         ]
       },
       {
-        "title": "Why it lasted three months",
+        "title": "Why I lasted three months",
         "paras": [
           "Three months in I had doubts: little output, little impact and a lot of meetings with people who, in many cases, had just landed like me. It was probably normal for a hypergrowth scaleup reorganising its product team. But I was neither adding value nor getting any, and that is not how I work.",
           "That is when INDYA appeared, a much smaller project with the ambition of becoming the best nutrition app on the market. **What told me it was time to move was not the offer: it was how little it took me to decide.**",
@@ -60,16 +60,16 @@
     "title": "Three things I take from three months",
     "items": [
       {
-        "title": "You don't pick a company, you pick a squad.",
-        "text": "Freepik was a great company and it still was not my place. Which area you join, what goals it has and how much continuity it is given weigh more than the name — and they are exactly what nobody checks when the name is impressive."
-      },
-      {
         "title": "Volume changes the method, not just the sample.",
         "text": "Hundreds of long responses in a few days are an advantage almost no project has, but they demand a different way of analysing: with fifteen interviews you read; with four hundred responses, you categorise before reading."
       },
       {
         "title": "A well-built OKR system is recognisable on sight.",
         "text": "It was the first place where I found them taken seriously and properly structured, and the difference from a decorative goal system is that these are used to say no."
+      },
+      {
+        "title": "Sometimes you don't pick a company, you pick a squad.",
+        "text": "Freepik was a great company and it still was not my place. Which area you join, what goals it has and how much continuity it is given weigh more than the name — and they are exactly what nobody checks when the name is impressive."
       }
     ]
   }

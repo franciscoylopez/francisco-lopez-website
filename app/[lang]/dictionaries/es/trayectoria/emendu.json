@@ -14,10 +14,10 @@
     "reporting": "Miembro del equipo de liderazgo"
   },
   "minuto": {
-    "title": "Convertir un SaaS recién creado en el negocio principal",
+    "title": "Darle a un SaaS recién creado un modelo de negocio",
     "items": [
       "**Estrategia de producto end-to-end, empezando por el ICP.** Lo redefiní con discovery fuera del pipeline comercial —empresas de 20 a 150 empleados sin IT interno— y reorienté con él el onboarding y los flujos clave: **de 0 a más de 50 clientes** de SaaS en el primer año.",
-      "**De operación manual a sistema digital y apificado.** Sales, Accounts y Operaciones trabajaban fuera del software y la operativa apenas dejaba rastro: **del 23% al 90% de trazabilidad** del pipeline.",
+      "**De operativa manual a sistema digital y apificado.** Sales, Accounts y Operaciones trabajaban fuera del software y la operativa apenas dejaba rastro: **del 23% al 90% de trazabilidad** del pipeline.",
       "**Partnership estratégico con Sesame HR**, liderado junto al Tech Lead: integrar en un software de RRHH todo el flujo de renting y MDM. **Fase 1 entregada en 7 semanas de producto**, y un canal de adquisición nuevo para Emendu.",
       "**LISA, el agente de IA:** de un sistema inconsistente a un agente funcional, con acceso dinámico a datos, documentación viva y capacidades multilingües.",
       "**Del SaaS de agencia externa a equipo técnico propio.** La plataforma en Bubble había validado el modelo, pero frenaba justo las dos áreas de más valor. Empujé el cambio y participé en la incorporación del Tech Lead.",
@@ -25,21 +25,21 @@
     ]
   },
   "historia": {
-    "title": "Un año para que el SaaS dejara de ser un añadido",
+    "title": "Cómo hacer que el SaaS dejara de ser un añadido",
     "bloques": [
       {
         "title": "La premisa que nadie había puesto en duda",
         "paras": [
           "Emendu vendía y operaba con solvencia haciendo las cosas a mano. Era una empresa **sales-led con un SaaS encima**, y el encargo no era gestionar un roadmap: era convertir un SaaS recién creado en el principal modelo de negocio de la compañía.",
           "Debajo había una premisa que nadie había cuestionado: se daba por hecho que la cartera de clientes de renting era, uno a uno, la cartera del SaaS. Para comprobarlo acompañé al equipo comercial a **más de 20 reuniones** y entrevisté a **10 empresas que no estaban en el pipeline**. La premisa se reveló incierta, y eso explicaba la poca aceptación entre esos usuarios: usaban la beta, pero no daban el paso a cliente de pago.",
-          "El hallazgo partía el mercado en dos. Las empresas con IT interno ya tenían cubierto casi todo lo que ofrecíamos. En las que no lo tenían, el trabajo de IT caía en RRHH, en la office manager, en el CEO o «en quien tocara». De ahí salió el ICP —**empresas de 20 a 150 empleados sin IT interno**, con al menos uno de tres dolores: gestión de dispositivos, soporte remoto y falta de criterio técnico para decidir— y con él el roadmap entero de 2025: evolucionar el SaaS hacia esos dolores, reorientar LISA y reescribir el lenguaje del producto para quien de verdad lo iba a usar."
+          "El hallazgo partía el mercado en dos. Las empresas con IT interno ya tenían cubierto casi todo lo que ofrecíamos. En las que no lo tenían, el trabajo de IT caía en RRHH, en la office manager, en el CEO o «en quien tocara». De ahí salió el ICP —**empresas de 20 a 150 empleados sin IT interno**, con al menos uno de tres dolores: gestión de dispositivos, soporte remoto y falta de criterio técnico para decidir— y con él el roadmap entero de 2025: evolucionar el SaaS hacia esos dolores, poner foco en soporte remoto, reorientar LISA y reescribir el lenguaje del producto para quien de verdad lo iba a usar."
         ]
       },
       {
         "title": "El techo de la plataforma",
         "paras": [
           "Lo que no quedaba validado era con qué estaba construido. La plataforma la había hecho una agencia externa sobre **Bubble**, y fue la decisión correcta para validar. Pero no aguantaba el ritmo de desarrollo ni el peso técnico de lo que venía —LISA y el MDM, las dos áreas de más valor— y arrastraba tres deudas: **sin trazabilidad** (solo el 23% de las operaciones quedaba registrado en algún sistema; el resto vivía en emails y llamadas, y ni siquiera existía como dato), **modelo conserje** (dar de alta un dispositivo se resolvía a mano) y **datos fragmentados**, sin repositorio con el que alimentar automatismos ni al agente.",
-          "Por eso empujé el paso a equipo técnico propio. La incorporación del **Tech Lead** confirmó las necesidades que ya tenía detectadas y añadió lo que yo no podía poner: un roadmap técnico con orden y fechas."
+          "Por eso empujé el paso a equipo técnico propio. La incorporación del **Tech Lead** confirmó las necesidades que ya teníamos detectadas y añadió lo que yo no podía poner: un roadmap técnico con orden y fechas."
         ]
       },
       {
@@ -69,7 +69,7 @@
     ],
     "artefacto": {
       "title": "El módulo MDM, como máquina de estados",
-      "caption": "El diagrama que el equipo de desarrollo —recién incorporado— usó como contrato: siete flujos numerados, sus estados y los saltos entre ellos. Una lista de requisitos deja sitio a la interpretación; esto no. Redibujado con los tokens del sitio a partir del original en Mermaid.",
+      "caption": "El diagrama que el equipo de desarrollo —recién incorporado— usó como contrato: siete flujos numerados, sus estados y los saltos entre ellos. Una lista de requisitos deja sitio a la interpretación; esto no. Es el diagrama original en Mermaid, no un redibujo: se publica su render real, saneado para que herede los colores del sitio y conmute con el tema.",
       "description": "Mapa de estados del módulo MDM en cuatro bloques. Activación (flujo 0): desde el módulo de renting activo, el superadmin entra en la sección MDM, ve los dispositivos activables y confirma, lo que deja el MDM activo; si cancela, vuelve a la sección. Con el MDM activo se abren tres superficies en paralelo: el módulo MDM del parque —dashboard consolidado, catálogo y paquetes (flujo 4), políticas de empresa y equipo (flujo 5), equipos como fuente única que consume Renting (flujo 7) y la pestaña de configuración—; el inventario con su pestaña MDM —datos administrativos, gestión del dispositivo y línea de tiempo—; y el enrollment (flujo 1), donde los ordenadores quedan pendientes de instalación y pasan a activos cuando el empleado instala el agente, a desconectados si el agente pierde conexión, y de vuelta a pendientes si se desinstala por una baja; los smartphones, tablets y accesorios quedan como no elegibles. Por último, la cancelación (flujo 6): el superadmin la programa, puede reactivar antes del fin de periodo, y al terminar se cursa la baja en el proveedor MDM y el módulo queda cancelado.",
       "svg": "emendu-mdm"
     },

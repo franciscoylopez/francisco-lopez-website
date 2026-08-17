@@ -14,7 +14,7 @@
     "reporting": "Member of the leadership team"
   },
   "minuto": {
-    "title": "Turning a brand-new SaaS into the core business",
+    "title": "Giving a brand-new SaaS a business model",
     "items": [
       "**End-to-end product strategy, starting with the ICP.** I redefined it through discovery outside the sales pipeline —companies of 20 to 150 employees with no in-house IT— and used it to reorient onboarding and the key flows: **from 0 to more than 50 SaaS customers** in the first year.",
       "**From a manual operation to a digital, API-first system.** Sales, Accounts and Operations worked outside the software and the operation left almost no trace: **from 23% to 90% pipeline traceability**.",
@@ -25,21 +25,21 @@
     ]
   },
   "historia": {
-    "title": "One year to stop the SaaS being an add-on",
+    "title": "Making the SaaS stop being an add-on",
     "bloques": [
       {
         "title": "The assumption nobody had questioned",
         "paras": [
           "Emendu sold and operated soundly doing things by hand. It was a **sales-led company with a SaaS on top**, and the brief was not to manage a roadmap: it was to turn a brand-new SaaS into the company's main business model.",
           "Underneath sat an assumption nobody had challenged: the renting customer base was taken to be, one by one, the SaaS customer base. To test it I joined the sales team in **more than 20 meetings** and interviewed **10 companies that were not in the pipeline**. The assumption proved shaky, and that explained the weak uptake among those users: they used the beta, but never became paying customers.",
-          "The finding split the market in two. Companies with in-house IT already covered almost everything we offered. In those without it, IT work fell on HR, on the office manager, on the CEO or on «whoever was around». That is where the ICP came from —**companies of 20 to 150 employees with no in-house IT**, with at least one of three pains: device management, remote support and no technical criteria to decide— and with it the whole 2025 roadmap: evolving the SaaS towards those pains, reorienting LISA and rewriting the product's language for whoever was actually going to use it."
+          "The finding split the market in two. Companies with in-house IT already covered almost everything we offered. In those without it, IT work fell on HR, on the office manager, on the CEO or on «whoever was around». That is where the ICP came from —**companies of 20 to 150 employees with no in-house IT**, with at least one of three pains: device management, remote support and no technical criteria to decide— and with it the whole 2025 roadmap: evolving the SaaS towards those pains, focusing on remote support, reorienting LISA and rewriting the product's language for whoever was actually going to use it."
         ]
       },
       {
         "title": "The platform's ceiling",
         "paras": [
           "What remained unvalidated was what it had been built with. The platform had been made by an external agency on **Bubble**, and that was the right call to validate. But it could not keep up with the development pace or the technical weight of what was coming —LISA and MDM, the two highest-value areas— and it carried three debts: **no traceability** (only 23% of operations were recorded in any system; the rest lived in emails and calls, and did not even exist as data), a **concierge model** (registering a device was handled by hand) and **fragmented data**, with no repository to feed automation or the agent.",
-          "That is why I pushed for an in-house engineering team. Hiring the **Tech Lead** confirmed the needs I had already identified and added what I could not bring myself: a technical roadmap with order and dates."
+          "That is why I pushed for an in-house engineering team. Hiring the **Tech Lead** confirmed the needs we had already identified and added what I could not bring myself: a technical roadmap with order and dates."
         ]
       },
       {
@@ -69,7 +69,7 @@
     ],
     "artefacto": {
       "title": "The MDM module as a state machine",
-      "caption": "The diagram the engineering team —which had just joined— used as the contract: seven numbered flows, their states and the jumps between them. A list of requirements leaves room for interpretation; this does not. Redrawn with the site's tokens from the original Mermaid source.",
+      "caption": "The diagram the engineering team —which had just joined— used as the contract: seven numbered flows, their states and the jumps between them. A list of requirements leaves room for interpretation; this does not. This is the original Mermaid diagram, not a redraw: what you see is its real render, sanitised so it inherits the site's colours and follows the theme.",
       "description": "State map of the MDM module in four blocks. Activation (flow 0): from the active renting module, the superadmin opens the MDM section, sees which devices can be activated and confirms, which leaves MDM active; cancelling returns to the section. With MDM active, three surfaces open in parallel: the MDM module for the fleet —consolidated dashboard, catalogue and declarative packages (flow 4), company and team policies (flow 5), teams as the single source Renting consumes (flow 7), and the configuration tab—; the inventory with its MDM tab —administrative data, device management and a derived timeline—; and enrollment (flow 1), where computers stay pending installation and become active once the employee installs the agent, disconnected if the agent loses connection for a long period, and back to pending if it is uninstalled when someone leaves; smartphones, tablets and accessories are not eligible. Finally, cancellation (flow 6): the superadmin schedules it, can reactivate before the period ends, and when it ends the MDM provider is offboarded and the module is cancelled.",
       "svg": "emendu-mdm"
     },
