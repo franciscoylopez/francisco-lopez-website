@@ -159,24 +159,43 @@ Dos piezas, y ninguna sobra:
 
 - **Un velo entre la imagen y el control, del color del FONDO** (`--background`), nunca negro. El
   negro arregla oscuro y empeora claro —acerca el póster al cian oscuro del tema claro—, que es
-  la firma de D41. El del fondo **oscurece en oscuro y aclara en claro**: aleja la imagen del
-  control en los dos temas. Su opacidad **se mide contra la peor imagen real**, no se elige.
-- **El control, de dos tonos** —relleno `--primary` + anillo `--primary-foreground`—, para que
-  siempre haya un borde que pase aunque cambie cuál. El borde interno de esos dos es un par de
-  tokens del sistema, así que **no depende de lo que haya detrás**.
+  la firma de D41. El del fondo **oscurece en oscuro y aclara en claro**, así que aleja la imagen
+  del **disco** en los dos temas. Su opacidad se mide contra la peor imagen real, no se elige —
+  y se mide **contra el disco**, que es a quien separa: al anillo lo acerca (ver abajo).
+- **El control, de dos tonos** —relleno `--primary` + anillo `--primary-foreground`—, cuyo borde
+  **interno** es un par de tokens del sistema y por tanto **no depende de lo que haya detrás**:
+  7,93 claro / 8,36 oscuro, siempre. Eso es lo que hace que el control se distinga sobre
+  cualquier póster. *No* garantiza que uno de los dos bordes EXTERNOS pase 3:1 en cada punto del
+  contorno — ver el párrafo siguiente, que es donde esta regla prometía de más.
 
 Es la misma idea que §El atenuado lo pone la superficie y que §Controles con dos fondos: **la
 pieza se define contra su propio carril**. Las cifras y el barrido, en `DECISIONS.md` D55.
 
-> **SIN RESPALDO desde el 2026-08-17, y por eso está escrito aquí y no solo en la tarea.** La
-> primera mitad de la regla —el borde **interno** de los dos tonos no depende de lo que haya
-> detrás— se reproduce exacta: **7,93 claro / 8,36 oscuro**. La segunda —«siempre hay un borde
-> que pasa aunque cambie cuál»— **depende del metro**: se midió muestreando puntos concretos del
-> perímetro, y midiendo el **peor de 144 ángulos** ningún borde externo llega a 3:1 en ninguna de
-> las dos páginas. Probablemente no sea incumplimiento —WCAG 1.4.11 pide que el componente se
-> distinga, no que pase cada punto del contorno— pero **la frase promete más de lo que el
-> componente garantiza**, y hay un estado que no se midió: en `:hover` el velo se apaga entero.
-> Hasta que se resuelva (tarea P50.35), esta regla se usa sabiendo eso. Cifras en D55.
+**Qué garantiza esto exactamente, y qué no** *(medido el 2026-08-18, P50.35; antes esta regla
+prometía de más)*. Lo que se sostiene es la parte que no depende de la imagen: **el borde
+INTERNO —relleno `--primary` contra anillo `--primary-foreground`— da 7,93 claro / 8,36 oscuro
+en las dos páginas y en los dos estados**, porque son dos tokens del sistema y detrás no hay
+póster que valga.
+
+Lo que **no** se sostiene es la frase que decía «siempre hay un borde que pasa aunque cambie
+cuál». Midiendo el **peor de 144 ángulos** del perímetro, el mejor de los dos bordes externos
+da **2,82–2,91 en reposo**: por debajo de 3:1, y en las cuatro combinaciones de página y tema.
+
+**Y no se arregla subiendo el velo, que era la palanca obvia: es contraproducente por
+construcción.** El velo acerca el póster a `--background`, y eso separa al **disco**
+(`--primary`, lejos del fondo) mientras acerca al **anillo** (`--primary-foreground`, que *es*
+prácticamente el fondo). Los dos bordes tiran en direcciones opuestas, así que no hay opacidad
+que gane: a 0,55 pasan tres combinaciones (3,69 / 3,97 / 3,00) y la cuarta se queda en 2,92 —
+además de lavar el póster—. *Un velo no puede separar a la vez dos colores que están en lados
+opuestos del fondo.*
+
+**No es incumplimiento**: WCAG 1.4.11 pide que el componente se **distinga**, no que cada punto
+de su contorno pase 3:1 — y con un borde interno a 7,93 y un disco relleno de 64px, se
+distingue. Lo que había era una regla que afirmaba más de lo que el componente da.
+
+De paso cae la sospecha sobre el hover: **apagar el velo del todo no empeora nada**, lo mejora
+un poco (2,84 / 2,87 / 2,93 / 3,04, todos por encima de su propio reposo), porque quitar el velo
+aleja el póster del anillo. El estado que D55 no midió resultó ser el bueno.
 
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
@@ -239,8 +258,9 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
-  están en AAA en ambos temas, en reposo y en hover. Sin excepciones** *(la mitad del hover
-  lleva sin medirse desde que el censo se rompió — ver el aviso de §Cómo se hace el censo)* — la última que
+  están en AAA en ambos temas, en reposo y en hover. Sin excepciones** *(re-verificado el
+  2026-08-18 con el censo reparado: 8 páginas × 2 temas, metro validado en las 16 corridas, cero
+  pares bajo AAA)* — la última que
   quedaba, `brand-purple-accent`, dejó de serlo el 2026-08-10 al hacerlo conmutar con el tema
   (§Color): la salvedad no era del morado, era de cualquier color fijo puesto sobre dos
   superficies opuestas.
@@ -260,20 +280,29 @@ de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así 
 hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
 `scripts/design-review/contrast-census.js`.
 
-> **ROTO PARA LOS HOVER desde el 2026-08-17 (medido, no supuesto).** `hoverDeclarations()`
-> decide si una regla es de grupo con `if (rule.cssRules)`, y **desde que Chrome soporta CSS
-> Nesting toda regla normal expone `cssRules`** —vacío—, así que la condición es siempre cierta
-> y el selector nunca llega a comprobarse. En la página servida: el censo encuentra **0** reglas
-> con `:hover`; **hay 21**. Consecuencia directa: la afirmación de arriba —«en reposo **y en
-> hover**, sin excepciones»— **está hoy sin respaldo en su segunda mitad**. No hay ningún
-> incumplimiento conocido, pero tampoco hay medición. Tarea P50.36; el arreglo se valida
-> reproduciendo su ancla (12,47 / 12,04), no leyendo el código.
+> **ESTUVO ROTO PARA LOS HOVER, y el arreglo destapó un par real** *(2026-08-17 → 2026-08-18,
+> P50.36)*. `hoverDeclarations()` decidía si una regla era de grupo con `if (rule.cssRules)`, y
+> **desde que Chrome soporta CSS Nesting toda regla normal expone `cssRules`** —vacío—, así que
+> la condición era siempre cierta y el selector nunca llegaba a comprobarse: el censo encontraba
+> **0** reglas con `:hover` donde hay **21**.
 >
-> Y es **la segunda vez que esta misma función falla por lo mismo**: ya se arregló una vez porque
-> un bucle plano se saltaba las utilidades `hover:` que Tailwind envuelve en `@media`. Se corrigió
-> el síntoma con un test de «esto es una regla de grupo» que el navegador invalidó después. La
-> lección que sí generaliza: **un metro que devuelve una lista vacía parece un aprobado**, así que
-> tiene que afirmar cuánto ha encontrado y fallar si es cero.
+> **Era la segunda vez que esta misma función fallaba por lo mismo**: ya se había arreglado una
+> vez porque un bucle plano se saltaba las utilidades `hover:` que Tailwind envuelve en
+> `@media`, y se corrigió el síntoma con un test de «esto es una regla de grupo» que el
+> navegador invalidó después. La corrección buena es que **no es o-grupo-o-selector**: con
+> nesting una regla puede tener las dos cosas, así que se evalúa el selector si lo tiene **y** se
+> baja si tiene hijas de verdad (`cssRules.length > 0`).
+>
+> **Lo que hay que llevarse, y por eso está aquí y no solo en el commit: un metro que devuelve
+> una lista vacía parece un aprobado.** El censo publica ahora cuántas reglas `:hover` ha
+> indexado y cuántos pares ha medido con ellas, y con cero lo dice en vez de callarse. Es la
+> tercera vez que este proyecto se encuentra un metro descalibrado —medidor fuera de gamut,
+> umbral por tamaño de texto, y esto—, y las tres se descubrieron igual: **midiendo un caso cuyo
+> resultado ya se conocía**.
+>
+> Y no era teórico: con los hover dentro apareció un incumplimiento real que llevaba escondido
+> detrás del fallo —la dirección de email de Accesibilidad, **6,42 claro / 5,59 oscuro**, porque
+> pisaba el color a mano en vez de usar el `tone: "muted"` de la variante—. Ver §Enlaces.
 
 ### Cómo medir sin equivocarse
 
