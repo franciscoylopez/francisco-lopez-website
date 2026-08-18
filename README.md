@@ -53,8 +53,8 @@ y con un sistema de marca propio.
   convertido en el círculo del split, que "florece" al cargar (CSS, reduced-motion safe).
 - **Seguridad y calidad**: cabeceras de seguridad (nosniff, X-Frame-Options,
   Referrer-Policy, Permissions-Policy, HSTS y **CSP** «A+ barato»), **escaneo de
-  dependencias** automatizado (**Dependabot**) y **CI** en cada PR (GitHub Actions, siete
-  pasos: formato + typecheck + lint + paleta + experiencias + CV al día + build) — nada que
+  dependencias** automatizado (**Dependabot**) y **CI** en cada PR (GitHub Actions, ocho
+  pasos: formato + typecheck + lint + paleta + experiencias + CV al día + raya + build) — nada que
   no compile, ni que contradiga a su fuente única, entra en `main`.
 
 ## Desarrollo
@@ -79,6 +79,8 @@ npm run check:experiencias  # que las TRES longitudes de cada experiencia cuadre
                             # hay deep-dive, y ninguna cifra en una y no en la otra (D57)
 npm run check:cv   # que los PDFs commiteados correspondan a la fuente: sella la
                    # HUELLA DE LAS ENTRADAS, no bytes — el PDF no es determinista (D60)
+npm run check:raya # que no vuelva la raya (—) al copy servido: solo se permiten
+                   # el ordinal de una cabecera (D43) y la celda «no aplica»
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza su sello
 npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 npm run gate:html -- save   # instantánea del HTML de las 12 páginas × 2 idiomas (24 variantes)
@@ -114,7 +116,7 @@ app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i18n
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
-.github/workflows/     CI (GitHub Actions), siete pasos en cada PR: format + typecheck + lint + paleta + experiencias + CV al día + build
+.github/workflows/     CI (GitHub Actions), ocho pasos en cada PR: format + typecheck + lint + paleta + experiencias + CV al día + raya + build
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
 components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), table.tsx (DataTable/TR/TD para datos, SPECIMEN_ROW para especímenes), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card, video-embed (vídeo de terceros con facade: sin iframe hasta el clic — D55) — ver BRAND.md y DECISIONS D36/D40
 components/site/        Piezas que SÍ saben de este sitio: page-shell.tsx (el marco común de toda página: JSON-LD, nav, isla de motion, el <main> y footer — D45/D46), skip-link.tsx (enlace de salto, WCAG 2.4.1 nivel A), bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)

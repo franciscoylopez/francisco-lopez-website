@@ -16,7 +16,8 @@
     "format:check": "prettier --check .",
     "gate:html": "tsx scripts/page-html-diff.ts",
     "psi": "tsx scripts/psi.ts",
-    "check:cv": "tsx scripts/check-cv-fresh.ts"
+    "check:cv": "tsx scripts/check-cv-fresh.ts",
+    "check:raya": "tsx scripts/check-raya.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

@@ -269,7 +269,7 @@ tenga que acordarse.
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.
 - **Calidad / seguridad**: CI (GitHub Actions) que corre formato + typecheck + lint + **paleta** +
-  **experiencias** + **CV al día** + build en cada PR (nada que no compile entra en `main`;
+  **experiencias** + **CV al día** + **raya** + build en cada PR (nada que no compile entra en `main`;
   y desde el 2026-08-10 el check de paleta no solo
   comprueba que las copias conocidas cuadren, sino que **no queda ninguna copia de un valor de
   token fuera de su fuente** — busca valores, no patrones, para no marcar los colores que el
