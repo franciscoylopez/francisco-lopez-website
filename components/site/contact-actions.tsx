@@ -83,12 +83,26 @@ export function EmailCta({
       </a>
       {showAddress && (
         <p className="m-0 mt-[0.9rem]">
+          {/* `tone: "muted"` Y NO `text-muted-foreground` a mano, que es como
+              estaba (P50.36). La diferencia no se ve en reposo —los dos pintan el
+              mismo gris— pero el `tone` trae además el salto a `--foreground` en
+              hover y en foco, y sin él este par caía a **6,42 claro / 5,59
+              oscuro**: AA, no AAA, justo el caso que D30 prohíbe y que el
+              comentario de la variante describe palabra por palabra.
+
+              ERA EL QUINTO USO DEL MISMO FALLO. Cuando se creó el `tone`, cuatro
+              de siete usos ya subían el color y el footer y el breadcrumb no; este
+              se quedó fuera de aquel recuento porque pisaba el color en el call
+              site en vez de omitir la variante. Y sobrevivió año y medio de
+              auditorías por la razón que lo hace interesante: **el par solo existe
+              mientras el cursor está encima**, y el censo que tenía que verlo
+              llevaba roto desde que Chrome soporta CSS Nesting. */}
           <a
             href={`mailto:${EMAIL}`}
             onClick={() => trackContactClick("email")}
             className={cn(
-              chromeLinkVariants(),
-              "text-muted-foreground text-[0.9rem] break-all",
+              chromeLinkVariants({ tone: "muted" }),
+              "text-[0.9rem] break-all",
             )}
           >
             {EMAIL}
