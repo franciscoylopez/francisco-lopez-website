@@ -42,14 +42,18 @@ const BASELINE = join("scripts", ".html-baseline");
 const ACTUAL = join("scripts", ".html-actual");
 
 /**
- * Las veintidós variantes: las seis páginas del sitio y las cinco del deep-dive,
- * × los dos idiomas.
+ * Las veinticuatro variantes: las seis páginas del sitio, el índice del deep-dive
+ * y sus cinco experiencias, × los dos idiomas.
  *
  * LAS DEL DEEP-DIVE ENTRAN CON P48.5, y no por completismo: ese refactor saca los
  * bullets de «En un minuto» del diccionario y los lleva al registro por
  * experiencia, así que las páginas que de verdad cambian son estas cinco. Un gate
  * que no mira lo que se está moviendo no es un gate. (Añadirlas estaba tareado en
  * P49; se adelanta porque hace falta aquí.)
+ *
+ * EL ÍNDICE ENTRA CON P49, que es la tarea que lo crea. Hasta entonces
+ * `/trayectoria` respondía 404 y las diez páginas del deep-dive tenían el enlace
+ * roto en su propio breadcrumb — un gate que no mira la ruta padre no lo ve.
  */
 const ROUTES = [
   "/",
@@ -58,6 +62,7 @@ const ROUTES = [
   "/design-system",
   "/accesibilidad",
   "/cookies",
+  "/trayectoria",
   "/trayectoria/emendu",
   "/trayectoria/kuotip",
   "/trayectoria/indya",
@@ -69,6 +74,7 @@ const ROUTES = [
   "/en/design-system",
   "/en/accesibilidad",
   "/en/cookies",
+  "/en/trayectoria",
   "/en/trayectoria/emendu",
   "/en/trayectoria/kuotip",
   "/en/trayectoria/indya",

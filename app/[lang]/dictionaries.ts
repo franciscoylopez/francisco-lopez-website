@@ -10,6 +10,7 @@ import type esDesignSystem from "./dictionaries/es/design-system.json";
 import type esAccesibilidad from "./dictionaries/es/accesibilidad.json";
 import type esCookies from "./dictionaries/es/cookies.json";
 import type esTrayectoriaComun from "./dictionaries/es/trayectoria/comun.json";
+import type esTrayectoriaIndice from "./dictionaries/es/trayectoria/indice.json";
 import type { ExperienceSlug } from "@/content/experiences";
 
 // Diccionario i18n, PARTIDO POR PÁGINA (P46). Era un único JSON de 1.580 líneas y
@@ -122,6 +123,27 @@ export const getTrayectoriaComun = cargador<TrayectoriaComunDict>({
     import("./dictionaries/es/trayectoria/comun.json").then((m) => m.default),
   en: () =>
     import("./dictionaries/en/trayectoria/comun.json").then((m) => m.default),
+});
+
+/**
+ * El copy PROPIO del índice: su metadata, su cabecera y el pie del CV. Rama
+ * aparte de `comun` y no una clave más dentro de él, por lo mismo que el
+ * diccionario está partido por página (D48): `comun` son los rótulos que las
+ * cinco experiencias comparten, y esto es el contenido de UNA página.
+ *
+ * LO QUE NO ESTÁ AQUÍ ES LA MITAD DE LA PÁGINA. Las cinco tarjetas no llevan
+ * copy propio: empresa y sector salen del registro por experiencia y la
+ * afirmación es el `title` del deep-dive —el h1 de su página, literalmente el
+ * mismo string—. Escribir aquí un resumen de cada una habría creado la CUARTA
+ * longitud de lo mismo, que es justo lo que D57/D58 acaban de retirar.
+ */
+export type TrayectoriaIndiceDict = typeof esTrayectoriaIndice;
+
+export const getTrayectoriaIndice = cargador<TrayectoriaIndiceDict>({
+  es: () =>
+    import("./dictionaries/es/trayectoria/indice.json").then((m) => m.default),
+  en: () =>
+    import("./dictionaries/en/trayectoria/indice.json").then((m) => m.default),
 });
 
 /**
