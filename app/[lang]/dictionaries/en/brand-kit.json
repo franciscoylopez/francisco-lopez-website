@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Brand Kit — Francisco López",
+    "title": "Brand Kit · Francisco López",
     "description": "Francisco López's identity system: logo and geometry, the two-layer palette, typography and the rules that govern its use. Downloadable in light and dark."
   },
   "crumb": "Brand Kit",
@@ -25,7 +25,7 @@
   "logotipo": {
     "num": "02 — Logotype",
     "title": "The logo and its rules",
-    "lead": "Two compositions —symbol alone and lockup with wordmark— each in flat and split. Cropped exactly to the ink: the height you give it is the real height of the symbol.",
+    "lead": "Two compositions (symbol alone and lockup with wordmark), each in flat and split. Cropped exactly to the ink: the height you give it is the real height of the symbol.",
     "svgShort": "SVG",
     "cards": {
       "symSplit": {
@@ -71,7 +71,7 @@
       },
       "rows": [
         {
-          "ctx": "Nav — on load",
+          "ctx": "Nav · on load",
           "variant": "Split",
           "on": true,
           "sym": "48px",
@@ -79,7 +79,7 @@
           "bar": "80px"
         },
         {
-          "ctx": "Nav — on scroll",
+          "ctx": "Nav · on scroll",
           "variant": "Flat",
           "on": false,
           "sym": "28px",
@@ -149,7 +149,7 @@
         },
         {
           "title": "prefers-reduced-motion: jump",
-          "body": "No interpolation: it jumps between states at once, with no intermediate transition. The symbol goes from 48px to 28px and the bar from 80px to 64px — two distinct measures."
+          "body": "No interpolation: it jumps between states at once, with no intermediate transition. The symbol goes from 48px to 28px and the bar from 80px to 64px: two distinct measures."
         }
       ]
     },
@@ -226,7 +226,7 @@
         "note": "Background, never text"
       }
     ],
-    "pastelNote": "Pastels never as text color. They're backgrounds. If text goes over a pastel, always in foreground (ink) — never the other way around."
+    "pastelNote": "Pastels never as text color. They're backgrounds. If text goes over a pastel, always in foreground (ink), never the other way around."
   },
   "tipografia": {
     "num": "04 — Typography",
@@ -235,7 +235,7 @@
     "bricolage": {
       "name": "Bricolage Grotesque",
       "tag": "Display · weights 600 / 700",
-      "desc": "A grotesque with character — humanist details and slight irregularities that give it personality without losing rigor. It's the voice of headlines and the wordmark: firm, contemporary, recognizable."
+      "desc": "A grotesque with character: humanist details and slight irregularities that give it personality without losing rigor. It's the voice of headlines and the wordmark: firm, contemporary, recognizable."
     },
     "inter": {
       "name": "Inter",
@@ -246,7 +246,7 @@
   "aplicaciones": {
     "num": "05 — Applications",
     "title": "The brand in its place",
-    "lead": "Where the logo lives and how each piece is downloaded. The symbol PNG is sized by height and the lockup PNG by width — it's not obvious, which is why it's stated here.",
+    "lead": "Where the logo lives and how each piece is downloaded. The symbol PNG is sized by height and the lockup PNG by width. It's not obvious, which is why it's stated here.",
     "favicon": {
       "title": "Favicon",
       "desc": "A dedicated asset, not a rescale. At 16px the stroke rises to 10 units for optical compensation. Flat, centered.",
@@ -254,7 +254,7 @@
     },
     "og": {
       "title": "OG image · social",
-      "desc": "The real card served to social: split logo, wordmark, title and kicker over the brand background. Fixed in light and dark — each page generates its own. The lockup below is the piece that builds it.",
+      "desc": "The real card served to social: split logo, wordmark, title and kicker over the brand background. Fixed in light and dark, each page generates its own. The lockup below is the piece that builds it.",
       "previewAlt": "Brand Open Graph image: split logo, wordmark and title over a dark background",
       "dlSvg": "Split lockup · SVG"
     },
@@ -272,7 +272,7 @@
         "before": "Before · 23px",
         "after": "After · 40px",
         "desc": "It was \"0 0 120 120\" but the ink filled only 58% of the height. Everyone who used the component undersized it without knowing.",
-        "fix": "viewBox cropped to the ink — the height you give IS the symbol's."
+        "fix": "viewBox cropped to the ink: the height you give IS the symbol's."
       },
       {
         "title": "The split used at 24px",
@@ -312,7 +312,7 @@
         "before": "Before · at 35% of its footprint",
         "after": "After · no container",
         "desc": "The nav put the symbol inside a circular container, turning it into a target.",
-        "fix": "no circular container — the symbol is already a circle (rule 3)."
+        "fix": "no circular container: the symbol is already a circle (rule 3)."
       },
       {
         "title": "The four colors of this page",

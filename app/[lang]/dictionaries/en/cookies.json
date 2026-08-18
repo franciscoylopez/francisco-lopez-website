@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Cookie policy — Francisco López",
+    "title": "Cookie policy · Francisco López",
     "description": "What cookies and technologies franciscolopez.es uses, why, and how to manage or withdraw your consent."
   },
   "crumb": "Cookies",
@@ -67,7 +67,7 @@
   "legalHeading": "Legal basis",
   "legalBody": "Necessary cookies load so the site can work and need no consent. Analytics cookies only load with your prior consent, which you can give, deny or withdraw at any time without affecting how the site works.",
   "manageHeading": "How to manage or withdraw your consent",
-  "manageBody": "The first time you visit, a notice lets you accept, reject or choose by category. You can change your choice —including analytics— at any time from the button below:",
+  "manageBody": "The first time you visit, a notice lets you accept, reject or choose by category. You can change your choice, including analytics, at any time from the button below:",
   "manageButton": "Manage cookie preferences",
   "manageBrowser": "You can also block or delete cookies from your browser settings.",
   "thirdHeading": "Third parties",
@@ -76,7 +76,7 @@
   "thirdBody2": "and at",
   "thirdLink2Label": "Microsoft's privacy statement",
   "embedHeading": "Embedded video",
-  "embedBody": "The INDYA and TheTool deep-dives embed a video hosted on YouTube. It does not load on its own: until you press play, the page shows a still image served from this domain and makes no request to Google. Once you press play, the video loads from youtube-nocookie.com —YouTube's domain that does not write advertising cookies— and Google's terms and privacy policy apply from that point on.",
+  "embedBody": "The INDYA and TheTool deep-dives embed a video hosted on YouTube. It does not load on its own: until you press play, the page shows a still image served from this domain and makes no request to Google. Once you press play, the video loads from youtube-nocookie.com (YouTube's domain that does not write advertising cookies) and Google's terms and privacy policy apply from that point on.",
   "retentionHeading": "Data retention",
   "retentionBody": "Your consent choice is stored in your browser until you change it or clear the site data. Aggregate analytics data is retained by Google according to the property settings (by default, a maximum of 14 months at user level).",
   "changesHeading": "Changes to this policy",

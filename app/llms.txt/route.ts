@@ -128,14 +128,14 @@ function trayectoriaList(): string {
     const { role, period } = factsOf("es", company);
     const { slug } = experienceOf(company);
     const exitNote =
-      company === "TheTool" ? " — exit, adquirida por AppRadar." : "";
+      company === "TheTool" ? " Exit: adquirida por AppRadar." : "";
     const nombre = tienePagina(slug)
       ? `[${company}](${SITE_URL}/trayectoria/${slug})`
       : company;
     const caso = tienePagina(slug)
       ? ` Caso completo: «${DEEP_DIVE[slug].title}».`
       : "";
-    return `- ${nombre} — ${role} (${period}): ${shortOf("es", company)}${exitNote}${caso}`;
+    return `- ${nombre} · ${role} (${period}): ${shortOf("es", company)}${exitNote}${caso}`;
   }).join("\n");
 }
 
@@ -156,8 +156,8 @@ ${trayectoriaList()}
 
 ## CV
 
-- [CV en PDF — español](${SITE_URL}${cvPath("es")}): CV bilingüe generado desde la misma fuente que esta web (ATS, texto seleccionable).
-- [CV en PDF — inglés](${SITE_URL}${cvPath("en")}): versión en inglés del mismo CV.
+- [CV en PDF · español](${SITE_URL}${cvPath("es")}): CV bilingüe generado desde la misma fuente que esta web (ATS, texto seleccionable).
+- [CV en PDF · inglés](${SITE_URL}${cvPath("en")}): versión en inglés del mismo CV.
 
 ## Contacto
 

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Brand Kit — Francisco López",
+    "title": "Brand Kit · Francisco López",
     "description": "El sistema de identidad de Francisco López: logo y geometría, la paleta de dos capas, tipografía y las reglas que gobiernan su uso. Descargable en claro y oscuro."
   },
   "crumb": "Brand Kit",
@@ -25,7 +25,7 @@
   "logotipo": {
     "num": "02 — Logotipo",
     "title": "El logo y sus reglas",
-    "lead": "Dos composiciones —símbolo solo y lockup con wordmark— cada una en plano y split. Recortadas exactas a la tinta: la altura que le das es la altura real del símbolo.",
+    "lead": "Dos composiciones (símbolo solo y lockup con wordmark), cada una en plano y split. Recortadas exactas a la tinta: la altura que le das es la altura real del símbolo.",
     "svgShort": "SVG",
     "cards": {
       "symSplit": {
@@ -71,7 +71,7 @@
       },
       "rows": [
         {
-          "ctx": "Nav — al cargar",
+          "ctx": "Nav · al cargar",
           "variant": "Split",
           "on": true,
           "sym": "48px",
@@ -79,7 +79,7 @@
           "bar": "80px"
         },
         {
-          "ctx": "Nav — con scroll",
+          "ctx": "Nav · con scroll",
           "variant": "Flat",
           "on": false,
           "sym": "28px",
@@ -149,7 +149,7 @@
         },
         {
           "title": "prefers-reduced-motion: salto",
-          "body": "Sin interpolar: se salta entre estados de golpe, sin transición intermedia. El símbolo pasa de 48px a 28px y la barra, de 80px a 64px — dos medidas distintas."
+          "body": "Sin interpolar: se salta entre estados de golpe, sin transición intermedia. El símbolo pasa de 48px a 28px y la barra, de 80px a 64px: dos medidas distintas."
         }
       ]
     },
@@ -226,7 +226,7 @@
         "note": "Fondo, nunca texto"
       }
     ],
-    "pastelNote": "Los pasteles nunca como color de texto. Son fondos. Si va texto sobre un pastel, siempre en foreground (tinta) — nunca al revés."
+    "pastelNote": "Los pasteles nunca como color de texto. Son fondos. Si va texto sobre un pastel, siempre en foreground (tinta), nunca al revés."
   },
   "tipografia": {
     "num": "04 — Tipografía",
@@ -246,7 +246,7 @@
   "aplicaciones": {
     "num": "05 — Aplicaciones",
     "title": "La marca en su sitio",
-    "lead": "Dónde vive el logo y cómo se descarga cada pieza. El PNG del símbolo se dimensiona por altura y el del lockup por ancho — no es evidente, por eso se dice aquí.",
+    "lead": "Dónde vive el logo y cómo se descarga cada pieza. El PNG del símbolo se dimensiona por altura y el del lockup por ancho. No es evidente, por eso se dice aquí.",
     "favicon": {
       "title": "Favicon",
       "desc": "Asset dedicado, no un reescalado. A 16px el trazo sube a 10 unidades para compensar ópticamente. Plano, centrado.",
@@ -254,7 +254,7 @@
     },
     "og": {
       "title": "OG image · redes",
-      "desc": "La tarjeta real que se sirve a las redes: logo split, wordmark, título y kicker sobre el fondo de marca. Fija en claro y oscuro — la genera cada página. El lockup de abajo es la pieza con la que se construye.",
+      "desc": "La tarjeta real que se sirve a las redes: logo split, wordmark, título y kicker sobre el fondo de marca. Fija en claro y oscuro, la genera cada página. El lockup de abajo es la pieza con la que se construye.",
       "previewAlt": "Imagen Open Graph de marca: logo split, wordmark y título sobre fondo oscuro",
       "dlSvg": "Lockup split · SVG"
     },
@@ -272,7 +272,7 @@
         "before": "Antes · 23px",
         "after": "Después · 40px",
         "desc": "Era \"0 0 120 120\" pero la tinta ocupaba solo el 58% del alto. Todo el que usó el componente lo infradimensionó sin saberlo.",
-        "fix": "viewBox recortado a la tinta — la altura que das ES la del símbolo."
+        "fix": "viewBox recortado a la tinta: la altura que das ES la del símbolo."
       },
       {
         "title": "El split usado a 24px",
@@ -312,7 +312,7 @@
         "before": "Antes · al 35% de su huella",
         "after": "Después · sin contenedor",
         "desc": "El nav metía el símbolo en un contenedor circular, convirtiéndolo en una diana.",
-        "fix": "sin contenedor circular — el símbolo ya es un círculo (regla 3)."
+        "fix": "sin contenedor circular: el símbolo ya es un círculo (regla 3)."
       },
       {
         "title": "Los cuatro colores de esta página",

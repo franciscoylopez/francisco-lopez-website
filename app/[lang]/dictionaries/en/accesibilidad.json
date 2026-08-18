@@ -1,13 +1,13 @@
 {
   "meta": {
-    "title": "Accessibility — Francisco López",
+    "title": "Accessibility · Francisco López",
     "description": "How this site is built to be usable by everyone: WCAG 2.2 AA met, a colour system at AAA, and the concrete measures behind it, verified with axe and Lighthouse."
   },
   "crumb": "Accessibility",
   "hero": {
     "kicker": "Commitment",
     "title": "Accessibility",
-    "lead": "Here accessibility is a release gate, not an add-on: anyone —using a mouse, a keyboard or a screen reader, with or without colour vision— can read and navigate this site without barriers. And it's not a promise: it's measured.",
+    "lead": "Here accessibility is a release gate, not an add-on: anyone (using a mouse, a keyboard or a screen reader, with or without colour vision) can read and navigate this site without barriers. And it's not a promise: it's measured.",
     "statConformidad": "WCAG 2.2 conformance",
     "statColor": "Colour system",
     "statAxe": "axe violations",
@@ -16,7 +16,7 @@
   "conformance": {
     "num": "01 — Conformance",
     "heading": "WCAG 2.2 AA met, with contrast measured",
-    "intro": "Contrast is measured, not estimated. Body text reaches {bodyText.light} in light and {bodyText.dark} in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1 — cleared with room to spare.",
+    "intro": "Contrast is measured, not estimated. Body text reaches {bodyText.light} in light and {bodyText.dark} in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1, cleared with room to spare.",
     "rows": [
       {
         "label": "Standard",

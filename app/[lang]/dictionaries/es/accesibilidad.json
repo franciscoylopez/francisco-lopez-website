@@ -1,13 +1,13 @@
 {
   "meta": {
-    "title": "Accesibilidad — Francisco López",
+    "title": "Accesibilidad · Francisco López",
     "description": "Cómo está construida esta web para ser usable por todas las personas: WCAG 2.2 AA cumplido, sistema de color en AAA y las medidas concretas que lo respaldan, verificadas con axe y Lighthouse."
   },
   "crumb": "Accesibilidad",
   "hero": {
     "kicker": "Compromiso",
     "title": "Accesibilidad",
-    "lead": "Aquí la accesibilidad es un criterio de cierre, no un extra: cualquier persona —con ratón, teclado o lector de pantalla, con o sin visión del color— puede leer y navegar esta web sin barreras. Y no es una promesa: está medido.",
+    "lead": "Aquí la accesibilidad es un criterio de cierre, no un extra: cualquier persona (con ratón, teclado o lector de pantalla, con o sin visión del color) puede leer y navegar esta web sin barreras. Y no es una promesa: está medido.",
     "statConformidad": "Conformidad WCAG 2.2",
     "statColor": "Sistema de color",
     "statAxe": "Violaciones axe",

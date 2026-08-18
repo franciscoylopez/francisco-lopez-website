@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Política de cookies — Francisco López",
+    "title": "Política de cookies · Francisco López",
     "description": "Qué cookies y tecnologías usa franciscolopez.es, con qué finalidad, y cómo gestionar o retirar tu consentimiento."
   },
   "crumb": "Cookies",
@@ -67,7 +67,7 @@
   "legalHeading": "Base legal",
   "legalBody": "Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las de analítica solo se cargan con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web.",
   "manageHeading": "Cómo gestionar o retirar tu consentimiento",
-  "manageBody": "La primera vez que visitas la web aparece un aviso para aceptar, rechazar o elegir por categoría. Puedes cambiar tu decisión —incluida la analítica— cuando quieras desde el botón de aquí abajo:",
+  "manageBody": "La primera vez que visitas la web aparece un aviso para aceptar, rechazar o elegir por categoría. Puedes cambiar tu decisión, incluida la analítica, cuando quieras desde el botón de aquí abajo:",
   "manageButton": "Gestionar preferencias de cookies",
   "manageBrowser": "También puedes bloquear o borrar cookies desde la configuración de tu navegador.",
   "thirdHeading": "Terceros",
@@ -76,7 +76,7 @@
   "thirdBody2": "y en",
   "thirdLink2Label": "la declaración de privacidad de Microsoft",
   "embedHeading": "Vídeo incrustado",
-  "embedBody": "Los deep-dives de INDYA y TheTool incrustan un vídeo alojado en YouTube. No se carga solo: hasta que pulsas play, la página muestra una imagen fija servida desde este dominio y no hace ninguna petición a Google. Al pulsar, el vídeo se carga desde youtube-nocookie.com —el dominio de YouTube que no escribe cookies publicitarias— y a partir de ahí se aplican las condiciones y la política de privacidad de Google.",
+  "embedBody": "Los deep-dives de INDYA y TheTool incrustan un vídeo alojado en YouTube. No se carga solo: hasta que pulsas play, la página muestra una imagen fija servida desde este dominio y no hace ninguna petición a Google. Al pulsar, el vídeo se carga desde youtube-nocookie.com (el dominio de YouTube que no escribe cookies publicitarias) y a partir de ahí se aplican las condiciones y la política de privacidad de Google.",
   "retentionHeading": "Conservación de los datos",
   "retentionBody": "Tu decisión de consentimiento se guarda en tu navegador hasta que la cambies o borres los datos del sitio. Los datos de analítica agregada los conserva Google según la configuración de la propiedad (por defecto, un máximo de 14 meses a nivel de usuario).",
   "changesHeading": "Cambios en esta política",

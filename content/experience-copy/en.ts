@@ -11,7 +11,7 @@ import type { ExperienceCopyMap } from "./types";
 export const copy: ExperienceCopyMap = {
   Emendu: {
     role: "Product Manager",
-    period: "Feb 2025 — Present",
+    period: "Feb 2025 - Present",
     sector: "B2B SaaS · IT Management",
     reporting: {
       deep: "Member of the leadership team",
@@ -22,10 +22,10 @@ export const copy: ExperienceCopyMap = {
     bullets: [
       {
         cv: "Defined end-to-end product strategy starting with the ICP, redefined through discovery outside the pipeline: from 0 to more than 50 customers in the first year.",
-        deep: "**End-to-end product strategy, starting with the ICP.** I redefined it through discovery outside the sales pipeline —companies of 20 to 150 employees with no in-house IT— and used it to reorient onboarding and the key flows: **from 0 to more than 50 SaaS customers** in the first year.",
+        deep: "**End-to-end product strategy, starting with the ICP.** I redefined it through discovery outside the sales pipeline (companies of 20 to 150 employees with no in-house IT) and used it to reorient onboarding and the key flows: **from 0 to more than 50 SaaS customers** in the first year.",
       },
       {
-        cv: "Led the product's evolution: from a manual operation to a digital, API-first system — from 23% to 90% pipeline traceability.",
+        cv: "Led the product's evolution: from a manual operation to a digital, API-first system: from 23% to 90% pipeline traceability.",
         deep: "**From a manual operation to a digital, API-first system.** Sales, Accounts and Operations worked outside the software and the operation left almost no trace: **from 23% to 90% pipeline traceability**.",
       },
       {
@@ -48,7 +48,7 @@ export const copy: ExperienceCopyMap = {
   },
   KUOTIP: {
     role: "Cofounder & Product",
-    period: "Feb 2024 — Dec 2024",
+    period: "Feb 2024 - Dec 2024",
     sector: "B2B2C SaaS · Customer Reviews",
     reporting: {
       deep: "Co-founder, 1 of 3 partners",
@@ -58,7 +58,7 @@ export const copy: ExperienceCopyMap = {
       "Validated review fraud with users and brands before building anything; defined the MVP with voice verification and AI, and supported the CEO in the pre-seed fundraising.",
     bullets: [
       {
-        cv: "Validated the problem on both sides of the market —fraud, manipulation and rising costs— with more than 30 user interviews and 15 with companies.",
+        cv: "Validated the problem on both sides of the market (fraud, manipulation and rising costs) with more than 30 user interviews and 15 with companies.",
         deep: "**I validated the problem on both sides of the market**, users and brands: fraud, manipulation and rising costs on the traditional platforms. **More than 30 user interviews and 15 with companies**, which not only confirmed the hypothesis but picked our go-to-market for us.",
       },
       {
@@ -77,7 +77,7 @@ export const copy: ExperienceCopyMap = {
   },
   INDYA: {
     role: "Product Lead",
-    period: "Jan 2022 — Dec 2023",
+    period: "Jan 2022 - Dec 2023",
     sector: "B2C SaaS · Health tech",
     reporting: {
       deep: "CPO and CTO",
@@ -88,7 +88,7 @@ export const copy: ExperienceCopyMap = {
     bullets: [
       {
         cv: "Co-defined the growth strategy on the lifecycle rather than features: activation, engagement and retention as the roadmap's levers.",
-        deep: "**Growth strategy built on the lifecycle, not on features.** I co-defined the three levers —activation, engagement and retention— and the roadmap and the team's OKRs were organised around them.",
+        deep: "**Growth strategy built on the lifecycle, not on features.** I co-defined the three levers (activation, engagement and retention) and the roadmap and the team's OKRs were organised around them.",
       },
       {
         cv: "Introduced systematic user research where there was none: interviews, surveys and continuous post-churn analysis.",
@@ -100,7 +100,7 @@ export const copy: ExperienceCopyMap = {
       },
       {
         cv: "Improved first-month activation (+28%) by optimising onboarding, personalisation and value comprehension.",
-        deep: "**First-month activation: +28%.** Onboarding, personalisation and value comprehension — so a new user understands what the app is for before the motivation that made them download it wears off.",
+        deep: "**First-month activation: +28%.** Onboarding, personalisation and value comprehension: so a new user understands what the app is for before the motivation that made them download it wears off.",
       },
       {
         cv: "Redesigned pricing with A/B testing, unifying plans and removing entry barriers: +13% conversion and +5% ARPU, without affecting retention.",
@@ -114,7 +114,7 @@ export const copy: ExperienceCopyMap = {
   },
   Freepik: {
     role: "Product Manager",
-    period: "Oct 2021 — Dec 2021",
+    period: "Oct 2021 - Dec 2021",
     sector: "B2C SaaS · UGC",
     reporting: {
       deep: "Head of Product",
@@ -133,13 +133,13 @@ export const copy: ExperienceCopyMap = {
       },
       {
         cv: "Owned the squad's OKRs.",
-        deep: "**Ownership of the squad's OKRs** — the first quarterly goal system I worked with in a formal way, and at a company that took them seriously.",
+        deep: "**Ownership of the squad's OKRs**: the first quarterly goal system I worked with in a formal way, and at a company that took them seriously.",
       },
     ],
   },
   TheTool: {
     role: "Cofounder & Product",
-    period: "May 2016 — Oct 2021",
+    period: "May 2016 - Oct 2021",
     sector: "B2B SaaS · ASO",
     reporting: {
       deep: "Co-founder, 1 of 4 partners",
@@ -158,7 +158,7 @@ export const copy: ExperienceCopyMap = {
       },
       {
         cv: "In 3 days we turned a hidden Google Play beta into an open feature: 7 months before the market and +30% MRR in 2 months.",
-        deep: "**In 3 days we turned a hidden Google Play beta into a feature open to all our customers** — we had it **7 months** before the market and it gave us **+30% MRR in 2 months**.",
+        deep: "**In 3 days we turned a hidden Google Play beta into a feature open to all our customers**: we had it **7 months** before the market and it gave us **+30% MRR in 2 months**.",
       },
       {
         cv: "Led roadmap, discovery, functional definition and coordination with development, marketing and CS.",
@@ -169,14 +169,14 @@ export const copy: ExperienceCopyMap = {
         deep: "**I brought in the first Product Designer**, and with them the full redesign of the brand and the platform.",
       },
       {
-        cv: "TheTool established itself among the reference ASO tools —nominated Best ASO Software in Europe— and was acquired by AppRadar in 2021.",
-        deep: "**TheTool established itself among the reference ASO tools** —nominated Best ASO Software in Europe at the App Promotion Summit in Berlin— and **was acquired by AppRadar in 2021**.",
+        cv: "TheTool established itself among the reference ASO tools (nominated Best ASO Software in Europe) and was acquired by AppRadar in 2021.",
+        deep: "**TheTool established itself among the reference ASO tools** (nominated Best ASO Software in Europe at the App Promotion Summit in Berlin) and **was acquired by AppRadar in 2021**.",
       },
     ],
   },
   PICKASO: {
     role: "COO",
-    period: "Sep 2015 — Dec 2016",
+    period: "Sep 2015 - Dec 2016",
     sector: "App Marketing · Agency",
     short:
       "Professionalized the agency's structure and service portfolio; ran the market research on TheTool's future competitors.",
@@ -192,26 +192,26 @@ export const copy: ExperienceCopyMap = {
   },
   Ontecnia: {
     role: "Digital Marketing Manager",
-    period: "Sep 2013 — Sep 2015",
+    period: "Sep 2013 - Sep 2015",
     sector: "Malavida.com",
     short:
-      "Organic growth from 3.2M to 9.4M monthly visits; shifted the business model from intrusive installers to valuable content and video monetization — the start of my turn toward product-first.",
+      "Organic growth from 3.2M to 9.4M monthly visits; shifted the business model from intrusive installers to valuable content and video monetization: the start of my turn toward product-first.",
     bullets: [
       { cv: "Organic growth from 3.2M to 9.4M monthly visits." },
       {
-        cv: "Drove the business-model shift: from intrusive installers to valuable content and video monetisation — the start of my move towards product-first.",
+        cv: "Drove the business-model shift: from intrusive installers to valuable content and video monetisation, the start of my move towards product-first.",
       },
     ],
   },
   "Havas Media": {
     role: "Digital Marketing / Performance",
-    period: "2009 — 2013",
+    period: "2009 - 2013",
     sector: "",
     short:
-      "Acquisition and performance at leading agencies — the analytics, CRO, UX and leadership foundation that enabled the jump to product.",
+      "Acquisition and performance at leading agencies: the analytics, CRO, UX and leadership foundation that enabled the jump to product.",
     bullets: [
       {
-        cv: "Acquisition and performance at leading agencies — the analytics, CRO, UX and leadership base that enabled the move into product.",
+        cv: "Acquisition and performance at leading agencies: the analytics, CRO, UX and leadership base that enabled the move into product.",
       },
     ],
   },
