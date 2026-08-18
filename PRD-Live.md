@@ -40,6 +40,11 @@ V1 lanzada. En vivo:
 - **Home** (una sola página), en **ES (raíz `/`) y EN (`/en`)**.
 - Páginas propias: **Sobre mí**, **Brand Kit**, **Design System**, **Accesibilidad**,
   **Política de cookies**.
+- **El deep-dive por experiencia** (2026-08-18): el índice **`/trayectoria`** y las cinco
+  páginas de `/trayectoria/[slug]` —Emendu, KUOTIP, INDYA, Freepik y TheTool—. Con eso el
+  sitio pasa de **seis páginas a doce** por idioma, que es el recuento que usan `gate:html`
+  (24 variantes), el sitemap y el recorrido de `design-review`. *En rama, pendiente de
+  merge a producción.*
 - **CV en PDF bilingüe** (ES/EN) descargable, con identidad de marca, generado por código.
 - **SEO técnico + Open Graph** por página, **medición** (GA4/GTM + consentimiento RGPD),
   **dominio propio**.
@@ -355,7 +360,21 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    subapartados son libres, porque si no, una experiencia de tres meses de hace cuatro años sale
    con secciones medio vacías al lado de una de cinco años. Detalle en `PRD-Historical.md` §42.
 
-   **Las cinco páginas están montadas, revisadas por Francisco y con el gate de accesibilidad
+   **EL SPRINT QUEDA CERRADO EL 2026-08-18**, con el índice construido y el SEO resuelto. El
+   índice `/trayectoria` no era un extra: el breadcrumb de tres niveles de las cinco
+   experiencias apuntaba a esa ruta desde que se montaron, así que **eran diez páginas con el
+   enlace roto en su propia carpintería** y no lo veía ningún gate, porque ninguno mira la ruta
+   *padre* de las que se añaden. Lista **las cinco con caso** y no la trayectoria entera —esa ya
+   está en la portada y en el CV—, y **ninguna de sus tarjetas tiene copy propio**: la afirmación
+   es el `h1` literal de la página a la que lleva.
+
+   El **SEO** (D59) destapó que «qué páginas tiene este sitio» estaba escrito a mano en **tres**
+   sitios —sitemap, `llms.txt` y la tabla de tarjetas OG—; los tres derivan ya del registro. Y el
+   **peso no era el problema** (D59): Emendu mide 223 KB y saca 94/100 en móvil, pero el Design
+   System pesa 341 y saca lo mismo — la nota la fija el retraso de renderizado, no los KB, así
+   que el artefacto no se toca.
+
+   **Las cinco páginas estaban montadas, revisadas por Francisco y con el gate de accesibilidad
    pasado** (2026-08-17). La segunda pasada cerró el diseño: la **apertura ocupa el pliegue**
    —hasta entonces, en cuanto la ventana pasaba de ~700px de alto asomaba la sección siguiente y
    la primera vista dejaba de ser una portada (D56)—, «En un minuto» y «Aprendizajes» bajan a

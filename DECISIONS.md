@@ -3016,3 +3016,167 @@ ese sí se localiza.
 son las cinco frases de Trayectoria y el `38%` de Emendu (de D57) más las seis apariciones de la
 fecha corregida. Mover cuatro campos fuera de los **diez** diccionarios del deep-dive salió
 **transparente**: ninguna de sus páginas cambió un byte.
+
+---
+
+## D59 · El SEO del deep-dive, y las tres listas de páginas escritas a mano — 2026-08-18
+
+**Contexto.** Las seis páginas nuevas activan el criterio de cierre de `CLAUDE.md` («SEO y datos
+estructurados por página, no un extra»). Al ir a cumplirlo apareció que el mismo dato —**qué
+páginas tiene este sitio**— estaba escrito a mano en **tres** sitios, y no lo detectaba nada:
+una lista incompleta no es un error de compilación.
+
+### Sitemap
+
+- **Las seis del deep-dive se DERIVAN** de `EXPERIENCES` filtrando `slug !== null`, la misma
+  fuente que las páginas y que `generateStaticParams` (D44). Y ya no es hipotético: la lista
+  acaba de cambiar de seis a cinco con PICKASO.
+- **El inglés gana entradas propias.** Antes `/en/…` solo existía como `alternates.languages` de
+  la entrada española: el hreflang funcionaba, pero la recomendación de Google es que **cada
+  versión sea su propia `<url>` y liste todas las alternativas, incluida ella misma**. De 6 a 24.
+  De paso el `x-default` entra también aquí — lo emitía el `<head>` y no el sitemap, y que digan
+  cosas distintas es de lo que ninguna herramienta del repo ve.
+- **`lastModified` deja de ser `new Date()`**, que marcaba TODAS las páginas como modificadas en
+  cada despliegue. Google dice explícitamente que ignora el `lastmod` cuando lo detecta poco
+  fiable, así que la señal no era ruidosa: **se estaba tirando**. Ahora es una fecha declarada por
+  página, sembrada del historial real.
+
+  **Por qué DECLARADA y no derivada del git**, que era lo obvio: **Vercel clona en superficial**,
+  así que `git log -1 -- <archivo>` devuelve vacío para todo lo que no se haya tocado en los
+  últimos commits. *Una fecha derivada de un historial que no está no es derivada: es un hueco.*
+  El riesgo de que se queden viejas se acota donde se puede — las del deep-dive van en un
+  `Record<ExperienceSlug, …>`, así que **añadir una experiencia sin darle fecha no compila**.
+
+### JSON-LD
+
+`experiencePageLd` es **`WebPage` y no `Article`**, decidido con Francisco. `Article` daba
+elegibilidad para rich results, pero marcar cinco páginas de carrera como artículos le dice a un
+rastreador que esto es un blog —y el PRD §9 es explícito en que no lo es— y pide un
+`datePublished` que en una página que cuenta cinco años no significa nada.
+
+Lo que sí aporta: ata cada página a su empresa (`about`) y **al `Person` de la home por `@id`**,
+que es lo que permite a Google unir las seis en una entidad en vez de leer seis personas que se
+llaman igual.
+
+**No lleva `isPartOf`, y la ausencia es deliberada.** Se escribió apuntando a
+`${SITE_URL}/#website` y se retiró al ver que **ese nodo no existe** (el `WebSite` es backlog de
+V3). Una referencia `@id` colgante **valida igual** —un validador de esquema no resuelve
+referencias— y no significa nada. *Un identificador que ningún nodo declara es peor que no
+ponerlo: pasa el control y miente.*
+
+El `BreadcrumbList` de tres niveles ya estaba (lo trajo P48 con `parents`), así que de la tarea
+solo quedaba el tipo. `PageShell` gana `extraLd`: un segundo `<script>` y no un `@graph`, porque
+son dos afirmaciones independientes y porque fundirlos cambiaría el marcado de las dieciocho
+variantes que no lo usan.
+
+### La tarjeta OG, y un fallo que solo se ve renderizando
+
+Las seis pasaban una card desconocida y caían en la de la home: compartir un deep-dive en
+LinkedIn —el canal del ICP— enseñaba el sitio y no el caso. Ahora `/api/og` la compone con el
+**mismo rótulo y el mismo titular que pinta la página**, leídos de su diccionario.
+
+Y al renderizarla apareció **un fallo preexistente**: el titular montaba sobre los flancos
+pastel, y **la «s» de «Política de cookies» ya lo hacía en la tarjeta que está en producción**.
+Con rótulos de una palabra el problema no existía; con frases es constante. El tope va en la
+columna (800px, calculado contra la geometría de los flancos: su borde izquierdo cae en 944 y la
+rotación de 8° saca las esquinas hasta ~923) y vale para las once tarjetas. *Ninguna cifra lo
+dice: hay que mirar la imagen.*
+
+### `llms.txt`
+
+No conocía el deep-dive: su lista de páginas no tenía el índice y su sección de trayectoria
+nombraba las cinco experiencias **sin URL** aunque sus páginas ya existieran, así que un modelo
+que lo leyera no podía descubrir el contenido más profundo del sitio. Ahora cada una enlaza si —y
+solo si— tiene `slug`, y añade su titular.
+
+### Verificación
+
+**Schema Markup Validator apuntado al Preview** (la página real, no un snippet pegado): 0 errores
+y 0 avisos en el índice, dos deep-dives y sus tres equivalentes en EN, reconociendo
+`WebPage` + `BreadcrumbList`.
+
+**La Rich Results Test no se puede correr contra un Preview**, y ahora se sabe por qué
+(comprobado, no supuesto): el Preview sirve `X-Robots-Tag: noindex` **y** un `robots.txt` con
+`Disallow: /`. La RRT respeta robots.txt, así que reportaría «URL no disponible» sin llegar a
+leer los datos estructurados. **Va contra producción después del merge.**
+
+### Y el peso no era el problema (P50.3)
+
+El artefacto inline pone la página de Emendu en 223 KB de HTML, y la tarea nació temiendo que
+fuera «el salto de peso más grande del sitio». Medido con `npm run psi` contra el Preview: **no
+lo es** —Design System pesa 341 KB y Brand Kit 302, ambos en producción desde hace semanas— y
+**el peso del HTML no predice la nota**: el índice pesa un tercio que Emendu (74 KB) y saca
+prácticamente lo mismo.
+
+| | HTML | móvil | escritorio | LCP móvil |
+|---|---|---|---|---|
+| Design System | 341 KB | 94 | 100 | 3,0 s |
+| Emendu | 223 KB | 94 | 100 | 3,0 s |
+| Home | 203 KB | 97 | 100 | 2,6 s |
+| Índice | 74 KB | 95 | 100 | 2,9 s |
+
+Lo que fija la nota móvil es el **retraso de renderizado**: en Emendu el TTFB son 6 ms (0% del
+LCP) y el render delay 1.564 ms (100%), el mismo perfil que D47 diagnosticó en la home. **No se
+toca el artefacto**: ni carga diferida ni optimización del SVG, que eran las dos palancas
+preparadas por si no cumplía.
+
+---
+
+## D60 · Una fuente única evita dos verdades; no mantiene al día una copia impresa — 2026-08-18
+
+**El hueco.** D57 y D58 dejaron los hechos y los bullets de una experiencia con fuente única, así
+que la web y el CV **no pueden decir cosas distintas… mientras el PDF se regenere**. Pero el PDF
+es un **artefacto commiteado**: al corregir el sector de KUOTIP en `content/experience-copy/`,
+los dos PDFs de `public/cv/` se quedaron viejos **en silencio**, y no lo vio nada — ni el
+typecheck, ni el linter, ni `gate:html`, ni `check:experiencias`.
+
+Es una familia de fallo distinta a la de D38/D44/D57. Allí el problema era **dos escrituras del
+mismo hecho**; aquí hay una sola escritura y el problema es la **copia derivada que no se
+recalcula**. La fuente única no cubre el último eslabón cuando ese eslabón es un binario que
+alguien tiene que acordarse de regenerar.
+
+**El método se eligió midiendo: el PDF NO es determinista.** Regenerarlo sin cambiar nada da otro
+hash —react-pdf sella fecha e ids en la salida—, así que comparar bytes está descartado. Lo que
+se sella es la **huella de las ENTRADAS**: el objeto ya resuelto que se le pasa al render, los
+dos idiomas. `npm run cv` escribe `public/cv/cv.huella`; `npm run check:cv` la recalcula y falla
+si no coincide. En CI.
+
+Para eso `assemble()` y `mergeJob()` salen de `generate.tsx` a `scripts/cv/assemble.ts`: los
+necesitan **dos** consumidores, y dejarlos dentro del `.tsx` obligaba al guardián a importar
+react-pdf y arrancar un render solo para saber qué datos entran.
+
+**Validado rompiéndolo**, no leyéndolo: cambiando una palabra del sector sin regenerar, el gate
+imprime qué ha cambiado y sale con **código 1** —comprobado aparte, porque un mensaje de error
+con salida 0 es un gate decorativo—. Y afirma cuánto ha mirado.
+
+**Lo que NO cubre, dicho para que no se dé por cubierto:** un cambio de **estilos** en
+`generate.tsx`. Cambia el PDF y no cambia la huella. Es deliberado — hashear el fuente del
+generador haría fallar el gate por un comentario, y quien toca los márgenes está mirando el PDF
+de todas formas. Lo que se protege es el camino silencioso: tocar el contenido en otro archivo y
+no acordarse del CV.
+
+### El tercer hueco NO es mecanizable, y se descartó midiendo antes de construirlo
+
+La idea era atar la **narrativa** del deep-dive a los bullets: si cambia una cifra en «La
+historia», que salte. Medido sobre las cinco páginas, **INDYA tiene 5 de 5 cifras de bullet sin
+respaldo en su narrativa** — y no es drift, es el formato funcionando: sus bullets llevan las
+cifras de crecimiento y su caso va de los marcados, que son otras. Ese gate habría dado **cinco
+falsos positivos en una sola página**.
+
+*Un gate ruidoso es peor que ninguno: el primero se ignora y arrastra consigo a los que sí
+funcionan.* Lo que cubre ese hueco sigue siendo la regla humana —las dos versiones se editan una
+al lado de la otra— y que el deep-dive sea la fuente (D58).
+
+### Y la lección que se llevó la sesión: las skills caducan peor que los `.md`
+
+Lo detectó Francisco preguntando si `update-cv` seguía al día. No lo estaba: en **un solo día**,
+D57 y D58 dejaron **nueve** afirmaciones falsas dentro de esa skill — una de ellas peligrosa
+(«retocar un bullet del CV no afecta a la web», que desde D57 es exactamente al revés). Y
+`design-review` seguía recorriendo «las seis páginas» cuando ya eran doce.
+
+**Una skill es documentación EJECUTABLE**: un párrafo desactualizado se lee con escepticismo; una
+skill se **sigue**. Por eso `close-session` gana el paso de comprobar si la sesión ha movido algo
+que una skill *describe*, con el comando mecánico que valida rutas y comandos — validado
+disparándolo sobre las cinco. Y la misma caducidad afecta a las **cabeceras de los módulos**:
+`scripts/cv/facts.ts` seguía anunciando que leía «periodos y roles» del diccionario meses después
+de dejar de hacerlo.

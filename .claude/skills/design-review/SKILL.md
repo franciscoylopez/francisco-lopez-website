@@ -83,8 +83,8 @@ Las cuatro fuentes que tienen que decir lo mismo:
 | El **porqué** fechado de esas reglas | `BRAND-historical.md` — léelo antes de proponer cambiar una: casi todas nacieron corrigiendo algo |
 | Implementación — lo que el navegador **pinta** | `app/globals.css` · las cinco capas de `components/ui/` |
 | Valores **publicados** | `lib/design-values.ts` (D38) |
-| Documentación publicada | página **Design System** (`components/site/design-system.tsx`) |
-| Assets publicados | página **Brand Kit** (`components/site/brand-kit.tsx`) |
+| Documentación publicada | página **Design System** (`components/site/design-system/` — una carpeta con un archivo por sección desde D42, no un `.tsx` suelto) |
+| Assets publicados | página **Brand Kit** (`components/site/brand-kit/`, misma forma) |
 | Cifras publicadas | página **Accesibilidad** (`components/site/accesibilidad.tsx`) |
 
 Qué buscar:

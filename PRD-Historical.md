@@ -1661,6 +1661,92 @@ páginas, ya en el sprint siguiente).
 
 ---
 
+## 48. El cierre del sprint Deep-dive: lo que se decidió, y tres premisas que no sobrevivieron a medirlas (2026-08-18)
+
+Sesión de cierre del sprint. Ocho tareas, casi todas pequeñas, y el patrón que las cruza es el
+mismo: **la tarea describía un problema y al medirlo el problema era otro**. Se recoge aquí
+porque las decisiones de producto están repartidas entre ellas.
+
+### El índice: cinco y no ocho, y las tarjetas sin copy propio
+
+`/trayectoria` no era un extra del sprint: el breadcrumb de tres niveles de las cinco
+experiencias apuntaba a esa ruta desde que se montaron, así que **eran diez páginas con el
+enlace roto en su propia carpintería**, y no lo veía ningún gate porque ninguno mira la ruta
+*padre* de las que se añaden.
+
+**Lista las cinco que tienen caso, no la trayectoria entera.** La alternativa —añadir PICKASO,
+Ontecnia y Havas Media apagadas— habría hecho del índice una copia de la sección de la portada
+con tres filas que no llevan a ningún sitio. La ausencia se explica en copy, bajo el CTA del CV,
+para que se lea como decisión y no como hueco.
+
+**Y ninguna tarjeta tiene copy propio**, que es lo único que de verdad había que acertar:
+empresa, sector, rol y periodo salen del registro, y la afirmación de la tarjeta **es el `h1`
+literal de la página a la que lleva**. Un resumen escrito aparte habría sido la cuarta longitud
+del mismo hecho, tres días después de retirar las tres primeras.
+
+### `WebPage` y no `Article`, y una tarjeta OG por experiencia
+
+Dos decisiones de cara al exterior, tomadas con Francisco.
+
+**El tipo de Schema.org**: `Article` daba elegibilidad para rich results, pero marcar cinco
+páginas de carrera como artículos le dice a un rastreador que esto es un blog —y §9 es explícito
+en que no lo es— y pide un `datePublished` que en una página que cuenta cinco años no significa
+nada. Gana `WebPage`, atado a la empresa y al `Person` de la home.
+
+**La tarjeta OG**: una por experiencia y no una genérica para las seis. El argumento decisivo es
+de canal — se comparte en LinkedIn, que es donde está el ICP, y una tarjeta genérica enseña el
+sitio cuando lo que se está compartiendo es el caso. No cuesta copy nuevo: la compone del mismo
+rótulo y el mismo titular que pinta la página.
+
+### El ancho de línea se queda como está, y Sobre mí no era la excepción
+
+Quedaba abierto desde el montaje: el cuerpo del deep-dive va a **157 caracteres por línea**, muy
+por encima de la medida clásica. Francisco lo confirmó mirando las dos secciones servidas —los
+bullets a media página, la prosa a página entera— y **se queda**.
+
+Lo que sí cambió es entender que **Sobre mí no era un precedente divergente sino el tercer caso
+de la misma regla**: sus dos bloques a 608px lo están *porque van al lado de una foto*, no por
+seguir otra norma. La regla, que ya vale para las dos páginas y quedó escrita en la primitiva de
+anchos y no en un comentario del deep-dive:
+
+> **bullets → media columna · prosa sola → ancho de contenedor · prosa con imagen al lado → lo
+> que le deje la imagen.**
+
+### Tres premisas que no sobrevivieron a medirlas
+
+Es el saldo más interesante de la sesión, y las tres van en la misma dirección: **la tarea
+proponía una solución y medir demostró que era la equivocada.**
+
+1. **«223 KB es el salto de peso más grande del sitio».** Falso: el Design System pesa 341 KB y
+   el Brand Kit 302, ambos en producción desde hace semanas. Y el peso del HTML **no predice la
+   nota** — el índice pesa un tercio que Emendu y saca prácticamente lo mismo. No se toca el
+   artefacto.
+2. **«Subir la opacidad del velo arreglaría el contraste del botón de play».** Es
+   contraproducente *por construcción*: el velo acerca el póster al fondo, lo que separa al disco
+   y **acerca** al anillo. Tiran en direcciones opuestas, así que no hay opacidad que gane. Y el
+   estado que se sospechaba roto —el hover, donde el velo se apaga— resultó ser **el mejor**. Se
+   corrigió la regla publicada, no el componente.
+3. **«Atar la narrativa del deep-dive a los bullets cerraría el último hueco».** Medido antes de
+   construirlo: INDYA daría **cinco falsos positivos de cinco**, porque el formato permite que
+   los bullets lleven cifras que la narrativa no. Un gate ruidoso es peor que ninguno.
+
+*El patrón, dicho una vez: una tarea bien escrita describe el síntoma con precisión y propone la
+causa por intuición. Lo primero se puede confiar; lo segundo hay que medirlo.*
+
+### Y una pregunta de Francisco que destapó una categoría entera de deuda
+
+«¿La skill de `update-cv` está al día?». No lo estaba: en **un solo día**, mover los bullets al
+registro había dejado **nueve** afirmaciones falsas dentro de ella, una de ellas del tipo que
+hace daño —«retocar un bullet del CV no afecta a la web», que desde D57 es exactamente al revés—.
+Y `design-review` seguía recorriendo «las seis páginas» cuando ya eran doce.
+
+**Una skill es documentación ejecutable**, y por eso su caducidad es peor que la de un `.md`: un
+párrafo desactualizado se lee con escepticismo; una skill se *sigue*. `close-session` gana el
+paso de comprobarlo, con un comando mecánico en vez de una intención.
+
+De ahí salió también el gate del CV (D60), que cierra el último eslabón: la fuente única evita
+dos verdades, pero **no mantiene al día una copia impresa**.
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
