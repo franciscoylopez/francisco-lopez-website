@@ -396,13 +396,24 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    eran erratas: un titular que decía «Tres cosas» con cuatro aprendizajes, un bloque con los
    párrafos en otro orden y una página con los niveles de título cambiados.
 
-   **Y dos afirmaciones publicadas quedaron señaladas como sin respaldo**, que es el saldo honesto
-   de la sesión: la regla del **control sobre imagen** promete «siempre pasa uno de los dos
-   bordes» y con un metro más estricto —el peor de 144 ángulos del perímetro— no se sostiene
-   (D55, aviso); y **el censo de contraste dejó de ver los hover** —encuentra 0 reglas donde hay
-   21, porque desde CSS Nesting toda regla expone `cssRules`—, así que la mitad «y en hover» de
-   §5 está hoy sin medición. Ninguna de las dos es un incumplimiento conocido; las dos están
-   tareadas (P50.35 y P50.36) y anotadas en `BRAND.md` donde vive la regla.
+   **Y dos afirmaciones publicadas quedaron señaladas como sin respaldo**, que fue el saldo honesto
+   de aquella sesión: la regla del **control sobre imagen** prometía «siempre pasa uno de los dos
+   bordes» y con un metro más estricto —el peor de 144 ángulos del perímetro— no se sostenía; y
+   **el censo de contraste había dejado de ver los hover** —encontraba 0 reglas donde hay 21,
+   porque desde CSS Nesting toda regla expone `cssRules`—, así que la mitad «y en hover» de §5
+   estaba sin medición.
+
+   **Las dos se cerraron el 2026-08-18, y ninguna terminó donde apuntaba.** El **censo** se
+   arregló y, con los hover dentro, destapó un incumplimiento real que llevaba escondido detrás
+   del fallo del metro: la dirección de email de Accesibilidad daba **6,42 claro / 5,59 oscuro**
+   en hover —AA, no AAA— porque pisaba el color a mano en vez de usar el `tone: "muted"` de la
+   variante; era el **quinto** uso del mismo fallo y sobrevivió a tres auditorías porque el par
+   solo existe mientras el cursor está encima. Corregido, el censo da **cero pares bajo AAA en
+   8 páginas × 2 temas**, con el metro validado en las 16 corridas, así que «en reposo y en hover,
+   sin excepciones» vuelve a tener respaldo. Y el **control sobre imagen** se resolvió corrigiendo
+   la afirmación y NO el componente, porque al barrer los 144 ángulos apareció que la palanca
+   obvia era contraproducente: el velo acerca el póster al anillo mientras lo aleja del disco, así
+   que no hay opacidad que separe a los dos a la vez. Detalle en `DECISIONS.md` D55.
 
    **Lo anterior, del primer montaje (2026-08-17).** Además del texto,
    dos experiencias enseñan algo que no es prosa: **KUOTIP su dashboard** —al lado del párrafo que

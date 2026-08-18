@@ -2758,6 +2758,50 @@ estados—. *Nota de geometría para quien la retome: en hover el disco escala 1
 muestrear con el radio de reposo cae DENTRO del disco y devuelve `disco↔anillo = 1,00` — el mismo
 fallo que la lección 2 de arriba, en su segunda visita.*
 
+### RESUELTO (2026-08-18, P50.35): se corrige la AFIRMACIÓN, y el componente no se toca
+
+Se barrieron los **144 ángulos del perímetro** en las dos páginas × los dos temas × los dos
+estados, componiendo el póster real en un `<canvas>` y aplicando el velo por cálculo, con el
+radio de muestreo corregido por el `scale(1.08)` del hover. La cifra que contesta a la pregunta
+publicada —«¿pasa al menos uno de los dos bordes en cada punto?»— es el **peor, sobre los 144
+ángulos, del mejor de los dos bordes**:
+
+| | reposo (velo 0,35) | hover (velo 0) | velo 0,55 |
+|---|---|---|---|
+| INDYA claro | 2,82 | 2,84 | 3,69 |
+| TheTool claro | 2,86 | 2,87 | 3,97 |
+| INDYA oscuro | 2,90 | 2,93 | 3,00 |
+| TheTool oscuro | 2,91 | **3,04** | **2,92** |
+
+**Tres conclusiones, y ninguna era la esperada.**
+
+**1 · Subir el velo no es la palanca: es contraproducente por construcción.** El velo acerca el
+póster a `--background`, lo que separa al **disco** (`--primary`, lejos del fondo) y **acerca**
+al **anillo** (`--primary-foreground`, que *es* prácticamente el fondo). Los dos bordes tiran en
+direcciones opuestas, así que no existe una opacidad que gane: a 0,55 pasan tres combinaciones y
+la cuarta se queda en 2,92 —y además lava el póster—. *Un velo no puede separar a la vez dos
+colores que están en lados opuestos del fondo.* Es la misma familia que D41 (un color fijo contra
+dos superficies opuestas), vista desde el otro lado: aquí lo fijo es el fondo y lo opuesto son
+los dos tonos del control.
+
+**2 · El estado que no se había medido resultó ser el BUENO.** Se sospechaba que apagar el velo
+en hover era el agujero; medido, el hover sale **mejor** que su propio reposo en las cuatro
+(2,84 · 2,87 · 2,93 · 3,04), justamente porque quitar el velo aleja el póster del anillo. No hay
+nada que arreglar ahí. *La sospecha razonable resultó ir en la dirección contraria, y solo se
+supo midiendo el estado entero en vez de razonar sobre él.*
+
+**3 · No hay incumplimiento, hay una frase que prometía de más.** WCAG 1.4.11 pide que el
+componente **se distinga**, no que cada punto de su contorno pase 3:1; con el borde interno a
+**7,93 / 8,36** —invariante, porque son dos tokens— y un disco relleno de 64px, se distingue. Así
+que **el componente se queda como está** y lo que se corrige es la regla: `BRAND.md` §Un control
+sobre una imagen deja de prometer «siempre pasa uno de los dos bordes» y publica lo que de verdad
+garantiza, con el 2,82–2,91 escrito.
+
+**Lección de método, que es la que se lleva esta entrada:** *no basta con elegir entre corregir
+la afirmación o el componente — hay que medir si el componente PUEDE cumplirla.* Aquí las dos
+palancas propuestas por la tarea (subir el velo, no apagarlo en hover) resultaron ser una
+contraproducente y la otra innecesaria, y eso no se sabía al escribirla.
+
 ---
 
 ## D56 · La apertura ocupa el pliegue, y `mx-auto` deja de significar lo que significaba — 2026-08-17
