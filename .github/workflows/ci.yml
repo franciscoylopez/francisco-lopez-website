@@ -88,5 +88,15 @@ jobs:
       - name: CV al día
         run: npm run check:cv
 
+      # El 2026-08-18 se barrieron 357 rayas (—) del copy servido: es una señal
+      # visual de texto escrito por IA y casi nunca decía nada que no dijera una
+      # coma. Un barrido sin guardián se deshace solo, y el bloque siguiente
+      # («Cómo se ha creado esta página») es el que más copy nuevo escribe. Mismo
+      # giro que la paleta y las experiencias —se busca la AUSENCIA— y con las dos
+      # únicas excepciones escritas: el ordinal de una cabecera (D43) y la celda
+      # «no aplica» de una tabla. No mira comentarios ni `*.md`, a propósito.
+      - name: Raya en el copy
+        run: npm run check:raya
+
       - name: Build
         run: npm run build
