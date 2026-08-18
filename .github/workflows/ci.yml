@@ -30,7 +30,11 @@ concurrency:
 
 jobs:
   quality:
-    name: format · typecheck · lint · palette · build
+    # El nombre NO enumera los pasos. Enumerarlos deriva por construcción: decía
+    # «format · typecheck · lint · palette · build» cuando ya había ocho, así que
+    # llevaba tres pasos sin nombrar (experiencias, CV y raya). Los pasos se leen
+    # abajo, que es donde no pueden mentir.
+    name: calidad y build
     runs-on: ubuntu-latest
     steps:
       # Las acciones se fijan por SHA de commit, no por tag: un tag es un puntero
