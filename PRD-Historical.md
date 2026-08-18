@@ -1747,6 +1747,91 @@ paso de comprobarlo, con un comando mecánico en vez de una intención.
 De ahí salió también el gate del CV (D60), que cierra el último eslabón: la fuente única evita
 dos verdades, pero **no mantiene al día una copia impresa**.
 
+## 49. El deep-dive sale a producción, y las dos revisiones se ganan el sueldo (2026-08-18)
+
+La sesión que cierra la etapa. El orden lo pidió Francisco y resultó ser el correcto: **primero
+`design-review` sobre la rama, después el merge a producción, después el cierre**.
+
+### Por qué la revisión iba antes del deploy, y no después
+
+El ciclo por tanda de este proyecto dice «OK y `design-review` al final, un solo deploy», y su
+disparador documentado es *antes de un release visual grande*. Este lo era —de seis páginas a
+doce por idioma, el mayor desde V1— y la skill **no se había disparado sobre el deep-dive**: lo
+último que se hizo con ella fue arreglarla, porque seguía recorriendo «las seis páginas».
+
+Encontró cinco cosas. **Dos se arreglaron antes de mergear** y las tres restantes se tarearon.
+
+### El hallazgo que justifica la revisión entera, y cómo apareció
+
+No lo encontró el censo corriendo como siempre. Lo encontró **preguntarse por qué `BRAND.md`
+publicaba «8 páginas × 2 temas»** cuando el sitio tiene doce. Al pasar el censo por las cuatro
+que faltaban apareció un par que llevaba meses ahí: el rótulo de la tarjeta de cierre —que está
+en **las doce páginas**— daba 9,14 en reposo y **7,79 claro / 9,01 oscuro en hover**, donde le
+tocaba 8,17 / 9,17.
+
+La causa es un eje que D39 no miraba: **una superficie también cambia por estado**. `hover:bg-muted`
+compila a `.hover\:bg-muted:hover` dentro de `@media (hover: hover)`, otro selector, así que la
+tarjeta cambiaba de fondo sin recalcular su atenuado. No era incumplimiento —AAA aguantaba por
+0,79—, y por eso importa decirlo bien: **lo que fallaba no era el color, era el mecanismo**, y
+fallaba en el eje que solo existe mientras el cursor está encima, que es el punto ciego histórico
+del proyecto. Detalle y cifras en **D61**.
+
+*La lección, que es la reutilizable: un metro bien calibrado que no se pasa por todo el sitio
+sigue siendo un metro que no ha mirado.* Es prima hermana de la de dos días antes —un metro que
+devuelve una lista vacía parece un aprobado— y las dos se descubren igual: mirando **cuánto ha
+mirado** el metro, no solo qué ha encontrado.
+
+### El segundo arreglo: la capa de cabecera publicaba cuatro quintos de sí misma
+
+`titleVariants` tiene cinco tamaños desde que `sub` nació con «La historia» del deep-dive (D53), y
+la sección 11 del Design System listaba cuatro. Es el recorrido incompleto de siempre —regla ✓,
+variante ✓, **sección publicada ✗**, uso ✓—, el mismo peldaño que se saltaron los botones. Al
+añadirlo apareció una decisión pequeña que merece quedar escrita: **el rótulo del espécimen se
+pinta solo si lo hay**, porque `sub` es el único tamaño que en el sitio va sin rótulo encima y
+dibujarle uno enseñaría una composición que la página real no tiene.
+
+### `graphify`: el primer descarte medido
+
+Se instaló entera y se disparó. **Se descarta**, y la razón que decide no es el coste —que fue
+alto: se llevó el límite de gasto por delante dos veces— sino un aviso de la propia herramienta:
+«30 source files produced zero nodes», y eran **los diccionarios JSON**. O sea ciega justo donde
+ocurrieron D57, D58 y D60. Eso no lo dice ninguna comparativa; se sabe disparándola. D51 ampliado.
+
+De paso quedó una decisión de método que aguantó bajo presión: **no se construyó el grafo con la
+mitad de los datos**. Faltaban `DECISIONS.md` entero, las skills y los PDFs, y un grafo así habría
+contestado «no encuentro drift» **por ausencia de datos** — invalidando el veredicto en las dos
+direcciones.
+
+### El `sprint-review`, y un patrón que ya son cinco
+
+El andamiaje salió sano: cero `any`, cero `@ts-ignore`, `strict` con `noUncheckedIndexedAccess`,
+nueve dependencias de runtime, `npm audit` limpio y los cuatro `dangerouslySetInnerHTML` pasando
+todos por una función con nombre.
+
+Lo que encontró fueron **contadores caducados**, y ya van cuatro en tres días: `design-review` con
+«seis páginas», `update-cv` con nueve afirmaciones falsas, y ahora **`PRD-Live` y `README`
+contradiciéndose consigo mismos** —PRD-Live decía «seis páginas» y tres líneas después «señala las
+doce»; README decía «6 páginas» y «12 páginas» con 53 líneas de diferencia—. Y al cerrar la sesión
+cayó un tercero de la misma familia: README describía CI **dos veces y las dos incompletas**, con
+tres y cinco pasos de los siete que corre.
+
+La causa no es descuido: **cuántas páginas tiene el sitio está escrito en prosa en cinco sitios y
+derivado en uno solo** —`scripts/page-html-diff.ts`, que el gate mantiene al día por obligación—.
+D59 hizo exactamente este giro con el sitemap, `llms.txt` y las tarjetas OG. La prosa no se puede
+derivar, pero sí comprobar, y eso queda tareado **con la cautela de D60: medir el ruido primero**,
+porque de las siete apariciones de «seis páginas» en `PRD-Live` **cuatro eran correctas** —tres
+hablan del deep-dive, que sí son seis páginas— y un grep ingenuo acertaría 3 de 7.
+
+Y el quinto metro descalibrado, esta vez en el propio tooling: `prettier --check "scripts/**"`
+responde «All matched files use Prettier code style!» sobre **cero** archivos, porque aplica
+`.prettierignore` también a las rutas explícitas.
+
+### Estado al cerrar
+
+Las doce páginas por idioma en producción y verificadas. Etapa Deep-dive cerrada: **29 tareas
+archivadas, 1 descartada, cero abiertas**. Queda por decidir la apertura de la etapa siguiente,
+*Cómo se ha creado*, cuyas siete tareas siguen en «Sin empezar».
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

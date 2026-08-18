@@ -77,6 +77,15 @@ Lo que hay que saber al escribir UI:
 - **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix` en vez de la utilidad—,
   tiene que declarar a qué familia pertenece con `data-surface="card" | "muted" | "inverted" |
   "page"`. Sin eso la capa no puede verlo, y ahí es donde se escaparon cuatro pares.
+- **Una superficie también cambia por ESTADO, no solo por clase o por atributo** *(2026-08-18,
+  D61)*. `hover:bg-muted` **no** compila a `.bg-muted`: compila a `.hover\:bg-muted:hover`, y
+  dentro de `@media (hover: hover)`. Es otro selector, así que durante meses una tarjeta que se
+  aclaraba al pasar el cursor cambiaba de fondo **sin recalcular su atenuado** — 9,14 en reposo
+  contra **7,79 claro / 9,01 oscuro** en hover, donde le tocaba 8,17 / 9,17. Ya está resuelto en
+  `globals.css` para `hover:` y `focus-visible:`, así que **al escribir UI no hay nada que hacer**;
+  lo que hay que saber es que `data-surface` **no** sirve para este caso: es estático y no puede
+  describir algo que cambia con el estado. Si aparece una tercera puerta (otro variante de estado
+  que cambie el fondo), se añade **en la capa**, nunca en el punto de uso.
 - **Los pasteles siguen sin ser superficie de texto.** Esto resuelve los grises del sistema, no
   convierte un `*-soft` en fondo legible.
 
@@ -259,8 +268,11 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
   están en AAA en ambos temas, en reposo y en hover. Sin excepciones** *(re-verificado el
-  2026-08-18 con el censo reparado: 8 páginas × 2 temas, metro validado en las 16 corridas, cero
-  pares bajo AAA)* — la última que
+  2026-08-18 sobre **las doce páginas × 2 temas**, metro validado en las 24 corridas, cero pares
+  bajo AA y cero bajo AAA. La primera pasada de ese día se corrió solo sobre 8 de las doce, y
+  preguntarse por las cuatro que faltaban es lo que destapó **D61**: el atenuado no se recalculaba
+  al cambiar de superficie por hover. Un metro bien calibrado que no se pasa por todo el sitio
+  sigue siendo un metro que no ha mirado)* — la última que
   quedaba, `brand-purple-accent`, dejó de serlo el 2026-08-10 al hacerlo conmutar con el tema
   (§Color): la salvedad no era del morado, era de cualquier color fijo puesto sobre dos
   superficies opuestas.

@@ -2293,6 +2293,48 @@ cosas mal y solo una era la herramienta.)* Y la técnica de motion elegida para 
 en CSS, cero JS de hilo principal y mejora progresiva por diseño— **no se registra todavía
 como decisión porque no está validada**: primero se prueba sobre una ilustración.
 
+### Ampliado el 2026-08-18: el primer descarte MEDIDO, y no fue por el precio
+
+`graphify` (Graphify-Labs) era la candidata para cruzar los nueve documentos de gobierno, las 60
+D-entries y las secciones numeradas del PRD: convierte código y documentación en un grafo
+consultable. Se instaló entera —`winget install astral-sh.uv` → `uv tool install graphifyy` →
+`graphify install`, con la skill en **global** porque `.claude/skills/` está rastreado por git— y
+se disparó sobre el repo. **Se descarta.**
+
+**La razón que se ve primero es el coste, y es la menos interesante.** El pase semántico se llevó
+el límite de gasto mensual por delante dos veces; los chunks que terminaron consumieron ~155-160k
+tokens **cada uno**. La parte barata de la herramienta —AST local con tree-sitter, determinista, sin
+LLM— **solo cubre el código**, y lo que aquí había que mirar eran los documentos: 326.000 palabras
+de prosa. El perfil de coste no es incidental, es lo que la herramienta *es* sobre este corpus.
+
+**La razón que decide es otra, y la dio la propia herramienta en un aviso: «30 source files
+produced zero nodes».** Eran los diccionarios JSON de i18n. O sea que el grafo **no ve el copy** —
+y D57, D58 y D60, las tres familias de drift reales y recientes de este proyecto, son todas de
+copy duplicado entre diccionario, registro y CV. Habría estado ciega justo donde más ha fallado el
+repo. Eso no lo dice ninguna comparativa: se sabe **disparándola**, que es la regla de siempre.
+
+**Lo que sí dejó, y se queda escrito porque vale más que el descarte:**
+
+- **La quinta aparición del metro que aprueba sobre lista vacía**, esta vez dentro de nuestro
+  propio tooling: `prettier --check "scripts/**"` responde «All matched files use Prettier code
+  style!» sobre **cero** archivos, porque aplica `.prettierignore` también a las rutas explícitas.
+  Solo con `--ignore-path /dev/null` salen los diez sin formatear.
+- **La extracción paralela falla en Windows** (multiprocessing + `<stdin>`) y cae a secuencial. Se
+  recupera sola y lo avisa, pero es fricción que ninguna documentación de la herramienta anticipa.
+- **Tres de cinco subagentes murieron al ESCRIBIR su JSON**, dejando basura parcial en disco —un
+  array pelado, sin esquema y con el nombre de archivo equivocado— que el glob del merge habría
+  recogido y que habría roto el paso siguiente sin avisar.
+
+**Y una decisión de método que se sostuvo bajo presión: no se construyó el grafo con lo que había.**
+Faltaban `DECISIONS.md` entero, las skills y los PDFs. Un grafo así habría contestado «no encuentro
+drift» **por ausencia de datos**, no por ausencia de drift — y el criterio de éxito era justamente
+«¿encuentra un drift real que el grep no había encontrado?». Juzgar la herramienta con el metro a
+medio montar invalida el veredicto en las dos direcciones.
+
+*Si algún día se reabre, la vía es `GEMINI_API_KEY` (`pip install 'graphifyy[gemini]'`), que saca
+el pase semántico del presupuesto de Claude. No merece la pena hasta que el corpus deje de ser
+mayoritariamente prosa, o hasta que la herramienta sepa leer los diccionarios.*
+
 ## D52 · El gate de accesibilidad deja de dispararse una sola vez, y el eje que le faltaba era el alto — 2026-08-16
 
 **Decisión.** El método de verificación de `CLAUDE.md` §Checklist de accesibilidad —«Verificación
@@ -3180,3 +3222,51 @@ que una skill *describe*, con el comando mecánico que valida rutas y comandos �
 disparándolo sobre las cinco. Y la misma caducidad afecta a las **cabeceras de los módulos**:
 `scripts/cv/facts.ts` seguía anunciando que leía «periodos y roles» del diccionario meses después
 de dejar de hacerlo.
+
+## D61 · Una superficie también cambia por ESTADO, y el atenuado no se enteraba — 2026-08-18
+
+**El hueco.** D39 hizo que el atenuado lo resolviera la superficie y no el punto de uso, y su
+promesa —«una tarjeta nueva nace bien sin pedirlo»— se cumplía en los **dos ejes que el bloque de
+`globals.css` miraba**: la clase (`.bg-card`, `.bg-muted`) y el atributo (`data-surface`). Faltaba
+un tercero, y es el que este sitio tiene peor cubierto por construcción: **el estado**.
+
+`hover:bg-muted` no compila a `.bg-muted`. Compila a `.hover\:bg-muted:hover`, y además dentro de
+`@media (hover: hover)` — **otro selector**. Así que una tarjeta que se aclara al pasar el cursor
+cambiaba de fondo sin recalcular su atenuado: el texto se quedaba con el valor derivado de
+`--card` encima de un fondo que ya era `--muted`.
+
+**Medido antes de tocar nada**, en el rótulo de la tarjeta de cierre (`components/ui/page-closer.tsx`,
+que es el cierre de **las doce páginas**) y en las tarjetas del índice de Trayectoria:
+
+| Estado | Claro | Oscuro |
+|---|---|---|
+| Reposo (`mutedOnCard`, correcto) | 9,14 | 10,32 |
+| **Hover, como estaba** | **7,79** | **9,01** |
+| Hover, como debía (`mutedOnMuted`) | 8,17 | 9,17 |
+
+**No llegaba a incumplimiento, y por eso importa decirlo bien: lo que fallaba no era el color,
+era el MECANISMO.** AAA aguantaba por 0,79 en claro — la holgura de hover más fina del sitio —,
+pero fallaba en el eje que **solo existe mientras el cursor está encima**, que es el punto ciego
+histórico de este proyecto: es el mismo sitio donde se escondió el quinto uso de `tone: "muted"`
+(la dirección de email de Accesibilidad, D55/P50.36) y el mismo que el censo no vio durante meses
+por su bug de CSS Nesting.
+
+**Se arregla en la capa, no en los dos call sites, y no es preferencia:** `data-surface` es
+**estático** y no puede describir una superficie que cambia con el estado, así que declararlo en
+la tarjeta no habría servido. La regla nueva vive en `app/globals.css`, junto a las otras cuatro.
+Se cubre también `focus-visible:bg-muted` —el mismo cambio de superficie por la otra puerta, que
+usan `outline-neutral` y `ghost` de `action.tsx`— aunque hoy ningún control con ese estado lleve
+texto atenuado: es la misma decisión, y dejarla a medias es cómo vuelve el fallo.
+
+**De paso era un par número 14 que ninguna página publicaba** — la regla 4 del censo dice que si
+el DOM tiene más pares que la tabla, la tabla está incompleta. Aquí la conclusión es mejor que
+añadir una fila: **arreglar la causa colapsa el par en `mutedOnMuted`, que ya está publicado**. Se
+arregla la capa y desaparece la fila que si no habría que mantener.
+
+**Verificado remidiendo sobre producción**, no sobre local: 8,17 claro / 9,17 oscuro, que es
+exactamente el valor predicho antes del cambio. El censo pasa de indexar 21 reglas `:hover` a 23.
+
+**Cómo se encontró, que es la parte reutilizable.** No lo encontró el censo corriendo como
+siempre: lo encontró `design-review` preguntándose **por qué `BRAND.md` publicaba «8 páginas × 2
+temas»** cuando el sitio tiene doce. Al correr las seis que faltaban apareció el par. *Un metro
+bien calibrado que no se pasa por todo el sitio sigue siendo un metro que no ha mirado.*
