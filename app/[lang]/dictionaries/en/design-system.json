@@ -435,7 +435,7 @@
         "size": "page-sm",
         "eyebrow": "Who's behind this",
         "sample": "About me",
-        "use": "The h1 of the long-read pages: About me and the cookie policy."
+        "use": "The h1 of the long-read pages: About me, the cookie policy and the Career index."
       },
       {
         "size": "section",
@@ -448,6 +448,12 @@
         "eyebrow": "Header layer",
         "sample": "Headers",
         "use": "A section of a long index, like the fourteen on this page."
+      },
+      {
+        "size": "sub",
+        "eyebrow": "",
+        "sample": "The product that already existed",
+        "use": "The h3 of a subsection inside a section. It is the only size that goes without a label above it: the free-form blocks of “The story” on the experience pages use it."
       }
     ],
     "toneTitle": "The label takes its grey from the surface",
