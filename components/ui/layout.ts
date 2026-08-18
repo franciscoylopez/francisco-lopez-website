@@ -17,7 +17,30 @@ export const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
 /** Sección de página: filete superior + ritmo vertical del sistema. */
 export const SECTION = "border-border border-t py-[var(--section-y)]";
 
-/** Prosa a la medida de lectura (~91 caracteres en Inter). */
+/**
+ * Prosa a la medida de lectura (~91 caracteres en Inter).
+ *
+ * NO ES LA ANCHURA POR DEFECTO DE TODO TEXTO, y conviene saberlo antes de
+ * alcanzarla por reflejo. El ancho de un bloque de texto en este sitio lo decide
+ * QUÉ ES el bloque, y son tres casos —cerrado el 2026-08-18 midiendo el deep-dive
+ * y Sobre mí, que es donde ya convivían los tres—:
+ *
+ * · **Bullets → media columna.** «En un minuto» del deep-dive y «Dónde estoy
+ *   ahora» de Sobre mí: ~650-670px, o sea ~80 caracteres. Una lista se escanea, y
+ *   a ancho completo el ojo pierde el salto de un bullet al siguiente.
+ * · **Prosa sola → ancho de contenedor**, o sea 1.280px y ~157 caracteres por
+ *   línea. Es MUY por encima de la medida clásica (60-75) y de este `PROSE`
+ *   (~91), y es deliberado: a media página, mil doscientas palabras seguidas se
+ *   leen como media página VACÍA y alargan el scroll el doble. Se decidió viendo
+ *   las dos versiones servidas y se reconfirmó midiendo.
+ * · **Prosa con una imagen al lado → lo que le deje la imagen.** Las dos de «Más
+ *   allá del trabajo» caen en 608px y eso NO es una excepción a la regla
+ *   anterior: ahí la otra mitad no está vacía.
+ *
+ * Así que `PROSE` es para el texto que de verdad quiere la medida clásica —una
+ * entradilla, una nota, un párrafo suelto dentro de una caja—, no para el cuerpo
+ * de una página larga.
+ */
 export const PROSE = "max-w-[var(--measure)]";
 
 /**
