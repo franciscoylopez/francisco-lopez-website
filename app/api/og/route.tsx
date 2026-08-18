@@ -4,6 +4,7 @@ import { join } from "node:path";
 import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 
+import { getExperience, getTrayectoriaIndice } from "@/app/[lang]/dictionaries";
 import { brandHex, paletteHex } from "@/lib/design-values";
 
 // Generación de imágenes OG (1200×630) con la marca (P16). Route handler bajo
@@ -191,8 +192,29 @@ function HomeCard({ lang }: { lang: Lang }) {
   );
 }
 
-function BrandCard({ lang, card }: { lang: Lang; card: Card }) {
-  const { title, kicker } = COPY[card][lang];
+// Recibe el copy YA RESUELTO en vez de buscarlo en `COPY` (P50). El cambio lo
+// pide el deep-dive: sus cinco tarjetas no salen de una tabla fija de este
+// archivo, sino del diccionario de cada experiencia — el mismo `eyebrow` y el
+// mismo `title` que pinta la página. Escribirlos aquí habría sido la copia
+// número seis de un dato que este sitio acaba de reducir a una (D57/D58).
+function BrandCard({
+  title,
+  kicker,
+  titleSize = 104,
+}: {
+  title: string;
+  kicker: string;
+  /**
+   * Los titulares del sistema son de una o dos palabras («Brand Kit»,
+   * «Accesibilidad») y a 104px llenan la tarjeta. Los del deep-dive son frases
+   * —«De vender a mano a un SaaS con canal propio»— y a ese tamaño se salen del
+   * lienzo por abajo, porque encima llevan el logo de 150px. Es un valor por
+   * FAMILIA de tarjeta, no por longitud del texto: escalarlo carácter a carácter
+   * daría un tamaño distinto en cada una de las cinco y se leerían como cinco
+   * plantillas.
+   */
+  titleSize?: number;
+}) {
   return (
     <div
       style={{
@@ -236,7 +258,26 @@ function BrandCard({ lang, card }: { lang: Lang; card: Card }) {
         />
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 30 }}>
+      {/* LA COLUMNA NO LLEGA AL BORDE, y esto NO lo trajo el deep-dive: la «s» de
+          «Política de cookies» ya montaba sobre el flanco cian en la tarjeta que
+          está en producción (visto al renderizar, 2026-08-18). Con rótulos de una
+          palabra el problema no existía, y con frases es constante — así que el
+          tope va en la COLUMNA y vale para las once tarjetas, no es un parche del
+          caso nuevo.
+
+          800 y no «lo que sobre»: los dos flancos miden 150+26+150 y van pegados
+          a la derecha desbordando 70px, o sea que su borde izquierdo cae en 944,
+          y la rotación de 8° saca las esquinas otros ~21px hasta ~923. La columna
+          arranca en los 90px del padding, así que 800 la deja acabar en 890 —
+          33px de aire contra el pastel. */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 30,
+          maxWidth: 800,
+        }}
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={LOGO}
@@ -260,7 +301,7 @@ function BrandCard({ lang, card }: { lang: Lang; card: Card }) {
           style={{
             fontFamily: "Bricolage",
             fontWeight: 600,
-            fontSize: 104,
+            fontSize: titleSize,
             lineHeight: 1.0,
             letterSpacing: -3,
             color: INK,
@@ -284,9 +325,54 @@ function BrandCard({ lang, card }: { lang: Lang; card: Card }) {
   );
 }
 
-export function GET(request: NextRequest) {
+/** Las tarjetas del deep-dive: el índice y `trayectoria/<slug>`. */
+const DEEP_DIVE = "trayectoria";
+
+/**
+ * El copy de la tarjeta de una página del deep-dive, leído de SU diccionario
+ * (P50). Devuelve `null` si el slug no tiene página, y entonces la petición cae
+ * en la tarjeta de la home como cualquier card desconocida.
+ *
+ * POR QUÉ AQUÍ Y NO EN LA TABLA `COPY`: son seis tarjetas cuyo texto ya existe
+ * —el `eyebrow` y el `title` que la página pinta— y escribirlo otra vez habría
+ * creado una copia que puede divergir sin que nada lo note, que es el modo de
+ * fallo que D57/D58 acaban de retirar tres veces de este repo. Aquí duele más
+ * que en otros sitios: una tarjeta OG solo la ve quien comparte el enlace, así
+ * que un titular desincronizado puede vivir meses sin que nadie lo vea.
+ */
+async function deepDiveCopy(
+  lang: Lang,
+  cardParam: string,
+): Promise<{ title: string; kicker: string } | null> {
+  if (cardParam === DEEP_DIVE) {
+    const t = await getTrayectoriaIndice(lang);
+    return { title: t.title, kicker: t.eyebrow };
+  }
+  const prefijo = `${DEEP_DIVE}/`;
+  if (!cardParam.startsWith(prefijo)) return null;
+
+  const dict = getExperience(lang, cardParam.slice(prefijo.length));
+  if (!dict) return null;
+  const t = await dict;
+  return { title: t.title, kicker: t.eyebrow };
+}
+
+export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const cardParam = searchParams.get("card");
+  const cardParam = searchParams.get("card") ?? "";
+  const lang: Lang = searchParams.get("lang") === "en" ? "en" : "es";
+
+  const deepDive = await deepDiveCopy(lang, cardParam);
+  if (deepDive) {
+    // 68px y no los 104 del resto: estos titulares son frases de hasta ocho
+    // palabras, no rótulos de una o dos. Ver `titleSize`.
+    return new ImageResponse(<BrandCard {...deepDive} titleSize={68} />, {
+      width: 1200,
+      height: 630,
+      fonts,
+    });
+  }
+
   const card: Card =
     cardParam === "brand-kit" ||
     cardParam === "design-system" ||
@@ -295,13 +381,12 @@ export function GET(request: NextRequest) {
     cardParam === "accesibilidad"
       ? cardParam
       : "home";
-  const lang: Lang = searchParams.get("lang") === "en" ? "en" : "es";
 
   return new ImageResponse(
     card === "home" ? (
       <HomeCard lang={lang} />
     ) : (
-      <BrandCard lang={lang} card={card} />
+      <BrandCard {...COPY[card][lang]} />
     ),
     { width: 1200, height: 630, fonts },
   );

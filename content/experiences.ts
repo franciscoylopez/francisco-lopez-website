@@ -92,3 +92,20 @@ export function experienceOf(company: string): Experience {
   }
   return hit;
 }
+
+/**
+ * La experiencia de un `slug`, o `undefined` si ese slug no tiene página. Es
+ * `experienceOf` al revés, y existe porque la ruta del deep-dive conoce el slug
+ * y no la empresa: sin esto, el nombre de la empresa tendría que escribirse otra
+ * vez en el diccionario de cada experiencia, que es la copia número seis del
+ * mismo dato en un sitio que acaba de retirar tres (D57/D58).
+ *
+ * NO LANZA, al contrario que `experienceOf`, y la asimetría es a propósito: aquí
+ * un slug desconocido es una URL que alguien se ha inventado —`/trayectoria/xxx`—
+ * y eso es un 404, no un error de programación. `experienceOf` sí lanza porque
+ * un nombre de empresa sin registrar solo puede venir de nuestro propio
+ * contenido.
+ */
+export function experienceBySlug(slug: string): Experience | undefined {
+  return EXPERIENCES.find((e) => e.slug === slug);
+}

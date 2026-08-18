@@ -6,7 +6,8 @@ import { DeepDiveNav } from "@/components/site/deep-dive-nav";
 import { PageShell } from "@/components/site/page-shell";
 import { locales, isLocale, pagePath } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
-import { pageUrl } from "@/lib/structured-data";
+import { experienceBySlug } from "@/content/experiences";
+import { experiencePageLd, pageUrl } from "@/lib/structured-data";
 import {
   experienceSlugs,
   getCommon,
@@ -46,10 +47,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     slug: `${BASE}/${slug}`,
     meta: t.meta,
     ogType: "article",
-    // TODO(P50): `/api/og` no tiene tarjeta del deep-dive todavía y una card
-    // desconocida cae en la de la home. Se resuelve con el SEO de estas páginas,
-    // junto con el sitemap derivado y el JSON-LD por experiencia.
-    ogCard: BASE,
+    // Tarjeta OG PROPIA de cada experiencia (P50). `/api/og` la compone con el
+    // mismo `eyebrow` y el mismo `title` que pinta la página, leídos de este
+    // diccionario: compartir un deep-dive enseña el caso y no el sitio. Hasta
+    // hoy las seis caían en la tarjeta de la home, que es lo que hace una card
+    // desconocida.
+    ogCard: `${BASE}/${slug}`,
   });
 }
 
@@ -70,12 +73,25 @@ export default async function ExperiencePage({ params }: Params) {
     dict,
   ]);
 
+  // La empresa sale del REGISTRO y no del diccionario: la ruta conoce el slug, y
+  // escribir el nombre otra vez en cada JSON sería la sexta copia del mismo dato.
+  // No puede faltar —`getExperience` ya ha respondido, así que el slug existe—,
+  // pero el tipo no lo sabe y el fallback evita un `!` que mentiría.
+  const experiencia = experienceBySlug(slug);
+
   return (
     <PageShell
       dict={common}
       lang={lang}
       crumb={t.crumb}
       parents={[{ name: comun.crumbIndice, url: pageUrl(lang, BASE) }]}
+      extraLd={experiencePageLd({
+        lang,
+        slug,
+        name: t.title,
+        description: t.meta.description,
+        company: experiencia?.company ?? t.crumb,
+      })}
     >
       <DeepDive
         t={t}

@@ -57,9 +57,23 @@ type PageShellProps = {
        * divergir; el ancestro que se olvide en el JSON-LD no lo ve nadie.
        */
       parents?: { name: string; url: string }[];
+      /**
+       * Un SEGUNDO bloque de JSON-LD, además del breadcrumb derivado. Hoy solo
+       * las páginas del deep-dive, que declaran su `WebPage` atada al `Person`
+       * de la home por `@id` (P50).
+       *
+       * Va como un `<script>` aparte y no fundido con el breadcrumb en un
+       * `@graph` por dos razones. La buena: son dos afirmaciones independientes
+       * —dónde está esta página en la jerarquía, y de qué va— y Google lee tantos
+       * bloques como haya. La práctica: fundirlos cambiaría el marcado de las
+       * dieciocho variantes que NO lo usan, y este bloque no las toca; con un
+       * script extra, `gate:html` sale vacío en todas menos en las diez del
+       * deep-dive, que es exactamente lo que se quiere de un gate.
+       */
+      extraLd?: object;
       jsonLd?: never;
     }
-  | { crumb?: never; parents?: never; jsonLd: object }
+  | { crumb?: never; parents?: never; extraLd?: never; jsonLd: object }
 );
 
 export function PageShell(props: PageShellProps) {
@@ -77,6 +91,7 @@ export function PageShell(props: PageShellProps) {
   return (
     <>
       <JsonLd data={data} />
+      {props.extraLd ? <JsonLd data={props.extraLd} /> : null}
       <Nav
         dict={dict.nav}
         homeHref={props.crumb === undefined ? undefined : pagePath(lang)}
