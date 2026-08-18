@@ -16,9 +16,9 @@ La propia web es la **prueba de criterio técnico y de diseño** — no un CV en
 
 ## 2. Audiencia — dos velocidades de lectura
 
-| Perfil | Cómo lee | Qué necesita |
-|---|---|---|
-| HR / Recruiter | Escaneo 5-10s | Rol, seniority, stack |
+| Perfil                 | Cómo lee         | Qué necesita                   |
+| ---------------------- | ---------------- | ------------------------------ |
+| HR / Recruiter         | Escaneo 5-10s    | Rol, seniority, stack          |
 | CEO / CPO / VP Product | Lectura profunda | Outcomes, criterio de producto |
 
 El **above the fold pasa el filtro de RRHH**; al hacer scroll, el contenido
@@ -37,6 +37,7 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
 ## 4. Estado actual — en producción (`franciscolopez.es`)
 
 V1 lanzada. En vivo:
+
 - **Home** (una sola página), en **ES (raíz `/`) y EN (`/en`)**.
 - Páginas propias: **Sobre mí**, **Brand Kit**, **Design System**, **Accesibilidad**,
   **Política de cookies**.
@@ -143,6 +144,7 @@ tenga que acordarse.
   no existen. El hueco titular→entradilla también subió a la capa (`LEAD_GAP`): eran 32
   márgenes escritos a mano que resultaron ser cuatro decisiones, una por tamaño.
   D45/D46/D47.
+
 - **El atenuado lo resuelve la superficie, no el punto de uso** (2026-08-09, D39). La
   utilidad `text-muted-foreground` dejó de significar «este gris» y pasa a significar «el
   atenuado del fondo donde caiga este texto»: cada superficie redefine `--surface-dim`
@@ -189,8 +191,8 @@ tenga que acordarse.
   `CLAUDE.md` deja de decir «Lighthouse + axe con `claude-in-chrome`» y pasa a `agent-browser`
   conducido por un subagente, `viewport-verifier`, que lleva la matriz de cuatro viewports ×
   dos temas y devuelve hallazgos en vez del volcado. El cambio no es de herramienta sino **de
-  forma**: el gate pasa a tener **dos disparos** —uno *mientras se dibuja* una banda o un hero
-  dimensionado por `vw`, otro *al cerrar*—, porque el eje que le faltaba no era el tema, era el
+  forma**: el gate pasa a tener **dos disparos** —uno _mientras se dibuja_ una banda o un hero
+  dimensionado por `vw`, otro _al cerrar_—, porque el eje que le faltaba no era el tema, era el
   **alto**, y al cerrar ya es un rediseño. De paso se separa lo que «Lighthouse» juntaba: la
   **nota** de PageSpeed sigue saliendo de `npm run psi` contra producción (D49), no de
   `vitals`, que da métricas. Y el **enlace de salto** sigue comprobándose a mano, porque axe no
@@ -236,8 +238,8 @@ tenga que acordarse.
   pares» que el PRD daba por incumplimiento, solo uno lo era**: los otros tres son los «Aa»
   de las muestras de color, de 24px y peso 600 —texto grande, donde AAA es 4,5 y no 7—, así
   que 5,21 y 6,57 **cumplían**; los marcaba el censo por aplicar el umbral de texto normal a
-  todo. Lección de método, la cuarta de la misma familia: *un umbral mal aplicado inventa
-  hallazgos igual que un metro mal calibrado*. **Y esa se arregló el mismo día (P37.6595):**
+  todo. Lección de método, la cuarta de la misma familia: _un umbral mal aplicado inventa
+  hallazgos igual que un metro mal calibrado_. **Y esa se arregló el mismo día (P37.6595):**
   el censo lee ya el tamaño y el peso de cada texto, puntúa contra el umbral que le toca y
   ordena por **holgura** en vez de por cifra, así que su lista dejó de ser de candidatos para
   volver a ser de incumplimientos. El congelado de transiciones —que el censo hacía por
@@ -265,6 +267,7 @@ tenga que acordarse.
   Verificado el 2026-08-10: censo del DOM con el metro validado (13,79 / 15,32) **sin ningún
   par bajo AAA** en home y Brand Kit, y **0 violaciones de axe** en home, Brand Kit y Design
   System, ES y EN, claro y oscuro.
+
 - **Medición**: GA4/GTM + Microsoft Clarity (cualitativo: heatmaps y grabaciones de
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.
@@ -276,11 +279,11 @@ tenga que acordarse.
   Brand Kit desvía a propósito; D38).
 
   **Y desde el 2026-08-18, el PDF del CV tiene su propio gate.** La fuente única de
-  D57/D58 garantiza que la web y el CV no puedan decir cosas distintas *mientras el PDF se
-  regenere* — pero el PDF es un **artefacto commiteado**, y ese día un cambio de sector en
+  D57/D58 garantiza que la web y el CV no puedan decir cosas distintas _mientras el PDF se
+  regenere_ — pero el PDF es un **artefacto commiteado**, y ese día un cambio de sector en
   `content/experience-copy/` dejó los dos PDFs viejos sin que lo viera nada: ni el typecheck,
-  ni el linter, ni `gate:html`, ni `check:experiencias`. *Una fuente única evita dos verdades;
-  no mantiene al día una copia impresa.* `npm run check:cv` sella la **huella de lo que entra**
+  ni el linter, ni `gate:html`, ni `check:experiencias`. _Una fuente única evita dos verdades;
+  no mantiene al día una copia impresa._ `npm run check:cv` sella la **huella de lo que entra**
   en el CV y falla si no coincide con la última generación — de entradas y no de bytes, porque
   el PDF **no es determinista** (regenerarlo sin cambiar nada da otro hash; medido antes de
   elegir el método). Validado rompiéndolo: cambiar una palabra del registro sin regenerar hace
@@ -306,6 +309,7 @@ tenga que acordarse.
   todas cuando el refactor pasó a ser el andamiaje común (D45), que es donde vive lo que nadie
   revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe. **Se valida
   rompiéndolo**: borrando una línea de `pageMetadata`, el diff señala las doce a la vez.
+
 - **Revisiones recurrentes**: dos skills con mirada externa, para que la mejora no dependa
   de acordarse — `sprint-review` (técnica, al cerrar etapa) y **`design-review`** (diseño:
   cumplimiento del sistema + expresión de marca, verificando **en pantalla** y no solo en el
@@ -337,8 +341,8 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 ## 9. Alcance por versión
 
-*(Replanificado el 2026-08-10. El detalle ejecutable —orden, dependencias y tamaños— vive en
-el tablero de tareas; aquí solo qué entra en cada release y qué queda fuera.)*
+_(Replanificado el 2026-08-10. El detalle ejecutable —orden, dependencias y tamaños— vive en
+el tablero de tareas; aquí solo qué entra en cada release y qué queda fuera.)_
 
 ### V2 — en curso: tres sprints de valor para el visitante
 
@@ -370,7 +374,7 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    índice `/trayectoria` no era un extra: el breadcrumb de tres niveles de las cinco
    experiencias apuntaba a esa ruta desde que se montaron, así que **eran diez páginas con el
    enlace roto en su propia carpintería** y no lo veía ningún gate, porque ninguno mira la ruta
-   *padre* de las que se añaden. Lista **las cinco con caso** y no la trayectoria entera —esa ya
+   _padre_ de las que se añaden. Lista **las cinco con caso** y no la trayectoria entera —esa ya
    está en la portada y en el CV—, y **ninguna de sus tarjetas tiene copy propio**: la afirmación
    es el `h1` literal de la página a la que lleva.
 
@@ -409,7 +413,7 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    era una **fecha**: KUOTIP terminaba en noviembre en la home y en diciembre en su página, y **el
    valor equivocado se estaba sirviendo en seis sitios** —la fila de Trayectoria y las tarjetas de
    «siguiente experiencia» de Emendu e INDYA, en los dos idiomas— mientras la propia página de
-   KUOTIP publicaba el bueno. *Un dato duplicado no falla donde se escribe: falla donde se lee.*
+   KUOTIP publicaba el bueno. _Un dato duplicado no falla donde se escribe: falla donde se lee._
    Rol, periodo, sector y reporting suben también al registro; el diccionario del deep-dive se
    queda con `tamano`, las filas de Trayectoria con `company` y el CV con la sola decisión de a
    qué experiencias da papel.
@@ -453,8 +457,8 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    superficie por hover**, porque `hover:bg-muted` compila a otro selector. Corregido eso, el
    censo cubre ya **las doce páginas × 2 temas con el metro validado en las 24 corridas, cero
    pares bajo AA y cero bajo AAA**, así que «en reposo y en hover, sin excepciones» vuelve a tener
-   respaldo — y de paso queda la lección: *un metro bien calibrado que no se pasa por todo el
-   sitio sigue siendo un metro que no ha mirado.* Y el **control sobre imagen** se resolvió corrigiendo
+   respaldo — y de paso queda la lección: _un metro bien calibrado que no se pasa por todo el
+   sitio sigue siendo un metro que no ha mirado._ Y el **control sobre imagen** se resolvió corrigiendo
    la afirmación y NO el componente, porque al barrer los 144 ángulos apareció que la palanca
    obvia era contraproducente: el velo acerca el póster al anillo mientras lo aleja del disco, así
    que no hay opacidad que separe a los dos a la vez. Detalle en `DECISIONS.md` D55.
@@ -482,10 +486,11 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    Projects» pasan a comportarse distinto —una enlaza a su deep-dive y la otra no— y eso
    **solo se puede juzgar en pantalla**, así que va con el diseño de la plantilla y no antes.
    Detalle en `PRD-Historical.md` §44.
+
 2. **«Cómo se ha creado esta página»** — una página con estructura y metadata de artículo
    (`TechArticle`) contando el proceso: marca, stack, sistema de componentes, accesibilidad,
    metodología, revisiones y medición. **No es un blog** y no habrá índice de artículos ni feed.
-   Es la pieza que enseña el *proceso* donde el resto del sitio enseña el *resultado*, y por eso
+   Es la pieza que enseña el _proceso_ donde el resto del sitio enseña el _resultado_, y por eso
    habla a los tres perfiles a la vez (producto, técnico, UX/UI).
 3. **Footer estructurado y Contacto ampliada** — el footer va el último **porque necesita que
    existan las secciones que crean los dos sprints anteriores**; hoy sólo tiene cuatro enlaces.
@@ -499,10 +504,10 @@ medida que se añade contenido, revisando el EN contra el ES y no al revés (D20
 ### V3 — deuda técnica y mejoras por bloque
 
 Sin fecha ni compromiso de release conjunto: entran en el sprint que las toque o cuando dejen de
-poder esperar. Agrupadas por dónde viven — *General* (higiene de validadores, Dependabot, `qlty`,
-tests cuando aparezca la primera lógica de negocio real), *Home* (gesto-firma de marca, presencia
-del morado, kicker del Hero, `WebSite` en JSON-LD), *Brand Kit*, *Design System* (copy-to-clipboard
-de tokens, simulador de foco) y *Accesibilidad*.
+poder esperar. Agrupadas por dónde viven — _General_ (higiene de validadores, Dependabot, `qlty`,
+tests cuando aparezca la primera lógica de negocio real), _Home_ (gesto-firma de marca, presencia
+del morado, kicker del Hero, `WebSite` en JSON-LD), _Brand Kit_, _Design System_ (copy-to-clipboard
+de tokens, simulador de foco) y _Accesibilidad_.
 
 ### V4 — IA conversacional
 
