@@ -101,9 +101,63 @@ window.contrastCensus = () => {
    * Leer un `color-mix(…, transparent 86%)` sin componer da una cifra falsa y
    * optimista — es el punto 2 de D30.
    */
+  /**
+   * El color que pinta un `background-image`, cuando de verdad se puede saber.
+   *
+   * POR QUÉ HACE FALTA, y no es un caso raro: el hover de los enlaces de
+   * contenido de este sitio NO es un `background-color`. Es
+   * `linear-gradient(var(--primary), var(--primary))` —un relleno SÓLIDO
+   * disfrazado de degradado— con `background-size: 100% 0%` en reposo y
+   * `100% 100%` en hover, que es lo que permite animar el relleno creciendo de
+   * abajo arriba. `backdrop()` solo componía `background-color`, así que en el
+   * pase de hover veía el texto pasar a `--primary-foreground` y NO veía
+   * aparecer el relleno debajo: medía hueso sobre hueso y daba **1,06:1**, o sea
+   * el aspecto exacto de un incumplimiento catastrófico sobre un par que está en
+   * AAA. Apareció en cuanto el hover volvió a medirse (P50.36) — llevaba
+   * escondido justo detrás del fallo que lo tapaba.
+   *
+   * DOS CONDICIONES, y las dos importan:
+   * · **Que cubra.** Con `background-size: 100% 0%` el relleno existe y no pinta
+   *   nada. Por eso el reposo del mismo enlace es correcto sin este código.
+   * · **Que sea un color y no un degradado.** Si las paradas no son todas
+   *   iguales, aquí no hay UN color que componer y devolvemos `null` — ese texto
+   *   se va a `sinMedir`, que es el cajón de lo que hay que mirar a ojo. Inventar
+   *   una media sería exactamente lo que este archivo existe para no hacer.
+   */
+  function fillColor(el) {
+    const cs = getComputedStyle(el);
+    const img = cs.backgroundImage;
+    if (!img || img === "none") return null;
+    // Alguna dimensión a cero = no cubre. `100% 0%`, `0% 100%`, `0px`…
+    if (/(^|[\s,])0(%|px)?([\s,]|$)/.test(cs.backgroundSize)) return null;
+    // EL COMPUTED NO DEVUELVE LO QUE ESTÁ ESCRITO. La hoja dice
+    // `linear-gradient(var(--primary), var(--primary))` y el token es `oklch`,
+    // pero Chrome resuelve el gradiente a **`lab(...)`**. Un matcher de `rgb` y
+    // hex —lo primero que uno escribe— no encuentra nada y el par se cae al cajón
+    // de «sin medir» sin que nada avise: el mismo modo de fallo silencioso que
+    // este archivo lleva tres iteraciones persiguiendo. Se cubren todas las
+    // funciones de color, que no anidan paréntesis y por eso se pueden recortar
+    // así.
+    const stops = img.match(
+      /(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\([^()]*\)|#[0-9a-fA-F]{3,8}/g,
+    );
+    if (!stops) return null;
+    const colores = new Set(stops.map((s) => paint(s).join(",")));
+    if (colores.size !== 1) return null; // degradado de verdad
+    const c = paint(stops[0]);
+    return c[3] === 0 ? null : c;
+  }
+
   function backdrop(el) {
     const stack = [];
     for (let n = el; n; n = n.parentElement) {
+      // El relleno de imagen va ENCIMA del `background-color` del mismo
+      // elemento, así que se mira primero.
+      const fill = fillColor(n);
+      if (fill) {
+        stack.push(fill);
+        if (fill[3] === 1) break;
+      }
       const c = paint(getComputedStyle(n).backgroundColor);
       if (c[3] === 0) continue;
       stack.push(c);
@@ -143,6 +197,24 @@ window.contrastCensus = () => {
     // tamaño cero en reposo) y NO marcaba el titular sobre la foto de Sobre mí,
     // porque ahí la imagen es un HERMANO posicionado, no un fondo. Es el mismo
     // error de disparador que este censo existe para no repetir.
+    // Y un DEGRADADO DE VERDAD detrás del texto también es «sin medir»: cubre,
+    // así que `background-color` no dice lo que hay debajo, y no tiene un color
+    // único que componer. Un relleno sólido escrito como gradiente —el idioma del
+    // hover de los enlaces de contenido— sí lo tiene, y lo resuelve `fillColor`;
+    // esto es solo para el resto. Hoy no hay ninguno, y por eso está escrito:
+    // el día que aparezca, tiene que salir en el informe como «míralo a ojo» y no
+    // como una cifra inventada.
+    for (let n = el; n; n = n.parentElement) {
+      const cs = getComputedStyle(n);
+      if (
+        cs.backgroundImage !== "none" &&
+        !/(^|[\s,])0(%|px)?([\s,]|$)/.test(cs.backgroundSize) &&
+        fillColor(n) === null
+      )
+        return true;
+      if (paint(cs.backgroundColor)[3] === 1) break;
+    }
+
     if (mediaRects === null) mediaRects = media();
     if (mediaRects.length === 0) return false;
     const r = el.getBoundingClientRect();
@@ -176,42 +248,70 @@ window.contrastCensus = () => {
    * pastilla y el color del texto— y quien lo revisó antes solo contó con una.
    * Simular el ratón no vale: el estado no sobrevive entre llamadas.
    */
-  function hoverDeclarations(el) {
-    const out = [];
-
-    // OJO: hay que BAJAR por las reglas de grupo. Tailwind v4 envuelve todas sus
-    // utilidades `hover:` en `@media (hover: hover)`, y un `@media` no tiene
-    // `selectorText`, así que un bucle plano sobre `cssRules` las salta enteras.
-    // Con ese fallo el censo daba 6,42 para el hover del chrome secundario —veía
-    // aparecer la pastilla y no el texto subiendo a `foreground`, que es la mitad
-    // que lo arregla— y habría reportado como hallazgo un par que está en 12,47.
-    // Es literalmente el principio 5 de la skill cobrándose su pieza: el metro se
-    // valida antes de creerse el hallazgo.
+  /**
+   * ÍNDICE de las reglas `:hover` de la página, construido UNA VEZ.
+   *
+   * DOS VECES SE HA CAÍDO ESTA MISMA FUNCIÓN, y por la misma familia de causa:
+   *
+   * 1 · Un bucle plano se saltaba las utilidades `hover:` de Tailwind v4, que van
+   *     envueltas en `@media (hover: hover)` — un `@media` no tiene
+   *     `selectorText`. El censo daba 6,42 para el hover del chrome secundario:
+   *     veía aparecer la pastilla y no el texto subiendo a `foreground`, que es
+   *     la mitad que lo arregla.
+   * 2 · Se arregló con `if (rule.cssRules) { bajar; continue; }`, o sea con un
+   *     test de «esto es una regla de grupo» que el navegador invalidó después:
+   *     DESDE QUE CHROME SOPORTA CSS NESTING, toda `CSSStyleRule` expone
+   *     `cssRules` —vacío—, así que la condición era siempre cierta, el `continue`
+   *     se ejecutaba siempre y la línea del selector NUNCA se alcanzaba. Medido en
+   *     la página servida el 2026-08-18: encontraba **0** reglas con `:hover`
+   *     donde hay **21**.
+   *
+   * La lección que sí generaliza, y por eso está escrita en el código y no solo en
+   * el commit: **no es o-grupo-o-selector**. Con nesting una regla puede tener
+   * las DOS cosas, así que se evalúa el selector si lo tiene Y se baja si tiene
+   * hijas — nunca se elige una rama. Y sobre todo: **un metro que devuelve una
+   * lista vacía parece un aprobado**, así que este índice se PUBLICA en el
+   * resultado y el censo falla si sale a cero (ver `reglasHover` abajo).
+   */
+  const HOVER_RULES = (() => {
+    const idx = [];
     const walk = (rules) => {
       for (const rule of rules) {
-        if (rule.cssRules) {
-          walk(rule.cssRules);
-          continue;
-        }
-        if (!rule.selectorText?.includes(":hover")) continue;
-        for (const sel of rule.selectorText.split(",")) {
-          const s = sel.trim();
-          if (!s.includes(":hover")) continue;
-          try {
-            if (!el.matches(s.replaceAll(":hover", ""))) continue;
-          } catch {
-            continue;
+        // Rama 1: ¿declara algo? Se mira SIEMPRE, tenga o no hijas.
+        if (rule.selectorText?.includes(":hover")) {
+          for (const sel of rule.selectorText.split(",")) {
+            const s = sel.trim();
+            if (s.includes(":hover")) idx.push({ sel: s, style: rule.style });
           }
-          out.push(rule.style);
         }
+        // Rama 2: ¿tiene hijas DE VERDAD? `length > 0`, no la mera existencia.
+        if (rule.cssRules?.length > 0) walk(rule.cssRules);
       }
     };
-
     for (const sheet of document.styleSheets) {
       try {
         walk(sheet.cssRules);
       } catch {
         continue; // hoja de otro origen
+      }
+    }
+    return idx;
+  })();
+
+  /**
+   * Las declaraciones que una regla `:hover` aplica de verdad a un elemento. Se
+   * LEEN de la hoja de estilo en vez de asumirse: la corrección del hover del
+   * chrome secundario consistió justo en que la regla declara dos cosas —la
+   * pastilla y el color del texto— y quien lo revisó antes solo contó con una.
+   * Simular el ratón no vale: el estado no sobrevive entre llamadas.
+   */
+  function hoverDeclarations(el) {
+    const out = [];
+    for (const { sel, style } of HOVER_RULES) {
+      try {
+        if (el.matches(sel.replaceAll(":hover", ""))) out.push(style);
+      } catch {
+        continue;
       }
     }
     return out;
@@ -328,8 +428,24 @@ window.contrastCensus = () => {
   // Ordenado por HOLGURA contra el umbral de cada uno, no por ratio: con
   // umbrales mixtos, el par más apretado no es el de la cifra más baja.
   const censo = [...pairs.values()].sort((a, b) => a.holgura - b.holgura);
+
+  // CUÁNTO HA MIRADO, no solo qué ha encontrado. Las dos veces que este censo se
+  // rompió no dio error: devolvió una lista de hallazgos vacía, que es
+  // exactamente lo que devuelve cuando todo está bien. Publicando el tamaño del
+  // índice, un cero se lee como lo que es —el metro no está midiendo— en vez de
+  // como un aprobado. Es la tercera vez que este proyecto se encuentra un metro
+  // descalibrado (medidor fuera de gamut, umbral por tamaño de texto, y esto).
+  const paresHover = censo.filter((p) => p.state === "hover").length;
+  const reglasHover =
+    HOVER_RULES.length === 0
+      ? "0 — EL METRO NO ESTÁ MIDIENDO EL HOVER. Esto NO es un aprobado: " +
+        "cualquier página de este sitio tiene reglas :hover. Revisa el walk de " +
+        "HOVER_RULES antes de creerte el resto del informe."
+      : `${HOVER_RULES.length} reglas :hover indexadas · ${paresHover} pares medidos en hover`;
+
   const resultado = {
     metro: ancla === esperado ? `OK (${ancla})` : `SOSPECHOSO: ${ancla} ≠ ${esperado}`,
+    reglasHover,
     tema: document.documentElement.classList.contains("dark") ? "oscuro" : "claro",
     pares: censo.length,
     // Cada uno contra el umbral que le toca por su tamaño (7 / 4,5 y 4,5 / 3).
