@@ -360,7 +360,13 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    subapartados son libres, porque si no, una experiencia de tres meses de hace cuatro años sale
    con secciones medio vacías al lado de una de cinco años. Detalle en `PRD-Historical.md` §42.
 
-   **EL SPRINT QUEDA CERRADO EL 2026-08-18**, con el índice construido y el SEO resuelto. El
+   **EL SPRINT QUEDA CERRADO EL 2026-08-18 Y DESPLEGADO A PRODUCCIÓN** (PR #112, rebase de 20
+   commits), con `design-review` disparada **sobre la rama antes del merge** —que es su
+   disparador documentado para un release visual grande, y aquí se ganó el sueldo: encontró el
+   agujero de `--surface-dim` en hover (**D61**) y que el Design System publicaba cuatro de los
+   cinco tamaños de su capa de cabecera—. La etapa se cierra con **29 tareas archivadas, 1
+   descartada** —`graphify`, por coste y por ser ciega a los diccionarios (D51 ampliado)— **y
+   cero abiertas**. Todo eso, con el índice construido y el SEO resuelto. El
    índice `/trayectoria` no era un extra: el breadcrumb de tres niveles de las cinco
    experiencias apuntaba a esa ruta desde que se montaron, así que **eran diez páginas con el
    enlace roto en su propia carpintería** y no lo veía ningún gate, porque ninguno mira la ruta
@@ -441,9 +447,14 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    del fallo del metro: la dirección de email de Accesibilidad daba **6,42 claro / 5,59 oscuro**
    en hover —AA, no AAA— porque pisaba el color a mano en vez de usar el `tone: "muted"` de la
    variante; era el **quinto** uso del mismo fallo y sobrevivió a tres auditorías porque el par
-   solo existe mientras el cursor está encima. Corregido, el censo da **cero pares bajo AAA en
-   8 páginas × 2 temas**, con el metro validado en las 16 corridas, así que «en reposo y en hover,
-   sin excepciones» vuelve a tener respaldo. Y el **control sobre imagen** se resolvió corrigiendo
+   solo existe mientras el cursor está encima. Corregido, el censo daba **cero pares bajo AAA en
+   8 páginas × 2 temas** —y esa cifra, «8 de doce», es la que horas después destapó **D61**: al
+   pasarlo por las cuatro que faltaban apareció que el atenuado **no se recalcula al cambiar de
+   superficie por hover**, porque `hover:bg-muted` compila a otro selector. Corregido eso, el
+   censo cubre ya **las doce páginas × 2 temas con el metro validado en las 24 corridas, cero
+   pares bajo AA y cero bajo AAA**, así que «en reposo y en hover, sin excepciones» vuelve a tener
+   respaldo — y de paso queda la lección: *un metro bien calibrado que no se pasa por todo el
+   sitio sigue siendo un metro que no ha mirado.* Y el **control sobre imagen** se resolvió corrigiendo
    la afirmación y NO el componente, porque al barrer los 144 ángulos apareció que la palanca
    obvia era contraproducente: el velo acerca el póster al anillo mientras lo aleja del disco, así
    que no hay opacidad que separe a los dos a la vez. Detalle en `DECISIONS.md` D55.
