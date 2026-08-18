@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "About — Francisco López",
+    "title": "About · Francisco López",
     "description": "The person behind the PM: how I ended up in Product from marketing and growth, baking, the mountains, and where I'm headed now."
   },
   "crumb": "About",
@@ -16,8 +16,8 @@
   "product": {
     "heading": "How I ended up in Product",
     "body": [
-      "As a kid, I liked the ads more than most of the shows on TV. One of my games was to name the ad before anyone else in the family. Something of that stayed with me —and with my parents—: when I was 15 they gave me Luis Bassat's [Red Book of Advertising](https://www.amazon.es/libro-rojo-publicidad-actualizada-Seller/dp/8466353208/). While others read adventure or sci-fi, I happily read the strategy behind campaigns I'd seen on TV, discovering the person who told you the *behind-the-scenes* of the very ads I played with.",
-      "The path seemed obvious: when the time came, I went off to study marketing at ESIC. I loved it, but I never got to use it. Why? Because something showed up that changed everything. Something called the **Internet**, maybe you've heard of it. For me it was a shift in mental model: you could reach users *and* know the data in real time. To my analytical brain, that was enough to know this was the way. I started in the new-channels department at Bancaja —building websites, feeding them, watching data (before Google Analytics existed)— and then came search engine ranking, and a very cool thing that back then was called *AdWords*…",
+      "As a kid, I liked the ads more than most of the shows on TV. One of my games was to name the ad before anyone else in the family. Something of that stayed with me, and with my parents: when I was 15 they gave me Luis Bassat's [Red Book of Advertising](https://www.amazon.es/libro-rojo-publicidad-actualizada-Seller/dp/8466353208/). While others read adventure or sci-fi, I happily read the strategy behind campaigns I'd seen on TV, discovering the person who told you the *behind-the-scenes* of the very ads I played with.",
+      "The path seemed obvious: when the time came, I went off to study marketing at ESIC. I loved it, but I never got to use it. Why? Because something showed up that changed everything. Something called the **Internet**, maybe you've heard of it. For me it was a shift in mental model: you could reach users *and* know the data in real time. To my analytical brain, that was enough to know this was the way. I started in the new-channels department at Bancaja, building websites, feeding them, watching data (before Google Analytics existed). And then came search engine ranking, and a very cool thing that back then was called *AdWords*…",
       "The rest you'll have seen in my career: agencies small, mid-sized and huge, a freelance stretch, teaching, and speaking at digital marketing conferences. My first big professional chapter.",
       "Everything was going well, but something told me it wasn't enough. I'd become an expert at attracting users, and one question kept circling: why do some people buy and others don't? What makes them come back? Why do they only use part of the site and never find that other section that's the key? I didn't know it yet, but the path was already set: **I was a Product guy.**"
     ]
@@ -26,8 +26,8 @@
     "heading": "Beyond work: baking",
     "photoAlt": "Francisco López baking",
     "body": [
-      "Outside the office, my great passion lives in the kitchen —baking, to be precise. I'm a sucker for a fine tiramisu, a gooey brownie, something as simple and traditional as a well-made flan; recipes that travel from far away like an *american pie*, or something as special as a *strudel*. And even more, finding new things when I travel: how did I go so long without knowing what a Sicilian *cannolo* was? But above all of it, **cheesecakes** are my weakness.",
-      "People often ask me which is my cheesecake. My answer is always the same: which one? There are countless, and the best thing about baking is that you can always make it your own. And there, inevitably, my product brain kicks in. Every recipe has its steps and its timings, but every oven is its own world and the ingredients are never the same —I buy one brand, you buy another, and the result changes—. **Every recipe is a launch**, and every iteration should be better. But for that, your biased maker's opinion isn't enough: you need your users' (yes, the ones who eat them)."
+      "Outside the office, my great passion lives in the kitchen. Baking, to be precise. I'm a sucker for a fine tiramisu, a gooey brownie, something as simple and traditional as a well-made flan; recipes that travel from far away like an *american pie*, or something as special as a *strudel*. And even more, finding new things when I travel: how did I go so long without knowing what a Sicilian *cannolo* was? But above all of it, **cheesecakes** are my weakness.",
+      "People often ask me which is my cheesecake. My answer is always the same: which one? There are countless, and the best thing about baking is that you can always make it your own. And there, inevitably, my product brain kicks in. Every recipe has its steps and its timings, but every oven is its own world and the ingredients are never the same: I buy one brand, you buy another, and the result changes. **Every recipe is a launch**, and every iteration should be better. But for that, your biased maker's opinion isn't enough: you need your users' (yes, the ones who eat them)."
     ],
     "aside": "This one's cheesier, I love it. The biscuit base was better with that hint of walnut. Mango jam with blue cheese takes it to another level.",
     "bodyAfter": [
@@ -46,7 +46,7 @@
   "now": {
     "heading": "Where I am now",
     "body": [
-      "If you've made it this far, you know me a little better now —and thank you for that. I'm still a PM who likes solving problems; or rather, finding them and solving them in a way that's satisfying for users, that makes their experience great, and that —of course— meets the business goals. If any of this resonates with you, I'd love to meet you."
+      "If you've made it this far, you know me a little better now (and thank you for that). I'm still a PM who likes solving problems; or rather, finding them and solving them in a way that's satisfying for users, that makes their experience great, and that, of course, meets the business goals. If any of this resonates with you, I'd love to meet you."
     ],
     "ctaPre": "So… why don't we ",
     "ctaLink": "talk",

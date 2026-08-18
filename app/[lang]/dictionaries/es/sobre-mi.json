@@ -1,6 +1,6 @@
 {
   "meta": {
-    "title": "Sobre mí — Francisco López",
+    "title": "Sobre mí · Francisco López",
     "description": "La persona detrás del PM: cómo llegué a Producto desde el marketing y el growth, la repostería, la montaña y hacia dónde voy ahora."
   },
   "crumb": "Sobre mí",
@@ -16,8 +16,8 @@
   "product": {
     "heading": "Cómo llegué a Producto",
     "body": [
-      "Desde pequeño me gustaban más los anuncios que muchos de los programas que echaban en la tele. Uno de mis juegos era acertar el anuncio antes que nadie de la familia. Algo de aquello quedó en mí —y en mis padres—: a los 15 años me regalaron [El libro rojo de la publicidad](https://www.amazon.es/libro-rojo-publicidad-actualizada-Seller/dp/8466353208/), de Luis Bassat. Mientras otros leían aventuras o ciencia ficción, yo disfrutaba leyendo estrategias de campañas que había visto por la tele, descubriendo a alguien que te contaba el *behind the scenes* de esos anuncios con los que yo jugaba.",
-      "El camino parecía lógico: cuando llegó el momento, me puse a estudiar marketing en ESIC. Me encantó, pero nunca llegué a aplicarlo. ¿Por qué? Porque apareció algo que lo cambió todo. Algo que se llamaba **Internet**, no sé si te suena. Para mí fue un cambio de modelo mental: podías impactar en los usuarios *y* conocer los datos en tiempo real. A mi cabeza analítica eso le bastó para saber que ese era el camino. Empecé en el departamento de nuevos canales de Bancaja —haciendo webs, alimentándolas, mirando datos (antes de Google Analytics)— y entonces llegó el posicionamiento en buscadores, y una cosa muy cool que por entonces se llamaba *AdWords*…",
+      "Desde pequeño me gustaban más los anuncios que muchos de los programas que echaban en la tele. Uno de mis juegos era acertar el anuncio antes que nadie de la familia. Algo de aquello quedó en mí, y en mis padres: a los 15 años me regalaron [El libro rojo de la publicidad](https://www.amazon.es/libro-rojo-publicidad-actualizada-Seller/dp/8466353208/), de Luis Bassat. Mientras otros leían aventuras o ciencia ficción, yo disfrutaba leyendo estrategias de campañas que había visto por la tele, descubriendo a alguien que te contaba el *behind the scenes* de esos anuncios con los que yo jugaba.",
+      "El camino parecía lógico: cuando llegó el momento, me puse a estudiar marketing en ESIC. Me encantó, pero nunca llegué a aplicarlo. ¿Por qué? Porque apareció algo que lo cambió todo. Algo que se llamaba **Internet**, no sé si te suena. Para mí fue un cambio de modelo mental: podías impactar en los usuarios *y* conocer los datos en tiempo real. A mi cabeza analítica eso le bastó para saber que ese era el camino. Empecé en el departamento de nuevos canales de Bancaja, haciendo webs, alimentándolas, mirando datos (antes de Google Analytics). Y entonces llegó el posicionamiento en buscadores, y una cosa muy cool que por entonces se llamaba *AdWords*…",
       "El resto ya lo habrás visto en mi trayectoria: agencias pequeñas, medianas y gigantes, alguna etapa de freelance, docencia y ponencias en congresos de marketing digital. Mi primera gran etapa profesional.",
       "Todo iba bien, pero algo me decía que no era suficiente. Me había convertido en un experto en atraer usuarios, y no dejaba de rondarme una pregunta: ¿por qué unos compran y otros no? ¿Qué hace que vuelvan? ¿Por qué usan solo una parte de la web y no descubren esa otra sección que es la clave? Aún no lo sabía, pero el camino ya estaba marcado: **era un tipo de Producto.**"
     ]
@@ -27,7 +27,7 @@
     "photoAlt": "Francisco López haciendo repostería",
     "body": [
       "Fuera de la oficina, mi gran pasión está en la cocina. En concreto, la repostería. Me pierde un tiramisú fino, un brownie goloso, algo tan sencillo y tradicional como un flan bien hecho; recetas que vienen de lejos como un *american pie*, o algo tan especial como un *strudel*. Y más aún descubrir cosas cuando viajo: ¿cómo he podido vivir tanto tiempo sin saber lo que era un *cannolo* siciliano? Pero por encima de todo eso, me pierden las **cheesecakes**.",
-      "Muchas veces me preguntan cuál es mi cheesecake. Y mi respuesta siempre es la misma: ¿cuál de todas? Hay muchísimas, y lo mejor de la repostería es que siempre puedes hacerla tuya. Ahí, inevitablemente, se me cruza la mente de producto. Cada receta tiene sus pasos y sus tiempos, pero cada horno es un mundo y los ingredientes nunca son iguales —yo compro una marca, tú otra, y el resultado cambia—. **Cada receta es un lanzamiento**, y cada iteración debería ser mejor. Pero para eso no basta con tu opinión sesgada de creador: necesitas la de tus usuarios (sí, los que se las comen)."
+      "Muchas veces me preguntan cuál es mi cheesecake. Y mi respuesta siempre es la misma: ¿cuál de todas? Hay muchísimas, y lo mejor de la repostería es que siempre puedes hacerla tuya. Ahí, inevitablemente, se me cruza la mente de producto. Cada receta tiene sus pasos y sus tiempos, pero cada horno es un mundo y los ingredientes nunca son iguales: yo compro una marca, tú otra, y el resultado cambia. **Cada receta es un lanzamiento**, y cada iteración debería ser mejor. Pero para eso no basta con tu opinión sesgada de creador: necesitas la de tus usuarios (sí, los que se las comen)."
     ],
     "aside": "Esta sabe más a queso, me encanta. La base de galleta estaba mejor con ese toque de nuez. La mermelada de mango con el queso azul la lleva a otro nivel.",
     "bodyAfter": [
@@ -46,7 +46,7 @@
   "now": {
     "heading": "Dónde estoy ahora",
     "body": [
-      "Si has llegado hasta aquí, ya me conoces un poco mejor —y gracias por hacerlo—. Sigo siendo un PM al que le gusta resolver problemas; mejor dicho, encontrarlos y resolverlos de una forma que sea satisfactoria para los usuarios, que su experiencia sea increíble y que, por supuesto, cumpla los objetivos del negocio. Si algo de todo esto te encaja, me encantará conocerte."
+      "Si has llegado hasta aquí, ya me conoces un poco mejor (y gracias por hacerlo). Sigo siendo un PM al que le gusta resolver problemas; mejor dicho, encontrarlos y resolverlos de una forma que sea satisfactoria para los usuarios, que su experiencia sea increíble y que, por supuesto, cumpla los objetivos del negocio. Si algo de todo esto te encaja, me encantará conocerte."
     ],
     "ctaPre": "Así que… ¿por qué no ",
     "ctaLink": "hablamos",
