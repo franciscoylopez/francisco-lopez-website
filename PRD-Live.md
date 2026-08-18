@@ -43,8 +43,8 @@ V1 lanzada. En vivo:
 - **El deep-dive por experiencia** (2026-08-18): el índice **`/trayectoria`** y las cinco
   páginas de `/trayectoria/[slug]` —Emendu, KUOTIP, INDYA, Freepik y TheTool—. Con eso el
   sitio pasa de **seis páginas a doce** por idioma, que es el recuento que usan `gate:html`
-  (24 variantes), el sitemap y el recorrido de `design-review`. *En rama, pendiente de
-  merge a producción.*
+  (24 variantes), el sitemap y el recorrido de `design-review`. **En producción desde el
+  2026-08-18.**
 - **CV en PDF bilingüe** (ES/EN) descargable, con identidad de marca, generado por código.
 - **SEO técnico + Open Graph** por página, **medición** (GA4/GTM + consentimiento RGPD),
   **dominio propio**.
@@ -87,9 +87,9 @@ devolver al usuario a la home. Detalle en `DECISIONS.md` D29.
 **Y desde el 2026-08-10, una página no se escribe: se compone.** El andamiaje —metadata y
 marco— dejó de copiarse: `pageMetadata` deriva canonical, los tres `hreflang`, OG y Twitter
 de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de motion, el `<main>` y footer
-(D45/D46). Las **seis páginas se prerenderizan** por locale desde que se retiró el
-`not-found` anidado que las volvía dinámicas a todas (D25), y el **diccionario está partido
-por página** (D48). Es lo que hace que las seis páginas del deep-dive —cinco experiencias y
+(D45/D46). Las **doce páginas se prerenderizan** por locale desde que se retiró el
+`not-found` anidado que volvía dinámicas a las seis de entonces (D25), y el **diccionario
+está partido por página** (D48). Es lo que hace que las seis páginas del deep-dive —cinco experiencias y
 su índice— nazcan con el `hreflang` correcto, con enlace de salto y estáticas, sin que nadie
 tenga que acordarse.
 
@@ -301,7 +301,7 @@ tenga que acordarse.
   ni duración (D55).
 
   **Y un gate que no es de CI pero es el que más ha cazado**: `npm run gate:html` compara el
-  **HTML servido de las seis páginas × dos idiomas** antes y después de un refactor. Diff
+  **HTML servido de las doce páginas × dos idiomas** antes y después de un refactor. Diff
   vacío = transparente por construcción. Nació cubriendo los dos showcase (D42) y se amplió a
   todas cuando el refactor pasó a ser el andamiaje común (D45), que es donde vive lo que nadie
   revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe. **Se valida
