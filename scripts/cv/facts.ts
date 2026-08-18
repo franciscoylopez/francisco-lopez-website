@@ -1,7 +1,19 @@
-// Hechos del CV leídos del diccionario i18n (single-source, D22): periodos,
-// roles, formación y toolkit NO se autoran en content.{es,en}.ts, se derivan de
-// aquí para que web y CV no diverjan. `es.json` es la fuente; el CV EN hereda los
-// hechos ya traducidos de `en.json` (periodos "Present", formación en inglés…).
+// Hechos del CV que siguen viniendo del DICCIONARIO i18n (single-source, D22):
+// **formación, toolkit y el proyecto paraguas** de los roles anidados. No se
+// autoran en `content/cv/`, se derivan de aquí para que web y CV no diverjan.
+// `es.json` es la fuente; el CV EN hereda los hechos ya traducidos de `en.json`
+// (formación en inglés, etc.).
+//
+// LO QUE ESTE ARCHIVO YA NO TRAE, y conviene decirlo porque su nombre sugiere lo
+// contrario: **rol y periodo** salieron de aquí el 2026-08-17 (P48.55, D58). Se
+// escribían en el diccionario y en el deep-dive por separado, y habían divergido
+// —KUOTIP terminaba en noviembre según la home y en diciembre según su página—,
+// así que subieron al registro por experiencia (`content/experience-copy/`), de
+// donde los leen las tres superficies. `generate.tsx` los pide con `factsOf`.
+//
+// De la fila del diccionario, entonces, este archivo solo saca ya el **proyecto
+// paraguas** («Shutapp Projects»), que es una agrupación de la home y no un hecho
+// de la experiencia. Por eso `FactRow` tiene dos campos y uno es opcional.
 
 import fs from "node:fs";
 import path from "node:path";
