@@ -26,14 +26,10 @@ import {
 import React from "react";
 import { content as esContent } from "../../content/cv/content.es";
 import { content as enContent } from "../../content/cv/content.en";
-import type { CV, CvContent, Job, AuthoredJob } from "../../content/cv/types";
-import { loadDict, buildEducation, buildTools, experienceFacts, previousFacts, matchFact, type FactRow } from "./facts";
+import type { CV, CvContent, Job } from "../../content/cv/types";
+import { assemble } from "./assemble";
+import { cvFingerprint, HUELLA_PATH } from "./fingerprint";
 import { brandHex, paletteHex } from "../../lib/design-values";
-import {
-  cvBullets,
-  factsOf,
-  reportingOf,
-} from "../../content/experience-copy";
 
 const ROOT = process.cwd();
 const asset = (p: string) => path.join(ROOT, p);
@@ -345,48 +341,7 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
   );
 }
 
-// Fusiona un rol autorado con sus hechos del diccionario (rol, periodo, proyecto)
-// y con sus bullets del registro por experiencia (P48.5). Las tres fuentes se unen
-// por `company`, y las tres LANZAN si no hay match: mejor romper la generación que
-// imprimir en el papel los bullets de otra empresa.
-function mergeJob(a: AuthoredJob, facts: FactRow[], lang: "es" | "en"): Job {
-  const f = matchFact(facts, a.company);
-  const { role, period, sector } = factsOf(lang, a.company);
-  return {
-    ...a,
-    role,
-    period,
-    context: sector,
-    reporting: reportingOf(lang, a.company, "cv"),
-    project: f.project,
-    bullets: cvBullets(lang, a.company),
-  };
-}
-
 // Ensambla el CV FUSIONADO (autorado + hechos del diccionario del locale).
-function assemble(lang: "es" | "en", content: CvContent): CV {
-  const dict = loadDict(lang);
-  const expFacts = experienceFacts(dict);
-  const prevFacts = previousFacts(dict);
-  return {
-    name: content.name,
-    role: content.role,
-    subject: content.subject,
-    ui: content.ui,
-    contact: content.contact,
-    summary: content.summary,
-    skills: content.skills,
-    milestones: content.milestones,
-    experience: content.experience.map((a) => mergeJob(a, expFacts, lang)),
-    previous: {
-      intro: content.previous.intro,
-      roles: content.previous.roles.map((a) => mergeJob(a, prevFacts, lang)),
-    },
-    education: buildEducation(dict),
-    tools: buildTools(dict),
-  };
-}
-
 // Cuenta páginas del PDF sin dependencias externas (los objetos /Type /Page van
 // en claro en la salida de react-pdf). Sirve de guard de la restricción de 2 págs.
 function countPages(file: string): number {
@@ -423,6 +378,13 @@ async function main() {
   }
   if (overflow) console.warn("\n⚠  Algún CV supera las 2 páginas — revísalo antes de publicar.");
   if (failures) process.exit(1);
+
+  // El sello va DESPUÉS y solo si los dos PDFs salieron: es lo que
+  // `npm run check:cv` compara para saber si los commiteados corresponden a la
+  // fuente. Sellar tras una generación a medias sería peor que no sellar —
+  // afirmaría que están al día.
+  fs.writeFileSync(asset(HUELLA_PATH), cvFingerprint() + "\n");
+  console.log(`Sello actualizado → ${HUELLA_PATH}`);
 }
 
 main().catch((e) => {

@@ -78,5 +78,15 @@ jobs:
       - name: Experiencias
         run: npm run check:experiencias
 
+      # Los PDFs del CV son un artefacto COMMITEADO, así que la fuente única no
+      # basta: garantiza que no haya dos verdades, no que la copia impresa esté al
+      # día. El 2026-08-18 un cambio de sector en `content/experience-copy/` dejó
+      # los dos PDFs viejos y no lo vio nada — ni el typecheck, ni el linter, ni
+      # `gate:html`, ni `check:experiencias`. Esto compara la huella de lo que
+      # ENTRA en el CV contra el sello que dejó la última generación (el PDF en sí
+      # no es determinista, así que comparar bytes no sirve; está medido).
+      - name: CV al día
+        run: npm run check:cv
+
       - name: Build
         run: npm run build

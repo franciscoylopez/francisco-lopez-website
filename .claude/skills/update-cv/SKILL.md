@@ -92,13 +92,34 @@ coló durante meses.
 npm run cv
 ```
 
-Genera `public/cv/francisco-lopez-cv-es.pdf` y `…-en.pdf`. Imprime el **nº de
-páginas de cada uno** y avisa con ⚠ si supera 2.
+Genera `public/cv/francisco-lopez-cv-es.pdf` y `…-en.pdf`, imprime el **nº de
+páginas de cada uno** y avisa con ⚠ si supera 2. Y deja el **sello**
+(`public/cv/cv.huella`) que usa el gate del §3.1: **commitea los tres**, PDFs y
+sello, o CI falla.
 
 > Si un PDF está **abierto en un visor**, la escritura falla con `EBUSY`. Pide a
 > Francisco que cierre la vista previa y repite.
 
 ---
+
+### 3.1 · Y el gate que impide olvidarse
+
+```bash
+npm run check:cv
+```
+
+Corre en CI y compara la **huella de lo que entra en el CV** contra el sello de la
+última generación. Existe porque los PDFs son un artefacto **commiteado**: la
+fuente única garantiza que no haya dos verdades, no que la copia impresa esté al
+día. El 2026-08-18 un cambio de sector en `content/experience-copy/` dejó los dos
+PDFs viejos y no lo vio nada.
+
+Si falla, la respuesta es siempre la misma: `npm run cv` y commitear.
+
+> **Lo que el gate NO ve:** un cambio de **estilos** en `generate.tsx` (márgenes,
+> tipografía). Cambia el PDF y no cambia la huella — es deliberado, porque
+> hashear el fuente del generador haría fallar el gate por un comentario, y quien
+> toca los estilos está mirando el PDF de todas formas.
 
 ## 4 · Si se sale de 2 páginas — las dos palancas evidentes NO sirven
 
@@ -146,8 +167,8 @@ existen** en `public/cv/`.
 
 1. **Entrega el PDF** a Francisco con `SendUserFile`.
 2. **Commit en rama corta** (D12) → `push` → **PR**.
-3. **QA**: `npm run typecheck`, `npm run lint`, `npm run check:experiencias` y
-   `npm run build`.
+3. **QA**: `npm run typecheck`, `npm run lint`, `npm run check:experiencias`,
+   **`npm run check:cv`** y `npm run build`.
 4. **Publicar** = mergear a `main` y desplegar (D16). Es producción: **confírmalo
    con Francisco antes de mergear.** Tras el deploy, verifica que `/` sirve `-es` y
    `/en` sirve `-en`, y etiqueta `vX.Y.Z`.
@@ -187,6 +208,10 @@ existen** en `public/cv/`.
   toolkit y el proyecto paraguas. **Ya no lee roles ni periodos.**
 - `scripts/cv/generate.tsx` — ensambla y renderiza; guard de páginas; estilos.
 - `scripts/check-experience-copy.ts` — el guardián del §2.
+- `scripts/cv/assemble.ts` — junta lo autorado con los hechos. Lo comparten el
+  generador y el gate de frescura, que es por lo que vive fuera de `generate.tsx`.
+- `scripts/cv/fingerprint.ts` + `scripts/check-cv-fresh.ts` — el gate del §3.1.
+- `public/cv/cv.huella` — el sello. Se commitea con los PDFs.
 - `app/[lang]/dictionaries/{es,en}/home.json` — `formacion`, `toolkit`, `hitos` y
   las filas de `trayectoria` (solo `company`).
 - `lib/i18n/config.ts` → `cvPath(lang)`.

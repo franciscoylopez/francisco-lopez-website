@@ -264,10 +264,24 @@ tenga que acordarse.
   sesión), ambos gateados a producción y a consentimiento (Consent Mode v2). Métricas
   de éxito → §7.
 - **Calidad / seguridad**: CI (GitHub Actions) que corre formato + typecheck + lint + **paleta** +
-  build en cada PR (nada que no compile entra en `main`; y desde el 2026-08-10 el check no solo
+  **experiencias** + **CV al día** + build en cada PR (nada que no compile entra en `main`;
+  y desde el 2026-08-10 el check de paleta no solo
   comprueba que las copias conocidas cuadren, sino que **no queda ninguna copia de un valor de
   token fuera de su fuente** — busca valores, no patrones, para no marcar los colores que el
-  Brand Kit desvía a propósito; D38); **escaneo de dependencias automatizado
+  Brand Kit desvía a propósito; D38).
+
+  **Y desde el 2026-08-18, el PDF del CV tiene su propio gate.** La fuente única de
+  D57/D58 garantiza que la web y el CV no puedan decir cosas distintas *mientras el PDF se
+  regenere* — pero el PDF es un **artefacto commiteado**, y ese día un cambio de sector en
+  `content/experience-copy/` dejó los dos PDFs viejos sin que lo viera nada: ni el typecheck,
+  ni el linter, ni `gate:html`, ni `check:experiencias`. *Una fuente única evita dos verdades;
+  no mantiene al día una copia impresa.* `npm run check:cv` sella la **huella de lo que entra**
+  en el CV y falla si no coincide con la última generación — de entradas y no de bytes, porque
+  el PDF **no es determinista** (regenerarlo sin cambiar nada da otro hash; medido antes de
+  elegir el método). Validado rompiéndolo: cambiar una palabra del registro sin regenerar hace
+  salir el gate con código 1.
+
+  Además: **escaneo de dependencias automatizado
   (Dependabot)**; cabeceras de seguridad servidas (nosniff, X-Frame-Options, Referrer-Policy,
   Permissions-Policy, HSTS **y CSP «A+ barato»**: directivas base + allowlist GTM/GA4,
   manteniendo `'unsafe-inline'`; la CSP estricta con nonces va con la IA conversacional,
