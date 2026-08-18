@@ -183,16 +183,18 @@ cierra el hueco**.
 ## 7 · Los gates de cierre
 
 1. **`npm run check:experiencias`** — las tres longitudes cuadran.
+2. **`npm run check:cv`** — y si falla, `npm run cv`: tocar un bullet o un hecho
+   cambia también el PDF, que es un artefacto commiteado y no se regenera solo.
 2. **`npm run gate:html`**, solo si has tocado algo COMPARTIDO. Para una página
    nueva no hay línea base contra la que compararla; su valor está en demostrar
    que el resto no se ha movido.
-3. **Gate de accesibilidad (D52)** con el subagente `viewport-verifier`, sobre el
+4. **Gate de accesibilidad (D52)** con el subagente `viewport-verifier`, sobre el
    sitio servido. **No se conduce a mano.** Y **son dos disparos**, no uno: si la
    página lleva hero o banda dimensionada por `vw`, uno **mientras se dibuja**
    —al cerrar, el alto ya no es un ajuste sino un rediseño (D50/D56)— y otro al
    cerrar. Precondición: `agent-browser` con el **sandbox de Bash desactivado**;
    un comando que cuelga es ese síntoma, así que no se reintenta igual.
-4. **Lo que el gate no tapa y va a mano:** el enlace de salto (axe no lo ve,
+5. **Lo que el gate no tapa y va a mano:** el enlace de salto (axe no lo ve,
    D46), la nota de PageSpeed (`npm run psi`, D49) y los puntos 4, 5, 6 y 8 del
    checklist, que los pone quien escribe la página.
 
