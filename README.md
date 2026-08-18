@@ -133,8 +133,9 @@ scripts/check-palette.ts  Guardián de CI: la paleta de lib/design-values.ts con
 scripts/design-review/  Censo de pares de contraste del DOM servido (lo usa el skill design-review)
 scripts/psi.ts         PageSpeed Insights desde la terminal: nota, métricas, desglose del LCP
                        y huella del despliegue medido (D49)
-scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 6 páginas (ES/EN) no
-                           puede cambiar. Semilla del arnés de tests (D42, ampliado en D45)
+scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 12 páginas (ES/EN) no
+                           puede cambiar. Semilla del arnés de tests (D42, ampliado en D45,
+                           y a las doce con el deep-dive en D59)
 scripts/artefacto-svg.ts   Traductor del export de mermaid.live al SVG que el sitio sirve:
                            le quita la hoja de estilos externa (que la CSP no permite), el
                            pan/zoom del editor y la paleta fija, y calcula el viewBox real.

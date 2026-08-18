@@ -7,9 +7,13 @@ package-lock.json
 # Docs mantenidos a mano (fuente de verdad) — no reformatear
 *.md
 
-# Tooling Node y CSS deprecado — fuera del formateo de la app
+# Tooling Node — fuera del formateo de la app.
+# OJO (2026-08-18, sprint-review): esta línea hace que `format:check` de CI NO mire
+# scripts/, y peor, que `prettier --check "scripts/**"` conteste «All matched files use
+# Prettier code style!» sobre CERO archivos — prettier aplica este ignore también a las
+# rutas explícitas y usa el mismo mensaje de éxito con lista vacía. Con
+# `--ignore-path /dev/null` salen 10 archivos sin formatear. Tareado en P71.5.
 scripts
-brand-globals.css
 
 # Fuente de diseño (export fiel de Claude Design) — no reformatear
 design
