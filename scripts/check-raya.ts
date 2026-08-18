@@ -41,7 +41,10 @@ const RAIZ = process.cwd();
 
 /** Dónde vive el copy que se sirve. */
 const DICCIONARIOS = "app/[lang]/dictionaries";
-const COPY_TS = ["content/experience-copy/es.ts", "content/experience-copy/en.ts"];
+const COPY_TS = [
+  "content/experience-copy/es.ts",
+  "content/experience-copy/en.ts",
+];
 
 /** El ordinal de una cabecera numerada: `01 — Rejilla` (D43). */
 const ORDINAL = /^\d{2} — /;
