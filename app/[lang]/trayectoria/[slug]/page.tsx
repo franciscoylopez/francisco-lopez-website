@@ -35,6 +35,20 @@ export function generateStaticParams() {
   );
 }
 
+// UN SLUG QUE NO EXISTE SE RECHAZA EN EL ENRUTADO, NO RENDERIZANDO. Sin esto, la
+// ruta casa con CUALQUIER valor, se renderiza, llama a `notFound()` y Next busca el
+// boundary `not-found` más cercano — que no existe desde que D25 borró el anidado
+// (su `headers()` volvía dinámico todo `[lang]`). Sin boundary sirve su 404 pelado,
+// que es lo que estas diez rutas hacían en producción: sin nav, sin footer, sin el
+// «0» del split y con el `<title>` de la home.
+//
+// `global-not-found` no las cubría, y no es un fallo suyo: su contrato es explícito
+// —cubre las URLs que no casan con NINGUNA ruta—, y `/trayectoria/loquesea` casa.
+// Con `dynamicParams = false` el 404 pasa a decidirse en el enrutado, que es justo
+// el caso que sí cubre. Los cinco slugs salen ya de `generateStaticParams`, así que
+// no se pierde ninguna página ni deja de prerenderizarse.
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
