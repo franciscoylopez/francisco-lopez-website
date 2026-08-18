@@ -435,7 +435,7 @@
         "size": "page-sm",
         "eyebrow": "Quién hay detrás",
         "sample": "Sobre mí",
-        "use": "El h1 de las páginas de lectura larga: Sobre mí y la política de cookies."
+        "use": "El h1 de las páginas de lectura larga: Sobre mí, la política de cookies y el índice de Trayectoria."
       },
       {
         "size": "section",
@@ -448,6 +448,12 @@
         "eyebrow": "Capa de cabecera",
         "sample": "Cabeceras",
         "use": "Sección de un índice largo, como las catorce de esta página."
+      },
+      {
+        "size": "sub",
+        "eyebrow": "",
+        "sample": "El producto que ya existía",
+        "use": "El h3 de un subapartado dentro de una sección. Es el único tamaño que va sin rótulo encima: lo usan los bloques libres de «La historia» en las páginas de experiencia."
       }
     ],
     "toneTitle": "El rótulo toma su gris de la superficie",
