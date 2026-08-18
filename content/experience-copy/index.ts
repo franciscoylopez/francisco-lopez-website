@@ -135,3 +135,29 @@ export function deepBullets(lang: Locale, company: string): string[] {
     return b.deep;
   });
 }
+
+/**
+ * El rótulo de apertura de un deep-dive y de su tarjeta OG: **empresa · sector**,
+ * buscado por SLUG (que es lo que conocen la ruta y `/api/og`).
+ *
+ * POR QUÉ SE COMPONE Y NO SE ESCRIBE (P50.36b). Era una cadena literal en cada uno
+ * de los diez diccionarios —cinco experiencias × dos idiomas— que repetía dos datos
+ * que ya viven en su fuente: el nombre en `content/experiences.ts` y el sector aquí.
+ * O sea, la sexta copia del sector después de que D58 lo subiera al registro.
+ *
+ * Y no fue teórico: el de KUOTIP se quedó en «KUOTIP · Customer Reviews», sin el
+ * tipo de negocio que llevan las otras cuatro. Salía así en la página y en su
+ * tarjeta OG, mientras el índice de `/trayectoria` —que ya componía este mismo
+ * rótulo desde el registro— decía otra cosa. **Dos superficies leyendo el mismo
+ * hecho de dos sitios distintos es la definición del problema que D57/D58
+ * resuelven**, y aquí había sobrevivido escondido dentro de una cadena de display.
+ *
+ * LANZA con un slug desconocido, igual que `companyOfSlug` —del que se apoya— y que
+ * `deepBulletsOfSlug`: aquí un slug que no existe solo puede venir de nuestro propio
+ * código, porque las dos llamadas reales ya han comprobado antes que la experiencia
+ * tiene diccionario. Mejor romper la build que servir el rótulo de otra empresa.
+ */
+export function eyebrowOf(lang: Locale, slug: string): string {
+  const company = companyOfSlug(slug);
+  return `${company} · ${factsOf(lang, company).sector}`;
+}

@@ -5,6 +5,7 @@ import { ImageResponse } from "next/og";
 import type { NextRequest } from "next/server";
 
 import { getExperience, getTrayectoriaIndice } from "@/app/[lang]/dictionaries";
+import { eyebrowOf } from "@/content/experience-copy";
 import { brandHex, paletteHex } from "@/lib/design-values";
 
 // Generación de imágenes OG (1200×630) con la marca (P16). Route handler bajo
@@ -351,10 +352,19 @@ async function deepDiveCopy(
   const prefijo = `${DEEP_DIVE}/`;
   if (!cardParam.startsWith(prefijo)) return null;
 
-  const dict = getExperience(lang, cardParam.slice(prefijo.length));
+  const slug = cardParam.slice(prefijo.length);
+  // El `?card=` es un parámetro de URL, o sea que puede traer cualquier cosa: se
+  // comprueba contra el registro de diccionarios ANTES de componer nada, porque
+  // `eyebrowOf` LANZA con un slug desconocido. Aquí un slug inventado no es un
+  // error de programación —es alguien tecleando— y su respuesta es la tarjeta de
+  // la home, como cualquier card que no existe.
+  const dict = getExperience(lang, slug);
   if (!dict) return null;
   const t = await dict;
-  return { title: t.title, kicker: t.eyebrow };
+  // El rótulo se COMPONE desde el registro, igual que en la página: si saliera del
+  // diccionario, la tarjeta y la página podrían decir algo distinto del índice —
+  // que es exactamente lo que pasaba con KUOTIP (P50.36b).
+  return { title: t.title, kicker: eyebrowOf(lang, slug) };
 }
 
 export async function GET(request: NextRequest) {
