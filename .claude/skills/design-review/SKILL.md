@@ -317,9 +317,18 @@ antes pedía abrir la URL desde la terminal. D51.)*
 > vuelve el aviso entero. Se usa **solo** si hay que entrar en una Preview de Vercel protegida;
 > contra local no hace falta nunca.
 
-**Recorrido base:** las seis páginas × ES/EN × claro/oscuro. Y **el viewport lleva alto**, que
-es justo lo que faltaba: una lista de anchos no puede ver el caso de D50, donde el ancho es el
-de siempre y **lo que cambia es el alto**.
+**Recorrido base:** las **doce** páginas × ES/EN × claro/oscuro. Eran seis hasta el 2026-08-18;
+el deep-dive añadió cinco experiencias y su índice, y **son las que más falta hace mirar**:
+tienen el único artefacto SVG del sitio, las dos únicas incrustaciones de vídeo y la única
+plantilla que se repite cinco veces. Un recorrido que se quede en seis no las ve.
+
+> **El número no se escribe: se saca de donde ya está.** La lista viva son las rutas de
+> `scripts/page-html-diff.ts`, que el gate mantiene al día porque una página nueva sin entrada
+> ahí es una página sin gate. Si al leerlas no cuadran con lo que dice este párrafo, manda el
+> script — y actualiza esta frase, que es lo que no pasó entre agosto y hoy.
+
+Y **el viewport lleva alto**, que es justo lo que faltaba: una lista de anchos no puede ver el
+caso de D50, donde el ancho es el de siempre y **lo que cambia es el alto**.
 
 | Viewport | Qué representa |
 |---|---|

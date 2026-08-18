@@ -46,6 +46,39 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 - Si algo es ambiguo (¿PRD o DECISIONS? ¿cambia una decisión previa, que se marca
   *Revertida* y se enlaza la nueva?), **pregúntale a Francisco** antes de escribir.
 
+### Y las SKILLS también caducan — el documento que nadie mira al cerrar
+
+*(Añadido el 2026-08-18, y no en abstracto: lo detectó Francisco preguntando «¿la skill de
+`update-cv` está al día?». No lo estaba. En **un solo día**, mover los bullets del CV a
+`content/experience-copy/` (D57) y los hechos al registro (D58) dejó **nueve** afirmaciones
+falsas dentro de esa skill — una de ellas peligrosa: «retocar un bullet del CV no afecta a la
+web», que desde D57 es exactamente al revés. Y `design-review` seguía recorriendo «las seis
+páginas» cuando ya eran doce.)*
+
+**Una skill es documentación ejecutable, y por eso su drift es peor que el de un `.md`:** un
+párrafo desactualizado se lee con escepticismo; una skill se **sigue**. Así que al cerrar,
+la pregunta no es solo qué documento toca, sino:
+
+> **¿Esta sesión ha movido algo que una skill DESCRIBE?** Un archivo que cambió de sitio, un
+> campo que cambió de dueño, un comando nuevo, un recuento (páginas, variantes, rutas), un
+> gate que se añadió.
+
+Si la respuesta es sí, se abre la skill y **se comprueba, no se recuerda**: que existan las
+rutas que nombra, que existan los comandos, y que sus afirmaciones sigan siendo ciertas.
+Barato y mecánico:
+
+```bash
+# Rutas y comandos que la skill afirma
+grep -oE '`[a-z0-9_/.-]+\.(ts|tsx|json|md)`' .claude/skills/<skill>/SKILL.md | tr -d '`' | sort -u \
+  | while read -r f; do [ -e "$f" ] || echo "FALTA $f"; done
+grep -oE 'npm run [a-z:]+' .claude/skills/<skill>/SKILL.md | sort -u
+```
+
+**Y mira también las cabeceras de los archivos que tocaste**: el comentario que explica un
+módulo caduca igual que una skill y nadie lo relee. En esta misma sesión, `scripts/cv/facts.ts`
+seguía anunciando que leía «periodos y roles» del diccionario meses después de dejar de
+hacerlo.
+
 ## Paso 2 · Propón antes de aplicar
 Preséntale a Francisco la **lista de actualizaciones propuestas** (qué documento, qué
 añadir/cambiar) para que confirme, corrija o añada lo que falte. Así no se te escapa
