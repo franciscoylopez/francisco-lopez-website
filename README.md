@@ -36,11 +36,17 @@ y con un sistema de marca propio.
 - **Rendimiento**: PageSpeed 100 (desktop) / >90 (móvil), CLS 0. Server Components
   por defecto y responsive en CSS (JS de cliente solo en las islas interactivas).
 - **CV en PDF bilingüe** (ES/EN) generado por código con identidad de marca y texto
-  seleccionable (ATS). Los hechos (roles, fechas, formación, toolkit) se leen del
-  diccionario i18n; el CV solo autora el texto rico. `npm run cv` regenera ambos.
-- **Deep-dive por experiencia** (`/trayectoria/[slug]`, en construcción): una plantilla única
-  renderiza las cinco páginas —Datos · En un minuto · La historia · El caso · Aprendizajes— con
-  el contenido en el diccionario partido por experiencia. Los **artefactos son documentos
+  seleccionable (ATS). **De una experiencia, todo lo que se cuenta —rol, periodo, sector,
+  reporting, la frase de la home y los bullets— vive en `content/experience-copy/`** (D57/D58);
+  la formación y el toolkit siguen viniendo del diccionario, y el CV solo aporta lo suyo
+  (summary, hitos, skills) y decide a qué experiencias da papel. `npm run cv` regenera ambos
+  PDFs y su sello; `npm run check:cv` comprueba en CI que los commiteados correspondan a la
+  fuente (D60).
+- **Deep-dive por experiencia**: el índice `/trayectoria` y cinco páginas en
+  `/trayectoria/[slug]`, con una plantilla única —Datos · En un minuto · La historia · El caso ·
+  Aprendizajes— y el contenido en el diccionario partido por experiencia. Cuáles existen no se
+  escribe en ningún sitio: las páginas, el índice, el sitemap y `llms.txt` **derivan** de
+  `content/experiences.ts` filtrando `slug !== null` (D44/D59). Los **artefactos son documentos
   reales**, no recreaciones: el diagrama de estados se publica renderizado desde su Mermaid
   original y saneado, en línea para que conmute con el tema (D53/D54).
 - **Páginas de error 404 y 500** con marca e i18n: el 404 con el "0" del número
@@ -70,9 +76,11 @@ npm run check:palette  # la paleta del código contra la de globals.css, y que n
 npm run check:experiencias  # que las TRES longitudes de cada experiencia cuadren:
                             # misma cobertura en ES y EN, versión larga solo donde
                             # hay deep-dive, y ninguna cifra en una y no en la otra (D57)
-npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/
+npm run check:cv   # que los PDFs commiteados correspondan a la fuente: sella la
+                   # HUELLA DE LAS ENTRADAS, no bytes — el PDF no es determinista (D60)
+npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza su sello
 npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
-npm run gate:html -- save   # instantánea del HTML de las 11 páginas × 2 idiomas
+npm run gate:html -- save   # instantánea del HTML de las 12 páginas × 2 idiomas (24 variantes)
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
 npm run psi -- <url>        # PageSpeed sobre el Preview o producción, móvil y escritorio (D49)
 ```
@@ -99,7 +107,7 @@ npm run psi -- <url>        # PageSpeed sobre el Preview o producción, móvil y
 ## Estructura
 
 ```
-app/[lang]/            Rutas por locale (home, sobre-mi, brand-kit, design-system, accesibilidad, cookies) + layout y error boundary
+app/[lang]/            Rutas por locale (home, sobre-mi, trayectoria + trayectoria/[slug], brand-kit, design-system, accesibilidad, cookies) + layout y error boundary
 app/[lang]/dictionaries/{es,en}/  Diccionario PARTIDO POR PÁGINA (D48): common + una rama por página. Cada página carga la suya; los tipos salen del ES y una clave que falte en EN rompe el build
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
