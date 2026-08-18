@@ -82,3 +82,59 @@ export function breadcrumbLd(items: { name: string; url?: string }[]) {
     })),
   };
 }
+
+/**
+ * Página de una experiencia del deep-dive (P50).
+ *
+ * ES `WebPage` Y NO `Article`, decidido con Francisco el 2026-08-18. `Article`
+ * daba campos y elegibilidad para rich results, pero marcar cinco páginas de
+ * carrera como artículos le dice a un rastreador que esto es un blog — y el PRD
+ * §9 es explícito en que no lo es (no hay índice de artículos ni feed). Además
+ * pide `datePublished`, que aquí habría que inventar o mantener: una fecha de
+ * publicación no significa nada en una página que cuenta cinco años de trabajo.
+ *
+ * LO QUE SÍ APORTA, que es lo que la tarea buscaba: ata cada página a la MISMA
+ * persona y a su empresa. El `Person` no se repite —se **referencia** por
+ * `@id`, el mismo `${SITE_URL}/#person` que declara `profilePageLd` en la home—,
+ * que es lo que permite a Google unir las seis páginas en una sola entidad en vez
+ * de leer seis personas que se llaman igual. Repetir el objeto entero habría
+ * sido, además, la sexta copia de los mismos datos en un sitio que acaba de
+ * retirar tres (D57/D58).
+ *
+ * `about` es la empresa y `mainEntity` la persona, y el orden importa: la página
+ * VA SOBRE la experiencia en esa organización, pero de quien habla es de él.
+ *
+ * NO LLEVA `isPartOf`, y la ausencia es deliberada: el nodo `WebSite` del sitio
+ * no existe todavía (está en el backlog de V3), así que apuntar a
+ * `${SITE_URL}/#website` sería una referencia `@id` COLGANDO — un identificador
+ * que ningún nodo declara. Valida igual, porque un validador de esquema no
+ * resuelve referencias, y no significa nada. Se añade el día que exista el nodo,
+ * no antes.
+ */
+export function experiencePageLd({
+  lang,
+  slug,
+  name,
+  description,
+  company,
+}: {
+  lang: Locale;
+  /** Slug de la experiencia, sin el segmento padre. */
+  slug: string;
+  /** El h1 de la página: la afirmación, no el nombre de la empresa. */
+  name: string;
+  description: string;
+  company: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    url: pageUrl(lang, `trayectoria/${slug}`),
+    name,
+    description,
+    inLanguage: lang,
+    about: { "@type": "Organization", name: company },
+    author: { "@id": `${SITE_URL}/#person` },
+    mainEntity: { "@id": `${SITE_URL}/#person` },
+  };
+}

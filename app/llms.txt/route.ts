@@ -2,6 +2,7 @@ import { EMAIL, LINKEDIN_URL, PHONE_TEL } from "@/lib/contact";
 import { cvPath } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import { factsOf, shortOf } from "@/content/experience-copy";
+import { experienceOf, type ExperienceSlug } from "@/content/experiences";
 
 import esCommon from "../[lang]/dictionaries/es/common.json";
 import esHome from "../[lang]/dictionaries/es/home.json";
@@ -10,6 +11,12 @@ import esBrandKit from "../[lang]/dictionaries/es/brand-kit.json";
 import esDesignSystem from "../[lang]/dictionaries/es/design-system.json";
 import esAccesibilidad from "../[lang]/dictionaries/es/accesibilidad.json";
 import esCookies from "../[lang]/dictionaries/es/cookies.json";
+import esTrayectoria from "../[lang]/dictionaries/es/trayectoria/indice.json";
+import esEmendu from "../[lang]/dictionaries/es/trayectoria/emendu.json";
+import esKuotip from "../[lang]/dictionaries/es/trayectoria/kuotip.json";
+import esIndya from "../[lang]/dictionaries/es/trayectoria/indya.json";
+import esFreepik from "../[lang]/dictionaries/es/trayectoria/freepik.json";
+import esThetool from "../[lang]/dictionaries/es/trayectoria/thetool.json";
 
 // Este archivo habla de TODAS las páginas, así que es el único sitio que sigue
 // necesitando el diccionario entero (P46). Se recompone aquí, y es barato: la ruta
@@ -39,6 +46,11 @@ const PAGES: {
     path: "/sobre-mi",
     title: es.sobreMi.meta.title,
     description: es.sobreMi.meta.description,
+  },
+  {
+    path: "/trayectoria",
+    title: esTrayectoria.meta.title,
+    description: esTrayectoria.meta.description,
   },
   {
     path: "/brand-kit",
@@ -74,16 +86,56 @@ function pageList(): string {
   }).join("\n");
 }
 
+/**
+ * El diccionario de cada deep-dive, para sacar su titular. El `Record` va
+ * tecleado por `ExperienceSlug`, así que una experiencia nueva sin entrada aquí
+ * NO COMPILA — que es lo que impide que su página se quede fuera de este archivo
+ * igual que estuvieron las cinco hasta hoy (P50).
+ */
+const DEEP_DIVE: Record<ExperienceSlug, { title: string }> = {
+  emendu: esEmendu,
+  kuotip: esKuotip,
+  indya: esIndya,
+  freepik: esFreepik,
+  thetool: esThetool,
+};
+
+/**
+ * Guardián de tipo, y no un `as`: `experienceOf` devuelve el `slug` como
+ * `string | null` —es el tipo del registro, donde `null` significa «sin página»—
+ * y aquí hace falta la unión estrecha para indexar. Se comprueba la pertenencia
+ * DE VERDAD en vez de afirmarla, que es lo que hace que un slug registrado sin
+ * diccionario caiga en la rama sin enlace en lugar de reventar al leer `.title`
+ * de `undefined`. Hoy no puede pasar —el `Record` es exhaustivo—, pero un `as`
+ * no lo sabe.
+ */
+const tienePagina = (slug: string | null): slug is ExperienceSlug =>
+  slug !== null && slug in DEEP_DIVE;
+
 function trayectoriaList(): string {
   // La descripción ya no es un campo de la fila: sale del registro por
   // experiencia (P48.5), que es donde vive emparejada con el bullet del CV y con
   // su gemelo del deep-dive. `llms.txt` es español y estático, así que pide el ES
   // directamente — es la misma fuente que lee la home.
+  //
+  // Y DESDE P50 CADA UNA LLEVA SU ENLACE, si tiene página. Hasta entonces este
+  // bloque nombraba las cinco experiencias SIN URL mientras sus cinco páginas ya
+  // existían: un modelo que leyera este archivo no podía descubrir el contenido
+  // más profundo del sitio. Que enlace o no lo decide `slug` en el registro
+  // (D44), no una lista escrita aquí — el mismo criterio que el sitemap y que
+  // `generateStaticParams`.
   return TRAYECTORIA.map(({ company }) => {
     const { role, period } = factsOf("es", company);
+    const { slug } = experienceOf(company);
     const exitNote =
       company === "TheTool" ? " — exit, adquirida por AppRadar." : "";
-    return `- ${company} — ${role} (${period}): ${shortOf("es", company)}${exitNote}`;
+    const nombre = tienePagina(slug)
+      ? `[${company}](${SITE_URL}/trayectoria/${slug})`
+      : company;
+    const caso = tienePagina(slug)
+      ? ` Caso completo: «${DEEP_DIVE[slug].title}».`
+      : "";
+    return `- ${nombre} — ${role} (${period}): ${shortOf("es", company)}${exitNote}${caso}`;
   }).join("\n");
 }
 
