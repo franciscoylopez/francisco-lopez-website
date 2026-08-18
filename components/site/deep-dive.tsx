@@ -9,6 +9,7 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import {
   companyOfSlug,
   deepBulletsOfSlug,
+  eyebrowOf,
   factsOf,
   reportingOf,
 } from "@/content/experience-copy";
@@ -469,7 +470,10 @@ export function DeepDive({
           <div className="my-auto">
             <header>
               <SectionHeader
-                eyebrow={t.eyebrow}
+                // El rótulo se COMPONE desde el registro (empresa · sector), no
+                // sale del diccionario: era la sexta copia del sector y la que
+                // se quedó atrás en KUOTIP. Ver `eyebrowOf`.
+                eyebrow={eyebrowOf(lang, slug)}
                 title={t.title}
                 level={1}
                 size="page"

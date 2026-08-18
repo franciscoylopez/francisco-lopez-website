@@ -165,8 +165,17 @@ export const getTrayectoriaIndice = cargador<TrayectoriaIndiceDict>({
 export interface DeepDiveDict {
   meta: { title: string; description: string };
   crumb: string;
-  /** Rótulo de la apertura: empresa · sector. */
-  eyebrow: string;
+  // EL RÓTULO DE LA APERTURA —«empresa · sector»— YA NO SE ESCRIBE AQUÍ (P50.36b).
+  // Era la sexta copia del sector: el registro por experiencia ya lo tiene (D58) y
+  // esta cadena lo repetía pegado al nombre de la empresa, en los dos idiomas. Diez
+  // strings que nada ataba, y el drift se cobró su pieza — el de KUOTIP se quedó en
+  // «KUOTIP · Customer Reviews» sin el tipo de negocio que llevan los otros cuatro,
+  // y salía así en la página Y en su tarjeta OG mientras el índice, que lo compone
+  // desde el registro, decía otra cosa.
+  //
+  // Ahora lo componen sus dos consumidores desde `company` + `sector`. Se comprobó
+  // antes de borrarlo que las diez cadenas eran EXACTAMENTE `${company} · ${sector}`,
+  // así que la derivación no cambia nada salvo lo que estaba mal.
   /** El h1: la afirmación de la experiencia, no el nombre de la empresa. */
   title: string;
   /**

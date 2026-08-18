@@ -49,7 +49,7 @@ export const copy: ExperienceCopyMap = {
   KUOTIP: {
     role: "Cofounder & Product",
     period: "Feb 2024 — Dec 2024",
-    sector: "Customer Reviews",
+    sector: "B2B2C SaaS · Customer Reviews",
     reporting: {
       deep: "Co-founder, 1 of 3 partners",
       cv: "Cofounder (1 of 3 partners) · alongside the CEO and CTO",
