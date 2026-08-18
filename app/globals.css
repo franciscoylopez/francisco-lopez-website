@@ -442,6 +442,39 @@
 [data-surface="muted"] {
   --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
 }
+/* Nota de cascada 3, y es la que le faltaba a este bloque: UNA SUPERFICIE TAMBIÉN
+   PUEDE CAMBIAR POR ESTADO, no solo por clase o por atributo. Las reglas de arriba
+   miran a `.bg-muted`, pero `hover:bg-muted` compila a `.hover\:bg-muted:hover`
+   —otro selector, y además dentro de `@media (hover: hover)`—, así que una tarjeta
+   que se aclara al pasar el cursor cambiaba de fondo SIN recalcular su atenuado: el
+   texto se quedaba con el valor derivado de `--card` encima de un fondo que ya era
+   `--muted`.
+
+   Medido antes de tocar nada, en el rótulo de la tarjeta de cierre (`ui/page-closer.tsx`,
+   que es el cierre de las doce páginas): reposo 9,14 → hover **7,79 claro / 9,01
+   oscuro**, donde el valor correcto de esa superficie es el `mutedOnMuted` que el
+   sitio YA publica, 8,17 / 9,17. No llegaba a incumplimiento —AAA aguanta— pero era
+   la holgura de hover más fina del sitio (0,79) y, sobre todo, era D39 fallando en
+   silencio en un eje entero: el que solo existe mientras el cursor está encima, que
+   es justo donde el censo tiene su punto ciego histórico.
+
+   Va aquí y no en los dos call sites por la razón de siempre: `data-surface` es
+   ESTÁTICO y no puede describir una superficie que cambia con el estado, así que
+   declararlo en la tarjeta no habría servido. Se arregla la capa.
+
+   Se cubre también `focus-visible:bg-muted` —el mismo cambio de superficie por la
+   otra puerta, que usan `outline-neutral` y `ghost` en `action.tsx`— aunque hoy
+   ningún control con ese estado lleve texto atenuado: es la misma decisión, y
+   dejarla a medias es cómo vuelve el fallo. El `@media` replica el de la utilidad
+   para no encender el hover en pantallas táctiles, donde se queda pegado. */
+@media (hover: hover) {
+  .hover\:bg-muted:hover {
+    --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
+  }
+}
+.focus-visible\:bg-muted:focus-visible {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
+}
 /* Superficie INVERTIDA (fondo = `--foreground`): ahí el primer plano es
    `--background`, así que el atenuado se construye con la misma fórmula pero
    partiendo del otro extremo. Hermano de `--primary-on-inverted`, que existe por
