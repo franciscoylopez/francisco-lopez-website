@@ -89,7 +89,8 @@ descarga** (D65).
   sitio**: registrarlas mal no es un hallazgo de auditoría sino un error del
   compilador, y un guardián contrasta el registro con el disco (D72). Es lo que hace
   que una página nueva nazca con el `hreflang` correcto, con enlace de salto,
-  estática y dentro del sitemap, del gate y de `/llms.txt`, sin que nadie se acuerde.
+  estática, y dentro del sitemap, del gate, de `/llms.txt` y de su propia tarjeta
+  OG, sin que nadie se acuerde.
 
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 
