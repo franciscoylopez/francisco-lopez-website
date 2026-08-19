@@ -111,8 +111,14 @@ export function Hero({
   homeHref: string;
 }) {
   return (
-    <section className="py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)]">
-      <div className={WRAP}>
+    <section className="flex flex-col py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)] md:min-h-[calc(100svh-5rem)]">
+      {/* La apertura ocupa el pliegue (P54). Misma constante que el hero de la
+          home y que el deep-dive; el porqué largo, en `brand-kit/hero.tsx`.
+          Medido antes: a 1920×1080 dejaba 227px de hueco por debajo, con el
+          rótulo de la segunda sección asomando. Es `min-h` porque a 1280×618
+          esta apertura ya desborda el pliegue y la regla no debe recortar. El
+          `w-full` evita que el `mx-auto` de `WRAP` desactive el stretch. */}
+      <div className={`${WRAP} flex w-full flex-1 flex-col`}>
         <div data-reveal className="mb-[clamp(3rem,6vw,4.5rem)]">
           <Breadcrumb
             routeLabel={breadcrumb.routeLabel}
@@ -122,42 +128,48 @@ export function Hero({
             ]}
           />
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
-          <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
-            <SectionHeader
-              eyebrow={t.kicker}
-              title={t.title}
-              level={1}
-              size="page"
-              reveal
-            >
-              <p
-                data-reveal
-                className="text-muted-foreground max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+        <div className="my-auto">
+          <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
+              <SectionHeader
+                eyebrow={t.kicker}
+                title={t.title}
+                level={1}
+                size="page"
+                reveal
               >
-                {t.lead}
-              </p>
-            </SectionHeader>
+                <p
+                  data-reveal
+                  className="text-muted-foreground max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+                >
+                  {t.lead}
+                </p>
+              </SectionHeader>
+            </div>
+            <HeroComposition />
           </div>
-          <HeroComposition />
+          {/* stats */}
+          <StatRow>
+            <Stat
+              value={String(CONTAINER_PX)}
+              unit="px"
+              label={t.statContainer}
+            />
+            <Stat
+              value={String(BREAKPOINT_COUNT)}
+              unit={` ${t.statBreakpoints}`}
+              label={BREAKPOINTS.filter((b) => b.min !== null)
+                .map((b) => b.min)
+                .join(" · ")}
+            />
+            <Stat
+              value={String(MEASURE_REM)}
+              unit="rem"
+              label={t.statMeasure}
+            />
+            <Stat value="AA→AAA" label={t.statA11y} />
+          </StatRow>
         </div>
-        {/* stats */}
-        <StatRow>
-          <Stat
-            value={String(CONTAINER_PX)}
-            unit="px"
-            label={t.statContainer}
-          />
-          <Stat
-            value={String(BREAKPOINT_COUNT)}
-            unit={` ${t.statBreakpoints}`}
-            label={BREAKPOINTS.filter((b) => b.min !== null)
-              .map((b) => b.min)
-              .join(" · ")}
-          />
-          <Stat value={String(MEASURE_REM)} unit="rem" label={t.statMeasure} />
-          <Stat value="AA→AAA" label={t.statA11y} />
-        </StatRow>
       </div>
     </section>
   );

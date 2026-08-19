@@ -43,8 +43,14 @@ export function Accesibilidad({
   return (
     <>
       {/* ===================== HERO ===================== */}
-      <section className="py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)]">
-        <div className={WRAP}>
+      <section className="flex flex-col py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)] md:min-h-[calc(100svh-5rem)]">
+        {/* La apertura ocupa el pliegue (P54). Misma constante que el hero de la
+            home y que el deep-dive; el porqué largo, en `brand-kit/hero.tsx`.
+            Medido antes: a 1920×1080 dejaba 234px de hueco por debajo, con el
+            rótulo de la segunda sección asomando. Es `min-h` porque a 1280×618
+            esta apertura ya desborda el pliegue y la regla no debe recortar. El
+            `w-full` evita que el `mx-auto` de `WRAP` desactive el stretch. */}
+        <div className={`${WRAP} flex w-full flex-1 flex-col`}>
           <div data-reveal className="mb-[clamp(3rem,6vw,4.5rem)]">
             <Breadcrumb
               routeLabel={breadcrumb.routeLabel}
@@ -54,32 +60,34 @@ export function Accesibilidad({
               ]}
             />
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
-            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
-              <SectionHeader
-                eyebrow={t.hero.kicker}
-                title={t.hero.title}
-                level={1}
-                size="page"
-                reveal
-              >
-                <p
-                  data-reveal
-                  className="text-muted-foreground max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+          <div className="my-auto">
+            <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+              <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
+                <SectionHeader
+                  eyebrow={t.hero.kicker}
+                  title={t.hero.title}
+                  level={1}
+                  size="page"
+                  reveal
                 >
-                  {t.hero.lead}
-                </p>
-              </SectionHeader>
+                  <p
+                    data-reveal
+                    className="text-muted-foreground max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+                  >
+                    {t.hero.lead}
+                  </p>
+                </SectionHeader>
+              </div>
+              <HeroComposition />
             </div>
-            <HeroComposition />
+            {/* datos */}
+            <StatRow>
+              <Stat value="AA" label={t.hero.statConformidad} />
+              <Stat value="AAA" label={t.hero.statColor} />
+              <Stat value="0" label={t.hero.statAxe} />
+              <Stat value="100" label={t.hero.statLighthouse} />
+            </StatRow>
           </div>
-          {/* datos */}
-          <StatRow>
-            <Stat value="AA" label={t.hero.statConformidad} />
-            <Stat value="AAA" label={t.hero.statColor} />
-            <Stat value="0" label={t.hero.statAxe} />
-            <Stat value="100" label={t.hero.statLighthouse} />
-          </StatRow>
         </div>
       </section>
 
