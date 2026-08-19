@@ -118,10 +118,15 @@ export function DataTable({
   cols: readonly Col[];
   /**
    * Ancho por debajo del cual la tabla deja de encogerse y empieza a scrollear.
-   * Solo lo necesita la que vive en una columna de LECTURA —la de cookies, cinco
-   * columnas dentro de `PROSE` (42rem)—: sin suelo, el navegador reparte el ancho
-   * disponible y la columna de propósito acaba partiendo cada frase en palabras
-   * sueltas. Las del Design System ocupan el ancho de página y no lo usan.
+   * Solo lo necesita la de cookies, que tiene CINCO columnas y una sola con frases
+   * (propósito): sin suelo, en una ventana estrecha el navegador reparte el ancho y
+   * esa columna acaba partiendo cada frase en palabras sueltas.
+   *
+   * OJO, EL MOTIVO CAMBIÓ EL 2026-08-19 (P54.2) aunque el valor no: hasta entonces
+   * hacía falta porque esa tabla vivía dentro de `PROSE` (42rem) y se estrangulaba
+   * ya en escritorio. Ahora el cuerpo de cookies va a ancho de contenedor y allí
+   * mide 1.278px, así que el suelo solo actúa en MÓVIL (medido a 390px: 572 y
+   * scrollea). Las del Design System ocupan el ancho de página y no lo usan.
    */
   minWidth?: string;
   children: ReactNode;

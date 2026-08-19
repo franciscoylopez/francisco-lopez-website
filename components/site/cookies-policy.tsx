@@ -32,6 +32,17 @@ export function CookiesPolicy({
   const t = dict;
   return (
     <>
+      {/* ESTA APERTURA NO LLENA EL PLIEGUE, al contrario que Brand Kit, Design
+          System, Accesibilidad y el deep-dive. No es un olvido de P54: se midió y
+          se decidió que no. Su encabezado son 252px de contenido —título, fecha y
+          entradilla, sin ilustración ni fila de datos—, así que estirarlo a los
+          1.000px del pliegue dejaría 539px de aire, más del doble de lo que hay
+          dentro. Las otras cuatro llevan ~600 de contenido y ~300 de aire.
+
+          Y hay un motivo de uso además del de proporción: esto es un documento
+          que se CONSULTA, y el lector viene a por la tabla. Retrasarla una
+          pantalla para que la portada respire es cambiar su trabajo por
+          simetría. */}
       <section className="py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)]">
         <div className={WRAP}>
           <div data-reveal className="mb-[clamp(2.5rem,5vw,3.5rem)]">
@@ -58,9 +69,21 @@ export function CookiesPolicy({
             </p>
           </header>
 
-          <div
-            className={`mt-[clamp(2.5rem,5vw,3.5rem)] flex flex-col gap-[clamp(2rem,4vw,3rem)] ${PROSE}`}
-          >
+          {/* EL CUERPO VA A ANCHO DE CONTENEDOR, NO A LA MEDIDA DE LECTURA.
+              Esta página era la última que quedaba con todo el cuerpo dentro de
+              `PROSE` (42rem, el 52% del contenido), y a lo largo de una página
+              entera eso no se lee como columna de lectura: se lee como media
+              página vacía. Es la misma corrección que ya se hizo en Sobre mí
+              (2026-08-16) y en el deep-dive (D53), donde quedó escrito que la
+              media columna es el tratamiento de las ENTRADAS y los CIERRES, no
+              del cuerpo. Medido: los párrafos del deep-dive van a 1.280px y
+              aquí iban a 672.
+
+              Se quedan en `PROSE` los dos bloques que Francisco señaló, y son
+              justamente esos dos: la apertura de arriba y el Contacto del final.
+              La tabla es la que más gana — cinco columnas en 42rem estrangulaban
+              la de propósito, que es la única con frases. */}
+          <div className="mt-[clamp(2.5rem,5vw,3.5rem)] flex flex-col gap-[clamp(2rem,4vw,3rem)]">
             {/* Qué son */}
             <Section heading={t.whatHeading}>
               <p>{t.whatBody}</p>
@@ -75,10 +98,14 @@ export function CookiesPolicy({
                   `Th`/`Td` locales. Sale de la capa como las demás. */}
               <DataTable
                 caption={t.useHeading}
-                // Sin anchos: en una columna de lectura de 42rem, cinco columnas
-                // repartidas a porcentaje estrangulan la de propósito —que es la
-                // única con frases— y parte cada una en palabras sueltas. Aquí
-                // reparte el navegador por contenido, y el suelo lo pone `minWidth`.
+                // Sin anchos: reparte el navegador por contenido, que con cinco
+                // columnas y una sola de frases (propósito) sale mejor que cualquier
+                // porcentaje. El `minWidth` sigue haciendo falta, pero YA NO por lo
+                // que decía este comentario: desde que el cuerpo va a ancho de
+                // contenedor (P54.2) la tabla mide 1.278px y no lo necesita en
+                // escritorio. Lo necesita en MÓVIL, donde cinco columnas en 350px se
+                // convertirían en palabras sueltas — medido: con el suelo, la tabla
+                // mide 572 y scrollea, que es lo correcto.
                 cols={[
                   { label: t.table.name },
                   { label: t.table.provider },
@@ -164,8 +191,10 @@ export function CookiesPolicy({
               <p>{t.changesBody}</p>
             </Section>
 
-            {/* Contacto */}
-            <Section heading={t.contactHeading}>
+            {/* Contacto — CIERRE, así que vuelve a la medida de lectura, igual
+                que la apertura. Es el segundo de los dos bloques que se quedan
+                estrechos. */}
+            <Section heading={t.contactHeading} prose>
               <p>
                 {t.contactBody}{" "}
                 <a
@@ -187,12 +216,15 @@ export function CookiesPolicy({
 function Section({
   heading,
   children,
+  prose,
 }: {
   heading: string;
   children: React.ReactNode;
+  /** Solo para el cierre: lo devuelve a la medida de lectura. */
+  prose?: boolean;
 }) {
   return (
-    <section data-reveal>
+    <section data-reveal className={prose ? PROSE : undefined}>
       <h2 className="font-display m-0 mb-3 text-[clamp(1.35rem,2.4vw,1.65rem)] leading-[1.2] font-semibold tracking-[-0.015em]">
         {heading}
       </h2>
