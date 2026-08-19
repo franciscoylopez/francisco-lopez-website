@@ -237,19 +237,28 @@ scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio s
 
 ## Documentación
 
-El «porqué» vive en documentos dedicados, y están partidos por una regla: **las reglas activas se leen siempre; la historia y el detalle exhaustivo, a demanda.**
+El «porqué» vive en documentos dedicados, partidos por una regla que **no es de estilo sino de coste**: lo que se lee en cada sesión de trabajo se paga en cada sesión de trabajo. Así que solo las **reglas activas** están siempre delante; la **historia** y el **detalle exhaustivo** se consultan cuando hacen falta.
+
+**Siempre cargados.** Son las reglas que aplican al escribir código, y su peso conjunto tiene techo medido en CI (`npm run check:contexto`): si crecen, el build falla y hay que retirar algo, no subir el techo.
 
 | Documento | Qué contiene |
 | :-- | :-- |
-| [PRD-Live.md](./PRD-Live.md) | Spec viva: qué es el producto hoy y qué tiene que cumplir |
-| [PRD-Historical.md](./PRD-Historical.md) | Registro fechado de decisiones de producto, diseño y alcance |
-| [DECISIONS.md](./DECISIONS.md) | Decisiones técnicas del build (ADR-lite), numeradas y fechadas |
+| [CLAUDE.md](./CLAUDE.md) | Convenciones de código (i18n, tokens, a11y, SEO), la regla de construcción y la **Definition of Done** por sección |
 | [BRAND.md](./BRAND.md) | Sistema de marca: reglas siempre activas (color, tipografía, tokens, a11y) |
-| [BRAND-historical.md](./BRAND-historical.md) | El porqué fechado de esas reglas: qué se probó y qué falló antes |
-| [BRAND-logo.md](./BRAND-logo.md) | Enciclopedia del logo y la firma split |
-| [CLAUDE.md](./CLAUDE.md) | Convenciones de código (i18n, tokens, a11y, SEO) y la regla de construcción |
-| [LICENSE](./LICENSE) | Público para consulta, no código abierto: todos los derechos reservados |
+| [PRD-Live.md](./PRD-Live.md) | Spec viva: qué es el producto **hoy** y qué tiene que cumplir |
 | [AGENTS.md](./AGENTS.md) | Aviso: este Next tiene breaking changes; leer los docs del paquete antes de tocar APIs |
+
+**A demanda, con índice.** Aquí vive el porqué completo: qué se probó, qué se descartó y qué falló antes de que cada regla quedara escrita. No se cargan nunca enteros, y por eso **los tres llevan índice derivado de sus propias cabeceras** — un archivo de 46.000 palabras sin índice es inservible, y con índice está bien. Los genera `npm run indices` y los vigila `check:indices`: no se escriben a mano, así que no pueden mentir sobre lo que hay dentro.
+
+| Documento | Qué contiene | Su índice |
+| :-- | :-- | :-- |
+| [DECISIONS.md](./DECISIONS.md) | Las decisiones técnicas del build (ADR-lite), numeradas y fechadas | En `CLAUDE.md`: se lo gana, porque el código las cita por número |
+| [PRD-Historical.md](./PRD-Historical.md) | Registro fechado de decisiones de producto, diseño y alcance | En su cabecera |
+| [BRAND-historical.md](./BRAND-historical.md) | El porqué fechado de las reglas de marca | En su cabecera |
+
+**Y dos que no son ninguna de las dos cosas:** [BRAND-logo.md](./BRAND-logo.md), la enciclopedia del logo y la firma split, y [LICENSE](./LICENSE) — público para consulta, no código abierto: todos los derechos reservados.
+
+**Nada tiene copia en otro sitio.** El repositorio es la única fuente de la documentación: no hay espejos, y los índices se derivan en vez de escribirse. Es la misma regla que gobierna el código de este sitio —una cosa, un sitio— aplicada a lo que se dice sobre él, y por el mismo motivo: *la misma cosa escrita en dos sitios acaba diciendo dos cosas.*
 
 ## Despliegue
 
