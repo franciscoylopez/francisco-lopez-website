@@ -68,6 +68,36 @@ Y tres más, heredados:
 
 ---
 
+## Fase −1 — Pasar antes el filtro mecánico (`/web-design-guidelines`)
+
+> **Va DELANTE y no dentro** *(2026-08-19)*. Es un checklist mecánico y esta revisión es
+> criterio: el filtro barato primero, para que el caro no gaste su atención en un
+> desbordamiento de texto. Y **se mantienen separadas** — fusionarlas crearía la copia que
+> prohíbe `BRAND.md` §Cómo se escribe una regla (5), e impediría que las reglas de Vercel se
+> actualicen solas sin tocar las nuestras.
+
+Dispara `/web-design-guidelines` sobre los archivos de la sección o página en revisión, y
+**resuelve o tarea sus hallazgos antes de seguir**. Cubre catorce familias que nuestro
+sistema **no codifica**: estados vacíos, desbordamiento de texto, hidratación, cifras
+tabulares, safe areas, `touch-action`, `overscroll-behavior`, `translate="no"`, formatos de
+fecha y número con `Intl`, y los antipatrones (`transition: all`, `outline-none` huérfano,
+`<div onClick>`, bloqueo de zoom).
+
+**Dos cosas al usarla:**
+
+- **Descarga sus reglas de la red en cada pasada.** Eso es bueno —se actualizan solas— y
+  tiene su precio: una revisión no es reproducible sin conexión. Si el barrido no puede
+  traerlas, dilo en la salida en vez de dar la fase por pasada.
+- **Tría con la regla del ruido de validadores** (D67): verifica cada hallazgo contra el
+  código **antes** de tarearlo, y documenta lo descartado **con su mecanismo, nunca con su
+  cifra**. En la primera pasada completa (2026-08-19), de seis hallazgos uno era falso
+  positivo — `safe-area-inset` ya estaba donde importaba— y las cifras del informe caducan.
+
+Y una trampa concreta que ya apareció: la guía pide `preconnect` a los dominios de assets.
+**A `youtube-nocookie` no**, porque sería exactamente la petición que el facade existe para
+evitar (D55). Una regla general puede contradecir una decisión tomada; gana la decisión, y
+se anota aquí.
+
 ## Fase 0 — Cruzar las cuatro fuentes (antes de mirar un solo componente)
 
 `BRAND.md` estableció que este es el primer chequeo de la revisión de diseño, y por un
