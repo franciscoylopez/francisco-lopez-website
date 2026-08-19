@@ -3079,7 +3079,7 @@ fecha corregida. Mover cuatro campos fuera de los **diez** diccionarios del deep
 
 ---
 
-## D59 · El SEO del deep-dive, y las tres listas de páginas escritas a mano — 2026-08-18
+## D59 (completado por D72) · El SEO del deep-dive, y las tres listas de páginas escritas a mano — 2026-08-18
 
 **Contexto.** Las seis páginas nuevas activan el criterio de cierre de `CLAUDE.md` («SEO y datos
 estructurados por página, no un extra»). Al ir a cumplirlo apareció que el mismo dato —**qué
@@ -3866,3 +3866,51 @@ Tres técnicas, y las tres salieron de que las dos hipótesis previas eran erró
 **Lo que esto le añade al punto 12 de `sprint-review`**, que se escribió el mismo día y sin nada
 que leer: ya tiene sus tres cifras de referencia, y su pregunta 4 («¿sigue midiendo bien el
 instrumento?») tiene ahora un procedimiento en vez de una intuición.
+
+## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
+
+**El hueco.** El mismo dato —qué páginas hay— estaba escrito **a mano en tres sitios**:
+`app/sitemap.ts`, `scripts/page-html-diff.ts` y `app/llms.txt/route.ts`. Y no había red debajo:
+`pageMetadata` aceptaba `slug?: string` libre, así que el typecheck tampoco obligaba a registrar
+nada.
+
+**Ninguna de las tres falla de forma visible**, que es lo que las hacía peligrosas juntas: la
+página no existe para Google, el gate de HTML deja de cubrirla **en silencio** —y es, según el
+PRD, el gate que más ha cazado— y no aparece en el índice para modelos. «Una lista incompleta no
+es un error de compilación» son las palabras de **D59**, que nombró esto el 2026-08-18 y arregló
+solo la mitad: las páginas del deep-dive pasaron a derivarse de `EXPERIENCES` y las estáticas se
+quedaron copiadas en las tres listas.
+
+**Decisión — tres piezas, y la primera es la que más se puede malinterpretar.**
+
+1. **`lib/routes.ts` es la lista.** Las estáticas **siguen siendo una constante escrita a mano**,
+   y no por comodidad: ninguna de las tres consumidoras puede leer el sistema de archivos —dos
+   corren dentro del bundle—, así que no hay forma de derivarlas en tiempo de ejecución. Lo que
+   cambia es que ahora hay **una** en vez de tres, y que tiene dos guardianes encima. Las del
+   deep-dive no se escriben en ninguna parte: salen de `EXPERIENCES`, la fuente de
+   `generateStaticParams` (D44).
+2. **`npm run check:rutas`, en CI.** Contrasta el registro con `app/[lang]/**/page.tsx` —el único
+   sitio donde una página existe de verdad— **en los dos sentidos**, y comprueba además que las
+   tres consumidoras sigan leyendo de ahí: el tipo impide olvidar una página, no impide que
+   alguien vuelva a escribir una lista a mano al lado. Un segmento dinámico que no sepa expandir
+   **lo dice** en vez de ignorarlo, porque un dinámico sin expandir son páginas que nadie está
+   contando.
+3. **`pageMetadata` pide `PageSlug`**, la unión derivada del registro. Añadir una página sin
+   registrarla deja de ser un hallazgo de auditoría y pasa a ser un **error del compilador**. En
+   la ruta del deep-dive el estrechamiento lo hace un guardián de tipo (`isExperienceSlug`) y no
+   un `as`: afirmarlo habría sido volver al problema con otra forma.
+
+**Validado rompiéndolo por las cuatro puntas**, que es la regla del proyecto: quitar «cookies»
+del registro → código 1 nombrándola; añadir una fantasma → código 1 nombrándola; quitarle a
+`sitemap.ts` el import del registro → código 1 nombrando el archivo y qué se rompe; y
+`const SLUG = "cookies-nueva"` → `error TS2322: Type '"cookies-nueva"' is not assignable to type
+'PageSlug'`. Afirma cuánto ha mirado —12 rutas en disco · 12 en el registro · 3 consumidoras— y
+falla al mirar cero.
+
+**Y la transparencia se midió, no se afirmó:** la salida de `sitemap()` y el texto entero de
+`/llms.txt` son **byte a byte idénticos** antes y después del refactor.
+
+**Estado:** CI pasa de doce a **catorce** pasos (`check:rutas` y `check:guardianes`, este último
+por P54.96). Los guardianes con caso malo pasan de siete a **nueve**: `check:experiencias`
+—descubierto, y el que sostiene una exclusión de `.qlty/qlty.toml`— y `check:rutas`, que entra
+con el suyo desde el primer día.
