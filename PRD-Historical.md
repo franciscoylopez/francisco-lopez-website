@@ -2030,6 +2030,35 @@ de D40** y nadie lo había visto— gana su guardián.
 una nota, no una regla.* D28 escribió el régimen y no le puso ninguna de las dos, así que
 se cumplió exactamente cuatro días.
 
+### Lo retirado de `CLAUDE.md`, y por qué era historia
+
+La DoD entró en `CLAUDE.md` y `check:contexto` saltó al instante: 16.003 palabras contra
+un techo de 16.000. Funcionó como estaba pensado, así que **se pagó retirando, no subiendo
+el techo** — que es la primera vez que este método ejecuta esa operación por obligación y
+no por criterio. Lo retirado, íntegro:
+
+> *(Aclarado 2026-07-24: antes esta regla mandaba renumerar siempre en vez de meter
+> decimales; se relaja porque renumerar decenas de tareas por un solo insert es
+> desproporcionado.)*
+
+> *(Añadido 2026-07-27: se construyó la home entera saltándose la P11.5 —conectar Vercel,
+> de prioridad anterior— y sin ir moviendo Estados; el tablero quedó desincronizado de la
+> realidad y hubo que reconstruir el mapeo a posteriori. La disciplina no es burocracia: es
+> lo que mantiene el tablero como fuente fiable de en qué punto está el proyecto.)*
+
+> **Modelo actualizado (2026-08-01): sin fechas.** Se dejaron los sprints datados —eran
+> ficción, vamos más rápido que cualquier calendario y no hay equipo que coordinar—. El
+> campo pasó a `Etapa`.
+
+> **Qué significa `Etapa` (revisado el 2026-08-10).** Dejó de ser una lista de fases
+> temáticas —había degenerado: 16 de 20 tareas abiertas estaban en «Optimización», así que
+> el eje ya no discriminaba nada— y pasa a contestar una sola pregunta.
+
+En los cuatro casos la REGLA se queda en `CLAUDE.md` y lo que baja aquí es el RELATO de
+cómo se llegó a ella. Es el criterio del paso 1 bis de `close-session`: si una frase lleva
+fecha, o cuenta lo que se probó y se descartó, no es de un documento en presente.
+
+
 ### Lo retirado de `PRD-Live.md` §4 y §5, íntegro
 
 

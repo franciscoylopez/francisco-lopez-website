@@ -79,10 +79,48 @@ módulo caduca igual que una skill y nadie lo relee. En esta misma sesión, `scr
 seguía anunciando que leía «periodos y roles» del diccionario meses después de dejar de
 hacerlo.
 
+## Paso 1 bis · Y ahora al revés: ¿qué se puede RETIRAR?
+
+> **Este paso existe porque el que faltaba era este.** El análisis de metodología del
+> 2026-08-19 lo dejó en una frase: *este método tiene una operación de añadir excepcional
+> y no tiene operación de retirar*. Cada fallo se convierte en regla, cada regla en
+> guardián, cada guardián en párrafo — sesenta y ocho veces, que es más de lo que hace
+> casi nadie. Pero nada se colapsa nunca, y esta skill era el sitio donde se notaba:
+> preguntaba qué documento hay que actualizar y **nunca** qué documento se puede colapsar.
+>
+> Lo que produjo esa asimetría, medido: `PRD-Live.md` con 40 fechas y 67 D-refs pese a
+> declararse present-tense; el contexto `@`-importado duplicado en diez días; y un 19 de
+> agosto con 941 líneas de markdown añadidas y 252 retiradas. Los documentos eran el único
+> artefacto del repo sin compactación — el diccionario se partió (D48), los showcase se
+> partieron (D42), `BRAND.md` se partió una vez y duró cuatro días.
+
+Antes de proponer nada, contesta estas tres. **Con «no» explícito si es que no**: la
+respuesta silenciosa es la que dejó crecer el contexto un 113%.
+
+1. **¿Algo de lo escrito hoy SUSTITUYE a un párrafo que ya está**, en vez de añadirse a su
+   lado? Una cifra corregida se sustituye en todos los párrafos que la citan; una nota
+   fechada al pie no corrige el texto de arriba (`BRAND.md` §Cómo medir sin equivocarse, 6).
+2. **¿Algún párrafo FECHADO de `PRD-Live.md` o `BRAND.md` ya es historia?** Si una frase
+   lleva fecha, o cuenta lo que se probó y se descartó, no es de un documento en presente:
+   su sitio es `PRD-Historical.md` o `BRAND-historical.md`, que van a demanda y por tanto
+   no cuestan tokens por sesión.
+3. **¿Alguna regla ha quedado escrita en DOS de los `@`-importados?** La misma decisión en
+   dos sitios acaba diciendo dos cosas (`BRAND.md` §Cómo se escribe una regla, 5). Ahí va
+   el puntero y el porqué específico, nunca la copia.
+
+Y el número: **`npm run check:contexto`**. Publica el peso de los cuatro `@`-importados,
+su techo y la distancia al objetivo. Si el total ha subido respecto a la sesión anterior
+sin que haya entrado una regla nueva de verdad, es que se ha añadido donde tocaba
+sustituir.
+
 ## Paso 2 · Propón antes de aplicar
 Preséntale a Francisco la **lista de actualizaciones propuestas** (qué documento, qué
 añadir/cambiar) para que confirme, corrija o añada lo que falte. Así no se te escapa
 nada ni escribes de más.
+
+**La lista lleva las dos columnas: lo que se AÑADE y lo que se RETIRA.** Una propuesta de
+cierre en la que la segunda columna está siempre vacía es la señal de que el paso 1 bis se
+ha contestado por inercia.
 
 ## Paso 3 · Aplica
 1. **Repo**: edita `PRD-Live.md` / `PRD-Historical.md` / `DECISIONS.md` / `README.md` /
