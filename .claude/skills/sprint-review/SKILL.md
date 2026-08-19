@@ -77,10 +77,13 @@ una etapa no se cierra sin haberlas escrito.
 4. **¿Sigue midiendo bien el instrumento?** Esta es la que faltó y la que costó caro. P31
    (el dashboard) se cerró el 2026-08-03 con dos de sus tres tiles en «No hay datos» y una
    nota que lo daba por **esperado** — «GA4 tarda 24-48h en procesarlo». Nadie volvió a
-   mirar: dieciséis días después seguían vacíos, porque el tag de GA4 que traduce el evento
-   `contact_click` nunca se había creado en GTM. *Una tarea de medición que se cierra sobre
-   una predicción en vez de sobre una verificación no ha medido nada.* Si un scorecard está a
-   cero, la primera hipótesis es **el instrumento**, no la audiencia.
+   mirar. *Una tarea de medición que se cierra sobre una predicción en vez de sobre una
+   verificación no ha medido nada.* Y al abrirlo el 2026-08-19, la causa **no era** la que se
+   suponía: el tag de GA4 estaba publicado desde el primer día y la medición llevaba dieciséis
+   días funcionando. Lo roto eran los **filtros de los propios scorecards**, con el valor vacío.
+   Si un scorecard está a cero, la primera hipótesis es **el instrumento**, no la audiencia — y
+   dentro del instrumento, el **filtro del tile** antes que la instrumentación aguas arriba. El
+   procedimiento de verificación, en `DECISIONS.md` **D71**.
 
 Herramientas: `Bash`/`Grep`/`Glob` para el barrido; `Read` para los archivos grandes y los
 puntos de entrada (routing, layout, `lib/`); cruza con `PRD-Live.md` / `PRD-Historical.md` /
