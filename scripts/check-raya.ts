@@ -41,17 +41,18 @@ const RAIZ = process.cwd();
 
 /** Dónde vive el copy que se sirve. */
 const DICCIONARIOS = "app/[lang]/dictionaries";
-const COPY_TS = [
-  "content/experience-copy/es.ts",
-  "content/experience-copy/en.ts",
-  // El copy de las páginas-sistema (404 y error). Vive fuera del diccionario A
-  // PROPÓSITO —el error boundary es cliente y no puede depender de `getDictionary`,
-  // que es server-only (D22/D25)—, y por eso mismo se escapó del primer barrido:
-  // el guardián no cubría la excepción que el sistema ya tenía documentada.
-  "lib/i18n/system-messages.ts",
-  // El `<title>` del 404, que también se escribe aquí y no en el diccionario.
-  "app/global-not-found.tsx",
-];
+
+// El copy NO vive solo en el diccionario, y ENUMERAR dónde más vive fue el error: una
+// lista de archivos solo cubre los que alguien se acordó de apuntar. Se escapó
+// `lib/i18n/system-messages.ts` —el copy de las páginas-sistema, que vive fuera del
+// diccionario A PROPÓSITO porque el error boundary es cliente y no puede depender de
+// `getDictionary`, que es server-only (D22/D25)— y con él el `<title>` del 404. O sea:
+// el guardián no cubría la excepción que el propio sistema tenía documentada.
+//
+// Así que se RECORREN las fuentes enteras, como hace `check-palette.ts`: un archivo de
+// copy nuevo entra solo. `scripts/` queda fuera a propósito — no sirve copy, y las
+// rayas de ESTE archivo (la regex del ordinal, los mensajes de error) son código.
+const FUENTES = ["app", "components", "lib", "content"];
 
 /** El ordinal de una cabecera numerada: `01 — Rejilla` (D43). */
 const ORDINAL = /^\d{2} — /;
@@ -65,6 +66,21 @@ const hallazgos: Hallazgo[] = [];
 let archivos = 0;
 let cadenas = 0;
 let permitidas = 0;
+
+/** Todo `.ts`/`.tsx` bajo FUENTES. Denylist, no allowlist: lo nuevo entra solo. */
+function fuentesTs(): string[] {
+  const out: string[] = [];
+  const baja = (dir: string) => {
+    for (const entrada of readdirSync(join(RAIZ, dir), { withFileTypes: true })) {
+      if (entrada.name.startsWith(".") || entrada.name === "node_modules") continue;
+      const rel = `${dir}/${entrada.name}`;
+      if (entrada.isDirectory()) baja(rel);
+      else if (/\.tsx?$/.test(entrada.name)) out.push(rel);
+    }
+  };
+  FUENTES.forEach(baja);
+  return out;
+}
 
 function jsonsDe(dir: string): string[] {
   const out: string[] = [];
@@ -106,7 +122,7 @@ function recorre(valor: unknown, ruta: string, archivo: string) {
 // --- Las rutas existen ANTES de recorrer nada. Sin esto, mover el diccionario
 //     hace que el check reviente con un stack trace: falla, sí, pero no dice por
 //     qué, y «no encuentro la carpeta» y «no hay rayas» tienen que distinguirse.
-const perdidas = [DICCIONARIOS, ...COPY_TS].filter(
+const perdidas = [DICCIONARIOS, ...FUENTES].filter(
   (p) => !existsSync(join(RAIZ, p)),
 );
 if (perdidas.length) {
@@ -126,10 +142,12 @@ for (const f of jsonsDe(join(RAIZ, DICCIONARIOS))) {
   recorre(JSON.parse(readFileSync(f, "utf8")), "", rel);
 }
 
-// --- Copy por experiencia: son `.ts`, así que se leen SOLO los literales entre
-//     comillas dobles. Las rayas de sus comentarios son código y no cuentan.
+// --- Fuentes `.ts`/`.tsx`: se leen SOLO los literales entre comillas dobles. Las
+//     rayas de los comentarios son código y no cuentan, y las de un TEMPLATE literal
+//     tampoco se miran: sin resolver, el ordinal de D43 —que es legal— no se distingue
+//     de una raya cualquiera, así que mirarlas inventaría un incumplimiento.
 const LITERAL = /"((?:[^"\\]|\\.)*)"/g;
-for (const rel of COPY_TS) {
+for (const rel of fuentesTs()) {
   archivos++;
   const texto = readFileSync(join(RAIZ, rel), "utf8");
   texto.split("\n").forEach((linea, i) => {

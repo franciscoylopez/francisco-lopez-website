@@ -519,11 +519,27 @@ tareas cerradas:
   pliegue por medición** (252px de contenido contra 539 de aire) pero **su cuerpo sale de la media
   columna**, que era la última página con todo dentro de `PROSE`.
 - La capa de componentes gana su **séptima pieza**, `stat-row.tsx`.
+- **El repositorio es PÚBLICO y `main` la protege el servidor** (D68), no la disciplina: ni push
+  directo, ni merge con CI en rojo, ni bypass de admin. Antes era imposible —en plan Free un repo
+  privado no admite protección de rama—, así que la tarea no era configurar sino **decidir**. El
+  paso previo fue **auditar los 293 commits**: cero secretos, y el riesgo real resultó ser
+  editorial. Con él llegan el **README de portada**, un **`LICENSE`** explícito («público para
+  consulta, no código abierto») y el **enlace al repo en el footer**, que trae el segundo icono
+  propio y mete el repo en el `sameAs` del JSON-LD.
+- **El ruido conocido de los validadores queda documentado** (D67): de ~11 hallazgos externos,
+  seis eran falsos positivos. **Se documenta el mecanismo y el comando para recontar, nunca la
+  cifra** — porque al verificarlos, *todas* las cifras apuntadas estaban viejas.
 
-**Quedan dos, y las dos son de otra naturaleza:** hacer el **repo público y proteger `main`** —hoy
-imposible, porque en plan Free un repo privado no admite protección de rama, y el paso de
-publicarlo es irreversible en la práctica— y **documentar qué avisos de validador son ruido
-conocido**, que es la tarea que evita que los mismos falsos positivos se reabran por tercera vez.
+**EL SPRINT SE CIERRA EL 2026-08-19 CON 12 DE 12 Y EN PRODUCCIÓN** (PR #112 y #115 por rebase,
+#116 por squash). Su última tarea la encontró **verificar producción** y no el estado del
+despliegue: el `<title>` del 404 servía `404 — Francisco López`, con raya, el mismo día que se
+desplegaba el guardián que la prohíbe. La causa era la **allowlist** de `check:raya`, que no
+cubría `lib/i18n/system-messages.ts` —el único copy que vive fuera del diccionario a propósito,
+por D22/D25—. Al cerrar el sprint, el guardián deja de enumerar archivos y **recorre las fuentes**
+como `check-palette.ts`: pasa de 32 archivos y 2.649 cadenas a **135 y 5.557**, y a la primera
+encontró **dos violaciones más en el contenido del CV**, donde la web ya decía `·` y el PDF
+seguía diciendo raya. *Un guardián que afirma cuánto ha mirado sigue sin decir qué dejó FUERA de
+su lista.*
 
 **Traducción de contenido nuevo a EN**: la arquitectura i18n ya está; la traducción se hace a
 medida que se añade contenido, revisando el EN contra el ES y no al revés (D20).

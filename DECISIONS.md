@@ -3592,3 +3592,57 @@ con endpoint externo (P67), o cuando llegue la IA conversacional de la V4.
 o contra el HTML servido.** De once, seis no lo sobrevivieron. Es `BRAND.md` §Cómo se escribe una
 regla, punto 3 —«valida el metro antes de creerte el hallazgo»— aplicado a metros que no son
 nuestros.
+
+---
+
+## D68 · El repositorio es público, y a `main` la protege el servidor y no la disciplina — 2026-08-19
+
+**Contexto.** GitHub avisó de que la rama principal no estaba protegida, y al ir a configurarlo
+los dos caminos —`branches/main/protection` y `rulesets`— devolvían **403 con el mismo mensaje**:
+«Upgrade to GitHub Pro or make this repository public». En plan Free, un repo **privado** no
+admite ni protección de rama ni rulesets. Así que la tarea no era configurar: **era decidir**, y
+la decisión —hacerlo público— es irreversible en la práctica, porque queda cacheado y clonado.
+
+**El paso previo no se salta: auditar el historial ENTERO, no el árbol de trabajo.** Sobre los 293
+commits: **cero** claves fuertes (`sk-`, `ghp_`, `AKIA`, `AIza`, PEM, `xox`, Bearer), cero
+asignaciones tipo `SECRET=`/`API_KEY=`, ningún `.env` commiteado —solo `.env.example`, plantilla
+íntegra— y **el CI no usa ni un secret**, así que funciona igual en público (y Actions es gratis
+ahí). Los IDs de **GTM y Clarity**, que era lo que había que mirar por ser lo que más se parece a
+una credencial sin serlo, **ni siquiera están en el repo**: viven en variables de Vercel.
+
+**Y el riesgo real no era el que la tarea anticipaba: era editorial.** Publicar el repo publica
+`PRD-Historical.md`, y ese documento **registraba lo que se había decidido no contar en el
+sitio** — o sea, lo republicaba. Tres pasajes, redactados antes de cambiar la visibilidad. La
+regla que queda: **un documento que registra qué se retiró por discreción lo vuelve a publicar**,
+y es la línea de discreción de §42 aplicada al propio repositorio. *(El texto viejo sigue en el
+historial: purgarlo exigía reescribir los 293 commits y romper los PRs abiertos, y se decidió que
+tres párrafos de un doc de proceso no lo justifican. La alternativa se evaluó, no se ignoró.)*
+
+**La protección, y por qué cada regla es la que es.** Ruleset «main protegida» sobre
+`~DEFAULT_BRANCH`: `pull_request` con **0 aprobaciones requeridas** —Francisco trabaja solo y no
+puede aprobar su propio PR; pedir 1 bloquearía el repo entero, y el PR obligatorio ya impide el
+push directo, que es lo que importa—, `required_status_checks` con **`calidad y build`**,
+`deletion` y `non_fast_forward`. `allowed_merge_methods` = **squash y rebase**, que es **D12
+escrita en el servidor** en vez de en un documento. **Sin bypass de admin**
+(`current_user_can_bypass: "never"`).
+
+**Validado disparándolo, no leyendo el panel:** un push directo a `main` con un commit real —no
+`--dry-run`— sale rechazado con `GH013` citando las dos reglas por su nombre, y `main` no se
+mueve; un PR con CI en rojo da `BLOCKED` con `mergeable=MERGEABLE`, o sea bloqueado **solo** por
+la regla; y Vercel siguió desplegando tras el cambio de visibilidad.
+
+**La contrapartida, que hay que saber antes de necesitarla:** sin bypass, un arreglo de emergencia
+en `main` pasa por **editar el ruleset**, no por forzar el push. Y hay un efecto de segundo orden
+que sí mordió: los PRs abiertos de antes llevaban el **nombre viejo** del job de CI, así que
+ninguno tenía el check requerido y **las cinco actualizaciones de Dependabot quedaron bloqueadas**
+hasta rebasarlas. *Cambiar el nombre de un check requerido invalida en silencio todo PR abierto.*
+
+**Y con el repo público llegan tres piezas que antes no tenían sentido.** El **README** deja de
+ser documentación interna y pasa a ser portada —era buena para quien ya estaba dentro y mala para
+quien llega: 172 líneas sin una imagen y el mapa del repo en un muro de 60—. El **`LICENSE`** hace
+explícito lo que por defecto ya era: **público para consulta, no código abierto**, enumerando lo
+que más se copia (marca y kit, textos ES/EN, fotos, vídeo y CV) porque un aviso genérico no
+protege lo que nadie identifica como protegible. Y el **enlace al repo en el footer**, que antes
+habría dado un 404 al que lo pulsara, trae el **segundo icono propio** —lucide retiró `Github` en
+la v1.24 por marca registrada, el supuesto que `BRAND.md` §Iconos propios nombra— y mete el repo
+en el **`sameAs`** del JSON-LD, que es el consumidor que no se ve mirando la página (D66).

@@ -14,7 +14,7 @@ export const content: CvContent = {
     profile: "Profile",
     milestones: "Highlights",
     experience: "Experience",
-    previous: "Earlier experience — Marketing & Growth",
+    previous: "Earlier experience · Marketing & Growth",
     education: "Education",
     skills: "Skills",
     toolkit: "Toolkit",
