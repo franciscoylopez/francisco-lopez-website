@@ -1832,6 +1832,90 @@ Las doce páginas por idioma en producción y verificadas. Etapa Deep-dive cerra
 archivadas, 1 descartada, cero abiertas**. Queda por decidir la apertura de la etapa siguiente,
 *Cómo se ha creado*, cuyas siete tareas siguen en «Sin empezar».
 
+## 50. El Sprint Lite: nueve iniciativas sueltas, y la homogeneidad como criterio (2026-08-18/19)
+
+Entre el sprint del deep-dive y el de «Cómo se ha creado» se intercala una tanda corta. El motivo
+lo dio Francisco: el siguiente sprint es de contenido y por tanto largo, y estas cosas no
+dependían de él. Trajo **nueve iniciativas sin tarear** en una página de Notion.
+
+### Lo primero fue verificarlas, y de nueve salieron cinco
+
+Antes de abrir tareas se comprobó cada punto contra el código, y el saldo fue este:
+
+- **Dos eran falsos positivos** de un SEO tool: «la mayoría de imágenes no tienen `alt`» y «la
+  mayoría de enlaces no tienen `title`». Las siete imágenes del sitio llevan `alt` (las dos vacías
+  son decorativas a propósito), los controles solo-icono llevan `aria-label`, y el `title` en
+  enlaces no lo pide WCAG y está desaconsejado. **Y ya estaban documentados**: son literalmente el
+  punto 5 de las notas de P71, verificado el 2026-08-10 y nunca escrito en `DECISIONS.md`. La
+  tarea que existe para que ese ruido no se reabra se reabrió sola en ocho días, lo que es el
+  mejor argumento posible para cerrarla.
+- **Dos pertenecían a P59.5** (la fila de datos del Brand Kit y el ancho de Cookies tocan las
+  mismas aperturas), así que se agruparon con ella en vez de duplicarse.
+- **Las cinco restantes** se tarearon como Sprint Lite, con prioridades 51 a 54.7 para que fueran
+  por delante del sprint 2.
+
+*El patrón, otra vez: verificar antes de tarear ahorró cuatro tareas de nueve.*
+
+### Un bug en producción que ningún gate podía ver
+
+Diez rutas —los cinco deep-dive × dos idiomas— servían el 404 pelado de Next. La causa es de
+contrato, no de implementación: `global-not-found` cubre las URLs que no casan con **ninguna**
+ruta, y `/trayectoria/loquesea` sí casa con `[slug]`. Ningún gate lo veía porque ninguno pide
+una URL que no existe. Detalle en **D62**.
+
+### La raya: cuando quitar un signo es una decisión de contenido
+
+Francisco: la raya doble es una señal visual de texto escrito por IA. Eran **357** apariciones, y
+lo que hizo el trabajo no fue el barrido sino **clasificarlas**: los parentéticos se reescriben,
+los separadores cambian de signo, los rangos de fecha piden un signo distinto del que se había
+elegido, y dos familias se quedan. Se cerró con una regla en `CLAUDE.md` y un guardián en CI,
+porque un barrido de copy sin regla se deshace solo — y el sprint siguiente es el que más copy
+nuevo escribe del proyecto. Detalle en **D63**.
+
+### La homogeneidad, que costó tres pasadas y es el criterio que se queda
+
+El trabajo de las aperturas empezó como «que la apertura ocupe el pliegue» y acabó siendo otra
+cosa. El pliegue se resolvió a la primera; lo que costó tres rondas fue que **las tres páginas
+hermanas se vieran iguales**. Y las tres rondas las abrió Francisco haciendo algo que ninguna
+medición hace sola: **abrir las páginas seguidas y compararlas**.
+
+Sus tres reportes fueron ciertos y ninguno era lo que se había supuesto: el eyebrow desalineado no
+lo causaba el centrado recién añadido sino el `items-center` de la fila con una ilustración más
+alta que el texto —y venía de antes—; la fila de datos a distinta altura la decidía la
+ilustración mientras fuera la más alta; y al final el grupo se centra, como `/trayectoria`, que es
+lo que él pidió al compararlas. Detalle y cifras en **D64**.
+
+De ahí salen dos frases que conviene guardar como criterio y no como anécdota:
+
+> **«No se trataría de hacer las imágenes más pequeñas sino de compactar los diferentes
+> elementos.»** (Francisco, sobre una ilustración demasiado alta.)
+
+> **Si un anclaje «arregla» una inconsistencia, probablemente esté tapando la causa.**
+
+Y su valoración al cerrarlo, que fija el criterio hacia delante: *«este es el trabajo de
+homogeneidad que me gusta y que deberíamos seguir»*.
+
+### Lo que se decidió NO hacer, y con qué medida
+
+- **Cookies no lleva el tratamiento de pliegue.** Su encabezado son 252px de contenido —sin
+  ilustración ni fila de datos—, así que llenar los 1.000 del pliegue dejaría 539px de aire, más
+  del doble de lo que hay dentro. Y es un documento que se **consulta**: retrasar la tabla una
+  pantalla es cambiar su trabajo por simetría. Decidido viendo las dos versiones servidas, y
+  escrito en el propio componente para que no se lea como un olvido.
+- **No se abre tarea para auditar el patrón `[&_p]:m-0`** que mataba dos márgenes por
+  especificidad: se comprobó que solo existía en esa página. Buscar algo que ya se sabe que no
+  está es la clase de tarea que este proyecto ha aprendido a no abrir.
+
+### Estado al cerrar
+
+Ocho de diez tareas cerradas, en la rama `feat/sprint-lite` (PR draft #115) sin mergear: el
+despliegue va con toda la tanda. Quedan dos, y las dos son de naturaleza distinta a las demás:
+**hacer el repo público y proteger `main`** —que en plan Free es la única vía, y publicar es
+irreversible en la práctica— y **documentar el ruido de validadores**, que es la que cierra el
+bucle abierto por los dos falsos positivos con los que empezó esta tanda.
+
+Cinco decisiones técnicas nuevas: **D62** a **D66**.
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)

@@ -46,6 +46,9 @@ V1 lanzada. En vivo:
   (24 variantes), el sitemap y el recorrido de `design-review`. **En producción desde el
   2026-08-18.**
 - **CV en PDF bilingüe** (ES/EN) descargable, con identidad de marca, generado por código.
+- **La apertura de Sobre mí es un vídeo** desde el 2026-08-19: se reproduce una vez y se queda en
+  su último fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
+  descarga** (D65). El retrato de la home también es nuevo, y con él la tarjeta OG (D66).
 - **SEO técnico + Open Graph** por página, **medición** (GA4/GTM + consentimiento RGPD),
   **dominio propio**.
 - **Páginas de error 404/500 con marca e i18n** (el 404 con el "0" del split animado) y
@@ -101,7 +104,7 @@ tenga que acordarse.
   tipado, cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 - **Marca**: regla de dos capas (cian = único color de acción; morado decorativo con
   cuentagotas), tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
-- **Capa de componentes — seis capas**: el control **con caja** —botón, chip, toggle,
+- **Capa de componentes — siete capas**: el control **con caja** —botón, chip, toggle,
   pestaña, control de icono— sale de `components/ui/action.tsx`; el **enlace de la
   carpintería de navegación** (nav, menú móvil, breadcrumb, footer, canales de contacto) de
   `components/ui/chrome.tsx`; el **rótulo que no se pulsa** (la pastilla de «Exit», «AAA»,
@@ -492,6 +495,35 @@ Se ejecutan **en este orden, que lo fijan las dependencias, no la preferencia**:
    De Contacto ampliada, lo primero es definir qué añade sobre la franja compartida de D29:
    si la respuesta es «nada», la conclusión legítima es reforzar la franja y no construir la
    página.
+
+**Y entre el sprint 1 y el 2 se intercala un SPRINT LITE** (2026-08-18/19), porque el siguiente
+es de contenido y por tanto largo. Sale de nueve iniciativas que Francisco traía sin tarear, y lo
+primero fue verificarlas contra el código: **de las nueve salieron cinco tareas nuevas, no
+nueve** — dos eran falsos positivos de un SEO tool ya descartados y documentados dentro de P71
+(imágenes sin `alt`, enlaces sin `title`) y dos pertenecían a P59.5. Entregado, con ocho de diez
+tareas cerradas:
+
+- **El 404 de marca ya cubre los deep-dive** (D62). Diez rutas servían en producción el 404 pelado
+  de Next, porque `global-not-found` solo cubre las URLs que no casan con ninguna ruta y
+  `/trayectoria/loquesea` sí casa.
+- **La raya (`—`) sale del copy servido** (D63): 357 apariciones en ES y EN, tratadas como tres
+  familias distintas y no como un reemplazo, con dos excepciones que se quedan. **Y con guardián:
+  `npm run check:raya` es el octavo paso de CI** y afirma cuánto ha mirado.
+- **Retrato nuevo en la home** (D66), que arrastró dos cosas invisibles: la tarjeta OG y el `image`
+  del JSON-LD leen la misma foto, y del archivo OG solo se servía la mitad.
+- **La apertura de Sobre mí es un vídeo** (D65): se reproduce una vez, con motion reducido se
+  sirve una imagen quieta y **no se descargan los 362 KB** del vídeo.
+- **Las aperturas de Brand Kit, Design System y Accesibilidad son homogéneas y ocupan el pliegue**
+  (D64), verificado con las tres abiertas seguidas: mismo eyebrow y misma fila de datos al píxel
+  en 1536×740, 1920×1080 y 2560×1440, y centradas como `/trayectoria`. Cookies queda **fuera del
+  pliegue por medición** (252px de contenido contra 539 de aire) pero **su cuerpo sale de la media
+  columna**, que era la última página con todo dentro de `PROSE`.
+- La capa de componentes gana su **séptima pieza**, `stat-row.tsx`.
+
+**Quedan dos, y las dos son de otra naturaleza:** hacer el **repo público y proteger `main`** —hoy
+imposible, porque en plan Free un repo privado no admite protección de rama, y el paso de
+publicarlo es irreversible en la práctica— y **documentar qué avisos de validador son ruido
+conocido**, que es la tarea que evita que los mismos falsos positivos se reabran por tercera vez.
 
 **Traducción de contenido nuevo a EN**: la arquitectura i18n ya está; la traducción se hace a
 medida que se añade contenido, revisando el EN contra el ES y no al revés (D20).

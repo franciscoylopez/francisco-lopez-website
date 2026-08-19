@@ -118,7 +118,7 @@ app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i1
 app/global-*           404/500 de marca e i18n (global-not-found, global-error): root layout dinámico → convenciones globales de Next
 .github/workflows/     CI (GitHub Actions), ocho pasos en cada PR: format + typecheck + lint + paleta + experiencias + CV al día + raya + build
 .github/dependabot.yml  Escaneo de dependencias: PRs semanales (npm + github-actions)
-components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), table.tsx (DataTable/TR/TD para datos, SPECIMEN_ROW para especímenes), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card, video-embed (vídeo de terceros con facade: sin iframe hasta el clic — D55) — ver BRAND.md y DECISIONS D36/D40
+components/ui/          Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable), chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan), heading.tsx (par eyebrow + titular), table.tsx (DataTable/TR/TD para datos, SPECIMEN_ROW para especímenes), stat-row.tsx (la fila de cifras de una apertura — D64), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR/HERO_ROW), logo, icons (los que lucide no trae), rich (markup inline del copy), info-card, video-embed (vídeo de terceros con facade: sin iframe hasta el clic — D55) — ver BRAND.md y DECISIONS D36/D40
 components/site/        Piezas que SÍ saben de este sitio: page-shell.tsx (el marco común de toda página: JSON-LD, nav, isla de motion, el <main> y footer — D45/D46), skip-link.tsx (enlace de salto, WCAG 2.4.1 nivel A), bloques (nav, footer, breadcrumb, banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN: index.tsx (el orden), NN-nombre.tsx (cada sección con sus subcomponentes) y shared.tsx (lo que cruza) — D42
 components/analytics/   GTM + Consent Mode (init) — el contenedor va gateado a producción; la UI de consentimiento se monta en todos los entornos
@@ -127,7 +127,7 @@ content/experience-copy/  De una experiencia, TODO lo que se cuenta en más de u
 content/artefactos/    Los artefactos del deep-dive: el `.mmd` es la FUENTE del dibujo y el `.svg` de al lado su render saneado — se regenera, no se edita (D54)
 lib/                   i18n (locales + pagePath, la fuente única de ruta↔locale), page-meta (metadata de página: canonical, hreflang, OG y Twitter derivados — D45), site (SITE_URL), contact (email/tel/LinkedIn), analítica (tracking de clics), consentimiento, datos estructurados, design-values (fuente única de lo que el sitio publica sobre sí mismo: tokens, breakpoints y contraste medido — D38) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
-public/                Assets: logo-kit, cv, img, og, favicons
+public/                Assets: logo-kit, cv, img, og, video (la apertura de Sobre mí — D65), favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts (hechos leídos del diccionario); el texto rico vive en content/cv/
