@@ -3505,3 +3505,90 @@ una caja de **600×630** —la mitad izquierda de la tarjeta— con `objectFit: 
 veían los 600 centrales: el 50% del archivo no se servía nunca y su nombre anunciaba un tamaño
 que no era el de uso. Verificado **renderizando el endpoint**, no leyendo el código. Pasa a
 `og-home-600x630.jpg`, que es la caja de verdad.
+
+---
+
+## D67 · El ruido conocido de los validadores se documenta por MECANISMO, no por cifra — 2026-08-19
+
+**Contexto.** De un lote de ~11 hallazgos de validadores externos, **seis eran falsos positivos o
+cosas ajenas al proyecto**. Sin dejarlo escrito, cada auditoría los vuelve a levantar y vuelve a
+costar medio día descartarlos — y ya había pasado **dos veces** con el mismo punto (las imágenes
+sin `alt`). Esta entrada es el sitio al que apuntar cuando alguien traiga la captura de un SEO
+tool.
+
+**Y la decisión de forma la impuso el propio trabajo de verificarlo.** Al comprobar los seis
+puntos contra el sitio de hoy, **todas las cifras que la tarea traía apuntadas estaban
+desfasadas**: las 79 reglas `@property` son **69**; «las 7 imágenes del sitio» son **142**; y la
+relación texto/HTML ya no cae en la banda que se anotó. Ninguna conclusión cambió, pero **un
+documento con cifras viejas parece equivocado justo cuando hace falta que sea creíble**. Así que
+se documenta el **mecanismo** —por qué el aviso aparece y por qué es ruido— y **el comando para
+recontar**, nunca el número como afirmación. Es la misma familia de D60: una copia derivada que
+nadie recalcula.
+
+### Los cuatro que son ruido
+
+**1. Validador CSS del W3C: las reglas `@property`.** Marca cada una como «la regla-arroba
+`@property` no está implementada», y además avisa de que no evalúa los custom properties «due to
+their dynamic nature». `@property` es **spec de CSS (Houdini)**, soportada en todos los
+navegadores modernos; el validador del W3C no la implementa. Es **output normal de Tailwind v4**:
+de las 69 servidas hoy, **61 son `--tw-*`** generadas por el framework y 8 son del proyecto
+(`--scroll-fade-*`, `--shimmer-*`). Falso positivo al 100%.
+Recuento: `curl -s <hoja>.css | grep -o '@property' | wc -l` — **y la hoja cuelga de
+`/_next/static/chunks/`, no de `/css/`**; un patrón que apunte a `/css/` devuelve **cero**, que es
+el falso aprobado contra el que avisa `BRAND.md` §Cómo se escribe una regla.
+
+**2. La barra final de los void elements.** La emite el serializador de `react-dom/server` y en
+JSX **no se puede escribir de otra forma** (`<input>` sin cerrar es error de sintaxis). En el
+propio validador es nivel **INFO, no error**. La parte del aviso que sí sería peligrosa —atributos
+sin comillas— **no aplica**: medido sobre la home servida, **1.392 atributos con comillas dobles y
+0 sin ellas**. *(Cuidado al recontarlo: un patrón ingenuo da 58 «sin comillas» porque cuenta la
+barra de cierre y los `=` dentro de URLs y `srcset`. Las 4 coincidencias de un patrón estricto son
+JavaScript dentro de scripts inline.)*
+
+**3. Relación texto-HTML baja (Semrush).** **Descartado.** Google no usa esa métrica. Y el
+diagnóstico, aunque aritméticamente correcto, no describe un defecto: las páginas con el ratio más
+bajo son la **home** y el **índice de trayectoria**, que son una portada y cinco tarjetas; el
+**Brand Kit** son decenas de anclas de descarga. Es lo que esas páginas *son*. Lo único accionable
+que salió de ahí es **P85** (reducir las anclas del Brand Kit), y **por UX, no por SEO**.
+
+**4. Assets de Vercel.** «Uncompressed Asset» (`challenge.v2.min.js`) y «Resource Load Failed 403»
+son del **challenge de seguridad de Vercel**, no del proyecto: cero coincidencias en el código y
+cero referencias en el HTML que sirve nuestro build.
+
+### El quinto es el que ya se reabrió dos veces
+
+**Imágenes sin `alt` y enlaces sin `title`.** Falso positivo, y conviene saber por qué son **dos
+afirmaciones distintas**:
+
+- **`alt`**: verificado sobre **las 24 variantes servidas** (12 páginas × 2 idiomas), **142
+  `<img>` y CERO sin atributo `alt`**. Los 54 que llevan `alt=""` son **decorativos a propósito**
+  —logos de empresa, herramienta y formación, que van pegados a su nombre en texto, y los dos
+  pósters de vídeo, cuyo botón ya lleva el nombre accesible—. Un logo con `alt` repetiría al
+  lector de pantalla lo que acaba de leer.
+- **`title`**: **no es requisito de WCAG y es un antipatrón** — no llega ni al teclado ni al
+  táctil, y duplicaría un texto de enlace que ya es descriptivo. Medido: **502 `<a>`, 0 con
+  `title` y 0 sin nombre accesible**. Los enlaces solo-icono lo resuelven con `aria-label`.
+
+Recuento: recorrer `scripts/.html-actual/*.html` tras un `npm run gate:html -- save`. **Sobre las
+24, no sobre la home** — es la lección de D61.
+
+### Y el sexto es REAL, solo que ya estaba decidido
+
+**`'unsafe-inline'` en `script-src` y `style-src`.** No es ruido: es una debilidad conocida y
+**aceptada**, pospuesta en **D26**. Con Next 16 los nonces exigen pasar por `proxy.ts` en cada
+request, lo que vuelve dinámicas todas las rutas y empeora el TTFB — se cambiaría una nota de
+informe por un coste real de rendimiento. **Condición de revisión:** cuando entre un formulario
+con endpoint externo (P67), o cuando llegue la IA conversacional de la V4.
+
+### Cómo repetir la comprobación
+
+| Validador | Dónde | Qué marca de esto |
+| --- | --- | --- |
+| CSS del W3C | `jigsaw.w3.org/css-validator/` | 1 |
+| HTML del W3C | `validator.w3.org/nu/` | 2 |
+| Semrush Site Audit | su panel | 3, 4 |
+
+**Regla de uso: antes de tarear un hallazgo de un validador externo, se comprueba contra el código
+o contra el HTML servido.** De once, seis no lo sobrevivieron. Es `BRAND.md` §Cómo se escribe una
+regla, punto 3 —«valida el metro antes de creerte el hallazgo»— aplicado a metros que no son
+nuestros.
