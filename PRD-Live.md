@@ -233,7 +233,7 @@ primero está entregado**; entre él y el segundo se han intercalado dos bloques
 | 1 | **Deep-dive por experiencia** — cinco páginas y su índice | **En producción** |
 | — | *Sprint Lite* — 404 de los deep-dive, la raya fuera del copy, retrato nuevo, vídeo de Sobre mí, aperturas homogéneas, repo público | **En producción** |
 | — | *Método* — el andamiaje del propio método antes de un sprint de contenido | **Entregado** |
-| 2 | **«Cómo se ha creado esta página»** | Siguiente |
+| 2 | **«Cómo se ha creado esta página»** | **En curso** |
 | 3 | **Footer estructurado y Contacto ampliada** | Después |
 
 **Sprint 2 — «Cómo se ha creado esta página».** Una página con estructura y metadata de
