@@ -18,7 +18,8 @@
 #
 # Dos lecturas, y las dos son ciertas a la vez. La primera es que Qlty señala con
 # PRECISIÓN el punto ciego real: su peor archivo es justo el que se ha roto dos
-# veces en silencio. Eso NO se silencia aquí — se arregla, y está tareado.
+# veces en silencio. Eso NO se silencia aquí — se arregla, y lo cubre
+# `npm run check:guardianes`.
 #
 # La segunda es que `en.ts` y `es.ts` son un falso positivo, y bastante irónico:
 # son tablas de datos sin una sola función, y Qlty las penaliza por duplicación
@@ -26,37 +27,28 @@
 # `npm run check:experiencias` existe para GARANTIZAR. Medir como deuda lo que un
 # guardián impone a propósito no informa de nada.
 #
-# Regla al tocar este archivo: se excluye por lo que un archivo ES (datos
+# REGLA AL TOCAR ESTE ARCHIVO: se excluye por lo que un archivo ES (datos
 # generados, contenido paralelo por idioma), nunca por lo que un archivo PUNTÚA.
 # Silenciar un hallazgo incómodo aquí sería convertir el informe en el metro que
 # aprueba sobre lista vacía.
 
-config_version = "0"
-
-[[source]]
-name = "default"
-default = true
-
-# Contenido paralelo por idioma: ES y EN tienen la MISMA forma por diseño y un
-# guardián en CI lo comprueba. Su duplicación estructural es la especificación,
-# no deuda.
-[[exclude_patterns]]
-file_patterns = [
-  "content/experience-copy/*.ts",
+exclude_patterns = [
+  # Contenido paralelo por idioma: ES y EN tienen la MISMA forma por diseño, y un
+  # guardián en CI lo comprueba. Su duplicación estructural es la especificación,
+  # no deuda.
+  "content/experience-copy/**",
   "content/cv/content.*.ts",
   "app/[lang]/dictionaries/**",
-]
 
-# Artefactos generados: los escribe un script y su forma la decide el generador.
-[[exclude_patterns]]
-file_patterns = [
-  "content/artefactos/*.svg",
+  # Artefactos generados: los escribe un script y su forma la decide el generador.
+  "content/artefactos/**",
   "public/**",
   "brand-assets/**",
-  "design/**",
-]
 
-# El umbral de duplicación por defecto marca el contenido paralelo aunque esté
-# excluido de otras reglas; se sube para que la señal que quede sea la de código.
-[smells.duplication]
-threshold = 60
+  # Export fiel de Claude Design, que no se edita a mano (ya está en .prettierignore
+  # por el mismo motivo).
+  "design/**",
+
+  "node_modules/**",
+  ".next/**",
+]
