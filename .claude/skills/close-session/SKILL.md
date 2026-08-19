@@ -41,7 +41,8 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
   repositorio sea PÚBLICO. Su página de Notion es ahora un puntero al archivo de GitHub.)*
   **No vuelvas a crear un espejo.** La misma cosa escrita en dos sitios acaba diciendo dos
   cosas, y este proyecto lo ha cerrado ya por cuatro puertas: los valores publicados (D38),
-  las tres listas de páginas (D59), el índice de decisiones y esta.
+  las cuatro listas de páginas (D59 abrió la puerta y D72 la cerró), el índice de decisiones
+  y esta.
 - No dupliques: cada cosa en su documento. **Estado** de producto → `PRD-Live.md`;
   **histórico** de decisiones de producto → `PRD-Historical.md`; técnica → `DECISIONS.md`;
   convención → `CLAUDE.md`; marca (core) → `BRAND.md`; el porqué fechado de esa regla → `BRAND-historical.md`; detalle del logo → `BRAND-logo.md`.

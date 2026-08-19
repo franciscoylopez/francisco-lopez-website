@@ -61,6 +61,7 @@ nada.
 | Una clave que está en `es` y no en `en` | `cargador<T>` con el tipo explícito (D11) | typecheck |
 | El nombre de empresa mal escrito entre registro, CV y diccionario | `experienceOf` / `matchFact` **lanzan** (D44/D22) | build |
 | Un bullet sin su gemelo, cobertura ES≠EN, una cifra que solo existe en una longitud | `npm run check:experiencias` (D57) | CI |
+| La página nueva fuera del sitemap, del gate de HTML, de `/llms.txt` o de su tarjeta OG | Las cuatro derivan del registro, y lo que piden por experiencia va en `Record<ExperienceSlug, …>` (D59/D72) | typecheck |
 
 Lo que **nada** caza, y por eso ocupa el resto de este documento: el presupuesto,
 qué va en cada sección, la política de artefactos y el gate de accesibilidad.
@@ -86,13 +87,18 @@ qué va en cada sección, la política de artefactos y el gate de accesibilidad.
    lleva **solo `company`**; rol, periodo y descripción salen del registro.
 7. **`content/cv/content.{es,en}.ts`** — si le toca papel en el CV. Ahí solo se
    decide *a qué experiencias se le da*: los bullets ya están en el registro.
-8. **`scripts/page-html-diff.ts`** — las dos rutas nuevas (ES y EN).
 
 **Lo que NO hay que tocar, y conviene saberlo para no perder el tiempo
-buscándolo:** el índice `/trayectoria`, el paso a la experiencia vecina y
-`generateStaticParams` **derivan del registro** y recogen la página nueva solos.
-`app/llms.txt/route.ts` y `app/sitemap.ts` todavía llevan listas a mano (tareado
-en P50); mientras siga así, hay que mirarlos.
+buscándolo:** el índice `/trayectoria`, el paso a la experiencia vecina,
+`generateStaticParams`, el sitemap, el gate de HTML, `/llms.txt` y la tarjeta OG
+**derivan del registro** y recogen la página nueva solos (D44/D59/D72).
+
+Lo único que dos de esas superficies siguen pidiendo es un dato **por experiencia**
+—su fecha en `app/sitemap.ts` y su diccionario en `app/llms.txt/route.ts`—, y
+ninguno se puede olvidar: los dos van en un `Record<ExperienceSlug, …>` que **no
+compila** incompleto. *(Hasta el 2026-08-19 esas dos llevaban además listas de
+páginas a mano y este documento mandaba mirarlas; ya no, y mirarlas ahora es tiempo
+perdido.)*
 
 ---
 

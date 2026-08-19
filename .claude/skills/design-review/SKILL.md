@@ -353,10 +353,12 @@ el deep-dive añadió cinco experiencias y su índice, y **son las que más falt
 tienen el único artefacto SVG del sitio, las dos únicas incrustaciones de vídeo y la única
 plantilla que se repite cinco veces. Un recorrido que se quede en seis no las ve.
 
-> **El número no se escribe: se saca de donde ya está.** La lista viva son las rutas de
-> `scripts/page-html-diff.ts`, que el gate mantiene al día porque una página nueva sin entrada
-> ahí es una página sin gate. Si al leerlas no cuadran con lo que dice este párrafo, manda el
-> script — y actualiza esta frase, que es lo que no pasó entre agosto y hoy.
+> **El número no se escribe: se saca de donde ya está.** La lista viva es `lib/routes.ts`
+> —`PAGE_SLUGS`—, de donde salen el sitemap, el gate de HTML, `/llms.txt` y las tarjetas OG, y
+> que `npm run check:rutas` contrasta contra las carpetas de `app/[lang]/` (D72). Si al leerla
+> no cuadra con lo que dice este párrafo, manda el registro — y actualiza esta frase, que es lo
+> que no pasó entre agosto y el 2026-08-18. *(Hasta el 2026-08-19 la lista viva estaba en
+> `scripts/page-html-diff.ts`, escrita a mano.)*
 
 Y **el viewport lleva alto**, que es justo lo que faltaba: una lista de anchos no puede ver el
 caso de D50, donde el ancho es el de siempre y **lo que cambia es el alto**.
