@@ -19,7 +19,8 @@
     "designSystem": "Design System",
     "accesibilidad": "Accessibility",
     "cookies": "Cookies",
-    "linkedinAria": "LinkedIn"
+    "linkedinAria": "LinkedIn",
+    "githubAria": "This site's source code on GitHub"
   },
   "breadcrumb": {
     "routeLabel": "Breadcrumb",

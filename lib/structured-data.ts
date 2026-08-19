@@ -5,7 +5,12 @@
 //   - Páginas internas: BreadcrumbList (elegible → se valida con la Rich Results Test).
 // URLs SIEMPRE absolutas vía SITE_URL (los rastreadores no resuelven relativas en JSON-LD).
 
-import { EMAIL, LINKEDIN_URL, PHONE_TEL as TELEPHONE } from "@/lib/contact";
+import {
+  EMAIL,
+  GITHUB_URL,
+  LINKEDIN_URL,
+  PHONE_TEL as TELEPHONE,
+} from "@/lib/contact";
 import { pagePath, type Locale } from "@/lib/i18n/config";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
@@ -57,7 +62,10 @@ export function profilePageLd(lang: Locale, description: string) {
       description,
       email: EMAIL,
       telephone: TELEPHONE,
-      sameAs: [LINKEDIN_URL],
+      // `sameAs` es el campo de «los otros perfiles de esta persona», así que el
+      // repo entra aquí en cuanto es público: es el consumidor que no se ve mirando
+      // la página, igual que el `image` del JSON-LD en D66.
+      sameAs: [LINKEDIN_URL, GITHUB_URL],
       knowsLanguage: ["es", "en"],
       knowsAbout: KNOWS_ABOUT,
       worksFor: { "@type": "Organization", name: "Emendu" },

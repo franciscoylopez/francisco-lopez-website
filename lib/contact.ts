@@ -9,3 +9,10 @@ export const PHONE_DISPLAY = "629 832 720";
 
 export const LINKEDIN_URL = "https://www.linkedin.com/in/franciscolopez1975/";
 export const LINKEDIN_DISPLAY = "linkedin.com/in/franciscolopez1975";
+
+// El repositorio de ESTE sitio. Vive aquí y no en el footer porque es el mismo
+// tipo de dato que los de arriba: un canal público que puede citarse en más de
+// un sitio. Enlazarlo solo tiene sentido desde que el repo es público.
+export const GITHUB_URL =
+  "https://github.com/franciscoylopez/francisco-lopez-website";
+export const GITHUB_DISPLAY = "github.com/franciscoylopez";
