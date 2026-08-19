@@ -19,7 +19,7 @@ type SystemMessages = {
 };
 
 const es: SystemMessages = {
-  homeAria: "Inicio — Francisco López",
+  homeAria: "Inicio · Francisco López",
   home: "Volver al inicio",
   notFound: {
     code: "Error 404",
@@ -34,7 +34,7 @@ const es: SystemMessages = {
 };
 
 const en: SystemMessages = {
-  homeAria: "Home — Francisco López",
+  homeAria: "Home · Francisco López",
   home: "Back to home",
   notFound: {
     code: "Error 404",

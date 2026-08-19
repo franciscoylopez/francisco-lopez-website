@@ -34,7 +34,7 @@ const bricolage = Bricolage_Grotesque({
 
 export const metadata: Metadata = {
   // Next inyecta <meta name="robots" content="noindex"> en respuestas 404.
-  title: "404 — Francisco López",
+  title: "404 · Francisco López",
 };
 
 export default async function GlobalNotFound() {
