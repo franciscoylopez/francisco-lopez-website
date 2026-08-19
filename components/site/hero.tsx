@@ -51,7 +51,7 @@ export function Hero({ dict }: { dict: HeroDict }) {
                   del propio Next dice que se use `loading="eager"` o
                   `fetchPriority="high"` en su lugar. Ver DECISIONS.md D47. */}
               <Image
-                src="/img/francisco-hero-4x5.webp"
+                src="/img/francisco-hero-estudio-4x5.webp"
                 alt={dict.photoAlt}
                 fill
                 fetchPriority="high"

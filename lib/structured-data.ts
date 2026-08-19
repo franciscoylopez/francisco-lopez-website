@@ -50,7 +50,10 @@ export function profilePageLd(lang: Locale, description: string) {
       name: SITE_NAME,
       jobTitle: "Senior Product Manager",
       url: `${SITE_URL}/`,
-      image: `${SITE_URL}/img/francisco-hero-4x5.webp`,
+      // La MISMA foto que pinta el hero. Es el tercer consumidor del archivo
+      // —hero, tarjeta OG y esto—, y el único que no se ve al mirar la página:
+      // al renombrar el asset, este apuntaba a un 404 sin que nada lo notara.
+      image: `${SITE_URL}/img/francisco-hero-estudio-4x5.webp`,
       description,
       email: EMAIL,
       telephone: TELEPHONE,

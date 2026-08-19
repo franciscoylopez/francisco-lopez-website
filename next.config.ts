@@ -76,7 +76,7 @@ const nextConfig: NextConfig = {
   // runtime. El file-tracing no detecta el join dinámico con process.cwd(), así que
   // se fuerza su inclusión en el bundle serverless para que no falle en Vercel.
   outputFileTracingIncludes: {
-    "/api/og": ["./assets/fonts/**", "./public/og/og-home-1200x630.jpg"],
+    "/api/og": ["./assets/fonts/**", "./public/og/og-home-600x630.jpg"],
   },
   experimental: {
     // 404 global para URLs no coincidentes (app/global-not-found.tsx). Es la vía que
