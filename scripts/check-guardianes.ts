@@ -15,10 +15,14 @@
  * rechazar. Es lo contrario de un test de que funciona — es un test de que sabe
  * fallar.
  *
- * POR QUÉ NO ESTÁ EN CI. Porque muta archivos rastreados para provocar el fallo, y
- * un job que escribe en el árbol de trabajo es la clase de cosa que sale cara el
- * día que se interrumpe a medias. Se dispara a mano al tocar un guardián, y es
- * casilla de la DoD cuando el trabajo crea o cambia uno.
+ * DÓNDE CORRE. En CI, como un paso más, desde el 2026-08-19. Nació fuera con este
+ * argumento: muta archivos rastreados para provocar el fallo, y un job que escribe
+ * en el árbol de trabajo sale caro el día que se interrumpe a medias. Eso vale para
+ * un árbol con trabajo dentro, no para un runner que se tira al terminar — y el
+ * precio de dejarlo fuera era justo el modo de fallo que este script existe para
+ * cerrar: un guardián que solo corre si alguien se acuerda no es un guardián, es
+ * una nota. Se sigue lanzando a mano al tocar un guardián, y es casilla de la DoD
+ * cuando el trabajo crea o cambia uno.
  *
  * SEGURIDAD. Se niega a arrancar con el árbol sucio, restaura en `finally` desde
  * la copia en memoria, y verifica al final que no ha dejado nada movido. Si aun
@@ -169,5 +173,5 @@ if (fallos.length) {
 }
 
 console.log(
-  "\n✓ Los siete guardianes rechazan su caso malo. El árbol queda como estaba.",
+  `\n✓ Los ${CASOS.length} guardianes rechazan su caso malo. El árbol queda como estaba.`,
 );
