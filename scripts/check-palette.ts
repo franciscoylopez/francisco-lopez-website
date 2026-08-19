@@ -223,11 +223,21 @@ function* sources(dir: string): Generator<string> {
   }
 }
 
+// Cuánto ha mirado el barrido de verdad. NO se puede derivar de las claves del
+// módulo: `PALETTE` tiene el mismo tamaño aunque `sources()` no encuentre un solo
+// archivo, así que contar constantes daría una cifra tranquilizadora sobre cero
+// trabajo. Es la quinta aparición de «un metro que devuelve lista vacía parece un
+// aprobado» y aquí se cuentan los ARCHIVOS ABIERTOS y los hex leídos.
+let ficheros = 0;
+let hexes = 0;
+
 for (const dir of ["app", "components", "lib", "scripts"]) {
   for (const file of sources(dir)) {
     if (ALLOWED.has(file)) continue;
+    ficheros++;
     const body = stripComments(readFileSync(file, "utf8"));
     for (const m of body.matchAll(/#[0-9A-Fa-f]{6}\b/g)) {
+      hexes++;
       const tokens = TOKEN_HEXES.get(m[0].toUpperCase());
       if (!tokens) continue;
       problems.push(
@@ -236,6 +246,16 @@ for (const dir of ["app", "components", "lib", "scripts"]) {
       );
     }
   }
+}
+
+if (ficheros === 0 || hexes === 0) {
+  console.error(
+    `\ncheck:palette — NO HA MIRADO NADA (${ficheros} archivos, ${hexes} hex leídos).\n` +
+      "Con cero entradas la mitad de este check —la que busca copias de token fuera\n" +
+      "de su fuente— aprobaría siempre, así que falla a propósito.\n" +
+      "¿Se han movido app/, components/, lib/ o scripts/, o ha cambiado la extensión?\n",
+  );
+  process.exit(1);
 }
 
 if (problems.length > 0) {
@@ -250,5 +270,6 @@ if (problems.length > 0) {
 }
 
 console.log(
-  `Paleta verificada: ${Object.keys(PALETTE.light).length * 2 + Object.keys(BRAND_PALETTE).length * 2} tokens contra globals.css, ${Object.keys(PAINTED).length} conversiones contra el navegador.`,
+  `Paleta verificada: ${Object.keys(PALETTE.light).length * 2 + Object.keys(BRAND_PALETTE).length * 2} tokens contra globals.css, ${Object.keys(PAINTED).length} conversiones contra el navegador, ` +
+    `${ficheros} archivos recorridos y ${hexes} hex leídos en busca de copias.`,
 );

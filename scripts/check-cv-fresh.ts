@@ -49,7 +49,12 @@ if (sellada !== esperada) {
   process.exit(1);
 }
 
+// La cifra sale del array, no de un literal. Decía «2 PDFs» a mano: si mañana
+// aparece un tercer idioma y nadie toca esta línea, el guardián seguiría
+// afirmando que ha mirado dos. Un metro que afirma cuánto ha mirado tiene que
+// afirmarlo CONTANDO, no recordándolo.
 console.log(
-  `check:cv — 2 PDFs comprobados contra la fuente · huella ${esperada.slice(0, 16)}…`,
+  `check:cv — ${PDFS.length} PDFs comprobados contra la fuente · ` +
+    `huella ${esperada.slice(0, 16)}…`,
 );
 console.log("✓ Los PDFs del CV corresponden a lo que dice la web.");
