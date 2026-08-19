@@ -30,8 +30,14 @@ import { readFileSync } from "node:fs";
 /** Lo que se `@`-importa en cada arranque de sesión, vía `CLAUDE.md`. */
 const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
 
-/** Falla por encima de aquí. Se aprieta conforme se compacta, nunca se afloja. */
-const TECHO = 16_000;
+/**
+ * Falla por encima de aquí. **Se aprieta conforme se compacta, nunca se afloja.**
+ *
+ * Historial del techo, que es la prueba de que el trinquete funciona:
+ *   16.000  al crearlo (2026-08-19), con 15.466 medidos tras compactar PRD-Live
+ *   13.500  el mismo día, al derivar el índice de decisiones (3.610 → 924)
+ */
+const TECHO = 13_500;
 
 /** A dónde se quiere llegar. No falla; solo se publica la distancia. */
 const OBJETIVO = 12_000;

@@ -17,7 +17,7 @@
 
 ---
 
-## D1 · El diseño se traduce, no se copia — 2026-07-24
+## D1 · El diseño se traduce, no se copia (superado en V2+) — 2026-07-24
 
 > **Superado para la fase V2+ (2026-08-01).** Este flujo aplicó a la V1, cuando **no
 > existía sistema** y había que explorar el lenguaje visual desde cero en Claude Design.
