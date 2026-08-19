@@ -4,7 +4,7 @@ description: >
   Checklist de cierre de sesión. Invócalo cuando Francisco indique que termináis por
   ahora — "cerramos sesión por ahora", "lo dejamos aquí/por hoy", "cerrar sesión",
   "hasta aquí" o similar — para revisar y actualizar la documentación que corresponda:
-  PRD-Live.md (+ su espejo en Notion), PRD-Historical.md y DECISIONS.md (solo repo),
+  PRD-Live.md, PRD-Historical.md y DECISIONS.md (todos solo en el repo),
   README.md, el tablero de tareas de Notion y, si aplica, CLAUDE.md / BRAND.md. Evita que
   algo quede sin documentar. También si Francisco lo pide directamente.
 ---
@@ -22,7 +22,7 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 
 | Tipo de cambio | Documento | Espejo / dónde |
 |---|---|---|
-| **Estado** de producto / diseño / alcance | `PRD-Live.md` (spec viva, `@`-importada) | **Único espejo en Notion:** [PRD Live](https://app.notion.com/p/3ad2caec08be8122b6a4cc379874ed0c) |
+| **Estado** de producto / diseño / alcance | `PRD-Live.md` (spec viva, `@`-importada) | Solo repo (**sin espejo desde el 2026-08-19**) |
 | **Registro histórico** de producto / diseño / alcance | `PRD-Historical.md` | Solo repo (sin espejo) |
 | Decisión técnica / de implementación | `DECISIONS.md` (formato ADR-lite) | Solo repo (sin espejo; **a demanda vía Read/Grep, NO `@`-importado** — D28). **D-entry nuevo → su línea al índice de `CLAUDE.md`** |
 | Convención que aplica en adelante | `CLAUDE.md` | — (se `@`-importa, se carga cada sesión) |
@@ -34,11 +34,14 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 | "Por qué" de un trozo de código | Mensaje de commit / PR | — |
 
 **Reglas:**
-- **El repo es la fuente de verdad de toda la documentación.** En Notion **solo vive el
-  PRD Live** (espejo de `PRD-Live.md`, para la comprobación cómoda de Francisco).
-  `PRD-Historical.md` y `DECISIONS.md` **no tienen espejo** — se quedan solo en el repo.
-  Al tocar `PRD-Live.md`, actualiza el repo primero y luego refleja el cambio en su
-  página de Notion. *(El espejo de Decisions y el del PRD histórico se retiraron el 2026-07-30.)*
+- **El repo es la fuente de verdad de toda la documentación, y ya no hay ningún espejo.**
+  En Notion vive el **tablero de tareas** y nada más. *(El de `DECISIONS` y el del PRD
+  histórico se retiraron el 2026-07-30; el de `PRD-Live`, el 2026-08-19: era el último, y
+  el motivo que lo justificaba —mirar el PRD sin abrir el código— lo cubre desde D68 que el
+  repositorio sea PÚBLICO. Su página de Notion es ahora un puntero al archivo de GitHub.)*
+  **No vuelvas a crear un espejo.** La misma cosa escrita en dos sitios acaba diciendo dos
+  cosas, y este proyecto lo ha cerrado ya por cuatro puertas: los valores publicados (D38),
+  las tres listas de páginas (D59), el índice de decisiones y esta.
 - No dupliques: cada cosa en su documento. **Estado** de producto → `PRD-Live.md`;
   **histórico** de decisiones de producto → `PRD-Historical.md`; técnica → `DECISIONS.md`;
   convención → `CLAUDE.md`; marca (core) → `BRAND.md`; el porqué fechado de esa regla → `BRAND-historical.md`; detalle del logo → `BRAND-logo.md`.
@@ -124,14 +127,13 @@ ha contestado por inercia.
 
 ## Paso 3 · Aplica
 1. **Repo**: edita `PRD-Live.md` / `PRD-Historical.md` / `DECISIONS.md` / `README.md` /
-   `CLAUDE.md` / `BRAND.md` / `BRAND-historical.md` / `BRAND-logo.md` según lo acordado. **Si añadiste un D-entry
-   nuevo a `DECISIONS.md`, añade también su línea al índice de `CLAUDE.md`** (D28): el
-   índice es lo único que se carga en cada arranque, así que una decisión que no está en
-   él es una decisión que nadie sabrá que existe para ir a leerla.
-2. **Espejo Notion (solo PRD Live)**: si tocaste `PRD-Live.md`, refleja el cambio en su
-   página de Notion. `PRD-Historical.md` y `DECISIONS.md` **no se espejan**. (Usa las
-   herramientas `notion-*`; convenciones del workspace — páginas nuevas bajo *New Website*,
-   iconos nativos de Notion, sin emojis.)
+   `CLAUDE.md` / `BRAND.md` / `BRAND-historical.md` / `BRAND-logo.md` según lo acordado. La CABECERA de un D-entry
+   nuevo importa más de lo que parece: es la línea que acaba en el índice de `CLAUDE.md`,
+   que es lo único que se carga en cada arranque. Tiene que bastar para decidir si abrir
+   esa entrada, porque el índice no tiene texto propio (ver paso 2).
+2. **Índice de decisiones**: si añadiste un D-entry, regenéralo con `npm run indice` —
+   se DERIVA de las cabeceras de `DECISIONS.md` y no se escribe a mano. Si el título no
+   basta para saber si abrir esa entrada, arregla la CABECERA, nunca el índice.
 3. **Tablero de tareas**: actualiza `Estado` (To-Do → En progreso → Listo; al cerrar
    una etapa, lo terminado → Archivado; el resto sigue abierto en su etapa),
    `Prioridad` y `Etapa` según las **reglas del tablero** de `CLAUDE.md` (no
@@ -144,7 +146,7 @@ pendiente de su input (una decisión que solo puede tomar él), déjalo anotado.
 
 ## Referencias rápidas (Notion)
 - New Website (raíz de todo): `39f2caec08be8040b6d4d2bb07ed24e7`
-- **PRD Live** (único espejo, el que se mantiene): `3ad2caec08be8122b6a4cc379874ed0c`
+- **PRD Live** (ya NO es espejo: es un puntero al archivo de GitHub): `3ad2caec08be8122b6a4cc379874ed0c`
 - Tablero Tareas (base): `f3ee9a949c58482888423d5917087962` · data source `collection://02005967-2f8c-44ff-975c-68b86364d4c4`
 - Vista MoSCoW: `3a62caec08be81989325c9fce678de5b`
-- *(Decisions ya no tiene espejo en Notion — vive solo en `DECISIONS.md` en el repo.)*
+- *(Ningún documento tiene espejo. Toda la documentación vive en el repo.)*
