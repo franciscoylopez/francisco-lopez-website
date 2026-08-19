@@ -3869,14 +3869,20 @@ instrumento?») tiene ahora un procedimiento en vez de una intuición.
 
 ## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
 
-**El hueco.** El mismo dato —qué páginas hay— estaba escrito **a mano en tres sitios**:
-`app/sitemap.ts`, `scripts/page-html-diff.ts` y `app/llms.txt/route.ts`. Y no había red debajo:
-`pageMetadata` aceptaba `slug?: string` libre, así que el typecheck tampoco obligaba a registrar
-nada.
+**El hueco.** El mismo dato —qué páginas hay— estaba escrito **a mano en cuatro sitios**:
+`app/sitemap.ts`, `scripts/page-html-diff.ts`, `app/llms.txt/route.ts` y la unión `Card` de
+`app/api/og/route.tsx`. Y no había red debajo: `pageMetadata` aceptaba `slug?: string` libre, así
+que el typecheck tampoco obligaba a registrar nada.
 
-**Ninguna de las tres falla de forma visible**, que es lo que las hacía peligrosas juntas: la
+**La cuarta la encontró `/code-review` revisando el PR de esta misma decisión**, y merece
+quedarse escrito: la tarea hablaba de tres listas, el trabajo cerró tres, y la reseña encontró
+que quedaba una. Es literalmente lo que D59 hizo un día antes —arreglar la mitad y creer que
+estaban las dos—, evitado esta vez porque algo ajeno al que escribió el código fue a contar.
+
+**Ninguna de las cuatro falla de forma visible**, que es lo que las hacía peligrosas juntas: la
 página no existe para Google, el gate de HTML deja de cubrirla **en silencio** —y es, según el
-PRD, el gate que más ha cazado— y no aparece en el índice para modelos. «Una lista incompleta no
+PRD, el gate que más ha cazado—, no aparece en el índice para modelos, y se publica con la
+tarjeta OG de la home, cosa que solo ve quien comparta el enlace. «Una lista incompleta no
 es un error de compilación» son las palabras de **D59**, que nombró esto el 2026-08-18 y arregló
 solo la mitad: las páginas del deep-dive pasaron a derivarse de `EXPERIENCES` y las estáticas se
 quedaron copiadas en las tres listas.
@@ -3899,13 +3905,24 @@ quedaron copiadas en las tres listas.
    registrarla deja de ser un hallazgo de auditoría y pasa a ser un **error del compilador**. En
    la ruta del deep-dive el estrechamiento lo hace un guardián de tipo (`isExperienceSlug`) y no
    un `as`: afirmarlo habría sido volver al problema con otra forma.
+4. **Y las tres superficies que necesitan un dato POR PÁGINA lo piden con un `Record` completo**:
+   la fecha y la prioridad del sitemap, el título de `/llms.txt` y la tarjeta OG. Medido
+   registrando una página falsa: **tres errores de compilación**, uno por cada cosa que hay que
+   rellenar. El compilador pasó de no decir nada a llevarte de la mano por lo que falta.
+
+   Lo que **no** se ha tocado es la cadena `cardParam === …` que `/api/og` usa en tiempo de
+   ejecución: sigue escrita a mano. Es deliberado —cambiarla mueve lógica del endpoint y habría
+   que reverificar las doce tarjetas— y no es el agujero, porque el `Record` incompleto ya
+   detiene la compilación antes de llegar ahí.
 
 **Validado rompiéndolo por las cuatro puntas**, que es la regla del proyecto: quitar «cookies»
 del registro → código 1 nombrándola; añadir una fantasma → código 1 nombrándola; quitarle a
 `sitemap.ts` el import del registro → código 1 nombrando el archivo y qué se rompe; y
 `const SLUG = "cookies-nueva"` → `error TS2322: Type '"cookies-nueva"' is not assignable to type
 'PageSlug'`. Afirma cuánto ha mirado —12 rutas en disco · 12 en el registro · 3 consumidoras— y
-falla al mirar cero.
+falla al mirar cero, y separa las dos mitades de lo que compara: **7 estáticas contrastadas
+contra el disco · 5 del deep-dive derivadas · 4 consumidoras**. Las cinco del deep-dive salen de
+la misma constante en los dos lados, así que contarlas como comparación sería contar de más.
 
 **Y la transparencia se midió, no se afirmó:** la salida de `sitemap()` y el texto entero de
 `/llms.txt` son **byte a byte idénticos** antes y después del refactor, y `npm run gate:html`

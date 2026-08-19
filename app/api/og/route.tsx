@@ -7,6 +7,7 @@ import type { NextRequest } from "next/server";
 import { getExperience, getTrayectoriaIndice } from "@/app/[lang]/dictionaries";
 import { eyebrowOf } from "@/content/experience-copy";
 import { brandHex, paletteHex } from "@/lib/design-values";
+import type { StaticPageSlug } from "@/lib/routes";
 
 // Generación de imágenes OG (1200×630) con la marca (P16). Route handler bajo
 // /api/og: el proxy excluye /api (D3), así que se sirve directo sin rewrite de
@@ -56,13 +57,17 @@ function splitLogoDataUri() {
 }
 
 type Lang = "es" | "en";
-type Card =
-  | "home"
-  | "brand-kit"
-  | "design-system"
-  | "cookies"
-  | "sobre-mi"
-  | "accesibilidad";
+/**
+ * Qué tarjeta se puede pedir. DERIVADA del registro de páginas (D72) y no escrita:
+ * era la CUARTA copia de «qué páginas tiene el sitio», y la más callada de las
+ * cuatro — una página registrada sin tarjeta compilaba, pasaba `check:rutas` y se
+ * publicaba con la OG de la home, cosa que solo ve quien comparta el enlace. Con
+ * esto, `COPY` deja de ser exhaustivo y NO COMPILA.
+ *
+ * Las dos exclusiones: la home no es un slug (es `""`), y `/trayectoria` y sus
+ * cinco experiencias las resuelve `deepDiveCopy` antes de llegar aquí.
+ */
+type Card = "home" | Exclude<StaticPageSlug, "" | "trayectoria">;
 
 const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
   home: {

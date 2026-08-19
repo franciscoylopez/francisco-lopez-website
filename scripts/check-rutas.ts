@@ -1,10 +1,11 @@
 /**
  * ¿El registro de páginas dice lo que hay en disco? — `npm run check:rutas`.
  *
- * QUÉ PROTEGE. «Qué páginas tiene este sitio» estaba escrito A MANO en tres
- * sitios —el sitemap, el gate de HTML y `/llms.txt`— y en ninguno fallaba de forma
- * visible: la página no existía para Google, el gate dejaba de cubrirla EN
- * SILENCIO, y no aparecía en el índice para modelos. D59 nombró el problema y
+ * QUÉ PROTEGE. «Qué páginas tiene este sitio» estaba escrito A MANO en CUATRO
+ * sitios —el sitemap, el gate de HTML, `/llms.txt` y la unión `Card` de las
+ * tarjetas OG— y en ninguno fallaba de forma visible: la página no existía para
+ * Google, el gate dejaba de cubrirla EN SILENCIO, no aparecía en el índice para
+ * modelos, y se publicaba con la tarjeta de la home. D59 nombró el problema y
  * arregló solo la mitad del deep-dive; D72 cierra la otra.
  *
  * Ahora la lista es una (`lib/routes.ts`) y este guardián comprueba las dos cosas
@@ -13,7 +14,7 @@
  *   1. Que el registro CUADRE con las carpetas de `app/[lang]/`, que es el único
  *      sitio donde una página existe de verdad. En los dos sentidos: una carpeta
  *      sin registrar, y un slug registrado cuya carpeta ya no está.
- *   2. Que las tres consumidoras sigan LEYENDO de ahí. El tipo impide que una
+ *   2. Que las consumidoras sigan LEYENDO de ahí. El tipo impide que una
  *      página nueva se quede sin registrar; no impide que alguien vuelva a
  *      escribir una lista a mano al lado.
  *
@@ -72,6 +73,11 @@ const CONSUMIDORAS = [
     archivo: "scripts/page-html-diff.ts",
     rompe: "el gate de HTML deja de cubrirla, en silencio",
   },
+  {
+    archivo: "app/api/og/route.tsx",
+    rompe:
+      "la página se publica con la tarjeta OG de la home, y eso solo lo ve quien comparta el enlace",
+  },
 ];
 
 const problemas: string[] = [];
@@ -116,7 +122,7 @@ for (const ruta of disco) {
   if (!registro.has(ruta)) {
     fallo(
       `«${ruta || "(home)"}» tiene página en disco y NO está en STATIC_PAGE_SLUGS de \`lib/routes.ts\`. ` +
-        `Mientras no esté: fuera del sitemap, fuera del gate de HTML y fuera de /llms.txt, las tres en silencio.`,
+        `Mientras no esté: fuera del sitemap, fuera del gate de HTML, fuera de /llms.txt y con la tarjeta OG de la home, las cuatro en silencio.`,
     );
   }
 }
@@ -129,7 +135,7 @@ for (const ruta of registro) {
   }
 }
 
-// 2 · Las tres consumidoras siguen leyendo del registro.
+// 2 · Las consumidoras siguen leyendo del registro.
 let nConsumidoras = 0;
 for (const { archivo, rompe } of CONSUMIDORAS) {
   nConsumidoras++;
@@ -179,5 +185,5 @@ if (problemas.length) {
 }
 
 console.log(
-  "✓ El registro de páginas, el disco y sus tres consumidoras cuadran.",
+  `✓ El registro de páginas, el disco y sus ${nConsumidoras} consumidoras cuadran.`,
 );
