@@ -20,8 +20,13 @@ const inter600 = readFileSync(join(FONT_DIR, "inter-600.woff"));
 const inter400 = readFileSync(join(FONT_DIR, "inter-400.woff"));
 
 // Foto del hero para la tarjeta compuesta de la home (JPEG → data URI).
+//
+// EL ARCHIVO MIDE 600×630, QUE ES LA CAJA DONDE CAE (abajo, la mitad izquierda
+// de la tarjeta con `objectFit: cover`). Hasta el 2026-08-19 se guardaba a
+// 1200×630 y el optimizador recortaba a los 600 centrales: la mitad del archivo
+// no se servía nunca y el nombre anunciaba un tamaño que no era el que se usaba.
 const photoDataUri = `data:image/jpeg;base64,${readFileSync(
-  join(process.cwd(), "public/og/og-home-1200x630.jpg"),
+  join(process.cwd(), "public/og/og-home-600x630.jpg"),
 ).toString("base64")}`;
 
 // Colores: tokens del tema oscuro (la OG lleva fondo de marca fijo), derivados de
