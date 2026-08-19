@@ -3664,3 +3664,132 @@ protege lo que nadie identifica como protegible. Y el **enlace al repo en el foo
 habría dado un 404 al que lo pulsara, trae el **segundo icono propio** —lucide retiró `Github` en
 la v1.24 por marca registrada, el supuesto que `BRAND.md` §Iconos propios nombra— y mete el repo
 en el **`sameAs`** del JSON-LD, que es el consumidor que no se ve mirando la página (D66).
+
+---
+
+## D69 · El régimen de contexto de D28 gana cifra y guardián, y aparece la operación que faltaba: retirar — 2026-08-19
+
+**Contexto.** Un análisis de metodología con mirada externa, pedido antes de abrir el sprint
+«Cómo se ha creado», midió el peso de lo que se `@`-importa en cada arranque de sesión:
+**9.275 palabras el 9 de agosto —el día del corte de `BRAND.md` que fijó el régimen— y 19.805
+el 19. Un +113% en diez días**, sin que nada lo viera. El corte compró 2.400 palabras y el
+crecimiento se las comió en cuatro días.
+
+D28 escribió el régimen —reglas precargadas, historia a demanda— y **no le puso ni cifra ni
+guardián**. O sea que se cumplió exactamente lo que dura la memoria de quien lo escribió. Es
+«una regla que hay que recordar es una regla que se incumple» aplicada a la regla que gobierna
+las reglas.
+
+**El diagnóstico de fondo, que explica bastante más que este archivo.** Este método tiene una
+operación de **añadir** excepcional —cada fallo se convierte en regla, cada regla en guardián,
+cada guardián en párrafo, sesenta y ocho veces— y **no tenía operación de retirar**. El
+contraste que lo prueba: los documentos eran el único artefacto del repositorio sin
+compactación. El diccionario se partió (D48), los showcase se partieron (D42), `BRAND.md` se
+partió una vez y duró cuatro días. Y la asimetría tenía un sitio concreto: **`close-session`
+preguntaba qué documento hay que actualizar y nunca qué documento se puede colapsar.**
+
+**Decisión — cuatro piezas, y ninguna es «escribir menos».**
+
+1. **`npm run check:contexto`, en CI.** Techo sobre las palabras de los cuatro `@`-importados,
+   con el desglose por archivo y la distancia a un objetivo declarado. **Nace en verde a
+   propósito y actúa de trinquete**: un gate que nace en rojo se acaba subiendo hasta que no
+   significa nada. Empezó en 16.000 y el mismo día bajó a 13.500; el historial del techo vive
+   en el propio script, porque *aflojarlo es la forma que tendría esto de morir*.
+2. **`PRD-Live.md` vuelve a ser present-tense**: 6.859 → 2.520 palabras y 40 fechas → 1. Sus
+   §5 y §9 eran el 84% del documento y casi todo era narrativa de cómo se llegó a un estado,
+   no el estado. Lo retirado va íntegro a `PRD-Historical.md` §52.
+3. **Los índices se derivan, no se escriben** (`npm run indices`, `check:indices` en CI). El de
+   decisiones pasó de **3.610 a 924 palabras** al decidirse que solo ENRUTA: para contestar
+   «¿cuál necesito?» basta el título, y quien te lleva a una entrada es el comentario del
+   archivo en el que estás —42 de las 68 se citan desde el código—, no el índice. Y
+   `PRD-Historical.md` y `BRAND-historical.md` ganan índice **en su propia cabecera**: eran
+   46.000 palabras y 52 secciones sin navegación de ninguna clase, así que «a demanda»
+   significaba grepear a ciegas o cargarlo entero.
+4. **`close-session` gana el paso 1 bis**: tres preguntas de retirada con «no» explícito
+   obligatorio, y una propuesta de cierre con dos columnas —altas y bajas—. Una segunda
+   columna siempre vacía es la señal de que se ha contestado por inercia.
+
+**El control correcto para un archivo no es un techo, es un índice.** Un archivo debe crecer:
+para eso es un archivo, y ponerle límite solo conseguiría que se deje de escribir el porqué,
+que es lo que hace bueno a este proyecto. 46.000 palabras sin índice son inservibles; 200.000
+con un índice bueno están bien. Por eso el techo va solo sobre lo `@`-importado y los históricos
+solo ganan navegación.
+
+**Consecuencia de método que hay que respetar:** el índice no tiene texto propio. Si un título
+no basta para saber si abrir una sección, **se arregla la cabecera**, nunca el índice. Es lo
+único que impide que los dos títulos divierjan, y es el mismo movimiento que D59 hizo con el
+sitemap, `llms.txt` y las tarjetas OG.
+
+**El sistema se estrenó contra sí mismo el mismo día**, que es la mejor prueba de que muerde:
+meter la Definition of Done en `CLAUDE.md` disparó `check:contexto` (16.003 contra 16.000), y
+se pagó **retirando** narrativa fechada de las reglas del tablero. Primera vez que este método
+compacta por obligación y no por criterio.
+
+**Y sobre borrar lo desfasado, que era la duda razonable: no.** Auditadas las 68 cabeceras, lo
+declarado obsoleto son **237 palabras de 41.694, el 0,6%**. No hay volumen que ganar, y el valor
+de este archivo es el experimento fallido — el mismo día, D51 evitó reconsiderar `graphify`
+por la razón equivocada y D60 obligó a medir si el artefacto era determinista en vez de copiar
+el método del CV. Lo que sí había era **información de estado escrita donde no se ve**: D30
+estaba marcada como generalizada por D39 desde el 9 de agosto y la marca vivía en el cuerpo. El
+estado gana hueco propio en la cabecera y viaja al índice, con **tres** palabras que significan
+cosas distintas —superado, generalizada por, revertida por—, porque D30 sigue vigente y
+marcarla como superada haría que se saltara una regla que se cumple todos los días.
+
+**Resultado:** 19.805 → 12.915 palabras de contexto de arranque (-35%), con techo, trinquete y
+la operación inversa escrita en la skill que se dispara sola.
+
+---
+
+## D70 · La capa que verifica no estaba verificada, y su modo de fallo es una luz verde — 2026-08-19
+
+**Contexto.** El proyecto tiene ~1.900 líneas de guardianes en `scripts/` y cero tests. Eso no
+sería grave en sí; lo grave es **cómo fallan**: en verde. El censo de contraste se rompió **dos
+veces en silencio** —primero un bucle plano que se saltaba las utilidades `hover:` envueltas en
+`@media`, después CSS Nesting haciendo que `if (rule.cssRules)` fuese siempre cierto, con lo que
+encontraba 0 reglas `:hover` donde hay 21—. Las dos se descubrieron igual: midiendo un caso cuyo
+resultado ya se conocía.
+
+Y Qlty lo estaba diciendo desde otro sitio: sus **cinco peores archivos, los cinco en F**, no
+eran código de la web sino `contrast-census.js` (el que se ha roto dos veces), dos registros de
+contenido y dos guardianes.
+
+**Decisión — cuatro piezas.**
+
+1. **`npm run check:guardianes`**: por cada guardián, un **caso malo conocido que tiene que
+   rechazar**. Eso ya se hacía —cada guardián se «validó rompiéndolo» el día que se escribió—
+   pero como **hábito**, y un hábito se olvida y no deja rastro. Detecta dos cosas, y la segunda
+   es la que lo hace útil a un año vista: que un guardián pierda los dientes, y que **el caso
+   malo caduque** (si la mutación ya no cambia el archivo, lo dice en vez de aprobar).
+   **No entra en CI a propósito**: muta archivos rastreados, y un job que escribe en el árbol de
+   trabajo sale caro el día que se interrumpe. Se niega a arrancar con el árbol sucio, restaura
+   en `finally` y comprueba al final que no ha dejado nada movido.
+2. **La guarda de cero, completada.** `check:experiencias` y `check:raya` ya fallaban al mirar
+   cero. `check:palette` no: publicaba «30 tokens, 18 conversiones», cifras derivadas de sus
+   **propias constantes**, que salen idénticas aunque el barrido no abra un solo archivo. *Una
+   cifra tranquilizadora sobre cero trabajo es la forma más difícil de detectar de este fallo,
+   porque el metro sí afirma cuánto ha mirado: solo que afirma lo que no ha mirado.*
+3. **`check:artefacto`**, y el método salió al revés que en el CV **por haberlo medido**. D60
+   sella las ENTRADAS del CV porque el PDF no es determinista; el artefacto sí lo es (mismo
+   sha256 byte a byte al regenerar), así que se sella el **par fuente→producto**, que es
+   estrictamente más fuerte: cubre además lo que el gate del CV deja fuera a propósito, un
+   cambio en el saneador. El sello lo escribe `npm run artefacto`, de modo que regenerar y
+   sellar no se pueden separar.
+4. **`check:skills`**, porque D60 dejó escrito que **las skills caducan peor que los `.md`**: un
+   párrafo desactualizado se lee con escepticismo, una skill se **sigue**. Comprueba la parte
+   mecánica —que existan las rutas y los `npm run` que nombra— y dice explícitamente lo que no
+   comprueba: que el procedimiento siga teniendo sentido.
+
+**Y `scripts/` sale de `.prettierignore`**, que era la quinta aparición de la misma familia y la
+más fina: no solo dejaba 3.000 líneas fuera del gate de formato, sino que hacía que
+`prettier --check "scripts/**"` contestara **«All matched files use Prettier code style!» sobre
+cero archivos**, porque prettier aplica el ignore también a las rutas explícitas. El aviso estaba
+escrito en el propio archivo que lo causaba, y decía «10 archivos»: eran 13.
+
+**Sobre Qlty: el informe pedía lectura, no obediencia.** `qlty.toml` baja al repo —vivía solo en
+su nube, o sea una segunda fuente de verdad fuera del control de versiones— y excluye **por lo
+que un archivo ES**, nunca por lo que puntúa: `en.ts` y `es.ts` son tablas de datos sin una sola
+función, penalizadas por la duplicación estructural ES↔EN que `check:experiencias` existe para
+GARANTIZAR. Lo que **no** se silencia es `contrast-census.js`, que era señal buena.
+
+**Estado:** CI pasa de 8 a 12 pasos. Los cinco guardianes nuevos o tocados se validaron
+rompiéndolos, y `check:guardianes` se validó neutralizando `check:raya` a propósito.
