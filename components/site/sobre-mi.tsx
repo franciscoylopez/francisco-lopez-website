@@ -8,6 +8,14 @@ import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
 import { SectionHeader } from "@/components/ui/heading";
 
+/**
+ * Id del vídeo de apertura. Lo comparten el elemento y el script inline que lo
+ * arranca, así que vive en una constante: dos cadenas iguales escritas a mano
+ * son dos cadenas que pueden dejar de serlo, y aquí el síntoma sería una
+ * apertura que se queda congelada en el póster sin error de compilación.
+ */
+const APERTURA_ID = "sobre-mi-apertura";
+
 type SobreMiDict = Dictionary["sobreMi"];
 
 // `PROSE` (medida de lectura) la usan el opening (intro) y el closing (Dónde estoy
@@ -85,6 +93,29 @@ export function SobreMi({
               recorte pasa a ser horizontal, sale la figura entera igual, y el
               68% conserva al sujeto, que está a la derecha.
 
+              DESDE EL 2026-08-19 LA APERTURA ES UN VÍDEO, y el párrafo de
+              arriba explica por qué NO se le puede aplicar su misma receta. El
+              plano dura 10s: sala vacía, entra por la derecha, cruza y se apoya
+              en la pared. Tres cosas medidas antes de montarlo:
+
+              · NO TERMINA EN LA FOTO ANTERIOR. Al final la figura está en
+                x=50% ocupando el 19% del ancho; en la foto estaba en x=69%
+                ocupando el 24%. Misma pose, encuadre distinto: el vídeo no
+                puede «entregarle el relevo» a la foto vieja, así que el
+                respaldo quieto sale de su ÚLTIMO FOTOGRAMA, no del asset de
+                antes.
+              · NO PUEDE LLEVAR `loop`. Saltaría de él apoyado a la sala vacía
+                y volvería a entrar en bucle, que se lee como un fallo. Se
+                reproduce UNA vez y se queda en el último fotograma.
+              · EL RECORTE NO PUEDE ANCLARSE ARRIBA. El vídeo es 16:9 (1,778) y
+                la banda 1,951, y su figura es más pequeña y más baja: ocupa el
+                71% del alto del cuadro contra el 87% de la foto. En un 1280×618
+                —el 1920 de Windows al 150%— la banda mide 394px y solo caben el
+                55% del alto del vídeo, así que A ESA ALTURA NO CABE ENTERO CON
+                NINGÚN ANCLAJE. Es aritmética, no criterio. Se ancla al 18% para
+                que lo que se pierda sea suelo y piernas y nunca la cabeza:
+                D50 al revés, porque aquí el sujeto no llega a los bordes.
+
               El scrim es más profundo que el de la foto anterior (85/55 frente a
               75/25) porque esta pared es blanca donde la otra era gris oscuro:
               con el gradiente antiguo el par texto-blanco/fondo caía a 3,81 en
@@ -100,18 +131,68 @@ export function SobreMi({
             data-reveal
             className="relative m-0 h-[clamp(15rem,min(48vw,100svh_-_14rem),41rem)] overflow-hidden rounded-lg"
           >
-            {/* Misma corrección que el hero de la home: `priority` está
-                deprecado en Next 16 y ya no pone `fetchpriority` en el <img>
-                (D47). Esta es la apertura de la página, o sea su LCP. */}
+            {/* CON MOTION REDUCIDO no se sirve el vídeo pausado, se sirve una
+                imagen quieta: su ÚLTIMO fotograma, porque el primero es la sala
+                vacía y una habitación sin nadie no es el retrato de esta página.
+                Lleva el `fetchPriority` alto que antes tenía la foto (D47).
+
+                Y NO SE DESCARGA EL VÍDEO, que es la parte que hay que hacer a
+                mano. `autoPlay` + `preload="none"` NO basta: está MEDIDO que el
+                navegador ignora el `preload` cuando hay autoplay y se baja los
+                370 KB igual, aunque el elemento esté en `display:none`. O sea
+                que quien pide menos movimiento pagaba el vídeo entero para ver
+                una imagen de 17 KB. Se quita el `autoPlay` y lo arranca el
+                script de abajo solo si la preferencia no está puesta — es la
+                misma forma que el sitio ya usa para el tema y el consentimiento:
+                un inline sin JS de cliente de React. */}
             <Image
-              src="/img/francisco-sobre-mi-apertura.webp"
+              src="/img/francisco-sobre-mi-quieto.webp"
               alt={t.photoAlt}
               fill
               fetchPriority="high"
               loading="eager"
               sizes="100vw"
-              className="object-cover object-[68%_0%]"
+              className="hidden object-cover object-[50%_18%] motion-reduce:block"
             />
+            <video
+              // Sin `controls`: no es un vídeo que se vea, es cómo abre la
+              // página. Sin `loop` a propósito (ver arriba). `muted` y
+              // `playsInline` no son opcionales: sin ellos iOS no reproduce y
+              // Chrome bloquea la reproducción automática.
+              id={APERTURA_ID}
+              muted
+              playsInline
+              preload="none"
+              poster="/img/francisco-sobre-mi-poster.webp"
+              aria-hidden
+              tabIndex={-1}
+              className="absolute inset-0 h-full w-full object-cover object-[50%_18%] motion-reduce:hidden"
+            >
+              <source
+                src="/video/francisco-sobre-mi-apertura.webm"
+                type="video/webm"
+              />
+            </video>
+            <script
+              // El `catch` no es decoración: un navegador puede rechazar la
+              // reproducción y una promesa sin capturar dejaría un error en
+              // consola de una página que funciona (se queda el póster).
+              dangerouslySetInnerHTML={{
+                __html: `{const v=document.getElementById(${JSON.stringify(APERTURA_ID)});if(v&&!matchMedia("(prefers-reduced-motion: reduce)").matches)v.play().catch(()=>{})}`,
+              }}
+            />
+            <noscript>
+              {/* Sin JS no hay vídeo, así que la apertura es el póster: la sala
+                  vacía. Se sustituye por el fotograma final, que sí es un
+                  retrato. */}
+              <Image
+                src="/img/francisco-sobre-mi-quieto.webp"
+                alt={t.photoAlt}
+                fill
+                sizes="100vw"
+                className="object-cover object-[50%_18%]"
+              />
+            </noscript>
             <div
               aria-hidden
               className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0,rgba(0,0,0,0.55)_min(60%,13rem),transparent_min(100%,22rem))]"
