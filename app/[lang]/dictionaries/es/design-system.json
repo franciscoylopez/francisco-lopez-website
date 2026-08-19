@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Fundamentos de diseño",
     "title": "Design System",
-    "lead": "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica y comportamiento en claro y oscuro. No define el contenido de ninguna sección: define cómo respira todo lo que va dentro.",
+    "lead": "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica y comportamiento en claro y oscuro. No define el contenido: define cómo respira todo lo que va dentro.",
     "statContainer": "Ancho máximo del contenedor",
     "statBreakpoints": "Breakpoints",
     "statMeasure": "Medida de lectura (~91 car.)",

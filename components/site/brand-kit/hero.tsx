@@ -211,8 +211,20 @@ export function Hero({
             ]}
           />
         </div>
-        <div className={HERO_ROW}>
-          {/* `self-start`: la fila sigue centrada —la composición decorativa
+        {/* EL GRUPO VA CENTRADO, como el deep-dive y por la misma razón: una
+            portada reparte el aire arriba y abajo, no lo acumula debajo de un
+            bloque pegado al breadcrumb. Francisco lo pidió al ver estas tres al
+            lado de `/trayectoria`, que ya lo hacía.
+
+            Y AHORA SE PUEDE, que en el primer intento no. Centrar reparte el
+            sobrante, así que si los grupos miden distinto el eyebrow cae a
+            distinta altura en cada página — que es exactamente lo que pasó (h1 a
+            406, 378 y 409). Lo que lo arregla no es el anclaje: es que los tres
+            grupos midan LO MISMO, y de eso se encargan el `min-h` de `HERO_ROW`
+            y las composiciones compactadas. Con eso hecho, centrar es seguro. */}
+        <div className="my-auto">
+          <div className={HERO_ROW}>
+            {/* `self-start`: la fila sigue centrada —la composición decorativa
               queda equilibrada frente al texto— pero la COLUMNA DE TEXTO se ancla
               arriba. Sin eso el hueco breadcrumb→eyebrow lo decidía el alto de la
               ilustración: la fila la manda el elemento más alto y `items-center`
@@ -221,58 +233,58 @@ export function Hero({
               (composición 54px más alta que el texto → 27 de empuje). Tres alturas
               distintas en tres páginas hermanas, y NO lo causaba el pliegue: venía
               de antes. Con esto, 72 en las tres. */}
-          <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">
-            <SectionHeader
-              eyebrow={t.kicker}
-              title={t.title}
-              level={1}
-              size="page"
-              reveal
-            >
-              <p
-                data-reveal
-                className="text-muted-foreground max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
+            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">
+              <SectionHeader
+                eyebrow={t.kicker}
+                title={t.title}
+                level={1}
+                size="page"
+                reveal
               >
-                {t.lead}
-              </p>
-            </SectionHeader>
-          </div>
-          {/* Composición: la anatomía del logo aplicada a escala (PRD §19).
+                <p
+                  data-reveal
+                  className="text-muted-foreground max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
+                >
+                  {t.lead}
+                </p>
+              </SectionHeader>
+            </div>
+            {/* Composición: la anatomía del logo aplicada a escala (PRD §19).
               Centro foreground que conmuta, flancos pastel fijos. Decorativa. */}
-          <div
-            aria-hidden="true"
-            className="flex flex-[1_1_26rem] items-center justify-center"
-          >
-            <div className="relative w-[min(21rem,100%)]">
-              <div
-                data-reveal
-                className="absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-                style={{ transitionDelay: "0.16s" }}
-              >
+            <div
+              aria-hidden="true"
+              className="flex flex-[1_1_26rem] items-center justify-center"
+            >
+              <div className="relative w-[min(21rem,100%)]">
                 <div
-                  className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
-                  style={{ transform: "rotate(-6deg)" }}
+                  data-reveal
+                  className="absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+                  style={{ transitionDelay: "0.16s" }}
                 >
-                  <Glyph variant="flat" h={27} />
+                  <div
+                    className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
+                    style={{ transform: "rotate(-6deg)" }}
+                  >
+                    <Glyph variant="flat" h={27} />
+                  </div>
                 </div>
-              </div>
-              <div
-                data-reveal
-                className="absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-                style={{ transitionDelay: "0.24s" }}
-              >
                 <div
-                  className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
-                  style={{ transform: "rotate(6deg)" }}
+                  data-reveal
+                  className="absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+                  style={{ transitionDelay: "0.24s" }}
                 >
-                  <Glyph variant="flat" h={27} />
+                  <div
+                    className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
+                    style={{ transform: "rotate(6deg)" }}
+                  >
+                    <Glyph variant="flat" h={27} />
+                  </div>
                 </div>
+                <BrowserMockup />
               </div>
-              <BrowserMockup />
             </div>
           </div>
-        </div>
-        {/* Fila de datos (P54.3). Las otras dos páginas que documentan el sistema
+          {/* Fila de datos (P54.3). Las otras dos páginas que documentan el sistema
             —Design System y Accesibilidad— abrían con su resumen en cifras y
             esta no, siendo de la misma familia. Los VALORES salen de
             `lib/design-values.ts` (D38): el diccionario solo trae la etiqueta,
@@ -280,12 +292,16 @@ export function Hero({
             recuento de color se DERIVA de las dos capas de la paleta, y el
             umbral del split es el mismo valor con el que la sección del
             logotipo decide qué peldaños funcionan. */}
-        <StatRow>
-          <Stat value={String(COLOR_TOKEN_COUNT)} label={t.statColor} />
-          <Stat value={String(TYPE_FAMILIES.length)} label={t.statTipografia} />
-          <Stat value={String(SPLIT_MIN_PX)} unit="px" label={t.statSplit} />
-          <Stat value="AA→AAA" label={t.statA11y} />
-        </StatRow>
+          <StatRow>
+            <Stat value={String(COLOR_TOKEN_COUNT)} label={t.statColor} />
+            <Stat
+              value={String(TYPE_FAMILIES.length)}
+              label={t.statTipografia}
+            />
+            <Stat value={String(SPLIT_MIN_PX)} unit="px" label={t.statSplit} />
+            <Stat value="AA→AAA" label={t.statA11y} />
+          </StatRow>
+        </div>
       </div>
     </section>
   );

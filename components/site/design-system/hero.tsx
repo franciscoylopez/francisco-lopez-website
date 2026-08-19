@@ -134,44 +134,50 @@ export function Hero({
             ]}
           />
         </div>
-        <div className={HERO_ROW}>
-          {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
+        <div className="my-auto">
+          <div className={HERO_ROW}>
+            {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
               breadcrumb→eyebrow lo decide el alto de la ilustración de al lado. */}
-          <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">
-            <SectionHeader
-              eyebrow={t.kicker}
-              title={t.title}
-              level={1}
-              size="page"
-              reveal
-            >
-              <p
-                data-reveal
-                className="text-muted-foreground max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">
+              <SectionHeader
+                eyebrow={t.kicker}
+                title={t.title}
+                level={1}
+                size="page"
+                reveal
               >
-                {t.lead}
-              </p>
-            </SectionHeader>
+                <p
+                  data-reveal
+                  className="text-muted-foreground max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
+                >
+                  {t.lead}
+                </p>
+              </SectionHeader>
+            </div>
+            <HeroComposition />
           </div>
-          <HeroComposition />
+          {/* stats */}
+          <StatRow>
+            <Stat
+              value={String(CONTAINER_PX)}
+              unit="px"
+              label={t.statContainer}
+            />
+            <Stat
+              value={String(BREAKPOINT_COUNT)}
+              unit={` ${t.statBreakpoints}`}
+              label={BREAKPOINTS.filter((b) => b.min !== null)
+                .map((b) => b.min)
+                .join(" · ")}
+            />
+            <Stat
+              value={String(MEASURE_REM)}
+              unit="rem"
+              label={t.statMeasure}
+            />
+            <Stat value="AA→AAA" label={t.statA11y} />
+          </StatRow>
         </div>
-        {/* stats */}
-        <StatRow>
-          <Stat
-            value={String(CONTAINER_PX)}
-            unit="px"
-            label={t.statContainer}
-          />
-          <Stat
-            value={String(BREAKPOINT_COUNT)}
-            unit={` ${t.statBreakpoints}`}
-            label={BREAKPOINTS.filter((b) => b.min !== null)
-              .map((b) => b.min)
-              .join(" · ")}
-          />
-          <Stat value={String(MEASURE_REM)} unit="rem" label={t.statMeasure} />
-          <Stat value="AA→AAA" label={t.statA11y} />
-        </StatRow>
       </div>
     </section>
   );
