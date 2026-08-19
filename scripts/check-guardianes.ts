@@ -73,7 +73,7 @@ const CASOS: Caso[] = [
     mutar: append("\n" + "relleno ".repeat(4000) + "\n"),
   },
   {
-    guardian: "check:decisiones",
+    guardian: "check:indices",
     rotura: "una decisión se queda sin línea en el índice",
     archivo: "CLAUDE.md",
     mutar: (o) => o.replace(/^- D33 · .*$/m, ""),

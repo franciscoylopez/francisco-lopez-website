@@ -10,6 +10,7 @@
 
 - **`@`-importados (siempre en contexto):** `AGENTS.md`, `BRAND.md` (core de reglas), `PRD-Live.md`, y este `CLAUDE.md`.
 - **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md` (el porqué fechado de las reglas de marca)**, `BRAND-logo.md` (enciclopedia del logo).
+- **Y cómo se consultan, que es lo que hace barata esa mitad:** los tres primeros llevan **índice derivado de sus cabeceras**. El de `DECISIONS.md` es el de aquí abajo; los de los dos históricos van **en su propia cabecera**, así que se abren con un `Read` limitado a las ~90 primeras líneas —el mapa entero de 46.000 palabras por unos 1.500 tokens— y solo después se va a la sección. Grepear a ciegas un archivo de 46.000 palabras es el fallo que el índice existe para evitar.
 - **Cuándo leer `BRAND-historical.md`:** *antes de cambiar una regla de `BRAND.md`*. Casi todas nacieron corrigiendo algo, y allí está qué se probó y por qué se descartó — ahorra repetir un experimento que ya salió mal. *(Partido el 2026-08-09, P37.685: `BRAND.md` bajó de 5.954 a 3.530 palabras y el total `@`-importado de ~11.400 a ~9.000.)*
 - **Convención de mitigación:** antes de tocar un subsistema con ADR, hacer `grep`/Read de su D-entry en `DECISIONS.md` — así no se pierde ninguna regla, solo deja de estar precargada. El índice de abajo dice qué D-entries existen.
 
