@@ -161,7 +161,8 @@ sale de una de ellas, es hallazgo:
 | Chrome | `components/ui/chrome.tsx` | el enlace de la **carpintería de navegación** (`shape` × `tone`) |
 | Etiqueta | `components/ui/badge.tsx` | el rótulo que **no se pulsa** (`tone` × `kind`) |
 | Cabecera | `components/ui/heading.tsx` | el par **eyebrow + titular**, con su hueco |
-| Layout | `components/ui/layout.ts` | cajas y ritmos (`WRAP`/`SECTION`/`CARD`/`PANEL`/`PAIR`) |
+| Fila de cifras | `components/ui/stat-row.tsx` | el resumen en datos bajo una apertura (`StatRow`/`Stat`) — la usan Brand Kit, Design System y Accesibilidad |
+| Layout | `components/ui/layout.ts` | cajas y ritmos (`WRAP`/`SECTION`/`PROSE`/`CARD`/`PANEL`/`PAIR`/`HERO_ROW`) |
 
 Cuál toca se decide con **dos preguntas** —¿se pulsa? y, si sí, ¿tiene caja propia?—, no por
 parecido. Y **dónde va lo nuevo** con una tercera: ¿la pieza sabe algo de ESTE sitio (copy,

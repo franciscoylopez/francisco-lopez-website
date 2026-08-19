@@ -3270,3 +3270,238 @@ exactamente el valor predicho antes del cambio. El censo pasa de indexar 21 regl
 siempre: lo encontró `design-review` preguntándose **por qué `BRAND.md` publicaba «8 páginas × 2
 temas»** cuando el sitio tiene doce. Al correr las seis que faltaban apareció el par. *Un metro
 bien calibrado que no se pasa por todo el sitio sigue siendo un metro que no ha mirado.*
+
+---
+
+## D62 · El 404 de una ruta que CASA no lo cubre `global-not-found`
+
+**Fecha:** 2026-08-19 · **Contexto:** Sprint Lite, P51 · **Estado:** aplicada
+
+Diez rutas del sitio —los cinco deep-dive × dos idiomas— servían en producción el «404 · This
+page could not be found» **por defecto de Next**: Times New Roman, sin nav, sin footer, sin el
+«0» del split, y con el `<title>` de la home. Lo reportó Francisco con una captura de
+`franciscolopez.es/trayectoria/kuotipsemrush`.
+
+**La causa no es un fallo de `global-not-found`, es su contrato.** La doc de Next es explícita
+(`node_modules/next/dist/docs/.../file-conventions/not-found.md`): «used when a requested URL
+doesn't match any route at all». Y `/trayectoria/loquesea` **sí casa** — el segmento `[slug]`
+acepta cualquier valor. Así que la página se renderizaba, llamaba a `notFound()`, y Next buscaba
+el boundary `not-found.js` más cercano… que no existe desde que **D25** borró el anidado, porque
+su `headers()` volvía dinámico todo `[lang]`.
+
+**El arreglo es mover el rechazo al ENRUTADO:** `export const dynamicParams = false` en la ruta.
+Con eso un slug que no salga de `generateStaticParams` se rechaza antes de renderizar, que es
+justo el caso que `global-not-found` sí cubre. Los cinco slugs ya salían de ahí, así que no se
+pierde ninguna página ni deja de prerenderizarse (las doce siguen `●`).
+
+**Lo que hay que llevarse, porque vuelve con cualquier ruta dinámica nueva:** un segmento
+dinámico casa con TODO, así que «tengo un 404 global» y «mis rutas dinámicas devuelven mi 404»
+son dos afirmaciones distintas. Si algún día hace falta una ruta cuyos valores no se conozcan en
+build, `dynamicParams = false` no sirve y reaparece la tensión de D25.
+
+**Y un falso hallazgo que casi se publica.** En local, `/trayectoria/EMENDU` —un slug real con
+otras mayúsculas— devolvía **200 con la página de Emendu**, lo que parecía una URL duplicada. Es
+el sistema de archivos de **Windows**, que es insensible a mayúsculas: `next start` encontraba el
+`emendu.html` prerenderizado. Verificado en la Preview (Linux): da 404 con el 404 de marca, igual
+que el resto. *El entorno de medida también inventa hallazgos.*
+
+---
+
+## D63 · La raya no era un reemplazo, eran tres familias — y su guardián
+
+**Fecha:** 2026-08-19 · **Contexto:** Sprint Lite, P52 y P52.5 · **Estado:** aplicada
+
+Francisco: la raya doble (`—`) es una señal visual de que el texto lo ha escrito una IA, y además
+casi nunca dice nada que no diga un signo más corto. Había **357** en el copy servido (174 ES +
+183 EN) más las de `content/experience-copy/`, que alimentan también el CV.
+
+**Tratarlo como un buscar-y-reemplazar habría estropeado la voz.** Al clasificarlas salieron
+tres familias con tratamiento distinto y una cuarta intocable:
+
+1. **~90 parentéticos** (`—texto—`): la señal de verdad. Se **reescriben** con comas, con
+   paréntesis cuando el inciso ya lleva comas dentro (si no, se confunde con la enumeración), o
+   partiendo la frase.
+2. **~208 incisos y separadores**: dos puntos cuando lo que sigue explica lo anterior, coma
+   cuando solo continúa, punto cuando ya era otra frase, y `·` **solo** cuando de verdad separa
+   dos etiquetas (`Nav · al cargar`).
+3. **8 rangos de fecha**: aquí el `·` elegido **no vale**, y se vio al aplicarlo — ya es el
+   separador de campos, así que `2019 · 2026 · 5 hitos` son tres campos donde había dos. Guion
+   con espacios.
+4. **Se quedan** los 50 ordinales de cabecera (`01 — Rejilla`, convención de D43) y 10 celdas
+   con la raya sola, que es el signo tipográfico de «no aplica» en una tabla de datos.
+
+**El inglés no era traducir el arreglo.** Tenía **nueve rayas más** que el español y, en cinco
+sitios, había derivado a la raya donde su gemelo español ya usaba `:` o `;` (tres titulares del
+Design System y dos notas). Se alinean con el ES, que es la fuente (D20).
+
+**El guardián, `npm run check:raya`, octavo paso de CI.** Mismo giro que la paleta y las
+experiencias: **busca la AUSENCIA**, no el patrón. Recorre el árbol del diccionario —así una rama
+nueva entra sola— y los literales de `content/experience-copy`, saltándose los comentarios, que
+son código. **No mira los `.md` del repo a propósito:** es una regla del copy que se sirve, no
+del estilo de escribir documentación.
+
+**Y afirma cuánto ha mirado** («30 archivos · 2.588 cadenas · 60 rayas permitidas»), porque un
+guardián que no encuentra nada y calla parece un aprobado. Ese 60 es 50 + 10, exactamente lo que
+contó el inventario por otro camino: el metro coincide con una medición independiente.
+
+**Dos trampas de método que cazó la propia validación** (y que valen para el próximo guardián):
+
+- La primera lectura de los códigos de salida usaba `$?` **detrás de un pipe**, o sea el de
+  `tail`: los seis casos decían 0 y parecía que el guardián no detectaba nada. El check estaba
+  bien; el que medía mal era yo.
+- El caso «diccionario movido de sitio» salía con código 1 pero **por un stack trace de ENOENT**.
+  Ahora comprueba las rutas antes de recorrer nada y distingue «no hay rayas» de «me he quedado
+  ciego», que es la diferencia que importa.
+
+**Coda: el guardián nuevo cayó en un punto ciego del propio tooling.** `scripts/check-raya.ts`
+estaba sin formatear y `format:check` decía que todo bien, porque `.prettierignore` excluye
+`scripts/`. Lo cazó **qlty**, que genera su config y sí lo mira. Es la quinta aparición del metro
+que aprueba sobre lista vacía (P71.5) y la primera en que el punto ciego se traga un archivo
+escrito ese mismo día. De paso, su botón «Run Formatter» reformateó **`CLAUDE.md` y
+`PRD-Live.md`**, que están excluidos a propósito: qlty no lee nuestro `.prettierignore`, y
+mientras su config viva solo en su nube no hay dónde escribir la exclusión (P73).
+
+---
+
+## D64 · Una apertura homogénea no la decide el anclaje: la deciden los altos
+
+**Fecha:** 2026-08-19 · **Contexto:** Sprint Lite, P54, P54.2 y P54.3 · **Estado:** aplicada
+
+Sale de P48: en cuanto la ventana pasa de cierto alto, el rótulo de la segunda sección asomaba
+por debajo de la apertura y la primera vista dejaba de ser una portada. El tratamiento del
+deep-dive —`md:min-h-[calc(100svh-5rem)]`, la misma constante que el hero de la home, y `min-h`
+y no `h` para que en ventana baja no recorte (D50 al revés)— sube a **Brand Kit, Design System y
+Accesibilidad**. Medido antes: a 1920×1080 dejaban 283, 227 y 234px de hueco; a 2560×1440, entre
+587 y 643.
+
+**Pero el pliegue era la parte fácil. La homogeneidad costó tres pasadas**, y las tres las abrió
+Francisco comparando las páginas **abiertas seguidas** —que es el caso que ninguna medición de
+una sola página detecta—. Sus tres reportes eran ciertos y **ninguno era lo que yo supuse**:
+
+1. **El eyebrow a distinta altura no lo causaba el `my-auto`** que acababa de añadir, aunque esa
+   fue mi primera hipótesis y anclar arriba «lo mejoró». Lo causaba el **`items-center` de la
+   fila**: su alto lo fija el hijo más alto, así que cuando la **ilustración** es más alta que la
+   columna de texto empuja el texto hacia abajo (27px en Accesibilidad, 11 en Design System, 0 en
+   Brand Kit, la única que se veía bien). **Venía de antes de P54.** Arreglo: `self-start` en la
+   columna de texto, que ancla el texto sin descentrar la ilustración.
+2. **La fila de datos a distinta altura era lo mismo un nivel más arriba:** mientras la
+   ilustración mande, es ella la que decide dónde cae la fila. Brand Kit «ajustaba» porque su
+   composición (207) es más baja que su texto (272). Arreglo en tres partes: **Accesibilidad
+   320→240** (tenía **68px de hueco muerto** entre dos piezas), **Design System 320→272** (aquí
+   no había hueco, así que compactar fue solaparlas más) y **`HERO_ROW`** en
+   `components/ui/layout.ts` con `md:min-h-[19rem]`, porque esa clase estaba escrita **tres
+   veces** y el `min-h` no podía ser tres constantes que pueden divergir.
+   Instrucción textual de Francisco, que es la parte reutilizable: *«no se trataría de hacer las
+   imágenes más pequeñas sino de compactar los diferentes elementos»*.
+3. **Y al final el grupo va CENTRADO**, como `/trayectoria`. Se pudo porque la causa estaba
+   resuelta: centrar reparte el sobrante, así que solo es seguro cuando los tres grupos miden lo
+   mismo. **La lección: si un anclaje «arregla» una inconsistencia, probablemente esté tapando la
+   causa.**
+
+**Resultado medido, las tres idénticas:** 2560×1440 eyebrow 531 y datos 907→991 · 1920×1080
+eyebrow 351 y datos 727→811 · 1536×740 eyebrow 225 y datos 601→686. Y la entradilla del Design
+System baja a cuatro líneas con la redacción que dio Francisco, igualándola a Accesibilidad.
+
+**La trampa del `mx-auto` no mordió, y se comprobó midiéndola**, no confiando en el `w-full`: al
+volver flex el contenedor, el `mx-auto` de `WRAP` pasa a ser margen del eje transversal y
+desactiva el `stretch`. Con el ancho declarado, el WRAP mide 1.360 y su borde queda a 40px del
+enlace del nav —el `--page-x`— en los cuatro viewports.
+
+**El cuerpo de Cookies sale de la media columna**, que era la última página con todo dentro de
+`PROSE` (42rem, lo que Francisco describió como «está toda al 50%»). El sitio ya había contestado
+esto dos veces —Sobre mí el 2026-08-16 y el deep-dive en D53— y la respuesta estaba escrita: la
+media columna es el tratamiento de las **entradas y los cierres**, no del cuerpo. Medido: los
+párrafos del deep-dive van a 1.280px (119-151 car/línea) y los de cookies iban a 672. Ahora
+apertura 672 · cuerpo 1280 · Contacto 672, que son exactamente los dos bloques que él señaló.
+El `minWidth` de su tabla **no cae pero su motivo sí**: ya no hace falta por los 42rem, hace
+falta en móvil (medido a 390px: 572 y scrollea), y los dos comentarios que lo justificaban con la
+razón vieja se corrigen en vez de dejarlos mintiendo.
+
+**Cookies NO lleva el tratamiento de pliegue, y se decidió con la medida:** su encabezado son
+252px de contenido —sin ilustración ni fila de datos—, así que estirarlo a los 1.000 del pliegue
+dejaría **539px de aire**, más del doble de lo que hay dentro; las otras cuatro llevan ~600 y
+~300. Y es un documento que se **consulta**: retrasar la tabla una pantalla es cambiar su trabajo
+por simetría. Queda escrito en el propio componente para que no se lea como un olvido.
+
+**Y un fallo que llevaba meses y que solo se ve mirando:** en esa página, `[&_p]:m-0` compila a un
+selector de **descendiente** (`.clase p`, especificidad 0-1-1) que le gana a `.mt-4` (0-1-0), así
+que **dos márgenes computaban 0px sin dar un solo error de compilación** — el botón de
+preferencias pegado a su texto y la nota de la tabla a 1px de ella. Es el punto 5 de `BRAND.md`
+§Cómo medir, y el arreglo es la regla que `CLAUDE.md` ya pide: **que el espaciado lo ponga el
+layout** (`flex flex-col gap-5`), no márgenes por elemento. Verificado que el patrón solo existía
+ahí, así que no hay auditoría pendiente.
+
+**Séptima pieza de la capa: `components/ui/stat-row.tsx`.** La fila de cifras de la apertura
+estaba escrita **dos veces** con firmas distintas —`accesibilidad.tsx` y `design-system/hero.tsx`,
+la primera un subconjunto de la segunda—, así que la tercera copia para el Brand Kit era justo lo
+que la Regla de construcción manda no hacer. Va en `ui/` y no en `site/` porque no sabe nada de
+este sitio (frontera de D36). **Su ancho mínimo de columna lo decidió la pantalla contra mi
+argumento:** razoné 13rem por la etiqueta más larga y al verlo a 900px resultó que con 13rem la
+fila de cuatro se parte en 3+1 y deja un dato **huérfano**, mientras con 11rem entran los cuatro y
+solo se parte una etiqueta en dos líneas.
+
+---
+
+## D65 · Un vídeo de apertura no es una foto que se mueve
+
+**Fecha:** 2026-08-19 · **Contexto:** Sprint Lite, P53.5 · **Estado:** aplicada
+
+La apertura de Sobre mí pasa de foto a vídeo (10s: sala vacía, entra por la derecha, cruza y se
+apoya en la pared). La tarea daba por hecho que era una versión animada de la foto y que el
+póster podía ser la webp existente. **Las dos cosas eran falsas**, y lo dijo la medición:
+
+- **No termina en la foto anterior.** Al final la figura queda en x=50% ocupando el 19% del
+  ancho; en la foto estaba en x=69% y el 24%. Misma pose, encuadre distinto — así que no puede
+  «entregarle el relevo», y el respaldo quieto es **su último fotograma**.
+- **No puede llevar `loop`.** Saltaría de él apoyado a la sala vacía y volvería a entrar en
+  bucle, que se lee como un fallo. Se reproduce una vez y se queda en el último fotograma.
+- **No puede anclarse arriba como la foto** (que venía recortada 84px justo para eso). El vídeo es
+  16:9 y la banda 1,951, y su figura es más pequeña: ocupa el 71% del alto del cuadro contra el
+  87% de la foto. En 1280×618 la banda mide 394px y solo caben el 55% del alto del vídeo, así que
+  **a esa altura no cabe entera con ningún anclaje**. Es aritmética. Anclada al 18%, lo que se
+  pierde es suelo y piernas y nunca la cabeza.
+
+**El error que solo salió midiendo:** el primer montaje llevaba `autoPlay` + `preload="none"` y un
+comentario afirmando que así no se descargaba el vídeo con motion reducido. **Es falso** — el
+navegador ignora ese `preload` cuando hay autoplay, incluso con el elemento en `display:none`—,
+así que quien pide menos movimiento se bajaba 362 KB para ver una imagen de 17 KB. Se quita el
+`autoPlay` y lo arranca un script inline gateado por la media query, la misma forma que el tema y
+el consentimiento: **cero JS de cliente de React**. Medido después: 0 KB de webm con motion
+reducido, 362 sin ella.
+
+**El scrim mejora, y su cifra estaba medida contra los píxeles de la FOTO** (5,44 en la cita /
+7,28 en el subtítulo). Sobre el peor de seis fotogramas muestreados, midiendo el fondo **sin el
+texto**: 6,27 y 10,85, con umbrales 4,5 y 7. Dos notas de método por el camino: la primera
+medición dio 1,04 porque el recorte caía sobre el **banner de cookies** —se vio *mirando* el
+recorte, no leyendo la cifra— y la segunda dio 1,00 porque medía el propio texto blanco contra
+blanco.
+
+**Gate (D52):** 0 violaciones de axe y 41 comprobaciones OK en claro, oscuro y motion reducido; la
+única «incompleta» es el par sobre vídeo, que axe no puede resolver por construcción. **LCP = el
+póster de 12,3 KB, CLS 0** — el vídeo no es el LCP, que era el riesgo. Sin JS no hay vídeo, así
+que el `<noscript>` sirve el fotograma final. La CSP no se toca: el vídeo es auto-hospedado y
+`media-src` cae en `default-src 'self'`.
+
+---
+
+## D66 · Un asset tiene más consumidores de los que se ven
+
+**Fecha:** 2026-08-19 · **Contexto:** Sprint Lite, P53 · **Estado:** aplicada
+
+Retrato nuevo en la home, con el encuadre decidido viendo las tres opciones **al tamaño al que se
+sirven** y dentro del marco real de la tarjeta. Pesa menos que el anterior (28,7 KB contra 33,8)
+aunque suba la calidad, porque el fondo nuevo es oscuro y liso.
+
+**Cambiar «la foto del hero» no es cambiar un archivo: son tres consumidores**, y el tercero no se
+ve mirando la página. Además del `<Image>` del hero, la usan la **tarjeta OG** (`/api/og` la lee y
+la compone) y el **JSON-LD** (`image` del `Person`, en `lib/structured-data.ts`). Al renombrar el
+asset, ese tercero apuntaba a un 404 **sin que nada lo notara** — lo cazó un `grep` del nombre
+viejo después de renombrar. Y ahí está el argumento a favor de renombrar en vez de reutilizar el
+nombre: si lo hubiera reutilizado, la referencia habría seguido «funcionando» apuntando a otra
+foto.
+
+**Y del archivo de la tarjeta OG se servía la mitad.** Medía 1200×630, pero `/api/og` lo mete en
+una caja de **600×630** —la mitad izquierda de la tarjeta— con `objectFit: cover`, así que solo se
+veían los 600 centrales: el 50% del archivo no se servía nunca y su nombre anunciaba un tamaño
+que no era el de uso. Verificado **renderizando el endpoint**, no leyendo el código. Pasa a
+`og-home-600x630.jpg`, que es la caja de verdad.
