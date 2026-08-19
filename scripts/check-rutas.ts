@@ -17,17 +17,21 @@
  *      página nueva se quede sin registrar; no impide que alguien vuelva a
  *      escribir una lista a mano al lado.
  *
- * LO QUE NO COMPRUEBA, dicho para que no se dé por cubierto: que el CONTENIDO de
- * cada consumidora sea el correcto —la prioridad del sitemap, la descripción de
- * `/llms.txt`—. Eso lo garantizan sus `Record` completos, que no compilan
- * incompletos. Aquí se mira la LISTA.
+ * LO QUE NO COMPRUEBA, dicho para que no se dé por cubierto. Dos cosas:
+ *
+ * - **El CONTENIDO de cada consumidora** —la prioridad del sitemap, la descripción
+ *   de `/llms.txt`—. Eso lo garantizan sus `Record` completos, que no compilan
+ *   incompletos. Aquí se mira la LISTA.
+ * - **Que el import se USE.** La comprobación 2 es un proxy: ve que el archivo
+ *   importa de `lib/routes`, no que no tenga además una lista propia al lado. Un
+ *   proxy honesto es mejor que nada y peor que un tipo — y el tipo ya cubre el caso
+ *   que importa, que es olvidar una página. Esto solo vigila la reincidencia.
  *
  * Y afirma cuánto ha mirado: cuántas rutas en disco, cuántas en el registro y
  * cuántas consumidoras. Un metro que devuelve una lista vacía parece un aprobado,
  * y este repo ya se lo ha encontrado seis veces — así que falla al mirar cero.
  */
-import { readdirSync } from "node:fs";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { DEEP_DIVE_SLUGS, PAGE_SLUGS } from "../lib/routes";
