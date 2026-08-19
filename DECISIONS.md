@@ -1,9 +1,9 @@
 # DECISIONS — Registro de decisiones técnicas (V1 build)
 
-> **Vive solo en el repo (sin espejo en Notion).** Es la fuente de verdad de las
-> decisiones técnicas. *(El espejo de Notion se retiró el 2026-07-30: en Notion solo se
-> mantiene el `PRD-Live.md` para comprobación cómoda; DECISIONS y el PRD histórico viven
-> solo como `.md` en el repo.)*
+> **Vive solo en el repo.** Es la fuente de verdad de las decisiones técnicas.
+> *(Ningún documento tiene ya espejo en Notion: el de DECISIONS y el del PRD histórico se
+> retiraron el 2026-07-30, y el de `PRD-Live.md` el 2026-08-19. En Notion vive el tablero
+> de tareas y nada más.)*
 >
 > Alcance: decisiones **técnicas/de implementación** de la fase de desarrollo. El
 > **estado** de producto/diseño/alcance vive en `PRD-Live.md` y su **registro histórico**
@@ -12,12 +12,30 @@
 > vive en los mensajes de commit/PR; el progreso por tarea, en Notion.
 >
 > Formato ADR-lite: cada entrada es Decisión + Contexto/porqué + fecha. Estado por
-> defecto: **Aceptada**. Si una se revierte, no se borra: se marca *Revertida* y se
-> enlaza la que la sustituye.
+> defecto: **Aceptada**.
+>
+> **Nada se borra nunca, y el estado va EN LA CABECERA.** Lo primero, porque el valor de
+> este archivo es el experimento fallido: casi todas las reglas del proyecto nacieron
+> corrigiendo algo, y saber qué se probó y por qué se descartó es lo que ahorra repetirlo.
+> Lo segundo, porque desde el 2026-08-19 el índice de `CLAUDE.md` **se deriva de estas
+> cabeceras** (`npm run indices`): una marca escrita en el cuerpo no la ve nadie hasta
+> haber abierto la entrada, que es justo lo que la marca existe para evitar. Le pasaba a
+> D30, marcada desde el 2026-08-09 y sin que se notara.
+>
+> Tres palabras, y significan cosas distintas:
+>
+> | Marca | Qué dice | Ejemplo |
+> |---|---|---|
+> | **(superado …)** | Ya no aplica. No la sigas | D1 |
+> | **(generalizada por Dxx)** | Sigue siendo cierta; lo que cambia es **quién la aplica** | D30 |
+> | **(revertida por Dxx)** | Se probó, se deshizo, y la que la deshace explica por qué | — |
+>
+> La distinción entre las dos primeras no es cosmética: D30 sigue vigente y marcarla como
+> superada haría que se saltara una regla que se cumple todos los días.
 
 ---
 
-## D1 · El diseño se traduce, no se copia (superado en V2+) — 2026-07-24
+## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
 
 > **Superado para la fase V2+ (2026-08-01).** Este flujo aplicó a la V1, cuando **no
 > existía sistema** y había que explorar el lenguaje visual desde cero en Claude Design.
@@ -372,7 +390,7 @@ scroll y descarga de CV de fábrica → cubre dos métricas de éxito del PRD §
 **Resultado.** Producción: Desktop 100/100/100/100; Móvil Perf 91-94 / A11y 100 /
 BP 100 / SEO 100. Cumple el objetivo D8 (>90 desktop+móvil). Tags v1.0.1 → v1.0.4.
 
-## D20 · Revisión de copy ES↔EN — `es.json` fuente de verdad, EN no literal — 2026-07-28
+## D20 · Revisión de copy ES↔EN: el diccionario ES es la fuente de verdad, el EN no es literal — 2026-07-28
 **Decisión.** El copy se revisa en dos capas: (1) los textos ES son correctos y
 comunican, (2) el EN tiene sentido, no es traducción literal ni redundante.
 **`es.json` es la fuente de verdad**; el `en.json` se revisa contra él, no al revés.
@@ -850,7 +868,7 @@ plan B; en Accesibilidad el bloque *es* el canal de reporte y no hay otro camino
 **Copy.** El diccionario gana `emailCta` y `cvCta`; se retiran `emailLabel`, `cvLabel` y
 `cvValue`, que morían con la lista de filas.
 
-## D30 · Texto atenuado sobre fondos que no son `--background` — 2026-08-03
+## D30 (generalizada por D39) · Texto atenuado sobre fondos que no son `--background` — 2026-08-03
 
 > **GENERALIZADA POR [D39](#d39--el-atenuado-lo-resuelve-la-superficie-no-el-punto-de-uso--2026-08-09) (2026-08-09).** La regla de aquí es correcta y sigue vigente;
 > lo que cambia es **quién la aplica**. Dejó de escribirse en el punto de uso —el

@@ -39,7 +39,10 @@ import { readFileSync, writeFileSync } from "node:fs";
 export const DECISIONES = "DECISIONS.md";
 export const INDICE_DECISIONES = "CLAUDE.md";
 
-const PRIMERA = /^- D1 ·/m;
+// D1 abre el bloque, y lleva estado —«(superado en V2+)»—, así que el hueco del
+// estado tiene que estar aquí también. Sin él, el bloque entero se lee como
+// inexistente y el check dice «no hay índice» en vez de «difiere».
+const PRIMERA = /^- D1( \([^)]+\))? ·/m;
 const CIERRE = /^\*\(Al añadir una decisión nueva/m;
 
 /**
@@ -49,10 +52,14 @@ const CIERRE = /^\*\(Al añadir una decisión nueva/m;
  */
 export function decisiones(): string[] {
   const texto = readFileSync(DECISIONES, "utf8");
-  return [...texto.matchAll(/^## (D(\d+)) · (.+)$/gm)]
+  return [...texto.matchAll(/^## (D(\d+))( \([^)]+\))? · (.+)$/gm)]
     .map((m) => ({
       n: Number(m[2]),
-      linea: `- ${m[1]} · ${(m[3] ?? "").replace(/\s+—\s+\d{4}-\d{2}-\d{2}.*$/, "").trim()}`,
+      // El grupo 3 es el ESTADO de la decisión —«(superado en V2+)», «(generalizada
+      // por D39)»— y viaja al índice a propósito: es lo único que te dice que NO
+      // abras una entrada, así que dejarlo dentro del cuerpo lo vuelve inútil. Es
+      // lo que le pasó a D30, marcada el 2026-08-09 sin que se enterara nadie.
+      linea: `- ${m[1]}${m[3] ?? ""} · ${(m[4] ?? "").replace(/\s+—\s+\d{4}-\d{2}-\d{2}.*$/, "").trim()}`,
     }))
     .sort((a, b) => a.n - b.n)
     .map((e) => e.linea);
@@ -63,7 +70,9 @@ export function decisionesActual(): string[] {
   const ini = lineas.findIndex((l) => PRIMERA.test(l));
   const fin = lineas.findIndex((l) => CIERRE.test(l));
   if (ini < 0 || fin < 0 || fin < ini) return [];
-  return lineas.slice(ini, fin).filter((l) => /^- D\d+ ·/.test(l));
+  // El `( (…))?` es el hueco del estado: sin él, una entrada marcada se leería como
+  // «no es una línea del índice» y el check diría que falta en vez de que difiere.
+  return lineas.slice(ini, fin).filter((l) => /^- D\d+( \([^)]+\))? ·/.test(l));
 }
 
 // --- Los índices en cabecera de los históricos --------------------------------
