@@ -7,7 +7,11 @@
   "hero": {
     "kicker": "Identidad de marca",
     "title": "Brand Kit",
-    "lead": "El sistema de identidad de Francisco López: el logo y su geometría exacta, la paleta con sus dos capas, la tipografía y las reglas que gobiernan su uso. Todo descargable, en claro y oscuro."
+    "lead": "El sistema de identidad de Francisco López: el logo y su geometría exacta, la paleta con sus dos capas, la tipografía y las reglas que gobiernan su uso. Todo descargable, en claro y oscuro.",
+    "statColor": "Tokens de color",
+    "statTipografia": "Familias tipográficas",
+    "statSplit": "Umbral del split",
+    "statA11y": "Objetivo de accesibilidad"
   },
   "concepto": {
     "num": "01 — Concepto",

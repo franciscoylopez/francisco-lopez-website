@@ -196,6 +196,38 @@ export const GUTTER_RANGE_PX = "16–24px";
 export const SECTION_Y_RANGE_PX = "72 → 144px";
 
 /* -------------------------------------------------------------------------- */
+/* Cifras de identidad — las que publica la portada del Brand Kit             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Altura mínima a la que el split se lee como capa y no como fleco (BRAND.md
+ * §Logo). Es un valor EJECUTABLE, no solo publicado: la escalera de la sección
+ * del logotipo decide con él qué peldaños funcionan, así que vive aquí y no
+ * escrito a mano en la página — que es donde estaba.
+ *
+ * Ojo con el falso positivo al buscarlo: hay otros `48` en el Brand Kit que NO
+ * son este umbral, sino coordenadas de dibujo (el radio de los iconos de la
+ * maqueta de favicon). Esos se quedan en px por la excepción de ilustraciones
+ * de `CLAUDE.md`.
+ */
+export const SPLIT_MIN_PX = 48;
+
+/**
+ * Las dos familias del sistema. Se listan en vez de contarse para que el número
+ * no pueda mentir: si algún día entra una tercera, la cifra publicada sube sola.
+ */
+export const TYPE_FAMILIES = ["Bricolage Grotesque", "Inter"] as const;
+
+/**
+ * Cuántos tokens de color tiene el sistema, DERIVADO de las dos capas en vez de
+ * contado a mano: los semánticos de `PALETTE` (por tema, así que se cuenta uno)
+ * más los de marca de `BRAND_PALETTE`. Es la regla de las dos capas de
+ * `BRAND.md` expresada como cifra.
+ */
+export const COLOR_TOKEN_COUNT =
+  Object.keys(PALETTE.light).length + Object.keys(BRAND_PALETTE).length;
+
+/* -------------------------------------------------------------------------- */
 /* Breakpoints                                                                 */
 /* -------------------------------------------------------------------------- */
 

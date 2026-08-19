@@ -1,6 +1,12 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
 import { WRAP } from "@/components/ui/layout";
+import { Stat, StatRow } from "@/components/ui/stat-row";
+import {
+  COLOR_TOKEN_COUNT,
+  SPLIT_MIN_PX,
+  TYPE_FAMILIES,
+} from "@/lib/design-values";
 import { Breadcrumb, type BreadcrumbDict } from "../breadcrumb";
 import { Glyph } from "./shared";
 
@@ -224,6 +230,20 @@ export function Hero({
             </div>
           </div>
         </div>
+        {/* Fila de datos (P54.3). Las otras dos páginas que documentan el sistema
+            —Design System y Accesibilidad— abrían con su resumen en cifras y
+            esta no, siendo de la misma familia. Los VALORES salen de
+            `lib/design-values.ts` (D38): el diccionario solo trae la etiqueta,
+            así que la cifra publicada y la del sistema no pueden divergir. El
+            recuento de color se DERIVA de las dos capas de la paleta, y el
+            umbral del split es el mismo valor con el que la sección del
+            logotipo decide qué peldaños funcionan. */}
+        <StatRow>
+          <Stat value={String(COLOR_TOKEN_COUNT)} label={t.statColor} />
+          <Stat value={String(TYPE_FAMILIES.length)} label={t.statTipografia} />
+          <Stat value={String(SPLIT_MIN_PX)} unit="px" label={t.statSplit} />
+          <Stat value="AA→AAA" label={t.statA11y} />
+        </StatRow>
       </div>
     </section>
   );

@@ -7,7 +7,11 @@
   "hero": {
     "kicker": "Brand identity",
     "title": "Brand Kit",
-    "lead": "Francisco López's identity system: the logo and its exact geometry, the palette with its two layers, the typography and the rules that govern its use. All downloadable, in light and dark."
+    "lead": "Francisco López's identity system: the logo and its exact geometry, the palette with its two layers, the typography and the rules that govern its use. All downloadable, in light and dark.",
+    "statColor": "Color tokens",
+    "statTipografia": "Type families",
+    "statSplit": "Split threshold",
+    "statA11y": "Accessibility target"
   },
   "concepto": {
     "num": "01 — Concept",

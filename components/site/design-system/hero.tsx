@@ -1,6 +1,7 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
 import { WRAP } from "@/components/ui/layout";
+import { Stat, StatRow } from "@/components/ui/stat-row";
 import {
   BREAKPOINT_COUNT,
   BREAKPOINTS,
@@ -10,30 +11,6 @@ import {
 import { Breadcrumb, type BreadcrumbDict } from "../breadcrumb";
 
 /* ===================== HERO ===================== */
-function Stat({
-  value,
-  unit,
-  label,
-}: {
-  value: string;
-  unit?: string;
-  label: string;
-}) {
-  return (
-    <div>
-      <div className="font-display text-[1.6rem] leading-none">
-        {value}
-        {unit && (
-          <span className="text-muted-foreground text-[0.9rem]">{unit}</span>
-        )}
-      </div>
-      <div className="text-muted-foreground mt-[0.35rem] text-[0.85rem]">
-        {label}
-      </div>
-    </div>
-  );
-}
-
 // Composición decorativa del hero: tres marcos de página escalonados con la
 // rejilla de 12 columnas visible en el frente. Solo desktop; en móvil, un marco.
 function HeroComposition() {
@@ -165,10 +142,7 @@ export function Hero({
           <HeroComposition />
         </div>
         {/* stats */}
-        <div
-          data-reveal
-          className="border-border mt-[clamp(3rem,6vw,4.5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-[var(--gutter)] border-t pt-8"
-        >
+        <StatRow>
           <Stat
             value={String(CONTAINER_PX)}
             unit="px"
@@ -183,7 +157,7 @@ export function Hero({
           />
           <Stat value={String(MEASURE_REM)} unit="rem" label={t.statMeasure} />
           <Stat value="AA→AAA" label={t.statA11y} />
-        </div>
+        </StatRow>
       </div>
     </section>
   );
