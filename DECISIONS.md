@@ -3241,6 +3241,28 @@ disparándolo sobre las cinco. Y la misma caducidad afecta a las **cabeceras de 
 `scripts/cv/facts.ts` seguía anunciando que leía «periodos y roles» del diccionario meses después
 de dejar de hacerlo.
 
+### Tercera instancia (2026-08-19): un PNG con cifras dentro
+
+La social preview del repo decía «doce páginas bilingües, WCAG AAA en ambos temas y **ocho
+guardianes en CI**». Los tres datos eran ciertos el día que se generó, y el tercero estaba a una
+línea de YAML de dejar de serlo. Misma familia que el PDF: una **copia impresa** de datos que
+viven en otro sitio.
+
+**Pero aquí la salida de D60 no está disponible.** Al CV se le pudo poner guardián porque el
+consumidor del artefacto es el repo. La social preview la sirve GitHub desde *Settings*, y **no
+acepta una URL**: exige un fichero subido a mano, así que tampoco vale generarla como el OG del
+sitio (D14). Un guardián podría avisar de que la cifra cambió, pero no puede actualizar lo que
+GitHub enseña.
+
+**Cuando no se puede automatizar la copia, se quita el dato.** El claim pasa a ser cualitativo
+—«web personal bilingüe, con el sistema de diseño y la accesibilidad publicados en el propio
+sitio»— y las cifras se quedan donde ya estaban vivas: `README.md` y `PRD-Live.md`, que se editan
+en el mismo PR que las cambia. *Un dato que no puede tener guardián no es un dato: es una
+promesa.*
+
+Queda dentro «Next.js 16», a sabiendas: una major es un acto deliberado y visible, no un contador
+que se mueve solo.
+
 ## D61 · Una superficie también cambia por ESTADO, y el atenuado no se enteraba — 2026-08-18
 
 **El hueco.** D39 hizo que el atenuado lo resolviera la superficie y no el punto de uso, y su
@@ -3793,3 +3815,43 @@ GARANTIZAR. Lo que **no** se silencia es `contrast-census.js`, que era señal bu
 
 **Estado:** CI pasa de 8 a 12 pasos. Los cinco guardianes nuevos o tocados se validaron
 rompiéndolos, y `check:guardianes` se validó neutralizando `check:raya` a propósito.
+
+## D71 · «No hay datos» no distingue entre cero filas y mal configurado — 2026-08-19
+
+**El hueco.** El dashboard de métricas llevaba **16 días** con dos de sus tres scorecards en «No
+hay datos», y la conclusión que se dio por buena —dos veces— fue que faltaba configurar la
+medición. Era falso. El tag de GA4, su trigger y la dimensión personalizada estaban publicados
+desde el 2026-08-03; **la medición llevaba 16 días funcionando y lo roto era el instrumento que
+la mira**.
+
+Los dos tiles vacíos tenían el mismo filtro: `Incluir · Nombre del evento · Igual que (=) · «»`,
+con el **valor vacío**. Filtra por «nombre igual a nada» → cero filas, para siempre, sin error en
+ninguna parte. El único tile que funcionaba era el único cuyo filtro vive a nivel de **fuente de
+datos** en vez de gráfico. Es el modo de fallo de D63/D70 en su versión más barata de producir:
+*un metro que devuelve lista vacía parece un aprobado*, y aquí ni siquiera devolvía lista vacía —
+devolvía la frase «No hay datos», que es indistinguible de «nadie ha hecho clic».
+
+**Las cifras reales**, que son la referencia del cierre siguiente (GA4, 22 jul - 18 ago 2026):
+contacto **9** · CV **6** · scroll **56**.
+
+### Cómo se verifica la medición sin creerse el panel
+
+Tres técnicas, y las tres salieron de que las dos hipótesis previas eran erróneas:
+
+1. **El contenedor de GTM se audita sin entrar en su UI.** `curl` de
+   `googletagmanager.com/gtm.js?id=GTM-XXXXXXX` devuelve el JSON publicado: `macros`, `tags`,
+   `predicates` y `rules`. Ahí se lee si el tag existe, con qué parámetros y con qué trigger, en
+   dos minutos y sin sesión. Es la forma barata de no volver a suponer.
+2. **La verificación en vivo desde el equipo de Francisco NO puede pasar por Realtime ni por los
+   informes.** El filtro de datos «Internal Traffic» está en Excluir/Activo —deliberado desde
+   P30.9, para que las pruebas no ensucien el análisis— y descarta esos hits **antes de la
+   ingesta**. Disparar dos eventos y ver Realtime a 0 no prueba nada. Se lee el hit saliente en
+   la pestaña de red (`…/g/collect?…&en=contact_click&ep.contact_method=email`), o se pone el
+   filtro en «Prueba» un rato.
+3. **Ante un scorecard a cero, la primera hipótesis es el instrumento, no la audiencia** — y la
+   segunda es el **filtro** del propio scorecard, no la instrumentación aguas arriba. Aquí las
+   dos veces se saltó directo a la tercera.
+
+**Lo que esto le añade al punto 12 de `sprint-review`**, que se escribió el mismo día y sin nada
+que leer: ya tiene sus tres cifras de referencia, y su pregunta 4 («¿sigue midiendo bien el
+instrumento?») tiene ahora un procedimiento en vez de una intuición.
