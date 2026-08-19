@@ -96,7 +96,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 
 ## Que no se rompa
 
-Ocho pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
+Catorce pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
 
 | Paso | Qué impide |
 | :-- | :-- |

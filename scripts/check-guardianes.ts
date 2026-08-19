@@ -15,6 +15,11 @@
  * rechazar. Es lo contrario de un test de que funciona — es un test de que sabe
  * fallar.
  *
+ * Y se mide EN LAS DOS DIRECCIONES: primero que el guardián esté verde sobre el
+ * árbol limpio, después que salga rojo sobre el caso malo. Solo la segunda mitad
+ * daría por bueno a un guardián roto por cualquier otra causa, que sale con
+ * código 1 pase lo que pase.
+ *
  * DÓNDE CORRE. En CI, como un paso más, desde el 2026-08-19. Nació fuera con este
  * argumento: muta archivos rastreados para provocar el fallo, y un job que escribe
  * en el árbol de trabajo sale caro el día que se interrumpe a medias. Eso vale para
@@ -112,10 +117,21 @@ const CASOS: Caso[] = [
   },
 ];
 
-/** Corre un guardián y devuelve su código de salida, sin volcar su ruido. */
+/**
+ * Corre un guardián y devuelve su código de salida, sin volcar su ruido.
+ *
+ * `maxBuffer` explícito y generoso: el de por defecto es 1 MiB, y un guardián al
+ * que se le acaba de romper su archivo puede volverse mucho más verboso de lo
+ * normal. Si lo matara el buffer, `execSync` lanzaría igual que si hubiera
+ * fallado, y este script lo puntuaría como «lo rechaza» — un verde falso dentro
+ * del verificador de verificadores.
+ */
 function salida(guardian: string): number {
   try {
-    execSync(`npm run ${guardian}`, { stdio: "pipe" });
+    execSync(`npm run ${guardian}`, {
+      stdio: "pipe",
+      maxBuffer: 32 * 1024 * 1024,
+    });
     return 0;
   } catch (e) {
     return (e as { status?: number }).status ?? 1;
@@ -144,7 +160,19 @@ for (const caso of CASOS) {
   let veredicto: string;
   try {
     const mutado = caso.mutar(original);
-    if (mutado === original) {
+    // ANTES de romper nada: ¿está verde? Un código distinto de 0 no significa por
+    // sí solo «lo rechaza» — un guardián roto por otra causa (un error suyo, una
+    // dependencia que no resuelve) también sale con 1 sobre el archivo mutado, y
+    // sin esta pasada quedaría puntuado como que tiene dientes. Es el verde falso
+    // viviendo DENTRO del verificador de verificadores, que es la única clase de
+    // fallo que este script no puede permitirse.
+    if (salida(caso.guardian) !== 0) {
+      veredicto = "YA ESTABA ROJO";
+      fallos.push(
+        `${caso.guardian}: falla ya sobre el árbol limpio, así que rechazar su caso ` +
+          "malo no prueba nada. Arréglalo y vuelve a pasar esto.",
+      );
+    } else if (mutado === original) {
       veredicto = "NO SE PUDO ROMPER";
       fallos.push(
         `${caso.guardian}: la mutación no cambió ${caso.archivo}. El caso malo ha ` +

@@ -10,9 +10,9 @@
  * Ahora la lista es una (`lib/routes.ts`) y este guardián comprueba las dos cosas
  * que un tipo no puede ver:
  *
- *   1. Que el registro CUADRE con `app/[lang]/**\/page.tsx`, que es el único sitio
- *      donde una página existe de verdad. En los dos sentidos: una carpeta sin
- *      registrar, y un slug registrado cuya carpeta ya no está.
+ *   1. Que el registro CUADRE con las carpetas de `app/[lang]/`, que es el único
+ *      sitio donde una página existe de verdad. En los dos sentidos: una carpeta
+ *      sin registrar, y un slug registrado cuya carpeta ya no está.
  *   2. Que las tres consumidoras sigan LEYENDO de ahí. El tipo impide que una
  *      página nueva se quede sin registrar; no impide que alguien vuelva a
  *      escribir una lista a mano al lado.
@@ -27,9 +27,11 @@
  *   proxy honesto es mejor que nada y peor que un tipo — y el tipo ya cubre el caso
  *   que importa, que es olvidar una página. Esto solo vigila la reincidencia.
  *
- * Y afirma cuánto ha mirado: cuántas rutas en disco, cuántas en el registro y
- * cuántas consumidoras. Un metro que devuelve una lista vacía parece un aprobado,
- * y este repo ya se lo ha encontrado seis veces — así que falla al mirar cero.
+ * Y afirma cuánto ha mirado, **distinguiendo las dos mitades**, que no son iguales:
+ * las estáticas se contrastan contra el disco y las del deep-dive salen de la misma
+ * constante en los dos lados. Un metro que devuelve una lista vacía parece un
+ * aprobado, y este repo ya se lo ha encontrado seis veces — así que falla al mirar
+ * cero.
  */
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -38,6 +40,14 @@ import { DEEP_DIVE_SLUGS, PAGE_SLUGS } from "../lib/routes";
 
 /** La raíz del App Router por locale. Todo lo que hay debajo es una página. */
 const RAIZ = join("app", "[lang]");
+
+/**
+ * Qué archivo convierte una carpeta en ruta. NO solo `page.tsx`: Next enruta
+ * igual `.ts`, `.js`, `.jsx` y `.mdx`. Mirar solo la extensión que este repo usa
+ * hoy sería el fallo que este guardián existe para evitar, con otra forma — una
+ * carpeta que es ruta de verdad y que él no cuenta.
+ */
+const ES_PAGE = /^page\.(tsx|ts|jsx|js|mdx)$/;
 
 /**
  * Los segmentos dinámicos que este guardián sabe expandir, y con qué. Si aparece
@@ -67,10 +77,10 @@ const CONSUMIDORAS = [
 const problemas: string[] = [];
 const fallo = (msg: string) => problemas.push(msg);
 
-/** Recorre el árbol de rutas y devuelve un slug por carpeta con `page.tsx`. */
+/** Recorre el árbol de rutas y devuelve un slug por carpeta con página. */
 function rutasEnDisco(dir: string, segmentos: string[] = []): string[] {
   const entradas = readdirSync(dir, { withFileTypes: true });
-  const encontradas = entradas.some((e) => e.isFile() && e.name === "page.tsx")
+  const encontradas = entradas.some((e) => e.isFile() && ES_PAGE.test(e.name))
     ? [segmentos.join("/")]
     : [];
 
@@ -113,7 +123,7 @@ for (const ruta of disco) {
 for (const ruta of registro) {
   if (!disco.has(ruta)) {
     fallo(
-      `«${ruta || "(home)"}» está registrada en \`lib/routes.ts\` y no tiene \`page.tsx\` en \`app/[lang]/\`. ` +
+      `«${ruta || "(home)"}» está registrada en \`lib/routes.ts\` y no tiene página en \`app/[lang]/\`. ` +
         `O se borró la página y quedó la entrada, o el slug está mal escrito.`,
     );
   }
@@ -122,18 +132,36 @@ for (const ruta of registro) {
 // 2 · Las tres consumidoras siguen leyendo del registro.
 let nConsumidoras = 0;
 for (const { archivo, rompe } of CONSUMIDORAS) {
-  const fuente = readFileSync(archivo, "utf8");
   nConsumidoras++;
+  let fuente: string;
+  try {
+    fuente = readFileSync(archivo, "utf8");
+  } catch {
+    // Sin esto moría con un ENOENT pelado, que es un fallo del guardián y no un
+    // informe: quien lo lanza vería una traza en vez de qué consumidora falta.
+    fallo(
+      `«${archivo}» no existe. O se ha movido y hay que actualizar CONSUMIDORAS, o ha desaparecido: ${rompe}.`,
+    );
+    continue;
+  }
   if (!/from ["'][^"']*lib\/routes["']/.test(fuente)) {
     fallo(
-      `\`${archivo}\` ya no importa de \`lib/routes\`. Si vuelve a llevar su propia lista de páginas, ${rompe}.`,
+      `«${archivo}» ya no importa de \`lib/routes\`. Si vuelve a llevar su propia lista de páginas, ${rompe}.`,
     );
   }
 }
 
-// El metro afirma cuánto ha mirado (y no al revés).
+// El metro afirma lo que ha comparado DE VERDAD, y las dos mitades no son iguales:
+// las estáticas se contrastan contra el disco, y las del deep-dive salen de la
+// misma constante en los dos lados de la comparación (`DEEP_DIVE_SLUGS` está dentro
+// de `PAGE_SLUGS`), así que ahí no hay dos listas que puedan diferir. Contarlas
+// juntas publicaba «12 contra 12» sobre siete comparaciones reales, que es la forma
+// fina de aprobar de más.
+const nDerivadas = DEEP_DIVE_SLUGS.length;
 console.log(
-  `check:rutas — ${disco.size} rutas en disco · ${registro.size} en el registro · ${nConsumidoras} consumidoras`,
+  `check:rutas — ${disco.size - nDerivadas} rutas estáticas contrastadas contra el disco · ` +
+    `${nDerivadas} del deep-dive derivadas de EXPERIENCES (no hay dos listas que puedan diferir) · ` +
+    `${nConsumidoras} consumidoras`,
 );
 
 if (disco.size === 0 || nConsumidoras === 0) {
