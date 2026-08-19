@@ -102,5 +102,32 @@ jobs:
       - name: Raya en el copy
         run: npm run check:raya
 
+      # El SVG del deep-dive es un artefacto COMMITEADO derivado del `.mmd` y del
+      # saneador, o sea la familia de D60 en su segunda instancia: una fuente única
+      # evita dos verdades, pero no mantiene al día una copia impresa. Y ya falló
+      # una vez por esa vía (D54 publicó el diagrama sin sanear). Aquí se sella el
+      # PAR fuente→producto, que se pudo porque se midió: al revés que el PDF, el
+      # artefacto SÍ es determinista.
+      - name: Artefacto al día
+        run: npm run check:artefacto
+
+      # Techo al contexto que se `@`-importa en cada sesión. D28 escribió el
+      # régimen y no le puso ni cifra ni guardián, así que se cumplió cuatro días:
+      # de 9.275 palabras a 19.805 en diez. Esto es coste fijo de cada arranque.
+      - name: Contexto de arranque
+        run: npm run check:contexto
+
+      # Las skills CADUCAN PEOR que los `.md` porque se siguen en vez de leerse
+      # (D60: `update-cv` acumuló nueve afirmaciones falsas en un día). Comprueba
+      # la parte mecánica: que las rutas y los `npm run` que nombran existan.
+      - name: Skills al día
+        run: npm run check:skills
+
+      # `DECISIONS.md` no se `@`-importa a propósito (D28), así que su índice en
+      # `CLAUDE.md` ES el mecanismo del régimen de contexto. Estaba desordenado a
+      # partir de D40 y nadie lo había visto.
+      - name: Índice de decisiones
+        run: npm run check:decisiones
+
       - name: Build
         run: npm run build
