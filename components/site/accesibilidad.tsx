@@ -8,7 +8,7 @@ import { fillRatios } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
-import { CARD, SECTION, WRAP } from "@/components/ui/layout";
+import { CARD, HERO_ROW, SECTION, WRAP } from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailCta } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
@@ -60,7 +60,7 @@ export function Accesibilidad({
               ]}
             />
           </div>
-          <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+          <div className={HERO_ROW}>
             {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
                 breadcrumb→eyebrow lo decide el alto de la ilustración de al lado. */}
             <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">
@@ -240,7 +240,12 @@ function HeroComposition() {
       className="flex flex-[1_1_24rem] items-center justify-center"
     >
       {/* desktop */}
-      <div className="relative hidden h-80 w-[min(25rem,100%)] md:block">
+      {/* 15rem = 240px, no 20 (320). Las tres piezas ocupaban 124, 116 y 65 de
+          alto, pero estaban repartidas en 320 con SESENTA Y OCHO PÍXELES DE NADA
+          entre el checklist (acababa en 174) y la muestra de foco (empezaba en
+          242). Lo vio Francisco comparando las tres aperturas. No se han hecho
+          las piezas más pequeñas: se han juntado. */}
+      <div className="relative hidden h-60 w-[min(25rem,100%)] md:block">
         {/* atrás: contraste medido */}
         <div
           data-reveal
@@ -284,7 +289,7 @@ function HeroComposition() {
         {/* delante: anillo de foco */}
         <div
           data-reveal
-          className="absolute bottom-4 left-0"
+          className="absolute top-[10.5rem] left-0"
           style={{ transform: "rotate(2deg)", transitionDelay: "0.24s" }}
         >
           <div className="ring-primary ring-offset-background rounded-[13px] ring-2 ring-offset-2">

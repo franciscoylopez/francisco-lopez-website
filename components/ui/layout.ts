@@ -18,6 +18,30 @@ export const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
 export const SECTION = "border-border border-t py-[var(--section-y)]";
 
 /**
+ * Fila de la apertura: columna de texto a la izquierda, ilustración a la derecha.
+ * La usan las tres páginas que documentan el sistema (Brand Kit, Design System y
+ * Accesibilidad), donde estaba escrita TRES veces con las mismas clases.
+ *
+ * EL `min-h` ES LA PARTE QUE NO SE PUEDE ESCRIBIR EN CADA PÁGINA, y es lo que
+ * hace que la fila de datos caiga a la misma altura en las tres. Sin él, el alto
+ * de la fila lo decide el contenido más alto de cada página —la columna de texto
+ * mide 272, 297 y 266 según lo que ocupe la entradilla— y los datos aparecían a
+ * 653, 679 y 648. Se ve al comparar las tres seguidas, que es como lo detectó
+ * Francisco. 19rem (304px) deja aire sobre la más alta de las tres sin recortar
+ * ninguna.
+ *
+ * Va con `md:` como el resto del andamiaje de pliegue: en móvil la fila apila y
+ * un alto mínimo solo metería un agujero.
+ *
+ * OJO al orden de causas si esto se vuelve a descuadrar: mientras la ILUSTRACIÓN
+ * sea más alta que la columna de texto, es ella la que manda y este `min-h` no
+ * arregla nada. Las tres composiciones se compactaron a 207, 272 y 240 justo para
+ * que no pase.
+ */
+export const HERO_ROW =
+  "flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)] md:min-h-[19rem]";
+
+/**
  * Prosa a la medida de lectura (~91 caracteres en Inter).
  *
  * NO ES LA ANCHURA POR DEFECTO DE TODO TEXTO, y conviene saberlo antes de
