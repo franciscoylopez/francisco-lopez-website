@@ -3782,9 +3782,10 @@ contenido y dos guardianes.
    pero como **hábito**, y un hábito se olvida y no deja rastro. Detecta dos cosas, y la segunda
    es la que lo hace útil a un año vista: que un guardián pierda los dientes, y que **el caso
    malo caduque** (si la mutación ya no cambia el archivo, lo dice en vez de aprobar).
-   **No entra en CI a propósito**: muta archivos rastreados, y un job que escribe en el árbol de
-   trabajo sale caro el día que se interrumpe. Se niega a arrancar con el árbol sucio, restaura
-   en `finally` y comprueba al final que no ha dejado nada movido.
+   **Nace fuera de CI**: muta archivos rastreados, y un job que escribe en el árbol de trabajo
+   sale caro el día que se interrumpe. Se niega a arrancar con el árbol sucio, restaura en
+   `finally` y comprueba al final que no ha dejado nada movido. *(Entró en CI el 2026-08-19,
+   P54.96 — ver la corrección al final de esta entrada.)*
 2. **La guarda de cero, completada.** `check:experiencias` y `check:raya` ya fallaban al mirar
    cero. `check:palette` no: publicaba «30 tokens, 18 conversiones», cifras derivadas de sus
    **propias constantes**, que salen idénticas aunque el barrido no abra un solo archivo. *Una
@@ -3815,6 +3816,16 @@ GARANTIZAR. Lo que **no** se silencia es `contrast-census.js`, que era señal bu
 
 **Estado:** CI pasa de 8 a 12 pasos. Los cinco guardianes nuevos o tocados se validaron
 rompiéndolos, y `check:guardianes` se validó neutralizando `check:raya` a propósito.
+
+**Corregido el 2026-08-19 en P54.96: `check:guardianes` entra en CI**, y CI pasa a trece pasos.
+El argumento para dejarlo fuera —que muta archivos rastreados y un job que escribe en el árbol
+de trabajo sale caro si se interrumpe— vale para un árbol con trabajo dentro, no para un runner
+que se tira al terminar. Y el precio de dejarlo fuera era **exactamente el modo de fallo que esta
+decisión describe**: el verificador de los verificadores solo corría si alguien se acordaba, o sea
+que el único guardián sin disparador automático era el que vigila a los otros ocho. Un guardián
+que se puede olvidar no es un guardián: es una nota (regla 1 de «Cómo se escribe una regla» en
+`BRAND.md` — un disparador que mira al momento equivocado). Medido en el runner: **2 s**, sobre
+un job de 59 s que domina el build.
 
 ## D71 · «No hay datos» no distingue entre cero filas y mal configurado — 2026-08-19
 

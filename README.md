@@ -109,9 +109,10 @@ Ocho pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `m
 | `check:contexto` | Que el contexto de arranque crezca sin techo. D28 escribió el régimen y no le puso cifra: creció un 113% en diez días (`D69`) |
 | `check:skills` | Que una skill nombre archivos o comandos que ya no existen. Se **siguen** en vez de leerse, así que su drift se ejecuta (`D60`) |
 | `check:indices` | Que un índice deje de ser el derivado de sus cabeceras. Los tres se generan con `npm run indices` (`D69`) |
+| `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
 | `build` | — |
 
-Y fuera de CI, dos: **`npm run check:guardianes`** pasa a cada guardián un caso malo conocido que tiene que rechazar —lo que se hacía como hábito («validado rompiéndolo») convertido en comando (`D70`)—, y el que más ha cazado, **`npm run gate:html`**, compara el HTML servido de las doce páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
+Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de las doce páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
 
 ## Arrancar
 
