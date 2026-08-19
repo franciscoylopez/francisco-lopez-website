@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Design foundations",
     "title": "Design System",
-    "lead": "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy and light/dark behavior. It doesn't define any section's content: it defines how everything inside breathes.",
+    "lead": "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy and light/dark behavior. It doesn't define the content: it defines how everything inside breathes.",
     "statContainer": "Max container width",
     "statBreakpoints": "Breakpoints",
     "statMeasure": "Reading measure (~91 char.)",
