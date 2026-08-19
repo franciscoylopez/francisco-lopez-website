@@ -99,7 +99,9 @@ export function previousFacts(dict: DictFacts): FactRow[] {
 // futuro rompe la correspondencia web↔CV, salta en la generación en vez de en
 // silencio.
 export function matchFact(rows: FactRow[], company: string): FactRow {
-  const hit = rows.find((r) => r.company === company || r.company.startsWith(company));
+  const hit = rows.find(
+    (r) => r.company === company || r.company.startsWith(company),
+  );
   if (!hit) {
     throw new Error(
       `CV: no encuentro los hechos de "${company}" en el diccionario (trayectoria). ` +

@@ -1,11 +1,11 @@
-const sharp = require('sharp');
-const path = require('path');
+const sharp = require("sharp");
+const path = require("path");
 
 const LIGHT_FG = { r: 0x21, g: 0x26, b: 0x2b }; // --foreground light theme #21262B
-const DARK_FG = { r: 0xF7, g: 0xF3, b: 0xEC };  // --foreground dark theme #F7F3EC
+const DARK_FG = { r: 0xf7, g: 0xf3, b: 0xec }; // --foreground dark theme #F7F3EC
 const CANVAS = 160;
-const D_LO = 20;  // below this distance from background: fully transparent
-const D_HI = 50;  // above this distance: fully opaque (steep ramp preserves faint linework, avoids noisy mid-tone haze)
+const D_LO = 20; // below this distance from background: fully transparent
+const D_HI = 50; // above this distance: fully opaque (steep ramp preserves faint linework, avoids noisy mid-tone haze)
 
 function dist(a, b) {
   return Math.sqrt((a.r - b.r) ** 2 + (a.g - b.g) ** 2 + (a.b - b.b) ** 2);
@@ -31,11 +31,15 @@ function sampleBackground(data, width, height, channels) {
     const key = `${data[idx]},${data[idx + 1]},${data[idx + 2]}`;
     counts.set(key, (counts.get(key) || 0) + 1);
   }
-  let best = null, bestCount = -1;
+  let best = null,
+    bestCount = -1;
   for (const [key, count] of counts) {
-    if (count > bestCount) { bestCount = count; best = key; }
+    if (count > bestCount) {
+      bestCount = count;
+      best = key;
+    }
   }
-  const [r, g, b] = best.split(',').map(Number);
+  const [r, g, b] = best.split(",").map(Number);
   return { r, g, b };
 }
 
@@ -48,11 +52,15 @@ function modeColorAmong(data, width, height, channels, predicate) {
     const key = `${data[idx] >> 3},${data[idx + 1] >> 3},${data[idx + 2] >> 3}`;
     counts.set(key, (counts.get(key) || 0) + 1);
   }
-  let best = null, bestCount = -1;
+  let best = null,
+    bestCount = -1;
   for (const [key, count] of counts) {
-    if (count > bestCount) { bestCount = count; best = key; }
+    if (count > bestCount) {
+      bestCount = count;
+      best = key;
+    }
   }
-  const [r, g, b] = best.split(',').map(n => Number(n) << 3);
+  const [r, g, b] = best.split(",").map((n) => Number(n) << 3);
   return { r, g, b };
 }
 
@@ -61,12 +69,14 @@ async function buildMask(input, opts = {}) {
   const dHi = opts.dHi ?? D_HI;
   const { data, info } = await getRaw(input);
   const { width, height, channels } = info;
-  const hasRealAlpha = channels === 4 && (() => {
-    for (let i = 3; i < data.length; i += channels) {
-      if (data[i] < 250) return true;
-    }
-    return false;
-  })();
+  const hasRealAlpha =
+    channels === 4 &&
+    (() => {
+      for (let i = 3; i < data.length; i += channels) {
+        if (data[i] < 250) return true;
+      }
+      return false;
+    })();
 
   const alpha = new Uint8Array(width * height);
 
@@ -82,7 +92,13 @@ async function buildMask(input, opts = {}) {
     for (let p = 0; p < width * height; p++) if (alpha[p] > 200) opaqueCount++;
     const fillRatio = opaqueCount / (width * height);
     if (fillRatio > 0.75) {
-      const fill = modeColorAmong(data, width, height, channels, idx => data[idx + 3] > 200);
+      const fill = modeColorAmong(
+        data,
+        width,
+        height,
+        channels,
+        (idx) => data[idx + 3] > 200,
+      );
       for (let p = 0; p < width * height; p++) {
         const idx = p * channels;
         if (alpha[p] <= 200) continue; // keep true transparent areas transparent
@@ -110,7 +126,10 @@ async function buildMask(input, opts = {}) {
 async function processLogo(input, outDir, baseName, opts = {}) {
   const { alpha, width, height } = await buildMask(input, opts);
 
-  for (const [suffix, color] of [['light', LIGHT_FG], ['dark', DARK_FG]]) {
+  for (const [suffix, color] of [
+    ["light", LIGHT_FG],
+    ["dark", DARK_FG],
+  ]) {
     const rgba = Buffer.alloc(width * height * 4);
     for (let p = 0; p < width * height; p++) {
       rgba[p * 4] = color.r;
@@ -120,21 +139,30 @@ async function processLogo(input, outDir, baseName, opts = {}) {
     }
     const img = sharp(rgba, { raw: { width, height, channels: 4 } });
     const trimmed = await img.png().toBuffer();
-    const meta = await sharp(trimmed).trim({ threshold: 10 }).toBuffer({ resolveWithObject: true }).catch(() => null);
+    const meta = await sharp(trimmed)
+      .trim({ threshold: 10 })
+      .toBuffer({ resolveWithObject: true })
+      .catch(() => null);
     const finalBuf = meta ? meta.data : trimmed;
 
     const out = path.join(outDir, `${baseName}-${suffix}.png`);
     await sharp(finalBuf)
-      .resize(CANVAS, CANVAS, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+      .resize(CANVAS, CANVAS, {
+        fit: "contain",
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      })
       .png()
       .toFile(out);
-    console.log('wrote', out);
+    console.log("wrote", out);
   }
 }
 
 module.exports = { processLogo };
 
 if (require.main === module) {
-  const [,, input, outDir, baseName] = process.argv;
-  processLogo(input, outDir, baseName).catch(e => { console.error(e); process.exit(1); });
+  const [, , input, outDir, baseName] = process.argv;
+  processLogo(input, outDir, baseName).catch((e) => {
+    console.error(e);
+    process.exit(1);
+  });
 }

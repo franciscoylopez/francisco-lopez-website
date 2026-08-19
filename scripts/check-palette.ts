@@ -69,7 +69,9 @@ for (const theme of ["light", "dark"] as const) {
     if (css === undefined) {
       problems.push(`${theme}: --${token} no existe en globals.css`);
     } else if (css !== value) {
-      problems.push(`${theme}: --${token}\n    módulo: ${value}\n    css:    ${css}`);
+      problems.push(
+        `${theme}: --${token}\n    módulo: ${value}\n    css:    ${css}`,
+      );
     }
   }
 }
@@ -82,7 +84,9 @@ for (const [token, value] of Object.entries(BRAND_PALETTE)) {
     if (css === undefined) {
       problems.push(`${theme}: --${token} no existe en globals.css`);
     } else if (css !== value) {
-      problems.push(`${theme}: --${token}\n    módulo: ${value}\n    css:    ${css}`);
+      problems.push(
+        `${theme}: --${token}\n    módulo: ${value}\n    css:    ${css}`,
+      );
     }
   }
 }

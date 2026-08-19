@@ -60,7 +60,10 @@ const C = {
   border: "#D9D0BE", // divisor sobre hueso (un punto más marcado que sobre blanco)
 };
 
-Font.register({ family: "Bricolage", fonts: [{ src: asset("assets/fonts/bricolage-600.woff"), fontWeight: 600 }] });
+Font.register({
+  family: "Bricolage",
+  fonts: [{ src: asset("assets/fonts/bricolage-600.woff"), fontWeight: 600 }],
+});
 Font.register({
   family: "Inter",
   fonts: [
@@ -94,24 +97,63 @@ const s = StyleSheet.create({
     letterSpacing: -0.3,
     marginLeft: 11,
   },
-  role: { fontFamily: "Inter", fontWeight: 600, fontSize: 10.5, color: C.cyan, marginTop: 5 },
+  role: {
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: 10.5,
+    color: C.cyan,
+    marginTop: 5,
+  },
   contact: { fontSize: 8.5, color: C.muted, marginTop: 8, lineHeight: 1.5 },
   contactLink: { color: C.muted, textDecoration: "none" },
   avatar: { width: 90, height: 90, borderRadius: 10 },
-  headerRule: { height: 2, backgroundColor: C.cyan, marginTop: 10, marginBottom: 2 },
+  headerRule: {
+    height: 2,
+    backgroundColor: C.cyan,
+    marginTop: 10,
+    marginBottom: 2,
+  },
 
   // Secciones
   section: { marginTop: 4 },
-  sectionDivider: { borderTopWidth: 1, borderTopColor: C.border, marginBottom: 5 },
-  sectionTitleRow: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
-  sectionAccent: { width: 12, height: 3, backgroundColor: C.cyan, marginRight: 7 },
-  sectionTitle: { fontFamily: "Bricolage", fontWeight: 600, fontSize: 12.5, color: C.ink },
+  sectionDivider: {
+    borderTopWidth: 1,
+    borderTopColor: C.border,
+    marginBottom: 5,
+  },
+  sectionTitleRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  sectionAccent: {
+    width: 12,
+    height: 3,
+    backgroundColor: C.cyan,
+    marginRight: 7,
+  },
+  sectionTitle: {
+    fontFamily: "Bricolage",
+    fontWeight: 600,
+    fontSize: 12.5,
+    color: C.ink,
+  },
 
   summary: { fontSize: 9.5, lineHeight: 1.42, color: C.ink },
 
   // Hitos
-  milestone: { flexDirection: "row", marginBottom: 2.5, alignItems: "flex-start" },
-  mYear: { fontFamily: "Bricolage", fontWeight: 600, fontSize: 9.5, color: C.cyan, width: 30 },
+  milestone: {
+    flexDirection: "row",
+    marginBottom: 2.5,
+    alignItems: "flex-start",
+  },
+  mYear: {
+    fontFamily: "Bricolage",
+    fontWeight: 600,
+    fontSize: 9.5,
+    color: C.cyan,
+    width: 30,
+  },
   mText: { flex: 1, fontSize: 9.5, lineHeight: 1.35 },
   mCompany: { fontFamily: "Inter", fontWeight: 600 },
   chip: {
@@ -129,32 +171,70 @@ const s = StyleSheet.create({
 
   // Experiencia
   job: { marginBottom: 3.5 },
-  jobHead: { flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+  jobHead: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "baseline",
+  },
   jobHeadLeft: { flex: 1, paddingRight: 10 },
-  jobCompany: { fontFamily: "Bricolage", fontWeight: 600, fontSize: 10.5, color: C.ink },
+  jobCompany: {
+    fontFamily: "Bricolage",
+    fontWeight: 600,
+    fontSize: 10.5,
+    color: C.ink,
+  },
   jobRole: { fontFamily: "Inter", fontWeight: 600, fontSize: 9, color: C.ink },
   jobContext: { fontSize: 9, color: C.muted },
   jobPeriod: { fontSize: 8.5, color: C.muted, fontFamily: "Inter" },
   jobMeta: { fontSize: 8, color: C.muted, marginTop: 1, marginBottom: 2.5 },
   bulletRow: { flexDirection: "row", marginBottom: 0.8, paddingRight: 2 },
-  bulletDot: { width: 3, height: 3, borderRadius: 1.5, backgroundColor: C.cyan, marginTop: 4.2, marginRight: 6 },
+  bulletDot: {
+    width: 3,
+    height: 3,
+    borderRadius: 1.5,
+    backgroundColor: C.cyan,
+    marginTop: 4.2,
+    marginRight: 6,
+  },
   bulletText: { flex: 1, fontSize: 9, lineHeight: 1.36, color: C.ink },
 
-  previousIntro: { fontSize: 9, color: C.muted, marginBottom: 6, lineHeight: 1.42 },
+  previousIntro: {
+    fontSize: 9,
+    color: C.muted,
+    marginBottom: 6,
+    lineHeight: 1.42,
+  },
 
   // Formación / Habilidades
   twoCol: { flexDirection: "row" },
   col: { flex: 1, paddingRight: 14 },
   eduItem: { marginBottom: 3.5 },
-  eduTitle: { fontFamily: "Inter", fontWeight: 600, fontSize: 9.5, color: C.ink },
+  eduTitle: {
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: 9.5,
+    color: C.ink,
+  },
   eduInst: { fontSize: 8.5, color: C.muted, marginTop: 0.5 },
   skillRow: { flexDirection: "row", marginBottom: 2 },
-  skillLabel: { fontFamily: "Inter", fontWeight: 600, fontSize: 9, color: C.ink, width: 118 },
+  skillLabel: {
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: 9,
+    color: C.ink,
+    width: 118,
+  },
   skillValue: { flex: 1, fontSize: 9, color: C.ink, lineHeight: 1.4 },
   // Igual que skillLabel: tinta en negrita, no cian. El cian es el color de acción
   // (BRAND.md); estas etiquetas de categoría no son acciones y deben leerse como las
   // de Habilidades.
-  toolLabel: { fontFamily: "Inter", fontWeight: 600, fontSize: 9, color: C.ink, width: 118 },
+  toolLabel: {
+    fontFamily: "Inter",
+    fontWeight: 600,
+    fontSize: 9,
+    color: C.ink,
+    width: 118,
+  },
 });
 
 function LogoMark({ size = 42 }: { size?: number }) {
@@ -165,9 +245,30 @@ function LogoMark({ size = 42 }: { size?: number }) {
   const w = (64 / 72) * size;
   return (
     <Svg viewBox="28 15 64 72" width={w} height={h}>
-      <Circle cx={57} cy={44} r={26} stroke={C.cyanSplit} strokeWidth={6} fill="none" />
-      <Circle cx={63} cy={48} r={26} stroke={C.purpleSplit} strokeWidth={6} fill="none" />
-      <Circle cx={60} cy={46} r={26} stroke={C.ink} strokeWidth={6} fill="none" />
+      <Circle
+        cx={57}
+        cy={44}
+        r={26}
+        stroke={C.cyanSplit}
+        strokeWidth={6}
+        fill="none"
+      />
+      <Circle
+        cx={63}
+        cy={48}
+        r={26}
+        stroke={C.purpleSplit}
+        strokeWidth={6}
+        fill="none"
+      />
+      <Circle
+        cx={60}
+        cy={46}
+        r={26}
+        stroke={C.ink}
+        strokeWidth={6}
+        fill="none"
+      />
       <Rect x={42} y={82} width={36} height={5} rx={2.5} fill={C.ink} />
     </Svg>
   );
@@ -182,7 +283,13 @@ function SectionTitle({ children }: { children: string }) {
   );
 }
 
-function Section({ title, children }: { title: string; children: React.ReactNode }) {
+function Section({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
   return (
     <View style={s.section}>
       <View style={s.sectionDivider} />
@@ -211,10 +318,14 @@ function JobBlock({ job }: { job: Job }) {
       <View style={s.jobHead}>
         <Text style={s.jobHeadLeft}>
           <Text style={s.jobCompany}>{job.company}</Text>
-          {job.project ? <Text style={s.jobContext}>{"  ·  " + job.project}</Text> : null}
+          {job.project ? (
+            <Text style={s.jobContext}>{"  ·  " + job.project}</Text>
+          ) : null}
           {"\n"}
           <Text style={s.jobRole}>{job.role}</Text>
-          {job.context ? <Text style={s.jobContext}>{"  ·  " + job.context}</Text> : null}
+          {job.context ? (
+            <Text style={s.jobContext}>{"  ·  " + job.context}</Text>
+          ) : null}
         </Text>
         <Text style={s.jobPeriod}>{job.period}</Text>
       </View>
@@ -226,7 +337,12 @@ function JobBlock({ job }: { job: Job }) {
 
 function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
   return (
-    <Document title={`${data.name} — CV`} author={data.name} subject={data.subject} language={lang}>
+    <Document
+      title={`${data.name} — CV`}
+      author={data.name}
+      subject={data.subject}
+      language={lang}
+    >
       <Page size="A4" style={s.page}>
         {/* Cabecera */}
         <View style={s.header}>
@@ -241,7 +357,10 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
                 {data.contact.email}
               </Link>
               {"   ·   "}
-              <Link src={`tel:+34${data.contact.phone.replace(/\s/g, "")}`} style={s.contactLink}>
+              <Link
+                src={`tel:+34${data.contact.phone.replace(/\s/g, "")}`}
+                style={s.contactLink}
+              >
                 {data.contact.phone}
               </Link>
               {"\n"}
@@ -249,7 +368,10 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
                 {data.contact.web}
               </Link>
               {"   ·   "}
-              <Link src={`https://${data.contact.linkedin}`} style={s.contactLink}>
+              <Link
+                src={`https://${data.contact.linkedin}`}
+                style={s.contactLink}
+              >
                 {data.contact.linkedin}
               </Link>
               {"   ·   "}
@@ -363,7 +485,9 @@ async function main() {
       const data = assemble(lang, content);
       await renderToFile(<Cv data={data} lang={lang} />, out);
       const pages = countPages(out);
-      console.log(`CV ${lang.toUpperCase()} generado → ${out}  (${pages} pág${pages === 1 ? "" : "s"})`);
+      console.log(
+        `CV ${lang.toUpperCase()} generado → ${out}  (${pages} pág${pages === 1 ? "" : "s"})`,
+      );
       if (pages > 2) {
         overflow = true;
         console.warn(
@@ -373,10 +497,16 @@ async function main() {
       }
     } catch (e) {
       failures++;
-      console.error(`Error generando ${lang} (¿PDF abierto en un visor?):`, (e as Error).message);
+      console.error(
+        `Error generando ${lang} (¿PDF abierto en un visor?):`,
+        (e as Error).message,
+      );
     }
   }
-  if (overflow) console.warn("\n⚠  Algún CV supera las 2 páginas — revísalo antes de publicar.");
+  if (overflow)
+    console.warn(
+      "\n⚠  Algún CV supera las 2 páginas — revísalo antes de publicar.",
+    );
   if (failures) process.exit(1);
 
   // El sello va DESPUÉS y solo si los dos PDFs salieron: es lo que

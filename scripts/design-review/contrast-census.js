@@ -221,7 +221,10 @@ window.contrastCensus = () => {
     if (r.width === 0 || r.height === 0) return false;
     return mediaRects.some(
       (m) =>
-        r.left < m.right && r.right > m.left && r.top < m.bottom && r.bottom > m.top,
+        r.left < m.right &&
+        r.right > m.left &&
+        r.top < m.bottom &&
+        r.bottom > m.top,
     );
   }
 
@@ -444,9 +447,14 @@ window.contrastCensus = () => {
       : `${HOVER_RULES.length} reglas :hover indexadas · ${paresHover} pares medidos en hover`;
 
   const resultado = {
-    metro: ancla === esperado ? `OK (${ancla})` : `SOSPECHOSO: ${ancla} ≠ ${esperado}`,
+    metro:
+      ancla === esperado
+        ? `OK (${ancla})`
+        : `SOSPECHOSO: ${ancla} ≠ ${esperado}`,
     reglasHover,
-    tema: document.documentElement.classList.contains("dark") ? "oscuro" : "claro",
+    tema: document.documentElement.classList.contains("dark")
+      ? "oscuro"
+      : "claro",
     pares: censo.length,
     // Cada uno contra el umbral que le toca por su tamaño (7 / 4,5 y 4,5 / 3).
     // Esto ya son incumplimientos, no candidatos: lo que salga aquí, o sube o se

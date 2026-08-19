@@ -27,7 +27,9 @@ import { readFileSync, writeFileSync } from "node:fs";
 
 const [, , entrada, salida] = process.argv;
 if (!entrada || !salida) {
-  console.error("Uso: npx tsx scripts/artefacto-svg.ts <export.svg> <destino.svg>");
+  console.error(
+    "Uso: npx tsx scripts/artefacto-svg.ts <export.svg> <destino.svg>",
+  );
   process.exit(1);
 }
 
@@ -142,9 +144,8 @@ function cajaDelGrafo(fuente: string) {
  * guardián de literales pasaba— sino mirar la página. El `viewBox` es de las
  * pocas cosas de un SVG que no se pueden verificar sin verlo.
  */
-const propio = /viewBox="\s*([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s*"/.exec(
-  svg,
-);
+const propio =
+  /viewBox="\s*([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s*"/.exec(svg);
 const caja = propio
   ? {
       x: Math.round(Number(propio[1])),
@@ -223,8 +224,10 @@ const PALETA: [RegExp, string][] = [
   // con pinta de captura pegada sobre la página. `red` es el color con el que
   // Mermaid marca una etiqueta que no ha sabido resolver: aquí no puede quedar.
   [/(fill|stroke|color|background-color)\s*:\s*white\b/gi, "$1:var(--card)"],
-  [/(fill|stroke|color|background-color)\s*:\s*(black|red)\b/gi,
-    "$1:var(--foreground)"],
+  [
+    /(fill|stroke|color|background-color)\s*:\s*(black|red)\b/gi,
+    "$1:var(--foreground)",
+  ],
 ];
 for (const [re, token] of PALETA) svg = svg.replace(re, token);
 

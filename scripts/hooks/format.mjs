@@ -21,7 +21,13 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
-const PRETTIER = resolve(ROOT, "node_modules", "prettier", "bin", "prettier.cjs");
+const PRETTIER = resolve(
+  ROOT,
+  "node_modules",
+  "prettier",
+  "bin",
+  "prettier.cjs",
+);
 
 /** Lee el JSON del evento por stdin. Sin entrada válida, no hay nada que hacer. */
 const readEvent = async () => {
