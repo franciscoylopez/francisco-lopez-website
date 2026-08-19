@@ -3,7 +3,7 @@ import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { DataTable, TD, TR } from "@/components/ui/table";
-import { paletteHex } from "@/lib/design-values";
+import { paletteHex, SPLIT_MIN_PX } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 import {
   Dl,
@@ -352,7 +352,7 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
           </div>
           <div className="flex flex-wrap items-end gap-[clamp(1.25rem,4vw,3rem)]">
             {[24, 32, 48, 64, 96].map((h) => {
-              const works = h >= 48;
+              const works = h >= SPLIT_MIN_PX;
               return (
                 <div
                   key={h}

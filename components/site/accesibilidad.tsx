@@ -9,6 +9,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
+import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailCta } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 import { SectionHeader } from "@/components/ui/heading";
@@ -73,15 +74,12 @@ export function Accesibilidad({
             <HeroComposition />
           </div>
           {/* datos */}
-          <div
-            data-reveal
-            className="border-border mt-[clamp(3rem,6vw,4.5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-[var(--gutter)] border-t pt-8"
-          >
+          <StatRow>
             <Stat value="AA" label={t.hero.statConformidad} />
             <Stat value="AAA" label={t.hero.statColor} />
             <Stat value="0" label={t.hero.statAxe} />
             <Stat value="100" label={t.hero.statLighthouse} />
-          </div>
+          </StatRow>
         </div>
       </section>
 
@@ -222,17 +220,6 @@ export function Accesibilidad({
 }
 
 // --- Subcomponentes ---
-
-function Stat({ value, label }: { value: string; label: string }) {
-  return (
-    <div>
-      <div className="font-display text-[1.6rem] leading-none">{value}</div>
-      <div className="text-muted-foreground mt-[0.35rem] text-[0.85rem]">
-        {label}
-      </div>
-    </div>
-  );
-}
 
 // Composición del hero (decorativa, aria-hidden): tres piezas superpuestas que
 // ilustran de qué habla la página —una tarjeta de contraste medido, una checklist
