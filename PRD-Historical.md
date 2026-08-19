@@ -198,7 +198,7 @@ La decisión y su matiz importante: **el PRD ya quería un momento de marca en e
 **Análisis de mejora V1 — Diseño, Marca y Arquitectura (resuelto 2026-07-19, ver sección 15 para el detalle completo del debate):** tras ver la V1 ya montada en Claude Design, un análisis exhaustivo ([documento en Notion](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2)) detectó que la estructura se sentía repetitiva (Selected Work / Más allá del PM / Trayectoria solapaban contenido) y que Trayectoria quedaba mal jerarquizada (por debajo de Toolkit). Decisiones tomadas:
 
 - **Selected Work → Hitos, sustitución completa** (no conviven ambas secciones). Se acepta perder la profundidad de proceso de los 3 casos a cambio de un quick-scan más contundente. Esa profundidad se traslada a Trayectoria (ver 8.5) y, más adelante, al deep-dive por experiencia de V2/V3 — cada hito/experiencia debe prever un enlace o CTA hacia ese deep-dive futuro, aunque no se construya en V1.
-- **Reparto del contenido que antes vivía en la línea "Seniority" de cada caso de Selected Work:** Hitos se queda con el resultado/impacto puro (ej. TheTool → "Nominado a Mejor Software ASO de Europa · Exit con AppRadar"); Trayectoria se queda con la autoridad real (reporta a CEO, socio con voto, liderazgo por influencia) dentro de sus 1-2 frases por experiencia — así ninguna sección se sobrecarga y la mitigación del riesgo "aspecto demasiado junior" (sección 11) sigue viva, solo que cambia de sitio.
+- **Reparto del contenido que antes vivía en la línea "Seniority" de cada caso de Selected Work:** Hitos se queda con el resultado/impacto puro (ej. TheTool → "Nominado a Mejor Software ASO de Europa · Exit con AppRadar"); Trayectoria se queda con la autoridad real (reporta a CEO, socio con voto, liderazgo por influencia) dentro de sus 1-2 frases por experiencia — así ninguna sección se sobrecarga y la mitigación del riesgo "el sitio no transmite la autoridad real del rol" (sección 11) sigue viva, solo que cambia de sitio.
 - **Contenido base de Hitos:** la lista "Logros" de la sección 10 es prácticamente reutilizable tal cual.
 - **Hero pierde su CTA propio**; Descargar CV, Sobre mí y el toggle de tema pasan a un nav sticky presente en toda la página (ver sección 5) — sin coste real de conversión porque el CV sigue disponible en todo momento. LinkedIn se queda solo en el footer. Trayectoria añade un CTA secundario de Descargar CV para cubrir el hueco del nav oculto en mobile (menú hamburguesa).
 - **Toggle Claro/Oscuro se reduce a icono sin texto** (sol/luna, `lucide-react`) para quitarle protagonismo frente a CV/Sobre mí, sin romper accesibilidad — ver requisitos en sección 11.
@@ -452,7 +452,7 @@ Foco de contenido explícitamente priorizado por Francisco: **primer nivel Found
 
 | Riesgo | Mitigación |
 |---|---|
-| Aspecto demasiado junior | **Mitigado, actualizado 2026-07-19:** la evidencia de autoridad real (socio con voto en TheTool, reporting a CEO en Emendu, liderazgo por influencia en INDYA) ya no vive en Selected Work — con la sustitución por Hitos (8.1, quick-scan de resultados puros), esa autoridad se trasladó al "Resumen" de cada fila de Trayectoria (8.5). Sigue siendo evidencia concreta, solo cambió de sección. |
+| El sitio no transmite la autoridad real del rol | **Mitigado, actualizado 2026-07-19:** la evidencia de autoridad real (socio con voto en TheTool, reporting a CEO en Emendu, liderazgo por influencia en INDYA) ya no vive en Selected Work — con la sustitución por Hitos (8.1, quick-scan de resultados puros), esa autoridad se trasladó al "Resumen" de cada fila de Trayectoria (8.5). Sigue siendo evidencia concreta, solo cambió de sección. |
 | Exceso de minimalismo | **Resuelto (2026-07-19, ver sección 15):** el espacio en blanco se ha pasado de la raya cuando deja de dirigir la atención y empieza a diluir la información. Bien: aire generoso alrededor de lo importante. Mal: aire uniforme sobre todo por igual. Regla práctica: espacio jerarquizado, no uniforme. |
 | Sobrevalorar certificaciones IA | Mitigado: el bloque de uso de IA se movió de "Formación" (8.6) a "Toolkit" (8.4) para no listarlo al nivel de un máster — ver decisión en 8.4. |
 | Denominaciones incorrectas de formación | **Resuelto (2026-07-17):** confirmada la versión CV — ver 8.6. |
@@ -518,7 +518,7 @@ Tras leer Brief y CV en detalle, se identificaron tensiones y vacíos que no est
 - **Solapamiento Pickaso/TheTool:** no era inconsistencia de fechas — ambos son proyectos de Shutapp Projects. PICKASO fue a la vez la escuela de mercado (apps, herramientas, sector) y el motor financiero que sustentó el arranque de TheTool. **Resuelto** con contexto real del usuario; incorporado a 8.3 y 8.5.
 - **ICP de empresa objetivo:** no estaba definido a quién le habla la web más allá del lector individual (HR/CPO). **Resuelto**: SaaS con PMF ya validado, con equipo/función de producto real (PM, Product Designer, o founder con peso en producto), IA integrada en el día a día del negocio (no uso superficial), remoto o híbrido fuerte, en España. Incorporado a sección 4.
 - **Métricas de éxito de la web:** no había forma de evaluar si V1 funcionaba antes de invertir en V2. **Resuelto**: métrica primaria = clics en contacto (email/teléfono); secundarias = % de scroll de página + clics en "Descargar CV", medido con Microsoft Clarity desde V1 (adelantado desde V2). Como consecuencia, se resolvió también que el teléfono se publica en Contacto (era decisión pendiente aparte) y surgió un pendiente nuevo: aviso de cookies para Clarity en audiencia española. Incorporado a secciones 7, 9, 10 y 13.
-- **Señales de seniority:** no había evidencia sistematizada de autoridad real, solo narración de proceso — la mitigación directa al riesgo "aspecto demasiado junior" (sección 11). **Resuelto** con contexto real del usuario: TheTool (socio 1 de 4, voz y voto, liderazgo de facto del equipo no-código), Emendu (reporta al CEO, equipo de liderazgo junto a Ops/Finanzas/Tech), INDYA (reporta a CPO/cofundador, liderazgo por influencia sin autoridad formal). Añadido como línea "Seniority" en cada caso de 8.1. No se aportaron cifras de presupuesto/P&L — queda abierto si se quiere añadir más adelante, no bloqueante.
+- **Señales de seniority:** no había evidencia sistematizada de autoridad real, solo narración de proceso — la mitigación directa al riesgo "el sitio no transmite la autoridad real del rol" (sección 11). **Resuelto** con contexto real del usuario: TheTool (socio 1 de 4, voz y voto, liderazgo de facto del equipo no-código), Emendu (reporta al CEO, equipo de liderazgo junto a Ops/Finanzas/Tech), INDYA (reporta a CPO/cofundador, liderazgo por influencia sin autoridad formal). Añadido como línea "Seniority" en cada caso de 8.1. No se aportaron cifras de presupuesto/P&L — queda abierto si se quiere añadir más adelante, no bloqueante.
 
 Con esto, todos los vacíos detectados en el análisis crítico inicial quedan resueltos, incluido el aviso de cookies/consentimiento para Clarity (banner simple, resuelto 2026-07-17, ver sección 12).
 
@@ -813,7 +813,7 @@ Pasada de revisión de todo el copy ya escrito (no traducción de contenido nuev
 - **Más allá del PM (§8.3):** cierre de la línea de growth a "…entendí cómo atraerlos" (y en EN, `Founder several times. Exit once.` — fiel a "varias veces" y sin la repetición "once" que arrastraba la versión anterior).
 - **Trayectoria (§8.5):** Emendu e INDYA **dejan de citar la línea de reporting** ("reporto al CEO" / "reportaba al CPO"); la autoridad se expresa ahora como pertenencia al equipo de liderazgo (Emendu) y liderazgo de equipo (INDYA). Freepik cambia el foco a análisis + gestión de OKR del squad. TheTool: "equipo no-código" → "equipo de desarrollo". PICKASO: "financió el arranque de TheTool" → "investigación de mercado de los futuros competidores de TheTool". Ontecnia: la fila pasa a "Ontecnia (Malavida, Lecturalia, BonViveur…)", Sep 2013 – Sep 2015; la fila de Havas/Increnta/Miss Conversion se acota a 2009 – 2013.
 
-**Efecto a vigilar sobre §11 (riesgo "aspecto demasiado junior"):** al quitar las líneas de reporting de Emendu e INDYA, la evidencia de autoridad en Trayectoria se sostiene ahora en "miembro del equipo de liderazgo" (Emendu), "liderazgo del equipo" (INDYA) y "voz y voto" (TheTool). Sigue habiendo señal de seniority, solo que reformulada — no se rompe la mitigación, pero queda menos explícita. Las líneas de reporting siguen en los datos de fondo de §8.1 (insumo/deep-dive), que no se tocan porque el hecho no cambió, solo salió del copy visible.
+**Efecto a vigilar sobre §11 (riesgo "el sitio no transmite la autoridad real del rol"):** al quitar las líneas de reporting de Emendu e INDYA, la evidencia de autoridad en Trayectoria se sostiene ahora en "miembro del equipo de liderazgo" (Emendu), "liderazgo del equipo" (INDYA) y "voz y voto" (TheTool). Sigue habiendo señal de seniority, solo que reformulada — no se rompe la mitigación, pero queda menos explícita. Las líneas de reporting siguen en los datos de fondo de §8.1 (insumo/deep-dive), que no se tocan porque el hecho no cambió, solo salió del copy visible.
 
 **Coherencia de datos:** la descripción de Ontecnia mantiene la métrica "3,2M → 9,4M visitas mensuales" (específica de Malavida), ahora atribuida a la ventana Sep 2013 – Sep 2015.
 
@@ -1336,11 +1336,16 @@ responde sin Francisco delante y en frases que no puede revisar. Lo que V4 absor
 **profundidad sobre lo que ya es público**, no discreción — lo que acota su corpus antes de
 que exista.
 
-Esa regla se aplicó el mismo día a INDYA, y su efecto es la regla del anclaje funcionando al
-revés: al retirar la saturación del servicio, **cayó el aprendizaje que dependía de ella**
-—«cuando la escalabilidad depende de personas, el producto no te salva del cuello de
-botella»— porque ya no podía señalar a nada escrito arriba. La página se queda con tres, que
-es lo que la regla pide.
+Esa regla se aplicó el mismo día a una de las páginas, y su efecto es la regla del anclaje
+funcionando al revés: al retirar de La historia un pasaje que la discreción no dejaba
+publicar, **cayó también el aprendizaje que dependía de él**, porque ya no podía señalar a
+nada escrito arriba. La página se queda con tres, que es lo que la regla pide.
+
+*(Ni el pasaje ni el aprendizaje se transcriben aquí, y hasta el 2026-08-19 sí lo estaban. Se
+corrigió auditando el repo antes de hacerlo público, y la razón es la propia regla llevada un
+paso más allá: **un documento que registra qué se retiró por discreción lo vuelve a
+publicar**. La lección de método —al caer un anclaje, cae lo que colgaba de él— se entiende
+igual sin el contenido retirado.)*
 
 Se reescribieron **las tres primeras experiencias** con el formato nuevo (Emendu 1.190
 palabras, KUOTIP 760, INDYA 1.150), elegidas para marcar el rango: dos con caso y una sin él,
@@ -1525,17 +1530,18 @@ De ahí salen tres reglas de contenido que valen para las otras cuatro páginas:
    entregó. Traducirlo lo convertiría en una recreación. Sí van en los dos idiomas su título, su
    pie y la alternativa en prosa.
 3. **La línea de discreción se aplica también a los artefactos, y ahí sube el listón.** El
-   diagrama vive dentro de un product spec **de un producto sin lanzar**, con modelo de
-   facturación, alternativas de pricing con importes, riesgos comerciales y compañeros con
-   nombre. Nada de eso sale en la página: el diagrama describe la estructura del módulo, no el
-   negocio. Pero deja claro que el «permiso de publicación» que P48.7 tenía abierto para las
-   métricas ya no es solo de métricas.
+   diagrama vive dentro de un documento interno cuyo resto **no es publicable**: hay material de
+   negocio y hay personas con nombre. Nada de eso sale en la página, que se queda con la
+   estructura de un módulo. Pero deja claro que el «permiso de publicación» que P48.7 tenía
+   abierto para las métricas ya no es solo de métricas. *(La enumeración de qué contenía ese
+   documento se retiró el 2026-08-19, al auditar el repo antes de hacerlo público: describir el
+   material reservado es una manera de publicarlo.)*
 
 **Lo que queda abierto al cerrar la sesión**, y es lo que le da forma a la siguiente: los
 artefactos de las otras cuatro experiencias —solo Emendu tiene el suyo—; los **titulares de
 sección y los h1**, que son copy derivado de las narrativas y necesitan el visto bueno de
 Francisco; la **captura del lowfi navegable**, que es el artefacto más elocuente para un CPO y
-el que más permiso necesita porque es trabajo de Emendu sobre una integración sin lanzar; y el
+el que más permiso necesita porque es trabajo interno de Emendu; y el
 **peso**, que sube a 229 KB de HTML en la página de Emendu —unos 62 son el SVG— y hay que medir
 con PSI antes de dar la sección por cerrada.
 
