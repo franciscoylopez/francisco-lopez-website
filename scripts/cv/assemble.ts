@@ -7,11 +7,7 @@
 // Es un `.ts` sin JSX a propósito: aquí no se pinta nada, solo se resuelven datos.
 
 import type { CV, CvContent, Job, AuthoredJob } from "../../content/cv/types";
-import {
-  cvBullets,
-  factsOf,
-  reportingOf,
-} from "../../content/experience-copy";
+import { cvBullets, factsOf, reportingOf } from "../../content/experience-copy";
 import {
   loadDict,
   buildEducation,

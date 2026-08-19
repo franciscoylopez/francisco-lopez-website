@@ -71,8 +71,11 @@ let permitidas = 0;
 function fuentesTs(): string[] {
   const out: string[] = [];
   const baja = (dir: string) => {
-    for (const entrada of readdirSync(join(RAIZ, dir), { withFileTypes: true })) {
-      if (entrada.name.startsWith(".") || entrada.name === "node_modules") continue;
+    for (const entrada of readdirSync(join(RAIZ, dir), {
+      withFileTypes: true,
+    })) {
+      if (entrada.name.startsWith(".") || entrada.name === "node_modules")
+        continue;
       const rel = `${dir}/${entrada.name}`;
       if (entrada.isDirectory()) baja(rel);
       else if (/\.tsx?$/.test(entrada.name)) out.push(rel);

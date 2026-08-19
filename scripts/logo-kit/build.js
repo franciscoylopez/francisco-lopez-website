@@ -10,17 +10,27 @@
 const fs = require("fs");
 const path = require("path");
 const sharp = require("sharp");
-const { COLORS, VIEWBOX, WORDMARK_TRANSFORM, symbolShapes } = require("./geometry");
+const {
+  COLORS,
+  VIEWBOX,
+  WORDMARK_TRANSFORM,
+  symbolShapes,
+} = require("./geometry");
 
 const OUT = path.join(__dirname, "..", "..", "public", "logo-kit");
-const WORDMARK = fs.readFileSync(path.join(__dirname, "wordmark-paths.svg"), "utf8").trim();
+const WORDMARK = fs
+  .readFileSync(path.join(__dirname, "wordmark-paths.svg"), "utf8")
+  .trim();
 const PNG_SIZES = [256, 512, 1024];
 
 const svgDoc = (viewBox, body) =>
   `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">\n  ${body}\n</svg>\n`;
 
 function symbol({ ink, split }) {
-  return svgDoc(split ? VIEWBOX.symbolSplit : VIEWBOX.symbolFlat, symbolShapes({ ink, split }));
+  return svgDoc(
+    split ? VIEWBOX.symbolSplit : VIEWBOX.symbolFlat,
+    symbolShapes({ ink, split }),
+  );
 }
 
 function lockup({ ink, split }) {
@@ -36,16 +46,39 @@ function lockup({ ink, split }) {
 // el fondo que sea, así que "tintaOscura" (para fondos claros) es la etiqueta
 // útil, no "claro".
 const VARIANTS = [
-  { name: "plano-claro", ink: COLORS.inkLight, split: false, png: "plano-tintaOscura" },
-  { name: "plano-oscuro", ink: COLORS.inkDark, split: false, png: "plano-tintaClara" },
-  { name: "split-claro", ink: COLORS.inkLight, split: true, png: "split-tintaOscura" },
-  { name: "split-oscuro", ink: COLORS.inkDark, split: true, png: "split-tintaClara" },
+  {
+    name: "plano-claro",
+    ink: COLORS.inkLight,
+    split: false,
+    png: "plano-tintaOscura",
+  },
+  {
+    name: "plano-oscuro",
+    ink: COLORS.inkDark,
+    split: false,
+    png: "plano-tintaClara",
+  },
+  {
+    name: "split-claro",
+    ink: COLORS.inkLight,
+    split: true,
+    png: "split-tintaOscura",
+  },
+  {
+    name: "split-oscuro",
+    ink: COLORS.inkDark,
+    split: true,
+    png: "split-tintaClara",
+  },
   { name: "mono-negro", ink: COLORS.black, split: false, png: "mono-negro" },
   { name: "mono-blanco", ink: COLORS.white, split: false, png: "mono-blanco" },
 ];
 
 async function writePng(svg, file, dim) {
-  await sharp(Buffer.from(svg), { density: 384 }).resize(dim).png({ compressionLevel: 9 }).toFile(file);
+  await sharp(Buffer.from(svg), { density: 384 })
+    .resize(dim)
+    .png({ compressionLevel: 9 })
+    .toFile(file);
 }
 
 /**
@@ -59,7 +92,11 @@ async function writePng(svg, file, dim) {
  * reescalado sin compensar nada (BRAND.md, regla 2).
  */
 function faviconSvg(ink, thicken) {
-  const shapes = symbolShapes({ ink, split: false, strokeWidth: thicken ? 10 : 6 });
+  const shapes = symbolShapes({
+    ink,
+    split: false,
+    strokeWidth: thicken ? 10 : 6,
+  });
   // El símbolo ocupa x 31..89, y 17..87. Lo recolocamos centrado en 80x80.
   return svgDoc("0 0 80 80", `<g transform="translate(-20,-12)">${shapes}</g>`);
 }
@@ -97,27 +134,41 @@ function buildIco(pngs) {
   // expresa todas sus reglas ("símbolo 48px" = 48px de alto). El lockup por
   // ancho, que es su dimensión natural: a 512px de alto mediría 3400 de ancho.
   for (const v of VARIANTS) {
-    for (const [shape, make, dimKey] of [["simbolo", symbol, "height"], ["lockup", lockup, "width"]]) {
+    for (const [shape, make, dimKey] of [
+      ["simbolo", symbol, "height"],
+      ["lockup", lockup, "width"],
+    ]) {
       const svg = make(v);
       fs.writeFileSync(path.join(OUT, "svg", `${shape}-${v.name}.svg`), svg);
       svgCount++;
       for (const size of PNG_SIZES) {
-        await writePng(svg, path.join(OUT, "png", `${shape}-${v.png}-${size}.png`), { [dimKey]: size });
+        await writePng(
+          svg,
+          path.join(OUT, "png", `${shape}-${v.png}-${size}.png`),
+          { [dimKey]: size },
+        );
         pngCount++;
       }
     }
   }
 
   const icoParts = [];
-  for (const [tone, ink] of [["claro", COLORS.inkLight], ["oscuro", COLORS.inkDark]]) {
+  for (const [tone, ink] of [
+    ["claro", COLORS.inkLight],
+    ["oscuro", COLORS.inkDark],
+  ]) {
     for (const size of [16, 32, 48]) {
       const svg = faviconSvg(ink, size <= 16);
       const file = path.join(OUT, "favicon", `favicon-${tone}-${size}.png`);
       await writePng(svg, file, { width: size, height: size });
-      if (tone === "claro") icoParts.push({ size, data: fs.readFileSync(file) });
+      if (tone === "claro")
+        icoParts.push({ size, data: fs.readFileSync(file) });
     }
   }
-  fs.writeFileSync(path.join(OUT, "favicon", "favicon.ico"), buildIco(icoParts));
+  fs.writeFileSync(
+    path.join(OUT, "favicon", "favicon.ico"),
+    buildIco(icoParts),
+  );
 
   console.log(`SVG:     ${svgCount}`);
   console.log(`PNG:     ${pngCount}`);

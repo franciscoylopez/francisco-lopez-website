@@ -53,7 +53,9 @@ const file = input?.file_path;
 if (!file) process.exit(0);
 
 // Ruta relativa a la raíz y con separadores POSIX, para comparar igual en Windows.
-const rel = resolve(file).slice(ROOT.length + 1).replace(/\\/g, "/");
+const rel = resolve(file)
+  .slice(ROOT.length + 1)
+  .replace(/\\/g, "/");
 
 const touchesSourceOfTruth = SOURCES_OF_TRUTH.includes(rel);
 

@@ -62,11 +62,24 @@ function symbolShapes({ ink, split, strokeWidth = CIRCLE.strokeWidth }) {
       `<circle cx="${CIRCLE.cx + p.dx}" cy="${CIRCLE.cy + p.dy}" r="${CIRCLE.r}" fill="none" stroke="${COLORS.purple}" stroke-width="${sw}"/>`,
     );
   }
-  parts.push(circle(CIRCLE.cx, CIRCLE.cy, ink).replace(/stroke-width="[^"]*"/, `stroke-width="${sw}"`));
+  parts.push(
+    circle(CIRCLE.cx, CIRCLE.cy, ink).replace(
+      /stroke-width="[^"]*"/,
+      `stroke-width="${sw}"`,
+    ),
+  );
   parts.push(
     `<rect x="${BASE.x}" y="${BASE.y}" width="${BASE.width}" height="${BASE.height}" rx="${BASE.rx}" fill="${ink}"/>`,
   );
   return parts.join("\n  ");
 }
 
-module.exports = { CIRCLE, BASE, SPLIT_OFFSET, COLORS, VIEWBOX, WORDMARK_TRANSFORM, symbolShapes };
+module.exports = {
+  CIRCLE,
+  BASE,
+  SPLIT_OFFSET,
+  COLORS,
+  VIEWBOX,
+  WORDMARK_TRANSFORM,
+  symbolShapes,
+};
