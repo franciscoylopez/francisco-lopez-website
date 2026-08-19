@@ -1,0 +1,62 @@
+# Configuración del análisis de Qlty, versionada en el repo.
+#
+# POR QUÉ ESTÁ AQUÍ Y NO SOLO EN SU NUBE. Vivía únicamente en la web de Qlty, que
+# es una segunda fuente de verdad fuera del control de versiones — exactamente el
+# patrón que este proyecto ha eliminado en todos los demás sitios (D38 con los
+# valores publicados, D59 con las tres listas de páginas). Un umbral que se cambia
+# en una web y no deja rastro en el historial es un umbral que nadie puede
+# auditar.
+#
+# QUÉ SE ARREGLA CON ESTO, y sale de mirar el informe del 2026-08-19. La deuda
+# técnica estuvo en 0% hasta el 5 de agosto y subió al 3,74%, y los CINCO peores
+# archivos (los cinco en F) no eran código de la web:
+#
+#   contrast-census.js        463 líneas · el censo de contraste
+#   en.ts / es.ts             registros de contenido · 0 funciones, 0 condicionales
+#   check-experience-copy.ts  un guardián
+#   artefacto-svg.ts          el saneador del artefacto
+#
+# Dos lecturas, y las dos son ciertas a la vez. La primera es que Qlty señala con
+# PRECISIÓN el punto ciego real: su peor archivo es justo el que se ha roto dos
+# veces en silencio. Eso NO se silencia aquí — se arregla, y está tareado.
+#
+# La segunda es que `en.ts` y `es.ts` son un falso positivo, y bastante irónico:
+# son tablas de datos sin una sola función, y Qlty las penaliza por duplicación
+# estructural entre ES y EN, que es EXACTAMENTE la propiedad que
+# `npm run check:experiencias` existe para GARANTIZAR. Medir como deuda lo que un
+# guardián impone a propósito no informa de nada.
+#
+# Regla al tocar este archivo: se excluye por lo que un archivo ES (datos
+# generados, contenido paralelo por idioma), nunca por lo que un archivo PUNTÚA.
+# Silenciar un hallazgo incómodo aquí sería convertir el informe en el metro que
+# aprueba sobre lista vacía.
+
+config_version = "0"
+
+[[source]]
+name = "default"
+default = true
+
+# Contenido paralelo por idioma: ES y EN tienen la MISMA forma por diseño y un
+# guardián en CI lo comprueba. Su duplicación estructural es la especificación,
+# no deuda.
+[[exclude_patterns]]
+file_patterns = [
+  "content/experience-copy/*.ts",
+  "content/cv/content.*.ts",
+  "app/[lang]/dictionaries/**",
+]
+
+# Artefactos generados: los escribe un script y su forma la decide el generador.
+[[exclude_patterns]]
+file_patterns = [
+  "content/artefactos/*.svg",
+  "public/**",
+  "brand-assets/**",
+  "design/**",
+]
+
+# El umbral de duplicación por defecto marca el contenido paralelo aunque esté
+# excluido de otras reglas; se sube para que la señal que quede sea la de código.
+[smells.duplication]
+threshold = 60
