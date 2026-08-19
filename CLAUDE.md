@@ -16,7 +16,7 @@
 
 ## Índice de `DECISIONS.md` (contenido a demanda, no cargado)
 
-- D1 · El diseño se traduce, no se copia (superado en V2+)
+- D1 (superado en V2+) · El diseño se traduce, no se copia
 - D2 · i18n nativo con `app/[lang]`, ES sin prefijo + `/en`
 - D3 · Next 16 usa `proxy.ts`, no `middleware.ts`
 - D4 · Fuente única de tokens = `app/globals.css`; `brand-globals.css` deprecado
@@ -35,7 +35,7 @@
 - D17 · Analítica cargada con `next/script`, gateada a producción, consent-ready
 - D18 · Página de política de cookies como documento vivo
 - D19 · Optimización post-lanzamiento: analítica diferida + SEO afinado
-- D20 · Revisión de copy ES↔EN — `es.json` fuente de verdad, EN no literal
+- D20 · Revisión de copy ES↔EN: el diccionario ES es la fuente de verdad, el EN no es literal
 - D21 · Enlaces entre páginas hermanas con componente compartido
 - D22 · CV en PDF generado desde el diccionario (react-pdf, ATS)
 - D23 · Copy con énfasis inline en el diccionario vía render de markup ligero
@@ -45,7 +45,7 @@
 - D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot
 - D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda
 - D29 · Superficie de contacto unificada: dato, patrón y jerarquía
-- D30 · Texto atenuado sobre fondos que no son `--background`
+- D30 (generalizada por D39) · Texto atenuado sobre fondos que no son `--background`
 - D31 · Tracking de clics mailto/tel vía dataLayer (P30)
 - D32 · CSP con allowlist para Microsoft Clarity; `c.bing.com` fuera a propósito (P37)
 - D33 · `/llms.txt` — un solo archivo, en español, generado desde el diccionario (P37.5)

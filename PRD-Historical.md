@@ -8,18 +8,6 @@
 
 > Documento de referencia para diseñar (Claude Design) y desarrollar esta web.
 > Consolida el Brief y el CV de partida. Versión V1 (Portfolio/CV en Vercel).
-> **V1.1** (2026-07-16): incorpora análisis crítico del Brief/CV y decisiones resultantes — ver sección 14.
-> **V1.2** (2026-07-19): incorpora el [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion), hecho tras ver la V1 ya montada en Claude Design. Reestructura Hero, Selected Work (→ Hitos), Trayectoria y Más allá del PM, y añade reequilibrio de color/motion — ver sección 15.
-> **V1.12** (2026-07-29): arranque del CV en PDF con identidad propia (generado desde el diccionario, bloque `cv`) y cierre del gap del deep-dive por experiencia —que nunca fue tarea y ahora sí—, con el que el CV comparte fuente de contenido — ver sección 25.
-> **V1.11** (2026-07-29): pasada de revisión de copy ES↔EN (P29) — cambios validados en Notion aplicados al sitio (`es.json` fuente de verdad, EN revisado contra el ES) y reconciliados en §8.2, §8.3 y la tabla de §8.5 — ver sección 24.
-> **V1.10** (2026-07-23): se cierra el Sprint 1. La foto del Hero se resuelve con una imagen generada con IA a partir de una foto de Francisco (recorte 4:5) en vez de una sesión de estudio, y se fijan las notas de uso para el build — ver sección 23.
-> **V1.9** (2026-07-23): reenfoque a lanzar V1 lo antes posible y priorización con MoSCoW en un tablero enlazado aparte. Sobre mí y Accesibilidad vuelven a V2, GA4 pasa a ser la medición del lanzamiento (Clarity queda para lo cualitativo), la arquitectura i18n es Must desde la primera línea, y los sprints se reorganizan a seis — ver sección 22.
-> **V1.8** (2026-07-22): pasada de responsive de la home —seis secciones que no apilaban en móvil por la misma causa— y ronda de ajustes de contenido, incluida la corrección del email y el LinkedIn, que estaban mal en la web — ver sección 21.
-> **V1.7** (2026-07-22): se construye la página Design System, con la sección de Accesibilidad convertida en checklist de cierre, y el sistema de color entero pasa a AAA en ambos temas — ver sección 20.
-> **V1.6** (2026-07-22): se construye la página Brand Kit, la primera de las cuatro páginas propias, y se consolida todo el diseño en una sola fuente con componentes compartidos — ver sección 19.
-> **V1.5** (2026-07-21): reorganización de sprints y ampliación del alcance de V1 — Sobre mí y Accesibilidad vuelven a V1, el responsive pasa a ser tarea de diseño, y Brand Kit y Sistema de diseño se montan como páginas en Sprint 1 — ver sección 18.
-> **V1.4** (2026-07-21): antes de abordar el footer, Francisco cuestionó si el logo se estaba usando de forma coherente con lo que documentarán las páginas Brand Kit y Sistema de diseño. Se auditaron los tres usos construidos, se descubrió que `BRAND.md` nunca cerró la tabla de uso del logo, y se cerró — ver sección 17.
-> **V1.3** (2026-07-20): tras cerrar el diseño de Más allá del PM y Trayectoria, Francisco revisó el conjunto y planteó una segunda ronda de ajustes de contenido y arquitectura — logos reales de empresa/herramienta/institución, nuevo paso "Lanzamiento" en Cómo trabajo, recategorización de Toolkit, y repriorización (Sobre mí entero a V2, Accesibilidad a V2, nuevas páginas Brand Kit/Sistema de diseño) — ver sección 16.
 
 **Fuentes originales:** ver sección [Fuentes](#fuentes) al final.
 
