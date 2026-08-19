@@ -114,7 +114,6 @@ export function CookiesPolicy({
                   { label: t.table.category },
                 ]}
                 minWidth="34rem"
-                className="mt-5"
               >
                 {t.rows.map((row) => (
                   <TR key={row.name}>
@@ -128,7 +127,7 @@ export function CookiesPolicy({
                   </TR>
                 ))}
               </DataTable>
-              <p className="text-muted-foreground mt-3 text-[0.85rem] leading-relaxed">
+              <p className="text-muted-foreground text-[0.85rem] leading-relaxed">
                 {t.tableNote}
               </p>
             </Section>
@@ -141,10 +140,10 @@ export function CookiesPolicy({
             {/* Gestionar / retirar */}
             <Section heading={t.manageHeading}>
               <p>{t.manageBody}</p>
-              <div className="mt-5">
+              <div>
                 <ConsentPreferencesButton label={t.manageButton} />
               </div>
-              <p className="mt-4">{t.manageBrowser}</p>
+              <p>{t.manageBrowser}</p>
             </Section>
 
             {/* Terceros */}
@@ -228,7 +227,19 @@ function Section({
       <h2 className="font-display m-0 mb-3 text-[clamp(1.35rem,2.4vw,1.65rem)] leading-[1.2] font-semibold tracking-[-0.015em]">
         {heading}
       </h2>
-      <div className="text-foreground/90 [&_p]:m-0 [&_p]:text-[1rem] [&_p]:leading-[1.7]">
+      {/* EL ESPACIO ENTRE BLOQUES LO PONE EL `gap`, NO UN MARGEN POR HIJO, y no
+          es preferencia: los márgenes NO FUNCIONABAN. `[&_p]:m-0` compila a un
+          selector de DESCENDIENTE (`.clase p`, especificidad 0-1-1) que le gana a
+          `.mt-4` (0-1-0), así que los `mt-3` y `mt-4` que había en dos párrafos
+          computaban 0px sin dar un solo error. El síntoma que lo destapó: el texto
+          de «bloquear o borrar cookies desde el navegador» pegado al botón de
+          preferencias, reportado por Francisco el 2026-08-19; el mismo fallo dejaba
+          la nota de la tabla a 1px de ella.
+
+          Es el punto 5 de `BRAND.md` §Cómo medir —una clase puede no aplicarse a
+          nada sin error de compilación— y la razón por la que `CLAUDE.md` pide que
+          el espaciado lo ponga el layout con `gap` y no márgenes por elemento. */}
+      <div className="text-foreground/90 flex flex-col gap-5 [&_p]:m-0 [&_p]:text-[1rem] [&_p]:leading-[1.7]">
         {children}
       </div>
     </section>
