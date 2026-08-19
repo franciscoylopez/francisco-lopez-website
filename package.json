@@ -21,7 +21,8 @@
     "check:artefacto": "tsx scripts/check-artefacto.ts",
     "check:contexto": "tsx scripts/check-contexto.ts",
     "check:skills": "tsx scripts/check-skills.ts",
-    "check:decisiones": "tsx scripts/check-decisiones.ts"
+    "check:decisiones": "tsx scripts/check-decisiones.ts",
+    "check:guardianes": "tsx scripts/check-guardianes.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
