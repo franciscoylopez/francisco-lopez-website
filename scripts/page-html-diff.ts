@@ -79,7 +79,16 @@ function normalize(html: string): string {
       //    cambia el orden de los archivos fuente, cosa que un movimiento sí
       //    hace y que no se ve en la página.
       .replace(/\/_next\/static\/[^"']+/g, "/_next/static/<hash>")
-      // 3. Un salto de línea SOLO donde dos etiquetas ya iban pegadas. Es una
+      // 3. El <meta name="next-size-adjust"> se va. Es de next/font, siempre
+      //    tiene el contenido vacío y su POSICIÓN dentro del <head> cambia entre
+      //    builds del mismo commit: medido el 2026-08-19 capturando la línea base
+      //    en main, reconstruyendo main y comparando contra sí mismo — una sola de
+      //    las 24 variantes (/en/trayectoria/freepik) y siempre esa. Un gate que
+      //    da un rojo que no depende del cambio deja de leerse, que es el modo de
+      //    fallo de D70 por la otra puerta. Se quita la etiqueta entera, no su
+      //    posición: su contenido no ha dicho nada nunca.
+      .replace(/<meta name="next-size-adjust"[^>]*>/g, "")
+      // 4. Un salto de línea SOLO donde dos etiquetas ya iban pegadas. Es una
       //    partición sin pérdida: el espacio en blanco entre elementos inline
       //    —que decide si dos palabras salen separadas— se conserva intacto y
       //    entra en la comparación. Colapsarlo sería esconder el fallo típico

@@ -3908,7 +3908,17 @@ del registro → código 1 nombrándola; añadir una fantasma → código 1 nomb
 falla al mirar cero.
 
 **Y la transparencia se midió, no se afirmó:** la salida de `sitemap()` y el texto entero de
-`/llms.txt` son **byte a byte idénticos** antes y después del refactor.
+`/llms.txt` son **byte a byte idénticos** antes y después del refactor, y `npm run gate:html`
+da **cero cambios en las 24 variantes**.
+
+**De paso, el gate tenía un rojo que no dependía del cambio, y por eso se documenta por
+MECANISMO** (D67). El `<meta name="next-size-adjust">` que emite `next/font` cambia de POSICIÓN
+dentro del `<head>` entre builds del mismo commit. Se comprobó como se comprueban estas cosas
+aquí: capturando la línea base en `main`, **reconstruyendo `main`** y comparándolo contra sí
+mismo — una sola de las 24 variantes (`/en/trayectoria/freepik`), siempre esa, y sin una línea de
+código de por medio. Ahora la etiqueta se normaliza fuera: su contenido está vacío y nunca ha
+dicho nada, y un gate que da un rojo falso deja de leerse, que es el modo de fallo de D70 por la
+otra puerta.
 
 **Estado:** CI pasa de doce a **catorce** pasos (`check:rutas` y `check:guardianes`, este último
 por P54.96). Los guardianes con caso malo pasan de siete a **nueve**: `check:experiencias`
