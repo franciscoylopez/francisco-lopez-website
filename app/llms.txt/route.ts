@@ -1,6 +1,7 @@
 import { EMAIL, LINKEDIN_URL, PHONE_TEL } from "@/lib/contact";
 import { cvPath } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
+import { STATIC_PAGE_SLUGS, type StaticPageSlug } from "@/lib/routes";
 import { factsOf, shortOf } from "@/content/experience-copy";
 import { experienceOf, type ExperienceSlug } from "@/content/experiences";
 
@@ -36,50 +37,30 @@ const es = {
 // web) para que nunca pueda divergir del contenido real. Un solo archivo, en
 // español (locale por defecto, D2), con enlaces a ambas versiones de cada página.
 // Ver Notion P37.5.
-const PAGES: {
-  path: string;
-  title: string;
-  description: string;
-}[] = [
-  { path: "", title: es.meta.title, description: es.meta.description },
-  {
-    path: "/sobre-mi",
-    title: es.sobreMi.meta.title,
-    description: es.sobreMi.meta.description,
-  },
-  {
-    path: "/trayectoria",
-    title: esTrayectoria.meta.title,
-    description: esTrayectoria.meta.description,
-  },
-  {
-    path: "/brand-kit",
-    title: es.brandKit.meta.title,
-    description: es.brandKit.meta.description,
-  },
-  {
-    path: "/design-system",
-    title: es.designSystem.meta.title,
-    description: es.designSystem.meta.description,
-  },
-  {
-    path: "/accesibilidad",
-    title: es.accesibilidad.meta.title,
-    description: es.accesibilidad.meta.description,
-  },
-  {
-    path: "/cookies",
-    title: es.cookies.meta.title,
-    description: es.cookies.meta.description,
-  },
-];
+
+// De qué rama del diccionario sale el texto de cada página estática. CUÁLES son
+// y en qué orden lo pone `lib/routes.ts` (D72): este archivo era una de las tres
+// copias a mano de esa lista, y la que fallaba más callada — una página que
+// faltara aquí simplemente no existía para un modelo. El `Record` completo hace
+// que una página nueva sin entrada NO COMPILE, igual que el `DEEP_DIVE` de abajo.
+const META: Record<StaticPageSlug, { title: string; description: string }> = {
+  "": es.meta,
+  "sobre-mi": es.sobreMi.meta,
+  trayectoria: esTrayectoria.meta,
+  "brand-kit": es.brandKit.meta,
+  "design-system": es.designSystem.meta,
+  accesibilidad: es.accesibilidad.meta,
+  cookies: es.cookies.meta,
+};
 
 // Trayectoria de producto (D9 §6): mismos períodos/roles/empresas que la home,
 // tal cual viven en el diccionario — sin prosa propia de este archivo.
 const TRAYECTORIA = [...es.trayectoria.producto, es.trayectoria.nested[0]!];
 
 function pageList(): string {
-  return PAGES.map(({ path, title, description }) => {
+  return STATIC_PAGE_SLUGS.map((slug) => {
+    const { title, description } = META[slug];
+    const path = slug ? `/${slug}` : "";
     const urlEs = `${SITE_URL}${path || "/"}`;
     const urlEn = `${SITE_URL}/en${path}`;
     return `- [${title}](${urlEs}) ([EN](${urlEn})): ${description}`;

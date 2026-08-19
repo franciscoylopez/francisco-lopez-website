@@ -95,6 +95,16 @@ const CASOS: Caso[] = [
     mutar: (o) => o.replace(/^- D33 · .*$/m, ""),
   },
   {
+    guardian: "check:rutas",
+    rotura: "una página que existe en disco y no está en el registro",
+    archivo: "lib/routes.ts",
+    // Se borra un slug de STATIC_PAGE_SLUGS. En el repo de verdad eso además no
+    // compilaría —los dos Record del sitemap y de llms.txt dejarían de ser
+    // exhaustivos—, pero el guardián corre con tsx, que transpila sin comprobar
+    // tipos: aquí se mide lo que ve él, que es el disco contra el registro.
+    mutar: (o) => o.replace(/\n  "cookies",/, ""),
+  },
+  {
     guardian: "check:skills",
     rotura: "una skill nombra un archivo que ya no existe",
     archivo: ".claude/skills/close-session/SKILL.md",

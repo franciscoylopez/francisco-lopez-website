@@ -106,6 +106,16 @@ export function experienceOf(company: string): Experience {
  * un nombre de empresa sin registrar solo puede venir de nuestro propio
  * contenido.
  */
+/**
+ * ¿Este segmento de URL es el slug de una experiencia CON página? Guardián de
+ * tipo, no un `as`: `experienceBySlug` devuelve el `Experience` completo, cuyo
+ * `slug` está tipado `string | null` por la interfaz, así que no estrecha nada.
+ * Lo usa la ruta del deep-dive para poder pasarle a `pageMetadata` un `PageSlug`
+ * de verdad (D72) en vez de afirmarlo.
+ */
+export const isExperienceSlug = (slug: string): slug is ExperienceSlug =>
+  EXPERIENCES.some((e) => e.slug === slug);
+
 export function experienceBySlug(slug: string): Experience | undefined {
   return EXPERIENCES.find((e) => e.slug === slug);
 }
