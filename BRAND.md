@@ -285,7 +285,7 @@ hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script e
 > caso cuyo resultado ya se conocía.** Por eso publica ahora cuántas reglas `:hover` ha indexado
 > y cuántos pares ha medido con ellas: *un metro que devuelve una lista vacía parece un
 > aprobado*. El detalle de los dos fallos y del incumplimiento real que escondía el segundo, en
-> [`BRAND-historical.md`](./BRAND-historical.md) §Accesibilidad.
+> [`BRAND-historical.md`](./BRAND-historical.md) §El censo de contraste se rompió dos veces.
 
 
 ### Cómo medir sin equivocarse

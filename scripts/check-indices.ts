@@ -11,6 +11,7 @@ import {
   DECISIONES,
   decisiones,
   decisionesActual,
+  decisionesDeclaradas,
   HISTORICOS,
   historico,
   historicoActual,
@@ -43,6 +44,26 @@ const casos: Caso[] = [
 
 const problemas: string[] = [];
 let entradas = 0;
+
+// Antes de comparar índices: ¿hay alguna cabecera de decisión que el generador NO
+// esté viendo? Es el punto ciego que este check tendría por construcción — una
+// cabecera mal formada no la ve el generador ni el lector, así que el índice
+// saldría sin ella y el veredicto sería ✓. Comprobado el 2026-08-19 escribiendo
+// una a propósito: pasaba en verde.
+const declaradas = decisionesDeclaradas();
+const formateadas = new Set(
+  decisiones().map((l) => Number(/^- D(\d+)/.exec(l)?.[1] ?? 0)),
+);
+const invisibles = declaradas.filter((n) => !formateadas.has(n));
+if (invisibles.length) {
+  problemas.push(
+    `${DECISIONES}: ${invisibles.length} cabecera(s) que el generador no ve — ` +
+      `${invisibles.map((n) => `D${n}`).join(", ")}.\n` +
+      "      El formato es `## Dnn · Título — AAAA-MM-DD`, con el punto medio «·» y\n" +
+      "      un estado opcional entre paréntesis tras el número. Sin eso, la decisión\n" +
+      "      no llega al índice y este check no lo notaría.",
+  );
+}
 
 for (const caso of casos) {
   entradas += caso.esperado.length;

@@ -182,10 +182,16 @@ cierra el hueco**.
 
 ## 7 · Los gates de cierre
 
+> **Esto NO sustituye a la Definition of Done** (`CLAUDE.md` §Definition of Done, escrita
+> el 2026-08-19): una página nueva pasa su columna A entera. Lo de aquí abajo es lo que la
+> DoD **no** puede saber porque es específico del deep-dive — las tres longitudes, el CV y
+> los dos disparos del gate por el hero. Si los dos textos discreparan alguna vez, manda la
+> DoD y esto se corrige.
+
 1. **`npm run check:experiencias`** — las tres longitudes cuadran.
 2. **`npm run check:cv`** — y si falla, `npm run cv`: tocar un bullet o un hecho
    cambia también el PDF, que es un artefacto commiteado y no se regenera solo.
-2. **`npm run gate:html`**, solo si has tocado algo COMPARTIDO. Para una página
+3. **`npm run gate:html`**, solo si has tocado algo COMPARTIDO. Para una página
    nueva no hay línea base contra la que compararla; su valor está en demostrar
    que el resto no se ha movido.
 4. **Gate de accesibilidad (D52)** con el subagente `viewport-verifier`, sobre el

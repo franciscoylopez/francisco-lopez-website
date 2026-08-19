@@ -50,6 +50,18 @@ const CIERRE = /^\*\(Al añadir una decisión nueva/m;
  * la fecha final y lo que la acompañe (alguna lleva «reescrita …» detrás), que es
  * metadato de la entrada y no ayuda a elegirla.
  */
+/**
+ * Las cabeceras que EMPIEZAN por `## Dnn`, sin exigirles el resto del formato.
+ * Existe para poder comparar contra las que sí lo cumplen: una cabecera mal
+ * formada —un guion donde va el `·`, por ejemplo— sería invisible para el
+ * generador **y** para el check, así que el índice saldría sin ella y el
+ * veredicto sería ✓. El metro aprobando porque no ha mirado, otra vez.
+ */
+export function decisionesDeclaradas(): number[] {
+  const texto = readFileSync(DECISIONES, "utf8");
+  return [...texto.matchAll(/^## D(\d+)\b/gm)].map((m) => Number(m[1]));
+}
+
 export function decisiones(): string[] {
   const texto = readFileSync(DECISIONES, "utf8");
   return [...texto.matchAll(/^## (D(\d+))( \([^)]+\))? · (.+)$/gm)]
@@ -89,11 +101,19 @@ const CIERRA = "<!-- FIN ÍNDICE -->";
  * que GitHub hace de verdad (y por lo que no vale un `normalize` agresivo aquí).
  */
 function ancla(titulo: string): string {
-  return titulo
-    .toLowerCase()
-    .replace(/[`*_[\]()«».,:;¿?¡!—·'"]/g, "")
-    .trim()
-    .replace(/\s+/g, "-");
+  return (
+    titulo
+      .toLowerCase()
+      .replace(/[`*_[\]()«».,:;¿?¡!—·'"’]/g, "")
+      .trim()
+      // CADA espacio pasa a guion, y NO se colapsan. Es lo que GitHub hace de
+      // verdad, y la diferencia importa justo donde este proyecto escribe: al
+      // quitar un « · » o un « — » quedan DOS espacios, que GitHub convierte en
+      // dos guiones. Con `\s+` el ancla salía con uno y el enlace no resolvía —
+      // pasaba en 2 de las 68 secciones, y en GitHub, que desde que el repo es
+      // público y no hay espejo es donde de verdad se navegan estos archivos.
+      .replace(/ /g, "-")
+  );
 }
 
 /** Las líneas del índice de un histórico, de sus cabeceras de nivel 2. */

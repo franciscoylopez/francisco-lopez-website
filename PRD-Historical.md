@@ -30,7 +30,7 @@
 - [12. Decisiones pendientes](#12-decisiones-pendientes)
 - [13. Roadmap](#13-roadmap)
 - [14. Feedback crítico (2026-07-16)](#14-feedback-crítico-2026-07-16)
-- [15. Análisis de mejora V1 — Diseño, Marca y Arquitectura (2026-07-19)](#15-análisis-de-mejora-v1-diseño-marca-y-arquitectura-2026-07-19)
+- [15. Análisis de mejora V1 — Diseño, Marca y Arquitectura (2026-07-19)](#15-análisis-de-mejora-v1--diseño-marca-y-arquitectura-2026-07-19)
 - [16. Ajustes de contenido y prioridad (2026-07-20)](#16-ajustes-de-contenido-y-prioridad-2026-07-20)
 - [17. Sistema de uso del logo (2026-07-21)](#17-sistema-de-uso-del-logo-2026-07-21)
 - [18. Reorganización de sprints y alcance de V1 (2026-07-21)](#18-reorganización-de-sprints-y-alcance-de-v1-2026-07-21)

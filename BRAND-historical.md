@@ -25,7 +25,7 @@ Partido el **2026-08-09** (P37.685).
 ---
 
 <!-- ÍNDICE · lo genera `npm run indices`; no se edita a mano -->
-- [Color — regla de las dos capas](#color-regla-de-las-dos-capas)
+- [Color — regla de las dos capas](#color--regla-de-las-dos-capas)
 - [Jerarquía de hover en botones y CTA](#jerarquía-de-hover-en-botones-y-cta)
 - [Etiquetas](#etiquetas)
 - [Cuándo una acción lleva icono](#cuándo-una-acción-lleva-icono)
