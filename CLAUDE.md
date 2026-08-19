@@ -26,7 +26,7 @@
 - D9 · Alcance de V1 (home + Brand Kit + Design System + SEO/OG + medición + dominio)
 - D10 · Política de documentación de la fase de desarrollo
 - D11 · Andamiaje de calidad del build (i18n tipado, sin tests en V1)
-- D12 · Branching y releases (trunk-based, ramas cortas, tags `vX.Y.Z`); **cómo se integra un PR: squash si trae un commit, rebase si trae varios**
+- D12 · Branching y releases (trunk-based, ramas cortas, tags `vX.Y.Z`); **cómo se integra un PR: squash si trae un commit, rebase si trae varios** — desde el 2026-08-19 **lo impone el servidor y no la disciplina** (ver D68: sin push directo a `main`, sin merge con CI en rojo y solo `squash`/`rebase`)
 - D13 · Entornos y staging = Vercel Previews
 - D14 · Imágenes OG con `ImageResponse` bajo `/api/og`
 - D15 · SITE_URL estable en prod (`VERCEL_PROJECT_PRODUCTION_URL`)

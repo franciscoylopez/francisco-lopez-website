@@ -168,7 +168,11 @@ existen** en `public/cv/`.
 1. **Entrega el PDF** a Francisco con `SendUserFile`.
 2. **Commit en rama corta** (D12) → `push` → **PR**.
 3. **QA**: `npm run typecheck`, `npm run lint`, `npm run check:experiencias`,
-   **`npm run check:cv`** y `npm run build`.
+   **`npm run check:cv`**, **`npm run check:raya`** y `npm run build`.
+   *(`check:raya` entra en esta lista el 2026-08-19: desde que el guardián recorre las
+   fuentes en vez de listar ficheros, `content/cv/` está bajo su vigilancia — y el fallo
+   que lo destapó fue justo ahí, «Experiencia previa — Marketing & Growth» donde la web
+   ya decía `·`. Tocar copy del CV puede tumbar este check.)*
 4. **Publicar** = mergear a `main` y desplegar (D16). Es producción: **confírmalo
    con Francisco antes de mergear.** Tras el deploy, verifica que `/` sirve `-es` y
    `/en` sirve `-en`, y etiqueta `vX.Y.Z`.

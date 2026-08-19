@@ -134,7 +134,8 @@ tenga que acordarse.
   encaja en una variante, se crea la variante; la excepción se documenta con fecha. Es
   lo que hace que un cambio de hover, de radio, del objetivo táctil, del icono que lleva
   una acción o del fondo de reposo de un control solo-icono llegue a todo el sitio a la
-  vez. Los iconos son de **lucide**; los que lucide no trae —hoy LinkedIn— se dibujan a
+  vez. Los iconos son de **lucide**; los que lucide no trae —hoy LinkedIn y GitHub, que dejó
+  de exportar en la v1.24 por marca registrada— se dibujan a
   mano siguiendo la **regla de autoría de iconos propios**, para que un icono del sitio
   no se distinga de uno de la librería. Los **widgets con estado, foco atrapado o portal**
   (diálogo, popover, tabs) se traen de shadcn en vez de escribirse —misma forma que la regla

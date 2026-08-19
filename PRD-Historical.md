@@ -1922,6 +1922,72 @@ bucle abierto por los dos falsos positivos con los que empezó esta tanda.
 
 Cinco decisiones técnicas nuevas: **D62** a **D66**.
 
+## 51. El repositorio se hace público, y el Sprint Lite se cierra (2026-08-19)
+
+La tarea que quedaba era «proteger `main`», y al ir a hacerla los dos caminos devolvieron **403
+con el mismo mensaje**: en plan Free un repo **privado** no admite protección de rama ni rulesets.
+Así que no era una tarea de configuración: **era una decisión de producto** —publicar el trabajo—
+y además irreversible en la práctica.
+
+**Lo que la auditoría del historial encontró no fue lo que la tarea anticipaba.** Los 293 commits
+salieron **limpios de secretos** (ni claves, ni `.env`, ni siquiera los IDs de GTM y Clarity, que
+viven en Vercel), y el CI no usa ni un `secret`. **El riesgo real era editorial**: publicar el
+repo publica `PRD-Historical.md`, y este documento **registraba lo que se había decidido no
+contar en el sitio** — o sea, lo republicaba. Es la línea de discreción de §42 aplicada al
+repositorio, y la regla que deja es incómoda de tan simple: *un documento que registra qué se
+retiró por discreción lo vuelve a publicar.* Tres pasajes se reescribieron antes de cambiar la
+visibilidad, y **un cuarto candidato no lo era**: la financiación de TheTool por PICKASO parecía
+retirada, pero al comprobarla **contra el copy servido** resultó estar publicada hoy y con más
+detalle. De cuatro hallazgos, tres reales.
+
+**Y con el repo público, tres piezas que antes no tenían sentido.** El **README** deja de ser
+documentación interna y pasa a ser portada: era buena para quien ya estaba dentro y mala para
+quien llega, con 172 líneas sin una imagen y el mapa del repo en un muro de 60. Se reordena sin
+tirar contenido —lo denso baja a `<details>`— y se abre con banner de marca y capturas del sitio
+en los dos temas, generadas con el Chrome local. Su sección central, «Qué tiene de interesante»,
+es lo que de verdad distingue este repo de un portfolio: ocho decisiones en tabla. El **`LICENSE`**
+hace explícito lo que por defecto ya era —**público para consulta, no código abierto**—
+enumerando lo que más se copia, porque un aviso genérico no protege lo que nadie identifica como
+protegible. Y el **enlace al repo en el footer**, que antes habría dado un 404 al que lo pulsara.
+
+**La petición que no se podía cumplir donde se pedía.** Francisco vio la tarjeta de su perfil de
+GitHub vacía y pidió hacerla más visual. Se comprobó: **esa tarjeta no admite imágenes** — GitHub
+pinta ahí nombre, visibilidad, descripción, lenguaje y estrellas, y nada más. Lo único accionable
+era la descripción, que faltaba y se puso. Lo visual va en un **README de perfil**, que es un repo
+aparte y queda tareado para después de la V3. *La petición era legítima y el sitio donde se hacía
+no era el sitio donde se puede cumplir.*
+
+### El cierre, y la lección que apareció tres veces en dos días
+
+**La última tarea del sprint la encontró verificar producción, no el estado del despliegue.** Al
+comprobar que el 404 de marca cubría ya los deep-dive, el título servido fue `404 — Francisco
+López`: **con raya, el mismo día que se desplegaba el guardián que la prohíbe**. La causa era la
+**allowlist** de `check:raya`, que no cubría `lib/i18n/system-messages.ts` — precisamente **el
+único copy que vive fuera del diccionario a propósito** (D22/D25). El guardián no cubría la
+excepción que el propio sistema tenía documentada.
+
+Al cerrar el sprint, la `sprint-review` lo generalizó: `check:raya` era **el único guardián
+construido sobre una lista de ficheros**, y el único que ha fallado; los otros tres derivan su
+alcance. Se cambió por un recorrido de las fuentes, y **pagó a la primera**: de 32 archivos y
+2.649 cadenas a **135 y 5.557**, con dos violaciones nuevas en el contenido del **CV**, donde la
+web ya decía `·` y el PDF seguía diciendo raya. El mismo rótulo con dos valores.
+
+Es la tercera cara del mismo fallo en dos días, y por eso queda escrita: **un guardián que afirma
+cuánto ha mirado sigue sin decir qué dejó FUERA de su lista.** Primero fue `.prettierignore` (un
+fichero excluido), luego una allowlist (un fichero nunca incluido), y el arreglo que sirve no es
+ampliar la lista sino **derivar el alcance en vez de enumerarlo**.
+
+La revisión dejó además dos cosas que no son de código: **`PRD-Live.md` seguía diciendo que el
+sprint estaba «a ocho de diez»** —y es el documento que se `@`-importa en cada sesión, así que
+toda sesión futura habría arrancado con un estado falso— y **el cambio operativo más grande no
+tenía ADR**: `DECISIONS.md` tenía cero menciones a «ruleset» mientras D12 seguía describiendo el
+flujo como disciplina. Con el sprint cerrado, **12 de 12 y en producción**, quedan tareadas tres
+cosas que no se resuelven hoy: el README de perfil, si D11 («sin tests») sigue vigente en V2, y
+la subida a ESLint 10 —cuyo bump automático revienta por dependencias transitivas, no por nuestra
+configuración—.
+
+---
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
