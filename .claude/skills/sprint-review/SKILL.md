@@ -98,6 +98,18 @@ puntos de entrada (routing, layout, `lib/`); cruza con `PRD-Live.md` / `PRD-Hist
    tablero** de `CLAUDE.md` (Estado, MoSCoW, Prioridad con decimales para insertar, Área,
    Versión, Sprint, Tamaño). Sin duplicar las existentes.
 
+## Al terminar, dispara `method-review`
+
+Esta revisión mira el **codebase**; la de metodología mira **cómo se trabaja** —los gates y su
+proporción manual/automática, el presupuesto de contexto, si los guardianes saben fallar, el
+drift de docs y skills, el bucle de medición, el tablero—. Van seguidas y en este orden, y el
+sitio de la segunda es **el hueco entre dos sprints**: el andamiaje hay que ponerlo antes de
+que existan las cosas que tiene que sostener.
+
+**Nómbrala explícitamente en tu salida**, con el paso 4 del ritual de cierre de `CLAUDE.md`.
+Es lo que impide que `method-review` sea una cosa más que hay que acordarse de disparar, que
+es exactamente el fallo que ella misma va a buscar.
+
 ## Relación con otros flujos
 - Es la revisión **técnica/de código**; el cierre de **documentación** de sesión lo hace el
   skill `close-session` (cadencia distinta: sesión vs sprint).
