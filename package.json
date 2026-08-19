@@ -23,7 +23,8 @@
     "check:skills": "tsx scripts/check-skills.ts",
     "check:guardianes": "tsx scripts/check-guardianes.ts",
     "indices": "tsx scripts/indices.ts --escribir",
-    "check:indices": "tsx scripts/check-indices.ts"
+    "check:indices": "tsx scripts/check-indices.ts",
+    "check:rutas": "tsx scripts/check-rutas.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

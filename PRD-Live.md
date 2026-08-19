@@ -85,8 +85,11 @@ descarga** (D65).
 - **Una página no se escribe: se compone.** `pageMetadata` deriva canonical, los tres
   `hreflang`, OG y Twitter de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de
   motion, el `<main>` y footer (D45/D46). Las doce se **prerenderizan** por locale y el
-  diccionario está **partido por página** (D48). Es lo que hace que una página nueva nazca
-  con el `hreflang` correcto, con enlace de salto y estática, sin que nadie se acuerde.
+  diccionario está **partido por página** (D48). Y **qué páginas hay lo dice un solo
+  sitio**: registrarlas mal no es un hallazgo de auditoría sino un error del
+  compilador, y un guardián contrasta el registro con el disco (D72). Es lo que hace
+  que una página nueva nazca con el `hreflang` correcto, con enlace de salto,
+  estática y dentro del sitemap, del gate y de `/llms.txt`, sin que nadie se acuerde.
 
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 
@@ -171,8 +174,8 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
 
 ### Calidad y seguridad
 
-CI en cada PR con **doce pasos**: formato, typecheck, lint, paleta, experiencias, CV al
-día, raya, artefacto, contexto, skills, decisiones y build. Todos comparten una regla de
+CI en cada PR con **catorce pasos**: formato, typecheck, lint, paleta, experiencias, CV
+al día, raya, artefacto, contexto, skills, índices, rutas, guardianes y build. Todos comparten una regla de
 método: **buscan la AUSENCIA, no el patrón**, y **afirman cuánto han mirado** — un metro
 que devuelve lista vacía parece un aprobado, y este proyecto se lo ha encontrado cinco
 veces (D38/D57/D60/D63).

@@ -15,10 +15,19 @@
  * rechazar. Es lo contrario de un test de que funciona — es un test de que sabe
  * fallar.
  *
- * POR QUÉ NO ESTÁ EN CI. Porque muta archivos rastreados para provocar el fallo, y
- * un job que escribe en el árbol de trabajo es la clase de cosa que sale cara el
- * día que se interrumpe a medias. Se dispara a mano al tocar un guardián, y es
- * casilla de la DoD cuando el trabajo crea o cambia uno.
+ * Y se mide EN LAS DOS DIRECCIONES: primero que el guardián esté verde sobre el
+ * árbol limpio, después que salga rojo sobre el caso malo. Solo la segunda mitad
+ * daría por bueno a un guardián roto por cualquier otra causa, que sale con
+ * código 1 pase lo que pase.
+ *
+ * DÓNDE CORRE. En CI, como un paso más, desde el 2026-08-19. Nació fuera con este
+ * argumento: muta archivos rastreados para provocar el fallo, y un job que escribe
+ * en el árbol de trabajo sale caro el día que se interrumpe a medias. Eso vale para
+ * un árbol con trabajo dentro, no para un runner que se tira al terminar — y el
+ * precio de dejarlo fuera era justo el modo de fallo que este script existe para
+ * cerrar: un guardián que solo corre si alguien se acuerda no es un guardián, es
+ * una nota. Se sigue lanzando a mano al tocar un guardián, y es casilla de la DoD
+ * cuando el trabajo crea o cambia uno.
  *
  * SEGURIDAD. Se niega a arrancar con el árbol sucio, restaura en `finally` desde
  * la copia en memoria, y verifica al final que no ha dejado nada movido. Si aun
@@ -55,6 +64,18 @@ const CASOS: Caso[] = [
     ),
   },
   {
+    guardian: "check:experiencias",
+    rotura: "un bullet que existe en ES y no en EN",
+    archivo: "content/experience-copy/en.ts",
+    // Se quita un bullet entero, que rompe la PARIDAD ES↔EN. No es un caso malo
+    // cualquiera: .qlty/qlty.toml excluye estos dos archivos del análisis de
+    // duplicación con el argumento de que su duplicación estructural es
+    // «exactamente la propiedad que check:experiencias existe para GARANTIZAR».
+    // O sea que un informe de calidad se apoya en este guardián, y hasta hoy
+    // nadie había comprobado que supiera fallar.
+    mutar: (o) => o.replace(/\n      \{\n        cv: [\s\S]*?\n      \},/, ""),
+  },
+  {
     guardian: "check:cv",
     rotura: "el contenido del CV cambia y los PDFs no se regeneran",
     archivo: "content/cv/content.es.ts",
@@ -79,6 +100,16 @@ const CASOS: Caso[] = [
     mutar: (o) => o.replace(/^- D33 · .*$/m, ""),
   },
   {
+    guardian: "check:rutas",
+    rotura: "una página que existe en disco y no está en el registro",
+    archivo: "lib/routes.ts",
+    // Se borra un slug de STATIC_PAGE_SLUGS. En el repo de verdad eso además no
+    // compilaría —los dos Record del sitemap y de llms.txt dejarían de ser
+    // exhaustivos—, pero el guardián corre con tsx, que transpila sin comprobar
+    // tipos: aquí se mide lo que ve él, que es el disco contra el registro.
+    mutar: (o) => o.replace(/\n  "cookies",/, ""),
+  },
+  {
     guardian: "check:skills",
     rotura: "una skill nombra un archivo que ya no existe",
     archivo: ".claude/skills/close-session/SKILL.md",
@@ -86,10 +117,21 @@ const CASOS: Caso[] = [
   },
 ];
 
-/** Corre un guardián y devuelve su código de salida, sin volcar su ruido. */
+/**
+ * Corre un guardián y devuelve su código de salida, sin volcar su ruido.
+ *
+ * `maxBuffer` explícito y generoso: el de por defecto es 1 MiB, y un guardián al
+ * que se le acaba de romper su archivo puede volverse mucho más verboso de lo
+ * normal. Si lo matara el buffer, `execSync` lanzaría igual que si hubiera
+ * fallado, y este script lo puntuaría como «lo rechaza» — un verde falso dentro
+ * del verificador de verificadores.
+ */
 function salida(guardian: string): number {
   try {
-    execSync(`npm run ${guardian}`, { stdio: "pipe" });
+    execSync(`npm run ${guardian}`, {
+      stdio: "pipe",
+      maxBuffer: 32 * 1024 * 1024,
+    });
     return 0;
   } catch (e) {
     return (e as { status?: number }).status ?? 1;
@@ -118,7 +160,19 @@ for (const caso of CASOS) {
   let veredicto: string;
   try {
     const mutado = caso.mutar(original);
-    if (mutado === original) {
+    // ANTES de romper nada: ¿está verde? Un código distinto de 0 no significa por
+    // sí solo «lo rechaza» — un guardián roto por otra causa (un error suyo, una
+    // dependencia que no resuelve) también sale con 1 sobre el archivo mutado, y
+    // sin esta pasada quedaría puntuado como que tiene dientes. Es el verde falso
+    // viviendo DENTRO del verificador de verificadores, que es la única clase de
+    // fallo que este script no puede permitirse.
+    if (salida(caso.guardian) !== 0) {
+      veredicto = "YA ESTABA ROJO";
+      fallos.push(
+        `${caso.guardian}: falla ya sobre el árbol limpio, así que rechazar su caso ` +
+          "malo no prueba nada. Arréglalo y vuelve a pasar esto.",
+      );
+    } else if (mutado === original) {
       veredicto = "NO SE PUDO ROMPER";
       fallos.push(
         `${caso.guardian}: la mutación no cambió ${caso.archivo}. El caso malo ha ` +
@@ -169,5 +223,5 @@ if (fallos.length) {
 }
 
 console.log(
-  "\n✓ Los siete guardianes rechazan su caso malo. El árbol queda como estaba.",
+  `\n✓ Los ${CASOS.length} guardianes rechazan su caso malo. El árbol queda como estaba.`,
 );

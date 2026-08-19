@@ -6,7 +6,7 @@ import { DeepDiveNav } from "@/components/site/deep-dive-nav";
 import { PageShell } from "@/components/site/page-shell";
 import { locales, isLocale, pagePath } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
-import { experienceBySlug } from "@/content/experiences";
+import { experienceBySlug, isExperienceSlug } from "@/content/experiences";
 import { experiencePageLd, pageUrl } from "@/lib/structured-data";
 import {
   experienceSlugs,
@@ -52,6 +52,11 @@ export const dynamicParams = false;
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { lang, slug } = await params;
   if (!isLocale(lang)) notFound();
+  // Estrecha el slug a `ExperienceSlug` para que el que se le pasa abajo sea un
+  // `PageSlug` comprobado y no un `as` (D72). Con `dynamicParams = false` esta
+  // rama no se alcanza en producción —el 404 lo decide el enrutado—, así que su
+  // trabajo es el tipo, no la defensa.
+  if (!isExperienceSlug(slug)) notFound();
 
   const t = await getExperience(lang, slug);
   if (!t) notFound();

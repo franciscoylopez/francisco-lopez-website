@@ -74,7 +74,7 @@
 - D56 · La apertura ocupa el pliegue, y `mx-auto` deja de significar lo que significaba
 - D57 · Las tres longitudes de una experiencia son un solo dato
 - D58 · El deep-dive es la fuente de los hechos de una experiencia
-- D59 · El SEO del deep-dive, y las tres listas de páginas escritas a mano
+- D59 (completado por D72) · El SEO del deep-dive, y las tres listas de páginas escritas a mano
 - D60 · Una fuente única evita dos verdades; no mantiene al día una copia impresa
 - D61 · Una superficie también cambia por ESTADO, y el atenuado no se enteraba
 - D62 · El 404 de una ruta que CASA no lo cubre `global-not-found`
@@ -87,6 +87,7 @@
 - D69 · El régimen de contexto de D28 gana cifra y guardián, y aparece la operación que faltaba: retirar
 - D70 · La capa que verifica no estaba verificada, y su modo de fallo es una luz verde
 - D71 · «No hay datos» no distingue entre cero filas y mal configurado
+- D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
@@ -247,7 +248,7 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 | 7 | **Copy**: ES fuente de verdad, EN revisado contra el ES, sin raya | D20 · `npm run check:raya` |
 | 8 | **Interfaz mecánica**: estados vacíos, desbordamiento, hidratación, cifras tabulares, safe areas | Skill de Web Interface Guidelines, **antes** de `design-review` |
 | 9 | **`npm run gate:html`** si el cambio se decía transparente | Diff vacío = transparente por construcción (D42/D45) |
-| 10 | **Los doce checks de CI en verde** | El PR |
+| 10 | **Los catorce checks de CI en verde** | El PR |
 
 ## Columna B — no bloquea el envío
 

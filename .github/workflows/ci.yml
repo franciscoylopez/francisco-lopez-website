@@ -131,5 +131,25 @@ jobs:
       - name: Índices derivados
         run: npm run check:indices
 
+      # «Qué páginas tiene este sitio» estaba escrito a mano en TRES sitios —el
+      # sitemap, este gate de HTML y /llms.txt— y en ninguno fallaba de forma
+      # visible: la página no existe para Google, el gate deja de cubrirla en
+      # silencio, y no aparece en el índice para modelos. Ahora la lista es una
+      # (lib/routes.ts) y esto comprueba que cuadre con app/[lang]/**/page.tsx,
+      # que es el único sitio donde una página existe de verdad (D72).
+      - name: Rutas registradas
+        run: npm run check:rutas
+
+      # Y el que mira a los otros nueve: a cada guardián le pasa un caso malo
+      # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que
+      # funciona — el modo de fallo de un guardián es una luz verde, y el censo de
+      # contraste se rompió así dos veces en silencio (D70). Nació FUERA de CI
+      # porque muta archivos rastreados para provocar el fallo, y eso sale caro en
+      # un árbol de trabajo con cosas dentro; en un runner que se tira al terminar,
+      # no. Exige árbol limpio, restaura desde memoria y falla si queda algo
+      # movido, así que el paso siguiente ve el mismo checkout que este.
+      - name: Guardianes con dientes
+        run: npm run check:guardianes
+
       - name: Build
         run: npm run build

@@ -3079,7 +3079,7 @@ fecha corregida. Mover cuatro campos fuera de los **diez** diccionarios del deep
 
 ---
 
-## D59 · El SEO del deep-dive, y las tres listas de páginas escritas a mano — 2026-08-18
+## D59 (completado por D72) · El SEO del deep-dive, y las tres listas de páginas escritas a mano — 2026-08-18
 
 **Contexto.** Las seis páginas nuevas activan el criterio de cierre de `CLAUDE.md` («SEO y datos
 estructurados por página, no un extra»). Al ir a cumplirlo apareció que el mismo dato —**qué
@@ -3782,9 +3782,10 @@ contenido y dos guardianes.
    pero como **hábito**, y un hábito se olvida y no deja rastro. Detecta dos cosas, y la segunda
    es la que lo hace útil a un año vista: que un guardián pierda los dientes, y que **el caso
    malo caduque** (si la mutación ya no cambia el archivo, lo dice en vez de aprobar).
-   **No entra en CI a propósito**: muta archivos rastreados, y un job que escribe en el árbol de
-   trabajo sale caro el día que se interrumpe. Se niega a arrancar con el árbol sucio, restaura
-   en `finally` y comprueba al final que no ha dejado nada movido.
+   **Nace fuera de CI**: muta archivos rastreados, y un job que escribe en el árbol de trabajo
+   sale caro el día que se interrumpe. Se niega a arrancar con el árbol sucio, restaura en
+   `finally` y comprueba al final que no ha dejado nada movido. *(Entró en CI el 2026-08-19,
+   P54.96 — ver la corrección al final de esta entrada.)*
 2. **La guarda de cero, completada.** `check:experiencias` y `check:raya` ya fallaban al mirar
    cero. `check:palette` no: publicaba «30 tokens, 18 conversiones», cifras derivadas de sus
    **propias constantes**, que salen idénticas aunque el barrido no abra un solo archivo. *Una
@@ -3815,6 +3816,16 @@ GARANTIZAR. Lo que **no** se silencia es `contrast-census.js`, que era señal bu
 
 **Estado:** CI pasa de 8 a 12 pasos. Los cinco guardianes nuevos o tocados se validaron
 rompiéndolos, y `check:guardianes` se validó neutralizando `check:raya` a propósito.
+
+**Corregido el 2026-08-19 en P54.96: `check:guardianes` entra en CI**, y CI pasa a trece pasos.
+El argumento para dejarlo fuera —que muta archivos rastreados y un job que escribe en el árbol
+de trabajo sale caro si se interrumpe— vale para un árbol con trabajo dentro, no para un runner
+que se tira al terminar. Y el precio de dejarlo fuera era **exactamente el modo de fallo que esta
+decisión describe**: el verificador de los verificadores solo corría si alguien se acordaba, o sea
+que el único guardián sin disparador automático era el que vigila a los otros ocho. Un guardián
+que se puede olvidar no es un guardián: es una nota (regla 1 de «Cómo se escribe una regla» en
+`BRAND.md` — un disparador que mira al momento equivocado). Medido en el runner: **2 s**, sobre
+un job de 59 s que domina el build.
 
 ## D71 · «No hay datos» no distingue entre cero filas y mal configurado — 2026-08-19
 
@@ -3855,3 +3866,78 @@ Tres técnicas, y las tres salieron de que las dos hipótesis previas eran erró
 **Lo que esto le añade al punto 12 de `sprint-review`**, que se escribió el mismo día y sin nada
 que leer: ya tiene sus tres cifras de referencia, y su pregunta 4 («¿sigue midiendo bien el
 instrumento?») tiene ahora un procedimiento en vez de una intuición.
+
+## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
+
+**El hueco.** El mismo dato —qué páginas hay— estaba escrito **a mano en cuatro sitios**:
+`app/sitemap.ts`, `scripts/page-html-diff.ts`, `app/llms.txt/route.ts` y la unión `Card` de
+`app/api/og/route.tsx`. Y no había red debajo: `pageMetadata` aceptaba `slug?: string` libre, así
+que el typecheck tampoco obligaba a registrar nada.
+
+**La cuarta la encontró `/code-review` revisando el PR de esta misma decisión**, y merece
+quedarse escrito: la tarea hablaba de tres listas, el trabajo cerró tres, y la reseña encontró
+que quedaba una. Es literalmente lo que D59 hizo un día antes —arreglar la mitad y creer que
+estaban las dos—, evitado esta vez porque algo ajeno al que escribió el código fue a contar.
+
+**Ninguna de las cuatro falla de forma visible**, que es lo que las hacía peligrosas juntas: la
+página no existe para Google, el gate de HTML deja de cubrirla **en silencio** —y es, según el
+PRD, el gate que más ha cazado—, no aparece en el índice para modelos, y se publica con la
+tarjeta OG de la home, cosa que solo ve quien comparta el enlace. «Una lista incompleta no
+es un error de compilación» son las palabras de **D59**, que nombró esto el 2026-08-18 y arregló
+solo la mitad: las páginas del deep-dive pasaron a derivarse de `EXPERIENCES` y las estáticas se
+quedaron copiadas en las tres listas.
+
+**Decisión — tres piezas, y la primera es la que más se puede malinterpretar.**
+
+1. **`lib/routes.ts` es la lista.** Las estáticas **siguen siendo una constante escrita a mano**,
+   y no por comodidad: ninguna de las tres consumidoras puede leer el sistema de archivos —dos
+   corren dentro del bundle—, así que no hay forma de derivarlas en tiempo de ejecución. Lo que
+   cambia es que ahora hay **una** en vez de tres, y que tiene dos guardianes encima. Las del
+   deep-dive no se escriben en ninguna parte: salen de `EXPERIENCES`, la fuente de
+   `generateStaticParams` (D44).
+2. **`npm run check:rutas`, en CI.** Contrasta el registro con `app/[lang]/**/page.tsx` —el único
+   sitio donde una página existe de verdad— **en los dos sentidos**, y comprueba además que las
+   tres consumidoras sigan leyendo de ahí: el tipo impide olvidar una página, no impide que
+   alguien vuelva a escribir una lista a mano al lado. Un segmento dinámico que no sepa expandir
+   **lo dice** en vez de ignorarlo, porque un dinámico sin expandir son páginas que nadie está
+   contando.
+3. **`pageMetadata` pide `PageSlug`**, la unión derivada del registro. Añadir una página sin
+   registrarla deja de ser un hallazgo de auditoría y pasa a ser un **error del compilador**. En
+   la ruta del deep-dive el estrechamiento lo hace un guardián de tipo (`isExperienceSlug`) y no
+   un `as`: afirmarlo habría sido volver al problema con otra forma.
+4. **Y las tres superficies que necesitan un dato POR PÁGINA lo piden con un `Record` completo**:
+   la fecha y la prioridad del sitemap, el título de `/llms.txt` y la tarjeta OG. Medido
+   registrando una página falsa: **tres errores de compilación**, uno por cada cosa que hay que
+   rellenar. El compilador pasó de no decir nada a llevarte de la mano por lo que falta.
+
+   Lo que **no** se ha tocado es la cadena `cardParam === …` que `/api/og` usa en tiempo de
+   ejecución: sigue escrita a mano. Es deliberado —cambiarla mueve lógica del endpoint y habría
+   que reverificar las doce tarjetas— y no es el agujero, porque el `Record` incompleto ya
+   detiene la compilación antes de llegar ahí.
+
+**Validado rompiéndolo por las cuatro puntas**, que es la regla del proyecto: quitar «cookies»
+del registro → código 1 nombrándola; añadir una fantasma → código 1 nombrándola; quitarle a
+`sitemap.ts` el import del registro → código 1 nombrando el archivo y qué se rompe; y
+`const SLUG = "cookies-nueva"` → `error TS2322: Type '"cookies-nueva"' is not assignable to type
+'PageSlug'`. Afirma cuánto ha mirado —12 rutas en disco · 12 en el registro · 3 consumidoras— y
+falla al mirar cero, y separa las dos mitades de lo que compara: **7 estáticas contrastadas
+contra el disco · 5 del deep-dive derivadas · 4 consumidoras**. Las cinco del deep-dive salen de
+la misma constante en los dos lados, así que contarlas como comparación sería contar de más.
+
+**Y la transparencia se midió, no se afirmó:** la salida de `sitemap()` y el texto entero de
+`/llms.txt` son **byte a byte idénticos** antes y después del refactor, y `npm run gate:html`
+da **cero cambios en las 24 variantes**.
+
+**De paso, el gate tenía un rojo que no dependía del cambio, y por eso se documenta por
+MECANISMO** (D67). El `<meta name="next-size-adjust">` que emite `next/font` cambia de POSICIÓN
+dentro del `<head>` entre builds del mismo commit. Se comprobó como se comprueban estas cosas
+aquí: capturando la línea base en `main`, **reconstruyendo `main`** y comparándolo contra sí
+mismo — una sola de las 24 variantes (`/en/trayectoria/freepik`), siempre esa, y sin una línea de
+código de por medio. Ahora la etiqueta se normaliza fuera: su contenido está vacío y nunca ha
+dicho nada, y un gate que da un rojo falso deja de leerse, que es el modo de fallo de D70 por la
+otra puerta.
+
+**Estado:** CI pasa de doce a **catorce** pasos (`check:rutas` y `check:guardianes`, este último
+por P54.96). Los guardianes con caso malo pasan de siete a **nueve**: `check:experiencias`
+—descubierto, y el que sostiene una exclusión de `.qlty/qlty.toml`— y `check:rutas`, que entra
+con el suyo desde el primer día.

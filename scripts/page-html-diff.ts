@@ -37,50 +37,32 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { locales, pagePath } from "../lib/i18n/config";
+import { PAGE_SLUGS } from "../lib/routes";
+
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const BASELINE = join("scripts", ".html-baseline");
 const ACTUAL = join("scripts", ".html-actual");
 
 /**
- * Las veinticuatro variantes: las seis páginas del sitio, el índice del deep-dive
- * y sus cinco experiencias, × los dos idiomas.
+ * Las veinticuatro variantes: las doce páginas del sitio × los dos idiomas, y
+ * ninguna se escribe — salen de `lib/routes.ts` y de `pagePath` (D72).
  *
- * LAS DEL DEEP-DIVE ENTRAN CON P48.5, y no por completismo: ese refactor saca los
- * bullets de «En un minuto» del diccionario y los lleva al registro por
- * experiencia, así que las páginas que de verdad cambian son estas cinco. Un gate
- * que no mira lo que se está moviendo no es un gate. (Añadirlas estaba tareado en
- * P49; se adelanta porque hace falta aquí.)
+ * HASTA P54.98 ERAN VEINTICUATRO RUTAS A MANO, o sea una de las tres copias de
+ * «qué páginas tiene el sitio», y la que fallaba peor de las tres: una página que
+ * se olvidara aquí dejaba de estar cubierta por el gate EN SILENCIO, y este es
+ * —según el PRD— el gate que más ha cazado. Las otras dos copias eran el sitemap
+ * y `/llms.txt`.
  *
- * EL ÍNDICE ENTRA CON P49, que es la tarea que lo crea. Hasta entonces
- * `/trayectoria` respondía 404 y las diez páginas del deep-dive tenían el enlace
- * roto en su propio breadcrumb — un gate que no mira la ruta padre no lo ve.
+ * Lo que documentaba la lista y conviene no perder: las cinco del deep-dive
+ * entraron en P48.5 —el refactor movía justo sus bullets, y un gate que no mira lo
+ * que se está moviendo no es un gate— y el índice `/trayectoria` en P49, que es la
+ * tarea que lo crea; hasta entonces respondía 404 y las diez páginas del deep-dive
+ * tenían roto el enlace de su propio breadcrumb.
  */
-const ROUTES = [
-  "/",
-  "/sobre-mi",
-  "/brand-kit",
-  "/design-system",
-  "/accesibilidad",
-  "/cookies",
-  "/trayectoria",
-  "/trayectoria/emendu",
-  "/trayectoria/kuotip",
-  "/trayectoria/indya",
-  "/trayectoria/freepik",
-  "/trayectoria/thetool",
-  "/en",
-  "/en/sobre-mi",
-  "/en/brand-kit",
-  "/en/design-system",
-  "/en/accesibilidad",
-  "/en/cookies",
-  "/en/trayectoria",
-  "/en/trayectoria/emendu",
-  "/en/trayectoria/kuotip",
-  "/en/trayectoria/indya",
-  "/en/trayectoria/freepik",
-  "/en/trayectoria/thetool",
-] as const;
+const ROUTES = locales.flatMap((lang) =>
+  PAGE_SLUGS.map((slug) => pagePath(lang, slug)),
+);
 
 const slug = (route: string) =>
   (route === "/" ? "home" : route.slice(1).replaceAll("/", "-")) + ".html";
@@ -97,7 +79,16 @@ function normalize(html: string): string {
       //    cambia el orden de los archivos fuente, cosa que un movimiento sí
       //    hace y que no se ve en la página.
       .replace(/\/_next\/static\/[^"']+/g, "/_next/static/<hash>")
-      // 3. Un salto de línea SOLO donde dos etiquetas ya iban pegadas. Es una
+      // 3. El <meta name="next-size-adjust"> se va. Es de next/font, siempre
+      //    tiene el contenido vacío y su POSICIÓN dentro del <head> cambia entre
+      //    builds del mismo commit: medido el 2026-08-19 capturando la línea base
+      //    en main, reconstruyendo main y comparando contra sí mismo — una sola de
+      //    las 24 variantes (/en/trayectoria/freepik) y siempre esa. Un gate que
+      //    da un rojo que no depende del cambio deja de leerse, que es el modo de
+      //    fallo de D70 por la otra puerta. Se quita la etiqueta entera, no su
+      //    posición: su contenido no ha dicho nada nunca.
+      .replace(/<meta name="next-size-adjust"[^>]*>/g, "")
+      // 4. Un salto de línea SOLO donde dos etiquetas ya iban pegadas. Es una
       //    partición sin pérdida: el espacio en blanco entre elementos inline
       //    —que decide si dos palabras salen separadas— se conserva intacto y
       //    entra en la comparación. Colapsarlo sería esconder el fallo típico
@@ -169,7 +160,7 @@ async function main() {
   }
 
   try {
-    readFileSync(join(BASELINE, slug(ROUTES[0])));
+    readFileSync(join(BASELINE, slug(ROUTES[0]!)));
   } catch {
     console.error(
       `No hay línea base en ${BASELINE}. Captúrala ANTES de refactorizar:\n  npm run gate:html -- save`,

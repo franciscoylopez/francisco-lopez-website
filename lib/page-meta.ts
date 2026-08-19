@@ -25,6 +25,7 @@ import {
   pagePath,
   type Locale,
 } from "@/lib/i18n/config";
+import type { PageSlug } from "@/lib/routes";
 import { SITE_NAME } from "@/lib/site";
 
 /** La rama `meta` de cualquier página del diccionario. */
@@ -35,8 +36,15 @@ export interface PageMeta {
 
 export interface PageMetadataInput {
   lang: Locale;
-  /** Segmento tras el locale, sin barras. Vacío = la home. */
-  slug?: string;
+  /**
+   * Segmento tras el locale, sin barras. Vacío = la home.
+   *
+   * Es `PageSlug` y no `string` a propósito (D72): una página cuya carpeta existe
+   * pero que nadie registró en `lib/routes.ts` NO COMPILA. Sin eso, olvidarla era
+   * un hallazgo de auditoría —fuera del sitemap, fuera del gate de HTML y fuera de
+   * `/llms.txt`, las tres en silencio— en vez de un error del compilador.
+   */
+  slug?: PageSlug;
   /** `dict.<pagina>.meta`, tal cual. */
   meta: PageMeta;
   /** `card` de `/api/og`. Por defecto, el slug — hoy coinciden en las seis. */

@@ -1,6 +1,11 @@
 import type { MetadataRoute } from "next";
 
 import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
+import {
+  STATIC_PAGE_SLUGS,
+  type PageSlug,
+  type StaticPageSlug,
+} from "@/lib/routes";
 import { locales, defaultLocale } from "@/lib/i18n/config";
 import { pageUrl } from "@/lib/structured-data";
 
@@ -41,24 +46,35 @@ import { pageUrl } from "@/lib/structured-data";
 //     lo que no se haya tocado en los últimos commits. Una fecha derivada de un
 //     historial que no está no es derivada: es un hueco.
 //
-//     Y EL RIESGO DE QUE SE QUEDEN VIEJAS SE ACOTA DONDE SE PUEDE: las del
-//     deep-dive van en un `Record<ExperienceSlug, …>`, así que **añadir una
-//     experiencia sin darle fecha rompe el typecheck**. Las seis de arriba no
-//     tienen ese guardián — son una lista fija y no derivada de nada, así que ahí
-//     sí hay que acordarse al cambiar el contenido de una página.
+//     Y EL RIESGO DE QUE SE QUEDEN VIEJAS SE ACOTA EN LAS DOCE: las fechas van
+//     en dos `Record` completos —uno por `ExperienceSlug` y otro por
+//     `StaticPageSlug`—, así que **una página nueva sin fecha rompe el
+//     typecheck**. Hasta P54.98 las estáticas eran una lista fija escrita aquí,
+//     que era además una de las tres copias de «qué páginas tiene el sitio» (D72).
 
 /** Una página del sitio, con la fecha real de su último cambio de CONTENIDO. */
-type Pagina = { slug: string; priority: number; lastModified: string };
+type Pagina = { slug: PageSlug; priority: number; lastModified: string };
 
-const PAGES: Pagina[] = [
-  { slug: "", priority: 1, lastModified: "2026-08-17" },
-  { slug: "sobre-mi", priority: 0.8, lastModified: "2026-08-15" },
-  { slug: "trayectoria", priority: 0.8, lastModified: "2026-08-18" },
-  { slug: "brand-kit", priority: 0.8, lastModified: "2026-08-10" },
-  { slug: "design-system", priority: 0.8, lastModified: "2026-08-10" },
-  { slug: "accesibilidad", priority: 0.8, lastModified: "2026-08-10" },
-  { slug: "cookies", priority: 0.3, lastModified: "2026-08-17" },
-];
+/**
+ * Lo ÚNICO que este archivo escribe de las páginas estáticas: su prioridad y su
+ * fecha. Cuáles son y en qué orden lo pone `lib/routes.ts` (D72), y el `Record`
+ * completo hace que una página nueva sin fecha no compile — el mismo guardián que
+ * las cinco del deep-dive tenían desde D59.
+ */
+const ESTATICAS: Record<StaticPageSlug, Omit<Pagina, "slug">> = {
+  "": { priority: 1, lastModified: "2026-08-17" },
+  "sobre-mi": { priority: 0.8, lastModified: "2026-08-15" },
+  trayectoria: { priority: 0.8, lastModified: "2026-08-18" },
+  "brand-kit": { priority: 0.8, lastModified: "2026-08-10" },
+  "design-system": { priority: 0.8, lastModified: "2026-08-10" },
+  accesibilidad: { priority: 0.8, lastModified: "2026-08-10" },
+  cookies: { priority: 0.3, lastModified: "2026-08-17" },
+};
+
+const PAGES: Pagina[] = STATIC_PAGE_SLUGS.map((slug) => ({
+  slug,
+  ...ESTATICAS[slug],
+}));
 
 /**
  * La fecha de cada deep-dive. Es lo ÚNICO que se escribe a mano de esas cinco
@@ -77,7 +93,7 @@ const DEEP_DIVE: Pagina[] = EXPERIENCES.filter(
   (e): e is (typeof EXPERIENCES)[number] & { slug: ExperienceSlug } =>
     e.slug !== null,
 ).map(({ slug }) => ({
-  slug: `trayectoria/${slug}`,
+  slug: `trayectoria/${slug}` as const,
   priority: 0.8,
   lastModified: DEEP_DIVE_MODIFICADO[slug],
 }));
