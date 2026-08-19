@@ -10,14 +10,18 @@
     "typecheck": "tsc --noEmit",
     "check:palette": "tsx scripts/check-palette.ts",
     "check:experiencias": "tsx scripts/check-experience-copy.ts",
-    "artefacto": "mmdc -i content/artefactos/emendu-mdm.mmd -o scripts/.artefacto-raw.svg -p scripts/mermaid-puppeteer.json && tsx scripts/artefacto-svg.ts scripts/.artefacto-raw.svg content/artefactos/emendu-mdm.svg",
+    "artefacto": "mmdc -i content/artefactos/emendu-mdm.mmd -o scripts/.artefacto-raw.svg -p scripts/mermaid-puppeteer.json && tsx scripts/artefacto-svg.ts scripts/.artefacto-raw.svg content/artefactos/emendu-mdm.svg && tsx scripts/artefacto/fingerprint.ts --seal",
     "cv": "tsx scripts/cv/generate.tsx",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "gate:html": "tsx scripts/page-html-diff.ts",
     "psi": "tsx scripts/psi.ts",
     "check:cv": "tsx scripts/check-cv-fresh.ts",
-    "check:raya": "tsx scripts/check-raya.ts"
+    "check:raya": "tsx scripts/check-raya.ts",
+    "check:artefacto": "tsx scripts/check-artefacto.ts",
+    "check:contexto": "tsx scripts/check-contexto.ts",
+    "check:skills": "tsx scripts/check-skills.ts",
+    "check:decisiones": "tsx scripts/check-decisiones.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
