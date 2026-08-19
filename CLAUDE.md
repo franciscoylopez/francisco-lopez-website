@@ -84,6 +84,8 @@
 - D66 · Un asset tiene más consumidores de los que se ven
 - D67 · El ruido conocido de los validadores se documenta por MECANISMO, no por cifra
 - D68 · El repositorio es público, y a `main` la protege el servidor y no la disciplina
+- D69 · El régimen de contexto de D28 gana cifra y guardián, y aparece la operación que faltaba: retirar
+- D70 · La capa que verifica no estaba verificada, y su modo de fallo es una luz verde
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 

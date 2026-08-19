@@ -35,6 +35,8 @@ Partido el **2026-08-09** (P37.685).
 - [El atenuado sensible a la superficie](#el-atenuado-sensible-a-la-superficie)
 - [Tablas](#tablas)
 - [El morado de los fondos invertidos](#el-morado-de-los-fondos-invertidos)
+- [La regla del control sobre imagen prometía de más (2026-08-18)](#la-regla-del-control-sobre-imagen-prometía-de-más-2026-08-18)
+- [El censo de contraste se rompió dos veces, y la segunda destapó un par real (2026-08-17 → 18)](#el-censo-de-contraste-se-rompió-dos-veces-y-la-segunda-destapó-un-par-real-2026-08-17-→-18)
 - [Cómo se escribe una regla](#cómo-se-escribe-una-regla)
 - [El morado como gráfico, y la tercera vez del mismo peldaño (2026-08-17)](#el-morado-como-gráfico-y-la-tercera-vez-del-mismo-peldaño-2026-08-17)
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
@@ -346,6 +348,63 @@ Lo que lo desbloqueó no fue elegir mejor el color, sino dejar de exigirle que f
 El token conmuta con el tema y sube a **7,04/7,21**. **El cálculo completo, los dos call sites
 que usaban el token fuera de su regla y la lección de método sobre los umbrales del censo están
 en `DECISIONS.md` D41** — aquí no se copian, que es la regla 5 de «Cómo se escribe una regla».
+
+## La regla del control sobre imagen prometía de más (2026-08-18)
+
+**La regla está en `BRAND.md` §Un control sobre una imagen.** Aquí, la corrección: qué se midió
+para descubrir que afirmaba más de lo que el componente da, y por qué la palanca obvia no valía.
+
+**Lo que se cayó.** La regla decía «siempre hay un borde que pasa 3:1 aunque cambie cuál». Con un
+metro más estricto —el **peor de 144 ángulos** del perímetro del disco, en vez de unos pocos
+puntos— el mejor de los dos bordes EXTERNOS da **2,82–2,91 en reposo**, por debajo de 3:1 y en
+las cuatro combinaciones de página y tema. Lo que sí se sostiene es el borde INTERNO (7,93 claro
+/ 8,36 oscuro), porque son dos tokens del sistema y detrás no hay póster que valga.
+
+**Y la palanca obvia era contraproducente por construcción**, que es la parte reutilizable. Subir
+el velo acerca el póster a `--background`; eso **separa** al disco (`--primary`, lejos del fondo)
+y **acerca** al anillo (`--primary-foreground`, que *es* prácticamente el fondo). Los dos bordes
+tiran en direcciones opuestas. A 0,55 pasan tres combinaciones (3,69 / 3,97 / 3,00) y la cuarta
+se queda en 2,92, además de lavar el póster. *Un velo no puede separar a la vez dos colores que
+están en lados opuestos del fondo.*
+
+**Cómo se resolvió: corrigiendo la AFIRMACIÓN, no el componente.** WCAG 1.4.11 pide que el
+componente se **distinga**, no que cada punto de su contorno pase 3:1, y con un borde interno a
+7,93 y un disco relleno de 64px se distingue. No había un incumplimiento: había una regla que
+afirmaba de más. *Es el desenlace que conviene recordar la próxima vez que un barrido exhaustivo
+tumbe una frase publicada: a veces lo que sobra es la frase.*
+
+**De paso cayó la sospecha sobre el hover.** Apagar el velo del todo no empeora nada: lo mejora
+un poco (2,84 / 2,87 / 2,93 / 3,04, todos por encima de su propio reposo), porque quitar el velo
+aleja el póster del anillo. El estado que la decisión original no llegó a medir resultó ser el
+bueno.
+
+## El censo de contraste se rompió dos veces, y la segunda destapó un par real (2026-08-17 → 18)
+
+**La regla está en `BRAND.md` §Cómo se hace el censo de pares.** Aquí, los dos fallos.
+
+**El segundo, que es el instructivo.** `hoverDeclarations()` decidía si una regla era de grupo
+con `if (rule.cssRules)`, y **desde que Chrome soporta CSS Nesting toda regla normal expone
+`cssRules`** —vacío—, así que la condición era siempre cierta y el selector nunca llegaba a
+comprobarse: el censo encontraba **0** reglas con `:hover` donde hay **21**.
+
+**Era la segunda vez que esa misma función fallaba por lo mismo.** Ya se había arreglado una vez
+porque un bucle plano se saltaba las utilidades `hover:` que Tailwind envuelve en `@media`, y se
+corrigió el síntoma con un test de «esto es una regla de grupo» que el navegador invalidó
+después. La corrección buena es que **no es o-grupo-o-selector**: con nesting una regla puede
+tener las dos cosas, así que se evalúa el selector si lo tiene **y** se baja si tiene hijas de
+verdad (`cssRules.length > 0`).
+
+**La lección: un metro que devuelve una lista vacía parece un aprobado.** El censo publica ahora
+cuántas reglas `:hover` ha indexado y cuántos pares ha medido con ellas, y con cero lo dice en
+vez de callarse. Era la tercera vez que este proyecto se encontraba un metro descalibrado
+—medidor fuera de gamut, umbral por tamaño de texto, y esto—, y las tres se descubrieron igual:
+**midiendo un caso cuyo resultado ya se conocía**.
+
+**Y no era teórico.** Con los hover dentro apareció un incumplimiento real que llevaba escondido
+detrás del fallo: la dirección de email de Accesibilidad daba **6,42 claro / 5,59 oscuro** en
+hover —AA, no AAA— porque pisaba el color a mano en vez de usar el `tone: "muted"` de la
+variante. Era el quinto uso del mismo fallo, y sobrevivió a tres auditorías porque el par solo
+existe mientras el cursor está encima.
 
 ## Cómo se escribe una regla
 

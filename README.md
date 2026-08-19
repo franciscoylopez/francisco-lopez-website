@@ -105,9 +105,13 @@ Ocho pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `m
 | `check:experiencias` | Que las tres longitudes de una experiencia se descuadren: misma cobertura en ES y EN, y ninguna cifra en una y no en la otra (`D57`) |
 | `check:cv` | Que los PDFs commiteados se queden viejos. Sella la **huella de las entradas**, no bytes: el PDF no es determinista (`D60`) |
 | `check:raya` | Que vuelva la raya (`—`) al copy servido, con sus dos excepciones (`D63`) |
+| `check:artefacto` | Que el SVG commiteado se quede viejo. Sella el **par fuente→producto**, que es más fuerte que sellar entradas: aquí sí se pudo, porque el artefacto **es** determinista (`D70`) |
+| `check:contexto` | Que el contexto de arranque crezca sin techo. D28 escribió el régimen y no le puso cifra: creció un 113% en diez días (`D69`) |
+| `check:skills` | Que una skill nombre archivos o comandos que ya no existen. Se **siguen** en vez de leerse, así que su drift se ejecuta (`D60`) |
+| `check:indices` | Que un índice deje de ser el derivado de sus cabeceras. Los tres se generan con `npm run indices` (`D69`) |
 | `build` | — |
 
-Y fuera de CI, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de las doce páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
+Y fuera de CI, dos: **`npm run check:guardianes`** pasa a cada guardián un caso malo conocido que tiene que rechazar —lo que se hacía como hábito («validado rompiéndolo») convertido en comando (`D70`)—, y el que más ha cazado, **`npm run gate:html`**, compara el HTML servido de las doce páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
 
 ## Arrancar
 
@@ -210,14 +214,18 @@ brand-assets/          Piezas de marca fuera de la web — no se despliega
 
 scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts
-scripts/check-palette.ts   Guardián de CI (D38)
+scripts/check-*.ts         Los guardianes de CI. Todos comparten dos reglas de método:
+                           buscan la AUSENCIA (no el patrón) y afirman cuánto han mirado
+scripts/indices.ts         Genera los tres índices derivados de sus cabeceras (D69)
+scripts/check-guardianes.ts  Un caso malo conocido por guardián. Fuera de CI: muta
+                           archivos, así que exige árbol limpio y restaura (D70)
 scripts/design-review/     Censo de pares de contraste del DOM servido
 scripts/psi.ts             PageSpeed desde la terminal, con desglose del LCP (D49)
 scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 12 páginas no puede cambiar
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
                            queda UN solo color literal: busca la ausencia (D54)
 
-.github/workflows/     CI, ocho pasos en cada PR
+.github/workflows/     CI, doce pasos en cada PR
 .github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions)
 .claude/skills/        Skills del proyecto (update-cv, close-session, sprint-review, design-review,
                        deep-dive-page)

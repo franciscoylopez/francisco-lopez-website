@@ -67,7 +67,7 @@
 - [49. El deep-dive sale a producción, y las dos revisiones se ganan el sueldo (2026-08-18)](#49-el-deep-dive-sale-a-producción-y-las-dos-revisiones-se-ganan-el-sueldo-2026-08-18)
 - [50. El Sprint Lite: nueve iniciativas sueltas, y la homogeneidad como criterio (2026-08-18/19)](#50-el-sprint-lite-nueve-iniciativas-sueltas-y-la-homogeneidad-como-criterio-2026-08-18/19)
 - [51. El repositorio se hace público, y el Sprint Lite se cierra (2026-08-19)](#51-el-repositorio-se-hace-público-y-el-sprint-lite-se-cierra-2026-08-19)
-- [52. `PRD-Live.md` vuelve a ser present-tense, y el método gana su operación inversa (2026-08-19)](#52-prd-livemd-vuelve-a-ser-present-tense-y-el-método-gana-su-operación-inversa-2026-08-19)
+- [52. El bloque Método: se audita cómo se trabaja, antes de un sprint de contenido (2026-08-19)](#52-el-bloque-método-se-audita-cómo-se-trabaja-antes-de-un-sprint-de-contenido-2026-08-19)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2032,46 +2032,85 @@ configuración—.
 
 ---
 
-## 52. `PRD-Live.md` vuelve a ser present-tense, y el método gana su operación inversa (2026-08-19)
+## 52. El bloque Método: se audita cómo se trabaja, antes de un sprint de contenido (2026-08-19)
 
-**Qué pasó.** Un análisis de metodología con mirada externa, pedido antes de abrir el
-sprint «Cómo se ha creado», midió el peso de lo que se `@`-importa en cada sesión y salió
-esto: **9.275 palabras el 9 de agosto —el día del corte de `BRAND.md` que fijó el régimen
-de D28— y 19.805 el 19, un +113% en diez días.** El corte compró 2.400 palabras y el
-crecimiento se las comió en cuatro días.
+**Por qué se hizo aquí.** Antes de abrir «Cómo se ha creado» —un sprint largo, de mucho texto y
+con una entidad nueva que traerá componentes propios—, Francisco pidió un análisis de
+metodología con mirada externa: *un técnico que ve el método por primera vez y busca margen*. Se
+hizo sobre lo que el repositorio demuestra, no sobre lo que los documentos afirman, y se cruzó
+con nueve notas que él traía sin tarear. El listón tenía que estar puesto **antes** de que
+existieran los componentes nuevos, no después.
 
-**Dónde estaba el bulto: aquí.** `PRD-Live.md` había crecido un 90% (3.608 → 6.859
-palabras) y llevaba **40 fechas y 67 referencias a D-entries**. Su propia cabecera dice
-«Present-tense, estado actual» y el registro fechado vive en este archivo. Se había
-convertido en un segundo `PRD-Historical`, que es literalmente lo que prohíbe. Sus
-secciones 5 y 9 eran el **84% del documento** y casi todo su contenido era narrativa de
-cómo se llegó a un estado, no el estado.
+**El diagnóstico, en una frase:** *este método tiene una operación de añadir excepcional y no
+tiene operación de retirar.* Cada fallo se convierte en regla, cada regla en guardián, cada
+guardián en párrafo — sesenta y ocho veces, que es más de lo que hace casi nadie. Pero nada se
+colapsa nunca, y las tres cosas que estaban drifteando lo hacían todas por ese lado.
 
-**El diagnóstico de fondo, que explica bastante más que este archivo.** Este método tiene
-una operación de **añadir** excepcional —cada fallo se convierte en regla, cada regla en
-guardián, cada guardián en párrafo, sesenta y ocho veces— y **no tiene operación de
-retirar**. El contraste que lo prueba: los documentos son el único artefacto del
-repositorio sin compactación. El diccionario se partió (D48), los showcase se partieron
-(D42), `BRAND.md` se partió una vez (P37.685) y duró cuatro días. El 19 de agosto se
-añadieron 941 líneas de markdown y se retiraron 252.
+### Lo que el cruce encontró, y lo que cambió al ejecutarlo
 
-Y la asimetría tenía un sitio concreto: **`close-session` pregunta qué documento hay que
-actualizar y nunca preguntaba qué documento se puede colapsar.** De ahí sale el resto.
+De los nueve hallazgos y las nueve notas, **tres convergieron desde direcciones distintas** —y
+esas fueron las de más confianza: la Definition of Done ↔ los nueve gates manuales, el consumo
+de tokens ↔ el régimen de contexto, y la deuda de Qlty ↔ la capa de verificación sin verificar.
 
-**Qué se hizo.** `PRD-Live.md` baja de 6.859 a ~2.500 palabras y de 40 fechas a 1. §4 pasa
-a describir las doce páginas y las tres cosas que el sitio hace y no se ven mirándolo; §5
-pasa a ser criterios de aceptación en tablas, con punteros a los D-entries en vez de sus
-historias; §9 pasa a ser qué entra en cada release. **No se pierde nada**: lo retirado se
-conserva íntegro más abajo, en este mismo documento, que se consulta a demanda y por tanto
-no cuesta tokens por sesión.
+**Dos notas quedaron diagnosticadas con causa y no con hipótesis.** El dashboard de Looker **sí**
+se actualizaba: el único tile con datos era el único que no necesitaba configuración manual
+(`file_download` es nativo de GA4), y los dos vacíos eran justo los que dependían de un paso
+fuera del repositorio que el propio código documenta como pendiente. Y la skill de brainstorming
+nunca se había disparado **por configuración, no por olvido**: `prototype` lleva
+`disable-model-invocation: true`, así que solo puede invocarla Francisco.
 
-Además: `close-session` gana la pregunta inversa, `npm run check:contexto` pone techo al
-presupuesto `@`-importado, y el índice de `DECISIONS.md` —que estaba **desordenado a partir
-de D40** y nadie lo había visto— gana su guardián.
+**Y una nota se corrigió en su premisa:** el repositorio no está en un canal inestable. `next`,
+`react` y `tailwind` están exactamente en `latest`, los dos primeros anclados sin caret, y `npm
+audit` da cero. El riesgo no era la versión sino **el tiempo** —saltar a la nueva la semana en
+que sale, con CI como única puerta—, así que lo que entró fue un periodo de reposo.
 
-**La lección, que es la reutilizable:** *un régimen de contexto sin cifra y sin guardián es
-una nota, no una regla.* D28 escribió el régimen y no le puso ninguna de las dos, así que
-se cumplió exactamente cuatro días.
+**Tres conclusiones del propio análisis se cayeron al ejecutarlas, y conviene que consten.**
+`check:raya` sí tenía su guarda de cero (se dio por ausente mirando solo el final del archivo,
+que es una ejecución del fallo que el hallazgo denunciaba). De las 20 tareas del bloque
+«General», **17 eran genuinamente transversales**, así que no hacía falta redistribuir sino
+escribir el criterio. Y el artefacto resultó **determinista**, al revés que el PDF, lo que
+permitió un gate más fuerte que el que se había planeado copiar.
+
+### Lo que quedó montado
+
+El detalle técnico vive en **D69** (el régimen de contexto gana cifra y guardián; los índices se
+derivan; `close-session` gana la operación inversa) y **D70** (la capa que verifica se verifica).
+Lo que no es técnico:
+
+- **La Definition of Done existe**, en `CLAUDE.md`, con **dos columnas**: la A bloquea el envío,
+  la B no y nace como tarea de V3. Esa segunda columna es la disciplina «shippear vs pulir» que
+  faltaba, y su frase operativa es *un hallazgo de la columna B nunca reabre una sección ya
+  enviada, se tarea*. Absorbe los nueve gates manuales, que estaban repartidos entre un
+  documento, cuatro skills y la memoria — y las tres skills que solo puede disparar Francisco.
+- **`sprint-review` gana su punto 12**, el check de medición, que el ritual de cierre de etapa
+  declaraba desde siempre y no tenía portador: cinco etapas cerradas, cero checks hechos. Su
+  cuarta pregunta es la que costó caro — *si un scorecard está a cero, la primera hipótesis es el
+  instrumento, no la audiencia*.
+- **La skill de Web Interface Guidelines** entra como **fase −1** de `design-review`: checklist
+  mecánico primero, criterio después. Cubre cinco familias que el sistema no codifica. La pasada
+  completa dio **cero antipatrones de catorce posibles** y seis huecos, de los que uno era falso
+  positivo.
+- **Se retira el último espejo de Notion.** El de `PRD-Live` era el único que quedaba, y el
+  motivo que lo justificaba —mirar el PRD sin abrir el código— lo cubre desde D68 que el
+  repositorio sea público.
+
+### La pregunta que cerró el bloque, y su respuesta
+
+Francisco preguntó si, ya que los archivos volverán a crecer, **merecía la pena borrar lo
+desfasado**. La respuesta fue **no**, y con número: lo declarado obsoleto son **237 palabras de
+41.694, el 0,6%**. No hay volumen que ganar, y el valor del histórico *es* el experimento
+fallido — ese mismo día D51 evitó reconsiderar `graphify` por la razón equivocada y D60 obligó a
+medir la determinancia del artefacto en vez de copiar el método del CV.
+
+El riesgo real no es que exista contenido desfasado: es que **algo desfasado se lea como
+vigente**, y eso no se arregla borrando sino **marcando**. Lo que sí se borró fue duplicación,
+no historia: las 12 líneas del changelog V1.x de la cabecera de este archivo, que decían «ver
+sección N» y apuntaban a secciones que el índice derivado ya lista.
+
+**Resultado del bloque:** contexto de arranque de **19.805 a ~12.900 palabras (-35%)**, CI de 8
+a 12 pasos, cinco guardianes nuevos o corregidos —todos validados rompiéndolos— y 15 de 16
+tareas cerradas. La que queda abierta es la de más valor y no es de código: crear en GTM el tag
+de GA4 que traduce `contact_click`.
 
 ### Lo retirado de `CLAUDE.md`, y por qué era historia
 

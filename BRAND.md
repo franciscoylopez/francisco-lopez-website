@@ -47,20 +47,17 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 
 ### El morado decorativo no vale como elemento gráfico
 
-*(2026-08-17, midiendo el primer artefacto del deep-dive.)* Un diagrama es de los pocos sitios
-donde §Color deja entrar los tokens de marca —«fondos de sección, detalles, **ilustración,
-gráficos**»—, y ahí el umbral no es el de texto: WCAG 1.4.11 pide **3:1** a un gráfico que hay
-que entender. **`--brand-purple` no llega en tema claro: 2,65 contra `--background` y 2,81
-contra `--card`.** En oscuro sí (5,79 / 5,21), y esa asimetría es la firma del problema — el
-morado de esta marca es FIJO, y el único que conmuta (`--brand-purple-accent`) lo hace para la
-banda invertida, o sea al revés de lo que aquí haría falta.
+Un diagrama es de los pocos sitios donde §Color deja entrar los tokens de marca —«fondos de
+sección, detalles, **ilustración, gráficos**»—, y ahí el umbral no es el de texto: WCAG 1.4.11
+pide **3:1** a un gráfico que hay que entender.
 
-**El cian sí llega y con holgura: 7,47 / 8,36 contra `--background`, 7,93 / 7,53 contra `--card`.**
-Así que en un gráfico **el cian lleva la información y lo que no llega se atenúa**
-(`--muted-foreground`), nunca se tiñe de morado — y la distinción entre dos caminos la hacen
-además el trazo y la etiqueta, que es lo que cumple el punto 6 del checklist sin depender del
-color. El 2,81 no es nuevo: es exactamente el que D41 midió al retirar el morado de los rótulos
-del Brand Kit, llegando por otra puerta.
+**`--brand-purple` no llega en tema claro y el cian sí, con holgura.** Así que en un gráfico
+**el cian lleva la información y lo que no llega se atenúa** (`--muted-foreground`), nunca se
+tiñe de morado. La distinción entre dos caminos la hacen además el trazo y la etiqueta, que es
+lo que cumple el punto 6 del checklist sin depender del color.
+
+*(Las cifras, la asimetría entre temas y por qué el mismo hallazgo llegó dos veces por dos
+puertas distintas, en [`BRAND-historical.md`](./BRAND-historical.md) §El morado como gráfico.)*
 
 ### El atenuado lo pone la superficie, no el punto de uso
 
@@ -180,31 +177,23 @@ Dos piezas, y ninguna sobra:
 Es la misma idea que §El atenuado lo pone la superficie y que §Controles con dos fondos: **la
 pieza se define contra su propio carril**. Las cifras y el barrido, en `DECISIONS.md` D55.
 
-**Qué garantiza esto exactamente, y qué no** *(medido el 2026-08-18, P50.35; antes esta regla
-prometía de más)*. Lo que se sostiene es la parte que no depende de la imagen: **el borde
-INTERNO —relleno `--primary` contra anillo `--primary-foreground`— da 7,93 claro / 8,36 oscuro
-en las dos páginas y en los dos estados**, porque son dos tokens del sistema y detrás no hay
-póster que valga.
+**Qué garantiza exactamente, y qué no.** Lo que se sostiene es la parte que no depende de la
+imagen: **el borde INTERNO —relleno `--primary` contra anillo `--primary-foreground`— da 7,93
+claro / 8,36 oscuro**, siempre, porque son dos tokens del sistema. Lo que **no** se sostiene es
+«siempre hay un borde externo que pasa»: midiendo el peor de 144 ángulos del perímetro, el mejor
+de los dos externos se queda en **2,82–2,91**.
 
-Lo que **no** se sostiene es la frase que decía «siempre hay un borde que pasa aunque cambie
-cuál». Midiendo el **peor de 144 ángulos** del perímetro, el mejor de los dos bordes externos
-da **2,82–2,91 en reposo**: por debajo de 3:1, y en las cuatro combinaciones de página y tema.
-
-**Y no se arregla subiendo el velo, que era la palanca obvia: es contraproducente por
-construcción.** El velo acerca el póster a `--background`, y eso separa al **disco**
-(`--primary`, lejos del fondo) mientras acerca al **anillo** (`--primary-foreground`, que *es*
-prácticamente el fondo). Los dos bordes tiran en direcciones opuestas, así que no hay opacidad
-que gane: a 0,55 pasan tres combinaciones (3,69 / 3,97 / 3,00) y la cuarta se queda en 2,92 —
-además de lavar el póster—. *Un velo no puede separar a la vez dos colores que están en lados
-opuestos del fondo.*
+**Y no se arregla subiendo el velo: es contraproducente por construcción.** El velo acerca el
+póster a `--background`, lo que separa al disco y **acerca al anillo** — los dos bordes tiran en
+direcciones opuestas y no hay opacidad que gane. *Un velo no puede separar a la vez dos colores
+que están en lados opuestos del fondo.*
 
 **No es incumplimiento**: WCAG 1.4.11 pide que el componente se **distinga**, no que cada punto
-de su contorno pase 3:1 — y con un borde interno a 7,93 y un disco relleno de 64px, se
-distingue. Lo que había era una regla que afirmaba más de lo que el componente da.
+de su contorno pase 3:1, y con un borde interno a 7,93 y un disco de 64px se distingue. Lo que
+había era una regla que afirmaba más de lo que el componente da.
 
-De paso cae la sospecha sobre el hover: **apagar el velo del todo no empeora nada**, lo mejora
-un poco (2,84 / 2,87 / 2,93 / 3,04, todos por encima de su propio reposo), porque quitar el velo
-aleja el póster del anillo. El estado que D55 no midió resultó ser el bueno.
+*(El barrido completo y el estado que resultó ser el bueno, en
+[`BRAND-historical.md`](./BRAND-historical.md) §Un control sobre una imagen.)*
 
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
@@ -292,29 +281,12 @@ de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así 
 hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
 `scripts/design-review/contrast-census.js`.
 
-> **ESTUVO ROTO PARA LOS HOVER, y el arreglo destapó un par real** *(2026-08-17 → 2026-08-18,
-> P50.36)*. `hoverDeclarations()` decidía si una regla era de grupo con `if (rule.cssRules)`, y
-> **desde que Chrome soporta CSS Nesting toda regla normal expone `cssRules`** —vacío—, así que
-> la condición era siempre cierta y el selector nunca llegaba a comprobarse: el censo encontraba
-> **0** reglas con `:hover` donde hay **21**.
->
-> **Era la segunda vez que esta misma función fallaba por lo mismo**: ya se había arreglado una
-> vez porque un bucle plano se saltaba las utilidades `hover:` que Tailwind envuelve en
-> `@media`, y se corrigió el síntoma con un test de «esto es una regla de grupo» que el
-> navegador invalidó después. La corrección buena es que **no es o-grupo-o-selector**: con
-> nesting una regla puede tener las dos cosas, así que se evalúa el selector si lo tiene **y** se
-> baja si tiene hijas de verdad (`cssRules.length > 0`).
->
-> **Lo que hay que llevarse, y por eso está aquí y no solo en el commit: un metro que devuelve
-> una lista vacía parece un aprobado.** El censo publica ahora cuántas reglas `:hover` ha
-> indexado y cuántos pares ha medido con ellas, y con cero lo dice en vez de callarse. Es la
-> tercera vez que este proyecto se encuentra un metro descalibrado —medidor fuera de gamut,
-> umbral por tamaño de texto, y esto—, y las tres se descubrieron igual: **midiendo un caso cuyo
-> resultado ya se conocía**.
->
-> Y no era teórico: con los hover dentro apareció un incumplimiento real que llevaba escondido
-> detrás del fallo —la dirección de email de Accesibilidad, **6,42 claro / 5,59 oscuro**, porque
-> pisaba el color a mano en vez de usar el `tone: "muted"` de la variante—. Ver §Enlaces.
+> **Este censo se ha roto dos veces, las dos en silencio, y las dos se descubrieron midiendo un
+> caso cuyo resultado ya se conocía.** Por eso publica ahora cuántas reglas `:hover` ha indexado
+> y cuántos pares ha medido con ellas: *un metro que devuelve una lista vacía parece un
+> aprobado*. El detalle de los dos fallos y del incumplimiento real que escondía el segundo, en
+> [`BRAND-historical.md`](./BRAND-historical.md) §Accesibilidad.
+
 
 ### Cómo medir sin equivocarse
 
