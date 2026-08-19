@@ -1,6 +1,6 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
-import { WRAP } from "@/components/ui/layout";
+import { HERO_ROW, WRAP } from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import {
   BREAKPOINT_COUNT,
@@ -20,7 +20,13 @@ function HeroComposition() {
       className="flex flex-[1_1_26rem] items-center justify-center"
     >
       {/* desktop */}
-      <div className="relative hidden h-80 w-[min(25rem,100%)] md:block">
+      {/* 17rem = 272px, no 20 (320). Aquí NO había hueco muerto —los tres
+          marcos se solapaban de forma continua— así que compactar es solaparlos
+          un poco más: el segundo sube de top-12 a top-8. El motivo es el mismo
+          que en Accesibilidad: mientras la ilustración sea más alta que la
+          columna de texto, es ELLA la que decide dónde cae la fila de datos, y
+          entonces cada página la pone a una altura distinta. */}
+      <div className="relative hidden h-[17rem] w-[min(25rem,100%)] md:block">
         <div
           data-reveal
           className="border-border bg-background absolute top-0 right-4 flex h-[12.5rem] w-[6.5rem] flex-col gap-[0.4rem] rounded-[12px] border p-[0.7rem]"
@@ -36,7 +42,7 @@ function HeroComposition() {
         </div>
         <div
           data-reveal
-          className="border-border bg-background absolute top-12 right-10 h-56 w-44 rounded-[14px] border p-[0.85rem]"
+          className="border-border bg-background absolute top-8 right-10 h-56 w-44 rounded-[14px] border p-[0.85rem]"
           style={{ transform: "rotate(-4deg)", transitionDelay: "0.16s" }}
         >
           <div className="bg-muted mb-[0.55rem] h-[0.5rem] w-[45%] rounded-full" />
@@ -128,7 +134,7 @@ export function Hero({
             ]}
           />
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+        <div className={HERO_ROW}>
           {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
               breadcrumb→eyebrow lo decide el alto de la ilustración de al lado. */}
           <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">

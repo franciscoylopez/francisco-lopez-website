@@ -1,6 +1,6 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
-import { WRAP } from "@/components/ui/layout";
+import { HERO_ROW, WRAP } from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import {
   COLOR_TOKEN_COUNT,
@@ -211,7 +211,7 @@ export function Hero({
             ]}
           />
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+        <div className={HERO_ROW}>
           {/* `self-start`: la fila sigue centrada —la composición decorativa
               queda equilibrada frente al texto— pero la COLUMNA DE TEXTO se ancla
               arriba. Sin eso el hueco breadcrumb→eyebrow lo decidía el alto de la
