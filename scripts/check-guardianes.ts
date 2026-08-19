@@ -59,6 +59,18 @@ const CASOS: Caso[] = [
     ),
   },
   {
+    guardian: "check:experiencias",
+    rotura: "un bullet que existe en ES y no en EN",
+    archivo: "content/experience-copy/en.ts",
+    // Se quita un bullet entero, que rompe la PARIDAD ES↔EN. No es un caso malo
+    // cualquiera: .qlty/qlty.toml excluye estos dos archivos del análisis de
+    // duplicación con el argumento de que su duplicación estructural es
+    // «exactamente la propiedad que check:experiencias existe para GARANTIZAR».
+    // O sea que un informe de calidad se apoya en este guardián, y hasta hoy
+    // nadie había comprobado que supiera fallar.
+    mutar: (o) => o.replace(/\n      \{\n        cv: [\s\S]*?\n      \},/, ""),
+  },
+  {
     guardian: "check:cv",
     rotura: "el contenido del CV cambia y los PDFs no se regeneran",
     archivo: "content/cv/content.es.ts",
