@@ -1,109 +1,88 @@
 /**
- * ¿El índice de decisiones cubre y ordena lo que hay? — `npm run check:decisiones`, en CI.
+ * ¿El índice de decisiones es el derivado? — `npm run check:decisiones`, en CI.
  *
- * POR QUÉ EXISTE. `DECISIONS.md` son ~42.000 palabras y, por diseño (D28), NO se
- * `@`-importa: se consulta a demanda. Su única puerta de entrada es el índice de
- * `CLAUDE.md`, que sí va en contexto. O sea que el índice no es una comodidad:
- * es el mecanismo entero del régimen de contexto. Si miente, la consulta dirigida
- * —que es lo que hace barato no cargar el archivo— se vuelve cara.
+ * El porqué, el método y la decisión de qué trabajo hace el índice, en
+ * `scripts/indice-decisiones.ts`. Aquí solo el veredicto.
  *
- * Y SE MANTENÍA A MANO, con la regla escrita en un paréntesis al final del propio
- * índice: «(Al añadir una decisión nueva a DECISIONS.md, añade también su línea
- * aquí.)». El 2026-08-19 estaban las 68 entradas pero DESORDENADAS a partir de
- * D40 (D43 → D42 → D49 → D48 → D47 → D46 → D45 → D44 → D50 → D41), y nadie lo
- * había visto. Es el mismo patrón que D59 ya eliminó tres veces —el sitemap,
- * `llms.txt` y la tabla de tarjetas OG estaban escritos a mano— aplicado al
- * único índice que queda.
- *
- * QUÉ COMPRUEBA, y por qué no genera el texto. Comprueba COBERTURA (que estén
- * todas y ninguna de más) y ORDEN. No regenera el índice porque cada línea lleva
- * una GLOSA escrita a mano que no está en la cabecera de `DECISIONS.md` —es un
- * resumen editorial, no el título— y generarla la perdería. Se verifica lo que se
- * puede verificar sin adivinar; la glosa la sigue escribiendo quien decide.
+ * QUÉ COMPRUEBA, y desde el 2026-08-19 comprueba MÁS que antes. Nació verificando
+ * cobertura y orden, porque cada línea llevaba una glosa escrita a mano que no
+ * estaba en la cabecera y por tanto no se podía generar. Al decidirse que el
+ * índice solo ENRUTA —título y nada más—, la glosa desaparece y el índice pasa a
+ * ser derivable entero: ahora se compara línea a línea contra lo que sale de
+ * `DECISIONS.md`. Deja de poder divergir, en vez de detectarse que ha divergido.
  *
  * Y AFIRMA CUÁNTO HA MIRADO, con su guarda de cero.
  */
-import { readFileSync } from "node:fs";
+import { DECISIONES, INDICE, indice, indiceActual } from "./indice-decisiones";
 
-const DECISIONES = "DECISIONS.md";
-const INDICE = "CLAUDE.md";
+const esperado = indice();
+const actual = indiceActual();
 
-const numeros = (texto: string, patron: RegExp): number[] =>
-  [...texto.matchAll(patron)].flatMap((m) => (m[1] ? [Number(m[1])] : []));
-
-/** `## D42 · …` en DECISIONS.md */
-const declaradas = numeros(readFileSync(DECISIONES, "utf8"), /^#+ *D(\d+) ·/gm);
-/** `- D42 · …` en el índice de CLAUDE.md */
-const indexadas = numeros(readFileSync(INDICE, "utf8"), /^- D(\d+) ·/gm);
-
-if (declaradas.length === 0 || indexadas.length === 0) {
+if (esperado.length === 0 || actual.length === 0) {
   console.error(
-    `\ncheck:decisiones — NO HA MIRADO NADA (${declaradas.length} en ${DECISIONES}, ` +
-      `${indexadas.length} en ${INDICE}).\n` +
+    `\ncheck:decisiones — NO HA MIRADO NADA (${esperado.length} en ${DECISIONES}, ` +
+      `${actual.length} en ${INDICE}).\n` +
       "Con cero entradas este check aprobaría siempre, así que falla a propósito.\n" +
-      "¿Ha cambiado el formato de las cabeceras o el de las líneas del índice?\n",
+      "¿Ha cambiado el formato de las cabeceras, o el bloque del índice ya no está\n" +
+      "entre la línea «- D1 ·» y la que empieza por «*(Al añadir una decisión»?\n",
   );
   process.exit(1);
 }
 
 // El metro afirma cuánto ha mirado (y no al revés).
 console.log(
-  `check:decisiones — ${declaradas.length} decisiones en ${DECISIONES} · ` +
-    `${indexadas.length} líneas en el índice de ${INDICE}`,
+  `check:decisiones — ${esperado.length} decisiones en ${DECISIONES} · ` +
+    `${actual.length} líneas en el índice de ${INDICE}`,
 );
 
 const problemas: string[] = [];
 
-const enIndice = new Set(indexadas);
-const faltan = declaradas.filter((d) => !enIndice.has(d));
+const numero = (l: string) => Number(/^- D(\d+)/.exec(l)?.[1] ?? 0);
+const enActual = new Set(actual.map(numero));
+const enEsperado = new Set(esperado.map(numero));
+
+const faltan = esperado.filter((l) => !enActual.has(numero(l)));
 if (faltan.length) {
   problemas.push(
-    `sin línea en el índice: ${faltan.map((d) => `D${d}`).join(", ")}\n` +
-      `    añádela en ${INDICE}, en su sitio por número`,
+    `sin línea en el índice: ${faltan.map((l) => `D${numero(l)}`).join(", ")}`,
   );
 }
 
-const enDecisiones = new Set(declaradas);
-const sobran = indexadas.filter((d) => !enDecisiones.has(d));
+const sobran = actual.filter((l) => !enEsperado.has(numero(l)));
 if (sobran.length) {
   problemas.push(
-    `en el índice pero no en ${DECISIONES}: ${sobran.map((d) => `D${d}`).join(", ")}\n` +
-      `    ¿se renombró la decisión, o la línea del índice se quedó huérfana?`,
+    `en el índice pero no en ${DECISIONES}: ` +
+      `${sobran.map((l) => `D${numero(l)}`).join(", ")}\n` +
+      "    ¿se renombró la decisión, o la línea se quedó huérfana?",
   );
 }
 
-const repetidas = indexadas.filter((d, i) => indexadas.indexOf(d) !== i);
-if (repetidas.length) {
-  problemas.push(
-    `repetidas en el índice: ${[...new Set(repetidas)].map((d) => `D${d}`).join(", ")}`,
-  );
-}
-
-// El orden. Se señala el primer salto y no la lista entera: con el índice
-// desordenado a partir de D40, enumerar cada par produciría treinta líneas de
-// ruido para un solo arreglo.
-const desorden = indexadas.findIndex(
-  (d, i) => i > 0 && d < (indexadas[i - 1] as number),
-);
-if (desorden > 0) {
-  problemas.push(
-    `el índice deja de ir en orden en D${indexadas[desorden]}, que va detrás de ` +
-      `D${indexadas[desorden - 1]}\n` +
-      `    ordénalo por número: es la única navegación a ${DECISIONES}`,
-  );
+// Orden y TEXTO a la vez: si las dos listas tienen los mismos números, cualquier
+// diferencia posicional es orden o redacción, y las dos se arreglan igual.
+if (!faltan.length && !sobran.length) {
+  const distinta = actual.findIndex((l, i) => l !== esperado[i]);
+  if (distinta >= 0) {
+    problemas.push(
+      "el índice no coincide con lo derivado. Primera diferencia:\n" +
+        `    índice      : ${actual[distinta]}\n` +
+        `    ${DECISIONES.padEnd(12)}: ${esperado[distinta]}`,
+    );
+  }
 }
 
 if (problemas.length) {
   console.error(
-    `\ncheck:decisiones — EL ÍNDICE NO CUADRA (${problemas.length}):\n`,
+    `\ncheck:decisiones — EL ÍNDICE NO ES EL DERIVADO (${problemas.length}):\n`,
   );
   for (const p of problemas) console.error(`  · ${p}\n`);
   console.error(
-    `El índice de ${INDICE} es la única puerta a ${DECISIONES}, que no se\n` +
-      "`@`-importa a propósito (D28). Un índice que miente encarece justo la\n" +
-      "consulta dirigida que hace barato no cargar el archivo.",
+    `El índice de ${INDICE} se DERIVA de las cabeceras de ${DECISIONES}: no se\n` +
+      "escribe a mano. Regenéralo con `npm run indice`.\n\n" +
+      "Y si el problema es que un título no basta para saber si abrir esa entrada,\n" +
+      `arregla la CABECERA de ${DECISIONES} y vuelve a generar. El índice no tiene\n` +
+      "texto propio, a propósito: es lo que impide que los dos títulos divierjan.",
   );
   process.exit(1);
 }
 
-console.log("✓ El índice cubre todas las decisiones y va en orden.");
+console.log("✓ El índice es exactamente el derivado de las cabeceras.");

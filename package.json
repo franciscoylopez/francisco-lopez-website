@@ -22,7 +22,8 @@
     "check:contexto": "tsx scripts/check-contexto.ts",
     "check:skills": "tsx scripts/check-skills.ts",
     "check:decisiones": "tsx scripts/check-decisiones.ts",
-    "check:guardianes": "tsx scripts/check-guardianes.ts"
+    "check:guardianes": "tsx scripts/check-guardianes.ts",
+    "indice": "tsx scripts/indice-decisiones.ts --escribir"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
