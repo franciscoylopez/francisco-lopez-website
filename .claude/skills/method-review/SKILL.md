@@ -162,13 +162,21 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 
 | Familia | Cómo se reconoce | Instancias |
 | :-- | :-- | :-- |
-| **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 5 |
-| **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 2 |
-| **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 4 |
-| **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 3 en un solo día |
-| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | 2 |
+| **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 |
+| **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 5 |
+| **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 3 |
+| **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 3 |
+| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | 3 |
+| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | 3 |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **Añadir sin retirar** | Un documento que crece porque nada pregunta qué sobra (D69) | el marco |
+
+*Segundo disparo, 2026-08-19: la familia nueva es «arreglar la mitad que se abre»
+—el* cooldown *de Dependabot controló cuántos PR se abren y no quién los cierra, y D59
+derivó el sitemap del deep-dive dejando las páginas estáticas a mano en tres listas—.
+Y una lección sobre esta tabla: **actualizarla es el último paso del disparo y es el
+que se olvida.** Se quedó sin tocar veinte minutos después de publicar un informe sobre
+documentos que crecen porque nadie pregunta qué falta.*
 
 ## La salida
 
