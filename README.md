@@ -240,6 +240,7 @@ El «porqué» vive en documentos dedicados, y están partidos por una regla: **
 | [BRAND-historical.md](./BRAND-historical.md) | El porqué fechado de esas reglas: qué se probó y qué falló antes |
 | [BRAND-logo.md](./BRAND-logo.md) | Enciclopedia del logo y la firma split |
 | [CLAUDE.md](./CLAUDE.md) | Convenciones de código (i18n, tokens, a11y, SEO) y la regla de construcción |
+| [LICENSE](./LICENSE) | Público para consulta, no código abierto: todos los derechos reservados |
 | [AGENTS.md](./AGENTS.md) | Aviso: este Next tiene breaking changes; leer los docs del paquete antes de tocar APIs |
 
 ## Despliegue
@@ -254,6 +255,7 @@ Flujo: ramas cortas → PR → merge (squash si trae un commit, rebase si trae v
 **Francisco López** · Senior Product Manager
 [franciscolopez.es](https://franciscolopez.es) · [LinkedIn](https://linkedin.com/in/franciscolopez1975)
 
-<sub>El código es público para que se pueda mirar. La marca, los textos, las fotos y el CV son suyos.</sub>
+<sub>Repositorio <b>público para consulta</b>, no de código abierto: <a href="./LICENSE">todos los derechos reservados</a>.<br>
+El código está a la vista para que se pueda examinar. ¿Quieres reutilizar algo? Escribe.</sub>
 
 </div>
