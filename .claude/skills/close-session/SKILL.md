@@ -131,9 +131,10 @@ ha contestado por inercia.
    nuevo importa más de lo que parece: es la línea que acaba en el índice de `CLAUDE.md`,
    que es lo único que se carga en cada arranque. Tiene que bastar para decidir si abrir
    esa entrada, porque el índice no tiene texto propio (ver paso 2).
-2. **Índice de decisiones**: si añadiste un D-entry, regenéralo con `npm run indice` —
-   se DERIVA de las cabeceras de `DECISIONS.md` y no se escribe a mano. Si el título no
-   basta para saber si abrir esa entrada, arregla la CABECERA, nunca el índice.
+2. **Índices**: si añadiste una sección a `DECISIONS.md`, `PRD-Historical.md` o
+   `BRAND-historical.md`, regenéralos con `npm run indices` — se DERIVAN de las
+   cabeceras y no se escriben a mano. Si un título no basta para saber si abrir esa
+   sección, arregla LA CABECERA, nunca el índice.
 3. **Tablero de tareas**: actualiza `Estado` (To-Do → En progreso → Listo; al cerrar
    una etapa, lo terminado → Archivado; el resto sigue abierto en su etapa),
    `Prioridad` y `Etapa` según las **reglas del tablero** de `CLAUDE.md` (no

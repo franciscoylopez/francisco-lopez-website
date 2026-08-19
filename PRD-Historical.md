@@ -27,6 +27,62 @@
 
 ---
 
+<!-- ÍNDICE · lo genera `npm run indices`; no se edita a mano -->
+- [1. Resumen ejecutivo](#1-resumen-ejecutivo)
+- [2. Objetivo y alcance](#2-objetivo-y-alcance)
+- [3. Audiencia](#3-audiencia)
+- [4. Posicionamiento y narrativa](#4-posicionamiento-y-narrativa)
+- [5. Hero](#5-hero)
+- [6. Dirección visual](#6-dirección-visual)
+- [7. Arquitectura de la página](#7-arquitectura-de-la-página)
+- [8. Contenido por bloque](#8-contenido-por-bloque)
+- [9. Sistema técnico](#9-sistema-técnico)
+- [10. Datos del candidato](#10-datos-del-candidato)
+- [11. Riesgos](#11-riesgos)
+- [12. Decisiones pendientes](#12-decisiones-pendientes)
+- [13. Roadmap](#13-roadmap)
+- [14. Feedback crítico (2026-07-16)](#14-feedback-crítico-2026-07-16)
+- [15. Análisis de mejora V1 — Diseño, Marca y Arquitectura (2026-07-19)](#15-análisis-de-mejora-v1-diseño-marca-y-arquitectura-2026-07-19)
+- [16. Ajustes de contenido y prioridad (2026-07-20)](#16-ajustes-de-contenido-y-prioridad-2026-07-20)
+- [17. Sistema de uso del logo (2026-07-21)](#17-sistema-de-uso-del-logo-2026-07-21)
+- [18. Reorganización de sprints y alcance de V1 (2026-07-21)](#18-reorganización-de-sprints-y-alcance-de-v1-2026-07-21)
+- [19. Página Brand Kit y consolidación del diseño (2026-07-21/22)](#19-página-brand-kit-y-consolidación-del-diseño-2026-07-21/22)
+- [20. Página Design System y sistema en AAA (2026-07-22)](#20-página-design-system-y-sistema-en-aaa-2026-07-22)
+- [21. Pasada de responsive y ronda de contenido (2026-07-22)](#21-pasada-de-responsive-y-ronda-de-contenido-2026-07-22)
+- [22. Reenfoque a lanzar V1 ASAP y priorización MoSCoW (2026-07-23)](#22-reenfoque-a-lanzar-v1-asap-y-priorización-moscow-2026-07-23)
+- [23. Cierre de Sprint 1 y foto del Hero (2026-07-23)](#23-cierre-de-sprint-1-y-foto-del-hero-2026-07-23)
+- [24. Revisión de copy ES↔EN (P29) (2026-07-29)](#24-revisión-de-copy-es↔en-p29-2026-07-29)
+- [25. Planificación del CV en PDF y deep-dive por experiencia (2026-07-29)](#25-planificación-del-cv-en-pdf-y-deep-dive-por-experiencia-2026-07-29)
+- [26. Fase V2+: análisis crítico y cambios de metodología (2026-08-01)](#26-fase-v2+-análisis-crítico-y-cambios-de-metodología-2026-08-01)
+- [27. Sobre mí: contenido y diseño en código (2026-08-01)](#27-sobre-mí-contenido-y-diseño-en-código-2026-08-01)
+- [28. Publicación de Sobre mí + Accesibilidad (2026-08-02)](#28-publicación-de-sobre-mí-+-accesibilidad-2026-08-02)
+- [29. Contacto: copy al ICP y una sola superficie (2026-08-03)](#29-contacto-copy-al-icp-y-una-sola-superficie-2026-08-03)
+- [30. Microsoft Clarity: alta, fugas de CSP y gating de consentimiento (2026-08-03)](#30-microsoft-clarity-alta-fugas-de-csp-y-gating-de-consentimiento-2026-08-03)
+- [31. Links con diseño y animación (P37.55) (2026-08-04)](#31-links-con-diseño-y-animación-p3755-2026-08-04)
+- [32. Consecuencias de P37.55: chrome completo y el sistema documentado (2026-08-04)](#32-consecuencias-de-p3755-chrome-completo-y-el-sistema-documentado-2026-08-04)
+- [33. Capa de acción y de layout: el sistema deja de escribirse a mano (2026-08-04)](#33-capa-de-acción-y-de-layout-el-sistema-deja-de-escribirse-a-mano-2026-08-04)
+- [34. AAA sin excepciones y la regla del icono propio (2026-08-08)](#34-aaa-sin-excepciones-y-la-regla-del-icono-propio-2026-08-08)
+- [35. La revisión de diseño se vuelve un método, y su primer disparo (2026-08-08)](#35-la-revisión-de-diseño-se-vuelve-un-método-y-su-primer-disparo-2026-08-08)
+- [36. Los huecos de variante se cierran, y la regla de shadcn se acota (2026-08-08)](#36-los-huecos-de-variante-se-cierran-y-la-regla-de-shadcn-se-acota-2026-08-08)
+- [37. Las capas que faltaban, y la fuente única de lo que el sitio dice de sí mismo (2026-08-09)](#37-las-capas-que-faltaban-y-la-fuente-única-de-lo-que-el-sitio-dice-de-sí-mismo-2026-08-09)
+- [38. La ola 3, primera mitad: el atenuado se hereda y las tablas dejan de escribirse a mano (2026-08-09)](#38-la-ola-3-primera-mitad-el-atenuado-se-hereda-y-las-tablas-dejan-de-escribirse-a-mano-2026-08-09)
+- [39. La ola 3, segunda mitad: el bloque cierra, y un diff limpio no es un diseño verificado (2026-08-10)](#39-la-ola-3-segunda-mitad-el-bloque-cierra-y-un-diff-limpio-no-es-un-diseño-verificado-2026-08-10)
+- [40. Tres sprints de valor: la replanificación tras cerrar el bloque de diseño (2026-08-10)](#40-tres-sprints-de-valor-la-replanificación-tras-cerrar-el-bloque-de-diseño-2026-08-10)
+- [41. El andamiaje del deep-dive: lo que se construye antes de tener nada que enseñar (2026-08-10)](#41-el-andamiaje-del-deep-dive-lo-que-se-construye-antes-de-tener-nada-que-enseñar-2026-08-10)
+- [42. El deep-dive baja de ocho secciones a cinco, y aparece una línea de discreción (2026-08-15)](#42-el-deep-dive-baja-de-ocho-secciones-a-cinco-y-aparece-una-línea-de-discreción-2026-08-15)
+- [43. El vídeo no va dentro de la página, y por qué eso es una decisión de producto (2026-08-16)](#43-el-vídeo-no-va-dentro-de-la-página-y-por-qué-eso-es-una-decisión-de-producto-2026-08-16)
+- [44. Las cinco narrativas escritas, y tres cosas que solo se ven escribiéndolas (2026-08-16)](#44-las-cinco-narrativas-escritas-y-tres-cosas-que-solo-se-ven-escribiéndolas-2026-08-16)
+- [45. La plantilla del deep-dive, y un artefacto que no se recrea (2026-08-17)](#45-la-plantilla-del-deep-dive-y-un-artefacto-que-no-se-recrea-2026-08-17)
+- [46. La primera pasada de Francisco sobre las cinco páginas montadas (2026-08-17)](#46-la-primera-pasada-de-francisco-sobre-las-cinco-páginas-montadas-2026-08-17)
+- [47. El cierre del deep-dive: cuatro ajustes en pantalla y tres metros descalibrados (2026-08-17)](#47-el-cierre-del-deep-dive-cuatro-ajustes-en-pantalla-y-tres-metros-descalibrados-2026-08-17)
+- [48. El cierre del sprint Deep-dive: lo que se decidió, y tres premisas que no sobrevivieron a medirlas (2026-08-18)](#48-el-cierre-del-sprint-deep-dive-lo-que-se-decidió-y-tres-premisas-que-no-sobrevivieron-a-medirlas-2026-08-18)
+- [49. El deep-dive sale a producción, y las dos revisiones se ganan el sueldo (2026-08-18)](#49-el-deep-dive-sale-a-producción-y-las-dos-revisiones-se-ganan-el-sueldo-2026-08-18)
+- [50. El Sprint Lite: nueve iniciativas sueltas, y la homogeneidad como criterio (2026-08-18/19)](#50-el-sprint-lite-nueve-iniciativas-sueltas-y-la-homogeneidad-como-criterio-2026-08-18/19)
+- [51. El repositorio se hace público, y el Sprint Lite se cierra (2026-08-19)](#51-el-repositorio-se-hace-público-y-el-sprint-lite-se-cierra-2026-08-19)
+- [52. `PRD-Live.md` vuelve a ser present-tense, y el método gana su operación inversa (2026-08-19)](#52-prd-livemd-vuelve-a-ser-present-tense-y-el-método-gana-su-operación-inversa-2026-08-19)
+- [Fuentes](#fuentes)
+<!-- FIN ÍNDICE -->
+
 ## 1. Resumen ejecutivo
 
 Web personal de **Francisco López**, Senior Product Manager con más de 10 años de experiencia en SaaS B2B y B2C, y un exit (TheTool → AppRadar).
@@ -1988,7 +2044,6 @@ configuración—.
 
 ---
 
-
 ## 52. `PRD-Live.md` vuelve a ser present-tense, y el método gana su operación inversa (2026-08-19)
 
 **Qué pasó.** Un análisis de metodología con mirada externa, pedido antes de abrir el
@@ -2058,11 +2113,9 @@ En los cuatro casos la REGLA se queda en `CLAUDE.md` y lo que baja aquí es el R
 cómo se llegó a ella. Es el criterio del paso 1 bis de `close-session`: si una frase lleva
 fecha, o cuenta lo que se probó y se descartó, no es de un documento en presente.
 
-
 ### Lo retirado de `PRD-Live.md` §4 y §5, íntegro
 
-
-## 4. Estado actual — en producción (`franciscolopez.es`)
+#### 4. Estado actual — en producción (`franciscolopez.es`)
 
 V1 lanzada. En vivo:
 - **Home** (una sola página), en **ES (raíz `/`) y EN (`/en`)**.
@@ -2124,7 +2177,7 @@ está partido por página** (D48). Es lo que hace que las seis páginas del deep
 su índice— nazcan con el `hreflang` correcto, con enlace de salto y estáticas, sin que nadie
 tenga que acordarse.
 
-## 5. Sistema (criterios de aceptación, no aspiraciones)
+#### 5. Sistema (criterios de aceptación, no aspiraciones)
 
 - **Stack / arquitectura**: Next 16 (App Router), TypeScript `strict`, Tailwind v4, capa de
   componentes propia. **shadcn/ui está configurado y sin usar**: entra solo para widgets con
@@ -2345,11 +2398,9 @@ tenga que acordarse.
   reales sobrevivieron a una auditoría por fallos de método, no de criterio, y su primer
   disparo (2026-08-08) encontró seis cosas que ni axe ni el typecheck pueden ver.
 
-
 ### Lo retirado de `PRD-Live.md` §9, íntegro
 
-
-## 9. Alcance por versión
+#### 9. Alcance por versión
 
 *(Replanificado el 2026-08-10. El detalle ejecutable —orden, dependencias y tamaños— vive en
 el tablero de tareas; aquí solo qué entra en cada release y qué queda fuera.)*
@@ -2580,7 +2631,6 @@ no discreción.** Es la regla 9 del formato de deep-dive; el porqué, en `PRD-Hi
 - **Marca externa**: firma de email, header de LinkedIn, rediseño de assets.
 
 El porqué de cada decisión de producto, en **[PRD-Historical.md](./PRD-Historical.md)**.
-
 
 ## Fuentes
 

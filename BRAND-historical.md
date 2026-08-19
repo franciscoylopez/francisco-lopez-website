@@ -24,6 +24,22 @@ Partido el **2026-08-09** (P37.685).
 
 ---
 
+<!-- ÍNDICE · lo genera `npm run indices`; no se edita a mano -->
+- [Color — regla de las dos capas](#color-regla-de-las-dos-capas)
+- [Jerarquía de hover en botones y CTA](#jerarquía-de-hover-en-botones-y-cta)
+- [Etiquetas](#etiquetas)
+- [Cuándo una acción lleva icono](#cuándo-una-acción-lleva-icono)
+- [Ningún control se escribe a mano](#ningún-control-se-escribe-a-mano)
+- [Accesibilidad](#accesibilidad)
+- [Iconos propios](#iconos-propios)
+- [El atenuado sensible a la superficie](#el-atenuado-sensible-a-la-superficie)
+- [Tablas](#tablas)
+- [El morado de los fondos invertidos](#el-morado-de-los-fondos-invertidos)
+- [Cómo se escribe una regla](#cómo-se-escribe-una-regla)
+- [El morado como gráfico, y la tercera vez del mismo peldaño (2026-08-17)](#el-morado-como-gráfico-y-la-tercera-vez-del-mismo-peldaño-2026-08-17)
+- [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
+<!-- FIN ÍNDICE -->
+
 ## Color — regla de las dos capas
 
 **Matizado 2026-07-21 — el chrome no lleva cian.** La redacción anterior decía «botones,

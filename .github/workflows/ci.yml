@@ -123,11 +123,13 @@ jobs:
       - name: Skills al día
         run: npm run check:skills
 
-      # `DECISIONS.md` no se `@`-importa a propósito (D28), así que su índice en
-      # `CLAUDE.md` ES el mecanismo del régimen de contexto. Estaba desordenado a
-      # partir de D40 y nadie lo había visto.
-      - name: Índice de decisiones
-        run: npm run check:decisiones
+      # La mitad «a demanda» del régimen de contexto (D28) son ~97.000 palabras, y
+      # solo funciona si se sabe QUÉ HAY dentro sin cargarlo. Los tres índices se
+      # derivan de las cabeceras: el de decisiones vive en `CLAUDE.md` (se lo gana:
+      # 42 de sus 68 entradas se citan desde el código), y los de los dos históricos
+      # en su propia cabecera, para no costar en cada arranque.
+      - name: Índices derivados
+        run: npm run check:indices
 
       - name: Build
         run: npm run build
