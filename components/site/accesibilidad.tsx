@@ -60,34 +60,34 @@ export function Accesibilidad({
               ]}
             />
           </div>
-          <div className="my-auto">
-            <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
-              <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
-                <SectionHeader
-                  eyebrow={t.hero.kicker}
-                  title={t.hero.title}
-                  level={1}
-                  size="page"
-                  reveal
+          <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+            {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
+                breadcrumb→eyebrow lo decide el alto de la ilustración de al lado. */}
+            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">
+              <SectionHeader
+                eyebrow={t.hero.kicker}
+                title={t.hero.title}
+                level={1}
+                size="page"
+                reveal
+              >
+                <p
+                  data-reveal
+                  className="text-muted-foreground max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
                 >
-                  <p
-                    data-reveal
-                    className="text-muted-foreground max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
-                  >
-                    {t.hero.lead}
-                  </p>
-                </SectionHeader>
-              </div>
-              <HeroComposition />
+                  {t.hero.lead}
+                </p>
+              </SectionHeader>
             </div>
-            {/* datos */}
-            <StatRow>
-              <Stat value="AA" label={t.hero.statConformidad} />
-              <Stat value="AAA" label={t.hero.statColor} />
-              <Stat value="0" label={t.hero.statAxe} />
-              <Stat value="100" label={t.hero.statLighthouse} />
-            </StatRow>
+            <HeroComposition />
           </div>
+          {/* datos */}
+          <StatRow>
+            <Stat value="AA" label={t.hero.statConformidad} />
+            <Stat value="AAA" label={t.hero.statColor} />
+            <Stat value="0" label={t.hero.statAxe} />
+            <Stat value="100" label={t.hero.statLighthouse} />
+          </StatRow>
         </div>
       </section>
 
