@@ -235,7 +235,7 @@ El «porqué» vive en documentos dedicados, y están partidos por una regla: **
 | :-- | :-- |
 | [PRD-Live.md](./PRD-Live.md) | Spec viva: qué es el producto hoy y qué tiene que cumplir |
 | [PRD-Historical.md](./PRD-Historical.md) | Registro fechado de decisiones de producto, diseño y alcance |
-| [DECISIONS.md](./DECISIONS.md) | Decisiones técnicas del build (ADR-lite), de D1 a D66 |
+| [DECISIONS.md](./DECISIONS.md) | Decisiones técnicas del build (ADR-lite), numeradas y fechadas |
 | [BRAND.md](./BRAND.md) | Sistema de marca: reglas siempre activas (color, tipografía, tokens, a11y) |
 | [BRAND-historical.md](./BRAND-historical.md) | El porqué fechado de esas reglas: qué se probó y qué falló antes |
 | [BRAND-logo.md](./BRAND-logo.md) | Enciclopedia del logo y la firma split |
