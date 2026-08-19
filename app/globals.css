@@ -258,6 +258,30 @@
     outline-offset: 2px;
     border-radius: 3px;
   }
+
+  /* Quita el retardo de ~300 ms que el navegador móvil se guarda por si el toque
+     era un doble tap de zoom. No cambia nada visible: cambia cuánto tarda en
+     responder cada control del sitio en un teléfono. Va sobre lo accionable y no
+     sobre `*` a propósito — en el cuerpo del texto el doble tap para acercar es
+     una afordancia legítima, y quitarla ahí sí sería un problema de
+     accesibilidad. (Web Interface Guidelines, 2026-08-19.) */
+  a,
+  button,
+  summary,
+  [role="button"],
+  label,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+  }
+
+  /* El scroll dentro del diálogo de preferencias no se encadena al documento de
+     debajo. Sin esto, al llegar al final del panel el gesto sigue moviendo la
+     página que hay detrás del modal. */
+  dialog {
+    overscroll-behavior: contain;
+  }
 }
 
 /* === Capa de motion (PRD §6/§21) — "una vez al entrar en viewport, nunca en
