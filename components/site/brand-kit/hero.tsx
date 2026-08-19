@@ -167,8 +167,29 @@ export function Hero({
   homeHref: string;
 }) {
   return (
-    <section className="py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)]">
-      <div className={WRAP}>
+    <section className="flex flex-col py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)] md:min-h-[calc(100svh-5rem)]">
+      {/* LA APERTURA OCUPA EL PLIEGUE (P54, 2026-08-19), con la MISMA constante
+          y el mismo guard de breakpoint que el hero de la home
+          (`site/hero.tsx`) y que el deep-dive: 5rem es el alto del header
+          sticky y `md:` deja el móvil fuera, donde llenar el pliegue no compra
+          nada.
+
+          POR QUÉ HACÍA FALTA, medido antes de tocarlo: a 1920×1080 la apertura
+          terminaba a 797px y dejaba 283px de hueco por debajo, así que el
+          rótulo de la segunda sección asomaba y la primera vista pasaba de ser
+          una portada a ser portada + principio de otra cosa. A 2560×1440 el
+          hueco era de 643px.
+
+          Y ES `min-h`, NO `h`: a 1280×618 y 1536×740 —el 1920 de Windows al
+          150% y al 125%— esta apertura ya mide MÁS que el pliegue (medido:
+          desborda 150 y 51px), así que la regla simplemente no aplica y no
+          puede recortar nada. Es D50 al revés.
+
+          El `w-full` de abajo no sobra: al volver flex el contenedor, el
+          `mx-auto` de `WRAP` pasa a ser margen del eje transversal y por
+          especificación DESACTIVA el stretch, con lo que la caja se encoge a su
+          contenido y se desalinea del nav. No da ningún error de compilación. */}
+      <div className={`${WRAP} flex w-full flex-1 flex-col`}>
         <div data-reveal className="mb-[clamp(3rem,6vw,4.5rem)]">
           <Breadcrumb
             routeLabel={breadcrumb.routeLabel}
@@ -178,59 +199,60 @@ export function Hero({
             ]}
           />
         </div>
-        <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
-          <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
-            <SectionHeader
-              eyebrow={t.kicker}
-              title={t.title}
-              level={1}
-              size="page"
-              reveal
-            >
-              <p
-                data-reveal
-                className="text-muted-foreground max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
+        <div className="my-auto">
+          <div className="flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)]">
+            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem]">
+              <SectionHeader
+                eyebrow={t.kicker}
+                title={t.title}
+                level={1}
+                size="page"
+                reveal
               >
-                {t.lead}
-              </p>
-            </SectionHeader>
-          </div>
-          {/* Composición: la anatomía del logo aplicada a escala (PRD §19).
+                <p
+                  data-reveal
+                  className="text-muted-foreground max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
+                >
+                  {t.lead}
+                </p>
+              </SectionHeader>
+            </div>
+            {/* Composición: la anatomía del logo aplicada a escala (PRD §19).
               Centro foreground que conmuta, flancos pastel fijos. Decorativa. */}
-          <div
-            aria-hidden="true"
-            className="flex flex-[1_1_26rem] items-center justify-center"
-          >
-            <div className="relative w-[min(21rem,100%)]">
-              <div
-                data-reveal
-                className="absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-                style={{ transitionDelay: "0.16s" }}
-              >
+            <div
+              aria-hidden="true"
+              className="flex flex-[1_1_26rem] items-center justify-center"
+            >
+              <div className="relative w-[min(21rem,100%)]">
                 <div
-                  className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
-                  style={{ transform: "rotate(-6deg)" }}
+                  data-reveal
+                  className="absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+                  style={{ transitionDelay: "0.16s" }}
                 >
-                  <Glyph variant="flat" h={27} />
+                  <div
+                    className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
+                    style={{ transform: "rotate(-6deg)" }}
+                  >
+                    <Glyph variant="flat" h={27} />
+                  </div>
                 </div>
-              </div>
-              <div
-                data-reveal
-                className="absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-                style={{ transitionDelay: "0.24s" }}
-              >
                 <div
-                  className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
-                  style={{ transform: "rotate(6deg)" }}
+                  data-reveal
+                  className="absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+                  style={{ transitionDelay: "0.24s" }}
                 >
-                  <Glyph variant="flat" h={27} />
+                  <div
+                    className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
+                    style={{ transform: "rotate(6deg)" }}
+                  >
+                    <Glyph variant="flat" h={27} />
+                  </div>
                 </div>
+                <BrowserMockup />
               </div>
-              <BrowserMockup />
             </div>
           </div>
-        </div>
-        {/* Fila de datos (P54.3). Las otras dos páginas que documentan el sistema
+          {/* Fila de datos (P54.3). Las otras dos páginas que documentan el sistema
             —Design System y Accesibilidad— abrían con su resumen en cifras y
             esta no, siendo de la misma familia. Los VALORES salen de
             `lib/design-values.ts` (D38): el diccionario solo trae la etiqueta,
@@ -238,12 +260,16 @@ export function Hero({
             recuento de color se DERIVA de las dos capas de la paleta, y el
             umbral del split es el mismo valor con el que la sección del
             logotipo decide qué peldaños funcionan. */}
-        <StatRow>
-          <Stat value={String(COLOR_TOKEN_COUNT)} label={t.statColor} />
-          <Stat value={String(TYPE_FAMILIES.length)} label={t.statTipografia} />
-          <Stat value={String(SPLIT_MIN_PX)} unit="px" label={t.statSplit} />
-          <Stat value="AA→AAA" label={t.statA11y} />
-        </StatRow>
+          <StatRow>
+            <Stat value={String(COLOR_TOKEN_COUNT)} label={t.statColor} />
+            <Stat
+              value={String(TYPE_FAMILIES.length)}
+              label={t.statTipografia}
+            />
+            <Stat value={String(SPLIT_MIN_PX)} unit="px" label={t.statSplit} />
+            <Stat value="AA→AAA" label={t.statA11y} />
+          </StatRow>
+        </div>
       </div>
     </section>
   );
