@@ -51,6 +51,36 @@ como diario en vez de spec viva, espejos de Notion que se desincronizan solos.
 10. **Limpieza**: archivos muertos/deprecados; contenido en carpetas que no le tocan.
 11. **Dinámica/proceso**: qué revela el estado del repo sobre cómo se trabaja (fricciones que se
     repiten, pasos manuales frágiles) — alimenta la mejora continua de la forma de trabajar.
+12. **Medición** — ver abajo. Es el paso 3 del ritual de cierre de etapa y **no tenía portador**.
+
+### 12 · El check de medición (obligatorio, con salida escrita)
+
+> **Por qué está aquí y no en la cabeza de nadie.** `CLAUDE.md` dice que al cerrar una etapa
+> se hace «(1) `sprint-review`, (2) archivar tareas, **(3) el check de medición**». El paso 3
+> no estaba en ninguna parte: este barrido tenía once puntos y ninguno era de medición.
+> Cinco etapas cerradas, cero checks hechos. Medido el 2026-08-19: **73 menciones de GA4 y
+> Clarity en los tres documentos grandes, todas sobre INSTALAR la medición, y CERO
+> decisiones que citen un dato de analítica como razón.** La web argumenta «del discovery al
+> dato» y el método declara el bucle medir→aprender en dos documentos. Era el único hueco
+> que contradecía la tesis del producto.
+
+Cuatro preguntas, no más. **Se contestan con cifra y van en la salida como sección propia**;
+una etapa no se cierra sin haberlas escrito.
+
+1. **¿Qué dicen los tres scorecards?** Clics de contacto, descargas de CV y profundidad de
+   scroll, últimos 28 días. Cifra, no impresión. Panel:
+   `https://datastudio.google.com/reporting/6126da1d-21ba-480b-b56e-f124e47c2e01/page/I7T5F`
+2. **¿Ha cambiado algo desde el cierre anterior?** Sin el número anterior no hay lectura, así
+   que cada cierre deja el suyo apuntado para el siguiente.
+3. **¿Hay algo aquí que cambie una prioridad del tablero?** Si la respuesta es **no**, dilo
+   explícitamente. Un «no» escrito es una decisión; un silencio es el bucle sin cerrar.
+4. **¿Sigue midiendo bien el instrumento?** Esta es la que faltó y la que costó caro. P31
+   (el dashboard) se cerró el 2026-08-03 con dos de sus tres tiles en «No hay datos» y una
+   nota que lo daba por **esperado** — «GA4 tarda 24-48h en procesarlo». Nadie volvió a
+   mirar: dieciséis días después seguían vacíos, porque el tag de GA4 que traduce el evento
+   `contact_click` nunca se había creado en GTM. *Una tarea de medición que se cierra sobre
+   una predicción en vez de sobre una verificación no ha medido nada.* Si un scorecard está a
+   cero, la primera hipótesis es **el instrumento**, no la audiencia.
 
 Herramientas: `Bash`/`Grep`/`Glob` para el barrido; `Read` para los archivos grandes y los
 puntos de entrada (routing, layout, `lib/`); cruza con `PRD-Live.md` / `PRD-Historical.md` /
@@ -59,8 +89,9 @@ puntos de entrada (routing, layout, `lib/`); cruza con `PRD-Live.md` / `PRD-Hist
 ## Salida
 1. **Análisis escrito**: veredicto rápido → fortalezas (para calibrar) → hallazgos **por
    severidad** (pronto / escala / limpieza, cada uno con "¿por qué importa?") → sección de
-   docs → huecos y dudas abiertas → **recomendaciones priorizadas** (marcando qué es "ya" y
-   qué es "solo si crece").
+   docs → **sección de medición** (las cuatro preguntas del punto 12, con sus cifras y el
+   número del cierre anterior) → huecos y dudas abiertas → **recomendaciones priorizadas**
+   (marcando qué es "ya" y qué es "solo si crece").
 2. **Propón antes de crear.** Preséntale a Francisco los hallazgos y la lista de tareas
    sugeridas para que confirme, ajuste o descarte.
 3. **Crea/actualiza tareas** en el tablero para lo acordado, respetando las **reglas del

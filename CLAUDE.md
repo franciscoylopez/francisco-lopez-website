@@ -118,9 +118,9 @@ Al empezar una sesión de desarrollo:
 
 ## Reglas del tablero (no negociables)
 
-> **Modelo actualizado (2026-08-01): sin fechas.** Se dejaron los sprints datados —eran ficción, vamos más rápido que cualquier calendario y no hay equipo que coordinar—. El campo pasó a **`Etapa`**. **Lo que dirige la ejecución es `MoSCoW` + `Prioridad` (orden) + `Tamaño`**, no el calendario. En las reglas de abajo, donde diga "sprint" léase **"etapa/fase"**, y "sprint activo" = **la etapa en curso**.
+> **Sin fechas.** Lo que dirige la ejecución es `MoSCoW` + `Prioridad` (orden) + `Tamaño`, no el calendario. Donde abajo diga "sprint", léase **"etapa"**.
 
-> **Qué significa `Etapa` (revisado el 2026-08-10).** Dejó de ser una lista de fases temáticas —había degenerado: 16 de 20 tareas abiertas estaban en *"Optimización"*, así que el eje ya no discriminaba nada— y pasa a contestar **una sola pregunta: ¿esto está comprometido o esperando?** Dos familias en el mismo campo:
+> **`Etapa` contesta una sola pregunta: ¿esto está comprometido o esperando?** Dos familias en el mismo campo (y **vigila que «General» no se coma el eje**: ya degeneró una vez con «Optimización» al 80%):
 >
 > - **Sprints** (lo comprometido, con su orden): *Deep-dive · Cómo se ha creado · Footer y contacto*.
 > - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad*.
@@ -132,9 +132,9 @@ Al empezar una sesión de desarrollo:
 
 - **"To-Do", "En progreso" y "Blocked" están reservados al sprint activo.** Toda tarea de un sprint futuro va en **"Sin empezar"**, sin excepción. Al abrir un sprint nuevo, sus tareas pasan de "Sin empezar" a "To-Do"; al cerrarlo, lo que quede sin hacer se mueve al siguiente sprint y vuelve a "Sin empezar".
 - **`Prioridad` es un orden global de ejecución, no una etiqueta de importancia.** Números bajos = antes. Debe ser coherente con el orden de sprints: todo lo del sprint 1 va por delante de todo lo del 2, y así sucesivamente. Dentro de cada sprint, ordena por dependencia — primero lo que desbloquea a otras tareas.
-- Las tareas cerradas conservan su prioridad histórica (por debajo de 10); las abiertas van de 10 en adelante. **Para insertar una o varias tareas sueltas, usar decimales es correcto** (ej. `11.5` entre `11` y `12`). **Solo se renumera el bloque abierto entero cuando hay una reestructuración completa de prioridades**, no por inserciones puntuales. *(Aclarado 2026-07-24: antes esta regla mandaba renumerar siempre en vez de meter decimales; se relaja porque renumerar decenas de tareas por un solo insert es desproporcionado.)*
+- Las tareas cerradas conservan su prioridad histórica (por debajo de 10); las abiertas van de 10 en adelante. **Para insertar una o varias tareas sueltas, usar decimales es correcto** (ej. `11.5` entre `11` y `12`). **Solo se renumera el bloque abierto entero cuando hay una reestructuración completa de prioridades**, no por inserciones puntuales.
 - **`Versión` refleja en qué release sale la tarea de verdad, no dónde se planificó.** Si una tarea se construye antes del deploy de V1, es V1 — aunque en su día se pospusiera a V2.
-- **Una tarea a la vez, en su orden de prioridad, con el `Estado` al día — nada de construir por delante del tablero.** Antes de tocar código, la tarea correspondiente se pone en "En progreso"; al terminarla, "Listo". No se salta una tarea de prioridad menor (número más bajo) para empezar otra posterior, aunque compartan trabajo. Si un mismo esfuerzo cubre varias tareas (p. ej. el build de la home repartido en 2-3 tareas de secciones), se **abren y se cierran una a una** conforme se avanza, no en bloque al final. *(Añadido 2026-07-27: se construyó la home entera saltándose la P11.5 —conectar Vercel, de prioridad anterior— y sin ir moviendo Estados; el tablero quedó desincronizado de la realidad y hubo que reconstruir el mapeo a posteriori. La disciplina no es burocracia: es lo que mantiene el tablero como fuente fiable de en qué punto está el proyecto.)*
+- **Una tarea a la vez, en su orden de prioridad, con el `Estado` al día — nada de construir por delante del tablero.** Antes de tocar código, la tarea correspondiente se pone en "En progreso"; al terminarla, "Listo". No se salta una tarea de prioridad menor (número más bajo) para empezar otra posterior, aunque compartan trabajo. Si un mismo esfuerzo cubre varias tareas (p. ej. el build de la home repartido en 2-3 tareas de secciones), se **abren y se cierran una a una** conforme se avanza, no en bloque al final.
 - **Al cerrar un sprint, sus tareas terminadas pasan a "Archivado".** "Listo" queda reservado a lo terminado del **sprint activo**; el histórico completado de sprints anteriores se archiva (sigue en la base, solo sale de las columnas activas). Lo que quede sin hacer se mueve al siguiente sprint como "Sin empezar". **Además, al cerrar un sprint invoca el skill `sprint-review`**: una revisión técnica crítica del codebase (developer externo, mirada fresca) que detecta deuda/huecos y propone tareas, para que la mejora del andamiaje y de la dinámica no dependa de acordarse de pedirla.
 
 ### Gestión de etapas — cuándo se cierra una y se dispara `sprint-review`
@@ -145,10 +145,10 @@ Sin fechas, la **etapa en curso** es el sprint de menor `Prioridad` con tareas a
 
 - **Contenido primero** en secciones bloqueadas por contenido (Sobre mí, Accesibilidad): el texto es el cuello de botella real y solo lo escribe Francisco. Desbloquear el contenido **antes o en paralelo** al diseño/dev; Claude puede redactar un borrador editable (como el CV o Sobre mí) para arrancarlo.
 - **Bucle medir→aprender.** Al cerrar cada etapa, revisar los números de GA4 (clics de contacto, descargas de CV, scroll) para informar la priorización. Construir **y** medir — es lo que predica la web ("del discovery al dato").
-- **Definition of Done por sección.** Cada tarea de sección nueva hereda el checklist de cierre (los 8 puntos de accesibilidad + SEO/JSON-LD + PageSpeed + responsive + seguridad). Misma vara para todas.
+- **Definition of Done por sección.** Cada tarea de sección hereda el checklist de cierre. **Vive en «Definition of Done» al final de este archivo**, en dos columnas: lo que bloquea el envío y lo que no.
 - **Revisión con IA en los PR grandes.** Sin segundo revisor humano, usa `/code-review` (o ultrareview) en cambios sustanciales como segundo par de ojos.
 - **Revisión de diseño:** skill `design-review` (cumplimiento del sistema + expresión de marca, verificado en pantalla). **Disparo manual** — antes de construir secciones nuevas o de un release visual grande, o cuando Francisco lo pida; no va enganchada al cierre de etapa como `sprint-review` hasta que se valide.
-- **Shippear vs. pulir.** Deja explícito qué es "suficiente para shippear la sección" vs. "pulido"; el pulido va a *Optimización* (Could) y **no bloquea el envío**. Que las secciones salgan en vez de dorarse.
+- **Shippear vs. pulir.** La columna «Pulido» de la DoD **no bloquea el envío**: nace fuera del sprint, en su bloque de V3. Que las secciones salgan en vez de dorarse.
 
 # Fase de desarrollo — convenciones (V1 build)
 
@@ -214,3 +214,48 @@ Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer p
 - **Lo que no tapa, y sigue a mano:** el **enlace de salto** de WCAG 2.4.1, que axe no detecta (D46); la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49); y los puntos **4, 5, 6 y 8**, que los pone quien escribe la página.
 
 `claude-in-chrome` no se retira: se queda para lo que necesita el navegador **con sesión** —consentimiento guardado, Preview autenticada—, que es la Fase 3 de `design-review`.
+
+# Definition of Done
+
+> **Por qué es una tabla y no prosa** *(2026-08-19)*. Llevaba declarada como una línea en
+> «Metodología» desde V2 y no existía en ningún sitio donde se trabaje: el tablero tiene
+> diez propiedades y ninguna es un checklist de cierre. Mientras tanto, de los diecisiete
+> gates del proyecto **nueve dependían de acordarse**, y fallaron cuatro veces (D54 publicó
+> el artefacto sin sanear, D60 dejó los PDFs viejos, D63 metió el guardián de la raya con
+> un agujero, y la última tarea del Sprint Lite la encontró verificar producción). La DoD
+> es el portador que les faltaba.
+
+**Se aplica a toda tarea que cree o rehaga una página, una sección o un bloque.** No a
+refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion al ponerla
+«En progreso», y se marca al cerrarla.
+
+## Columna A — bloquea el envío
+
+| # | Comprobación | Cómo |
+|---|---|---|
+| 1 | **Sale de las piezas, no de clases sueltas** | La cascada de la «Regla de construcción». Si hubo que crear variante, se publica en el Design System antes de dar por hecha la tarea |
+| 2 | **Accesibilidad de contenido**: un solo `h1` y jerarquía sin saltos · breadcrumb · nada codificado solo por color · alternativas textuales | A mano. Son los puntos 4, 5, 6 y 8: los pone quien escribe la página |
+| 3 | **Accesibilidad heredada**: contraste, foco, 44px, `reduced-motion` | `viewport-verifier` (D52). **Solo se vuelve a MEDIR** si el trabajo introduce un par de color nuevo, un fondo que no sea `--background` o una animación propia |
+| 4 | **Enlace de salto** | A mano: axe no lo detecta (D46) |
+| 5 | **Pliegue**, si lleva banda o hero por `vw` | `viewport-verifier` **mientras se dibuja**, no al cerrar (D50/D52) |
+| 6 | **SEO + JSON-LD** del tipo que le toca, ES y EN | `pageMetadata` lo deriva; se verifica el tipo nuevo si lo hay |
+| 7 | **Copy**: ES fuente de verdad, EN revisado contra el ES, sin raya | D20 · `npm run check:raya` |
+| 8 | **Interfaz mecánica**: estados vacíos, desbordamiento, hidratación, cifras tabulares, safe areas | Skill de Web Interface Guidelines, **antes** de `design-review` |
+| 9 | **`npm run gate:html`** si el cambio se decía transparente | Diff vacío = transparente por construcción (D42/D45) |
+| 10 | **Los doce checks de CI en verde** | El PR |
+
+## Columna B — no bloquea el envío
+
+Nace como tarea de V3 en su bloque, no se hace dentro del sprint: **expresión de marca**
+(`design-review`), **nota de PageSpeed** (`npm run psi`, D49), **micro-motion**, y el
+pulido tipográfico o de ritmo que aparezca al mirarla.
+
+*Un hallazgo de la columna B nunca reabre una sección ya enviada: se tarea.*
+
+## Antes de construir, no al cerrar
+
+- **¿Hay decisión visual abierta?** → `/prototype` **antes** de escribir el componente.
+  Solo puede invocarla Francisco (lleva `disable-model-invocation: true`), así que
+  **ofrécela** en cuanto la tarea tenga más de una dirección posible.
+- **¿Dependencia frontend nueva?** → `/pick-ui-library`, misma condición.
+- **¿Toca motion?** → `/review-animations` al terminarlo.
