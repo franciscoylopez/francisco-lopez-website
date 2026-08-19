@@ -10,6 +10,20 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 5
+    # PERIODO DE REPOSO (2026-08-19). El riesgo de este repo no es el CANAL: se
+    # comprobó y está en `latest`, no en canary ni beta —next 16.3.1, react 19.2.8 y
+    # tailwind 4.3.3 son exactamente latest, y next/react van anclados sin caret—.
+    # El riesgo es el TIEMPO: Dependabot saltaba a la versión nueva la semana en que
+    # salía, con CI como única puerta. Y ya mordió una vez (el PR #47 de TypeScript 7
+    # rompía el build), aunque ahí el fallo fue RUIDOSO. Un cambio de comportamiento
+    # en el render, no en la compilación, pasaría los doce checks enteros: ninguno
+    # mira la página servida, porque `gate:html` no está en CI a propósito.
+    # Los parches no esperan, y las actualizaciones de SEGURIDAD son otro mecanismo
+    # (alertas), así que este reposo no las retrasa.
+    cooldown:
+      semver-major-days: 14
+      semver-minor-days: 7
+      semver-patch-days: 0
     # Prefijos alineados con Conventional Commits del repo (DECISIONS D12).
     commit-message:
       prefix: chore
