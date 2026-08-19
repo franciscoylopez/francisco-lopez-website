@@ -3,7 +3,7 @@ const fs = require('fs');
 const { processLogo } = require('./process_logo');
 
 // Carpeta de origen de los .webp. Sobreescribible: LOGOS_SRC=... node batch_process.js
-const SRC = process.env.LOGOS_SRC || "C:/Users/franc/Desktop/Logos Web";
+const SRC = process.env.LOGOS_SRC || "./logos-src";
 const OUT = path.join(__dirname, '..', '..', 'public', 'logos');
 
 const jobs = [

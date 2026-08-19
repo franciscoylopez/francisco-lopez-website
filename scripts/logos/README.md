@@ -15,7 +15,7 @@ pero aplanada a un único color por tema.
 node scripts/logos/batch_process.js
 ```
 
-La carpeta de origen por defecto es `C:/Users/franc/Desktop/Logos Web`, con
+La carpeta de origen por defecto es `./logos-src`, con
 subcarpetas `Tools/`, `Empresas/` y `Formacion/`. Para usar otra:
 
 ```bash
