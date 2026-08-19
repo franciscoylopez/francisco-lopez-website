@@ -44,6 +44,13 @@ const DICCIONARIOS = "app/[lang]/dictionaries";
 const COPY_TS = [
   "content/experience-copy/es.ts",
   "content/experience-copy/en.ts",
+  // El copy de las páginas-sistema (404 y error). Vive fuera del diccionario A
+  // PROPÓSITO —el error boundary es cliente y no puede depender de `getDictionary`,
+  // que es server-only (D22/D25)—, y por eso mismo se escapó del primer barrido:
+  // el guardián no cubría la excepción que el sistema ya tenía documentada.
+  "lib/i18n/system-messages.ts",
+  // El `<title>` del 404, que también se escribe aquí y no en el diccionario.
+  "app/global-not-found.tsx",
 ];
 
 /** El ordinal de una cabecera numerada: `01 — Rejilla` (D43). */
