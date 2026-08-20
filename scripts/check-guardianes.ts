@@ -29,6 +29,12 @@
  * una nota. Se sigue lanzando a mano al tocar un guardián, y es casilla de la DoD
  * cuando el trabajo crea o cambia uno.
  *
+ * NECESITA EL BUILD. Desde `check:marco` (P58.5) hay un caso que muerde el HTML
+ * prerenderizado en vez de un archivo fuente, porque esa es la ENTRADA de ese
+ * guardián. Sin `.next`, ese caso no se puede probar — y no se salta en silencio:
+ * se cuenta como fallo, que es lo contrario de lo que este script combate. Por eso
+ * en CI va DETRÁS de `Build` y no delante.
+ *
  * SEGURIDAD. Se niega a arrancar con el árbol sucio, restaura en `finally` desde
  * la copia en memoria, y verifica al final que no ha dejado nada movido. Si aun
  * así muriera a mitad, `git checkout .` lo deshace: por eso exige árbol limpio.
@@ -40,6 +46,10 @@ type Caso = {
   guardian: string;
   /** Qué se rompe, en una línea, para que el informe se lea sin abrir el código. */
   rotura: string;
+  /**
+   * Qué se rompe. Normalmente un archivo FUENTE; en `check:marco`, el HTML del
+   * build, que es su entrada de verdad. Rastreado o no: se restaura desde memoria.
+   */
   archivo: string;
   /** Del contenido original al mutado. */
   mutar: (original: string) => string;
@@ -115,6 +125,20 @@ const CASOS: Caso[] = [
     archivo: ".claude/skills/close-session/SKILL.md",
     mutar: append("\nVer `lib/esto-no-existe.ts` para el detalle.\n"),
   },
+  {
+    guardian: "check:marco",
+    rotura: "una página se queda sin enlace de salto (WCAG 2.4.1, nivel A)",
+    // ÚNICO CASO QUE MUERDE UN ARTEFACTO DEL BUILD y no un archivo fuente, y es a
+    // propósito: la ENTRADA de este guardián es el HTML que el sitio emite, no el
+    // código que lo genera. Romper el componente no se vería sin volver a
+    // construir —dos minutos por caso—, y sobre todo probaría otra cosa: que el
+    // build propaga el cambio, no que el detector sabe verlo.
+    //
+    // El archivo está en `.gitignore`, así que el `git status` de arriba y el de
+    // abajo no lo ven; la restauración es la misma de siempre, desde memoria.
+    archivo: ".next/server/app/es.html",
+    mutar: (o) => o.replace(/<a href="#main"[\s\S]*?<\/a>/, ""),
+  },
 ];
 
 /**
@@ -156,7 +180,23 @@ console.log(
 const fallos: string[] = [];
 
 for (const caso of CASOS) {
-  const original = readFileSync(caso.archivo, "utf8");
+  let original: string;
+  try {
+    original = readFileSync(caso.archivo, "utf8");
+  } catch {
+    // Un caso sin material NO se salta en silencio: saltarlo dejaría a su
+    // guardián sin comprobar y con el mismo ✓ final, que es exactamente el modo
+    // de fallo que este script existe para cerrar. Pasa con los casos que muerden
+    // un artefacto DERIVADO (el HTML del build) en vez de un archivo fuente.
+    console.log(
+      `  ${"SIN MATERIAL".padEnd(18)} ${caso.guardian.padEnd(20)} ${caso.rotura}`,
+    );
+    fallos.push(
+      `${caso.guardian}: no existe \`${caso.archivo}\`, así que su caso malo no se ha podido ` +
+        "probar. Si es un artefacto del build, corre `npm run build` antes.",
+    );
+    continue;
+  }
   let veredicto: string;
   try {
     const mutado = caso.mutar(original);

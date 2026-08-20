@@ -4062,3 +4062,77 @@ creado». Es un recuento escrito a mano, de la misma familia que los badges, y c
 diferencia: este sí tiene fuente (`lib/routes.ts`, D72), así que su arreglo natural no es el
 umbral sino generarlo.
 
+
+## D75 · Lo que verifica una página no es su código, es el HTML que emite — 2026-08-20
+
+**Decisión.** `npm run check:marco` (`scripts/check-marco.ts`) entra en CI justo detrás de
+`Build` y comprueba, sobre las **24 variantes prerenderizadas**, lo que quedaba del criterio
+de cierre de página: **axe** sobre lo estructural, el **enlace de salto**, el marco
+accesible que pone quien escribe la página, que la **derivación de metadata llegó**, y que
+las referencias **`@id`** del JSON-LD resuelven. Con él, CI pasa de catorce pasos a
+**quince**, y `check:guardianes` se mueve al final porque ahora necesita el build.
+
+**Contexto.** El criterio de cierre de `CLAUDE.md` —los 8 puntos de accesibilidad, el enlace
+de salto, el SEO y su JSON-LD— se cumplía **a mano y por página**, o sea dependía de
+acordarse. Es literalmente el patrón que `BRAND.md` §Cómo se escribe una regla nombra como
+el que produce drift.
+
+**Por qué esto y no «axe y Lighthouse en CI», que era como estaba planteado en 2026-08-10.**
+Porque entre medias se hizo D45 y D72, y **media lista dejó de poder romperse**: `pageMetadata`
+deriva canonical, los tres `hreflang`, OG y Twitter; `PageShell` pone el `<main>`, el enlace de
+salto y el breadcrumb; `check:rutas` cubre el registro. Automatizar eso habría sido automatizar
+la comprobación de algo que ya es imposible de romper. Y el mismo argumento, una vuelta más
+allá, es el que deja **contraste y objetivo táctil FUERA**: son los puntos que se **heredan**
+de la capa de componentes (`CLAUDE.md` §Qué compra esto), y los cubre `viewport-verifier` en
+navegador de verdad (D52). Lo que este gate mira es justo lo que **no** se hereda.
+
+**Las tres cosas que sí puede romper una página nueva, que son las que mira:**
+
+1. **Lo que pone quien la escribe** — puntos 4, 5 y 8 del checklist: un solo `h1` y jerarquía
+   sin saltos, breadcrumb con `aria-current`, alternativas textuales. Más todo lo estructural
+   de axe (47 reglas evaluadas: `link-name`, `button-name`, `aria-*`, `region`, `list`,
+   `heading-order`…).
+2. **Que la derivación LLEGÓ.** Los helpers son **opt-in**: una página que se escriba su
+   metadata a mano compila igual, y el canonical de otra página o la tarjeta OG del otro
+   idioma solo los ve quien comparte el enlace, después de compartirlo.
+3. **El enlace de salto**, que **axe no detecta** —su regla `bypass` se conforma con los
+   landmarks— y cuya ausencia fue el único incumplimiento de nivel A que ha tenido el sitio
+   (D46).
+
+**Y una que ningún validador externo hace: resolver los `@id`.** El Schema Markup Validator y
+la Rich Results Test validan **cada bloque por separado**, así que un identificador colgando
+les sale verde. Está dicho desde antes en `lib/structured-data.ts`, en el párrafo que explica
+por qué `isPartOf` no está: «un identificador que ningún nodo declara. Valida igual […] y no
+significa nada». Ahora se comprueba de verdad, y **contra todo el sitio**: el `Person` lo
+declara solo la home y lo referencian los cinco deep-dive, así que la comprobación no puede
+ser por página.
+
+**De dónde sale el HTML: del build, no de un servidor.** Las doce páginas × dos idiomas se
+prerenderizan (D45), así que el gate lee `.next/server/app/**.html` y cuesta ~37 s sin
+navegador ni `npm start`. Eso es lo que decide que corra **en cada PR** en vez de ser un
+nightly, que era la tercera opción sobre la mesa. El precio: depende de una ruta interna de
+Next, así que si un día cambia, el guardián **no encuentra los archivos y lo dice** — la
+única salida que no vale es seguir en verde mirando cero variantes.
+
+**El caso malo vive en el HTML, no en el código, y es el primero así.** `check:guardianes` le
+pasa a este guardián una home sin enlace de salto mutando `.next/server/app/es.html`. Romper
+el componente en su lugar habría exigido reconstruir —dos minutos por caso— y sobre todo
+habría probado otra cosa: que el build propaga el cambio, no que el detector sabe verlo. Como
+consecuencia, `check:guardianes` deja de correr antes del build y pasa a ser el último paso;
+y un caso sin material no se salta en silencio, se cuenta como fallo, que es lo contrario de
+lo que ese script existe para combatir (D70).
+
+**Validado rompiéndolo, con diez casos malos** antes de darlo por bueno: sin enlace de salto,
+sin `h1`, JSON-LD inválido, sin `@context`, canonical de otra página, `hreflang` mal apuntado,
+tarjeta OG del otro idioma, `img` sin `alt`, y un `@id` que nadie declara. Los diez rojos.
+Dos de los primeros intentos salieron «no lo ve» y **el fallo era de la mutación, no del
+guardián** —un espacio de más en el JSON seguía siendo JSON válido; la página elegida no tenía
+imágenes—, que es la trampa 3 de `BRAND.md` §Cómo medir: valida el metro antes de creerte el
+hallazgo, y también antes de creerte el hueco.
+
+**Lo que sigue fuera, dicho para que no se dé por cubierto.** Contraste, objetivo táctil, foco
+visible y `reduced-motion` (necesitan pintar y tema → `viewport-verifier`, D52) · lo que no
+incumple ninguna regla —un `Esc` que no cierra, un cambio de tema que no se anuncia— que es la
+pasada con lector de pantalla (D73) · el punto 6, «nada codificado solo por color», que no
+tiene forma automática · y la nota de PageSpeed, que sigue siendo `npm run psi` a demanda
+porque su variabilidad daría rojos falsos (D49).

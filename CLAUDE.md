@@ -90,6 +90,7 @@
 - D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila
 - D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe
 - D74 · Un compromiso no caduca y una medición sí: fuera de su fuente se publica el umbral
+- D75 · Lo que verifica una página no es su código, es el HTML que emite
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
@@ -192,7 +193,7 @@ Antes de escribir markup nuevo, la cascada, en orden:
 
 ### Qué compra esto: la accesibilidad se hereda, no se vuelve a medir
 
-Con el gate cumplido, del checklist de 8 puntos de abajo solo hay que **verificar los que dependen del contenido**: **4** (un solo `h1`, jerarquía sin saltos), **5** (breadcrumb), **6** (nada codificado solo por color) y **8** (alternativas textuales). Esos los pone quien escribe la página, no el componente.
+Con el gate cumplido, del checklist de 8 puntos de abajo solo dependen del contenido —los pone quien escribe la página, no el componente— **4** (un solo `h1`, jerarquía sin saltos), **5** (breadcrumb), **6** (nada codificado solo por color) y **8** (alternativas textuales). Y de esos cuatro **solo el 6 se verifica a mano**: el 4, el 5 y el 8 los mira `npm run check:marco` en cada PR, con el enlace de salto y el JSON-LD (D75).
 
 Los otros cuatro —**1** contraste de los pares del sistema, **2** anillo de foco, **3** objetivo táctil de 44px, **7** `prefers-reduced-motion`— vienen dados por la pieza. Lo que se comprueba es que **se heredaron** (que el elemento sale de la variante), no se vuelven a medir. Y se comprueba **en pantalla**, no leyendo el JSX: es el punto 5 del método de `BRAND.md` §Accesibilidad («verifica la clase, no solo el color»), que existe justo porque una clase puede no estar aplicándose a nada sin dar error de compilación.
 
@@ -218,7 +219,8 @@ Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer p
 
 - **Se dispara dos veces, y la primera no es al cerrar.** Si la sección lleva banda o hero dimensionado por `vw`, **mientras se dibuja**: el eje que faltaba no era el tema, era el **alto**, y por ahí se coló D50 (`1536×740` y `1280×618` son un 1920 con el escalado de Windows al 125% y al 150%). Al cerrar, el resto del checklist.
 - **Precondición:** `agent-browser` se conduce con el **sandbox de Bash desactivado**. No es solo la navegación: bajo el sandbox **ningún** comando llega al daemon, ni con la página ya cargada. Un comando que cuelga es ese síntoma —se desactiva el sandbox, no se reintenta ni se abre la URL desde la terminal—. (D51.)
-- **Lo que no tapa, y sigue a mano:** el **enlace de salto** de WCAG 2.4.1, que axe no detecta (D46); la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49); y los puntos **4, 5, 6 y 8**, que los pone quien escribe la página.
+- **Lo que no tapa, y ahora cubre CI:** el **enlace de salto** de WCAG 2.4.1 —que axe no detecta (D46)— y los puntos **4, 5 y 8**, que mira `npm run check:marco` sobre el HTML prerenderizado, en cada PR (D75).
+- **Lo que sigue a mano:** el punto **6** (nada codificado solo por color), sin forma automática, y la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49).
 - **Tras una pasada COMPLETA de accesibilidad** (no al cerrar una página): actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, que es la fecha que publica `/accesibilidad`. Vive pegada al censo que fecha, así que quien toca una ve la otra (D38).
 
 `claude-in-chrome` no se retira: se queda para lo que necesita el navegador **con sesión** —consentimiento guardado, Preview autenticada—, que es la Fase 3 de `design-review`.
@@ -242,15 +244,15 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 | # | Comprobación | Cómo |
 |---|---|---|
 | 1 | **Sale de las piezas, no de clases sueltas** | La cascada de la «Regla de construcción». Si hubo que crear variante, se publica en el Design System antes de dar por hecha la tarea |
-| 2 | **Accesibilidad de contenido**: un solo `h1` y jerarquía sin saltos · breadcrumb · nada codificado solo por color · alternativas textuales | A mano. Son los puntos 4, 5, 6 y 8: los pone quien escribe la página |
+| 2 | **Accesibilidad de contenido**: un solo `h1` y jerarquía sin saltos · breadcrumb · nada codificado solo por color · alternativas textuales | `npm run check:marco` en CI para los puntos 4, 5 y 8 (D75). A mano solo el **6**, que no tiene forma automática |
 | 3 | **Accesibilidad heredada**: contraste, foco, 44px, `reduced-motion` | `viewport-verifier` (D52). **Solo se vuelve a MEDIR** si el trabajo introduce un par de color nuevo, un fondo que no sea `--background` o una animación propia |
-| 4 | **Enlace de salto** | A mano: axe no lo detecta (D46) |
+| 4 | **Enlace de salto** | `npm run check:marco`: axe no lo detecta, y por eso lo mira él (D46/D75) |
 | 5 | **Pliegue**, si lleva banda o hero por `vw` | `viewport-verifier` **mientras se dibuja**, no al cerrar (D50/D52) |
-| 6 | **SEO + JSON-LD** del tipo que le toca, ES y EN | `pageMetadata` lo deriva; se verifica el tipo nuevo si lo hay |
+| 6 | **SEO + JSON-LD** del tipo que le toca, ES y EN | `pageMetadata` lo deriva y `check:marco` comprueba que llegó, con los `@id` resueltos (D75). Se verifica a mano el **tipo nuevo** si lo hay, con el Schema Markup Validator |
 | 7 | **Copy**: ES fuente de verdad, EN revisado contra el ES, sin raya | D20 · `npm run check:raya` |
 | 8 | **Interfaz mecánica**: estados vacíos, desbordamiento, hidratación, cifras tabulares, safe areas | Skill de Web Interface Guidelines, **antes** de `design-review` |
 | 9 | **`npm run gate:html`** si el cambio se decía transparente | Diff vacío = transparente por construcción (D42/D45) |
-| 10 | **Los catorce checks de CI en verde** | El PR |
+| 10 | **Los quince checks de CI en verde** | El PR |
 
 ## Columna B — no bloquea el envío
 
