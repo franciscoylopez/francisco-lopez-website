@@ -388,6 +388,48 @@ export const CONTRAST = {
   inkOnPurpleSoft: { light: 8.4, dark: null, decimals: 1 },
 } as const satisfies Record<string, Measurement>;
 
+/* -------------------------------------------------------------------------- */
+/* Fechas de revisión                                                          */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Cuándo se verificó por última vez lo que el censo de arriba publica. Vive
+ * PEGADA a él a propósito: la cifra y la fecha de la cifra en el mismo archivo,
+ * de modo que quien toca una ve la otra. Es la aplicación directa de D38.
+ *
+ * EN ISO Y NO EN PROSA, por la misma razón que las cifras se guardan como
+ * `number` y no como «13,79:1»: «20 de agosto de 2026» y «20 August 2026» son el
+ * mismo dato con dos formatos, y el formato lo pone `Intl.DateTimeFormat` en el
+ * punto de render. Escrita como frase completa vivía DUPLICADA en los dos
+ * diccionarios, que es lo que la dejó trece días diciendo el 2 de agosto.
+ *
+ * LO QUE NO SE HACE: derivarla de `new Date()`. Generaría una fecha que afirma
+ * una verificación que no ocurrió, y eso es peor que una fecha vieja: mentiría
+ * cada día en vez de solo quedarse atrás.
+ */
+export const LAST_A11Y_REVIEW = "2026-08-20";
+
+/**
+ * Cuándo cambió por última vez la política de cookies. Constante APARTE y no la
+ * de arriba: fecha lo que CAMBIÓ, no lo que se midió. Comparten mecanismo, no
+ * significado, y unificarlas haría que tocar el censo moviera una fecha legal.
+ */
+export const LAST_COOKIES_UPDATE = "2026-08-17";
+
+/** La fecha larga en el idioma de la página. */
+export function reviewDate(iso: string, locale: Locale): string {
+  return new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(`${iso}T00:00:00Z`));
+}
+
+/** Sustituye `{date}` en el copy, como `fillRatios` hace con `{par.tema}`. */
+export function fillDate(text: string, iso: string, locale: Locale): string {
+  return text.replace(/{date}/g, reviewDate(iso, locale));
+}
+
 export type ContrastId = keyof typeof CONTRAST;
 export type Theme = "light" | "dark";
 

@@ -1,5 +1,7 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { EMAIL } from "@/lib/contact";
+import { LAST_COOKIES_UPDATE, fillDate } from "@/lib/design-values";
+import type { Locale } from "@/lib/i18n/config";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ConsentPreferencesButton } from "./consent-preferences-button";
@@ -24,10 +26,13 @@ export function CookiesPolicy({
   dict,
   breadcrumb,
   homeHref,
+  lang,
 }: {
   dict: CookiesDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
+  /** Solo para dar formato a la fecha: el dato es ISO y el idioma lo pone aquí. */
+  lang: Locale;
 }) {
   const t = dict;
   return (
@@ -62,7 +67,9 @@ export function CookiesPolicy({
               level={1}
               size="page-sm"
             >
-              <p className="text-muted-foreground text-[0.9rem]">{t.updated}</p>
+              <p className="text-muted-foreground text-[0.9rem]">
+                {fillDate(t.updated, LAST_COOKIES_UPDATE, lang)}
+              </p>
             </SectionHeader>
             <p className="mt-6 text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6]">
               {t.lead}

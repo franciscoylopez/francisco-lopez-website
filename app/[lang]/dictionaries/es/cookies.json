@@ -6,7 +6,7 @@
   "crumb": "Cookies",
   "kicker": "Legal",
   "title": "Política de cookies",
-  "updated": "Última actualización: 17 de agosto de 2026",
+  "updated": "Última actualización: {date}",
   "lead": "Esta web usa el mínimo de cookies y tecnologías similares. Aquí te explico cuáles, para qué sirven y cómo controlarlas. Ninguna cookie de analítica se activa sin tu consentimiento.",
   "whatHeading": "Qué son las cookies",
   "whatBody": "Las cookies son pequeños archivos que un sitio guarda en tu navegador. También se usan tecnologías equivalentes, como el almacenamiento local del navegador (localStorage). Unas son imprescindibles para que la web funcione; otras, como las de analítica, solo se usan si das tu permiso.",

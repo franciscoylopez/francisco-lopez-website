@@ -8,6 +8,7 @@ import { trackContactClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import {
   EMAIL,
+  mailtoHref,
   LINKEDIN_DISPLAY,
   LINKEDIN_URL,
   PHONE_DISPLAY,
@@ -61,15 +62,23 @@ export function EmailCta({
   label,
   showAddress = false,
   className = "",
+  subject,
 }: {
   label: string;
   showAddress?: boolean;
   className?: string;
+  /**
+   * Asunto del correo, si esta superficie lo necesita. OPCIONAL a propósito: el
+   * componente lo comparten la home, Sobre mí y Accesibilidad (D29), y solo la
+   * última tiene una petición concreta que preencabezar. Un asunto de
+   * accesibilidad en el CTA de contratación de la home sería peor que ninguno.
+   */
+  subject?: string;
 }) {
   return (
     <div className={className}>
       <a
-        href={`mailto:${EMAIL}`}
+        href={mailtoHref(subject)}
         onClick={() => trackContactClick("email")}
         className={actionVariants({ variant: "solid", size: "lg" })}
       >
@@ -98,7 +107,7 @@ export function EmailCta({
               mientras el cursor está encima**, y el censo que tenía que verlo
               llevaba roto desde que Chrome soporta CSS Nesting. */}
           <a
-            href={`mailto:${EMAIL}`}
+            href={mailtoHref(subject)}
             onClick={() => trackContactClick("email")}
             className={cn(
               chromeLinkVariants({ tone: "muted" }),
