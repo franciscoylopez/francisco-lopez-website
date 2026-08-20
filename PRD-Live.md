@@ -167,6 +167,11 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
   dimensionado por `vw`, también *mientras se dibuja*, porque el eje que falta no es el
   tema sino el **alto** (D50/D52). El **enlace de salto** de WCAG 2.4.1 sigue a mano:
   axe no lo detecta (D46).
+- **Pasada con lector de pantalla**: NVDA sobre el sitio entero, no por página. Es la
+  única capa que encuentra lo que **no incumple ninguna regla** y por tanto ningún motor
+  automático puede señalar: un `Esc` que no cierra, un cambio de tema que no se anuncia, un
+  aviso de consentimiento que se lee el último. Lo que encuentra se publica en la propia
+  página (D73).
 - **`npm run gate:html`**: compara el HTML servido de las 24 variantes antes y después de
   un refactor. Diff vacío = transparente por construcción. Es el gate que más ha cazado
   y no está en CI (D42/D45).

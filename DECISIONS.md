@@ -3941,3 +3941,77 @@ otra puerta.
 por P54.96). Los guardianes con caso malo pasan de siete a **nueve**: `check:experiencias`
 —descubierto, y el que sostiene una exclusión de `.qlty/qlty.toml`— y `check:rutas`, que entra
 con el suyo desde el primer día.
+
+## D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe — 2026-08-20
+
+**El hueco.** La sección 03 de `/accesibilidad` listaba cuatro herramientas —axe-core,
+Lighthouse, contraste medido, teclado y foco— y **ninguna era una tecnología asistiva**. El
+sitio afirmaba «cualquier persona, con ratón, teclado o lector de pantalla», sin haber pasado
+nunca un lector de pantalla.
+
+**La regla que lo gobierna, y por la que la ejecución fue tarea propia y anterior al
+contenido:** escribir «probado con NVDA» sin haberlo probado convierte el activo —credibilidad
+técnica verificable— en un pasivo. O se prueba, o no se publica.
+
+**Cuándo se dispara.** No al cerrar una página: eso ya lo cubre `viewport-verifier` (D52). La
+pasada con lector de pantalla es de **sitio entero**, y su periodicidad la marca el cambio de
+superficie, no el calendario. Al cerrarla se actualiza `LAST_A11Y_REVIEW` en
+`lib/design-values.ts`, que es la fecha que la página publica.
+
+### Los cuatro defectos, y por qué ninguna herramienta podía verlos
+
+Ninguno **incumple una regla WCAG**, y ahí está el asunto: axe no tiene nada que decir sobre
+ellos porque no hay criterio que violen.
+
+1. **`Esc` no cierra el menú móvil.** Cero manejadores en `nav.tsx`. No es trampa de teclado
+   (se tabula fuera), pero es expectativa universal de cualquier desplegable.
+2. **El panel del menú va después del botón de tema en el DOM**, así que al abrirlo el primer
+   `Tab` lleva al toggle claro/oscuro y no a los enlaces.
+3. **El cambio de tema es mudo**, y la causa resultó más ancha que el síntoma: **no hay una
+   sola live region en todo el sitio**, el botón nunca refleja el estado y no lleva
+   `aria-pressed`.
+4. **El aviso de consentimiento es lo último del DOM y no se anuncia.** Quien ve se lo
+   encuentra sobre el Hero al cargar; quien usa lector recorre las diez secciones de la home y
+   el pie antes de enterarse de que existe. No es una banda decorativa: es un mecanismo de
+   consentimiento con peso legal.
+
+Tareados en P87.51-P87.55, y **publicados en la propia página** (§04, «Ser honesto también es
+accesibilidad»): una página que dice qué encontró sostiene mejor el argumento que un 100/100
+pelado.
+
+### El contraste, el mismo día: un escáner externo, 3 de 3 falsos positivos
+
+Un informe comercial (93/100 de riesgo, 3 hallazgos revelados y 11 tras un plan de pago) dio:
+
+| Su afirmación | Qué dijo la medición |
+|---|---|
+| «Elementos ocultos reciben foco», 20 instancias | **Falso positivo.** 34 paradas de `Tab`: cero con el foco en algo invisible |
+| «Región con scroll sin acceso de teclado», 2 | **No reproduce.** Diez páginas a 390px: una sola región con scroll, y ya tiene `tabindex="0"` |
+| «Contenido fuera de landmark», 10 | **Por diseño.** Es el enlace de salto, que tiene que ir antes del `banner`, y el anunciador de rutas de Next |
+
+**EL MECANISMO QUE LO EXPLICA, que es lo reutilizable: un escáner lee el DOM INICIAL; un
+lector de pantalla recorre el DOM VIVO.** Por eso el escáner contó como «oculto pero
+focusable» cada elemento que espera su reveal bajo el pliegue —20 instancias en 5 páginas
+encaja exactamente con eso— y por eso no vio ninguno de los cuatro defectos reales, que solo
+existen mientras alguien interactúa.
+
+Es D67 confirmado por segunda vez, y ahora con la simetría completa: **el ruido de los
+validadores externos es real, y el silencio de los automáticos también.**
+
+### Dos trampas de método que costaron rato, documentadas por mecanismo (D67)
+
+- **Una hipótesis mía se cayó al medirla, y menos mal que se midió antes de tarear.** Di por
+  roto el enlace de salto («el foco no se mueve, falta `tabindex="-1"`») a partir de un
+  informe de oído ambiguo. `document.activeElement` devolvió `MAIN id=main tabindex=-1`: la
+  pieza que sospechaba que faltaba, estaba.
+- **Un servidor viejo falseó una verificación.** El `mailto:` salía sin asunto porque un
+  `next start` de dos horas antes seguía ocupando el puerto: `TaskStop` mata el envoltorio y
+  no el proceso, así que el servidor nuevo nunca llegó a escuchar y se estaba leyendo el build
+  anterior. Se detectó comparando la hora de arranque del PID con la del build. Familia «el
+  metro que responde no es el metro que está midiendo».
+
+### Lo que la pasada NO cubre, dicho para que no se dé por cubierto
+
+**Solo NVDA 2026.1.1 sobre Chrome.** Ni VoiceOver, ni JAWS, ni Firefox, y NVDA se comporta
+distinto según el motor. La página lo dice con esas palabras y añade que ampliarlo está en el
+plan. La herramienta queda instalada como copia portable, no como instalación.
