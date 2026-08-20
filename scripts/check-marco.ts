@@ -57,7 +57,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import type { AxeResults, RunOptions } from "axe-core";
-import { JSDOM } from "jsdom";
+import { JSDOM, type DOMWindow } from "jsdom";
 
 import { locales, pagePath, type Locale } from "../lib/i18n/config";
 import { PAGE_SLUGS, type PageSlug } from "../lib/routes";
@@ -187,6 +187,311 @@ function ruta(href: string | null | undefined): string | null {
   }
 }
 
+/**
+ * Todo lo que una comprobación necesita saber de la página que está mirando. Va
+ * entero en vez de cuatro parámetros sueltos porque casi todas usan casi todo, y
+ * `esperada` va DENTRO y no se recalcula en cada una: es la ruta contra la que se
+ * contrastan el canonical, los `hreflang` y el `og:url`, y son justo los tres que
+ * no pueden decir cosas distintas.
+ */
+type Pagina = {
+  variante: string;
+  doc: Document;
+  lang: Locale;
+  slug: PageSlug;
+  /** Toda la que no es la home: lleva breadcrumb visible y `BreadcrumbList`. */
+  esInterna: boolean;
+  /** La ruta que le toca a esta variante, según `pagePath` (D2). */
+  esperada: string;
+};
+
+/** El idioma declarado y los dos textos que ve un buscador. */
+function revisarIdioma({ doc, variante, lang }: Pagina): void {
+  if (doc.documentElement.lang !== lang) {
+    fallo(
+      variante,
+      `\`<html lang>\` dice «${doc.documentElement.lang}» y esta variante es «${lang}».`,
+    );
+  }
+  if (!doc.title.trim()) fallo(variante, "no tiene `<title>`.");
+  const descripcion = doc
+    .querySelector('meta[name="description"]')
+    ?.getAttribute("content");
+  if (!descripcion?.trim()) {
+    fallo(variante, "no tiene `<meta name=description>`.");
+  }
+}
+
+/**
+ * Un `<main>` y un solo `h1` (checklist 4). Son las dos reglas que axe no
+ * concluye en jsdom, así que se miran aquí.
+ *
+ * La jerarquía sin saltos NO está: es la regla `heading-order` de axe, que sí
+ * evalúa. Duplicarla sería tener dos verdades.
+ */
+function revisarEsqueleto({ doc, variante }: Pagina): void {
+  const mains = doc.querySelectorAll("main");
+  if (mains.length !== 1) {
+    fallo(variante, `tiene ${mains.length} \`<main>\`, y tiene que haber uno.`);
+  }
+  const h1s = doc.querySelectorAll("h1");
+  if (h1s.length !== 1) {
+    fallo(
+      variante,
+      `tiene ${h1s.length} \`<h1>\`, y tiene que haber uno (checklist 4).`,
+    );
+  } else if (!h1s[0]!.textContent?.trim()) {
+    fallo(variante, "el `<h1>` está vacío.");
+  }
+}
+
+/**
+ * El enlace de salto — WCAG 2.4.1, nivel A (D46).
+ *
+ * axe NO lo ve: su regla `bypass` se da por satisfecha con los landmarks, que
+ * este sitio tiene. Su ausencia fue el único incumplimiento de nivel A que el
+ * sitio ha tenido, y ninguna auditoría automática lo encontró.
+ */
+function revisarEnlaceDeSalto({ doc, variante }: Pagina): void {
+  const primero = doc.querySelector(FOCUSABLES);
+  const destino = doc.getElementById(MAIN_ID);
+
+  if (!primero || primero.getAttribute("href") !== `#${MAIN_ID}`) {
+    const quien = primero
+      ? `\`<${primero.tagName.toLowerCase()}>\` «${primero.textContent?.trim().slice(0, 40) ?? ""}»` +
+        ` → ${primero.getAttribute("href") ?? "(sin href)"}`
+      : "no hay ningún elemento enfocable";
+    fallo(
+      variante,
+      "lo primero que recibe el foco no es el enlace de salto (WCAG 2.4.1, nivel A): " +
+        `es ${quien}. axe NO lo detecta —su regla \`bypass\` se conforma con los landmarks—, ` +
+        "así que si esto no lo ve, no lo ve nadie.",
+    );
+  } else if (!primero.textContent?.trim()) {
+    fallo(variante, "el enlace de salto no tiene texto.");
+  }
+
+  if (!destino) {
+    fallo(
+      variante,
+      `el enlace de salto apunta a \`#${MAIN_ID}\` y no hay ningún elemento con ese id.`,
+    );
+  } else if (destino.tagName !== "MAIN") {
+    fallo(
+      variante,
+      `\`#${MAIN_ID}\` es un \`<${destino.tagName.toLowerCase()}>\` y tiene que ser el \`<main>\`.`,
+    );
+  } else if (destino.getAttribute("tabindex") !== "-1") {
+    fallo(
+      variante,
+      "el `<main>` no lleva `tabindex=-1`, así que el foco no aterriza al saltar.",
+    );
+  }
+}
+
+/** Breadcrumb en toda página interna (checklist 5). */
+function revisarBreadcrumb({ doc, variante, esInterna }: Pagina): void {
+  if (!esInterna) return;
+  const nav = [...doc.querySelectorAll("nav[aria-label]")].find((n) =>
+    n.querySelector('ol [aria-current="page"]'),
+  );
+  if (!nav) {
+    fallo(
+      variante,
+      "no tiene breadcrumb: hace falta `<nav aria-label>` con una lista ordenada y " +
+        '`aria-current="page"` en el nivel actual (checklist 5).',
+    );
+  }
+}
+
+/**
+ * Canonical y los tres `hreflang`. No se comprueba el helper, que es correcto por
+ * construcción: se comprueba que la página PASÓ por él, porque escribirse la
+ * metadata a mano compila igual (D45).
+ */
+function revisarCanonical({ doc, variante, slug, esperada }: Pagina): void {
+  const canonicals = doc.querySelectorAll('link[rel="canonical"]');
+  if (canonicals.length !== 1) {
+    fallo(
+      variante,
+      `tiene ${canonicals.length} \`canonical\` y tiene que haber uno.`,
+    );
+  } else if (ruta(canonicals[0]!.getAttribute("href")) !== esperada) {
+    fallo(
+      variante,
+      `el canonical apunta a «${canonicals[0]!.getAttribute("href")}» y esta variante es «${esperada}».`,
+    );
+  }
+
+  const alternos = new Map(
+    [...doc.querySelectorAll("link[rel=alternate][hreflang]")].map((l) => [
+      l.getAttribute("hreflang")!,
+      ruta(l.getAttribute("href")),
+    ]),
+  );
+  const esperados: Record<string, string> = {
+    ...Object.fromEntries(locales.map((l) => [l, pagePath(l, slug)])),
+    "x-default": pagePath("es", slug),
+  };
+  for (const [clave, destino] of Object.entries(esperados)) {
+    if (!alternos.has(clave)) {
+      fallo(variante, `le falta el \`hreflang="${clave}"\`.`);
+    } else if (alternos.get(clave) !== destino) {
+      fallo(
+        variante,
+        `el \`hreflang="${clave}"\` apunta a «${alternos.get(clave)}» en vez de a «${destino}».`,
+      );
+    }
+  }
+}
+
+/** Lo que se ve cuando alguien comparte el enlace: OG y Twitter. */
+function revisarTarjetas({ doc, variante, lang, esperada }: Pagina): void {
+  const meta = (sel: string) =>
+    doc.querySelector(sel)?.getAttribute("content")?.trim() ?? "";
+  const OG: [string, string][] = [
+    ["og:title", meta('meta[property="og:title"]')],
+    ["og:description", meta('meta[property="og:description"]')],
+    ["og:type", meta('meta[property="og:type"]')],
+    ["og:url", meta('meta[property="og:url"]')],
+    ["og:image", meta('meta[property="og:image"]')],
+    ["twitter:card", meta('meta[name="twitter:card"]')],
+    ["twitter:image", meta('meta[name="twitter:image"]')],
+  ];
+  for (const [nombre, valor] of OG) {
+    if (!valor) fallo(variante, `le falta \`${nombre}\`.`);
+  }
+
+  const ogUrl = OG.find(([n]) => n === "og:url")![1];
+  if (ogUrl && ruta(ogUrl) !== esperada) {
+    fallo(
+      variante,
+      `el \`og:url\` apunta a «${ogUrl}» y esta variante es «${esperada}».`,
+    );
+  }
+  // La tarjeta OG de la variante EN pidiendo el texto en ES es el fallo que solo
+  // ve quien comparte el enlace, y solo después de compartirlo.
+  const ogImage = OG.find(([n]) => n === "og:image")![1];
+  if (ogImage && !ogImage.includes(`lang=${lang}`)) {
+    fallo(
+      variante,
+      `la tarjeta OG («${ogImage}») no pide el idioma de esta variante (\`lang=${lang}\`).`,
+    );
+  }
+}
+
+/** Los dos invariantes de un `BreadcrumbList`: orden contiguo y el último sin `item`. */
+function revisarBreadcrumbLd(
+  { variante }: Pagina,
+  raiz: Record<string, unknown>,
+): void {
+  const items = (raiz.itemListElement ?? []) as Record<string, unknown>[];
+  const posiciones = items.map((it) => it.position);
+  const esperadas = items.map((_, n) => n + 1);
+  if (JSON.stringify(posiciones) !== JSON.stringify(esperadas)) {
+    fallo(
+      variante,
+      `las \`position\` del BreadcrumbList son [${posiciones.join(", ")}] y tienen que ser [${esperadas.join(", ")}].`,
+    );
+  }
+  if (items.length > 0 && "item" in items[items.length - 1]!) {
+    fallo(
+      variante,
+      "el último nivel del BreadcrumbList lleva `item`, y Google pide que la página en curso lo omita.",
+    );
+  }
+}
+
+/**
+ * JSON-LD: válido, del tipo que le toca, y con sus `@id` apuntados. La
+ * RESOLUCIÓN de los `@id` no se hace aquí: es global, y va al final de `main()`.
+ */
+function revisarJsonLd(pagina: Pagina): void {
+  const { doc, variante, esInterna } = pagina;
+  const bloques = [
+    ...doc.querySelectorAll('script[type="application/ld+json"]'),
+  ];
+  if (bloques.length === 0) {
+    fallo(variante, "no emite ningún bloque JSON-LD.");
+  }
+
+  const tipos: string[] = [];
+  for (const [i, bloque] of bloques.entries()) {
+    let dato: unknown;
+    try {
+      dato = JSON.parse(bloque.textContent ?? "");
+    } catch (e) {
+      fallo(
+        variante,
+        `el bloque JSON-LD ${i + 1} no es JSON válido: ${(e as Error).message}.`,
+      );
+      continue;
+    }
+    bloquesLd++;
+
+    const raiz = dato as Record<string, unknown>;
+    if (raiz["@context"] !== "https://schema.org") {
+      fallo(
+        variante,
+        `el bloque JSON-LD ${i + 1} no declara \`"@context": "https://schema.org"\`.`,
+      );
+    }
+    const suyos = tiposDe(dato);
+    if (suyos.length === 0) {
+      fallo(
+        variante,
+        `el bloque JSON-LD ${i + 1} no declara ningún \`@type\`.`,
+      );
+    }
+    tipos.push(...suyos);
+    recorrerIds(dato, variante);
+
+    if (suyos.includes("BreadcrumbList")) revisarBreadcrumbLd(pagina, raiz);
+  }
+
+  // La home declara la entidad del sitio; toda interna dice dónde está.
+  const obligatorio = esInterna ? "BreadcrumbList" : "ProfilePage";
+  if (bloques.length > 0 && !tipos.includes(obligatorio)) {
+    fallo(
+      variante,
+      `no emite ningún \`${obligatorio}\` (emite: ${tipos.join(", ") || "nada"}).`,
+    );
+  }
+}
+
+/** axe, sobre todo lo demás que se puede ver sin pintar. */
+async function revisarConAxe(
+  { doc, variante }: Pagina,
+  ventana: DOMWindow,
+): Promise<void> {
+  ventana.eval(AXE_SOURCE);
+  const resultado: AxeResults = await (
+    ventana as unknown as {
+      axe: { run: (ctx: Document, o: RunOptions) => Promise<AxeResults> };
+    }
+  ).axe.run(doc, OPCIONES_AXE);
+
+  for (const r of [...resultado.passes, ...resultado.violations]) {
+    reglasEvaluadas.add(r.id);
+  }
+  for (const v of resultado.violations) {
+    const donde = v.nodes
+      .slice(0, 3)
+      .map((n) => n.target.join(" "))
+      .join(" · ");
+    fallo(
+      variante,
+      `axe · ${v.id} (${v.impact}, ${v.nodes.length} nodo(s)): ${v.help}. En ${donde}.`,
+    );
+  }
+}
+
+/**
+ * Una variante: abre su HTML y le pasa las ocho comprobaciones, en el orden en
+ * que se leería la página. Ninguna corta a la siguiente —todas acumulan en
+ * `problemas`— porque un informe que se para en el primer fallo obliga a tantas
+ * pasadas como fallos haya.
+ */
 async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
   const variante = `${lang}${slug ? `/${slug}` : " (home)"}`;
   const archivo = archivoDe(lang, slug);
@@ -206,250 +511,25 @@ async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
     runScripts: "outside-only",
     pretendToBeVisual: true,
   });
-  const { document } = dom.window;
-  const esInterna = slug !== "";
+
+  const pagina: Pagina = {
+    variante,
+    doc: dom.window.document,
+    lang,
+    slug,
+    esInterna: slug !== "",
+    esperada: pagePath(lang, slug),
+  };
 
   try {
-    // ── 1 · El idioma y los dos textos que ve un buscador ───────────────────
-    if (document.documentElement.lang !== lang) {
-      fallo(
-        variante,
-        `\`<html lang>\` dice «${document.documentElement.lang}» y esta variante es «${lang}».`,
-      );
-    }
-    if (!document.title.trim()) fallo(variante, "no tiene `<title>`.");
-    const descripcion = document
-      .querySelector('meta[name="description"]')
-      ?.getAttribute("content");
-    if (!descripcion?.trim()) {
-      fallo(variante, "no tiene `<meta name=description>`.");
-    }
-
-    // ── 2 · El marco: un `<main>` y un solo `h1` (checklist 4) ──────────────
-    // Son las dos reglas que axe no concluye en jsdom, así que se miran aquí.
-    const mains = document.querySelectorAll("main");
-    if (mains.length !== 1) {
-      fallo(
-        variante,
-        `tiene ${mains.length} \`<main>\`, y tiene que haber uno.`,
-      );
-    }
-    const h1s = document.querySelectorAll("h1");
-    if (h1s.length !== 1) {
-      fallo(
-        variante,
-        `tiene ${h1s.length} \`<h1>\`, y tiene que haber uno (checklist 4).`,
-      );
-    } else if (!h1s[0]!.textContent?.trim()) {
-      fallo(variante, "el `<h1>` está vacío.");
-    }
-    // La jerarquía sin saltos NO se comprueba aquí: es la regla `heading-order`
-    // de axe, que sí evalúa en jsdom. Duplicarla sería tener dos verdades.
-
-    // ── 3 · El enlace de salto — WCAG 2.4.1, nivel A (D46) ──────────────────
-    // axe NO lo ve: su regla `bypass` se da por satisfecha con los landmarks,
-    // que este sitio tiene. Su ausencia fue el único incumplimiento de nivel A
-    // que el sitio ha tenido, y ninguna auditoría automática lo encontró.
-    const primero = document.querySelector(FOCUSABLES);
-    const destino = document.getElementById(MAIN_ID);
-    if (!primero || primero.getAttribute("href") !== `#${MAIN_ID}`) {
-      const quien = primero
-        ? `\`<${primero.tagName.toLowerCase()}>\` «${primero.textContent?.trim().slice(0, 40) ?? ""}»` +
-          ` → ${primero.getAttribute("href") ?? "(sin href)"}`
-        : "no hay ningún elemento enfocable";
-      fallo(
-        variante,
-        "lo primero que recibe el foco no es el enlace de salto (WCAG 2.4.1, nivel A): " +
-          `es ${quien}. axe NO lo detecta —su regla \`bypass\` se conforma con los landmarks—, ` +
-          "así que si esto no lo ve, no lo ve nadie.",
-      );
-    } else if (!primero.textContent?.trim()) {
-      fallo(variante, "el enlace de salto no tiene texto.");
-    }
-    if (!destino) {
-      fallo(
-        variante,
-        `el enlace de salto apunta a \`#${MAIN_ID}\` y no hay ningún elemento con ese id.`,
-      );
-    } else if (destino.tagName !== "MAIN") {
-      fallo(
-        variante,
-        `\`#${MAIN_ID}\` es un \`<${destino.tagName.toLowerCase()}>\` y tiene que ser el \`<main>\`.`,
-      );
-    } else if (destino.getAttribute("tabindex") !== "-1") {
-      fallo(
-        variante,
-        "el `<main>` no lleva `tabindex=-1`, así que el foco no aterriza al saltar.",
-      );
-    }
-
-    // ── 4 · Breadcrumb en toda página interna (checklist 5) ─────────────────
-    if (esInterna) {
-      const nav = [...document.querySelectorAll("nav[aria-label]")].find((n) =>
-        n.querySelector('ol [aria-current="page"]'),
-      );
-      if (!nav) {
-        fallo(
-          variante,
-          "no tiene breadcrumb: hace falta `<nav aria-label>` con una lista ordenada y " +
-            '`aria-current="page"` en el nivel actual (checklist 5).',
-        );
-      }
-    }
-
-    // ── 5 · Que la derivación de metadata LLEGÓ (D45) ───────────────────────
-    // No se comprueba el helper, que es correcto por construcción: se comprueba
-    // que la página pasó por él. Escribirse la metadata a mano compila igual.
-    const esperada = pagePath(lang, slug);
-    const canonicals = document.querySelectorAll('link[rel="canonical"]');
-    if (canonicals.length !== 1) {
-      fallo(
-        variante,
-        `tiene ${canonicals.length} \`canonical\` y tiene que haber uno.`,
-      );
-    } else if (ruta(canonicals[0]!.getAttribute("href")) !== esperada) {
-      fallo(
-        variante,
-        `el canonical apunta a «${canonicals[0]!.getAttribute("href")}» y esta variante es «${esperada}».`,
-      );
-    }
-
-    const alternos = new Map(
-      [...document.querySelectorAll("link[rel=alternate][hreflang]")].map(
-        (l) => [l.getAttribute("hreflang")!, ruta(l.getAttribute("href"))],
-      ),
-    );
-    const esperados: Record<string, string> = {
-      ...Object.fromEntries(locales.map((l) => [l, pagePath(l, slug)])),
-      "x-default": pagePath("es", slug),
-    };
-    for (const [clave, destino] of Object.entries(esperados)) {
-      if (!alternos.has(clave)) {
-        fallo(variante, `le falta el \`hreflang="${clave}"\`.`);
-      } else if (alternos.get(clave) !== destino) {
-        fallo(
-          variante,
-          `el \`hreflang="${clave}"\` apunta a «${alternos.get(clave)}» en vez de a «${destino}».`,
-        );
-      }
-    }
-
-    const meta = (sel: string) =>
-      document.querySelector(sel)?.getAttribute("content")?.trim() ?? "";
-    const OG: [string, string][] = [
-      ["og:title", meta('meta[property="og:title"]')],
-      ["og:description", meta('meta[property="og:description"]')],
-      ["og:type", meta('meta[property="og:type"]')],
-      ["og:url", meta('meta[property="og:url"]')],
-      ["og:image", meta('meta[property="og:image"]')],
-      ["twitter:card", meta('meta[name="twitter:card"]')],
-      ["twitter:image", meta('meta[name="twitter:image"]')],
-    ];
-    for (const [nombre, valor] of OG) {
-      if (!valor) fallo(variante, `le falta \`${nombre}\`.`);
-    }
-    const ogUrl = OG.find(([n]) => n === "og:url")![1];
-    if (ogUrl && ruta(ogUrl) !== esperada) {
-      fallo(
-        variante,
-        `el \`og:url\` apunta a «${ogUrl}» y esta variante es «${esperada}».`,
-      );
-    }
-    // La tarjeta OG de la variante EN pidiendo el texto en ES es el fallo que
-    // solo ve quien comparte el enlace, y solo después de compartirlo.
-    const ogImage = OG.find(([n]) => n === "og:image")![1];
-    if (ogImage && !ogImage.includes(`lang=${lang}`)) {
-      fallo(
-        variante,
-        `la tarjeta OG («${ogImage}») no pide el idioma de esta variante (\`lang=${lang}\`).`,
-      );
-    }
-
-    // ── 6 · JSON-LD: válido, del tipo que toca, y con los `@id` que resuelven ─
-    const bloques = [
-      ...document.querySelectorAll('script[type="application/ld+json"]'),
-    ];
-    if (bloques.length === 0) {
-      fallo(variante, "no emite ningún bloque JSON-LD.");
-    }
-    const tipos: string[] = [];
-    for (const [i, bloque] of bloques.entries()) {
-      let dato: unknown;
-      try {
-        dato = JSON.parse(bloque.textContent ?? "");
-      } catch (e) {
-        fallo(
-          variante,
-          `el bloque JSON-LD ${i + 1} no es JSON válido: ${(e as Error).message}.`,
-        );
-        continue;
-      }
-      bloquesLd++;
-      const raiz = dato as Record<string, unknown>;
-      if (raiz["@context"] !== "https://schema.org") {
-        fallo(
-          variante,
-          `el bloque JSON-LD ${i + 1} no declara \`"@context": "https://schema.org"\`.`,
-        );
-      }
-      const suyos = tiposDe(dato);
-      if (suyos.length === 0) {
-        fallo(
-          variante,
-          `el bloque JSON-LD ${i + 1} no declara ningún \`@type\`.`,
-        );
-      }
-      tipos.push(...suyos);
-      recorrerIds(dato, variante);
-
-      if (suyos.includes("BreadcrumbList")) {
-        const items = (raiz.itemListElement ?? []) as Record<string, unknown>[];
-        const posiciones = items.map((it) => it.position);
-        const esperadas = items.map((_, n) => n + 1);
-        if (JSON.stringify(posiciones) !== JSON.stringify(esperadas)) {
-          fallo(
-            variante,
-            `las \`position\` del BreadcrumbList son [${posiciones.join(", ")}] y tienen que ser [${esperadas.join(", ")}].`,
-          );
-        }
-        if (items.length > 0 && "item" in items[items.length - 1]!) {
-          fallo(
-            variante,
-            "el último nivel del BreadcrumbList lleva `item`, y Google pide que la página en curso lo omita.",
-          );
-        }
-      }
-    }
-    // La home declara la entidad del sitio; toda interna dice dónde está.
-    const obligatorio = esInterna ? "BreadcrumbList" : "ProfilePage";
-    if (bloques.length > 0 && !tipos.includes(obligatorio)) {
-      fallo(
-        variante,
-        `no emite ningún \`${obligatorio}\` (emite: ${tipos.join(", ") || "nada"}).`,
-      );
-    }
-
-    // ── 7 · axe, sobre todo lo demás que se puede ver sin pintar ────────────
-    dom.window.eval(AXE_SOURCE);
-    const resultado: AxeResults = await (
-      dom.window as unknown as {
-        axe: { run: (ctx: Document, o: RunOptions) => Promise<AxeResults> };
-      }
-    ).axe.run(document, OPCIONES_AXE);
-
-    for (const r of [...resultado.passes, ...resultado.violations]) {
-      reglasEvaluadas.add(r.id);
-    }
-    for (const v of resultado.violations) {
-      const donde = v.nodes
-        .slice(0, 3)
-        .map((n) => n.target.join(" "))
-        .join(" · ");
-      fallo(
-        variante,
-        `axe · ${v.id} (${v.impact}, ${v.nodes.length} nodo(s)): ${v.help}. En ${donde}.`,
-      );
-    }
+    revisarIdioma(pagina);
+    revisarEsqueleto(pagina);
+    revisarEnlaceDeSalto(pagina);
+    revisarBreadcrumb(pagina);
+    revisarCanonical(pagina);
+    revisarTarjetas(pagina);
+    revisarJsonLd(pagina);
+    await revisarConAxe(pagina, dom.window);
   } finally {
     dom.window.close();
   }
