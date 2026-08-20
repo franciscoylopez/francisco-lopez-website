@@ -6,7 +6,7 @@
   "crumb": "Cookies",
   "kicker": "Legal",
   "title": "Cookie policy",
-  "updated": "Last updated: 17 August 2026",
+  "updated": "Last updated: {date}",
   "lead": "This site uses the minimum of cookies and similar technologies. Here's what they are, what they're for, and how to control them. No analytics cookie loads without your consent.",
   "whatHeading": "What cookies are",
   "whatBody": "Cookies are small files a site stores in your browser. Equivalent technologies are also used, such as the browser's local storage (localStorage). Some are essential for the site to work; others, like analytics, are only used if you allow them.",

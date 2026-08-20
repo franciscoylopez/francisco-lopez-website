@@ -37,6 +37,7 @@ export default async function CookiesPage({ params }: LangParams) {
         dict={t}
         breadcrumb={common.breadcrumb}
         homeHref={pagePath(lang)}
+        lang={lang}
       />
     </PageShell>
   );

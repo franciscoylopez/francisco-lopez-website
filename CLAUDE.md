@@ -218,6 +218,7 @@ Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer p
 - **Se dispara dos veces, y la primera no es al cerrar.** Si la sección lleva banda o hero dimensionado por `vw`, **mientras se dibuja**: el eje que faltaba no era el tema, era el **alto**, y por ahí se coló D50 (`1536×740` y `1280×618` son un 1920 con el escalado de Windows al 125% y al 150%). Al cerrar, el resto del checklist.
 - **Precondición:** `agent-browser` se conduce con el **sandbox de Bash desactivado**. No es solo la navegación: bajo el sandbox **ningún** comando llega al daemon, ni con la página ya cargada. Un comando que cuelga es ese síntoma —se desactiva el sandbox, no se reintenta ni se abre la URL desde la terminal—. *(Corregido el 2026-08-17; antes esto pedía abrir la URL una vez desde la terminal, remedio más caro y que no hace falta. D51.)*
 - **Lo que no tapa, y sigue a mano:** el **enlace de salto** de WCAG 2.4.1, que axe no detecta (D46); la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49); y los puntos **4, 5, 6 y 8**, que los pone quien escribe la página.
+- **Tras una pasada COMPLETA de accesibilidad** (no al cerrar una página): actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, que es la fecha que publica `/accesibilidad`. Vive pegada al censo que fecha, así que quien toca una ve la otra (D38).
 
 `claude-in-chrome` no se retira: se queda para lo que necesita el navegador **con sesión** —consentimiento guardado, Preview autenticada—, que es la Fase 3 de `design-review`.
 

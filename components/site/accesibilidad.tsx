@@ -4,7 +4,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
-import { fillRatios } from "@/lib/design-values";
+import { LAST_A11Y_REVIEW, fillDate, fillRatios } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
@@ -100,7 +100,7 @@ export function Accesibilidad({
               data-reveal
               className="text-muted-foreground m-0 mt-6 text-[0.85rem]"
             >
-              {t.hero.updated}
+              {fillDate(t.hero.updated, LAST_A11Y_REVIEW, lang)}
             </p>
           </div>
         </div>
@@ -242,8 +242,12 @@ export function Accesibilidad({
               <p className="text-foreground/90 m-0 text-[1.0625rem] leading-[1.7]">
                 {t.report.body}
               </p>
+              {/* La única superficie de contacto con asunto (D29): aquí se
+                  reporta una barrera concreta, y preencabezarlo baja la fricción
+                  de verdad. La home y Sobre mí lo dejan vacío a propósito. */}
               <EmailCta
                 label={t.report.emailCta}
+                subject={t.report.emailSubject}
                 showAddress
                 className="mt-6"
               />
