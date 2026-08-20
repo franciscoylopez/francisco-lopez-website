@@ -4015,3 +4015,50 @@ validadores externos es real, y el silencio de los automáticos también.**
 **Solo NVDA 2026.1.1 sobre Chrome.** Ni VoiceOver, ni JAWS, ni Firefox, y NVDA se comporta
 distinto según el motor. La página lo dice con esas palabras y añade que ampliarlo está en el
 plan. La herramienta queda instalada como copia portable, no como instalación.
+
+## D74 · Un compromiso no caduca y una medición sí: fuera de su fuente se publica el umbral — 2026-08-20
+
+**Decisión.** Cuando un artefacto que vive **fuera del alcance del generador** tiene que
+hablar de un resultado del proyecto, publica el **umbral comprometido**, nunca la medición
+del día, y enlaza a donde vive la cifra.
+
+**Contexto — el caso que D38 y D60 no cubrían.** D38 puso los valores publicados en una
+fuente única, y D60 dejó dicho que una fuente única evita dos verdades **mientras genera**:
+el día que una copia impresa se queda quieta, vuelven a ser dos. Pero quedaba un caso sin
+regla, y es justo el que más se lee desde fuera: los artefactos a los que el generador no
+llega. El README de GitHub, una tarjeta social, un perfil de LinkedIn, el copy de un
+artículo. Ahí no hay fuente que consultar en tiempo de build, así que la pregunta no es «¿de
+dónde lo leo?» sino **«¿qué se puede escribir a mano sin que envejezca solo?»**.
+
+**La respuesta: la regla, no el resultado.** «AA de suelo y AAA de objetivo» es una decisión
+del proyecto y sigue siendo cierta mientras el proyecto la mantenga. «AAA en ambos temas» es
+una medición, y deja de serlo en cuanto entre un par de color nuevo. Lo mismo con «>90 en
+escritorio y móvil» (D8) frente a «100 escritorio · 94-96 móvil», que además cambia con cada
+despliegue y con la máquina que mide.
+
+**Aplicado a:**
+
+- **Los dos badges del README** (2026-08-20). `WCAG · AAA en ambos temas` → `WCAG · AA suelo
+  · AAA objetivo`; `PageSpeed · 100 escritorio · 94-96 móvil` → `PageSpeed · >90 escritorio
+  y móvil`. Quien quiera la cifra del día la tiene en `/accesibilidad` y en `npm run psi`.
+- **La social preview**, que dejó de contar cosas por este mismo motivo el 2026-08-19: *las
+  cifras caducan, la imagen no*.
+- **El copy de «Cómo se ha creado esta página»**: publica umbrales y enlaza a las páginas que
+  ya publican su cifra. Es lo que resuelve el «remate de resultados» que quedó abierto en P58
+  (`PRD-Historical.md` §53).
+
+**Lo que NO cubre.** Las páginas del sitio siguen leyendo de `lib/design-values.ts` (D38):
+ahí hay generador, y ahí la cifra exacta **es** el producto: una página de accesibilidad que
+publicara umbrales en vez de mediciones no estaría declarando nada. Esta regla es solo para
+lo que queda fuera de ese alcance.
+
+**Su pariente.** D67 dice lo mismo para el ruido de los validadores: se documenta por
+**mecanismo, no por cifra**, porque «la puntuación era 87» obliga a rediscutirlo al mes
+siguiente con otra puntuación. D74 lo generaliza a todo lo que se publica fuera de la fuente.
+
+**Cabo abierto del mismo tipo, dicho para que no se dé por cerrado:** el README también
+afirma «Doce páginas por idioma». Hoy es cierto y serán **trece** al publicar «Cómo se ha
+creado». Es un recuento escrito a mano, de la misma familia que los badges, y con una
+diferencia: este sí tiene fuente (`lib/routes.ts`, D72), así que su arreglo natural no es el
+umbral sino generarlo.
+

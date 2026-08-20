@@ -68,6 +68,7 @@
 - [50. El Sprint Lite: nueve iniciativas sueltas, y la homogeneidad como criterio (2026-08-18/19)](#50-el-sprint-lite-nueve-iniciativas-sueltas-y-la-homogeneidad-como-criterio-2026-08-18/19)
 - [51. El repositorio se hace público, y el Sprint Lite se cierra (2026-08-19)](#51-el-repositorio-se-hace-público-y-el-sprint-lite-se-cierra-2026-08-19)
 - [52. El bloque Método: se audita cómo se trabaja, antes de un sprint de contenido (2026-08-19)](#52-el-bloque-método-se-audita-cómo-se-trabaja-antes-de-un-sprint-de-contenido-2026-08-19)
+- [53. «Cómo se ha creado esta página»: el contenido primero, y un artículo que no publica cifras (2026-08-20)](#53-cómo-se-ha-creado-esta-página-el-contenido-primero-y-un-artículo-que-no-publica-cifras-2026-08-20)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2655,9 +2656,86 @@ no discreción.** Es la regla 9 del formato de deep-dive; el porqué, en `PRD-Hi
 
 ### Fuera de alcance, sin versión asignada
 
-- **Marca externa**: firma de email, header de LinkedIn, rediseño de assets.
+- ~~**Marca externa**: firma de email, header de LinkedIn, rediseño de assets.~~ **Retirado el 2026-08-20: era falso.** Las tres estaban hechas. Ver §53.
 
 El porqué de cada decisión de producto, en **[PRD-Historical.md](./PRD-Historical.md)**.
+
+## 53. «Cómo se ha creado esta página»: el contenido primero, y un artículo que no publica cifras (2026-08-20)
+
+**Qué se hizo.** P58 pedía «solo el índice y la estructura, no se escribe el artículo
+todavía». Francisco amplió el alcance a mitad de sesión: un borrador completo que él
+reescribe con su voz, como se hizo con el CV y con Sobre mí. Salieron cinco versiones en
+una sesión y quedó cerrado como borrador: **diez secciones, apertura y cierre, ~6.000
+palabras**, en una página de Notion enlazada desde la tarea.
+
+**Lo primero fue revisar la tarea, y eso fue lo que más valió.** Se definió el 2026-08-10
+y en diez días se le habían caducado cinco premisas: sus «43 decisiones técnicas» eran ya
+73; el repositorio se hizo público (D68), lo que convierte cada afirmación del artículo en
+enlazable en vez de contable; los cinco deep-dive habían resuelto la forma de página larga,
+así que dejó de ser la primera del sitio; cuatro de las diez secciones propuestas pisaban
+páginas que ya publican esos mismos datos; y el material nuevo (D50-D73) resultó ser el
+mejor del artículo, no relleno. *Una tarea definida hace diez días en un proyecto que se
+mueve a esta velocidad no se ejecuta: se revisa primero.*
+
+### Las decisiones de contenido
+
+- **Diez secciones sin techo de palabras.** Decisión de Francisco contra la recomendación
+  de un corte selectivo de cinco o seis. Es la página más larga del sitio y un perfil de
+  RRHH no la termina, pero no es para él. Obliga a **índice navegable**, que pasa de
+  adorno a requisito de P59, y a etiquetas cortas por sección, que son copy y salieron con
+  el borrador.
+- **Cada sección enlaza a su ADR, su archivo o su guardián.** Solo es posible desde D68, y
+  es lo que separa «un post sobre mi web» de una prueba verificable.
+- **El artículo no publica cifras propias.** Ni contraste, ni rendimiento, ni número de
+  páginas: o enlaza a la página que ya lo publica, o lo lee de `lib/design-values.ts`.
+  Escribirlas en el diccionario sería la copia impresa de D60. La forma exacta de rematar
+  eso sin cifras la fijó **D74**.
+- **Diagramas propios como norma; capturas solo cuando lo que se enseña no es un número**
+  (el tablero, una tarea real, un prototipo frente a la sección publicada).
+
+### Tres reordenaciones, y las tres salieron de leerlo como si fuera la primera vez
+
+**El método pasó del penúltimo bloque al segundo.** Un artículo que cuenta cómo se ha hecho
+una página no puede dejar «cómo se decide qué se hace» para el final: el lector recibía
+ocho secciones de resultados antes de saber con qué criterio se produjeron.
+
+**La medición dejó de ser sección propia y acabó en el cierre.** Primero se fusionó con el
+método (era la sección más floja y rompía el crescendo hacia el bloque de errores) y
+después Francisco la movió al final, que es mejor que las dos anteriores: ahí no es una
+capa técnica, es el «y ahora qué».
+
+**El sistema de componentes se adelantó a la historia de la maqueta**, que contaba el
+efecto antes que la causa: la maqueta caducó *porque* el sistema en código creció, y ese
+crecimiento se narraba después.
+
+### Lo que el artículo dice de más y de menos, a propósito
+
+Se escribieron las **decisiones de no hacer** —sin formulario de contacto, sin página
+propia para dos experiencias, sin blog, y el límite del corpus del asistente conversacional
+fijado antes de que el asistente exista— porque el criterio de producto se enseña mejor en
+lo que no está que en lo que está. Y se dice en voz alta que **no hubo investigación con
+usuarios**, junto con lo que sí hubo: perfiles de referentes, artículos de gente de
+selección y una hipótesis escrita de quién lee y en cuánto tiempo, de la que salen las
+decisiones de la sección. *Convertir la ausencia en criterio es más fuerte que disimularla,
+sobre todo en un sitio que se llama «Del discovery al dato».*
+
+**Descartado: cuánto tiempo llevó el proyecto.** Era el dato más persuasivo que le falta al
+artículo. Francisco lo descarta porque el proyecto sigue avanzando y sería un dato a
+cambiar cada poco: el mismo criterio que retiró las cifras de los badges del README.
+
+### Y una afirmación falsa que salió por el camino
+
+Al escribir el párrafo sobre coherencia de marca, el PRD publicaba «**Marca externa**:
+firma de email, header de LinkedIn, rediseño de assets» bajo «Fuera de alcance, sin versión
+asignada». Las tres estaban hechas: la firma lleva el monograma con su split y la
+tipografía de titulares, y el banner de LinkedIn y la portada del repositorio abren los dos
+con «Del discovery al dato», que es el titular del Hero. Se **retiró la sección entera** de
+`PRD-Live.md` en vez de anotarla al pie, y el hecho subió a §4.
+
+**Estado al cerrar.** P58 en Listo. Se arrastra a P60 una sola cosa de contenido: el remate
+de resultados, que no es la analítica de usuarios (esa empieza ahora y el artículo ya lo
+cuenta así) sino que el lector recorre ~6.000 palabras de proceso sin ver un solo resultado
+del trabajo. Se resuelve con D74 al escribir el copy final.
 
 ## Fuentes
 
