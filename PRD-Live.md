@@ -177,6 +177,11 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
   automático puede señalar: un `Esc` que no cierra, un cambio de tema que no se anuncia, un
   aviso de consentimiento que se lee el último. Lo que encuentra se publica en la propia
   página (D73).
+- **`npm run check:marco`**: el criterio de cierre de página nueva, en cada PR (D75). Sobre
+  el HTML **prerenderizado** de las 24 variantes: axe estructural, el enlace de salto que axe
+  no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, y que los `@id`
+  del JSON-LD **resuelven** — cosa que ningún validador externo hace. Contraste y objetivo
+  táctil quedan fuera a propósito: se heredan, y necesitan pintar.
 - **`npm run gate:html`**: compara el HTML servido de las 24 variantes antes y después de
   un refactor. Diff vacío = transparente por construcción. Es el gate que más ha cazado
   y no está en CI (D42/D45).
@@ -185,8 +190,9 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
 
 ### Calidad y seguridad
 
-CI en cada PR con **catorce pasos**: formato, typecheck, lint, paleta, experiencias, CV
-al día, raya, artefacto, contexto, skills, índices, rutas, guardianes y build. Todos comparten una regla de
+CI en cada PR con **quince pasos**: formato, typecheck, lint, paleta, experiencias, CV
+al día, raya, artefacto, contexto, skills, índices, rutas, build, marco de página y
+guardianes. Todos comparten una regla de
 método: **buscan la AUSENCIA, no el patrón**, y **afirman cuánto han mirado** — un metro
 que devuelve lista vacía parece un aprobado, y este proyecto se lo ha encontrado cinco
 veces (D38/D57/D60/D63).

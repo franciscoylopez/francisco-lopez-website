@@ -140,16 +140,35 @@ jobs:
       - name: Rutas registradas
         run: npm run check:rutas
 
-      # Y el que mira a los otros nueve: a cada guardián le pasa un caso malo
+      - name: Build
+        run: npm run build
+
+      # Los dos pasos que miden el HTML que el sitio EMITE, no el código que lo
+      # genera, así que van detrás del build y no delante.
+      #
+      # El criterio de cierre de página nueva —los 8 puntos de accesibilidad, el
+      # enlace de salto, el SEO y su JSON-LD— se cumplía A MANO y dependía de
+      # acordarse, que es el patrón que BRAND.md §Cómo se escribe una regla nombra
+      # como el que produce drift. La mitad ya no se puede romper: pageMetadata y
+      # PageShell la DERIVAN (D45). Esto mira la otra mitad: lo que pone quien
+      # ESCRIBE la página, que la derivación LLEGÓ —los helpers son opt-in, y una
+      # página que se escriba su metadata a mano compila igual— y que las
+      # referencias `@id` entre páginas resuelven, cosa que ningún validador
+      # externo hace. Contraste y objetivo táctil NO están: necesitan navegador y
+      # tema, los cubre viewport-verifier (D52), y además se HEREDAN de la capa de
+      # componentes. Cuesta segundos porque lee el prerender, y por eso puede
+      # correr en cada PR en vez de ser un nightly.
+      - name: Marco de página
+        run: npm run check:marco
+
+      # Y el que mira a los otros diez: a cada guardián le pasa un caso malo
       # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que
       # funciona — el modo de fallo de un guardián es una luz verde, y el censo de
       # contraste se rompió así dos veces en silencio (D70). Nació FUERA de CI
       # porque muta archivos rastreados para provocar el fallo, y eso sale caro en
       # un árbol de trabajo con cosas dentro; en un runner que se tira al terminar,
-      # no. Exige árbol limpio, restaura desde memoria y falla si queda algo
-      # movido, así que el paso siguiente ve el mismo checkout que este.
+      # no. Exige árbol limpio, restaura desde memoria y falla si queda algo movido.
+      # Va el ÚLTIMO desde P58.5: su caso de `check:marco` muerde el HTML del
+      # build, que es la entrada de ese guardián, y sin `.next` no se podría probar.
       - name: Guardianes con dientes
         run: npm run check:guardianes
-
-      - name: Build
-        run: npm run build

@@ -97,7 +97,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 
 ## Que no se rompa
 
-Catorce pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
+Quince pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
 
 | Paso | Qué impide |
 | :-- | :-- |
@@ -111,6 +111,7 @@ Catorce pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y
 | `check:skills` | Que una skill nombre archivos o comandos que ya no existen. Se **siguen** en vez de leerse, así que su drift se ejecuta (`D60`) |
 | `check:indices` | Que un índice deje de ser el derivado de sus cabeceras. Los tres se generan con `npm run indices` (`D69`) |
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
+| `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
 | `build` | — |
 
@@ -139,6 +140,9 @@ npm run check:palette       # la paleta del código contra la de globals.css, y 
 npm run check:experiencias  # que las TRES longitudes de cada experiencia cuadren (D57)
 npm run check:cv            # que los PDFs commiteados correspondan a su fuente (D60)
 npm run check:raya          # que no vuelva la raya (—) al copy servido (D63)
+npm run check:marco         # el criterio de cierre de página sobre las 24 variantes
+                            # prerenderizadas: axe, enlace de salto y JSON-LD (D75).
+                            # Necesita `npm run build` antes: mide el HTML, no el código
 
 # Generadores
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza su sello
@@ -228,7 +232,7 @@ scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 12 páginas 
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
                            queda UN solo color literal: busca la ausencia (D54)
 
-.github/workflows/     CI, catorce pasos en cada PR
+.github/workflows/     CI, quince pasos en cada PR
 .github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions)
 .claude/skills/        Skills del proyecto: update-cv, deep-dive-page, y las tres revisiones
                        recurrentes — sprint-review (el codebase, al cerrar etapa),
