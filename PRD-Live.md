@@ -50,6 +50,13 @@ consentimiento RGPD) · **dominio propio** · **páginas 404/500 de marca e i18n
 **cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy,
 Permissions-Policy, HSTS y CSP «A+ barato»).
 
+**La marca no termina en el dominio.** Firma de email (monograma split, nombre en
+Bricolage y canales), banner de LinkedIn y portada del repositorio comparten el mismo
+titular que el Hero, «Del discovery al dato», y el mismo monograma. Es la prueba de
+coherencia que un sistema de marca solo puede dar fuera de su propio sitio. *(Figuró
+como «fuera de alcance» hasta el 2026-08-20, cuando se comprobó que estaba hecho: la
+sección entera se retiró por falsa.)*
+
 La apertura de **Sobre mí es un vídeo**: se reproduce una vez y se queda en su último
 fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
 descarga** (D65).
@@ -284,6 +291,3 @@ papelera de lo que se cuenta en una entrevista y no en abierto (motivos de salid
 problemas internos, límites de un equipo). **V4 absorbe profundidad sobre lo que ya es
 público, no discreción.**
 
-### Fuera de alcance, sin versión asignada
-
-**Marca externa**: firma de email, header de LinkedIn, rediseño de assets.
