@@ -11,7 +11,7 @@
 - **`@`-importados (siempre en contexto):** `AGENTS.md`, `BRAND.md` (core de reglas), `PRD-Live.md`, y este `CLAUDE.md`.
 - **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md` (el porqué fechado de las reglas de marca)**, `BRAND-logo.md` (enciclopedia del logo).
 - **Y cómo se consultan, que es lo que hace barata esa mitad:** los tres primeros llevan **índice derivado de sus cabeceras**. El de `DECISIONS.md` es el de aquí abajo; los de los dos históricos van **en su propia cabecera**, así que se abren con un `Read` limitado a las ~90 primeras líneas —el mapa entero de 46.000 palabras por unos 1.500 tokens— y solo después se va a la sección. Grepear a ciegas un archivo de 46.000 palabras es el fallo que el índice existe para evitar.
-- **Cuándo leer `BRAND-historical.md`:** *antes de cambiar una regla de `BRAND.md`*. Casi todas nacieron corrigiendo algo, y allí está qué se probó y por qué se descartó — ahorra repetir un experimento que ya salió mal. *(Partido el 2026-08-09, P37.685: `BRAND.md` bajó de 5.954 a 3.530 palabras y el total `@`-importado de ~11.400 a ~9.000.)*
+- **Cuándo leer `BRAND-historical.md`:** *antes de cambiar una regla de `BRAND.md`*. Casi todas nacieron corrigiendo algo, y allí está qué se probó y por qué se descartó — ahorra repetir un experimento que ya salió mal.
 - **Convención de mitigación:** antes de tocar un subsistema con ADR, hacer `grep`/Read de su D-entry en `DECISIONS.md` — así no se pierde ninguna regla, solo deja de estar precargada. El índice de abajo dice qué D-entries existen.
 
 ## Índice de `DECISIONS.md` (contenido a demanda, no cargado)
@@ -88,6 +88,7 @@
 - D70 · La capa que verifica no estaba verificada, y su modo de fallo es una luz verde
 - D71 · «No hay datos» no distingue entre cero filas y mal configurado
 - D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila
+- D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
@@ -211,12 +212,11 @@ Antes de dar por cerrada una página o sección, verificar los 8 puntos (es la l
 
 ### Cómo se verifica
 
-*(Cambiado el 2026-08-16, D52. Antes: «con la skill `claude-in-chrome`: Lighthouse desktop + mobile + axe, en claro y oscuro» — un metro que mide en una pestaña **oculta**, con el tema como único eje y disparado una sola vez, al cerrar.)*
 
 Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer plano, donde `:focus`, el LCP, `rAF` y el `IntersectionObserver` sí funcionan— y **conducido por el subagente `viewport-verifier`**, que ya lleva la matriz (cuatro viewports × dos temas + `reduced-motion`), congela el motion antes de medir y devuelve **hallazgos, no el volcado**. No se conduce a mano.
 
 - **Se dispara dos veces, y la primera no es al cerrar.** Si la sección lleva banda o hero dimensionado por `vw`, **mientras se dibuja**: el eje que faltaba no era el tema, era el **alto**, y por ahí se coló D50 (`1536×740` y `1280×618` son un 1920 con el escalado de Windows al 125% y al 150%). Al cerrar, el resto del checklist.
-- **Precondición:** `agent-browser` se conduce con el **sandbox de Bash desactivado**. No es solo la navegación: bajo el sandbox **ningún** comando llega al daemon, ni con la página ya cargada. Un comando que cuelga es ese síntoma —se desactiva el sandbox, no se reintenta ni se abre la URL desde la terminal—. *(Corregido el 2026-08-17; antes esto pedía abrir la URL una vez desde la terminal, remedio más caro y que no hace falta. D51.)*
+- **Precondición:** `agent-browser` se conduce con el **sandbox de Bash desactivado**. No es solo la navegación: bajo el sandbox **ningún** comando llega al daemon, ni con la página ya cargada. Un comando que cuelga es ese síntoma —se desactiva el sandbox, no se reintenta ni se abre la URL desde la terminal—. (D51.)
 - **Lo que no tapa, y sigue a mano:** el **enlace de salto** de WCAG 2.4.1, que axe no detecta (D46); la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49); y los puntos **4, 5, 6 y 8**, que los pone quien escribe la página.
 - **Tras una pasada COMPLETA de accesibilidad** (no al cerrar una página): actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, que es la fecha que publica `/accesibilidad`. Vive pegada al censo que fecha, así que quien toca una ve la otra (D38).
 
