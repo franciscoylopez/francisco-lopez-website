@@ -89,6 +89,7 @@
 - D71 · «No hay datos» no distingue entre cero filas y mal configurado
 - D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila
 - D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe
+- D74 · Un compromiso no caduca y una medición sí: fuera de su fuente se publica el umbral
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
