@@ -11,7 +11,8 @@
     "statConformidad": "WCAG 2.2 conformance",
     "statColor": "Colour system",
     "statAxe": "axe violations",
-    "statLighthouse": "Lighthouse a11y"
+    "statLighthouse": "Lighthouse a11y",
+    "updated": "Last accessibility review: 20 August 2026."
   },
   "conformance": {
     "num": "01 — Conformance",
@@ -29,8 +30,13 @@
       {
         "label": "Colour system",
         "value": "AAA in light and dark, with contrast measured."
+      },
+      {
+        "label": "European standard",
+        "value": "Aligned with the criteria of EN 301 549, the harmonised ICT accessibility standard the European Union references, which in turn points to WCAG."
       }
-    ]
+    ],
+    "note": "The [European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj) covers commercial products and services (e-commerce, banking, transport), not a personal site: saying this one «complies with the EAA» would be inaccurate. What does apply is its technical reference standard, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), which points to WCAG. That is the criterion followed here."
   },
   "measures": {
     "num": "02 — What's been done",
@@ -82,7 +88,7 @@
   "verify": {
     "num": "03 — Verification",
     "heading": "Not a self-assessment taken on trust",
-    "intro": "Every page is checked, in light and dark mode, with real tools.",
+    "intro": "Every page is checked, in light and dark mode, with real tools. And by hand, because the automated ones have a blind spot: none of them caught the missing skip link, and that was a level A failure.",
     "items": [
       {
         "tool": "axe-core",
@@ -100,7 +106,8 @@
         "tool": "Keyboard & focus",
         "result": "Manual review of keyboard navigation and focus order."
       }
-    ]
+    ],
+    "note": "And by hand, with a screen reader: NVDA 2026.1.1 on Chrome, across six journeys (skip link, navigation, consent dialog, data tables, theme switch and reading order). Widening the test to more browsers and other screen readers is on the roadmap."
   },
   "limits": {
     "num": "04 — Limits",
@@ -119,13 +126,13 @@
         "title": "Continuous improvement",
         "body": "The colour system is already at AAA and is re-checked on every change so it doesn't slip."
       }
-    ]
+    ],
+    "note": "That pass found four details no automated tool flags, because none of them breaks a rule: the mobile menu doesn't close with the Escape key, the theme switch isn't announced aloud, opening the menu moves focus to the theme button first, and the cookie notice is read last even though it's the first thing you see. They're logged and pending."
   },
   "report": {
     "num": "05 — Contact",
     "heading": "If something blocks you, I want to know",
     "body": "If anything on this site is hard to use with your assistive technology, it's the best way to fix it. Tell me which page you were on, what happened and what assistive tech you use, and I'll get back to you.",
-    "emailCta": "Email me",
-    "updated": "Last accessibility review: 2 August 2026."
+    "emailCta": "Email me"
   }
 }

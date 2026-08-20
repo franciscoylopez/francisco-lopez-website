@@ -11,7 +11,8 @@
     "statConformidad": "Conformidad WCAG 2.2",
     "statColor": "Sistema de color",
     "statAxe": "Violaciones axe",
-    "statLighthouse": "Lighthouse a11y"
+    "statLighthouse": "Lighthouse a11y",
+    "updated": "Última revisión de accesibilidad: 20 de agosto de 2026."
   },
   "conformance": {
     "num": "01 — Conformidad",
@@ -29,8 +30,13 @@
       {
         "label": "Sistema de color",
         "value": "AAA en claro y oscuro, con el contraste medido."
+      },
+      {
+        "label": "Norma europea",
+        "value": "Alineada con los criterios de EN 301 549, la norma armonizada de accesibilidad TIC que la Unión Europea referencia y que a su vez remite a WCAG."
       }
-    ]
+    ],
+    "note": "La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a WCAG. Es el criterio que se ha seguido."
   },
   "measures": {
     "num": "02 — Qué se ha hecho",
@@ -82,7 +88,7 @@
   "verify": {
     "num": "03 — Verificación",
     "heading": "No es una autoevaluación de palabra",
-    "intro": "Cada página se comprueba, en modo claro y oscuro, con herramientas reales.",
+    "intro": "Cada página se comprueba, en modo claro y oscuro, con herramientas reales. Y a mano, porque las automáticas tienen un punto ciego: ninguna detectó que faltaba el enlace de salto al contenido, y eso era un incumplimiento de nivel A.",
     "items": [
       {
         "tool": "axe-core",
@@ -100,7 +106,8 @@
         "tool": "Teclado y foco",
         "result": "Revisión manual de la navegación por teclado y del orden de foco."
       }
-    ]
+    ],
+    "note": "Y a mano, con lector de pantalla: NVDA 2026.1.1 sobre Chrome, en seis recorridos (enlace de salto, navegación, diálogo de consentimiento, tablas de datos, cambio de tema y orden de lectura). Ampliar la prueba a más navegadores y a otros lectores está en el plan."
   },
   "limits": {
     "num": "04 — Límites",
@@ -119,13 +126,13 @@
         "title": "Mejora continua",
         "body": "El sistema de color ya está en AAA y se revisa en cada cambio para no perder ese nivel."
       }
-    ]
+    ],
+    "note": "Esa prueba encontró cuatro detalles que ninguna herramienta automática señala, porque no incumplen ninguna regla: el menú móvil no se cierra con la tecla Escape, el cambio de tema no se anuncia en voz, al abrir el menú el foco pasa antes por el botón de tema, y el aviso de cookies se lee el último aunque sea lo primero que se ve. Están anotados y pendientes."
   },
   "report": {
     "num": "05 — Contacto",
     "heading": "Si algo te bloquea, quiero saberlo",
     "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
-    "emailCta": "Escríbeme",
-    "updated": "Última revisión de accesibilidad: 2 de agosto de 2026."
+    "emailCta": "Escríbeme"
   }
 }
