@@ -8,6 +8,7 @@ import { fillRatios } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
+import { Rich } from "@/components/ui/rich";
 import { CARD, HERO_ROW, SECTION, WRAP } from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailCta } from "./contact-actions";
@@ -24,7 +25,7 @@ type AccesibilidadDict = Dictionary["accesibilidad"];
 // barrera), contrapunto del criterio interno de la sección 08 del Design System.
 //
 // El contenido está medido y verificado (axe 0 violaciones en claro/oscuro,
-// Lighthouse a11y 100). La cifra de conformidad y la fecha de `report.updated` se
+// Lighthouse a11y 100). La cifra de conformidad y la fecha de `hero.updated` se
 // revisan tras cada QA de accesibilidad del build, no se declaran de memoria.
 export function Accesibilidad({
   dict,
@@ -89,6 +90,18 @@ export function Accesibilidad({
               <Stat value="0" label={t.hero.statAxe} />
               <Stat value="100" label={t.hero.statLighthouse} />
             </StatRow>
+            {/* La vigencia de una declaración de conformidad es contexto que se
+                quiere ANTES de leerla, no al final: sube aquí para igualar a la
+                política de cookies, que ya la lleva arriba y cuyo copy dice «la
+                fecha del principio». Va DEBAJO de las cifras para no meterse
+                entre la entradilla y su dato. Sigue escrita a mano y duplicada en
+                los dos idiomas: eso lo resuelve su tarea (P87.56). */}
+            <p
+              data-reveal
+              className="text-muted-foreground m-0 mt-6 text-[0.85rem]"
+            >
+              {t.hero.updated}
+            </p>
           </div>
         </div>
       </section>
@@ -110,6 +123,14 @@ export function Accesibilidad({
               <InfoCard key={r.label} title={r.label} body={r.value} />
             ))}
           </div>
+          {/* La precisión que sostiene la fila «Norma europea»: la EAA obliga a
+              productos y servicios comerciales, no a una web personal, y decir lo
+              contrario sería el error que justo el público de esta página detecta.
+              Va con <Rich> —único uso en la página— porque lleva los dos enlaces
+              oficiales, EUR-Lex y ETSI (D23). */}
+          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <Rich text={t.conformance.note} />
+          </p>
         </div>
       </section>
 
@@ -176,6 +197,11 @@ export function Accesibilidad({
               <InfoCard key={v.tool} title={v.tool} body={v.result} mono />
             ))}
           </div>
+          {/* El matiz que no cabe en una tarjeta: más largo que el resto y
+              deformaba la rejilla. Mismo patrón que la nota de (01). */}
+          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <Rich text={t.verify.note} />
+          </p>
         </div>
       </section>
 
@@ -196,6 +222,11 @@ export function Accesibilidad({
               <InfoCard key={l.title} title={l.title} body={l.body} />
             ))}
           </div>
+          {/* El matiz que no cabe en una tarjeta: más largo que el resto y
+              deformaba la rejilla. Mismo patrón que la nota de (01). */}
+          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <Rich text={t.limits.note} />
+          </p>
         </div>
       </section>
 
@@ -216,9 +247,6 @@ export function Accesibilidad({
                 showAddress
                 className="mt-6"
               />
-              <p className="text-muted-foreground m-0 mt-6 text-[0.85rem]">
-                {t.report.updated}
-              </p>
             </div>
           </SectionHeader>
         </div>
