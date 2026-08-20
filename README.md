@@ -11,8 +11,8 @@ La propia web es la prueba de criterio técnico y de diseño: rápida, accesible
 ![Next.js 16](https://img.shields.io/badge/Next.js-16-000?logo=nextdotjs&logoColor=white)
 ![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)
 ![Tailwind v4](https://img.shields.io/badge/Tailwind-v4-06B6D4?logo=tailwindcss&logoColor=white)
-![WCAG AAA](https://img.shields.io/badge/WCAG-AAA_en_ambos_temas-16BDBD)
-![PageSpeed](https://img.shields.io/badge/PageSpeed-100_escritorio_·_94--96_móvil-9B87F5)
+![WCAG AA suelo, AAA objetivo](https://img.shields.io/badge/WCAG-AA_suelo_·_AAA_objetivo-16BDBD)
+![PageSpeed >90](https://img.shields.io/badge/PageSpeed-%3E90_escritorio_y_móvil-9B87F5)
 
 [Ver el sitio](https://franciscolopez.es) · [Design System](https://franciscolopez.es/design-system) · [Brand Kit](https://franciscolopez.es/brand-kit) · [Accesibilidad](https://franciscolopez.es/accesibilidad) · [Un deep-dive](https://franciscolopez.es/trayectoria/emendu)
 
