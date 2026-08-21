@@ -631,7 +631,7 @@ export function DiagramPanel({
 }: {
   children: ReactNode;
   caption: ReactNode;
-  side?: "left" | "right";
+  side?: "left" | "right" | "center";
 }) {
   return (
     // Flotado, al 50% real del contenedor (P60 tanda 3, punto 3): el primer
@@ -656,15 +656,23 @@ export function DiagramPanel({
     <figure
       data-reveal
       className={cn(
-        "diagram-realce border-border bg-card my-[1.5rem] overflow-hidden rounded-xl border",
-        side
-          ? cn(
+        "diagram-realce border-border bg-card mb-[1.5rem] overflow-hidden rounded-xl border",
+        side === "left" || side === "right"
+          ? // Sin `mt`: un flotado ya hereda el hueco vertical del ritmo del
+            // párrafo (`space-y` del contenedor de `ArticleProse`), así que
+            // sumarle encima `my-[1.5rem]` lo dejaba empezando más abajo que
+            // el texto con el que corre en paralelo — desalineado por arriba
+            // Y, como efecto de cascada, sobresaliendo más por abajo (P60,
+            // feedback sobre el diagrama del stack en s04).
+            cn(
               "w-full sm:w-1/2",
               side === "right"
                 ? "sm:float-right sm:ml-8"
                 : "sm:float-left sm:mr-8",
             )
-          : "w-full",
+          : side === "center"
+            ? "mx-auto mt-[1.5rem] w-full sm:w-[70%]"
+            : "mt-[1.5rem] w-full",
       )}
     >
       <div className="flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">

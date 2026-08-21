@@ -4325,3 +4325,38 @@ animación por diagrama» que ya pedía D67 en otro contexto.
 **El diagrama de los 15 pasos absorbe al dato en vivo que tenía al lado** (extiende D78): con el
 diagrama mostrando ya los quince nombres reales, «Quince pasos en cada PR» —el `livestat` que
 vivía junto a él— pasó a ser el mismo dato dos veces. Se retira el bloque, no se sustituye.
+
+## D80 · Un flotado sin `mt` se alinea con su texto, y el marco se ajusta al contenido — 2026-08-22
+
+**Contexto.** Cerrado el ciclo de tandas numeradas de P59/P60, la última ronda de ajuste fino
+—colocar imágenes, centrar citas, ajustar diagramas— se hizo con Francisco dando feedback
+directo en el chat sobre la página servida, sin abrir Notion. Es un cambio de canal, no de
+método: sigue siendo «revisado en pantalla antes de comitear» (regla ya escrita en P60), solo
+que el registro de cada punto vive en la conversación y no en la Nota de la tarea.
+
+**`DiagramPanel` gana un tercer `side`: `"center"`.** Hasta ahora un diagrama o imagen sin
+`side` ocupaba el ancho COMPLETO de la columna de prosa, aunque su contenido —una captura, un
+grupo de píldoras— fuera mucho más estrecho: el marco quedaba con aire vacío a los lados que no
+aportaba nada. `"center"` no flota (a diferencia de `"left"`/`"right"`) y limita el marco a un
+70% centrado (`mx-auto w-full sm:w-[70%]`), dejando que el `max-w` propio del contenido decida
+el tamaño real dentro de ese marco más ajustado. Se aplicó a las capturas nuevas (tablero
+MoSCoW en s02, panel de Qlty en s07) y a los diagramas SVG que no necesitan correr junto a un
+párrafo concreto (las cuatro píldoras de color en s03, el de consentimiento en s07, el de capas
+de verificación en s08, el de los quince pasos de CI en s09).
+
+**Un flotado (`side: "left"`/`"right"`) no lleva `mt`: ya lo pone el `space-y` del párrafo.**
+`DiagramPanel` sumaba `my-[1.5rem]` a TODOS los `side`, pero un elemento flotado ya hereda el
+margen superior del ritmo vertical del contenedor (`space-y` de `ArticleProse`) — sumarle
+encima su propio `mt` lo dejaba empezando más abajo que el texto con el que corre en paralelo,
+y esa misma diferencia se acumulaba abajo: el flotado sobresalía más de lo necesario por debajo
+del último párrafo. Detectado con el diagrama del stack en s04 (el más alto de los flotados,
+donde el desajuste se veía a simple vista) y corregido en el componente compartido: `mb` se
+queda para todos, `mt` solo para los que no flotan (`"center"` y sin `side`).
+
+**Una cita se centra respecto a su lista partiéndola en dos, no moviendo la cita.** Patrón que
+ya existía en s01 (P60) y que esta tanda repitió dos veces más (s07, s09): cuando una cita
+flotada (`Pull`/`Pullquote`) cae justo DESPUÉS de una lista larga, el float sube hasta el final
+de la lista y queda pegado al fondo en vez de centrado. La lista se parte en dos bloques `ul` con
+la cita entre medias, en el punto que mejor reparte la altura — no hay forma de centrar un
+flotado contra contenido de altura dinámica con solo CSS, así que el punto de corte se decide
+midiendo (`getBoundingClientRect`) sobre la página servida, no a ojo.
