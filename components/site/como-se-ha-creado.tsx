@@ -8,8 +8,6 @@ import {
   ChapterNav,
   DiagramPanel,
   LiveStat,
-  Pull,
-  Pullquote,
   RepoStrip,
   SectionCover,
 } from "@/components/ui/article";
@@ -49,11 +47,13 @@ import {
 // banda invertida queda solo para la apertura. Documentado en el PR de esta
 // tarea, no en BRAND.md: es una decisión de UNA página, no una regla nueva.
 //
-// EL BREADCRUMB VIVE FUERA DE LA BANDA INVERTIDA. `Breadcrumb` usa
-// `text-foreground` para el nivel actual, que sobre una banda con
-// `bg-foreground` sería texto invisible — la pieza no tiene variante para
-// superficie invertida y no es esta tarea la que se la añade. Se pinta antes,
-// sobre `--background`, como cualquier otra página.
+// PASADA DE FEEDBACK (2026-08-21, revisión de Francisco sobre la página
+// servida): breadcrumb integrado en la banda (con la variante `inverted` que
+// ganaron `Breadcrumb`/`chromeLinkVariants`), apertura recortada al mínimo —
+// el enlace «échale un ojo» fuera, palabras/nota movidas al índice—, con
+// `md:min-h` para que el heading quepa entero en el pliegue como en
+// Accesibilidad/Brand Kit/Design System, y cada franja de enlace con un
+// `<a>` por decisión citada en vez de uno solo para la frase entera.
 
 const DIAGRAMS: Record<string, { Component: ComponentType; caption: string }> =
   {
@@ -100,9 +100,9 @@ export function ComoSeHaCreado({
   const t = dict;
 
   // El diccionario viene de JSON: `type` se infiere como `string`, no como el
-  // literal `"p" | "h3" | "ul"` que pide `ArticleBlock`. El dato es correcto
-  // en tiempo de ejecución —lo comprueba el guardián ES↔EN (D11)—, así que se
-  // estrecha aquí UNA vez en vez de en cada punto de consumo.
+  // literal `"p" | "h3" | "ul" | "quote"` que pide `ArticleBlock`. El dato es
+  // correcto en tiempo de ejecución —lo comprueba el guardián ES↔EN (D11)—,
+  // así que se estrecha aquí UNA vez en vez de en cada punto de consumo.
   const blocksOf = (raw: unknown) => raw as ArticleBlock[];
 
   const totalWords = articleWordCount(
@@ -132,32 +132,39 @@ export function ComoSeHaCreado({
     label: it.label,
   }));
 
+  /** «Capítulo 08 de 11 · 4 min de lectura», compuesta de tres fragmentos de
+   * copy + dos cifras calculadas en build (D60) — nunca escrita entera. */
+  const metaLineFor = (position: number, minutes: number) =>
+    `${t.sectionMeta.chapter} ${String(position).padStart(2, "0")} ${
+      t.sectionMeta.of
+    } ${totalSections} · ${minutes} ${t.sectionMeta.reading}`;
+
   return (
     <>
       <ReadingProgress ariaLabel={t.progress.ariaLabel} />
       <SectionRail items={railItems} />
 
-      <div className={`${WRAP} pt-[clamp(1.5rem,3vw,1.75rem)]`}>
-        <Breadcrumb
-          routeLabel={breadcrumb.routeLabel}
-          items={[
-            { label: breadcrumb.home, href: homeHref },
-            { label: t.crumb },
-          ]}
-        />
-      </div>
-
-      {/* Apertura: banda invertida con los datos del artículo, ref. validada
-          en el prototipo de P59 (Espécimen 1). `data-surface="inverted"`
-          (globals.css) hace que `text-muted-foreground` resuelva su propio
-          atenuado en vez del calibrado contra `--background` — sin él, el
-          rol del byline y el resto del texto secundario caían con el gris
-          equivocado (D30/D39). */}
+      {/* Apertura: banda invertida con el breadcrumb integrado (ya no una
+          fila aparte sobre --background, que se leía como un cambio de color
+          extraño) y recortada a lo esencial para caber en el pliegue —
+          palabras/secciones y la nota de lectura viven ahora en el índice.
+          `data-surface="inverted"` (globals.css) hace que
+          `text-muted-foreground` resuelva su propio atenuado (D30/D39). */}
       <div
         data-surface="inverted"
-        className="bg-foreground text-background py-[clamp(2.75rem,5.5vw,4.75rem)]"
+        className="bg-foreground text-background flex flex-col justify-center py-[clamp(2.5rem,5vw,4rem)] md:min-h-[calc(100svh-5rem)]"
       >
         <div className={WRAP}>
+          <div data-reveal className="mb-[clamp(2rem,5vw,3.5rem)]">
+            <Breadcrumb
+              routeLabel={breadcrumb.routeLabel}
+              items={[
+                { label: breadcrumb.home, href: homeHref },
+                { label: t.crumb },
+              ]}
+              inverted
+            />
+          </div>
           <p
             data-reveal
             className="text-muted-foreground m-0 mb-2 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
@@ -175,36 +182,9 @@ export function ComoSeHaCreado({
               {t.hero.leadParas[0]}
             </p>
             <p className="m-0 text-[1.05rem] leading-[1.6]">
-              {t.hero.leadParas[1]}{" "}
-              {/* `.link-content` pinta el reposo en `--foreground`, que sobre
-                  esta banda invertida ES el fondo de la propia banda — texto
-                  invisible. Igual que el breadcrumb (nota de arriba), un
-                  enlace de contenido dentro de una banda invertida necesita
-                  el cian que YA está calibrado para eso: `--primary-on-inverted`
-                  (BRAND.md, mismo mecanismo que `--brand-purple-accent`). */}
-              <a
-                href={GITHUB_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="underline decoration-1 underline-offset-2"
-                style={{ color: "var(--primary-on-inverted)" }}
-              >
-                {t.hero.repoLinkLabel}
-              </a>
-              .
+              {t.hero.leadParas[1]}
             </p>
           </div>
-          <p data-reveal className="mt-5 mb-0 text-[0.95rem] font-medium">
-            <b>{totalWords.toLocaleString("es-ES")}</b> {t.hero.wordsSuffix}
-            <span className="mx-[0.6em]">·</span>
-            <b>{totalSections}</b> {t.hero.sectionsSuffix}
-          </p>
-          <p
-            data-reveal
-            className="text-muted-foreground m-0 mt-2 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
-          >
-            {t.hero.note}
-          </p>
           <div
             data-reveal
             className="mt-6 flex flex-wrap items-center justify-between gap-4"
@@ -224,6 +204,17 @@ export function ComoSeHaCreado({
 
       <section id="indice" className={SECTION}>
         <div className={WRAP}>
+          <p data-reveal className="m-0 mb-1 text-[0.95rem] font-medium">
+            <b>{totalWords.toLocaleString("es-ES")}</b> {t.index.wordsSuffix}
+            <span className="mx-[0.6em]">·</span>
+            <b>{totalSections}</b> {t.index.sectionsSuffix}
+          </p>
+          <p
+            data-reveal
+            className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
+          >
+            {t.index.note}
+          </p>
           <ArticleIndex
             kicker={t.index.kicker}
             timeLabel={t.index.timeLabel}
@@ -235,6 +226,7 @@ export function ComoSeHaCreado({
 
       {t.sections.map((s, i) => {
         const diagram = DIAGRAMS[s.id];
+        const position = i + 1;
         return (
           <section key={s.id} id={s.id} className={SECTION}>
             <div className={WRAP}>
@@ -243,14 +235,12 @@ export function ComoSeHaCreado({
                 kicker={s.kicker}
                 title={s.title}
                 id={`${s.id}-h`}
+                metaLine={metaLineFor(
+                  position,
+                  sectionReadingTime(blocksOf(s.body)).minutes,
+                )}
               />
               <ArticleProse blocks={blocksOf(s.body)} />
-              {s.pullquote ? (
-                <Pullquote label="La frase de la sección">
-                  {s.pullquote}
-                </Pullquote>
-              ) : null}
-              {s.pull ? <Pull>{s.pull}</Pull> : null}
               {diagram ? (
                 <DiagramPanel caption={diagram.caption}>
                   <diagram.Component />
@@ -269,13 +259,9 @@ export function ComoSeHaCreado({
                   }
                 />
               ) : null}
-              <RepoStrip
-                label="ENLACE ·"
-                text={s.enlace.text}
-                path={s.enlace.path}
-              />
+              <RepoStrip label={s.enlace.label} parts={s.enlace.parts} />
               <ChapterNav
-                position={i + 1}
+                position={position}
                 total={totalSections}
                 indexLabel={t.chapterNav.indexLabel}
                 indexHref="#indice"
@@ -283,7 +269,7 @@ export function ComoSeHaCreado({
                   t.sections[i + 1]?.ordinal ?? t.closing.ordinal
                 } · ${t.sections[i + 1]?.indexLabel ?? t.closing.indexLabel}`}
                 nextHref={`#${t.sections[i + 1]?.id ?? t.closing.id}`}
-                positionLabel={`${i + 1} de ${totalSections}`}
+                positionLabel={`${position} de ${totalSections}`}
               />
             </div>
           </section>
@@ -297,15 +283,18 @@ export function ComoSeHaCreado({
             kicker={t.closing.kicker}
             title={t.closing.title}
             id={`${t.closing.id}-h`}
+            metaLine={metaLineFor(
+              totalSections,
+              sectionReadingTime(blocksOf(t.closing.body)).minutes,
+            )}
           />
           <ArticleProse blocks={blocksOf(t.closing.body)} />
           <p className="text-muted-foreground mt-6 mb-0 text-[0.85rem]">
             {t.closing.meta}
           </p>
           <RepoStrip
-            label="ENLACE ·"
-            text={t.closing.enlace.text}
-            path={t.closing.enlace.path}
+            label={t.closing.enlace.label}
+            parts={t.closing.enlace.parts}
           />
           <div className="mt-[clamp(2.25rem,4.5vw,3rem)]">
             <ContactActions dict={contacto} cvHref={cvHref} />

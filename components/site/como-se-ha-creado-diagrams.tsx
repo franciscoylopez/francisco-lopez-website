@@ -24,7 +24,7 @@ export function DosVelocidadesDiagram() {
       viewBox="0 0 560 200"
       role="img"
       aria-label="Dos columnas iguales representan el mismo scroll de la página. La columna de la izquierda, marcada «selección, 5-10s», solo cubre el primer tramo, el above the fold. La columna de la derecha, marcada «CPO/VP Product, lectura profunda», cubre la columna entera hasta el final."
-      className="h-auto w-full max-w-[420px]"
+      className="h-auto w-full max-w-[540px]"
     >
       <rect
         x="60"
@@ -160,7 +160,7 @@ export function SinConsentimientoDiagram() {
       viewBox="0 0 560 150"
       role="img"
       aria-label="Dos filas. Sin consentimiento y antes del clic en el vídeo, la fila de peticiones de red está vacía. Después del consentimiento y del clic, la fila muestra tres peticiones: analítica, mapa de calor y el vídeo."
-      className="h-auto w-full max-w-[440px]"
+      className="h-auto w-full max-w-[620px]"
     >
       <text x="10" y="30" className={LBL}>
         Sin consentimiento · sin clic en el vídeo
@@ -231,10 +231,10 @@ export function CapasVerificacionDiagram() {
   ];
   return (
     <svg
-      viewBox="0 0 560 260"
+      viewBox="0 0 620 300"
       role="img"
       aria-label="Cinco barras horizontales de longitud creciente: compilador, escáner automático, censo de contraste, lector de pantalla y persona. Solo la barra de la persona, la más larga, entra en la zona final marcada como «lo que ninguna regla prohíbe»."
-      className="h-auto w-full max-w-[520px]"
+      className="h-auto w-full max-w-[600px]"
     >
       <line
         x1="130"
@@ -287,11 +287,25 @@ export function CapasVerificacionDiagram() {
         rx="4"
         className="fill-foreground"
       />
-      <text x="380" y="238" textAnchor="middle" className={LBL}>
-        lo que cubre una regla escrita
+      {/* Las dos etiquetas de cierre, en DOS líneas y separadas por el ancho
+          de las zonas que describen (0-466 y 466-550): a una sola línea
+          colisionaban a mitad de camino (11 caracteres de margen, con texto
+          de 27-28). */}
+      <text x="230" y="250" textAnchor="middle" className={LBL}>
+        <tspan x="230" dy="0">
+          lo que cubre
+        </tspan>
+        <tspan x="230" dy="16">
+          una regla escrita
+        </tspan>
       </text>
-      <text x="508" y="238" textAnchor="middle" className={LBL}>
-        lo que ninguna regla prohíbe
+      <text x="560" y="250" textAnchor="middle" className={LBL}>
+        <tspan x="560" dy="0">
+          lo que ninguna
+        </tspan>
+        <tspan x="560" dy="16">
+          regla prohíbe
+        </tspan>
       </text>
     </svg>
   );
@@ -306,7 +320,7 @@ export function CIDiagram() {
       viewBox="0 0 620 90"
       role="img"
       aria-label="Quince cuadrados en fila representan los pasos de integración continua. Once, la mayoría, están marcados como «buscan ausencia»; los cuatro restantes, como «buscan patrón»."
-      className="h-auto w-full max-w-[560px]"
+      className="h-auto w-full max-w-[620px]"
     >
       {Array.from({ length: pasos }, (_, i) => (
         <rect

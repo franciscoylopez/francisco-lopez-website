@@ -1,3 +1,5 @@
+import { cn } from "@/lib/utils";
+
 import { chromeLinkVariants } from "@/components/ui/chrome";
 
 export type BreadcrumbDict = {
@@ -15,9 +17,16 @@ export type Crumb = { label: string; href?: string };
 export function Breadcrumb({
   routeLabel,
   items,
+  inverted = false,
 }: {
   routeLabel: string;
   items: Crumb[];
+  /** Sobre una banda invertida (P60): el nivel actual pasa de `text-foreground`
+   * —que ahí ES el fondo de la banda, invisible— a `text-background`, y los
+   * enlaces usan `chromeLinkVariants({ tone: "inverted" })` en vez de
+   * `"muted"` (mismo problema en el hover). Requiere que el ancestro lleve
+   * `data-surface="inverted"` para que el atenuado en reposo resuelva bien. */
+  inverted?: boolean;
 }) {
   return (
     <nav aria-label={routeLabel}>
@@ -29,7 +38,9 @@ export function Breadcrumb({
               {item.href && !last ? (
                 <a
                   href={item.href}
-                  className={chromeLinkVariants({ tone: "muted" })}
+                  className={chromeLinkVariants({
+                    tone: inverted ? "inverted" : "muted",
+                  })}
                 >
                   {item.label}
                 </a>
@@ -41,7 +52,10 @@ export function Breadcrumb({
                 // un único nivel.
                 <span
                   aria-current="page"
-                  className="text-foreground inline-flex min-h-[44px] items-center font-medium"
+                  className={cn(
+                    "inline-flex min-h-[44px] items-center font-medium",
+                    inverted ? "text-background" : "text-foreground",
+                  )}
                 >
                   {item.label}
                 </span>

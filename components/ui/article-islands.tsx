@@ -48,6 +48,11 @@ export function ReadingProgress({ ariaLabel }: { ariaLabel: string }) {
   }, []);
 
   return (
+    // `z-[60]`, por ENCIMA del nav (`z-50`, sticky): con z-40 la barra
+    // quedaba pintada DEBAJO de la cabecera opaca del nav y no se veía nunca
+    // — «esto lo hemos perdido», feedback de diseño de P60. Vive pegada al
+    // borde superior del viewport, no al borde inferior del nav, así que es
+    // visible aunque el nav cambie de alto.
     <div
       ref={barRef}
       role="progressbar"
@@ -55,7 +60,7 @@ export function ReadingProgress({ ariaLabel }: { ariaLabel: string }) {
       aria-valuemin={0}
       aria-valuemax={100}
       aria-valuenow={0}
-      className="bg-border fixed inset-x-0 top-0 z-40 h-[3px]"
+      className="bg-border fixed inset-x-0 top-0 z-[60] h-[3px]"
     >
       <div
         ref={fillRef}
@@ -104,34 +109,32 @@ export function SectionRail({ items }: { items: RailItem[] }) {
         {items.map((item) => {
           const isActive = item.id === active;
           return (
-            <li key={item.id} className="group relative">
+            <li key={item.id}>
+              {/* La etiqueta ya NO es un tooltip flotante aparte: el propio
+                  círculo se ensancha en hover/foco y la revela dentro de la
+                  misma pastilla — «integrado con el índice», feedback de
+                  diseño de P60. `overflow-hidden` + `max-width` en vez de
+                  `width` porque el texto no puede reflowar durante la
+                  transición. La sección activa se acentúa en morado en vez
+                  de negro, mismo eje que el punto de `ChapterNav`. */}
               <a
                 href={`#${item.id}`}
                 aria-current={isActive ? "true" : undefined}
-                // El riel es `fixed`: sobrevuela lo que haya scrolleado debajo
-                // —la banda invertida de la apertura, luego la página normal—,
-                // así que NO puede fiarse de un fondo transparente ni de
-                // `text-muted-foreground` (calibrado contra `--background`,
-                // no contra lo que sea que esté detrás en cada instante). Cada
-                // punto lleva su PROPIA superficie opaca (`bg-card` +
-                // `border-border`), así que su contraste no depende de nada
-                // que no controle él mismo — viewport-verifier midió 1,9-2,2:1
-                // con el fondo transparente anterior.
                 className={cn(
-                  "border-border flex size-6 items-center justify-center rounded-full border font-mono text-[0.68rem] transition-colors",
+                  "border-border group flex h-6 max-w-6 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out hover:max-w-40 focus-visible:max-w-40",
                   isActive
-                    ? "bg-foreground text-background border-foreground"
-                    : "bg-card text-muted-foreground hover:bg-muted",
+                    ? // Mismo velo que badgeVariants({tone:"purple"}) — ya
+                      // validado en AAA (badge.tsx) — en vez de un morado
+                      // sólido con un texto encima que nadie ha medido.
+                      "text-foreground border-brand-purple bg-[color-mix(in_oklch,var(--brand-purple),transparent_82%)]"
+                    : "bg-card text-muted-foreground hover:bg-card hover:text-foreground",
                 )}
               >
-                {item.ordinal}
+                <span className="flex size-[18px] shrink-0 items-center justify-center">
+                  {item.ordinal}
+                </span>
+                <span className="pr-3 text-[0.78rem]">{item.label}</span>
               </a>
-              <span
-                role="tooltip"
-                className="bg-foreground text-background pointer-events-none absolute top-1/2 left-[calc(100%+0.5rem)] -translate-y-1/2 rounded-md px-2 py-1 text-[0.75rem] whitespace-nowrap opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100"
-              >
-                {item.label}
-              </span>
             </li>
           );
         })}

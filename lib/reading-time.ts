@@ -19,18 +19,29 @@ function countWords(text: string): number {
   return stripped.split(/\s+/).length;
 }
 
-/** Un bloque de cuerpo de sección: párrafo, subtítulo o lista. Mismo tipo que
- * consume `SectionCover`/la prosa de la página (ver `components/ui/article.tsx`). */
+/** Un bloque de cuerpo de sección: párrafo, subtítulo, lista o cita. Mismo
+ * tipo que consume `ArticleProse` (ver `components/ui/article.tsx`). La cita
+ * vive DENTRO del cuerpo —no como campo aparte— para que flote en su sitio
+ * exacto del párrafo y el texto de alrededor la rodee (feedback de diseño de
+ * P60: una cita aparte del flujo no se integraba con el texto). */
 export type ArticleBlock =
   | { type: "p"; text: string }
   | { type: "h3"; text: string }
-  | { type: "ul"; items: string[] };
+  | { type: "ul"; items: string[] }
+  | {
+      type: "quote";
+      text: string;
+      style: "pullquote" | "pull";
+      label?: string;
+      side?: "left" | "right";
+    };
 
 function wordsOfBlocks(blocks: ArticleBlock[]): number {
   return blocks.reduce((sum, block) => {
     if (block.type === "ul") {
       return sum + block.items.reduce((s, item) => s + countWords(item), 0);
     }
+    if (block.type === "quote") return sum; // ya contada como parte del párrafo que cita
     return sum + countWords(block.text);
   }, 0);
 }
