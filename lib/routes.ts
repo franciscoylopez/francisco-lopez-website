@@ -37,6 +37,7 @@ export const STATIC_PAGE_SLUGS = [
   "design-system",
   "accesibilidad",
   "cookies",
+  "como-se-ha-creado",
 ] as const;
 
 /** Una página estática, como unión de literales. */

@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
+import { ARTICLE_UPDATED } from "@/lib/design-values";
 import {
   STATIC_PAGE_SLUGS,
   type PageSlug,
@@ -69,6 +70,7 @@ const ESTATICAS: Record<StaticPageSlug, Omit<Pagina, "slug">> = {
   "design-system": { priority: 0.8, lastModified: "2026-08-10" },
   accesibilidad: { priority: 0.8, lastModified: "2026-08-10" },
   cookies: { priority: 0.3, lastModified: "2026-08-17" },
+  "como-se-ha-creado": { priority: 0.8, lastModified: ARTICLE_UPDATED },
 };
 
 const PAGES: Pagina[] = STATIC_PAGE_SLUGS.map((slug) => ({

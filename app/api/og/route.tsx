@@ -100,6 +100,16 @@ const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
     es: { title: "Accesibilidad", kicker: "Compromiso" },
     en: { title: "Accessibility", kicker: "Commitment" },
   },
+  "como-se-ha-creado": {
+    es: {
+      title: "Cómo se ha creado esta página",
+      kicker: "Making-of",
+    },
+    en: {
+      title: "How this page was built",
+      kicker: "Making-of",
+    },
+  },
 };
 
 const WORDMARK = "Francisco López";
@@ -398,7 +408,8 @@ export async function GET(request: NextRequest) {
     cardParam === "design-system" ||
     cardParam === "cookies" ||
     cardParam === "sobre-mi" ||
-    cardParam === "accesibilidad"
+    cardParam === "accesibilidad" ||
+    cardParam === "como-se-ha-creado"
       ? cardParam
       : "home";
 

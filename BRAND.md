@@ -37,13 +37,19 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
      legible en **secciones con fondo invertido** (fondo = `foreground`, texto =
      `background`), donde el `brand-purple` estándar no llega. Úsalo **solo ahí**; fuera de
      ese contexto, `brand-purple`.
-     **Es el único token de marca que CONMUTA con el tema** (`0.78` en claro, `0.45` en
-     oscuro), y tiene que hacerlo: el fondo de esas secciones *es* `--foreground`, así que
-     salta de carbón a hueso. Un color fijo no puede pasar de **3,71:1** contra las dos
-     superficies —es la media geométrica de sus contrastes, no una estimación—, así que la
-     salvedad «solo texto grande» que arrastró hasta el 2026-08-09 no era del morado: era de
-     cualquier color fijo. Al conmutar da **7,04 / 7,21** y entra en AAA sin coletilla. Mismo
-     patrón que `--primary-on-inverted`.
+     **Conmuta con el tema** (`0.78` en claro, `0.45` en oscuro), y tiene que hacerlo: el fondo
+     de esas secciones *es* `--foreground`, así que salta de carbón a hueso. Un color fijo no
+     puede pasar de **3,71:1** contra las dos superficies —es la media geométrica de sus
+     contrastes, no una estimación—, así que la salvedad «solo texto grande» que arrastró hasta
+     el 2026-08-09 no era del morado: era de cualquier color fijo. Al conmutar da **7,04 / 7,21**
+     y entra en AAA sin coletilla. Mismo patrón que `--primary-on-inverted`.
+   - `progress-ink` *(2026-08-21)*: variante de `brand-purple` para la barra de progreso de
+     lectura de «Cómo se ha creado esta página» — el otro sitio donde el morado decorativo tiene
+     que leerse como UI, esta vez sobre `--background` DIRECTAMENTE en vez de una banda
+     invertida. Mismo mecanismo que `brand-purple-accent` y **con los papeles cambiados**:
+     `0.45` en claro (el morado oscuro, porque el fondo de página en claro es hueso) y `0.78`
+     en oscuro (el morado claro, porque el fondo de página en oscuro es carbón). Úsalo **solo**
+     para esa barra; fuera de ahí, `brand-purple` o `brand-purple-accent` según el fondo.
 
 ### El morado decorativo no vale como elemento gráfico
 

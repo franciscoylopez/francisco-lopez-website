@@ -51,6 +51,7 @@
   --color-brand-cyan-split: var(--brand-cyan-split);
   --color-brand-purple-split: var(--brand-purple-split);
   --color-brand-purple-accent: var(--brand-purple-accent);
+  --color-progress-ink: var(--progress-ink);
 
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -161,6 +162,16 @@
     0.78 0.16 290
   ); /* se pinta #B7A3FF sobre carbón */
 
+  /* Morado de la barra de progreso de «Cómo se ha creado» (P60). Mismo
+     mecanismo que `--brand-purple-accent` —un color fijo no puede pasar 3:1
+     contra las dos superficies opuestas (BRAND.md §El morado como gráfico)—
+     pero con los papeles INVERTIDOS: la barra vive sobre `--background`
+     directamente, no sobre una banda invertida, así que en claro necesita el
+     morado OSCURO (0.45) y en oscuro el CLARO (0.78) — justo al revés que
+     `--brand-purple-accent`, que vive sobre bandas invertidas. Documentado en
+     BRAND.md §Color, 2026-08-21. */
+  --progress-ink: oklch(0.45 0.16 290);
+
   /* Cian legible sobre fondos INVERTIDOS (bloques cuyo fondo es `--foreground`).
      Es, literalmente, el cian del OTRO tema: sobre una superficie invertida el
      "primer plano" es `--background`, así que el acento tiene que ser el que ese
@@ -233,6 +244,10 @@
      Mismo motivo y mismo cálculo que en claro (ver arriba). Se pinta #583DA6. */
   --brand-purple-accent: oklch(0.45 0.16 290);
   --primary-on-inverted: oklch(0.41 0.0886 194.82); /* el cian del tema claro */
+  /* El morado CLARO de la barra de progreso: en oscuro el fondo de página es
+     carbón, así que necesita el morado que se lee sobre carbón (ver la nota en
+     :root). */
+  --progress-ink: oklch(0.78 0.16 290);
 }
 
 @layer base {

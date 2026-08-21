@@ -416,6 +416,16 @@ export const LAST_A11Y_REVIEW = "2026-08-20";
  */
 export const LAST_COOKIES_UPDATE = "2026-08-17";
 
+/**
+ * Cuándo se publicó y cuándo se revisó por última vez «Cómo se ha creado esta
+ * página» — mismo mecanismo que `LAST_A11Y_REVIEW`, fuente única para el
+ * `datePublished`/`dateModified` del JSON-LD `TechArticle` (P60) y para
+ * cualquier copy que necesite decirlo. Se actualiza `ARTICLE_UPDATED` cada vez
+ * que el artículo cambia de forma sustantiva; `ARTICLE_PUBLISHED` no se toca.
+ */
+export const ARTICLE_PUBLISHED = "2026-08-21";
+export const ARTICLE_UPDATED = "2026-08-21";
+
 /** La fecha larga en el idioma de la página. */
 export function reviewDate(iso: string, locale: Locale): string {
   return new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-GB", {
