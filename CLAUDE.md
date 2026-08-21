@@ -94,6 +94,7 @@
 - D76 · Una capa nueva para texto largo, y el control que le faltaba al chrome sobre banda invertida
 - D77 · Un bug que ya estaba comentado tres veces, y el diagrama pasa a vivir donde vive la cita
 - D78 · El dato en vivo se vuelve un bloque más, y el pie deja de tener dos estilos
+- D79 · Un prototipo: una dirección ganó
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 

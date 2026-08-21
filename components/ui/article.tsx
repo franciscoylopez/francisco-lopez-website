@@ -647,10 +647,16 @@ export function DiagramPanel({
     // columna. `--measure` sigue siendo el ancho correcto para una LISTA
     // (línea de lectura), pero un panel no es prosa: se cuadra con el ancho
     // real del bloque, no con el de una línea cómoda de leer.
+    // `diagram-realce` (D79, prototipo de Tanda 3): el marco entra con el
+    // mismo fade-up que cualquier `data-reveal`, y sus piezas internas
+    // —cada una marcada `.rlz` con su propio `--i`, en `como-se-ha-creado-
+    // diagrams.tsx`— entran atenuadas y un barrido secuencial las lleva a
+    // opacidad plena. Es LA regla para los diagramas de nodos/líneas del
+    // artículo, no una animación por diagrama.
     <figure
       data-reveal
       className={cn(
-        "border-border bg-card my-[1.5rem] overflow-hidden rounded-xl border",
+        "diagram-realce border-border bg-card my-[1.5rem] overflow-hidden rounded-xl border",
         side
           ? cn(
               "w-full sm:w-1/2",

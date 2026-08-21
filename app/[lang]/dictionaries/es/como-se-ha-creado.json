@@ -777,15 +777,6 @@
           "type": "p",
           "text": "Ninguna de las cinco es un prompt que reescribo cada vez. Son instrucciones versionadas dentro del repositorio, y por eso mejoran: cuando una falla, se corrige el archivo, no la siguiente conversación."
         },
-        {
-          "type": "livestat",
-          "id": "s09",
-          "label": "Integración continua · dato en vivo",
-          "source": ".github/workflows/ci.yml",
-          "value": "Quince pasos en cada PR",
-          "linkLabel": "Ver el flujo de CI",
-          "href": "github"
-        },
         { "type": "h3", "text": "Lo que no encuentra: lo que falta" },
         {
           "type": "p",
@@ -798,8 +789,7 @@
         {
           "type": "diagram",
           "id": "s09",
-          "side": "left",
-          "caption": "Los quince pasos de integración continua: la mayoría busca la ausencia de un patrón malo, no su presencia."
+          "caption": "Los quince pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
         },
         {
           "type": "quote",

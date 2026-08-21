@@ -1,4 +1,7 @@
+import type { CSSProperties } from "react";
+
 import type { Locale } from "@/lib/i18n/config";
+import { cn } from "@/lib/utils";
 
 // Los diagramas propios de «Cómo se ha creado esta página» (P60, D54): SVG
 // inline con tokens, no `<img>` — así conmutan con el tema. Site-specific (el
@@ -29,6 +32,15 @@ import type { Locale } from "@/lib/i18n/config";
 
 const LBL = "fill-muted-foreground font-mono text-[11px]";
 const LBL_STRONG = "fill-foreground font-mono text-[11px] font-medium";
+
+/** «Realce» (D79): cada pieza de un diagrama entra atenuada y un barrido
+ * secuencial la lleva a opacidad plena, en el orden NARRATIVO que marca `i`
+ * —el origen primero, lo que depende de él después—, no el orden en que cae
+ * en el DOM. `.rlz` y `--i` los resuelve la CSS global (`app/globals.css`);
+ * aquí solo se combina con las clases propias de cada pieza. */
+function rlz(i: number, extra?: string) {
+  return { className: cn(extra, "rlz"), style: { "--i": i } as CSSProperties };
+}
 
 /** 01 · Dos lectores, dos velocidades: el mismo scroll, leído a dos ritmos. */
 export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
@@ -61,7 +73,7 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
         width="160"
         height="160"
         rx="6"
-        className="fill-muted"
+        {...rlz(1, "fill-muted")}
       />
       <rect
         x="60"
@@ -69,12 +81,12 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
         width="160"
         height="42"
         rx="6"
-        className="fill-primary/70"
+        {...rlz(0, "fill-primary/70")}
       />
-      <text x="140" y="45" textAnchor="middle" className={LBL_STRONG}>
+      <text x="140" y="45" textAnchor="middle" {...rlz(0, LBL_STRONG)}>
         above the fold
       </text>
-      <text x="140" y="200" textAnchor="middle" className={LBL}>
+      <text x="140" y="200" textAnchor="middle" {...rlz(4, LBL)}>
         {t.scan}
       </text>
 
@@ -84,7 +96,7 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
         width="160"
         height="160"
         rx="6"
-        className="fill-muted"
+        {...rlz(1, "fill-muted")}
       />
       <rect
         x="340"
@@ -92,7 +104,7 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
         width="160"
         height="42"
         rx="6"
-        className="fill-primary/70"
+        {...rlz(0, "fill-primary/70")}
       />
       <rect
         x="340"
@@ -100,100 +112,112 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
         width="160"
         height="114"
         rx="4"
-        className="fill-brand-purple-soft"
+        {...rlz(2, "fill-brand-purple-soft")}
       />
-      <text x="420" y="45" textAnchor="middle" className={LBL_STRONG}>
+      <text x="420" y="45" textAnchor="middle" {...rlz(0, LBL_STRONG)}>
         above the fold
       </text>
-      <text x="420" y="125" textAnchor="middle" className={LBL_STRONG}>
+      <text x="420" y="125" textAnchor="middle" {...rlz(3, LBL_STRONG)}>
         {t.deep}
       </text>
-      <text x="420" y="200" textAnchor="middle" className={LBL}>
+      <text x="420" y="200" textAnchor="middle" {...rlz(4, LBL)}>
         {t.deepReader}
       </text>
     </svg>
   );
 }
 
-/** 05 · La cascada de construcción: cuatro preguntas en fila, con su destino. */
+/** 05 · La cascada de construcción, en escalera descendente (D79, prototipo
+ * de Tanda 3 · «Escalera descendente», elegida sobre las otras dos que se
+ * compararon): el indentado decreciente enseña lo que el texto ya dice —la
+ * mayoría de casos se resuelven en la primera pregunta—, cosa que la fila
+ * horizontal anterior no comunicaba en ningún sitio. */
 export function CascadaDiagram({ lang }: { lang: Locale }) {
   const t = {
     es: {
       ariaLabel:
-        "Cuatro cajas en fila, unidas por flechas: ¿Existe la pieza? → se usa. ¿Es del sistema? → se crea la variante. ¿Es estado, foco o portal? → se trae de shadcn. ¿Nada de lo anterior? → se decide y se documenta.",
+        "Cuatro preguntas en cascada descendente, cada una más corta que la anterior: ¿Existe la pieza? → se usa. Si no, ¿es del sistema? → se crea la variante. Si no, ¿es estado, foco o portal? → se trae de shadcn. Si no, ¿nada de lo anterior? → se decide y se documenta. La mayoría de casos se resuelven en la primera pregunta.",
       steps: [
         { q: "¿Existe la pieza?", a: "Se usa" },
         { q: "¿Es del sistema?", a: "Se crea la variante" },
-        { q: "¿Estado/foco/portal?", a: "Se trae de shadcn" },
+        { q: "¿Estado, foco o portal?", a: "Se trae de shadcn" },
         { q: "¿Nada de lo anterior?", a: "Se decide y se documenta" },
       ],
+      sino: "si no",
     },
     en: {
       ariaLabel:
-        "Four boxes in a row, joined by arrows: Does the piece exist? → use it. Does it belong to the system? → create the variant. Is it state, focus or a portal? → pull it from shadcn. None of the above? → decide and document it.",
+        "Four questions in a descending cascade, each shorter than the last: Does the piece exist? → use it. If not, is it the system's? → create the variant. If not, is it state, focus or a portal? → pull it from shadcn. If not, none of the above? → decide and document it. Most cases resolve at the first question.",
       steps: [
         { q: "Does it exist?", a: "Use it" },
         { q: "Is it the system's?", a: "Create the variant" },
-        { q: "State/focus/portal?", a: "Pull it from shadcn" },
+        { q: "State, focus or portal?", a: "Pull it from shadcn" },
         { q: "None of the above?", a: "Decide and document" },
       ],
+      sino: "if not",
     },
   }[lang];
+  const W = 600;
+  const ROW_H = 72;
+  const PAD = 14;
   return (
     <svg
-      viewBox="0 0 700 160"
+      viewBox={`0 0 ${W} ${PAD * 2 + t.steps.length * ROW_H}`}
       role="img"
       aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[640px]"
+      className="h-auto w-full max-w-[600px]"
     >
       {t.steps.map((s, i) => {
-        const x = 10 + i * 172;
+        const y = PAD + i * ROW_H;
+        const indent = i * 24;
+        const boxW = W - 40 - indent * 2;
+        const isFirst = i === 0;
         return (
           <g key={s.q}>
             <rect
-              x={x}
-              y="16"
-              width="152"
-              height="128"
-              rx="6"
-              className="fill-muted"
+              x={20 + indent}
+              y={y}
+              width={boxW}
+              height={ROW_H - 14}
+              rx="8"
+              strokeWidth={isFirst ? 1.5 : 1}
+              {...rlz(
+                i,
+                isFirst ? "fill-primary/12 stroke-primary" : "fill-muted",
+              )}
             />
-            <text x={x + 76} y="46" textAnchor="middle" className={LBL}>
-              {i + 1}
+            <text x={40 + indent} y={y + 25} {...rlz(i, LBL_STRONG)}>
+              {i + 1}. {s.q}
             </text>
-            <foreignObject x={x + 10} y="54" width="132" height="80">
-              <div className="flex h-full flex-col justify-between text-center">
-                <p className="text-foreground m-0 text-[11px] leading-[1.3] font-medium">
-                  {s.q}
-                </p>
-                <p className="text-primary m-0 text-[11px] leading-[1.3] font-semibold">
-                  {s.a}
-                </p>
-              </div>
-            </foreignObject>
+            <text
+              x={40 + indent}
+              y={y + 44}
+              {...rlz(i, "fill-primary font-mono text-[11px] font-semibold")}
+            >
+              → {s.a}
+            </text>
             {i < t.steps.length - 1 ? (
-              <path
-                d={`M${x + 156} 80 L${x + 168} 80`}
-                className="stroke-border"
-                strokeWidth="2"
-                markerEnd="url(#arrow)"
-              />
+              <>
+                <line
+                  x1={20 + indent + 16}
+                  y1={y + ROW_H - 14}
+                  x2={20 + indent + 16}
+                  y2={y + ROW_H - 2}
+                  strokeWidth="2"
+                  {...rlz(i, "stroke-border")}
+                />
+                <text
+                  x={20 + indent + 26}
+                  y={y + ROW_H - 3}
+                  {...rlz(i, "fill-muted-foreground font-mono text-[9px]")}
+                >
+                  {t.sino}
+                </text>
+              </>
             ) : null}
           </g>
         );
       })}
-      <defs>
-        <marker
-          id="arrow"
-          markerWidth="8"
-          markerHeight="8"
-          refX="4"
-          refY="4"
-          orient="auto"
-        >
-          <path d="M0 0 L8 4 L0 8 Z" className="fill-border" />
-        </marker>
-      </defs>
     </svg>
   );
 }
@@ -229,7 +253,7 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
       aria-label={t.ariaLabel}
       className="h-auto w-full max-w-[620px]"
     >
-      <text x="10" y="30" className={LBL}>
+      <text x="10" y="30" {...rlz(0, LBL)}>
         {t.before}
       </text>
       <rect
@@ -238,14 +262,14 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
         width="540"
         height="34"
         rx="6"
-        className="fill-muted"
         strokeDasharray="4 4"
+        {...rlz(0, "fill-muted")}
       />
-      <text x="280" y="64" textAnchor="middle" className={LBL}>
+      <text x="280" y="64" textAnchor="middle" {...rlz(0, LBL)}>
         {t.empty}
       </text>
 
-      <text x="10" y="108" className={LBL}>
+      <text x="10" y="108" {...rlz(1, LBL)}>
         {t.after}
       </text>
       <g>
@@ -255,9 +279,9 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
           width="170"
           height="28"
           rx="5"
-          className="fill-primary/25"
+          {...rlz(2, "fill-primary/25")}
         />
-        <text x="95" y="136" textAnchor="middle" className={LBL_STRONG}>
+        <text x="95" y="136" textAnchor="middle" {...rlz(2, LBL_STRONG)}>
           {t.analytics}
         </text>
         <rect
@@ -266,9 +290,9 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
           width="170"
           height="28"
           rx="5"
-          className="fill-primary/25"
+          {...rlz(3, "fill-primary/25")}
         />
-        <text x="280" y="136" textAnchor="middle" className={LBL_STRONG}>
+        <text x="280" y="136" textAnchor="middle" {...rlz(3, LBL_STRONG)}>
           {t.heatmap}
         </text>
         <rect
@@ -277,9 +301,9 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
           width="170"
           height="28"
           rx="5"
-          className="fill-primary/25"
+          {...rlz(4, "fill-primary/25")}
         />
-        <text x="465" y="136" textAnchor="middle" className={LBL_STRONG}>
+        <text x="465" y="136" textAnchor="middle" {...rlz(4, LBL_STRONG)}>
           {t.video}
         </text>
       </g>
@@ -334,16 +358,16 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
         y1="10"
         x2="130"
         y2="220"
-        className="stroke-border"
         strokeDasharray="3 3"
+        {...rlz(5, "stroke-border")}
       />
       <line
         x1="466"
         y1="10"
         x2="466"
         y2="220"
-        className="stroke-border"
         strokeDasharray="3 3"
+        {...rlz(5, "stroke-border")}
       />
       <rect
         x="466"
@@ -351,12 +375,12 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
         width="84"
         height="210"
         rx="4"
-        className="fill-brand-purple-soft/50 stroke-brand-purple"
         strokeDasharray="4 3"
+        {...rlz(5, "fill-brand-purple-soft/50 stroke-brand-purple")}
       />
       {t.capas.map((c, i) => (
         <g key={c.label}>
-          <text x="118" y={10 + i * 42 + 26} textAnchor="end" className={LBL}>
+          <text x="118" y={10 + i * 42 + 26} textAnchor="end" {...rlz(i, LBL)}>
             {c.label}
           </text>
           <rect
@@ -365,11 +389,11 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
             width={c.w}
             height="24"
             rx="4"
-            className="fill-muted"
+            {...rlz(i, "fill-muted")}
           />
         </g>
       ))}
-      <text x="118" y="196" textAnchor="end" className={LBL}>
+      <text x="118" y="196" textAnchor="end" {...rlz(4, LBL)}>
         {t.persona}
       </text>
       <rect
@@ -378,13 +402,13 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
         width="420"
         height="24"
         rx="4"
-        className="fill-foreground"
+        {...rlz(4, "fill-foreground")}
       />
       {/* Las dos etiquetas de cierre, en DOS líneas y separadas por el ancho
           de las zonas que describen (0-466 y 466-550): a una sola línea
           colisionaban a mitad de camino (11 caracteres de margen, con texto
           de 27-28). */}
-      <text x="230" y="250" textAnchor="middle" className={LBL}>
+      <text x="230" y="250" textAnchor="middle" {...rlz(5, LBL)}>
         <tspan x="230" dy="0">
           {t.coveredLine1}
         </tspan>
@@ -392,7 +416,7 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
           {t.coveredLine2}
         </tspan>
       </text>
-      <text x="560" y="250" textAnchor="middle" className={LBL}>
+      <text x="560" y="250" textAnchor="middle" {...rlz(5, LBL)}>
         <tspan x="560" dy="0">
           {t.uncoveredLine1}
         </tspan>
@@ -404,62 +428,190 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
   );
 }
 
-/** 09 · Los quince pasos de CI en fila, marcando cuáles buscan ausencia. */
+/** 09 · Los quince pasos de CI, agrupados por rol (D79, prototipo de Tanda 3
+ * · «Agrupado por rol», elegida sobre las otras dos que se compararon):
+ * sustituye a los quince cuadraditos anónimos Y al dato en vivo «Quince
+ * pasos en cada PR» —eran DOS piezas compitiendo por el mismo hueco (P60
+ * tanda 3-bis, punto 11)— por un único diagrama con los QUINCE PASOS REALES
+ * del workflow, en su orden real (un único job de GitHub Actions: se
+ * ejecutan uno detrás de otro, nunca en paralelo). Busca-patrón /
+ * busca-ausencia sale del propio texto de la sección, no de una etiqueta
+ * inventada: los cuatro que buscan un patrón conocido son las herramientas
+ * de fábrica (Format, Typecheck, Lint, Build); los once que buscan la
+ * ausencia de algo bueno son los guardianes propios de este repositorio. */
 export function CIDiagram({ lang }: { lang: Locale }) {
-  const pasos = 15;
-  const buscanAusencia = 11;
+  type Cat = "ausencia" | "patron";
   const t = {
     es: {
       ariaLabel:
-        "Quince cuadrados en fila representan los pasos de integración continua. Once, la mayoría, están marcados como «buscan ausencia»; los cuatro restantes, como «buscan patrón».",
-      absence: `busca ausencia (${buscanAusencia})`,
-      pattern: `busca patrón (${pasos - buscanAusencia})`,
+        "Los quince pasos del workflow de integración continua, en su orden real, agrupados en cuatro bloques: Código, Copy y contenido, Guardianes del repo, y Build y marco. Los pasos coloreados buscan la ausencia de algo bueno; los neutros buscan un patrón conocido.",
+      groups: [
+        {
+          label: "Código",
+          items: [
+            { n: "Format", cat: "patron" as Cat },
+            { n: "Typecheck", cat: "patron" as Cat },
+            { n: "Lint", cat: "patron" as Cat },
+          ],
+        },
+        {
+          label: "Copy y contenido",
+          items: [
+            { n: "Paleta", cat: "ausencia" as Cat },
+            { n: "Experiencias", cat: "ausencia" as Cat },
+            { n: "CV al día", cat: "ausencia" as Cat },
+            { n: "Raya en el copy", cat: "ausencia" as Cat },
+          ],
+        },
+        {
+          label: "Guardianes del repo",
+          items: [
+            { n: "Artefacto al día", cat: "ausencia" as Cat },
+            { n: "Contexto de arranque", cat: "ausencia" as Cat },
+            { n: "Skills al día", cat: "ausencia" as Cat },
+            { n: "Índices derivados", cat: "ausencia" as Cat },
+            { n: "Rutas registradas", cat: "ausencia" as Cat },
+          ],
+        },
+        {
+          label: "Build y marco",
+          items: [
+            { n: "Build", cat: "patron" as Cat },
+            { n: "Marco de página", cat: "ausencia" as Cat },
+            { n: "Guardianes con dientes", cat: "ausencia" as Cat },
+          ],
+        },
+      ],
+      absence: "busca ausencia (11)",
+      pattern: "busca patrón (4)",
     },
     en: {
       ariaLabel:
-        "Fifteen squares in a row represent the steps of continuous integration. Eleven, most of them, are marked as “looks for absence”; the remaining four, as “looks for a pattern”.",
-      absence: `looks for absence (${buscanAusencia})`,
-      pattern: `looks for a pattern (${pasos - buscanAusencia})`,
+        "The fifteen steps of the continuous-integration workflow, in their real order, grouped into four blocks: Code, Copy and content, Repo guardians, and Build and frame. Tinted steps look for the absence of something good; neutral ones look for a known pattern.",
+      groups: [
+        {
+          label: "Code",
+          items: [
+            { n: "Format", cat: "patron" as Cat },
+            { n: "Typecheck", cat: "patron" as Cat },
+            { n: "Lint", cat: "patron" as Cat },
+          ],
+        },
+        {
+          label: "Copy and content",
+          items: [
+            { n: "Palette", cat: "ausencia" as Cat },
+            { n: "Experiences", cat: "ausencia" as Cat },
+            { n: "CV freshness", cat: "ausencia" as Cat },
+            { n: "Copy dash check", cat: "ausencia" as Cat },
+          ],
+        },
+        {
+          label: "Repo guardians",
+          items: [
+            { n: "Artifact freshness", cat: "ausencia" as Cat },
+            { n: "Context budget", cat: "ausencia" as Cat },
+            { n: "Skills freshness", cat: "ausencia" as Cat },
+            { n: "Derived indices", cat: "ausencia" as Cat },
+            { n: "Registered routes", cat: "ausencia" as Cat },
+          ],
+        },
+        {
+          label: "Build and frame",
+          items: [
+            { n: "Build", cat: "patron" as Cat },
+            { n: "Page frame", cat: "ausencia" as Cat },
+            { n: "Guardians with teeth", cat: "ausencia" as Cat },
+          ],
+        },
+      ],
+      absence: "looks for absence (11)",
+      pattern: "looks for a pattern (4)",
     },
   }[lang];
+
+  const chipW = (label: string) =>
+    Math.max(58, Math.round(label.length * 6.4) + 22);
+  const GAP = 8;
+  const ROW_H = 26;
+  const GROUP_H = 56;
+  const W = 760;
+  const lastStep = t.groups.length - 1;
+  const legendY = t.groups.length * GROUP_H;
+
   return (
     <svg
-      viewBox="0 0 620 90"
+      viewBox={`0 0 ${W} ${legendY + 30}`}
       role="img"
       aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[620px]"
+      className="h-auto w-full max-w-[760px]"
     >
-      {Array.from({ length: pasos }, (_, i) => (
-        <rect
-          key={i}
-          x={10 + i * 40}
-          y="10"
-          width="32"
-          height="32"
-          rx="5"
-          className={i < buscanAusencia ? "fill-primary/30" : "fill-muted"}
-        />
-      ))}
+      {t.groups.map((g, gi) => {
+        const y = gi * GROUP_H;
+        let x = 10;
+        return (
+          <g key={g.label}>
+            <text
+              x="10"
+              y={y + 12}
+              {...rlz(
+                gi,
+                "fill-muted-foreground font-mono text-[10px] font-semibold uppercase tracking-[0.06em]",
+              )}
+            >
+              {g.label}
+            </text>
+            {g.items.map((it) => {
+              const w = chipW(it.n);
+              const cx = x;
+              x += w + GAP;
+              return (
+                <g key={it.n}>
+                  <rect
+                    x={cx}
+                    y={y + 18}
+                    width={w}
+                    height={ROW_H}
+                    rx="6"
+                    {...rlz(
+                      gi,
+                      it.cat === "ausencia" ? "fill-primary/25" : "fill-muted",
+                    )}
+                  />
+                  <text
+                    x={cx + w / 2}
+                    y={y + 18 + ROW_H / 2 + 3.5}
+                    textAnchor="middle"
+                    {...rlz(gi, "fill-foreground font-mono text-[9.5px]")}
+                  >
+                    {it.n}
+                  </text>
+                </g>
+              );
+            })}
+          </g>
+        );
+      })}
       <rect
         x="10"
-        y="60"
+        y={legendY + 8}
         width="14"
         height="14"
         rx="3"
-        className="fill-primary/30"
+        {...rlz(lastStep, "fill-primary/25")}
       />
-      <text x="30" y="71" className={LBL}>
+      <text x="30" y={legendY + 19} {...rlz(lastStep, LBL)}>
         {t.absence}
       </text>
       <rect
         x="220"
-        y="60"
+        y={legendY + 8}
         width="14"
         height="14"
         rx="3"
-        className="fill-muted"
+        {...rlz(lastStep, "fill-muted")}
       />
-      <text x="240" y="71" className={LBL}>
+      <text x="240" y={legendY + 19} {...rlz(lastStep, LBL)}>
         {t.pattern}
       </text>
     </svg>
@@ -561,9 +713,9 @@ export function StackDiagram({ lang }: { lang: Locale }) {
             y1={CORE.y}
             x2={cx}
             y2={cy}
-            className="stroke-border"
             strokeWidth="2"
             strokeDasharray={n.shipped ? undefined : "5 4"}
+            {...rlz(1, "stroke-border")}
           />
         );
       })}
@@ -574,10 +726,10 @@ export function StackDiagram({ lang }: { lang: Locale }) {
         width="190"
         height="70"
         rx="8"
-        className="fill-primary/15 stroke-primary"
         strokeWidth="1.5"
+        {...rlz(0, "fill-primary/15 stroke-primary")}
       />
-      <foreignObject x="105" y="235" width="170" height="50">
+      <foreignObject x="105" y="235" width="170" height="50" {...rlz(0)}>
         <div className="flex h-full flex-col items-center justify-center text-center">
           <p className="text-foreground m-0 text-[12px] leading-[1.3] font-semibold">
             {t.core.l1}
@@ -596,15 +748,16 @@ export function StackDiagram({ lang }: { lang: Locale }) {
             width={n.w}
             height={n.h}
             rx="7"
-            className={n.shipped ? "fill-muted" : "fill-card stroke-border"}
             strokeWidth={n.shipped ? undefined : 1.5}
             strokeDasharray={n.shipped ? undefined : "4 3"}
+            {...rlz(2, n.shipped ? "fill-muted" : "fill-card stroke-border")}
           />
           <foreignObject
             x={n.x + 8}
             y={n.y + 8}
             width={n.w - 16}
             height={n.h - 16}
+            {...rlz(3)}
           >
             <div className="flex h-full flex-col items-center justify-center text-center">
               <p className="text-foreground m-0 text-[11px] leading-[1.3] font-semibold">
@@ -623,10 +776,10 @@ export function StackDiagram({ lang }: { lang: Locale }) {
         y1="470"
         x2="44"
         y2="470"
-        className="stroke-border"
         strokeWidth="2"
+        {...rlz(4, "stroke-border")}
       />
-      <text x="52" y="474" className={LBL}>
+      <text x="52" y="474" {...rlz(4, LBL)}>
         {t.shippedLabel}
       </text>
       <line
@@ -634,11 +787,11 @@ export function StackDiagram({ lang }: { lang: Locale }) {
         y1="470"
         x2="174"
         y2="470"
-        className="stroke-border"
         strokeWidth="2"
         strokeDasharray="5 4"
+        {...rlz(4, "stroke-border")}
       />
-      <text x="182" y="474" className={LBL}>
+      <text x="182" y="474" {...rlz(4, LBL)}>
         {t.buildLabel}
       </text>
     </svg>
