@@ -40,7 +40,7 @@ export function ArticuloLargo({
             metaLine={t.coverMeta}
           />
           <div className="grid grid-cols-1 gap-x-[var(--gutter)] gap-y-2 md:grid-cols-2">
-            <Pullquote label={t.pullquoteLabel}>{t.pullquote}</Pullquote>
+            <Pullquote>{t.pullquote}</Pullquote>
             <Pull>{t.pull}</Pull>
           </div>
           <LiveStat

@@ -1,4 +1,4 @@
-import type { ComponentType } from "react";
+import type { ComponentType, ReactNode } from "react";
 
 import type { ComoSeHaCreadoDict } from "@/app/[lang]/dictionaries";
 import {
@@ -6,18 +6,19 @@ import {
   ArticleProse,
   ByLine,
   ChapterNav,
-  DiagramPanel,
-  LiveStat,
   RepoStrip,
   SectionCover,
 } from "@/components/ui/article";
 import {
+  FloatingShare,
   ReadingProgress,
   SectionRail,
   ShareActions,
 } from "@/components/ui/article-islands";
+import { Badge } from "@/components/ui/badge";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { GITHUB_URL } from "@/lib/contact";
+import type { Locale } from "@/lib/i18n/config";
 import {
   articleWordCount,
   sectionReadingTime,
@@ -25,13 +26,13 @@ import {
 } from "@/lib/reading-time";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import { ContactActions, type ContactActionsDict } from "./contact-actions";
 import {
   CapasVerificacionDiagram,
   CascadaDiagram,
   CIDiagram,
   DosVelocidadesDiagram,
   SinConsentimientoDiagram,
+  StackDiagram,
 } from "./como-se-ha-creado-diagrams";
 
 // La página «Cómo se ha creado esta página» (P60, sprint «Cómo se ha creado»,
@@ -39,13 +40,13 @@ import {
 // `components/ui/article.tsx` con EL contenido real del artículo — igual que
 // `deep-dive.tsx` compone `ui/heading.tsx` con el copy de una experiencia.
 //
-// LA APERTURA Y EL CIERRE SON BANDA/PROSA NORMAL, NO DOS BANDAS INVERTIDAS
-// COMO EL PROTOTIPO DE P59. El borrador de contenido (P58, fuente de verdad
-// por ser el que se cerró después) pide explícitamente reutilizar la franja
-// de contacto compartida (D29) en el cierre, no una nueva — así que el cierre
-// usa `ContactActions` con el mismo patrón que Sobre mí y Accesibilidad, y la
-// banda invertida queda solo para la apertura. Documentado en el PR de esta
-// tarea, no en BRAND.md: es una decisión de UNA página, no una regla nueva.
+// LA APERTURA ES BANDA INVERTIDA; EL CIERRE, PROSA NORMAL IGUAL QUE LAS OTRAS
+// DIEZ SECCIONES (P60 tanda 3, puntos 7 y 9). La primera versión reutilizaba
+// la franja de contacto compartida (D29) al final del cierre, así que era la
+// única de las once secciones con un pie distinto al resto. Se quitó: el
+// contacto ya vive en la home, y el cierre gana en consistencia siendo una
+// sección más — mismo `SectionCover`, mismo `RepoStrip`, mismo `ChapterNav`
+// (sin `nextHref`, por no tener «siguiente»).
 //
 // PASADA DE FEEDBACK (2026-08-21, revisión de Francisco sobre la página
 // servida): breadcrumb integrado en la banda (con la variante `inverted` que
@@ -55,49 +56,61 @@ import {
 // Accesibilidad/Brand Kit/Design System, y cada franja de enlace con un
 // `<a>` por decisión citada en vez de uno solo para la frase entera.
 
-const DIAGRAMS: Record<string, { Component: ComponentType; caption: string }> =
-  {
-    s01: {
-      Component: DosVelocidadesDiagram,
-      caption:
-        "El mismo scroll, leído a dos ritmos: quien escanea solo llega al primer tramo; quien lee en profundidad recorre la página entera.",
-    },
-    s05: {
-      Component: CascadaDiagram,
-      caption:
-        "La cascada de la Regla de construcción: cuatro preguntas, en orden, antes de escribir markup nuevo.",
-    },
-    s07: {
-      Component: SinConsentimientoDiagram,
-      caption:
-        "Sin consentimiento y sin clic en el vídeo, la página no hace ni una petición de red hacia terceros.",
-    },
-    s08: {
-      Component: CapasVerificacionDiagram,
-      caption:
-        "Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de abajo, una persona, encuentra lo que no incumple ninguna regla.",
-    },
-    s09: {
-      Component: CIDiagram,
-      caption:
-        "Los quince pasos de integración continua: la mayoría busca la ausencia de un patrón malo, no su presencia.",
-    },
-  };
-
 export function ComoSeHaCreado({
   dict,
-  contacto,
+  lang,
   breadcrumb,
   homeHref,
-  cvHref,
 }: {
   dict: ComoSeHaCreadoDict;
-  contacto: ContactActionsDict;
+  lang: Locale;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
-  cvHref: string;
 }) {
   const t = dict;
+
+  // Registro site-specific id→componente (D36): el bloque `{ type: "diagram",
+  // id, caption }` del diccionario dice DÓNDE va cada diagrama y en qué
+  // idioma se lee su pie; este registro dice qué SVG dibuja cada id. Cada
+  // diagrama necesita además el idioma para SU PROPIO texto interno (el pie
+  // ya viene traducido del diccionario, pero las etiquetas dentro del SVG
+  // —«se despliega», «busca ausencia»— estaban hardcodeadas en español, el
+  // mismo bug de i18n una capa más adentro, hallado al verificar la página en
+  // inglés — P60 tanda 2). `ArticleProse` solo sabe pedir un `ComponentType`
+  // sin props, así que aquí se cierra sobre `lang` en vez de cambiar ese
+  // contrato.
+  const DIAGRAMS: Record<string, ComponentType> = {
+    s01: () => <DosVelocidadesDiagram lang={lang} />,
+    s04: () => <StackDiagram lang={lang} />,
+    s05: () => <CascadaDiagram lang={lang} />,
+    s07: () => <SinConsentimientoDiagram lang={lang} />,
+    s08: () => <CapasVerificacionDiagram lang={lang} />,
+    s09: () => <CIDiagram lang={lang} />,
+  };
+
+  // El `href` de un `{ type: "livestat" }` es un slug relativo o el literal
+  // «github»; resolverlo depende del locale (D36, mismo patrón que `DIAGRAMS`).
+  const resolveLiveStatHref = (href: string) =>
+    href === "github" ? GITHUB_URL : `${homeHref}${href}`;
+
+  // Las mismas pastillas que usa el resto del sitio, no una recreación (P60
+  // tanda 2, punto 17): el «ejemplo real» del apartado de badge.tsx que el
+  // cuerpo de s05 acaba de contar.
+  const LIVESTAT_EXTRAS: Record<string, ReactNode> = {
+    s05: (
+      <>
+        <Badge tone="cyan" kind="code">
+          13,79:1
+        </Badge>
+        <Badge tone="purple" kind="label">
+          Exit
+        </Badge>
+        <Badge tone="neutral" kind="value">
+          AAA
+        </Badge>
+      </>
+    ),
+  };
 
   // El diccionario viene de JSON: `type` se infiere como `string`, no como el
   // literal `"p" | "h3" | "ul" | "quote"` que pide `ArticleBlock`. El dato es
@@ -134,27 +147,48 @@ export function ComoSeHaCreado({
 
   /** «Capítulo 08 de 11 · 4 min de lectura», compuesta de tres fragmentos de
    * copy + dos cifras calculadas en build (D60) — nunca escrita entera. */
+  // «1 de 11 · 4 min», sin «Capítulo» ni el cero de relleno ni «de lectura»
+  // (P60 tanda 3, punto 2): con el texto largo, la meta-línea competía en
+  // ancho con el numeral y no cabía a su lado. «min» sin traducir es la
+  // misma convención que ya usa `ArticleIndex` para el tiempo por sección.
   const metaLineFor = (position: number, minutes: number) =>
-    `${t.sectionMeta.chapter} ${String(position).padStart(2, "0")} ${
-      t.sectionMeta.of
-    } ${totalSections} · ${minutes} ${t.sectionMeta.reading}`;
+    `${position} ${t.sectionMeta.of} ${totalSections} · ${minutes} min`;
 
   return (
     <>
       <ReadingProgress ariaLabel={t.progress.ariaLabel} />
       <SectionRail items={railItems} />
+      <FloatingShare
+        items={railItems}
+        shareLabel={t.hero.shareLabel}
+        copyLabel={t.hero.copyLabel}
+        copiedLabel={t.hero.copiedLabel}
+        copiedAnnounce={t.hero.copiedAnnounce}
+        shareUnavailableAnnounce={t.hero.shareUnavailableAnnounce}
+      />
 
       {/* Apertura: banda invertida con el breadcrumb integrado (ya no una
           fila aparte sobre --background, que se leía como un cambio de color
           extraño) y recortada a lo esencial para caber en el pliegue —
           palabras/secciones y la nota de lectura viven ahora en el índice.
           `data-surface="inverted"` (globals.css) hace que
-          `text-muted-foreground` resuelva su propio atenuado (D30/D39). */}
+          `text-muted-foreground` resuelva su propio atenuado (D30/D39).
+
+          MISMO PATRÓN QUE brand-kit/design-system/accesibilidad/deep-dive
+          (P60 tanda 2, punto 1): `${WRAP} flex w-full flex-1 flex-col`, con
+          el breadcrumb anclado arriba y solo el grupo de abajo en `my-auto`.
+          La versión anterior centraba TODO el bloque con `justify-center`
+          sobre un `WRAP` sin `w-full`: al ser flex-item, el `mx-auto` de
+          `WRAP` desactiva el `stretch` por especificación y la caja se
+          encoge a su contenido, desplazando en ANCHO hasta el breadcrumb.
+          Es la tercera vez que este bug aparece pese a llevar el porqué
+          comentado en las otras cuatro páginas — D77 documenta el mecanismo
+          una sola vez, en vez de seguir copiando el comentario. */}
       <div
         data-surface="inverted"
-        className="bg-foreground text-background flex flex-col justify-center py-[clamp(2.5rem,5vw,4rem)] md:min-h-[calc(100svh-5rem)]"
+        className="bg-foreground text-background flex flex-col py-[clamp(2.5rem,5vw,4rem)] md:min-h-[calc(100svh-5rem)]"
       >
-        <div className={WRAP}>
+        <div className={`${WRAP} flex w-full flex-1 flex-col`}>
           <div data-reveal className="mb-[clamp(2rem,5vw,3.5rem)]">
             <Breadcrumb
               routeLabel={breadcrumb.routeLabel}
@@ -165,67 +199,79 @@ export function ComoSeHaCreado({
               inverted
             />
           </div>
-          <p
-            data-reveal
-            className="text-muted-foreground m-0 mb-2 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
-          >
-            {t.hero.kicker}
-          </p>
-          <h1
-            data-reveal
-            className="font-display m-0 mb-5 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.025em] text-balance"
-          >
-            {t.hero.title}
-          </h1>
-          <div data-reveal className="max-w-[var(--measure)] space-y-2">
-            <p className="m-0 text-[1.15rem] leading-[1.55]">
-              {t.hero.leadParas[0]}
+          <div className="my-auto">
+            <p
+              data-reveal
+              className="text-muted-foreground m-0 mb-2 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
+            >
+              {t.hero.kicker}
             </p>
-            <p className="m-0 text-[1.05rem] leading-[1.6]">
-              {t.hero.leadParas[1]}
-            </p>
-          </div>
-          <div
-            data-reveal
-            className="mt-6 flex flex-wrap items-center justify-between gap-4"
-          >
-            <ByLine name={t.hero.bylineName} role={t.hero.bylineRole} />
-            <ShareActions
-              shareLabel={t.hero.shareLabel}
-              copyLabel={t.hero.copyLabel}
-              copiedLabel={t.hero.copiedLabel}
-              copiedAnnounce={t.hero.copiedAnnounce}
-              shareUnavailableAnnounce={t.hero.shareUnavailableAnnounce}
-              onInverted
-            />
+            <h1
+              data-reveal
+              className="font-display m-0 mb-5 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.025em] text-balance"
+            >
+              {t.hero.title}
+            </h1>
+            <div data-reveal className="max-w-[var(--measure)] space-y-2">
+              <p className="m-0 text-[1.15rem] leading-[1.55]">
+                {t.hero.leadParas[0]}
+              </p>
+              <p className="m-0 text-[1.05rem] leading-[1.6]">
+                {t.hero.leadParas[1]}
+              </p>
+            </div>
+            <div
+              data-reveal
+              className="mt-6 flex flex-wrap items-center justify-between gap-4"
+            >
+              <ByLine name={t.hero.bylineName} role={t.hero.bylineRole} />
+              <ShareActions
+                shareLabel={t.hero.shareLabel}
+                copyLabel={t.hero.copyLabel}
+                copiedLabel={t.hero.copiedLabel}
+                copiedAnnounce={t.hero.copiedAnnounce}
+                shareUnavailableAnnounce={t.hero.shareUnavailableAnnounce}
+                onInverted
+              />
+            </div>
           </div>
         </div>
       </div>
 
       <section id="indice" className={SECTION}>
         <div className={WRAP}>
-          <p data-reveal className="m-0 mb-1 text-[0.95rem] font-medium">
-            <b>{totalWords.toLocaleString("es-ES")}</b> {t.index.wordsSuffix}
-            <span className="mx-[0.6em]">·</span>
-            <b>{totalSections}</b> {t.index.sectionsSuffix}
-          </p>
-          <p
-            data-reveal
-            className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
-          >
-            {t.index.note}
-          </p>
           <ArticleIndex
             kicker={t.index.kicker}
             timeLabel={t.index.timeLabel}
             ariaLabel={t.index.ariaLabel}
             items={indexItems}
+            intro={
+              // Vivía ANTES del eyebrow «ÍNDICE» — dos elementos orientando
+              // al lector, uno encima del otro (P60 tanda 2, punto 2). Ahora
+              // cuelga de su propio rótulo, entre el eyebrow y la rejilla, y
+              // el recuento va DESPUÉS de la nota (P60 tanda 3, punto 1): la
+              // nota explica cómo leer el artículo, el recuento es el dato
+              // que la cierra, no el que la abre.
+              <>
+                <p
+                  data-reveal
+                  className="text-muted-foreground m-0 mb-1 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
+                >
+                  {t.index.note}
+                </p>
+                <p data-reveal className="m-0 text-[0.95rem] font-medium">
+                  <b>{totalWords.toLocaleString("es-ES")}</b>{" "}
+                  {t.index.wordsSuffix}
+                  <span className="mx-[0.6em]">·</span>
+                  <b>{totalSections}</b> {t.index.sectionsSuffix}
+                </p>
+              </>
+            }
           />
         </div>
       </section>
 
       {t.sections.map((s, i) => {
-        const diagram = DIAGRAMS[s.id];
         const position = i + 1;
         return (
           <section key={s.id} id={s.id} className={SECTION}>
@@ -240,25 +286,12 @@ export function ComoSeHaCreado({
                   sectionReadingTime(blocksOf(s.body)).minutes,
                 )}
               />
-              <ArticleProse blocks={blocksOf(s.body)} />
-              {diagram ? (
-                <DiagramPanel caption={diagram.caption}>
-                  <diagram.Component />
-                </DiagramPanel>
-              ) : null}
-              {s.liveStat ? (
-                <LiveStat
-                  label={s.liveStat.label}
-                  source={s.liveStat.source}
-                  value={s.liveStat.value}
-                  linkLabel={s.liveStat.linkLabel}
-                  href={
-                    s.liveStat.href === "github"
-                      ? GITHUB_URL
-                      : `${homeHref}${s.liveStat.href}`
-                  }
-                />
-              ) : null}
+              <ArticleProse
+                blocks={blocksOf(s.body)}
+                diagrams={DIAGRAMS}
+                resolveLiveStatHref={resolveLiveStatHref}
+                liveStatExtras={LIVESTAT_EXTRAS}
+              />
               <RepoStrip label={s.enlace.label} parts={s.enlace.parts} />
               <ChapterNav
                 position={position}
@@ -269,7 +302,7 @@ export function ComoSeHaCreado({
                   t.sections[i + 1]?.ordinal ?? t.closing.ordinal
                 } · ${t.sections[i + 1]?.indexLabel ?? t.closing.indexLabel}`}
                 nextHref={`#${t.sections[i + 1]?.id ?? t.closing.id}`}
-                positionLabel={`${position} de ${totalSections}`}
+                positionLabel={`${position} ${t.sectionMeta.of} ${totalSections}`}
               />
             </div>
           </section>
@@ -288,7 +321,7 @@ export function ComoSeHaCreado({
               sectionReadingTime(blocksOf(t.closing.body)).minutes,
             )}
           />
-          <ArticleProse blocks={blocksOf(t.closing.body)} />
+          <ArticleProse blocks={blocksOf(t.closing.body)} diagrams={DIAGRAMS} />
           <p className="text-muted-foreground mt-6 mb-0 text-[0.85rem]">
             {t.closing.meta}
           </p>
@@ -296,9 +329,19 @@ export function ComoSeHaCreado({
             label={t.closing.enlace.label}
             parts={t.closing.enlace.parts}
           />
-          <div className="mt-[clamp(2.25rem,4.5vw,3rem)]">
-            <ContactActions dict={contacto} cvHref={cvHref} />
-          </div>
+          {/* El cierre termina igual que las otras diez secciones —mismo pie,
+              sin franja de contacto propia (P60 tanda 3, puntos 7 y 9): tenía
+              su propio bloque de «Escríbeme / teléfono / LinkedIn / CV», que
+              lo hacía la única sección con un pie distinto, y ese contacto ya
+              vive en la home (D29). Sin «siguiente» —es la última—, así que
+              `ChapterNav` se llama sin `nextHref`. */}
+          <ChapterNav
+            position={totalSections}
+            total={totalSections}
+            indexLabel={t.chapterNav.indexLabel}
+            indexHref="#indice"
+            positionLabel={`${totalSections} ${t.sectionMeta.of} ${totalSections}`}
+          />
         </div>
       </section>
     </>
