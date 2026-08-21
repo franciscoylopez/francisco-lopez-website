@@ -148,64 +148,66 @@ export function ComoSeHaCreado({
       </div>
 
       {/* Apertura: banda invertida con los datos del artículo, ref. validada
-          en el prototipo de P59 (Espécimen 1). */}
-      <div className="bg-foreground text-background py-[clamp(3.5rem,7vw,6rem)]">
+          en el prototipo de P59 (Espécimen 1). `data-surface="inverted"`
+          (globals.css) hace que `text-muted-foreground` resuelva su propio
+          atenuado en vez del calibrado contra `--background` — sin él, el
+          rol del byline y el resto del texto secundario caían con el gris
+          equivocado (D30/D39). */}
+      <div
+        data-surface="inverted"
+        className="bg-foreground text-background py-[clamp(2.75rem,5.5vw,4.75rem)]"
+      >
         <div className={WRAP}>
           <p
             data-reveal
-            className="m-0 mb-3 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
-            style={{
-              color: "color-mix(in srgb, var(--background) 80%, transparent)",
-            }}
+            className="text-muted-foreground m-0 mb-2 text-[0.8125rem] font-semibold tracking-[0.09em] uppercase"
           >
             {t.hero.kicker}
           </p>
           <h1
             data-reveal
-            className="font-display m-0 mb-6 text-[clamp(2.5rem,6vw,4.25rem)] leading-[1.02] font-semibold tracking-[-0.025em] text-balance"
+            className="font-display m-0 mb-5 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.025em] text-balance"
           >
             {t.hero.title}
           </h1>
-          <div data-reveal className="max-w-[var(--measure)] space-y-3">
+          <div data-reveal className="max-w-[var(--measure)] space-y-2">
             <p className="m-0 text-[1.15rem] leading-[1.55]">
               {t.hero.leadParas[0]}
             </p>
             <p className="m-0 text-[1.05rem] leading-[1.6]">
               {t.hero.leadParas[1]}{" "}
+              {/* `.link-content` pinta el reposo en `--foreground`, que sobre
+                  esta banda invertida ES el fondo de la propia banda — texto
+                  invisible. Igual que el breadcrumb (nota de arriba), un
+                  enlace de contenido dentro de una banda invertida necesita
+                  el cian que YA está calibrado para eso: `--primary-on-inverted`
+                  (BRAND.md, mismo mecanismo que `--brand-purple-accent`). */}
               <a
                 href={GITHUB_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="link-content link-content--underline"
+                className="underline decoration-1 underline-offset-2"
+                style={{ color: "var(--primary-on-inverted)" }}
               >
                 {t.hero.repoLinkLabel}
               </a>
               .
             </p>
           </div>
-          <p
-            data-reveal
-            className="mt-6 mb-0 text-[0.95rem] font-medium"
-            style={{
-              color: "color-mix(in srgb, var(--background) 90%, transparent)",
-            }}
-          >
+          <p data-reveal className="mt-5 mb-0 text-[0.95rem] font-medium">
             <b>{totalWords.toLocaleString("es-ES")}</b> {t.hero.wordsSuffix}
             <span className="mx-[0.6em]">·</span>
             <b>{totalSections}</b> {t.hero.sectionsSuffix}
           </p>
           <p
             data-reveal
-            className="m-0 mt-2 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
-            style={{
-              color: "color-mix(in srgb, var(--background) 75%, transparent)",
-            }}
+            className="text-muted-foreground m-0 mt-2 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
           >
             {t.hero.note}
           </p>
           <div
             data-reveal
-            className="mt-8 flex flex-wrap items-center justify-between gap-4"
+            className="mt-6 flex flex-wrap items-center justify-between gap-4"
           >
             <ByLine name={t.hero.bylineName} role={t.hero.bylineRole} />
             <ShareActions
@@ -214,6 +216,7 @@ export function ComoSeHaCreado({
               copiedLabel={t.hero.copiedLabel}
               copiedAnnounce={t.hero.copiedAnnounce}
               shareUnavailableAnnounce={t.hero.shareUnavailableAnnounce}
+              onInverted
             />
           </div>
         </div>

@@ -111,9 +111,16 @@ export function ArticleIndex({
 /* ───────────────────────── SectionCover ───────────────────────── */
 
 /** La portada de una sección: ordinal ilustrado (decorativo, `aria-hidden`) +
- * kicker + `h2`. El ordinal ya está dicho en texto accesible por el kicker;
- * el numeral grande es pura ilustración, por eso va en `brand-purple-soft`
- * (BRAND.md: los pasteles son SOLO relleno decorativo, nunca texto). */
+ * kicker + `h2`. El ordinal ya está dicho en texto accesible por el kicker,
+ * pero eso no exime al numeral grande de WCAG 1.4.3: `aria-hidden` lo saca
+ * del árbol de accesibilidad, no de la vista, y alguien con baja visión SÍ lo
+ * lee. `brand-purple-soft` daba 1,63:1 en claro y prácticamente 0 en oscuro
+ * (viewport-verifier, P60) — ni el umbral de texto grande (3:1). Un morado que
+ * SÍ llegara ahí no existe sin inventar un token nuevo (BRAND.md §El morado
+ * como gráfico: el decorativo no pasa 3:1 en claro), así que se usa
+ * `text-muted-foreground`, que ya viene calibrado por superficie (D30/D39) y
+ * cumple de sobra en los dos temas. Pierde el guiño morado del prototipo de
+ * P59; queda anotado para que `design-review` proponga un tratamiento propio. */
 export function SectionCover({
   ordinal,
   kicker,
@@ -129,7 +136,7 @@ export function SectionCover({
     <div className="mb-[clamp(2rem,4vw,3rem)] flex items-end gap-[clamp(1rem,3vw,2rem)]">
       <span
         aria-hidden="true"
-        className="text-brand-purple-soft font-display hidden text-[clamp(4rem,9vw,7rem)] leading-[0.8] font-semibold sm:block"
+        className="text-muted-foreground font-display hidden text-[clamp(4rem,9vw,7rem)] leading-[0.8] font-semibold sm:block"
       >
         {ordinal}
       </span>
