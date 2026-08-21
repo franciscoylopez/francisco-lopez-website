@@ -774,15 +774,6 @@
           "type": "p",
           "text": "None of the five is a prompt I rewrite every time. They're versioned instructions inside the repository, and that's why they improve: when one fails, the file gets fixed, not the next conversation."
         },
-        {
-          "type": "livestat",
-          "id": "s09",
-          "label": "Continuous integration · live data",
-          "source": ".github/workflows/ci.yml",
-          "value": "Fifteen steps on every PR",
-          "linkLabel": "See the CI workflow",
-          "href": "github"
-        },
         { "type": "h3", "text": "What it doesn't catch: what's missing" },
         {
           "type": "p",
@@ -795,8 +786,7 @@
         {
           "type": "diagram",
           "id": "s09",
-          "side": "left",
-          "caption": "The fifteen steps of continuous integration: most of them look for the absence of a bad pattern, not its presence."
+          "caption": "The fifteen continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
         },
         {
           "type": "quote",

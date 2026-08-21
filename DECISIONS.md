@@ -4274,3 +4274,54 @@ duplicar los botones que la apertura ya muestra)—, con las mismas 44px de obje
 resto del chrome solo-icono. La lógica de `navigator.share` con fallback a copiar, que antes
 vivía solo dentro de `ShareActions`, se extrajo a `useShareLink` para que el dock la reutilizara
 sin copiarla: dos call sites de la misma lógica de estado no se copian, se comparten.
+
+## D79 · Un prototipo: una dirección ganó — 2026-08-21
+
+**Contexto.** La tanda 3 de feedback pedía animar los diagramas de nodos/líneas, rehacer el de
+la cascada («muy mejorable») y fusionar los dos gráficos de «Qué revisa una IA» en uno. Las tres
+son decisiones de diseño, no fixes mecánicos, así que en vez de decidir a ciegas se construyó un
+artefacto con tres variantes por cada pregunta —comparadas en vivo, con los tokens reales— y
+Francisco eligió mirándolas, no describiéndolas (mismo método que D1 ya dejó escrito).
+
+**Las tres preguntas y lo que ganó:**
+
+- **Cómo se anima un diagrama de nodos/líneas** (puntos 4-5): tres direcciones —«Ensamblaje»
+  (construcción literal: el origen nace, las piezas se despliegan, las líneas se lanzan),
+  «Cascada» (fundido en cadena sin dibujar líneas, el más barato) y «Realce» (la figura entera
+  visible desde el principio, atenuada, con un barrido secuencial que la lleva a opacidad
+  plena)—. Ganó **Realce**: el lector nunca espera para ver la figura completa, y es la única de
+  las tres que no depende de que el observador se quede mirando la animación para entender el
+  diagrama — si se pierde el barrido, la figura ya estaba toda ahí.
+- **El diagrama de la cascada** (punto 5 bis): «Escalera descendente» ganó a «Raíl horizontal» y
+  «Pipeline numerado» porque es la única que hace visible en la FORMA lo que el texto ya decía
+  —la mayoría de casos se resuelven en la primera pregunta—, con el indentado decreciente y un
+  «si no» explícito entre preguntas.
+- **Los quince pasos de CI** (punto 11): «Agrupado por rol» ganó a «Cadena compacta» y «Riel
+  vertical» porque el lector entiende la FORMA del pipeline (código → contenido → guardianes →
+  cierre) sin memorizar quince nombres sueltos. Es una agrupación editorial —no texto que ya
+  existiera en el artículo—, así que los cuatro rótulos de grupo (Código, Copy y contenido,
+  Guardianes del repo, Build y marco) quedan documentados aquí como lo que son: una lectura
+  propuesta, no un hecho citado.
+
+**Implementación de «Realce», la regla que queda para todo diagrama de este estilo.** Cada
+pieza interna de un diagrama —no el marco, que sigue con el `data-reveal` normal de
+`DiagramPanel`— lleva la clase `.rlz` y una variable `--i` con su orden NARRATIVO (el origen
+primero, lo que depende de él después; nunca la posición en el DOM). La CSS vive en
+`app/globals.css`, junto al resto de la capa de motion (`RevealRoot`/`reveal-on`), y reutiliza
+el MISMO disparador: cuando el `[data-reveal]` del `<figure>` padre gana `data-shown`, sus
+`.rlz` pasan de opacidad 0,34 a opacidad 1, cada una con `transition-delay: calc(var(--i) *
+130ms)`. Sin `.reveal-on` —sin JS, o `prefers-reduced-motion`— cada `.rlz` es opacidad 1 desde
+el primer render: el barrido es un extra sobre el fade-up existente, nunca la única vía de ver
+el diagrama completo, y no hace falta tocar `RevealRoot.tsx` para nada de esto.
+
+**Dos diagramas más se redibujaron para servir de demo real, no de maqueta.** El de «Dos
+lectores, dos velocidades» y el del stack son los que Francisco vio animarse en el prototipo, así
+que llevan el orden narrativo exacto que se validó ahí (cabecera → panel → capa morada → texto,
+para el primero; núcleo → líneas → nodos → etiquetas → leyenda, para el segundo). Los otros dos
+diagramas de nodos/líneas del artículo (consentimiento, capas de verificación) heredan la misma
+regla por coherencia, aunque no se prototiparon en detalle — es la misma «regla, no una
+animación por diagrama» que ya pedía D67 en otro contexto.
+
+**El diagrama de los 15 pasos absorbe al dato en vivo que tenía al lado** (extiende D78): con el
+diagrama mostrando ya los quince nombres reales, «Quince pasos en cada PR» —el `livestat` que
+vivía junto a él— pasó a ser el mismo dato dos veces. Se retira el bloque, no se sustituye.
