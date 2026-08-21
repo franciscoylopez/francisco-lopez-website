@@ -634,14 +634,19 @@ export function DiagramPanel({
   side?: "left" | "right";
 }) {
   return (
-    // Ancho de media columna cuando no flota: los diagramas se dibujan a un
-    // tamaño legible (400-700px de viewBox) y dentro de una caja de 1.248px
-    // dejaban la mitad en blanco a cada lado (feedback de diseño de P60). El
-    // mismo ancho máximo que las listas — `--measure` — mantiene la columna
-    // de lectura coherente. Flotado, al 50% real del contenedor (P60 tanda
-    // 3, punto 3): el primer intento capaba a `max-w-[24rem]` (384px) sobre
-    // el 54% pedido, así que en cualquier viewport de escritorio ganaba
-    // siempre el tope fijo y el diagrama se veía diminuto, casi ilegible.
+    // Flotado, al 50% real del contenedor (P60 tanda 3, punto 3): el primer
+    // intento capaba a `max-w-[24rem]` (384px) sobre el 54% pedido, así que
+    // en cualquier viewport de escritorio ganaba siempre el tope fijo y el
+    // diagrama se veía diminuto, casi ilegible.
+    //
+    // Sin flotar, ANCHO COMPLETO de la columna de prosa (P60 tanda 3-bis,
+    // punto 10) y no `max-w-[var(--measure)]`: ese tope de media columna
+    // dejaba el marco más ESTRECHO que el párrafo que lo precede —el
+    // borde izquierdo coincidía, el derecho se quedaba corto—, y por eso se
+    // leía descuadrado respecto al texto en vez de leerse como su misma
+    // columna. `--measure` sigue siendo el ancho correcto para una LISTA
+    // (línea de lectura), pero un panel no es prosa: se cuadra con el ancho
+    // real del bloque, no con el de una línea cómoda de leer.
     <figure
       data-reveal
       className={cn(
@@ -653,7 +658,7 @@ export function DiagramPanel({
                 ? "sm:float-right sm:ml-8"
                 : "sm:float-left sm:mr-8",
             )
-          : "max-w-[var(--measure)]",
+          : "w-full",
       )}
     >
       <div className="flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">

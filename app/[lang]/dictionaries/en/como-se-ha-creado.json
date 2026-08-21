@@ -318,7 +318,6 @@
         {
           "type": "diagram",
           "id": "s04",
-          "side": "right",
           "caption": "The core that ships (Next 16, strict TypeScript and Tailwind v4) with two pieces that also travel in the bundle: lucide-react, and shadcn/ui, installed and barely used. And two tools that only helped build it: Claude Design for the initial design, Claude Code for development."
         },
         { "type": "h3", "text": "Two surprises from a fresh major version" },
@@ -554,7 +553,6 @@
         {
           "type": "diagram",
           "id": "s07",
-          "side": "right",
           "caption": "Without consent and without a click on the video, the page makes zero network requests to third parties."
         },
         {
