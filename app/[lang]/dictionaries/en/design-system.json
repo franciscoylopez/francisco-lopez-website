@@ -447,7 +447,7 @@
         "size": "section-sm",
         "eyebrow": "Header layer",
         "sample": "Headers",
-        "use": "A section of a long index, like the fourteen on this page."
+        "use": "A section of a long index, like the fifteen on this page."
       },
       {
         "size": "sub",
@@ -663,5 +663,25 @@
         "h": "clamp(8rem,18vw,12rem)"
       }
     ]
+  },
+  "articulo": {
+    "num": "15 — Long-form article",
+    "title": "The shape for long text with stops",
+    "lead": "\"How this page was built\" introduced this family: eleven sections and several thousand words needed a cover per section, a quote that stops the reader, a fact that doesn't go stale, and an explicit transition between stops. The pieces below are the real ones from that page, with sample content.",
+    "coverKicker": "05 — Specimen",
+    "coverTitle": "The illustrated ordinal opens every section",
+    "pullquoteLabel": "The line of the section",
+    "pullquote": "A rule you have to remember is a rule that gets broken.",
+    "pull": "The record of why something else was thought at the time is worth more than retroactive consistency.",
+    "liveStatLabel": "Example · live data",
+    "liveStatSource": "lib/design-values.ts",
+    "liveStatValue": "AAA across all twelve pages",
+    "liveStatLink": "See the measured census",
+    "repoLabel": "LINK ·",
+    "repoText": "Decisions D39, D41 and D73",
+    "chapterPositionLabel": "5 of 11",
+    "chapterIndexLabel": "Contents",
+    "chapterNextLabel": "Next: 06 · From design to code",
+    "hint": "The full page: \"How this page was built\"."
   }
 }

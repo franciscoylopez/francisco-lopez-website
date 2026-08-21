@@ -36,13 +36,14 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
 
 ## 4. Estado actual — en producción (`franciscolopez.es`)
 
-**Doce páginas por idioma**, en ES (raíz `/`) y EN (`/en`):
+**Trece páginas por idioma**, en ES (raíz `/`) y EN (`/en`):
 
 - **Home**, una sola página con las diez secciones de abajo.
-- **Sobre mí**, **Brand Kit**, **Design System**, **Accesibilidad** y **Política de cookies**.
+- **Sobre mí**, **Brand Kit**, **Design System**, **Accesibilidad**, **Política de cookies**
+  y **Cómo se ha creado esta página** (D14, el artículo del sprint 2, `TechArticle`).
 - **El deep-dive por experiencia**: el índice `/trayectoria` y las cinco páginas de
-  `/trayectoria/[slug]` (Emendu, KUOTIP, INDYA, Freepik y TheTool). Doce por idioma son
-  las **24 variantes** que usan `gate:html`, el sitemap y el recorrido de `design-review`.
+  `/trayectoria/[slug]` (Emendu, KUOTIP, INDYA, Freepik y TheTool). Trece por idioma son
+  las **26 variantes** que usan `gate:html`, el sitemap y el recorrido de `design-review`.
 
 Y con ellas: **CV en PDF bilingüe** descargable con identidad de marca y generado por
 código · **SEO técnico y Open Graph** por página · **medición** (GA4/GTM con
@@ -78,7 +79,7 @@ descarga** (D65).
 ### Tres cosas que el sitio hace y no se ven mirándolo
 
 - **Las páginas que documentan el sistema no pueden mentir.** El Design System lo publica
-  en catorce secciones y el Brand Kit en seis, las dos con **las piezas reales del sitio
+  en quince secciones y el Brand Kit en seis, las dos con **las piezas reales del sitio
   como demo**: si una variante cambia, la página cambia con ella. Y no leen sus valores
   del diccionario, sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio
   publica sobre sí mismo — tokens de layout, breakpoints y el censo de pares de contraste

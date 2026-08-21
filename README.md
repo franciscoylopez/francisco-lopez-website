@@ -22,7 +22,7 @@ La propia web es la prueba de criterio técnico y de diseño: rápida, accesible
 
 ## El sitio
 
-Doce páginas por idioma, en español (raíz `/`) e inglés (`/en`). Tema claro y oscuro, `system` por defecto.
+Trece páginas por idioma, en español (raíz `/`) e inglés (`/en`). Tema claro y oscuro, `system` por defecto.
 
 | Claro | Oscuro |
 | :---: | :---: |
