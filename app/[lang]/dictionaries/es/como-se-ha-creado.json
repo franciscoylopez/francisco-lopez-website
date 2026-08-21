@@ -318,7 +318,6 @@
         {
           "type": "diagram",
           "id": "s04",
-          "side": "right",
           "caption": "El núcleo que se despliega (Next 16, TypeScript estricto y Tailwind v4) con dos piezas que también viajan en el bundle: lucide-react, y shadcn/ui, instalado y casi sin uso. Y dos herramientas que solo ayudaron a construirlo: Claude Design en el diseño inicial, Claude Code en el desarrollo."
         },
         { "type": "h3", "text": "Dos sorpresas de estrenar versión" },
@@ -550,7 +549,6 @@
         {
           "type": "diagram",
           "id": "s07",
-          "side": "right",
           "caption": "Sin consentimiento y sin clic en el vídeo, la página no hace ni una petición de red hacia terceros."
         },
         {
