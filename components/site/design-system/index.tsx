@@ -18,6 +18,7 @@ import { Cabeceras } from "./11-cabeceras";
 import { Tablas } from "./12-tablas";
 import { Accesibilidad } from "./13-accesibilidad";
 import { Esqueleto } from "./14-esqueleto";
+import { ArticuloLargo } from "./15-articulo";
 
 type DesignSystemDict = Dictionary["designSystem"];
 
@@ -73,6 +74,7 @@ export function DesignSystem({
       <Tablas t={t.tablas} />
       <Accesibilidad t={t.accesibilidad} lang={lang} />
       <Esqueleto t={t.esqueleto} />
+      <ArticuloLargo t={t.articulo} />
 
       <RelatedPages dict={related} current="designSystem" lang={lang} />
     </>
