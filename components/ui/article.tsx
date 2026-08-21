@@ -91,7 +91,11 @@ export function ArticleIndex({
         </span>
       </div>
       {intro ? <div className="px-1 pt-4 pb-1">{intro}</div> : null}
-      <ol className="border-border m-0 mt-3 grid list-none grid-cols-1 border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
+      {/* `border-t` además de `border-l` (P60 tanda 3-bis, punto 1): sin ella
+          la rejilla se leía cortada por arriba, como una tabla sin cabecera —
+          las celdas ya cierran su propio borde inferior y derecho, pero nada
+          dibujaba el de arriba. */}
+      <ol className="border-border m-0 mt-3 grid list-none grid-cols-1 border-t border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <li key={item.id} className="border-border border-r border-b">
             <a
@@ -169,7 +173,12 @@ export function SectionCover({
           {title}
         </h2>
       </header>
-      <div className="hidden shrink-0 flex-col items-end gap-2 sm:flex">
+      {/* `items-center` (P60 tanda 3-bis, punto 2): con `items-end` la
+          meta-línea quedaba pegada al borde derecho del numeral en vez de
+          centrada bajo su caja — el ancho de la caja del numeral y el del
+          texto no coinciden, así que alinear a la derecha desalinea el
+          centro visual. */}
+      <div className="hidden shrink-0 flex-col items-center gap-2 sm:flex">
         <span
           aria-hidden="true"
           className="text-progress-ink border-progress-ink/30 font-display rounded-2xl border text-[clamp(2.5rem,5vw,4rem)] leading-none font-semibold"
@@ -177,7 +186,7 @@ export function SectionCover({
         >
           {ordinal}
         </span>
-        <div className="text-right">{metaLineText}</div>
+        <div className="text-center">{metaLineText}</div>
       </div>
     </div>
   );
@@ -228,7 +237,18 @@ export function ArticleProse({
           return (
             <h3
               key={i}
-              className={cn(titleVariants({ size: "sub" }), "!mt-[2.5rem]")}
+              // `clear-both` (P60 tanda 3-bis, punto 7): `ArticleProse` es UN
+              // `flow-root` para toda la sección, no uno por subapartado —
+              // así que un diagrama o cita flotados bajo un `h3` podían seguir
+              // cayendo, sin cortarse, sobre el `h3` SIGUIENTE y su texto, y
+              // visualmente parecía que el gráfico pertenecía al subapartado
+              // equivocado aunque el dato estuviera en el bloque correcto.
+              // Cada cabecera de subapartado cierra ahora los flotantes de su
+              // predecesora antes de empezar la suya.
+              className={cn(
+                titleVariants({ size: "sub" }),
+                "clear-both !mt-[2.5rem]",
+              )}
             >
               {block.text}
             </h3>
@@ -240,10 +260,18 @@ export function ArticleProse({
           // a medio metro uno del otro y la lista deja de leerse como lista —
           // mismo motivo y mismo ancho que las listas del deep-dive. La marca es
           // cuadrada (no el punto redondo de antes): feedback de diseño de P60.
+          //
+          // `!my-[2.25rem]` (P60 tanda 3-bis, punto 3): los márgenes de
+          // bloques hermanos COLAPSAN al máximo, no se suman, así que subir
+          // el propio margen de la lista por encima del `space-y-[1.75rem]`
+          // del contenedor separa la lista del texto de alrededor sin tocar
+          // el espaciado párrafo-a-párrafo. Sin esto, el hueco ENTRE viñetas
+          // (0,7rem + el interlineado de cada una) se leía más grande que el
+          // hueco entre la lista entera y el texto que la rodea.
           return (
             <ul
               key={i}
-              className="m-0 max-w-[var(--measure)] list-none space-y-[0.7rem] p-0"
+              className="m-0 !my-[2.25rem] max-w-[var(--measure)] list-none space-y-[0.7rem] p-0"
             >
               {block.items.map((item, j) => (
                 <li key={j} className="flex gap-3 text-[1.02rem] leading-[1.7]">
