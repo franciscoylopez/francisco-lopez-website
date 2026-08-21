@@ -249,23 +249,25 @@ export function ComoSeHaCreado({
               // Vivía ANTES del eyebrow «ÍNDICE» — dos elementos orientando
               // al lector, uno encima del otro (P60 tanda 2, punto 2). Ahora
               // cuelga de su propio rótulo, entre el eyebrow y la rejilla, y
-              // el recuento va DESPUÉS de la nota (P60 tanda 3, punto 1): la
-              // nota explica cómo leer el artículo, el recuento es el dato
-              // que la cierra, no el que la abre.
-              <>
-                <p
-                  data-reveal
-                  className="text-muted-foreground m-0 mb-1 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
-                >
-                  {t.index.note}
-                </p>
-                <p data-reveal className="m-0 text-[0.95rem] font-medium">
-                  <b>{totalWords.toLocaleString("es-ES")}</b>{" "}
-                  {t.index.wordsSuffix}
-                  <span className="mx-[0.6em]">·</span>
-                  <b>{totalSections}</b> {t.index.sectionsSuffix}
-                </p>
-              </>
+              // el recuento cierra la MISMA línea que la nota en vez de ir en
+              // un párrafo propio debajo (P60 tanda 3-bis, punto 1): eran dos
+              // frases orientando al lector, apiladas, cuando son una sola
+              // idea — cómo leer el artículo y cuánto hay que leer.
+              <p
+                data-reveal
+                className="text-muted-foreground m-0 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
+              >
+                {t.index.note}{" "}
+                <b className="text-foreground font-medium">
+                  {totalWords.toLocaleString("es-ES")}
+                </b>{" "}
+                {t.index.wordsSuffix}
+                <span className="mx-[0.5em]">·</span>
+                <b className="text-foreground font-medium">
+                  {totalSections}
+                </b>{" "}
+                {t.index.sectionsSuffix}
+              </p>
             }
           />
         </div>
@@ -322,9 +324,6 @@ export function ComoSeHaCreado({
             )}
           />
           <ArticleProse blocks={blocksOf(t.closing.body)} diagrams={DIAGRAMS} />
-          <p className="text-muted-foreground mt-6 mb-0 text-[0.85rem]">
-            {t.closing.meta}
-          </p>
           <RepoStrip
             label={t.closing.enlace.label}
             parts={t.closing.enlace.parts}

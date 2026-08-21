@@ -483,14 +483,14 @@
           "text": "Cuando el sistema en código creció hasta ser lo que acabo de describir (siete piezas, una capa de página y una página que las publica), la maqueta pasó a ser más pobre que el sitio. A partir de ahí, mantener las dos en paralelo no era rigor: era garantizar que acabaran diciendo cosas distintas, que es justo lo que la decisión original quería evitar."
         },
         {
-          "type": "p",
-          "text": "El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. Hoy las secciones nuevas se diseñan directamente en código, iterando en el navegador con los tokens reales, y la maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es la primera decisión del proyecto que anulé por escrito, y dejé la original debajo, con su fecha."
-        },
-        {
           "type": "quote",
           "style": "pull",
           "side": "right",
           "text": "El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva."
+        },
+        {
+          "type": "p",
+          "text": "El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. Hoy las secciones nuevas se diseñan directamente en código, iterando en el navegador con los tokens reales, y la maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es la primera decisión del proyecto que anulé por escrito, y dejé la original debajo, con su fecha."
         },
         {
           "type": "p",
@@ -517,12 +517,6 @@
           "type": "p",
           "text": "Un portfolio no guarda datos de nadie, no tiene formularios y no tiene sesión. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo."
         },
-        {
-          "type": "quote",
-          "style": "pull",
-          "side": "right",
-          "text": "Si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve."
-        },
         { "type": "h3", "text": "Las cabeceras: los huecos baratos de cerrar" },
         { "type": "p", "text": "El sitio sirve cinco, y ninguna cuesta nada:" },
         {
@@ -534,6 +528,12 @@
             "**Apagar las APIs del navegador que no uso**, como cámara, micrófono o ubicación.",
             "**Forzar HTTPS durante dos años.** Esta va sin entrar en la lista de precarga a propósito, porque entrar es fácil y salir no, y una decisión difícil de revertir no se toma para ganar un punto en un informe."
           ]
+        },
+        {
+          "type": "quote",
+          "style": "pull",
+          "side": "right",
+          "text": "Si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve."
         },
         {
           "type": "h3",
@@ -633,6 +633,15 @@
           "text": "Tener un AA según WCAG no era el objetivo: es un mínimo garantizado. A partir de ahí trabajo para llegar a AAA en todo lo que se pueda, en los dos temas, en reposo y también mientras el cursor está encima, que es donde casi nadie mide."
         },
         {
+          "type": "livestat",
+          "id": "s08",
+          "label": "Contraste · dato en vivo",
+          "source": "lib/design-values.ts",
+          "value": "AAA en las doce páginas",
+          "linkLabel": "Ver el censo medido",
+          "href": "accesibilidad"
+        },
+        {
           "type": "h3",
           "text": "Cuatro puntos se heredan, cuatro se ponen a mano"
         },
@@ -693,23 +702,13 @@
         },
         { "type": "h3", "text": "La capa que no se puede automatizar" },
         {
-          "type": "diagram",
-          "id": "s08",
-          "side": "right",
-          "caption": "Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de abajo, una persona, encuentra lo que no incumple ninguna regla."
-        },
-        {
           "type": "p",
           "text": "Recorrí el sitio entero con [NVDA](https://www.nvaccess.org/), un lector de pantalla, y encontró cosas que no incumplen ninguna regla y que por eso ningún escáner podía señalar: una tecla que no cerraba lo que parecía que iba a cerrar, un cambio que ocurría sin anunciarse a quien no lo ve. Lo que encontró está publicado en la [página de accesibilidad](/accesibilidad) del sitio, con nombre y apellidos, junto a lo que todavía no he arreglado. Una declaración de accesibilidad que solo dice lo que cumple no es una declaración: es una portada."
         },
         {
-          "type": "livestat",
+          "type": "diagram",
           "id": "s08",
-          "label": "Contraste · dato en vivo",
-          "source": "lib/design-values.ts",
-          "value": "AAA en las doce páginas",
-          "linkLabel": "Ver el censo medido",
-          "href": "accesibilidad"
+          "caption": "Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de abajo, una persona, encuentra lo que no incumple ninguna regla."
         }
       ],
       "enlace": {
@@ -921,7 +920,6 @@
         "text": "Si esa es la clase de criterio que buscas para tu equipo, hablemos."
       }
     ],
-    "meta": "11 / 11 · fin del recorrido",
     "enlace": {
       "label": "ENLACE ·",
       "parts": [

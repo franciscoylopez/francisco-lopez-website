@@ -484,14 +484,14 @@
           "text": "Once the system in code grew into what I've just described (seven pieces, a page layer and a page that publishes them), the mockup became poorer than the site itself. From there, keeping both in parallel wasn't rigor: it was guaranteeing they'd end up saying different things, which is exactly what the original decision was meant to avoid."
         },
         {
-          "type": "p",
-          "text": "The Claude Design mockup did its job: capture the feel of the page, be easy to translate, and get a first version out fast. Today new sections get designed directly in code, iterating in the browser with the real tokens, and the mockup stays on as a disposable sketchbook for visual moves the system doesn't have yet. It's the first decision in the project I overturned in writing, and I kept the original below it, dated."
-        },
-        {
           "type": "quote",
           "style": "pull",
           "side": "right",
           "text": "The record of why something else was thought at the time is worth more than retroactive consistency."
+        },
+        {
+          "type": "p",
+          "text": "The Claude Design mockup did its job: capture the feel of the page, be easy to translate, and get a first version out fast. Today new sections get designed directly in code, iterating in the browser with the real tokens, and the mockup stays on as a disposable sketchbook for visual moves the system doesn't have yet. It's the first decision in the project I overturned in writing, and I kept the original below it, dated."
         },
         {
           "type": "p",
@@ -518,12 +518,6 @@
           "type": "p",
           "text": "A portfolio holds nobody's data, has no forms and has no session. It's exactly the kind of site nobody bothers securing properly, and that's exactly why it seemed like the right site to do it on."
         },
-        {
-          "type": "quote",
-          "style": "pull",
-          "side": "right",
-          "text": "If the page's whole argument is rigor, that rigor has to show up where nobody's looking too."
-        },
         { "type": "h3", "text": "The headers: the cheap gaps to close" },
         {
           "type": "p",
@@ -538,6 +532,12 @@
             "**Turn off browser APIs I don't use**, like camera, microphone or location.",
             "**Force HTTPS for two years.** This one skips the preload list on purpose, because getting in is easy and getting out isn't, and a hard-to-reverse decision doesn't get made to score a point on a report."
           ]
+        },
+        {
+          "type": "quote",
+          "style": "pull",
+          "side": "right",
+          "text": "If the page's whole argument is rigor, that rigor has to show up where nobody's looking too."
         },
         {
           "type": "h3",
@@ -637,6 +637,15 @@
           "type": "p",
           "text": "Meeting WCAG AA wasn't the goal: it's a guaranteed floor. From there I work toward AAA wherever it's achievable, in both themes, at rest and also while the cursor is hovering, which is where almost nobody measures."
         },
+        {
+          "type": "livestat",
+          "id": "s08",
+          "label": "Contrast · live data",
+          "source": "lib/design-values.ts",
+          "value": "AAA across all twelve pages",
+          "linkLabel": "See the measured census",
+          "href": "accesibilidad"
+        },
         { "type": "h3", "text": "Four points get inherited, four stay manual" },
         {
           "type": "p",
@@ -689,23 +698,13 @@
         },
         { "type": "h3", "text": "The layer that can't be automated" },
         {
-          "type": "diagram",
-          "id": "s08",
-          "side": "right",
-          "caption": "Each verification layer catches what the one before it can't see. Only the last one, a person, catches what breaks no rule at all."
-        },
-        {
           "type": "p",
           "text": "I walked the entire site with [NVDA](https://www.nvaccess.org/), a screen reader, and it caught things that break no rule at all and that no scanner could ever flag: a key that didn't close what it looked like it should close, a change that happened with no announcement to someone who can't see it. What it found is published on the site's own [accessibility page](/en/accesibilidad), named and dated, alongside what I haven't fixed yet. An accessibility statement that only says what's compliant isn't a statement: it's a cover page."
         },
         {
-          "type": "livestat",
+          "type": "diagram",
           "id": "s08",
-          "label": "Contrast · live data",
-          "source": "lib/design-values.ts",
-          "value": "AAA across all twelve pages",
-          "linkLabel": "See the measured census",
-          "href": "accesibilidad"
+          "caption": "Each verification layer catches what the one before it can't see. Only the last one, a person, catches what breaks no rule at all."
         }
       ],
       "enlace": {
@@ -918,7 +917,6 @@
         "text": "If that's the kind of judgment you're looking for on your team, let's talk."
       }
     ],
-    "meta": "11 / 11 · end of the read",
     "enlace": {
       "label": "LINK ·",
       "parts": [
