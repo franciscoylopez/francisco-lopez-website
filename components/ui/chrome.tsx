@@ -90,6 +90,18 @@ export const chromeLinkVariants = cva(
          */
         muted:
           "text-muted-foreground hover:text-foreground focus-visible:text-foreground",
+        /**
+         * Chrome sobre una banda INVERTIDA (`bg-foreground`, P60: el breadcrumb
+         * de «Cómo se ha creado esta página»). `tone: "muted"` rompe aquí dos
+         * veces: en reposo porque `--muted-foreground` no está calibrado para
+         * esta superficie salvo que el ancestro lleve `data-surface="inverted"`
+         * (D30/D39, sí lo lleva), y en HOVER porque sube a `--foreground` —que
+         * en una banda invertida ES el color de fondo de la propia banda, texto
+         * invisible—. Aquí el hover sube a `--background`, que es el mismo
+         * "tinta llena" que ya usa el resto del texto de la banda.
+         */
+        inverted:
+          "text-muted-foreground hover:text-background focus-visible:text-background",
       },
     },
     defaultVariants: { shape: "inline", tone: "default" },

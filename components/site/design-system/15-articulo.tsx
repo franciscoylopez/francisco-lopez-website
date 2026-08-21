@@ -37,6 +37,7 @@ export function ArticuloLargo({
             kicker={t.coverKicker}
             title={t.coverTitle}
             id="ds-articulo-cover"
+            metaLine={t.coverMeta}
           />
           <div className="grid grid-cols-1 gap-x-[var(--gutter)] gap-y-2 md:grid-cols-2">
             <Pullquote label={t.pullquoteLabel}>{t.pullquote}</Pullquote>
@@ -51,8 +52,10 @@ export function ArticuloLargo({
           />
           <RepoStrip
             label={t.repoLabel}
-            text={t.repoText}
-            path="DECISIONS.md"
+            parts={[
+              t.repoText,
+              { label: "DECISIONS.md", path: "DECISIONS.md" },
+            ]}
           />
           <ChapterNav
             position={5}

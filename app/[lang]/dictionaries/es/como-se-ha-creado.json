@@ -9,28 +9,32 @@
     "title": "Cómo se ha creado esta página",
     "leadParas": [
       "Cuando empecé a pensar en este proyecto tenía claro que no quería un CV en HTML, quería una prueba de criterio: en producto, en lo técnico y en usabilidad y diseño.",
-      "Todo lo que afirmo aquí abajo está enlazado al código que lo sostiene. El repositorio es público, así que no hace falta que me creas:"
+      "Todo lo que afirmo aquí abajo está enlazado al código que lo sostiene. El repositorio es público, así que no hace falta, podrás comprobarlo con cada decisión que te mencione."
     ],
-    "repoLinkLabel": "échale un ojo",
-    "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. El índice lleva el tiempo de cada una, y la barra del borde superior marca por dónde vas.",
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
     "shareLabel": "Compartir",
     "copyLabel": "Copiar enlace",
     "copiedLabel": "Copiado",
     "copiedAnnounce": "Enlace copiado al portapapeles",
-    "shareUnavailableAnnounce": "Compartir no está disponible: enlace copiado",
-    "wordsSuffix": "palabras",
-    "sectionsSuffix": "secciones"
+    "shareUnavailableAnnounce": "Compartir no está disponible: enlace copiado"
   },
   "index": {
     "kicker": "Índice",
     "timeLabel": "tiempo por sección",
-    "ariaLabel": "Índice del artículo"
+    "ariaLabel": "Índice del artículo",
+    "wordsSuffix": "palabras",
+    "sectionsSuffix": "secciones",
+    "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas."
   },
   "rail": { "ariaLabel": "Índice de secciones" },
   "progress": { "ariaLabel": "Progreso de lectura" },
   "chapterNav": { "indexLabel": "Índice", "nextLabel": "Siguiente:" },
+  "sectionMeta": {
+    "chapter": "Capítulo",
+    "of": "de",
+    "reading": "min de lectura"
+  },
   "sections": [
     {
       "id": "s01",
@@ -66,7 +70,14 @@
         },
         {
           "type": "p",
-          "text": "No hice una investigación con usuarios. Lo que sí hice fue revisar los perfiles de algunos referentes en Producto, leer artículos de gente de selección, y tener claro dos cosas: que quería una primera versión rápida, y que quería una web preparada para los distintos perfiles que iban a leerla. De ahí salió una hipótesis escrita de quién lee y en cuánto tiempo, y de esa hipótesis salen todas las decisiones de arriba. **Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno.**"
+          "text": "No hice una investigación con usuarios. Lo que sí hice fue revisar los perfiles de algunos referentes en Producto, leer artículos de gente de selección, y tener claro dos cosas: que quería una primera versión rápida, y que quería una web preparada para los distintos perfiles que iban a leerla. De ahí salió una hipótesis escrita de quién lee y en cuánto tiempo, y de esa hipótesis salen todas las decisiones de arriba."
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "label": "La frase de la sección",
+          "text": "Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno."
         },
         { "type": "h3", "text": "Lo que no está (de momento) y por qué" },
         {
@@ -92,10 +103,14 @@
           "text": "Si la web dice que sé de producto, de UX y de datos, la web tiene que estar hecha con esas tres cosas. Una página lenta, inaccesible, mal medida o poco segura contradice su propio texto. Eso es lo que convierte cada decisión técnica de las que vienen en una decisión de contenido."
         }
       ],
-      "pullquote": "Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno.",
       "enlace": {
-        "text": "PRD-Live.md, secciones 1 a 3 y 9, y la decisión D29 para la franja de contacto",
-        "path": "PRD-Live.md"
+        "label": "ENLACE ·",
+        "parts": [
+          { "label": "PRD-Live.md", "path": "PRD-Live.md" },
+          ", secciones 1 a 3 y 9, y la decisión ",
+          { "label": "D29", "path": "DECISIONS.md", "line": 844 },
+          " para la franja de contacto"
+        ]
       }
     },
     {
@@ -171,13 +186,28 @@
         },
         {
           "type": "p",
-          "text": "Y la parte que aprendí tarde: la rama principal no la protege mi disciplina, la protege el servidor. Sin push directo, sin fusionar con los checks en rojo, sin saltarse la protección por ser administrador. Escribí esa configuración el mismo día que hice público el repositorio, y el orden correcto habría sido el inverso."
+          "text": "Y la parte que aprendí tarde: sin push directo, sin fusionar con los checks en rojo, sin saltarse la protección por ser administrador. Escribí esa configuración el mismo día que hice público el repositorio, y el orden correcto habría sido el inverso."
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "left",
+          "label": "La frase de la sección",
+          "text": "La rama principal no la protege mi disciplina, la protege el servidor."
         }
       ],
-      "pullquote": "La rama principal no la protege mi disciplina, la protege el servidor.",
       "enlace": {
-        "text": "El apartado de seguimiento de tareas de CLAUDE.md, y las decisiones D10, D12 y D68",
-        "path": "CLAUDE.md"
+        "label": "ENLACE ·",
+        "parts": [
+          "El apartado de seguimiento de tareas de ",
+          { "label": "CLAUDE.md", "path": "CLAUDE.md" },
+          ", y las decisiones ",
+          { "label": "D10", "path": "DECISIONS.md", "line": 176 },
+          ", ",
+          { "label": "D12", "path": "DECISIONS.md", "line": 202 },
+          " y ",
+          { "label": "D68", "path": "DECISIONS.md", "line": 3638 }
+        ]
       }
     },
     {
@@ -245,17 +275,28 @@
         },
         {
           "type": "p",
-          "text": "El CV en PDF se produce por código a partir de los mismos datos que la web, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano. Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces."
+          "text": "El CV en PDF se produce por código a partir de los mismos datos que la web, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano."
+        },
+        {
+          "type": "quote",
+          "style": "pull",
+          "side": "right",
+          "text": "Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces."
         },
         {
           "type": "p",
           "text": "Y la prueba de que una marca existe de verdad es que sobrevive fuera de su sitio. La firma de mis correos lleva el monograma con su split, el nombre en la tipografía de los titulares y los canales, sin banner ni floritura. El banner de LinkedIn lleva ese mismo monograma y la frase que preside la home. Y la portada del repositorio de GitHub abre otra vez con esa frase, sobre el mismo fondo carbón. No es que las tres se parezcan: es que las tres dicen literalmente lo mismo, «Del discovery al dato», que es el titular del sitio. Cuando alguien te encuentra en tres sitios distintos en la misma semana, esa repetición es lo único que hace que los tres sean la misma persona."
         }
       ],
-      "pull": "Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces.",
       "enlace": {
-        "text": "BRAND.md, BRAND-logo.md y su porqué fechado en BRAND-historical.md",
-        "path": "BRAND.md"
+        "label": "ENLACE ·",
+        "parts": [
+          { "label": "BRAND.md", "path": "BRAND.md" },
+          ", ",
+          { "label": "BRAND-logo.md", "path": "BRAND-logo.md" },
+          " y su porqué fechado en ",
+          { "label": "BRAND-historical.md", "path": "BRAND-historical.md" }
+        ]
       }
     },
     {
@@ -302,8 +343,20 @@
         }
       ],
       "enlace": {
-        "text": "Decisiones D2, D3, D6, D34 y D51 del registro técnico",
-        "path": "DECISIONS.md"
+        "label": "ENLACE ·",
+        "parts": [
+          "Decisiones ",
+          { "label": "D2", "path": "DECISIONS.md", "line": 59 },
+          ", ",
+          { "label": "D3", "path": "DECISIONS.md", "line": 71 },
+          ", ",
+          { "label": "D6", "path": "DECISIONS.md", "line": 107 },
+          ", ",
+          { "label": "D34", "path": "DECISIONS.md", "line": 1020 },
+          " y ",
+          { "label": "D51", "path": "DECISIONS.md", "line": 2187 },
+          " del registro técnico"
+        ]
       }
     },
     {
@@ -342,7 +395,14 @@
         },
         {
           "type": "p",
-          "text": "Encima de las siete piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una. **Añadir una página nueva y olvidarse de registrarla no es un hallazgo de auditoría en este repositorio: es un error de compilación.**"
+          "text": "Encima de las siete piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una."
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "label": "La frase de la sección",
+          "text": "Añadir una página nueva y olvidarse de registrarla no es un hallazgo de auditoría en este repositorio: es un error de compilación."
         },
         { "type": "h3", "text": "Qué compra todo esto" },
         {
@@ -350,7 +410,6 @@
           "text": "Cuatro de los ocho puntos del checklist de accesibilidad dejan de verificarse a mano al cerrar una página, porque los pone la pieza: el contraste de los pares del sistema, el anillo de foco, el objetivo táctil mínimo y el respeto a quien ha pedido menos movimiento. Es la mitad de un capítulo que viene más adelante, y por eso ese capítulo puede dedicarse entero a lo que de verdad costó."
         }
       ],
-      "pullquote": "Añadir una página nueva y olvidarse de registrarla no es un hallazgo de auditoría en este repositorio: es un error de compilación.",
       "liveStat": {
         "label": "Piezas del sistema · dato en vivo",
         "source": "components/ui/",
@@ -359,8 +418,21 @@
         "href": "design-system"
       },
       "enlace": {
-        "text": "Decisiones D36, D40, D45, D46 y D72, y el directorio components/ui/",
-        "path": "components/ui"
+        "label": "ENLACE ·",
+        "parts": [
+          "Decisiones ",
+          { "label": "D36", "path": "DECISIONS.md", "line": 1107 },
+          ", ",
+          { "label": "D40", "path": "DECISIONS.md", "line": 1520 },
+          ", ",
+          { "label": "D45", "path": "DECISIONS.md", "line": 1854 },
+          ", ",
+          { "label": "D46", "path": "DECISIONS.md", "line": 1909 },
+          " y ",
+          { "label": "D72", "path": "DECISIONS.md", "line": 3870 },
+          ", y el directorio ",
+          { "label": "components/ui/", "path": "components/ui" }
+        ]
       }
     },
     {
@@ -386,17 +458,26 @@
         },
         {
           "type": "p",
-          "text": "El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. Hoy las secciones nuevas se diseñan directamente en código, iterando en el navegador con los tokens reales, y la maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es la primera decisión del proyecto que anulé por escrito, y dejé la original debajo, con su fecha, porque **el registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.**"
+          "text": "El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. Hoy las secciones nuevas se diseñan directamente en código, iterando en el navegador con los tokens reales, y la maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es la primera decisión del proyecto que anulé por escrito, y dejé la original debajo, con su fecha."
+        },
+        {
+          "type": "quote",
+          "style": "pull",
+          "side": "right",
+          "text": "El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva."
         },
         {
           "type": "p",
           "text": "Lo que sí se conserva del método antiguo es la costumbre de decidir viendo y no imaginando: cuando hay más de una dirección posible, se prototipa con los tokens de verdad y se elige mirando las dos, no describiéndolas."
         }
       ],
-      "pull": "El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.",
       "enlace": {
-        "text": "Decisión D1, con su nota de superación y la decisión original conservada debajo",
-        "path": "DECISIONS.md"
+        "label": "ENLACE ·",
+        "parts": [
+          "Decisión ",
+          { "label": "D1", "path": "DECISIONS.md", "line": 38 },
+          ", con su nota de superación y la decisión original conservada debajo"
+        ]
       }
     },
     {
@@ -408,7 +489,13 @@
       "body": [
         {
           "type": "p",
-          "text": "Un portfolio no guarda datos de nadie, no tiene formularios y no tiene sesión. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo: si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve."
+          "text": "Un portfolio no guarda datos de nadie, no tiene formularios y no tiene sesión. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo."
+        },
+        {
+          "type": "quote",
+          "style": "pull",
+          "side": "right",
+          "text": "Si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve."
         },
         { "type": "h3", "text": "Las cabeceras: los huecos baratos de cerrar" },
         { "type": "p", "text": "El sitio sirve cinco, y ninguna cuesta nada:" },
@@ -457,7 +544,7 @@
         { "type": "h3", "text": "La deuda que el analizador sí encontró" },
         {
           "type": "p",
-          "text": "Aquí hay una respuesta cómoda y una verdadera. La cómoda es que casi no hay. La verdadera es que uso Qlty, un analizador externo, y este fue quien me dijo que sí la había, y al mirar de cerca resultó que los cinco archivos peor puntuados no eran código de la web: eran el censo de contraste, dos registros de contenido y dos guardianes. De ahí salen dos lecturas que son ciertas a la vez:"
+          "text": "Aquí hay una respuesta cómoda y una verdadera. La cómoda es que casi no hay. La verdadera es que uso [Qlty](https://qlty.sh), un analizador externo, y este fue quien me dijo que sí la había, y al mirar de cerca resultó que los cinco archivos peor puntuados no eran código de la web: eran el censo de contraste, dos registros de contenido y dos guardianes. De ahí salen dos lecturas que son ciertas a la vez:"
         },
         {
           "type": "ul",
@@ -476,10 +563,26 @@
           "text": "Este repositorio no tiene tests. No es un olvido, es una decisión. No hay lógica de negocio que probar: hay datos, componentes de presentación y reglas, y las reglas ya las verifican los guardianes en cada push. El día que aparezca la primera función con condiciones de verdad, entran los tests. Escribir un test que comprueba que un título renderiza un título habría sido teatro, y teatro caro de mantener."
         }
       ],
-      "pull": "Si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve.",
       "enlace": {
-        "text": "Decisiones D13, D15, D26, D27, D32 y D55, el archivo next.config.ts y la configuración de Qlty",
-        "path": "next.config.ts"
+        "label": "ENLACE ·",
+        "parts": [
+          "Decisiones ",
+          { "label": "D13", "path": "DECISIONS.md", "line": 229 },
+          ", ",
+          { "label": "D15", "path": "DECISIONS.md", "line": 280 },
+          ", ",
+          { "label": "D26", "path": "DECISIONS.md", "line": 706 },
+          ", ",
+          { "label": "D27", "path": "DECISIONS.md", "line": 750 },
+          ", ",
+          { "label": "D32", "path": "DECISIONS.md", "line": 957 },
+          " y ",
+          { "label": "D55", "path": "DECISIONS.md", "line": 2713 },
+          ", el archivo ",
+          { "label": "next.config.ts", "path": "next.config.ts" },
+          " y la configuración de ",
+          { "label": "Qlty", "external": "https://qlty.sh" }
+        ]
       }
     },
     {
@@ -524,7 +627,14 @@
         },
         {
           "type": "p",
-          "text": "No es un componente. El gris del texto secundario está calibrado contra el fondo de la página, y solo contra él. Encima de una tarjeta, de una banda invertida o de un velo, ese mismo gris se queda corto. La primera versión de la regla decía «recalcúlalo cuando cambies de superficie», que es una regla que hay que recordar, es decir, una regla que se incumple. La segunda versión no hay que recordarla: cada superficie declara su propio atenuado mezclando el texto hacia el fondo que tiene debajo, y el punto de uso escribe siempre lo mismo. **El gris correcto lo decide el sitio donde cae el texto.**"
+          "text": "No es un componente. El gris del texto secundario está calibrado contra el fondo de la página, y solo contra él. Encima de una tarjeta, de una banda invertida o de un velo, ese mismo gris se queda corto. La primera versión de la regla decía «recalcúlalo cuando cambies de superficie», que es una regla que hay que recordar, es decir, una regla que se incumple. La segunda versión no hay que recordarla: cada superficie declara su propio atenuado mezclando el texto hacia el fondo que tiene debajo, y el punto de uso escribe siempre lo mismo."
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "label": "La frase de la sección",
+          "text": "El gris correcto lo decide el sitio donde cae el texto."
         },
         {
           "type": "p",
@@ -553,10 +663,9 @@
         { "type": "h3", "text": "La capa que no se puede automatizar" },
         {
           "type": "p",
-          "text": "Recorrí el sitio entero con NVDA, un lector de pantalla, y encontró cosas que no incumplen ninguna regla y que por eso ningún escáner podía señalar: una tecla que no cerraba lo que parecía que iba a cerrar, un cambio que ocurría sin anunciarse a quien no lo ve. Lo que encontró está publicado en la página de accesibilidad del sitio, con nombre y apellidos, junto a lo que todavía no he arreglado. Una declaración de accesibilidad que solo dice lo que cumple no es una declaración: es una portada."
+          "text": "Recorrí el sitio entero con [NVDA](https://www.nvaccess.org/), un lector de pantalla, y encontró cosas que no incumplen ninguna regla y que por eso ningún escáner podía señalar: una tecla que no cerraba lo que parecía que iba a cerrar, un cambio que ocurría sin anunciarse a quien no lo ve. Lo que encontró está publicado en la página de accesibilidad del sitio, con nombre y apellidos, junto a lo que todavía no he arreglado. Una declaración de accesibilidad que solo dice lo que cumple no es una declaración: es una portada."
         }
       ],
-      "pullquote": "El gris correcto lo decide el sitio donde cae el texto.",
       "liveStat": {
         "label": "Contraste · dato en vivo",
         "source": "lib/design-values.ts",
@@ -565,8 +674,24 @@
         "href": "accesibilidad"
       },
       "enlace": {
-        "text": "Decisiones D39, D41, D52, D61 y D73, y el script contrast-census.js",
-        "path": "scripts/design-review/contrast-census.js"
+        "label": "ENLACE ·",
+        "parts": [
+          "Decisiones ",
+          { "label": "D39", "path": "DECISIONS.md", "line": 1451 },
+          ", ",
+          { "label": "D41", "path": "DECISIONS.md", "line": 1583 },
+          ", ",
+          { "label": "D52", "path": "DECISIONS.md", "line": 2356 },
+          ", ",
+          { "label": "D61", "path": "DECISIONS.md", "line": 3266 },
+          " y ",
+          { "label": "D73", "path": "DECISIONS.md", "line": 3945 },
+          ", y el script ",
+          {
+            "label": "contrast-census.js",
+            "path": "scripts/design-review/contrast-census.js"
+          }
+        ]
       }
     },
     {
@@ -615,7 +740,14 @@
         },
         {
           "type": "p",
-          "text": "Por eso los verificadores de este repositorio están escritos al revés de como se escriben normalmente. No buscan el patrón malo: buscan la ausencia del bueno. No preguntan «¿hay algún guion largo en el copy?», preguntan «¿hay algún texto que este verificador no esté mirando?». Y todos terminan diciendo cuántas cosas han revisado, porque un verificador que devuelve una lista vacía y un verificador que no ha mirado nada producen exactamente el mismo informe: verde."
+          "text": "Por eso los verificadores de este repositorio están escritos al revés de como se escriben normalmente. No buscan el patrón malo: buscan la ausencia del bueno. No preguntan «¿hay algún guion largo en el copy?», preguntan «¿hay algún texto que este verificador no esté mirando?». Y todos terminan diciendo cuántas cosas han revisado."
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "label": "La frase de la sección",
+          "text": "Un verificador que devuelve una lista vacía y un verificador que no ha mirado nada producen exactamente el mismo informe: verde."
         },
         {
           "type": "p",
@@ -627,7 +759,6 @@
           "text": "Pasé el sitio por varias herramientas de auditoría y me devolvieron once hallazgos. Seis eran falsos positivos. Lo importante no fue descartarlos, fue escribir por qué se descartaban, y escribirlo por mecanismo y no por cifra: «esta herramienta cuenta esto de esta manera» envejece bien, mientras que apuntar la puntuación de aquel día obliga a discutirlo otra vez dentro de un mes con otra puntuación distinta."
         }
       ],
-      "pullquote": "Lo que hay que comprobarle a un verificador no es qué encontró: es cuánto miró.",
       "liveStat": {
         "label": "Integración continua · dato en vivo",
         "source": ".github/workflows/ci.yml",
@@ -636,8 +767,23 @@
         "href": "github"
       },
       "enlace": {
-        "text": "Decisiones D37, D63, D67, D70 y D72, el workflow de CI y las rutinas versionadas en .claude/skills/",
-        "path": ".github/workflows/ci.yml"
+        "label": "ENLACE ·",
+        "parts": [
+          "Decisiones ",
+          { "label": "D37", "path": "DECISIONS.md", "line": 1259 },
+          ", ",
+          { "label": "D63", "path": "DECISIONS.md", "line": 3350 },
+          ", ",
+          { "label": "D67", "path": "DECISIONS.md", "line": 3551 },
+          ", ",
+          { "label": "D70", "path": "DECISIONS.md", "line": 3765 },
+          " y ",
+          { "label": "D72", "path": "DECISIONS.md", "line": 3870 },
+          ", el ",
+          { "label": "workflow de CI", "path": ".github/workflows/ci.yml" },
+          " y las rutinas versionadas en ",
+          { "label": ".claude/skills/", "path": ".claude/skills" }
+        ]
       }
     },
     {
@@ -656,6 +802,13 @@
           "text": "**Una regla que hay que recordar es una regla que se incumple.** No hay ni una excepción en el registro del proyecto. Las reglas que se han sostenido son las que llegaron a convertirse en un componente, una utilidad o un verificador. Las que se quedaron escritas en un documento se incumplieron todas, incluidas las que yo mismo había escrito la semana anterior."
         },
         {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "label": "La frase del artículo",
+          "text": "Una regla que hay que recordar es una regla que se incumple."
+        },
+        {
           "type": "p",
           "text": "**Una regla cuyo disparador mira al sitio equivocado no es una regla, es una nota.** Tenía escrito «si hay más de dos iconos propios, publícalos». Lo comprobaba mirando el archivo de iconos, donde había uno. El sitio tenía siete, repartidos por otros archivos. La regla era correcta y la condición miraba a otro lado. Y pasa igual con el momento: el gate de accesibilidad se disparaba al cerrar una sección, y ahí ya es tarde, porque cambiar el alto de una apertura no es un ajuste, es un rediseño. Ahora salta también mientras se dibuja."
         },
@@ -672,10 +825,18 @@
           "text": "Y una quinta que va en dirección contraria, para que no parezca que la moraleja es unificarlo todo: **antes de juntar dos valores que se parecen, comprueba que no signifiquen cosas distintas.** Encontré dos radios de esquina diferentes en lo que parecía el mismo componente y estuve a punto de igualarlos. No era incoherencia: eran dos cajas distintas y a una le faltaba el nombre. Unificarlas habría roto la jerarquía visual de media web."
         }
       ],
-      "pullquote": "Una regla que hay que recordar es una regla que se incumple.",
       "enlace": {
-        "text": "El apartado «Cómo se escribe una regla aquí» de BRAND.md, y las decisiones D60, D63 y D70",
-        "path": "BRAND.md"
+        "label": "ENLACE ·",
+        "parts": [
+          "El apartado «Cómo se escribe una regla aquí» de ",
+          { "label": "BRAND.md", "path": "BRAND.md" },
+          ", y las decisiones ",
+          { "label": "D60", "path": "DECISIONS.md", "line": 3185 },
+          ", ",
+          { "label": "D63", "path": "DECISIONS.md", "line": 3350 },
+          " y ",
+          { "label": "D70", "path": "DECISIONS.md", "line": 3765 }
+        ]
       }
     }
   ],
@@ -717,8 +878,17 @@
     ],
     "meta": "11 / 11 · fin del recorrido",
     "enlace": {
-      "text": "Decisiones D17, D18, D31 y D71",
-      "path": "DECISIONS.md"
+      "label": "ENLACE ·",
+      "parts": [
+        "Decisiones ",
+        { "label": "D17", "path": "DECISIONS.md", "line": 301 },
+        ", ",
+        { "label": "D18", "path": "DECISIONS.md", "line": 341 },
+        ", ",
+        { "label": "D31", "path": "DECISIONS.md", "line": 929 },
+        " y ",
+        { "label": "D71", "path": "DECISIONS.md", "line": 3830 }
+      ]
     }
   }
 }

@@ -40,6 +40,7 @@ Partido el **2026-08-09** (P37.685).
 - [Cómo se escribe una regla](#cómo-se-escribe-una-regla)
 - [El morado como gráfico, y la tercera vez del mismo peldaño (2026-08-17)](#el-morado-como-gráfico-y-la-tercera-vez-del-mismo-peldaño-2026-08-17)
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
+- [El morado de la barra de progreso, con los papeles cambiados (2026-08-21)](#el-morado-de-la-barra-de-progreso-con-los-papeles-cambiados-2026-08-21)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -526,3 +527,17 @@ malo eran las cifras.)*
 
 La regla en presente está en **`BRAND.md` §Un control sobre una imagen**; el detalle técnico del
 componente —facade, CSP, consentimiento— en **`DECISIONS.md` D55**. Aquí no se copian (regla 5).
+
+## El morado de la barra de progreso, con los papeles cambiados (2026-08-21)
+
+`--progress-ink` (P60, «Cómo se ha creado esta página») es el segundo caso —tras
+`brand-purple-accent`— donde el morado decorativo tiene que leerse como UI y un
+color fijo no llega. La diferencia con aquel: la barra de progreso vive sobre
+`--background` DIRECTAMENTE, no sobre una banda invertida, así que el papel de
+cada tema se cambia. `brand-purple-accent` pinta `0.78` en claro (fondo carbón
+de la banda) y `0.45` en oscuro (fondo hueso); `--progress-ink` pinta al revés:
+`0.45` en claro (el fondo de página en claro ES hueso) y `0.78` en oscuro (el
+fondo de página en oscuro ES carbón). Mismo mecanismo, mismo par de valores,
+superficie de referencia invertida entre los dos tokens.
+
+La regla en presente está en **`BRAND.md` §Color**.

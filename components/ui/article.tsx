@@ -61,7 +61,10 @@ export type IndexItem = {
 };
 
 /** El índice navegable de 11 paradas, con tiempo por sección (pintado en
- * servidor: no hace falta JS para verlo ni para saltar). */
+ * servidor: no hace falta JS para verlo ni para saltar). Rejilla continua —
+ * el ordinal grande sobre la etiqueta, sin caja propia por celda, con
+ * hairlines de división y una pastilla de hover que ocupa la celda entera
+ * (P60, feedback de diseño: «variante C»). */
 export function ArticleIndex({
   kicker,
   timeLabel,
@@ -75,29 +78,26 @@ export function ArticleIndex({
 }) {
   return (
     <nav aria-label={ariaLabel} data-reveal>
-      <div className="mb-4 flex items-baseline justify-between gap-3">
+      <div className="border-border flex items-baseline justify-between gap-3 border-b px-1 pb-3">
         <p className={cn(eyebrowVariants(), "m-0")}>{kicker}</p>
         <span className="text-muted-foreground hidden text-[0.78rem] sm:inline">
           {timeLabel}
         </span>
       </div>
-      <ol className="m-0 grid list-none grid-cols-1 gap-[var(--gutter)] p-0 sm:grid-cols-2 lg:grid-cols-3">
+      <ol className="border-border m-0 grid list-none grid-cols-1 border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
-          <li key={item.id}>
+          <li key={item.id} className="border-border border-r border-b">
             <a
               href={`#${item.id}`}
-              className="border-border hover:bg-muted focus-visible:bg-muted flex min-h-[44px] items-baseline gap-3 rounded-lg border px-4 py-3 no-underline transition-colors"
+              className="hover:bg-muted focus-visible:bg-muted flex min-h-[7.5rem] flex-col justify-center gap-1 px-5 py-4 no-underline transition-colors"
             >
-              <span
-                aria-hidden="true"
-                className="text-muted-foreground font-mono text-[0.85rem]"
-              >
+              <span className="font-display text-[1.9rem] leading-none font-semibold">
                 {item.ordinal}
               </span>
-              <span className="text-foreground flex-1 text-[0.92rem] font-medium">
+              <span className="text-foreground text-[0.95rem] font-medium">
                 {item.label}
               </span>
-              <span className="text-muted-foreground shrink-0 text-[0.78rem] whitespace-nowrap">
+              <span className="text-muted-foreground mt-1 font-mono text-[0.75rem]">
                 ≈{item.minutes} min
               </span>
             </a>
@@ -110,37 +110,43 @@ export function ArticleIndex({
 
 /* ───────────────────────── SectionCover ───────────────────────── */
 
-/** La portada de una sección: ordinal ilustrado (decorativo, `aria-hidden`) +
- * kicker + `h2`. El ordinal ya está dicho en texto accesible por el kicker,
- * pero eso no exime al numeral grande de WCAG 1.4.3: `aria-hidden` lo saca
- * del árbol de accesibilidad, no de la vista, y alguien con baja visión SÍ lo
- * lee. `brand-purple-soft` daba 1,63:1 en claro y prácticamente 0 en oscuro
+/** La portada de una sección: una línea de meta («Capítulo 08 de 11 · 4 min
+ * de lectura») + kicker + `h2` a la izquierda, y el ordinal ilustrado
+ * (decorativo, `aria-hidden`) a la DERECHA — feedback de diseño de P60: en el
+ * layout anterior el numeral grande y el ordinal del kicker quedaban pegados.
+ *
+ * El ordinal ya está dicho en texto accesible por el kicker, pero eso no
+ * exime al numeral grande de WCAG 1.4.3: `aria-hidden` lo saca del árbol de
+ * accesibilidad, no de la vista, y alguien con baja visión SÍ lo lee.
+ * `brand-purple-soft` daba 1,63:1 en claro y prácticamente 0 en oscuro
  * (viewport-verifier, P60) — ni el umbral de texto grande (3:1). Un morado que
  * SÍ llegara ahí no existe sin inventar un token nuevo (BRAND.md §El morado
- * como gráfico: el decorativo no pasa 3:1 en claro), así que se usa
- * `text-muted-foreground`, que ya viene calibrado por superficie (D30/D39) y
- * cumple de sobra en los dos temas. Pierde el guiño morado del prototipo de
- * P59; queda anotado para que `design-review` proponga un tratamiento propio. */
+ * como gráfico: el decorativo no pasa 3:1 en claro), así que el numeral usa
+ * `text-muted-foreground` con un marco (`border-muted-foreground`) — evoca el
+ * numeral con contorno del prototipo de P59 sin depender de un color que no
+ * pasa el umbral. */
 export function SectionCover({
   ordinal,
   kicker,
   title,
   id,
+  metaLine,
 }: {
   ordinal: string;
   kicker: string;
   title: string;
   id: string;
+  /** «Capítulo 08 de 11 · 4 min de lectura», ya compuesta por el llamador
+   * (los tres fragmentos son copy, y el número de sección/minutos se calcula
+   * en build — D60). */
+  metaLine: string;
 }) {
   return (
-    <div className="mb-[clamp(2rem,4vw,3rem)] flex items-end gap-[clamp(1rem,3vw,2rem)]">
-      <span
-        aria-hidden="true"
-        className="text-muted-foreground font-display hidden text-[clamp(4rem,9vw,7rem)] leading-[0.8] font-semibold sm:block"
-      >
-        {ordinal}
-      </span>
-      <header>
+    <div className="mb-[clamp(2rem,4vw,3rem)] flex items-start justify-between gap-[clamp(1.5rem,4vw,3rem)]">
+      <header className="min-w-0">
+        <p className="text-muted-foreground m-0 mb-2 font-mono text-[0.7rem] tracking-[0.06em] uppercase">
+          {metaLine}
+        </p>
         <p className={cn(eyebrowVariants(), "mb-3")}>{kicker}</p>
         <h2
           id={id}
@@ -149,6 +155,13 @@ export function SectionCover({
           {title}
         </h2>
       </header>
+      <span
+        aria-hidden="true"
+        className="text-muted-foreground border-muted-foreground/30 font-display hidden shrink-0 rounded-2xl border text-[clamp(2.5rem,5vw,4rem)] leading-none font-semibold sm:block"
+        style={{ padding: "0.5em 0.65em" }}
+      >
+        {ordinal}
+      </span>
     </div>
   );
 }
@@ -173,13 +186,21 @@ export function ArticleProse({ blocks }: { blocks: ArticleBlock[] }) {
           );
         }
         if (block.type === "ul") {
+          // Ancho de MEDIA COLUMNA (`--measure`, ~42rem) y no el del contenedor
+          // del artículo: a ancho completo la viñeta y el final de línea quedan
+          // a medio metro uno del otro y la lista deja de leerse como lista —
+          // mismo motivo y mismo ancho que las listas del deep-dive. La marca es
+          // cuadrada (no el punto redondo de antes): feedback de diseño de P60.
           return (
-            <ul key={i} className="m-0 list-none space-y-[0.7rem] p-0">
+            <ul
+              key={i}
+              className="m-0 max-w-[var(--measure)] list-none space-y-[0.7rem] p-0"
+            >
               {block.items.map((item, j) => (
                 <li key={j} className="flex gap-3 text-[1.02rem] leading-[1.7]">
                   <span
                     aria-hidden="true"
-                    className="border-primary mt-[0.6em] size-[6px] shrink-0 rounded-full border-2"
+                    className="bg-primary mt-[0.65em] size-[6px] shrink-0"
                   />
                   <span>
                     <Rich text={item} />
@@ -187,6 +208,17 @@ export function ArticleProse({ blocks }: { blocks: ArticleBlock[] }) {
                 </li>
               ))}
             </ul>
+          );
+        }
+        if (block.type === "quote") {
+          return block.style === "pullquote" ? (
+            <Pullquote key={i} label={block.label ?? ""} side={block.side}>
+              {block.text}
+            </Pullquote>
+          ) : (
+            <Pull key={i} side={block.side}>
+              {block.text}
+            </Pull>
           );
         }
         return (
@@ -201,27 +233,35 @@ export function ArticleProse({ blocks }: { blocks: ArticleBlock[] }) {
 
 /* ───────────────────────── Citas ───────────────────────── */
 
-/** Cita destacada: para el sitio EN el que un lector para. Marcas de esquina
- * en morado — el único uso "gráfico" del morado que no necesita 3:1 porque no
- * transporta información, es ornamento sobre un texto que ya se lee solo. */
+/** Cita destacada: integrada en el flujo de lectura como una cita de revista,
+ * flotando a un lado (`side`) mientras el texto sigue alrededor — no un
+ * bloque que interrumpe la columna entera (feedback de diseño de P60). Marcas
+ * de esquina en morado: el único uso "gráfico" del morado que no necesita 3:1
+ * porque no transporta información, es ornamento sobre un texto que ya se lee
+ * solo. */
 export function Pullquote({
   label,
+  side = "right",
   children,
 }: {
   label: string;
+  side?: "left" | "right";
   children: ReactNode;
 }) {
   return (
     <aside
       role="note"
-      className="border-brand-purple/40 relative my-[2.5rem] max-w-[38rem] border-t-2 border-b-2 py-6 pl-[1.5rem]"
+      className={cn(
+        "border-brand-purple/40 relative my-2 w-full max-w-[19rem] border-t-2 border-b-2 py-5 pl-[1.25rem] sm:w-[45%]",
+        side === "right" ? "sm:float-right sm:ml-8" : "sm:float-left sm:mr-8",
+      )}
     >
       <span
         aria-hidden="true"
         className="bg-brand-purple absolute top-0 bottom-0 left-0 w-[2px]"
       />
-      <p className={cn(eyebrowVariants(), "mb-2")}>{label}</p>
-      <blockquote className="font-display text-foreground m-0 text-[1.4rem] leading-[1.35] font-semibold text-balance">
+      <p className={cn(eyebrowVariants(), "mb-2 text-[0.7rem]")}>{label}</p>
+      <blockquote className="font-display text-foreground m-0 text-[1.15rem] leading-[1.3] font-semibold text-balance">
         {children}
       </blockquote>
     </aside>
@@ -229,10 +269,22 @@ export function Pullquote({
 }
 
 /** Cita en el flujo: la cita menor, que no debe parar la lectura. Filete
- * morado pastel, tamaño de párrafo grande, sin marco. */
-export function Pull({ children }: { children: ReactNode }) {
+ * morado pastel, flota al lado contrario que `Pullquote` cuando ambas caen en
+ * la misma sección, para que el peso gráfico no se acumule en un solo borde. */
+export function Pull({
+  side = "left",
+  children,
+}: {
+  side?: "left" | "right";
+  children: ReactNode;
+}) {
   return (
-    <blockquote className="border-brand-purple-soft text-foreground my-[1.75rem] max-w-[var(--measure)] border-l-2 pl-5 text-[1.1rem] leading-[1.55] font-medium">
+    <blockquote
+      className={cn(
+        "border-brand-purple-soft text-foreground my-2 w-full max-w-[17rem] border-l-2 pl-4 text-[1rem] leading-[1.45] font-medium sm:w-[38%]",
+        side === "right" ? "sm:float-right sm:ml-8" : "sm:float-left sm:mr-8",
+      )}
+    >
       {children}
     </blockquote>
   );
@@ -282,33 +334,55 @@ export function LiveStat({
 
 /* ───────────────────────── RepoStrip ───────────────────────── */
 
+/** Un tramo de texto llano, o un enlace a un archivo del repo (con `line`
+ * opcional para un permalink a la línea exacta — más fiable que adivinar el
+ * anchor que GitHub genera del titular) o a una URL externa (herramientas
+ * citadas, D60/D67: se enlazan, no se citan a pelo). */
+export type RepoStripPart =
+  | string
+  | { label: string; path: string; line?: number }
+  | { label: string; external: string };
+
 /** La franja «ENLACE ·» que cierra cada sección: cada afirmación apunta al
- * código que la sostiene (regla transversal del artículo). `path` es
- * RELATIVO al repo — el prefijo absoluto lo pone `GITHUB_URL`
- * (`lib/contact.ts`), nunca escrito a mano en el diccionario. */
+ * código que la sostiene (regla transversal del artículo), y CADA elemento
+ * citado —cada decisión, cada archivo— es su propio enlace, no uno solo que
+ * cubra la frase entera. */
 export function RepoStrip({
   label,
-  text,
-  path,
+  parts,
 }: {
   label: string;
-  text: string;
-  path: string;
+  parts: RepoStripPart[];
 }) {
   return (
     <footer className="border-border mt-[2.5rem] flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t pt-5 text-[0.92rem]">
       <span className="text-muted-foreground shrink-0 font-semibold tracking-[0.04em] uppercase">
         {label}
       </span>
-      <a
-        href={`${GITHUB_URL}/blob/main/${path}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="link-content link-content--underline inline-flex items-center gap-1"
-      >
-        {text}
-        <ArrowUpRight aria-hidden="true" className="size-[15px] shrink-0" />
-      </a>
+      <p className="m-0">
+        {parts.map((part, i) => {
+          if (typeof part === "string") return <span key={i}>{part}</span>;
+          const href =
+            "external" in part
+              ? part.external
+              : `${GITHUB_URL}/blob/main/${part.path}${part.line ? `#L${part.line}` : ""}`;
+          return (
+            <a
+              key={i}
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="link-content link-content--underline"
+            >
+              {part.label}
+            </a>
+          );
+        })}
+        <ArrowUpRight
+          aria-hidden="true"
+          className="ml-1 inline size-[15px] shrink-0 align-text-bottom"
+        />
+      </p>
     </footer>
   );
 }
@@ -344,13 +418,20 @@ export function ChapterNav({
       className="border-border mt-[2.5rem] flex flex-wrap items-center gap-x-4 gap-y-3 border-t pt-5"
     >
       <p className="text-muted-foreground m-0 flex items-center gap-2 text-[0.85rem]">
+        {/* Vistas en negro, pendientes en gris, y la ACTUAL en morado — el eje
+            que faltaba (feedback de diseño de P60): antes «vista» y «actual»
+            se confundían en el mismo negro. */}
         <span aria-hidden="true" className="flex gap-[3px]">
           {Array.from({ length: total }, (_, i) => (
             <span
               key={i}
               className={cn(
                 "size-[6px] rounded-full",
-                i < position ? "bg-foreground" : "bg-border",
+                i === position - 1
+                  ? "bg-brand-purple"
+                  : i < position - 1
+                    ? "bg-foreground"
+                    : "bg-border",
               )}
             />
           ))}
@@ -389,8 +470,13 @@ export function DiagramPanel({
   caption: ReactNode;
 }) {
   return (
-    <figure className="border-border bg-card my-[2rem] overflow-hidden rounded-xl border">
-      <div className="flex items-center justify-center p-[clamp(1rem,3vw,2rem)]">
+    // Ancho de media columna, no el del artículo: los diagramas se dibujan a
+    // un tamaño legible (400-700px de viewBox) y dentro de una caja de
+    // 1.248px dejaban la mitad en blanco a cada lado (feedback de diseño de
+    // P60). El mismo ancho que las listas — `--measure` — mantiene la
+    // columna de lectura coherente.
+    <figure className="border-border bg-card my-[2rem] max-w-[var(--measure)] overflow-hidden rounded-xl border">
+      <div className="flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
         {children}
       </div>
       <figcaption className="border-border text-muted-foreground border-t px-5 py-4 text-[0.85rem] leading-[1.6]">
