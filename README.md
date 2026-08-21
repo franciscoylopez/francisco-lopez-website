@@ -36,7 +36,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 | :-- | :-- | :-- |
 | **Un dato, un sitio** | De una experiencia, la frase de la portada, el bullet del CV y su gemelo del deep-dive son **el mismo elemento de un array** | Vivían en tres archivos y habían divergido ocho veces. Una fecha equivocada no falla donde se escribe: falla en los seis sitios que la leen · `D57` · `D58` |
 | **La accesibilidad se hereda** | `text-muted-foreground` no significa «este gris», significa «el atenuado del fondo donde caiga este texto» | Cada superficie recalcula su propio contraste. 141 usos heredaron el arreglo sin tocar un solo call site, y una tarjeta nueva nace bien sin pedirlo · `D39` · `D61` |
-| **Nada se escribe a mano** | Siete piezas resuelven todo lo accionable, los rótulos, las cabeceras, las tablas y las cajas | Si un caso no encaja en una variante, se crea la variante. Es lo que hace que un cambio de hover llegue a las doce páginas a la vez · `D36` |
+| **Nada se escribe a mano** | Siete piezas resuelven todo lo accionable, los rótulos, las cabeceras, las tablas y las cajas | Si un caso no encaja en una variante, se crea la variante. Es lo que hace que un cambio de hover llegue a las trece páginas a la vez · `D36` |
 | **Los guardianes buscan la ausencia** | Los checks de CI no comprueban que las copias conocidas cuadren: comprueban que **no queda ninguna** | Un metro que solo valida lo que ya conoce aprueba sobre lista vacía. Y cada uno **afirma cuánto ha mirado** · `D38` · `D54` · `D63` |
 | **El refactor se demuestra** | `npm run gate:html` compara el HTML servido de las 24 variantes antes y después | Diff vacío = transparente por construcción, no por revisión. Es lo que más ha cazado, y se valida rompiéndolo · `D42` · `D45` |
 | **Un artefacto se enseña** | El diagrama del deep-dive es el render **real** de su Mermaid original, saneado y en línea | Redibujarlo con los tokens del sitio cumplía la letra de la regla e incumplía su espíritu. En línea, y no como imagen, para que conmute con el tema · `D54` |
@@ -46,7 +46,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`) · **Tailwind CSS v4**
-- **Capa de componentes propia, en siete piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `table` · `stat-row` · `layout`. **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: entra solo para widgets con estado, foco atrapado o portal, y hacia delante (`D6`, `D36`)
+- **Capa de componentes propia, en siete piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `table` · `stat-row` · `layout`. Aparte, no como octava pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: entra solo para widgets con estado, foco atrapado o portal, y hacia delante (`D6`, `D36`)
 - **lucide-react** para iconos; los que lucide no trae se dibujan a mano con su propia regla de autoría, para que no se distingan de los de la librería
 - **next-themes** (claro/oscuro, `system` por defecto) · **Vercel** (`main` = producción)
 

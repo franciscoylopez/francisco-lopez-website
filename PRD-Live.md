@@ -127,6 +127,10 @@ tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 Encima de las siete, la **capa de página**: `lib/page-meta.ts` y
 `components/site/page-shell.tsx` (D45/D46).
 
+Y aparte, no encima: `ui/article.tsx` + `ui/article-islands.tsx`, la capa de
+**artículo largo** que estrenó «Cómo se ha creado esta página» — no una
+octava pieza del núcleo (D76).
+
 Cuál toca se decide con dos preguntas — **¿se pulsa?** y, si sí, **¿tiene caja propia?** —
 no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
 tampoco. **Ninguno se escribe con clases sueltas**: si un caso no encaja en una variante,
