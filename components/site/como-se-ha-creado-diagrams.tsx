@@ -8,6 +8,11 @@
 // diagrama a cada una de las once habría sido ilustrar por completar una
 // lista, no porque la sección lo necesitara. Es tarea de V3 (columna B de la
 // DoD) si al verlo en pantalla se echa en falta alguno más.
+//
+// RUIDO CONOCIDO (D67): axe marca `<text>` dentro de estos SVG como
+// `incomplete` en `color-contrast` — no resuelve `fill` sobre `<text>` SVG, no
+// es un hallazgo. Medido a mano (viewport-verifier, P60): el par real es
+// `--muted-foreground`/`--foreground` sobre `--card`, ya calibrado (D30/D39).
 
 const LBL = "fill-muted-foreground font-mono text-[11px]";
 const LBL_STRONG = "fill-foreground font-mono text-[11px] font-medium";

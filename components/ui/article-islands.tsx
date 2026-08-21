@@ -108,11 +108,20 @@ export function SectionRail({ items }: { items: RailItem[] }) {
               <a
                 href={`#${item.id}`}
                 aria-current={isActive ? "true" : undefined}
+                // El riel es `fixed`: sobrevuela lo que haya scrolleado debajo
+                // —la banda invertida de la apertura, luego la página normal—,
+                // así que NO puede fiarse de un fondo transparente ni de
+                // `text-muted-foreground` (calibrado contra `--background`,
+                // no contra lo que sea que esté detrás en cada instante). Cada
+                // punto lleva su PROPIA superficie opaca (`bg-card` +
+                // `border-border`), así que su contraste no depende de nada
+                // que no controle él mismo — viewport-verifier midió 1,9-2,2:1
+                // con el fondo transparente anterior.
                 className={cn(
-                  "flex size-6 items-center justify-center rounded-full font-mono text-[0.68rem] transition-colors",
+                  "border-border flex size-6 items-center justify-center rounded-full border font-mono text-[0.68rem] transition-colors",
                   isActive
-                    ? "bg-foreground text-background"
-                    : "text-muted-foreground hover:bg-muted",
+                    ? "bg-foreground text-background border-foreground"
+                    : "bg-card text-muted-foreground hover:bg-muted",
                 )}
               >
                 {item.ordinal}
@@ -142,12 +151,20 @@ export function ShareActions({
   copiedLabel,
   copiedAnnounce,
   shareUnavailableAnnounce,
+  onInverted = false,
 }: {
   shareLabel: string;
   copyLabel: string;
   copiedLabel: string;
   copiedAnnounce: string;
   shareUnavailableAnnounce: string;
+  /** El único uso hoy: la apertura del artículo, sobre `bg-foreground`. Ahí
+   * `outline-neutral` pinta un rectángulo con `--background` normal —claro en
+   * claro— flotando sobre la banda oscura: legible mal, no un fallo de
+   * contraste. Controles CON DOS FONDOS (BRAND.md): el color se toma del
+   * fondo, no se fija, así que aquí se deriva de `--background`/`--foreground`
+   * en vez de reusar la variante pensada para superficies normales. */
+  onInverted?: boolean;
 }) {
   const [copyText, setCopyText] = useState(copyLabel);
   const [announce, setAnnounce] = useState("");
@@ -178,21 +195,23 @@ export function ShareActions({
     setAnnounce(shareUnavailableAnnounce);
   };
 
+  // El borde al 35% daba 2,1-3:1 contra la banda (viewport-verifier, P60):
+  // por debajo del 3:1 que WCAG 1.4.11 pide a un componente de UI en los dos
+  // temas. El texto interior ya es AAA (mismo par que el resto del sitio);
+  // solo el límite del control necesitaba más opacidad de `--background`.
+  const btnClass = cn(
+    actionVariants({ variant: "outline-neutral", size: "sm" }),
+    onInverted &&
+      "border-background/70 bg-transparent text-background hover:bg-background/15 focus-visible:bg-background/15",
+  );
+
   return (
     <div className="flex flex-wrap gap-2">
-      <button
-        type="button"
-        onClick={share}
-        className={actionVariants({ variant: "outline-neutral", size: "sm" })}
-      >
+      <button type="button" onClick={share} className={btnClass}>
         <Share2 aria-hidden="true" />
         {shareLabel}
       </button>
-      <button
-        type="button"
-        onClick={copyLink}
-        className={actionVariants({ variant: "outline-neutral", size: "sm" })}
-      >
+      <button type="button" onClick={copyLink} className={btnClass}>
         {copyText === copyLabel ? (
           <Link2 aria-hidden="true" />
         ) : (
