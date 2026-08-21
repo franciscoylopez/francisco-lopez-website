@@ -161,10 +161,19 @@
           "type": "p",
           "text": "Las tareas no se ordenan por lo que apetece. Están vinculadas a un tablero de priorización aparte donde se clasifican con MoSCoW: imprescindible, debería, podría, no ahora. Los dos tableros contestan preguntas distintas y por eso están separados: el de ejecución dice **en qué orden** se hace, el de priorización dice **por qué ese orden**. Juntarlos convierte cualquier revisión de prioridades en una discusión conmigo mismo sobre si mover una tarjeta."
         },
+        {
+          "type": "image",
+          "src": "/img/como-se-ha-creado-moscow-tablero.webp",
+          "alt": "Tablero de priorización MoSCoW en Notion con tareas agrupadas en cuatro columnas: imprescindible, debería, podría y no ahora.",
+          "width": 1208,
+          "height": 522,
+          "side": "center",
+          "caption": "El tablero de priorización, separado del de ejecución: uno dice en qué orden se hace, el otro por qué."
+        },
         { "type": "h3", "text": "Sin fechas" },
         {
           "type": "p",
-          "text": "Lo que no hay son fechas. Las fechas en un proyecto personal de una sola persona son ficción, y una ficción que además hay que mantener al día cada semana. Lo que dirige la ejecución son otras tres cosas:"
+          "text": "Lo que no hay son fechas. Empecé utilizándolas, pero rápidamente me di cuenta de que las fechas en un proyecto personal de una sola persona son ficción, y una ficción que además hay que mantener al día cada semana. Lo que dirige la ejecución son otras tres cosas:"
         },
         {
           "type": "ul",
@@ -248,6 +257,12 @@
           ]
         },
         {
+          "type": "diagram",
+          "id": "s03",
+          "side": "center",
+          "caption": "Los cuatro colores de marca: cian y morado estándar, y sus versiones suaves para fondos y gráficos."
+        },
+        {
           "type": "p",
           "text": "Y lo que hace que esto se sostenga no es el permiso, es la prohibición: los slots neutros del sistema no se pintan nunca de color de marca, por bien que quede."
         },
@@ -315,12 +330,13 @@
           "type": "p",
           "text": "La pregunta con la que entra cada herramienta en este proyecto no es «¿es buena?», sino «¿qué trabajo mío resuelve?». Suena obvio y no lo es: casi todo el software que se instala de más entra por la primera pregunta."
         },
+        { "type": "h3", "text": "Dos sorpresas de estrenar versión" },
         {
           "type": "diagram",
           "id": "s04",
+          "side": "right",
           "caption": "El núcleo que se despliega (Next 16, TypeScript estricto y Tailwind v4) con dos piezas que también viajan en el bundle: lucide-react, y shadcn/ui, instalado y casi sin uso. Y dos herramientas que solo ayudaron a construirlo: Claude Design en el diseño inicial, Claude Code en el desarrollo."
         },
-        { "type": "h3", "text": "Dos sorpresas de estrenar versión" },
         {
           "type": "p",
           "text": "Next con App Router, TypeScript en modo estricto y Tailwind. Nada de eso es exótico. Lo que sí sorprende es estrenar una versión nueva: parte de lo que creas saber ha dejado de ser cierto, y no siempre te avisan. Me pasó dos veces."
@@ -416,12 +432,6 @@
         {
           "type": "h3",
           "text": "La capa de página: una página no se escribe, se compone"
-        },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "right",
-          "text": "Añadir una página nueva y olvidarse de registrarla no es un hallazgo de auditoría en este repositorio: es un error de compilación."
         },
         {
           "type": "p",
@@ -522,10 +532,7 @@
           "type": "ul",
           "items": [
             "**No adivinar el tipo de un archivo**, para que algo servido como texto no acabe ejecutándose como script.",
-            "**Prohibir que nadie meta el sitio dentro de un iframe.**",
-            "**Recortar lo que se filtra en el referer** cuando sales hacia fuera.",
-            "**Apagar las APIs del navegador que no uso**, como cámara, micrófono o ubicación.",
-            "**Forzar HTTPS durante dos años.** Esta va sin entrar en la lista de precarga a propósito, porque entrar es fácil y salir no, y una decisión difícil de revertir no se toma para ganar un punto en un informe."
+            "**Prohibir que nadie meta el sitio dentro de un iframe.**"
           ]
         },
         {
@@ -533,6 +540,14 @@
           "style": "pull",
           "side": "right",
           "text": "Si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve."
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**Recortar lo que se filtra en el referer** cuando sales hacia fuera.",
+            "**Apagar las APIs del navegador que no uso**, como cámara, micrófono o ubicación.",
+            "**Forzar HTTPS durante dos años.** Esta va sin entrar en la lista de precarga a propósito, porque entrar es fácil y salir no, y una decisión difícil de revertir no se toma para ganar un punto en un informe."
+          ]
         },
         {
           "type": "h3",
@@ -549,6 +564,7 @@
         {
           "type": "diagram",
           "id": "s07",
+          "side": "center",
           "caption": "Sin consentimiento y sin clic en el vídeo, la página no hace ni una petición de red hacia terceros."
         },
         {
@@ -577,14 +593,6 @@
           "text": "Aquí hay una respuesta cómoda y una verdadera. La cómoda es que casi no hay. La verdadera es que uso [Qlty](https://qlty.sh), un analizador externo, y este fue quien me dijo que sí la había, y al mirar de cerca resultó que los cinco archivos peor puntuados no eran código de la web: eran el censo de contraste, dos registros de contenido y dos guardianes. De ahí salen dos lecturas que son ciertas a la vez:"
         },
         {
-          "type": "image",
-          "src": "/img/como-se-ha-creado-qlty-deuda.webp",
-          "alt": "Captura del informe de Qlty: nota A en mantenibilidad (29 code smells) y nota A en seguridad (sin incidencias abiertas). El gráfico muestra el ratio de deuda técnica y el tiempo de remediación entre el 22 de julio y el 19 de agosto de 2026, con una subida el 3 de agosto y un pico el 19 de agosto. Cifras finales: 2,49% de ratio de deuda técnica, 1 semana de tiempo de remediación, 2,0% de duplicación y una complejidad de 84 por cada mil líneas de código.",
-          "width": 935,
-          "height": 748,
-          "caption": "El informe de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con el repunte del ratio de deuda técnica que señaló los cinco archivos peor puntuados."
-        },
-        {
           "type": "ul",
           "items": [
             "**Qlty señalaba con puntería el punto ciego real**, porque su peor archivo era justo el que se había roto dos veces en silencio. Eso no se silencia: se arregla.",
@@ -594,6 +602,15 @@
         {
           "type": "p",
           "text": "De ahí salió la regla que me dejé escrita para no engañarme: en ese archivo se excluye por lo que un archivo **es** (datos generados, contenido paralelo por idioma), nunca por lo que un archivo **puntúa**. Silenciar un hallazgo incómodo habría convertido el informe en el metro que aprueba sobre una lista vacía, que es el error que más veces he cometido en este proyecto."
+        },
+        {
+          "type": "image",
+          "src": "/img/como-se-ha-creado-qlty-deuda.webp",
+          "alt": "Panel de Qlty sobre este repositorio: nota A en mantenibilidad (29 code smells) y nota A en seguridad (sin incidencias abiertas), un gráfico de ratio de deuda técnica y tiempo de remediación con un pico el 19 de agosto de 2026, un sunburst de los puntos calientes de mantenibilidad, y el listado de los cinco archivos peor puntuados: contrast-census.js y artefacto-svg.ts (nota F), check-experience-copy.ts (nota F), check-palette.ts y reveal-root.tsx (nota D).",
+          "width": 1357,
+          "height": 750,
+          "side": "center",
+          "caption": "El panel de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con los cinco archivos peor puntuados que señaló el ratio de deuda técnica."
         },
         { "type": "h3", "text": "Y una ausencia, dicha en voz alta" },
         {
@@ -714,6 +731,7 @@
         {
           "type": "diagram",
           "id": "s08",
+          "side": "center",
           "caption": "Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de abajo, una persona, encuentra lo que no incumple ninguna regla."
         }
       ],
@@ -767,7 +785,18 @@
           "type": "ul",
           "items": [
             "**Al cerrar una etapa**, una revisión técnica del repositorio entero con mirada de desarrollador externo que lo ve por primera vez: deuda, huecos, y dónde la documentación y el código han dejado de decir lo mismo. Termina proponiendo tareas concretas, no un informe para archivar.",
-            "**Entre etapas**, una revisión del método: los gates y cuántos dependen de acordarse, lo que cuesta arrancar una sesión, si los guardianes saben fallar, si el tablero sigue diciendo la verdad. Va en el hueco entre dos etapas y no al cerrar una, por una razón que me costó ver: el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener.",
+            "**Entre etapas**, una revisión del método: los gates y cuántos dependen de acordarse, lo que cuesta arrancar una sesión, si los guardianes saben fallar, si el tablero sigue diciendo la verdad. Va en el hueco entre dos etapas y no al cerrar una, por una razón que me costó ver: el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener."
+          ]
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "text": "Un verificador que devuelve una lista vacía y un verificador que no ha mirado nada producen exactamente el mismo informe: verde."
+        },
+        {
+          "type": "ul",
+          "items": [
             "**Antes de un cambio visual grande**, una revisión de diseño que mira dos cosas distintas: si el sistema se está cumpliendo, y si la marca se está expresando. Se verifica en pantalla, no leyendo el código, porque una clase puede estar mal aplicada sin dar un solo error.",
             "**Al cerrar la sesión**, una rutina de documentación que repasa qué hay que actualizar y lo actualiza, incluida la operación que siempre se olvida, que es retirar lo que ha dejado de ser verdad.",
             "**Y una para el CV**, que regenera los dos PDF desde la fuente única, comprueba que siguen cabiendo en dos páginas y deja el enlace listo. Existe porque la primera vez que cambié un dato de mi carrera la web quedó al día y el PDF no."
@@ -789,13 +818,8 @@
         {
           "type": "diagram",
           "id": "s09",
+          "side": "center",
           "caption": "Los quince pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
-        },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "right",
-          "text": "Un verificador que devuelve una lista vacía y un verificador que no ha mirado nada producen exactamente el mismo informe: verde."
         },
         {
           "type": "p",

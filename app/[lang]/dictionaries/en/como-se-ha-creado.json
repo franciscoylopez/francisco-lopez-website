@@ -161,10 +161,19 @@
           "type": "p",
           "text": "Tasks aren't ordered by whim. They're linked to a separate prioritization board where they get tagged with MoSCoW: must, should, could, won't. The two boards answer different questions, which is why they're kept apart: the execution board says **what order** things happen in; the prioritization board says **why that order**. Merging them turns every priority review into an argument with myself about whether to move a card."
         },
+        {
+          "type": "image",
+          "src": "/img/como-se-ha-creado-moscow-tablero.webp",
+          "alt": "MoSCoW prioritization board in Notion with tasks grouped into four columns: must, should, could and won't.",
+          "width": 1208,
+          "height": 522,
+          "side": "center",
+          "caption": "The prioritization board, kept apart from the execution one: one says what order things happen in, the other says why."
+        },
         { "type": "h3", "text": "No dates" },
         {
           "type": "p",
-          "text": "What's missing is dates. Dates on a solo personal project are fiction, and fiction that also needs updating every week. What drives execution is three other things:"
+          "text": "What's missing is dates. I started out using them, then quickly realized dates on a solo personal project are fiction, and fiction that also needs updating every week. What drives execution is three other things:"
         },
         {
           "type": "ul",
@@ -248,6 +257,12 @@
           ]
         },
         {
+          "type": "diagram",
+          "id": "s03",
+          "side": "center",
+          "caption": "The four brand colors: standard cyan and purple, and their soft versions for backgrounds and charts."
+        },
+        {
           "type": "p",
           "text": "And what holds this together isn't permission, it's prohibition: the system's neutral slots never get painted with a brand color, no matter how good it would look."
         },
@@ -315,12 +330,13 @@
           "type": "p",
           "text": "The question every tool has to answer to get into this project isn't \"is it good?\" but \"what work of mine does it solve?\" It sounds obvious, and it isn't: almost all the software that ends up over-installed gets in through the first question."
         },
+        { "type": "h3", "text": "Two surprises from a fresh major version" },
         {
           "type": "diagram",
           "id": "s04",
+          "side": "right",
           "caption": "The core that ships (Next 16, strict TypeScript and Tailwind v4) with two pieces that also travel in the bundle: lucide-react, and shadcn/ui, installed and barely used. And two tools that only helped build it: Claude Design for the initial design, Claude Code for development."
         },
-        { "type": "h3", "text": "Two surprises from a fresh major version" },
         {
           "type": "p",
           "text": "Next with the App Router, TypeScript in strict mode, and Tailwind. None of that is exotic. What is surprising is adopting a brand-new version: part of what you think you know has stopped being true, and it doesn't always warn you. It happened to me twice."
@@ -416,12 +432,6 @@
         {
           "type": "h3",
           "text": "The page layer: a page isn't written, it's composed"
-        },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "right",
-          "text": "Adding a new page and forgetting to register it isn't an audit finding in this repository: it's a compile error."
         },
         {
           "type": "p",
@@ -526,10 +536,7 @@
           "type": "ul",
           "items": [
             "**Never guess a file's type**, so something served as text can't end up executing as a script.",
-            "**Forbid anyone from embedding the site in an iframe.**",
-            "**Trim what leaks in the referrer** when a link leads out.",
-            "**Turn off browser APIs I don't use**, like camera, microphone or location.",
-            "**Force HTTPS for two years.** This one skips the preload list on purpose, because getting in is easy and getting out isn't, and a hard-to-reverse decision doesn't get made to score a point on a report."
+            "**Forbid anyone from embedding the site in an iframe.**"
           ]
         },
         {
@@ -537,6 +544,14 @@
           "style": "pull",
           "side": "right",
           "text": "If the page's whole argument is rigor, that rigor has to show up where nobody's looking too."
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**Trim what leaks in the referrer** when a link leads out.",
+            "**Turn off browser APIs I don't use**, like camera, microphone or location.",
+            "**Force HTTPS for two years.** This one skips the preload list on purpose, because getting in is easy and getting out isn't, and a hard-to-reverse decision doesn't get made to score a point on a report."
+          ]
         },
         {
           "type": "h3",
@@ -553,6 +568,7 @@
         {
           "type": "diagram",
           "id": "s07",
+          "side": "center",
           "caption": "Without consent and without a click on the video, the page makes zero network requests to third parties."
         },
         {
@@ -581,14 +597,6 @@
           "text": "There's a comfortable answer here and a true one. The comfortable one is that there's barely any. The true one is that I use [Qlty](https://qlty.sh), an external analyzer, and it's the one that told me there was, and looking closer it turned out the five worst-scored files weren't the site's actual code: they were the contrast census, two content registries, and two guardians. Two readings come out of that, both true at once:"
         },
         {
-          "type": "image",
-          "src": "/img/como-se-ha-creado-qlty-deuda.webp",
-          "alt": "Screenshot of the Qlty report: an A grade in maintainability (29 code smells) and an A grade in security (no open issues). The chart shows the technical debt ratio and remediation time between July 22 and August 19, 2026, rising on August 3 and peaking on August 19. Final figures: 2.49% technical debt ratio, 1 week remediation time, 2.0% duplication, and a complexity of 84 per thousand lines of code.",
-          "width": 935,
-          "height": 748,
-          "caption": "This repository's Qlty report: an A grade in maintainability and security, with the technical debt ratio spike that pointed at the five worst-scored files."
-        },
-        {
           "type": "ul",
           "items": [
             "**Qlty pointed straight at the real blind spot**, because its worst-scored file was exactly the one that had broken twice in silence. That doesn't get silenced, it gets fixed.",
@@ -598,6 +606,15 @@
         {
           "type": "p",
           "text": "Out of that came the rule I wrote down to keep myself honest: in that file, exclusions are based on what a file **is** (generated data, parallel per-language content), never on what a file **scores**. Silencing an uncomfortable finding would have turned the report into the same meter that passes on an empty list, which is the mistake I've made the most times in this project."
+        },
+        {
+          "type": "image",
+          "src": "/img/como-se-ha-creado-qlty-deuda.webp",
+          "alt": "Qlty dashboard for this repository: an A grade in maintainability (29 code smells) and an A grade in security (no open issues), a technical debt ratio and remediation time chart peaking on August 19, 2026, a sunburst of maintainability hotspots, and the five worst-scored files: contrast-census.js and artefacto-svg.ts (F grade), check-experience-copy.ts (F grade), check-palette.ts and reveal-root.tsx (D grade).",
+          "width": 1357,
+          "height": 750,
+          "side": "center",
+          "caption": "This repository's Qlty dashboard: an A grade in maintainability and security, with the five worst-scored files the technical debt ratio pointed at."
         },
         { "type": "h3", "text": "And one absence, said out loud" },
         {
@@ -710,6 +727,7 @@
         {
           "type": "diagram",
           "id": "s08",
+          "side": "center",
           "caption": "Each verification layer catches what the one before it can't see. Only the last one, a person, catches what breaks no rule at all."
         }
       ],
@@ -764,7 +782,18 @@
           "type": "ul",
           "items": [
             "**On closing a stage**, a technical review of the whole repository, seen with the eyes of an outside developer looking at it for the first time: debt, gaps, and where the docs and the code stopped saying the same thing. It ends by proposing concrete tasks, not a report to file away.",
-            "**Between stages**, a review of the method itself: the gates and how many of them depend on remembering, how expensive it is to start a session, whether the guardians know how to fail, whether the board still tells the truth. It runs in the gap between two stages and not when one closes, for a reason that took me a while to see: the scaffolding has to go up before the things it needs to hold exist.",
+            "**Between stages**, a review of the method itself: the gates and how many of them depend on remembering, how expensive it is to start a session, whether the guardians know how to fail, whether the board still tells the truth. It runs in the gap between two stages and not when one closes, for a reason that took me a while to see: the scaffolding has to go up before the things it needs to hold exist."
+          ]
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "text": "A checker that returns an empty list and a checker that never looked produce exactly the same report: green."
+        },
+        {
+          "type": "ul",
+          "items": [
             "**Before a big visual change**, a design review that looks at two different things: whether the system is being followed, and whether the brand is coming through. It gets checked on screen, not by reading the code, because a class can be misapplied without throwing a single error.",
             "**On closing a session**, a documentation routine that checks what needs updating and updates it, including the operation that always gets forgotten: retiring what's stopped being true.",
             "**And one for the résumé**, which regenerates both PDFs from the single source, checks they still fit on two pages, and leaves the link ready. It exists because the first time I changed a fact about my career, the site stayed current and the PDF didn't."
@@ -786,13 +815,8 @@
         {
           "type": "diagram",
           "id": "s09",
+          "side": "center",
           "caption": "The fifteen continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
-        },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "right",
-          "text": "A checker that returns an empty list and a checker that never looked produce exactly the same report: green."
         },
         {
           "type": "p",

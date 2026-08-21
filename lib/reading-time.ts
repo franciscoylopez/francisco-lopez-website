@@ -39,7 +39,12 @@ export type ArticleBlock =
       label?: string;
       side?: "left" | "right";
     }
-  | { type: "diagram"; id: string; caption: string; side?: "left" | "right" }
+  | {
+      type: "diagram";
+      id: string;
+      caption: string;
+      side?: "left" | "right" | "center";
+    }
   | {
       /** El artefacto real de un tercero (D54: se enseña, no se recrea) —a
        * diferencia de `diagram`, que dibuja un SVG propio con tokens, este
@@ -51,7 +56,11 @@ export type ArticleBlock =
       width: number;
       height: number;
       caption: string;
-      side?: "left" | "right";
+      /** Sin `side`: ancho completo. `"left"`/`"right"`: flota al 50%, con el
+       * texto rodeándola. `"center"`: no flota, ancho reducido y centrada —
+       * para una captura que no acompaña a un párrafo concreto y no necesita
+       * el ancho completo de la columna (P60, tablero MoSCoW en s02). */
+      side?: "left" | "right" | "center";
     }
   | {
       type: "livestat";

@@ -27,6 +27,7 @@ import {
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import {
+  CapasColorDiagram,
   CapasVerificacionDiagram,
   CascadaDiagram,
   CIDiagram,
@@ -81,6 +82,7 @@ export function ComoSeHaCreado({
   // contrato.
   const DIAGRAMS: Record<string, ComponentType> = {
     s01: () => <DosVelocidadesDiagram lang={lang} />,
+    s03: () => <CapasColorDiagram lang={lang} />,
     s04: () => <StackDiagram lang={lang} />,
     s05: () => <CascadaDiagram lang={lang} />,
     s07: () => <SinConsentimientoDiagram lang={lang} />,
