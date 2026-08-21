@@ -91,6 +91,7 @@
 - D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe
 - D74 · Un compromiso no caduca y una medición sí: fuera de su fuente se publica el umbral
 - D75 · Lo que verifica una página no es su código, es el HTML que emite
+- D76 · Una capa nueva para texto largo, y el control que le faltaba al chrome sobre banda invertida
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 

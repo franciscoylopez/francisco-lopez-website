@@ -4136,3 +4136,69 @@ incumple ninguna regla —un `Esc` que no cierra, un cambio de tema que no se an
 pasada con lector de pantalla (D73) · el punto 6, «nada codificado solo por color», que no
 tiene forma automática · y la nota de PageSpeed, que sigue siendo `npm run psi` a demanda
 porque su variabilidad daría rojos falsos (D49).
+
+## D76 · Una capa nueva para texto largo, y el control que le faltaba al chrome sobre banda invertida — 2026-08-21
+
+**El problema.** «Cómo se ha creado esta página» (P60) es la primera página del sitio con
+~6.000 palabras de prosa continua, y las siete piezas del sistema (D36) no cubren ese caso:
+ninguna resuelve un índice navegable con tiempo por sección, una portada de capítulo, una cita
+que para la lectura, un dato que no se escribe a mano, o una transición entre paradas. Escribir
+eso a mano en `components/site/como-se-ha-creado.tsx` habría sido la primera excepción a la
+Regla de construcción del proyecto entero.
+
+**La capa: `ui/article.tsx` + `ui/article-islands.tsx`, ocho piezas.** Servidor —`ByLine`,
+`ArticleIndex`, `SectionCover`, `Pullquote`/`Pull`, `LiveStat`, `RepoStrip`, `ChapterNav`,
+`DiagramPanel`— y tres islas de cliente —`ReadingProgress`, `SectionRail`, `ShareActions`—,
+mismo patrón `design-system.tsx`/`design-system-islands.tsx` que ya separa server de cliente
+en el resto del sitio (D7). Publicada en el Design System (sección 15) antes de cerrar la
+tarea, como pide la Regla de construcción.
+
+**No es una octava pieza del núcleo de D36.** Las siete de esa decisión resuelven lo que usa
+TODO el sitio —un botón, un enlace de nav, una etiqueta—; esta resuelve un FORMATO, el de
+texto largo con paradas, que hoy solo tiene una página. Encima de las siete no habría sido
+cierto: viven AL LADO. Decidido con Francisco el 2026-08-21, para no repetir el error que D36
+mismo corrigió una vez —tratar como núcleo transversal algo que en realidad era un caso.
+
+**Las citas viven DENTRO del cuerpo, no en un campo aparte.** Primer diseño: `pullquote`/`pull`
+como propiedades sueltas de la sección, renderizadas después de toda la prosa. Con la sección
+servida delante, se leían apiladas al final junto al diagrama, el dato-en-vivo y la franja de
+enlace — mucho peso gráfico junto, poco durante la lectura. Se movieron al array `body` como
+un bloque más (`{ type: "quote", style, side }`), en el punto exacto del párrafo que las
+origina, y pasaron a **flotar** (`float: left/right`) para que el texto siga alrededor. Es la
+misma lección de D57 aplicada a un tipo de dato nuevo: el sitio del dato en la estructura
+importa tanto como el dato.
+
+**El chrome no tenía variante para banda invertida, y hacía falta interactivo por primera
+vez.** `mas-alla.tsx` (D41) ya probaba que un texto sobre `bg-foreground` necesita su propio
+cálculo de contraste, pero nunca había puesto un `<nav>` de breadcrumb ni un `<button>` encima.
+Al hacerlo aquí, dos piezas compartidas fallaron con el mismo patrón que D41 ya había nombrado
+una vez y que no se había generalizado:
+
+- `Breadcrumb` pintaba el nivel actual en `text-foreground`, que sobre una banda con
+  `bg-foreground` **es el color de fondo de la propia banda** — texto invisible, no un fallo de
+  contraste que un metro detecte, sino un texto que no existe visualmente.
+- `chromeLinkVariants({ tone: "muted" })` sube a `text-foreground` en **hover**, mismo problema
+  un gesto más tarde.
+
+Las dos ganaron una variante —`Breadcrumb({ inverted })` y `chromeLinkVariants({ tone:
+"inverted" })`— que resuelve en reposo con `text-muted-foreground` (correcto porque el ancestro
+lleva `data-surface="inverted"`, D39) y en hover/foco sube a `text-background`, el mismo
+«tinta llena» que ya usa el resto del texto de la banda. Reutilizable la próxima vez que
+alguien ponga chrome interactivo sobre una banda invertida, que hasta esta tarea nadie había
+hecho.
+
+**El botón «Compartir»/«Copiar enlace» no podía reusar `outline-neutral` tal cual**, por el
+mismo motivo que BRAND.md §Un control sobre una imagen ya había nombrado para un caso distinto:
+el color no puede fijarse, tiene que derivarse del fondo real. `outline-neutral` es
+`bg-background text-foreground` — sobre la banda pintaba un rectángulo claro flotando encima de
+un fondo oscuro, legible pero visualmente roto. `ShareActions` ganó un prop `onInverted` que
+sustituye ese trío por uno derivado de `--background`/`--foreground`, sin tocar la variante
+compartida (que sigue sirviendo a todo lo demás sin cambios).
+
+**Verificado con `viewport-verifier` antes y después.** La primera pasada (24 combinaciones,
+ES/EN) encontró los tres huecos de arriba con cifras: el riel de navegación (otro elemento con
+el mismo problema, resuelto dándole su propia superficie opaca en vez de heredar tono) a
+1,9-2,2:1, el numeral decorativo de cada portada a 1,63:1 en claro y prácticamente 0 en oscuro,
+y el borde del botón `onInverted` a 2,1-3:1 — los tres por debajo de sus umbrales. Corregidos y
+no re-verificados con una segunda pasada automatizada completa; queda pendiente antes de cerrar
+la tarea.
