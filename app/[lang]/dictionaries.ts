@@ -9,6 +9,7 @@ import type esBrandKit from "./dictionaries/es/brand-kit.json";
 import type esDesignSystem from "./dictionaries/es/design-system.json";
 import type esAccesibilidad from "./dictionaries/es/accesibilidad.json";
 import type esCookies from "./dictionaries/es/cookies.json";
+import type esComoSeHaCreado from "./dictionaries/es/como-se-ha-creado.json";
 import type esTrayectoriaComun from "./dictionaries/es/trayectoria/comun.json";
 import type esTrayectoriaIndice from "./dictionaries/es/trayectoria/indice.json";
 import type { ExperienceSlug } from "@/content/experiences";
@@ -49,6 +50,7 @@ export type BrandKitDict = typeof esBrandKit;
 export type DesignSystemDict = typeof esDesignSystem;
 export type AccesibilidadDict = typeof esAccesibilidad;
 export type CookiesDict = typeof esCookies;
+export type ComoSeHaCreadoDict = typeof esComoSeHaCreado;
 
 /**
  * La forma completa, recompuesta. No la carga nadie de una pieza —cada página
@@ -62,6 +64,7 @@ export type Dictionary = Common &
     designSystem: DesignSystemDict;
     accesibilidad: AccesibilidadDict;
     cookies: CookiesDict;
+    comoSeHaCreado: ComoSeHaCreadoDict;
   };
 
 /**
@@ -113,6 +116,13 @@ export const getAccesibilidad = cargador<AccesibilidadDict>({
 export const getCookies = cargador<CookiesDict>({
   es: () => import("./dictionaries/es/cookies.json").then((m) => m.default),
   en: () => import("./dictionaries/en/cookies.json").then((m) => m.default),
+});
+
+export const getComoSeHaCreado = cargador<ComoSeHaCreadoDict>({
+  es: () =>
+    import("./dictionaries/es/como-se-ha-creado.json").then((m) => m.default),
+  en: () =>
+    import("./dictionaries/en/como-se-ha-creado.json").then((m) => m.default),
 });
 
 /** Lo que comparten las cinco experiencias y su índice: rótulos, no contenido. */

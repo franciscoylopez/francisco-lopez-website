@@ -12,6 +12,7 @@ import {
   PHONE_TEL as TELEPHONE,
 } from "@/lib/contact";
 import { pagePath, type Locale } from "@/lib/i18n/config";
+import { ARTICLE_PUBLISHED, ARTICLE_UPDATED } from "@/lib/design-values";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Especialidades declaradas en el PRD §10.
@@ -91,6 +92,46 @@ export function breadcrumbLd(items: { name: string; url?: string }[]) {
       name: it.name,
       ...(it.url ? { item: it.url } : {}),
     })),
+  };
+}
+
+/**
+ * `TechArticle` de «Cómo se ha creado esta página» (P60). Es la ÚNICA página
+ * del sitio marcada como artículo — el deep-dive deliberadamente NO lo es (ver
+ * la nota de `experiencePageLd` arriba): esta sí cuenta un proceso con fecha de
+ * publicación real, y el PRD la trata como pieza propia, no como el primer post
+ * de un blog que no existe.
+ *
+ * `author` REFERENCIA al `Person` de la home por `@id` en vez de repetirlo,
+ * mismo patrón que `experiencePageLd`: es la misma persona en las dos páginas,
+ * no dos entidades que se llaman igual. Las fechas salen de
+ * `lib/design-values.ts` (`ARTICLE_PUBLISHED`/`ARTICLE_UPDATED`) y no de un
+ * literal aquí, por la misma razón que el resto de cifras publicadas: una sola
+ * fuente que actualizar, no un string que se queda atrás (D60).
+ */
+export function techArticleLd({
+  lang,
+  headline,
+  description,
+}: {
+  lang: Locale;
+  /** El h1 de la página. */
+  headline: string;
+  description: string;
+}) {
+  const url = pageUrl(lang, "como-se-ha-creado");
+  return {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "@id": `${url}#article`,
+    mainEntityOfPage: url,
+    url,
+    headline,
+    description,
+    inLanguage: lang,
+    datePublished: ARTICLE_PUBLISHED,
+    dateModified: ARTICLE_UPDATED,
+    author: { "@id": `${SITE_URL}/#person` },
   };
 }
 

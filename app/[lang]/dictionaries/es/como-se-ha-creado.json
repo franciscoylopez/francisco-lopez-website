@@ -1,0 +1,724 @@
+{
+  "meta": {
+    "title": "Cómo se ha creado esta página · Francisco López",
+    "description": "El making-of de esta web: la marca antes que el código, el stack, cómo se hereda la accesibilidad, seguridad y alojamiento, qué revisa una IA y qué no, y lo que salió mal por el camino. Todo enlazado al repositorio público."
+  },
+  "crumb": "Cómo se ha creado",
+  "hero": {
+    "kicker": "Making-of · Actualizado en agosto de 2026",
+    "title": "Cómo se ha creado esta página",
+    "leadParas": [
+      "Cuando empecé a pensar en este proyecto tenía claro que no quería un CV en HTML, quería una prueba de criterio: en producto, en lo técnico y en usabilidad y diseño.",
+      "Todo lo que afirmo aquí abajo está enlazado al código que lo sostiene. El repositorio es público, así que no hace falta que me creas:"
+    ],
+    "repoLinkLabel": "échale un ojo",
+    "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. El índice lleva el tiempo de cada una, y la barra del borde superior marca por dónde vas.",
+    "bylineName": "Francisco López",
+    "bylineRole": "Senior Product Manager",
+    "shareLabel": "Compartir",
+    "copyLabel": "Copiar enlace",
+    "copiedLabel": "Copiado",
+    "copiedAnnounce": "Enlace copiado al portapapeles",
+    "shareUnavailableAnnounce": "Compartir no está disponible: enlace copiado",
+    "wordsSuffix": "palabras",
+    "sectionsSuffix": "secciones"
+  },
+  "index": {
+    "kicker": "Índice",
+    "timeLabel": "tiempo por sección",
+    "ariaLabel": "Índice del artículo"
+  },
+  "rail": { "ariaLabel": "Índice de secciones" },
+  "progress": { "ariaLabel": "Progreso de lectura" },
+  "chapterNav": { "indexLabel": "Índice", "nextLabel": "Siguiente:" },
+  "sections": [
+    {
+      "id": "s01",
+      "ordinal": "01",
+      "indexLabel": "Por qué existe",
+      "kicker": "01 — Por qué existe",
+      "title": "Una web no demuestra criterio por existir",
+      "body": [
+        {
+          "type": "p",
+          "text": "Cuando decidí abordar este proyecto, lo primero que escribí no fue una línea de código: fue a quién iba dirigida esta página y en cuánto tiempo iba a leerla."
+        },
+        { "type": "h3", "text": "Dos lectores, dos velocidades" },
+        {
+          "type": "p",
+          "text": "Una persona de selección escanea entre cinco y diez segundos, y necesita tres datos: rol, seniority y stack. Un CPO o un VP Product puede leerla más despacio, y lo que busca no son datos, sino criterio: qué decidiste, con qué información, y qué pasó después."
+        },
+        {
+          "type": "p",
+          "text": "Un mismo texto no sirve para los dos. La solución fue de arquitectura, no de redacción: el primer pantallazo pasa el filtro de selección, y el contenido se hace más profundo conforme bajas. Lo que un lector rápido necesita está antes de tener que hacer scroll; lo que un lector lento busca está debajo, con espacio para explicarse."
+        },
+        { "type": "h3", "text": "Qué decidieron esas dos velocidades" },
+        {
+          "type": "p",
+          "text": "No se quedaron en el documento. Decidieron cosas concretas:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**La franja de contacto es idéntica en las tres páginas donde aparece**, con los mismos canales y la misma jerarquía, porque devolver a alguien a la portada para escribirte es pedirle un paso de más justo cuando ya había decidido darlo.",
+            "**El vídeo que abre la página sobre mí se reproduce una vez y se queda quieto**, y si por temas de accesibilidad, el navegador avisa de que su dueño prefiere menos movimiento, ni siquiera se descarga."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "No hice una investigación con usuarios. Lo que sí hice fue revisar los perfiles de algunos referentes en Producto, leer artículos de gente de selección, y tener claro dos cosas: que quería una primera versión rápida, y que quería una web preparada para los distintos perfiles que iban a leerla. De ahí salió una hipótesis escrita de quién lee y en cuánto tiempo, y de esa hipótesis salen todas las decisiones de arriba. **Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno.**"
+        },
+        { "type": "h3", "text": "Lo que no está (de momento) y por qué" },
+        {
+          "type": "p",
+          "text": "La parte del criterio de producto que menos se enseña, sin embargo, es la que se ve en lo que **no** está. Van cuatro decisiones de no hacer, con su motivo:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**No hay formulario de contacto.** Un formulario añade un backend, un servicio de correo, un captcha y una superficie de ataque, para resolver algo que un enlace ya resuelve. Lo que sí aporta es una métrica cómoda (envíos) en lugar de una honesta (alguien ha decidido escribirte). Me quedé con el enlace.",
+            "**No todas mis experiencias tienen página propia.** Las dos de marketing y growth no la tienen, aunque hay material de sobra: contarlas al mismo nivel diluiría el orden con el que quiero que me lean, que es producto primero. Y la empresa donde nació el producto que cofundé tampoco tiene la suya, porque no es una historia separable: es el primer capítulo de la otra.",
+            "**Esto no es un blog.** Es una página con estructura de artículo, sin índice de entradas, sin etiquetas y sin feed. Montar un blog es comprometerse a publicar. Si algún día hay un segundo artículo, esa decisión se toma entonces.",
+            "**El asistente conversacional está aplazado, y ya tiene escrito su límite antes de existir**: lo que no está por escrito en el sitio tampoco entra en su corpus. Un agente público publica igual que una página, pero responde sin mí delante y en frases que no puedo revisar, así que no sirve de papelera para lo que se cuenta en una entrevista y no en abierto. Fijar ese límite antes de construirlo es mucho más barato que discutirlo después."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Ninguna de las cuatro es una limitación técnica. Son cuatro sitios donde lo fácil era decir que sí."
+        },
+        { "type": "h3", "text": "La regla que condicionó todo lo demás" },
+        {
+          "type": "p",
+          "text": "Si la web dice que sé de producto, de UX y de datos, la web tiene que estar hecha con esas tres cosas. Una página lenta, inaccesible, mal medida o poco segura contradice su propio texto. Eso es lo que convierte cada decisión técnica de las que vienen en una decisión de contenido."
+        }
+      ],
+      "pullquote": "Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno.",
+      "enlace": {
+        "text": "PRD-Live.md, secciones 1 a 3 y 9, y la decisión D29 para la franja de contacto",
+        "path": "PRD-Live.md"
+      }
+    },
+    {
+      "id": "s02",
+      "ordinal": "02",
+      "indexLabel": "Cómo se trabaja",
+      "kicker": "02 — Cómo se trabaja",
+      "title": "Del brief al tablero, y un solo despliegue por tanda",
+      "body": [
+        {
+          "type": "p",
+          "text": "Esto empezó como empieza cualquier producto: con un brief. Media página contestando a qué es esto, para quién y qué tiene que conseguir. De ahí salió un PRD, que no es un documento de ceremonia sino el sitio donde vive la respuesta a «¿esto para qué?» cuando ya llevas tres semanas metido en el código y se te ha olvidado."
+        },
+        { "type": "h3", "text": "Un PRD partido en dos" },
+        {
+          "type": "p",
+          "text": "Ese PRD acabó fuera de Notion, vive en el repo como un archivo markdown, y hoy está partido en dos, y es de las decisiones que mejor han envejecido. Uno vivo, que dice qué es el producto hoy, escrito en presente. Otro histórico, que guarda el registro fechado de cada decisión y de por qué se descartó lo que se descartó. Mezclarlos es lo que convierte un PRD en un documento que nadie abre: cuando la mayoría de lo que lees ya no es verdad, dejas de leerlo entero, y entonces deja de servir para lo único que servía."
+        },
+        {
+          "type": "h3",
+          "text": "El tablero, y por qué sus columnas no son decorativas"
+        },
+        {
+          "type": "p",
+          "text": "Del PRD sale el tablero. Cada tarea lleva su alcance, sus dependencias, su tamaño y sus notas, y esas notas son el sitio donde escribo el porqué mientras lo pienso, no después. Los estados tampoco están puestos por poner:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**Sin empezar**, para todo lo que ni siquiera está comprometido.",
+            "**Pendiente, en curso y bloqueada**, los tres reservados a la etapa activa. Ninguna tarea de una etapa futura puede estar ahí.",
+            "**Listo**, solo para lo terminado de esa etapa.",
+            "**Archivado**, adonde pasa todo cuando la etapa se cierra."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Esa última columna es la que mantiene el tablero legible: si lo terminado se queda a la vista para siempre, a los dos meses el tablero es un museo."
+        },
+        { "type": "h3", "text": "Dos tableros, porque son dos preguntas" },
+        {
+          "type": "p",
+          "text": "Las tareas no se ordenan por lo que apetece. Están vinculadas a un tablero de priorización aparte donde se clasifican con MoSCoW: imprescindible, debería, podría, no ahora. Los dos tableros contestan preguntas distintas y por eso están separados: el de ejecución dice **en qué orden** se hace, el de priorización dice **por qué ese orden**. Juntarlos convierte cualquier revisión de prioridades en una discusión conmigo mismo sobre si mover una tarjeta."
+        },
+        { "type": "h3", "text": "Sin fechas" },
+        {
+          "type": "p",
+          "text": "Lo que no hay son fechas. Las fechas en un proyecto personal de una sola persona son ficción, y una ficción que además hay que mantener al día cada semana. Lo que dirige la ejecución son otras tres cosas:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "Si algo es imprescindible o puede esperar.",
+            "En qué orden va.",
+            "Cuánto ocupa."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Hay dos campos que se confunden siempre, y separarlos fue lo que hizo el tablero utilizable. Uno contesta «¿esto está comprometido o está esperando?». El otro contesta «¿en qué versión sale?». Son preguntas distintas: una tarea puede estar comprometida para la etapa que viene y salir en una versión posterior, y mezclarlas convierte el tablero en una lista de deseos ordenada por optimismo."
+        },
+        {
+          "type": "p",
+          "text": "Hay además un carril que corre por delante del resto, y es el contenido. En las páginas que dependen de un texto que solo puedo escribir yo, el texto es el cuello de botella real, no el desarrollo. Así que el contenido de una etapa se desbloquea mientras se construye la anterior."
+        },
+        {
+          "type": "h3",
+          "text": "Un commit por tarea, un despliegue por tanda"
+        },
+        {
+          "type": "p",
+          "text": "Cada tarea cierra con su commit y con su porqué escrito en el mensaje, pero todo va a una rama de tanda con una pull request en borrador: eso da integración continua en cada push y una vista previa acumulada para revisarlo entero antes de tocar producción una sola vez."
+        },
+        {
+          "type": "p",
+          "text": "Y la parte que aprendí tarde: la rama principal no la protege mi disciplina, la protege el servidor. Sin push directo, sin fusionar con los checks en rojo, sin saltarse la protección por ser administrador. Escribí esa configuración el mismo día que hice público el repositorio, y el orden correcto habría sido el inverso."
+        }
+      ],
+      "pullquote": "La rama principal no la protege mi disciplina, la protege el servidor.",
+      "enlace": {
+        "text": "El apartado de seguimiento de tareas de CLAUDE.md, y las decisiones D10, D12 y D68",
+        "path": "CLAUDE.md"
+      }
+    },
+    {
+      "id": "s03",
+      "ordinal": "03",
+      "indexLabel": "La marca",
+      "kicker": "03 — La marca",
+      "title": "La marca, antes que la primera línea de código",
+      "body": [
+        {
+          "type": "p",
+          "text": "Este proyecto está concebido como un producto, así que antes de abrir el editor pensé en qué iba a ser esto visualmente. No por vanidad de diseñador, que no lo soy, sino porque un sistema de color que se decide después del código es un sistema que se negocia sección a sección, y eso acaba siempre en una paleta de doce grises y tres azules que nadie recuerda de dónde salieron y que no hay manera de mantener."
+        },
+        { "type": "h3", "text": "El logo, y por qué se comporta así" },
+        {
+          "type": "p",
+          "text": "El logo tiene un sentido: una base sólida y firme sobre la que se trabaja (método, datos, documentación) y una firma con un efecto de aberración cromática que desplaza ligeramente los canales de color, generando esa sensación de ambigüedad e incertidumbre con la que vivimos en el día a día los que nos dedicamos a producto."
+        },
+        {
+          "type": "p",
+          "text": "Elegidos el logo y la tipografía, había que darles un comportamiento con sentido. Para mí lo lógico fue un desplazamiento entre sus dos mitades, en cian y morado, que solo aparece en el monograma y solo por encima de 48 píxeles. Por debajo de ese tamaño el desplazamiento deja de leerse como intención y empieza a parecer un error de impresión, así que ahí el logo cambia a su versión plana. Es la primera regla del sistema y ya tiene la forma de todas las demás: no dice «úsalo con cuidado», dice a partir de qué número deja de valer."
+        },
+        { "type": "h3", "text": "Dos capas de color que no se mezclan" },
+        {
+          "type": "p",
+          "text": "Después había que darle lógica a su uso en el resto del sitio. El color son dos capas:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**La semántica.** El cian es el único color de acción del sitio. Si algo es cian, se pulsa.",
+            "**La decorativa.** Cian y morado suaves para fondos, ilustración y gráficos, sin significado funcional."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Y lo que hace que esto se sostenga no es el permiso, es la prohibición: los slots neutros del sistema no se pintan nunca de color de marca, por bien que quede."
+        },
+        {
+          "type": "p",
+          "text": "Donde esa regla enseña los dientes es en los diagramas. Un gráfico que hay que entender tiene que separar sus elementos con un mínimo de contraste, y el morado decorativo no llega en tema claro. La conclusión no fue subirle el contraste al morado: fue que en un gráfico la información la lleva el cian, y lo que no llega se atenúa a gris. Un camino y otro se distinguen además por el trazo y por la etiqueta, no solo por el color, que es lo que hace que el diagrama siga funcionando para quien no distingue esos dos tonos."
+        },
+        {
+          "type": "h3",
+          "text": "Dos páginas que no describen el sistema: lo usan"
+        },
+        {
+          "type": "p",
+          "text": "Una marca no es el logo: es lo que impide que la página doce se parezca poco a la primera. Por eso el sistema tiene dos páginas publicadas dentro del propio sitio."
+        },
+        {
+          "type": "ul",
+          "items": [
+            "El **Design System** enseña los tokens, la tipografía, cada variante de cada control y el checklist de accesibilidad.",
+            "El **Brand Kit** enseña el logo, sus usos, sus mínimos y sus descargas."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Las dos tienen una propiedad que me importa más que su contenido: no describen el sistema, lo usan. Los botones que se ven en el Design System son los botones del sitio, no una imitación. Si mañana cambio el hover de una variante, la página que lo documenta cambia sola. Una guía de estilo escrita a mano empieza a mentir el día dos."
+        },
+        {
+          "type": "h3",
+          "text": "Y todo lo que sale del navegador, desde la misma fuente"
+        },
+        {
+          "type": "p",
+          "text": "El CV en PDF se produce por código a partir de los mismos datos que la web, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano. Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces."
+        },
+        {
+          "type": "p",
+          "text": "Y la prueba de que una marca existe de verdad es que sobrevive fuera de su sitio. La firma de mis correos lleva el monograma con su split, el nombre en la tipografía de los titulares y los canales, sin banner ni floritura. El banner de LinkedIn lleva ese mismo monograma y la frase que preside la home. Y la portada del repositorio de GitHub abre otra vez con esa frase, sobre el mismo fondo carbón. No es que las tres se parezcan: es que las tres dicen literalmente lo mismo, «Del discovery al dato», que es el titular del sitio. Cuando alguien te encuentra en tres sitios distintos en la misma semana, esa repetición es lo único que hace que los tres sean la misma persona."
+        }
+      ],
+      "pull": "Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces.",
+      "enlace": {
+        "text": "BRAND.md, BRAND-logo.md y su porqué fechado en BRAND-historical.md",
+        "path": "BRAND.md"
+      }
+    },
+    {
+      "id": "s04",
+      "ordinal": "04",
+      "indexLabel": "El stack",
+      "kicker": "04 — El stack",
+      "title": "El stack, y por qué ese",
+      "body": [
+        {
+          "type": "p",
+          "text": "La pregunta con la que entra cada herramienta en este proyecto no es «¿es buena?», sino «¿qué trabajo mío resuelve?». Suena obvio y no lo es: casi todo el software que se instala de más entra por la primera pregunta."
+        },
+        { "type": "h3", "text": "Dos sorpresas de estrenar versión" },
+        {
+          "type": "p",
+          "text": "Next con App Router, TypeScript en modo estricto y Tailwind. Nada de eso es exótico. Lo que sí sorprende es estrenar una versión nueva: parte de lo que creas saber ha dejado de ser cierto, y no siempre te avisan. Me pasó dos veces."
+        },
+        {
+          "type": "p",
+          "text": "La primera, con el archivo que decide en qué idioma se te sirve la página. En la versión anterior ese archivo tenía un nombre; en la nueva, otro. Si dejas el antiguo no da error, no se queja, no aparece en ningún sitio: simplemente no se ejecuta. Todo parece correcto hasta que descubres que nadie está eligiendo el idioma."
+        },
+        {
+          "type": "p",
+          "text": "La segunda es más sutil, y va de cómo se escriben los valores del diseño. El sistema tiene un valor para «esquina redondeada mediana», y ese valor se puede escribir de dos maneras: por su nombre, o poniendo directamente los píxeles que mide hoy. Las dos pintan lo mismo en pantalla, así que mientras no toques nada parecen equivalentes. Dejan de serlo el día que decides que esa esquina sea un poco más redonda: las escritas por su nombre cambian todas a la vez, y las que llevaban el número a mano se quedan como estaban, sin que nada falle ni nadie lo note. Encontré el mismo valor escrito de tres formas distintas en catorce sitios, y la regla de escribir siempre el nombre nació de ahí."
+        },
+        {
+          "type": "p",
+          "text": "Las dos tienen la misma firma, y es la que se va a repetir en todo lo que viene después: **el error no da la cara.**"
+        },
+        { "type": "h3", "text": "Instalado, configurado y sin usar" },
+        {
+          "type": "p",
+          "text": "Aunque todo el diseño es propio, decidí tener shadcn/ui como soporte: está instalado, configurado y sin apenas uso. La capa de componentes es propia. No es purismo. Es que shadcn resuelve un problema muy concreto (comportamiento de teclado, foco atrapado, portales) y este sitio todavía no tenía ese problema, pero quería estar preparado para cuando lo tuviera."
+        },
+        {
+          "type": "p",
+          "text": "La regla que dejé escrita mira hacia delante: el día que haga falta un diálogo, un menú o un combobox, no se escribe a mano, se trae. Escribir a mano el manejo del foco de un modal es la forma más fácil de publicar un problema de accesibilidad con aspecto de componente terminado."
+        },
+        { "type": "h3", "text": "Dos idiomas, cero frases dentro del código" },
+        {
+          "type": "p",
+          "text": "Sobre los idiomas, solo indicar fue decisión y no configuración: español sin prefijo en la raíz, inglés en su propia rama, y cero frases escritas dentro de un componente. Todo el copy sale de un diccionario tipado. Eso hace imposible el bug clásico de las webs en dos idiomas, que es la frase que alguien tradujo en el HTML y nadie volvió a tocar."
+        }
+      ],
+      "enlace": {
+        "text": "Decisiones D2, D3, D6, D34 y D51 del registro técnico",
+        "path": "DECISIONS.md"
+      }
+    },
+    {
+      "id": "s05",
+      "ordinal": "05",
+      "indexLabel": "El sistema de componentes",
+      "kicker": "05 — El sistema de componentes",
+      "title": "El sistema de componentes: nada nuevo se escribe a mano",
+      "body": [
+        { "type": "h3", "text": "Dos preguntas deciden qué pieza toca" },
+        {
+          "type": "p",
+          "text": "El sitio tiene siete piezas, y cuál toca se decide preguntando **¿se pulsa?** y, si se pulsa, **¿tiene caja propia?** Un chip que solo rotula un dato no es un botón pequeño: es una etiqueta, y no necesita ni estado, ni hover, ni objetivo táctil. Un enlace del menú tampoco es un botón: es carpintería de navegación, y ahí el cian no distingue nada porque todo el bloque navega. Parecen distinciones de vocabulario y son justo lo que evita que cada sección invente su propio botón."
+        },
+        { "type": "h3", "text": "La cascada: antes de escribir markup nuevo" },
+        {
+          "type": "p",
+          "text": "Encima de esas dos preguntas hay una regla que gobierna todo lo que se construye, y es una cascada:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**¿Existe ya la pieza?** Se usa, y no se replica su aspecto con clases sueltas.",
+            "**¿No existe, pero el caso es del sistema?** Se crea la variante, no la excepción: un botón que no encaja en ninguna variante no es un botón especial, es una variante que falta.",
+            "**¿Es un widget con estado, foco atrapado o portal?** Se trae hecho, no se escribe.",
+            "**¿No encaja nada de lo anterior?** Se decide y se documenta con fecha."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "La señal de alarma es fácil de reconocer: si estoy escribiendo una cadena de más de cuatro clases sueltas para algo que se pulsa, es que me he saltado la primera pregunta."
+        },
+        {
+          "type": "h3",
+          "text": "La capa de página: una página no se escribe, se compone"
+        },
+        {
+          "type": "p",
+          "text": "Encima de las siete piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una. **Añadir una página nueva y olvidarse de registrarla no es un hallazgo de auditoría en este repositorio: es un error de compilación.**"
+        },
+        { "type": "h3", "text": "Qué compra todo esto" },
+        {
+          "type": "p",
+          "text": "Cuatro de los ocho puntos del checklist de accesibilidad dejan de verificarse a mano al cerrar una página, porque los pone la pieza: el contraste de los pares del sistema, el anillo de foco, el objetivo táctil mínimo y el respeto a quien ha pedido menos movimiento. Es la mitad de un capítulo que viene más adelante, y por eso ese capítulo puede dedicarse entero a lo que de verdad costó."
+        }
+      ],
+      "pullquote": "Añadir una página nueva y olvidarse de registrarla no es un hallazgo de auditoría en este repositorio: es un error de compilación.",
+      "liveStat": {
+        "label": "Piezas del sistema · dato en vivo",
+        "source": "components/ui/",
+        "value": "Siete piezas + capa de página",
+        "linkLabel": "Ver el catálogo",
+        "href": "design-system"
+      },
+      "enlace": {
+        "text": "Decisiones D36, D40, D45, D46 y D72, y el directorio components/ui/",
+        "path": "components/ui"
+      }
+    },
+    {
+      "id": "s06",
+      "ordinal": "06",
+      "indexLabel": "Del diseño al código",
+      "kicker": "06 — Del diseño al código",
+      "title": "Del diseño al código, y el día en que la fuente de diseño cambió",
+      "body": [
+        { "type": "h3", "text": "La maqueta como punto de partida" },
+        {
+          "type": "p",
+          "text": "La primera versión de esta web se diseñó con Claude Design: potente y rápido, fácil de iterar y de obtener una primera versión. Un archivo de maqueta que se puede traducir. Y traducir no es copiar: la maqueta da la intención (qué manda, qué acompaña, qué ritmo tiene la página) y el sistema da los valores (qué radio, qué gris, qué espaciado). Copiar píxeles produce el problema contrario, que es una sección que se parece mucho al diseño y no se parece nada al resto del sitio."
+        },
+        {
+          "type": "p",
+          "text": "Eso me sirvió para tener un MVP publicable en muy poco tiempo y disponible al público. Pero enseguida llegó lo que ya sabía que iba a ocurrir: la decisión iba a caducar, y en poco tiempo."
+        },
+        { "type": "h3", "text": "El día que caducó" },
+        {
+          "type": "p",
+          "text": "Cuando el sistema en código creció hasta ser lo que acabo de describir (siete piezas, una capa de página y una página que las publica), la maqueta pasó a ser más pobre que el sitio. A partir de ahí, mantener las dos en paralelo no era rigor: era garantizar que acabaran diciendo cosas distintas, que es justo lo que la decisión original quería evitar."
+        },
+        {
+          "type": "p",
+          "text": "El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. Hoy las secciones nuevas se diseñan directamente en código, iterando en el navegador con los tokens reales, y la maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es la primera decisión del proyecto que anulé por escrito, y dejé la original debajo, con su fecha, porque **el registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.**"
+        },
+        {
+          "type": "p",
+          "text": "Lo que sí se conserva del método antiguo es la costumbre de decidir viendo y no imaginando: cuando hay más de una dirección posible, se prototipa con los tokens de verdad y se elige mirando las dos, no describiéndolas."
+        }
+      ],
+      "pull": "El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.",
+      "enlace": {
+        "text": "Decisión D1, con su nota de superación y la decisión original conservada debajo",
+        "path": "DECISIONS.md"
+      }
+    },
+    {
+      "id": "s07",
+      "ordinal": "07",
+      "indexLabel": "Seguridad y alojamiento",
+      "kicker": "07 — Seguridad y alojamiento",
+      "title": "Lo que no se ve: seguridad, alojamiento y la deuda que no se acumuló",
+      "body": [
+        {
+          "type": "p",
+          "text": "Un portfolio no guarda datos de nadie, no tiene formularios y no tiene sesión. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo: si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve."
+        },
+        { "type": "h3", "text": "Las cabeceras: los huecos baratos de cerrar" },
+        { "type": "p", "text": "El sitio sirve cinco, y ninguna cuesta nada:" },
+        {
+          "type": "ul",
+          "items": [
+            "**No adivinar el tipo de un archivo**, para que algo servido como texto no acabe ejecutándose como script.",
+            "**Prohibir que nadie meta el sitio dentro de un iframe.**",
+            "**Recortar lo que se filtra en el referer** cuando sales hacia fuera.",
+            "**Apagar las APIs del navegador que no uso**, como cámara, micrófono o ubicación.",
+            "**Forzar HTTPS durante dos años.** Esta va sin entrar en la lista de precarga a propósito, porque entrar es fácil y salir no, y una decisión difícil de revertir no se toma para ganar un punto en un informe."
+          ]
+        },
+        {
+          "type": "h3",
+          "text": "La política de contenido, y lo que no protege"
+        },
+        {
+          "type": "p",
+          "text": "Es la parte donde toca ser honesto, porque es donde casi todo el mundo exagera. La mía sube la nota del analizador de A a A+, y aun así **no es una protección fuerte contra inyección de scripts**: mantiene la ejecución de scripts en línea, porque el sitio tiene dos que corren antes de pintar (el que decide el tema y el del consentimiento). Lo que sí hace, gratis y sin romper nada: bloquear objetos incrustados, fijar la base de las URLs, limitar a dónde puede enviar un formulario y prohibir que nadie enmarque el sitio. La versión fuerte, la que firma cada script en cada petición, está escrita como pendiente y atada a la primera funcionalidad que la necesite de verdad. Prefiero una cabecera que dice la verdad sobre lo que protege que un A+ que suena mejor de lo que es."
+        },
+        {
+          "type": "p",
+          "text": "Un detalle de esa política que me gusta especialmente. Los vídeos de terceros del sitio entran por el dominio sin cookies de YouTube, y además no existen en la página hasta que alguien le da al play. Las dos cosas juntas significan que la página no hace ni una sola petición a Google mientras nadie pulse. Cualquiera de las dos por separado no bastaba: el dominio normal escribe cookies en cuanto se pinta el iframe, y un iframe que existe desde el principio ya ha hablado con el servidor aunque nadie lo mire."
+        },
+        {
+          "type": "h3",
+          "text": "Vercel no compra el despliegue, compra el entorno de pruebas"
+        },
+        {
+          "type": "p",
+          "text": "Aquí no hay un staging montado, porque un staging persistente para una persona sola es sobreingeniería. Cada rama publica su propia URL con el mismo build que producción, y ahí se validan las tres cosas que en local no se pueden validar:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**El consentimiento y las cookies**, que necesitan dominios de verdad.",
+            "**Las tarjetas sociales**, que necesitan una URL pública para que el robot que las lee las vea.",
+            "**El número de rendimiento**, medido sobre infraestructura desplegada, porque el servidor de desarrollo da cifras engañosas."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Con una tanda entera de trabajo en una sola rama, esa URL acumula toda la tanda y se revisa junta antes de tocar producción una única vez."
+        },
+        { "type": "h3", "text": "La deuda que el analizador sí encontró" },
+        {
+          "type": "p",
+          "text": "Aquí hay una respuesta cómoda y una verdadera. La cómoda es que casi no hay. La verdadera es que uso Qlty, un analizador externo, y este fue quien me dijo que sí la había, y al mirar de cerca resultó que los cinco archivos peor puntuados no eran código de la web: eran el censo de contraste, dos registros de contenido y dos guardianes. De ahí salen dos lecturas que son ciertas a la vez:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**Qlty señalaba con puntería el punto ciego real**, porque su peor archivo era justo el que se había roto dos veces en silencio. Eso no se silencia: se arregla.",
+            "**Y a la vez penalizaba los dos registros de contenido** por duplicación estructural entre el español y el inglés, que es exactamente la propiedad que un guardián de este repositorio existe para garantizar. Medir como deuda lo que se impone a propósito no informa de nada."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "De ahí salió la regla que me dejé escrita para no engañarme: en ese archivo se excluye por lo que un archivo **es** (datos generados, contenido paralelo por idioma), nunca por lo que un archivo **puntúa**. Silenciar un hallazgo incómodo habría convertido el informe en el metro que aprueba sobre una lista vacía, que es el error que más veces he cometido en este proyecto."
+        },
+        { "type": "h3", "text": "Y una ausencia, dicha en voz alta" },
+        {
+          "type": "p",
+          "text": "Este repositorio no tiene tests. No es un olvido, es una decisión. No hay lógica de negocio que probar: hay datos, componentes de presentación y reglas, y las reglas ya las verifican los guardianes en cada push. El día que aparezca la primera función con condiciones de verdad, entran los tests. Escribir un test que comprueba que un título renderiza un título habría sido teatro, y teatro caro de mantener."
+        }
+      ],
+      "pull": "Si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve.",
+      "enlace": {
+        "text": "Decisiones D13, D15, D26, D27, D32 y D55, el archivo next.config.ts y la configuración de Qlty",
+        "path": "next.config.ts"
+      }
+    },
+    {
+      "id": "s08",
+      "ordinal": "08",
+      "indexLabel": "Accesibilidad",
+      "kicker": "08 — Accesibilidad",
+      "title": "AA es el suelo, y el metro estuvo mal calibrado tres veces",
+      "body": [
+        {
+          "type": "p",
+          "text": "Ya tenía la primera versión en marcha, una marca creada, un Design System que la mantenía e incluso un Brand Kit para su uso. Pero faltaba algo que tenía claro desde el principio que debía incluir esta página: una accesibilidad excelente. No solo porque todo el mundo tiene que poder acceder a todo el contenido, sino porque cuando piensas en accesibilidad, aunque no te des cuenta, estás mejorando la experiencia de uso de todos los usuarios, no solo la de quienes necesitan unos estándares mínimos."
+        },
+        {
+          "type": "p",
+          "text": "Tener un AA según WCAG no era el objetivo: es un mínimo garantizado. A partir de ahí trabajo para llegar a AAA en todo lo que se pueda, en los dos temas, en reposo y también mientras el cursor está encima, que es donde casi nadie mide."
+        },
+        {
+          "type": "h3",
+          "text": "Cuatro puntos se heredan, cuatro se ponen a mano"
+        },
+        {
+          "type": "p",
+          "text": "El checklist son ocho puntos que hay que cumplir antes de dar una página por cerrada, y ya conté que cuatro dejaron de verificarse a mano el día que los puso la pieza. Los otros cuatro siguen a mano y seguirán, porque dependen del contenido y no puede ponerlos ningún componente:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "La jerarquía de encabezados, sin saltos.",
+            "La miga de pan de toda página interna.",
+            "Que nada esté codificado solo por color.",
+            "Las alternativas textuales."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Esa división es el único motivo por el que un checklist de ocho puntos sigue cumpliéndose el mes catorce: nadie sostiene ocho verificaciones manuales, y cuatro sí."
+        },
+        {
+          "type": "h3",
+          "text": "La regla de color de la que estoy más contento"
+        },
+        {
+          "type": "p",
+          "text": "No es un componente. El gris del texto secundario está calibrado contra el fondo de la página, y solo contra él. Encima de una tarjeta, de una banda invertida o de un velo, ese mismo gris se queda corto. La primera versión de la regla decía «recalcúlalo cuando cambies de superficie», que es una regla que hay que recordar, es decir, una regla que se incumple. La segunda versión no hay que recordarla: cada superficie declara su propio atenuado mezclando el texto hacia el fondo que tiene debajo, y el punto de uso escribe siempre lo mismo. **El gris correcto lo decide el sitio donde cae el texto.**"
+        },
+        {
+          "type": "p",
+          "text": "Y aquí va el primer fallo, porque la regla buena tenía un agujero que tardé tiempo en ver. Una superficie no cambia solo por clase: cambia por estado. Una tarjeta que se aclara al pasar el cursor está cambiando de fondo, y mi capa no se enteraba, porque el hover compila a un selector distinto. Durante todo ese tiempo hubo tarjetas que en reposo cumplían de sobra y en hover se quedaban por debajo del objetivo. No lo encontró ningún escáner. Lo encontró preguntarme por qué había medido ocho páginas y no las doce."
+        },
+        {
+          "type": "h3",
+          "text": "Las tres veces que el metro estaba mal calibrado"
+        },
+        {
+          "type": "p",
+          "text": "Y lo demás no es que el sitio no llegara. Es que para llegar tuve que arreglar tres veces el instrumento con el que medía, y las tres veces el instrumento roto daba aprobado."
+        },
+        {
+          "type": "p",
+          "text": "**De color.** Los cianes de esta marca caen ligeramente fuera del espacio de color que usa la pantalla. El navegador los recorta al pintarlos, pero si le preguntas por el valor te devuelve el original, con componentes negativas. Medir contraste sobre eso es medir un color que nadie ha visto nunca: cifras perfectas de un color inexistente."
+        },
+        {
+          "type": "p",
+          "text": "**De cobertura.** El censo que recorre la página y mide cada par de colores se rompió dos veces, y las dos en silencio, devolviendo una lista vacía. Una lista vacía de incumplimientos y un sitio impecable se escriben igual en un informe. La segunda vez tapaba un incumplimiento real. Desde entonces el censo publica cuántas reglas ha indexado y cuántos pares ha medido con ellas, porque lo que hay que comprobarle a un verificador no es qué encontró: es cuánto miró."
+        },
+        {
+          "type": "p",
+          "text": "**De umbral.** La norma no le pide lo mismo a un texto pequeño que a un titular: por encima de cierto tamaño, el listón baja. Yo estaba puntuándolo todo contra el listón del texto pequeño, así que publiqué cuatro incumplimientos donde en realidad había uno. Un umbral mal aplicado inventa hallazgos igual que un metro descalibrado, y cuesta más de deshacer, porque nadie duda de un informe que trae malas noticias."
+        },
+        { "type": "h3", "text": "La capa que no se puede automatizar" },
+        {
+          "type": "p",
+          "text": "Recorrí el sitio entero con NVDA, un lector de pantalla, y encontró cosas que no incumplen ninguna regla y que por eso ningún escáner podía señalar: una tecla que no cerraba lo que parecía que iba a cerrar, un cambio que ocurría sin anunciarse a quien no lo ve. Lo que encontró está publicado en la página de accesibilidad del sitio, con nombre y apellidos, junto a lo que todavía no he arreglado. Una declaración de accesibilidad que solo dice lo que cumple no es una declaración: es una portada."
+        }
+      ],
+      "pullquote": "El gris correcto lo decide el sitio donde cae el texto.",
+      "liveStat": {
+        "label": "Contraste · dato en vivo",
+        "source": "lib/design-values.ts",
+        "value": "AAA en las doce páginas",
+        "linkLabel": "Ver el censo medido",
+        "href": "accesibilidad"
+      },
+      "enlace": {
+        "text": "Decisiones D39, D41, D52, D61 y D73, y el script contrast-census.js",
+        "path": "scripts/design-review/contrast-census.js"
+      }
+    },
+    {
+      "id": "s09",
+      "ordinal": "09",
+      "indexLabel": "Qué revisa una IA",
+      "kicker": "09 — Qué revisa una IA",
+      "title": "Qué revisa una IA y qué no",
+      "body": [
+        {
+          "type": "p",
+          "text": "Esta web la he construido trabajando con una IA, así que la pregunta honesta no es si ayuda: es qué encuentra y qué no."
+        },
+        { "type": "h3", "text": "Quién decide" },
+        {
+          "type": "p",
+          "text": "Un apunte antes de seguir, porque afecta a cómo hay que leer todo lo anterior. Cuando en este artículo digo «decidí», la decisión es mía y la firmo. Pero casi ninguna se tomó en silencio: se discutieron en conversación, y de ahí salió buena parte de las objeciones que me hicieron cambiar de idea. Lo que no delego es la decisión, ni el criterio con el que se juzga después."
+        },
+        { "type": "h3", "text": "Lo que encuentra: lo que existe" },
+        {
+          "type": "p",
+          "text": "Un patrón mal escrito, una incoherencia entre dos archivos, un valor duplicado, una función que se puede simplificar. Le pides una revisión del código y te la da, y suele ser mejor que la mía a las once de la noche."
+        },
+        {
+          "type": "p",
+          "text": "Sobre eso he montado un puñado de rutinas propias, escritas por mí para este proyecto, que se disparan en un momento concreto y no cuando me acuerdo:"
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**Al cerrar una etapa**, una revisión técnica del repositorio entero con mirada de desarrollador externo que lo ve por primera vez: deuda, huecos, y dónde la documentación y el código han dejado de decir lo mismo. Termina proponiendo tareas concretas, no un informe para archivar.",
+            "**Entre etapas**, una revisión del método: los gates y cuántos dependen de acordarse, lo que cuesta arrancar una sesión, si los guardianes saben fallar, si el tablero sigue diciendo la verdad. Va en el hueco entre dos etapas y no al cerrar una, por una razón que me costó ver: el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener.",
+            "**Antes de un cambio visual grande**, una revisión de diseño que mira dos cosas distintas: si el sistema se está cumpliendo, y si la marca se está expresando. Se verifica en pantalla, no leyendo el código, porque una clase puede estar mal aplicada sin dar un solo error.",
+            "**Al cerrar la sesión**, una rutina de documentación que repasa qué hay que actualizar y lo actualiza, incluida la operación que siempre se olvida, que es retirar lo que ha dejado de ser verdad.",
+            "**Y una para el CV**, que regenera los dos PDF desde la fuente única, comprueba que siguen cabiendo en dos páginas y deja el enlace listo. Existe porque la primera vez que cambié un dato de mi carrera la web quedó al día y el PDF no."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Ninguna de las cinco es un prompt que reescribo cada vez. Son instrucciones versionadas dentro del repositorio, y por eso mejoran: cuando una falla, se corrige el archivo, no la siguiente conversación."
+        },
+        { "type": "h3", "text": "Lo que no encuentra: lo que falta" },
+        {
+          "type": "p",
+          "text": "Y en este proyecto, lo que falta ha sido siempre el problema caro."
+        },
+        {
+          "type": "p",
+          "text": "Por eso los verificadores de este repositorio están escritos al revés de como se escriben normalmente. No buscan el patrón malo: buscan la ausencia del bueno. No preguntan «¿hay algún guion largo en el copy?», preguntan «¿hay algún texto que este verificador no esté mirando?». Y todos terminan diciendo cuántas cosas han revisado, porque un verificador que devuelve una lista vacía y un verificador que no ha mirado nada producen exactamente el mismo informe: verde."
+        },
+        {
+          "type": "p",
+          "text": "Me ha pasado cinco veces, y la mejor de todas fue esta: descubrí que la capa que verifica no estaba verificada. Los guardianes de este repositorio comprueban que nadie se salte las reglas, y no había nada que comprobara que los guardianes funcionaban. Su modo de fallo no es una alarma, es una luz verde. Ahora cada guardián tiene un caso malo de mentira que tiene que ser capaz de cazar, y si no lo caza, falla la integración."
+        },
+        { "type": "h3", "text": "El ruido del auditor externo" },
+        {
+          "type": "p",
+          "text": "Pasé el sitio por varias herramientas de auditoría y me devolvieron once hallazgos. Seis eran falsos positivos. Lo importante no fue descartarlos, fue escribir por qué se descartaban, y escribirlo por mecanismo y no por cifra: «esta herramienta cuenta esto de esta manera» envejece bien, mientras que apuntar la puntuación de aquel día obliga a discutirlo otra vez dentro de un mes con otra puntuación distinta."
+        }
+      ],
+      "pullquote": "Lo que hay que comprobarle a un verificador no es qué encontró: es cuánto miró.",
+      "liveStat": {
+        "label": "Integración continua · dato en vivo",
+        "source": ".github/workflows/ci.yml",
+        "value": "Quince pasos en cada PR",
+        "linkLabel": "Ver el flujo de CI",
+        "href": "github"
+      },
+      "enlace": {
+        "text": "Decisiones D37, D63, D67, D70 y D72, el workflow de CI y las rutinas versionadas en .claude/skills/",
+        "path": ".github/workflows/ci.yml"
+      }
+    },
+    {
+      "id": "s10",
+      "ordinal": "10",
+      "indexLabel": "Lo que salió mal",
+      "kicker": "10 — Lo que salió mal",
+      "title": "Lo que salió mal, y qué tenían todos en común",
+      "body": [
+        {
+          "type": "p",
+          "text": "Si has llegado hasta aquí habrás notado que casi todas las secciones terminan igual, con algo que se rompió. No es humildad de escaparate. Es que, al ordenar este artículo, me di cuenta de que los fallos se parecían demasiado entre sí, y ese parecido es lo único de todo esto que me llevaría a otro equipo."
+        },
+        {
+          "type": "p",
+          "text": "**Una regla que hay que recordar es una regla que se incumple.** No hay ni una excepción en el registro del proyecto. Las reglas que se han sostenido son las que llegaron a convertirse en un componente, una utilidad o un verificador. Las que se quedaron escritas en un documento se incumplieron todas, incluidas las que yo mismo había escrito la semana anterior."
+        },
+        {
+          "type": "p",
+          "text": "**Una regla cuyo disparador mira al sitio equivocado no es una regla, es una nota.** Tenía escrito «si hay más de dos iconos propios, publícalos». Lo comprobaba mirando el archivo de iconos, donde había uno. El sitio tenía siete, repartidos por otros archivos. La regla era correcta y la condición miraba a otro lado. Y pasa igual con el momento: el gate de accesibilidad se disparaba al cerrar una sección, y ahí ya es tarde, porque cambiar el alto de una apertura no es un ajuste, es un rediseño. Ahora salta también mientras se dibuja."
+        },
+        {
+          "type": "p",
+          "text": "**Valida el instrumento antes de creerte el hallazgo.** Se me han caído tres: un medidor de contraste, una norma de dibujo de iconos y un censo de pares. Los tres daban resultados verosímiles. La única defensa que he encontrado es empezar midiendo algo cuyo resultado ya conozco: si el instrumento no reproduce eso, el problema es mío y no del sitio."
+        },
+        {
+          "type": "p",
+          "text": "**La misma decisión escrita en dos sitios acaba diciendo dos cosas.** Siempre. La versión de este error que más me dolió no fue de documentación: fue un PDF generado desde una fuente única que dejó de regenerarse. Una fuente única evita dos verdades mientras genera. El día que la copia impresa se queda quieta, vuelves a tener dos."
+        },
+        {
+          "type": "p",
+          "text": "Y una quinta que va en dirección contraria, para que no parezca que la moraleja es unificarlo todo: **antes de juntar dos valores que se parecen, comprueba que no signifiquen cosas distintas.** Encontré dos radios de esquina diferentes en lo que parecía el mismo componente y estuve a punto de igualarlos. No era incoherencia: eran dos cajas distintas y a una le faltaba el nombre. Unificarlas habría roto la jerarquía visual de media web."
+        }
+      ],
+      "pullquote": "Una regla que hay que recordar es una regla que se incumple.",
+      "enlace": {
+        "text": "El apartado «Cómo se escribe una regla aquí» de BRAND.md, y las decisiones D60, D63 y D70",
+        "path": "BRAND.md"
+      }
+    }
+  ],
+  "closing": {
+    "id": "s11",
+    "ordinal": "11",
+    "indexLabel": "Ahora empieza lo bueno",
+    "kicker": "11 — Cierre",
+    "title": "Ahora empieza lo bueno",
+    "body": [
+      {
+        "type": "p",
+        "text": "Más allá de sacar esa versión MVP y poder tenerla para ir mostrándola cuando fuera necesario, quería tomarme un tiempo para crear esto con rigor, y creo que lo he conseguido. Seguro que tú le ves fallos: desde tu punto de vista de HR, como diseñador seguro que echas en falta temas o tienes críticas razonables, y como developer seguro que algo te ha hecho guiñar un ojo. Como decía al principio, esto es una prueba de criterio a la hora de construir un producto, por pequeño que sea. Y estoy contento con el resultado."
+      },
+      {
+        "type": "p",
+        "text": "Pero falta la pieza que cierra el ciclo, y es la que le da sentido a todo lo anterior: empezar a ver datos e iterar con ellos. ¿Cómo lo he preparado? Te lo cuento."
+      },
+      {
+        "type": "p",
+        "text": "La medición entra con consentimiento y no antes: sin aceptar no se carga nada, ni el gestor de etiquetas, ni la analítica, ni el mapa de calor. Y la política de cookies no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia."
+      },
+      {
+        "type": "p",
+        "text": "La métrica principal no es la visita, es el clic en un canal de contacto. Como no hay formulario, el correo y el teléfono son el proxy de intención más honesto que tengo: alguien que copia mi email ha decidido algo. Las secundarias son la descarga del CV, medida en los diferentes sitios donde se ofrece, y la profundidad de scroll, que es la que dice si el lector lento del que hablaba al principio existe de verdad. Y con Clarity voy a mirar cómo son esas visitas: qué recorrido hacen, cómo se mueven por la página, todo lo que ayude a aprender de quien la lee."
+      },
+      {
+        "type": "p",
+        "text": "El primer objetivo ya está cubierto: el ejercicio de crear este proyecto ha sido un aprendizaje fantástico. Lo que me llevo es la forma de trabajar que hay debajo: escribir las decisiones con su porqué y su fecha, convertir en código toda regla que dependa de acordarse, y desconfiar del instrumento antes que del resultado, sobre todo cuando el resultado es bueno."
+      },
+      {
+        "type": "p",
+        "text": "Al principio decía que quería abrir el taller y enseñar el motor. Esto era el motor. No hace falta ser programador para construir así: hace falta decidir así, y dejar escrito por qué."
+      },
+      {
+        "type": "p",
+        "text": "Si esa es la clase de criterio que buscas para tu equipo, hablemos."
+      }
+    ],
+    "meta": "11 / 11 · fin del recorrido",
+    "enlace": {
+      "text": "Decisiones D17, D18, D31 y D71",
+      "path": "DECISIONS.md"
+    }
+  }
+}
