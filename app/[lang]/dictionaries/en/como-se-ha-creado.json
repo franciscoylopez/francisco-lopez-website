@@ -583,6 +583,14 @@
           "text": "There's a comfortable answer here and a true one. The comfortable one is that there's barely any. The true one is that I use [Qlty](https://qlty.sh), an external analyzer, and it's the one that told me there was, and looking closer it turned out the five worst-scored files weren't the site's actual code: they were the contrast census, two content registries, and two guardians. Two readings come out of that, both true at once:"
         },
         {
+          "type": "image",
+          "src": "/img/como-se-ha-creado-qlty-deuda.webp",
+          "alt": "Screenshot of the Qlty report: an A grade in maintainability (29 code smells) and an A grade in security (no open issues). The chart shows the technical debt ratio and remediation time between July 22 and August 19, 2026, rising on August 3 and peaking on August 19. Final figures: 2.49% technical debt ratio, 1 week remediation time, 2.0% duplication, and a complexity of 84 per thousand lines of code.",
+          "width": 935,
+          "height": 748,
+          "caption": "This repository's Qlty report: an A grade in maintainability and security, with the technical debt ratio spike that pointed at the five worst-scored files."
+        },
+        {
           "type": "ul",
           "items": [
             "**Qlty pointed straight at the real blind spot**, because its worst-scored file was exactly the one that had broken twice in silence. That doesn't get silenced, it gets fixed.",
