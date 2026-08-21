@@ -4202,3 +4202,75 @@ el mismo problema, resuelto dándole su propia superficie opaca en vez de hereda
 y el borde del botón `onInverted` a 2,1-3:1 — los tres por debajo de sus umbrales. Corregidos y
 no re-verificados con una segunda pasada automatizada completa; queda pendiente antes de cerrar
 la tarea.
+
+## D77 · Un bug que ya estaba comentado tres veces, y el diagrama pasa a vivir donde vive la cita — 2026-08-21
+
+**El problema, otra vez.** La apertura de «Cómo se ha creado esta página» centraba TODO el
+bloque —incluido el breadcrumb— en ANCHO, no solo en alto. Es el mismo bug que ya rompió Brand
+Kit y Design System antes de esta tarea: `WRAP` (`mx-auto max-w-[...]`) dentro de un contenedor
+`flex flex-col` deja de estirarse a lo ancho —`mx-auto` desactiva el `stretch` del eje
+transversal por especificación— y la caja se encoge a su contenido, desplazándose al centro.
+El mecanismo ya estaba explicado en un comentario de `brand-kit/hero.tsx`. No sirvió: el
+comentario vive donde el código ya está bien, no donde alguien va a escribirlo mal la próxima
+vez. **Una regla que hay que recordar es una regla que se incumple** (D60, y la propia cita de
+cierre del artículo que este bug afecta) — la tercera repetición es la prueba. El arreglo es el
+de siempre (`${WRAP} flex w-full flex-1 flex-col`, breadcrumb anclado arriba, `my-auto` solo en
+el grupo inferior); lo que cambia aquí es solo dejarlo escrito una vez, en un sitio que un
+`grep` de "flex flex-col" + "WRAP" pueda encontrar antes de reescribirlo mal.
+
+**El diagrama se mueve dentro del `body`, como ya hizo la cita en D76.** Los seis diagramas de
+D76 vivían en un registro aparte (`DIAGRAMS`, id de sección → componente) y se pintaban SIEMPRE
+después de toda la prosa de la sección, nunca junto al párrafo que los explica — el mismo
+defecto que D76 ya había corregido para las citas (viste texto apilado al final, poco durante la
+lectura) pero que no se generalizó al construir el diagrama. `ArticleBlock` gana un tercer tipo
+flotante, `{ type: "diagram", id, caption }`, con el mismo mecanismo de `float` que la cita; el
+registro `DIAGRAMS` pasa de `id → componente` a un prop que recibe `ArticleProse`, para que siga
+siendo site-specific (D36) sin que la pieza genérica sepa dibujar nada. Encontrado al revisar
+las once secciones para la tanda 2 de feedback: no era solo el diagrama de apertura, eran los
+seis.
+
+**El texto DENTRO de un SVG también es copy, y por eso también hay que traducirlo.** Verificando
+la versión EN de la página tras mover los diagramas, la mitad de cada uno seguía en español —
+«selección · 5-10s», «se usa», «busca ausencia»—, hardcodeado en el componente igual que el pie
+ya se había hardcodeado antes de D76. Mismo bug, una capa más adentro, encontrado por la misma
+disciplina que D20 pide: mirar la página en el otro idioma, no asumir que el componente ya lo
+resuelve. Cada diagrama de `como-se-ha-creado-diagrams.tsx` gana un prop `lang` y un objeto
+`{ es, en }` con su propio texto; `ArticleProse` no lo sabe, solo lo recibe ya resuelto desde
+`como-se-ha-creado.tsx`, que es quien conoce el locale de la página. La misma pasada encontró un
+segundo caso idéntico fuera del SVG: el «N de M» de `ChapterNav` llevaba la palabra «de» escrita
+a mano en vez de leer `sectionMeta.of` del diccionario, que ya existía y ya se usaba correctamente
+dos líneas más arriba en el mismo archivo.
+
+**Lo que compra esto, dicho una vez:** los tres hallazgos son la misma familia de error —un
+valor correcto que vive en dos sitios y solo se actualizó en uno—, y los tres se encontraron
+verificando la página SERVIDA en los dos temas y los dos idiomas, no leyendo el código. Es
+D75 aplicado de nuevo: lo que hay que comprobar es el HTML que la página emite.
+
+## D78 · El dato en vivo se vuelve un bloque más, y el pie deja de tener dos estilos — 2026-08-21
+
+**El «dato en vivo» pasa de campo aparte a bloque del cuerpo.** `LiveStat` se enganchaba a la
+sección por un campo propio (`s.liveStat`) y se pintaba SIEMPRE al final, después de toda la
+prosa — el mismo defecto que D76/D77 ya habían corregido para la cita y el diagrama, pero que
+no se generalizó al construirlo. Con el feedback de la tanda 3 pidiendo un dato en vivo dentro
+de «Lo que encuentra: lo que existe» (s09) en vez de al final, se le aplicó la misma cura:
+`ArticleBlock` gana `{ type: "livestat" }` y `ArticleProse` lo resuelve donde el diccionario lo
+ancle. El `href` («design-system», «github»…) sigue resolviéndose fuera de la pieza genérica
+—`resolveLiveStatHref`, prop que aporta el llamador, mismo patrón que `diagrams` (D36)— y el
+«ejemplo real» de un dato (los `Badge` de s05) sigue siendo un registro id→nodo aparte.
+
+**`RepoStrip` pasa a `tone: "chrome"` por defecto, en las once secciones.** La versión de D77
+solo lo aplicaba al cierre, razonando que ahí ocupaba el sitio de `ChapterNav`. El feedback
+señaló la grieta: en las OTRAS diez secciones, la franja «ENLACE ·» (subrayada, tono contenido)
+vive pegada justo encima de «Índice · Siguiente» (pastilla, tono chrome) — dos estilos de
+enlace en el mismo pie de sección, y esa inconsistencia importaba más que la distinción de
+origen que la motivó. `tone: "content"` se queda como opción de la pieza por si algún día la
+franja cae de verdad en medio de un párrafo; hoy ningún call site la usa.
+
+**Compartir gana un dock flotante, y la lógica de compartir se saca a un hook.** Los botones de
+compartir/copiar solo vivían en la apertura; quien ya había bajado a leer no tenía forma de
+compartir sin volver arriba. `FloatingShare` es la pareja del `SectionRail` ya existente —mismo
+breakpoint (`xl:`), mismo lado opuesto, misma regla de aparición (desde el capítulo 01, para no
+duplicar los botones que la apertura ya muestra)—, con las mismas 44px de objetivo táctil que el
+resto del chrome solo-icono. La lógica de `navigator.share` con fallback a copiar, que antes
+vivía solo dentro de `ShareActions`, se extrajo a `useShareLink` para que el dock la reutilizara
+sin copiarla: dos call sites de la misma lógica de estado no se copian, se comparten.
