@@ -37,15 +37,13 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
      legible en **secciones con fondo invertido** (fondo = `foreground`, texto =
      `background`), donde el `brand-purple` estándar no llega. Úsalo **solo ahí**; fuera de
      ese contexto, `brand-purple`.
-     **Conmuta con el tema** (`0.78` en claro, `0.45` en oscuro), y tiene que hacerlo: el fondo
-     de esas secciones *es* `--foreground`, así que salta de carbón a hueso. Un color fijo no
-     puede pasar de **3,71:1** contra las dos superficies —es la media geométrica de sus
-     contrastes, no una estimación—, así que la salvedad «solo texto grande» que arrastró hasta
-     el 2026-08-09 no era del morado: era de cualquier color fijo. Al conmutar da **7,04 / 7,21**
-     y entra en AAA sin coletilla. Mismo patrón que `--primary-on-inverted`.
-   - `progress-ink` *(2026-08-21)*: para la barra de progreso de lectura sobre `--background`
-     directo, mismo mecanismo que `brand-purple-accent` con los papeles cambiados (`0.45`
-     claro / `0.78` oscuro). Porqué completo en `BRAND-historical.md`. Solo para esa barra.
+     **Conmuta con el tema** (`0.78` en claro, `0.45` en oscuro): un color fijo no pasa de
+     **3,71:1** contra las dos superficies, conmutando da **7,04 / 7,21**, AAA sin coletilla.
+     Porqué y cálculo en `BRAND-historical.md`. Mismo patrón que `--primary-on-inverted`.
+   - `progress-ink` *(2026-08-21)*: para texto/gráficos grandes directamente sobre
+     `--background` (`0.45` claro / `0.78` oscuro, AAA en los dos) — no para superficies
+     compuestas (tarjeta, velo, banda invertida), que ya tienen su propio token. Porqué y
+     cifras en `BRAND-historical.md`.
 
 ### El morado decorativo no vale como elemento gráfico
 

@@ -541,3 +541,13 @@ fondo de página en oscuro ES carbón). Mismo mecanismo, mismo par de valores,
 superficie de referencia invertida entre los dos tokens.
 
 La regla en presente está en **`BRAND.md` §Color**.
+
+**Generalizado el mismo día (P60 tanda 2/3):** el numeral ilustrado de `SectionCover` vive
+sobre la misma superficie (`--background` directo) que la barra, así que se probó ahí antes de
+inventar un token nuevo. Medido con un `<canvas>` (método de `BRAND.md` §Cómo medir sin
+equivocarse), no asumido por analogía: **7,21:1 en claro / 7,83:1 en oscuro**, AAA en los dos —
+de hecho por encima del propio umbral AAA de texto normal (7:1), no solo del de texto grande
+(4,5:1) que le tocaba. La regla de alcance pasó de «solo para esa barra» a «cualquier
+texto/gráfico grande directamente sobre `--background`»; sigue sin valer sobre una superficie
+compuesta (tarjeta, velo, banda invertida), que ya tiene su propio token calculado contra SU
+fondo.

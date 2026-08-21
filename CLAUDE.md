@@ -92,6 +92,8 @@
 - D74 · Un compromiso no caduca y una medición sí: fuera de su fuente se publica el umbral
 - D75 · Lo que verifica una página no es su código, es el HTML que emite
 - D76 · Una capa nueva para texto largo, y el control que le faltaba al chrome sobre banda invertida
+- D77 · Un bug que ya estaba comentado tres veces, y el diagrama pasa a vivir donde vive la cita
+- D78 · El dato en vivo se vuelve un bloque más, y el pie deja de tener dos estilos
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
