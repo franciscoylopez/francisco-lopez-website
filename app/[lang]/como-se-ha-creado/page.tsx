@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { ComoSeHaCreado } from "@/components/site/como-se-ha-creado";
 import { PageShell } from "@/components/site/page-shell";
-import { cvPath, locales, isLocale, pagePath } from "@/lib/i18n/config";
+import { locales, isLocale, pagePath } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
 import { techArticleLd } from "@/lib/structured-data";
 import { getCommon, getComoSeHaCreado } from "../dictionaries";
@@ -52,10 +52,9 @@ export default async function ComoSeHaCreadoPage({ params }: LangParams) {
     >
       <ComoSeHaCreado
         dict={t}
-        contacto={common.contacto}
+        lang={lang}
         breadcrumb={common.breadcrumb}
         homeHref={pagePath(lang)}
-        cvHref={cvPath(lang)}
       />
     </PageShell>
   );

@@ -30,7 +30,7 @@
   "rail": { "ariaLabel": "Section index" },
   "progress": { "ariaLabel": "Reading progress" },
   "chapterNav": { "indexLabel": "Contents", "nextLabel": "Next:" },
-  "sectionMeta": { "chapter": "Chapter", "of": "of", "reading": "min read" },
+  "sectionMeta": { "of": "of" },
   "sections": [
     {
       "id": "s01",
@@ -54,6 +54,12 @@
         },
         { "type": "h3", "text": "What those two speeds actually decided" },
         {
+          "type": "diagram",
+          "id": "s01",
+          "side": "right",
+          "caption": "The same scroll, read at two speeds: a scanning reader only reaches the first stretch; a deep reader covers the whole page."
+        },
+        {
           "type": "p",
           "text": "They didn't stay on paper. They drove concrete calls:"
         },
@@ -68,13 +74,6 @@
           "type": "p",
           "text": "I didn't run user research. What I did do was study the profiles of a few product references, read recruiter articles, and settle two things: I wanted a fast first version, and I wanted a site built for the different profiles that would read it. Out of that came a written hypothesis about who reads and for how long, and every decision above follows from it."
         },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "right",
-          "label": "The line of the section",
-          "text": "An explicit hypothesis that drives decisions beats discovery for show."
-        },
         { "type": "h3", "text": "What isn't here (yet), and why" },
         {
           "type": "p",
@@ -84,7 +83,18 @@
           "type": "ul",
           "items": [
             "**No contact form.** A form adds a backend, an email service, a captcha and an attack surface, to solve something a link already solves. What it does add is a comfortable metric (submissions) instead of an honest one (someone decided to write to you). I kept the link.",
-            "**Not every one of my experiences gets its own page.** The two in marketing and growth don't, even though there's plenty of material: telling them at the same level would dilute the ordering I want people to read me in, which is product first. And the company where the product I co-founded was born doesn't have its own page either, because it isn't a separable story: it's the first chapter of the other one.",
+            "**Not every one of my experiences gets its own page.** The two in marketing and growth don't, even though there's plenty of material: telling them at the same level would dilute the ordering I want people to read me in, which is product first. And the company where the product I co-founded was born doesn't have its own page either, because it isn't a separable story: it's the first chapter of the other one."
+          ]
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "text": "An explicit hypothesis that drives decisions beats discovery for show."
+        },
+        {
+          "type": "ul",
+          "items": [
             "**This isn't a blog.** It's a page with article structure, no post index, no tags, no feed. Setting up a blog is committing to publish. If a second article ever exists, that decision gets made then.",
             "**The conversational assistant is on hold, and its limit is already written before it exists**: whatever isn't written on the site publicly doesn't go into its corpus either. A public agent publishes just like a page, but it answers without me there and in sentences I can't review, so it can't serve as a dumping ground for what gets said in an interview and not in the open. Fixing that limit before building it is far cheaper than arguing about it afterward."
           ]
@@ -165,6 +175,12 @@
           ]
         },
         {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "text": "A one-person board still needs MoSCoW, order and size: delivery judgment doesn't depend on being a team."
+        },
+        {
           "type": "p",
           "text": "There are two fields people always mix up, and separating them is what made the board usable. One answers \"is this committed, or is it waiting?\" The other answers \"which release does it ship in?\" They're different questions: a task can be committed for the next stage and still ship in a later release, and conflating them turns the board into a wish list sorted by optimism."
         },
@@ -180,13 +196,6 @@
         {
           "type": "p",
           "text": "And the part I learned late: no direct pushes, no merging with checks in the red, no bypassing protection as an admin. I wrote that configuration the same day I made the repository public, and the right order would have been the reverse."
-        },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "left",
-          "label": "The line of the section",
-          "text": "The main branch isn't protected by my discipline, it's protected by the server."
         }
       ],
       "enlace": {
@@ -257,9 +266,15 @@
         {
           "type": "ul",
           "items": [
-            "The **Design System** shows the tokens, the typography, every variant of every control and the accessibility checklist.",
-            "The **Brand Kit** shows the logo, its uses, its minimums and its downloads."
+            "The [Design System](/en/design-system) shows the tokens, the typography, every variant of every control and the accessibility checklist.",
+            "The [Brand Kit](/en/brand-kit) shows the logo, its uses, its minimums and its downloads."
           ]
+        },
+        {
+          "type": "quote",
+          "style": "pull",
+          "side": "right",
+          "text": "Coherence, in a product, isn't that everything looks alike: it's that nothing needs updating twice."
         },
         {
           "type": "p",
@@ -272,12 +287,6 @@
         {
           "type": "p",
           "text": "The PDF résumé is produced by code from the same data as the site, so it ships with the same typeface, the same cyan and exactly the same facts: there's no separate version of the CV and of the page, only programmed adaptations. The cards you see when sharing a link are also generated by code, one per page, instead of being a fixed image uploaded by hand."
-        },
-        {
-          "type": "quote",
-          "style": "pull",
-          "side": "right",
-          "text": "Coherence, in a product, isn't that everything looks alike: it's that nothing needs updating twice."
         },
         {
           "type": "p",
@@ -305,6 +314,12 @@
         {
           "type": "p",
           "text": "The question every tool has to answer to get into this project isn't \"is it good?\" but \"what work of mine does it solve?\" It sounds obvious, and it isn't: almost all the software that ends up over-installed gets in through the first question."
+        },
+        {
+          "type": "diagram",
+          "id": "s04",
+          "side": "right",
+          "caption": "The core that ships (Next 16, strict TypeScript and Tailwind v4) with two pieces that also travel in the bundle: lucide-react, and shadcn/ui, installed and barely used. And two tools that only helped build it: Claude Design for the initial design, Claude Code for development."
         },
         { "type": "h3", "text": "Two surprises from a fresh major version" },
         {
@@ -373,6 +388,12 @@
           "text": "On top of those two questions sits a rule that governs everything that gets built, and it's a cascade:"
         },
         {
+          "type": "diagram",
+          "id": "s05",
+          "side": "right",
+          "caption": "The cascade behind the construction rule: four questions, in order, before writing any new markup."
+        },
+        {
           "type": "ul",
           "items": [
             "**Does the piece already exist?** Use it, and don't replicate its look with loose classes.",
@@ -387,32 +408,41 @@
         },
         {
           "type": "h3",
-          "text": "The page layer: a page isn't written, it's composed"
+          "text": "A real example: the badge that wasn't a small button"
         },
         {
           "type": "p",
-          "text": "On top of the seven pieces there's one more layer. A helper derives the canonical URL, the per-language variants, the social card and the structured markup from a single source, and a component adds the skip link, navigation, main content and footer. And which pages the site has is decided by a single file, which is where the sitemap, the HTML gate and each page's social card all come from."
+          "text": "A real case of that cascade. A value like \"AAA\" or a decision like \"Exit\" needed a label, and the first version was a small button: with a hover that meant nothing, and a touch target that protected nothing because it was never clicked. The question **does it get clicked?** answered no, so it left the actions family and became its own piece, with two axes that never get combined by hand: `tone` says which family the value belongs to (a measurement in cyan, a brand fact in purple, or neutral), and `kind` says how it's written (small caps for a state, plain text for a prose value, monospace for a technical one). Below are the same pills the rest of the site uses, not a recreation of them."
+        },
+        {
+          "type": "h3",
+          "text": "The page layer: a page isn't written, it's composed"
         },
         {
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "The line of the section",
           "text": "Adding a new page and forgetting to register it isn't an audit finding in this repository: it's a compile error."
+        },
+        {
+          "type": "p",
+          "text": "On top of the seven pieces there's one more layer. A helper derives the canonical URL, the per-language variants, the social card and the structured markup from a single source, and a component adds the skip link, navigation, main content and footer. And which pages the site has is decided by a single file, which is where the sitemap, the HTML gate and each page's social card all come from."
         },
         { "type": "h3", "text": "What all this buys" },
         {
           "type": "p",
           "text": "Four of the eight points on the accessibility checklist stop needing manual verification when a page closes, because the piece already handles them: contrast on the system's color pairs, the focus ring, the minimum touch target, and respecting anyone who asked for less motion. That's half of a chapter coming up later, which is why that chapter can be spent entirely on what actually cost something."
+        },
+        {
+          "type": "livestat",
+          "id": "s05",
+          "label": "System pieces · live data",
+          "source": "components/ui/",
+          "value": "Seven pieces + a page layer",
+          "linkLabel": "See the catalog",
+          "href": "design-system"
         }
       ],
-      "liveStat": {
-        "label": "System pieces · live data",
-        "source": "components/ui/",
-        "value": "Seven pieces + a page layer",
-        "linkLabel": "See the catalog",
-        "href": "design-system"
-      },
       "enlace": {
         "label": "LINK ·",
         "parts": [
@@ -522,6 +552,12 @@
           "text": "One detail of that policy I'm particularly fond of. The site's third-party videos load through YouTube's cookieless domain, and on top of that they don't exist on the page until someone hits play. Together, both mean the page makes zero requests to Google until someone clicks. Either one on its own wasn't enough: the regular domain writes cookies the moment the iframe paints, and an iframe that exists from the start has already talked to the server even if nobody's looking at it."
         },
         {
+          "type": "diagram",
+          "id": "s07",
+          "side": "right",
+          "caption": "Without consent and without a click on the video, the page makes zero network requests to third parties."
+        },
+        {
           "type": "h3",
           "text": "Vercel isn't buying the deploy, it's buying the test environment"
         },
@@ -595,7 +631,7 @@
       "body": [
         {
           "type": "p",
-          "text": "I already had the first version running, a brand created, a Design System keeping it consistent, and even a Brand Kit for using it. But something was missing that I knew from the start this page had to include: excellent accessibility. Not just because everyone has to be able to reach all the content, but because thinking about accessibility, whether you notice it or not, improves the experience for every user, not only the ones who need a minimum standard."
+          "text": "I already had the first version running, a brand created, a [Design System](/en/design-system) keeping it consistent, and even a [Brand Kit](/en/brand-kit) for using it. But something was missing that I knew from the start this page had to include: excellent accessibility. Not just because everyone has to be able to reach all the content, but because thinking about accessibility, whether you notice it or not, improves the experience for every user, not only the ones who need a minimum standard."
         },
         {
           "type": "p",
@@ -628,7 +664,6 @@
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "The line of the section",
           "text": "The right gray is decided by the surface the text lands on."
         },
         {
@@ -654,17 +689,25 @@
         },
         { "type": "h3", "text": "The layer that can't be automated" },
         {
+          "type": "diagram",
+          "id": "s08",
+          "side": "right",
+          "caption": "Each verification layer catches what the one before it can't see. Only the last one, a person, catches what breaks no rule at all."
+        },
+        {
           "type": "p",
-          "text": "I walked the entire site with [NVDA](https://www.nvaccess.org/), a screen reader, and it caught things that break no rule at all and that no scanner could ever flag: a key that didn't close what it looked like it should close, a change that happened with no announcement to someone who can't see it. What it found is published on the site's own accessibility page, named and dated, alongside what I haven't fixed yet. An accessibility statement that only says what's compliant isn't a statement: it's a cover page."
+          "text": "I walked the entire site with [NVDA](https://www.nvaccess.org/), a screen reader, and it caught things that break no rule at all and that no scanner could ever flag: a key that didn't close what it looked like it should close, a change that happened with no announcement to someone who can't see it. What it found is published on the site's own [accessibility page](/en/accesibilidad), named and dated, alongside what I haven't fixed yet. An accessibility statement that only says what's compliant isn't a statement: it's a cover page."
+        },
+        {
+          "type": "livestat",
+          "id": "s08",
+          "label": "Contrast · live data",
+          "source": "lib/design-values.ts",
+          "value": "AAA across all twelve pages",
+          "linkLabel": "See the measured census",
+          "href": "accesibilidad"
         }
       ],
-      "liveStat": {
-        "label": "Contrast · live data",
-        "source": "lib/design-values.ts",
-        "value": "AAA across all twelve pages",
-        "linkLabel": "See the measured census",
-        "href": "accesibilidad"
-      },
       "enlace": {
         "label": "LINK ·",
         "parts": [
@@ -726,6 +769,15 @@
           "type": "p",
           "text": "None of the five is a prompt I rewrite every time. They're versioned instructions inside the repository, and that's why they improve: when one fails, the file gets fixed, not the next conversation."
         },
+        {
+          "type": "livestat",
+          "id": "s09",
+          "label": "Continuous integration · live data",
+          "source": ".github/workflows/ci.yml",
+          "value": "Fifteen steps on every PR",
+          "linkLabel": "See the CI workflow",
+          "href": "github"
+        },
         { "type": "h3", "text": "What it doesn't catch: what's missing" },
         {
           "type": "p",
@@ -736,10 +788,15 @@
           "text": "That's why this repository's checkers are written backward from how they're usually written. They don't look for the bad pattern: they look for the absence of the good one. They don't ask \"is there a long dash anywhere in the copy?\", they ask \"is there any text this checker isn't looking at?\" And all of them end up reporting how much they reviewed."
         },
         {
+          "type": "diagram",
+          "id": "s09",
+          "side": "left",
+          "caption": "The fifteen steps of continuous integration: most of them look for the absence of a bad pattern, not its presence."
+        },
+        {
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "The line of the section",
           "text": "A checker that returns an empty list and a checker that never looked produce exactly the same report: green."
         },
         {
@@ -752,13 +809,6 @@
           "text": "I ran the site through several audit tools and got eleven findings back. Six were false positives. What mattered wasn't dismissing them, it was writing down why, and writing it by mechanism rather than by score: \"this tool counts it this specific way\" ages well, while jotting down that day's score forces the same argument again a month later with a different score."
         }
       ],
-      "liveStat": {
-        "label": "Continuous integration · live data",
-        "source": ".github/workflows/ci.yml",
-        "value": "Fifteen steps on every PR",
-        "linkLabel": "See the CI workflow",
-        "href": "github"
-      },
       "enlace": {
         "label": "LINK ·",
         "parts": [
@@ -798,7 +848,6 @@
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "The line of the article",
           "text": "A rule you have to remember is a rule that gets broken."
         },
         {
@@ -850,7 +899,7 @@
       },
       {
         "type": "p",
-        "text": "Measurement kicks in with consent, and not before: without acceptance nothing loads, not the tag manager, not analytics, not the heatmap. And the cookie policy isn't text copied from a template: it's a living document that says what loads today, and gets updated the day that changes."
+        "text": "Measurement kicks in with consent, and not before: without acceptance nothing loads, not the tag manager, not analytics, not the heatmap. And the [cookie policy](/en/cookies) isn't text copied from a template: it's a living document that says what loads today, and gets updated the day that changes."
       },
       {
         "type": "p",

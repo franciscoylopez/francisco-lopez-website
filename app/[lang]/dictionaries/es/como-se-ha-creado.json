@@ -30,11 +30,7 @@
   "rail": { "ariaLabel": "Índice de secciones" },
   "progress": { "ariaLabel": "Progreso de lectura" },
   "chapterNav": { "indexLabel": "Índice", "nextLabel": "Siguiente:" },
-  "sectionMeta": {
-    "chapter": "Capítulo",
-    "of": "de",
-    "reading": "min de lectura"
-  },
+  "sectionMeta": { "of": "de" },
   "sections": [
     {
       "id": "s01",
@@ -58,6 +54,12 @@
         },
         { "type": "h3", "text": "Qué decidieron esas dos velocidades" },
         {
+          "type": "diagram",
+          "id": "s01",
+          "side": "right",
+          "caption": "El mismo scroll, leído a dos ritmos: quien escanea solo llega al primer tramo; quien lee en profundidad recorre la página entera."
+        },
+        {
           "type": "p",
           "text": "No se quedaron en el documento. Decidieron cosas concretas:"
         },
@@ -72,13 +74,6 @@
           "type": "p",
           "text": "No hice una investigación con usuarios. Lo que sí hice fue revisar los perfiles de algunos referentes en Producto, leer artículos de gente de selección, y tener claro dos cosas: que quería una primera versión rápida, y que quería una web preparada para los distintos perfiles que iban a leerla. De ahí salió una hipótesis escrita de quién lee y en cuánto tiempo, y de esa hipótesis salen todas las decisiones de arriba."
         },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "right",
-          "label": "La frase de la sección",
-          "text": "Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno."
-        },
         { "type": "h3", "text": "Lo que no está (de momento) y por qué" },
         {
           "type": "p",
@@ -88,7 +83,18 @@
           "type": "ul",
           "items": [
             "**No hay formulario de contacto.** Un formulario añade un backend, un servicio de correo, un captcha y una superficie de ataque, para resolver algo que un enlace ya resuelve. Lo que sí aporta es una métrica cómoda (envíos) en lugar de una honesta (alguien ha decidido escribirte). Me quedé con el enlace.",
-            "**No todas mis experiencias tienen página propia.** Las dos de marketing y growth no la tienen, aunque hay material de sobra: contarlas al mismo nivel diluiría el orden con el que quiero que me lean, que es producto primero. Y la empresa donde nació el producto que cofundé tampoco tiene la suya, porque no es una historia separable: es el primer capítulo de la otra.",
+            "**No todas mis experiencias tienen página propia.** Las dos de marketing y growth no la tienen, aunque hay material de sobra: contarlas al mismo nivel diluiría el orden con el que quiero que me lean, que es producto primero. Y la empresa donde nació el producto que cofundé tampoco tiene la suya, porque no es una historia separable: es el primer capítulo de la otra."
+          ]
+        },
+        {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "text": "Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno."
+        },
+        {
+          "type": "ul",
+          "items": [
             "**Esto no es un blog.** Es una página con estructura de artículo, sin índice de entradas, sin etiquetas y sin feed. Montar un blog es comprometerse a publicar. Si algún día hay un segundo artículo, esa decisión se toma entonces.",
             "**El asistente conversacional está aplazado, y ya tiene escrito su límite antes de existir**: lo que no está por escrito en el sitio tampoco entra en su corpus. Un agente público publica igual que una página, pero responde sin mí delante y en frases que no puedo revisar, así que no sirve de papelera para lo que se cuenta en una entrevista y no en abierto. Fijar ese límite antes de construirlo es mucho más barato que discutirlo después."
           ]
@@ -169,6 +175,12 @@
           ]
         },
         {
+          "type": "quote",
+          "style": "pullquote",
+          "side": "right",
+          "text": "Un tablero de una sola persona sigue necesitando MoSCoW, orden y tamaño: el criterio de delivery no depende de ser un equipo."
+        },
+        {
           "type": "p",
           "text": "Hay dos campos que se confunden siempre, y separarlos fue lo que hizo el tablero utilizable. Uno contesta «¿esto está comprometido o está esperando?». El otro contesta «¿en qué versión sale?». Son preguntas distintas: una tarea puede estar comprometida para la etapa que viene y salir en una versión posterior, y mezclarlas convierte el tablero en una lista de deseos ordenada por optimismo."
         },
@@ -187,13 +199,6 @@
         {
           "type": "p",
           "text": "Y la parte que aprendí tarde: sin push directo, sin fusionar con los checks en rojo, sin saltarse la protección por ser administrador. Escribí esa configuración el mismo día que hice público el repositorio, y el orden correcto habría sido el inverso."
-        },
-        {
-          "type": "quote",
-          "style": "pullquote",
-          "side": "left",
-          "label": "La frase de la sección",
-          "text": "La rama principal no la protege mi disciplina, la protege el servidor."
         }
       ],
       "enlace": {
@@ -261,9 +266,15 @@
         {
           "type": "ul",
           "items": [
-            "El **Design System** enseña los tokens, la tipografía, cada variante de cada control y el checklist de accesibilidad.",
-            "El **Brand Kit** enseña el logo, sus usos, sus mínimos y sus descargas."
+            "El [Design System](/design-system) enseña los tokens, la tipografía, cada variante de cada control y el checklist de accesibilidad.",
+            "El [Brand Kit](/brand-kit) enseña el logo, sus usos, sus mínimos y sus descargas."
           ]
+        },
+        {
+          "type": "quote",
+          "style": "pull",
+          "side": "right",
+          "text": "Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces."
         },
         {
           "type": "p",
@@ -276,12 +287,6 @@
         {
           "type": "p",
           "text": "El CV en PDF se produce por código a partir de los mismos datos que la web, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano."
-        },
-        {
-          "type": "quote",
-          "style": "pull",
-          "side": "right",
-          "text": "Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces."
         },
         {
           "type": "p",
@@ -309,6 +314,12 @@
         {
           "type": "p",
           "text": "La pregunta con la que entra cada herramienta en este proyecto no es «¿es buena?», sino «¿qué trabajo mío resuelve?». Suena obvio y no lo es: casi todo el software que se instala de más entra por la primera pregunta."
+        },
+        {
+          "type": "diagram",
+          "id": "s04",
+          "side": "right",
+          "caption": "El núcleo que se despliega (Next 16, TypeScript estricto y Tailwind v4) con dos piezas que también viajan en el bundle: lucide-react, y shadcn/ui, instalado y casi sin uso. Y dos herramientas que solo ayudaron a construirlo: Claude Design en el diseño inicial, Claude Code en el desarrollo."
         },
         { "type": "h3", "text": "Dos sorpresas de estrenar versión" },
         {
@@ -377,6 +388,12 @@
           "text": "Encima de esas dos preguntas hay una regla que gobierna todo lo que se construye, y es una cascada:"
         },
         {
+          "type": "diagram",
+          "id": "s05",
+          "side": "right",
+          "caption": "La cascada de la Regla de construcción: cuatro preguntas, en orden, antes de escribir markup nuevo."
+        },
+        {
           "type": "ul",
           "items": [
             "**¿Existe ya la pieza?** Se usa, y no se replica su aspecto con clases sueltas.",
@@ -391,32 +408,41 @@
         },
         {
           "type": "h3",
-          "text": "La capa de página: una página no se escribe, se compone"
+          "text": "Un ejemplo real: la etiqueta que no era un botón pequeño"
         },
         {
           "type": "p",
-          "text": "Encima de las siete piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una."
+          "text": "Un caso real de esa cascada. Un dato como «AAA» o una decisión como «Exit» necesitaba un rótulo, y la primera versión fue un botón pequeño: sin hover que significara nada, con un objetivo táctil que no protegía nada porque no se pulsaba. La pregunta **¿se pulsa?** contestó que no, así que salió de la familia de acciones y se convirtió en su propia pieza, con dos ejes que nunca se combinan a mano: `tone` dice de qué familia es el dato (una medición en cian, una cosa de marca en morado, o neutro) y `kind` dice cómo se escribe (versalitas para un estado, caja normal para un dato en prosa, monoespaciada para un valor técnico). Abajo tienes las mismas pastillas que usa el resto del sitio, no una recreación."
+        },
+        {
+          "type": "h3",
+          "text": "La capa de página: una página no se escribe, se compone"
         },
         {
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "La frase de la sección",
           "text": "Añadir una página nueva y olvidarse de registrarla no es un hallazgo de auditoría en este repositorio: es un error de compilación."
+        },
+        {
+          "type": "p",
+          "text": "Encima de las siete piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una."
         },
         { "type": "h3", "text": "Qué compra todo esto" },
         {
           "type": "p",
           "text": "Cuatro de los ocho puntos del checklist de accesibilidad dejan de verificarse a mano al cerrar una página, porque los pone la pieza: el contraste de los pares del sistema, el anillo de foco, el objetivo táctil mínimo y el respeto a quien ha pedido menos movimiento. Es la mitad de un capítulo que viene más adelante, y por eso ese capítulo puede dedicarse entero a lo que de verdad costó."
+        },
+        {
+          "type": "livestat",
+          "id": "s05",
+          "label": "Piezas del sistema · dato en vivo",
+          "source": "components/ui/",
+          "value": "Siete piezas + capa de página",
+          "linkLabel": "Ver el catálogo",
+          "href": "design-system"
         }
       ],
-      "liveStat": {
-        "label": "Piezas del sistema · dato en vivo",
-        "source": "components/ui/",
-        "value": "Siete piezas + capa de página",
-        "linkLabel": "Ver el catálogo",
-        "href": "design-system"
-      },
       "enlace": {
         "label": "ENLACE ·",
         "parts": [
@@ -522,6 +548,12 @@
           "text": "Un detalle de esa política que me gusta especialmente. Los vídeos de terceros del sitio entran por el dominio sin cookies de YouTube, y además no existen en la página hasta que alguien le da al play. Las dos cosas juntas significan que la página no hace ni una sola petición a Google mientras nadie pulse. Cualquiera de las dos por separado no bastaba: el dominio normal escribe cookies en cuanto se pinta el iframe, y un iframe que existe desde el principio ya ha hablado con el servidor aunque nadie lo mire."
         },
         {
+          "type": "diagram",
+          "id": "s07",
+          "side": "right",
+          "caption": "Sin consentimiento y sin clic en el vídeo, la página no hace ni una petición de red hacia terceros."
+        },
+        {
           "type": "h3",
           "text": "Vercel no compra el despliegue, compra el entorno de pruebas"
         },
@@ -594,7 +626,7 @@
       "body": [
         {
           "type": "p",
-          "text": "Ya tenía la primera versión en marcha, una marca creada, un Design System que la mantenía e incluso un Brand Kit para su uso. Pero faltaba algo que tenía claro desde el principio que debía incluir esta página: una accesibilidad excelente. No solo porque todo el mundo tiene que poder acceder a todo el contenido, sino porque cuando piensas en accesibilidad, aunque no te des cuenta, estás mejorando la experiencia de uso de todos los usuarios, no solo la de quienes necesitan unos estándares mínimos."
+          "text": "Ya tenía la primera versión en marcha, una marca creada, un [Design System](/design-system) que la mantenía e incluso un [Brand Kit](/brand-kit) para su uso. Pero faltaba algo que tenía claro desde el principio que debía incluir esta página: una accesibilidad excelente. No solo porque todo el mundo tiene que poder acceder a todo el contenido, sino porque cuando piensas en accesibilidad, aunque no te des cuenta, estás mejorando la experiencia de uso de todos los usuarios, no solo la de quienes necesitan unos estándares mínimos."
         },
         {
           "type": "p",
@@ -633,7 +665,6 @@
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "La frase de la sección",
           "text": "El gris correcto lo decide el sitio donde cae el texto."
         },
         {
@@ -662,17 +693,25 @@
         },
         { "type": "h3", "text": "La capa que no se puede automatizar" },
         {
+          "type": "diagram",
+          "id": "s08",
+          "side": "right",
+          "caption": "Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de abajo, una persona, encuentra lo que no incumple ninguna regla."
+        },
+        {
           "type": "p",
-          "text": "Recorrí el sitio entero con [NVDA](https://www.nvaccess.org/), un lector de pantalla, y encontró cosas que no incumplen ninguna regla y que por eso ningún escáner podía señalar: una tecla que no cerraba lo que parecía que iba a cerrar, un cambio que ocurría sin anunciarse a quien no lo ve. Lo que encontró está publicado en la página de accesibilidad del sitio, con nombre y apellidos, junto a lo que todavía no he arreglado. Una declaración de accesibilidad que solo dice lo que cumple no es una declaración: es una portada."
+          "text": "Recorrí el sitio entero con [NVDA](https://www.nvaccess.org/), un lector de pantalla, y encontró cosas que no incumplen ninguna regla y que por eso ningún escáner podía señalar: una tecla que no cerraba lo que parecía que iba a cerrar, un cambio que ocurría sin anunciarse a quien no lo ve. Lo que encontró está publicado en la [página de accesibilidad](/accesibilidad) del sitio, con nombre y apellidos, junto a lo que todavía no he arreglado. Una declaración de accesibilidad que solo dice lo que cumple no es una declaración: es una portada."
+        },
+        {
+          "type": "livestat",
+          "id": "s08",
+          "label": "Contraste · dato en vivo",
+          "source": "lib/design-values.ts",
+          "value": "AAA en las doce páginas",
+          "linkLabel": "Ver el censo medido",
+          "href": "accesibilidad"
         }
       ],
-      "liveStat": {
-        "label": "Contraste · dato en vivo",
-        "source": "lib/design-values.ts",
-        "value": "AAA en las doce páginas",
-        "linkLabel": "Ver el censo medido",
-        "href": "accesibilidad"
-      },
       "enlace": {
         "label": "ENLACE ·",
         "parts": [
@@ -733,6 +772,15 @@
           "type": "p",
           "text": "Ninguna de las cinco es un prompt que reescribo cada vez. Son instrucciones versionadas dentro del repositorio, y por eso mejoran: cuando una falla, se corrige el archivo, no la siguiente conversación."
         },
+        {
+          "type": "livestat",
+          "id": "s09",
+          "label": "Integración continua · dato en vivo",
+          "source": ".github/workflows/ci.yml",
+          "value": "Quince pasos en cada PR",
+          "linkLabel": "Ver el flujo de CI",
+          "href": "github"
+        },
         { "type": "h3", "text": "Lo que no encuentra: lo que falta" },
         {
           "type": "p",
@@ -743,10 +791,15 @@
           "text": "Por eso los verificadores de este repositorio están escritos al revés de como se escriben normalmente. No buscan el patrón malo: buscan la ausencia del bueno. No preguntan «¿hay algún guion largo en el copy?», preguntan «¿hay algún texto que este verificador no esté mirando?». Y todos terminan diciendo cuántas cosas han revisado."
         },
         {
+          "type": "diagram",
+          "id": "s09",
+          "side": "left",
+          "caption": "Los quince pasos de integración continua: la mayoría busca la ausencia de un patrón malo, no su presencia."
+        },
+        {
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "La frase de la sección",
           "text": "Un verificador que devuelve una lista vacía y un verificador que no ha mirado nada producen exactamente el mismo informe: verde."
         },
         {
@@ -759,13 +812,6 @@
           "text": "Pasé el sitio por varias herramientas de auditoría y me devolvieron once hallazgos. Seis eran falsos positivos. Lo importante no fue descartarlos, fue escribir por qué se descartaban, y escribirlo por mecanismo y no por cifra: «esta herramienta cuenta esto de esta manera» envejece bien, mientras que apuntar la puntuación de aquel día obliga a discutirlo otra vez dentro de un mes con otra puntuación distinta."
         }
       ],
-      "liveStat": {
-        "label": "Integración continua · dato en vivo",
-        "source": ".github/workflows/ci.yml",
-        "value": "Quince pasos en cada PR",
-        "linkLabel": "Ver el flujo de CI",
-        "href": "github"
-      },
       "enlace": {
         "label": "ENLACE ·",
         "parts": [
@@ -805,7 +851,6 @@
           "type": "quote",
           "style": "pullquote",
           "side": "right",
-          "label": "La frase del artículo",
           "text": "Una regla que hay que recordar es una regla que se incumple."
         },
         {
@@ -857,7 +902,7 @@
       },
       {
         "type": "p",
-        "text": "La medición entra con consentimiento y no antes: sin aceptar no se carga nada, ni el gestor de etiquetas, ni la analítica, ni el mapa de calor. Y la política de cookies no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia."
+        "text": "La medición entra con consentimiento y no antes: sin aceptar no se carga nada, ni el gestor de etiquetas, ni la analítica, ni el mapa de calor. Y la [política de cookies](/cookies) no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia."
       },
       {
         "type": "p",

@@ -19,11 +19,15 @@ function countWords(text: string): number {
   return stripped.split(/\s+/).length;
 }
 
-/** Un bloque de cuerpo de sección: párrafo, subtítulo, lista o cita. Mismo
- * tipo que consume `ArticleProse` (ver `components/ui/article.tsx`). La cita
- * vive DENTRO del cuerpo —no como campo aparte— para que flote en su sitio
- * exacto del párrafo y el texto de alrededor la rodee (feedback de diseño de
- * P60: una cita aparte del flujo no se integraba con el texto). */
+/** Un bloque de cuerpo de sección: párrafo, subtítulo, lista, cita o diagrama.
+ * Mismo tipo que consume `ArticleProse` (ver `components/ui/article.tsx`). La
+ * cita y el diagrama viven DENTRO del cuerpo —no como campo aparte— para que
+ * floten en su sitio exacto del párrafo y el texto de alrededor los rodee
+ * (feedback de diseño de P60, tanda 2: una cita o un diagrama aparte del flujo,
+ * siempre al final de la sección, no se integraba con el texto al que
+ * pertenecía). El `id` del diagrama resuelve contra el registro site-specific
+ * que pasa el llamador a `ArticleProse` — el bloque no sabe dibujar nada, solo
+ * dónde debe aparecer el dibujo. */
 export type ArticleBlock =
   | { type: "p"; text: string }
   | { type: "h3"; text: string }
@@ -34,6 +38,16 @@ export type ArticleBlock =
       style: "pullquote" | "pull";
       label?: string;
       side?: "left" | "right";
+    }
+  | { type: "diagram"; id: string; caption: string; side?: "left" | "right" }
+  | {
+      type: "livestat";
+      id: string;
+      label: string;
+      source: string;
+      value: string;
+      linkLabel: string;
+      href: string;
     };
 
 function wordsOfBlocks(blocks: ArticleBlock[]): number {
@@ -42,6 +56,8 @@ function wordsOfBlocks(blocks: ArticleBlock[]): number {
       return sum + block.items.reduce((s, item) => s + countWords(item), 0);
     }
     if (block.type === "quote") return sum; // ya contada como parte del párrafo que cita
+    if (block.type === "diagram") return sum + countWords(block.caption);
+    if (block.type === "livestat") return sum; // dato, no prosa
     return sum + countWords(block.text);
   }, 0);
 }

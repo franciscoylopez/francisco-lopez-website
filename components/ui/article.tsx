@@ -1,5 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
-import type { ReactNode } from "react";
+import type { ComponentType, ReactNode } from "react";
 
 import { GITHUB_URL } from "@/lib/contact";
 import type { ArticleBlock } from "@/lib/reading-time";
@@ -64,16 +64,22 @@ export type IndexItem = {
  * servidor: no hace falta JS para verlo ni para saltar). Rejilla continua —
  * el ordinal grande sobre la etiqueta, sin caja propia por celda, con
  * hairlines de división y una pastilla de hover que ocupa la celda entera
- * (P60, feedback de diseño: «variante C»). */
+ * (P60, feedback de diseño: «variante C»). `intro` es un slot opcional entre
+ * el eyebrow y la rejilla — el recuento de palabras/secciones y la nota de
+ * lectura vivían ANTES del eyebrow «ÍNDICE» (dos elementos con la misma
+ * función, uno encima del otro, feedback de P60 tanda 2); aquí quedan bajo su
+ * propio rótulo. */
 export function ArticleIndex({
   kicker,
   timeLabel,
   ariaLabel,
+  intro,
   items,
 }: {
   kicker: string;
   timeLabel: string;
   ariaLabel: string;
+  intro?: ReactNode;
   items: IndexItem[];
 }) {
   return (
@@ -84,7 +90,8 @@ export function ArticleIndex({
           {timeLabel}
         </span>
       </div>
-      <ol className="border-border m-0 grid list-none grid-cols-1 border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
+      {intro ? <div className="px-1 pt-4 pb-1">{intro}</div> : null}
+      <ol className="border-border m-0 mt-3 grid list-none grid-cols-1 border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <li key={item.id} className="border-border border-r border-b">
             <a
@@ -110,21 +117,25 @@ export function ArticleIndex({
 
 /* ───────────────────────── SectionCover ───────────────────────── */
 
-/** La portada de una sección: una línea de meta («Capítulo 08 de 11 · 4 min
- * de lectura») + kicker + `h2` a la izquierda, y el ordinal ilustrado
- * (decorativo, `aria-hidden`) a la DERECHA — feedback de diseño de P60: en el
- * layout anterior el numeral grande y el ordinal del kicker quedaban pegados.
+/** La portada de una sección: kicker + `h2` a la izquierda, y a la DERECHA el
+ * ordinal ilustrado con la línea de meta («Capítulo 08 de 11 · 4 min de
+ * lectura») debajo — feedback de diseño de P60 tanda 2: con la meta-línea
+ * pegada a la cabecera y el numeral grande al otro lado, la apertura de
+ * sección apelotonaba tres piezas de información en el mismo golpe de vista.
+ * La meta-línea se duplica con visibilidad responsive (una copia junto al
+ * kicker en móvil, donde el numeral se oculta; otra bajo el numeral desde
+ * `sm:`) en vez de reordenarla con flex, para no perder la información en
+ * pantallas pequeñas.
  *
  * El ordinal ya está dicho en texto accesible por el kicker, pero eso no
  * exime al numeral grande de WCAG 1.4.3: `aria-hidden` lo saca del árbol de
- * accesibilidad, no de la vista, y alguien con baja visión SÍ lo lee.
- * `brand-purple-soft` daba 1,63:1 en claro y prácticamente 0 en oscuro
- * (viewport-verifier, P60) — ni el umbral de texto grande (3:1). Un morado que
- * SÍ llegara ahí no existe sin inventar un token nuevo (BRAND.md §El morado
- * como gráfico: el decorativo no pasa 3:1 en claro), así que el numeral usa
- * `text-muted-foreground` con un marco (`border-muted-foreground`) — evoca el
- * numeral con contorno del prototipo de P59 sin depender de un color que no
- * pasa el umbral. */
+ * accesibilidad, no de la vista, y alguien con baja visión SÍ lo lee. Antes
+ * era `text-muted-foreground` porque ningún morado pasaba 3:1 sobre
+ * `--background` en claro (BRAND.md §El morado como gráfico) — pero el
+ * numeral vive directamente sobre `--background`, la misma superficie para la
+ * que ya existe `--progress-ink` (calibrado 0.45 claro / 0.78 oscuro contra
+ * ELLA, no contra una media de dos fondos). Reutilizarlo aquí generaliza su
+ * alcance más allá de la barra de lectura — BRAND.md actualizado. */
 export function SectionCover({
   ordinal,
   kicker,
@@ -141,12 +152,15 @@ export function SectionCover({
    * en build — D60). */
   metaLine: string;
 }) {
+  const metaLineText = (
+    <p className="text-muted-foreground m-0 font-mono text-[0.7rem] tracking-[0.06em] uppercase">
+      {metaLine}
+    </p>
+  );
   return (
     <div className="mb-[clamp(2rem,4vw,3rem)] flex items-start justify-between gap-[clamp(1.5rem,4vw,3rem)]">
       <header className="min-w-0">
-        <p className="text-muted-foreground m-0 mb-2 font-mono text-[0.7rem] tracking-[0.06em] uppercase">
-          {metaLine}
-        </p>
+        <div className="mb-2 sm:hidden">{metaLineText}</div>
         <p className={cn(eyebrowVariants(), "mb-3")}>{kicker}</p>
         <h2
           id={id}
@@ -155,25 +169,60 @@ export function SectionCover({
           {title}
         </h2>
       </header>
-      <span
-        aria-hidden="true"
-        className="text-muted-foreground border-muted-foreground/30 font-display hidden shrink-0 rounded-2xl border text-[clamp(2.5rem,5vw,4rem)] leading-none font-semibold sm:block"
-        style={{ padding: "0.5em 0.65em" }}
-      >
-        {ordinal}
-      </span>
+      <div className="hidden shrink-0 flex-col items-end gap-2 sm:flex">
+        <span
+          aria-hidden="true"
+          className="text-progress-ink border-progress-ink/30 font-display rounded-2xl border text-[clamp(2.5rem,5vw,4rem)] leading-none font-semibold"
+          style={{ padding: "0.5em 0.65em" }}
+        >
+          {ordinal}
+        </span>
+        <div className="text-right">{metaLineText}</div>
+      </div>
     </div>
   );
 }
 
 /* ───────────────────────── Prosa ───────────────────────── */
 
-/** El cuerpo de una sección: párrafos, `h3` de subapartado y listas, con
- * énfasis inline vía `Rich` (D23). Es el mismo tipo `ArticleBlock` que cuenta
- * `lib/reading-time.ts`, así que el diccionario no se recompone en dos sitios. */
-export function ArticleProse({ blocks }: { blocks: ArticleBlock[] }) {
+/** El cuerpo de una sección: párrafos, `h3` de subapartado, listas, citas y
+ * diagramas, con énfasis inline vía `Rich` (D23). Es el mismo tipo
+ * `ArticleBlock` que cuenta `lib/reading-time.ts`, así que el diccionario no
+ * se recompone en dos sitios. */
+export function ArticleProse({
+  blocks,
+  diagrams,
+  resolveLiveStatHref,
+  liveStatExtras,
+}: {
+  blocks: ArticleBlock[];
+  /** Registro site-specific id→componente de los diagramas citados en
+   * `blocks` (`type: "diagram"`). Vive en el llamador (`como-se-ha-creado.tsx`,
+   * frontera de D36): esta pieza no sabe dibujar nada, solo resolverlo y
+   * flotarlo en el punto exacto del cuerpo donde el diccionario lo ancló. */
+  diagrams?: Record<string, ComponentType>;
+  /** El `href` de un `{ type: "livestat" }` es un slug relativo
+   * («design-system») o el literal «github»; resolverlo a una URL de verdad
+   * depende del locale y de `GITHUB_URL`, que son cosas del sitio, no de esta
+   * pieza (D36) — el llamador decide cómo. */
+  resolveLiveStatHref?: (href: string) => string;
+  /** Registro site-specific id→ejemplo real (P60 tanda 2, punto 17): el
+   * `LiveStat` de una sección puede mostrar una pieza real del sitio, no solo
+   * el dato en texto. */
+  liveStatExtras?: Record<string, ReactNode>;
+}) {
   return (
-    <div className="max-w-[var(--prose-w,78rem)] space-y-[1.15rem]">
+    // `flow-root`: crea un contexto de bloque que CONTIENE los floats propios
+    // de `Pullquote`/`Pull`/`DiagramPanel`. Sin esto, una cita o un diagrama
+    // flotado cerca del final de la prosa se colaba visualmente sobre
+    // `RepoStrip`/`ChapterNav` —hermanos fuera de este contenedor, en normal
+    // flow— en vez de quedar contenido dentro de su propia sección (feedback
+    // de P60 tanda 2, punto 12: «eso no tiene sentido, nunca debería ocurrir»).
+    // El espaciado entre bloques sube de 1.15rem a 1.75rem por la misma tanda
+    // (punto 7): a 1.15rem el salto de párrafo a lista apenas se distinguía
+    // del propio interlineado (1.7) del párrafo — el aire se gana ENTRE
+    // bloques, nunca recortando el interlineado, que es legibilidad.
+    <div className="flow-root max-w-[var(--prose-w,78rem)] space-y-[1.75rem]">
       {blocks.map((block, i) => {
         if (block.type === "h3") {
           return (
@@ -212,13 +261,35 @@ export function ArticleProse({ blocks }: { blocks: ArticleBlock[] }) {
         }
         if (block.type === "quote") {
           return block.style === "pullquote" ? (
-            <Pullquote key={i} label={block.label ?? ""} side={block.side}>
+            <Pullquote key={i} side={block.side}>
               {block.text}
             </Pullquote>
           ) : (
             <Pull key={i} side={block.side}>
               {block.text}
             </Pull>
+          );
+        }
+        if (block.type === "diagram") {
+          const Diagram = diagrams?.[block.id];
+          if (!Diagram) return null;
+          return (
+            <DiagramPanel key={i} caption={block.caption} side={block.side}>
+              <Diagram />
+            </DiagramPanel>
+          );
+        }
+        if (block.type === "livestat") {
+          return (
+            <LiveStat
+              key={i}
+              label={block.label}
+              source={block.source}
+              value={block.value}
+              linkLabel={block.linkLabel}
+              href={resolveLiveStatHref?.(block.href) ?? block.href}
+              example={liveStatExtras?.[block.id]}
+            />
           );
         }
         return (
@@ -238,19 +309,20 @@ export function ArticleProse({ blocks }: { blocks: ArticleBlock[] }) {
  * bloque que interrumpe la columna entera (feedback de diseño de P60). Marcas
  * de esquina en morado: el único uso "gráfico" del morado que no necesita 3:1
  * porque no transporta información, es ornamento sobre un texto que ya se lee
- * solo. */
+ * solo. Sin rótulo «LA FRASE DE LA SECCIÓN» (P60 tanda 2, punto 8): era un
+ * marcador de autoría de las seis apariciones, literalmente el mismo texto
+ * las seis veces, no copy para quien lee. */
 export function Pullquote({
-  label,
   side = "right",
   children,
 }: {
-  label: string;
   side?: "left" | "right";
   children: ReactNode;
 }) {
   return (
     <aside
       role="note"
+      data-reveal
       className={cn(
         "border-brand-purple/40 relative my-2 w-full max-w-[19rem] border-t-2 border-b-2 py-5 pl-[1.25rem] sm:w-[45%]",
         side === "right" ? "sm:float-right sm:ml-8" : "sm:float-left sm:mr-8",
@@ -260,7 +332,6 @@ export function Pullquote({
         aria-hidden="true"
         className="bg-brand-purple absolute top-0 bottom-0 left-0 w-[2px]"
       />
-      <p className={cn(eyebrowVariants(), "mb-2 text-[0.7rem]")}>{label}</p>
       <blockquote className="font-display text-foreground m-0 text-[1.15rem] leading-[1.3] font-semibold text-balance">
         {children}
       </blockquote>
@@ -280,6 +351,7 @@ export function Pull({
 }) {
   return (
     <blockquote
+      data-reveal
       className={cn(
         "border-brand-purple-soft text-foreground my-2 w-full max-w-[17rem] border-l-2 pl-4 text-[1rem] leading-[1.45] font-medium sm:w-[38%]",
         side === "right" ? "sm:float-right sm:ml-8" : "sm:float-left sm:mr-8",
@@ -293,19 +365,27 @@ export function Pull({
 /* ───────────────────────── LiveStat ───────────────────────── */
 
 /** La regleta de un dato en vivo: no se escribe la cifra en el diccionario
- * (D60), se enlaza a la página que la publica de verdad. */
+ * (D60), se enlaza a la página que la publica de verdad. `example` es un slot
+ * opcional para mostrar la pieza real en vez de solo describirla en texto
+ * (P60 tanda 2, punto 17): el llamador pasa componentes reales importados de
+ * `components/ui/` —el mismo artefacto que renderiza el sitio, no una
+ * recreación— sobre una franja propia, con su propia superficie declarada
+ * (`data-surface="card"`, D30/D39) para que el atenuado de dentro se
+ * recalcule contra ELLA. */
 export function LiveStat({
   label,
   source,
   value,
   linkLabel,
   href,
+  example,
 }: {
   label: string;
   source: string;
   value: string;
   linkLabel: string;
   href: string;
+  example?: ReactNode;
 }) {
   return (
     <aside className="border-border bg-card my-[2rem] max-w-[34rem] rounded-lg border">
@@ -328,6 +408,14 @@ export function LiveStat({
           {linkLabel}
         </a>
       </div>
+      {example ? (
+        <div
+          data-surface="card"
+          className="border-border flex flex-wrap items-center gap-2 border-t px-5 py-4"
+        >
+          {example}
+        </div>
+      ) : null}
     </aside>
   );
 }
@@ -346,13 +434,26 @@ export type RepoStripPart =
 /** La franja «ENLACE ·» que cierra cada sección: cada afirmación apunta al
  * código que la sostiene (regla transversal del artículo), y CADA elemento
  * citado —cada decisión, cada archivo— es su propio enlace, no uno solo que
- * cubra la frase entera. */
+ * cubra la frase entera.
+ *
+ * `tone: "chrome"` por defecto, en TODAS sus apariciones (P60 tanda 3, punto
+ * 5): la franja no vive nunca en medio de un párrafo, siempre ocupa la MISMA
+ * posición, justo encima de `ChapterNav` (o de `ContactActions` en el
+ * cierre) — es chrome de pie de sección, no contenido. La primera versión
+ * (D76/P60 tanda 2) le daba tono de contenido en las diez secciones normales
+ * y solo chrome en el cierre, así que dentro de un mismo pie convivían dos
+ * estilos de enlace distintos («ENLACE ·» subrayado, «Índice · Siguiente»
+ * en pastilla) — la inconsistencia que este cambio unifica. `tone: "content"`
+ * se queda disponible por si algún día la franja SÍ cae en medio de un
+ * párrafo, caso que hoy no existe. */
 export function RepoStrip({
   label,
   parts,
+  tone = "chrome",
 }: {
   label: string;
   parts: RepoStripPart[];
+  tone?: "content" | "chrome";
 }) {
   return (
     <footer className="border-border mt-[2.5rem] flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t pt-5 text-[0.92rem]">
@@ -362,6 +463,8 @@ export function RepoStrip({
       <p className="m-0">
         {parts.map((part, i) => {
           if (typeof part === "string") return <span key={i}>{part}</span>;
+          // Las dos formas de `part` resuelven a un destino fuera del sitio
+          // (github.com, o una URL externa citada) — siempre `target="_blank"`.
           const href =
             "external" in part
               ? part.external
@@ -372,7 +475,11 @@ export function RepoStrip({
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="link-content link-content--underline"
+              className={
+                tone === "chrome"
+                  ? chromeLinkVariants({ shape: "inline", tone: "muted" })
+                  : "link-content link-content--underline"
+              }
             >
               {part.label}
             </a>
@@ -405,7 +512,8 @@ export function ChapterNav({
   total: number;
   indexLabel: string;
   indexHref: string;
-  nextLabel: string;
+  /** Sin `nextHref` (el cierre, que no tiene «siguiente»), no se lee. */
+  nextLabel?: string;
   nextHref?: string;
   positionLabel: string;
 }) {
@@ -461,21 +569,46 @@ export function ChapterNav({
 
 /** El marco de un diagrama propio: SVG inline con tokens (D54) + pie. El
  * dibujo lo aporta el llamador —es site-specific, vive en
- * `components/site/como-se-ha-creado-diagrams.tsx`—, esto solo pone la caja. */
+ * `components/site/como-se-ha-creado-diagrams.tsx`—, esto solo pone la caja.
+ *
+ * Con `side`, flota junto al párrafo al que pertenece (mismo mecanismo que
+ * `Pullquote`) en vez de vivir suelto al final de toda la prosa de la sección
+ * — el diagrama de «Qué decidieron esas dos velocidades» aparecía después de
+ * los cuatro bloques siguientes en vez de al lado del texto que lo explica
+ * (P60 tanda 2, puntos 10 y 20). Sin `side` (el espécimen de Design System),
+ * se queda centrado a ancho de media columna, como antes. */
 export function DiagramPanel({
   children,
   caption,
+  side,
 }: {
   children: ReactNode;
   caption: ReactNode;
+  side?: "left" | "right";
 }) {
   return (
-    // Ancho de media columna, no el del artículo: los diagramas se dibujan a
-    // un tamaño legible (400-700px de viewBox) y dentro de una caja de
-    // 1.248px dejaban la mitad en blanco a cada lado (feedback de diseño de
-    // P60). El mismo ancho que las listas — `--measure` — mantiene la
-    // columna de lectura coherente.
-    <figure className="border-border bg-card my-[2rem] max-w-[var(--measure)] overflow-hidden rounded-xl border">
+    // Ancho de media columna cuando no flota: los diagramas se dibujan a un
+    // tamaño legible (400-700px de viewBox) y dentro de una caja de 1.248px
+    // dejaban la mitad en blanco a cada lado (feedback de diseño de P60). El
+    // mismo ancho máximo que las listas — `--measure` — mantiene la columna
+    // de lectura coherente. Flotado, al 50% real del contenedor (P60 tanda
+    // 3, punto 3): el primer intento capaba a `max-w-[24rem]` (384px) sobre
+    // el 54% pedido, así que en cualquier viewport de escritorio ganaba
+    // siempre el tope fijo y el diagrama se veía diminuto, casi ilegible.
+    <figure
+      data-reveal
+      className={cn(
+        "border-border bg-card my-[1.5rem] overflow-hidden rounded-xl border",
+        side
+          ? cn(
+              "w-full sm:w-1/2",
+              side === "right"
+                ? "sm:float-right sm:ml-8"
+                : "sm:float-left sm:mr-8",
+            )
+          : "max-w-[var(--measure)]",
+      )}
+    >
       <div className="flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
         {children}
       </div>
