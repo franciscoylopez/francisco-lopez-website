@@ -41,6 +41,19 @@ export type ArticleBlock =
     }
   | { type: "diagram"; id: string; caption: string; side?: "left" | "right" }
   | {
+      /** El artefacto real de un tercero (D54: se enseña, no se recrea) —a
+       * diferencia de `diagram`, que dibuja un SVG propio con tokens, este
+       * bloque es una captura tal cual, con su propio `width`/`height` para
+       * que `next/image` reserve el hueco sin layout shift. */
+      type: "image";
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      caption: string;
+      side?: "left" | "right";
+    }
+  | {
       type: "livestat";
       id: string;
       label: string;
@@ -57,6 +70,7 @@ function wordsOfBlocks(blocks: ArticleBlock[]): number {
     }
     if (block.type === "quote") return sum; // ya contada como parte del párrafo que cita
     if (block.type === "diagram") return sum + countWords(block.caption);
+    if (block.type === "image") return sum + countWords(block.caption);
     if (block.type === "livestat") return sum; // dato, no prosa
     return sum + countWords(block.text);
   }, 0);

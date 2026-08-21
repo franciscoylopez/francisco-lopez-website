@@ -579,6 +579,14 @@
           "text": "Aquí hay una respuesta cómoda y una verdadera. La cómoda es que casi no hay. La verdadera es que uso [Qlty](https://qlty.sh), un analizador externo, y este fue quien me dijo que sí la había, y al mirar de cerca resultó que los cinco archivos peor puntuados no eran código de la web: eran el censo de contraste, dos registros de contenido y dos guardianes. De ahí salen dos lecturas que son ciertas a la vez:"
         },
         {
+          "type": "image",
+          "src": "/img/como-se-ha-creado-qlty-deuda.webp",
+          "alt": "Captura del informe de Qlty: nota A en mantenibilidad (29 code smells) y nota A en seguridad (sin incidencias abiertas). El gráfico muestra el ratio de deuda técnica y el tiempo de remediación entre el 22 de julio y el 19 de agosto de 2026, con una subida el 3 de agosto y un pico el 19 de agosto. Cifras finales: 2,49% de ratio de deuda técnica, 1 semana de tiempo de remediación, 2,0% de duplicación y una complejidad de 84 por cada mil líneas de código.",
+          "width": 935,
+          "height": 748,
+          "caption": "El informe de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con el repunte del ratio de deuda técnica que señaló los cinco archivos peor puntuados."
+        },
+        {
           "type": "ul",
           "items": [
             "**Qlty señalaba con puntería el punto ciego real**, porque su peor archivo era justo el que se había roto dos veces en silencio. Eso no se silencia: se arregla.",

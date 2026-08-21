@@ -1,4 +1,5 @@
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import type { ComponentType, ReactNode } from "react";
 
 import { GITHUB_URL } from "@/lib/contact";
@@ -304,6 +305,24 @@ export function ArticleProse({
           return (
             <DiagramPanel key={i} caption={block.caption} side={block.side}>
               <Diagram />
+            </DiagramPanel>
+          );
+        }
+        if (block.type === "image") {
+          // El artefacto REAL de un tercero (D54), no una recreación con
+          // tokens: mismo marco que `DiagramPanel` —misma caja, mismo
+          // pie—, pero dentro va la captura tal cual, con su ancho y alto
+          // reales para que `next/image` le reserve el hueco sin salto de
+          // layout.
+          return (
+            <DiagramPanel key={i} caption={block.caption} side={block.side}>
+              <Image
+                src={block.src}
+                alt={block.alt}
+                width={block.width}
+                height={block.height}
+                className="h-auto w-full rounded-md"
+              />
             </DiagramPanel>
           );
         }
