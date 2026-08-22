@@ -4739,3 +4739,51 @@ lo buscaba.
 **Lo que queda abierto.** El CLI cierra la lectura para quien tenga el repo delante, no para el PR:
 el detalle sigue sin llegar a GitHub. Si algún día molesta, la salida es que la App de qlty comente
 en el PR, no volver a mirar el panel.
+
+## D87 · Google no cruza de página, y por eso una referencia `@id` no basta en un tipo elegible — 2026-08-22
+
+**El síntoma.** La Rich Results Test sobre «Cómo se ha creado esta página», en producción y en los
+dos idiomas: **sin errores** —la elegibilidad nunca estuvo en riesgo— y **siete avisos**. Salían de
+tres huecos, los tres en `techArticleLd`, y el primero es el que enseña algo.
+
+**Uno · `author` llegaba como un `Thing` anónimo.** El JSON-LD referencia al `Person` por `@id` en
+vez de repetirlo, que es lo correcto y lo que permite a Google unir las trece páginas en una sola
+entidad (D14). Pero **la RRT evalúa una página aislada**: ve un identificador que esa página no
+declara, no va a buscarlo a la home y lo degrada.
+
+Lo interesante es que **`npm run check:marco` daba verde sobre exactamente lo mismo**, y no está
+mal: resuelve los `@id` **contra todo el sitio**, que es la única comprobación de este repo que
+ningún validador externo hace (D75). Los dos metros son correctos y miden cosas distintas. Es el
+patrón de D84 y D86 otra vez, y ya van tres: **un verificador propio y uno externo con modelos
+distintos, y la afirmación publicada apoyada solo en el nuestro.** La lección no es desconfiar del
+propio, es saber de qué no habla.
+
+**La salida no es repetir el `Person`.** Esa copia se evitó a propósito y el argumento sigue en pie:
+sería la sexta de los mismos datos en un sitio que acaba de retirar tres (D57/D58). Se le dan a
+`author` los dos campos que Google necesita para pintarlo —`name` y `url`, con `@type: Person`—
+**junto** al `@id`, que sigue haciendo su trabajo. Dos campos, no una entidad.
+
+Y solo ahí: `experiencePageLd` usa la misma referencia pelada y **se queda como está**, porque
+`WebPage` no es elegible para rich results y allí no cuesta nada.
+
+**Dos · las fechas eran cuatro avisos y un solo hueco.** Google avisa **dos veces por fecha**
+—«el valor de fecha y hora no es válido» y «falta la zona horaria»— cuando le llega solo el día.
+La hora **se compone al emitir el JSON-LD y no se guarda** en `lib/design-values.ts`: la misma
+constante alimenta el copy que lee una persona, formateado con `Intl`, y ahí una hora inventada se
+vería. Y **el desfase se deriva de `Europe/Madrid`, no se escribe**: `+02:00` es correcto en agosto
+y falso en enero, así que un literal habría dejado la primera fecha de invierno mal por una hora sin
+que nadie lo mirara. Comprobado en las dos estaciones.
+
+**Tres · faltaba `image`**, que es la miniatura del resultado. Es la tarjeta OG que la página ya
+genera, no un asset nuevo — y al extraerla a `ogImagePath` deja de estar escrita dos veces, una en
+la metadata y otra aquí (D66).
+
+**Resultado, medido contra producción tras el merge:** ES y EN, dos elementos válidos cada una y
+**cero avisos**. En Preview no se puede comprobar —sirve `noindex` y la RRT respeta robots—, y la
+RRT pide sesión de Google, así que se conduce con `claude-in-chrome` y no con `agent-browser`. Es
+justo el caso para el que `claude-in-chrome` no se retiró.
+
+**Lo que queda abierto.** `check:marco` no distingue un tipo elegible para rich results de uno que
+no lo es, así que no puede avisar de que una referencia que cruza de página va a degradarse. Hoy no
+hay caso vivo. Está tareado, **sin prejuzgar la forma**: puede que lo correcto no sea un guardián
+más sino la regla escrita donde ya está el porqué, en `lib/structured-data.ts`.
