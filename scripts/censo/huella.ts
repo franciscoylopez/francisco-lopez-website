@@ -67,6 +67,18 @@ function bloque(css: string, selector: string): string {
   return end === -1 ? "" : css.slice(open + 1, end);
 }
 
+/**
+ * Fuera los comentarios antes de buscar. **Un `data-surface` citado en una
+ * explicación no es una superficie**, y tres de los ocho sitios donde aparece el
+ * atributo en este repo son prosa (`breadcrumb.tsx`, `article.tsx`, `chrome.tsx`).
+ * Hoy no cambiarían el hash —son las mismas familias y entran en un `Set`—, pero
+ * un comentario que mencionara una familia nueva pediría un censo que no hace
+ * falta, y **un guardián que da falsas alarmas es un guardián que se ignora**.
+ * Mismo criterio, y misma implementación, que el barrido de copias de token.
+ */
+const sinComentarios = (src: string) =>
+  src.replace(/\/\*[\s\S]*?\*\//g, "").replace(/\/\/[^\n]*/g, "");
+
 /** Todos los archivos de código bajo las raíces, recursivamente. */
 function fuentes(): string[] {
   const salida: string[] = [];
@@ -101,7 +113,7 @@ export function entradaDelCenso(): Entrada {
   const superficies = new Set<string>();
   // Las familias que declara el código…
   for (const archivo of fuentes()) {
-    const texto = readFileSync(archivo, "utf8");
+    const texto = sinComentarios(readFileSync(archivo, "utf8"));
     for (const m of texto.matchAll(/data-surface=["'{]?\s*["']?([\w-]+)/g)) {
       if (m[1]) superficies.add(`familia ${m[1]}`);
     }
@@ -135,6 +147,15 @@ export function huella(e: Entrada = entradaDelCenso()): string {
   return h.digest("hex");
 }
 
+/** Lo que se publica de una entrada, en una línea. Lo escribe el sello y lo
+ *  imprime el check, así que sale de un solo sitio. */
+function resumenDe(e: Entrada): string {
+  return (
+    `${e.tokens.length} tokens de color · ${e.superficies.length} superficies · ` +
+    `${e.animaciones.length} animaciones`
+  );
+}
+
 export type Sello = { hash: string; fecha: string; resumen: string };
 
 export function leerSello(): Sello | undefined {
@@ -150,17 +171,57 @@ export function leerSello(): Sello | undefined {
 /** Sella la pasada. Lo llama `npm run censo` SOLO si ha terminado en verde. */
 export function sellar(fecha: string): Sello {
   const e = entradaDelCenso();
-  const sello: Sello = {
-    hash: huella(e),
-    fecha,
-    resumen:
-      `${e.tokens.length} tokens de color · ${e.superficies.length} superficies · ` +
-      `${e.animaciones.length} animaciones`,
-  };
+  const sello: Sello = { hash: huella(e), fecha, resumen: resumenDe(e) };
   writeFileSync(
     HUELLA_PATH,
     `${sello.hash}\n${sello.fecha}\n${sello.resumen}\n`,
     "utf8",
   );
   return sello;
+}
+
+/** El veredicto sobre el sello: qué falta por medir y cuánto se ha mirado. */
+export type Veredicto = {
+  problemas: string[];
+  /** Señales indexadas. Es la guarda de cero: con cero, esto aprobaría siempre. */
+  senales: number;
+  /** Lo que hay HOY, en una línea. */
+  resumen: string;
+  /** La fecha del sello vigente, si lo hay. */
+  fecha?: string;
+};
+
+/**
+ * ¿Ha aparecido algo que el censo no ha visto? Vive aquí, con los datos que
+ * mira, y no en el check que lo llama: `check:palette` solo tiene que decidir
+ * qué hacer con el veredicto.
+ */
+export function revisaSello(): Veredicto {
+  const e = entradaDelCenso();
+  const sello = leerSello();
+  const problemas: string[] = [];
+
+  if (!sello) {
+    problemas.push(
+      `censo: no hay sello en ${HUELLA_PATH}. Córrelo una vez ` +
+        "(`npm run build && npm start`, y en otra terminal `npm run censo`).",
+    );
+  } else if (sello.hash !== huella(e)) {
+    problemas.push(
+      "censo: la paleta o las superficies han cambiado desde la última pasada\n" +
+        `    (sellada el ${sello.fecha} sobre ${sello.resumen}).\n` +
+        `    Hoy hay ${resumenDe(e)}.\n` +
+        "    Es la condición de re-medir de la DoD, y ya no hay que acordarse de\n" +
+        "    leerla: pasa el censo (`npm run build && npm start`, y en otra terminal\n" +
+        "    `npm run censo`), que vuelve a sellar. Si la pasada es la buena,\n" +
+        "    actualiza también LAST_A11Y_REVIEW en lib/design-values.ts.",
+    );
+  }
+
+  return {
+    problemas,
+    senales: e.tokens.length + e.superficies.length + e.animaciones.length,
+    resumen: resumenDe(e),
+    fecha: sello?.fecha,
+  };
 }
