@@ -97,19 +97,20 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 
 ## Que no se rompa
 
-Quince pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
+Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
 
 | Paso | Qué impide |
 | :-- | :-- |
 | `format:check` · `typecheck` · `lint` | Lo de siempre. Nada que no compile entra en `main` |
-| `check:palette` | Que quede **ninguna** copia de un valor de token fuera de su fuente. Busca valores, no patrones (`D38`) |
+| `check:palette` | Dos cosas: que quede **ninguna** copia de un valor de token fuera de su fuente —busca valores, no patrones (`D38`)— y que no haya aparecido ningún color, superficie o animación que el censo de contraste no haya visto. Medir necesita navegador; comprobar si hay que medir, no (`D90`) |
 | `check:experiencias` | Que las tres longitudes de una experiencia se descuadren: misma cobertura en ES y EN, y ninguna cifra en una y no en la otra (`D57`) |
 | `check:cv` | Que los PDFs commiteados se queden viejos. Sella la **huella de las entradas**, no bytes: el PDF no es determinista (`D60`) |
 | `check:raya` | Que vuelva la raya (`—`) al copy servido, con sus dos excepciones (`D63`) |
 | `check:artefacto` | Que el SVG commiteado se quede viejo. Sella el **par fuente→producto**, que es más fuerte que sellar entradas: aquí sí se pudo, porque el artefacto **es** determinista (`D70`) |
 | `check:contexto` | Que el contexto de arranque crezca sin techo. D28 escribió el régimen y no le puso cifra: creció un 113% en diez días (`D69`) |
 | `check:skills` | Que una skill nombre archivos o comandos que ya no existen. Se **siguen** en vez de leerse, así que su drift se ejecuta (`D60`) |
-| `check:indices` | Que un índice deje de ser el derivado de sus cabeceras. Los tres se generan con `npm run indices` (`D69`) |
+| `check:indices` | Que un índice deje de ser el derivado de sus fuentes. Son cuatro y se generan con `npm run indices` (`D69`); el cuarto indexa una carpeta —`components/ui/`— y además comprueba que cada pieza salga de verdad en la sección que dice publicarla (`D89`) |
+| `check:articulo` | Que «Cómo se ha creado esta página» describa un proyecto que ya se ha movido. Cada sección declara de qué depende y lleva su sello: cuando una fuente cambia, CI sale rojo **nombrando la sección** (`D84`) |
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
 | `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
