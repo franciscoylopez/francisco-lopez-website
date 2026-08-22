@@ -4689,3 +4689,53 @@ veinticuatro.
 interacción —pestañas sin abrir, diálogos sin invocar— no está en el DOM cuando el censo mira. Y
 el censo mide **colores**, que no dependen del ancho; el pliegue y el objetivo táctil siguen
 siendo de `viewport-verifier` (D52).
+
+## D86 · El informe de qlty baja al repo, y de sus hallazgos dos eran míos — 2026-08-22
+
+**El hueco.** `qlty check` aparece en el PR como **commit status**, no como check run, así que su
+salida no está en la API de GitHub: solo el texto «N blocking issues» y un enlace que pide login.
+Sin comentario de PR ni anotaciones. Se podía ver **el número y no la causa** — y el número subió
+6 → 7 → 9 en tres tandas, todas de código propio.
+
+Es la misma crítica que ya está escrita en la cabecera de `.qlty/qlty.toml`: la configuración
+*«vivía únicamente en la web de Qlty, que es una segunda fuente de verdad fuera del control de
+versiones»*. La config se bajó al repo el 2026-08-19; el informe se quedó arriba. **Una métrica que
+no se puede leer donde se trabaja no informa: solo puntúa.**
+
+**Se instala el CLI** (`qlty.sh/install.ps1`, v0.642 en `~/.qlty/bin`). `qlty smells --upstream main`
+reproduce en local exactamente lo que cuenta el PR, y con eso el hallazgo deja de ser una cifra.
+
+**Qué había, separando lo de hoy de lo que ya venía de P60:**
+
+| Hallazgo | Origen | Qué se hizo |
+|---|---|---|
+| `articulo/huella.ts:114` — anidamiento nivel 5 | D84 | **Arreglado.** Un ternario doble dentro de dos bucles pasa a `porQueNoResuelve()`. Además se lee mejor: la frase va a informe |
+| `contrast-census.js` — `overImage` complejidad 22 | D85 | **Arreglado.** El solape y el barrido de media salen a `solapan()` y `tapaMedia()` |
+| `check-articulo.ts` — complejidad total 61 | D84 | **Se queda**, y es una decisión, no una omisión |
+| `contrast-census.js` — `contrastCensus` 110 / 26 returns | anterior | **Se queda**, ya estaba decidido |
+| og/route, diagramas ×4, `article-islands`, `article.tsx`, `check-marco` | P60 | No son de esta sesión |
+
+**Por qué `check:articulo` se queda en 61.** Sus tres hermanos miden 81 (`check:marco`), 68
+(`check:experiencias`) y 62 (`check:palette`): **61 es la forma normal de un guardián en este repo,
+y la más baja de las cuatro.** Un guardián es un script lineal de comprobaciones independientes;
+partirlo por bajar un número lo haría más difícil de leer, que es lo contrario de lo que la métrica
+persigue. Si algún día molesta, se arreglan los cuatro con el mismo criterio o ninguno.
+
+**Y `contrast-census.js` tampoco se excluye**, porque su propia config ya lo dejó dicho: *«su peor
+archivo es justo el que se ha roto dos veces en silencio. Eso NO se silencia aquí — se arregla, y lo
+cubre `npm run check:guardianes`»*. Es un cierre de 500 líneas **por necesidad**: se inyecta en la
+página y define `window.contrastCensus`, así que no puede importar nada. Partirlo rompería la razón
+por la que existe.
+
+**Tocar el medidor obliga a revalidarlo, y se hizo.** El refactor de `overImage` es mecánico, pero
+mecánico no es transparente hasta que se mide: mismos tres casos en los dos temas —el titular de
+Sobre mí sigue marcado, el diálogo de consentimiento sigue sin estarlo— y la pasada completa vuelve
+a dar **26 corridas, 380 pares, cero bajo AA y cero bajo AAA**, idéntica a la de antes.
+
+**Y lo destapó el guardián de D84**: tocar `contrast-census.js` puso la §08 en rojo, que es la
+sección del artículo que habla del censo. Primera vez que el mecanismo salta por un cambio que no
+lo buscaba.
+
+**Lo que queda abierto.** El CLI cierra la lectura para quien tenga el repo delante, no para el PR:
+el detalle sigue sin llegar a GitHub. Si algún día molesta, la salida es que la App de qlty comente
+en el PR, no volver a mirar el panel.
