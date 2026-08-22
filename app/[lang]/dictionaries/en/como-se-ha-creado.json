@@ -5,19 +5,42 @@
   },
   "crumb": "How it was built",
   "hero": {
-    "kicker": "Making-of · Updated August 2026",
+    "kicker": "The «Making of» of franciscolopez.es",
     "title": "How this page was built",
     "leadParas": [
-      "When I started thinking about this project, I knew I didn't want a CV in HTML. I wanted proof of judgment: in product, in engineering, in usability and design.",
-      "Everything I claim below is linked to the code that backs it up. The repository is public, so there's no need to, you can check it against every decision I mention."
+      "In this article you can see everything that led me to build this page: the reasoning and the process I followed to get where you are now.",
+      "A small adventure in learning and judgment, from strategy to UX, from UX to design, and from design to code."
     ],
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
+    "bylinePhotoAlt": "Portrait of Francisco López",
     "shareLabel": "Share",
     "copyLabel": "Copy link",
     "copiedLabel": "Copied",
     "copiedAnnounce": "Link copied to clipboard",
     "shareUnavailableAnnounce": "Sharing isn't available: link copied instead"
+  },
+  "opening": {
+    "kicker": "Opening",
+    "title": "Building with judgment in the age of AI",
+    "body": [
+      {
+        "type": "p",
+        "text": "When I started thinking about this project, I knew I didn't want a CV in HTML. I wanted proof of judgment: in product, in engineering, in usability and design. Something that showed how I work, the weight I give to design and user experience, and a product-builder approach that isn't about shipping vibe-coded output that works but is riddled with technical inconsistencies and security risks. Without being an engineer or a product designer, it's possible today to do genuinely meticulous work across every layer."
+      },
+      {
+        "type": "p",
+        "text": "And the most honest way to prove it is to show it. As simple as opening the workshop and showing the engine: why this page exists, how it's built, what broke along the way, and what I learned from each break."
+      },
+      {
+        "type": "p",
+        "text": "Everything I claim below is linked to the code that backs it up. The repository is public, so you don't have to take my word for it: go take a look."
+      },
+      {
+        "type": "p",
+        "text": "Let's get into it."
+      }
+    ]
   },
   "index": {
     "kicker": "Contents",
@@ -559,7 +582,7 @@
         },
         {
           "type": "p",
-          "text": "This is the part where honesty matters, because it's where almost everyone overstates. Mine bumps the analyzer's grade from A to A+, and even so it's **not a strong protection against script injection**: it still allows inline scripts to run, because the site has two that run before paint (the one that picks the theme, and the consent one). What it does do, for free and without breaking anything: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site. The strong version, the one that signs every script on every request, is written down as a pending item tied to the first feature that genuinely needs it. I'd rather have a header that tells the truth about what it protects than an A+ that sounds better than it is."
+          "text": "This is the part where honesty matters, because it's where almost everyone overstates. [Mozilla's HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) grades this a B+, 80 out of 100: it loses exactly the twenty points for content policy, and not by oversight. It's **not a strong protection against script injection**: it still allows inline scripts to run, because the site has two that run before paint (the one that picks the theme, and the consent one). What it does do, for free and without breaking anything: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site. The strong version, the one that signs every script on every request, is written down as a pending item tied to the first feature that genuinely needs it. I'd rather have a grade that tells the truth about what it protects than a higher one that sounds better than it is."
         },
         {
           "type": "p",
@@ -590,6 +613,23 @@
         {
           "type": "p",
           "text": "With a whole batch of work on a single branch, that URL accumulates the entire batch and gets reviewed as one before production gets touched a single time."
+        },
+        {
+          "type": "h3",
+          "text": "The performance number, and where to check it"
+        },
+        {
+          "type": "p",
+          "text": "The non-functional target is a minimum of 90 on PageSpeed, desktop and mobile. It isn't a frozen screenshot: you can rerun it anytime against production."
+        },
+        {
+          "type": "livestat",
+          "id": "s07",
+          "label": "Performance · PageSpeed",
+          "source": "npm run psi",
+          "value": "100 desktop · 94-96 mobile",
+          "linkLabel": "See the report",
+          "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
         { "type": "h3", "text": "The debt the analyzer actually found" },
         {
@@ -659,6 +699,10 @@
         {
           "type": "p",
           "text": "Meeting WCAG AA wasn't the goal: it's a guaranteed floor. From there I work toward AAA wherever it's achievable, in both themes, at rest and also while the cursor is hovering, which is where almost nobody measures."
+        },
+        {
+          "type": "p",
+          "text": "The European Accessibility Act doesn't apply to a personal website, only to e-commerce, banking or transport, but I do follow its technical reference standard: EN 301 549, which points back to WCAG. The full reasoning is on the [accessibility page](/en/accesibilidad)."
         },
         {
           "type": "livestat",
@@ -810,7 +854,7 @@
         },
         {
           "type": "p",
-          "text": "That's why this repository's checkers are written backward from how they're usually written. They don't look for the bad pattern: they look for the absence of the good one. They don't ask \"is there a long dash anywhere in the copy?\", they ask \"is there any text this checker isn't looking at?\" And all of them end up reporting how much they reviewed."
+          "text": "That's why this repository's checkers are written backward from how they're usually written. They don't look for the bad pattern: they look for the absence of the good one. They don't ask \"is there a low-contrast color anywhere?\", they ask \"is there any color pair this census hasn't measured?\" And all of them end up reporting how much they reviewed."
         },
         {
           "type": "diagram",

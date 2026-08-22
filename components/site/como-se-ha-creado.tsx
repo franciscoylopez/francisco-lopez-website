@@ -16,6 +16,7 @@ import {
   ShareActions,
 } from "@/components/ui/article-islands";
 import { Badge } from "@/components/ui/badge";
+import { LEADING, SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { GITHUB_URL } from "@/lib/contact";
 import type { Locale } from "@/lib/i18n/config";
@@ -24,6 +25,7 @@ import {
   sectionReadingTime,
   type ArticleBlock,
 } from "@/lib/reading-time";
+import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import {
@@ -90,10 +92,15 @@ export function ComoSeHaCreado({
     s09: () => <CIDiagram lang={lang} />,
   };
 
-  // El `href` de un `{ type: "livestat" }` es un slug relativo o el literal
-  // «github»; resolverlo depende del locale (D36, mismo patrón que `DIAGRAMS`).
-  const resolveLiveStatHref = (href: string) =>
-    href === "github" ? GITHUB_URL : `${homeHref}${href}`;
+  // El `href` de un `{ type: "livestat" }` es un slug relativo, una URL
+  // externa completa (el informe de PageSpeed Insights, s07) o el literal
+  // «github»; resolverlo depende del locale (D36, mismo patrón que
+  // `DIAGRAMS`).
+  const resolveLiveStatHref = (href: string) => {
+    if (href === "github") return GITHUB_URL;
+    if (href.startsWith("http")) return href;
+    return `${homeHref}${href}`;
+  };
 
   // Las mismas pastillas que usa el resto del sitio, no una recreación (P60
   // tanda 2, punto 17): el «ejemplo real» del apartado de badge.tsx que el
@@ -112,6 +119,19 @@ export function ComoSeHaCreado({
         </Badge>
       </>
     ),
+    s07: (
+      <>
+        <Badge tone="cyan" kind="value">
+          SEO 100
+        </Badge>
+        <Badge tone="cyan" kind="value">
+          {lang === "es" ? "Accesibilidad 100" : "Accessibility 100"}
+        </Badge>
+        <Badge tone="cyan" kind="value">
+          {lang === "es" ? "Buenas prácticas 100" : "Best practices 100"}
+        </Badge>
+      </>
+    ),
   };
 
   // El diccionario viene de JSON: `type` se infiere como `string`, no como el
@@ -122,7 +142,10 @@ export function ComoSeHaCreado({
 
   const totalWords = articleWordCount(
     t.sections.map((s) => ({ body: blocksOf(s.body) })),
-    t.hero.leadParas.map((text) => ({ type: "p" as const, text })),
+    [
+      ...t.hero.leadParas.map((text) => ({ type: "p" as const, text })),
+      ...blocksOf(t.opening.body),
+    ],
   );
   const totalSections = t.sections.length + 1; // + cierre
 
@@ -215,10 +238,10 @@ export function ComoSeHaCreado({
               {t.hero.title}
             </h1>
             <div data-reveal className="max-w-[var(--measure)] space-y-2">
-              <p className="m-0 text-[1.15rem] leading-[1.55]">
+              <p className={cn("m-0 text-[1.15rem]", LEADING.lead)}>
                 {t.hero.leadParas[0]}
               </p>
-              <p className="m-0 text-[1.05rem] leading-[1.6]">
+              <p className={cn("m-0 text-[1.05rem]", LEADING.lead)}>
                 {t.hero.leadParas[1]}
               </p>
             </div>
@@ -226,7 +249,12 @@ export function ComoSeHaCreado({
               data-reveal
               className="mt-6 flex flex-wrap items-center justify-between gap-4"
             >
-              <ByLine name={t.hero.bylineName} role={t.hero.bylineRole} />
+              <ByLine
+                name={t.hero.bylineName}
+                role={t.hero.bylineRole}
+                photoSrc="/img/francisco-como-se-ha-creado-byline-1x1.webp"
+                photoAlt={t.hero.bylinePhotoAlt}
+              />
               <ShareActions
                 shareLabel={t.hero.shareLabel}
                 copyLabel={t.hero.copyLabel}
@@ -239,6 +267,38 @@ export function ComoSeHaCreado({
           </div>
         </div>
       </div>
+
+      {/* Apertura: prosa de entrada, ANTES del índice y fuera de él —no es una
+          parada más del recorrido, no lleva ordinal ni cuenta en `indexItems`,
+          y por eso no aparece en el riel ni en `ChapterNav`. Lleva SU PROPIO
+          titular (`SectionHeader`, `level={2}`) porque el `h1` de la página ya
+          lo puso el hero — dos `h1` rompería el punto 4 del checklist, que
+          `check:marco` verifica— pero en tamaño `section` (el mismo peldaño
+          que separaba las once secciones numeradas, más grande que su
+          `section-sm`): es la única cabecera de todo el artículo que no abre
+          una parada del recorrido, y el tamaño lo dice antes que el texto.
+          Sus palabras sí entran en el recuento total: es texto real que el
+          lector se lee, aunque no sea una sección numerada.
+
+          Ancho de MEDIA COLUMNA (`--measure`, ~42rem), no el de la prosa a
+          columna completa (`--prose-w`, 78rem): a cuatro frases cortas,
+          columna entera dejaba líneas larguísimas para tan poco texto — el
+          mismo motivo por el que las listas de `ArticleProse` ya usan
+          `--measure` en vez del ancho del contenedor. */}
+      <section id="apertura" className={SECTION}>
+        <div className={WRAP}>
+          <SectionHeader
+            eyebrow={t.opening.kicker}
+            title={t.opening.title}
+            level={2}
+            size="section"
+          >
+            <div className="max-w-[var(--measure)]">
+              <ArticleProse blocks={blocksOf(t.opening.body)} />
+            </div>
+          </SectionHeader>
+        </div>
+      </section>
 
       <section id="indice" className={SECTION}>
         <div className={WRAP}>
@@ -257,7 +317,10 @@ export function ComoSeHaCreado({
               // idea — cómo leer el artículo y cuánto hay que leer.
               <p
                 data-reveal
-                className="text-muted-foreground m-0 max-w-[var(--measure)] text-[0.9rem] leading-[1.6]"
+                className={cn(
+                  "text-muted-foreground m-0 max-w-[var(--measure)] text-[0.9rem]",
+                  LEADING.lead,
+                )}
               >
                 {t.index.note}{" "}
                 <b className="text-foreground font-medium">

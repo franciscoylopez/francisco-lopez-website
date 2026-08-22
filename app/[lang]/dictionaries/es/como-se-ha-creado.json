@@ -5,19 +5,42 @@
   },
   "crumb": "Cómo se ha creado",
   "hero": {
-    "kicker": "Making-of · Actualizado en agosto de 2026",
+    "kicker": "El «Making of» de franciscolopez.es",
     "title": "Cómo se ha creado esta página",
     "leadParas": [
-      "Cuando empecé a pensar en este proyecto tenía claro que no quería un CV en HTML, quería una prueba de criterio: en producto, en lo técnico y en usabilidad y diseño.",
-      "Todo lo que afirmo aquí abajo está enlazado al código que lo sostiene. El repositorio es público, así que no hace falta, podrás comprobarlo con cada decisión que te mencione."
+      "En este artículo puedes ver todo lo que me ha llevado a montar esta página: el porqué y el proceso que he seguido para llegar hasta donde estás ahora.",
+      "Una pequeña aventura de aprendizaje y criterio, de estrategia a UX, de UX a diseño y de diseño a código."
     ],
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
+    "bylinePhotoAlt": "Retrato de Francisco López",
     "shareLabel": "Compartir",
     "copyLabel": "Copiar enlace",
     "copiedLabel": "Copiado",
     "copiedAnnounce": "Enlace copiado al portapapeles",
     "shareUnavailableAnnounce": "Compartir no está disponible: enlace copiado"
+  },
+  "opening": {
+    "kicker": "Apertura",
+    "title": "Construir con criterio en tiempos de IA",
+    "body": [
+      {
+        "type": "p",
+        "text": "Cuando empecé a pensar en este proyecto tenía claro que no quería un CV en HTML, quería una prueba de criterio: en producto, en lo técnico y en usabilidad y diseño. Algo que enseñara cómo trabajo, el peso que le doy al diseño y a la experiencia de uso, y un enfoque de product builder que no consista en hacer vibe coding funcional pero lleno de incoherencias técnicas y de riesgos de seguridad. Sin ser programador o product designer hoy se puede hacer un trabajo muy fino en todos los aspectos."
+      },
+      {
+        "type": "p",
+        "text": "Y la forma más honesta de demostrarlo es enseñarlo. Tan sencillo como abrir el taller y enseñar el motor: por qué existe esta página, cómo está construida, qué se rompió por el camino y qué aprendí de cada rotura."
+      },
+      {
+        "type": "p",
+        "text": "Todo lo que afirmo aquí abajo está enlazado al código que lo sostiene. El repositorio es público, así que no hace falta que me creas: échale un ojo."
+      },
+      {
+        "type": "p",
+        "text": "Vamos a ello."
+      }
+    ]
   },
   "index": {
     "kicker": "Índice",
@@ -555,7 +578,7 @@
         },
         {
           "type": "p",
-          "text": "Es la parte donde toca ser honesto, porque es donde casi todo el mundo exagera. La mía sube la nota del analizador de A a A+, y aun así **no es una protección fuerte contra inyección de scripts**: mantiene la ejecución de scripts en línea, porque el sitio tiene dos que corren antes de pintar (el que decide el tema y el del consentimiento). Lo que sí hace, gratis y sin romper nada: bloquear objetos incrustados, fijar la base de las URLs, limitar a dónde puede enviar un formulario y prohibir que nadie enmarque el sitio. La versión fuerte, la que firma cada script en cada petición, está escrita como pendiente y atada a la primera funcionalidad que la necesite de verdad. Prefiero una cabecera que dice la verdad sobre lo que protege que un A+ que suena mejor de lo que es."
+          "text": "Es la parte donde toca ser honesto, porque es donde casi todo el mundo exagera. El [HTTP Observatory de Mozilla](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) le pone a esto una B+, 80 sobre 100: pierde exactamente los veinte puntos de la política de contenido, y no por descuido. **No es una protección fuerte contra inyección de scripts**: mantiene la ejecución de scripts en línea, porque el sitio tiene dos que corren antes de pintar (el que decide el tema y el del consentimiento). Lo que sí hace, gratis y sin romper nada: bloquear objetos incrustados, fijar la base de las URLs, limitar a dónde puede enviar un formulario y prohibir que nadie enmarque el sitio. La versión fuerte, la que firma cada script en cada petición, está escrita como pendiente y atada a la primera funcionalidad que la necesite de verdad. Prefiero una nota que diga la verdad sobre lo que protege que una más alta que sonara mejor de lo que es."
         },
         {
           "type": "p",
@@ -586,6 +609,23 @@
         {
           "type": "p",
           "text": "Con una tanda entera de trabajo en una sola rama, esa URL acumula toda la tanda y se revisa junta antes de tocar producción una única vez."
+        },
+        {
+          "type": "h3",
+          "text": "El número de rendimiento, y dónde comprobarlo"
+        },
+        {
+          "type": "p",
+          "text": "El objetivo no funcional es un mínimo de 90 en PageSpeed, en escritorio y en móvil. No es una captura fija: se puede repetir en cualquier momento contra producción."
+        },
+        {
+          "type": "livestat",
+          "id": "s07",
+          "label": "Rendimiento · PageSpeed",
+          "source": "npm run psi",
+          "value": "100 escritorio · 94-96 móvil",
+          "linkLabel": "Ver el informe",
+          "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
         { "type": "h3", "text": "La deuda que el analizador sí encontró" },
         {
@@ -654,6 +694,10 @@
         {
           "type": "p",
           "text": "Tener un AA según WCAG no era el objetivo: es un mínimo garantizado. A partir de ahí trabajo para llegar a AAA en todo lo que se pueda, en los dos temas, en reposo y también mientras el cursor está encima, que es donde casi nadie mide."
+        },
+        {
+          "type": "p",
+          "text": "La Ley Europea de Accesibilidad no obliga a una web personal, solo a comercio electrónico, banca o transporte, pero sí sigo su norma técnica de referencia: EN 301 549, que remite a WCAG. El porqué completo, en la [página de accesibilidad](/accesibilidad)."
         },
         {
           "type": "livestat",
@@ -813,7 +857,7 @@
         },
         {
           "type": "p",
-          "text": "Por eso los verificadores de este repositorio están escritos al revés de como se escriben normalmente. No buscan el patrón malo: buscan la ausencia del bueno. No preguntan «¿hay algún guion largo en el copy?», preguntan «¿hay algún texto que este verificador no esté mirando?». Y todos terminan diciendo cuántas cosas han revisado."
+          "text": "Por eso los verificadores de este repositorio están escritos al revés de como se escriben normalmente. No buscan el patrón malo: buscan la ausencia del bueno. No preguntan «¿hay algún color con poco contraste?», preguntan «¿hay algún par de colores que este censo no haya medido?». Y todos terminan diciendo cuántas cosas han revisado."
         },
         {
           "type": "diagram",

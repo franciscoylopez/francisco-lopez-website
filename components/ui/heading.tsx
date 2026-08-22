@@ -139,6 +139,39 @@ export const LEAD_GAP = {
   sub: "mb-3",
 } as const;
 
+/**
+ * Interlineado del texto de CUERPO (no titulares, que ya tienen el suyo dentro
+ * de `titleVariants`). Nace de una auditoría sobre «Cómo se ha creado esta
+ * página» (P60): la mitad de sus elementos de texto llevaban un valor elegido
+ * a mano sin relación entre sí, y la otra mitad no declaraba ninguno, así que
+ * heredaba el `1.5` del preflight de Tailwind por accidente — un valor que
+ * nadie había decidido, no una elección.
+ *
+ * Tres familias, no un solo número:
+ * - **`prose` (1,7)** — el único texto pensado para leerse seguido, párrafo
+ *   tras párrafo: el cuerpo de una sección larga.
+ * - **`lead` (1,6)** — texto de apoyo más corto, que se escanea más que se
+ *   lee: la entradilla de una apertura, una nota de orientación, el pie de un
+ *   diagrama o una imagen. Ya era el valor que más se repetía antes de
+ *   nombrarlo.
+ * - **`meta` (1,3)** — etiquetas y metadatos cortos, casi siempre de una
+ *   línea: autoría, datos en vivo, migas de posición. Verificado en pantalla
+ *   a ancho de móvil real (clonando el DOM servido, no solo mirando el
+ *   número) en los dos casos que sí podían envolver a varias líneas —el pie
+ *   de `RepoStrip` con muchas decisiones citadas, la celda más larga del
+ *   índice—: en ninguno de los dos se lee apretado.
+ *
+ * Las citas (`Pullquote`, `Pull`) se quedan FUERA de esta escala a propósito:
+ * son un registro visual distinto, no cuerpo ni metadato, y su interlineado
+ * más ajustado es una convención tipográfica real (texto grande, pensado
+ * para leerse como un titular corto), documentada en su propio componente.
+ */
+export const LEADING = {
+  prose: "leading-[1.7]",
+  lead: "leading-[1.6]",
+  meta: "leading-[1.3]",
+} as const;
+
 type Size = NonNullable<VariantProps<typeof titleVariants>["size"]>;
 
 export function SectionHeader({
