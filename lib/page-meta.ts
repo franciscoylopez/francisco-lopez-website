@@ -53,6 +53,17 @@ export interface PageMetadataInput {
   ogType?: "website" | "profile" | "article";
 }
 
+/**
+ * La tarjeta OG de una página, RELATIVA: resuelve contra el `metadataBase` del
+ * layout. Se exporta porque tiene un segundo consumidor que no se ve mirando la
+ * metadata: el `image` del JSON-LD `TechArticle` (D14), que la necesita absoluta
+ * y la compone con `SITE_URL`. Es el caso de D66 —un asset con más consumidores
+ * de los que se ven— resuelto antes de que aparezca la segunda verdad.
+ */
+export function ogImagePath(card: string, lang: Locale): string {
+  return `/api/og?card=${card}&lang=${lang}`;
+}
+
 export function pageMetadata({
   lang,
   slug = "",
@@ -61,7 +72,7 @@ export function pageMetadata({
   ogType = "website",
 }: PageMetadataInput): Metadata {
   const path = pagePath(lang, slug);
-  const ogImage = `/api/og?card=${ogCard}&lang=${lang}`;
+  const ogImage = ogImagePath(ogCard, lang);
 
   return {
     title: meta.title,
