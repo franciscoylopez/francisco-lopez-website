@@ -306,7 +306,13 @@ export function ComoSeHaCreado({
         </div>
       </section>
 
-      <section id="indice" className={SECTION}>
+      {/* scroll-mt-[5rem] en las tres secciones con ancla (design-review P60):
+          el nav es sticky y ningún ancla tenía margen de scroll, así que los
+          30+ enlaces internos del artículo (índice, ChapterNav) dejaban la
+          sección arrancando debajo del nav. 5rem es el mismo alto que ya
+          asume la apertura (`calc(100svh-5rem)`), con margen de sobra sobre
+          los ~65px reales del nav. */}
+      <section id="indice" className={cn(SECTION, "scroll-mt-[5rem]")}>
         <div className={WRAP}>
           <ArticleIndex
             kicker={t.index.kicker}
@@ -347,7 +353,11 @@ export function ComoSeHaCreado({
       {t.sections.map((s, i) => {
         const position = i + 1;
         return (
-          <section key={s.id} id={s.id} className={SECTION}>
+          <section
+            key={s.id}
+            id={s.id}
+            className={cn(SECTION, "scroll-mt-[5rem]")}
+          >
             <div className={WRAP}>
               <SectionCover
                 ordinal={s.ordinal}
@@ -382,7 +392,7 @@ export function ComoSeHaCreado({
         );
       })}
 
-      <section id={t.closing.id} className={SECTION}>
+      <section id={t.closing.id} className={cn(SECTION, "scroll-mt-[5rem]")}>
         <div className={WRAP}>
           <SectionCover
             ordinal={t.closing.ordinal}
