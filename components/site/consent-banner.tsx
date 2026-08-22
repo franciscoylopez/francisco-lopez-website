@@ -295,20 +295,25 @@ function ConsentRow({
           previo; lo destapó darle contraste a la bolita en P37.593 — con la bolita
           blanca sobre carril casi blanco (1,22:1) no se distinguía dónde estaba. */}
       <label className="flex cursor-pointer items-center justify-between gap-4 p-3.5">
-        <div className="min-w-0">
-          <p
+        {/* `span` y no `div`/`p`: el content model de `<label>` es phrasing content,
+            así que un `div` o un `p` dentro son inválidos (dos errores del validador
+            del W3C). El contenedor no necesita `block` —es flex item, y eso lo
+            blockifica—, pero los dos hijos SÍ: sin él quedarían en línea, uno al lado
+            del otro. Cero cambio visual con él. */}
+        <span className="min-w-0">
+          <span
             id={titleId}
-            className="text-foreground text-[0.95rem] font-semibold"
+            className="text-foreground block text-[0.95rem] font-semibold"
           >
             {title}
-          </p>
-          <p
+          </span>
+          <span
             id={descId}
-            className="text-muted-foreground mt-0.5 text-[0.85rem] leading-relaxed"
+            className="text-muted-foreground mt-0.5 block text-[0.85rem] leading-relaxed"
           >
             {description}
-          </p>
-        </div>
+          </span>
+        </span>
         <span className="inline-flex min-h-[44px] shrink-0 items-center">
           <input
             type="checkbox"

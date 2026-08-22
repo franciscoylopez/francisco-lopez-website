@@ -29,7 +29,7 @@ const bricolage = Bricolage_Grotesque({
 
 // Aplica la preferencia de tema (next-themes, storageKey "theme") o el esquema del
 // sistema antes de pintar, ya que aquí no corre el ThemeProvider del layout normal.
-const themeInit = `(function(){try{var e=localStorage.getItem('theme');if(e==='dark'||((e===null||e==='system')&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');}catch(e){}})()`;
+const themeInit = `(function(){try{var e=localStorage.getItem('theme');if(e==='dark'||((e===null||e==='system')&&matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.classList.add('dark');}catch{}})()`;
 
 export default function GlobalError({
   error,
