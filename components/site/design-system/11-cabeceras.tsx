@@ -8,9 +8,15 @@ import {
 } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
+import { Stat, StatRow } from "@/components/ui/stat-row";
 import { SPECIMEN_ROW } from "@/components/ui/table";
+import {
+  BREAKPOINT_COUNT,
+  BREAKPOINTS,
+  CONTAINER_PX,
+} from "@/lib/design-values";
 import { cn } from "@/lib/utils";
-import { TypeMeta } from "./shared";
+import { GroupHead, SpecimenCard, TypeMeta } from "./shared";
 
 /* ===================== (11) CABECERAS ===================== */
 /** Guarda para el tamaño de titular que llega desde el diccionario (§11). */
@@ -92,12 +98,7 @@ export function Cabeceras({
           })}
         </div>
 
-        <h3 className="font-display m-0 mt-10 mb-2 text-[1rem] font-semibold">
-          {t.toneTitle}
-        </h3>
-        <p className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]">
-          {t.toneLead}
-        </p>
+        <GroupHead title={t.toneTitle} lead={t.toneLead} />
         <div className={PAIR}>
           {t.tones.map((tone) => {
             const band = tone.surface === "--muted";
@@ -135,6 +136,44 @@ export function Cabeceras({
               </div>
             );
           })}
+        </div>
+
+        {/* LA FILA DE CIFRAS, publicada el 2026-08-22. Era la única de las siete
+            piezas del núcleo sin sección: nació el 2026-08-19 y el inventario
+            derivado de D89 la sacó por su nombre. Va AQUÍ y no en una sección
+            propia porque el titular de esta ya dice de qué habla —cómo abre una
+            página— y la fila es justo lo que va debajo de esa apertura.
+
+            LA DEMO ES LA FILA DE VERDAD, con los valores de `design-values.ts`:
+            es la misma que abre esta página, así que se puede comprobar
+            subiendo. Y por eso trae su propio hueco superior, que es parte de lo
+            que la pieza resuelve y no un descuido de esta sección. La ficha va
+            SIN `children` —la variante de `SpecimenCard` para piezas cuya demo
+            no cabe dentro de una caja—, porque meter la fila dentro de un marco
+            enseñaría una composición que el sitio no tiene. */}
+        <GroupHead title={t.statTitle} lead={t.statLead} />
+        <StatRow>
+          <Stat
+            value={String(CONTAINER_PX)}
+            unit="px"
+            label={t.stat.labels.container}
+          />
+          <Stat
+            value={String(BREAKPOINT_COUNT)}
+            unit={` ${t.stat.labels.breakpointsUnit}`}
+            label={BREAKPOINTS.filter((b) => b.min !== null)
+              .map((b) => b.min)
+              .join(" · ")}
+          />
+          <Stat value="AA→AAA" label={t.stat.labels.contrast} />
+        </StatRow>
+        <div className="mt-8 max-w-[var(--measure)]">
+          <SpecimenCard
+            kicker={t.stat.kicker}
+            cls={t.stat.cls}
+            rule={t.stat.rule}
+            note={t.stat.note}
+          />
         </div>
 
         <div className="mt-8 max-w-[var(--measure)]">

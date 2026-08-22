@@ -472,6 +472,19 @@
         "note": "Encima de cualquier otra superficie ese gris hay que recalcularlo, no reusarlo (D30): se mezcla un 85% hacia el fondo de debajo. Antes había que pedirlo con una prop y solo lo tenía quien se acordaba; ahora lo resuelve el token."
       }
     ],
+    "statTitle": "Debajo del titular, la fila de cifras",
+    "statLead": "Cuando una apertura resume algo en datos, la fila no la monta la página: la trae una pieza con su filete, su hueco y su rejilla. Esta de aquí abajo es la misma que abre esta página, con los mismos valores, así que se puede comprobar subiendo.",
+    "stat": {
+      "kicker": "Fila de cifras",
+      "cls": "StatRow · Stat",
+      "rule": "StatRow pone el filete, el hueco que la separa de la apertura y la rejilla que reparte las columnas. Stat pone la cifra, su unidad opcional y la etiqueta de debajo.",
+      "note": "El ancho mínimo de columna es 11rem y no es un parámetro: a 900px de ancho, con 13rem la fila de cuatro se parte en tres más uno y deja un dato huérfano en la segunda línea. Un huérfano se lee como un fallo de maquetación; un salto de línea, no.",
+      "labels": {
+        "container": "Ancho máximo del contenedor",
+        "breakpointsUnit": "breakpoints",
+        "contrast": "Suelo y objetivo de contraste"
+      }
+    },
     "ruleTitle": "Qué decide la variante y qué el punto de uso",
     "rule": [
       "El tamaño elige el hueco entre rótulo y titular. Antes había seis valores para la misma relación repartidos por catorce archivos.",

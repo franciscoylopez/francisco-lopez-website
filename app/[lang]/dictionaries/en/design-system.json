@@ -472,6 +472,19 @@
         "note": "Over any other surface that grey has to be recomputed, not reused (D30): it blends 85% into the surface underneath. This used to be a prop you had to remember; now the token resolves it."
       }
     ],
+    "statTitle": "Below the headline, the row of figures",
+    "statLead": "When an opening sums itself up in numbers, the page doesn't assemble that row: a piece brings it, with its rule, its gap and its grid. The one below is the same row that opens this page, with the same values, so you can check by scrolling up.",
+    "stat": {
+      "kicker": "Row of figures",
+      "cls": "StatRow · Stat",
+      "rule": "StatRow brings the rule above it, the gap that separates it from the opening, and the grid that shares out the columns. Stat brings the figure, its optional unit and the label underneath.",
+      "note": "The minimum column width is 11rem, and it isn't a parameter: at 900px wide, 13rem breaks a row of four into three plus one and strands a figure on its own line. An orphan reads as a layout bug; a wrapped label doesn't.",
+      "labels": {
+        "container": "Maximum container width",
+        "breakpointsUnit": "breakpoints",
+        "contrast": "Contrast floor and target"
+      }
+    },
     "ruleTitle": "What the variant decides and what the call site does",
     "rule": [
       "The size picks the gap between label and headline. There used to be six values for that one relationship, spread across fourteen files.",
