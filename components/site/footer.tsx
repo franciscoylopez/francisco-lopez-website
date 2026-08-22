@@ -72,7 +72,12 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
       <div className="mx-auto max-w-[var(--container)] px-[var(--page-x)] py-[clamp(1.75rem,3.5vw,2.5rem)]">
         <div className="flex flex-col items-center gap-5 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-x-8">
           <div className="text-foreground flex items-center md:justify-self-start">
-            <Logo variant="flat" showWordmark className="h-8" />
+            {/* `symbolPx` y `h-8` dicen lo mismo (32px) porque son dos cosas
+                distintas: la clase dimensiona el SVG y el número le dice al
+                wordmark contra qué escalar. El componente no puede leer una
+                clase de Tailwind, así que el tipo obliga a pasar el número
+                cuando hay wordmark. */}
+            <Logo variant="flat" showWordmark symbolPx={32} className="h-8" />
           </div>
 
           {/* EN MÓVIL los cuatro enlaces envolvían uno a uno, así que la familia
