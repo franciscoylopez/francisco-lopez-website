@@ -142,10 +142,11 @@ Al empezar una sesión de desarrollo:
 
 > **`Etapa` contesta una sola pregunta: ¿esto está comprometido o esperando?** Dos familias en el mismo campo (y **vigila que «General» no se coma el eje**: ya degeneró una vez con «Optimización» al 80%):
 >
-> - **Sprints** (lo comprometido, con su orden): *Deep-dive · Cómo se ha creado · Footer y contacto*.
-> - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad*.
+> - **Sprints** (lo comprometido, con su orden): *Footer y contacto*.
+> - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad · Cómo se ha creado*.
 > - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque. *(Vigilado desde 2026-08-19: degeneró una vez con «Optimización».)*
-> - **Cerradas** (solo archivadas, no se usan para tareas nuevas): *V1 (entregado) · Cimientos técnicos · Sobre mí · Contacto avanzado · Optimización · IA conversacional*.
+> - **Cerradas** (solo archivadas, no se usan para tareas nuevas): *V1 (entregado) · Cimientos técnicos · Sobre mí · Contacto avanzado · Optimización · IA conversacional · Deep-dive*.
+> - **Un sprint que cierra no se archiva: se convierte en su BLOQUE** *(2026-08-22)*. Su página sigue viva y va a generar deuda, y esa deuda es de ella, no transversal. «Cómo se ha creado» hizo ese viaje al cerrar; «Deep-dive» no lo hizo y por eso llevaba dos cierres listado como sprint comprometido.
 >
 > **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote. El coste asumido: al entrar en un sprint se pierde de qué bloque venía; lo llevan el nombre y las notas, y añadir una séptima propiedad sería peor.
 

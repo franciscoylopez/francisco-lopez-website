@@ -1,9 +1,13 @@
 name: CI
 
-# Gate de calidad en cada PR a main: formato + typecheck + lint + paleta + build. Hoy nada
-# bloquea el merge salvo el preview de Vercel (que no es un gate); esto impide meter
-# a main código que no compila, no pasa el linter o no está formateado. Coherente
-# con el argumento de rigor técnico del sitio (PRD §1).
+# Gate de calidad en cada PR a main: impide meter a main código que no compila, no pasa
+# el linter, no está formateado, o que rompe una de las cosas que este repo ha decidido
+# vigilar. Coherente con el argumento de rigor técnico del sitio (PRD §1).
+#
+# QUÉ PASOS SON, NO SE ESCRIBE AQUÍ. Se leen abajo, que es donde no pueden mentir: esta
+# cabecera enumeró cinco durante once pasos, mientras el comentario del `name:` —treinta
+# líneas más abajo— argumentaba justo eso. La regla estaba escrita y el mismo archivo la
+# incumplía.
 #
 # `format:check` entra aquí en P37.5991, cuando dejó de estar rojo por defecto: con
 # CRLF en el working tree reportaba 57 falsos positivos, así que meterlo en CI habría
@@ -126,8 +130,8 @@ jobs:
       # La mitad «a demanda» del régimen de contexto (D28) son ~97.000 palabras, y
       # solo funciona si se sabe QUÉ HAY dentro sin cargarlo. Los tres índices se
       # derivan de las cabeceras: el de decisiones vive en `CLAUDE.md` (se lo gana:
-      # 42 de sus 68 entradas se citan desde el código), y los de los dos históricos
-      # en su propia cabecera, para no costar en cada arranque.
+      # buena parte de sus entradas se citan desde el código), y los de los dos
+      # históricos en su propia cabecera, para no costar en cada arranque.
       - name: Índices derivados
         run: npm run check:indices
 
@@ -171,7 +175,7 @@ jobs:
       - name: Marco de página
         run: npm run check:marco
 
-      # Y el que mira a los otros diez: a cada guardián le pasa un caso malo
+      # Y el que mira a todos los demás: a cada guardián le pasa un caso malo
       # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que
       # funciona — el modo de fallo de un guardián es una luz verde, y el censo de
       # contraste se rompió así dos veces en silencio (D70). Nació FUERA de CI
