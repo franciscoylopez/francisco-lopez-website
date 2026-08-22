@@ -4479,3 +4479,61 @@ resolvió retirando, no subiendo el techo: la sección más pesada de `BRAND.md`
 «Un control sobre una imagen») repetía en el documento en presente el barrido completo que ya
 vive en `BRAND-historical.md` — se dejó la regla y el «qué garantiza y qué no», el resto ya
 tenía puntero. 13345 palabras, mismo contenido.
+
+---
+
+## D83 · Una sección que documenta una capa nueva no puede ser una caja con las piezas dentro — 2026-08-22
+
+**Contexto.** P60.9 nació como una tarea de una línea: el espécimen de «Artículo largo»
+(Design System §15) mostraba la meta-línea en el formato viejo («Capítulo 05 de 11 · 3 min de
+lectura») mientras la página real usaba el corto desde la tanda 3 de P60 («5 de 11 · 3 min»).
+Al abrirla, Francisco añadió lo que se ve al mirar la sección: las **trece** piezas de la capa
+de artículo estaban dentro de un solo `PANEL`, apiladas, con una única entradilla para todas y
+sin explicación por pieza.
+
+**El diagnóstico no era estético, era estructural.** Las otras catorce secciones de la página
+tienen una anatomía fija: `SectionHeader` → subapartados con `h3` + entradilla cuando hacen
+falta → **rejilla de tarjetas espécimen**, y cada tarjeta es la demo real arriba sobre
+`--background` y su ficha abajo sobre `--card` (rótulo · nombre en monoespaciada · qué resuelve
+· la letra pequeña tras un filete discontinuo). §15 no seguía ninguna de las dos. Y era **la
+sección que menos se lo podía permitir**: las otras catorce documentan cosas que ya se conocen
+—botones, etiquetas, tablas—; §15 es la única que documenta una capa que nadie ha visto antes,
+así que es justo la que no puede enseñar trece piezas sin decir qué es cada una.
+
+**El eje del corte: dónde vive la pieza, no qué tipo de pieza es.** La partición obvia era
+servidor / islas de cliente, y es la mala: describe cómo está construido el código, no lo que
+el lector puede comprobar. El eje que sí sirve es **dónde aparece la pieza dentro del
+artículo**, porque se verifica abriendo `/como-se-ha-creado` al lado. Cinco subapartados: la
+portada del artículo (`ByLine`, `ShareActions`, `ArticleIndex`) · la apertura de cada parada
+(`SectionCover`) · lo que flota junto al texto (`Pullquote`, `Pull`, `DiagramPanel`,
+`LiveStat`) · el pie de cada parada (`RepoStrip`, `ChapterNav`) · lo que no se va con el scroll
+(`ReadingProgress`, `SectionRail`, `FloatingShare`). Las tres últimas comparten una sola demo
+—la caja con `translateZ(0)` del patrón 1 de **D82**— y llevan ficha sin espécimen propio:
+separarlas en tres cajas serían tres veces la misma caja vacía.
+
+**`SpecimenCard` y `GroupHead` suben a `design-system/shared.tsx`.** La anatomía de la tarjeta
+estaba escrita **a mano e idéntica en 08, 09, 10 y 11**, y §15 iba a ser la quinta copia. Su
+sitio es ese archivo por lo que dice su propia cabecera: *lo único de esta página que se usa en
+más de una sección*. **Las cuatro que la tienen inline NO se migraron aquí, a propósito**: es un
+refactor mecánico sobre secciones publicadas y su gate es un `gate:html` con diff vacío (D42),
+así que meterlo de rebote habría mezclado un cambio visual intencionado con uno que tiene que
+ser invisible. Tareado aparte (bloque Design System, P87.85), con dos diferencias reales que
+comprobar antes de unificar —el ancho de rejilla difiere entre 08/09 (19rem) y 10 (15rem), y 11
+tiene una tarjeta sin rótulo—: es la regla 4 de `BRAND.md` §Cómo se escribe una regla aquí,
+mirar si dos valores parecidos significan cosas distintas antes de unificarlos.
+
+**`SectionCover` gana `level`.** En la página real su titular *es* el `h2` que abre una
+sección; anidado bajo el `h2` de §15 y el `h3` de su subapartado tiene que ser `h4`. Defecto
+`2`, así que la página real no cambia ni un byte de HTML. Mismo criterio que
+`SectionHeader.level` (D43): la semántica del DOM no la decide cuánto mide el texto.
+
+**Tres fallos más que solo aparecieron EN PANTALLA, y solo ya con la estructura nueva.** Es la
+parte que conviene no olvidar, porque los tres estaban en el código anterior y ninguna lectura
+del JSX los había encontrado. (1) El espécimen de `RepoStrip` pegaba el texto al enlace sin
+espacio («…y D73DECISIONS.md»): el espaciado de esa franja vive **dentro de los strings** de
+`parts` —así lo escribe la página real— y el demo no lo llevaba. (2) La ficha de `ArticleIndex`
+se rotulaba «ÍNDICE» justo debajo de un demo que ya dice «ÍNDICE» en su eyebrow. (3) `RepoStrip`
+y `ChapterNav` abren las dos con `border-t` y `mt-[2.5rem]`, así que sueltas dentro de una caja
+se leían como un filete huérfano flotando sobre un hueco vacío; con la última línea del cuerpo
+encima, ese mismo hueco es lo que el margen significa. **Una pieza de PIE se demuestra con algo
+delante**, o su propio margen parece un error de maquetación.
