@@ -42,6 +42,7 @@ Partido el **2026-08-09** (P37.685).
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
 - [El morado de la barra de progreso, con los papeles cambiados (2026-08-21)](#el-morado-de-la-barra-de-progreso-con-los-papeles-cambiados-2026-08-21)
 - [La pasada completa, y las dos veces que el «sin excepciones» fue falso (2026-08-18 → 22)](#la-pasada-completa-y-las-dos-veces-que-el-sin-excepciones-fue-falso-2026-08-18-→-22)
+- [La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`](#la-pasada-de-retirada-del-2026-08-22-y-qué-se-fue-de-brandmd)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -583,3 +584,46 @@ con su `bg-card` opaco, encima del hero— salía marcado en tres páginas. **22
 mandaba mirar a ojo no tenían imagen debajo.** Una lista de revisión manual inflada de falsos
 positivos es una lista que nadie lee: la tercera forma, después del metro descalibrado y del
 umbral mal aplicado, de que un medidor deje de servir sin dar error.
+
+## La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`
+
+**Por qué hubo que hacerla.** `BRAND.md` se partió el 2026-08-09 y el corte ganó 1.033
+palabras. Diez días después el archivo estaba **por encima del punto de partida**: 4.626 antes
+de partirlo, 3.593 al partirlo, 4.998 el 19 de agosto. La partición compró tiempo; lo que no
+existía era el hábito de retirar. Familia «añadir sin retirar», y con un matiz que importa: el
+mecanismo para retirar ya existía desde el 2026-08-19 (paso 1 bis de `close-session` +
+`check:contexto`). Lo que no había ocurrido nunca es pasarlo por este archivo. **No faltaba el
+portador: la deuda era anterior al portador.**
+
+**Qué bajó, y dónde vive ahora.** Casi todo estaba ya contado aquí, así que la operación fue
+comprobar la cobertura y borrar arriba, no mover:
+
+| Lo retirado de `BRAND.md` | Dónde estaba ya |
+|---|---|
+| Las cifras de `--brand-purple-accent` (3,71 fijo · 7,04 / 7,21 conmutando) | §El morado de los fondos invertidos |
+| La medición del atenuado en hover de D61 (9,14 · 7,79 / 9,01 · 8,17 / 9,17) | §El atenuado sensible a la superficie |
+| El barrido del botón de play: 2,81 / 2,59, el borde interno a 7,93 / 8,36 y los 144 ángulos del perímetro | §Un control sobre una imagen · §La regla del control sobre imagen prometía de más |
+| Que la pastilla neutra escribe `text-muted-foreground` «desde el 2026-08-09» | §Etiquetas |
+| La variante «G» aparcada de los enlaces de contenido | §Jerarquía de hover |
+| El 12% del texto en el hover de `toggle-primary` | §Jerarquía de hover |
+
+**Y lo que no estaba en ningún sitio, que es lo que este párrafo existe para conservar:**
+
+- El **cian primario en hexadecimal** (`#005859` claro / `#3FC9C4` oscuro) estaba escrito como
+  bullet de §Accesibilidad. Se va porque el propio documento dice dos párrafos más arriba que
+  «el censo con las cifras vive en `lib/design-values.ts`, no aquí» (D38) y porque §Modo oscuro
+  ya prohíbe hardcodear hex. Es la misma familia que el hallazgo del 2026-08-21: un documento
+  publicando una cifra que su propio bullet prohíbe.
+- Dos verificaciones de los **iconos propios**: que `user` ocupa 16×20 sin verse pequeño (era
+  el ejemplo de «no hay que llenar el artboard») y que **al 400% todos los dibujos se ven
+  bien** (resultado de la pasada del 2026-08-08, no una instrucción).
+
+**Resultado.** `BRAND.md` 4.764 → 4.516 palabras. Con la bajada del índice de decisiones
+(D88), el contexto de arranque queda en **11.976** y por primera vez cabe en el objetivo de
+12.000 que se fijó el 2026-08-19.
+
+**La lección, que no es la del tamaño.** Lo que se retiró no era relleno: era **narrativa
+fechada de mediciones que ya se cuentan aquí**. Un documento que se declara «en presente» y
+acumula doce fechas no es que esté mal escrito; es que le falta el momento de bajarlas. Ese
+momento existe y es `close-session`, pero solo se dispara si alguien mira el archivo — y por
+eso el número lo vigila `check:contexto` y no la disciplina.
