@@ -106,7 +106,10 @@ const CASOS: Caso[] = [
   {
     guardian: "check:indices",
     rotura: "una decisión se queda sin línea en el índice",
-    archivo: "CLAUDE.md",
+    // El índice vive en la cabecera del propio archivo desde D88. La entrada del
+    // índice empieza por `- D33 ·`; la cabecera de la decisión, por `## D33 ·`,
+    // así que la mutación quita la línea del índice y no la sección.
+    archivo: "DECISIONS.md",
     mutar: (o) => o.replace(/^- D33 · .*$/m, ""),
   },
   {
