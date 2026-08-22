@@ -78,6 +78,18 @@ const CONSUMIDORAS = [
     rompe:
       "la página se publica con la tarjeta OG de la home, y eso solo lo ve quien comparta el enlace",
   },
+  {
+    // La quinta, añadida el 2026-08-22. Es distinta de las otras cuatro y por eso
+    // conviene decir qué garantiza: el footer NO lista todas las páginas —enseña
+    // cinco de ocho, con etiqueta propia— así que no puede derivarse entero. Lo
+    // que sí sale del registro es que la página EXISTA (`StaticPageSlug` es la
+    // unión de literales: retirar una deja de compilar) y su ruta (`pagePath`).
+    // D82 lo encontró después de pagarlo: «Cómo se ha creado» hubo que insertarla
+    // a mano en el footer y nada lo habría dicho.
+    archivo: "components/site/footer.tsx",
+    rompe:
+      "el footer enlaza a una página que ya no existe, y eso lo ve cualquiera que baje del todo",
+  },
 ];
 
 const problemas: string[] = [];
