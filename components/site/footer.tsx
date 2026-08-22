@@ -10,6 +10,7 @@ export type FooterDict = {
   copyright: string;
   brandKit: string;
   designSystem: string;
+  comoSeHaCreado: string;
   accesibilidad: string;
   cookies: string;
   linkedinAria: string;
@@ -17,9 +18,9 @@ export type FooterDict = {
 };
 
 // Footer compartido (PRD §7/§17). Una fila de baja densidad: logo flat 32px +
-// copyright · enlaces (Brand Kit / Design System / Accesibilidad / Cookies)
-// ópticamente centrados · los dos canales de icono. Enlaces de chrome en
-// foreground/muted (no primary, BRAND.md).
+// copyright · enlaces (Brand Kit / Design System / Cómo se ha creado /
+// Accesibilidad / Cookies) ópticamente centrados · los dos canales de icono.
+// Enlaces de chrome en foreground/muted (no primary, BRAND.md).
 export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
   const base = lang === "es" ? "" : `/${lang}`;
   return (
@@ -38,6 +39,10 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
           {[
             { href: `${base}/brand-kit`, label: dict.brandKit },
             { href: `${base}/design-system`, label: dict.designSystem },
+            {
+              href: `${base}/como-se-ha-creado`,
+              label: dict.comoSeHaCreado,
+            },
             { href: `${base}/accesibilidad`, label: dict.accesibilidad },
             { href: `${base}/cookies`, label: dict.cookies },
           ].map((l) => (

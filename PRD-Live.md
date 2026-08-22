@@ -74,7 +74,7 @@ descarga** (D65).
 9. **Franja-CTA de cierre** — banda de fondo propio con copy de posicionamiento al ICP;
    el email es la acción destacada (único botón sólido del sitio) y teléfono, LinkedIn y
    CV la acompañan como canales de apoyo.
-10. **Footer** — Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn, repositorio.
+10. **Footer** — Brand Kit, Design System, Cómo se ha creado esta página, Accesibilidad, Cookies, LinkedIn, repositorio.
 
 ### Tres cosas que el sitio hace y no se ven mirándolo
 
