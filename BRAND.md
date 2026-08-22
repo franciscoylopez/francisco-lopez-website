@@ -242,8 +242,7 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 
 > **Excepción viva — el switch del diálogo de consentimiento** *(2026-08-08, P37.5996)*.
 > `consent-banner.tsx` dibuja su interruptor con una cadena inline (`peer-checked`, `after:`,
-> anillo de foco) y es **el único elemento interactivo del sitio fuera de la capa de
-> componentes**. Se queda así porque hay **un** switch en todo el sitio —no hay repetición que
+> anillo de foco). Se queda así porque hay **un** switch en todo el sitio —no hay repetición que
 > factorizar, y una pieza con un solo call site solo añade indirección— y porque la cascada de
 > la «Regla de construcción» mandaría traerlo de shadcn, que **aplica hacia delante, no hacia
 > atrás**.
@@ -251,6 +250,15 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 > factorizar y el segundo se trae de shadcn, arrastrando al primero— o cuando este haya que
 > rehacerlo por otro motivo. Lo que **no** es excepción es su color: eso lo resuelve
 > §Controles con dos fondos.
+
+> **Excepción viva — el índice de secciones de «Cómo se ha creado esta página»**
+> *(2026-08-22, design-review P60)*. El riel flotante (`article-islands.tsx`) no compone
+> `chromeLinkVariants`: es una píldora que se expande en hover/foco con estado activo
+> propio, un caso que hoy no cubre ninguna `shape` de `chrome.tsx`.
+> Se queda así porque hay **un** índice de este tipo en todo el sitio —no hay repetición
+> que factorizar, y una pieza con un solo call site solo añade indirección—.
+> **Condición de salida:** cuando aparezca un **segundo** índice flotante de secciones
+> (otro deep-dive largo con TOC), se extrae a `chrome.tsx` arrastrando a este.
 
 ## Accesibilidad (no negociable)
 

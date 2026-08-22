@@ -132,7 +132,9 @@ export function SectionRail({ items }: { items: RailItem[] }) {
                   El `<a>` es el objetivo táctil de 44×44 (design-review P60:
                   la píldora visible de 24px medía por debajo del suelo del
                   checklist); el aspecto entero — círculo, expansión, color —
-                  vive en el `<span>` interior, así que no crece en pantalla. */}
+                  vive en el `<span>` interior, así que no crece en pantalla.
+                  No compone `chromeLinkVariants`: excepción documentada con
+                  fecha en BRAND.md §Ningún control se escribe a mano. */}
               <a
                 href={`#${item.id}`}
                 aria-current={isActive ? "true" : undefined}
