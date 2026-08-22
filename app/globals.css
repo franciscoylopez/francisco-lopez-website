@@ -660,6 +660,19 @@
 .contact-band {
   --chrome-hover-bg: color-mix(in srgb, var(--foreground) 10%, var(--muted));
 }
+/* Mismo problema, banda invertida (P60, design-review): el fondo local es
+   `--foreground` y el texto de `tone: "inverted"` sube a `--background` en
+   hover, así que el pill por defecto (`--muted`) quedaba casi del mismo tono
+   que ese texto — 1,11:1 en claro, 1,27:1 en oscuro. Se mezcla un 10% de
+   `--background` sobre `--foreground`, la misma proporción y sentido que
+   `.contact-band` (un paso hacia el extremo opuesto del propio fondo). */
+[data-surface="inverted"] {
+  --chrome-hover-bg: color-mix(
+    in srgb,
+    var(--background) 10%,
+    var(--foreground)
+  );
+}
 /* Solo el ASPECTO de la pastilla: el color de reposo, el de hover (sensible al
    fondo vía `--chrome-hover-bg`) y la transición, con sus dos extremos en la misma
    regla (D35). Las MÉTRICAS —suelo táctil, padding, márgenes compensatorios— ya no
