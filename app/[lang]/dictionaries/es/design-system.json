@@ -682,6 +682,20 @@
     "chapterPositionLabel": "5 de 11",
     "chapterIndexLabel": "Índice",
     "chapterNextLabel": "Siguiente: 06 · Del diseño al código",
-    "hint": "La página completa: «Cómo se ha creado esta página»."
+    "hint": "La página completa: «Cómo se ha creado esta página».",
+    "bylineName": "Francisco López",
+    "bylineRole": "Senior Product Manager",
+    "indexKicker": "Índice",
+    "indexTimeLabel": "12 min de lectura",
+    "indexAriaLabel": "Índice del artículo de muestra",
+    "indexItems": ["Por qué existe", "Cómo se trabaja", "La marca"],
+    "diagramCaption": "Un diagrama real de la página, con sus mismos tokens de color.",
+    "progressAriaLabel": "Progreso de lectura del artículo de muestra",
+    "shareLabel": "Compartir",
+    "shareCopyLabel": "Copiar enlace",
+    "shareCopiedLabel": "Enlace copiado",
+    "shareCopiedAnnounce": "Enlace copiado al portapapeles",
+    "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
+    "railHint": "Igual que en la página real, pero contenidos a este panel: el riel de índice y el dock de compartir se activan al desplazar esta sección hasta el centro de la ventana."
   }
 }
