@@ -128,6 +128,7 @@
 - D90 · Lo que el censo midió se sella, y CI puede ponerse en rojo sin abrir un navegador
 - D91 · Un backlog transversal no lo drena ningún sprint, y el carril de contenido se barría con el resto
 - D92 · Quién cierra los PR de Dependabot, y por qué la allowlist no son «las de desarrollo»
+- D93 · El sitio scrolleaba en horizontal por debajo de 349px, y el culpable no era el que decía la tarea
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5172,3 +5173,68 @@ cuando no vio nada.
 **Requisito de repositorio.** `allow_auto_merge` estaba en `false` y se activó. `--auto` no se
 salta ningún gate: espera a que la protección de `main` (D68) dé por buenos todos los checks y
 entonces hace `squash`. Un PR en rojo se queda abierto, que es lo correcto.
+
+---
+
+## D93 · El sitio scrolleaba en horizontal por debajo de 349px, y el culpable no era el que decía la tarea — 2026-08-22
+
+**Contexto.** Dos tareas del cupo del sprint 3 (P65.5 y P65.6) describían el mismo síntoma desde
+dos sitios: por debajo de 360px el sitio entero se movía de lado. Sus notas mandaban **medir cuál
+de los dos elementos forzaba el ancho mínimo antes de tocar nada**. Bien mandado: los dos
+diagnósticos apuntados estaban equivocados, cada uno de una forma distinta.
+
+**Lo medido, sobre el sitio servido.** El nav pide **349px exactos** y no cede:
+
+```
+20 (gutter) + 217 (logo) + 16 (hueco) + 96 (grupo derecho) = 349
+```
+
+**El grupo derecho no era el culpable.** La tarea decía «el grupo derecho —EN + toggle + hamburguesa—
+necesita 349px». Pide **96**. Quien manda es el **logo**: 217px, de los cuales **168 son un wordmark
+que nunca encoge**. Y eso decide el arreglo, porque apretar el gutter y el hueco recupera 24 de los
+29 que faltan a 320px: no llega. La única palanca que cabe es **soltar el wordmark**.
+
+**Decisión 1 — el wordmark se suelta por debajo de 359px** (`max-[359px]:hidden` en `nav.tsx`). No es
+una excepción inventada: el nav **ya lo suelta al hacer scroll** y el footer no lo lleva nunca
+(`BRAND-logo.md` §Tabla de uso). Dejarlo encoger o truncarse lo prohíbe la regla 6 de ese mismo
+documento —recorta glifos a mitad de letra y se lee como un bug—, así que la alternativa estaba
+cerrada antes de empezar. **El símbolo se queda**, de modo que el momento de marca del split
+(§Dónde respira la marca) sobrevive intacto. 359 y no 348 para tener margen real: el corte cae por
+debajo del iPhone SE (375) y de los Android de 360.
+
+**Decisión 2 — el email en prosa gana su punto de ruptura.** La otra tarea culpaba al email «de 29
+caracteres sin punto de ruptura» en `contact-actions.tsx`. **Ahí no desborda**: el texto ocupa
+20..296 dentro de una columna 20..300, y ya llevaba `break-all`. Lo que se sale son los 9,6px de
+padding de su pastilla de chrome, a cada lado — invisible en reposo, porque esa pastilla solo se
+pinta en hover.
+
+Pero el fallo que describía **sí existe, en otro sitio**: en la **política de cookies** el mismo
+email se pinta en **prosa**, sin ninguna protección, y sus 40 caracteres fuerzan el párrafo a 320
+dentro de una columna de 280. Eran 20px de scroll en toda la página, y seguían ahí después de
+arreglar el nav. Se resuelve con **`<wbr>` después de la arroba** y no con `break-all`: parte por el
+separador natural en vez de por cualquier sitio, que dejaba «…@gmai / l.com» partiendo el dominio.
+
+**Decisión 3 — 320 entra en la matriz del `viewport-verifier`.** Este fallo vivió meses en las trece
+páginas porque **el viewport más estrecho del instrumento era 390**: estaba justo debajo del suelo
+del metro. Y con él entra la comprobación que ningún otro paso hace —`scrollWidth > innerWidth`—,
+porque un desbordamiento horizontal no lo caza axe ni lo ve la aritmética del pliegue: solo se ve
+preguntándolo.
+
+**Dos trampas del método, que cuestan una pista falsa cada una y por eso quedan escritas en el
+agente.** Al buscar al infractor hay que **descartar `<col>` y `<colgroup>`** —no son cajas pintadas
+y su rectángulo abarca la tabla entera— y **descartar lo que vive dentro de un contenedor con
+`overflow-x` propio**, que scrollea ahí y no extiende el documento. La tabla de cookies daba las dos
+señales a la vez y estaba perfectamente montada.
+
+**Y una tercera, que ya es vieja: el servidor de al lado.** Dos veces en la misma sesión una
+medición dio el resultado contrario al real porque el `next start` nuevo no había arrancado —el
+puerto seguía ocupado por uno viejo— y se estaba midiendo un build anterior. Primero con
+`x-powered-by` (D92) y después con esta clase. **Antes de creerse una medida, comprobar que el HTML
+servido contiene el cambio**; es el punto 5 de `BRAND.md` §Cómo medir sin equivocarse, aplicado al
+servidor en vez de a la clase.
+
+**Estado, con su límite dicho.** A **320 y 360 las trece páginas están limpias**, en ES y EN. A
+**280** —la pantalla exterior del Galaxy Fold— quedan tres con desbordamientos de 5 a 29px, y son
+**otro problema**: no es carpintería de ancho fijo sino **palabras largas contra una columna de
+240** (el `h1` «Accesibilidad» pide 269px él solo). Eso es la escala tipográfica en el extremo
+estrecho, se tarea aparte y no se resuelve con esta decisión.

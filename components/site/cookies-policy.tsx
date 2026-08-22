@@ -203,11 +203,22 @@ export function CookiesPolicy({
             <Section heading={t.contactHeading} prose>
               <p>
                 {t.contactBody}{" "}
+                {/* El email en PROSA es un token de 40 caracteres sin ningún
+                    punto de ruptura, y a 320px fuerza el párrafo a 320 dentro de
+                    una columna de 280: 20px de scroll horizontal en toda la
+                    página (medido el 2026-08-22). El otro sitio donde se pinta
+                    —la pastilla de `contact-actions`— ya se protegía; este no.
+                    `<wbr>` y no `break-all`: parte DESPUÉS de la arroba, que es
+                    el separador natural, en vez de por cualquier sitio —
+                    `break-all` dejaba «…@gmai / l.com» y partía el dominio. Sin
+                    efecto donde hay sitio: `<wbr>` solo ofrece el corte. */}
                 <a
                   href={`mailto:${EMAIL}`}
                   className="link-content link-content--underline"
                 >
-                  {EMAIL}
+                  {EMAIL.slice(0, EMAIL.indexOf("@") + 1)}
+                  <wbr />
+                  {EMAIL.slice(EMAIL.indexOf("@") + 1)}
                 </a>
                 .
               </p>

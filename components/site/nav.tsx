@@ -113,8 +113,22 @@ export function Nav({
           <span className="block shrink-0" style={{ height: `${symH}px` }}>
             <Logo splitOpacity={splitOpacity} className="h-full gap-0" />
           </span>
+          {/* `max-[359px]:hidden` — POR QUÉ ESTE NÚMERO, medido el 2026-08-22.
+              El nav pide 349px exactos y no cede: 20 de gutter + 217 de logo + 16
+              de hueco + 96 del grupo derecho. Por debajo de 349 el SITIO ENTERO
+              scrollea en horizontal, y el grupo derecho no tiene la culpa —solo
+              pide 96—: manda el logo, cuyo wordmark son 168px que nunca encogen.
+              Apretar gutter y hueco recupera 24 de los 29 que faltan a 320px, así
+              que no llega; soltar el wordmark es la única palanca que cabe.
+              Y no es una excepción: el nav ya lo suelta al hacer scroll y el
+              footer no lo lleva nunca (`BRAND-logo.md` §Tabla de uso). Dejarlo
+              encoger o recortarse está prohibido por la regla 6 de ese mismo
+              documento — recorta glifos a mitad de letra y se lee como un bug.
+              El símbolo se queda, así que el momento de marca del split sobrevive.
+              359 y no 348 para tener margen real: el corte cae por debajo del
+              iPhone SE (375) y de los Android de 360. */}
           <span
-            className="font-display overflow-hidden text-[1.375rem] font-semibold tracking-[-0.01em] whitespace-nowrap"
+            className="font-display overflow-hidden text-[1.375rem] font-semibold tracking-[-0.01em] whitespace-nowrap max-[359px]:hidden"
             style={
               nameO <= 0
                 ? { opacity: 0, maxWidth: 0, marginLeft: 0 }

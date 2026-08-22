@@ -84,6 +84,20 @@ alto sin tocar la resolución:
 | `1536 740` | 1920 al **125%** ← el caso de D50 |
 | `1280 618` | 1920 al **150%** |
 | `390 844` | móvil |
+| `320 720` | móvil **estrecho** ← el caso de D93 |
+
+**Por qué 320 y no solo 390** *(añadido 2026-08-22)*. El nav pedía **349px** y el sitio entero
+scrolleaba en horizontal por debajo de esa anchura, en las trece páginas y durante meses. No lo
+vio nadie porque **el viewport más estrecho de esta matriz era 390**, así que el fallo vivía
+justo debajo del suelo del instrumento. 320 es el iPhone SE de 1.ª y 2.ª generación, no un caso
+de laboratorio.
+
+**Qué se mide ahí, y es una cosa que no se mide en los demás:** `document.documentElement.scrollWidth > innerWidth`.
+Un desbordamiento horizontal no es un problema de pliegue ni lo caza axe; se ve
+solo preguntándolo. Y cuando aparezca, **el infractor se busca descartando `<col>` y
+`<colgroup>`** —no son cajas pintadas y dan falso positivo— y **descartando lo que vive dentro
+de un contenedor con `overflow-x` propio**, que scrollea ahí y no extiende el documento. Las dos
+trampas costaron una pista falsa cada una.
 
 **Temas y motion:** `light`, `dark`, y `dark reduced-motion` como tercera pasada.
 
