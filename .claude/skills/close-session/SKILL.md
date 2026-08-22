@@ -136,11 +136,22 @@ ha contestado por inercia.
    `BRAND-historical.md`, regenéralos con `npm run indices` — se DERIVAN de las
    cabeceras y no se escriben a mano. Si un título no basta para saber si abrir esa
    sección, arregla LA CABECERA, nunca el índice.
-3. **Tablero de tareas**: actualiza `Estado` (To-Do → En progreso → Listo; al cerrar
+3. **El artículo, que casi siempre va a saltar.** `check:articulo` sella **por archivo**
+   y esta skill edita justo los archivos sellados —`PRD-Live.md`, `DECISIONS.md`,
+   `BRAND.md`, `CLAUDE.md`—, así que **cuenta con que salga rojo**: el 2026-08-22 saltó
+   cuatro veces. **No selles por reflejo**, que es exactamente como un guardián deja de
+   servir. El orden es: `npm run check:articulo` → **abre las secciones que nombra en
+   `app/[lang]/dictionaries/{es,en}/como-se-ha-creado.json`** → decide si lo que dicen
+   sigue siendo cierto. Si lo es, `npm run articulo:sellar`. Si no, corrige el copy **ES y
+   EN** (D20) y sella después.
+   **Mira especialmente las CIFRAS escritas con letra** —«las seis rutinas», «los
+   dieciséis pasos», «siete piezas»—: son las que envejecen primero, y son la mitad de
+   las veces que este guardián acierta.
+4. **Tablero de tareas**: actualiza `Estado` (To-Do → En progreso → Listo; al cerrar
    una etapa, lo terminado → Archivado; el resto sigue abierto en su etapa),
    `Prioridad` y `Etapa` según las **reglas del tablero** de `CLAUDE.md` (no
    negociables). Una tarea a la vez, estado al día.
-4. **Commit** de los cambios de repo en rama corta → PR (D12); no directo a `main`.
+5. **Commit** de los cambios de repo en rama corta → PR (D12); no directo a `main`.
 
 ## Paso 4 · Cierra el bucle
 Dile a Francisco **qué se actualizó y qué se dejó igual a propósito**. Si algo quedó
