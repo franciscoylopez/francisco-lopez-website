@@ -10,7 +10,7 @@
 
 - **`@`-importados (siempre en contexto):** `AGENTS.md`, `BRAND.md` (core de reglas), `PRD-Live.md`, y este `CLAUDE.md`.
 - **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md` (el porqué fechado de las reglas de marca)**, `BRAND-logo.md` (enciclopedia del logo).
-- **Y cómo se consultan, que es lo que hace barata esa mitad:** los tres primeros llevan **índice derivado de sus cabeceras, y los tres lo llevan en su propia cabecera**: se abren con un `Read` limitado a sus primeras líneas —130 en `DECISIONS.md`, 90 en los históricos, el mapa entero de 46.000 palabras por unos 1.500 tokens— y solo después se va a la sección. Ninguno de los tres cuesta nada en el arranque, y eso incluye el de decisiones, que vivía aquí y pesaba 1.296 palabras que crecían solas (D88). Grepear a ciegas un archivo de 46.000 palabras es el fallo que el índice existe para evitar.
+- **Y cómo se consultan, que es lo que hace barata esa mitad:** los tres primeros llevan **índice derivado de sus cabeceras, y los tres lo llevan en su propia cabecera**: se abren con un `Read` limitado a sus primeras líneas —130 en `DECISIONS.md`, 90 en los históricos— y solo después se va a la sección. Ninguno de los tres cuesta nada en el arranque (D88). Grepear a ciegas un archivo de 46.000 palabras es el fallo que el índice existe para evitar.
 - **Cuándo leer `BRAND-historical.md`:** *antes de cambiar una regla de `BRAND.md`*. Casi todas nacieron corrigiendo algo, y allí está qué se probó y por qué se descartó — ahorra repetir un experimento que ya salió mal.
 - **Convención de mitigación:** antes de tocar un subsistema con ADR, hacer `grep`/Read de su D-entry en `DECISIONS.md` — así no se pierde ninguna regla, solo deja de estar precargada. El índice de su cabecera dice qué D-entries existen.
 
@@ -50,10 +50,10 @@ Al empezar una sesión de desarrollo:
 
 > **`Etapa` contesta una sola pregunta: ¿esto está comprometido o esperando?** Dos familias en el mismo campo (y **vigila que «General» no se coma el eje**: ya degeneró una vez con «Optimización» al 80%):
 >
-> - **Sprints** (lo comprometido, con su orden): *Método II · Footer y contacto*.
+> - **Sprints** (lo comprometido, con su orden): *Footer y contacto*.
 > - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad · Cómo se ha creado*.
 > - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque. *(Vigilado desde 2026-08-19: degeneró una vez con «Optimización».)*
-> - **Cerradas** (solo archivadas, no se usan para tareas nuevas): *V1 (entregado) · Cimientos técnicos · Sobre mí · Contacto avanzado · Optimización · IA conversacional · Deep-dive*.
+> - **Cerradas** (solo archivadas, no se usan para tareas nuevas): *V1 (entregado) · Cimientos técnicos · Sobre mí · Contacto avanzado · Optimización · IA conversacional · Deep-dive · Método · Método II*. **Los dos «Método» no se vuelven bloque:** no tienen página, y su deuda es transversal (*General*).
 > - **Un sprint que cierra no se archiva: se convierte en su BLOQUE** *(2026-08-22)*. Su página sigue viva y va a generar deuda, y esa deuda es de ella, no transversal. «Cómo se ha creado» hizo ese viaje al cerrar; «Deep-dive» no lo hizo y por eso llevaba dos cierres listado como sprint comprometido.
 >
 > **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote. El coste asumido: al entrar en un sprint se pierde de qué bloque venía; lo llevan el nombre y las notas, y añadir una séptima propiedad sería peor.
@@ -110,7 +110,7 @@ Antes de escribir markup nuevo, la cascada, en orden:
 
 **Señal de alarma:** si estás escribiendo una cadena de más de ~4 clases utilitarias para algo accionable, o para una caja que aparece más de una vez, estás en el paso 1 sin haberlo mirado.
 
-**Al cerrar:** si el trabajo creó una variante o un bloque nuevo (paso 2), **se publica en el Design System antes de dar la tarea por hecha**. El recorrido completo —regla → componente → sección publicada → uso— es lo que hace que los enlaces sean difíciles de incumplir y lo que a los botones les faltaba.
+**Al cerrar:** si el trabajo creó una variante o un bloque nuevo (paso 2), **se publica en el Design System antes de dar la tarea por hecha**, y eso lo lleva la skill `publicar-en-design-system` — que existe porque esta regla llevaba meses escrita y se incumplió dos veces (D89). El recorrido completo —regla → componente → sección publicada → uso— es lo que hace que los enlaces sean difíciles de incumplir y lo que a los botones les faltaba.
 
 ### Qué compra esto: la accesibilidad se hereda, no se vuelve a medir
 
@@ -160,7 +160,7 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 
 | # | Comprobación | Cómo |
 |---|---|---|
-| 1 | **Sale de las piezas, no de clases sueltas** | La cascada de la «Regla de construcción». Si hubo que crear variante, se publica en el Design System antes de dar por hecha la tarea |
+| 1 | **Sale de las piezas, no de clases sueltas** | La cascada de la «Regla de construcción». Si hubo que crear variante, se publica en el Design System con la skill `publicar-en-design-system` antes de dar por hecha la tarea, y `check:indices` la nombra si no |
 | 2 | **Accesibilidad de contenido**: un solo `h1` y jerarquía sin saltos · breadcrumb · nada codificado solo por color · alternativas textuales | `npm run check:marco` en CI para los puntos 4, 5 y 8 (D75). A mano solo el **6**, que no tiene forma automática |
 | 3 | **Accesibilidad heredada**: contraste, foco, 44px, `reduced-motion` | `viewport-verifier` (D52). **Solo se vuelve a MEDIR** si el trabajo introduce un par de color nuevo, un fondo que no sea `--background` o una animación propia — y **esa condición ya no hay que leerla**: `check:palette` compara contra el sello del último censo y sale rojo nombrando lo que apareció (D90) |
 | 4 | **Enlace de salto** | `npm run check:marco`: axe no lo detecta, y por eso lo mira él (D46/D75) |

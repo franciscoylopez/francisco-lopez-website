@@ -123,9 +123,7 @@ D76 dejó fuera del núcleo a propósito.
 
 **Qué hay exactamente en `components/ui/` no lo dice este párrafo: lo dice
 `components/ui/README.md`, derivado del disco** y comprobado en cada PR, con la frase de
-cada pieza y la sección donde se publica. Circulaban tres cifras escritas a mano —cinco
-capas, siete piezas, diez nombres— que describían grupos distintos, y ninguna acertaba el
-total (D89).
+cada pieza y la sección donde se publica (D89).
 
 Cuál toca se decide con dos preguntas — **¿se pulsa?** y, si sí, **¿tiene caja propia?** —
 no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
@@ -267,7 +265,7 @@ dos primeros están entregados**; entre ellos se intercalaron dos bloques cortos
 | — | *Sprint Lite* — 404 de los deep-dive, la raya fuera del copy, retrato nuevo, vídeo de Sobre mí, aperturas homogéneas, repo público | **En producción** |
 | — | *Método* — el andamiaje del propio método antes de un sprint de contenido | **Entregado** |
 | 2 | **«Cómo se ha creado esta página»** | **En producción** (cerrado el 2026-08-22) |
-| — | *Método II* — el andamiaje otra vez, y el presupuesto de contexto sin margen | **En curso** |
+| — | *Método II* — el andamiaje otra vez, y el presupuesto de contexto sin margen | **Entregado** (cerrado el 2026-08-22) |
 | 3 | **Footer estructurado y Contacto ampliada** | Después |
 
 **Sprint 3 — Footer y Contacto ampliada.** El footer va el último **porque necesita que

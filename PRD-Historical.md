@@ -69,6 +69,7 @@
 - [51. El repositorio se hace público, y el Sprint Lite se cierra (2026-08-19)](#51-el-repositorio-se-hace-público-y-el-sprint-lite-se-cierra-2026-08-19)
 - [52. El bloque Método: se audita cómo se trabaja, antes de un sprint de contenido (2026-08-19)](#52-el-bloque-método-se-audita-cómo-se-trabaja-antes-de-un-sprint-de-contenido-2026-08-19)
 - [53. «Cómo se ha creado esta página»: el contenido primero, y un artículo que no publica cifras (2026-08-20)](#53-cómo-se-ha-creado-esta-página-el-contenido-primero-y-un-artículo-que-no-publica-cifras-2026-08-20)
+- [54. Método II: el sprint de la operación que faltaba, y tres reglas que existían sin disparador (2026-08-22)](#54-método-ii-el-sprint-de-la-operación-que-faltaba-y-tres-reglas-que-existían-sin-disparador-2026-08-22)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2736,6 +2737,49 @@ con «Del discovery al dato», que es el titular del Hero. Se **retiró la secci
 de resultados, que no es la analítica de usuarios (esa empieza ahora y el artículo ya lo
 cuenta así) sino que el lector recorre ~6.000 palabras de proceso sin ver un solo resultado
 del trabajo. Se resuelve con D74 al escribir el copy final.
+
+## 54. Método II: el sprint de la operación que faltaba, y tres reglas que existían sin disparador (2026-08-22)
+
+**Qué lo abrió.** Un número. El contexto que se `@`-importa en cada arranque había pasado de
+4.120 palabras el 30 de julio a **13.470 el 22 de agosto**, con el techo en 13.500: **treinta
+palabras de margen**, +227 % en 23 días. El sprint anterior había cerrado en producción y el
+siguiente añade una página, que es justo lo que hace crecer `PRD-Live.md`.
+
+**El diagnóstico, que no era «se escribe de más».** El method-review del mismo día lo dejó en
+una frase: *este método tiene una operación de añadir excepcional y no tiene operación de
+retirar*. Y el matiz importa, porque el mecanismo para retirar **ya existía** desde el 19 de
+agosto —el paso 1 bis de `close-session` y el techo de `check:contexto`—. Lo que no había
+ocurrido nunca era pasarlo por los documentos. **La deuda era anterior al portador.**
+
+**Las tres decisiones, y ninguna es «escribir menos».**
+
+- **D88** · el índice de decisiones baja a la cabecera de `DECISIONS.md`. Era el único de los
+  tres índices que vivía dentro de un archivo `@`-importado, y el único que crecía **por
+  construcción**: 1.296 palabras, el 9,6 % del presupuesto, a unas 42 palabras diarias. Contra
+  algo que crece solo, un techo no defiende: solo obliga a recortar en otro sitio.
+- **D89** · el inventario de `components/ui/` se deriva del disco. La lista que contesta el paso
+  1 de la «Regla de construcción» —¿existe ya la pieza?— estaba escrita a mano en **cinco
+  sitios y ninguno acertaba**, y dos piezas no salían en ninguno.
+- **D90** · el censo de contraste sella lo que midió. La condición de re-medir de la DoD era
+  correcta y **leerla era trabajo humano**; ahora CI la lee y sale rojo nombrando lo que
+  apareció, sin necesitar navegador.
+
+**El resultado, medido:** 13.494 → **11.997** palabras. Por primera vez el arranque cabe en el
+objetivo de 12.000 que se fijó el 19 de agosto, con el techo apretado dos veces en el mismo día
+(13.500 → 12.500 → 12.400).
+
+**El patrón que comparten cinco de las siete tareas, y es lo que hay que llevarse:** *una regla
+que existe, es correcta, y no tiene quién la dispare*. La de publicar una pieza en el Design
+System llevaba meses escrita y se incumplió dos veces seguidas; la condición de re-medir se
+cumplió por triplicado sin que nadie la leyera; el inventario mandaba mirar donde las piezas no
+estaban. En los tres casos lo que faltaba no era documentación: era **el momento y el con qué
+compararse**. De ahí salen dos skills nuevas —`publicar-en-design-system` y
+`gates-de-servidor`— y un guardián que nombra lo que falta en cada PR.
+
+**Y lo que el sprint destapó al pasar:** `stat-row` llevaba desde el 19 de agosto siendo una de
+las siete piezas del núcleo **sin publicar**, y `deep-dive-page` no se había disparado nunca
+desde que se extrajo. Las dos cosas las encontró el andamiaje nuevo el mismo día de estrenarlo,
+que es la única prueba que vale de que un gate sirve.
 
 ## Fuentes
 
