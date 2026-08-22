@@ -73,6 +73,13 @@ jobs:
       # System y las imágenes OG copian valores de token a mano por necesidad —pintan
       # la paleta contraria a la vigente, o las genera Satori, que no lee CSS vars— y
       # una copia que diverge no la detectan ni axe, ni el typecheck, ni el ojo.
+      #
+      # Y desde D90 mira una segunda cosa de la misma familia: si ha aparecido un
+      # token de color, una superficie o una animación que el censo de contraste
+      # NO ha visto. El censo no puede correr aquí —necesita navegador (D85)—,
+      # pero comparar su sello sí, y eso convierte la condición de re-medir de la
+      # DoD en un rojo con nombre en vez de un párrafo que hay que acordarse de
+      # leer.
       - name: Palette
         run: npm run check:palette
 

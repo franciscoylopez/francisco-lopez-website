@@ -125,10 +125,10 @@ vertical sin ganar nada (P37.62). **Una sola** sí va a la medida de lectura.
 - `npm run check:raya` · `npm run typecheck` · `npm run lint` · `npm run format`.
 - `npm run check:marco` — jerarquía de encabezados sin saltos, sobre el HTML prerenderizado.
 - **Accesibilidad heredada, no re-medida** (DoD columna A, punto 3): sale de piezas que ya
-  existen, así que contraste, foco, 44px y `reduced-motion` vienen dados. **Solo se vuelve a
-  medir con `npm run censo` si la sección introduce un par de color nuevo, un fondo que no sea
-  `--background` o una animación propia** — y una demo de superficies lo hace, así que léelo
-  antes de saltártelo.
+  existen, así que contraste, foco, 44px y `reduced-motion` vienen dados. **Y la condición de
+  re-medir ya no hay que leerla**: si la sección introduce un token de color, una superficie o
+  una animación, `npm run check:palette` sale rojo nombrándolo y manda pasar `npm run censo`
+  (D90). Una demo de superficies lo dispara, que es justo el caso que se coló.
 - **`npm run gate:html` no aplica aquí**: publicar cambia el HTML a propósito. Es el gate de
   los refactors que se dicen transparentes (D42).
 - Si la pieza no estaba en el `README.md` derivado, el PR no está terminado.
