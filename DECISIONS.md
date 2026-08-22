@@ -4429,3 +4429,53 @@ PRIMERA banda invertida del sitio con foto —todas las demás (Brand Kit, Desig
 Accesibilidad) son color plano—, una decisión de sistema y no solo de esta página. Revertido
 por completo: el componente, la constante de variante y la imagen de `public/img/` — nada
 quedó en el árbol.
+
+## D82 · El design-review de P60 encuentra ocho fallos reales, y dos patrones que se repiten — 2026-08-22
+
+**Contexto.** Primera vez que `/design-review` se dispara sobre una página recién cerrada (P60)
+en vez de sobre el sitio agregado: barrido de código (fork) + verificación en pantalla
+(`viewport-verifier` + `agent-browser` dirigido) + expresión de marca. Ocho hallazgos
+verificados, tareados (60.1-60.8) y resueltos en la misma sesión; dos regresiones más, cazadas
+por Francisco viendo la página servida tras el primer arreglo.
+
+**Los ocho hallazgos, en una línea cada uno.** (1) Hover del breadcrumb sobre banda invertida,
+1,11:1 — `--chrome-hover-bg` sin override para `[data-surface="inverted"]`. (2) Dos diagramas
+nuevos usaban `brand-purple-soft` como relleno informativo, 1,3-1,7:1 en claro — `BRAND.md` ya
+prohibía esto; el cian pasa a llevar la información, un borde `stroke-primary` delimita la
+forma. (3) `SectionRail` (el TOC flotante): objetivo táctil 24×24, no 44×44. (4) El riel y el
+dock de compartir precedían al `h1` en el DOM — `fixed` no implica «antes» visualmente, pero sí
+en el orden de tabulación. (5) Ningún `<section id>` con ancla tenía `scroll-margin-top` bajo el
+nav sticky. (6) El Design System (§15) publicaba 6 de las 11 piezas de la familia de artículo.
+(7) El TOC se escribió a mano fuera de `chrome.tsx` — excepción documentada con fecha, mismo
+patrón que el switch de consentimiento. (8) `LiveStat` no abría en pestaña nueva sus enlaces
+externos, a diferencia de `RepoStrip`.
+
+**Patrón 1 — Contener un `fixed` dentro de una demo del Design System.** `SectionRail`,
+`FloatingShare` y `ReadingProgress` son `fixed` a la VENTANA por diseño, correcto en la página
+real. Para demostrarlos en el Design System sin que invadan el resto de la página, el
+contenedor de la demo lleva `[transform:translateZ(0)]`: cualquier `transform`/`filter`/
+`perspective` en un ancestro crea un *containing block* nuevo para sus descendientes `fixed`,
+así que se posicionan relativos AL PANEL, no al viewport. Mismo componente, mismo
+comportamiento, contenido.
+
+**Patrón 2 — Un flex item que debe desbordar necesita `shrink-0` explícito.** Al separar el
+objetivo táctil (44×44) del aspecto visual del pill de `SectionRail`, el pill pasó a ser flex
+item de un nuevo `<a>` flex. `flex-shrink: 1` es el valor por defecto, así que el pill se
+encogía a los 44px del padre en cada hover en vez de crecer hasta `max-w-64` —
+`overflow: visible` en el padre **no** evita el shrink, que ocurre en el propio cálculo del
+layout flex, antes de pintar—. Y por separado: `justify-center` en el padre hace que el
+crecimiento empuje hacia los dos lados, así que un elemento que vive cerca de un borde (aquí, el
+borde izquierdo de la ventana) se sale de la pantalla por la mitad izquierda del crecimiento —
+`justify-start` para que crezca en una sola dirección.
+
+**El footer no se propaga solo.** Su lista de enlaces (`footer.tsx`) es manual, no deriva de
+`lib/routes.ts`: P60 no se añadió sola. Insertado a petición de Francisco, con label propio del
+footer («El Making of» / «The Making Of») distinto del título real de la página, y primero en
+el orden.
+
+**`check:contexto` en rojo por primera vez desde que existe.** La excepción del TOC (patrón 1
+de arriba, escrita en `BRAND.md`) empujó el contexto de arranque de 13500 a 13598 palabras. Se
+resolvió retirando, no subiendo el techo: la sección más pesada de `BRAND.md` (523 palabras,
+«Un control sobre una imagen») repetía en el documento en presente el barrido completo que ya
+vive en `BRAND-historical.md` — se dejó la regla y el «qué garantiza y qué no», el resto ya
+tenía puntero. 13345 palabras, mismo contenido.
