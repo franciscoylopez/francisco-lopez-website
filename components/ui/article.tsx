@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 
 import { Rich } from "./rich";
 import { chromeLinkVariants } from "./chrome";
-import { eyebrowVariants, titleVariants } from "./heading";
+import { eyebrowVariants, LEADING, titleVariants } from "./heading";
 
 // Capa de ARTÍCULO LARGO del sistema (P60). Ninguna de estas piezas sabe nada de
 // ESTE sitio —reciben texto y hrefs, no copy propio ni rutas— así que viven en
@@ -22,11 +22,21 @@ import { eyebrowVariants, titleVariants } from "./heading";
 
 /* ───────────────────────── ByLine ───────────────────────── */
 
-/** Avatar + nombre + rol del autor, en la apertura del artículo. Sin foto
- * propia: iniciales sobre `--muted`, mismo tratamiento que un avatar sin
- * imagen en cualquier sistema — no es una foto de estudio, es una pieza
- * genérica. */
-export function ByLine({ name, role }: { name: string; role: string }) {
+/** Avatar + nombre + rol del autor, en la apertura del artículo. Con
+ * `photoSrc`, la foto real recortada 1:1; sin ella, iniciales sobre
+ * `--muted` (mismo tratamiento que un avatar sin imagen en cualquier
+ * sistema), que sigue siendo el valor por defecto de la pieza. */
+export function ByLine({
+  name,
+  role,
+  photoSrc,
+  photoAlt,
+}: {
+  name: string;
+  role: string;
+  photoSrc?: string;
+  photoAlt?: string;
+}) {
   const initials = name
     .split(" ")
     .map((w) => w[0])
@@ -36,15 +46,31 @@ export function ByLine({ name, role }: { name: string; role: string }) {
     .toUpperCase();
   return (
     <div className="flex items-center gap-[0.85rem]">
-      <span
-        aria-hidden="true"
-        className="bg-muted text-foreground flex size-11 shrink-0 items-center justify-center rounded-full text-[0.85rem] font-semibold"
-      >
-        {initials}
-      </span>
+      {photoSrc ? (
+        <span className="relative size-11 shrink-0 overflow-hidden rounded-full">
+          <Image
+            src={photoSrc}
+            alt={photoAlt ?? ""}
+            fill
+            sizes="44px"
+            className="object-cover"
+          />
+        </span>
+      ) : (
+        <span
+          aria-hidden="true"
+          className="bg-muted text-foreground flex size-11 shrink-0 items-center justify-center rounded-full text-[0.85rem] font-semibold"
+        >
+          {initials}
+        </span>
+      )}
       <div>
-        <div className="text-[0.95rem] leading-[1.3] font-semibold">{name}</div>
-        <div className="text-muted-foreground text-[0.85rem] leading-[1.3]">
+        <div className={cn("text-[0.95rem] font-semibold", LEADING.meta)}>
+          {name}
+        </div>
+        <div
+          className={cn("text-muted-foreground text-[0.85rem]", LEADING.meta)}
+        >
           {role}
         </div>
       </div>
@@ -87,7 +113,12 @@ export function ArticleIndex({
     <nav aria-label={ariaLabel} data-reveal>
       <div className="border-border flex items-baseline justify-between gap-3 border-b px-1 pb-3">
         <p className={cn(eyebrowVariants(), "m-0")}>{kicker}</p>
-        <span className="text-muted-foreground hidden text-[0.78rem] sm:inline">
+        <span
+          className={cn(
+            "text-muted-foreground hidden text-[0.78rem] sm:inline",
+            LEADING.meta,
+          )}
+        >
           {timeLabel}
         </span>
       </div>
@@ -106,10 +137,20 @@ export function ArticleIndex({
               <span className="font-display text-[1.9rem] leading-none font-semibold">
                 {item.ordinal}
               </span>
-              <span className="text-foreground text-[0.95rem] font-medium">
+              <span
+                className={cn(
+                  "text-foreground text-[0.95rem] font-medium",
+                  LEADING.meta,
+                )}
+              >
                 {item.label}
               </span>
-              <span className="text-muted-foreground mt-1 font-mono text-[0.75rem]">
+              <span
+                className={cn(
+                  "text-muted-foreground mt-1 font-mono text-[0.75rem]",
+                  LEADING.meta,
+                )}
+              >
                 ≈{item.minutes} min
               </span>
             </a>
@@ -158,7 +199,12 @@ export function SectionCover({
   metaLine: string;
 }) {
   const metaLineText = (
-    <p className="text-muted-foreground m-0 font-mono text-[0.7rem] tracking-[0.06em] uppercase">
+    <p
+      className={cn(
+        "text-muted-foreground m-0 font-mono text-[0.7rem] tracking-[0.06em] uppercase",
+        LEADING.meta,
+      )}
+    >
       {metaLine}
     </p>
   );
@@ -275,7 +321,10 @@ export function ArticleProse({
               className="m-0 !my-[2.25rem] max-w-[var(--measure)] list-none space-y-[0.7rem] p-0"
             >
               {block.items.map((item, j) => (
-                <li key={j} className="flex gap-3 text-[1.02rem] leading-[1.7]">
+                <li
+                  key={j}
+                  className={cn("flex gap-3 text-[1.02rem]", LEADING.prose)}
+                >
                   <span
                     aria-hidden="true"
                     className="bg-primary mt-[0.65em] size-[6px] shrink-0"
@@ -340,7 +389,10 @@ export function ArticleProse({
           );
         }
         return (
-          <p key={i} className="m-0 text-[1.02rem] leading-[1.7] text-pretty">
+          <p
+            key={i}
+            className={cn("m-0 text-[1.02rem] text-pretty", LEADING.prose)}
+          >
             <Rich text={block.text} />
           </p>
         );
@@ -358,7 +410,12 @@ export function ArticleProse({
  * porque no transporta información, es ornamento sobre un texto que ya se lee
  * solo. Sin rótulo «LA FRASE DE LA SECCIÓN» (P60 tanda 2, punto 8): era un
  * marcador de autoría de las seis apariciones, literalmente el mismo texto
- * las seis veces, no copy para quien lee. */
+ * las seis veces, no copy para quien lee.
+ *
+ * `leading-[1.3]`: a propósito FUERA de la escala `LEADING` de cuerpo/meta —
+ * una cita destacada no es prosa que se lee seguida ni un metadato, es texto
+ * grande y en negrita pensado para leerse como un titular corto. Más apretado
+ * a más tamaño es la misma convención que ya usa `titleVariants`. */
 export function Pullquote({
   side = "right",
   children,
@@ -388,7 +445,12 @@ export function Pullquote({
 
 /** Cita en el flujo: la cita menor, que no debe parar la lectura. Filete
  * morado pastel, flota al lado contrario que `Pullquote` cuando ambas caen en
- * la misma sección, para que el peso gráfico no se acumule en un solo borde. */
+ * la misma sección, para que el peso gráfico no se acumule en un solo borde.
+ *
+ * `leading-[1.45]`: mismo criterio que `Pullquote` (fuera de `LEADING`, es
+ * cita y no cuerpo/meta), pero más suelto que su 1,3 — a menor tamaño de
+ * letra, la misma proporción se lee más apretada, así que necesita algo más
+ * de aire para no sentirse comprimida. */
 export function Pull({
   side = "left",
   children,
@@ -437,20 +499,38 @@ export function LiveStat({
   return (
     <aside className="border-border bg-card my-[2rem] max-w-[34rem] rounded-lg border">
       <div className="border-border flex flex-wrap items-baseline justify-between gap-2 border-b border-dashed px-5 pt-4 pb-3">
-        <span className="text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
+        <span
+          className={cn(
+            "text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase",
+            LEADING.meta,
+          )}
+        >
           {label}
         </span>
-        <code className="text-muted-foreground font-mono text-[0.74rem]">
+        <code
+          className={cn(
+            "text-muted-foreground font-mono text-[0.74rem]",
+            LEADING.meta,
+          )}
+        >
           {source}
         </code>
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
-        <p className="text-foreground m-0 text-[1.05rem] font-semibold">
+        <p
+          className={cn(
+            "text-foreground m-0 text-[1.05rem] font-semibold",
+            LEADING.meta,
+          )}
+        >
           {value}
         </p>
         <a
           href={href}
-          className="link-content link-content--underline text-[0.9rem] font-medium"
+          className={cn(
+            "link-content link-content--underline text-[0.9rem] font-medium",
+            LEADING.meta,
+          )}
         >
           {linkLabel}
         </a>
@@ -503,7 +583,12 @@ export function RepoStrip({
   tone?: "content" | "chrome";
 }) {
   return (
-    <footer className="border-border mt-[2.5rem] flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t pt-5 text-[0.92rem]">
+    <footer
+      className={cn(
+        "border-border mt-[2.5rem] flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t pt-5 text-[0.92rem]",
+        LEADING.meta,
+      )}
+    >
       <span className="text-muted-foreground shrink-0 font-semibold tracking-[0.04em] uppercase">
         {label}
       </span>
@@ -572,7 +657,12 @@ export function ChapterNav({
       aria-label={`Entre secciones · ${positionLabel}`}
       className="border-border mt-[2.5rem] flex flex-wrap items-center gap-x-4 gap-y-3 border-t pt-5"
     >
-      <p className="text-muted-foreground m-0 flex items-center gap-2 text-[0.85rem]">
+      <p
+        className={cn(
+          "text-muted-foreground m-0 flex items-center gap-2 text-[0.85rem]",
+          LEADING.meta,
+        )}
+      >
         {/* Vistas en negro, pendientes en gris, y la ACTUAL en morado — el eje
             que faltaba (feedback de diseño de P60): antes «vista» y «actual»
             se confundían en el mismo negro. */}
@@ -678,7 +768,12 @@ export function DiagramPanel({
       <div className="flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
         {children}
       </div>
-      <figcaption className="border-border text-muted-foreground border-t px-5 py-4 text-[0.85rem] leading-[1.6]">
+      <figcaption
+        className={cn(
+          "border-border text-muted-foreground border-t px-5 py-4 text-[0.85rem]",
+          LEADING.lead,
+        )}
+      >
         {caption}
       </figcaption>
     </figure>
