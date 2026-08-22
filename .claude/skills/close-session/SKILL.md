@@ -24,7 +24,7 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 |---|---|---|
 | **Estado** de producto / diseño / alcance | `PRD-Live.md` (spec viva, `@`-importada) | Solo repo (**sin espejo desde el 2026-08-19**) |
 | **Registro histórico** de producto / diseño / alcance | `PRD-Historical.md` | Solo repo (sin espejo) |
-| Decisión técnica / de implementación | `DECISIONS.md` (formato ADR-lite) | Solo repo (sin espejo; **a demanda vía Read/Grep, NO `@`-importado** — D28). **D-entry nuevo → su línea al índice de `CLAUDE.md`** |
+| Decisión técnica / de implementación | `DECISIONS.md` (formato ADR-lite) | Solo repo (sin espejo; **a demanda vía Read/Grep, NO `@`-importado** — D28). **D-entry nuevo → `npm run indices`**, que reescribe el índice de su cabecera (D88) |
 | Convención que aplica en adelante | `CLAUDE.md` | — (se `@`-importa, se carga cada sesión) |
 | Regla de identidad / marca (core), en presente | `BRAND.md` | — (se `@`-importa) |
 | Porqué fechado de una regla de marca (qué se probó, qué falló) | `BRAND-historical.md` | — (**a demanda**, NO `@`-importado — D28) |
@@ -129,9 +129,9 @@ ha contestado por inercia.
 ## Paso 3 · Aplica
 1. **Repo**: edita `PRD-Live.md` / `PRD-Historical.md` / `DECISIONS.md` / `README.md` /
    `CLAUDE.md` / `BRAND.md` / `BRAND-historical.md` / `BRAND-logo.md` según lo acordado. La CABECERA de un D-entry
-   nuevo importa más de lo que parece: es la línea que acaba en el índice de `CLAUDE.md`,
-   que es lo único que se carga en cada arranque. Tiene que bastar para decidir si abrir
-   esa entrada, porque el índice no tiene texto propio (ver paso 2).
+   nuevo importa más de lo que parece: es la línea que acaba en el índice de la cabecera
+   de `DECISIONS.md`, que es lo único que se lee antes de abrir nada. Tiene que bastar
+   para decidir si abrir esa entrada, porque el índice no tiene texto propio (ver paso 2).
 2. **Índices**: si añadiste una sección a `DECISIONS.md`, `PRD-Historical.md` o
    `BRAND-historical.md`, regenéralos con `npm run indices` — se DERIVAN de las
    cabeceras y no se escriben a mano. Si un título no basta para saber si abrir esa
