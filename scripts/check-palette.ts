@@ -1,5 +1,14 @@
-// Guardián de la paleta (P37.6605). Falla el build si `lib/design-values.ts` y
-// `app/globals.css` dejan de decir lo mismo.
+// Guardián de la paleta (P37.6605). Mira DOS cosas, y conviene saberlo antes de
+// tocarlo:
+//
+//   1. Que `lib/design-values.ts` y `app/globals.css` digan lo mismo, y que no
+//      quede ninguna copia de un valor de token fuera de su fuente.
+//   2. Que no haya aparecido ningún token de color, superficie o animación que
+//      el censo de contraste NO haya visto (D90). Eso vive en
+//      `scripts/censo/huella.ts`, con los datos que mira; aquí solo el veredicto.
+//
+// Las dos son la misma pregunta —¿la paleta dice hoy lo que creemos?— hecha a dos
+// distancias: contra el CSS, y contra la última vez que alguien la midió pintada.
 //
 // EXISTE PORQUE NINGUNA OTRA COSA QUE CORREMOS PUEDE VERLO. El mock de tema del
 // Design System pintó durante días el cian ANTERIOR a la corrección de P37.598, y
@@ -21,12 +30,7 @@ import {
   PALETTE,
   type Theme,
 } from "../lib/design-values";
-import {
-  entradaDelCenso,
-  huella,
-  HUELLA_PATH,
-  leerSello,
-} from "./censo/huella";
+import { revisaSello } from "./censo/huella";
 
 const CSS = readFileSync("app/globals.css", "utf8");
 
@@ -258,55 +262,18 @@ for (const dir of ["app", "components", "lib", "scripts"]) {
   }
 }
 
-/**
- * 6) ¿HA APARECIDO ALGO QUE EL CENSO NO HA VISTO? (D90)
- *
- * La DoD dice que la accesibilidad heredada solo se vuelve a medir si el trabajo
- * introduce un par de color nuevo, un fondo que no sea `--background` o una
- * animación propia. La regla es correcta y **leerla es trabajo humano**: el
- * artículo cumplió las tres ramas a la vez y nadie la leyó, y cuatro de los ocho
- * hallazgos de aquel `design-review` tenían su regla escrita antes de empezar.
- *
- * Va AQUÍ y no en un paso propio de CI porque la pregunta es de paleta: qué
- * colores y qué superficies hay. Y puede correr en CI —al revés que el censo,
- * que necesita navegador (D85)— porque no mide nada: compara lo que HABÍA cuando
- * se midió contra lo que hay ahora. Medir necesita pintar; saber que hay que
- * medir, no.
- */
-const entrada = entradaDelCenso();
-const selloCenso = leerSello();
-const huellaAhora = huella(entrada);
-const senales =
-  entrada.tokens.length +
-  entrada.superficies.length +
-  entrada.animaciones.length;
+// 6) ¿Ha aparecido algo que el censo no ha visto? El porqué y el método están en
+//    `scripts/censo/huella.ts`, con los datos que mira; aquí solo el veredicto.
+const censo = revisaSello();
+problems.push(...censo.problemas);
 
-if (senales === 0) {
+if (censo.senales === 0) {
   console.error(
     "\ncheck:palette — NO HA MIRADO NADA del censo (0 tokens de color, 0 superficies\n" +
-      "y 0 animaciones). Con cero señales esta parte aprobaría siempre, así que falla\n" +
+      "y 0 animaciones). Con cero señales esa mitad aprobaría siempre, así que falla\n" +
       "a propósito. ¿Ha cambiado el formato de `app/globals.css`?\n",
   );
   process.exit(1);
-}
-
-if (!selloCenso) {
-  problems.push(
-    `censo: no hay sello en ${HUELLA_PATH}. Córrelo una vez ` +
-      "(`npm run build && npm start`, y en otra terminal `npm run censo`).",
-  );
-} else if (selloCenso.hash !== huellaAhora) {
-  problems.push(
-    "censo: la paleta o las superficies han cambiado desde la última pasada\n" +
-      `    (sellada el ${selloCenso.fecha} sobre ${selloCenso.resumen}).\n` +
-      "    Hoy hay " +
-      `${entrada.tokens.length} tokens de color · ${entrada.superficies.length} ` +
-      `superficies · ${entrada.animaciones.length} animaciones.\n` +
-      "    Es la condición de re-medir de la DoD, y ya no hay que acordarse de\n" +
-      "    leerla: pasa el censo (`npm run build && npm start`, y en otra terminal\n" +
-      "    `npm run censo`), que vuelve a sellar. Si la pasada es la buena,\n" +
-      "    actualiza también LAST_A11Y_REVIEW en lib/design-values.ts.",
-  );
 }
 
 if (ficheros === 0 || hexes === 0) {
@@ -335,7 +302,6 @@ console.log(
     `${ficheros} archivos recorridos y ${hexes} hex leídos en busca de copias.`,
 );
 console.log(
-  `  y el censo ha visto lo que hay: ${entrada.tokens.length} tokens de color · ` +
-    `${entrada.superficies.length} superficies · ${entrada.animaciones.length} ` +
-    `animaciones, selladas el ${selloCenso?.fecha ?? "—"}.`,
+  `  y el censo ha visto lo que hay: ${censo.resumen}, selladas el ` +
+    `${censo.fecha ?? "—"}.`,
 );
