@@ -75,7 +75,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <details>
 <summary><b>Accesibilidad</b></summary>
 
-- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover, sin excepciones** — verificado sobre las doce páginas × dos temas, con el metro validado en las 24 corridas.
+- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover, sin excepciones** — 380 pares sobre las trece páginas × dos temas, con el metro validado en las 26 corridas. La pasada es un comando (`npm run censo`) y lee las páginas del registro, así que una nueva entra sin que nadie se acuerde (`D85`).
 - El censo de contraste se hace **recorriendo el DOM de la página servida**, no leyendo el CSS: un par que solo existe al componer un velo, o una pastilla de hover, no aparece en ningún inventario de tokens.
 - **Enlace de salto** (WCAG 2.4.1, nivel A), que axe no detecta y por eso se comprueba a mano (`D46`).
 - **Probado con lector de pantalla** (NVDA sobre Chrome), no solo con motores de reglas. Es lo que encuentra los defectos que no violan ningún criterio y que por eso ningún escáner ve; los que encontró están publicados en la propia página de Accesibilidad (`D73`).
@@ -115,7 +115,7 @@ Quince pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y 
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
 | `build` | — |
 
-Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de las doce páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
+Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de las trece páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
 
 ## Arrancar
 
@@ -149,9 +149,10 @@ npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza 
 npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 
 # Medición
-npm run gate:html -- save   # instantánea del HTML de las 12 páginas × 2 idiomas
+npm run gate:html -- save   # instantánea del HTML de las 13 páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
 npm run psi -- <url>        # PageSpeed sobre el Preview o producción (D49)
+npm run censo               # censo de contraste: 13 páginas × 2 temas, servidas (D85)
 ```
 
 > **`npm run artefacto`** usa `@mermaid-js/mermaid-cli`, que necesita un navegador.
@@ -159,6 +160,12 @@ npm run psi -- <url>        # PageSpeed sobre el Preview o producción (D49)
 > tengas instalado**: no se descarga ningún Chromium. El render es local — el diagrama no
 > sale a ningún servidor — y **determinista**, así que regenerar sin cambiar el `.mmd` no
 > ensucia el diff.
+
+> **`npm run censo`** necesita el sitio **servido** (`npm run build && npm start`) y
+> `agent-browser`: la mitad de los pares de este sitio no existen hasta que el navegador
+> compone un `color-mix`, así que no hay forma estática de verlos. Lee las páginas del
+> registro, valida el metro en cada corrida y falla si aparece un par bajo AAA. Fuera de CI
+> por la misma razón que `psi`.
 
 > **`npm run psi`** necesita una **URL pública** (el Preview de Vercel o producción, nunca
 > localhost) y una clave gratuita de la API en `PSI_API_KEY` — ver [`.env.example`](./.env.example).

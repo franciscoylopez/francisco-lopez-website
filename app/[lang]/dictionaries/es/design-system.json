@@ -785,7 +785,7 @@
     "pull": "El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.",
     "liveStatLabel": "Ejemplo · dato en vivo",
     "liveStatSource": "lib/design-values.ts",
-    "liveStatValue": "AAA en las doce páginas",
+    "liveStatValue": "AAA en las {paginas} páginas",
     "liveStatLink": "Ver el censo medido",
     "repoLabel": "ENLACE ·",
     "repoText": "Las decisiones D39, D41 y D73, en ",

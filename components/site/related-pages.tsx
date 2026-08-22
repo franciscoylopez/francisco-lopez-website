@@ -23,7 +23,7 @@ const PAGES: { key: PageKey; path: string | null }[] = [
 // EL FORMATO YA NO VIVE AQUÍ: lo pone `ui/page-closer.tsx` desde que apareció el
 // segundo caso (el paso entre experiencias del deep-dive, P48). Aquí queda lo que
 // es de ESTE sitio: quién es hermana de quién. El refactor se verificó con
-// `npm run gate:html` — diff vacío en las doce variantes.
+// `npm run gate:html` — diff vacío en las veintiséis variantes.
 export function RelatedPages({
   dict,
   current,

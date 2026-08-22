@@ -4626,3 +4626,66 @@ es **decisión fechada** y no caduca nunca. Es la partición que ya tienen `PRD-
 `PRD-Historical` y `BRAND`/`BRAND-historical`, y el artículo es el único documento del proyecto
 sin ella. Si se hace explícita, la clase C encoge mucho: un formulario no falsificaría la §01, la
 continuaría. Francisco decide al escribir el primer caso real, no antes.
+
+## D85 · La pasada de contraste deja de hacerse a mano, y el medidor tenía un falso positivo — 2026-08-22
+
+**Contexto.** Al cerrar D84 salió el primer hallazgo del mecanismo nuevo: el sitio publicaba «AAA
+en las doce páginas» teniendo trece. Francisco lo zanjó en una línea —«asegurémonos de que todas
+las páginas están en AAA, eso no lo debemos perder nunca»—, y ese *nunca* es lo que decide la
+forma de la respuesta: no bastaba con medir y corregir la cifra.
+
+**Por qué se perdió, que no fue descuido.** La pasada completa se conducía **a mano**, llamada a
+llamada del navegador, y por eso se había hecho entera dos veces. Entre una y otra el sitio ganó
+una página —el propio artículo, publicado un día después de `LAST_A11Y_REVIEW`— y nada lo notó.
+Un procedimiento que solo existe como hábito no cubre lo que se añade después de la última vez
+que alguien se acordó.
+
+**`npm run censo`.** El recorrido pasa a ser un comando: lee las páginas de `PAGE_SLUGS` (D72),
+las abre servidas × los dos temas, inyecta `contrast-census.js` y falla si aparece un par bajo
+AAA. **La lista no se escribe en el script**, así que una página nueva entra en el censo por el
+mismo mecanismo que ya la mete en el sitemap, en `gate:html` y en `/llms.txt`.
+
+Con guarda de cero en las tres dimensiones que ya han fallado en silencio aquí: el **metro**
+contra los anclajes sin cian (13,79 / 15,32, exactos), las **reglas `:hover` indexadas** (cero es
+el fallo que el censo tuvo dos veces, y su síntoma era un aprobado) y el **tema pintado** contra
+el que se pidió — un `set media` que no llega mediría la misma página dos veces y lo llamaría
+cobertura.
+
+**Fuera de CI, como `psi` (D49)**, y por el mismo motivo: necesita navegador y servidor. La mitad
+de los pares de este sitio no existen hasta que el navegador **compone** un `color-mix`.
+
+**Resultado: 26 corridas, 380 pares, metro validado en las 26, cero bajo AA y cero bajo AAA.**
+
+**Y midiendo apareció un falso positivo del medidor.** `overImage()` decidía «texto sobre foto»
+por **solape de rectángulos contra cualquier `<img>`/`<video>` del documento**, sin mirar el
+apilamiento. El diálogo de consentimiento es `fixed`, cae encima de la foto del hero y pinta su
+propio `bg-card` **opaco**: salía marcado «sin medir» en tres páginas. Con eso, **22 de los 26
+pares que el censo mandaba revisar a ojo no tenían ninguna imagen debajo** — y una lista de
+revisión manual inflada con falsos positivos es una lista que nadie lee, que es la misma forma de
+fallo que el resto de ese archivo combate.
+
+La pregunta correcta es si hay una imagen pintada **entre el texto y el primer fondo opaco de su
+cadena**: en cuanto un ancestro pinta opaco, lo de detrás no se ve. Ahora el recorrido busca media
+**dentro de cada ancestro** y el fondo opaco devuelve `false` en vez de romper el bucle y seguir
+preguntando. Validado en las dos direcciones, que es lo que exige tocar un metro: el titular de
+Sobre mí **sigue** marcado (verdadero positivo, la foto es un hermano posicionado) y el diálogo
+**deja** de estarlo. `sinMedir` baja de 26 a 4 y los pares medidos suben de 376 a 380.
+
+**Los cuatro que quedan sí son texto sobre la foto**, y se miden aparte porque ninguna herramienta
+compone una fotografía: se toma el píxel pintado bajo la caja del texto, con el texto oculto, y se
+puntúa el **peor** de todos. Titular (38,4px, grande, umbral 4,5): **7,23**. Entradilla (19,2px,
+normal, umbral 7): **11,02**. Repetido a 1440, 768 y 390 de ancho, por si el texto sube a la zona
+donde el degradado se debilita: el peor de las tres anchuras es **7,23**. AAA con holgura.
+
+**Y la cifra de páginas deja de escribirse.** `PAGE_COUNT` sale de `PAGE_SLUGS` y `fillPages()`
+sustituye `{paginas}` en el copy, con el cardinal en palabras para no romper la voz del sitio
+—mismo mecanismo que `fillDate` y `fillRatios` (D38)—. Lo usaban dos páginas, el artículo y el
+Design System, en los dos idiomas. De paso caen las otras seis copias de «doce» que ya eran falsas
+—`lib/routes.ts`, `check-marco.ts`, `page-html-diff.ts`, `related-pages.tsx`, `PRD-Live.md` y
+`README.md`—, con el código contando veintiséis variantes mientras los comentarios decían
+veinticuatro.
+
+**Lo que sigue sin cubrir, dicho para que no se dé por cubierto.** Lo que hay detrás de una
+interacción —pestañas sin abrir, diálogos sin invocar— no está en el DOM cuando el censo mira. Y
+el censo mide **colores**, que no dependen del ancho; el pliegue y el objetivo táctil siguen
+siendo de `viewport-verifier` (D52).

@@ -74,7 +74,7 @@ export function DesignSystem({
       <Tablas t={t.tablas} />
       <Accesibilidad t={t.accesibilidad} lang={lang} />
       <Esqueleto t={t.esqueleto} />
-      <ArticuloLargo t={t.articulo} />
+      <ArticuloLargo t={t.articulo} lang={lang} />
 
       <RelatedPages dict={related} current="designSystem" lang={lang} />
     </>

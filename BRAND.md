@@ -246,15 +246,13 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
-  están en AAA en ambos temas, en reposo y en hover. Sin excepciones** *(re-verificado el
-  2026-08-18 sobre **las doce páginas × 2 temas**, metro validado en las 24 corridas, cero pares
-  bajo AA y cero bajo AAA. La primera pasada de ese día se corrió solo sobre 8 de las doce, y
-  preguntarse por las cuatro que faltaban es lo que destapó **D61**: el atenuado no se recalculaba
-  al cambiar de superficie por hover. Un metro bien calibrado que no se pasa por todo el sitio
-  sigue siendo un metro que no ha mirado)* — la última que
-  quedaba, `brand-purple-accent`, dejó de serlo el 2026-08-10 al hacerlo conmutar con el tema
-  (§Color): la salvedad no era del morado, era de cualquier color fijo puesto sobre dos
-  superficies opuestas.
+  están en AAA en ambos temas, en reposo y en hover. Sin excepciones.**
+  **La pasada es `npm run censo`, no se conduce a mano** (D85): lee las páginas del registro,
+  así que una página nueva entra sin que nadie se acuerde. Última corrida el 2026-08-22 —trece
+  páginas × 2 temas, 380 pares, metro validado en las 26 corridas, cero bajo AA y cero bajo AAA—.
+  Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
+  *(Las dos veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
+  ser un hábito, en [`BRAND-historical.md`](./BRAND-historical.md) §La pasada completa.)*
 - **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es
   la fuente del **porqué** —qué par existe, por qué se eligió ese color y qué se probó antes—;
   el **valor** lo tiene un solo sitio, del que beben las páginas que lo publican.

@@ -43,7 +43,7 @@
  * - **Nada codificado solo por color** (punto 6). No hay forma automática.
  *
  * DE DÓNDE SALE EL HTML: de `.next/server/app/**.html`, o sea del propio build.
- * Las doce páginas × dos idiomas se prerenderizan (D45), así que no hace falta ni
+ * Las trece páginas × dos idiomas se prerenderizan (D45), así que no hace falta ni
  * servidor ni navegador y el paso cuesta segundos — que es lo que permite que
  * corra en CADA PR en vez de ser un nightly. En CI va justo detrás de `Build`,
  * así que mide el HTML de ese commit; en local mide el del último `npm run build`

@@ -709,7 +709,7 @@
           "id": "s08",
           "label": "Contrast · live data",
           "source": "lib/design-values.ts",
-          "value": "AAA across all twelve pages",
+          "value": "AAA across all {paginas} pages",
           "linkLabel": "See the measured census",
           "href": "accesibilidad"
         },

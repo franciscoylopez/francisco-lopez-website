@@ -17,6 +17,8 @@ import {
   ShareActions,
 } from "@/components/ui/article-islands";
 import { SectionHeader } from "@/components/ui/heading";
+import { fillPages } from "@/lib/design-values";
+import type { Locale } from "@/lib/i18n/config";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 
@@ -51,8 +53,10 @@ const RAIL_IDS = ["ds-rail-1", "ds-rail-2", "ds-rail-3"];
 
 export function ArticuloLargo({
   t,
+  lang,
 }: {
   t: Dictionary["designSystem"]["articulo"];
+  lang: Locale;
 }) {
   const railItems: { id: string; ordinal: string; label: string }[] =
     RAIL_IDS.map((id, i) => ({
@@ -157,7 +161,7 @@ export function ArticuloLargo({
             <LiveStat
               label={t.liveStatLabel}
               source={t.liveStatSource}
-              value={t.liveStatValue}
+              value={fillPages(t.liveStatValue, lang)}
               linkLabel={t.liveStatLink}
               href="#ds-articulo-cover"
             />
