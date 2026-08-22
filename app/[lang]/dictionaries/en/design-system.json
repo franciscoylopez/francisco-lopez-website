@@ -682,6 +682,20 @@
     "chapterPositionLabel": "5 of 11",
     "chapterIndexLabel": "Contents",
     "chapterNextLabel": "Next: 06 · From design to code",
-    "hint": "The full page: \"How this page was built\"."
+    "hint": "The full page: \"How this page was built\".",
+    "bylineName": "Francisco López",
+    "bylineRole": "Senior Product Manager",
+    "indexKicker": "Contents",
+    "indexTimeLabel": "12 min read",
+    "indexAriaLabel": "Sample article contents",
+    "indexItems": ["Why it exists", "How the work happens", "The brand"],
+    "diagramCaption": "A real diagram from the page, with its own color tokens.",
+    "progressAriaLabel": "Reading progress of the sample article",
+    "shareLabel": "Share",
+    "shareCopyLabel": "Copy link",
+    "shareCopiedLabel": "Link copied",
+    "shareCopiedAnnounce": "Link copied to clipboard",
+    "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
+    "railHint": "Same as on the real page, but contained to this panel: the section rail and the share dock activate once this section scrolls to the middle of the window."
   }
 }
