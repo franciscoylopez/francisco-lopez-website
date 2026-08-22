@@ -37,9 +37,9 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
      legible en **secciones con fondo invertido** (fondo = `foreground`, texto =
      `background`), donde el `brand-purple` estándar no llega. Úsalo **solo ahí**; fuera de
      ese contexto, `brand-purple`.
-     **Conmuta con el tema** (`0.78` en claro, `0.45` en oscuro): un color fijo no pasa de
-     **3,71:1** contra las dos superficies, conmutando da **7,04 / 7,21**, AAA sin coletilla.
-     Porqué y cálculo en `BRAND-historical.md`. Mismo patrón que `--primary-on-inverted`.
+     **Conmuta con el tema** (`0.78` en claro, `0.45` en oscuro), mismo patrón que
+     `--primary-on-inverted`: un color fijo no llega a AAA contra las dos superficies a la
+     vez. Cifras y cálculo en `BRAND-historical.md`.
    - `progress-ink` *(2026-08-21)*: para texto/gráficos grandes directamente sobre
      `--background` (`0.45` claro / `0.78` oscuro, AAA en los dos) — no para superficies
      compuestas (tarjeta, velo, banda invertida), que ya tienen su propio token. Porqué y
@@ -49,15 +49,16 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
 
 Un diagrama es de los pocos sitios donde §Color deja entrar los tokens de marca —«fondos de
 sección, detalles, **ilustración, gráficos**»—, y ahí el umbral no es el de texto: WCAG 1.4.11
-pide **3:1** a un gráfico que hay que entender.
+pide **3:1** a un gráfico que hay que entender. **`--brand-purple` no llega en tema claro y el
+cian sí, con holgura.**
 
-**`--brand-purple` no llega en tema claro y el cian sí, con holgura.** Así que en un gráfico
-**el cian lleva la información y lo que no llega se atenúa** (`--muted-foreground`), nunca se
-tiñe de morado. La distinción entre dos caminos la hacen además el trazo y la etiqueta, que es
-lo que cumple el punto 6 del checklist sin depender del color.
+Así que en un gráfico **el cian lleva la información y lo que no llega se atenúa**
+(`--muted-foreground`), nunca se tiñe de morado. La distinción entre dos caminos la hacen
+además el trazo y la etiqueta, que es lo que cumple el punto 6 del checklist sin depender del
+color.
 
-*(Las cifras, la asimetría entre temas y por qué el mismo hallazgo llegó dos veces por dos
-puertas distintas, en [`BRAND-historical.md`](./BRAND-historical.md) §El morado como gráfico.)*
+*(Las cifras y la asimetría entre temas, en [`BRAND-historical.md`](./BRAND-historical.md)
+§El morado como gráfico.)*
 
 ### El atenuado lo pone la superficie, no el punto de uso
 
@@ -74,15 +75,14 @@ Lo que hay que saber al escribir UI:
 - **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix` en vez de la utilidad—,
   tiene que declarar a qué familia pertenece con `data-surface="card" | "muted" | "inverted" |
   "page"`. Sin eso la capa no puede verlo, y ahí es donde se escaparon cuatro pares.
-- **Una superficie también cambia por ESTADO, no solo por clase o por atributo** *(2026-08-18,
-  D61)*. `hover:bg-muted` **no** compila a `.bg-muted`: compila a `.hover\:bg-muted:hover`, y
-  dentro de `@media (hover: hover)`. Es otro selector, así que durante meses una tarjeta que se
-  aclaraba al pasar el cursor cambiaba de fondo **sin recalcular su atenuado** — 9,14 en reposo
-  contra **7,79 claro / 9,01 oscuro** en hover, donde le tocaba 8,17 / 9,17. Ya está resuelto en
-  `globals.css` para `hover:` y `focus-visible:`, así que **al escribir UI no hay nada que hacer**;
-  lo que hay que saber es que `data-surface` **no** sirve para este caso: es estático y no puede
-  describir algo que cambia con el estado. Si aparece una tercera puerta (otro variante de estado
-  que cambie el fondo), se añade **en la capa**, nunca en el punto de uso.
+- **Una superficie también cambia por ESTADO, no solo por clase o por atributo** (D61).
+  `hover:bg-muted` **no** compila a `.bg-muted`: compila a `.hover\:bg-muted:hover`, y dentro
+  de `@media (hover: hover)`. Es otro selector, así que una tarjeta que se aclaraba al pasar el
+  cursor cambiaba de fondo **sin recalcular su atenuado**. Ya está resuelto en `globals.css`
+  para `hover:` y `focus-visible:`, así que **al escribir UI no hay nada que hacer**; lo que
+  hay que saber es que `data-surface` **no** sirve para este caso: es estático y no puede
+  describir algo que cambia con el estado. Si aparece una tercera puerta (otra variante de
+  estado que cambie el fondo), se añade **en la capa**, nunca en el punto de uso.
 - **Los pasteles siguen sin ser superficie de texto.** Esto resuelve los grises del sistema, no
   convierte un `*-soft` en fondo legible.
 
@@ -92,8 +92,7 @@ Lo que hay que saber al escribir UI:
   `foreground` con subrayado fino en `primary` (2px, offset amplio para librar descendentes
   como «p»/«y»); en hover/focus, un relleno sólido en `primary` crece de abajo arriba y el
   texto pasa a `primary-foreground` — variante **H1**. El cian entra como **recompensa de la
-  interacción**, no como color permanente del texto. *(Hay una variante «G» aparcada para un
-  uso puntual de énfasis, descrita en el histórico; no es el estándar y hoy no se usa.)*
+  interacción**, no como color permanente del texto.
 - **Chrome de navegación** (nav, breadcrumb, footer, menús): `foreground` o `muted-foreground`,
   nunca `primary` — ni en el texto ni en el fondo de su estado hover. En un bloque cuya función
   *entera* es navegar, el cian no distingue nada: solo mete ruido. Se leen como enlace por su
@@ -140,8 +139,8 @@ Lo que hay que saber al escribir UI:
 
 En un control con estado el **relleno pleno ya significa «activo»**, así que el encendido reusa el sólido y el apagado nunca puede rellenarse igual. Cuál de las dos variantes toca se decide por la **forma** del control, no por su contenido ni por cuántos segmentos tenga:
 
-- **`toggle-primary` — interruptor suelto.** Un único control que enciende o apaga algo que antes no estaba (el toggle de rejilla del Design System). No tiene pares al lado, así que el cian no compite con nada. Apagado = `border-primary` con **tinte** en hover (velo del propio `primary` al 8%), nunca el relleno: con el relleno, hover y encendido se verían igual y el control dejaría de comunicar en qué estado está. En ese hover el **texto** se mezcla además un 12% hacia `--foreground` —la misma constante del hover del sólido—, que es lo que sube el par a AAA sin apagar el velo.
-- **`toggle-neutral` — grupo de alternativas excluyentes.** Varios botones de los que exactamente uno está activo, para elegir cómo mirar un contenido que ya está en pantalla (pestañas del Toolkit, tabs de dispositivo del Esqueleto navegable). Apagado = el mismo **outline neutro**, y ahí el hover **sí** puede ser la pastilla plena: `muted` no se parece en nada al cian del seleccionado, no hay ambigüedad que evitar. Es el mismo eje que separa contenido de chrome: en un bloque cuya función entera es elegir qué mirar, el cian no distingue nada — y multiplicado por tres o cuatro se come la sección.
+- **`toggle-primary` — interruptor suelto.** Un único control que enciende o apaga algo que antes no estaba (el toggle de rejilla del Design System). No tiene pares al lado, así que el cian no compite con nada. Apagado = `border-primary` con **tinte** en hover (velo del propio `primary` al 8%), nunca el relleno: con el relleno, hover y encendido se verían igual y el control dejaría de comunicar en qué estado está.
+- **`toggle-neutral` — grupo de alternativas excluyentes.** Varios botones de los que exactamente uno está activo, para elegir cómo mirar un contenido que ya está en pantalla (pestañas del Toolkit, tabs de dispositivo del Esqueleto navegable). Apagado = el mismo **outline neutro**, y ahí el hover **sí** puede ser la pastilla plena: `muted` no se parece en nada al cian del seleccionado, no hay ambigüedad que evitar. Es el mismo eje que separa contenido de chrome, y multiplicado por tres o cuatro segmentos el cian se come la sección.
 
 ### Controles con dos fondos: el color se toma del fondo, no se fija
 
@@ -154,40 +153,38 @@ referencia. La regla que sí funciona: **la pieza es el `foreground` de su propi
 
 ### Un control sobre una imagen no puede fijar su color
 
-*(2026-08-17, midiendo el botón de play de los vídeos del deep-dive.)* Un control sobre una
-**imagen** tiene el fondo fuera del sistema: no hay token que ajustar, lo decide el póster. **Un
-color fijo no puede garantizar el 3:1 que WCAG 1.4.11 pide a un componente** — el disco de play
-sobre el póster de TheTool medía **2,81 oscuro / 2,59 claro**.
+Un control sobre una **imagen** tiene el fondo fuera del sistema: no hay token que ajustar, lo
+decide el póster, así que **un color fijo no puede garantizar el 3:1 que WCAG 1.4.11 pide a un
+componente**.
 
 Misma idea que §El atenuado lo pone la superficie y §Controles con dos fondos: **la pieza se
 define contra su propio carril**, con dos piezas. Un velo entre la imagen y el control, **del
 color del FONDO** (`--background`), nunca negro (el negro arregla un tema y empeora el otro,
 firma de D41). Y un control **de dos tonos** —relleno `--primary` + anillo
-`--primary-foreground`—, cuyo borde **interno** no depende de la imagen: 7,93 claro / 8,36
-oscuro, siempre.
+`--primary-foreground`—, cuyo borde **interno** no depende de la imagen.
 
-**Qué garantiza y qué no.** El borde interno, siempre. Que alguno de los dos bordes EXTERNOS
-pase 3:1 en cada punto del contorno, no: el peor de 144 ángulos del perímetro se queda en
-**2,82–2,91**, y subir el velo no lo arregla —acerca el póster al fondo, lo que separa al disco
-y **acerca al anillo**, tirando en direcciones opuestas—. No es incumplimiento: WCAG pide que el
-componente se distinga, no que cada punto del contorno pase 3:1, y con un borde interno a 7,93 y
-un disco de 64px se distingue.
+**Y lo que eso garantiza es el borde INTERNO, no el contorno entero.** Que alguno de los dos
+bordes externos pase 3:1 en cada punto no se puede prometer, y subir el velo no lo arregla:
+acerca el póster al fondo, lo que separa al disco y **acerca al anillo**, tirando en
+direcciones opuestas. No es incumplimiento —WCAG pide que el componente se distinga, no que
+cada punto del contorno pase 3:1—, pero la regla se escribió prometiendo de más y hubo que
+corregirla.
 
-*(El barrido de opacidad, la tabla y las dos veces que el metro estuvo mal, en
-[`BRAND-historical.md`](./BRAND-historical.md) §Un control sobre una imagen; cifras y
-componente en `DECISIONS.md` D55.)*
+*(Las cifras, el barrido de opacidad y las dos veces que el metro estuvo mal, en
+[`BRAND-historical.md`](./BRAND-historical.md) §Un control sobre una imagen y §La regla del
+control sobre imagen prometía de más; componente en `DECISIONS.md` D55.)*
 
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
 Una **etiqueta** (la pastilla no interactiva que rotula un título, una fila o un dato) sale de `components/ui/badge.tsx`, no de `action.tsx`: no se pulsa, así que no tiene estado, ni hover, ni suelo táctil de 44px. Dos ejes, y ninguno se escribe en el punto de uso:
 
-- **`tone`** — `neutral` · `cyan` · `purple`. Los dos teñidos se llaman **por su color** y usan `--brand-cyan` / `--brand-purple`, no `--primary`/`--accent`: son la **segunda capa** de este documento (decorativa), y nombrarlos con vocabulario de la capa semántica es justo la mezcla que §Color prohíbe. `--brand-cyan` pinta idéntico a `--primary` a propósito, pero aquí el cian es relleno, no color de acción.
+- **`tone`** — `neutral` · `cyan` · `purple`. Los dos teñidos se llaman **por su color** y usan `--brand-cyan` / `--brand-purple`, no `--primary`/`--accent`: son la **segunda capa** de este documento (decorativa), y nombrarlos con vocabulario semántico es justo la mezcla que §Color prohíbe. Aquí el cian es relleno, no color de acción.
 
   **Cuál de los dos teñidos toca:** **cian = una medición o el comportamiento de un token**
   —«AAA», «Conmuta», la cifra del hero de Accesibilidad—; **morado = una cosa de la marca**
   —«Exit», «Split», la métrica del logo—. Los dos están en AAA, así que la elección es **de
   significado, nunca de contraste**.
-- **`kind`** — `label` (versalitas, para un rótulo de estado: «EXIT», «PRÓXIMAMENTE») · `value` (caja normal, para un dato en prosa: «AAA», «Split») · `code` (monoespaciada, para un valor técnico: «13,79:1»). El `kind` se lleva también la **familia tipográfica**: era la última pieza que un call site tenía que acordarse de escribir.
+- **`kind`** — `label` (versalitas, para un rótulo de estado: «EXIT», «PRÓXIMAMENTE») · `value` (caja normal, para un dato en prosa: «AAA», «Split») · `code` (monoespaciada, para un valor técnico: «13,79:1»). El `kind` se lleva también la **familia tipográfica**.
 
 **La regla de color, que es la parte reutilizable: el texto de una pastilla teñida es SIEMPRE
 `--foreground`.** El velo dice de qué familia es; el texto solo tiene que leerse. No es
@@ -195,10 +192,8 @@ preferencia estética: es lo único que llega a AAA. Con el texto teñido sobre 
 **no hay alfa que lo salve** — es el techo asintótico de D30.
 
 Y en la **neutra**, el texto tampoco puede ser el `muted-foreground` calibrado contra
-`--background`: encima de la pastilla caería a AA. Ya no hace falta pedirlo —desde el
-2026-08-09 la pastilla escribe `text-muted-foreground` y el **85% hacia su propio fondo** lo
-resuelve la superficie (§El atenuado lo pone la superficie, D39)—, pero el valor es el mismo
-píxel que antes se escribía a mano.
+`--background`: encima de la pastilla caería a AA. No hay que pedirlo, lo resuelve la
+superficie (§El atenuado lo pone la superficie, D39).
 
 ### Cuándo una acción lleva icono
 
@@ -213,9 +208,8 @@ píxel que antes se escribía a mano.
 > **Caso particular de la «Regla de construcción» de `CLAUDE.md`** (2026-08-08), que
 > generaliza esto a todo lo que se construye —secciones, páginas, bloques— y añade el
 > paso de shadcn para widgets con estado, foco atrapado o portal. La cascada completa
-> vive **solo allí**; aquí queda el porqué específico de los controles. No se copia:
-> dos documentos afirmando la misma regla es exactamente lo que produjo el drift de
-> cuatro días de §Jerarquía de hover.
+> vive **solo allí**; aquí queda el porqué específico de los controles. No se copia
+> (regla 5 de §Cómo se escribe una regla aquí).
 
 **Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control
 de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea
@@ -256,8 +250,6 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
   el **valor** lo tiene un solo sitio, del que beben las páginas que lo publican.
 - Los pasteles (`*-soft`) no pasan contraste como primer plano. Si necesitas texto sobre un
   fondo pastel, usa `foreground` (gris/hueso), nunca otro pastel.
-- Cian primario: `#005859` en claro y `#3FC9C4` en oscuro (ya resuelto en los tokens; no lo
-  hardcodees).
 
 ### Cómo se hace el censo de pares
 
@@ -267,10 +259,10 @@ de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así 
 hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
 `scripts/design-review/contrast-census.js`.
 
-> **Este censo se ha roto dos veces, las dos en silencio, y las dos se descubrieron midiendo un
-> caso cuyo resultado ya se conocía.** Por eso publica ahora cuántas reglas `:hover` ha indexado
-> y cuántos pares ha medido con ellas: *un metro que devuelve una lista vacía parece un
-> aprobado*. El detalle de los dos fallos y del incumplimiento real que escondía el segundo, en
+> **Publica cuántas reglas `:hover` ha indexado y cuántos pares ha medido con ellas**, porque
+> *un metro que devuelve una lista vacía parece un aprobado*: se ha roto dos veces, las dos en
+> silencio, y las dos se descubrieron midiendo un caso cuyo resultado ya se conocía. Los dos
+> fallos y el incumplimiento real que escondía el segundo, en
 > [`BRAND-historical.md`](./BRAND-historical.md) §El censo de contraste se rompió dos veces.
 
 
@@ -335,11 +327,11 @@ que se note cuál es cuál — y eso no sale de copiar los atributos del `<svg>`
 glifo propio se justifica **solo** por lo que lucide no exporta. Parece obvio y es la regla que
 más se ha incumplido.
 
-- **Mismo artboard.** `viewBox="0 0 24 24"`, `fill="none"`, `stroke="currentColor"`, trazo **2**, terminaciones y uniones **redondas**. Todas las coordenadas dentro de **2–22** (el área útil de 20×20 de lucide; el trazo desborda hasta 1 y 23). No hay que llenarla: `user` ocupa 16×20 y no se ve pequeño.
+- **Mismo artboard.** `viewBox="0 0 24 24"`, `fill="none"`, `stroke="currentColor"`, trazo **2**, terminaciones y uniones **redondas**. Todas las coordenadas dentro de **2–22** (el área útil de 20×20 de lucide; el trazo desborda hasta 1 y 23). No hay que llenarla.
 - **Nada se contornea por debajo de 8 unidades** (4× el trazo). Una forma más estrecha que eso se dibuja **con** el trazo, monolineal, en vez de rodearla con él. Lucide lo cumple sin excepción: su forma contorneada más estrecha es el disco del `sun`, que mide justo 8, y el borne del `battery` —que como contorno sería un saliente de 2— es una línea suelta.
 - **Contraforma mínima 6 unidades de eje a eje** (3× el trazo, 4 de fondo limpio) entre trazos paralelos y en todo hueco que haya que leer. Es la rejilla de lucide: `menu`, `list` y `align-*` separan sus líneas exactamente 6. A 18px, 4 unidades son 3px de fondo — se ve; 2 son 1,5px — se rellena.
 - **Los puntos son trazo, no círculos.** `M4 4h.01` con terminación redonda da un punto del diámetro exacto del trazo. Un `circle` de radio pequeño incumple la regla anterior por definición.
-- **Se verifica en pantalla, no en el editor.** A tamaño real (17px en `.link-chrome`, 18px en la variante `icon`), dentro de su pastilla, **junto a un lucide del mismo bloque** y en los dos temas. Al 400% todos los dibujos se ven bien.
+- **Se verifica en pantalla, no en el editor.** A tamaño real (17px en `.link-chrome`, 18px en la variante `icon`), dentro de su pastilla, **junto a un lucide del mismo bloque** y en los dos temas.
 - **El inventario de glifos propios es el `grep` de `<svg>`** en `components/` y `app/`, no el contenido de `icons.tsx`. De ahí se descuentan el logo y las **ilustraciones** (maquetas de navegador, marcos de dispositivo, esqueletos, el «0» del 404), que son dibujos y no iconos. Lo que quede son iconos propios, vivan donde vivan — y **su sitio es `components/ui/icons.tsx`**.
 - **Si hay más de dos iconos propios**, publicarlos en el Brand Kit — el recorrido completo (regla → uso → página publicada) es lo que hace que una regla deje de depender de que alguien se acuerde.
 
@@ -355,10 +347,9 @@ regla que existía y aun así se incumplió, y el caso está en
    **De lugar:** «si hay más de dos iconos propios» se comprobaba leyendo `icons.tsx` —donde
    había uno— mientras el sitio tenía siete; el censo de contraste se hacía leyendo
    `globals.css`, donde los pares compuestos no existen.
-   **De momento** *(añadido el 2026-08-16)*: el gate de accesibilidad se disparaba **al
-   cerrar** una sección, y al cerrar el alto de una banda dimensionada por `vw` ya no es un
-   ajuste, es un rediseño. Por eso pasó a tener **dos** disparos, y el primero es *mientras se
-   dibuja* (D50, D52).
+   **De momento:** el gate de accesibilidad se disparaba **al cerrar** una sección, y al
+   cerrar, el alto de una banda dimensionada por `vw` ya no es un ajuste sino un rediseño. Por
+   eso tiene **dos** disparos y el primero es *mientras se dibuja* (D50, D52).
 2. **Una regla que hay que recordar es una regla que se incumple.** Lo que impide el drift es
    el **recorrido completo** —regla → variante o clase → sección publicada en el Design System
    → uso—, no la disciplina. Los enlaces lo hicieron entero y son coherentes; los botones se
