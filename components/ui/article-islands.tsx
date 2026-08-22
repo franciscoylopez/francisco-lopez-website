@@ -134,11 +134,16 @@ export function SectionRail({ items }: { items: RailItem[] }) {
                   checklist); el aspecto entero — círculo, expansión, color —
                   vive en el `<span>` interior, así que no crece en pantalla.
                   No compone `chromeLinkVariants`: excepción documentada con
-                  fecha en BRAND.md §Ningún control se escribe a mano. */}
+                  fecha en BRAND.md §Ningún control se escribe a mano.
+                  `justify-start`, NO `-center` (aviso de Francisco: el hover
+                  se desplazaba a la izquierda y tapaba el texto): el pill
+                  crece desde su borde izquierdo, igual que antes del fix de
+                  44×44 — centrado, la mitad del crecimiento empujaba a la
+                  IZQUIERDA, hacia fuera del borde del riel. */}
               <a
                 href={`#${item.id}`}
                 aria-current={isActive ? "true" : undefined}
-                className="group flex size-11 shrink-0 items-center justify-center"
+                className="group flex size-11 shrink-0 items-center justify-start"
               >
                 <span
                   className={cn(
