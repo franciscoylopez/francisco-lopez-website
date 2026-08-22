@@ -667,10 +667,120 @@
   "articulo": {
     "num": "15 — Long-form article",
     "title": "The shape for long text with stops",
-    "lead": "\"How this page was built\" introduced this family: eleven sections and several thousand words needed a cover per section, a quote that stops the reader, a fact that doesn't go stale, and an explicit transition between stops. The pieces below are the real ones from that page, with sample content.",
+    "lead": "\"How this page was built\" introduced this family: eleven sections and several thousand words needed a cover per section, a quote that stops the reader, a fact that doesn't go stale, and an explicit transition between stops. Thirteen pieces, grouped below by where each one lives inside the article.",
+    "groups": {
+      "portada": {
+        "title": "The article's opening",
+        "lead": "Three pieces that appear only once, at the top: who signs it, how it gets shared, and the map of stops."
+      },
+      "parada": {
+        "title": "How every stop opens",
+        "lead": "A single piece, repeated eleven times. It's what makes every section of the article read as the same kind of thing."
+      },
+      "cuerpo": {
+        "title": "What floats alongside the text",
+        "lead": "Four pieces that don't cut the column: they sit to one side and the text keeps running around them, magazine-style. Which side is decided by the prose container, not at the point of use."
+      },
+      "pie": {
+        "title": "How every stop closes",
+        "lead": "Two strips that close the section in the same order every time: the evidence first, the transition after."
+      },
+      "islas": {
+        "title": "What doesn't scroll away",
+        "lead": "The three client islands, fixed to the window. They're demonstrated together here inside a box that contains them, because on the real page their frame of reference is the whole window."
+      }
+    },
+    "fichas": {
+      "byline": {
+        "kicker": "Byline",
+        "cls": "<ByLine>",
+        "rule": "Avatar, name and role, before the text begins. With a real photo cropped to a circle; without one, the initials on neutral grey.",
+        "note": "A signed article says who signs it at the top, not in the footer."
+      },
+      "share": {
+        "kicker": "Share",
+        "cls": "<ShareActions>",
+        "rule": "The system's native share, with copy-link as the fallback, next to the byline.",
+        "note": "navigator.share isn't in every browser: without it the button copies anyway and announces it via aria-live. The action is never silent."
+      },
+      "index": {
+        "kicker": "Map of stops",
+        "cls": "<ArticleIndex>",
+        "rule": "The map of stops with a time for each, rendered on the server: visible and clickable without JavaScript.",
+        "note": "A continuous grid with no box per cell: hairlines do the dividing and the hover pill fills the whole cell."
+      },
+      "cover": {
+        "kicker": "Section cover",
+        "cls": "<SectionCover>",
+        "rule": "Kicker and heading on the left; on the right, the illustrated ordinal with its meta line beneath it.",
+        "note": "The big numeral is aria-hidden because the kicker already says the ordinal, but it's still bound by contrast: someone with low vision does read it. It uses progress-ink, calibrated against the page background."
+      },
+      "pullquote": {
+        "kicker": "Pull quote",
+        "cls": "<Pullquote>",
+        "rule": "The line that stops the reader: rules above and below, and a purple bar down the edge.",
+        "note": "The purple carries no information here, it's ornament on text that already reads on its own. It's the one graphic use of purple that doesn't need 3:1."
+      },
+      "pull": {
+        "kicker": "Minor quote",
+        "cls": "<Pull>",
+        "rule": "The quote that accompanies without stopping the reader: a pastel purple rule and nothing else.",
+        "note": "It floats to the opposite side from the pull quote when both land in the same section, so the graphic weight doesn't pile up on one edge."
+      },
+      "diagram": {
+        "kicker": "Diagram",
+        "cls": "<DiagramPanel>",
+        "rule": "The frame for an in-house diagram or a real artefact, with its caption. The drawing comes from the page; this only supplies the box.",
+        "note": "Unfloated it takes the full width of the column, not the reading measure: a panel isn't prose, it squares up with the block rather than with the line."
+      },
+      "livestat": {
+        "kicker": "Live figure",
+        "cls": "<LiveStat>",
+        "rule": "A number that isn't written into the dictionary: it links to the page that actually publishes it.",
+        "note": "It takes an example underneath built from the real imported piece, not a recreation. The strip declares its own surface so the dimmed text recalculates against it."
+      },
+      "repo": {
+        "kicker": "Link to the evidence",
+        "cls": "<RepoStrip>",
+        "rule": "Every claim in the section points at the code behind it, and each decision cited is its own link rather than one covering the whole sentence.",
+        "note": "Chrome tone in all of its appearances: the strip never lands mid-paragraph, it always sits in the same place at the foot."
+      },
+      "chapter": {
+        "kicker": "Transition",
+        "cls": "<ChapterNav>",
+        "rule": "Where you are and where it goes next: position dots, back to the contents, and the following stop.",
+        "note": "Read ones in black, pending in grey, the current one in purple. The dots are decorative: the position is already stated in text."
+      },
+      "progress": {
+        "kicker": "Reading progress",
+        "cls": "<ReadingProgress>",
+        "rule": "The bar along the top edge, advancing with the scroll.",
+        "note": "Its width follows the scroll rather than animating on its own, so it needs no prefers-reduced-motion exception."
+      },
+      "rail": {
+        "kicker": "Section rail",
+        "cls": "<SectionRail>",
+        "rule": "The floating desktop index, highlighting the stop you're currently in.",
+        "note": "An enhancement, not a requirement: the server-rendered contents already covers navigation. If the observer can't mount, the rail highlights nothing and nothing breaks."
+      },
+      "dock": {
+        "kicker": "Share dock",
+        "cls": "<FloatingShare>",
+        "rule": "The rail's counterpart on the right edge, icon only: sharing without scrolling back to the top.",
+        "note": "It shares the opening piece's logic instead of duplicating it, because state logic with two call sites doesn't get copied."
+      }
+    },
+    "ruleTitle": "What this layer is, and what it isn't",
+    "rule": [
+      "None of these pieces knows anything about this site: they take text and links, not copy or routes of their own. That's why they live in components/ui/, like the badges or the headings.",
+      "It isn't an eighth piece of the system's core: it's a separate layer, for long text with stops.",
+      "The container is ArticleProse, which walks the dictionary's blocks and decides which side each quote and diagram floats to. It has no specimen here because its demonstration is the whole page.",
+      "The specimens above are the real pieces, imported, with sample content: if one of them changes, this section changes with it."
+    ],
+    "ruleFoot": "Introduced by \"How this page was built\", the first content on the site that needed a shape for several thousand words.",
     "coverKicker": "05 — Specimen",
     "coverTitle": "The illustrated ordinal opens every section",
-    "coverMeta": "Chapter 05 of 11 · 3 min read",
+    "coverMeta": "5 of 11 · 3 min",
     "pullquote": "A rule you have to remember is a rule that gets broken.",
     "pull": "The record of why something else was thought at the time is worth more than retroactive consistency.",
     "liveStatLabel": "Example · live data",
@@ -678,11 +788,11 @@
     "liveStatValue": "AAA across all twelve pages",
     "liveStatLink": "See the measured census",
     "repoLabel": "LINK ·",
-    "repoText": "Decisions D39, D41 and D73",
+    "repoText": "Decisions D39, D41 and D73, in ",
+    "pieSample": "…and that's why the section ends here, with the evidence and the way out towards the next one.",
     "chapterPositionLabel": "5 of 11",
     "chapterIndexLabel": "Contents",
     "chapterNextLabel": "Next: 06 · From design to code",
-    "hint": "The full page: \"How this page was built\".",
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
     "indexKicker": "Contents",

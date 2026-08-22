@@ -667,10 +667,120 @@
   "articulo": {
     "num": "15 — Artículo largo",
     "title": "La forma para texto largo con paradas",
-    "lead": "«Cómo se ha creado esta página» estrenó esta familia: once secciones y varios miles de palabras necesitaban una portada por sección, una cita que para la lectura, un dato que no caduca y una transición explícita entre paradas. Las piezas de abajo son las reales de esa página, con contenido de muestra.",
+    "lead": "«Cómo se ha creado esta página» estrenó esta familia: once secciones y varios miles de palabras necesitaban una portada por sección, una cita que para la lectura, un dato que no caduca y una transición explícita entre paradas. Trece piezas, agrupadas abajo por dónde vive cada una dentro del artículo.",
+    "groups": {
+      "portada": {
+        "title": "La portada del artículo",
+        "lead": "Tres piezas que solo aparecen una vez, al principio: quién firma, cómo se comparte y el mapa de paradas."
+      },
+      "parada": {
+        "title": "La apertura de cada parada",
+        "lead": "Una sola pieza, repetida once veces. Es lo que hace que todas las secciones del artículo se reconozcan como la misma cosa."
+      },
+      "cuerpo": {
+        "title": "Lo que flota junto al texto",
+        "lead": "Cuatro piezas que no cortan la columna: se colocan a un lado y el texto sigue alrededor, como en una revista. Quién va a qué lado lo decide el contenedor de prosa, no el punto de uso."
+      },
+      "pie": {
+        "title": "El pie de cada parada",
+        "lead": "Dos franjas que cierran la sección siempre en el mismo orden: primero la prueba, después la transición."
+      },
+      "islas": {
+        "title": "Lo que no se va con el scroll",
+        "lead": "Las tres islas de cliente, fijas a la ventana. Aquí se demuestran juntas dentro de una caja que las contiene, porque en la página real su marco de referencia es la ventana entera."
+      }
+    },
+    "fichas": {
+      "byline": {
+        "kicker": "Autoría",
+        "cls": "<ByLine>",
+        "rule": "Avatar, nombre y rol, antes de que empiece el texto. Con foto real recortada en círculo; sin ella, las iniciales sobre el gris neutro.",
+        "note": "Un artículo firmado dice quién lo firma en la apertura, no en el pie."
+      },
+      "share": {
+        "kicker": "Compartir",
+        "cls": "<ShareActions>",
+        "rule": "Compartir nativo del sistema, con copiar el enlace como respaldo, al lado de la autoría.",
+        "note": "navigator.share no está en todos los navegadores: sin él el botón copia igualmente y lo anuncia por aria-live. La acción nunca queda muda."
+      },
+      "index": {
+        "kicker": "Mapa de paradas",
+        "cls": "<ArticleIndex>",
+        "rule": "El mapa de paradas con el tiempo de cada una, pintado en servidor: se ve y se salta sin JavaScript.",
+        "note": "Rejilla continua, sin caja por celda: la división la hacen los filetes y la pastilla de hover ocupa la celda entera."
+      },
+      "cover": {
+        "kicker": "Portada de sección",
+        "cls": "<SectionCover>",
+        "rule": "Rótulo y titular a la izquierda; a la derecha, el ordinal ilustrado con su meta-línea debajo.",
+        "note": "El numeral grande lleva aria-hidden porque el ordinal ya está en el rótulo, pero sigue sujeto a contraste: alguien con baja visión sí lo lee. Va en progress-ink, calibrado contra el fondo de página."
+      },
+      "pullquote": {
+        "kicker": "Cita destacada",
+        "cls": "<Pullquote>",
+        "rule": "La frase que para la lectura: filetes arriba y abajo, y una barra morada en el canto.",
+        "note": "El morado aquí no transporta información, es ornamento sobre un texto que ya se lee solo. Es el único uso gráfico del morado que no necesita 3:1."
+      },
+      "pull": {
+        "kicker": "Cita menor",
+        "cls": "<Pull>",
+        "rule": "La cita que acompaña sin parar la lectura: un filete morado pastel y nada más.",
+        "note": "Flota al lado contrario que la destacada cuando las dos caen en la misma sección, para que el peso gráfico no se acumule en un borde."
+      },
+      "diagram": {
+        "kicker": "Diagrama",
+        "cls": "<DiagramPanel>",
+        "rule": "El marco de un diagrama propio o de un artefacto real, con su pie. El dibujo lo aporta la página; esto solo pone la caja.",
+        "note": "Sin flotar ocupa el ancho completo de la columna, no la medida de lectura: un panel no es prosa, se cuadra con el bloque y no con la línea."
+      },
+      "livestat": {
+        "kicker": "Dato en vivo",
+        "cls": "<LiveStat>",
+        "rule": "Una cifra que no se escribe en el diccionario: se enlaza a la página que la publica de verdad.",
+        "note": "Admite debajo un ejemplo con la pieza real importada, no una recreación. La franja declara su propia superficie para que el atenuado se recalcule contra ella."
+      },
+      "repo": {
+        "kicker": "Enlace a la prueba",
+        "cls": "<RepoStrip>",
+        "rule": "Cada afirmación de la sección apunta al código que la sostiene, y cada decisión citada es su propio enlace, no uno que cubra la frase entera.",
+        "note": "Tono de chrome en todas sus apariciones: la franja nunca cae en medio de un párrafo, siempre ocupa la misma posición en el pie."
+      },
+      "chapter": {
+        "kicker": "Transición",
+        "cls": "<ChapterNav>",
+        "rule": "Dónde estás y hacia dónde sigue: puntos de posición, vuelta al índice y siguiente parada.",
+        "note": "Vistas en negro, pendientes en gris y la actual en morado. Los puntos son decorativos: la posición ya está dicha en texto."
+      },
+      "progress": {
+        "kicker": "Progreso de lectura",
+        "cls": "<ReadingProgress>",
+        "rule": "La barra del borde superior, que avanza con el scroll.",
+        "note": "El ancho sigue al scroll y no anima por su cuenta, así que no necesita excepción de prefers-reduced-motion."
+      },
+      "rail": {
+        "kicker": "Riel de índice",
+        "cls": "<SectionRail>",
+        "rule": "El índice flotante de escritorio, con la parada activa resaltada al pasar por ella.",
+        "note": "Es una mejora, no un requisito: el índice de servidor ya cubre la navegación. Si el observador no puede montarse, el riel no resalta nada y no rompe."
+      },
+      "dock": {
+        "kicker": "Dock de compartir",
+        "cls": "<FloatingShare>",
+        "rule": "La pareja del riel en el borde derecho, solo icono: compartir sin volver arriba.",
+        "note": "Comparte la lógica de la pieza de la apertura en vez de duplicarla, porque una lógica de estado con dos usos no se copia."
+      }
+    },
+    "ruleTitle": "Qué es esta capa y qué no",
+    "rule": [
+      "Ninguna de estas piezas sabe nada de este sitio: reciben texto y enlaces, no copy propio ni rutas. Por eso viven en components/ui/, igual que las etiquetas o las cabeceras.",
+      "No es una octava pieza del núcleo del sistema: es una capa aparte, para texto largo con paradas.",
+      "El contenedor es ArticleProse, que recorre los bloques del diccionario y decide a qué lado flota cada cita y cada diagrama. No tiene espécimen aquí porque su demostración es la página entera.",
+      "Los especímenes de arriba son las piezas reales importadas, con contenido de muestra: si una cambia, esta sección cambia con ella."
+    ],
+    "ruleFoot": "Estrenada en «Cómo se ha creado esta página», que es el primer contenido del sitio que necesitaba una forma para varios miles de palabras.",
     "coverKicker": "05 — Espécimen",
     "coverTitle": "El ordinal ilustrado abre cada sección",
-    "coverMeta": "Capítulo 05 de 11 · 3 min de lectura",
+    "coverMeta": "5 de 11 · 3 min",
     "pullquote": "Una regla que hay que recordar es una regla que se incumple.",
     "pull": "El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.",
     "liveStatLabel": "Ejemplo · dato en vivo",
@@ -678,11 +788,11 @@
     "liveStatValue": "AAA en las doce páginas",
     "liveStatLink": "Ver el censo medido",
     "repoLabel": "ENLACE ·",
-    "repoText": "Decisiones D39, D41 y D73",
+    "repoText": "Las decisiones D39, D41 y D73, en ",
+    "pieSample": "…y por eso la sección termina aquí, con la prueba y la salida hacia la siguiente.",
     "chapterPositionLabel": "5 de 11",
     "chapterIndexLabel": "Índice",
     "chapterNextLabel": "Siguiente: 06 · Del diseño al código",
-    "hint": "La página completa: «Cómo se ha creado esta página».",
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
     "indexKicker": "Índice",
