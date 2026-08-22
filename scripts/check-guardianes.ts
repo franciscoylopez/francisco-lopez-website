@@ -197,8 +197,14 @@ if (sucio) {
   process.exit(1);
 }
 
+// Guardianes y casos dejaron de ser lo mismo el día que `check:articulo` trajo
+// dos —uno por cada mitad de lo que vigila—, así que la cabecera cuenta las dos
+// cosas. Decir «12 guardianes» habiendo once es la clase de cifra que este
+// archivo existe para no publicar.
+const GUARDIANES = new Set(CASOS.map((c) => c.guardian)).size;
+
 console.log(
-  `check:guardianes — ${CASOS.length} guardianes, un caso malo cada uno\n`,
+  `check:guardianes — ${GUARDIANES} guardianes, ${CASOS.length} casos malos\n`,
 );
 
 const fallos: string[] = [];
@@ -287,5 +293,5 @@ if (fallos.length) {
 }
 
 console.log(
-  `\n✓ Los ${CASOS.length} guardianes rechazan su caso malo. El árbol queda como estaba.`,
+  `\n✓ Los ${GUARDIANES} guardianes rechazan sus ${CASOS.length} casos malos. El árbol queda como estaba.`,
 );
