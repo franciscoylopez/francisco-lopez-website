@@ -239,13 +239,8 @@ Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer p
 
 # Definition of Done
 
-> **Por qué es una tabla y no prosa** *(2026-08-19)*. Llevaba declarada como una línea en
-> «Metodología» desde V2 y no existía en ningún sitio donde se trabaje: el tablero tiene
-> diez propiedades y ninguna es un checklist de cierre. Mientras tanto, de los diecisiete
-> gates del proyecto **nueve dependían de acordarse**, y fallaron cuatro veces (D54 publicó
-> el artefacto sin sanear, D60 dejó los PDFs viejos, D63 metió el guardián de la raya con
-> un agujero, y la última tarea del Sprint Lite la encontró verificar producción). La DoD
-> es el portador que les faltaba.
+> **Es una tabla porque un gate que depende de acordarse no es un gate.** Los cuatro que
+> fallaron por esa vía están cada uno en su entrada: D54, D60, D63.
 
 **Se aplica a toda tarea que cree o rehaga una página, una sección o un bloque.** No a
 refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion al ponerla

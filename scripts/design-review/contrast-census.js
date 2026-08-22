@@ -6,6 +6,11 @@
 // cargarlo con un `<script src>`. **No vale `eval()`**: la CSP del sitio no
 // permite `unsafe-eval`, y eso está bien.
 //
+// PARA EL SITIO ENTERO NO SE CONDUCE A MANO: `npm run censo` (D85) inyecta esto
+// en las páginas de `lib/routes.ts` × los dos temas y falla si algún par baja de
+// AAA. Nació porque la pasada completa era un hábito, y por eso se saltó la
+// decimotercera página. Esto de aquí es el metro; aquel es el recorrido.
+//
 // No es un script de Node y no puede serlo: la mitad de los pares de este sitio
 // **no existen hasta que el navegador compone** un `color-mix` sobre la
 // superficie que tiene debajo, así que solo se ven en el DOM pintado. Se expone

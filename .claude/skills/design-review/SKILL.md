@@ -348,10 +348,11 @@ antes pedía abrir la URL desde la terminal. D51.)*
 > vuelve el aviso entero. Se usa **solo** si hay que entrar en una Preview de Vercel protegida;
 > contra local no hace falta nunca.
 
-**Recorrido base:** las **doce** páginas × ES/EN × claro/oscuro. Eran seis hasta el 2026-08-18;
-el deep-dive añadió cinco experiencias y su índice, y **son las que más falta hace mirar**:
+**Recorrido base:** **todas** las páginas de `lib/routes.ts` × ES/EN × claro/oscuro. No se
+escribe cuántas son —cuando esta línea decía «seis» ya eran doce, y cuando decía «doce» ya
+eran trece—: se cuenta el registro. Los deep-dive **son los que más falta hace mirar**:
 tienen el único artefacto SVG del sitio, las dos únicas incrustaciones de vídeo y la única
-plantilla que se repite cinco veces. Un recorrido que se quede en seis no las ve.
+plantilla que se repite cinco veces.
 
 > **El número no se escribe: se saca de donde ya está.** La lista viva es `lib/routes.ts`
 > —`PAGE_SLUGS`—, de donde salen el sitemap, el gate de HTML, `/llms.txt` y las tarjetas OG, y
@@ -415,6 +416,11 @@ equivocado.
 página cargada y devuelve el censo ordenado por **holgura contra el umbral de cada par**, con
 los que no llegan a AAA (`bajoAAA`) y los que no llegan ni a AA (`bajoAA`). Se escribió a
 mano tres veces antes de quedarse ahí; no lo reescribas.
+
+**Para el sitio entero, no lo conduzcas a mano: `npm run censo`** (D85). Recorre las páginas
+del registro × los dos temas sobre el sitio servido, valida el metro en cada corrida y falla
+si aparece un par bajo AAA. Nació porque la pasada completa era un hábito y por eso se saltó
+la decimotercera página. Para UNA página suelta, las dos llamadas siguen valiendo:
 
 ```bash
 agent-browser eval --stdin < scripts/design-review/contrast-census.js

@@ -247,8 +247,8 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
   están en AAA en ambos temas, en reposo y en hover. Sin excepciones.**
-  **La pasada es `npm run censo`, no se conduce a mano** (D85): lee las páginas del registro,
-  así que una página nueva entra sin que nadie se acuerde. Última corrida el 2026-08-22 —trece
+  **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
+  Última corrida el 2026-08-22 —trece
   páginas × 2 temas, 380 pares, metro validado en las 26 corridas, cero bajo AA y cero bajo AAA—.
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
   *(Las dos veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de

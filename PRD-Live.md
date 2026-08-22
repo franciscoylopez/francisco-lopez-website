@@ -186,13 +186,19 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
   aviso de consentimiento que se lee el último. Lo que encuentra se publica en la propia
   página (D73).
 - **`npm run check:marco`**: el criterio de cierre de página nueva, en cada PR (D75). Sobre
-  el HTML **prerenderizado** de las 24 variantes: axe estructural, el enlace de salto que axe
+  el HTML **prerenderizado** de las 26 variantes: axe estructural, el enlace de salto que axe
   no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, y que los `@id`
   del JSON-LD **resuelven** — cosa que ningún validador externo hace. Contraste y objetivo
   táctil quedan fuera a propósito: se heredan, y necesitan pintar.
-- **`npm run gate:html`**: compara el HTML servido de las 24 variantes antes y después de
+- **`npm run gate:html`**: compara el HTML servido de las 26 variantes antes y después de
   un refactor. Diff vacío = transparente por construcción. Es el gate que más ha cazado
   y no está en CI (D42/D45).
+- **`npm run check:articulo`**: cada sección de «Cómo se ha creado esta página» declara de
+  qué depende y lleva su sello. Cuando una fuente se mueve, CI sale rojo **nombrando la
+  sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
+  mirarlo (D84).
+- **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
+  porque necesita navegador (D85).
 - **`npm run psi`**: la nota de PageSpeed contra producción, a demanda y nunca como gate
   de CI, porque su variabilidad daría rojos falsos (D49).
 
