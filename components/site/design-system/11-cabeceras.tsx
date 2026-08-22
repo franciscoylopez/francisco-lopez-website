@@ -167,16 +167,18 @@ export function Cabeceras({
           />
           <Stat value="AA→AAA" label={t.stat.labels.contrast} />
         </StatRow>
-        <div className="mt-8 max-w-[var(--measure)]">
+        {/* Las dos notas de cierre van en PAIR, no apiladas a la medida de
+            lectura: es lo mismo que ya hace §(09) con sus dos reglas hermanas
+            (P37.62), y por el mismo motivo — apiladas dejaban media sección
+            vacía a la derecha y hacían crecer la página en vertical sin ganar
+            nada. */}
+        <div className={cn(PAIR, "mt-8")}>
           <SpecimenCard
             kicker={t.stat.kicker}
             cls={t.stat.cls}
             rule={t.stat.rule}
             note={t.stat.note}
           />
-        </div>
-
-        <div className="mt-8 max-w-[var(--measure)]">
           <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
         </div>
       </div>
