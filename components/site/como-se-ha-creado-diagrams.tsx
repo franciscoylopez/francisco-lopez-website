@@ -106,13 +106,22 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
         rx="6"
         {...rlz(0, "fill-primary/70")}
       />
+      {/* La zona "reached beyond the fold" sigue en la familia del cian, no del
+          morado (BRAND.md, «el morado decorativo no vale como elemento
+          gráfico»): brand-purple-soft daba 1,74:1 contra el fondo en tema
+          claro, por debajo del 3:1 que pide WCAG 1.4.11 para un relleno que
+          transmite información (design-review P60). El relleno translúcido
+          por sí solo tampoco llega (fill-primary/30 mide 1,66:1) — el borde
+          en stroke-primary sí (7,93:1, mismo cian a plena intensidad que ya
+          usa el header de arriba), y es el borde el que delimita la forma. */}
       <rect
         x="340"
         y="66"
         width="160"
         height="114"
         rx="4"
-        {...rlz(2, "fill-brand-purple-soft")}
+        strokeWidth="1.5"
+        {...rlz(2, "fill-primary/30 stroke-primary")}
       />
       <text x="420" y="45" textAnchor="middle" {...rlz(0, LBL_STRONG)}>
         above the fold
@@ -453,6 +462,9 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
         strokeDasharray="3 3"
         {...rlz(5, "stroke-border")}
       />
+      {/* Mismo ajuste que la zona "scroll completo" de arriba: fill-brand-purple-soft/50
+          + stroke-brand-purple daban 1,30:1 y 2,81:1 en tema claro (design-review
+          P60) — el cian lleva la información también aquí. */}
       <rect
         x="466"
         y="10"
@@ -460,7 +472,7 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
         height="210"
         rx="4"
         strokeDasharray="4 3"
-        {...rlz(5, "fill-brand-purple-soft/50 stroke-brand-purple")}
+        {...rlz(5, "fill-primary/15 stroke-primary")}
       />
       {t.capas.map((c, i) => (
         <g key={c.label}>
