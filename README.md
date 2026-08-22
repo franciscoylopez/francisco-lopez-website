@@ -153,7 +153,13 @@ npm run gate:html -- save   # instantánea del HTML de las 13 páginas × 2 idio
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
 npm run psi -- <url>        # PageSpeed sobre el Preview o producción (D49)
 npm run censo               # censo de contraste: 13 páginas × 2 temas, servidas (D85)
+qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 ```
+
+> **`qlty smells`** necesita el [CLI de qlty](https://qlty.sh) instalado. El check del PR
+> publica un número y su detalle vive tras un login, así que el mismo argumento por el que
+> `.qlty/qlty.toml` está versionado aplica al informe: `--upstream main` reproduce en local
+> exactamente lo que el PR cuenta.
 
 > **`npm run artefacto`** usa `@mermaid-js/mermaid-cli`, que necesita un navegador.
 > `scripts/mermaid-puppeteer.json` declara `channel: "chrome"`, o sea **el Chrome que ya

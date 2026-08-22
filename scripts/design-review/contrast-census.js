@@ -184,6 +184,31 @@ window.contrastCensus = () => {
    */
   const MEDIA_SEL = "img, video, canvas, svg image";
 
+  const solapan = (a, b) =>
+    a.left < b.right &&
+    a.right > b.left &&
+    a.top < b.bottom &&
+    a.bottom > b.top;
+
+  /** ¿El fondo de este elemento es una imagen que CUBRE y no se puede reducir a
+   *  un color? `background-size` con una dimensión a cero no pinta nada, y un
+   *  relleno sólido escrito como degradado lo resuelve `fillColor`. */
+  const cubreConImagen = (n, cs) =>
+    cs.backgroundImage !== "none" &&
+    !/(^|[\s,])0(%|px)?([\s,]|$)/.test(cs.backgroundSize) &&
+    fillColor(n) === null;
+
+  /** ¿Hay un `<img>`/`<video>` DENTRO de `ancestro` que se solape con la caja
+   *  del texto sin contenerlo? Es la foto que se interpone. */
+  function tapaMedia(ancestro, el, r) {
+    for (const m of ancestro.querySelectorAll(MEDIA_SEL)) {
+      if (m.contains(el)) continue;
+      const mr = m.getBoundingClientRect();
+      if (mr.width > 0 && mr.height > 0 && solapan(r, mr)) return true;
+    }
+    return false;
+  }
+
   function overImage(el) {
     // La comprobación es GEOMÉTRICA y no de cascada: se pregunta si el texto cae
     // ENCIMA de una foto, que es el hecho. El primer intento miraba si algún
@@ -216,30 +241,13 @@ window.contrastCensus = () => {
     // opaco devuelve `false` en vez de romper el bucle y seguir preguntando.
     const r = el.getBoundingClientRect();
     if (r.width === 0 || r.height === 0) return false;
-    const solapa = (m) =>
-      r.left < m.right &&
-      r.right > m.left &&
-      r.top < m.bottom &&
-      r.bottom > m.top;
 
     for (let n = el; n; n = n.parentElement) {
       const cs = getComputedStyle(n);
-      if (
-        cs.backgroundImage !== "none" &&
-        !/(^|[\s,])0(%|px)?([\s,]|$)/.test(cs.backgroundSize) &&
-        fillColor(n) === null
-      )
-        return true;
-
+      if (cubreConImagen(n, cs)) return true;
       // El hermano posicionado que es el caso de Sobre mí: la foto vive dentro
       // del `<figure>`, no en el fondo de ningún ancestro del texto.
-      if (n !== el)
-        for (const m of n.querySelectorAll(MEDIA_SEL)) {
-          if (m.contains(el)) continue;
-          const mr = m.getBoundingClientRect();
-          if (mr.width > 0 && mr.height > 0 && solapa(mr)) return true;
-        }
-
+      if (n !== el && tapaMedia(n, el, r)) return true;
       if (paint(cs.backgroundColor)[3] === 1) return false;
     }
 
