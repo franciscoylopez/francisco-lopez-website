@@ -137,7 +137,7 @@
         "parts": [
           { "label": "PRD-Live.md", "path": "PRD-Live.md" },
           ", secciones 1 a 3 y 9, y la decisión ",
-          { "label": "D29", "path": "DECISIONS.md", "line": 844 },
+          { "label": "D29", "path": "DECISIONS.md" },
           " para la franja de contacto"
         ]
       }
@@ -239,11 +239,11 @@
           "El apartado de seguimiento de tareas de ",
           { "label": "CLAUDE.md", "path": "CLAUDE.md" },
           ", y las decisiones ",
-          { "label": "D10", "path": "DECISIONS.md", "line": 176 },
+          { "label": "D10", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D12", "path": "DECISIONS.md", "line": 202 },
+          { "label": "D12", "path": "DECISIONS.md" },
           " y ",
-          { "label": "D68", "path": "DECISIONS.md", "line": 3638 }
+          { "label": "D68", "path": "DECISIONS.md" }
         ]
       }
     },
@@ -395,15 +395,15 @@
         "label": "ENLACE ·",
         "parts": [
           "Decisiones ",
-          { "label": "D2", "path": "DECISIONS.md", "line": 59 },
+          { "label": "D2", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D3", "path": "DECISIONS.md", "line": 71 },
+          { "label": "D3", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D6", "path": "DECISIONS.md", "line": 107 },
+          { "label": "D6", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D34", "path": "DECISIONS.md", "line": 1020 },
+          { "label": "D34", "path": "DECISIONS.md" },
           " y ",
-          { "label": "D51", "path": "DECISIONS.md", "line": 2187 },
+          { "label": "D51", "path": "DECISIONS.md" },
           " del registro técnico"
         ]
       }
@@ -479,15 +479,15 @@
         "label": "ENLACE ·",
         "parts": [
           "Decisiones ",
-          { "label": "D36", "path": "DECISIONS.md", "line": 1107 },
+          { "label": "D36", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D40", "path": "DECISIONS.md", "line": 1520 },
+          { "label": "D40", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D45", "path": "DECISIONS.md", "line": 1854 },
+          { "label": "D45", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D46", "path": "DECISIONS.md", "line": 1909 },
+          { "label": "D46", "path": "DECISIONS.md" },
           " y ",
-          { "label": "D72", "path": "DECISIONS.md", "line": 3870 },
+          { "label": "D72", "path": "DECISIONS.md" },
           ", y el directorio ",
           { "label": "components/ui/", "path": "components/ui" }
         ]
@@ -533,7 +533,7 @@
         "label": "ENLACE ·",
         "parts": [
           "Decisión ",
-          { "label": "D1", "path": "DECISIONS.md", "line": 38 },
+          { "label": "D1", "path": "DECISIONS.md" },
           ", con su nota de superación y la decisión original conservada debajo"
         ]
       }
@@ -662,17 +662,17 @@
         "label": "ENLACE ·",
         "parts": [
           "Decisiones ",
-          { "label": "D13", "path": "DECISIONS.md", "line": 229 },
+          { "label": "D13", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D15", "path": "DECISIONS.md", "line": 280 },
+          { "label": "D15", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D26", "path": "DECISIONS.md", "line": 706 },
+          { "label": "D26", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D27", "path": "DECISIONS.md", "line": 750 },
+          { "label": "D27", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D32", "path": "DECISIONS.md", "line": 957 },
+          { "label": "D32", "path": "DECISIONS.md" },
           " y ",
-          { "label": "D55", "path": "DECISIONS.md", "line": 2713 },
+          { "label": "D55", "path": "DECISIONS.md" },
           ", el archivo ",
           { "label": "next.config.ts", "path": "next.config.ts" },
           " y la configuración de ",
@@ -783,15 +783,15 @@
         "label": "ENLACE ·",
         "parts": [
           "Decisiones ",
-          { "label": "D39", "path": "DECISIONS.md", "line": 1451 },
+          { "label": "D39", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D41", "path": "DECISIONS.md", "line": 1583 },
+          { "label": "D41", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D52", "path": "DECISIONS.md", "line": 2356 },
+          { "label": "D52", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D61", "path": "DECISIONS.md", "line": 3266 },
+          { "label": "D61", "path": "DECISIONS.md" },
           " y ",
-          { "label": "D73", "path": "DECISIONS.md", "line": 3945 },
+          { "label": "D73", "path": "DECISIONS.md" },
           ", y el script ",
           {
             "label": "contrast-census.js",
@@ -863,7 +863,7 @@
           "type": "diagram",
           "id": "s09",
           "side": "center",
-          "caption": "Los quince pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
+          "caption": "Los dieciséis pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
         },
         {
           "type": "p",
@@ -879,15 +879,15 @@
         "label": "ENLACE ·",
         "parts": [
           "Decisiones ",
-          { "label": "D37", "path": "DECISIONS.md", "line": 1259 },
+          { "label": "D37", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D63", "path": "DECISIONS.md", "line": 3350 },
+          { "label": "D63", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D67", "path": "DECISIONS.md", "line": 3551 },
+          { "label": "D67", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D70", "path": "DECISIONS.md", "line": 3765 },
+          { "label": "D70", "path": "DECISIONS.md" },
           " y ",
-          { "label": "D72", "path": "DECISIONS.md", "line": 3870 },
+          { "label": "D72", "path": "DECISIONS.md" },
           ", el ",
           { "label": "workflow de CI", "path": ".github/workflows/ci.yml" },
           " y las rutinas versionadas en ",
@@ -939,11 +939,11 @@
           "El apartado «Cómo se escribe una regla aquí» de ",
           { "label": "BRAND.md", "path": "BRAND.md" },
           ", y las decisiones ",
-          { "label": "D60", "path": "DECISIONS.md", "line": 3185 },
+          { "label": "D60", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D63", "path": "DECISIONS.md", "line": 3350 },
+          { "label": "D63", "path": "DECISIONS.md" },
           " y ",
-          { "label": "D70", "path": "DECISIONS.md", "line": 3765 }
+          { "label": "D70", "path": "DECISIONS.md" }
         ]
       }
     }
@@ -988,13 +988,13 @@
       "label": "ENLACE ·",
       "parts": [
         "Decisiones ",
-        { "label": "D17", "path": "DECISIONS.md", "line": 301 },
+        { "label": "D17", "path": "DECISIONS.md" },
         ", ",
-        { "label": "D18", "path": "DECISIONS.md", "line": 341 },
+        { "label": "D18", "path": "DECISIONS.md" },
         ", ",
-        { "label": "D31", "path": "DECISIONS.md", "line": 929 },
+        { "label": "D31", "path": "DECISIONS.md" },
         " y ",
-        { "label": "D71", "path": "DECISIONS.md", "line": 3830 }
+        { "label": "D71", "path": "DECISIONS.md" }
       ]
     }
   }

@@ -7,6 +7,7 @@ import {
   ByLine,
   ChapterNav,
   RepoStrip,
+  type RepoStripPart,
   SectionCover,
 } from "@/components/ui/article";
 import {
@@ -19,6 +20,11 @@ import { Badge } from "@/components/ui/badge";
 import { LEADING, SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { GITHUB_URL } from "@/lib/contact";
+import {
+  DECISIONES_PATH,
+  ES_DECISION,
+  lineasDeDecision,
+} from "@/lib/decisions";
 import type { Locale } from "@/lib/i18n/config";
 import {
   articleWordCount,
@@ -58,6 +64,37 @@ import {
 // `md:min-h` para que el heading quepa entero en el pliegue como en
 // Accesibilidad/Brand Kit/Design System, y cada franja de enlace con un
 // `<a>` por decisión citada en vez de uno solo para la frase entera.
+
+/**
+ * Las líneas de `DECISIONS.md`, leídas UNA VEZ por build. Las trece páginas se
+ * prerenderizan (D48), así que esto es trabajo de `next build`, no de petición.
+ */
+const LINEAS_DECISION = lineasDeDecision();
+
+/** La cita tal y como la guarda el diccionario: sin `line`, que es derivado. */
+type CitaDict =
+  | string
+  | { label: string; path: string }
+  | { label: string; external: string };
+
+/**
+ * Le pone el ancla `#L…` a cada decisión citada, resolviéndola de la cabecera
+ * real (`lib/decisions.ts`). El diccionario guarda la etiqueta y el archivo; la
+ * línea no se escribe nunca, porque una línea escrita a mano es una segunda
+ * verdad y ya se desincronizó en 27 de 38 citas.
+ *
+ * Solo toca las citas a `DECISIONS.md` con etiqueta `D<n>`: el resto —archivos
+ * de código, `BRAND.md`, URLs externas— apuntan al archivo entero a propósito.
+ */
+function conAncla(parts: readonly CitaDict[]): RepoStripPart[] {
+  return parts.map((part) => {
+    if (typeof part === "string" || !("path" in part)) return part;
+    if (part.path !== DECISIONES_PATH || !ES_DECISION.test(part.label))
+      return part;
+    const line = LINEAS_DECISION.get(part.label);
+    return line ? { ...part, line } : part;
+  });
+}
 
 export function ComoSeHaCreado({
   dict,
@@ -375,7 +412,10 @@ export function ComoSeHaCreado({
                 resolveLiveStatHref={resolveLiveStatHref}
                 liveStatExtras={LIVESTAT_EXTRAS}
               />
-              <RepoStrip label={s.enlace.label} parts={s.enlace.parts} />
+              <RepoStrip
+                label={s.enlace.label}
+                parts={conAncla(s.enlace.parts)}
+              />
               <ChapterNav
                 position={position}
                 total={totalSections}
@@ -407,7 +447,7 @@ export function ComoSeHaCreado({
           <ArticleProse blocks={blocksOf(t.closing.body)} diagrams={DIAGRAMS} />
           <RepoStrip
             label={t.closing.enlace.label}
-            parts={t.closing.enlace.parts}
+            parts={conAncla(t.closing.enlace.parts)}
           />
           {/* El cierre termina igual que las otras diez secciones —mismo pie,
               sin franja de contacto propia (P60 tanda 3, puntos 7 y 9): tenía
