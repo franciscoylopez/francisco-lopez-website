@@ -13,6 +13,7 @@ import {
 } from "@/lib/contact";
 import { pagePath, type Locale } from "@/lib/i18n/config";
 import { ARTICLE_PUBLISHED, ARTICLE_UPDATED } from "@/lib/design-values";
+import { ogImagePath } from "@/lib/page-meta";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 // Especialidades declaradas en el PRD §10.
@@ -95,6 +96,42 @@ export function breadcrumbLd(items: { name: string; url?: string }[]) {
   };
 }
 
+/** El único artículo del sitio. Escrito una vez: lo usan su URL y su tarjeta OG. */
+const ARTICLE_SLUG = "como-se-ha-creado";
+
+/**
+ * La hora nominal de publicación y la zona de la que sale el desfase. La hora NO
+ * se guarda junto a la fecha en `lib/design-values.ts` a propósito: la MISMA
+ * constante alimenta el copy que lee una persona, formateado con `Intl`, y ahí
+ * una hora inventada se vería. Se compone aquí, al emitir el JSON-LD, y solo aquí.
+ */
+const ARTICLE_HOUR = "10:00";
+const TIME_ZONE = "Europe/Madrid";
+
+/**
+ * ISO 8601 COMPLETO a partir de la fecha corta. La Rich Results Test avisa DOS
+ * veces por cada fecha de un `Article` cuando le llega solo el día —«el valor de
+ * fecha y hora no es válido» y «falta la zona horaria»—, así que los cuatro
+ * avisos de fecha son en realidad este único hueco.
+ *
+ * EL DESFASE SE DERIVA DE LA ZONA, NO SE ESCRIBE. `+02:00` es correcto en agosto
+ * y falso en enero: un literal convertiría la primera fecha de invierno en un
+ * dato mal por una hora, y nadie lo miraría. `longOffset` da `GMT+02:00`, y
+ * `GMT` a secas cuando el desfase es cero (que en Madrid no ocurre, pero el
+ * formato lo contempla).
+ */
+function isoConHora(iso: string): string {
+  const desfase =
+    new Intl.DateTimeFormat("en-US", {
+      timeZone: TIME_ZONE,
+      timeZoneName: "longOffset",
+    })
+      .formatToParts(new Date(`${iso}T${ARTICLE_HOUR}:00Z`))
+      .find((p) => p.type === "timeZoneName")
+      ?.value.replace("GMT", "") || "Z";
+  return `${iso}T${ARTICLE_HOUR}:00${desfase}`;
+}
+
 /**
  * `TechArticle` de «Cómo se ha creado esta página» (P60). Es la ÚNICA página
  * del sitio marcada como artículo — el deep-dive deliberadamente NO lo es (ver
@@ -108,6 +145,18 @@ export function breadcrumbLd(items: { name: string; url?: string }[]) {
  * `lib/design-values.ts` (`ARTICLE_PUBLISHED`/`ARTICLE_UPDATED`) y no de un
  * literal aquí, por la misma razón que el resto de cifras publicadas: una sola
  * fuente que actualizar, no un string que se queda atrás (D60).
+ *
+ * PERO EL `@id` SOLO NO LE BASTA A GOOGLE, y aquí sí importa. La Rich Results
+ * Test evalúa una página AISLADA: ve una referencia colgando, la degrada a
+ * `Thing` anónimo y avisa de que al autor le faltan `name` y `url`. Que
+ * `npm run check:marco` dé verde sobre lo mismo no es una contradicción —resuelve
+ * los `@id` contra TODO el sitio, que es justo lo que ningún validador externo
+ * hace (D75)—: miden cosas distintas. La salida no es repetir el `Person` entero
+ * (esa copia se evitó a propósito), sino darle al `author` los dos campos que
+ * Google necesita para pintarlo, con el `@id` haciendo su trabajo al lado.
+ *
+ * SOLO AQUÍ. `experiencePageLd` usa la misma referencia, pero es `WebPage`, que
+ * no es elegible para rich results: allí no cuesta nada y se queda como está.
  */
 export function techArticleLd({
   lang,
@@ -119,7 +168,7 @@ export function techArticleLd({
   headline: string;
   description: string;
 }) {
-  const url = pageUrl(lang, "como-se-ha-creado");
+  const url = pageUrl(lang, ARTICLE_SLUG);
   return {
     "@context": "https://schema.org",
     "@type": "TechArticle",
@@ -129,9 +178,17 @@ export function techArticleLd({
     headline,
     description,
     inLanguage: lang,
-    datePublished: ARTICLE_PUBLISHED,
-    dateModified: ARTICLE_UPDATED,
-    author: { "@id": `${SITE_URL}/#person` },
+    // La MISMA tarjeta que sirve el OG de la página, no un asset nuevo: sin
+    // `image` el resultado de Google sale sin miniatura.
+    image: `${SITE_URL}${ogImagePath(ARTICLE_SLUG, lang)}`,
+    datePublished: isoConHora(ARTICLE_PUBLISHED),
+    dateModified: isoConHora(ARTICLE_UPDATED),
+    author: {
+      "@type": "Person",
+      "@id": `${SITE_URL}/#person`,
+      name: SITE_NAME,
+      url: `${SITE_URL}/`,
+    },
   };
 }
 
