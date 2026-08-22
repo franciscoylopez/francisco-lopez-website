@@ -102,6 +102,7 @@
 - D84 · El artículo describe un proyecto que se mueve, y nadie le avisaba
 - D85 · La pasada de contraste deja de hacerse a mano, y el medidor tenía un falso positivo
 - D86 · El informe de qlty baja al repo, y de sus hallazgos dos eran míos
+- D87 · Google no cruza de página, y por eso una referencia `@id` no basta en un tipo elegible
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
