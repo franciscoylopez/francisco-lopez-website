@@ -74,6 +74,17 @@ const CASOS: Caso[] = [
     ),
   },
   {
+    guardian: "check:palette",
+    rotura: "aparece una animación propia y el censo no la ha visto (D90)",
+    // Un `@keyframes` es la tercera rama de la condición de re-medir de la DoD, y
+    // la más limpia de mutar: cambia la huella del censo sin tocar ningún token,
+    // así que lo que se comprueba es exactamente este control y no otro.
+    archivo: "app/globals.css",
+    mutar: append(
+      "\n@keyframes guardian-de-mentira {\n  to { opacity: 1; }\n}\n",
+    ),
+  },
+  {
     guardian: "check:experiencias",
     rotura: "un bullet que existe en ES y no en EN",
     archivo: "content/experience-copy/en.ts",

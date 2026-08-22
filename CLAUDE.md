@@ -162,7 +162,7 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 |---|---|---|
 | 1 | **Sale de las piezas, no de clases sueltas** | La cascada de la «Regla de construcción». Si hubo que crear variante, se publica en el Design System antes de dar por hecha la tarea |
 | 2 | **Accesibilidad de contenido**: un solo `h1` y jerarquía sin saltos · breadcrumb · nada codificado solo por color · alternativas textuales | `npm run check:marco` en CI para los puntos 4, 5 y 8 (D75). A mano solo el **6**, que no tiene forma automática |
-| 3 | **Accesibilidad heredada**: contraste, foco, 44px, `reduced-motion` | `viewport-verifier` (D52). **Solo se vuelve a MEDIR** si el trabajo introduce un par de color nuevo, un fondo que no sea `--background` o una animación propia |
+| 3 | **Accesibilidad heredada**: contraste, foco, 44px, `reduced-motion` | `viewport-verifier` (D52). **Solo se vuelve a MEDIR** si el trabajo introduce un par de color nuevo, un fondo que no sea `--background` o una animación propia — y **esa condición ya no hay que leerla**: `check:palette` compara contra el sello del último censo y sale rojo nombrando lo que apareció (D90) |
 | 4 | **Enlace de salto** | `npm run check:marco`: axe no lo detecta, y por eso lo mira él (D46/D75) |
 | 5 | **Pliegue**, si lleva banda o hero por `vw` | `viewport-verifier` **mientras se dibuja**, no al cerrar (D50/D52) |
 | 6 | **SEO + JSON-LD** del tipo que le toca, ES y EN | `pageMetadata` lo deriva y `check:marco` comprueba que llegó, con los `@id` resueltos (D75). Se verifica a mano el **tipo nuevo** si lo hay, con el Schema Markup Validator |

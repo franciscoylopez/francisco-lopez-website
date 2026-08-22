@@ -54,6 +54,7 @@ import { dirname, join } from "node:path";
 
 import { locales, pagePath } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
+import { HUELLA_PATH, sellar } from "./censo/huella";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const CENSO = "scripts/design-review/contrast-census.js";
@@ -193,10 +194,18 @@ if (problemas.length) {
   process.exit(1);
 }
 
+// La pasada deja algo detrás, que es lo que la separa de un hábito: el sello de
+// lo que había cuando se midió. A partir de aquí, un token de color, una
+// superficie o una animación nuevos ponen `check:palette` en rojo NOMBRÁNDOLOS,
+// sin necesitar navegador — que es la mitad de la condición de re-medir de la
+// DoD que hasta ahora había que acordarse de leer (D90).
+const sello = sellar(new Date().toISOString().slice(0, 10));
+
 console.log(
   `censo ✓ — ${corridas} corridas (${PAGE_SLUGS.length} páginas × ${TEMAS.length} temas), ` +
     `${paresTotales} pares medidos, metro validado en las ${corridas}.\n` +
     `Cero bajo AA y cero bajo AAA. ${sinMedirTotales} pares sobre imagen quedan fuera ` +
     `del veredicto y se miran aparte.\n\n` +
+    `Sellado en ${HUELLA_PATH} — ${sello.resumen}.\n` +
     `Si esta pasada es la buena, actualiza LAST_A11Y_REVIEW en lib/design-values.ts.`,
 );

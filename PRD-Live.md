@@ -194,7 +194,10 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
   sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
   mirarlo (D84).
 - **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
-  porque necesita navegador (D85).
+  porque necesita navegador (D85). **Pero deja sello**: al pasar en verde firma los tokens
+  de color, las superficies y las animaciones que había, y `check:palette` compara ese
+  sello en cada PR. Medir necesita pintar; saber que hay que medir, no — así que la
+  condición de re-medir de la DoD la lee una máquina (D90).
 - **`npm run psi`**: la nota de PageSpeed contra producción, a demanda y nunca como gate
   de CI, porque su variabilidad daría rojos falsos (D49).
 

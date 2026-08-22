@@ -125,6 +125,7 @@
 - D87 · Google no cruza de página, y por eso una referencia `@id` no basta en un tipo elegible
 - D88 · El único índice que se precargaba baja a su cabecera, y era el único que crecía solo
 - D89 · El inventario de `components/ui/` se deriva del disco, y una pieza nueva sin publicar sale en rojo
+- D90 · Lo que el censo midió se sella, y CI puede ponerse en rojo sin abrir un navegador
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -4995,3 +4996,49 @@ son y cuáles, cada vez.
 Design System, pese a que la «Regla de construcción» manda publicarlo antes de dar la tarea por
 hecha. Llevaba tres días siendo una de las siete piezas del sistema sin sección propia y no lo
 vio nadie, porque no había quién lo mirara. Ahora lo mira CI y sale por su nombre en cada PR.
+
+## D90 · Lo que el censo midió se sella, y CI puede ponerse en rojo sin abrir un navegador — 2026-08-22
+
+**El hueco, que es el más caro de «la regla sin portador».** La Definition of Done dice que la
+accesibilidad heredada **solo se vuelve a medir** si el trabajo introduce (a) un par de color
+nuevo, (b) un fondo que no sea `--background` o (c) una animación propia. La regla es correcta.
+El problema es que **leerla es trabajo humano**: «Cómo se ha creado esta página» cumplió **las
+tres ramas a la vez** y no la leyó nadie. Resultado medido: **cuatro de los ocho hallazgos** del
+`design-review` de P60 tenían su regla escrita *antes de empezar* — el hover del breadcrumb a
+1,11:1 (la rama del fondo), el morado como relleno informativo, el riel a 24px y el índice
+fuera de `chrome.tsx`. Es la regla 2 de `BRAND.md` cobrándose la pieza más cara.
+
+**Las dos salidas obvias no valen.** *Fallar el PR* no puede: el censo necesita navegador y
+servidor, y por eso está fuera de CI (D85); un gate que no puede correr no puede bloquear. Y
+*avisar* tampoco: esto nació **precisamente** de que nadie leyó una condición, así que un aviso
+más es la misma trampa con otro nombre.
+
+**La tercera vía, que este repo ya usa dos veces: se sella lo que ENTRA** (D60 con el CV, D84
+con el artículo). **Medir necesita pintar; saber que hay que medir, no.** `npm run censo`, al
+terminar en verde, escribe `scripts/censo/censo.huella` con el hash de lo que había cuando
+midió, y `npm run check:palette` lo compara en cada PR. Si aparece un token de color, una
+superficie o una animación que el censo no vio, **CI se pone rojo y lo nombra**.
+
+**Qué se sella son exactamente las tres ramas de la condición:**
+
+| Rama de la DoD | Qué entra en el hash |
+|---|---|
+| Un par de color nuevo | los `--x: valor` **de color** de `:root` y `.dark` (un radio nuevo no manda a medir contraste) |
+| Un fondo que no sea `--background` | los valores de `data-surface` usados en el código **y** los selectores que redefinen `--surface-dim` |
+| Una animación propia | los `@keyframes` declarados |
+
+Los selectores de `--surface-dim` entran porque son los que hacen que una superficie **exista
+para la capa** (D39), y porque incluyen los de **estado** (D61) — que es justo la puerta por la
+que se coló el caso de P60: `hover:bg-muted` no compila al mismo selector que `.bg-muted`.
+
+**Por qué vive dentro de `check:palette` y no en un paso propio.** La pregunta que hace es de
+paleta —qué colores y qué superficies hay—, y un paso diecisiete movería la cifra de pasos de
+CI que publican el artículo, el PRD y el README por un control que cabe donde ya se miran los
+colores. El guardián estrena su caso malo: un `@keyframes` de mentira en `globals.css` tiene
+que ponerlo en rojo.
+
+**Lo que NO promete, dicho para que no se dé por cubierto.** No dice que el sitio cumpla: dice
+que **lo que el censo midió sigue siendo lo que hay**. Un bloque que se pinta su propia
+superficie sin declarar `data-surface` no aparece en el hash — pero ese caso ya lo prohíbe
+`BRAND.md`, y lo que este sello añade es que saltárselo tenga consecuencias visibles en el PR
+siguiente en vez de dentro de dos sprints.
