@@ -257,21 +257,25 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 ### V2 — en curso
 
 Tres sprints de valor para el visitante, en el orden que fijan las dependencias. **Los
-dos primeros están entregados**; entre ellos se intercalaron dos bloques cortos.
+dos primeros están entregados y el tercero está abierto**; entre ellos se intercalaron
+dos bloques cortos.
 
 | # | Sprint | Estado |
 |---|---|---|
 | 1 | **Deep-dive por experiencia** — cinco páginas y su índice | **En producción** |
-| — | *Sprint Lite* — 404 de los deep-dive, la raya fuera del copy, retrato nuevo, vídeo de Sobre mí, aperturas homogéneas, repo público | **En producción** |
+| — | *Sprint Lite* — seis mejoras cortas entre los dos sprints grandes | **En producción** |
 | — | *Método* — el andamiaje del propio método antes de un sprint de contenido | **Entregado** |
 | 2 | **«Cómo se ha creado esta página»** | **En producción** (cerrado el 2026-08-22) |
 | — | *Método II* — el andamiaje otra vez, y el presupuesto de contexto sin margen | **Entregado** (cerrado el 2026-08-22) |
-| 3 | **Footer estructurado y Contacto ampliada** | Después |
+| 3 | **Footer estructurado y Contacto ampliada** | **En curso** (abierto el 2026-08-22) |
 
 **Sprint 3 — Footer y Contacto ampliada.** El footer va el último **porque necesita que
 existan las secciones que crean los dos sprints anteriores**. De Contacto ampliada, lo
 primero es definir qué añade sobre la franja compartida de D29: si la respuesta es «nada»,
-la conclusión legítima es reforzar la franja y no construir la página.
+la conclusión legítima es reforzar la franja y no construir la página. Es el primer sprint
+que arrastra **cupo de `General`** (D91): cuatro tareas transversales entran con él, y dos
+de ellas son el mismo defecto —el sitio scrollea en horizontal por debajo de 360px— visto
+desde el nav y desde el email de contacto.
 
 **Traducción a EN**: la arquitectura i18n ya está; se traduce a medida que se añade
 contenido, revisando el EN contra el ES y no al revés (D20).
