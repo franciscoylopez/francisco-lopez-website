@@ -128,21 +128,29 @@ export function SectionRail({ items }: { items: RailItem[] }) {
                   índice («El sistema de componentes», 26 caracteres) sin
                   cortarla — con `max-w-40` el hover truncaba a media palabra
                   (P60 tanda 2, punto 4). La sección activa vuelve a
-                  blanco/negro: el morado no convenció en pantalla. */}
+                  blanco/negro: el morado no convenció en pantalla.
+                  El `<a>` es el objetivo táctil de 44×44 (design-review P60:
+                  la píldora visible de 24px medía por debajo del suelo del
+                  checklist); el aspecto entero — círculo, expansión, color —
+                  vive en el `<span>` interior, así que no crece en pantalla. */}
               <a
                 href={`#${item.id}`}
                 aria-current={isActive ? "true" : undefined}
-                className={cn(
-                  "border-border group flex h-6 max-w-6 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out hover:max-w-64 focus-visible:max-w-64",
-                  isActive
-                    ? "bg-foreground text-background border-foreground"
-                    : "bg-card text-muted-foreground hover:bg-card hover:text-foreground",
-                )}
+                className="group flex size-11 shrink-0 items-center justify-center"
               >
-                <span className="flex size-[18px] shrink-0 items-center justify-center">
-                  {item.ordinal}
+                <span
+                  className={cn(
+                    "border-border flex h-6 max-w-6 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out group-hover:max-w-64 group-focus-visible:max-w-64",
+                    isActive
+                      ? "bg-foreground text-background border-foreground"
+                      : "bg-card text-muted-foreground group-hover:bg-card group-hover:text-foreground",
+                  )}
+                >
+                  <span className="flex size-[18px] shrink-0 items-center justify-center">
+                    {item.ordinal}
+                  </span>
+                  <span className="pr-3 text-[0.78rem]">{item.label}</span>
                 </span>
-                <span className="pr-3 text-[0.78rem]">{item.label}</span>
               </a>
             </li>
           );
