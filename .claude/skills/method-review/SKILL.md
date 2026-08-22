@@ -149,6 +149,13 @@ una vez (16 de 20 en «Optimización»). Pero **mira las tareas una a una antes 
 segunda vez, 17 de 20 eran genuinamente transversales y lo que faltaba no era redistribuir
 sino escribir el criterio.
 
+**Y no te quedes en la clasificación, que es lo que falló al concluir eso: mide también el
+DRENAJE.** Cuántas entran en un bloque y cuántas salen. `General` pasó de 20 a 28 con el
+criterio ya escrito, porque clasificar bien una tarea no la mueve — la regla de movimiento
+(«cambia de `Etapa` al sprint que la toca») funciona para bloques de página y **no puede**
+funcionar para un bloque transversal, al que ningún sprint toca. Un bloque cuyo único
+desagüe es inventar un sprint de método es el hallazgo, no su tamaño.
+
 ### 9 · Herramientas y dependencias
 
 Canal real (`npm view <pkg> dist-tags`), anclaje, `npm audit`, y **cuánto tarda un bump en
@@ -163,21 +170,19 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | Familia | Cómo se reconoce | Instancias |
 | :-- | :-- | :-- |
 | **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 |
-| **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 5 |
+| **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 6 |
 | **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 3 |
-| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **6** |
-| **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 3 |
-| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | 3 |
+| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **7** |
+| **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 4 |
+| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **4** |
 | **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **2** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **Añadir sin retirar** | Un documento que crece porque nada pregunta qué sobra (D69) | el marco |
 
-*Segundo disparo, 2026-08-19: la familia nueva es «arreglar la mitad que se abre»
-—el* cooldown *de Dependabot controló cuántos PR se abren y no quién los cierra, y D59
-derivó el sitemap del deep-dive dejando las páginas estáticas a mano en tres listas—.
-Y una lección sobre esta tabla: **actualizarla es el último paso del disparo y es el
-que se olvida.** Se quedó sin tocar veinte minutos después de publicar un informe sobre
-documentos que crecen porque nadie pregunta qué falta.*
+*Segundo disparo, 2026-08-19: nace «arreglar la mitad que se abre» —el* cooldown *de
+Dependabot controló cuántos PR se abren y no quién los cierra; D59 derivó el sitemap del
+deep-dive dejando las páginas estáticas a mano en tres listas—. Y la lección sobre esta
+tabla: **actualizarla es el último paso del disparo y es el que se olvida.***
 
 *Tercer disparo, 2026-08-22: **«la regla sin portador» pasa de 3 instancias a 6 y se
 convierte en la familia dominante.** Las tres nuevas salieron del mismo sprint: cuatro de
@@ -197,6 +202,25 @@ estructura de las otras
 catorce. **Ojo al medirla: su firma es que el hallazgo aparece tarde y en plural** —ocho
 tareas de golpe en una revisión final, no una en cada PR.*
 
+*Cuarto disparo, 2026-08-22 (el mismo día que el tercero, tras Método II): **«arreglar la
+mitad que se abre» alcanza al propio método, y esa es la instancia 4.** Las revisiones
+producen hallazgos mejor que nunca y nada los saca: `General` acumula 28 abiertas con 1
+archivada en toda su vida, y su único desagüe histórico ha sido abrir un sprint de método
+—dos veces, 24 tareas, exactamente las mismas que costó construir la página del sprint—.
+El aviso lo trajo Francisco desde el tiempo invertido y el barrido lo confirmó desde los
+contadores del tablero: **segunda vez que las dos direcciones convergen y segunda vez que
+ese es el hallazgo de más confianza.***
+
+*Y dos cosas que este disparo deja como método, no como hallazgo:*
+
+- ***Un aviso sin umbral se olvida.** Cuando Francisco pide anotar algo «como aviso, no como
+  accionable», el trabajo de la revisión es convertirlo en una cifra con verde y rojo para el
+  próximo cierre. Aquí fueron dos: hallazgos del `design-review` cuya regla ya existía (4 de 8
+  hoy · verde ≤1 · rojo ≥3) y proporción de tareas de método sobre el ciclo (50% hoy · verde
+  ≤25%). Sin eso, dentro de un mes vuelve a ser una conversación de sensación.*
+- ***Mide el drenaje, no solo la clasificación*** *(ver el paso 8, corregido). Es lo que se le
+  escapó al segundo disparo mirando el mismo eje.*
+
 ## La salida
 
 1. **Un informe publicado como Artifact**, no un volcado en la terminal: Francisco lo lee
@@ -210,10 +234,17 @@ tareas de golpe en una revisión final, no una en cada PR.*
 3. **Propón antes de crear**, y **consulta el tablero primero**: en el primer disparo, cinco
    de los once puntos del plan ya estaban tareados por revisiones anteriores. La salida no es
    una lista de tareas nuevas, es un bloque ensamblado con las que ya existen.
-4. **Si se acuerda ejecutarlo, va en su propia `Etapa`** (la primera se llamó *Método*), con
-   las tareas de deuda que se comprometan movidas ahí desde su bloque, según las reglas del
-   tablero.
-5. **Actualiza este catálogo.** Es lo único de esta skill que tiene que crecer.
+4. **Un sprint de método propio es el último recurso, no el formato por defecto** *(desde el
+   cuarto disparo)*. Las dos primeras veces se abrió uno —*Método* y *Método II*, 24 tareas,
+   las mismas que costó la página del sprint que las generó— y eso es justo lo que el cupo de
+   `General` existe para evitar. El orden correcto: **la regla o la edición de documento se
+   hace ahora**, en la misma sesión; **el arreglo con código va al sprint que ya toca esos
+   archivos**; y solo lo que no encaje en ninguno de los dos cae en `General`, dentro del cupo.
+   Un sprint propio se abre únicamente si lo acordado no cabe en esas tres vías.
+5. **Antes de dar por abierto el sprint siguiente, comprueba su tarea de contenido.** Si sigue
+   en `Sin empezar`, el sprint abre bloqueado y esa es su primera tarea. Este es el hueco donde
+   se comprueba porque es el último momento antes de abrir.
+6. **Actualiza este catálogo.** Es lo único de esta skill que tiene que crecer.
 
 ## Dos cosas que NO hace
 

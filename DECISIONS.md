@@ -126,6 +126,7 @@
 - D88 · El único índice que se precargaba baja a su cabecera, y era el único que crecía solo
 - D89 · El inventario de `components/ui/` se deriva del disco, y una pieza nueva sin publicar sale en rojo
 - D90 · Lo que el censo midió se sella, y CI puede ponerse en rojo sin abrir un navegador
+- D91 · Un backlog transversal no lo drena ningún sprint, y el carril de contenido se barría con el resto
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5042,3 +5043,75 @@ que **lo que el censo midió sigue siendo lo que hay**. Un bloque que se pinta s
 superficie sin declarar `data-surface` no aparece en el hash — pero ese caso ya lo prohíbe
 `BRAND.md`, y lo que este sello añade es que saltárselo tenga consecuencias visibles en el PR
 siguiente en vez de dentro de dos sprints.
+
+---
+
+## D91 · Un backlog transversal no lo drena ningún sprint, y el carril de contenido se barría con el resto — 2026-08-22
+
+**Contexto.** Cuarto disparo de `method-review`, en el hueco entre Método II y «Footer y
+contacto». El aviso lo trajo Francisco desde el tiempo invertido —«no podemos dedicar más
+tiempo a arreglar que a crear»— y el barrido lo confirmó desde los contadores del tablero, sin
+haber leído su nota. **Segunda vez que las dos direcciones convergen y segunda vez que ese es
+el hallazgo de más confianza.**
+
+**Lo medido.** Del ciclo del sprint 2 —*Método* (17 tareas) + *Cómo se ha creado* (24) +
+*Método II* (7)— **la mitad exacta fue andamiaje**. `DECISIONS.md` pasó de 23.910 a 58.681
+palabras (+145%) mientras el sitio pasaba de doce a trece páginas (+8%); de 156 commits desde
+el 12-08, 38 son de valor (`feat`/`content`/`copy`) y 98 de `docs`/`fix`. Y `General` acumula
+**28 tareas abiertas con 1 archivada en toda su vida**, 16 de ellas creadas en cuatro días por
+las revisiones.
+
+**La causa, que no es falta de disciplina.** La regla de movimiento del tablero —«una tarea de
+deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete, porque desbloquea
+algo de ese sprint o porque toca los mismos archivos»— **funciona para bloques de página y no
+puede funcionar para `General`**, que es transversal por definición: ningún sprint de página lo
+toca nunca. No tiene tirador. Por eso su único desagüe histórico ha sido inventar un sprint de
+método, dos veces, con un coste igual al de construir la página que lo generó.
+
+Esto **corrige el diagnóstico del segundo disparo**, que midió el mismo eje, revisó las tareas
+una a una y concluyó que no estaba degenerando: que 17 de 20 eran genuinamente transversales y
+lo que faltaba era escribir el criterio. El criterio se escribió y el cubo pasó de 20 a 28.
+**Clasificar bien una tarea no la mueve.** Lo que hay que medir de un bloque no es su
+composición sino su **drenaje**.
+
+**Decisión 1 — `General` se drena por CUPO.** Cada sprint arrastra 3-4 tareas de `General`
+—las que no piden criterio, por `Prioridad`— dentro del propio sprint, y **una revisión no
+cierra dejando en `General` más tareas nuevas de las que ese cupo va a sacar**. Si las deja, la
+revisión no ha terminado: falta decidir qué se retira. Es la operación «retirar» de D69
+aplicada al tablero en vez de a los documentos.
+
+Y en la salida de `method-review`, **un sprint de método propio pasa a ser el último recurso**:
+primero la regla o la edición de documento, que se hace en la misma sesión; luego el arreglo
+con código, al sprint que ya toca esos archivos; y solo lo que no encaje en ninguna de las dos
+cae en `General`, dentro del cupo.
+
+**Decisión 2 — el barrido de cierre no toca el carril de contenido.** `CLAUDE.md` declara dos
+carriles: el build avanza una etapa cada vez y el contenido que solo escribe Francisco corre
+por delante para desbloquear las secciones futuras. Estaba declarado y **no se había disparado
+nunca**: el tablero tenía cero tareas en `To-Do` y la definición de Contacto ampliada llevaba
+doce días en `Sin empezar` con su sprint a punto de abrir.
+
+La causa es mecánica y estaba **dentro del mismo documento**: la regla de columnas dice que
+`To-Do` está reservado al sprint activo «sin excepción», y veinte líneas más abajo la sección
+de carriles crea justo esa excepción. Al cerrar un sprint ganó la regla absoluta y el carril se
+barrió con el resto. El sprint 3 iba a abrir bloqueado por su propia premisa.
+
+Arreglado en las tres puertas por las que pasa: `CLAUDE.md` (el barrido excluye el carril),
+`sprint-review` (el archivado tampoco lo toca) y `method-review` (**antes de dar por abierto un
+sprint, se comprueba que su tarea de contenido no siga sin empezar**) — el hueco entre sprints
+es el último momento en que esa comprobación llega a tiempo, que es el mismo argumento de D50.
+
+**Los dos umbrales, para que el aviso no dependa de la memoria.** Al cerrar «Footer y
+contacto»: hallazgos del `design-review` cuya regla ya estaba escrita antes de empezar —hoy
+**4 de 8** (D82), verde ≤1, rojo ≥3— y proporción de tareas de método sobre el ciclo —hoy
+**50%**, verde ≤25%—. El primero es el que decide: Método II construyó portadores
+(`check:indices`, el sello de `check:palette`, la plantilla de publicación, `check:marco`), y
+si funcionan el sprint 3 tiene que salir con menos hallazgos. Si sale con los mismos, el
+problema no era la falta de portadores y toca replantear cómo se revisa.
+
+**Lo que NO se hizo, y es la parte que importa.** No se abrió un «Método III». Habría sido la
+respuesta equivocada a un informe sobre sprints de método: de los cinco hallazgos, tres son
+ediciones de regla hechas en el acto, uno entra en el sprint que ya toca ese archivo y solo el
+último cae en `General`, con el cupo encima. Y las 191 palabras que las reglas nuevas añadieron
+al contexto de arranque se compensaron **retirando 174 de duplicación** —entre ellas una que
+`CLAUDE.md` y `BRAND.md` decían casi palabra por palabra, pagándola dos veces en cada arranque.
