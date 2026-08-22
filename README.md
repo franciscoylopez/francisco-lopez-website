@@ -247,10 +247,13 @@ scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio s
 
 .github/workflows/     CI, dieciséis pasos en cada PR
 .github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions)
-.claude/skills/        Skills del proyecto: update-cv, deep-dive-page, y las tres revisiones
-                       recurrentes — sprint-review (el codebase, al cerrar etapa),
-                       method-review (cómo se trabaja, entre sprints) y design-review
-                       (el diseño, en pantalla). close-session cierra la documentación.
+.claude/skills/        Skills del proyecto: update-cv, deep-dive-page,
+                       publicar-en-design-system (una pieza nueva se publica, `D89`) y
+                       gates-de-servidor (los tres gates que necesitan el sitio servido).
+                       Y las tres revisiones recurrentes — sprint-review (el codebase, al
+                       cerrar etapa), method-review (cómo se trabaja, entre sprints) y
+                       design-review (el diseño, en pantalla). close-session cierra la
+                       documentación.
 .claude/agents/        Subagentes: viewport-verifier (mide una página servida con agent-browser;
                        mide y reporta, no edita, D52)
 ```
