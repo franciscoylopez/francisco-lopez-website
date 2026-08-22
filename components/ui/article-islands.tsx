@@ -142,7 +142,14 @@ export function SectionRail({ items }: { items: RailItem[] }) {
               >
                 <span
                   className={cn(
-                    "border-border flex h-6 max-w-6 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out group-hover:max-w-64 group-focus-visible:max-w-64",
+                    // shrink-0 (regresión cazada tras el fix de 44×44, aviso
+                    // de Francisco viendo la página): el <a> exterior también
+                    // es `flex`, así que este pill —flex item suyo— heredaba
+                    // `flex-shrink: 1` por defecto y se encogía a los 44px
+                    // del padre en vez de desbordar hasta max-w-64, aunque el
+                    // padre tenga `overflow: visible`. El shrink ocurre en el
+                    // cálculo del layout flex, no lo evita overflow-visible.
+                    "border-border flex h-6 max-w-6 shrink-0 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out group-hover:max-w-64 group-focus-visible:max-w-64",
                     isActive
                       ? "bg-foreground text-background border-foreground"
                       : "bg-card text-muted-foreground group-hover:bg-card group-hover:text-foreground",
