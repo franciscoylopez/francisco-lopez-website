@@ -2,9 +2,28 @@
 
 import { cn } from "@/lib/utils";
 
-interface LogoProps {
+/**
+ * EL WORDMARK NECESITA SABER LA ALTURA DEL SÍMBOLO, y por eso va en un tipo
+ * aparte: la regla 5 de `BRAND-logo.md` dice que «si cambia el tamaño del
+ * símbolo, el wordmark cambia con él», y un tamaño fijo no puede cumplirla.
+ * Antes era un `text-lg` congelado: al único sitio que lo usaba le salía un
+ * 56,3% cuando los otros seis wordmarks del sitio caen entre el 42,7% y el 46%.
+ *
+ * Se pasa el número y no se deduce del `className` porque no hay forma de leer
+ * una clase de Tailwind desde el componente. Se intentó con `container-type:
+ * size` + `cqh`, que sí derivaría la cifra — pero la contención aplica a los
+ * DOS ejes, así que el lockup dejaba de medir por su contenido y colapsaba a
+ * ancho 0. Medido: `lockup: 40..40 (w=0)` con el texto saliéndose 148px.
+ *
+ * El tipo lo hace obligatorio a propósito: con wordmark hay que decir el
+ * tamaño, y sin wordmark no se puede pasar.
+ */
+type ConWordmark =
+  | { showWordmark: true; symbolPx: number }
+  | { showWordmark?: false; symbolPx?: never };
+
+type LogoProps = ConWordmark & {
   variant?: "split" | "flat";
-  showWordmark?: boolean;
   forceColor?: "theme" | "white" | "black";
   /**
    * Opacidad de las capas de color del split (0–1). Cuando se pasa, las capas se
@@ -14,11 +33,15 @@ interface LogoProps {
    */
   splitOpacity?: number;
   className?: string;
-}
+};
+
+/** La proporción wordmark/símbolo del lockup compuesto en UI (regla 5: 40-45%). */
+const RATIO_WORDMARK = 0.45;
 
 export function Logo({
   variant = "split",
   showWordmark = false,
+  symbolPx,
   forceColor = "theme",
   splitOpacity,
   className,
@@ -66,7 +89,18 @@ export function Logo({
         <rect x="42" y="82" width="36" height="5" rx="2.5" fill={shapeColor} />
       </svg>
       {showWordmark && (
-        <span className="font-display text-lg" style={{ color: shapeColor }}>
+        // El tamaño sale de la altura del símbolo por `RATIO_WORDMARK`, no de
+        // una clase congelada. `font-semibold` y el tracking tampoco son
+        // decoración: los otros SEIS wordmarks del sitio —nav, los dos lockups
+        // del Brand Kit, la firma de email— van todos a 600 con tracking
+        // negativo, y este era el único a 400 y sin él.
+        <span
+          className="font-display font-semibold tracking-[-0.01em] whitespace-nowrap"
+          style={{
+            color: shapeColor,
+            fontSize: symbolPx ? `${symbolPx * RATIO_WORDMARK}px` : undefined,
+          }}
+        >
           Francisco López
         </span>
       )}
