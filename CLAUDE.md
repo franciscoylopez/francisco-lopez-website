@@ -97,6 +97,7 @@
 - D79 · Un prototipo: una dirección ganó
 - D80 · Un flotado sin `mt` se alinea con su texto, y el marco se ajusta al contenido
 - D81 · Foto en la apertura, evidencia citada en vivo, y una prueba descartada
+- D82 · El design-review de P60 encuentra ocho fallos reales, y dos patrones que se repiten
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
