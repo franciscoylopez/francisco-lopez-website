@@ -4537,3 +4537,92 @@ y `ChapterNav` abren las dos con `border-t` y `mt-[2.5rem]`, así que sueltas de
 se leían como un filete huérfano flotando sobre un hueco vacío; con la última línea del cuerpo
 encima, ese mismo hueco es lo que el margen significa. **Una pieza de PIE se demuestra con algo
 delante**, o su propio margen parece un error de maquetación.
+
+## D84 · El artículo describe un proyecto que se mueve, y nadie le avisaba — 2026-08-22
+
+**Contexto.** «Cómo se ha creado esta página» (P60) cuenta el estado del proyecto: la marca, el
+stack, las cabeceras servidas, las cifras de CI, por qué no hay formulario de contacto. Todo eso
+sigue cambiando. La pregunta que abrió la sesión era de método —¿revisión antes de subir, skill
+propio, bloque de `sprint-review`?— y la respuesta salió de mirar primero **si el artículo ya
+había derivado**. Había derivado dos veces.
+
+**Hallazgo 1: 27 de 38 permalinks apuntaban al párrafo equivocado.** Cada sección cierra con la
+franja `ENLACE ·`, y cada decisión citada era un permalink a la línea exacta de su cabecera:
+`{ "label": "D29", "path": "DECISIONS.md", "line": 844 }`. Esa línea estaba **escrita a mano en
+el diccionario**, o sea una segunda verdad sobre un hecho que ya vive aquí — la familia de D38 y
+D60. El commit `b1fd354` insertó diez líneas dentro de D26 (`@@ -747,6 +747,16 @@`, el addendum
+que retiraba la cifra A+ de securityheaders) y con eso las 24 decisiones de D27 en adelante
+pasaron a apuntar diez líneas arriba. **Nada se rompió**: el enlace sigue abriendo el archivo, en
+otro sitio. Ningún check podía verlo porque no había nada que comparar.
+
+**Hallazgo 2: una cifra contable ya era falsa.** «AAA en las doce páginas», cuando son trece por
+idioma desde que existe el propio artículo — que es la decimotercera y llegó un día después de
+`LAST_A11Y_REVIEW`.
+
+**El diagnóstico, que es lo que decide la forma de la solución.** No es un problema, son tres
+clases, y solo una necesita criterio:
+
+| Clase | Ejemplo | Quién puede detectarla |
+|---|---|---|
+| **A · Cita rota** | los 38 `#L…` | una máquina, trivialmente |
+| **B · Cifra desfasada** | «doce páginas», «quince pasos», «siete piezas» | una máquina, si sabe de dónde sale la cifra |
+| **C · Afirmación que se vuelve falsa** | «No hay formulario de contacto», «B+, 80 sobre 100» | solo una persona leyendo el diff |
+
+Meter las tres en el mismo mecanismo era el error. **A no necesita revisión: necesita dejar de
+ser una segunda copia.**
+
+**Qué se descartó, y por qué.** Un **bloque en `sprint-review`** dispara al cerrar etapa, así que
+el artículo pasaría semanas mintiendo en producción y las citas de clase A se rompen entre
+commits, no entre sprints — es el fallo de disparador que nombra `BRAND.md` §Cómo se escribe una
+regla, «una condición que se comprueba en el momento equivocado no es una regla». Una **revisión
+genérica antes de subir** no tiene señal de qué mirar: releería 63 KB de prosa cada deploy y se
+saltaría a la tercera vez. Un **skill manual** depende de acordarse, que es el modo de fallo
+contra el que van las otras 83 entradas de este archivo.
+
+**Capa 1 — la línea se deriva, no se guarda.** `lib/decisions.ts` indexa las cabeceras `## D<n>`
+y `components/site/como-se-ha-creado.tsx` inyecta el ancla al pasar las `parts` a `RepoStrip`.
+`components/ui/article.tsx` no se entera: sigue recibiendo un `line` opcional y sin saber nada de
+este sitio (D36). Los 38 `line` salen de los dos diccionarios. Verificado sobre el HTML
+prerenderizado: **38 de 38 correctas en ES y en EN**, donde antes 27 estaban mal. La clase A
+desaparece en vez de quedar vigilada.
+
+**Capa 2 — `check:articulo`, un sello por sección.** Cada una de las once declara de qué depende
+en `content/articulo/dependencias.ts` (no es copy, así que no va al diccionario, D44), y el sello
+guarda el hash de esas fuentes. Cuando una se mueve, CI sale rojo **nombrando la sección**, en el
+PR que la mueve. No dice que el texto sea falso: dice que hay que mirarlo, y ofrece las dos
+salidas —`npm run articulo:sellar` si sigue siendo cierto, corregir ES y EN si no—.
+
+**La granularidad es la decisión de diseño, no un detalle.** `DECISIONS.md` cambia en casi cada
+sesión: hashearlo entero daría rojo siempre y a la tercera nadie lo leería. Por eso se depende de
+la **entrada** (`DECISIONS.md#D26`) y de la **sección** de un `.md`, y de un directorio se hashea
+la **lista de archivos**, no su contenido — lo que el artículo afirma de `components/ui/` es
+cuántas piezas hay. Comprobado en las dos direcciones: añadir un D84 al final es verde; tocar D26
+enciende la §07, y tocar `PRD-Live.md#7` enciende la §01 y la §11, que son exactamente las tres
+secciones que van a invalidar la CSP estricta (P64.5) y Contacto ampliada.
+
+**`--seal` vive dentro del mismo script**, no aparte: las tres comprobaciones previas —las citas
+resuelven, ninguna guarda su línea, toda sección declara dependencias— son **precondición** de
+sellar. Sellar sobre una declaración rota congelaría el fallo. Mismo acoplamiento que
+`npm run artefacto`.
+
+**Y el guardián falsificó el artículo al nacer.** Entrar en CI convierte los «quince pasos» de la
+§09 en dieciséis, así que el primer rojo de `check:articulo` lo provocó su propio paso de CI. Se
+actualizaron la §09 (diagrama, `ariaLabel` y pie, ES y EN) y las tres copias vivas de la cifra
+(`PRD-Live.md`, `CLAUDE.md`, `README.md`); las de este archivo no, porque fechan lo que era
+cierto entonces.
+
+**Lo que NO cubre, dicho para que no se dé por cubierto.** Que el párrafo diga la verdad: detecta
+que la fuente se movió, no que la prosa se haya vuelto falsa. Y `package.json` queda fuera a
+propósito —el artículo nombra «Next 16» y «Tailwind v4», pero Dependabot toca ese archivo cada
+semana y meterlo convertiría el guardián en ruido, que es peor que no tenerlo—.
+
+**Capa 3, tareada y no construida** (P68.5): el skill que, disparado por un rojo de la capa 2,
+lee el diff de la dependencia y propone el texto ES y EN. Se diseña después de cerrar «Footer y
+contacto», cuando haya dos o tres casos reales delante en vez de un caso imaginado.
+
+**Y una decisión de contenido que queda abierta.** El artículo mezcla dos tiempos verbales y no
+los distingue: «No hay formulario de contacto» es **estado** y caduca; «Me quedé con el enlace»
+es **decisión fechada** y no caduca nunca. Es la partición que ya tienen `PRD-Live`/
+`PRD-Historical` y `BRAND`/`BRAND-historical`, y el artículo es el único documento del proyecto
+sin ella. Si se hace explícita, la clase C encoge mucho: un formulario no falsificaría la §01, la
+continuaría. Francisco decide al escribir el primer caso real, no antes.

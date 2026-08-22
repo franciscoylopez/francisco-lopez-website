@@ -140,6 +140,16 @@ jobs:
       - name: Rutas registradas
         run: npm run check:rutas
 
+      # «Cómo se ha creado esta página» describe un proyecto que sigue cambiando, y
+      # sus afirmaciones caducan sin avisar: la cifra de páginas ya iba una por
+      # detrás, y 27 de sus 38 permalinks a DECISIONS.md apuntaban diez líneas
+      # arriba desde que un addendum de D26 desplazó el archivo. Cada sección
+      # declara de qué depende y lleva su sello; cuando una fuente se mueve, esto
+      # sale rojo NOMBRANDO la sección, en el PR que la mueve — no al cerrar la
+      # etapa, que es cuando lo vería `sprint-review` (D84).
+      - name: Artículo al día
+        run: npm run check:articulo
+
       - name: Build
         run: npm run build
 

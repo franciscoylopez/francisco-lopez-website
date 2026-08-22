@@ -524,7 +524,7 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
   );
 }
 
-/** 09 · Los quince pasos de CI, agrupados por rol (D79, prototipo de Tanda 3
+/** 09 · Los dieciséis pasos de CI, agrupados por rol (D79, prototipo de Tanda 3
  * · «Agrupado por rol», elegida sobre las otras dos que se compararon):
  * sustituye a los quince cuadraditos anónimos Y al dato en vivo «Quince
  * pasos en cada PR» —eran DOS piezas compitiendo por el mismo hueco (P60
@@ -540,7 +540,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
   const t = {
     es: {
       ariaLabel:
-        "Los quince pasos del workflow de integración continua, en su orden real, agrupados en cuatro bloques: Código, Copy y contenido, Guardianes del repo, y Build y marco. Los pasos coloreados buscan la ausencia de algo bueno; los neutros buscan un patrón conocido.",
+        "Los dieciséis pasos del workflow de integración continua, en su orden real, agrupados en cuatro bloques: Código, Copy y contenido, Guardianes del repo, y Build y marco. Los pasos coloreados buscan la ausencia de algo bueno; los neutros buscan un patrón conocido.",
       groups: [
         {
           label: "Código",
@@ -567,6 +567,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
             { n: "Skills al día", cat: "ausencia" as Cat },
             { n: "Índices derivados", cat: "ausencia" as Cat },
             { n: "Rutas registradas", cat: "ausencia" as Cat },
+            { n: "Artículo al día", cat: "ausencia" as Cat },
           ],
         },
         {
@@ -578,12 +579,12 @@ export function CIDiagram({ lang }: { lang: Locale }) {
           ],
         },
       ],
-      absence: "busca ausencia (11)",
+      absence: "busca ausencia (12)",
       pattern: "busca patrón (4)",
     },
     en: {
       ariaLabel:
-        "The fifteen steps of the continuous-integration workflow, in their real order, grouped into four blocks: Code, Copy and content, Repo guardians, and Build and frame. Tinted steps look for the absence of something good; neutral ones look for a known pattern.",
+        "The sixteen steps of the continuous-integration workflow, in their real order, grouped into four blocks: Code, Copy and content, Repo guardians, and Build and frame. Tinted steps look for the absence of something good; neutral ones look for a known pattern.",
       groups: [
         {
           label: "Code",
@@ -610,6 +611,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
             { n: "Skills freshness", cat: "ausencia" as Cat },
             { n: "Derived indices", cat: "ausencia" as Cat },
             { n: "Registered routes", cat: "ausencia" as Cat },
+            { n: "Article freshness", cat: "ausencia" as Cat },
           ],
         },
         {
@@ -621,7 +623,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
           ],
         },
       ],
-      absence: "looks for absence (11)",
+      absence: "looks for absence (12)",
       pattern: "looks for a pattern (4)",
     },
   }[lang];

@@ -99,6 +99,7 @@
 - D81 · Foto en la apertura, evidencia citada en vivo, y una prueba descartada
 - D82 · El design-review de P60 encuentra ocho fallos reales, y dos patrones que se repiten
 - D83 · Una sección que documenta una capa nueva no puede ser una caja con las piezas dentro
+- D84 · El artículo describe un proyecto que se mueve, y nadie le avisaba
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
@@ -260,7 +261,7 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 | 7 | **Copy**: ES fuente de verdad, EN revisado contra el ES, sin raya | D20 · `npm run check:raya` |
 | 8 | **Interfaz mecánica**: estados vacíos, desbordamiento, hidratación, cifras tabulares, safe areas | Skill de Web Interface Guidelines, **antes** de `design-review` |
 | 9 | **`npm run gate:html`** si el cambio se decía transparente | Diff vacío = transparente por construcción (D42/D45) |
-| 10 | **Los quince checks de CI en verde** | El PR |
+| 10 | **Los dieciséis checks de CI en verde** | El PR |
 
 ## Columna B — no bloquea el envío
 
