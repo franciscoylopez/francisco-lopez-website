@@ -32,6 +32,7 @@
 // tenerlo escrito al lado solo abre la puerta a que un día no coincidan.
 
 import type { Locale } from "@/lib/i18n/config";
+import { PAGE_SLUGS } from "@/lib/routes";
 
 /* -------------------------------------------------------------------------- */
 /* Las dos paletas                                                             */
@@ -407,7 +408,85 @@ export const CONTRAST = {
  * una verificación que no ocurrió, y eso es peor que una fecha vieja: mentiría
  * cada día en vez de solo quedarse atrás.
  */
-export const LAST_A11Y_REVIEW = "2026-08-20";
+export const LAST_A11Y_REVIEW = "2026-08-22";
+
+/**
+ * CUÁNTAS PÁGINAS tiene el sitio por idioma, derivado del registro y nunca
+ * escrito.
+ *
+ * Existe porque la cifra se publicaba a mano y ya iba una por detrás: el copy
+ * decía «AAA en las doce páginas» mientras el sitio tenía trece —la
+ * decimotercera es el propio artículo, que se publicó un día después de la
+ * última pasada del censo—. Y no estaba solo en el copy: `lib/routes.ts`,
+ * `check-marco.ts`, `page-html-diff.ts`, `PRD-Live.md` y `README.md` decían
+ * doce también, con el código contando veintiséis variantes.
+ *
+ * Es D38 otra vez, en su forma más simple: el valor lo tiene UN sitio, y aquí
+ * ese sitio es `PAGE_SLUGS` (D72), que ya es la única fuente de qué páginas hay.
+ * Añadir la catorce mueve la cifra sola.
+ */
+export const PAGE_COUNT = PAGE_SLUGS.length;
+
+/**
+ * El cardinal en palabras, porque el copy de este sitio escribe los recuentos
+ * pequeños con letra («siete piezas», «ocho puntos», «dieciséis pasos») y un
+ * numeral suelto rompería esa voz. Cubre hasta veinte: si el sitio pasa de ahí,
+ * `fillPages` cae al numeral en vez de inventarse una palabra.
+ */
+const CARDINALES: Record<Locale, readonly string[]> = {
+  es: [
+    "cero",
+    "una",
+    "dos",
+    "tres",
+    "cuatro",
+    "cinco",
+    "seis",
+    "siete",
+    "ocho",
+    "nueve",
+    "diez",
+    "once",
+    "doce",
+    "trece",
+    "catorce",
+    "quince",
+    "dieciséis",
+    "diecisiete",
+    "dieciocho",
+    "diecinueve",
+    "veinte",
+  ],
+  en: [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+    "eleven",
+    "twelve",
+    "thirteen",
+    "fourteen",
+    "fifteen",
+    "sixteen",
+    "seventeen",
+    "eighteen",
+    "nineteen",
+    "twenty",
+  ],
+};
+
+/** Sustituye `{paginas}` en el copy, como `fillDate` hace con `{date}`. */
+export function fillPages(text: string, locale: Locale): string {
+  const palabra = CARDINALES[locale][PAGE_COUNT] ?? String(PAGE_COUNT);
+  return text.replace(/{paginas}/g, palabra);
+}
 
 /**
  * Cuándo cambió por última vez la política de cookies. Constante APARTE y no la

@@ -785,7 +785,7 @@
     "pull": "The record of why something else was thought at the time is worth more than retroactive consistency.",
     "liveStatLabel": "Example · live data",
     "liveStatSource": "lib/design-values.ts",
-    "liveStatValue": "AAA across all twelve pages",
+    "liveStatValue": "AAA across all {paginas} pages",
     "liveStatLink": "See the measured census",
     "repoLabel": "LINK ·",
     "repoText": "Decisions D39, D41 and D73, in ",

@@ -41,6 +41,7 @@ Partido el **2026-08-09** (P37.685).
 - [El morado como gráfico, y la tercera vez del mismo peldaño (2026-08-17)](#el-morado-como-gráfico-y-la-tercera-vez-del-mismo-peldaño-2026-08-17)
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
 - [El morado de la barra de progreso, con los papeles cambiados (2026-08-21)](#el-morado-de-la-barra-de-progreso-con-los-papeles-cambiados-2026-08-21)
+- [La pasada completa, y las dos veces que el «sin excepciones» fue falso (2026-08-18 → 22)](#la-pasada-completa-y-las-dos-veces-que-el-sin-excepciones-fue-falso-2026-08-18-→-22)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -551,3 +552,34 @@ de hecho por encima del propio umbral AAA de texto normal (7:1), no solo del de 
 texto/gráfico grande directamente sobre `--background`»; sigue sin valer sobre una superficie
 compuesta (tarjeta, velo, banda invertida), que ya tiene su propio token calculado contra SU
 fondo.
+
+## La pasada completa, y las dos veces que el «sin excepciones» fue falso (2026-08-18 → 22)
+
+Contexto de la regla de `BRAND.md` §Accesibilidad, que hoy dice «todos los pares en AAA, sin
+excepciones» y remite a `npm run censo`. La afirmación es vieja; lo que cambió es qué la sostiene.
+
+**La excepción que dejó de serlo (2026-08-10).** La última salvedad viva era
+`brand-purple-accent`, y desapareció al hacerlo conmutar con el tema (§Color). El aprendizaje no
+era del morado: era que **ningún color fijo sirve a dos superficies opuestas**.
+
+**La primera pasada del 2026-08-18 se corrió sobre 8 de las doce páginas.** Preguntarse por las
+cuatro que faltaban es lo que destapó **D61**: el atenuado no se recalculaba al cambiar de
+superficie *por hover*, así que una tarjeta que se aclaraba con el cursor cambiaba de fondo sin
+recalcular su gris. *Un metro bien calibrado que no se pasa por todo el sitio sigue siendo un
+metro que no ha mirado.*
+
+**Y la segunda se quedó vieja sin que nada avisara (2026-08-22).** La pasada del 18 cubrió las
+doce que había. Tres días después el sitio tenía **trece** —«Cómo se ha creado esta página», que
+se publicó un día después de `LAST_A11Y_REVIEW`— y el copy siguió diciendo «AAA en las doce
+páginas». Nada mintió: simplemente, un procedimiento que solo existe como **hábito** no cubre lo
+que se añade después de la última vez que alguien se acordó. De ahí `npm run censo`, que lee las
+páginas de `PAGE_SLUGS` en vez de una lista escrita, y `PAGE_COUNT`, que hace que la cifra
+publicada no se escriba (D85).
+
+**Lo que se encontró al automatizarla.** Nada bajo AAA en 380 pares — pero sí un falso positivo
+del propio medidor: `overImage()` marcaba «texto sobre foto» por solape de rectángulos contra
+cualquier imagen del documento, sin mirar el apilamiento, y el diálogo de consentimiento —`fixed`,
+con su `bg-card` opaco, encima del hero— salía marcado en tres páginas. **22 de los 26 pares que
+mandaba mirar a ojo no tenían imagen debajo.** Una lista de revisión manual inflada de falsos
+positivos es una lista que nadie lee: la tercera forma, después del metro descalibrado y del
+umbral mal aplicado, de que un medidor deje de servir sin dar error.

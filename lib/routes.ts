@@ -57,7 +57,7 @@ export const DEEP_DIVE_SLUGS: readonly DeepDiveSlug[] = EXPERIENCES.flatMap(
   (e) => (e.slug === null ? [] : [`trayectoria/${e.slug}` as DeepDiveSlug]),
 );
 
-/** Las doce páginas del sitio, por idioma. */
+/** Las páginas del sitio, por idioma. El recuento lo publica `PAGE_COUNT`. */
 export const PAGE_SLUGS: readonly PageSlug[] = [
   ...STATIC_PAGE_SLUGS,
   ...DEEP_DIVE_SLUGS,

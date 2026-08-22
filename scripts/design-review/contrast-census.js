@@ -182,12 +182,7 @@ window.contrastCensus = () => {
    * en `sinMedir` en lugar de descartarse: son los pares que hay que mirar a ojo,
    * y esconderlos sería cambiar un fallo por otro que no sale en el informe.
    */
-  const media = () =>
-    [...document.querySelectorAll("img, video, canvas, svg image")]
-      .map((n) => n.getBoundingClientRect())
-      .filter((r) => r.width > 0 && r.height > 0);
-
-  let mediaRects = null;
+  const MEDIA_SEL = "img, video, canvas, svg image";
 
   function overImage(el) {
     // La comprobación es GEOMÉTRICA y no de cascada: se pregunta si el texto cae
@@ -204,6 +199,29 @@ window.contrastCensus = () => {
     // esto es solo para el resto. Hoy no hay ninguno, y por eso está escrito:
     // el día que aparezca, tiene que salir en el informe como «míralo a ojo» y no
     // como una cifra inventada.
+    // Y LA GEOMETRÍA SE MIRA DENTRO DE LA SUBRAMA, no en toda la página
+    // (2026-08-22). La primera versión comparaba el texto contra CUALQUIER
+    // `<img>`/`<video>` del documento por solape de rectángulos, sin mirar el
+    // apilamiento: el diálogo de consentimiento, que es `fixed` y pinta su
+    // propio `bg-card` OPACO, cae encima de la foto del hero y salía marcado
+    // «sobre imagen». Con eso, 22 de los 26 pares que el censo mandaba mirar a
+    // ojo no tenían imagen debajo — y una lista de revisión manual inflada con
+    // falsos positivos es una lista que nadie lee, que es la misma forma de
+    // fallo que el resto de este archivo combate.
+    //
+    // La pregunta correcta es si hay una imagen pintada ENTRE el texto y el
+    // primer fondo opaco de su cadena: en cuanto un ancestro pinta opaco, lo
+    // que haya detrás ya no se ve, y el color queda determinado. Por eso ahora
+    // se recorre subiendo, buscando media DENTRO de cada ancestro, y el fondo
+    // opaco devuelve `false` en vez de romper el bucle y seguir preguntando.
+    const r = el.getBoundingClientRect();
+    if (r.width === 0 || r.height === 0) return false;
+    const solapa = (m) =>
+      r.left < m.right &&
+      r.right > m.left &&
+      r.top < m.bottom &&
+      r.bottom > m.top;
+
     for (let n = el; n; n = n.parentElement) {
       const cs = getComputedStyle(n);
       if (
@@ -212,20 +230,20 @@ window.contrastCensus = () => {
         fillColor(n) === null
       )
         return true;
-      if (paint(cs.backgroundColor)[3] === 1) break;
+
+      // El hermano posicionado que es el caso de Sobre mí: la foto vive dentro
+      // del `<figure>`, no en el fondo de ningún ancestro del texto.
+      if (n !== el)
+        for (const m of n.querySelectorAll(MEDIA_SEL)) {
+          if (m.contains(el)) continue;
+          const mr = m.getBoundingClientRect();
+          if (mr.width > 0 && mr.height > 0 && solapa(mr)) return true;
+        }
+
+      if (paint(cs.backgroundColor)[3] === 1) return false;
     }
 
-    if (mediaRects === null) mediaRects = media();
-    if (mediaRects.length === 0) return false;
-    const r = el.getBoundingClientRect();
-    if (r.width === 0 || r.height === 0) return false;
-    return mediaRects.some(
-      (m) =>
-        r.left < m.right &&
-        r.right > m.left &&
-        r.top < m.bottom &&
-        r.bottom > m.top,
-    );
+    return false;
   }
 
   /** Un elemento cuenta si pinta texto propio y se ve. */

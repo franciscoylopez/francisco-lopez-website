@@ -157,8 +157,8 @@ nazca bien sin pedirlo (D30/D39/D61).
 | Criterio | Umbral | Estado |
 |---|---|---|
 | PageSpeed / Lighthouse | >90 escritorio y móvil | **100 escritorio · 94-96 móvil** (`npm run psi`, D49) |
-| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** en las doce páginas × 2 temas, en reposo y en hover; **0 violaciones de axe** |
-| SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las doce |
+| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** en las trece páginas × 2 temas, en reposo y en hover — 380 pares, `npm run censo` (D85); **0 violaciones de axe** |
+| SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las trece |
 
 Las cifras de contraste se miden **sobre el color que el navegador pinta**, recorriendo el
 DOM de la página servida y no leyendo `globals.css` — un par que solo existe al componer un
@@ -166,6 +166,9 @@ velo, o solo mientras el cursor está encima, no aparece en ningún inventario d
 método y sus siete trampas, en `BRAND.md` §Accesibilidad; el censo, en
 `scripts/design-review/contrast-census.js`; las cifras publicadas, en
 `lib/design-values.ts` (D38).
+
+La pasada completa es **`npm run censo`** y lee las páginas del registro, así que una
+página nueva entra sin que nadie se acuerde (D85).
 
 Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumplimiento.
 

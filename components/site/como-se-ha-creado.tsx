@@ -20,6 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { LEADING, SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { GITHUB_URL } from "@/lib/contact";
+import { fillPages } from "@/lib/design-values";
 import {
   DECISIONES_PATH,
   ES_DECISION,
@@ -175,7 +176,15 @@ export function ComoSeHaCreado({
   // literal `"p" | "h3" | "ul" | "quote"` que pide `ArticleBlock`. El dato es
   // correcto en tiempo de ejecución —lo comprueba el guardián ES↔EN (D11)—,
   // así que se estrecha aquí UNA vez en vez de en cada punto de consumo.
-  const blocksOf = (raw: unknown) => raw as ArticleBlock[];
+  // Los bloques del diccionario, con las cifras DERIVADAS ya sustituidas: el
+  // copy escribe `{paginas}` y el recuento lo pone `lib/design-values.ts`
+  // leyéndolo del registro de rutas (D72). Mismo mecanismo que `fillDate` y
+  // `fillRatios`, y por el mismo motivo: «AAA en las doce páginas» llevaba días
+  // siendo falso porque la cifra estaba escrita a mano en los dos diccionarios.
+  const blocksOf = (raw: unknown) =>
+    (raw as ArticleBlock[]).map((b) =>
+      b.type === "livestat" ? { ...b, value: fillPages(b.value, lang) } : b,
+    );
 
   const totalWords = articleWordCount(
     t.sections.map((s) => ({ body: blocksOf(s.body) })),

@@ -100,6 +100,7 @@
 - D82 · El design-review de P60 encuentra ocho fallos reales, y dos patrones que se repiten
 - D83 · Una sección que documenta una capa nueva no puede ser una caja con las piezas dentro
 - D84 · El artículo describe un proyecto que se mueve, y nadie le avisaba
+- D85 · La pasada de contraste deja de hacerse a mano, y el medidor tenía un falso positivo
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
@@ -230,7 +231,8 @@ Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer p
 - **Precondición:** `agent-browser` se conduce con el **sandbox de Bash desactivado**. No es solo la navegación: bajo el sandbox **ningún** comando llega al daemon, ni con la página ya cargada. Un comando que cuelga es ese síntoma —se desactiva el sandbox, no se reintenta ni se abre la URL desde la terminal—. (D51.)
 - **Lo que no tapa, y ahora cubre CI:** el **enlace de salto** de WCAG 2.4.1 —que axe no detecta (D46)— y los puntos **4, 5 y 8**, que mira `npm run check:marco` sobre el HTML prerenderizado, en cada PR (D75).
 - **Lo que sigue a mano:** el punto **6** (nada codificado solo por color), sin forma automática, y la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49).
-- **Tras una pasada COMPLETA de accesibilidad** (no al cerrar una página): actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, que es la fecha que publica `/accesibilidad`. Vive pegada al censo que fecha, así que quien toca una ve la otra (D38).
+- **La pasada COMPLETA de contraste es `npm run censo`** (D85): lee las páginas de `PAGE_SLUGS`, valida el metro en cada corrida y falla si algún par baja de AAA. Fuera de CI, como `psi`. **Lo único que no juzga es el texto sobre foto**, que se mide aparte sobre el píxel pintado.
+- **Tras esa pasada** (no al cerrar una página): actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, la fecha que publica `/accesibilidad` (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
 
 `claude-in-chrome` no se retira: se queda para lo que necesita el navegador **con sesión** —consentimiento guardado, Preview autenticada—, que es la Fase 3 de `design-review`.
 

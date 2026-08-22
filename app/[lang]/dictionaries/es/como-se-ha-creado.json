@@ -704,7 +704,7 @@
           "id": "s08",
           "label": "Contraste · dato en vivo",
           "source": "lib/design-values.ts",
-          "value": "AAA en las doce páginas",
+          "value": "AAA en las {paginas} páginas",
           "linkLabel": "Ver el censo medido",
           "href": "accesibilidad"
         },

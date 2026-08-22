@@ -45,7 +45,7 @@ const BASELINE = join("scripts", ".html-baseline");
 const ACTUAL = join("scripts", ".html-actual");
 
 /**
- * Las veinticuatro variantes: las doce páginas del sitio × los dos idiomas, y
+ * Las veintiséis variantes: las trece páginas del sitio × los dos idiomas, y
  * ninguna se escribe — salen de `lib/routes.ts` y de `pagePath` (D72).
  *
  * HASTA P54.98 ERAN VEINTICUATRO RUTAS A MANO, o sea una de las tres copias de
