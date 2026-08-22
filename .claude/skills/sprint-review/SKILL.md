@@ -118,7 +118,9 @@ es exactamente el fallo que ella misma va a buscar.
   skill `close-session` (cadencia distinta: sesión vs sprint).
 - El **archivado de tareas** del sprint que cierra (terminadas → Archivado; pendientes →
   "Sin empezar" del siguiente) sigue las reglas del tablero de `CLAUDE.md`; hazlo junto con
-  esta revisión.
+  esta revisión. **El barrido no toca el carril de contenido**: esa tarea no pertenece a
+  ningún sprint, corre por delante y se queda como esté. Ya se la llevó por delante una vez y
+  el sprint siguiente abrió bloqueado (2026-08-22).
 - La revisión hermana de **Diseño** ya existe: skill `design-review` (cumplimiento del
   sistema + expresión de marca, verificando en pantalla). Es de **disparo manual** hasta que
   Francisco la valide, así que no se lanza sola al cerrar etapa — pero si esta revisión
