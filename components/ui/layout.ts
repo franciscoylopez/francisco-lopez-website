@@ -1,3 +1,5 @@
+// @pieza núcleo · design-system/01-rejilla.tsx · Las cajas y los ritmos comunes: WRAP, SECTION, PROSE, CARD, PANEL, PAIR, HERO_ROW.
+
 // Primitivas de layout del sistema (P37.594). Fuente única de las cajas y los
 // ritmos que comparten todas las páginas, para que cambiar el gutter o el radio de
 // una tarjeta sea UNA edición y no cinco.

@@ -105,6 +105,15 @@ const CASOS: Caso[] = [
   },
   {
     guardian: "check:indices",
+    rotura: "una pieza de components/ui/ se queda sin declarar su línea",
+    // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja
+    // sobre archivos que ya existen: quitarle la línea a una es la misma
+    // ausencia, y la que el check tiene que ver.
+    archivo: "components/ui/rich.tsx",
+    mutar: (o) => o.replace(/^\/\/ @pieza .*$\n/m, ""),
+  },
+  {
+    guardian: "check:indices",
     rotura: "una decisión se queda sin línea en el índice",
     // El índice vive en la cabecera del propio archivo desde D88. La entrada del
     // índice empieza por `- D33 ·`; la cabecera de la decisión, por `## D33 ·`,

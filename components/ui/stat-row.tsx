@@ -1,3 +1,5 @@
+// @pieza núcleo · pendiente · La fila de cifras que resume una apertura.
+
 import type { ReactNode } from "react";
 
 /**

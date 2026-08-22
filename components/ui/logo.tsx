@@ -1,3 +1,5 @@
+// @pieza primitiva · brand-kit/02-logotipo.tsx · El monograma y el wordmark, con la firma split y su umbral de 48px.
+
 import { cn } from "@/lib/utils";
 
 interface LogoProps {

@@ -1,3 +1,5 @@
+// @pieza núcleo · design-system/11-cabeceras.tsx · El par eyebrow + titular con el que abren página y sección.
+
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
 

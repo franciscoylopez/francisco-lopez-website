@@ -1,3 +1,5 @@
+// @pieza primitiva · brand-kit/06-uso.tsx · Los iconos que lucide no trae (LinkedIn, GitHub), con la regla de autoría propia.
+
 // Iconos propios: los que lucide no trae. Desde v1.24 ya no exporta iconos de
 // marca (LinkedIn, GitHub…) por motivos de marca registrada, así que cualquier
 // red o servicio que se añada al sitio se dibuja aquí a mano.

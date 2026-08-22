@@ -32,7 +32,7 @@
  * abrir esa sección, se arregla LA CABECERA, nunca el índice.** El índice no
  * tiene texto propio, y eso es lo que impide que los dos títulos divierjan.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 
 // --- El bloque, que es el mismo para los tres ---------------------------------
 
@@ -175,10 +175,148 @@ export function historicoActual(archivo: string): string[] {
   return bloqueActual(archivo, /^- \[/);
 }
 
+// --- El inventario de `components/ui/` ----------------------------------------
+
+/**
+ * EL CUARTO ÍNDICE, y el único que no indexa prosa: indexa una CARPETA.
+ *
+ * El paso 1 de la «Regla de construcción» de `CLAUDE.md` es «¿existe ya la
+ * pieza?», y se contesta leyendo una lista. Esa lista estaba escrita a mano en
+ * CINCO sitios y ninguno acertaba: `design-review` decía cinco capas, `PRD-Live`
+ * y `README` siete piezas, `CLAUDE.md` nombraba diez, y en disco había quince.
+ * Dos piezas —`page-closer` y `video-embed`— no salían en ningún inventario, así
+ * que la regla que gobierna todo lo que se construye mandaba mirar donde no
+ * estaban. Es la regla 1 de `BRAND.md` aplicada a sí misma.
+ *
+ * LAS TRES CIFRAS NO ERAN LA MISMA MAL CONTADA, y por eso no se unifican (regla 4
+ * de `BRAND.md`): siete es el **núcleo** del sistema, dos son la **capa de
+ * artículo** que D76 dejó explícitamente fuera del núcleo, y el resto son
+ * **primitivas**. Lo que faltaba no era un número común: era el nombre de cada
+ * grupo, y que el recuento saliera del disco.
+ *
+ * CADA PIEZA APORTA SU PROPIA LÍNEA, en la primera línea del archivo:
+ *
+ *     // @pieza <grupo> · <publicación> · <una frase>
+ *
+ * Misma regla que los otros tres índices: el índice no tiene texto propio, así
+ * que si una frase no basta para saber si esa es la pieza, se arregla LA LÍNEA.
+ */
+export const PIEZAS_DIR = "components/ui";
+export const INVENTARIO = "components/ui/README.md";
+
+export type Pieza = {
+  archivo: string;
+  grupo: string;
+  /** Ruta bajo `components/site/`, o `pendiente`. */
+  publica: string;
+  frase: string;
+};
+
+const GRUPOS = ["núcleo", "artículo", "primitiva"] as const;
+
+/**
+ * Las piezas que hoy pueden estar SIN publicar, con el motivo. Es la lista que
+ * hace que un archivo NUEVO sin sección salga en rojo: si no está aquí y declara
+ * `pendiente`, falla. Añadir una línea es un acto visible en el diff, que es
+ * justo lo que no era «se me olvidó publicarla».
+ *
+ *   stat-row    nació en P54.3 (2026-08-19) y se quedó sin sección: es del NÚCLEO
+ *               y es la deuda de verdad de esta lista.
+ *   info-card   la tarjeta con la que las páginas de sistema cuentan cosas al
+ *               margen; se usa en siete secciones y no se documenta en ninguna.
+ *   rich        render de markup del diccionario (D23): no tiene aspecto propio
+ *               que enseñar, lo que enseña es el enlace de contenido (§08).
+ *   page-closer el cierre de las trece páginas.
+ *   video-embed la facade de vídeo (D55), que solo aparece en los deep-dive.
+ */
+export const SIN_PUBLICAR = [
+  "stat-row.tsx",
+  "info-card.tsx",
+  "rich.tsx",
+  "page-closer.tsx",
+  "video-embed.tsx",
+];
+
+/** Los archivos de la carpeta, sin el README generado. */
+export function archivosDePiezas(): string[] {
+  return readdirSync(PIEZAS_DIR)
+    .filter((f: string) => /\.tsx?$/.test(f))
+    .sort();
+}
+
+/** La declaración de una pieza, o `undefined` si no la lleva. */
+export function pieza(archivo: string): Pieza | undefined {
+  const texto = readFileSync(`${PIEZAS_DIR}/${archivo}`, "utf8");
+  const m = /^\/\/ @pieza ([^·]+) · ([^·]+) · (.+)$/m.exec(texto);
+  if (!m) return undefined;
+  return {
+    archivo,
+    grupo: (m[1] ?? "").trim(),
+    publica: (m[2] ?? "").trim(),
+    frase: (m[3] ?? "").trim(),
+  };
+}
+
+/** Las líneas del inventario, agrupadas y derivadas de las declaraciones. */
+export function inventario(): string[] {
+  const piezas = archivosDePiezas()
+    .map(pieza)
+    .filter((p): p is Pieza => p !== undefined);
+
+  const lineas: string[] = [];
+  for (const grupo of GRUPOS) {
+    const delGrupo = piezas.filter((p) => p.grupo === grupo);
+    if (!delGrupo.length) continue;
+    lineas.push(`### ${grupo} · ${delGrupo.length}`);
+    for (const p of delGrupo) {
+      const donde =
+        p.publica === "pendiente"
+          ? "sin publicar"
+          : `[${p.publica.replace(/\.tsx?$/, "")}](../site/${p.publica})`;
+      lineas.push(`- **\`${p.archivo}\`** — ${p.frase} *(${donde})*`);
+    }
+  }
+  return lineas;
+}
+
+/** El inventario que hoy tiene el README, si tiene alguno. */
+export function inventarioActual(): string[] {
+  return bloqueActual(INVENTARIO, /^(### |- \*\*`)/);
+}
+
+/**
+ * El README del inventario se genera ENTERO: no tiene parte escrita a mano que
+ * preservar, y así no hay dónde escribir una línea que el disco no respalde.
+ */
+function escribeInventario(): number {
+  const lineas = inventario();
+  const salida = [
+    "# `components/ui/` — el inventario de piezas",
+    "",
+    "> **Derivado, no escrito.** Lo genera `npm run indices` leyendo la primera",
+    "> línea de cada archivo (`// @pieza grupo · publicación · frase`) y lo",
+    "> comprueba `npm run check:indices` en cada PR. Para cambiar una frase se",
+    "> edita el archivo, nunca este README.",
+    ">",
+    "> **Es la lista que contesta el paso 1 de la «Regla de construcción»**",
+    "> (`CLAUDE.md`): ¿existe ya la pieza? Los tres grupos no son la misma cifra",
+    "> mal contada: el **núcleo** es el sistema, la capa de **artículo** quedó",
+    "> fuera de él a propósito (D76) y las **primitivas** son piezas sueltas.",
+    "",
+    ABRE,
+    ...lineas,
+    CIERRA,
+    "",
+  ];
+  writeFileSync(INVENTARIO, salida.join("\n"), "utf8");
+  return lineas.filter((l) => l.startsWith("- ")).length;
+}
+
 // --- Escritura ----------------------------------------------------------------
 
 if (process.argv.includes("--escribir")) {
   const escritos: Array<[string, number]> = [
+    [INVENTARIO, escribeInventario()],
     [DECISIONES, escribeIndice(DECISIONES, decisiones())],
     ...HISTORICOS.map((archivo): [string, number] => [
       archivo,
@@ -186,6 +324,6 @@ if (process.argv.includes("--escribir")) {
     ]),
   ];
   for (const [archivo, n] of escritos) {
-    console.log(`${archivo} · índice en cabecera: ${n} entradas`);
+    console.log(`${archivo} · ${n} entradas`);
   }
 }

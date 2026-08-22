@@ -1,3 +1,5 @@
+// @pieza núcleo · design-system/10-etiquetas.tsx · El rótulo que NO se pulsa, en dos ejes: `tone` × `kind`.
+
 import { cva, type VariantProps } from "class-variance-authority";
 import type { ReactNode } from "react";
 

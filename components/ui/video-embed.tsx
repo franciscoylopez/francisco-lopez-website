@@ -1,5 +1,7 @@
 "use client";
 
+// @pieza primitiva · pendiente · La facade de vídeo de terceros: póster propio y el clic como gate (D55).
+
 import { Play } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
