@@ -259,22 +259,16 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 ### V2 — en curso
 
-Tres sprints de valor para el visitante, en el orden que fijan las dependencias. **El
-primero está entregado**; entre él y el segundo se han intercalado dos bloques cortos.
+Tres sprints de valor para el visitante, en el orden que fijan las dependencias. **Los
+dos primeros están entregados**; entre ellos se intercalaron dos bloques cortos.
 
 | # | Sprint | Estado |
 |---|---|---|
 | 1 | **Deep-dive por experiencia** — cinco páginas y su índice | **En producción** |
 | — | *Sprint Lite* — 404 de los deep-dive, la raya fuera del copy, retrato nuevo, vídeo de Sobre mí, aperturas homogéneas, repo público | **En producción** |
 | — | *Método* — el andamiaje del propio método antes de un sprint de contenido | **Entregado** |
-| 2 | **«Cómo se ha creado esta página»** | **En curso** |
-| 3 | **Footer estructurado y Contacto ampliada** | Después |
-
-**Sprint 2 — «Cómo se ha creado esta página».** Una página con estructura y metadata de
-artículo (`TechArticle`) contando el proceso: marca, stack, sistema de componentes,
-accesibilidad, metodología, revisiones y medición. **No es un blog** y no habrá índice de
-artículos ni feed. Es la pieza que enseña el *proceso* donde el resto del sitio enseña el
-*resultado*, y por eso habla a los tres perfiles a la vez (producto, técnico, UX/UI).
+| 2 | **«Cómo se ha creado esta página»** | **En producción** (cerrado el 2026-08-22) |
+| 3 | **Footer estructurado y Contacto ampliada** | Siguiente |
 
 **Sprint 3 — Footer y Contacto ampliada.** El footer va el último **porque necesita que
 existan las secciones que crean los dos sprints anteriores**. De Contacto ampliada, lo

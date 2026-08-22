@@ -745,7 +745,11 @@ implementación:
   **en vivo**: cabecera servida, `gtm.js`/`gtag/js` cargan (200), el beacon de GA4 sale con
   `gcs=G111` (consentimiento) y la consola queda **sin ninguna violación CSP** en home y
   página interna (local + preview + prod).
-- **La CSP estricta (nonces) sigue diferida a V3** con la IA conversacional, sin cambios.
+- **La CSP estricta (nonces) sigue diferida a V4** con la IA conversacional, o antes si
+  Contacto ampliada incorpora un endpoint externo. *(Decía «V3» hasta el 2026-08-22: la
+  versión se movió en `PRD-Live.md` §5 y aquí no, así que la misma decisión estaba fechada
+  en dos versiones distintas en tres sitios. La fecha la fija el PRD, que es donde vive el
+  alcance por versión; aquí y en `next.config.ts` va el puntero.)*
 
 **La cifra de arriba (A+) ya no es cierta (comprobado en vivo, 2026-08-22).** Escrito el
 artículo «Cómo se ha creado esta página» (P60), volver a medir securityheaders.com dio **A**,
@@ -3876,6 +3880,29 @@ Tres técnicas, y las tres salieron de que las dos hipótesis previas eran erró
 **Lo que esto le añade al punto 12 de `sprint-review`**, que se escribió el mismo día y sin nada
 que leer: ya tiene sus tres cifras de referencia, y su pregunta 4 («¿sigue midiendo bien el
 instrumento?») tiene ahora un procedimiento en vez de una intuición.
+
+### Cierre del sprint 2 — 2026-08-22: el procedimiento se estrenó y el instrumento aprobó
+
+Los tres marcadores daban **9 · 6 · 56**, *exactamente* lo de arriba. Tres días después, con una
+ventana de 28 días que se ha movido, tres cifras clavadas es la firma de un panel congelado — así
+que se contrastó contra GA4 en vez de creérselo, que es lo que este D-entry existe para exigir.
+**El panel reproduce GA4 al dígito** (25 jul - 21 ago 2026): `scroll` 56 / 4 usuarios ·
+`contact_click` 9 / 2 usuarios · `file_download` 6 / 2 usuarios · total 489 eventos, 37 usuarios,
+166 `page_view`. **Primera vez que la pregunta 4 se cierra sobre una verificación y no sobre una
+predicción.**
+
+Lo que sí deja abierto es **a quién** cuenta: 4,5 clics de contacto y 3,0 descargas por persona
+son el patrón de quien **audita** el sitio probando sus tres puntos de descarga, no el de quien
+quiere contactar. El filtro de tráfico interno es por IP, así que cualquier dispositivo fuera de
+ella entra como visita real — y **con n=2 un usuario contaminado se lleva la métrica primaria
+entera**. Tareado aparte.
+
+**Y el hallazgo que ninguna de las cuatro preguntas pedía, pero que sale de mirarlas juntas:** con
+37 usuarios en 28 días, la métrica primaria del PRD §7 tiene un tamaño muestral de dos personas.
+No es una señal débil, es una métrica que **no puede discriminar nada**, así que la respuesta a la
+pregunta 3 («¿cambia esto una prioridad?») es *no*, y el motivo no es que los datos digan que todo
+va bien: es que no dicen nada. El tablero tenía 51 tareas abiertas y ninguna sobre distribución.
+También tareado.
 
 ## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
 

@@ -4,7 +4,9 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 // Content-Security-Policy — Fase 2 «A+ barato» (tarea 37.9). Mantiene `'unsafe-inline'`
 // en script-src (los scripts inline del sitio: consent-init, init de tema, loader de GTM),
 // así que NO es protección de XSS fuerte — eso sería la CSP estricta con nonces, diferida
-// a V3 (D26). Lo que sí aporta, gratis y sin romper nada: bloquear <object>/<embed>
+// a V4 con la IA conversacional, o antes si Contacto ampliada incorpora un endpoint
+// externo (D26; la fecha la fija `PRD-Live.md` §5, que es donde vive el alcance por
+// versión). Lo que sí aporta, gratis y sin romper nada: bloquear <object>/<embed>
 // (object-src 'none'), fijar la base de URLs (base-uri 'self'), limitar destinos de
 // formularios (form-action 'self') y prohibir el embedding (frame-ancestors 'none'). El
 // allowlist de GTM/GA4 (script/connect/img/frame) evita romper la analítica. Sube
