@@ -139,6 +139,30 @@ const CASOS: Caso[] = [
     archivo: ".next/server/app/es.html",
     mutar: (o) => o.replace(/<a href="#main"[\s\S]*?<\/a>/, ""),
   },
+  {
+    guardian: "check:articulo",
+    rotura:
+      "cambia una fuente que el artículo describe y su sección no se revisa",
+    // `next.config.ts` es dependencia de la §07 («seguridad, alojamiento y la
+    // deuda que no se acumuló»), que es exactamente la sección que va a
+    // invalidar la CSP estricta con nonces (P64.5). El caso malo es el escenario
+    // real, no uno inventado.
+    archivo: "next.config.ts",
+    mutar: append("\n// cambio en las cabeceras que el artículo describe\n"),
+  },
+  {
+    guardian: "check:articulo",
+    rotura: "una cita vuelve a guardar su línea a mano en el diccionario",
+    // La regresión de la capa 1. Una línea escrita a mano no rompe nada visible
+    // —el enlace sigue abriendo el archivo, solo que en el párrafo equivocado—,
+    // que es cómo 27 de 38 citas llevaban días apuntando diez líneas arriba.
+    archivo: "app/[lang]/dictionaries/es/como-se-ha-creado.json",
+    mutar: (o) =>
+      o.replace(
+        /\{ "label": "D29", "path": "DECISIONS\.md" \}/,
+        '{ "label": "D29", "path": "DECISIONS.md", "line": 844 }',
+      ),
+  },
 ];
 
 /**

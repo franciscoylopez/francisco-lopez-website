@@ -195,9 +195,9 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
 
 ### Calidad y seguridad
 
-CI en cada PR con **quince pasos**: formato, typecheck, lint, paleta, experiencias, CV
-al día, raya, artefacto, contexto, skills, índices, rutas, build, marco de página y
-guardianes. Todos comparten una regla de
+CI en cada PR con **dieciséis pasos**: formato, typecheck, lint, paleta, experiencias, CV
+al día, raya, artefacto, contexto, skills, índices, rutas, artículo al día, build, marco
+de página y guardianes. Todos comparten una regla de
 método: **buscan la AUSENCIA, no el patrón**, y **afirman cuánto han mirado** — un metro
 que devuelve lista vacía parece un aprobado, y este proyecto se lo ha encontrado cinco
 veces (D38/D57/D60/D63).
