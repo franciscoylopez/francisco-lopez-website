@@ -17,6 +17,12 @@ Extraído **de** las cinco que ya existen (Emendu, KUOTIP, INDYA, Freepik,
 TheTool), no antes de escribirlas. Lo que sigue es lo que de verdad se repitió;
 lo que parecía plantilla y no lo era está marcado como tal.
 
+> **Recorrido en seco el 2026-08-22 contra Emendu**, porque llevaba desde el 18 de agosto
+> sin dispararse nunca y una skill se **sigue** en vez de leerse: la que no se ha ejecutado
+> es la que más riesgo tiene. La lista de archivos del §3 y el metro del §5 cuadraron; lo
+> que estaba desfasado eran **los gates**, y el sprint que acababa de cerrar había añadido
+> los tres que faltaban (`check:marco`, `censo`, `check:rutas`).
+
 ---
 
 ## 0 · Antes de nada: ¿esta experiencia tiene página?
@@ -51,9 +57,10 @@ Orden: decidir si tiene página → escribir el ES → revisar el EN contra el E
 
 ## 2 · Lo que el build YA garantiza — no lo verifiques a mano
 
-Esto es la mitad del valor de esta skill: **hay cuatro cosas que no hace falta
-comprobar porque rompen solas.** Verificarlas a mano es trabajo que no compra
-nada.
+Esto es la mitad del valor de esta skill: **lo de esta tabla no hace falta
+comprobarlo, porque rompe solo.** Verificarlo a mano es trabajo que no compra
+nada. *(Y va sin recuento a propósito: la lista crece, y un número escrito aquí
+envejecería mal.)*
 
 | Lo que se te puede olvidar | Qué lo caza | Cuándo |
 |---|---|---|
@@ -62,6 +69,7 @@ nada.
 | El nombre de empresa mal escrito entre registro, CV y diccionario | `experienceOf` / `matchFact` **lanzan** (D44/D22) | build |
 | Un bullet sin su gemelo, cobertura ES≠EN, una cifra que solo existe en una longitud | `npm run check:experiencias` (D57) | CI |
 | La página nueva fuera del sitemap, del gate de HTML, de `/llms.txt` o de su tarjeta OG | Las cuatro derivan del registro, y lo que piden por experiencia va en `Record<ExperienceSlug, …>` (D59/D72) | typecheck |
+| Que el registro y el disco dejen de decir lo mismo | `npm run check:rutas` contrasta los dos y sus consumidoras (D72) | CI |
 
 Lo que **nada** caza, y por eso ocupa el resto de este documento: el presupuesto,
 qué va en cada sección, la política de artefactos y el gate de accesibilidad.
@@ -197,18 +205,28 @@ cierra el hueco**.
 1. **`npm run check:experiencias`** — las tres longitudes cuadran.
 2. **`npm run check:cv`** — y si falla, `npm run cv`: tocar un bullet o un hecho
    cambia también el PDF, que es un artefacto commiteado y no se regenera solo.
-3. **`npm run gate:html`**, solo si has tocado algo COMPARTIDO. Para una página
-   nueva no hay línea base contra la que compararla; su valor está en demostrar
-   que el resto no se ha movido.
+3. **`npm run check:marco`** (D75) — **es el criterio de cierre de página nueva, y
+   está en CI**. Sobre el HTML **prerenderizado** de las 26 variantes mira axe
+   estructural, el **enlace de salto** que axe no ve, un solo `h1` y la jerarquía,
+   el breadcrumb, que la metadata derivada **llegó** y que los `@id` del JSON-LD
+   **resuelven** — cosa que ningún validador externo hace. Con esto, los puntos 4,
+   5 y 8 del checklist dejan de comprobarse a mano.
 4. **Gate de accesibilidad (D52)** con el subagente `viewport-verifier`, sobre el
    sitio servido. **No se conduce a mano.** Y **son dos disparos**, no uno: si la
    página lleva hero o banda dimensionada por `vw`, uno **mientras se dibuja**
    —al cerrar, el alto ya no es un ajuste sino un rediseño (D50/D56)— y otro al
    cerrar. Precondición: `agent-browser` con el **sandbox de Bash desactivado**;
    un comando que cuelga es ese síntoma, así que no se reintenta igual.
-5. **Lo que el gate no tapa y va a mano:** el enlace de salto (axe no lo ve,
-   D46), la nota de PageSpeed (`npm run psi`, D49) y los puntos 4, 5, 6 y 8 del
-   checklist, que los pone quien escribe la página.
+5. **Los tres que necesitan el sitio SERVIDO van juntos**, y su secuencia entera
+   —incluida la línea base que hay que guardar antes de tocar nada— la lleva la
+   skill `gates-de-servidor`: `gate:html` (solo si has tocado algo COMPARTIDO;
+   para una página nueva no hay línea base contra la que compararla, su valor está
+   en demostrar que el resto no se ha movido), **`npm run censo`** (D85) y
+   **`npm run psi`** (D49). Del censo **no hay que acordarse**: si la página
+   introduce un par de color, una superficie o una animación nuevos, CI lo dice
+   por su nombre (D90).
+6. **Lo que sigue a mano, y es poco:** el punto **6** del checklist —nada
+   codificado solo por color—, que no tiene forma automática.
 
 **La apertura ocupa el pliegue** (D56): el bloque de apertura termina siempre a
 la misma altura porque es tipográfico, así que lo que sobra crece solo con el
