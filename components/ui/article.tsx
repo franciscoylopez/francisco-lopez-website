@@ -496,6 +496,12 @@ export function LiveStat({
   href: string;
   example?: ReactNode;
 }) {
+  // ¿destino fuera del sitio? (design-review P60, F2): a diferencia de
+  // `RepoStrip`, que SIEMPRE resuelve a github.com o a una URL externa, este
+  // `href` también recibe anclas internas (el espécimen del Design System usa
+  // "#ds-articulo-cover"), así que la comprobación es explícita en vez de un
+  // `target="_blank"` fijo.
+  const isExternal = /^https?:\/\//.test(href);
   return (
     <aside className="border-border bg-card my-[2rem] max-w-[34rem] rounded-lg border">
       <div className="border-border flex flex-wrap items-baseline justify-between gap-2 border-b border-dashed px-5 pt-4 pb-3">
@@ -527,6 +533,8 @@ export function LiveStat({
         </p>
         <a
           href={href}
+          target={isExternal ? "_blank" : undefined}
+          rel={isExternal ? "noopener noreferrer" : undefined}
           className={cn(
             "link-content link-content--underline text-[0.9rem] font-medium",
             LEADING.meta,
