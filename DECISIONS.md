@@ -124,6 +124,7 @@
 - D86 · El informe de qlty baja al repo, y de sus hallazgos dos eran míos
 - D87 · Google no cruza de página, y por eso una referencia `@id` no basta en un tipo elegible
 - D88 · El único índice que se precargaba baja a su cabecera, y era el único que crecía solo
+- D89 · El inventario de `components/ui/` se deriva del disco, y una pieza nueva sin publicar sale en rojo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -4935,3 +4936,62 @@ incluidas las que no tocan ninguna decisión.
 
 **Resultado, medido:** 13.494 → **12.224**, de 1.494 palabras por encima del objetivo de
 12.000 a 224. El techo baja de 13.500 a 12.500, que es lo que D69 manda hacer con él.
+
+## D89 · El inventario de `components/ui/` se deriva del disco, y una pieza nueva sin publicar sale en rojo — 2026-08-22
+
+**El hueco.** El paso 1 de la «Regla de construcción» de `CLAUDE.md` es «¿existe ya la
+pieza?», y se contesta leyendo una lista. Esa lista estaba escrita a mano en **cinco sitios y
+ninguno acertaba**:
+
+| Dónde | Qué decía |
+|---|---|
+| `design-review/SKILL.md` (×2) | «las **cinco** capas de `components/ui/`» … sobre una tabla de **seis** filas |
+| `PRD-Live.md` §5 | «Capa de componentes — **siete** piezas» |
+| `README.md` | «capa de componentes propia, en **siete** piezas» |
+| `CLAUDE.md`, cascada paso 1 | nombraba **diez** |
+| `ls components/ui/` | **quince** |
+
+Dos piezas no salían en **ningún** inventario: `page-closer.tsx` (el cierre de las trece
+páginas, que D61 usa como caso de medición) y `video-embed.tsx` (la facade de vídeo de D55).
+Es la regla 1 de `BRAND.md` —un disparador que mira al lugar equivocado— aplicada justo a la
+regla que gobierna todo lo que se construye: se manda mirar una lista, y la lista no es el
+sitio donde están las piezas.
+
+Y la deriva **crecía sola**: el 19 de agosto había trece archivos, el 22 quince (el sprint 2
+añadió `article.tsx` y `article-islands.tsx`) y las cinco menciones seguían diciendo lo mismo.
+
+**Las tres cifras no se unifican, porque no eran la misma mal contada.** Es la regla 4 de
+`BRAND.md`: antes de juntar dos valores que se parecen, mirar si significan cosas distintas.
+Siete es el **núcleo** del sistema; dos son la **capa de artículo largo**, que D76 dejó fuera
+del núcleo a propósito; el resto son **primitivas**. Lo que faltaba no era un número común: era
+el **nombre de cada grupo** y que el recuento saliera del disco.
+
+**Decisión.** Cada archivo declara su propia línea, en su primera línea:
+
+```
+// @pieza <grupo> · <publicación> · <una frase>
+```
+
+`npm run indices` deriva de ahí `components/ui/README.md` —el cuarto índice, y el único que
+indexa una carpeta en vez de prosa— y `npm run check:indices` lo comprueba en cada PR. Las
+cinco menciones **citan ese README en vez de repetirlo**; en `CLAUDE.md` y en `PRD-Live.md` eso
+además devuelve 61 palabras al presupuesto de contexto.
+
+**Y la parte que no es un índice: la publicación se comprueba de verdad.** Que una pieza diga
+publicarse en una sección no prueba nada, así que el check abre la sección declarada y exige
+que **importe la pieza** — el Design System y el Brand Kit enseñan las piezas reales como demo
+(§«Tres cosas que el sitio hace y no se ven mirándolo»), y una sección que describe una pieza
+sin usarla puede divergir sin que nadie se entere. La resolución baja **un nivel de
+indirección**, porque el Brand Kit enseña el logo real pero lo importa a través de
+`brand-kit/shared.tsx`: sin eso, un falso «esa sección no publica esa pieza».
+
+**Las cinco sin publicar quedan en una lista con motivo** (`SIN_PUBLICAR`), no en el silencio.
+Una pieza que declare `pendiente` sin estar en ella **falla**, así que un archivo nuevo obliga
+a decidir: se publica, o se escribe por qué no y eso queda en el diff. El check imprime cuántas
+son y cuáles, cada vez.
+
+**La deuda que esto destapó, y que es la razón de que la lista no esté vacía:**
+`stat-row.tsx` es del **núcleo**, nació en P54.3 el 2026-08-19 y **nunca se publicó** en el
+Design System, pese a que la «Regla de construcción» manda publicarlo antes de dar la tarea por
+hecha. Llevaba tres días siendo una de las siete piezas del sistema sin sección propia y no lo
+vio nadie, porque no había quién lo mirara. Ahora lo mira CI y sale por su nombre en cada PR.

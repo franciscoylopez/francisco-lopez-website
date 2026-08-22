@@ -1,3 +1,5 @@
+// @pieza núcleo · design-system/12-tablas.tsx · La rejilla de filas y celdas: tabla real si son datos, divs si son especímenes.
+
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";

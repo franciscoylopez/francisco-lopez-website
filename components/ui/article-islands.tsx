@@ -1,5 +1,7 @@
 "use client";
 
+// @pieza artículo · design-system/15-articulo.tsx · Las islas de cliente del texto largo: riel de secciones, copiar enlace, compartir.
+
 import { Copy, Link2, Share2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 

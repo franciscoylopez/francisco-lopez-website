@@ -1,3 +1,5 @@
+// @pieza núcleo · design-system/08-enlaces.tsx · El enlace de la carpintería de navegación: `shape` × `tone`.
+
 import { cva, type VariantProps } from "class-variance-authority";
 
 // Capa de CHROME del sistema (P37.656). Fuente única del enlace de la carpintería

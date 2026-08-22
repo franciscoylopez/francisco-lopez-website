@@ -1,3 +1,5 @@
+// @pieza primitiva · pendiente · La tarjeta de nota: un título y su explicación, al margen del cuerpo.
+
 import { CARD } from "./layout";
 import { cn } from "@/lib/utils";
 

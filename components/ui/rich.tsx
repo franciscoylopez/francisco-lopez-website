@@ -1,3 +1,5 @@
+// @pieza primitiva · pendiente · El render de markup inline del copy del diccionario: negrita, cursiva y enlace.
+
 // Mini-render de markup inline para el copy del diccionario: **negrita**, *cursiva*
 // y [texto](url). Plano (sin anidamiento), suficiente para el énfasis editorial de
 // las páginas de contenido, y mantiene el copy como strings en el diccionario
