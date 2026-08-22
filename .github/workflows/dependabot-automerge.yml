@@ -1,0 +1,155 @@
+name: Dependabot
+
+# QUIÉN CIERRA LOS PR DE DEPENDABOT. El `cooldown` de `dependabot.yml` controla cuántos se
+# abren y cuándo; esto controla quién los cierra. Sin las dos mitades, la cola se repone
+# cada lunes y nadie la vacía: llegó a haber cuatro PR abiertos tres días con los dieciséis
+# checks en verde (hallazgo M1 del cuarto `method-review`, D91).
+#
+# EL CRITERIO ES UNO: ¿puede este paquete cambiar lo que el sitio sirve? No → automerge.
+# Sí, o no se sabe → espera a una persona.
+#
+# Y no es prudencia genérica: es que **CI no puede ver ese cambio**. Los dieciséis pasos
+# compilan, tipan y validan estructura, pero ninguno abre la página pintada — `gate:html`
+# está fuera de CI a propósito (D42/D45) porque necesita el sitio servido. Un cambio de
+# comportamiento en el render pasaría el gate entero. Es el mismo argumento con el que se
+# escribió el `cooldown`, aplicado a la mitad que faltaba.
+#
+# POR QUÉ ALLOWLIST Y NO «LAS DE DESARROLLO». Era la regla obvia y es falsa en este repo:
+# `tailwindcss` y `@tailwindcss/postcss` son `devDependencies` y generan la hoja de estilos
+# que se sirve. Una denylist habría fallado ABIERTA —una dependencia nueva que llegue al
+# build no estaría en ella y se mergearía sola—, así que la lista dice qué SÍ, no qué no, y
+# lo desconocido espera. Mismo criterio que la CSP en allowlist mínima (D26).
+#
+# Automerge no se salta nada: `--auto` espera a que la protección de `main` (D68) dé por
+# buenos todos los checks y entonces hace `squash`. Un PR en rojo se queda abierto.
+
+on:
+  pull_request_target:
+    branches: [main]
+
+# `pull_request_target` corre con el token del repositorio base, no el del PR — que es la
+# única forma de que un PR de Dependabot pueda mergearse solo (desde 2023 los eventos
+# `pull_request` de Dependabot reciben un token de solo lectura).
+#
+# Eso lo hace peligroso EN GENERAL, y aquí no lo es por una razón concreta: **este workflow
+# no hace checkout de la rama del PR ni ejecuta una sola línea de su código**. Solo lee
+# metadatos y llama a `gh`. Si algún día necesita el código del PR, este comentario deja de
+# ser cierto y hay que cambiar el disparador.
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: dependabot-${{ github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    name: automerge acotado
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      # Las acciones se fijan por SHA, no por tag, igual que en `ci.yml`: un tag es un
+      # puntero movible, así que `@v3` es «lo que su dueño diga hoy».
+      - name: Metadatos del bump
+        id: meta
+        uses: dependabot/fetch-metadata@25dd0e34f4fe68f24cc83900b1fe3fe149efef98 # v3.1.0
+
+      - name: ¿Puede cambiar lo que el sitio sirve?
+        id: juicio
+        env:
+          TIPO: ${{ steps.meta.outputs.dependency-type }}
+          NOMBRES: ${{ steps.meta.outputs.dependency-names }}
+          ECOSISTEMA: ${{ steps.meta.outputs.package-ecosystem }}
+        run: |
+          set -euo pipefail
+
+          # La allowlist, y el porqué de cada entrada. Añadir aquí es un acto deliberado:
+          # antes de hacerlo, la pregunta es si ese paquete puede emitir algo que acabe en
+          # el HTML, en el CSS o en un archivo de `public/`.
+          #
+          #   tsx, typescript-eslint    ejecutan y analizan scripts; no emiten build
+          #   prettier                  formatea el árbol; no participa en el build
+          #   eslint                    analiza; no emite
+          #   axe-core, jsdom           verificación; no entran en el bundle
+          #   shadcn                    CLI que se invoca a mano
+          #   @mermaid-js/mermaid-cli   genera el SVG del artefacto, que tiene su propia
+          #                             huella y su guardián (check:artefacto)
+          #
+          # FUERA A PROPÓSITO, aunque sean de desarrollo:
+          #   tailwindcss, @tailwindcss/postcss, prettier-plugin-tailwindcss → el CSS servido
+          #   typescript, eslint-config-next, @next/bundle-analyzer          → tocan el build
+          #   @react-pdf/renderer  → cambia el PDF del CV en la próxima regeneración, y
+          #                          check:cv sella las ENTRADAS, así que no lo vería
+          PERMITIDOS="tsx prettier eslint axe-core jsdom shadcn @mermaid-js/mermaid-cli"
+
+          seguro=false
+          motivo="toca dependencias que sí pueden llegar a lo que el sitio sirve"
+
+          if [ "${ECOSISTEMA:-}" = "github_actions" ]; then
+            seguro=true
+            motivo="mueve el CI, no el sitio"
+          elif [ -n "${NOMBRES:-}" ]; then
+            # Un PR agrupado con un solo paquete desconocido va entero a mano.
+            desconocido=""
+            for n in $(echo "$NOMBRES" | tr ',' ' '); do
+              case " $PERMITIDOS " in
+                *" $n "*) continue ;;
+              esac
+              case "$n" in
+                @types/*) continue ;;
+              esac
+              desconocido="$desconocido $n"
+            done
+            if [ -z "$desconocido" ]; then
+              seguro=true
+              motivo="solo tipos y herramientas que no emiten nada al build"
+            else
+              motivo="no está en la allowlist:$desconocido"
+            fi
+          else
+            motivo="fetch-metadata no devolvió ningún paquete, así que no hay nada que juzgar"
+          fi
+
+          echo "seguro=$seguro" >> "$GITHUB_OUTPUT"
+          echo "motivo=$motivo" >> "$GITHUB_OUTPUT"
+
+          # Afirma sobre QUÉ ha opinado, no solo su veredicto: un triaje que no dice qué
+          # miró parece un aprobado cuando en realidad no vio nada.
+          echo "Ecosistema: ${ECOSISTEMA:-(vacío)} · tipo: ${TIPO:-(vacío)}"
+          echo "Paquetes:   ${NOMBRES:-(ninguno)}"
+          echo "Veredicto:  seguro=$seguro — $motivo"
+
+      - name: Automerge
+        if: steps.juicio.outputs.seguro == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --squash "$PR"
+
+      # La otra mitad, que es la que se olvida. Un PR que no entra por automerge no puede
+      # quedarse en silencio: si nadie sabe que le toca mirarlo, vuelve a haber una cola.
+      - name: Decir qué le falta al que no entra
+        if: steps.juicio.outputs.seguro != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR: ${{ github.event.pull_request.html_url }}
+          MOTIVO: ${{ steps.juicio.outputs.motivo }}
+          NOMBRES: ${{ steps.meta.outputs.dependency-names }}
+        run: |
+          set -euo pipefail
+          gh pr edit "$PR" --add-label "revisar a mano" || true
+          {
+            printf '**Este no se mergea solo**, y no es prudencia genérica: %s.\n\n' "$MOTIVO"
+            printf 'Paquetes del bump: `%s`\n\n' "${NOMBRES:-(ninguno)}"
+            cat <<'FIN'
+          Los dieciséis pasos de CI compilan, tipan y validan estructura, pero **ninguno abre la página pintada**: `gate:html` está fuera de CI a propósito (D42/D45) porque necesita el sitio servido. Un cambio de comportamiento en el render pasaría el gate entero sin que nadie lo viera.
+
+          Antes de mergear:
+
+          1. `npm run gate:html` con la línea base guardada **antes** del bump. Diff vacío = el HTML servido no cambió, y ahí termina el trabajo.
+          2. Si el diff no está vacío, abrir la página y mirar si el cambio era el esperado. El gate no tiene criterio propio a propósito, y esa es su fuerza.
+          3. La secuencia entera, incluida la línea base, está en la skill `gates-de-servidor`.
+          FIN
+          } > aviso.md
+          gh pr comment "$PR" --body-file aviso.md

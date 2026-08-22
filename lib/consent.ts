@@ -108,6 +108,6 @@ export function consentInitScript(): string {
 window.dataLayer=window.dataLayer||[];
 function gtag(){dataLayer.push(arguments);}
 gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',personalization_storage:'denied',functionality_storage:'granted',security_storage:'granted',wait_for_update:500});
-try{var raw=localStorage.getItem('${CONSENT_STORAGE_KEY}');if(raw){var c=JSON.parse(raw);if(c&&c.v===${CONSENT_VERSION}){gtag('consent','update',{analytics_storage:c.analytics?'granted':'denied',ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied',personalization_storage:c.marketing?'granted':'denied'});}}}catch(e){}
+try{var raw=localStorage.getItem('${CONSENT_STORAGE_KEY}');if(raw){var c=JSON.parse(raw);if(c&&c.v===${CONSENT_VERSION}){gtag('consent','update',{analytics_storage:c.analytics?'granted':'denied',ad_storage:c.marketing?'granted':'denied',ad_user_data:c.marketing?'granted':'denied',ad_personalization:c.marketing?'granted':'denied',personalization_storage:c.marketing?'granted':'denied'});}}}catch{}
 })();`;
 }

@@ -74,6 +74,10 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  // Next emite `x-powered-by: Next.js` por defecto, que anuncia el stack a cualquiera
+  // que mire las cabeceras y no aporta nada. Va aquí, junto a `headers()`, porque es
+  // lo mismo: qué se sirve en la respuesta.
+  poweredByHeader: false,
   // La ruta /api/og lee las fuentes (assets/fonts) y la foto (public/og) con fs en
   // runtime. El file-tracing no detecta el join dinámico con process.cwd(), así que
   // se fuerza su inclusión en el bundle serverless para que no falle en Vercel.
