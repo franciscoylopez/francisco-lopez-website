@@ -18,8 +18,11 @@ export type FooterDict = {
 };
 
 // Footer compartido (PRD §7/§17). Una fila de baja densidad: logo flat 32px +
-// copyright · enlaces (Brand Kit / Design System / Cómo se ha creado /
+// copyright · enlaces (El Making of / Brand Kit / Design System /
 // Accesibilidad / Cookies) ópticamente centrados · los dos canales de icono.
+// El label del primero es solo del footer ("El Making of" / "The Making Of"):
+// el título de la página, la URL y el breadcrumb siguen siendo «Cómo se ha
+// creado esta página» / «How it was built».
 // Enlaces de chrome en foreground/muted (no primary, BRAND.md).
 export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
   const base = lang === "es" ? "" : `/${lang}`;
@@ -37,12 +40,12 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: string }) {
             métrica del enlace, así que se queda aquí — ver la nota de `chrome.tsx`. */}
         <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 md:justify-self-center">
           {[
-            { href: `${base}/brand-kit`, label: dict.brandKit },
-            { href: `${base}/design-system`, label: dict.designSystem },
             {
               href: `${base}/como-se-ha-creado`,
               label: dict.comoSeHaCreado,
             },
+            { href: `${base}/brand-kit`, label: dict.brandKit },
+            { href: `${base}/design-system`, label: dict.designSystem },
             { href: `${base}/accesibilidad`, label: dict.accesibilidad },
             { href: `${base}/cookies`, label: dict.cookies },
           ].map((l) => (
