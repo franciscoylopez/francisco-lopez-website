@@ -127,6 +127,7 @@
 - D89 · El inventario de `components/ui/` se deriva del disco, y una pieza nueva sin publicar sale en rojo
 - D90 · Lo que el censo midió se sella, y CI puede ponerse en rojo sin abrir un navegador
 - D91 · Un backlog transversal no lo drena ningún sprint, y el carril de contenido se barría con el resto
+- D92 · Quién cierra los PR de Dependabot, y por qué la allowlist no son «las de desarrollo»
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5115,3 +5116,59 @@ ediciones de regla hechas en el acto, uno entra en el sprint que ya toca ese arc
 último cae en `General`, con el cupo encima. Y las 191 palabras que las reglas nuevas añadieron
 al contexto de arranque se compensaron **retirando 174 de duplicación** —entre ellas una que
 `CLAUDE.md` y `BRAND.md` decían casi palabra por palabra, pagándola dos veces en cada arranque.
+
+---
+
+## D92 · Quién cierra los PR de Dependabot, y por qué la allowlist no son «las de desarrollo» — 2026-08-22
+
+**Decisión.** Automerge **acotado** para los bumps de Dependabot: `.github/workflows/dependabot-automerge.yml`
+lee los metadatos del PR y, si el bump no puede cambiar lo que el sitio sirve, activa
+`gh pr merge --auto --squash`. El resto recibe la etiqueta `revisar a mano` y **un comentario
+que dice exactamente qué le falta**. Primera tarea del cupo de `General` que estrena D91.
+
+**El problema era la mitad que faltaba.** El `cooldown` de `dependabot.yml` (D68) controla
+cuántos PR se abren y cuándo; nada controlaba quién los cierra. Con `semver-patch-days: 0` la
+cola se repone cada lunes, así que el estado estable era cuatro PR abiertos con los dieciséis
+checks en verde — que es como estuvieron tres días. Familia «arreglar la mitad que se abre».
+
+**Por qué el criterio es «¿puede cambiar lo que el sitio sirve?» y no la severidad del bump.**
+Porque es lo que **CI no puede ver**. Los dieciséis pasos compilan, tipan y validan
+estructura, pero ninguno abre la página pintada: `gate:html` está fuera de CI a propósito
+(D42/D45) porque necesita el sitio servido. Un cambio de comportamiento en el render pasaría
+el gate entero. Es el mismo argumento con el que se escribió el `cooldown`, aplicado a la otra
+mitad.
+
+**La regla obvia era falsa, y ahí está lo que merece recordarse.** «Las `devDependencies` son
+seguras» parece evidente y en este repo no lo es: **`tailwindcss` y `@tailwindcss/postcss` son
+`devDependencies` y generan la hoja de estilos que se sirve**. Se descubrió comprobando el
+`package.json` en vez de darlo por hecho, después de haber presentado esa regla como la opción
+recomendada.
+
+Y la corrección no fue añadir dos excepciones: fue **cambiar la forma de la lista**. Una
+denylist falla **abierta** —una dependencia nueva que llegue al build no estaría en ella y se
+mergearía sola—, así que la lista dice qué **sí**, y lo desconocido espera. Mismo criterio que
+la CSP en allowlist mínima (D26), y misma consecuencia deseada: el modo de fallo es un PR de
+más esperando, nunca un cambio de render entrando solo.
+
+Entran `@types/*` (se borran al compilar, por definición no emiten nada), el ecosistema
+`github_actions` (mueve el CI, no el sitio) y siete herramientas nombradas una a una. **Queda
+fuera `@react-pdf/renderer` aunque sea de desarrollo**: cambia el PDF del CV en la próxima
+regeneración, y `check:cv` sella las **entradas**, así que una regresión de maquetación pasaría
+sin que el guardián dijera nada.
+
+**Sobre `pull_request_target`, que es el disparador peligroso.** Es el único que permite que un
+PR de Dependabot se mergee solo: desde 2023 los eventos `pull_request` de Dependabot reciben un
+token de solo lectura. Es seguro aquí **por una razón concreta y escrita en el propio archivo**:
+el workflow no hace checkout de la rama del PR ni ejecuta una línea de su código — solo lee
+metadatos y llama a `gh`. El día que necesite el código del PR, ese comentario deja de ser
+cierto y hay que cambiar el disparador.
+
+**El triaje se validó antes de creerlo**, con diez casos de resultado conocido: `github_actions`
+y `@types/*` en verde, `tailwindcss`, `typescript` y `@react-pdf/renderer` en rojo, un PR
+agrupado con un solo paquete desconocido en rojo entero, y la lista vacía en rojo. Y **publica
+sobre qué opinó, no solo su veredicto**: un triaje que no dice qué miró parece un aprobado
+cuando no vio nada.
+
+**Requisito de repositorio.** `allow_auto_merge` estaba en `false` y se activó. `--auto` no se
+salta ningún gate: espera a que la protección de `main` (D68) dé por buenos todos los checks y
+entonces hace `squash`. Un PR en rojo se queda abierto, que es lo correcto.

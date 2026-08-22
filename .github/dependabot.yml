@@ -20,6 +20,10 @@ updates:
     # mira la página servida, porque `gate:html` no está en CI a propósito.
     # Los parches no esperan, y las actualizaciones de SEGURIDAD son otro mecanismo
     # (alertas), así que este reposo no las retrasa.
+    #
+    # QUIÉN LOS CIERRA ES LA OTRA MITAD, y está en `.github/workflows/dependabot-automerge.yml`.
+    # Esto de aquí controla cuántos se abren y cuándo; sin la otra mitad la cola se repone
+    # cada lunes y nadie la vacía — pasó, y son tres días con cuatro PR en verde (D91/D92).
     cooldown:
       semver-major-days: 14
       semver-minor-days: 7
