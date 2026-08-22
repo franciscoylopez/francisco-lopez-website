@@ -96,6 +96,7 @@
 - D78 · El dato en vivo se vuelve un bloque más, y el pie deja de tener dos estilos
 - D79 · Un prototipo: una dirección ganó
 - D80 · Un flotado sin `mt` se alinea con su texto, y el marco se ajusta al contenido
+- D81 · Foto en la apertura, evidencia citada en vivo, y una prueba descartada
 
 *(Al añadir una decisión nueva a `DECISIONS.md`, añade también su línea aquí.)*
 
@@ -137,7 +138,7 @@ Al empezar una sesión de desarrollo:
 >
 > - **Sprints** (lo comprometido, con su orden): *Deep-dive · Cómo se ha creado · Footer y contacto*.
 > - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad*.
-> - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque. *(Vigilado desde 2026-08-19, tras degenerar una vez con «Optimización»: el riesgo no era el volumen, era no tener el criterio escrito.)*
+> - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque. *(Vigilado desde 2026-08-19: degeneró una vez con «Optimización».)*
 > - **Cerradas** (solo archivadas, no se usan para tareas nuevas): *V1 (entregado) · Cimientos técnicos · Sobre mí · Contacto avanzado · Optimización · IA conversacional*.
 >
 > **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote. El coste asumido: al entrar en un sprint se pierde de qué bloque venía; lo llevan el nombre y las notas, y añadir una séptima propiedad sería peor.

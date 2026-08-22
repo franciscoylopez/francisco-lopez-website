@@ -747,6 +747,16 @@ implementación:
   página interna (local + preview + prod).
 - **La CSP estricta (nonces) sigue diferida a V3** con la IA conversacional, sin cambios.
 
+**La cifra de arriba (A+) ya no es cierta (comprobado en vivo, 2026-08-22).** Escrito el
+artículo «Cómo se ha creado esta página» (P60), volver a medir securityheaders.com dio **A**,
+capado por el mismo aviso de `unsafe-inline` que esta entrada ya documentaba como conocido —no
+es una regresión de código, es que el criterio de scoring de la herramienta cambió entre
+2026-08-02 y hoy. El artículo cita en su lugar el HTTP Observatory de Mozilla (B+, 80/100,
+pierde exactamente los 20 puntos de la política de contenido), con enlace a la comprobación en
+vivo en vez de una cifra escrita. El hueco real sigue siendo el mismo que esta entrada ya
+señalaba —`unsafe-inline` en `script-src`— y ahora tiene tarea propia, máxima prioridad del
+sprint «Footer y contacto» (P64.5), en vez de quedar diferido sin fecha a «cuando haga falta».
+
 ## D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot — 2026-08-02
 **Decisión.** Cierre de la deuda de dependencias de la etapa Cimientos (P30.5 + P37.72),
 más el escaneo automatizado que la mantiene a raya:
@@ -4360,3 +4370,62 @@ de la lista y queda pegado al fondo en vez de centrado. La lista se parte en dos
 la cita entre medias, en el punto que mejor reparte la altura — no hay forma de centrar un
 flotado contra contenido de altura dinámica con solo CSS, así que el punto de corte se decide
 midiendo (`getBoundingClientRect`) sobre la página servida, no a ojo.
+
+## D81 · Foto en la apertura, evidencia citada en vivo, y una prueba descartada — 2026-08-22
+
+**Contexto.** Última sesión antes de cerrar P60: ajuste fino en chat (mismo canal que D80),
+sobre la página ya servida. Cinco piezas, agrupadas aquí por llegar en la misma sesión.
+
+**La Apertura, nueva sección antes del índice.** Bloque de prosa de entrada, fuera del
+recorrido numerado —sin ordinal, no cuenta en `indexItems`, no aparece en el riel ni en
+`ChapterNav`— pero sus palabras sí entran en el recuento total (`articleWordCount` ya tenía el
+parámetro `extra` pensado para esto). Ancho de media columna (`--measure`, ~42rem): a cuatro
+frases cortas, la columna completa de prosa dejaba líneas larguísimas para tan poco texto.
+Titular propio con `SectionHeader` (`level={2}`, `size="section"`): sigue habiendo un solo
+`h1` real, el del hero, pero en el mismo tamaño que separaba las once secciones numeradas — la
+única cabecera del artículo que no abre una parada del recorrido, y el tamaño lo dice antes que
+el texto.
+
+**El `ByLine` gana foto real.** Hasta ahora era iniciales sobre `--muted` siempre
+(`ui/article.tsx`). Gana `photoSrc`/`photoAlt` opcionales: con foto, `next/image` `fill` dentro
+de un círculo `overflow-hidden`; sin ella, sigue el comportamiento de siempre. La foto de este
+artículo es un recorte cabeza-hombros de la foto de portada de la home
+(`public/img/francisco-como-se-ha-creado-byline-1x1.webp`), cuadrado, cara centrada.
+
+**Tres huecos de contenido, cada uno citando una fuente externa en vivo, no una cifra escrita
+de memoria.** (1) Accesibilidad: un párrafo nuevo antes del `livestat` de contraste, sobre por
+qué el sitio sigue EN 301 549 sin que la Ley Europea de Accesibilidad obligue a una web
+personal. (2) Rendimiento: nuevo `livestat` («RENDIMIENTO · PAGESPEED», fuente `npm run psi`)
+enlazando al informe de PageSpeed Insights en vivo — deliberadamente SIN el rótulo «DATO EN
+VIVO» que sí llevan Contraste/Piezas del sistema, porque D49 ya estableció que esta cifra se
+mide a demanda y nunca es un valor de build. (3) Seguridad: el párrafo de la CSP nombra y
+enlaza el HTTP Observatory de Mozilla (B+, 80/100, pierde exactamente los 20 puntos de
+`unsafe-inline` en `script-src`) — sustituye la frase anterior, que citaba de memoria «sube la
+nota del analizador de A a A+» sin nombrar la herramienta. Esa cifra resultó estar
+desactualizada: ver el addendum de D26.
+
+`resolveLiveStatHref` (`como-se-ha-creado.tsx`) gana un tercer caso: además del slug relativo y
+el literal `"github"`, ahora pasa tal cual cualquier `href` que empiece por `http`, para el
+enlace externo del `livestat` de PageSpeed.
+
+**Escala `LEADING` (`heading.tsx`): `prose`/`lead`/`meta`.** Nace de una auditoría pedida por
+Francisco sobre el interlineado del artículo: la mitad de sus elementos de texto llevaba un
+valor elegido a mano sin relación entre sí, y la otra mitad no declaraba ninguno, heredando el
+`1.5` del preflight de Tailwind por accidente — un valor que nadie había decidido, no una
+elección. Verificado en pantalla —clonando el DOM servido a ancho de móvil real— en los dos
+casos que sí podían envolver a varias líneas (`RepoStrip`, la celda más larga del índice) antes
+de aplicar el valor más apretado (`meta`, 1,3): en ninguno de los dos se lee comprimido. Las
+citas (`Pullquote`/`Pull`) se quedan fuera de la escala a propósito: no son cuerpo ni metadato,
+es una convención tipográfica distinta, ahora documentada en el propio componente en vez de sin
+explicar.
+
+**Probado y descartado: foto de fondo en la banda de apertura.** A petición explícita de
+Francisco («probablemente se descarte»), se montaron cuatro variantes —color, color con velo,
+blanco y negro, blanco y negro con velo— de un contact sheet de 18 poses como fondo de la banda
+invertida. Ninguna se sostuvo: color y B/N sin velo rompían la legibilidad del breadcrumb y la
+entradilla (a ojo ya fallaban, sin necesidad de medir contraste); color con velo ocultaba tanto
+la foto que dejaba de aportar nada; B/N con velo era la única legible, pero habría sido la
+PRIMERA banda invertida del sitio con foto —todas las demás (Brand Kit, Design System,
+Accesibilidad) son color plano—, una decisión de sistema y no solo de esta página. Revertido
+por completo: el componente, la constante de variante y la imagen de `public/img/` — nada
+quedó en el árbol.
