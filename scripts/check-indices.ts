@@ -2,8 +2,8 @@
  * ¿Los índices son los derivados? — `npm run check:indices`, en CI.
  *
  * El porqué, el método y dónde vive cada índice, en `scripts/indices.ts`. Aquí
- * solo el veredicto, para los tres: el de decisiones (que vive en `CLAUDE.md`) y
- * los de los dos históricos (que viven en su propia cabecera).
+ * solo el veredicto, para los tres: los tres viven en la cabecera de su propio
+ * archivo, y ninguno cuesta nada en el contexto de arranque.
  *
  * Y AFIRMA CUÁNTO HA MIRADO, con su guarda de cero.
  */
@@ -15,7 +15,6 @@ import {
   HISTORICOS,
   historico,
   historicoActual,
-  INDICE_DECISIONES,
 } from "./indices";
 
 type Caso = {
@@ -30,7 +29,7 @@ type Caso = {
 const casos: Caso[] = [
   {
     fuente: DECISIONES,
-    destino: INDICE_DECISIONES,
+    destino: `${DECISIONES} (cabecera)`,
     esperado: decisiones(),
     actual: decisionesActual(),
   },

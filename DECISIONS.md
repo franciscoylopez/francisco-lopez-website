@@ -17,7 +17,7 @@
 > **Nada se borra nunca, y el estado va EN LA CABECERA.** Lo primero, porque el valor de
 > este archivo es el experimento fallido: casi todas las reglas del proyecto nacieron
 > corrigiendo algo, y saber qué se probó y por qué se descartó es lo que ahorra repetirlo.
-> Lo segundo, porque desde el 2026-08-19 el índice de `CLAUDE.md` **se deriva de estas
+> Lo segundo, porque desde el 2026-08-19 el índice de aquí abajo **se deriva de estas
 > cabeceras** (`npm run indices`): una marca escrita en el cuerpo no la ve nadie hasta
 > haber abierto la entrada, que es justo lo que la marca existe para evitar. Le pasaba a
 > D30, marcada desde el 2026-08-09 y sin que se notara.
@@ -34,6 +34,97 @@
 > superada haría que se saltara una regla que se cumple todos los días.
 
 ---
+
+<!-- ÍNDICE · lo genera `npm run indices`; no se edita a mano -->
+- D1 (superado en V2+) · El diseño se traduce, no se copia
+- D2 · i18n nativo con `app/[lang]`, ES sin prefijo + `/en`
+- D3 · Next 16 usa `proxy.ts`, no `middleware.ts`
+- D4 · Fuente única de tokens = `app/globals.css`; `brand-globals.css` deprecado
+- D5 · Dark mode = `system` por defecto + toggle
+- D6 · ¿shadcn lo trae? → no se escribe (regla hacia delante); `@base-ui/react` fuera hasta el primer componente
+- D7 · Responsive en CSS, no en JS; Server Components por defecto
+- D8 · Objetivos no funcionales: PageSpeed >90, desktop+mobile, AA→AAA
+- D9 · Alcance de V1 = home + Brand Kit + Design System + SEO/OG + medición + dominio
+- D10 · Política de documentación de la fase de desarrollo
+- D11 · Andamiaje de calidad del build
+- D12 · Branching y releases
+- D13 · Entornos y staging = Vercel Previews
+- D14 · Imágenes OG generadas con ImageResponse bajo `/api/og`
+- D15 · SITE_URL estable en producción (`VERCEL_PROJECT_PRODUCTION_URL`)
+- D16 · V1 en producción
+- D17 · Analítica cargada con `next/script`, gateada a producción, consent-ready
+- D18 · Página de política de cookies como documento vivo
+- D19 · Optimización post-lanzamiento: analítica diferida + SEO afinado
+- D20 · Revisión de copy ES↔EN: el diccionario ES es la fuente de verdad, el EN no es literal
+- D21 · Enlaces entre páginas hermanas con componente compartido
+- D22 · CV en PDF generado desde el diccionario (react-pdf, ATS)
+- D23 · Copy con énfasis inline en el diccionario vía render de markup ligero
+- D24 · Página de Accesibilidad: declaración pública verificada, no autoevaluación
+- D25 · Páginas 404/error de marca con `global-not-found` + `global-error` (root layout dinámico)
+- D26 · Cabeceras de seguridad Fase 1; CSP «A+ barato» (Fase 2) implementada, estricta diferida
+- D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot
+- D28 · Arquitectura de contexto: reglas `@`-importadas vs referencia a demanda
+- D29 · Superficie de contacto unificada: dato, patrón y jerarquía
+- D30 (generalizada por D39) · Texto atenuado sobre fondos que no son `--background`
+- D31 · Tracking de clics mailto/tel vía dataLayer (P30)
+- D32 · CSP con allowlist para Microsoft Clarity; `c.bing.com` fuera a propósito (P37)
+- D33 · `/llms.txt` — un solo archivo, en español, generado desde el diccionario (P37.5)
+- D34 · Clases de componente en `globals.css` van sin `@layer` en este proyecto (Tailwind v4)
+- D35 · Los dos extremos de una `transition` van en la misma regla que la declara
+- D36 · Capa de componentes: variantes de acción y primitivas de layout
+- D37 · Endurecimiento del workflow de CI, y qué audita de verdad este repo
+- D38 · Fuente única de los valores publicados: `lib/design-values.ts`
+- D39 · El atenuado lo resuelve la superficie, no el punto de uso
+- D40 · Capa de tabla: `components/ui/table.tsx`
+- D41 · Un color fijo no puede servir a dos superficies opuestas: `--brand-purple-accent` conmuta
+- D42 · Los showcase se parten por sección, y el gate del refactor es un diff de HTML
+- D43 · Toda página y toda sección abren igual: el ordinal va dentro del eyebrow
+- D44 · Lo que de una experiencia no es copy vive en `content/`, y la unión es por nombre
+- D45 · El andamiaje de página sale de un helper, no de seis copias
+- D46 · El enlace de salto, y el `<main>` sube al shell
+- D47 · Lo que ya está en pantalla no se anima: el LCP no lo paga el reveal
+- D48 · El diccionario se parte por página, conservando el guardián de tipos
+- D49 · El número de rendimiento se mide desde la terminal, y a demanda
+- D50 · Una banda dimensionada por `vw` no cabe necesariamente sobre el pliegue
+- D51 · Una herramienta externa entra por el trabajo que resuelve, no por lo buena que sea
+- D52 · El gate de accesibilidad deja de dispararse una sola vez, y el eje que le faltaba era el alto
+- D53 · La plantilla del deep-dive: una forma para cinco páginas, y el tipo como guardián
+- D54 · Un artefacto se enseña, no se recrea: el diagrama real, saneado y en línea
+- D55 · Un vídeo de terceros entra con facade, y el clic es el gate
+- D56 · La apertura ocupa el pliegue, y `mx-auto` deja de significar lo que significaba
+- D57 · Las tres longitudes de una experiencia son un solo dato
+- D58 · El deep-dive es la fuente de los hechos de una experiencia
+- D59 (completado por D72) · El SEO del deep-dive, y las tres listas de páginas escritas a mano
+- D60 · Una fuente única evita dos verdades; no mantiene al día una copia impresa
+- D61 · Una superficie también cambia por ESTADO, y el atenuado no se enteraba
+- D62 · El 404 de una ruta que CASA no lo cubre `global-not-found`
+- D63 · La raya no era un reemplazo, eran tres familias — y su guardián
+- D64 · Una apertura homogénea no la decide el anclaje: la deciden los altos
+- D65 · Un vídeo de apertura no es una foto que se mueve
+- D66 · Un asset tiene más consumidores de los que se ven
+- D67 · El ruido conocido de los validadores se documenta por MECANISMO, no por cifra
+- D68 · El repositorio es público, y a `main` la protege el servidor y no la disciplina
+- D69 · El régimen de contexto de D28 gana cifra y guardián, y aparece la operación que faltaba: retirar
+- D70 · La capa que verifica no estaba verificada, y su modo de fallo es una luz verde
+- D71 · «No hay datos» no distingue entre cero filas y mal configurado
+- D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila
+- D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe
+- D74 · Un compromiso no caduca y una medición sí: fuera de su fuente se publica el umbral
+- D75 · Lo que verifica una página no es su código, es el HTML que emite
+- D76 · Una capa nueva para texto largo, y el control que le faltaba al chrome sobre banda invertida
+- D77 · Un bug que ya estaba comentado tres veces, y el diagrama pasa a vivir donde vive la cita
+- D78 · El dato en vivo se vuelve un bloque más, y el pie deja de tener dos estilos
+- D79 · Un prototipo: una dirección ganó
+- D80 · Un flotado sin `mt` se alinea con su texto, y el marco se ajusta al contenido
+- D81 · Foto en la apertura, evidencia citada en vivo, y una prueba descartada
+- D82 · El design-review de P60 encuentra ocho fallos reales, y dos patrones que se repiten
+- D83 · Una sección que documenta una capa nueva no puede ser una caja con las piezas dentro
+- D84 · El artículo describe un proyecto que se mueve, y nadie le avisaba
+- D85 · La pasada de contraste deja de hacerse a mano, y el medidor tenía un falso positivo
+- D86 · El informe de qlty baja al repo, y de sus hallazgos dos eran míos
+- D87 · Google no cruza de página, y por eso una referencia `@id` no basta en un tipo elegible
+- D88 · El único índice que se precargaba baja a su cabecera, y era el único que crecía solo
+<!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
 
@@ -224,7 +315,6 @@ commits trae la rama, no su tamaño:
 **Por qué no merge commit.** Con un solo desarrollador la burbuja no informa de nada —no hubo dos
 líneas de trabajo que reconciliar— y rompe la lectura lineal de `git log`, que aquí se usa como
 registro real de en qué orden pasaron las cosas.
-
 
 ## D13 · Entornos y staging = Vercel Previews — 2026-07-24
 **Decisión.** No hay entorno de staging pesado separado. Los **Vercel Preview Deployments** (uno por
@@ -853,7 +943,6 @@ desde el archivo.
 aparecieron dos defectos estructurales que llevaban meses invisibles porque nadie lo leía de
 principio a fin — el **ítem 2 de la regla de dos capas estaba cien líneas por debajo del ítem 1**,
 detrás de cuatro secciones de nivel 2, y el método de medición iba numerado 1-4-5-2-3-6.
-
 
 ## D29 · Superficie de contacto unificada: dato, patrón y jerarquía — 2026-08-03
 **Decisión.** El contacto deja de ser tres implementaciones que se parecían y pasa a ser
@@ -4099,7 +4188,6 @@ creado». Es un recuento escrito a mano, de la misma familia que los badges, y c
 diferencia: este sí tiene fuente (`lib/routes.ts`, D72), así que su arreglo natural no es el
 umbral sino generarlo.
 
-
 ## D75 · Lo que verifica una página no es su código, es el HTML que emite — 2026-08-20
 
 **Decisión.** `npm run check:marco` (`scripts/check-marco.ts`) entra en CI justo detrás de
@@ -4814,3 +4902,33 @@ justo el caso para el que `claude-in-chrome` no se retiró.
 no lo es, así que no puede avisar de que una referencia que cruza de página va a degradarse. Hoy no
 hay caso vivo. Está tareado, **sin prejuzgar la forma**: puede que lo correcto no sea un guardián
 más sino la regla escrita donde ya está el porqué, en `lib/structured-data.ts`.
+
+## D88 · El único índice que se precargaba baja a su cabecera, y era el único que crecía solo — 2026-08-22
+
+**Decisión.** El índice de este archivo deja de vivir dentro de `CLAUDE.md` y pasa a la
+**cabecera de `DECISIONS.md`**, que es donde ya vivían los de `PRD-Historical.md` y
+`BRAND-historical.md` (D69). En `CLAUDE.md` queda el puntero y la instrucción de lectura:
+un `Read` limitado a las primeras ~130 líneas. El generador y su guardián no cambian de
+método, solo de destino, y de paso dejan de tener dos caminos: un único bloque
+`ÍNDICE`/`FIN ÍNDICE` y una sola función de escritura para los tres.
+
+**El número.** El contexto de arranque iba de 4.120 palabras el 30 de julio a **13.470 el
+22 de agosto**, con el techo en 13.500: **30 palabras de margen**, +227 % en 23 días.
+
+**Por qué no valía retirar, que es la operación que D69 añadió.** Se probó: el
+method-review del 19 de agosto recortó 437 palabras. En tres días volvieron 386, y no por
+indisciplina — fue un sprint normal. Retirar compra tiempo contra lo que se escribe de más;
+no contra lo que crece por construcción.
+
+**Por qué no valía subir el techo.** El índice pesaba **1.296 palabras** —el 22 % de
+`CLAUDE.md` y el **9,6 % del presupuesto entero**— y crecía a 2,8 decisiones al día, unas
+42 palabras diarias. Cada línea estaba legítimamente ahí. **No era deuda: era masa**, y un
+trinquete no defiende de la masa; solo obliga a recortar en otro sitio lo que esta añade.
+
+**El argumento que se retira.** Lo que puso el índice en contexto fue que *«se lo gana:
+buena parte de sus entradas se citan desde el código»*. Eso justifica **tener** el índice
+—y sigue siendo cierto—, pero no justifica **precargarlo** en cada arranque de cada sesión,
+incluidas las que no tocan ninguna decisión.
+
+**Resultado, medido:** 13.494 → **12.224**, de 1.494 palabras por encima del objetivo de
+12.000 a 224. El techo baja de 13.500 a 12.500, que es lo que D69 manda hacer con él.

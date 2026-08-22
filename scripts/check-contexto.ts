@@ -36,8 +36,11 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  * Historial del techo, que es la prueba de que el trinquete funciona:
  *   16.000  al crearlo (2026-08-19), con 15.466 medidos tras compactar PRD-Live
  *   13.500  el mismo día, al derivar el índice de decisiones (3.610 → 924)
+ *   12.500  el 2026-08-22, al BAJAR ese índice a la cabecera de `DECISIONS.md`
+ *           (13.494 → 12.224). D88: era el único componente del presupuesto que
+ *           crecía por construcción, y contra eso un techo no defiende.
  */
-const TECHO = 13_500;
+const TECHO = 12_500;
 
 /** A dónde se quiere llegar. No falla; solo se publica la distancia. */
 const OBJETIVO = 12_000;

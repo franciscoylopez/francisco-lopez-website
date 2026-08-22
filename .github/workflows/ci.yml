@@ -129,9 +129,9 @@ jobs:
 
       # La mitad «a demanda» del régimen de contexto (D28) son ~97.000 palabras, y
       # solo funciona si se sabe QUÉ HAY dentro sin cargarlo. Los tres índices se
-      # derivan de las cabeceras: el de decisiones vive en `CLAUDE.md` (se lo gana:
-      # buena parte de sus entradas se citan desde el código), y los de los dos
-      # históricos en su propia cabecera, para no costar en cada arranque.
+      # derivan de las cabeceras y los tres viven en la cabecera de su propio
+      # archivo, para no costar nada en el arranque: el de decisiones estaba dentro
+      # de `CLAUDE.md` y era el único que crecía sin límite (D88).
       - name: Índices derivados
         run: npm run check:indices
 
