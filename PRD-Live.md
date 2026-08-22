@@ -268,7 +268,8 @@ dos primeros están entregados**; entre ellos se intercalaron dos bloques cortos
 | — | *Sprint Lite* — 404 de los deep-dive, la raya fuera del copy, retrato nuevo, vídeo de Sobre mí, aperturas homogéneas, repo público | **En producción** |
 | — | *Método* — el andamiaje del propio método antes de un sprint de contenido | **Entregado** |
 | 2 | **«Cómo se ha creado esta página»** | **En producción** (cerrado el 2026-08-22) |
-| 3 | **Footer estructurado y Contacto ampliada** | Siguiente |
+| — | *Método II* — el andamiaje otra vez, y el presupuesto de contexto sin margen | **En curso** |
+| 3 | **Footer estructurado y Contacto ampliada** | Después |
 
 **Sprint 3 — Footer y Contacto ampliada.** El footer va el último **porque necesita que
 existan las secciones que crean los dos sprints anteriores**. De Contacto ampliada, lo

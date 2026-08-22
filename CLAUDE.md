@@ -142,7 +142,7 @@ Al empezar una sesión de desarrollo:
 
 > **`Etapa` contesta una sola pregunta: ¿esto está comprometido o esperando?** Dos familias en el mismo campo (y **vigila que «General» no se coma el eje**: ya degeneró una vez con «Optimización» al 80%):
 >
-> - **Sprints** (lo comprometido, con su orden): *Footer y contacto*.
+> - **Sprints** (lo comprometido, con su orden): *Método II · Footer y contacto*.
 > - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad · Cómo se ha creado*.
 > - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque. *(Vigilado desde 2026-08-19: degeneró una vez con «Optimización».)*
 > - **Cerradas** (solo archivadas, no se usan para tareas nuevas): *V1 (entregado) · Cimientos técnicos · Sobre mí · Contacto avanzado · Optimización · IA conversacional · Deep-dive*.

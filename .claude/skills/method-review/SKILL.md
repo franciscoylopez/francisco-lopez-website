@@ -165,9 +165,10 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 |
 | **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 5 |
 | **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 3 |
+| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **6** |
 | **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 3 |
-| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | 3 |
 | **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | 3 |
+| **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **2** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **Añadir sin retirar** | Un documento que crece porque nada pregunta qué sobra (D69) | el marco |
 
@@ -177,6 +178,24 @@ derivó el sitemap del deep-dive dejando las páginas estáticas a mano en tres 
 Y una lección sobre esta tabla: **actualizarla es el último paso del disparo y es el
 que se olvida.** Se quedó sin tocar veinte minutos después de publicar un informe sobre
 documentos que crecen porque nadie pregunta qué falta.*
+
+*Tercer disparo, 2026-08-22: **«la regla sin portador» pasa de 3 instancias a 6 y se
+convierte en la familia dominante.** Las tres nuevas salieron del mismo sprint: cuatro de
+los ocho hallazgos del `design-review` tenían la regla ya escrita antes de empezar (el
+fondo invertido, el morado como gráfico, los 44px, la cascada de construcción); la regla
+de publicar en el Design System no tiene disparador **ni plantilla**; y la condición de
+re-medir de la DoD se cumplió por sus tres vías a la vez y nadie la leyó, porque leerla es
+trabajo humano.*
+
+*Y la familia nueva es **«la pieza que nace fuera de la capa»**, que se separó de la
+anterior por el REMEDIO y no por el síntoma: la regla sin portador necesita un
+**disparador**; esta necesita un **guardián de frontera** —algo que note que apareció un
+archivo en `components/ui/` y le exija lo que la capa exige—. Sus dos instancias:
+`components/ui/article-islands.tsx`, que perdió los 44px, el hover y el foco al escribirse
+fuera de `components/ui/chrome.tsx`, y la sección 15 del Design System, que perdió la
+estructura de las otras
+catorce. **Ojo al medirla: su firma es que el hallazgo aparece tarde y en plural** —ocho
+tareas de golpe en una revisión final, no una en cada PR.*
 
 ## La salida
 
