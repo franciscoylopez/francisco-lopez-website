@@ -163,9 +163,9 @@ export function ArticleIndex({
 
 /* ───────────────────────── SectionCover ───────────────────────── */
 
-/** La portada de una sección: kicker + `h2` a la izquierda, y a la DERECHA el
- * ordinal ilustrado con la línea de meta («Capítulo 08 de 11 · 4 min de
- * lectura») debajo — feedback de diseño de P60 tanda 2: con la meta-línea
+/** La portada de una sección: kicker + titular a la izquierda, y a la DERECHA
+ * el ordinal ilustrado con la línea de meta («8 de 11 · 4 min») debajo —
+ * feedback de diseño de P60 tanda 2: con la meta-línea
  * pegada a la cabecera y el numeral grande al otro lado, la apertura de
  * sección apelotonaba tres piezas de información en el mismo golpe de vista.
  * La meta-línea se duplica con visibilidad responsive (una copia junto al
@@ -188,16 +188,25 @@ export function SectionCover({
   title,
   id,
   metaLine,
+  level = 2,
 }: {
   ordinal: string;
   kicker: string;
   title: string;
   id: string;
-  /** «Capítulo 08 de 11 · 4 min de lectura», ya compuesta por el llamador
-   * (los tres fragmentos son copy, y el número de sección/minutos se calcula
-   * en build — D60). */
+  /** «8 de 11 · 4 min», ya compuesta por el llamador (los tres fragmentos son
+   * copy, y el número de sección/minutos se calcula en build — D60). */
   metaLine: string;
+  /**
+   * El nivel del titular. `2` en la página real, donde la portada de sección
+   * ES una sección de la página. El espécimen del Design System la anida bajo
+   * el `h2` de «15 — Artículo largo» y el `h3` de su subapartado, así que ahí
+   * tiene que ser `4`: mismo criterio que `SectionHeader.level`, la semántica
+   * del DOM no la decide cuánto mide el texto (punto 4 del checklist).
+   */
+  level?: 2 | 3 | 4;
 }) {
+  const Title = `h${level}` as const;
   const metaLineText = (
     <p
       className={cn(
@@ -213,12 +222,12 @@ export function SectionCover({
       <header className="min-w-0">
         <div className="mb-2 sm:hidden">{metaLineText}</div>
         <p className={cn(eyebrowVariants(), "mb-3")}>{kicker}</p>
-        <h2
+        <Title
           id={id}
           className={cn(titleVariants({ size: "section-sm" }), "max-w-[24ch]")}
         >
           {title}
-        </h2>
+        </Title>
       </header>
       {/* `items-center` (P60 tanda 3-bis, punto 2): con `items-end` la
           meta-línea quedaba pegada al borde derecho del numeral en vez de
