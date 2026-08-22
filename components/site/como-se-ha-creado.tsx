@@ -181,17 +181,6 @@ export function ComoSeHaCreado({
 
   return (
     <>
-      <ReadingProgress ariaLabel={t.progress.ariaLabel} />
-      <SectionRail items={railItems} />
-      <FloatingShare
-        items={railItems}
-        shareLabel={t.hero.shareLabel}
-        copyLabel={t.hero.copyLabel}
-        copiedLabel={t.hero.copiedLabel}
-        copiedAnnounce={t.hero.copiedAnnounce}
-        shareUnavailableAnnounce={t.hero.shareUnavailableAnnounce}
-      />
-
       {/* Apertura: banda invertida con el breadcrumb integrado (ya no una
           fila aparte sobre --background, que se leía como un cambio de color
           extraño) y recortada a lo esencial para caber en el pliegue —
@@ -267,6 +256,23 @@ export function ComoSeHaCreado({
           </div>
         </div>
       </div>
+
+      {/* Riel de índice y dock de compartir DESPUÉS del breadcrumb y del `h1`
+          en el DOM (design-review P60): las tres piezas van `fixed`, así que
+          moverlas aquí no cambia nada en pantalla, pero antes precedían al
+          título de la página en el orden de tabulación — quien navegaba por
+          teclado o lector de pantalla pasaba por 11 enlaces del índice + 2
+          botones del dock antes de que se anunciara el `h1`. */}
+      <ReadingProgress ariaLabel={t.progress.ariaLabel} />
+      <SectionRail items={railItems} />
+      <FloatingShare
+        items={railItems}
+        shareLabel={t.hero.shareLabel}
+        copyLabel={t.hero.copyLabel}
+        copiedLabel={t.hero.copiedLabel}
+        copiedAnnounce={t.hero.copiedAnnounce}
+        shareUnavailableAnnounce={t.hero.shareUnavailableAnnounce}
+      />
 
       {/* Apertura: prosa de entrada, ANTES del índice y fuera de él —no es una
           parada más del recorrido, no lleva ordinal ni cuenta en `indexItems`,
