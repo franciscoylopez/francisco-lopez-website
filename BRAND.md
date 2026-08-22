@@ -154,46 +154,28 @@ referencia. La regla que sí funciona: **la pieza es el `foreground` de su propi
 
 ### Un control sobre una imagen no puede fijar su color
 
-*(2026-08-17, midiendo el botón de play de los vídeos del deep-dive.)* §Controles con dos fondos
-resuelve el caso en que el fondo **cambia por tema y por estado**, y todos sus fondos son tokens.
-Un control encima de una **imagen** es el mismo problema con el fondo fuera del sistema: ahí no
-hay token que ajustar, porque el fondo lo decide el póster. **Un color fijo no puede garantizar
-el 3:1 que WCAG 1.4.11 pide a un componente**, y no es teoría: el póster de TheTool es el teal de
-su marca, casi el cian del sitio, y el disco de play medía **2,81 en oscuro y 2,59 en claro**.
+*(2026-08-17, midiendo el botón de play de los vídeos del deep-dive.)* Un control sobre una
+**imagen** tiene el fondo fuera del sistema: no hay token que ajustar, lo decide el póster. **Un
+color fijo no puede garantizar el 3:1 que WCAG 1.4.11 pide a un componente** — el disco de play
+sobre el póster de TheTool medía **2,81 oscuro / 2,59 claro**.
 
-Dos piezas, y ninguna sobra:
+Misma idea que §El atenuado lo pone la superficie y §Controles con dos fondos: **la pieza se
+define contra su propio carril**, con dos piezas. Un velo entre la imagen y el control, **del
+color del FONDO** (`--background`), nunca negro (el negro arregla un tema y empeora el otro,
+firma de D41). Y un control **de dos tonos** —relleno `--primary` + anillo
+`--primary-foreground`—, cuyo borde **interno** no depende de la imagen: 7,93 claro / 8,36
+oscuro, siempre.
 
-- **Un velo entre la imagen y el control, del color del FONDO** (`--background`), nunca negro. El
-  negro arregla oscuro y empeora claro —acerca el póster al cian oscuro del tema claro—, que es
-  la firma de D41. El del fondo **oscurece en oscuro y aclara en claro**, así que aleja la imagen
-  del **disco** en los dos temas. Su opacidad se mide contra la peor imagen real, no se elige —
-  y se mide **contra el disco**, que es a quien separa: al anillo lo acerca (ver abajo).
-- **El control, de dos tonos** —relleno `--primary` + anillo `--primary-foreground`—, cuyo borde
-  **interno** es un par de tokens del sistema y por tanto **no depende de lo que haya detrás**:
-  7,93 claro / 8,36 oscuro, siempre. Eso es lo que hace que el control se distinga sobre
-  cualquier póster. *No* garantiza que uno de los dos bordes EXTERNOS pase 3:1 en cada punto del
-  contorno — ver el párrafo siguiente, que es donde esta regla prometía de más.
+**Qué garantiza y qué no.** El borde interno, siempre. Que alguno de los dos bordes EXTERNOS
+pase 3:1 en cada punto del contorno, no: el peor de 144 ángulos del perímetro se queda en
+**2,82–2,91**, y subir el velo no lo arregla —acerca el póster al fondo, lo que separa al disco
+y **acerca al anillo**, tirando en direcciones opuestas—. No es incumplimiento: WCAG pide que el
+componente se distinga, no que cada punto del contorno pase 3:1, y con un borde interno a 7,93 y
+un disco de 64px se distingue.
 
-Es la misma idea que §El atenuado lo pone la superficie y que §Controles con dos fondos: **la
-pieza se define contra su propio carril**. Las cifras y el barrido, en `DECISIONS.md` D55.
-
-**Qué garantiza exactamente, y qué no.** Lo que se sostiene es la parte que no depende de la
-imagen: **el borde INTERNO —relleno `--primary` contra anillo `--primary-foreground`— da 7,93
-claro / 8,36 oscuro**, siempre, porque son dos tokens del sistema. Lo que **no** se sostiene es
-«siempre hay un borde externo que pasa»: midiendo el peor de 144 ángulos del perímetro, el mejor
-de los dos externos se queda en **2,82–2,91**.
-
-**Y no se arregla subiendo el velo: es contraproducente por construcción.** El velo acerca el
-póster a `--background`, lo que separa al disco y **acerca al anillo** — los dos bordes tiran en
-direcciones opuestas y no hay opacidad que gane. *Un velo no puede separar a la vez dos colores
-que están en lados opuestos del fondo.*
-
-**No es incumplimiento**: WCAG 1.4.11 pide que el componente se **distinga**, no que cada punto
-de su contorno pase 3:1, y con un borde interno a 7,93 y un disco de 64px se distingue. Lo que
-había era una regla que afirmaba más de lo que el componente da.
-
-*(El barrido completo y el estado que resultó ser el bueno, en
-[`BRAND-historical.md`](./BRAND-historical.md) §Un control sobre una imagen.)*
+*(El barrido de opacidad, la tabla y las dos veces que el metro estuvo mal, en
+[`BRAND-historical.md`](./BRAND-historical.md) §Un control sobre una imagen; cifras y
+componente en `DECISIONS.md` D55.)*
 
 ### Etiquetas: el velo es la señal, el texto siempre es `foreground`
 
