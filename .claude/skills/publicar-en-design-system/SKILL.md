@@ -91,6 +91,12 @@ en monoespaciada aparte: es D43, y nació de tres copias privadas que lo pintaba
 `<span>` o `<p>`, nunca en `<h1>`/`<h2>`: un lector de pantalla los anunciaría como secciones
 que no existen. Los `h3` son solo los de `GroupHead`.
 
+**Dos tarjetas de nota van en `PAIR`, nunca apiladas.** Si al cerrar la sección tienes la
+ficha de la pieza y la nota de la regla, van una al lado de otra
+(`<div className={cn(PAIR, "mt-8")}>`), como ya hacen §09 y §11. Apiladas a
+`max-w-[var(--measure)]` dejan media sección vacía a la derecha y hacen crecer la página en
+vertical sin ganar nada (P37.62). **Una sola** sí va a la medida de lectura.
+
 ## Paso 3 · El copy, y los valores que no son copy
 
 - El texto va al diccionario partido: `app/[lang]/dictionaries/es/design-system.json` **y**
