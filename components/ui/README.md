@@ -17,7 +17,7 @@
 - **`chrome.tsx`** — El enlace de la carpintería de navegación: `shape` × `tone`. *([design-system/08-enlaces](../site/design-system/08-enlaces.tsx))*
 - **`heading.tsx`** — El par eyebrow + titular con el que abren página y sección. *([design-system/11-cabeceras](../site/design-system/11-cabeceras.tsx))*
 - **`layout.ts`** — Las cajas y los ritmos comunes: WRAP, SECTION, PROSE, CARD, PANEL, PAIR, HERO_ROW. *([design-system/01-rejilla](../site/design-system/01-rejilla.tsx))*
-- **`stat-row.tsx`** — La fila de cifras que resume una apertura. *(sin publicar)*
+- **`stat-row.tsx`** — La fila de cifras que resume una apertura. *([design-system/11-cabeceras](../site/design-system/11-cabeceras.tsx))*
 - **`table.tsx`** — La rejilla de filas y celdas: tabla real si son datos, divs si son especímenes. *([design-system/12-tablas](../site/design-system/12-tablas.tsx))*
 ### artículo · 2
 - **`article-islands.tsx`** — Las islas de cliente del texto largo: riel de secciones, copiar enlace, compartir. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*

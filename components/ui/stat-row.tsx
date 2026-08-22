@@ -1,4 +1,4 @@
-// @pieza núcleo · pendiente · La fila de cifras que resume una apertura.
+// @pieza núcleo · design-system/11-cabeceras.tsx · La fila de cifras que resume una apertura.
 
 import type { ReactNode } from "react";
 

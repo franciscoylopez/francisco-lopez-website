@@ -220,8 +220,6 @@ const GRUPOS = ["núcleo", "artículo", "primitiva"] as const;
  * `pendiente`, falla. Añadir una línea es un acto visible en el diff, que es
  * justo lo que no era «se me olvidó publicarla».
  *
- *   stat-row    nació en P54.3 (2026-08-19) y se quedó sin sección: es del NÚCLEO
- *               y es la deuda de verdad de esta lista.
  *   info-card   la tarjeta con la que las páginas de sistema cuentan cosas al
  *               margen; se usa en siete secciones y no se documenta en ninguna.
  *   rich        render de markup del diccionario (D23): no tiene aspecto propio
@@ -230,7 +228,9 @@ const GRUPOS = ["núcleo", "artículo", "primitiva"] as const;
  *   video-embed la facade de vídeo (D55), que solo aparece en los deep-dive.
  */
 export const SIN_PUBLICAR = [
-  "stat-row.tsx",
+  // `stat-row.tsx` salió de aquí el 2026-08-22: era la única pieza del NÚCLEO
+  // sin sección, y fue el primer disparo de la skill `publicar-en-design-system`
+  // (§11, «Debajo del titular, la fila de cifras»).
   "info-card.tsx",
   "rich.tsx",
   "page-closer.tsx",
