@@ -69,15 +69,25 @@ function escribeIndice(archivo: string, entradas: string[]): number {
     throw new Error(`${archivo} no tiene ninguna cabecera de nivel 2.`);
   }
 
+  // El blanco se normaliza SOLO en la costura, nunca en todo el archivo. Con un
+  // `replace(/\n{3,}/g)` global el generador reescribía párrafos que no son
+  // suyos: al bajar aquí el índice de decisiones se comió tres líneas en blanco
+  // repartidas por `DECISIONS.md` y dejó en rojo a `check:articulo`, que vigila
+  // justo esas entradas. Un guardián que salta por un blanco ajeno es un
+  // guardián que se acaba ignorando.
+  const cabecera = sinIndice.slice(0, primeraSeccion);
+  while (cabecera.at(-1)?.trim() === "") cabecera.pop();
+
   const salida = [
-    ...sinIndice.slice(0, primeraSeccion),
+    ...cabecera,
+    "",
     ABRE,
     ...entradas,
     CIERRA,
     "",
     ...sinIndice.slice(primeraSeccion),
   ];
-  writeFileSync(archivo, salida.join("\n").replace(/\n{3,}/g, "\n\n"), "utf8");
+  writeFileSync(archivo, salida.join("\n"), "utf8");
   return entradas.length;
 }
 

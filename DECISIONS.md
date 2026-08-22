@@ -316,6 +316,7 @@ commits trae la rama, no su tamaño:
 líneas de trabajo que reconciliar— y rompe la lectura lineal de `git log`, que aquí se usa como
 registro real de en qué orden pasaron las cosas.
 
+
 ## D13 · Entornos y staging = Vercel Previews — 2026-07-24
 **Decisión.** No hay entorno de staging pesado separado. Los **Vercel Preview Deployments** (uno por
 rama/PR, build idéntico a producción) son el staging de facto. **Conectar Vercel temprano** (previews
@@ -943,6 +944,7 @@ desde el archivo.
 aparecieron dos defectos estructurales que llevaban meses invisibles porque nadie lo leía de
 principio a fin — el **ítem 2 de la regla de dos capas estaba cien líneas por debajo del ítem 1**,
 detrás de cuatro secciones de nivel 2, y el método de medición iba numerado 1-4-5-2-3-6.
+
 
 ## D29 · Superficie de contacto unificada: dato, patrón y jerarquía — 2026-08-03
 **Decisión.** El contacto deja de ser tres implementaciones que se parecían y pasa a ser
@@ -4187,6 +4189,7 @@ afirma «Doce páginas por idioma». Hoy es cierto y serán **trece** al publica
 creado». Es un recuento escrito a mano, de la misma familia que los badges, y con una
 diferencia: este sí tiene fuente (`lib/routes.ts`, D72), así que su arreglo natural no es el
 umbral sino generarlo.
+
 
 ## D75 · Lo que verifica una página no es su código, es el HTML que emite — 2026-08-20
 
