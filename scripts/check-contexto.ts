@@ -19,11 +19,16 @@
  * estaba escrita en `CLAUDE.md` y en `DECISIONS.md`, y las dos veces en prosa. Lo
  * que convierte una intención en una restricción es que falle el build.
  *
- * Y POR QUÉ EL TECHO NO ES EL OBJETIVO. El objetivo declarado son 12.000
- * palabras; hoy son ~15.500 y el techo está en 16.000. Un gate que nace en rojo
- * se acaba subiendo hasta que no significa nada, así que este nace en verde y
- * actúa de trinquete: impide crecer y deja ver cuánto falta para el objetivo.
- * Al bajar de 12.000, BAJAR EL TECHO — está para apretarse, no para vivir suelto.
+ * Y POR QUÉ EL TECHO NO ES EL OBJETIVO. Un gate que nace en rojo se acaba
+ * subiendo hasta que no significa nada, así que este nació en verde y actúa de
+ * trinquete: impide crecer y deja ver cuánto falta para el objetivo. **Se aprieta
+ * conforme se compacta, nunca se afloja.**
+ *
+ * EL OBJETIVO SE ALCANZÓ EL 2026-08-22 (11.976), así que a partir de aquí deja de
+ * ser una distancia y pasa a ser una línea que hay que sostener. El techo queda
+ * por encima con holgura de trabajo —una sesión normal escribe y borra párrafos—
+ * y su próximo apretón es a 12.000: cuando eso pase, el objetivo necesita número
+ * nuevo, porque un objetivo igual al techo no dice nada.
  */
 import { readFileSync } from "node:fs";
 
@@ -36,8 +41,13 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  * Historial del techo, que es la prueba de que el trinquete funciona:
  *   16.000  al crearlo (2026-08-19), con 15.466 medidos tras compactar PRD-Live
  *   13.500  el mismo día, al derivar el índice de decisiones (3.610 → 924)
+ *   12.500  el 2026-08-22, al BAJAR ese índice a la cabecera de `DECISIONS.md`
+ *           (13.494 → 12.224). D88: era el único componente del presupuesto que
+ *           crecía por construcción, y contra eso un techo no defiende.
+ *   12.400  el mismo día, tras la pasada de retirada sobre `BRAND.md` (12.224 →
+ *           11.976, la primera vez que el arranque cabe en el objetivo)
  */
-const TECHO = 13_500;
+const TECHO = 12_400;
 
 /** A dónde se quiere llegar. No falla; solo se publica la distancia. */
 const OBJETIVO = 12_000;

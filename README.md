@@ -46,7 +46,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`) · **Tailwind CSS v4**
-- **Capa de componentes propia, en siete piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `table` · `stat-row` · `layout`. Aparte, no como octava pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: entra solo para widgets con estado, foco atrapado o portal, y hacia delante (`D6`, `D36`)
+- **Capa de componentes propia, con un núcleo de siete piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `table` · `stat-row` · `layout`. Aparte, no como octava pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: entra solo para widgets con estado, foco atrapado o portal, y hacia delante (`D6`, `D36`)
 - **lucide-react** para iconos; los que lucide no trae se dibujan a mano con su propia regla de autoría, para que no se distingan de los de la librería
 - **next-themes** (claro/oscuro, `system` por defecto) · **Vercel** (`main` = producción)
 
@@ -247,10 +247,13 @@ scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio s
 
 .github/workflows/     CI, dieciséis pasos en cada PR
 .github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions)
-.claude/skills/        Skills del proyecto: update-cv, deep-dive-page, y las tres revisiones
-                       recurrentes — sprint-review (el codebase, al cerrar etapa),
-                       method-review (cómo se trabaja, entre sprints) y design-review
-                       (el diseño, en pantalla). close-session cierra la documentación.
+.claude/skills/        Skills del proyecto: update-cv, deep-dive-page,
+                       publicar-en-design-system (una pieza nueva se publica, `D89`) y
+                       gates-de-servidor (los tres gates que necesitan el sitio servido).
+                       Y las tres revisiones recurrentes — sprint-review (el codebase, al
+                       cerrar etapa), method-review (cómo se trabaja, entre sprints) y
+                       design-review (el diseño, en pantalla). close-session cierra la
+                       documentación.
 .claude/agents/        Subagentes: viewport-verifier (mide una página servida con agent-browser;
                        mide y reporta, no edita, D52)
 ```

@@ -839,13 +839,15 @@
           "type": "ul",
           "items": [
             "**Before a big visual change**, a design review that looks at two different things: whether the system is being followed, and whether the brand is coming through. It gets checked on screen, not by reading the code, because a class can be misapplied without throwing a single error.",
+            "**When a new piece is built**, a routine for publishing it on the page that documents the system: which existing section to compare it against, how a section is put together, and what subsections it needs. It exists because the rule to publish them had been written for months and was broken twice in a row: what was missing wasn't the rule, it was something to compare against.",
             "**On closing a session**, a documentation routine that checks what needs updating and updates it, including the operation that always gets forgotten: retiring what's stopped being true.",
-            "**And one for the résumé**, which regenerates both PDFs from the single source, checks they still fit on two pages, and leaves the link ready. It exists because the first time I changed a fact about my career, the site stayed current and the PDF didn't."
+            "**And one for the résumé**, which regenerates both PDFs from the single source, checks they still fit on two pages, and leaves the link ready. It exists because the first time I changed a fact about my career, the site stayed current and the PDF didn't.",
+            "**And a seventh that is the exception, which is why it's worth mentioning:** three of these checks need the site up and running in front of them, so there is no editor event to hang them on. They're packaged into one routine you invoke by hand. If something can't be tied to an event, at least tie it to one command instead of seven steps you have to remember in order."
           ]
         },
         {
           "type": "p",
-          "text": "None of the five is a prompt I rewrite every time. They're versioned instructions inside the repository, and that's why they improve: when one fails, the file gets fixed, not the next conversation."
+          "text": "None of the seven is a prompt I rewrite every time. They're versioned instructions inside the repository, and that's why they improve: when one fails, the file gets fixed, not the next conversation."
         },
         { "type": "h3", "text": "What it doesn't catch: what's missing" },
         {

@@ -21,6 +21,12 @@ import {
   PALETTE,
   type Theme,
 } from "../lib/design-values";
+import {
+  entradaDelCenso,
+  huella,
+  HUELLA_PATH,
+  leerSello,
+} from "./censo/huella";
 
 const CSS = readFileSync("app/globals.css", "utf8");
 
@@ -252,6 +258,57 @@ for (const dir of ["app", "components", "lib", "scripts"]) {
   }
 }
 
+/**
+ * 6) ¿HA APARECIDO ALGO QUE EL CENSO NO HA VISTO? (D90)
+ *
+ * La DoD dice que la accesibilidad heredada solo se vuelve a medir si el trabajo
+ * introduce un par de color nuevo, un fondo que no sea `--background` o una
+ * animación propia. La regla es correcta y **leerla es trabajo humano**: el
+ * artículo cumplió las tres ramas a la vez y nadie la leyó, y cuatro de los ocho
+ * hallazgos de aquel `design-review` tenían su regla escrita antes de empezar.
+ *
+ * Va AQUÍ y no en un paso propio de CI porque la pregunta es de paleta: qué
+ * colores y qué superficies hay. Y puede correr en CI —al revés que el censo,
+ * que necesita navegador (D85)— porque no mide nada: compara lo que HABÍA cuando
+ * se midió contra lo que hay ahora. Medir necesita pintar; saber que hay que
+ * medir, no.
+ */
+const entrada = entradaDelCenso();
+const selloCenso = leerSello();
+const huellaAhora = huella(entrada);
+const senales =
+  entrada.tokens.length +
+  entrada.superficies.length +
+  entrada.animaciones.length;
+
+if (senales === 0) {
+  console.error(
+    "\ncheck:palette — NO HA MIRADO NADA del censo (0 tokens de color, 0 superficies\n" +
+      "y 0 animaciones). Con cero señales esta parte aprobaría siempre, así que falla\n" +
+      "a propósito. ¿Ha cambiado el formato de `app/globals.css`?\n",
+  );
+  process.exit(1);
+}
+
+if (!selloCenso) {
+  problems.push(
+    `censo: no hay sello en ${HUELLA_PATH}. Córrelo una vez ` +
+      "(`npm run build && npm start`, y en otra terminal `npm run censo`).",
+  );
+} else if (selloCenso.hash !== huellaAhora) {
+  problems.push(
+    "censo: la paleta o las superficies han cambiado desde la última pasada\n" +
+      `    (sellada el ${selloCenso.fecha} sobre ${selloCenso.resumen}).\n` +
+      "    Hoy hay " +
+      `${entrada.tokens.length} tokens de color · ${entrada.superficies.length} ` +
+      `superficies · ${entrada.animaciones.length} animaciones.\n` +
+      "    Es la condición de re-medir de la DoD, y ya no hay que acordarse de\n" +
+      "    leerla: pasa el censo (`npm run build && npm start`, y en otra terminal\n" +
+      "    `npm run censo`), que vuelve a sellar. Si la pasada es la buena,\n" +
+      "    actualiza también LAST_A11Y_REVIEW en lib/design-values.ts.",
+  );
+}
+
 if (ficheros === 0 || hexes === 0) {
   console.error(
     `\ncheck:palette — NO HA MIRADO NADA (${ficheros} archivos, ${hexes} hex leídos).\n` +
@@ -276,4 +333,9 @@ if (problems.length > 0) {
 console.log(
   `Paleta verificada: ${Object.keys(PALETTE.light).length * 2 + Object.keys(BRAND_PALETTE).length * 2} tokens contra globals.css, ${Object.keys(PAINTED).length} conversiones contra el navegador, ` +
     `${ficheros} archivos recorridos y ${hexes} hex leídos en busca de copias.`,
+);
+console.log(
+  `  y el censo ha visto lo que hay: ${entrada.tokens.length} tokens de color · ` +
+    `${entrada.superficies.length} superficies · ${entrada.animaciones.length} ` +
+    `animaciones, selladas el ${selloCenso?.fecha ?? "—"}.`,
 );

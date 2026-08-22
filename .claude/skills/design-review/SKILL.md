@@ -111,7 +111,7 @@ Las cuatro fuentes que tienen que decir lo mismo:
 |---|---|
 | Reglas de marca, en presente | `BRAND.md` (+ `BRAND-logo.md`, `DECISIONS.md` D30/D34/D35/D36/D38) |
 | El **porqué** fechado de esas reglas | `BRAND-historical.md` — léelo antes de proponer cambiar una: casi todas nacieron corrigiendo algo |
-| Implementación — lo que el navegador **pinta** | `app/globals.css` · las cinco capas de `components/ui/` |
+| Implementación — lo que el navegador **pinta** | `app/globals.css` · las piezas de `components/ui/` (inventario en su `README.md`) |
 | Valores **publicados** | `lib/design-values.ts` (D38) |
 | Documentación publicada | página **Design System** (`components/site/design-system/` — una carpeta con un archivo por sección desde D42, no un `.tsx` suelto) |
 | Assets publicados | página **Brand Kit** (`components/site/brand-kit/`, misma forma) |
@@ -182,17 +182,13 @@ plano: una utilidad construida por interpolación no se genera, el elemento se q
 hover **sin error de compilación**, y solo se detecta midiendo el color pintado. Ya tumbó a
 la vez el hover del sólido y el del toggle.
 
-**Las cinco capas que hoy existen** (D36), y de las que tiene que salir todo. Si un hit no
-sale de una de ellas, es hallazgo:
+**Las piezas de las que tiene que salir todo** (D36) están en
+[`components/ui/README.md`](../../../components/ui/README.md), **derivado del disco** por
+`npm run indices`: cada archivo declara ahí su grupo y su frase. Ábrelo antes de la pasada
+—son tres grupos y no una lista plana— y si un hit no sale de una de esas piezas, es hallazgo.
 
-| Capa | Archivo | Qué manda |
-|---|---|---|
-| Acción | `components/ui/action.tsx` | el control **con caja**: botón, chip, toggle, pestaña, control de icono |
-| Chrome | `components/ui/chrome.tsx` | el enlace de la **carpintería de navegación** (`shape` × `tone`) |
-| Etiqueta | `components/ui/badge.tsx` | el rótulo que **no se pulsa** (`tone` × `kind`) |
-| Cabecera | `components/ui/heading.tsx` | el par **eyebrow + titular**, con su hueco |
-| Fila de cifras | `components/ui/stat-row.tsx` | el resumen en datos bajo una apertura (`StatRow`/`Stat`) — la usan Brand Kit, Design System y Accesibilidad |
-| Layout | `components/ui/layout.ts` | cajas y ritmos (`WRAP`/`SECTION`/`PROSE`/`CARD`/`PANEL`/`PAIR`/`HERO_ROW`) |
+*Esta tabla estaba escrita a mano y decía «las cinco capas» debajo de seis filas, mientras en
+disco había quince archivos. Por eso ahora se cita en vez de copiarse.*
 
 Cuál toca se decide con **dos preguntas** —¿se pulsa? y, si sí, ¿tiene caja propia?—, no por
 parecido. Y **dónde va lo nuevo** con una tercera: ¿la pieza sabe algo de ESTE sitio (copy,

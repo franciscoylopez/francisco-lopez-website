@@ -1,3 +1,5 @@
+// @pieza núcleo · design-system/09-botones.tsx · El control CON CAJA: botón, chip, toggle, pestaña y control solo-icono.
+
 import { cva, type VariantProps } from "class-variance-authority";
 
 // Capa de acción del sistema (P37.591/P37.592). ÚNICA fuente de verdad del aspecto

@@ -112,24 +112,20 @@ cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 Regla de dos capas (cian = único color de acción; morado decorativo con cuentagotas),
 tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 
-### Capa de componentes — siete piezas
+### Capa de componentes — un núcleo de siete, quince archivos
 
-| Pieza | Qué resuelve |
-|---|---|
-| `ui/action.tsx` | El control **con caja**: botón, chip, toggle, pestaña, control de icono |
-| `ui/chrome.tsx` | El **enlace de la carpintería**: nav, menú móvil, breadcrumb, footer, canales de contacto |
-| `ui/badge.tsx` | El **rótulo que no se pulsa** («Exit», «AAA», «13,79:1») |
-| `ui/heading.tsx` | El par **eyebrow + titular** |
-| `ui/table.tsx` | La **rejilla de filas y celdas**: marcado de tabla real si son datos, divs si son especímenes |
-| `ui/stat-row.tsx` | La **fila de cifras** que resume una apertura |
-| `ui/layout.ts` | Cajas y ritmos comunes (`WRAP`, `SECTION`, `PROSE`, `CARD`, `PANEL`, `PAIR`, `HERO_ROW`, `LEAD_GAP`) |
+El **núcleo** son siete: `action` (el control con caja), `chrome` (el enlace de la
+carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (el par
+eyebrow + titular), `table`, `stat-row` y `layout` (cajas y ritmos). Encima, la **capa
+de página**: `lib/page-meta.ts` y `components/site/page-shell.tsx` (D45/D46). Y aparte,
+no encima, la de **artículo largo** (`ui/article.tsx` + `ui/article-islands.tsx`), que
+D76 dejó fuera del núcleo a propósito.
 
-Encima de las siete, la **capa de página**: `lib/page-meta.ts` y
-`components/site/page-shell.tsx` (D45/D46).
-
-Y aparte, no encima: `ui/article.tsx` + `ui/article-islands.tsx`, la capa de
-**artículo largo** que estrenó «Cómo se ha creado esta página» — no una
-octava pieza del núcleo (D76).
+**Qué hay exactamente en `components/ui/` no lo dice este párrafo: lo dice
+`components/ui/README.md`, derivado del disco** y comprobado en cada PR, con la frase de
+cada pieza y la sección donde se publica. Circulaban tres cifras escritas a mano —cinco
+capas, siete piezas, diez nombres— que describían grupos distintos, y ninguna acertaba el
+total (D89).
 
 Cuál toca se decide con dos preguntas — **¿se pulsa?** y, si sí, **¿tiene caja propia?** —
 no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
@@ -198,7 +194,10 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
   sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
   mirarlo (D84).
 - **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
-  porque necesita navegador (D85).
+  porque necesita navegador (D85). **Pero deja sello**: al pasar en verde firma los tokens
+  de color, las superficies y las animaciones que había, y `check:palette` compara ese
+  sello en cada PR. Medir necesita pintar; saber que hay que medir, no — así que la
+  condición de re-medir de la DoD la lee una máquina (D90).
 - **`npm run psi`**: la nota de PageSpeed contra producción, a demanda y nunca como gate
   de CI, porque su variabilidad daría rojos falsos (D49).
 

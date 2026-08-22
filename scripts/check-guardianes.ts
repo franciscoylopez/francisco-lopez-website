@@ -74,6 +74,17 @@ const CASOS: Caso[] = [
     ),
   },
   {
+    guardian: "check:palette",
+    rotura: "aparece una animación propia y el censo no la ha visto (D90)",
+    // Un `@keyframes` es la tercera rama de la condición de re-medir de la DoD, y
+    // la más limpia de mutar: cambia la huella del censo sin tocar ningún token,
+    // así que lo que se comprueba es exactamente este control y no otro.
+    archivo: "app/globals.css",
+    mutar: append(
+      "\n@keyframes guardian-de-mentira {\n  to { opacity: 1; }\n}\n",
+    ),
+  },
+  {
     guardian: "check:experiencias",
     rotura: "un bullet que existe en ES y no en EN",
     archivo: "content/experience-copy/en.ts",
@@ -105,8 +116,20 @@ const CASOS: Caso[] = [
   },
   {
     guardian: "check:indices",
+    rotura: "una pieza de components/ui/ se queda sin declarar su línea",
+    // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja
+    // sobre archivos que ya existen: quitarle la línea a una es la misma
+    // ausencia, y la que el check tiene que ver.
+    archivo: "components/ui/rich.tsx",
+    mutar: (o) => o.replace(/^\/\/ @pieza .*$\n/m, ""),
+  },
+  {
+    guardian: "check:indices",
     rotura: "una decisión se queda sin línea en el índice",
-    archivo: "CLAUDE.md",
+    // El índice vive en la cabecera del propio archivo desde D88. La entrada del
+    // índice empieza por `- D33 ·`; la cabecera de la decisión, por `## D33 ·`,
+    // así que la mutación quita la línea del índice y no la sección.
+    archivo: "DECISIONS.md",
     mutar: (o) => o.replace(/^- D33 · .*$/m, ""),
   },
   {

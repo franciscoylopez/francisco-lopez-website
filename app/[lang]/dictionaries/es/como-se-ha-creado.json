@@ -842,13 +842,15 @@
           "type": "ul",
           "items": [
             "**Antes de un cambio visual grande**, una revisión de diseño que mira dos cosas distintas: si el sistema se está cumpliendo, y si la marca se está expresando. Se verifica en pantalla, no leyendo el código, porque una clase puede estar mal aplicada sin dar un solo error.",
+            "**Al crear una pieza nueva**, una rutina para publicarla en la página que documenta el sistema: contra qué sección hay que compararla, cómo está estructurada una sección y qué subapartados pide. Existe porque la regla de publicarlas llevaba meses escrita y se incumplió dos veces seguidas: lo que faltaba no era la regla, era con qué compararse.",
             "**Al cerrar la sesión**, una rutina de documentación que repasa qué hay que actualizar y lo actualiza, incluida la operación que siempre se olvida, que es retirar lo que ha dejado de ser verdad.",
-            "**Y una para el CV**, que regenera los dos PDF desde la fuente única, comprueba que siguen cabiendo en dos páginas y deja el enlace listo. Existe porque la primera vez que cambié un dato de mi carrera la web quedó al día y el PDF no."
+            "**Y una para el CV**, que regenera los dos PDF desde la fuente única, comprueba que siguen cabiendo en dos páginas y deja el enlace listo. Existe porque la primera vez que cambié un dato de mi carrera la web quedó al día y el PDF no.",
+            "**Y una séptima que es la excepción, y por eso la cuento:** hay tres comprobaciones que necesitan el sitio funcionando delante, así que no hay ningún momento del editor al que atarlas. Están empaquetadas en una rutina que se invoca a mano. Si algo no se puede atar a un evento, al menos que se ate a un comando en vez de a siete pasos que hay que recordar en orden."
           ]
         },
         {
           "type": "p",
-          "text": "Ninguna de las cinco es un prompt que reescribo cada vez. Son instrucciones versionadas dentro del repositorio, y por eso mejoran: cuando una falla, se corrige el archivo, no la siguiente conversación."
+          "text": "Ninguna de las siete es un prompt que reescribo cada vez. Son instrucciones versionadas dentro del repositorio, y por eso mejoran: cuando una falla, se corrige el archivo, no la siguiente conversación."
         },
         { "type": "h3", "text": "Lo que no encuentra: lo que falta" },
         {
