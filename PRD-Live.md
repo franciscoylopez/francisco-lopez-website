@@ -241,6 +241,8 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 - **Primaria**: **envíos del formulario de `/contacto`** (`contact_submit`), contados
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
+  **Hoy el evento llega al `dataLayer` y ahí se queda**: falta su trigger en GTM y marcarlo
+  como evento clave, que es la mitad que vive fuera del repo (D71).
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
   Trayectoria, Contacto) y profundidad de scroll.
 - **Herramienta**: GA4 (captura scroll y descarga de fábrica).
@@ -257,20 +259,12 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 > aquí solo qué entra en cada release y qué queda fuera. El porqué de cada decisión, en
 > **[PRD-Historical.md](./PRD-Historical.md)**.
 
-### V2 — en curso
+### V2 — entregada (2026-08-23)
 
-Tres sprints de valor para el visitante, en el orden que fijan las dependencias. **Los
-tres están entregados**; entre ellos se intercalaron dos bloques cortos. El porqué de cada
-uno, en `PRD-Historical.md`.
-
-| # | Sprint | Estado |
-|---|---|---|
-| 1 | **Deep-dive por experiencia** — cinco páginas y su índice | **En producción** |
-| — | *Sprint Lite* — seis mejoras cortas entre los dos sprints grandes | **En producción** |
-| — | *Método* — el andamiaje del propio método antes de un sprint de contenido | **Entregado** |
-| 2 | **«Cómo se ha creado esta página»** | **En producción** (cerrado el 2026-08-22) |
-| — | *Método II* — el andamiaje otra vez, y el presupuesto de contexto sin margen | **Entregado** (cerrado el 2026-08-22) |
-| 3 | **Footer estructurado y Contacto ampliada** | **En producción** (cerrado el 2026-08-23) |
+Sus tres sprints de valor para el visitante están **en producción**: el deep-dive por
+experiencia, «Cómo se ha creado esta página», y Contacto ampliada con su footer. Entre
+ellos se intercalaron tres bloques de método. El recorrido sprint a sprint, con el porqué
+de cada uno, en `PRD-Historical.md`.
 
 **Traducción a EN**: la arquitectura i18n ya está; se traduce a medida que se añade
 contenido, revisando el EN contra el ES y no al revés (D20).
