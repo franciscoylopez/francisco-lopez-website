@@ -46,5 +46,11 @@ export function proxy(request: NextRequest) {
 export const config = {
   // No corre en assets internos (_next), API, ni rutas con extensión de archivo
   // (favicon.ico, /og/*.jpg, /img/*.webp, /cv/*.pdf, …).
-  matcher: ["/((?!_next|api|.*\\..*).*)"],
+  //
+  // `prototipos` ES TEMPORAL: es la superficie de la skill `/prototype`, que vive
+  // fuera de `app/[lang]/` para no chocar con `check:rutas` ni con `pageMetadata`.
+  // Sin esta exclusión, el enrutado de locale la reescribe a `/es/prototipos/…`,
+  // que no existe, y devuelve 404. SE BORRA junto con `app/prototipos/` al
+  // promover la variante ganadora (P66).
+  matcher: ["/((?!_next|api|prototipos|.*\\..*).*)"],
 };
