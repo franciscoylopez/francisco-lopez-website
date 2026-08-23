@@ -155,7 +155,7 @@ nazca bien sin pedirlo (D30/D39/D61).
 
 | Criterio | Umbral | Estado |
 |---|---|---|
-| PageSpeed / Lighthouse | >90 escritorio y móvil | **100 escritorio · 94-96 móvil** (`npm run psi`, D49) |
+| PageSpeed / Lighthouse | >90 escritorio y móvil | **Cumplido en las catorce**: móvil 95-99 · escritorio 97-100 (`npm run psi -- --registro`, 2026-08-24) |
 | Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** y **cero contornos bajo el 3:1 de WCAG 1.4.11** en las catorce páginas × 2 temas, en reposo y en hover — 370 pares de texto y 276 contornos de control, `npm run censo` (D85/D97); **0 violaciones de axe** |
 | SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las catorce |
 
@@ -164,7 +164,9 @@ siete trampas; aquí solo el criterio y el estado. Lo que importa para el alcanc
 lee las páginas del **registro**, así que una página nueva entra sin que nadie se acuerde
 (D85), y las cifras publicadas salen de `lib/design-values.ts` (D38).
 
-Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumplimiento.
+**La cifra lleva fecha porque una sola corrida no basta**: la misma página del mismo
+despliegue ha dado 72 y 100 en escritorio con veinte minutos de diferencia. Por eso el
+criterio es el umbral, el rango es un dato fechado, y `psi` sigue fuera de CI (D49).
 
 ### Cómo se verifica lo que no ve un compilador
 
