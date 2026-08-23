@@ -91,26 +91,6 @@ const nextConfig: NextConfig = {
     // consistente con layout+not-found anidados, así que se sirve una página 404
     // completa a nivel de enrutado. Ver not-found.md del paquete.
     globalNotFound: true,
-    // El CSS viaja DENTRO del HTML, en vez de en un `<link>` que hay que ir a
-    // buscar (P68.62). No es una preferencia: la auditoría de las catorce páginas
-    // (P68.6) señaló «Render-blocking requests» en 14 de 14, con ~580 ms estimados
-    // en móvil, y al abrir el detalle los culpables eran exactamente nuestras dos
-    // hojas —18,4 KB + 2,5 KB— y nada más. Eso es lo que empuja el `Element render
-    // delay`, que es el 83% del LCP móvil de la home.
-    //
-    // Y ES EL CASO QUE LA PROPIA DOC DE NEXT DESCRIBE PARA ACTIVARLO: CSS atómico
-    // (Tailwind, que solo genera las clases usadas y por eso cabe en 18 KB) y
-    // visitantes que llegan por primera vez. Aquí lo segundo no es una suposición:
-    // es una web de candidatura, donde el visitante típico entra una vez desde
-    // LinkedIn o desde un correo. El precio documentado —que el CSS deja de
-    // cachearse aparte y viaja en cada respuesta— lo pagan los que vuelven, que
-    // son los pocos, y son 18 KB.
-    //
-    // LA CSP YA LO PERMITE: `style-src` lleva 'unsafe-inline' desde D26 por los
-    // style attributes del nav y los reveals. Cuando se retome la CSP estricta con
-    // nonces (V4), esto es una razón MÁS para que `style-src` la necesite, no un
-    // obstáculo nuevo.
-    inlineCss: true,
   },
 };
 
