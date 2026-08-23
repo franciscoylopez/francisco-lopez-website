@@ -138,11 +138,10 @@ Lo que hay que saber al escribir UI:
 
 ### La tarjeta que se pulsa entera
 
-Cuando el objetivo de clic es **la caja completa** y no un renglón —hoy, los dos canales de
-`/contacto`—, es la variante `card` + `size="card"`, no una pieza aparte: las dos preguntas de
-D36 la traen a esta capa. Hover en pastilla `muted`, porque es un canal y no la acción
-destacada de la pantalla. **Se compone a través de `cn()`, nunca suelta**, porque deshace
-clases de la base y `cva` concatena en vez de fusionar (el porqué, en `BRAND-historical.md`).
+Cuando el objetivo de clic es **la caja completa** y no un renglón, es la variante `card` +
+`size="card"`: las dos preguntas de D36 la traen a esta capa. Hover en pastilla `muted`, no
+cian. **Se compone a través de `cn()`, nunca suelta**, porque deshace clases de la base y `cva`
+concatena en vez de fusionar (el porqué, en `BRAND-historical.md`).
 
 ### Controles con estado (toggles, segmentados y pestañas)
 
@@ -253,7 +252,9 @@ el switch del consentimiento, aquí debajo).
   **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
   **«Que pinta» es el límite del metro:** el censo recorre el DOM, así que un token que existe y
-  no se usa le resulta invisible. Ahí estaba `--destructive`, que no llega ni a AA (2026-08-23).
+  no se usa le resulta invisible. Ahí estaba `--destructive` (4,31:1 en claro), y de ahí la
+  regla: **el rojo no es color de texto.** El mensaje va en `--foreground`; `--destructive` marca
+  la forma (icono, filete), donde basta el 3:1 de WCAG 1.4.11 *(2026-08-23)*.
   *(Las tres veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
   ser un hábito, en [`BRAND-historical.md`](./BRAND-historical.md) §La pasada completa.)*
 - **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es

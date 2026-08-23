@@ -131,6 +131,7 @@
 - D93 · El sitio scrolleaba en horizontal por debajo de 349px, y el culpable no era el que decía la tarea
 - D94 · El wordmark del logo escalaba con nada, y el arreglo elegante colapsaba la caja
 - D95 · El formulario de contacto sale por el SMTP de la propia cuenta, y por eso la CSP no se tocó
+- D96 · El disparador de la CSP estricta no se cumplió, y conviene decirlo en vez de dejarlo caducar
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5409,3 +5410,36 @@ sino un tope al envío repetido desde una instancia.
 que usan los dos lados, y **devuelve códigos, no mensajes**: las palabras las pone el
 diccionario de la página, en ES y en EN. Es donde se olvida el i18n de un formulario, y donde
 media página acabaría hablando español en `/en/contacto`.
+
+---
+
+## D96 · El disparador de la CSP estricta no se cumplió, y conviene decirlo en vez de dejarlo caducar — 2026-08-23
+
+**D26 y `PRD-Live.md` §5 dejaron escrito cuándo tocaría la CSP estricta con nonces:** con la
+IA conversacional de V4, «o antes si Contacto ampliada incorpora un endpoint externo». Un
+disparador explícito, que es lo que este método pide para no depender de acordarse.
+
+**Contacto ampliada llegó (P67) y NO incorporó endpoint externo.** El envío es una Server
+Action del mismo origen, así que `form-action 'self'` y `connect-src 'self'` bastaron y
+`next.config.ts` no se tocó (D95). El disparador no se ha cumplido, y esa es la respuesta.
+
+**Lo que sí cambió, y por qué no basta.** El argumento que sostenía la espera decía «sin auth,
+sin formularios, sin contenido de usuario». La tercera parte ya no es cierta. Pero la razón por
+la que eso importaba sí lo sigue siendo: **el sitio no RENDERIZA nada de lo que llega**. El
+mensaje viaja a un buzón de correo, en texto plano, y ninguna página lo pinta. La superficie de
+inyección que la CSP estricta protege sigue sin existir.
+
+**Contra un coste que no ha bajado:** las 28 variantes pasarían a render dinámico —sin SSG, sin
+ISR, sin caché de CDN, según la doc de Next— contra los 4-6 puntos de margen que hoy separan el
+PageSpeed móvil (94-96) del criterio de aceptación de `PRD-Live.md` §5. El premio medido es la
+nota: `csp-implemented-with-unsafe-inline` vale −20 en el grader del HTTP Observatory, así que
+con nonce el techo es 100 = A+.
+
+**Decisión (Francisco, 2026-08-23): no se ejecuta, y la tarea se reescribe con estos hechos en
+vez de dejarla apuntando a una condición que ya se resolvió.** Vuelve a V4, atada a la IA
+conversacional, que sí traerá contenido generado y renderizado.
+
+**Y la lección de método, que es lo reutilizable:** un disparador escrito puede cumplirse **o
+descartarse**, y descartarse también es un resultado que hay que anotar. Sin esta entrada, la
+tarea se habría quedado en el tablero apuntando a un evento que ya ocurrió y no la disparó, que
+es la forma más silenciosa que tiene una condición de caducar.

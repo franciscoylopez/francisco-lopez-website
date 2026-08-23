@@ -211,9 +211,9 @@ veces (D38/D57/D60/D63).
 `main` **la protege el servidor y no la disciplina**: sin push directo, sin merge con CI
 en rojo, sin bypass de admin, y solo `squash` o `rebase` (D68). Escaneo de dependencias
 con Dependabot. Cabeceras de seguridad servidas, con la CSP en allowlist mínima: base +
-GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'`; la CSP
-estricta con nonces va con la IA conversacional (V4), o antes si Contacto ampliada
-incorpora un endpoint externo.
+GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'`: su
+disparador era que Contacto trajera un endpoint externo, y no lo trajo (D95), así que la
+CSP estricta con nonces sigue con la IA conversacional (V4).
 
 El **repositorio es público** desde el 2026-08-19, con `LICENSE` explícito («público para
 consulta, no código abierto») y enlace en el footer.
