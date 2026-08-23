@@ -44,6 +44,7 @@ Partido el **2026-08-09** (P37.685).
 - [La pasada completa, y las tres veces que el «sin excepciones» fue falso (2026-08-18 → 23)](#la-pasada-completa-y-las-tres-veces-que-el-sin-excepciones-fue-falso-2026-08-18-→-23)
 - [El enlace de contenido no tiene contraparte invertida (2026-08-23)](#el-enlace-de-contenido-no-tiene-contraparte-invertida-2026-08-23)
 - [La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`](#la-pasada-de-retirada-del-2026-08-22-y-qué-se-fue-de-brandmd)
+- [La tarjeta salió en negrita con la clase correcta puesta](#la-tarjeta-salió-en-negrita-con-la-clase-correcta-puesta)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -696,3 +697,21 @@ fechada de mediciones que ya se cuentan aquí**. Un documento que se declara «e
 acumula doce fechas no es que esté mal escrito; es que le falta el momento de bajarlas. Ese
 momento existe y es `close-session`, pero solo se dispara si alguien mira el archivo — y por
 eso el número lo vigila `check:contexto` y no la disciplina.
+
+## La tarjeta salió en negrita con la clase correcta puesta
+
+*(2026-08-23, P67.)* La variante `card` nació para los dos canales de `/contacto`, y su
+clase incluye `font-normal` porque la base de `actionVariants` asume un control en línea
+con etiqueta de una palabra: `justify-center`, `whitespace-nowrap`, `font-semibold`. Con la
+clase puesta, el correo de la tarjeta se pintó en **600**.
+
+El motivo es que **`cva` concatena, no fusiona**. Las dos clases llegan al atributo
+`class` y ahí no decide el orden en que se escribieron, decide el ORDEN DEL CSS GENERADO,
+que Tailwind ordena canónicamente por valor: `font-normal` (400) se emite antes que
+`font-semibold` (600), así que gana el segundo. `cn` es `twMerge` y sí resuelve el
+conflicto quedándose con la última, que es la de la variante.
+
+Lo reutilizable no es el dato de Tailwind: es que **una variante que deshace su propia base
+no es autosuficiente**, y que esto se vio en pantalla y no leyendo el código, con la clase
+correcta escrita. Es el punto 5 de §Cómo medir sin equivocarse con otro disfraz — «verifica
+la clase, no solo el color»— aplicado al peso tipográfico.

@@ -89,7 +89,7 @@
         {
           "type": "ul",
           "items": [
-            "**The contact strip is identical on all three pages where it appears**, same channels, same hierarchy, because sending someone back to the homepage to write to you asks for one extra step right when they'd already decided to take it.",
+            "**Contact is resolved on one page, and the rest lead to it.** The homepage strip and the close of the About page end in the same button. They used to repeat the address, the phone, LinkedIn and the CV right there, which was saying four times what a whole page says better. Yes, that is one more click than before: in exchange it gives a form instead of opening an email client plenty of people never set up. The exception is the accessibility page, which shows the address written out and doesn't route through the form, because forcing someone to use it to report a barrier would be a trap the day the barrier was the form.",
             "**The video that opens the About page plays once and freezes on its last frame**, and if the browser reports that its owner prefers less motion, the video isn't even downloaded."
           ]
         },
@@ -105,7 +105,7 @@
         {
           "type": "ul",
           "items": [
-            "**No contact form.** A form adds a backend, an email service, a captcha and an attack surface, to solve something a link already solves. What it does add is a comfortable metric (submissions) instead of an honest one (someone decided to write to you). I kept the link.",
+            "**For months there was no contact form.** A form adds a backend, an email service, a captcha and an attack surface, to solve something a link already solves. I kept it out until I could strip all four away: it arrived at the end, with no captcha (which is an accessibility barrier, and this site publishes a conformance statement) and no external service, because it sends through my own account's email. And it took away the reason I gave for not having one: I said a click on the address was a more honest metric than submissions, and it isn't, it was just the only one I had.",
             "**Not every one of my experiences gets its own page.** The two in marketing and growth don't, even though there's plenty of material: telling them at the same level would dilute the ordering I want people to read me in, which is product first. And the company where the product I co-founded was born doesn't have its own page either, because it isn't a separable story: it's the first chapter of the other one."
           ]
         },
@@ -299,7 +299,7 @@
         },
         {
           "type": "p",
-          "text": "A brand isn't the logo: it's what keeps page thirteen from looking little like page one. That's why the system has two pages published inside the site itself."
+          "text": "A brand isn't the logo: it's what keeps page fourteen from looking little like page one. That's why the system has two pages published inside the site itself."
         },
         {
           "type": "ul",
@@ -548,7 +548,7 @@
       "body": [
         {
           "type": "p",
-          "text": "A portfolio holds nobody's data, has no forms and has no session. It's exactly the kind of site nobody bothers securing properly, and that's exactly why it seemed like the right site to do it on."
+          "text": "A portfolio has no session and holds nobody's data: the only data it receives is whatever someone types into the contact form, and that isn't stored anywhere, it goes to an inbox and that's it. It's exactly the kind of site nobody bothers securing properly, and that's exactly why it seemed like the right site to do it on."
         },
         { "type": "h3", "text": "The headers: the cheap gaps to close" },
         {
@@ -968,7 +968,7 @@
       },
       {
         "type": "p",
-        "text": "The primary metric isn't the visit, it's the click on a contact channel. Since there's no form, email and phone are the most honest proxy of intent I have: someone copying my email has decided something. The secondary ones are CV downloads, measured across the different places it's offered, and scroll depth, which is the one that tells whether the slow reader I talked about at the start actually exists. And with Clarity I'll be watching what those visits look like: what path they take, how they move through the page, anything that helps me learn from whoever's reading it."
+        "text": "The primary metric isn't the visit, it's the message. For months it was the click on a contact channel, because with no form that was the most honest proxy of intent I had: someone copying my address has decided something. Since the form exists, the primary one is the submission, and it's counted when the server confirms it went out, not when someone presses the button: a click that dies on a badly filled field isn't a contact, and counting it inflates exactly the number you want to believe. Clicks on the phone and on the direct address stay as secondary. So are CV downloads, measured across the different places it's offered, and scroll depth, which is the one that tells whether the slow reader I talked about at the start actually exists. And with Clarity I'll be watching what those visits look like: what path they take, how they move through the page, anything that helps me learn from whoever's reading it."
       },
       {
         "type": "p",

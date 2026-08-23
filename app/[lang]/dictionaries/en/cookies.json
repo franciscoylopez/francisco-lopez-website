@@ -1,13 +1,41 @@
 {
   "meta": {
-    "title": "Cookie policy · Francisco López",
-    "description": "What cookies and technologies franciscolopez.es uses, why, and how to manage or withdraw your consent."
+    "title": "Privacy and cookies · Francisco López",
+    "description": "What I do with your data if you get in touch, and what cookies franciscolopez.es uses, why, and how to manage or withdraw your consent."
   },
-  "crumb": "Cookies",
+  "crumb": "Privacy and cookies",
   "kicker": "Legal",
-  "title": "Cookie policy",
+  "title": "Privacy and cookies",
   "updated": "Last updated: {date}",
-  "lead": "This site uses the minimum of cookies and similar technologies. Here's what they are, what they're for, and how to control them. No analytics cookie loads without your consent.",
+  "lead": "Two things here: what I do with your data if you get in touch, and what cookies this site uses. Same approach for both: the minimum, with real names and real deadlines, and no analytics cookie without your consent.",
+  "privacyHeading": "Your data when you write to me",
+  "privacyIntro": "This first part isn't about cookies. It's about what happens to your data if you get in touch, by email or from this site. It's the information required by article 13 of the General Data Protection Regulation.",
+  "privacyBlocks": [
+    {
+      "heading": "Who the controller is",
+      "body": "Francisco Javier López Martínez, in Valencia, Spain. There's no company behind this site: it's personal, and I write and maintain it myself. For anything to do with your data you can [write to me](#contacto)."
+    },
+    {
+      "heading": "What data I process, and what for",
+      "body": "Whatever you give me when you write: your name, your email address and whatever you say in the message. I use it only to read you and reply. No mailing lists, no profiling, no automated decisions, no advertising."
+    },
+    {
+      "heading": "On what legal basis",
+      "body": "Your own initiative. Writing to me is the step before a possible working relationship, so the legal basis is the pre-contractual measures of article 6(1)(b) of the GDPR. That's why there's no box to tick before sending: the processing starts because you decide to write."
+    },
+    {
+      "heading": "Who else sees it",
+      "body": "Nobody else reads your message. The only company involved is Google, which hosts the mailbox (Gmail) and acts as processor. That means an international transfer of data to the United States, covered by the EU to US Data Privacy Framework, which Google has joined. I don't pass your data to anyone for commercial purposes."
+    },
+    {
+      "heading": "How long I keep it",
+      "body": "Your message stays in the mailbox for as long as the conversation makes sense, and at most one year from the last email. After that I delete it, unless there's a legal obligation to keep it."
+    },
+    {
+      "heading": "What rights you have",
+      "body": "You can ask me for access to your data, for it to be corrected or deleted, and you can also object to the processing, restrict it, or ask for it back in a portable format. Just write to the address at the end of this page. And if you think I've got it wrong, you can complain to the [Spanish Data Protection Agency](https://www.aepd.es)."
+    }
+  ],
   "whatHeading": "What cookies are",
   "whatBody": "Cookies are small files a site stores in your browser. Equivalent technologies are also used, such as the browser's local storage (localStorage). Some are essential for the site to work; others, like analytics, are only used if you allow them.",
   "useHeading": "What this site uses",

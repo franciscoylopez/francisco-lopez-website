@@ -152,6 +152,36 @@ export const actionVariants = cva(
         // `transparent` y los seis call sites normales repetían el `--card` a
         // mano; el LinkedIn del footer no lo escribió y se quedó sin caja.
         icon: "icon-chrome border-border text-foreground border",
+        // LA TARJETA QUE SE PULSA ENTERA. Nace con los dos canales de `/contacto`
+        // (P67), donde el objetivo no es un renglón sino una caja con rótulo y
+        // valor en dos líneas.
+        //
+        // POR QUÉ ES UNA VARIANTE DE AQUÍ Y NO UNA PIEZA APARTE: las dos preguntas
+        // de D36 la traen a esta capa —se pulsa, y tiene caja propia—, así que
+        // ponerla fuera sería la segunda fuente del aspecto de un accionable que
+        // esta capa existe para impedir. El prototipo de P66 la escribió con clases
+        // sueltas y dejó anotado que eso era deuda, no diseño.
+        //
+        // Lo que sí hace falta es DESHACER media base, y por eso está escrito y no
+        // heredado: la base asume un control en línea con etiqueta de una palabra
+        // (`justify-center`, `whitespace-nowrap`, `font-semibold`) y una tarjeta es
+        // lo contrario en los tres ejes. Va con `size="card"`, que es el único que
+        // trae padding de caja en vez de padding de botón.
+        //
+        // Y POR ESO ESTA VARIANTE SE COMPONE SIEMPRE A TRAVÉS DE `cn()`, no suelta:
+        // `cva` concatena, no fusiona, así que `font-semibold` de la base y
+        // `font-normal` de aquí llegan las dos al `class` y decide el ORDEN DEL CSS
+        // generado, que Tailwind ordena por valor —o sea que gana el semibold—. Se
+        // vio en pantalla, no leyendo el código: la tarjeta salió en negrita con la
+        // clase correcta puesta. `cn` es `twMerge`, y ahí gana la última, que es
+        // esta. Es el punto 5 de `BRAND.md` §Cómo medir con otro disfraz.
+        //
+        // El hover es la pastilla `muted`, como el resto de lo que no es CTA: la
+        // tarjeta es un canal, no la acción destacada de la página. Y no necesita
+        // `data-surface`: `bg-card` y `hover:bg-muted` ya recalculan el atenuado
+        // por sí solos en `globals.css` (D39/D61), así que el rótulo de dentro se
+        // lee bien en los dos estados sin que el call site pida nada.
+        card: "border-border bg-card hover:bg-muted focus-visible:bg-muted w-full justify-start rounded-lg border text-left font-normal whitespace-normal",
       },
       // El tamaño del icono va con el del texto y no lo escribe el call site
       // (`[&_svg]`, sin `>` a propósito: el glifo puede ir envuelto). `shrink-0`
@@ -161,6 +191,9 @@ export const actionVariants = cva(
         md: "min-h-[44px] px-[1.35rem] text-[0.92rem] [&_svg]:size-[17px]",
         lg: "min-h-[48px] px-[1.6rem] text-[1rem] [&_svg]:size-[18px]",
         icon: "min-h-[44px] min-w-[44px] [&_svg]:size-[18px]",
+        // Padding de CAJA, no de botón: el único tamaño que no aprieta el
+        // contenido contra los lados. Va siempre con `variant="card"`.
+        card: "min-h-[44px] gap-[0.75rem] px-[1rem] py-[0.85rem] text-[0.9rem] [&_svg]:size-[18px]",
       },
       // Estado de las variantes `toggle-*`. Se ignora en el resto.
       on: { true: "", false: "" },

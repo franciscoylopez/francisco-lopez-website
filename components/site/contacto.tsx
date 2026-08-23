@@ -1,4 +1,4 @@
-import { ContactActions, type ContactActionsDict } from "./contact-actions";
+import { ContactCta, type ContactActionsDict } from "./contact-actions";
 import { WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
 
@@ -19,10 +19,11 @@ export type ContactoDict = ContactActionsDict & {
 // sensible a la superficie» de globals.css.
 export function Contacto({
   dict,
-  cvHref,
+  contactoHref,
 }: {
   dict: ContactoDict;
-  cvHref: string;
+  /** Desde P67 el CTA de esta franja lleva a la página de contacto. */
+  contactoHref: string;
 }) {
   return (
     <section
@@ -39,7 +40,7 @@ export function Contacto({
         </div>
 
         <div data-reveal className="mt-[clamp(2.25rem,4.5vw,3rem)]">
-          <ContactActions dict={dict} cvHref={cvHref} />
+          <ContactCta label={dict.emailCta} href={contactoHref} />
         </div>
       </div>
     </section>

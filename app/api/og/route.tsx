@@ -89,8 +89,12 @@ const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
     en: { title: "Design System", kicker: "Design foundations" },
   },
   cookies: {
-    es: { title: "Política de cookies", kicker: "Legal" },
-    en: { title: "Cookie policy", kicker: "Legal" },
+    es: { title: "Privacidad y cookies", kicker: "Legal" },
+    en: { title: "Privacy and cookies", kicker: "Legal" },
+  },
+  contacto: {
+    es: { title: "Hablemos", kicker: "Contacto" },
+    en: { title: "Let's talk", kicker: "Contact" },
   },
   "sobre-mi": {
     es: { title: "Sobre mí", kicker: "Quién hay detrás" },

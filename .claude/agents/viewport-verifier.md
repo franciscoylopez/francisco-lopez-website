@@ -67,6 +67,14 @@ da cuatro pares de 1,06 · 1,11 · 1,42 · 2,05 — el aspecto exacto de un fall
 Esperar «un poco más» no vale: `.link-content` tarda 380 ms, así que cualquier espera
 prudente de 300-400 ms cae justo dentro.
 
+**«Cada medición» significa CADA LLAMADA, no cada viewport** *(2026-08-23)*. Congelar una vez
+al entrar en un viewport y encadenar después los tres temas **no basta**: la conmutación de
+tema vuelve a disparar la transición, así que la segunda y la tercera medición miden a mitad
+de camino. Se comprobó al verificar `/contacto`, y el síntoma fue el de siempre: 7-10
+violaciones de `color-contrast` con `#2b2e31` sobre `#1a1e22` (1,15-1,22) que desaparecían al
+volver a congelar justo antes. **Congelar → medir → descongelar, una vez por cada axe y por
+cada censo.** Si dos pasadas del mismo par no dan lo mismo, el fallo es del método.
+
 ```bash
 agent-browser eval "window.__unfreeze = window.freezeMotion(); 'frozen'"
 # …medir…

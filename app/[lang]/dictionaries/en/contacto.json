@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "title": "Contact · Francisco López",
+    "description": "Write to me through the form, by email or by phone. Reply within 24 hours."
+  },
+  "crumb": "Contact",
+  "kicker": "Contact",
+  "title": "Let's talk",
+  "lead": "If you've made it this far, something caught your eye, so thank you for your time. If you want to build products that create great experiences, you're in the right place. Use whichever channel suits you and let's talk product.",
+  "channels": {
+    "label": "Ways to reach me",
+    "email": "Email",
+    "phone": "Phone"
+  },
+  "form": {
+    "title": "Write to me",
+    "respuesta": "You'll have a reply within 24 hours",
+    "labels": {
+      "nombre": "Name",
+      "email": "Email",
+      "mensaje": "Message"
+    },
+    "placeholders": {
+      "nombre": "Marta Ruiz",
+      "email": "marta@company.com",
+      "mensaje": "Tell me what you're building and what you need in product."
+    },
+    "submit": "Send message",
+    "sending": "Sending",
+    "summary": "Check these fields before sending:",
+    "errors": {
+      "nombre": {
+        "required": "Add your name so I know who you are.",
+        "long": "That name doesn't fit. First name is plenty."
+      },
+      "email": {
+        "required": "I need an address to reply to.",
+        "email": "That address doesn't look complete. Check the part after the at sign.",
+        "long": "That address is longer than email allows."
+      },
+      "mensaje": {
+        "required": "Tell me something, even if it's two lines.",
+        "short": "A bit more context helps. That's {n} characters out of {min}.",
+        "long": "That got long. Trim it down and we'll pick it up by email."
+      }
+    },
+    "failed": {
+      "rate": "You've sent several messages in a row. Give it a while, or write straight to the address above.",
+      "server": "I couldn't send it. It's not your fault: write to the address above and it reaches me all the same."
+    },
+    "sent": {
+      "title": "Message sent",
+      "body": "I'll reply to the address you left. If you see nothing in a couple of days, check your spam folder or give me a call.",
+      "again": "Write another"
+    },
+    "legal": "I use your details only to reply to you, and they aren't shared with anyone else. You can ask for access, correction or deletion at any time.",
+    "legalLink": "Privacy and cookies",
+    "honeypot": "Leave this field empty"
+  }
+}

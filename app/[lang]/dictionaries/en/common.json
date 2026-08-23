@@ -7,6 +7,7 @@
     "skipToContent": "Skip to content",
     "homeAria": "Home · Francisco López",
     "downloadCv": "Download CV",
+    "contacto": "Contact",
     "sobreMi": "About me",
     "menu": "Menu",
     "toggleTheme": "Toggle theme",
@@ -19,7 +20,7 @@
     "brandKit": "Brand Kit",
     "designSystem": "Design System",
     "accesibilidad": "Accessibility",
-    "cookies": "Cookie policy",
+    "cookies": "Privacy and cookies",
     "linkedinAria": "LinkedIn",
     "githubAria": "This site's source code on GitHub"
   },
@@ -78,10 +79,7 @@
   "contacto": {
     "eyebrow": "The next step",
     "title": "Let's talk",
-    "intro": "If product sits at the core of your company and you're building genuinely great experiences for your users through discovery, applied AI and data, I think we'd be a good fit. Senior Product Manager with 10+ years in B2B and B2C SaaS, happy working remote or hybrid, based in Spain. Email or call me directly.",
-    "emailCta": "Email me",
-    "phoneLabel": "Phone",
-    "linkedinLabel": "LinkedIn",
-    "cvCta": "Download CV"
+    "intro": "If product sits at the core of your company and you're building genuinely great experiences for your users through discovery, applied AI and data, I think we'd be a good fit. Senior Product Manager with 10+ years in B2B and B2C SaaS, happy working remote or hybrid, based in Spain. Write to me and let's talk.",
+    "emailCta": "Get in touch"
   }
 }

@@ -317,7 +317,7 @@
         "kicker": "Acción destacada",
         "cls": "solid",
         "rule": "El único relleno cian de la pantalla. Al pasar el cursor, el relleno se mezcla hacia el color de texto en vez de aclararse.",
-        "note": "Mezclar sube el contraste del texto en hover; bajar la opacidad lo habría bajado. Hoy solo lo lleva el email de la franja de contacto."
+        "note": "Mezclar sube el contraste del texto en hover; bajar la opacidad lo habría bajado. Hoy lo llevan el botón que lleva a Contacto y el de enviar el formulario."
       },
       {
         "kicker": "Acción de contenido",
@@ -348,9 +348,15 @@
         "cls": "icon",
         "rule": "Controles sin etiqueta: la misma pastilla que el resto del chrome, ocupando los 44px completos del objetivo táctil.",
         "note": "El tamaño mínimo vive en el componente, no en cada llamada. Cuando se escribía a mano, el icono del footer se quedó en 40px."
+      },
+      {
+        "kicker": "Tarjeta pulsable",
+        "cls": "card",
+        "rule": "Cuando lo que se pulsa es la caja entera y no un renglón de texto: fondo de tarjeta, pastilla gris al pasar el cursor y padding de caja en vez de padding de botón.",
+        "note": "Su hover es gris y no cian porque es un canal, no la acción destacada de la pantalla. Hoy la llevan las dos vías de contacto de su página."
       }
     ],
-    "demoSolid": "Escríbeme",
+    "demoSolid": "Contacta conmigo",
     "demoOutlinePrimary": "Descargar CV",
     "demoNeutral": "Cancelar",
     "demoGhost": "Preferencias",
@@ -363,14 +369,16 @@
       "Todo lo que ocurre dentro de la página va sin él: aceptar, guardar, cerrar, elegir una pestaña o navegar por el sitio. «Gestionar preferencias» abre un diálogo, así que no lo lleva.",
       "El icono va delante de la etiqueta, porque clasifica la acción. Solo en el botón sólido va detrás y avanza dos píxeles al pasar el cursor: ahí marca la dirección del viaje."
     ],
-    "iconFoot": "El tamaño, el hueco y el lado los pone la variante, no cada uso. Cuando los ponía cada uso, el mismo icono de descarga medía 15, 17 y 18 píxeles en tres sitios del sitio, y «Descargar CV» aparecía con icono en dos de sus tres apariciones.",
+    "iconFoot": "El tamaño, el hueco y el lado los pone la variante, no cada uso. Cuando los ponía cada uso, el mismo icono de descarga medía 15, 17 y 18 píxeles en tres sitios del sitio, y «Descargar CV» aparecía con icono en dos de las tres apariciones que tenía entonces.",
     "ruleTitle": "Por qué esto es un componente y no una convención",
     "rule": [
       "Antes de existir, la misma decisión estaba escrita a mano en seis archivos: dos radios para la misma caja, cuatro comportamientos de hover para el mismo botón y el objetivo táctil de 44px copiado catorce veces.",
       "Ningún control se escribe con clases sueltas. Si un caso no encaja en ninguna variante, se crea la variante; si es una excepción, se documenta con fecha.",
       "Cambiar un hover es cambiar una línea, y llega a todos los botones del sitio a la vez."
     ],
-    "ruleFoot": "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio. Antes convivían tres, y una de ellas dibujaba un halo blanco en tema oscuro."
+    "ruleFoot": "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio. Antes convivían tres, y una de ellas dibujaba un halo blanco en tema oscuro.",
+    "demoCardLabel": "Correo",
+    "demoCardValue": "hola@ejemplo.com"
   },
   "etiquetas": {
     "num": "10 — Etiquetas",
@@ -820,5 +828,42 @@
     "shareCopiedAnnounce": "Enlace copiado al portapapeles",
     "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
     "railHint": "Igual que en la página real, pero contenidos a este panel: el riel de índice y el dock de compartir se activan al desplazar esta sección hasta el centro de la ventana."
+  },
+  "formulario": {
+    "num": "16 — Formulario",
+    "title": "La primera superficie que recibe, no la que enseña",
+    "lead": "Hasta que existió el formulario de contacto, esta web era de solo lectura entera. Un campo no es un botón pequeño: tiene etiqueta, tiene estado de error y tiene que decirlo en voz alta.",
+    "fieldTitle": "El campo",
+    "fieldLead": "Etiqueta y control son una sola pieza, y el suelo táctil vive en el control, que es donde se pulsa.",
+    "fieldKicker": "En reposo",
+    "fieldRule": "La etiqueta va siempre visible y unida al campo, nunca dentro como texto de ayuda: un marcador de posición desaparece al escribir y deja el campo sin nombre.",
+    "fieldNote": "Alto mínimo de 44px, el mismo suelo táctil que los botones. El anillo de foco no lo pone esta pieza: lo pone la regla global, igual que en todo lo demás que se puede enfocar.",
+    "errorKicker": "Con error",
+    "errorRule": "El mensaje se ata al campo, así que un lector de pantalla lo oye al llegar a él y no solo al intentar enviar.",
+    "errorNote": "El borde rojo y el icono marcan la forma; el texto va en el color normal. El rojo del sistema no llega al contraste que pide un texto, y ese es también el motivo de que el error nunca dependa solo del color.",
+    "summaryTitle": "Cuando el envío falla",
+    "summaryLead": "Un aviso que se anuncia solo, sin robar el foco, y que enumera qué campos hay que revisar.",
+    "summaryKicker": "Resumen de errores",
+    "summaryRule": "Aparece al intentar enviar y se anuncia como alerta. El foco lo mueve el formulario al primer campo que falla: dos saltos a la vez dejarían al lector de pantalla sin saber dónde está.",
+    "summaryNote": "La misma pieza sirve para el aviso sin lista, que es el que se ve si el envío no sale del servidor.",
+    "demoLabel": "Correo",
+    "demoPlaceholder": "marta@empresa.com",
+    "demoError": "Ese correo no parece completo. Revisa la parte de después de la arroba.",
+    "demoSummary": "Revisa estos campos antes de enviar:",
+    "demoSummaryItems": ["Nombre", "Correo"],
+    "redTitle": "El rojo no es color de texto",
+    "redRule": [
+      "El rojo del sistema mide 4,31:1 sobre el fondo claro: no llega ni al mínimo que pide un texto.",
+      "Así que el mensaje se escribe en el color de texto normal, y el rojo se queda en el borde y el icono, donde el umbral es más bajo y sí lo cumple.",
+      "De regalo, el error deja de estar codificado solo por color."
+    ],
+    "redFoot": "El censo de contraste no podía haber encontrado esto: recorre lo que la web pinta, y ese color no se pintaba en ninguna parte hasta que existió el formulario.",
+    "serverTitle": "Lo que valida de verdad es el servidor",
+    "serverRule": [
+      "La validación del navegador existe para no gastar un viaje en un campo vacío, no para decidir.",
+      "La misma regla corre en el servidor, porque quien envía a mano no ha ejecutado la del navegador.",
+      "Y devuelve códigos, no frases: las palabras las pone el diccionario, en los dos idiomas."
+    ],
+    "serverFoot": "Es donde se olvida el idioma de un formulario: la mitad de la página traducida y los errores hablando siempre en el mismo."
   }
 }

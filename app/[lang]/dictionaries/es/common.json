@@ -7,6 +7,7 @@
     "skipToContent": "Saltar al contenido",
     "homeAria": "Inicio · Francisco López",
     "downloadCv": "Descargar CV",
+    "contacto": "Contacto",
     "sobreMi": "Sobre mí",
     "menu": "Menú",
     "toggleTheme": "Cambiar tema",
@@ -19,7 +20,7 @@
     "brandKit": "Brand Kit",
     "designSystem": "Design System",
     "accesibilidad": "Accesibilidad",
-    "cookies": "Política de cookies",
+    "cookies": "Privacidad y cookies",
     "linkedinAria": "LinkedIn",
     "githubAria": "Código de este sitio en GitHub"
   },
@@ -78,10 +79,7 @@
   "contacto": {
     "eyebrow": "El siguiente paso",
     "title": "¿Hablamos?",
-    "intro": "Si en tu empresa el producto está en el centro y construís experiencias increíbles para vuestros usuarios a través del discovery, la IA aplicada y el dato, creo que encajamos. Senior Product Manager con 10+ años en SaaS B2B y B2C, cómodo en remoto o híbrido desde España. Escríbeme o llámame directamente.",
-    "emailCta": "Escríbeme",
-    "phoneLabel": "Teléfono",
-    "linkedinLabel": "LinkedIn",
-    "cvCta": "Descargar CV"
+    "intro": "Si en tu empresa el producto está en el centro y construís experiencias increíbles para vuestros usuarios a través del discovery, la IA aplicada y el dato, creo que encajamos. Senior Product Manager con 10+ años en SaaS B2B y B2C, cómodo en remoto o híbrido desde España. Escríbeme y hablamos.",
+    "emailCta": "Contacta conmigo"
   }
 }

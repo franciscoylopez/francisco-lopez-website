@@ -1,4 +1,4 @@
-import { Download, Mail, Menu, Moon } from "lucide-react";
+import { ArrowRight, Download, Mail, Menu, Moon } from "lucide-react";
 import { SectionHeader } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
@@ -46,7 +46,7 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
                     href="#top"
                     className={actionVariants({ variant: "solid" })}
                   >
-                    <Mail aria-hidden="true" />
+                    <ArrowRight aria-hidden="true" />
                     {t.demoSolid}
                   </a>
                 )}
@@ -117,6 +117,35 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
                       {seg}
                     </span>
                   ))}
+                {/* La tarjeta pulsable. Va con `wide` de facto —ocupa el ancho
+                    de su celda— porque su demo es la caja entera, no un control
+                    centrado: encogerla al centro enseñaría otra cosa.
+                    `cn()` NO es decorativo aquí: `cva` concatena y no fusiona,
+                    así que sin él ganaría el `font-semibold` de la base y la
+                    demo saldría en negrita mientras la tarjeta real no. Es
+                    exactamente el fallo que se cazó al construirla. */}
+                {i === 6 && (
+                  <a
+                    href="#top"
+                    className={cn(
+                      actionVariants({ variant: "card", size: "card" }),
+                      "max-w-[19rem]",
+                    )}
+                  >
+                    <Mail
+                      aria-hidden="true"
+                      className="text-muted-foreground shrink-0"
+                    />
+                    <span className="min-w-0">
+                      <span className="text-muted-foreground block text-[0.75rem] tracking-[0.06em] uppercase">
+                        {t.demoCardLabel}
+                      </span>
+                      <span className="text-foreground block [overflow-wrap:anywhere]">
+                        {t.demoCardValue}
+                      </span>
+                    </span>
+                  </a>
+                )}
                 {i === 5 && (
                   <>
                     <a

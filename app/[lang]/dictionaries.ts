@@ -9,6 +9,7 @@ import type esBrandKit from "./dictionaries/es/brand-kit.json";
 import type esDesignSystem from "./dictionaries/es/design-system.json";
 import type esAccesibilidad from "./dictionaries/es/accesibilidad.json";
 import type esCookies from "./dictionaries/es/cookies.json";
+import type esContacto from "./dictionaries/es/contacto.json";
 import type esComoSeHaCreado from "./dictionaries/es/como-se-ha-creado.json";
 import type esTrayectoriaComun from "./dictionaries/es/trayectoria/comun.json";
 import type esTrayectoriaIndice from "./dictionaries/es/trayectoria/indice.json";
@@ -50,6 +51,13 @@ export type BrandKitDict = typeof esBrandKit;
 export type DesignSystemDict = typeof esDesignSystem;
 export type AccesibilidadDict = typeof esAccesibilidad;
 export type CookiesDict = typeof esCookies;
+/**
+ * El copy de la página de Contacto (P67). NO entra en la intersección
+ * `Dictionary`, y no es un olvido: `common.json` ya tiene una rama `contacto`
+ * —la franja compartida de D29— y las dos se pisarían. Los componentes de la
+ * página se tipan contra `ContactoPaginaDict` directamente.
+ */
+export type ContactoPaginaDict = typeof esContacto;
 export type ComoSeHaCreadoDict = typeof esComoSeHaCreado;
 
 /**
@@ -116,6 +124,11 @@ export const getAccesibilidad = cargador<AccesibilidadDict>({
 export const getCookies = cargador<CookiesDict>({
   es: () => import("./dictionaries/es/cookies.json").then((m) => m.default),
   en: () => import("./dictionaries/en/cookies.json").then((m) => m.default),
+});
+
+export const getContacto = cargador<ContactoPaginaDict>({
+  es: () => import("./dictionaries/es/contacto.json").then((m) => m.default),
+  en: () => import("./dictionaries/en/contacto.json").then((m) => m.default),
 });
 
 export const getComoSeHaCreado = cargador<ComoSeHaCreadoDict>({

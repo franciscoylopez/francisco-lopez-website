@@ -1,0 +1,60 @@
+{
+  "meta": {
+    "title": "Contacto · Francisco López",
+    "description": "Escríbeme por el formulario, por correo o por teléfono. Respuesta en 24 horas."
+  },
+  "crumb": "Contacto",
+  "kicker": "Contacto",
+  "title": "Hablemos",
+  "lead": "Si has llegado hasta aquí es porque algo te ha llamado la atención, así que gracias por tu tiempo. Si quieres crear productos que generen experiencias increíbles, estás en el sitio adecuado. Usa cualquiera de las vías de contacto disponibles y hablemos de producto.",
+  "channels": {
+    "label": "Vías de contacto",
+    "email": "Correo",
+    "phone": "Teléfono"
+  },
+  "form": {
+    "title": "Escríbeme",
+    "respuesta": "Tendrás una respuesta en 24 horas",
+    "labels": {
+      "nombre": "Nombre",
+      "email": "Correo",
+      "mensaje": "Mensaje"
+    },
+    "placeholders": {
+      "nombre": "Marta Ruiz",
+      "email": "marta@empresa.com",
+      "mensaje": "Cuéntame qué construís y qué buscáis en producto."
+    },
+    "submit": "Enviar mensaje",
+    "sending": "Enviando",
+    "summary": "Revisa estos campos antes de enviar:",
+    "errors": {
+      "nombre": {
+        "required": "Escribe tu nombre para saber quién eres.",
+        "long": "Ese nombre no cabe. Con el de pila me sobra."
+      },
+      "email": {
+        "required": "Necesito un correo al que responderte.",
+        "email": "Ese correo no parece completo. Revisa la parte de después de la arroba.",
+        "long": "Esa dirección es más larga de lo que permite el correo."
+      },
+      "mensaje": {
+        "required": "Cuéntame algo, aunque sean dos líneas.",
+        "short": "Un poco más de contexto ayuda. Van {n} caracteres de {min}.",
+        "long": "Se ha alargado bastante. Resúmelo y ya lo hablamos por correo."
+      }
+    },
+    "failed": {
+      "rate": "Has enviado varios mensajes seguidos. Espera un rato o escríbeme directamente al correo de aquí arriba.",
+      "server": "No he podido enviarlo. No es culpa tuya: escríbeme al correo de aquí arriba y me llega igual."
+    },
+    "sent": {
+      "title": "Mensaje enviado",
+      "body": "Te contesto al correo que dejaste. Si en un par de días no ves nada, mira en spam o llámame.",
+      "again": "Escribir otro"
+    },
+    "legal": "Tus datos los uso solo para contestarte y no se ceden a nadie más. Puedes pedir acceso, corrección o borrado cuando quieras.",
+    "legalLink": "Privacidad y cookies",
+    "honeypot": "No rellenes este campo"
+  }
+}

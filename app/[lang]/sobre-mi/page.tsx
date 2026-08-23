@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 
 import { PageShell } from "@/components/site/page-shell";
 import { SobreMi } from "@/components/site/sobre-mi";
-import { locales, isLocale, cvPath, pagePath } from "@/lib/i18n/config";
+import { locales, isLocale, pagePath } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
 import { getCommon, getSobreMi } from "../dictionaries";
 
@@ -47,7 +47,7 @@ export default async function SobreMiPage({ params }: LangParams) {
         contacto={common.contacto}
         breadcrumb={common.breadcrumb}
         homeHref={pagePath(lang)}
-        cvHref={cvPath(lang)}
+        contactoHref={pagePath(lang, "contacto")}
       />
     </PageShell>
   );

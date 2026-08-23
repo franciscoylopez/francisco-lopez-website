@@ -130,6 +130,8 @@
 - D92 · Quién cierra los PR de Dependabot, y por qué la allowlist no son «las de desarrollo»
 - D93 · El sitio scrolleaba en horizontal por debajo de 349px, y el culpable no era el que decía la tarea
 - D94 · El wordmark del logo escalaba con nada, y el arreglo elegante colapsaba la caja
+- D95 · El formulario de contacto sale por el SMTP de la propia cuenta, y por eso la CSP no se tocó
+- D96 · El disparador de la CSP estricta no se cumplió, y conviene decirlo en vez de dejarlo caducar
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5364,3 +5366,80 @@ wordmark a mano con su propio par de números. Están **dentro de la banda**, as
 incumplimiento; lo que hay es tres sitios que saben la misma proporción. Unificarlos es
 posible ahora que el componente la implementa, pero el nav además **anima** la suya con el
 scroll (regla 6), así que no es un reemplazo mecánico.
+
+---
+
+## D95 · El formulario de contacto sale por el SMTP de la propia cuenta, y por eso la CSP no se tocó — 2026-08-23
+
+**Contexto.** P67 estrena la primera superficie del sitio que RECIBE algo escrito por otra
+persona. La tarea dejó tres cosas por decidir antes de escribir código: dónde aterriza el
+envío, cómo se para el spam sin CAPTCHA, y qué había que abrir en la CSP.
+
+**Decisión 1 — el transporte: SMTP de Google con contraseña de aplicación**, no un proveedor
+transaccional. Los dos candidatos costaban cero y ninguno pedía DNS, así que lo que decidió
+fue otra cosa: un proveedor externo es un **encargado del tratamiento nuevo**, con su
+transferencia internacional, y habría que declararlo en el bloque del artículo 13 que P66.5
+acababa de publicar, donde hoy pone que «la única empresa que interviene es Google». El coste
+del externo era permanente y legal; el del SMTP es operativo (una contraseña de aplicación que
+Francisco genera, y un envío algo más lento desde serverless). `From` es la dirección real y
+`Reply-To` el visitante: mandar `From: visitante@…` desde aquí falla SPF y DKIM a la vez, que
+es el patrón exacto del spoofing.
+
+**Decisión 2 — el envío es una Server Action, no un endpoint externo. Y eso es lo que hizo que
+la CSP no cambiara.** El POST sale al MISMO ORIGEN, así que `form-action 'self'` y
+`connect-src 'self'`, que ya estaban, lo permiten. El disparador escrito de D26 y de
+`PRD-Live.md` §5 era literalmente «o antes si Contacto ampliada incorpora un endpoint
+externo»: **no se ha cumplido**, así que la CSP estricta con nonces no está forzada por esta
+tarea. Lo que sí ha cambiado es el otro platillo, y conviene no confundirlos: el argumento de
+P67.1 para no hacerla decía «sin formularios, sin contenido de usuario», y esa frase ya no es
+cierta. La decisión se toma en su tarea, con ese matiz, no aquí.
+
+Y de regalo: con la acción en `action={…}` el formulario **funciona sin JavaScript**. Todo lo
+de cliente —validar al salir de un campo, mover el foco al primer error, el estado «enviando»—
+es comodidad encima de eso, nunca el mecanismo.
+
+**Decisión 3 — anti-spam sin CAPTCHA**, porque un CAPTCHA es una barrera de accesibilidad y
+este sitio publica una declaración de conformidad. Tres capas, y las tres con su límite
+escrito: campo trampa que ninguna persona ve (se contesta «enviado» y no se envía nada, porque
+decirle a un bot que lo has detectado solo le enseña a evitarlo), filtro de velocidad con el
+sello puesto AL MONTAR —la página es estática, así que calcularlo al renderizar daría la hora
+del build— y tope por IP **en memoria del proceso**, que en serverless no es un límite duro
+sino un tope al envío repetido desde una instancia.
+
+**Lo que se validó en el servidor y no en el cliente.** La validación vive en un módulo puro
+que usan los dos lados, y **devuelve códigos, no mensajes**: las palabras las pone el
+diccionario de la página, en ES y en EN. Es donde se olvida el i18n de un formulario, y donde
+media página acabaría hablando español en `/en/contacto`.
+
+---
+
+## D96 · El disparador de la CSP estricta no se cumplió, y conviene decirlo en vez de dejarlo caducar — 2026-08-23
+
+**D26 y `PRD-Live.md` §5 dejaron escrito cuándo tocaría la CSP estricta con nonces:** con la
+IA conversacional de V4, «o antes si Contacto ampliada incorpora un endpoint externo». Un
+disparador explícito, que es lo que este método pide para no depender de acordarse.
+
+**Contacto ampliada llegó (P67) y NO incorporó endpoint externo.** El envío es una Server
+Action del mismo origen, así que `form-action 'self'` y `connect-src 'self'` bastaron y
+`next.config.ts` no se tocó (D95). El disparador no se ha cumplido, y esa es la respuesta.
+
+**Lo que sí cambió, y por qué no basta.** El argumento que sostenía la espera decía «sin auth,
+sin formularios, sin contenido de usuario». La tercera parte ya no es cierta. Pero la razón por
+la que eso importaba sí lo sigue siendo: **el sitio no RENDERIZA nada de lo que llega**. El
+mensaje viaja a un buzón de correo, en texto plano, y ninguna página lo pinta. La superficie de
+inyección que la CSP estricta protege sigue sin existir.
+
+**Contra un coste que no ha bajado:** las 28 variantes pasarían a render dinámico —sin SSG, sin
+ISR, sin caché de CDN, según la doc de Next— contra los 4-6 puntos de margen que hoy separan el
+PageSpeed móvil (94-96) del criterio de aceptación de `PRD-Live.md` §5. El premio medido es la
+nota: `csp-implemented-with-unsafe-inline` vale −20 en el grader del HTTP Observatory, así que
+con nonce el techo es 100 = A+.
+
+**Decisión (Francisco, 2026-08-23): no se ejecuta, y la tarea se reescribe con estos hechos en
+vez de dejarla apuntando a una condición que ya se resolvió.** Vuelve a V4, atada a la IA
+conversacional, que sí traerá contenido generado y renderizado.
+
+**Y la lección de método, que es lo reutilizable:** un disparador escrito puede cumplirse **o
+descartarse**, y descartarse también es un resultado que hay que anotar. Sin esta entrada, la
+tarea se habría quedado en el tablero apuntando a un evento que ya ocurrió y no la disparó, que
+es la forma más silenciosa que tiene una condición de caducar.

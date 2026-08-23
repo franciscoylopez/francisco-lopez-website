@@ -1,13 +1,41 @@
 {
   "meta": {
-    "title": "Política de cookies · Francisco López",
-    "description": "Qué cookies y tecnologías usa franciscolopez.es, con qué finalidad, y cómo gestionar o retirar tu consentimiento."
+    "title": "Privacidad y cookies · Francisco López",
+    "description": "Qué hago con tus datos si me escribes y qué cookies usa franciscolopez.es, con qué finalidad, y cómo gestionar o retirar tu consentimiento."
   },
-  "crumb": "Cookies",
+  "crumb": "Privacidad y cookies",
   "kicker": "Legal",
-  "title": "Política de cookies",
+  "title": "Privacidad y cookies",
   "updated": "Última actualización: {date}",
-  "lead": "Esta web usa el mínimo de cookies y tecnologías similares. Aquí te explico cuáles, para qué sirven y cómo controlarlas. Ninguna cookie de analítica se activa sin tu consentimiento.",
+  "lead": "Aquí te cuento dos cosas: qué hago con tus datos si te pones en contacto conmigo, y qué cookies usa esta web. En las dos, el mismo criterio: el mínimo, con nombres y plazos concretos, y ninguna cookie de analítica sin tu consentimiento.",
+  "privacyHeading": "Tus datos cuando me escribes",
+  "privacyIntro": "Esta primera parte no va de cookies, sino de qué pasa con tus datos si te pones en contacto conmigo, por correo o desde esta web. Es la información que pide el artículo 13 del Reglamento General de Protección de Datos.",
+  "privacyBlocks": [
+    {
+      "heading": "Quién es el responsable",
+      "body": "Francisco Javier López Martínez, en Valencia (España). No hay ninguna empresa detrás de esta web: es personal, y la escribo y la mantengo yo. Para cualquier cosa relacionada con tus datos puedes [escribirme](#contacto)."
+    },
+    {
+      "heading": "Qué datos trato y para qué",
+      "body": "Los que me facilitas al escribirme: tu nombre, tu dirección de correo y lo que cuentes en el mensaje. Los uso solo para leerte y contestarte. No hay listas de correo, ni perfilado, ni decisiones automatizadas, ni publicidad."
+    },
+    {
+      "heading": "Con qué base legal",
+      "body": "Tu propia iniciativa. Escribirme es el paso previo a una posible relación profesional, así que la base legal es la aplicación de medidas precontractuales del artículo 6.1.b del RGPD. Por eso no verás una casilla que marcar antes de enviar: el tratamiento nace de que tú decides escribir."
+    },
+    {
+      "heading": "Quién más los ve",
+      "body": "Nadie más lee tu mensaje. La única empresa que interviene es Google, que aloja el buzón de correo (Gmail) y actúa como encargado del tratamiento. Eso implica una transferencia internacional de datos a Estados Unidos, amparada por el Marco de Privacidad de Datos entre la Unión Europea y Estados Unidos, al que Google está adherido. No cedo tus datos a nadie con fines comerciales."
+    },
+    {
+      "heading": "Cuánto tiempo los conservo",
+      "body": "El mensaje se queda en el buzón mientras la conversación tenga sentido, y como mucho un año desde el último correo. Pasado ese plazo lo borro, salvo que exista una obligación legal de conservarlo."
+    },
+    {
+      "heading": "Qué derechos tienes",
+      "body": "Puedes pedirme acceso a tus datos, su rectificación o su supresión, y también oponerte al tratamiento, limitarlo o pedir que te los devuelva en un formato portable. Basta con que me escribas a la dirección del final de esta página. Y si crees que no lo he hecho bien, puedes reclamar ante la [Agencia Española de Protección de Datos](https://www.aepd.es)."
+    }
+  ],
   "whatHeading": "Qué son las cookies",
   "whatBody": "Las cookies son pequeños archivos que un sitio guarda en tu navegador. También se usan tecnologías equivalentes, como el almacenamiento local del navegador (localStorage). Unas son imprescindibles para que la web funcione; otras, como las de analítica, solo se usan si das tu permiso.",
   "useHeading": "Qué usamos en esta web",

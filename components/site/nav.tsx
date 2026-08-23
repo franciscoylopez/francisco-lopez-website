@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 export type NavDict = {
   homeAria: string;
   downloadCv: string;
+  contacto: string;
   sobreMi: string;
   menu: string;
   toggleTheme: string;
@@ -42,6 +43,7 @@ export function Nav({
   // Contacto) lo resuelven igual desde la página.
   const cvHref = cvPath(lang);
   const sobreMiHref = `${lang === "es" ? "" : `/${lang}`}/sobre-mi`;
+  const contactoHref = `${lang === "es" ? "" : `/${lang}`}/contacto`;
   const { resolvedTheme, setTheme } = useTheme();
   const pathname = usePathname() || "/";
   const [p, setP] = useState(0);
@@ -58,6 +60,7 @@ export function Nav({
   const altHref =
     lang === "en" ? subpath : subpath === "/" ? "/en" : `/en${subpath}`;
   const isSobreMi = subpath === "/sobre-mi";
+  const isContacto = subpath === "/contacto";
 
   useEffect(() => {
     const reduce = window.matchMedia?.(
@@ -153,25 +156,48 @@ export function Nav({
               formas —pelado aquí, con icono en Trayectoria y en los canales de
               contacto— porque cada punto de uso lo decidía por su cuenta. El
               tamaño lo pone `.link-chrome svg`, no esta clase. */}
-          {/* `hidden sm:inline-flex` pisa el `inline-flex` de la variante en el
-              breakpoint pequeño: es visibilidad, no métrica, y por eso sigue aquí. */}
+          {/* `hidden md:inline-flex` pisa el `inline-flex` de la variante en el
+              breakpoint pequeño: es visibilidad, no métrica, y por eso sigue aquí.
+
+              Y ES `md` (768) DESDE P67, no `sm` (640). Con dos enlaces la barra
+              cabía en 640; con el tercero —Contacto— MIDE 701 y desborda 61px.
+              Se midió al añadirlo, que era la condición que dejó escrita P65.6
+              cuando cerró el scroll horizontal de la carpintería.
+              Subir el punto de aparición es la corrección barata: entre 640 y
+              767 los tres siguen tras la hamburguesa, que es donde ya estaban, y
+              no hay que apretar tipografía ni huecos para hacer sitio. El
+              selector de idioma sube con ellos porque comparte la fila. */}
           <a
             href={cvHref}
             download
             className={cn(
               chromeLinkVariants({ shape: "bar" }),
-              "hidden text-[0.88rem] sm:inline-flex",
+              "hidden text-[0.88rem] md:inline-flex",
             )}
           >
             <Download aria-hidden="true" />
             {dict.downloadCv}
+          </a>
+          {/* CONTACTO VA ENTRE EL CV Y SOBRE MÍ (P67): el orden es CV · Contacto ·
+              Sobre mí, de la acción más buscada a la más de contexto. NO lleva
+              icono: la regla mira la acción, y navegar dentro del sitio no saca
+              al usuario de él. */}
+          <a
+            href={contactoHref}
+            aria-current={isContacto ? "page" : undefined}
+            className={cn(
+              chromeLinkVariants({ shape: "bar" }),
+              "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
+            )}
+          >
+            {dict.contacto}
           </a>
           <a
             href={sobreMiHref}
             aria-current={isSobreMi ? "page" : undefined}
             className={cn(
               chromeLinkVariants({ shape: "bar" }),
-              "hidden text-[0.88rem] aria-[current=page]:underline sm:inline-flex",
+              "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
             )}
           >
             {dict.sobreMi}
@@ -189,7 +215,7 @@ export function Nav({
             // táctil son las DOS dimensiones.
             className={cn(
               chromeLinkVariants({ shape: "bar", tone: "muted" }),
-              "hidden min-w-[44px] justify-center px-[0.6rem] text-[0.85rem] sm:inline-flex",
+              "hidden min-w-[44px] justify-center px-[0.6rem] text-[0.85rem] md:inline-flex",
             )}
           >
             {dict.switchLanguageShort}
@@ -201,7 +227,7 @@ export function Nav({
             onClick={() => setMenuOpen((o) => !o)}
             className={cn(
               actionVariants({ variant: "icon", size: "icon" }),
-              "sm:hidden",
+              "md:hidden",
             )}
           >
             <Menu aria-hidden="true" />
@@ -223,7 +249,7 @@ export function Nav({
       </div>
 
       {menuOpen && (
-        <div className="border-border bg-background border-t sm:hidden">
+        <div className="border-border bg-background border-t md:hidden">
           <div className="mx-auto flex max-w-[var(--container)] flex-col px-[var(--page-x)] pt-2 pb-[0.85rem]">
             <a
               href={cvHref}
@@ -236,6 +262,17 @@ export function Nav({
             >
               <Download aria-hidden="true" />
               {dict.downloadCv}
+            </a>
+            <a
+              href={contactoHref}
+              aria-current={isContacto ? "page" : undefined}
+              onClick={() => setMenuOpen(false)}
+              className={cn(
+                chromeLinkVariants({ shape: "stack" }),
+                "text-[0.95rem] aria-[current=page]:underline",
+              )}
+            >
+              {dict.contacto}
             </a>
             <a
               href={sobreMiHref}

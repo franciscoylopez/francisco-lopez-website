@@ -247,3 +247,47 @@ export function experiencePageLd({
     mainEntity: { "@id": `${SITE_URL}/#person` },
   };
 }
+
+/**
+ * La página de Contacto (P67). `ContactPage` es el tipo que Schema.org tiene
+ * para exactamente esto, y a diferencia de `WebPage` dice algo que un rastreador
+ * puede usar: esta es LA página desde la que se contacta con la persona.
+ *
+ * `mainEntity` referencia al `Person` de la home por `@id`, igual que el
+ * deep-dive: la persona se declara una vez, en `profilePageLd`, y todo lo demás
+ * apunta a ella. Repetir el objeto habría sido otra copia de los mismos datos.
+ *
+ * Los canales van dentro del `ContactPoint`: el correo y el teléfono que la
+ * página ya pinta, leídos de `lib/contact.ts` por quien la llama, para que no
+ * exista una segunda versión del dato en el marcado.
+ */
+export function contactPageLd({
+  lang,
+  name,
+  description,
+  email,
+  telephone,
+}: {
+  lang: Locale;
+  name: string;
+  description: string;
+  email: string;
+  telephone: string;
+}) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    url: pageUrl(lang, "contacto"),
+    name,
+    description,
+    inLanguage: lang,
+    mainEntity: { "@id": `${SITE_URL}/#person` },
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "business",
+      email,
+      telephone,
+      availableLanguage: ["es", "en"],
+    },
+  };
+}

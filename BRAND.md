@@ -108,31 +108,19 @@ Lo que hay que saber al escribir UI:
   pastilla** que el chrome con etiqueta (`.icon-chrome`), sobre el objetivo táctil de 44px
   completo. Un control sin texto necesita la misma afordancia que uno con etiqueta.
 
-> **Excepción viva — `ContactSecondary`** *(2026-08-04, ampliada el 08-08)*. Teléfono, LinkedIn
-> y CV de la franja de contacto, y la **dirección de email visible** bajo el CTA de
-> Accesibilidad, son acciones y no navegación, así que por regla les tocaría H1 — pero llevan
-> tratamiento de **chrome** (`.link-chrome`, sin subrayado). Motivo: están a 15px del CTA
-> sólido de email, y ahí H1 mete ruido —subrayado permanente + un hover propio— en vez de
-> leerse como su acompañamiento. Es una excepción puntual, **no un tercer criterio**;
-> probablemente se resuelva de otra forma el día que exista una sección de contacto dedicada
-> (hoy es una franja compartida entre home, Sobre mí y Accesibilidad, D29).
->
-> **RETIRADA DECIDIDA el 2026-08-23** (P65): todo pasa a contenido, tal como este párrafo
-> predijo. Se ejecuta con `/contacto`; hasta entonces sigue viva y esto describe el sitio que
-> hay. Ese día el bloque sale de aquí entero.
 
 ## Jerarquía de hover en botones y CTA
 
 > **Estas reglas no se escriben a mano.** Viven en `components/ui/action.tsx` (variantes
 > `solid` · `outline-primary` · `outline-neutral` · `ghost` · `toggle-primary` ·
-> `toggle-neutral` · `icon`), que es la única fuente del aspecto de todo elemento
+> `toggle-neutral` · `icon` · `card`), que es la única fuente del aspecto de todo elemento
 > accionable. Lo de abajo explica **por qué** cada variante es como es; para aplicarlas,
 > se usa la variante. Ver «Ningún control se escribe a mano» al final de esta sección.
 
 - **CTA sólido** (`bg-primary`): la acción destacada de la página. Hover = el relleno se mezcla
   hacia `--foreground` (`color-mix(in srgb, var(--primary) 88%, var(--foreground))`), que
-  **sube** el contraste del texto encima en los dos temas; bajar la opacidad lo bajaría. Hoy
-  solo el email de la franja de contacto.
+  **sube** el contraste del texto encima en los dos temas; bajar la opacidad lo bajaría. Hoy,
+  el botón que lleva a Contacto y el de enviar el formulario.
 - **CTA outline-primary** (`border-primary` + `text-primary`): acciones de contenido que viven
   solas, sin otro CTA al lado con el que competir — «Descargar CV» de Trayectoria, «Gestionar
   preferencias» de Cookies, chips de descarga del Brand Kit. Hover = **el relleno cian pleno**,
@@ -140,6 +128,13 @@ Lo que hay que saber al escribir UI:
 - **Outline neutro** (`border-border` + `bg-background`): controles de utilidad y botones que
   conviven con un sólido dentro del mismo grupo (los del diálogo de consentimiento, «Repetir»
   del Design System). Hover = pastilla `muted`, nunca cian.
+
+### La tarjeta que se pulsa entera
+
+Cuando el objetivo de clic es **la caja completa** y no un renglón, es la variante `card` +
+`size="card"`: las dos preguntas de D36 la traen a esta capa. Hover en pastilla `muted`, no
+cian. **Se compone a través de `cn()`, nunca suelta**, porque deshace clases de la base y `cva`
+concatena en vez de fusionar (el porqué, en `BRAND-historical.md`).
 
 ### Controles con estado (toggles, segmentados y pestañas)
 
@@ -203,7 +198,7 @@ superficie (§El atenuado lo pone la superficie, D39).
 
 ### Cuándo una acción lleva icono
 
-**Una sola pregunta: ¿esta acción saca al usuario de la página?** Descargar un archivo, abrir otra aplicación (correo, teléfono) o irse a otro sitio web → **lleva icono**. Todo lo que ocurre dentro de la página —aceptar, guardar, cerrar, elegir en un grupo de pestañas, navegar por el sitio— → **no lo lleva**. El criterio mira la **acción**, no la variante ni el sitio donde vive: por eso «Descargar CV» lo lleva en sus tres apariciones (nav, Trayectoria, canales de contacto) y «Gestionar preferencias» no lo lleva en ninguna, porque abre un diálogo y no te lleva a ningún sitio.
+**Una sola pregunta: ¿esta acción saca al usuario de la página?** Descargar un archivo, abrir otra aplicación (correo, teléfono) o irse a otro sitio web → **lleva icono**. Todo lo que ocurre dentro de la página —aceptar, guardar, cerrar, elegir en un grupo de pestañas, navegar por el sitio— → **no lo lleva**. El criterio mira la **acción**, no la variante ni el sitio donde vive: por eso «Descargar CV» lo lleva en sus dos apariciones (nav y Trayectoria) y «Gestionar preferencias» no lo lleva en ninguna, porque abre un diálogo y no te lleva a ningún sitio.
 
 - **Posición: delante de la etiqueta**, porque el icono clasifica la acción («descargar», «teléfono»). **Excepción por forma, no por caso: la variante `solid`**, donde va detrás y avanza 2px en hover — ahí no clasifica nada (es la única acción de la pantalla), marca la dirección del viaje.
 - **Tamaño, hueco y lado no se escriben en el punto de uso.** Los pone la variante (`sm` 16 · `md` 17 · `lg` 18 · `icon` 18) y, en los canales de chrome, `.link-chrome svg`. En el call site se escribe `<Download />` y nada más — el icono va **siempre primero en el JSX** y es `solid` quien lo manda al otro lado.
@@ -220,7 +215,7 @@ superficie (§El atenuado lo pone la superficie, D39).
 **Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control
 de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea
 la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como
-`ContactSecondary` más arriba).
+el switch del consentimiento, aquí debajo).
 
 > **Excepción viva — el switch del diálogo de consentimiento** *(2026-08-08, P37.5996)*.
 > `consent-banner.tsx` dibuja su interruptor con una cadena inline (`peer-checked`, `after:`,
@@ -250,7 +245,9 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
   **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
   **«Que pinta» es el límite del metro:** el censo recorre el DOM, así que un token que existe y
-  no se usa le resulta invisible. Ahí estaba `--destructive`, que no llega ni a AA (2026-08-23).
+  no se usa le resulta invisible. Ahí estaba `--destructive` (4,31:1 en claro), y de ahí la
+  regla: **el rojo no es color de texto.** El mensaje va en `--foreground`; `--destructive` marca
+  la forma (icono, filete), donde basta el 3:1 de WCAG 1.4.11 *(2026-08-23)*.
   *(Las tres veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
   ser un hábito, en [`BRAND-historical.md`](./BRAND-historical.md) §La pasada completa.)*
 - **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es
