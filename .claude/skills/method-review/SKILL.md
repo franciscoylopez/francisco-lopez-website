@@ -44,7 +44,7 @@ de accesibilidad.
 **Y no es «una cosa más que recordar»**, que era la objeción obvia: la dispara `sprint-review`
 al terminar, y el ritual de cierre de etapa de `CLAUDE.md` la nombra como paso 4. Si acaba
 dependiendo de que alguien se acuerde, ha fallado por la misma razón que este método lleva
-sesenta y nueve decisiones corrigiendo.
+todo `DECISIONS.md` corrigiendo.
 
 ## Los tres principios, y el primero manda sobre todo lo demás
 
