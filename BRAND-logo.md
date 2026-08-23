@@ -62,6 +62,20 @@ Todos los tamaños son **altura visible del símbolo** (borde superior del círc
 
    Si cambia el tamaño del símbolo, el wordmark cambia con él en los dos casos. Lo que cambia entre ellos es la proporción, no el hecho de escalar juntos.
 
+   **Y desde el 2026-08-23 el componente la CUMPLE, en vez de solo enunciarla.** `logo.tsx`
+   dimensiona su wordmark con `RATIO_WORDMARK` (0,45) sobre la altura del símbolo, que se le
+   pasa en `symbolPx` — y el tipo lo hace **obligatorio** cuando hay wordmark. Antes era un
+   `text-lg` congelado que no escalaba con nada: a su único uso le salía un **56,3%**, y era
+   además el único de los siete wordmarks del sitio a peso 400 y sin tracking. Se derivó y no
+   se dedujo por una razón medida: `container-type: size` + `cqh` sí lo calcularía solo, pero
+   la contención aplica a los dos ejes y **colapsa el lockup a ancho cero** con el texto
+   pintándose fuera. Cifras y el barrido de los siete, en `DECISIONS.md` **D94**.
+
+   **El nav y el Brand Kit siguen escribiendo el suyo a mano**, con su propio par de números.
+   Están dentro de la banda —45,8% y 42,7%—, así que no incumplen; lo que hay es tres sitios
+   que saben la misma proporción. El nav además **anima** la suya (regla 6), así que
+   unificarlos no es un reemplazo mecánico.
+
    *Matizado 2026-07-21, el mismo día que se escribió:* la primera redacción daba un solo rango (40-45%) para todo, generalizando de un caso — el del nav. Al reconstruir el kit se vio que su lockup iba al 60% y, enfrentados los dos, el 44% dejaba el nombre en pie de foto. El nav no es un lockup: son dos elementos sueltos en una fila que se componen y se descomponen. El del kit sí, en el sentido literal de que las proporciones van bloqueadas dentro de un asset cerrado. La proporción sigue al trabajo, y el trabajo sigue al tamaño.
 6. **Transición del nav.** Al hacer scroll, símbolo y barra escalan de forma continua (48→28px y 80→64px) y el wordmark se desvanece **en opacidad manteniendo su ancho completo**: nunca se anima el `max-width`, porque recorta glifos a mitad de letra y se lee como un bug de truncado. El hueco del layout se colapsa después. La opacidad de las capas de color **decae más rápido que la escala: extinguidas antes de que el símbolo baje del umbral del split**, para que la transición no renderice nunca el estado ambiguo donde el split parece un error de registro.
 7. **`prefers-reduced-motion`:** salto seco entre los dos estados del nav, sin interpolar.

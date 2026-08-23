@@ -246,8 +246,10 @@ scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 12 páginas 
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
                            queda UN solo color literal: busca la ausencia (D54)
 
-.github/workflows/     CI, dieciséis pasos en cada PR
-.github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions)
+.github/workflows/     ci.yml, dieciséis pasos en cada PR · dependabot-automerge.yml, que
+                       decide quién CIERRA los PR de dependencias (D92)
+.github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions).
+                       Controla cuántos se abren; la otra mitad es el workflow de arriba
 .claude/skills/        Skills del proyecto: update-cv, deep-dive-page,
                        publicar-en-design-system (una pieza nueva se publica, `D89`) y
                        gates-de-servidor (los tres gates que necesitan el sitio servido).

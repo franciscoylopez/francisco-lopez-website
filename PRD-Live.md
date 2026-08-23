@@ -74,7 +74,7 @@ descarga** (D65).
 9. **Franja-CTA de cierre** — banda de fondo propio con copy de posicionamiento al ICP;
    el email es la acción destacada (único botón sólido del sitio) y teléfono, LinkedIn y
    CV la acompañan como canales de apoyo.
-10. **Footer** — El Making of («Cómo se ha creado esta página», solo el label del footer), Brand Kit, Design System, Accesibilidad, Cookies, LinkedIn, repositorio.
+10. **Footer**, en dos filas — arriba, la firma con el nombre en lockup, los enlaces y los dos canales de icono; abajo, una línea fina con los derechos y la política de cookies. Los enlaces van en jerarquía: **El Making of** destacado y las tres páginas del sistema (Brand Kit, Design System, Accesibilidad) agrupadas detrás de un filete. La distinción la hace el tono del chrome, nunca `primary`.
 
 ### Tres cosas que el sitio hace y no se ven mirándolo
 
@@ -90,7 +90,7 @@ descarga** (D65).
   devolver al usuario a la home (D29).
 - **Una página no se escribe: se compone.** `pageMetadata` deriva canonical, los tres
   `hreflang`, OG y Twitter de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de
-  motion, el `<main>` y footer (D45/D46). Las doce se **prerenderizan** por locale y el
+  motion, el `<main>` y footer (D45/D46). Las trece se **prerenderizan** por locale y el
   diccionario está **partido por página** (D48). Y **qué páginas hay lo dice un solo
   sitio**: registrarlas mal no es un hallazgo de auditoría sino un error del
   compilador, y un guardián contrasta el registro con el disco (D72). Es lo que hace
@@ -154,15 +154,10 @@ nazca bien sin pedirlo (D30/D39/D61).
 | Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** en las trece páginas × 2 temas, en reposo y en hover — 380 pares, `npm run censo` (D85); **0 violaciones de axe** |
 | SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las trece |
 
-Las cifras de contraste se miden **sobre el color que el navegador pinta**, recorriendo el
-DOM de la página servida y no leyendo `globals.css` — un par que solo existe al componer un
-velo, o solo mientras el cursor está encima, no aparece en ningún inventario de tokens. El
-método y sus siete trampas, en `BRAND.md` §Accesibilidad; el censo, en
-`scripts/design-review/contrast-census.js`; las cifras publicadas, en
-`lib/design-values.ts` (D38).
-
-La pasada completa es **`npm run censo`** y lee las páginas del registro, así que una
-página nueva entra sin que nadie se acuerde (D85).
+**Cómo se mide el contraste lo dice `BRAND.md` §Cómo se hace el censo**, entero y con sus
+siete trampas; aquí solo el criterio y el estado. Lo que importa para el alcance: la pasada
+lee las páginas del **registro**, así que una página nueva entra sin que nadie se acuerde
+(D85), y las cifras publicadas salen de `lib/design-values.ts` (D38).
 
 Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumplimiento.
 
