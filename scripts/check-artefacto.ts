@@ -15,7 +15,18 @@ import {
   HUELLA_PATH,
 } from "./artefacto/fingerprint";
 
-const faltan = [FUENTE, ARTEFACTO].filter((p) => !existsSync(p));
+/**
+ * Los pares fuente→producto que este guardián vigila. LA CIFRA DEL MENSAJE SALE DE
+ * AQUÍ, NO DE UN LITERAL: decía «1 artefacto» a mano, así que el día que hubiera un
+ * segundo `.mmd` el guardián seguiría afirmando que ha mirado uno — que es la forma
+ * fina del fallo de «afirmar cuánto has mirado», y la que no se ve porque el número
+ * es correcto hasta que deja de serlo. Mismo arreglo que ya llevaba `check-cv-fresh.ts`.
+ */
+const PARES = [{ fuente: FUENTE, producto: ARTEFACTO }];
+
+const faltan = PARES.flatMap((p) => [p.fuente, p.producto]).filter(
+  (p) => !existsSync(p),
+);
 if (faltan.length) {
   console.error(`check:artefacto — faltan archivos: ${faltan.join(" · ")}`);
   console.error("Genera el artefacto con `npm run artefacto`.");
@@ -50,7 +61,7 @@ if (sellada !== esperada) {
 // El metro afirma cuánto ha mirado (y no al revés).
 const kb = Math.round(statSync(ARTEFACTO).size / 1024);
 console.log(
-  `check:artefacto — 1 artefacto comprobado contra su fuente · ${kb} KB · ` +
+  `check:artefacto — ${PARES.length} ${PARES.length === 1 ? "artefacto comprobado" : "artefactos comprobados"} contra su fuente · ${kb} KB · ` +
     `huella ${esperada.slice(0, 16)}…`,
 );
 console.log("✓ El artefacto publicado sale de su .mmd y de su saneador.");

@@ -43,6 +43,8 @@ Al empezar una sesión de desarrollo:
 3. Actualiza el `Estado` en Notion según avances: "To-Do" → "En progreso" al empezar, "Listo" al terminar.
 4. Si una tarea deja de tener sentido tal como está definida (cambia el alcance, se descubre que depende de algo no resuelto, etc.), dilo antes de marcarla "Listo" — no la des por completada a medias.
 
+**El cuerpo de una tarea NO sale en la consulta SQL, que solo devuelve propiedades.** Y el cuerpo es donde viven el porqué medido, las tablas y las dependencias. Al retomar una tarea se abre con `fetch`; listarla no basta *(2026-08-23: media tarea se perdió por esto)*.
+
 ## Reglas del tablero (no negociables)
 
 > **Sin fechas.** Lo que dirige la ejecución es `MoSCoW` + `Prioridad` (orden) + `Tamaño`, no el calendario. Donde abajo diga "sprint", léase **"etapa"**.
@@ -80,9 +82,8 @@ Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cua
 
 - **Contenido primero** en secciones bloqueadas por contenido (Sobre mí, Accesibilidad): el texto es el cuello de botella real y solo lo escribe Francisco. Desbloquear el contenido **antes o en paralelo** al diseño/dev; Claude puede redactar un borrador editable (como el CV o Sobre mí) para arrancarlo.
 - **Bucle medir→aprender.** Al cerrar cada etapa, revisar los números de GA4 (clics de contacto, descargas de CV, scroll) para informar la priorización. Construir **y** medir — es lo que predica la web ("del discovery al dato").
-- **Definition of Done por sección.** Cada tarea de sección hereda el checklist de cierre. **Vive en «Definition of Done» al final de este archivo**, en dos columnas: lo que bloquea el envío y lo que no.
+- **Definition of Done por sección.** Cada tarea de sección hereda el checklist de cierre, al final de este archivo.
 - **Revisión con IA en los PR grandes.** Sin segundo revisor humano, usa `/code-review` (o ultrareview) en cambios sustanciales como segundo par de ojos.
-- **Revisión de diseño:** skill `design-review` (cumplimiento del sistema + expresión de marca, verificado en pantalla). **Disparo manual** — antes de construir secciones nuevas o de un release visual grande, o cuando Francisco lo pida; no va enganchada al cierre de etapa como `sprint-review` hasta que se valide.
 - **Shippear vs. pulir.** La columna «Pulido» de la DoD **no bloquea el envío**: nace fuera del sprint, en su bloque de V3. Que las secciones salgan en vez de dorarse.
 
 # Fase de desarrollo — convenciones (V1 build)
@@ -189,3 +190,7 @@ pulido tipográfico o de ritmo que aparezca al mirarla.
   **ofrécela** en cuanto la tarea tenga más de una dirección posible.
 - **¿Dependencia frontend nueva?** → `/pick-ui-library`, misma condición.
 - **¿Toca motion?** → `/review-animations` al terminarlo.
+- **¿La tarea añade una superficie que recibe input de un tercero** (formulario, subida,
+  endpoint)? → **`/security-review` al terminarla.** El sprint 3 estrenó la primera del sitio
+  y no se disparó ni una vez; el `sprint-review` encontró después una inyección en la
+  cabecera `Reply-To` (2026-08-23).

@@ -18,6 +18,24 @@ si el sistema se cumple, después si la marca se expresa. No es una review de un
 es `/code-review`) ni del andamiaje técnico (eso es `sprint-review`): es del **diseño
 publicado**, código y píxel.
 
+## Paso 0 — el filtro barato, ANTES de nada
+
+**Dispara `/web-design-guidelines` y triá lo que devuelva antes de abrir esta revisión.**
+No es un extra: es el punto 8 de la columna A de la Definition of Done, que dice
+«**antes** de `design-review`», y llevaba desde que se escribió sin portador — o sea,
+sin nadie que lo disparase.
+
+**Por qué importa la cifra, y no la regla.** El `design-review` del sprint 3 devolvió cinco
+hallazgos. Dos eran huecos de medición genuinos —el contorno de control a 1,21:1 y
+`--destructive` a 4,31:1— que ningún instrumento podía ver, y su respuesta correcta fue
+extender el metro (D85, D90, D97). **Los otros tres eran mecánicos**: un filete varado
+entre 768 y 829px, nueve copias de la misma cadena, y una excepción publicada en cuatro
+sitios tras retirarse del código. Esos tres no necesitaban criterio de diseño: necesitaban
+un filtro barato que esta revisión, que es la más cara del sistema, acabó haciendo a mano.
+
+Si el filtro no encuentra nada, has perdido un minuto. Si encuentra algo, lo ha quitado de
+delante de la parte cara.
+
 **De dónde sale este documento.** La auditoría del 2026-08-04 (P37.591) buscaba
 incoherencias de CTA y encontró que entre los tokens y las páginas **no había capa de
 componentes**: 6 definiciones de «botón base», 4 hovers para la misma variante, el suelo
