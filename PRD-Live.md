@@ -241,8 +241,10 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 - **Primaria**: **envíos del formulario de `/contacto`** (`contact_submit`), contados
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
-  **Hoy el evento llega al `dataLayer` y ahí se queda**: falta su trigger en GTM y marcarlo
-  como evento clave, que es la mitad que vive fuera del repo (D71).
+  **La cadena está entera desde el 2026-08-24**: el `dataLayer` lo recoge un trigger de
+  Custom Event con su tag de GA4 —comprobado en el `gtm.js` publicado, que es como se
+  audita la mitad que vive fuera del repo (D71)— y en GA4 está marcado como **evento
+  clave**. La marca no es retroactiva: cuenta desde ahí.
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
   Trayectoria, Contacto) y profundidad de scroll.
 - **Herramienta**: GA4 (captura scroll y descarga de fábrica).
