@@ -73,6 +73,7 @@
 - [55. El footer no es de columnas, y la cifra que lo decidió son ocho enlaces (2026-08-23)](#55-el-footer-no-es-de-columnas-y-la-cifra-que-lo-decidió-son-ocho-enlaces-2026-08-23)
 - [56. Contacto ampliada añade una sola cosa, y con ella el sitio deja de ser de solo lectura (2026-08-23)](#56-contacto-ampliada-añade-una-sola-cosa-y-con-ella-el-sitio-deja-de-ser-de-solo-lectura-2026-08-23)
 - [57. La dirección de Contacto se elige viéndola, y el prototipo destapa dos defectos del sistema (2026-08-23)](#57-la-dirección-de-contacto-se-elige-viéndola-y-el-prototipo-destapa-dos-defectos-del-sistema-2026-08-23)
+- [58. Contacto se construye, y las tres cosas que arrastra no son las que decía el sprint (2026-08-23)](#58-contacto-se-construye-y-las-tres-cosas-que-arrastra-no-son-las-que-decía-el-sprint-2026-08-23)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2931,6 +2932,46 @@ midió en 349px, así que vuelve a poner el ancho mínimo bajo vigilancia.
 (#162) y la borra P67 al construir la página real, junto con la única línea de producción que
 necesitó: una exclusión en el matcher de `proxy.ts`, sin la cual el enrutado de locale reescribe
 `/prototipos` a `/es/prototipos` y devuelve 404.
+
+## 58. Contacto se construye, y las tres cosas que arrastra no son las que decía el sprint (2026-08-23)
+
+**El Sprint 3 se cerró el mismo día que se abrió el desarrollo**, y este es el párrafo que
+vivía en `PRD-Live.md` §9 mientras estuvo en curso, con lo que se cumplió y lo que no:
+
+> El footer va el último **porque necesita que existan las secciones que crean los dos
+> sprints anteriores**. Contacto ampliada añade UNA cosa sobre la franja de D29, el
+> formulario, que es a la vez su justificación y su listón. Con él el sitio deja de ser de
+> solo lectura, y eso arrastra tres cosas que no estaban en el sprint: la franja de home y
+> Sobre mí pasa a enlazar a `/contacto`, la métrica primaria deja de ser los clics y pasa a
+> ser los envíos, y **la CSP estricta con nonces se acciona** (era su disparador escrito).
+
+**Las dos primeras se cumplieron. La tercera no, y ese es el hallazgo.** El disparador
+escrito era «si Contacto incorpora un endpoint externo», y el envío acabó siendo una Server
+Action del mismo origen: la CSP no se tocó. La tarea volvió a V4 en vez de quedarse
+apuntando a un evento que ya había ocurrido sin dispararla (`DECISIONS.md` D96).
+
+**Y arrastró una cuarta que nadie había previsto: la franja adelgazó.** El enunciado decía
+que el formulario era lo ÚNICO que se añadía porque «email, teléfono, LinkedIn y CV ya los
+daba la franja igual de bien». Al verlo montado, la conclusión fue la contraria: con una
+página de contacto publicada, esos cuatro canales bajo el CTA de la home decían por segunda
+vez lo que la página dice mejor. Se retiraron, y con ellos **la excepción `ContactSecondary`
+de `BRAND.md`** —que llevaba desde el 2026-08-04 prediciendo por escrito que caería el día
+que existiera una sección de contacto dedicada— y la regla que se había escrito para
+sustituirla, que se quedó sin un solo caso el mismo día que nació.
+
+**La medición cambió de naturaleza, no de herramienta.** El PRD decía que el clic en
+`mailto:` era «un proxy de intención **porque no hay formulario en V1**». Con formulario, el
+envío es el hecho. Se cuenta cuando el servidor confirma y no al pulsar: un clic que muere
+en un campo mal rellenado no es un contacto, y contarlo infla justo la cifra que uno quiere
+creerse. **Regalo no planeado:** la medición mejorada de GA4 manda `form_start` por su
+cuenta, así que emparejado con `contact_submit` da la tasa de abandono del formulario sin
+configurar nada.
+
+**Lo que queda abierto y no es técnico:** el diagnóstico de GTM avisa de una tasa de
+consentimiento cercana a cero. No es un fallo de configuración —este sitio exige
+consentimiento a todo el mundo, no solo al EEE— pero significa que la analítica ve una
+fracción de las visitas, y la métrica primaria nueva hereda ese límite. Es una pregunta de
+producto, no un arreglo.
 
 ## Fuentes
 

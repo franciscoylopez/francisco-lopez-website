@@ -206,7 +206,7 @@ cierra el hueco**.
 2. **`npm run check:cv`** — y si falla, `npm run cv`: tocar un bullet o un hecho
    cambia también el PDF, que es un artefacto commiteado y no se regenera solo.
 3. **`npm run check:marco`** (D75) — **es el criterio de cierre de página nueva, y
-   está en CI**. Sobre el HTML **prerenderizado** de las 26 variantes mira axe
+   está en CI**. Sobre el HTML **prerenderizado** de todas las variantes mira axe
    estructural, el **enlace de salto** que axe no ve, un solo `h1` y la jerarquía,
    el breadcrumb, que la metadata derivada **llegó** y que los `@id` del JSON-LD
    **resuelven** — cosa que ningún validador externo hace. Con esto, los puntos 4,

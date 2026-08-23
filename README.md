@@ -22,7 +22,7 @@ La propia web es la prueba de criterio técnico y de diseño: rápida, accesible
 
 ## El sitio
 
-Trece páginas por idioma, en español (raíz `/`) e inglés (`/en`). Tema claro y oscuro, `system` por defecto.
+Catorce páginas por idioma, en español (raíz `/`) e inglés (`/en`). Tema claro y oscuro, `system` por defecto.
 
 | Claro | Oscuro |
 | :---: | :---: |
@@ -36,9 +36,9 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 | :-- | :-- | :-- |
 | **Un dato, un sitio** | De una experiencia, la frase de la portada, el bullet del CV y su gemelo del deep-dive son **el mismo elemento de un array** | Vivían en tres archivos y habían divergido ocho veces. Una fecha equivocada no falla donde se escribe: falla en los seis sitios que la leen · `D57` · `D58` |
 | **La accesibilidad se hereda** | `text-muted-foreground` no significa «este gris», significa «el atenuado del fondo donde caiga este texto» | Cada superficie recalcula su propio contraste. 141 usos heredaron el arreglo sin tocar un solo call site, y una tarjeta nueva nace bien sin pedirlo · `D39` · `D61` |
-| **Nada se escribe a mano** | Siete piezas resuelven todo lo accionable, los rótulos, las cabeceras, las tablas y las cajas | Si un caso no encaja en una variante, se crea la variante. Es lo que hace que un cambio de hover llegue a las trece páginas a la vez · `D36` |
+| **Nada se escribe a mano** | Ocho piezas resuelven todo lo accionable, los rótulos, las cabeceras, las tablas y las cajas | Si un caso no encaja en una variante, se crea la variante. Es lo que hace que un cambio de hover llegue a todas las páginas a la vez · `D36` |
 | **Los guardianes buscan la ausencia** | Los checks de CI no comprueban que las copias conocidas cuadren: comprueban que **no queda ninguna** | Un metro que solo valida lo que ya conoce aprueba sobre lista vacía. Y cada uno **afirma cuánto ha mirado** · `D38` · `D54` · `D63` |
-| **El refactor se demuestra** | `npm run gate:html` compara el HTML servido de las 24 variantes antes y después | Diff vacío = transparente por construcción, no por revisión. Es lo que más ha cazado, y se valida rompiéndolo · `D42` · `D45` |
+| **El refactor se demuestra** | `npm run gate:html` compara el HTML servido de todas las variantes antes y después | Diff vacío = transparente por construcción, no por revisión. Es lo que más ha cazado, y se valida rompiéndolo · `D42` · `D45` |
 | **Un artefacto se enseña** | El diagrama del deep-dive es el render **real** de su Mermaid original, saneado y en línea | Redibujarlo con los tokens del sitio cumplía la letra de la regla e incumplía su espíritu. En línea, y no como imagen, para que conmute con el tema · `D54` |
 | **El alto también es un eje** | El gate de accesibilidad se dispara dos veces: *mientras se dibuja* una banda y *al cerrar* | Un 1920 con el escalado de Windows al 150% es un viewport de 1280×618. No lo vio ninguna auditoría porque ninguna miraba una combinación que el desarrollador no tiene delante · `D50` · `D52` |
 | **Un vídeo entra con facade** | Hasta que alguien pulsa no hay iframe, ni JS de terceros, ni una petición a Google | El clic es más estricto que gatearlo por categoría: quien acepta todas las cookies tampoco carga YouTube sin pulsar · `D55` |
@@ -46,7 +46,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`) · **Tailwind CSS v4**
-- **Capa de componentes propia, con un núcleo de siete piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `table` · `stat-row` · `layout`. Aparte, no como octava pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: entra solo para widgets con estado, foco atrapado o portal, y hacia delante (`D6`, `D36`)
+- **Capa de componentes propia, con un núcleo de ocho piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `field` (el campo de formulario) · `table` · `stat-row` · `layout`. Aparte, no como novena pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: entra solo para widgets con estado, foco atrapado o portal, y hacia delante (`D6`, `D36`)
 - **lucide-react** para iconos; los que lucide no trae se dibujan a mano con su propia regla de autoría, para que no se distingan de los de la librería
 - **next-themes** (claro/oscuro, `system` por defecto) · **Vercel** (`main` = producción)
 
@@ -64,6 +64,17 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 </details>
 
 <details>
+<summary><b>Contacto: la única superficie que recibe</b></summary>
+
+Un formulario de tres campos, y todo lo demás es consecuencia de dos decisiones.
+
+**El envío es una Server Action del mismo origen**, no un endpoint externo: la política de contenido no cambió —`form-action 'self'` y `connect-src 'self'` ya lo permitían— y el formulario **funciona con JavaScript desactivado**, porque el navegador postea el `<form>` igual. Validar al salir de un campo, mover el foco al primer error y el estado «enviando» son comodidad encima de eso, nunca el mecanismo. La validación que decide corre en el servidor y devuelve **códigos, no frases**: las palabras las pone el diccionario, en los dos idiomas.
+
+**Y sale por el SMTP de la propia cuenta**, no por un proveedor transaccional, porque uno externo sería un encargado del tratamiento nuevo que habría que declarar en la página de privacidad. Anti-spam **sin CAPTCHA** —que es una barrera de accesibilidad, y este sitio publica una declaración de conformidad—: campo trampa, filtro de velocidad y tope por IP, los tres con su límite escrito (`D95`).
+
+</details>
+
+<details>
 <summary><b>Deep-dive por experiencia</b></summary>
 
 El índice `/trayectoria` y cinco páginas en `/trayectoria/[slug]`, con una plantilla única — Datos · En un minuto · La historia · El caso (opcional) · Aprendizajes — y un presupuesto de 700-900 palabras, 1.200 con caso. La homogeneidad la dan el marco y la longitud, no los títulos: dentro de «La historia» los subapartados son libres, para que una experiencia de tres meses no salga con secciones medio vacías al lado de una de cinco años y medio.
@@ -75,7 +86,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <details>
 <summary><b>Accesibilidad</b></summary>
 
-- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover, sin excepciones** — 380 pares sobre las trece páginas × dos temas, con el metro validado en las 26 corridas. La pasada es un comando (`npm run censo`) y lee las páginas del registro, así que una nueva entra sin que nadie se acuerde (`D85`).
+- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover, sin excepciones** — 368 pares sobre las catorce páginas × dos temas, con el metro validado en las 28 corridas. La pasada es un comando (`npm run censo`) y lee las páginas del registro, así que una nueva entra sin que nadie se acuerde (`D85`).
 - El censo de contraste se hace **recorriendo el DOM de la página servida**, no leyendo el CSS: un par que solo existe al componer un velo, o una pastilla de hover, no aparece en ningún inventario de tokens.
 - **Enlace de salto** (WCAG 2.4.1, nivel A), que axe no detecta y por eso se comprueba a mano (`D46`).
 - **Probado con lector de pantalla** (NVDA sobre Chrome), no solo con motores de reglas. Es lo que encuentra los defectos que no violan ningún criterio y que por eso ningún escáner ve; los que encontró están publicados en la propia página de Accesibilidad (`D73`).
@@ -116,7 +127,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
 | `build` | — |
 
-Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de las trece páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
+Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
 
 ## Arrancar
 
@@ -141,7 +152,7 @@ npm run check:palette       # la paleta del código contra la de globals.css, y 
 npm run check:experiencias  # que las TRES longitudes de cada experiencia cuadren (D57)
 npm run check:cv            # que los PDFs commiteados correspondan a su fuente (D60)
 npm run check:raya          # que no vuelva la raya (—) al copy servido (D63)
-npm run check:marco         # el criterio de cierre de página sobre las 24 variantes
+npm run check:marco         # el criterio de cierre de página, sobre todas las variantes
                             # prerenderizadas: axe, enlace de salto y JSON-LD (D75).
                             # Necesita `npm run build` antes: mide el HTML, no el código
 
@@ -150,10 +161,10 @@ npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza 
 npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 
 # Medición
-npm run gate:html -- save   # instantánea del HTML de las 13 páginas × 2 idiomas
+npm run gate:html -- save   # instantánea del HTML de todas las páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
 npm run psi -- <url>        # PageSpeed sobre el Preview o producción (D49)
-npm run censo               # censo de contraste: 13 páginas × 2 temas, servidas (D85)
+npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
 qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 ```
 
