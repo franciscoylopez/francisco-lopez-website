@@ -66,7 +66,7 @@ const SOLID =
 // Compartido por la variante `outline-neutral` y por el estado apagado de
 // `toggle-neutral`: son el mismo control, con y sin estado.
 const OUTLINE_NEUTRAL =
-  "border-border bg-background text-foreground border hover:bg-muted focus-visible:bg-muted";
+  "border-control-edge bg-background text-foreground border hover:bg-muted focus-visible:bg-muted";
 
 // El icono del CTA sólido: DETRÁS de la etiqueta y avanzando 2px al interactuar.
 // Vive aquí y no en el call site por lo de siempre —el orden en el JSX es una
@@ -151,7 +151,7 @@ export const actionVariants = cva(
         // cierre del diálogo de consentimiento. Hasta P37.5989 el defecto era
         // `transparent` y los seis call sites normales repetían el `--card` a
         // mano; el LinkedIn del footer no lo escribió y se quedó sin caja.
-        icon: "icon-chrome border-border text-foreground border",
+        icon: "icon-chrome border-control-edge text-foreground border",
         // LA TARJETA QUE SE PULSA ENTERA. Nace con los dos canales de `/contacto`
         // (P67), donde el objetivo no es un renglón sino una caja con rótulo y
         // valor en dos líneas.
@@ -181,7 +181,7 @@ export const actionVariants = cva(
         // `data-surface`: `bg-card` y `hover:bg-muted` ya recalculan el atenuado
         // por sí solos en `globals.css` (D39/D61), así que el rótulo de dentro se
         // lee bien en los dos estados sin que el call site pida nada.
-        card: "border-border bg-card hover:bg-muted focus-visible:bg-muted w-full justify-start rounded-lg border text-left font-normal whitespace-normal",
+        card: "border-control-edge bg-card hover:bg-muted focus-visible:bg-muted w-full justify-start rounded-lg border text-left font-normal whitespace-normal",
       },
       // El tamaño del icono va con el del texto y no lo escribe el call site
       // (`[&_svg]`, sin `>` a propósito: el glifo puede ir envuelto). `shrink-0`
@@ -232,3 +232,44 @@ export const actionVariants = cva(
 );
 
 export type ActionVariants = VariantProps<typeof actionVariants>;
+
+/**
+ * El INTERIOR de la tarjeta que se pulsa: icono, rótulo y valor en dos líneas.
+ *
+ * POR QUÉ EXISTE (2026-08-23, design-review). La variante `card` compartía la
+ * CAJA entre sus dos usos —los canales de `/contacto` y su demo del Design
+ * System— y el interior estaba escrito **dos veces, byte a byte**. Y el interior
+ * no es decoración: el propio comentario de la variante dice que su objeto es
+ * «una caja con rótulo y valor en dos líneas», así que era la mitad del concepto
+ * viviendo fuera de la capa. La demo habría empezado a mentir en cuanto alguien
+ * tocara el rótulo, sin que nada avisara — que es justo el modo de fallo que la
+ * página del Design System existe para no tener.
+ *
+ * El `[overflow-wrap:anywhere]` del valor va aquí y no en el call site: un correo
+ * de 39 caracteres es la cadena más larga que sirve el sitio y a 320px reabre el
+ * scroll horizontal. Es `anywhere` y no `break-word` porque solo el primero
+ * reduce el ancho MÍNIMO INTRÍNSECO, que es lo que dimensiona la columna.
+ */
+export function ActionCardLines({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
+  return (
+    <>
+      <span className="text-muted-foreground flex shrink-0">{icon}</span>
+      <span className="min-w-0">
+        <span className="text-muted-foreground block text-[0.75rem] tracking-[0.06em] uppercase">
+          {label}
+        </span>
+        <span className="text-foreground block [overflow-wrap:anywhere]">
+          {value}
+        </span>
+      </span>
+    </>
+  );
+}

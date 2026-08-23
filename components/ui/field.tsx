@@ -38,7 +38,7 @@ import { cn } from "@/lib/utils";
 const CONTROL = [
   // El suelo táctil es del control, no del contenedor: aquí es donde se pulsa.
   "w-full min-h-[44px] rounded-md border px-[0.85rem] py-[0.7rem]",
-  "border-input bg-transparent text-foreground text-[0.95rem] leading-[1.5]",
+  "border-control-edge bg-transparent text-foreground text-[0.95rem] leading-[1.5]",
   "placeholder:text-muted-foreground transition-colors",
 ].join(" ");
 

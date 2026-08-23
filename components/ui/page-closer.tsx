@@ -32,7 +32,7 @@ import { eyebrowVariants } from "./heading";
 // tarjeta y el anillo.
 const LINK_CARD = cn(
   CARD,
-  "group hover:bg-muted block px-[1.4rem] py-[1.2rem] transition-colors",
+  "group hover:bg-muted border-control-edge block px-[1.4rem] py-[1.2rem] transition-colors",
 );
 
 /** Un destino del cierre. Sin `href` se dibuja apagado, con su etiqueta. */

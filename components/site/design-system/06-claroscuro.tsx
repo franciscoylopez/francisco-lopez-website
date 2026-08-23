@@ -1,5 +1,5 @@
 import { Download } from "lucide-react";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { PALETTE, paletteHex } from "@/lib/design-values";
@@ -132,7 +132,7 @@ export function Claroscuro({
         <div
           className={cn(CARD, "mt-6 max-w-[var(--measure)] px-[1.4rem] py-5")}
         >
-          <h3 className="font-display m-0 mb-[0.6rem] text-[1rem] font-semibold">
+          <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-[0.6rem]")}>
             {t.ruleTitle}
           </h3>
           <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">

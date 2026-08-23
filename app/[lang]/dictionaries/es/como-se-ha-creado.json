@@ -685,7 +685,7 @@
       "ordinal": "08",
       "indexLabel": "Accesibilidad",
       "kicker": "08 — Accesibilidad",
-      "title": "AA es el suelo, y el metro estuvo mal calibrado tres veces",
+      "title": "AA es el suelo, y el metro no midió lo que yo creía cuatro veces",
       "body": [
         {
           "type": "p",
@@ -749,11 +749,11 @@
         },
         {
           "type": "h3",
-          "text": "Las tres veces que el metro estaba mal calibrado"
+          "text": "Las cuatro veces que el metro no medía lo que yo creía"
         },
         {
           "type": "p",
-          "text": "Y lo demás no es que el sitio no llegara. Es que para llegar tuve que arreglar tres veces el instrumento con el que medía, y las tres veces el instrumento roto daba aprobado."
+          "text": "Y lo demás no es que el sitio no llegara. Es que para llegar tuve que arreglar cuatro veces el instrumento con el que medía, y las cuatro veces el resultado se leía igual que un aprobado."
         },
         {
           "type": "p",
@@ -766,6 +766,10 @@
         {
           "type": "p",
           "text": "**De umbral.** La norma no le pide lo mismo a un texto pequeño que a un titular: por encima de cierto tamaño, el listón baja. Yo estaba puntuándolo todo contra el listón del texto pequeño, así que publiqué cuatro incumplimientos donde en realidad había uno. Un umbral mal aplicado inventa hallazgos igual que un metro descalibrado, y cuesta más de deshacer, porque nadie duda de un informe que trae malas noticias."
+        },
+        {
+          "type": "p",
+          "text": "**De alcance.** El cuarto es de otra clase, y por eso es el que más me ha enseñado: no es que el instrumento estuviera roto, es que no existía. Todo lo que medía eran pares de texto sobre fondo, y hay un segundo requisito que casi nadie recuerda: un control también tiene que poder reconocerse como control. El borde de un campo de formulario, que es lo único que dice dónde se escribe, tiene su propio listón. El mío estaba a menos de la mitad, en todos los controles neutros del sitio, y desde la primera versión. No lo vio nadie porque el escáner automático no comprueba esa regla, mi censo medía otra cosa y cada eslabón delegaba en el siguiente, así que la cadena entera terminaba en un sitio donde no había nadie. Y ayudó el nombre que le puse: «censo de pares de contraste» suena a todo. Si lo hubiera llamado «censo de pares de texto», el hueco se habría visto el primer día."
         },
         { "type": "h3", "text": "La capa que no se puede automatizar" },
         {

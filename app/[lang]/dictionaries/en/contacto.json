@@ -26,7 +26,7 @@
       "mensaje": "Tell me what you're building and what you need in product."
     },
     "submit": "Send message",
-    "sending": "Sending",
+    "sending": "Sending…",
     "summary": "Check these fields before sending:",
     "errors": {
       "nombre": {

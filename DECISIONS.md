@@ -132,6 +132,7 @@
 - D94 · El wordmark del logo escalaba con nada, y el arreglo elegante colapsaba la caja
 - D95 · El formulario de contacto sale por el SMTP de la propia cuenta, y por eso la CSP no se tocó
 - D96 · El disparador de la CSP estricta no se cumplió, y conviene decirlo en vez de dejarlo caducar
+- D97 · El contorno de un control no es el filete de una caja, y hasta hoy no lo medía nadie
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5443,3 +5444,49 @@ conversacional, que sí traerá contenido generado y renderizado.
 descartarse**, y descartarse también es un resultado que hay que anotar. Sin esta entrada, la
 tarea se habría quedado en el tablero apuntando a un evento que ya ocurrió y no la disparó, que
 es la forma más silenciosa que tiene una condición de caducar.
+
+## D97 · El contorno de un control no es el filete de una caja, y hasta hoy no lo medía nadie — 2026-08-23
+
+**Contexto.** La `design-review` del cierre del sprint «Footer y contacto» midió el campo del
+formulario recién publicado: **1,29:1** de borde contra su panel en claro, **1,23** en oscuro,
+contra el 3:1 que WCAG 1.4.11 pide a la información visual que identifica un componente. El
+campo no tiene relleno propio, así que el borde era lo único que lo señalaba como campo. Al
+barrer el resto de controles con borde, el campo resultó el **más leve**: el toggle de tema,
+los dos iconos del pie, el enlace de salto y las tarjetas pulsables estaban en **1,21 / 1,36**,
+y llevaban así **desde V1**.
+
+**Por qué no lo vio ningún gate.** `check:marco` delega el contraste en `viewport-verifier`;
+`viewport-verifier` corre axe y dispara el censo; **axe-core no implementa 1.4.11** (lo lista
+como comprobación manual); y el censo medía **pares de texto**. Ningún eslabón mentía y el
+resultado era silencio. `grep` de «1.4.11» en `scripts/` devolvía cero mientras
+`/accesibilidad` publicaba que «todo texto y todo control se comprueba con cifra».
+
+**Decisión 1 — el censo crece a dos pases.** `contrast-census.js` mantiene el pase de texto y
+añade uno de **contorno de control**: por cada elemento interactivo que dibuja caja (borde o
+relleno propio) mide borde-vs-fondo y relleno-vs-fondo, y **basta con que uno llegue a 3:1** —
+un botón sólido no necesita borde. Quedan fuera, a propósito y para no inventar hallazgos: lo
+no interactivo, los enlaces de texto sin caja (su afordancia es el texto, y eso es 1.4.3), los
+deshabilitados (WCAG los exime), el hover (el control ya era reconocible antes del cursor) y
+lo que cae sobre imagen. `npm run censo` falla nombrando el control, y **afirma cuántos ha
+indexado**: un cero es el pase sin correr, no un aprobado.
+
+**Decisión 2 — se parte el token, no se sube `--border`.** `--border` y `--input` tenían el
+mismo valor y servían dos decisiones con umbrales distintos: el filete decorativo (sin umbral)
+y el contorno de un control (3:1). Nace **`--control-edge`**, derivado de la superficie igual
+que `--surface-dim` (D39) y con la misma cobertura de cambios de superficie por estado (D61).
+La mezcla **conmuta con el tema** —60% claro / 45% oscuro— porque un porcentaje fijo no llega
+a `--background`, `--card` y `--muted` a la vez; mismo patrón que `--primary-on-inverted`.
+Subir `--border` habría endurecido cada hairline del sitio para arreglar los controles.
+
+**Dónde se aplica.** En la VARIANTE, nunca en el call site: `outline-neutral`, `icon` y `card`
+de `action.tsx`, el `CONTROL` de `field.tsx`, y las dos tarjetas pulsables que todavía viven
+fuera de la capa (`ui/page-closer.tsx` y `site/trayectoria-indice.tsx`). Lo bordeado en
+`primary` no lo necesita: ya va a 7,47.
+
+**Lo que esto deja escrito para la próxima.** Es la cuarta vez que un metro de este proyecto
+falla en silencio, y la primera en que el fallo es que **el metro no existía**. Las tres
+anteriores fueron instrumentos rotos; esta fue un hueco con forma de instrumento. Y el nombre
+ayudó: «censo de pares de contraste» suena exhaustivo — si hubiera dicho «de TEXTO», el hueco
+se habría visto el día que se escribió. Fue además la **segunda vez en el mismo sprint** que
+el censo no podía ver algo (D-entry de `--destructive`, doce días antes): aquella vez se
+arregló el caso y se escribió una regla, no se tocó el metro.

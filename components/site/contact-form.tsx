@@ -172,6 +172,7 @@ export function ContactForm({
             onBlur={() => blurField(name)}
             type={name === "email" ? "email" : "text"}
             autoComplete={name === "email" ? "email" : "name"}
+            spellCheck={name === "email" ? false : undefined}
             ref={failing[0] === name ? firstErrorRef : undefined}
           />
         ))}
@@ -215,7 +216,7 @@ export function ContactForm({
         className={cn(
           actionVariants({ variant: "solid", size: "lg" }),
           "w-full",
-          pending && "cursor-progress opacity-90",
+          pending && "cursor-progress",
         )}
       >
         {/* El sólido NO lleva icono: la regla mira la acción, y enviar no saca al
@@ -252,9 +253,16 @@ function Sent({
   return (
     <div role="status" className="flex flex-col items-start gap-[0.9rem]">
       <CircleCheck aria-hidden className="text-primary size-[28px]" />
-      <p className="font-display text-foreground m-0 text-[1.5rem] font-semibold">
+      {/* ES UN `h2` Y NO UN `p` (design-review, 2026-08-23): al enviar, este
+          bloque SUSTITUYE al formulario entero, y con él al `h2` que lo abría.
+          Con un párrafo, la página perdía un encabezado al cambiar de estado y su
+          esquema dejaba de ser el mismo que verifica `check:marco` sobre el HTML
+          prerenderizado — que nunca ve este estado, porque solo existe después de
+          un envío. El punto 4 del checklist es de la página, no del primer
+          render. */}
+      <h2 className="font-display text-foreground m-0 text-[1.5rem] font-semibold">
         {dict.sent.title}
-      </p>
+      </h2>
       <p className="text-muted-foreground m-0 max-w-[34ch] text-[0.95rem] leading-[1.6]">
         {dict.sent.body}
       </p>

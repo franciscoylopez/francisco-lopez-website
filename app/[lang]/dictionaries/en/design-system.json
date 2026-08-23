@@ -293,6 +293,12 @@
         "cls": ".icon-chrome",
         "rule": "Theme toggle, menu and social icons: the same pill as the rest of the chrome, filling the full 44px touch target.",
         "note": "A control without a label needs the same affordance as one with text; otherwise it is the only piece of chrome that ignores the cursor."
+      },
+      {
+        "kicker": "Chrome on an inverted band",
+        "cls": ".link-chrome · tone inverted",
+        "rule": "On a block whose background is foreground, chrome lifts to background on hover or focus, and the pill is built from the opposite end of that same background.",
+        "note": "The usual secondary tone lifts to foreground, which here IS the background colour: invisible text. The surface overrules the variant."
       }
     ],
     "demoContentBefore": "Every decision on this page is",
@@ -305,7 +311,7 @@
       "Holding it back for the moment of interaction turns it back into a signal instead of a paragraph colour.",
       "No state is encoded by colour alone: underline, fill and pill are changes of shape, not of hue."
     ],
-    "ruleFoot": "A deliberate exception: the channels in the contact band (phone, LinkedIn, CV) are actions rather than navigation, yet they take the chrome treatment, because a permanent underline next to the solid email button competed with it instead of supporting it."
+    "ruleFoot": "A chrome tone is not decoration. The secondary one (footer, breadcrumb, language switch) lifts to foreground in the same gesture that brings up the pill, because without that jump the pair drops to AA exactly on hover; and on an inverted band it lifts to background, because there foreground is the background colour. No call site writes that rule: the tone does."
   },
   "botones": {
     "num": "09 — Buttons and actions",
@@ -461,7 +467,13 @@
         "size": "sub",
         "eyebrow": "",
         "sample": "The product that already existed",
-        "use": "The h3 of a subsection inside a section. It is the only size that goes without a label above it: the free-form blocks of “The story” on the experience pages use it."
+        "use": "The h3 of a sub-section inside a section. It goes without an eyebrow above, like sub-sm: it serves the free-form blocks of “The story” on the experience pages."
+      },
+      {
+        "size": "sub-sm",
+        "eyebrow": "",
+        "sample": "Before and after",
+        "use": "The step below sub: the heading of a supporting block inside a section. It serves the nine demo headings on this page, where the same string was hand-written nine times. The only size without a clamp: at 1rem there is nothing to scale."
       }
     ],
     "toneTitle": "The label takes its grey from the surface",

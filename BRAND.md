@@ -86,6 +86,23 @@ Lo que hay que saber al escribir UI:
 - **Los pasteles siguen sin ser superficie de texto.** Esto resuelve los grises del sistema, no
   convierte un `*-soft` en fondo legible.
 
+### El contorno de un control también lo pone la superficie
+
+El **filete decorativo** (divisores, borde de una tarjeta que no se pulsa) y el **contorno de un
+control** se parecen y no son lo mismo: al segundo, WCAG 1.4.11 le pide **3:1**, porque es lo que
+permite reconocerlo *como* control. Un campo sin relleno propio es el caso puro: el borde es lo
+único que dice que ahí se escribe. Por eso son dos tokens, `--border` y `--control-edge`.
+
+La regla al escribir UI es la del atenuado: **no se elige el color del borde**. Se escribe
+`border-control-edge` **en la variante** (nunca en el call site) y la superficie lo resuelve,
+estados incluidos. Lo lleva todo lo que se pulsa y dibuja caja neutra; lo bordeado en `primary`
+no lo necesita. La mezcla **conmuta con el tema**, como `--primary-on-inverted`: un porcentaje
+fijo no llega a las dos superficies a la vez.
+
+*(Cifras, barrido de mezcla y por qué esto pasó año y medio invisible, en
+[`BRAND-historical.md`](./BRAND-historical.md) §El contorno de un control; componente y metro en
+`DECISIONS.md` D97.)*
+
 ### Enlaces: depende de si son contenido o chrome
 
 - **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en
@@ -243,6 +260,7 @@ el switch del consentimiento, aquí debajo).
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares que el sitio
   PINTA están en AAA en ambos temas, en reposo y en hover.**
   **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
+  Son **dos pases**: pares de texto (1.4.3/1.4.6) y **contorno de control** (1.4.11, 3:1).
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
   **«Que pinta» es el límite del metro:** el censo recorre el DOM, así que un token que existe y
   no se usa le resulta invisible. Ahí estaba `--destructive` (4,31:1 en claro), y de ahí la

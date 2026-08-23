@@ -3,7 +3,7 @@ import { Mail, Phone } from "lucide-react";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ContactForm } from "./contact-form";
 import type { ContactoPaginaDict } from "@/app/[lang]/dictionaries";
-import { actionVariants } from "@/components/ui/action";
+import { ActionCardLines, actionVariants } from "@/components/ui/action";
 import { LEAD_GAP, SectionHeader } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { EMAIL, PHONE_DISPLAY, PHONE_TEL, mailtoHref } from "@/lib/contact";
@@ -119,37 +119,21 @@ export function ContactoPagina({
                 <li key={valor} className="min-w-0">
                   {/* La tarjeta pulsable entera: `variant="card"` de la capa de
                     acciones, creada aquí (P67). El prototipo la escribió con
-                    clases sueltas y dejó anotado que eso era deuda. */}
+                    clases sueltas y dejó anotado que eso era deuda. El interior
+                    —icono, rótulo y valor— sale de `ActionCardLines`, de la misma
+                    capa: estaba escrito aquí y otra vez en su demo del Design
+                    System, byte a byte (design-review, 2026-08-23). */}
                   <a
                     href={href}
                     className={cn(
                       actionVariants({ variant: "card", size: "card" }),
                     )}
                   >
-                    <Icon
-                      aria-hidden
-                      className="text-muted-foreground shrink-0"
+                    <ActionCardLines
+                      icon={<Icon aria-hidden />}
+                      label={rotulo}
+                      value={valor}
                     />
-                    <span className="min-w-0">
-                      <span className="text-muted-foreground block text-[0.75rem] tracking-[0.06em] uppercase">
-                        {rotulo}
-                      </span>
-                      {/* Un correo de 39 caracteres es la cadena más larga que
-                        sirve el sitio, y a 320px no cabe: sin esto la tarjeta
-                        reabre el scroll horizontal que cerró P65.5 (medido: la
-                        columna salía a 368 en un viewport de 320).
-
-                        Y ES `anywhere`, NO el `break-words` que traía el
-                        prototipo, que no bastaba: `overflow-wrap: break-word`
-                        parte la línea AL PINTAR pero no reduce el ancho mínimo
-                        intrínseco, así que la columna de la rejilla se seguía
-                        dimensionando por la palabra entera. `anywhere` sí lo
-                        reduce, y solo parte cuando hace falta, a diferencia de
-                        `break-all`, que partiría el dominio siempre. */}
-                      <span className="text-foreground block [overflow-wrap:anywhere]">
-                        {valor}
-                      </span>
-                    </span>
                   </a>
                 </li>
               ))}

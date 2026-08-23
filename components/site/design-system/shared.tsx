@@ -1,3 +1,4 @@
+import { titleVariants } from "@/components/ui/heading";
 import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
@@ -105,7 +106,8 @@ export function GroupHead({
     <>
       <h3
         className={cn(
-          "font-display m-0 mb-2 text-[1rem] font-semibold",
+          titleVariants({ size: "sub-sm" }),
+          "mb-2",
           !first && "mt-12",
         )}
       >

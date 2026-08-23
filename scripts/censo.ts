@@ -3,7 +3,14 @@
  *
  * QUÉ HACE. Recorre las páginas del registro (`PAGE_SLUGS`, D72) × los dos temas
  * sobre el sitio SERVIDO, inyecta `scripts/design-review/contrast-census.js` en
- * cada una y falla si aparece un solo par por debajo de AAA.
+ * cada una y falla si aparece un solo par de TEXTO por debajo de AAA **o un solo
+ * CONTORNO de control por debajo del 3:1 de WCAG 1.4.11**.
+ *
+ * Lo segundo se añadió el 2026-08-23 y llegaba tarde: el contorno de todo control
+ * neutro del sitio llevaba en 1,21:1 desde V1, y no lo veía nadie porque
+ * `check:marco` delega el contraste aquí, aquí se medía texto, y **axe no
+ * implementa 1.4.11**. Tres eslabones, ninguno mintiendo, y un agujero al final.
+ * El porqué largo está en el segundo pase de `contrast-census.js`.
  *
  * POR QUÉ EXISTE, y es una lección repetida de este repo: la pasada completa se
  * hacía **a mano**, conduciendo el navegador llamada a llamada, y por eso se
@@ -28,7 +35,7 @@
  *     npm run build && npm start        # en otra terminal
  *     npm run censo
  *
- * AFIRMA CUÁNTO HA MIRADO, con guarda de cero en las tres dimensiones que ya han
+ * AFIRMA CUÁNTO HA MIRADO, con guarda de cero en las cuatro dimensiones que ya han
  * fallado en silencio en este proyecto (`BRAND.md` §Cómo medir sin equivocarse):
  *
  *   1. **El metro**, contra los anclajes SIN cian —13,79 claro / 15,32 oscuro—,
@@ -37,6 +44,9 @@
  *      censo dos veces, y su síntoma era un aprobado.
  *   3. **El tema pintado**, contra el que se pidió. Un `set media` que no llega
  *      mediría la misma página dos veces y lo llamaría cobertura.
+ *   4. **Los contornos de control indexados.** Toda página tiene al menos el
+ *      enlace de salto, que dibuja caja; un cero aquí es el pase de 1.4.11 sin
+ *      correr, no un aprobado.
  *
  * LO QUE NO CUBRE, dicho para que no se dé por cubierto:
  *
@@ -67,6 +77,14 @@ const TEMAS = ["light", "dark"] as const;
 const LOCALE = locales[0];
 
 type Par = { ratio: number; px: number; nivel: string; ejemplo: string };
+/** Contorno de un control: WCAG 1.4.11, que no es contraste de texto. */
+type Contorno = {
+  ejemplo: string;
+  lados: string;
+  bordeVsFondo: number | null;
+  rellenoVsFondo: number | null;
+  veces: number;
+};
 type Censo = {
   metro: string;
   reglasHover: string;
@@ -75,6 +93,8 @@ type Censo = {
   bajoAA: Par[];
   bajoAAA: Par[];
   sinMedir: Par[];
+  contornos: string;
+  bajo3: Contorno[];
 };
 
 /**
@@ -126,6 +146,7 @@ const guionCenso = readFileSync(CENSO, "utf8");
 let corridas = 0;
 let paresTotales = 0;
 let sinMedirTotales = 0;
+let contornosTotales = 0;
 
 console.log(
   `censo — ${PAGE_SLUGS.length} páginas × ${TEMAS.length} temas sobre ${BASE}\n`,
@@ -144,6 +165,7 @@ for (const slug of PAGE_SLUGS) {
     corridas++;
     paresTotales += c.pares;
     sinMedirTotales += c.sinMedir.length;
+    contornosTotales += Number(c.contornos.match(/^\d+/)?.[0] ?? 0);
 
     const etiqueta = `${ruta} · ${tema}`;
     const temaPintado = tema === "dark" ? "oscuro" : "claro";
@@ -156,6 +178,7 @@ for (const slug of PAGE_SLUGS) {
           `El \`set media\` no ha llegado, así que esta corrida mide otra cosa.`,
       );
     if (c.reglasHover.startsWith("0")) fallo(`${etiqueta}: ${c.reglasHover}`);
+    if (c.contornos.startsWith("0")) fallo(`${etiqueta}: ${c.contornos}`);
     if (c.pares === 0)
       fallo(`${etiqueta}: cero pares medidos. Una página siempre tiene pares.`);
 
@@ -169,6 +192,16 @@ for (const slug of PAGE_SLUGS) {
           `${etiqueta}: bajo AAA — ${p.ratio.toFixed(2)}:1 en ${p.px}px · ${p.ejemplo}`,
         );
 
+    // WCAG 1.4.11: el control tiene que poder reconocerse COMO control. Basta con
+    // que uno de los dos caminos llegue a 3:1, así que el mensaje dice los dos —
+    // si no, el lector no sabe cuál subir.
+    for (const c11 of c.bajo3)
+      fallo(
+        `${etiqueta}: FALLA 1.4.11 — ni el borde (${c11.bordeVsFondo ?? "—"}) ` +
+          `ni el relleno (${c11.rellenoVsFondo ?? "—"}) llegan a 3:1 · ` +
+          `${c11.ejemplo}${c11.veces > 1 ? ` ×${c11.veces}` : ""}`,
+      );
+
     console.log(
       `  ${etiqueta.padEnd(34)} ${String(c.pares).padStart(3)} pares · ` +
         `${c.sinMedir.length} sobre imagen · metro ${c.metro}`,
@@ -178,10 +211,10 @@ for (const slug of PAGE_SLUGS) {
 
 console.log("");
 
-if (corridas === 0 || paresTotales === 0)
+if (corridas === 0 || paresTotales === 0 || contornosTotales === 0)
   fallo(
-    `el censo no ha medido nada (corridas: ${corridas}, pares: ${paresTotales}). ` +
-      `Un metro que devuelve lista vacía parece un aprobado.`,
+    `el censo no ha medido nada (corridas: ${corridas}, pares: ${paresTotales}, ` +
+      `contornos: ${contornosTotales}). Un metro que devuelve lista vacía parece un aprobado.`,
   );
 
 if (problemas.length) {
@@ -203,9 +236,10 @@ const sello = sellar(new Date().toISOString().slice(0, 10));
 
 console.log(
   `censo ✓ — ${corridas} corridas (${PAGE_SLUGS.length} páginas × ${TEMAS.length} temas), ` +
-    `${paresTotales} pares medidos, metro validado en las ${corridas}.\n` +
-    `Cero bajo AA y cero bajo AAA. ${sinMedirTotales} pares sobre imagen quedan fuera ` +
-    `del veredicto y se miran aparte.\n\n` +
+    `${paresTotales} pares de texto y ${contornosTotales} contornos de control medidos, ` +
+    `metro validado en las ${corridas}.\n` +
+    `Cero bajo AA, cero bajo AAA y cero por debajo del 3:1 de WCAG 1.4.11. ` +
+    `${sinMedirTotales} pares sobre imagen quedan fuera del veredicto y se miran aparte.\n\n` +
     `Sellado en ${HUELLA_PATH} — ${sello.resumen}.\n` +
     `Si esta pasada es la buena, actualiza LAST_A11Y_REVIEW en lib/design-values.ts.`,
 );

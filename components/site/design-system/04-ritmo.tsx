@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { SECTION_Y_RANGE_PX, SPACING_SCALE } from "@/lib/design-values";
 
@@ -15,7 +16,7 @@ export function Ritmo({ t }: { t: Dictionary["designSystem"]["ritmo"] }) {
         </SectionHeader>
         <div className="flex flex-wrap gap-10">
           <div className="min-w-[min(100%,20rem)] flex-[1_1_22rem]">
-            <h3 className="font-display m-0 mb-4 text-[1rem] font-semibold">
+            <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-4")}>
               {t.scaleTitle}
             </h3>
             <div className="flex flex-col gap-[0.55rem]">
@@ -36,7 +37,7 @@ export function Ritmo({ t }: { t: Dictionary["designSystem"]["ritmo"] }) {
             </div>
           </div>
           <div className="min-w-[min(100%,20rem)] flex-[1_1_22rem]">
-            <h3 className="font-display m-0 mb-4 text-[1rem] font-semibold">
+            <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-4")}>
               {t.rhythmTitle}
             </h3>
             <div className={PANEL}>

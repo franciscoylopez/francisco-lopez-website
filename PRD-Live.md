@@ -156,7 +156,7 @@ nazca bien sin pedirlo (D30/D39/D61).
 | Criterio | Umbral | Estado |
 |---|---|---|
 | PageSpeed / Lighthouse | >90 escritorio y móvil | **100 escritorio · 94-96 móvil** (`npm run psi`, D49) |
-| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** en las catorce páginas × 2 temas, en reposo y en hover — 380 pares, `npm run censo` (D85); **0 violaciones de axe** |
+| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** y **cero contornos bajo el 3:1 de WCAG 1.4.11** en las catorce páginas × 2 temas, en reposo y en hover — 370 pares de texto y 276 contornos de control, `npm run censo` (D85/D97); **0 violaciones de axe** |
 | SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las catorce |
 
 **Cómo se mide el contraste lo dice `BRAND.md` §Cómo se hace el censo**, entero y con sus
@@ -192,7 +192,10 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
   sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
   mirarlo (D84).
 - **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
-  porque necesita navegador (D85). **Pero deja sello**: al pasar en verde firma los tokens
+  porque necesita navegador (D85). **Son dos pases**: los pares de TEXTO (1.4.3/1.4.6) y el
+  **contorno de cada control** (1.4.11, 3:1), que hasta el 2026-08-23 no medía nadie porque
+  axe no implementa esa regla — y por eso el contorno de todo control neutro del sitio llevaba
+  en 1,21:1 desde V1 (D97). **Y deja sello**: al pasar en verde firma los tokens
   de color, las superficies y las animaciones que había, y `check:palette` compara ese
   sello en cada PR. Medir necesita pintar; saber que hay que medir, no — así que la
   condición de re-medir de la DoD la lee una máquina (D90).

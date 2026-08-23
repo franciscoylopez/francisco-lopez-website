@@ -26,7 +26,7 @@
       "mensaje": "Cuéntame qué construís y qué buscáis en producto."
     },
     "submit": "Enviar mensaje",
-    "sending": "Enviando",
+    "sending": "Enviando…",
     "summary": "Revisa estos campos antes de enviar:",
     "errors": {
       "nombre": {

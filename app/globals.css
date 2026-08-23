@@ -25,6 +25,7 @@
   --color-ring: var(--ring);
   --color-input: var(--input);
   --color-border: var(--border);
+  --color-control-edge: var(--control-edge);
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
@@ -113,7 +114,13 @@
   --destructive: oklch(0.577 0.245 27.325);
 
   --border: oklch(0.901 0.0142 88.69);
+  /* Token de la base de shadcn, hoy SIN USAR: el borde de un campo lo pone
+     `--control-edge`, que se deriva de la superficie y llega al 3:1 de WCAG
+     1.4.11. Se conserva por no tocar la base, pero no lo consume nadie — y
+     nombrarlo como si gobernara los campos fue parte de cómo el borde real pasó
+     año y medio a 1,21:1. */
   --input: oklch(0.901 0.0142 88.69);
+  --control-edge-mix: 60%;
   --ring: oklch(0.41 0.0886 194.82); /* foco = cian primario */
 
   --chart-1: var(--brand-cyan);
@@ -215,6 +222,7 @@
 
   --border: oklch(0.3252 0.0157 248.31);
   --input: oklch(0.3252 0.0157 248.31);
+  --control-edge-mix: 45%;
   --ring: oklch(0.7626 0.1156 191.46);
 
   --chart-1: var(--brand-cyan);
@@ -552,6 +560,99 @@
   --surface-dim: var(--muted-foreground);
 }
 
+/* ── EL CONTORNO DE UN CONTROL LO PONE SU SUPERFICIE (2026-08-23) ────────────
+   Hermano exacto de `--surface-dim` de aquí arriba, y por el mismo motivo, en el
+   otro criterio: `--surface-dim` existe porque el texto ATENUADO tiene que
+   recalcularse contra el fondo donde cae; esto existe porque el CONTORNO de un
+   control tiene que hacer lo mismo, y con otro umbral.
+
+   POR QUÉ NO VALÍA `--border`. Un solo token servía dos decisiones con
+   requisitos distintos: el **filete decorativo** (divisores, hairlines, el borde
+   de una tarjeta que no se pulsa), que no tiene umbral de WCAG, y el **contorno
+   de un control**, al que 1.4.11 le pide 3:1 porque es la información visual que
+   permite reconocerlo COMO control. Con los dos en el mismo valor, el filete
+   mandaba: 1,21:1 en claro y 1,36 en oscuro, o sea menos de la mitad del umbral,
+   en el campo del formulario, el toggle de tema, los dos iconos del footer y la
+   tarjeta pulsable del cierre de cada página. Desde V1 y sin que nada avisara,
+   porque **axe no implementa 1.4.11** y el censo medía pares de texto (2026-08-23;
+   el segundo pase de `scripts/design-review/contrast-census.js` ya lo mide).
+
+   Es `BRAND.md` §Cómo se escribe una regla nº4 al revés: la regla avisa de no
+   unificar dos valores que se parecen sin mirar si significan cosas distintas, y
+   aquí ya estaban unificados de nacimiento. Se separan, no se sube `--border`:
+   subirlo endurecería cada hairline del sitio para arreglar los controles.
+
+   LA MEZCLA CONMUTA CON EL TEMA (60% claro / 45% oscuro) y no es un capricho: un
+   porcentaje fijo no llega a las dos superficies a la vez. Mismo patrón que
+   `--primary-on-inverted`, `--brand-purple-accent` y `progress-ink`. Medido sobre
+   el píxel pintado: claro 4,00 sobre `--background` · 4,08 sobre `--card` · 3,85
+   sobre `--muted`; oscuro 4,11 · 3,96 · 3,74. El mínimo para 3:1 era 55% y 40%;
+   se deja un escalón de holgura para que un retoque de paleta no lo tumbe.
+
+   AL ESCRIBIR UI NO HAY QUE ELEGIRLO: se escribe `border-control-edge` en la
+   VARIANTE (nunca en el call site) y la superficie de debajo resuelve el color,
+   incluidos los cambios de superficie por estado que ya cubren los bloques de
+   `hover:` y `focus-visible:` de aquí arriba. */
+:root {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--background)
+  );
+}
+.bg-card,
+.bg-popover,
+[data-surface="card"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--card)
+  );
+}
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+[data-surface="muted"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--muted)
+  );
+}
+@media (hover: hover) {
+  .hover\:bg-muted:hover {
+    --control-edge: color-mix(
+      in srgb,
+      var(--foreground) var(--control-edge-mix),
+      var(--muted)
+    );
+  }
+}
+.focus-visible\:bg-muted:focus-visible {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--muted)
+  );
+}
+/* En una banda invertida el primer plano es `--background`, así que el contorno
+   se construye desde el otro extremo — igual que hace `--surface-dim`. */
+[data-surface="inverted"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--background) var(--control-edge-mix),
+    var(--foreground)
+  );
+}
+.bg-background,
+[data-surface="page"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--background)
+  );
+}
+
 /* El CTA de email tenía aquí `.contact-cta` / `.contact-cta-icon`, y en P37.5988 se
    borraron las dos. P37.592 ya les había quitado el hover del relleno (se lo lleva
    la variante `solid`) y lo único que quedaba era el empujón de 2px del icono, que
@@ -605,19 +706,14 @@
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 100% 0%;
-  transition:
-    background-size 0.3s ease,
-    color 0.3s ease 0.08s;
-}
-.link-content:hover,
-.link-content:focus-visible {
-  background-size: 100% 100%;
-  color: var(--primary-foreground);
-}
-/* Modificador solo para enlaces de texto corrido (sin icono): el subrayado es la
-   afordancia en reposo; en icono + etiqueta (p. ej. ContactSecondary) el propio
-   icono ya cumple esa función y el subrayado sobraría bajo el glifo. */
-.link-content--underline {
+  /* EL SUBRAYADO ES DE LA BASE desde el 2026-08-23, no de un modificador. Vivía
+     en `.link-content--underline` porque había un caso sin él: los enlaces de
+     icono + etiqueta de `ContactSecondary`, donde el glifo ya hacía de
+     afordancia y el subrayado sobraba bajo él. Ese caso se retiró con la página
+     de Contacto (P67) y el modificador se quedó con CERO usos propios: los diez
+     call sites del sitio lo escribían siempre. Una distinción sin caso no es una
+     distinción, así que se fusiona. Si vuelve a aparecer un enlace de contenido
+     con icono, vuelve el modificador — con su caso delante. */
   text-decoration: underline;
   text-decoration-color: var(--primary);
   text-decoration-thickness: 2px;
@@ -627,13 +723,14 @@
     color 0.3s ease 0.08s,
     text-decoration-color 0.22s ease;
 }
-.link-content--underline:hover,
-.link-content--underline:focus-visible {
+.link-content:hover,
+.link-content:focus-visible {
+  background-size: 100% 100%;
+  color: var(--primary-foreground);
   text-decoration-color: transparent;
 }
 @media (prefers-reduced-motion: reduce) {
-  .link-content,
-  .link-content--underline {
+  .link-content {
     transition: none;
   }
 }
@@ -645,20 +742,21 @@
    `@layer`, esta clase la pisaría si la trajera. La pastilla usa la caja que ya
    define cada componente.
    `--chrome-hover-bg` sensible al fondo, mismo patrón que `--surface-dim` arriba:
-   por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), pero dentro
-   de `.contact-band` (fondo YA `--muted`, ContactSecondary también usa esta clase
-   desde P37.55) el pill se volvía invisible — mismo color que su fondo.
-   Ajustado 2026-08-04: el primer intento usaba `--card` ahí dentro — un token fijo
-   mucho más claro que rompía con el tono cálido y sutil del pill de siempre (se
-   veía como un recuadro blanco suelto). En su lugar se mezcla `--foreground` un
-   10% sobre la PROPIA banda, igual que ya hace `--surface-dim`: en claro oscurece
-   un paso (mismo sentido que --muted respecto a --background), en oscuro aclara un
-   paso — la misma dirección que ya tiene el pill por defecto en cada tema. */
+   por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), y
+   recalculado en las superficies donde ese valor por defecto se volvería invisible
+   por ser del mismo color que el fondo.
+
+   AQUÍ HABÍA UNA RAMA PARA `.contact-band`, y se retiró el 2026-08-23 al quedarse
+   sin caso. Existía porque `ContactSecondary` —la fila de teléfono, LinkedIn y CV
+   bajo el CTA— llevaba tratamiento de chrome DENTRO de esa banda, cuyo fondo ya es
+   `--muted`. Esa fila se retiró con la página de Contacto (P67): la franja hoy solo
+   tiene su cabecera y un botón sólido, así que no queda un solo enlace de chrome
+   dentro de `.contact-band` y la rama era código muerto con documentación viva.
+   Si vuelve a entrar chrome en una banda `--muted`, vuelve la rama: se mezclaba
+   `--foreground` al 10% sobre la propia banda —no `--card`, que se veía como un
+   recuadro blanco suelto—, mismo sentido y proporción que la de abajo. */
 :root {
   --chrome-hover-bg: var(--muted);
-}
-.contact-band {
-  --chrome-hover-bg: color-mix(in srgb, var(--foreground) 10%, var(--muted));
 }
 /* Mismo problema, banda invertida (P60, design-review): el fondo local es
    `--foreground` y el texto de `tone: "inverted"` sube a `--background` en

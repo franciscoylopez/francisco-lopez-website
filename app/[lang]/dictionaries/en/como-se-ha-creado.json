@@ -690,7 +690,7 @@
       "ordinal": "08",
       "indexLabel": "Accessibility",
       "kicker": "08 — Accessibility",
-      "title": "AA is the floor, and the meter was miscalibrated three times",
+      "title": "AA is the floor, and four times the meter measured something other than what I thought",
       "body": [
         {
           "type": "p",
@@ -746,10 +746,13 @@
           "type": "p",
           "text": "And here's the first failure, because the good rule had a hole that took me a while to see. A surface doesn't only change by class: it changes by state. A card that lightens on hover is changing its background, and my layer had no idea, because hover compiles to a different selector. For a long stretch, cards that passed comfortably at rest fell below target on hover. No scanner caught it. What caught it was asking myself why I'd measured eight pages and not twelve."
         },
-        { "type": "h3", "text": "The three times the meter was miscalibrated" },
+        {
+          "type": "h3",
+          "text": "The four times the meter measured something other than what I thought"
+        },
         {
           "type": "p",
-          "text": "And the rest isn't that the site fell short. It's that getting there meant fixing the measuring instrument itself three times, and all three times the broken instrument said pass."
+          "text": "And the rest isn't that the site fell short. It's that getting there meant fixing the measuring instrument itself four times, and all four times the result read exactly like a pass."
         },
         {
           "type": "p",
@@ -762,6 +765,10 @@
         {
           "type": "p",
           "text": "**On threshold.** The standard doesn't ask the same of small text as it does of a headline: past a certain size, the bar drops. I was scoring everything against the small-text bar, so I published four violations where there was really one. A misapplied threshold invents findings just as badly as an uncalibrated meter, and it's more expensive to undo, because nobody doubts a report that brings bad news."
+        },
+        {
+          "type": "p",
+          "text": "**On scope.** The fourth one is a different kind, and that's why it taught me the most: the instrument wasn't broken, it didn't exist. Everything it measured was text against its background, and there's a second requirement almost nobody remembers: a control also has to be recognisable as a control. The border of a form field, which is the only thing telling you where to type, has a bar of its own. Mine sat at less than half of it, on every neutral control on the site, and had done since the first version. Nobody caught it because the automated scanner doesn't check that rule, my own census measured something else, and each link in the chain delegated to the next, so the whole chain ended somewhere nobody was standing. The name I gave it helped too: “contrast pair census” sounds like it covers everything. Had I called it “text pair census”, the gap would have been visible on day one."
         },
         { "type": "h3", "text": "The layer that can't be automated" },
         {

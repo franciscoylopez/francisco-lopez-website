@@ -546,10 +546,7 @@ export function LiveStat({
           href={href}
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
-          className={cn(
-            "link-content link-content--underline text-[0.9rem] font-medium",
-            LEADING.meta,
-          )}
+          className={cn("link-content text-[0.9rem] font-medium", LEADING.meta)}
         >
           {linkLabel}
         </a>
@@ -629,7 +626,7 @@ export function RepoStrip({
               className={
                 tone === "chrome"
                   ? chromeLinkVariants({ shape: "inline", tone: "muted" })
-                  : "link-content link-content--underline"
+                  : "link-content"
               }
             >
               {part.label}

@@ -122,10 +122,7 @@ export function ConsentBanner({
               </p>
               <p className="text-muted-foreground mt-1 text-[0.9rem] leading-relaxed">
                 {dict.description}{" "}
-                <a
-                  href={policyHref}
-                  className="link-content link-content--underline"
-                >
+                <a href={policyHref} className="link-content">
                   {dict.policyLink}
                 </a>
               </p>
