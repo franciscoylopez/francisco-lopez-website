@@ -12,6 +12,7 @@ import esBrandKit from "../[lang]/dictionaries/es/brand-kit.json";
 import esDesignSystem from "../[lang]/dictionaries/es/design-system.json";
 import esAccesibilidad from "../[lang]/dictionaries/es/accesibilidad.json";
 import esCookies from "../[lang]/dictionaries/es/cookies.json";
+import esContacto from "../[lang]/dictionaries/es/contacto.json";
 import esComoSeHaCreado from "../[lang]/dictionaries/es/como-se-ha-creado.json";
 import esTrayectoria from "../[lang]/dictionaries/es/trayectoria/indice.json";
 import esEmendu from "../[lang]/dictionaries/es/trayectoria/emendu.json";
@@ -52,6 +53,7 @@ const META: Record<StaticPageSlug, { title: string; description: string }> = {
   "design-system": es.designSystem.meta,
   accesibilidad: es.accesibilidad.meta,
   cookies: es.cookies.meta,
+  contacto: esContacto.meta,
   "como-se-ha-creado": esComoSeHaCreado.meta,
 };
 

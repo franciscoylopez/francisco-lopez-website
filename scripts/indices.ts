@@ -231,6 +231,12 @@ export const SIN_PUBLICAR = [
   // `stat-row.tsx` salió de aquí el 2026-08-22: era la única pieza del NÚCLEO
   // sin sección, y fue el primer disparo de la skill `publicar-en-design-system`
   // (§11, «Debajo del titular, la fila de cifras»).
+  // `field.tsx` nace sin sección A PROPÓSITO y con fecha de caducidad: P67.2 es
+  // la tarea que publica en el Design System las piezas que estrena el
+  // formulario, y va inmediatamente detrás de P67. Se anota aquí en vez de
+  // dejarla «pendiente» porque esa es la diferencia entre una deuda declarada y
+  // un olvido (2026-08-23).
+  "field.tsx",
   "info-card.tsx",
   "rich.tsx",
   "page-closer.tsx",

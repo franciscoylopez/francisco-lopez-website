@@ -69,7 +69,8 @@ const ESTATICAS: Record<StaticPageSlug, Omit<Pagina, "slug">> = {
   "brand-kit": { priority: 0.8, lastModified: "2026-08-10" },
   "design-system": { priority: 0.8, lastModified: "2026-08-10" },
   accesibilidad: { priority: 0.8, lastModified: "2026-08-10" },
-  cookies: { priority: 0.3, lastModified: "2026-08-17" },
+  cookies: { priority: 0.3, lastModified: "2026-08-23" },
+  contacto: { priority: 0.9, lastModified: "2026-08-23" },
   "como-se-ha-creado": { priority: 0.8, lastModified: ARTICLE_UPDATED },
 };
 

@@ -18,3 +18,22 @@ export function trackContactClick(method: ContactMethod): void {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: "contact_click", contact_method: method });
 }
+
+/**
+ * El envío del formulario de contacto (P67). Desde que existe, la métrica
+ * primaria del PRD §7 deja de ser el clic en `mailto:` —un proxy de intención,
+ * porque no había formulario— y pasa a ser esto: un envío real.
+ *
+ * Se dispara cuando el SERVIDOR confirma, no al pulsar: un clic en «Enviar» que
+ * falla la validación o que no llega a salir no es un contacto, y contarlo
+ * inflaría justo la cifra que se quiere creer.
+ *
+ * LA OTRA MITAD VIVE FUERA DEL REPO, como el resto (D71): GTM necesita un
+ * trigger de Custom Event para `contact_submit` y su tag de GA4. Sin eso, el
+ * evento llega al `dataLayer` y no sale de ahí.
+ */
+export function trackContactSubmit(): void {
+  if (typeof window === "undefined") return;
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: "contact_submit" });
+}

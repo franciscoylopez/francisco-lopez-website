@@ -37,6 +37,7 @@ export const STATIC_PAGE_SLUGS = [
   "design-system",
   "accesibilidad",
   "cookies",
+  "contacto",
   "como-se-ha-creado",
 ] as const;
 
