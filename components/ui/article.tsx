@@ -546,10 +546,7 @@ export function LiveStat({
           href={href}
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
-          className={cn(
-            "link-content text-[0.9rem] font-medium",
-            LEADING.meta,
-          )}
+          className={cn("link-content text-[0.9rem] font-medium", LEADING.meta)}
         >
           {linkLabel}
         </a>

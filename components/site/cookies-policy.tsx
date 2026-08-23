@@ -258,10 +258,7 @@ export function CookiesPolicy({
                     el separador natural, en vez de por cualquier sitio —
                     `break-all` dejaba «…@gmai / l.com» y partía el dominio. Sin
                     efecto donde hay sitio: `<wbr>` solo ofrece el corte. */}
-                <a
-                  href={`mailto:${EMAIL}`}
-                  className="link-content"
-                >
+                <a href={`mailto:${EMAIL}`} className="link-content">
                   {EMAIL.slice(0, EMAIL.indexOf("@") + 1)}
                   <wbr />
                   {EMAIL.slice(EMAIL.indexOf("@") + 1)}
