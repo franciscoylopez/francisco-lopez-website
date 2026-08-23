@@ -168,9 +168,12 @@ Verifica el orden del DOM = orden de lectura, un solo `h1` y jerarquía `h2`–`
 agent-browser vitals --json
 ```
 
-Referencia viva: escritorio 100/100 con LCP 0,7 s; móvil 94-96 con LCP 2,6-3,0 s, del que el
-~81% es retraso de renderizado. Eso es margen conocido, no incumplimiento — no lo reportes
-como hallazgo salvo que empeore.
+Referencia viva (medida sobre las catorce páginas el 2026-08-24): **móvil 95-99 · escritorio
+97-100**, con LCP móvil de 2,6-3,2 s. Del LCP móvil, el retraso de renderizado va del 43% al
+83% **entre corridas de la misma página y el mismo despliegue**, así que ni ese reparto ni una
+nota suelta sirven de hallazgo: PSI varía tanto que la home ha dado 72 y 100 en escritorio con
+veinte minutos de diferencia (D99). Repite antes de reportar, y reporta solo lo que se
+reproduzca.
 
 **5 · Contraste, solo si el trabajo introdujo un par nuevo** — un color nuevo, un fondo que no
 sea `--background`, o una superficie propia. Si todo sale de piezas existentes, el contraste

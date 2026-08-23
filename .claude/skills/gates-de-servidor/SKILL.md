@@ -59,7 +59,7 @@ Y vuelve aquí.
 ```bash
 npm run gate:html    # ¿cambió el HTML? Ver arriba: vacío = cerrado
 npm run censo        # contraste de todas las páginas × 2 temas, con el sitio servido
-npm run psi          # la nota de PageSpeed — CONTRA PRODUCCIÓN, no contra local
+npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no contra local
 ```
 
 - **`gate:html`** compara contra la base del paso 2. Si sale diff y el cambio era intencionado,

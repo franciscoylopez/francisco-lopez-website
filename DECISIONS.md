@@ -134,6 +134,7 @@
 - D96 · El disparador de la CSP estricta no se cumplió, y conviene decirlo en vez de dejarlo caducar
 - D97 · El contorno de un control no es el filete de una caja, y hasta hoy no lo medía nadie
 - D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro
+- D99 · La auditoría de rendimiento recorre el registro, y un ahorro estimado no es un ahorro
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5593,3 +5594,67 @@ misma tarde; sube a `Must`.
 **La lección de método, que es lo único que hay que llevarse:** medir un instrumento incluye medir
 su **alcance**, no solo su resultado. Los tres hallazgos de arriba no se habrían encontrado
 preguntando si fallaban; se encontraron preguntando **sobre qué** pasaban.
+
+## D99 · La auditoría de rendimiento recorre el registro, y un ahorro estimado no es un ahorro — 2026-08-24
+
+**Decisión.** `npm run psi -- --registro` recorre las páginas de `PAGE_SLUGS` (D72) como hace
+`censo` desde D85, en vez de medir una URL pasada por argumento. Y lo que imprime deja de ser
+una lista de títulos: cada aviso lleva **gravedad** —el corte de Lighthouse, rojo por debajo de
+0,5 y naranja por debajo de 0,9— y su ahorro estimado, y al final va **el agregado: qué aviso se
+repite en cuántas páginas**. Amplía D49, no lo sustituye: el modo de una URL y el desglose del
+LCP siguen siendo el instrumento cuando se persigue una cifra concreta.
+
+**Por qué el modo registro.** Mientras la auditoría medía una URL, la cobertura dependía de
+acordarse de cuál mirar, que es lo que `BRAND.md` §Cómo se escribe una regla nombra como fuente
+del drift. Y ya había pasado: `PRD-Live.md` §5 publicaba «100 escritorio · 94-96 móvil», una
+cifra escrita con doce páginas que dejó de ser cierta al añadir la trece y la catorce sin que
+nada lo dijera.
+
+**Por qué el agregado es el entregable.** Un aviso en catorce páginas se arregla una vez en la
+capa; el mismo aviso en una es pulido de esa página. Sin esa tabla hay que leer catorce informes
+y hacer la cuenta a ojo, que es como se acaba tratando como puntual algo que era transversal. La
+primera pasada lo demostró: de los **seis rojos que se repiten, solo dos son nuestros**, y los
+dos aparecen en una página cada uno. Los otros cuatro son de terceros (`gtm.js` y `gtag`, 135 de
+los 181 KiB de «unused JavaScript»), del framework (`polyfill-module.js` de Next, cuyo fuente
+entero mide 1.380 bytes pese a los «14 KiB de ahorro») o ya medidos y descartados.
+
+### Un ahorro estimado no es un ahorro: es una hipótesis con unidades
+
+Es la parte reutilizable, y salió de creerse una y comprobarla. La auditoría señalaba
+«Render-blocking requests» en **14 de 14** páginas con ~580 ms estimados en móvil, y al abrir el
+detalle los culpables eran exactamente nuestras dos hojas de estilo. El candidato era
+`experimental.inlineCss`, que además es el caso que la doc de Next describe para activarlo: CSS
+atómico y visitantes de primera vez, que aquí no es una suposición sino la definición del
+visitante.
+
+Medido **Preview contra Preview**, que es la única comparación limpia —producción va más rápida
+que cualquier Preview, y compararlas habría dicho que el cambio empeoraba cinco puntos:
+
+| home móvil | nota | LCP | FCP | render-blocking |
+|---|---|---|---|---|
+| Preview control (`<link>`) | 92 · 93 · 92 | 3,2 s | 1,2 s | «600 ms estimados» |
+| Preview con `inlineCss` | 91 · 91 · 91 | **3,2 s** | 1,1 s | **pasa** |
+
+El aviso desaparece, el FCP mejora 0,1 s y **el LCP no se mueve**, a cambio de que el HTML de
+cada página pase de 17 a 32 KB en brotli y de que el CSS deje de cachearse entre páginas.
+Revertido. Los 600 ms no existían: las dos hojas van al mismo origen por HTTP/2 y pesan 18 KB
+comprimidas, así que llegaban en paralelo con el HTML y nunca fueron el cuello de botella.
+
+### La varianza, que es lo que fija cómo se publica la cifra
+
+En la misma noche, la home dio **72** en escritorio y veinte minutos después **100** —mismo
+despliegue, misma URL—, y una de las 28 llamadas devolvió un 500 de Lighthouse que al repetirla
+dio 100. Por eso el script **cuenta y nombra las llamadas que fallan**: una pasada incompleta no
+puede leerse como una pasada limpia.
+
+Y por eso `PRD-Live.md` §5 pasa a publicar **el umbral como criterio y el rango con su fecha
+como estado** —móvil 95-99 · escritorio 97-100, medido el 2026-08-24— en vez de un número
+suelto. Un número sin fecha afirma una estabilidad que PSI no tiene. Es también la cifra que le
+faltaba a D49 para justificarse: `psi` sigue **fuera de CI** porque 28 puntos de diferencia en
+la misma URL serían rojos falsos.
+
+**Lo que queda abierto.** El retraso de renderizado del LCP móvil (P68.62) sigue sin causa
+accionable: su premisa decía «~81% del LCP móvil», y midiendo la misma página del mismo
+despliegue ese reparto va de 108 ms (43%) a 1.983 ms (83%). El elemento LCP es la foto del hero,
+que ya pasa las tres comprobaciones de descubrimiento, así que lo que queda es trabajo de hilo
+principal. La tarea vuelve a «necesita definición» en vez de cerrarse.
