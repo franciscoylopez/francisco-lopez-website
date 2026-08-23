@@ -88,7 +88,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <summary><b>Rendimiento, medición y seguridad</b></summary>
 
 - **PageSpeed 100 (escritorio) / 94-96 (móvil)**, CLS 0. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
-- **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de política de cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
+- **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
 - **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** «A+ barato», con allowlist mínima por origen exacto.
 - **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar (CSS, seguro con motion reducido).

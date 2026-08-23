@@ -6,6 +6,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ConsentPreferencesButton } from "./consent-preferences-button";
 import { PROSE, WRAP } from "@/components/ui/layout";
+import { Rich } from "@/components/ui/rich";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { SectionHeader } from "@/components/ui/heading";
 
@@ -91,6 +92,48 @@ export function CookiesPolicy({
               La tabla es la que más gana — cinco columnas en 42rem estrangulaban
               la de propósito, que es la única con frases. */}
           <div className="mt-[clamp(2.5rem,5vw,3.5rem)] flex flex-col gap-[clamp(2rem,4vw,3rem)]">
+            {/* PRIVACIDAD — la capa 2 del artículo 13 del RGPD (P66.5), y la
+                razón de que la página se llame «Privacidad y cookies».
+
+                POR QUÉ VA PRIMERA: el título nombra las dos partes en este
+                orden, y quien llega desde el aviso de bajo el formulario viene
+                a por esta, no a por la tabla. `id="privacidad"` para que ese
+                enlace pueda apuntar al bloque y no al principio de la página.
+
+                POR QUÉ NO NOMBRA EL FORMULARIO: el documento habla de los datos
+                que llegan CUANDO ALGUIEN ESCRIBE, por correo o desde la web. Es
+                cierto hoy —el correo ya recoge nombre, dirección y mensaje— y
+                sigue siéndolo cuando P67 publique el formulario, así que la
+                página no anuncia algo que todavía no existe ni hay que
+                reescribirla después.
+
+                MANTENIMIENTO, igual que la tabla de cookies: si el envío deja
+                de aterrizar solo en Gmail (P67 aún no ha elegido servicio de
+                envío), ese proveedor es un encargado del tratamiento nuevo y
+                hay que AÑADIRLO a «Quién más los ve», con su transferencia
+                internacional si la hay, y mover `LAST_COOKIES_UPDATE`. Es
+                criterio de cierre de esa tarea, no un extra. */}
+            <Section heading={t.privacyHeading} id="privacidad">
+              <p>{t.privacyIntro}</p>
+              {t.privacyBlocks.map((block) => (
+                <div key={block.heading}>
+                  {/* h3 LOCAL, no `SectionHeader level={3} size="sub"`: el `sub`
+                      de la capa mide clamp(1.35rem, 2.2vw, 1.75rem), o sea MÁS
+                      que el h2 de esta página, que también es local. Se define
+                      una vez aquí y se usa seis veces, que es la misma forma que
+                      ya tiene el h2 de `Section`; crear una variante de sistema
+                      para un solo call site sería la indirección que la «Regla
+                      de construcción» no pide. */}
+                  <h3 className="font-display text-foreground m-0 mb-2 text-[1.125rem] leading-[1.3] font-semibold tracking-[-0.01em]">
+                    {block.heading}
+                  </h3>
+                  <p>
+                    <Rich text={block.body} />
+                  </p>
+                </div>
+              ))}
+            </Section>
+
             {/* Qué son */}
             <Section heading={t.whatHeading}>
               <p>{t.whatBody}</p>
@@ -200,7 +243,10 @@ export function CookiesPolicy({
             {/* Contacto — CIERRE, así que vuelve a la medida de lectura, igual
                 que la apertura. Es el segundo de los dos bloques que se quedan
                 estrechos. */}
-            <Section heading={t.contactHeading} prose>
+            {/* `id="contacto"`: a él apunta «escribirme» del bloque del
+                responsable, para no repetir la dirección en prosa dos veces
+                (y con ella el arreglo de `<wbr>` de aquí abajo). */}
+            <Section heading={t.contactHeading} id="contacto" prose>
               <p>
                 {t.contactBody}{" "}
                 {/* El email en PROSA es un token de 40 caracteres sin ningún
@@ -233,15 +279,18 @@ export function CookiesPolicy({
 function Section({
   heading,
   children,
+  id,
   prose,
 }: {
   heading: string;
   children: React.ReactNode;
+  /** Ancla, solo para las dos secciones a las que se enlaza desde fuera. */
+  id?: string;
   /** Solo para el cierre: lo devuelve a la medida de lectura. */
   prose?: boolean;
 }) {
   return (
-    <section data-reveal className={prose ? PROSE : undefined}>
+    <section id={id} data-reveal className={prose ? PROSE : undefined}>
       <h2 className="font-display m-0 mb-3 text-[clamp(1.35rem,2.4vw,1.65rem)] leading-[1.2] font-semibold tracking-[-0.015em]">
         {heading}
       </h2>
