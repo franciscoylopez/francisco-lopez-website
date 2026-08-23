@@ -329,67 +329,59 @@ function imprimeDetalle(m: Medicion) {
 
 const espera = (cuanto: number) => new Promise((r) => setTimeout(r, cuanto));
 
-/** Modo registro: las páginas de `PAGE_SLUGS` × las estrategias pedidas. */
-async function recorreElRegistro(
+/** Una llamada que no llegó a devolver nota. Se cuentan y se nombran al final. */
+interface Fallo {
+  ruta: string;
+  estrategia: Estrategia;
+  error: string;
+}
+
+/** Mide UNA página en todas las estrategias y deja su bloque impreso. */
+async function midePagina(
   base: string,
+  ruta: string,
   estrategias: readonly Estrategia[],
   key: string,
-) {
-  const rutas = PAGE_SLUGS.map((slug) => pagePath(defaultLocale, slug));
-  const llamadas = rutas.length * estrategias.length;
-
-  console.log(
-    `\npsi — ${rutas.length} páginas × ${estrategias.length} estrategia(s) sobre ${base}` +
-      `\n  ${llamadas} llamadas en serie: esto tarda varios minutos.`,
-  );
-
-  try {
-    const d = await huellaDelDespliegue(base);
-    console.log(
-      `  Despliegue medido: huella ${d.huella} (${d.assets} assets) · caché de Vercel: ${d.cache}`,
-    );
-  } catch {
-    console.log("  (no se pudo leer la huella del despliegue)");
-  }
-
+): Promise<{ medidas: Medicion[]; fallos: Fallo[] }> {
+  const url = `${base}${ruta}`;
   const medidas: Medicion[] = [];
-  const fallos: { ruta: string; estrategia: Estrategia; error: string }[] = [];
+  const fallos: Fallo[] = [];
+  const notas: string[] = [];
+  const avisos: { estrategia: Estrategia; aviso: Aviso }[] = [];
 
-  for (const ruta of rutas) {
-    const url = `${base}${ruta}`;
-    const notas: string[] = [];
-    const avisos: { estrategia: Estrategia; aviso: Aviso }[] = [];
-
-    for (const estrategia of estrategias) {
-      try {
-        const m = await mide(url, estrategia, key);
-        medidas.push(m);
-        notas.push(`${enCastellano(estrategia)} ${String(m.nota).padStart(3)}`);
-        for (const aviso of m.avisos) avisos.push({ estrategia, aviso });
-      } catch (e) {
-        fallos.push({
-          ruta,
-          estrategia,
-          error: e instanceof Error ? e.message : String(e),
-        });
-        notas.push(`${enCastellano(estrategia)} ERROR`);
-      }
-      await espera(RESPIRO_MS);
+  for (const estrategia of estrategias) {
+    try {
+      const m = await mide(url, estrategia, key);
+      medidas.push(m);
+      notas.push(`${enCastellano(estrategia)} ${String(m.nota).padStart(3)}`);
+      for (const aviso of m.avisos) avisos.push({ estrategia, aviso });
+    } catch (e) {
+      fallos.push({
+        ruta,
+        estrategia,
+        error: e instanceof Error ? e.message : String(e),
+      });
+      notas.push(`${enCastellano(estrategia)} ERROR`);
     }
-
-    console.log(`\n  ${ruta.padEnd(28)} ${notas.join("   ")}`);
-    for (const { estrategia, aviso } of avisos) {
-      console.log(`      ${enLinea(aviso)}   (${enCastellano(estrategia)})`);
-    }
-    if (!avisos.length && !notas.some((n) => n.endsWith("ERROR"))) {
-      console.log("      sin avisos");
-    }
+    await espera(RESPIRO_MS);
   }
 
-  // EL AGREGADO ES EL ENTREGABLE: un aviso en doce páginas se arregla una vez en la
-  // capa; el mismo aviso en una es pulido de esa página. Sin esta tabla hay que leer
-  // catorce informes y hacer la cuenta a ojo, que es como se acaba tratando como
-  // puntual algo que era transversal.
+  console.log(`\n  ${ruta.padEnd(28)} ${notas.join("   ")}`);
+  for (const { estrategia, aviso } of avisos) {
+    console.log(`      ${enLinea(aviso)}   (${enCastellano(estrategia)})`);
+  }
+  if (!avisos.length && !fallos.length) console.log("      sin avisos");
+
+  return { medidas, fallos };
+}
+
+/**
+ * EL AGREGADO ES EL ENTREGABLE: un aviso en doce páginas se arregla una vez en la
+ * capa; el mismo aviso en una es pulido de esa página. Sin esta tabla hay que leer
+ * catorce informes y hacer la cuenta a ojo, que es como se acaba tratando como
+ * puntual algo que era transversal.
+ */
+function imprimeAgregado(medidas: Medicion[], totalPaginas: number) {
   const porAviso = new Map<
     string,
     { titulo: string; paginas: Set<string>; rojo: boolean }
@@ -412,24 +404,34 @@ async function recorreElRegistro(
   );
   if (porAviso.size === 0) {
     console.log("  Ninguno: todas las auditorías de rendimiento pasan.");
-  } else {
-    const filas = [...porAviso.values()].sort(
-      (x, y) =>
-        y.paginas.size - x.paginas.size ||
-        Number(y.rojo) - Number(x.rojo) ||
-        x.titulo.localeCompare(y.titulo, "es"),
-    );
-    for (const f of filas) {
-      console.log(
-        `  ${`${f.paginas.size}/${rutas.length}`.padStart(6)} páginas · ` +
-          `[${(f.rojo ? "rojo" : "naranja").padEnd(7)}] ${f.titulo}`,
-      );
-    }
+    return;
   }
+  const filas = [...porAviso.values()].sort(
+    (x, y) =>
+      y.paginas.size - x.paginas.size ||
+      Number(y.rojo) - Number(x.rojo) ||
+      x.titulo.localeCompare(y.titulo, "es"),
+  );
+  for (const f of filas) {
+    console.log(
+      `  ${`${f.paginas.size}/${totalPaginas}`.padStart(6)} páginas · ` +
+        `[${(f.rojo ? "rojo" : "naranja").padEnd(7)}] ${f.titulo}`,
+    );
+  }
+}
 
-  // AFIRMA CUÁNTO HA MIRADO, que es la regla de este repo para cualquier metro: una
-  // tabla vacía puede ser un aprobado o una pasada que no midió nada, y desde fuera
-  // se leen igual (D38/D57/D60/D63).
+/**
+ * AFIRMA CUÁNTO HA MIRADO, que es la regla de este repo para cualquier metro: una
+ * tabla vacía puede ser un aprobado o una pasada que no midió nada, y desde fuera
+ * se leen igual (D38/D57/D60/D63).
+ */
+function imprimeResumen(
+  medidas: Medicion[],
+  fallos: Fallo[],
+  estrategias: readonly Estrategia[],
+  totalPaginas: number,
+) {
+  const llamadas = totalPaginas * estrategias.length;
   const resumen = estrategias.map((estrategia) => {
     const suyas = medidas.filter((m) => m.estrategia === estrategia);
     if (!suyas.length) return `${enCastellano(estrategia)}: sin medir`;
@@ -440,22 +442,53 @@ async function recorreElRegistro(
 
   console.log(
     `\npsi ${fallos.length ? "✗" : "✓"} — ${medidas.length}/${llamadas} llamadas ` +
-      `(${rutas.length} páginas × ${estrategias.length} estrategia(s)), ` +
+      `(${totalPaginas} páginas × ${estrategias.length} estrategia(s)), ` +
       `${fallos.length} fallidas · ${resumen.join(" · ")}\n`,
   );
 
-  if (fallos.length) {
-    for (const f of fallos) {
-      console.error(
-        `  ✗ ${f.ruta} (${enCastellano(f.estrategia)}): ${f.error}`,
-      );
-    }
-    console.error(
-      "\n  Una pasada incompleta NO es una pasada limpia: repite las que fallaron\n" +
-        "  antes de sacar conclusiones de la tabla de arriba.\n",
-    );
-    process.exitCode = 1;
+  if (!fallos.length) return;
+  for (const f of fallos) {
+    console.error(`  ✗ ${f.ruta} (${enCastellano(f.estrategia)}): ${f.error}`);
   }
+  console.error(
+    "\n  Una pasada incompleta NO es una pasada limpia: repite las que fallaron\n" +
+      "  antes de sacar conclusiones de la tabla de arriba.\n",
+  );
+  process.exitCode = 1;
+}
+
+/** Modo registro: las páginas de `PAGE_SLUGS` × las estrategias pedidas. */
+async function recorreElRegistro(
+  base: string,
+  estrategias: readonly Estrategia[],
+  key: string,
+) {
+  const rutas = PAGE_SLUGS.map((slug) => pagePath(defaultLocale, slug));
+
+  console.log(
+    `\npsi — ${rutas.length} páginas × ${estrategias.length} estrategia(s) sobre ${base}` +
+      `\n  ${rutas.length * estrategias.length} llamadas en serie: esto tarda varios minutos.`,
+  );
+
+  try {
+    const d = await huellaDelDespliegue(base);
+    console.log(
+      `  Despliegue medido: huella ${d.huella} (${d.assets} assets) · caché de Vercel: ${d.cache}`,
+    );
+  } catch {
+    console.log("  (no se pudo leer la huella del despliegue)");
+  }
+
+  const medidas: Medicion[] = [];
+  const fallos: Fallo[] = [];
+  for (const ruta of rutas) {
+    const r = await midePagina(base, ruta, estrategias, key);
+    medidas.push(...r.medidas);
+    fallos.push(...r.fallos);
+  }
+
+  imprimeAgregado(medidas, rutas.length);
+  imprimeResumen(medidas, fallos, estrategias, rutas.length);
 }
 
 async function main() {
