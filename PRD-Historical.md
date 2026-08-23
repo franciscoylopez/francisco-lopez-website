@@ -74,6 +74,7 @@
 - [56. Contacto ampliada añade una sola cosa, y con ella el sitio deja de ser de solo lectura (2026-08-23)](#56-contacto-ampliada-añade-una-sola-cosa-y-con-ella-el-sitio-deja-de-ser-de-solo-lectura-2026-08-23)
 - [57. La dirección de Contacto se elige viéndola, y el prototipo destapa dos defectos del sistema (2026-08-23)](#57-la-dirección-de-contacto-se-elige-viéndola-y-el-prototipo-destapa-dos-defectos-del-sistema-2026-08-23)
 - [58. Contacto se construye, y las tres cosas que arrastra no son las que decía el sprint (2026-08-23)](#58-contacto-se-construye-y-las-tres-cosas-que-arrastra-no-son-las-que-decía-el-sprint-2026-08-23)
+- [59. El sprint 4 se define contra un calendario, no contra la deuda (2026-08-23)](#59-el-sprint-4-se-define-contra-un-calendario-no-contra-la-deuda-2026-08-23)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2972,6 +2973,43 @@ consentimiento cercana a cero. No es un fallo de configuración —este sitio ex
 consentimiento a todo el mundo, no solo al EEE— pero significa que la analítica ve una
 fracción de las visitas, y la métrica primaria nueva hereda ese límite. Es una pregunta de
 producto, no un arreglo.
+
+## 59. El sprint 4 se define contra un calendario, no contra la deuda (2026-08-23)
+
+Con «Footer estructurado y Contacto ampliada» cerrado, **los tres sprints de V2 quedaban
+entregados y el tablero no tenía sprint siguiente**: todo lo que quedaba eran bloques. La
+pregunta «¿qué es lo próximo?» dejó de contestarla el orden de prioridad y pasó a ser una
+decisión de producto.
+
+**La propuesta de partida de Francisco eran tres bloques de trabajo interno** —resolver la
+actualización del artículo, un foco en PageSpeed y un filtrado de `General`—. La objeción de la
+revisión fue que sería **el primer sprint que no entrega nada que un visitante vea**, y que le
+faltaba distribución: el check de medición acababa de dar **37 usuarios en 28 días y n=2 en la
+métrica primaria**. Se acababa de construir el fondo del embudo y la boca no existía.
+
+**La respuesta cambió el sprint entero, y no por la vía que la objeción esperaba.** Agosto está
+parado en contratación en España —estacionalidad de verano—, así que el plan es **lanzar «Cómo se
+ha creado esta página» en septiembre y medir desde ahí**. Eso no aplaza la distribución: la
+reordena. El artículo *es* el vehículo, y el sprint que parecía de deuda interna resulta ser la
+preparación del activo que se lanza.
+
+Con esa vara, tres consecuencias que la propuesta original no tenía:
+
+- **El carril del artículo sube de mantenimiento a activo.** Y con él, `contact_submit` en GA4
+  pasa de higiene a **prerrequisito**: no se puede «medir como dice el artículo» si la métrica
+  primaria no la cuenta nadie (D71, cierre del sprint 3).
+- **P69.9 (distribución) se queda en `General` con la razón escrita**, en el D-entry y en la
+  propia tarea. Un «no» silencioso vuelve como descuido en el cierre siguiente; uno escrito es
+  una decisión.
+- **TypeScript 7 se queda fuera** aunque el `method-review` lo encontrara: dos *majors* de salto,
+  riesgo real de build rojo y **cero efecto sobre el lanzamiento**. La regla que lo decidió la dio
+  Francisco: *método sano es la mejor forma de entregar rápido* — que es exactamente por qué el
+  método entra cuando quita fricción del objetivo, y no cuando la añade.
+
+El sprint queda en **17 tareas** bajo la etapa «Artículo y velocidad», y **abre por su tarea de
+contenido**, que el `method-review` tuvo que crear: el trabajo existía —Francisco leyendo el
+artículo con calma— pero vivía en el chat y no en el tablero, que es exactamente como el carril de
+contenido se perdió una vez (§54).
 
 ## Fuentes
 

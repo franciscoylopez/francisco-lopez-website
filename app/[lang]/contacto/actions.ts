@@ -4,7 +4,6 @@ import { headers } from "next/headers";
 
 import {
   HONEYPOT_FIELD,
-  MAX_FILL_MS,
   MIN_FILL_MS,
   TIMESTAMP_FIELD,
   type ContactState,
@@ -82,12 +81,17 @@ export async function submitContact(
 
   // 2. El filtro de velocidad, con el mismo silencio. El sello lo pone el
   //    cliente al montar; si no hay JS no hay sello, y entonces no se juzga.
+  //
+  //    SOLO JUZGA POR ABAJO, y el silencio depende de eso. Aquí hubo también un
+  //    tope de 12 h, y con él quien dejaba la pestaña abierta y enviaba al día
+  //    siguiente veía la pantalla de éxito sin que se enviara nada: para un bot
+  //    ese silencio es correcto —no se le enseña que lo has cazado—, pero quien
+  //    cae por arriba es una persona y la confirmación era mentira, sobre la
+  //    métrica primaria del PRD §7 además. El tope tampoco defendía de nadie: el
+  //    que caza bots es el suelo (P68.48, 2026-08-23).
   const stamp = Number(field(data, TIMESTAMP_FIELD));
-  if (Number.isFinite(stamp) && stamp > 0) {
-    const elapsed = Date.now() - stamp;
-    if (elapsed < MIN_FILL_MS || elapsed > MAX_FILL_MS) {
-      return { status: "sent" };
-    }
+  if (Number.isFinite(stamp) && stamp > 0 && Date.now() - stamp < MIN_FILL_MS) {
+    return { status: "sent" };
   }
 
   // 3. La validación de verdad, la que decide. La del cliente no cuenta aquí:

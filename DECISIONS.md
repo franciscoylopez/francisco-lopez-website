@@ -133,6 +133,7 @@
 - D95 · El formulario de contacto sale por el SMTP de la propia cuenta, y por eso la CSP no se tocó
 - D96 · El disparador de la CSP estricta no se cumplió, y conviene decirlo en vez de dejarlo caducar
 - D97 · El contorno de un control no es el filete de una caja, y hasta hoy no lo medía nadie
+- D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -4073,6 +4074,33 @@ pregunta 3 («¿cambia esto una prioridad?») es *no*, y el motivo no es que los
 va bien: es que no dicen nada. El tablero tenía 51 tareas abiertas y ninguna sobre distribución.
 También tareado.
 
+### Cierre del sprint 3 — 2026-08-23: la pregunta 3 tiene su primer «sí», y no lo dieron los números
+
+Los tres marcadores: `contact_click` **9** · `file_download` **6** · `scroll` **60**. Contra el
+cierre anterior (9 · 6 · 56), **dos clavados y uno movido**, y ese movimiento es lo que cierra la
+pregunta 4: un panel congelado habría dado las tres idénticas, así que el +4 de scroll prueba que
+la ventana avanza y que 9 y 6 son ceros reales, no un instrumento muerto. Verificado además que
+`/contacto` sirve el formulario en producción.
+
+**La pregunta 2 no se puede contestar, y conviene escribirlo para que el próximo cierre no lea
+estas cifras como estancamiento:** entre este cierre y el anterior ha pasado **un día**. Una
+ventana de 28 días que avanza 1/28 no produce lectura nueva. *Dos cierres consecutivos separados
+por un día son un cierre, y el segundo solo puede verificar el instrumento.*
+
+**Y la pregunta 3 tiene su primer «sí» en cinco cierres, que no salió de los números sino de
+mirar qué se acababa de construir:** el sprint que entregó el formulario **cerró sin conectar su
+propia métrica**. `trackContactSubmit` empuja `contact_submit` al `dataLayer` y ahí se queda —
+falta el trigger de Custom Event, su tag de GA4 y marcarlo como evento clave, que es la mitad que
+vive fuera del repo (D71). La métrica primaria del PRD §7 **no la cuenta nadie hoy**. Estaba
+tareado en `General` con prioridad 80,5, por debajo de veinte `Could` de V3; repriorizado a 68,49
+dentro del sprint siguiente.
+
+**Distribución: «no», y escrito.** P69.9 (37 usuarios en 28 días, n=2) sigue sin sprint **por
+decisión de Francisco**, no por descuido: agosto está parado en contratación en España, y el plan
+es lanzar «Cómo se ha creado esta página» en **septiembre** y medir desde ahí. Eso convierte el
+artículo en el vehículo de distribución —y a P68.49 en prerrequisito del lanzamiento—. Se anota
+aquí y en la propia tarea porque un «no» silencioso vuelve como descuido en el cierre siguiente.
+
 ## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
 
 **El hueco.** El mismo dato —qué páginas hay— estaba escrito **a mano en cuatro sitios**:
@@ -5490,3 +5518,78 @@ ayudó: «censo de pares de contraste» suena exhaustivo — si hubiera dicho «
 se habría visto el día que se escribió. Fue además la **segunda vez en el mismo sprint** que
 el censo no podía ver algo (D-entry de `--destructive`, doce días antes): aquella vez se
 arregló el caso y se escribió una regla, no se tocó el metro.
+
+## D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro — 2026-08-23
+
+**El hallazgo del cuarto `method-review`, y lo que lo hace distinto de los tres anteriores.** No
+encontró ningún gate roto. Encontró **tres gates sanos midiendo un objeto más pequeño que el que
+dicen cubrir**, y por eso ninguno se puso rojo nunca: no fallaron, miraron a otro sitio.
+
+**1 · El presupuesto de contexto vigila la mitad que no crece.** Medido sobre el historial:
+
+| fecha | `@`-importados (vigilado) | skills (sin vigilar) |
+|---|---|---|
+| 2026-08-08 | 9.188 | 5.982 |
+| 2026-08-19 | 13.084 | **16.261** |
+| 2026-08-23 | 12.356 | 19.938 |
+
+El cruce ocurre el **19 de agosto, el día del PRIMER `method-review`**: ese día lo vigilado bajó
+437 palabras y lo no vigilado subió 6.816. Los dos disparos juntos **retiraron 1.463 de la mitad
+que se cuenta y depositaron 10.493 en la mitad que no**. `design-review` sola son 6.152 palabras,
+la mitad del presupuesto entero. Es «arreglar la mitad que se abre» aplicado al propio método, y
+es la quinta instancia de esa familia. Tareado en P68.67.
+
+**2 · `Prioridad` dejó de ser un orden de ejecución.** El orden real del sprint 3, sacado de los
+commits, fue `64.6 · 64.7 · 65.5 · 65.6 · 67.5 · 68 · 64.5 · 65 · 66.5 · 67`: **P64.5 se ejecutó
+la séptima, después de P68**, y hubo cuatro saltos contra una regla de tablero que dice literalmente
+«no se salta una tarea de prioridad menor». Además, dos tareas distintas compartían la prioridad
+exacta 69,93. **El tablero es la única fuente de verdad del proyecto sin guardián** — los 16 pasos
+de CI miran el repo y ninguno mira dónde vive el orden de ejecución. Tareado en P68.685.
+
+Y el síntoma que se nota antes que la causa: **`Blocked` está haciendo el trabajo que debería
+hacer `Prioridad`**. Si el número codifica el orden, bloquear es excepcional; si no lo codifica,
+hay que marcar a mano lo que el número debería decir, y se acaba con más tareas bloqueadas que en
+marcha.
+
+**3 · El hook de formato no ve las ediciones por Bash.** Casa `Edit|Write|MultiEdit`; el modo
+automático edita con `sed`/heredoc por **Bash**, y los generadores escriben por Node. **No falla:
+no se le llama**, y no deja rastro. Es una piel nueva del metro que aprueba sobre lista vacía —
+las seis instancias anteriores devolvían una lista vacía; esta ni siquiera corre. De 30 runs de
+CI, 2 en rojo: uno era `check:articulo` funcionando (D84) y el otro fue `Format` con tres `.tsx`,
+que es la clase entera de rojo que ese hook existe para eliminar. Tareado en P68.455.
+
+### Lo que sí se arregló el mismo día
+
+- **El filtro barato va ANTES del caro.** `design-review` gana un **Paso 0**:
+  `/web-design-guidelines`. Estaba escrito en la columna A de la DoD —«**antes** de
+  `design-review`»— desde que se escribió, y **no tenía portador**. La cifra que lo justifica: de
+  los cinco hallazgos del `design-review` del sprint 3, **dos eran huecos de medición genuinos**
+  (D97 y el de `--destructive`) que ningún instrumento podía ver y cuya respuesta correcta fue
+  extender el metro; **los otros tres eran mecánicos** —un filete varado entre 768 y 829px, nueve
+  copias de la misma cadena y una excepción publicada en cuatro sitios— y los cazó a mano la
+  revisión más cara del sistema.
+- **`/security-review` gana disparador** en `CLAUDE.md`: toda tarea que añada una superficie que
+  reciba input de un tercero. El sprint 3 estrenó la primera del sitio —formulario y SMTP— y no se
+  disparó ni una vez; el `sprint-review` encontró después una inyección en la cabecera `Reply-To`.
+- **El cuerpo de una tarea de Notion no sale en la consulta SQL**, que solo devuelve propiedades, y
+  el cuerpo es donde vive el porqué medido. Convención escrita en `CLAUDE.md`.
+- **`check-artefacto.ts` derivaba su «1 artefacto» de un literal.** Es la forma fina de fallar al
+  afirmar cuánto has mirado —el número es correcto hasta que deja de serlo— y su hermano
+  `check-cv-fresh.ts` ya llevaba el arreglo documentado en su línea 52.
+- **La skill `method-review` se lo había hecho a sí misma.** Presumía «una reducción del 35% del
+  contexto de arranque»; el total pasó de 13.521 a 13.084, o sea **−3,2%**. Lo que cayó un 42% fue
+  `PRD-Live.md` sola, mientras `CLAUDE.md` (+452) y `BRAND.md` (+959) se comían el hueco el mismo
+  día. La cifra describía un archivo y se leía como si describiera el arranque entero — dentro del
+  documento que define cómo se cazan esas cifras.
+
+### Y la demostración que se dio sola
+
+Las dos reglas nuevas de `CLAUDE.md` **no cabían**: el presupuesto estaba en 12.356 de un techo de
+12.400. Hubo que **retirar** antes la regla de `design-review`, que estaba escrita tres veces
+—`CLAUDE.md`, `PRD-Live.md` §5 y la propia skill—. Quedó en 12.383: **17 palabras de margen**. La
+tarea que anticipaba esa presión (P68.675) nació esa mañana diciendo «44 palabras» y la sufrió esa
+misma tarde; sube a `Must`.
+
+**La lección de método, que es lo único que hay que llevarse:** medir un instrumento incluye medir
+su **alcance**, no solo su resultado. Los tres hallazgos de arriba no se habrían encontrado
+preguntando si fallaban; se encontraron preguntando **sobre qué** pasaban.

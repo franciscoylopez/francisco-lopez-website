@@ -14,8 +14,16 @@ description: >
 
 Un técnico que **acaba de ver este método por primera vez** lo audita buscando margen. Se
 hizo la primera vez el 2026-08-19, antes del sprint «Cómo se ha creado», y salió con nueve
-hallazgos, dieciséis tareas y una reducción del 35% del contexto de arranque. Lo que sigue es
-ese recorrido, con lo que aprendió al ejecutarse.
+hallazgos y dieciséis tareas. Lo que sigue es ese recorrido, con lo que aprendió al ejecutarse.
+
+> **Y aquí mismo, la primera lección de su propio catálogo** *(corregido en el cuarto disparo,
+> 2026-08-23)*. Esta línea presumía «una reducción del 35% del contexto de arranque». El total
+> `@`-importado pasó de **13.521 a 13.084 palabras: −3,2%**. Lo que cayó un 42% fue
+> `PRD-Live.md` sola, mientras `CLAUDE.md` (+452) y `BRAND.md` (+959) se comían el hueco **el
+> mismo día**. La cifra describía un archivo y se leía como si describiera el arranque entero
+> — familia «la cifra apuntada que caduca», dentro del documento que define cómo se cazan.
+> **Si esta skill se lo hizo a sí misma, no des por buena ninguna cifra en prosa de las que
+> vas a leer: reprodúcela.**
 
 ## Cuándo
 
@@ -36,7 +44,7 @@ de accesibilidad.
 **Y no es «una cosa más que recordar»**, que era la objeción obvia: la dispara `sprint-review`
 al terminar, y el ritual de cierre de etapa de `CLAUDE.md` la nombra como paso 4. Si acaba
 dependiendo de que alguien se acuerde, ha fallado por la misma razón que este método lleva
-sesenta y nueve decisiones corrigiendo.
+todo `DECISIONS.md` corrigiendo.
 
 ## Los tres principios, y el primero manda sobre todo lo demás
 
