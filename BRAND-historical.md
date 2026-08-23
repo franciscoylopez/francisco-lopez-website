@@ -45,6 +45,7 @@ Partido el **2026-08-09** (P37.685).
 - [El enlace de contenido no tiene contraparte invertida (2026-08-23)](#el-enlace-de-contenido-no-tiene-contraparte-invertida-2026-08-23)
 - [La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`](#la-pasada-de-retirada-del-2026-08-22-y-qué-se-fue-de-brandmd)
 - [La tarjeta salió en negrita con la clase correcta puesta](#la-tarjeta-salió-en-negrita-con-la-clase-correcta-puesta)
+- [El contorno de un control: 1,21:1 desde V1, y el metro que no existía (2026-08-23)](#el-contorno-de-un-control-1211-desde-v1-y-el-metro-que-no-existía-2026-08-23)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -715,3 +716,75 @@ Lo reutilizable no es el dato de Tailwind: es que **una variante que deshace su 
 no es autosuficiente**, y que esto se vio en pantalla y no leyendo el código, con la clase
 correcta escrita. Es el punto 5 de §Cómo medir sin equivocarse con otro disfraz — «verifica
 la clase, no solo el color»— aplicado al peso tipográfico.
+
+## El contorno de un control: 1,21:1 desde V1, y el metro que no existía (2026-08-23)
+
+Lo encontró la `design-review` del cierre del sprint «Footer y contacto», midiendo el campo
+del formulario recién publicado. El campo daba **1,29:1** contra su panel en claro y **1,23**
+en oscuro, con un umbral de 3:1 (WCAG 1.4.11) y sin relleno propio: el borde era **lo único**
+que decía que ahí se escribe.
+
+Al medir el resto de controles con borde, el campo resultó ser el más leve:
+
+| Control | Borde vs fondo (claro / oscuro) | Relleno vs fondo |
+|---|---|---|
+| `input` · `textarea` | 1,29 / 1,23 | — |
+| Toggle de tema, GitHub y LinkedIn del pie (`icon`) | 1,21 / 1,37 | 1,06 / 1,11 |
+| Tarjeta pulsable (cierre de página, índice de trayectoria, canales) | 1,21 / 1,36 | 1,06 / 1,11 |
+| Enlace de salto (`outline-neutral`) | 1,21 / 1,36 | 1,00 |
+| Lo bordeado en `primary` | 7,47 | — |
+
+**El toggle de tema llevaba así desde V1.** Nada de esto era nuevo; lo nuevo era que alguien
+lo midiera.
+
+### Por qué no lo vio nadie, que es la parte reutilizable
+
+La cadena de medición terminaba donde no había nadie: `check:marco` **delega** el contraste
+en `viewport-verifier`, `viewport-verifier` corre axe y dispara el censo, **axe no implementa
+1.4.11** —está en su lista de comprobaciones manuales— y el censo medía pares de texto. Tres
+eslabones, ninguno mintiendo, y un agujero al final. `grep` de «1.4.11» en `scripts/`
+devolvía cero mientras `/accesibilidad` publicaba que «todo texto y **todo control** se
+comprueba con cifra».
+
+Y **el nombre ayudó a esconderlo**: «censo de pares de contraste» suena exhaustivo. Si se
+hubiera llamado «censo de pares de TEXTO», el hueco habría sido visible el día que se
+escribió, y esa frase no se habría podido redactar. Es §Cómo se escribe una regla nº1 —el
+disparador que mira al sitio equivocado— aplicado al **nombre** de un instrumento.
+
+Fue además **la segunda vez en el mismo sprint**: doce días antes, `--destructive` no llegaba
+ni a AA y «el censo no podía haberlo visto». Aquella vez se arregló el caso y se escribió una
+regla; no se tocó el metro. Documentar el punto ciego de un instrumento no lo cierra.
+
+### Por qué se parte el token en vez de subir `--border`
+
+`--border` y `--input` tenían **el mismo valor** en los dos temas, y ese valor servía dos
+decisiones con requisitos distintos: el filete decorativo (sin umbral) y el contorno de un
+control (3:1). Subir `--border` habría endurecido cada hairline del sitio para arreglar los
+controles. Es §Cómo se escribe una regla nº4 al revés: la regla avisa de no unificar dos
+valores que se parecen sin mirar si significan cosas distintas, y aquí estaban unificados de
+nacimiento.
+
+`--input` se queda declarado —es de la base de shadcn— pero **ya no lo consume nadie**.
+Nombrarlo como si gobernara los campos fue parte de cómo el borde real pasó año y medio sin
+que nadie lo mirara.
+
+### El barrido de mezcla, y por qué conmuta con el tema
+
+`--control-edge` se deriva de la superficie, igual que `--surface-dim`. El porcentaje mínimo
+para llegar a 3:1, medido sobre el píxel pintado:
+
+| Superficie | Mínimo en claro | Mínimo en oscuro |
+|---|---|---|
+| `--background` | 50% | 35% |
+| `--card` | 50% | 40% |
+| `--muted` | 55% | 40% |
+
+De ahí que **la mezcla conmute con el tema**: un porcentaje fijo no llega a las dos a la vez,
+igual que ya pasa con `--primary-on-inverted` y `progress-ink`. Se fijó en **60% claro / 45%
+oscuro** —un escalón por encima del mínimo, para que un retoque de paleta no lo tumbe—, que
+da 4,00 · 4,08 · 3,85 en claro y 4,11 · 3,96 · 3,74 en oscuro.
+
+Se compararon en pantalla 55, 60 y 70 sobre el formulario servido: a partir de 55 el cambio
+es casi indistinguible entre candidatos, y el salto que de verdad se ve es el de 1,21 a 3,x —
+los campos pasan de insinuarse a **parecer campos**. No engorda el diseño; lo que hacía el
+valor viejo era esconderlo.

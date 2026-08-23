@@ -86,6 +86,32 @@ Lo que hay que saber al escribir UI:
 - **Los pasteles siguen sin ser superficie de texto.** Esto resuelve los grises del sistema, no
   convierte un `*-soft` en fondo legible.
 
+### El contorno de un control también lo pone la superficie
+
+Un **filete decorativo** —divisores, hairlines, el borde de una tarjeta que no se pulsa— y el
+**contorno de un control** se parecen y no son lo mismo: al segundo, WCAG 1.4.11 le pide **3:1**,
+porque es la información visual que permite reconocerlo *como* control. Un campo de formulario es
+el caso puro: sin relleno propio, el borde es lo único que dice que ahí se escribe.
+
+Son **dos tokens**, y la regla al escribir UI es la misma que con el atenuado: **no se elige el
+color del borde**. Se escribe `border-control-edge` **en la variante** (nunca en el call site) y
+la superficie de debajo lo resuelve, incluidos los cambios de superficie por estado. `--border`
+se queda solo para el filete.
+
+- **Lo lleva todo lo que se pulsa y dibuja caja neutra:** `outline-neutral`, `icon` y `card` de
+  `action.tsx`, el campo de `field.tsx` y las dos tarjetas pulsables que aún viven fuera de la
+  capa (el cierre de página y el índice de trayectoria).
+- **No lo lleva lo bordeado en `primary`**, que ya va a 7,47 por su propio color.
+- **La mezcla conmuta con el tema** (60% claro / 45% oscuro): un porcentaje fijo no llega a las
+  dos superficies a la vez, mismo patrón que `--primary-on-inverted` y `progress-ink`.
+
+**Y esto lo mide una máquina desde el 2026-08-23:** el segundo pase de `npm run censo` recorre
+los controles y falla nombrando al que no llegue. Antes no lo medía nadie — **axe no implementa
+1.4.11** — y por eso el contorno de todo control neutro del sitio llevaba en 1,21:1 desde V1.
+
+*(Las cifras por superficie, el barrido de mezcla y por qué el nombre del censo ayudó a
+esconderlo, en [`BRAND-historical.md`](./BRAND-historical.md) §El contorno de un control.)*
+
 ### Enlaces: depende de si son contenido o chrome
 
 - **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en
@@ -243,6 +269,9 @@ el switch del consentimiento, aquí debajo).
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares que el sitio
   PINTA están en AAA en ambos temas, en reposo y en hover.**
   **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
+  Desde el 2026-08-23 son **dos pases**: los pares de texto (1.4.3 / 1.4.6) y el **contorno de
+  cada control** (1.4.11, 3:1), que hasta entonces no medía nadie porque axe no implementa esa
+  regla. Ver §El contorno de un control también lo pone la superficie.
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
   **«Que pinta» es el límite del metro:** el censo recorre el DOM, así que un token que existe y
   no se usa le resulta invisible. Ahí estaba `--destructive` (4,31:1 en claro), y de ahí la

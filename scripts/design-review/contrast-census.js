@@ -1,4 +1,17 @@
-// Censo de pares de contraste de una página SERVIDA (P37.68).
+// Censo de contraste de una página SERVIDA (P37.68).
+//
+// DOS PASES, y conviene saberlo antes de leer nada más:
+//
+//   1. **Pares de TEXTO sobre fondo** — WCAG 1.4.3 / 1.4.6, con umbral por tamaño
+//      y con los estados incluidos. Es el pase original y ocupa casi todo el
+//      archivo.
+//   2. **Contornos de CONTROL** — WCAG 1.4.11, que no es contraste de texto sino
+//      «¿se reconoce esto como un control?». Añadido el 2026-08-23; su porqué
+//      está entero junto al código, más abajo.
+//
+// El archivo se llamaba «censo de pares de contraste», y ese nombre es parte de
+// cómo el pase 2 tardó año y medio en existir: sonaba exhaustivo. Si hubiera
+// dicho «pares de TEXTO», el hueco habría sido visible el día que se escribió.
 //
 // CÓMO SE USA: define `window.contrastCensus()`, que se llama sobre la página ya
 // cargada y devuelve el censo. Se puede pegar en la consola, o —para recorrer
@@ -448,6 +461,140 @@ window.contrastCensus = () => {
     clone.remove();
   }
 
+  // --- Contorno de controles: WCAG 1.4.11, que NO es contraste de texto ----
+  //
+  // POR QUÉ EXISTE ESTE SEGUNDO PASE (2026-08-23, design-review). Todo lo de
+  // arriba mide TEXTO sobre fondo — 1.4.3 y 1.4.6. Pero un control también tiene
+  // que poder RECONOCERSE como control, y eso es 1.4.11: la información visual
+  // necesaria para identificarlo pide 3:1 contra lo que tiene al lado.
+  //
+  // Nadie lo medía. `check:marco` delega el contraste en `viewport-verifier`;
+  // `viewport-verifier` corre axe y dispara este censo; **axe no implementa
+  // 1.4.11** (está en su lista de comprobaciones manuales) y este censo medía
+  // pares de texto. La cadena entera terminaba en un sitio donde no había nadie,
+  // y el resultado era que el contorno de TODO control neutro del sitio llevaba
+  // en 1,21:1 desde V1 mientras `/accesibilidad` publicaba que «todo texto y todo
+  // control se comprueba con cifra».
+  //
+  // Y el nombre ayudó a esconderlo: «censo de pares de contraste» suena
+  // exhaustivo. Si se hubiera llamado «censo de pares de TEXTO», el hueco habría
+  // sido visible el día que se escribió.
+  //
+  // QUÉ SE MIDE Y QUÉ NO, que es donde se inventan los hallazgos:
+  //
+  //  · Solo elementos INTERACTIVOS. Una tarjeta decorativa con borde flojo no
+  //    incumple nada: 1.4.11 habla de componentes de interfaz.
+  //  · Solo si el autor DIBUJA una caja (borde o relleno propio). Un enlace de
+  //    texto —`.link-content`, `.link-chrome` en reposo— no se identifica por un
+  //    contorno sino por su texto y su subrayado, y eso ya lo cubre 1.4.3 arriba.
+  //    Medirlo aquí sería puntuar contra un umbral que no le aplica, que es
+  //    exactamente cómo D41 publicó cuatro incumplimientos donde había uno.
+  //  · Los DESHABILITADOS quedan fuera: WCAG los exime explícitamente.
+  //  · Solo REPOSO. La pastilla de hover no es lo que identifica al control —el
+  //    control ya era reconocible antes de que llegara el cursor—, así que exigirle
+  //    3:1 sería inventarse un requisito.
+  //  · Sobre imagen no se mide, igual que arriba: no hay cifra que dar.
+  //
+  // BASTA CON QUE UNO DE LOS DOS LLEGUE. Un botón sólido no necesita borde: su
+  // relleno ya lo separa del fondo con holgura. Por eso el veredicto es «¿lo
+  // identifica el relleno, o el borde?» y no «¿tiene un borde a 3:1?».
+  const CONTROL_SEL = [
+    "a[href]",
+    "button",
+    "input:not([type='hidden'])",
+    "textarea",
+    "select",
+    "summary",
+    "[role='button']",
+    "[role='switch']",
+    "[role='tab']",
+    "[role='checkbox']",
+    "[role='radio']",
+  ].join(", ");
+
+  const LADOS = ["Top", "Right", "Bottom", "Left"];
+
+  const esVisible = (el, cs) => {
+    if (cs.visibility === "hidden" || cs.display === "none") return false;
+    if (parseFloat(cs.opacity) === 0) return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  };
+
+  const ladosConBorde = (cs) =>
+    LADOS.filter(
+      (l) =>
+        parseFloat(cs[`border${l}Width`]) > 0 &&
+        cs[`border${l}Style`] !== "none",
+    );
+
+  const controles = new Map();
+  let controlesIndexados = 0;
+
+  for (const el of document.querySelectorAll(CONTROL_SEL)) {
+    const cs = getComputedStyle(el);
+    if (!esVisible(el, cs)) continue;
+    if (el.disabled || el.getAttribute("aria-disabled") === "true") continue;
+
+    const lados = ladosConBorde(cs);
+    const relleno = paint(cs.backgroundColor);
+    // Ni caja ni relleno: es un enlace de texto. No aplica 1.4.11.
+    if (lados.length === 0 && relleno[3] === 0) continue;
+    if (overImage(el)) continue;
+
+    controlesIndexados++;
+
+    // El fondo es el del PADRE: `backdrop(el)` devolvería el relleno del propio
+    // control, que es justo lo que hay que comparar contra él.
+    const fondo = backdrop(el.parentElement ?? el);
+
+    const rRelleno =
+      relleno[3] === 0 ? null : round(ratio(over(relleno, fondo), fondo));
+
+    // El mejor de los lados dibujados. Un contorno completo es lo normal; si solo
+    // hay un lado, se queda con ese y el `lados` del informe lo delata.
+    let rBorde = null;
+    let colorBorde = null;
+    for (const l of lados) {
+      const c = paint(cs[`border${l}Color`]);
+      const r = round(
+        ratio(c[3] === 1 ? c.slice(0, 3) : over(c, fondo), fondo),
+      );
+      if (rBorde === null || r > rBorde) {
+        rBorde = r;
+        colorBorde = cs[`border${l}Color`];
+      }
+    }
+
+    const porRelleno = rRelleno !== null && rRelleno >= 3;
+    const porBorde = rBorde !== null && rBorde >= 3;
+
+    const key = [
+      el.tagName.toLowerCase(),
+      colorBorde ?? "sin-borde",
+      cs.backgroundColor,
+      fondo.map(Math.round).join(","),
+    ].join("|");
+
+    if (controles.has(key)) {
+      controles.get(key).veces++;
+      continue;
+    }
+
+    controles.set(key, {
+      ejemplo: label(el),
+      lados: lados.length === 4 ? "caja" : lados.join("+").toLowerCase(),
+      bordeVsFondo: rBorde,
+      rellenoVsFondo: rRelleno,
+      umbral: 3,
+      // Cuánto le sobra al mejor de los dos caminos. Negativo = incumple.
+      holgura: round(Math.max(rBorde ?? 0, rRelleno ?? 0) - 3),
+      identifica: porRelleno ? "el relleno" : porBorde ? "el borde" : null,
+      nivel: porRelleno || porBorde ? "OK" : "FALLA 1.4.11",
+      veces: 1,
+    });
+  }
+
   // --- Validación del metro, ANTES de creerse nada -------------------------
   // Anclajes sin cian (no dependen del recorte de gamut): texto principal
   // 13,79 claro / 15,32 oscuro. Si no salen exactos, el fallo es del medidor.
@@ -496,6 +643,22 @@ window.contrastCensus = () => {
     // Texto sobre imagen: el medidor no puede componer una foto, así que estos
     // pares se listan aparte y se miran a ojo. Su `ratio` NO es una medición.
     sinMedir: [...sinMedir.values()].sort((a, b) => a.ratio - b.ratio),
+
+    // --- WCAG 1.4.11, el segundo pase --------------------------------------
+    // Mismo principio que `reglasHover`: publica CUÁNTO ha mirado. Toda página
+    // de este sitio tiene al menos el enlace de salto, que es un
+    // `outline-neutral` con caja, así que un cero aquí no es un aprobado — es el
+    // pase que no está corriendo.
+    contornos:
+      controlesIndexados === 0
+        ? "0 — EL METRO NO ESTÁ MIRANDO LOS CONTORNOS. Esto NO es un aprobado: " +
+          "toda página tiene al menos el enlace de salto, que dibuja caja. " +
+          "Revisa CONTROL_SEL antes de creerte el resto del informe."
+        : `${controlesIndexados} controles con caja indexados · ${controles.size} contornos distintos medidos`,
+    controles: [...controles.values()].sort((a, b) => a.holgura - b.holgura),
+    bajo3: [...controles.values()]
+      .filter((c) => c.nivel !== "OK")
+      .sort((a, b) => a.holgura - b.holgura),
   };
   descongelar();
   return resultado;

@@ -49,9 +49,12 @@ const CON_PAGINA = EXPERIENCES.filter((e) => e.slug !== null);
 // cierre de seis páginas para no ganar nada hoy; si aparece un tercer caso, ese
 // será el momento (regla 4 de `BRAND.md` §Cómo se escribe una regla: antes de
 // unificar dos valores que se parecen, mirar si significan cosas distintas).
+// `border-control-edge` pisa el `border-border` de `CARD` (2026-08-23): esta
+// tarjeta SE PULSA, y a un control WCAG 1.4.11 le pide 3:1 al contorno que lo
+// identifica. `CARD` se queda con el filete decorativo, que no tiene ese umbral.
 const TARJETA = cn(
   CARD,
-  "group hover:bg-muted flex h-full flex-col p-[1.4rem] transition-colors",
+  "group hover:bg-muted border-control-edge flex h-full flex-col p-[1.4rem] transition-colors",
 );
 
 export function TrayectoriaIndice({

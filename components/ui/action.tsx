@@ -66,7 +66,7 @@ const SOLID =
 // Compartido por la variante `outline-neutral` y por el estado apagado de
 // `toggle-neutral`: son el mismo control, con y sin estado.
 const OUTLINE_NEUTRAL =
-  "border-border bg-background text-foreground border hover:bg-muted focus-visible:bg-muted";
+  "border-control-edge bg-background text-foreground border hover:bg-muted focus-visible:bg-muted";
 
 // El icono del CTA sólido: DETRÁS de la etiqueta y avanzando 2px al interactuar.
 // Vive aquí y no en el call site por lo de siempre —el orden en el JSX es una
@@ -151,7 +151,7 @@ export const actionVariants = cva(
         // cierre del diálogo de consentimiento. Hasta P37.5989 el defecto era
         // `transparent` y los seis call sites normales repetían el `--card` a
         // mano; el LinkedIn del footer no lo escribió y se quedó sin caja.
-        icon: "icon-chrome border-border text-foreground border",
+        icon: "icon-chrome border-control-edge text-foreground border",
         // LA TARJETA QUE SE PULSA ENTERA. Nace con los dos canales de `/contacto`
         // (P67), donde el objetivo no es un renglón sino una caja con rótulo y
         // valor en dos líneas.
@@ -181,7 +181,7 @@ export const actionVariants = cva(
         // `data-surface`: `bg-card` y `hover:bg-muted` ya recalculan el atenuado
         // por sí solos en `globals.css` (D39/D61), así que el rótulo de dentro se
         // lee bien en los dos estados sin que el call site pida nada.
-        card: "border-border bg-card hover:bg-muted focus-visible:bg-muted w-full justify-start rounded-lg border text-left font-normal whitespace-normal",
+        card: "border-control-edge bg-card hover:bg-muted focus-visible:bg-muted w-full justify-start rounded-lg border text-left font-normal whitespace-normal",
       },
       // El tamaño del icono va con el del texto y no lo escribe el call site
       // (`[&_svg]`, sin `>` a propósito: el glifo puede ir envuelto). `shrink-0`
