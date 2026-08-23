@@ -15,7 +15,7 @@
 - **`action.tsx`** — El control CON CAJA: botón, chip, toggle, pestaña y control solo-icono. *([design-system/09-botones](../site/design-system/09-botones.tsx))*
 - **`badge.tsx`** — El rótulo que NO se pulsa, en dos ejes: `tone` × `kind`. *([design-system/10-etiquetas](../site/design-system/10-etiquetas.tsx))*
 - **`chrome.tsx`** — El enlace de la carpintería de navegación: `shape` × `tone`. *([design-system/08-enlaces](../site/design-system/08-enlaces.tsx))*
-- **`field.tsx`** — El campo de formulario: etiqueta, control y su error, con el resumen del envío. *(sin publicar)*
+- **`field.tsx`** — El campo de formulario: etiqueta, control y su error, con el resumen del envío. *([design-system/16-formulario](../site/design-system/16-formulario.tsx))*
 - **`heading.tsx`** — El par eyebrow + titular con el que abren página y sección. *([design-system/11-cabeceras](../site/design-system/11-cabeceras.tsx))*
 - **`layout.ts`** — Las cajas y los ritmos comunes: WRAP, SECTION, PROSE, CARD, PANEL, PAIR, HERO_ROW. *([design-system/01-rejilla](../site/design-system/01-rejilla.tsx))*
 - **`stat-row.tsx`** — La fila de cifras que resume una apertura. *([design-system/11-cabeceras](../site/design-system/11-cabeceras.tsx))*

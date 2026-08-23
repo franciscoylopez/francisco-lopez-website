@@ -317,7 +317,7 @@
         "kicker": "Primary action",
         "cls": "solid",
         "rule": "The only cyan fill on the screen. On hover the fill blends towards the text colour instead of lightening.",
-        "note": "Blending raises the text contrast on hover; dropping the opacity would have lowered it. Today only the email in the contact band uses it."
+        "note": "Blending raises the text contrast on hover; dropping the opacity would have lowered it. Today it's used by the button that leads to Contact and by the one that sends the form."
       },
       {
         "kicker": "Content action",
@@ -348,9 +348,15 @@
         "cls": "icon",
         "rule": "Controls with no label: the same pill as the rest of the chrome, filling the full 44px touch target.",
         "note": "The minimum size lives in the component, not in each call. Back when it was written by hand, the footer icon was left at 40px."
+      },
+      {
+        "kicker": "Pressable card",
+        "cls": "card",
+        "rule": "When the click target is the whole box rather than a line of text: card background, grey pill on hover, and box padding instead of button padding.",
+        "note": "Its hover is grey and not cyan because it's a channel, not the standout action on the screen. Today the two contact routes on their own page use it."
       }
     ],
-    "demoSolid": "Email me",
+    "demoSolid": "Get in touch",
     "demoOutlinePrimary": "Download CV",
     "demoNeutral": "Cancel",
     "demoGhost": "Preferences",
@@ -363,14 +369,16 @@
       "Anything that happens inside the page goes without one: accept, save, close, pick a tab, move around the site. \"Manage preferences\" opens a dialog, so it stays bare.",
       "The icon sits before the label, because it classifies the action. Only on the solid button does it sit after and travel two pixels on hover: there it marks the direction of the trip."
     ],
-    "iconFoot": "Size, gap and side come from the variant, not from each call. Back when each call decided, the same download icon measured 15, 17 and 18 pixels in three places, and \"Download CV\" showed up with an icon in two of its three appearances.",
+    "iconFoot": "Size, gap and side come from the variant, not from each call. Back when each call decided, the same download icon measured 15, 17 and 18 pixels in three places, and \"Download CV\" showed up with an icon in two of the three appearances it had back then.",
     "ruleTitle": "Why this is a component and not a convention",
     "rule": [
       "Before it existed, the same decision was hand-written across six files: two radii for the same box, four hover behaviours for the same button, and the 44px touch target copied fourteen times.",
       "No control is written with loose classes. If a case fits no variant, the variant gets created; if it's an exception, it gets documented with a date.",
       "Changing a hover means changing one line, and it reaches every button on the site at once."
     ],
-    "ruleFoot": "No variant declares focus: a single global rule does, the same one everywhere. Three used to coexist, and one of them drew a white halo in dark mode."
+    "ruleFoot": "No variant declares focus: a single global rule does, the same one everywhere. Three used to coexist, and one of them drew a white halo in dark mode.",
+    "demoCardLabel": "Email",
+    "demoCardValue": "hello@example.com"
   },
   "etiquetas": {
     "num": "10 — Labels",
@@ -820,5 +828,42 @@
     "shareCopiedAnnounce": "Link copied to clipboard",
     "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
     "railHint": "Same as on the real page, but contained to this panel: the section rail and the share dock activate once this section scrolls to the middle of the window."
+  },
+  "formulario": {
+    "num": "16 — Form",
+    "title": "The first surface that receives, not the one that shows",
+    "lead": "Until the contact form existed, this site was read-only from end to end. A field isn't a small button: it has a label, it has an error state, and it has to say so out loud.",
+    "fieldTitle": "The field",
+    "fieldLead": "Label and control are one piece, and the touch target floor lives on the control, which is where you press.",
+    "fieldKicker": "At rest",
+    "fieldRule": "The label is always visible and tied to the field, never tucked inside as helper text: a placeholder vanishes as you type and leaves the field with no name.",
+    "fieldNote": "Minimum height of 44px, the same touch floor as the buttons. The focus ring doesn't come from this piece: it comes from the global rule, like everything else that can be focused.",
+    "errorKicker": "With an error",
+    "errorRule": "The message is tied to the field, so a screen reader hears it on arrival and not only when you try to send.",
+    "errorNote": "The red border and the icon carry the shape; the text stays in the normal colour. The system red doesn't reach the contrast a text needs, which is also why the error never depends on colour alone.",
+    "summaryTitle": "When sending fails",
+    "summaryLead": "A notice that announces itself without stealing focus, listing which fields need another look.",
+    "summaryKicker": "Error summary",
+    "summaryRule": "It appears when you try to send and is announced as an alert. Focus is moved by the form to the first failing field: two jumps at once would leave a screen reader with no idea where it is.",
+    "summaryNote": "The same piece serves the notice without a list, which is the one you see if the send never leaves the server.",
+    "demoLabel": "Email",
+    "demoPlaceholder": "marta@company.com",
+    "demoError": "That address doesn't look complete. Check the part after the at sign.",
+    "demoSummary": "Check these fields before sending:",
+    "demoSummaryItems": ["Name", "Email"],
+    "redTitle": "Red isn't a text colour",
+    "redRule": [
+      "The system red measures 4.31:1 on the light background: it doesn't even reach the minimum a text needs.",
+      "So the message is written in the normal text colour, and red stays on the border and the icon, where the threshold is lower and it does pass.",
+      "As a bonus, the error stops being encoded by colour alone."
+    ],
+    "redFoot": "The contrast census could never have found this: it walks what the site paints, and that colour wasn't painted anywhere until the form existed.",
+    "serverTitle": "What really validates is the server",
+    "serverRule": [
+      "Browser validation exists so a blank field doesn't cost a round trip, not to decide.",
+      "The same rule runs on the server, because whoever posts by hand never ran the browser's.",
+      "And it returns codes, not sentences: the words come from the dictionary, in both languages."
+    ],
+    "serverFoot": "It's where a form's language gets forgotten: half the page translated and the errors always speaking the same one."
   }
 }

@@ -84,7 +84,7 @@ descarga** (D65).
 ### Tres cosas que el sitio hace y no se ven mirándolo
 
 - **Las páginas que documentan el sistema no pueden mentir.** El Design System lo publica
-  en quince secciones y el Brand Kit en seis, las dos con **las piezas reales del sitio
+  en dieciséis secciones y el Brand Kit en seis, las dos con **las piezas reales del sitio
   como demo**: si una variante cambia, la página cambia con ella. Y no leen sus valores
   del diccionario, sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio
   publica sobre sí mismo — tokens de layout, breakpoints y el censo de pares de contraste

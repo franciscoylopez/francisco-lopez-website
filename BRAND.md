@@ -119,8 +119,8 @@ Lo que hay que saber al escribir UI:
 
 - **CTA sólido** (`bg-primary`): la acción destacada de la página. Hover = el relleno se mezcla
   hacia `--foreground` (`color-mix(in srgb, var(--primary) 88%, var(--foreground))`), que
-  **sube** el contraste del texto encima en los dos temas; bajar la opacidad lo bajaría. Hoy
-  solo el email de la franja de contacto.
+  **sube** el contraste del texto encima en los dos temas; bajar la opacidad lo bajaría. Hoy,
+  el botón que lleva a Contacto y el de enviar el formulario.
 - **CTA outline-primary** (`border-primary` + `text-primary`): acciones de contenido que viven
   solas, sin otro CTA al lado con el que competir — «Descargar CV» de Trayectoria, «Gestionar
   preferencias» de Cookies, chips de descarga del Brand Kit. Hover = **el relleno cian pleno**,
