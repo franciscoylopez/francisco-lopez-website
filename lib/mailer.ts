@@ -77,7 +77,16 @@ export async function sendContactMessage(
       // el mensaje: en la bandeja se lee «Contacto web · Marta Ruiz» sin abrirlo.
       from: { name: `Contacto web · ${nombre}`, address: from },
       to: from,
-      replyTo: `${nombre} <${replyTo}>`,
+      // La dirección de respuesta va en forma de OBJETO, no concatenada como
+      // `nombre <correo>`: `header()` tapa la inyección por salto de línea, pero
+      // no toca `<`, `>` ni la coma, y `EMAIL_SHAPE` los admite a propósito
+      // (esa permisividad es correcta y no se toca). Con la cadena, un correo
+      // `x>,<atacante@evil.com` emitía `Reply-To: Marta <x>, atacante@evil.com`
+      // — dos direcciones, así que al pulsar «Responder» el buzón contestaba
+      // también a quien no cree; con un nombre `Ana <x@evil.com>, Otro`, la del
+      // visitante iba incluso PRIMERO. Pasándolo como objeto, nodemailer
+      // entrecomilla y queda una sola dirección. Medido con nodemailer.
+      replyTo: { name: nombre, address: replyTo },
       subject: `Contacto web · ${nombre}`,
       text: [
         `Nombre:  ${values.nombre}`,
