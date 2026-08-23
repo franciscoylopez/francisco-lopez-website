@@ -108,13 +108,6 @@ Lo que hay que saber al escribir UI:
   pastilla** que el chrome con etiqueta (`.icon-chrome`), sobre el objetivo táctil de 44px
   completo. Un control sin texto necesita la misma afordancia que uno con etiqueta.
 
-- **Un enlace de contenido SÍ lleva icono cuando vive en una fila de canales** *(2026-08-23)*.
-  La exclusión de §Cuándo una acción lleva icono está escrita contra la **prosa**, donde un
-  glifo en medio de un párrafo rompe la línea base. Una columna o una fila de canales
-  —teléfono, LinkedIn, descarga— no es un párrafo, y ahí el icono hace el trabajo que la regla
-  del icono le pide: clasificar una acción que **saca al usuario de la página**. El tamaño y la
-  caja no se escriben en el punto de uso más de una vez; si aparece un tercer sitio con esta
-  forma, se factoriza.
 
 ## Jerarquía de hover en botones y CTA
 
@@ -205,7 +198,7 @@ superficie (§El atenuado lo pone la superficie, D39).
 
 ### Cuándo una acción lleva icono
 
-**Una sola pregunta: ¿esta acción saca al usuario de la página?** Descargar un archivo, abrir otra aplicación (correo, teléfono) o irse a otro sitio web → **lleva icono**. Todo lo que ocurre dentro de la página —aceptar, guardar, cerrar, elegir en un grupo de pestañas, navegar por el sitio— → **no lo lleva**. El criterio mira la **acción**, no la variante ni el sitio donde vive: por eso «Descargar CV» lo lleva en sus tres apariciones (nav, Trayectoria, canales de contacto) y «Gestionar preferencias» no lo lleva en ninguna, porque abre un diálogo y no te lleva a ningún sitio.
+**Una sola pregunta: ¿esta acción saca al usuario de la página?** Descargar un archivo, abrir otra aplicación (correo, teléfono) o irse a otro sitio web → **lleva icono**. Todo lo que ocurre dentro de la página —aceptar, guardar, cerrar, elegir en un grupo de pestañas, navegar por el sitio— → **no lo lleva**. El criterio mira la **acción**, no la variante ni el sitio donde vive: por eso «Descargar CV» lo lleva en sus dos apariciones (nav y Trayectoria) y «Gestionar preferencias» no lo lleva en ninguna, porque abre un diálogo y no te lleva a ningún sitio.
 
 - **Posición: delante de la etiqueta**, porque el icono clasifica la acción («descargar», «teléfono»). **Excepción por forma, no por caso: la variante `solid`**, donde va detrás y avanza 2px en hover — ahí no clasifica nada (es la única acción de la pantalla), marca la dirección del viaje.
 - **Tamaño, hueco y lado no se escriben en el punto de uso.** Los pone la variante (`sm` 16 · `md` 17 · `lg` 18 · `icon` 18) y, en los canales de chrome, `.link-chrome svg`. En el call site se escribe `<Download />` y nada más — el icono va **siempre primero en el JSX** y es `solid` quien lo manda al otro lado.

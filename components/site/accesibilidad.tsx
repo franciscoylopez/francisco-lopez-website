@@ -11,7 +11,7 @@ import { InfoCard } from "@/components/ui/info-card";
 import { Rich } from "@/components/ui/rich";
 import { CARD, HERO_ROW, SECTION, WRAP } from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
-import { EmailCta } from "./contact-actions";
+import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 import { SectionHeader } from "@/components/ui/heading";
 
@@ -244,13 +244,17 @@ export function Accesibilidad({
               </p>
               {/* La única superficie de contacto con asunto (D29): aquí se
                   reporta una barrera concreta, y preencabezarlo baja la fricción
-                  de verdad. La home y Sobre mí lo dejan vacío a propósito. */}
-              <EmailCta
-                label={t.report.emailCta}
-                subject={t.report.emailSubject}
-                showAddress
-                className="mt-6"
-              />
+                  de verdad. La home y Sobre mí lo dejan vacío a propósito.
+
+                  Y AQUÍ NO HAY BOTÓN desde P67. Lo había —un sólido «Escríbeme»
+                  con la dirección debajo—, y con la dirección escrita al lado no
+                  añadía nada: el botón abría exactamente el mismo `mailto:` que
+                  el enlace, así que era la misma acción dos veces, ocupando la
+                  jerarquía del único sólido de la página. Esta página tampoco
+                  enruta al formulario, a propósito: obligar a usarlo para
+                  reportar una barrera sería una trampa el día que la barrera
+                  fuera el formulario. */}
+              <EmailLink subject={t.report.emailSubject} className="mt-6" />
             </div>
           </SectionHeader>
         </div>

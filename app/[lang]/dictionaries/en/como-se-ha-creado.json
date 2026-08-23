@@ -89,7 +89,7 @@
         {
           "type": "ul",
           "items": [
-            "**The contact strip is identical on all three pages where it appears**, same channels, same hierarchy, because sending someone back to the homepage to write to you asks for one extra step right when they'd already decided to take it. Since the contact page exists, its main button leads there, and yes, that is one more click: in exchange it gives a form instead of opening an email client plenty of people never set up. The phone is still one click away, and on the accessibility page the direct address deliberately doesn't route through the form, because forcing someone to use it to report a barrier would be a trap the day the barrier was the form.",
+            "**Contact is resolved on one page, and the rest lead to it.** The homepage strip and the close of the About page end in the same button. They used to repeat the address, the phone, LinkedIn and the CV right there, which was saying four times what a whole page says better. Yes, that is one more click than before: in exchange it gives a form instead of opening an email client plenty of people never set up. The exception is the accessibility page, which shows the address written out and doesn't route through the form, because forcing someone to use it to report a barrier would be a trap the day the barrier was the form.",
             "**The video that opens the About page plays once and freezes on its last frame**, and if the browser reports that its owner prefers less motion, the video isn't even downloaded."
           ]
         },

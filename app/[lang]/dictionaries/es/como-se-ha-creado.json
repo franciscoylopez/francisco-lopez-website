@@ -89,7 +89,7 @@
         {
           "type": "ul",
           "items": [
-            "**La franja de contacto es idéntica en las tres páginas donde aparece**, con los mismos canales y la misma jerarquía, porque devolver a alguien a la portada para escribirte es pedirle un paso de más justo cuando ya había decidido darlo. Desde que existe la página de contacto, su botón principal lleva allí, y sí, eso es un clic más: a cambio da un formulario en vez de abrir un cliente de correo que mucha gente no tiene configurado. El teléfono sigue a un clic, y en la página de accesibilidad el correo directo no pasa por el formulario a propósito, porque obligar a usarlo para reportar una barrera sería una trampa el día que la barrera fuera el formulario.",
+            "**El contacto se resuelve en una sola página, y las demás llevan a ella.** La franja de la home y el cierre de Sobre mí acaban en el mismo botón. Antes repetían ahí mismo el correo, el teléfono, LinkedIn y el CV, y eso era decir cuatro veces lo que una página entera dice mejor. Sí, es un clic más de los que había: a cambio da un formulario en vez de abrir un cliente de correo que mucha gente no tiene configurado. La excepción es la página de accesibilidad, que enseña la dirección escrita y no pasa por el formulario, porque obligar a usarlo para reportar una barrera sería una trampa el día que la barrera fuera el formulario.",
             "**El vídeo que abre la página sobre mí se reproduce una vez y se queda quieto**, y si por temas de accesibilidad, el navegador avisa de que su dueño prefiere menos movimiento, ni siquiera se descarga."
           ]
         },

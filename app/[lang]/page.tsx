@@ -44,7 +44,6 @@ export default async function Home({ params }: LangParams) {
         <Formacion dict={t.formacion} />
         <Contacto
           dict={common.contacto}
-          cvHref={cvHref}
           contactoHref={pagePath(lang, "contacto")}
         />
       </>

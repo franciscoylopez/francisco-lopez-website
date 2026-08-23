@@ -3,7 +3,7 @@ import Image from "next/image";
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import { ContactActions, type ContactActionsDict } from "./contact-actions";
+import { ContactCta, type ContactActionsDict } from "./contact-actions";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
 import { SectionHeader } from "@/components/ui/heading";
@@ -38,14 +38,12 @@ export function SobreMi({
   contacto,
   breadcrumb,
   homeHref,
-  cvHref,
   contactoHref,
 }: {
   dict: SobreMiDict;
   contacto: ContactActionsDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
-  cvHref: string;
   /** Desde P67 el CTA del cierre lleva a la página de contacto. */
   contactoHref: string;
 }) {
@@ -294,11 +292,7 @@ export function SobreMi({
             </p>
           </div>
           <div data-reveal className="mt-[clamp(2rem,4vw,2.75rem)]">
-            <ContactActions
-              dict={contacto}
-              cvHref={cvHref}
-              contactoHref={contactoHref}
-            />
+            <ContactCta label={contacto.emailCta} href={contactoHref} />
           </div>
         </div>
       </section>

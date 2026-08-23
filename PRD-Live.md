@@ -67,8 +67,8 @@ descarga** (D65).
 
 ### Estructura de la home (orden actual)
 
-1. **Nav sticky** — logo (split→flat al scroll), Descargar CV, Sobre mí, toggle
-   claro/oscuro; en móvil CV y Sobre mí colapsan tras menú.
+1. **Nav sticky** — logo (split→flat al scroll), Descargar CV, Contacto, Sobre mí, toggle
+   claro/oscuro; por debajo de 768px los tres enlaces colapsan tras el menú.
 2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio.
 3. **Hitos** — 5 reconocimientos, cronológico descendente; chip "Exit" en el de TheTool.
 4. **Cómo trabajo** — 6 etapas: Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica.
@@ -76,9 +76,9 @@ descarga** (D65).
 6. **Trayectoria** — bloque Producto + bloque Experiencia previa (Marketing & Growth); logos reales monocromo; el rol enlaza al deep-dive; CTA Descargar CV.
 7. **Toolkit** — 4 categorías (Usuarios / Gestión y Documentación / Diseño y prototipado / Desarrollo) en pestañas, logos reales monocromo.
 8. **Formación** — Producto + Marketing.
-9. **Franja-CTA de cierre** — banda de fondo propio con copy de posicionamiento al ICP;
-   el email es la acción destacada (único botón sólido del sitio) y teléfono, LinkedIn y
-   CV la acompañan como canales de apoyo.
+9. **Franja-CTA de cierre** — banda de fondo propio con copy de posicionamiento al ICP y
+   **una sola acción**, el botón sólido que lleva a `/contacto`. Los canales sueltos que
+   la acompañaban salieron al existir esa página: allí están mejor.
 10. **Footer**, en dos filas — arriba, la firma con el nombre en lockup, los enlaces y los dos canales de icono; abajo, una línea fina con los derechos y el enlace de privacidad y cookies. Los enlaces van en jerarquía: **El Making of** destacado y las tres páginas del sistema (Brand Kit, Design System, Accesibilidad) agrupadas detrás de un filete. La distinción la hace el tono del chrome, nunca `primary`.
 
 ### Tres cosas que el sitio hace y no se ven mirándolo
@@ -89,10 +89,10 @@ descarga** (D65).
   del diccionario, sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio
   publica sobre sí mismo — tokens de layout, breakpoints y el censo de pares de contraste
   medidos. El diccionario se queda solo con el copy.
-- **Las tres superficies de contacto son un solo patrón** (franja de la home, cierre de
-  Sobre mí y «reportar una barrera» de Accesibilidad): mismo componente, mismos datos y
-  misma jerarquía, de modo que Sobre mí resuelve el contacto en su propia página en vez de
-  devolver al usuario a la home (D29).
+- **Las superficies de contacto son dos, y la diferencia es deliberada** (D29): la franja
+  de la home y el cierre de Sobre mí llevan a `/contacto`; el «reportar una barrera» de
+  Accesibilidad **no**, y enseña la dirección escrita con su asunto. Obligar a usar el
+  formulario para reportar una barrera sería una trampa el día que la barrera fuera él.
 - **Una página no se escribe: se compone.** `pageMetadata` deriva canonical, los tres
   `hreflang`, OG y Twitter de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de
   motion, el `<main>` y footer (D45/D46). Las catorce se **prerenderizan** por locale y el
