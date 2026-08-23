@@ -50,10 +50,19 @@
     "sectionsSuffix": "sections",
     "note": "Every section closes on its own: you can read it in chunks, in any order. The bar along the top edge tracks where you are."
   },
-  "rail": { "ariaLabel": "Section index" },
-  "progress": { "ariaLabel": "Reading progress" },
-  "chapterNav": { "indexLabel": "Contents", "nextLabel": "Next:" },
-  "sectionMeta": { "of": "of" },
+  "rail": {
+    "ariaLabel": "Section index"
+  },
+  "progress": {
+    "ariaLabel": "Reading progress"
+  },
+  "chapterNav": {
+    "indexLabel": "Contents",
+    "nextLabel": "Next:"
+  },
+  "sectionMeta": {
+    "of": "of"
+  },
   "sections": [
     {
       "id": "s01",
@@ -66,7 +75,10 @@
           "type": "p",
           "text": "When I decided to take this project on, the first thing I wrote wasn't a line of code: it was who this page was for, and how long they'd spend reading it."
         },
-        { "type": "h3", "text": "Two readers, two speeds" },
+        {
+          "type": "h3",
+          "text": "Two readers, two speeds"
+        },
         {
           "type": "p",
           "text": "A recruiter scans for five to ten seconds and needs three facts: role, seniority, stack. A CPO or VP Product can read more slowly, and what they're after isn't facts but judgment: what you decided, with what information, and what happened next."
@@ -75,7 +87,10 @@
           "type": "p",
           "text": "One text can't serve both. The fix was architectural, not editorial: the first screen passes the recruiter's filter, and the content goes deeper as you scroll. What a fast reader needs sits before any scrolling is required; what a slow reader is looking for sits below, with room to explain itself."
         },
-        { "type": "h3", "text": "What those two speeds actually decided" },
+        {
+          "type": "h3",
+          "text": "What those two speeds actually decided"
+        },
         {
           "type": "diagram",
           "id": "s01",
@@ -97,7 +112,10 @@
           "type": "p",
           "text": "I didn't run user research. What I did do was study the profiles of a few product references, read recruiter articles, and settle two things: I wanted a fast first version, and I wanted a site built for the different profiles that would read it. Out of that came a written hypothesis about who reads and for how long, and every decision above follows from it."
         },
-        { "type": "h3", "text": "What isn't here (yet), and why" },
+        {
+          "type": "h3",
+          "text": "What isn't here (yet), and why"
+        },
         {
           "type": "p",
           "text": "The part of product judgment that gets shown the least, though, is what's visible in what **isn't** there. Four decisions to not do something, each with its reason:"
@@ -126,7 +144,10 @@
           "type": "p",
           "text": "None of the four is a technical limitation. They're four places where saying yes would have been the easy call."
         },
-        { "type": "h3", "text": "The rule that shaped everything else" },
+        {
+          "type": "h3",
+          "text": "The rule that shaped everything else"
+        },
         {
           "type": "p",
           "text": "If the site claims I know product, UX and data, the site has to be built with all three. A slow, inaccessible, poorly measured or insecure page contradicts its own text. That's what turns every technical decision that follows into a content decision."
@@ -135,9 +156,15 @@
       "enlace": {
         "label": "LINK ·",
         "parts": [
-          { "label": "PRD-Live.md", "path": "PRD-Live.md" },
+          {
+            "label": "PRD-Live.md",
+            "path": "PRD-Live.md"
+          },
           ", sections 1 through 3 and 9, and decision ",
-          { "label": "D29", "path": "DECISIONS.md" },
+          {
+            "label": "D29",
+            "path": "DECISIONS.md"
+          },
           " for the contact strip"
         ]
       }
@@ -153,7 +180,10 @@
           "type": "p",
           "text": "This started the way any product starts: with a brief. Half a page answering what this is, who it's for and what it has to achieve. From there came a PRD, which isn't a ceremony document but the place where the answer to \"what's this even for?\" lives, for when you're three weeks deep in the code and have forgotten."
         },
-        { "type": "h3", "text": "A PRD split in two" },
+        {
+          "type": "h3",
+          "text": "A PRD split in two"
+        },
         {
           "type": "p",
           "text": "That PRD ended up outside Notion, living in the repo as a markdown file, and today it's split in two, which is one of the decisions that has aged best. A live one, saying what the product is today, written in the present tense. A historical one, keeping the dated record of every decision and why whatever got discarded was discarded. Mixing the two is what turns a PRD into a document nobody opens: once most of what you're reading is no longer true, you stop reading the whole thing, and then it stops serving the one purpose it had."
@@ -179,7 +209,10 @@
           "type": "p",
           "text": "That last column is what keeps the board readable: if finished work stays visible forever, in two months the board is a museum."
         },
-        { "type": "h3", "text": "Two boards, because they're two questions" },
+        {
+          "type": "h3",
+          "text": "Two boards, because they're two questions"
+        },
         {
           "type": "p",
           "text": "Tasks aren't ordered by whim. They're linked to a separate prioritization board where they get tagged with MoSCoW: must, should, could, won't. The two boards answer different questions, which is why they're kept apart: the execution board says **what order** things happen in; the prioritization board says **why that order**. Merging them turns every priority review into an argument with myself about whether to move a card."
@@ -193,7 +226,10 @@
           "side": "center",
           "caption": "The prioritization board, kept apart from the execution one: one says what order things happen in, the other says why."
         },
-        { "type": "h3", "text": "No dates" },
+        {
+          "type": "h3",
+          "text": "No dates"
+        },
         {
           "type": "p",
           "text": "What's missing is dates. I started out using them, then quickly realized dates on a solo personal project are fiction, and fiction that also needs updating every week. What drives execution is three other things:"
@@ -220,7 +256,10 @@
           "type": "p",
           "text": "There's also a lane that runs ahead of the rest, and it's content. On pages that depend on text only I can write, the text is the real bottleneck, not development. So a stage's content gets unblocked while the previous one is still being built."
         },
-        { "type": "h3", "text": "One commit per task, one deploy per batch" },
+        {
+          "type": "h3",
+          "text": "One commit per task, one deploy per batch"
+        },
         {
           "type": "p",
           "text": "Every task closes with its own commit and its why written into the message, but everything lands on a batch branch with a draft pull request: that gives continuous integration on every push and an accumulated preview to review as a whole before touching production even once."
@@ -234,13 +273,25 @@
         "label": "LINK ·",
         "parts": [
           "The task-tracking section of ",
-          { "label": "CLAUDE.md", "path": "CLAUDE.md" },
+          {
+            "label": "CLAUDE.md",
+            "path": "CLAUDE.md"
+          },
           ", and decisions ",
-          { "label": "D10", "path": "DECISIONS.md" },
+          {
+            "label": "D10",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D12", "path": "DECISIONS.md" },
+          {
+            "label": "D12",
+            "path": "DECISIONS.md"
+          },
           " and ",
-          { "label": "D68", "path": "DECISIONS.md" }
+          {
+            "label": "D68",
+            "path": "DECISIONS.md"
+          }
         ]
       }
     },
@@ -267,7 +318,10 @@
           "type": "p",
           "text": "With the logo and typeface chosen, they needed behavior that meant something. To me the logical move was a shift between its two halves, in cyan and purple, that only shows up in the monogram and only above 48 pixels. Below that size the shift stops reading as intent and starts looking like a printing error, so below it the logo switches to its flat version. It's the first rule of the system, and it already has the shape of all the others: it doesn't say \"use with care,\" it says the exact number where it stops holding."
         },
-        { "type": "h3", "text": "Two color layers that don't mix" },
+        {
+          "type": "h3",
+          "text": "Two color layers that don't mix"
+        },
         {
           "type": "p",
           "text": "Next came giving its use across the rest of the site a logic. Color is two layers:"
@@ -334,11 +388,20 @@
       "enlace": {
         "label": "LINK ·",
         "parts": [
-          { "label": "BRAND.md", "path": "BRAND.md" },
+          {
+            "label": "BRAND.md",
+            "path": "BRAND.md"
+          },
           ", ",
-          { "label": "BRAND-logo.md", "path": "BRAND-logo.md" },
+          {
+            "label": "BRAND-logo.md",
+            "path": "BRAND-logo.md"
+          },
           " and its dated reasoning in ",
-          { "label": "BRAND-historical.md", "path": "BRAND-historical.md" }
+          {
+            "label": "BRAND-historical.md",
+            "path": "BRAND-historical.md"
+          }
         ]
       }
     },
@@ -353,7 +416,10 @@
           "type": "p",
           "text": "The question every tool has to answer to get into this project isn't \"is it good?\" but \"what work of mine does it solve?\" It sounds obvious, and it isn't: almost all the software that ends up over-installed gets in through the first question."
         },
-        { "type": "h3", "text": "Two surprises from a fresh major version" },
+        {
+          "type": "h3",
+          "text": "Two surprises from a fresh major version"
+        },
         {
           "type": "diagram",
           "id": "s04",
@@ -376,7 +442,10 @@
           "type": "p",
           "text": "Both share the same signature, and it's the one that keeps repeating in everything that follows: **the error doesn't show its face.**"
         },
-        { "type": "h3", "text": "Installed, configured, and unused" },
+        {
+          "type": "h3",
+          "text": "Installed, configured, and unused"
+        },
         {
           "type": "p",
           "text": "Even though the whole design is custom, I decided to keep shadcn/ui as backup: it's installed, configured and barely used. The component layer is my own. That's not purism. It's that shadcn solves a very specific problem (keyboard behavior, focus trapping, portals) and this site didn't have that problem yet, but I wanted to be ready for when it did."
@@ -385,7 +454,10 @@
           "type": "p",
           "text": "The rule I left in writing looks forward: the day a dialog, a menu or a combobox is needed, it doesn't get written by hand, it gets pulled in. Hand-writing a modal's focus handling is the easiest way to ship an accessibility problem that looks like a finished component."
         },
-        { "type": "h3", "text": "Two languages, zero strings inside the code" },
+        {
+          "type": "h3",
+          "text": "Two languages, zero strings inside the code"
+        },
         {
           "type": "p",
           "text": "On languages, the only thing I'll flag is that this was a decision, not a config: Spanish unprefixed at the root, English in its own branch, and zero sentences written inside a component. All copy comes from a typed dictionary. That makes the classic bug of two-language sites impossible: the sentence someone translated straight into the HTML and nobody ever touched again."
@@ -395,15 +467,30 @@
         "label": "LINK ·",
         "parts": [
           "Decisions ",
-          { "label": "D2", "path": "DECISIONS.md" },
+          {
+            "label": "D2",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D3", "path": "DECISIONS.md" },
+          {
+            "label": "D3",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D6", "path": "DECISIONS.md" },
+          {
+            "label": "D6",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D34", "path": "DECISIONS.md" },
+          {
+            "label": "D34",
+            "path": "DECISIONS.md"
+          },
           " and ",
-          { "label": "D51", "path": "DECISIONS.md" },
+          {
+            "label": "D51",
+            "path": "DECISIONS.md"
+          },
           " in the technical record"
         ]
       }
@@ -415,12 +502,18 @@
       "kicker": "05 — The component system",
       "title": "The component system: nothing new gets hand-written",
       "body": [
-        { "type": "h3", "text": "Two questions decide which piece applies" },
+        {
+          "type": "h3",
+          "text": "Two questions decide which piece applies"
+        },
         {
           "type": "p",
           "text": "The site has eight pieces, and which one applies is decided by asking **does it get clicked?** and, if it does, **does it have its own box?** A chip that only labels a value isn't a small button: it's a badge, and it needs no state, no hover, no touch target. A menu link isn't a button either: it's navigation chrome, and there cyan distinguishes nothing because the whole block is about navigating. They sound like vocabulary distinctions, and they're exactly what stops every section from inventing its own button."
         },
-        { "type": "h3", "text": "The cascade: before writing any new markup" },
+        {
+          "type": "h3",
+          "text": "The cascade: before writing any new markup"
+        },
         {
           "type": "p",
           "text": "On top of those two questions sits a rule that governs everything that gets built, and it's a cascade:"
@@ -460,7 +553,10 @@
           "type": "p",
           "text": "On top of the eight pieces there's one more layer. A helper derives the canonical URL, the per-language variants, the social card and the structured markup from a single source, and a component adds the skip link, navigation, main content and footer. And which pages the site has is decided by a single file, which is where the sitemap, the HTML gate and each page's social card all come from."
         },
-        { "type": "h3", "text": "What all this buys" },
+        {
+          "type": "h3",
+          "text": "What all this buys"
+        },
         {
           "type": "p",
           "text": "Four of the eight points on the accessibility checklist stop needing manual verification when a page closes, because the piece already handles them: contrast on the system's color pairs, the focus ring, the minimum touch target, and respecting anyone who asked for less motion. That's half of a chapter coming up later, which is why that chapter can be spent entirely on what actually cost something."
@@ -479,17 +575,35 @@
         "label": "LINK ·",
         "parts": [
           "Decisions ",
-          { "label": "D36", "path": "DECISIONS.md" },
+          {
+            "label": "D36",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D40", "path": "DECISIONS.md" },
+          {
+            "label": "D40",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D45", "path": "DECISIONS.md" },
+          {
+            "label": "D45",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D46", "path": "DECISIONS.md" },
+          {
+            "label": "D46",
+            "path": "DECISIONS.md"
+          },
           " and ",
-          { "label": "D72", "path": "DECISIONS.md" },
+          {
+            "label": "D72",
+            "path": "DECISIONS.md"
+          },
           ", and the ",
-          { "label": "components/ui/", "path": "components/ui" },
+          {
+            "label": "components/ui/",
+            "path": "components/ui"
+          },
           " directory"
         ]
       }
@@ -501,7 +615,10 @@
       "kicker": "06 — From design to code",
       "title": "From design to code, and the day the design source changed",
       "body": [
-        { "type": "h3", "text": "The mockup as a starting point" },
+        {
+          "type": "h3",
+          "text": "The mockup as a starting point"
+        },
         {
           "type": "p",
           "text": "The first version of this site was designed with Claude Design: powerful and fast, easy to iterate on, and quick to get a first version out of. A mockup file that could be translated. And translating isn't copying: the mockup gives the intent (what leads, what accompanies, what rhythm the page has) and the system gives the values (which radius, which gray, which spacing). Copying pixels produces the opposite problem, a section that looks a lot like the design and nothing like the rest of the site."
@@ -510,7 +627,10 @@
           "type": "p",
           "text": "That got me a publishable MVP in very little time, available to the public. But soon came what I already knew was coming: the decision was going to expire, and fast."
         },
-        { "type": "h3", "text": "The day it expired" },
+        {
+          "type": "h3",
+          "text": "The day it expired"
+        },
         {
           "type": "p",
           "text": "Once the system in code grew into what I've just described (eight pieces, a page layer and a page that publishes them), the mockup became poorer than the site itself. From there, keeping both in parallel wasn't rigor: it was guaranteeing they'd end up saying different things, which is exactly what the original decision was meant to avoid."
@@ -534,7 +654,10 @@
         "label": "LINK ·",
         "parts": [
           "Decision ",
-          { "label": "D1", "path": "DECISIONS.md" },
+          {
+            "label": "D1",
+            "path": "DECISIONS.md"
+          },
           ", with its supersession note and the original decision kept below it"
         ]
       }
@@ -550,7 +673,10 @@
           "type": "p",
           "text": "A portfolio has no session and holds nobody's data: the only data it receives is whatever someone types into the contact form, and that isn't stored anywhere, it goes to an inbox and that's it. It's exactly the kind of site nobody bothers securing properly, and that's exactly why it seemed like the right site to do it on."
         },
-        { "type": "h3", "text": "The headers: the cheap gaps to close" },
+        {
+          "type": "h3",
+          "text": "The headers: the cheap gaps to close"
+        },
         {
           "type": "p",
           "text": "The site serves five, and none of them cost anything:"
@@ -631,7 +757,10 @@
           "linkLabel": "See the report",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
-        { "type": "h3", "text": "The debt the analyzer actually found" },
+        {
+          "type": "h3",
+          "text": "The debt the analyzer actually found"
+        },
         {
           "type": "p",
           "text": "There's a comfortable answer here and a true one. The comfortable one is that there's barely any. The true one is that I use [Qlty](https://qlty.sh), an external analyzer, and it's the one that told me there was, and looking closer it turned out the five worst-scored files weren't the site's actual code: they were the contrast census, two content registries, and two guardians. Two readings come out of that, both true at once:"
@@ -656,7 +785,10 @@
           "side": "center",
           "caption": "This repository's Qlty dashboard: an A grade in maintainability and security, with the five worst-scored files the technical debt ratio pointed at."
         },
-        { "type": "h3", "text": "And one absence, said out loud" },
+        {
+          "type": "h3",
+          "text": "And one absence, said out loud"
+        },
         {
           "type": "p",
           "text": "This repository has no tests. It's not an oversight, it's a decision. There's no business logic to test: there's data, presentational components, and rules, and the guardians already verify the rules on every push. The day the first function with real branching conditions shows up, tests come with it. Writing a test that checks a heading renders a heading would have been theater, and expensive theater to maintain."
@@ -666,21 +798,45 @@
         "label": "LINK ·",
         "parts": [
           "Decisions ",
-          { "label": "D13", "path": "DECISIONS.md" },
+          {
+            "label": "D13",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D15", "path": "DECISIONS.md" },
+          {
+            "label": "D15",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D26", "path": "DECISIONS.md" },
+          {
+            "label": "D26",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D27", "path": "DECISIONS.md" },
+          {
+            "label": "D27",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D32", "path": "DECISIONS.md" },
+          {
+            "label": "D32",
+            "path": "DECISIONS.md"
+          },
           " and ",
-          { "label": "D55", "path": "DECISIONS.md" },
+          {
+            "label": "D55",
+            "path": "DECISIONS.md"
+          },
           ", the ",
-          { "label": "next.config.ts", "path": "next.config.ts" },
+          {
+            "label": "next.config.ts",
+            "path": "next.config.ts"
+          },
           " file and the ",
-          { "label": "Qlty", "external": "https://qlty.sh" },
+          {
+            "label": "Qlty",
+            "external": "https://qlty.sh"
+          },
           " configuration"
         ]
       }
@@ -690,7 +846,7 @@
       "ordinal": "08",
       "indexLabel": "Accessibility",
       "kicker": "08 — Accessibility",
-      "title": "AA is the floor, and the meter was miscalibrated three times",
+      "title": "AA is the floor, and four times the meter measured something other than what I thought",
       "body": [
         {
           "type": "p",
@@ -713,7 +869,10 @@
           "linkLabel": "See the measured census",
           "href": "accesibilidad"
         },
-        { "type": "h3", "text": "Four points get inherited, four stay manual" },
+        {
+          "type": "h3",
+          "text": "Four points get inherited, four stay manual"
+        },
         {
           "type": "p",
           "text": "The checklist is eight points a page has to clear before it counts as closed, and I already mentioned four stopped needing manual checks the day the piece started handling them. The other four stay manual and will keep staying manual, because they depend on the content and no component can supply them:"
@@ -731,7 +890,10 @@
           "type": "p",
           "text": "That split is the only reason an eight-point checklist is still being met in month fourteen: nobody sustains eight manual checks, but four, yes."
         },
-        { "type": "h3", "text": "The color rule I'm proudest of" },
+        {
+          "type": "h3",
+          "text": "The color rule I'm proudest of"
+        },
         {
           "type": "p",
           "text": "It isn't a component. The secondary text's gray is calibrated against the page's background, and only against that. On top of a card, an inverted band or an overlay, that same gray falls short. The rule's first version said \"recalculate it when you change surfaces,\" which is a rule you have to remember, meaning a rule that gets broken. The second version doesn't need remembering: every surface declares its own dimmed value by mixing the text toward whatever background sits beneath it, and the call site always writes the same thing."
@@ -746,10 +908,13 @@
           "type": "p",
           "text": "And here's the first failure, because the good rule had a hole that took me a while to see. A surface doesn't only change by class: it changes by state. A card that lightens on hover is changing its background, and my layer had no idea, because hover compiles to a different selector. For a long stretch, cards that passed comfortably at rest fell below target on hover. No scanner caught it. What caught it was asking myself why I'd measured eight pages and not twelve."
         },
-        { "type": "h3", "text": "The three times the meter was miscalibrated" },
+        {
+          "type": "h3",
+          "text": "The four times the meter measured something other than what I thought"
+        },
         {
           "type": "p",
-          "text": "And the rest isn't that the site fell short. It's that getting there meant fixing the measuring instrument itself three times, and all three times the broken instrument said pass."
+          "text": "And the rest isn't that the site fell short. It's that getting there meant fixing the measuring instrument itself four times, and all four times the result read exactly like a pass."
         },
         {
           "type": "p",
@@ -763,7 +928,14 @@
           "type": "p",
           "text": "**On threshold.** The standard doesn't ask the same of small text as it does of a headline: past a certain size, the bar drops. I was scoring everything against the small-text bar, so I published four violations where there was really one. A misapplied threshold invents findings just as badly as an uncalibrated meter, and it's more expensive to undo, because nobody doubts a report that brings bad news."
         },
-        { "type": "h3", "text": "The layer that can't be automated" },
+        {
+          "type": "p",
+          "text": "**On scope.** The fourth one is a different kind, and that is why it taught me the most: the instrument was not broken, it did not exist. Everything it measured was text against its background, and there is a second requirement almost nobody remembers: a control also has to be recognisable as a control. The border of a form field, which is the only thing telling you where to type, has a bar of its own. Mine sat at less than half of it, on every neutral control on the site, and had done since the first version. Nobody caught it because the automated scanner does not check that rule, my own census measured something else, and each link in the chain delegated to the next, so the whole chain ended somewhere nobody was standing. The name I gave it helped too: “contrast pair census” sounds like it covers everything. Had I called it “text pair census”, the gap would have been visible on day one."
+        },
+        {
+          "type": "h3",
+          "text": "The layer that can't be automated"
+        },
         {
           "type": "p",
           "text": "I walked the entire site with [NVDA](https://www.nvaccess.org/), a screen reader, and it caught things that break no rule at all and that no scanner could ever flag: a key that didn't close what it looked like it should close, a change that happened with no announcement to someone who can't see it. What it found is published on the site's own [accessibility page](/en/accesibilidad), named and dated, alongside what I haven't fixed yet. An accessibility statement that only says what's compliant isn't a statement: it's a cover page."
@@ -779,15 +951,30 @@
         "label": "LINK ·",
         "parts": [
           "Decisions ",
-          { "label": "D39", "path": "DECISIONS.md" },
+          {
+            "label": "D39",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D41", "path": "DECISIONS.md" },
+          {
+            "label": "D41",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D52", "path": "DECISIONS.md" },
+          {
+            "label": "D52",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D61", "path": "DECISIONS.md" },
+          {
+            "label": "D61",
+            "path": "DECISIONS.md"
+          },
           " and ",
-          { "label": "D73", "path": "DECISIONS.md" },
+          {
+            "label": "D73",
+            "path": "DECISIONS.md"
+          },
           ", and the ",
           {
             "label": "contrast-census.js",
@@ -808,12 +995,18 @@
           "type": "p",
           "text": "This site was built working with an AI, so the honest question isn't whether it helps: it's what it catches and what it doesn't."
         },
-        { "type": "h3", "text": "Who decides" },
+        {
+          "type": "h3",
+          "text": "Who decides"
+        },
         {
           "type": "p",
           "text": "One note before going on, because it affects how everything above should be read. When this article says \"I decided,\" the decision is mine and I own it. But almost none of them were made in silence: they got discussed in conversation, and a good part of the objections that changed my mind came out of that. What doesn't get delegated is the decision itself, or the judgment it's weighed against afterward."
         },
-        { "type": "h3", "text": "What it catches: what exists" },
+        {
+          "type": "h3",
+          "text": "What it catches: what exists"
+        },
         {
           "type": "p",
           "text": "A badly written pattern, an inconsistency between two files, a duplicated value, a function that can be simplified. Ask for a code review and you get one, and it's usually better than mine at eleven at night."
@@ -849,7 +1042,10 @@
           "type": "p",
           "text": "None of the seven is a prompt I rewrite every time. They're versioned instructions inside the repository, and that's why they improve: when one fails, the file gets fixed, not the next conversation."
         },
-        { "type": "h3", "text": "What it doesn't catch: what's missing" },
+        {
+          "type": "h3",
+          "text": "What it doesn't catch: what's missing"
+        },
         {
           "type": "p",
           "text": "And on this project, what's missing has always been the expensive problem."
@@ -868,7 +1064,10 @@
           "type": "p",
           "text": "It's happened to me five times, and the best of them was this one: I found out that the layer that verifies wasn't itself verified. This repository's guardians check that nobody breaks the rules, and nothing checked that the guardians actually worked. Their failure mode isn't an alarm, it's a green light. Now every guardian carries a fake bad case it has to be able to catch, and if it doesn't catch it, the build fails."
         },
-        { "type": "h3", "text": "The noise from an outside auditor" },
+        {
+          "type": "h3",
+          "text": "The noise from an outside auditor"
+        },
         {
           "type": "p",
           "text": "I ran the site through several audit tools and got eleven findings back. Six were false positives. What mattered wasn't dismissing them, it was writing down why, and writing it by mechanism rather than by score: \"this tool counts it this specific way\" ages well, while jotting down that day's score forces the same argument again a month later with a different score."
@@ -878,19 +1077,40 @@
         "label": "LINK ·",
         "parts": [
           "Decisions ",
-          { "label": "D37", "path": "DECISIONS.md" },
+          {
+            "label": "D37",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D63", "path": "DECISIONS.md" },
+          {
+            "label": "D63",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D67", "path": "DECISIONS.md" },
+          {
+            "label": "D67",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D70", "path": "DECISIONS.md" },
+          {
+            "label": "D70",
+            "path": "DECISIONS.md"
+          },
           " and ",
-          { "label": "D72", "path": "DECISIONS.md" },
+          {
+            "label": "D72",
+            "path": "DECISIONS.md"
+          },
           ", the ",
-          { "label": "CI workflow", "path": ".github/workflows/ci.yml" },
+          {
+            "label": "CI workflow",
+            "path": ".github/workflows/ci.yml"
+          },
           ", and the versioned routines in ",
-          { "label": ".claude/skills/", "path": ".claude/skills" }
+          {
+            "label": ".claude/skills/",
+            "path": ".claude/skills"
+          }
         ]
       }
     },
@@ -936,13 +1156,25 @@
         "label": "LINK ·",
         "parts": [
           "The \"How a rule gets written here\" section of ",
-          { "label": "BRAND.md", "path": "BRAND.md" },
+          {
+            "label": "BRAND.md",
+            "path": "BRAND.md"
+          },
           ", and decisions ",
-          { "label": "D60", "path": "DECISIONS.md" },
+          {
+            "label": "D60",
+            "path": "DECISIONS.md"
+          },
           ", ",
-          { "label": "D63", "path": "DECISIONS.md" },
+          {
+            "label": "D63",
+            "path": "DECISIONS.md"
+          },
           " and ",
-          { "label": "D70", "path": "DECISIONS.md" }
+          {
+            "label": "D70",
+            "path": "DECISIONS.md"
+          }
         ]
       }
     }
@@ -987,13 +1219,25 @@
       "label": "LINK ·",
       "parts": [
         "Decisions ",
-        { "label": "D17", "path": "DECISIONS.md" },
+        {
+          "label": "D17",
+          "path": "DECISIONS.md"
+        },
         ", ",
-        { "label": "D18", "path": "DECISIONS.md" },
+        {
+          "label": "D18",
+          "path": "DECISIONS.md"
+        },
         ", ",
-        { "label": "D31", "path": "DECISIONS.md" },
+        {
+          "label": "D31",
+          "path": "DECISIONS.md"
+        },
         " and ",
-        { "label": "D71", "path": "DECISIONS.md" }
+        {
+          "label": "D71",
+          "path": "DECISIONS.md"
+        }
       ]
     }
   }

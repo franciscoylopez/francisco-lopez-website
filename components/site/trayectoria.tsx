@@ -53,10 +53,10 @@ export type TrayectoriaDict = {
 // «Shutapp Projects» hay dos filas hermanas y solo una tiene página, así que
 // PICKASO es la única sin subrayar dentro de su grupo. Se eligió A sabiéndolo.
 //
-// El subrayado lo pone `.link-content--underline`, no `.link-content` a secas:
-// esa clase sola resuelve el relleno del hover y deja el reposo SIN afordancia
-// —el primer montaje del prototipo salió así y los enlaces no se distinguían del
-// texto—. Y es enlace de CONTENIDO y no de chrome porque no es carpintería de
+// El subrayado va en la base de `.link-content` desde el 2026-08-23; hasta
+// entonces lo ponía un modificador aparte que TODOS los call sites escribían, y
+// sin él el reposo se queda SIN afordancia —el primer montaje del prototipo salió
+// así y los enlaces no se distinguían del texto—. Y es enlace de CONTENIDO y no de chrome porque no es carpintería de
 // navegación: es una entrada de la trayectoria que además lleva a su caso.
 // Y LA RUTA NO SE ESCRIBE: sale de `pagePath`, que es la fuente única del
 // emparejamiento ruta↔locale (D45). Escribir `/trayectoria/${slug}` aquí habría
@@ -74,10 +74,7 @@ function CaseLink({
   const { slug } = experienceOf(company);
   if (!slug) return <>{children}</>;
   return (
-    <a
-      href={pagePath(lang, `trayectoria/${slug}`)}
-      className="link-content link-content--underline"
-    >
+    <a href={pagePath(lang, `trayectoria/${slug}`)} className="link-content">
       {children}
     </a>
   );

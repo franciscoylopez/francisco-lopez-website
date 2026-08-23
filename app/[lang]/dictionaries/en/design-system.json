@@ -293,6 +293,12 @@
         "cls": ".icon-chrome",
         "rule": "Theme toggle, menu and social icons: the same pill as the rest of the chrome, filling the full 44px touch target.",
         "note": "A control without a label needs the same affordance as one with text; otherwise it is the only piece of chrome that ignores the cursor."
+      },
+      {
+        "kicker": "Chrome on an inverted band",
+        "cls": ".link-chrome · tone inverted",
+        "rule": "On a block whose background is foreground, chrome lifts to background on hover or focus, and the pill is built from the opposite end of that same background.",
+        "note": "The usual secondary tone lifts to foreground, which here IS the background colour: invisible text. The surface overrules the variant."
       }
     ],
     "demoContentBefore": "Every decision on this page is",
@@ -305,7 +311,7 @@
       "Holding it back for the moment of interaction turns it back into a signal instead of a paragraph colour.",
       "No state is encoded by colour alone: underline, fill and pill are changes of shape, not of hue."
     ],
-    "ruleFoot": "A deliberate exception: the channels in the contact band (phone, LinkedIn, CV) are actions rather than navigation, yet they take the chrome treatment, because a permanent underline next to the solid email button competed with it instead of supporting it."
+    "ruleFoot": "A chrome tone is not decoration. The secondary one (footer, breadcrumb, language switch) lifts to foreground in the same gesture that brings up the pill, because without that jump the pair drops to AA exactly on hover; and on an inverted band it lifts to background, because there foreground is the background colour. No call site writes that rule: the tone does."
   },
   "botones": {
     "num": "09 — Buttons and actions",

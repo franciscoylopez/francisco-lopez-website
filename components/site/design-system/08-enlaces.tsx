@@ -27,10 +27,7 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
                 {i === 0 && (
                   <p className="m-0 text-center text-[0.95rem] leading-[1.7]">
                     {t.demoContentBefore}{" "}
-                    <a
-                      href="#top"
-                      className="link-content link-content--underline"
-                    >
+                    <a href="#top" className="link-content">
                       {t.demoContentLink}
                     </a>{" "}
                     {t.demoContentAfter}
@@ -74,6 +71,34 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
                     >
                       <Menu />
                     </a>
+                  </div>
+                )}
+                {/* El `tone: "inverted"` necesita SU superficie para demostrarse:
+                    sobre el fondo de la página se vería igual que el chrome de al
+                    lado. La banda es la demo, no un adorno — y lleva
+                    `data-surface="inverted"` porque se pinta su propio fondo, que
+                    es lo que permite a la capa recalcular el atenuado y la
+                    pastilla (D39/D61). */}
+                {i === 3 && (
+                  <div
+                    data-surface="inverted"
+                    className="bg-foreground -mx-5 -my-7 flex grow flex-wrap items-center justify-center gap-1 self-stretch px-5 py-7"
+                  >
+                    {t.demoChromeItems.map((item) => (
+                      <a
+                        key={item}
+                        href="#top"
+                        className={cn(
+                          chromeLinkVariants({
+                            shape: "bar",
+                            tone: "inverted",
+                          }),
+                          "text-[0.88rem]",
+                        )}
+                      >
+                        {item}
+                      </a>
+                    ))}
                   </div>
                 )}
               </div>

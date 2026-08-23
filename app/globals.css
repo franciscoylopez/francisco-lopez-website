@@ -706,19 +706,14 @@
   background-repeat: no-repeat;
   background-position: 0 100%;
   background-size: 100% 0%;
-  transition:
-    background-size 0.3s ease,
-    color 0.3s ease 0.08s;
-}
-.link-content:hover,
-.link-content:focus-visible {
-  background-size: 100% 100%;
-  color: var(--primary-foreground);
-}
-/* Modificador solo para enlaces de texto corrido (sin icono): el subrayado es la
-   afordancia en reposo; en icono + etiqueta (p. ej. ContactSecondary) el propio
-   icono ya cumple esa función y el subrayado sobraría bajo el glifo. */
-.link-content--underline {
+  /* EL SUBRAYADO ES DE LA BASE desde el 2026-08-23, no de un modificador. Vivía
+     en `.link-content--underline` porque había un caso sin él: los enlaces de
+     icono + etiqueta de `ContactSecondary`, donde el glifo ya hacía de
+     afordancia y el subrayado sobraba bajo él. Ese caso se retiró con la página
+     de Contacto (P67) y el modificador se quedó con CERO usos propios: los diez
+     call sites del sitio lo escribían siempre. Una distinción sin caso no es una
+     distinción, así que se fusiona. Si vuelve a aparecer un enlace de contenido
+     con icono, vuelve el modificador — con su caso delante. */
   text-decoration: underline;
   text-decoration-color: var(--primary);
   text-decoration-thickness: 2px;
@@ -728,13 +723,14 @@
     color 0.3s ease 0.08s,
     text-decoration-color 0.22s ease;
 }
-.link-content--underline:hover,
-.link-content--underline:focus-visible {
+.link-content:hover,
+.link-content:focus-visible {
+  background-size: 100% 100%;
+  color: var(--primary-foreground);
   text-decoration-color: transparent;
 }
 @media (prefers-reduced-motion: reduce) {
-  .link-content,
-  .link-content--underline {
+  .link-content {
     transition: none;
   }
 }
@@ -746,20 +742,21 @@
    `@layer`, esta clase la pisaría si la trajera. La pastilla usa la caja que ya
    define cada componente.
    `--chrome-hover-bg` sensible al fondo, mismo patrón que `--surface-dim` arriba:
-   por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), pero dentro
-   de `.contact-band` (fondo YA `--muted`, ContactSecondary también usa esta clase
-   desde P37.55) el pill se volvía invisible — mismo color que su fondo.
-   Ajustado 2026-08-04: el primer intento usaba `--card` ahí dentro — un token fijo
-   mucho más claro que rompía con el tono cálido y sutil del pill de siempre (se
-   veía como un recuadro blanco suelto). En su lugar se mezcla `--foreground` un
-   10% sobre la PROPIA banda, igual que ya hace `--surface-dim`: en claro oscurece
-   un paso (mismo sentido que --muted respecto a --background), en oscuro aclara un
-   paso — la misma dirección que ya tiene el pill por defecto en cada tema. */
+   por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), y
+   recalculado en las superficies donde ese valor por defecto se volvería invisible
+   por ser del mismo color que el fondo.
+
+   AQUÍ HABÍA UNA RAMA PARA `.contact-band`, y se retiró el 2026-08-23 al quedarse
+   sin caso. Existía porque `ContactSecondary` —la fila de teléfono, LinkedIn y CV
+   bajo el CTA— llevaba tratamiento de chrome DENTRO de esa banda, cuyo fondo ya es
+   `--muted`. Esa fila se retiró con la página de Contacto (P67): la franja hoy solo
+   tiene su cabecera y un botón sólido, así que no queda un solo enlace de chrome
+   dentro de `.contact-band` y la rama era código muerto con documentación viva.
+   Si vuelve a entrar chrome en una banda `--muted`, vuelve la rama: se mezclaba
+   `--foreground` al 10% sobre la propia banda —no `--card`, que se veía como un
+   recuadro blanco suelto—, mismo sentido y proporción que la de abajo. */
 :root {
   --chrome-hover-bg: var(--muted);
-}
-.contact-band {
-  --chrome-hover-bg: color-mix(in srgb, var(--foreground) 10%, var(--muted));
 }
 /* Mismo problema, banda invertida (P60, design-review): el fondo local es
    `--foreground` y el texto de `tone: "inverted"` sube a `--background` en

@@ -293,6 +293,12 @@
         "cls": ".icon-chrome",
         "rule": "Toggle de tema, menú y redes: la misma pastilla que el resto del chrome, ocupando el objetivo táctil de 44px completo.",
         "note": "Un control sin etiqueta necesita la misma afordancia que uno con texto; si no, es lo único del chrome que no responde al cursor."
+      },
+      {
+        "kicker": "Chrome sobre banda invertida",
+        "cls": ".link-chrome · tone inverted",
+        "rule": "Sobre un bloque cuyo fondo es foreground, el chrome sube a background al recibir cursor o foco, y la pastilla se construye desde el otro extremo del propio fondo.",
+        "note": "El tono secundario de siempre sube a foreground, que aquí ES el color del fondo: texto invisible. La superficie manda sobre la variante."
       }
     ],
     "demoContentBefore": "Cada decisión de esta página está",
@@ -305,7 +311,7 @@
       "Reservarlo al momento de la interacción lo devuelve a ser una señal, no un color de párrafo.",
       "Ningún estado se codifica solo por color: subrayado, relleno y pastilla son cambios de forma, no de tono."
     ],
-    "ruleFoot": "Excepción consciente: los canales de la franja de contacto (teléfono, LinkedIn, CV) son acciones, no navegación, pero llevan tratamiento de chrome, porque un subrayado permanente junto al botón sólido de email competía con él en vez de acompañarlo."
+    "ruleFoot": "El tono del chrome no es decoración. El secundario (pie, breadcrumb, selector de idioma) sube a foreground en el mismo gesto en que aparece la pastilla, porque sin ese salto el par cae a AA justo en hover; y sobre una banda invertida sube a background, porque ahí foreground es el color del fondo. La regla no la escribe cada uso: la escribe el tono."
   },
   "botones": {
     "num": "09 — Botones y acciones",
