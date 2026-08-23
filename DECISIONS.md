@@ -858,6 +858,62 @@ vivo en vez de una cifra escrita. El hueco real sigue siendo el mismo que esta e
 señalaba —`unsafe-inline` en `script-src`— y ahora tiene tarea propia, máxima prioridad del
 sprint «Footer y contacto» (P64.5), en vez de quedar diferido sin fecha a «cuando haga falta».
 
+**Definida P64.5, y el resultado es que la condición de disparo no ha cambiado
+(2026-08-23).** La tarea entró como «Necesita definición» con una pregunta concreta —¿el
+render dinámico afectaría a algunas rutas o a las 26 variantes?— y con el supuesto de que
+lo que faltaba era estimar. Medido sobre el build real y sobre la fuente del propio
+validador, lo que faltaba era saber que **no hay media tinta**: o las 26 dinámicas, o
+ninguna.
+
+- **Son las 26, y no por reparto de rutas.** Las trece páginas × dos locales llevan las
+  mismas tres familias de script inline: el init de tema de next-themes, `consent-init` y
+  el **payload RSC de Next**. Ninguna puede quedarse estática bajo la política estricta,
+  porque su HTML ya prerenderizado contiene inline scripts que necesitarían el nonce. La
+  doc del paquete (`01-app/02-guides/content-security-policy.md`, Next 16.3.1) lo dice sin
+  matices: *«all pages must be dynamically rendered»*, SSG e ISR desactivados, sin caché de
+  CDN, PPR incompatible.
+- **Los hashes no son la puerta de atrás.** `es.html` tiene **7 scripts inline y 5 son el
+  payload RSC** (`self.__next_f.push`, ~65 KB), con contenido distinto por página y por
+  build. `headers()` de `next.config.ts` se evalúa **antes** de que ese HTML exista, así
+  que un hash de build es imposible por construcción, no por esfuerzo. (Build en dos
+  pasadas escribiendo `vercel.json`: considerado y descartado por fragilidad — cualquier
+  cambio de copy invalidaría los hashes de la pasada anterior.)
+- **`experimental.sri` tampoco cierra el hueco.** Existe en 16.3.1 y pone `integrity` en
+  los scripts con `src` (12 en la home), pero **SRI no aplica a inline**: `'unsafe-inline'`
+  se queda y la nota no se mueve. Sirve para otra cosa, no para esto.
+- **El premio sí es el A+ limpio.** Leído el grader del HTTP Observatory en su fuente
+  (`mdn-http-observatory`, `src/grader/charts.js`): `csp-implemented-with-unsafe-inline`
+  vale **−20** —que es exactamente el 80/100 medido— y
+  `csp-implemented-with-unsafe-inline-in-style-src-only` vale **0**. Es decir: **los 1169
+  atributos `style=` inline del sitio NO capan la nota**. Con nonce en `script-src`, el
+  techo es 100 = A+, aunque `style-src` conserve `'unsafe-inline'`. Se anota porque la
+  hipótesis de partida era la contraria y habría hecho descartar la tarea por un motivo
+  falso (regla 3 de `BRAND.md` §Cómo se escribe una regla: valida el metro antes de
+  creerte el hallazgo).
+
+**Lo que decide, entonces, no es la viabilidad sino el otro platillo.** `PRD-Live.md` §5
+exige PageSpeed **>90 en móvil como criterio de aceptación** y hoy va 94-96: de cuatro a
+seis puntos de margen para absorber el TTFB de renderizar en cada request lo que hoy sirve
+la CDN. Y el beneficio de seguridad sigue siendo el que esta entrada declaró en 2026-08-02:
+ningún `dangerouslySetInnerHTML` recibe entrada no confiable (JSON-LD propio, SVG propio,
+`consent-init` propio), sin auth, sin formularios, sin contenido de usuario.
+
+**Y hay una trampa de medición que conviene saber antes de intentarlo:** el peaje de
+rendimiento y la rotura de GTM **solo se pueden medir en producción**. La analítica está
+capada a producción (D13) y `npm run psi` corre contra producción, así que el preview no
+puede contestar ninguna de las dos. La sonda correcta, si algún día se quiere el número
+sin arriesgar el sitio, es servir la política estricta como **`Report-Only` junto a la
+enforced actual**: el render dinámico se paga igual —o sea, `psi` mide el peaje de verdad—
+mientras nada se rompe.
+
+**Decisión (Francisco, 2026-08-23): no se ejecuta todavía; queda bloqueada por P65.** No es
+un aplazamiento nuevo: es **el disparador que esta entrada y `PRD-Live.md` §5 ya habían
+fijado** —«o antes si Contacto ampliada incorpora un endpoint externo»— y P65 está a un
+puesto de distancia. Si la investigación de Contacto concluye que hay formulario con
+endpoint, la CSP estricta deja de ser insignia y se resuelve **dentro de P67**, no aparte;
+si concluye que no, se va con la IA conversacional de V4. Por eso P64.5 se renumera detrás
+de P65 en el tablero: estaba por delante de la tarea que la desbloquea.
+
 ## D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot — 2026-08-02
 **Decisión.** Cierre de la deuda de dependencias de la etapa Cimientos (P30.5 + P37.72),
 más el escaneo automatizado que la mantiene a raya:
