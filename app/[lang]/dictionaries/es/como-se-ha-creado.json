@@ -418,7 +418,7 @@
         { "type": "h3", "text": "Dos preguntas deciden qué pieza toca" },
         {
           "type": "p",
-          "text": "El sitio tiene siete piezas, y cuál toca se decide preguntando **¿se pulsa?** y, si se pulsa, **¿tiene caja propia?** Un chip que solo rotula un dato no es un botón pequeño: es una etiqueta, y no necesita ni estado, ni hover, ni objetivo táctil. Un enlace del menú tampoco es un botón: es carpintería de navegación, y ahí el cian no distingue nada porque todo el bloque navega. Parecen distinciones de vocabulario y son justo lo que evita que cada sección invente su propio botón."
+          "text": "El sitio tiene ocho piezas, y cuál toca se decide preguntando **¿se pulsa?** y, si se pulsa, **¿tiene caja propia?** Un chip que solo rotula un dato no es un botón pequeño: es una etiqueta, y no necesita ni estado, ni hover, ni objetivo táctil. Un enlace del menú tampoco es un botón: es carpintería de navegación, y ahí el cian no distingue nada porque todo el bloque navega. Parecen distinciones de vocabulario y son justo lo que evita que cada sección invente su propio botón."
         },
         { "type": "h3", "text": "La cascada: antes de escribir markup nuevo" },
         {
@@ -458,7 +458,7 @@
         },
         {
           "type": "p",
-          "text": "Encima de las siete piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una."
+          "text": "Encima de las ocho piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una."
         },
         { "type": "h3", "text": "Qué compra todo esto" },
         {
@@ -512,7 +512,7 @@
         { "type": "h3", "text": "El día que caducó" },
         {
           "type": "p",
-          "text": "Cuando el sistema en código creció hasta ser lo que acabo de describir (siete piezas, una capa de página y una página que las publica), la maqueta pasó a ser más pobre que el sitio. A partir de ahí, mantener las dos en paralelo no era rigor: era garantizar que acabaran diciendo cosas distintas, que es justo lo que la decisión original quería evitar."
+          "text": "Cuando el sistema en código creció hasta ser lo que acabo de describir (ocho piezas, una capa de página y una página que las publica), la maqueta pasó a ser más pobre que el sitio. A partir de ahí, mantener las dos en paralelo no era rigor: era garantizar que acabaran diciendo cosas distintas, que es justo lo que la decisión original quería evitar."
         },
         {
           "type": "quote",

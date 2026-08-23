@@ -83,6 +83,17 @@ módulo caduca igual que una skill y nadie lo relee. En esta misma sesión, `scr
 seguía anunciando que leía «periodos y roles» del diccionario meses después de dejar de
 hacerlo.
 
+**Cuando lo que ha caducado es un RECUENTO, la corrección no es el número nuevo: es dejar de
+escribirlo** *(2026-08-23)*. Al añadir `/contacto`, la cifra estaba mal en siete sitios del
+`README` y en cuatro de dos skills, y convivían **tres versiones distintas** —24, 26 y trece—
+porque cada una había caducado en un momento distinto. La única línea que no había caducado
+era la de `design-review`, y dice por qué: *«No se escribe cuántas son —cuando esta línea
+decía "seis" ya eran doce, y cuando decía "doce" ya eran trece—: se cuenta el registro»*.
+Así que al encontrar un recuento obsoleto, la pregunta no es cuál es el número correcto sino
+**si esa frase necesita un número**; casi nunca lo necesita. Se deja escrito solo donde ES el
+dato (la portada del `README`) o donde es el RESULTADO de una medición con su fecha (los
+pares del censo).
+
 ## Paso 1 bis · Y ahora al revés: ¿qué se puede RETIRAR?
 
 > **Este paso existe porque el que faltaba era este.** El análisis de metodología del

@@ -418,7 +418,7 @@
         { "type": "h3", "text": "Two questions decide which piece applies" },
         {
           "type": "p",
-          "text": "The site has seven pieces, and which one applies is decided by asking **does it get clicked?** and, if it does, **does it have its own box?** A chip that only labels a value isn't a small button: it's a badge, and it needs no state, no hover, no touch target. A menu link isn't a button either: it's navigation chrome, and there cyan distinguishes nothing because the whole block is about navigating. They sound like vocabulary distinctions, and they're exactly what stops every section from inventing its own button."
+          "text": "The site has eight pieces, and which one applies is decided by asking **does it get clicked?** and, if it does, **does it have its own box?** A chip that only labels a value isn't a small button: it's a badge, and it needs no state, no hover, no touch target. A menu link isn't a button either: it's navigation chrome, and there cyan distinguishes nothing because the whole block is about navigating. They sound like vocabulary distinctions, and they're exactly what stops every section from inventing its own button."
         },
         { "type": "h3", "text": "The cascade: before writing any new markup" },
         {
@@ -458,7 +458,7 @@
         },
         {
           "type": "p",
-          "text": "On top of the seven pieces there's one more layer. A helper derives the canonical URL, the per-language variants, the social card and the structured markup from a single source, and a component adds the skip link, navigation, main content and footer. And which pages the site has is decided by a single file, which is where the sitemap, the HTML gate and each page's social card all come from."
+          "text": "On top of the eight pieces there's one more layer. A helper derives the canonical URL, the per-language variants, the social card and the structured markup from a single source, and a component adds the skip link, navigation, main content and footer. And which pages the site has is decided by a single file, which is where the sitemap, the HTML gate and each page's social card all come from."
         },
         { "type": "h3", "text": "What all this buys" },
         {
@@ -513,7 +513,7 @@
         { "type": "h3", "text": "The day it expired" },
         {
           "type": "p",
-          "text": "Once the system in code grew into what I've just described (seven pieces, a page layer and a page that publishes them), the mockup became poorer than the site itself. From there, keeping both in parallel wasn't rigor: it was guaranteeing they'd end up saying different things, which is exactly what the original decision was meant to avoid."
+          "text": "Once the system in code grew into what I've just described (eight pieces, a page layer and a page that publishes them), the mockup became poorer than the site itself. From there, keeping both in parallel wasn't rigor: it was guaranteeing they'd end up saying different things, which is exactly what the original decision was meant to avoid."
         },
         {
           "type": "quote",

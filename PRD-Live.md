@@ -40,9 +40,8 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
 
 - **Home**, una sola página con las diez secciones de abajo.
 - **Sobre mí**, **Brand Kit**, **Design System**, **Accesibilidad**, **Privacidad y
-  cookies** (en `/cookies`, con la información del art. 13 del RGPD desde el 2026-08-23)
-  y **Cómo se ha creado esta página**
-  (D14, el artículo del sprint 2, `TechArticle`).
+  cookies** (en `/cookies`, con la información del art. 13 del RGPD) y **Cómo se ha creado
+  esta página** (D14, el artículo del sprint 2, `TechArticle`).
 - **Contacto** (`ContactPage`), con los dos canales y el **formulario**: la primera
   superficie que recibe algo escrito por otra persona. Envío por Server Action del mismo
   origen (la CSP no cambió) y por el SMTP de la propia cuenta, sin encargado nuevo.
@@ -117,11 +116,12 @@ cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 Regla de dos capas (cian = único color de acción; morado decorativo con cuentagotas),
 tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 
-### Capa de componentes — un núcleo de siete, quince archivos
+### Capa de componentes — un núcleo de ocho, dieciséis archivos
 
-El **núcleo** son siete: `action` (el control con caja), `chrome` (el enlace de la
+El **núcleo** son ocho: `action` (el control con caja), `chrome` (el enlace de la
 carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (el par
-eyebrow + titular), `table`, `stat-row` y `layout` (cajas y ritmos). Encima, la **capa
+eyebrow + titular), `field` (el campo de formulario), `table`, `stat-row` y `layout`
+(cajas y ritmos). Encima, la **capa
 de página**: `lib/page-meta.ts` y `components/site/page-shell.tsx` (D45/D46). Y aparte,
 no encima, la de **artículo largo** (`ui/article.tsx` + `ui/article-islands.tsx`), que
 D76 dejó fuera del núcleo a propósito.
@@ -237,8 +237,7 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 ## 7. Métricas de éxito
 
 - **Primaria**: **envíos del formulario de `/contacto`** (`contact_submit`), contados
-  cuando el servidor confirma y no al pulsar. Sustituyen desde el 2026-08-23 al clic en
-  `mailto:`/`tel:`, que era el proxy que había *porque no había formulario*.
+  cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
   Trayectoria, Contacto) y profundidad de scroll.
 - **Herramienta**: GA4 (captura scroll y descarga de fábrica).
@@ -258,8 +257,8 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 ### V2 — en curso
 
 Tres sprints de valor para el visitante, en el orden que fijan las dependencias. **Los
-dos primeros están entregados y el tercero está abierto**; entre ellos se intercalaron
-dos bloques cortos.
+tres están entregados**; entre ellos se intercalaron dos bloques cortos. El porqué de cada
+uno, en `PRD-Historical.md`.
 
 | # | Sprint | Estado |
 |---|---|---|
@@ -268,20 +267,7 @@ dos bloques cortos.
 | — | *Método* — el andamiaje del propio método antes de un sprint de contenido | **Entregado** |
 | 2 | **«Cómo se ha creado esta página»** | **En producción** (cerrado el 2026-08-22) |
 | — | *Método II* — el andamiaje otra vez, y el presupuesto de contexto sin margen | **Entregado** (cerrado el 2026-08-22) |
-| 3 | **Footer estructurado y Contacto ampliada** | **En curso** (abierto el 2026-08-22) |
-
-**Sprint 3 — Footer y Contacto ampliada.** El footer va el último **porque necesita que
-existan las secciones que crean los dos sprints anteriores**. **Contacto ampliada ya está
-definida (2026-08-23): se hace, y lo que añade sobre la franja de D29 es UNA cosa, el
-formulario** — email, teléfono, LinkedIn y CV ya los daba la franja igual de bien, así que
-el formulario es a la vez la justificación de la página y su listón. Con él, el sitio deja
-de ser de solo lectura por primera vez, y eso arrastra tres cosas que no estaban en el
-sprint: la franja de home y Sobre mí **pasa a enlazar a `/contacto`** en vez de abrir el
-cliente de correo, **la métrica primaria de §7 deja de ser los clics de contacto** y pasa a
-ser los envíos, y **la CSP estricta con nonces se acciona** (era su disparador escrito, D26).
-Es además el primer sprint que arrastra **cupo de `General`** (D91): cuatro tareas
-transversales entran con él, y dos de ellas son el mismo defecto —el sitio scrollea en
-horizontal por debajo de 360px— visto desde el nav y desde el email de contacto.
+| 3 | **Footer estructurado y Contacto ampliada** | **En producción** (cerrado el 2026-08-23) |
 
 **Traducción a EN**: la arquitectura i18n ya está; se traduce a medida que se añade
 contenido, revisando el EN contra el ES y no al revés (D20).
