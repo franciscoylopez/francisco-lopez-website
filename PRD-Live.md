@@ -265,12 +265,17 @@ dos bloques cortos.
 | 3 | **Footer estructurado y Contacto ampliada** | **En curso** (abierto el 2026-08-22) |
 
 **Sprint 3 — Footer y Contacto ampliada.** El footer va el último **porque necesita que
-existan las secciones que crean los dos sprints anteriores**. De Contacto ampliada, lo
-primero es definir qué añade sobre la franja compartida de D29: si la respuesta es «nada»,
-la conclusión legítima es reforzar la franja y no construir la página. Es el primer sprint
-que arrastra **cupo de `General`** (D91): cuatro tareas transversales entran con él, y dos
-de ellas son el mismo defecto —el sitio scrollea en horizontal por debajo de 360px— visto
-desde el nav y desde el email de contacto.
+existan las secciones que crean los dos sprints anteriores**. **Contacto ampliada ya está
+definida (2026-08-23): se hace, y lo que añade sobre la franja de D29 es UNA cosa, el
+formulario** — email, teléfono, LinkedIn y CV ya los daba la franja igual de bien, así que
+el formulario es a la vez la justificación de la página y su listón. Con él, el sitio deja
+de ser de solo lectura por primera vez, y eso arrastra tres cosas que no estaban en el
+sprint: la franja de home y Sobre mí **pasa a enlazar a `/contacto`** en vez de abrir el
+cliente de correo, **la métrica primaria de §7 deja de ser los clics de contacto** y pasa a
+ser los envíos, y **la CSP estricta con nonces se acciona** (era su disparador escrito, D26).
+Es además el primer sprint que arrastra **cupo de `General`** (D91): cuatro tareas
+transversales entran con él, y dos de ellas son el mismo defecto —el sitio scrollea en
+horizontal por debajo de 360px— visto desde el nav y desde el email de contacto.
 
 **Traducción a EN**: la arquitectura i18n ya está; se traduce a medida que se añade
 contenido, revisando el EN contra el ES y no al revés (D20).
