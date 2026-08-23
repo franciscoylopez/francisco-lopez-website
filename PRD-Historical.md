@@ -71,6 +71,7 @@
 - [53. «Cómo se ha creado esta página»: el contenido primero, y un artículo que no publica cifras (2026-08-20)](#53-cómo-se-ha-creado-esta-página-el-contenido-primero-y-un-artículo-que-no-publica-cifras-2026-08-20)
 - [54. Método II: el sprint de la operación que faltaba, y tres reglas que existían sin disparador (2026-08-22)](#54-método-ii-el-sprint-de-la-operación-que-faltaba-y-tres-reglas-que-existían-sin-disparador-2026-08-22)
 - [55. El footer no es de columnas, y la cifra que lo decidió son ocho enlaces (2026-08-23)](#55-el-footer-no-es-de-columnas-y-la-cifra-que-lo-decidió-son-ocho-enlaces-2026-08-23)
+- [56. Contacto ampliada añade una sola cosa, y con ella el sitio deja de ser de solo lectura (2026-08-23)](#56-contacto-ampliada-añade-una-sola-cosa-y-con-ella-el-sitio-deja-de-ser-de-solo-lectura-2026-08-23)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2812,6 +2813,71 @@ wordmark del componente llevaba un tamaño congelado y era el único de los siet
 peso 400 (D94) — lo vio Francisco enfrentando el footer al lockup del Brand Kit. Y el footer
 escribía cinco rutas a mano sin ser consumidora del registro, que es la causa de que «Cómo se
 ha creado» hubiera que insertarla a mano al cerrar el sprint anterior (P67.5).
+
+## 56. Contacto ampliada añade una sola cosa, y con ella el sitio deja de ser de solo lectura (2026-08-23)
+
+La tarea de definición llevaba abierta desde julio con una pregunta honesta escrita en ella:
+**¿qué añade una página de contacto sobre la franja que ya existe?** D29 había unificado las
+tres superficies de contacto —la franja de la home, el cierre de Sobre mí y el «reportar una
+barrera» de Accesibilidad— en un solo componente, unos datos y una jerarquía, y funcionaban.
+La tarea admitía por escrito que **si la respuesta era «nada», la conclusión legítima era
+descartar la página**, no construirla por inercia.
+
+**La respuesta es «una cosa, el formulario», y conviene decirlo así de crudo.** Email,
+teléfono, LinkedIn y CV ya los da la franja igual de bien; el formulario es lo único que la
+franja no puede dar, porque quita el paso de «abre tu cliente de correo» — que es donde se
+pierde al visitante en un portátil ajeno o en un móvil sin cuenta configurada. Eso justifica
+la página **y le pone el listón**: si el formulario no queda impecable, la página resta.
+
+**El inventario de partida corrigió dos supuestos de la propia tarea.** Verificado en código
+y contra el HTML renderizado: **el email solo se LEE en dos sitios**, Cookies y Accesibilidad
+—en home y Sobre mí vive únicamente dentro del `href` del botón sólido, nunca en pantalla—,
+así que «unificar el formato del email» era unificar dos casos y no cinco. Y **el teléfono
+solo existe en `ContactSecondary`**, o sea home y Sobre mí. Los dos casos visibles usaban
+capas distintas —Cookies en contenido (`.link-content--underline`), Accesibilidad en chrome
+(`chromeLinkVariants`)—, y la divergencia estaba razonada pero **escrita como excepción a un
+caso, no como regla**: si Accesibilidad perdiera su botón, nada decía qué variante tocaba.
+
+**Cuatro decisiones, y tres de ellas tienen coste asumido a sabiendas.**
+
+1. **La franja de home y Sobre mí pasa a ENLAZAR a `/contacto`**; el `mailto:` directo
+   desaparece de ahí. Se centraliza todo el contacto, a cambio del atajo del lector rápido
+   del §3 —el perfil de RRHH que escanea en 5-10 segundos ahora carga una página más— y de
+   que **la métrica primaria deje de ser los clics de contacto y pase a ser los envíos**.
+   Se avisó de las dos cosas antes de elegir.
+2. **Formulario mínimo: nombre, email y mensaje.** Descartado el filtro de ICP del §2 como
+   campos: cada campo añadido baja la tasa de envío, y quien escribe ya dice de qué empresa
+   es dentro del mensaje.
+3. **Todo se unifica a la variante de contenido**, así que Accesibilidad cambia de chrome a
+   contenido. **Esto retira la «excepción viva» de `ContactSecondary`** que `BRAND.md`
+   documentaba desde el 2026-08-04 — la que decía que ahí el subrayado permanente compite
+   con el CTA sólido que tiene a 15px. El propio `BRAND.md` había predicho que la excepción
+   «probablemente se resuelva de otra forma el día que exista una sección de contacto
+   dedicada»; ese día es este, y se resuelve retirándola.
+4. **Correo de envío y recepción: el Gmail que el sitio ya publica. Cero trabajo de DNS.**
+
+**La cuarta decisión esquivó un fallo que no se ve en el código.** Medido el mismo día sobre
+`franciscolopez.es`: **no hay SPF, no hay DKIM y no hay MX**, pero **sí hay DMARC en
+`p=quarantine`**, puesto por el registrador. Es la peor combinación posible: un formulario
+que enviara desde una dirección del dominio propio fallaría las dos alineaciones y su propio
+DMARC lo mandaría a cuarentena — el criterio de cierre del desarrollo («un envío de prueba
+que llegue de verdad al buzón») fallando el primer día por una causa invisible.
+
+Lo que hace innecesario todo eso es una observación de encuadre, no técnica: **el correo del
+formulario es una notificación para Francisco, no un mensaje al mundo.** Su remitente solo lo
+ve una persona, así que puede ser el del proveedor con `Reply-To` del visitante, sin coste de
+marca y sin un solo registro DNS. Y descarta activamente la alternativa que sonaba natural
+—enviar *como* el Gmail desde un proveedor externo—: `gmail.com` publica
+`v=spf1 redirect=_spf.google.com` y `p=none`, así que un tercero firmando como esa dirección
+falla SPF y DKIM a la vez, que es el patrón exacto del spoofing.
+
+**Lo que la definición arrastra, y que no estaba en el sprint.** El sitio pasa de trece a
+catorce páginas por idioma —`PAGE_COUNT` es derivado y se actualiza solo, pero la cifra
+escrita a mano no—; dar de alta `/contacto` es **una línea** en el registro de rutas (D72) y
+detrás van solos el sitemap, el gate, `/llms.txt`, el censo y `check:marco`; y **la CSP
+estricta con nonces se acciona**, porque su disparador escrito en D26 y en §5 era literalmente
+«o antes si Contacto ampliada incorpora un endpoint externo». Esa tarea se había definido esa
+misma mañana y se había dejado bloqueada esperando justo a esta respuesta.
 
 ## Fuentes
 
