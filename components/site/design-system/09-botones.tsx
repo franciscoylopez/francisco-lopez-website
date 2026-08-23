@@ -1,7 +1,7 @@
 import { ArrowRight, Download, Mail, Menu, Moon } from "lucide-react";
 import { SectionHeader } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { actionVariants } from "@/components/ui/action";
+import { ActionCardLines, actionVariants } from "@/components/ui/action";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
@@ -132,18 +132,16 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
                       "max-w-[19rem]",
                     )}
                   >
-                    <Mail
-                      aria-hidden="true"
-                      className="text-muted-foreground shrink-0"
+                    {/* El interior sale de `ActionCardLines`, la misma pieza que
+                        sirve los canales de `/contacto`. Estaba escrito aquí y
+                        allí byte a byte, así que esta demo iba a empezar a mentir
+                        en cuanto alguien tocara el rótulo — y sin que nada
+                        avisara (design-review, 2026-08-23). */}
+                    <ActionCardLines
+                      icon={<Mail aria-hidden="true" />}
+                      label={t.demoCardLabel}
+                      value={t.demoCardValue}
                     />
-                    <span className="min-w-0">
-                      <span className="text-muted-foreground block text-[0.75rem] tracking-[0.06em] uppercase">
-                        {t.demoCardLabel}
-                      </span>
-                      <span className="text-foreground block [overflow-wrap:anywhere]">
-                        {t.demoCardValue}
-                      </span>
-                    </span>
                   </a>
                 )}
                 {i === 5 && (

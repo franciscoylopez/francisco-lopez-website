@@ -88,7 +88,7 @@ export function EmailLink({
       <a
         href={mailtoHref(subject)}
         onClick={() => trackContactClick("email")}
-        className="link-content text-[0.95rem] break-all"
+        className="link-content text-[0.95rem] [overflow-wrap:anywhere]"
       >
         {EMAIL}
       </a>

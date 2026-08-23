@@ -84,8 +84,8 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
               se partía —«Accesibilidad» sola en la línea siguiente— y el filete
               se quedaba varado a mitad de la primera. La familia va en su PROPIA
               caja: el corte cae entre el destacado y el grupo, que es donde
-              significa algo. En `md` vuelven a la misma fila y el filete
-              reaparece, porque solo separa cuando tiene algo a los dos lados.
+              significa algo. En `md` vuelven a la misma fila; el filete tarda un
+              poco más en aparecer, y su porqué está en su propia nota aquí abajo.
               El tamaño de texto (0,9rem) es la tipografía de esta fila, no una
               métrica del enlace, así que se queda aquí — ver `chrome.tsx`. */}
           <nav className="flex flex-col items-center gap-y-2 md:flex-row md:flex-wrap md:gap-x-5 md:justify-self-center">
@@ -173,7 +173,7 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
             href={pagePath(lang, "cookies")}
             className={cn(
               chromeLinkVariants({ tone: "muted" }),
-              "-mr-[0.6rem] text-[0.8rem]",
+              "text-[0.8rem]",
             )}
           >
             {dict.cookies}
