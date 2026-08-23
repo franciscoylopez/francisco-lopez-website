@@ -98,9 +98,28 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
             >
               {dict.comoSeHaCreado}
             </a>
+            {/* EL FILETE APARECE A 820, NO EN `md` (2026-08-23, design-review).
+                La fila vuelve a una línea en `md` (768) solo sobre el papel: con
+                el copy más largo de los dos idiomas —el ES— sigue envolviendo
+                hasta **818px**, así que entre 768 y 818 el filete se quedaba a la
+                derecha de «El Making of» con la familia ya en la línea siguiente
+                y NADA a su otro lado. Es el mismo fallo que esta caja arregló en
+                móvil, movido de sitio en vez de eliminado, y 768×1024 es iPad
+                vertical, o sea un dispositivo real y no un hueco entre
+                breakpoints.
+
+                El número está MEDIDO, no elegido: 818 es donde deja de envolver
+                en ES (en EN cabe antes), y se deja 2px de margen. Y se mide CON
+                el filete puesto, que es la trampa de este arreglo: el propio
+                filete ocupa 9px con sus márgenes, así que esconderlo adelanta el
+                punto donde la fila cabe. Medir sin él daría un umbral optimista
+                para un estado que no existe. Va aquí y no en
+                un breakpoint del sistema porque no describe un tamaño de
+                pantalla, describe cuándo cabe ESTA fila — y si mañana cambia una
+                etiqueta, este es el número que hay que volver a medir. */}
             <span
               aria-hidden="true"
-              className="bg-border mx-1 hidden h-5 w-px md:block"
+              className="bg-border mx-1 hidden h-5 w-px min-[820px]:block"
             />
             <span className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
               {FAMILIA.map(({ slug, label }) => (
