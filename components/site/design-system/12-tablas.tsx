@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { DataTable, TD, TR } from "@/components/ui/table";
@@ -15,7 +16,7 @@ export function Tablas({ t }: { t: Dictionary["designSystem"]["tablas"] }) {
           </p>
         </SectionHeader>
 
-        <h3 className="font-display m-0 mb-2 text-[1rem] font-semibold">
+        <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-2")}>
           {t.dataTitle}
         </h3>
         <p className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]">

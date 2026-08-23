@@ -1,5 +1,6 @@
+import { cn } from "@/lib/utils";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { RevealDemo } from "../design-system-islands";
 
@@ -113,7 +114,7 @@ export function Movimiento({
 
         {/* transición del nav */}
         <div className="border-border mt-11 border-t border-dashed pt-9">
-          <h3 className="font-display m-0 mb-5 text-[1rem] font-semibold">
+          <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-5")}>
             {t.navTitle}
           </h3>
           <div className="flex flex-wrap gap-10">

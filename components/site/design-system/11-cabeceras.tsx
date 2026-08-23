@@ -38,21 +38,25 @@ export function Cabeceras({
           </p>
         </SectionHeader>
 
-        {/* Los CINCO tamaños, renderizados con las variantes REALES. Van sobre
+        {/* Los SEIS tamaños, renderizados con las variantes REALES. Van sobre
             <span> y <p>, no sobre <h1>/<h2>: un espécimen no debe entrar en el
             esquema de encabezados de la página —un lector de pantalla los
             anunciaría como secciones que no existen—, que es el mismo motivo
             por el que §(05) enseña la escala tipográfica en <span>.
 
-            ERAN CUATRO hasta el 2026-08-18, y el que faltaba es `sub`: nació con
+            ERAN CUATRO hasta el 2026-08-18 y CINCO hasta el 2026-08-23. El de
+            aquel día fue `sub`: nació con
             «La historia» del deep-dive y se usa en las cinco páginas de
             experiencia, así que esta sección llevaba documentando cuatro quintos
             de su propia capa. Es el recorrido incompleto de siempre —regla ✓,
             variante ✓, sección publicada ✗, uso ✓—, el mismo peldaño que se
-            saltaron los botones. Lo encontró `design-review`.
+            saltaron los botones. Lo encontró `design-review`. El de este,
+            `sub-sm`, salió del mismo sitio y por el camino contrario: no faltaba
+            en la página, faltaba en la CAPA. La cadena estaba escrita a mano
+            nueve veces, ocho de ellas aquí dentro.
 
             EL RÓTULO SE PINTA SOLO SI LO HAY, y no es un detalle de implementación:
-            `sub` es el único tamaño que en el sitio va SIN rótulo encima, así que
+            `sub` y `sub-sm` son los tamaños que en el sitio van SIN rótulo encima, así que
             dibujarle uno aquí enseñaría una composición que la página real no
             tiene — que es exactamente el defecto de «demos que enseñan algo que no
             existe». Su `EYEBROW_GAP` sí se publica, porque el valor existe en la

@@ -467,7 +467,13 @@
         "size": "sub",
         "eyebrow": "",
         "sample": "The product that already existed",
-        "use": "The h3 of a subsection inside a section. It is the only size that goes without a label above it: the free-form blocks of “The story” on the experience pages use it."
+        "use": "The h3 of a sub-section inside a section. It goes without an eyebrow above, like sub-sm: it serves the free-form blocks of “The story” on the experience pages."
+      },
+      {
+        "size": "sub-sm",
+        "eyebrow": "",
+        "sample": "Before and after",
+        "use": "The step below sub: the heading of a supporting block inside a section. It serves the nine demo headings on this page, where the same string was hand-written nine times. The only size without a clamp: at 1rem there is nothing to scale."
       }
     ],
     "toneTitle": "The label takes its grey from the surface",

@@ -83,6 +83,22 @@ export const titleVariants = cva("font-display m-0 font-semibold", {
        * jerarquía del punto 4 del checklist.
        */
       sub: "text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.25] tracking-[-0.015em]",
+      /**
+       * El escalón por debajo de `sub`: el titular de un bloque de apoyo dentro
+       * de una sección — el «antes / después» de una demo, la nota que acompaña a
+       * un espécimen, el rótulo de una lista larga.
+       *
+       * NACE DE UN CONTEO, no de una intuición (design-review 2026-08-23): la
+       * cadena `font-display m-0 text-[1rem] font-semibold` estaba escrita a mano
+       * **ocho veces**, idéntica, en siete archivos del Design System — la página
+       * que existe precisamente para que nada del sistema se escriba dos veces.
+       *
+       * NO LLEVA `clamp` a propósito, y no es un descuido de forma: a 1rem no hay
+       * nada que escalar. Los tamaños de arriba crecen porque un titular de página
+       * a 2,75rem en móvil y 5rem en escritorio son dos decisiones distintas; este
+       * es texto de apoyo y su tamaño es el mismo en los dos sitios.
+       */
+      "sub-sm": "text-[1rem] leading-[1.5]",
     },
   },
   defaultVariants: { size: "section" },
@@ -99,6 +115,7 @@ export const EYEBROW_GAP = {
   section: "mb-3",
   "section-sm": "mb-3",
   sub: "mb-2",
+  "sub-sm": "mb-2",
 } as const;
 
 /**
@@ -139,6 +156,7 @@ export const LEAD_GAP = {
   section: "mb-[1.4rem]",
   "section-sm": "mb-4",
   sub: "mb-3",
+  "sub-sm": "mb-3",
 } as const;
 
 /**

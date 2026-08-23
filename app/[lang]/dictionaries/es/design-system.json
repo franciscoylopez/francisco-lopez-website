@@ -467,7 +467,13 @@
         "size": "sub",
         "eyebrow": "",
         "sample": "El producto que ya existía",
-        "use": "El h3 de un subapartado dentro de una sección. Es el único tamaño que va sin rótulo encima: lo usan los bloques libres de «La historia» en las páginas de experiencia."
+        "use": "El h3 de un subapartado dentro de una sección. Va sin rótulo encima, como sub-sm: lo usan los bloques libres de «La historia» en las páginas de experiencia."
+      },
+      {
+        "size": "sub-sm",
+        "eyebrow": "",
+        "sample": "Antes y después",
+        "use": "El escalón por debajo de sub: el titular de un bloque de apoyo dentro de una sección. Lo usan las nueve cabeceras de demo de esta página, donde estaba escrito a mano nueve veces con la misma cadena. Único tamaño sin clamp: a 1rem no hay nada que escalar."
       }
     ],
     "toneTitle": "El rótulo toma su gris de la superficie",

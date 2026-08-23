@@ -1,5 +1,5 @@
 import { Check } from "lucide-react";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { Badge } from "@/components/ui/badge";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
@@ -39,7 +39,7 @@ export function Accesibilidad({
           </p>
         </SectionHeader>
 
-        <h3 className="font-display m-0 mt-8 mb-4 text-[1rem] font-semibold">
+        <h3 className={cn(titleVariants({ size: "sub-sm" }), "mt-8 mb-4")}>
           {t.contrastTitle}
         </h3>
         <DataTable
@@ -79,7 +79,7 @@ export function Accesibilidad({
           {t.contrastNote}
         </p>
 
-        <h3 className="font-display m-0 mt-10 mb-4 text-[1rem] font-semibold">
+        <h3 className={cn(titleVariants({ size: "sub-sm" }), "mt-10 mb-4")}>
           {t.checklistTitle}
         </h3>
         <ol className="m-0 grid list-none [grid-template-columns:repeat(auto-fill,minmax(min(100%,20rem),1fr))] gap-3 p-0">
