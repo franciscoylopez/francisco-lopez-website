@@ -41,7 +41,8 @@ Partido el **2026-08-09** (P37.685).
 - [El morado como gráfico, y la tercera vez del mismo peldaño (2026-08-17)](#el-morado-como-gráfico-y-la-tercera-vez-del-mismo-peldaño-2026-08-17)
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
 - [El morado de la barra de progreso, con los papeles cambiados (2026-08-21)](#el-morado-de-la-barra-de-progreso-con-los-papeles-cambiados-2026-08-21)
-- [La pasada completa, y las dos veces que el «sin excepciones» fue falso (2026-08-18 → 22)](#la-pasada-completa-y-las-dos-veces-que-el-sin-excepciones-fue-falso-2026-08-18-→-22)
+- [La pasada completa, y las tres veces que el «sin excepciones» fue falso (2026-08-18 → 23)](#la-pasada-completa-y-las-tres-veces-que-el-sin-excepciones-fue-falso-2026-08-18-→-23)
+- [El enlace de contenido no tiene contraparte invertida (2026-08-23)](#el-enlace-de-contenido-no-tiene-contraparte-invertida-2026-08-23)
 - [La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`](#la-pasada-de-retirada-del-2026-08-22-y-qué-se-fue-de-brandmd)
 <!-- FIN ÍNDICE -->
 
@@ -554,7 +555,7 @@ texto/gráfico grande directamente sobre `--background`»; sigue sin valer sobre
 compuesta (tarjeta, velo, banda invertida), que ya tiene su propio token calculado contra SU
 fondo.
 
-## La pasada completa, y las dos veces que el «sin excepciones» fue falso (2026-08-18 → 22)
+## La pasada completa, y las tres veces que el «sin excepciones» fue falso (2026-08-18 → 23)
 
 Contexto de la regla de `BRAND.md` §Accesibilidad, que hoy dice «todos los pares en AAA, sin
 excepciones» y remite a `npm run censo`. La afirmación es vieja; lo que cambió es qué la sostiene.
@@ -584,6 +585,74 @@ con su `bg-card` opaco, encima del hero— salía marcado en tres páginas. **22
 mandaba mirar a ojo no tenían imagen debajo.** Una lista de revisión manual inflada de falsos
 positivos es una lista que nadie lee: la tercera forma, después del metro descalibrado y del
 umbral mal aplicado, de que un medidor deje de servir sin dar error.
+
+**Y la TERCERA vez, que es de otra familia (2026-08-23).** Las dos anteriores fueron pares mal
+medidos: el metro estaba descalibrado o el umbral mal aplicado, y en cuanto se arregló el
+instrumento el par apareció. Esta no. Esta vez **el par nunca estuvo en el campo de visión del
+metro**.
+
+Diseñando el primer estado de error del sitio —el del formulario de `/contacto`, P66— se midió
+`--destructive`, un token que shadcn trae por defecto y que **lleva en el repositorio desde el
+principio sin un solo uso**:
+
+| Par | Ratio | Veredicto |
+| --- | --- | --- |
+| `--destructive` sobre `--background`, **claro** | **4,31:1** | **No llega ni a AA** (4,5) |
+| `--destructive` sobre `--background`, oscuro | 5,86:1 | AA sí, AAA (7) no |
+| `--destructive` sobre `--card`, claro | 4,57:1 | AA raspado, AAA no |
+| `--destructive` sobre `--card`, oscuro | 5,27:1 | AA sí, AAA no |
+
+*(Metro validado antes de creerse el hallazgo, como manda la regla 3: los dos anclajes se
+reprodujeron **exactos** —13,79 en claro y 15,32 en oscuro—, así que la cifra es del color y no
+del método.)*
+
+**Por qué `npm run censo` no podía haberlo cazado, y por qué eso NO es un fallo suyo.** El censo
+recorre el **DOM de las páginas servidas**, que es justo lo que lo hace bueno: encuentra los pares
+que solo existen al **componer** —un velo `color-mix` sobre la superficie de debajo, una pastilla
+de hover— y que ninguna lectura de `globals.css` puede encontrar por muy cuidadosa que sea. Ese
+acierto tiene un reverso exacto: **un token que existe y no se pinta en ninguna parte le es
+invisible.** El censo mide todo lo que se usa, y nada de lo que no.
+
+**Así que es una familia nueva, y conviene nombrarla porque el catálogo de §Cómo se escribe una
+regla no la tenía.** No es un disparador que mira al lugar equivocado (regla 1) ni un metro
+descalibrado (regla 3): es un **hueco de cobertura**. El instrumento funciona perfectamente
+dentro de su alcance, y el alcance no incluye lo que todavía no se usa. La versión de «afirma
+cuánto has mirado» que faltaba aquí no es cuántos pares midió —eso ya lo publica—, sino **qué
+tokens de color no ha medido nunca**.
+
+**Y por eso la frase de `BRAND.md` cambió de sujeto**, no de tono: donde decía «todos los pares
+del sistema» ahora dice «todos los pares que el sitio **pinta**». No es una cautela defensiva; es
+la descripción honesta de hasta dónde llega el metro que la respalda.
+
+**Lo que se hizo mientras tanto.** El estado de error del prototipo lo esquiva entero: el
+**mensaje va en `--foreground`** (13,79 / 15,32) y `--destructive` se queda como marca **no
+textual** —el icono y el filete—, donde 4,31 supera de sobra el 3:1 que WCAG 1.4.11 pide a un
+componente, y de paso el error deja de estar codificado solo por color (punto 6 del checklist).
+**Eso resuelve el caso, no el token**, y arreglarlo entra en el desarrollo de `/contacto` (P67)
+por decisión de Francisco: o se recalibra `--destructive` conmutándolo por tema —el patrón de
+`--brand-purple-accent` y `--progress-ink`— o se escribe la regla de que el rojo no es color de
+texto. Hoy no está escrita en ninguna parte, que es medio motivo de que esto ocurriera.
+
+## El enlace de contenido no tiene contraparte invertida (2026-08-23)
+
+Visto en pantalla durante P66, poniendo los canales de contacto sobre una banda invertida:
+**desaparecieron**. Solo quedó flotando el subrayado cian sobre el fondo.
+
+La causa es de una línea: `.link-content` fija `color: var(--foreground)`, y en una superficie
+invertida —`bg-foreground text-background`, el gesto de «Más allá del PM» y de la portada de
+«Cómo se ha creado»— **`--foreground` es el fondo**. El enlace se pinta del color de la banda.
+
+**Lo que hace interesante el caso es la asimetría con la capa de chrome**, que sí lo tiene
+resuelto desde P60 con `tone: "inverted"`, y con el porqué escrito: `muted` rompe dos veces sobre
+una banda, y en hover sube a `--foreground`, que ahí es texto invisible. O sea que el problema
+estaba **diagnosticado y resuelto en una capa y sin tocar en la otra**.
+
+No fue descuido: fue que el caso no había ocurrido. Es la regla 1 de §Cómo se escribe una regla
+leída del revés — un disparador no puede fallar si nunca llega a dispararse. Y es la razón de que
+esto se quede como deuda latente en vez de arreglarse en caliente: hoy no hay ni un enlace de
+contenido sobre fondo invertido en todo el sitio. El arreglo, cuando toque, es un
+`.link-content--inverted` con el texto en `--background` y el barrido en `--primary-on-inverted`,
+que existe exactamente para esto.
 
 ## La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`
 
