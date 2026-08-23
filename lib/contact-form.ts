@@ -40,9 +40,6 @@ export const TIMESTAMP_FIELD = "ts";
  */
 export const MIN_FILL_MS = 3_000;
 
-/** Y por arriba: un formulario abierto ayer no se envía hoy con el mismo sello. */
-export const MAX_FILL_MS = 12 * 60 * 60 * 1_000;
-
 export const NAME_MAX = 80;
 export const EMAIL_MAX = 254; // El límite real de una dirección (RFC 5321).
 export const MESSAGE_MIN = 10;
