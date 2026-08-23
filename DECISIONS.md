@@ -129,6 +129,7 @@
 - D91 · Un backlog transversal no lo drena ningún sprint, y el carril de contenido se barría con el resto
 - D92 · Quién cierra los PR de Dependabot, y por qué la allowlist no son «las de desarrollo»
 - D93 · El sitio scrolleaba en horizontal por debajo de 349px, y el culpable no era el que decía la tarea
+- D94 · El wordmark del logo escalaba con nada, y el arreglo elegante colapsaba la caja
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5238,3 +5239,59 @@ servidor en vez de a la clase.
 **otro problema**: no es carpintería de ancho fijo sino **palabras largas contra una columna de
 240** (el `h1` «Accesibilidad» pide 269px él solo). Eso es la escala tipográfica en el extremo
 estrecho, se tarea aparte y no se resuelve con esta decisión.
+
+---
+
+## D94 · El wordmark del logo escalaba con nada, y el arreglo elegante colapsaba la caja — 2026-08-23
+
+**Contexto.** El footer estrena el lockup con nombre (P68) y es el **primer uso de
+`showWordmark` en producción**: el nav y el Brand Kit dibujan el suyo a mano. Francisco vio,
+comparando footer y Brand Kit, que «el texto no está proporcionado». Lo estaba, pero al revés
+de lo que sugería el ojo.
+
+**Lo medido, sobre el sitio servido — los siete wordmarks del sitio.**
+
+```
+nav                              22px / 48px = 45,8 %   peso 600
+lockup del Brand Kit (×2)      25,6px / 60px = 42,7 %   peso 600
+firma de email                 18,4px / 40px = 46,0 %   peso 600
+ejemplo «mal» de usos incorrectos 12px / 48px = 25,0 %  peso 600  ← a propósito
+componente (`showWordmark`)      18px / 32px = 56,3 %   peso 400  ← el único fuera
+```
+
+El del componente era **el más grande**, no el más pequeño, y era **el único a peso 400 y sin
+tracking**. Eso es lo que el ojo leía como «más ancho»: le faltaba **cuerpo**, no tamaño. Un
+`text-lg` congelado que no escalaba con el símbolo, contra la regla 5 de `BRAND-logo.md` — «si
+cambia el tamaño del símbolo, el wordmark cambia con él».
+
+**Decisión.** El tamaño sale de la altura del símbolo por `RATIO_WORDMARK` (0,45, la banda
+40-45% que la regla fija para el lockup **compuesto en UI**), más `font-semibold` y el tracking
+que llevan los otros seis. Medido después: 14,4px, peso 600, **45,0%**.
+
+**El intento descartado, que es la parte que merece quedar escrita.** `container-type: size` +
+`font-size: 45cqh` derivaba la cifra **sin pasar ningún número**, que era claramente la
+solución mejor: el wordmark se mediría contra la altura real del lockup y no habría constante
+que mantener. Se implementó, y colapsó:
+
+```
+lockup: 40..40 (w=0 h=32)   containerType=size
+texto:  79..188 (w=110)     → se sale 148px
+```
+
+`container-type: size` aplica contención en **los dos ejes**, así que el elemento deja de
+medirse por su contenido: con `inline-flex` y sin ancho explícito, el lockup se fue a **ancho
+cero** con el texto pintándose fuera. **Se veía bien y la caja medía nada** — el modo de fallo
+peor, porque una captura no lo habría enseñado. Lo destapó medir la caja además del texto, y no
+por casualidad: es la misma sospecha de `BRAND.md` §Cómo medir sin equivocarse 5 («verifica la
+clase, no solo el color»), aplicada al `getBoundingClientRect` del padre.
+
+**Por eso el número se pasa**, y el tipo lo hace obligatorio: `showWordmark: true` exige
+`symbolPx`, y sin wordmark no se puede pasar. Un componente no puede leer una clase de Tailwind,
+así que la alternativa era deducirlo o confiar en un default — y un default silencioso es
+exactamente cómo nació el 56,3%.
+
+**Lo que sigue abierto y no se toca aquí.** El nav y el Brand Kit continúan escribiendo su
+wordmark a mano con su propio par de números. Están **dentro de la banda**, así que no hay
+incumplimiento; lo que hay es tres sitios que saben la misma proporción. Unificarlos es
+posible ahora que el componente la implementa, pero el nav además **anima** la suya con el
+scroll (regla 6), así que no es un reemplazo mecánico.

@@ -70,6 +70,7 @@
 - [52. El bloque Método: se audita cómo se trabaja, antes de un sprint de contenido (2026-08-19)](#52-el-bloque-método-se-audita-cómo-se-trabaja-antes-de-un-sprint-de-contenido-2026-08-19)
 - [53. «Cómo se ha creado esta página»: el contenido primero, y un artículo que no publica cifras (2026-08-20)](#53-cómo-se-ha-creado-esta-página-el-contenido-primero-y-un-artículo-que-no-publica-cifras-2026-08-20)
 - [54. Método II: el sprint de la operación que faltaba, y tres reglas que existían sin disparador (2026-08-22)](#54-método-ii-el-sprint-de-la-operación-que-faltaba-y-tres-reglas-que-existían-sin-disparador-2026-08-22)
+- [55. El footer no es de columnas, y la cifra que lo decidió son ocho enlaces (2026-08-23)](#55-el-footer-no-es-de-columnas-y-la-cifra-que-lo-decidió-son-ocho-enlaces-2026-08-23)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2780,6 +2781,37 @@ compararse**. De ahí salen dos skills nuevas —`publicar-en-design-system` y
 las siete piezas del núcleo **sin publicar**, y `deep-dive-page` no se había disparado nunca
 desde que se extrajo. Las dos cosas las encontró el andamiaje nuevo el mismo día de estrenarlo,
 que es la única prueba que vale de que un gate sirve.
+
+## 55. El footer no es de columnas, y la cifra que lo decidió son ocho enlaces (2026-08-23)
+
+**El footer estructurado llevaba desde el 2026-07-18 con su condición escrita en el propio
+nombre de la tarea —«cuando existan más secciones»— y con un aviso al lado que resultó ser el
+criterio de verdad.** El PRD §7 ya había evaluado la referencia `footer-3` y **descartado su
+estructura de columnas** por sobredimensionar: riesgo «portfolio freelancer». Con trece páginas
+la condición por fin se cumplía, así que la tarea se abrió para hacer columnas.
+
+**Y contar los enlaces la cerró en dirección contraria.** `footer-3` reparte **~20 enlaces en
+cuatro columnas**; aquí hay **8**. Ese hueco es exactamente lo que el aviso de julio nombraba,
+y no se vio razonando sino **dibujándolo**: la primera ronda de `/prototype` puso la rejilla en
+pantalla y las tres columnas quedaron a 295 / 626 / 956 px sobre 1360 de contenedor, con el
+aire que la referencia llena con veinte enlaces y aquí no llena nada.
+
+**Cinco rondas hicieron falta, y el recorrido es el hallazgo.** Rejilla · Banda · Bloque →
+riff sobre Rejilla → las cuatro celdas de alineación × separador → **vuelta al footer de
+producción** con tres cambios. La dirección final no es ninguna de las tres primeras: es el
+footer que ya había, con el nombre en la firma, una segunda línea fina y los enlaces en
+jerarquía. **Ocho enlaces no piden una arquitectura nueva: piden orden dentro de la que hay.**
+
+**Lo que la prueba costó y lo que ahorró.** Cinco rondas de prototipo es caro. La alternativa
+era construir las columnas, verlas vacías y rehacerlas — y el aviso de julio decía exactamente
+eso sin que nadie pudiera confirmarlo hasta verlo. **Una decisión aplazada por una condición se
+resolvió en una sesión porque se dibujó en vez de discutirse.**
+
+**Dos cosas se destaparon al pasar, las dos por comparar contra algo ya publicado.** El
+wordmark del componente llevaba un tamaño congelado y era el único de los siete del sitio a
+peso 400 (D94) — lo vio Francisco enfrentando el footer al lockup del Brand Kit. Y el footer
+escribía cinco rutas a mano sin ser consumidora del registro, que es la causa de que «Cómo se
+ha creado» hubiera que insertarla a mano al cerrar el sprint anterior (P67.5).
 
 ## Fuentes
 
