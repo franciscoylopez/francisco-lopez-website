@@ -173,6 +173,19 @@ i18n después sería rehacer.
 Confirmado leyendo `node_modules/next/dist/docs/` (AGENTS.md avisa de que este Next tiene
 breaking changes respecto al conocido).
 
+**Su matcher es un CATCH-ALL, y eso convierte cualquier ruta nueva de primer nivel en un 404
+(2026-08-23).** El matcher excluye `_next`, `api` y las rutas con extensión de archivo, y
+reescribe **todo lo demás** a `/{defaultLocale}/…`. O sea que una carpeta nueva bajo `app/` que
+NO cuelgue de `app/[lang]/` —una superficie de prototipo, un panel interno, lo que sea— se
+reescribe a `/es/loquesea`, que no existe, y devuelve 404 **sin ningún error de compilación ni
+aviso**. El síntoma no apunta a su causa: parece que la ruta está mal escrita.
+
+Se descubrió montando la superficie de `/prototype` para P66, que vive fuera de `app/[lang]/` a
+propósito —ahí la vigilan `check:rutas` y el `PageSlug` que exige `pageMetadata`, así que una
+ruta de andamiaje no compilaría—. La salida es una palabra en el lookahead del matcher, y
+conviene saber que hace falta antes de perder un ciclo buscándola: **es la única línea de
+producción que un prototipo necesita, y se va con él.**
+
 ## D4 · Fuente única de tokens = `app/globals.css`; `brand-globals.css` deprecado — 2026-07-24
 **Decisión.** `app/globals.css` (la que importa la app) es la **única** fuente de tokens.
 `brand-globals.css` **no se borra** (decisión de Francisco): se marca DEPRECADO en su cabecera y

@@ -72,6 +72,7 @@
 - [54. Método II: el sprint de la operación que faltaba, y tres reglas que existían sin disparador (2026-08-22)](#54-método-ii-el-sprint-de-la-operación-que-faltaba-y-tres-reglas-que-existían-sin-disparador-2026-08-22)
 - [55. El footer no es de columnas, y la cifra que lo decidió son ocho enlaces (2026-08-23)](#55-el-footer-no-es-de-columnas-y-la-cifra-que-lo-decidió-son-ocho-enlaces-2026-08-23)
 - [56. Contacto ampliada añade una sola cosa, y con ella el sitio deja de ser de solo lectura (2026-08-23)](#56-contacto-ampliada-añade-una-sola-cosa-y-con-ella-el-sitio-deja-de-ser-de-solo-lectura-2026-08-23)
+- [57. La dirección de Contacto se elige viéndola, y el prototipo destapa dos defectos del sistema (2026-08-23)](#57-la-dirección-de-contacto-se-elige-viéndola-y-el-prototipo-destapa-dos-defectos-del-sistema-2026-08-23)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -2878,6 +2879,58 @@ detrás van solos el sitemap, el gate, `/llms.txt`, el censo y `check:marco`; y 
 estricta con nonces se acciona**, porque su disparador escrito en D26 y en §5 era literalmente
 «o antes si Contacto ampliada incorpora un endpoint externo». Esa tarea se había definido esa
 misma mañana y se había dejado bloqueada esperando justo a esta respuesta.
+
+## 57. La dirección de Contacto se elige viéndola, y el prototipo destapa dos defectos del sistema (2026-08-23)
+
+El mismo día que se definió **qué** añade Contacto ampliada (§56), se decidió **cómo** se ve.
+No razonándolo: construyendo cuatro direcciones que funcionan y mirándolas servidas, que es lo
+que pide la Definition of Done cuando una tarea tiene más de una dirección posible.
+
+**Tres rondas, y cada una preguntó algo distinto.** La primera exploró **qué es el formulario
+respecto a la página**: un objeto sobre ella (tarjeta), una continuación del texto (campos como
+líneas de escritura), el contrapeso de una declaración de marca (banda invertida), o la página
+entera (bloque denso sobre el pliegue). Ganó *objeto*. La segunda fijó esa estructura y divergió
+**solo en el bloque de canales** —lista, tarjetas, pastillas de chrome, ficha técnica—, con la
+cabecera copiando la apertura del Design System. La tercera convergió sobre **tarjetas** y ajustó:
+fuera el rótulo, fuera LinkedIn, formulario centrado.
+
+**El último ajuste enseña algo sobre el propio método.** «Centrar las tarjetas en altura respecto
+a la entradilla» suena a una clase y no lo era: para centrarse contra la entradilla hay que
+**compartir fila** con ella, y con dos columnas flex eso no se puede expresar —el centrado sería
+siempre contra el bloque entero—. La cabecera pasó a rejilla de dos filas. Medido después: **0px
+de desfase** entre los dos centros. Y el hueco titular→entradilla se **importó de `LEAD_GAP`** en
+vez de escribirse, para que no se desincronice el día que ese valor cambie.
+
+**Lo que el prototipo destapó, y que no era del prototipo.** Es la parte que justifica haberlo
+construido en vez de decidirlo sobre el papel:
+
+- **`--destructive` no llega ni a AA en claro (4,31:1).** Es el token de error del sistema, sin un
+  solo uso desde que existe el repositorio, y el formulario iba a estrenarlo. Cifras y método en
+  `BRAND-historical.md`; lo que importa aquí es que **`npm run censo` no podía haberlo cazado**,
+  porque recorre el DOM y un token que no se pinta no está ahí. El censo mide todo lo que se usa,
+  y nada de lo que no.
+- **`.link-content` no tiene contraparte invertida.** Sobre una banda, `--foreground` es el fondo
+  y el enlace desaparece. La capa de chrome lo tenía resuelto desde P60; la de contenido no,
+  porque el caso no había ocurrido nunca.
+- **El formulario obliga a un documento de privacidad**, y la política de cookies no lo cubre:
+  contesta al art. 22.2 de la LSSI, que es otra cosa que el art. 13 del RGPD. Se resuelve **sin
+  crear una página nueva**: la URL `/cookies` se queda —no rompe el footer, ni el diálogo de
+  consentimiento— y la página se retitula «Privacidad y cookies» con una sección de datos del
+  formulario. Un enlace de footer, cero redirecciones, catorce páginas y no quince.
+
+**Cuatro decisiones de contenido que salen de aquí y que P67 hereda cerradas.** Accesibilidad
+**no** se enruta al formulario: su canal de «reportar una barrera» sigue siendo correo directo,
+porque si el formulario resultara ser la barrera, obligar a usarlo para reportarla es una trampa
+—y esa página publica una declaración de conformidad—. **LinkedIn desaparece de la página** y
+sobrevive solo en el footer. **El CV no es un canal**, es una descarga, y juntarlos era herencia
+de la franja de la home. Y **Contacto entra en el nav**, detrás de Descargar CV, que hoy tiene
+exactamente dos enlaces: es un cambio en las trece páginas y ensancha justo el grupo que P65.6
+midió en 349px, así que vuelve a poner el ancho mínimo bajo vigilancia.
+
+**El entregable no se mergea.** La superficie de prototipo vive en una rama con PR en borrador
+(#162) y la borra P67 al construir la página real, junto con la única línea de producción que
+necesitó: una exclusión en el matcher de `proxy.ts`, sin la cual el enrutado de locale reescribe
+`/prototipos` a `/es/prototipos` y devuelve 404.
 
 ## Fuentes
 

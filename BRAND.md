@@ -93,6 +93,8 @@ Lo que hay que saber al escribir UI:
   como «p»/«y»); en hover/focus, un relleno sólido en `primary` crece de abajo arriba y el
   texto pasa a `primary-foreground` — variante **H1**. El cian entra como **recompensa de la
   interacción**, no como color permanente del texto.
+  **No tiene contraparte invertida: sobre una banda desaparece**, porque ahí `--foreground` es el
+  fondo. La de chrome sí la tiene (`tone: "inverted"`). Deuda abierta, 2026-08-23.
 - **Chrome de navegación** (nav, breadcrumb, footer, menús): `foreground` o `muted-foreground`,
   nunca `primary` — ni en el texto ni en el fondo de su estado hover. En un bloque cuya función
   *entera* es navegar, el cian no distingue nada: solo mete ruido. Se leen como enlace por su
@@ -114,6 +116,10 @@ Lo que hay que saber al escribir UI:
 > leerse como su acompañamiento. Es una excepción puntual, **no un tercer criterio**;
 > probablemente se resuelva de otra forma el día que exista una sección de contacto dedicada
 > (hoy es una franja compartida entre home, Sobre mí y Accesibilidad, D29).
+>
+> **RETIRADA DECIDIDA el 2026-08-23** (P65): todo pasa a contenido, tal como este párrafo
+> predijo. Se ejecuta con `/contacto`; hasta entonces sigue viva y esto describe el sitio que
+> hay. Ese día el bloque sale de aquí entero.
 
 ## Jerarquía de hover en botones y CTA
 
@@ -239,11 +245,13 @@ la variante**; si es una excepción, la decide Francisco y se **documenta con fe
 ## Accesibilidad (no negociable)
 
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
-  suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares del sistema
-  están en AAA en ambos temas, en reposo y en hover. Sin excepciones.**
+  suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares que el sitio
+  PINTA están en AAA en ambos temas, en reposo y en hover.**
   **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
-  *(Las dos veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
+  **«Que pinta» es el límite del metro:** el censo recorre el DOM, así que un token que existe y
+  no se usa le resulta invisible. Ahí estaba `--destructive`, que no llega ni a AA (2026-08-23).
+  *(Las tres veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
   ser un hábito, en [`BRAND-historical.md`](./BRAND-historical.md) §La pasada completa.)*
 - **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es
   la fuente del **porqué** —qué par existe, por qué se eligió ese color y qué se probó antes—;
