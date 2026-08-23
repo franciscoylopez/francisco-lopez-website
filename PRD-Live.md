@@ -36,16 +36,19 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
 
 ## 4. Estado actual — en producción (`franciscolopez.es`)
 
-**Trece páginas por idioma**, en ES (raíz `/`) y EN (`/en`):
+**Catorce páginas por idioma**, en ES (raíz `/`) y EN (`/en`):
 
 - **Home**, una sola página con las diez secciones de abajo.
 - **Sobre mí**, **Brand Kit**, **Design System**, **Accesibilidad**, **Privacidad y
-  cookies** (la de `/cookies`, que desde el 2026-08-23 lleva también la información del
-  art. 13 del RGPD sobre los datos de quien escribe) y **Cómo se ha creado esta página**
+  cookies** (en `/cookies`, con la información del art. 13 del RGPD desde el 2026-08-23)
+  y **Cómo se ha creado esta página**
   (D14, el artículo del sprint 2, `TechArticle`).
+- **Contacto** (`ContactPage`), con los dos canales y el **formulario**: la primera
+  superficie que recibe algo escrito por otra persona. Envío por Server Action del mismo
+  origen (la CSP no cambió) y por el SMTP de la propia cuenta, sin encargado nuevo.
 - **El deep-dive por experiencia**: el índice `/trayectoria` y las cinco páginas de
-  `/trayectoria/[slug]` (Emendu, KUOTIP, INDYA, Freepik y TheTool). Trece por idioma son
-  las **26 variantes** que usan `gate:html`, el sitemap y el recorrido de `design-review`.
+  `/trayectoria/[slug]` (Emendu, KUOTIP, INDYA, Freepik y TheTool). Catorce por idioma son
+  las **28 variantes** que usan `gate:html`, el sitemap y el recorrido de `design-review`.
 
 Y con ellas: **CV en PDF bilingüe** descargable con identidad de marca y generado por
 código · **SEO técnico y Open Graph** por página · **medición** (GA4/GTM con
@@ -92,7 +95,7 @@ descarga** (D65).
   devolver al usuario a la home (D29).
 - **Una página no se escribe: se compone.** `pageMetadata` deriva canonical, los tres
   `hreflang`, OG y Twitter de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de
-  motion, el `<main>` y footer (D45/D46). Las trece se **prerenderizan** por locale y el
+  motion, el `<main>` y footer (D45/D46). Las catorce se **prerenderizan** por locale y el
   diccionario está **partido por página** (D48). Y **qué páginas hay lo dice un solo
   sitio**: registrarlas mal no es un hallazgo de auditoría sino un error del
   compilador, y un guardián contrasta el registro con el disco (D72). Es lo que hace
@@ -153,8 +156,8 @@ nazca bien sin pedirlo (D30/D39/D61).
 | Criterio | Umbral | Estado |
 |---|---|---|
 | PageSpeed / Lighthouse | >90 escritorio y móvil | **100 escritorio · 94-96 móvil** (`npm run psi`, D49) |
-| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** en las trece páginas × 2 temas, en reposo y en hover — 380 pares, `npm run censo` (D85); **0 violaciones de axe** |
-| SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las trece |
+| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** en las catorce páginas × 2 temas, en reposo y en hover — 380 pares, `npm run censo` (D85); **0 violaciones de axe** |
+| SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las catorce |
 
 **Cómo se mide el contraste lo dice `BRAND.md` §Cómo se hace el censo**, entero y con sus
 siete trampas; aquí solo el criterio y el estado. Lo que importa para el alcance: la pasada
@@ -177,11 +180,11 @@ Del LCP móvil, el ~81% es retraso de renderizado: ahí queda margen, no incumpl
   aviso de consentimiento que se lee el último. Lo que encuentra se publica en la propia
   página (D73).
 - **`npm run check:marco`**: el criterio de cierre de página nueva, en cada PR (D75). Sobre
-  el HTML **prerenderizado** de las 26 variantes: axe estructural, el enlace de salto que axe
+  el HTML **prerenderizado** de las 28 variantes: axe estructural, el enlace de salto que axe
   no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, y que los `@id`
   del JSON-LD **resuelven** — cosa que ningún validador externo hace. Contraste y objetivo
   táctil quedan fuera a propósito: se heredan, y necesitan pintar.
-- **`npm run gate:html`**: compara el HTML servido de las 26 variantes antes y después de
+- **`npm run gate:html`**: compara el HTML servido de las 28 variantes antes y después de
   un refactor. Diff vacío = transparente por construcción. Es el gate que más ha cazado
   y no está en CI (D42/D45).
 - **`npm run check:articulo`**: cada sección de «Cómo se ha creado esta página» declara de
@@ -233,10 +236,11 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 ## 7. Métricas de éxito
 
-- **Primaria**: clics en contacto (`mailto:` / `tel:`) — proxy de intención (no hay
-  formulario en V1).
-- **Secundarias**: clics en Descargar CV (3 puntos: nav, CTA de Trayectoria, Contacto) y
-  profundidad de scroll.
+- **Primaria**: **envíos del formulario de `/contacto`** (`contact_submit`), contados
+  cuando el servidor confirma y no al pulsar. Sustituyen desde el 2026-08-23 al clic en
+  `mailto:`/`tel:`, que era el proxy que había *porque no había formulario*.
+- **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
+  Trayectoria, Contacto) y profundidad de scroll.
 - **Herramienta**: GA4 (captura scroll y descarga de fábrica).
 
 ## 8. Datos del candidato

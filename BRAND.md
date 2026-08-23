@@ -108,24 +108,19 @@ Lo que hay que saber al escribir UI:
   pastilla** que el chrome con etiqueta (`.icon-chrome`), sobre el objetivo táctil de 44px
   completo. Un control sin texto necesita la misma afordancia que uno con etiqueta.
 
-> **Excepción viva — `ContactSecondary`** *(2026-08-04, ampliada el 08-08)*. Teléfono, LinkedIn
-> y CV de la franja de contacto, y la **dirección de email visible** bajo el CTA de
-> Accesibilidad, son acciones y no navegación, así que por regla les tocaría H1 — pero llevan
-> tratamiento de **chrome** (`.link-chrome`, sin subrayado). Motivo: están a 15px del CTA
-> sólido de email, y ahí H1 mete ruido —subrayado permanente + un hover propio— en vez de
-> leerse como su acompañamiento. Es una excepción puntual, **no un tercer criterio**;
-> probablemente se resuelva de otra forma el día que exista una sección de contacto dedicada
-> (hoy es una franja compartida entre home, Sobre mí y Accesibilidad, D29).
->
-> **RETIRADA DECIDIDA el 2026-08-23** (P65): todo pasa a contenido, tal como este párrafo
-> predijo. Se ejecuta con `/contacto`; hasta entonces sigue viva y esto describe el sitio que
-> hay. Ese día el bloque sale de aquí entero.
+- **Un enlace de contenido SÍ lleva icono cuando vive en una fila de canales** *(2026-08-23)*.
+  La exclusión de §Cuándo una acción lleva icono está escrita contra la **prosa**, donde un
+  glifo en medio de un párrafo rompe la línea base. Una columna o una fila de canales
+  —teléfono, LinkedIn, descarga— no es un párrafo, y ahí el icono hace el trabajo que la regla
+  del icono le pide: clasificar una acción que **saca al usuario de la página**. El tamaño y la
+  caja no se escriben en el punto de uso más de una vez; si aparece un tercer sitio con esta
+  forma, se factoriza.
 
 ## Jerarquía de hover en botones y CTA
 
 > **Estas reglas no se escriben a mano.** Viven en `components/ui/action.tsx` (variantes
 > `solid` · `outline-primary` · `outline-neutral` · `ghost` · `toggle-primary` ·
-> `toggle-neutral` · `icon`), que es la única fuente del aspecto de todo elemento
+> `toggle-neutral` · `icon` · `card`), que es la única fuente del aspecto de todo elemento
 > accionable. Lo de abajo explica **por qué** cada variante es como es; para aplicarlas,
 > se usa la variante. Ver «Ningún control se escribe a mano» al final de esta sección.
 
@@ -140,6 +135,14 @@ Lo que hay que saber al escribir UI:
 - **Outline neutro** (`border-border` + `bg-background`): controles de utilidad y botones que
   conviven con un sólido dentro del mismo grupo (los del diálogo de consentimiento, «Repetir»
   del Design System). Hover = pastilla `muted`, nunca cian.
+
+### La tarjeta que se pulsa entera
+
+Cuando el objetivo de clic es **la caja completa** y no un renglón —hoy, los dos canales de
+`/contacto`—, es la variante `card` + `size="card"`, no una pieza aparte: las dos preguntas de
+D36 la traen a esta capa. Hover en pastilla `muted`, porque es un canal y no la acción
+destacada de la pantalla. **Se compone a través de `cn()`, nunca suelta**, porque deshace
+clases de la base y `cva` concatena en vez de fusionar (el porqué, en `BRAND-historical.md`).
 
 ### Controles con estado (toggles, segmentados y pestañas)
 
@@ -220,7 +223,7 @@ superficie (§El atenuado lo pone la superficie, D39).
 **Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control
 de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea
 la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como
-`ContactSecondary` más arriba).
+el switch del consentimiento, aquí debajo).
 
 > **Excepción viva — el switch del diálogo de consentimiento** *(2026-08-08, P37.5996)*.
 > `consent-banner.tsx` dibuja su interruptor con una cadena inline (`peer-checked`, `after:`,

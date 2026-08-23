@@ -48,6 +48,7 @@ export default async function SobreMiPage({ params }: LangParams) {
         breadcrumb={common.breadcrumb}
         homeHref={pagePath(lang)}
         cvHref={cvPath(lang)}
+        contactoHref={pagePath(lang, "contacto")}
       />
     </PageShell>
   );

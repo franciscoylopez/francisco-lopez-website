@@ -130,6 +130,7 @@
 - D92 · Quién cierra los PR de Dependabot, y por qué la allowlist no son «las de desarrollo»
 - D93 · El sitio scrolleaba en horizontal por debajo de 349px, y el culpable no era el que decía la tarea
 - D94 · El wordmark del logo escalaba con nada, y el arreglo elegante colapsaba la caja
+- D95 · El formulario de contacto sale por el SMTP de la propia cuenta, y por eso la CSP no se tocó
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5364,3 +5365,47 @@ wordmark a mano con su propio par de números. Están **dentro de la banda**, as
 incumplimiento; lo que hay es tres sitios que saben la misma proporción. Unificarlos es
 posible ahora que el componente la implementa, pero el nav además **anima** la suya con el
 scroll (regla 6), así que no es un reemplazo mecánico.
+
+---
+
+## D95 · El formulario de contacto sale por el SMTP de la propia cuenta, y por eso la CSP no se tocó — 2026-08-23
+
+**Contexto.** P67 estrena la primera superficie del sitio que RECIBE algo escrito por otra
+persona. La tarea dejó tres cosas por decidir antes de escribir código: dónde aterriza el
+envío, cómo se para el spam sin CAPTCHA, y qué había que abrir en la CSP.
+
+**Decisión 1 — el transporte: SMTP de Google con contraseña de aplicación**, no un proveedor
+transaccional. Los dos candidatos costaban cero y ninguno pedía DNS, así que lo que decidió
+fue otra cosa: un proveedor externo es un **encargado del tratamiento nuevo**, con su
+transferencia internacional, y habría que declararlo en el bloque del artículo 13 que P66.5
+acababa de publicar, donde hoy pone que «la única empresa que interviene es Google». El coste
+del externo era permanente y legal; el del SMTP es operativo (una contraseña de aplicación que
+Francisco genera, y un envío algo más lento desde serverless). `From` es la dirección real y
+`Reply-To` el visitante: mandar `From: visitante@…` desde aquí falla SPF y DKIM a la vez, que
+es el patrón exacto del spoofing.
+
+**Decisión 2 — el envío es una Server Action, no un endpoint externo. Y eso es lo que hizo que
+la CSP no cambiara.** El POST sale al MISMO ORIGEN, así que `form-action 'self'` y
+`connect-src 'self'`, que ya estaban, lo permiten. El disparador escrito de D26 y de
+`PRD-Live.md` §5 era literalmente «o antes si Contacto ampliada incorpora un endpoint
+externo»: **no se ha cumplido**, así que la CSP estricta con nonces no está forzada por esta
+tarea. Lo que sí ha cambiado es el otro platillo, y conviene no confundirlos: el argumento de
+P67.1 para no hacerla decía «sin formularios, sin contenido de usuario», y esa frase ya no es
+cierta. La decisión se toma en su tarea, con ese matiz, no aquí.
+
+Y de regalo: con la acción en `action={…}` el formulario **funciona sin JavaScript**. Todo lo
+de cliente —validar al salir de un campo, mover el foco al primer error, el estado «enviando»—
+es comodidad encima de eso, nunca el mecanismo.
+
+**Decisión 3 — anti-spam sin CAPTCHA**, porque un CAPTCHA es una barrera de accesibilidad y
+este sitio publica una declaración de conformidad. Tres capas, y las tres con su límite
+escrito: campo trampa que ninguna persona ve (se contesta «enviado» y no se envía nada, porque
+decirle a un bot que lo has detectado solo le enseña a evitarlo), filtro de velocidad con el
+sello puesto AL MONTAR —la página es estática, así que calcularlo al renderizar daría la hora
+del build— y tope por IP **en memoria del proceso**, que en serverless no es un límite duro
+sino un tope al envío repetido desde una instancia.
+
+**Lo que se validó en el servidor y no en el cliente.** La validación vive en un módulo puro
+que usan los dos lados, y **devuelve códigos, no mensajes**: las palabras las pone el
+diccionario de la página, en ES y en EN. Es donde se olvida el i18n de un formulario, y donde
+media página acabaría hablando español en `/en/contacto`.

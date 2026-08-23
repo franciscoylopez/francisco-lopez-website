@@ -39,12 +39,15 @@ export function SobreMi({
   breadcrumb,
   homeHref,
   cvHref,
+  contactoHref,
 }: {
   dict: SobreMiDict;
   contacto: ContactActionsDict;
   breadcrumb: BreadcrumbDict;
   homeHref: string;
   cvHref: string;
+  /** Desde P67 el CTA del cierre lleva a la página de contacto. */
+  contactoHref: string;
 }) {
   const t = dict;
   return (
@@ -291,7 +294,11 @@ export function SobreMi({
             </p>
           </div>
           <div data-reveal className="mt-[clamp(2rem,4vw,2.75rem)]">
-            <ContactActions dict={contacto} cvHref={cvHref} />
+            <ContactActions
+              dict={contacto}
+              cvHref={cvHref}
+              contactoHref={contactoHref}
+            />
           </div>
         </div>
       </section>

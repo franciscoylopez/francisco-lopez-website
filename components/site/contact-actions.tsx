@@ -3,7 +3,6 @@
 import { Download, Mail, Phone } from "lucide-react";
 
 import { actionVariants } from "@/components/ui/action";
-import { chromeLinkVariants } from "@/components/ui/chrome";
 import { trackContactClick } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import {
@@ -54,17 +53,30 @@ export type ContactActionsDict = {
 // plano, y el motivo escrito arriba justificaba que se mostrara, no que no fuera
 // accionable — respondía a otra pregunta. Las dos cosas son compatibles: sigue
 // escrita y copiable (no se sustituye por «Escríbeme»), y encima se puede pulsar.
-// Lleva tratamiento de CHROME y no de contenido (H1) por el mismo motivo,
-// documentado, que `ContactSecondary` justo debajo: un subrayado permanente con su
-// propio hover a 15px de un CTA sólido compite con él en vez de acompañarlo. No es
-// un criterio nuevo, es el mismo caso.
+// Desde P67 va en variante de CONTENIDO, como todo lo de este archivo: llevaba
+// chrome por el mismo motivo que `ContactSecondary`, y ese motivo se retiró con
+// la excepción (2026-08-23).
 export function EmailCta({
   label,
+  href,
   showAddress = false,
   className = "",
   subject,
 }: {
   label: string;
+  /**
+   * A dónde lleva el botón. Sin `href` abre el cliente de correo, que es como
+   * nació y como sigue funcionando en Accesibilidad. Con `href` navega DENTRO
+   * del sitio, que es lo que hacen la franja de la home y el cierre de Sobre mí
+   * desde que existe `/contacto` (P67).
+   *
+   * Y de esa diferencia cuelgan otras dos, que por eso no se escriben en el call
+   * site: el ICONO —la regla mira la acción, y navegar dentro del sitio no saca
+   * a nadie de él, así que solo lo lleva el `mailto:`— y el TRACKING, que deja
+   * de tener sentido cuando el clic ya no es el contacto sino el paso previo:
+   * la métrica primaria pasa a ser el envío del formulario (PRD §7).
+   */
+  href?: string;
   showAddress?: boolean;
   className?: string;
   /**
@@ -78,16 +90,17 @@ export function EmailCta({
   return (
     <div className={className}>
       <a
-        href={mailtoHref(subject)}
-        onClick={() => trackContactClick("email")}
+        href={href ?? mailtoHref(subject)}
+        onClick={href ? undefined : () => trackContactClick("email")}
         className={actionVariants({ variant: "solid", size: "lg" })}
       >
         {/* El icono se escribe SIEMPRE primero; la variante `solid` es la que lo
             manda detrás de la etiqueta y le da el empujón de 2px en hover. Antes
             iba detrás en el JSX y con su tamaño y su clase de movimiento a mano
             —`.contact-cta` en globals.css—, que es lo que hacía que la demo de
-            esta misma variante en el Design System no se moviera (P37.5988). */}
-        <Mail aria-hidden="true" />
+            esta misma variante en el Design System no se moviera (P37.5988).
+            Y solo aparece en el caso `mailto:`: ver la nota del prop `href`. */}
+        {href ? null : <Mail aria-hidden="true" />}
         {label}
       </a>
       {showAddress && (
@@ -106,13 +119,19 @@ export function EmailCta({
               auditorías por la razón que lo hace interesante: **el par solo existe
               mientras el cursor está encima**, y el censo que tenía que verlo
               llevaba roto desde que Chrome soporta CSS Nesting. */}
+          {/* DESDE P67 VA EN VARIANTE DE CONTENIDO, como el resto de esta pieza.
+              La nota de arriba explica por qué llevaba tratamiento de chrome
+              —el mismo motivo que `ContactSecondary`— y ese motivo se retira
+              entero con la excepción: aquí ya no hay un CTA sólido a 15px con el
+              que competir, porque el sólido de esta página es este mismo bloque.
+
+              Lo que la nota decía de la MEDIDA sigue siendo cierto y ahora lo
+              resuelve otro: `.link-content` pinta el texto en `--foreground`, no
+              en el atenuado, así que el par no puede caer a AA en hover. */}
           <a
             href={mailtoHref(subject)}
             onClick={() => trackContactClick("email")}
-            className={cn(
-              chromeLinkVariants({ tone: "muted" }),
-              "text-[0.9rem] break-all",
-            )}
+            className="link-content link-content--underline text-[0.9rem] break-all"
           >
             {EMAIL}
           </a>
@@ -134,17 +153,30 @@ export function ContactSecondary({
   cvHref: string;
   className?: string;
 }) {
-  // Excepción a la regla de dos capas de BRAND.md: aunque son acciones (no
-  // navegación), llevan tratamiento de chrome (`.link-chrome`, sin subrayado) en
-  // vez de contenido — el subrayado + hover propio al lado del CTA sólido
-  // generaba ruido visual (feedback 2026-08-04). Probablemente se resuelva de
-  // otra forma cuando exista una sección de contacto dedicada.
-  // Los tres llevan icono porque los tres sacan al usuario de la página: uno abre
-  // el marcador del teléfono, otro se va a LinkedIn y el tercero descarga un
-  // archivo (regla del icono, P37.5988). El tamaño ya no se escribe aquí: lo pone
-  // `.link-chrome svg` en globals.css, igual que `size` lo pone en las acciones
-  // con caja.
-  const link = cn(chromeLinkVariants(), "text-[0.95rem]");
+  // LA EXCEPCIÓN SE RETIRÓ EL 2026-08-23 (P67), y con ella el bloque que la
+  // documentaba en `BRAND.md`. Estos tres son acciones, no navegación, así que
+  // por regla les tocaba variante de CONTENIDO desde el principio; llevaban
+  // chrome porque a 15px de un CTA sólido de correo el subrayado permanente
+  // competía con él en vez de acompañarlo (feedback 2026-08-04). Ese motivo se
+  // acabó: el sólido de al lado ya no abre el correo, lleva a `/contacto`, y la
+  // conversación entera se resuelve allí. Es el desenlace que la propia
+  // excepción predijo por escrito.
+  //
+  // LOS ICONOS SE QUEDAN, y eso sí es regla nueva (BRAND.md, 2026-08-23): los
+  // tres sacan al usuario de la página —marcador del teléfono, LinkedIn,
+  // descarga—, así que la regla del icono los pide, y la exclusión que hace
+  // `.link-content` está escrita contra la PROSA, donde un glifo rompe la línea
+  // base. Esto es una fila de canales, no un párrafo.
+  //
+  // Y LO QUE TRAÍA `chromeLinkVariants` HAY QUE REPONERLO, que es la parte que
+  // se olvida al cambiar de capa: el suelo táctil de 44px (checklist §3), la
+  // caja flexible que alinea glifo y etiqueta, y el tamaño del icono, que lo
+  // ponía `.link-chrome svg` en globals.css y aquí ya no aplica.
+  const link = cn(
+    "link-content link-content--underline",
+    "inline-flex min-h-[44px] items-center gap-[0.5rem] text-[0.95rem]",
+    "[&_svg]:size-[17px] [&_svg]:shrink-0",
+  );
   return (
     <ul
       // `gap-y` solo actúa cuando la fila envuelve (en móvil los tres canales no
@@ -192,15 +224,18 @@ export function ContactSecondary({
 export function ContactActions({
   dict,
   cvHref,
+  contactoHref,
   className = "",
 }: {
   dict: ContactActionsDict;
   cvHref: string;
+  /** Desde P67 el CTA no abre el correo: lleva a la página de contacto. */
+  contactoHref: string;
   className?: string;
 }) {
   return (
     <div className={className}>
-      <EmailCta label={dict.emailCta} />
+      <EmailCta label={dict.emailCta} href={contactoHref} />
       <ContactSecondary
         dict={dict}
         cvHref={cvHref}

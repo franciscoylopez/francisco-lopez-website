@@ -20,9 +20,12 @@ export type ContactoDict = ContactActionsDict & {
 export function Contacto({
   dict,
   cvHref,
+  contactoHref,
 }: {
   dict: ContactoDict;
   cvHref: string;
+  /** Desde P67 el CTA de esta franja lleva a la página de contacto. */
+  contactoHref: string;
 }) {
   return (
     <section
@@ -39,7 +42,11 @@ export function Contacto({
         </div>
 
         <div data-reveal className="mt-[clamp(2.25rem,4.5vw,3rem)]">
-          <ContactActions dict={dict} cvHref={cvHref} />
+          <ContactActions
+            dict={dict}
+            cvHref={cvHref}
+            contactoHref={contactoHref}
+          />
         </div>
       </div>
     </section>

@@ -9,7 +9,7 @@ import { MasAlla } from "@/components/site/mas-alla";
 import { PageShell } from "@/components/site/page-shell";
 import { Toolkit } from "@/components/site/toolkit";
 import { Trayectoria } from "@/components/site/trayectoria";
-import { isLocale, cvPath } from "@/lib/i18n/config";
+import { isLocale, cvPath, pagePath } from "@/lib/i18n/config";
 import { profilePageLd } from "@/lib/structured-data";
 import { getCommon, getHome } from "./dictionaries";
 
@@ -42,7 +42,11 @@ export default async function Home({ params }: LangParams) {
         <Trayectoria dict={t.trayectoria} cvHref={cvHref} lang={lang} />
         <Toolkit dict={t.toolkit} />
         <Formacion dict={t.formacion} />
-        <Contacto dict={common.contacto} cvHref={cvHref} />
+        <Contacto
+          dict={common.contacto}
+          cvHref={cvHref}
+          contactoHref={pagePath(lang, "contacto")}
+        />
       </>
     </PageShell>
   );

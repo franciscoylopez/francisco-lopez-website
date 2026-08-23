@@ -89,7 +89,7 @@
         {
           "type": "ul",
           "items": [
-            "**La franja de contacto es idéntica en las tres páginas donde aparece**, con los mismos canales y la misma jerarquía, porque devolver a alguien a la portada para escribirte es pedirle un paso de más justo cuando ya había decidido darlo.",
+            "**La franja de contacto es idéntica en las tres páginas donde aparece**, con los mismos canales y la misma jerarquía, porque devolver a alguien a la portada para escribirte es pedirle un paso de más justo cuando ya había decidido darlo. Desde que existe la página de contacto, su botón principal lleva allí, y sí, eso es un clic más: a cambio da un formulario en vez de abrir un cliente de correo que mucha gente no tiene configurado. El teléfono sigue a un clic, y en la página de accesibilidad el correo directo no pasa por el formulario a propósito, porque obligar a usarlo para reportar una barrera sería una trampa el día que la barrera fuera el formulario.",
             "**El vídeo que abre la página sobre mí se reproduce una vez y se queda quieto**, y si por temas de accesibilidad, el navegador avisa de que su dueño prefiere menos movimiento, ni siquiera se descarga."
           ]
         },
@@ -105,7 +105,7 @@
         {
           "type": "ul",
           "items": [
-            "**No hay formulario de contacto.** Un formulario añade un backend, un servicio de correo, un captcha y una superficie de ataque, para resolver algo que un enlace ya resuelve. Lo que sí aporta es una métrica cómoda (envíos) en lugar de una honesta (alguien ha decidido escribirte). Me quedé con el enlace.",
+            "**Durante meses no hubo formulario de contacto.** Un formulario añade un backend, un servicio de correo, un captcha y una superficie de ataque, para resolver algo que un enlace ya resuelve. Lo dejé fuera hasta que pude quitarle esas cuatro cosas: llegó al final, sin captcha (que es una barrera de accesibilidad, y este sitio publica una declaración de conformidad) y sin servicio externo, porque el envío sale por el correo de mi propia cuenta. Y de paso me quitó la razón que daba para no tenerlo: decía que el clic en el correo era una métrica más honesta que los envíos, y no lo es, era la única que tenía.",
             "**No todas mis experiencias tienen página propia.** Las dos de marketing y growth no la tienen, aunque hay material de sobra: contarlas al mismo nivel diluiría el orden con el que quiero que me lean, que es producto primero. Y la empresa donde nació el producto que cofundé tampoco tiene la suya, porque no es una historia separable: es el primer capítulo de la otra."
           ]
         },
@@ -299,7 +299,7 @@
         },
         {
           "type": "p",
-          "text": "Una marca no es el logo: es lo que impide que la página trece se parezca poco a la primera. Por eso el sistema tiene dos páginas publicadas dentro del propio sitio."
+          "text": "Una marca no es el logo: es lo que impide que la página catorce se parezca poco a la primera. Por eso el sistema tiene dos páginas publicadas dentro del propio sitio."
         },
         {
           "type": "ul",
@@ -547,7 +547,7 @@
       "body": [
         {
           "type": "p",
-          "text": "Un portfolio no guarda datos de nadie, no tiene formularios y no tiene sesión. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo."
+          "text": "Un portfolio no tiene sesión y no guarda datos de nadie: el único que recibe es lo que alguien escriba en el formulario de contacto, y ese no se guarda en ninguna parte, va a un buzón y se acabó. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo."
         },
         { "type": "h3", "text": "Las cabeceras: los huecos baratos de cerrar" },
         { "type": "p", "text": "El sitio sirve cinco, y ninguna cuesta nada:" },
@@ -971,7 +971,7 @@
       },
       {
         "type": "p",
-        "text": "La métrica principal no es la visita, es el clic en un canal de contacto. Como no hay formulario, el correo y el teléfono son el proxy de intención más honesto que tengo: alguien que copia mi email ha decidido algo. Las secundarias son la descarga del CV, medida en los diferentes sitios donde se ofrece, y la profundidad de scroll, que es la que dice si el lector lento del que hablaba al principio existe de verdad. Y con Clarity voy a mirar cómo son esas visitas: qué recorrido hacen, cómo se mueven por la página, todo lo que ayude a aprender de quien la lee."
+        "text": "La métrica principal no es la visita, es el mensaje. Durante meses fue el clic en un canal de contacto, porque sin formulario era el proxy de intención más honesto que tenía: alguien que copia mi correo ha decidido algo. Desde que el formulario existe, la principal es el envío, y se cuenta cuando el servidor confirma que ha salido, no cuando alguien pulsa el botón: un clic que se queda en un campo mal rellenado no es un contacto, y contarlo infla justo la cifra que uno quiere creerse. El clic en el teléfono y en el correo directo se quedan como secundarios. También lo son la descarga del CV, medida en los diferentes sitios donde se ofrece, y la profundidad de scroll, que es la que dice si el lector lento del que hablaba al principio existe de verdad. Y con Clarity voy a mirar cómo son esas visitas: qué recorrido hacen, cómo se mueven por la página, todo lo que ayude a aprender de quien la lee."
       },
       {
         "type": "p",
