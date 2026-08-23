@@ -164,9 +164,8 @@ siete trampas; aquí solo el criterio y el estado. Lo que importa para el alcanc
 lee las páginas del **registro**, así que una página nueva entra sin que nadie se acuerde
 (D85), y las cifras publicadas salen de `lib/design-values.ts` (D38).
 
-**La cifra lleva fecha porque una sola corrida no basta**: la misma página del mismo
-despliegue ha dado 72 y 100 en escritorio con veinte minutos de diferencia. Por eso el
-criterio es el umbral, el rango es un dato fechado, y `psi` sigue fuera de CI (D49).
+La nota lleva fecha porque una sola corrida no basta, y esa es también la razón de que
+`psi` siga fuera de CI: la cifra y el porqué, en D99.
 
 ### Cómo se verifica lo que no ve un compilador
 
@@ -201,8 +200,9 @@ criterio es el umbral, el rango es un dato fechado, y `psi` sigue fuera de CI (D
   de color, las superficies y las animaciones que había, y `check:palette` compara ese
   sello en cada PR. Medir necesita pintar; saber que hay que medir, no — así que la
   condición de re-medir de la DoD la lee una máquina (D90).
-- **`npm run psi`**: la nota de PageSpeed contra producción, a demanda y nunca como gate
-  de CI, porque su variabilidad daría rojos falsos (D49).
+- **`npm run psi -- --registro`**: la nota de PageSpeed de las páginas del registro contra
+  producción, a demanda y nunca como gate de CI, porque su variabilidad daría rojos falsos
+  (D49/D99).
 
 ### Calidad y seguridad
 

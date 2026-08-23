@@ -98,7 +98,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <details>
 <summary><b>Rendimiento, medición y seguridad</b></summary>
 
-- **PageSpeed 100 (escritorio) / 94-96 (móvil)**, CLS 0. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
+- **PageSpeed >90 en las catorce páginas** — móvil 95-99 · escritorio 97-100, medido el 2026-08-24 (`npm run psi -- --registro`) — y CLS 0. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
 - **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
 - **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** «A+ barato», con allowlist mínima por origen exacto.
@@ -163,7 +163,8 @@ npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 # Medición
 npm run gate:html -- save   # instantánea del HTML de todas las páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
-npm run psi -- <url>        # PageSpeed sobre el Preview o producción (D49)
+npm run psi -- <url>        # PageSpeed de UNA página: nota, métricas y desglose del LCP (D49)
+npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
 qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 ```
@@ -252,8 +253,10 @@ scripts/indices.ts         Genera los tres índices derivados de sus cabeceras (
 scripts/check-guardianes.ts  Un caso malo conocido por guardián. Fuera de CI: muta
                            archivos, así que exige árbol limpio y restaura (D70)
 scripts/design-review/     Censo de pares de contraste del DOM servido
-scripts/psi.ts             PageSpeed desde la terminal, con desglose del LCP (D49)
-scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las 12 páginas no puede cambiar
+scripts/psi.ts             PageSpeed desde la terminal: una página con su desglose del LCP,
+                           o el registro entero con el agregado de avisos (D49, D99)
+scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las páginas del registro,
+                           en sus dos idiomas, no puede cambiar
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
                            queda UN solo color literal: busca la ausencia (D54)
 
