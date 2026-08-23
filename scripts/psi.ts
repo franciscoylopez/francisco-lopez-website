@@ -1,4 +1,4 @@
-// PageSpeed Insights desde la terminal (P46.5).
+// PageSpeed Insights desde la terminal (P46.5, ampliado en P68.6).
 //
 // POR QUÉ EXISTE. Arreglando el LCP del hero (D47) hicieron falta tres idas y
 // vueltas para una sola cifra: diagnóstico en local, Francisco pasando PageSpeed a
@@ -8,30 +8,76 @@
 // con `visibilityState: "hidden"` y el navegador no emite entradas de LCP con la
 // página oculta.
 //
-// LO QUE IMPRIME es lo que se mira, no el informe entero: la nota, las métricas y
-// —lo que de verdad importó en D47— el DESGLOSE DEL LCP POR FASES. El aviso de
-// `fetchpriority` de aquella tarea era legítimo, pero la cifra que señalaba el
-// problema estaba en el desglose, no en la lista de avisos.
+// DOS MODOS, y el segundo es el que faltaba (P68.6):
+//
+//   · UNA URL — el modo de D47: se persigue una cifra concreta de una página, y lo
+//     que se mira es el DESGLOSE DEL LCP POR FASES, que es lo que dice si el
+//     problema es la red o algo que tapa el elemento después de pintarlo.
+//   · REGISTRO — recorre `PAGE_SLUGS` (D72) como hace `censo` desde D85, así que
+//     una página nueva entra en la auditoría de rendimiento SIN QUE NADIE SE
+//     ACUERDE. Mientras la cobertura dependía de elegir a mano qué página mirar,
+//     dependía de la memoria, que es lo que `BRAND.md` §Cómo se escribe una regla
+//     nombra como la fuente del drift.
+//
+// LO QUE IMPRIME, y una corrección de esta misma cabecera (2026-08-24). Decía que
+// imprimía «la nota, las métricas y el desglose» y NO la lista de avisos. Lo
+// segundo era falso desde el primer commit: los avisos que no pasan se listaban ya,
+// solo que por título pelado. Lo que de verdad faltaba era **con qué gravedad y a
+// costa de cuánto**, y sobre todo **cuántas páginas comparten el mismo aviso** —
+// que es lo único que separa un arreglo en bloque de un pulido de una página. La
+// cabecera describía el código de oídas; es el mismo fallo que persigue D84 en el
+// artículo, cometido dentro de un script.
 //
 // USO:
-//     npm run psi -- https://…                 # móvil y escritorio
-//     npm run psi -- https://… --solo=movil    # o --solo=escritorio
+//     npm run psi -- https://…                     # una url: móvil y escritorio
+//     npm run psi -- https://… --solo=movil        # o --solo=escritorio
+//     npm run psi -- --registro                    # las páginas del registro
+//     npm run psi -- --registro --base=https://…   # sobre un Preview
 //
 // CLAVE: la API sin clave devuelve 429 casi siempre. Se lee de `PSI_API_KEY`, del
 // entorno o de `.env.local` (que está en .gitignore). Cómo obtenerla, en el README.
+// En modo registro la clave NO es opcional: 28 llamadas sin ella son 28 errores.
+//
+// SIGUE FUERA DE CI (D49): su variabilidad daría rojos falsos. Y el modo registro
+// tarda varios minutos, porque las llamadas van EN SERIE a propósito.
+//
+// LO QUE NO CUBRE, dicho para que no se dé por cubierto:
+//   · Solo el idioma por defecto. Las páginas EN son los mismos componentes con
+//     otro copy; medirlas doblaría el coste para mover decimales.
+//   · Solo la categoría de rendimiento. Accesibilidad y SEO los cubren
+//     `check:marco`, `censo` y el `viewport-verifier`, que no gastan cuota de API
+//     ni dependen de que Google esté de buenas.
 
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 
+import { defaultLocale, pagePath } from "../lib/i18n/config";
+import { PAGE_SLUGS } from "../lib/routes";
+
 const ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
 
-/** Lee la clave del entorno y, si no está, de `.env.local`. Nunca se imprime. */
-function apiKey(): string | undefined {
-  if (process.env.PSI_API_KEY) return process.env.PSI_API_KEY;
+/** El sitio que se mide cuando nadie dice otra cosa. */
+const PRODUCCION = "https://franciscolopez.es";
+
+/** Pausa entre llamadas: la cuota es amplia, pero no se dispara en paralelo. */
+const RESPIRO_MS = 400;
+
+type Estrategia = "mobile" | "desktop";
+
+const enCastellano = (e: Estrategia) =>
+  e === "mobile" ? "móvil" : "escritorio";
+
+/**
+ * Lee una variable del entorno y, si no está, de `.env.local` (en .gitignore).
+ * Generaliza lo que antes hacía solo con `PSI_API_KEY`, porque el modo registro
+ * necesita además saber sobre qué dominio mide.
+ */
+function delEntorno(nombre: string): string | undefined {
+  if (process.env[nombre]) return process.env[nombre];
   try {
     const linea = readFileSync(".env.local", "utf8")
       .split(/\r?\n/)
-      .find((l) => l.trimStart().startsWith("PSI_API_KEY="));
+      .find((l) => l.trimStart().startsWith(`${nombre}=`));
     return linea
       ?.slice(linea.indexOf("=") + 1)
       .trim()
@@ -85,6 +131,25 @@ const noPasa = (au: Auditoria) =>
   !SIN_NOTA.includes(au.scoreDisplayMode ?? "");
 
 /**
+ * La gravedad es la de Lighthouse, no una inventada: por debajo de 0,5 su interfaz
+ * lo pinta ROJO; entre 0,5 y 0,9, NARANJA. Importa porque el rojo dice «esto cuesta
+ * nota» y el naranja, «esto es pulido», y era justo la distinción que faltaba.
+ */
+const gravedad = (score: number | null): "rojo" | "naranja" =>
+  score !== null && score < 0.5 ? "rojo" : "naranja";
+
+/**
+ * Lo que ahorraría arreglarlo, cuando Lighthouse lo estima. Cadena VACÍA cuando no
+ * hay cifra —hay auditorías que no la traen, como el reflujo forzado— para que la
+ * línea no acabe en una raya que no dice nada.
+ */
+function ahorro(au: Auditoria): string {
+  const estimado = au.details?.overallSavingsMs;
+  if (estimado && estimado >= 1) return ms(estimado);
+  return au.displayValue ?? "";
+}
+
+/**
  * Una fase del desglose del LCP. Los nombres de campo cambiaron con la auditoría:
  * Lighthouse 13 usa `label`/`duration`; la versión anterior, `phase`/`timing`. Se
  * aceptan los dos para que el script no se quede mudo con un cambio de versión.
@@ -103,11 +168,46 @@ interface Auditoria {
   scoreDisplayMode?: string;
   displayValue?: string;
   numericValue?: number;
-  details?: { items?: (FaseLcp | { items?: FaseLcp[] })[] };
+  details?: {
+    overallSavingsMs?: number;
+    items?: (FaseLcp | { items?: FaseLcp[] })[];
+  };
 }
 
-async function mide(url: string, strategy: "mobile" | "desktop", key?: string) {
-  const q = new URLSearchParams({ url, strategy, category: "performance" });
+/** Un aviso que no pasa, ya resuelto a lo que se imprime. */
+interface Aviso {
+  id: string;
+  titulo: string;
+  gravedad: "rojo" | "naranja";
+  ahorro: string;
+}
+
+/** Un aviso en una línea, sin dejar colgando el guion cuando no hay ahorro. */
+const enLinea = (av: Aviso) =>
+  `[${av.gravedad.padEnd(7)}] ${av.titulo}${av.ahorro ? ` — ${av.ahorro}` : ""}`;
+
+/** El resultado de UNA llamada. `mide` ya no imprime: eso lo decide cada modo. */
+interface Medicion {
+  url: string;
+  ruta: string;
+  estrategia: Estrategia;
+  nota: number;
+  medido: string;
+  metricas: { etiqueta: string; valor: string }[];
+  fases: FaseLcp[] | null;
+  avisos: Aviso[];
+}
+
+async function mide(
+  url: string,
+  estrategia: Estrategia,
+  key?: string,
+): Promise<Medicion> {
+  const q = new URLSearchParams({
+    url,
+    strategy: estrategia,
+    category: "performance",
+  });
   if (key) q.set("key", key);
 
   const res = await fetch(`${ENDPOINT}?${q}`);
@@ -133,23 +233,19 @@ async function mide(url: string, strategy: "mobile" | "desktop", key?: string) {
   const lh = j.lighthouseResult;
   const a = lh.audits;
 
-  const titulo = strategy === "mobile" ? "MÓVIL" : "ESCRITORIO";
-  console.log(`\n─── ${titulo} ───────────────────────────────`);
-  console.log(
-    `  Rendimiento: ${Math.round(lh.categories.performance.score * 100)}/100` +
-      `   (medido ${new Date(lh.fetchTime).toLocaleString("es-ES")})`,
+  const metricas = (
+    [
+      ["LCP", "largest-contentful-paint"],
+      ["FCP", "first-contentful-paint"],
+      ["TBT", "total-blocking-time"],
+      ["CLS", "cumulative-layout-shift"],
+      ["Speed Index", "speed-index"],
+    ] as const
+  ).flatMap(([etiqueta, id]) =>
+    a[id]
+      ? [{ etiqueta: etiqueta as string, valor: a[id].displayValue ?? "—" }]
+      : [],
   );
-
-  for (const [etiqueta, id] of [
-    ["LCP", "largest-contentful-paint"],
-    ["FCP", "first-contentful-paint"],
-    ["TBT", "total-blocking-time"],
-    ["CLS", "cumulative-layout-shift"],
-    ["Speed Index", "speed-index"],
-  ] as const) {
-    const au = a[id];
-    if (au) console.log(`  ${etiqueta.padEnd(12)} ${au.displayValue ?? "—"}`);
-  }
 
   // El desglose del LCP: la cifra que resolvió D47. Sin él, un LCP alto no dice
   // si el problema es la red o algo que tapa el elemento después de pintarlo.
@@ -167,13 +263,50 @@ async function mide(url: string, strategy: "mobile" | "desktop", key?: string) {
     Array.isArray((i as { items?: unknown[] }).items),
   ) as { items?: FaseLcp[] } | undefined;
 
-  if (tabla?.items?.length) {
-    const total = tabla.items.reduce(
+  const avisos: Aviso[] = Object.entries(a)
+    .filter(([, au]) => noPasa(au))
+    .map(([id, au]) => ({
+      id,
+      titulo: au.title ?? id,
+      gravedad: gravedad(au.score),
+      ahorro: ahorro(au),
+    }))
+    // Primero lo que cuesta nota; dentro de cada gravedad, orden estable.
+    .sort(
+      (x, y) =>
+        Number(y.gravedad === "rojo") - Number(x.gravedad === "rojo") ||
+        x.titulo.localeCompare(y.titulo, "es"),
+    );
+
+  return {
+    url,
+    ruta: new URL(url).pathname,
+    estrategia,
+    nota: Math.round(lh.categories.performance.score * 100),
+    medido: new Date(lh.fetchTime).toLocaleString("es-ES"),
+    metricas,
+    fases: tabla?.items?.length ? tabla.items : null,
+    avisos,
+  };
+}
+
+/** El informe de UNA url, con el mismo formato que desde P46.5. */
+function imprimeDetalle(m: Medicion) {
+  console.log(
+    `\n─── ${enCastellano(m.estrategia).toUpperCase()} ───────────────────────────────`,
+  );
+  console.log(`  Rendimiento: ${m.nota}/100   (medido ${m.medido})`);
+  for (const { etiqueta, valor } of m.metricas) {
+    console.log(`  ${etiqueta.padEnd(12)} ${valor}`);
+  }
+
+  if (m.fases) {
+    const total = m.fases.reduce(
       (s, f) => s + (f.duration ?? f.timing ?? 0),
       0,
     );
     console.log("  Desglose del LCP:");
-    for (const f of tabla.items) {
+    for (const f of m.fases) {
       const t = f.duration ?? f.timing ?? 0;
       const pct = total ? Math.round((t / total) * 100) : 0;
       console.log(
@@ -186,26 +319,168 @@ async function mide(url: string, strategy: "mobile" | "desktop", key?: string) {
     );
   }
 
-  const fallan = Object.entries(a)
-    .filter(([, au]) => noPasa(au))
-    .map(([id, au]) => `    · ${au.title ?? id}`);
   console.log(
-    fallan.length
-      ? `  Avisos que no pasan (${fallan.length}):\n${fallan.join("\n")}`
+    m.avisos.length
+      ? `  Avisos que no pasan (${m.avisos.length}):\n` +
+          m.avisos.map((av) => `    · ${enLinea(av)}`).join("\n")
       : "  Sin avisos: todas las auditorías de rendimiento pasan.",
   );
+}
+
+const espera = (cuanto: number) => new Promise((r) => setTimeout(r, cuanto));
+
+/** Modo registro: las páginas de `PAGE_SLUGS` × las estrategias pedidas. */
+async function recorreElRegistro(
+  base: string,
+  estrategias: readonly Estrategia[],
+  key: string,
+) {
+  const rutas = PAGE_SLUGS.map((slug) => pagePath(defaultLocale, slug));
+  const llamadas = rutas.length * estrategias.length;
+
+  console.log(
+    `\npsi — ${rutas.length} páginas × ${estrategias.length} estrategia(s) sobre ${base}` +
+      `\n  ${llamadas} llamadas en serie: esto tarda varios minutos.`,
+  );
+
+  try {
+    const d = await huellaDelDespliegue(base);
+    console.log(
+      `  Despliegue medido: huella ${d.huella} (${d.assets} assets) · caché de Vercel: ${d.cache}`,
+    );
+  } catch {
+    console.log("  (no se pudo leer la huella del despliegue)");
+  }
+
+  const medidas: Medicion[] = [];
+  const fallos: { ruta: string; estrategia: Estrategia; error: string }[] = [];
+
+  for (const ruta of rutas) {
+    const url = `${base}${ruta}`;
+    const notas: string[] = [];
+    const avisos: { estrategia: Estrategia; aviso: Aviso }[] = [];
+
+    for (const estrategia of estrategias) {
+      try {
+        const m = await mide(url, estrategia, key);
+        medidas.push(m);
+        notas.push(`${enCastellano(estrategia)} ${String(m.nota).padStart(3)}`);
+        for (const aviso of m.avisos) avisos.push({ estrategia, aviso });
+      } catch (e) {
+        fallos.push({
+          ruta,
+          estrategia,
+          error: e instanceof Error ? e.message : String(e),
+        });
+        notas.push(`${enCastellano(estrategia)} ERROR`);
+      }
+      await espera(RESPIRO_MS);
+    }
+
+    console.log(`\n  ${ruta.padEnd(28)} ${notas.join("   ")}`);
+    for (const { estrategia, aviso } of avisos) {
+      console.log(`      ${enLinea(aviso)}   (${enCastellano(estrategia)})`);
+    }
+    if (!avisos.length && !notas.some((n) => n.endsWith("ERROR"))) {
+      console.log("      sin avisos");
+    }
+  }
+
+  // EL AGREGADO ES EL ENTREGABLE: un aviso en doce páginas se arregla una vez en la
+  // capa; el mismo aviso en una es pulido de esa página. Sin esta tabla hay que leer
+  // catorce informes y hacer la cuenta a ojo, que es como se acaba tratando como
+  // puntual algo que era transversal.
+  const porAviso = new Map<
+    string,
+    { titulo: string; paginas: Set<string>; rojo: boolean }
+  >();
+  for (const m of medidas) {
+    for (const av of m.avisos) {
+      const entrada = porAviso.get(av.id) ?? {
+        titulo: av.titulo,
+        paginas: new Set<string>(),
+        rojo: false,
+      };
+      entrada.paginas.add(m.ruta);
+      entrada.rojo ||= av.gravedad === "rojo";
+      porAviso.set(av.id, entrada);
+    }
+  }
+
+  console.log(
+    "\n─── Qué aviso se repite, y en cuántas páginas ───────────────",
+  );
+  if (porAviso.size === 0) {
+    console.log("  Ninguno: todas las auditorías de rendimiento pasan.");
+  } else {
+    const filas = [...porAviso.values()].sort(
+      (x, y) =>
+        y.paginas.size - x.paginas.size ||
+        Number(y.rojo) - Number(x.rojo) ||
+        x.titulo.localeCompare(y.titulo, "es"),
+    );
+    for (const f of filas) {
+      console.log(
+        `  ${`${f.paginas.size}/${rutas.length}`.padStart(6)} páginas · ` +
+          `[${(f.rojo ? "rojo" : "naranja").padEnd(7)}] ${f.titulo}`,
+      );
+    }
+  }
+
+  // AFIRMA CUÁNTO HA MIRADO, que es la regla de este repo para cualquier metro: una
+  // tabla vacía puede ser un aprobado o una pasada que no midió nada, y desde fuera
+  // se leen igual (D38/D57/D60/D63).
+  const resumen = estrategias.map((estrategia) => {
+    const suyas = medidas.filter((m) => m.estrategia === estrategia);
+    if (!suyas.length) return `${enCastellano(estrategia)}: sin medir`;
+    const peor = suyas.reduce((p, m) => (m.nota < p.nota ? m : p));
+    const mejor = suyas.reduce((p, m) => (m.nota > p.nota ? m : p));
+    return `${enCastellano(estrategia)} ${peor.nota}-${mejor.nota} (peor: ${peor.ruta})`;
+  });
+
+  console.log(
+    `\npsi ${fallos.length ? "✗" : "✓"} — ${medidas.length}/${llamadas} llamadas ` +
+      `(${rutas.length} páginas × ${estrategias.length} estrategia(s)), ` +
+      `${fallos.length} fallidas · ${resumen.join(" · ")}\n`,
+  );
+
+  if (fallos.length) {
+    for (const f of fallos) {
+      console.error(
+        `  ✗ ${f.ruta} (${enCastellano(f.estrategia)}): ${f.error}`,
+      );
+    }
+    console.error(
+      "\n  Una pasada incompleta NO es una pasada limpia: repite las que fallaron\n" +
+        "  antes de sacar conclusiones de la tabla de arriba.\n",
+    );
+    process.exitCode = 1;
+  }
 }
 
 async function main() {
   const args = process.argv.slice(2);
   const url = args.find((a) => !a.startsWith("--"));
-  if (!url) {
+  const registro = args.includes("--registro");
+
+  if (!url && !registro) {
     console.error(
       "Uso: npm run psi -- <url> [--solo=movil|escritorio]\n" +
+        "     npm run psi -- --registro [--base=https://…] [--solo=…]\n" +
         "PSI necesita una URL PÚBLICA: el Preview de Vercel o producción, nunca localhost.",
     );
     process.exit(2);
   }
+  // Las dos formas piden cosas distintas, y aceptar la mezcla haría dudar de qué se
+  // midió al leer la salida.
+  if (url && registro) {
+    console.error(
+      "\n--registro recorre las páginas del registro y no acepta además una url.\n" +
+        "Para medir otro dominio: --registro --base=https://…\n",
+    );
+    process.exit(2);
+  }
+
   // Un `--solo` que no se reconoce NO cae de vuelta a «las dos»: eso gastaría dos
   // llamadas de una cuota limitada y el doble de espera sin decir que la bandera se
   // ignoró. Basta escribir `--solo=mobile` en inglés, o `--solo=móvil` con tilde.
@@ -213,7 +488,7 @@ async function main() {
   const POR_BANDERA = {
     movil: ["mobile"],
     escritorio: ["desktop"],
-  } as const satisfies Record<string, readonly ("mobile" | "desktop")[]>;
+  } as const satisfies Record<string, readonly Estrategia[]>;
 
   if (solo !== undefined && !(solo in POR_BANDERA)) {
     console.error(
@@ -222,11 +497,33 @@ async function main() {
     );
     process.exit(2);
   }
-  const estrategias: readonly ("mobile" | "desktop")[] = solo
+  const estrategias: readonly Estrategia[] = solo
     ? POR_BANDERA[solo as keyof typeof POR_BANDERA]
     : ["mobile", "desktop"];
 
-  const key = apiKey();
+  const key = delEntorno("PSI_API_KEY");
+
+  if (registro) {
+    // En una url suelta, sin clave, se avisa y se sigue: puede colar. En modo
+    // registro son decenas de llamadas, así que sin clave son decenas de errores y
+    // varios minutos de espera para nada. Se para antes de empezar.
+    if (!key) {
+      console.error(
+        "\nEl modo registro necesita PSI_API_KEY: sin clave la API devuelve 429 casi\n" +
+          "siempre, y aquí son decenas de llamadas. Ponla en .env.local (ver README).\n",
+      );
+      process.exit(2);
+    }
+    const base = (
+      args.find((a) => a.startsWith("--base="))?.split("=")[1] ??
+      delEntorno("BASE_URL") ??
+      delEntorno("NEXT_PUBLIC_SITE_URL") ??
+      PRODUCCION
+    ).replace(/\/$/, "");
+    await recorreElRegistro(base, estrategias, key);
+    return;
+  }
+
   console.log(`\n${url}`);
   if (!key) {
     console.log(
@@ -235,7 +532,7 @@ async function main() {
   }
 
   try {
-    const d = await huellaDelDespliegue(url);
+    const d = await huellaDelDespliegue(url!);
     console.log(
       `  Despliegue medido: huella ${d.huella} (${d.assets} assets) · caché de Vercel: ${d.cache}`,
     );
@@ -247,7 +544,7 @@ async function main() {
   }
 
   for (const s of estrategias) {
-    await mide(url, s, key);
+    imprimeDetalle(await mide(url!, s, key));
   }
   console.log("");
 }
