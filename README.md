@@ -101,7 +101,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 - **PageSpeed >90 en las catorce páginas** — móvil 95-99 · escritorio 97-100, medido el 2026-08-24 (`npm run psi -- --registro`) — y CLS 0. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
 - **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
-- **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** «A+ barato», con allowlist mínima por origen exacto.
+- **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** con allowlist mínima por origen exacto. La letra que le pone cada escáner no se escribe aquí: se comprueba en vivo, y por qué no sube está en `DECISIONS.md` D26.
 - **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar (CSS, seguro con motion reducido).
 
 </details>

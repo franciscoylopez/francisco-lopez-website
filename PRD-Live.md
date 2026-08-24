@@ -53,7 +53,7 @@ Y con ellas: **CV en PDF bilingüe** descargable con identidad de marca y genera
 código · **SEO técnico y Open Graph** por página · **medición** (GA4/GTM con
 consentimiento RGPD) · **dominio propio** · **páginas 404/500 de marca e i18n** ·
 **cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy,
-Permissions-Policy, HSTS y CSP «A+ barato»).
+Permissions-Policy, HSTS y CSP con allowlist mínima).
 
 **La marca no termina en el dominio.** Firma de email (monograma split, nombre en
 Bricolage y canales), banner de LinkedIn y portada del repositorio comparten el mismo
@@ -216,9 +216,9 @@ veces (D38/D57/D60/D63).
 `main` **la protege el servidor y no la disciplina**: sin push directo, sin merge con CI
 en rojo, sin bypass de admin, y solo `squash` o `rebase` (D68). Escaneo de dependencias
 con Dependabot. Cabeceras de seguridad servidas, con la CSP en allowlist mínima: base +
-GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'`: su
-disparador era que Contacto trajera un endpoint externo, y no lo trajo (D95), así que la
-CSP estricta con nonces sigue con la IA conversacional (V4).
+GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'`, desde el
+2026-08-24 **por coste medido**: quitarlo exige nonces, y el nonce cuesta el prerenderizado
+de las catorce páginas (D26). Va con la IA conversacional (V4), que hereda ese coste.
 
 El **repositorio es público** desde el 2026-08-19, con `LICENSE` explícito («público para
 consulta, no código abierto») y enlace en el footer.

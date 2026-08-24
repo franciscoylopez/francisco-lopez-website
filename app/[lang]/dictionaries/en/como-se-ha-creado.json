@@ -341,7 +341,7 @@
           "type": "p",
           "text": "The question every tool has to answer to get into this project isn't \"is it good?\" but \"what work of mine does it solve?\" It sounds obvious, and it isn't: almost all the software that ends up over-installed gets in through the first question."
         },
-        { "type": "h3", "text": "Two surprises from a fresh major version" },
+        { "type": "h3", "text": "Three surprises from a fresh major version" },
         {
           "type": "diagram",
           "id": "s04",
@@ -350,7 +350,7 @@
         },
         {
           "type": "p",
-          "text": "Next with the App Router, TypeScript in strict mode, and Tailwind. None of that is exotic. What is surprising is adopting a brand-new version: part of what you think you know has stopped being true, and it doesn't always warn you. It happened to me twice."
+          "text": "Next with the App Router, TypeScript in strict mode, and Tailwind. None of that is exotic. What is surprising is adopting a brand-new version: part of what you think you know has stopped being true, and it doesn't always warn you. It happened to me three times, and the third while I was writing this."
         },
         {
           "type": "p",
@@ -362,7 +362,15 @@
         },
         {
           "type": "p",
-          "text": "Both share the same signature, and it's the one that keeps repeating in everything that follows: **the error doesn't show its face.**"
+          "text": "The third one is my favourite, because it had been in front of me for months and I found it while writing this article. The system has a way of saying «space these blocks apart», and it governs the gap between the paragraphs you are reading. It has never worked. In the previous version that instruction outweighed the «no margins» each paragraph carries on top of it; in the new one it weighs less, deliberately, so that it is easy to override. So the air I have been asking for between paragraphs has not been painted once."
+        },
+        {
+          "type": "p",
+          "text": "And it went unnoticed because every other block brings its own margin: subheadings, lists and diagrams space themselves. Paragraphs were the only ones relying on that instruction, and there is exactly one place on this page made only of paragraphs, which is the last chapter. I caught it comparing a mockup against the real page: the mockup reproduced what the code said and the page showed something else. Had I trusted the mockup, I'd have picked a nice new rhythm on top of something that was broken."
+        },
+        {
+          "type": "p",
+          "text": "All three share the same signature, and it's the one that keeps repeating in everything that follows: **the error doesn't show its face.**"
         },
         { "type": "h3", "text": "Installed for the day it's needed" },
         {

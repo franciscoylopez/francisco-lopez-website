@@ -108,6 +108,10 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D6",
     "DECISIONS.md#D34",
     "DECISIONS.md#D51",
+    // La TERCERA sorpresa de estrenar v4, añadida el 2026-08-24: el `space-y`
+    // dentro de `:where()`. Es la única de las tres que el capítulo cuenta y
+    // que se descubrió DESPUÉS de publicarlo.
+    "DECISIONS.md#D100",
   ],
 
   // «El sistema de componentes» — la cascada y las OCHO piezas. El directorio

@@ -135,6 +135,7 @@
 - D97 · El contorno de un control no es el filete de una caja, y hasta hoy no lo medía nadie
 - D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro
 - D99 · La auditoría de rendimiento recorre el registro, y un ahorro estimado no es un ahorro
+- D100 · `space-y` de Tailwind v4 va dentro de `:where()`, así que cualquier hijo con `m-0` lo anula
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -896,6 +897,13 @@ ninguna.
   que un hash de build es imposible por construcción, no por esfuerzo. (Build en dos
   pasadas escribiendo `vercel.json`: considerado y descartado por fragilidad — cualquier
   cambio de copy invalidaría los hashes de la pasada anterior.)
+  **Medido el 2026-08-24, y es peor que frágil: no hace falta ni cambiar el copy.** Dos
+  builds seguidos del mismo commit, sin tocar una coma, y **0 de 28 variantes** repiten sus
+  firmas: dentro de esos scripts van los nombres de chunk que el compilador renombra en
+  cada pasada. En `en/cookies.html` sobreviven 3 de 4 hashes y el cuarto no, que es el que
+  lleva el manifiesto dentro. Y una firma que no coincide no degrada, **bloquea** el script.
+  Por tamaño sí cabía (126 hashes únicos, 809 B en la peor ruta), así que el camino no lo
+  cierra el coste: lo cierra que el HTML de Next no sea reproducible.
 - **`experimental.sri` tampoco cierra el hueco.** Existe en 16.3.1 y pone `integrity` en
   los scripts con `src` (12 en la home), pero **SRI no aplica a inline**: `'unsafe-inline'`
   se queda y la nota no se mueve. Sirve para otra cosa, no para esto.
@@ -931,6 +939,16 @@ puesto de distancia. Si la investigación de Contacto concluye que hay formulari
 endpoint, la CSP estricta deja de ser insignia y se resuelve **dentro de P67**, no aparte;
 si concluye que no, se va con la IA conversacional de V4. Por eso P64.5 se renumera detrás
 de P65 en el tablero: estaba por delante de la tarea que la desbloquea.
+
+**Reafirmada el 2026-08-24, y cambia el MOTIVO, no la decisión (P68.496).** Hasta hoy estaba
+aplazada porque su disparador no ocurrió (Contacto no trajo endpoint externo, D95); ahora lo
+está por **coste medido**, que es mucho más difícil de reabrir dentro de un mes. Con el
+camino de hashes cerrado arriba, solo queda el nonce, y el nonce cuesta el prerenderizado de
+las catorce páginas. Un −20 que mide una **ausencia** (la política no previene XSS por
+construcción) no vale la nota de velocidad que sostiene ese prerenderizado, en un sitio sin
+sesión cuya única entrada ajena ya llega saneada. **Lo que V4 hereda de aquí:** la CSP
+estricta de la IA conversacional trae render dinámico dentro, y eso se planifica, no se
+descubre.
 
 ## D27 · Higiene de dependencias: sharp override, shadcn a devDeps, Dependabot — 2026-08-02
 **Decisión.** Cierre de la deuda de dependencias de la etapa Cimientos (P30.5 + P37.72),
@@ -5658,3 +5676,51 @@ accionable: su premisa decía «~81% del LCP móvil», y midiendo la misma pági
 despliegue ese reparto va de 108 ms (43%) a 1.983 ms (83%). El elemento LCP es la foto del hero,
 que ya pasa las tres comprobaciones de descubrimiento, así que lo que queda es trabajo de hilo
 principal. La tarea vuelve a «necesita definición» en vez de cerrarse.
+
+## D100 · `space-y` de Tailwind v4 va dentro de `:where()`, así que cualquier hijo con `m-0` lo anula — 2026-08-24
+
+**El síntoma.** El último capítulo de «Cómo se ha creado esta página» se leía como un muro:
+siete párrafos seguidos y pegados, sin más separación que el interlineado. `ArticleProse`
+pide `space-y-[1.75rem]` desde P60, así que el código decía una cosa y la página pintaba
+otra.
+
+**La causa.** Tailwind v4 compila esa utilidad envuelta en `:where(…)`:
+
+```css
+:where(.space-y-\[1\.75rem\] > :not(:last-child)) { margin-block-end: 1.75rem }
+```
+
+`:where()` tiene especificidad **cero**, y el `m-0` del propio párrafo (0-1-0) la gana
+**siempre**, sin que importe el orden en la hoja. En v3 el selector era
+`> :not([hidden]) ~ :not([hidden])` (0-2-0) y ganaba él. El envoltorio es deliberado en v4
+—existe para que la utilidad sea fácil de sobrescribir— y aquí lo sobrescribe justo lo que
+no debía.
+
+**Por qué pasó año y medio invisible.** Todos los demás bloques traen margen propio y con
+`!`: el `h3` su `!mt-[2.5rem]`, la `ul` su `!my-[2.25rem]`, el marco del diagrama el suyo.
+Ganan al `:where()` y su ritmo sí se pinta. **El párrafo era el único que dependía del
+`space-y`**, y el cierre la única sección hecha solo de párrafos. En las otras once lo
+tapaban los subtítulos, las listas y los diagramas.
+
+**El arreglo, y por qué no es quitar el `m-0`.** `[&+p]:mt-[1.75rem]` en el párrafo, que
+compila a `.clase + p` (0-1-1) y gana **por especificidad, no por orden**. Quitar el `m-0`
+o retirar el `space-y` habría arreglado un ritmo rompiendo otro: el `space-y` **sí**
+funciona para los hijos que no llevan `m-0`, y de él recibe su margen inferior el marco de
+un diagrama.
+
+**Cómo se encontró, que es la parte reutilizable.** Prototipando el ritmo con `/prototype`,
+una de las variantes era «Hoy» como línea base. Francisco la comparó con producción y no
+coincidían: la línea base reproducía lo que el código dice. Sin esa comparación, las cuatro
+direcciones se habrían medido contra una quinta mejora y cualquiera habría «funcionado»,
+tapando la causa. Es la regla 3 de `BRAND.md` §Cómo se escribe una regla aplicada a una
+maqueta: **valida el metro contra algo que ya conoces antes de creerte el hallazgo**, y aquí
+lo que había que validar era la propia línea base.
+
+**Dónde puede volver a morder.** En cualquier `space-y-*` cuyos hijos lleven `m-0` u otra
+utilidad de margen. Hoy hay tres en el repo y los otros dos están bien: el de la lista
+(`space-y-[0.7rem]`) tiene hijos `li` sin margen propio, y el `space-y-2` de la apertura
+también.
+
+**Y va al artículo.** Es la tercera sorpresa de estrenar Tailwind v4 y comparte firma con
+las dos que s04 ya contaba —«el error no da la cara»—, con el añadido de ser la única
+descubierta **después** de publicar el capítulo que habla de ellas.
