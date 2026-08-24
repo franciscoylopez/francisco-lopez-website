@@ -155,7 +155,7 @@ nazca bien sin pedirlo (D30/D39/D61).
 
 | Criterio | Umbral | Estado |
 |---|---|---|
-| PageSpeed / Lighthouse | >90 escritorio y móvil | **Cumplido en las catorce**: móvil 95-99 · escritorio 97-100 (`npm run psi -- --registro`, 2026-08-24) |
+| PageSpeed / Lighthouse | >90 escritorio y móvil | **Cumplido en las catorce.** La cifra y su fecha las sella `npm run psi -- --registro`, y de ahí las lee el artículo (D102) |
 | Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** y **cero contornos bajo el 3:1 de WCAG 1.4.11** en las catorce páginas × 2 temas, en reposo y en hover — 370 pares de texto y 276 contornos de control, `npm run censo` (D85/D97); **0 violaciones de axe** |
 | SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las catorce |
 
@@ -164,8 +164,6 @@ siete trampas; aquí solo el criterio y el estado. Lo que importa para el alcanc
 lee las páginas del **registro**, así que una página nueva entra sin que nadie se acuerde
 (D85), y las cifras publicadas salen de `lib/design-values.ts` (D38).
 
-La nota lleva fecha porque una sola corrida no basta, y esa es también la razón de que
-`psi` siga fuera de CI: la cifra y el porqué, en D99.
 
 ### Cómo se verifica lo que no ve un compilador
 
@@ -185,6 +183,9 @@ La nota lleva fecha porque una sola corrida no basta, y esa es también la razó
   no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, y que los `@id`
   del JSON-LD **resuelven** — cosa que ningún validador externo hace. Contraste y objetivo
   táctil quedan fuera a propósito: se heredan, y necesitan pintar.
+- **`npm test`**: la lógica del formulario, que es la primera del sitio: validación,
+  saneado de cabeceras y decisiones de la Server Action, medidas sobre el mensaje que
+  nodemailer **emite**. En CI, al revés que `psi` y el censo: no necesita navegador (D101).
 - **`npm run gate:html`**: compara el HTML servido de las 28 variantes antes y después de
   un refactor. Diff vacío = transparente por construcción. Es el gate que más ha cazado
   y no está en CI (D42/D45).
@@ -194,9 +195,8 @@ La nota lleva fecha porque una sola corrida no basta, y esa es también la razó
   mirarlo (D84). Y qué líneas cambiaron lo dice `articulo:novedades` (D103).
 - **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
   porque necesita navegador (D85). **Son dos pases**: los pares de TEXTO (1.4.3/1.4.6) y el
-  **contorno de cada control** (1.4.11, 3:1), que hasta el 2026-08-23 no medía nadie porque
-  axe no implementa esa regla — y por eso el contorno de todo control neutro del sitio llevaba
-  en 1,21:1 desde V1 (D97). **Y deja sello**: al pasar en verde firma los tokens
+  **contorno de cada control** (1.4.11, 3:1), que axe no implementa y por tanto no mira
+  nadie más (D97). **Y deja sello**: al pasar en verde firma los tokens
   de color, las superficies y las animaciones que había, y `check:palette` compara ese
   sello en cada PR. Medir necesita pintar; saber que hay que medir, no — así que la
   condición de re-medir de la DoD la lee una máquina (D90).
@@ -206,10 +206,8 @@ La nota lleva fecha porque una sola corrida no basta, y esa es también la razó
 
 ### Calidad y seguridad
 
-CI en cada PR con **diecisiete pasos**: formato, typecheck, lint, **tests**, paleta,
-experiencias, CV al día, raya, artefacto, contexto, skills, índices, rutas, artículo al
-día, build, marco de página y guardianes. Los tests llegaron con la primera lógica de
-negocio real, la del formulario (D101). Los demás comparten una regla de
+CI en cada PR, y **cuáles son los pasos lo dice `ci.yml`**: enumerarlos aquí ya ha
+caducado dos veces. Todos comparten una regla de
 método: **buscan la AUSENCIA, no el patrón**, y **afirman cuánto han mirado** — un metro
 que devuelve lista vacía parece un aprobado, y este proyecto se lo ha encontrado cinco
 veces (D38/D57/D60/D63).

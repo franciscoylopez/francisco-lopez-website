@@ -5863,9 +5863,14 @@ no solo al `value` de un `livestat`. Antes solo se rellenaba ahí, así que un `
 pie de un diagrama se habría publicado con las llaves a la vista. Recorrer el bloque entero
 cuesta lo mismo y quita una regla que había que recordar.
 
-**Lo que queda fuera, dicho para que no se dé por cubierto.** El recuento de pasos sigue
-escrito a mano en `PRD-Live.md`, `CLAUDE.md` y `README.md`. Son documentos, no copy servido, y
-no hay dónde interpolar; el guardián cubre lo que el sitio **publica**.
+**Enmienda del mismo día, al cerrar la sesión.** Este párrafo decía que el recuento «sigue
+escrito a mano en `PRD-Live.md`, `CLAUDE.md` y `README.md` porque no hay dónde interpolar», y
+daba eso por inevitable. No lo era: **la respuesta correcta no era interpolarlo, era dejar de
+escribirlo.** Un documento no necesita decir cuántos pasos tiene CI cuando `ci.yml` está a un
+clic y el README ya los tabula; escribirlo solo crea un sitio más donde caducar, y ya había
+caducado dos veces. Los tres se han quedado sin número. Es la misma regla que `close-session`
+tenía escrita desde el 2026-08-23 y que esta entrada no aplicó: *ante un recuento obsoleto, la
+pregunta no es cuál es el número correcto sino si esa frase necesita un número*.
 
 ---
 
