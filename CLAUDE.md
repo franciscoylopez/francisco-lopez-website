@@ -43,7 +43,7 @@ Al empezar una sesión de desarrollo:
 3. Actualiza el `Estado` en Notion según avances: "To-Do" → "En progreso" al empezar, "Listo" al terminar.
 4. Si una tarea deja de tener sentido tal como está definida (cambia el alcance, se descubre que depende de algo no resuelto, etc.), dilo antes de marcarla "Listo" — no la des por completada a medias.
 
-**El cuerpo de una tarea NO sale en la consulta SQL, que solo devuelve propiedades.** Y el cuerpo es donde viven el porqué medido, las tablas y las dependencias. Al retomar una tarea se abre con `fetch`; listarla no basta *(2026-08-23: media tarea se perdió por esto)*.
+**El cuerpo de una tarea NO sale en la consulta SQL, que solo devuelve propiedades.** Y el cuerpo es donde viven el porqué medido, las tablas y las dependencias. Al retomar una tarea se abre con `fetch`; listarla no basta.
 
 ## Reglas del tablero (no negociables)
 
@@ -53,13 +53,13 @@ Al empezar una sesión de desarrollo:
 >
 > - **Sprints** (lo comprometido, con su orden): *Footer y contacto*.
 > - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad · Cómo se ha creado*.
-> - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque. *(Vigilado desde 2026-08-19: degeneró una vez con «Optimización».)*
+> - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque.
 > - **Cerradas** (solo archivadas, no se usan para tareas nuevas): las que el tablero ya no lista como sprint ni como bloque. **Los «Método» no se vuelven bloque:** no tienen página, y su deuda es transversal (*General*).
 > - **Un sprint que cierra no se archiva: se convierte en su BLOQUE** *(2026-08-22)*. Su página sigue viva y va a generar deuda, y esa deuda es de ella, no transversal.
 >
 > **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote. El coste asumido: al entrar en un sprint se pierde de qué bloque venía; lo llevan el nombre y las notas, y añadir una séptima propiedad sería peor.
 
-> **A `General` no lo drena ningún sprint, así que se drena por CUPO** *(2026-08-22)*. La regla de movimiento funciona para los bloques de página porque antes o después un sprint los toca; `General` es transversal, así que **no lo toca nunca nada**. Por eso su único desagüe histórico ha sido inventar un sprint de método: dos veces, 24 tareas, exactamente las mismas que costó construir la página del sprint que las generó. Desde ahora, **cada sprint arrastra 3-4 tareas de `General`** —las que no piden criterio, por `Prioridad`— dentro del propio sprint, y **una revisión no cierra dejando en `General` más tareas nuevas de las que ese cupo va a sacar**. Si las deja, la revisión no ha terminado: falta decidir qué se retira. *(Medido: 28 abiertas y 1 archivada en toda su vida, 16 de ellas creadas en cuatro días.)*
+> **A `General` no lo drena ningún sprint, así que se drena por CUPO.** La regla de movimiento vale para los bloques de página porque antes o después un sprint los toca; `General` es transversal, así que no lo toca nada. **Cada sprint arrastra 3-4 tareas de `General`** —las que no piden criterio, por `Prioridad`— dentro del propio sprint, y **una revisión no cierra dejando en `General` más tareas nuevas de las que ese cupo va a sacar**. Si las deja, la revisión no ha terminado: falta decidir qué se retira.
 
 > **`Versión` ≠ `Etapa`.** La etapa dice *cuándo se hace*; la versión, *en qué release sale*. Desde el 2026-08-10: **V2** = los tres sprints de arriba · **V3** = la deuda y mejoras por bloque · **V4** = la IA conversacional. Ver `PRD-Live.md` §9.
 
@@ -74,7 +74,7 @@ Al empezar una sesión de desarrollo:
 
 Sin fechas, la **etapa en curso** es el sprint de menor `Prioridad` con tareas abiertas. Se trabaja **una etapa a la vez**, en orden, **pero en dos carriles**: el *build* (técnico/diseño/dev) avanza una etapa cada vez; el *contenido* que solo escribe Francisco corre **en paralelo, por delante**, para desbloquear las secciones futuras. Por eso `To-Do`/`En progreso` cubren la **etapa de build activa** *y* el **carril de contenido en marcha**; todo lo demás —sprints futuros y bloques— va en `Sin empezar`.
 
-**El carril de contenido no es una excepción menor: es lo que impide que un sprint abra bloqueado** *(2026-08-22)*. Ya se barrió una vez —la regla de columnas de arriba se llevó por delante la tarea de contenido del sprint siguiente, y doce días después seguía en `Sin empezar` con el sprint a punto de abrir—, así que el cierre **no lo toca**, y **abrir un sprint empieza comprobando que su tarea de contenido no sigue sin empezar**. Si lo está, esa es la primera tarea, no la de build.
+**El carril de contenido es lo que impide que un sprint abra bloqueado**, y ya se barrió una vez: el cierre **no lo toca**, y **abrir un sprint empieza comprobando que su tarea de contenido no sigue sin empezar**. Si lo está, esa es la primera tarea, no la de build.
 
 Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara ("cerramos Cimientos"). Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** (ver abajo) y (4) **antes de abrir el siguiente** se dispara **`method-review`**, que audita cómo se trabaja. Va en ese hueco y no al cerrar porque **el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener**, no después. "Listo" queda solo para lo terminado de la etapa en curso.
 
@@ -144,12 +144,8 @@ Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer p
 
 - **Se dispara dos veces, y la primera no es al cerrar** (D50/D52). Si la sección lleva banda o hero dimensionado por `vw`, también **mientras se dibuja**: el eje que faltaba no era el tema, era el **alto**. Al cerrar, el resto del checklist.
 - **Precondición:** `agent-browser` se conduce con el **sandbox de Bash desactivado**. No es solo la navegación: bajo el sandbox **ningún** comando llega al daemon, ni con la página ya cargada. Un comando que cuelga es ese síntoma —se desactiva el sandbox, no se reintenta ni se abre la URL desde la terminal—. (D51.)
-- **Lo que no tapa, y ahora cubre CI:** el **enlace de salto** de WCAG 2.4.1 —que axe no detecta (D46)— y los puntos **4, 5 y 8**, que mira `npm run check:marco` sobre el HTML prerenderizado, en cada PR (D75).
-- **Lo que sigue a mano:** el punto **6** (nada codificado solo por color), sin forma automática, y la **nota de PageSpeed**, que sale de `npm run psi` contra producción y no de `vitals` —que da métricas, no nota— (D49).
-- **La pasada COMPLETA de contraste es `npm run censo`** (D85): lee las páginas de `PAGE_SLUGS`, valida el metro en cada corrida y falla si algún par baja de AAA. Fuera de CI, como `psi`. **Lo único que no juzga es el texto sobre foto**, que se mide aparte sobre el píxel pintado.
-- **Tras esa pasada** (no al cerrar una página): actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, la fecha que publica `/accesibilidad` (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
-
-`claude-in-chrome` no se retira: se queda para lo que necesita el navegador **con sesión** —consentimiento guardado, Preview autenticada—, que es la Fase 3 de `design-review`.
+- **Lo que sigue a mano:** el punto **6** (nada codificado solo por color) y la **nota de PageSpeed** (`npm run psi`, no `vitals`). Lo demás lo cubren `check:marco` en CI y `npm run censo` fuera de ella; **qué garantiza cada uno lo dice `PRD-Live.md` §Cómo se verifica**, no esta lista.
+- **La pasada completa de contraste es `npm run censo`**, con el sitio construido y servido (D85). **Tras ella**, y no al cerrar una página: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, la fecha que publica `/accesibilidad` (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
 
 # Definition of Done
 
@@ -192,6 +188,4 @@ pulido tipográfico o de ritmo que aparezca al mirarla.
 - **¿Dependencia frontend nueva?** → `/pick-ui-library`, misma condición.
 - **¿Toca motion?** → `/review-animations` al terminarlo.
 - **¿La tarea añade una superficie que recibe input de un tercero** (formulario, subida,
-  endpoint)? → **`/security-review` al terminarla.** El sprint 3 estrenó la primera del sitio
-  y no se disparó ni una vez; el `sprint-review` encontró después una inyección en la
-  cabecera `Reply-To` (2026-08-23).
+  endpoint)? → **`/security-review` al terminarla.**

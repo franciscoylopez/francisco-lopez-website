@@ -115,6 +115,16 @@ const CASOS: Caso[] = [
     mutar: append("\n" + "relleno ".repeat(4000) + "\n"),
   },
   {
+    // La OTRA mitad del presupuesto (P68.67). Sin este caso, la mitad que
+    // vigila las skills podría no mirar ninguna y seguir pareciendo un
+    // aprobado, que es el modo de fallo que este archivo entero existe para
+    // cazar.
+    guardian: "check:contexto",
+    rotura: "una skill engorda por encima de su techo por entrada",
+    archivo: ".claude/skills/gates-de-servidor/SKILL.md",
+    mutar: append("\n" + "relleno ".repeat(7000) + "\n"),
+  },
+  {
     guardian: "check:indices",
     rotura: "una pieza de components/ui/ se queda sin declarar su línea",
     // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja

@@ -181,12 +181,10 @@ color del FONDO** (`--background`), nunca negro (el negro arregla un tema y empe
 firma de D41). Y un control **de dos tonos** —relleno `--primary` + anillo
 `--primary-foreground`—, cuyo borde **interno** no depende de la imagen.
 
-**Y lo que eso garantiza es el borde INTERNO, no el contorno entero.** Que alguno de los dos
-bordes externos pase 3:1 en cada punto no se puede prometer, y subir el velo no lo arregla:
-acerca el póster al fondo, lo que separa al disco y **acerca al anillo**, tirando en
-direcciones opuestas. No es incumplimiento —WCAG pide que el componente se distinga, no que
-cada punto del contorno pase 3:1—, pero la regla se escribió prometiendo de más y hubo que
-corregirla.
+**Y eso garantiza el borde INTERNO, no el contorno entero:** que los dos bordes externos
+pasen 3:1 en cada punto no se puede prometer, y subir el velo tira en direcciones opuestas.
+No es incumplimiento —WCAG pide que el componente se distinga—, pero la regla se escribió
+prometiendo de más.
 
 *(Las cifras, el barrido de opacidad y las dos veces que el metro estuvo mal, en
 [`BRAND-historical.md`](./BRAND-historical.md) §Un control sobre una imagen y §La regla del
@@ -234,25 +232,18 @@ de icono— nace de una cadena de clases inline.** Si el caso no encaja en una v
 la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como
 el switch del consentimiento, aquí debajo).
 
-> **Excepción viva — el switch del diálogo de consentimiento** *(2026-08-08, P37.5996)*.
-> `consent-banner.tsx` dibuja su interruptor con una cadena inline (`peer-checked`, `after:`,
-> anillo de foco). Se queda así porque hay **un** switch en todo el sitio —no hay repetición que
-> factorizar, y una pieza con un solo call site solo añade indirección— y porque la cascada de
-> la «Regla de construcción» mandaría traerlo de shadcn, que **aplica hacia delante, no hacia
-> atrás**.
-> **Condición de salida:** cuando aparezca un **segundo** switch —entonces hay repetición que
-> factorizar y el segundo se trae de shadcn, arrastrando al primero— o cuando este haya que
-> rehacerlo por otro motivo. Lo que **no** es excepción es su color: eso lo resuelve
-> §Controles con dos fondos.
-
-> **Excepción viva — el índice de secciones de «Cómo se ha creado esta página»**
-> *(2026-08-22, design-review P60)*. El riel flotante (`article-islands.tsx`) no compone
-> `chromeLinkVariants`: es una píldora que se expande en hover/foco con estado activo
-> propio, un caso que hoy no cubre ninguna `shape` de `chrome.tsx`.
-> Se queda así porque hay **un** índice de este tipo en todo el sitio —no hay repetición
-> que factorizar, y una pieza con un solo call site solo añade indirección—.
-> **Condición de salida:** cuando aparezca un **segundo** índice flotante de secciones
-> (otro deep-dive largo con TOC), se extrae a `chrome.tsx` arrastrando a este.
+> **Dos excepciones vivas, con la misma razón y la misma condición de salida:** hay **una**
+> de cada en todo el sitio, así que no hay repetición que factorizar y una pieza con un solo
+> call site solo añadiría indirección. **Salen cuando aparezca la segunda** —entonces sí hay
+> repetición, y la segunda arrastra a la primera— o cuando haya que rehacerlas por otro motivo.
+>
+> - **El switch del consentimiento** *(2026-08-08)*: `consent-banner.tsx` lo dibuja con una
+>   cadena inline. Y traerlo de shadcn es lo que mandaría la cascada, que **aplica hacia
+>   delante, no hacia atrás**. Lo que **no** es excepción es su color: lo resuelve §Controles
+>   con dos fondos.
+> - **El índice de secciones del artículo** *(2026-08-22)*: el riel de `article-islands.tsx`
+>   no compone `chromeLinkVariants` —es una píldora que se expande en hover/foco con estado
+>   activo propio, y ninguna `shape` de `chrome.tsx` cubre ese caso—. Sale a `chrome.tsx`.
 
 ## Accesibilidad (no negociable)
 
@@ -262,10 +253,9 @@ el switch del consentimiento, aquí debajo).
   **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
   Son **dos pases**: pares de texto (1.4.3/1.4.6) y **contorno de control** (1.4.11, 3:1).
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
-  **«Que pinta» es el límite del metro:** el censo recorre el DOM, así que un token que existe y
-  no se usa le resulta invisible. Ahí estaba `--destructive` (4,31:1 en claro), y de ahí la
-  regla: **el rojo no es color de texto.** El mensaje va en `--foreground`; `--destructive` marca
-  la forma (icono, filete), donde basta el 3:1 de WCAG 1.4.11 *(2026-08-23)*.
+  **«Que pinta» es el límite del metro:** un token que existe y no se usa le resulta invisible.
+  De ahí **el rojo no es color de texto**: el mensaje va en `--foreground` y `--destructive`
+  marca la forma (icono, filete), donde basta el 3:1 de WCAG 1.4.11.
   *(Las tres veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
   ser un hábito, en [`BRAND-historical.md`](./BRAND-historical.md) §La pasada completa.)*
 - **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es
@@ -284,9 +274,8 @@ hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script e
 
 > **Publica cuántas reglas `:hover` ha indexado y cuántos pares ha medido con ellas**, porque
 > *un metro que devuelve una lista vacía parece un aprobado*: se ha roto dos veces, las dos en
-> silencio, y las dos se descubrieron midiendo un caso cuyo resultado ya se conocía. Los dos
-> fallos y el incumplimiento real que escondía el segundo, en
-> [`BRAND-historical.md`](./BRAND-historical.md) §El censo de contraste se rompió dos veces.
+> silencio. Los dos fallos, en [`BRAND-historical.md`](./BRAND-historical.md) §El censo de
+> contraste se rompió dos veces.
 
 
 ### Cómo medir sin equivocarse
@@ -351,8 +340,8 @@ glifo propio se justifica **solo** por lo que lucide no exporta. Parece obvio y 
 más se ha incumplido.
 
 - **Mismo artboard.** `viewBox="0 0 24 24"`, `fill="none"`, `stroke="currentColor"`, trazo **2**, terminaciones y uniones **redondas**. Todas las coordenadas dentro de **2–22** (el área útil de 20×20 de lucide; el trazo desborda hasta 1 y 23). No hay que llenarla.
-- **Nada se contornea por debajo de 8 unidades** (4× el trazo). Una forma más estrecha que eso se dibuja **con** el trazo, monolineal, en vez de rodearla con él. Lucide lo cumple sin excepción: su forma contorneada más estrecha es el disco del `sun`, que mide justo 8, y el borne del `battery` —que como contorno sería un saliente de 2— es una línea suelta.
-- **Contraforma mínima 6 unidades de eje a eje** (3× el trazo, 4 de fondo limpio) entre trazos paralelos y en todo hueco que haya que leer. Es la rejilla de lucide: `menu`, `list` y `align-*` separan sus líneas exactamente 6. A 18px, 4 unidades son 3px de fondo — se ve; 2 son 1,5px — se rellena.
+- **Nada se contornea por debajo de 8 unidades** (4× el trazo). Una forma más estrecha que eso se dibuja **con** el trazo, monolineal, en vez de rodearla con él.
+- **Contraforma mínima 6 unidades de eje a eje** (3× el trazo, 4 de fondo limpio) entre trazos paralelos y en todo hueco que haya que leer.
 - **Los puntos son trazo, no círculos.** `M4 4h.01` con terminación redonda da un punto del diámetro exacto del trazo. Un `circle` de radio pequeño incumple la regla anterior por definición.
 - **Se verifica en pantalla, no en el editor.** A tamaño real (17px en `.link-chrome`, 18px en la variante `icon`), dentro de su pastilla, **junto a un lucide del mismo bloque** y en los dos temas.
 - **El inventario de glifos propios es el `grep` de `<svg>`** en `components/` y `app/`, no el contenido de `icons.tsx`. De ahí se descuentan el logo y las **ilustraciones** (maquetas de navegador, marcos de dispositivo, esqueletos, el «0» del 404), que son dibujos y no iconos. Lo que quede son iconos propios, vivan donde vivan — y **su sitio es `components/ui/icons.tsx`**.
