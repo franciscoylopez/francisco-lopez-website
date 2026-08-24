@@ -64,7 +64,7 @@
       "body": [
         {
           "type": "p",
-          "text": "When I decided to take this project on, the first thing I wrote wasn't a line of code: it was who this page was for, and how long they'd spend reading it."
+          "text": "When I decided to take this project on, the first thing I wrote wasn't a line of code, and I didn't run user research either. What I did do was study the profiles of a few people I look up to in Product, read what recruiters write, and get two things straight: that I wanted a first version out fast, and that I wanted a site ready for the different kinds of people who were going to read it. Out of that came a written hypothesis of who reads and for how long, and every decision comes out of that hypothesis."
         },
         { "type": "h3", "text": "Two readers, two speeds" },
         {
@@ -77,26 +77,22 @@
         },
         { "type": "h3", "text": "What those two speeds actually decided" },
         {
+          "type": "p",
+          "text": "They didn't stay on paper: they shaped the pages. The three most-read ones are all built the same way, with a summary up top and the detail underneath."
+        },
+        {
           "type": "diagram",
           "id": "s01",
           "side": "right",
           "caption": "The same scroll, read at two speeds: a scanning reader only reaches the first stretch; a deep reader covers the whole page."
         },
         {
-          "type": "p",
-          "text": "They didn't stay on paper: they shaped the pages. The three most-read ones are all built the same way, with a summary up top and the detail underneath."
-        },
-        {
           "type": "ul",
           "items": [
             "**The homepage has a safety net for the fast reader.** Right below the cover come five milestones, on one screen and with no scrolling: that's what answers «role, seniority and stack» to someone who'll be here ten seconds. What follows, how I work, the track record, the tools and the training, isn't talking to that person any more: it unfolds for whoever keeps going down.",
-            "**The track record does the same, only split across two pages.** The listing sums each role up in what you can take in at a glance, and the job title links to a page of its own where that story is told in full. Nobody has to read the whole case to know whether it's for them, and whoever wants the detail isn't stuck with the summary. Not every role has one, though, and that also comes out of the hypothesis: the two marketing and growth roles have no page of their own despite there being plenty of material, because telling them at the same level would dilute the order I want to be read in, which is product first. And the company where the product I co-founded was born doesn't have one either, because it isn't a separable story: it's the first chapter of the other one.",
+            "**The track record does the same, only split across two pages.** The listing sums each role up in what you can take in at a glance, and the job title links to a page of its own where that story is told in full. Nobody has to read the whole case to know whether it's for them, and whoever wants the detail isn't stuck with the summary.",
             "**And the three system pages open the same way, whatever screen you're on.** The Brand Kit, the [Design System](/design-system) and the [accessibility statement](/accesibilidad) start with a lead paragraph and a row of key figures, and the detail comes after. That row isn't each page's own call: it's a piece of the system that exists for exactly this, so all three behave the same without anyone having to remember."
           ]
-        },
-        {
-          "type": "p",
-          "text": "I didn't run user research. What I did do was study the profiles of a few product references, read recruiter articles, and settle two things: I wanted a fast first version, and I wanted a site built for the different profiles that would read it. Out of that came a written hypothesis about who reads and for how long, and every decision above follows from it."
         },
         { "type": "h3", "text": "What isn't here (yet), and why" },
         {
@@ -275,7 +271,7 @@
           "type": "ul",
           "items": [
             "**The semantic one.** Cyan is the site's only action color. If something is cyan, it's clickable.",
-            "**The decorative one.** Cyan and purple, for section backgrounds, illustration and charts, with no functional meaning. Cyan still leads here and purple comes in sparingly: a second color used casually stops accenting and starts competing. And each one has a soft version, deliberately low-contrast, good only as fill: a pastel is never text or button color."
+            "**The decorative one.** Cyan and purple, for section backgrounds, illustration and charts, with no functional meaning. Cyan still leads here and purple comes in sparingly, for details that matter. And each one has a soft version, deliberately low-contrast, good only as fill: a pastel is never text or button color."
           ]
         },
         {
@@ -530,36 +526,32 @@
         },
         {
           "type": "p",
-          "text": "The design tool for this site is the browser. A new section gets drawn directly in code, with the real tokens, and that removes the step that costs the most: the translation. There's no pretty version in one tool and a real one on the web, there's a single one, and it gets looked at where it's going to live, in both themes and at all four widths. It sounds like the shortcut of someone who can't use a design tool, and the effect is the opposite: when trying something costs two minutes, you try it instead of arguing about it."
+          "text": "The design tool for this site is the browser. A new section gets drawn in code, with the real tokens, and that removes the most expensive step: the translation. There's no pretty version in one tool and a real one on the web, there's a single one, and it gets looked at where it's going to live. That's where the one rule of method I have about this comes from: **if a visual decision can be seen, it doesn't get decided by reading**. When more than one direction is possible I build two or three of them and choose by looking, because between two descriptions the best-explained one tends to win, which isn't the same as the best one."
         },
         {
           "type": "p",
-          "text": "That's where the one rule of method I have about this comes from: **if a visual decision can be seen, it doesn't get decided by reading**. When more than one direction is possible I don't write down which one I prefer, I build two or three of them, with the real tokens and their theme switch, on a separate page that gets thrown away afterwards. Choosing between two things that exist takes a minute; choosing between two descriptions takes an argument, and the best-explained one tends to win, which isn't the same as the best one."
+          "text": "Then comes the part no method ever mentions: the fine-tuning. Not one section came out right the first time, and between that one and the good one there are rounds of looking at it served and writing down what grates, which is almost never what you expected."
         },
         {
           "type": "p",
-          "text": "And then comes the part no method ever mentions: the fine-tuning. Not one section of this site came out right the first time. What sits between the first version and the good one is rounds of looking at it served and writing down what grates, almost always small things and almost never the ones you expected: a heading that shifts as the width changes, a pull quote stuck to the bottom of a list, a diagram that starts lower than the text it runs alongside. This very page has more of those rounds inside it than I care to count."
-        },
-        {
-          "type": "p",
-          "text": "None of the above holds up on good intentions alone, so there are routines for design too, and they belong to a different family than the ones I describe later: those know about this site, and these know nothing about it. They know about design."
+          "text": "And there are routines for design, a different family than the ones I describe later: those know about this site and these know nothing about it, they know about design. Three are [Emil Kowalski's](https://github.com/emilkowalski/skills), and the fourth is [Vercel's](https://github.com/vercel-labs/web-interface-guidelines)."
         },
         {
           "type": "ul",
           "items": [
-            "**Before writing the component**, the one that builds several real versions of the same piece and puts them behind a picker so you can flip between them live. It's what turns the rule above into something that actually happens.",
-            "**Before installing any interface dependency**, the one that forces you to pick it from a reasoned list instead of from the first search result. A dependency goes in in five seconds and stays for years.",
-            "**Once the interface is done**, a review against the Web Interface Guidelines: empty states, text that overflows, figures that jitter as they update, screen margins on a phone with a notch. The mechanical things that get forgotten once the screen looks good.",
-            "**Once any animation is done**, a motion review that suspects by default. It's the most useful of the four precisely because its default bar is «this shouldn't be here»."
+            "**prototype**, before writing the component: it builds several versions of the same piece and puts them behind a picker so you can see them live.",
+            "**pick-ui-library**, before installing anything: it forces you to choose from a reasoned list. A dependency goes in in five seconds and stays for years.",
+            "**web-design-guidelines**, once the interface is done: empty states, text that overflows, figures that jitter as they update, margins on a phone with a notch.",
+            "**review-animations**, once any motion is done: it reviews with the default bar set at «this shouldn't be here»."
           ]
         },
         {
           "type": "p",
-          "text": "Three of those four are marked so the AI **can't launch them on its own**, and that mark is the most important design decision on the list. They aren't checks, they're decisions: which of three directions, which dependency goes in, whether that motion stays. A check can be automated end to end; a decision, at most, can be prepared. What the machine does is put the options in front of me, built and on screen; choosing is still mine, and I want the process to force me to be there."
+          "text": "Three of the four are marked so the AI **can't launch them on its own**, and that mark is the most important thing on the list: they aren't checks, they're decisions. A check can be automated end to end; a decision, at most, can be prepared. The machine puts the options in front of me, built and on screen; choosing is still mine."
         },
         {
           "type": "p",
-          "text": "That leaves the voice, which is the easiest thing to lose working this way. Two written rules and one checker govern it: Spanish is the source and English gets reviewed against it, never the other way around, because translating a text with judgment literally produces a correct text with no judgment. And **the site's copy doesn't use the em dash**, because it's one of the most recognizable tells of a text written by an AI and it almost never says anything a shorter mark wouldn't. That doesn't depend on my remembering it: there's a build step that walks every copy string on the site and fails if one shows up. Writing about judgment in the age of AI and publishing it with a model's punctuation would have been a silly way to contradict myself."
+          "text": "That leaves the voice, which is the easiest thing to lose working this way, and one written rule governs it: Spanish is the source and English gets reviewed against it, never the other way around, because translating a text with judgment literally produces a correct text with no judgment."
         }
       ],
       "enlace": {
@@ -588,23 +580,15 @@
         },
         {
           "type": "p",
-          "text": "That the form is the only one is itself a decision, and not a navigational one. Contact is resolved on a single page and the rest of the site leads there: the strip that closes the homepage and the end of the About page both land on the same button. The fewer ways there are to write to me, the fewer places there are to protect and the less code there is to maintain knowing it receives text written by a stranger."
+          "text": "That the form is the only one is itself a decision: the fewer ways there are to write to me, the fewer places there are to protect. And its format came out of removing. No captcha, which is an accessibility barrier on a site that publishes a conformance statement. No external email service, because it sends through the account that already existed. And it goes nowhere, because it happens on the same origin as the page. The validation that decides is the server's, the email goes out as plain text so the body interprets nothing anyone writes into it, and all of that works with JavaScript switched off."
         },
         {
           "type": "p",
-          "text": "And the format came out of removing, not adding. No captcha, because a captcha is an accessibility barrier and this site publishes a conformance statement. No external email service, because it sends through the account that already existed: there's no new third party to trust with other people's messages, and no extra domain to open up in the content policy. And it goes nowhere, because the send happens on the same origin as the page. Three decisions that look a lot like the five headers just below: nearly everything that makes this form safe is something that isn't there."
+          "text": "The hole that did exist was where I wasn't looking, in the email headers. The visitor's address goes in the reply field, and that field was being assembled by joining strings together: anyone who wrote their name in the right shape got the email to go out with **two** addresses instead of one, and in one case theirs came first. Hitting «Reply» I'd have answered someone who never wrote to me as well. No scanner found it, the end-of-stage technical review did."
         },
         {
           "type": "p",
-          "text": "What does need telling is what happens to that text once it arrives, because it's the only thing on the whole site written by someone who isn't me. The validation that decides is the server's, not the browser's: the one up front is a convenience for whoever is filling it in, and anyone posting by hand never ran it. The message leaves the server as plain text and not as HTML, which isn't a style call: a text body doesn't interpret anything anyone writes into it, so there's no way to slip markup into my inbox through there. And it works with JavaScript switched off, because the form genuinely posts instead of pretending to."
-        },
-        {
-          "type": "p",
-          "text": "The hole that did exist was where I wasn't looking, in the email headers. The visitor's address goes in the reply field, which is what makes «Reply» work, and that field was being assembled by joining strings together. Anyone who wrote their name in the right shape got the email to go out with **two** reply addresses instead of one, and in one case theirs came first: hitting «Reply» I'd have answered someone who never wrote to me as well. No scanner found it, the end-of-stage technical review did. It gets fixed by passing the name and the address as two separate values instead of as one sentence, which is the same idea as always: the problem wasn't the text, it was joining it."
-        },
-        {
-          "type": "p",
-          "text": "With bots the rule is silence. There's an invisible field a person can't fill in and a time floor below which a submission isn't human, and in both cases the screen says «sent» and nothing gets sent, because telling a bot you've caught it only teaches it to dodge you next time. And that's this chapter's failure: that filter also had a ceiling, so anyone who left the tab open and submitted the next day saw the same success screen with their message in the bin. The silence that's right with a bot is a lie with a person, and on the one metric this site takes seriously, no less. Now the filter only judges from below."
+          "text": "With bots the rule is silence: an invisible field, a time floor, and in both cases the screen says «sent» without sending anything, because telling a bot you've caught it only teaches it to dodge you. That's this chapter's failure: the filter also had a ceiling, so anyone who left the tab open and submitted the next day saw the same success screen with their message in the bin. **The silence that's right with a bot is a lie with a person.**"
         },
         {
           "type": "p",
@@ -642,23 +626,19 @@
         },
         {
           "type": "p",
-          "text": "Two public scanners grade this, and both are worth looking at because they say different things for the same reason. [Security Headers](https://securityheaders.com/?q=franciscolopez.es&followRedirects=on) gives it an **A**: all six headers above are served and none is missing. It doesn't give it an A+, and what stops it isn't a header that's absent, it's one line inside a header that's present."
+          "text": "Two public scanners grade this and both are worth a look, because they say different things for the same reason. [Security Headers](https://securityheaders.com/?q=franciscolopez.es&followRedirects=on) gives it an **A**: all six headers are served and none is missing. What stops it short of an A+ isn't a header that's absent, it's one line inside a header that's present. And [Mozilla's HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es), which is harsher, deducts twenty points for that same line and leaves the site at **B+**."
         },
         {
           "type": "p",
-          "text": "That line is the part where honesty matters, because it's where almost everyone overstates. [Mozilla's HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) is harsher and leaves the site at **B+**, 80 out of 100: it deducts exactly twenty points, one single item, and not by oversight. **This site's content policy is not a strong protection against script injection**: it still allows inline scripts to run, because the page has several that run before paint (the one that picks the theme, the consent one, and the one React uses to wake the page up). What it does do, for free and without breaking anything: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site."
+          "text": "And here's where honesty matters, because it's where almost everyone overstates: **this policy is not a strong protection against script injection**, since it still allows inline scripts to run. What it does do, for free: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site."
         },
         {
           "type": "p",
-          "text": "And here's what I didn't know when I first wrote this chapter: **that line has a price, and the whole chapter pays it**. Removing it means signing every script with a different number on every visit, and that number only exists if the page is built at the moment it's requested. Today all fourteen are built beforehand, once, and served ready-made, which is where the performance number just below comes from."
+          "text": "What I didn't know when I first wrote this is that **that line has a price**. Removing it means signing every script with a different number on every visit, and that number only exists if the page is built at the moment it's requested; today all fourteen are built beforehand, which is where the performance number just below comes from. The back door would be signing them by their content, and it isn't there: I compiled the site twice without touching a comma and **not one of the twenty-eight variants produced the same signatures**, because inside them are the file names the compiler renames on every pass. And a signature that doesn't match doesn't degrade, it blocks."
         },
         {
           "type": "p",
-          "text": "I went looking for the back door, which would be signing scripts by their content instead of per visit (that part is compatible with pages built in advance), and it isn't there. I compiled the site twice in a row without touching a comma, and **not one of the twenty-eight variants produced the same signatures**: inside those scripts are the names of the files the compiler renames on every pass. And a signature that doesn't match doesn't degrade anything, it blocks the script and leaves the page half-built, so the policy would expire by itself on every deploy."
-        },
-        {
-          "type": "p",
-          "text": "So the grade stays at B+, with the date on it and the reason written down. Raising it would improve a tool's score by making the visitor's worse, and this site has no session, stores nothing, and its only outside input is a form that already arrives sanitized. The day there's an assistant answering generated text, that protection stops being a letter and gets paid for whatever it costs. I'd rather have a grade that tells the truth about what it protects than a higher one that sounds better than it is."
+          "text": "So it stays at B+, with the date on it and the reason written down: raising it would improve a tool's score by making the visitor's worse. The day there's an assistant answering generated text it'll get paid for whatever it costs."
         },
         {
           "type": "p",
