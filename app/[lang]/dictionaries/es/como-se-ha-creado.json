@@ -800,17 +800,14 @@
           "side": "center",
           "caption": "El panel de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con los cinco archivos peor puntuados que señaló el ratio de deuda técnica."
         },
+        { "type": "h3", "text": "Los tests llegaron cuando llegó la lógica" },
         {
-          "type": "h3",
-          "text": "Y una ausencia que llevaba escrita su condición de salida"
+          "type": "p",
+          "text": "Durante un tiempo este repositorio no tuvo tests, y no era un olvido: era una decisión fijada hasta el día que apareciera la primera función con condiciones de verdad. Apareció con el formulario de contacto, que valida lo que escribe un desconocido, compone una cabecera de correo y decide si un envío se acepta."
         },
         {
           "type": "p",
-          "text": "Durante meses este repositorio no tuvo tests, y no era un olvido: era una decisión con su condición de salida escrita. No había lógica de negocio que probar, solo datos, componentes de presentación y reglas, y las reglas ya las verificaban los guardianes en cada push. Escribir un test que comprueba que un título renderiza un título habría sido teatro, y teatro caro de mantener."
-        },
-        {
-          "type": "p",
-          "text": "La condición decía «el día que aparezca la primera función con condiciones de verdad». Apareció con el formulario de contacto, que valida lo que escribe un desconocido, compone una cabecera de correo y decide si un envío se acepta. Y que hacían falta no es una opinión: la revisión de cierre de etapa encontró ahí dos fallos, uno de ellos de seguridad, y los encontró alguien leyendo, no el código a sí mismo. Ahora hay tests, y solo donde hay lógica: la validación, el saneado de las cabeceras y las decisiones del envío. Corren en cada PR y tienen su propio caso malo en el verificador de verificadores, porque una suite en verde y una suite que no prueba nada se parecen demasiado."
+          "text": "Se prueba eso y nada más: la validación, el saneado de las cabeceras y las decisiones del envío. Y se prueba sobre el correo que sale, no sobre las instrucciones que se le dan a quien lo manda. El mensaje se genera entero, con su codificación y su entrecomillado, porque el agujero de ahí arriba era justo una cabecera de aspecto razonable que acababa con dos direcciones: afirmar que las instrucciones eran correctas lo habría vuelto a aprobar. Corren en cada PR y tienen su propio caso malo en el verificador de verificadores, porque una suite en verde y una suite que no prueba nada se parecen demasiado."
         }
       ],
       "enlace": {

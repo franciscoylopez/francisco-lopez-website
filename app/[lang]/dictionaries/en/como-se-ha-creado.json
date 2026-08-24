@@ -804,17 +804,14 @@
           "side": "center",
           "caption": "This repository's Qlty dashboard: an A grade in maintainability and security, with the five worst-scored files the technical debt ratio pointed at."
         },
+        { "type": "h3", "text": "The tests arrived when the logic did" },
         {
-          "type": "h3",
-          "text": "And one absence that came with its own exit condition"
+          "type": "p",
+          "text": "For a while this repository had no tests, and it wasn't an oversight: it was a decision that held until the day the first function with real branching conditions showed up. It showed up with the contact form, which validates what a stranger types, composes an email header, and decides whether a submission is accepted."
         },
         {
           "type": "p",
-          "text": "For months this repository had no tests, and it wasn't an oversight: it was a decision with its exit condition written down. There was no business logic to test, only data, presentational components, and rules, and the guardians already verified the rules on every push. Writing a test that checks a heading renders a heading would have been theater, and expensive theater to maintain."
-        },
-        {
-          "type": "p",
-          "text": "The condition read “the day the first function with real branching conditions shows up”. It showed up with the contact form, which validates what a stranger types, composes an email header, and decides whether a submission is accepted. And that they were needed isn't an opinion: the end-of-stage review found two defects there, one of them a security bug, and a person reading found them, not the code itself. Now there are tests, and only where there is logic: validation, header sanitising, and the send decisions. They run on every PR and they have their own planted failure in the verifier of verifiers, because a green suite and a suite that tests nothing look far too similar."
+          "text": "That, and nothing else, is what gets tested: validation, header sanitising, and the send decisions. And it gets tested on the email that goes out, not on the instructions handed to whatever sends it. The message is generated in full, with its encoding and its quoting, because the hole just above was precisely a reasonable-looking header that ended up carrying two addresses: asserting that the instructions were right would have waved it through again. They run on every PR and they have their own planted failure in the verifier of verifiers, because a green suite and a suite that tests nothing look far too similar."
         }
       ],
       "enlace": {
