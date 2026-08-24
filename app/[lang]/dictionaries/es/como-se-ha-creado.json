@@ -905,11 +905,11 @@
         },
         {
           "type": "h3",
-          "text": "Las cuatro veces que el metro no medía lo que yo creía"
+          "text": "Las veces que el metro no medía lo que yo creía"
         },
         {
           "type": "p",
-          "text": "Y lo demás no es que el sitio no llegara. Es que para llegar tuve que arreglar cuatro veces el instrumento con el que medía, y las cuatro veces el resultado se leía igual que un aprobado."
+          "text": "Y lo demás no es que el sitio no llegara. Es que para llegar tuve que arreglar el instrumento con el que medía más veces de las que me gustaría contar, y siempre el resultado se leía igual que un aprobado."
         },
         {
           "type": "p",
@@ -926,6 +926,10 @@
         {
           "type": "p",
           "text": "**De alcance.** El cuarto es de otra clase, y por eso es el que más me ha enseñado: no es que el instrumento estuviera roto, es que no existía. Todo lo que medía eran pares de texto sobre fondo, y hay un segundo requisito que casi nadie recuerda: un control también tiene que poder reconocerse como control. El borde de un campo de formulario, que es lo único que dice dónde se escribe, tiene su propio listón. El mío estaba a menos de la mitad, en todos los controles neutros del sitio, y desde la primera versión. No lo vio nadie porque el escáner automático no comprueba esa regla, mi censo medía otra cosa y cada eslabón delegaba en el siguiente, así que la cadena entera terminaba en un sitio donde no había nadie. Y ayudó el nombre que le puse: «censo de pares de contraste» suena a todo. Si lo hubiera llamado «censo de pares de texto», el hueco se habría visto el primer día."
+        },
+        {
+          "type": "p",
+          "text": "**De criterio.** El quinto llegó al día siguiente de arreglar el cuarto, y es el que peor me sabe: el instrumento no estaba roto ni faltaba. Medía, publicaba su cifra, y la cifra era cierta de lo que medía. Lo que fallaba era qué había decidido mirar. Daba por control lo que se pulsa y además se dibuja a sí mismo un borde, y el índice lateral de esta página se dibuja el suyo en una pieza de dentro: así que ni contaba como control ni se miraba como borde. Doce controles invisibles, once por debajo del listón, con el mismo número que acababa de corregir en todos los demás. Y encima la pasada medía sin bajar por la página, así que ese índice ni siquiera existía cuando iba a medirlo: dos motivos independientes para el mismo cero, y cada uno bastaba para producirlo. Ahora la pasada dice cuántos controles encuentra por esa puerta, para que un cero no pueda volver a parecerse a un aprobado."
         },
         { "type": "h3", "text": "La capa que no se puede automatizar" },
         {

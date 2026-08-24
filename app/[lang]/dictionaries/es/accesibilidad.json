@@ -45,7 +45,7 @@
     "items": [
       {
         "title": "Contraste medido en ambos temas",
-        "body": "Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco.",
+        "body": "Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto o una barra translúcida: ahí no hay un color que medir, y se miran a ojo.",
         "wcag": "WCAG 1.4.3 · 1.4.11"
       },
       {

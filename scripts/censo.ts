@@ -221,6 +221,14 @@ for (const slug of PAGE_SLUGS) {
       `  ${etiqueta.padEnd(34)} ${String(c.pares).padStart(3)} pares · ` +
         `${c.sinMedir.length} sobre imagen · metro ${c.metro}`,
     );
+
+    // Y SE NOMBRAN, no solo se cuentan (P68.587, 2026-08-24). Un recuento al pie
+    // —«16 pares sobre imagen quedan fuera del veredicto»— no es accionable: no
+    // dice cuáles, así que nadie los mira nunca y la salvedad se vuelve
+    // permanente. Con el nombre delante, la lista de lo que falta por medir a
+    // mano es una lista, no una cifra.
+    for (const p of c.sinMedir)
+      console.log(`      ↳ sin medir · ${p.ejemplo} · ${p.px}px`);
   }
 }
 
