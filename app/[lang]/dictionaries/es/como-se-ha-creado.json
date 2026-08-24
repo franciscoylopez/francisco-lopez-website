@@ -502,18 +502,18 @@
           "text": "De cada experiencia de mi carrera se cuenta lo mismo tres veces y con tres tamaños distintos: la frase que aparece en la trayectoria, el bullet que va al CV y la versión larga que se lee en la página del caso. Las tres viven juntas en el mismo sitio, en los dos idiomas, precisamente porque se editan mirándose entre ellas."
         },
         {
-          "type": "diagram",
-          "id": "s06",
-          "side": "center",
-          "caption": "El mismo dato baja por tres carriles hasta tres destinos distintos: la web, el PDF y la página del caso, cada uno con la longitud que le toca."
-        },
-        {
           "type": "p",
           "text": "El CV en PDF se produce por código a partir de esos mismos datos, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas del mismo material. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano."
         },
         {
           "type": "p",
           "text": "Y encima hay un guardián que comprueba lo que la estructura sola no puede: que el español y el inglés tengan el mismo número de bullets, que tenga versión larga exactamente quien tiene página propia, y **que una cifra no viva en una longitud y falte en la otra**. Esa tercera es la que había fallado siete veces, con métricas que existían solo en el caso largo, o solo en el CV."
+        },
+        {
+          "type": "diagram",
+          "id": "s06",
+          "side": "center",
+          "caption": "El mismo dato baja por tres carriles hasta tres destinos distintos: la web, el PDF y la página del caso, cada uno con la longitud que le toca."
         },
         { "type": "h3", "text": "El catálogo de piezas se escribe solo" },
         {
