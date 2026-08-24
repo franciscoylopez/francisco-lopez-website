@@ -156,7 +156,7 @@ nazca bien sin pedirlo (D30/D39/D61).
 | Criterio | Umbral | Estado |
 |---|---|---|
 | PageSpeed / Lighthouse | >90 escritorio y móvil | **Cumplido en las catorce.** La cifra y su fecha las sella `npm run psi -- --registro`, y de ahí las lee el artículo (D102) |
-| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** y **cero contornos bajo el 3:1 de WCAG 1.4.11** en las catorce páginas × 2 temas, en reposo y en hover — 386 pares de texto y 354 contornos de control, `npm run censo` (D85/D97); **0 violaciones de axe** |
+| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** y **cero contornos bajo el 3:1 de WCAG 1.4.11** en las catorce páginas × 2 temas, en reposo y en hover — 402 pares de texto y 364 contornos de control, `npm run censo` (D85/D97); **0 violaciones de axe** |
 | SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las catorce |
 
 **Cómo se mide el contraste lo dice `BRAND.md` §Cómo se hace el censo**, entero y con sus

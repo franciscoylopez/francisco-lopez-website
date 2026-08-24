@@ -528,18 +528,70 @@ window.contrastCensus = () => {
         cs[`border${l}Style`] !== "none",
     );
 
+  const dibujaCaja = (cs) =>
+    ladosConBorde(cs).length > 0 || paint(cs.backgroundColor)[3] !== 0;
+
+  /**
+   * LA CAJA DE UN CONTROL PUEDE NO ESTAR EN EL CONTROL (P68.585, 2026-08-24).
+   *
+   * El criterio anterior miraba solo al elemento que casa `CONTROL_SEL`: si él
+   * no dibujaba borde ni relleno, se descartaba por «enlace de texto». El riel
+   * de secciones del artículo dibuja su píldora en un `<span>` HIJO, así que el
+   * `<a>` se descartaba por no tener caja y el `<span>` no se miraba por no
+   * casar el selector. Doce controles invisibles, y once de ellos con el borde
+   * a 1,21:1 contra un umbral de 3 — la misma cifra que D97 arregló en la capa
+   * de componentes y que aquí se quedó fuera, porque el riel es la excepción
+   * viva de `BRAND.md` que no compone `chromeLinkVariants`.
+   *
+   * Es el modo de fallo de siempre: el metro devolvía «cero contornos bajo 3:1»
+   * y eso se leía como un aprobado. La sexta vez en este proyecto.
+   *
+   * SIN UMBRAL DE ÁREA, y eso se midió antes de elegirlo. Sobre seis páginas
+   * servidas, la puerta nueva sin umbral deja entrar exactamente los doce del
+   * riel y ni un falso positivo; los doce ocupan el 0,30 del área de su control,
+   * así que un umbral del 50% los habría perdido y 0/10/25% dan el mismo
+   * resultado. Un número que no cambia nada solo añade algo que se puede
+   * desajustar. El criterio es el que se puede defender: si el control no dibuja
+   * nada y algo dentro sí, ESO es lo que el usuario ve como el control.
+   */
+  const cajaDelHijo = (control) => {
+    let mejor = null;
+    for (const h of control.querySelectorAll("*")) {
+      const hs = getComputedStyle(h);
+      if (!esVisible(h, hs) || !dibujaCaja(hs)) continue;
+      const r = h.getBoundingClientRect();
+      const area = r.width * r.height;
+      if (!mejor || area > mejor.area) mejor = { el: h, area };
+    }
+    return mejor && mejor.el;
+  };
+
   const controles = new Map();
   let controlesIndexados = 0;
+  let indexadosPorHijo = 0;
 
-  for (const el of document.querySelectorAll(CONTROL_SEL)) {
-    const cs = getComputedStyle(el);
-    if (!esVisible(el, cs)) continue;
-    if (el.disabled || el.getAttribute("aria-disabled") === "true") continue;
+  for (const control of document.querySelectorAll(CONTROL_SEL)) {
+    const csControl = getComputedStyle(control);
+    if (!esVisible(control, csControl)) continue;
+    if (control.disabled || control.getAttribute("aria-disabled") === "true")
+      continue;
+
+    // El elemento que se MIDE es el que dibuja la caja, que no siempre es el
+    // que recibe el clic.
+    let el = control;
+    let cs = csControl;
+    if (!dibujaCaja(csControl)) {
+      const hijo = cajaDelHijo(control);
+      // Ni él ni nadie dentro dibuja caja: es un enlace de texto, y a eso no le
+      // aplica 1.4.11 — se identifica por su texto, que ya mide el primer pase.
+      if (!hijo) continue;
+      el = hijo;
+      cs = getComputedStyle(hijo);
+      indexadosPorHijo++;
+    }
 
     const lados = ladosConBorde(cs);
     const relleno = paint(cs.backgroundColor);
-    // Ni caja ni relleno: es un enlace de texto. No aplica 1.4.11.
-    if (lados.length === 0 && relleno[3] === 0) continue;
     if (overImage(el)) continue;
 
     controlesIndexados++;
@@ -654,7 +706,13 @@ window.contrastCensus = () => {
         ? "0 — EL METRO NO ESTÁ MIRANDO LOS CONTORNOS. Esto NO es un aprobado: " +
           "toda página tiene al menos el enlace de salto, que dibuja caja. " +
           "Revisa CONTROL_SEL antes de creerte el resto del informe."
-        : `${controlesIndexados} controles con caja indexados · ${controles.size} contornos distintos medidos`,
+        : // El desglose de la puerta nueva NO es adorno (P68.585): si mañana se
+          // rompe la búsqueda en descendientes, el censo volverá a decir «cero
+          // bajo 3:1» y eso vuelve a parecer un aprobado. Publicando cuántos
+          // entran por ahí, un cero donde había doce se lee como lo que es.
+          `${controlesIndexados} controles con caja indexados` +
+          ` (${indexadosPorHijo} por caja en un descendiente)` +
+          ` · ${controles.size} contornos distintos medidos`,
     controles: [...controles.values()].sort((a, b) => a.holgura - b.holgura),
     bajo3: [...controles.values()]
       .filter((c) => c.nivel !== "OK")
