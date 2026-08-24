@@ -43,6 +43,7 @@ import {
   DosVelocidadesDiagram,
   SinConsentimientoDiagram,
   StackDiagram,
+  TresLongitudesDiagram,
 } from "./como-se-ha-creado-diagrams";
 
 // La página «Cómo se ha creado esta página» (P60, sprint «Cómo se ha creado»,
@@ -125,6 +126,7 @@ export function ComoSeHaCreado({
     s03: () => <CapasColorDiagram lang={lang} />,
     s04: () => <StackDiagram lang={lang} />,
     s05: () => <CascadaDiagram lang={lang} />,
+    s06: () => <TresLongitudesDiagram lang={lang} />,
     s08: () => <SinConsentimientoDiagram lang={lang} />,
     s09: () => <CapasVerificacionDiagram lang={lang} />,
     s10: () => <CIDiagram lang={lang} />,
