@@ -747,7 +747,7 @@ export function ChapterNav({
 
 /** El marco de un diagrama propio: SVG inline con tokens (D54) + pie. El
  * dibujo lo aporta el llamador —es site-specific, vive en
- * `components/site/como-se-ha-creado-diagrams.tsx`—, esto solo pone la caja.
+ * `components/site/como-se-ha-creado-diagrams/`—, esto solo pone la caja.
  *
  * Con `side`, flota junto al párrafo al que pertenece (mismo mecanismo que
  * `Pullquote`) en vez de vivir suelto al final de toda la prosa de la sección

@@ -4490,7 +4490,7 @@ la versión EN de la página tras mover los diagramas, la mitad de cada uno segu
 «selección · 5-10s», «se usa», «busca ausencia»—, hardcodeado en el componente igual que el pie
 ya se había hardcodeado antes de D76. Mismo bug, una capa más adentro, encontrado por la misma
 disciplina que D20 pide: mirar la página en el otro idioma, no asumir que el componente ya lo
-resuelve. Cada diagrama de `como-se-ha-creado-diagrams.tsx` gana un prop `lang` y un objeto
+resuelve. Cada diagrama de `como-se-ha-creado-diagrams/` gana un prop `lang` y un objeto
 `{ es, en }` con su propio texto; `ArticleProse` no lo sabe, solo lo recibe ya resuelto desde
 `como-se-ha-creado.tsx`, que es quien conoce el locale de la página. La misma pasada encontró un
 segundo caso idéntico fuera del SVG: el «N de M» de `ChapterNav` llevaba la palabra «de» escrita
