@@ -43,6 +43,7 @@ import {
   DosVelocidadesDiagram,
   SinConsentimientoDiagram,
   StackDiagram,
+  TresLongitudesDiagram,
 } from "./como-se-ha-creado-diagrams";
 
 // La página «Cómo se ha creado esta página» (P60, sprint «Cómo se ha creado»,
@@ -125,13 +126,14 @@ export function ComoSeHaCreado({
     s03: () => <CapasColorDiagram lang={lang} />,
     s04: () => <StackDiagram lang={lang} />,
     s05: () => <CascadaDiagram lang={lang} />,
-    s07: () => <SinConsentimientoDiagram lang={lang} />,
-    s08: () => <CapasVerificacionDiagram lang={lang} />,
-    s09: () => <CIDiagram lang={lang} />,
+    s06: () => <TresLongitudesDiagram lang={lang} />,
+    s08: () => <SinConsentimientoDiagram lang={lang} />,
+    s09: () => <CapasVerificacionDiagram lang={lang} />,
+    s10: () => <CIDiagram lang={lang} />,
   };
 
   // El `href` de un `{ type: "livestat" }` es un slug relativo, una URL
-  // externa completa (el informe de PageSpeed Insights, s07) o el literal
+  // externa completa (el informe de PageSpeed Insights, s08) o el literal
   // «github»; resolverlo depende del locale (D36, mismo patrón que
   // `DIAGRAMS`).
   const resolveLiveStatHref = (href: string) => {
@@ -157,7 +159,7 @@ export function ComoSeHaCreado({
         </Badge>
       </>
     ),
-    s07: (
+    s08: (
       <>
         <Badge tone="cyan" kind="value">
           SEO 100

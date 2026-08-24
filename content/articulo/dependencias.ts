@@ -48,7 +48,7 @@
  *   una anécdota). No hay nada que sellar ahí, y está bien: no caduca.
  */
 
-/** Las once secciones, en el orden en que se leen. El guardián comprueba que
+/** Las doce secciones, en el orden en que se leen. El guardián comprueba que
  *  esta lista y la del diccionario son la misma: una sección nueva sin declarar
  *  dependencias no pasa. */
 export const SECCIONES = [
@@ -63,6 +63,7 @@ export const SECCIONES = [
   "s09",
   "s10",
   "s11",
+  "s12",
 ] as const;
 
 export type SeccionId = (typeof SECCIONES)[number];
@@ -109,7 +110,7 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D51",
   ],
 
-  // «El sistema de componentes» — la cascada y las SIETE piezas. El directorio
+  // «El sistema de componentes» — la cascada y las OCHO piezas. El directorio
   // por su lista de archivos: es la cifra que el texto publica.
   s05: [
     "DECISIONS.md#D36",
@@ -121,14 +122,34 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "CLAUDE.md#Regla de construcción",
   ],
 
+  // «Los componentes no se escriben a mano, y los datos tampoco» — el CV
+  // generado, las tres longitudes de cada experiencia, el inventario de piezas
+  // derivado del disco y el sellado de este mismo artículo. El guardián de
+  // copy por experiencia es la fuente de la regla de las tres longitudes; el
+  // README de `components/ui/` es el inventario que el texto dice que nadie
+  // mantiene a mano, así que si deja de estar derivado, hay que releer esto.
+  s06: [
+    "DECISIONS.md#D22",
+    "DECISIONS.md#D84",
+    "DECISIONS.md#D89",
+    "scripts/check-experience-copy.ts",
+    "components/ui/README.md",
+    // Las automatizaciones que el texto llama «las que no se ven»: los hooks que
+    // se disparan al editar y quién cierra los PR de dependencias. Del
+    // directorio de hooks se hashea la LISTA: lo que el artículo afirma es que
+    // son dos, no qué hace cada uno.
+    "scripts/hooks/",
+    ".github/workflows/dependabot-automerge.yml",
+  ],
+
   // «Del diseño al código» — la fuente de diseño y su traducción.
-  s06: ["DECISIONS.md#D1"],
+  s07: ["DECISIONS.md#D1"],
 
   // «Lo que no se ve: seguridad, alojamiento y la deuda que no se acumuló» — las
   // cabeceras servidas, la CSP y la nota del HTTP Observatory. Es la sección que
   // P64.5 (CSP estricta con nonces) va a invalidar, y la primera prueba real de
   // que este mecanismo sirve.
-  s07: [
+  s08: [
     "DECISIONS.md#D13",
     "DECISIONS.md#D15",
     "DECISIONS.md#D26",
@@ -140,7 +161,7 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
 
   // «AA es el suelo, y el metro estuvo mal calibrado tres veces» — el censo, las
   // cifras publicadas y la pasada con lector de pantalla.
-  s08: [
+  s09: [
     "DECISIONS.md#D39",
     "DECISIONS.md#D41",
     "DECISIONS.md#D52",
@@ -148,17 +169,15 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D73",
     "scripts/design-review/contrast-census.js",
     "lib/design-values.ts",
-    // El texto publica una CIFRA de páginas («AAA en las doce páginas»), así que
-    // añadir una tiene que mandar a releer esta sección. Hoy ya dice doce donde
-    // hay trece: el artículo es la decimotercera y llegó después de la última
-    // pasada completa (`LAST_A11Y_REVIEW`, 2026-08-20).
+    // El texto publica una CIFRA de páginas («AAA en las catorce páginas»), así
+    // que añadir una tiene que mandar a releer esta sección.
     "lib/routes.ts",
   ],
 
   // «Qué revisa una IA y qué no» — los pasos de CI (una cifra en el texto), los
   // guardianes y los skills. El workflow y el directorio de skills son la
   // fuente de las dos cifras que publica.
-  s09: [
+  s10: [
     "DECISIONS.md#D37",
     "DECISIONS.md#D63",
     "DECISIONS.md#D67",
@@ -170,7 +189,7 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
 
   // «Lo que salió mal, y qué tenían todos en común» — los fallos y la regla que
   // salió de cada uno.
-  s10: [
+  s11: [
     "DECISIONS.md#D60",
     "DECISIONS.md#D63",
     "DECISIONS.md#D70",
@@ -179,7 +198,7 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
 
   // «Ahora empieza lo bueno» — el consentimiento, la política de cookies, la
   // medición y qué viene después.
-  s11: [
+  s12: [
     "DECISIONS.md#D17",
     "DECISIONS.md#D18",
     "DECISIONS.md#D31",

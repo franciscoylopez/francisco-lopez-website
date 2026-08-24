@@ -36,10 +36,7 @@
         "type": "p",
         "text": "Everything I claim below is linked to the code that backs it up. The repository is public, so you don't have to take my word for it: go take a look."
       },
-      {
-        "type": "p",
-        "text": "Let's get into it."
-      }
+      { "type": "p", "text": "Let's get into it." }
     ]
   },
   "index": {
@@ -64,7 +61,7 @@
       "body": [
         {
           "type": "p",
-          "text": "When I decided to take this project on, the first thing I wrote wasn't a line of code: it was who this page was for, and how long they'd spend reading it."
+          "text": "When I decided to take this project on, the first thing I wrote wasn't a line of code, and I didn't run user research either. What I did do was study the profiles of a few people I look up to in Product, read what recruiters write, and get two things straight: that I wanted a first version out fast, and that I wanted a site ready for the different kinds of people who were going to read it. Out of that came a written hypothesis of who reads and for how long, and every decision comes out of that hypothesis."
         },
         { "type": "h3", "text": "Two readers, two speeds" },
         {
@@ -77,36 +74,32 @@
         },
         { "type": "h3", "text": "What those two speeds actually decided" },
         {
+          "type": "p",
+          "text": "They didn't stay on paper: they shaped the pages. The three most-read ones are all built the same way, with a summary up top and the detail underneath."
+        },
+        {
           "type": "diagram",
           "id": "s01",
           "side": "right",
           "caption": "The same scroll, read at two speeds: a scanning reader only reaches the first stretch; a deep reader covers the whole page."
         },
         {
-          "type": "p",
-          "text": "They didn't stay on paper. They drove concrete calls:"
-        },
-        {
           "type": "ul",
           "items": [
-            "**Contact is resolved on one page, and the rest lead to it.** The homepage strip and the close of the About page end in the same button. They used to repeat the address, the phone, LinkedIn and the CV right there, which was saying four times what a whole page says better. Yes, that is one more click than before: in exchange it gives a form instead of opening an email client plenty of people never set up. The exception is the accessibility page, which shows the address written out and doesn't route through the form, because forcing someone to use it to report a barrier would be a trap the day the barrier was the form.",
-            "**The video that opens the About page plays once and freezes on its last frame**, and if the browser reports that its owner prefers less motion, the video isn't even downloaded."
+            "**The homepage has a safety net for the fast reader.** Right below the cover come five milestones, on one screen and with no scrolling: that's what answers «role, seniority and stack» to someone who'll be here ten seconds. What follows, how I work, the track record, the tools and the training, isn't talking to that person any more: it unfolds for whoever keeps going down.",
+            "**The track record does the same, only split across two pages.** The listing sums each role up in what you can take in at a glance, and the job title links to a page of its own where that story is told in full. Nobody has to read the whole case to know whether it's for them, and whoever wants the detail isn't stuck with the summary.",
+            "**And the three system pages open the same way, whatever screen you're on.** The Brand Kit, the [Design System](/design-system) and the [accessibility statement](/accesibilidad) start with a lead paragraph and a row of key figures, and the detail comes after. That row isn't each page's own call: it's a piece of the system that exists for exactly this, so all three behave the same without anyone having to remember."
           ]
-        },
-        {
-          "type": "p",
-          "text": "I didn't run user research. What I did do was study the profiles of a few product references, read recruiter articles, and settle two things: I wanted a fast first version, and I wanted a site built for the different profiles that would read it. Out of that came a written hypothesis about who reads and for how long, and every decision above follows from it."
         },
         { "type": "h3", "text": "What isn't here (yet), and why" },
         {
           "type": "p",
-          "text": "The part of product judgment that gets shown the least, though, is what's visible in what **isn't** there. Four decisions to not do something, each with its reason:"
+          "text": "The part of product judgment that gets shown the least, though, is what's visible in what **isn't** there. Two absences, and neither of them is a «never»: both are waiting for data to say they're needed."
         },
         {
           "type": "ul",
           "items": [
-            "**For months there was no contact form.** A form adds a backend, an email service, a captcha and an attack surface, to solve something a link already solves. I kept it out until I could strip all four away: it arrived at the end, with no captcha (which is an accessibility barrier, and this site publishes a conformance statement) and no external service, because it sends through my own account's email. And it took away the reason I gave for not having one: I said a click on the address was a more honest metric than submissions, and it isn't, it was just the only one I had.",
-            "**Not every one of my experiences gets its own page.** The two in marketing and growth don't, even though there's plenty of material: telling them at the same level would dilute the ordering I want people to read me in, which is product first. And the company where the product I co-founded was born doesn't have its own page either, because it isn't a separable story: it's the first chapter of the other one."
+            "**This isn't a blog.** It's a page with article structure, no post index, no tags, no feed. Setting up a blog isn't publishing once, it's committing to publish, and that commitment gets made when there's something to tell a second time and someone waiting for it. What you're reading is the first measurement of that: if this page gets read, the next decision gets made with real readers on the table instead of with enthusiasm."
           ]
         },
         {
@@ -118,13 +111,12 @@
         {
           "type": "ul",
           "items": [
-            "**This isn't a blog.** It's a page with article structure, no post index, no tags, no feed. Setting up a blog is committing to publish. If a second article ever exists, that decision gets made then.",
-            "**The conversational assistant is on hold, and its limit is already written before it exists**: whatever isn't written on the site publicly doesn't go into its corpus either. A public agent publishes just like a page, but it answers without me there and in sentences I can't review, so it can't serve as a dumping ground for what gets said in an interview and not in the open. Fixing that limit before building it is far cheaper than arguing about it afterward."
+            "**The conversational assistant is on hold, and its limit is already written before it exists**: whatever isn't written on the site publicly doesn't go into its corpus either. A public agent publishes just like a page, but it answers without me there and in sentences I can't review, so it can't serve as a dumping ground for what gets said in an interview and not in the open. Fixing that limit before building it is far cheaper than arguing about it afterward. And what will decide when it gets built isn't the itch to ship it: it's the questions coming in through the form starting to repeat."
           ]
         },
         {
           "type": "p",
-          "text": "None of the four is a technical limitation. They're four places where saying yes would have been the easy call."
+          "text": "Neither of the two is a technical limitation. They're two places where saying yes would have been the easy call, and where saying «not yet» forces something more uncomfortable than saying «no»: writing down what would have to happen to change my mind."
         },
         { "type": "h3", "text": "The rule that shaped everything else" },
         {
@@ -276,7 +268,7 @@
           "type": "ul",
           "items": [
             "**The semantic one.** Cyan is the site's only action color. If something is cyan, it's clickable.",
-            "**The decorative one.** Soft cyan and purple for backgrounds, illustration and charts, with no functional meaning."
+            "**The decorative one.** Cyan and purple, for section backgrounds, illustration and charts, with no functional meaning. Cyan still leads here and purple comes in sparingly, for details that matter. And each one has a soft version, deliberately low-contrast, good only as fill: a pastel is never text or button color."
           ]
         },
         {
@@ -312,7 +304,7 @@
           "type": "quote",
           "style": "pull",
           "side": "right",
-          "text": "Coherence, in a product, isn't that everything looks alike: it's that nothing needs updating twice."
+          "text": "Coherence, in a product, isn't just that the design looks consistent: it's that nothing needs updating twice."
         },
         {
           "type": "p",
@@ -320,15 +312,11 @@
         },
         {
           "type": "h3",
-          "text": "And everything that leaves the browser, from the same source"
+          "text": "Outside its own site, which is where you find out"
         },
         {
           "type": "p",
-          "text": "The PDF résumé is produced by code from the same data as the site, so it ships with the same typeface, the same cyan and exactly the same facts: there's no separate version of the CV and of the page, only programmed adaptations. The cards you see when sharing a link are also generated by code, one per page, instead of being a fixed image uploaded by hand."
-        },
-        {
-          "type": "p",
-          "text": "And the proof that a brand truly exists is that it survives outside its own site. My email signature carries the split monogram, the name in the same typeface as the headings, and the channels, with no banner or flourish. The LinkedIn banner carries that same monogram and the line that heads the homepage. And the GitHub repository's cover opens with that same line again, over the same charcoal background. It's not that the three look alike: it's that all three literally say the same thing, \"From discovery to data,\" which is the site's own headline. When someone finds you in three different places in the same week, that repetition is the only thing that makes all three the same person."
+          "text": "The proof that a brand truly exists is that it survives outside its own site. My email signature carries the split monogram, the name in the same typeface as the headings, and the channels, with no banner or flourish. The LinkedIn banner carries that same monogram and the line that heads the homepage. And the GitHub repository's cover opens with that same line again, over the same charcoal background. It's not that the three look alike: it's that all three literally say the same thing, \"From discovery to data,\" which is the site's own headline. When someone finds you in three different places in the same week, that repetition is the only thing that makes all three the same person."
         }
       ],
       "enlace": {
@@ -358,7 +346,7 @@
           "type": "diagram",
           "id": "s04",
           "side": "right",
-          "caption": "The core that ships (Next 16, strict TypeScript and Tailwind v4) with two pieces that also travel in the bundle: lucide-react, and shadcn/ui, installed and barely used. And two tools that only helped build it: Claude Design for the initial design, Claude Code for development."
+          "caption": "The core that ships (Next 16, strict TypeScript and Tailwind v4) with two pieces that also travel in the bundle: lucide-react, and shadcn/ui, installed and still unopened. And two tools that only helped build it: Claude Design for the initial design, Claude Code for development."
         },
         {
           "type": "p",
@@ -376,14 +364,18 @@
           "type": "p",
           "text": "Both share the same signature, and it's the one that keeps repeating in everything that follows: **the error doesn't show its face.**"
         },
-        { "type": "h3", "text": "Installed, configured, and unused" },
+        { "type": "h3", "text": "Installed for the day it's needed" },
         {
           "type": "p",
-          "text": "Even though the whole design is custom, I decided to keep shadcn/ui as backup: it's installed, configured and barely used. The component layer is my own. That's not purism. It's that shadcn solves a very specific problem (keyboard behavior, focus trapping, portals) and this site didn't have that problem yet, but I wanted to be ready for when it did."
+          "text": "Every component layer on this site is my own. Even so, shadcn/ui has been installed and configured from the start, and to this day not a single one of its components has come in. That's not purism and it isn't an oversight: shadcn solves a very specific problem (keyboard behavior, focus trapping, portals) and the decision I left in writing is that the day that problem shows up, it won't be solved by hand."
         },
         {
           "type": "p",
-          "text": "The rule I left in writing looks forward: the day a dialog, a menu or a combobox is needed, it doesn't get written by hand, it gets pulled in. Hand-writing a modal's focus handling is the easiest way to ship an accessibility problem that looks like a finished component."
+          "text": "So the rule looks forward: the day a dialog, a menu or a combobox is needed, it doesn't get written, it gets pulled in. Hand-writing a modal's focus handling is the easiest way to ship an accessibility problem that looks like a finished component."
+        },
+        {
+          "type": "p",
+          "text": "The last thing I built is a good example of why the rule doesn't fire for everything. The contact form looked like the obvious candidate, and it wasn't: a field with its label and its error message traps nobody's focus and opens no portal, so it shipped as one more piece of the system rather than as a new dependency. The question isn't \"does something already exist?\", it's \"what work of mine does it solve?\""
         },
         { "type": "h3", "text": "Two languages, zero strings inside the code" },
         {
@@ -470,7 +462,7 @@
           "id": "s05",
           "label": "System pieces · live data",
           "source": "components/ui/",
-          "value": "Seven pieces + a page layer",
+          "value": "Eight pieces + a page layer",
           "linkLabel": "See the catalog",
           "href": "design-system"
         }
@@ -497,8 +489,95 @@
     {
       "id": "s06",
       "ordinal": "06",
+      "indexLabel": "Automation",
+      "kicker": "06 — Automation",
+      "title": "Components don't get written by hand, and neither does the data",
+      "body": [
+        {
+          "type": "p",
+          "text": "The previous chapter was about no interface piece being born from a loose string of classes. The same thing happens with data and it shows less: every fact in this project lives in one place and everything else is derived from it. That isn't an engineer's fussiness, it's the only defence I've found against the mistake that has bitten me most often, which is the same fact written in two places and updated in one."
+        },
+        { "type": "h3", "text": "One fact, three lengths" },
+        {
+          "type": "p",
+          "text": "Every role in my career gets told three times at three different sizes: the line that shows up on the track record, the bullet that goes into the CV, and the long version you read on the case page. All three live together in the same place, in both languages, precisely because they get edited looking at each other."
+        },
+        {
+          "type": "p",
+          "text": "The PDF résumé is produced by code from that same data, so it ships with the same typeface, the same cyan and exactly the same facts: there's no separate version of the CV and of the page, only programmed adaptations of the same material. The cards you see when sharing a link are also generated by code, one per page, instead of being a fixed image uploaded by hand."
+        },
+        {
+          "type": "p",
+          "text": "And on top of that there's a guardian checking what structure alone can't: that Spanish and English have the same number of bullets, that the long version exists for exactly whoever has a page of their own, and **that a figure doesn't live in one length and go missing from the other**. That third one is the one that had failed seven times, with metrics that existed only in the long case, or only in the CV."
+        },
+        {
+          "type": "diagram",
+          "id": "s06",
+          "side": "center",
+          "caption": "The same data flows down three lanes to three different destinations: the site, the PDF and the case page, each with the length it needs."
+        },
+        { "type": "h3", "text": "The catalogue of pieces writes itself" },
+        {
+          "type": "p",
+          "text": "I don't maintain the list of system pieces: it's derived from disk by reading the first line of each file, where every piece declares what it solves and which section publishes it. And continuous integration names the one that's still unpublished. It exists because the rule about publishing each new piece had been written down for months and got broken twice in a row: what was missing wasn't the rule, it was someone checking it without depending on my memory."
+        },
+        {
+          "type": "h3",
+          "text": "And this very article, which knows when it has expired"
+        },
+        {
+          "type": "p",
+          "text": "This page is the hardest thing to maintain on the whole site, because it describes the state of a project that keeps changing. Three kinds of sentence expire without warning: the countable figure («AAA across all twelve pages»), the state of the product («there's no contact form yet») and the external measurement («B+, 80 out of 100»). No compiler sees any of them."
+        },
+        {
+          "type": "p",
+          "text": "So **every section of this article declares what it depends on**: a specific decision from the record, a file, a directory. When it all lines up, it gets sealed. And the day one of those sources moves, continuous integration goes red naming the section, inside the very change that moved it. It doesn't say the paragraph is a lie, which it can't know: it says someone has to reread it, which is exactly what nobody was doing before."
+        },
+        {
+          "type": "p",
+          "text": "And the failure, because there's one here too: the guardian watches the declared sources and can't see a figure typed inside the text. On this very page there were three boxes labelled «live figure» and **only one of them was**; the other two had the number written by hand, and both had stopped being true. A careful read found them, not a machine. A mechanism that stops your text from expiring in silence can still let expire exactly what you never asked it to watch."
+        },
+        { "type": "h3", "text": "And the ones you never see" },
+        {
+          "type": "p",
+          "text": "Everything above gets noticed because it produces something you look at. The ones that have saved me the most are nowhere to be seen. Two of them fire on their own **while I write**, the moment a file is touched: one formats it, and the other launches the colour guardian, but only when that particular edit could have broken the invariant. Neither adds anything to the site; both exist because the work they do used to depend on my remembering, and remembering isn't a mechanism."
+        },
+        {
+          "type": "p",
+          "text": "And another one lives **afterwards**, in the least glamorous place of all: deciding who closes the dependency updates that arrive on their own every week. The criterion is a question, can this package change what the visitor receives? If it can't, it merges itself; if it can, or if nobody knows, it waits for a person. And the list says what **is** allowed, never what isn't, because the obvious rule («development ones merge themselves») turned out to be false here: the tool that generates the site's stylesheet is a development dependency. A list of exceptions would have failed open, letting through any new dependency nobody had classified yet."
+        },
+        {
+          "type": "p",
+          "text": "It's the same reasoning as the content policy further on, and that's why it belongs here: **when the cost of being wrong is asymmetric, you enumerate what's allowed and the unknown waits**. And there's a concrete reason not to trust it in this case: none of the automatic steps opens the painted page, so a change in how something looks would sail past all of them without any of them being able to see it."
+        }
+      ],
+      "enlace": {
+        "label": "LINK ·",
+        "parts": [
+          "Decisions ",
+          { "label": "D22", "path": "DECISIONS.md" },
+          ", ",
+          { "label": "D84", "path": "DECISIONS.md" },
+          " and ",
+          { "label": "D89", "path": "DECISIONS.md" },
+          ", the dependency registry in ",
+          {
+            "label": "content/articulo/dependencias.ts",
+            "path": "content/articulo/dependencias.ts"
+          },
+          " and the derived inventory in ",
+          {
+            "label": "components/ui/README.md",
+            "path": "components/ui/README.md"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s07",
+      "ordinal": "07",
       "indexLabel": "From design to code",
-      "kicker": "06 — From design to code",
+      "kicker": "07 — From design to code",
       "title": "From design to code, and the day the design source changed",
       "body": [
         { "type": "h3", "text": "The mockup as a starting point" },
@@ -523,11 +602,40 @@
         },
         {
           "type": "p",
-          "text": "The Claude Design mockup did its job: capture the feel of the page, be easy to translate, and get a first version out fast. Today new sections get designed directly in code, iterating in the browser with the real tokens, and the mockup stays on as a disposable sketchbook for visual moves the system doesn't have yet. It's the first decision in the project I overturned in writing, and I kept the original below it, dated."
+          "text": "The Claude Design mockup did its job: capture the feel of the page, be easy to translate, and get a first version out fast. The mockup stays on as a disposable sketchbook for visual moves the system doesn't have yet. It's the first decision in the project I overturned in writing, and I kept the original below it, dated."
+        },
+        {
+          "type": "h3",
+          "text": "How the design happens now: in the browser, and decided by looking"
         },
         {
           "type": "p",
-          "text": "What does survive from the old method is the habit of deciding by seeing, not by imagining: when more than one direction is possible, it gets prototyped with the real tokens and chosen by looking at both, not by describing them."
+          "text": "The design tool for this site is the browser. A new section gets drawn in code, with the real tokens, and that removes the most expensive step: the translation. There's no pretty version in one tool and a real one on the web, there's a single one, and it gets looked at where it's going to live. That's where the one rule of method I have about this comes from: **if a visual decision can be seen, it doesn't get decided by reading**. When more than one direction is possible I build two or three of them and choose by looking, because between two descriptions the best-explained one tends to win, which isn't the same as the best one."
+        },
+        {
+          "type": "p",
+          "text": "Then comes the part no method ever mentions: the fine-tuning. Not one section came out right the first time, and between that one and the good one there are rounds of looking at it served and writing down what grates, which is almost never what you expected."
+        },
+        {
+          "type": "p",
+          "text": "And there are routines for design, a different family than the ones I describe later: those know about this site and these know nothing about it, they know about design. Three are [Emil Kowalski's](https://github.com/emilkowalski/skills), and the fourth is [Vercel's](https://github.com/vercel-labs/web-interface-guidelines)."
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**prototype**, before writing the component: it builds several versions of the same piece and puts them behind a picker so you can see them live.",
+            "**pick-ui-library**, before installing anything: it forces you to choose from a reasoned list. A dependency goes in in five seconds and stays for years.",
+            "**web-design-guidelines**, once the interface is done: empty states, text that overflows, figures that jitter as they update, margins on a phone with a notch.",
+            "**review-animations**, once any motion is done: it reviews with the default bar set at «this shouldn't be here»."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Three of the four are marked so the AI **can't launch them on its own**, and that mark is the most important thing on the list: they aren't checks, they're decisions. A check can be automated end to end; a decision, at most, can be prepared. The machine puts the options in front of me, built and on screen; choosing is still mine."
+        },
+        {
+          "type": "p",
+          "text": "That leaves the voice, which is the easiest thing to lose working this way, and one written rule governs it: Spanish is the source and English gets reviewed against it, never the other way around, because translating a text with judgment literally produces a correct text with no judgment."
         }
       ],
       "enlace": {
@@ -540,15 +648,35 @@
       }
     },
     {
-      "id": "s07",
-      "ordinal": "07",
+      "id": "s08",
+      "ordinal": "08",
       "indexLabel": "Security and hosting",
-      "kicker": "07 — Security and hosting",
+      "kicker": "08 — Security and hosting",
       "title": "What you don't see: security, hosting, and the debt that didn't pile up",
       "body": [
         {
           "type": "p",
           "text": "A portfolio has no session and holds nobody's data: the only data it receives is whatever someone types into the contact form, and that isn't stored anywhere, it goes to an inbox and that's it. It's exactly the kind of site nobody bothers securing properly, and that's exactly why it seemed like the right site to do it on."
+        },
+        {
+          "type": "h3",
+          "text": "One surface that receives, and everything else leads to it"
+        },
+        {
+          "type": "p",
+          "text": "That the form is the only one is itself a decision: the fewer ways there are to write to me, the fewer places there are to protect. And its format came out of removing. No captcha, which is an accessibility barrier on a site that publishes a conformance statement. No external email service, because it sends through the account that already existed. And it goes nowhere, because it happens on the same origin as the page. The validation that decides is the server's, the email goes out as plain text so the body interprets nothing anyone writes into it, and all of that works with JavaScript switched off."
+        },
+        {
+          "type": "p",
+          "text": "The hole that did exist was where I wasn't looking, in the email headers. The visitor's address goes in the reply field, and that field was being assembled by joining strings together: anyone who wrote their name in the right shape got the email to go out with **two** addresses instead of one, and in one case theirs came first. Hitting «Reply» I'd have answered someone who never wrote to me as well. No scanner found it, the end-of-stage technical review did."
+        },
+        {
+          "type": "p",
+          "text": "With bots the rule is silence: an invisible field, a time floor, and in both cases the screen says «sent» without sending anything, because telling a bot you've caught it only teaches it to dodge you. That's this chapter's failure: the filter also had a ceiling, so anyone who left the tab open and submitted the next day saw the same success screen with their message in the bin. **The silence that's right with a bot is a lie with a person.**"
+        },
+        {
+          "type": "p",
+          "text": "The one page that doesn't lead to the form is the accessibility statement, which shows the address written out with its subject line. Forcing someone to use a form to report a barrier would be a trap the day the barrier was the form."
         },
         { "type": "h3", "text": "The headers: the cheap gaps to close" },
         {
@@ -582,7 +710,19 @@
         },
         {
           "type": "p",
-          "text": "This is the part where honesty matters, because it's where almost everyone overstates. [Mozilla's HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) grades this a B+, 80 out of 100: it loses exactly the twenty points for content policy, and not by oversight. It's **not a strong protection against script injection**: it still allows inline scripts to run, because the site has two that run before paint (the one that picks the theme, and the consent one). What it does do, for free and without breaking anything: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site. The strong version, the one that signs every script on every request, is written down as a pending item tied to the first feature that genuinely needs it. I'd rather have a grade that tells the truth about what it protects than a higher one that sounds better than it is."
+          "text": "Two public scanners grade this and both are worth a look, because they say different things for the same reason. [Security Headers](https://securityheaders.com/?q=franciscolopez.es&followRedirects=on) gives it an **A**: all six headers are served and none is missing. What stops it short of an A+ isn't a header that's absent, it's one line inside a header that's present. And [Mozilla's HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es), which is harsher, deducts twenty points for that same line and leaves the site at **B+**."
+        },
+        {
+          "type": "p",
+          "text": "And here's where honesty matters, because it's where almost everyone overstates: **this policy is not a strong protection against script injection**, since it still allows inline scripts to run. What it does do, for free: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site."
+        },
+        {
+          "type": "p",
+          "text": "What I didn't know when I first wrote this is that **that line has a price**. Removing it means signing every script with a different number on every visit, and that number only exists if the page is built at the moment it's requested; today all fourteen are built beforehand, which is where the performance number just below comes from. The back door would be signing them by their content, and it isn't there: I compiled the site twice without touching a comma and **not one of the twenty-eight variants produced the same signatures**, because inside them are the file names the compiler renames on every pass. And a signature that doesn't match doesn't degrade, it blocks."
+        },
+        {
+          "type": "p",
+          "text": "So it stays at B+, with the date on it and the reason written down: raising it would improve a tool's score by making the visitor's worse. The day there's an assistant answering generated text it'll get paid for whatever it costs."
         },
         {
           "type": "p",
@@ -590,7 +730,7 @@
         },
         {
           "type": "diagram",
-          "id": "s07",
+          "id": "s08",
           "side": "center",
           "caption": "Without consent and without a click on the video, the page makes zero network requests to third parties."
         },
@@ -624,10 +764,10 @@
         },
         {
           "type": "livestat",
-          "id": "s07",
+          "id": "s08",
           "label": "Performance · PageSpeed",
           "source": "npm run psi",
-          "value": "100 desktop · 94-96 mobile",
+          "value": "97-100 desktop · 95-99 mobile",
           "linkLabel": "See the report",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
@@ -686,10 +826,10 @@
       }
     },
     {
-      "id": "s08",
-      "ordinal": "08",
+      "id": "s09",
+      "ordinal": "09",
       "indexLabel": "Accessibility",
-      "kicker": "08 — Accessibility",
+      "kicker": "09 — Accessibility",
       "title": "AA is the floor, and four times the meter measured something other than what I thought",
       "body": [
         {
@@ -706,7 +846,7 @@
         },
         {
           "type": "livestat",
-          "id": "s08",
+          "id": "s09",
           "label": "Contrast · live data",
           "source": "lib/design-values.ts",
           "value": "AAA across all {paginas} pages",
@@ -730,6 +870,10 @@
         {
           "type": "p",
           "text": "That split is the only reason an eight-point checklist is still being met in month fourteen: nobody sustains eight manual checks, but four, yes."
+        },
+        {
+          "type": "p",
+          "text": "Inheriting it isn't always enough either, and the video that opens the About page is the example. It plays once and stops on its last frame. When the browser reports that whoever is watching prefers less motion, it isn't that the video holds still: it's that it never gets downloaded, and a still image is served instead. Switching the animation off and leaving the file downloading would have met the rule just the same, and would have charged a megabyte to the one person who had explicitly asked for the opposite."
         },
         { "type": "h3", "text": "The color rule I'm proudest of" },
         {
@@ -777,7 +921,7 @@
         },
         {
           "type": "diagram",
-          "id": "s08",
+          "id": "s09",
           "side": "center",
           "caption": "Each verification layer catches what the one before it can't see. Only the last one, a person, catches what breaks no rule at all."
         }
@@ -805,10 +949,10 @@
       }
     },
     {
-      "id": "s09",
-      "ordinal": "09",
+      "id": "s10",
+      "ordinal": "10",
       "indexLabel": "What an AI reviews",
-      "kicker": "09 — What an AI reviews",
+      "kicker": "10 — What an AI reviews",
       "title": "What an AI reviews, and what it doesn't",
       "body": [
         {
@@ -867,18 +1011,13 @@
         },
         {
           "type": "diagram",
-          "id": "s09",
+          "id": "s10",
           "side": "center",
           "caption": "The sixteen continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
         },
         {
           "type": "p",
           "text": "It's happened to me five times, and the best of them was this one: I found out that the layer that verifies wasn't itself verified. This repository's guardians check that nobody breaks the rules, and nothing checked that the guardians actually worked. Their failure mode isn't an alarm, it's a green light. Now every guardian carries a fake bad case it has to be able to catch, and if it doesn't catch it, the build fails."
-        },
-        { "type": "h3", "text": "The noise from an outside auditor" },
-        {
-          "type": "p",
-          "text": "I ran the site through several audit tools and got eleven findings back. Six were false positives. What mattered wasn't dismissing them, it was writing down why, and writing it by mechanism rather than by score: \"this tool counts it this specific way\" ages well, while jotting down that day's score forces the same argument again a month later with a different score."
         }
       ],
       "enlace": {
@@ -902,15 +1041,15 @@
       }
     },
     {
-      "id": "s10",
-      "ordinal": "10",
+      "id": "s11",
+      "ordinal": "11",
       "indexLabel": "What went wrong",
-      "kicker": "10 — What went wrong",
+      "kicker": "11 — What went wrong",
       "title": "What went wrong, and what all of it had in common",
       "body": [
         {
           "type": "p",
-          "text": "If you've made it this far you'll have noticed that almost every section ends the same way, with something that broke. That's not humility for show. It's that, while putting this article in order, I noticed the failures looked too much alike, and that resemblance is the one thing in all of this I'd carry to another team."
+          "text": "As in any project, there have been failures here. Some were expected: shipping fast knowing it generates debt is a decision, not an oversight. Others weren't, they simply happened, and I've been fixing, improving and polishing them as I went. And since this is about opening the workshop and showing the engine, here are some of the parts I've had to replace. Putting them in order I ran into something I wasn't expecting: they look too much alike, and that resemblance is the one thing in all of this I'd carry to another team."
         },
         {
           "type": "p",
@@ -936,7 +1075,11 @@
         },
         {
           "type": "p",
-          "text": "And a fifth one that runs the other way, so this doesn't read as \"unify everything\": **before merging two values that look similar, check they don't mean different things.** I found two different corner radii on what looked like the same component and nearly made them match. It wasn't inconsistency: they were two different boxes, and one of them was just missing its name. Unifying them would have broken half the site's visual hierarchy."
+          "text": "**The metric you have is not the metric that matters, and mixing them up is far too easy.** For months this site had no contact form, and I argued that a click on the address was a more honest signal than a submission. It wasn't: it was just the only one I had. This mistake doesn't show its face either, because the argument sounds good; the only tell is that it justified exactly what was already built, and reasons like that are almost always written afterward."
+        },
+        {
+          "type": "p",
+          "text": "And a sixth one that runs the other way, so this doesn't read as \"unify everything\": **before merging two values that look similar, check they don't mean different things.** I found two different corner radii on what looked like the same component and nearly made them match. It wasn't inconsistency: they were two different boxes, and one of them was just missing its name. Unifying them would have broken half the site's visual hierarchy."
         }
       ],
       "enlace": {
@@ -955,10 +1098,10 @@
     }
   ],
   "closing": {
-    "id": "s11",
-    "ordinal": "11",
+    "id": "s12",
+    "ordinal": "12",
     "indexLabel": "Now the good part starts",
-    "kicker": "11 — Closing",
+    "kicker": "12 — Closing",
     "title": "Now the good part starts",
     "body": [
       {
