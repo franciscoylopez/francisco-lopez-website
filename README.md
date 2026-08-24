@@ -86,7 +86,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <details>
 <summary><b>Accesibilidad</b></summary>
 
-- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover, sin excepciones** — 368 pares sobre las catorce páginas × dos temas, con el metro validado en las 28 corridas. La pasada es un comando (`npm run censo`) y lee las páginas del registro, así que una nueva entra sin que nadie se acuerde (`D85`).
+- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover**, sobre las catorce páginas × dos temas y con el metro validado en las 28 corridas. La pasada es un comando (`npm run censo`) y lee las páginas del registro, así que una nueva entra sin que nadie se acuerde (`D85`).
 - El censo de contraste se hace **recorriendo el DOM de la página servida**, no leyendo el CSS: un par que solo existe al componer un velo, o una pastilla de hover, no aparece en ningún inventario de tokens.
 - **Enlace de salto** (WCAG 2.4.1, nivel A), que axe no detecta y por eso se comprueba a mano (`D46`).
 - **Probado con lector de pantalla** (NVDA sobre Chrome), no solo con motores de reglas. Es lo que encuentra los defectos que no violan ningún criterio y que por eso ningún escáner ve; los que encontró están publicados en la propia página de Accesibilidad (`D73`).
