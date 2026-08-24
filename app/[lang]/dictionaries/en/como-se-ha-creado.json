@@ -489,8 +489,8 @@
     {
       "id": "s06",
       "ordinal": "06",
-      "indexLabel": "A single source",
-      "kicker": "06 — A single source",
+      "indexLabel": "Automation",
+      "kicker": "06 — Automation",
       "title": "Components don't get written by hand, and neither does the data",
       "body": [
         {
@@ -530,6 +530,19 @@
         {
           "type": "p",
           "text": "And the failure, because there's one here too: the guardian watches the declared sources and can't see a figure typed inside the text. On this very page there were three boxes labelled «live figure» and **only one of them was**; the other two had the number written by hand, and both had stopped being true. A careful read found them, not a machine. A mechanism that stops your text from expiring in silence can still let expire exactly what you never asked it to watch."
+        },
+        { "type": "h3", "text": "And the ones you never see" },
+        {
+          "type": "p",
+          "text": "Everything above gets noticed because it produces something you look at. The ones that have saved me the most are nowhere to be seen. Two of them fire on their own **while I write**, the moment a file is touched: one formats it, and the other launches the colour guardian, but only when that particular edit could have broken the invariant. Neither adds anything to the site; both exist because the work they do used to depend on my remembering, and remembering isn't a mechanism."
+        },
+        {
+          "type": "p",
+          "text": "And another one lives **afterwards**, in the least glamorous place of all: deciding who closes the dependency updates that arrive on their own every week. The criterion is a question, can this package change what the visitor receives? If it can't, it merges itself; if it can, or if nobody knows, it waits for a person. And the list says what **is** allowed, never what isn't, because the obvious rule («development ones merge themselves») turned out to be false here: the tool that generates the site's stylesheet is a development dependency. A list of exceptions would have failed open, letting through any new dependency nobody had classified yet."
+        },
+        {
+          "type": "p",
+          "text": "It's the same reasoning as the content policy further on, and that's why it belongs here: **when the cost of being wrong is asymmetric, you enumerate what's allowed and the unknown waits**. And there's a concrete reason not to trust it in this case: none of the automatic steps opens the painted page, so a change in how something looks would sail past all of them without any of them being able to see it."
         }
       ],
       "enlace": {

@@ -134,6 +134,12 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D89",
     "scripts/check-experience-copy.ts",
     "components/ui/README.md",
+    // Las automatizaciones que el texto llama «las que no se ven»: los hooks que
+    // se disparan al editar y quién cierra los PR de dependencias. Del
+    // directorio de hooks se hashea la LISTA: lo que el artículo afirma es que
+    // son dos, no qué hace cada uno.
+    "scripts/hooks/",
+    ".github/workflows/dependabot-automerge.yml",
   ],
 
   // «Del diseño al código» — la fuente de diseño y su traducción.

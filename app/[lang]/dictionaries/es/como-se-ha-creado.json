@@ -488,8 +488,8 @@
     {
       "id": "s06",
       "ordinal": "06",
-      "indexLabel": "Una sola fuente",
-      "kicker": "06 — Una sola fuente",
+      "indexLabel": "Automatizaciones",
+      "kicker": "06 — Automatizaciones",
       "title": "Los componentes no se escriben a mano, y los datos tampoco",
       "body": [
         {
@@ -529,6 +529,19 @@
         {
           "type": "p",
           "text": "Y el fallo, porque aquí también lo hay: el guardián vigila las fuentes declaradas y no ve una cifra tecleada dentro del texto. En esta misma página había tres recuadros rotulados «dato en vivo» y **solo uno lo era**; los otros dos llevaban el número escrito a mano y los dos habían dejado de ser ciertos. Los encontró una lectura con calma, no una máquina. Un mecanismo que impide que el texto caduque en silencio puede seguir dejando caducar justo lo que nunca le pediste que mirara."
+        },
+        { "type": "h3", "text": "Y las que no se ven" },
+        {
+          "type": "p",
+          "text": "Todo lo anterior se nota porque produce algo que se mira. Las que más me han ahorrado no se ven en ninguna parte. Dos se disparan solas **mientras escribo**, en cuanto se toca un archivo: una lo formatea, y la otra lanza el guardián de color, pero solo cuando esa edición concreta ha podido romper el invariante. Ninguna de las dos añade nada al sitio; las dos existen porque el trabajo que hacen dependía de que yo me acordara, y acordarse no es un mecanismo."
+        },
+        {
+          "type": "p",
+          "text": "Y otra vive **después**, en el sitio menos glamuroso de todos: quién cierra las actualizaciones de dependencias que llegan solas cada semana. El criterio es una pregunta, ¿puede este paquete cambiar lo que el visitante recibe? Si no, se integra sola; si sí, o si no se sabe, espera a una persona. Y la lista dice qué **sí**, nunca qué no, porque la regla evidente («las de desarrollo se integran solas») resultó ser falsa aquí: la herramienta que genera la hoja de estilos del sitio es una dependencia de desarrollo. Una lista de excepciones habría fallado abierta, dejando pasar sola cualquier dependencia nueva que nadie hubiera clasificado todavía."
+        },
+        {
+          "type": "p",
+          "text": "Es el mismo razonamiento que la política de contenido de más adelante, y por eso lo cuento aquí: **cuando el coste de equivocarse es asimétrico, se enumera lo permitido y lo desconocido espera**. Y hay un motivo concreto para no fiarse en este caso: ninguno de los pasos automáticos abre la página pintada, así que un cambio de aspecto pasaría por delante de todos ellos sin que ninguno pudiera verlo."
         }
       ],
       "enlace": {
