@@ -276,7 +276,7 @@
           "type": "ul",
           "items": [
             "**La semántica.** El cian es el único color de acción del sitio. Si algo es cian, se pulsa.",
-            "**La decorativa.** Cian y morado suaves para fondos, ilustración y gráficos, sin significado funcional."
+            "**La decorativa.** Cian y morado, para fondos de sección, ilustración y gráficos, sin significado funcional. Aquí el cian sigue mandando y el morado entra con cuentagotas: un segundo color usado a la ligera deja de acentuar y empieza a competir. Y de cada uno hay una versión suave, de bajo contraste a propósito, que solo vale de relleno: un pastel nunca es color de texto ni de botón."
           ]
         },
         {
@@ -312,7 +312,7 @@
           "type": "quote",
           "style": "pull",
           "side": "right",
-          "text": "Coherencia, en un producto, no es que todo se parezca: es que nada haya que actualizarlo dos veces."
+          "text": "Coherencia, en un producto, no es solo que el diseño sea homogéneo: es que nada haya que actualizarlo dos veces."
         },
         {
           "type": "p",
@@ -320,15 +320,11 @@
         },
         {
           "type": "h3",
-          "text": "Y todo lo que sale del navegador, desde la misma fuente"
+          "text": "Fuera de su sitio, que es donde se comprueba"
         },
         {
           "type": "p",
-          "text": "El CV en PDF se produce por código a partir de los mismos datos que la web, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano."
-        },
-        {
-          "type": "p",
-          "text": "Y la prueba de que una marca existe de verdad es que sobrevive fuera de su sitio. La firma de mis correos lleva el monograma con su split, el nombre en la tipografía de los titulares y los canales, sin banner ni floritura. El banner de LinkedIn lleva ese mismo monograma y la frase que preside la home. Y la portada del repositorio de GitHub abre otra vez con esa frase, sobre el mismo fondo carbón. No es que las tres se parezcan: es que las tres dicen literalmente lo mismo, «Del discovery al dato», que es el titular del sitio. Cuando alguien te encuentra en tres sitios distintos en la misma semana, esa repetición es lo único que hace que los tres sean la misma persona."
+          "text": "La prueba de que una marca existe de verdad es que sobrevive fuera de su sitio. La firma de mis correos lleva el monograma con su split, el nombre en la tipografía de los titulares y los canales, sin banner ni floritura. El banner de LinkedIn lleva ese mismo monograma y la frase que preside la home. Y la portada del repositorio de GitHub abre otra vez con esa frase, sobre el mismo fondo carbón. No es que las tres se parezcan: es que las tres dicen literalmente lo mismo, «Del discovery al dato», que es el titular del sitio. Cuando alguien te encuentra en tres sitios distintos en la misma semana, esa repetición es lo único que hace que los tres sean la misma persona."
         }
       ],
       "enlace": {
@@ -358,7 +354,7 @@
           "type": "diagram",
           "id": "s04",
           "side": "right",
-          "caption": "El núcleo que se despliega (Next 16, TypeScript estricto y Tailwind v4) con dos piezas que también viajan en el bundle: lucide-react, y shadcn/ui, instalado y casi sin uso. Y dos herramientas que solo ayudaron a construirlo: Claude Design en el diseño inicial, Claude Code en el desarrollo."
+          "caption": "El núcleo que se despliega (Next 16, TypeScript estricto y Tailwind v4) con dos piezas que también viajan en el bundle: lucide-react, y shadcn/ui, instalado y todavía sin estrenar. Y dos herramientas que solo ayudaron a construirlo: Claude Design en el diseño inicial, Claude Code en el desarrollo."
         },
         {
           "type": "p",
@@ -376,14 +372,18 @@
           "type": "p",
           "text": "Las dos tienen la misma firma, y es la que se va a repetir en todo lo que viene después: **el error no da la cara.**"
         },
-        { "type": "h3", "text": "Instalado, configurado y sin usar" },
+        { "type": "h3", "text": "Instalado para el día que haga falta" },
         {
           "type": "p",
-          "text": "Aunque todo el diseño es propio, decidí tener shadcn/ui como soporte: está instalado, configurado y sin apenas uso. La capa de componentes es propia. No es purismo. Es que shadcn resuelve un problema muy concreto (comportamiento de teclado, foco atrapado, portales) y este sitio todavía no tenía ese problema, pero quería estar preparado para cuando lo tuviera."
+          "text": "Toda la capa de componentes de este sitio es propia. Aun así, shadcn/ui está instalado y configurado desde el principio, y hasta hoy no ha entrado ni uno solo de sus componentes. No es purismo ni es olvido: shadcn resuelve un problema muy concreto (comportamiento de teclado, foco atrapado, portales) y la decisión que dejé escrita es que ese problema, el día que aparezca, no se resuelve a mano."
         },
         {
           "type": "p",
-          "text": "La regla que dejé escrita mira hacia delante: el día que haga falta un diálogo, un menú o un combobox, no se escribe a mano, se trae. Escribir a mano el manejo del foco de un modal es la forma más fácil de publicar un problema de accesibilidad con aspecto de componente terminado."
+          "text": "Así que la regla mira hacia delante: el día que haga falta un diálogo, un menú o un combobox, no se escribe, se trae. Escribir a mano el manejo del foco de un modal es la forma más fácil de publicar un problema de accesibilidad con aspecto de componente terminado."
+        },
+        {
+          "type": "p",
+          "text": "Lo último que he construido es un buen ejemplo de por qué la regla no dispara con todo. El formulario de contacto parecía el candidato obvio, y no lo era: un campo con su etiqueta y su mensaje de error no atrapa el foco de nadie ni abre un portal, así que salió como una pieza más del sistema en vez de como una dependencia nueva. La pregunta no es «¿existe algo hecho?», es «¿qué trabajo mío resuelve?»."
         },
         { "type": "h3", "text": "Dos idiomas, cero frases dentro del código" },
         {
@@ -874,11 +874,6 @@
         {
           "type": "p",
           "text": "Me ha pasado cinco veces, y la mejor de todas fue esta: descubrí que la capa que verifica no estaba verificada. Los guardianes de este repositorio comprueban que nadie se salte las reglas, y no había nada que comprobara que los guardianes funcionaban. Su modo de fallo no es una alarma, es una luz verde. Ahora cada guardián tiene un caso malo de mentira que tiene que ser capaz de cazar, y si no lo caza, falla la integración."
-        },
-        { "type": "h3", "text": "El ruido del auditor externo" },
-        {
-          "type": "p",
-          "text": "Pasé el sitio por varias herramientas de auditoría y me devolvieron once hallazgos. Seis eran falsos positivos. Lo importante no fue descartarlos, fue escribir por qué se descartaban, y escribirlo por mecanismo y no por cifra: «esta herramienta cuenta esto de esta manera» envejece bien, mientras que apuntar la puntuación de aquel día obliga a discutirlo otra vez dentro de un mes con otra puntuación distinta."
         }
       ],
       "enlace": {
@@ -910,7 +905,7 @@
       "body": [
         {
           "type": "p",
-          "text": "Si has llegado hasta aquí habrás notado que casi todas las secciones terminan igual, con algo que se rompió. No es humildad de escaparate. Es que, al ordenar este artículo, me di cuenta de que los fallos se parecían demasiado entre sí, y ese parecido es lo único de todo esto que me llevaría a otro equipo."
+          "text": "Como en todo proyecto, aquí ha habido fallos. Algunos estaban previstos: lanzar rápido y sabiendo que eso genera deuda es una decisión, no un descuido. Otros no lo estaban, simplemente ocurrieron, y los he ido solventando, mejorando y puliendo sobre la marcha. Y como esto va de abrir el taller y enseñar el motor, aquí van algunas de las piezas que he tenido que cambiar. Ordenándolas me encontré con algo que no esperaba: se parecen demasiado entre sí, y ese parecido es lo único de todo esto que me llevaría a otro equipo."
         },
         {
           "type": "p",
