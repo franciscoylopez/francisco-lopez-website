@@ -171,7 +171,7 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 | 8 | **Interfaz mecánica**: estados vacíos, desbordamiento, hidratación, cifras tabulares, safe areas | Skill de Web Interface Guidelines, **antes** de `design-review` |
 | 9 | **`npm run gate:html`** si el cambio se decía transparente | Diff vacío = transparente por construcción (D42/D45) |
 | 10 | **Los checks de CI en verde** | El PR |
-| 11 | **Figura con lienzo escalado**: rótulo ≥11px **pintados a 360** | Un `viewBox` escala su texto y el `font-size` computado no lo dice, así que se mide `fs × (ancho pintado / viewBox)` sobre servido. Y su `/prototype` se ve a 360, no solo a escritorio (P68.56) |
+| 11 | **Figura con lienzo escalado**: rótulo ≥11px **pintados a 360** | `npm run check:figuras` en CI: un `viewBox` escala su texto y el `font-size` computado no lo dice (P68.59). Y su `/prototype` se ve a 360, no solo a escritorio (P68.56) |
 
 ## Columna B — no bloquea el envío
 

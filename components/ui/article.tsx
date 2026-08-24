@@ -806,7 +806,12 @@ export function DiagramPanel({
             : "mt-[1.5rem] w-full",
       )}
     >
-      <div className="flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
+      {/* `@container` (P68.59): los diagramas cambian de disposición según el
+          ancho del PANEL, no el de la ventana — media columna a 1024 y columna
+          entera a 360 son el mismo hueco. Va en este div y no en el `<figure>`
+          a propósito: `container-type: inline-size` implica contención, y el
+          `<figure>` es quien flota. Aquí dentro no hay geometría que romper. */}
+      <div className="@container flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
         {children}
       </div>
       <figcaption

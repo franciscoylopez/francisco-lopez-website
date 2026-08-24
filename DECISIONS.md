@@ -141,6 +141,7 @@
 - D103 · El ruido de `check:articulo` no eran los falsos positivos, era tener que ir a leer
 - D104 · El censo mide dónde está pintada la caja, no quién recibe el clic — y la pasada se desplaza antes de medir
 - D105 · El presupuesto de contexto vigila también las skills, y con techo POR ENTRADA
+- D106 · El umbral de una figura es su propio lienzo, y quien lo vigila lee el prerender, no el navegador
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6022,3 +6023,62 @@ El script tenía anotado que su próximo apretón del techo general era a 12.000
 techo que no deja escribir no produce compactación, produce el reflejo de subirlo. Lo que se
 sostiene es la holgura: techo a **12.200** (~240 palabras, cinco o seis reglas) y objetivo nuevo
 a **11.800**, porque un objetivo ya cumplido deja de tirar.
+
+## D106 · El umbral de una figura es su propio lienzo, y quien lo vigila lee el prerender, no el navegador — 2026-08-24
+
+**11px dentro de un `viewBox` no son 11 píxeles.** Son 11 unidades de dibujo, y lo que llega a
+la pantalla es `font-size × (ancho pintado / ancho del viewBox)`. Los siete diagramas del
+artículo pintaban su rótulo entre **5,0 y 8,2px a 360** desde que existen. No lo detectó nada
+porque cae en el hueco de tres metros a la vez: `viewport-verifier` mira desbordamientos y un
+texto pequeño no produce ninguno; axe da `incomplete` sobre `<text>` de SVG (D67) y no mide
+tamaño; y el `font-size` **computado dice 11 en todos los viewports**, así que un guardián que
+leyera el CSS no vería nada. La escala del `viewBox` no aparece en ninguna de las tres.
+
+**La salida son dos lienzos por figura, no uno elástico** (elegida con `/prototype` entre cuatro
+direcciones). Cada diagrama tiene una segunda disposición estrecha de 280 unidades y se conmuta
+con una container query: sin JavaScript y sin dejar de ser Server Component. La finalista
+—pintar a tamaño natural y desplazar— dejaba tres diagramas por debajo del suelo igual, porque
+un rótulo de 9 unidades a escala 1:1 son 9px.
+
+**EL UMBRAL ES EL `viewBox`, NO UN BREAKPOINT, y esa es la decisión de verdad.** Un dibujo de
+620 unidades necesita 620px pintados para que su rótulo llegue a 11; uno de 380 necesita 380.
+Con un umbral común quedaba un agujero que no se ve probando a 360/768/1536 a ancho completo:
+una figura **flotada** (`sm:w-1/2`) en un viewport de 1024 tiene ~437px de contenido, así que
+enseñaba el lienzo ancho y pintaba **8,3px**. Por eso el umbral viaja al lado del `viewBox` —de
+donde sale— y por eso es container query: lo que decide es el ancho del **panel**, no el de la
+ventana. Media columna a 1024 y columna entera a 360 son el mismo hueco.
+
+**Y una container query mide la caja de CONTENIDO**, así que al umbral no se le suma el padding
+del panel. Sumárselo —el primer intento— desplazaba los siete umbrales 48px y mandaba al dibujo
+de móvil huecos donde el ancho cabía de sobra.
+
+**No era solo de móvil, y esa parte no la pedía la tarea.** Cinco de los siete no llegaban a
+11px **ni a 1536**: subrótulos de 9 unidades, un rol de nodo de 10,5, y tres figuras cuyo
+`max-w` era **más estrecho que su propio lienzo** —una escala <1 permanente, que ningún viewport
+puede arreglar—. De ahí la regla que queda: **el tope de un SVG nunca por debajo de su
+`viewBox`**, y es la rotura que prueba el guardián.
+
+**El guardián va en CI, no en el censo**, que es donde la tarea lo suponía por analogía («ya
+abre navegador y ya recorre las páginas»). Dos razones, y la segunda pesa más que la primera:
+no hace falta navegador —el `viewBox`, el tope, el umbral y el tamaño de cada rótulo están en
+el HTML **prerenderizado**, así que son atributos y no resultados de layout—; y del censo habría
+heredado **el eje equivocado**, porque mide color en un solo viewport a propósito (D85) y esto
+es justo un problema de ancho. `npm run check:figuras` corre en cada PR y cuesta segundos.
+
+**Qué juzga y qué solo nombra.** Un lienzo que **encoge** depende del hueco, y ese se juzga. Uno
+que **se desplaza** a ancho fijo —anclado por `min-w` dentro de un `overflow-x-auto`— no: su
+ancho no lo decide el hueco, así que la palanca no es estrecharlo sino re-renderizarlo, que en
+el artefacto de Emendu (D54) significa otra tipografía de Mermaid y otro layout. Se mide, se
+publica su cifra **en cada corrida** y no tumba el gate. Que salga por pantalla siempre es la
+mitad de la decisión: sin eso sería un alcance recortado en silencio.
+
+Lo encontró en su primera pasada, y es el argumento de que valía la pena: ese artefacto pinta
+sus 44 rótulos a **5,4px**, peor que lo que se acababa de arreglar y desde antes.
+
+**Fuera del contrato, dicho en voz alta:** por debajo de 360 no se juzga, porque el suelo de la
+DoD es 360. A 320 los lienzos estrechos pintan 9,7px, y cerrarlo pediría lienzos de 244 unidades
+en vez de 280.
+
+**Validado contra el navegador antes de creérselo** (`BRAND.md` §Cómo medir, punto 1): predice
+11,2px a 360 y 11,0 / 12,2 a 1280, que es exactamente lo que mide `agent-browser` sobre el sitio
+servido. Si deja de cuadrar, el fallo es del script.

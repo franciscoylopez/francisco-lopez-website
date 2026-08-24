@@ -183,6 +183,11 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
   no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, y que los `@id`
   del JSON-LD **resuelven** — cosa que ningún validador externo hace. Contraste y objetivo
   táctil quedan fuera a propósito: se heredan, y necesitan pintar.
+- **`npm run check:figuras`**: el rótulo **pintado** de toda figura con lienzo
+  escalado, sobre el prerender de las 28 variantes. `text-[11px]` dentro de un
+  `viewBox` son 11 unidades, no 11 píxeles, y esa escala no está en el
+  `font-size` computado (P68.59). En CI, no en el censo: no necesita navegador.
+  Un lienzo que se desplaza a ancho fijo se mide y se nombra, no se juzga.
 - **`npm test`**: la lógica del formulario, que es la primera del sitio: validación,
   saneado de cabeceras y decisiones de la Server Action, medidas sobre el mensaje que
   nodemailer **emite**. En CI, al revés que `psi` y el censo: no necesita navegador (D101).

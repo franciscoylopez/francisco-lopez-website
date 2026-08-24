@@ -200,6 +200,18 @@ jobs:
       - name: Marco de página
         run: npm run check:marco
 
+      # El rótulo PINTADO de toda figura con lienzo escalado (P68.59). Un
+      # `text-[11px]` dentro de un `viewBox` son 11 unidades de dibujo, no 11
+      # píxeles: los siete diagramas del artículo llevaban desde que existen
+      # pintando entre 5,0 y 8,2px a 360 y no lo vio nadie, porque cae justo en
+      # el hueco de tres metros —`viewport-verifier` mira desbordamientos, axe no
+      # mide tamaño de texto, y el `font-size` computado dice 11 en todos los
+      # viewports—. Va aquí y no en el censo, que es donde la tarea lo suponía,
+      # porque NO necesita navegador: el `viewBox`, el tope, el umbral de la
+      # container query y el tamaño de cada rótulo están en el prerender.
+      - name: Rótulo de las figuras
+        run: npm run check:figuras
+
       # Y el que mira a todos los demás: a cada guardián le pasa un caso malo
       # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que
       # funciona — el modo de fallo de un guardián es una luz verde, y el censo de

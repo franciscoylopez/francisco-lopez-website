@@ -173,6 +173,19 @@ const CASOS: Caso[] = [
     mutar: (o) => o.replace(/<a href="#main"[\s\S]*?<\/a>/, ""),
   },
   {
+    guardian: "check:figuras",
+    rotura:
+      "un diagrama se queda con el tope más estrecho que su propio lienzo",
+    // Segundo caso que muerde el build, por la misma razón que el de arriba: la
+    // entrada de este guardián es el HTML emitido. Y la rotura elegida NO es
+    // inventada — es exactamente el fallo que tenían s01, s03 y s09 antes de
+    // P68.59: un `max-w` por debajo del `viewBox` es una escala <1 permanente,
+    // así que el rótulo no llega a 11px pintados ni con toda la pantalla.
+    // Con 300 sobre un lienzo de 540, el rótulo de 11 unidades cae a 6,1px.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) => o.replace("max-w-[540px]", "max-w-[300px]"),
+  },
+  {
     guardian: "check:articulo",
     rotura:
       "cambia una fuente que el artículo describe y su sección no se revisa",
