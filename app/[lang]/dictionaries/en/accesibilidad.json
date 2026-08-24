@@ -45,7 +45,7 @@
     "items": [
       {
         "title": "Contrast measured in both themes",
-        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states.",
+        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single color to measure there, so they get looked at by eye.",
         "wcag": "WCAG 1.4.3 · 1.4.11"
       },
       {
