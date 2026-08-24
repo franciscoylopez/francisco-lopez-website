@@ -186,6 +186,44 @@ const CASOS: Caso[] = [
         '{ "label": "D29", "path": "DECISIONS.md", "line": 844 }',
       ),
   },
+  {
+    guardian: "check:articulo",
+    rotura: "un «dato en vivo» vuelve a tener su cifra tecleada",
+    // La regresión de P68.495. La pieza se llama `livestat` y su etiqueta dice
+    // «dato en vivo»; dos de los tres lo prometían con un número a mano, y los
+    // dos ya mentían cuando alguien los leyó. Nada se rompe al teclearlo: se
+    // publica una cifra que envejece sola.
+    archivo: "app/[lang]/dictionaries/es/como-se-ha-creado.json",
+    mutar: (o) =>
+      o.replace(
+        '"value": "{piezasNucleo} piezas + capa de página"',
+        '"value": "Ocho piezas + capa de página"',
+      ),
+  },
+  {
+    guardian: "check:articulo",
+    rotura: "el diagrama de CI se queda un paso corto respecto al workflow",
+    // El pie deriva su cifra de `ci.yml` y las pastillas son un dibujo: sin la
+    // comparación, un paso nuevo movería el pie y dejaría el diagrama corto sin
+    // que se rompiera nada. Muerde la lista ES; el guardián mira los dos idiomas.
+    archivo: "content/articulo/ci-steps.ts",
+    mutar: (o) => o.replace('          { n: "Tests", cat: "patron" },\n', ""),
+  },
+  {
+    guardian: "test",
+    rotura:
+      "el Reply-To vuelve a componerse concatenando y cuela una segunda dirección",
+    // El arnés de tests entra aquí en cuanto entra en CI (P68.494): a partir de
+    // ese momento es un gate, y un gate cuyo modo de fallo es una luz verde
+    // necesita su caso malo como cualquier otro. El caso es la regresión de
+    // P68.47 literal, que es el bug que motivó escribir los tests.
+    archivo: "lib/mailer.ts",
+    mutar: (o) =>
+      o.replace(
+        "replyTo: { name: nombre, address: replyTo },",
+        "replyTo: `${nombre} <${replyTo}>`,",
+      ),
+  },
 ];
 
 /**

@@ -470,7 +470,7 @@
           "id": "s05",
           "label": "Piezas del sistema · dato en vivo",
           "source": "components/ui/",
-          "value": "Ocho piezas + capa de página",
+          "value": "{piezasNucleo} piezas + capa de página",
           "linkLabel": "Ver el catálogo",
           "href": "design-system"
         }
@@ -770,8 +770,8 @@
           "type": "livestat",
           "id": "s08",
           "label": "Rendimiento · PageSpeed",
-          "source": "npm run psi",
-          "value": "97-100 escritorio · 95-99 móvil",
+          "source": "npm run psi · {psiFecha}",
+          "value": "{psiEscritorio} escritorio · {psiMovil} móvil",
           "linkLabel": "Ver el informe",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
@@ -800,10 +800,14 @@
           "side": "center",
           "caption": "El panel de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con los cinco archivos peor puntuados que señaló el ratio de deuda técnica."
         },
-        { "type": "h3", "text": "Y una ausencia, dicha en voz alta" },
+        { "type": "h3", "text": "Los tests llegaron cuando llegó la lógica" },
         {
           "type": "p",
-          "text": "Este repositorio no tiene tests. No es un olvido, es una decisión. No hay lógica de negocio que probar: hay datos, componentes de presentación y reglas, y las reglas ya las verifican los guardianes en cada push. El día que aparezca la primera función con condiciones de verdad, entran los tests. Escribir un test que comprueba que un título renderiza un título habría sido teatro, y teatro caro de mantener."
+          "text": "Durante un tiempo este repositorio no tuvo tests, y no era un olvido: era una decisión fijada hasta el día que apareciera la primera función con condiciones de verdad. Apareció con el formulario de contacto, que valida lo que escribe un desconocido, compone una cabecera de correo y decide si un envío se acepta."
+        },
+        {
+          "type": "p",
+          "text": "Se prueba eso y nada más: la validación, el saneado de las cabeceras y las decisiones del envío. Y se prueba sobre el correo que sale, no sobre las instrucciones que se le dan a quien lo manda. El mensaje se genera entero, con su codificación y su entrecomillado, porque el agujero de ahí arriba era justo una cabecera de aspecto razonable que acababa con dos direcciones: afirmar que las instrucciones eran correctas lo habría vuelto a aprobar. Corren en cada PR y tienen su propio caso malo en el verificador de verificadores, porque una suite en verde y una suite que no prueba nada se parecen demasiado."
         }
       ],
       "enlace": {
@@ -1021,7 +1025,7 @@
           "type": "diagram",
           "id": "s10",
           "side": "center",
-          "caption": "Los dieciséis pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
+          "caption": "Los {pasosCI} pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
         },
         {
           "type": "p",

@@ -470,7 +470,7 @@
           "id": "s05",
           "label": "System pieces · live data",
           "source": "components/ui/",
-          "value": "Eight pieces + a page layer",
+          "value": "{piezasNucleo} pieces + a page layer",
           "linkLabel": "See the catalog",
           "href": "design-system"
         }
@@ -774,8 +774,8 @@
           "type": "livestat",
           "id": "s08",
           "label": "Performance · PageSpeed",
-          "source": "npm run psi",
-          "value": "97-100 desktop · 95-99 mobile",
+          "source": "npm run psi · {psiFecha}",
+          "value": "{psiEscritorio} desktop · {psiMovil} mobile",
           "linkLabel": "See the report",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
@@ -804,10 +804,14 @@
           "side": "center",
           "caption": "This repository's Qlty dashboard: an A grade in maintainability and security, with the five worst-scored files the technical debt ratio pointed at."
         },
-        { "type": "h3", "text": "And one absence, said out loud" },
+        { "type": "h3", "text": "The tests arrived when the logic did" },
         {
           "type": "p",
-          "text": "This repository has no tests. It's not an oversight, it's a decision. There's no business logic to test: there's data, presentational components, and rules, and the guardians already verify the rules on every push. The day the first function with real branching conditions shows up, tests come with it. Writing a test that checks a heading renders a heading would have been theater, and expensive theater to maintain."
+          "text": "For a while this repository had no tests, and it wasn't an oversight: it was a decision that held until the day the first function with real branching conditions showed up. It showed up with the contact form, which validates what a stranger types, composes an email header, and decides whether a submission is accepted."
+        },
+        {
+          "type": "p",
+          "text": "That, and nothing else, is what gets tested: validation, header sanitising, and the send decisions. And it gets tested on the email that goes out, not on the instructions handed to whatever sends it. The message is generated in full, with its encoding and its quoting, because the hole just above was precisely a reasonable-looking header that ended up carrying two addresses: asserting that the instructions were right would have waved it through again. They run on every PR and they have their own planted failure in the verifier of verifiers, because a green suite and a suite that tests nothing look far too similar."
         }
       ],
       "enlace": {
@@ -1021,7 +1025,7 @@
           "type": "diagram",
           "id": "s10",
           "side": "center",
-          "caption": "The sixteen continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
+          "caption": "The {pasosCI} continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
         },
         {
           "type": "p",

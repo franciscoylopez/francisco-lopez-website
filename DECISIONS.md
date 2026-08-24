@@ -136,6 +136,9 @@
 - D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro
 - D99 · La auditoría de rendimiento recorre el registro, y un ahorro estimado no es un ahorro
 - D100 · `space-y` de Tailwind v4 va dentro de `:where()`, así que cualquier hijo con `m-0` lo anula
+- D101 · El arnés de tests entra cuando aparece la lógica, y se mide sobre lo que el código EMITE
+- D102 · «Dato en vivo» era una promesa, no un mecanismo: la cifra se deriva o se sella, nunca se teclea
+- D103 · El ruido de `check:articulo` no eran los falsos positivos, era tener que ir a leer
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5724,3 +5727,206 @@ también.
 **Y va al artículo.** Es la tercera sorpresa de estrenar Tailwind v4 y comparte firma con
 las dos que s04 ya contaba —«el error no da la cara»—, con el añadido de ser la única
 descubierta **después** de publicar el capítulo que habla de ellas.
+
+---
+
+## D101 · El arnés de tests entra cuando aparece la lógica, y se mide sobre lo que el código EMITE — 2026-08-24
+
+**La condición se había escrito antes, y por eso esto no es una decisión nueva sino una
+condición cumpliéndose.** El PRD llevaba desde V3 diciendo «tests cuando aparezca la primera
+lógica de negocio real», y el sitio pasó año y medio sin uno solo con razón: hay datos,
+componentes de presentación y reglas, y las reglas ya las verifican los guardianes en cada
+push. Un test que comprueba que un título renderiza un título es teatro caro de mantener.
+
+Lo que cambió es que **el formulario de `/contacto` trajo la lógica**: valida entrada de un
+tercero, compone una cabecera de correo y decide si un envío se acepta. Y no es teórico: el
+`sprint-review` del 2026-08-23 encontró ahí **dos fallos que un test habría cazado** — la
+inyección en `Reply-To` por concatenación (P68.47) y el sello caducado que contestaba
+«enviado» a alguien cuyo mensaje se había tirado (P68.48). Dos bugs en la única superficie
+que recibe algo escrito por otra persona, encontrados por revisión y no por el código.
+
+**Runner: Vitest**, que es el que recomienda la guía de Next 16 (`node_modules/next/dist/docs/`).
+Las alternativas se descartaron midiendo, no por gusto: `node:test` no habría costado ni una
+dependencia, pero su `mock.module()` sigue tras `--experimental-test-module-mocks` en Node 22,
+que es el de CI, y sin mocks solo se puede probar la validación pura — justo lo que no
+motivaba la tarea. La tercera vía, inyectar dependencias en la Server Action, era tocar
+código de producción para poder probarlo.
+
+**Y se instala sin `jsdom`, sin `@testing-library` y sin `@vitejs/plugin-react`.** El alcance
+no tiene ni un componente: montar un DOM falso para código que nunca toca el DOM es pagar un
+árbol de dependencias por nada. `vite-tsconfig-paths`, que la guía de Next sigue
+recomendando, **también sobra**: Vite ya resuelve los paths del tsconfig de forma nativa y lo
+avisa él mismo por consola. Quedó **una** dependencia de desarrollo.
+
+### Lo que hace estos tests distintos de una suite de cobertura
+
+**Se mide sobre el mensaje que nodemailer EMITE, no sobre el objeto que se le pasa.** El bug
+de P68.47 era exactamente que un objeto de aspecto razonable producía dos direcciones en la
+cabecera; afirmar la forma del objeto habría vuelto a aprobarlo. El transporte SMTP se
+sustituye por el `streamTransport` del propio nodemailer, que devuelve el RFC 822 completo en
+un búfer sin abrir un socket: la codificación de cabeceras, el entrecomillado y el plegado
+son los de verdad.
+
+**Y el metro se validó contra el caso conocido antes de fiarse de él** (`BRAND.md` §Cómo
+medir, regla 3): con `x>,<atacante@evil.com`, el `Reply-To` emitido es
+`Marta Ruiz <"x , atacante"@evil.com>`, una sola dirección.
+
+**Las 54 aserciones se validaron rompiendo el código.** Nueve mutaciones en `lib/mailer.ts`,
+`lib/contact-form.ts` y la Server Action; las nueve salen rojas. La primera pasada dio
+**ocho de nueve**, y el fallo es el interesante: el test del salto de línea en las cabeceras
+seguía pasando con `header()` quitado, porque **quien defiende ahí es nodemailer**, que
+codifica el CRLF en RFC 2047. El test afirmaba una propiedad cierta que se cumple sola. Se
+reescribió para afirmar lo que `header()` sí cambia en el mensaje emitido (que el salto no
+viaje **ni codificado**), y entonces mordió. *Es D70 otra vez: el modo de fallo de un test es
+una luz verde.*
+
+**Por eso el arnés entra en `check:guardianes` el mismo día que entra en CI**, con su caso
+malo propio: la regresión de P68.47 literal. Un gate cuyo verde no se ha comprobado no es un
+gate, y una suite que no prueba nada se parece demasiado a una suite verde.
+
+### Dónde queda
+
+**Paso 17 de CI, detrás de `Lint`**, con los que miran el código fuente y antes de los que
+miran artefactos derivados. Entra en CI y no a demanda —al revés que `psi` o el censo—
+porque no necesita navegador ni red y tarda menos de un segundo. Un test que no corre en cada
+PR no es un guardián, es documentación.
+
+**Y el recuento de pasos sigue escrito a mano en cinco sitios** (el diagrama de §s10, su pie
+en los dos diccionarios, `PRD-Live.md`, `CLAUDE.md` y `README.md`). Quince, luego dieciséis,
+ahora diecisiete. Derivarlo del propio `ci.yml` es **P68.495**, la tarea siguiente, y este
+cambio es su cuarto caso medido.
+
+---
+
+## D102 · «Dato en vivo» era una promesa, no un mecanismo: la cifra se deriva o se sella, nunca se teclea — 2026-08-24
+
+**El hallazgo, y quién lo encontró.** La pieza que el artículo usa para publicar una cifra
+sobre el propio sitio se llama `livestat` y su etiqueta dice, literalmente, «dato en vivo».
+Había tres, y **solo uno lo era**: el del contraste, que interpola `{paginas}` desde
+`lib/design-values.ts`. Los otros dos eran números escritos a mano dentro de un `value`, y
+los dos **ya mentían**: «siete piezas» con ocho en disco desde que existe `field.tsx`, y
+«100 escritorio · 94-96 móvil» medido con doce páginas cuando ya había catorce.
+
+No los encontró ningún guardián. Los encontró Francisco leyendo el artículo con calma. Y ese
+es el punto: `check:articulo` (D84) gira entero alrededor de las dependencias **declaradas**,
+y **un número tecleado dentro de un `value` no declara nada**. No es que el guardián fallara;
+es que ese hueco quedaba fuera de su forma.
+
+### Las tres cifras no se derivan igual, y esa es la parte reutilizable
+
+- **Piezas del núcleo** y **pasos de CI** se leen del disco al construir (`lib/figures.ts`).
+  La verdad está en `components/ui/` —cada archivo declara su grupo en su primera línea
+  (D89)— y en `.github/workflows/ci.yml`. Añadir una pieza o un paso mueve la cifra sin que
+  nadie se acuerde.
+- **La nota de PageSpeed no se puede derivar**: medir necesita pintar y necesita producción
+  (D49/D99). Así que **se sella**, como hace el censo: `npm run psi -- --registro` deja el
+  rango de cada estrategia con su fecha en `content/psi/registro.json`, y el artículo lo lee
+  de ahí. Un número medido sigue siendo un número medido, pero deja de poder envejecer en
+  silencio, porque llega con su fecha pegada y el sitio la publica al lado.
+
+**Y el sello se niega a escribir una pasada parcial.** Ni sobre un Preview, ni con una sola
+estrategia, ni con un solo fallo: dice por qué no ha sellado y deja el sello anterior. Un
+rango sacado de media auditoría se lee exactamente igual que uno bueno, que es el modo de
+fallo de toda esta familia.
+
+### Los pasos de CI: el recuento sale del workflow y el dibujo se compara con él
+
+El pie de §s10 decía «los dieciséis pasos» y el diagrama dibujaba dieciséis pastillas, con la
+cifra repetida además en el texto alternativo y en las dos etiquetas de la leyenda. Cinco
+sitios, todos a mano, y en su vida han dicho lo mismo dos veces seguidas: fue quince, luego
+dieciséis, y P68.494 la dejó en diecisiete.
+
+Ahora el **recuento** sale de contar los pasos de `ci.yml` que invocan un script de npm —la
+misma regla que usa una persona al leerlo, y por eso `Install dependencies` no cuenta—, la
+**leyenda** sale de contar las propias pastillas, y los pasos dibujados salen a
+`content/articulo/ci-steps.ts` para que `check:articulo` **compare el dibujo contra el
+workflow**. Lo que no se deriva y por eso sigue escrito: el agrupado por rol y la categoría de
+cada paso, que son editoriales. Y el nombre no se compara: el workflow los nombra en un idioma
+y el diagrama se lee en dos.
+
+### La parte que impide que vuelva a pasar
+
+`check:articulo` gana dos comprobaciones, las dos de **ausencia** como el resto de la casa:
+
+5. **Un `livestat` no puede tener el valor tecleado**: si la pieza promete «dato en vivo», su
+   valor tiene que interpolar una cifra derivada. Y el token tiene que **existir**, que es la
+   segunda mitad: `{psiMovil}` con una ele de más no rompe nada, se publica con las llaves
+   puestas.
+6. **El diagrama de CI dibuja tantos pasos como tiene el workflow.**
+
+Y el guardián **afirma cuánto ha mirado**: seis datos en vivo, todos interpolados, y diecisiete
+pasos dibujados. Los dos casos malos están en `check:guardianes`, y con ellos se validó que
+muerden.
+
+**Un detalle de implementación que sí importa: el relleno alcanza a TODA cadena del bloque**,
+no solo al `value` de un `livestat`. Antes solo se rellenaba ahí, así que un `{pasosCI}` en el
+pie de un diagrama se habría publicado con las llaves a la vista. Recorrer el bloque entero
+cuesta lo mismo y quita una regla que había que recordar.
+
+**Lo que queda fuera, dicho para que no se dé por cubierto.** El recuento de pasos sigue
+escrito a mano en `PRD-Live.md`, `CLAUDE.md` y `README.md`. Son documentos, no copy servido, y
+no hay dónde interpolar; el guardián cubre lo que el sitio **publica**.
+
+---
+
+## D103 · El ruido de `check:articulo` no eran los falsos positivos, era tener que ir a leer — 2026-08-24
+
+**La hipótesis, escrita en la tarea y con un argumento razonable detrás.** `check:articulo`
+(D84) sella **por archivo**, y «la dependencia declarada es más gruesa que la afirmación que
+protege»: tocar un **comentario** de `ci.yml` enciende §s10, y cambiar el estado de un sprint en
+`PRD-Live.md` §9 enciende §s12, que solo habla de las métricas del §7. De ahí la propuesta:
+afinar la granularidad —sellar por sección de destino, ignorar comentarios— o aceptar el ruido.
+Y la tarea decía, con razón, que **medirlo era más urgente que construir el skill**.
+
+### La medición, y por qué cambió el diseño
+
+Se reconstruyó el sello de cada sección **en cada uno de los últimos 60 commits**, sin hacer
+checkout: leyendo cada dependencia con `git show <sha>:<ruta>` y aplicando el mismo recorte que
+`huella.ts`. Después se clasificó cada encendido por la causa del cambio.
+
+| | |
+|---|---|
+| Commits que encienden algo | 31 de 60 |
+| Secciones encendidas | 57 |
+| …por un cambio **sustantivo** | **53** |
+| …por comentarios | 7 |
+| …por el borde del recorte | 3 |
+| Secciones encendidas **solo por ruido** | **8 de 57 (14%)** |
+
+**La hipótesis no sobrevive: el 86% de los encendidos son cambios de verdad en la fuente.**
+Afinar la granularidad no era donde estaba el coste. Y aun así, los siete disparos con veredicto
+registrado terminaron **los siete en «sellar»**. Las dos cosas juntas dicen algo distinto de lo
+que decía la tarea: **el problema no son los falsos positivos, es que «la fuente cambió» obliga a
+abrir el archivo, buscar el cambio y juzgarlo.** El coste está en la lectura, no en el disparo.
+
+### Qué se hace, entonces
+
+1. **`npm run articulo:novedades`** — el informe. Por cada sección movida dice **qué
+   dependencias cambiaron y qué líneas**, comparando contra el contenido que tenían en el commit
+   donde se escribió el sello vigente (`git log -1 -- content/articulo/articulo.huella`). No
+   reduce los disparos: los hace baratos. El rojo de `check:articulo` lo nombra, y
+   `close-session` lo pone en su orden de trabajo.
+   Fuera de CI, como `psi` y el censo: necesita historia de git y su salida es para una persona.
+2. **Se mata el artefacto del borde del recorte**, que es la única de las dos causas mecánicas
+   sin ninguna señal dentro: el recorte de una entrada de markdown llega hasta el titular
+   siguiente, así que **arrastra el separador**, y por eso **añadir una decisión nueva cambiaba
+   el recorte de la anterior**. Tres casos de tres, todos con la entrada citada sin tocar.
+3. **Los comentarios NO se ignoran**, y es una decisión, no una omisión. En este repo el
+   comentario es donde vive el porqué, y el artículo describe justo eso: los comentarios de
+   `ci.yml` son documentación. El informe los **marca** —`[solo comentarios]`— y deja el juicio a
+   quien lee, que es lo correcto cuando la señal existe pero es débil.
+
+### El informe se validó a sí mismo en su primer disparo
+
+La primera corrida real dio **11 secciones movidas y cero dependencias cambiadas**, que es
+imposible… salvo que lo que haya cambiado sea el propio método de sellado, como acababa de pasar
+con la poda del recorte. El script lleva escrita esa guarda y la disparó sola: *«el sello no
+cuadra y ninguna dependencia parece haber cambiado; revisa el diff de `huella.ts` antes de sellar
+a ciegas»*. Un informe que sale vacío se lee igual que uno que no tenía nada que contar, y ese es
+el modo de fallo que este repo se ha encontrado cinco veces.
+
+**Lo que queda abierto, y sigue abierto a propósito.** El artículo mezcla dos tiempos verbales
+—«no hay formulario de contacto» es *estado* y caduca; «me quedé con el enlace» es *decisión
+fechada* y no caduca— y es el único documento del proyecto sin la partición que ya tienen
+`PRD-Live`/`PRD-Historical` y `BRAND`/`BRAND-historical`. Se decide al escribir el primer caso
+real que la necesite; siete disparos después, ninguno la ha necesitado todavía.

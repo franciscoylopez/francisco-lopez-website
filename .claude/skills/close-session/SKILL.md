@@ -151,13 +151,16 @@ ha contestado por inercia.
    y esta skill edita justo los archivos sellados —`PRD-Live.md`, `DECISIONS.md`,
    `BRAND.md`, `CLAUDE.md`—, así que **cuenta con que salga rojo**: el 2026-08-22 saltó
    cuatro veces. **No selles por reflejo**, que es exactamente como un guardián deja de
-   servir. El orden es: `npm run check:articulo` → **abre las secciones que nombra en
-   `app/[lang]/dictionaries/{es,en}/como-se-ha-creado.json`** → decide si lo que dicen
-   sigue siendo cierto. Si lo es, `npm run articulo:sellar`. Si no, corrige el copy **ES y
-   EN** (D20) y sella después.
-   **Mira especialmente las CIFRAS escritas con letra** —«las seis rutinas», «los
-   dieciséis pasos», «siete piezas»—: son las que envejecen primero, y son la mitad de
-   las veces que este guardián acierta.
+   servir. El orden es: `npm run check:articulo` → **`npm run articulo:novedades`**, que
+   dice QUÉ líneas cambiaron en cada dependencia desde el sello vigente y marca las que
+   son solo comentarios (D103) → con eso delante, abre en
+   `app/[lang]/dictionaries/{es,en}/como-se-ha-creado.json` las secciones que sigan en
+   duda y decide. Si sigue siendo cierto, `npm run articulo:sellar`. Si no, corrige el
+   copy **ES y EN** (D20) y sella después.
+   **Las CIFRAS escritas con letra ya no hay que mirarlas a mano**: desde D102 las que el
+   artículo publica se derivan del disco o se sellan al medir, y `check:articulo` no deja
+   teclear una nueva. Lo que sí hay que leer es lo que AFIRMA la prosa, que ninguna
+   máquina puede juzgar.
 4. **Tablero de tareas**: actualiza `Estado` (To-Do → En progreso → Listo; al cerrar
    una etapa, lo terminado → Archivado; el resto sigue abierto en su etapa),
    `Prioridad` y `Etapa` según las **reglas del tablero** de `CLAUDE.md` (no

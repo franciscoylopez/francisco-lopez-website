@@ -1,5 +1,11 @@
 import type { CSSProperties } from "react";
 
+import {
+  type CategoriaPaso,
+  DIAGRAMA_CI,
+  pasosDibujados,
+} from "@/content/articulo/ci-steps";
+import { cardinal } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
@@ -532,101 +538,36 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
  * del workflow, en su orden real (un único job de GitHub Actions: se
  * ejecutan uno detrás de otro, nunca en paralelo). Busca-patrón /
  * busca-ausencia sale del propio texto de la sección, no de una etiqueta
- * inventada: los cuatro que buscan un patrón conocido son las herramientas
- * de fábrica (Format, Typecheck, Lint, Build); los once que buscan la
- * ausencia de algo bueno son los guardianes propios de este repositorio. */
+ * inventada: los que buscan un patrón conocido son las herramientas de
+ * fábrica (Format, Typecheck, Lint, Build); los que buscan la ausencia de
+ * algo bueno son los guardianes propios de este repositorio.
+ *
+ * POR QUÉ «Tests» CUENTA COMO BUSCA-PATRÓN (2026-08-24, P68.494). Un test
+ * falla cuando un caso ESCRITO deja de comportarse como debe; no sabe decir
+ * qué lógica no cubre nadie, y esa es justo la propiedad que define a la otra
+ * familia. Ponerlo con los guardianes haría falsa la frase de la sección.
+ *
+ * Y EL RECUENTO YA NO SE ESCRIBE (P68.495). Fue quince, luego dieciséis y ahora
+ * diecisiete, tecleado cada vez en el texto alternativo, en las dos cifras de la
+ * leyenda y en el pie del diccionario. Ahora sale de `.github/workflows/ci.yml`
+ * y de contar las propias pastillas, y `check:articulo` comprueba que las dos
+ * cuentas coincidan. */
 export function CIDiagram({ lang }: { lang: Locale }) {
-  type Cat = "ausencia" | "patron";
-  const t = {
-    es: {
-      ariaLabel:
-        "Los dieciséis pasos del workflow de integración continua, en su orden real, agrupados en cuatro bloques: Código, Copy y contenido, Guardianes del repo, y Build y marco. Los pasos coloreados buscan la ausencia de algo bueno; los neutros buscan un patrón conocido.",
-      groups: [
-        {
-          label: "Código",
-          items: [
-            { n: "Format", cat: "patron" as Cat },
-            { n: "Typecheck", cat: "patron" as Cat },
-            { n: "Lint", cat: "patron" as Cat },
-          ],
-        },
-        {
-          label: "Copy y contenido",
-          items: [
-            { n: "Paleta", cat: "ausencia" as Cat },
-            { n: "Experiencias", cat: "ausencia" as Cat },
-            { n: "CV al día", cat: "ausencia" as Cat },
-            { n: "Raya en el copy", cat: "ausencia" as Cat },
-          ],
-        },
-        {
-          label: "Guardianes del repo",
-          items: [
-            { n: "Artefacto al día", cat: "ausencia" as Cat },
-            { n: "Contexto de arranque", cat: "ausencia" as Cat },
-            { n: "Skills al día", cat: "ausencia" as Cat },
-            { n: "Índices derivados", cat: "ausencia" as Cat },
-            { n: "Rutas registradas", cat: "ausencia" as Cat },
-            { n: "Artículo al día", cat: "ausencia" as Cat },
-          ],
-        },
-        {
-          label: "Build y marco",
-          items: [
-            { n: "Build", cat: "patron" as Cat },
-            { n: "Marco de página", cat: "ausencia" as Cat },
-            { n: "Guardianes con dientes", cat: "ausencia" as Cat },
-          ],
-        },
-      ],
-      absence: "busca ausencia (12)",
-      pattern: "busca patrón (4)",
-    },
-    en: {
-      ariaLabel:
-        "The sixteen steps of the continuous-integration workflow, in their real order, grouped into four blocks: Code, Copy and content, Repo guardians, and Build and frame. Tinted steps look for the absence of something good; neutral ones look for a known pattern.",
-      groups: [
-        {
-          label: "Code",
-          items: [
-            { n: "Format", cat: "patron" as Cat },
-            { n: "Typecheck", cat: "patron" as Cat },
-            { n: "Lint", cat: "patron" as Cat },
-          ],
-        },
-        {
-          label: "Copy and content",
-          items: [
-            { n: "Palette", cat: "ausencia" as Cat },
-            { n: "Experiences", cat: "ausencia" as Cat },
-            { n: "CV freshness", cat: "ausencia" as Cat },
-            { n: "Copy dash check", cat: "ausencia" as Cat },
-          ],
-        },
-        {
-          label: "Repo guardians",
-          items: [
-            { n: "Artifact freshness", cat: "ausencia" as Cat },
-            { n: "Context budget", cat: "ausencia" as Cat },
-            { n: "Skills freshness", cat: "ausencia" as Cat },
-            { n: "Derived indices", cat: "ausencia" as Cat },
-            { n: "Registered routes", cat: "ausencia" as Cat },
-            { n: "Article freshness", cat: "ausencia" as Cat },
-          ],
-        },
-        {
-          label: "Build and frame",
-          items: [
-            { n: "Build", cat: "patron" as Cat },
-            { n: "Page frame", cat: "ausencia" as Cat },
-            { n: "Guardians with teeth", cat: "ausencia" as Cat },
-          ],
-        },
-      ],
-      absence: "looks for absence (12)",
-      pattern: "looks for a pattern (4)",
-    },
-  }[lang];
+  // LOS PASOS VIENEN DE `content/articulo/ci-steps.ts` Y EL RECUENTO DEL
+  // WORKFLOW (P68.495). Aquí no se escribe ninguna cifra: ni la del texto
+  // alternativo, ni las dos de la leyenda. Las tres estaban tecleadas, y las
+  // tres decían quince cuando ya eran dieciséis. `check:articulo` compara
+  // además cuántas pastillas dibuja esto contra cuántos pasos tiene `ci.yml`.
+  const t = DIAGRAMA_CI[lang];
+  const pasos = pasosDibujados(lang);
+  const cuenta = (cat: CategoriaPaso) =>
+    t.groups.reduce(
+      (n, g) => n + g.items.filter((it) => it.cat === cat).length,
+      0,
+    );
+  const ariaLabel = t.ariaLabel.replace("{pasos}", cardinal(pasos, lang));
+  const absence = t.absence.replace("{n}", String(cuenta("ausencia")));
+  const pattern = t.pattern.replace("{n}", String(cuenta("patron")));
 
   const chipW = (label: string) =>
     Math.max(58, Math.round(label.length * 6.4) + 22);
@@ -641,7 +582,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
     <svg
       viewBox={`0 0 ${W} ${legendY + 30}`}
       role="img"
-      aria-label={t.ariaLabel}
+      aria-label={ariaLabel}
       className="h-auto w-full max-w-[760px]"
     >
       {t.groups.map((g, gi) => {
@@ -699,7 +640,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
         {...rlz(lastStep, "fill-primary/25")}
       />
       <text x="30" y={legendY + 19} {...rlz(lastStep, LBL)}>
-        {t.absence}
+        {absence}
       </text>
       <rect
         x="220"
@@ -710,7 +651,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
         {...rlz(lastStep, "fill-muted")}
       />
       <text x="240" y={legendY + 19} {...rlz(lastStep, LBL)}>
-        {t.pattern}
+        {pattern}
       </text>
     </svg>
   );

@@ -38,6 +38,14 @@
 // entorno o de `.env.local` (que está en .gitignore). Cómo obtenerla, en el README.
 // En modo registro la clave NO es opcional: 28 llamadas sin ella son 28 errores.
 //
+// Y EL MODO REGISTRO SELLA (P68.495, D102). Al terminar deja en
+// `content/psi/registro.json` el rango de cada estrategia con su fecha, y de ahí
+// lo lee el artículo para publicar la nota en vez de tenerla tecleada — que es
+// como llevaba semanas diciendo «100 escritorio» con la página trece sacando 93.
+// No sella una pasada parcial: ni sobre un Preview, ni con una sola estrategia,
+// ni con un solo fallo. Un rango sacado de media auditoría se lee igual que uno
+// bueno.
+//
 // SIGUE FUERA DE CI (D49): su variabilidad daría rojos falsos. Y el modo registro
 // tarda varios minutos, porque las llamadas van EN SERIE a propósito.
 //
@@ -48,10 +56,11 @@
 //     `check:marco`, `censo` y el `viewport-verifier`, que no gastan cuota de API
 //     ni dependen de que Google esté de buenas.
 
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 
 import { defaultLocale, pagePath } from "../lib/i18n/config";
+import { PSI_REGISTRO } from "../lib/figures";
 import { PAGE_SLUGS } from "../lib/routes";
 
 const ENDPOINT = "https://www.googleapis.com/pagespeedonline/v5/runPagespeed";
@@ -489,6 +498,64 @@ async function recorreElRegistro(
 
   imprimeAgregado(medidas, rutas.length);
   imprimeResumen(medidas, fallos, estrategias, rutas.length);
+  sella(medidas, fallos, estrategias, rutas.length, base);
+}
+
+/**
+ * Deja escrito lo que se acaba de medir, para que el artículo lo publique en vez
+ * de teclearlo (P68.495, D102). Mismo mecanismo que el sello del censo: medir
+ * necesita pintar y necesita producción, así que la cifra no puede derivarse al
+ * construir; lo que sí puede es no envejecer en silencio.
+ *
+ * NO SELLA UNA PASADA PARCIAL, y es la mitad importante de esta función. Un
+ * rango sacado de cuatro páginas, o de un Preview, publicado como si fuera el
+ * del sitio es peor que no publicar nada: se lee igual y es falso. Con un solo
+ * fallo, una estrategia de menos o una `--base` que no sea producción, se dice
+ * por qué no se ha sellado y se deja el sello anterior intacto.
+ */
+function sella(
+  medidas: Medicion[],
+  fallos: Fallo[],
+  estrategias: readonly Estrategia[],
+  totalPaginas: number,
+  base: string,
+) {
+  const esperadas = totalPaginas * 2;
+  const motivo =
+    base !== PRODUCCION
+      ? `se ha medido ${base} y el sello solo describe producción`
+      : estrategias.length !== 2
+        ? "falta una de las dos estrategias"
+        : fallos.length
+          ? `${fallos.length} medición(es) fallaron`
+          : medidas.length !== esperadas
+            ? `hay ${medidas.length} mediciones y se esperaban ${esperadas}`
+            : null;
+
+  if (motivo) {
+    console.log(`\n  Sin sellar: ${motivo}.`);
+    console.log(`  ${PSI_REGISTRO} se queda como estaba.`);
+    return;
+  }
+
+  const rango = (e: Estrategia) => {
+    const notas = medidas.filter((m) => m.estrategia === e).map((m) => m.nota);
+    return { min: Math.min(...notas), max: Math.max(...notas) };
+  };
+
+  const registro = {
+    fecha: new Date().toISOString().slice(0, 10),
+    paginas: totalPaginas,
+    movil: rango("mobile"),
+    escritorio: rango("desktop"),
+  };
+
+  writeFileSync(PSI_REGISTRO, `${JSON.stringify(registro, null, 2)}\n`);
+  console.log(
+    `\n  Sellado en ${PSI_REGISTRO} — ${registro.escritorio.min}-${registro.escritorio.max} escritorio · ` +
+      `${registro.movil.min}-${registro.movil.max} móvil, ${totalPaginas} páginas, ${registro.fecha}.`,
+  );
+  console.log("  El artículo publica esa cifra con esa fecha (D102).");
 }
 
 async function main() {

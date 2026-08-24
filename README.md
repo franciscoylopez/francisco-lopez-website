@@ -125,6 +125,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
 | `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
+| `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
 
 Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
@@ -145,6 +146,7 @@ npm run start      # sirve el build de producción
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 npm run format     # Prettier
+npm test           # Vitest, una vez (npm run test:watch para el bucle)
 
 # Guardianes (los mismos que corre CI)
 npm run check:palette       # la paleta del código contra la de globals.css, y que no
@@ -163,8 +165,13 @@ npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 # Medición
 npm run gate:html -- save   # instantánea del HTML de todas las páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
+npm run articulo:novedades  # QUÉ cambió en cada dependencia del artículo desde el sello
+                            # vigente, con las de solo comentarios marcadas (D103).
+                            # Se invoca PORQUE check:articulo está en rojo
 npm run psi -- <url>        # PageSpeed de UNA página: nota, métricas y desglose del LCP (D49)
-npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99)
+npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99).
+                            # Al terminar SELLA el rango en content/psi/ y el artículo lo
+                            # publica con su fecha; una pasada parcial no sella (D102)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
 qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 ```
@@ -236,10 +243,16 @@ content/experience-copy/  De una experiencia, TODO lo que se cuenta en más de u
                        Home, CV, deep-dive y llms.txt leen de aquí (D57, D58)
 content/artefactos/    El `.mmd` es la FUENTE del dibujo y el `.svg` de al lado su render saneado:
                        se regenera, no se edita (D54)
+content/articulo/      Lo que el artículo declara de sí mismo: dependencias.ts (de qué depende
+                       cada sección, D84), su sello, y ci-steps.ts (los pasos que dibuja §s10,
+                       comparados contra el workflow en cada PR, D102)
+content/psi/           registro.json: el rango de PageSpeed con su fecha, escrito por
+                       `npm run psi -- --registro`. El artículo lo publica de ahí (D102)
 
 lib/                   i18n (fuente única de ruta↔locale), page-meta (D45), site (SITE_URL),
                        contact, analítica, consentimiento, datos estructurados, design-values
-                       (fuente única de lo que el sitio publica sobre sí mismo, D38) y utils
+                       (fuente única de lo que el sitio publica sobre sí mismo, D38), figures
+                       (las cifras del artículo, derivadas del disco o selladas, D102) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, video, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
@@ -260,7 +273,7 @@ scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las páginas del
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
                            queda UN solo color literal: busca la ausencia (D54)
 
-.github/workflows/     ci.yml, dieciséis pasos en cada PR · dependabot-automerge.yml, que
+.github/workflows/     ci.yml, diecisiete pasos en cada PR · dependabot-automerge.yml, que
                        decide quién CIERRA los PR de dependencias (D92)
 .github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions).
                        Controla cuántos se abren; la otra mitad es el workflow de arriba

@@ -191,7 +191,7 @@ La nota lleva fecha porque una sola corrida no basta, y esa es también la razó
 - **`npm run check:articulo`**: cada sección de «Cómo se ha creado esta página» declara de
   qué depende y lleva su sello. Cuando una fuente se mueve, CI sale rojo **nombrando la
   sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
-  mirarlo (D84).
+  mirarlo (D84). Y qué líneas cambiaron lo dice `articulo:novedades` (D103).
 - **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
   porque necesita navegador (D85). **Son dos pases**: los pares de TEXTO (1.4.3/1.4.6) y el
   **contorno de cada control** (1.4.11, 3:1), que hasta el 2026-08-23 no medía nadie porque
@@ -206,9 +206,10 @@ La nota lleva fecha porque una sola corrida no basta, y esa es también la razó
 
 ### Calidad y seguridad
 
-CI en cada PR con **dieciséis pasos**: formato, typecheck, lint, paleta, experiencias, CV
-al día, raya, artefacto, contexto, skills, índices, rutas, artículo al día, build, marco
-de página y guardianes. Todos comparten una regla de
+CI en cada PR con **diecisiete pasos**: formato, typecheck, lint, **tests**, paleta,
+experiencias, CV al día, raya, artefacto, contexto, skills, índices, rutas, artículo al
+día, build, marco de página y guardianes. Los tests llegaron con la primera lógica de
+negocio real, la del formulario (D101). Los demás comparten una regla de
 método: **buscan la AUSENCIA, no el patrón**, y **afirman cuánto han mirado** — un metro
 que devuelve lista vacía parece un aprobado, y este proyecto se lo ha encontrado cinco
 veces (D38/D57/D60/D63).
@@ -281,7 +282,7 @@ la historia de TheTool y no una experiencia con historia separable.
 
 Sin fecha ni compromiso de release conjunto: entran en el sprint que las toque o cuando
 dejen de poder esperar. Agrupadas por dónde viven — *General* (higiene de validadores,
-dependencias, `qlty`, tests cuando aparezca la primera lógica de negocio real), *Home*
+dependencias, `qlty`), *Home*
 (gesto-firma de marca, presencia del morado, kicker del Hero, `WebSite` en JSON-LD),
 *Brand Kit*, *Design System* (copy-to-clipboard de tokens, simulador de foco) y
 *Accesibilidad*.
