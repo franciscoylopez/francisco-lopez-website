@@ -157,6 +157,21 @@ for (const slug of PAGE_SLUGS) {
   for (const tema of TEMAS) {
     ab(["open", `${BASE}${ruta}`]);
     ab(["set", "media", tema]);
+    // SE DESPLAZA ANTES DE MEDIR (P68.585, 2026-08-24). La pasada abría la
+    // página y medía ahí mismo, así que TODA isla que solo monta al hacer
+    // scroll —el riel de secciones del artículo es el caso— no estaba en el DOM
+    // cuando se la iba a medir. Doce controles que el censo no podía ver por
+    // este motivo, además de los que no veía por su criterio de caja.
+    //
+    // Desplazar es ESTRICTAMENTE ADITIVO para la cobertura: el censo recorre el
+    // DOM entero y su `esVisible` mira tamaño y visibilidad, no intersección
+    // con el viewport, así que bajar no quita nada de la lista — solo añade lo
+    // que hasta ahora no llegaba a existir.
+    ab(["eval", "window.scrollTo(0, document.body.scrollHeight * 0.5); 'ok'"]);
+    // Y se espera al `IntersectionObserver`, que no resuelve en el mismo
+    // fotograma: sin esta pausa el riel sigue sin montar y el arreglo de arriba
+    // no serviría de nada.
+    ab(["eval", "new Promise((r) => setTimeout(() => r('ok'), 900))"]);
     ab(["eval", "--stdin"], guionCenso);
     const crudo = ab(["eval", "JSON.stringify(window.contrastCensus())"]);
     // `eval` devuelve la cadena JSON entrecomillada; se desenvuelve dos veces.

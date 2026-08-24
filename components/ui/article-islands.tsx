@@ -188,7 +188,17 @@ export function SectionRail({ items }: { items: RailItem[] }) {
                     // del padre en vez de desbordar hasta max-w-64, aunque el
                     // padre tenga `overflow: visible`. El shrink ocurre en el
                     // cálculo del layout flex, no lo evita overflow-visible.
-                    "border-border flex h-6 max-w-6 shrink-0 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out group-hover:max-w-64 group-focus-visible:max-w-64",
+                    // `border-control-edge`, NO `border-border` (P68.585). El
+                    // filete decorativo y el contorno de un control se parecen
+                    // y no son lo mismo: al segundo WCAG 1.4.11 le pide 3:1,
+                    // porque es lo que permite reconocerlo COMO control, y aquí
+                    // la píldora es lo único que dice que ahí se pulsa. Con
+                    // `--border` medía 1,21:1 en claro y 1,36 en oscuro.
+                    // D97 hizo este cambio en la capa de componentes y este riel
+                    // se quedó fuera por ser la excepción que no compone
+                    // `chromeLinkVariants`; su cadena inline ES su variante, así
+                    // que el token va aquí y no en el call site.
+                    "border-control-edge flex h-6 max-w-6 shrink-0 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out group-hover:max-w-64 group-focus-visible:max-w-64",
                     isActive
                       ? "bg-foreground text-background border-foreground"
                       : "bg-card text-muted-foreground group-hover:bg-card group-hover:text-foreground",
