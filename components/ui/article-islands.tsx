@@ -111,12 +111,44 @@ export function SectionRail({ items }: { items: RailItem[] }) {
 
   if (active === null) return null;
 
+  /* EL RIEL SE CENTRA EN EL HUECO QUE LE QUEDA, NO EN EL VIEWPORT (P68.57).
+        Antes era `top-1/2 -translate-y-1/2`, o sea centrado sobre la ventana
+        entera, cabecera pegajosa incluida. Con once capítulos medía 548px y no
+        molestaba; con doce mide 598 y la primera pastilla se mete DEBAJO del
+        nav por debajo de 728px de `innerHeight` — que es justo lo que da un
+        portátil de 15" a 1920/125% una vez Chrome se queda con su cromo (~720).
+        Medido: a 700 solapa 14px, a 660 son 34, a 620 son 54, y por debajo de
+        598 además se sale por los dos extremos. No era «se rompe a 1920»: era
+        el eje de ALTO, el que D50 obliga a mirar mientras se dibuja.
+
+        `top-[5rem]` es la MISMA distancia con la que las secciones con ancla
+        libran el nav (`scroll-mt-[5rem]`, tres call sites en
+        `como-se-ha-creado.tsx`); si algún día el nav cambia de alto, se mueven
+        los cuatro juntos.
+
+        Y el `ol` lleva `my-auto` en vez de que el `nav` centre con
+        `items-center`: cuando el contenido desborda un contenedor centrado por
+        alineación, el navegador recorta por ARRIBA y esa parte se vuelve
+        inalcanzable. Con margen automático se centra igual mientras cabe y
+        empieza a desplazarse cuando no, que es lo que tiene que pasar en el
+        capítulo trece.
+
+        El scroll vive en el `nav`, no en el `ol`, y por eso el `nav` mide
+        `w-64`: `overflow-y` distinto de `visible` obliga a `overflow-x` a
+        recortar también, y la pastilla se ensancha hasta `max-w-64` en hover.
+        Con el scroll en el `ol` —de 44px de ancho— la etiqueta se cortaría al
+        aparecer. A cambio, esa caja de 256px se queda `pointer-events-none` y
+        solo la lista los recupera: si no, el riel invisible interceptaría los
+        clics de una columna entera de texto. */
   return (
     <nav
       aria-label="Índice de secciones"
-      className="fixed top-1/2 left-[clamp(0.75rem,2vw,1.75rem)] z-30 hidden -translate-y-1/2 xl:block"
+      className="pointer-events-none fixed top-[5rem] bottom-6 left-[clamp(0.75rem,2vw,1.75rem)] z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex [&::-webkit-scrollbar]:hidden"
     >
-      <ol className="m-0 flex list-none flex-col gap-[0.4rem] p-0">
+      {/* `mx-0 my-auto`, no `m-0 my-auto`: la abreviada y la de eje compiten por
+          la misma propiedad y quién gana lo decide el orden de la hoja, no el
+          de las clases. */}
+      <ol className="pointer-events-auto mx-0 my-auto flex w-11 list-none flex-col gap-[0.4rem] p-0">
         {items.map((item) => {
           const isActive = item.id === active;
           return (
