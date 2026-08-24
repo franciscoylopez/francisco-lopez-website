@@ -206,9 +206,10 @@ La nota lleva fecha porque una sola corrida no basta, y esa es también la razó
 
 ### Calidad y seguridad
 
-CI en cada PR con **dieciséis pasos**: formato, typecheck, lint, paleta, experiencias, CV
-al día, raya, artefacto, contexto, skills, índices, rutas, artículo al día, build, marco
-de página y guardianes. Todos comparten una regla de
+CI en cada PR con **diecisiete pasos**: formato, typecheck, lint, **tests**, paleta,
+experiencias, CV al día, raya, artefacto, contexto, skills, índices, rutas, artículo al
+día, build, marco de página y guardianes. Los tests llegaron con la primera lógica de
+negocio real, la del formulario (D101). Los demás comparten una regla de
 método: **buscan la AUSENCIA, no el patrón**, y **afirman cuánto han mirado** — un metro
 que devuelve lista vacía parece un aprobado, y este proyecto se lo ha encontrado cinco
 veces (D38/D57/D60/D63).
@@ -281,7 +282,7 @@ la historia de TheTool y no una experiencia con historia separable.
 
 Sin fecha ni compromiso de release conjunto: entran en el sprint que las toque o cuando
 dejen de poder esperar. Agrupadas por dónde viven — *General* (higiene de validadores,
-dependencias, `qlty`, tests cuando aparezca la primera lógica de negocio real), *Home*
+dependencias, `qlty`), *Home*
 (gesto-firma de marca, presencia del morado, kicker del Hero, `WebSite` en JSON-LD),
 *Brand Kit*, *Design System* (copy-to-clipboard de tokens, simulador de foco) y
 *Accesibilidad*.

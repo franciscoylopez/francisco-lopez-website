@@ -125,6 +125,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
 | `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
+| `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
 
 Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
@@ -145,6 +146,7 @@ npm run start      # sirve el build de producción
 npm run lint       # ESLint
 npm run typecheck  # tsc --noEmit
 npm run format     # Prettier
+npm test           # Vitest, una vez (npm run test:watch para el bucle)
 
 # Guardianes (los mismos que corre CI)
 npm run check:palette       # la paleta del código contra la de globals.css, y que no
@@ -260,7 +262,7 @@ scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las páginas del
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
                            queda UN solo color literal: busca la ausencia (D54)
 
-.github/workflows/     ci.yml, dieciséis pasos en cada PR · dependabot-automerge.yml, que
+.github/workflows/     ci.yml, diecisiete pasos en cada PR · dependabot-automerge.yml, que
                        decide quién CIERRA los PR de dependencias (D92)
 .github/dependabot.yml Escaneo de dependencias: PRs semanales (npm + github-actions).
                        Controla cuántos se abren; la otra mitad es el workflow de arriba

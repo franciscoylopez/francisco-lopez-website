@@ -532,15 +532,24 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
  * del workflow, en su orden real (un único job de GitHub Actions: se
  * ejecutan uno detrás de otro, nunca en paralelo). Busca-patrón /
  * busca-ausencia sale del propio texto de la sección, no de una etiqueta
- * inventada: los cuatro que buscan un patrón conocido son las herramientas
- * de fábrica (Format, Typecheck, Lint, Build); los once que buscan la
- * ausencia de algo bueno son los guardianes propios de este repositorio. */
+ * inventada: los que buscan un patrón conocido son las herramientas de
+ * fábrica (Format, Typecheck, Lint, Build); los que buscan la ausencia de
+ * algo bueno son los guardianes propios de este repositorio.
+ *
+ * POR QUÉ «Tests» CUENTA COMO BUSCA-PATRÓN (2026-08-24, P68.494). Un test
+ * falla cuando un caso ESCRITO deja de comportarse como debe; no sabe decir
+ * qué lógica no cubre nadie, y esa es justo la propiedad que define a la otra
+ * familia. Ponerlo con los guardianes haría falsa la frase de la sección.
+ *
+ * Y el recuento —quince, luego dieciséis, ahora diecisiete— sigue escrito a
+ * mano aquí, en el pie del diccionario, en el PRD y en el README. Derivarlo
+ * del propio `ci.yml` es P68.495, no esto. */
 export function CIDiagram({ lang }: { lang: Locale }) {
   type Cat = "ausencia" | "patron";
   const t = {
     es: {
       ariaLabel:
-        "Los dieciséis pasos del workflow de integración continua, en su orden real, agrupados en cuatro bloques: Código, Copy y contenido, Guardianes del repo, y Build y marco. Los pasos coloreados buscan la ausencia de algo bueno; los neutros buscan un patrón conocido.",
+        "Los diecisiete pasos del workflow de integración continua, en su orden real, agrupados en cuatro bloques: Código, Copy y contenido, Guardianes del repo, y Build y marco. Los pasos coloreados buscan la ausencia de algo bueno; los neutros buscan un patrón conocido.",
       groups: [
         {
           label: "Código",
@@ -548,6 +557,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
             { n: "Format", cat: "patron" as Cat },
             { n: "Typecheck", cat: "patron" as Cat },
             { n: "Lint", cat: "patron" as Cat },
+            { n: "Tests", cat: "patron" as Cat },
           ],
         },
         {
@@ -580,11 +590,11 @@ export function CIDiagram({ lang }: { lang: Locale }) {
         },
       ],
       absence: "busca ausencia (12)",
-      pattern: "busca patrón (4)",
+      pattern: "busca patrón (5)",
     },
     en: {
       ariaLabel:
-        "The sixteen steps of the continuous-integration workflow, in their real order, grouped into four blocks: Code, Copy and content, Repo guardians, and Build and frame. Tinted steps look for the absence of something good; neutral ones look for a known pattern.",
+        "The seventeen steps of the continuous-integration workflow, in their real order, grouped into four blocks: Code, Copy and content, Repo guardians, and Build and frame. Tinted steps look for the absence of something good; neutral ones look for a known pattern.",
       groups: [
         {
           label: "Code",
@@ -592,6 +602,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
             { n: "Format", cat: "patron" as Cat },
             { n: "Typecheck", cat: "patron" as Cat },
             { n: "Lint", cat: "patron" as Cat },
+            { n: "Tests", cat: "patron" as Cat },
           ],
         },
         {
@@ -624,7 +635,7 @@ export function CIDiagram({ lang }: { lang: Locale }) {
         },
       ],
       absence: "looks for absence (12)",
-      pattern: "looks for a pattern (4)",
+      pattern: "looks for a pattern (5)",
     },
   }[lang];
 

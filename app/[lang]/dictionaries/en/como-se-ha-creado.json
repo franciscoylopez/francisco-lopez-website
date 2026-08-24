@@ -804,10 +804,17 @@
           "side": "center",
           "caption": "This repository's Qlty dashboard: an A grade in maintainability and security, with the five worst-scored files the technical debt ratio pointed at."
         },
-        { "type": "h3", "text": "And one absence, said out loud" },
+        {
+          "type": "h3",
+          "text": "And one absence that came with its own exit condition"
+        },
         {
           "type": "p",
-          "text": "This repository has no tests. It's not an oversight, it's a decision. There's no business logic to test: there's data, presentational components, and rules, and the guardians already verify the rules on every push. The day the first function with real branching conditions shows up, tests come with it. Writing a test that checks a heading renders a heading would have been theater, and expensive theater to maintain."
+          "text": "For months this repository had no tests, and it wasn't an oversight: it was a decision with its exit condition written down. There was no business logic to test, only data, presentational components, and rules, and the guardians already verified the rules on every push. Writing a test that checks a heading renders a heading would have been theater, and expensive theater to maintain."
+        },
+        {
+          "type": "p",
+          "text": "The condition read “the day the first function with real branching conditions shows up”. It showed up with the contact form, which validates what a stranger types, composes an email header, and decides whether a submission is accepted. And that they were needed isn't an opinion: the end-of-stage review found two defects there, one of them a security bug, and a person reading found them, not the code itself. Now there are tests, and only where there is logic: validation, header sanitising, and the send decisions. They run on every PR and they have their own planted failure in the verifier of verifiers, because a green suite and a suite that tests nothing look far too similar."
         }
       ],
       "enlace": {
@@ -1021,7 +1028,7 @@
           "type": "diagram",
           "id": "s10",
           "side": "center",
-          "caption": "The sixteen continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
+          "caption": "The seventeen continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
         },
         {
           "type": "p",

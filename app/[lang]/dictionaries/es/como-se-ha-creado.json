@@ -800,10 +800,17 @@
           "side": "center",
           "caption": "El panel de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con los cinco archivos peor puntuados que señaló el ratio de deuda técnica."
         },
-        { "type": "h3", "text": "Y una ausencia, dicha en voz alta" },
+        {
+          "type": "h3",
+          "text": "Y una ausencia que llevaba escrita su condición de salida"
+        },
         {
           "type": "p",
-          "text": "Este repositorio no tiene tests. No es un olvido, es una decisión. No hay lógica de negocio que probar: hay datos, componentes de presentación y reglas, y las reglas ya las verifican los guardianes en cada push. El día que aparezca la primera función con condiciones de verdad, entran los tests. Escribir un test que comprueba que un título renderiza un título habría sido teatro, y teatro caro de mantener."
+          "text": "Durante meses este repositorio no tuvo tests, y no era un olvido: era una decisión con su condición de salida escrita. No había lógica de negocio que probar, solo datos, componentes de presentación y reglas, y las reglas ya las verificaban los guardianes en cada push. Escribir un test que comprueba que un título renderiza un título habría sido teatro, y teatro caro de mantener."
+        },
+        {
+          "type": "p",
+          "text": "La condición decía «el día que aparezca la primera función con condiciones de verdad». Apareció con el formulario de contacto, que valida lo que escribe un desconocido, compone una cabecera de correo y decide si un envío se acepta. Y que hacían falta no es una opinión: la revisión de cierre de etapa encontró ahí dos fallos, uno de ellos de seguridad, y los encontró alguien leyendo, no el código a sí mismo. Ahora hay tests, y solo donde hay lógica: la validación, el saneado de las cabeceras y las decisiones del envío. Corren en cada PR y tienen su propio caso malo en el verificador de verificadores, porque una suite en verde y una suite que no prueba nada se parecen demasiado."
         }
       ],
       "enlace": {
@@ -1021,7 +1028,7 @@
           "type": "diagram",
           "id": "s10",
           "side": "center",
-          "caption": "Los dieciséis pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
+          "caption": "Los diecisiete pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
         },
         {
           "type": "p",

@@ -186,6 +186,21 @@ const CASOS: Caso[] = [
         '{ "label": "D29", "path": "DECISIONS.md", "line": 844 }',
       ),
   },
+  {
+    guardian: "test",
+    rotura:
+      "el Reply-To vuelve a componerse concatenando y cuela una segunda dirección",
+    // El arnés de tests entra aquí en cuanto entra en CI (P68.494): a partir de
+    // ese momento es un gate, y un gate cuyo modo de fallo es una luz verde
+    // necesita su caso malo como cualquier otro. El caso es la regresión de
+    // P68.47 literal, que es el bug que motivó escribir los tests.
+    archivo: "lib/mailer.ts",
+    mutar: (o) =>
+      o.replace(
+        "replyTo: { name: nombre, address: replyTo },",
+        "replyTo: `${nombre} <${replyTo}>`,",
+      ),
+  },
 ];
 
 /**

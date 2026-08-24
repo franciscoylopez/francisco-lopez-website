@@ -136,6 +136,7 @@
 - D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro
 - D99 · La auditoría de rendimiento recorre el registro, y un ahorro estimado no es un ahorro
 - D100 · `space-y` de Tailwind v4 va dentro de `:where()`, así que cualquier hijo con `m-0` lo anula
+- D101 · El arnés de tests entra cuando aparece la lógica, y se mide sobre lo que el código EMITE
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5724,3 +5725,71 @@ también.
 **Y va al artículo.** Es la tercera sorpresa de estrenar Tailwind v4 y comparte firma con
 las dos que s04 ya contaba —«el error no da la cara»—, con el añadido de ser la única
 descubierta **después** de publicar el capítulo que habla de ellas.
+
+---
+
+## D101 · El arnés de tests entra cuando aparece la lógica, y se mide sobre lo que el código EMITE — 2026-08-24
+
+**La condición se había escrito antes, y por eso esto no es una decisión nueva sino una
+condición cumpliéndose.** El PRD llevaba desde V3 diciendo «tests cuando aparezca la primera
+lógica de negocio real», y el sitio pasó año y medio sin uno solo con razón: hay datos,
+componentes de presentación y reglas, y las reglas ya las verifican los guardianes en cada
+push. Un test que comprueba que un título renderiza un título es teatro caro de mantener.
+
+Lo que cambió es que **el formulario de `/contacto` trajo la lógica**: valida entrada de un
+tercero, compone una cabecera de correo y decide si un envío se acepta. Y no es teórico: el
+`sprint-review` del 2026-08-23 encontró ahí **dos fallos que un test habría cazado** — la
+inyección en `Reply-To` por concatenación (P68.47) y el sello caducado que contestaba
+«enviado» a alguien cuyo mensaje se había tirado (P68.48). Dos bugs en la única superficie
+que recibe algo escrito por otra persona, encontrados por revisión y no por el código.
+
+**Runner: Vitest**, que es el que recomienda la guía de Next 16 (`node_modules/next/dist/docs/`).
+Las alternativas se descartaron midiendo, no por gusto: `node:test` no habría costado ni una
+dependencia, pero su `mock.module()` sigue tras `--experimental-test-module-mocks` en Node 22,
+que es el de CI, y sin mocks solo se puede probar la validación pura — justo lo que no
+motivaba la tarea. La tercera vía, inyectar dependencias en la Server Action, era tocar
+código de producción para poder probarlo.
+
+**Y se instala sin `jsdom`, sin `@testing-library` y sin `@vitejs/plugin-react`.** El alcance
+no tiene ni un componente: montar un DOM falso para código que nunca toca el DOM es pagar un
+árbol de dependencias por nada. `vite-tsconfig-paths`, que la guía de Next sigue
+recomendando, **también sobra**: Vite ya resuelve los paths del tsconfig de forma nativa y lo
+avisa él mismo por consola. Quedó **una** dependencia de desarrollo.
+
+### Lo que hace estos tests distintos de una suite de cobertura
+
+**Se mide sobre el mensaje que nodemailer EMITE, no sobre el objeto que se le pasa.** El bug
+de P68.47 era exactamente que un objeto de aspecto razonable producía dos direcciones en la
+cabecera; afirmar la forma del objeto habría vuelto a aprobarlo. El transporte SMTP se
+sustituye por el `streamTransport` del propio nodemailer, que devuelve el RFC 822 completo en
+un búfer sin abrir un socket: la codificación de cabeceras, el entrecomillado y el plegado
+son los de verdad.
+
+**Y el metro se validó contra el caso conocido antes de fiarse de él** (`BRAND.md` §Cómo
+medir, regla 3): con `x>,<atacante@evil.com`, el `Reply-To` emitido es
+`Marta Ruiz <"x , atacante"@evil.com>`, una sola dirección.
+
+**Las 54 aserciones se validaron rompiendo el código.** Nueve mutaciones en `lib/mailer.ts`,
+`lib/contact-form.ts` y la Server Action; las nueve salen rojas. La primera pasada dio
+**ocho de nueve**, y el fallo es el interesante: el test del salto de línea en las cabeceras
+seguía pasando con `header()` quitado, porque **quien defiende ahí es nodemailer**, que
+codifica el CRLF en RFC 2047. El test afirmaba una propiedad cierta que se cumple sola. Se
+reescribió para afirmar lo que `header()` sí cambia en el mensaje emitido (que el salto no
+viaje **ni codificado**), y entonces mordió. *Es D70 otra vez: el modo de fallo de un test es
+una luz verde.*
+
+**Por eso el arnés entra en `check:guardianes` el mismo día que entra en CI**, con su caso
+malo propio: la regresión de P68.47 literal. Un gate cuyo verde no se ha comprobado no es un
+gate, y una suite que no prueba nada se parece demasiado a una suite verde.
+
+### Dónde queda
+
+**Paso 17 de CI, detrás de `Lint`**, con los que miran el código fuente y antes de los que
+miran artefactos derivados. Entra en CI y no a demanda —al revés que `psi` o el censo—
+porque no necesita navegador ni red y tarda menos de un segundo. Un test que no corre en cada
+PR no es un guardián, es documentación.
+
+**Y el recuento de pasos sigue escrito a mano en cinco sitios** (el diagrama de §s10, su pie
+en los dos diccionarios, `PRD-Live.md`, `CLAUDE.md` y `README.md`). Quince, luego dieciséis,
+ahora diecisiete. Derivarlo del propio `ci.yml` es **P68.495**, la tarea siguiente, y este
+cambio es su cuarto caso medido.

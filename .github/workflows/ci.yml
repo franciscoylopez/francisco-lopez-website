@@ -68,6 +68,24 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # El arnés de tests (P68.494). Va aquí, con los pasos que miran el código
+      # fuente y antes de los que miran artefactos derivados, porque eso es lo
+      # que prueba: la primera lógica de negocio real del sitio —la validación
+      # del formulario, el saneado de cabeceras del correo y las decisiones de la
+      # Server Action—, que es también la única superficie que recibe algo
+      # escrito por otra persona.
+      #
+      # ENTRA EN CI Y NO A DEMANDA, al revés que `psi` o el censo: no necesita
+      # navegador ni red —el transporte SMTP se sustituye por el
+      # `streamTransport` de nodemailer— y tarda menos de un segundo. Un test que
+      # no corre en cada PR no es un guardián, es documentación.
+      #
+      # Y como cualquier otro gate de este repo, tiene su caso malo en
+      # `check:guardianes`: el modo de fallo de una suite verde es indistinguible
+      # del de una suite que no prueba nada (D70).
+      - name: Tests
+        run: npm test
+
       # Compara la paleta de lib/design-values.ts con la de app/globals.css. Va
       # aquí porque es el único sitio donde se puede ver: el mock de tema del Design
       # System y las imágenes OG copian valores de token a mano por necesidad —pintan
