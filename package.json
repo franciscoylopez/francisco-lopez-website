@@ -23,6 +23,7 @@
     "check:raya": "tsx scripts/check-raya.ts",
     "check:artefacto": "tsx scripts/check-artefacto.ts",
     "articulo:sellar": "tsx scripts/check-articulo.ts --seal",
+    "articulo:novedades": "tsx scripts/articulo-novedades.ts",
     "check:articulo": "tsx scripts/check-articulo.ts",
     "check:contexto": "tsx scripts/check-contexto.ts",
     "check:skills": "tsx scripts/check-skills.ts",

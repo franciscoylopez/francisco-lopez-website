@@ -165,6 +165,9 @@ npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 # Medición
 npm run gate:html -- save   # instantánea del HTML de todas las páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
+npm run articulo:novedades  # QUÉ cambió en cada dependencia del artículo desde el sello
+                            # vigente, con las de solo comentarios marcadas (D103).
+                            # Se invoca PORQUE check:articulo está en rojo
 npm run psi -- <url>        # PageSpeed de UNA página: nota, métricas y desglose del LCP (D49)
 npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99).
                             # Al terminar SELLA el rango en content/psi/ y el artículo lo

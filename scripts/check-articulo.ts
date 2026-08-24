@@ -26,9 +26,11 @@
  *      `ci.yml` y las pastillas son un dibujo: sin esto, un paso nuevo movería
  *      el pie y dejaría el diagrama corto, en silencio.
  *
- * QUÉ HACER CON UN ROJO DE LA 4. Leer la sección que nombra y decidir. Si el
- * texto sigue siendo cierto, `npm run articulo:sellar`. Si no, se corrige el
- * copy ES y EN (D20: el ES es la fuente) y se sella después.
+ * QUÉ HACER CON UN ROJO DE LA 4. `npm run articulo:novedades` dice QUÉ cambió en
+ * cada dependencia desde el sello vigente, para no tener que ir a buscarlo
+ * (D103). Con eso delante: si el texto sigue siendo cierto,
+ * `npm run articulo:sellar`; si no, se corrige el copy ES y EN (D20: el ES es la
+ * fuente) y se sella después.
  *
  * POR QUÉ SELLAR VIVE AQUÍ Y NO EN UN SCRIPT APARTE. Porque las tres primeras
  * comprobaciones son PRECONDICIÓN de sellar: sellar sobre una declaración rota
@@ -251,8 +253,11 @@ if (!SELLAR && problemas.length === 0) {
                 DEPENDENCIAS[s].map((d) => `        · ${d}`).join("\n"),
             )
             .join("\n") +
-          `\n\n    Esto NO dice que el texto sea falso: dice que hay que mirarlo. Lee esas\n` +
-          `    secciones del diccionario y decide:\n` +
+          `\n\n    Esto NO dice que el texto sea falso: dice que hay que mirarlo. Y para\n` +
+          `    mirarlo no hace falta abrir los archivos:\n\n` +
+          `        npm run articulo:novedades\n\n` +
+          `    dice QUÉ líneas cambiaron en cada dependencia desde el sello vigente y\n` +
+          `    marca las que son solo comentarios. Con eso delante se decide:\n` +
           `      · sigue siendo cierto → \`npm run articulo:sellar\`\n` +
           `      · ya no lo es         → corrige el copy ES y EN (D20) y sella después.`,
       );

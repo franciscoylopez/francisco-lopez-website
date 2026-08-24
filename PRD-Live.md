@@ -191,7 +191,7 @@ La nota lleva fecha porque una sola corrida no basta, y esa es también la razó
 - **`npm run check:articulo`**: cada sección de «Cómo se ha creado esta página» declara de
   qué depende y lleva su sello. Cuando una fuente se mueve, CI sale rojo **nombrando la
   sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
-  mirarlo (D84).
+  mirarlo (D84). Y qué líneas cambiaron lo dice `articulo:novedades` (D103).
 - **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
   porque necesita navegador (D85). **Son dos pases**: los pares de TEXTO (1.4.3/1.4.6) y el
   **contorno de cada control** (1.4.11, 3:1), que hasta el 2026-08-23 no medía nadie porque

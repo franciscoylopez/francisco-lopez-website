@@ -138,6 +138,7 @@
 - D100 · `space-y` de Tailwind v4 va dentro de `:where()`, así que cualquier hijo con `m-0` lo anula
 - D101 · El arnés de tests entra cuando aparece la lógica, y se mide sobre lo que el código EMITE
 - D102 · «Dato en vivo» era una promesa, no un mecanismo: la cifra se deriva o se sella, nunca se teclea
+- D103 · El ruido de `check:articulo` no eran los falsos positivos, era tener que ir a leer
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5865,3 +5866,67 @@ cuesta lo mismo y quita una regla que había que recordar.
 **Lo que queda fuera, dicho para que no se dé por cubierto.** El recuento de pasos sigue
 escrito a mano en `PRD-Live.md`, `CLAUDE.md` y `README.md`. Son documentos, no copy servido, y
 no hay dónde interpolar; el guardián cubre lo que el sitio **publica**.
+
+---
+
+## D103 · El ruido de `check:articulo` no eran los falsos positivos, era tener que ir a leer — 2026-08-24
+
+**La hipótesis, escrita en la tarea y con un argumento razonable detrás.** `check:articulo`
+(D84) sella **por archivo**, y «la dependencia declarada es más gruesa que la afirmación que
+protege»: tocar un **comentario** de `ci.yml` enciende §s10, y cambiar el estado de un sprint en
+`PRD-Live.md` §9 enciende §s12, que solo habla de las métricas del §7. De ahí la propuesta:
+afinar la granularidad —sellar por sección de destino, ignorar comentarios— o aceptar el ruido.
+Y la tarea decía, con razón, que **medirlo era más urgente que construir el skill**.
+
+### La medición, y por qué cambió el diseño
+
+Se reconstruyó el sello de cada sección **en cada uno de los últimos 60 commits**, sin hacer
+checkout: leyendo cada dependencia con `git show <sha>:<ruta>` y aplicando el mismo recorte que
+`huella.ts`. Después se clasificó cada encendido por la causa del cambio.
+
+| | |
+|---|---|
+| Commits que encienden algo | 31 de 60 |
+| Secciones encendidas | 57 |
+| …por un cambio **sustantivo** | **53** |
+| …por comentarios | 7 |
+| …por el borde del recorte | 3 |
+| Secciones encendidas **solo por ruido** | **8 de 57 (14%)** |
+
+**La hipótesis no sobrevive: el 86% de los encendidos son cambios de verdad en la fuente.**
+Afinar la granularidad no era donde estaba el coste. Y aun así, los siete disparos con veredicto
+registrado terminaron **los siete en «sellar»**. Las dos cosas juntas dicen algo distinto de lo
+que decía la tarea: **el problema no son los falsos positivos, es que «la fuente cambió» obliga a
+abrir el archivo, buscar el cambio y juzgarlo.** El coste está en la lectura, no en el disparo.
+
+### Qué se hace, entonces
+
+1. **`npm run articulo:novedades`** — el informe. Por cada sección movida dice **qué
+   dependencias cambiaron y qué líneas**, comparando contra el contenido que tenían en el commit
+   donde se escribió el sello vigente (`git log -1 -- content/articulo/articulo.huella`). No
+   reduce los disparos: los hace baratos. El rojo de `check:articulo` lo nombra, y
+   `close-session` lo pone en su orden de trabajo.
+   Fuera de CI, como `psi` y el censo: necesita historia de git y su salida es para una persona.
+2. **Se mata el artefacto del borde del recorte**, que es la única de las dos causas mecánicas
+   sin ninguna señal dentro: el recorte de una entrada de markdown llega hasta el titular
+   siguiente, así que **arrastra el separador**, y por eso **añadir una decisión nueva cambiaba
+   el recorte de la anterior**. Tres casos de tres, todos con la entrada citada sin tocar.
+3. **Los comentarios NO se ignoran**, y es una decisión, no una omisión. En este repo el
+   comentario es donde vive el porqué, y el artículo describe justo eso: los comentarios de
+   `ci.yml` son documentación. El informe los **marca** —`[solo comentarios]`— y deja el juicio a
+   quien lee, que es lo correcto cuando la señal existe pero es débil.
+
+### El informe se validó a sí mismo en su primer disparo
+
+La primera corrida real dio **11 secciones movidas y cero dependencias cambiadas**, que es
+imposible… salvo que lo que haya cambiado sea el propio método de sellado, como acababa de pasar
+con la poda del recorte. El script lleva escrita esa guarda y la disparó sola: *«el sello no
+cuadra y ninguna dependencia parece haber cambiado; revisa el diff de `huella.ts` antes de sellar
+a ciegas»*. Un informe que sale vacío se lee igual que uno que no tenía nada que contar, y ese es
+el modo de fallo que este repo se ha encontrado cinco veces.
+
+**Lo que queda abierto, y sigue abierto a propósito.** El artículo mezcla dos tiempos verbales
+—«no hay formulario de contacto» es *estado* y caduca; «me quedé con el enlace» es *decisión
+fechada* y no caduca— y es el único documento del proyecto sin la partición que ya tienen
+`PRD-Live`/`PRD-Historical` y `BRAND`/`BRAND-historical`. Se decide al escribir el primer caso
+real que la necesite; siete disparos después, ninguno la ha necesitado todavía.
