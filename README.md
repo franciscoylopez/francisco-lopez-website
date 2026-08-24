@@ -124,6 +124,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `check:articulo` | Que «Cómo se ha creado esta página» describa un proyecto que ya se ha movido. Cada sección declara de qué depende y lleva su sello: cuando una fuente cambia, CI sale rojo **nombrando la sección** (`D84`) |
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
 | `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
+| `check:figuras` | Que una figura pinte sus rótulos ilegibles. `text-[11px]` dentro de un `viewBox` son 11 **unidades de dibujo**, no 11 píxeles, y esa escala no está en el `font-size` computado: los diagramas del artículo pintaron entre 5,0 y 8,2px durante meses sin que lo viera nadie. Mide el prerender, así que no necesita navegador (`D106`) |
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
@@ -157,6 +158,8 @@ npm run check:raya          # que no vuelva la raya (—) al copy servido (D63)
 npm run check:marco         # el criterio de cierre de página, sobre todas las variantes
                             # prerenderizadas: axe, enlace de salto y JSON-LD (D75).
                             # Necesita `npm run build` antes: mide el HTML, no el código
+npm run check:figuras       # el rótulo PINTADO de cada figura con lienzo escalado, contra
+                            # el suelo de 11px de la DoD (D106). También sobre el prerender
 
 # Generadores
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza su sello
@@ -263,8 +266,8 @@ scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts
 scripts/check-*.ts         Los guardianes de CI. Todos comparten dos reglas de método:
                            buscan la AUSENCIA (no el patrón) y afirman cuánto han mirado
 scripts/indices.ts         Genera los tres índices derivados de sus cabeceras (D69)
-scripts/check-guardianes.ts  Un caso malo conocido por guardián. Fuera de CI: muta
-                           archivos, así que exige árbol limpio y restaura (D70)
+scripts/check-guardianes.ts  Un caso malo conocido por guardián. Muta archivos para
+                           provocar el fallo, así que exige árbol limpio y restaura (D70)
 scripts/design-review/     Censo de pares de contraste del DOM servido
 scripts/psi.ts             PageSpeed desde la terminal: una página con su desglose del LCP,
                            o el registro entero con el agregado de avisos (D49, D99)

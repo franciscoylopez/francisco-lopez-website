@@ -32,12 +32,37 @@ disable-model-invocation: true
    sobre ella. No es un fallo del gate: es su alcance. Si lo que tocaste vive solo en cliente,
    el gate no es la comprobación — hay que medirlo en el navegador.
 
+4. **UN SERVIDOR VIEJO EN EL PUERTO CONVIERTE ESTE GATE EN UN VERDE FALSO** *(2026-08-24,
+   P68.59)*. Si el 3000 ya está ocupado, `npm start` muere con `EADDRINUSE` **en silencio**,
+   el servidor de antes sigue respondiendo 200, y el gate compara ese build consigo mismo. No
+   es que la cifra salga parecida: es que imprime *«Sin cambios en el HTML de las 28 variantes.
+   El refactor es transparente»* sobre un cambio que reescribía siete diagramas. Lo destapó que
+   el resultado fuera **imposible**, no el gate. Y `pkill` no lo mata en Windows.
+
 ## Paso 1 · Levanta el sitio
 
 ```bash
 npm run build
 npm start            # en otra terminal; queda en :3000
 ```
+
+**Antes de seguir, dos comprobaciones de dos segundos**, que son las que cierran el punto 4:
+
+```bash
+grep -c EADDRINUSE <log-de-npm-start>   # si sale ≥1, lo que responde NO es tu build
+```
+
+```powershell
+# Y si hay que matarlo, por puerto y en PowerShell — `pkill` no sirve aquí:
+Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue |
+  Select-Object -ExpandProperty OwningProcess -Unique |
+  ForEach-Object { Stop-Process -Id $_ -Force }
+```
+
+Cuando el gate compara **dos builds** (guardar la base en una rama y comparar en otra), añade
+la comprobación que de verdad lo prueba: **busca en cada lado una marca que solo exista ahí**
+—una clase, una frase— y confirma que aparece donde toca. Es «valida el metro contra un caso
+ya publicado» (`BRAND.md` §Cómo medir, 1) aplicado al servidor.
 
 Si el 3000 está ocupado por otra cosa, usa otro puerto y pásalo a los tres:
 `npx next start -p 3100` y `BASE_URL=http://localhost:3100` delante de cada comando.
