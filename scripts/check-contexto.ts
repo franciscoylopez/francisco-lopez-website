@@ -38,7 +38,8 @@
  * 240 palabras —cinco o seis reglas— y se baja el objetivo, que es quien lleva la
  * ambición.
  */
-import { readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join, relative } from "node:path";
 
 /** Lo que se `@`-importa en cada arranque de sesión, vía `CLAUDE.md`. */
 const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
@@ -125,4 +126,132 @@ if (total > OBJETIVO) {
   );
 } else {
   console.log("✓ El contexto de arranque cabe en el objetivo. Baja el techo.");
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * SEGUNDA MITAD: LAS SKILLS Y LOS AGENTES (2026-08-24, P68.67).
+ *
+ * El presupuesto de arriba vigilaba los cuatro `@`-importados y nada más,
+ * mientras la mitad no vigilada pesaba 1,61× la vigilada —19.884 palabras
+ * contra 11.957— y crecía al revés: entre el 08-08 y el 08-22, lo vigilado
+ * +34% y las skills +233%. Las curvas se cruzaron el 2026-08-19, el día del
+ * primer `method-review`: ese día lo vigilado bajó 437 palabras y lo no
+ * vigilado subió 6.816. Es el mismo modo de fallo que D69 arregló para los
+ * documentos —crece porque nada pregunta qué sobra—, en el sitio donde nadie
+ * miraba.
+ *
+ * POR QUÉ UN TECHO POR SKILL Y NO UN TOTAL. Un total aquí no significa nada:
+ * las nueve entradas no se cargan nunca a la vez. Una skill se carga ENTERA
+ * cuando se dispara, de una en una y a mano, así que el coste es puntual y lo
+ * que importa es cuánto cuesta LA MÁS CARA, no cuánto suman todas.
+ *
+ * EL NÚMERO SALE DE MEDIR EL RUIDO PRIMERO, no de elegirlo. Barrido sobre las
+ * nueve entradas reales: a 4.500 lo cruza UNA, a 2.500 dos, a 2.000 tres y a
+ * 1.500 seis. Un techo que descalifica a media casa está mal puesto él, no las
+ * skills; 4.500 —el tamaño del mayor `@`-importado— señala exactamente al
+ * outlier y deja pasar al resto.
+ *
+ * Y NACE EN VERDE, por la misma razón que el techo de arriba: un gate que nace
+ * en rojo se sube hasta que no significa nada. `design-review` mide 6.290 y es
+ * quien tiene el margen —la única skill que no se ha revisado desde que se
+ * escribió, y el sprint 2 le añadió una fase entera—, así que el TECHO nace por
+ * encima de ella y el OBJETIVO, que solo avisa, la nombra en cada corrida.
+ * Cuando se compacte, el techo baja detrás.
+ *
+ * LO QUE ESTE METRO NO VE, y conviene saberlo: las skills de usuario
+ * (`~/.claude/skills/`) también se cargan enteras y no están en el repositorio,
+ * así que CI no puede medirlas. Aquí se vigila lo que el proyecto sí controla.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/**
+ * Falla por encima de aquí, POR ENTRADA. **Se aprieta conforme se compacta.**
+ *   6.400  al crearlo (2026-08-24), con `design-review` medida en 6.290
+ */
+const TECHO_SKILL = 6_400;
+
+/** A dónde se quiere llegar por entrada: el tamaño del mayor `@`-importado. */
+const OBJETIVO_SKILL = 4_500;
+
+/** Las carpetas de contexto a demanda que vivan en el repo. Del DISCO, nunca de
+ *  una lista escrita: una skill nueva entra en el presupuesto sin que nadie se
+ *  acuerde, igual que una página entra en el censo por `PAGE_SLUGS`. */
+const CARPETAS = [".claude/skills", ".claude/agents", ".claude/commands"];
+
+function mdRecursivo(dir: string): string[] {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    if (e.isDirectory()) return mdRecursivo(p);
+    return e.name.endsWith(".md") ? [p] : [];
+  });
+}
+
+/** Una entrada = una skill, con todos los `.md` que la componen sumados: lo que
+ *  cuesta dispararla es su carpeta entera, no su `SKILL.md`. */
+const entradas = new Map<string, { palabras: number; archivos: number }>();
+for (const carpeta of CARPETAS) {
+  for (const archivo of mdRecursivo(carpeta)) {
+    // Separador normalizado antes de partir: en Windows `relative` devuelve
+    // `\`, y una clase de caracteres mal escapada partiría solo por `/` y
+    // dejaría el nombre en «design-review\SKILL».
+    const resto = relative(carpeta, archivo).replaceAll("\\", "/").split("/");
+    const primero = resto[0] ?? archivo;
+    const nombre = resto.length > 1 ? primero : primero.replace(/\.md$/, "");
+    const acc = entradas.get(nombre) ?? { palabras: 0, archivos: 0 };
+    acc.palabras += palabras(readFileSync(archivo, "utf8"));
+    acc.archivos += 1;
+    entradas.set(nombre, acc);
+  }
+}
+
+if (entradas.size === 0) {
+  console.error(
+    "\ncheck:contexto — NO HA MIRADO NINGUNA SKILL. Con cero entradas esta mitad\n" +
+      "aprobaría siempre, así que falla a propósito. ¿Se han movido de sitio?\n" +
+      `Esperaba .md bajo: ${CARPETAS.join(", ")}\n`,
+  );
+  process.exit(1);
+}
+
+const porTamano = [...entradas].sort((a, b) => b[1].palabras - a[1].palabras);
+const sumaSkills = porTamano.reduce((n, [, v]) => n + v.palabras, 0);
+
+// El metro afirma cuánto ha mirado (y no al revés).
+console.log(
+  `\ncheck:contexto — ${entradas.size} entradas a demanda (skills y agentes del repo),` +
+    ` techo ${TECHO_SKILL} por entrada:`,
+);
+for (const [nombre, v] of porTamano) {
+  const marca =
+    v.palabras > TECHO_SKILL ? " ✗" : v.palabras > OBJETIVO_SKILL ? " ⚠" : "";
+  console.log(`  ${String(v.palabras).padStart(6)}  ${nombre}${marca}`);
+}
+console.log(
+  `  ${String(sumaSkills).padStart(6)}  suma (NO es un presupuesto: no se cargan a la vez)`,
+);
+
+const pasadas = porTamano.filter(([, v]) => v.palabras > TECHO_SKILL);
+if (pasadas.length > 0) {
+  console.error(
+    `\ncheck:contexto — ${pasadas.length} entrada(s) por encima del techo de ` +
+      `${TECHO_SKILL} palabras:\n` +
+      pasadas.map(([n, v]) => `  ${v.palabras}  ${n}`).join("\n") +
+      "\n\nUna skill se carga ENTERA al dispararse. Lo que toca no es subir el techo,\n" +
+      "es retirar: ¿hay una fase que ya no se usa, un ejemplo que repite al de\n" +
+      "arriba, o un porqué fechado que debería estar en el documento histórico?\n",
+  );
+  process.exit(1);
+}
+
+const sobreObjetivo = porTamano.filter(([, v]) => v.palabras > OBJETIVO_SKILL);
+if (sobreObjetivo.length > 0) {
+  console.log(
+    `  ⚠ ${sobreObjetivo.length} por encima del objetivo de ${OBJETIVO_SKILL}: ` +
+      sobreObjetivo.map(([n, v]) => `${n} (${v.palabras})`).join(", ") +
+      ". No falla, pero es de donde sale el próximo apretón.",
+  );
+} else {
+  console.log(
+    `✓ Ninguna entrada pasa de ${OBJETIVO_SKILL} palabras. Baja el techo.`,
+  );
 }
