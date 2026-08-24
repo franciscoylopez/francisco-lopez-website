@@ -522,11 +522,44 @@
         },
         {
           "type": "p",
-          "text": "The Claude Design mockup did its job: capture the feel of the page, be easy to translate, and get a first version out fast. Today new sections get designed directly in code, iterating in the browser with the real tokens, and the mockup stays on as a disposable sketchbook for visual moves the system doesn't have yet. It's the first decision in the project I overturned in writing, and I kept the original below it, dated."
+          "text": "The Claude Design mockup did its job: capture the feel of the page, be easy to translate, and get a first version out fast. The mockup stays on as a disposable sketchbook for visual moves the system doesn't have yet. It's the first decision in the project I overturned in writing, and I kept the original below it, dated."
+        },
+        {
+          "type": "h3",
+          "text": "How the design happens now: in the browser, and decided by looking"
         },
         {
           "type": "p",
-          "text": "What does survive from the old method is the habit of deciding by seeing, not by imagining: when more than one direction is possible, it gets prototyped with the real tokens and chosen by looking at both, not by describing them."
+          "text": "The design tool for this site is the browser. A new section gets drawn directly in code, with the real tokens, and that removes the step that costs the most: the translation. There's no pretty version in one tool and a real one on the web, there's a single one, and it gets looked at where it's going to live, in both themes and at all four widths. It sounds like the shortcut of someone who can't use a design tool, and the effect is the opposite: when trying something costs two minutes, you try it instead of arguing about it."
+        },
+        {
+          "type": "p",
+          "text": "That's where the one rule of method I have about this comes from: **if a visual decision can be seen, it doesn't get decided by reading**. When more than one direction is possible I don't write down which one I prefer, I build two or three of them, with the real tokens and their theme switch, on a separate page that gets thrown away afterwards. Choosing between two things that exist takes a minute; choosing between two descriptions takes an argument, and the best-explained one tends to win, which isn't the same as the best one."
+        },
+        {
+          "type": "p",
+          "text": "And then comes the part no method ever mentions: the fine-tuning. Not one section of this site came out right the first time. What sits between the first version and the good one is rounds of looking at it served and writing down what grates, almost always small things and almost never the ones you expected: a heading that shifts as the width changes, a pull quote stuck to the bottom of a list, a diagram that starts lower than the text it runs alongside. This very page has more of those rounds inside it than I care to count."
+        },
+        {
+          "type": "p",
+          "text": "None of the above holds up on good intentions alone, so there are routines for design too, and they belong to a different family than the ones I describe later: those know about this site, and these know nothing about it. They know about design."
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**Before writing the component**, the one that builds several real versions of the same piece and puts them behind a picker so you can flip between them live. It's what turns the rule above into something that actually happens.",
+            "**Before installing any interface dependency**, the one that forces you to pick it from a reasoned list instead of from the first search result. A dependency goes in in five seconds and stays for years.",
+            "**Once the interface is done**, a review against the Web Interface Guidelines: empty states, text that overflows, figures that jitter as they update, screen margins on a phone with a notch. The mechanical things that get forgotten once the screen looks good.",
+            "**Once any animation is done**, a motion review that suspects by default. It's the most useful of the four precisely because its default bar is «this shouldn't be here»."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Three of those four are marked so the AI **can't launch them on its own**, and that mark is the most important design decision on the list. They aren't checks, they're decisions: which of three directions, which dependency goes in, whether that motion stays. A check can be automated end to end; a decision, at most, can be prepared. What the machine does is put the options in front of me, built and on screen; choosing is still mine, and I want the process to force me to be there."
+        },
+        {
+          "type": "p",
+          "text": "That leaves the voice, which is the easiest thing to lose working this way. Two written rules and one checker govern it: Spanish is the source and English gets reviewed against it, never the other way around, because translating a text with judgment literally produces a correct text with no judgment. And **the site's copy doesn't use the em dash**, because it's one of the most recognizable tells of a text written by an AI and it almost never says anything a shorter mark wouldn't. That doesn't depend on my remembering it: there's a build step that walks every copy string on the site and fails if one shows up. Writing about judgment in the age of AI and publishing it with a model's punctuation would have been a silly way to contradict myself."
         }
       ],
       "enlace": {
@@ -560,6 +593,18 @@
         {
           "type": "p",
           "text": "And the format came out of removing, not adding. No captcha, because a captcha is an accessibility barrier and this site publishes a conformance statement. No external email service, because it sends through the account that already existed: there's no new third party to trust with other people's messages, and no extra domain to open up in the content policy. And it goes nowhere, because the send happens on the same origin as the page. Three decisions that look a lot like the five headers just below: nearly everything that makes this form safe is something that isn't there."
+        },
+        {
+          "type": "p",
+          "text": "What does need telling is what happens to that text once it arrives, because it's the only thing on the whole site written by someone who isn't me. The validation that decides is the server's, not the browser's: the one up front is a convenience for whoever is filling it in, and anyone posting by hand never ran it. The message leaves the server as plain text and not as HTML, which isn't a style call: a text body doesn't interpret anything anyone writes into it, so there's no way to slip markup into my inbox through there. And it works with JavaScript switched off, because the form genuinely posts instead of pretending to."
+        },
+        {
+          "type": "p",
+          "text": "The hole that did exist was where I wasn't looking, in the email headers. The visitor's address goes in the reply field, which is what makes «Reply» work, and that field was being assembled by joining strings together. Anyone who wrote their name in the right shape got the email to go out with **two** reply addresses instead of one, and in one case theirs came first: hitting «Reply» I'd have answered someone who never wrote to me as well. No scanner found it, the end-of-stage technical review did. It gets fixed by passing the name and the address as two separate values instead of as one sentence, which is the same idea as always: the problem wasn't the text, it was joining it."
+        },
+        {
+          "type": "p",
+          "text": "With bots the rule is silence. There's an invisible field a person can't fill in and a time floor below which a submission isn't human, and in both cases the screen says «sent» and nothing gets sent, because telling a bot you've caught it only teaches it to dodge you next time. And that's this chapter's failure: that filter also had a ceiling, so anyone who left the tab open and submitted the next day saw the same success screen with their message in the bin. The silence that's right with a bot is a lie with a person, and on the one metric this site takes seriously, no less. Now the filter only judges from below."
         },
         {
           "type": "p",

@@ -521,11 +521,44 @@
         },
         {
           "type": "p",
-          "text": "El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. Hoy las secciones nuevas se diseñan directamente en código, iterando en el navegador con los tokens reales, y la maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es la primera decisión del proyecto que anulé por escrito, y dejé la original debajo, con su fecha."
+          "text": "El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. La maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es la primera decisión del proyecto que anulé por escrito, y dejé la original debajo, con su fecha."
+        },
+        {
+          "type": "h3",
+          "text": "Cómo se diseña hoy: en el navegador, y decidiendo con los ojos"
         },
         {
           "type": "p",
-          "text": "Lo que sí se conserva del método antiguo es la costumbre de decidir viendo y no imaginando: cuando hay más de una dirección posible, se prototipa con los tokens de verdad y se elige mirando las dos, no describiéndolas."
+          "text": "La herramienta de diseño de este sitio es el navegador. Una sección nueva se dibuja directamente en código, con los tokens de verdad, y eso quita del medio el paso que más caro sale: la traducción. No hay una versión bonita en una herramienta y otra real en la web, hay una sola, y se mira donde va a vivir, en los dos temas y en los cuatro anchos. Suena a atajo de quien no sabe usar una herramienta de diseño, y el efecto es el contrario: cuando probar algo cuesta dos minutos, se prueba en vez de discutirlo."
+        },
+        {
+          "type": "p",
+          "text": "De ahí sale la única regla de método que tengo sobre esto: **si una decisión visual se puede ver, no se decide leyendo**. Cuando hay más de una dirección posible no escribo cuál me gusta más, construyo las dos o las tres, con los tokens reales y su cambio de tema, en una página aparte que se tira después. Elegir entre dos cosas que existen lleva un minuto; elegir entre dos descripciones lleva una discusión, y encima suele ganar la mejor explicada, que no es lo mismo que la mejor."
+        },
+        {
+          "type": "p",
+          "text": "Y después viene la parte que no sale en ningún método: el ajuste fino. Ninguna sección de este sitio ha quedado bien a la primera. Lo que hay entre la primera versión y la buena son rondas de mirarla servida y anotar lo que chirría, casi siempre cosas pequeñas y casi nunca las que uno esperaba: un titular que se desplaza al cambiar de ancho, una cita pegada al fondo de una lista, un diagrama que empieza más abajo que el texto con el que corre en paralelo. Esta misma página lleva dentro más rondas de esas de las que me apetece contar."
+        },
+        {
+          "type": "p",
+          "text": "Nada de lo anterior se sostiene solo por buena voluntad, así que también hay rutinas para el diseño, y son de otra familia que las que cuento más adelante: aquellas saben de este sitio, y estas no saben nada de él. Saben de diseño."
+        },
+        {
+          "type": "ul",
+          "items": [
+            "**Antes de escribir el componente**, la que construye varias versiones de verdad de una misma pieza y las pone detrás de un selector para poder pasar de una a otra en vivo. Es la que convierte la regla de arriba en algo que ocurre.",
+            "**Antes de instalar cualquier dependencia de interfaz**, la que obliga a elegirla de una lista razonada en vez de por el primer resultado de una búsqueda. Una dependencia entra en cinco segundos y se queda años.",
+            "**Al terminar la interfaz**, una revisión contra las Web Interface Guidelines: estados vacíos, textos que desbordan, cifras que bailan al actualizarse, márgenes de pantalla en un móvil con muesca. Lo mecánico que se olvida cuando la pantalla está bonita.",
+            "**Al terminar cualquier animación**, una revisión de movimiento que por defecto sospecha. Es la más útil de las cuatro precisamente porque el listón por defecto es «esto sobra»."
+          ]
+        },
+        {
+          "type": "p",
+          "text": "Tres de esas cuatro están marcadas para que la IA **no pueda lanzarlas por su cuenta**, y esa marca es la decisión de diseño más importante de la lista. No son comprobaciones, son decisiones: cuál de tres direcciones, qué dependencia entra, si ese movimiento se queda. Una comprobación se puede automatizar entera; una decisión, como mucho, se puede preparar. Lo que la máquina hace es ponerme las opciones delante construidas y en pantalla; elegir sigue siendo mío, y quiero que el proceso me obligue a estar ahí."
+        },
+        {
+          "type": "p",
+          "text": "Queda la voz, que es lo que más fácil se pierde trabajando así. La gobiernan dos reglas escritas y un verificador: el español es la fuente y el inglés se revisa contra él, nunca al revés, porque traducir literalmente un texto con criterio produce un texto correcto sin criterio. Y **el copy del sitio no usa la raya**, ese guion largo que separa incisos, porque es una de las señales más reconocibles de un texto escrito por una IA y casi nunca dice nada que no diga un signo más corto. Eso no depende de que yo me acuerde: hay un paso de integración que recorre todas las cadenas de copy del sitio y falla si aparece una. Escribir sobre criterio en tiempos de IA y publicarlo con la puntuación de un modelo habría sido una forma tonta de contradecirse."
         }
       ],
       "enlace": {
@@ -559,6 +592,18 @@
         {
           "type": "p",
           "text": "Y el formato salió de quitar, no de añadir. Sin captcha, porque un captcha es una barrera de accesibilidad y este sitio publica una declaración de conformidad. Sin servicio externo de correo, porque el envío sale por la cuenta que ya existía: no hay un tercero nuevo al que confiarle mensajes ajenos, ni un dominio más que abrir en la política de contenido. Y sin salir a ningún sitio, porque el envío ocurre en el mismo origen que la página. Tres decisiones que se parecen mucho a las cinco cabeceras de aquí abajo: casi todo lo que hace seguro este formulario es algo que no está."
+        },
+        {
+          "type": "p",
+          "text": "Lo que sí hay que contar es qué le pasa a ese texto cuando llega, porque es lo único de todo el sitio que escribe alguien que no soy yo. La validación que decide es la del servidor, no la del navegador: la de delante es una comodidad para quien rellena, y quien envía a mano no la ha ejecutado nunca. El mensaje sale del servidor en texto plano y no en HTML, que no es una decisión de estilo: un cuerpo de texto no interpreta nada de lo que le escriban, así que por ahí no se puede colar marcado en mi buzón. Y funciona con JavaScript desactivado, porque el formulario postea de verdad en vez de simularlo."
+        },
+        {
+          "type": "p",
+          "text": "El agujero que sí existía estaba donde no miraba, en las cabeceras del correo. La dirección del visitante va en el campo de respuesta, que es lo que hace que «Responder» funcione, y ese campo se componía juntando cadenas. Alguien que escribiera su nombre con la forma adecuada conseguía que el correo saliera con **dos** direcciones de respuesta en vez de una, y en un caso la suya iba incluso primero: al pulsar «Responder» yo le habría contestado también a alguien que nunca escribió. No lo encontró ningún escáner, lo encontró la revisión técnica de cierre de etapa. Se arregla pasando el nombre y la dirección como dos datos separados en vez de como una frase, que es la misma idea de siempre: el problema no era el texto, era juntarlo."
+        },
+        {
+          "type": "p",
+          "text": "Con los robots el criterio es el silencio. Hay un campo invisible que una persona no puede rellenar y un suelo de tiempo por debajo del cual el envío no es humano, y en los dos casos la pantalla dice «enviado» y no se envía nada, porque avisar a un bot de que lo has cazado solo le enseña a esquivarte la próxima vez. Y ahí está el fallo de este capítulo: ese filtro tenía también un techo, así que quien dejaba la pestaña abierta y enviaba al día siguiente veía la misma pantalla de éxito con el mensaje en la basura. El silencio que es correcto con un bot es una mentira con una persona, y encima sobre la única métrica que este sitio se toma en serio. Ahora el filtro solo juzga por abajo."
         },
         {
           "type": "p",
