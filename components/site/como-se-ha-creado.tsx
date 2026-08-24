@@ -36,16 +36,14 @@ import {
 import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
-import {
-  CapasColorDiagram,
-  CapasVerificacionDiagram,
-  CascadaDiagram,
-  CIDiagram,
-  DosVelocidadesDiagram,
-  SinConsentimientoDiagram,
-  StackDiagram,
-  TresLongitudesDiagram,
-} from "./como-se-ha-creado-diagrams";
+import { DosVelocidadesDiagram } from "./como-se-ha-creado-diagrams/01-dos-velocidades";
+import { CapasColorDiagram } from "./como-se-ha-creado-diagrams/03-capas-color";
+import { StackDiagram } from "./como-se-ha-creado-diagrams/04-stack";
+import { CascadaDiagram } from "./como-se-ha-creado-diagrams/05-cascada";
+import { TresLongitudesDiagram } from "./como-se-ha-creado-diagrams/06-tres-longitudes";
+import { SinConsentimientoDiagram } from "./como-se-ha-creado-diagrams/07-sin-consentimiento";
+import { CapasVerificacionDiagram } from "./como-se-ha-creado-diagrams/08-capas-verificacion";
+import { CIDiagram } from "./como-se-ha-creado-diagrams/09-ci";
 
 // La página «Cómo se ha creado esta página» (P60, sprint «Cómo se ha creado»,
 // PRD-Live.md §9). Site-specific: compone las piezas genéricas de
