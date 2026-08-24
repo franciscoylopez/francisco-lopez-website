@@ -904,11 +904,11 @@
         },
         {
           "type": "h3",
-          "text": "The four times the meter measured something other than what I thought"
+          "text": "The times the meter measured something other than what I thought"
         },
         {
           "type": "p",
-          "text": "And the rest isn't that the site fell short. It's that getting there meant fixing the measuring instrument itself four times, and all four times the result read exactly like a pass."
+          "text": "And the rest isn't that the site fell short. It's that getting there meant fixing the measuring instrument itself more times than I would care to count, and every time the result read exactly like a pass."
         },
         {
           "type": "p",
@@ -925,6 +925,10 @@
         {
           "type": "p",
           "text": "**On scope.** The fourth one is a different kind, and that's why it taught me the most: the instrument wasn't broken, it didn't exist. Everything it measured was text against its background, and there's a second requirement almost nobody remembers: a control also has to be recognisable as a control. The border of a form field, which is the only thing telling you where to type, has a bar of its own. Mine sat at less than half of it, on every neutral control on the site, and had done since the first version. Nobody caught it because the automated scanner doesn't check that rule, my own census measured something else, and each link in the chain delegated to the next, so the whole chain ended somewhere nobody was standing. The name I gave it helped too: “contrast pair census” sounds like it covers everything. Had I called it “text pair census”, the gap would have been visible on day one."
+        },
+        {
+          "type": "p",
+          "text": "**On criteria.** The fifth one landed the day after I fixed the fourth, and it is the one that stings most: the instrument was not broken, and it was not missing. It measured, it published its number, and the number was true of what it measured. What was wrong was what it had decided to look at. It counted as a control anything you click that also draws itself a border, and the section index on this page draws its own inside a piece within it, so it neither counted as a control nor got looked at as a border. Twelve invisible controls, eleven of them below the bar, carrying the very number I had just corrected everywhere else. And the pass measured without scrolling down the page, so that index was not even there when it went to measure it: two independent reasons for the same zero, and either one was enough. Now the pass says how many controls it finds through that door, so a zero cannot look like a pass again."
         },
         { "type": "h3", "text": "The layer that can't be automated" },
         {
