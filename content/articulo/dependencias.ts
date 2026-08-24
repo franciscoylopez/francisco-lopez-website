@@ -188,6 +188,11 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D70",
     "DECISIONS.md#D72",
     ".github/workflows/ci.yml",
+    // El dibujo de los pasos, fuera del componente desde P68.495. El RECUENTO ya
+    // no puede divergir —lo deriva `lib/figures.ts` de `ci.yml` y lo compara
+    // `check:articulo`—, pero el agrupado por rol y la categoría de cada paso son
+    // editoriales, y de ellos sí depende la frase «la mayoría busca la ausencia».
+    "content/articulo/ci-steps.ts",
     ".claude/skills/",
   ],
 

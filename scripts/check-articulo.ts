@@ -3,7 +3,7 @@
  * en CI. Con `--seal` (`npm run articulo:sellar`), sella en vez de juzgar.
  *
  * EL PORQUÉ, en `content/articulo/dependencias.ts`. EL MÉTODO, en
- * `scripts/articulo/huella.ts`. Aquí, el veredicto y sus cuatro comprobaciones:
+ * `scripts/articulo/huella.ts`. Aquí, el veredicto y sus seis comprobaciones:
  *
  *   1. **Las citas resuelven.** Toda decisión citada (`D29`) existe en
  *      `DECISIONS.md`, y todo archivo citado sigue en disco. Sin esto, la franja
@@ -17,6 +17,14 @@
  *      justo el modo de fallo que esto viene a cerrar.
  *   4. **El sello cuadra.** Si una dependencia cambió, sale rojo NOMBRANDO la
  *      sección. No dice que el texto sea falso: dice que hay que mirarlo.
+ *   5. **Un «dato en vivo» no está tecleado.** La pieza `livestat` promete eso
+ *      literalmente, y de los tres que había dos eran números a mano que ya
+ *      mentían. Su valor tiene que interpolar una cifra derivada, y el token
+ *      tiene que existir: uno mal escrito se publica con las llaves puestas
+ *      (P68.495).
+ *   6. **El diagrama de CI dibuja los pasos que hay.** El pie deriva su cifra de
+ *      `ci.yml` y las pastillas son un dibujo: sin esto, un paso nuevo movería
+ *      el pie y dejaría el diagrama corto, en silencio.
  *
  * QUÉ HACER CON UN ROJO DE LA 4. Leer la sección que nombra y decidir. Si el
  * texto sigue siendo cierto, `npm run articulo:sellar`. Si no, se corrige el
@@ -28,8 +36,8 @@
  * escribe si pasan. Es el mismo acoplamiento que `npm run artefacto`, donde
  * regenerar y sellar tampoco pueden separarse.
  *
- * Y AFIRMA CUÁNTO HA MIRADO, con su guarda de cero: secciones, dependencias y
- * citas comprobadas. Un metro que devuelve lista vacía parece un aprobado, y
+ * Y AFIRMA CUÁNTO HA MIRADO, con su guarda de cero: secciones, dependencias,
+ * citas y datos en vivo comprobados. Un metro que devuelve lista vacía parece un aprobado, y
  * este repo se lo ha encontrado cinco veces.
  *
  * LO QUE NO COMPRUEBA, dicho para que no se dé por cubierto: que el párrafo diga
@@ -41,8 +49,10 @@ import { existsSync, writeFileSync } from "node:fs";
 
 import enArticulo from "../app/[lang]/dictionaries/en/como-se-ha-creado.json";
 import esArticulo from "../app/[lang]/dictionaries/es/como-se-ha-creado.json";
+import { pasosDibujados } from "../content/articulo/ci-steps";
 import { DEPENDENCIAS, SECCIONES } from "../content/articulo/dependencias";
 import { ES_DECISION, lineasDeDecision } from "../lib/decisions";
+import { FIGURAS, pasosDeCI } from "../lib/figures";
 import {
   HUELLA_PATH,
   huellaDelArticulo,
@@ -131,6 +141,76 @@ for (const id of declaradas)
       `se declaran dependencias de «${id}», que ya no es una sección del artículo.`,
     );
 
+// ── 5 · Un «dato en vivo» no puede estar tecleado ────────────────────────────
+//
+// El hueco que las cuatro comprobaciones de arriba NO cubren, y que se encontró
+// leyendo, no midiendo (P68.495): las cuatro giran alrededor de las dependencias
+// DECLARADAS, y un número escrito dentro de un `value` no declara nada. La pieza
+// se llama `livestat` y su etiqueta dice «dato en vivo»; de los tres que había,
+// dos eran cifras a mano y las dos ya mentían.
+//
+// Comprobación de AUSENCIA, como el resto de la casa: no se busca un número
+// sospechoso, se busca que FALTE la interpolación. Y de paso, que el token
+// exista: `{psiMovil}` con una ele de más no rompe nada, se publica con las
+// llaves puestas.
+
+type LiveStat = { id?: string; value?: string; source?: string };
+
+function liveStats(nodo: unknown, acc: LiveStat[] = []): LiveStat[] {
+  if (Array.isArray(nodo)) {
+    for (const hijo of nodo) liveStats(hijo, acc);
+    return acc;
+  }
+  if (nodo && typeof nodo === "object") {
+    const o = nodo as Record<string, unknown>;
+    if (o.type === "livestat") acc.push(o as LiveStat);
+    for (const k of Object.keys(o)) liveStats(o[k], acc);
+  }
+  return acc;
+}
+
+let liveStatsVistos = 0;
+
+for (const { dict, ruta } of DICCIONARIOS) {
+  for (const ls of liveStats(dict)) {
+    liveStatsVistos += 1;
+    const texto = `${ls.value ?? ""} ${ls.source ?? ""}`;
+    const tokens = [...texto.matchAll(/{(\w+)}/g)].map((m) => m[1] as string);
+
+    if (!tokens.length)
+      fallo(
+        `el livestat «${ls.id}» de ${ruta} promete un DATO EN VIVO y su valor está ` +
+          `tecleado: «${ls.value}». Tiene que interpolar una cifra derivada ` +
+          `(${FIGURAS.map((n: string) => `{${n}}`).join(", ")}) — ver lib/figures.ts.`,
+      );
+
+    for (const token of tokens)
+      if (!(FIGURAS as readonly string[]).includes(token))
+        fallo(
+          `el livestat «${ls.id}» de ${ruta} interpola «{${token}}», que no es una ` +
+            `cifra derivada. Se publicaría con las llaves puestas. Las que hay: ` +
+            `${FIGURAS.join(", ")}.`,
+        );
+  }
+}
+
+// ── 6 · El diagrama de CI dibuja tantos pasos como tiene el workflow ─────────
+//
+// El pie de §s10 dice «los {pasosCI} pasos» y esa cifra sale de `ci.yml`; las
+// pastillas del diagrama son un dibujo con su propio agrupado editorial. Sin
+// esto, un paso nuevo movería el pie y dejaría el dibujo corto, en silencio.
+
+const pasosWorkflow = pasosDeCI();
+for (const locale of ["es", "en"] as const) {
+  const dibujados = pasosDibujados(locale);
+  if (dibujados !== pasosWorkflow)
+    fallo(
+      `el diagrama de CI dibuja ${dibujados} pasos en ${locale} y ` +
+        `.github/workflows/ci.yml tiene ${pasosWorkflow}. Añade o quita el paso en ` +
+        `content/articulo/ci-steps.ts, con su grupo y su categoría.`,
+    );
+}
+
 // ── Las dependencias resuelven (precondición de sellar) ──────────────────────
 
 const { sellos, rotas, dependencias } = huellaDelArticulo();
@@ -143,10 +223,10 @@ for (const rota of rotas)
 
 // ── Guarda de cero ───────────────────────────────────────────────────────────
 
-if (citasVistas === 0 || dependencias === 0)
+if (citasVistas === 0 || dependencias === 0 || liveStatsVistos === 0)
   fallo(
-    `el guardián no ha mirado nada (citas: ${citasVistas}, dependencias: ${dependencias}). ` +
-      `Un metro que devuelve lista vacía parece un aprobado.`,
+    `el guardián no ha mirado nada (citas: ${citasVistas}, dependencias: ${dependencias}, ` +
+      `datos en vivo: ${liveStatsVistos}). Un metro que devuelve lista vacía parece un aprobado.`,
   );
 
 // ── Sellar, o juzgar ─────────────────────────────────────────────────────────
@@ -196,6 +276,7 @@ if (SELLAR) {
 } else {
   console.log(
     `check:articulo ✓ — ${SECCIONES.length} secciones, ${dependencias} dependencias ` +
-      `y ${citasVistas} citas (ES+EN) comprobadas. El sello cuadra.`,
+      `y ${citasVistas} citas (ES+EN) comprobadas · ${liveStatsVistos} datos en vivo, todos ` +
+      `interpolados · ${pasosWorkflow} pasos de CI dibujados. El sello cuadra.`,
   );
 }

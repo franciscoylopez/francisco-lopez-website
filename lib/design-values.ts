@@ -482,10 +482,18 @@ const CARDINALES: Record<Locale, readonly string[]> = {
   ],
 };
 
+/**
+ * El cardinal en palabras de un número, o el numeral si se sale de la tabla.
+ * Exportado desde P68.495: el recuento de páginas dejó de ser el único que el
+ * copy escribe con letra, y la tabla vive aquí para no tener dos.
+ */
+export function cardinal(n: number, locale: Locale): string {
+  return CARDINALES[locale][n] ?? String(n);
+}
+
 /** Sustituye `{paginas}` en el copy, como `fillDate` hace con `{date}`. */
 export function fillPages(text: string, locale: Locale): string {
-  const palabra = CARDINALES[locale][PAGE_COUNT] ?? String(PAGE_COUNT);
-  return text.replace(/{paginas}/g, palabra);
+  return text.replace(/{paginas}/g, cardinal(PAGE_COUNT, locale));
 }
 
 /**

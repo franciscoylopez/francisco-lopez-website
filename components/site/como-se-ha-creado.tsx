@@ -21,6 +21,7 @@ import { LEADING, SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { GITHUB_URL } from "@/lib/contact";
 import { fillPages } from "@/lib/design-values";
+import { fillFigures, rellena } from "@/lib/figures";
 import {
   DECISIONES_PATH,
   ES_DECISION,
@@ -183,9 +184,18 @@ export function ComoSeHaCreado({
   // leyéndolo del registro de rutas (D72). Mismo mecanismo que `fillDate` y
   // `fillRatios`, y por el mismo motivo: «AAA en las doce páginas» llevaba días
   // siendo falso porque la cifra estaba escrita a mano en los dos diccionarios.
+  //
+  // ALCANZA A TODA CADENA DEL BLOQUE, no solo al `value` de un `livestat`
+  // (P68.495). Antes solo se rellenaba ahí, así que un `{pasosCI}` en el pie de
+  // un diagrama se habría publicado con las llaves puestas. Rellenar el bloque
+  // entero cuesta lo mismo y quita una regla que había que recordar; las citas
+  // (`label`/`path`) pasan por aquí sin tokens y salen intactas.
   const blocksOf = (raw: unknown) =>
-    (raw as ArticleBlock[]).map((b) =>
-      b.type === "livestat" ? { ...b, value: fillPages(b.value, lang) } : b,
+    (raw as ArticleBlock[]).map(
+      (b) =>
+        rellena(b, (t) =>
+          fillFigures(fillPages(t, lang), lang),
+        ) as ArticleBlock,
     );
 
   const totalWords = articleWordCount(

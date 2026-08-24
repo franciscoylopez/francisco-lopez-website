@@ -470,7 +470,7 @@
           "id": "s05",
           "label": "Piezas del sistema · dato en vivo",
           "source": "components/ui/",
-          "value": "Ocho piezas + capa de página",
+          "value": "{piezasNucleo} piezas + capa de página",
           "linkLabel": "Ver el catálogo",
           "href": "design-system"
         }
@@ -770,8 +770,8 @@
           "type": "livestat",
           "id": "s08",
           "label": "Rendimiento · PageSpeed",
-          "source": "npm run psi",
-          "value": "97-100 escritorio · 95-99 móvil",
+          "source": "npm run psi · {psiFecha}",
+          "value": "{psiEscritorio} escritorio · {psiMovil} móvil",
           "linkLabel": "Ver el informe",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
@@ -1025,7 +1025,7 @@
           "type": "diagram",
           "id": "s10",
           "side": "center",
-          "caption": "Los diecisiete pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
+          "caption": "Los {pasosCI} pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
         },
         {
           "type": "p",

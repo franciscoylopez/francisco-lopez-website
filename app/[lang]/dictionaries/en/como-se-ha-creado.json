@@ -470,7 +470,7 @@
           "id": "s05",
           "label": "System pieces · live data",
           "source": "components/ui/",
-          "value": "Eight pieces + a page layer",
+          "value": "{piezasNucleo} pieces + a page layer",
           "linkLabel": "See the catalog",
           "href": "design-system"
         }
@@ -774,8 +774,8 @@
           "type": "livestat",
           "id": "s08",
           "label": "Performance · PageSpeed",
-          "source": "npm run psi",
-          "value": "97-100 desktop · 95-99 mobile",
+          "source": "npm run psi · {psiFecha}",
+          "value": "{psiEscritorio} desktop · {psiMovil} mobile",
           "linkLabel": "See the report",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
@@ -1025,7 +1025,7 @@
           "type": "diagram",
           "id": "s10",
           "side": "center",
-          "caption": "The seventeen continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
+          "caption": "The {pasosCI} continuous-integration steps, grouped by role and in their real order: most look for the absence of a good pattern, not the presence of a bad one."
         },
         {
           "type": "p",

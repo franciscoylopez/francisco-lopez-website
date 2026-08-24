@@ -166,7 +166,9 @@ npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 npm run gate:html -- save   # instantánea del HTML de todas las páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
 npm run psi -- <url>        # PageSpeed de UNA página: nota, métricas y desglose del LCP (D49)
-npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99)
+npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99).
+                            # Al terminar SELLA el rango en content/psi/ y el artículo lo
+                            # publica con su fecha; una pasada parcial no sella (D102)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
 qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 ```
@@ -238,10 +240,16 @@ content/experience-copy/  De una experiencia, TODO lo que se cuenta en más de u
                        Home, CV, deep-dive y llms.txt leen de aquí (D57, D58)
 content/artefactos/    El `.mmd` es la FUENTE del dibujo y el `.svg` de al lado su render saneado:
                        se regenera, no se edita (D54)
+content/articulo/      Lo que el artículo declara de sí mismo: dependencias.ts (de qué depende
+                       cada sección, D84), su sello, y ci-steps.ts (los pasos que dibuja §s10,
+                       comparados contra el workflow en cada PR, D102)
+content/psi/           registro.json: el rango de PageSpeed con su fecha, escrito por
+                       `npm run psi -- --registro`. El artículo lo publica de ahí (D102)
 
 lib/                   i18n (fuente única de ruta↔locale), page-meta (D45), site (SITE_URL),
                        contact, analítica, consentimiento, datos estructurados, design-values
-                       (fuente única de lo que el sitio publica sobre sí mismo, D38) y utils
+                       (fuente única de lo que el sitio publica sobre sí mismo, D38), figures
+                       (las cifras del artículo, derivadas del disco o selladas, D102) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, video, favicons
 design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega

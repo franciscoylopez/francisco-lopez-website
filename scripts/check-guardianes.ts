@@ -187,6 +187,29 @@ const CASOS: Caso[] = [
       ),
   },
   {
+    guardian: "check:articulo",
+    rotura: "un «dato en vivo» vuelve a tener su cifra tecleada",
+    // La regresión de P68.495. La pieza se llama `livestat` y su etiqueta dice
+    // «dato en vivo»; dos de los tres lo prometían con un número a mano, y los
+    // dos ya mentían cuando alguien los leyó. Nada se rompe al teclearlo: se
+    // publica una cifra que envejece sola.
+    archivo: "app/[lang]/dictionaries/es/como-se-ha-creado.json",
+    mutar: (o) =>
+      o.replace(
+        '"value": "{piezasNucleo} piezas + capa de página"',
+        '"value": "Ocho piezas + capa de página"',
+      ),
+  },
+  {
+    guardian: "check:articulo",
+    rotura: "el diagrama de CI se queda un paso corto respecto al workflow",
+    // El pie deriva su cifra de `ci.yml` y las pastillas son un dibujo: sin la
+    // comparación, un paso nuevo movería el pie y dejaría el diagrama corto sin
+    // que se rompiera nada. Muerde la lista ES; el guardián mira los dos idiomas.
+    archivo: "content/articulo/ci-steps.ts",
+    mutar: (o) => o.replace('          { n: "Tests", cat: "patron" },\n', ""),
+  },
+  {
     guardian: "test",
     rotura:
       "el Reply-To vuelve a componerse concatenando y cuela una segunda dirección",

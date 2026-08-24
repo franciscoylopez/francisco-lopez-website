@@ -1,0 +1,6 @@
+{
+  "fecha": "2026-08-24",
+  "paginas": 14,
+  "movil": { "min": 95, "max": 99 },
+  "escritorio": { "min": 97, "max": 100 }
+}

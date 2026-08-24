@@ -137,6 +137,7 @@
 - D99 · La auditoría de rendimiento recorre el registro, y un ahorro estimado no es un ahorro
 - D100 · `space-y` de Tailwind v4 va dentro de `:where()`, así que cualquier hijo con `m-0` lo anula
 - D101 · El arnés de tests entra cuando aparece la lógica, y se mide sobre lo que el código EMITE
+- D102 · «Dato en vivo» era una promesa, no un mecanismo: la cifra se deriva o se sella, nunca se teclea
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5793,3 +5794,74 @@ PR no es un guardián, es documentación.
 en los dos diccionarios, `PRD-Live.md`, `CLAUDE.md` y `README.md`). Quince, luego dieciséis,
 ahora diecisiete. Derivarlo del propio `ci.yml` es **P68.495**, la tarea siguiente, y este
 cambio es su cuarto caso medido.
+
+---
+
+## D102 · «Dato en vivo» era una promesa, no un mecanismo: la cifra se deriva o se sella, nunca se teclea — 2026-08-24
+
+**El hallazgo, y quién lo encontró.** La pieza que el artículo usa para publicar una cifra
+sobre el propio sitio se llama `livestat` y su etiqueta dice, literalmente, «dato en vivo».
+Había tres, y **solo uno lo era**: el del contraste, que interpola `{paginas}` desde
+`lib/design-values.ts`. Los otros dos eran números escritos a mano dentro de un `value`, y
+los dos **ya mentían**: «siete piezas» con ocho en disco desde que existe `field.tsx`, y
+«100 escritorio · 94-96 móvil» medido con doce páginas cuando ya había catorce.
+
+No los encontró ningún guardián. Los encontró Francisco leyendo el artículo con calma. Y ese
+es el punto: `check:articulo` (D84) gira entero alrededor de las dependencias **declaradas**,
+y **un número tecleado dentro de un `value` no declara nada**. No es que el guardián fallara;
+es que ese hueco quedaba fuera de su forma.
+
+### Las tres cifras no se derivan igual, y esa es la parte reutilizable
+
+- **Piezas del núcleo** y **pasos de CI** se leen del disco al construir (`lib/figures.ts`).
+  La verdad está en `components/ui/` —cada archivo declara su grupo en su primera línea
+  (D89)— y en `.github/workflows/ci.yml`. Añadir una pieza o un paso mueve la cifra sin que
+  nadie se acuerde.
+- **La nota de PageSpeed no se puede derivar**: medir necesita pintar y necesita producción
+  (D49/D99). Así que **se sella**, como hace el censo: `npm run psi -- --registro` deja el
+  rango de cada estrategia con su fecha en `content/psi/registro.json`, y el artículo lo lee
+  de ahí. Un número medido sigue siendo un número medido, pero deja de poder envejecer en
+  silencio, porque llega con su fecha pegada y el sitio la publica al lado.
+
+**Y el sello se niega a escribir una pasada parcial.** Ni sobre un Preview, ni con una sola
+estrategia, ni con un solo fallo: dice por qué no ha sellado y deja el sello anterior. Un
+rango sacado de media auditoría se lee exactamente igual que uno bueno, que es el modo de
+fallo de toda esta familia.
+
+### Los pasos de CI: el recuento sale del workflow y el dibujo se compara con él
+
+El pie de §s10 decía «los dieciséis pasos» y el diagrama dibujaba dieciséis pastillas, con la
+cifra repetida además en el texto alternativo y en las dos etiquetas de la leyenda. Cinco
+sitios, todos a mano, y en su vida han dicho lo mismo dos veces seguidas: fue quince, luego
+dieciséis, y P68.494 la dejó en diecisiete.
+
+Ahora el **recuento** sale de contar los pasos de `ci.yml` que invocan un script de npm —la
+misma regla que usa una persona al leerlo, y por eso `Install dependencies` no cuenta—, la
+**leyenda** sale de contar las propias pastillas, y los pasos dibujados salen a
+`content/articulo/ci-steps.ts` para que `check:articulo` **compare el dibujo contra el
+workflow**. Lo que no se deriva y por eso sigue escrito: el agrupado por rol y la categoría de
+cada paso, que son editoriales. Y el nombre no se compara: el workflow los nombra en un idioma
+y el diagrama se lee en dos.
+
+### La parte que impide que vuelva a pasar
+
+`check:articulo` gana dos comprobaciones, las dos de **ausencia** como el resto de la casa:
+
+5. **Un `livestat` no puede tener el valor tecleado**: si la pieza promete «dato en vivo», su
+   valor tiene que interpolar una cifra derivada. Y el token tiene que **existir**, que es la
+   segunda mitad: `{psiMovil}` con una ele de más no rompe nada, se publica con las llaves
+   puestas.
+6. **El diagrama de CI dibuja tantos pasos como tiene el workflow.**
+
+Y el guardián **afirma cuánto ha mirado**: seis datos en vivo, todos interpolados, y diecisiete
+pasos dibujados. Los dos casos malos están en `check:guardianes`, y con ellos se validó que
+muerden.
+
+**Un detalle de implementación que sí importa: el relleno alcanza a TODA cadena del bloque**,
+no solo al `value` de un `livestat`. Antes solo se rellenaba ahí, así que un `{pasosCI}` en el
+pie de un diagrama se habría publicado con las llaves a la vista. Recorrer el bloque entero
+cuesta lo mismo y quita una regla que había que recordar.
+
+**Lo que queda fuera, dicho para que no se dé por cubierto.** El recuento de pasos sigue
+escrito a mano en `PRD-Live.md`, `CLAUDE.md` y `README.md`. Son documentos, no copy servido, y
+no hay dónde interpolar; el guardián cubre lo que el sitio **publica**.
