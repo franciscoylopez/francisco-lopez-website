@@ -152,11 +152,12 @@ if (total > OBJETIVO) {
  * outlier y deja pasar al resto.
  *
  * Y NACE EN VERDE, por la misma razón que el techo de arriba: un gate que nace
- * en rojo se sube hasta que no significa nada. `design-review` mide 6.290 y es
- * quien tiene el margen —la única skill que no se ha revisado desde que se
- * escribió, y el sprint 2 le añadió una fase entera—, así que el TECHO nace por
- * encima de ella y el OBJETIVO, que solo avisa, la nombra en cada corrida.
- * Cuando se compacte, el techo baja detrás.
+ * en rojo se sube hasta que no significa nada. `design-review` medía 6.290 y era
+ * quien tenía el margen —la única skill que no se había revisado desde que se
+ * escribió, y el sprint 2 le añadió una fase entera—, así que el TECHO nació por
+ * encima de ella y el OBJETIVO, que solo avisa, la nombró en cada corrida hasta
+ * que se compactó. **Y el techo bajó detrás**, que es lo que hace que esto sea un
+ * trinquete y no un aviso.
  *
  * LO QUE ESTE METRO NO VE, y conviene saberlo: las skills de usuario
  * (`~/.claude/skills/`) también se cargan enteras y no están en el repositorio,
@@ -166,8 +167,13 @@ if (total > OBJETIVO) {
 /**
  * Falla por encima de aquí, POR ENTRADA. **Se aprieta conforme se compacta.**
  *   6.400  al crearlo (2026-08-24), con `design-review` medida en 6.290
+ *   4.600  el mismo día (P68.655), tras la retirada sobre `design-review`
+ *          (6.290 → 4.499). Ninguna regla se retiró: la Fase 3 pesaba 1.963
+ *          palabras reescribiendo el censo que ya está en `BRAND.md` y el axe
+ *          que ya lleva `viewport-verifier`, y el filtro mecánico estaba escrito
+ *          dos veces seguidas. Ahora la más cara es `method-review`, 2.630.
  */
-const TECHO_SKILL = 6_400;
+const TECHO_SKILL = 4_600;
 
 /** A dónde se quiere llegar por entrada: el tamaño del mayor `@`-importado. */
 const OBJETIVO_SKILL = 4_500;
@@ -251,7 +257,16 @@ if (sobreObjetivo.length > 0) {
       ". No falla, pero es de donde sale el próximo apretón.",
   );
 } else {
+  // Con todo bajo el objetivo, el consejo útil no es «baja el techo» a secas: eso
+  // se quedaría escrito para siempre, incluido el día en que el techo ya está
+  // pegado a la entrada mayor. Se publica la holgura real y solo se pide apretar
+  // cuando la hay.
+  const mayor = porTamano[0]?.[1].palabras ?? 0;
+  const holgura = TECHO_SKILL - mayor;
   console.log(
-    `✓ Ninguna entrada pasa de ${OBJETIVO_SKILL} palabras. Baja el techo.`,
+    `✓ Ninguna entrada pasa del objetivo de ${OBJETIVO_SKILL} palabras. ` +
+      (holgura > 500
+        ? `Al techo (${TECHO_SKILL}) le sobran ${holgura} sobre la mayor (${mayor}): bájalo.`
+        : `La mayor mide ${mayor}, a ${holgura} del techo: el trinquete está apretado.`),
   );
 }
