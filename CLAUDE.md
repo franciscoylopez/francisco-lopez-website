@@ -173,7 +173,7 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 | 7 | **Copy**: ES fuente de verdad, EN revisado contra el ES, sin raya | D20 · `npm run check:raya` |
 | 8 | **Interfaz mecánica**: estados vacíos, desbordamiento, hidratación, cifras tabulares, safe areas | Skill de Web Interface Guidelines, **antes** de `design-review` |
 | 9 | **`npm run gate:html`** si el cambio se decía transparente | Diff vacío = transparente por construcción (D42/D45) |
-| 10 | **Los diecisiete checks de CI en verde** | El PR |
+| 10 | **Los checks de CI en verde** | El PR |
 
 ## Columna B — no bloquea el envío
 
