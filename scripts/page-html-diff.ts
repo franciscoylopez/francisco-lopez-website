@@ -94,6 +94,18 @@ function normalize(html: string): string {
       //    entra en la comparación. Colapsarlo sería esconder el fallo típico
       //    de mover JSX de sitio.
       .replaceAll("><", ">\n<")
+      // 5. El id de la Server Action del formulario de contacto. Next lo
+      //    recalcula EN CADA BUILD: medido el 2026-08-24 construyendo dos veces
+      //    el MISMO commit —`60727b0b…` y `60e59749…`—, así que /contacto y
+      //    /en/contacto daban rojo en TODA pasada del gate desde que existe el
+      //    formulario, sin depender del cambio que se estuviera revisando. Es
+      //    el modo de fallo de la regla 3 por otra puerta. Se normaliza SOLO el
+      //    id: el resto del <form> —campos, clases, los otros ocultos— sigue
+      //    entrando entero en la comparación.
+      .replace(
+        /(name="\$ACTION_\d+:0" value="\{&quot;id&quot;:&quot;)[^&]+/g,
+        "$1<hash>",
+      )
       .trim() + "\n"
   );
 }
