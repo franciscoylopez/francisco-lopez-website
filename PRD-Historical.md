@@ -75,6 +75,7 @@
 - [57. La dirección de Contacto se elige viéndola, y el prototipo destapa dos defectos del sistema (2026-08-23)](#57-la-dirección-de-contacto-se-elige-viéndola-y-el-prototipo-destapa-dos-defectos-del-sistema-2026-08-23)
 - [58. Contacto se construye, y las tres cosas que arrastra no son las que decía el sprint (2026-08-23)](#58-contacto-se-construye-y-las-tres-cosas-que-arrastra-no-son-las-que-decía-el-sprint-2026-08-23)
 - [59. El sprint 4 se define contra un calendario, no contra la deuda (2026-08-23)](#59-el-sprint-4-se-define-contra-un-calendario-no-contra-la-deuda-2026-08-23)
+- [60. La lectura del artículo destapa tres cosas que nadie buscaba (2026-08-24)](#60-la-lectura-del-artículo-destapa-tres-cosas-que-nadie-buscaba-2026-08-24)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3010,6 +3011,34 @@ El sprint queda en **17 tareas** bajo la etapa «Artículo y velocidad», y **ab
 contenido**, que el `method-review` tuvo que crear: el trabajo existía —Francisco leyendo el
 artículo con calma— pero vivía en el chat y no en el tablero, que es exactamente como el carril de
 contenido se perdió una vez (§54).
+
+## 60. La lectura del artículo destapa tres cosas que nadie buscaba (2026-08-24)
+
+El artículo «Cómo se ha creado esta página» se lanza en septiembre, así que dejó de ser
+mantenimiento y pasó a ser el activo del sprint 4. Francisco lo leyó entero y devolvió **18
+puntos**, que se trocearon en seis tandas (A1 a A6) para no aplicarlos de golpe.
+
+**Lo que pedía el encargo** fue casi todo copy: seis ajustes quirúrgicos, la redistribución
+del capítulo 1 alrededor de la ESTRUCTURA en vez de dos bullets sueltos, dos mudanzas de
+contenido (el contacto a la sección técnica, el vídeo a la de accesibilidad), los dos huecos
+que faltaban —cómo se diseña hoy y qué le pasa al texto que escribe un desconocido— y un
+capítulo entero nuevo, «06 — Automatizaciones», que llevó el artículo de once a doce.
+
+**Y tres cosas que no estaban en el encargo**, las tres por comprobar el terreno antes de
+escribir. Es el patrón que hace que esta entrada merezca existir:
+
+1. **Dos «datos en vivo» mentían.** La pieza se llama así y solo uno de los tres lo era:
+   los otros dos llevaban el número tecleado y habían caducado. Se corrigieron a mano antes
+   de publicar el párrafo que los cuenta en pasado, y la solución de raíz quedó tareada.
+2. **La A de Observatory no se descarta por coste** (P68.496): se descarta porque el HTML de
+   Next no es reproducible entre builds. Lo que cambió no fue la decisión, fue el motivo,
+   que pasó de «su disparador no ocurrió» a una medición (D26).
+3. **El espacio entre párrafos no se pintaba desde P60** (D100), y lo destapó comparar la
+   línea base de un prototipo con producción.
+
+**Lo que se lleva de método:** las tres salieron de verificar contra la cosa real —el disco,
+dos builds, la página servida— y ninguna la habría encontrado leyendo el código. La segunda
+y la tercera invalidaban, además, la premisa con la que se iba a trabajar.
 
 ## Fuentes
 

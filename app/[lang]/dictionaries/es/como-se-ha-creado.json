@@ -341,7 +341,7 @@
           "type": "p",
           "text": "La pregunta con la que entra cada herramienta en este proyecto no es «¿es buena?», sino «¿qué trabajo mío resuelve?». Suena obvio y no lo es: casi todo el software que se instala de más entra por la primera pregunta."
         },
-        { "type": "h3", "text": "Dos sorpresas de estrenar versión" },
+        { "type": "h3", "text": "Tres sorpresas de estrenar versión" },
         {
           "type": "diagram",
           "id": "s04",
@@ -350,7 +350,7 @@
         },
         {
           "type": "p",
-          "text": "Next con App Router, TypeScript en modo estricto y Tailwind. Nada de eso es exótico. Lo que sí sorprende es estrenar una versión nueva: parte de lo que creas saber ha dejado de ser cierto, y no siempre te avisan. Me pasó dos veces."
+          "text": "Next con App Router, TypeScript en modo estricto y Tailwind. Nada de eso es exótico. Lo que sí sorprende es estrenar una versión nueva: parte de lo que creas saber ha dejado de ser cierto, y no siempre te avisan. Me pasó tres veces, y la tercera mientras escribía esto."
         },
         {
           "type": "p",
@@ -362,7 +362,15 @@
         },
         {
           "type": "p",
-          "text": "Las dos tienen la misma firma, y es la que se va a repetir en todo lo que viene después: **el error no da la cara.**"
+          "text": "La tercera es la que más gracia me hace, porque llevaba meses delante y la encontré escribiendo este artículo. El sistema tiene una forma de decir «separa estos bloques entre sí», y es la que gobierna el espacio entre los párrafos que estás leyendo. Nunca ha funcionado. En la versión anterior esa instrucción pesaba más que el «sin márgenes» que cada párrafo lleva encima; en la nueva pesa menos, y a propósito, para que sea fácil de ajustar. Así que el aire que llevo meses pidiendo entre párrafo y párrafo no se ha pintado ni una sola vez."
+        },
+        {
+          "type": "p",
+          "text": "Y no se notaba porque los demás bloques traen su propio margen: los subtítulos, las listas y los diagramas se separan solos. Los párrafos eran los únicos que dependían de esa instrucción, y en toda la página hay un solo sitio hecho únicamente de párrafos, que es el último capítulo. Lo vi comparando una maqueta con la página de verdad: la maqueta reproducía lo que el código decía y la página enseñaba otra cosa. Si hubiera dado por buena la maqueta, habría elegido un ritmo nuevo y bonito encima de algo que estaba roto."
+        },
+        {
+          "type": "p",
+          "text": "Las tres tienen la misma firma, y es la que se va a repetir en todo lo que viene después: **el error no da la cara.**"
         },
         { "type": "h3", "text": "Instalado para el día que haga falta" },
         {
