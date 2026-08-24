@@ -139,6 +139,8 @@
 - D101 · El arnés de tests entra cuando aparece la lógica, y se mide sobre lo que el código EMITE
 - D102 · «Dato en vivo» era una promesa, no un mecanismo: la cifra se deriva o se sella, nunca se teclea
 - D103 · El ruido de `check:articulo` no eran los falsos positivos, era tener que ir a leer
+- D104 · El censo mide dónde está pintada la caja, no quién recibe el clic — y la pasada se desplaza antes de medir
+- D105 · El presupuesto de contexto vigila también las skills, y con techo POR ENTRADA
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -5935,3 +5937,88 @@ el modo de fallo que este repo se ha encontrado cinco veces.
 fechada* y no caduca— y es el único documento del proyecto sin la partición que ya tienen
 `PRD-Live`/`PRD-Historical` y `BRAND`/`BRAND-historical`. Se decide al escribir el primer caso
 real que la necesite; siete disparos después, ninguno la ha necesitado todavía.
+
+## D104 · El censo mide dónde está pintada la caja, no quién recibe el clic — y la pasada se desplaza antes de medir — 2026-08-24
+
+**Dos huecos independientes, y cada uno bastaba para producir el mismo cero.** D97 añadió al
+censo el segundo pase, el de WCAG 1.4.11: el contorno de un control tiene que llegar a 3:1
+porque es lo que permite reconocerlo *como* control. Ese pase publicaba «cero contornos bajo
+el 3:1» y era cierto de lo que miraba. Lo que miraba era menos de lo que parecía.
+
+### El primero: el criterio de caja
+
+Un elemento entraba en el pase si casaba `CONTROL_SEL` **y dibujaba su propia caja** —algún
+lado con borde, o `background-color` con alfa—. El riel de secciones del artículo dibuja su
+píldora en un `<span>` HIJO, así que el `<a>` se descartaba por no tener caja y el `<span>` no
+se miraba por no casar el selector. **Doce controles invisibles**, y once de ellos con el borde
+a **1,21:1 en claro y 1,36 en oscuro** contra un umbral de 3 — la misma cifra que D97 acababa de
+corregir en la capa de componentes, y que aquí se había quedado fuera porque el riel es la
+excepción viva de `BRAND.md` que no compone `chromeLinkVariants`.
+
+Ahora, cuando el control no dibuja nada, se mide **el mayor descendiente que sí dibuje**. Y
+**sin umbral de área**, que es la parte que se decidió midiendo en vez de eligiendo: sobre seis
+páginas servidas, la puerta nueva sin umbral deja entrar exactamente los doce del riel y ni un
+falso positivo. Ocupan el **0,30** del área de su control, así que un umbral del 50% los habría
+perdido y 0/10/25% dan el mismo resultado. Un número que no cambia nada solo añade algo que se
+puede desajustar.
+
+### El segundo: la pasada no se desplazaba
+
+`censo.ts` hacía `open`, `set media`, inyectar y medir. **Sin scroll.** Así que toda isla que
+solo monta al desplazarse —el riel es el caso— no estaba en el DOM cuando se la iba a medir.
+Arreglar solo el criterio no habría cambiado nada en la corrida de verdad: habría seguido
+saliendo «cero» por el otro motivo. Desplazarse es **estrictamente aditivo** para la cobertura:
+el censo recorre el DOM entero y su `esVisible` mira tamaño y visibilidad, no intersección con
+el viewport, así que bajar no quita nada de la lista.
+
+### Lo que se publica para que no vuelva a pasar en silencio
+
+El informe dice ahora **cuántos controles entran por la puerta nueva** —«22 indexados (12 por
+caja en un descendiente)»—, porque si mañana se rompe la búsqueda en descendientes el censo
+volverá a decir «cero bajo 3:1» y eso vuelve a leerse como un aprobado. Es la sexta vez que este
+proyecto se encuentra un metro que aprueba por no mirar (D38, D57, D60, D63, y las dos roturas
+del propio censo).
+
+Y los pares **sobre imagen** dejan de ser una cifra al pie y pasan a nombrarse uno a uno. Eran
+2 y con el scroll son 16, y las dieciséis abstenciones son **correctas**: cuatro son el titular
+de Sobre mí sobre el vídeo, y doce el nav —`sticky`, translúcido, con `backdrop-blur`— sobre lo
+que le corre por debajo desde que la pasada se desplaza. Un texto sobre una foto no tiene un
+color de fondo que componer. El fallo no era abstenerse: era esconderlo en un recuento que nadie
+podía accionar.
+
+## D105 · El presupuesto de contexto vigila también las skills, y con techo POR ENTRADA — 2026-08-24
+
+**La mitad no vigilada pesaba 1,61× la vigilada.** D69 le puso techo, objetivo y guardián a los
+cuatro `@`-importados, y este mes bajaron. `.claude/` no tenía ninguna de las tres cosas y se
+comportó al revés: **19.884 palabras contra 11.957**, y desde el 08-08 un +233% frente al +34%
+de lo vigilado. Las curvas se cruzaron el 2026-08-19, el día del primer `method-review`: ese día
+lo vigilado bajó 437 palabras y lo no vigilado subió 6.816.
+
+**Techo POR ENTRADA, no un total**, y no es un detalle de implementación: las nueve entradas no
+se cargan nunca a la vez. Una skill se carga ENTERA al dispararse, de una en una y a mano, así
+que lo que importa es cuánto cuesta **la más cara**, no cuánto suman todas. La suma se publica
+etiquetada como lo que no es.
+
+**El número sale de medir el ruido primero.** Barrido sobre las nueve entradas reales: a 4.500
+lo cruza **una**, a 2.500 dos, a 2.000 tres y a 1.500 seis. El criterio escrito en la tarea era
+que un techo cruzado por cuatro está mal puesto él, no las skills.
+
+**Y nace en verde**, por la doctrina que el propio script ya tenía: un gate que nace en rojo se
+sube hasta que no significa nada. `design-review` mide 6.290, así que el techo nace en 6.400 y el
+objetivo —que solo avisa— la nombra en cada corrida. Su retirada es el próximo apretón.
+
+La lista sale **del disco**, nunca de un array: una skill nueva entra en el presupuesto sin que
+nadie se acuerde, igual que una página entra en el censo por `PAGE_SLUGS` (D72/D85). Lleva guarda
+de cero y su caso malo en `check:guardianes`, que pasa de 17 a 18.
+
+**Lo que este metro no ve, y queda escrito:** las skills de usuario (`~/.claude/skills/`) también
+se cargan enteras y no están en el repositorio, así que CI no puede medirlas.
+
+### El trinquete se aprieta por HOLGURA, no por número
+
+El script tenía anotado que su próximo apretón del techo general era a 12.000. **No se hizo**: con
+11.957 medidos dejaría 43 palabras de margen, que es exactamente el estado que originó la tarea
+—el mismo día, una regla nueva de tres líneas no cupo y hubo que retirar antes para pagarla—. Un
+techo que no deja escribir no produce compactación, produce el reflejo de subirlo. Lo que se
+sostiene es la holgura: techo a **12.200** (~240 palabras, cinco o seis reglas) y objetivo nuevo
+a **11.800**, porque un objetivo ya cumplido deja de tirar.

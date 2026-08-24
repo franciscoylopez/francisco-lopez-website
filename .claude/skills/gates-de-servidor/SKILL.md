@@ -26,6 +26,11 @@ disable-model-invocation: true
    transparente **por construcción**, y ahí termina el trabajo. Diff no vacío **no** significa
    que esté mal: significa que hay que abrir la página y mirar si el cambio era el que
    buscabas. El gate no tiene criterio propio a propósito, y esa es su fuerza.
+3. **Y NO VE LO QUE NO SE SIRVE** *(2026-08-24, P68.57)*. Una isla que solo se pinta en cliente
+   —el riel de secciones del artículo devuelve `null` hasta que su observer confirma una
+   sección— **nunca está en el HTML servido**, así que un diff vacío no dice absolutamente nada
+   sobre ella. No es un fallo del gate: es su alcance. Si lo que tocaste vive solo en cliente,
+   el gate no es la comprobación — hay que medirlo en el navegador.
 
 ## Paso 1 · Levanta el sitio
 
@@ -64,7 +69,8 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
 
 - **`gate:html`** compara contra la base del paso 2. Si sale diff y el cambio era intencionado,
   vuelve a guardar la base y sigue; si no lo era, abre la página.
-- **`censo`** falla si aparece **un solo par por debajo de AAA**, y valida su propio metro en
+- **`censo`** falla si aparece **un solo par por debajo de AAA** o **un solo contorno de
+  control por debajo del 3:1** de WCAG 1.4.11 (D97), y valida su propio metro en
   cada corrida (los anclajes sin cian, 13,79 y 15,32, que tienen que salir exactos). Al pasar
   en verde **sella** lo que había —tokens de color, superficies y animaciones—, y ese sello es
   lo que `check:palette` compara en cada PR (D90). Lo que **no** juzga es el texto sobre foto:
