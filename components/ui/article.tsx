@@ -400,9 +400,34 @@ export function ArticleProse({
           );
         }
         return (
+          // EL ESPACIO ENTRE PÁRRAFOS VA AQUÍ Y NO EN EL `space-y` DE ARRIBA,
+          // y es un arreglo, no una preferencia (P68.493, 2026-08-24). El
+          // contenedor pide `space-y-[1.75rem]` desde P60 y ese margen NUNCA
+          // se ha pintado entre dos párrafos: Tailwind v4 compila `space-y-*`
+          // envuelto en `:where(…)`, que tiene especificidad CERO, y el `m-0`
+          // de esta misma línea (0-1-0) lo gana siempre, da igual el orden.
+          // En v3 el selector era `> :not([hidden]) ~ :not([hidden])` y ganaba
+          // él; al estrenar v4 dejó de ser cierto sin que nada fallara. Es la
+          // tercera sorpresa de la misma familia que cuenta el artículo, con
+          // su misma firma: el error no da la cara.
+          //
+          // POR QUÉ SOLO SE VEÍA EN EL CIERRE. Los demás bloques traen margen
+          // propio y con `!` —`h3` su `!mt-[2.5rem]`, `ul` su `!my-[2.25rem]`,
+          // el diagrama el suyo—, así que ganan al `:where()` y su ritmo sí
+          // se pinta. El párrafo era el único que dependía del `space-y`, y el
+          // cierre, la única sección hecha solo de párrafos: siete seguidos y
+          // pegados. En el resto lo tapaban los subtítulos y las listas.
+          //
+          // Y SE ARREGLA ENTRE PÁRRAFOS, no quitando el `m-0`: el `space-y`
+          // SÍ funciona para los hijos que no llevan `m-0` (el marco de un
+          // diagrama recibe de él su margen inferior), así que quitarlo o
+          // desactivarlo rompería ese ritmo para arreglar este.
           <p
             key={i}
-            className={cn("m-0 text-[1.02rem] text-pretty", LEADING.prose)}
+            className={cn(
+              "m-0 text-[1.02rem] text-pretty [&+p]:mt-[1.75rem]",
+              LEADING.prose,
+            )}
           >
             <Rich text={block.text} />
           </p>
