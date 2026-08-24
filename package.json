@@ -31,6 +31,7 @@
     "indices": "tsx scripts/indices.ts --escribir",
     "check:indices": "tsx scripts/check-indices.ts",
     "check:rutas": "tsx scripts/check-rutas.ts",
+    "check:tablero": "tsx scripts/check-tablero.ts",
     "check:marco": "tsx scripts/check-marco.ts",
     "check:figuras": "tsx scripts/check-figuras.ts"
   },

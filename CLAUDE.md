@@ -10,7 +10,7 @@
 
 - **`@`-importados (siempre en contexto):** `AGENTS.md`, `BRAND.md` (core de reglas), `PRD-Live.md`, y este `CLAUDE.md`.
 - **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md` (el porqué fechado de las reglas de marca)**, `BRAND-logo.md` (enciclopedia del logo).
-- **Y cómo se consultan, que es lo que hace barata esa mitad:** los tres primeros llevan índice derivado **en su propia cabecera**, así que no cuestan nada en el arranque (D88). Se abren con un `Read` limitado a sus primeras líneas —130 en `DECISIONS.md`, 90 en los históricos— y solo después se va a la sección. Grepear a ciegas un archivo de decenas de miles de palabras es el fallo que el índice existe para evitar.
+- **Y cómo se consultan, que es lo que hace barata esa mitad:** los tres primeros llevan índice derivado **en su propia cabecera**, así que no cuestan nada en el arranque (D88). Se abren con un `Read` limitado a sus primeras líneas —130 en `DECISIONS.md`, 90 en los históricos— y solo después se va a la sección, nunca grepeando a ciegas.
 - **Convención de mitigación:** antes de tocar un subsistema con ADR, `grep`/Read de su D-entry en `DECISIONS.md` — así no se pierde ninguna regla, solo deja de estar precargada. *(Cuándo leer `BRAND-historical.md` lo dice la cabecera de `BRAND.md`, que es donde estás cuando vas a cambiar una regla de marca.)*
 
 ## Modelo por tarea
@@ -38,7 +38,7 @@ Micro-tarea mecánica dentro de una sesión Opus → delegar a un subagente con 
 Las tareas de desarrollo viven en la base de datos "Tareas — Web personal" en Notion: https://app.notion.com/p/f3ee9a949c58482888423d5917087962 (al mismo nivel que el PRD, dentro de "New Website").
 
 Al empezar una sesión de desarrollo:
-1. Lee las tareas con Estado "To-Do" del sprint activo, ordenadas por `Prioridad` ascendente.
+1. **Vuelca las tareas abiertas a `scripts/.tablero.json` y lanza `npm run check:tablero`** *(2026-08-25)*. Dice el sprint activo y lo siguiente por prioridad, y caza lo que el tablero no vigila solo: `Prioridad` duplicada, estados fuera del sprint, `Área` vacía. Fuera de CI: leer Notion necesita su MCP.
 2. Trabájalas en ese orden, respetando las dependencias señaladas en `Notas` de cada tarea.
 3. Actualiza el `Estado` en Notion según avances: "To-Do" → "En progreso" al empezar, "Listo" al terminar.
 4. Si una tarea deja de tener sentido tal como está definida (cambia el alcance, se descubre que depende de algo no resuelto, etc.), dilo antes de marcarla "Listo" — no la des por completada a medias.

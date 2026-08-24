@@ -156,7 +156,7 @@ nazca bien sin pedirlo (D30/D39/D61).
 | Criterio | Umbral | Estado |
 |---|---|---|
 | PageSpeed / Lighthouse | >90 escritorio y móvil | **Cumplido en las catorce.** La cifra y su fecha las sella `npm run psi -- --registro`, y de ahí las lee el artículo (D102) |
-| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** y **cero contornos bajo el 3:1 de WCAG 1.4.11** en las catorce páginas × 2 temas, en reposo y en hover, `npm run censo` con el metro validado en las 28 corridas (D85/D97/D104); **0 violaciones de axe** |
+| Accesibilidad | AA de suelo, AAA objetivo | **Cero pares bajo AAA** y **cero contornos bajo el 3:1 de WCAG 1.4.11** en las catorce × 2 temas, en reposo y en hover, con el metro validado en cada corrida (D85/D97/D104); **0 violaciones de axe** |
 | SEO + JSON-LD por página | Criterio de cierre, no extra | Cumplido en las catorce |
 
 **Cómo se mide el contraste lo dice `BRAND.md` §Cómo se hace el censo**, entero y con sus
@@ -168,11 +168,8 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 ### Cómo se verifica lo que no ve un compilador
 
 - **Gate de accesibilidad**: `agent-browser` conducido por el subagente
-  `viewport-verifier`, con matriz de cuatro viewports × dos temas + `reduced-motion`.
-  **Se dispara dos veces**, y la primera no es al cerrar: si la sección lleva banda o hero
-  dimensionado por `vw`, también *mientras se dibuja*, porque el eje que falta no es el
-  tema sino el **alto** (D50/D52). El **enlace de salto** de WCAG 2.4.1 sigue a mano:
-  axe no lo detecta (D46).
+  `viewport-verifier`, con su matriz de viewports × temas + `reduced-motion`. **Cuándo se
+  dispara —dos veces, y la primera mientras se dibuja— lo dice `CLAUDE.md`** (D50/D52).
 - **Pasada con lector de pantalla**: NVDA sobre el sitio entero, no por página. Es la
   única capa que encuentra lo que **no incumple ninguna regla** y por tanto ningún motor
   automático puede señalar: un `Esc` que no cierra, un cambio de tema que no se anuncia, un
@@ -188,9 +185,10 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
   `viewBox` son 11 unidades, no 11 píxeles, y esa escala no está en el
   `font-size` computado (P68.59). En CI, no en el censo: no necesita navegador.
   Un lienzo que se desplaza a ancho fijo se mide y se nombra, no se juzga.
-- **`npm test`**: la lógica del formulario, que es la primera del sitio: validación,
-  saneado de cabeceras y decisiones de la Server Action, medidas sobre el mensaje que
-  nodemailer **emite**. En CI, al revés que `psi` y el censo: no necesita navegador (D101).
+- **`npm test`**: la lógica que no necesita navegador, y por eso en CI al revés que `psi` y el
+  censo. Son dos: la del formulario —validación, saneado de cabeceras y decisiones de la Server
+  Action, medidas sobre el mensaje que nodemailer **emite** (D101)— y las reglas del tablero,
+  que es lo que deja a su guardián vivir fuera de CI (D107).
 - **`npm run gate:html`**: compara el HTML servido de las 28 variantes antes y después de
   un refactor. Diff vacío = transparente por construcción. Es el gate que más ha cazado
   y no está en CI (D42/D45).
@@ -203,19 +201,21 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
   **contorno de cada control** (1.4.11, 3:1), que axe no implementa y por tanto no mira
   nadie más (D97). **Y deja sello**: al pasar en verde firma los tokens
   de color, las superficies y las animaciones que había, y `check:palette` compara ese
-  sello en cada PR. Medir necesita pintar; saber que hay que medir, no — así que la
-  condición de re-medir de la DoD la lee una máquina (D90).
+  sello en cada PR, así que la condición de re-medir de la DoD la lee una máquina (D90).
 - **`npm run psi -- --registro`**: la nota de PageSpeed de las páginas del registro contra
   producción, a demanda y nunca como gate de CI, porque su variabilidad daría rojos falsos
   (D49/D99).
+- **`npm run check:tablero`**: que `Prioridad` siga siendo un orden —números únicos, estados de
+  ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, que era la
+  última fuente de verdad sin red. Fuera de CI (leer Notion necesita su MCP); el criterio,
+  vigilado en `npm test` (D107).
 
 ### Calidad y seguridad
 
-CI en cada PR, y **cuáles son los pasos lo dice `ci.yml`**: enumerarlos aquí ya ha
-caducado dos veces. Todos comparten una regla de
-método: **buscan la AUSENCIA, no el patrón**, y **afirman cuánto han mirado** — un metro
-que devuelve lista vacía parece un aprobado, y este proyecto se lo ha encontrado cinco
-veces (D38/D57/D60/D63).
+CI en cada PR, y **cuáles son los pasos lo dice `ci.yml`**: enumerarlos aquí ya ha caducado
+dos veces. Todos comparten una regla de método: **buscan la AUSENCIA, no el patrón**, y
+**afirman cuánto han mirado** — un metro que devuelve lista vacía parece un aprobado, y este
+proyecto se lo ha encontrado cinco veces (D38/D57/D60/D63).
 
 `main` **la protege el servidor y no la disciplina**: sin push directo, sin merge con CI
 en rojo, sin bypass de admin, y solo `squash` o `rebase` (D68). Escaneo de dependencias

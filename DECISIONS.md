@@ -142,6 +142,7 @@
 - D104 · El censo mide dónde está pintada la caja, no quién recibe el clic — y la pasada se desplaza antes de medir
 - D105 · El presupuesto de contexto vigila también las skills, y con techo POR ENTRADA
 - D106 · El umbral de una figura es su propio lienzo, y quien lo vigila lee el prerender, no el navegador
+- D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6118,3 +6119,61 @@ en vez de 280.
 **Validado contra el navegador antes de creérselo** (`BRAND.md` §Cómo medir, punto 1): predice
 11,2px a 360 y 11,0 / 12,2 a 1280, que es exactamente lo que mide `agent-browser` sobre el sitio
 servido. Si deja de cuadrar, el fallo es del script.
+
+---
+
+## D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red — 2026-08-25
+
+**Contexto.** El proyecto ha ido eliminando la segunda fuente de verdad en todas partes: D38
+(valores publicados), D59 y D72 (qué páginas hay), D60 (artefactos commiteados). El tablero de
+Notion era **lo último que quedaba sin red**, y encima es donde vive el orden en que se hace
+todo. El sprint 3 lo demostró dos veces: dos tareas distintas con la prioridad exacta 69,93
+—detectado a mano— y un orden de ejecución que se saltó cuatro veces una regla que dice
+literalmente «no se salta una tarea de prioridad menor».
+
+**Decisión.** `npm run check:tablero`, con **la E/S y el criterio separados a propósito**:
+
+- **`scripts/tablero/reglas.ts`** es una función pura sobre una lista de tareas. Sin red, sin
+  credenciales, sin Notion. Cuatro reglas: prioridades únicas entre las abiertas, ninguna
+  abierta sin `Prioridad` ni sin `Área`, los tres estados de ejecución solo en el sprint activo,
+  y coherencia de orden entre sprints abiertos a la vez.
+- **`scripts/check-tablero.ts`** es la E/S: lee el volcado, normaliza los nombres de propiedad
+  de Notion e informa. Corre **fuera de CI**, como `censo` y `psi`, porque leer el tablero
+  necesita el MCP de Notion y en un runner headless puede no estar autenticado.
+
+**Por qué partido, que es lo único no obvio.** Un guardián que corre fuera de CI es un guardián
+que solo corre si alguien se acuerda, y este repo tiene escrito que eso no es un guardián sino
+una nota. La partición compra la mitad que sí se puede vigilar siempre: **las reglas las prueba
+`npm test` en CI**, con un caso bueno que tiene que pasar y uno malo por regla que tiene que
+rechazar, y `check:guardianes` muerde el criterio con la rotura que lo dejaría ciego al caso que
+lo motivó (`grupo.length > 1` → `> 2`, dos tareas con 69,93). Así que el comando puede vivir
+fuera de CI sin que su criterio se pudra en silencio.
+
+**Tres detalles que costaron una decisión cada uno.**
+
+1. **El sprint activo no se declara: se deriva.** Una lista de sprints en el script sería otra
+   fuente de verdad que puede diferir del tablero, que es justo lo que este guardián combate.
+   Sale de dónde están las tareas en ejecución.
+2. **El carril de contenido es una excepción explícita.** `CLAUDE.md` dice que el contenido que
+   solo escribe Francisco corre **en paralelo y por delante**, para que un sprint no abra
+   bloqueado. Sin esa excepción el guardián saldría rojo justo sobre lo que el tablero protege.
+   Tiene su propio test.
+3. **Un bloque no es una cola.** «Todo lo del sprint activo por delante de los bloques» no se
+   puede pedir literalmente: un bloque es un backlog temático y su numeración se entrelaza con
+   la del sprint a propósito, porque la deuda se numera donde aparece. La regla de orden solo
+   compara **entre etapas que también tienen tareas en ejecución**, o sea entre sprints abiertos
+   a la vez. Hoy es vacua, y ese es el estado correcto.
+
+**El volcado no se versiona.** Vive en `scripts/.tablero.json`, ignorado por git: una foto del
+tablero dentro del repo sería exactamente la segunda fuente de verdad que esto viene a evitar.
+Y **su ausencia no pasa en silencio** —el comando sale con código 1 diciendo qué falta— ni su
+vejez tampoco: por encima de doce horas se niega a juzgar, porque un verde sobre una foto vieja
+afirma del tablero de hoy algo que no ha mirado.
+
+**Lo que NO puede ver, y hay que saberlo antes de creerse un verde.** El primero de los dos
+incumplimientos que lo motivaron —ejecutar P64.5 la séptima, después de P68— **no está en el
+tablero**: está en el orden de los commits. Esto comprueba que los números *sean* un orden total
+coherente, que es su condición previa, no que alguien lo haya seguido.
+
+**Validado disparándolo, y encontró tres cosas a la primera:** dos pares de prioridades
+duplicadas (80 y 81) y cuatro tareas abiertas sin `Área`. Corregidas en Notion el mismo día.
