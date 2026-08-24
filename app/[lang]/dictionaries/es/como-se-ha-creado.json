@@ -36,10 +36,7 @@
         "type": "p",
         "text": "Todo lo que afirmo aquí abajo está enlazado al código que lo sostiene. El repositorio es público, así que no hace falta que me creas: échale un ojo."
       },
-      {
-        "type": "p",
-        "text": "Vamos a ello."
-      }
+      { "type": "p", "text": "Vamos a ello." }
     ]
   },
   "index": {
@@ -465,7 +462,7 @@
           "id": "s05",
           "label": "Piezas del sistema · dato en vivo",
           "source": "components/ui/",
-          "value": "Siete piezas + capa de página",
+          "value": "Ocho piezas + capa de página",
           "linkLabel": "Ver el catálogo",
           "href": "design-system"
         }
@@ -491,8 +488,76 @@
     {
       "id": "s06",
       "ordinal": "06",
+      "indexLabel": "Una sola fuente",
+      "kicker": "06 — Una sola fuente",
+      "title": "Los componentes no se escriben a mano, y los datos tampoco",
+      "body": [
+        {
+          "type": "p",
+          "text": "El capítulo anterior iba de que ninguna pieza de interfaz nace de una cadena de clases sueltas. Con los datos pasa lo mismo y se ve menos: cada hecho de este proyecto vive en un sitio y todo lo demás se deriva de ahí. No es manía de ingeniero, es la única defensa que he encontrado contra el error que más veces me ha mordido, que es el mismo dato escrito en dos sitios y actualizado en uno."
+        },
+        { "type": "h3", "text": "Un hecho, tres longitudes" },
+        {
+          "type": "p",
+          "text": "De cada experiencia de mi carrera se cuenta lo mismo tres veces y con tres tamaños distintos: la frase que aparece en la trayectoria, el bullet que va al CV y la versión larga que se lee en la página del caso. Las tres viven juntas en el mismo sitio, en los dos idiomas, precisamente porque se editan mirándose entre ellas."
+        },
+        {
+          "type": "p",
+          "text": "El CV en PDF se produce por código a partir de esos mismos datos, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas del mismo material. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano."
+        },
+        {
+          "type": "p",
+          "text": "Y encima hay un guardián que comprueba lo que la estructura sola no puede: que el español y el inglés tengan el mismo número de bullets, que tenga versión larga exactamente quien tiene página propia, y **que una cifra no viva en una longitud y falte en la otra**. Esa tercera es la que había fallado siete veces, con métricas que existían solo en el caso largo, o solo en el CV."
+        },
+        { "type": "h3", "text": "El catálogo de piezas se escribe solo" },
+        {
+          "type": "p",
+          "text": "La lista de piezas del sistema no la mantengo yo: se deriva del disco leyendo la primera línea de cada archivo, donde cada pieza declara qué resuelve y en qué sección se publica. Y la integración continua nombra la que esté sin publicar. Existe porque la regla de publicar cada pieza nueva llevaba meses escrita y se incumplió dos veces seguidas: lo que faltaba no era la regla, era que alguien la comprobara sin depender de que yo me acordara."
+        },
+        {
+          "type": "h3",
+          "text": "Y este mismo artículo, que sabe cuándo ha caducado"
+        },
+        {
+          "type": "p",
+          "text": "Esta página es lo más difícil de mantener de todo el sitio, porque cuenta el estado de un proyecto que sigue cambiando. Hay tres clases de frase que caducan sin avisar: la cifra contable («AAA en las doce páginas»), el estado del producto («todavía no hay formulario») y la medición externa («B+, 80 sobre 100»). Ninguna la ve un compilador."
+        },
+        {
+          "type": "p",
+          "text": "Así que **cada sección de este artículo declara de qué depende**: una decisión concreta del registro, un archivo, un directorio. Cuando todo cuadra, se sella. Y el día que una de esas fuentes se mueve, la integración continua sale roja nombrando la sección, dentro del mismo cambio que la movió. No dice que el párrafo sea mentira, que eso no puede saberlo: dice que alguien tiene que releerlo, que es justo lo que antes no hacía nadie."
+        },
+        {
+          "type": "p",
+          "text": "Y el fallo, porque aquí también lo hay: el guardián vigila las fuentes declaradas y no ve una cifra tecleada dentro del texto. En esta misma página había tres recuadros rotulados «dato en vivo» y **solo uno lo era**; los otros dos llevaban el número escrito a mano y los dos habían dejado de ser ciertos. Los encontró una lectura con calma, no una máquina. Un mecanismo que impide que el texto caduque en silencio puede seguir dejando caducar justo lo que nunca le pediste que mirara."
+        }
+      ],
+      "enlace": {
+        "label": "ENLACE ·",
+        "parts": [
+          "Decisiones ",
+          { "label": "D22", "path": "DECISIONS.md" },
+          ", ",
+          { "label": "D84", "path": "DECISIONS.md" },
+          " y ",
+          { "label": "D89", "path": "DECISIONS.md" },
+          ", el registro de dependencias en ",
+          {
+            "label": "content/articulo/dependencias.ts",
+            "path": "content/articulo/dependencias.ts"
+          },
+          " y el inventario derivado en ",
+          {
+            "label": "components/ui/README.md",
+            "path": "components/ui/README.md"
+          }
+        ]
+      }
+    },
+    {
+      "id": "s07",
+      "ordinal": "07",
       "indexLabel": "Del diseño al código",
-      "kicker": "06 — Del diseño al código",
+      "kicker": "07 — Del diseño al código",
       "title": "Del diseño al código, y el día en que la fuente de diseño cambió",
       "body": [
         { "type": "h3", "text": "La maqueta como punto de partida" },
@@ -563,10 +628,10 @@
       }
     },
     {
-      "id": "s07",
-      "ordinal": "07",
+      "id": "s08",
+      "ordinal": "08",
       "indexLabel": "Seguridad y alojamiento",
-      "kicker": "07 — Seguridad y alojamiento",
+      "kicker": "08 — Seguridad y alojamiento",
       "title": "Lo que no se ve: seguridad, alojamiento y la deuda que no se acumuló",
       "body": [
         {
@@ -642,7 +707,7 @@
         },
         {
           "type": "diagram",
-          "id": "s07",
+          "id": "s08",
           "side": "center",
           "caption": "Sin consentimiento y sin clic en el vídeo, la página no hace ni una petición de red hacia terceros."
         },
@@ -676,10 +741,10 @@
         },
         {
           "type": "livestat",
-          "id": "s07",
+          "id": "s08",
           "label": "Rendimiento · PageSpeed",
           "source": "npm run psi",
-          "value": "100 escritorio · 94-96 móvil",
+          "value": "97-100 escritorio · 95-99 móvil",
           "linkLabel": "Ver el informe",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
         },
@@ -737,10 +802,10 @@
       }
     },
     {
-      "id": "s08",
-      "ordinal": "08",
+      "id": "s09",
+      "ordinal": "09",
       "indexLabel": "Accesibilidad",
-      "kicker": "08 — Accesibilidad",
+      "kicker": "09 — Accesibilidad",
       "title": "AA es el suelo, y el metro no midió lo que yo creía cuatro veces",
       "body": [
         {
@@ -757,7 +822,7 @@
         },
         {
           "type": "livestat",
-          "id": "s08",
+          "id": "s09",
           "label": "Contraste · dato en vivo",
           "source": "lib/design-values.ts",
           "value": "AAA en las {paginas} páginas",
@@ -838,7 +903,7 @@
         },
         {
           "type": "diagram",
-          "id": "s08",
+          "id": "s09",
           "side": "center",
           "caption": "Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de abajo, una persona, encuentra lo que no incumple ninguna regla."
         }
@@ -865,10 +930,10 @@
       }
     },
     {
-      "id": "s09",
-      "ordinal": "09",
+      "id": "s10",
+      "ordinal": "10",
       "indexLabel": "Qué revisa una IA",
-      "kicker": "09 — Qué revisa una IA",
+      "kicker": "10 — Qué revisa una IA",
       "title": "Qué revisa una IA y qué no",
       "body": [
         {
@@ -927,7 +992,7 @@
         },
         {
           "type": "diagram",
-          "id": "s09",
+          "id": "s10",
           "side": "center",
           "caption": "Los dieciséis pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo."
         },
@@ -957,10 +1022,10 @@
       }
     },
     {
-      "id": "s10",
-      "ordinal": "10",
+      "id": "s11",
+      "ordinal": "11",
       "indexLabel": "Lo que salió mal",
-      "kicker": "10 — Lo que salió mal",
+      "kicker": "11 — Lo que salió mal",
       "title": "Lo que salió mal, y qué tenían todos en común",
       "body": [
         {
@@ -1014,10 +1079,10 @@
     }
   ],
   "closing": {
-    "id": "s11",
-    "ordinal": "11",
+    "id": "s12",
+    "ordinal": "12",
     "indexLabel": "Ahora empieza lo bueno",
-    "kicker": "11 — Cierre",
+    "kicker": "12 — Cierre",
     "title": "Ahora empieza lo bueno",
     "body": [
       {
