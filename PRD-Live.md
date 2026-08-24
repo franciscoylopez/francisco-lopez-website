@@ -107,8 +107,8 @@ descarga** (D65).
 ### Stack y arquitectura
 
 Next 16 (App Router), TypeScript `strict`, Tailwind v4 y capa de componentes propia.
-**shadcn/ui está configurado y sin usar**: entra solo para widgets con estado, foco
-atrapado o portal, y hacia delante (D6). i18n nativo `app/[lang]`, diccionario tipado,
+**shadcn/ui está configurado y sin usar**: en un widget se pregunta antes por la
+plataforma, y entra donde ella no llega (D6). i18n nativo `app/[lang]`, diccionario tipado,
 cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 
 ### Marca

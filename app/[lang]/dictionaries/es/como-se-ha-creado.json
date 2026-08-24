@@ -375,7 +375,7 @@
         { "type": "h3", "text": "Instalado para el día que haga falta" },
         {
           "type": "p",
-          "text": "Toda la capa de componentes de este sitio es propia. Aun así, shadcn/ui está instalado y configurado desde el principio, y hasta hoy no ha entrado ni uno solo de sus componentes. No es purismo ni es olvido: shadcn resuelve un problema muy concreto (comportamiento de teclado, foco atrapado, portales) y la decisión que dejé escrita es que ese problema, el día que aparezca, no se resuelve a mano."
+          "text": "Toda la capa de componentes de este sitio es propia. Aun así, shadcn/ui está instalado y configurado desde el principio, y hasta hoy no ha entrado ni uno solo de sus componentes. No es purismo ni es olvido: hay un problema muy concreto (comportamiento de teclado, foco atrapado, portales) que no pienso resolver a mano, y lo que dejé escrito es de dónde tiene que salir la solución el día que aparezca. Primero del navegador, que ya trae el diálogo, el popover y hasta el anclaje; de shadcn solo donde el navegador no llega, que hoy sigue siendo un combobox o un selector de fechas."
         },
         {
           "type": "p",

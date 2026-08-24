@@ -28,6 +28,10 @@ import { cn } from "@/lib/utils";
 // Queda anotado porque contradice la letra de la tarea: si algún día entra un
 // widget de verdad (un combobox, un date picker), la cascada sigue mandando.
 //
+// Esta medición dejó de vivir solo aquí el 2026-08-24: es una de las dos cifras
+// que reescriben D6 (P68.66), donde la cascada pasa a preguntar por la plataforma
+// antes que por shadcn.
+//
 // EL COLOR DEL ERROR es la decisión de sistema que se toma aquí, y sale medida:
 // `--destructive` da 4,31:1 sobre `--background` en claro, así que NO llega ni a
 // AA como texto. El mensaje va por tanto en `--foreground` y el rojo se queda

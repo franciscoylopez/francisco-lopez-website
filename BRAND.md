@@ -11,8 +11,8 @@ Reglas de identidad visual para este proyecto. Aplícalas siempre al generar UI.
 ## Stack
 
 Next.js + TypeScript + Tailwind (v4). La capa de componentes es **propia**
-(`components/ui/`); shadcn/ui está configurado y **sin usar** — entra solo para widgets
-con estado, foco atrapado o portal, y hacia delante (`DECISIONS.md` D6). Iconos: lucide-react.
+(`components/ui/`); shadcn/ui está configurado y **sin usar** — entra donde la plataforma
+no llega, y hacia delante (`DECISIONS.md` D6). Iconos: lucide-react.
 Los tokens viven en `app/globals.css`. No inventes colores fuera de esos tokens.
 
 ## Tipografía
@@ -223,7 +223,7 @@ superficie (§El atenuado lo pone la superficie, D39).
 
 > **Caso particular de la «Regla de construcción» de `CLAUDE.md`** (2026-08-08), que
 > generaliza esto a todo lo que se construye —secciones, páginas, bloques— y añade el
-> paso de shadcn para widgets con estado, foco atrapado o portal. La cascada completa
+> paso de plataforma y shadcn para los widgets con foco atrapado. La cascada completa
 > vive **solo allí**; aquí queda el porqué específico de los controles. No se copia
 > (regla 5 de §Cómo se escribe una regla aquí).
 

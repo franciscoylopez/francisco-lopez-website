@@ -375,7 +375,7 @@
         { "type": "h3", "text": "Installed for the day it's needed" },
         {
           "type": "p",
-          "text": "Every component layer on this site is my own. Even so, shadcn/ui has been installed and configured from the start, and to this day not a single one of its components has come in. That's not purism and it isn't an oversight: shadcn solves a very specific problem (keyboard behavior, focus trapping, portals) and the decision I left in writing is that the day that problem shows up, it won't be solved by hand."
+          "text": "Every component layer on this site is my own. Even so, shadcn/ui has been installed and configured from the start, and to this day not a single one of its components has come in. That's not purism and it isn't an oversight: there is a very specific problem (keyboard behavior, focus trapping, portals) I have no intention of solving by hand, and what I left in writing is where the solution has to come from the day it shows up. From the browser first, which now ships the dialog, the popover and even the anchoring; from shadcn only where the browser falls short, which today still means a combobox or a date picker."
         },
         {
           "type": "p",

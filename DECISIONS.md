@@ -41,7 +41,7 @@
 - D3 · Next 16 usa `proxy.ts`, no `middleware.ts`
 - D4 · Fuente única de tokens = `app/globals.css`; `brand-globals.css` deprecado
 - D5 · Dark mode = `system` por defecto + toggle
-- D6 · ¿shadcn lo trae? → no se escribe (regla hacia delante); `@base-ui/react` fuera hasta el primer componente
+- D6 · Plataforma primero, shadcn donde la plataforma no llega; `@base-ui/react` fuera hasta el primer componente
 - D7 · Responsive en CSS, no en JS; Server Components por defecto
 - D8 · Objetivos no funcionales: PageSpeed >90, desktop+mobile, AA→AAA
 - D9 · Alcance de V1 = home + Brand Kit + Design System + SEO/OG + medición + dominio
@@ -226,14 +226,50 @@ Añadir `color-scheme` en `:root` y `<meta name="theme-color">` por esquema.
 aparentar. La base ya evita el flash (`attribute="class"` + `suppressHydrationWarning`). El swap de
 logos claro/oscuro se hace por CSS puro (sin JS, sin parpadeo).
 
-## D6 · ¿shadcn lo trae? → no se escribe (regla hacia delante); `@base-ui/react` fuera hasta el primer componente — 2026-07-24, **reescrita 2026-08-08 (P37.63)**
+## D6 · Plataforma primero, shadcn donde la plataforma no llega; `@base-ui/react` fuera hasta el primer componente — 2026-07-24, **reescrita 2026-08-08 (P37.63) y 2026-08-24 (P68.66)**
 **Decisión.** Para **widgets con estado, foco atrapado o portal** —diálogo, popover, tooltip,
-combobox, menú, tabs, scroll-area— la regla es la simétrica de la de iconos («¿lucide lo trae? →
-no se dibuja»): **¿shadcn lo trae? → no se escribe.** Se trae con `npx shadcn@latest add
-<componente>` (estilo `base-nova`, ya configurado en `components.json`), se le aplican **nuestros**
-tokens, y si acaba siendo pieza del sistema se publica en el Design System. Es el **paso 3 de la
-«Regla de construcción»** de `CLAUDE.md`, que es donde vive la cascada completa; aquí queda el
-porqué y el estado de la dependencia.
+combobox, menú, tabs, scroll-area— siguen sin escribirse a mano el teclado, el ARIA y la gestión
+de foco. Lo que cambia el 2026-08-24 es **de dónde salen, y en qué orden se pregunta**:
+
+1. **¿Lo trae la plataforma?** Diálogo modal (`<dialog>` + `showModal()`), popover no modal
+   (atributo `popover`) y el posicionamiento contra un ancla (`anchor-name` / `position-area`).
+   Los tres dan foco, `Esc`, capa superior y light-dismiss sin dependencia y sin JS que mantener.
+2. **Si no, ¿lo trae shadcn?** Lo que **no** tiene equivalente nativo —combobox, autocompletado,
+   date picker— se trae con `npx shadcn@latest add <componente>` (estilo `base-nova`, ya
+   configurado en `components.json`), se le aplican **nuestros** tokens, y si acaba siendo pieza
+   del sistema se publica en el Design System.
+3. **Escribirlo a mano sigue siendo el último recurso, no el primero.** «Plataforma primero» no
+   es permiso para reimplementar un combobox: es el paso que antes no se preguntaba.
+
+Es el **paso 3 de la «Regla de construcción»** de `CLAUDE.md`, que es donde vive la cascada
+completa; aquí queda el porqué y el estado de la dependencia.
+
+**Por qué se invierte el orden, con las dos cifras que lo deciden.**
+
+- **La plataforma alcanzó a la librería en lo único que se le compraba.** D6 ya acotaba la regla
+  «a lo que de verdad compra algo: teclado, ARIA y gestión de foco». Para diálogo y popover eso
+  ya no hay que comprarlo: la **Popover API** es Baseline *newly available* desde **enero de
+  2025**, y lo único que le faltaba —posicionar contra un ancla— lo cubre **CSS anchor
+  positioning**, Baseline *newly available* desde **enero de 2026**. Y este sitio no lo está
+  suponiendo: su `<dialog>` nativo de consentimiento lleva desde V1 atrapando el foco y dando
+  `Esc` de fábrica, con 0 violaciones de axe.
+- **Y el coste de adoptarla se midió en un caso real.** P67 trajo el `field` de shadcn para
+  comprobarlo y hubo que reescribir **cuatro de cuatro** propiedades: `h-8` contra el suelo de
+  44px del checklist, `outline-none` con anillo propio de 3px contra el mecanismo único de foco
+  del sitio, valores fuera de la disciplina de tokens, y una dependencia nueva de frontend para
+  un `<input>`. «Adoptarlo era reescribirle todas las clases y quedarse con el nombre del archivo
+  más una dependencia» (`components/ui/field.tsx`). Esa prueba **no** invalida la regla —un
+  `<input>` no es un widget con foco atrapado, así que el disparador ni llegó a activarse— pero
+  sí mide lo que cuesta el encaje, y ese coste es el mismo para cualquier componente suyo: el
+  desajuste es con el sistema de diseño, no con el elemento.
+- Juntas dicen lo mismo: **cuando lo que se compra es solo comportamiento, y el navegador ya lo
+  regala, la dependencia deja de pagarse sola.** Donde no lo regala, se sigue pagando sin
+  discutir.
+
+**Lo que NO cambia.** La dependencia sigue necesitando `/pick-ui-library` antes de entrar (solo
+la dispara Francisco). Y la nota de «newly available» va con su letra pequeña: Baseline *newly*
+significa las versiones actuales, no el parque entero — un widget que se apoye en anchor
+positioning necesita degradar con `@supports`, igual que cualquier otra cosa recién llegada.
 
 - **Aplica hacia delante, no hacia atrás.** Los widgets que hoy están a mano se quedan: el
   `<dialog>` nativo del consentimiento (`showModal()` atrapa el foco y da ESC de fábrica), su
