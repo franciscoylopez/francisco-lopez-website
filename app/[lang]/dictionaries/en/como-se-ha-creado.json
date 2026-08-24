@@ -84,13 +84,14 @@
         },
         {
           "type": "p",
-          "text": "They didn't stay on paper. They drove concrete calls:"
+          "text": "They didn't stay on paper: they shaped the pages. The three most-read ones are all built the same way, with a summary up top and the detail underneath."
         },
         {
           "type": "ul",
           "items": [
-            "**Contact is resolved on one page, and the rest lead to it.** The homepage strip and the close of the About page end in the same button. They used to repeat the address, the phone, LinkedIn and the CV right there, which was saying four times what a whole page says better. Yes, that is one more click than before: in exchange it gives a form instead of opening an email client plenty of people never set up. The exception is the accessibility page, which shows the address written out and doesn't route through the form, because forcing someone to use it to report a barrier would be a trap the day the barrier was the form.",
-            "**The video that opens the About page plays once and freezes on its last frame**, and if the browser reports that its owner prefers less motion, the video isn't even downloaded."
+            "**The homepage has a safety net for the fast reader.** Right below the cover come five milestones, on one screen and with no scrolling: that's what answers «role, seniority and stack» to someone who'll be here ten seconds. What follows, how I work, the track record, the tools and the training, isn't talking to that person any more: it unfolds for whoever keeps going down.",
+            "**The track record does the same, only split across two pages.** The listing sums each role up in what you can take in at a glance, and the job title links to a page of its own where that story is told in full. Nobody has to read the whole case to know whether it's for them, and whoever wants the detail isn't stuck with the summary. Not every role has one, though, and that also comes out of the hypothesis: the two marketing and growth roles have no page of their own despite there being plenty of material, because telling them at the same level would dilute the order I want to be read in, which is product first. And the company where the product I co-founded was born doesn't have one either, because it isn't a separable story: it's the first chapter of the other one.",
+            "**And the three system pages open the same way, whatever screen you're on.** The Brand Kit, the [Design System](/design-system) and the [accessibility statement](/accesibilidad) start with a lead paragraph and a row of key figures, and the detail comes after. That row isn't each page's own call: it's a piece of the system that exists for exactly this, so all three behave the same without anyone having to remember."
           ]
         },
         {
@@ -100,13 +101,12 @@
         { "type": "h3", "text": "What isn't here (yet), and why" },
         {
           "type": "p",
-          "text": "The part of product judgment that gets shown the least, though, is what's visible in what **isn't** there. Four decisions to not do something, each with its reason:"
+          "text": "The part of product judgment that gets shown the least, though, is what's visible in what **isn't** there. Two absences, and neither of them is a «never»: both are waiting for data to say they're needed."
         },
         {
           "type": "ul",
           "items": [
-            "**For months there was no contact form.** A form adds a backend, an email service, a captcha and an attack surface, to solve something a link already solves. I kept it out until I could strip all four away: it arrived at the end, with no captcha (which is an accessibility barrier, and this site publishes a conformance statement) and no external service, because it sends through my own account's email. And it took away the reason I gave for not having one: I said a click on the address was a more honest metric than submissions, and it isn't, it was just the only one I had.",
-            "**Not every one of my experiences gets its own page.** The two in marketing and growth don't, even though there's plenty of material: telling them at the same level would dilute the ordering I want people to read me in, which is product first. And the company where the product I co-founded was born doesn't have its own page either, because it isn't a separable story: it's the first chapter of the other one."
+            "**This isn't a blog.** It's a page with article structure, no post index, no tags, no feed. Setting up a blog isn't publishing once, it's committing to publish, and that commitment gets made when there's something to tell a second time and someone waiting for it. What you're reading is the first measurement of that: if this page gets read, the next decision gets made with real readers on the table instead of with enthusiasm."
           ]
         },
         {
@@ -118,13 +118,12 @@
         {
           "type": "ul",
           "items": [
-            "**This isn't a blog.** It's a page with article structure, no post index, no tags, no feed. Setting up a blog is committing to publish. If a second article ever exists, that decision gets made then.",
-            "**The conversational assistant is on hold, and its limit is already written before it exists**: whatever isn't written on the site publicly doesn't go into its corpus either. A public agent publishes just like a page, but it answers without me there and in sentences I can't review, so it can't serve as a dumping ground for what gets said in an interview and not in the open. Fixing that limit before building it is far cheaper than arguing about it afterward."
+            "**The conversational assistant is on hold, and its limit is already written before it exists**: whatever isn't written on the site publicly doesn't go into its corpus either. A public agent publishes just like a page, but it answers without me there and in sentences I can't review, so it can't serve as a dumping ground for what gets said in an interview and not in the open. Fixing that limit before building it is far cheaper than arguing about it afterward. And what will decide when it gets built isn't the itch to ship it: it's the questions coming in through the form starting to repeat."
           ]
         },
         {
           "type": "p",
-          "text": "None of the four is a technical limitation. They're four places where saying yes would have been the easy call."
+          "text": "Neither of the two is a technical limitation. They're two places where saying yes would have been the easy call, and where saying «not yet» forces something more uncomfortable than saying «no»: writing down what would have to happen to change my mind."
         },
         { "type": "h3", "text": "The rule that shaped everything else" },
         {
@@ -550,6 +549,22 @@
           "type": "p",
           "text": "A portfolio has no session and holds nobody's data: the only data it receives is whatever someone types into the contact form, and that isn't stored anywhere, it goes to an inbox and that's it. It's exactly the kind of site nobody bothers securing properly, and that's exactly why it seemed like the right site to do it on."
         },
+        {
+          "type": "h3",
+          "text": "One surface that receives, and everything else leads to it"
+        },
+        {
+          "type": "p",
+          "text": "That the form is the only one is itself a decision, and not a navigational one. Contact is resolved on a single page and the rest of the site leads there: the strip that closes the homepage and the end of the About page both land on the same button. The fewer ways there are to write to me, the fewer places there are to protect and the less code there is to maintain knowing it receives text written by a stranger."
+        },
+        {
+          "type": "p",
+          "text": "And the format came out of removing, not adding. No captcha, because a captcha is an accessibility barrier and this site publishes a conformance statement. No external email service, because it sends through the account that already existed: there's no new third party to trust with other people's messages, and no extra domain to open up in the content policy. And it goes nowhere, because the send happens on the same origin as the page. Three decisions that look a lot like the five headers just below: nearly everything that makes this form safe is something that isn't there."
+        },
+        {
+          "type": "p",
+          "text": "The one page that doesn't lead to the form is the accessibility statement, which shows the address written out with its subject line. Forcing someone to use a form to report a barrier would be a trap the day the barrier was the form."
+        },
         { "type": "h3", "text": "The headers: the cheap gaps to close" },
         {
           "type": "p",
@@ -730,6 +745,10 @@
         {
           "type": "p",
           "text": "That split is the only reason an eight-point checklist is still being met in month fourteen: nobody sustains eight manual checks, but four, yes."
+        },
+        {
+          "type": "p",
+          "text": "Inheriting it isn't always enough either, and the video that opens the About page is the example. It plays once and stops on its last frame. When the browser reports that whoever is watching prefers less motion, it isn't that the video holds still: it's that it never gets downloaded, and a still image is served instead. Switching the animation off and leaving the file downloading would have met the rule just the same, and would have charged a megabyte to the one person who had explicitly asked for the opposite."
         },
         { "type": "h3", "text": "The color rule I'm proudest of" },
         {
@@ -931,7 +950,11 @@
         },
         {
           "type": "p",
-          "text": "And a fifth one that runs the other way, so this doesn't read as \"unify everything\": **before merging two values that look similar, check they don't mean different things.** I found two different corner radii on what looked like the same component and nearly made them match. It wasn't inconsistency: they were two different boxes, and one of them was just missing its name. Unifying them would have broken half the site's visual hierarchy."
+          "text": "**The metric you have is not the metric that matters, and mixing them up is far too easy.** For months this site had no contact form, and I argued that a click on the address was a more honest signal than a submission. It wasn't: it was just the only one I had. This mistake doesn't show its face either, because the argument sounds good; the only tell is that it justified exactly what was already built, and reasons like that are almost always written afterward."
+        },
+        {
+          "type": "p",
+          "text": "And a sixth one that runs the other way, so this doesn't read as \"unify everything\": **before merging two values that look similar, check they don't mean different things.** I found two different corner radii on what looked like the same component and nearly made them match. It wasn't inconsistency: they were two different boxes, and one of them was just missing its name. Unifying them would have broken half the site's visual hierarchy."
         }
       ],
       "enlace": {
