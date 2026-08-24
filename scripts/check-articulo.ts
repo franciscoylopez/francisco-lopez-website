@@ -22,9 +22,12 @@
  *      mentían. Su valor tiene que interpolar una cifra derivada, y el token
  *      tiene que existir: uno mal escrito se publica con las llaves puestas
  *      (P68.495).
- *   6. **El diagrama de CI dibuja los pasos que hay.** El pie deriva su cifra de
- *      `ci.yml` y las pastillas son un dibujo: sin esto, un paso nuevo movería
- *      el pie y dejaría el diagrama corto, en silencio.
+ *   6. **El diagrama de CI dibuja los pasos que hay, y los reparte igual en los
+ *      dos idiomas.** El pie deriva su cifra de `ci.yml` y las pastillas son un
+ *      dibujo: sin esto, un paso nuevo movería el pie y dejaría el diagrama
+ *      corto, en silencio. Y como los pasos están escritos una vez por idioma
+ *      —el patrón de los siete diagramas de este artículo—, se compara además la
+ *      FORMA: la etiqueta cambia con el idioma, el grupo y la categoría no.
  *
  * QUÉ HACER CON UN ROJO DE LA 4. `npm run articulo:novedades` dice QUÉ cambió en
  * cada dependencia desde el sello vigente, para no tener que ir a buscarlo
@@ -51,7 +54,7 @@ import { existsSync, writeFileSync } from "node:fs";
 
 import enArticulo from "../app/[lang]/dictionaries/en/como-se-ha-creado.json";
 import esArticulo from "../app/[lang]/dictionaries/es/como-se-ha-creado.json";
-import { pasosDibujados } from "../content/articulo/ci-steps";
+import { DIAGRAMA_CI, pasosDibujados } from "../content/articulo/ci-steps";
 import { DEPENDENCIAS, SECCIONES } from "../content/articulo/dependencias";
 import { ES_DECISION, lineasDeDecision } from "../lib/decisions";
 import { FIGURAS, pasosDeCI } from "../lib/figures";
@@ -210,6 +213,26 @@ for (const locale of ["es", "en"] as const) {
       `el diagrama de CI dibuja ${dibujados} pasos en ${locale} y ` +
         `.github/workflows/ci.yml tiene ${pasosWorkflow}. Añade o quita el paso en ` +
         `content/articulo/ci-steps.ts, con su grupo y su categoría.`,
+    );
+}
+
+// Y LAS DOS LISTAS TIENEN LA MISMA FORMA. Los pasos están escritos dos veces, una
+// por idioma, porque es el patrón de los siete diagramas de este artículo: la
+// etiqueta cambia y la estructura no. Lo que la duplicación permite es que la
+// ESTRUCTURA derive —que un paso sea `patron` en ES y `ausencia` en EN, o que
+// cambie de grupo—, y eso saldría en pantalla como dos leyendas distintas sin que
+// nada fallara. Comparar el recuento contra `ci.yml` no lo ve: los dos idiomas
+// pueden tener diecisiete pasos y repartirlos distinto.
+{
+  const forma = (locale: "es" | "en") =>
+    DIAGRAMA_CI[locale].groups
+      .map((g) => g.items.map((it) => it.cat).join(","))
+      .join(" | ");
+  if (forma("es") !== forma("en"))
+    fallo(
+      `el diagrama de CI reparte sus pasos distinto en cada idioma:\n` +
+        `        es: ${forma("es")}\n        en: ${forma("en")}\n` +
+        `      La etiqueta cambia con el idioma; el grupo y la categoría, no.`,
     );
 }
 
