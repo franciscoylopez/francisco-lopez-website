@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { LBL, rlz } from "./shared";
+import { DosLienzos, LBL, rlz } from "./shared";
 
 /** 03 · Las cuatro píldoras del color de marca: el mismo gesto rotado que
  * abre la portada del Brand Kit en `/api/og`, extendido de su par decorativo
@@ -27,12 +27,14 @@ export function CapasColorDiagram({ lang }: { lang: Locale }) {
       purpleSoft: "soft purple",
     },
   }[lang];
-  return (
+  const ancho = (
     <svg
       viewBox="0 0 480 280"
       role="img"
       aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[470px]"
+      /* 480 y no 470 (P68.59): igual que en s01, el tope quedaba por debajo
+         del propio lienzo y dejaba el rótulo en 10,8 con toda la pantalla. */
+      className="h-auto w-full max-w-[480px]"
     >
       <rect
         x="25"
@@ -84,4 +86,69 @@ export function CapasColorDiagram({ lang }: { lang: Locale }) {
       </text>
     </svg>
   );
+
+  /** Las mismas cuatro píldoras en dos filas de dos, conservando el
+   * agrupamiento por tono: el par cian arriba, el par morado abajo. Cuatro en
+   * fila dentro de 280 unidades darían píldoras de 60, más estrechas que su
+   * propio rótulo. */
+  const estrecho = (
+    <svg
+      viewBox="0 0 280 344"
+      role="img"
+      aria-label={t.ariaLabel}
+      className="h-auto w-full max-w-[300px]"
+    >
+      <rect
+        x="46"
+        y="12"
+        width="84"
+        height="120"
+        rx="18"
+        transform="rotate(-8 88 72)"
+        {...rlz(0, "fill-brand-cyan")}
+      />
+      <rect
+        x="150"
+        y="12"
+        width="84"
+        height="120"
+        rx="18"
+        transform="rotate(8 192 72)"
+        {...rlz(1, "fill-brand-cyan-soft")}
+      />
+      <text x="88" y="158" textAnchor="middle" {...rlz(4, LBL)}>
+        {t.cyan}
+      </text>
+      <text x="192" y="158" textAnchor="middle" {...rlz(4, LBL)}>
+        {t.cyanSoft}
+      </text>
+
+      <rect
+        x="46"
+        y="182"
+        width="84"
+        height="120"
+        rx="18"
+        transform="rotate(-8 88 242)"
+        {...rlz(2, "fill-brand-purple")}
+      />
+      <rect
+        x="150"
+        y="182"
+        width="84"
+        height="120"
+        rx="18"
+        transform="rotate(8 192 242)"
+        {...rlz(3, "fill-brand-purple-soft")}
+      />
+      <text x="88" y="328" textAnchor="middle" {...rlz(4, LBL)}>
+        {t.purple}
+      </text>
+      <text x="192" y="328" textAnchor="middle" {...rlz(4, LBL)}>
+        {t.purpleSoft}
+      </text>
+    </svg>
+  );
+
+  return <DosLienzos umbral={490} ancho={ancho} estrecho={estrecho} />;
 }

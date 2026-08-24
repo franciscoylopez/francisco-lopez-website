@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { LBL_STRONG, rlz } from "./shared";
+import { DosLienzos, LBL, LBL_STRONG, rlz } from "./shared";
 
 /**
  * 06 · Un hecho, tres longitudes, tres destinos. Elegido con `/prototype`
@@ -17,6 +17,11 @@ import { LBL_STRONG, rlz } from "./shared";
  * Y LAS BARRITAS DE DENTRO DE CADA ARTEFACTO SON DIBUJO, no información: son
  * texto simulado a escala, del mismo modo que el navegador de mentira del
  * Brand Kit. Por eso van en `fill-muted` sin borde y no se miden.
+ *
+ * LOS SUBRÓTULOS SUBEN DE 9 A 11 (P68.59). Eran el texto más pequeño de la
+ * figura y no llegaban al suelo de 11px pintados en ningún viewport: a 1536
+ * daban 9,0. Caben sin tocar el dibujo — el más largo, «el caso entero», ocupa
+ * 92 unidades de las 136 de su artefacto.
  */
 export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
   const t = {
@@ -32,6 +37,10 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
       deep: "Deep-dive",
       deepLen: "el caso entero",
       guard: "un guardián comprueba que ninguna cifra falte en una de las tres",
+      guardWrap: [
+        "un guardián comprueba que ninguna",
+        "cifra falte en una de las tres",
+      ],
     },
     en: {
       ariaLabel:
@@ -45,6 +54,10 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
       deep: "Deep-dive",
       deepLen: "the whole case",
       guard: "a guardian checks no figure is missing from any of the three",
+      guardWrap: [
+        "a guardian checks no figure is",
+        "missing from any of the three",
+      ],
     },
   }[lang];
 
@@ -62,7 +75,7 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
       />
     ));
 
-  return (
+  const ancho = (
     <svg
       viewBox="0 0 600 300"
       role="img"
@@ -78,15 +91,10 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
         strokeWidth="1.5"
         {...rlz(0, "fill-primary/12 stroke-primary")}
       />
-      <text x="300" y="34" textAnchor="middle" {...rlz(0, LBL_STRONG)}>
+      <text x="300" y="30" textAnchor="middle" {...rlz(0, LBL_STRONG)}>
         {t.hecho}
       </text>
-      <text
-        x="300"
-        y="50"
-        textAnchor="middle"
-        {...rlz(0, "fill-muted-foreground font-mono text-[9px]")}
-      >
+      <text x="300" y="50" textAnchor="middle" {...rlz(0, LBL)}>
         {t.once}
       </text>
 
@@ -119,12 +127,7 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
       <text x="116" y="234" textAnchor="middle" {...rlz(2, LBL_STRONG)}>
         {t.web}
       </text>
-      <text
-        x="116"
-        y="250"
-        textAnchor="middle"
-        {...rlz(2, "fill-muted-foreground font-mono text-[9px]")}
-      >
+      <text x="116" y="252" textAnchor="middle" {...rlz(2, LBL)}>
         {t.webLen}
       </text>
 
@@ -143,12 +146,7 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
       <text x="300" y="234" textAnchor="middle" {...rlz(3, LBL_STRONG)}>
         {t.pdf}
       </text>
-      <text
-        x="300"
-        y="250"
-        textAnchor="middle"
-        {...rlz(3, "fill-muted-foreground font-mono text-[9px]")}
-      >
+      <text x="300" y="252" textAnchor="middle" {...rlz(3, LBL)}>
         {t.pdfLen}
       </text>
 
@@ -167,30 +165,137 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
       <text x="484" y="234" textAnchor="middle" {...rlz(4, LBL_STRONG)}>
         {t.deep}
       </text>
-      <text
-        x="484"
-        y="250"
-        textAnchor="middle"
-        {...rlz(4, "fill-muted-foreground font-mono text-[9px]")}
-      >
+      <text x="484" y="252" textAnchor="middle" {...rlz(4, LBL)}>
         {t.deepLen}
       </text>
 
       <path
-        d="M48 272 L552 272"
+        d="M48 274 L552 274"
         fill="none"
         strokeWidth="1"
         strokeDasharray="3 3"
         {...rlz(5, "stroke-border")}
       />
-      <text
-        x="300"
-        y="290"
-        textAnchor="middle"
-        {...rlz(5, "fill-muted-foreground font-mono text-[9px]")}
-      >
+      <text x="300" y="292" textAnchor="middle" {...rlz(5, LBL)}>
         {t.guard}
       </text>
     </svg>
   );
+
+  /** El mismo flujo girado: la bifurcación en tres carriles pasa a ser un
+   * espinazo vertical con tres derivaciones, y cada artefacto se lee con su
+   * rótulo al lado en vez de debajo. La línea del guardián se parte en dos
+   * porque a 11 unidades ocupa 422 y el lienzo tiene 280. */
+  const estrecho = (
+    <svg
+      viewBox="0 0 280 546"
+      role="img"
+      aria-label={t.ariaLabel}
+      className="h-auto w-full max-w-[300px]"
+    >
+      <rect
+        x="36"
+        y="12"
+        width="208"
+        height="52"
+        rx="8"
+        strokeWidth="1.5"
+        {...rlz(0, "fill-primary/12 stroke-primary")}
+      />
+      <text x="140" y="34" textAnchor="middle" {...rlz(0, LBL_STRONG)}>
+        {t.hecho}
+      </text>
+      <text x="140" y="53" textAnchor="middle" {...rlz(0, LBL)}>
+        {t.once}
+      </text>
+
+      <path
+        d="M140 64 L140 84 M28 84 L140 84 M28 84 L28 398 M28 138 L52 138 M28 268 L52 268 M28 398 L52 398"
+        fill="none"
+        strokeWidth="1.25"
+        {...rlz(1, "stroke-primary")}
+      />
+
+      {/* Navegador: la frase corta. */}
+      <rect
+        x="52"
+        y="96"
+        width="104"
+        height="84"
+        rx="7"
+        strokeWidth="1"
+        {...rlz(2, "fill-card stroke-border")}
+      />
+      <path
+        d="M52 116 L156 116"
+        fill="none"
+        strokeWidth="1"
+        {...rlz(2, "stroke-border")}
+      />
+      <circle cx="63" cy="106" r="2.5" {...rlz(2, "fill-muted-foreground")} />
+      <circle cx="73" cy="106" r="2.5" {...rlz(2, "fill-muted-foreground")} />
+      {lineas(64, 130, [66, 86, 74], 2)}
+      <text x="168" y="134" {...rlz(2, LBL_STRONG)}>
+        {t.web}
+      </text>
+      <text x="168" y="152" {...rlz(2, LBL)}>
+        {t.webLen}
+      </text>
+
+      {/* Hoja: el bullet. */}
+      <rect
+        x="52"
+        y="226"
+        width="104"
+        height="84"
+        rx="4"
+        strokeWidth="1"
+        {...rlz(3, "fill-card stroke-border")}
+      />
+      {lineas(64, 242, [46, 60, 60], 3)}
+      {lineas(64, 276, [50, 56], 3)}
+      <text x="168" y="264" {...rlz(3, LBL_STRONG)}>
+        {t.pdf}
+      </text>
+      <text x="168" y="282" {...rlz(3, LBL)}>
+        {t.pdfLen}
+      </text>
+
+      {/* Página larga: el caso entero. */}
+      <rect
+        x="52"
+        y="356"
+        width="104"
+        height="84"
+        rx="7"
+        strokeWidth="1"
+        {...rlz(4, "fill-card stroke-border")}
+      />
+      {lineas(64, 370, [56, 84, 84], 4)}
+      {lineas(64, 404, [74, 84, 64], 4)}
+      <text x="168" y="394" {...rlz(4, LBL_STRONG)}>
+        {t.deep}
+      </text>
+      <text x="168" y="412" {...rlz(4, LBL)}>
+        {t.deepLen}
+      </text>
+
+      <path
+        d="M20 476 L260 476"
+        fill="none"
+        strokeWidth="1"
+        strokeDasharray="3 3"
+        {...rlz(5, "stroke-border")}
+      />
+      <text x="140" y="500" textAnchor="middle" {...rlz(5, LBL)}>
+        {t.guardWrap.map((linea, k) => (
+          <tspan key={linea} x="140" dy={k === 0 ? 0 : 17}>
+            {linea}
+          </tspan>
+        ))}
+      </text>
+    </svg>
+  );
+
+  return <DosLienzos umbral={610} ancho={ancho} estrecho={estrecho} />;
 }
