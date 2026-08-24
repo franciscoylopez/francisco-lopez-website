@@ -593,7 +593,23 @@
         },
         {
           "type": "p",
-          "text": "Es la parte donde toca ser honesto, porque es donde casi todo el mundo exagera. El [HTTP Observatory de Mozilla](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) le pone a esto una B+, 80 sobre 100: pierde exactamente los veinte puntos de la política de contenido, y no por descuido. **No es una protección fuerte contra inyección de scripts**: mantiene la ejecución de scripts en línea, porque el sitio tiene dos que corren antes de pintar (el que decide el tema y el del consentimiento). Lo que sí hace, gratis y sin romper nada: bloquear objetos incrustados, fijar la base de las URLs, limitar a dónde puede enviar un formulario y prohibir que nadie enmarque el sitio. La versión fuerte, la que firma cada script en cada petición, está escrita como pendiente y atada a la primera funcionalidad que la necesite de verdad. Prefiero una nota que diga la verdad sobre lo que protege que una más alta que sonara mejor de lo que es."
+          "text": "Hay dos escáneres públicos que puntúan esto, y conviene mirar los dos porque dicen cosas distintas por el mismo motivo. [Security Headers](https://securityheaders.com/?q=franciscolopez.es&followRedirects=on) le pone una **A**: las seis cabeceras de arriba están servidas y no falta ninguna. No le pone A+, y lo que se lo impide no es una cabecera que falte, es una línea dentro de la que sí está."
+        },
+        {
+          "type": "p",
+          "text": "Esa línea es la parte donde toca ser honesto, porque es donde casi todo el mundo exagera. El [HTTP Observatory de Mozilla](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) es más duro y deja el sitio en **B+**, 80 sobre 100: descuenta exactamente veinte puntos, un solo concepto, y no por descuido. **La política de contenido de este sitio no es una protección fuerte contra inyección de scripts**: mantiene la ejecución de scripts en línea, porque la página tiene varios que corren antes de pintar (el que decide el tema, el del consentimiento y el que React usa para despertar la página). Lo que sí hace, gratis y sin romper nada: bloquear objetos incrustados, fijar la base de las URLs, limitar a dónde puede enviar un formulario y prohibir que nadie enmarque el sitio."
+        },
+        {
+          "type": "p",
+          "text": "Y aquí está lo que no sabía cuando escribí este capítulo por primera vez: **esa línea tiene precio, y lo paga el capítulo entero**. Quitarla obliga a firmar cada script con un número distinto en cada visita, y ese número solo existe si la página se construye en el momento de pedirla. Hoy las catorce se construyen antes, una sola vez, y se sirven ya hechas, que es de donde sale el número de rendimiento de aquí abajo."
+        },
+        {
+          "type": "p",
+          "text": "Busqué la puerta de atrás, que sería firmar los scripts por su contenido en vez de por visita (eso sí es compatible con páginas ya construidas), y no existe. Compilé el sitio dos veces seguidas sin tocar una coma, y **ninguna de las veintiocho variantes produjo las mismas firmas**: dentro de esos scripts van los nombres de los archivos que el compilador renombra en cada pasada. Y una firma que no coincide no degrada nada, bloquea el script y deja la página a medias, así que la política caducaría sola en cada despliegue."
+        },
+        {
+          "type": "p",
+          "text": "Así que la letra se queda en B+, con la fecha puesta y el motivo escrito. Subirla mejoraría la nota de una herramienta empeorando la del visitante, y este sitio no tiene sesión, no guarda nada y su única entrada ajena es un formulario que ya llega saneado. El día que haya un asistente respondiendo texto generado, esa protección deja de ser una letra y se paga lo que valga. Prefiero una nota que diga la verdad sobre lo que protege a una más alta que sonara mejor de lo que es."
         },
         {
           "type": "p",

@@ -597,7 +597,23 @@
         },
         {
           "type": "p",
-          "text": "This is the part where honesty matters, because it's where almost everyone overstates. [Mozilla's HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) grades this a B+, 80 out of 100: it loses exactly the twenty points for content policy, and not by oversight. It's **not a strong protection against script injection**: it still allows inline scripts to run, because the site has two that run before paint (the one that picks the theme, and the consent one). What it does do, for free and without breaking anything: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site. The strong version, the one that signs every script on every request, is written down as a pending item tied to the first feature that genuinely needs it. I'd rather have a grade that tells the truth about what it protects than a higher one that sounds better than it is."
+          "text": "Two public scanners grade this, and both are worth looking at because they say different things for the same reason. [Security Headers](https://securityheaders.com/?q=franciscolopez.es&followRedirects=on) gives it an **A**: all six headers above are served and none is missing. It doesn't give it an A+, and what stops it isn't a header that's absent, it's one line inside a header that's present."
+        },
+        {
+          "type": "p",
+          "text": "That line is the part where honesty matters, because it's where almost everyone overstates. [Mozilla's HTTP Observatory](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es) is harsher and leaves the site at **B+**, 80 out of 100: it deducts exactly twenty points, one single item, and not by oversight. **This site's content policy is not a strong protection against script injection**: it still allows inline scripts to run, because the page has several that run before paint (the one that picks the theme, the consent one, and the one React uses to wake the page up). What it does do, for free and without breaking anything: block embedded objects, pin the base for URLs, limit where a form can submit to, and forbid anyone from framing the site."
+        },
+        {
+          "type": "p",
+          "text": "And here's what I didn't know when I first wrote this chapter: **that line has a price, and the whole chapter pays it**. Removing it means signing every script with a different number on every visit, and that number only exists if the page is built at the moment it's requested. Today all fourteen are built beforehand, once, and served ready-made, which is where the performance number just below comes from."
+        },
+        {
+          "type": "p",
+          "text": "I went looking for the back door, which would be signing scripts by their content instead of per visit (that part is compatible with pages built in advance), and it isn't there. I compiled the site twice in a row without touching a comma, and **not one of the twenty-eight variants produced the same signatures**: inside those scripts are the names of the files the compiler renames on every pass. And a signature that doesn't match doesn't degrade anything, it blocks the script and leaves the page half-built, so the policy would expire by itself on every deploy."
+        },
+        {
+          "type": "p",
+          "text": "So the grade stays at B+, with the date on it and the reason written down. Raising it would improve a tool's score by making the visitor's worse, and this site has no session, stores nothing, and its only outside input is a form that already arrives sanitized. The day there's an assistant answering generated text, that protection stops being a letter and gets paid for whatever it costs. I'd rather have a grade that tells the truth about what it protects than a higher one that sounds better than it is."
         },
         {
           "type": "p",
