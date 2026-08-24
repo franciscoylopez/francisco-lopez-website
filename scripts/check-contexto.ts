@@ -26,9 +26,17 @@
  *
  * EL OBJETIVO SE ALCANZÓ EL 2026-08-22 (11.976), así que a partir de aquí deja de
  * ser una distancia y pasa a ser una línea que hay que sostener. El techo queda
- * por encima con holgura de trabajo —una sesión normal escribe y borra párrafos—
- * y su próximo apretón es a 12.000: cuando eso pase, el objetivo necesita número
- * nuevo, porque un objetivo igual al techo no dice nada.
+ * por encima con holgura de trabajo —una sesión normal escribe y borra párrafos—.
+ *
+ * Y ESA HOLGURA ES LA MAGNITUD QUE HAY QUE SOSTENER, no el techo (2026-08-24,
+ * P68.675). Aquí estaba escrito que el próximo apretón era a 12.000, y NO se hizo:
+ * con 11.957 medidos habría dejado 43 palabras de margen, que es justo el estado
+ * que originó esta tarea. El 2026-08-23 quedaron 17, y el 2026-08-24 una regla
+ * nueva de tres líneas no cupo y hubo que retirar antes para pagarla. Un techo que
+ * no deja escribir no produce compactación: produce el reflejo de subirlo, que es
+ * lo único que este gate no puede permitirse. Se aprieta el techo hasta dejar unas
+ * 240 palabras —cinco o seis reglas— y se baja el objetivo, que es quien lleva la
+ * ambición.
  */
 import { readFileSync } from "node:fs";
 
@@ -46,11 +54,21 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  *           crecía por construcción, y contra eso un techo no defiende.
  *   12.400  el mismo día, tras la pasada de retirada sobre `BRAND.md` (12.224 →
  *           11.976, la primera vez que el arranque cabe en el objetivo)
+ *   12.200  el 2026-08-24 (12.397 → 11.957), retirando historia fechada y tres
+ *           duplicaciones: el inventario de verificación estaba escrito en
+ *           `CLAUDE.md`, en la DoD y en `PRD-Live`, y las dos «excepciones vivas»
+ *           de `BRAND.md` repetían justificación y condición de salida palabra
+ *           por palabra. Ninguna regla se retiró; solo su historia y sus copias.
  */
-const TECHO = 12_400;
+const TECHO = 12_200;
 
-/** A dónde se quiere llegar. No falla; solo se publica la distancia. */
-const OBJETIVO = 12_000;
+/**
+ * A dónde se quiere llegar. No falla; solo se publica la distancia. Necesita número
+ * nuevo cada vez que se alcanza, porque un objetivo ya cumplido deja de tirar.
+ *   12.000  alcanzado el 2026-08-22 y sostenido desde entonces
+ *   11.800  desde el 2026-08-24
+ */
+const OBJETIVO = 11_800;
 
 /** Palabras «de verdad»: sin bloques de código, que no son prosa que haya que leer. */
 function palabras(texto: string): number {
