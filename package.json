@@ -31,7 +31,8 @@
     "indices": "tsx scripts/indices.ts --escribir",
     "check:indices": "tsx scripts/check-indices.ts",
     "check:rutas": "tsx scripts/check-rutas.ts",
-    "check:marco": "tsx scripts/check-marco.ts"
+    "check:marco": "tsx scripts/check-marco.ts",
+    "check:figuras": "tsx scripts/check-figuras.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
