@@ -241,6 +241,10 @@ components/site/       Piezas que SÍ saben de este sitio: page-shell.tsx (el ma
                        skip-link.tsx (WCAG 2.4.1 nivel A), bloques (nav, footer, breadcrumb,
                        banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN (D42)
+components/site/diagrams/  Los diagramas SVG del sitio y lo que comparten: shared.tsx (el rótulo,
+                       el realce y el conmutador de dos lienzos de D68.59). Salió de la carpeta del
+                       artículo cuando /accesibilidad estrenó el suyo (D112)
+components/site/como-se-ha-creado-diagrams/  Los ocho del artículo, UN ARCHIVO POR DIAGRAMA
 components/analytics/  GTM + Consent Mode (init)
 
 content/               Contenido y datos que NO son copy del diccionario: cv/ (lo exclusivo del papel)

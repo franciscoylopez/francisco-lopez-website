@@ -78,6 +78,7 @@
 - [60. La lectura del artículo destapa tres cosas que nadie buscaba (2026-08-24)](#60-la-lectura-del-artículo-destapa-tres-cosas-que-nadie-buscaba-2026-08-24)
 - [61. La tanda de método cierra siete tareas, y cuatro tenían la premisa equivocada (2026-08-25)](#61-la-tanda-de-método-cierra-siete-tareas-y-cuatro-tenían-la-premisa-equivocada-2026-08-25)
 - [62. Los dos sprints hacia septiembre: coherencia de las hermanas, con el activo que se lanza arrastrado dentro (2026-08-25)](#62-los-dos-sprints-hacia-septiembre-coherencia-de-las-hermanas-con-el-activo-que-se-lanza-arrastrado-dentro-2026-08-25)
+- [63. La página que documenta el sistema dejaba fuera justo la parte que no tiene nadie (2026-08-25)](#63-la-página-que-documenta-el-sistema-dejaba-fuera-justo-la-parte-que-no-tiene-nadie-2026-08-25)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3120,6 +3121,62 @@ y Brand Kit. La home queda definida y en «Sin empezar», con **su carril de con
 del Hero— ya arrancado en paralelo**, que es lo que impide que abra bloqueada. Tres de las 28
 son funcionalidad y no deuda (copy-to-clipboard, simulador de foco, ilustraciones animadas):
 quedan señaladas como las primeras que salen si septiembre aprieta.
+
+## 63. La página que documenta el sistema dejaba fuera justo la parte que no tiene nadie (2026-08-25)
+
+**Accesibilidad medía 5.399 caracteres de texto renderizado contra los 8.934 del Brand Kit y
+los 33.452 del Design System**, siendo una de las tres páginas donde el sitio se documenta a sí
+mismo. El diagnóstico no era de volumen: `verify` publicaba las cuatro herramientas que tiene
+cualquier proyecto —axe, Lighthouse, contraste, teclado— y callaba las tres que no tiene
+ninguno; y `measures` era la lista genérica de nueve puntos sin el criterio que la sostiene.
+
+**Pasa de cinco secciones a siete y a 12.066 caracteres** (11.550 en EN), dentro de la banda que
+pidió Francisco: por encima del Brand Kit y por debajo del Design System. Las dos nuevas son las
+que llevan el material propio. **«Herencia»** explica por qué cuatro de los nueve puntos no se
+comprueban página a página, el atenuado que resuelve la superficie y el sello que decide cuándo
+hay que volver a medir. **«El punto ciego»** cuenta qué encuentra una pasada a mano: el material
+existía repartido en dos notas al pie, y con titular propio es un argumento en vez de una
+anécdota. `verify` pasa de cuatro herramientas a ocho y `limits` de tres a seis, con los tres
+que cuestan: nadie que use tecnología de asistencia a diario ha probado el sitio, un solo lector
+y un solo navegador, y las pantallas por debajo de 320.
+
+### Lo que se decidió NO publicar, que define la página tanto como lo que sí
+
+**El número de pasos de CI**, cuando aún se escribía a mano: el artículo dibujaba diecinueve y
+el workflow tiene veinte pasos nombrados, y dos páginas del mismo sitio con cifras distintas es
+el drift que este repo persigue. *(Existía `{pasosCI}` derivado en `lib/figures.ts` y se
+descubrió después; la decisión valía para el número tecleado, no para el derivado.)*
+
+**Y el sello de un verificador externo.** Francisco propuso enlazar un informe de getwcag que
+marca 100% y «Pass» en WCAG, Section 508, ADA y la **European Accessibility Act**. La sección 01
+de esa misma página explica, con dos enlaces oficiales, que decir que este sitio «cumple la EAA»
+sería inexacto: obliga a productos y servicios comerciales, no a una web personal. Enlazar el
+sello habría puesto las dos afirmaciones a tres pantallas de distancia, y un «100% Excellent»
+junto a una sección titulada «Lo que ninguna herramienta automática encuentra» se lee como
+contradicción. Queda tareado citar el hecho —cero violaciones en un motor que no es el nuestro—
+sin comprar su lista de normativas.
+
+### La distinción que salvó la otra propuesta
+
+Francisco propuso también la marca de **LoveA11y**, y a primera vista chocaba con lo anterior.
+No es lo mismo: **un sello afirma que cumples una normativa; una marca de comunidad señala que
+te apuntas a una idea.** Pero la defensa dependía del maquetado, así que el propio Francisco la
+reencuadró y la dejó mejor: el hueco real no era decorativo. **«a11y» aparece UNA vez en toda
+la página, sin explicar, en un rótulo del hero**, y la página cita axe, Lighthouse, NVDA y WCAG
+sin enlazar ninguno. Lo tareado es un bloque de contenido que diga qué es el término, cómo se
+usa aquí y a quién enlaza; la marca solo le da peso visual, y así deja de necesitar defensa.
+
+### La sección de herencia estrenó diagrama, y con él dos hallazgos de método
+
+El dibujo se eligió con `/prototype` entre tres direcciones: **matriz** (los nueve puntos con su
+capa y quién los verifica), **bandas** (la proporción cuatro/uno/cuatro de un vistazo) y
+**descenso** (qué baja ya puesto y qué nace en la página). Ganó la matriz por ser la única que
+sostiene la segunda dimensión, que es lo que convierte la sección en criterio: ocho de los nueve
+los comprueba una máquina y uno una persona.
+
+Construirlo destapó dos cosas que no eran del diagrama, y las dos tienen entrada propia:
+sacar `shared.tsx` de la carpeta del artículo **estrechó un guardián en silencio** (D112), y
+`LiveStat` llevaba en la capa de artículo por vecindad y no por argumento (D113).
 
 ## Fuentes
 
