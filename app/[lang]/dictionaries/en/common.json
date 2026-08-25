@@ -10,7 +10,8 @@
     "contacto": "Contact",
     "sobreMi": "About me",
     "menu": "Menu",
-    "toggleTheme": "Toggle theme",
+    "toggleThemeToDark": "Switch to dark theme",
+    "toggleThemeToLight": "Switch to light theme",
     "switchLanguage": "View in Spanish",
     "switchLanguageShort": "ES"
   },

@@ -17,7 +17,8 @@ export type NavDict = {
   contacto: string;
   sobreMi: string;
   menu: string;
-  toggleTheme: string;
+  toggleThemeToDark: string;
+  toggleThemeToLight: string;
   switchLanguage: string;
   switchLanguageShort: string;
 };
@@ -248,15 +249,39 @@ export function Nav({
           >
             {dict.switchLanguageShort}
           </a>
+          {/* EL NOMBRE DICE A QUÉ TEMA LLEVA (P70.07, pasada con NVDA). Era fijo
+              —«Cambiar tema»—, así que quien no ve no sabía en qué tema estaba
+              ANTES de pulsar ni que había cambiado DESPUÉS: al activarlo no se
+              anunciaba nada. Con el nombre en el destino, la mitad de antes la
+              da el propio nombre y la de después la da el cambio de nombre del
+              elemento enfocado, que es lo que el lector reanuncia.
+
+              NO ES `aria-pressed` NI UNA LIVE REGION. `aria-pressed` sobre un
+              nombre que ya cambia dice dos veces la misma cosa y con vocabulario
+              de otro control; y una live region para esto es más maquinaria de
+              la necesaria, y abriría la pregunta de qué más debería anunciarse.
+
+              Y NO SALE DE `resolvedTheme`, QUE ES LA TRAMPA: en SSR es
+              `undefined`, así que un `aria-label` derivado de él se renderizaría
+              con un valor en el servidor y otro tras hidratar. Los dos nombres se
+              conmutan por CSS con la MISMA pareja de clases que ya conmuta los
+              iconos aquí debajo, que es por lo que este botón nunca ha tenido
+              desajuste de hidratación. `hidden` es `display:none`, y lo que no
+              se renderiza no entra en el nombre accesible. */}
           <button
             type="button"
-            aria-label={dict.toggleTheme}
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className={cn(
               actionVariants({ variant: "icon", size: "icon" }),
               "ml-0.5",
             )}
           >
+            <span className="sr-only dark:hidden">
+              {dict.toggleThemeToDark}
+            </span>
+            <span className="sr-only hidden dark:inline">
+              {dict.toggleThemeToLight}
+            </span>
             {/* Sin tamaño a mano: lo pone `size: "icon"` de la variante. */}
             <Moon className="dark:hidden" aria-hidden="true" />
             <Sun className="hidden dark:block" aria-hidden="true" />
