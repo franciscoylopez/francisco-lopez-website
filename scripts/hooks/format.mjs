@@ -44,8 +44,8 @@ const event = await readEvent();
 const file = event?.tool_input?.file_path;
 if (!file) process.exit(0);
 
-// Solo lo que la app escribe. `scripts/`, `design/` y los `.md` ya están fuera
-// por `.prettierignore`, pero filtrar aquí evita arrancar un proceso para nada.
+// Solo lo que la app escribe. `scripts/` y los `.md` ya están fuera por
+// `.prettierignore`, pero filtrar aquí evita arrancar un proceso para nada.
 if (!/\.(ts|tsx|css|json|mjs)$/i.test(file)) process.exit(0);
 
 // `--ignore-unknown` para que un parser desconocido no sea un error, y el cwd

@@ -11,8 +11,8 @@ Reglas de identidad visual para este proyecto. Aplícalas siempre al generar UI.
 ## Stack
 
 Next.js + TypeScript + Tailwind (v4). La capa de componentes es **propia**
-(`components/ui/`); shadcn/ui está configurado y **sin usar** — entra solo para widgets
-con estado, foco atrapado o portal, y hacia delante (`DECISIONS.md` D6). Iconos: lucide-react.
+(`components/ui/`); shadcn/ui está configurado y **sin usar** — entra donde la plataforma
+no llega, y hacia delante (`DECISIONS.md` D6). Iconos: lucide-react.
 Los tokens viven en `app/globals.css`. No inventes colores fuera de esos tokens.
 
 ## Tipografía
@@ -181,10 +181,8 @@ color del FONDO** (`--background`), nunca negro (el negro arregla un tema y empe
 firma de D41). Y un control **de dos tonos** —relleno `--primary` + anillo
 `--primary-foreground`—, cuyo borde **interno** no depende de la imagen.
 
-**Y eso garantiza el borde INTERNO, no el contorno entero:** que los dos bordes externos
-pasen 3:1 en cada punto no se puede prometer, y subir el velo tira en direcciones opuestas.
-No es incumplimiento —WCAG pide que el componente se distinga—, pero la regla se escribió
-prometiendo de más.
+**Y eso garantiza el borde INTERNO, no el contorno entero:** los dos externos no se pueden
+prometer punto por punto. No es incumplimiento, pero la regla se escribió prometiendo de más.
 
 *(Las cifras, el barrido de opacidad y las dos veces que el metro estuvo mal, en
 [`BRAND-historical.md`](./BRAND-historical.md) §Un control sobre una imagen y §La regla del
@@ -221,37 +219,47 @@ superficie (§El atenuado lo pone la superficie, D39).
 
 ### Ningún control se escribe a mano
 
-> **Caso particular de la «Regla de construcción» de `CLAUDE.md`** (2026-08-08), que
-> generaliza esto a todo lo que se construye —secciones, páginas, bloques— y añade el
-> paso de shadcn para widgets con estado, foco atrapado o portal. La cascada completa
-> vive **solo allí**; aquí queda el porqué específico de los controles. No se copia
-> (regla 5 de §Cómo se escribe una regla aquí).
+> **Caso particular de la «Regla de construcción» de `CLAUDE.md`**, donde vive la cascada
+> completa; aquí queda solo el porqué específico de los controles (regla 5 de §Cómo se
+> escribe una regla aquí).
 
 **Ningún elemento interactivo —botón, enlace con forma de botón, chip, toggle, pestaña, control
 de icono— nace de una cadena de clases inline.** Si el caso no encaja en una variante, se **crea
 la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como
 el switch del consentimiento, aquí debajo).
 
-> **Dos excepciones vivas, con la misma razón y la misma condición de salida:** hay **una**
-> de cada en todo el sitio, así que no hay repetición que factorizar y una pieza con un solo
-> call site solo añadiría indirección. **Salen cuando aparezca la segunda** —entonces sí hay
-> repetición, y la segunda arrastra a la primera— o cuando haya que rehacerlas por otro motivo.
+> **Cuatro excepciones vivas, y esta lista ya no se escribe de memoria: la comprueba
+> `npm run check:excepciones`** *(2026-08-25)*, que le exige a cada control fuera de la capa
+> una marca `@fuera-de-capa` y que aquí esté nombrado. Las dos primeras
+> comparten razón: hay **una** de cada, así que no hay repetición que factorizar y una pieza
+> con un solo call site solo añadiría indirección. **Salen cuando aparezca la segunda**, o
+> cuando haya que rehacerlas por otro motivo.
 >
 > - **El switch del consentimiento** *(2026-08-08)*: `consent-banner.tsx` lo dibuja con una
->   cadena inline. Y traerlo de shadcn es lo que mandaría la cascada, que **aplica hacia
+>   cadena inline. Y traerlo hecho es lo que mandaría la cascada, que **aplica hacia
 >   delante, no hacia atrás**. Lo que **no** es excepción es su color: lo resuelve §Controles
 >   con dos fondos.
 > - **El índice de secciones del artículo** *(2026-08-22)*: el riel de `article-islands.tsx`
 >   no compone `chromeLinkVariants` —es una píldora que se expande en hover/foco con estado
 >   activo propio, y ninguna `shape` de `chrome.tsx` cubre ese caso—. Sale a `chrome.tsx`.
+> - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
+>   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
+> - **La tarjeta que se pulsa entera, escrita tres veces** *(2026-08-25)*: `page-closer.tsx`,
+>   `trayectoria-indice.tsx` y `article.tsx` componen `cn(CARD, …)` en vez de la variante
+>   `card`. Su condición de salida ya se cumplió: está tareada (P74.55), no exenta. Y no es
+>   cosmética: les falta el `focus-visible:bg-muted` de la variante, así que el teclado no
+>   recibe lo que recibe el ratón.
+>
+> **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
+> imagen del vídeo no es excepción: sale de `.video-facade`.
 
 ## Accesibilidad (no negociable)
 
 - Todo texto y todo elemento interactivo debe cumplir WCAG AA (4.5:1 texto, 3:1 UI). **AA es el
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares que el sitio
   PINTA están en AAA en ambos temas, en reposo y en hover.**
-  **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`).
-  Son **dos pases**: pares de texto (1.4.3/1.4.6) y **contorno de control** (1.4.11, 3:1).
+  **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`, y qué
+  mide cada uno de sus dos pases, en `PRD-Live` §Cómo se verifica).
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
   **«Que pinta» es el límite del metro:** un token que existe y no se usa le resulta invisible.
   De ahí **el rojo no es color de texto**: el mensaje va en `--foreground` y `--destructive`

@@ -55,3 +55,8 @@ next-env.d.ts
 # Claude Code — config local de máquina (las skills del proyecto SÍ se versionan)
 .claude/settings.local.json
 /scripts/.artefacto-raw.svg
+
+# Volcado del tablero de Notion para `npm run check:tablero`. NO se versiona: una
+# foto del tablero dentro del repo sería la segunda fuente de verdad que ese
+# guardián existe para evitar. Se regenera al empezar la sesión.
+/scripts/.tablero.json

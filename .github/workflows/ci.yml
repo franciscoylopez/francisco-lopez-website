@@ -160,6 +160,14 @@ jobs:
       - name: Índices derivados
         run: npm run check:indices
 
+      # La lista de excepciones de BRAND.md —los controles escritos a mano— se
+      # llevaba de memoria, y al derivarla del disco por primera vez estaba mal por
+      # los dos lados: nombraba una que no lo era y le faltaba otra, escrita tres
+      # veces. Ahora cada control fuera de la capa lleva su marca `@fuera-de-capa` y
+      # el documento tiene que nombrarlo; se comprueba en las dos direcciones (D109).
+      - name: Excepciones de la capa de controles
+        run: npm run check:excepciones
+
       # «Qué páginas tiene este sitio» estaba escrito a mano en TRES sitios —el
       # sitemap, este gate de HTML y /llms.txt— y en ninguno fallaba de forma
       # visible: la página no existe para Google, el gate deja de cubrirla en

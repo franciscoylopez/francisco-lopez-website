@@ -11,22 +11,22 @@ export function CascadaDiagram({ lang }: { lang: Locale }) {
   const t = {
     es: {
       ariaLabel:
-        "Cuatro preguntas en cascada descendente, cada una más corta que la anterior: ¿Existe la pieza? → se usa. Si no, ¿es del sistema? → se crea la variante. Si no, ¿es estado, foco o portal? → se trae de shadcn. Si no, ¿nada de lo anterior? → se decide y se documenta. La mayoría de casos se resuelven en la primera pregunta.",
+        "Cuatro preguntas en cascada descendente, cada una más corta que la anterior: ¿Existe la pieza? → se usa. Si no, ¿es del sistema? → se crea la variante. Si no, ¿es estado, foco o portal? → se trae hecho, primero de la plataforma y si ella no llega, de shadcn. Si no, ¿nada de lo anterior? → se decide y se documenta. La mayoría de casos se resuelven en la primera pregunta.",
       steps: [
         { q: "¿Existe la pieza?", a: "Se usa" },
         { q: "¿Es del sistema?", a: "Se crea la variante" },
-        { q: "¿Estado, foco o portal?", a: "Se trae de shadcn" },
+        { q: "¿Estado, foco o portal?", a: "Se trae hecho" },
         { q: "¿Nada de lo anterior?", a: "Se decide y se documenta" },
       ],
       sino: "si no",
     },
     en: {
       ariaLabel:
-        "Four questions in a descending cascade, each shorter than the last: Does the piece exist? → use it. If not, is it the system's? → create the variant. If not, is it state, focus or a portal? → pull it from shadcn. If not, none of the above? → decide and document it. Most cases resolve at the first question.",
+        "Four questions in a descending cascade, each shorter than the last: Does the piece exist? → use it. If not, is it the system's? → create the variant. If not, is it state, focus or a portal? → pull it in ready-made, from the platform first and from shadcn where the platform falls short. If not, none of the above? → decide and document it. Most cases resolve at the first question.",
       steps: [
         { q: "Does it exist?", a: "Use it" },
         { q: "Is it the system's?", a: "Create the variant" },
-        { q: "State, focus or portal?", a: "Pull it from shadcn" },
+        { q: "State, focus or portal?", a: "Pull it in ready-made" },
         { q: "None of the above?", a: "Decide and document" },
       ],
       sino: "if not",

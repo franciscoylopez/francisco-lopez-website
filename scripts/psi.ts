@@ -55,6 +55,17 @@
 //   · Solo la categoría de rendimiento. Accesibilidad y SEO los cubren
 //     `check:marco`, `censo` y el `viewport-verifier`, que no gastan cuota de API
 //     ni dependen de que Google esté de buenas.
+//
+// DOS TRAMPAS AL REPETIR CORRIDAS (D108, 2026-08-25). Si alguna vez se lanza esto
+// N veces para sacar una mediana:
+//   · LA API DEVUELVE RESULTADO CACHEADO. Seis de ocho corridas seguidas pueden ser
+//     la misma respuesta byte a byte. DEDUPLICA por el «(medido …)» que se imprime
+//     al lado de la nota: es el sello del análisis, no el de la llamada. Una n alta
+//     sobre filas repetidas da la apariencia de rigor y el veredicto contrario.
+//   · Y EL DESGLOSE DEL LCP NO ES UNA PROPIEDAD DE LA PÁGINA. Sobre el mismo
+//     despliegue, el render delay se movió entre 15 y 2058 ms (137×) y su cuota
+//     entre el 1% y el 90%. El TOTAL sí es estable. No abras una tarea sobre una
+//     fase sin mediana de corridas deduplicadas.
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";

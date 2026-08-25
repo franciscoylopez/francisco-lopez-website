@@ -41,7 +41,7 @@
 - D3 · Next 16 usa `proxy.ts`, no `middleware.ts`
 - D4 · Fuente única de tokens = `app/globals.css`; `brand-globals.css` deprecado
 - D5 · Dark mode = `system` por defecto + toggle
-- D6 · ¿shadcn lo trae? → no se escribe (regla hacia delante); `@base-ui/react` fuera hasta el primer componente
+- D6 · Plataforma primero, shadcn donde la plataforma no llega; `@base-ui/react` fuera hasta el primer componente
 - D7 · Responsive en CSS, no en JS; Server Components por defecto
 - D8 · Objetivos no funcionales: PageSpeed >90, desktop+mobile, AA→AAA
 - D9 · Alcance de V1 = home + Brand Kit + Design System + SEO/OG + medición + dominio
@@ -142,6 +142,9 @@
 - D104 · El censo mide dónde está pintada la caja, no quién recibe el clic — y la pasada se desplaza antes de medir
 - D105 · El presupuesto de contexto vigila también las skills, y con techo POR ENTRADA
 - D106 · El umbral de una figura es su propio lienzo, y quien lo vigila lee el prerender, no el navegador
+- D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red
+- D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra
+- D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -155,6 +158,14 @@
 > desechable** para movimientos visuales *nuevos* (gesto-firma, franja-CTA, layouts
 > novedosos), **nunca como fuente viva** — mantenerlo en paralelo reintroduce la divergencia
 > que D1/D4/D19 combaten. La decisión original se conserva abajo como registro.
+>
+> **Y la copia del repo se borra el 2026-08-25 (P68.695).** `design/web-personal.dc.html`
+> llevaba sin tocarse desde el 26 de julio y **ya afirmaba algo falso**: su línea 317 seguía
+> diciendo «Feb 2024 — Nov 2024» para KUOTIP, la fecha que el sitio corrigió el 16 de agosto.
+> Un artefacto congelado que nadie mantiene no es una referencia: es la divergencia de arriba,
+> versionada y en un repositorio público. **No se pierde nada**: el archivo sigue en Claude
+> Design (proyecto «New Website»), que es donde D1 dice que vive, y git conserva la copia.
+> Lo que queda en el árbol son los dos comentarios que lo citaban como origen, ahora sin ruta.
 
 **Decisión.** El diseño de V1 (home + Brand Kit + Design System, con nav/footer/breadcrumb
 compartidos) vive en Claude Design, proyecto "New Website", archivo `Web personal.dc.html`.
@@ -226,14 +237,50 @@ Añadir `color-scheme` en `:root` y `<meta name="theme-color">` por esquema.
 aparentar. La base ya evita el flash (`attribute="class"` + `suppressHydrationWarning`). El swap de
 logos claro/oscuro se hace por CSS puro (sin JS, sin parpadeo).
 
-## D6 · ¿shadcn lo trae? → no se escribe (regla hacia delante); `@base-ui/react` fuera hasta el primer componente — 2026-07-24, **reescrita 2026-08-08 (P37.63)**
+## D6 · Plataforma primero, shadcn donde la plataforma no llega; `@base-ui/react` fuera hasta el primer componente — 2026-07-24, **reescrita 2026-08-08 (P37.63) y 2026-08-24 (P68.66)**
 **Decisión.** Para **widgets con estado, foco atrapado o portal** —diálogo, popover, tooltip,
-combobox, menú, tabs, scroll-area— la regla es la simétrica de la de iconos («¿lucide lo trae? →
-no se dibuja»): **¿shadcn lo trae? → no se escribe.** Se trae con `npx shadcn@latest add
-<componente>` (estilo `base-nova`, ya configurado en `components.json`), se le aplican **nuestros**
-tokens, y si acaba siendo pieza del sistema se publica en el Design System. Es el **paso 3 de la
-«Regla de construcción»** de `CLAUDE.md`, que es donde vive la cascada completa; aquí queda el
-porqué y el estado de la dependencia.
+combobox, menú, tabs, scroll-area— siguen sin escribirse a mano el teclado, el ARIA y la gestión
+de foco. Lo que cambia el 2026-08-24 es **de dónde salen, y en qué orden se pregunta**:
+
+1. **¿Lo trae la plataforma?** Diálogo modal (`<dialog>` + `showModal()`), popover no modal
+   (atributo `popover`) y el posicionamiento contra un ancla (`anchor-name` / `position-area`).
+   Los tres dan foco, `Esc`, capa superior y light-dismiss sin dependencia y sin JS que mantener.
+2. **Si no, ¿lo trae shadcn?** Lo que **no** tiene equivalente nativo —combobox, autocompletado,
+   date picker— se trae con `npx shadcn@latest add <componente>` (estilo `base-nova`, ya
+   configurado en `components.json`), se le aplican **nuestros** tokens, y si acaba siendo pieza
+   del sistema se publica en el Design System.
+3. **Escribirlo a mano sigue siendo el último recurso, no el primero.** «Plataforma primero» no
+   es permiso para reimplementar un combobox: es el paso que antes no se preguntaba.
+
+Es el **paso 3 de la «Regla de construcción»** de `CLAUDE.md`, que es donde vive la cascada
+completa; aquí queda el porqué y el estado de la dependencia.
+
+**Por qué se invierte el orden, con las dos cifras que lo deciden.**
+
+- **La plataforma alcanzó a la librería en lo único que se le compraba.** D6 ya acotaba la regla
+  «a lo que de verdad compra algo: teclado, ARIA y gestión de foco». Para diálogo y popover eso
+  ya no hay que comprarlo: la **Popover API** es Baseline *newly available* desde **enero de
+  2025**, y lo único que le faltaba —posicionar contra un ancla— lo cubre **CSS anchor
+  positioning**, Baseline *newly available* desde **enero de 2026**. Y este sitio no lo está
+  suponiendo: su `<dialog>` nativo de consentimiento lleva desde V1 atrapando el foco y dando
+  `Esc` de fábrica, con 0 violaciones de axe.
+- **Y el coste de adoptarla se midió en un caso real.** P67 trajo el `field` de shadcn para
+  comprobarlo y hubo que reescribir **cuatro de cuatro** propiedades: `h-8` contra el suelo de
+  44px del checklist, `outline-none` con anillo propio de 3px contra el mecanismo único de foco
+  del sitio, valores fuera de la disciplina de tokens, y una dependencia nueva de frontend para
+  un `<input>`. «Adoptarlo era reescribirle todas las clases y quedarse con el nombre del archivo
+  más una dependencia» (`components/ui/field.tsx`). Esa prueba **no** invalida la regla —un
+  `<input>` no es un widget con foco atrapado, así que el disparador ni llegó a activarse— pero
+  sí mide lo que cuesta el encaje, y ese coste es el mismo para cualquier componente suyo: el
+  desajuste es con el sistema de diseño, no con el elemento.
+- Juntas dicen lo mismo: **cuando lo que se compra es solo comportamiento, y el navegador ya lo
+  regala, la dependencia deja de pagarse sola.** Donde no lo regala, se sigue pagando sin
+  discutir.
+
+**Lo que NO cambia.** La dependencia sigue necesitando `/pick-ui-library` antes de entrar (solo
+la dispara Francisco). Y la nota de «newly available» va con su letra pequeña: Baseline *newly*
+significa las versiones actuales, no el parque entero — un widget que se apoye en anchor
+positioning necesita degradar con `@supports`, igual que cualquier otra cosa recién llegada.
 
 - **Aplica hacia delante, no hacia atrás.** Los widgets que hoy están a mano se quedan: el
   `<dialog>` nativo del consentimiento (`showModal()` atrapa el foco y da ESC de fábrica), su
@@ -6082,3 +6129,154 @@ en vez de 280.
 **Validado contra el navegador antes de creérselo** (`BRAND.md` §Cómo medir, punto 1): predice
 11,2px a 360 y 11,0 / 12,2 a 1280, que es exactamente lo que mide `agent-browser` sobre el sitio
 servido. Si deja de cuadrar, el fallo es del script.
+
+---
+
+## D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red — 2026-08-25
+
+**Contexto.** El proyecto ha ido eliminando la segunda fuente de verdad en todas partes: D38
+(valores publicados), D59 y D72 (qué páginas hay), D60 (artefactos commiteados). El tablero de
+Notion era **lo último que quedaba sin red**, y encima es donde vive el orden en que se hace
+todo. El sprint 3 lo demostró dos veces: dos tareas distintas con la prioridad exacta 69,93
+—detectado a mano— y un orden de ejecución que se saltó cuatro veces una regla que dice
+literalmente «no se salta una tarea de prioridad menor».
+
+**Decisión.** `npm run check:tablero`, con **la E/S y el criterio separados a propósito**:
+
+- **`scripts/tablero/reglas.ts`** es una función pura sobre una lista de tareas. Sin red, sin
+  credenciales, sin Notion. Cuatro reglas: prioridades únicas entre las abiertas, ninguna
+  abierta sin `Prioridad` ni sin `Área`, los tres estados de ejecución solo en el sprint activo,
+  y coherencia de orden entre sprints abiertos a la vez.
+- **`scripts/check-tablero.ts`** es la E/S: lee el volcado, normaliza los nombres de propiedad
+  de Notion e informa. Corre **fuera de CI**, como `censo` y `psi`, porque leer el tablero
+  necesita el MCP de Notion y en un runner headless puede no estar autenticado.
+
+**Por qué partido, que es lo único no obvio.** Un guardián que corre fuera de CI es un guardián
+que solo corre si alguien se acuerda, y este repo tiene escrito que eso no es un guardián sino
+una nota. La partición compra la mitad que sí se puede vigilar siempre: **las reglas las prueba
+`npm test` en CI**, con un caso bueno que tiene que pasar y uno malo por regla que tiene que
+rechazar, y `check:guardianes` muerde el criterio con la rotura que lo dejaría ciego al caso que
+lo motivó (`grupo.length > 1` → `> 2`, dos tareas con 69,93). Así que el comando puede vivir
+fuera de CI sin que su criterio se pudra en silencio.
+
+**Tres detalles que costaron una decisión cada uno.**
+
+1. **El sprint activo no se declara: se deriva.** Una lista de sprints en el script sería otra
+   fuente de verdad que puede diferir del tablero, que es justo lo que este guardián combate.
+   Sale de dónde están las tareas en ejecución.
+2. **El carril de contenido es una excepción explícita.** `CLAUDE.md` dice que el contenido que
+   solo escribe Francisco corre **en paralelo y por delante**, para que un sprint no abra
+   bloqueado. Sin esa excepción el guardián saldría rojo justo sobre lo que el tablero protege.
+   Tiene su propio test.
+3. **Un bloque no es una cola.** «Todo lo del sprint activo por delante de los bloques» no se
+   puede pedir literalmente: un bloque es un backlog temático y su numeración se entrelaza con
+   la del sprint a propósito, porque la deuda se numera donde aparece. La regla de orden solo
+   compara **entre etapas que también tienen tareas en ejecución**, o sea entre sprints abiertos
+   a la vez. Hoy es vacua, y ese es el estado correcto.
+
+**El volcado no se versiona.** Vive en `scripts/.tablero.json`, ignorado por git: una foto del
+tablero dentro del repo sería exactamente la segunda fuente de verdad que esto viene a evitar.
+Y **su ausencia no pasa en silencio** —el comando sale con código 1 diciendo qué falta— ni su
+vejez tampoco: por encima de doce horas se niega a juzgar, porque un verde sobre una foto vieja
+afirma del tablero de hoy algo que no ha mirado.
+
+**Lo que NO puede ver, y hay que saberlo antes de creerse un verde.** El primero de los dos
+incumplimientos que lo motivaron —ejecutar P64.5 la séptima, después de P68— **no está en el
+tablero**: está en el orden de los commits. Esto comprueba que los números *sean* un orden total
+coherente, que es su condición previa, no que alguien lo haya seguido.
+
+**Validado disparándolo, y encontró tres cosas a la primera:** dos pares de prioridades
+duplicadas (80 y 81) y cuatro tareas abiertas sin `Área`. Corregidas en Notion el mismo día.
+
+---
+
+## D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra — 2026-08-25
+
+**Contexto.** P68.62 nació de una cifra: «~81% del LCP móvil es retraso de renderizado». Sobre
+ella se probó un candidato (`experimental.inlineCss`), que no movió el LCP y engordó el HTML de
+17 a 32 KB en brotli. Antes de reabrirla se midió la premisa, que es lo que faltaba.
+
+**La medición.** Cinco análisis genuinos del mismo despliegue (huella `5b2d0ba5c0ac`), misma URL,
+en dos minutos:
+
+| sello | nota | LCP | resource load delay | element render delay |
+|---|---|---|---|---|
+| 0:32:39 | 97 | 2,3 s | 1628 ms (78%) | **15 ms (1%)** |
+| 0:33:22 | 96 | 2,7 s | 652 ms (59%) | **132 ms (12%)** |
+| 0:33:41 | 81 | 2,7 s | 126 ms (6%) | **2058 ms (90%)** |
+| 0:34:29 | 96 | 2,7 s | 76 ms (25%) | **201 ms (65%)** |
+| 0:34:48 | 96 | 2,7 s | 131 ms (37%) | **154 ms (43%)** |
+
+**Decisión.** **A este nivel de rendimiento, el TOTAL se persigue y el REPARTO no.** La mediana
+del render delay es **154 ms**, no un segundo; su rango es de **137×** y su cuota del LCP va del
+1% al 90%. El resource load delay hace exactamente lo mismo (1628 → 76 ms). Lo único estable en
+las cinco es el total: LCP 2,3-2,7 s y nota 96-97, con un 81 aislado que degradó la corrida
+entera y no una fase. Así que una tarea de rendimiento **no se abre sobre una fase del desglose**
+salvo que su mediana, sobre varias corridas deduplicadas, se sostenga por encima de ese ruido.
+Con un perfil de hilo principal sí; con el desglose de PageSpeed, no.
+
+**Y la premisa original era n=1.** El 81% no era una cifra falsa: era **una muestra** de una
+distribución que va de punta a punta, leída como si fuera una propiedad. Es la misma familia que
+D41 (un umbral mal aplicado inventa hallazgos) trasladada al eje del tiempo: *una muestra tomada
+por propiedad inventa trabajo*.
+
+**LA TRAMPA DEL METRO, que casi firma el veredicto contrario.** La API de PageSpeed **devuelve
+resultado cacheado**. De las primeras ocho corridas, **seis eran la misma respuesta byte a byte,
+con el mismo sello de hora**. Una mediana sobre esas ocho habría dicho «78% de resource load
+delay, estable» — un veredicto falso construido sobre una fila copiada seis veces, y encima con
+la apariencia de rigor que da la n alta. **Se deduplica por la marca de tiempo del propio
+informe**, que `npm run psi` ya imprime. Es la regla 3 de `BRAND.md` aplicada a una API: valida
+el metro antes de creerte el hallazgo.
+
+**Relación.** Amplía D49 y D99, que ya sacaron `psi` de CI por su variabilidad; esto dice **qué
+parte** de su salida es la variable y por tanto cuál no puede fundar una tarea.
+
+---
+
+## D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso — 2026-08-25
+
+**Contexto.** `BRAND.md` §Ningún control se escribe a mano lleva una lista de excepciones
+vivas, y era **la única lista del repo que seguía escribiéndose de memoria**. Al derivarla del
+disco por primera vez (P68.68) estaba mal por los dos lados: nombraba como excepción el control
+sobre imagen del vídeo —que no lo es, sale de `.video-facade` en `globals.css`— y no mencionaba
+la que sí lo era, la tarjeta que se pulsa entera, escrita a mano en **tres** sitios.
+
+**Decisión.** `npm run check:excepciones`, en CI, con una marca en el punto de uso:
+
+```
+// @fuera-de-capa: <motivo en una línea> (<AAAA-MM-DD>)
+```
+
+Pegada al elemento o a la constante que le da las clases, y **sin exigir `//`**: dentro de JSX
+no se puede, y la mitad de los sitios donde hace falta piden `{/* … */}`. Una convención que no
+se puede escribir donde ocurre la cosa es la regla 1 de `BRAND.md` §Cómo se escribe una regla.
+
+**Va en las dos direcciones**, como todos los guardianes de aquí: (1) todo control fuera de la
+capa lleva marca, y (2) toda marca sale nombrada en `BRAND.md`. Con solo la primera, el
+documento podría quedarse con excepciones fantasma; con solo la segunda, el código podría
+llenarse de controles a mano sin que nadie lo notara.
+
+**LA CALIBRACIÓN FUE EL TRABAJO, no el script.** La primera pasada devolvió 13 hallazgos y
+solo cinco eran reales. Tres cortes, cada uno contra un criterio que ya estaba escrito:
+
+1. **Un `<a>` sin decisión de aspecto no es un control escrito a mano.** El enlace del logo del
+   nav es `inline-flex items-center no-underline`: no decide nada que la capa tenga que
+   resolver. El corte —`hover:` `rounded-` `border` `bg-` `px-`— es el que ya usaba la Fase 1
+   de `design-review`, no uno nuevo.
+2. **Dos niveles de resolución de identificadores.** Los chips de descarga del Brand Kit son
+   `cn(cls, …)` donde `cls` es un ternario entre dos constantes que son quienes llaman a la
+   variante. Con un solo nivel salían como escritos a mano.
+3. **Y los comentarios no cuentan.** `action.tsx` —el archivo de las variantes— salía como
+   incumplidor porque su cabecera *menciona* `<button>`.
+
+**Y el metro no se dio por bueno hasta que reprodujo sus anclajes**, que aquí son las dos
+excepciones que `BRAND.md` ya listaba. No las veía **ninguna de las dos**, y por la misma razón:
+**el elemento que recibe el clic y el que está pintado no son el mismo nodo**. El switch del
+consentimiento pinta en un `<span>` hermano de un `<input class="peer sr-only">`; la píldora del
+riel de artículo es un `<span>` dentro del `<a>`. Es **D104 otra vez** —el censo tuvo este mismo
+problema con la caja de un hijo— y sin buscar en los descendientes, este guardián habría dado
+verde sobre las dos únicas excepciones que el documento nombraba.
+
+**Estado al escribirlo:** 80 controles, 71 salen de la capa, **6 marcados**. Cuatro son
+excepciones de verdad; los otros dos son las tarjetas de P74.55, marcadas como **tareadas, no
+exentas** — la marca dice qué son, no las absuelve.

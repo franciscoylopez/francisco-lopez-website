@@ -15,7 +15,7 @@ import { getCommon, getHome } from "./dictionaries";
 
 type LangParams = { params: Promise<{ lang: string }> };
 
-// Home completa. Traducida desde design/web-personal.dc.html (D1). Su metadata la
+// Home completa. Traducida del mockup de Claude Design (D1). Su metadata la
 // aporta el layout de [lang] —la home ES la raíz del locale—, así que aquí no hay
 // generateMetadata; el resto del andamiaje sale de PageShell (D45).
 export default async function Home({ params }: LangParams) {

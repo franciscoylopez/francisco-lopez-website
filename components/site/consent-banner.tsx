@@ -311,6 +311,8 @@ function ConsentRow({
             {description}
           </span>
         </span>
+        {/* @fuera-de-capa: el switch se dibuja con cadena inline y traerlo hecho es lo que
+            mandaría la cascada, que aplica hacia delante y no hacia atrás (2026-08-08) */}
         <span className="inline-flex min-h-[44px] shrink-0 items-center">
           <input
             type="checkbox"

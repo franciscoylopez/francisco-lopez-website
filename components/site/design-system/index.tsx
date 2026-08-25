@@ -23,7 +23,7 @@ import { Formulario } from "./16-formulario";
 
 type DesignSystemDict = Dictionary["designSystem"];
 
-// Página Design System (PRD §20). Traducida de design/web-personal.dc.html (D1).
+// Página Design System (PRD §20). Traducida del mockup de Claude Design (D1).
 // Server Component salvo tres islas interactivas (design-system-islands.tsx):
 // toggle de rejilla, demo de reveal y tabs de dispositivo. La sección de
 // Accesibilidad es la checklist de cierre de todo el sitio (§20).

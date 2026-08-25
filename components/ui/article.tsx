@@ -132,6 +132,8 @@ export function ArticleIndex({
       <ol className="border-border m-0 mt-3 grid list-none grid-cols-1 border-t border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <li key={item.id} className="border-border border-r border-b">
+            {/* @fuera-de-capa: tarjeta que se pulsa entera escrita a mano, la TERCERA;
+                tareada en P74.55, no exenta (2026-08-25) */}
             <a
               href={`#${item.id}`}
               className="hover:bg-muted focus-visible:bg-muted flex min-h-[7.5rem] flex-col justify-center gap-1 px-5 py-4 no-underline transition-colors"

@@ -76,6 +76,7 @@
 - [58. Contacto se construye, y las tres cosas que arrastra no son las que decía el sprint (2026-08-23)](#58-contacto-se-construye-y-las-tres-cosas-que-arrastra-no-son-las-que-decía-el-sprint-2026-08-23)
 - [59. El sprint 4 se define contra un calendario, no contra la deuda (2026-08-23)](#59-el-sprint-4-se-define-contra-un-calendario-no-contra-la-deuda-2026-08-23)
 - [60. La lectura del artículo destapa tres cosas que nadie buscaba (2026-08-24)](#60-la-lectura-del-artículo-destapa-tres-cosas-que-nadie-buscaba-2026-08-24)
+- [61. La tanda de método cierra siete tareas, y cuatro tenían la premisa equivocada (2026-08-25)](#61-la-tanda-de-método-cierra-siete-tareas-y-cuatro-tenían-la-premisa-equivocada-2026-08-25)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3039,6 +3040,46 @@ escribir. Es el patrón que hace que esta entrada merezca existir:
 **Lo que se lleva de método:** las tres salieron de verificar contra la cosa real —el disco,
 dos builds, la página servida— y ninguna la habría encontrado leyendo el código. La segunda
 y la tercera invalidaban, además, la premisa con la que se iba a trabajar.
+
+## 61. La tanda de método cierra siete tareas, y cuatro tenían la premisa equivocada (2026-08-25)
+
+La T4 del sprint 4 era la tanda de higiene: peso de las skills, D6, la lista de excepciones de
+`BRAND.md`, el guardián del tablero, el triaje de motion, la limpieza de ramas y la medición que
+desbloqueaba P68.62. Se cerraron las siete y se retiró una octava.
+
+**El patrón que las une no estaba en el plan: en CUATRO de las siete, medir contradijo el
+enunciado de la propia tarea.**
+
+1. **P68.655** daba por probable que la Fase 3 de `design-review` no se ejecutara nunca, porque
+   «necesita navegador con sesión». Eso dejó de ser cierto en D52, tres semanas antes. No había
+   fase muerta que retirar; lo que sí había eran 1.963 palabras reescribiendo el censo de
+   `BRAND.md` y el axe de `viewport-verifier` — este último, además, **más al día que la copia**.
+2. **P68.68** decía «dice una excepción y hay dos, porque D55 añadió el control sobre imagen».
+   Falsas las dos mitades: ya decía dos, y el control del vídeo **no es una excepción** (sale de
+   `.video-facade` en `globals.css`, que es una capa como lo es una variante). Y la que de verdad
+   faltaba no estaba en la tarea: la tarjeta que se pulsa entera, escrita a mano **dos veces**, con
+   la condición de salida ya cumplida.
+3. **P68.62** se apoyaba en «~81% del LCP móvil es retraso de renderizado». Cinco mediciones del
+   mismo despliegue dan una mediana de 154 ms y un rango de 137×. El 81% no era falso: era **una
+   muestra** leída como propiedad (D108).
+4. **P68.69** mandaba triar «los 5 hallazgos de la auditoría de motion». No existían por escrito
+   en ninguna parte: ni en la tarea, ni en el repo, ni en Notion. El triaje se hizo sobre el motion
+   real, contra el listón que la propia adopción de las skills había fijado.
+
+**La lección, y es incómoda porque señala al único sitio que este proyecto no vigila.** El repo
+tiene guardianes para el copy, los índices, las rutas, las figuras, el artículo, la paleta, las
+skills y —desde hoy— el propio tablero. Todos nacieron de la misma frase: *una regla que hay que
+recordar es una regla que se incumple*. Pero **las NOTAS de una tarea son prosa fechada que nadie
+re-verifica**, y son justo lo que se lee para decidir qué hacer. Cuatro de siete llegaron a
+ejecución con una premisa caducada, y ninguna lo habría dicho sola.
+
+No se convierte en guardián: una nota de tarea no tiene fuente contra la que contrastarse, que es
+lo que hace verificable a los otros nueve. Lo que sí cambia es el orden de trabajo: **al abrir una
+tarea, medir la premisa antes de aceptarla**, sobre todo si trae una cifra. Salió gratis las cuatro
+veces, y en dos de ellas evitó construir sobre algo falso.
+
+**Y el guardián nuevo se validó solo.** `check:tablero` (D107) encontró en su primera corrida dos
+pares de prioridades duplicadas y cuatro tareas sin `Área` — en un tablero que se creía ordenado.
 
 ## Fuentes
 

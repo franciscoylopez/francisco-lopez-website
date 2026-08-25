@@ -52,6 +52,8 @@ const CON_PAGINA = EXPERIENCES.filter((e) => e.slug !== null);
 // `border-control-edge` pisa el `border-border` de `CARD` (2026-08-23): esta
 // tarjeta SE PULSA, y a un control WCAG 1.4.11 le pide 3:1 al contorno que lo
 // identifica. `CARD` se queda con el filete decorativo, que no tiene ese umbral.
+// @fuera-de-capa: tarjeta que se pulsa entera escrita a mano; TAREADA en P74.55, no
+// exenta — le falta el `focus-visible:bg-muted` de la variante `card` (2026-08-25)
 const TARJETA = cn(
   CARD,
   "group hover:bg-muted border-control-edge flex h-full flex-col p-[1.4rem] transition-colors",

@@ -46,7 +46,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`) · **Tailwind CSS v4**
-- **Capa de componentes propia, con un núcleo de ocho piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `field` (el campo de formulario) · `table` · `stat-row` · `layout`. Aparte, no como novena pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: entra solo para widgets con estado, foco atrapado o portal, y hacia delante (`D6`, `D36`)
+- **Capa de componentes propia, con un núcleo de ocho piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `field` (el campo de formulario) · `table` · `stat-row` · `layout`. Aparte, no como novena pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: en un widget con foco atrapado se pregunta antes por la plataforma (`<dialog>`, `popover`, `anchor-name`), y shadcn entra donde ella no llega (`D6`, `D36`)
 - **lucide-react** para iconos; los que lucide no trae se dibujan a mano con su propia regla de autoría, para que no se distingan de los de la librería
 - **next-themes** (claro/oscuro, `system` por defecto) · **Vercel** (`main` = producción)
 
@@ -121,6 +121,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `check:contexto` | Que el contexto de arranque crezca sin techo. D28 escribió el régimen y no le puso cifra: creció un 113% en diez días (`D69`) |
 | `check:skills` | Que una skill nombre archivos o comandos que ya no existen. Se **siguen** en vez de leerse, así que su drift se ejecuta (`D60`) |
 | `check:indices` | Que un índice deje de ser el derivado de sus fuentes. Son cuatro y se generan con `npm run indices` (`D69`); el cuarto indexa una carpeta —`components/ui/`— y además comprueba que cada pieza salga de verdad en la sección que dice publicarla (`D89`) |
+| `check:excepciones` | Que la lista de controles escritos a mano de `BRAND.md` se lleve de memoria. Era la última que quedaba así, y al derivarla del disco estaba mal por los dos lados: nombraba una que no lo era y le faltaba otra, escrita tres veces. Cada control fuera de la capa lleva su marca `@fuera-de-capa` y el documento tiene que nombrarlo (`D109`) |
 | `check:articulo` | Que «Cómo se ha creado esta página» describa un proyecto que ya se ha movido. Cada sección declara de qué depende y lleva su sello: cuando una fuente cambia, CI sale rojo **nombrando la sección** (`D84`) |
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
 | `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
@@ -129,7 +130,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
 
-Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
+Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`** y **`npm run psi`** necesitan navegador y red; **`npm run check:tablero`** necesita el MCP de Notion, y por eso su criterio se prueba aparte, en `npm test` (`D107`).
 
 ## Arrancar
 
@@ -176,6 +177,8 @@ npm run psi -- --registro   # …y de todas las del registro, con el agregado de
                             # Al terminar SELLA el rango en content/psi/ y el artículo lo
                             # publica con su fecha; una pasada parcial no sella (D102)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
+npm run check:tablero       # que Prioridad siga siendo un orden, sobre un volcado del
+                            # tablero de Notion. Al empezar la sesión, no en CI (D107)
 qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 ```
 
@@ -258,7 +261,6 @@ lib/                   i18n (fuente única de ruta↔locale), page-meta (D45), s
                        (las cifras del artículo, derivadas del disco o selladas, D102) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, video, favicons
-design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 brand-assets/          Piezas de marca fuera de la web — no se despliega
 
 scripts/logo-kit/      Generación del kit de logo desde su geometría
