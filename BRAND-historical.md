@@ -42,7 +42,7 @@ Partido el **2026-08-09** (P37.685).
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
 - [El morado de la barra de progreso, con los papeles cambiados (2026-08-21)](#el-morado-de-la-barra-de-progreso-con-los-papeles-cambiados-2026-08-21)
 - [La pasada completa, y las tres veces que el «sin excepciones» fue falso (2026-08-18 → 23)](#la-pasada-completa-y-las-tres-veces-que-el-sin-excepciones-fue-falso-2026-08-18-→-23)
-- [El enlace de contenido no tiene contraparte invertida (2026-08-23)](#el-enlace-de-contenido-no-tiene-contraparte-invertida-2026-08-23)
+- [El enlace de contenido invertido (2026-08-23 → 25)](#el-enlace-de-contenido-invertido-2026-08-23-→-25)
 - [La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`](#la-pasada-de-retirada-del-2026-08-22-y-qué-se-fue-de-brandmd)
 - [La tarjeta salió en negrita con la clase correcta puesta](#la-tarjeta-salió-en-negrita-con-la-clase-correcta-puesta)
 - [El contorno de un control: 1,21:1 desde V1, y el metro que no existía (2026-08-23)](#el-contorno-de-un-control-1211-desde-v1-y-el-metro-que-no-existía-2026-08-23)
@@ -637,7 +637,7 @@ por decisión de Francisco: o se recalibra `--destructive` conmutándolo por tem
 `--brand-purple-accent` y `--progress-ink`— o se escribe la regla de que el rojo no es color de
 texto. Hoy no está escrita en ninguna parte, que es medio motivo de que esto ocurriera.
 
-## El enlace de contenido no tiene contraparte invertida (2026-08-23)
+## El enlace de contenido invertido (2026-08-23 → 25)
 
 Visto en pantalla durante P66, poniendo los canales de contacto sobre una banda invertida:
 **desaparecieron**. Solo quedó flotando el subrayado cian sobre el fondo.
@@ -653,10 +653,34 @@ estaba **diagnosticado y resuelto en una capa y sin tocar en la otra**.
 
 No fue descuido: fue que el caso no había ocurrido. Es la regla 1 de §Cómo se escribe una regla
 leída del revés — un disparador no puede fallar si nunca llega a dispararse. Y es la razón de que
-esto se quede como deuda latente en vez de arreglarse en caliente: hoy no hay ni un enlace de
-contenido sobre fondo invertido en todo el sitio. El arreglo, cuando toque, es un
-`.link-content--inverted` con el texto en `--background` y el barrido en `--primary-on-inverted`,
-que existe exactamente para esto.
+esto se quedara como deuda latente en vez de arreglarse en caliente: no había ni un enlace de
+contenido sobre fondo invertido en todo el sitio.
+
+### Y al arreglarlo (2026-08-25, P70.18), el modificador era la respuesta equivocada
+
+La ficha proponía `.link-content--inverted`, que es lo que haría la capa de chrome. **No sirve
+aquí, y la diferencia no es de estilo: es de quién sabe la respuesta.** Una variante de chrome se
+elige al escribir el componente, y quien la escribe está mirando la banda. Un enlace de contenido
+vive dentro de la **prosa del diccionario**, y quien redacta esa frase no sabe —ni tiene por qué
+saber— sobre qué fondo va a caer el párrafo. Un modificador ahí es una regla que hay que recordar
+en el sitio donde menos información hay, que es la forma segura de que se incumpla.
+
+Así que va como `--surface-dim` (D39), `--chrome-hover-bg` y `--control-edge` (D97): **lo resuelve
+la superficie**. Una banda que ya se declara `data-surface="inverted"` —porque lo necesita para el
+atenuado y para la pastilla de hover— arregla también sus enlaces, sin tocar el copy y sin que
+nadie se acuerde.
+
+**Y los colores no hubo que elegirlos.** Los tres son los del otro tema: texto en `--background`
+(el primer plano de esa superficie), acento en `--primary-on-inverted` (el cian del otro tema, que
+ya existía) y, bajo el relleno del hover, un `--primary-foreground-on-inverted` que es el
+`--primary-foreground` del otro tema. Eso hace que **el par de hover no necesite medición nueva**:
+son exactamente los dos colores del par «texto sobre botón» que el censo ya da por bueno —7,93:1
+en claro, 8,36:1 en oscuro—, intercambiados. Es el mismo argumento con el que
+`--brand-purple-accent` dejó de ser fijo: un solo valor para las dos superficies topa con un techo
+que no depende del tono.
+
+Se publica en §08 del Design System, y no como quinta tarjeta de su rejilla: con cuatro por fila,
+la quinta se quedaría sola. Va a lo ancho, que además es como aparece de verdad.
 
 ## La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`
 

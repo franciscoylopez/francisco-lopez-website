@@ -106,12 +106,12 @@ fijo no llega a las dos superficies a la vez.
 ### Enlaces: depende de si son contenido o chrome
 
 - **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en
-  `foreground` con subrayado fino en `primary` (2px, offset amplio para librar descendentes
-  como «p»/«y»); en hover/focus, un relleno sólido en `primary` crece de abajo arriba y el
-  texto pasa a `primary-foreground` — variante **H1**. El cian entra como **recompensa de la
-  interacción**, no como color permanente del texto.
-  **No tiene contraparte invertida: sobre una banda desaparece**, porque ahí `--foreground` es el
-  fondo. La de chrome sí la tiene (`tone: "inverted"`). Deuda abierta, 2026-08-23.
+  `foreground` con subrayado fino en `primary`; en hover/focus, un relleno sólido en `primary`
+  crece de abajo arriba y el texto pasa a `primary-foreground`. El cian entra como
+  **recompensa de la interacción**, no como color permanente del texto.
+  **Sobre una banda invertida no lo elige el enlace: lo resuelve la banda** *(2026-08-25)*, como
+  `--surface-dim` y `--control-edge` — ahí `--foreground` es el fondo. El porqué y las cifras, en
+  [`BRAND-historical.md`](./BRAND-historical.md) §El enlace de contenido invertido.
 - **Chrome de navegación** (nav, breadcrumb, footer, menús): `foreground` o `muted-foreground`,
   nunca `primary` — ni en el texto ni en el fondo de su estado hover. En un bloque cuya función
   *entera* es navegar, el cian no distingue nada: solo mete ruido. Se leen como enlace por su

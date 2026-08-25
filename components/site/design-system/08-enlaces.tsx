@@ -6,6 +6,8 @@ import { chromeLinkVariants } from "@/components/ui/chrome";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
+import { SpecimenCard } from "./shared";
+
 /* ===================== (08) ENLACES ===================== */
 export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
   return (
@@ -122,6 +124,37 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
           ))}
         </div>
         <p className="text-muted-foreground m-0 mt-4 text-[0.8rem]">{t.hint}</p>
+
+        {/* La contraparte invertida del enlace de CONTENIDO (P70.18). Va aparte
+            y a lo ancho, no como quinta tarjeta de la rejilla de arriba: con
+            `minmax(19rem)` caben cuatro por fila y la quinta se quedaría sola
+            dejando tres cuartos de fila vacíos, que es el mismo problema que
+            documentó (10). Y a lo ancho es además como aparece de verdad: una
+            banda ocupa la página entera, no un tercio.
+
+            La banda se declara `data-surface="inverted"` y no elige ningún
+            color: es lo que permite a la capa resolver el enlace, el atenuado y
+            la pastilla de hover (D39/D61). */}
+        <SpecimenCard
+          kicker={t.invertedKicker}
+          cls={t.invertedCls}
+          rule={t.invertedRule}
+          note={t.invertedNote}
+          wide
+        >
+          <div
+            data-surface="inverted"
+            className="bg-foreground text-background rounded-lg px-[clamp(1.25rem,3vw,2rem)] py-8"
+          >
+            <p className="m-0 mx-auto max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {t.demoInvertedBefore}{" "}
+              <a href="#top" className="link-content">
+                {t.demoInvertedLink}
+              </a>{" "}
+              {t.demoInvertedAfter}
+            </p>
+          </div>
+        </SpecimenCard>
         <div
           className={cn(CARD, "mt-8 max-w-[var(--measure)] px-[1.4rem] py-5")}
         >

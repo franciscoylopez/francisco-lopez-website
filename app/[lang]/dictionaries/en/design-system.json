@@ -275,6 +275,13 @@
     "title": "Its function decides, not where it sits",
     "lead": "Inside content, cyan is the reward for interacting; inside a block that is already navigation, cyan tells you nothing and only adds noise.",
     "hint": "Hover over them ▸",
+    "invertedKicker": "Content, on an inverted band",
+    "invertedCls": ".link-content · data-surface",
+    "invertedRule": "On an inverted band the page's text colour IS the background, so a link that pinned it would vanish and leave the underline floating on its own. The link doesn't pick it here: the band does, by declaring which surface it is.",
+    "invertedNote": "All three colours are the other theme's, not new values: that's why the hover contrast is exactly the one already verified for text on a button, with the themes swapped.",
+    "demoInvertedBefore": "An inverted band is one painted in the text colour that then writes on top in the background colour. Inside it,",
+    "demoInvertedLink": "a content link",
+    "demoInvertedAfter": "still behaves the same way: a thin underline at rest and a solid fill on hover.",
     "cases": [
       {
         "kicker": "Content",

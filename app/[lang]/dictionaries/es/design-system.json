@@ -275,6 +275,13 @@
     "title": "Lo decide su función, no dónde cae",
     "lead": "Si es contenido, el cian aparece como recompensa de la interacción; si su bloque entero ya es navegación, el cian no distingue nada y sobra.",
     "hint": "Pasa el cursor por encima ▸",
+    "invertedKicker": "Contenido, sobre banda invertida",
+    "invertedCls": ".link-content · data-surface",
+    "invertedRule": "En una banda invertida el color de texto de la página es el FONDO, así que un enlace que lo fijara desaparecería y dejaría flotando solo el subrayado. Aquí no lo elige el enlace: lo resuelve la banda, que declara qué superficie es.",
+    "invertedNote": "Los tres colores son los del otro tema, no valores nuevos: por eso el contraste al pasar el cursor es exactamente el mismo que el del texto sobre un botón, con los temas cambiados.",
+    "demoInvertedBefore": "Una banda invertida es la que se pinta con el color del texto y escribe encima con el del fondo. Dentro,",
+    "demoInvertedLink": "un enlace de contenido",
+    "demoInvertedAfter": "sigue comportándose igual: subrayado fino en reposo y relleno sólido al pasar por encima.",
     "cases": [
       {
         "kicker": "Contenido",
