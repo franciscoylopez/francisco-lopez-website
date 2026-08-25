@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { Marcas } from "@/components/ui/marcas";
 
 // ÍNDICE DEL DEEP-DIVE (P49). La página que le faltaba a la ruta: el breadcrumb
 // de tres niveles de las cinco experiencias —`Inicio › Trayectoria › Emendu`—
@@ -121,7 +122,7 @@ export function TrayectoriaIndice({
                 <a href={hrefDe(slug)} className={TARJETA}>
                   <div className="mb-[1.1rem] flex items-start justify-between gap-3">
                     <p className={cn(eyebrowVariants(), "text-[0.7rem]")}>
-                      {exp.company} · {sector}
+                      <Marcas>{exp.company}</Marcas> · {sector}
                     </p>
                     {exp.logo ? <BrandLogoBox name={exp.logo} /> : null}
                   </div>

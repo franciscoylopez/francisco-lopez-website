@@ -235,6 +235,13 @@ export const SIN_PUBLICAR = [
   "rich.tsx",
   "page-closer.tsx",
   "video-embed.tsx",
+  // `marcas.tsx` (2026-08-25): no pinta NADA. Envuelve los nombres propios en
+  // `translate="no"` para que el traductor de Chrome no convierta «TheTool» en
+  // «La Herramienta», y su efecto es un atributo invisible — una sección del
+  // Design System que la enseñara mostraría un texto idéntico al de al lado.
+  // Es el mismo caso que `rich.tsx`, y por eso entra aquí y no en la página.
+  // Lo que sí la vigila es `npm run check:marcas` sobre las 28 variantes.
+  "marcas.tsx",
 ];
 
 /** Los archivos de la carpeta, sin el README generado. */

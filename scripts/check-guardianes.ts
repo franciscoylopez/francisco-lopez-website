@@ -196,6 +196,18 @@ const CASOS: Caso[] = [
       o.replace('"text": "', '"text": "Un párrafo nuevo del artículo. '),
   },
   {
+    guardian: "check:marcas",
+    rotura: 'un nombre propio se pinta suelto, sin `translate="no"`',
+    // Tercer caso que muerde el build, por lo de siempre: la entrada de este
+    // guardián es el HTML emitido. Y la rotura es EXACTAMENTE el estado del
+    // sitio hasta P70.12 — `translate` no aparecía ni una vez en todo el repo—,
+    // así que quitarle el atributo a una aparición reproduce el fallo real y no
+    // uno inventado. Se muerde una sola: el guardián tiene que cazar la que
+    // falta, no notar que faltan todas.
+    archivo: ".next/server/app/es/trayectoria.html",
+    mutar: (o) => o.replace('<span translate="no">', "<span>"),
+  },
+  {
     guardian: "check:figuras",
     rotura:
       "un diagrama se queda con el tope más estrecho que su propio lienzo",

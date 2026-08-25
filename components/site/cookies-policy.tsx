@@ -9,6 +9,7 @@ import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { SectionHeader } from "@/components/ui/heading";
+import { Marcas } from "@/components/ui/marcas";
 
 type CookiesDict = Dictionary["cookies"];
 
@@ -227,7 +228,9 @@ export function CookiesPolicy({
                 la tabla de arriba —no tiene nombre, ni proveedor activo, ni
                 duración mientras nadie lo reproduzca—. Ver `ui/video-embed.tsx`. */}
             <Section heading={t.embedHeading}>
-              <p>{t.embedBody}</p>
+              <p>
+                <Marcas>{t.embedBody}</Marcas>
+              </p>
             </Section>
 
             {/* Conservación */}

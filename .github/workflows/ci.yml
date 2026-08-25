@@ -220,6 +220,19 @@ jobs:
       - name: Rótulo de las figuras
         run: npm run check:figuras
 
+      # Que los nombres propios lleguen al HTML marcados como no traducibles
+      # (P70.12). El traductor automático de Chrome convierte «TheTool» en «La
+      # Herramienta» y «Miss Conversion» en «Señorita Conversión», y este sitio es
+      # bilingüe: la traducción se ofrece de verdad, y el argumento entero son esos
+      # nombres. Lo pone una capa —el copy no lleva el atributo escrito— y por eso
+      # hay que comprobar que LLEGA: los helpers son opt-in, así que una página que
+      # pinte un nombre sin pasar por `Rich` ni por `<Marcas>` compila igual. Busca
+      # la AUSENCIA: recorre los nodos de texto y exige un ancestro con
+      # `translate="no"`, en vez de contar cuántos hay. Lee el prerender, así que
+      # va detrás del build y cuesta segundos.
+      - name: Nombres propios sin traducir
+        run: npm run check:marcas
+
       # Y el que mira a todos los demás: a cada guardián le pasa un caso malo
       # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que
       # funciona — el modo de fallo de un guardián es una luz verde, y el censo de

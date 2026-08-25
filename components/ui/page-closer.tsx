@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "./badge";
 import { CARD, WRAP } from "./layout";
 import { eyebrowVariants } from "./heading";
+import { Marcas } from "./marcas";
 
 // CIERRE DE PÁGINA: el rótulo suelto y la rejilla de tarjetas-enlace que remata
 // el `<main>` antes del footer. Lo estrenaron las tres páginas del sistema
@@ -158,7 +159,7 @@ export function PageCloser({
                 >
                   {item.kicker ? <Kicker>{item.kicker}</Kicker> : null}
                   <span className="text-muted-foreground flex items-center gap-2 text-[1rem] font-semibold">
-                    {item.name}
+                    <Marcas>{item.name}</Marcas>
                     {item.badge ? (
                       <Badge kind="label">{item.badge}</Badge>
                     ) : null}
@@ -190,7 +191,7 @@ export function PageCloser({
                   }
                 >
                   {back ? <Flecha back /> : null}
-                  {item.name}
+                  <Marcas>{item.name}</Marcas>
                   {back ? null : <Flecha />}
                 </span>
                 <p className="text-muted-foreground m-0 mt-[0.55rem] text-[0.9rem] leading-[1.55]">

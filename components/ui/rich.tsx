@@ -6,6 +6,14 @@
 // (fuente de verdad ES→EN). Enlaces http(s) → target/rel de seguridad; enlaces de
 // contenido con `.link-content` (reposo neutro subrayado, cian en hover — regla
 // de BRAND.md matizada 2026-08-04 / P37.55). Ver D23.
+//
+// Y MARCA LOS NOMBRES PROPIOS al pasar (`marcarMarcas`), en las cuatro salidas y
+// no solo en el texto llano: un «TheTool» en negrita o dentro de la etiqueta de
+// un enlace es igual de traducible que uno suelto, y es justo el sitio donde se
+// habría escapado. El copy del diccionario no sabe nada de esto — ver
+// `components/ui/marcas.tsx`.
+import { marcarMarcas } from "./marcas";
+
 const RICH_TOKEN = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g;
 
 export function Rich({ text }: { text: string }) {
@@ -27,21 +35,21 @@ export function Rich({ text }: { text: string }) {
                 : {})}
               className="link-content"
             >
-              {label}
+              {marcarMarcas(label)}
             </a>
           );
         }
         if (part.startsWith("**") && part.endsWith("**")) {
           return (
             <strong key={i} className="text-foreground font-semibold">
-              {part.slice(2, -2)}
+              {marcarMarcas(part.slice(2, -2))}
             </strong>
           );
         }
         if (part.startsWith("*") && part.endsWith("*")) {
-          return <em key={i}>{part.slice(1, -1)}</em>;
+          return <em key={i}>{marcarMarcas(part.slice(1, -1))}</em>;
         }
-        return <span key={i}>{part}</span>;
+        return <span key={i}>{marcarMarcas(part)}</span>;
       })}
     </>
   );

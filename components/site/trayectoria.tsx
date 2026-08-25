@@ -9,6 +9,7 @@ import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
 import { experienceOf } from "@/content/experiences";
 import { factsOf, shortOf } from "@/content/experience-copy";
+import { Marcas } from "@/components/ui/marcas";
 
 // LA FILA NO LLEVA SU DESCRIPCIÓN, igual que no lleva su logo ni su `slug`: sale
 // del registro por experiencia, buscada por `company` (P48.5). Esa frase es una
@@ -108,10 +109,10 @@ function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
           </CaseLink>
         </div>
         <div className="text-muted-foreground mt-1 text-[0.9rem]">
-          {row.company}
+          <Marcas>{row.company}</Marcas>
         </div>
         <p className="text-muted-foreground m-0 mt-[0.7rem] max-w-[60ch] text-[0.92rem] leading-[1.6] text-pretty">
-          {shortOf(lang, row.company)}
+          <Marcas>{shortOf(lang, row.company)}</Marcas>
         </p>
       </div>
       <LogoCell company={row.company} />
@@ -142,10 +143,10 @@ function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
           </CaseLink>
         </div>
         <div className="text-muted-foreground mt-[0.2rem] text-[0.88rem]">
-          {row.company}
+          <Marcas>{row.company}</Marcas>
         </div>
         <p className="text-muted-foreground m-0 mt-[0.6rem] max-w-[58ch] text-[0.9rem] leading-[1.6] text-pretty">
-          {shortOf(lang, row.company)}
+          <Marcas>{shortOf(lang, row.company)}</Marcas>
         </p>
       </div>
       <LogoCell company={row.company} />
