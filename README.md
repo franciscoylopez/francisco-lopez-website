@@ -258,7 +258,6 @@ lib/                   i18n (fuente única de ruta↔locale), page-meta (D45), s
                        (las cifras del artículo, derivadas del disco o selladas, D102) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, video, favicons
-design/                Fuente fiel del diseño (export de Claude Design) — referencia, no se despliega
 brand-assets/          Piezas de marca fuera de la web — no se despliega
 
 scripts/logo-kit/      Generación del kit de logo desde su geometría

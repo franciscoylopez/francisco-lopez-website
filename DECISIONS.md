@@ -156,6 +156,14 @@
 > desechable** para movimientos visuales *nuevos* (gesto-firma, franja-CTA, layouts
 > novedosos), **nunca como fuente viva** — mantenerlo en paralelo reintroduce la divergencia
 > que D1/D4/D19 combaten. La decisión original se conserva abajo como registro.
+>
+> **Y la copia del repo se borra el 2026-08-25 (P68.695).** `design/web-personal.dc.html`
+> llevaba sin tocarse desde el 26 de julio y **ya afirmaba algo falso**: su línea 317 seguía
+> diciendo «Feb 2024 — Nov 2024» para KUOTIP, la fecha que el sitio corrigió el 16 de agosto.
+> Un artefacto congelado que nadie mantiene no es una referencia: es la divergencia de arriba,
+> versionada y en un repositorio público. **No se pierde nada**: el archivo sigue en Claude
+> Design (proyecto «New Website»), que es donde D1 dice que vive, y git conserva la copia.
+> Lo que queda en el árbol son los dos comentarios que lo citaban como origen, ahora sin ruta.
 
 **Decisión.** El diseño de V1 (home + Brand Kit + Design System, con nav/footer/breadcrumb
 compartidos) vive en Claude Design, proyecto "New Website", archivo `Web personal.dc.html`.
