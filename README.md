@@ -129,7 +129,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
 
-Y fuera de CI queda uno, el que más ha cazado: **`npm run gate:html`** compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor. Ahí vive lo que nadie revisa: un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe.
+Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`** y **`npm run psi`** necesitan navegador y red; **`npm run check:tablero`** necesita el MCP de Notion, y por eso su criterio se prueba aparte, en `npm test` (`D107`).
 
 ## Arrancar
 
@@ -176,6 +176,8 @@ npm run psi -- --registro   # …y de todas las del registro, con el agregado de
                             # Al terminar SELLA el rango en content/psi/ y el artículo lo
                             # publica con su fecha; una pasada parcial no sella (D102)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
+npm run check:tablero       # que Prioridad siga siendo un orden, sobre un volcado del
+                            # tablero de Notion. Al empezar la sesión, no en CI (D107)
 qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 ```
 

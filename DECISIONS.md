@@ -143,6 +143,7 @@
 - D105 · El presupuesto de contexto vigila también las skills, y con techo POR ENTRADA
 - D106 · El umbral de una figura es su propio lienzo, y quien lo vigila lee el prerender, no el navegador
 - D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red
+- D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6185,3 +6186,46 @@ coherente, que es su condición previa, no que alguien lo haya seguido.
 
 **Validado disparándolo, y encontró tres cosas a la primera:** dos pares de prioridades
 duplicadas (80 y 81) y cuatro tareas abiertas sin `Área`. Corregidas en Notion el mismo día.
+
+---
+
+## D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra — 2026-08-25
+
+**Contexto.** P68.62 nació de una cifra: «~81% del LCP móvil es retraso de renderizado». Sobre
+ella se probó un candidato (`experimental.inlineCss`), que no movió el LCP y engordó el HTML de
+17 a 32 KB en brotli. Antes de reabrirla se midió la premisa, que es lo que faltaba.
+
+**La medición.** Cinco análisis genuinos del mismo despliegue (huella `5b2d0ba5c0ac`), misma URL,
+en dos minutos:
+
+| sello | nota | LCP | resource load delay | element render delay |
+|---|---|---|---|---|
+| 0:32:39 | 97 | 2,3 s | 1628 ms (78%) | **15 ms (1%)** |
+| 0:33:22 | 96 | 2,7 s | 652 ms (59%) | **132 ms (12%)** |
+| 0:33:41 | 81 | 2,7 s | 126 ms (6%) | **2058 ms (90%)** |
+| 0:34:29 | 96 | 2,7 s | 76 ms (25%) | **201 ms (65%)** |
+| 0:34:48 | 96 | 2,7 s | 131 ms (37%) | **154 ms (43%)** |
+
+**Decisión.** **A este nivel de rendimiento, el TOTAL se persigue y el REPARTO no.** La mediana
+del render delay es **154 ms**, no un segundo; su rango es de **137×** y su cuota del LCP va del
+1% al 90%. El resource load delay hace exactamente lo mismo (1628 → 76 ms). Lo único estable en
+las cinco es el total: LCP 2,3-2,7 s y nota 96-97, con un 81 aislado que degradó la corrida
+entera y no una fase. Así que una tarea de rendimiento **no se abre sobre una fase del desglose**
+salvo que su mediana, sobre varias corridas deduplicadas, se sostenga por encima de ese ruido.
+Con un perfil de hilo principal sí; con el desglose de PageSpeed, no.
+
+**Y la premisa original era n=1.** El 81% no era una cifra falsa: era **una muestra** de una
+distribución que va de punta a punta, leída como si fuera una propiedad. Es la misma familia que
+D41 (un umbral mal aplicado inventa hallazgos) trasladada al eje del tiempo: *una muestra tomada
+por propiedad inventa trabajo*.
+
+**LA TRAMPA DEL METRO, que casi firma el veredicto contrario.** La API de PageSpeed **devuelve
+resultado cacheado**. De las primeras ocho corridas, **seis eran la misma respuesta byte a byte,
+con el mismo sello de hora**. Una mediana sobre esas ocho habría dicho «78% de resource load
+delay, estable» — un veredicto falso construido sobre una fila copiada seis veces, y encima con
+la apariencia de rigor que da la n alta. **Se deduplica por la marca de tiempo del propio
+informe**, que `npm run psi` ya imprime. Es la regla 3 de `BRAND.md` aplicada a una API: valida
+el metro antes de creerte el hallazgo.
+
+**Relación.** Amplía D49 y D99, que ya sacaron `psi` de CI por su variabilidad; esto dice **qué
+parte** de su salida es la variable y por tanto cuál no puede fundar una tarea.
