@@ -48,6 +48,7 @@ Partido el **2026-08-09** (P37.685).
 - [El contorno de un control: 1,21:1 desde V1, y el metro que no existía (2026-08-23)](#el-contorno-de-un-control-1211-desde-v1-y-el-metro-que-no-existía-2026-08-23)
 - [El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)](#el-interlineado-que-sobrevivió-a-tres-medidas-y-por-qué-la-medición-aprobaba-2026-08-25)
 - [La variante que dimensiona una fila, usada en una pila (2026-08-25)](#la-variante-que-dimensiona-una-fila-usada-en-una-pila-2026-08-25)
+- [El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)](#el-hover-de-la-tarjeta-pulsable-y-por-qué-no-se-arregló-con-luminancia-2026-08-25)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -893,3 +894,54 @@ neutral respecto a la FORMA del contenido que envuelve. Al llevar un caso a la c
 pregunta no es «¿existe la variante?» sino «¿la variante asume una disposición que este caso
 no tiene?». Al tercer caso apilado, la respuesta deja de ser neutralizar y pasa a ser un
 `size` propio.
+
+## El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)
+
+Lo levantó `design-review` el 2026-08-23, con el metro validado contra los anclajes de siempre:
+la tarjeta `card` pisa **6,25 de ΔL\*** en claro y **4,70 en oscuro**, contra los **9,04** que
+pisa cualquier otro hover del sistema. La asimetría tiene causa y no es un error: en oscuro la
+tarjeta parte de `--card` (L\* 14,87) y no de `--background` (10,52), así que el salto hasta
+`--muted` (19,56) es la mitad de recorrido.
+
+**No se arregló en caliente porque no es un incumplimiento.** No hay umbral de WCAG para la
+perceptibilidad de un hover: el 9,04 es una referencia interna. Y toca todas las tarjetas
+pulsables del sitio a la vez.
+
+### Lo que descartó subir el relleno: no hay un porcentaje que sirva a los dos temas
+
+Se midió antes de descartarlo, y el barrido es la parte que conviene no repetir. Mezclando
+`--muted` hacia `--foreground`:
+
+| Mezcla | ΔL\* claro | ΔL\* oscuro |
+|---|---|---|
+| Hoy (`--muted` puro) | 6,25 | 4,70 |
+| 95% + `--foreground` | 9,75 | **9,22** |
+| 92% + `--foreground` | 11,85 | 11,86 |
+| `--border` | 9,79 | 6,91 |
+| *Referencia del sitio* | *3,89* | *9,04* |
+
+El 95% deja el oscuro clavado en la referencia **y el claro en 9,75, que es dos veces y media
+la suya**. Para resolverlo con luminancia habría que hacer conmutar la mezcla con el tema, como
+`--primary-on-inverted` y `--brand-purple-accent`. Se puede, y es la respuesta equivocada: el
+claro **no tenía ningún problema** —6,25 ya está por encima de su referencia—, así que la
+conmutación existiría solo para no estropear lo que ya estaba bien. Eso es un mando nuevo para
+sostener una decisión, no una decisión.
+
+### La afordancia que faltaba se añadió en otro eje
+
+Contorno a `--primary` en hover, con el relleno neutro donde estaba. Tres cosas se ganan de
+golpe: la señal **no depende del contraste del fondo**, no toca ningún par de texto, y el
+estado deja de estar codificado solo por un cambio de tono. Es el mismo cian de acción que ya
+usa `outline-primary`, y aquí no compite con nada porque el relleno sigue siendo `muted`.
+
+**Solo en hover, y la asimetría con `focus-visible` es deliberada.** El foco ya trae el anillo
+de `--ring` —que ES `--primary`— a 2px de offset, así que un borde cian por dentro dibujaría
+dos líneas cianas concéntricas separadas por un hueco: se lee como un defecto, no como una
+señal. El teclado no se queda corto, porque conserva el `focus-visible:bg-muted` que P70.15 le
+devolvió, y encima el anillo.
+
+**Y lo decidió el ojo, no la tabla**, que es lo que la propia ficha pedía: «puede que a esa
+luminancia se vea de sobra y el número engañe». Las tres opciones se pusieron en pantalla con
+los tokens reales y un botón que las forzaba todas a hover a la vez, para poder compararlas sin
+pasar el cursor. Es el punto 8 de §Cómo medir: cuando alguien que está mirando la página
+contradice a la medición, la primera hipótesis es el alcance de la medición.

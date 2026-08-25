@@ -176,12 +176,37 @@ export const actionVariants = cva(
         // clase correcta puesta. `cn` es `twMerge`, y ahí gana la última, que es
         // esta. Es el punto 5 de `BRAND.md` §Cómo medir con otro disfraz.
         //
-        // El hover es la pastilla `muted`, como el resto de lo que no es CTA: la
-        // tarjeta es un canal, no la acción destacada de la página. Y no necesita
-        // `data-surface`: `bg-card` y `hover:bg-muted` ya recalculan el atenuado
-        // por sí solos en `globals.css` (D39/D61), así que el rótulo de dentro se
-        // lee bien en los dos estados sin que el call site pida nada.
-        card: "border-control-edge bg-card hover:bg-muted focus-visible:bg-muted w-full justify-start rounded-lg border text-left font-normal whitespace-normal",
+        // El relleno del hover es la pastilla `muted`, como el resto de lo que no
+        // es CTA: la tarjeta es un canal, no la acción destacada de la página. Y no
+        // necesita `data-surface`: `bg-card` y `hover:bg-muted` ya recalculan el
+        // atenuado por sí solos en `globals.css` (D39/D61), así que el rótulo de
+        // dentro se lee bien en los dos estados sin que el call site pida nada.
+        //
+        // Y EL CONTORNO PASA A `primary` EN HOVER (P70.21, 2026-08-25). El relleno
+        // solo no bastaba en OSCURO: ahí la tarjeta parte de `--card` y no de
+        // `--background`, así que el salto hasta `--muted` es la mitad de recorrido
+        // —4,70 de ΔL* contra los 9,04 que pisa cualquier otro hover del sitio—.
+        //
+        // NO SE ARREGLA SUBIENDO EL RELLENO, y esto se midió antes de descartarlo:
+        // no hay un porcentaje de mezcla que sirva para los dos temas. El que deja
+        // el oscuro clavado en la referencia (95% hacia `--foreground`) pone el
+        // claro en 9,75, que es dos veces y media SU referencia de 3,89. Habría que
+        // hacer conmutar la mezcla con el tema, como `--primary-on-inverted`, para
+        // resolver con luminancia algo que no es un problema de luminancia.
+        //
+        // Así que la afordancia que faltaba se añade en otro eje: una señal que no
+        // depende del contraste del fondo, no toca ningún par de texto y encima deja
+        // de codificar el estado SOLO por un cambio de tono. Es el mismo cian de
+        // acción que ya usa `outline-primary`, y aquí no compite con nada porque el
+        // relleno sigue siendo neutro.
+        //
+        // SOLO EN HOVER, y la asimetría con `focus-visible` es deliberada: el foco
+        // ya trae el anillo de `--ring` —que ES `--primary`— a 2px de offset, así
+        // que un borde cian por dentro dibujaría dos líneas cianas concéntricas
+        // separadas por un hueco, que se lee como un defecto y no como una señal.
+        // El teclado no se queda corto: conserva el `focus-visible:bg-muted` que
+        // P70.15 le devolvió, y encima el anillo.
+        card: "border-control-edge bg-card hover:border-primary hover:bg-muted focus-visible:bg-muted w-full justify-start rounded-lg border text-left font-normal whitespace-normal",
       },
       // El tamaño del icono va con el del texto y no lo escribe el call site
       // (`[&_svg]`, sin `>` a propósito: el glifo puede ir envuelto). `shrink-0`
