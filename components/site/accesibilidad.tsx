@@ -4,7 +4,13 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
-import { LAST_A11Y_REVIEW, fillDate, fillRatios } from "@/lib/design-values";
+import {
+  LAST_A11Y_REVIEW,
+  cardinal,
+  fillDate,
+  fillPages,
+  fillRatios,
+} from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
@@ -41,6 +47,20 @@ export function Accesibilidad({
   lang: Locale;
 }) {
   const t = dict;
+
+  // CUÁNTOS PUNTOS DEL CHECKLIST SE HEREDAN, contados y no escritos (D38). La nota
+  // de (02) afirma «cuatro de los nueve», y las dos cifras son justo las que se
+  // quedan atrás cuando alguien añade un punto: el total, porque la lista de
+  // arriba crece sola, y el heredado, porque depende de si la pieza lo trae. El
+  // dato vive PEGADO a cada punto (`inherited`) y no en una lista aparte, que es
+  // lo que impide que digan cosas distintas.
+  const total = t.measures.items.length;
+  const heredados = t.measures.items.filter((m) => m.inherited).length;
+  const fillCounts = (text: string) =>
+    text
+      .replace(/{heredados}/g, cardinal(heredados, lang))
+      .replace(/{total}/g, cardinal(total, lang));
+
   return (
     <>
       {/* ===================== HERO ===================== */}
@@ -177,6 +197,46 @@ export function Accesibilidad({
               </li>
             ))}
           </ol>
+          {/* El puente a (03): de los nueve puntos de arriba, cuáles no se
+              vuelven a comprobar página a página. Mismo patrón de nota que el
+              resto de secciones; las dos cifras se cuentan, no se escriben. */}
+          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <Rich text={fillCounts(t.measures.note)} />
+          </p>
+        </div>
+      </section>
+
+      {/* ===================== (03) HERENCIA ===================== */}
+      {/* LA SECCIÓN QUE FALTABA, y el diagnóstico que la abre (P70.02): la página
+          contaba lo que tiene cualquiera y callaba lo que no tiene nadie. Los
+          nueve puntos de (02) son la lista genérica; lo que los convierte en
+          criterio es que cuatro de ellos NO se negocian por página porque los
+          pone la capa de componentes, y que el atenuado lo resuelve la superficie
+          y no el punto de uso (D30/D39/D61). Es lo que un CPO lee como criterio
+          de producto, y no estaba escrito en ninguna parte del sitio. */}
+      <section data-reveal className={SECTION}>
+        <div className={WRAP}>
+          <SectionHeader
+            eyebrow={t.inheritance.num}
+            title={t.inheritance.heading}
+            size="section-sm"
+          >
+            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {t.inheritance.intro}
+            </p>
+          </SectionHeader>
+          <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
+            {t.inheritance.items.map((i) => (
+              <InfoCard
+                key={i.title}
+                title={i.title}
+                body={fillPages(i.body, lang)}
+              />
+            ))}
+          </div>
+          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <Rich text={fillPages(t.inheritance.note, lang)} />
+          </p>
         </div>
       </section>
 
@@ -194,13 +254,51 @@ export function Accesibilidad({
           </SectionHeader>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]">
             {t.verify.items.map((v) => (
-              <InfoCard key={v.tool} title={v.tool} body={v.result} mono />
+              <InfoCard
+                key={v.tool}
+                title={v.tool}
+                body={fillPages(v.result, lang)}
+                mono
+              />
             ))}
           </div>
           {/* El matiz que no cabe en una tarjeta: más largo que el resto y
               deformaba la rejilla. Mismo patrón que la nota de (01). */}
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={t.verify.note} />
+          </p>
+        </div>
+      </section>
+
+      {/* ===================== (05) EL PUNTO CIEGO ===================== */}
+      {/* La otra mitad del hueco de P70.02, y la que da credibilidad: qué
+          encuentra una pasada a mano que ningún motor puede encontrar. El
+          material estaba, pero repartido en dos notas al pie —el enlace de salto
+          en la entradilla de (04) y los hallazgos de NVDA colgando de los
+          límites—, o sea contado como pie de página de otra cosa. Con titular
+          propio es un argumento; enterrado, era una anécdota. */}
+      <section data-reveal className={SECTION}>
+        <div className={WRAP}>
+          <SectionHeader
+            eyebrow={t.blindspot.num}
+            title={t.blindspot.heading}
+            size="section-sm"
+          >
+            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {t.blindspot.intro}
+            </p>
+          </SectionHeader>
+          <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
+            {t.blindspot.items.map((b) => (
+              <InfoCard
+                key={b.title}
+                title={b.title}
+                body={fillPages(b.body, lang)}
+              />
+            ))}
+          </div>
+          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <Rich text={t.blindspot.note} />
           </p>
         </div>
       </section>
