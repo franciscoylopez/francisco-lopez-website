@@ -147,6 +147,7 @@
 - D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso
 - D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte
 - D111 · Lo que el lector de pantalla cambió en el marco de toda página
+- D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6503,3 +6504,39 @@ juzgar si los tres cambios suenan como se pretendía y que ningún gate puede su
 página que publica los hallazgos: su nota decía que los cuatro detalles estaban «anotados y
 pendientes», y esa frase se corrige en el mismo lote, porque una página que documenta el sistema
 no puede quedarse contando un estado que el propio lote acaba de cambiar (D84).
+
+## D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va — 2026-08-25
+
+**Decisión.** Lo que el sello del copy del artículo vigila **se nombra archivo a archivo cuando
+sale de su carpeta**, y no se da por cubierto por la ruta antigua. En concreto, `shared.tsx`
+—el rótulo y el conmutador de lienzos de los diagramas— vive desde hoy en
+`components/site/diagrams/` y entra en `FUENTES_DEL_COPY` por su nombre.
+
+**Cómo apareció.** `/accesibilidad` estrenó diagrama (P70.101) y con él una segunda página que
+dibuja. `shared.tsx` colgaba de `como-se-ha-creado-diagrams/`, así que la alternativa a moverlo
+era que **la página de accesibilidad importara de la del artículo**. Se movió, ocho imports
+cambiaron de línea, y el HTML del artículo salió **idéntico byte a byte salvo el build ID**.
+Un refactor limpio.
+
+**Y el refactor limpio rompió una vigilancia sin que nada saliera en rojo por el motivo bueno.**
+`FUENTES_DEL_COPY` (D110) hashea **la carpeta** de figuras, no una lista de archivos. Al salir
+`shared.tsx`, el sello dejó de verlo: a partir de ahí, cambiar `LBL` de 11px a 12px habría
+redibujado **las ocho figuras del artículo** sin mover el `dateModified` que ve Google. CI sí
+salió rojo, pero por el hash de la carpeta cambiando —el síntoma correcto por la razón
+equivocada—, y la salida cómoda era resellar y seguir.
+
+**La forma del fallo, que es lo reutilizable.** Un guardián que se define por CONTINENTE
+—una carpeta, un glob, un prefijo— hereda el alcance de una decisión de organización que nadie
+tomó pensando en él. Mover un archivo es la operación más inocente que existe y aquí recortó
+una promesa a Google. Es la familia de D57/D60/D63 vista del revés: allí el peligro era un metro
+que devuelve lista vacía, y aquí es un metro que **sigue devolviendo una lista, más corta**.
+
+**Lo que no se hizo, y por qué.** Sellar la carpeta nueva entera habría sido más cómodo y está
+mal: dentro vive el diagrama de `/accesibilidad`, que no es copy del artículo, y movería su
+`dateModified` sin que cambiara una palabra de lo que se lee. La precisión del alcance es justo
+lo que hace que el guardián se mire en vez de apagarse (D110).
+
+**Lo que queda abierto.** Nada obliga todavía a que un archivo que sale de una carpeta vigilada
+se declare en su nueva ruta: esta vez lo cazó estar mirando. La red que lo haría automático es
+la de P68.705 (el guardián de `/accesibilidad`) generalizada, o una comprobación de que toda
+fuente del sello existe y ninguna figura queda fuera de él.
