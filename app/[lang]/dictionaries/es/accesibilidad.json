@@ -147,6 +147,10 @@
         "result": "La auditoría de accesibilidad de Chrome. Puntuación 100 en producción."
       },
       {
+        "tool": "getWCAG",
+        "result": "Un escáner comercial de terceros que no sabe nada de este repositorio: reglas suyas, configuración suya. Cero violaciones, el mismo cero que da el nuestro. Mira una sola página y se lanza aparte, no en cada cambio, así que no sustituye a ninguna de las demás: lo que aporta es que el cero no dependa de nuestro arnés."
+      },
+      {
         "tool": "Censo de contraste",
         "result": "Color a color y con cifra, recorriendo el sitio servido y leyendo el color que el navegador pinta de verdad. Incluye los estados: el gris de una tarjeta al pasar el ratón es otro par que medir."
       },

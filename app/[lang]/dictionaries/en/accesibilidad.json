@@ -147,6 +147,10 @@
         "result": "Chrome's accessibility audit. Score of 100 in production."
       },
       {
+        "tool": "getWCAG",
+        "result": "A third-party commercial scanner that knows nothing about this repository: its own rules, its own configuration. Zero violations, the same zero ours reports. It looks at a single page and runs separately, not with every change, so it replaces none of the others: what it adds is that the zero doesn't depend on our own harness."
+      },
+      {
         "tool": "Contrast census",
         "result": "Colour by colour and with a number, walking the served site and reading the colour the browser actually paints. States included: the grey of a card under the cursor is another pair to measure."
       },
