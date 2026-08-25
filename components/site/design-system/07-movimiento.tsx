@@ -6,7 +6,15 @@ import { RevealDemo } from "../design-system-islands";
 
 /* ===================== (07) MOVIMIENTO ===================== */
 // Glifo del nav (§07 transición) — split/flat dimensionado por altura.
-function NavGlyph({ variant, h }: { variant: "split" | "flat"; h: number }) {
+function NavGlyph({
+  variant,
+  h,
+  className,
+}: {
+  variant: "split" | "flat";
+  h: number;
+  className?: string;
+}) {
   const w = +((h * 58) / 70).toFixed(2);
   return variant === "split" ? (
     <svg
@@ -14,7 +22,7 @@ function NavGlyph({ variant, h }: { variant: "split" | "flat"; h: number }) {
       width={w}
       height={h}
       fill="none"
-      className="block flex-none overflow-visible"
+      className={cn("block flex-none overflow-visible", className)}
       aria-hidden="true"
     >
       <circle
@@ -53,7 +61,7 @@ function NavGlyph({ variant, h }: { variant: "split" | "flat"; h: number }) {
       width={w}
       height={h}
       fill="none"
-      className="block flex-none overflow-visible"
+      className={cn("block flex-none overflow-visible", className)}
       aria-hidden="true"
     >
       <circle
@@ -126,7 +134,12 @@ export function Movimiento({
             <div className="flex min-w-[min(100%,15rem)] flex-[1_1_16rem] flex-col gap-[0.85rem]">
               <div className="border-border bg-background flex h-20 items-center justify-between gap-4 rounded-lg border px-5">
                 <span className="inline-flex items-center gap-[0.6rem]">
-                  <NavGlyph variant="split" h={48} />
+                  {/* PILOTO SCROLL-DRIVEN (P70.26). Los dos estados siguen
+                      dibujados a la vez; lo único que añade el scroll es la
+                      escala, así que la figura no pierde nada donde la técnica
+                      no llega. El porqué de la elección y sus dos capas de
+                      degradación están en `globals.css`. */}
+                  <NavGlyph variant="split" h={48} className="nav-demo-split" />
                   <span className="font-display text-foreground text-[1.05rem] font-semibold tracking-[-0.01em]">
                     Francisco López
                   </span>
@@ -136,7 +149,7 @@ export function Movimiento({
                 </span>
               </div>
               <div className="border-border bg-background flex h-16 items-center justify-between gap-4 rounded-lg border px-5">
-                <NavGlyph variant="flat" h={28} />
+                <NavGlyph variant="flat" h={28} className="nav-demo-flat" />
                 <span className="text-muted-foreground font-mono text-[0.68rem]">
                   {t.navState2}
                 </span>

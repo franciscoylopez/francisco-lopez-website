@@ -977,3 +977,74 @@
     transition: none;
   }
 }
+
+/* ── PILOTO DE SCROLL-DRIVEN CSS (P70.26) ───────────────────────────────────
+ *
+ * QUÉ ANIMA, Y POR QUÉ ESTA Y NO OTRA. La ilustración de §07 del Design System
+ * dibuja los dos estados del nav —alto con el split y el nombre, bajo con el
+ * flat— uno encima del otro, y lo que los separa es HABER HECHO SCROLL. Era el
+ * único sitio del sitio donde el movimiento no decora: dice exactamente lo que
+ * la figura afirma, y lo dice con el mismo gesto que lo provoca.
+ *
+ * Los dos estados SIGUEN DIBUJADOS a la vez, que es la decisión de §09 («ver los
+ * dos estados a la vez») y no se toca: esto solo añade la escala, así que la
+ * figura no pierde nada si la animación no corre.
+ *
+ * SOLO `transform`, y a propósito. Cualquier cambio de opacidad o de color aquí
+ * crearía un par nuevo que el censo tendría que medir; una escala no. (Y por eso
+ * los rótulos y el texto no se tocan: son los que tienen suelo de contraste.)
+ *
+ * PROGRESIVA POR CONSTRUCCIÓN, en dos capas:
+ *   · `@supports` — quien no soporta `animation-timeline` no ve nada raro, ve la
+ *     figura de siempre. No hay estado inicial escondido que dependa de que la
+ *     animación arranque, que es el modo en que estas cosas dejan una página en
+ *     blanco.
+ *   · `prefers-reduced-motion` — no se apaga, se AMORTIGUA: la escala baja de un
+ *     8% a un 1,5%. La regla mejor dice «más suave, no cero», y aquí se puede
+ *     cumplir porque el movimiento lo conduce el propio scroll de quien mira, no
+ *     un temporizador que se le echa encima.
+ *
+ * CERO JS: ni bundle, ni hidratación, ni un `IntersectionObserver` más en una
+ * página que ya tiene el suyo. Es lo que esta tarea venía a validar. */
+@keyframes nav-split-encoge {
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(var(--nav-demo-delta, 0.92));
+  }
+}
+@keyframes nav-flat-llega {
+  from {
+    transform: scale(var(--nav-demo-delta, 0.92));
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .nav-demo-split,
+  .nav-demo-flat {
+    animation-duration: 1ms; /* lo ignora el timeline; hace falta para que corra */
+    animation-fill-mode: both;
+    animation-timing-function: linear;
+    animation-timeline: view();
+    /* Empieza cuando la figura ya se ve entera y termina antes de que se vaya:
+       el gesto ocurre MIENTRAS se lee, no al asomar ni al salir. */
+    animation-range: entry 60% cover 55%;
+  }
+  .nav-demo-split {
+    animation-name: nav-split-encoge;
+  }
+  .nav-demo-flat {
+    animation-name: nav-flat-llega;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-demo-split,
+  .nav-demo-flat {
+    --nav-demo-delta: 0.985;
+  }
+}
