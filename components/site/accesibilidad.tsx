@@ -291,6 +291,9 @@ export function Accesibilidad({
               />
             ))}
           </div>
+          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <Rich text={fillPages(t.inheritance.note, lang)} />
+          </p>
           {/* EL DATO EN VIVO, y aquí es donde deja de ser una promesa: la
               sección afirma que los controles salen de una capa común, y esto
               enlaza al catálogo que los publica. La cifra NO se escribe —
@@ -319,9 +322,6 @@ export function Accesibilidad({
               </>
             }
           />
-          <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            <Rich text={fillPages(t.inheritance.note, lang)} />
-          </p>
         </div>
       </section>
 
