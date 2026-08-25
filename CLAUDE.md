@@ -45,6 +45,8 @@ Al empezar una sesión de desarrollo:
 
 **El cuerpo de una tarea NO sale en la consulta SQL, que solo devuelve propiedades.** Y el cuerpo es donde viven el porqué medido, las tablas y las dependencias. Al retomar una tarea se abre con `fetch`; listarla no basta.
 
+**Y la ficha puede estar CADUCADA: verifica su premisa contra el disco antes de darla por mecánica** *(2026-08-26)*. En las tandas 3 y 4 fallaron cinco: dos recuentos mal, una tarea que ya había resuelto otro PR el día que se abrió, y dos alcances que eran otra cosa. Cuesta un `grep`; ahorra ejecutar la tarea equivocada.
+
 ## Reglas del tablero (no negociables)
 
 > **Sin fechas.** Lo que dirige la ejecución es `MoSCoW` + `Prioridad` (orden) + `Tamaño`, no el calendario. Donde abajo diga "sprint", léase **"etapa"**.

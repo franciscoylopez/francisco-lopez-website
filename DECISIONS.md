@@ -152,6 +152,7 @@
 - D114 · El lienzo de un diagrama es la única cifra que declara, y la capa deriva el resto
 - D115 · El suelo de ancho del sitio es 320, y 280 queda fuera con su motivo escrito
 - D116 · Los nombres propios no se marcan en el copy: los marca la capa que lo pinta
+- D117 · Un vocabulario de dos valores no puede distinguir la deuda del criterio
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6781,3 +6782,52 @@ a **no mutar nada** — o sea, a puntuar como verde. Lo cazó `check:guardianes`
 mismo PR que lo rompió, que es exactamente para lo que existe (D70). La lección, escrita en el
 propio caso: **al elegir el archivo de un caso malo, prefiere el que NO está tareado para
 moverse.**
+
+## D117 · Un vocabulario de dos valores no puede distinguir la deuda del criterio — 2026-08-26
+
+**El hueco.** D89 hizo que cada pieza de `components/ui/` declarara dónde se publica, en una
+línea de su propia cabecera, y que `check:indices` lo comprobara contra la sección. El campo
+admitía **dos** valores: una ruta bajo `components/site/`, o el literal `pendiente`.
+
+Con dos valores no había forma de decir «esta pieza **no** se publica, y este es el motivo».
+`rich.tsx` —el render de markup del diccionario— no tiene aspecto propio que enseñar, y
+`marcas.tsx` no pinta nada en absoluto: envuelve nombres propios en un atributo invisible, así
+que una sección del Design System que la enseñara mostraría un texto idéntico al de al lado.
+Las dos iban a salir como deuda **para siempre**, o había que escribirles una sección falsa
+para que el contador quedara a cero.
+
+Eso último es el fallo de verdad, y no es de vocabulario: **es el metro mandando sobre el
+criterio en vez de al revés.** Un contador que solo puede bajar publicando empuja a publicar.
+
+**La decisión.** Un tercer valor, `interna`, y el recuento que los separa: *«N publicadas · N
+internas · N pendientes»*. `pendiente` vuelve a significar UNA sola cosa —deuda: se va a
+publicar y todavía no— e `interna` significa una decisión tomada. La condición que decide cuál
+toca es la misma que la del Design System entero: **la página enseña las piezas reales como
+demo**, así que una pieza que no pinta nada no tiene demo posible.
+
+**Y el motivo pasa a ser un DATO, no un comentario.** Las dos listas
+(`SIN_PUBLICAR`, `INTERNAS`) son `Record<archivo, motivo>` en vez de arrays, por dos razones
+que se refuerzan:
+
+- **Se deriva al inventario.** Quien contesta el paso 1 de la «Regla de construcción» lee en
+  `components/ui/README.md` por qué esa pieza no tiene sección, sin abrir `scripts/indices.ts`.
+- **Muere una duplicación.** El array llevaba encima un bloque de comentario que repetía la
+  lista con sus motivos, y ya era la misma cosa escrita dos veces dentro del mismo archivo —
+  exactamente lo que avisa la regla 5 de `BRAND.md` §Cómo se escribe una regla.
+
+`check:indices` exige el motivo en los dos casos y comprueba las dos direcciones: una pieza que
+declara `pendiente` o `interna` sin estar en su lista falla, y una entrada de lista cuya pieza
+ya no lo declara también. Añadir una línea sigue siendo un acto visible en el diff, que es lo
+que nunca fue «se me olvidó publicarla».
+
+**Lo que se llevó por delante.** `SIN_PUBLICAR` quedó **vacía**, y eso es el estado bueno y no
+un metro roto: la guarda de cero de `check:indices` mira los ARCHIVOS de la carpeta, que nunca
+son cero. Las tres que sí lo merecían se publicaron el mismo día —`video-embed` en §18,
+`info-card` y `page-closer` en §17—, así que el sitio pasa de dieciséis secciones de Design
+System a dieciocho.
+
+**Lo que se decidió NO arreglar, y queda por escrito.** `live-stat.tsx` es una **primitiva** y
+se demuestra dentro de §15, que se llama «Artículo largo». Grupo y sección de publicación son
+**ejes independientes**: el grupo dice de qué capa es la pieza; la publicación, dónde se la ve
+funcionando. Forzarlos a concordar movería especímenes buenos a secciones donde no ilustran
+nada. Está escrito en la cabecera de `scripts/indices.ts`, que es donde se lee al tocarlo.
