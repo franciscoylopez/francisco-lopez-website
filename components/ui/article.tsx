@@ -10,7 +10,12 @@ import { cn } from "@/lib/utils";
 
 import { Rich } from "./rich";
 import { chromeLinkVariants } from "./chrome";
-import { eyebrowVariants, LEADING, titleVariants } from "./heading";
+import {
+  eyebrowVariants,
+  LEADING,
+  TitleOrdinal,
+  titleVariants,
+} from "./heading";
 
 // Capa de ARTÍCULO LARGO del sistema (P60). Ninguna de estas piezas sabe nada de
 // ESTE sitio —reciben texto y hrefs, no copy propio ni rutas— así que viven en
@@ -226,10 +231,15 @@ export function SectionCover({
       <header className="min-w-0">
         <div className="mb-2 sm:hidden">{metaLineText}</div>
         <p className={cn(eyebrowVariants(), "mb-3")}>{kicker}</p>
+        {/* El ordinal entra en el nombre accesible del titular (P70.10). Aquí
+            no se deriva del kicker: esta portada YA lo recibe suelto, que es la
+            misma información sin el rodeo. El numeral grande de la derecha
+            sigue `aria-hidden`, así que no se dice dos veces. */}
         <Title
           id={id}
           className={cn(titleVariants({ size: "section-sm" }), "max-w-[24ch]")}
         >
+          <TitleOrdinal ordinal={ordinal} />
           {title}
         </Title>
       </header>
