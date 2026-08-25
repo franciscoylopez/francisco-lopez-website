@@ -286,7 +286,12 @@ export function HerenciaDiagram({ lang }: { lang: Locale }) {
     </svg>
   );
 
-  /* El umbral es el `viewBox` del lienzo ancho más 10 (P68.59): por debajo de
-     630px de contenido, un dibujo de 620 unidades ya no pinta su rótulo a 11px. */
+  /* El umbral es el `viewBox` del lienzo ancho más 10 (P68.59), y es un
+     CONTRATO: promete que este dibujo no aparecerá con menos de 630px de hueco.
+     Quien lo ajusta al sitio no es este archivo sino la caja que lo enmarca
+     —`max-w-[690px]` en `accesibilidad.tsx`, que deja 640 de contenido—. Se
+     intentó al revés, bajándolo a 610 para que la caja pudiera encogerse más, y
+     `check:figuras` lo rechazó con la cifra: prometer 610 es prometer 10,8px
+     pintados. */
   return <DosLienzos umbral={630} ancho={ancho} estrecho={estrecho} />;
 }

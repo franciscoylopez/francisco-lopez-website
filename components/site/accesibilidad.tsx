@@ -239,12 +239,32 @@ export function Accesibilidad({
               toque el dibujo. Se midió en el prototipo, donde con 24px daba
               9,19.
 
+              Y `max-w-[690px]` PORQUE LA CAJA SE AJUSTA AL DIBUJO, no a la
+              columna (feedback de Francisco: a ancho completo la tarjeta dejaba
+              250px de vacío a cada lado del lienzo).
+
+              EL NÚMERO NO ES DE DISEÑO Y NO SE PUEDE APRETAR MÁS: 690 − 2 del
+              borde − 48 del padding a escritorio (el `clamp` ya en su tope de
+              1,5rem) = 640 de contenido, que es lo que mide el `@container`. Y
+              tiene que quedar POR ENCIMA de 630, el umbral del lienzo ancho:
+              con 670 el contenido son 620 justos, o sea por debajo, y el
+              diagrama saltaba al dibujo estrecho precisamente en escritorio.
+
+              BAJAR EL UMBRAL EN VEZ DE ENSANCHAR LA CAJA NO VALE, y lo cazó
+              `check:figuras` al intentarlo: el umbral es un CONTRATO —«este
+              lienzo puede aparecer a partir de este ancho»—, así que ponerlo en
+              610 promete dibujar a 610, y ahí el rótulo son 10,8px pintados.
+
+              OJO AL VERIFICARLO: el gate no modela el `max-w` de esta caja, así
+              que un 670 le parece bien. Lo que caza el salto de lienzo es mirar
+              la página servida, no el gate.
+
               `diagram-realce` + `data-reveal` encienden el barrido de `.rlz`
               (D79). Sin JS o con `prefers-reduced-motion`, cada pieza es
               opacidad 1 desde el primer render. */}
           <figure
             data-reveal
-            className="diagram-realce border-border bg-card m-0 mb-8 overflow-hidden rounded-xl border"
+            className="diagram-realce border-border bg-card mx-auto mt-0 mb-8 max-w-[690px] overflow-hidden rounded-xl border"
           >
             <div className="@container flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
               <HerenciaDiagram lang={lang} />
