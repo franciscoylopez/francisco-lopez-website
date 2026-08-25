@@ -101,6 +101,41 @@ function fueraDeAlcance(nodo: Node): "svg" | "inerte" | null {
   return null;
 }
 
+/**
+ * Un nodo de texto de la página. Va aparte del recorrido porque son dos cosas
+ * distintas —abrir la variante y juzgar un nodo—, y juntas eran una sola función
+ * que qlty marcaba por complejidad.
+ */
+function revisarTexto(variante: string, nodo: Node) {
+  const texto = nodo.textContent ?? "";
+  const encontradas = texto.match(PATRON);
+  if (!encontradas) return;
+
+  const fuera = fueraDeAlcance(nodo);
+  if (fuera === "inerte") return;
+  if (fuera === "svg") {
+    enSvg += encontradas.length;
+    const set = svgPorVariante.get(variante) ?? new Set<string>();
+    for (const m of encontradas) set.add(m);
+    svgPorVariante.set(variante, set);
+    return;
+  }
+
+  apariciones += encontradas.length;
+  if (estaMarcado(nodo)) {
+    marcadas += encontradas.length;
+    return;
+  }
+
+  const contexto = texto.trim().replace(/\s+/g, " ").slice(0, 70);
+  fallo(
+    variante,
+    `«${[...new Set(encontradas)].join("», «")}» se pinta sin \`translate="no"\`: ` +
+      `«${contexto}${texto.trim().length > 70 ? "…" : ""}» — ese texto no pasa por ` +
+      "`Rich` ni por `<Marcas>`.",
+  );
+}
+
 function revisar(lang: (typeof locales)[number], slug: string) {
   const variante = `${lang}${slug ? `/${slug}` : ""}`;
   // La misma resolución que `check:marco` y `check:figuras`: la home es
@@ -125,33 +160,7 @@ function revisar(lang: (typeof locales)[number], slug: string) {
       NodeFilter.SHOW_TEXT,
     );
     for (let n = paseo.nextNode(); n; n = paseo.nextNode()) {
-      const texto = n.textContent ?? "";
-      const encontradas = texto.match(PATRON);
-      if (!encontradas) continue;
-
-      const fuera = fueraDeAlcance(n);
-      if (fuera === "inerte") continue;
-      if (fuera === "svg") {
-        enSvg += encontradas.length;
-        const set = svgPorVariante.get(variante) ?? new Set<string>();
-        for (const m of encontradas) set.add(m);
-        svgPorVariante.set(variante, set);
-        continue;
-      }
-
-      apariciones += encontradas.length;
-      if (estaMarcado(n)) {
-        marcadas += encontradas.length;
-        continue;
-      }
-
-      const contexto = texto.trim().replace(/\s+/g, " ").slice(0, 70);
-      fallo(
-        variante,
-        `«${[...new Set(encontradas)].join("», «")}» se pinta sin \`translate="no"\`: ` +
-          `«${contexto}${texto.trim().length > 70 ? "…" : ""}» — ese texto no pasa por ` +
-          "`Rich` ni por `<Marcas>`.",
-      );
+      revisarTexto(variante, n);
     }
   } finally {
     dom.window.close();
