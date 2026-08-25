@@ -151,9 +151,11 @@ export function Accesibilidad({
           {/* La precisión que sostiene la fila «Norma europea»: la EAA obliga a
               productos y servicios comerciales, no a una web personal, y decir lo
               contrario sería el error que justo el público de esta página detecta.
-              Va con <Rich> porque lleva los dos enlaces oficiales, EUR-Lex y
-              ETSI (D23). Eran los dos únicos salientes de la página hasta que
-              (07) trajo los cinco de las herramientas. */}
+              Va con <Rich> porque lleva los enlaces oficiales, EUR-Lex y ETSI
+              (D23), y desde P70.105 también el de WCAG: es aquí, «que remite a
+              WCAG», donde la norma aparece por primera vez en texto corrido, y
+              los salientes se reparten por la página en su primera aparición en
+              vez de amontonarse en un bloque final (decisión de Francisco). */}
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={t.conformance.note} />
           </p>
@@ -334,8 +336,11 @@ export function Accesibilidad({
             title={t.verify.heading}
             size="section-sm"
           >
+            {/* Con `Rich` desde P70.105: aquí caen los enlaces de axe-core y
+                Lighthouse, en la primera vez que se nombran en texto corrido y
+                justo encima de las tarjetas que los describen. */}
             <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-              {t.verify.intro}
+              <Rich text={t.verify.intro} />
             </p>
           </SectionHeader>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]">
@@ -425,16 +430,22 @@ export function Accesibilidad({
 
           Y EL SEGUNDO HUECO, DE LA MISMA FAMILIA: la página citaba axe-core,
           Lighthouse, NVDA y WCAG sin enlazar ninguno. Quien no supiera qué es
-          NVDA se quedaba igual. Los enlaces van INLINE en la prosa, como los de
-          EUR-Lex y ETSI de (01), y por eso no llevan icono: la regla del icono
-          de `BRAND.md` deja fuera el enlace de contenido, cuya afordancia es el
+          NVDA se quedaba igual.
+
+          PERO ESOS CUATRO ENLACES NO VIVEN AQUÍ, y esa fue la corrección de
+          Francisco a la primera versión: amontonarlos en el último bloque los
+          pone donde ya no hacen falta. Cada uno cae en su PRIMERA aparición en
+          texto corrido, no en una tarjeta —WCAG en la nota de (01), axe-core y
+          Lighthouse en la entradilla de (04), NVDA en la nota de (05)—, y aquí
+          se queda solo el de The A11Y Project, que es el sujeto de la sección.
+          Todos inline en la prosa, y por eso sin icono: la regla del icono de
+          `BRAND.md` deja fuera el enlace de contenido, cuya afordancia es el
           subrayado.
 
           NO ES UNA SÉPTIMA REJILLA DE TARJETAS a propósito. Las seis secciones
           anteriores ya son rejillas de `InfoCard`, y una más antes del cierre
           las convertiría en textura. Prosa + ilustración cambia el ritmo justo
-          donde hace falta, y es lo que le da a la marca el peso visual que pedía
-          la ficha sin que se lea como insignia. */}
+          donde hace falta. */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHeader
@@ -446,51 +457,44 @@ export function Accesibilidad({
               {t.term.intro}
             </p>
           </SectionHeader>
-          {/* NO ES `PAIR`, y no por gusto: `PAIR` reparte 50/50 porque está
-              escrito para DOS TARJETAS hermanas, y aquí la caja de la derecha
-              contiene un dibujo de 320px. A media columna (unos 600) dejaría más
-              de 250px de vacío a cada lado, que es justo el defecto que Francisco
-              señaló en el diagrama de (03): la caja se ajusta al dibujo, no a la
-              columna. Tampoco es `HERO_ROW`, cuyo `md:min-h-[19rem]` está
-              calibrado para que las tres aperturas del sistema caigan a la misma
-              altura y aquí solo metería un agujero.
+          {/* PROSA A LA IZQUIERDA, MARCA A LA DERECHA, y sin caja: el recurso
+              va directamente sobre el fondo de la página (decisión de Francisco,
+              2026-08-25). La versión anterior lo metía en una tarjeta con filete
+              y pie enmarcado, y una marca ajena dentro de una caja propia se lee
+              como sello expuesto, que es justo lo que esta página no puede
+              permitirse (mismo motivo que descartó el de getWCAG en P70.103).
 
-              El reparto 2:1 con bases de 28rem y 16rem deja la prosa en el ancho
-              que le corresponde según `layout.ts` —«prosa con una imagen al lado
-              → lo que le deje la imagen»— y la ilustración justa. Apila por
-              `flex-wrap` en cuanto no quepan las dos bases, sin breakpoint. */}
-          {/* `items-start` Y NO `items-center`, y esto se vio MIRANDO, no en las
-              cifras: la tarjeta mide 442px y la prosa 197, así que centrarlas
-              dejaba 180px de vacío entre la entradilla y el primer párrafo, con
-              el texto flotando a media altura. La cifra del alto no señalaba
-              nada raro; el hueco sí. Alineadas por arriba, lo que sobra queda
-              debajo del texto, que es como se lee una figura al lado de prosa. */}
-          <div className="flex flex-wrap items-start gap-[var(--gutter)]">
+              NO ES `PAIR`, que reparte 50/50 porque está escrito para DOS
+              TARJETAS hermanas: aquí la columna de la derecha lleva un dibujo, y
+              a media página dejaría un agujero a cada lado. Tampoco es
+              `HERO_ROW`, cuyo `md:min-h-[19rem]` está calibrado para que las tres
+              aperturas del sistema caigan a la misma altura. El reparto 2:1 deja
+              la prosa en el ancho que `layout.ts` le da a un texto con imagen al
+              lado, y apila por `flex-wrap` sin breakpoint.
+
+              `items-center` VUELVE a ser lo correcto justo porque se quitó la
+              caja: con tarjeta, la figura medía 442px contra 197 de prosa y
+              centrarlas dejaba 180px de agujero sobre el primer párrafo (medido
+              el 2026-08-25). Sin filete ni pie enmarcado, los dos altos se
+              parecen y centrar es lo que pidió Francisco. */}
+          <div className="flex flex-wrap items-center gap-[var(--gutter)]">
             <div className="flex min-w-[min(100%,20rem)] flex-[2_1_28rem] flex-col gap-4">
               <p className="text-muted-foreground m-0 text-[0.95rem] leading-[1.7]">
-                <Rich text={t.term.tools} />
+                {t.term.what}
               </p>
               <p className="text-muted-foreground m-0 text-[0.95rem] leading-[1.7]">
-                <Rich text={t.term.community} />
+                <Rich text={t.term.project} />
               </p>
             </div>
-            {/* EL `max-w` ES LA MITAD DE LA MISMA REGLA, y opera CUANDO APILA:
-                al envolver, la figura se queda sola en su línea y `flex-grow`
-                la estiraría a los 726px de una tableta con el dibujo de 320
-                flotando en medio. Capada a 26rem se comporta igual apilada que
-                al lado de la prosa, donde su columna mide justo eso. */}
-            <figure
-              className={cn(
-                CARD,
-                "m-0 flex max-w-[26rem] flex-[1_1_16rem] flex-col",
-              )}
-            >
-              <div className="flex flex-1 items-center justify-center p-[clamp(1.5rem,4vw,2.5rem)]">
-                <LoveA11yMark label={t.term.figura.alt} />
-              </div>
+            {/* EL `max-w` OPERA SOBRE TODO AL APILAR: al envolver, la figura se
+                queda sola en su línea y `flex-grow` la estiraría al ancho entero
+                de una tableta con el dibujo flotando en medio. Capada a 18rem se
+                comporta igual apilada que al lado de la prosa. */}
+            <figure className="m-0 flex max-w-[18rem] flex-[1_1_14rem] flex-col items-center gap-4">
+              <LoveA11yMark label={t.term.figura.alt} />
               <figcaption
                 className={cn(
-                  "border-border text-muted-foreground border-t px-5 py-4 text-[0.85rem]",
+                  "text-muted-foreground text-[0.85rem]",
                   LEADING.lead,
                 )}
               >
@@ -558,19 +562,24 @@ const LOVE_A11Y_PATH =
  * accesibilidad. Va con `role="img"` y su nombre accesible, y el nombre describe
  * el dibujo (qué se ve), no lo llama «logo».
  *
- * NO LLEVA `max-w` PROPIO, y eso es deliberado: quien acota el dibujo es la
- * tarjeta que lo enmarca (`max-w-[26rem]` menos su padding), y **un segundo tope
- * aquí dejaba un remanente**. Medido: con `max-w-[20rem]` el SVG paraba en 320
- * dentro de un hueco de 334, o sea 7px de vacío extra por lado que no eran el
- * padding de nadie. Es la misma forma del defecto que ya se corrigió en el
- * diagrama de (03): dos topes que no concuerdan, y el dibujo deja de llenar su
- * caja. Un solo tope, el de la caja.
+ * NO LLEVA `max-w` PROPIO, y eso es deliberado: quien acota el dibujo es su
+ * columna, y **un segundo tope aquí dejaba un remanente**. Medido el 2026-08-25:
+ * con `max-w-[20rem]` el SVG paraba en 320 dentro de un hueco de 334, o sea 7px
+ * de vacío por lado que no eran el padding de nadie. Es la misma forma del
+ * defecto ya corregido en el diagrama de (03): dos topes que no concuerdan, y el
+ * dibujo deja de llenar lo suyo. Un solo tope.
  *
- * EL COLOR ES `--brand-cyan` Y NO `--primary`, aunque en tema claro se pinten
- * igual. §Color de `BRAND.md` manda la capa decorativa para «ilustración,
- * gráficos», y usar el color de acción en algo que no se pulsa es justo la mezcla
- * de capas que esa regla prohíbe. Contra `--background` pasa de sobra el 3:1 que
- * WCAG 1.4.11 le pide a un gráfico que hay que entender, en los dos temas.
+ * MONOCROMO (`--foreground`), Y NO EL CIAN DE MARCA (decisión de Francisco,
+ * 2026-08-25). Nació en `--brand-cyan` por §Color de `BRAND.md`, que manda la
+ * capa decorativa para las ilustraciones; el problema es que esto no es una
+ * ilustración nuestra, es la marca de OTRO. Teñirla con el color de esta casa la
+ * disfraza de elemento propio, y el sitio ya tiene una convención para un logo
+ * ajeno: monocromo, como los de Trayectoria y Toolkit. La diferencia es que allí
+ * son dos PNG que conmutan por tema y aquí basta un token, porque es SVG.
+ *
+ * Contra `--background` es el par más medido del sitio (13,79 claro / 15,32
+ * oscuro), muy por encima del 3:1 que WCAG 1.4.11 le pide a un gráfico que hay
+ * que entender.
  */
 function LoveA11yMark({ label }: { label: string }) {
   return (
@@ -578,7 +587,7 @@ function LoveA11yMark({ label }: { label: string }) {
       viewBox="0 0 760 600"
       role="img"
       aria-label={label}
-      className="fill-brand-cyan h-auto w-full"
+      className="fill-foreground h-auto w-full"
     >
       <path fillRule="evenodd" d={LOVE_A11Y_PATH} />
     </svg>

@@ -36,7 +36,7 @@
         "value": "Alineada con los criterios de EN 301 549, la norma armonizada de accesibilidad TIC que la Unión Europea referencia y que a su vez remite a WCAG."
       }
     ],
-    "note": "La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a WCAG. Es el criterio que se ha seguido."
+    "note": "La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a [WCAG](https://www.w3.org/TR/WCAG22/). Es el criterio que se ha seguido."
   },
   "measures": {
     "num": "02 — Qué se ha hecho",
@@ -136,7 +136,7 @@
   "verify": {
     "num": "04 — Verificación",
     "heading": "No es una autoevaluación de palabra",
-    "intro": "Cada página se comprueba en modo claro y en modo oscuro, con herramientas reales, y también a mano. Las automáticas hacen bien su trabajo, pero solo saben mirar lo que alguien ha convertido en regla.",
+    "intro": "Cada página se comprueba en modo claro y en modo oscuro, con herramientas reales ([axe-core](https://github.com/dequelabs/axe-core), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)) y también a mano. Las automáticas hacen bien su trabajo, pero solo saben mirar lo que alguien ha convertido en regla.",
     "items": [
       {
         "tool": "axe-core",
@@ -199,7 +199,7 @@
         "body": "Y tres de ellas no eran el arreglo de una página: cambiaron el armazón que comparten las {paginas}. Ahora el aviso de cookies se anuncia en cuanto aparece y va al principio del documento, la barra de navegación es una región con nombre propio, y el número de sección se oye al recorrer los títulos. Esa es la diferencia entre una prueba a mano y un informe: el informe habría salido en verde las dos veces."
       }
     ],
-    "note": "Lo que esta prueba no cubre está justo debajo, en los límites: un solo lector de pantalla, un solo navegador, y ninguna persona que use tecnología de asistencia a diario."
+    "note": "Lo que esta prueba no cubre está justo debajo, en los límites: un solo lector de pantalla ([NVDA](https://www.nvaccess.org/)), un solo navegador, y ninguna persona que use tecnología de asistencia a diario."
   },
   "limits": {
     "num": "06 — Límites",
@@ -235,13 +235,13 @@
   },
   "term": {
     "num": "07 — El término",
-    "heading": "«a11y» es un atajo del gremio, y darlo por sabido ya es una barrera",
-    "intro": "En el oficio, «accesibilidad» casi siempre se escribe a11y: la a, las once letras que van en medio y la y. Es cómodo dentro del gremio y opaco fuera de él, así que en esta web solo aparece aquí, y explicado.",
-    "tools": "Las herramientas y los estándares que sostienen esta página también tienen nombre propio, y hasta ahora se citaban sin decir dónde viven. [WCAG 2.2](https://www.w3.org/TR/WCAG22/) es la norma del W3C contra la que se mide todo lo demás. [axe-core](https://github.com/dequelabs/axe-core) es el motor de reglas de Deque que recorre el HTML ya generado. [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview) es la auditoría que viene dentro de Chrome. Y [NVDA](https://www.nvaccess.org/) es el lector de pantalla de NV Access, gratuito y de código abierto, con el que se hizo la pasada a mano.",
-    "community": "Nada de esto se ha inventado aquí. [The A11Y Project](https://www.a11yproject.com/) es el sitio abierto donde el oficio mantiene la lista de comprobaciones de la que sale buena parte del criterio que sigue esta web.",
+    "heading": "Qué es A11y y por qué lo usamos",
+    "intro": "Es la palabra que el oficio usa a diario y casi nunca explica. Esta página la estaba usando igual: una vez, en la primera pantalla, sin decir qué era.",
+    "what": "A11y es la abreviatura que el desarrollo web usa para la palabra inglesa accessibility, accesibilidad. Se forma con su primera letra, su última letra y el número de letras que hay entre las dos: once. Y lo que nombra es diseñar sitios y aplicaciones para que cualquier persona pueda usarlos, tenga o no limitaciones físicas, visuales, auditivas o cognitivas.",
+    "project": "[The A11Y Project](https://www.a11yproject.com/) es el espacio abierto donde el oficio reúne los principios y los patrones de accesibilidad que funcionan, del diseño al despliegue. Su idea de fondo es la que sigue esta web: la accesibilidad no es una capa que se añade al final, es un criterio de cierre. Aquí eso se traduce en tres cosas concretas. La lista de comprobación se pega en la tarea antes de empezarla, no al revisarla. Cuatro de sus nueve puntos ya no se miran página a página, porque los pone la capa de componentes. Y todo lo que se pudo convertir en comprobación automática se convirtió.",
     "figura": {
       "alt": "La palabra «a11y» dentro de un corazón cuyo trazo se prolonga hasta hacer de cola de la «y».",
-      "caption": "El corazón de LoveA11y, una marca libre de derechos que cualquiera puede usar y recolorear para hablar de accesibilidad en abierto. Aquí lleva el cian de este sitio."
+      "caption": "El corazón de LoveA11y, una marca libre de derechos para hablar de accesibilidad en abierto."
     }
   },
   "report": {
