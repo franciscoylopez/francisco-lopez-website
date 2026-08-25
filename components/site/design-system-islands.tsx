@@ -8,8 +8,8 @@ import { cn } from "@/lib/utils";
 
 import { PANEL } from "@/components/ui/layout";
 
-// Las tres piezas interactivas del Design System (D7: JS solo en islas). El resto
-// de la página es Server Component.
+// Las cuatro piezas interactivas del Design System (D7: JS solo en islas). El
+// resto de la página es Server Component.
 
 const COLS = Array.from({ length: 12 });
 
@@ -290,5 +290,70 @@ export function DevicePreview({
         </div>
       </div>
     </>
+  );
+}
+
+/* ───────────────────────── FocusSimulator ───────────────────────── */
+
+/** (09) Botones — enciende el anillo de foco sobre los especímenes sin que
+ * ninguno se vuelva focalizable.
+ *
+ * POR QUÉ FINGE EN VEZ DE ENFOCAR. La sección es INERTE a propósito: sus demos
+ * son `<a href="#top">` y `<span>` porque los estados con carga se enseñan a la
+ * vez y un control que no hace nada sería una parada de tabulación puesta ahí
+ * para ilustrar. Enfocarlos de verdad metería doce paradas inútiles en una
+ * página sobre accesibilidad, que es empeorar justo lo que se documenta.
+ *
+ * Y EL ANILLO QUE ENSEÑA NO ES UNA IMITACIÓN: la regla de `globals.css` que
+ * pinta `:focus-visible` lleva el selector del simulador dentro, con la
+ * especificidad igualada. No hay dos juegos de valores que puedan divergir, así
+ * que la pregunta «¿coincide píxel a píxel con el real?» no depende de que
+ * alguien lo compruebe: no hay forma de que no coincida. */
+export function FocusSimulator({
+  showLabel,
+  hideLabel,
+  hint,
+  children,
+}: {
+  showLabel: string;
+  hideLabel: string;
+  hint: string;
+  children: React.ReactNode;
+}) {
+  const [on, setOn] = useState(false);
+
+  return (
+    <div data-focus-sim={on ? "on" : "off"}>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+        <p className="text-muted-foreground m-0 max-w-[var(--measure)] text-[0.8rem]">
+          {hint}
+        </p>
+        <button
+          type="button"
+          onClick={() => setOn((v) => !v)}
+          aria-pressed={on}
+          // Interruptor SUELTO, no grupo de alternativas: enciende una capa que
+          // antes no estaba, y no compite con ningún par al lado. De ahí
+          // `toggle-primary` y no `toggle-neutral` (BRAND.md §Controles con
+          // estado).
+          className={actionVariants({
+            variant: "toggle-primary",
+            on,
+            size: "sm",
+          })}
+        >
+          {/* El glifo es el propio anillo, dibujado con los mismos 2px de trazo
+              y 2px de hueco: un cuadrado con su contorno separado. Es forma, no
+              color, que es lo que el punto 6 del checklist pide de un estado. */}
+          <span
+            aria-hidden="true"
+            className="inline-block h-[13px] w-[13px] rounded-[2px] border-2 border-current"
+            style={{ outline: "2px solid currentColor", outlineOffset: "1px" }}
+          />
+          {on ? hideLabel : showLabel}
+        </button>
+      </div>
+      {children}
+    </div>
   );
 }

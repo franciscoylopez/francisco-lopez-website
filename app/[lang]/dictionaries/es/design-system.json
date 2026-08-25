@@ -393,7 +393,9 @@
     ],
     "ruleFoot": "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio. Antes convivían tres, y una de ellas dibujaba un halo blanco en tema oscuro.",
     "demoCardLabel": "Correo",
-    "demoCardValue": "hola@ejemplo.com"
+    "demoCardValue": "hola@ejemplo.com",
+    "focusShow": "Ver el anillo de foco",
+    "focusHide": "Ocultar el anillo de foco"
   },
   "etiquetas": {
     "num": "10 — Etiquetas",

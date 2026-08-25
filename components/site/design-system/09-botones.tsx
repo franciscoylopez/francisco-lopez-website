@@ -6,6 +6,8 @@ import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
+import { FocusSimulator } from "@/components/site/design-system-islands";
+
 import { SpecimenCard } from "./shared";
 
 /* ===================== (09) BOTONES Y ACCIONES =====================
@@ -24,16 +26,26 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
             {t.lead}
           </p>
         </SectionHeader>
-        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">
-          {t.cases.map((c, i) => (
-            <SpecimenCard
-              key={c.cls}
-              kicker={c.kicker}
-              cls={c.cls}
-              rule={c.rule}
-              note={c.note}
-            >
-              {/* Con su icono, como los botones reales de los que toman la
+        {/* Las dos formas de VER un estado, juntas y antes de los especímenes:
+            el hover se enseña pasando el cursor, y el foco no se podía enseñar
+            sin saber usar el teclado (P70.25). La pista de hover vivía debajo de
+            la rejilla y sube aquí: son la misma instrucción dicha dos veces, y
+            separadas la segunda no se leía como pareja de la primera. */}
+        <FocusSimulator
+          hint={t.hint}
+          showLabel={t.focusShow}
+          hideLabel={t.focusHide}
+        >
+          <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">
+            {t.cases.map((c, i) => (
+              <SpecimenCard
+                key={c.cls}
+                kicker={c.kicker}
+                cls={c.cls}
+                rule={c.rule}
+                note={c.note}
+              >
+                {/* Con su icono, como los botones reales de los que toman la
                     etiqueta: el de contacto de la home y el de Trayectoria. Lo
                     llevan porque las dos acciones sacan al usuario de la página
                     —una abre el correo, la otra descarga un archivo— y los de
@@ -45,134 +57,137 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
                     —la página que documenta la variante enseñaba un botón que no
                     existía—. Ahora es el mismo `actionVariants` y no puede
                     mentir, que es el motivo entero de esta sección. */}
-              {i === 0 && (
-                <a href="#top" className={actionVariants({ variant: "solid" })}>
-                  <ArrowRight aria-hidden="true" />
-                  {t.demoSolid}
-                </a>
-              )}
-              {i === 1 && (
-                <a
-                  href="#top"
-                  className={actionVariants({ variant: "outline-primary" })}
-                >
-                  <Download aria-hidden="true" />
-                  {t.demoOutlinePrimary}
-                </a>
-              )}
-              {i === 2 && (
-                <>
+                {i === 0 && (
                   <a
                     href="#top"
-                    className={actionVariants({
-                      variant: "outline-neutral",
-                    })}
+                    className={actionVariants({ variant: "solid" })}
                   >
-                    {t.demoNeutral}
+                    <ArrowRight aria-hidden="true" />
+                    {t.demoSolid}
                   </a>
+                )}
+                {i === 1 && (
                   <a
                     href="#top"
-                    className={actionVariants({ variant: "ghost" })}
+                    className={actionVariants({ variant: "outline-primary" })}
                   >
-                    {t.demoGhost}
+                    <Download aria-hidden="true" />
+                    {t.demoOutlinePrimary}
                   </a>
-                </>
-              )}
-              {/* Los dos casos con estado se muestran con <span>, no con
+                )}
+                {i === 2 && (
+                  <>
+                    <a
+                      href="#top"
+                      className={actionVariants({
+                        variant: "outline-neutral",
+                      })}
+                    >
+                      {t.demoNeutral}
+                    </a>
+                    <a
+                      href="#top"
+                      className={actionVariants({ variant: "ghost" })}
+                    >
+                      {t.demoGhost}
+                    </a>
+                  </>
+                )}
+                {/* Los dos casos con estado se muestran con <span>, no con
                     botones: su demostración es ver los dos estados A LA VEZ, y
                     un botón que no hace nada sería un control inerte y
                     focalizable puesto ahí solo para ilustrar. El hover sigue
                     funcionando —es CSS— así que no se pierde nada. */}
-              {i === 3 && (
-                <>
-                  <span
-                    className={actionVariants({
-                      variant: "toggle-primary",
-                      on: true,
-                      size: "sm",
-                    })}
-                  >
-                    {t.stateOn}
-                  </span>
-                  <span
-                    className={actionVariants({
-                      variant: "toggle-primary",
-                      on: false,
-                      size: "sm",
-                    })}
-                  >
-                    {t.stateOff}
-                  </span>
-                </>
-              )}
-              {i === 4 &&
-                t.demoSegments.map((seg, j) => (
-                  <span
-                    key={seg}
-                    className={actionVariants({
-                      variant: "toggle-neutral",
-                      on: j === 0,
-                      size: "sm",
-                    })}
-                  >
-                    {seg}
-                  </span>
-                ))}
-              {/* La tarjeta pulsable. Va con `wide` de facto —ocupa el ancho
+                {i === 3 && (
+                  <>
+                    <span
+                      className={actionVariants({
+                        variant: "toggle-primary",
+                        on: true,
+                        size: "sm",
+                      })}
+                    >
+                      {t.stateOn}
+                    </span>
+                    <span
+                      className={actionVariants({
+                        variant: "toggle-primary",
+                        on: false,
+                        size: "sm",
+                      })}
+                    >
+                      {t.stateOff}
+                    </span>
+                  </>
+                )}
+                {i === 4 &&
+                  t.demoSegments.map((seg, j) => (
+                    <span
+                      key={seg}
+                      className={actionVariants({
+                        variant: "toggle-neutral",
+                        on: j === 0,
+                        size: "sm",
+                      })}
+                    >
+                      {seg}
+                    </span>
+                  ))}
+                {/* La tarjeta pulsable. Va con `wide` de facto —ocupa el ancho
                     de su celda— porque su demo es la caja entera, no un control
                     centrado: encogerla al centro enseñaría otra cosa.
                     `cn()` NO es decorativo aquí: `cva` concatena y no fusiona,
                     así que sin él ganaría el `font-semibold` de la base y la
                     demo saldría en negrita mientras la tarjeta real no. Es
                     exactamente el fallo que se cazó al construirla. */}
-              {i === 6 && (
-                <a
-                  href="#top"
-                  className={cn(
-                    actionVariants({ variant: "card", size: "card" }),
-                    "max-w-[19rem]",
-                  )}
-                >
-                  {/* El interior sale de `ActionCardLines`, la misma pieza que
+                {i === 6 && (
+                  <a
+                    href="#top"
+                    className={cn(
+                      actionVariants({ variant: "card", size: "card" }),
+                      "max-w-[19rem]",
+                    )}
+                  >
+                    {/* El interior sale de `ActionCardLines`, la misma pieza que
                         sirve los canales de `/contacto`. Estaba escrito aquí y
                         allí byte a byte, así que esta demo iba a empezar a mentir
                         en cuanto alguien tocara el rótulo — y sin que nada
                         avisara (design-review, 2026-08-23). */}
-                  <ActionCardLines
-                    icon={<Mail aria-hidden="true" />}
-                    label={t.demoCardLabel}
-                    value={t.demoCardValue}
-                  />
-                </a>
-              )}
-              {i === 5 && (
-                <>
-                  <a
-                    href="#top"
-                    aria-label={c.kicker}
-                    className={actionVariants({
-                      variant: "icon",
-                      size: "icon",
-                    })}
-                  >
-                    <Moon />
+                    <ActionCardLines
+                      icon={<Mail aria-hidden="true" />}
+                      label={t.demoCardLabel}
+                      value={t.demoCardValue}
+                    />
                   </a>
-                  <a
-                    href="#top"
-                    aria-label={c.cls}
-                    className={actionVariants({
-                      variant: "icon",
-                      size: "icon",
-                    })}
-                  >
-                    <Menu />
-                  </a>
-                </>
-              )}
-            </SpecimenCard>
-          ))}
-        </div>
-        <p className="text-muted-foreground m-0 mt-4 text-[0.8rem]">{t.hint}</p>
+                )}
+                {i === 5 && (
+                  <>
+                    <a
+                      href="#top"
+                      aria-label={c.kicker}
+                      className={actionVariants({
+                        variant: "icon",
+                        size: "icon",
+                      })}
+                    >
+                      <Moon />
+                    </a>
+                    <a
+                      href="#top"
+                      aria-label={c.cls}
+                      className={actionVariants({
+                        variant: "icon",
+                        size: "icon",
+                      })}
+                    >
+                      <Menu />
+                    </a>
+                  </>
+                )}
+              </SpecimenCard>
+            ))}
+          </div>
+        </FocusSimulator>
         {/* La regla del icono se publica aquí, no solo en BRAND.md (P37.5988).
             Es el paso que faltaba: los enlaces son difíciles de incumplir porque
             hicieron el recorrido completo regla → clase → sección publicada →
