@@ -150,6 +150,7 @@
 - D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va
 - D113 · La premisa de una capa caduca cuando aparece el segundo consumidor
 - D114 · El lienzo de un diagrama es la única cifra que declara, y la capa deriva el resto
+- D115 · El suelo de ancho del sitio es 320, y 280 queda fuera con su motivo escrito
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6637,3 +6638,58 @@ rótulos, ninguno por debajo de 11px.
 **Lo que la capa NO cubre, y conviene no prometerlo.** Un lienzo de ancho fijo que se desplaza en
 horizontal —el artefacto de Emendu— no lo arregla ningún umbral, y `check:figuras` ya declara que
 se abstiene ahí. Ese caso pide re-renderizar el dibujo, no ajustar una cifra.
+
+---
+
+## D115 · El suelo de ancho del sitio es 320, y 280 queda fuera con su motivo escrito — 2026-08-25
+
+**Contexto.** Cerrar D93 dejó una pregunta abierta que se tareó aparte (P70.13) en vez de alargar
+aquella tarea, y con razón: **no es el mismo problema**. Lo que D93 arregló era **carpintería de
+ancho fijo** —el nav pedía 349px pasara lo que pasara— y la palanca fue soltar una pieza. Lo que
+queda no tiene ninguna pieza de ancho fijo detrás.
+
+**Lo medido, sobre el sitio servido (2026-08-22).** A **320 y a 360 las páginas están limpias en
+ES y EN**. A **280px** —la pantalla exterior del Galaxy Fold plegado— quedaban tres:
+
+```
+/cookies         +29px   DIV clientW=240 scrollW=289   «preferencias»
+/accesibilidad    +9px   H1  clientW=240 scrollW=269   «Accesibilidad»
+/en               +5px   DIV clientW=240 scrollW=246   «(01)EmenduStrategic»
+```
+
+**Y ahí no hay nada que soltar: son palabras que no caben.** El `h1` «Accesibilidad» son trece
+caracteres que a tamaño de display piden 269px él solo, contra una columna de 240. Así que la
+única palanca es **la escala tipográfica por debajo de 320**, y eso es una decisión de diseño.
+
+**Decisión — 280 queda fuera del contrato, y el suelo del sitio es 320.** Tres razones, en orden
+de peso:
+
+1. **A quién dejaría fuera.** 280 es la pantalla **exterior** de un Galaxy Fold plegado, que es un
+   modo de uso de vistazo, no de lectura. Los iPhone modernos empiezan en 375 y el SE de 1.ª y
+   2.ª generación es 320 — **ese ya está cubierto y medido limpio**.
+2. **Lo que costaría cada palanca, que es más de lo que arregla.** `hyphens: auto` es una línea y
+   partiría «Ac-ce-si-bi-li-dad» en español de verdad (el `lang` ya lo pone el locale), pero
+   afecta a **todo el sitio en todos los anchos**, no solo por debajo de 320: cambiaría el ritmo
+   de párrafo de las catorce páginas para arreglar tres desbordes en un ancho que nadie pide. Un
+   escalón más en el `clamp()` de los titulares es más control y menos efecto colateral, pero
+   añade un breakpoint que hay que mantener y es una decisión con varias direcciones posibles
+   —o sea, `/prototype` antes de escribir nada—.
+3. **Coincide con el suelo que el proyecto ya tenía escrito en otro sitio.** El punto 11 de la
+   Definition of Done mide el rótulo de una figura **a 360**, y `check:figuras` ya declara en voz
+   alta que por debajo de eso no juzga. Esta entrada no inventa un umbral: le pone número y
+   motivo al que ya se estaba aplicando.
+
+**La matriz del `viewport-verifier` se queda en 320** y no gana un ancho más. Añadir 280 sería
+declarar un contrato que esta misma decisión dice que no se persigue, y un gate que mide algo que
+nadie va a arreglar solo produce ruido que hay que ignorar en cada corrida — que es cómo un
+informe deja de leerse.
+
+**Qué reabriría esto**, dicho para que no haga falta volver a razonarlo: **tráfico medido** en esa
+franja. Hoy la decisión se toma sobre catálogo de dispositivos, no sobre GA4, porque con la
+audiencia actual (§Métricas) ese corte no tendría ni una sesión con la que decidir. Si algún día
+la tiene, la palanca a evaluar es el `clamp()`, no `hyphens`: el efecto colateral acotado vale
+más que la línea barata.
+
+**Esta es la forma de cierre que la propia tarea contemplaba** —«puede que la respuesta legítima
+sea descartarla con su motivo escrito»— y no un recorte de alcance silencioso, que es lo que
+`BRAND.md` §Cómo se escribe una regla nombra como antipatrón: lo que no se persigue se dice.
