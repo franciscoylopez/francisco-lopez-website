@@ -294,22 +294,6 @@ export const SPACING_SCALE = [
 /* Contraste medido                                                            */
 /* -------------------------------------------------------------------------- */
 
-/**
- * MÉTODO Y FECHA, que van pegados al número porque sin ellos no significa nada:
- * medido el **2026-08-09** sobre el sitio servido, recorriendo el DOM y leyendo
- * el color que el navegador PINTA —no el valor nominal del `oklch`, que en los
- * cianes de esta marca cae fuera del gamut sRGB y se recorta al pintarse—. El
- * procedimiento completo, con los dos anclajes de validación, está en `BRAND.md`
- * §Accesibilidad.
- *
- * EL CENSO INCLUYE LOS ESTADOS, no solo el reposo, y se hace recorriendo el DOM
- * en vez de leyendo `globals.css`: los tres pares que se escaparon a las dos
- * auditorías anteriores (etiqueta neutra, etiqueta teñida y hover del chrome
- * secundario) solo existen al COMPONER un velo o una pastilla de hover sobre la
- * superficie de debajo, así que no aparecen en ningún inventario de tokens.
- */
-export const MEASURED_ON = "2026-08-09";
-
 type Measurement = {
   /** Ratio en tema claro. */
   light: number;
@@ -397,6 +381,14 @@ export const CONTRAST = {
  * Cuándo se verificó por última vez lo que el censo de arriba publica. Vive
  * PEGADA a él a propósito: la cifra y la fecha de la cifra en el mismo archivo,
  * de modo que quien toca una ve la otra. Es la aplicación directa de D38.
+ *
+ * ES LA ÚNICA FECHA DEL CENSO. Hubo una segunda —`MEASURED_ON`, que no leía
+ * nadie— y llegó a quedarse dieciséis días por detrás de esta: dos fechas para
+ * la misma cosa dentro del archivo que existe para que cada cifra tenga un solo
+ * sitio. CÓMO se mide lo que fecha —sobre el color que el navegador PINTA,
+ * recorriendo el DOM servido y con los estados incluidos— no se cuenta aquí:
+ * está en `BRAND.md` §Cómo se hace el censo de pares, y repetirlo sería
+ * exactamente la regla 5 de §Cómo se escribe una regla.
  *
  * EN ISO Y NO EN PROSA, por la misma razón que las cifras se guardan como
  * `number` y no como «13,79:1»: «20 de agosto de 2026» y «20 August 2026» son el
