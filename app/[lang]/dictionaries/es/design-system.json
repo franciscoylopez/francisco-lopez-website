@@ -878,5 +878,85 @@
       "Y devuelve códigos, no frases: las palabras las pone el diccionario, en los dos idiomas."
     ],
     "serverFoot": "Es donde se olvida el idioma de un formulario: la mitad de la página traducida y los errores hablando siempre en el mismo."
+  },
+  "bloques": {
+    "num": "17 — Bloques de página",
+    "title": "El remate y la nota no los decide cada página",
+    "lead": "Ni son controles ni son texto: son las dos cajas con las que se compone una página. Las dos se escribieron a mano en dos sitios distintos y ya se leían distinto antes de que nadie lo notara, y por eso subieron a la capa. Lo que aquí no puede divergir no es el color: es el formato.",
+    "noteTitle": "La nota al margen",
+    "noteLead": "Una medida, el resultado de una herramienta, una regla que conviene decir aparte: lo que una página cuenta fuera del cuerpo del texto.",
+    "noteKicker": "Con párrafo",
+    "noteRule": "Un título y su explicación sobre la superficie de tarjeta. El gris del cuerpo no lo elige esta pieza: lo resuelve el fondo donde cae, que dentro de una tarjeta pesa más que fuera.",
+    "noteNote": "Admite tres cuerpos y se combinan: párrafo, lista y un pie más pequeño para el matiz que cierra.",
+    "monoKicker": "Título en monoespaciada",
+    "monoRule": "Cuando el título es el nombre de un token, de un archivo o de una herramienta, va en monoespaciada: así se lee como lo que es, un identificador y no una frase.",
+    "monoNote": "Es el único eje de la pieza. Todo lo demás lo decide qué cuerpos se le pasen, no una variante.",
+    "demoNoteTitle": "Un valor no es copy",
+    "demoNoteBody": "Si una sección publica una cifra del sistema, sale del archivo de valores y nunca del diccionario. La regla para distinguirlos es literal: si la entrada en español y la inglesa son idénticas carácter a carácter, es un valor con dos copias.",
+    "demoMonoTitle": "--measure",
+    "demoMonoBullets": [
+      "El ancho de la columna de lectura, medido en caracteres y no en píxeles.",
+      "Lo usan las entradillas de sección y el cuerpo de los artículos.",
+      "Cambiarlo mueve el ritmo de todas las páginas a la vez, que es justo para lo que existe."
+    ],
+    "demoMonoFoot": "Se publica entero en la sección de tokens de layout, con su valor y su motivo.",
+    "closerTitle": "El cierre de página",
+    "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en las catorce páginas.",
+    "closerKicker": "Dos destinos",
+    "closerRule": "Sube entero a la capa, y no solo la tarjeta: el ritmo vertical propio (más corto que una sección, porque es un remate), el filete de arriba y el hueco del rótulo son lo que tiene que no divergir. Si solo subiera la tarjeta, el segundo caso volvería a decidir esas tres cosas por su cuenta.",
+    "closerNote": "La flecha empuja hacia donde apunta, y el empujón se apaga con movimiento reducido. Un destino que todavía no existe no se enlaza: se dibuja punteado, apagado y con su etiqueta.",
+    "demoCloserEyebrow": "Seguir leyendo",
+    "demoBackKicker": "Experiencia anterior",
+    "demoBackName": "KUOTIP",
+    "demoBackDesc": "Enlace real: la flecha va delante y apunta a la izquierda, que es lo que se lee como volver sin necesidad de leer el rótulo.",
+    "demoSoonKicker": "Experiencia siguiente",
+    "demoSoonName": "Un destino que aún no existe",
+    "demoSoonDesc": "Sin enlace, la tarjeta se dibuja punteada y apagada. Es lo que le pasa a la experiencia más reciente, que nunca tiene una siguiente.",
+    "demoSoonBadge": "Próximamente",
+    "twiceTitle": "Las dos nacieron dos veces",
+    "twiceRule": [
+      "La nota se escribió en dos páginas y solo una aceptaba el título en monoespaciada.",
+      "El cierre lo estrenaron las tres páginas del sistema, y al aparecer el segundo caso volvió a decidirse entero.",
+      "Ninguna de las dos divergencias era visible leyendo el código: se veían poniendo las páginas una al lado de otra."
+    ],
+    "twiceFoot": "Es el patrón del que avisa la regla de construcción: cuando la pieza no cubre el caso, lo que se escribe a mano es el caso, y luego diverge.",
+    "wholeTitle": "El formato sube entero, no solo la caja",
+    "wholeRule": [
+      "Lo que tiene que no divergir es el remate completo, no el aspecto de una tarjeta.",
+      "El bloque no sabe nada de este sitio: recibe un rótulo y una lista de destinos.",
+      "Quién es hermana de quién lo deciden sus dos llamadores, que sí lo saben."
+    ],
+    "wholeFoot": "Es la frontera que decide dónde vive una pieza: si sabe algo de este sitio, no es del sistema."
+  },
+  "video": {
+    "num": "18 — Vídeo",
+    "title": "El clic es el consentimiento",
+    "lead": "Un vídeo de otro sitio no se incrusta: se anuncia. Hasta que alguien pulsa no hay marco de terceros, no hay JavaScript de YouTube y no sale una sola petición a Google. Lo que se ve antes es una imagen servida desde este mismo dominio.",
+    "facadeTitle": "La fachada",
+    "facadeLead": "Lo que se pinta mientras el vídeo no se ha pedido: el póster propio y el disco de reproducir encima.",
+    "facadeKicker": "Antes del clic",
+    "facadeRule": "El objetivo de clic es el póster entero y no el disco, así que queda muy por encima del suelo táctil de 44px. Al pulsar, y solo entonces, el marco del vídeo sustituye a la imagen y arranca solo: la intención ya está expresada, y pedir dos clics para una sola intención sería peor.",
+    "facadeNote": "Púlsalo si quieres: esta demo es la pieza real, así que cargará el vídeo igual que en la página donde vive.",
+    "controlTitle": "El control sobre la imagen",
+    "controlLead": "Un control apoyado en una foto tiene el fondo fuera del sistema, así que no puede fijar su color: lo decide el póster.",
+    "controlKicker": "Velo y disco",
+    "controlRule": "El velo entre la imagen y el control es del color del fondo de la página, nunca negro: el negro arregla un tema y empeora el otro. Y el disco va en dos tonos, relleno y anillo, para que su borde interior no dependa de lo que haya debajo.",
+    "controlNote": "Eso garantiza el borde interior, no el contorno entero: los dos externos caen sobre la foto y no se pueden prometer punto por punto.",
+    "demoVideoTitle": "TheTool, la herramienta de App Store Optimization",
+    "demoPlayLabel": "Reproducir el vídeo",
+    "clickTitle": "El clic vale más que la casilla",
+    "clickRule": [
+      "Antes de pulsar no hay nada que consentir: ni almacenamiento ni ninguna petición a un tercero.",
+      "Así que no cuelga de una categoría de cookies, sino del propio clic, que es un acto explícito e informado.",
+      "Es más estricto, no menos: quien acepta todas las cookies tampoco carga el vídeo sin pulsar."
+    ],
+    "clickFoot": "Donde la pieza vive de verdad, el pie del vídeo dice qué ocurre al pulsar, y esa frase es la que convierte el clic en informado.",
+    "posterTitle": "El póster no viene de YouTube",
+    "posterRule": [
+      "La miniatura oficial se sirve desde un dominio de Google, así que usarla haría justo la petición que la fachada viene a evitar.",
+      "Se descarga una vez, se versiona con el resto de imágenes y se sirve desde aquí.",
+      "De paso, la lista de orígenes permitidos para imágenes no tiene que crecer."
+    ],
+    "posterFoot": "Cuesta un archivo en el repositorio y ahorra cientos de kilobytes de reproductor que nadie ha pedido todavía."
   }
 }

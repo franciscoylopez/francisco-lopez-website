@@ -1,4 +1,4 @@
-// @pieza primitiva · pendiente · Marca los nombres propios del sitio como no traducibles.
+// @pieza primitiva · interna · Marca los nombres propios del sitio como no traducibles.
 
 /**
  * LOS NOMBRES PROPIOS NO SE TRADUCEN — `translate="no"` sobre cada aparición.

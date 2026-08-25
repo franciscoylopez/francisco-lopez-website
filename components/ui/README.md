@@ -27,11 +27,11 @@
 
 ### primitiva · 8
 - **`icons.tsx`** — Los iconos que lucide no trae (LinkedIn, GitHub), con la regla de autoría propia. *([brand-kit/06-uso](../site/brand-kit/06-uso.tsx))*
-- **`info-card.tsx`** — La tarjeta de nota: un título y su explicación, al margen del cuerpo. *(sin publicar)*
+- **`info-card.tsx`** — La tarjeta de nota: un título y su explicación, al margen del cuerpo. *([design-system/17-bloques](../site/design-system/17-bloques.tsx))*
 - **`live-stat.tsx`** — La regleta de un dato en vivo: la cifra no se escribe, se enlaza a quien la publica. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*
 - **`logo.tsx`** — El monograma y el wordmark, con la firma split y su umbral de 48px. *([brand-kit/02-logotipo](../site/brand-kit/02-logotipo.tsx))*
-- **`marcas.tsx`** — Marca los nombres propios del sitio como no traducibles. *(sin publicar)*
-- **`page-closer.tsx`** — El cierre común de las trece páginas: a dónde se va desde aquí. *(sin publicar)*
-- **`rich.tsx`** — El render de markup inline del copy del diccionario: negrita, cursiva y enlace. *(sin publicar)*
-- **`video-embed.tsx`** — La facade de vídeo de terceros: póster propio y el clic como gate (D55). *(sin publicar)*
+- **`marcas.tsx`** — Marca los nombres propios del sitio como no traducibles. *(interna — no pinta nada: envuelve los nombres propios en un atributo invisible, y una sección que la enseñara mostraría un texto idéntico al de al lado. La vigila `npm run check:marcas` sobre las 28 variantes)*
+- **`page-closer.tsx`** — El cierre común de las páginas: a dónde se va desde aquí. *([design-system/17-bloques](../site/design-system/17-bloques.tsx))*
+- **`rich.tsx`** — El render de markup inline del copy del diccionario: negrita, cursiva y enlace. *(interna — no tiene aspecto propio que enseñar: es infraestructura de texto (D23), y lo que de ella sí se ve —el enlace de contenido— se publica en §08)*
+- **`video-embed.tsx`** — La facade de vídeo de terceros: póster propio y el clic como gate (D55). *([design-system/18-video](../site/design-system/18-video.tsx))*
 <!-- FIN ÍNDICE -->
