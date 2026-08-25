@@ -507,11 +507,21 @@ export const LAST_COOKIES_UPDATE = "2026-08-23";
  * Cuándo se publicó y cuándo se revisó por última vez «Cómo se ha creado esta
  * página» — mismo mecanismo que `LAST_A11Y_REVIEW`, fuente única para el
  * `datePublished`/`dateModified` del JSON-LD `TechArticle` (P60) y para
- * cualquier copy que necesite decirlo. Se actualiza `ARTICLE_UPDATED` cada vez
- * que el artículo cambia de forma sustantiva; `ARTICLE_PUBLISHED` no se toca.
+ * cualquier copy que necesite decirlo. `ARTICLE_PUBLISHED` no se toca.
+ *
+ * `ARTICLE_UPDATED` SE SUBE CUANDO EL ARTÍCULO CAMBIA DE FORMA SUSTANTIVA, y
+ * desde P70.04 eso ya no hay que recordarlo: `check:articulo` sella aparte el
+ * copy del artículo —los dos diccionarios y sus figuras— y sale rojo si ese
+ * sello se mueve y esta constante no. La salida para lo no sustantivo es
+ * `npm run articulo:sellar`, que deja el cambio a la vista en el diff.
+ *
+ * Hizo falta porque esta frase ya estaba escrita aquí y aun así la fecha pasó
+ * DOCE COMMITS congelada en el 21 de agosto, uno de ellos con un capítulo nuevo.
+ * El `ByLine` no pinta la fecha, así que no había forma humana de notarlo: solo
+ * Google, y tarde.
  */
 export const ARTICLE_PUBLISHED = "2026-08-21";
-export const ARTICLE_UPDATED = "2026-08-21";
+export const ARTICLE_UPDATED = "2026-08-25";
 
 /** La fecha larga en el idioma de la página. */
 export function reviewDate(iso: string, locale: Locale): string {

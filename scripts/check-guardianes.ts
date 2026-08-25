@@ -185,6 +185,17 @@ const CASOS: Caso[] = [
     mutar: (o) => o.replaceAll("card=contacto", "card=home"),
   },
   {
+    guardian: "check:articulo",
+    rotura: "cambia el copy del artículo y la fecha que ve Google no se mueve",
+    // El caso malo es el estado real hasta P70.04: `ARTICLE_UPDATED` pasó DOCE
+    // commits congelada en el 21 de agosto, uno de ellos con un capítulo nuevo,
+    // mientras el JSON-LD y el sitemap le decían a Google que el artículo no se
+    // tocaba. No lo vio nadie porque el `ByLine` no pinta fecha.
+    archivo: "app/[lang]/dictionaries/es/como-se-ha-creado.json",
+    mutar: (o) =>
+      o.replace('"text": "', '"text": "Un párrafo nuevo del artículo. '),
+  },
+  {
     guardian: "check:figuras",
     rotura:
       "un diagrama se queda con el tope más estrecho que su propio lienzo",
