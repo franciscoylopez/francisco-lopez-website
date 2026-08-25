@@ -153,6 +153,11 @@ Cuando el objetivo de clic es **la caja completa** y no un renglón, es la varia
 cian. **Se compone a través de `cn()`, nunca suelta**, porque deshace clases de la base y `cva`
 concatena en vez de fusionar (el porqué, en `BRAND-historical.md`).
 
+**`size="card"` dimensiona una FILA** (icono + etiqueta), así que una tarjeta APILADA le
+devuelve `align-items` a `stretch` y el `gap` a cero al componer. Al tercer caso apilado, lo
+que falta no es otro neutralizador: es un `size` propio. *(Qué se ve sin eso, en
+[`BRAND-historical.md`](./BRAND-historical.md) §La variante que dimensiona una fila.)*
+
 ### Controles con estado (toggles, segmentados y pestañas)
 
 En un control con estado el **relleno pleno ya significa «activo»**, así que el encendido reusa el sólido y el apagado nunca puede rellenarse igual. Cuál de las dos variantes toca se decide por la **forma** del control, no por su contenido ni por cuántos segmentos tenga:
@@ -244,15 +249,12 @@ el switch del consentimiento, aquí debajo).
 >   activo propio, y ninguna `shape` de `chrome.tsx` cubre ese caso—. Sale a `chrome.tsx`.
 > - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
 >   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
-> - **La celda de índice del artículo** *(2026-08-25)*: el `<a>` de `article.tsx` que hace
->   pulsable una celda entera de su rejilla de secciones. Eran TRES tarjetas a mano y las
->   otras dos —`page-closer.tsx` y `trayectoria-indice.tsx`— salieron a la variante `card`
->   en P70.15, que es lo que arregló el `focus-visible:bg-muted` que les faltaba. Esta se
->   queda, y con motivo propio: **no es una tarjeta, es una celda**. Los filetes los dibuja
->   la rejilla (`border-r border-b` en el `<li>`), así que darle la variante le pondría
->   caja y radio propios dentro de una cuadrícula que ya está cerrada. Y la divergencia que
->   movió a las otras dos aquí no existe: ya lleva su `focus-visible:bg-muted` escrito.
->   **Sale el día que la capa tenga el caso «celda pulsable»**, que hoy tiene un solo uso.
+> - **La celda de índice del artículo** *(2026-08-25)*, en `article.tsx`: **no es una tarjeta,
+>   es una celda** —los filetes los dibuja el `<li>`—, así que la variante le pondría caja
+>   propia dentro de una cuadrícula ya cerrada. Eran tres y las otras dos salieron a `card`
+>   en P70.15. El motivo entero está en su marca `@fuera-de-capa`, que es donde D109 lo puso
+>   y donde `check:excepciones` lo imprime. **Sale cuando la capa tenga el caso «celda
+>   pulsable».**
 >
 > **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
 > imagen del vídeo no es excepción: sale de `.video-facade`.

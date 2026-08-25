@@ -47,6 +47,7 @@ Partido el **2026-08-09** (P37.685).
 - [La tarjeta salió en negrita con la clase correcta puesta](#la-tarjeta-salió-en-negrita-con-la-clase-correcta-puesta)
 - [El contorno de un control: 1,21:1 desde V1, y el metro que no existía (2026-08-23)](#el-contorno-de-un-control-1211-desde-v1-y-el-metro-que-no-existía-2026-08-23)
 - [El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)](#el-interlineado-que-sobrevivió-a-tres-medidas-y-por-qué-la-medición-aprobaba-2026-08-25)
+- [La variante que dimensiona una fila, usada en una pila (2026-08-25)](#la-variante-que-dimensiona-una-fila-usada-en-una-pila-2026-08-25)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -833,3 +834,38 @@ y un agente con matriz de viewports y dos disparos. Para lo visual y tipográfic
 **un gate manual** —`design-review`— que se dispara «antes de un release visual», o sea al
 final. El punto 8 no cierra esa asimetría; solo impide que el aprobado se dé por bueno
 cuando contradice a alguien que está mirando.
+
+
+## La variante que dimensiona una fila, usada en una pila (2026-08-25)
+
+P70.15 sacó a la variante `card` las dos tarjetas que se pulsan enteras y estaban escritas a
+mano — el cierre de página y el índice de Trayectoria—. La tarea daba eso por mecánico y no lo
+era: **`size="card"` está dimensionado para una FILA**, icono + etiqueta, que es el caso para
+el que nació. Las dos tarjetas son **pilas**.
+
+Lo que trae de más, y qué se ve si no se neutraliza:
+
+- **`items-center` de la base.** En un contenedor `flex-col` eso es el eje transversal: el
+  contenido deja de estirarse y **se encoge al centro**. El rótulo, el titular y la fila de
+  rol dejarían de ocupar el ancho de la tarjeta.
+- **`gap-[0.75rem]` del tamaño.** En una pila **separa las tres partes 12px** que hoy no
+  existen, y encima del margen que ya llevan escrito.
+
+Ninguno de los dos da error, ninguno lo ve el typecheck, y `gate:html` los habría enseñado
+como dos clases más en un atributo que ya cambiaba entero — o sea, escondidos entre las
+catorce que la variante añade de verdad. Se cazaron leyendo qué hace cada clase añadida
+ANTES de aceptar el diff, que es la única forma: la lista de clases nuevas es corta y la de
+sus efectos, no.
+
+**El resto de lo que añade la variante sí es inerte, y también hubo que comprobarlo uno a
+uno:** las flechas ya declaraban `size-[18px]`, los logos son `<img>` y no `<svg>`, todos los
+textos hijos declaran su tamaño —así que el `text-[0.9rem]` heredado no llega a nadie—, el
+subrayado de `globals.css` es de `.link-content` y no de un `<a>` pelado, y `min-h-[44px]`,
+`w-full`, `text-left`, `font-normal` y `whitespace-normal` son el valor por defecto en su
+contexto. Lo único que cambia de verdad es el `focus-visible:bg-muted`, que era la tarea.
+
+**La lección, que es por qué esto está escrito y no solo arreglado:** una variante no es
+neutral respecto a la FORMA del contenido que envuelve. Al llevar un caso a la capa, la
+pregunta no es «¿existe la variante?» sino «¿la variante asume una disposición que este caso
+no tiene?». Al tercer caso apilado, la respuesta deja de ser neutralizar y pasa a ser un
+`size` propio.

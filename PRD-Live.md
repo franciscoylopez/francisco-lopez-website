@@ -188,6 +188,12 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
   **Confirma en vez de sostener**: el tamaño lo pone la capa, que lo deriva del
   único ancho que un diagrama declara, y un lienzo desconocido no compila (D114).
   Uno de ancho fijo que se desplaza se mide y se nombra, no se juzga.
+- **`npm run check:marcas`**: que los nombres propios lleguen al HTML con
+  `translate="no"`, o el traductor de Chrome hará «La Herramienta» de «TheTool».
+  Lo pone una capa y el copy no lo escribe, así que recorre los nodos de TEXTO de
+  las 28 variantes exigiendo un ancestro marcado, en vez de contar cuántos hay
+  (D116). Fuera del contrato, dicho en cada corrida: el `<head>`, los atributos y
+  el interior de un `<svg>`.
 - **`npm test`**: la lógica que no necesita navegador, y por eso en CI al revés que `psi` y el
   censo. Son dos: la del formulario —validación, saneado de cabeceras y decisiones de la Server
   Action, medidas sobre el mensaje que nodemailer **emite** (D101)— y las reglas del tablero,
