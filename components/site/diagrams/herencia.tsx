@@ -117,12 +117,7 @@ export function HerenciaDiagram({ lang }: { lang: Locale }) {
   const Y0 = 52;
   const PASO = 25;
   const ancho = (
-    <svg
-      viewBox="0 0 620 262"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[620px]"
-    >
+    <>
       <text x="196" y="30" textAnchor="end" {...rlz(0, LBL)}>
         {t.col.punto}
       </text>
@@ -197,7 +192,7 @@ export function HerenciaDiagram({ lang }: { lang: Locale }) {
           </g>
         );
       })}
-    </svg>
+    </>
   );
 
   /* ── LIENZO ESTRECHO (280) ───────────────────────────────────────────────
@@ -252,12 +247,7 @@ export function HerenciaDiagram({ lang }: { lang: Locale }) {
     ) + 12;
 
   const estrecho = (
-    <svg
-      viewBox={`0 0 280 ${altoEstrecho}`}
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[300px]"
-    >
+    <>
       {grupos.map(({ capa, ci, cabecera, rows, i }) => (
         <g key={capa.nombre}>
           <text x="10" y={cabecera} {...rlz(i, LBL_STRONG)}>
@@ -283,7 +273,7 @@ export function HerenciaDiagram({ lang }: { lang: Locale }) {
           ))}
         </g>
       ))}
-    </svg>
+    </>
   );
 
   /* El umbral es el `viewBox` del lienzo ancho más 10 (P68.59), y es un
@@ -293,5 +283,11 @@ export function HerenciaDiagram({ lang }: { lang: Locale }) {
      intentó al revés, bajándolo a 610 para que la caja pudiera encogerse más, y
      `check:figuras` lo rechazó con la cifra: prometer 610 es prometer 10,8px
      pintados. */
-  return <DosLienzos umbral={630} ancho={ancho} estrecho={estrecho} />;
+  return (
+    <DosLienzos
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 620, h: 262, children: ancho }}
+      estrecho={{ h: altoEstrecho, children: estrecho }}
+    />
+  );
 }

@@ -21,18 +21,7 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
     },
   }[lang];
   const ancho = (
-    <svg
-      viewBox="0 0 540 200"
-      role="img"
-      aria-label={t.ariaLabel}
-      /* 540 (P68.59), y el tope IGUAL al lienzo. Antes eran 560 unidades de
-         dibujo dentro de un tope de 540px: un tope por debajo del propio
-         `viewBox` es una escala <1 permanente, y dejaba el rótulo en 10,6 ni
-         con toda la pantalla. Se igualan en 540 —la segunda columna se acerca
-         20 unidades— porque esta figura va flotada, y media columna son
-         ~550px de contenido hasta 1536. */
-      className="h-auto w-full max-w-[540px]"
-    >
+    <>
       <rect
         x="60"
         y="20"
@@ -98,19 +87,14 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
       <text x="400" y="200" textAnchor="middle" {...rlz(4, LBL)}>
         {t.deepReader}
       </text>
-    </svg>
+    </>
   );
 
   /** La misma comparación en un hueco estrecho: las dos columnas siguen lado
    * a lado —apilarlas destruiría la comparación, que es lo que el diagrama
    * cuenta— y lo que se estrecha es cada una. */
   const estrecho = (
-    <svg
-      viewBox="0 0 280 208"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[300px]"
-    >
+    <>
       <rect
         x="8"
         y="18"
@@ -168,8 +152,14 @@ export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {
       <text x="210" y="192" textAnchor="middle" {...rlz(4, LBL)}>
         {t.deepReader}
       </text>
-    </svg>
+    </>
   );
 
-  return <DosLienzos umbral={545} ancho={ancho} estrecho={estrecho} />;
+  return (
+    <DosLienzos
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 540, h: 200, children: ancho }}
+      estrecho={{ h: 208, children: estrecho }}
+    />
+  );
 }

@@ -95,49 +95,133 @@ export function rlz(i: number, extra?: string) {
  * en vez de dejarlas conmutar en escritorio: su versión ancha se pintaba a
  * escala 0,98 y ese 2% era justo el déficit de 10,6px que arrastraban.
  *
- * LOS UMBRALES SON LITERALES A PROPÓSITO. Tailwind escanea el código como
- * texto plano: una clase construida por interpolación no se genera y el
- * elemento se queda sin regla, sin error de compilación (`BRAND.md` §Cómo
- * medir, punto 5 — la trampa que ya costó cuatro comprobadores). Por eso el
- * mapa de abajo escribe cada clase entera y el diagrama solo elige la llave.
+ * Cómo se escribe todo eso —y por qué el lienzo acabó siendo la única cifra que
+ * un diagrama declara— está justo debajo.
  */
-const UMBRAL = {
-  390: ["contents @max-[390px]:hidden", "hidden @max-[390px]:contents"],
-  490: ["contents @max-[490px]:hidden", "hidden @max-[490px]:contents"],
-  545: ["contents @max-[545px]:hidden", "hidden @max-[545px]:contents"],
-  570: ["contents @max-[570px]:hidden", "hidden @max-[570px]:contents"],
-  610: ["contents @max-[610px]:hidden", "hidden @max-[610px]:contents"],
-  630: ["contents @max-[630px]:hidden", "hidden @max-[630px]:contents"],
+/* ── EL LIENZO ES LA ÚNICA CIFRA, y de él salen las otras dos (P68.7205) ──
+ *
+ * Antes, cada diagrama escribía el ancho de su lienzo TRES veces: en su propio
+ * `viewBox`, en su `max-w-[Npx]` y, con un +10, en el `umbral` que le pasaba a
+ * `DosLienzos`. Tres sitios con el mismo número y nada que los atara, así que
+ * la pregunta no era si iban a desviarse sino cuándo. Ya lo habían hecho tres
+ * veces, y las tres por caminos distintos:
+ *
+ *  · `s01`: el tope se quedó en 600 con un lienzo de 620 y el rótulo no llegaba
+ *    a 11px ni a pantalla completa (P68.59).
+ *  · `s01` y `s05`: se estrecharon a 540 y su umbral se quedó en 545, o sea +5.
+ *  · `s07`: lienzo de 560 con tope de 620, copiado de otro diagrama. No rompía
+ *    nada —un tope MAYOR que el lienzo agranda el dibujo, no lo encoge— pero
+ *    pintaba esa figura un 10% más grande de como está dibujada.
+ *
+ * Un gate mide DESPUÉS; una capa impide ANTES. `check:figuras` seguía en CI y
+ * seguirá, pero ahora como confirmación: el número entra una vez, y el tope y el
+ * umbral se leen de esta tabla.
+ *
+ * LAS CLASES SON LITERALES, y eso no es estilo: Tailwind escanea el código como
+ * texto plano, así que una clase construida por interpolación no se genera y el
+ * elemento se queda sin regla, sin error de compilación (`BRAND.md` §Cómo medir,
+ * punto 5). Por eso la tabla escribe cada clase entera en vez de componerla.
+ *
+ * EL UMBRAL ES EL LIENZO +10: un dibujo de 620 unidades necesita 620px pintados
+ * para que su rótulo llegue a 11, y los diez son margen para no conmutar en el
+ * empate exacto. Y es una CONTAINER query, no un breakpoint, porque lo que
+ * decide es el ancho del panel: media columna a 1024 y columna entera a 360 son
+ * el mismo hueco y merecen el mismo dibujo.
+ */
+const LIENZO = {
+  380: {
+    cap: "h-auto w-full max-w-[380px]",
+    ancho: "contents @max-[390px]:hidden",
+    estrecho: "hidden @max-[390px]:contents",
+  },
+  480: {
+    cap: "h-auto w-full max-w-[480px]",
+    ancho: "contents @max-[490px]:hidden",
+    estrecho: "hidden @max-[490px]:contents",
+  },
+  540: {
+    cap: "h-auto w-full max-w-[540px]",
+    ancho: "contents @max-[550px]:hidden",
+    estrecho: "hidden @max-[550px]:contents",
+  },
+  560: {
+    cap: "h-auto w-full max-w-[560px]",
+    ancho: "contents @max-[570px]:hidden",
+    estrecho: "hidden @max-[570px]:contents",
+  },
+  600: {
+    cap: "h-auto w-full max-w-[600px]",
+    ancho: "contents @max-[610px]:hidden",
+    estrecho: "hidden @max-[610px]:contents",
+  },
+  620: {
+    cap: "h-auto w-full max-w-[620px]",
+    ancho: "contents @max-[630px]:hidden",
+    estrecho: "hidden @max-[630px]:contents",
+  },
 } as const;
 
-/** El ancho de contenido a partir del cual el lienzo ancho ya pinta su rótulo
- * a 11px o más: el `viewBox` del diagrama más 10 de margen. */
-export type Umbral = keyof typeof UMBRAL;
+/** El ancho del `viewBox` del lienzo ancho. Es la única cifra que un diagrama
+ * declara sobre su escala: el tope y el umbral salen de ella. Un ancho que no
+ * esté en la tabla es un error de compilación, no un rótulo pequeño en
+ * producción. */
+export type Lienzo = keyof typeof LIENZO;
 
-/** Los dos dibujos de un diagrama, con el conmutador en UN solo sitio.
+/** El lienzo estrecho es el MISMO para los ocho diagramas: 280 unidades, con
+ * tope de 300. No es coincidencia sino la premisa del rediseño de P68.59 —el
+ * hueco de un móvil de 360 son 284px—, así que vive aquí y ningún diagrama lo
+ * escribe. Solo su ALTO cambia, porque el mismo contenido apilado ocupa distinto
+ * en cada uno. */
+const ESTRECHO_W = 280;
+const ESTRECHO_CAP = "h-auto w-full max-w-[300px]";
+
+/** Los dos dibujos de un diagrama, con el lienzo, el tope y el conmutador en UN
+ * solo sitio.
  *
- * Solo uno está en el DOM visible a la vez, así que el `aria-label` que cada
- * lienzo lleva NO se duplica para un lector de pantalla: `display:none` saca
- * al oculto del árbol de accesibilidad. Y el texto alternativo es el mismo en
- * los dos porque lo que cambia es la FORMA del dibujo, no lo que cuenta. */
+ * EL `aria-label` SE PASA UNA VEZ y la capa lo pone en los dos `<svg>`, que es
+ * como debía ser: el texto alternativo describe lo que el diagrama CUENTA, y eso
+ * no cambia entre las dos disposiciones. Escrito en cada lienzo, eran dos sitios
+ * donde podían acabar diciendo cosas distintas.
+ *
+ * Solo uno está en el DOM visible a la vez, así que el `aria-label` NO se duplica
+ * para un lector de pantalla: `display:none` saca al oculto del árbol de
+ * accesibilidad. */
 export function DosLienzos({
-  umbral,
+  ariaLabel,
   ancho,
   estrecho,
 }: {
-  umbral: Umbral;
-  ancho: ReactNode;
-  estrecho: ReactNode;
+  ariaLabel: string;
+  ancho: { w: Lienzo; h: number; children: ReactNode };
+  estrecho: { h: number; children: ReactNode };
 }) {
-  const [claseAncho, claseEstrecho] = UMBRAL[umbral];
+  const L = LIENZO[ancho.w];
   return (
     <>
       {/* `contents` y no `block`: el envoltorio desaparece de la caja y el
           `<svg>` sigue siendo hijo directo del flex de `DiagramPanel`, que es
           quien lo centra. Con un `block` en medio, el `w-full` del SVG se
           resolvería contra un hijo flex sin ancho propio. */}
-      <div className={claseAncho}>{ancho}</div>
-      <div className={claseEstrecho}>{estrecho}</div>
+      <div className={L.ancho}>
+        <svg
+          viewBox={`0 0 ${ancho.w} ${ancho.h}`}
+          role="img"
+          aria-label={ariaLabel}
+          className={L.cap}
+        >
+          {ancho.children}
+        </svg>
+      </div>
+      <div className={L.estrecho}>
+        <svg
+          viewBox={`0 0 ${ESTRECHO_W} ${estrecho.h}`}
+          role="img"
+          aria-label={ariaLabel}
+          className={ESTRECHO_CAP}
+        >
+          {estrecho.children}
+        </svg>
+      </div>
     </>
   );
 }

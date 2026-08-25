@@ -28,14 +28,7 @@ export function CapasColorDiagram({ lang }: { lang: Locale }) {
     },
   }[lang];
   const ancho = (
-    <svg
-      viewBox="0 0 480 280"
-      role="img"
-      aria-label={t.ariaLabel}
-      /* 480 y no 470 (P68.59): igual que en s01, el tope quedaba por debajo
-         del propio lienzo y dejaba el rótulo en 10,8 con toda la pantalla. */
-      className="h-auto w-full max-w-[480px]"
-    >
+    <>
       <rect
         x="25"
         y="15"
@@ -84,7 +77,7 @@ export function CapasColorDiagram({ lang }: { lang: Locale }) {
       <text x="402" y="258" textAnchor="middle" {...rlz(4, LBL)}>
         {t.purpleSoft}
       </text>
-    </svg>
+    </>
   );
 
   /** Las mismas cuatro píldoras en dos filas de dos, conservando el
@@ -92,12 +85,7 @@ export function CapasColorDiagram({ lang }: { lang: Locale }) {
    * fila dentro de 280 unidades darían píldoras de 60, más estrechas que su
    * propio rótulo. */
   const estrecho = (
-    <svg
-      viewBox="0 0 280 344"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[300px]"
-    >
+    <>
       <rect
         x="46"
         y="12"
@@ -147,8 +135,14 @@ export function CapasColorDiagram({ lang }: { lang: Locale }) {
       <text x="192" y="328" textAnchor="middle" {...rlz(4, LBL)}>
         {t.purpleSoft}
       </text>
-    </svg>
+    </>
   );
 
-  return <DosLienzos umbral={490} ancho={ancho} estrecho={estrecho} />;
+  return (
+    <DosLienzos
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 480, h: 280, children: ancho }}
+      estrecho={{ h: 344, children: estrecho }}
+    />
+  );
 }

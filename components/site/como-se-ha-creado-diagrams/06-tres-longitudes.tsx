@@ -76,12 +76,7 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
     ));
 
   const ancho = (
-    <svg
-      viewBox="0 0 600 300"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[600px]"
-    >
+    <>
       <rect
         x="196"
         y="12"
@@ -179,7 +174,7 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
       <text x="300" y="292" textAnchor="middle" {...rlz(5, LBL)}>
         {t.guard}
       </text>
-    </svg>
+    </>
   );
 
   /** El mismo flujo girado: la bifurcación en tres carriles pasa a ser un
@@ -187,12 +182,7 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
    * rótulo al lado en vez de debajo. La línea del guardián se parte en dos
    * porque a 11 unidades ocupa 422 y el lienzo tiene 280. */
   const estrecho = (
-    <svg
-      viewBox="0 0 280 546"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[300px]"
-    >
+    <>
       <rect
         x="36"
         y="12"
@@ -294,8 +284,14 @@ export function TresLongitudesDiagram({ lang }: { lang: Locale }) {
           </tspan>
         ))}
       </text>
-    </svg>
+    </>
   );
 
-  return <DosLienzos umbral={610} ancho={ancho} estrecho={estrecho} />;
+  return (
+    <DosLienzos
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 600, h: 300, children: ancho }}
+      estrecho={{ h: 546, children: estrecho }}
+    />
+  );
 }

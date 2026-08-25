@@ -61,14 +61,7 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
   }[lang];
 
   const ancho = (
-    <svg
-      viewBox="0 0 620 300"
-      role="img"
-      aria-label={t.ariaLabel}
-      /* 620 y no 600 (P68.59): el tope era más estrecho que el lienzo, así que
-         el rótulo se quedaba en 10,6 incluso a pantalla completa. */
-      className="h-auto w-full max-w-[620px]"
-    >
+    <>
       <line
         x1="130"
         y1="10"
@@ -143,7 +136,7 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
           {t.uncoveredLine2}
         </tspan>
       </text>
-    </svg>
+    </>
   );
 
   /** Las mismas cinco barras, con el rótulo ENCIMA en vez de en un canalón a
@@ -163,12 +156,7 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
    * construcción. */
   const escala = (w: number) => Math.round((w * 244) / 420);
   const estrecho = (
-    <svg
-      viewBox="0 0 280 312"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[300px]"
-    >
+    <>
       <line
         x1="10"
         y1="8"
@@ -236,8 +224,14 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
           {t.uncoveredLine2}
         </tspan>
       </text>
-    </svg>
+    </>
   );
 
-  return <DosLienzos umbral={630} ancho={ancho} estrecho={estrecho} />;
+  return (
+    <DosLienzos
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 620, h: 300, children: ancho }}
+      estrecho={{ h: 312, children: estrecho }}
+    />
+  );
 }
