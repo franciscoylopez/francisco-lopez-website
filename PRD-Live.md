@@ -177,9 +177,10 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
   página (D73).
 - **`npm run check:marco`**: el criterio de cierre de página nueva, en cada PR (D75). Sobre
   el HTML **prerenderizado** de las 28 variantes: axe estructural, el enlace de salto que axe
-  no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, y que los `@id`
-  del JSON-LD **resuelven** — cosa que ningún validador externo hace. Contraste y objetivo
-  táctil quedan fuera a propósito: se heredan, y necesitan pintar.
+  no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, que el `?card=`
+  de cada variante **resuelve a su propia tarjeta** y no a la de la home (P70.03), y que los
+  `@id` del JSON-LD **resuelven** — las dos últimas, cosas que ningún validador externo
+  hace. Contraste y objetivo táctil quedan fuera a propósito: se heredan, y necesitan pintar.
 - **`npm run check:figuras`**: el rótulo **pintado** de toda figura con lienzo
   escalado, sobre el prerender de las 28 variantes. `text-[11px]` dentro de un
   `viewBox` son 11 unidades, no 11 píxeles, y esa escala no está en el
