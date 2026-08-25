@@ -7,7 +7,11 @@ import type {
 import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
 import { factsOf } from "@/content/experience-copy";
 import { actionVariants } from "@/components/ui/action";
-import { SectionHeader, dataLabelVariants } from "@/components/ui/heading";
+import {
+  SectionHeader,
+  dataLabelVariants,
+  titleVariants,
+} from "@/components/ui/heading";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -137,7 +141,12 @@ export function TrayectoriaIndice({
                       navegable la rejilla con un lector de pantalla: cinco
                       encabezados de segundo nivel bajo el h1 de la página, sin
                       saltos (punto 4 del checklist). */}
-                  <h2 className="font-display m-0 text-[clamp(1.15rem,1.7vw,1.4rem)] leading-[1.25] font-semibold tracking-[-0.015em] text-balance">
+                  <h2
+                    className={cn(
+                      titleVariants({ size: "card" }),
+                      "text-balance",
+                    )}
+                  >
                     {claims[slug]}
                   </h2>
 

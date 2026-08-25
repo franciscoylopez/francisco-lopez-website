@@ -123,6 +123,23 @@ export const titleVariants = cva("font-display m-0 font-semibold", {
        */
       sub: "text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.25] tracking-[-0.015em]",
       /**
+       * El titular de UNA PIEZA dentro de una rejilla: la tarjeta de una etapa de
+       * «Cómo trabajo», una fila de Formación, una experiencia del índice de
+       * Trayectoria, un bloque menor del Brand Kit.
+       *
+       * NO ES UN ESCALÓN QUE FALTARA POR ESTÉTICA, es la moda de cuatro valores que
+       * significaban lo mismo (design-review 2026-08-23, decidido en P70.20): 1,15
+       * a 1,4 · 1,15 a 1,5 · 1,2 a 1,5 · 1,25 a 1,6. Todo el abanico cabe en medio
+       * rem, y el nivel de encabezado difiere —hay un `h2` y tres `h3`— mientras el
+       * papel visual es idéntico. Cuatro valores dentro de medio rem no son cuatro
+       * decisiones: son una escrita cuatro veces.
+       *
+       * SE LLAMA POR SU PAPEL Y NO POR SU TAMAÑO, como `page` y `section`: lo que
+       * lo elige es que el titular abre una pieza y no una sección. Que caiga entre
+       * `sub` y `sub-sm` en la escala es consecuencia, no definición.
+       */
+      card: "text-[clamp(1.2rem,1.9vw,1.5rem)] leading-[1.25] tracking-[-0.015em]",
+      /**
        * El escalón por debajo de `sub`: el titular de un bloque de apoyo dentro
        * de una sección — el «antes / después» de una demo, la nota que acompaña a
        * un espécimen, el rótulo de una lista larga.
@@ -155,6 +172,11 @@ export const EYEBROW_GAP = {
   "section-sm": "mb-3",
   sub: "mb-2",
   "sub-sm": "mb-2",
+  // `card` comparte peldaño con los dos de arriba: todo lo que va por debajo de
+  // `section-sm` usa el mismo. Hoy no lo gasta nadie —un titular de tarjeta no
+  // lleva rótulo encima—, y se declara igual, por lo mismo que se publica el de
+  // `sub`: el valor existe en la capa aunque no tenga uso todavía.
+  card: "mb-2",
 } as const;
 
 /**
@@ -196,6 +218,8 @@ export const LEAD_GAP = {
   "section-sm": "mb-4",
   sub: "mb-3",
   "sub-sm": "mb-3",
+  // Mismo peldaño que sus vecinos, por lo mismo que en `EYEBROW_GAP`.
+  card: "mb-3",
 } as const;
 
 /**

@@ -468,7 +468,13 @@
         "size": "section-sm",
         "eyebrow": "Capa de cabecera",
         "sample": "Cabeceras",
-        "use": "Sección de un índice largo, como las quince de esta página."
+        "use": "Sección de un índice largo, como todas las de esta página. Sin cifra a propósito: la llevaba escrita y ya se quedó atrás dos veces."
+      },
+      {
+        "size": "card",
+        "eyebrow": "",
+        "sample": "Discovery",
+        "use": "El titular de una PIEZA dentro de una rejilla: una etapa de «Cómo trabajo», una fila de Formación, una experiencia del índice de Trayectoria. Es la moda de cuatro valores que cabían en medio rem y significaban lo mismo, con niveles de encabezado distintos y el mismo papel visual."
       },
       {
         "size": "sub",

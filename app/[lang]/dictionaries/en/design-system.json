@@ -468,7 +468,13 @@
         "size": "section-sm",
         "eyebrow": "Header layer",
         "sample": "Headers",
-        "use": "A section of a long index, like the fifteen on this page."
+        "use": "A section of a long index, like every one on this page. No figure on purpose: it used to carry one and fell behind twice."
+      },
+      {
+        "size": "card",
+        "eyebrow": "",
+        "sample": "Discovery",
+        "use": "The headline of a PIECE inside a grid: a stage of “How I work”, a row of Education, a role in the Career index. It's the mode of four values that all fitted inside half a rem and meant the same thing, with different heading levels and the same visual job."
       },
       {
         "size": "sub",
