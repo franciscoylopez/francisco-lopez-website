@@ -13,7 +13,8 @@ description: Publicar una pieza nueva de `components/ui/` en el Design System (o
 > segundo fallo y no impidió que se repitiera**, que es la señal de que faltaba portador.
 >
 > Ahora el disparador existe: `npm run check:indices` (D89) nombra en cada PR las piezas sin
-> publicar, y una pieza nueva que declare `pendiente` sin motivo escrito **falla**. Esta skill
+> publicar, y una pieza nueva que declare `pendiente` (o `interna`) sin motivo escrito
+> **falla**. Esta skill
 > es el cómo.
 
 ## Paso 0 · ¿Dónde va, y va de verdad?
@@ -34,6 +35,12 @@ Tres preguntas, en este orden:
 3. **¿Se puede enseñar con la pieza real?** Si la respuesta es no, no se publica una imitación:
    se replantea la demo. Esa es la promesa de la página («las piezas reales del sitio como
    demo») y lo que hace que la página no pueda mentir.
+4. **Y si la respuesta sigue siendo no, la pieza NO SE PUBLICA — y eso se declara** (D117).
+   Es la cuarta salida y existe desde el 2026-08-26: hay piezas sin demo posible porque no
+   pintan nada (`rich.tsx` es infraestructura de texto; `marcas.tsx` solo añade un atributo
+   invisible, así que su sección mostraría un texto idéntico al de al lado). Declaran
+   `interna` en vez de `pendiente` y van a `INTERNAS` con su motivo. **Publicar una sección
+   que no enseña nada para bajar un contador es el metro mandando sobre el criterio.**
 
 Si sale «sección nueva», **dilo antes de escribirla**: cambia una cifra publicada y es una
 decisión de Francisco.
@@ -115,7 +122,10 @@ vertical sin ganar nada (P37.62). **Una sola** sí va a la medida de lectura.
 2. **Actualiza la línea `@pieza` del archivo en `components/ui/`**: la publicación deja de ser
    `pendiente` y pasa a ser la ruta de su sección **relativa a `components/site/`**.
 3. **Quítala de `SIN_PUBLICAR`** en `scripts/indices.ts`, o `check:indices` avisará de que
-   sobra la excusa.
+   sobra la excusa. Son **dos** listas desde D117 —`SIN_PUBLICAR` para lo que declara
+   `pendiente`, `INTERNAS` para lo que declara `interna`— y las dos son
+   `Record<archivo, motivo>`: **el motivo es un dato y se deriva al inventario**, así que se
+   escribe pensando en quien lo va a leer ahí, no como comentario suelto.
 4. `npm run indices` para regenerar `components/ui/README.md`.
 
 ## Paso 5 · Cierre

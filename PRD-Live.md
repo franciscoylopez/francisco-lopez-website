@@ -142,15 +142,6 @@ mano con la regla de autoría de iconos propios. Detalle en `BRAND.md` y en
 **Y toda página y toda sección abren igual**: el ordinal dentro del eyebrow, el titular
 como afirmación y entradilla debajo, con el hueco puesto por la capa (D43).
 
-### El atenuado lo resuelve la superficie, no el punto de uso
-
-`text-muted-foreground` no significa «este gris»: significa «el atenuado del fondo donde
-caiga este texto». Cada superficie redefine `--surface-dim` mezclando el texto un 85%
-hacia su propio fondo, incluidas las que cambian por **estado** (`hover:`,
-`focus-visible:`). Un bloque que se pinta su propia superficie declara su familia con
-`data-surface`. Es lo que hace que **la accesibilidad se herede** y que una tarjeta nueva
-nazca bien sin pedirlo (D30/D39/D61).
-
 ### No funcionales
 
 | Criterio | Umbral | Estado |
