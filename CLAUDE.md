@@ -61,6 +61,11 @@ Al empezar una sesión de desarrollo:
 
 > **A `General` no lo drena ningún sprint, así que se drena por CUPO.** La regla de movimiento vale para los bloques de página porque antes o después un sprint los toca; `General` es transversal, así que no lo toca nada. **Cada sprint arrastra 3-4 tareas de `General`** —las que no piden criterio, por `Prioridad`— dentro del propio sprint, y **una revisión no cierra dejando en `General` más tareas nuevas de las que ese cupo va a sacar**. Si las deja, la revisión no ha terminado: falta decidir qué se retira.
 
+> **`Tanda` agrupa el sprint por lotes de trabajo, y es GENÉRICA** *(2026-08-25)*. `Tanda 1`…`Tanda 5`
+> se **repueblan al abrir cada sprint**: la tanda 1 de uno y la de otro no son lo mismo, y etiquetas con
+> el nombre del sprint se acumularían hasta que el desplegable no dijera nada. Es de lectura visual, no
+> un eje de ejecución: quien manda sigue siendo `Prioridad`.
+
 > **`Versión` ≠ `Etapa`.** La etapa dice *cuándo se hace*; la versión, *en qué release sale*. Desde el 2026-08-10: **V2** = los tres sprints de arriba · **V3** = la deuda y mejoras por bloque · **V4** = la IA conversacional. Ver `PRD-Live.md` §9.
 
 - **"To-Do", "En progreso" y "Blocked" están reservados al sprint activo.** Toda tarea de un sprint futuro va en **"Sin empezar"**, sin excepción. Al abrir un sprint nuevo, sus tareas pasan de "Sin empezar" a "To-Do"; al cerrarlo, lo que quede sin hacer se mueve al siguiente sprint y vuelve a "Sin empezar".
