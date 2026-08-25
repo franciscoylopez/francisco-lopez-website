@@ -20,9 +20,11 @@
 - **`layout.ts`** — Las cajas y los ritmos comunes: WRAP, SECTION, PROSE, CARD, PANEL, PAIR, HERO_ROW. *([design-system/01-rejilla](../site/design-system/01-rejilla.tsx))*
 - **`stat-row.tsx`** — La fila de cifras que resume una apertura. *([design-system/11-cabeceras](../site/design-system/11-cabeceras.tsx))*
 - **`table.tsx`** — La rejilla de filas y celdas: tabla real si son datos, divs si son especímenes. *([design-system/12-tablas](../site/design-system/12-tablas.tsx))*
+
 ### artículo · 2
 - **`article-islands.tsx`** — Las islas de cliente del texto largo: riel de secciones, copiar enlace, compartir. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*
 - **`article.tsx`** — Los bloques del texto largo: portada de capítulo, cita, diagrama, cierre. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*
+
 ### primitiva · 8
 - **`icons.tsx`** — Los iconos que lucide no trae (LinkedIn, GitHub), con la regla de autoría propia. *([brand-kit/06-uso](../site/brand-kit/06-uso.tsx))*
 - **`info-card.tsx`** — La tarjeta de nota: un título y su explicación, al margen del cuerpo. *(sin publicar)*

@@ -8,7 +8,7 @@ import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
 import { factsOf } from "@/content/experience-copy";
 import { actionVariants } from "@/components/ui/action";
 import { SectionHeader, eyebrowVariants } from "@/components/ui/heading";
-import { CARD, PROSE, WRAP } from "@/components/ui/layout";
+import { PROSE, WRAP } from "@/components/ui/layout";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
@@ -50,14 +50,19 @@ const CON_PAGINA = EXPERIENCES.filter((e) => e.slug !== null);
 // cierre de seis páginas para no ganar nada hoy; si aparece un tercer caso, ese
 // será el momento (regla 4 de `BRAND.md` §Cómo se escribe una regla: antes de
 // unificar dos valores que se parecen, mirar si significan cosas distintas).
-// `border-control-edge` pisa el `border-border` de `CARD` (2026-08-23): esta
-// tarjeta SE PULSA, y a un control WCAG 1.4.11 le pide 3:1 al contorno que lo
-// identifica. `CARD` se queda con el filete decorativo, que no tiene ese umbral.
-// @fuera-de-capa: tarjeta que se pulsa entera escrita a mano; TAREADA en P74.55, no
-// exenta — le falta el `focus-visible:bg-muted` de la variante `card` (2026-08-25)
+// SALE DE LA VARIANTE `card` (P70.15). Escrita a mano le faltaba el
+// `focus-visible:bg-muted`, así que el teclado no recibía lo que recibe el ratón.
+// El `border-control-edge` que antes había que pedir aquí —esta tarjeta SE PULSA, y
+// WCAG 1.4.11 le pide 3:1 al contorno que la identifica— ya viene dentro: es la
+// diferencia entre un filete decorativo y el contorno de un control (D97).
+//
+// LO QUE SE NEUTRALIZA: `size="card"` dimensiona una FILA (icono + etiqueta) y esto
+// es una pila, así que hay que devolver el `align-items` a `stretch` y el `gap` a
+// cero. Sin eso, el contenido se encogería al centro y las tres partes se separarían
+// 12px — dos cambios visuales que no pide nadie.
 const TARJETA = cn(
-  CARD,
-  "group hover:bg-muted border-control-edge flex h-full flex-col p-[1.4rem] transition-colors",
+  actionVariants({ variant: "card", size: "card" }),
+  "group flex h-full flex-col items-stretch gap-0 p-[1.4rem]",
 );
 
 export function TrayectoriaIndice({

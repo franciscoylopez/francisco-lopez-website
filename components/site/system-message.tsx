@@ -2,6 +2,8 @@ import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
 
 import { MAIN_ID } from "./skip-link";
+import { WRAP } from "@/components/ui/layout";
+import { cn } from "@/lib/utils";
 
 // Shell presentacional de las páginas-sistema (404 y error). Puro —sin hooks ni
 // "use client"— para renderizarse igual en el not-found de servidor y dentro del
@@ -36,7 +38,10 @@ export function SystemMessage({
     <main
       id={MAIN_ID}
       tabIndex={-1}
-      className="mx-auto flex min-h-[100dvh] max-w-[var(--container)] flex-col items-center justify-center gap-7 px-[var(--page-x)] py-16 text-center"
+      className={cn(
+        WRAP,
+        "flex min-h-[100dvh] flex-col items-center justify-center gap-7 py-16 text-center",
+      )}
     >
       <a
         href={homeHref}

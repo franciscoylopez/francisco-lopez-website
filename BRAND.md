@@ -244,11 +244,15 @@ el switch del consentimiento, aquí debajo).
 >   activo propio, y ninguna `shape` de `chrome.tsx` cubre ese caso—. Sale a `chrome.tsx`.
 > - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
 >   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
-> - **La tarjeta que se pulsa entera, escrita tres veces** *(2026-08-25)*: `page-closer.tsx`,
->   `trayectoria-indice.tsx` y `article.tsx` componen `cn(CARD, …)` en vez de la variante
->   `card`. Su condición de salida ya se cumplió: está tareada (P74.55), no exenta. Y no es
->   cosmética: les falta el `focus-visible:bg-muted` de la variante, así que el teclado no
->   recibe lo que recibe el ratón.
+> - **La celda de índice del artículo** *(2026-08-25)*: el `<a>` de `article.tsx` que hace
+>   pulsable una celda entera de su rejilla de secciones. Eran TRES tarjetas a mano y las
+>   otras dos —`page-closer.tsx` y `trayectoria-indice.tsx`— salieron a la variante `card`
+>   en P70.15, que es lo que arregló el `focus-visible:bg-muted` que les faltaba. Esta se
+>   queda, y con motivo propio: **no es una tarjeta, es una celda**. Los filetes los dibuja
+>   la rejilla (`border-r border-b` en el `<li>`), así que darle la variante le pondría
+>   caja y radio propios dentro de una cuadrícula que ya está cerrada. Y la divergencia que
+>   movió a las otras dos aquí no existe: ya lleva su `focus-visible:bg-muted` escrito.
+>   **Sale el día que la capa tenga el caso «celda pulsable»**, que hoy tiene un solo uso.
 >
 > **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
 > imagen del vídeo no es excepción: sale de `.video-facade`.
