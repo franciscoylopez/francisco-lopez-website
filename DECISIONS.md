@@ -148,6 +148,7 @@
 - D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte
 - D111 · Lo que el lector de pantalla cambió en el marco de toda página
 - D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va
+- D113 · La premisa de una capa caduca cuando aparece el segundo consumidor
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -4560,6 +4561,11 @@ porque su variabilidad daría rojos falsos (D49).
 
 ## D76 · Una capa nueva para texto largo, y el control que le faltaba al chrome sobre banda invertida — 2026-08-21
 
+> **CORREGIDA EN UNA PIEZA el 2026-08-25 por D113.** La capa son SIETE, no ocho:
+> `LiveStat` salió a `ui/live-stat.tsx` cuando `/accesibilidad` quiso publicar una cifra
+> derivada. Su premisa —«un formato que hoy solo tiene una página»— nunca fue cierta para
+> esa pieza; lo era para las otras siete, y ahí D76 sigue en pie.
+
 **El problema.** «Cómo se ha creado esta página» (P60) es la primera página del sitio con
 ~6.000 palabras de prosa continua, y las siete piezas del sistema (D36) no cubren ese caso:
 ninguna resuelve un índice navegable con tiempo por sección, una portada de capítulo, una cita
@@ -6540,3 +6546,43 @@ lo que hace que el guardián se mire en vez de apagarse (D110).
 se declare en su nueva ruta: esta vez lo cazó estar mirando. La red que lo haría automático es
 la de P68.705 (el guardián de `/accesibilidad`) generalizada, o una comprobación de que toda
 fuente del sello existe y ninguna figura queda fuera de él.
+
+## D113 · La premisa de una capa caduca cuando aparece el segundo consumidor — 2026-08-25
+
+**Decisión.** `LiveStat` sale de la capa de artículo a `components/ui/live-stat.tsx`, como
+**primitiva** y no como pieza de núcleo. Las otras siete de D76 se quedan donde están.
+
+**Por qué solo esa.** D76 dejó la capa de artículo fuera del núcleo con un argumento que era
+bueno: resolvía «un FORMATO, el de texto largo con paradas, que hoy solo tiene una página». Y
+seis de sus piezas lo cumplen sin discusión — portada de capítulo, cita que para la lectura,
+índice con tiempo por sección, transición entre paradas, la regleta de enlace al repo, el marco
+de un diagrama. `LiveStat` no: lo que resuelve es **«esta cifra no se escribe a mano, se enlaza
+a quien la publica»**, que es D38 con forma de bloque y no tiene nada que ver con el largo del
+texto. Estaba en esa capa **por vecindad**, porque el artículo fue quien la necesitó primero.
+
+**Lo que lo puso en evidencia fue un segundo consumidor.** La sección de herencia de
+`/accesibilidad` (P70.101) afirma que los controles salen de una capa común, y quería enseñar
+cuántas piezas tiene el sistema sin teclear el número. La alternativa a mover la pieza era que
+**una página que no es el artículo importara de `ui/article.tsx`**, y eso no es un detalle de
+importación: es la página de accesibilidad declarando que depende del formato de texto largo.
+
+**Y NO ES NÚCLEO, aunque la tarea lo dijera.** El vocabulario de `components/ui/README.md` tiene
+tres grupos y no son la misma cifra mal contada: el **núcleo** son los ocho EJES del sistema —el
+control, el enlace de nav, la etiqueta, la cabecera, el campo, la tabla, la fila de cifras y las
+cajas—, la **capa de artículo** es un formato, y las **primitivas** son bloques sueltos.
+`LiveStat` es lo tercero, del mismo grupo que `info-card.tsx`. Subirlo al núcleo habría hecho
+nueve una cifra que significa otra cosa, y `PRD-Live.md` la publica. **La mudanza no cambia su
+rango: cambia de qué depende.**
+
+**La forma del error, que es lo reutilizable.** La premisa de una capa —«esto solo lo usa X»—
+es un hecho sobre el presente, no una propiedad de la pieza, y **caduca en silencio**: nada
+falla el día que deja de ser cierta. Lo único que la revisa es que aparezca un segundo
+consumidor y alguien se pregunte por qué tiene que importar de casa ajena. Es la misma familia
+que D112, de ayer mismo: allí un guardián heredó el alcance de una carpeta, aquí una pieza
+heredó el alcance de su vecina.
+
+**Validado con el gate que existe para esto.** `npm run gate:html -- save` con el árbol limpio,
+la extracción, y `npm run gate:html` después: **sin cambios en el HTML de las 28 variantes**.
+Conviene decir cómo NO se comprueba, porque costó un rodeo: comparar a mano los `.html`
+prerenderizados da 26 de 26 distintos, porque extraer un módulo mueve los identificadores del
+payload RSC. Eso es exactamente el ruido que el gate normaliza y el motivo por el que existe.

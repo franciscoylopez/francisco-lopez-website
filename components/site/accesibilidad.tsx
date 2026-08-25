@@ -7,11 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import {
   LAST_A11Y_REVIEW,
   cardinal,
+  levelOf,
+  ratioText,
   fillDate,
   fillPages,
   fillRatios,
 } from "@/lib/design-values";
-import type { Locale } from "@/lib/i18n/config";
+import { pagePath, type Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
 import { Rich } from "@/components/ui/rich";
@@ -20,6 +22,8 @@ import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 import { HerenciaDiagram } from "./diagrams/herencia";
+import { LiveStat } from "@/components/ui/live-stat";
+import { fillFigures } from "@/lib/figures";
 import { LEADING, SectionHeader } from "@/components/ui/heading";
 
 type AccesibilidadDict = Dictionary["accesibilidad"];
@@ -287,6 +291,34 @@ export function Accesibilidad({
               />
             ))}
           </div>
+          {/* EL DATO EN VIVO, y aquí es donde deja de ser una promesa: la
+              sección afirma que los controles salen de una capa común, y esto
+              enlaza al catálogo que los publica. La cifra NO se escribe —
+              `{piezasNucleo}` la resuelve `fillFigures` contando en el disco
+              los archivos con cabecera `@pieza núcleo`—, así que crear una
+              pieza la mueve sola. Es D38 con forma de bloque, y por eso esta
+              pieza dejó de vivir en la capa de artículo (P70.102, D113).
+
+              Y el `example` enseña piezas REALES del sistema con una cifra
+              REAL del censo, no una recreación: es el argumento de la sección
+              hecho con el propio material del que habla. */}
+          <LiveStat
+            label={t.inheritance.livestat.label}
+            source={t.inheritance.livestat.source}
+            value={fillFigures(t.inheritance.livestat.value, lang)}
+            linkLabel={t.inheritance.livestat.linkLabel}
+            href={pagePath(lang, "design-system")}
+            example={
+              <>
+                <Badge tone="cyan" kind="code">
+                  {ratioText("bodyText", "light", lang)}
+                </Badge>
+                <Badge tone="cyan" kind="value">
+                  {levelOf("bodyText", "light")}
+                </Badge>
+              </>
+            }
+          />
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={fillPages(t.inheritance.note, lang)} />
           </p>

@@ -125,6 +125,12 @@
         "body": "La medición completa de color es cara: hay que servir el sitio y recorrerlo con un navegador de verdad, así que no se repite en cada cambio, sino cuando aparece algo nuevo que medir. Una comprobación guarda la huella de los colores, las superficies y las animaciones que había en la última medición, y se pone en rojo nombrando lo que no estaba. La regla dejó de depender de que alguien la recordara."
       }
     ],
+    "livestat": {
+      "label": "Piezas del sistema · dato en vivo",
+      "source": "components/ui/",
+      "value": "{piezasNucleo} piezas en el núcleo, y ninguna se escribe a mano",
+      "linkLabel": "Ver el catálogo"
+    },
     "note": "Esto es lo que sostiene la cifra de arriba. El sistema de color está en AAA, el nivel más exigente que define WCAG, en las {paginas} páginas y en los dos temas, en reposo y con el ratón encima. No se mantiene a base de revisiones: se mantiene porque los colores los eligen los componentes, y porque volver a medir es obligatorio en cuanto aparece uno que nadie ha medido."
   },
   "verify": {

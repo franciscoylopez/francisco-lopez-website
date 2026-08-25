@@ -125,6 +125,12 @@
         "body": "Measuring colour properly is expensive: the site has to be served and walked with a real browser, so it isn't repeated on every change. It's repeated when something new shows up to measure. A check stores a fingerprint of the colours, the surfaces and the animations present at the last measurement, and turns red naming whatever wasn't there. The rule stopped depending on anyone remembering it."
       }
     ],
+    "livestat": {
+      "label": "System pieces · live figure",
+      "source": "components/ui/",
+      "value": "{piezasNucleo} pieces in the core, and none is written by hand",
+      "linkLabel": "See the catalogue"
+    },
     "note": "This is what holds up the figure at the top. The colour system sits at AAA, the strictest level WCAG defines, across the {paginas} pages and both themes, at rest and under the cursor. It isn't kept there by review passes: it's kept there because the components pick the colours, and because measuring again is mandatory the moment one appears that nobody has measured."
   },
   "verify": {

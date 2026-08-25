@@ -116,7 +116,7 @@ cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 Regla de dos capas (cian = único color de acción; morado decorativo con cuentagotas),
 tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 
-### Capa de componentes — un núcleo de ocho, dieciséis archivos
+### Capa de componentes — un núcleo de ocho, diecisiete archivos
 
 El **núcleo** son ocho: `action` (el control con caja), `chrome` (el enlace de la
 carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (el par
