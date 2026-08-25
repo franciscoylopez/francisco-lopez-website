@@ -132,7 +132,7 @@
         "body": "El sistema de color ya está en AAA y se revisa en cada cambio para no perder ese nivel."
       }
     ],
-    "note": "Esa prueba encontró cuatro detalles que ninguna herramienta automática señala, porque no incumplen ninguna regla: el menú móvil no se cierra con la tecla Escape, el cambio de tema no se anuncia en voz, al abrir el menú el foco pasa antes por el botón de tema, y el aviso de cookies se lee el último aunque sea lo primero que se ve. Están anotados y pendientes."
+    "note": "Esa prueba encontró cuatro detalles que ninguna herramienta automática señala, porque no incumplen ninguna regla: el menú móvil no se cerraba con la tecla Escape, el cambio de tema no se anunciaba en voz, al abrir el menú el foco pasaba antes por el botón de tema, y el aviso de cookies se leía el último aunque sea lo primero que se ve. Los cuatro están corregidos. Es lo que compra una pasada a mano: nada de eso aparece en un informe automático."
   },
   "report": {
     "num": "05 — Contacto",

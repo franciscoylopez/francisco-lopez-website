@@ -132,7 +132,7 @@
         "body": "The colour system is already at AAA and is re-checked on every change so it doesn't slip."
       }
     ],
-    "note": "That pass found four details no automated tool flags, because none of them breaks a rule: the mobile menu doesn't close with the Escape key, the theme switch isn't announced aloud, opening the menu moves focus to the theme button first, and the cookie notice is read last even though it's the first thing you see. They're logged and pending."
+    "note": "That pass found four details no automated tool flags, because none of them breaks a rule: the mobile menu didn't close with the Escape key, the theme switch wasn't announced aloud, opening the menu moved focus to the theme button first, and the cookie notice was read last even though it's the first thing you see. All four are fixed. That's what a manual pass buys you: none of it shows up in an automated report."
   },
   "report": {
     "num": "05 — Contact",
