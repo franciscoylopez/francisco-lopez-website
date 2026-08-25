@@ -7,7 +7,7 @@ import type { NextRequest } from "next/server";
 import { getExperience, getTrayectoriaIndice } from "@/app/[lang]/dictionaries";
 import { eyebrowOf } from "@/content/experience-copy";
 import { brandHex, paletteHex } from "@/lib/design-values";
-import type { StaticPageSlug } from "@/lib/routes";
+import { type OgCard, resolveOgCard } from "@/lib/routes";
 
 // Generación de imágenes OG (1200×630) con la marca (P16). Route handler bajo
 // /api/og: el proxy excluye /api (D3), así que se sirve directo sin rewrite de
@@ -67,7 +67,7 @@ type Lang = "es" | "en";
  * Las dos exclusiones: la home no es un slug (es `""`), y `/trayectoria` y sus
  * cinco experiencias las resuelve `deepDiveCopy` antes de llegar aquí.
  */
-type Card = "home" | Exclude<StaticPageSlug, "" | "trayectoria">;
+type Card = OgCard;
 
 const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
   home: {
@@ -407,15 +407,10 @@ export async function GET(request: NextRequest) {
     });
   }
 
-  const card: Card =
-    cardParam === "brand-kit" ||
-    cardParam === "design-system" ||
-    cardParam === "cookies" ||
-    cardParam === "sobre-mi" ||
-    cardParam === "accesibilidad" ||
-    cardParam === "como-se-ha-creado"
-      ? cardParam
-      : "home";
+  // El despacho NO se escribe aquí: sale de `OG_CARDS` (D72), que es la misma
+  // lista de la que sale el tipo de `COPY`. Cuando esto era una cadena de seis
+  // `===` a mano, `/contacto` publicó la tarjeta de la home un sprint entero.
+  const card: Card = resolveOgCard(cardParam);
 
   return new ImageResponse(
     card === "home" ? (

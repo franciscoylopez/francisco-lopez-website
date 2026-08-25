@@ -4306,6 +4306,26 @@ por P54.96). Los guardianes con caso malo pasan de siete a **nueve**: `check:exp
 —descubierto, y el que sostiene una exclusión de `.qlty/qlty.toml`— y `check:rutas`, que entra
 con el suyo desde el primer día.
 
+### Enmienda (2026-08-25, P70.03): derivó el tipo y dejó suelto el despacho
+
+**Esta entrada se quedó a medias, y el hueco vivió en producción un sprint entero.** El
+tipo `Card` de `/api/og` se derivó de este registro, así que registrar una página sin copy
+de tarjeta dejó de compilar. Pero **quien elige qué tarjeta pintar no era el tipo**: era una
+cadena de seis `cardParam === "…"` escrita a mano dentro del handler. Cuando entró
+`/contacto`, el compilador exigió su entrada en la tabla de copy y nadie tocó el `if`.
+
+Resultado, medido byte a byte sobre el build servido: **1 de 14 páginas publicaba la tarjeta
+de la home**, con el md5 idéntico en ES y EN, y era justo la del embudo. Un enlace a
+`/contacto` pegado en LinkedIn salía con «Del discovery al dato».
+
+**La lección es sobre el ALCANCE de una derivación, no sobre el olvido.** Derivar el tipo
+cierra la autoría —qué se puede escribir— y no cierra el despacho —qué se elige en tiempo
+de ejecución—. Son dos preguntas y esta entrada solo contestó la primera. Ahora las dos
+salen de `OG_CARDS` y `resolveOgCard` en `lib/routes.ts`, y **al guardián lo llama el mismo
+`resolveOgCard` que usa el handler**: `check:marco` comprueba sobre el HTML servido que el
+`?card=` de cada variante resuelve a la suya, y afirma cuántos ha resuelto (28). Su caso
+malo entra en `check:guardianes` y no es inventado: es este fallo.
+
 ## D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe — 2026-08-20
 
 **El hueco.** La sección 03 de `/accesibilidad` listaba cuatro herramientas —axe-core,

@@ -173,6 +173,18 @@ const CASOS: Caso[] = [
     mutar: (o) => o.replace(/<a href="#main"[\s\S]*?<\/a>/, ""),
   },
   {
+    guardian: "check:marco",
+    rotura: "una página publica la tarjeta OG de la home en vez de la suya",
+    // El caso malo NO es inventado: es lo que `/contacto` hacía en producción
+    // desde el sprint 3 hasta P70.03. D72 derivó el TIPO de tarjeta del registro
+    // y dejó el DESPACHO escrito a mano, así que la página del embudo compilaba,
+    // pasaba `check:rutas` y publicaba «Del discovery al dato» a quien pegara su
+    // enlace en LinkedIn. Tercer caso que muerde el build, por lo de siempre: la
+    // entrada de este guardián es el HTML emitido.
+    archivo: ".next/server/app/es/contacto.html",
+    mutar: (o) => o.replaceAll("card=contacto", "card=home"),
+  },
+  {
     guardian: "check:figuras",
     rotura:
       "un diagrama se queda con el tope más estrecho que su propio lienzo",
