@@ -4231,6 +4231,36 @@ discriminar nada, y no es un problema que arregle el tablero: agosto está parad
 siendo lanzar el artículo en septiembre y medir desde ahí. Lo que sí cambia es que **ahora habrá
 con qué medirlo**, que es lo que este cierre añade sobre el anterior.
 
+### El cuarto scorecard existe, y la cifra de partida queda escrita (2026-08-25, P70.05)
+
+El panel publicaba tres scorecards y ninguno era la métrica primaria, así que **cada cierre de
+etapa iba a leer tres secundarias y dar la primaria por no observada**, indefinidamente y sin que
+nada avisara. Ya está el cuarto: «Envíos del formulario (últimos 28 días)».
+
+**La cifra de partida**, 28 días hasta el 24-08, para que el cierre siguiente tenga contra qué leer:
+
+| Scorecard | Evento | Valor |
+|---|---|---|
+| Clics de contacto | `contact_click` | 9 |
+| Descargas de CV | `file_download` | 6 |
+| Profundidad de scroll | `scroll` | 62 |
+| **Envíos del formulario** | **`contact_submit`** | **1** |
+
+**El filtro se comprobó, que es lo que esta entrada existe para no volver a saltarse.** Y de paso
+salió que **los tres filtros que había NO eran iguales**: «Clics de contacto» y «Scroll profundo»
+son de una cláusula (`Nombre del evento` = valor) y «Descargas de CV» es **compuesto, de dos**. El
+nuevo se **duplicó del de una cláusula** en vez de escribirse, para heredar la estructura exacta.
+
+**Verificado contra una fuente independiente, en dos puntos.** Sin filtro, el scorecard da **550**,
+que es exactamente el total de eventos que GA4 reporta para esos mismos 28 días: la fuente y el
+periodo cuadran. Con el filtro puesto, da **1**, que es exactamente lo que GA4 cuenta de
+`contact_submit`. No hace falta el envío de prueba que pedía la tarea: **el evento real ya existe**
+—se registró al conectar la cadena el 24-08—, así que el cero ambiguo del que avisaba («nadie ha
+escrito» contra «el trigger no dispara») no llega a existir.
+
+**Lo que sigue sin servir es la portada de GA4**, por lo dicho arriba: su «Eventos clave: 0» no es
+retroactivo y seguirá diciendo cero para lo anterior a la marca. La cifra que vale es la del panel.
+
 ## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
 
 **El hueco.** El mismo dato —qué páginas hay— estaba escrito **a mano en cuatro sitios**:
