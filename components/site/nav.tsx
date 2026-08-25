@@ -12,6 +12,7 @@ import { cvPath, type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 export type NavDict = {
+  navLabel: string;
   homeAria: string;
   downloadCv: string;
   contacto: string;
@@ -131,19 +132,34 @@ export function Nav({
         background: "color-mix(in srgb, var(--background) 86%, transparent)",
       }}
     >
-      <div
-        className="mx-auto flex max-w-[var(--container)] items-center justify-between gap-4 px-[var(--page-x)]"
-        style={{ minHeight: `${barMinHeight}px` }}
-      >
-        <a
-          href={homeHref}
-          aria-label={dict.homeAria}
-          className="text-foreground inline-flex items-center no-underline"
+      {/* LA BARRA ES UN LANDMARK DE NAVEGACIÓN, Y ANTES NO LO ERA (P70.09).
+          Aquí ponía que el grupo de controles «no es navegación de sitio, así
+          que <div>», para evitar un segundo landmark sin nombre único. El
+          razonamiento tenía dos huecos: `aria-label` da landmark Y nombre único
+          a la vez, así que la pega que evitaba no existía; y la premisa era
+          discutible —el logo lleva a Inicio y «Sobre mí» y «Contacto» llevan a
+          sus páginas: eso es navegación—. En la práctica, quien pulsaba D
+          buscando la navegación no la encontraba en la home: el único
+          «navegación» que sonaba era el del pie.
+
+          ENVUELVE TAMBIÉN AL LOGO Y AL PANEL DEL MENÚ, que es lo que hace que el
+          landmark contenga toda la navegación de la barra y no una parte. El
+          toggle de tema queda dentro sin ser navegación; es el coste de que la
+          barra sea UN landmark en vez de dos. */}
+      <nav aria-label={dict.navLabel}>
+        <div
+          className="mx-auto flex max-w-[var(--container)] items-center justify-between gap-4 px-[var(--page-x)]"
+          style={{ minHeight: `${barMinHeight}px` }}
         >
-          <span className="block shrink-0" style={{ height: `${symH}px` }}>
-            <Logo splitOpacity={splitOpacity} className="h-full gap-0" />
-          </span>
-          {/* `max-[359px]:hidden` — POR QUÉ ESTE NÚMERO, medido el 2026-08-22.
+          <a
+            href={homeHref}
+            aria-label={dict.homeAria}
+            className="text-foreground inline-flex items-center no-underline"
+          >
+            <span className="block shrink-0" style={{ height: `${symH}px` }}>
+              <Logo splitOpacity={splitOpacity} className="h-full gap-0" />
+            </span>
+            {/* `max-[359px]:hidden` — POR QUÉ ESTE NÚMERO, medido el 2026-08-22.
               El nav pide 349px exactos y no cede: 20 de gutter + 217 de logo + 16
               de hueco + 96 del grupo derecho. Por debajo de 349 el SITIO ENTERO
               scrollea en horizontal, y el grupo derecho no tiene la culpa —solo
@@ -157,33 +173,31 @@ export function Nav({
               El símbolo se queda, así que el momento de marca del split sobrevive.
               359 y no 348 para tener margen real: el corte cae por debajo del
               iPhone SE (375) y de los Android de 360. */}
-          <span
-            className="font-display overflow-hidden text-[1.375rem] font-semibold tracking-[-0.01em] whitespace-nowrap max-[359px]:hidden"
-            style={
-              nameO <= 0
-                ? { opacity: 0, maxWidth: 0, marginLeft: 0 }
-                : {
-                    opacity: nameO,
-                    maxWidth: "none",
-                    marginLeft: "0.6rem",
-                    transform: `translateX(${(-(1 - nameO) * 8).toFixed(1)}px)`,
-                  }
-            }
-          >
-            Francisco López
-          </span>
-        </a>
+            <span
+              className="font-display overflow-hidden text-[1.375rem] font-semibold tracking-[-0.01em] whitespace-nowrap max-[359px]:hidden"
+              style={
+                nameO <= 0
+                  ? { opacity: 0, maxWidth: 0, marginLeft: 0 }
+                  : {
+                      opacity: nameO,
+                      maxWidth: "none",
+                      marginLeft: "0.6rem",
+                      transform: `translateX(${(-(1 - nameO) * 8).toFixed(1)}px)`,
+                    }
+              }
+            >
+              Francisco López
+            </span>
+          </a>
 
-        {/* Grupo de controles (CV + menú + tema): no es navegación de sitio, así
-            que <div> — evita un segundo landmark de navegación sin nombre único
-            (el único <nav> es el del footer). */}
-        <div className="flex items-center gap-1.5">
-          {/* Descarga un archivo → lleva icono (regla del icono, P37.5988). Era el
+          {/* Grupo de controles: CV · Contacto · Sobre mí · idioma · tema · menú. */}
+          <div className="flex items-center gap-1.5">
+            {/* Descarga un archivo → lleva icono (regla del icono, P37.5988). Era el
               caso testigo del problema: el MISMO «Descargar CV» se veía de tres
               formas —pelado aquí, con icono en Trayectoria y en los canales de
               contacto— porque cada punto de uso lo decidía por su cuenta. El
               tamaño lo pone `.link-chrome svg`, no esta clase. */}
-          {/* `hidden md:inline-flex` pisa el `inline-flex` de la variante en el
+            {/* `hidden md:inline-flex` pisa el `inline-flex` de la variante en el
               breakpoint pequeño: es visibilidad, no métrica, y por eso sigue aquí.
 
               Y ES `md` (768) DESDE P67, no `sm` (640). Con dos enlaces la barra
@@ -194,62 +208,62 @@ export function Nav({
               767 los tres siguen tras la hamburguesa, que es donde ya estaban, y
               no hay que apretar tipografía ni huecos para hacer sitio. El
               selector de idioma sube con ellos porque comparte la fila. */}
-          <a
-            href={cvHref}
-            download
-            className={cn(
-              chromeLinkVariants({ shape: "bar" }),
-              "hidden text-[0.88rem] md:inline-flex",
-            )}
-          >
-            <Download aria-hidden="true" />
-            {dict.downloadCv}
-          </a>
-          {/* CONTACTO VA ENTRE EL CV Y SOBRE MÍ (P67): el orden es CV · Contacto ·
+            <a
+              href={cvHref}
+              download
+              className={cn(
+                chromeLinkVariants({ shape: "bar" }),
+                "hidden text-[0.88rem] md:inline-flex",
+              )}
+            >
+              <Download aria-hidden="true" />
+              {dict.downloadCv}
+            </a>
+            {/* CONTACTO VA ENTRE EL CV Y SOBRE MÍ (P67): el orden es CV · Contacto ·
               Sobre mí, de la acción más buscada a la más de contexto. NO lleva
               icono: la regla mira la acción, y navegar dentro del sitio no saca
               al usuario de él. */}
-          <a
-            href={contactoHref}
-            aria-current={isContacto ? "page" : undefined}
-            className={cn(
-              chromeLinkVariants({ shape: "bar" }),
-              "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
-            )}
-          >
-            {dict.contacto}
-          </a>
-          <a
-            href={sobreMiHref}
-            aria-current={isSobreMi ? "page" : undefined}
-            className={cn(
-              chromeLinkVariants({ shape: "bar" }),
-              "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
-            )}
-          >
-            {dict.sobreMi}
-          </a>
-          {/* @fuera-de-capa: etiqueta de dos letras, el ancho lo daba el texto y el suelo
+            <a
+              href={contactoHref}
+              aria-current={isContacto ? "page" : undefined}
+              className={cn(
+                chromeLinkVariants({ shape: "bar" }),
+                "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
+              )}
+            >
+              {dict.contacto}
+            </a>
+            <a
+              href={sobreMiHref}
+              aria-current={isSobreMi ? "page" : undefined}
+              className={cn(
+                chromeLinkVariants({ shape: "bar" }),
+                "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
+              )}
+            >
+              {dict.sobreMi}
+            </a>
+            {/* @fuera-de-capa: etiqueta de dos letras, el ancho lo daba el texto y el suelo
               táctil se escribe aquí; verificado el 2026-08-18 (2026-08-18) */}
-          <a
-            href={altHref}
-            hrefLang={lang === "en" ? "es" : "en"}
-            aria-label={dict.switchLanguage}
-            // `min-w-[44px]` + `justify-center` se quedan en el call site y NO
-            // suben a la variante: hay un solo control así en todo el sitio, y una
-            // variante con un único uso solo añade indirección (misma decisión que
-            // el switch del consentimiento, BRAND.md). El motivo, de P37.598: la
-            // etiqueta son dos letras («EN»/«ES»), así que el ancho lo daba el
-            // texto y se quedaba en 38px — alto correcto, ancho no. El objetivo
-            // táctil son las DOS dimensiones.
-            className={cn(
-              chromeLinkVariants({ shape: "bar", tone: "muted" }),
-              "hidden min-w-[44px] justify-center px-[0.6rem] text-[0.85rem] md:inline-flex",
-            )}
-          >
-            {dict.switchLanguageShort}
-          </a>
-          {/* EL NOMBRE DICE A QUÉ TEMA LLEVA (P70.07, pasada con NVDA). Era fijo
+            <a
+              href={altHref}
+              hrefLang={lang === "en" ? "es" : "en"}
+              aria-label={dict.switchLanguage}
+              // `min-w-[44px]` + `justify-center` se quedan en el call site y NO
+              // suben a la variante: hay un solo control así en todo el sitio, y una
+              // variante con un único uso solo añade indirección (misma decisión que
+              // el switch del consentimiento, BRAND.md). El motivo, de P37.598: la
+              // etiqueta son dos letras («EN»/«ES»), así que el ancho lo daba el
+              // texto y se quedaba en 38px — alto correcto, ancho no. El objetivo
+              // táctil son las DOS dimensiones.
+              className={cn(
+                chromeLinkVariants({ shape: "bar", tone: "muted" }),
+                "hidden min-w-[44px] justify-center px-[0.6rem] text-[0.85rem] md:inline-flex",
+              )}
+            >
+              {dict.switchLanguageShort}
+            </a>
+            {/* EL NOMBRE DICE A QUÉ TEMA LLEVA (P70.07, pasada con NVDA). Era fijo
               —«Cambiar tema»—, así que quien no ve no sabía en qué tema estaba
               ANTES de pulsar ni que había cambiado DESPUÉS: al activarlo no se
               anunciaba nada. Con el nombre en el destino, la mitad de antes la
@@ -268,25 +282,25 @@ export function Nav({
               iconos aquí debajo, que es por lo que este botón nunca ha tenido
               desajuste de hidratación. `hidden` es `display:none`, y lo que no
               se renderiza no entra en el nombre accesible. */}
-          <button
-            type="button"
-            onClick={() => setTheme(isDark ? "light" : "dark")}
-            className={cn(
-              actionVariants({ variant: "icon", size: "icon" }),
-              "ml-0.5",
-            )}
-          >
-            <span className="sr-only dark:hidden">
-              {dict.toggleThemeToDark}
-            </span>
-            <span className="sr-only hidden dark:inline">
-              {dict.toggleThemeToLight}
-            </span>
-            {/* Sin tamaño a mano: lo pone `size: "icon"` de la variante. */}
-            <Moon className="dark:hidden" aria-hidden="true" />
-            <Sun className="hidden dark:block" aria-hidden="true" />
-          </button>
-          {/* EL BOTÓN DE TEMA VA DELANTE (P70.06). El panel del menú es hermano de
+            <button
+              type="button"
+              onClick={() => setTheme(isDark ? "light" : "dark")}
+              className={cn(
+                actionVariants({ variant: "icon", size: "icon" }),
+                "ml-0.5",
+              )}
+            >
+              <span className="sr-only dark:hidden">
+                {dict.toggleThemeToDark}
+              </span>
+              <span className="sr-only hidden dark:inline">
+                {dict.toggleThemeToLight}
+              </span>
+              {/* Sin tamaño a mano: lo pone `size: "icon"` de la variante. */}
+              <Moon className="dark:hidden" aria-hidden="true" />
+              <Sun className="hidden dark:block" aria-hidden="true" />
+            </button>
+            {/* EL BOTÓN DE TEMA VA DELANTE (P70.06). El panel del menú es hermano de
               esta barra, así que su sitio en el DOM es DESPUÉS de todo el grupo
               de controles: con la hamburguesa penúltima, el primer Tab tras
               abrir el menú llevaba al toggle claro/oscuro y solo entonces a los
@@ -296,78 +310,79 @@ export function Nav({
               detrás, que es la estructura del patrón de disclosure de la APG.
               En escritorio no cambia nada —la hamburguesa es `md:hidden`—; en
               móvil los dos iconos intercambian sitio. */}
-          <button
-            type="button"
-            ref={menuButtonRef}
-            aria-label={dict.menu}
-            aria-expanded={menuOpen}
-            aria-controls={MENU_PANEL_ID}
-            onClick={() => setMenuOpen((o) => !o)}
-            className={cn(
-              actionVariants({ variant: "icon", size: "icon" }),
-              "md:hidden",
-            )}
-          >
-            <Menu aria-hidden="true" />
-          </button>
-        </div>
-      </div>
-
-      {menuOpen && (
-        <div
-          id={MENU_PANEL_ID}
-          className="border-border bg-background border-t md:hidden"
-        >
-          <div className="mx-auto flex max-w-[var(--container)] flex-col px-[var(--page-x)] pt-2 pb-[0.85rem]">
-            <a
-              href={cvHref}
-              download
-              onClick={() => setMenuOpen(false)}
+            <button
+              type="button"
+              ref={menuButtonRef}
+              aria-label={dict.menu}
+              aria-expanded={menuOpen}
+              aria-controls={MENU_PANEL_ID}
+              onClick={() => setMenuOpen((o) => !o)}
               className={cn(
-                chromeLinkVariants({ shape: "stack" }),
-                "text-[0.95rem]",
+                actionVariants({ variant: "icon", size: "icon" }),
+                "md:hidden",
               )}
             >
-              <Download aria-hidden="true" />
-              {dict.downloadCv}
-            </a>
-            <a
-              href={contactoHref}
-              aria-current={isContacto ? "page" : undefined}
-              onClick={() => setMenuOpen(false)}
-              className={cn(
-                chromeLinkVariants({ shape: "stack" }),
-                "text-[0.95rem] aria-[current=page]:underline",
-              )}
-            >
-              {dict.contacto}
-            </a>
-            <a
-              href={sobreMiHref}
-              aria-current={isSobreMi ? "page" : undefined}
-              onClick={() => setMenuOpen(false)}
-              className={cn(
-                chromeLinkVariants({ shape: "stack" }),
-                "text-[0.95rem] aria-[current=page]:underline",
-              )}
-            >
-              {dict.sobreMi}
-            </a>
-            <a
-              href={altHref}
-              hrefLang={lang === "en" ? "es" : "en"}
-              aria-label={dict.switchLanguage}
-              onClick={() => setMenuOpen(false)}
-              className={cn(
-                chromeLinkVariants({ shape: "stack" }),
-                "text-[0.95rem]",
-              )}
-            >
-              {dict.switchLanguageShort}
-            </a>
+              <Menu aria-hidden="true" />
+            </button>
           </div>
         </div>
-      )}
+
+        {menuOpen && (
+          <div
+            id={MENU_PANEL_ID}
+            className="border-border bg-background border-t md:hidden"
+          >
+            <div className="mx-auto flex max-w-[var(--container)] flex-col px-[var(--page-x)] pt-2 pb-[0.85rem]">
+              <a
+                href={cvHref}
+                download
+                onClick={() => setMenuOpen(false)}
+                className={cn(
+                  chromeLinkVariants({ shape: "stack" }),
+                  "text-[0.95rem]",
+                )}
+              >
+                <Download aria-hidden="true" />
+                {dict.downloadCv}
+              </a>
+              <a
+                href={contactoHref}
+                aria-current={isContacto ? "page" : undefined}
+                onClick={() => setMenuOpen(false)}
+                className={cn(
+                  chromeLinkVariants({ shape: "stack" }),
+                  "text-[0.95rem] aria-[current=page]:underline",
+                )}
+              >
+                {dict.contacto}
+              </a>
+              <a
+                href={sobreMiHref}
+                aria-current={isSobreMi ? "page" : undefined}
+                onClick={() => setMenuOpen(false)}
+                className={cn(
+                  chromeLinkVariants({ shape: "stack" }),
+                  "text-[0.95rem] aria-[current=page]:underline",
+                )}
+              >
+                {dict.sobreMi}
+              </a>
+              <a
+                href={altHref}
+                hrefLang={lang === "en" ? "es" : "en"}
+                aria-label={dict.switchLanguage}
+                onClick={() => setMenuOpen(false)}
+                className={cn(
+                  chromeLinkVariants({ shape: "stack" }),
+                  "text-[0.95rem]",
+                )}
+              >
+                {dict.switchLanguageShort}
+              </a>
+            </div>
+          </div>
+        )}
+      </nav>
     </header>
   );
 }
