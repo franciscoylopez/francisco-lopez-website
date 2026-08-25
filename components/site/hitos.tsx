@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
+import { Marcas } from "@/components/ui/marcas";
 
 export type HitosDict = {
   eyebrow: string;
@@ -47,7 +48,7 @@ function Row({
       </span>
       <div className="min-w-[12rem] flex-[1_1_15rem] [grid-area:name]">
         <span className="font-display text-[clamp(1.05rem,1.7vw,1.3rem)] font-semibold tracking-[-0.01em]">
-          {name}
+          <Marcas>{name}</Marcas>
         </span>
       </div>
       <p
@@ -103,7 +104,7 @@ export function Hitos({ dict }: { dict: HitosDict }) {
         </div>
 
         <Row idx="(01)" name="Emendu" year="2026">
-          {dict.emenduImpact}
+          <Marcas>{dict.emenduImpact}</Marcas>
         </Row>
 
         <Row idx="(02)" name="INDYA" year="2023">
@@ -119,18 +120,18 @@ export function Hitos({ dict }: { dict: HitosDict }) {
         </Row>
 
         <Row idx="(03)" name="INDYA" year="2022">
-          {dict.indyaApple}
+          <Marcas>{dict.indyaApple}</Marcas>
         </Row>
 
         <Row idx="(04)" name="TheTool" year="2021" emphasizeImpact boldYear>
-          {dict.thetoolAcquired}
+          <Marcas>{dict.thetoolAcquired}</Marcas>
           <Badge tone="purple" kind="label" className="exit-chip ml-2">
             {dict.exitChip}
           </Badge>
         </Row>
 
         <Row idx="(05)" name="TheTool" year="2019">
-          {dict.thetoolNomination}
+          <Marcas>{dict.thetoolNomination}</Marcas>
         </Row>
       </div>
     </section>

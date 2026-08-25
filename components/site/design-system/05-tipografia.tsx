@@ -8,6 +8,7 @@ import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { SPECIMEN_ROW } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { TypeMeta } from "./shared";
+import { Marcas } from "@/components/ui/marcas";
 
 /* ===================== (05) TIPOGRAFÍA ===================== */
 // Especímenes de la escala tipográfica (§05). Un espécimen es explícito a
@@ -58,7 +59,7 @@ export function Tipografia({
             <div key={row.name} className={SPECIMEN_ROW}>
               <div className="min-w-[min(100%,14rem)] flex-[1_1_16rem] overflow-hidden">
                 <span className={cn("text-foreground block", SAMPLE[row.kind])}>
-                  {row.sample}
+                  <Marcas>{row.sample}</Marcas>
                 </span>
               </div>
               <div className="grid flex-[2_1_26rem] [grid-template-columns:repeat(auto-fit,minmax(6.5rem,1fr))] content-start gap-x-5 gap-y-[0.9rem]">

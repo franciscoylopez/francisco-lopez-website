@@ -10,6 +10,7 @@ import { chromeLinkVariants } from "@/components/ui/chrome";
 import { Logo } from "@/components/ui/logo";
 import { cvPath, type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
+import { WRAP } from "@/components/ui/layout";
 
 export type NavDict = {
   navLabel: string;
@@ -148,7 +149,7 @@ export function Nav({
           barra sea UN landmark en vez de dos. */}
       <nav aria-label={dict.navLabel}>
         <div
-          className="mx-auto flex max-w-[var(--container)] items-center justify-between gap-4 px-[var(--page-x)]"
+          className={cn(WRAP, "flex items-center justify-between gap-4")}
           style={{ minHeight: `${barMinHeight}px` }}
         >
           <a
@@ -332,7 +333,7 @@ export function Nav({
             id={MENU_PANEL_ID}
             className="border-border bg-background border-t md:hidden"
           >
-            <div className="mx-auto flex max-w-[var(--container)] flex-col px-[var(--page-x)] pt-2 pb-[0.85rem]">
+            <div className={cn(WRAP, "flex flex-col pt-2 pb-[0.85rem]")}>
               <a
                 href={cvHref}
                 download

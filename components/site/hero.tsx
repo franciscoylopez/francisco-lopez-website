@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { SectionHeader } from "@/components/ui/heading";
+import { WRAP } from "@/components/ui/layout";
+import { cn } from "@/lib/utils";
 
 export type HeroDict = {
   kicker: string;
@@ -20,7 +22,7 @@ export function Hero({ dict }: { dict: HeroDict }) {
       id="top"
       className="flex items-center py-[clamp(2rem,7vw,4rem)] md:min-h-[calc(100svh-5rem)]"
     >
-      <div className="mx-auto w-full max-w-[var(--container)] px-[var(--page-x)]">
+      <div className={cn(WRAP, "w-full")}>
         <div className="flex flex-wrap items-center gap-[clamp(2rem,5vw,4rem)]">
           <div className="min-w-[min(100%,20rem)] flex-[1.15_1_26rem]">
             <SectionHeader

@@ -34,7 +34,8 @@
     "check:rutas": "tsx scripts/check-rutas.ts",
     "check:tablero": "tsx scripts/check-tablero.ts",
     "check:marco": "tsx scripts/check-marco.ts",
-    "check:figuras": "tsx scripts/check-figuras.ts"
+    "check:figuras": "tsx scripts/check-figuras.ts",
+    "check:marcas": "tsx scripts/check-marcas.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

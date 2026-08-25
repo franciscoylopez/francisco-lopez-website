@@ -196,6 +196,18 @@ const CASOS: Caso[] = [
       o.replace('"text": "', '"text": "Un párrafo nuevo del artículo. '),
   },
   {
+    guardian: "check:marcas",
+    rotura: 'un nombre propio se pinta suelto, sin `translate="no"`',
+    // Tercer caso que muerde el build, por lo de siempre: la entrada de este
+    // guardián es el HTML emitido. Y la rotura es EXACTAMENTE el estado del
+    // sitio hasta P70.12 — `translate` no aparecía ni una vez en todo el repo—,
+    // así que quitarle el atributo a una aparición reproduce el fallo real y no
+    // uno inventado. Se muerde una sola: el guardián tiene que cazar la que
+    // falta, no notar que faltan todas.
+    archivo: ".next/server/app/es/trayectoria.html",
+    mutar: (o) => o.replace('<span translate="no">', "<span>"),
+  },
+  {
     guardian: "check:figuras",
     rotura:
       "un diagrama se queda con el tope más estrecho que su propio lienzo",
@@ -284,10 +296,18 @@ const CASOS: Caso[] = [
   {
     guardian: "check:excepciones",
     rotura: "un control a mano se queda sin su marca `@fuera-de-capa`",
-    // Se le quita la marca a una de las tres tarjetas que se pulsan enteras. Es el
-    // caso real: así estaba el repo hasta el 2026-08-25, y BRAND.md no lo sabía.
-    archivo: "components/ui/page-closer.tsx",
-    mutar: (o) => o.replace("// @fuera-de-capa:", "// tarjeta a mano:"),
+    // Se le quita la marca al control a mano que queda en la capa de artículo: la
+    // celda de rejilla pulsable de `article.tsx`. Es el caso real —así estaba el
+    // repo hasta que D109 puso la marca en el punto de uso, y BRAND.md no lo sabía—.
+    //
+    // APUNTABA A `page-closer.tsx` Y EL CASO CADUCÓ EL 2026-08-25: P70.15 sacó esa
+    // tarjeta a la variante `card`, así que el archivo se quedó sin marca que
+    // quitar y la mutación dejó de mutar nada. Lo cazó este mismo script en CI, que
+    // es exactamente para lo que existe: un caso malo que ya no muerde puntúa como
+    // verde. Al elegir el archivo de un caso, conviene preferir el que NO está
+    // tareado para salir de la lista.
+    archivo: "components/ui/article.tsx",
+    mutar: (o) => o.replace("@fuera-de-capa:", "control a mano:"),
   },
 ];
 

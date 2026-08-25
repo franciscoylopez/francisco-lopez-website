@@ -1,6 +1,7 @@
 import { BrandLogoBox } from "./brand-logo-box";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader } from "@/components/ui/heading";
+import { Marcas } from "@/components/ui/marcas";
 
 type EduItem = { title: string; institution: string };
 export type FormacionDict = {
@@ -52,7 +53,7 @@ function Group({
                 {item.title}
               </h3>
               <p className="text-muted-foreground m-0 text-[0.9rem]">
-                {item.institution}
+                <Marcas>{item.institution}</Marcas>
               </p>
             </div>
           </div>

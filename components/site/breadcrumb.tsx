@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 
 import { chromeLinkVariants } from "@/components/ui/chrome";
+import { Marcas } from "@/components/ui/marcas";
 
 export type BreadcrumbDict = {
   routeLabel: string;
@@ -42,7 +43,7 @@ export function Breadcrumb({
                     tone: inverted ? "inverted" : "muted",
                   })}
                 >
-                  {item.label}
+                  <Marcas>{item.label}</Marcas>
                 </a>
               ) : (
                 // El nivel actual NO sale de `chromeLinkVariants`: no es un
@@ -57,7 +58,7 @@ export function Breadcrumb({
                     inverted ? "text-background" : "text-foreground",
                   )}
                 >
-                  {item.label}
+                  <Marcas>{item.label}</Marcas>
                 </span>
               )}
               {!last && (

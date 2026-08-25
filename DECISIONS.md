@@ -150,6 +150,8 @@
 - D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va
 - D113 · La premisa de una capa caduca cuando aparece el segundo consumidor
 - D114 · El lienzo de un diagrama es la única cifra que declara, y la capa deriva el resto
+- D115 · El suelo de ancho del sitio es 320, y 280 queda fuera con su motivo escrito
+- D116 · Los nombres propios no se marcan en el copy: los marca la capa que lo pinta
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6637,3 +6639,145 @@ rótulos, ninguno por debajo de 11px.
 **Lo que la capa NO cubre, y conviene no prometerlo.** Un lienzo de ancho fijo que se desplaza en
 horizontal —el artefacto de Emendu— no lo arregla ningún umbral, y `check:figuras` ya declara que
 se abstiene ahí. Ese caso pide re-renderizar el dibujo, no ajustar una cifra.
+
+---
+
+## D115 · El suelo de ancho del sitio es 320, y 280 queda fuera con su motivo escrito — 2026-08-25
+
+**Contexto.** Cerrar D93 dejó una pregunta abierta que se tareó aparte (P70.13) en vez de alargar
+aquella tarea, y con razón: **no es el mismo problema**. Lo que D93 arregló era **carpintería de
+ancho fijo** —el nav pedía 349px pasara lo que pasara— y la palanca fue soltar una pieza. Lo que
+queda no tiene ninguna pieza de ancho fijo detrás.
+
+**Lo medido, sobre el sitio servido (2026-08-22).** A **320 y a 360 las páginas están limpias en
+ES y EN**. A **280px** —la pantalla exterior del Galaxy Fold plegado— quedaban tres:
+
+```
+/cookies         +29px   DIV clientW=240 scrollW=289   «preferencias»
+/accesibilidad    +9px   H1  clientW=240 scrollW=269   «Accesibilidad»
+/en               +5px   DIV clientW=240 scrollW=246   «(01)EmenduStrategic»
+```
+
+**Y ahí no hay nada que soltar: son palabras que no caben.** El `h1` «Accesibilidad» son trece
+caracteres que a tamaño de display piden 269px él solo, contra una columna de 240. Así que la
+única palanca es **la escala tipográfica por debajo de 320**, y eso es una decisión de diseño.
+
+**Decisión — 280 queda fuera del contrato, y el suelo del sitio es 320.** Tres razones, en orden
+de peso:
+
+1. **A quién dejaría fuera.** 280 es la pantalla **exterior** de un Galaxy Fold plegado, que es un
+   modo de uso de vistazo, no de lectura. Los iPhone modernos empiezan en 375 y el SE de 1.ª y
+   2.ª generación es 320 — **ese ya está cubierto y medido limpio**.
+2. **Lo que costaría cada palanca, que es más de lo que arregla.** `hyphens: auto` es una línea y
+   partiría «Ac-ce-si-bi-li-dad» en español de verdad (el `lang` ya lo pone el locale), pero
+   afecta a **todo el sitio en todos los anchos**, no solo por debajo de 320: cambiaría el ritmo
+   de párrafo de las catorce páginas para arreglar tres desbordes en un ancho que nadie pide. Un
+   escalón más en el `clamp()` de los titulares es más control y menos efecto colateral, pero
+   añade un breakpoint que hay que mantener y es una decisión con varias direcciones posibles
+   —o sea, `/prototype` antes de escribir nada—.
+3. **Coincide con el suelo que el proyecto ya tenía escrito en otro sitio.** El punto 11 de la
+   Definition of Done mide el rótulo de una figura **a 360**, y `check:figuras` ya declara en voz
+   alta que por debajo de eso no juzga. Esta entrada no inventa un umbral: le pone número y
+   motivo al que ya se estaba aplicando.
+
+**La matriz del `viewport-verifier` se queda en 320** y no gana un ancho más. Añadir 280 sería
+declarar un contrato que esta misma decisión dice que no se persigue, y un gate que mide algo que
+nadie va a arreglar solo produce ruido que hay que ignorar en cada corrida — que es cómo un
+informe deja de leerse.
+
+**Qué reabriría esto**, dicho para que no haga falta volver a razonarlo: **tráfico medido** en esa
+franja. Hoy la decisión se toma sobre catálogo de dispositivos, no sobre GA4, porque con la
+audiencia actual (§Métricas) ese corte no tendría ni una sesión con la que decidir. Si algún día
+la tiene, la palanca a evaluar es el `clamp()`, no `hyphens`: el efecto colateral acotado vale
+más que la línea barata.
+
+**Esta es la forma de cierre que la propia tarea contemplaba** —«puede que la respuesta legítima
+sea descartarla con su motivo escrito»— y no un recorte de alcance silencioso, que es lo que
+`BRAND.md` §Cómo se escribe una regla nombra como antipatrón: lo que no se persigue se dice.
+
+---
+
+## D116 · Los nombres propios no se marcan en el copy: los marca la capa que lo pinta — 2026-08-25
+
+**Contexto.** El sitio tiene **216 apariciones de marcas propias** repartidas entre veinte
+diccionarios y siete componentes —TheTool, Emendu, INDYA, Freepik, PICKASO, KUOTIP,
+AppRadar…— y **cero** `translate="no"` en todo el repo. Chrome le ofrece al visitante traducir
+la página, y en una web **bilingüe** eso ocurre de verdad: alguien abre `/en` y el navegador le
+propone el español. El traductor no distingue un nombre propio de una palabra, así que
+«TheTool» se convierte en «La Herramienta», «AppRadar» en «Radar de aplicaciones» y «Miss
+Conversion» en «Señorita Conversión». El argumento entero del sitio son esos nombres: un
+recruiter que busque «TheTool» en la página traducida no lo encuentra.
+
+**Las dos opciones obvias, y por qué ninguna.**
+
+- **Un token en el markup del diccionario** (`{{TheTool}}`, que `Rich` aprendería a
+  renderizar). Son **~130 ediciones de copy** entre ES y EN, y deja el problema abierto por el
+  lado que importa: **el copy que se escriba mañana nace sin el token**, y nada lo detecta.
+- **`translate="no"` en contenedores enteros.** Una línea por bloque, pero `translate` **se
+  hereda**: apaga la traducción de toda la prosa de ese bloque, no solo del nombre. En una web
+  cuyo argumento son esos textos, deja al visitante sin traducir justo los párrafos que quiere
+  leer. Es cambiar un fallo por otro peor.
+
+**Decisión — el copy no se toca; lo marca la capa que lo pinta.**
+`components/ui/marcas.tsx` declara **una vez** qué cadenas son nombres propios y envuelve cada
+aparición en `<span translate="no">`. Es la misma forma que este repo ya usa para el atenuado
+(D39) y para el contorno de un control (D97): **no se elige en el punto de uso, lo resuelve la
+capa**.
+
+**Y los nombres de empresa salen de `EXPERIENCES`, no de una lista nueva.** Ese registro ya es
+la fuente única de qué experiencias existen —su logo y su slug se unen por `company`—, así que
+una experiencia nueva entra aquí sola. Un segundo listado se habría desincronizado igual que se
+desincronizaban los logos antes de que ese registro existiera. Los ocho que no están en ningún
+registro (quien compró TheTool, la formación y las agencias de Marketing & Growth) se escriben
+con su motivo al lado: no son experiencias, no hay dato del que derivarlos, y **un registro de
+una sola columna para ocho cadenas sería peor**.
+
+**Dónde se engancha, que es lo que convierte 216 sitios en seis.** Dos puntos de paso que ya
+existían:
+
+- **`Rich`** (D23), en sus **cuatro** salidas y no solo en el texto llano: un «TheTool» en
+  negrita o dentro de la etiqueta de un enlace es igual de traducible, y es justo donde se
+  habría escapado. Cubre la prosa del diccionario de los cinco deep-dives, Sobre mí, Cookies,
+  Accesibilidad y el artículo.
+- **`SectionHeader`** (D43), por donde pasa **toda cabecera del sitio** — el `h1` de cada
+  página y cada titular de sección.
+
+Lo demás son los nombres que vienen de un **dato** y no de la prosa: hitos, la fila de
+Trayectoria, su índice, formación, el cierre de página, el breadcrumb y el espécimen
+tipográfico del Design System. **Cero ediciones de diccionario.**
+
+**Y como no se elige en el punto de uso, hay que vigilar que LLEGA: `npm run check:marcas`.**
+Los dos helpers son **opt-in**: una página que pinte un nombre sin pasar por ellos compila
+igual, pasa el typecheck y publica el nombre suelto. El guardián recorre el HTML
+**prerenderizado** de las 28 variantes y, por cada nodo de TEXTO donde encuentra un nombre,
+exige un ancestro con `translate="no"`. **Busca la ausencia, no el patrón** —contar cuántos
+`translate` hay sube en verde mientras el que falta sigue faltando— y publica cuántas variantes
+ha leído y cuántas apariciones ha inspeccionado. Va en CI detrás del build, con `check:marco` y
+`check:figuras`, porque todo lo que necesita está en el prerender: un atributo heredado y un
+nodo de texto, sin layout que resolver ni color que pintar.
+
+**No es ceremonia: encontró tres call sites que la lista escrita a mano no tenía** —el
+breadcrumb, el cierre de página y el índice de Trayectoria—. Hoy: **168 apariciones de 16
+nombres, todas marcadas**, en 28 variantes.
+
+**Lo que queda fuera del contrato, dicho en cada corrida en vez de callado:**
+
+- **El `<head>`.** El `<title>` y la `description` llevan nombres y Chrome también los traduce,
+  pero ahí no cabe un `<span>`: son texto plano por contrato. No es un descuido, es que el
+  arreglo no existe en esa capa.
+- **Los atributos** (`alt`, `aria-label`). Mismo motivo.
+- **El texto dentro de un `<svg>`** — seis apariciones, nombradas una a una. `translate` es un
+  atributo global de **HTML** y SVG no lo define, así que marcarlo ahí sería escribir algo que
+  el navegador no promete respetar.
+
+Callar cualquiera de los tres sería el alcance recortado en silencio que `BRAND.md` §Cómo se
+escribe una regla nombra como antipatrón: un informe que no dice qué no mira se lee como
+cobertura.
+
+**El caso malo del meta-guardián caducó el mismo día, y también es la decisión.** El de
+`check:excepciones` mordía `page-closer.tsx` quitándole su marca `@fuera-de-capa`; P70.15 sacó
+esa tarjeta a la variante `card`, el archivo se quedó sin marca que quitar, y la mutación pasó
+a **no mutar nada** — o sea, a puntuar como verde. Lo cazó `check:guardianes` en CI, en el
+mismo PR que lo rompió, que es exactamente para lo que existe (D70). La lección, escrita en el
+propio caso: **al elegir el archivo de un caso malo, prefiere el que NO está tareado para
+moverse.**

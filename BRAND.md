@@ -153,6 +153,11 @@ Cuando el objetivo de clic es **la caja completa** y no un renglón, es la varia
 cian. **Se compone a través de `cn()`, nunca suelta**, porque deshace clases de la base y `cva`
 concatena en vez de fusionar (el porqué, en `BRAND-historical.md`).
 
+**`size="card"` dimensiona una FILA** (icono + etiqueta), así que una tarjeta APILADA le
+devuelve `align-items` a `stretch` y el `gap` a cero al componer. Al tercer caso apilado, lo
+que falta no es otro neutralizador: es un `size` propio. *(Qué se ve sin eso, en
+[`BRAND-historical.md`](./BRAND-historical.md) §La variante que dimensiona una fila.)*
+
 ### Controles con estado (toggles, segmentados y pestañas)
 
 En un control con estado el **relleno pleno ya significa «activo»**, así que el encendido reusa el sólido y el apagado nunca puede rellenarse igual. Cuál de las dos variantes toca se decide por la **forma** del control, no por su contenido ni por cuántos segmentos tenga:
@@ -244,11 +249,12 @@ el switch del consentimiento, aquí debajo).
 >   activo propio, y ninguna `shape` de `chrome.tsx` cubre ese caso—. Sale a `chrome.tsx`.
 > - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
 >   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
-> - **La tarjeta que se pulsa entera, escrita tres veces** *(2026-08-25)*: `page-closer.tsx`,
->   `trayectoria-indice.tsx` y `article.tsx` componen `cn(CARD, …)` en vez de la variante
->   `card`. Su condición de salida ya se cumplió: está tareada (P74.55), no exenta. Y no es
->   cosmética: les falta el `focus-visible:bg-muted` de la variante, así que el teclado no
->   recibe lo que recibe el ratón.
+> - **La celda de índice del artículo** *(2026-08-25)*, en `article.tsx`: **no es una tarjeta,
+>   es una celda** —los filetes los dibuja el `<li>`—, así que la variante le pondría caja
+>   propia dentro de una cuadrícula ya cerrada. Eran tres y las otras dos salieron a `card`
+>   en P70.15. El motivo entero está en su marca `@fuera-de-capa`, que es donde D109 lo puso
+>   y donde `check:excepciones` lo imprime. **Sale cuando la capa tenga el caso «celda
+>   pulsable».**
 >
 > **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
 > imagen del vídeo no es excepción: sale de `.video-facade`.

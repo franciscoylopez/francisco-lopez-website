@@ -5,8 +5,10 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { Badge } from "./badge";
-import { CARD, WRAP } from "./layout";
+import { actionVariants } from "./action";
+import { WRAP } from "./layout";
 import { eyebrowVariants } from "./heading";
+import { Marcas } from "./marcas";
 
 // CIERRE DE PÁGINA: el rótulo suelto y la rejilla de tarjetas-enlace que remata
 // el `<main>` antes del footer. Lo estrenaron las tres páginas del sistema
@@ -30,11 +32,19 @@ import { eyebrowVariants } from "./heading";
 // `globals.css`. La versión anterior se lo sustituía por su propio `ring` con el
 // color del offset sin declarar, y en tema oscuro salía un halo claro entre la
 // tarjeta y el anillo.
-// @fuera-de-capa: tarjeta que se pulsa entera escrita a mano; TAREADA en P74.55, no
-// exenta — le falta el `focus-visible:bg-muted` de la variante `card` (2026-08-25)
+// SALE DE LA VARIANTE `card`, que es lo que `BRAND.md` §La tarjeta que se pulsa
+// entera manda para el caso en que el objetivo de clic es la caja completa. Escrita
+// a mano le faltaba el `focus-visible:bg-muted`: quien navega con teclado no
+// recibía el cambio de fondo que sí recibe el ratón (P70.15).
+//
+// LO QUE SE NEUTRALIZA, y por qué no es un apaño: `size="card"` está dimensionado
+// para una FILA (icono + etiqueta), y esta tarjeta es una pila. `block` deja
+// inertes el `inline-flex`, el `items-center` y el `gap` de la base, y el padding
+// vuelve al publicado. Se compone con `cn()` y no suelta, que es lo que manda
+// `BRAND.md`: `cva` concatena en vez de fusionar.
 const LINK_CARD = cn(
-  CARD,
-  "group hover:bg-muted border-control-edge block px-[1.4rem] py-[1.2rem] transition-colors",
+  actionVariants({ variant: "card", size: "card" }),
+  "group block px-[1.4rem] py-[1.2rem]",
 );
 
 /** Un destino del cierre. Sin `href` se dibuja apagado, con su etiqueta. */
@@ -158,7 +168,7 @@ export function PageCloser({
                 >
                   {item.kicker ? <Kicker>{item.kicker}</Kicker> : null}
                   <span className="text-muted-foreground flex items-center gap-2 text-[1rem] font-semibold">
-                    {item.name}
+                    <Marcas>{item.name}</Marcas>
                     {item.badge ? (
                       <Badge kind="label">{item.badge}</Badge>
                     ) : null}
@@ -190,7 +200,7 @@ export function PageCloser({
                   }
                 >
                   {back ? <Flecha back /> : null}
-                  {item.name}
+                  <Marcas>{item.name}</Marcas>
                   {back ? null : <Flecha />}
                 </span>
                 <p className="text-muted-foreground m-0 mt-[0.55rem] text-[0.9rem] leading-[1.55]">

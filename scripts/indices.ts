@@ -235,6 +235,13 @@ export const SIN_PUBLICAR = [
   "rich.tsx",
   "page-closer.tsx",
   "video-embed.tsx",
+  // `marcas.tsx` (2026-08-25): no pinta NADA. Envuelve los nombres propios en
+  // `translate="no"` para que el traductor de Chrome no convierta «TheTool» en
+  // «La Herramienta», y su efecto es un atributo invisible — una sección del
+  // Design System que la enseñara mostraría un texto idéntico al de al lado.
+  // Es el mismo caso que `rich.tsx`, y por eso entra aquí y no en la página.
+  // Lo que sí la vigila es `npm run check:marcas` sobre las 28 variantes.
+  "marcas.tsx",
 ];
 
 /** Los archivos de la carpeta, sin el README generado. */
@@ -290,6 +297,16 @@ export function inventarioActual(): string[] {
  */
 function escribeInventario(): number {
   const lineas = inventario();
+  // EL BLANCO ANTES DE CADA GRUPO LO PONE QUIEN PRESENTA, NUNCA `inventario()`.
+  // Esas líneas son la UNIDAD DE COMPARACIÓN de `check:indices`: metiéndole
+  // cadenas vacías, `bloqueActual` las filtraría al leer y el check diría que el
+  // índice no coincide consigo mismo. El blanco es presentación —CommonMark deja
+  // que un encabezado corte una lista, así que renderiza igual—, y es solo que
+  // pegado al último ítem del grupo anterior se lee apretado en GitHub, que desde
+  // D68 es donde de verdad se navegan estos documentos.
+  const conAire = lineas.flatMap((l, i) =>
+    l.startsWith("### ") && i > 0 ? ["", l] : [l],
+  );
   const salida = [
     "# `components/ui/` — el inventario de piezas",
     "",
@@ -304,7 +321,7 @@ function escribeInventario(): number {
     "> fuera de él a propósito (D76) y las **primitivas** son piezas sueltas.",
     "",
     ABRE,
-    ...lineas,
+    ...conAire,
     CIERRA,
     "",
   ];

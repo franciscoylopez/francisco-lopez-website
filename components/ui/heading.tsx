@@ -5,6 +5,8 @@ import type { ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
+import { marcarMarcas } from "./marcas";
+
 // Capa de CABECERA del sistema (P37.65). Fuente única del par eyebrow + título que
 // abre toda página y toda sección.
 //
@@ -272,6 +274,14 @@ export function SectionHeader({
   const Title = `h${level}` as const;
   const ordinal = ordinalDeEyebrow(eyebrow);
 
+  // LOS NOMBRES PROPIOS, MARCADOS AQUÍ Y NO EN CADA CABECERA. Toda cabecera del
+  // sitio pasa por este componente (D43), así que es el sitio donde «TheTool» y
+  // «Emendu» dejan de ser traducibles de una vez para las 28 variantes en lugar
+  // de una por titular. Solo cuando llegan como cadena: un `ReactNode` ya trae su
+  // markup y no es nuestro para reescribir. Ver `components/ui/marcas.tsx`.
+  const rotulo = typeof eyebrow === "string" ? marcarMarcas(eyebrow) : eyebrow;
+  const titular = typeof title === "string" ? marcarMarcas(title) : title;
+
   return (
     <>
       {eyebrow ? (
@@ -279,7 +289,7 @@ export function SectionHeader({
           {...(reveal ? { "data-reveal": true } : {})}
           className={cn(eyebrowVariants(), EYEBROW_GAP[size])}
         >
-          {eyebrow}
+          {rotulo}
         </p>
       ) : null}
       <Title
@@ -291,7 +301,7 @@ export function SectionHeader({
         )}
       >
         {ordinal ? <TitleOrdinal ordinal={ordinal} /> : null}
-        {title}
+        {titular}
       </Title>
       {children}
     </>

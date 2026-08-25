@@ -138,8 +138,11 @@ export function ArticleIndex({
       <ol className="border-border m-0 mt-3 grid list-none grid-cols-1 border-t border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((item) => (
           <li key={item.id} className="border-border border-r border-b">
-            {/* @fuera-de-capa: tarjeta que se pulsa entera escrita a mano, la TERCERA;
-                tareada en P74.55, no exenta (2026-08-25) */}
+            {/* @fuera-de-capa: celda de rejilla pulsable, no una tarjeta — los filetes
+                los dibuja el `<li>`, así que la variante `card` le pondría caja y radio
+                propios dentro de una cuadrícula ya cerrada. Sus dos hermanas sí salieron
+                a la variante en P70.15; esta no tiene la divergencia que las movió, porque
+                ya lleva su `focus-visible:bg-muted` (2026-08-25) */}
             <a
               href={`#${item.id}`}
               className="hover:bg-muted focus-visible:bg-muted flex min-h-[7.5rem] flex-col justify-center gap-1 px-5 py-4 no-underline transition-colors"

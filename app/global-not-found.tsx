@@ -13,6 +13,8 @@ import { SYSTEM_BTN_PRIMARY } from "@/components/site/system-message";
 import { ThemeProvider } from "@/components/theme-provider";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import { getSystemMessages } from "@/lib/i18n/system-messages";
+import { WRAP } from "@/components/ui/layout";
+import { cn } from "@/lib/utils";
 
 // 404 global (tarea 30.2). El root layout de este sitio es un segmento dinámico de
 // nivel superior (app/[lang]/layout.tsx), caso en el que la doc de Next descarta
@@ -65,7 +67,10 @@ export default async function GlobalNotFound() {
           <main
             id={MAIN_ID}
             tabIndex={-1}
-            className="mx-auto flex w-full max-w-[var(--container)] flex-1 flex-col items-center justify-center gap-7 px-[var(--page-x)] py-20 text-center"
+            className={cn(
+              WRAP,
+              "flex w-full flex-1 flex-col items-center justify-center gap-7 py-20 text-center",
+            )}
           >
             {/* Hero: el "404" como pieza central, con el "0" convertido en el círculo
                 con split que florece en la carga (Split404 · .split-zero, globals.css). */}
