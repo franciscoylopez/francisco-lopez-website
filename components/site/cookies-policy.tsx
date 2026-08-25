@@ -8,7 +8,8 @@ import { ConsentPreferencesButton } from "./consent-preferences-button";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
 import { DataTable, TD, TR } from "@/components/ui/table";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import { cn } from "@/lib/utils";
 import { Marcas } from "@/components/ui/marcas";
 
 type CookiesDict = Dictionary["cookies"];
@@ -125,7 +126,12 @@ export function CookiesPolicy({
                       ya tiene el h2 de `Section`; crear una variante de sistema
                       para un solo call site sería la indirección que la «Regla
                       de construcción» no pide. */}
-                  <h3 className="font-display text-foreground m-0 mb-2 text-[1.125rem] leading-[1.3] font-semibold tracking-[-0.01em]">
+                  <h3
+                    className={cn(
+                      titleVariants({ size: "sub-sm" }),
+                      "text-foreground mb-2",
+                    )}
+                  >
                     {block.heading}
                   </h3>
                   <p>
@@ -291,9 +297,7 @@ function Section({
 }) {
   return (
     <section id={id} data-reveal className={prose ? PROSE : undefined}>
-      <h2 className="font-display m-0 mb-3 text-[clamp(1.35rem,2.4vw,1.65rem)] leading-[1.2] font-semibold tracking-[-0.015em]">
-        {heading}
-      </h2>
+      <h2 className={cn(titleVariants({ size: "sub" }), "mb-3")}>{heading}</h2>
       {/* EL ESPACIO ENTRE BLOQUES LO PONE EL `gap`, NO UN MARGEN POR HIJO, y no
           es preferencia: los márgenes NO FUNCIONABAN. `[&_p]:m-0` compila a un
           selector de DESCENDIENTE (`.clase p`, especificidad 0-1-1) que le gana a

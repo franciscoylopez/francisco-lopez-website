@@ -1,5 +1,5 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { DataTable, TD, TR } from "@/components/ui/table";
@@ -252,7 +252,7 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
 
         {/* Tabla de uso */}
         <div data-reveal className="mb-[clamp(3rem,6vw,5rem)]">
-          <h3 className="font-display m-0 mb-[0.4rem] text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold tracking-[-0.015em]">
+          <h3 className={cn(titleVariants({ size: "sub" }), "mb-[0.4rem]")}>
             {t.usage.title}
           </h3>
           <p className="text-muted-foreground m-0 mb-6 text-[0.95rem]">
@@ -312,7 +312,7 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
 
         {/* Las siete reglas */}
         <div data-reveal className="mb-[clamp(3rem,6vw,5rem)]">
-          <h3 className="font-display m-0 mb-6 text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold tracking-[-0.015em]">
+          <h3 className={cn(titleVariants({ size: "sub" }), "mb-6")}>
             {t.rules.title}
           </h3>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr))] gap-[var(--gutter)]">
@@ -325,7 +325,7 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
                   <span className="bg-foreground text-background inline-flex h-[1.9rem] w-[1.9rem] flex-none items-center justify-center rounded-md font-mono text-[0.85rem] font-semibold">
                     {i + 1}
                   </span>
-                  <h4 className="font-display m-0 text-[1.05rem] leading-[1.25] font-semibold tracking-[-0.01em]">
+                  <h4 className={titleVariants({ size: "sub-sm" })}>
                     {r.title}
                   </h4>
                 </div>
@@ -343,7 +343,7 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
             <p className="text-muted-foreground m-0 mb-2 font-mono text-[0.78rem]">
               {t.ladder.kicker}
             </p>
-            <h3 className="font-display m-0 mb-[0.6rem] text-[clamp(1.2rem,2vw,1.5rem)] font-semibold tracking-[-0.015em]">
+            <h3 className={cn(titleVariants({ size: "card" }), "mb-[0.6rem]")}>
               {t.ladder.title}
             </h3>
             <p className="text-muted-foreground m-0 text-[0.92rem] leading-[1.6]">

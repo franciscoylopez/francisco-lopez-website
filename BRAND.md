@@ -37,13 +37,11 @@ El sistema tiene DOS grupos de tokens que no se mezclan:
      legible en **secciones con fondo invertido** (fondo = `foreground`, texto =
      `background`), donde el `brand-purple` estándar no llega. Úsalo **solo ahí**; fuera de
      ese contexto, `brand-purple`.
-     **Conmuta con el tema** (`0.78` en claro, `0.45` en oscuro), mismo patrón que
-     `--primary-on-inverted`: un color fijo no llega a AAA contra las dos superficies a la
-     vez. Cifras y cálculo en `BRAND-historical.md`.
+     **Conmuta con el tema**, mismo patrón que `--primary-on-inverted`: un color fijo no llega
+     a AAA contra las dos superficies a la vez. Cifras y cálculo en `BRAND-historical.md`.
    - `progress-ink` *(2026-08-21)*: para texto/gráficos grandes directamente sobre
-     `--background` (`0.45` claro / `0.78` oscuro, AAA en los dos) — no para superficies
-     compuestas (tarjeta, velo, banda invertida), que ya tienen su propio token. Porqué y
-     cifras en `BRAND-historical.md`.
+     `--background`, no para superficies compuestas (tarjeta, velo, banda invertida), que ya
+     tienen su propio token. Porqué y cifras en `BRAND-historical.md`.
 
 ### El morado decorativo no vale como elemento gráfico
 
@@ -106,12 +104,12 @@ fijo no llega a las dos superficies a la vez.
 ### Enlaces: depende de si son contenido o chrome
 
 - **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en
-  `foreground` con subrayado fino en `primary` (2px, offset amplio para librar descendentes
-  como «p»/«y»); en hover/focus, un relleno sólido en `primary` crece de abajo arriba y el
-  texto pasa a `primary-foreground` — variante **H1**. El cian entra como **recompensa de la
-  interacción**, no como color permanente del texto.
-  **No tiene contraparte invertida: sobre una banda desaparece**, porque ahí `--foreground` es el
-  fondo. La de chrome sí la tiene (`tone: "inverted"`). Deuda abierta, 2026-08-23.
+  `foreground` con subrayado fino en `primary`; en hover/focus, un relleno sólido en `primary`
+  crece de abajo arriba y el texto pasa a `primary-foreground`. El cian entra como
+  **recompensa de la interacción**, no como color permanente del texto.
+  **Sobre una banda invertida no lo elige el enlace: lo resuelve la banda** *(2026-08-25)*, como
+  `--surface-dim` y `--control-edge` — ahí `--foreground` es el fondo. El porqué y las cifras, en
+  [`BRAND-historical.md`](./BRAND-historical.md) §El enlace de contenido invertido.
 - **Chrome de navegación** (nav, breadcrumb, footer, menús): `foreground` o `muted-foreground`,
   nunca `primary` — ni en el texto ni en el fondo de su estado hover. En un bloque cuya función
   *entera* es navegar, el cian no distingue nada: solo mete ruido. Se leen como enlace por su
@@ -149,9 +147,13 @@ fijo no llega a las dos superficies a la vez.
 ### La tarjeta que se pulsa entera
 
 Cuando el objetivo de clic es **la caja completa** y no un renglón, es la variante `card` +
-`size="card"`: las dos preguntas de D36 la traen a esta capa. Hover en pastilla `muted`, no
-cian. **Se compone a través de `cn()`, nunca suelta**, porque deshace clases de la base y `cva`
-concatena en vez de fusionar (el porqué, en `BRAND-historical.md`).
+`size="card"`: las dos preguntas de D36 la traen a esta capa. **Relleno de hover en pastilla
+`muted`, nunca cian; el CONTORNO sí pasa a `primary`, y solo en hover** *(2026-08-25)*: el
+relleno solo no se ve en oscuro, y el foco ya trae su anillo. Porqué y cifras, en
+[`BRAND-historical.md`](./BRAND-historical.md) §El hover de la tarjeta pulsable.
+**Se compone a través de `cn()`, nunca suelta**,
+porque deshace clases de la base y `cva` concatena en vez de fusionar (el porqué, en
+`BRAND-historical.md`).
 
 **`size="card"` dimensiona una FILA** (icono + etiqueta), así que una tarjeta APILADA le
 devuelve `align-items` a `stretch` y el `gap` a cero al componer. Al tercer caso apilado, lo
@@ -250,11 +252,9 @@ el switch del consentimiento, aquí debajo).
 > - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
 >   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
 > - **La celda de índice del artículo** *(2026-08-25)*, en `article.tsx`: **no es una tarjeta,
->   es una celda** —los filetes los dibuja el `<li>`—, así que la variante le pondría caja
->   propia dentro de una cuadrícula ya cerrada. Eran tres y las otras dos salieron a `card`
->   en P70.15. El motivo entero está en su marca `@fuera-de-capa`, que es donde D109 lo puso
->   y donde `check:excepciones` lo imprime. **Sale cuando la capa tenga el caso «celda
->   pulsable».**
+>   es una celda**, y la variante le pondría caja propia dentro de una cuadrícula ya cerrada.
+>   El motivo entero lo imprime `check:excepciones` desde su marca `@fuera-de-capa` (D109).
+>   **Sale cuando la capa tenga el caso «celda pulsable».**
 >
 > **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
 > imagen del vídeo no es excepción: sale de `.video-facade`.

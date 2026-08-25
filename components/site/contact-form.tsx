@@ -23,6 +23,7 @@ import {
 } from "@/lib/contact-form";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
+import { titleVariants } from "@/components/ui/heading";
 
 // El formulario de contacto (P67). Primera superficie del sitio que ESCRIBE.
 //
@@ -137,7 +138,7 @@ export function ContactForm({
       className="flex flex-col gap-[1.1rem]"
     >
       <div>
-        <h2 className="font-display text-foreground m-0 text-[1.35rem] leading-[1.2] font-semibold">
+        <h2 className={cn(titleVariants({ size: "sub" }), "text-foreground")}>
           {dict.title}
         </h2>
         <p className="text-muted-foreground m-0 mt-[0.3rem] text-[0.875rem]">
@@ -260,6 +261,13 @@ function Sent({
           prerenderizado — que nunca ve este estado, porque solo existe después de
           un envío. El punto 4 del checklist es de la página, no del primer
           render. */}
+      {/* NO SALE DE `titleVariants`, y es el único de los doce de P70.20 que se
+          queda fijo. Es el acuse de envío, y mide MÁS que el título del propio
+          formulario a propósito: el formulario desaparece y esto ocupa su sitio,
+          así que tiene que leerse como un remate y no como otra cabecera. El
+          título es `sub`, cuyo suelo son estos mismos 1,35rem; con `sub` los dos
+          serían iguales y se perdería la diferencia que alguien decidió. Al
+          segundo caso de «un escalón por encima de `sub`», es una variante. */}
       <h2 className="font-display text-foreground m-0 text-[1.5rem] font-semibold">
         {dict.sent.title}
       </h2>

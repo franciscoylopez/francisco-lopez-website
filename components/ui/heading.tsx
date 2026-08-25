@@ -53,6 +53,43 @@ export const eyebrowVariants = cva(
 );
 
 /**
+ * Y EL OTRO RÓTULO EN VERSALITAS, que no es el eyebrow ni una variante suya.
+ *
+ * El eyebrow ABRE una sección, emparejado con un titular y con el hueco entre los
+ * dos puesto por el `size`. Este ROTULA UN DATO dentro del contenido: la etiqueta
+ * de una ficha del deep-dive, la cabecera de la fila de hitos, el «Producto» que
+ * separa los dos bloques de Trayectoria. No tiene titular al lado ni hueco que
+ * derivar, y va un punto más pequeño y menos abierto a propósito, porque compite
+ * con el dato que rotula y no con el cuerpo de la página.
+ *
+ * Es la regla 4 de `BRAND.md` aplicada antes de unificar: se parecen y significan
+ * cosas distintas, así que lo que faltaba no era una corrección sino UN NOMBRE.
+ * Mismo diagnóstico y mismo conteo que creó `eyebrowVariants`, que estaba escrito
+ * catorce veces antes de existir.
+ *
+ * EL CONTEO (design-review 2026-08-18, reverificado el 2026-08-25 sobre el disco):
+ * la cadena completa estaba escrita a mano SIETE veces —`deep-dive` ×3,
+ * `formacion`, `hitos`, `trayectoria` ×2— y otras DOS llamaban a `eyebrowVariants`
+ * y le pisaban el tamaño con `text-[0.7rem]`, que es la señal de que la variante
+ * que usaban no era la suya. Esas dos se mueven DOS veces, y conviene decirlo
+ * entero: el tamaño sube de 0,7 a 0,72rem —un tercio de píxel— y el tracking baja
+ * de 0,09 a 0,08em, porque lo heredaban del eyebrow y nadie lo había elegido. Lo
+ * que se gana es que dejan de pisar nada.
+ *
+ * LO QUE NO ENTRA, y no por descuido: el rótulo de la ficha del Design System
+ * (0,72rem pero en `--foreground` y a 0,05em) es otra familia —va sobre la
+ * superficie de tarjeta y no atenuado—, y lo factoriza `SpecimenCard`. Y los
+ * sueltos con tracking propio (la banda de manifiesto a 0,11em, el mensaje de
+ * sistema a 0,12em) son decisiones de su bloque, no copias de esta.
+ *
+ * El margen se queda en el call site, igual que en `eyebrowVariants` fuera de
+ * `SectionHeader`: aquí no hay un `size` del que derivarlo.
+ */
+export const dataLabelVariants = cva(
+  "text-muted-foreground m-0 text-[0.72rem] font-semibold tracking-[0.08em] uppercase",
+);
+
+/**
  * Titular de cabecera. El `leading` va en la variante y no en el call site: `hero`
  * escribía `leading-none` y los demás `leading-[1.0]` —el mismo valor en dos
  * notaciones, que es lo que P37.5996 dejó prohibido.
@@ -86,6 +123,23 @@ export const titleVariants = cva("font-display m-0 font-semibold", {
        */
       sub: "text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.25] tracking-[-0.015em]",
       /**
+       * El titular de UNA PIEZA dentro de una rejilla: la tarjeta de una etapa de
+       * «Cómo trabajo», una fila de Formación, una experiencia del índice de
+       * Trayectoria, un bloque menor del Brand Kit.
+       *
+       * NO ES UN ESCALÓN QUE FALTARA POR ESTÉTICA, es la moda de cuatro valores que
+       * significaban lo mismo (design-review 2026-08-23, decidido en P70.20): 1,15
+       * a 1,4 · 1,15 a 1,5 · 1,2 a 1,5 · 1,25 a 1,6. Todo el abanico cabe en medio
+       * rem, y el nivel de encabezado difiere —hay un `h2` y tres `h3`— mientras el
+       * papel visual es idéntico. Cuatro valores dentro de medio rem no son cuatro
+       * decisiones: son una escrita cuatro veces.
+       *
+       * SE LLAMA POR SU PAPEL Y NO POR SU TAMAÑO, como `page` y `section`: lo que
+       * lo elige es que el titular abre una pieza y no una sección. Que caiga entre
+       * `sub` y `sub-sm` en la escala es consecuencia, no definición.
+       */
+      card: "text-[clamp(1.2rem,1.9vw,1.5rem)] leading-[1.25] tracking-[-0.015em]",
+      /**
        * El escalón por debajo de `sub`: el titular de un bloque de apoyo dentro
        * de una sección — el «antes / después» de una demo, la nota que acompaña a
        * un espécimen, el rótulo de una lista larga.
@@ -118,6 +172,11 @@ export const EYEBROW_GAP = {
   "section-sm": "mb-3",
   sub: "mb-2",
   "sub-sm": "mb-2",
+  // `card` comparte peldaño con los dos de arriba: todo lo que va por debajo de
+  // `section-sm` usa el mismo. Hoy no lo gasta nadie —un titular de tarjeta no
+  // lleva rótulo encima—, y se declara igual, por lo mismo que se publica el de
+  // `sub`: el valor existe en la capa aunque no tenga uso todavía.
+  card: "mb-2",
 } as const;
 
 /**
@@ -159,6 +218,8 @@ export const LEAD_GAP = {
   "section-sm": "mb-4",
   sub: "mb-3",
   "sub-sm": "mb-3",
+  // Mismo peldaño que sus vecinos, por lo mismo que en `EYEBROW_GAP`.
+  card: "mb-3",
 } as const;
 
 /**

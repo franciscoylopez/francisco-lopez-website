@@ -193,6 +193,18 @@
   --primary-on-inverted: oklch(
     0.7626 0.1156 191.46
   ); /* el cian del tema oscuro */
+
+  /* Y lo que se LEE encima de ese cian, por el mismo argumento (P70.18). El
+     enlace de contenido, al pasar el cursor, se rellena de `--primary` y pone el
+     texto en `--primary-foreground`; sobre una banda invertida el relleno pasa a
+     ser `--primary-on-inverted`, así que el texto tiene que ser el
+     `--primary-foreground` DEL OTRO TEMA. No hay que medirlo de nuevo: son
+     exactamente los dos mismos colores del par «texto sobre botón» que el censo
+     ya da por bueno (7,93:1 claro / 8,36:1 oscuro), solo que intercambiados por
+     tema. Un valor fijo tendría el mismo techo que topó `--brand-purple-accent`.
+     Existe como token y no escrito en la regla porque el valor lo tiene UN sitio,
+     que es lo que hace que un cambio del cian llegue solo a los dos casos. */
+  --primary-foreground-on-inverted: oklch(0.2283 0.0098 248.26);
 }
 
 .dark {
@@ -252,6 +264,7 @@
      Mismo motivo y mismo cálculo que en claro (ver arriba). Se pinta #583DA6. */
   --brand-purple-accent: oklch(0.45 0.16 290);
   --primary-on-inverted: oklch(0.41 0.0886 194.82); /* el cian del tema claro */
+  --primary-foreground-on-inverted: oklch(0.9855 0.0057 84.57);
   /* El morado CLARO de la barra de progreso: en oscuro el fondo de página es
      carbón, así que necesita el morado que se lee sobre carbón (ver la nota en
      :root). */
@@ -734,6 +747,37 @@
   .link-content {
     transition: none;
   }
+}
+
+/* La contraparte invertida (P70.18). `.link-content` fija `color: var(--foreground)`
+   y sobre una banda invertida `--foreground` ES EL FONDO: el enlace se pintaba del
+   color de la banda y desaparecía, dejando flotando solo el subrayado cian. No se ve
+   leyendo el CSS; se vio poniendo los canales de contacto sobre una banda (P66).
+
+   LO RESUELVE LA SUPERFICIE, NO UN MODIFICADOR, y esa es la diferencia con lo que
+   proponía la ficha. La capa de chrome lo lleva en un eje `tone` porque su variante
+   se elige al escribirla; aquí el enlace vive DENTRO de la prosa del diccionario y
+   quien lo escribe no sabe sobre qué fondo va a caer. Es el mismo argumento que
+   `--surface-dim` (D39), `--chrome-hover-bg` y `--control-edge` (D97): no se elige
+   el color en el punto de uso, lo resuelve el fondo donde cae. Así una banda que se
+   declara `data-surface="inverted"` arregla sus enlaces sin que nadie se acuerde.
+
+   LOS TRES COLORES SON EL PAR DEL OTRO TEMA, no valores nuevos: texto en
+   `--background` (que es el primer plano de esta superficie), acento en
+   `--primary-on-inverted` (el cian del otro tema, que ya existía) y, encima del
+   relleno, `--primary-foreground-on-inverted`. Por eso el contraste en hover es
+   idéntico al del par «texto sobre botón» ya verificado, con los temas cambiados. */
+[data-surface="inverted"] .link-content {
+  color: var(--background);
+  background-image: linear-gradient(
+    var(--primary-on-inverted),
+    var(--primary-on-inverted)
+  );
+  text-decoration-color: var(--primary-on-inverted);
+}
+[data-surface="inverted"] .link-content:hover,
+[data-surface="inverted"] .link-content:focus-visible {
+  color: var(--primary-foreground-on-inverted);
 }
 
 /* Enlaces de chrome (nav/breadcrumb/footer) — nunca `primary`, ni en texto ni en

@@ -275,6 +275,13 @@
     "title": "Its function decides, not where it sits",
     "lead": "Inside content, cyan is the reward for interacting; inside a block that is already navigation, cyan tells you nothing and only adds noise.",
     "hint": "Hover over them ▸",
+    "invertedKicker": "Content, on an inverted band",
+    "invertedCls": ".link-content · data-surface",
+    "invertedRule": "On an inverted band the page's text colour IS the background, so a link that pinned it would vanish and leave the underline floating on its own. The link doesn't pick it here: the band does, by declaring which surface it is.",
+    "invertedNote": "All three colours are the other theme's, not new values: that's why the hover contrast is exactly the one already verified for text on a button, with the themes swapped.",
+    "demoInvertedBefore": "An inverted band is one painted in the text colour that then writes on top in the background colour. Inside it,",
+    "demoInvertedLink": "a content link",
+    "demoInvertedAfter": "still behaves the same way: a thin underline at rest and a solid fill on hover.",
     "cases": [
       {
         "kicker": "Content",
@@ -461,7 +468,13 @@
         "size": "section-sm",
         "eyebrow": "Header layer",
         "sample": "Headers",
-        "use": "A section of a long index, like the fifteen on this page."
+        "use": "A section of a long index, like every one on this page. No figure on purpose: it used to carry one and fell behind twice."
+      },
+      {
+        "size": "card",
+        "eyebrow": "",
+        "sample": "Discovery",
+        "use": "The headline of a PIECE inside a grid: a stage of “How I work”, a row of Education, a role in the Career index. It's the mode of four values that all fitted inside half a rem and meant the same thing, with different heading levels and the same visual job."
       },
       {
         "size": "sub",
@@ -492,6 +505,18 @@
         "note": "Over any other surface that grey has to be recomputed, not reused (D30): it blends 85% into the surface underneath. This used to be a prop you had to remember; now the token resolves it."
       }
     ],
+    "labelTitle": "The other small-caps label, which is not this one",
+    "labelLead": "They look alike and do different jobs, so they're two pieces rather than one with an axis. The left one opens a section and comes paired with a headline; the right one labels a piece of data inside the content, which is why it runs a notch smaller and a notch tighter.",
+    "labelEyebrowKicker": "Opens a section",
+    "labelEyebrowRule": "It always sits above a headline, and the gap between them isn't written anywhere: the size of the headline below sets it.",
+    "labelEyebrowNote": "This is the piece that ended up written by hand fourteen times before it had a name.",
+    "labelEyebrowSample": "Career",
+    "labelEyebrowTitle": "Ten years of product",
+    "labelDataKicker": "Labels a value",
+    "labelDataRule": "It has no headline beside it, so there's no gap to derive: the margin belongs to whoever uses it. It's a fact's label, a row heading, or the name of a block inside a section.",
+    "labelDataNote": "It was written by hand nine times when it finally got a name, and two of those called the one next to it and overrode its size, which is the tell that the variant they were using wasn't theirs.",
+    "labelDataSample": "Length",
+    "labelDataValue": "5 years and 6 months",
     "statTitle": "Below the headline, the row of figures",
     "statLead": "When an opening sums itself up in numbers, the page doesn't assemble that row: a piece brings it, with its rule, its gap and its grid. The one below is the same row that opens this page, with the same values, so you can check by scrolling up.",
     "stat": {
@@ -878,5 +903,85 @@
       "And it returns codes, not sentences: the words come from the dictionary, in both languages."
     ],
     "serverFoot": "It's where a form's language gets forgotten: half the page translated and the errors always speaking the same one."
+  },
+  "bloques": {
+    "num": "17 — Page blocks",
+    "title": "Neither the closer nor the aside is up to each page",
+    "lead": "Not controls, not text: the two boxes a page is assembled from. Both were written by hand in two different places and both already read differently before anyone noticed, which is why they moved into the layer. What can't diverge here isn't the colour: it's the format.",
+    "noteTitle": "The aside",
+    "noteLead": "A measurement, a tool's verdict, a rule worth stating separately: what a page says outside the body of the text.",
+    "noteKicker": "With a paragraph",
+    "noteRule": "A title and its explanation on the card surface. This piece doesn't pick the grey of the body: the background it lands on resolves it, and inside a card it lands heavier than outside.",
+    "noteNote": "It takes three bodies and they combine: paragraph, list, and a smaller foot for the closing nuance.",
+    "monoKicker": "Monospaced title",
+    "monoRule": "When the title is the name of a token, a file or a tool, it goes monospaced: that way it reads as what it is, an identifier and not a sentence.",
+    "monoNote": "It's the piece's only axis. Everything else is decided by which bodies you pass, not by a variant.",
+    "demoNoteTitle": "A value is not copy",
+    "demoNoteBody": "If a section publishes a figure from the system, it comes from the values file and never from the dictionary. The test is literal: if the Spanish entry and the English one are identical character for character, it's a value with two copies.",
+    "demoMonoTitle": "--measure",
+    "demoMonoBullets": [
+      "The width of the reading column, measured in characters rather than pixels.",
+      "Section standfirsts and article bodies both use it.",
+      "Changing it moves the rhythm of every page at once, which is exactly what it exists for."
+    ],
+    "demoMonoFoot": "It's published in full in the layout tokens section, with its value and its reason.",
+    "closerTitle": "The page closer",
+    "closerLead": "What finishes the content before the footer: where you go from here, in the same format across all fourteen pages.",
+    "closerKicker": "Two destinations",
+    "closerRule": "The whole thing moved into the layer, not just the card: its own vertical rhythm (shorter than a section, because it's a closer), the rule above it and the gap under the label are what must not diverge. Had only the card moved up, the second case would have decided those three things again on its own.",
+    "closerNote": "The arrow nudges the way it points, and the nudge is off under reduced motion. A destination that doesn't exist yet isn't linked: it's drawn dashed, dimmed and with its label.",
+    "demoCloserEyebrow": "Keep reading",
+    "demoBackKicker": "Previous role",
+    "demoBackName": "KUOTIP",
+    "demoBackDesc": "A real link: the arrow sits in front and points left, which is what reads as going back without having to read the label.",
+    "demoSoonKicker": "Next role",
+    "demoSoonName": "A destination that doesn't exist yet",
+    "demoSoonDesc": "With no link, the card is drawn dashed and dimmed. It's what happens to the most recent role, which never has a next one.",
+    "demoSoonBadge": "Coming soon",
+    "twiceTitle": "Both were born twice",
+    "twiceRule": [
+      "The aside was written on two pages and only one of them accepted the monospaced title.",
+      "The closer was introduced by the three system pages, and when the second case turned up it was decided all over again.",
+      "Neither divergence was visible in the code: you saw them by putting the pages side by side."
+    ],
+    "twiceFoot": "It's the pattern the build rule warns about: when the piece doesn't cover the case, what gets written by hand is the case, and then it drifts.",
+    "wholeTitle": "The format moves up whole, not just the box",
+    "wholeRule": [
+      "What must not diverge is the entire closer, not the look of one card.",
+      "The block knows nothing about this site: it takes a label and a list of destinations.",
+      "Which page is a sibling of which is decided by its two callers, which do know."
+    ],
+    "wholeFoot": "It's the border that decides where a piece lives: if it knows something about this site, it doesn't belong to the system."
+  },
+  "video": {
+    "num": "18 — Video",
+    "title": "The click is the consent",
+    "lead": "A video from somewhere else isn't embedded: it's announced. Until someone clicks there's no third-party frame, no YouTube JavaScript and not a single request to Google. What you see before that is an image served from this very domain.",
+    "facadeTitle": "The facade",
+    "facadeLead": "What gets painted while the video hasn't been asked for: the site's own poster with the play disc on top.",
+    "facadeKicker": "Before the click",
+    "facadeRule": "The click target is the whole poster and not the disc, so it sits far above the 44px touch floor. On click, and only then, the video frame replaces the image and starts on its own: the intent has already been expressed, and asking for two clicks for one intent would be worse.",
+    "facadeNote": "Go ahead and click it: this demo is the real piece, so it will load the video exactly as it does on the page where it lives.",
+    "controlTitle": "A control on top of an image",
+    "controlLead": "A control resting on a photo has its background outside the system, so it can't fix its own colour: the poster decides it.",
+    "controlKicker": "Veil and disc",
+    "controlRule": "The veil between the image and the control is the colour of the page background, never black: black fixes one theme and makes the other worse. And the disc is two-tone, fill plus ring, so its inner edge doesn't depend on whatever is underneath.",
+    "controlNote": "That guarantees the inner edge, not the whole outline: the two outer ones fall on the photo and can't be promised point by point.",
+    "demoVideoTitle": "TheTool, the App Store Optimization platform",
+    "demoPlayLabel": "Play the video",
+    "clickTitle": "A click says more than a checkbox",
+    "clickRule": [
+      "Before the click there's nothing to consent to: no storage and no third-party request.",
+      "So it doesn't hang off a cookie category but off the click itself, which is an explicit, informed act.",
+      "That's stricter, not looser: accepting every cookie still doesn't load the video without a click."
+    ],
+    "clickFoot": "Where the piece actually lives, the caption states what happens on click, and that sentence is what makes the click informed.",
+    "posterTitle": "The poster doesn't come from YouTube",
+    "posterRule": [
+      "The official thumbnail is served from a Google domain, so using it would make the very request the facade exists to avoid.",
+      "It's downloaded once, versioned with the rest of the images and served from here.",
+      "And the allowlist of image origins doesn't have to grow."
+    ],
+    "posterFoot": "It costs one file in the repository and saves hundreds of kilobytes of a player nobody has asked for yet."
   }
 }

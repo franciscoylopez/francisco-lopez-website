@@ -1,4 +1,4 @@
-// @pieza primitiva · pendiente · El cierre común de las trece páginas: a dónde se va desde aquí.
+// @pieza primitiva · design-system/17-bloques.tsx · El cierre común de las páginas: a dónde se va desde aquí.
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { Badge } from "./badge";
 import { actionVariants } from "./action";
 import { WRAP } from "./layout";
-import { eyebrowVariants } from "./heading";
+import { dataLabelVariants, eyebrowVariants } from "./heading";
 import { Marcas } from "./marcas";
 
 // CIERRE DE PÁGINA: el rótulo suelto y la rejilla de tarjetas-enlace que remata
@@ -84,11 +84,7 @@ export type CloserItem = {
  * nombre, que es lo que hay que leer primero.
  */
 function Kicker({ children }: { children: React.ReactNode }) {
-  return (
-    <p className={cn(eyebrowVariants(), "mb-[0.45rem] text-[0.7rem]")}>
-      {children}
-    </p>
-  );
+  return <p className={cn(dataLabelVariants(), "mb-[0.45rem]")}>{children}</p>;
 }
 
 /**

@@ -6,7 +6,8 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ContactCta, type ContactActionsDict } from "./contact-actions";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import { cn } from "@/lib/utils";
 
 /**
  * Id del vídeo de apertura. Lo comparten el elemento y el script inline que lo
@@ -302,9 +303,7 @@ export function SobreMi({
 
 function Heading({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="font-display m-0 mb-4 text-[clamp(1.5rem,2.6vw,1.9rem)] leading-[1.15] font-semibold tracking-[-0.02em]">
-      {children}
-    </h2>
+    <h2 className={cn(titleVariants({ size: "sub" }), "mb-4")}>{children}</h2>
   );
 }
 

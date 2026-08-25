@@ -200,6 +200,21 @@ export function historicoActual(archivo: string): string[] {
  *
  * Misma regla que los otros tres índices: el índice no tiene texto propio, así
  * que si una frase no basta para saber si esa es la pieza, se arregla LA LÍNEA.
+ *
+ * LA PUBLICACIÓN TIENE TRES VALORES, NO DOS (2026-08-25). Con dos —una ruta o
+ * `pendiente`— no había forma de decir «esta pieza NO se publica, y este es el
+ * motivo»: `rich.tsx` iba a salir como deuda para siempre, o había que publicar
+ * una sección que no enseña nada solo para que el contador quedara a cero, que es
+ * el metro mandando sobre el criterio en vez de al revés. El tercer valor es
+ * `interna`, y el recuento las separa: «N publicadas · N internas · N
+ * pendientes». Así `pendiente` vuelve a significar UNA sola cosa: deuda.
+ *
+ * GRUPO Y SECCIÓN SON EJES INDEPENDIENTES, y queda dicho a propósito. El grupo
+ * dice de qué capa es la pieza; la publicación, dónde se la ve funcionando. Que
+ * `live-stat.tsx` sea una PRIMITIVA y se demuestre dentro de §15 «Artículo
+ * largo» no es una incoherencia que haya que corregir: su espécimen vive donde
+ * la pieza se usa, que es lo que hace que la demo sea real. Forzarlos a
+ * concordar movería especímenes buenos a secciones donde no ilustran nada.
  */
 export const PIEZAS_DIR = "components/ui";
 export const INVENTARIO = "components/ui/README.md";
@@ -207,7 +222,7 @@ export const INVENTARIO = "components/ui/README.md";
 export type Pieza = {
   archivo: string;
   grupo: string;
-  /** Ruta bajo `components/site/`, o `pendiente`. */
+  /** Ruta bajo `components/site/`, o `pendiente`, o `interna`. */
   publica: string;
   frase: string;
 };
@@ -215,34 +230,45 @@ export type Pieza = {
 const GRUPOS = ["núcleo", "artículo", "primitiva"] as const;
 
 /**
- * Las piezas que hoy pueden estar SIN publicar, con el motivo. Es la lista que
- * hace que un archivo NUEVO sin sección salga en rojo: si no está aquí y declara
+ * Las piezas que hoy declaran `pendiente`, con el motivo. Es la lista que hace
+ * que un archivo NUEVO sin sección salga en rojo: si no está aquí y declara
  * `pendiente`, falla. Añadir una línea es un acto visible en el diff, que es
  * justo lo que no era «se me olvidó publicarla».
  *
- *   info-card   la tarjeta con la que las páginas de sistema cuentan cosas al
- *               margen; se usa en siete secciones y no se documenta en ninguna.
- *   rich        render de markup del diccionario (D23): no tiene aspecto propio
- *               que enseñar, lo que enseña es el enlace de contenido (§08).
- *   page-closer el cierre de las trece páginas.
- *   video-embed la facade de vídeo (D55), que solo aparece en los deep-dive.
+ * EL MOTIVO ES UN DATO, NO UN COMENTARIO (2026-08-25): la lista y sus motivos
+ * estaban escritos dos veces —el array, y el bloque de arriba que lo describía—,
+ * que es la trampa de la regla 5 de `BRAND.md`. Ahora el motivo se DERIVA al
+ * inventario, así que quien contesta el paso 1 de la «Regla de construcción» lee
+ * por qué esa pieza no tiene sección sin abrir este archivo.
+ *
+ * ESTÁ VACÍA, y eso es el estado bueno, no un metro roto: la guarda de cero de
+ * `check:indices` mira los ARCHIVOS de la carpeta, que nunca son cero. Que aquí
+ * no haya nadie significa que ninguna pieza del sistema está sin documentar.
+ * `stat-row.tsx` salió el 2026-08-22 (§11); `info-card`, `page-closer` y
+ * `video-embed`, el 2026-08-25, ya con sección propia.
  */
-export const SIN_PUBLICAR = [
-  // `stat-row.tsx` salió de aquí el 2026-08-22: era la única pieza del NÚCLEO
-  // sin sección, y fue el primer disparo de la skill `publicar-en-design-system`
-  // (§11, «Debajo del titular, la fila de cifras»).
-  "info-card.tsx",
-  "rich.tsx",
-  "page-closer.tsx",
-  "video-embed.tsx",
-  // `marcas.tsx` (2026-08-25): no pinta NADA. Envuelve los nombres propios en
-  // `translate="no"` para que el traductor de Chrome no convierta «TheTool» en
-  // «La Herramienta», y su efecto es un atributo invisible — una sección del
-  // Design System que la enseñara mostraría un texto idéntico al de al lado.
-  // Es el mismo caso que `rich.tsx`, y por eso entra aquí y no en la página.
-  // Lo que sí la vigila es `npm run check:marcas` sobre las 28 variantes.
-  "marcas.tsx",
-];
+export const SIN_PUBLICAR: Record<string, string> = {};
+
+/**
+ * Y las piezas que NO se publican, con el motivo. Es el tercer valor del
+ * vocabulario, y lo que lo separa del de arriba es el tiempo verbal: `pendiente`
+ * es deuda —se va a publicar y todavía no—, `interna` es una DECISIÓN tomada.
+ * Con dos valores las dos se contaban juntas, así que una pieza que no se puede
+ * publicar salía como deuda para siempre.
+ *
+ * La condición es la del Design System entero: la página enseña LAS PIEZAS
+ * REALES como demo. Una pieza que no pinta nada no tiene demo posible, así que
+ * publicarla sería escribir una sección falsa para bajar un contador.
+ */
+export const INTERNAS: Record<string, string> = {
+  "marcas.tsx":
+    "no pinta nada: envuelve los nombres propios en un atributo invisible, y " +
+    "una sección que la enseñara mostraría un texto idéntico al de al lado. La " +
+    "vigila `npm run check:marcas` sobre las 28 variantes",
+  "rich.tsx":
+    "no tiene aspecto propio que enseñar: es infraestructura de texto (D23), y " +
+    "lo que de ella sí se ve —el enlace de contenido— se publica en §08",
+};
 
 /** Los archivos de la carpeta, sin el README generado. */
 export function archivosDePiezas(): string[] {
@@ -276,10 +302,15 @@ export function inventario(): string[] {
     if (!delGrupo.length) continue;
     lineas.push(`### ${grupo} · ${delGrupo.length}`);
     for (const p of delGrupo) {
+      // Los tres valores del vocabulario, y los dos que no son una ruta LLEVAN
+      // SU MOTIVO al inventario: «sin publicar» a secas no dice si es deuda o
+      // criterio, que es justo la distinción que el tercer valor vino a hacer.
       const donde =
         p.publica === "pendiente"
-          ? "sin publicar"
-          : `[${p.publica.replace(/\.tsx?$/, "")}](../site/${p.publica})`;
+          ? `sin publicar — ${SIN_PUBLICAR[p.archivo] ?? "sin motivo declarado"}`
+          : p.publica === "interna"
+            ? `interna — ${INTERNAS[p.archivo] ?? "sin motivo declarado"}`
+            : `[${p.publica.replace(/\.tsx?$/, "")}](../site/${p.publica})`;
       lineas.push(`- **\`${p.archivo}\`** — ${p.frase} *(${donde})*`);
     }
   }

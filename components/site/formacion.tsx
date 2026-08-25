@@ -1,6 +1,11 @@
 import { BrandLogoBox } from "./brand-logo-box";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { SectionHeader } from "@/components/ui/heading";
+import {
+  SectionHeader,
+  dataLabelVariants,
+  titleVariants,
+} from "@/components/ui/heading";
+import { cn } from "@/lib/utils";
 import { Marcas } from "@/components/ui/marcas";
 
 type EduItem = { title: string; institution: string };
@@ -30,12 +35,7 @@ function Group({
 }) {
   return (
     <>
-      <p
-        className={
-          "text-muted-foreground m-0 mb-[0.4rem] text-[0.72rem] font-semibold tracking-[0.08em] uppercase " +
-          (className ?? "")
-        }
-      >
+      <p className={cn(dataLabelVariants(), "mb-[0.4rem]", className)}>
         {label}
       </p>
       <div className="border-border border-t">
@@ -49,7 +49,9 @@ function Group({
               className="h-10 w-10 flex-none"
             />
             <div>
-              <h3 className="font-display m-0 mb-[0.3rem] text-[clamp(1.15rem,1.9vw,1.5rem)] leading-[1.2] font-semibold tracking-[-0.015em]">
+              <h3
+                className={cn(titleVariants({ size: "card" }), "mb-[0.3rem]")}
+              >
                 {item.title}
               </h3>
               <p className="text-muted-foreground m-0 text-[0.9rem]">

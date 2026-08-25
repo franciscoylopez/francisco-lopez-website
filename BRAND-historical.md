@@ -42,12 +42,13 @@ Partido el **2026-08-09** (P37.685).
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
 - [El morado de la barra de progreso, con los papeles cambiados (2026-08-21)](#el-morado-de-la-barra-de-progreso-con-los-papeles-cambiados-2026-08-21)
 - [La pasada completa, y las tres veces que el «sin excepciones» fue falso (2026-08-18 → 23)](#la-pasada-completa-y-las-tres-veces-que-el-sin-excepciones-fue-falso-2026-08-18-→-23)
-- [El enlace de contenido no tiene contraparte invertida (2026-08-23)](#el-enlace-de-contenido-no-tiene-contraparte-invertida-2026-08-23)
+- [El enlace de contenido invertido (2026-08-23 → 25)](#el-enlace-de-contenido-invertido-2026-08-23-→-25)
 - [La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`](#la-pasada-de-retirada-del-2026-08-22-y-qué-se-fue-de-brandmd)
 - [La tarjeta salió en negrita con la clase correcta puesta](#la-tarjeta-salió-en-negrita-con-la-clase-correcta-puesta)
 - [El contorno de un control: 1,21:1 desde V1, y el metro que no existía (2026-08-23)](#el-contorno-de-un-control-1211-desde-v1-y-el-metro-que-no-existía-2026-08-23)
 - [El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)](#el-interlineado-que-sobrevivió-a-tres-medidas-y-por-qué-la-medición-aprobaba-2026-08-25)
 - [La variante que dimensiona una fila, usada en una pila (2026-08-25)](#la-variante-que-dimensiona-una-fila-usada-en-una-pila-2026-08-25)
+- [El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)](#el-hover-de-la-tarjeta-pulsable-y-por-qué-no-se-arregló-con-luminancia-2026-08-25)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -637,7 +638,7 @@ por decisión de Francisco: o se recalibra `--destructive` conmutándolo por tem
 `--brand-purple-accent` y `--progress-ink`— o se escribe la regla de que el rojo no es color de
 texto. Hoy no está escrita en ninguna parte, que es medio motivo de que esto ocurriera.
 
-## El enlace de contenido no tiene contraparte invertida (2026-08-23)
+## El enlace de contenido invertido (2026-08-23 → 25)
 
 Visto en pantalla durante P66, poniendo los canales de contacto sobre una banda invertida:
 **desaparecieron**. Solo quedó flotando el subrayado cian sobre el fondo.
@@ -653,10 +654,34 @@ estaba **diagnosticado y resuelto en una capa y sin tocar en la otra**.
 
 No fue descuido: fue que el caso no había ocurrido. Es la regla 1 de §Cómo se escribe una regla
 leída del revés — un disparador no puede fallar si nunca llega a dispararse. Y es la razón de que
-esto se quede como deuda latente en vez de arreglarse en caliente: hoy no hay ni un enlace de
-contenido sobre fondo invertido en todo el sitio. El arreglo, cuando toque, es un
-`.link-content--inverted` con el texto en `--background` y el barrido en `--primary-on-inverted`,
-que existe exactamente para esto.
+esto se quedara como deuda latente en vez de arreglarse en caliente: no había ni un enlace de
+contenido sobre fondo invertido en todo el sitio.
+
+### Y al arreglarlo (2026-08-25, P70.18), el modificador era la respuesta equivocada
+
+La ficha proponía `.link-content--inverted`, que es lo que haría la capa de chrome. **No sirve
+aquí, y la diferencia no es de estilo: es de quién sabe la respuesta.** Una variante de chrome se
+elige al escribir el componente, y quien la escribe está mirando la banda. Un enlace de contenido
+vive dentro de la **prosa del diccionario**, y quien redacta esa frase no sabe —ni tiene por qué
+saber— sobre qué fondo va a caer el párrafo. Un modificador ahí es una regla que hay que recordar
+en el sitio donde menos información hay, que es la forma segura de que se incumpla.
+
+Así que va como `--surface-dim` (D39), `--chrome-hover-bg` y `--control-edge` (D97): **lo resuelve
+la superficie**. Una banda que ya se declara `data-surface="inverted"` —porque lo necesita para el
+atenuado y para la pastilla de hover— arregla también sus enlaces, sin tocar el copy y sin que
+nadie se acuerde.
+
+**Y los colores no hubo que elegirlos.** Los tres son los del otro tema: texto en `--background`
+(el primer plano de esa superficie), acento en `--primary-on-inverted` (el cian del otro tema, que
+ya existía) y, bajo el relleno del hover, un `--primary-foreground-on-inverted` que es el
+`--primary-foreground` del otro tema. Eso hace que **el par de hover no necesite medición nueva**:
+son exactamente los dos colores del par «texto sobre botón» que el censo ya da por bueno —7,93:1
+en claro, 8,36:1 en oscuro—, intercambiados. Es el mismo argumento con el que
+`--brand-purple-accent` dejó de ser fijo: un solo valor para las dos superficies topa con un techo
+que no depende del tono.
+
+Se publica en §08 del Design System, y no como quinta tarjeta de su rejilla: con cuatro por fila,
+la quinta se quedaría sola. Va a lo ancho, que además es como aparece de verdad.
 
 ## La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`
 
@@ -869,3 +894,54 @@ neutral respecto a la FORMA del contenido que envuelve. Al llevar un caso a la c
 pregunta no es «¿existe la variante?» sino «¿la variante asume una disposición que este caso
 no tiene?». Al tercer caso apilado, la respuesta deja de ser neutralizar y pasa a ser un
 `size` propio.
+
+## El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)
+
+Lo levantó `design-review` el 2026-08-23, con el metro validado contra los anclajes de siempre:
+la tarjeta `card` pisa **6,25 de ΔL\*** en claro y **4,70 en oscuro**, contra los **9,04** que
+pisa cualquier otro hover del sistema. La asimetría tiene causa y no es un error: en oscuro la
+tarjeta parte de `--card` (L\* 14,87) y no de `--background` (10,52), así que el salto hasta
+`--muted` (19,56) es la mitad de recorrido.
+
+**No se arregló en caliente porque no es un incumplimiento.** No hay umbral de WCAG para la
+perceptibilidad de un hover: el 9,04 es una referencia interna. Y toca todas las tarjetas
+pulsables del sitio a la vez.
+
+### Lo que descartó subir el relleno: no hay un porcentaje que sirva a los dos temas
+
+Se midió antes de descartarlo, y el barrido es la parte que conviene no repetir. Mezclando
+`--muted` hacia `--foreground`:
+
+| Mezcla | ΔL\* claro | ΔL\* oscuro |
+|---|---|---|
+| Hoy (`--muted` puro) | 6,25 | 4,70 |
+| 95% + `--foreground` | 9,75 | **9,22** |
+| 92% + `--foreground` | 11,85 | 11,86 |
+| `--border` | 9,79 | 6,91 |
+| *Referencia del sitio* | *3,89* | *9,04* |
+
+El 95% deja el oscuro clavado en la referencia **y el claro en 9,75, que es dos veces y media
+la suya**. Para resolverlo con luminancia habría que hacer conmutar la mezcla con el tema, como
+`--primary-on-inverted` y `--brand-purple-accent`. Se puede, y es la respuesta equivocada: el
+claro **no tenía ningún problema** —6,25 ya está por encima de su referencia—, así que la
+conmutación existiría solo para no estropear lo que ya estaba bien. Eso es un mando nuevo para
+sostener una decisión, no una decisión.
+
+### La afordancia que faltaba se añadió en otro eje
+
+Contorno a `--primary` en hover, con el relleno neutro donde estaba. Tres cosas se ganan de
+golpe: la señal **no depende del contraste del fondo**, no toca ningún par de texto, y el
+estado deja de estar codificado solo por un cambio de tono. Es el mismo cian de acción que ya
+usa `outline-primary`, y aquí no compite con nada porque el relleno sigue siendo `muted`.
+
+**Solo en hover, y la asimetría con `focus-visible` es deliberada.** El foco ya trae el anillo
+de `--ring` —que ES `--primary`— a 2px de offset, así que un borde cian por dentro dibujaría
+dos líneas cianas concéntricas separadas por un hueco: se lee como un defecto, no como una
+señal. El teclado no se queda corto, porque conserva el `focus-visible:bg-muted` que P70.15 le
+devolvió, y encima el anillo.
+
+**Y lo decidió el ojo, no la tabla**, que es lo que la propia ficha pedía: «puede que a esa
+luminancia se vea de sobra y el número engañe». Las tres opciones se pusieron en pantalla con
+los tokens reales y un botón que las forzaba todas a hover a la vez, para poder compararlas sin
+pasar el cursor. Es el punto 8 de §Cómo medir: cuando alguien que está mirando la página
+contradice a la medición, la primera hipótesis es el alcance de la medición.

@@ -18,6 +18,7 @@ import {
   HISTORICOS,
   historico,
   historicoActual,
+  INTERNAS,
   INVENTARIO,
   inventario,
   inventarioActual,
@@ -101,6 +102,7 @@ function textoDeLaSeccion(ruta: string): string | undefined {
 // sección que no la enseña, y el índice saldría idéntico. Se comprueba aparte.
 let piezasVistas = 0;
 const pendientes: string[] = [];
+const internas: string[] = [];
 for (const archivo of archivosDePiezas()) {
   piezasVistas++;
   const p = pieza(archivo);
@@ -114,21 +116,43 @@ for (const archivo of archivosDePiezas()) {
         "archivo tiene que ser\n" +
         "      `// @pieza <grupo> · <publicación> · <una frase>`, con grupo\n" +
         "      `núcleo` | `artículo` | `primitiva` y publicación relativa a\n" +
-        "      `components/site/` (o `pendiente`, y entonces va también a\n" +
-        "      SIN_PUBLICAR de `scripts/indices.ts`, con su motivo).",
+        "      `components/site/`, o uno de los dos valores que NO son una ruta:\n" +
+        "      `pendiente` (deuda: se va a publicar y todavía no) e `interna`\n" +
+        "      (decisión: no se publica). Los dos van también a su lista de\n" +
+        "      `scripts/indices.ts` —SIN_PUBLICAR o INTERNAS— con su motivo.",
     );
     continue;
   }
 
   if (p.publica === "pendiente") {
     pendientes.push(archivo);
-    if (!SIN_PUBLICAR.includes(archivo)) {
+    if (!SIN_PUBLICAR[archivo]) {
       problemas.push(
         `components/ui/${archivo}: se declara \`pendiente\` y no está en ` +
-          "SIN_PUBLICAR.\n" +
+          "SIN_PUBLICAR (o está sin motivo).\n" +
           "      Una pieza del sistema se publica en el Design System (o en el\n" +
           "      Brand Kit) antes de darla por hecha. Si de verdad no toca todavía,\n" +
-          "      añádela a esa lista CON EL MOTIVO: es un acto visible en el diff.",
+          "      añádela a esa lista CON EL MOTIVO: es un acto visible en el diff,\n" +
+          "      y el motivo sale derivado al inventario.\n" +
+          "      Y si la pieza NO se va a publicar nunca, el valor no es\n" +
+          "      `pendiente` sino `interna`: eso es criterio, no deuda.",
+      );
+    }
+    continue;
+  }
+
+  // El tercer valor del vocabulario. Mismo trato que `pendiente` —la excusa se
+  // escribe— pero cuenta aparte, que es lo que impide que una decisión tomada
+  // siga apareciendo como deuda en cada PR.
+  if (p.publica === "interna") {
+    internas.push(archivo);
+    if (!INTERNAS[archivo]) {
+      problemas.push(
+        `components/ui/${archivo}: se declara \`interna\` y no está en ` +
+          "INTERNAS (o está sin motivo).\n" +
+          "      `interna` significa «esta pieza no se publica, y este es el\n" +
+          "      porqué». Sin el motivo escrito no se distingue de un olvido, que\n" +
+          "      es exactamente lo que este check existe para no dejar pasar.",
       );
     }
     continue;
@@ -155,10 +179,18 @@ for (const archivo of archivosDePiezas()) {
 }
 
 // Y al revés: una excusa que sobra también es deriva.
-for (const archivo of SIN_PUBLICAR) {
+for (const archivo of Object.keys(SIN_PUBLICAR)) {
   if (!pendientes.includes(archivo)) {
     problemas.push(
       `SIN_PUBLICAR incluye \`${archivo}\`, que ya no declara \`pendiente\` ` +
+        "(o ya no existe). Quítalo de la lista.",
+    );
+  }
+}
+for (const archivo of Object.keys(INTERNAS)) {
+  if (!internas.includes(archivo)) {
+    problemas.push(
+      `INTERNAS incluye \`${archivo}\`, que ya no declara \`interna\` ` +
         "(o ya no existe). Quítalo de la lista.",
     );
   }
@@ -209,10 +241,14 @@ console.log(
   `check:indices — ${casos.length} índices · ${entradas} entradas comprobadas ` +
     `(${casos.map((c) => `${c.esperado.length} en ${c.fuente}`).join(" · ")})`,
 );
+// TRES CIFRAS, NO DOS: «sin publicar» juntaba la deuda con la decisión, así que
+// una pieza que no se puede publicar salía en rojo en cada PR para siempre.
+const lista = (xs: string[]) => (xs.length ? ` (${xs.join(", ")})` : "");
 console.log(
   `                ${piezasVistas} piezas de components/ui/ · ` +
-    `${piezasVistas - pendientes.length} publicadas y comprobadas contra su ` +
-    `sección · ${pendientes.length} sin publicar (${pendientes.join(", ")})`,
+    `${piezasVistas - pendientes.length - internas.length} publicadas y ` +
+    `comprobadas contra su sección · ${internas.length} internas` +
+    `${lista(internas)} · ${pendientes.length} sin publicar${lista(pendientes)}`,
 );
 
 if (problemas.length) {

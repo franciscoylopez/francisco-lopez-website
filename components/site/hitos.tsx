@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, dataLabelVariants } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { Marcas } from "@/components/ui/marcas";
 
@@ -93,7 +93,10 @@ export function Hitos({ dict }: { dict: HitosDict }) {
         {/* Etiquetas de columna — ocultas en móvil (la fila se reordena a grid) */}
         <div
           data-reveal
-          className="border-border text-muted-foreground hidden items-center gap-x-6 border-b pb-3 text-[0.72rem] font-semibold tracking-[0.08em] uppercase md:flex"
+          className={cn(
+            dataLabelVariants(),
+            "border-border hidden items-center gap-x-6 border-b pb-3 md:flex",
+          )}
         >
           <span className="w-10 shrink-0" />
           <span className="min-w-[12rem] flex-[1_1_15rem]">{dict.colName}</span>

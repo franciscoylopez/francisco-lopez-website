@@ -1,5 +1,6 @@
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import { cn } from "@/lib/utils";
 
 export type ProcesoDict = {
   eyebrow: string;
@@ -49,7 +50,12 @@ export function ComoTrabajo({ dict }: { dict: ProcesoDict }) {
                   {String(i + 1).padStart(2, "0")}
                 </div>
                 <div className="min-w-[min(100%,14rem)] flex-[1_1_16rem]">
-                  <h3 className="font-display m-0 mb-[0.4rem] text-[clamp(1.25rem,2vw,1.6rem)] leading-[1.2] font-semibold tracking-[-0.015em]">
+                  <h3
+                    className={cn(
+                      titleVariants({ size: "card" }),
+                      "mb-[0.4rem]",
+                    )}
+                  >
                     {step.title}
                   </h3>
                   <p className="text-muted-foreground m-0 max-w-[var(--measure)] text-[0.95rem] leading-[1.6]">
