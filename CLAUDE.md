@@ -51,8 +51,8 @@ Al empezar una sesión de desarrollo:
 
 > **`Etapa` contesta una sola pregunta: ¿esto está comprometido o esperando?** Dos familias en el mismo campo (y **vigila que «General» no se coma el eje**: ya degeneró una vez con «Optimización» al 80%):
 >
-> - **Sprints** (lo comprometido, con su orden): *Footer y contacto*.
-> - **Bloques** (backlog temático, aún no comprometido): *General · Home · Brand Kit · Design System · Accesibilidad · Cómo se ha creado*.
+> - **Sprints** (lo comprometido, con su orden): *Páginas hermanas*.
+> - **Bloques** (backlog temático, aún no comprometido): *General · Home · Sobre mí · Footer y contacto · Cómo se ha creado*.
 > - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque.
 > - **Cerradas** (solo archivadas, no se usan para tareas nuevas): las que el tablero ya no lista como sprint ni como bloque. **Los «Método» no se vuelven bloque:** no tienen página, y su deuda es transversal (*General*).
 > - **Un sprint que cierra no se archiva: se convierte en su BLOQUE** *(2026-08-22)*. Su página sigue viva y va a generar deuda, y esa deuda es de ella, no transversal.

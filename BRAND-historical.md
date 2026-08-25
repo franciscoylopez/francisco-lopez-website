@@ -46,6 +46,7 @@ Partido el **2026-08-09** (P37.685).
 - [La pasada de retirada del 2026-08-22, y qué se fue de `BRAND.md`](#la-pasada-de-retirada-del-2026-08-22-y-qué-se-fue-de-brandmd)
 - [La tarjeta salió en negrita con la clase correcta puesta](#la-tarjeta-salió-en-negrita-con-la-clase-correcta-puesta)
 - [El contorno de un control: 1,21:1 desde V1, y el metro que no existía (2026-08-23)](#el-contorno-de-un-control-1211-desde-v1-y-el-metro-que-no-existía-2026-08-23)
+- [El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)](#el-interlineado-que-sobrevivió-a-tres-medidas-y-por-qué-la-medición-aprobaba-2026-08-25)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -788,3 +789,47 @@ Se compararon en pantalla 55, 60 y 70 sobre el formulario servido: a partir de 5
 es casi indistinguible entre candidatos, y el salto que de verdad se ve es el de 1,21 a 3,x —
 los campos pasan de insinuarse a **parecer campos**. No engorda el diseño; lo que hacía el
 valor viejo era esconderlo.
+
+## El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)
+
+*(El caso que escribió el punto 8 de `BRAND.md` §Cómo medir sin equivocarse.)*
+
+**Lo que pasó.** El artículo se pintaba en producción con una separación entre párrafos
+que Francisco señaló **tres veces** mientras se construía. Las tres se midió. Las tres se
+dio por correcto. Lo encontró, ya cerrado el sprint, un `/prototype` renderizado al
+trabajar P68.493 —el cierre del artículo como monolito de párrafos—: era un bug real.
+
+**Por qué la medición aprobó, que es la parte reutilizable.** D81 dejó escrito su método
+con estas palabras:
+
+> «Verificado en pantalla —clonando el DOM servido a ancho de móvil real— en los dos casos
+> que sí podían envolver a varias líneas.»
+
+Las dos mitades de esa frase son el fallo, y las dos parecen rigor:
+
+1. **«Clonando el DOM servido» no es mirar la página.** Un clon reproduce los nodos y los
+   estilos computados que se le pidan, no el resultado compuesto: el ritmo entre bloques
+   sale de márgenes que colapsan, de `:first-child`, del contenedor que no viajó en el
+   clon. Se midió un objeto parecido a la página.
+2. **«Los dos casos que podían envolver» era una muestra, y no la que dolía.** Se eligió
+   por dónde el interlineado podía comprimir texto —una preocupación legítima— mientras el
+   síntoma que se señalaba estaba en la separación ENTRE párrafos. El alcance declarado
+   nunca contuvo el defecto.
+
+**Y declarar el alcance es lo que lo blindó.** Un informe que dice qué ha mirado se lee
+como más riguroso que uno que no lo dice, así que la frase de D81 funcionó como aval
+justo donde estaba el fallo. Es la misma forma que el punto 3 de §Cómo se escribe una
+regla ataca en los hallazgos —valida el metro—, en el lado del aprobado, que nadie estaba
+validando.
+
+**El caso hermano, el mismo día.** Siete diagramas del artículo pintaban sus rótulos entre
+5,1 y 6,6px en móvil, y el texto que los describía se leía perfecto. Otra vez: lo que se
+miraba no era lo que estaba roto. Ahí el remedio fue un gate (`check:figuras`, P68.59),
+construido **después** y con el hallazgo llegando tarde y en bloque — la firma de «la
+pieza que nace fuera de la capa».
+
+**La asimetría que explica las dos.** Para accesibilidad el proyecto tiene 20 pasos de CI
+y un agente con matriz de viewports y dos disparos. Para lo visual y tipográfico tiene
+**un gate manual** —`design-review`— que se dispara «antes de un release visual», o sea al
+final. El punto 8 no cierra esa asimetría; solo impide que el aprobado se dé por bueno
+cuando contradice a alguien que está mirando.

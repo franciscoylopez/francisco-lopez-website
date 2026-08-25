@@ -1096,6 +1096,23 @@ aparecieron dos defectos estructurales que llevaban meses invisibles porque nadi
 principio a fin — el **ítem 2 de la regla de dos capas estaba cien líneas por debajo del ítem 1**,
 detrás de cuatro secciones de nivel 2, y el método de medición iba numerado 1-4-5-2-3-6.
 
+### Addendum 2026-08-25 — el techo sube por primera vez, y esta entrada no lo cuenta
+
+D69 le puso cifra y guardián a este régimen, y el trinquete se apretó **cinco veces**. El
+2026-08-25 **subió**: 12.200 → 12.700, decisión de Francisco en el quinto `method-review`.
+
+**El motivo, en una línea:** el propio guardián define la *holgura de trabajo* —unas 240
+palabras, cinco o seis reglas— como la magnitud que hay que sostener, y quedaban **dos**.
+Apretar más no era una opción que existiera; las dos reglas que esa misma revisión mandó
+escribir cuestan 157 palabras y no habrían cabido.
+
+**El historial completo del techo, con el porqué de cada valor, vive en
+`scripts/check-contexto.ts` y solo ahí** — es donde no puede caducar sin que falle algo, y
+copiarlo aquí sería la segunda verdad que este proyecto ha cerrado ya por cinco puertas.
+Lo que sí queda escrito aquí, porque es de régimen y no de cifra: **la subida es interina y
+está atada a P68.5905**, que busca el dato de coste que ninguno de los seis valores del techo
+ha tenido nunca. Ninguno salió de medir qué cuesta este contexto; todos, de cuánto ocupa.
+
 
 ## D29 · Superficie de contacto unificada: dato, patrón y jerarquía — 2026-08-03
 **Decisión.** El contacto deja de ser tres implementaciones que se parecían y pasa a ser

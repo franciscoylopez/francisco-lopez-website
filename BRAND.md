@@ -316,14 +316,13 @@ hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script e
    lo aplica y ordena por **holgura**, no por ratio — con umbrales mixtos, la cifra más baja no
    señala al peor par. *Un umbral mal aplicado inventa hallazgos igual que un metro mal
    calibrado.*
-8. **Valida también el APROBADO, no solo el hallazgo** *(2026-08-25)*. El punto 1 dice que no te
-   creas un hallazgo sin validar el metro; le faltaba la otra mitad. **Si alguien que está
-   mirando la página señala un defecto y la medición dice que está bien, la primera hipótesis es
-   el ALCANCE de la medición, no el ojo de quien mira.** Y un informe que declara su alcance
-   —«verificado en los dos casos que podían envolver»— parece más riguroso justo cuando el
-   alcance es el fallo. **Corolario operativo: se mira la página servida.** Un clon del DOM, un
-   `getComputedStyle` o el JSX no son la página; el interlineado del artículo sobrevivió a tres
-   revisiones así, y lo cazó un `/prototype` renderizado.
+8. **Valida también el APROBADO, no solo el hallazgo** *(2026-08-25)*. El punto 1 cubre el
+   hallazgo y le faltaba la otra mitad. **Si alguien que está mirando la página señala un
+   defecto y la medición dice que está bien, la primera hipótesis es el ALCANCE de la
+   medición, no el ojo de quien mira.** Un informe que declara su alcance parece más riguroso
+   justo cuando el alcance es el fallo. **Corolario: se mira la página servida** — un clon del
+   DOM, un `getComputedStyle` o el JSX no son la página. *(El caso que lo escribió, en
+   [`BRAND-historical.md`](./BRAND-historical.md) §El interlineado.)*
 
 ## Modo oscuro
 

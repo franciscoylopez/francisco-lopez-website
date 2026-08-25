@@ -177,13 +177,14 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 
 | Familia | Cómo se reconoce | Instancias |
 | :-- | :-- | :-- |
-| **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 |
+| **El metro que declara su alcance, y su alcance no incluye el síntoma** | Una verificación que **aprueba**, dice qué ha mirado —y por eso convence— y lo que ha mirado no es donde está el defecto que una persona está señalando | **2** |
+| **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 · **0 vivas** |
 | **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 6 |
 | **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 3 |
 | **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **7** |
 | **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 4 |
-| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **4** |
-| **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **2** |
+| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **5** |
+| **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **3** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **Añadir sin retirar** | Un documento que crece porque nada pregunta qué sobra (D69) | el marco |
 
@@ -228,6 +229,41 @@ ese es el hallazgo de más confianza.***
   ≤25%). Sin eso, dentro de un mes vuelve a ser una conversación de sensación.*
 - ***Mide el drenaje, no solo la clasificación*** *(ver el paso 8, corregido). Es lo que se le
   escapó al segundo disparo mirando el mismo eje.*
+
+*Quinto disparo, 2026-08-25: **nace «el metro que declara su alcance, y su alcance no incluye
+el síntoma», y es la familia que faltaba para el otro lado del método.** Se separa de «el metro
+que aprueba sobre lista vacía» **por el remedio**: aquella necesita CONTAR —y ya no tiene
+instancias vivas, los 12 guardianes de CI publican cuánto han mirado—; esta necesita MIRAR EL
+RESULTADO RENDERIZADO. Sus dos instancias son del mismo sprint y las trajo Francisco: el
+interlineado del artículo, medido y aprobado tres veces «clonando el DOM servido en los dos
+casos que podían envolver», que era un bug real; y siete diagramas a 5-6px en móvil cuyo texto
+descriptivo se leía perfecto. La regla que sale de ahí vive en `BRAND.md` §Cómo medir, punto 8,
+y su caso en `BRAND-historical.md`.*
+
+*Y tres cosas de método que este disparo deja:*
+
+- ***Aplícate la regla del punto 8 a ti mismo, porque este informe la incumplió dos veces.** Un
+  `grep` que devuelve cero es un aprobado, y aquí dio dos falsos: «cero decisiones tomadas con
+  un dato» —el bucle SÍ se cerró el 2026-08-23 y redefinió un sprint entero— y «tres skills sin
+  estrenar», que eran dos porque el recorrido en seco de `deep-dive-page` está documentado
+  dentro de la propia skill, donde no se miró. **Antes de publicar un cero, búscalo con otras
+  palabras y en otro sitio.***
+- ***La asimetría entre lo automático y lo visual es medible y conviene medirla cada vez:**
+  hoy 20 pasos de CI y un agente de dos disparos para accesibilidad, contra UN gate manual
+  (`design-review`) para lo visual, y que se dispara al final.*
+- ***Cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es cuánto
+  recortar sino qué gobierna el número.** El presupuesto de contexto subió por primera vez este
+  día, y hasta entonces ninguno de sus cinco valores había tenido un porqué escrito.*
+
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-25)*:
+
+| Indicador | Hoy | Verde | Rojo |
+| :-- | :-- | :-- | :-- |
+| Variación neta de `General` por sprint | +6 (cerró en 34, abrió en 31) | ≤ 0 | ≥ +4 |
+| Margen del presupuesto de contexto | 345 | ≥ 400 | < 100 |
+| Skills sin estrenar | 2 | 0 | ≥ 3 |
+| Hallazgos de `design-review` cuya regla ya existía | 4 de 8 | ≤ 1 | ≥ 3 |
+| Proporción de tareas de método sobre el ciclo | 50% | ≤ 25% | — |
 
 ## La salida
 
