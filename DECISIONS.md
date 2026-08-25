@@ -145,6 +145,7 @@
 - D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red
 - D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra
 - D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso
+- D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -4231,6 +4232,36 @@ discriminar nada, y no es un problema que arregle el tablero: agosto está parad
 siendo lanzar el artículo en septiembre y medir desde ahí. Lo que sí cambia es que **ahora habrá
 con qué medirlo**, que es lo que este cierre añade sobre el anterior.
 
+### El cuarto scorecard existe, y la cifra de partida queda escrita (2026-08-25, P70.05)
+
+El panel publicaba tres scorecards y ninguno era la métrica primaria, así que **cada cierre de
+etapa iba a leer tres secundarias y dar la primaria por no observada**, indefinidamente y sin que
+nada avisara. Ya está el cuarto: «Envíos del formulario (últimos 28 días)».
+
+**La cifra de partida**, 28 días hasta el 24-08, para que el cierre siguiente tenga contra qué leer:
+
+| Scorecard | Evento | Valor |
+|---|---|---|
+| Clics de contacto | `contact_click` | 9 |
+| Descargas de CV | `file_download` | 6 |
+| Profundidad de scroll | `scroll` | 62 |
+| **Envíos del formulario** | **`contact_submit`** | **1** |
+
+**El filtro se comprobó, que es lo que esta entrada existe para no volver a saltarse.** Y de paso
+salió que **los tres filtros que había NO eran iguales**: «Clics de contacto» y «Scroll profundo»
+son de una cláusula (`Nombre del evento` = valor) y «Descargas de CV» es **compuesto, de dos**. El
+nuevo se **duplicó del de una cláusula** en vez de escribirse, para heredar la estructura exacta.
+
+**Verificado contra una fuente independiente, en dos puntos.** Sin filtro, el scorecard da **550**,
+que es exactamente el total de eventos que GA4 reporta para esos mismos 28 días: la fuente y el
+periodo cuadran. Con el filtro puesto, da **1**, que es exactamente lo que GA4 cuenta de
+`contact_submit`. No hace falta el envío de prueba que pedía la tarea: **el evento real ya existe**
+—se registró al conectar la cadena el 24-08—, así que el cero ambiguo del que avisaba («nadie ha
+escrito» contra «el trigger no dispara») no llega a existir.
+
+**Lo que sigue sin servir es la portada de GA4**, por lo dicho arriba: su «Eventos clave: 0» no es
+retroactivo y seguirá diciendo cero para lo anterior a la marca. La cifra que vale es la del panel.
+
 ## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
 
 **El hueco.** El mismo dato —qué páginas hay— estaba escrito **a mano en cuatro sitios**:
@@ -4305,6 +4336,26 @@ otra puerta.
 por P54.96). Los guardianes con caso malo pasan de siete a **nueve**: `check:experiencias`
 —descubierto, y el que sostiene una exclusión de `.qlty/qlty.toml`— y `check:rutas`, que entra
 con el suyo desde el primer día.
+
+### Enmienda (2026-08-25, P70.03): derivó el tipo y dejó suelto el despacho
+
+**Esta entrada se quedó a medias, y el hueco vivió en producción un sprint entero.** El
+tipo `Card` de `/api/og` se derivó de este registro, así que registrar una página sin copy
+de tarjeta dejó de compilar. Pero **quien elige qué tarjeta pintar no era el tipo**: era una
+cadena de seis `cardParam === "…"` escrita a mano dentro del handler. Cuando entró
+`/contacto`, el compilador exigió su entrada en la tabla de copy y nadie tocó el `if`.
+
+Resultado, medido byte a byte sobre el build servido: **1 de 14 páginas publicaba la tarjeta
+de la home**, con el md5 idéntico en ES y EN, y era justo la del embudo. Un enlace a
+`/contacto` pegado en LinkedIn salía con «Del discovery al dato».
+
+**La lección es sobre el ALCANCE de una derivación, no sobre el olvido.** Derivar el tipo
+cierra la autoría —qué se puede escribir— y no cierra el despacho —qué se elige en tiempo
+de ejecución—. Son dos preguntas y esta entrada solo contestó la primera. Ahora las dos
+salen de `OG_CARDS` y `resolveOgCard` en `lib/routes.ts`, y **al guardián lo llama el mismo
+`resolveOgCard` que usa el handler**: `check:marco` comprueba sobre el HTML servido que el
+`?card=` de cada variante resuelve a la suya, y afirma cuántos ha resuelto (28). Su caso
+malo entra en `check:guardianes` y no es inventado: es este fallo.
 
 ## D73 · Un lector de pantalla encuentra lo que ningún escáner puede, y un escáner encuentra lo que no existe — 2026-08-20
 
@@ -6338,3 +6389,40 @@ verde sobre las dos únicas excepciones que el documento nombraba.
 **Estado al escribirlo:** 80 controles, 71 salen de la capa, **6 marcados**. Cuatro son
 excepciones de verdad; los otros dos son las tarjetas de P74.55, marcadas como **tareadas, no
 exentas** — la marca dice qué son, no las absuelve.
+## D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte — 2026-08-25
+
+**Decisión.** `ARTICLE_UPDATED` —el `dateModified` del JSON-LD y el `lastmod` del sitemap—
+**se sigue escribiendo a mano**, y lo que impide que se quede atrás es un guardián, no la
+disciplina: `check:articulo` sella **el copy del artículo** aparte de sus sellos por sección,
+y sale rojo si ese sello se mueve y la constante no.
+
+**El problema medido.** La fecha pasó **doce commits congelada** en el 21 de agosto, entre
+ellos un capítulo nuevo, los diagramas partidos por sección y el de CI rehecho. El artículo
+se habría lanzado en septiembre anunciándole a Google que no se toca desde hace tres semanas,
+justo cuando se quiere que lo reindexe. **No lo vio nadie porque el `ByLine` no pinta fecha**:
+no hay forma humana de notarlo mirando la página, solo Google y tarde. Y la regla que lo
+impedía estaba escrita **en el comentario de la propia constante**.
+
+**La alternativa que se descartó, y por qué.** Derivarla del último commit que toca el
+artículo nunca caduca, pero **cambia lo que la fecha significa**: pasaría de «cambio
+sustantivo» a «último toque», y un arreglo de una coma movería el `dateModified`. Google
+recomienda lo contrario. Se prefiere conservar el juicio y ponerle una red.
+
+**Lo que hace que el guardián se lea en vez de apagarse: son dos preguntas distintas.** Las
+dependencias por sección vigilan **el mundo que el artículo describe** —si se mueve
+`DECISIONS.md#D72`, hay que RELEER el texto—; el sello del copy vigila **el texto mismo** —si
+se mueve, cambió lo que lee un visitante—. Mezclarlas habría dado un rojo que salta cada vez
+que se toca cualquier documento del repo, es decir, un rojo que nadie mira.
+
+**Qué cuenta como contenido, dicho para que no se dé por cubierto:** los dos diccionarios y
+las figuras. **No** la carpintería: centrar un riel o arreglar un hover no cambia una palabra
+de lo que se lee. Una figura sí, porque un diagrama dice algo.
+
+**Y la salida para lo no sustantivo no es una puerta trasera.** `npm run articulo:sellar` sin
+tocar la fecha deja **una línea en el diff que alguien firma** en la revisión. La diferencia
+con lo de antes es que ahora es una decisión y no un olvido.
+
+**Validado disparándolo** (P54.9): con una palabra cambiada en el copy y la fecha quieta, CI
+sale rojo con las dos salidas impresas; restaurada la palabra, verde. Su caso malo entra en
+`check:guardianes`, y tampoco es inventado: es el estado real de esos doce commits. El
+informe dice además **qué fecha ha comprobado**, que es la regla de esta casa desde D57.

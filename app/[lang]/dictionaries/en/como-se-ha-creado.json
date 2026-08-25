@@ -463,7 +463,7 @@
         { "type": "h3", "text": "What all this buys" },
         {
           "type": "p",
-          "text": "Four of the eight points on the accessibility checklist stop needing manual verification when a page closes, because the piece already handles them: contrast on the system's color pairs, the focus ring, the minimum touch target, and respecting anyone who asked for less motion. That's half of a chapter coming up later, which is why that chapter can be spent entirely on what actually cost something."
+          "text": "Four of the nine points on the accessibility checklist stop needing manual verification when a page closes, because the piece already handles them: contrast on the system's color pairs, the focus ring, the minimum touch target, and respecting anyone who asked for less motion. That's half of a chapter coming up later, which is why that chapter can be spent entirely on what actually cost something."
         },
         {
           "type": "livestat",
@@ -865,10 +865,10 @@
           "linkLabel": "See the measured census",
           "href": "accesibilidad"
         },
-        { "type": "h3", "text": "Four points get inherited, four stay manual" },
+        { "type": "h3", "text": "Five points get inherited, four stay manual" },
         {
           "type": "p",
-          "text": "The checklist is eight points a page has to clear before it counts as closed, and I already mentioned four stopped needing manual checks the day the piece started handling them. The other four stay manual and will keep staying manual, because they depend on the content and no component can supply them:"
+          "text": "The checklist is nine points a page has to clear before it counts as closed, and I already mentioned four stopped needing manual checks the day the piece started handling them. The ninth, the skip link to the content, comes from the page layer and a guard checks it on every change. The other four stay manual and will keep staying manual, because they depend on the content and no component can supply them:"
         },
         {
           "type": "ul",
@@ -881,7 +881,7 @@
         },
         {
           "type": "p",
-          "text": "That split is the only reason an eight-point checklist is still being met in month fourteen: nobody sustains eight manual checks, but four, yes."
+          "text": "That split is the only reason a nine-point checklist is still being met in month fourteen: nobody sustains nine manual checks, but four, yes."
         },
         {
           "type": "p",

@@ -82,6 +82,11 @@
         "title": "Text alternatives",
         "body": "Images that carry meaning have alt text; decorative ones are hidden from assistive technology.",
         "wcag": "WCAG 1.1.1"
+      },
+      {
+        "title": "A keyboard escape route",
+        "body": "The first thing the tab key reaches is a link that jumps straight to the content, so you do not have to walk the whole menu on every page.",
+        "wcag": "WCAG 2.4.1"
       }
     ]
   },
@@ -115,8 +120,8 @@
     "intro": "What doesn't measure up yet, and what it would take.",
     "items": [
       {
-        "title": "Direct contact",
-        "body": "Contact is by email and phone (there's no form yet); both are direct, accessible links."
+        "title": "Text over photography",
+        "body": "The contrast census deliberately abstains on sixteen pairs: the eight pieces of text that sit on a photograph, measured in both themes. There the background is decided by the image and not by the colour system, so measuring them properly means reading the painted pixel one by one. They are identified and pending."
       },
       {
         "title": "CV in PDF",

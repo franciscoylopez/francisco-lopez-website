@@ -18,6 +18,10 @@
  *   4. **El sello cuadra.** Si una dependencia cambió, sale rojo NOMBRANDO la
  *      sección. No dice que el texto sea falso: dice que hay que mirarlo.
  *   5. **Un «dato en vivo» no está tecleado.** La pieza `livestat` promete eso
+ *   5. **La fecha que ve Google.** Si cambia el copy del artículo y
+ *      `ARTICLE_UPDATED` no, sale rojo: ese valor alimenta el `dateModified` del
+ *      JSON-LD y el `lastmod` del sitemap, y no se pinta en la página, así que
+ *      nadie lo nota mirándola (P70.04).
  *      literalmente, y de los tres que había dos eran números a mano que ya
  *      mentían. Su valor tiene que interpolar una cifra derivada, y el token
  *      tiene que existir: uno mal escrito se publica con las llaves puestas
@@ -61,11 +65,16 @@ import { FIGURAS, pasosDeCI } from "../lib/figures";
 import {
   HUELLA_PATH,
   huellaDelArticulo,
+  huellaDelCopy,
+  CLAVE_COPY,
+  CLAVE_FECHA,
   leerSello,
   serializar,
 } from "./articulo/huella";
 
 const SELLAR = process.argv.includes("--seal");
+
+import { ARTICLE_UPDATED } from "../lib/design-values";
 
 const problemas: string[] = [];
 const fallo = (msg: string) => problemas.push(msg);
@@ -287,6 +296,52 @@ if (!SELLAR && problemas.length === 0) {
   }
 }
 
+// ── La fecha que ve Google ───────────────────────────────────────────────────
+//
+// `ARTICLE_UPDATED` alimenta el `dateModified` del JSON-LD y el `lastmod` del
+// sitemap, y NO SE PINTA EN NINGÚN SITIO: el `ByLine` no lleva fecha, así que no
+// hay forma humana de notar que se ha quedado atrás. Solo Google, y tarde. Se
+// quedó doce commits congelada en el 21 de agosto mientras el artículo ganaba un
+// capítulo entero, y la regla que lo impedía estaba escrita en el comentario de
+// la propia constante: una regla que hay que recordar es una regla que se
+// incumple (P70.04).
+//
+// SE MIRA EL COPY, NO LOS SELLOS DE SECCIÓN. Son dos preguntas distintas y
+// mezclarlas daría un guardián que nadie lee: que se mueva `DECISIONS.md#D72`
+// obliga a RELEER el artículo, no a decirle a Google que el texto cambió.
+//
+// LA SALIDA PARA LO NO SUSTANTIVO ES `npm run articulo:sellar` sin tocar la
+// fecha, y no es una puerta trasera: deja una línea en el diff que alguien firma
+// en la revisión. La diferencia con lo de antes es que ahora es una decisión y no
+// un olvido.
+const copyAhora = huellaDelCopy();
+if (copyAhora === undefined)
+  fallo(
+    `alguna de las fuentes del copy del artículo no existe, así que no se puede ` +
+      `sellar su fecha. Revisa \`FUENTES_DEL_COPY\` en scripts/articulo/huella.ts.`,
+  );
+
+if (!SELLAR && copyAhora !== undefined && problemas.length === 0) {
+  const sellado = leerSello();
+  const copySellado = sellado.get(CLAVE_COPY);
+  const fechaSellada = sellado.get(CLAVE_FECHA);
+  if (
+    copySellado !== undefined &&
+    copySellado !== copyAhora &&
+    fechaSellada === ARTICLE_UPDATED
+  ) {
+    fallo(
+      `EL COPY DEL ARTÍCULO HA CAMBIADO Y \`ARTICLE_UPDATED\` SIGUE EN ${ARTICLE_UPDATED}.\n\n` +
+        `    Eso es lo que el sitio le promete a Google en el \`dateModified\` del\n` +
+        `    JSON-LD y en el \`lastmod\` del sitemap, y no se pinta en la página,\n` +
+        `    así que nadie lo va a notar mirándola.\n\n` +
+        `      · fue sustantivo → sube ARTICLE_UPDATED en lib/design-values.ts\n` +
+        `      · no lo fue      → \`npm run articulo:sellar\`, que deja el cambio\n` +
+        `                         de sello a la vista en el diff`,
+    );
+  }
+}
+
 if (problemas.length) {
   console.error(
     "check:articulo — «Cómo se ha creado esta página» puede haber dejado de ser cierto.\n",
@@ -296,7 +351,11 @@ if (problemas.length) {
 }
 
 if (SELLAR) {
-  writeFileSync(HUELLA_PATH, serializar(sellos), "utf8");
+  writeFileSync(
+    HUELLA_PATH,
+    serializar(sellos, copyAhora!, ARTICLE_UPDATED),
+    "utf8",
+  );
   console.log(
     `Artículo sellado en ${HUELLA_PATH} — ${SECCIONES.length} secciones, ` +
       `${dependencias} dependencias.`,
@@ -305,6 +364,6 @@ if (SELLAR) {
   console.log(
     `check:articulo ✓ — ${SECCIONES.length} secciones, ${dependencias} dependencias ` +
       `y ${citasVistas} citas (ES+EN) comprobadas · ${liveStatsVistos} datos en vivo, todos ` +
-      `interpolados · ${pasosWorkflow} pasos de CI dibujados. El sello cuadra.`,
+      `interpolados · ${pasosWorkflow} pasos de CI dibujados · fecha publicada ${ARTICLE_UPDATED}. El sello cuadra.`,
   );
 }

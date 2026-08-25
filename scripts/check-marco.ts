@@ -1,7 +1,7 @@
 /**
  * ¿Una página nueva nace accesible y con su marcado? — `npm run check:marco`.
  *
- * QUÉ PROTEGE. El criterio de cierre de página de `CLAUDE.md` —los 8 puntos de
+ * QUÉ PROTEGE. El criterio de cierre de página de `CLAUDE.md` —los 9 puntos de
  * accesibilidad, el enlace de salto, el SEO y su JSON-LD— se cumplía A MANO y
  * dependía de acordarse. Es el patrón que `BRAND.md` §Cómo se escribe una regla
  * nombra como el que produce drift: «una regla que hay que recordar es una regla
@@ -43,7 +43,7 @@
  * - **Nada codificado solo por color** (punto 6). No hay forma automática.
  *
  * DE DÓNDE SALE EL HTML: de `.next/server/app/**.html`, o sea del propio build.
- * Las trece páginas × dos idiomas se prerenderizan (D45), así que no hace falta ni
+ * Las catorce páginas × dos idiomas se prerenderizan (D45), así que no hace falta ni
  * servidor ni navegador y el paso cuesta segundos — que es lo que permite que
  * corra en CADA PR en vez de ser un nightly. En CI va justo detrás de `Build`,
  * así que mide el HTML de ese commit; en local mide el del último `npm run build`
@@ -60,7 +60,7 @@ import type { AxeResults, RunOptions } from "axe-core";
 import { JSDOM, type DOMWindow } from "jsdom";
 
 import { locales, pagePath, type Locale } from "../lib/i18n/config";
-import { PAGE_SLUGS, type PageSlug } from "../lib/routes";
+import { PAGE_SLUGS, type PageSlug, resolveOgCard } from "../lib/routes";
 
 /**
  * Dónde deja Next el HTML prerenderizado. Es una ruta INTERNA suya, así que si
@@ -141,6 +141,8 @@ const reglasEvaluadas = new Set<string>();
 const idsDeclarados = new Set<string>();
 const idsReferenciados = new Map<string, string>();
 let bloquesLd = 0;
+/** Tarjetas OG cuyo `?card=` se ha resuelto de verdad contra el despacho. */
+let tarjetasResueltas = 0;
 
 /**
  * Recorre un JSON-LD y separa las dos formas de usar un `@id`: un objeto que solo
@@ -346,7 +348,13 @@ function revisarCanonical({ doc, variante, slug, esperada }: Pagina): void {
 }
 
 /** Lo que se ve cuando alguien comparte el enlace: OG y Twitter. */
-function revisarTarjetas({ doc, variante, lang, esperada }: Pagina): void {
+function revisarTarjetas({
+  doc,
+  variante,
+  lang,
+  slug,
+  esperada,
+}: Pagina): void {
   const meta = (sel: string) =>
     doc.querySelector(sel)?.getAttribute("content")?.trim() ?? "";
   const OG: [string, string][] = [
@@ -376,6 +384,40 @@ function revisarTarjetas({ doc, variante, lang, esperada }: Pagina): void {
     fallo(
       variante,
       `la tarjeta OG («${ogImage}») no pide el idioma de esta variante (\`lang=${lang}\`).`,
+    );
+  }
+  // Y QUE EL `card` RESUELVA A LA SUYA. Es la otra mitad de D72: el tipo ya
+  // impedía registrar una página sin copy de tarjeta, pero el DESPACHO estaba
+  // escrito a mano, así que `/contacto` publicó la tarjeta de la home durante un
+  // sprint entero, siendo una página de catorce y justo la del embudo. No lo ve
+  // el compilador, no lo ve `check:rutas` y no lo ve nadie que no comparta el
+  // enlace: por eso se mira aquí, sobre el HTML servido.
+  //
+  // Se resuelve con el MISMO `resolveOgCard` que usa el handler. Reimplementarlo
+  // aquí sería crear la segunda verdad que este arreglo acaba de retirar.
+  if (!ogImage) return;
+  const card = new URL(ogImage, "https://x").searchParams.get("card") ?? "";
+  tarjetasResueltas++;
+  // Las del deep-dive no pasan por `resolveOgCard`: las compone `deepDiveCopy`
+  // leyendo el diccionario de la experiencia, así que aquí basta con que el
+  // parámetro sea el slug. Con otro, cae en la home igual.
+  if (slug === "trayectoria" || slug.startsWith("trayectoria/")) {
+    if (card !== slug) {
+      fallo(
+        variante,
+        `la tarjeta OG pide \`card=${card}\` y esta variante es «${slug}»: la compone ` +
+          "`deepDiveCopy` por el slug, así que con otro parámetro publicaría la de la home.",
+      );
+    }
+    return;
+  }
+  const resuelta = resolveOgCard(card);
+  const suya = slug === "" ? "home" : slug;
+  if (resuelta !== suya) {
+    fallo(
+      variante,
+      `la tarjeta OG pide \`card=${card}\`, que el despacho resuelve a «${resuelta}»: ` +
+        `esta variante publicaría la tarjeta de «${resuelta}» en vez de la suya («${suya}»).`,
     );
   }
 }
@@ -567,6 +609,7 @@ async function main() {
     `check:marco — ${VARIANTES.length} variantes del build ${buildId}\n` +
       `  axe        ${reglasEvaluadas.size} reglas evaluadas · ${Object.keys(DELEGADAS).length} delegadas\n` +
       `  a mano     enlace de salto · un h1 · un main · breadcrumb · canonical y hreflang · OG\n` +
+      `  tarjetas   ${tarjetasResueltas} \`?card=\` resueltos contra el despacho de \`/api/og\`\n` +
       `  JSON-LD    ${bloquesLd} bloques · ${idsDeclarados.size} \`@id\` declarados · ${idsReferenciados.size} referenciados\n`,
   );
   for (const [id, motivo] of Object.entries(DELEGADAS)) {

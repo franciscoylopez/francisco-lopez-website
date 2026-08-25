@@ -463,7 +463,7 @@
         { "type": "h3", "text": "Qué compra todo esto" },
         {
           "type": "p",
-          "text": "Cuatro de los ocho puntos del checklist de accesibilidad dejan de verificarse a mano al cerrar una página, porque los pone la pieza: el contraste de los pares del sistema, el anillo de foco, el objetivo táctil mínimo y el respeto a quien ha pedido menos movimiento. Es la mitad de un capítulo que viene más adelante, y por eso ese capítulo puede dedicarse entero a lo que de verdad costó."
+          "text": "Cuatro de los nueve puntos del checklist de accesibilidad dejan de verificarse a mano al cerrar una página, porque los pone la pieza: el contraste de los pares del sistema, el anillo de foco, el objetivo táctil mínimo y el respeto a quien ha pedido menos movimiento. Es la mitad de un capítulo que viene más adelante, y por eso ese capítulo puede dedicarse entero a lo que de verdad costó."
         },
         {
           "type": "livestat",
@@ -862,11 +862,11 @@
         },
         {
           "type": "h3",
-          "text": "Cuatro puntos se heredan, cuatro se ponen a mano"
+          "text": "Cinco puntos se heredan, cuatro se ponen a mano"
         },
         {
           "type": "p",
-          "text": "El checklist son ocho puntos que hay que cumplir antes de dar una página por cerrada, y ya conté que cuatro dejaron de verificarse a mano el día que los puso la pieza. Los otros cuatro siguen a mano y seguirán, porque dependen del contenido y no puede ponerlos ningún componente:"
+          "text": "El checklist son nueve puntos que hay que cumplir antes de dar una página por cerrada, y ya conté que cuatro dejaron de verificarse a mano el día que los puso la pieza. El noveno, el enlace de salto al contenido, lo pone la capa de página y lo comprueba un guardián en cada cambio. Los otros cuatro siguen a mano y seguirán, porque dependen del contenido y no puede ponerlos ningún componente:"
         },
         {
           "type": "ul",
@@ -879,7 +879,7 @@
         },
         {
           "type": "p",
-          "text": "Esa división es el único motivo por el que un checklist de ocho puntos sigue cumpliéndose el mes catorce: nadie sostiene ocho verificaciones manuales, y cuatro sí."
+          "text": "Esa división es el único motivo por el que un checklist de nueve puntos sigue cumpliéndose el mes catorce: nadie sostiene nueve verificaciones manuales, y cuatro sí."
         },
         {
           "type": "p",

@@ -47,7 +47,12 @@ export interface PageMetadataInput {
   slug?: PageSlug;
   /** `dict.<pagina>.meta`, tal cual. */
   meta: PageMeta;
-  /** `card` de `/api/og`. Por defecto, el slug — hoy coinciden en las seis. */
+  /**
+   * `card` de `/api/og`. Por defecto, el slug, y esa coincidencia ya no es una
+   * observación que haya que mantener a mano: `resolveOgCard` (D72) despacha
+   * contra el registro, y `check:marco` comprueba sobre el HTML servido que la
+   * tarjeta que pide cada página resuelve a la suya.
+   */
   ogCard?: string;
   /** `og:type`. `profile` en Sobre mí; `article` cuando llegue el deep-dive. */
   ogType?: "website" | "profile" | "article";

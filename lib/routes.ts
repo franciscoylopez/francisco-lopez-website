@@ -44,6 +44,47 @@ export const STATIC_PAGE_SLUGS = [
 /** Una página estática, como unión de literales. */
 export type StaticPageSlug = (typeof STATIC_PAGE_SLUGS)[number];
 
+/**
+ * Las tarjetas OG que `/api/og` sabe pintar: `home` más toda página estática que
+ * no sea la propia home ni el índice de `/trayectoria` (ese y sus cinco
+ * experiencias los resuelve `deepDiveCopy` antes de llegar al despacho).
+ *
+ * POR QUÉ EXISTE. D72 derivó el TIPO de tarjeta de este registro y dejó el
+ * DESPACHO escrito a mano: una cadena de seis `cardParam === "…"` en
+ * `app/api/og/route.tsx`. Cuando entró `/contacto` en el sprint 3, el compilador
+ * exigió su entrada en la tabla de copy —eso sí lo cerraba el tipo— y nadie tocó
+ * el `if`, así que la página del embudo publicó la tarjeta de la home durante un
+ * sprint entero. Es el modo de fallo de D72 otra vez, en la mitad que D72 no
+ * cerró: compila, pasa `check:rutas`, y solo lo ve quien comparte el enlace.
+ *
+ * Con la lista aquí, el despacho no es una copia de esta lista: ES esta lista.
+ */
+export type OgCard = "home" | Exclude<StaticPageSlug, "" | "trayectoria">;
+
+export const OG_CARDS: readonly OgCard[] = [
+  "home",
+  ...STATIC_PAGE_SLUGS.filter(
+    (s): s is Exclude<StaticPageSlug, "" | "trayectoria"> =>
+      s !== "" && s !== "trayectoria",
+  ),
+];
+
+/**
+ * El despacho de `?card=`, con su caída a `home` para cualquier cosa que no
+ * exista: el parámetro viene de una URL, así que puede traer lo que sea.
+ *
+ * Lo llaman DOS, y que sea el mismo es la mitad que faltaba del recorrido: el
+ * route handler, que pinta la tarjeta, y `check:marco`, que comprueba sobre el
+ * HTML servido que la que pide cada página resuelve a la suya. Un guardián que
+ * reimplementara este despacho podría opinar distinto que el código, que es
+ * justo el fallo que se está cerrando.
+ */
+export function resolveOgCard(cardParam: string): OgCard {
+  return (OG_CARDS as readonly string[]).includes(cardParam)
+    ? (cardParam as OgCard)
+    : "home";
+}
+
 /** Una página de deep-dive: `trayectoria/<slug>` de una experiencia con página. */
 export type DeepDiveSlug = `trayectoria/${ExperienceSlug}`;
 
