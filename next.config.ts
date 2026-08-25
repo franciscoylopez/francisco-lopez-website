@@ -78,6 +78,31 @@ const nextConfig: NextConfig = {
   // que mire las cabeceras y no aporta nada. Va aquí, junto a `headers()`, porque es
   // lo mismo: qué se sirve en la respuesta.
   poweredByHeader: false,
+  images: {
+    // UN ANCHO DE 384 QUE NO ESTABA, y por eso las dos fotos de «Sobre mí» se
+    // servían a 640 dentro de una caja de 382 (P70.28).
+    //
+    // La causa NO es el `sizes` de esas fotos, que ya declara `384px` en
+    // escritorio. Es que `next/image`, cuando el `sizes` contiene ALGÚN valor en
+    // `vw` —el suyo lleva `100vw` para el móvil—, descarta del `srcset` todo
+    // candidato por debajo de `deviceSizes[0] × el vw más pequeño`. Con el
+    // reparto por defecto eso es 640, así que el `384px` de escritorio no tenía
+    // a qué apuntar: el candidato más pequeño que existía era 640, y 640 píxeles
+    // en una caja de 382 son 1,7× los que hacen falta.
+    //
+    // La palanca correcta es `deviceSizes`, no `imageSizes`: `imageSizes` se
+    // concatena pero cae dentro del mismo filtro, así que sus 384 tampoco
+    // sobrevivían. Bajando el suelo a 384 el filtro deja pasar el candidato y el
+    // navegador elige por lo que necesita, como siempre.
+    //
+    // No quita ningún ancho: solo AÑADE uno por debajo, así que ninguna imagen
+    // del sitio puede empeorar — como mucho, pedir menos.
+    deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    // La doc pide que todos los `imageSizes` sean MENORES que el menor
+    // `deviceSizes`. Al bajar el suelo a 384, el 384 que traía por defecto deja
+    // de cumplirlo; se retira y el resto se queda igual.
+    imageSizes: [32, 48, 64, 96, 128, 256],
+  },
   // La ruta /api/og lee las fuentes (assets/fonts) y la foto (public/og) con fs en
   // runtime. El file-tracing no detecta el join dinámico con process.cwd(), así que
   // se fuerza su inclusión en el bundle serverless para que no falle en Vercel.
