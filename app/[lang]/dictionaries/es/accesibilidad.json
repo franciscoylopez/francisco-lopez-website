@@ -103,6 +103,9 @@
   "inheritance": {
     "num": "03 — Herencia",
     "heading": "La accesibilidad se hereda, no se vuelve a escribir",
+    "figura": {
+      "caption": "Los nueve puntos del checklist, cada uno asignado a la capa que lo pone y a quién lo verifica. Ocho los comprueba una máquina; uno, una persona."
+    },
     "intro": "Cumplir en una página es fácil. Lo difícil es que la página número quince nazca cumpliendo sin que nadie tenga que acordarse. Esto es lo que hace que ocurra, y es la parte que no se ve mirando el sitio.",
     "items": [
       {

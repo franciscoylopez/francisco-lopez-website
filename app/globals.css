@@ -334,7 +334,8 @@
   opacity: 1;
   transform: none;
 }
-/* Diagramas de nodos/líneas de «Cómo se ha creado esta página»: además del
+/* Diagramas de nodos/líneas (el artículo, y desde P70.101 también la sección
+   de herencia de `/accesibilidad`): además del
    fade-up del marco (`data-reveal` en `DiagramPanel`), cada pieza interna
    entra atenuada y un barrido secuencial la lleva a opacidad plena —
    «Realce», la dirección elegida en el prototipo de la Tanda 3 sobre las

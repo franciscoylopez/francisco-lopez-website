@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, LBL_STRONG, rlz } from "./shared";
+import { DosLienzos, LBL, LBL_STRONG, rlz } from "../diagrams/shared";
 
 /** 01 · Dos lectores, dos velocidades: el mismo scroll, leído a dos ritmos. */
 export function DosVelocidadesDiagram({ lang }: { lang: Locale }) {

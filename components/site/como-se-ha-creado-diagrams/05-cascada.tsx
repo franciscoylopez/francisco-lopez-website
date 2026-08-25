@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, LBL_STRONG, rlz } from "./shared";
+import { DosLienzos, LBL, LBL_STRONG, rlz } from "../diagrams/shared";
 
 /** 05 · La cascada de construcción, en escalera descendente (D79, prototipo
  * de Tanda 3 · «Escalera descendente», elegida sobre las otras dos que se

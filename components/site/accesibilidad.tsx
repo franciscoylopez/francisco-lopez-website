@@ -19,7 +19,8 @@ import { CARD, HERO_ROW, SECTION, WRAP } from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
-import { SectionHeader } from "@/components/ui/heading";
+import { HerenciaDiagram } from "./diagrams/herencia";
+import { LEADING, SectionHeader } from "@/components/ui/heading";
 
 type AccesibilidadDict = Dictionary["accesibilidad"];
 
@@ -225,6 +226,38 @@ export function Accesibilidad({
               {t.inheritance.intro}
             </p>
           </SectionHeader>
+          {/* EL DIBUJO VA ANTES DE LAS TARJETAS, no después (P70.101): las
+              cuatro tarjetas cuentan CÓMO se hereda cada mecanismo, y el
+              diagrama dice QUÉ se hereda. Puesto detrás, se leía como un
+              resumen de lo ya leído en vez de como el mapa que las ordena.
+
+              EL MARCO ES EL MISMO QUE EL DE LOS DIAGRAMAS DEL ARTÍCULO, y su
+              `p-[clamp(1rem,2.5vw,1.5rem)]` no es decoración: a 360 resuelve a
+              16px, que son los que `check:figuras` presupuesta al calcular el
+              hueco (360 − 42 de página − 2 de borde − 32 de panel = 284). Con
+              más aire, el rótulo cae por debajo de 11px pintados sin que nadie
+              toque el dibujo. Se midió en el prototipo, donde con 24px daba
+              9,19.
+
+              `diagram-realce` + `data-reveal` encienden el barrido de `.rlz`
+              (D79). Sin JS o con `prefers-reduced-motion`, cada pieza es
+              opacidad 1 desde el primer render. */}
+          <figure
+            data-reveal
+            className="diagram-realce border-border bg-card m-0 mb-8 overflow-hidden rounded-xl border"
+          >
+            <div className="@container flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
+              <HerenciaDiagram lang={lang} />
+            </div>
+            <figcaption
+              className={cn(
+                "border-border text-muted-foreground border-t px-5 py-4 text-[0.85rem]",
+                LEADING.lead,
+              )}
+            >
+              {t.inheritance.figura.caption}
+            </figcaption>
+          </figure>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
             {t.inheritance.items.map((i) => (
               <InfoCard

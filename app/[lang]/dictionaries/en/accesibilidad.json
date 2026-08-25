@@ -103,6 +103,9 @@
   "inheritance": {
     "num": "03 — Inheritance",
     "heading": "Accessibility is inherited, not rewritten",
+    "figura": {
+      "caption": "The nine checklist points, each assigned to the layer that puts it and to whoever verifies it. Eight are checked by a machine; one, by a person."
+    },
     "intro": "Meeting the bar on one page is easy. The hard part is page number fifteen being born compliant without anyone having to remember. This is what makes that happen, and it's the part you can't see by looking at the site.",
     "items": [
       {

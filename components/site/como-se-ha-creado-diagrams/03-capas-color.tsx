@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, rlz } from "./shared";
+import { DosLienzos, LBL, rlz } from "../diagrams/shared";
 
 /** 03 · Las cuatro píldoras del color de marca: el mismo gesto rotado que
  * abre la portada del Brand Kit en `/api/og`, extendido de su par decorativo

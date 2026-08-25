@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, rlz } from "./shared";
+import { DosLienzos, LBL, rlz } from "../diagrams/shared";
 
 /** 08 · Las cinco capas de verificación, cada una cubriendo más que la
  * anterior — el diagrama validado en el prototipo de P59, con tokens reales. */

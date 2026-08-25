@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, LBL_STRONG, rlz } from "./shared";
+import { DosLienzos, LBL, LBL_STRONG, rlz } from "../diagrams/shared";
 
 /** 07 · Qué sale de la página antes de un clic: nada, hasta que alguien pulsa. */
 export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {

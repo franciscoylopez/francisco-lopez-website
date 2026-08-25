@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, LBL_STRONG, rlz } from "./shared";
+import { DosLienzos, LBL, LBL_STRONG, rlz } from "../diagrams/shared";
 
 /**
  * 06 · Un hecho, tres longitudes, tres destinos. Elegido con `/prototype`

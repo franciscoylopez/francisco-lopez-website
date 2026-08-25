@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, rlz } from "./shared";
+import { DosLienzos, LBL, rlz } from "../diagrams/shared";
 
 /** 04 · El stack como grafo, no como flujo (P60 tanda 2, punto 16): un núcleo
  * que se despliega, con dos piezas que también viajan en el bundle y dos
