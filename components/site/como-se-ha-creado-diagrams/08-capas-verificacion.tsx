@@ -3,7 +3,29 @@ import type { Locale } from "@/lib/i18n/config";
 import { DosLienzos, LBL, rlz } from "../diagrams/shared";
 
 /** 08 · Las cinco capas de verificación, cada una cubriendo más que la
- * anterior — el diagrama validado en el prototipo de P59, con tokens reales. */
+ * anterior — el diagrama validado en el prototipo de P59, con tokens reales.
+ *
+ * LOS ANCHOS SE CORRIGIERON EL 2026-08-25 (P68.594) porque el dibujo decía lo
+ * contrario que su propio texto alternativo, que es el peor sitio donde puede
+ * fallar un diagrama: quien lo ve y quien lo oye recibían cosas distintas.
+ *
+ * El alt afirma dos cosas —que la barra de la persona es LA MÁS LARGA y que es
+ * LA ÚNICA que entra en la zona final—, y las dos eran falsas. `lector de
+ * pantalla` medía 448 contra los 420 de la persona, así que rompía la escalera
+ * justo en el escalón que sostiene la tesis del capítulo; y acababa en 578,
+ * o sea que no solo cruzaba la frontera de la zona (466): se salía de ella por
+ * la derecha, 28 unidades más allá de donde el rectángulo punteado termina.
+ *
+ * SE ARREGLA EL DIBUJO Y NO EL ALT, y esa es la decisión: el alt describe lo que
+ * el capítulo quiere decir —solo una persona encuentra lo que no incumple
+ * ninguna regla—, así que lo que estaba mal era el dibujo. Un lector de pantalla
+ * no encuentra nada por sí solo; lo encuentra quien lo maneja, y ese es el
+ * escalón siguiente.
+ *
+ * La escalera nueva es 150 · 220 · 285 · 325 y luego 420: el salto más grande
+ * (95) es el último, que es exactamente lo que el diagrama afirma. El lector
+ * acaba en 455, once unidades antes de la frontera, así que se acerca sin
+ * cruzarla. */
 export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
   const t = {
     es: {
@@ -11,9 +33,9 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
         "Cinco barras horizontales de longitud creciente: compilador, escáner automático, censo de contraste, lector de pantalla y persona. Solo la barra de la persona, la más larga, entra en la zona final marcada como «lo que ninguna regla prohíbe».",
       capas: [
         { label: "compilador", w: 150 },
-        { label: "escáner automático", w: 240 },
-        { label: "censo de contraste", w: 330 },
-        { label: "lector de pantalla", w: 448 },
+        { label: "escáner automático", w: 220 },
+        { label: "censo de contraste", w: 285 },
+        { label: "lector de pantalla", w: 325 },
       ],
       persona: "persona",
       coveredLine1: "lo que cubre",
@@ -26,9 +48,9 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
         "Five horizontal bars of increasing length: compiler, automated scanner, contrast census, screen reader and person. Only the person's bar, the longest, reaches into the final zone marked “what no rule forbids”.",
       capas: [
         { label: "compiler", w: 150 },
-        { label: "automated scanner", w: 240 },
-        { label: "contrast census", w: 330 },
-        { label: "screen reader", w: 448 },
+        { label: "automated scanner", w: 220 },
+        { label: "contrast census", w: 285 },
+        { label: "screen reader", w: 325 },
       ],
       persona: "person",
       coveredLine1: "what a written",
@@ -127,9 +149,19 @@ export function CapasVerificacionDiagram({ lang }: { lang: Locale }) {
   /** Las mismas cinco barras, con el rótulo ENCIMA en vez de en un canalón a
    * la izquierda. El canalón era lo que obligaba a un lienzo de 620: reservaba
    * 118 unidades para un texto que necesita 119. Arriba, cada rótulo dispone
-   * del ancho entero, y las barras conservan su proporción exacta (×260/448),
-   * que es lo único que este diagrama afirma. */
-  const escala = (w: number) => Math.round((w * 260) / 448);
+   * del ancho entero, y las barras conservan su proporción exacta, que es lo
+   * único que este diagrama afirma.
+   *
+   * EL DIVISOR ES LA BARRA DE LA PERSONA, no la más larga de las herramientas
+   * (P68.594). Antes era `×260/448`, o sea el ancho del lector de pantalla, que
+   * era entonces la barra más larga del dibujo y no debería haberlo sido nunca.
+   * Al corregirlo, ese 448 dejó de existir y el divisor se habría quedado
+   * apuntando a una cifra que ya no es de nadie. La persona es la referencia
+   * correcta porque su extremo está ANCLADO en los dos lienzos: acaba justo en
+   * el borde derecho de la zona (550 en el ancho, 254 en el estrecho), así que
+   * normalizar por ella hace que los dos dibujos digan lo mismo por
+   * construcción. */
+  const escala = (w: number) => Math.round((w * 244) / 420);
   const estrecho = (
     <svg
       viewBox="0 0 280 312"
