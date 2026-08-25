@@ -53,7 +53,9 @@
         "title": "Definidos una sola vez",
         "body": "Viven en el :root del sitio junto a los tokens de color; cada página los consume. Cambiar un valor aquí lo cambia en todas partes."
       }
-    ]
+    ],
+    "copyAria": "Copiar el bloque de tokens de layout",
+    "copiedAnnounce": "Bloque de tokens copiado al portapapeles"
   },
   "breakpoints": {
     "num": "03 — Breakpoints",

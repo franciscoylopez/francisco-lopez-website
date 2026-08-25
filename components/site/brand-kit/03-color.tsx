@@ -2,7 +2,13 @@ import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
-import { BRAND_SWATCHES, swatchRatioParts } from "@/lib/design-values";
+import { CopyButton } from "@/components/ui/copy-button";
+import {
+  BRAND_SWATCHES,
+  swatchHexText,
+  swatchRatioParts,
+  swatchSwaps,
+} from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 import { Callout, LEAD } from "./shared";
@@ -65,16 +71,33 @@ export function Color({
                     <div className="font-display text-[0.98rem] font-semibold">
                       {c.name}
                     </div>
-                    <Badge tone={s.swaps ? "cyan" : "neutral"}>
-                      {s.swaps ? t.swapConmuta : t.swapFijo}
+                    <Badge tone={swatchSwaps(s) ? "cyan" : "neutral"}>
+                      {swatchSwaps(s) ? t.swapConmuta : t.swapFijo}
                     </Badge>
                   </div>
                   <code className="text-muted-foreground mt-[0.35rem] block font-mono text-[0.76rem]">
                     {s.token}
                   </code>
-                  <code className="text-foreground mt-[0.15rem] block font-mono text-[0.78rem]">
-                    {s.hex}
-                  </code>
+                  {/* El pie IMPRIME los dos hexes cuando el token conmuta, y el
+                      botón COPIA uno solo: el del tema que se está viendo. Son
+                      dos cosas distintas y por eso son dos funciones (ver la
+                      nota de `swatchHexFor` en design-values). El anuncio dice
+                      cuál se ha llevado, que es lo que deshace la ambigüedad
+                      para quien no ve la pantalla.
+                      El `-my-2` deja el suelo táctil de 44px intacto y evita
+                      que la tarjeta crezca 26px: los vecinos de arriba y abajo
+                      no son interactivos, así que solaparlos no quita nada. */}
+                  <div className="mt-[0.15rem] flex items-center justify-between gap-2">
+                    <code className="text-foreground block font-mono text-[0.78rem]">
+                      {swatchHexText(s)}
+                    </code>
+                    <CopyButton
+                      value={s.hex}
+                      label={t.copyAria.replace("{token}", s.token)}
+                      announcement={t.copiedAnnounce}
+                      className="-my-2 shrink-0"
+                    />
+                  </div>
                   <div className="border-border text-muted-foreground mt-[0.6rem] border-t border-dashed pt-[0.6rem] text-[0.78rem]">
                     {ratio}
                   </div>

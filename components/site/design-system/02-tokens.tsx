@@ -2,7 +2,8 @@ import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { LAYOUT_TOKENS } from "@/lib/design-values";
+import { CopyButton } from "@/components/ui/copy-button";
+import { LAYOUT_TOKENS, LAYOUT_TOKENS_CSS } from "@/lib/design-values";
 
 /* ===================== (02) TOKENS ===================== */
 export function Tokens({ t }: { t: Dictionary["designSystem"]["tokens"] }) {
@@ -26,8 +27,13 @@ export function Tokens({ t }: { t: Dictionary["designSystem"]["tokens"] }) {
             className="border-border overflow-hidden rounded-xl border"
             style={{ background: "var(--foreground)" }}
           >
+            {/* El botón de copiar mide 44px de suelo táctil, así que la cabecera
+                del panel baja su relleno vertical para no crecer con él: el
+                objetivo se conserva entero, la caja casi no se entera.
+                «Copia de un vistazo» llevaba escrito desde P37.66 y no hacía
+                nada; ahora es el rótulo de una acción de verdad (P70.24). */}
             <div
-              className="flex items-center justify-between gap-4 px-5 py-[0.9rem]"
+              className="flex items-center justify-between gap-4 py-[0.4rem] pr-[0.4rem] pl-5"
               style={{
                 borderBottom:
                   "1px solid color-mix(in oklch,var(--background),transparent 82%)",
@@ -42,8 +48,22 @@ export function Tokens({ t }: { t: Dictionary["designSystem"]["tokens"] }) {
               >
                 {t.copyLabel}
               </span>
-              <span className="text-muted-foreground text-[0.68rem] tracking-[0.06em] uppercase">
-                {t.copyHint}
+              <span className="flex items-center gap-1">
+                <span
+                  className="text-[0.68rem] tracking-[0.06em] uppercase"
+                  style={{
+                    color:
+                      "color-mix(in oklch,var(--background),transparent 25%)",
+                  }}
+                >
+                  {t.copyHint}
+                </span>
+                <CopyButton
+                  value={LAYOUT_TOKENS_CSS}
+                  label={t.copyAria}
+                  announcement={t.copiedAnnounce}
+                  onInverted
+                />
               </span>
             </div>
             <div className="flex flex-col gap-[0.55rem] p-5 font-mono text-[clamp(0.8rem,1.4vw,0.92rem)] leading-[1.5]">
