@@ -6,6 +6,8 @@ import { SECTION, WRAP } from "@/components/ui/layout";
 import { fillRatios, ratioText } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 
+import { SpecimenCard } from "./shared";
+
 /* ===================== (10) ETIQUETAS =====================
     La tercera capa del sistema, publicada aquí por el mismo motivo que (09):
     el recorrido completo es regla → componente → sección publicada → uso, y
@@ -44,56 +46,40 @@ export function Etiquetas({
                 ? [...c.demo, ratioText("bodyText", "light", lang)]
                 : c.demo;
             return (
-              <div
+              <SpecimenCard
                 key={c.cls}
-                className="border-border overflow-hidden rounded-xl border"
+                kicker={c.kicker}
+                cls={c.cls}
+                rule={c.rule}
+                note={fillRatios(c.note, lang)}
               >
-                <div className="bg-background flex min-h-[7.5rem] flex-wrap items-center justify-center gap-2 px-5 py-7">
-                  {/* Las tres primeras tarjetas enseñan un TONO con dos ejemplos
+                {/* Las tres primeras tarjetas enseñan un TONO con dos ejemplos
                     reales; la cuarta enseña los tres `kind` sobre un mismo tono,
                     que es el eje que de verdad significa algo. Por eso el mapeo
                     va por índice y no por una prop en el diccionario: el copy
                     describe la variante, no la elige. */}
-                  {demo.map((d, j) => (
-                    <Badge
-                      key={d}
-                      tone={
-                        i === 0
-                          ? "neutral"
-                          : i === 1
-                            ? "cyan"
-                            : i === 2
-                              ? "purple"
-                              : "neutral"
-                      }
-                      kind={
-                        i === 3
-                          ? ((["label", "value", "code"] as const)[j] ??
-                            "value")
-                          : "value"
-                      }
-                    >
-                      {d}
-                    </Badge>
-                  ))}
-                </div>
-                <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
-                  <div className="mb-[0.7rem] flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                    <span className="text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase">
-                      {c.kicker}
-                    </span>
-                    <code className="text-muted-foreground font-mono text-[0.74rem]">
-                      {c.cls}
-                    </code>
-                  </div>
-                  <p className="text-foreground m-0 text-[0.88rem] leading-[1.6]">
-                    {c.rule}
-                  </p>
-                  <p className="text-muted-foreground border-border m-0 mt-[0.8rem] border-t border-dashed pt-[0.8rem] text-[0.82rem] leading-[1.55]">
-                    {fillRatios(c.note, lang)}
-                  </p>
-                </div>
-              </div>
+                {demo.map((d, j) => (
+                  <Badge
+                    key={d}
+                    tone={
+                      i === 0
+                        ? "neutral"
+                        : i === 1
+                          ? "cyan"
+                          : i === 2
+                            ? "purple"
+                            : "neutral"
+                    }
+                    kind={
+                      i === 3
+                        ? ((["label", "value", "code"] as const)[j] ?? "value")
+                        : "value"
+                    }
+                  >
+                    {d}
+                  </Badge>
+                ))}
+              </SpecimenCard>
             );
           })}
         </div>

@@ -18,12 +18,21 @@ import { cn } from "@/lib/utils";
  * página, y debajo su ficha sobre `--card` — rótulo, nombre de la pieza en
  * monoespaciada, qué resuelve, y la letra pequeña tras un filete discontinuo.
  *
- * Estaba escrita a mano, idéntica, en las secciones 08, 09, 10 y 11, y la
- * quinta (15, la capa de artículo) la habría copiado por quinta vez. Sube aquí
- * por lo que dice la cabecera de este archivo: es lo que se usa en más de una
- * sección. **Las cuatro que la tenían inline siguen sin migrar** — es un
- * refactor mecánico sobre secciones publicadas y su gate es un diff de HTML
- * vacío (D42), así que va tareado aparte y no de rebote aquí.
+ * Estaba escrita a mano en las secciones 08, 09 y 10, y la cuarta (15, la capa
+ * de artículo) la habría copiado por cuarta vez. Sube aquí por lo que dice la
+ * cabecera de este archivo: es lo que se usa en más de una sección. **Las tres
+ * migraron el 2026-08-25 (P70.23)**, en su propia tarea y no de rebote: es un
+ * refactor mecánico sobre secciones publicadas y su gate es un diff de HTML.
+ *
+ * LA (11) NO ENTRA, y la tarea decía que eran cuatro. Su tarjeta de tonos se
+ * parece y no es esta: no tiene rótulo ni regla, su demo apila en columna en vez
+ * de centrar en fila, y sobre todo **su SUPERFICIE cambia por espécimen** —es
+ * literalmente lo que ese subapartado enseña, que el rótulo toma su gris del
+ * fondo—. Migrarla pedía tres mandos nuevos (superficie, rótulo opcional, regla
+ * opcional) para servir a un solo llamador cuyo asunto es justo que la superficie
+ * varía, y eso es la regla 4 de `BRAND.md`: dos cosas que se parecen y significan
+ * distinto no se unifican. Lo único que de verdad comparten es la FICHA de abajo,
+ * y son dos apariciones.
  *
  * `wide` es el único eje real: las piezas pequeñas (una cita, una etiqueta) se
  * centran en su caja, y las que son una franja o una rejilla entera necesitan
