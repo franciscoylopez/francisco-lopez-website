@@ -115,7 +115,7 @@
       },
       {
         "title": "El marco lo pone la página, no quien la escribe",
-        "body": "El enlace de salto al contenido, el idioma del documento, la miga de pan y la estructura de títulos los pone el armazón que comparten las {paginas} páginas. Una página nueva los trae puestos el día que se crea, y una comprobación los verifica sobre el HTML ya generado de las {paginas} en los dos idiomas."
+        "body": "El enlace de salto al contenido y su destino, el idioma del documento y los dos landmarks de navegación los pone el armazón que comparten las {paginas} páginas: una página nueva los trae puestos el día que se crea. La miga de pan y la estructura de títulos no, porque dependen de lo que cuente cada página, y por eso son justo las que una comprobación verifica sobre el HTML ya generado de las {paginas} en los dos idiomas."
       },
       {
         "title": "Cuándo hay que volver a medir lo dice una máquina",

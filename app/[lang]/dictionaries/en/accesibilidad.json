@@ -115,7 +115,7 @@
       },
       {
         "title": "The frame comes from the shell, not the author",
-        "body": "The skip link, the document language, the breadcrumb and the heading structure all come from the shell the {paginas} pages share. A new page is born with them on the day it's created, and a check verifies them against the already generated HTML of all {paginas}, in both languages."
+        "body": "The skip link and its target, the document language and the two navigation landmarks come from the shell the {paginas} pages share: a new page is born with them on the day it's created. The breadcrumb and the heading structure do not, because they depend on what each page has to say, and that is exactly why they are the ones a check verifies against the already generated HTML of all {paginas}, in both languages."
       },
       {
         "title": "A machine decides when to measure again",
