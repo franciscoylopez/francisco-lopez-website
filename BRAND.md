@@ -228,10 +228,12 @@ de icono— nace de una cadena de clases inline.** Si el caso no encaja en una v
 la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como
 el switch del consentimiento, aquí debajo).
 
-> **Tres excepciones vivas, y la lista se saca del disco, no de la memoria** *(2026-08-25)*.
-> Las dos primeras comparten razón: hay **una** de cada en todo el sitio, así que no hay
-> repetición que factorizar y una pieza con un solo call site solo añadiría indirección.
-> **Salen cuando aparezca la segunda**, o cuando haya que rehacerlas por otro motivo.
+> **Cuatro excepciones vivas, y esta lista ya no se escribe de memoria: la comprueba
+> `npm run check:excepciones`** *(2026-08-25)*, que le exige a cada control fuera de la capa
+> una marca `@fuera-de-capa` y que aquí esté nombrado. Las dos primeras
+> comparten razón: hay **una** de cada, así que no hay repetición que factorizar y una pieza
+> con un solo call site solo añadiría indirección. **Salen cuando aparezca la segunda**, o
+> cuando haya que rehacerlas por otro motivo.
 >
 > - **El switch del consentimiento** *(2026-08-08)*: `consent-banner.tsx` lo dibuja con una
 >   cadena inline. Y traerlo hecho es lo que mandaría la cascada, que **aplica hacia
@@ -240,14 +242,16 @@ el switch del consentimiento, aquí debajo).
 > - **El índice de secciones del artículo** *(2026-08-22)*: el riel de `article-islands.tsx`
 >   no compone `chromeLinkVariants` —es una píldora que se expande en hover/foco con estado
 >   activo propio, y ninguna `shape` de `chrome.tsx` cubre ese caso—. Sale a `chrome.tsx`.
-> - **La tarjeta que se pulsa entera, escrita dos veces** *(2026-08-25)*: `page-closer.tsx` y
->   `trayectoria-indice.tsx` componen `cn(CARD, …)` en vez de la variante `card`. A ésta la
->   condición de salida **ya se le cumplió**, así que está tareada, no exenta. Y la
->   divergencia no es cosmética: a las dos les falta el `focus-visible:bg-muted` que la
->   variante sí tiene, así que el teclado no recibe lo que recibe el ratón.
+> - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
+>   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
+> - **La tarjeta que se pulsa entera, escrita tres veces** *(2026-08-25)*: `page-closer.tsx`,
+>   `trayectoria-indice.tsx` y `article.tsx` componen `cn(CARD, …)` en vez de la variante
+>   `card`. Su condición de salida ya se cumplió: está tareada (P74.55), no exenta. Y no es
+>   cosmética: les falta el `focus-visible:bg-muted` de la variante, así que el teclado no
+>   recibe lo que recibe el ratón.
 >
-> **Y lo que NO es excepción aunque lo parezca:** el control sobre imagen del vídeo. Sale de
-> `.video-facade` en `globals.css`, y una clase de `globals.css` es tan capa como una variante.
+> **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
+> imagen del vídeo no es excepción: sale de `.video-facade`.
 
 ## Accesibilidad (no negociable)
 

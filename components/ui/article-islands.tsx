@@ -174,6 +174,8 @@ export function SectionRail({ items }: { items: RailItem[] }) {
                   crece desde su borde izquierdo, igual que antes del fix de
                   44×44 — centrado, la mitad del crecimiento empujaba a la
                   IZQUIERDA, hacia fuera del borde del riel. */}
+              {/* @fuera-de-capa: píldora que se expande en hover/foco con estado activo
+                  propio, y ninguna shape de chrome.tsx cubre ese caso (2026-08-22) */}
               <a
                 href={`#${item.id}`}
                 aria-current={isActive ? "true" : undefined}

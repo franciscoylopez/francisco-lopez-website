@@ -202,6 +202,8 @@ export function Nav({
           >
             {dict.sobreMi}
           </a>
+          {/* @fuera-de-capa: etiqueta de dos letras, el ancho lo daba el texto y el suelo
+              táctil se escribe aquí; verificado el 2026-08-18 (2026-08-18) */}
           <a
             href={altHref}
             hrefLang={lang === "en" ? "es" : "en"}

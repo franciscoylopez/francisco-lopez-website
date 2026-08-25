@@ -144,6 +144,7 @@
 - D106 · El umbral de una figura es su propio lienzo, y quien lo vigila lee el prerender, no el navegador
 - D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red
 - D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra
+- D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6229,3 +6230,53 @@ el metro antes de creerte el hallazgo.
 
 **Relación.** Amplía D49 y D99, que ya sacaron `psi` de CI por su variabilidad; esto dice **qué
 parte** de su salida es la variable y por tanto cuál no puede fundar una tarea.
+
+---
+
+## D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso — 2026-08-25
+
+**Contexto.** `BRAND.md` §Ningún control se escribe a mano lleva una lista de excepciones
+vivas, y era **la única lista del repo que seguía escribiéndose de memoria**. Al derivarla del
+disco por primera vez (P68.68) estaba mal por los dos lados: nombraba como excepción el control
+sobre imagen del vídeo —que no lo es, sale de `.video-facade` en `globals.css`— y no mencionaba
+la que sí lo era, la tarjeta que se pulsa entera, escrita a mano en **tres** sitios.
+
+**Decisión.** `npm run check:excepciones`, en CI, con una marca en el punto de uso:
+
+```
+// @fuera-de-capa: <motivo en una línea> (<AAAA-MM-DD>)
+```
+
+Pegada al elemento o a la constante que le da las clases, y **sin exigir `//`**: dentro de JSX
+no se puede, y la mitad de los sitios donde hace falta piden `{/* … */}`. Una convención que no
+se puede escribir donde ocurre la cosa es la regla 1 de `BRAND.md` §Cómo se escribe una regla.
+
+**Va en las dos direcciones**, como todos los guardianes de aquí: (1) todo control fuera de la
+capa lleva marca, y (2) toda marca sale nombrada en `BRAND.md`. Con solo la primera, el
+documento podría quedarse con excepciones fantasma; con solo la segunda, el código podría
+llenarse de controles a mano sin que nadie lo notara.
+
+**LA CALIBRACIÓN FUE EL TRABAJO, no el script.** La primera pasada devolvió 13 hallazgos y
+solo cinco eran reales. Tres cortes, cada uno contra un criterio que ya estaba escrito:
+
+1. **Un `<a>` sin decisión de aspecto no es un control escrito a mano.** El enlace del logo del
+   nav es `inline-flex items-center no-underline`: no decide nada que la capa tenga que
+   resolver. El corte —`hover:` `rounded-` `border` `bg-` `px-`— es el que ya usaba la Fase 1
+   de `design-review`, no uno nuevo.
+2. **Dos niveles de resolución de identificadores.** Los chips de descarga del Brand Kit son
+   `cn(cls, …)` donde `cls` es un ternario entre dos constantes que son quienes llaman a la
+   variante. Con un solo nivel salían como escritos a mano.
+3. **Y los comentarios no cuentan.** `action.tsx` —el archivo de las variantes— salía como
+   incumplidor porque su cabecera *menciona* `<button>`.
+
+**Y el metro no se dio por bueno hasta que reprodujo sus anclajes**, que aquí son las dos
+excepciones que `BRAND.md` ya listaba. No las veía **ninguna de las dos**, y por la misma razón:
+**el elemento que recibe el clic y el que está pintado no son el mismo nodo**. El switch del
+consentimiento pinta en un `<span>` hermano de un `<input class="peer sr-only">`; la píldora del
+riel de artículo es un `<span>` dentro del `<a>`. Es **D104 otra vez** —el censo tuvo este mismo
+problema con la caja de un hijo— y sin buscar en los descendientes, este guardián habría dado
+verde sobre las dos únicas excepciones que el documento nombraba.
+
+**Estado al escribirlo:** 80 controles, 71 salen de la capa, **6 marcados**. Cuatro son
+excepciones de verdad; los otros dos son las tarjetas de P74.55, marcadas como **tareadas, no
+exentas** — la marca dice qué son, no las absuelve.

@@ -258,6 +258,14 @@ const CASOS: Caso[] = [
     mutar: (o) =>
       o.replace("if (grupo.length > 1) {", "if (grupo.length > 2) {"),
   },
+  {
+    guardian: "check:excepciones",
+    rotura: "un control a mano se queda sin su marca `@fuera-de-capa`",
+    // Se le quita la marca a una de las tres tarjetas que se pulsan enteras. Es el
+    // caso real: así estaba el repo hasta el 2026-08-25, y BRAND.md no lo sabía.
+    archivo: "components/ui/page-closer.tsx",
+    mutar: (o) => o.replace("// @fuera-de-capa:", "// tarjeta a mano:"),
+  },
 ];
 
 /**

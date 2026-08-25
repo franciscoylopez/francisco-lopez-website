@@ -30,6 +30,8 @@ import { eyebrowVariants } from "./heading";
 // `globals.css`. La versión anterior se lo sustituía por su propio `ring` con el
 // color del offset sin declarar, y en tema oscuro salía un halo claro entre la
 // tarjeta y el anillo.
+// @fuera-de-capa: tarjeta que se pulsa entera escrita a mano; TAREADA en P74.55, no
+// exenta — le falta el `focus-visible:bg-muted` de la variante `card` (2026-08-25)
 const LINK_CARD = cn(
   CARD,
   "group hover:bg-muted border-control-edge block px-[1.4rem] py-[1.2rem] transition-colors",
