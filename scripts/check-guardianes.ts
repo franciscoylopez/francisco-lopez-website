@@ -296,10 +296,18 @@ const CASOS: Caso[] = [
   {
     guardian: "check:excepciones",
     rotura: "un control a mano se queda sin su marca `@fuera-de-capa`",
-    // Se le quita la marca a una de las tres tarjetas que se pulsan enteras. Es el
-    // caso real: así estaba el repo hasta el 2026-08-25, y BRAND.md no lo sabía.
-    archivo: "components/ui/page-closer.tsx",
-    mutar: (o) => o.replace("// @fuera-de-capa:", "// tarjeta a mano:"),
+    // Se le quita la marca al control a mano que queda en la capa de artículo: la
+    // celda de rejilla pulsable de `article.tsx`. Es el caso real —así estaba el
+    // repo hasta que D109 puso la marca en el punto de uso, y BRAND.md no lo sabía—.
+    //
+    // APUNTABA A `page-closer.tsx` Y EL CASO CADUCÓ EL 2026-08-25: P70.15 sacó esa
+    // tarjeta a la variante `card`, así que el archivo se quedó sin marca que
+    // quitar y la mutación dejó de mutar nada. Lo cazó este mismo script en CI, que
+    // es exactamente para lo que existe: un caso malo que ya no muerde puntúa como
+    // verde. Al elegir el archivo de un caso, conviene preferir el que NO está
+    // tareado para salir de la lista.
+    archivo: "components/ui/article.tsx",
+    mutar: (o) => o.replace("@fuera-de-capa:", "control a mano:"),
   },
 ];
 
