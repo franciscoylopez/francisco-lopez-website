@@ -247,6 +247,14 @@ export function Accesibilidad({
               toque el dibujo. Se midió en el prototipo, donde con 24px daba
               9,19.
 
+              SIN `mx-auto`, o sea alineada a la IZQUIERDA (Francisco,
+              2026-08-25, para las DOS figuras de esta página). Centrada dejaba
+              su borde izquierdo desalineado con todo lo demás de la sección
+              —titular, entradilla y la primera columna de tarjetas arrancan en
+              el mismo eje—, y en una página que es sobre todo rejillas de
+              tarjetas esa desalineación se nota más que el desequilibrio de
+              tener hueco a la derecha.
+
               Y `max-w-[690px]` PORQUE LA CAJA SE AJUSTA AL DIBUJO, no a la
               columna (feedback de Francisco: a ancho completo la tarjeta dejaba
               250px de vacío a cada lado del lienzo).
@@ -272,7 +280,7 @@ export function Accesibilidad({
               opacidad 1 desde el primer render. */}
           <figure
             data-reveal
-            className="diagram-realce border-border bg-card mx-auto mt-0 mb-8 max-w-[690px] overflow-hidden rounded-xl border"
+            className="diagram-realce border-border bg-card mt-0 mb-8 max-w-[690px] overflow-hidden rounded-xl border"
           >
             <div className="@container flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
               <HerenciaDiagram lang={lang} />
@@ -400,7 +408,7 @@ export function Accesibilidad({
               dibujo estrecho en escritorio. */}
           <figure
             data-reveal
-            className="diagram-realce border-border bg-card mx-auto mt-0 mb-8 max-w-[690px] overflow-hidden rounded-xl border"
+            className="diagram-realce border-border bg-card mt-0 mb-8 max-w-[690px] overflow-hidden rounded-xl border"
           >
             <div className="@container flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
               <CapasVerificacionDiagram lang={lang} />
