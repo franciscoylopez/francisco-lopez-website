@@ -22,6 +22,7 @@ import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
 import { HerenciaDiagram } from "./diagrams/herencia";
+import { CapasVerificacionDiagram } from "./diagrams/capas-verificacion";
 import { LiveStat } from "@/components/ui/live-stat";
 import { fillFigures } from "@/lib/figures";
 import { LEADING, SectionHeader } from "@/components/ui/heading";
@@ -379,6 +380,40 @@ export function Accesibilidad({
               {t.blindspot.intro}
             </p>
           </SectionHeader>
+          {/* EL DIAGRAMA QUE YA EXISTÍA Y NO SE PODÍA REUSAR (P70.104). Dibuja
+              cinco capas de verificación de longitud creciente y una zona final
+              marcada «lo que ninguna regla prohíbe» que solo alcanza la última,
+              una persona. Es LITERALMENTE el titular de esta sección, y estaba
+              escrito para el capítulo 09 del artículo.
+
+              NO SE DIBUJÓ OTRO, y ese era el bloqueo: dos diagramas del mismo
+              sitio contando lo mismo con cifras distintas es el drift que P70.02
+              acababa de evitar. Reusarlo obligaba antes a dos cosas, y las dos
+              se hicieron: corregir su geometría, que contradecía su propio texto
+              alternativo (P68.594), y sacarlo de `como-se-ha-creado-diagrams/`,
+              o sea de UNA página, a `diagrams/` (P68.7205).
+
+              MISMA CAJA QUE EL DIAGRAMA DE (03), y el `max-w-[690px]` es la
+              misma aritmética, no una coincidencia de diseño: 690 menos 2 de
+              borde menos 48 de padding son 640 de contenido, y el umbral de
+              este lienzo también es 630. Por debajo, el diagrama saltaría a su
+              dibujo estrecho en escritorio. */}
+          <figure
+            data-reveal
+            className="diagram-realce border-border bg-card mx-auto mt-0 mb-8 max-w-[690px] overflow-hidden rounded-xl border"
+          >
+            <div className="@container flex items-center justify-center p-[clamp(1rem,2.5vw,1.5rem)]">
+              <CapasVerificacionDiagram lang={lang} />
+            </div>
+            <figcaption
+              className={cn(
+                "border-border text-muted-foreground border-t px-5 py-4 text-[0.85rem]",
+                LEADING.lead,
+              )}
+            >
+              {t.blindspot.figura.caption}
+            </figcaption>
+          </figure>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">
             {t.blindspot.items.map((b) => (
               <InfoCard

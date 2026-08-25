@@ -181,6 +181,9 @@
     "num": "05 — El punto ciego",
     "heading": "Lo que ninguna herramienta automática encuentra",
     "intro": "Una web puede cumplir todas las reglas y seguir siendo incómoda de usar. Las herramientas comprueban reglas; lo demás solo aparece usándola.",
+    "figura": {
+      "caption": "Las cinco capas con las que se comprueba esta web, cada una cubriendo lo que la anterior no ve. La zona de la derecha, lo que no incumple ninguna regla, solo la alcanza la última: una persona."
+    },
     "items": [
       {
         "title": "El caso que lo demuestra",

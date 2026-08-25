@@ -181,6 +181,9 @@
     "num": "05 — The blind spot",
     "heading": "What no automated tool finds",
     "intro": "A site can satisfy every rule and still be awkward to use. Tools check rules; the rest only shows up when you actually use it.",
+    "figura": {
+      "caption": "The five layers this site is checked with, each covering what the one before it cannot see. The zone on the right, what breaks no rule, is reached only by the last of them: a person."
+    },
     "items": [
       {
         "title": "The case that proves it",
