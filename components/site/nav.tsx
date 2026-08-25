@@ -3,7 +3,7 @@
 import { Download, Menu, Moon, Sun } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { actionVariants } from "@/components/ui/action";
 import { chromeLinkVariants } from "@/components/ui/chrome";
@@ -29,6 +29,10 @@ export type NavDict = {
 // CV/hamburguesa alternan por CSS (D7: responsive en CSS, no en JS).
 // `homeHref` por defecto es "#top" (scroll al inicio en la home); las páginas
 // internas pasan la URL de la home para que el logo navegue de vuelta.
+// `aria-controls` ata el botón a su panel. Es una constante y no una cadena
+// suelta porque los dos extremos tienen que decir lo mismo y viven a 100 líneas.
+const MENU_PANEL_ID = "nav-menu";
+
 export function Nav({
   dict,
   homeHref = "#top",
@@ -48,6 +52,7 @@ export function Nav({
   const pathname = usePathname() || "/";
   const [p, setP] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   // Selector de idioma (toggle al otro locale conservando la página actual, D2):
   // ES sin prefijo, EN en /en. Enlace <a> nativo → navegación completa, para que
@@ -86,6 +91,27 @@ export function Nav({
       if (raf) cancelAnimationFrame(raf);
     };
   }, []);
+
+  // ESC CIERRA EL MENÚ Y DEVUELVE EL FOCO AL BOTÓN (P70.06, pasada con NVDA).
+  // No había NINGÚN manejador de teclado en este archivo: durante la pasada
+  // pareció que Esc cerraba, y era el lector saliendo de modo foco, no el menú.
+  // No incumplía WCAG 2.1.2 —se puede tabular fuera, no hay trampa— pero es la
+  // expectativa universal de cualquier desplegable.
+  //
+  // El listener va en `document` y SOLO existe mientras el menú está abierto: un
+  // manejador local en el panel no se enteraría con el foco en el botón, que es
+  // justo donde está al abrirlo. Devolver el foco es la otra mitad del gesto —al
+  // cerrar, el panel deja de existir y el foco caería al `<body>`.
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      setMenuOpen(false);
+      menuButtonRef.current?.focus();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [menuOpen]);
 
   const symH = 48 - 20 * p;
   const splitOpacity = Math.max(0, Math.min(1, 1 - p / 0.05));
@@ -224,18 +250,6 @@ export function Nav({
           </a>
           <button
             type="button"
-            aria-label={dict.menu}
-            aria-expanded={menuOpen}
-            onClick={() => setMenuOpen((o) => !o)}
-            className={cn(
-              actionVariants({ variant: "icon", size: "icon" }),
-              "md:hidden",
-            )}
-          >
-            <Menu aria-hidden="true" />
-          </button>
-          <button
-            type="button"
             aria-label={dict.toggleTheme}
             onClick={() => setTheme(isDark ? "light" : "dark")}
             className={cn(
@@ -247,11 +261,38 @@ export function Nav({
             <Moon className="dark:hidden" aria-hidden="true" />
             <Sun className="hidden dark:block" aria-hidden="true" />
           </button>
+          {/* EL BOTÓN DE TEMA VA DELANTE (P70.06). El panel del menú es hermano de
+              esta barra, así que su sitio en el DOM es DESPUÉS de todo el grupo
+              de controles: con la hamburguesa penúltima, el primer Tab tras
+              abrir el menú llevaba al toggle claro/oscuro y solo entonces a los
+              enlaces. Se oyó en la pasada con NVDA y se confirmó leyendo el JSX.
+              La palanca barata es el ORDEN, no mover el foco a mano: la
+              hamburguesa pasa a ser el último control y el panel viene justo
+              detrás, que es la estructura del patrón de disclosure de la APG.
+              En escritorio no cambia nada —la hamburguesa es `md:hidden`—; en
+              móvil los dos iconos intercambian sitio. */}
+          <button
+            type="button"
+            ref={menuButtonRef}
+            aria-label={dict.menu}
+            aria-expanded={menuOpen}
+            aria-controls={MENU_PANEL_ID}
+            onClick={() => setMenuOpen((o) => !o)}
+            className={cn(
+              actionVariants({ variant: "icon", size: "icon" }),
+              "md:hidden",
+            )}
+          >
+            <Menu aria-hidden="true" />
+          </button>
         </div>
       </div>
 
       {menuOpen && (
-        <div className="border-border bg-background border-t md:hidden">
+        <div
+          id={MENU_PANEL_ID}
+          className="border-border bg-background border-t md:hidden"
+        >
           <div className="mx-auto flex max-w-[var(--container)] flex-col px-[var(--page-x)] pt-2 pb-[0.85rem]">
             <a
               href={cvHref}
