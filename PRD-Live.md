@@ -196,7 +196,10 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 - **`npm run check:articulo`**: cada sección de «Cómo se ha creado esta página» declara de
   qué depende y lleva su sello. Cuando una fuente se mueve, CI sale rojo **nombrando la
   sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
-  mirarlo (D84). Y qué líneas cambiaron lo dice `articulo:novedades` (D103).
+  mirarlo (D84). Y qué líneas cambiaron lo dice `articulo:novedades` (D103). Sella
+  aparte **el copy del artículo**, y ahí la pregunta es otra: si ese sello se mueve y
+  `ARTICLE_UPDATED` no, sale rojo, porque esa constante es el `dateModified` que ve
+  Google y no se pinta en ninguna página (D110).
 - **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
   porque necesita navegador (D85). **Son dos pases**: los pares de TEXTO (1.4.3/1.4.6) y el
   **contorno de cada control** (1.4.11, 3:1), que axe no implementa y por tanto no mira

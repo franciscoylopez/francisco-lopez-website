@@ -145,6 +145,7 @@
 - D107 · El tablero tiene guardián, y la E/S fuera de CI no deja al criterio sin red
 - D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra
 - D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso
+- D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6388,3 +6389,40 @@ verde sobre las dos únicas excepciones que el documento nombraba.
 **Estado al escribirlo:** 80 controles, 71 salen de la capa, **6 marcados**. Cuatro son
 excepciones de verdad; los otros dos son las tarjetas de P74.55, marcadas como **tareadas, no
 exentas** — la marca dice qué son, no las absuelve.
+## D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte — 2026-08-25
+
+**Decisión.** `ARTICLE_UPDATED` —el `dateModified` del JSON-LD y el `lastmod` del sitemap—
+**se sigue escribiendo a mano**, y lo que impide que se quede atrás es un guardián, no la
+disciplina: `check:articulo` sella **el copy del artículo** aparte de sus sellos por sección,
+y sale rojo si ese sello se mueve y la constante no.
+
+**El problema medido.** La fecha pasó **doce commits congelada** en el 21 de agosto, entre
+ellos un capítulo nuevo, los diagramas partidos por sección y el de CI rehecho. El artículo
+se habría lanzado en septiembre anunciándole a Google que no se toca desde hace tres semanas,
+justo cuando se quiere que lo reindexe. **No lo vio nadie porque el `ByLine` no pinta fecha**:
+no hay forma humana de notarlo mirando la página, solo Google y tarde. Y la regla que lo
+impedía estaba escrita **en el comentario de la propia constante**.
+
+**La alternativa que se descartó, y por qué.** Derivarla del último commit que toca el
+artículo nunca caduca, pero **cambia lo que la fecha significa**: pasaría de «cambio
+sustantivo» a «último toque», y un arreglo de una coma movería el `dateModified`. Google
+recomienda lo contrario. Se prefiere conservar el juicio y ponerle una red.
+
+**Lo que hace que el guardián se lea en vez de apagarse: son dos preguntas distintas.** Las
+dependencias por sección vigilan **el mundo que el artículo describe** —si se mueve
+`DECISIONS.md#D72`, hay que RELEER el texto—; el sello del copy vigila **el texto mismo** —si
+se mueve, cambió lo que lee un visitante—. Mezclarlas habría dado un rojo que salta cada vez
+que se toca cualquier documento del repo, es decir, un rojo que nadie mira.
+
+**Qué cuenta como contenido, dicho para que no se dé por cubierto:** los dos diccionarios y
+las figuras. **No** la carpintería: centrar un riel o arreglar un hover no cambia una palabra
+de lo que se lee. Una figura sí, porque un diagrama dice algo.
+
+**Y la salida para lo no sustantivo no es una puerta trasera.** `npm run articulo:sellar` sin
+tocar la fecha deja **una línea en el diff que alguien firma** en la revisión. La diferencia
+con lo de antes es que ahora es una decisión y no un olvido.
+
+**Validado disparándolo** (P54.9): con una palabra cambiada en el copy y la fecha quieta, CI
+sale rojo con las dos salidas impresas; restaurada la palabra, verde. Su caso malo entra en
+`check:guardianes`, y tampoco es inventado: es el estado real de esos doce commits. El
+informe dice además **qué fecha ha comprobado**, que es la regla de esta casa desde D57.
