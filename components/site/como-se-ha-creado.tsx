@@ -42,7 +42,7 @@ import { StackDiagram } from "./como-se-ha-creado-diagrams/04-stack";
 import { CascadaDiagram } from "./como-se-ha-creado-diagrams/05-cascada";
 import { TresLongitudesDiagram } from "./como-se-ha-creado-diagrams/06-tres-longitudes";
 import { SinConsentimientoDiagram } from "./como-se-ha-creado-diagrams/07-sin-consentimiento";
-import { CapasVerificacionDiagram } from "./como-se-ha-creado-diagrams/08-capas-verificacion";
+import { CapasVerificacionDiagram } from "./diagrams/capas-verificacion";
 import { CIDiagram } from "./como-se-ha-creado-diagrams/09-ci";
 
 // La página «Cómo se ha creado esta página» (P60, sprint «Cómo se ha creado»,

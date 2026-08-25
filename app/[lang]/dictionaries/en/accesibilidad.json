@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Accessibility · Francisco López",
-    "description": "How this site is built to be usable by everyone: WCAG 2.2 AA met, a colour system at AAA, and the concrete measures behind it, verified with axe and Lighthouse."
+    "description": "How this site is built to be usable by everyone: WCAG 2.2 AA met, a colour system at AAA, what gets inherited from the component layer, and what the manual screen reader pass turned up."
   },
   "crumb": "Accessibility",
   "hero": {
@@ -11,7 +11,7 @@
     "statConformidad": "WCAG 2.2 conformance",
     "statColor": "Colour system",
     "statAxe": "axe violations",
-    "statLighthouse": "Lighthouse a11y",
+    "statLighthouse": "Lighthouse accessibility",
     "updated": "Last accessibility review: {date}."
   },
   "conformance": {
@@ -36,7 +36,7 @@
         "value": "Aligned with the criteria of EN 301 549, the harmonised ICT accessibility standard the European Union references, which in turn points to WCAG."
       }
     ],
-    "note": "The [European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj) covers commercial products and services (e-commerce, banking, transport), not a personal site: saying this one «complies with the EAA» would be inaccurate. What does apply is its technical reference standard, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), which points to WCAG. That is the criterion followed here."
+    "note": "The [European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj) covers commercial products and services (e-commerce, banking, transport), not a personal site: saying this one «complies with the EAA» would be inaccurate. What does apply is its technical reference standard, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), which points to [WCAG](https://www.w3.org/TR/WCAG22/). That is the criterion followed here."
   },
   "measures": {
     "num": "02 — What's been done",
@@ -45,99 +45,211 @@
     "items": [
       {
         "title": "Contrast measured in both themes",
-        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single color to measure there, so they get looked at by eye.",
-        "wcag": "WCAG 1.4.3 · 1.4.11"
+        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single colour to measure there, so they get looked at by eye.",
+        "wcag": "WCAG 1.4.3 · 1.4.11",
+        "inherited": true
       },
       {
         "title": "Focus always visible",
         "body": "Every interactive element shows a 2px focus ring with an offset; the indicator is never removed without a replacement.",
-        "wcag": "WCAG 2.4.7"
+        "wcag": "WCAG 2.4.7",
+        "inherited": true
       },
       {
         "title": "Generous tap areas",
         "body": "Touch targets are at least 44×44px, including small controls like the breadcrumb or the theme switch.",
-        "wcag": "WCAG 2.5.8 (exceeded)"
+        "wcag": "WCAG 2.5.8 (exceeded)",
+        "inherited": true
       },
       {
         "title": "Logical structure and order",
         "body": "A single main heading per page and a hierarchy with no skipped levels; reading order matches source order, for screen readers and keyboard navigation.",
-        "wcag": "WCAG 1.3.1 · 2.4.6"
+        "wcag": "WCAG 1.3.1 · 2.4.6",
+        "inherited": false
       },
       {
         "title": "Clear location",
         "body": "Inner pages carry a breadcrumb that shows where you are within the site.",
-        "wcag": "WCAG 2.4.8"
+        "wcag": "WCAG 2.4.8",
+        "inherited": false
       },
       {
         "title": "Never colour alone",
         "body": "No state or category is signalled by colour only: there's always text or shape as well.",
-        "wcag": "WCAG 1.4.1"
+        "wcag": "WCAG 1.4.1",
+        "inherited": false
       },
       {
         "title": "Reduced motion respected",
         "body": "If your system asks for less animation, transitions and reveals are turned off.",
-        "wcag": "WCAG 2.3.3"
+        "wcag": "WCAG 2.3.3",
+        "inherited": true
       },
       {
         "title": "Text alternatives",
-        "body": "Images that carry meaning have alt text; decorative ones are hidden from assistive technology.",
-        "wcag": "WCAG 1.1.1"
+        "body": "Images that carry information have alt text; decorative ones are hidden from assistive technology.",
+        "wcag": "WCAG 1.1.1",
+        "inherited": false
       },
       {
-        "title": "A keyboard escape route",
-        "body": "The first thing the tab key reaches is a link that jumps straight to the content, so you do not have to walk the whole menu on every page.",
-        "wcag": "WCAG 2.4.1"
+        "title": "A keyboard way out",
+        "body": "The first element the tab key reaches is a link that jumps straight to the content, so you don't have to walk the whole menu on every page.",
+        "wcag": "WCAG 2.4.1",
+        "inherited": false
       }
-    ]
+    ],
+    "note": "Of these {total} points, {heredados} are not checked page by page, and that is exactly the point: contrast, the focus ring, the tap area and reduced motion already live inside the button, the link and the form field. A new section is born with them in place and cannot negotiate them. The next section explains how."
+  },
+  "inheritance": {
+    "num": "03 — Inheritance",
+    "heading": "Accessibility is inherited, not rewritten",
+    "figura": {
+      "caption": "The nine checklist points, each assigned to the layer that puts it and to whoever verifies it. Eight are checked by a machine; one, by a person."
+    },
+    "intro": "Meeting the bar on one page is easy. The hard part is page number fifteen being born compliant without anyone having to remember. This is what makes that happen, and it's the part you can't see by looking at the site.",
+    "items": [
+      {
+        "title": "No control is written by hand",
+        "body": "Everything you press (buttons, links, chips, tabs, the theme switch) comes out of one shared component layer. The focus ring, the 44 pixels of tap area and the contrast of every state live in there, so changing them changes the whole site at once. When a control has to stay outside that layer it carries a marker with its reason and its date, and a check refuses to let any of them through without one."
+      },
+      {
+        "title": "The background picks the grey, not the author",
+        "body": "Dimmed text on the page background and that same text inside a card cannot be the same grey: the second one would read worse. Here it isn't a choice. Every surface recalculates its own dimmed tone from the background underneath it, including the surfaces that change colour on hover. That is where the cases two earlier reviews missed were hiding: they don't exist until two layers overlap."
+      },
+      {
+        "title": "The frame comes from the shell, not the author",
+        "body": "The skip link and its target, the document language and the two navigation landmarks come from the shell the {paginas} pages share: a new page is born with them on the day it's created. The breadcrumb and the heading structure do not, because they depend on what each page has to say, and that is exactly why they are the ones a check verifies against the already generated HTML of all {paginas}, in both languages."
+      },
+      {
+        "title": "A machine decides when to measure again",
+        "body": "Measuring colour properly is expensive: the site has to be served and walked with a real browser, so it isn't repeated on every change. It's repeated when something new shows up to measure. A check stores a fingerprint of the colours, the surfaces and the animations present at the last measurement, and turns red naming whatever wasn't there. The rule stopped depending on anyone remembering it."
+      }
+    ],
+    "livestat": {
+      "label": "System pieces · live figure",
+      "source": "components/ui/",
+      "value": "{piezasNucleo} pieces in the core, and none is written by hand",
+      "linkLabel": "See the catalogue"
+    },
+    "note": "This is what holds up the figure at the top. The colour system sits at AAA, the strictest level WCAG defines, across the {paginas} pages and both themes, at rest and under the cursor. It isn't kept there by review passes: it's kept there because the components pick the colours, and because measuring again is mandatory the moment one appears that nobody has measured."
   },
   "verify": {
-    "num": "03 — Verification",
-    "heading": "Not a self-assessment taken on trust",
-    "intro": "Every page is checked, in light and dark mode, with real tools. And by hand, because the automated ones have a blind spot: none of them caught the missing skip link, and that was a level A failure.",
+    "num": "04 — Verification",
+    "heading": "Not a self-assessment on my word",
+    "intro": "Every page is checked in light mode and in dark mode, with real tools ([axe-core](https://github.com/dequelabs/axe-core), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)) and by hand as well. The automated ones do their job well, but they can only look at what somebody has turned into a rule.",
     "items": [
       {
         "tool": "axe-core",
-        "result": "WCAG rules engine. 0 violations on the home and inner pages."
+        "result": "The most widely used WCAG rules engine, run over the already generated HTML of the {paginas} pages in both languages. Zero violations."
       },
       {
         "tool": "Lighthouse",
-        "result": "Accessibility audit. A score of 100 in production."
+        "result": "Chrome's accessibility audit. Score of 100 in production."
       },
       {
-        "tool": "Contrast measured",
-        "result": "Colour by colour, with a number, not by eye."
+        "tool": "getWCAG",
+        "result": "A third-party commercial scanner that knows nothing about this repository: its own rules, its own configuration. Zero violations, the same zero ours reports. It looks at a single page and runs separately, not with every change, so it replaces none of the others: what it adds is that the zero doesn't depend on our own harness."
       },
       {
-        "tool": "Keyboard & focus",
-        "result": "Manual review of keyboard navigation and focus order."
+        "tool": "Contrast census",
+        "result": "Colour by colour and with a number, walking the served site and reading the colour the browser actually paints. States included: the grey of a card under the cursor is another pair to measure."
+      },
+      {
+        "tool": "Outline census",
+        "result": "A second pass that measures the edge of every control rather than its text. It's WCAG criterion 1.4.11, and no automated tool on the market implements it: if a form field doesn't stand out from the background, nothing tells you that's where you type."
+      },
+      {
+        "tool": "Page frame",
+        "result": "Checks what axe waves through: that the skip link exists, that there is a single main heading, that the hierarchy skips no levels, that the breadcrumb is in place and that the structured data points at something real."
+      },
+      {
+        "tool": "Figure labels",
+        "result": "Diagrams are drawn on a canvas that scales, so a label declared at 11 pixels can end up painted at 5. The real size of every label is measured at 360 pixels wide, which is an ordinary phone."
+      },
+      {
+        "tool": "Keyboard and focus",
+        "result": "Manual review of keyboard navigation and of the order in which focus walks the page."
+      },
+      {
+        "tool": "Screen reader",
+        "result": "NVDA on Chrome, walking the whole site rather than page by page, which is how it actually gets used."
       }
     ],
-    "note": "And by hand, with a screen reader: NVDA 2026.1.1 on Chrome, across six journeys (skip link, navigation, consent dialog, data tables, theme switch and reading order). Widening the test to more browsers and other screen readers is on the roadmap."
+    "note": "They don't all fit in the same place, and saying so matters. The ones that only need to read the code run on their own with every change, before anything ships. The two colour measurements need a browser actually painting the page, so they're launched by hand. And the last two need a person in front of the screen. There's also a check that watches the others: it takes each one, plants the exact fault it should catch, and confirms it fires. Fourteen checks and twenty-three planted faults, because a review that comes back with an empty list looks far too much like a pass."
   },
-  "limits": {
-    "num": "04 — Limits",
-    "heading": "Being honest is part of accessibility too",
-    "intro": "What doesn't measure up yet, and what it would take.",
+  "blindspot": {
+    "num": "05 — The blind spot",
+    "heading": "What no automated tool finds",
+    "intro": "A site can satisfy every rule and still be awkward to use. Tools check rules; the rest only shows up when you actually use it.",
+    "figura": {
+      "caption": "The five layers this site is checked with, each covering what the one before it cannot see. The zone on the right, what breaks no rule, is reached only by the last of them: a person."
+    },
     "items": [
       {
-        "title": "Text over photography",
-        "body": "The contrast census deliberately abstains on sixteen pairs: the eight pieces of text that sit on a photograph, measured in both themes. There the background is decided by the image and not by the colour system, so measuring them properly means reading the painted pixel one by one. They are identified and pending."
+        "title": "The case that proves it",
+        "body": "None of the tools spotted that the link that jumps to the content was missing, and that was a level A failure, the most basic WCAG defines. It isn't their fault either: their rule is satisfied if the page has its regions and headings properly in place, and it did. What was missing was the link."
       },
       {
-        "title": "CV in PDF",
-        "body": "It's selectable, tagged text, but a PDF never matches a web page for accessibility. If you need it in another format, email me."
+        "title": "A full pass with a screen reader",
+        "body": "NVDA on Chrome, walking six complete journeys: the skip link, navigation, the cookie dialog, data tables, the theme switch and reading order. The whole site in one go, not page by page."
       },
       {
-        "title": "Continuous improvement",
-        "body": "The colour system is already at AAA and is re-checked on every change so it doesn't slip."
+        "title": "Five things that broke no rule",
+        "body": "Which is why no tool had anything to say. The mobile menu didn't close with the Escape key. The theme button didn't say which theme you were in, nor that it had changed. The cookie notice was read last, even though on screen it's the first thing you see. The navigation bar wasn't announced as navigation. And the number of each section wasn't spoken when jumping from heading to heading."
+      },
+      {
+        "title": "All five are fixed",
+        "body": "And three of them weren't one page's fix: they changed the shell all {paginas} share. The cookie notice now announces itself as it appears and sits at the start of the document, the navigation bar is a region with a name of its own, and the section number is spoken when walking the headings. That is the difference between a manual pass and a report: the report would have come back green both times."
       }
     ],
-    "note": "That pass found four details no automated tool flags, because none of them breaks a rule: the mobile menu doesn't close with the Escape key, the theme switch isn't announced aloud, opening the menu moves focus to the theme button first, and the cookie notice is read last even though it's the first thing you see. They're logged and pending."
+    "note": "What this pass doesn't cover is right below, in the limits: one screen reader ([NVDA](https://www.nvaccess.org/)), one browser, and nobody who uses assistive technology every day."
+  },
+  "limits": {
+    "num": "06 — Limits",
+    "heading": "Being honest is accessibility too",
+    "intro": "What doesn't meet the bar yet, and what it would take.",
+    "items": [
+      {
+        "title": "No real users",
+        "body": "Everything on this page was measured by me. Nobody who uses assistive technology every day has tried this site, and that is the check no number replaces. If you'd like to be that person, the section below is exactly for that."
+      },
+      {
+        "title": "One reader, one browser",
+        "body": "The manual pass was done with NVDA on Chrome. Not VoiceOver, not JAWS, not TalkBack on mobile. Each combination behaves differently, so what works here isn't proven on the others. Widening it is on the roadmap."
+      },
+      {
+        "title": "Text over photography",
+        "body": "The contrast census deliberately abstains on sixteen pairs: the eight pieces of text that sit over a photograph, measured in both themes. There the background is decided by the image and not by the colour system, so measuring them means reading the painted pixel one by one. They're identified and pending."
+      },
+      {
+        "title": "Very narrow screens",
+        "body": "Below 320 pixels wide, three pages overflow horizontally. It isn't the layout scaffolding: they're long words that don't fit in a 240 pixel column. Measured at 280 and pending."
+      },
+      {
+        "title": "Two diagrams measured but not judged",
+        "body": "The check that measures figure labels abstains on two of them: they're wide diagrams that scroll horizontally instead of shrinking, so their size isn't decided by the width of the screen. Their labels end up painted at 5 pixels, and that is too small. The fix isn't to narrow them but to redraw them, and it's pending."
+      },
+      {
+        "title": "CV as a PDF",
+        "body": "It's selectable, tagged text, but a PDF never matches a web page for accessibility. If you need it in another format, write to me."
+      }
+    ],
+    "note": "None of this is here for completeness. A limits section that only says «continuous improvement» tells you nothing. If anything on this list affects you, write to me: it moves up the list."
+  },
+  "term": {
+    "num": "07 — The word",
+    "heading": "What A11y is, and why we use it",
+    "intro": "It's the word the trade uses daily and almost never explains. This page was using it the same way: once, on the first screen, without saying what it meant.",
+    "what": "A11y is the shorthand web development uses for the word accessibility. It's built from its first letter, its last letter, and the number of letters in between: eleven. What it names is designing sites and apps so that anyone can use them, whether or not they have physical, visual, hearing or cognitive limitations.",
+    "project": "[The A11Y Project](https://www.a11yproject.com/) is the open space where the trade gathers the accessibility principles and patterns that work, from design through to deployment. Its underlying idea is the one this site follows: accessibility isn't a layer added at the end, it's a closing criterion. Here that turns into three concrete things. The checklist goes into the task before the work starts, not when it gets reviewed. Four of its nine points are no longer checked page by page, because the component layer supplies them. And everything that could become an automated check became one.",
+    "figura": {
+      "alt": "The word “a11y” inside a heart whose stroke carries on to become the tail of the “y”."
+    }
   },
   "report": {
-    "num": "05 — Contact",
+    "num": "08 — Contact",
     "heading": "If something blocks you, I want to know",
-    "body": "If anything on this site is hard to use with your assistive technology, it's the best way to fix it. Tell me which page you were on, what happened and what assistive tech you use, and I'll get back to you.",
+    "body": "If anything on this site is hard to use with your assistive technology, telling me is the best way to get it fixed. Tell me which page you were on, what happened and which assistive tech you use, and I'll reply.",
     "emailSubject": "Accessibility barrier on franciscolopez.es"
   }
 }

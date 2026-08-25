@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, LBL_STRONG, rlz } from "./shared";
+import { DosLienzos, LBL, LBL_STRONG, rlz } from "../diagrams/shared";
 
 /** 05 · La cascada de construcción, en escalera descendente (D79, prototipo
  * de Tanda 3 · «Escalera descendente», elegida sobre las otras dos que se
@@ -39,19 +39,9 @@ export function CascadaDiagram({ lang }: { lang: Locale }) {
   /** El mismo escalón, a dos anchos. Lo único que cambia entre ellos es
    * cuánto puede sangrar cada paso: en 280 unidades, los 24 del lienzo ancho
    * se comerían la mitad del texto en el cuarto escalón. */
-  const escalera = (
-    W: number,
-    step: number,
-    padX: number,
-    tick: number,
-    cap: string,
-  ) => (
-    <svg
-      viewBox={`0 0 ${W} ${PAD * 2 + t.steps.length * ROW_H}`}
-      role="img"
-      aria-label={t.ariaLabel}
-      className={cap}
-    >
+  const ALTO = PAD * 2 + t.steps.length * ROW_H;
+  const escalera = (W: number, step: number, padX: number, tick: number) => (
+    <>
       {t.steps.map((s, i) => {
         const y = PAD + i * ROW_H;
         const indent = i * step;
@@ -107,7 +97,7 @@ export function CascadaDiagram({ lang }: { lang: Locale }) {
           </g>
         );
       })}
-    </svg>
+    </>
   );
 
   /* EL LIENZO ANCHO BAJA DE 600 A 540 (P68.59). Esta figura va flotada a media
@@ -119,9 +109,9 @@ export function CascadaDiagram({ lang }: { lang: Locale }) {
      que estrecharlo no cuesta nada y lo devuelve a su sitio. */
   return (
     <DosLienzos
-      umbral={545}
-      ancho={escalera(540, 24, 20, 16, "h-auto w-full max-w-[540px]")}
-      estrecho={escalera(280, 8, 12, 10, "h-auto w-full max-w-[300px]")}
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 540, h: ALTO, children: escalera(540, 24, 20, 16) }}
+      estrecho={{ h: ALTO, children: escalera(280, 8, 12, 10) }}
     />
   );
 }

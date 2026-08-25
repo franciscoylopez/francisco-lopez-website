@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, LBL_STRONG, rlz } from "./shared";
+import { DosLienzos, LBL, LBL_STRONG, rlz } from "../diagrams/shared";
 
 /** 07 · Qué sale de la página antes de un clic: nada, hasta que alguien pulsa. */
 export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
@@ -30,12 +30,7 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
   }[lang];
 
   const ancho = (
-    <svg
-      viewBox="0 0 560 150"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[620px]"
-    >
+    <>
       <text x="10" y="30" {...rlz(0, LBL)}>
         {t.before}
       </text>
@@ -90,7 +85,7 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
           {t.video}
         </text>
       </g>
-    </svg>
+    </>
   );
 
   /** Las mismas dos filas, con las tres peticiones apiladas en vez de en
@@ -98,12 +93,7 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
    * cosas», y eso se lee igual de bien en columna. El rótulo de la primera
    * fila se parte en dos porque a 11 unidades ocupa 271 de las 280. */
   const estrecho = (
-    <svg
-      viewBox="0 0 280 240"
-      role="img"
-      aria-label={t.ariaLabel}
-      className="h-auto w-full max-w-[300px]"
-    >
+    <>
       <text x="10" y="22" {...rlz(0, LBL)}>
         {t.beforeWrap.map((linea, k) => (
           <tspan key={linea} x="10" dy={k === 0 ? 0 : 16}>
@@ -162,8 +152,14 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
           {t.video}
         </text>
       </g>
-    </svg>
+    </>
   );
 
-  return <DosLienzos umbral={570} ancho={ancho} estrecho={estrecho} />;
+  return (
+    <DosLienzos
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 560, h: 150, children: ancho }}
+      estrecho={{ h: 240, children: estrecho }}
+    />
+  );
 }

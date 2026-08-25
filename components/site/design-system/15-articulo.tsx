@@ -4,12 +4,12 @@ import {
   ByLine,
   ChapterNav,
   DiagramPanel,
-  LiveStat,
   Pull,
   Pullquote,
   RepoStrip,
   SectionCover,
 } from "@/components/ui/article";
+import { LiveStat } from "@/components/ui/live-stat";
 import {
   FloatingShare,
   ReadingProgress,

@@ -23,9 +23,10 @@
 ### artículo · 2
 - **`article-islands.tsx`** — Las islas de cliente del texto largo: riel de secciones, copiar enlace, compartir. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*
 - **`article.tsx`** — Los bloques del texto largo: portada de capítulo, cita, diagrama, cierre. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*
-### primitiva · 6
+### primitiva · 7
 - **`icons.tsx`** — Los iconos que lucide no trae (LinkedIn, GitHub), con la regla de autoría propia. *([brand-kit/06-uso](../site/brand-kit/06-uso.tsx))*
 - **`info-card.tsx`** — La tarjeta de nota: un título y su explicación, al margen del cuerpo. *(sin publicar)*
+- **`live-stat.tsx`** — La regleta de un dato en vivo: la cifra no se escribe, se enlaza a quien la publica. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*
 - **`logo.tsx`** — El monograma y el wordmark, con la firma split y su umbral de 48px. *([brand-kit/02-logotipo](../site/brand-kit/02-logotipo.tsx))*
 - **`page-closer.tsx`** — El cierre común de las trece páginas: a dónde se va desde aquí. *(sin publicar)*
 - **`rich.tsx`** — El render de markup inline del copy del diccionario: negrita, cursiva y enlace. *(sin publicar)*

@@ -9,12 +9,15 @@
     "downloadCv": "Download CV",
     "contacto": "Contact",
     "sobreMi": "About me",
+    "navLabel": "Main",
     "menu": "Menu",
-    "toggleTheme": "Toggle theme",
+    "toggleThemeToDark": "Switch to dark theme",
+    "toggleThemeToLight": "Switch to light theme",
     "switchLanguage": "View in Spanish",
     "switchLanguageShort": "ES"
   },
   "footer": {
+    "navLabel": "Footer",
     "copyright": "© 2026. All rights reserved.",
     "comoSeHaCreado": "The Making Of",
     "brandKit": "Brand Kit",

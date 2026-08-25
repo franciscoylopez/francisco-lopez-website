@@ -192,6 +192,48 @@ export const LEADING = {
   meta: "leading-[1.3]",
 } as const;
 
+/**
+ * EL ORDINAL, DICHO EN EL NOMBRE ACCESIBLE DEL TITULAR (P70.10, pasada con NVDA).
+ *
+ * D43 fija que el ordinal va DENTRO del eyebrow, y el eyebrow es un `<p>`
+ * ANTERIOR al titular. Navegar con H —que es como se recorre una página larga con
+ * lector— salta de encabezado en encabezado y se lleva SOLO el titular: se oye
+ * «WCAG 2.2 AA cumplido, con el contraste medido» y el «01» no suena nunca.
+ *
+ * NO ES UN DEFECTO, y por eso el arreglo es este y no otro: el titular solo es una
+ * afirmación completa, que es justamente la intención de D43. La pregunta era si
+ * el ordinal es decoración visual o información de orientación, y quien lo ha oído
+ * dice que orienta. Así que entra en el NOMBRE, no en la pantalla: D43 sigue en
+ * pie y el ordinal no se pinta dos veces.
+ *
+ * SIN LA RAYA, y no por la regla del copy —que mira el texto que se sirve— sino
+ * porque aquí se OYE: `01 — Conformidad` tiene un signo cuyo anuncio depende del
+ * nivel de puntuación del lector. El punto es un signo que ningún lector pronuncia
+ * y que sí produce la pausa que separa el ordinal del titular.
+ */
+export function TitleOrdinal({ ordinal }: { ordinal: string }) {
+  return <span className="sr-only">{`${ordinal}. `}</span>;
+}
+
+/**
+ * El ordinal de un eyebrow numerado, o `null`. Se DERIVA en vez de pedirse por
+ * prop porque el formato ya existe y es uno solo —`NN — Etiqueta`, la convención
+ * de D43— en las tres familias numeradas del sitio: las dieciséis secciones del
+ * Design System, las seis del Brand Kit y las ocho de Accesibilidad. Pedirlo por
+ * prop obligaría a escribir el número otra vez en cada uno de esos call sites, que
+ * es exactamente la copia que la capa de cabecera existe para evitar.
+ *
+ * Los eyebrows que no empiezan por número —los kickers de los heros— no casan y no
+ * cambian.
+ */
+const ORDINAL = /^(\d{1,2})\s*—/;
+
+export function ordinalDeEyebrow(eyebrow: ReactNode): string | null {
+  return typeof eyebrow === "string"
+    ? (ORDINAL.exec(eyebrow)?.[1] ?? null)
+    : null;
+}
+
 type Size = NonNullable<VariantProps<typeof titleVariants>["size"]>;
 
 export function SectionHeader({
@@ -228,6 +270,7 @@ export function SectionHeader({
   children?: ReactNode;
 }) {
   const Title = `h${level}` as const;
+  const ordinal = ordinalDeEyebrow(eyebrow);
 
   return (
     <>
@@ -247,6 +290,7 @@ export function SectionHeader({
           titleClassName,
         )}
       >
+        {ordinal ? <TitleOrdinal ordinal={ordinal} /> : null}
         {title}
       </Title>
       {children}

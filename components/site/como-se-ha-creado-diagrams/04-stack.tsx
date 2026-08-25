@@ -1,6 +1,6 @@
 import type { Locale } from "@/lib/i18n/config";
 
-import { DosLienzos, LBL, rlz } from "./shared";
+import { DosLienzos, LBL, rlz } from "../diagrams/shared";
 
 /** 04 · El stack como grafo, no como flujo (P60 tanda 2, punto 16): un núcleo
  * que se despliega, con dos piezas que también viajan en el bundle y dos
@@ -80,7 +80,6 @@ export function StackDiagram({ lang }: { lang: Locale }) {
    * es cuál, que un `[2]` no decía. */
   type Punto = { x: number; y: number };
   type Layout = {
-    vb: string;
     core: { x: number; y: number; w: number; h: number };
     nodeW: number;
     at: Record<"lucide" | "shadcn" | "design" | "code", Punto>;
@@ -88,7 +87,7 @@ export function StackDiagram({ lang }: { lang: Locale }) {
     legend: { shipped: Punto; build: Punto };
   };
 
-  const grafo = (L: Layout, cap: string) => {
+  const grafo = (L: Layout) => {
     const cx = L.core.x + L.core.w / 2;
     const cy = L.core.y + L.core.h / 2;
     const nodes = t.nodes.map((n) => ({
@@ -98,7 +97,7 @@ export function StackDiagram({ lang }: { lang: Locale }) {
       h: 64,
     }));
     return (
-      <svg viewBox={L.vb} role="img" aria-label={t.ariaLabel} className={cap}>
+      <>
         {nodes.map((n) => (
           <line
             key={`edge-${n.name}`}
@@ -204,45 +203,43 @@ export function StackDiagram({ lang }: { lang: Locale }) {
         >
           {t.buildLabel}
         </text>
-      </svg>
+      </>
     );
   };
 
-  const ancho = grafo(
-    {
-      vb: "0 0 380 520",
-      core: { x: 95, y: 225, w: 190, h: 70 },
-      nodeW: 160,
-      at: {
-        lucide: { x: 210, y: 15 },
-        shadcn: { x: 210, y: 390 },
-        design: { x: 10, y: 15 },
-        code: { x: 10, y: 390 },
-      },
-      legend: { shipped: { x: 20, y: 470 }, build: { x: 150, y: 470 } },
+  const ancho = grafo({
+    core: { x: 95, y: 225, w: 190, h: 70 },
+    nodeW: 160,
+    at: {
+      lucide: { x: 210, y: 15 },
+      shadcn: { x: 210, y: 390 },
+      design: { x: 10, y: 15 },
+      code: { x: 10, y: 390 },
     },
-    "h-auto w-full max-w-[380px]",
-  );
+    legend: { shipped: { x: 20, y: 470 }, build: { x: 150, y: 470 } },
+  });
 
   /** El mismo grafo comprimido: los nodos pierden 36 unidades de ancho y la
    * leyenda pasa de una fila a dos, que es lo único que no cabía. La forma
    * —núcleo al centro, cuatro piezas en las esquinas— se conserva, porque es
    * lo que distingue a este diagrama de un flujo. */
-  const estrecho = grafo(
-    {
-      vb: "0 0 280 512",
-      core: { x: 45, y: 225, w: 190, h: 70 },
-      nodeW: 124,
-      at: {
-        lucide: { x: 148, y: 15 },
-        shadcn: { x: 148, y: 390 },
-        design: { x: 8, y: 15 },
-        code: { x: 8, y: 390 },
-      },
-      legend: { shipped: { x: 14, y: 472 }, build: { x: 14, y: 496 } },
+  const estrecho = grafo({
+    core: { x: 45, y: 225, w: 190, h: 70 },
+    nodeW: 124,
+    at: {
+      lucide: { x: 148, y: 15 },
+      shadcn: { x: 148, y: 390 },
+      design: { x: 8, y: 15 },
+      code: { x: 8, y: 390 },
     },
-    "h-auto w-full max-w-[300px]",
-  );
+    legend: { shipped: { x: 14, y: 472 }, build: { x: 14, y: 496 } },
+  });
 
-  return <DosLienzos umbral={390} ancho={ancho} estrecho={estrecho} />;
+  return (
+    <DosLienzos
+      ariaLabel={t.ariaLabel}
+      ancho={{ w: 380, h: 520, children: ancho }}
+      estrecho={{ h: 512, children: estrecho }}
+    />
+  );
 }

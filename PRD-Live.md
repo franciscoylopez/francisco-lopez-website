@@ -116,7 +116,7 @@ cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 Regla de dos capas (cian = único color de acción; morado decorativo con cuentagotas),
 tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 
-### Capa de componentes — un núcleo de ocho, dieciséis archivos
+### Capa de componentes — un núcleo de ocho, diecisiete archivos
 
 El **núcleo** son ocho: `action` (el control con caja), `chrome` (el enlace de la
 carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (el par
@@ -185,7 +185,9 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
   escalado, sobre el prerender de las 28 variantes. `text-[11px]` dentro de un
   `viewBox` son 11 unidades, no 11 píxeles, y esa escala no está en el
   `font-size` computado (P68.59). En CI, no en el censo: no necesita navegador.
-  Un lienzo que se desplaza a ancho fijo se mide y se nombra, no se juzga.
+  **Confirma en vez de sostener**: el tamaño lo pone la capa, que lo deriva del
+  único ancho que un diagrama declara, y un lienzo desconocido no compila (D114).
+  Uno de ancho fijo que se desplaza se mide y se nombra, no se juzga.
 - **`npm test`**: la lógica que no necesita navegador, y por eso en CI al revés que `psi` y el
   censo. Son dos: la del formulario —validación, saneado de cabeceras y decisiones de la Server
   Action, medidas sobre el mensaje que nodemailer **emite** (D101)— y las reglas del tablero,

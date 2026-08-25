@@ -146,6 +146,10 @@
 - D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra
 - D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso
 - D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte
+- D111 · Lo que el lector de pantalla cambió en el marco de toda página
+- D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va
+- D113 · La premisa de una capa caduca cuando aparece el segundo consumidor
+- D114 · El lienzo de un diagrama es la única cifra que declara, y la capa deriva el resto
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -2003,6 +2007,10 @@ eyebrow no puede repetir el título—, así que va en P37.695, commit aparte y 
 aquí habría costado la propiedad que hace barato este refactor: diff vacío = correcto.
 
 ## D43 · Toda página y toda sección abren igual: el ordinal va dentro del eyebrow — 2026-08-10
+
+> **AMPLIADA el 2026-08-25 por D111.** El ordinal sigue viviendo en el eyebrow, y desde
+> esa fecha entra ADEMÁS en el nombre accesible del titular: navegar con `H` salta el eyebrow
+> y se llevaba solo la afirmación. No se pinta dos veces.
 
 **Decisión.** Las **19 secciones numeradas** del Design System y de Accesibilidad pasan a abrir
 como el resto del sitio: `SectionHeader` con **rótulo + titular**, el ordinal dentro del rótulo
@@ -4554,6 +4562,11 @@ porque su variabilidad daría rojos falsos (D49).
 
 ## D76 · Una capa nueva para texto largo, y el control que le faltaba al chrome sobre banda invertida — 2026-08-21
 
+> **CORREGIDA EN UNA PIEZA el 2026-08-25 por D113.** La capa son SIETE, no ocho:
+> `LiveStat` salió a `ui/live-stat.tsx` cuando `/accesibilidad` quiso publicar una cifra
+> derivada. Su premisa —«un formato que hoy solo tiene una página»— nunca fue cierta para
+> esa pieza; lo era para las otras siete, y ahí D76 sigue en pie.
+
 **El problema.** «Cómo se ha creado esta página» (P60) es la primera página del sitio con
 ~6.000 palabras de prosa continua, y las siete piezas del sistema (D36) no cubren ese caso:
 ninguna resuelve un índice navegable con tiempo por sección, una portada de capítulo, una cita
@@ -6426,3 +6439,201 @@ con lo de antes es que ahora es una decisión y no un olvido.
 sale rojo con las dos salidas impresas; restaurada la palabra, verde. Su caso malo entra en
 `check:guardianes`, y tampoco es inventado: es el estado real de esos doce commits. El
 informe dice además **qué fecha ha comprobado**, que es la regla de esta casa desde D57.
+
+## D111 · Lo que el lector de pantalla cambió en el marco de toda página — 2026-08-25
+
+**Decisión.** Tres cambios en la carpintería que comparten las catorce páginas, salidos de la
+pasada manual con NVDA (D73) y no de ninguna herramienta: **la barra de navegación es un
+landmark con nombre**, **el aviso de consentimiento vive al principio del `<body>` y se anuncia
+al aparecer**, y **el ordinal de sección entra en el nombre accesible del titular**. Ninguno de
+los tres incumplía WCAG. Son decisiones, y por eso están aquí y no en un commit.
+
+**Por qué juntos.** Los cinco hallazgos de la pasada eran de dos clases. Dos eran defectos con
+arreglo obvio y sin decisión detrás —`Esc` no cerraba el menú móvil, el botón de tema no decía
+en qué tema estabas— y se cierran en su mensaje de commit. Los otros tres cambian el marco que
+hereda toda página, así que cambian el sitio entero: eso es lo que este archivo registra.
+
+**1. La barra es navegación, y el comentario que decía lo contrario era el problema.**
+`nav.tsx` justificaba el `<div>` así: «no es navegación de sitio, evita un segundo landmark de
+navegación sin nombre único». El razonamiento tenía dos huecos, y es lo único que justifica
+reabrir una decisión ya tomada. Primero, **`<nav aria-label>` da landmark y nombre único a la
+vez**, así que la pega que evitaba no existía. Segundo, la premisa era falsa: el logo lleva a
+Inicio y «Sobre mí» y «Contacto» llevan a sus páginas. En la práctica, quien pulsaba `D`
+buscando la navegación **no la encontraba en la home**: el único «navegación» que sonaba era el
+del pie, que además era **el único `<nav>` anónimo del sitio** (en una página interna convive
+con «Ruta» y con «Del mismo sistema»).
+
+El `<nav>` envuelve el logo, el grupo de controles y el panel del menú. **El toggle de tema
+queda dentro sin ser navegación:** es el coste de que la barra sea un landmark en vez de dos, y
+se paga a propósito.
+
+**2. El consentimiento deja de ser lo último del documento, y se anuncia.** Su region salía
+**después de `contentinfo`**: quien ve el aviso se lo encuentra sobre el contenido al cargar, y
+quien usa lector recorría las diez secciones de la home y el pie entero antes de enterarse de
+que existe. No hay criterio WCAG que obligue a anunciar un banner, pero **es un mecanismo de
+consentimiento con peso legal** y la misma elección no puede presentarse de inmediato a unos y
+de facto la última a otros.
+
+Se hacen **las dos cosas, y no una**, porque arreglan mitades distintas: mover el nodo ordena la
+lectura pero no avisa a quien ya está leyendo; anunciar avisa pero deja el aviso al final para
+quien recorre la página. Y mover resultó **más barato de lo que la tarea suponía**: la franja
+nace en un efecto (`localStorage` no existe en SSR), así que en el HTML prerenderizado solo se
+mueven el `<dialog>` cerrado y un envoltorio vacío.
+
+**La live region es el envoltorio, no la franja**, y esto es lo reutilizable: una live region
+tiene que existir en el DOM **antes** de que le entre contenido, y la franja se inserta ya
+poblada. La franja conserva su `role="region"` con nombre, porque anunciar y ser punto de
+navegación son dos cosas distintas. Va **detrás del enlace de salto**, que sigue siendo el
+primer elemento focalizable (D46, WCAG 2.4.1): con el aviso abierto, el segundo es su primer
+botón, que es exactamente lo que ve quien mira la pantalla.
+
+**3. El ordinal entra en el nombre accesible del titular, y D43 sigue en pie.** D43 fija que el
+ordinal va **dentro del eyebrow**, y el eyebrow es un `<p>` anterior al titular. Navegar con `H`
+—que es como se recorre una página larga con lector— salta de encabezado en encabezado y **se
+lleva solo el titular**: se oye «WCAG 2.2 AA cumplido, con el contraste medido» y el «01» no
+suena nunca. No era un defecto: el titular solo es una afirmación completa, que es la intención
+de D43. Lo que estaba en duda era si el ordinal es decoración o orientación, y quien lo ha oído
+dice que orienta. Así que entra en el **nombre**, no en la pantalla.
+
+**Se deriva del eyebrow, no se pide por prop.** El formato ya existe y es uno solo (`NN —
+Etiqueta`) en las tres familias numeradas: las dieciséis secciones del Design System, las seis
+del Brand Kit y las cinco de Accesibilidad. Pedirlo por prop obligaría a **escribir el número
+otra vez en treinta call sites**, que es la copia que la capa de cabecera existe para evitar.
+La portada de sección del artículo es la excepción y no por caso especial: **ya recibe el
+ordinal suelto**, así que usa el que tiene en vez de deducirlo.
+
+**Y va sin la raya**, no por la regla del copy —que mira el texto servido— sino porque **aquí se
+oye**: el anuncio de ese signo depende del nivel de puntuación configurado en el lector. El
+punto no lo pronuncia ninguno y sí produce la pausa que separa el ordinal del titular.
+
+**Lo que esto no cierra.** La comprobación **de oído** con NVDA, que es la única capa capaz de
+juzgar si los tres cambios suenan como se pretendía y que ningún gate puede sustituir. Y la
+página que publica los hallazgos: su nota decía que los cuatro detalles estaban «anotados y
+pendientes», y esa frase se corrige en el mismo lote, porque una página que documenta el sistema
+no puede quedarse contando un estado que el propio lote acaba de cambiar (D84).
+
+## D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va — 2026-08-25
+
+**Decisión.** Lo que el sello del copy del artículo vigila **se nombra archivo a archivo cuando
+sale de su carpeta**, y no se da por cubierto por la ruta antigua. En concreto, `shared.tsx`
+—el rótulo y el conmutador de lienzos de los diagramas— vive desde hoy en
+`components/site/diagrams/` y entra en `FUENTES_DEL_COPY` por su nombre.
+
+**Cómo apareció.** `/accesibilidad` estrenó diagrama (P70.101) y con él una segunda página que
+dibuja. `shared.tsx` colgaba de `como-se-ha-creado-diagrams/`, así que la alternativa a moverlo
+era que **la página de accesibilidad importara de la del artículo**. Se movió, ocho imports
+cambiaron de línea, y el HTML del artículo salió **idéntico byte a byte salvo el build ID**.
+Un refactor limpio.
+
+**Y el refactor limpio rompió una vigilancia sin que nada saliera en rojo por el motivo bueno.**
+`FUENTES_DEL_COPY` (D110) hashea **la carpeta** de figuras, no una lista de archivos. Al salir
+`shared.tsx`, el sello dejó de verlo: a partir de ahí, cambiar `LBL` de 11px a 12px habría
+redibujado **las ocho figuras del artículo** sin mover el `dateModified` que ve Google. CI sí
+salió rojo, pero por el hash de la carpeta cambiando —el síntoma correcto por la razón
+equivocada—, y la salida cómoda era resellar y seguir.
+
+**La forma del fallo, que es lo reutilizable.** Un guardián que se define por CONTINENTE
+—una carpeta, un glob, un prefijo— hereda el alcance de una decisión de organización que nadie
+tomó pensando en él. Mover un archivo es la operación más inocente que existe y aquí recortó
+una promesa a Google. Es la familia de D57/D60/D63 vista del revés: allí el peligro era un metro
+que devuelve lista vacía, y aquí es un metro que **sigue devolviendo una lista, más corta**.
+
+**Lo que no se hizo, y por qué.** Sellar la carpeta nueva entera habría sido más cómodo y está
+mal: dentro vive el diagrama de `/accesibilidad`, que no es copy del artículo, y movería su
+`dateModified` sin que cambiara una palabra de lo que se lee. La precisión del alcance es justo
+lo que hace que el guardián se mire en vez de apagarse (D110).
+
+**Lo que queda abierto.** Nada obliga todavía a que un archivo que sale de una carpeta vigilada
+se declare en su nueva ruta: esta vez lo cazó estar mirando. La red que lo haría automático es
+la de P68.705 (el guardián de `/accesibilidad`) generalizada, o una comprobación de que toda
+fuente del sello existe y ninguna figura queda fuera de él.
+
+## D113 · La premisa de una capa caduca cuando aparece el segundo consumidor — 2026-08-25
+
+**Decisión.** `LiveStat` sale de la capa de artículo a `components/ui/live-stat.tsx`, como
+**primitiva** y no como pieza de núcleo. Las otras siete de D76 se quedan donde están.
+
+**Por qué solo esa.** D76 dejó la capa de artículo fuera del núcleo con un argumento que era
+bueno: resolvía «un FORMATO, el de texto largo con paradas, que hoy solo tiene una página». Y
+seis de sus piezas lo cumplen sin discusión — portada de capítulo, cita que para la lectura,
+índice con tiempo por sección, transición entre paradas, la regleta de enlace al repo, el marco
+de un diagrama. `LiveStat` no: lo que resuelve es **«esta cifra no se escribe a mano, se enlaza
+a quien la publica»**, que es D38 con forma de bloque y no tiene nada que ver con el largo del
+texto. Estaba en esa capa **por vecindad**, porque el artículo fue quien la necesitó primero.
+
+**Lo que lo puso en evidencia fue un segundo consumidor.** La sección de herencia de
+`/accesibilidad` (P70.101) afirma que los controles salen de una capa común, y quería enseñar
+cuántas piezas tiene el sistema sin teclear el número. La alternativa a mover la pieza era que
+**una página que no es el artículo importara de `ui/article.tsx`**, y eso no es un detalle de
+importación: es la página de accesibilidad declarando que depende del formato de texto largo.
+
+**Y NO ES NÚCLEO, aunque la tarea lo dijera.** El vocabulario de `components/ui/README.md` tiene
+tres grupos y no son la misma cifra mal contada: el **núcleo** son los ocho EJES del sistema —el
+control, el enlace de nav, la etiqueta, la cabecera, el campo, la tabla, la fila de cifras y las
+cajas—, la **capa de artículo** es un formato, y las **primitivas** son bloques sueltos.
+`LiveStat` es lo tercero, del mismo grupo que `info-card.tsx`. Subirlo al núcleo habría hecho
+nueve una cifra que significa otra cosa, y `PRD-Live.md` la publica. **La mudanza no cambia su
+rango: cambia de qué depende.**
+
+**La forma del error, que es lo reutilizable.** La premisa de una capa —«esto solo lo usa X»—
+es un hecho sobre el presente, no una propiedad de la pieza, y **caduca en silencio**: nada
+falla el día que deja de ser cierta. Lo único que la revisa es que aparezca un segundo
+consumidor y alguien se pregunte por qué tiene que importar de casa ajena. Es la misma familia
+que D112, de ayer mismo: allí un guardián heredó el alcance de una carpeta, aquí una pieza
+heredó el alcance de su vecina.
+
+**Validado con el gate que existe para esto.** `npm run gate:html -- save` con el árbol limpio,
+la extracción, y `npm run gate:html` después: **sin cambios en el HTML de las 28 variantes**.
+Conviene decir cómo NO se comprueba, porque costó un rodeo: comparar a mano los `.html`
+prerenderizados da 26 de 26 distintos, porque extraer un módulo mueve los identificadores del
+payload RSC. Eso es exactamente el ruido que el gate normaliza y el motivo por el que existe.
+
+## D114 · El lienzo de un diagrama es la única cifra que declara, y la capa deriva el resto — 2026-08-25
+
+**Decisión.** `DosLienzos` (`components/site/diagrams/shared.tsx`) construye los dos `<svg>` de
+un diagrama. Un diagrama declara **el ancho de su lienzo ancho una sola vez**, y de una tabla
+salen su tope (`max-w-[Npx]`) y el umbral de la container query que conmuta al dibujo estrecho
+(el lienzo +10). El lienzo estrecho —280 unidades, tope 300— es constante de la capa y ningún
+diagrama lo escribe. El `aria-label` también se pasa una vez, y la capa lo pone en los dos.
+
+**El problema no era el rótulo pequeño: era que el mismo número vivía en tres sitios.** Cada
+diagrama lo escribía en su `viewBox`, en su `max-w-[Npx]` y, con un +10, en el `umbral` que
+pasaba a `DosLienzos`. Tres copias sin nada que las atara, así que la pregunta no era si iban a
+desviarse sino cuándo. Ya lo habían hecho tres veces por tres caminos distintos, y la tercera
+seguía viva al escribir esto: `s07` tenía lienzo de 560 con tope de 620, copiado de otro
+diagrama, así que pintaba esa figura un 10% más grande de como está dibujada. **Ningún gate
+podía verlo**, porque `check:figuras` mide a 360, donde manda el otro lienzo.
+
+**Y ese es el argumento de fondo: un gate mide DESPUÉS, una capa impide ANTES.** `check:figuras`
+nació en P68.59 midiendo el rótulo pintado, y siguió siendo la única red durante dos sprints:
+había algo que avisaba cuando el rótulo ya no se leía y nada que garantizara que se leyera. Con
+la tabla, un ancho que no esté en ella es un **error de compilación**, no un rótulo de 5px en
+producción. El gate sigue en CI y pasa de red a confirmación.
+
+**Las clases de la tabla son literales, y no es estilo.** Tailwind escanea el código como texto
+plano: una clase construida por interpolación no se genera y el elemento se queda sin regla, sin
+error de compilación (`BRAND.md` §Cómo medir, punto 5). Por eso la tabla escribe cada clase
+entera en vez de componerla con el número.
+
+**Dónde vive un diagrama, que es la otra mitad.** En la carpeta de su página mientras solo esa
+página lo use, y **se muda a `components/site/diagrams/` en cuanto haya una segunda**. Es la
+misma pregunta que separa `ui/` de `site/`. Lo disparó `/accesibilidad` queriendo reusar el
+diagrama de capas de verificación del artículo (P70.104): repetirlo habría dado dos dibujos del
+mismo sitio contando lo mismo con cifras distintas.
+
+**Y al mudarlo hay que nombrarlo en `FUENTES_DEL_COPY`** (`scripts/articulo/huella.ts`). El
+sello del copy hashea la CARPETA del artículo, así que sacar un archivo de ahí lo saca del hash
+sin que nada proteste: la figura podría cambiar y el `dateModified` que el sitio le promete a
+Google quedarse quieto. Es **D112 otra vez**, el mismo fallo que tuvo `shared.tsx` el mismo día
+y unas horas antes. Se comprueba disparándolo: con el sello en verde, se toca la figura movida y
+`check:articulo` tiene que salir rojo.
+
+**Validado con `gate:html`,** línea base capturada del estado anterior. El diff sobre las 28
+variantes es exactamente las tres desviaciones que el refactor existe para quitar y nada más:
+cuatro `@max-[545px]` → `@max-[550px]` (los dos lienzos de 540, que llevaban +5 en vez de +10) y
+dos `max-w-[620px]` → `max-w-[560px]` (el de `s07`). `check:figuras` después: 36 lienzos, 332
+rótulos, ninguno por debajo de 11px.
+
+**Lo que la capa NO cubre, y conviene no prometerlo.** Un lienzo de ancho fijo que se desplaza en
+horizontal —el artefacto de Emendu— no lo arregla ningún umbral, y `check:figuras` ya declara que
+se abstiene ahí. Ese caso pide re-renderizar el dibujo, no ajustar una cifra.

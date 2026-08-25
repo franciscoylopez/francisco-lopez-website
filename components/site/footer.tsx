@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { GithubIcon, LinkedinIcon } from "@/components/ui/icons";
 
 export type FooterDict = {
+  navLabel: string;
   copyright: string;
   brandKit: string;
   designSystem: string;
@@ -88,7 +89,13 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
               poco más en aparecer, y su porqué está en su propia nota aquí abajo.
               El tamaño de texto (0,9rem) es la tipografía de esta fila, no una
               métrica del enlace, así que se queda aquí — ver `chrome.tsx`. */}
-          <nav className="flex flex-col items-center gap-y-2 md:flex-row md:flex-wrap md:gap-x-5 md:justify-self-center">
+          {/* CON NOMBRE (P70.09). En la home daba igual, era el único. En una
+              página interna hay tres —«Ruta», «Del mismo sistema» y este— y era
+              el ÚNICO anónimo: sonaba «navegación» a secas, indistinguible. */}
+          <nav
+            aria-label={dict.navLabel}
+            className="flex flex-col items-center gap-y-2 md:flex-row md:flex-wrap md:gap-x-5 md:justify-self-center"
+          >
             <a
               href={pagePath(lang, "como-se-ha-creado")}
               className={cn(

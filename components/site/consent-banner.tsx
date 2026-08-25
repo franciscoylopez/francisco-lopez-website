@@ -109,50 +109,68 @@ export function ConsentBanner({
 
   return (
     <>
-      {bannerOpen && !prefsOpen && (
-        <div
-          role="region"
-          aria-label={dict.region}
-          className="consent-enter fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[var(--page-x)] z-[60] w-[calc(100%-2*var(--page-x))] max-w-[40rem]"
-        >
-          <div className="border-border bg-card flex flex-col gap-4 rounded-xl border p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
-            <div className="min-w-0">
-              <p className="font-display text-foreground text-[1.05rem] font-semibold">
-                {dict.title}
-              </p>
-              <p className="text-muted-foreground mt-1 text-[0.9rem] leading-relaxed">
-                {dict.description}{" "}
-                <a href={policyHref} className="link-content">
-                  {dict.policyLink}
-                </a>
-              </p>
-            </div>
-            <div className={BANNER_ACTIONS}>
-              <button
-                type="button"
-                className={BTN_GHOST}
-                onClick={() => setPrefsOpen(true)}
-              >
-                {dict.preferences}
-              </button>
-              <button
-                type="button"
-                className={BTN_OUTLINE}
-                onClick={() => decide({ analytics: false, marketing: false })}
-              >
-                {dict.rejectAll}
-              </button>
-              <button
-                type="button"
-                className={BTN_PRIMARY}
-                onClick={() => decide({ analytics: true, marketing: true })}
-              >
-                {dict.acceptAll}
-              </button>
+      {/* LA LIVE REGION ES ESTE ENVOLTORIO, Y ESTÁ SIEMPRE (P70.08). El aviso no
+          se anunciaba al aparecer: quien usa lector recorría las diez secciones
+          de la home y el pie entero antes de enterarse de que existe. No
+          incumple WCAG —no hay criterio que obligue a anunciar un banner— pero
+          es un mecanismo de consentimiento con peso legal, así que la elección
+          no puede presentarse de inmediato a unos y de facto la última a otros.
+
+          POR QUÉ EL ENVOLTORIO Y NO `role="status"` EN LA FRANJA: una live
+          region tiene que existir en el DOM ANTES de que le entre contenido. La
+          franja nace en un efecto —`localStorage` no existe en SSR—, así que
+          ponerle el rol a ella la insertaría ya poblada y el anuncio se
+          perdería. El envoltorio se renderiza vacío desde el primer pintado.
+
+          Y la franja conserva su `role="region"` con nombre: el rol de live
+          region anuncia, pero no es un punto de navegación. Son dos cosas y por
+          eso son dos elementos. */}
+      <div role="status" aria-live="polite">
+        {bannerOpen && !prefsOpen && (
+          <div
+            role="region"
+            aria-label={dict.region}
+            className="consent-enter fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-[var(--page-x)] z-[60] w-[calc(100%-2*var(--page-x))] max-w-[40rem]"
+          >
+            <div className="border-border bg-card flex flex-col gap-4 rounded-xl border p-5 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+              <div className="min-w-0">
+                <p className="font-display text-foreground text-[1.05rem] font-semibold">
+                  {dict.title}
+                </p>
+                <p className="text-muted-foreground mt-1 text-[0.9rem] leading-relaxed">
+                  {dict.description}{" "}
+                  <a href={policyHref} className="link-content">
+                    {dict.policyLink}
+                  </a>
+                </p>
+              </div>
+              <div className={BANNER_ACTIONS}>
+                <button
+                  type="button"
+                  className={BTN_GHOST}
+                  onClick={() => setPrefsOpen(true)}
+                >
+                  {dict.preferences}
+                </button>
+                <button
+                  type="button"
+                  className={BTN_OUTLINE}
+                  onClick={() => decide({ analytics: false, marketing: false })}
+                >
+                  {dict.rejectAll}
+                </button>
+                <button
+                  type="button"
+                  className={BTN_PRIMARY}
+                  onClick={() => decide({ analytics: true, marketing: true })}
+                >
+                  {dict.acceptAll}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <dialog
         ref={dialogRef}

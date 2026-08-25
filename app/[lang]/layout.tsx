@@ -130,6 +130,23 @@ export default async function RootLayout({
         {/* Primer hijo del <body>, por delante del bloque de GTM: es lo primero
             que tiene que recibir el foco al tabular (WCAG 2.4.1, nivel A). */}
         <SkipLink label={dict.nav.skipToContent} />
+        {/* EL AVISO DE CONSENTIMIENTO VA AQUÍ, NO AL FINAL DEL `<body>` (P70.08).
+            Estaba detrás del pie, así que su region salía DESPUÉS de
+            `contentinfo`: quien ve se lo encuentra encima del contenido nada más
+            cargar y quien usa lector recorría la página entera antes de llegar a
+            él. Aquí el orden del documento dice lo mismo que la prominencia
+            visual, que es lo que /accesibilidad §02 afirma del sitio entero.
+
+            DETRÁS DEL ENLACE DE SALTO Y NO DELANTE: la vía de escape del teclado
+            tiene que seguir siendo el primer elemento focalizable (WCAG 2.4.1).
+            Con el aviso abierto, el segundo es su primer botón, que es justo lo
+            que ve quien mira la pantalla.
+
+            Y se monta en TODOS los entornos (P37.5975): no comparte gate con la
+            analítica —no envía nada a ningún sitio— y colgarla de `GTM_ID` dejaba
+            un modal con cuatro botones y un switch que solo existía en
+            producción, imposible de revisar antes de publicarlo. */}
+        <ConsentBanner dict={dict.consent} lang={lang} />
         {/* Analítica solo en producción (D13). ConsentInit va antes que GTM
             (beforeInteractive) para fijar el default denegado; sin contenedor que
             lo lea no tiene nada que hacer, así que comparte gate con él. */}
@@ -147,11 +164,6 @@ export default async function RootLayout({
         >
           {children}
         </ThemeProvider>
-        {/* La UI de consentimiento se monta en TODOS los entornos (P37.5975). No
-            comparte gate con la analítica: no envía nada a ningún sitio, y colgarla
-            de `GTM_ID` dejaba un modal con cuatro botones y un switch que solo
-            existía en producción — imposible de revisar antes de publicarlo. */}
-        <ConsentBanner dict={dict.consent} lang={lang} />
       </body>
     </html>
   );

@@ -10,7 +10,13 @@ import { cn } from "@/lib/utils";
 
 import { Rich } from "./rich";
 import { chromeLinkVariants } from "./chrome";
-import { eyebrowVariants, LEADING, titleVariants } from "./heading";
+import {
+  eyebrowVariants,
+  LEADING,
+  TitleOrdinal,
+  titleVariants,
+} from "./heading";
+import { LiveStat } from "./live-stat";
 
 // Capa de ARTÍCULO LARGO del sistema (P60). Ninguna de estas piezas sabe nada de
 // ESTE sitio —reciben texto y hrefs, no copy propio ni rutas— así que viven en
@@ -226,10 +232,15 @@ export function SectionCover({
       <header className="min-w-0">
         <div className="mb-2 sm:hidden">{metaLineText}</div>
         <p className={cn(eyebrowVariants(), "mb-3")}>{kicker}</p>
+        {/* El ordinal entra en el nombre accesible del titular (P70.10). Aquí
+            no se deriva del kicker: esta portada YA lo recibe suelto, que es la
+            misma información sin el rodeo. El numeral grande de la derecha
+            sigue `aria-hidden`, así que no se dice dos veces. */}
         <Title
           id={id}
           className={cn(titleVariants({ size: "section-sm" }), "max-w-[24ch]")}
         >
+          <TitleOrdinal ordinal={ordinal} />
           {title}
         </Title>
       </header>
@@ -506,87 +517,6 @@ export function Pull({
     >
       {children}
     </blockquote>
-  );
-}
-
-/* ───────────────────────── LiveStat ───────────────────────── */
-
-/** La regleta de un dato en vivo: no se escribe la cifra en el diccionario
- * (D60), se enlaza a la página que la publica de verdad. `example` es un slot
- * opcional para mostrar la pieza real en vez de solo describirla en texto
- * (P60 tanda 2, punto 17): el llamador pasa componentes reales importados de
- * `components/ui/` —el mismo artefacto que renderiza el sitio, no una
- * recreación— sobre una franja propia, con su propia superficie declarada
- * (`data-surface="card"`, D30/D39) para que el atenuado de dentro se
- * recalcule contra ELLA. */
-export function LiveStat({
-  label,
-  source,
-  value,
-  linkLabel,
-  href,
-  example,
-}: {
-  label: string;
-  source: string;
-  value: string;
-  linkLabel: string;
-  href: string;
-  example?: ReactNode;
-}) {
-  // ¿destino fuera del sitio? (design-review P60, F2): a diferencia de
-  // `RepoStrip`, que SIEMPRE resuelve a github.com o a una URL externa, este
-  // `href` también recibe anclas internas (el espécimen del Design System usa
-  // "#ds-articulo-cover"), así que la comprobación es explícita en vez de un
-  // `target="_blank"` fijo.
-  const isExternal = /^https?:\/\//.test(href);
-  return (
-    <aside className="border-border bg-card my-[2rem] max-w-[34rem] rounded-lg border">
-      <div className="border-border flex flex-wrap items-baseline justify-between gap-2 border-b border-dashed px-5 pt-4 pb-3">
-        <span
-          className={cn(
-            "text-foreground text-[0.72rem] font-semibold tracking-[0.05em] uppercase",
-            LEADING.meta,
-          )}
-        >
-          {label}
-        </span>
-        <code
-          className={cn(
-            "text-muted-foreground font-mono text-[0.74rem]",
-            LEADING.meta,
-          )}
-        >
-          {source}
-        </code>
-      </div>
-      <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-4">
-        <p
-          className={cn(
-            "text-foreground m-0 text-[1.05rem] font-semibold",
-            LEADING.meta,
-          )}
-        >
-          {value}
-        </p>
-        <a
-          href={href}
-          target={isExternal ? "_blank" : undefined}
-          rel={isExternal ? "noopener noreferrer" : undefined}
-          className={cn("link-content text-[0.9rem] font-medium", LEADING.meta)}
-        >
-          {linkLabel}
-        </a>
-      </div>
-      {example ? (
-        <div
-          data-surface="card"
-          className="border-border flex flex-wrap items-center gap-2 border-t px-5 py-4"
-        >
-          {example}
-        </div>
-      ) : null}
-    </aside>
   );
 }
 

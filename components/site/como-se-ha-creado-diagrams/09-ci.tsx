@@ -7,7 +7,7 @@ import { cardinal } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
-import { rlz } from "./shared";
+import { rlz } from "../diagrams/shared";
 
 /** 09 · Los pasos de CI, agrupados por rol (D79, prototipo de Tanda 3
  * · «Agrupado por rol», elegida sobre las otras dos que se compararon):

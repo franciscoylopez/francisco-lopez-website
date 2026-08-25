@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Accesibilidad · Francisco López",
-    "description": "Cómo está construida esta web para ser usable por todas las personas: WCAG 2.2 AA cumplido, sistema de color en AAA y las medidas concretas que lo respaldan, verificadas con axe y Lighthouse."
+    "description": "Cómo está construida esta web para ser usable por todas las personas: WCAG 2.2 AA cumplido, sistema de color en AAA, qué se hereda de la capa de componentes y qué encontró la pasada a mano con lector de pantalla."
   },
   "crumb": "Accesibilidad",
   "hero": {
@@ -11,7 +11,7 @@
     "statConformidad": "Conformidad WCAG 2.2",
     "statColor": "Sistema de color",
     "statAxe": "Violaciones axe",
-    "statLighthouse": "Lighthouse a11y",
+    "statLighthouse": "Lighthouse accesibilidad",
     "updated": "Última revisión de accesibilidad: {date}."
   },
   "conformance": {
@@ -36,7 +36,7 @@
         "value": "Alineada con los criterios de EN 301 549, la norma armonizada de accesibilidad TIC que la Unión Europea referencia y que a su vez remite a WCAG."
       }
     ],
-    "note": "La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a WCAG. Es el criterio que se ha seguido."
+    "note": "La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a [WCAG](https://www.w3.org/TR/WCAG22/). Es el criterio que se ha seguido."
   },
   "measures": {
     "num": "02 — Qué se ha hecho",
@@ -46,96 +46,208 @@
       {
         "title": "Contraste medido en ambos temas",
         "body": "Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto o una barra translúcida: ahí no hay un color que medir, y se miran a ojo.",
-        "wcag": "WCAG 1.4.3 · 1.4.11"
+        "wcag": "WCAG 1.4.3 · 1.4.11",
+        "inherited": true
       },
       {
         "title": "Foco siempre visible",
         "body": "Cada elemento interactivo muestra un anillo de foco de 2 px con separación; nunca se elimina el indicador sin sustituto.",
-        "wcag": "WCAG 2.4.7"
+        "wcag": "WCAG 2.4.7",
+        "inherited": true
       },
       {
         "title": "Áreas de pulsación amplias",
         "body": "Los objetivos táctiles miden al menos 44×44 px, también en controles pequeños como la miga de pan o el cambio de tema.",
-        "wcag": "WCAG 2.5.8 (superado)"
+        "wcag": "WCAG 2.5.8 (superado)",
+        "inherited": true
       },
       {
         "title": "Estructura y orden lógicos",
         "body": "Un solo título principal por página y una jerarquía sin saltos; el orden de lectura coincide con el del código, para lectores de pantalla y navegación por teclado.",
-        "wcag": "WCAG 1.3.1 · 2.4.6"
+        "wcag": "WCAG 1.3.1 · 2.4.6",
+        "inherited": false
       },
       {
         "title": "Ubicación clara",
         "body": "Las páginas internas llevan una miga de pan (breadcrumb) que indica dónde estás dentro del sitio.",
-        "wcag": "WCAG 2.4.8"
+        "wcag": "WCAG 2.4.8",
+        "inherited": false
       },
       {
         "title": "Nunca solo el color",
         "body": "Ningún estado o categoría se distingue únicamente por color: siempre hay además texto o forma.",
-        "wcag": "WCAG 1.4.1"
+        "wcag": "WCAG 1.4.1",
+        "inherited": false
       },
       {
         "title": "Respeto al movimiento reducido",
         "body": "Si tu sistema pide menos animación, las transiciones y los reveals se desactivan.",
-        "wcag": "WCAG 2.3.3"
+        "wcag": "WCAG 2.3.3",
+        "inherited": true
       },
       {
         "title": "Alternativas textuales",
         "body": "Las imágenes que informan llevan texto alternativo; lo decorativo se oculta a la tecnología de asistencia.",
-        "wcag": "WCAG 1.1.1"
+        "wcag": "WCAG 1.1.1",
+        "inherited": false
       },
       {
         "title": "Vía de escape del teclado",
         "body": "El primer elemento al que llega el tabulador es un enlace que salta directamente al contenido, para no recorrer el menú entero en cada página.",
-        "wcag": "WCAG 2.4.1"
+        "wcag": "WCAG 2.4.1",
+        "inherited": false
       }
-    ]
+    ],
+    "note": "De estos {total} puntos, {heredados} no se comprueban página a página, y ese es justo el punto: el contraste, el anillo de foco, el área de pulsación y el respeto al movimiento reducido vienen ya dentro del botón, del enlace y del campo de formulario. Una sección nueva nace con ellos puestos y no puede negociarlos. La sección siguiente cuenta cómo."
+  },
+  "inheritance": {
+    "num": "03 — Herencia",
+    "heading": "La accesibilidad se hereda, no se vuelve a escribir",
+    "figura": {
+      "caption": "Los nueve puntos del checklist, cada uno asignado a la capa que lo pone y a quién lo verifica. Ocho los comprueba una máquina; uno, una persona."
+    },
+    "intro": "Cumplir en una página es fácil. Lo difícil es que la página número quince nazca cumpliendo sin que nadie tenga que acordarse. Esto es lo que hace que ocurra, y es la parte que no se ve mirando el sitio.",
+    "items": [
+      {
+        "title": "Ningún control se escribe a mano",
+        "body": "Todo lo que se pulsa (botones, enlaces, chips, pestañas, el cambio de tema) sale de una capa de componentes común. El anillo de foco, los 44 píxeles de área de pulsación y el contraste de cada estado viven ahí dentro, así que cambiarlos es cambiarlos en todo el sitio a la vez. Cuando un control tiene que quedarse fuera de esa capa lleva una marca con su motivo y su fecha, y hay una comprobación que no deja pasar ninguno sin ella."
+      },
+      {
+        "title": "El gris lo decide el fondo, no quien escribe",
+        "body": "Un texto atenuado sobre el fondo de la página y ese mismo texto dentro de una tarjeta no pueden ser del mismo gris: el segundo se leería peor. Aquí no se elige. Cada superficie recalcula su propio atenuado a partir del fondo que tiene debajo, incluidas las que cambian de color al pasar el ratón por encima. Ahí se escondían los casos que dos revisiones anteriores no vieron: no existen hasta que dos capas se superponen."
+      },
+      {
+        "title": "El marco lo pone la página, no quien la escribe",
+        "body": "El enlace de salto al contenido y su destino, el idioma del documento y los dos landmarks de navegación los pone el armazón que comparten las {paginas} páginas: una página nueva los trae puestos el día que se crea. La miga de pan y la estructura de títulos no, porque dependen de lo que cuente cada página, y por eso son justo las que una comprobación verifica sobre el HTML ya generado de las {paginas} en los dos idiomas."
+      },
+      {
+        "title": "Cuándo hay que volver a medir lo dice una máquina",
+        "body": "La medición completa de color es cara: hay que servir el sitio y recorrerlo con un navegador de verdad, así que no se repite en cada cambio, sino cuando aparece algo nuevo que medir. Una comprobación guarda la huella de los colores, las superficies y las animaciones que había en la última medición, y se pone en rojo nombrando lo que no estaba. La regla dejó de depender de que alguien la recordara."
+      }
+    ],
+    "livestat": {
+      "label": "Piezas del sistema · dato en vivo",
+      "source": "components/ui/",
+      "value": "{piezasNucleo} piezas en el núcleo, y ninguna se escribe a mano",
+      "linkLabel": "Ver el catálogo"
+    },
+    "note": "Esto es lo que sostiene la cifra de arriba. El sistema de color está en AAA, el nivel más exigente que define WCAG, en las {paginas} páginas y en los dos temas, en reposo y con el ratón encima. No se mantiene a base de revisiones: se mantiene porque los colores los eligen los componentes, y porque volver a medir es obligatorio en cuanto aparece uno que nadie ha medido."
   },
   "verify": {
-    "num": "03 — Verificación",
+    "num": "04 — Verificación",
     "heading": "No es una autoevaluación de palabra",
-    "intro": "Cada página se comprueba, en modo claro y oscuro, con herramientas reales. Y a mano, porque las automáticas tienen un punto ciego: ninguna detectó que faltaba el enlace de salto al contenido, y eso era un incumplimiento de nivel A.",
+    "intro": "Cada página se comprueba en modo claro y en modo oscuro, con herramientas reales ([axe-core](https://github.com/dequelabs/axe-core), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)) y también a mano. Las automáticas hacen bien su trabajo, pero solo saben mirar lo que alguien ha convertido en regla.",
     "items": [
       {
         "tool": "axe-core",
-        "result": "Motor de reglas WCAG. 0 violaciones en la home y en las páginas internas."
+        "result": "El motor de reglas WCAG más extendido, pasado sobre el HTML ya generado de las {paginas} páginas en los dos idiomas. Cero violaciones."
       },
       {
         "tool": "Lighthouse",
-        "result": "Auditoría de accesibilidad. Puntuación 100 en producción."
+        "result": "La auditoría de accesibilidad de Chrome. Puntuación 100 en producción."
       },
       {
-        "tool": "Contraste medido",
-        "result": "Color a color, con cifra, no «a ojo»."
+        "tool": "getWCAG",
+        "result": "Un escáner comercial de terceros que no sabe nada de este repositorio: reglas suyas, configuración suya. Cero violaciones, el mismo cero que da el nuestro. Mira una sola página y se lanza aparte, no en cada cambio, así que no sustituye a ninguna de las demás: lo que aporta es que el cero no dependa de nuestro arnés."
+      },
+      {
+        "tool": "Censo de contraste",
+        "result": "Color a color y con cifra, recorriendo el sitio servido y leyendo el color que el navegador pinta de verdad. Incluye los estados: el gris de una tarjeta al pasar el ratón es otro par que medir."
+      },
+      {
+        "tool": "Censo de contornos",
+        "result": "Un segundo recorrido que mide el borde de cada control en vez de su texto. Es el criterio 1.4.11 de WCAG, y ninguna herramienta automática del mercado lo implementa: si un campo de formulario no se distingue del fondo, nada te dice que ahí se escribe."
+      },
+      {
+        "tool": "Marco de página",
+        "result": "Comprueba lo que axe da por bueno: que el enlace de salto exista, que haya un solo título principal, que la jerarquía no salte niveles, que la miga de pan esté puesta y que los datos estructurados apunten a algo que existe."
+      },
+      {
+        "tool": "Rótulos de figuras",
+        "result": "Los diagramas se dibujan sobre un lienzo que se escala, así que un rótulo declarado a 11 píxeles puede acabar pintado a 5. Se mide el tamaño real de cada rótulo a 360 píxeles de ancho, que es un teléfono normal."
       },
       {
         "tool": "Teclado y foco",
-        "result": "Revisión manual de la navegación por teclado y del orden de foco."
+        "result": "Revisión manual de la navegación por teclado y del orden en que el foco recorre la página."
+      },
+      {
+        "tool": "Lector de pantalla",
+        "result": "NVDA sobre Chrome, recorriendo el sitio entero en vez de página a página, que es como se usa de verdad."
       }
     ],
-    "note": "Y a mano, con lector de pantalla: NVDA 2026.1.1 sobre Chrome, en seis recorridos (enlace de salto, navegación, diálogo de consentimiento, tablas de datos, cambio de tema y orden de lectura). Ampliar la prueba a más navegadores y a otros lectores está en el plan."
+    "note": "No todas caben en el mismo sitio, y decirlo importa. Las que solo necesitan leer el código se ejecutan solas en cada cambio, antes de que nada se publique. Las dos mediciones de color necesitan un navegador pintando la página de verdad, así que se lanzan a mano. Y las dos últimas necesitan a alguien delante. Hay además una comprobación que vigila a las demás: coge cada una, le mete a propósito el error que debería cazar y confirma que salta. Son catorce comprobaciones y veintitrés errores fingidos, porque una revisión que devuelve una lista vacía se parece demasiado a un aprobado."
+  },
+  "blindspot": {
+    "num": "05 — El punto ciego",
+    "heading": "Lo que ninguna herramienta automática encuentra",
+    "intro": "Una web puede cumplir todas las reglas y seguir siendo incómoda de usar. Las herramientas comprueban reglas; lo demás solo aparece usándola.",
+    "figura": {
+      "caption": "Las cinco capas con las que se comprueba esta web, cada una cubriendo lo que la anterior no ve. La zona de la derecha, lo que no incumple ninguna regla, solo la alcanza la última: una persona."
+    },
+    "items": [
+      {
+        "title": "El caso que lo demuestra",
+        "body": "Ninguna de las herramientas detectó que faltaba el enlace que salta al contenido, y eso era un incumplimiento de nivel A, el más básico que define WCAG. Tampoco es culpa suya: su regla se da por satisfecha si la página tiene bien puestas sus regiones y sus títulos, y los tenía. Lo que faltaba era el enlace."
+      },
+      {
+        "title": "Una pasada entera con lector de pantalla",
+        "body": "NVDA sobre Chrome, recorriendo seis caminos completos: el enlace de salto, la navegación, el diálogo de cookies, las tablas de datos, el cambio de tema y el orden de lectura. El sitio entero de una vez, no página a página."
+      },
+      {
+        "title": "Cinco cosas que no incumplían ninguna regla",
+        "body": "Y por eso ninguna herramienta tenía nada que decir. El menú del móvil no se cerraba con la tecla Escape. El botón de tema no decía en qué tema estabas ni avisaba de que había cambiado. El aviso de cookies se leía el último, aunque en pantalla sea lo primero que ves. La barra de navegación no se anunciaba como navegación. Y el número de cada sección no sonaba al saltar de título en título."
+      },
+      {
+        "title": "Las cinco están corregidas",
+        "body": "Y tres de ellas no eran el arreglo de una página: cambiaron el armazón que comparten las {paginas}. Ahora el aviso de cookies se anuncia en cuanto aparece y va al principio del documento, la barra de navegación es una región con nombre propio, y el número de sección se oye al recorrer los títulos. Esa es la diferencia entre una prueba a mano y un informe: el informe habría salido en verde las dos veces."
+      }
+    ],
+    "note": "Lo que esta prueba no cubre está justo debajo, en los límites: un solo lector de pantalla ([NVDA](https://www.nvaccess.org/)), un solo navegador, y ninguna persona que use tecnología de asistencia a diario."
   },
   "limits": {
-    "num": "04 — Límites",
+    "num": "06 — Límites",
     "heading": "Ser honesto también es accesibilidad",
     "intro": "Lo que todavía no cumple, y qué falta para que cumpla.",
     "items": [
+      {
+        "title": "Sin usuarios reales",
+        "body": "Todo lo que hay en esta página lo he medido yo. Nadie que use tecnología de asistencia a diario ha probado esta web, y esa es la comprobación que ninguna cifra sustituye. Si quieres serlo, la sección de abajo es exactamente para eso."
+      },
+      {
+        "title": "Un lector y un navegador",
+        "body": "La prueba a mano se ha hecho con NVDA sobre Chrome. Ni VoiceOver, ni JAWS, ni TalkBack en el móvil. Cada combinación se comporta distinto, así que lo que funciona aquí no está probado en las demás. Ampliarlo está en el plan."
+      },
       {
         "title": "Texto sobre foto",
         "body": "El censo de contraste se abstiene a propósito en dieciséis pares: los ocho textos que caen sobre una fotografía, medidos en los dos temas. Ahí el fondo lo decide la imagen y no el sistema de color, así que medirlos exige leer el píxel pintado uno a uno. Están identificados y pendientes."
       },
       {
-        "title": "CV en PDF",
-        "body": "Es texto seleccionable y etiquetado, pero un PDF nunca iguala a una página web en accesibilidad. Si lo necesitas en otro formato, escríbeme."
+        "title": "Pantallas muy estrechas",
+        "body": "Por debajo de 320 píxeles de ancho, tres páginas se desbordan en horizontal. No es la carpintería: son palabras largas que no caben en una columna de 240. Medido a 280 y pendiente."
       },
       {
-        "title": "Mejora continua",
-        "body": "El sistema de color ya está en AAA y se revisa en cada cambio para no perder ese nivel."
+        "title": "Dos diagramas que se miden y no se juzgan",
+        "body": "La comprobación que mide los rótulos de las figuras se abstiene en dos: son diagramas anchos que se desplazan en horizontal en vez de encogerse, así que su tamaño no lo decide el ancho de la pantalla. Sus rótulos acaban pintados a 5 píxeles, y eso es demasiado pequeño. La solución no es estrecharlos sino volver a dibujarlos, y está pendiente."
+      },
+      {
+        "title": "CV en PDF",
+        "body": "Es texto seleccionable y etiquetado, pero un PDF nunca iguala a una página web en accesibilidad. Si lo necesitas en otro formato, escríbeme."
       }
     ],
-    "note": "Esa prueba encontró cuatro detalles que ninguna herramienta automática señala, porque no incumplen ninguna regla: el menú móvil no se cierra con la tecla Escape, el cambio de tema no se anuncia en voz, al abrir el menú el foco pasa antes por el botón de tema, y el aviso de cookies se lee el último aunque sea lo primero que se ve. Están anotados y pendientes."
+    "note": "Nada de esto está aquí por completismo. Un apartado de límites que solo dice «mejora continua» no informa de nada. Si algo de esta lista te afecta, escríbeme: sube de prioridad."
+  },
+  "term": {
+    "num": "07 — El término",
+    "heading": "Qué es A11y y por qué lo usamos",
+    "intro": "Es la palabra que el oficio usa a diario y casi nunca explica. Esta página la estaba usando igual: una vez, en la primera pantalla, sin decir qué era.",
+    "what": "A11y es la abreviatura que el desarrollo web usa para la palabra inglesa accessibility, accesibilidad. Se forma con su primera letra, su última letra y el número de letras que hay entre las dos: once. Y lo que nombra es diseñar sitios y aplicaciones para que cualquier persona pueda usarlos, tenga o no limitaciones físicas, visuales, auditivas o cognitivas.",
+    "project": "[The A11Y Project](https://www.a11yproject.com/) es el espacio abierto donde el oficio reúne los principios y los patrones de accesibilidad que funcionan, del diseño al despliegue. Su idea de fondo es la que sigue esta web: la accesibilidad no es una capa que se añade al final, es un criterio de cierre. Aquí eso se traduce en tres cosas concretas. La lista de comprobación se pega en la tarea antes de empezarla, no al revisarla. Cuatro de sus nueve puntos ya no se miran página a página, porque los pone la capa de componentes. Y todo lo que se pudo convertir en comprobación automática se convirtió.",
+    "figura": {
+      "alt": "La palabra «a11y» dentro de un corazón cuyo trazo se prolonga hasta hacer de cola de la «y»."
+    }
   },
   "report": {
-    "num": "05 — Contacto",
+    "num": "08 — Contacto",
     "heading": "Si algo te bloquea, quiero saberlo",
     "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
     "emailSubject": "Barrera de accesibilidad en franciscolopez.es"
