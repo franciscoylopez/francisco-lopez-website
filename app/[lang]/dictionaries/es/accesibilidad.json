@@ -11,7 +11,7 @@
     "statConformidad": "Conformidad WCAG 2.2",
     "statColor": "Sistema de color",
     "statAxe": "Violaciones axe",
-    "statLighthouse": "Lighthouse a11y",
+    "statLighthouse": "Lighthouse accesibilidad",
     "updated": "Última revisión de accesibilidad: {date}."
   },
   "conformance": {
@@ -233,8 +233,19 @@
     ],
     "note": "Nada de esto está aquí por completismo. Un apartado de límites que solo dice «mejora continua» no informa de nada. Si algo de esta lista te afecta, escríbeme: sube de prioridad."
   },
+  "term": {
+    "num": "07 — El término",
+    "heading": "«a11y» es un atajo del gremio, y darlo por sabido ya es una barrera",
+    "intro": "En el oficio, «accesibilidad» casi siempre se escribe a11y: la a, las once letras que van en medio y la y. Es cómodo dentro del gremio y opaco fuera de él, así que en esta web solo aparece aquí, y explicado.",
+    "tools": "Las herramientas y los estándares que sostienen esta página también tienen nombre propio, y hasta ahora se citaban sin decir dónde viven. [WCAG 2.2](https://www.w3.org/TR/WCAG22/) es la norma del W3C contra la que se mide todo lo demás. [axe-core](https://github.com/dequelabs/axe-core) es el motor de reglas de Deque que recorre el HTML ya generado. [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview) es la auditoría que viene dentro de Chrome. Y [NVDA](https://www.nvaccess.org/) es el lector de pantalla de NV Access, gratuito y de código abierto, con el que se hizo la pasada a mano.",
+    "community": "Nada de esto se ha inventado aquí. [The A11Y Project](https://www.a11yproject.com/) es el sitio abierto donde el oficio mantiene la lista de comprobaciones de la que sale buena parte del criterio que sigue esta web.",
+    "figura": {
+      "alt": "La palabra «a11y» dentro de un corazón cuyo trazo se prolonga hasta hacer de cola de la «y».",
+      "caption": "El corazón de LoveA11y, una marca libre de derechos que cualquiera puede usar y recolorear para hablar de accesibilidad en abierto. Aquí lleva el cian de este sitio."
+    }
+  },
   "report": {
-    "num": "07 — Contacto",
+    "num": "08 — Contacto",
     "heading": "Si algo te bloquea, quiero saberlo",
     "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
     "emailSubject": "Barrera de accesibilidad en franciscolopez.es"

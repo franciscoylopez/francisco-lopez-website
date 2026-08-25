@@ -11,7 +11,7 @@
     "statConformidad": "WCAG 2.2 conformance",
     "statColor": "Colour system",
     "statAxe": "axe violations",
-    "statLighthouse": "Lighthouse a11y",
+    "statLighthouse": "Lighthouse accessibility",
     "updated": "Last accessibility review: {date}."
   },
   "conformance": {
@@ -233,8 +233,19 @@
     ],
     "note": "None of this is here for completeness. A limits section that only says «continuous improvement» tells you nothing. If anything on this list affects you, write to me: it moves up the list."
   },
+  "term": {
+    "num": "07 — The word",
+    "heading": "“a11y” is trade shorthand, and taking it as read is already a barrier",
+    "intro": "In this trade, “accessibility” is almost always written a11y: the a, the eleven letters in between, and the y. Handy inside the guild and opaque outside it, so on this site it appears here only, and explained.",
+    "tools": "The tools and standards holding this page up have names of their own too, and until now they were cited without saying where they live. [WCAG 2.2](https://www.w3.org/TR/WCAG22/) is the W3C standard everything else is measured against. [axe-core](https://github.com/dequelabs/axe-core) is Deque's rules engine, run over the already generated HTML. [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview) is the audit that ships inside Chrome. And [NVDA](https://www.nvaccess.org/) is NV Access's screen reader, free and open source, the one used for the manual pass.",
+    "community": "None of it was invented here. [The A11Y Project](https://www.a11yproject.com/) is the open site where the trade keeps the checklist that much of this site's criteria comes from.",
+    "figura": {
+      "alt": "The word “a11y” inside a heart whose stroke carries on to become the tail of the “y”.",
+      "caption": "The LoveA11y heart, a rights-free mark anyone can use and recolour to talk about accessibility in the open. Here it wears this site's cyan."
+    }
+  },
   "report": {
-    "num": "07 — Contact",
+    "num": "08 — Contact",
     "heading": "If something blocks you, I want to know",
     "body": "If anything on this site is hard to use with your assistive technology, telling me is the best way to get it fixed. Tell me which page you were on, what happened and which assistive tech you use, and I'll reply.",
     "emailSubject": "Accessibility barrier on franciscolopez.es"

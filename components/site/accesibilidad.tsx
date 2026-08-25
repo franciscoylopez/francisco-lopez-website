@@ -151,8 +151,9 @@ export function Accesibilidad({
           {/* La precisión que sostiene la fila «Norma europea»: la EAA obliga a
               productos y servicios comerciales, no a una web personal, y decir lo
               contrario sería el error que justo el público de esta página detecta.
-              Va con <Rich> —único uso en la página— porque lleva los dos enlaces
-              oficiales, EUR-Lex y ETSI (D23). */}
+              Va con <Rich> porque lleva los dos enlaces oficiales, EUR-Lex y
+              ETSI (D23). Eran los dos únicos salientes de la página hasta que
+              (07) trajo los cinco de las herramientas. */}
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={t.conformance.note} />
           </p>
@@ -325,7 +326,7 @@ export function Accesibilidad({
         </div>
       </section>
 
-      {/* ===================== (03) CÓMO SE VERIFICA ===================== */}
+      {/* ===================== (04) CÓMO SE VERIFICA ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHeader
@@ -388,7 +389,7 @@ export function Accesibilidad({
         </div>
       </section>
 
-      {/* ===================== (04) LÍMITES CONOCIDOS ===================== */}
+      {/* ===================== (06) LÍMITES CONOCIDOS ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHeader
@@ -413,7 +414,94 @@ export function Accesibilidad({
         </div>
       </section>
 
-      {/* ===================== (05) REPORTAR UNA BARRERA ===================== */}
+      {/* ===================== (07) EL TÉRMINO ===================== */}
+      {/* EL HUECO QUE TAPA (P70.105): «a11y» aparecía UNA vez en toda la página
+          —el rótulo `Lighthouse a11y` de la fila de datos del hero—, sin glosa,
+          en la primera pantalla, y en una página cuyo público incluye a RRHH.
+          Jerga de gremio usada como vocabulario común, justo en la página cuya
+          sección 02 abre diciendo «en lenguaje llano». El rótulo del hero se
+          arregló por su lado (dos cadenas), así que esta sección es CONTEXTO y
+          no reparación.
+
+          Y EL SEGUNDO HUECO, DE LA MISMA FAMILIA: la página citaba axe-core,
+          Lighthouse, NVDA y WCAG sin enlazar ninguno. Quien no supiera qué es
+          NVDA se quedaba igual. Los enlaces van INLINE en la prosa, como los de
+          EUR-Lex y ETSI de (01), y por eso no llevan icono: la regla del icono
+          de `BRAND.md` deja fuera el enlace de contenido, cuya afordancia es el
+          subrayado.
+
+          NO ES UNA SÉPTIMA REJILLA DE TARJETAS a propósito. Las seis secciones
+          anteriores ya son rejillas de `InfoCard`, y una más antes del cierre
+          las convertiría en textura. Prosa + ilustración cambia el ritmo justo
+          donde hace falta, y es lo que le da a la marca el peso visual que pedía
+          la ficha sin que se lea como insignia. */}
+      <section data-reveal className={SECTION}>
+        <div className={WRAP}>
+          <SectionHeader
+            eyebrow={t.term.num}
+            title={t.term.heading}
+            size="section-sm"
+          >
+            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+              {t.term.intro}
+            </p>
+          </SectionHeader>
+          {/* NO ES `PAIR`, y no por gusto: `PAIR` reparte 50/50 porque está
+              escrito para DOS TARJETAS hermanas, y aquí la caja de la derecha
+              contiene un dibujo de 320px. A media columna (unos 600) dejaría más
+              de 250px de vacío a cada lado, que es justo el defecto que Francisco
+              señaló en el diagrama de (03): la caja se ajusta al dibujo, no a la
+              columna. Tampoco es `HERO_ROW`, cuyo `md:min-h-[19rem]` está
+              calibrado para que las tres aperturas del sistema caigan a la misma
+              altura y aquí solo metería un agujero.
+
+              El reparto 2:1 con bases de 28rem y 16rem deja la prosa en el ancho
+              que le corresponde según `layout.ts` —«prosa con una imagen al lado
+              → lo que le deje la imagen»— y la ilustración justa. Apila por
+              `flex-wrap` en cuanto no quepan las dos bases, sin breakpoint. */}
+          {/* `items-start` Y NO `items-center`, y esto se vio MIRANDO, no en las
+              cifras: la tarjeta mide 442px y la prosa 197, así que centrarlas
+              dejaba 180px de vacío entre la entradilla y el primer párrafo, con
+              el texto flotando a media altura. La cifra del alto no señalaba
+              nada raro; el hueco sí. Alineadas por arriba, lo que sobra queda
+              debajo del texto, que es como se lee una figura al lado de prosa. */}
+          <div className="flex flex-wrap items-start gap-[var(--gutter)]">
+            <div className="flex min-w-[min(100%,20rem)] flex-[2_1_28rem] flex-col gap-4">
+              <p className="text-muted-foreground m-0 text-[0.95rem] leading-[1.7]">
+                <Rich text={t.term.tools} />
+              </p>
+              <p className="text-muted-foreground m-0 text-[0.95rem] leading-[1.7]">
+                <Rich text={t.term.community} />
+              </p>
+            </div>
+            {/* EL `max-w` ES LA MITAD DE LA MISMA REGLA, y opera CUANDO APILA:
+                al envolver, la figura se queda sola en su línea y `flex-grow`
+                la estiraría a los 726px de una tableta con el dibujo de 320
+                flotando en medio. Capada a 26rem se comporta igual apilada que
+                al lado de la prosa, donde su columna mide justo eso. */}
+            <figure
+              className={cn(
+                CARD,
+                "m-0 flex max-w-[26rem] flex-[1_1_16rem] flex-col",
+              )}
+            >
+              <div className="flex flex-1 items-center justify-center p-[clamp(1.5rem,4vw,2.5rem)]">
+                <LoveA11yMark label={t.term.figura.alt} />
+              </div>
+              <figcaption
+                className={cn(
+                  "border-border text-muted-foreground border-t px-5 py-4 text-[0.85rem]",
+                  LEADING.lead,
+                )}
+              >
+                {t.term.figura.caption}
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== (08) REPORTAR UNA BARRERA ===================== */}
       <section data-reveal className={SECTION}>
         <div className={WRAP}>
           <SectionHeader
@@ -449,6 +537,53 @@ export function Accesibilidad({
 }
 
 // --- Subcomponentes ---
+
+// EL TRAZADO DE LoveA11y, tal cual sale del pack de marca: UN solo `path` con
+// `fill-rule="evenodd"` sobre un lienzo de 760×600. Un corazón cuyo trazo inferior
+// derecho se prolonga hasta hacer de cola de la «y» de «a11y», que es lo que
+// convierte al dibujo en la ilustración exacta de lo que el texto explica.
+//
+// LA LICENCIA LO PERMITE SIN ATRIBUCIÓN: «Free, forever», «100% trademark and
+// copyright-free», «designed to be remixed». Las quince variantes del pack son el
+// mismo dibujo en quince colores, así que no hay nada que elegir: se coge una y el
+// relleno pasa a token.
+const LOVE_A11Y_PATH =
+  "m211.62,339.39c-9.69,0-15.16-4.66-15.16-12.59s5.21-11.89,15.16-11.89h22.86v11.41c-3.74,7.91-12.67,13.05-22.86,13.05m11.42-99.95c-18.58,0-37.75,3.62-57.15,10.19-4.14,1.4-9.12,4.5-6.59,11.61l4.33,12.07c3.19,8.93,7.87,9.65,15.98,7.03,11.74-3.82,22.15-6.65,30.61-6.65,12.41,0,24.24,5.02,24.24,18.18h-33.04c-34.03.46-52.17,13.99-52.17,38.45s16.89,39.85,45.71,39.85c17.88,0,31.29-5.81,39.5-16.07v6.1c0,4.34,3.78,7.89,8.4,7.89h32.36c4.62,0,8.4-3.56,8.4-7.89v-74.36c0-29.35-22.61-46.36-60.61-46.36l.02-.04Zm170.11-32.89v17.9c0,5.51,2.22,6.97,7.75,6.79l24.04-.94v129.85c0,4.34,3.78,7.89,8.4,7.89h34.79c4.62,0,8.4-3.56,8.4-7.89v-165.86c0-6.24-2.41-8.11-8.63-7.35l-64.2,9.81c-8.99,1.32-10.58,4.1-10.58,9.77l.02.02Zm-104.27,0v17.9c0,5.51,2.22,6.97,7.75,6.79l24.05-.94v129.85c0,4.34,3.78,7.89,8.4,7.89h34.79c4.62,0,8.4-3.56,8.4-7.89v-165.86c0-6.24-2.41-8.11-8.63-7.35l-64.2,9.81c-8.99,1.32-10.58,4.1-10.58,9.77l.02.02Zm71.55-118.16c13.68-18.92,30.72-35.59,50.33-49.18,28.5-19.74,61.6-32.37,96.65-37.13,56.24-7.61,113.68,6.07,159.2,37.99,29.05,20.38,51.91,46.24,67.72,76.87,52.23,101.23,18.01,230.14-42.2,321.46-47.2,71.6-118.88,134.84-205.88,160.3-14.21,4.16-17.63-8.31-20.88-18.08-3.29-9.93-7.56-20.68,6.65-24.84,76.19-22.28,139.04-79.57,180.08-142.22,51.91-79.21,85.46-195.85,35.89-282.87-12.31-21.6-29.15-39.93-50.05-54.59-35.36-24.8-79.99-35.47-123.69-29.55-27.23,3.7-52.93,13.55-75.07,28.87-22.15,15.35-39.98,35.67-51.81,58.99-1.41,2.8-3.44,5.29-5.93,7.31-9.99,8.11-25.08,7.11-33.74-2.24-18.77-20.24-42.81-35.77-69.6-45.1-26.81-9.35-55.48-12.17-83.77-8.33-44.99,6.09-85.16,28.52-112.35,62.67-72.45,90.9-19.68,213.59,68.61,275.6,40.49,28.46,89.19,46.92,139.19,53.81,47.79,6.57,98.08,2.7,142.84-15.05,44.12-17.48,87.34-44.54,114.32-90.36-1.35-2.44-2.62-5.15-3.78-8.15l-51.93-114.52c-3-6.62-1.31-8.73,6.5-8.73h30.72c9.33,0,10.35.28,13.79,8.93l29.32,73.8c8.7-24.5,12.39-49.14,14.78-77.19.32-3.78,3.84-5.76,7.62-5.54h40.49c2.03.12,3.86.86,5.11,2.4,1.37,1.7,1.2,3.56.76,5.51-21.37,119.98-63.9,204.9-189.03,255.28-52.69,21.2-111.99,25.9-168.4,18.12-57.84-7.97-114.13-29.39-160.95-62.31C11.99,383.13-45.13,233.04,43.53,121.78c34.85-43.72,86.34-72.38,143.93-80.19,36.23-4.92,72.96-1.36,107.29,10.61,23.96,8.35,46.21,20.64,65.68,36.19v-.02Z";
+
+/**
+ * La marca de LoveA11y con el cian de esta casa.
+ *
+ * NO ES `aria-hidden`, al contrario que la composición del hero: el dibujo DICE
+ * «a11y», o sea que lleva información y no puede quedarse fuera del árbol de
+ * accesibilidad. Va con `role="img"` y su nombre accesible, y el nombre describe
+ * el dibujo (qué se ve), no lo llama «logo».
+ *
+ * NO LLEVA `max-w` PROPIO, y eso es deliberado: quien acota el dibujo es la
+ * tarjeta que lo enmarca (`max-w-[26rem]` menos su padding), y **un segundo tope
+ * aquí dejaba un remanente**. Medido: con `max-w-[20rem]` el SVG paraba en 320
+ * dentro de un hueco de 334, o sea 7px de vacío extra por lado que no eran el
+ * padding de nadie. Es la misma forma del defecto que ya se corrigió en el
+ * diagrama de (03): dos topes que no concuerdan, y el dibujo deja de llenar su
+ * caja. Un solo tope, el de la caja.
+ *
+ * EL COLOR ES `--brand-cyan` Y NO `--primary`, aunque en tema claro se pinten
+ * igual. §Color de `BRAND.md` manda la capa decorativa para «ilustración,
+ * gráficos», y usar el color de acción en algo que no se pulsa es justo la mezcla
+ * de capas que esa regla prohíbe. Contra `--background` pasa de sobra el 3:1 que
+ * WCAG 1.4.11 le pide a un gráfico que hay que entender, en los dos temas.
+ */
+function LoveA11yMark({ label }: { label: string }) {
+  return (
+    <svg
+      viewBox="0 0 760 600"
+      role="img"
+      aria-label={label}
+      className="fill-brand-cyan h-auto w-full"
+    >
+      <path fillRule="evenodd" d={LOVE_A11Y_PATH} />
+    </svg>
+  );
+}
 
 // Composición del hero (decorativa, aria-hidden): tres piezas superpuestas que
 // ilustran de qué habla la página —una tarjeta de contraste medido, una checklist

@@ -219,7 +219,7 @@ export function TitleOrdinal({ ordinal }: { ordinal: string }) {
  * El ordinal de un eyebrow numerado, o `null`. Se DERIVA en vez de pedirse por
  * prop porque el formato ya existe y es uno solo —`NN — Etiqueta`, la convención
  * de D43— en las tres familias numeradas del sitio: las dieciséis secciones del
- * Design System, las seis del Brand Kit y las cinco de Accesibilidad. Pedirlo por
+ * Design System, las seis del Brand Kit y las ocho de Accesibilidad. Pedirlo por
  * prop obligaría a escribir el número otra vez en cada uno de esos call sites, que
  * es exactamente la copia que la capa de cabecera existe para evitar.
  *
