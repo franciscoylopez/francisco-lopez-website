@@ -1,6 +1,7 @@
 import { BrandLogoBox } from "./brand-logo-box";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, dataLabelVariants } from "@/components/ui/heading";
+import { cn } from "@/lib/utils";
 import { Marcas } from "@/components/ui/marcas";
 
 type EduItem = { title: string; institution: string };
@@ -30,12 +31,7 @@ function Group({
 }) {
   return (
     <>
-      <p
-        className={
-          "text-muted-foreground m-0 mb-[0.4rem] text-[0.72rem] font-semibold tracking-[0.08em] uppercase " +
-          (className ?? "")
-        }
-      >
+      <p className={cn(dataLabelVariants(), "mb-[0.4rem]", className)}>
         {label}
       </p>
       <div className="border-border border-t">

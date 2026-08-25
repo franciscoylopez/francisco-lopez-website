@@ -1,5 +1,6 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import {
+  dataLabelVariants,
   EYEBROW_GAP,
   eyebrowVariants,
   LEAD_GAP,
@@ -140,6 +141,55 @@ export function Cabeceras({
               </div>
             );
           })}
+        </div>
+
+        {/* LOS DOS RÓTULOS EN VERSALITAS, uno al lado del otro (P70.22). Van en
+            la misma sección y no en una propia porque el titular de esta ya dice
+            de qué habla, y van EMPAREJADOS porque el hallazgo era justo que se
+            parecen: la cadena del segundo estaba escrita a mano nueve veces, y
+            dos de ellas llamaban al PRIMERO y le pisaban el tamaño.
+
+            Cada demo trae SU composición natural, que es lo único que los
+            distingue de verdad: el eyebrow con el titular debajo y su hueco
+            derivado; el rótulo de dato con el dato debajo, sin hueco que
+            derivar. Enseñarlos sueltos, uno junto a otro, habría enseñado dos
+            cadenas de texto casi iguales — que es exactamente el problema. */}
+        <GroupHead title={t.labelTitle} lead={t.labelLead} />
+        <div className={PAIR}>
+          <SpecimenCard
+            kicker={t.labelEyebrowKicker}
+            cls="eyebrowVariants"
+            rule={t.labelEyebrowRule}
+            note={t.labelEyebrowNote}
+            wide
+          >
+            <div>
+              <p className={cn(eyebrowVariants(), EYEBROW_GAP.sub)}>
+                {t.labelEyebrowSample}
+              </p>
+              <span className={cn(titleVariants({ size: "sub" }), "block")}>
+                {t.labelEyebrowTitle}
+              </span>
+            </div>
+          </SpecimenCard>
+          <SpecimenCard
+            kicker={t.labelDataKicker}
+            cls="dataLabelVariants"
+            rule={t.labelDataRule}
+            note={t.labelDataNote}
+            wide
+          >
+            {/* La ficha del deep-dive, que es de donde salió la cadena: la
+                etiqueta y su valor, sin titular por medio. */}
+            <dl className="m-0">
+              <dt className={cn(dataLabelVariants(), "mb-1")}>
+                {t.labelDataSample}
+              </dt>
+              <dd className="text-foreground m-0 text-[0.95rem]">
+                {t.labelDataValue}
+              </dd>
+            </dl>
+          </SpecimenCard>
         </div>
 
         {/* LA FILA DE CIFRAS, publicada el 2026-08-22. Era la única de las siete

@@ -7,7 +7,7 @@ import type {
 import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
 import { factsOf } from "@/content/experience-copy";
 import { actionVariants } from "@/components/ui/action";
-import { SectionHeader, eyebrowVariants } from "@/components/ui/heading";
+import { SectionHeader, dataLabelVariants } from "@/components/ui/heading";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -126,7 +126,7 @@ export function TrayectoriaIndice({
               <li key={slug} className="m-0">
                 <a href={hrefDe(slug)} className={TARJETA}>
                   <div className="mb-[1.1rem] flex items-start justify-between gap-3">
-                    <p className={cn(eyebrowVariants(), "text-[0.7rem]")}>
+                    <p className={dataLabelVariants()}>
                       <Marcas>{exp.company}</Marcas> · {sector}
                     </p>
                     {exp.logo ? <BrandLogoBox name={exp.logo} /> : null}

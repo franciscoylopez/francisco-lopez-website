@@ -17,7 +17,8 @@ import type { Locale } from "@/lib/i18n/config";
 import { CARD, PANEL, PROSE, SECTION, WRAP } from "@/components/ui/layout";
 import { artefactoSvg } from "@/lib/artefacto";
 import { Rich } from "@/components/ui/rich";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, dataLabelVariants } from "@/components/ui/heading";
+import { cn } from "@/lib/utils";
 import { VideoEmbed } from "@/components/ui/video-embed";
 
 // PLANTILLA ÚNICA del deep-dive por experiencia (P48). Una sola forma renderiza
@@ -172,9 +173,7 @@ function Datos({
     <dl className="border-border m-0 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-x-[var(--gutter)] gap-y-6 border-t pt-[clamp(1.5rem,3vw,2rem)]">
       {filas.map((f) => (
         <div key={f.label}>
-          <dt className="text-muted-foreground m-0 text-[0.72rem] font-semibold tracking-[0.08em] uppercase">
-            {f.label}
-          </dt>
+          <dt className={dataLabelVariants()}>{f.label}</dt>
           <dd className="m-0 mt-[0.45rem] text-[0.95rem] leading-[1.5] text-pretty">
             {f.value}
           </dd>
@@ -198,9 +197,7 @@ function Artefacto({
 }: NonNullable<NonNullable<DeepDiveDict["caso"]>["artefacto"]>) {
   return (
     <figure className="m-0 mt-8">
-      <h3 className="text-muted-foreground m-0 mb-4 text-[0.72rem] font-semibold tracking-[0.08em] uppercase">
-        {title}
-      </h3>
+      <h3 className={cn(dataLabelVariants(), "mb-4")}>{title}</h3>
       <div className={PANEL}>
         {/* La alternativa textual va ANTES del dibujo y visualmente oculta: un
             lector de pantalla no puede seguir flechas, así que no se etiqueta el
@@ -373,9 +370,7 @@ function Resultados({
       {/* `h3` y no `h4`: dentro de «El caso» no hay subapartados, así que un h4
           sería un salto de nivel (punto 4 del checklist). El nivel es semántica
           y el tamaño es aspecto — aquí el rótulo se ve pequeño y encabeza igual. */}
-      <h3 className="text-muted-foreground m-0 mb-4 text-[0.72rem] font-semibold tracking-[0.08em] uppercase">
-        {resultados.title}
-      </h3>
+      <h3 className={cn(dataLabelVariants(), "mb-4")}>{resultados.title}</h3>
       <ul className="m-0 grid list-none [grid-template-columns:repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-[var(--gutter)] p-0">
         {resultados.items.map((r) => (
           <li key={r.value} className={`${CARD} p-5`}>

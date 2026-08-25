@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { BrandLogoBox } from "./brand-logo-box";
 import { type Locale, pagePath } from "@/lib/i18n/config";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, dataLabelVariants } from "@/components/ui/heading";
 import { experienceOf } from "@/content/experiences";
 import { factsOf, shortOf } from "@/content/experience-copy";
 import { Marcas } from "@/components/ui/marcas";
@@ -182,7 +182,7 @@ export function Trayectoria({
           className="mb-[clamp(1.5rem,3vw,2.25rem)] flex flex-wrap items-start justify-between gap-x-10 gap-y-5"
         >
           <div className="min-w-[min(100%,20rem)] flex-[1_1_30rem]">
-            <p className="text-muted-foreground m-0 mb-2 text-[0.72rem] font-semibold tracking-[0.08em] uppercase">
+            <p className={cn(dataLabelVariants(), "mb-2")}>
               {dict.productoLabel}
             </p>
             <p className="m-0 max-w-[64ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty">
@@ -242,10 +242,7 @@ export function Trayectoria({
           aria-hidden="true"
           className="border-foreground mb-[clamp(2rem,4vw,3rem)] border-t-2 opacity-[0.28]"
         />
-        <p
-          data-reveal
-          className="text-muted-foreground m-0 mb-2 text-[0.72rem] font-semibold tracking-[0.08em] uppercase"
-        >
+        <p data-reveal className={cn(dataLabelVariants(), "mb-2")}>
           {dict.previoLabel}
         </p>
         <p

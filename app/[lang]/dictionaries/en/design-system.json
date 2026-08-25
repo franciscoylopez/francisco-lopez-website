@@ -499,6 +499,18 @@
         "note": "Over any other surface that grey has to be recomputed, not reused (D30): it blends 85% into the surface underneath. This used to be a prop you had to remember; now the token resolves it."
       }
     ],
+    "labelTitle": "The other small-caps label, which is not this one",
+    "labelLead": "They look alike and do different jobs, so they're two pieces rather than one with an axis. The left one opens a section and comes paired with a headline; the right one labels a piece of data inside the content, which is why it runs a notch smaller and a notch tighter.",
+    "labelEyebrowKicker": "Opens a section",
+    "labelEyebrowRule": "It always sits above a headline, and the gap between them isn't written anywhere: the size of the headline below sets it.",
+    "labelEyebrowNote": "This is the piece that ended up written by hand fourteen times before it had a name.",
+    "labelEyebrowSample": "Career",
+    "labelEyebrowTitle": "Ten years of product",
+    "labelDataKicker": "Labels a value",
+    "labelDataRule": "It has no headline beside it, so there's no gap to derive: the margin belongs to whoever uses it. It's a fact's label, a row heading, or the name of a block inside a section.",
+    "labelDataNote": "It was written by hand nine times when it finally got a name, and two of those called the one next to it and overrode its size, which is the tell that the variant they were using wasn't theirs.",
+    "labelDataSample": "Length",
+    "labelDataValue": "5 years and 6 months",
     "statTitle": "Below the headline, the row of figures",
     "statLead": "When an opening sums itself up in numbers, the page doesn't assemble that row: a piece brings it, with its rule, its gap and its grid. The one below is the same row that opens this page, with the same values, so you can check by scrolling up.",
     "stat": {

@@ -499,6 +499,18 @@
         "note": "Encima de cualquier otra superficie ese gris hay que recalcularlo, no reusarlo (D30): se mezcla un 85% hacia el fondo de debajo. Antes había que pedirlo con una prop y solo lo tenía quien se acordaba; ahora lo resuelve el token."
       }
     ],
+    "labelTitle": "El otro rótulo en versalitas, que no es este",
+    "labelLead": "Se parecen mucho y hacen cosas distintas, así que son dos piezas y no una con un eje. El de la izquierda abre una sección y viene emparejado con un titular; el de la derecha rotula un dato dentro del contenido, y por eso va un punto más pequeño y menos abierto.",
+    "labelEyebrowKicker": "Abre una sección",
+    "labelEyebrowRule": "Va siempre encima de un titular, y el hueco que los separa no se escribe: lo pone el tamaño del titular que tiene debajo.",
+    "labelEyebrowNote": "Es la pieza que llegó a estar escrita a mano catorce veces antes de tener nombre.",
+    "labelEyebrowSample": "Trayectoria",
+    "labelEyebrowTitle": "Diez años de producto",
+    "labelDataKicker": "Rotula un dato",
+    "labelDataRule": "No tiene titular al lado, así que no hay hueco que derivar: el margen lo pone quien la usa. Es la etiqueta de una ficha, la cabecera de una fila o el nombre de un bloque dentro de una sección.",
+    "labelDataNote": "Estaba escrita a mano nueve veces cuando se le puso nombre, y dos de ellas llamaban a la de al lado y le pisaban el tamaño, que es la señal de que la variante que usaban no era la suya.",
+    "labelDataSample": "Duración",
+    "labelDataValue": "5 años y 6 meses",
     "statTitle": "Debajo del titular, la fila de cifras",
     "statLead": "Cuando una apertura resume algo en datos, la fila no la monta la página: la trae una pieza con su filete, su hueco y su rejilla. Esta de aquí abajo es la misma que abre esta página, con los mismos valores, así que se puede comprobar subiendo.",
     "stat": {
