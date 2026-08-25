@@ -521,21 +521,23 @@ export function Accesibilidad({
                 <Rich text={t.term.project} />
               </p>
             </div>
-            {/* EL `max-w` OPERA SOBRE TODO AL APILAR: al envolver, la figura se
-                queda sola en su línea y `flex-grow` la estiraría al ancho entero
-                de una tableta con el dibujo flotando en medio. Capada a 18rem se
-                comporta igual apilada que al lado de la prosa. */}
-            <figure className="m-0 flex max-w-[18rem] flex-[1_1_14rem] flex-col items-center gap-4">
+            {/* SIN PIE Y SIN `<figure>` (decisión de Francisco, 2026-08-25): el
+                recurso va suelto. Un `<figure>` sin `<figcaption>` no aporta
+                nada que no aporte ya el `role="img"` del SVG con su nombre
+                accesible, así que aquí sobra el elemento.
+
+                LA ATRIBUCIÓN NO SE PIERDE POR ESO: la licencia de LoveA11y es
+                «100% trademark and copyright-free» y no exige ninguna. Lo que se
+                pierde es contarle al lector qué marca está viendo, y eso es una
+                elección editorial, no un requisito.
+
+                EL `max-w` OPERA SOBRE TODO AL APILAR: al envolver, el dibujo se
+                queda solo en su línea y `flex-grow` lo estiraría al ancho entero
+                de una tableta. Capado se comporta igual apilado que al lado de
+                la prosa. Los 15,3rem son los 18 anteriores menos un 15%. */}
+            <div className="flex max-w-[15.3rem] flex-[1_1_12rem] justify-center">
               <LoveA11yMark label={t.term.figura.alt} />
-              <figcaption
-                className={cn(
-                  "text-muted-foreground text-[0.85rem]",
-                  LEADING.lead,
-                )}
-              >
-                {t.term.figura.caption}
-              </figcaption>
-            </figure>
+            </div>
           </div>
         </div>
       </section>

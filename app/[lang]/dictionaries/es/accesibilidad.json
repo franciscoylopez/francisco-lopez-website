@@ -243,8 +243,7 @@
     "what": "A11y es la abreviatura que el desarrollo web usa para la palabra inglesa accessibility, accesibilidad. Se forma con su primera letra, su última letra y el número de letras que hay entre las dos: once. Y lo que nombra es diseñar sitios y aplicaciones para que cualquier persona pueda usarlos, tenga o no limitaciones físicas, visuales, auditivas o cognitivas.",
     "project": "[The A11Y Project](https://www.a11yproject.com/) es el espacio abierto donde el oficio reúne los principios y los patrones de accesibilidad que funcionan, del diseño al despliegue. Su idea de fondo es la que sigue esta web: la accesibilidad no es una capa que se añade al final, es un criterio de cierre. Aquí eso se traduce en tres cosas concretas. La lista de comprobación se pega en la tarea antes de empezarla, no al revisarla. Cuatro de sus nueve puntos ya no se miran página a página, porque los pone la capa de componentes. Y todo lo que se pudo convertir en comprobación automática se convirtió.",
     "figura": {
-      "alt": "La palabra «a11y» dentro de un corazón cuyo trazo se prolonga hasta hacer de cola de la «y».",
-      "caption": "El corazón de LoveA11y, una marca libre de derechos para hablar de accesibilidad en abierto."
+      "alt": "La palabra «a11y» dentro de un corazón cuyo trazo se prolonga hasta hacer de cola de la «y»."
     }
   },
   "report": {

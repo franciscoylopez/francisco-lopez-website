@@ -243,8 +243,7 @@
     "what": "A11y is the shorthand web development uses for the word accessibility. It's built from its first letter, its last letter, and the number of letters in between: eleven. What it names is designing sites and apps so that anyone can use them, whether or not they have physical, visual, hearing or cognitive limitations.",
     "project": "[The A11Y Project](https://www.a11yproject.com/) is the open space where the trade gathers the accessibility principles and patterns that work, from design through to deployment. Its underlying idea is the one this site follows: accessibility isn't a layer added at the end, it's a closing criterion. Here that turns into three concrete things. The checklist goes into the task before the work starts, not when it gets reviewed. Four of its nine points are no longer checked page by page, because the component layer supplies them. And everything that could become an automated check became one.",
     "figura": {
-      "alt": "The word “a11y” inside a heart whose stroke carries on to become the tail of the “y”.",
-      "caption": "The LoveA11y heart, a rights-free mark for talking about accessibility in the open."
+      "alt": "The word “a11y” inside a heart whose stroke carries on to become the tail of the “y”."
     }
   },
   "report": {
