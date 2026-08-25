@@ -146,6 +146,7 @@
 - D108 · El desglose por fases del LCP no es una propiedad de la página: es una muestra
 - D109 · La lista de excepciones deja de escribirse de memoria: la marca va en el punto de uso
 - D110 · La fecha que ve Google se escribe a mano, y lo que la sostiene es un sello aparte
+- D111 · Lo que el lector de pantalla cambió en el marco de toda página
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -2003,6 +2004,10 @@ eyebrow no puede repetir el título—, así que va en P37.695, commit aparte y 
 aquí habría costado la propiedad que hace barato este refactor: diff vacío = correcto.
 
 ## D43 · Toda página y toda sección abren igual: el ordinal va dentro del eyebrow — 2026-08-10
+
+> **AMPLIADA el 2026-08-25 por D111.** El ordinal sigue viviendo en el eyebrow, y desde
+> esa fecha entra ADEMÁS en el nombre accesible del titular: navegar con `H` salta el eyebrow
+> y se llevaba solo la afirmación. No se pinta dos veces.
 
 **Decisión.** Las **19 secciones numeradas** del Design System y de Accesibilidad pasan a abrir
 como el resto del sitio: `SectionHeader` con **rótulo + titular**, el ordinal dentro del rótulo
@@ -6426,3 +6431,75 @@ con lo de antes es que ahora es una decisión y no un olvido.
 sale rojo con las dos salidas impresas; restaurada la palabra, verde. Su caso malo entra en
 `check:guardianes`, y tampoco es inventado: es el estado real de esos doce commits. El
 informe dice además **qué fecha ha comprobado**, que es la regla de esta casa desde D57.
+
+## D111 · Lo que el lector de pantalla cambió en el marco de toda página — 2026-08-25
+
+**Decisión.** Tres cambios en la carpintería que comparten las catorce páginas, salidos de la
+pasada manual con NVDA (D73) y no de ninguna herramienta: **la barra de navegación es un
+landmark con nombre**, **el aviso de consentimiento vive al principio del `<body>` y se anuncia
+al aparecer**, y **el ordinal de sección entra en el nombre accesible del titular**. Ninguno de
+los tres incumplía WCAG. Son decisiones, y por eso están aquí y no en un commit.
+
+**Por qué juntos.** Los cinco hallazgos de la pasada eran de dos clases. Dos eran defectos con
+arreglo obvio y sin decisión detrás —`Esc` no cerraba el menú móvil, el botón de tema no decía
+en qué tema estabas— y se cierran en su mensaje de commit. Los otros tres cambian el marco que
+hereda toda página, así que cambian el sitio entero: eso es lo que este archivo registra.
+
+**1. La barra es navegación, y el comentario que decía lo contrario era el problema.**
+`nav.tsx` justificaba el `<div>` así: «no es navegación de sitio, evita un segundo landmark de
+navegación sin nombre único». El razonamiento tenía dos huecos, y es lo único que justifica
+reabrir una decisión ya tomada. Primero, **`<nav aria-label>` da landmark y nombre único a la
+vez**, así que la pega que evitaba no existía. Segundo, la premisa era falsa: el logo lleva a
+Inicio y «Sobre mí» y «Contacto» llevan a sus páginas. En la práctica, quien pulsaba `D`
+buscando la navegación **no la encontraba en la home**: el único «navegación» que sonaba era el
+del pie, que además era **el único `<nav>` anónimo del sitio** (en una página interna convive
+con «Ruta» y con «Del mismo sistema»).
+
+El `<nav>` envuelve el logo, el grupo de controles y el panel del menú. **El toggle de tema
+queda dentro sin ser navegación:** es el coste de que la barra sea un landmark en vez de dos, y
+se paga a propósito.
+
+**2. El consentimiento deja de ser lo último del documento, y se anuncia.** Su region salía
+**después de `contentinfo`**: quien ve el aviso se lo encuentra sobre el contenido al cargar, y
+quien usa lector recorría las diez secciones de la home y el pie entero antes de enterarse de
+que existe. No hay criterio WCAG que obligue a anunciar un banner, pero **es un mecanismo de
+consentimiento con peso legal** y la misma elección no puede presentarse de inmediato a unos y
+de facto la última a otros.
+
+Se hacen **las dos cosas, y no una**, porque arreglan mitades distintas: mover el nodo ordena la
+lectura pero no avisa a quien ya está leyendo; anunciar avisa pero deja el aviso al final para
+quien recorre la página. Y mover resultó **más barato de lo que la tarea suponía**: la franja
+nace en un efecto (`localStorage` no existe en SSR), así que en el HTML prerenderizado solo se
+mueven el `<dialog>` cerrado y un envoltorio vacío.
+
+**La live region es el envoltorio, no la franja**, y esto es lo reutilizable: una live region
+tiene que existir en el DOM **antes** de que le entre contenido, y la franja se inserta ya
+poblada. La franja conserva su `role="region"` con nombre, porque anunciar y ser punto de
+navegación son dos cosas distintas. Va **detrás del enlace de salto**, que sigue siendo el
+primer elemento focalizable (D46, WCAG 2.4.1): con el aviso abierto, el segundo es su primer
+botón, que es exactamente lo que ve quien mira la pantalla.
+
+**3. El ordinal entra en el nombre accesible del titular, y D43 sigue en pie.** D43 fija que el
+ordinal va **dentro del eyebrow**, y el eyebrow es un `<p>` anterior al titular. Navegar con `H`
+—que es como se recorre una página larga con lector— salta de encabezado en encabezado y **se
+lleva solo el titular**: se oye «WCAG 2.2 AA cumplido, con el contraste medido» y el «01» no
+suena nunca. No era un defecto: el titular solo es una afirmación completa, que es la intención
+de D43. Lo que estaba en duda era si el ordinal es decoración o orientación, y quien lo ha oído
+dice que orienta. Así que entra en el **nombre**, no en la pantalla.
+
+**Se deriva del eyebrow, no se pide por prop.** El formato ya existe y es uno solo (`NN —
+Etiqueta`) en las tres familias numeradas: las dieciséis secciones del Design System, las seis
+del Brand Kit y las cinco de Accesibilidad. Pedirlo por prop obligaría a **escribir el número
+otra vez en treinta call sites**, que es la copia que la capa de cabecera existe para evitar.
+La portada de sección del artículo es la excepción y no por caso especial: **ya recibe el
+ordinal suelto**, así que usa el que tiene en vez de deducirlo.
+
+**Y va sin la raya**, no por la regla del copy —que mira el texto servido— sino porque **aquí se
+oye**: el anuncio de ese signo depende del nivel de puntuación configurado en el lector. El
+punto no lo pronuncia ninguno y sí produce la pausa que separa el ordinal del titular.
+
+**Lo que esto no cierra.** La comprobación **de oído** con NVDA, que es la única capa capaz de
+juzgar si los tres cambios suenan como se pretendía y que ningún gate puede sustituir. Y la
+página que publica los hallazgos: su nota decía que los cuatro detalles estaban «anotados y
+pendientes», y esa frase se corrige en el mismo lote, porque una página que documenta el sistema
+no puede quedarse contando un estado que el propio lote acaba de cambiar (D84).
