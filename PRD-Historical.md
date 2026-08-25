@@ -77,6 +77,7 @@
 - [59. El sprint 4 se define contra un calendario, no contra la deuda (2026-08-23)](#59-el-sprint-4-se-define-contra-un-calendario-no-contra-la-deuda-2026-08-23)
 - [60. La lectura del artículo destapa tres cosas que nadie buscaba (2026-08-24)](#60-la-lectura-del-artículo-destapa-tres-cosas-que-nadie-buscaba-2026-08-24)
 - [61. La tanda de método cierra siete tareas, y cuatro tenían la premisa equivocada (2026-08-25)](#61-la-tanda-de-método-cierra-siete-tareas-y-cuatro-tenían-la-premisa-equivocada-2026-08-25)
+- [62. Los dos sprints hacia septiembre: coherencia de las hermanas, con el activo que se lanza arrastrado dentro (2026-08-25)](#62-los-dos-sprints-hacia-septiembre-coherencia-de-las-hermanas-con-el-activo-que-se-lanza-arrastrado-dentro-2026-08-25)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3080,6 +3081,45 @@ veces, y en dos de ellas evitó construir sobre algo falso.
 
 **Y el guardián nuevo se validó solo.** `check:tablero` (D107) encontró en su primera corrida dos
 pares de prioridades duplicadas y cuatro tareas sin `Área` — en un tablero que se creía ordenado.
+
+## 62. Los dos sprints hacia septiembre: coherencia de las hermanas, con el activo que se lanza arrastrado dentro (2026-08-25)
+
+Cerrado «Artículo y velocidad» —33 tareas, 32 hechas y una descartada—, **la propuesta de
+Francisco fue dos sprints seguidos, los dos antes de septiembre**: primero las **tres páginas
+hermanas** (Brand Kit, Design System, Accesibilidad) con una tanda por bloque, y después la
+**home**, con más `General` dentro.
+
+**La objeción de la revisión, y no es la que la propuesta esperaba.** Las tres hermanas y la
+home son páginas del **sistema**, ya entregadas; lo que se lanza en septiembre es «Cómo se ha
+creado esta página», y quien llegue por ahí y convierta pasa por `/contacto`. **Ninguno de los
+dos sprints tocaba ni el activo que se lanza ni su enlace de conversión**, y los dos iban a
+septiembre con un defecto conocido cada uno: `/contacto` publicando la tarjeta OG de la home
+—probado byte a byte— y el artículo anunciando a Google que no cambia desde el 21 de agosto,
+tras seis commits y un capítulo nuevo.
+
+**La resolución no cambió el plan, lo completó:** los dos *Must* se **arrastran** al primer
+sprint aunque no sean de su bloque, que es exactamente para lo que existe la regla de
+movimiento. Entran como P70.03 y P70.04, por delante de toda la deuda de diseño.
+
+**Y una tarea de contenido que no estaba y era el cuello de botella.** Francisco pidió revisar
+si el contenido de Accesibilidad «es escueto para lo mucho que hacemos». Lo es, y **no por
+volumen**: 7.120 caracteres frente a los 46.552 del Design System y los 82.906 del artículo,
+siendo las tres las páginas donde el sitio se documenta a sí mismo. El diagnóstico que quedó
+escrito en la tarea es más útil que la cifra: **la página publica lo que tiene cualquiera
+—axe, Lighthouse— y calla lo que no tiene nadie**, empezando por que su censo mide el contorno
+de cada control, que es WCAG 1.4.11 y axe no lo implementa. De paso apareció una afirmación
+caducada —«aún no hay formulario»— en el bloque de límites, que es donde más cuesta.
+
+**El orden lleva una dependencia dura escrita:** el discurso de esa página no se amplía
+mientras sigan abiertos sus cinco hallazgos de NVDA. Subir el listón declarado justo donde el
+sitio todavía falla es lo que esa página menos se puede permitir.
+
+**Forma final.** «Páginas hermanas» abre con **28 tareas** (P70.01-P70.28): contenido primero,
+los tres *Must*, los cinco de NVDA, cuatro de `General` por cupo, y las tandas de Design System
+y Brand Kit. La home queda definida y en «Sin empezar», con **su carril de contenido —el kicker
+del Hero— ya arrancado en paralelo**, que es lo que impide que abra bloqueada. Tres de las 28
+son funcionalidad y no deuda (copy-to-clipboard, simulador de foco, ilustraciones animadas):
+quedan señaladas como las primeras que salen si septiembre aprieta.
 
 ## Fuentes
 

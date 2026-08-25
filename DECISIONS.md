@@ -1096,6 +1096,23 @@ aparecieron dos defectos estructurales que llevaban meses invisibles porque nadi
 principio a fin — el **ítem 2 de la regla de dos capas estaba cien líneas por debajo del ítem 1**,
 detrás de cuatro secciones de nivel 2, y el método de medición iba numerado 1-4-5-2-3-6.
 
+### Addendum 2026-08-25 — el techo sube por primera vez, y esta entrada no lo cuenta
+
+D69 le puso cifra y guardián a este régimen, y el trinquete se apretó **cinco veces**. El
+2026-08-25 **subió**: 12.200 → 12.700, decisión de Francisco en el quinto `method-review`.
+
+**El motivo, en una línea:** el propio guardián define la *holgura de trabajo* —unas 240
+palabras, cinco o seis reglas— como la magnitud que hay que sostener, y quedaban **dos**.
+Apretar más no era una opción que existiera; las dos reglas que esa misma revisión mandó
+escribir cuestan 157 palabras y no habrían cabido.
+
+**El historial completo del techo, con el porqué de cada valor, vive en
+`scripts/check-contexto.ts` y solo ahí** — es donde no puede caducar sin que falle algo, y
+copiarlo aquí sería la segunda verdad que este proyecto ha cerrado ya por cinco puertas.
+Lo que sí queda escrito aquí, porque es de régimen y no de cifra: **la subida es interina y
+está atada a P68.5905**, que busca el dato de coste que ninguno de los seis valores del techo
+ha tenido nunca. Ninguno salió de medir qué cuesta este contexto; todos, de cuánto ocupa.
+
 
 ## D29 · Superficie de contacto unificada: dato, patrón y jerarquía — 2026-08-03
 **Decisión.** El contacto deja de ser tres implementaciones que se parecían y pasa a ser
@@ -4172,6 +4189,47 @@ decisión de Francisco**, no por descuido: agosto está parado en contratación 
 es lanzar «Cómo se ha creado esta página» en **septiembre** y medir desde ahí. Eso convierte el
 artículo en el vehículo de distribución —y a P68.49 en prerrequisito del lanzamiento—. Se anota
 aquí y en la propia tarea porque un «no» silencioso vuelve como descuido en el cierre siguiente.
+
+### Cierre del sprint 4 — 2026-08-25: la métrica primaria registra su primer evento, y la portada no sirve para verlo
+
+**Los tres marcadores, y el panel vuelve a reproducir GA4 al dígito:** `contact_click` **9** ·
+`file_download` **6** · `scroll` **62**, idénticos en Looker y en el informe de eventos de GA4
+(28 jul - 24 ago 2026; 550 eventos, 46 usuarios, 181 `page_view`). Contra el cierre anterior
+(9 · 6 · 60): **dos clavados y scroll +2**. Han pasado **dos días**, o sea 2/28 de ventana, así
+que la pregunta 2 vuelve a no tener respuesta y era lo previsto — es literalmente la lección que
+dejó escrita el cierre anterior.
+
+**La pregunta 4 se cierra sobre una verificación por segunda vez, y esta es la que importaba:
+`contact_submit` = 1 evento, 1 usuario**, dentro de la ventana 18-25 ago, o sea **posterior al
+cableado del 24**. Es el primer registro de la métrica primaria del PRD §7 desde que existe. La
+cadena `dataLayer` → trigger de Custom Event → tag de GA4 está verificada **de punta a punta con
+un evento real**, no con la predicción de que lo estaría. `form_start` = 1 en la misma ventana,
+así que el par abandono/finalización también funciona.
+
+**El discriminador que lo prueba, y conviene guardarlo porque es reutilizable:** el hub de
+eventos tiene dos pestañas, «Eventos clave» y «Eventos recientes», y la segunda lista **solo lo
+que ha llegado en 28 días**. `purchase` —evento clave que no ha disparado nunca— aparece en la
+primera y **no** en la segunda; `contact_submit` aparece en las dos. Eso separa «configurado» de
+«ha llegado dato» sin depender de un recuento que puede estar procesándose.
+
+**Y el hallazgo que ninguna de las cuatro preguntas pedía: la portada de GA4 dice «Eventos clave:
+0» mientras el informe dice 1.** No es una contradicción — la marca de evento clave **no es
+retroactiva**, cosa que el propio PRD §7 ya advertía. Pero sí significa que **ese cero no sirve
+para vigilar esta métrica**, y que quien mire la portada leerá «nadie ha escrito» donde el dato
+dice «la cadena funciona». Es la forma exacta del fallo de P31: un instrumento que parece
+completo porque lo que falta no aparece en él. Refuerza P68.592 (cuarto scorecard), abierta en
+este mismo cierre.
+
+**Pregunta 3, «¿cambia una prioridad?»: no cambia el orden, pero confirma dos que ya estaban.**
+P68.592 pasa de propuesta a hecho por lo de arriba. Y P69.91 sigue viva con la misma firma que en
+el cierre anterior: **9 clics de contacto entre 2 usuarios (4,5 por persona) y 6 descargas entre
+2 (3,0)** es el patrón de quien audita el sitio, no el de quien quiere contactar.
+
+**Distribución, «no» por segunda vez y por la misma razón escrita.** 46 usuarios en 28 días, y el
+24 y el 25 de agosto el tráfico es **cero**. Con eso ninguna métrica de conversión puede
+discriminar nada, y no es un problema que arregle el tablero: agosto está parado y el plan sigue
+siendo lanzar el artículo en septiembre y medir desde ahí. Lo que sí cambia es que **ahora habrá
+con qué medirlo**, que es lo que este cierre añade sobre el anterior.
 
 ## D72 · Una sola fuente de qué páginas tiene el sitio, y olvidarlas no compila — 2026-08-19
 

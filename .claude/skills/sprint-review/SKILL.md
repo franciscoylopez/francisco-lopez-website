@@ -67,9 +67,13 @@ como diario en vez de spec viva, espejos de Notion que se desincronizan solos.
 Cuatro preguntas, no más. **Se contestan con cifra y van en la salida como sección propia**;
 una etapa no se cierra sin haberlas escrito.
 
-1. **¿Qué dicen los tres scorecards?** Clics de contacto, descargas de CV y profundidad de
-   scroll, últimos 28 días. Cifra, no impresión. Panel:
+1. **¿Qué dicen los marcadores del panel, y qué dice la métrica PRIMARIA?** No se escribe
+   cuántos son —decía «los tres» y el panel iba camino de cuatro—: se lee lo que haya, últimos
+   28 días, cifra y no impresión. Panel:
    `https://datastudio.google.com/reporting/6126da1d-21ba-480b-b56e-f124e47c2e01/page/I7T5F`
+   **Y la primaria se busca aunque no esté en el panel**: `contact_submit` llevaba desde el
+   2026-08-24 contando y ningún marcador la enseñaba, así que leer solo el panel habría dado
+   «cero» donde el dato decía «la cadena funciona» (D71, cierre del sprint 4).
 2. **¿Ha cambiado algo desde el cierre anterior?** Sin el número anterior no hay lectura, así
    que cada cierre deja el suyo apuntado para el siguiente.
 3. **¿Hay algo aquí que cambie una prioridad del tablero?** Si la respuesta es **no**, dilo

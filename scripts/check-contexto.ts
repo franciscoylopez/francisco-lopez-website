@@ -60,8 +60,39 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  *           `CLAUDE.md`, en la DoD y en `PRD-Live`, y las dos «excepciones vivas»
  *           de `BRAND.md` repetían justificación y condición de salida palabra
  *           por palabra. Ninguna regla se retiró; solo su historia y sus copias.
+ *   12.700  el 2026-08-25, y es la PRIMERA vez que el techo SUBE. Decisión de
+ *           Francisco en el quinto `method-review`, con el porqué medido abajo.
+ *
+ * LA VEZ QUE SE AFLOJÓ, Y POR QUÉ NO CONTRADICE LA REGLA DE ARRIBA. Este bloque
+ * dice «nunca se afloja» y predice este momento con precisión incómoda: «un techo
+ * que no deja escribir no produce compactación: produce el reflejo de subirlo».
+ * Conviene leer eso antes de justificar nada. Lo que hace que esta subida no sea
+ * ese reflejo es la magnitud que el propio párrafo de arriba nombra como la que hay
+ * que sostener: **la holgura de trabajo, unas 240 palabras**. El 2026-08-25 eran
+ * DOS, así que la invariante ya estaba rota y apretar más no era una opción que
+ * existiera.
+ *
+ * Y la curva dice por qué 240 tampoco bastaba. Medida en el quinto disparo:
+ *
+ *     30-jul   4.120
+ *     10-ago  12.116
+ *     19-ago  13.084   ← pico
+ *     22-ago  12.058   ← Método II recorta 1.026
+ *     25-ago  12.198   ← +140 en tres días, sin regla nueva
+ *
+ * Sube ~1.000 por sprint y se recorta ~1.000 por sprint, y el recorte cuesta
+ * TAREAS: tres de las treinta y tres del sprint «Artículo y velocidad» (el 9%).
+ * Eso ya no es un trinquete, es una cinta de correr, y la fricción la paga cada
+ * tarea que quiere escribir una regla. 500 palabras de holgura son media docena de
+ * sesiones en vez de un cuarto de sprint.
+ *
+ * ES INTERINO Y ESTÁ ATADO. El número sigue sin salir de una medida de coste real
+ * —nadie ha medido qué cuesta este contexto, solo cuánto ocupa—, y esa es la tarea
+ * que abre con él: revisar a mano qué archivos generan la fricción para decidir con
+ * un dato si esto se compacta de verdad o si el techo sube otra vez con razón. El
+ * trinquete vuelve a apretar en cuanto haya ese dato.
  */
-const TECHO = 12_200;
+const TECHO = 12_700;
 
 /**
  * A dónde se quiere llegar. No falla; solo se publica la distancia. Necesita número

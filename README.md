@@ -299,7 +299,7 @@ scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio s
 
 El «porqué» vive en documentos dedicados, partidos por una regla que **no es de estilo sino de coste**: lo que se lee en cada sesión de trabajo se paga en cada sesión de trabajo. Así que solo las **reglas activas** están siempre delante; la **historia** y el **detalle exhaustivo** se consultan cuando hacen falta.
 
-**Siempre cargados.** Son las reglas que aplican al escribir código, y su peso conjunto tiene techo medido en CI (`npm run check:contexto`): si crecen, el build falla y hay que retirar algo, no subir el techo.
+**Siempre cargados.** Son las reglas que aplican al escribir código, y su peso conjunto tiene techo medido en CI (`npm run check:contexto`): si crecen, el build falla. La salida por defecto es **retirar**, y el techo se ha apretado cinco veces por esa vía. El 2026-08-25 subió por primera vez, con la holgura de trabajo en dos palabras y el porqué escrito en el propio guardián: un techo que no deja escribir no produce compactación.
 
 | Documento | Qué contiene |
 | :-- | :-- |
