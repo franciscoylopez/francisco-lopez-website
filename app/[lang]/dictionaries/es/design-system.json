@@ -642,7 +642,8 @@
       "Breadcrumb en toda página interna, con <nav aria-label>, lista ordenada y aria-current=\"page\" en el nivel actual.",
       "Nada codificado solo por color: todo estado o categoría que se distinga por color lleva además texto o forma.",
       "prefers-reduced-motion respetado en toda animación.",
-      "Alternativas textuales: alt y etiquetas donde informan, aria-hidden en lo decorativo."
+      "Alternativas textuales: alt y etiquetas donde informan, aria-hidden en lo decorativo.",
+      "Vía de escape del teclado: un enlace de salto al contenido como primer elemento focalizable de la página, con destino real (<main> con tabindex=\"-1\"). Ninguna herramienta automática lo detecta: su regla de bypass se da por satisfecha con landmarks o encabezados."
     ]
   },
   "esqueleto": {

@@ -82,6 +82,11 @@
         "title": "Text alternatives",
         "body": "Images that carry meaning have alt text; decorative ones are hidden from assistive technology.",
         "wcag": "WCAG 1.1.1"
+      },
+      {
+        "title": "A keyboard escape route",
+        "body": "The first thing the tab key reaches is a link that jumps straight to the content, so you do not have to walk the whole menu on every page.",
+        "wcag": "WCAG 2.4.1"
       }
     ]
   },

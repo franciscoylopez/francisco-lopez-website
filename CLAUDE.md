@@ -121,13 +121,13 @@ Antes de escribir markup nuevo, la cascada, en orden:
 
 ### Qué compra esto: la accesibilidad se hereda, no se vuelve a medir
 
-De los 8 puntos de abajo, la pieza ya trae **1, 2, 3 y 7** (contraste, foco, 44px, `reduced-motion`): lo que se comprueba es que **se heredaron**, y **en pantalla, no leyendo el JSX** — una clase puede no estar aplicándose a nada sin dar error de compilación (`BRAND.md` §Accesibilidad, punto 5). Del resto —**4, 5, 6 y 8**, que los pone quien escribe la página, no el componente— **solo el 6 se verifica a mano**.
+De los 9 puntos de abajo, la pieza ya trae **1, 2, 3 y 7** (contraste, foco, 44px, `reduced-motion`): lo que se comprueba es que **se heredaron**, y **en pantalla, no leyendo el JSX** — una clase puede no estar aplicándose a nada sin dar error de compilación (`BRAND.md` §Accesibilidad, punto 5). El **9** lo hereda igual, pero de la capa de página: lo pone `<PageShell>` (D46) y lo comprueba `check:marco` en CI. Del resto —**4, 5, 6 y 8**, que los pone quien escribe la página, no el componente— **solo el 6 se verifica a mano**.
 
 Quién mira cada punto, y cuándo hay que volver a medir, lo dice la tabla de la **Definition of Done** al final de este archivo. No se lleva en la cabeza y no se repite aquí.
 
 ## Checklist de accesibilidad — gate de cierre de cada página/sección
 
-Antes de dar por cerrada una página o sección, verificar los 8 puntos (es la lista que publica el propio Design System del sitio) — con la rebaja que permite la regla de construcción de arriba cuando todo sale de piezas existentes:
+Antes de dar por cerrada una página o sección, verificar los 9 puntos (es la lista que publica el propio Design System del sitio) — con la rebaja que permite la regla de construcción de arriba cuando todo sale de piezas existentes:
 
 1. **Contraste medido, con cifra, en ambos temas.** AA es el suelo; AAA siempre que se alcance sin coste visual. Verificar también los estados interactivos (hover/focus), no solo el reposo.
 2. **Foco visible:** anillo de 2px con `var(--ring)` y offset de 2px en todo elemento interactivo. Nunca `outline:none` sin sustituto.
@@ -137,6 +137,7 @@ Antes de dar por cerrada una página o sección, verificar los 8 puntos (es la l
 6. **Nada codificado solo por color:** todo estado/categoría distinguido por color lleva además texto o forma.
 7. **`prefers-reduced-motion`** respetado en toda animación (reveals, contadores, transición del nav).
 8. **Alternativas textuales:** `alt` y etiquetas donde informan, `aria-hidden` en lo decorativo.
+9. **Vía de escape del teclado:** enlace de salto al contenido como primer elemento focalizable, con destino real (`<main>` con `tabindex="-1"`). Ninguna herramienta automática lo detecta: su regla de bypass se da por satisfecha con landmarks o encabezados (D46).
 
 ### Cómo se verifica
 

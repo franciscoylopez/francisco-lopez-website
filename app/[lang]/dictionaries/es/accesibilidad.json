@@ -82,6 +82,11 @@
         "title": "Alternativas textuales",
         "body": "Las imágenes que informan llevan texto alternativo; lo decorativo se oculta a la tecnología de asistencia.",
         "wcag": "WCAG 1.1.1"
+      },
+      {
+        "title": "Vía de escape del teclado",
+        "body": "El primer elemento al que llega el tabulador es un enlace que salta directamente al contenido, para no recorrer el menú entero en cada página.",
+        "wcag": "WCAG 2.4.1"
       }
     ]
   },

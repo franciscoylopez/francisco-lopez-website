@@ -124,6 +124,11 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D72",
     "components/ui/",
     "CLAUDE.md#Regla de construcción",
+    // El texto publica una CIFRA de puntos del checklist («cuatro de los nueve»),
+    // y esa lista vive fuera de este archivo: añadir o quitar un punto tiene que
+    // mandar a releer la sección. Sin esto, P70.01 habría dejado el artículo
+    // diciendo «ocho» con nueve publicados, y el guardián no lo habría dicho.
+    "CLAUDE.md#Checklist de accesibilidad",
   ],
 
   // «Los componentes no se escriben a mano, y los datos tampoco» — el CV
@@ -176,6 +181,8 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     // El texto publica una CIFRA de páginas («AAA en las catorce páginas»), así
     // que añadir una tiene que mandar a releer esta sección.
     "lib/routes.ts",
+    // Y una cifra de puntos del checklist, igual que en s05.
+    "CLAUDE.md#Checklist de accesibilidad",
   ],
 
   // «Qué revisa una IA y qué no» — los pasos de CI (una cifra en el texto), los

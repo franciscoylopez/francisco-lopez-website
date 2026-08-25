@@ -642,7 +642,8 @@
       "Breadcrumb on every internal page, with <nav aria-label>, an ordered list and aria-current=\"page\" on the current level.",
       "Nothing encoded by color alone: any state or category distinguished by color also carries text or shape.",
       "prefers-reduced-motion respected in every animation.",
-      "Text alternatives: alt and labels where they inform, aria-hidden on the decorative."
+      "Text alternatives: alt and labels where they inform, aria-hidden on the decorative.",
+      "A keyboard escape route: a skip link to the content as the first focusable element on the page, with a real destination (<main> with tabindex=\"-1\"). No automated tool catches it: their bypass rule is satisfied by landmarks or headings."
     ]
   },
   "esqueleto": {
