@@ -149,6 +149,7 @@
 - D111 · Lo que el lector de pantalla cambió en el marco de toda página
 - D112 · Un guardián que hashea una carpeta se estrecha en silencio cuando un archivo se va
 - D113 · La premisa de una capa caduca cuando aparece el segundo consumidor
+- D114 · El lienzo de un diagrama es la única cifra que declara, y la capa deriva el resto
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6586,3 +6587,53 @@ la extracción, y `npm run gate:html` después: **sin cambios en el HTML de las 
 Conviene decir cómo NO se comprueba, porque costó un rodeo: comparar a mano los `.html`
 prerenderizados da 26 de 26 distintos, porque extraer un módulo mueve los identificadores del
 payload RSC. Eso es exactamente el ruido que el gate normaliza y el motivo por el que existe.
+
+## D114 · El lienzo de un diagrama es la única cifra que declara, y la capa deriva el resto — 2026-08-25
+
+**Decisión.** `DosLienzos` (`components/site/diagrams/shared.tsx`) construye los dos `<svg>` de
+un diagrama. Un diagrama declara **el ancho de su lienzo ancho una sola vez**, y de una tabla
+salen su tope (`max-w-[Npx]`) y el umbral de la container query que conmuta al dibujo estrecho
+(el lienzo +10). El lienzo estrecho —280 unidades, tope 300— es constante de la capa y ningún
+diagrama lo escribe. El `aria-label` también se pasa una vez, y la capa lo pone en los dos.
+
+**El problema no era el rótulo pequeño: era que el mismo número vivía en tres sitios.** Cada
+diagrama lo escribía en su `viewBox`, en su `max-w-[Npx]` y, con un +10, en el `umbral` que
+pasaba a `DosLienzos`. Tres copias sin nada que las atara, así que la pregunta no era si iban a
+desviarse sino cuándo. Ya lo habían hecho tres veces por tres caminos distintos, y la tercera
+seguía viva al escribir esto: `s07` tenía lienzo de 560 con tope de 620, copiado de otro
+diagrama, así que pintaba esa figura un 10% más grande de como está dibujada. **Ningún gate
+podía verlo**, porque `check:figuras` mide a 360, donde manda el otro lienzo.
+
+**Y ese es el argumento de fondo: un gate mide DESPUÉS, una capa impide ANTES.** `check:figuras`
+nació en P68.59 midiendo el rótulo pintado, y siguió siendo la única red durante dos sprints:
+había algo que avisaba cuando el rótulo ya no se leía y nada que garantizara que se leyera. Con
+la tabla, un ancho que no esté en ella es un **error de compilación**, no un rótulo de 5px en
+producción. El gate sigue en CI y pasa de red a confirmación.
+
+**Las clases de la tabla son literales, y no es estilo.** Tailwind escanea el código como texto
+plano: una clase construida por interpolación no se genera y el elemento se queda sin regla, sin
+error de compilación (`BRAND.md` §Cómo medir, punto 5). Por eso la tabla escribe cada clase
+entera en vez de componerla con el número.
+
+**Dónde vive un diagrama, que es la otra mitad.** En la carpeta de su página mientras solo esa
+página lo use, y **se muda a `components/site/diagrams/` en cuanto haya una segunda**. Es la
+misma pregunta que separa `ui/` de `site/`. Lo disparó `/accesibilidad` queriendo reusar el
+diagrama de capas de verificación del artículo (P70.104): repetirlo habría dado dos dibujos del
+mismo sitio contando lo mismo con cifras distintas.
+
+**Y al mudarlo hay que nombrarlo en `FUENTES_DEL_COPY`** (`scripts/articulo/huella.ts`). El
+sello del copy hashea la CARPETA del artículo, así que sacar un archivo de ahí lo saca del hash
+sin que nada proteste: la figura podría cambiar y el `dateModified` que el sitio le promete a
+Google quedarse quieto. Es **D112 otra vez**, el mismo fallo que tuvo `shared.tsx` el mismo día
+y unas horas antes. Se comprueba disparándolo: con el sello en verde, se toca la figura movida y
+`check:articulo` tiene que salir rojo.
+
+**Validado con `gate:html`,** línea base capturada del estado anterior. El diff sobre las 28
+variantes es exactamente las tres desviaciones que el refactor existe para quitar y nada más:
+cuatro `@max-[545px]` → `@max-[550px]` (los dos lienzos de 540, que llevaban +5 en vez de +10) y
+dos `max-w-[620px]` → `max-w-[560px]` (el de `s07`). `check:figuras` después: 36 lienzos, 332
+rótulos, ninguno por debajo de 11px.
+
+**Lo que la capa NO cubre, y conviene no prometerlo.** Un lienzo de ancho fijo que se desplaza en
+horizontal —el artefacto de Emendu— no lo arregla ningún umbral, y `check:figuras` ya declara que
+se abstiene ahí. Ese caso pide re-renderizar el dibujo, no ajustar una cifra.

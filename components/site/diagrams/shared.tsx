@@ -2,9 +2,14 @@ import type { CSSProperties, ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
-// Lo único que comparten los diagramas de «Cómo se ha creado esta página»: las
-// dos clases de rótulo y el helper de realce. Todo lo demás vive en el archivo
-// de su diagrama.
+// La capa de los diagramas del sitio: las dos clases de rótulo, el helper de
+// realce y el conmutador de lienzos. Todo lo demás vive en el archivo de su
+// diagrama.
+//
+// YA NO ES SOLO DEL ARTÍCULO (2026-08-25). Nació sirviendo a «Cómo se ha creado
+// esta página» y hoy la comparten también las dos figuras de `/accesibilidad`.
+// Por eso este archivo vive en `diagrams/` y no en la carpeta de una página:
+// D114 fija que un diagrama se muda aquí en cuanto lo use una segunda.
 //
 // UN ARCHIVO POR DIAGRAMA (P68.55), que es lo que D42 ya decidió para el mismo
 // problema —`design-system/` son 18 archivos y `brand-kit/` 9— y lo único que
@@ -29,12 +34,17 @@ import { cn } from "@/lib/utils";
 // se veía la mitad del diagrama en castellano. Cada diagrama lleva su propio
 // `t` con las dos versiones; el componente solo elige el idioma.
 //
-// SON OCHO —los archivos de esta carpeta, así que el número no caduca—, NO LOS
-// ONCE QUE MARCA CADA `VISUAL ·` DEL BORRADOR. El resto de secciones se apoyan
-// en la prosa y en las citas/dato-en-vivo; añadir un diagrama a cada una de
-// las once habría sido ilustrar por completar una lista, no porque la sección
-// lo necesitara. Es tarea de V3 (columna B de la DoD) si al verlo en pantalla
-// se echa en falta alguno más.
+// NO HAY UNA FIGURA POR SECCIÓN DEL ARTÍCULO, y no es una lista a medio
+// completar: cada `VISUAL ·` del borrador marcaba una, y las que no se
+// dibujaron se apoyan en la prosa y en las citas o el dato en vivo. Ilustrarlas
+// todas habría sido completar una lista, no responder a lo que la sección
+// necesita. Es tarea de V3 (columna B de la DoD) si al verlo en pantalla se
+// echa en falta alguno más.
+//
+// (Aquí decía CUÁNTAS eran, ancladas a «los archivos de esta carpeta, así que el
+// número no caduca». El ancla se rompió el día que este archivo cambió de
+// carpeta y el recuento pasó a contar otra cosa. Un recuento caducado no se
+// corrige con el número nuevo: se deja de escribir.)
 //
 // RUIDO CONOCIDO (D67): axe marca `<text>` dentro de estos SVG como
 // `incomplete` en `color-contrast` — no resuelve `fill` sobre `<text>` SVG, no
