@@ -185,7 +185,10 @@ pulido tipográfico o de ritmo que aparezca al mirarla.
 
 - **¿Hay decisión visual abierta?** → `/prototype` **antes** de escribir el componente.
   Solo puede invocarla Francisco (lleva `disable-model-invocation: true`), así que
-  **ofrécela** en cuanto la tarea tenga más de una dirección posible.
+  **ofrécela** en cuanto la tarea tenga más de una dirección posible. **Y también cuando
+  una medición visual contradiga lo que Francisco ve en la página** *(2026-08-25)*: es lo
+  que cazó el interlineado del artículo tras tres revisiones que lo dieron por bueno
+  (`BRAND.md` §Cómo medir, punto 8).
 - **¿Dependencia frontend nueva?** → `/pick-ui-library`, misma condición.
 - **¿Toca motion?** → `/review-animations` al terminarlo.
 - **¿La tarea añade una superficie que recibe input de un tercero** (formulario, subida,
