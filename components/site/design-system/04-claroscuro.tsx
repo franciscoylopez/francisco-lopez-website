@@ -5,7 +5,8 @@ import {
   titleVariants,
 } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
+import { InfoCard } from "@/components/ui/info-card";
+import { PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { PALETTE, paletteHex } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 import { GroupHead } from "./shared";
@@ -134,20 +135,12 @@ export function Claroscuro({
             cta={t.cta}
           />
         </div>
-        <div
-          className={cn(CARD, "mt-6 max-w-[var(--measure)] px-[1.4rem] py-5")}
-        >
-          <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-[0.6rem]")}>
-            {t.ruleTitle}
-          </h3>
-          <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
-            {t.rule.map((r) => (
-              <li key={r}>{r}</li>
-            ))}
-          </ul>
-          <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem]">
-            {t.ruleFoot}
-          </p>
+        {/* SALE DE `InfoCard`, no de una caja a mano. Las dos secciones escribían
+            este mismo bloque —tarjeta, titular `sub-sm`, lista y pie— con las
+            mismas clases, y era lo que la pieza hace desde que existe. Lo cazó
+            `qlty` al renombrarse los archivos: 16 líneas idénticas en dos sitios. */}
+        <div className="mt-6 max-w-[var(--measure)]">
+          <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
         </div>
 
         {/* ---------- el gris que pone la superficie ----------
