@@ -153,6 +153,7 @@
 - D115 · El suelo de ancho del sitio es 320, y 280 queda fuera con su motivo escrito
 - D116 · Los nombres propios no se marcan en el copy: los marca la capa que lo pinta
 - D117 · Un vocabulario de dos valores no puede distinguir la deuda del criterio
+- D118 · El `srcset` de `next/image` no baja de `deviceSizes[0]` cuando el `sizes` lleva un `vw`
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6831,3 +6832,44 @@ se demuestra dentro de §15, que se llama «Artículo largo». Grupo y sección 
 **ejes independientes**: el grupo dice de qué capa es la pieza; la publicación, dónde se la ve
 funcionando. Forzarlos a concordar movería especímenes buenos a secciones donde no ilustran
 nada. Está escrito en la cabecera de `scripts/indices.ts`, que es donde se lee al tocarlo.
+
+## D118 · El `srcset` de `next/image` no baja de `deviceSizes[0]` cuando el `sizes` lleva un `vw` — 2026-08-26
+
+**El síntoma.** `psi --registro` marcaba «Improve image delivery» en dos páginas, y las dos
+fotos de «Sobre mí» se servían a **640px dentro de una caja de 382**. El `sizes` de esas fotos
+ya declaraba `384px` para escritorio, así que la explicación obvia —«falta el `sizes`»— era
+falsa. Leerlo no bastaba: hubo que mirar el `srcset` servido, y **empezaba en 640w**. No es que
+el navegador eligiera mal; es que **el candidato correcto no existía**.
+
+**La causa, que está en el propio `next/image`.** Cuando el `sizes` contiene ALGÚN valor en
+`vw` —el de estas fotos lleva `100vw` para el móvil—, `getWidths()` descarta del `srcset` todo
+candidato por debajo de `deviceSizes[0] × el vw más pequeño`. Con el reparto por defecto eso
+son **640**, y ahí se quedan fuera los `imageSizes` enteros: se concatenan, pero caen dentro
+del mismo filtro. O sea que `imageSizes` **no** es la palanca aunque su documentación sugiera
+lo contrario; la palanca es bajar el suelo de `deviceSizes`.
+
+**La decisión.** `deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840]`, con
+`imageSizes` recortado a `[32, 48, 64, 96, 128, 256]` para respetar el invariante que pide la
+doc (todos menores que el menor `deviceSize`). **No quita ningún ancho: solo añade uno por
+debajo**, así que ninguna imagen del sitio puede empeorar — como mucho, pedir menos. Verificado
+en home, deep-dive y artículo: los logos siguen en `w=48` y el hero en 640 para su caja de 433.
+
+**Medido**, a 1440 y DPR 1:
+
+| | antes | después |
+|---|---|---|
+| `francisco-reposteria-4x5` | 640w · 44.248 B | 384w · 20.572 B |
+| `francisco-montana-4x5` | 640w · 36.464 B | 384w · 19.874 B |
+
+**39,3 KiB**, contra los 21 que estimaba la tarea.
+
+**Y ES UN ARREGLO DE ESCRITORIO, que es el límite y no se puede callar.** En móvil el navegador
+pide ~1080w para esa misma caja (412 CSS px × DPR 2,625) y este cambio no toca ese caso:
+`psi --registro` del 2026-08-26 sigue marcando los 21 KiB en `/sobre-mi` móvil. La mitad móvil
+queda tareada aparte.
+
+**La trampa de medirlo, que costó una lectura falsa.** Chrome **nunca baja a un candidato más
+pequeño si ya tiene uno grande en caché**, y `location.reload(true)` no lo evita: está obsoleto
+y se ignora. Con la pestaña caliente, el arreglo parecía no hacer nada. Solo cerrando el
+navegador entero se ve el `384w`. Es «valida el metro antes de creerte el hallazgo»
+(`BRAND.md` §Cómo medir, 3) aplicado a la caché.
