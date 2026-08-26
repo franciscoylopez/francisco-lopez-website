@@ -1,4 +1,4 @@
-// @pieza núcleo · design-system/01-rejilla.tsx · Las cajas y los ritmos comunes: WRAP, SECTION, PROSE, CARD, PANEL, PAIR, HERO_ROW.
+// @pieza núcleo · design-system/01-rejilla.tsx · Las cajas y los ritmos comunes: WRAP, SECTION, PROSE, CARD, PANEL, PAIR y el andamiaje del pliegue.
 
 // Primitivas de layout del sistema (P37.594). Fuente única de las cajas y los
 // ritmos que comparten todas las páginas, para que cambiar el gutter o el radio de
@@ -42,6 +42,45 @@ export const SECTION = "border-border border-t py-[var(--section-y)]";
  */
 export const HERO_ROW =
   "flex flex-wrap items-center justify-between gap-[clamp(2rem,5vw,4rem)] md:min-h-[19rem]";
+
+/**
+ * EL HUECO DEL BREADCRUMB AL GRUPO DE APERTURA, y el propio grupo centrado en el
+ * pliegue. Son dos constantes porque son dos elementos, pero un solo mecanismo:
+ * juntas deciden a qué altura cae el `h1` de una página interna.
+ *
+ * POR QUÉ EL `min-h`, QUE ES LA PARTE QUE NO SE VE. El grupo va centrado
+ * (`my-auto`), y centrar reparte el sobrante ARRIBA y abajo: un grupo más alto
+ * que sus hermanas sube su borde superior la mitad de la diferencia. Así que
+ * centrar solo es seguro mientras los grupos midan LO MISMO —es la misma
+ * condición que `HERO_ROW` resuelve una capa más abajo, para la fila—.
+ *
+ * Y NO ES TEÓRICO: se ha roto dos veces, las dos detectadas a ojo por Francisco
+ * cambiando de pestaña, nunca por una herramienta.
+ *
+ * · La primera, entre las tres páginas del sistema: grupos a 428, 484 y 477, con
+ *   el `h1` a 406, 378 y 409. Se cerró compactando las composiciones.
+ * · La segunda, Accesibilidad contra sus dos hermanas al ganar un párrafo de
+ *   fecha bajo la fila de cifras: 505 contra 461, `h1` a 368 contra 390 (P70.29).
+ * · La tercera no era una regresión sino una ausencia: Contacto no llega a esa
+ *   altura por estructura —no usa `HERO_ROW` ni tiene fila de cifras— así que su
+ *   grupo medía 297 y su `h1` caía a 464 contra los 390 de las otras tres
+ *   (P70.35). Ahí compactar no servía: lo que hacía falta era un SUELO.
+ *
+ * 29rem (464px) es tres píxeles por encima de los 461 que miden las tres páginas
+ * del sistema por su cuenta, así que no recorta a ninguna y le da a Contacto la
+ * altura que le falta. El sobrante cae DEBAJO del contenido, que es aire de
+ * pliegue que ya estaba ahí: lo único que cambia es de qué lado del grupo queda.
+ *
+ * QUIÉN NO LAS USA, Y NO ES UN OLVIDO: el deep-dive y «Cómo se ha creado» comparten
+ * el andamiaje del pliegue pero no esta familia. Sus aperturas son tipográficas,
+ * de alto constante, no se comparan de un vistazo con las cuatro de aquí, y cada
+ * una tiene su hueco elegido y razonado en su propio archivo. La home tampoco:
+ * no tiene breadcrumb.
+ */
+export const FOLD_CRUMB = "mb-[clamp(3rem,6vw,4.5rem)]";
+
+/** @see FOLD_CRUMB — el grupo de apertura, centrado en el pliegue y con suelo. */
+export const FOLD_GROUP = "my-auto md:min-h-[29rem]";
 
 /**
  * Prosa a la medida de lectura (~91 caracteres en Inter).

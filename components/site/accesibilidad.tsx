@@ -17,7 +17,14 @@ import { pagePath, type Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
 import { Rich } from "@/components/ui/rich";
-import { CARD, HERO_ROW, SECTION, WRAP } from "@/components/ui/layout";
+import {
+  CARD,
+  FOLD_CRUMB,
+  FOLD_GROUP,
+  HERO_ROW,
+  SECTION,
+  WRAP,
+} from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
@@ -79,7 +86,7 @@ export function Accesibilidad({
             esta apertura ya desborda el pliegue y la regla no debe recortar. El
             `w-full` evita que el `mx-auto` de `WRAP` desactive el stretch. */}
         <div className={`${WRAP} flex w-full flex-1 flex-col`}>
-          <div data-reveal className="mb-[clamp(3rem,6vw,4.5rem)]">
+          <div data-reveal className={FOLD_CRUMB}>
             <Breadcrumb
               routeLabel={breadcrumb.routeLabel}
               items={[
@@ -88,7 +95,7 @@ export function Accesibilidad({
               ]}
             />
           </div>
-          <div className="my-auto">
+          <div className={FOLD_GROUP}>
             <div className={HERO_ROW}>
               {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
                 breadcrumb→eyebrow lo decide el alto de la ilustración de al lado. */}

@@ -1,6 +1,6 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
-import { HERO_ROW, WRAP } from "@/components/ui/layout";
+import { FOLD_CRUMB, FOLD_GROUP, HERO_ROW, WRAP } from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import {
   COLOR_TOKEN_COUNT,
@@ -202,7 +202,7 @@ export function Hero({
           abajo, que no se compara de un vistazo. Es lo que «toda página abre
           igual» (D43) exige de verdad. */}
       <div className={`${WRAP} flex w-full flex-1 flex-col`}>
-        <div data-reveal className="mb-[clamp(3rem,6vw,4.5rem)]">
+        <div data-reveal className={FOLD_CRUMB}>
           <Breadcrumb
             routeLabel={breadcrumb.routeLabel}
             items={[
@@ -222,7 +222,7 @@ export function Hero({
             406, 378 y 409). Lo que lo arregla no es el anclaje: es que los tres
             grupos midan LO MISMO, y de eso se encargan el `min-h` de `HERO_ROW`
             y las composiciones compactadas. Con eso hecho, centrar es seguro. */}
-        <div className="my-auto">
+        <div className={FOLD_GROUP}>
           <div className={HERO_ROW}>
             {/* `self-start`: la fila sigue centrada —la composición decorativa
               queda equilibrada frente al texto— pero la COLUMNA DE TEXTO se ancla
