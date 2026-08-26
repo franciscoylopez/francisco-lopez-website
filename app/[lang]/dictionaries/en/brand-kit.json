@@ -34,33 +34,27 @@
     "cards": {
       "symSplit": {
         "name": "Symbol · Split",
-        "meta": "Inline in markup · 382 B · sized by height.",
-        "svg": "Symbol split · SVG"
+        "meta": "Inline in markup · 382 B · sized by height."
       },
       "symPlano": {
         "name": "Symbol · Flat",
-        "meta": "Inline in markup · 220 B · sized by height.",
-        "svg": "Symbol flat · SVG"
+        "meta": "Inline in markup · 220 B · sized by height."
       },
       "symMonoNegro": {
         "name": "Symbol · Mono black",
-        "meta": "One pure ink · 220 B · for light backgrounds.",
-        "svg": "Mono black · SVG"
+        "meta": "One pure ink · 220 B · for light backgrounds."
       },
       "symMonoBlanco": {
         "name": "Symbol · Mono white",
-        "meta": "One pure ink · 220 B · for dark backgrounds.",
-        "svg": "Mono white · SVG"
+        "meta": "One pure ink · 220 B · for dark backgrounds."
       },
       "lockSplit": {
         "name": "Lockup · Split",
-        "meta": "Never inline · 23 KB outlined · sized by width.",
-        "svg": "Lockup split · SVG"
+        "meta": "Never inline · 23 KB outlined · sized by width."
       },
       "lockPlano": {
         "name": "Lockup · Flat",
-        "meta": "Never inline · 23 KB outlined · sized by width.",
-        "svg": "Lockup flat · SVG"
+        "meta": "Never inline · 23 KB outlined · sized by width."
       }
     },
     "usage": {
@@ -164,6 +158,19 @@
       "crescent": "crescent",
       "works": "Works",
       "dirty": "Dirty fringe"
+    },
+    "kit": {
+      "title": "The whole brand, packed",
+      "body": "Everything you need to put this brand anywhere: the {formatos} px PNGs, both inks and the favicon. In a single file.",
+      "cta": "Download the kit"
+    },
+    "descargarSvg": "Download SVG",
+    "enElKit": {
+      "prefijo": "In the kit:",
+      "png": "{tamanos} px PNGs",
+      "dosTintas": "both inks",
+      "tintaSuelta": "The standalone SVG uses the dark ink.",
+      "y": "and"
     }
   },
   "color": {
@@ -256,13 +263,12 @@
     "favicon": {
       "title": "Favicon",
       "desc": "A dedicated asset, not a rescale. At 16px the stroke rises to 10 units for optical compensation. Flat, centered.",
-      "ico": "favicon.ico"
+      "ico": "Download ICO"
     },
     "og": {
       "title": "OG image · social",
       "desc": "The real card served to social: split logo, wordmark, title and kicker over the brand background. Fixed in light and dark, each page generates its own. The lockup below is the piece that builds it.",
-      "previewAlt": "Brand Open Graph image: split logo, wordmark and title over a dark background",
-      "dlSvg": "Split lockup · SVG"
+      "previewAlt": "Brand Open Graph image: split logo, wordmark and title over a dark background"
     },
     "pngNote": "The PNG suffix names the ink, not the background. tintaOscura (dark ink) goes over light backgrounds; tintaClara (light ink) over dark ones. Available at 256 / 512 / 1024 px."
   },

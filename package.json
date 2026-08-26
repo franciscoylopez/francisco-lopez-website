@@ -32,6 +32,7 @@
     "check:indices": "tsx scripts/check-indices.ts",
     "check:excepciones": "tsx scripts/check-excepciones.ts",
     "check:rutas": "tsx scripts/check-rutas.ts",
+    "check:kit": "tsx scripts/check-kit.ts",
     "check:tablero": "tsx scripts/check-tablero.ts",
     "check:marco": "tsx scripts/check-marco.ts",
     "check:figuras": "tsx scripts/check-figuras.ts",

@@ -1,38 +1,23 @@
-import { Download, Info } from "lucide-react";
+import { Info } from "lucide-react";
 
-import { actionVariants } from "@/components/ui/action";
 import { Logo } from "@/components/ui/logo";
-import { cn } from "@/lib/utils";
 
-// Lo único del Brand Kit que se usa en MÁS DE UNA sección: los tres rótulos de
-// cabecera, los dos chips de descarga y el marco de espécimen del logo. El
-// resto de subcomponentes vive en el archivo de su sección (P37.69).
-
-// Chips de descarga. Salen de la capa de acción del sistema (P37.592), que ya trae
-// el objetivo táctil de 44px —punto 3 de la checklist que publica el propio Design
-// System; estos chips estaban a 40px hasta P37.59— y el par de hover correcto:
-// outline-primary se rellena de cian, el outline neutro se apoya en la pastilla
-// `muted` del chrome.
-const DL_PRIMARY = actionVariants({ variant: "outline-primary", size: "sm" });
-const DL_NEUTRAL = actionVariants({ variant: "outline-neutral", size: "sm" });
-
-// --- Assets del logo-kit. La tinta sigue el tema: claro → tinta oscura sobre
-//     fondo claro; oscuro → tinta clara sobre fondo oscuro (public/logo-kit/**). ---
-export const svgPair = (n: string) => ({
-  light: `/logo-kit/svg/${n}-claro.svg`,
-  dark: `/logo-kit/svg/${n}-oscuro.svg`,
-});
-export const pngPair = (n: string, sz: number) => ({
-  light: `/logo-kit/png/${n}-tintaOscura-${sz}.png`,
-  dark: `/logo-kit/png/${n}-tintaClara-${sz}.png`,
-});
-export const favPair = (sz: number) => ({
-  light: `/logo-kit/favicon/favicon-claro-${sz}.png`,
-  dark: `/logo-kit/favicon/favicon-oscuro-${sz}.png`,
-});
-export const monoSvg = (n: string) => `/logo-kit/svg/${n}.svg`;
-export const monoPng = (n: string, sz: number) =>
-  `/logo-kit/png/${n}-${sz}.png`;
+// Lo único del Brand Kit que se usa en MÁS DE UNA sección: la entradilla, el aviso
+// y el marco de espécimen del logo. El resto de subcomponentes vive en el archivo
+// de su sección (P37.69).
+//
+// LOS CHIPS DE DESCARGA SALIERON DE AQUÍ EL 2026-08-26 (P70.27). Vivían `Dl` y
+// `DlThemed`, y con ellos los constructores de ruta `svgPair` / `pngPair` /
+// `favPair` / `monoSvg` / `monoPng`. `DlThemed` dibujaba DOS anclas por descarga
+// —una `dark:hidden` y otra `hidden dark:inline-flex`— para conmutar de tinta sin
+// JS, y esa era justamente la avería: la tinta la elegía el TEMA DEL SITIO, así que
+// de las 49 anclas de la página veinte estaban siempre en `display:none`, sin foco y
+// fuera del árbol de accesibilidad. Para bajar la tinta oscura estando en tema
+// oscuro había que cambiar el tema de la web, y nada lo decía.
+//
+// Ahora la tarjeta ofrece un SVG y ANUNCIA su tinta, el resto va en el kit, y las
+// rutas las construye `lib/logo-kit.ts`, que además es lo que `check:kit` contrasta
+// contra el disco.
 
 // Entradilla de sección, propia de esta página. Las cajas y los ritmos comunes
 // (WRAP / SECTION / PANEL) vienen de `./layout`: lo que aquí se llamaba `CARD` era
@@ -55,60 +40,6 @@ export const LEAD =
 // —lo lleva la acción que saca al usuario de la página— no admite matiz aquí:
 // estos componentes existen solo para descargar, así que el icono es suyo, no de
 // quien los invoca. Una decisión menos que tomar en cada llamada.
-export function Dl({
-  href,
-  tone = "neutral",
-  children,
-}: {
-  href: string;
-  tone?: "primary" | "neutral";
-  children: React.ReactNode;
-}) {
-  return (
-    <a
-      href={href}
-      download
-      className={tone === "primary" ? DL_PRIMARY : DL_NEUTRAL}
-    >
-      <Download />
-      {children}
-    </a>
-  );
-}
-
-// Descarga dependiente de tema: dos <a> conmutados por CSS (sin JS).
-export function DlThemed({
-  pair,
-  tone = "neutral",
-  children,
-}: {
-  pair: { light: string; dark: string };
-  tone?: "primary" | "neutral";
-  children: React.ReactNode;
-}) {
-  const cls = tone === "primary" ? DL_PRIMARY : DL_NEUTRAL;
-  return (
-    <>
-      <a href={pair.light} download className={cn(cls, "dark:hidden")}>
-        <Download />
-        {children}
-      </a>
-      <a
-        href={pair.dark}
-        download
-        className={cn(cls, "hidden dark:inline-flex")}
-      >
-        <Download />
-        {children}
-      </a>
-    </>
-  );
-}
-
-// Glifo dimensionado por altura (reutiliza el componente Logo, fuente única de la
-// geometría). `h` en px.
-//
-// EL ENVOLTORIO ES FLEX Y NO BLOCK, y no es cosmético (P37.695). `Logo` es
 // `inline-flex`, así que dentro de un envoltorio `block` es una caja EN LÍNEA:
 // no rellena su hueco, se apoya en la línea de texto, y la altura de esa línea
 // la manda el `line-height` heredado —24px—, no el glifo. Mientras el glifo mide

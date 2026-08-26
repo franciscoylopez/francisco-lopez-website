@@ -1,20 +1,21 @@
+import { Download, Palette } from "lucide-react";
+
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { actionVariants } from "@/components/ui/action";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { paletteHex, SPLIT_MIN_PX } from "@/lib/design-values";
-import { cn } from "@/lib/utils";
 import {
-  Dl,
-  DlThemed,
-  Glyph,
-  monoPng,
-  monoSvg,
-  LEAD,
-  pngPair,
-  svgPair,
-} from "./shared";
+  HREF_KIT,
+  PIEZAS,
+  type Pieza,
+  type Preview,
+  svgDe,
+} from "@/lib/logo-kit";
+import { cn } from "@/lib/utils";
+import { Glyph, LEAD } from "./shared";
 
 /* ===================== 02 LOGOTIPO ===================== */
 // Superficie de la previsualización. `card` sigue al tema (es la del PANEL);
@@ -47,6 +48,54 @@ const PREVIEW_SURFACE = {
     style: { background: INK },
   },
 } as const;
+
+// Qué plato pide cada previsualización. Los mono se ven sobre el fondo para el que
+// existen, no sobre el del tema, y eso lo decide la pieza, no el punto de uso.
+const SUPERFICIE_DE: Record<Preview, keyof typeof PREVIEW_SURFACE> = {
+  split: "card",
+  flat: "card",
+  "mono-negro": "white",
+  "mono-blanco": "ink",
+};
+
+/** «1024, 512 y 256», con la conjunción que ponga el diccionario. */
+function enumera(xs: (string | number)[], y: string): string {
+  if (xs.length <= 1) return String(xs[0] ?? "");
+  return `${xs.slice(0, -1).join(", ")} ${y} ${xs[xs.length - 1]}`;
+}
+
+/** Los tamaños de PNG que lleva el kit. Todas las piezas tienen los mismos. */
+function listaPngs(y: string): string {
+  return enumera([...(PIEZAS[0]?.pngs ?? [])], y);
+}
+
+/**
+ * Qué añade el kit por encima del SVG suelto. Se COMPONE con la plantilla del
+ * diccionario y los números de `lib/logo-kit.ts`: escrito a mano en dos idiomas se
+ * desincronizaría del disco sin que nada fallara.
+ *
+ * Y ANUNCIA LA TINTA DEL SUELTO. Es la diferencia entera con lo que había antes: el
+ * SVG tiene dos tintas igual que el PNG, así que un chip suelto tiene que contestar
+ * cuál da. Antes lo contestaba el tema del sitio, en silencio.
+ */
+function EnElKit({
+  pieza,
+  t,
+}: {
+  pieza: Pieza;
+  t: Dictionary["brandKit"]["logotipo"]["enElKit"];
+}) {
+  const partes = [t.png.replace("{tamanos}", enumera([...pieza.pngs], t.y))];
+  if (pieza.dosTintas) partes.push(t.dosTintas);
+
+  return (
+    <p className="text-muted-foreground m-0 mt-[0.75rem] text-[0.8rem] leading-[1.5]">
+      {pieza.dosTintas ? `${t.tintaSuelta} ` : null}
+      <span className="text-foreground font-semibold">{t.prefijo}</span>{" "}
+      {enumera(partes, t.y)}.
+    </p>
+  );
+}
 
 function VariantCard({
   glyph,
@@ -126,129 +175,104 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
           </SectionHeader>
         </div>
 
-        {/* Fila 1 — símbolo split / plano */}
-        <div data-reveal className={cn(PAIR, "mb-[var(--gutter)]")}>
-          <VariantCard
-            glyph={<Glyph variant="split" h={96} />}
-            name={t.cards.symSplit.name}
-            meta={t.cards.symSplit.meta}
-          >
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={svgPair("simbolo-split")} tone="primary">
-                {t.cards.symSplit.svg}
-              </DlThemed>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={pngPair("simbolo-split", 1024)}>
-                PNG 1024
-              </DlThemed>
-              <DlThemed pair={pngPair("simbolo-split", 512)}>PNG 512</DlThemed>
-              <DlThemed pair={pngPair("simbolo-split", 256)}>PNG 256</DlThemed>
-            </div>
-          </VariantCard>
+        {/* EL KIT COMPLETO. Es la acción destacada de la sección y por eso la única
+            `solid` de la página: el reparto que ordena esto (P70.27) es que la
+            TARJETA da la pieza canónica y el KIT da las variaciones. El icono va
+            primero en el JSX y es la variante quien lo manda detrás.
 
-          <VariantCard
-            glyph={<Glyph variant="flat" h={96} />}
-            name={t.cards.symPlano.name}
-            meta={t.cards.symPlano.meta}
+            EL GLIFO QUE ROTULA LA TARJETA VA EN `foreground`, NO EN `primary`. No es
+            una acción ni un estado: en esta marca el cian es el color de acción y
+            nada más, y la acción de esta tarjeta ya es el botón. */}
+        <div
+          data-reveal
+          className="border-border bg-card mb-[clamp(2rem,4vw,3rem)] flex flex-col gap-[1.1rem] rounded-xl border p-[clamp(1.5rem,3vw,2.25rem)] sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="max-w-[44ch]">
+            <div className="mb-[0.35rem] flex items-center gap-[0.6rem]">
+              <Palette className="text-foreground size-[18px]" aria-hidden />
+              <span className="font-display text-[1.15rem] font-semibold">
+                {t.kit.title}
+              </span>
+            </div>
+            <p className="text-muted-foreground m-0 text-[0.92rem] leading-[1.55]">
+              {t.kit.body.replace("{formatos}", listaPngs(t.enElKit.y))}
+            </p>
+          </div>
+          <a
+            href={HREF_KIT}
+            download
+            className={cn(
+              actionVariants({ variant: "solid", size: "lg" }),
+              "shrink-0",
+            )}
           >
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={svgPair("simbolo-plano")} tone="primary">
-                {t.cards.symPlano.svg}
-              </DlThemed>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={pngPair("simbolo-plano", 1024)}>
-                PNG 1024
-              </DlThemed>
-              <DlThemed pair={pngPair("simbolo-plano", 512)}>PNG 512</DlThemed>
-              <DlThemed pair={pngPair("simbolo-plano", 256)}>PNG 256</DlThemed>
-            </div>
-          </VariantCard>
+            <Download />
+            {t.kit.cta}
+          </a>
         </div>
 
-        {/* Fila 2 — símbolo mono: DOS tarjetas, no una partida. Hasta P37.61
-            compartían un solo panel con la previsualización dividida en
-            blanco/negro y ocho chips en dos filas etiquetadas. Era la única
-            tarjeta de la fila escrita a mano —las hermanas ya salían de
-            VariantCard—, así que no heredó el ensanchado de chips de P37.592 y
-            sus dos filas se partieron en cuatro. Separarlas borra la excepción
-            en vez de afinarla, y ponerlas en el MISMO par conserva lo que el
-            panel partido sí hacía bien: enseñar las dos tintas juntas. */}
-        <div data-reveal className={cn(PAIR, "mb-[var(--gutter)]")}>
-          <VariantCard
-            glyph={<Glyph variant="flat" h={96} mono="black" />}
-            name={t.cards.symMonoNegro.name}
-            meta={t.cards.symMonoNegro.meta}
-            surface="white"
+        {/* LAS SEIS PIEZAS. Salían de seis bloques escritos a mano, cada uno con sus
+            cuatro chips: 29 chips en la página, 49 anclas, y VEINTE de ellas en
+            `display:none` porque la tinta la elegía el tema del sitio (P70.27).
+            Ahora la lista es una (`lib/logo-kit.ts`), la recorre un bucle, y lo que
+            el kit añade sobre el SVG suelto se COMPONE con la plantilla del
+            diccionario en vez de escribirse en dos idiomas. */}
+        {[0, 2, 4].map((desde) => (
+          <div
+            key={desde}
+            data-reveal
+            className={cn(
+              PAIR,
+              desde === 4 ? "mb-[clamp(3rem,6vw,5rem)]" : "mb-[var(--gutter)]",
+            )}
           >
-            <div className="flex flex-wrap gap-2">
-              <Dl href={monoSvg("simbolo-mono-negro")} tone="primary">
-                {t.cards.symMonoNegro.svg}
-              </Dl>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Dl href={monoPng("simbolo-mono-negro", 1024)}>PNG 1024</Dl>
-              <Dl href={monoPng("simbolo-mono-negro", 512)}>PNG 512</Dl>
-              <Dl href={monoPng("simbolo-mono-negro", 256)}>PNG 256</Dl>
-            </div>
-          </VariantCard>
-
-          <VariantCard
-            glyph={<Glyph variant="flat" h={96} mono="white" />}
-            name={t.cards.symMonoBlanco.name}
-            meta={t.cards.symMonoBlanco.meta}
-            surface="ink"
-          >
-            <div className="flex flex-wrap gap-2">
-              <Dl href={monoSvg("simbolo-mono-blanco")} tone="primary">
-                {t.cards.symMonoBlanco.svg}
-              </Dl>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Dl href={monoPng("simbolo-mono-blanco", 1024)}>PNG 1024</Dl>
-              <Dl href={monoPng("simbolo-mono-blanco", 512)}>PNG 512</Dl>
-              <Dl href={monoPng("simbolo-mono-blanco", 256)}>PNG 256</Dl>
-            </div>
-          </VariantCard>
-        </div>
-
-        {/* Fila 3 — lockups */}
-        <div data-reveal className={cn(PAIR, "mb-[clamp(3rem,6vw,5rem)]")}>
-          <VariantCard
-            glyph={<Lockup variant="split" />}
-            name={t.cards.lockSplit.name}
-            meta={t.cards.lockSplit.meta}
-          >
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={svgPair("lockup-split")} tone="primary">
-                {t.cards.lockSplit.svg}
-              </DlThemed>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={pngPair("lockup-split", 1024)}>PNG 1024</DlThemed>
-              <DlThemed pair={pngPair("lockup-split", 512)}>PNG 512</DlThemed>
-              <DlThemed pair={pngPair("lockup-split", 256)}>PNG 256</DlThemed>
-            </div>
-          </VariantCard>
-
-          <VariantCard
-            glyph={<Lockup variant="flat" />}
-            name={t.cards.lockPlano.name}
-            meta={t.cards.lockPlano.meta}
-          >
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={svgPair("lockup-plano")} tone="primary">
-                {t.cards.lockPlano.svg}
-              </DlThemed>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={pngPair("lockup-plano", 1024)}>PNG 1024</DlThemed>
-              <DlThemed pair={pngPair("lockup-plano", 512)}>PNG 512</DlThemed>
-              <DlThemed pair={pngPair("lockup-plano", 256)}>PNG 256</DlThemed>
-            </div>
-          </VariantCard>
-        </div>
+            {PIEZAS.slice(desde, desde + 2).map((pieza) => {
+              const card = t.cards[pieza.id as keyof typeof t.cards];
+              return (
+                <VariantCard
+                  key={pieza.id}
+                  glyph={
+                    pieza.esLockup ? (
+                      <Lockup
+                        variant={pieza.preview === "split" ? "split" : "flat"}
+                      />
+                    ) : (
+                      <Glyph
+                        variant={pieza.preview === "split" ? "split" : "flat"}
+                        h={96}
+                        mono={
+                          pieza.preview === "mono-negro"
+                            ? "black"
+                            : pieza.preview === "mono-blanco"
+                              ? "white"
+                              : undefined
+                        }
+                      />
+                    )
+                  }
+                  name={card.name}
+                  meta={card.meta}
+                  surface={SUPERFICIE_DE[pieza.preview]}
+                >
+                  <div className="flex flex-wrap gap-2">
+                    <a
+                      href={svgDe(pieza)}
+                      download
+                      className={actionVariants({
+                        variant: "outline-primary",
+                        size: "sm",
+                      })}
+                    >
+                      <Download />
+                      {t.descargarSvg}
+                    </a>
+                  </div>
+                  <EnElKit pieza={pieza} t={t.enElKit} />
+                </VariantCard>
+              );
+            })}
+          </div>
+        ))}
 
         {/* Tabla de uso */}
         <div data-reveal className="mb-[clamp(3rem,6vw,5rem)]">

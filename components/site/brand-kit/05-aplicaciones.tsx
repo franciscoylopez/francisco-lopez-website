@@ -1,25 +1,27 @@
+import { Download } from "lucide-react";
+
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { actionVariants } from "@/components/ui/action";
 import { SectionHeader } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { type Locale } from "@/lib/i18n/config";
+import { FAVICON_PNGS, HREF_FAVICON_ICO } from "@/lib/logo-kit";
 import { cn } from "@/lib/utils";
-import {
-  Callout,
-  Dl,
-  DlThemed,
-  favPair,
-  Glyph,
-  LEAD,
-  pngPair,
-  svgPair,
-} from "./shared";
+import { Callout, Glyph, LEAD } from "./shared";
 
 /* ===================== 05 APLICACIONES ===================== */
 export function Aplicaciones({
   t,
+  tKit,
   lang,
 }: {
   t: Dictionary["brandKit"]["aplicaciones"];
+  /**
+   * El copy de «qué añade el kit», que vive con la sección 02 porque es donde se
+   * explica el reparto. Aquí llega como prop en vez de duplicarse: la misma frase
+   * escrita en dos ramas del diccionario acabaría diciendo dos cosas.
+   */
+  tKit: Dictionary["brandKit"]["logotipo"]["enElKit"];
   lang: Locale;
 }) {
   return (
@@ -64,13 +66,32 @@ export function Aplicaciones({
                 </div>
               ))}
             </div>
+            {/* El `.ico` es la pieza canónica del favicon y es la que se ofrece
+                suelta; sus dos PNG viajan en el kit, igual que los tamaños del
+                resto de piezas (P70.27). */}
             <div className="flex flex-wrap gap-2">
-              <Dl href="/logo-kit/favicon/favicon.ico" tone="primary">
+              <a
+                href={HREF_FAVICON_ICO}
+                download
+                className={actionVariants({
+                  variant: "outline-primary",
+                  size: "sm",
+                })}
+              >
+                <Download />
                 {t.favicon.ico}
-              </Dl>
-              <DlThemed pair={favPair(32)}>PNG 32</DlThemed>
-              <DlThemed pair={favPair(16)}>PNG 16</DlThemed>
+              </a>
             </div>
+            <p className="text-muted-foreground m-0 mt-[0.75rem] text-[0.8rem] leading-[1.5]">
+              <span className="text-foreground font-semibold">
+                {tKit.prefijo}
+              </span>{" "}
+              {tKit.png.replace(
+                "{tamanos}",
+                `${FAVICON_PNGS[0]} ${tKit.y} ${FAVICON_PNGS[1]}`,
+              )}{" "}
+              {tKit.y} {tKit.dosTintas}.
+            </p>
           </div>
 
           {/* OG / redes */}
@@ -101,17 +122,11 @@ export function Aplicaciones({
               decoding="async"
               className="border-border mb-[1.2rem] block w-full rounded-lg border"
             />
-            {/* Mismo orden y misma jerarquía que las otras cuatro tarjetas de
-                descarga: el SVG es la pieza canónica y va en `primary`; los PNG
-                son la alternativa y van en neutro. Aquí estaban al revés —PNG
-                1024 destacado y el SVG de chip pequeño— sin motivo: el lockup
-                que se descarga es el mismo. */}
-            <div className="flex flex-wrap gap-2">
-              <DlThemed pair={svgPair("lockup-split")} tone="primary">
-                {t.og.dlSvg}
-              </DlThemed>
-              <DlThemed pair={pngPair("lockup-split", 1024)}>PNG 1024</DlThemed>
-            </div>
+            {/* AQUÍ NO VA NINGUNA DESCARGA (P70.27). Este panel ofrecía el SVG y el
+                PNG 1024 del lockup split, que son EXACTAMENTE los mismos archivos
+                que ya ofrece su tarjeta en la sección 02: cuatro de las 49 anclas
+                de la página eran URLs repetidas. El panel explica cómo se construye
+                la tarjeta OG, que es lo suyo; la pieza se baja donde vive. */}
           </div>
         </div>
         <Callout data-reveal accent="primary">
