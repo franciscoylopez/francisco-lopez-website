@@ -125,7 +125,8 @@ eyebrow + titular), `field` (el campo de formulario), `table`, `stat-row` y `lay
 de página**: `lib/page-meta.ts` y `components/site/page-shell.tsx` (D45/D46). Y aparte,
 no encima, la de **artículo largo**, que D76 dejó fuera del núcleo a propósito — y que
 se vacía por su propio criterio: cuando una segunda página quiere una de sus piezas,
-esa pieza sale (`LiveStat` en D113, el índice y el riel en D121).
+esa pieza sale (`LiveStat` en D113, el índice y el cierre en D121) — **y vuelve si su
+motivo no valía en las cuatro**: el riel se probó en tres páginas y volvió (D123).
 
 **Qué hay exactamente en `components/ui/` no lo dice este párrafo: lo dice
 `components/ui/README.md`, derivado del disco** y comprobado en cada PR, con la frase de
