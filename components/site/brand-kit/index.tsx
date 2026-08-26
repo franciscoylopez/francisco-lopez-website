@@ -47,7 +47,7 @@ export function BrandKit({
       <Logotipo t={t.logotipo} />
       <Color t={t.color} lang={lang} />
       <Tipografia t={t.tipografia} />
-      <Aplicaciones t={t.aplicaciones} lang={lang} />
+      <Aplicaciones t={t.aplicaciones} tKit={t.logotipo.enElKit} lang={lang} />
       <Uso t={t.uso} />
 
       <RelatedPages dict={related} current="brandKit" lang={lang} />

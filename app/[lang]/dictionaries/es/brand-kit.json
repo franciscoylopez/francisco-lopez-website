@@ -34,33 +34,27 @@
     "cards": {
       "symSplit": {
         "name": "Símbolo · Split",
-        "meta": "Inline en el marcado · 382 B · dimensionado por altura.",
-        "svg": "Símbolo split · SVG"
+        "meta": "Inline en el marcado · 382 B · dimensionado por altura."
       },
       "symPlano": {
         "name": "Símbolo · Plano",
-        "meta": "Inline en el marcado · 220 B · dimensionado por altura.",
-        "svg": "Símbolo plano · SVG"
+        "meta": "Inline en el marcado · 220 B · dimensionado por altura."
       },
       "symMonoNegro": {
         "name": "Símbolo · Mono negro",
-        "meta": "Una tinta pura · 220 B · para fondos claros.",
-        "svg": "Mono negro · SVG"
+        "meta": "Una tinta pura · 220 B · para fondos claros."
       },
       "symMonoBlanco": {
         "name": "Símbolo · Mono blanco",
-        "meta": "Una tinta pura · 220 B · para fondos oscuros.",
-        "svg": "Mono blanco · SVG"
+        "meta": "Una tinta pura · 220 B · para fondos oscuros."
       },
       "lockSplit": {
         "name": "Lockup · Split",
-        "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho.",
-        "svg": "Lockup split · SVG"
+        "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho."
       },
       "lockPlano": {
         "name": "Lockup · Plano",
-        "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho.",
-        "svg": "Lockup plano · SVG"
+        "meta": "Nunca inline · 23 KB trazado · dimensionado por ancho."
       }
     },
     "usage": {
@@ -164,6 +158,19 @@
       "crescent": "creciente",
       "works": "Funciona",
       "dirty": "Fleco sucio"
+    },
+    "kit": {
+      "title": "Llévate la marca entera",
+      "body": "Todo lo que hace falta para poner esta marca en cualquier sitio: los PNG de {formatos} px, las dos tintas y el favicon. En un solo archivo.",
+      "cta": "Descargar el kit"
+    },
+    "descargarSvg": "Descargar SVG",
+    "enElKit": {
+      "prefijo": "En el kit:",
+      "png": "PNG de {tamanos} px",
+      "dosTintas": "las dos tintas",
+      "tintaSuelta": "El SVG suelto va en tinta oscura.",
+      "y": "y"
     }
   },
   "color": {
@@ -256,13 +263,12 @@
     "favicon": {
       "title": "Favicon",
       "desc": "Asset dedicado, no un reescalado. A 16px el trazo sube a 10 unidades para compensar ópticamente. Plano, centrado.",
-      "ico": "favicon.ico"
+      "ico": "Descargar ICO"
     },
     "og": {
       "title": "OG image · redes",
       "desc": "La tarjeta real que se sirve a las redes: logo split, wordmark, título y kicker sobre el fondo de marca. Fija en claro y oscuro, la genera cada página. El lockup de abajo es la pieza con la que se construye.",
-      "previewAlt": "Imagen Open Graph de marca: logo split, wordmark y título sobre fondo oscuro",
-      "dlSvg": "Lockup split · SVG"
+      "previewAlt": "Imagen Open Graph de marca: logo split, wordmark y título sobre fondo oscuro"
     },
     "pngNote": "El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos claros; tintaClara sobre fondos oscuros. Disponibles en 256 / 512 / 1024 px."
   },

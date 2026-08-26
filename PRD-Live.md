@@ -208,6 +208,8 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 - **`npm run psi -- --registro`**: la nota de PageSpeed de las páginas del registro contra
   producción, a demanda y nunca como gate de CI, porque su variabilidad daría rojos falsos
   (D49/D99).
+- **`npm run check:kit`**: que el registro del kit (`lib/logo-kit.ts`) y `public/logo-kit/`
+  cuadren **en los dos sentidos**. El ZIP no se vigila: se genera en el build (D119).
 - **`npm run check:tablero`**: que `Prioridad` siga siendo un orden —números únicos, estados de
   ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, que era la
   última fuente de verdad sin red. Fuera de CI (leer Notion necesita su MCP); el criterio,

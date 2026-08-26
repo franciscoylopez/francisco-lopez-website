@@ -233,7 +233,7 @@ ese es el hallazgo de más confianza.***
 *Quinto disparo, 2026-08-25: **nace «el metro que declara su alcance, y su alcance no incluye
 el síntoma», y es la familia que faltaba para el otro lado del método.** Se separa de «el metro
 que aprueba sobre lista vacía» **por el remedio**: aquella necesita CONTAR —y ya no tiene
-instancias vivas, los 12 guardianes de CI publican cuánto han mirado—; esta necesita MIRAR EL
+instancias vivas, los guardianes de CI publican cuánto han mirado—; esta necesita MIRAR EL
 RESULTADO RENDERIZADO. Sus dos instancias son del mismo sprint y las trajo Francisco: el
 interlineado del artículo, medido y aprobado tres veces «clonando el DOM servido en los dos
 casos que podían envolver», que era un bug real; y siete diagramas a 5-6px en móvil cuyo texto
@@ -249,8 +249,9 @@ y su caso en `BRAND-historical.md`.*
   dentro de la propia skill, donde no se miró. **Antes de publicar un cero, búscalo con otras
   palabras y en otro sitio.***
 - ***La asimetría entre lo automático y lo visual es medible y conviene medirla cada vez:**
-  hoy 20 pasos de CI y un agente de dos disparos para accesibilidad, contra UN gate manual
-  (`design-review`) para lo visual, y que se dispara al final.*
+  cuenta los pasos de `ci.yml` y el agente de dos disparos para accesibilidad, y ponlos
+  contra UN gate manual (`design-review`) para lo visual, que además se dispara al final. **No
+  se escribe la cifra**: cuando esta línea decía «20 pasos» ya eran 21.*
 - ***Cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es cuánto
   recortar sino qué gobierna el número.** El presupuesto de contexto subió por primera vez este
   día, y hasta entonces ninguno de sus cinco valores había tenido un porqué escrito.*

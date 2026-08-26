@@ -177,6 +177,16 @@ jobs:
       - name: Rutas registradas
         run: npm run check:rutas
 
+      # El kit de marca se genera en el build leyendo public/logo-kit/, así que el
+      # ZIP no puede quedarse viejo. Lo que sí puede derivar es el REGISTRO: una
+      # ruta declarada cuyo archivo ya no está sería un 404 desde un chip que se ve
+      # perfectamente bien, y un archivo en disco que no declara nadie viajaría
+      # dentro del kit sin que ninguna página lo mencione. Es literalmente cómo
+      # aparecieron los diez huérfanos que encontró P70.27: nadie los metió a
+      # propósito, simplemente nunca hubo nada que los contara (D119).
+      - name: Registro del kit de marca
+        run: npm run check:kit
+
       # «Cómo se ha creado esta página» describe un proyecto que sigue cambiando, y
       # sus afirmaciones caducan sin avisar: la cifra de páginas ya iba una por
       # detrás, y 27 de sus 38 permalinks a DECISIONS.md apuntaban diez líneas

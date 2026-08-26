@@ -154,6 +154,7 @@
 - D116 · Los nombres propios no se marcan en el copy: los marca la capa que lo pinta
 - D117 · Un vocabulario de dos valores no puede distinguir la deuda del criterio
 - D118 · El `srcset` de `next/image` no baja de `deviceSizes[0]` cuando el `sizes` lleva un `vw`
+- D119 · Una descarga que conmuta con el tema está adivinando, y la mitad de sus anclas no existe
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -6873,3 +6874,81 @@ pequeño si ya tiene uno grande en caché**, y `location.reload(true)` no lo evi
 y se ignora. Con la pestaña caliente, el arreglo parecía no hacer nada. Solo cerrando el
 navegador entero se ve el `384w`. Es «valida el metro antes de creerte el hallazgo»
 (`BRAND.md` §Cómo medir, 3) aplicado a la caché.
+
+## D119 · Una descarga que conmuta con el tema está adivinando, y la mitad de sus anclas no existe — 2026-08-26
+
+**El síntoma, y por qué nadie lo vio en año y medio.** El Brand Kit ofrecía **49 anclas de
+descarga** en una página, y de ellas **20 estaban siempre en `display:none`**. La causa era
+`DlThemed`, en `components/site/brand-kit/shared.tsx`: para dar la tinta correcta sin JS
+dibujaba **dos** `<a>` por descarga, uno con `dark:hidden` y otro con `hidden dark:inline-flex`.
+Elegante en apariencia y roto en el fondo, porque **la tinta la decidía el tema del sitio**.
+
+Un ancla en `display:none` no se pulsa, no recibe foco y **no está en el árbol de
+accesibilidad**. Así que para bajarte el logo de tinta oscura estando en tema oscuro había que
+**cambiar el tema de la web**, y nada lo decía. La ficha de la tarea llevaba meses planteada
+como un problema de densidad («49 chips es demasiado»); el defecto de verdad apareció al
+**medirlo sobre la página servida**, contando anclas alcanzables en vez de leer el JSX.
+
+Y son cosas independientes: **se puede leer en oscuro y estar montando un dossier en blanco**.
+El sitio estaba infiriendo una preferencia de salida a partir de una preferencia de lectura.
+
+**Lo que se descartó, que es donde está el aprendizaje.** La reparación evidente era que
+`DlThemed` dejara de duplicar el nodo. No se puede: **estas no son ilustraciones que se pintan
+en la página, son archivos que se descargan**. `currentColor` no sirve —un SVG con
+`currentColor` abierto fuera de la página se pinta negro; verificado con `diff`, los dos
+archivos difieren exactamente en un hex— y **el CSS no puede cambiar un `href`**. Las salidas
+eran una isla que leyera el tema en el clic, que cambia 20 descargas estáticas por 20 que
+dependen de JS y rompe el «guardar enlace como», o dejar de conmutar.
+
+Y hay un corolario que decide el diseño entero: **cualquier descarga individual reintroduce la
+pregunta de la tinta, sin excepción parcial**. Se estudió dejar un escape solo para el SVG, que
+es la pieza canónica y pesa 383 bytes, y no vale: el SVG también tiene dos tintas.
+
+**La decisión: la tarjeta da la pieza canónica, el kit da las variaciones.** Un SVG suelto por
+tarjeta que **anuncia su tinta** («El SVG suelto va en tinta oscura»), y los tres tamaños de
+PNG y la segunda tinta dentro de un ZIP con todo. De **49 anclas a 8**, todas alcanzables, en
+cualquier tema, sin JS. Sigue habiendo un valor por defecto, pero deja de ser un secreto: la
+diferencia entera entre esto y lo anterior es que ahora **se dice**.
+
+De paso caen cuatro anclas que eran **URLs repetidas**: el panel de OG en `05-aplicaciones.tsx`
+volvía a ofrecer el SVG y el PNG 1024 del lockup split que ya ofrecía su tarjeta en la 02.
+
+**El ZIP se genera en el BUILD y no se commitea.** `app/api/kit/route.ts` con
+`dynamic = "force-static"`: Next lo ejecuta una vez al construir leyendo `public/logo-kit/` y
+sirve el resultado como asset estático. La propiedad que se compra es la que importa: **no
+puede quedarse viejo por construcción**. Nada de binario de 642 KB en git recommiteado entero
+en cada cambio, ningún `npm run` que recordar, y **ningún guardián para una desincronización
+que aquí no puede ocurrir**. Va bajo `/api/` porque el matcher de `proxy.ts` excluye ese
+prefijo; fuera de él habría que tocar el proxy.
+
+El contenedor lo escribe `lib/zip.ts`, 90 líneas, **sin dependencia nueva**: Node ya trae
+`deflateRawSync` y `crc32`, y lo único que falta son tres estructuras de campos fijos. Es
+**determinista** (marcas de tiempo fijas a 1980-01-01), así que el mismo contenido da siempre
+los mismos bytes y cualquier comparación posterior significa algo. No hace ZIP64 y **falla en
+vez de escribir un archivo corrupto** si alguna vez se acerca a sus límites.
+
+**Y lo que sí necesita guardián es el REGISTRO, no el ZIP.** `lib/logo-kit.ts` declara dos
+listas —lo que la página publica y lo que viaja en el kit sin tarjeta— y `npm run check:kit`
+las contrasta contra el disco en los dos sentidos. Es lo que convierte en rojo el caso que
+originó los huérfanos: **nadie los metió a propósito, simplemente nunca hubo nada que los
+contara**. El guardián se estrenó cazando el ZIP ad-hoc del prototipo, que se habría metido
+dentro de sí mismo.
+
+**Los diez huérfanos.** Al sumar el kit apareció que `public/logo-kit/` tiene **55 archivos y la
+página publicaba 45**: los ocho `lockup-mono-*`, con cero referencias en todo el código desde
+que existen, y el par `favicon-*-48.png`, que duplica los de la raíz que usa el layout. Se
+decidió que **viajan en el kit sin tarjeta propia**, y ahora están **declarados** en
+`SOLO_EN_EL_KIT` con su motivo, que es la diferencia entre una decisión y un descuido.
+
+**Lo que queda pendiente, dicho para que no se dé por cerrado.** El **renombrado de los
+assets**: en disco los SVG se nombran por TEMA (`-claro`/`-oscuro`) y los PNG por TINTA
+(`tintaOscura`/`tintaClara`), y son **opuestos** (`simbolo-split-claro.svg` lleva tinta
+oscura). El cruce está encapsulado en `svgDe()` y `pngDe()`, así que la página nunca lo expone,
+y el `LEEME.txt` que viaja dentro del ZIP lo explica en los dos idiomas, que es donde el
+usuario tropieza con él. Renombrarlos es otra tarea.
+
+**Y una medición que no se hizo.** Esto **borra una capacidad que existía**: hasta hoy se podía
+bajar exactamente el PNG 512 en tinta clara. GA4 captura descargas de fábrica, así que el
+`file_download` de `/brand-kit` diría si alguien lo hacía alguna vez. No se consultó antes de
+decidir. Si el dato dijera que sí, la respuesta no es volver a las 49 anclas: es que a esa
+pieza le falta tarjeta.
