@@ -26,7 +26,7 @@
 - **`article.tsx`** — Los bloques del texto largo: portada de capítulo, cita, diagrama, cierre. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*
 
 ### primitiva · 9
-- **`copy-button.tsx`** — El botón que lleva un valor al portapapeles, con su confirmación anunciada. *([design-system/02-tokens](../site/design-system/02-tokens.tsx))*
+- **`copy-button.tsx`** — Copiar un valor al portapapeles: directo si hay uno, con menú si hay dos. *([design-system/02-tokens](../site/design-system/02-tokens.tsx))*
 - **`icons.tsx`** — Los iconos que lucide no trae (LinkedIn, GitHub), con la regla de autoría propia. *([brand-kit/06-uso](../site/brand-kit/06-uso.tsx))*
 - **`info-card.tsx`** — La tarjeta de nota: un título y su explicación, al margen del cuerpo. *([design-system/17-bloques](../site/design-system/17-bloques.tsx))*
 - **`live-stat.tsx`** — La regleta de un dato en vivo: la cifra no se escribe, se enlaza a quien la publica. *([design-system/15-articulo](../site/design-system/15-articulo.tsx))*

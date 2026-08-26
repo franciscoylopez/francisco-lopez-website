@@ -977,3 +977,46 @@
     transition: none;
   }
 }
+
+/* ── EL MENÚ DE «COPIAR CUÁL» (P70.36) ──────────────────────────────────────
+   La caja del `popover` de `CopyChoice`. Va aquí y no en el componente por la
+   razón de siempre: una clase de `globals.css` es tan capa como una variante, y
+   el posicionamiento anclado necesita CSS que Tailwind no genera.
+
+   `position-anchor` empareja con el `anchor-name` que el disparador declara en
+   línea —el nombre lleva el `useId` del componente, así que no se puede escribir
+   aquí—. Con `position-try-fallbacks` el menú se voltea arriba cuando abajo no
+   cabe, que en la última fila de la rejilla de color es el caso normal.
+
+   SIN SOPORTE DE ANCLAJE el popover se centra en la pantalla y no se rompe nada:
+   sigue etiquetado, sigue copiando y sigue cerrándose con `Esc` y al pulsar
+   fuera, porque todo eso lo da `popover` y no el posicionamiento. Se pierde la
+   relación espacial con su botón, y esa es toda la degradación. */
+.copy-menu {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0.25rem;
+  min-width: 12rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 14%);
+  top: anchor(bottom);
+  right: anchor(right);
+  margin-top: 6px;
+  position-try-fallbacks: flip-block;
+}
+/* El menú es su propia superficie, así que su atenuado se recalcula contra
+   `--card` como el de cualquier tarjeta (D39). */
+.copy-menu {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--card));
+}
+@supports not (top: anchor(bottom)) {
+  .copy-menu {
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+  }
+}

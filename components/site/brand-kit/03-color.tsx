@@ -2,7 +2,7 @@ import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader } from "@/components/ui/heading";
 import { Badge } from "@/components/ui/badge";
 import { CARD, SECTION, WRAP } from "@/components/ui/layout";
-import { CopyButton } from "@/components/ui/copy-button";
+import { CopyButton, CopyChoice } from "@/components/ui/copy-button";
 import {
   BRAND_SWATCHES,
   swatchRatioParts,
@@ -20,31 +20,19 @@ const SWATCH: Record<string, (typeof BRAND_SWATCHES)[number] | undefined> =
   Object.fromEntries(BRAND_SWATCHES.map((s) => [s.id, s]));
 
 /**
- * EL HEX DEL PIE, y cuál de los dos se va a copiar cuando hay dos.
+ * EL PIE DEL HEX: los dos valores en UN RENGLÓN cuando el token conmuta.
  *
- * El token que conmuta imprime sus dos valores y el botón de al lado copia UNO,
- * el del tema que se está viendo. Eso ya era así; lo que faltaba era decirlo.
+ * Apilarlos no cuesta alto —el control de 44px ya fija la altura de la fila, así
+ * que los dos caben dentro—, así que el renglón no se elige por espacio: se elige
+ * porque los dos valores se comparan de un vistazo, que es para lo que sirve un
+ * Brand Kit. Medido en el prototipo: el par mide 112px y no se parte ni con la
+ * tarjeta a 222, por debajo de las 13rem que llega a medir la columna.
  *
- * NO SE RESUELVE EN EL RENDER, Y NO ES UN DETALLE: quien pinta esta tarjeta es un
- * Server Component, que no sabe en qué tema está el navegador. Leerlo en el
- * primer render de cliente sería una discrepancia de hidratación esperando a
- * ocurrir —es el mismo motivo por el que `CopyButton` resuelve el valor en el
- * CLIC y no al renderizar—. Así que lo decide el CSS: los dos valores se pintan
- * siempre y la variante `dark:` intercambia cuál va en tinta plena. Cero
- * JavaScript nuevo.
- *
- * Y LA ETIQUETA NO ES DECORADO, ES EL PUNTO 6 DEL GATE. Si el único indicio de
- * cuál se copia fuera el contraste entre tinta y gris, sería un estado codificado
- * solo por color. El rótulo «claro» / «oscuro» está siempre escrito, así que la
- * información se lee sin depender del tono; el tono la refuerza.
+ * LOS RÓTULOS «CLARO» / «OSCURO» SALEN DE AQUÍ y viven en el menú, que es donde
+ * la elección de verdad ocurre. En el renglón sobraban: no marcaban un estado, y
+ * el orden claro→oscuro es el mismo en las nueve muestras.
  */
-function SwatchHex({
-  hex,
-  labels,
-}: {
-  hex: string | { light: string; dark: string };
-  labels: { light: string; dark: string };
-}) {
+function SwatchHex({ hex }: { hex: string | { light: string; dark: string } }) {
   if (typeof hex === "string") {
     return (
       <code className="text-foreground block font-mono text-[0.78rem]">
@@ -53,19 +41,12 @@ function SwatchHex({
     );
   }
   return (
-    <span className="flex min-w-0 flex-wrap items-baseline gap-x-[0.6rem] gap-y-[0.1rem] text-[0.78rem]">
-      <span className="text-foreground dark:text-muted-foreground">
-        <span className="mr-[0.3rem] text-[0.68rem] tracking-[0.04em] uppercase">
-          {labels.light}
-        </span>{" "}
-        <code className="font-mono">{hex.light}</code>
+    <span className="flex min-w-0 flex-wrap items-baseline gap-x-[0.35rem] font-mono text-[0.78rem]">
+      <code>{hex.light}</code>
+      <span aria-hidden="true" className="text-muted-foreground">
+        ·
       </span>
-      <span className="text-muted-foreground dark:text-foreground">
-        <span className="mr-[0.3rem] text-[0.68rem] tracking-[0.04em] uppercase">
-          {labels.dark}
-        </span>{" "}
-        <code className="font-mono">{hex.dark}</code>
-      </span>
+      <code>{hex.dark}</code>
     </span>
   );
 }
@@ -128,35 +109,36 @@ export function Color({
                   <code className="text-muted-foreground mt-[0.35rem] block font-mono text-[0.76rem]">
                     {s.token}
                   </code>
-                  {/* El pie IMPRIME los dos hexes cuando el token conmuta, y el
-                      botón COPIA uno solo: el del tema que se está viendo. Son
-                      dos cosas distintas y por eso son dos funciones (ver la
-                      nota de `swatchHexFor` en design-values). El anuncio dice
-                      cuál se ha llevado, que es lo que deshace la ambigüedad
-                      para quien no ve la pantalla.
+                  {/* CUÁL DE LOS DOS CONTROLES lo decide si el token conmuta,
+                      y esa es la corrección de P70.36. Antes había uno solo que
+                      copiaba el hex del tema activo sin decirlo: además de no
+                      decirlo, dejaba INALCANZABLE el otro valor, que en un Brand
+                      Kit es tan legítimo como el primero. Ahora, cuando hay dos,
+                      se eligen por su nombre en un menú.
 
-                      Y ESA ERA LA MITAD QUE FALTABA (P70.30): la única persona a
-                      la que se le decía cuál de los dos se llevaba era la que no
-                      ve la pantalla. Quien la mira leía «#F7F3EC · #191D21» y un
-                      botón, sin nada que dijera cuál de los dos. Francisco
-                      esperaba dos botones; lo que faltaba no era un control, era
-                      la etiqueta.
-
-                      El `-my-2` deja el suelo táctil de 44px intacto y evita
-                      que la tarjeta crezca 26px: los vecinos de arriba y abajo
-                      no son interactivos, así que solaparlos no quita nada. */}
+                      El `-my-2` deja el suelo táctil de 44px intacto y evita que
+                      la tarjeta crezca 26px: los vecinos de arriba y abajo no son
+                      interactivos, así que solaparlos no quita nada. */}
                   <div className="mt-[0.15rem] flex items-center justify-between gap-2">
-                    <SwatchHex
-                      hex={s.hex}
-                      labels={{ light: t.hexLight, dark: t.hexDark }}
-                    />
-                    <CopyButton
-                      value={s.hex}
-                      label={t.copyAria.replace("{token}", s.token)}
-                      announcement={t.copiedAnnounce}
-                      copiedLabel={t.copiedLabel}
-                      className="-my-2 shrink-0"
-                    />
+                    <SwatchHex hex={s.hex} />
+                    {typeof s.hex === "string" ? (
+                      <CopyButton
+                        value={s.hex}
+                        label={t.copyAria.replace("{token}", s.token)}
+                        announcement={t.copiedAnnounce}
+                        copiedLabel={t.copiedLabel}
+                        className="-my-2"
+                      />
+                    ) : (
+                      <CopyChoice
+                        values={s.hex}
+                        optionLabels={{ light: t.hexLight, dark: t.hexDark }}
+                        label={t.chooseAria.replace("{token}", s.token)}
+                        announcement={t.copiedAnnounce}
+                        copiedLabel={t.copiedLabel}
+                        className="-my-2"
+                      />
+                    )}
                   </div>
                   <div className="border-border text-muted-foreground mt-[0.6rem] border-t border-dashed pt-[0.6rem] text-[0.78rem]">
                     {ratio}

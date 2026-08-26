@@ -241,8 +241,9 @@
     ],
     "pastelNote": "Pastels never as text color. They're backgrounds. If text goes over a pastel, always in foreground (ink), never the other way around.",
     "copyAria": "Copy the hex for {token}",
+    "chooseAria": "Choose which hex of {token} to copy",
     "copiedAnnounce": "{value} copied to clipboard",
-    "copiedLabel": "Copied"
+    "copiedLabel": "{value} Copied"
   },
   "tipografia": {
     "num": "04 — Typography",
