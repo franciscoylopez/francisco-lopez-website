@@ -23,6 +23,16 @@
     "nextLabel": "Next:",
     "of": "of"
   },
+  "bloques": {
+    "cumple": {
+      "title": "What it meets, and how that is proven",
+      "lead": "The declared level, the checks that close every page, what is inherited from the component layer, and who verifies it."
+    },
+    "limites": {
+      "title": "Where it falls short, and how that is said",
+      "lead": "What no automated tool finds, the limits that remain, the term used here, and the way to report a barrier."
+    }
+  },
   "conformance": {
     "indexLabel": "Conformance",
     "heading": "WCAG 2.2 AA met, with contrast measured",

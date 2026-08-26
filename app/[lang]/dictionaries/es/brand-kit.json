@@ -23,6 +23,16 @@
     "nextLabel": "Siguiente:",
     "of": "de"
   },
+  "bloques": {
+    "hecha": {
+      "title": "De qué está hecha",
+      "lead": "La idea que hay detrás y los tres signos que la sostienen: el monograma, la paleta de dos capas y la pareja tipográfica."
+    },
+    "uso": {
+      "title": "Cómo se usa",
+      "lead": "Dónde vive la marca fuera de este sitio, y las reglas que impiden que cada aplicación la interprete a su manera."
+    }
+  },
   "concepto": {
     "indexLabel": "Concepto",
     "title": "Una marca de dos capas",

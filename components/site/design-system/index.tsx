@@ -1,4 +1,7 @@
+import { Fragment, type ReactNode } from "react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { BlockOpener } from "@/components/ui/block-opener";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import {
   IndexNote,
@@ -58,6 +61,34 @@ const ORDEN = [
 
 /** El ancla del índice. Misma convención que el artículo, que ya la estrenó. */
 const ANCLA_INDICE = "indice";
+
+/**
+ * LOS CUATRO BLOQUES, y esta lista es lo que hace VISIBLE una jerarquía que hasta
+ * hoy solo existía en el comentario de abajo (P70.47).
+ *
+ * El orden de las doce dejó de ser cronológico en P70.34 y pasó a ser
+ * `fundamentos → piezas → composición → excepción`. Estaba escrito, estaba bien
+ * pensado, y en pantalla no se veía: doce secciones seguidas, todas separadas por
+ * el mismo filete, no dicen dónde acaba una familia y empieza otra.
+ *
+ * Aquí van las CLAVES y nada más. El título y la entradilla de cada bloque son
+ * copy y viven en el diccionario; los ordinales de la banda salen de `paradas`,
+ * no se escriben. Así reordenar la página no puede dejar una banda anunciando
+ * secciones que ya no están debajo.
+ *
+ * SI HAY QUE AÑADIR UN QUINTO BLOQUE, la pregunta antes es la densidad: la banda
+ * cae hoy cada 8,9 pantallas y por debajo de ~6 la página se lee a golpes. El
+ * porqué medido, en `ui/block-opener.tsx`.
+ */
+const BLOQUES = [
+  {
+    id: "fundamentos",
+    claves: ["rejilla", "ritmo", "tipografia", "claroscuro", "movimiento"],
+  },
+  { id: "piezas", claves: ["enlaces", "botones", "etiquetas", "formulario"] },
+  { id: "composicion", claves: ["composicion", "accesibilidad"] },
+  { id: "excepcion", claves: ["articulo"] },
+] as const;
 
 // Página Design System (PRD §20). Traducida del mockup de Claude Design (D1).
 // Server Component salvo tres islas interactivas (design-system-islands.tsx):
@@ -140,6 +171,56 @@ export function DesignSystem({
     }),
   ) as Record<(typeof ORDEN)[number], SeccionMarco>;
 
+  /**
+   * Cada sección con SU rebanada del diccionario, indexada por su clave. Existe
+   * porque las doce ya no se escriben una debajo de otra: las reparte el bucle de
+   * `BLOQUES`, y un mapa por clave no puede desalinearse al insertar una sección
+   * en medio como sí haría una lista por posición.
+   */
+  const secciones: Record<(typeof ORDEN)[number], ReactNode> = {
+    rejilla: <Rejilla t={t.rejilla} marco={marcos.rejilla} />,
+    ritmo: <Ritmo t={t.ritmo} marco={marcos.ritmo} />,
+    tipografia: <Tipografia t={t.tipografia} marco={marcos.tipografia} />,
+    claroscuro: <Claroscuro t={t.claroscuro} marco={marcos.claroscuro} />,
+    movimiento: <Movimiento t={t.movimiento} marco={marcos.movimiento} />,
+    enlaces: <Enlaces t={t.enlaces} marco={marcos.enlaces} />,
+    botones: <Botones t={t.botones} marco={marcos.botones} />,
+    etiquetas: (
+      <Etiquetas t={t.etiquetas} marco={marcos.etiquetas} lang={lang} />
+    ),
+    formulario: <Formulario t={t.formulario} marco={marcos.formulario} />,
+    composicion: (
+      <Composicion
+        t={t.composicion}
+        marco={marcos.composicion}
+        paradas={paradas}
+        // El espécimen de `BlockOpener` es LA BANDA DEL BLOQUE «Piezas» de esta
+        // misma página, no una maqueta: mismo copy y mismas cuatro paradas.
+        bloqueDemo={{
+          title: t.bloques.piezas.title,
+          lead: t.bloques.piezas.lead,
+          items: paradas.filter((p) =>
+            (
+              BLOQUES.find((b) => b.id === "piezas")
+                ?.claves as readonly string[]
+            ).includes(p.clave),
+          ),
+        }}
+        lang={lang}
+      />
+    ),
+    accesibilidad: (
+      <Accesibilidad
+        t={t.accesibilidad}
+        marco={marcos.accesibilidad}
+        lang={lang}
+      />
+    ),
+    articulo: (
+      <ArticuloLargo t={t.articulo} marco={marcos.articulo} lang={lang} />
+    ),
+  };
+
   return (
     <>
       <Hero
@@ -178,27 +259,23 @@ export function DesignSystem({
         </div>
       </section>
 
-      <Rejilla t={t.rejilla} marco={marcos.rejilla} />
-      <Ritmo t={t.ritmo} marco={marcos.ritmo} />
-      <Tipografia t={t.tipografia} marco={marcos.tipografia} />
-      <Claroscuro t={t.claroscuro} marco={marcos.claroscuro} />
-      <Movimiento t={t.movimiento} marco={marcos.movimiento} />
-      <Enlaces t={t.enlaces} marco={marcos.enlaces} />
-      <Botones t={t.botones} marco={marcos.botones} />
-      <Etiquetas t={t.etiquetas} marco={marcos.etiquetas} lang={lang} />
-      <Formulario t={t.formulario} marco={marcos.formulario} />
-      <Composicion
-        t={t.composicion}
-        marco={marcos.composicion}
-        paradas={paradas}
-        lang={lang}
-      />
-      <Accesibilidad
-        t={t.accesibilidad}
-        marco={marcos.accesibilidad}
-        lang={lang}
-      />
-      <ArticuloLargo t={t.articulo} marco={marcos.articulo} lang={lang} />
+      {/* LAS DOCE, REPARTIDAS EN SUS CUATRO BLOQUES. La lista de secciones sigue
+          leyéndose de un vistazo, que es lo que este archivo tiene que ser; lo
+          único que cambia es que ahora se ve dónde empieza cada familia. */}
+      {BLOQUES.map((bloque) => (
+        <Fragment key={bloque.id}>
+          <BlockOpener
+            title={t.bloques[bloque.id].title}
+            lead={t.bloques[bloque.id].lead}
+            items={paradas.filter((p) =>
+              (bloque.claves as readonly string[]).includes(p.clave),
+            )}
+          />
+          {bloque.claves.map((clave) => (
+            <Fragment key={clave}>{secciones[clave]}</Fragment>
+          ))}
+        </Fragment>
+      ))}
 
       <RelatedPages dict={related} current="designSystem" lang={lang} />
     </>

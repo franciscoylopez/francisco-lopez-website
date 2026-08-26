@@ -23,6 +23,16 @@
     "nextLabel": "Next:",
     "of": "of"
   },
+  "bloques": {
+    "hecha": {
+      "title": "What it is made of",
+      "lead": "The idea behind it and the three signs that carry it: the monogram, the two-layer palette and the type pairing."
+    },
+    "uso": {
+      "title": "How it is used",
+      "lead": "Where the brand lives outside this site, and the rules that stop every application from interpreting it its own way."
+    }
+  },
   "concepto": {
     "indexLabel": "Concept",
     "title": "A two-layer brand",

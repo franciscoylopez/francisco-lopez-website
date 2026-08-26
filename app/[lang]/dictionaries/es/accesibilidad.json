@@ -23,6 +23,16 @@
     "nextLabel": "Siguiente:",
     "of": "de"
   },
+  "bloques": {
+    "cumple": {
+      "title": "Qué cumple, y cómo se prueba",
+      "lead": "El nivel declarado, las comprobaciones que cierran cada página, lo que se hereda de la capa de componentes y quién lo verifica."
+    },
+    "limites": {
+      "title": "Dónde no llega, y cómo decirlo",
+      "lead": "Lo que ninguna herramienta automática encuentra, los límites que quedan, el término que se usa y la vía para avisar de una barrera."
+    }
+  },
   "conformance": {
     "indexLabel": "Conformidad",
     "heading": "WCAG 2.2 AA cumplido, con el contraste medido",
