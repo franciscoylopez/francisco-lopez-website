@@ -11,13 +11,13 @@
     "statConformidad": "WCAG 2.2 conformance",
     "statColor": "Colour system",
     "statAxe": "axe violations",
-    "statLighthouse": "Lighthouse accessibility",
-    "updated": "Last accessibility review: {date}."
+    "statLighthouse": "Lighthouse accessibility"
   },
   "conformance": {
     "num": "01 — Conformance",
     "heading": "WCAG 2.2 AA met, with contrast measured",
     "intro": "Contrast is measured, not estimated. Body text reaches {bodyText.light} in light and {bodyText.dark} in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1, cleared with room to spare.",
+    "updated": "Last accessibility review: {date}.",
     "rows": [
       {
         "label": "Standard",

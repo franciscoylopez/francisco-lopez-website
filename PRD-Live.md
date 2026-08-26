@@ -82,9 +82,9 @@ descarga** (D65).
 
 ### Tres cosas que el sitio hace y no se ven mirándolo
 
-- **Las páginas que documentan el sistema no pueden mentir.** El Design System lo publica
-  en dieciocho secciones y el Brand Kit en seis, las dos con **las piezas reales del sitio
-  como demo**: si una variante cambia, la página cambia con ella. Y no leen sus valores
+- **Las páginas que documentan el sistema no pueden mentir.** El Design System y el
+  Brand Kit publican **las piezas reales del sitio como demo**: si una variante cambia,
+  la página cambia con ella. Y no leen sus valores
   del diccionario, sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio
   publica sobre sí mismo — tokens de layout, breakpoints y el censo de pares de contraste
   medidos. El diccionario se queda solo con el copy.
@@ -292,8 +292,7 @@ Sin fecha ni compromiso de release conjunto: entran en el sprint que las toque o
 dejen de poder esperar. Agrupadas por dónde viven — *General* (higiene de validadores,
 dependencias, `qlty`), *Home*
 (gesto-firma de marca, presencia del morado, kicker del Hero, `WebSite` en JSON-LD),
-*Brand Kit*, *Design System* (copy-to-clipboard de tokens, simulador de foco) y
-*Accesibilidad*.
+*Brand Kit*, *Design System* y *Accesibilidad*.
 
 ### V4 — IA conversacional
 

@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Brand identity",
     "title": "Brand Kit",
-    "lead": "Francisco López's identity system: the logo and its exact geometry, the palette with its two layers, the typography and the rules that govern its use. All downloadable, in light and dark.",
+    "lead": "An identity isn't designed because a logo is needed: it's designed to stop deciding the same thing over and over. This is that language, with its rules and its pieces, downloadable in light and dark.",
     "statColor": "Color tokens",
     "statTipografia": "Type families",
     "statSplit": "Split threshold",
@@ -179,6 +179,8 @@
     "lead": "The two-layer rule: an ink layer (background + stroke) that switches with the theme, and a color layer (cyan + purple) that only appears in the split and doesn't change between light and dark. Each swatch carries its token, its hex and its measured contrast ratio. Switch the theme with the nav toggle to watch the ink layer flip.",
     "swapConmuta": "Switches",
     "swapFijo": "Fixed",
+    "hexLight": "light",
+    "hexDark": "dark",
     "ratioLabels": {
       "inkOver": "Ink over it",
       "bodyText": "Body text",
@@ -239,7 +241,9 @@
     ],
     "pastelNote": "Pastels never as text color. They're backgrounds. If text goes over a pastel, always in foreground (ink), never the other way around.",
     "copyAria": "Copy the hex for {token}",
-    "copiedAnnounce": "{value} copied to clipboard"
+    "chooseAria": "Choose which hex of {token} to copy",
+    "copiedAnnounce": "{value} copied to clipboard",
+    "copiedLabel": "{value} Copied"
   },
   "tipografia": {
     "num": "04 — Typography",

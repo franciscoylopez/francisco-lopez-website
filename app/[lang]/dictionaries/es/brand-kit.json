@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Identidad de marca",
     "title": "Brand Kit",
-    "lead": "El sistema de identidad de Francisco López: el logo y su geometría exacta, la paleta con sus dos capas, la tipografía y las reglas que gobiernan su uso. Todo descargable, en claro y oscuro.",
+    "lead": "Una identidad no se diseña porque haga falta un logotipo: se diseña para dejar de decidir lo mismo cada vez. Esto es ese lenguaje, con sus reglas y sus piezas, descargable en claro y oscuro.",
     "statColor": "Tokens de color",
     "statTipografia": "Familias tipográficas",
     "statSplit": "Umbral del split",
@@ -179,6 +179,8 @@
     "lead": "La regla de las dos capas: una capa de tinta (fondo + trazo) que conmuta con el tema, y una capa de color (cian + morado) que solo aparece en el split y no cambia entre claro y oscuro. Cada muestra lleva su token, su hex y su ratio de contraste medido. Cambia el tema con el toggle del nav para ver la capa de tinta conmutar.",
     "swapConmuta": "Conmuta",
     "swapFijo": "Fijo",
+    "hexLight": "claro",
+    "hexDark": "oscuro",
     "ratioLabels": {
       "inkOver": "Tinta encima",
       "bodyText": "Texto principal",
@@ -239,7 +241,9 @@
     ],
     "pastelNote": "Los pasteles nunca como color de texto. Son fondos. Si va texto sobre un pastel, siempre en foreground (tinta), nunca al revés.",
     "copyAria": "Copiar el hex de {token}",
-    "copiedAnnounce": "{value} copiado al portapapeles"
+    "chooseAria": "Elegir qué hex de {token} copiar",
+    "copiedAnnounce": "{value} copiado al portapapeles",
+    "copiedLabel": "{value} Copiado"
   },
   "tipografia": {
     "num": "04 — Tipografía",

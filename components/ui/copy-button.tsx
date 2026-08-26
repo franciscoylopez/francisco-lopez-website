@@ -1,9 +1,9 @@
 "use client";
 
-// @pieza primitiva · design-system/02-tokens.tsx · El botón que lleva un valor al portapapeles, con su confirmación anunciada.
+// @pieza primitiva · design-system/01-rejilla.tsx · Copiar un valor al portapapeles: directo si hay uno, con menú si hay dos.
 
 import { Check, Copy } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
@@ -64,97 +64,265 @@ export function useCopyToClipboard(resetMs = 1800) {
 }
 
 /**
- * El control.
+ * LA CONFIRMACIÓN, que es lo que las dos piezas de abajo comparten de verdad.
  *
- * POR QUÉ HAY DOS FORMAS DE DAR EL VALOR. Un bloque de CSS es el mismo se mire
- * como se mire: `value`. El hex de una muestra que conmuta con el tema, no —y
- * **no se puede resolver al renderizar**: quien lo pinta es un Server Component,
- * que no sabe en qué tema está el navegador, y leerlo en el primer render de
- * cliente sería una discrepancia de hidratación esperando a ocurrir. De ahí
- * `valueByTheme`, que se resuelve **en el momento del clic** mirando la clase
- * `.dark` del documento, que es donde `next-themes` deja la verdad.
+ * EL CHECK SOLO NO ORIENTA. Un icono que pasa de copia a marca de verificación
+ * dice que ALGO pasó, y en una rejilla de nueve tarjetas con un botón cada una no
+ * dice ni qué ni cuál. La asimetría lo delataba: el `aria-live` ya daba la frase
+ * entera, así que la única persona informada era la que no ve la pantalla.
  *
- * Y NO ES UNA FUNCIÓN, que sería lo obvio, porque cruzando la frontera RSC no
- * viaja: un Server Component no puede pasarle una función a una isla. Un objeto
- * plano sí.
+ * NI TOOLTIP NI TOAST. Un tooltip aparece en HOVER y esto llega después de un
+ * CLIC, que en táctil no tiene hover: sería invisible en móvil justo donde más
+ * falta hace. Un toast pide dependencia y saca la confirmación del sitio donde
+ * ocurrió la acción.
  *
- * EL ANUNCIO NO ES DECORADO, ES EL PUNTO 6 DEL GATE. Un icono que pasa de copia
- * a marca de verificación distingue el estado **por forma**, que es lo que la
- * regla pide de la parte visible; pero un control solo-icono sin nombre no le
- * dice nada a quien no lo ve, y «se ha copiado» es precisamente la información
- * que no está escrita en ningún otro sitio de la página. De ahí que `announce`
- * sea obligatorio y nombre QUÉ se ha copiado, no solo que algo se copió.
+ * VA ABSOLUTA, y anclada al borde DERECHO. Absoluta porque si creciera dentro del
+ * flujo empujaría al hex que tiene al lado, un salto de layout a los 1.800 ms y
+ * otro a la vuelta. Y a la derecha porque centrada NO CABE: la tarjeta del Brand
+ * Kit mide 13rem y lleva `overflow-hidden`, y «#F7F3EC Copiado» son unos 110px
+ * sobre un control que vive en el borde. Centrada, la tarjeta la corta —se vio en
+ * el prototipo de P70.36, no leyendo el código—. Anclada a la derecha crece hacia
+ * dentro, que es donde hay sitio.
+ *
+ * `aria-hidden` porque el `aria-live` del control ya lo anuncia: sin él, un lector
+ * de pantalla lo diría dos veces.
+ */
+function Confirm({
+  text,
+  on,
+  onInverted,
+  placement,
+}: {
+  text: string;
+  on: boolean;
+  onInverted: boolean;
+  placement: "above" | "below";
+}) {
+  return (
+    <span
+      aria-hidden="true"
+      className={cn(
+        "pointer-events-none absolute right-0 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none",
+        placement === "above" ? "bottom-full mb-1" : "top-full mt-1",
+        // La pastilla se apoya en el carril contrario al del control, igual que
+        // hace `onInverted`: sobre la banda invertida el fondo de la página ES
+        // `--foreground`, así que vuelve a `--background` para verse. Es el par
+        // de texto principal en los dos casos, ya medido por el censo.
+        onInverted
+          ? "bg-background text-foreground"
+          : "bg-foreground text-background",
+        on ? "opacity-100" : "opacity-0",
+      )}
+    >
+      {text}
+    </span>
+  );
+}
+
+/** El disparador: mismo aspecto en las dos piezas. */
+const trigger = (onInverted: boolean) =>
+  cn(
+    actionVariants({ variant: "ghost", size: "icon" }),
+    onInverted &&
+      "text-background hover:bg-background/15 focus-visible:bg-background/15",
+  );
+
+type Comun = {
+  /**
+   * Nombre accesible del control. No se pinta, y NO lleva el valor dentro: un
+   * nombre accesible que se reescribe solo es peor que uno estable. Nombra la
+   * COSA («Copiar el hex de --background»), no su contenido de ahora mismo.
+   */
+  label: string;
+  /**
+   * Lo que se anuncia al lograrlo. `{value}` se sustituye por lo copiado, y es
+   * donde tiene que estar: el anuncio ocurre después del clic, o sea cuando ya se
+   * sabe qué se copió.
+   */
+  announcement: string;
+  /**
+   * Lo que se PINTA al lograrlo. También admite `{value}` —y en el Brand Kit lo
+   * lleva, porque «Copiado» a secas no dice cuál de los dos hexes se ha llevado—.
+   * Donde lo copiado es un bloque entero de CSS no hay valor corto que nombrar y
+   * la plantilla se queda sin `{value}`.
+   */
+  copiedLabel: string;
+  /**
+   * Sobre una banda cuyo fondo es `--foreground`. Es §Controles con dos fondos de
+   * `BRAND.md`: la pieza es el `foreground` de su propio carril, y en un carril
+   * invertido ese `foreground` es `--background`.
+   */
+  onInverted?: boolean;
+  /**
+   * A qué lado del control aparece la confirmación. Arriba por defecto, que es
+   * donde no molesta en una tarjeta.
+   *
+   * NO ES UNA PREFERENCIA, ES EL RECORTE OTRA VEZ. La pastilla va absoluta, así
+   * que su contenedor con `overflow-hidden` la corta cuando en esa dirección no
+   * hay sitio: en la tarjeta del Brand Kit se salía por la derecha (resuelto
+   * anclándola a ese borde) y en la cabecera del panel de tokens se sale por
+   * ARRIBA, porque esa barra mide poco más que el propio botón. Ahí baja.
+   *
+   * Un popover se colocaría solo con `position-try-fallbacks`, pero esto no es
+   * un popover: no atrapa foco ni se cierra, es una etiqueta. Meterla en la capa
+   * superior para elegir un lado sería pagar un widget por un margen.
+   */
+  confirmPlacement?: "above" | "below";
+  className?: string;
+};
+
+/**
+ * UN VALOR, UN CLIC.
+ *
+ * YA NO RESUELVE NADA EN EL CLIC, y esa simplificación la trajo el prototipo. La
+ * versión anterior aceptaba también el par `{ light, dark }` y decidía cuál
+ * copiar mirando la clase `.dark` del documento, porque quien pinta la tarjeta es
+ * un Server Component y no sabe en qué tema está el navegador. Funcionaba, y era
+ * la respuesta equivocada: dejaba **inalcanzable el otro hex**, que en un Brand
+ * Kit es un valor tan legítimo como el primero. Con la elección explícita
+ * (`CopyChoice`), toda esa maquinaria sobra.
  */
 export function CopyButton({
   value,
   label,
   announcement,
+  copiedLabel,
   onInverted = false,
+  confirmPlacement = "above",
   className,
-}: {
-  /**
-   * El texto a copiar. Un string cuando no depende del tema; el par
-   * `{ light, dark }` cuando sí. Es la misma forma que `Swatch.hex`, y a
-   * propósito: así el punto de uso pasa el dato tal cual lo tiene, sin
-   * desmontarlo en dos props que luego hay que volver a juntar aquí.
-   */
-  value: string | { light: string; dark: string };
-  /**
-   * Nombre accesible del control. No se pinta, y NO lleva el valor dentro: en el
-   * caso por tema el valor cambia bajo los pies del rótulo, y un nombre
-   * accesible que se reescribe solo es peor que uno estable. Nombra la COSA
-   * («Copiar el hex de --background»), no su contenido de ahora mismo.
-   */
-  label: string;
-  /**
-   * Lo que se anuncia al lograrlo. Aquí `{value}` SÍ se sustituye por lo
-   * copiado, y es donde tiene que estar: el anuncio ocurre después del clic, o
-   * sea cuando ya se sabe qué se copió, y es la única forma de que quien no ve
-   * la pantalla sepa cuál de los dos hexes se ha llevado.
-   */
-  announcement: string;
-  /**
-   * Sobre una banda cuyo fondo es `--foreground`. Es §Controles con dos fondos
-   * de `BRAND.md`: la pieza es el `foreground` de su propio carril, y en un
-   * carril invertido ese `foreground` es `--background`. No lleva borde, así
-   * que no pisa nada de lo que D97 resuelve por superficie.
-   */
-  onInverted?: boolean;
-  className?: string;
-}) {
+}: Comun & { value: string }) {
   const { copied, announce, copy } = useCopyToClipboard();
-
-  // El tema se lee EN EL CLIC, no al renderizar. `next-themes` escribe la clase
-  // `.dark` en <html> (`@custom-variant dark (&:is(.dark *))` en globals.css),
-  // así que esa clase es la fuente, y consultarla ya montado no puede
-  // desincronizarse de lo que se está viendo.
-  const resolve = () => {
-    if (typeof value === "string") return value;
-    const dark = document.documentElement.classList.contains("dark");
-    return dark ? value.dark : value.light;
-  };
-
-  const onClick = () => {
-    const copiado = resolve();
-    if (!copiado) return;
-    copy(copiado, announcement.replaceAll("{value}", copiado));
-  };
 
   return (
     <>
-      <button
-        type="button"
-        aria-label={label}
-        onClick={onClick}
-        className={cn(
-          actionVariants({ variant: "ghost", size: "icon" }),
-          onInverted &&
-            "text-background hover:bg-background/15 focus-visible:bg-background/15",
-          className,
-        )}
+      <span className={cn("relative inline-flex shrink-0", className)}>
+        <button
+          type="button"
+          aria-label={label}
+          onClick={() => {
+            if (value) copy(value, announcement.replaceAll("{value}", value));
+          }}
+          className={trigger(onInverted)}
+        >
+          {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+        </button>
+        <Confirm
+          text={copiedLabel.replaceAll("{value}", value)}
+          on={copied}
+          onInverted={onInverted}
+          placement={confirmPlacement}
+        />
+      </span>
+      <p aria-live="polite" className="sr-only">
+        {announce}
+      </p>
+    </>
+  );
+}
+
+/**
+ * DOS VALORES: se elige cuál, y se elige POR SU NOMBRE.
+ *
+ * El caso es el token que conmuta con el tema y publica sus dos hexes. Antes se
+ * copiaba el del tema activo sin decirlo, así que la mitad del dato de la tarjeta
+ * no se podía llevar. Ahora el control abre un menú de dos entradas nombradas.
+ *
+ * EL WIDGET NO SE ESCRIBE A MANO, y no hace falta bajar hasta shadcn: la
+ * plataforma lo trae entero con `popover`, que da capa superior, cierre con
+ * `Esc`, cierre al pulsar fuera y devolución del foco al disparador. Es el paso 3
+ * de la cascada de `CLAUDE.md` contestado en su primera pregunta.
+ *
+ * DÓNDE SE COLOCA lo hace `anchor-name` / `position-anchor`, también de
+ * plataforma, en la clase `.copy-menu` de `globals.css`. En un navegador que aún
+ * no las tenga, un popover sin posicionar se centra en la pantalla: pierde la
+ * relación espacial con su botón y **sigue funcionando entero** —etiquetado,
+ * copiando, cerrando con `Esc`—. Es degradación aceptable y sin una línea de JS;
+ * si algún día deja de serlo, la palanca es posicionar en el evento `toggle`.
+ */
+export function CopyChoice({
+  values,
+  label,
+  optionLabels,
+  announcement,
+  copiedLabel,
+  onInverted = false,
+  confirmPlacement = "above",
+  className,
+}: Comun & {
+  /** Los dos valores, en el orden en que se ofrecen. */
+  values: { light: string; dark: string };
+  /** Cómo se llama cada uno en el menú. */
+  optionLabels: { light: string; dark: string };
+}) {
+  const { copied, announce, copy } = useCopyToClipboard();
+  const [ultimo, setUltimo] = useState("");
+  const id = useId().replace(/:/g, "");
+  const menu = useRef<HTMLDivElement>(null);
+
+  const elegir = (valor: string) => {
+    menu.current?.hidePopover();
+    copy(valor, announcement.replaceAll("{value}", valor));
+    setUltimo(valor);
+  };
+
+  const opciones = [
+    { k: "light" as const, texto: optionLabels.light, valor: values.light },
+    { k: "dark" as const, texto: optionLabels.dark, valor: values.dark },
+  ];
+
+  return (
+    <>
+      <span className={cn("relative inline-flex shrink-0", className)}>
+        <button
+          type="button"
+          aria-label={label}
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any -- `popovertarget` aún no está en los tipos de React
+          {...({ popoverTarget: id } as any)}
+          style={{ anchorName: `--${id}` } as React.CSSProperties}
+          className={trigger(onInverted)}
+        >
+          {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+        </button>
+        <Confirm
+          text={copiedLabel.replaceAll("{value}", ultimo)}
+          on={copied}
+          onInverted={onInverted}
+          placement={confirmPlacement}
+        />
+      </span>
+
+      <div
+        ref={menu}
+        id={id}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any -- ídem
+        {...({ popover: "auto" } as any)}
+        style={{ positionAnchor: `--${id}` } as React.CSSProperties}
+        className="copy-menu"
       >
-        {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-      </button>
+        {opciones.map((o) => (
+          <button
+            key={o.k}
+            type="button"
+            onClick={() => elegir(o.valor)}
+            // SALE DE LA CAPA, compuesto con `cn()` como la variante `card`: de
+            // `ghost` vienen la pastilla `muted` del hover, el foco y el suelo de
+            // 44px; lo único que se añade aquí es la FORMA de fila —ancho completo
+            // y los dos extremos separados—, que no depende de esta pieza sino de
+            // vivir dentro de un menú. Escrito a mano se quedaba sin el hover del
+            // sistema y sin el radio, y `check:excepciones` lo cazó.
+            className={cn(
+              actionVariants({ variant: "ghost", size: "sm" }),
+              "w-full shrink justify-between gap-3 font-normal",
+            )}
+          >
+            <span className="text-muted-foreground text-[0.68rem] tracking-[0.04em] uppercase">
+              {o.texto}
+            </span>
+            <span className="font-mono">{o.valor}</span>
+          </button>
+        ))}
+      </div>
+
       <p aria-live="polite" className="sr-only">
         {announce}
       </p>

@@ -60,3 +60,9 @@ next-env.d.ts
 # foto del tablero dentro del repo sería la segunda fuente de verdad que ese
 # guardián existe para evitar. Se regenera al empezar la sesión.
 /scripts/.tablero.json
+
+# Andamiaje de la poda del Design System (P70.33). Mismo motivo que el volcado
+# del tablero: `es.original.json` y `en.original.json` son copias literales de un
+# archivo que el historial de git ya tiene, y una segunda copia acaba diciendo
+# otra cosa. El registro de cómo se hizo es el diff y el mensaje del commit.
+/scripts/.poda/

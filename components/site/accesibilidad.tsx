@@ -17,7 +17,14 @@ import { pagePath, type Locale } from "@/lib/i18n/config";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { InfoCard } from "@/components/ui/info-card";
 import { Rich } from "@/components/ui/rich";
-import { CARD, HERO_ROW, SECTION, WRAP } from "@/components/ui/layout";
+import {
+  CARD,
+  FOLD_CRUMB,
+  FOLD_GROUP,
+  HERO_ROW,
+  SECTION,
+  WRAP,
+} from "@/components/ui/layout";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
@@ -37,8 +44,9 @@ type AccesibilidadDict = Dictionary["accesibilidad"];
 // barrera), contrapunto del criterio interno de la sección 08 del Design System.
 //
 // El contenido está medido y verificado (axe 0 violaciones en claro/oscuro,
-// Lighthouse a11y 100). La cifra de conformidad y la fecha de `hero.updated` se
-// revisan tras cada QA de accesibilidad del build, no se declaran de memoria.
+// Lighthouse a11y 100). La cifra de conformidad y la fecha de
+// `conformance.updated` se revisan tras cada QA de accesibilidad del build, no se
+// declaran de memoria.
 export function Accesibilidad({
   dict,
   related,
@@ -78,7 +86,7 @@ export function Accesibilidad({
             esta apertura ya desborda el pliegue y la regla no debe recortar. El
             `w-full` evita que el `mx-auto` de `WRAP` desactive el stretch. */}
         <div className={`${WRAP} flex w-full flex-1 flex-col`}>
-          <div data-reveal className="mb-[clamp(3rem,6vw,4.5rem)]">
+          <div data-reveal className={FOLD_CRUMB}>
             <Breadcrumb
               routeLabel={breadcrumb.routeLabel}
               items={[
@@ -87,7 +95,7 @@ export function Accesibilidad({
               ]}
             />
           </div>
-          <div className="my-auto">
+          <div className={FOLD_GROUP}>
             <div className={HERO_ROW}>
               {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
                 breadcrumb→eyebrow lo decide el alto de la ilustración de al lado. */}
@@ -116,18 +124,6 @@ export function Accesibilidad({
               <Stat value="0" label={t.hero.statAxe} />
               <Stat value="100" label={t.hero.statLighthouse} />
             </StatRow>
-            {/* La vigencia de una declaración de conformidad es contexto que se
-                quiere ANTES de leerla, no al final: sube aquí para igualar a la
-                política de cookies, que ya la lleva arriba y cuyo copy dice «la
-                fecha del principio». Va DEBAJO de las cifras para no meterse
-                entre la entradilla y su dato. Sigue escrita a mano y duplicada en
-                los dos idiomas: eso lo resuelve su tarea (P87.56). */}
-            <p
-              data-reveal
-              className="text-muted-foreground m-0 mt-6 text-[0.85rem]"
-            >
-              {fillDate(t.hero.updated, LAST_A11Y_REVIEW, lang)}
-            </p>
           </div>
         </div>
       </section>
@@ -140,8 +136,31 @@ export function Accesibilidad({
             title={t.conformance.heading}
             size="section-sm"
           >
-            <p className="text-muted-foreground m-0 mb-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
+            <p className="text-muted-foreground m-0 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
               {fillRatios(t.conformance.intro, lang)}
+            </p>
+            {/* LA FECHA VIVE AQUÍ Y NO EN EL HERO, y el motivo no es de lectura
+                sino de aritmética del pliegue (P70.29). Las tres páginas
+                hermanas centran su grupo con `my-auto` dentro de
+                `min-h-[calc(100svh-5rem)]`, y centrar reparte el sobrante ARRIBA
+                y abajo: un grupo que mide más que sus hermanas sube su borde
+                superior la mitad de la diferencia. Con la fecha colgando de la
+                `StatRow`, este grupo medía 505 contra los 461 de Brand Kit y
+                Design System, y su `h1` caía a 368 contra 390 en las otras dos.
+                Medido a 1920×1080, y son los mismos 22px que Francisco vio
+                cambiando de pestaña.
+
+                Sigue siendo lo primero que se lee de la declaración —que es el
+                porqué por el que subió el 2026-08-16—, solo que ahora encabeza
+                la sección que fecha en vez de rematar el hero. Fuera del pliegue
+                no hay altura que repartir, así que ya no puede desalinear nada.
+
+                La invariante que esto restaura («los grupos del pliegue miden lo
+                mismo») está escrita en `brand-kit/hero.tsx` y no la vigila nadie
+                todavía: es la segunda vez que se rompe y las dos las encontró un
+                ojo, no una herramienta. */}
+            <p className="text-muted-foreground m-0 mt-3 mb-8 text-[0.85rem]">
+              {fillDate(t.conformance.updated, LAST_A11Y_REVIEW, lang)}
             </p>
           </SectionHeader>
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">

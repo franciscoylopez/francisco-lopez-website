@@ -1,4 +1,4 @@
-// @pieza núcleo · design-system/12-tablas.tsx · La rejilla de filas y celdas: tabla real si son datos, divs si son especímenes.
+// @pieza núcleo · design-system/10-composicion.tsx · La rejilla de filas y celdas: tabla real si son datos, divs si son especímenes.
 
 import type { ReactNode } from "react";
 

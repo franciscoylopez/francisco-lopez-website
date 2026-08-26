@@ -1,4 +1,4 @@
-// @pieza núcleo · design-system/09-botones.tsx · El control CON CAJA: botón, chip, toggle, pestaña y control solo-icono.
+// @pieza núcleo · design-system/07-botones.tsx · El control CON CAJA: botón, chip, toggle, pestaña y control solo-icono.
 
 import { cva, type VariantProps } from "class-variance-authority";
 

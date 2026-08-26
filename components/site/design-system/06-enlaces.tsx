@@ -1,15 +1,23 @@
 import { Menu, Moon } from "lucide-react";
-import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import { SectionHeader } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { InfoCard } from "@/components/ui/info-card";
 import { actionVariants } from "@/components/ui/action";
 import { chromeLinkVariants } from "@/components/ui/chrome";
-import { CARD, SECTION, WRAP } from "@/components/ui/layout";
+import { SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
 import { SpecimenCard } from "./shared";
 
 /* ===================== (08) ENLACES ===================== */
 export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
+  // EL CASO INVERTIDO VIVE EN `cases` desde P70.33 —es un caso más de la misma
+  // familia y no una excepción con claves propias— pero se PINTA aparte y a lo
+  // ancho, por el motivo que explica el comentario de más abajo. El corte va
+  // aquí, en una línea, en vez de repartido por el JSX.
+  const rejilla = t.cases.slice(0, -1);
+  const invertido = t.cases[t.cases.length - 1]!;
+
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
@@ -19,7 +27,7 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
           </p>
         </SectionHeader>
         <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">
-          {t.cases.map((c, i) => (
+          {rejilla.map((c, i) => (
             /* Demo vivo: el hover real de cada clase, no una captura. */
             <SpecimenCard
               key={c.cls}
@@ -122,9 +130,9 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
             la pastilla de hover (D39/D61). */}
         <SpecimenCard
           kicker={t.invertedKicker}
-          cls={t.invertedCls}
-          rule={t.invertedRule}
-          note={t.invertedNote}
+          cls={invertido.cls}
+          rule={invertido.rule}
+          note={invertido.note}
           wide
         >
           <div
@@ -140,20 +148,12 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
             </p>
           </div>
         </SpecimenCard>
-        <div
-          className={cn(CARD, "mt-8 max-w-[var(--measure)] px-[1.4rem] py-5")}
-        >
-          <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-[0.6rem]")}>
-            {t.ruleTitle}
-          </h3>
-          <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-2 pl-[1.1rem] text-[0.9rem] leading-[1.6]">
-            {t.rule.map((r) => (
-              <li key={r}>{r}</li>
-            ))}
-          </ul>
-          <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem] leading-[1.6]">
-            {t.ruleFoot}
-          </p>
+        {/* SALE DE `InfoCard`, no de una caja a mano. Las dos secciones escribían
+            este mismo bloque —tarjeta, titular `sub-sm`, lista y pie— con las
+            mismas clases, y era lo que la pieza hace desde que existe. Lo cazó
+            `qlty` al renombrarse los archivos: 16 líneas idénticas en dos sitios. */}
+        <div className="mt-8 max-w-[var(--measure)]">
+          <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
         </div>
       </div>
     </section>

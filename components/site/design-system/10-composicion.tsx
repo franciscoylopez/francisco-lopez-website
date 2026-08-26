@@ -3,34 +3,33 @@ import { SectionHeader } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 import { PageCloser, type CloserItem } from "@/components/ui/page-closer";
+import { DataTable, TD, TR } from "@/components/ui/table";
 import { type Locale } from "@/lib/i18n/config";
-import { cn } from "@/lib/utils";
 
 import { GroupHead, SpecimenCard } from "./shared";
 
-/* ===================== (17) BLOQUES DE PÁGINA =====================
-    Sección propia, y el criterio es el que pide la skill: se justifica cuando
-    lo que falta no es una pieza más sino un SITIO. Estas dos no encajan en
-    ninguna de las que ya existen —no son un control con caja (09), ni un enlace
-    (08), ni un rótulo (10), ni una cabecera (11)—, y las dos comparten
-    exactamente el mismo pasado: se escribieron a mano en dos páginas distintas
-    y ya se leían distinto antes de que nadie lo notara. La nota nació dos veces
-    (P37.62, solo una tenía `mono`); el cierre lo estrenaron las tres páginas del
-    sistema y volvió a decidirse entero al aparecer el deep-dive (P48).
+/* ===================== (10) COMPOSICIÓN DE PÁGINA =====================
+    Fusión de las antiguas 12 (tablas) y 17 (bloques de página), P70.34.
 
-    Por eso van juntas y por eso el titular habla de FORMATO: lo que sube a la
-    capa no es el aspecto de una caja, es la decisión de que no la tome cada
-    página por su cuenta.
+    La 17 tenía razón de existir cuando se escribió —lo que faltaba no era una
+    pieza más sino un SITIO— y aun así no daba para sección propia, que es lo
+    que señaló Francisco. Lo que sí tenía era el nombre a medias: sus dos piezas
+    no son «bloques de página» a secas, son, CON LA TABLA, las tres cajas que no
+    son ni control ni texto. Juntas tienen nombre; sueltas, no.
+
+    Y el titular sigue hablando de FORMATO, que es lo que las tres comparten: lo
+    que sube a la capa no es el aspecto de una caja, es la decisión de que no la
+    tome cada página por su cuenta.
 
     EL CIERRE SE DEMUESTRA ENTERO, con su ritmo vertical propio y su filete de
     arriba, porque es justo eso lo que se publica. Y lleva `labelId` propio: la
     página ya termina con un cierre de verdad, y dos `id` iguales en el mismo
     documento es un defecto de accesibilidad, no un detalle. */
-export function Bloques({
+export function Composicion({
   t,
   lang,
 }: {
-  t: Dictionary["designSystem"]["bloques"];
+  t: Dictionary["designSystem"]["composicion"];
   lang: Locale;
 }) {
   const base = lang === "es" ? "" : `/${lang}`;
@@ -65,7 +64,33 @@ export function Bloques({
           </p>
         </SectionHeader>
 
-        <GroupHead title={t.noteTitle} lead={t.noteLead} first />
+        {/* ---------- la tabla ---------- */}
+        <GroupHead title={t.dataTitle} lead={t.dataLead} first />
+        {/* La demo es una tabla de verdad y con la pieza de verdad: si la capa
+            cambia, este espécimen cambia con ella y no puede mentir. */}
+        <DataTable
+          caption={t.dataTitle}
+          cols={[
+            { label: t.demoCols.part, width: "34%" },
+            { label: t.demoCols.markup, width: "26%" },
+            { label: t.demoCols.what },
+          ]}
+        >
+          {t.demoRows.map((r) => (
+            <TR key={r.markup}>
+              <TD head className="text-foreground font-medium">
+                {r.part}
+              </TD>
+              <TD>
+                <code className="font-mono text-[0.85rem]">{r.markup}</code>
+              </TD>
+              <TD className="text-muted-foreground text-[0.88rem]">{r.what}</TD>
+            </TR>
+          ))}
+        </DataTable>
+
+        {/* ---------- la nota al margen ---------- */}
+        <GroupHead title={t.noteTitle} lead={t.noteLead} />
         <div className={PAIR}>
           <SpecimenCard
             kicker={t.noteKicker}
@@ -80,7 +105,6 @@ export function Bloques({
             kicker={t.monoKicker}
             cls="InfoCard · mono"
             rule={t.monoRule}
-            note={t.monoNote}
             wide
           >
             <InfoCard
@@ -92,6 +116,7 @@ export function Bloques({
           </SpecimenCard>
         </div>
 
+        {/* ---------- el cierre de página ---------- */}
         <GroupHead title={t.closerTitle} lead={t.closerLead} />
         <SpecimenCard
           kicker={t.closerKicker}
@@ -107,20 +132,11 @@ export function Bloques({
           />
         </SpecimenCard>
 
-        {/* Las dos reglas que esta sección publica y que no se ven mirando una
-            caja. En `PAIR`, como en (09) y (16): apiladas a la medida de lectura
-            dejarían media sección vacía (P37.62). */}
-        <div className={cn(PAIR, "mt-8")}>
-          <InfoCard
-            title={t.twiceTitle}
-            bullets={t.twiceRule}
-            foot={t.twiceFoot}
-          />
-          <InfoCard
-            title={t.wholeTitle}
-            bullets={t.wholeRule}
-            foot={t.wholeFoot}
-          />
+        {/* La sección publica UNA regla, no dos: la poda de P70.33 dejó fuera el
+            inventario de lo que la capa se llevó por delante, que contaba cómo se
+            llegó aquí en vez de qué hay que hacer. */}
+        <div className="mt-8 max-w-[var(--measure)]">
+          <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
         </div>
       </div>
     </section>

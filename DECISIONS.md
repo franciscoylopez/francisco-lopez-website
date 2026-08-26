@@ -99,7 +99,7 @@
 - D61 · Una superficie también cambia por ESTADO, y el atenuado no se enteraba
 - D62 · El 404 de una ruta que CASA no lo cubre `global-not-found`
 - D63 · La raya no era un reemplazo, eran tres familias — y su guardián
-- D64 · Una apertura homogénea no la decide el anclaje: la deciden los altos
+- D64 · Una apertura homogénea no la decide el anclaje: la deciden los altos — **ampliada 2026-08-26 (P70.29, P70.35): la invariante sube a la capa**
 - D65 · Un vídeo de apertura no es una foto que se mueve
 - D66 · Un asset tiene más consumidores de los que se ven
 - D67 · El ruido conocido de los validadores se documenta por MECANISMO, no por cifra
@@ -155,6 +155,7 @@
 - D117 · Un vocabulario de dos valores no puede distinguir la deuda del criterio
 - D118 · El `srcset` de `next/image` no baja de `deviceSizes[0]` cuando el `sizes` lleva un `vw`
 - D119 · Una descarga que conmuta con el tema está adivinando, y la mitad de sus anclas no existe
+- D120 · El primer `popover` del repositorio, y la etiqueta que no es un widget
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -3690,7 +3691,7 @@ mientras su config viva solo en su nube no hay dónde escribir la exclusión (P7
 
 ---
 
-## D64 · Una apertura homogénea no la decide el anclaje: la deciden los altos
+## D64 · Una apertura homogénea no la decide el anclaje: la deciden los altos — **ampliada 2026-08-26 (P70.29, P70.35): la invariante sube a la capa**
 
 **Fecha:** 2026-08-19 · **Contexto:** Sprint Lite, P54, P54.2 y P54.3 · **Estado:** aplicada
 
@@ -3728,6 +3729,51 @@ una sola página detecta—. Sus tres reportes eran ciertos y **ninguno era lo q
 **Resultado medido, las tres idénticas:** 2560×1440 eyebrow 531 y datos 907→991 · 1920×1080
 eyebrow 351 y datos 727→811 · 1536×740 eyebrow 225 y datos 601→686. Y la entradilla del Design
 System baja a cuatro líneas con la redacción que dio Francisco, igualándola a Accesibilidad.
+
+---
+
+**AMPLIACIÓN 2026-08-26 — se rompió dos veces más, y la segunda no era una regresión.** Las dos
+las abrió Francisco igual que las tres de arriba: con las páginas en pestañas y cambiando entre
+ellas. Ninguna herramienta las miró.
+
+4. **Accesibilidad ganó un párrafo** —la fecha de última revisión, colgada de la fila de
+   cifras— y con él **44px de grupo**. Centrar reparte el sobrante arriba y abajo, así que su
+   `h1` subió exactamente **la mitad**: 22px. Medido a 1920×1080, grupo/`h1`: Brand Kit 461/390,
+   Design System 461/390, **Accesibilidad 505/368**. Arreglo: la fecha baja a encabezar §01
+   Conformidad, que es la sección que fecha (P70.29).
+5. **Contacto no llegaba a esa altura por ESTRUCTURA**, que es un caso distinto: no usa
+   `HERO_ROW` ni tiene fila de cifras, así que su grupo medía **297** y su `h1` caía a **464**
+   contra los 390 de las otras tres. Aquí compactar —el arreglo de los tres episodios
+   anteriores— no servía: no sobraba alto, **faltaba**. Lo que hacía falta era un **suelo**
+   (P70.35).
+
+**La invariante deja de depender de que alguien se acuerde.** `FOLD_CRUMB` y `FOLD_GROUP`, en
+`components/ui/layout.ts`, al lado de `HERO_ROW` —que resuelve la misma condición una capa más
+abajo, para la fila—. El grupo declara `my-auto md:min-h-[29rem]`: 29rem son **tres píxeles por
+encima** de los 461 que las tres del sistema miden por su cuenta, así que no recorta a ninguna y
+le da a Contacto lo que le falta. El sobrante cae **debajo** del contenido, que es aire de
+pliegue que ya estaba ahí. Y de paso se une la otra divergencia, que era copia a mano: el hueco
+del breadcrumb estaba escrito `clamp(3rem,6vw,4.5rem)` en tres sitios y `clamp(2.5rem,5vw,3.5rem)`
+en el cuarto.
+
+**Una trampa que solo se ve MIRANDO, no midiendo.** El grupo de Contacto es un `grid`, y un grid
+con `min-height` y filas automáticas **reparte el sobrante entre las filas** (`align-content`
+vale `normal`, que ahí se comporta como `stretch`): los 167px que le faltaban se metieron entre
+el titular y su entradilla y las separaron un dedo. **La cifra salía perfecta y la página estaba
+peor.** Lo cierra `content-start`. Es el punto 8 de `BRAND.md` §Cómo medir en su forma inversa:
+la medición aprobaba y el ojo no.
+
+**Medido después**, grupo/`h1`: las **cuatro** en 464/389 a 1920, 265 a 1280 y 269 a 1024.
+
+**Lo que queda fuera, dicho para que no parezca olvido.** Por debajo de 1024 las tres hermanas
+desbordan el pliegue y se anclan arriba (`h1` a 237) mientras Contacto todavía cabe y se centra
+(271). Es la misma razón por la que el alto es `min-h` y no `h`: la regla no debe recortar.
+Igualarlo ahí exigiría rellenar Contacto con aire arbitrario o dejar de centrar, y centrar es lo
+que pidió Francisco. **Y el deep-dive y «Cómo se ha creado» no usan estas constantes**: comparten
+el andamiaje del pliegue pero no esta familia — sus aperturas son tipográficas, de alto
+constante, y cada una tiene su hueco razonado en su archivo.
+
+**Y sigue sin vigilarlo nadie.** Cinco episodios, cinco veces detectado a ojo. Está tareado.
 
 **La trampa del `mx-auto` no mordió, y se comprobó midiéndola**, no confiando en el `w-full`: al
 volver flex el contenedor, el `mx-auto` de `WRAP` pasa a ser margen del eje transversal y
@@ -6952,3 +6998,72 @@ bajar exactamente el PNG 512 en tinta clara. GA4 captura descargas de fábrica, 
 `file_download` de `/brand-kit` diría si alguien lo hacía alguna vez. No se consultó antes de
 decidir. Si el dato dijera que sí, la respuesta no es volver a las 49 anclas: es que a esa
 pieza le falta tarjeta.
+
+---
+
+## D120 · El primer `popover` del repositorio, y la etiqueta que no es un widget — 2026-08-26
+
+**Fecha:** 2026-08-26 · **Contexto:** tanda 6, P70.36 · **Estado:** aceptada
+
+**Qué lo abrió, que no era un problema técnico.** El Brand Kit publica nueve muestras de color
+y cinco de ellas **conmutan con el tema**, así que imprimen dos hexes. Un solo botón copiaba el
+del tema activo sin decirlo. P70.30 razonó que copias el color que estás viendo y se limitó a
+**etiquetar** cuál se llevaba el botón: es falso en un Brand Kit, donde los dos valores son
+legítimos y el tema en el que estás no debe decidir cuál puedes copiar. **El otro hex quedaba
+inalcanzable, y eso no lo arregla un rótulo.** Lo vio Francisco en pantalla.
+
+**La decisión, y es el primer ejercicio real de D6.** Elegir cuál se copia pide un menú, o sea
+un widget con estado, foco y capa superior. La cascada de D6 se contestó **en su primera
+pregunta**: el atributo `popover` da capa superior, cierre con `Esc`, cierre al pulsar fuera y
+devolución del foco al disparador, sin una línea de JS ni una dependencia. No hubo que bajar a
+shadcn. Verificado sobre la página servida, no supuesto: `Esc` cierra y el foco vuelve al botón
+que lo abrió.
+
+**El posicionamiento también es de plataforma, y su degradación se acepta a propósito.**
+`anchor-name` en el disparador y `position-anchor` en el menú, con `position-try-fallbacks:
+flip-block` para voltearse cuando abajo no cabe —que en la última fila de la rejilla de color es
+el caso normal—. En un navegador sin anclaje CSS, un popover sin posicionar **se centra en la
+pantalla**: pierde la relación espacial con su botón y **sigue funcionando entero**, porque el
+comportamiento no depende de dónde caiga. Se descartó un fallback de JS que lo colocara en el
+evento `toggle`: obligaría a cerrar en el scroll y a mantener dos caminos, uno de ellos
+imposible de probar aquí. La clase vive en `globals.css` (`.copy-menu`), que es tan capa como
+una variante.
+
+**Y lo que la práctica añade a D6, que es la parte transferible: una etiqueta no es un widget.**
+La confirmación («#F7F3EC Copiado») es un `<span>` absoluto — no atrapa foco, no se cierra, no
+se navega. **No entra en la cascada**, y meterla en la capa superior para que `position-try` le
+eligiera lado sería pagar un widget por un margen. Su colocación es una prop, `confirmPlacement`.
+La cascada de D6 aplica a **widgets**; confundir «flota sobre el contenido» con «es un widget»
+llevaría a envolver en popover cualquier tooltip decorativo del sitio.
+
+**El precio de esa decisión, y hay que saberlo: la etiqueta no se coloca sola, así que se
+recorta.** Va absoluta, y un contenedor con `overflow-hidden` la corta cuando en esa dirección
+no hay sitio. Ha pasado **dos veces en dos días**:
+
+| Dónde | Se salía por | Arreglo |
+|---|---|---|
+| Tarjeta de color del Brand Kit (13rem, `overflow-hidden`) | la derecha — «#F7F3EC Copiado» son ~110px sobre un control pegado al borde | anclarla a ese borde: crece hacia dentro |
+| Cabecera del panel de tokens del Design System | arriba — esa barra mide poco más que el botón | `confirmPlacement="below"` |
+
+**Es el patrón del que avisa `BRAND.md` §Cómo medir, punto 8:** las dos veces la cifra salía
+bien y la pantalla estaba mal. La primera la cazó el prototipo de `/prototype`; la segunda, el
+ojo de Francisco. Ninguna la habría encontrado leyendo el código.
+
+**Lo que se SIMPLIFICA, que es lo mejor de la decisión.** `CopyButton` pierde el par
+`{ light, dark }` y con él toda la maquinaria de resolver el tema **en el clic** leyendo
+`document.documentElement.classList` —que existía porque quien pinta la tarjeta es un Server
+Component y no sabe en qué tema está el navegador—. Con la elección explícita ya no hay nada que
+adivinar. El par se queda en `CopyChoice`, y sirve para nombrar las opciones, no para adivinarlas.
+
+**Cómo se eligió.** Cinco direcciones en `/prototype` sobre las dos superficies reales, con los
+tokens de `globals.css`. Ganó el menú en línea. **Y una medición cambió la decisión:** apilar los
+dos hexes **no cuesta alto**, porque el control de 44px ya fija la altura de la fila, así que las
+dos formas del menú dan tarjetas de 314px (contra 358 con dos controles o con la fila pulsable, y
+346 con un segmentado). El renglón no se eligió por espacio sino porque los dos valores se
+comparan de un vistazo. Coste asumido: los rótulos «claro» y «oscuro» salen de la tarjeta y viven
+solo en el menú.
+
+**Y el guardián hizo su trabajo.** `check:excepciones` salió rojo: el ítem del menú estaba
+escrito con clases sueltas. No lleva marca de excepción — se compone de `ghost` con `cn()`, como
+la variante `card`, así que la pastilla del hover, el foco y el suelo de 44px los sigue poniendo
+la capa.

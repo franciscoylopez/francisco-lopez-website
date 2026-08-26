@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils";
 
 import { FocusSimulator } from "@/components/site/design-system-islands";
 
+import { VideoEmbed } from "@/components/ui/video-embed";
 import { SpecimenCard } from "./shared";
 
 /* ===================== (09) BOTONES Y ACCIONES =====================
@@ -18,6 +19,12 @@ import { SpecimenCard } from "./shared";
     (P37.597). Los demos son los MISMOS `actionVariants` que usa el sitio: si
     una variante cambia, esta página cambia con ella y no puede mentir. */
 export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
+  // La última ficha —el control sobre imagen, que absorbió la antigua §18— se
+  // pinta aparte y a lo ancho: su demo es un vídeo y no cabe en una columna de
+  // la rejilla. El corte va aquí, en una línea, y no repartido por el JSX.
+  const rejilla = t.cases.slice(0, -1);
+  const sobreImagen = t.cases[t.cases.length - 1]!;
+
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
@@ -37,7 +44,7 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
           hideLabel={t.focusHide}
         >
           <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">
-            {t.cases.map((c, i) => (
+            {rejilla.map((c, i) => (
               <SpecimenCard
                 key={c.cls}
                 kicker={c.kicker}
@@ -188,6 +195,33 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
             ))}
           </div>
         </FocusSimulator>
+
+        {/* EL CONTROL SOBRE IMAGEN, que es lo que queda de la antigua §18
+            (P70.34). Va aparte y a lo ancho, no como novena tarjeta de la
+            rejilla: su demo es un vídeo, y a 19rem de columna no se vería. Es el
+            mismo criterio que usa §06 con el enlace sobre banda invertida.
+
+            La demo es la pieza real y carga de verdad al pulsar, como en la
+            página donde vive: una fachada con `href="#"` no comprobaría ni el
+            velo ni el disco sobre la foto. */}
+        <div className="mt-[var(--gutter)]">
+          <SpecimenCard
+            kicker={sobreImagen.kicker}
+            cls={sobreImagen.cls}
+            rule={sobreImagen.rule}
+            note={sobreImagen.note}
+            wide
+          >
+            <div className="mx-auto max-w-[40rem]">
+              <VideoEmbed
+                id="rf79VTlAdUM"
+                poster="/img/thetool-video-poster.webp"
+                title={t.demoVideoTitle}
+                playLabel={t.demoPlayLabel}
+              />
+            </div>
+          </SpecimenCard>
+        </div>
         {/* La regla del icono se publica aquí, no solo en BRAND.md (P37.5988).
             Es el paso que faltaba: los enlaces son difíciles de incumplir porque
             hicieron el recorrido completo regla → clase → sección publicada →
@@ -202,7 +236,7 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
             bullets={t.iconRule}
             foot={t.iconFoot}
           />
-          <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
+          <InfoCard title={t.ruleTitle} bullets={t.rule} />
         </div>
       </div>
     </section>

@@ -5,7 +5,13 @@ import { ContactForm } from "./contact-form";
 import type { ContactoPaginaDict } from "@/app/[lang]/dictionaries";
 import { ActionCardLines, actionVariants } from "@/components/ui/action";
 import { LEAD_GAP, SectionHeader } from "@/components/ui/heading";
-import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
+import {
+  FOLD_CRUMB,
+  FOLD_GROUP,
+  PANEL,
+  SECTION,
+  WRAP,
+} from "@/components/ui/layout";
 import { EMAIL, PHONE_DISPLAY, PHONE_TEL, mailtoHref } from "@/lib/contact";
 import { pagePath, type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -76,7 +82,7 @@ export function ContactoPagina({
       <section className="flex flex-col py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)] md:min-h-[calc(100svh-5rem)]">
         {/* El `w-full` evita que el `mx-auto` de `WRAP` desactive el stretch. */}
         <div className={cn(WRAP, "flex w-full flex-1 flex-col")}>
-          <div data-reveal className="mb-[clamp(2.5rem,5vw,3.5rem)]">
+          <div data-reveal className={FOLD_CRUMB}>
             <Breadcrumb
               routeLabel={breadcrumb.routeLabel}
               items={[
@@ -88,7 +94,19 @@ export function ContactoPagina({
 
           {/* `my-auto`: dentro del pliegue, el bloque se centra en el aire que
               sobra en vez de quedarse pegado al breadcrumb. */}
-          <div className="my-auto grid items-start gap-x-[clamp(2rem,5vw,4rem)] lg:grid-cols-[minmax(0,1.2fr)_minmax(17rem,22rem)]">
+          <div
+            className={cn(
+              FOLD_GROUP,
+              // `content-start` NO es decorado: sin él, el suelo de `FOLD_GROUP`
+              // rompe justo esta apertura. Un grid con `min-height` y filas
+              // automáticas reparte el sobrante ENTRE LAS FILAS —`align-content`
+              // vale `normal`, que aquí se comporta como `stretch`—, así que los
+              // 167px que le faltaban a esta página se metían entre el titular y
+              // su entradilla y las separaban un dedo. Las otras tres no lo
+              // sufren porque su grupo es un bloque, no un grid.
+              "grid content-start items-start gap-x-[clamp(2rem,5vw,4rem)] lg:grid-cols-[minmax(0,1.2fr)_minmax(17rem,22rem)]",
+            )}
+          >
             <div
               data-reveal
               className={cn(LEAD_GAP.page, "lg:col-start-1 lg:row-start-1")}

@@ -83,24 +83,24 @@ export function ArticuloLargo({
 
         {/* ── (a) La portada del artículo ───────────────────────────── */}
         <GroupHead first {...t.groups.portada} />
-        <div className={PAIR}>
-          <SpecimenCard {...f.byline}>
-            <ByLine name={t.bylineName} role={t.bylineRole} />
-          </SpecimenCard>
-          <SpecimenCard {...f.share}>
-            <ShareActions shareLabel={t.shareLabel} {...shareStrings} />
-          </SpecimenCard>
-        </div>
-        <div className="mt-[var(--gutter)]">
-          <SpecimenCard wide {...f.index}>
+        {/* LAS TRES BAJO UNA FICHA (P70.33). Eran tres especímenes con tres
+            reglas y las tres decían lo mismo con otras palabras: son lo que
+            aparece una sola vez, al principio. Aquí se demuestran juntas, que
+            además es como se ven en la página real. */}
+        <SpecimenCard wide {...f.portada}>
+          <div className="flex flex-col gap-[var(--gutter)]">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <ByLine name={t.bylineName} role={t.bylineRole} />
+              <ShareActions shareLabel={t.shareLabel} {...shareStrings} />
+            </div>
             <ArticleIndex
               kicker={t.indexKicker}
               timeLabel={t.indexTimeLabel}
               ariaLabel={t.indexAriaLabel}
               items={railItems.map((it, i) => ({ ...it, minutes: 3 + i }))}
             />
-          </SpecimenCard>
-        </div>
+          </div>
+        </SpecimenCard>
 
         {/* ── (b) La apertura de cada parada ────────────────────────── */}
         <GroupHead {...t.groups.parada} />
@@ -124,11 +124,11 @@ export function ArticuloLargo({
           {/* Las dos citas flotan en la página real; dentro de su ficha no hay
               texto alrededor del que apartarse, así que se ven en su forma
               base. Es la misma pieza: el lado lo pone `ArticleProse`. */}
-          <SpecimenCard {...f.pullquote}>
-            <Pullquote>{t.pullquote}</Pullquote>
-          </SpecimenCard>
-          <SpecimenCard {...f.pull}>
-            <Pull>{t.pull}</Pull>
+          <SpecimenCard wide {...f.citas}>
+            <div className="flex flex-col gap-6">
+              <Pullquote>{t.pullquote}</Pullquote>
+              <Pull>{t.pull}</Pull>
+            </div>
           </SpecimenCard>
           <SpecimenCard wide {...f.diagram}>
             <DiagramPanel caption={t.diagramCaption}>
@@ -168,15 +168,18 @@ export function ArticuloLargo({
           </SpecimenCard>
         </div>
 
-        {/* ── (d) El pie de cada parada ─────────────────────────────── */}
-        <GroupHead {...t.groups.pie} />
-        <div className="grid gap-[var(--gutter)]">
+        {/* ── (d) El pie de cada parada ───────────────────────────────
+            SIN FICHA PROPIA desde P70.33: las dos franjas se siguen viendo
+            —forman parte de `article.tsx`, que sí está publicada— pero dejan de
+            ocupar dos entradas del catálogo. Lo que enseñaban era el ORDEN en el
+            que cierran una sección, y eso se ve mirándolas. */}
+        <div className="mt-12 grid gap-[var(--gutter)]">
           {/* Las dos franjas se enseñan CON la última línea del cuerpo encima
               (P60.9): las dos abren con `border-t` y un margen superior de
               2,5rem, así que sueltas en una caja se leían como un filete
               huérfano sobre un hueco vacío. Pegadas a un párrafo, ese mismo
               hueco es lo que son: el aire que las separa de la prosa. */}
-          <SpecimenCard wide {...f.repo}>
+          <div className="border-border bg-background rounded-xl border px-[clamp(1.25rem,3vw,2rem)] py-8">
             <p className="text-muted-foreground m-0 text-[1.02rem] leading-[1.7]">
               {t.pieSample}
             </p>
@@ -187,8 +190,8 @@ export function ArticuloLargo({
                 { label: "DECISIONS.md", path: "DECISIONS.md" },
               ]}
             />
-          </SpecimenCard>
-          <SpecimenCard wide {...f.chapter}>
+          </div>
+          <div className="border-border bg-background rounded-xl border px-[clamp(1.25rem,3vw,2rem)] py-8">
             <p className="text-muted-foreground m-0 text-[1.02rem] leading-[1.7]">
               {t.pieSample}
             </p>
@@ -201,7 +204,7 @@ export function ArticuloLargo({
               nextHref="#ds-articulo-cover"
               positionLabel={t.chapterPositionLabel}
             />
-          </SpecimenCard>
+          </div>
         </div>
 
         {/* ── (e) Lo que no se va con el scroll ─────────────────────── */}
@@ -237,14 +240,10 @@ export function ArticuloLargo({
         <p className="text-muted-foreground m-0 mt-3 mb-[var(--gutter)] max-w-[var(--measure)] text-[0.8rem] leading-[1.55]">
           {t.railHint}
         </p>
-        <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] items-start gap-[var(--gutter)]">
-          <SpecimenCard {...f.progress} />
-          <SpecimenCard {...f.rail} />
-          <SpecimenCard {...f.dock} />
-        </div>
+        <SpecimenCard {...f.islas} />
 
         <div className="mt-12 max-w-[var(--measure)]">
-          <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
+          <InfoCard title={t.ruleTitle} bullets={t.rule} />
         </div>
       </div>
     </section>
