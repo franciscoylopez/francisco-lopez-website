@@ -208,12 +208,8 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 - **`npm run psi -- --registro`**: la nota de PageSpeed de las páginas del registro contra
   producción, a demanda y nunca como gate de CI, porque su variabilidad daría rojos falsos
   (D49/D99).
-- **`npm run check:kit`**: que el registro del kit de marca (`lib/logo-kit.ts`) y
-  `public/logo-kit/` cuadren en los dos sentidos. El ZIP no necesita vigilancia —se genera en
-  el build leyendo el directorio, así que no puede quedarse viejo (D119)—, pero el registro sí:
-  una ruta declarada cuyo archivo ya no está sería un 404 desde un chip que se ve bien, y un
-  archivo en disco que no declara nadie es exactamente cómo aparecieron los diez huérfanos que
-  encontró P70.27. Entrar sin declararse es rojo.
+- **`npm run check:kit`**: que el registro del kit (`lib/logo-kit.ts`) y `public/logo-kit/`
+  cuadren **en los dos sentidos**. El ZIP no se vigila: se genera en el build (D119).
 - **`npm run check:tablero`**: que `Prioridad` siga siendo un orden —números únicos, estados de
   ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, que era la
   última fuente de verdad sin red. Fuera de CI (leer Notion necesita su MCP); el criterio,
