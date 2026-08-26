@@ -52,10 +52,10 @@ no el contenido. Es el paso que se saltó la §15. Buenas vecinas por tipo de pi
 
 | Si la pieza es… | Abre | Por qué |
 |---|---|---|
-| Un control o una variante | `components/site/design-system/09-botones.tsx` | especímenes con ficha, uno por variante |
-| Un rótulo o algo pequeño | `components/site/design-system/10-etiquetas.tsx` | dos ejes cruzados en rejilla |
-| Un par o una composición | `components/site/design-system/11-cabeceras.tsx` | tres subapartados con su propio ritmo |
-| Una capa entera | `components/site/design-system/15-articulo.tsx` | cinco subapartados, el caso grande |
+| Un control o una variante | `components/site/design-system/07-botones.tsx` | especímenes con ficha, uno por variante |
+| Un rótulo o algo pequeño | `components/site/design-system/08-etiquetas.tsx` | dos ejes cruzados en rejilla |
+| Un par o una composición | `components/site/design-system/03-tipografia.tsx` | la escala y la capa que la aplica, en subapartados |
+| Una capa entera | `components/site/design-system/12-articulo.tsx` | cuatro subapartados y seis especímenes, el caso grande |
 
 ## Paso 2 · El molde, que no se escribe a mano
 
