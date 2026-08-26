@@ -79,6 +79,7 @@
 - [61. La tanda de método cierra siete tareas, y cuatro tenían la premisa equivocada (2026-08-25)](#61-la-tanda-de-método-cierra-siete-tareas-y-cuatro-tenían-la-premisa-equivocada-2026-08-25)
 - [62. Los dos sprints hacia septiembre: coherencia de las hermanas, con el activo que se lanza arrastrado dentro (2026-08-25)](#62-los-dos-sprints-hacia-septiembre-coherencia-de-las-hermanas-con-el-activo-que-se-lanza-arrastrado-dentro-2026-08-25)
 - [63. La página que documenta el sistema dejaba fuera justo la parte que no tiene nadie (2026-08-25)](#63-la-página-que-documenta-el-sistema-dejaba-fuera-justo-la-parte-que-no-tiene-nadie-2026-08-25)
+- [64. La revisión de las hermanas destapa que el Design System había cambiado de género (2026-08-26)](#64-la-revisión-de-las-hermanas-destapa-que-el-design-system-había-cambiado-de-género-2026-08-26)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3177,6 +3178,55 @@ los comprueba una máquina y uno una persona.
 Construirlo destapó dos cosas que no eran del diagrama, y las dos tienen entrada propia:
 sacar `shared.tsx` de la carpeta del artículo **estrechó un guardián en silencio** (D112), y
 `LiveStat` llevaba en la capa de artículo por vecindad y no por argumento (D113).
+
+## 64. La revisión de las hermanas destapa que el Design System había cambiado de género (2026-08-26)
+
+Francisco revisó las páginas hermanas tras el trabajo de las cinco tandas y preparó una lista
+de ajustes. Dos de sus tres apartados eran retoques; el tercero no: *«creo que la página de
+Design System se nos ha ido de las manos, antes aunque extensa estaba limpia y clara»*, *«al
+final hay más texto que componentes»*, *«esta sección parece más un documento de trabajo»*.
+
+**El diagnóstico tenía un punto de inflexión exacto, y no era el que él supuso.** Medido sobre
+el diccionario: las secciones 01→07 promediaban **118 palabras** y las 08→18, **560**. Un
+4,7×, y el corte está en la 08, no en la 07. Pero el problema no era la cantidad de texto:
+**era que las secciones tardías habían cambiado de género**. Las primeras contestan «¿qué
+valor uso?» —una tabla de consulta—; las tardías empezaron a contestar «¿por qué llegamos
+aquí?»: *«estaba escrita a mano nueve veces»*, *«las dos nacieron dos veces»*, *«tres
+definiciones que divergían en siete propiedades»*. Eso es arqueología, y su sitio es
+`DECISIONS.md`. Estaba en los dos, que es lo que `BRAND.md` §Cómo se escribe una regla
+prohíbe en su punto 5.
+
+**Y el orden de las secciones era cronológico, no jerárquico.** Cada capa nueva se añadía al
+final, así que el vídeo y los bloques de página habían acabado **debajo** de la capa de
+artículo, que es la excepción del sistema y debería cerrar. La página pasa a **doce**
+secciones ordenadas fundamentos → piezas → composición → excepción; con ese principio, «nada
+debajo del artículo» sale solo y además queda dicho dónde va lo que se añada.
+
+**Dos decisiones de alcance que no eran de copy, y las tomó Francisco.** El subapartado del
+gris que pone la superficie se va de tipografía a claro y oscuro, porque es jerarquía de
+superficies y no tipografía. Y la capa de artículo baja de **trece especímenes a seis**:
+podar las notas la dejaba en 748 palabras y ahí topaba, porque el volumen no era prosa sino
+catálogo. Los seis no son una selección libre — entre ellos tienen que aparecer los tres
+archivos de `components/ui/` que declaran publicarse allí, o `check:indices` sale rojo.
+
+**Resultado: 7.237 → 4.552 palabras (−37%).** Y aquí hay una corrección que conviene dejar
+escrita: la estimación inicial fue 3.000, y era mía y estaba mal. Asumí que el volumen era
+prosa, y en las secciones grandes es **inventario** — ocho variantes de botón, nueve niveles
+tipográficos, trece piezas de artículo. La prosa de la sección más pesada bajó un 71%; lo que
+no baja es el catálogo, porque es lo que se viene a consultar. Lo que sí se cumplió entero es
+la queja de fondo: **cero arqueología**.
+
+**Lo que la tanda destapó de rebote, midiendo.** Al comprobar el pliegue de Accesibilidad
+—Francisco lo vio cambiando de pestaña— salió que **Contacto abría 74px por debajo de sus tres
+hermanas**, y por un motivo distinto: no le sobraba alto, le faltaba. La invariante sube a la
+capa (D64, ampliada). Y en el control de copiar, un arreglo resultó ser la mitad equivocada: se
+etiquetó cuál de los dos hexes se llevaba el botón cuando el problema era que **el otro no se
+podía copiar**. Se resolvió con `/prototype` y cinco direcciones, y de ahí sale el primer
+`popover` del repositorio (D120).
+
+**Y una cosa que no se hizo.** El sprint «Páginas hermanas» se queda sin tareas abiertas, pero
+no se cierra: falta `design-review` sobre el resultado, y Francisco decidió lanzarlo con
+contexto limpio antes del ritual de cierre.
 
 ## Fuentes
 
