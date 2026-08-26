@@ -18,6 +18,7 @@
     "ariaLabel": "Índice del Design System",
     "railAriaLabel": "Ir a una sección",
     "closerLabel": "Índice",
+    "closerAriaLabel": "Entre secciones",
     "nextLabel": "Siguiente:",
     "of": "de"
   },
@@ -660,6 +661,7 @@
     "navCloserIndexLabel": "Índice",
     "navCloserNextLabel": "Siguiente parada",
     "navCloserPositionLabel": "2 de 3",
+    "navCloserAria": "Entre secciones (espécimen)",
     "navRailKicker": "El atajo permanente",
     "navRailRule": "Isla de cliente, fija a la ventana y solo por encima de 1280px.",
     "navRailNote": "Es una mejora, no un requisito: sin JavaScript el índice de arriba ya cubre la navegación. El círculo se ensancha al pasar por encima y revela el rótulo dentro de la misma pastilla.",
@@ -869,6 +871,7 @@
     "shareCopiedAnnounce": "Enlace copiado al portapapeles",
     "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
     "railAriaLabel": "Riel de secciones (espécimen)",
+    "chapterNavAria": "Cierre de bloque (espécimen)",
     "railHint": "Igual que en la página real, pero contenidos a este panel: fuera de él van fijos a la ventana."
   }
 }

@@ -36,6 +36,31 @@ import { eyebrowVariants, LEADING } from "./heading";
 // sección concreta— esa cifra no significa nada. Que dos piezas vecinas se muevan
 // no arrastra a la tercera.
 
+/* ───────────────────────── El marco de una parada ───────────────────────── */
+
+/**
+ * LO QUE UNA SECCIÓN NECESITA SABER DE SU SITIO EN EL RECORRIDO, y que por
+ * definición no puede saber ella (P70.39).
+ *
+ * Las tres cosas de aquí dependen del ORDEN de la página, no del contenido de la
+ * sección: su ancla, el ordinal que abre su cabecera y el cierre de bloque que
+ * dice «7 de 12». Ese orden vive en un solo sitio —el `index.tsx` de cada página—,
+ * que es lo que impide que el índice diga «07» y la cabecera «08».
+ *
+ * Vive AQUÍ y no en el `shared.tsx` de una página porque lo usan tres: Design
+ * System, Brand Kit y Accesibilidad. Es el tipo compañero de estas piezas.
+ *
+ * Y es UN prop y no tres: una sección no compone su marco, lo recibe entero.
+ */
+export type SeccionMarco = {
+  /** `s01`…`sNN`. Idéntico en `es/` y `en/` porque lo deriva el orden, no el copy. */
+  id: string;
+  /** El eyebrow ya compuesto: «01 — Rejilla y medidas» (D43). */
+  kicker: string;
+  /** El `SectionCloser` ya montado, con su posición y su siguiente parada. */
+  closer: ReactNode;
+};
+
 /* ───────────────────────── La celda pulsable ───────────────────────── */
 
 /**
@@ -177,6 +202,7 @@ export function SectionCloser({
   nextLabel,
   nextHref,
   positionLabel,
+  ariaLabel,
 }: {
   position: number;
   total: number;
@@ -186,13 +212,24 @@ export function SectionCloser({
   nextLabel?: string;
   nextHref?: string;
   positionLabel: string;
+  /**
+   * EL NOMBRE ACCESIBLE, que llevaba «Entre secciones» LITERAL en el componente
+   * (P70.40). En `/en/*` los seis cierres anunciaban «Entre secciones · 1 of 6»:
+   * mitad en español, mitad en inglés. Mismo defecto que acababa de arreglarse en
+   * `SectionRail`, en su pieza hermana y a tres metros — por eso se busca en las
+   * DOS al arreglar una.
+   *
+   * Sigue llevando la posición dentro: axe marca `landmark-unique` si N `<nav>` de
+   * la misma página comparten nombre exacto, y aquí hay uno por sección.
+   */
+  ariaLabel: string;
 }) {
   return (
-    // El `aria-label` incluye la posición: axe marca `landmark-unique` si N
-    // `<nav>` en la misma página comparten nombre accesible exacto, y aquí hay
-    // uno por sección.
+    // El `aria-label` lo compone el llamador con su copy, más la posición: axe
+    // marca `landmark-unique` si N `<nav>` de la misma página comparten nombre
+    // accesible exacto, y aquí hay uno por sección.
     <nav
-      aria-label={`Entre secciones · ${positionLabel}`}
+      aria-label={`${ariaLabel} · ${positionLabel}`}
       className="border-border mt-[2.5rem] flex flex-wrap items-center gap-x-4 gap-y-3 border-t pt-5"
     >
       <p

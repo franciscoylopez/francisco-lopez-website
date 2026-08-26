@@ -3,17 +3,24 @@ import { SectionHeader } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 import { Glyph, LEAD } from "./shared";
+import type { SeccionMarco } from "@/components/ui/section-index";
 
 /* ===================== 01 CONCEPTO ===================== */
-export function Concepto({ t }: { t: Dictionary["brandKit"]["concepto"] }) {
+export function Concepto({
+  t,
+  marco,
+}: {
+  t: Dictionary["brandKit"]["concepto"];
+  marco: SeccionMarco;
+}) {
   return (
-    <section className={SECTION}>
+    <section id={marco.id} className={cn(SECTION, "scroll-mt-[5rem]")}>
       <div className={WRAP}>
         <div
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <SectionHeader eyebrow={t.num} title={t.title} size="section">
+          <SectionHeader eyebrow={marco.kicker} title={t.title} size="section">
             <p className={LEAD}>{t.lead}</p>
           </SectionHeader>
         </div>
@@ -44,6 +51,7 @@ export function Concepto({ t }: { t: Dictionary["brandKit"]["concepto"] }) {
             </div>
           ))}
         </div>
+        {marco.closer}
       </div>
     </section>
   );

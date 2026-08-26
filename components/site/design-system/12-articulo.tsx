@@ -211,6 +211,7 @@ export function ArticuloLargo({
               indexHref="#ds-articulo-cover"
               nextLabel={t.chapterNextLabel}
               nextHref="#ds-articulo-cover"
+              ariaLabel={t.chapterNavAria}
               positionLabel={t.chapterPositionLabel}
             />
           </div>

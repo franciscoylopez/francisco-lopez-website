@@ -13,8 +13,17 @@
     "statSplit": "Umbral del split",
     "statA11y": "Objetivo de accesibilidad"
   },
+  "indice": {
+    "kicker": "Índice",
+    "ariaLabel": "Índice del Brand Kit",
+    "railAriaLabel": "Ir a una sección",
+    "closerLabel": "Índice",
+    "closerAriaLabel": "Entre secciones",
+    "nextLabel": "Siguiente:",
+    "of": "de"
+  },
   "concepto": {
-    "num": "01 — Concepto",
+    "indexLabel": "Concepto",
     "title": "Una marca de dos capas",
     "lead": "El símbolo es un anillo, el foco que descansa sobre una base sólida: criterio de producto construido sobre una fundación estable. No es decoración: es la firma del método. Del discovery al dato, dos planos que se separan y vuelven a alinearse en una sola forma limpia.",
     "plano": {
@@ -27,7 +36,7 @@
     }
   },
   "logotipo": {
-    "num": "02 — Logotipo",
+    "indexLabel": "Logotipo",
     "title": "El logo y sus reglas",
     "lead": "Dos composiciones (símbolo solo y lockup con wordmark), cada una en plano y split. Recortadas exactas a la tinta: la altura que le das es la altura real del símbolo.",
     "svgShort": "SVG",
@@ -174,7 +183,7 @@
     }
   },
   "color": {
-    "num": "03 — Color",
+    "indexLabel": "Color",
     "title": "Paleta y dos capas",
     "lead": "La regla de las dos capas: una capa de tinta (fondo + trazo) que conmuta con el tema, y una capa de color (cian + morado) que solo aparece en el split y no cambia entre claro y oscuro. Cada muestra lleva su token, su hex y su ratio de contraste medido. Cambia el tema con el toggle del nav para ver la capa de tinta conmutar.",
     "swapConmuta": "Conmuta",
@@ -246,7 +255,7 @@
     "copiedLabel": "{value} Copiado"
   },
   "tipografia": {
-    "num": "04 — Tipografía",
+    "indexLabel": "Tipografía",
     "title": "Dos tipos, dos trabajos",
     "lead": "Qué tipos son y por qué, como activo de marca. La escala, tamaños e interlineados viven en el Design System.",
     "bricolage": {
@@ -261,7 +270,7 @@
     }
   },
   "aplicaciones": {
-    "num": "05 — Aplicaciones",
+    "indexLabel": "Aplicaciones",
     "title": "La marca en su sitio",
     "lead": "Dónde vive el logo y cómo se descarga cada pieza. El PNG del símbolo se dimensiona por altura y el del lockup por ancho. No es evidente, por eso se dice aquí.",
     "favicon": {
@@ -277,7 +286,7 @@
     "pngNote": "El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos claros; tintaClara sobre fondos oscuros. Disponibles en 256 / 512 / 1024 px."
   },
   "uso": {
-    "num": "06 — Uso correcto e incorrecto",
+    "indexLabel": "Uso correcto e incorrecto",
     "title": "Los errores reales de este sistema",
     "lead": "No un catálogo de ✓ / ✗ genéricos: los fallos que tuvo esta marca en el proceso, la cifra que los detectó y cómo se corrigieron.",
     "fixLabel": "Corrección:",

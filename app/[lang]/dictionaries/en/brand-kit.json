@@ -13,8 +13,17 @@
     "statSplit": "Split threshold",
     "statA11y": "Accessibility target"
   },
+  "indice": {
+    "kicker": "Contents",
+    "ariaLabel": "Brand Kit contents",
+    "railAriaLabel": "Jump to a section",
+    "closerLabel": "Contents",
+    "closerAriaLabel": "Between sections",
+    "nextLabel": "Next:",
+    "of": "of"
+  },
   "concepto": {
-    "num": "01 — Concept",
+    "indexLabel": "Concept",
     "title": "A two-layer brand",
     "lead": "The symbol is a ring, the focus resting on a solid base: product judgment built on a stable foundation. It's not decoration: it's the signature of the method. From discovery to data, two planes that separate and realign into a single clean shape.",
     "plano": {
@@ -27,7 +36,7 @@
     }
   },
   "logotipo": {
-    "num": "02 — Logotype",
+    "indexLabel": "Logotype",
     "title": "The logo and its rules",
     "lead": "Two compositions (symbol alone and lockup with wordmark), each in flat and split. Cropped exactly to the ink: the height you give it is the real height of the symbol.",
     "svgShort": "SVG",
@@ -174,7 +183,7 @@
     }
   },
   "color": {
-    "num": "03 — Color",
+    "indexLabel": "Color",
     "title": "Palette and two layers",
     "lead": "The two-layer rule: an ink layer (background + stroke) that switches with the theme, and a color layer (cyan + purple) that only appears in the split and doesn't change between light and dark. Each swatch carries its token, its hex and its measured contrast ratio. Switch the theme with the nav toggle to watch the ink layer flip.",
     "swapConmuta": "Switches",
@@ -246,7 +255,7 @@
     "copiedLabel": "{value} Copied"
   },
   "tipografia": {
-    "num": "04 — Typography",
+    "indexLabel": "Typography",
     "title": "Two typefaces, two jobs",
     "lead": "What the typefaces are and why, as a brand asset. The scale, sizes and line heights live in the Design System.",
     "bricolage": {
@@ -261,7 +270,7 @@
     }
   },
   "aplicaciones": {
-    "num": "05 — Applications",
+    "indexLabel": "Applications",
     "title": "The brand in its place",
     "lead": "Where the logo lives and how each piece is downloaded. The symbol PNG is sized by height and the lockup PNG by width. It's not obvious, which is why it's stated here.",
     "favicon": {
@@ -277,7 +286,7 @@
     "pngNote": "The PNG suffix names the ink, not the background. tintaOscura (dark ink) goes over light backgrounds; tintaClara (light ink) over dark ones. Available at 256 / 512 / 1024 px."
   },
   "uso": {
-    "num": "06 — Correct and incorrect use",
+    "indexLabel": "Correct and incorrect use",
     "title": "The real mistakes of this system",
     "lead": "Not a catalog of generic ✓ / ✗: the failures this brand had in the process, the figure that caught them and how they were fixed.",
     "fixLabel": "Fix:",

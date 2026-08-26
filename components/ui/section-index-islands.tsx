@@ -135,6 +135,24 @@ export function SectionRail({
         598 además se sale por los dos extremos. No era «se rompe a 1920»: era
         el eje de ALTO, el que D50 obliga a mirar mientras se dibuja.
 
+        EL RIEL SE PEGA AL BORDE POR DEBAJO DE 1536px, Y NO ES ESTÉTICA (P70.40).
+        Entre 1280 —donde se monta— y 1536 la página NO TIENE CANAL para él: el
+        contenido arranca en `--page-x` (40px) y una tarjeta añade ~21 de relleno,
+        así que lo pulsable empieza en x=61. Con la posición anterior el objetivo
+        táctil del riel ocupaba x 25,6–69,6 y se COMÍA los clics: medido con
+        `elementFromPoint` sobre los tres «Descargar SVG» del Brand Kit a 1280×618,
+        el elemento de arriba era una parada del riel, no el botón. No es solape
+        visual, es intercepción — y axe no la ve, porque no evalúa qué elemento
+        recibe el punto.
+
+        Con `left-2` el riel ocupa 8–52 y deja 9px de aire hasta el contenido en
+        todo el tramo 1280–1535. De 1536 en adelante el contenedor ya centra y
+        sobra sitio, así que vuelve el `clamp` de siempre.
+
+        Lo que esto NO arregla: por debajo de 1536 el riel sigue flotando sobre el
+        área de contenido en vez de vivir en un canal propio. Hoy no molesta
+        porque ese borde suele estar vacío; el día que otra página ponga algo
+        pulsable ahí, vuelve. Eso es una decisión de layout, no un ajuste.
         `top-[5rem]` es la MISMA distancia con la que las secciones con ancla
         libran el nav (`scroll-mt-[5rem]`); si algún día el nav cambia de alto,
         se mueven todos juntos.
@@ -155,7 +173,7 @@ export function SectionRail({
   return (
     <nav
       aria-label={ariaLabel}
-      className="pointer-events-none fixed top-[5rem] bottom-6 left-[clamp(0.75rem,2vw,1.75rem)] z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex [&::-webkit-scrollbar]:hidden"
+      className="pointer-events-none fixed top-[5rem] bottom-6 left-2 2xl:left-[clamp(0.75rem,2vw,1.75rem)] z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex [&::-webkit-scrollbar]:hidden"
     >
       {/* `mx-0 my-auto`, no `m-0 my-auto`: la abreviada y la de eje compiten por
           la misma propiedad y quién gana lo decide el orden de la hoja, no el

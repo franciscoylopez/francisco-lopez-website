@@ -329,7 +329,7 @@ export function ComoSeHaCreado({
           teclado o lector de pantalla pasaba por 11 enlaces del índice + 2
           botones del dock antes de que se anunciara el `h1`. */}
       <ReadingProgress ariaLabel={t.progress.ariaLabel} />
-      <SectionRail items={railItems} ariaLabel={t.index.railAriaLabel} />
+      <SectionRail items={railItems} ariaLabel={t.rail.ariaLabel} />
       <FloatingShare
         items={railItems}
         shareLabel={t.hero.shareLabel}
@@ -453,6 +453,7 @@ export function ComoSeHaCreado({
                   t.sections[i + 1]?.ordinal ?? t.closing.ordinal
                 } · ${t.sections[i + 1]?.indexLabel ?? t.closing.indexLabel}`}
                 nextHref={`#${t.sections[i + 1]?.id ?? t.closing.id}`}
+                ariaLabel={t.chapterNav.ariaLabel}
                 positionLabel={`${position} ${t.sectionMeta.of} ${totalSections}`}
               />
             </div>
@@ -488,6 +489,7 @@ export function ComoSeHaCreado({
             total={totalSections}
             indexLabel={t.chapterNav.indexLabel}
             indexHref="#indice"
+            ariaLabel={t.chapterNav.ariaLabel}
             positionLabel={`${totalSections} ${t.sectionMeta.of} ${totalSections}`}
           />
         </div>

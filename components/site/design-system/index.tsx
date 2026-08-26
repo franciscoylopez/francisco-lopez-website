@@ -128,6 +128,7 @@ export function DesignSystem({
                 : undefined
             }
             nextHref={siguiente ? `#${siguiente.id}` : undefined}
+            ariaLabel={t.indice.closerAriaLabel}
             positionLabel={`${i + 1} ${t.indice.of} ${paradas.length}`}
           />
         ),

@@ -18,6 +18,7 @@
     "ariaLabel": "Design System contents",
     "railAriaLabel": "Jump to a section",
     "closerLabel": "Contents",
+    "closerAriaLabel": "Between sections",
     "nextLabel": "Next:",
     "of": "of"
   },
@@ -660,6 +661,7 @@
     "navCloserIndexLabel": "Contents",
     "navCloserNextLabel": "Next stop",
     "navCloserPositionLabel": "2 of 3",
+    "navCloserAria": "Between sections (specimen)",
     "navRailKicker": "The standing shortcut",
     "navRailRule": "A client island, pinned to the window and only above 1280px.",
     "navRailNote": "An enhancement, not a requirement: without JavaScript the contents grid above already covers navigation. The circle widens on hover and reveals its label inside the same pill.",
@@ -869,6 +871,7 @@
     "shareCopiedAnnounce": "Link copied to clipboard",
     "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
     "railAriaLabel": "Section rail (specimen)",
+    "chapterNavAria": "Block footer (specimen)",
     "railHint": "Just like the real page, but contained to this panel: outside it they're pinned to the window."
   }
 }
