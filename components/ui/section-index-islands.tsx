@@ -173,7 +173,7 @@ export function SectionRail({
   return (
     <nav
       aria-label={ariaLabel}
-      className="pointer-events-none fixed top-[5rem] bottom-6 left-2 2xl:left-[clamp(0.75rem,2vw,1.75rem)] z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex [&::-webkit-scrollbar]:hidden"
+      className="pointer-events-none fixed top-[5rem] bottom-6 left-2 z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex 2xl:left-[clamp(0.75rem,2vw,1.75rem)] [&::-webkit-scrollbar]:hidden"
     >
       {/* `mx-0 my-auto`, no `m-0 my-auto`: la abreviada y la de eje compiten por
           la misma propiedad y quién gana lo decide el orden de la hoja, no el

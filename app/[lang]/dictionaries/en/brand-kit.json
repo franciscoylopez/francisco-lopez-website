@@ -15,6 +15,8 @@
   },
   "indice": {
     "kicker": "Contents",
+    "note": "Every section closes on its own: you can read it in chunks, in any order.",
+    "sectionsSuffix": "sections",
     "ariaLabel": "Brand Kit contents",
     "railAriaLabel": "Jump to a section",
     "closerLabel": "Contents",

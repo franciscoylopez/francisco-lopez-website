@@ -1,7 +1,7 @@
 // @pieza primitiva · design-system/10-composicion.tsx · La navegación de una página con paradas: el índice y el cierre de bloque.
 
 import { cva } from "class-variance-authority";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -183,6 +183,49 @@ export function SectionIndex({
         ))}
       </ol>
     </nav>
+  );
+}
+
+/* ───────────────────────── La nota del índice ───────────────────────── */
+
+/**
+ * LA FRASE QUE ORIENTA AL LECTOR, bajo el eyebrow del índice y sobre la rejilla.
+ *
+ * Vivía escrita a mano en el artículo y las tres páginas del sistema la querían
+ * igual (P70.41): cuatro copias de la misma cadena de clases es justo lo que la
+ * Regla de construcción manda subir a la capa.
+ *
+ * `figuras` es una lista y no un par de campos porque el artículo publica DOS
+ * —palabras y secciones— y las páginas de consulta solo una. El separador `·`
+ * lo pone la pieza entre figuras, nunca el copy.
+ *
+ * Los valores llegan YA FORMATEADOS: el artículo agrupa millares y eso depende
+ * del locale (`5.900` en español es `5,900` en inglés), así que quien sabe hacerlo
+ * es el llamador, que tiene el `lang`.
+ */
+export function IndexNote({
+  note,
+  figures,
+}: {
+  note: string;
+  figures: { value: string; suffix: string }[];
+}) {
+  return (
+    <p
+      data-reveal
+      className={cn(
+        "text-muted-foreground m-0 max-w-[var(--measure)] text-[0.9rem]",
+        LEADING.lead,
+      )}
+    >
+      {note}{" "}
+      {figures.map((f, i) => (
+        <Fragment key={f.suffix}>
+          {i > 0 ? <span className="mx-[0.5em]">·</span> : null}
+          <b className="text-foreground font-medium">{f.value}</b> {f.suffix}
+        </Fragment>
+      ))}
+    </p>
   );
 }
 

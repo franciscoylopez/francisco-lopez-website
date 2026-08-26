@@ -1,6 +1,10 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { SectionCloser, SectionIndex } from "@/components/ui/section-index";
+import {
+  IndexNote,
+  SectionCloser,
+  SectionIndex,
+} from "@/components/ui/section-index";
 import { SectionRail } from "@/components/ui/section-index-islands";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -167,6 +171,17 @@ export function DesignSystem({
             kicker={t.indice.kicker}
             ariaLabel={t.indice.ariaLabel}
             items={paradas}
+            intro={
+              <IndexNote
+                note={t.indice.note}
+                figures={[
+                  {
+                    value: String(paradas.length),
+                    suffix: t.indice.sectionsSuffix,
+                  },
+                ]}
+              />
+            }
           />
         </div>
       </section>

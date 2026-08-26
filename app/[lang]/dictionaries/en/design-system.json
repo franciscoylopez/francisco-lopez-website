@@ -15,6 +15,8 @@
   },
   "indice": {
     "kicker": "Contents",
+    "note": "Every section closes on its own: you can read it in chunks, in any order.",
+    "sectionsSuffix": "sections",
     "ariaLabel": "Design System contents",
     "railAriaLabel": "Jump to a section",
     "closerLabel": "Contents",
@@ -655,6 +657,8 @@
     "navIndexNote": "The third line of each cell is a free, optional slot. The article puts its per-section reading time there; a page of specimens has no prose to time, so it stays empty.",
     "navIndexDemoKicker": "Contents",
     "navIndexDemoAria": "Contents (specimen)",
+    "navIndexDemoNote": "Every section closes on its own: you can read it in chunks, in any order.",
+    "navIndexDemoSuffix": "sections",
     "navCloserKicker": "The foot of every stop",
     "navCloserRule": "Where you are, the way back to the contents, and the next stop.",
     "navCloserNote": "The dots are decorative: the position is spelled out in text too, which is what satisfies point 6 of the checklist. The label carries that position so twelve footers never share a name.",

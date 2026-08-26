@@ -3,7 +3,11 @@ import { SectionHeader } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 import { PageCloser, type CloserItem } from "@/components/ui/page-closer";
-import { SectionCloser, SectionIndex } from "@/components/ui/section-index";
+import {
+  IndexNote,
+  SectionCloser,
+  SectionIndex,
+} from "@/components/ui/section-index";
 import { SectionRail } from "@/components/ui/section-index-islands";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { type Locale } from "@/lib/i18n/config";
@@ -180,6 +184,16 @@ export function Composicion({
             kicker={t.navIndexDemoKicker}
             ariaLabel={t.navIndexDemoAria}
             items={paradas.slice(0, 3)}
+            intro={
+              // La nota va en el espécimen porque va en las cuatro páginas que
+              // usan la pieza: sin ella la demo se parecería menos al índice
+              // real que hay tres secciones más arriba. La cifra es la de ESTA
+              // demo —tres paradas—, no la de la página.
+              <IndexNote
+                note={t.navIndexDemoNote}
+                figures={[{ value: "3", suffix: t.navIndexDemoSuffix }]}
+              />
+            }
           />
         </SpecimenCard>
         <SpecimenCard

@@ -15,6 +15,8 @@
   },
   "indice": {
     "kicker": "Índice",
+    "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras.",
+    "sectionsSuffix": "secciones",
     "ariaLabel": "Índice del Design System",
     "railAriaLabel": "Ir a una sección",
     "closerLabel": "Índice",
@@ -655,6 +657,8 @@
     "navIndexNote": "La tercera línea de cada celda es libre y opcional. El artículo pone ahí su tiempo por sección; en una página de especímenes no hay prosa que cronometrar, así que va vacía.",
     "navIndexDemoKicker": "Índice",
     "navIndexDemoAria": "Índice (espécimen)",
+    "navIndexDemoNote": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras.",
+    "navIndexDemoSuffix": "secciones",
     "navCloserKicker": "El pie de cada parada",
     "navCloserRule": "Dónde estás, la vuelta al índice y la parada siguiente.",
     "navCloserNote": "Los puntos son decorativos: la posición va además en texto, que es lo que cumple el punto 6 del checklist. La etiqueta lleva la posición dentro para que doce cierres no compartan nombre.",

@@ -2,6 +2,7 @@ import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import {
   SectionCloser,
+  IndexNote,
   SectionIndex,
   type SeccionMarco,
 } from "@/components/ui/section-index";
@@ -120,6 +121,17 @@ export function BrandKit({
             kicker={t.indice.kicker}
             ariaLabel={t.indice.ariaLabel}
             items={paradas}
+            intro={
+              <IndexNote
+                note={t.indice.note}
+                figures={[
+                  {
+                    value: String(paradas.length),
+                    suffix: t.indice.sectionsSuffix,
+                  },
+                ]}
+              />
+            }
           />
         </div>
       </section>
