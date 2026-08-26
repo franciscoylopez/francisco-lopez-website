@@ -4,12 +4,24 @@ import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { SECTION_Y_RANGE_PX, SPACING_SCALE } from "@/lib/design-values";
 
-/* ===================== (04) RITMO ===================== */
-export function Ritmo({ t }: { t: Dictionary["designSystem"]["ritmo"] }) {
+/* ===================== RITMO ===================== */
+import type { SeccionMarco } from "./shared";
+
+export function Ritmo({
+  t,
+  marco,
+}: {
+  t: Dictionary["designSystem"]["ritmo"];
+  marco: SeccionMarco;
+}) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -66,6 +78,7 @@ export function Ritmo({ t }: { t: Dictionary["designSystem"]["ritmo"] }) {
             </ul>
           </div>
         </div>
+        {marco.closer}
       </div>
     </section>
   );

@@ -13,8 +13,18 @@
     "statMeasure": "Medida de lectura (~91 car.)",
     "statA11y": "Objetivo de accesibilidad"
   },
+  "indice": {
+    "kicker": "Índice",
+    "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras.",
+    "sectionsSuffix": "secciones",
+    "ariaLabel": "Índice del Design System",
+    "closerLabel": "Índice",
+    "closerAriaLabel": "Entre secciones",
+    "nextLabel": "Siguiente:",
+    "of": "de"
+  },
   "rejilla": {
-    "num": "01 — Rejilla y medidas",
+    "indexLabel": "Rejilla y medidas",
     "title": "Ancha para maquetar, estrecha para leer",
     "lead": "Doce columnas, un contenedor que tope en 1360 y una medida de lectura que nunca lo usa entero. Lo que se maqueta en el sitio se apoya en estos tres números.",
     "showGrid": "Mostrar rejilla",
@@ -125,7 +135,7 @@
     ]
   },
   "ritmo": {
-    "num": "02 — Ritmo y espaciado",
+    "indexLabel": "Ritmo y espaciado",
     "title": "El aire es la herramienta de jerarquía",
     "lead": "Escala de base 4px (Tailwind).",
     "scaleTitle": "Escala de espaciado",
@@ -138,7 +148,7 @@
     ]
   },
   "tipografia": {
-    "num": "03 — Tipografía y cabeceras",
+    "indexLabel": "Tipografía y cabeceras",
     "title": "El tamaño lo decide el ancho, no el dispositivo",
     "lead": "Bricolage Grotesque para titulares, Inter para texto y UI. Móvil es el mínimo del clamp; escritorio, el máximo.",
     "cols": {
@@ -320,7 +330,7 @@
     ]
   },
   "claroscuro": {
-    "num": "04 — Claro y oscuro",
+    "indexLabel": "Claro y oscuro",
     "title": "La profundidad la dan los filetes, no las sombras",
     "lead": "Mismo esqueleto y misma jerarquía de superficies: fondo → tarjeta → borde. El claro es papel cálido; el oscuro, azul profundo.",
     "lightLabel": "Modo claro",
@@ -352,7 +362,7 @@
     "ruleFoot": "Usa el conmutador de la cabecera para ver esta misma página en ambos modos."
   },
   "movimiento": {
-    "num": "05 — Movimiento",
+    "indexLabel": "Movimiento",
     "title": "Sobrio: nunca compite con el contenido",
     "lead": "Las duraciones no se eligen por gusto: cada una corresponde a un tipo de cambio en pantalla.",
     "timings": [
@@ -391,7 +401,7 @@
     "navFoot": "Es la transición que ves ahora mismo en la cabecera de esta página."
   },
   "enlaces": {
-    "num": "06 — Enlaces",
+    "indexLabel": "Enlaces",
     "title": "Lo decide su función, no dónde cae",
     "lead": "Si es contenido, el cian aparece como recompensa de la interacción. Si su bloque entero ya es navegación, el cian no distingue nada y sobra.",
     "hint": "Pasa el cursor por encima ▸",
@@ -438,7 +448,7 @@
     "ruleFoot": "El tono del chrome tampoco es decoración: el secundario sube a foreground en el mismo gesto en que aparece la pastilla, porque sin ese salto el par cae a AA justo en hover."
   },
   "botones": {
-    "num": "07 — Botones y acciones",
+    "indexLabel": "Botones y acciones",
     "title": "Un botón no elige su aspecto: lo elige su papel",
     "lead": "Cuántas acciones compiten a su lado, y si lleva estado, deciden la variante. La variante ya trae resueltos el hover, el foco y el objetivo táctil.",
     "hint": "Pasa el cursor por encima ▸",
@@ -516,7 +526,7 @@
     ]
   },
   "etiquetas": {
-    "num": "08 — Etiquetas",
+    "indexLabel": "Etiquetas",
     "title": "Rotula, no se pulsa",
     "lead": "No sale de la capa de acción: no tiene estado, ni hover, ni objetivo táctil. Solo tiene que leerse.",
     "hint": "Son las mismas etiquetas que usa el sitio: si una cambia, esta sección cambia con ella.",
@@ -557,7 +567,7 @@
     "ruleFoot": "El texto de las dos teñidas es el color de texto normal, no el del velo. Es lo que las lleva a {badgeTinted.light} en claro y {badgeTinted.dark} en oscuro; teñido se quedaban en 6,07 y 5,46."
   },
   "formulario": {
-    "num": "09 — Formulario",
+    "indexLabel": "Formulario",
     "title": "La primera superficie que recibe, no la que enseña",
     "lead": "Un campo no es un botón pequeño: tiene etiqueta, tiene estado de error, y tiene que decirlo en voz alta.",
     "fieldTitle": "El campo",
@@ -591,7 +601,7 @@
     ]
   },
   "composicion": {
-    "num": "10 — Composición de página",
+    "indexLabel": "Composición de página",
     "title": "Ni controles ni texto: las cajas con las que se monta una página",
     "lead": "Una tabla, una nota al margen y el remate del final. Las tres suben a la capa porque su formato es lo que no puede divergir de una página a otra.",
     "dataTitle": "La tabla",
@@ -639,6 +649,22 @@
       "Cambiarlo mueve el ritmo de todas las páginas a la vez, que es justo para lo que existe."
     ],
     "demoMonoFoot": "Se publica entero en la sección de tokens de layout, con su valor y su motivo.",
+    "navTitle": "La navegación de una página con paradas",
+    "navLead": "Dos piezas que convierten una página larga en una recorrible, y esta misma las usa: el índice va justo debajo del hero y el cierre al pie de cada una de sus doce secciones. La tercera de la familia, el riel fijo, no vive aquí: se publica en la sección del artículo largo, que es la única página que lo lleva.",
+    "navIndexKicker": "El mapa",
+    "navIndexRule": "Rejilla de paradas pintada en servidor: se navega sin JavaScript.",
+    "navIndexNote": "La tercera línea de cada celda es libre y opcional. El artículo pone ahí su tiempo por sección; en una página de especímenes no hay prosa que cronometrar, así que va vacía.",
+    "navIndexDemoKicker": "Índice",
+    "navIndexDemoAria": "Índice (espécimen)",
+    "navIndexDemoNote": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras.",
+    "navIndexDemoSuffix": "secciones",
+    "navCloserKicker": "El pie de cada parada",
+    "navCloserRule": "Dónde estás, la vuelta al índice y la parada siguiente.",
+    "navCloserNote": "Los puntos son decorativos: la posición va además en texto, que es lo que cumple el punto 6 del checklist. La etiqueta lleva la posición dentro para que doce cierres no compartan nombre.",
+    "navCloserIndexLabel": "Índice",
+    "navCloserNextLabel": "Siguiente parada",
+    "navCloserPositionLabel": "2 de 3",
+    "navCloserAria": "Entre secciones (espécimen)",
     "closerTitle": "El cierre de página",
     "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en las catorce páginas.",
     "closerKicker": "Dos destinos",
@@ -661,7 +687,7 @@
     "ruleFoot": "Es la frontera que decide dónde vive una pieza: si sabe algo de este sitio, no es del sistema."
   },
   "accesibilidad": {
-    "num": "11 — Checklist de cierre",
+    "indexLabel": "Checklist de cierre",
     "title": "AA es el suelo, no el objetivo",
     "lead": "La lista con la que se cierra cada página. Es el criterio interno de construcción; la declaración pública de conformidad vive en la página de Accesibilidad.",
     "contrastTitle": "Contraste medido",
@@ -752,13 +778,13 @@
     ]
   },
   "articulo": {
-    "num": "12 — Artículo largo",
+    "indexLabel": "Artículo largo",
     "title": "La forma para texto largo con paradas",
     "lead": "Once secciones y varios miles de palabras necesitan piezas que el resto del sitio no usa. Es una capa aparte, no la octava del núcleo.",
     "groups": {
       "portada": {
         "title": "La portada del artículo",
-        "lead": "Lo que solo aparece una vez, al principio: quién firma, cómo se comparte y el mapa de paradas."
+        "lead": "Lo que solo aparece una vez, al principio: quién firma y cómo se comparte."
       },
       "parada": {
         "title": "La apertura de cada parada",
@@ -776,8 +802,8 @@
     "fichas": {
       "portada": {
         "kicker": "Portada",
-        "cls": "<ByLine> · <ShareActions> · <ArticleIndex>",
-        "rule": "Autoría, compartir y el mapa de paradas con el tiempo de cada una. El índice se pinta en servidor: se ve y se salta sin JavaScript.",
+        "cls": "<ByLine> · <ShareActions>",
+        "rule": "Autoría y compartir, resueltas en la misma fila de apertura.",
         "note": "Un artículo firmado dice quién lo firma en la apertura, no en el pie. Y sin `navigator.share` el botón copia el enlace igualmente."
       },
       "cover": {
@@ -827,14 +853,8 @@
     "repoLabel": "ENLACE ·",
     "repoText": "Las decisiones D39, D41 y D73, en ",
     "pieSample": "…y por eso la sección termina aquí, con la prueba y la salida hacia la siguiente.",
-    "chapterPositionLabel": "5 de 11",
-    "chapterIndexLabel": "Índice",
-    "chapterNextLabel": "Siguiente: 06 · Del diseño al código",
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
-    "indexKicker": "Índice",
-    "indexTimeLabel": "12 min de lectura",
-    "indexAriaLabel": "Índice del artículo de muestra",
     "indexItems": ["Por qué existe", "Cómo se trabaja", "La marca"],
     "diagramCaption": "Un diagrama real de la página, con sus mismos tokens de color.",
     "progressAriaLabel": "Progreso de lectura del artículo de muestra",
@@ -843,6 +863,7 @@
     "shareCopiedLabel": "Enlace copiado",
     "shareCopiedAnnounce": "Enlace copiado al portapapeles",
     "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
+    "railAriaLabel": "Riel de secciones (espécimen)",
     "railHint": "Igual que en la página real, pero contenidos a este panel: fuera de él van fijos a la ventana."
   }
 }

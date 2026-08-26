@@ -5,6 +5,7 @@ import { LinkedinIcon } from "@/components/ui/icons";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 import { Glyph, LEAD } from "./shared";
+import type { SeccionMarco } from "@/components/ui/section-index";
 
 /* ===================== 06 USO ===================== */
 // Visuales antes/después de los 7 errores (§06). Reutilizan el glifo salvo los
@@ -151,15 +152,21 @@ function ErrorVisual({
   }
 }
 
-export function Uso({ t }: { t: Dictionary["brandKit"]["uso"] }) {
+export function Uso({
+  t,
+  marco,
+}: {
+  t: Dictionary["brandKit"]["uso"];
+  marco: SeccionMarco;
+}) {
   return (
-    <section className={SECTION}>
+    <section id={marco.id} className={cn(SECTION, "scroll-mt-[5rem]")}>
       <div className={WRAP}>
         <div
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <SectionHeader eyebrow={t.num} title={t.title} size="section">
+          <SectionHeader eyebrow={marco.kicker} title={t.title} size="section">
             <p className={LEAD}>{t.lead}</p>
           </SectionHeader>
         </div>
@@ -204,6 +211,7 @@ export function Uso({ t }: { t: Dictionary["brandKit"]["uso"] }) {
             </div>
           ))}
         </div>
+        {marco.closer}
       </div>
     </section>
   );

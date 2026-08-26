@@ -8,14 +8,17 @@ import { type Locale } from "@/lib/i18n/config";
 import { FAVICON_PNGS, HREF_FAVICON_ICO } from "@/lib/logo-kit";
 import { cn } from "@/lib/utils";
 import { Callout, Glyph, LEAD } from "./shared";
+import type { SeccionMarco } from "@/components/ui/section-index";
 
 /* ===================== 05 APLICACIONES ===================== */
 export function Aplicaciones({
   t,
+  marco,
   tKit,
   lang,
 }: {
   t: Dictionary["brandKit"]["aplicaciones"];
+  marco: SeccionMarco;
   /**
    * El copy de «qué añade el kit», que vive con la sección 02 porque es donde se
    * explica el reparto. Aquí llega como prop en vez de duplicarse: la misma frase
@@ -25,13 +28,13 @@ export function Aplicaciones({
   lang: Locale;
 }) {
   return (
-    <section className={SECTION}>
+    <section id={marco.id} className={cn(SECTION, "scroll-mt-[5rem]")}>
       <div className={WRAP}>
         <div
           data-reveal
           className="mb-[clamp(2.5rem,5vw,4rem)] max-w-[var(--measure)]"
         >
-          <SectionHeader eyebrow={t.num} title={t.title} size="section">
+          <SectionHeader eyebrow={marco.kicker} title={t.title} size="section">
             <p className={LEAD}>{t.lead}</p>
           </SectionHeader>
         </div>
@@ -132,6 +135,7 @@ export function Aplicaciones({
         <Callout data-reveal accent="primary">
           {t.pngNote}
         </Callout>
+        {marco.closer}
       </div>
     </section>
   );

@@ -3,12 +3,18 @@ import { SectionHeader } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 import { PageCloser, type CloserItem } from "@/components/ui/page-closer";
+import {
+  IndexNote,
+  SectionCloser,
+  SectionIndex,
+} from "@/components/ui/section-index";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { type Locale } from "@/lib/i18n/config";
 
-import { GroupHead, SpecimenCard } from "./shared";
+import { cn } from "@/lib/utils";
+import { GroupHead, SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (10) COMPOSICIÓN DE PÁGINA =====================
+/* ===================== COMPOSICIÓN DE PÁGINA =====================
     Fusión de las antiguas 12 (tablas) y 17 (bloques de página), P70.34.
 
     La 17 tenía razón de existir cuando se escribió —lo que faltaba no era una
@@ -27,9 +33,19 @@ import { GroupHead, SpecimenCard } from "./shared";
     documento es un defecto de accesibilidad, no un detalle. */
 export function Composicion({
   t,
+  marco,
+  paradas,
   lang,
 }: {
   t: Dictionary["designSystem"]["composicion"];
+  marco: SeccionMarco;
+  /**
+   * LAS PARADAS REALES DE ESTA PÁGINA, para que la demo no sea una maqueta
+   * (P70.395). Las tres primeras celdas del espécimen ENLAZAN de verdad a las
+   * secciones 01, 02 y 03: si mañana se reordena la página, la demo se reordena
+   * con ella. Es «las piezas reales del sitio como demo» llevado al dato.
+   */
+  paradas: { id: string; ordinal: string; label: string }[];
   lang: Locale;
 }) {
   const base = lang === "es" ? "" : `/${lang}`;
@@ -56,9 +72,13 @@ export function Composicion({
   ];
 
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -132,12 +152,72 @@ export function Composicion({
           />
         </SpecimenCard>
 
+        {/* ---------- la navegación por paradas ---------- */}
+        {/* AQUÍ, Y NO EN §12 «Artículo largo» (P70.395). D121 sacó estas tres de
+            la capa de artículo en cuanto el índice entró también en Design
+            System, Brand Kit y Accesibilidad, pero su línea @pieza seguía
+            declarando la sección del artículo: la página decía que eran piezas
+            de un formato cuando ya sirven a cuatro. Su hermana de peldaño es
+            PageCloser, que se publica justo arriba, y por eso van detrás de él.
+            §12 conserva sus especímenes, que ahora se leen como USO del
+            artículo y no como la publicación. */}
+        <GroupHead title={t.navTitle} lead={t.navLead} />
+        <SpecimenCard
+          kicker={t.navIndexKicker}
+          cls="SectionIndex"
+          rule={t.navIndexRule}
+          note={t.navIndexNote}
+          wide
+        >
+          {/* Tres paradas, no las doce: el índice completo ya está tres
+              secciones más arriba y repetirlo entero aquí sería la misma
+              rejilla dos veces en la misma página. */}
+          <SectionIndex
+            kicker={t.navIndexDemoKicker}
+            ariaLabel={t.navIndexDemoAria}
+            items={paradas.slice(0, 3)}
+            intro={
+              // La nota va en el espécimen porque va en las cuatro páginas que
+              // usan la pieza: sin ella la demo se parecería menos al índice
+              // real que hay tres secciones más arriba. La cifra es la de ESTA
+              // demo —tres paradas—, no la de la página.
+              <IndexNote
+                note={t.navIndexDemoNote}
+                figures={[{ value: "3", suffix: t.navIndexDemoSuffix }]}
+              />
+            }
+          />
+        </SpecimenCard>
+        <SpecimenCard
+          kicker={t.navCloserKicker}
+          cls="SectionCloser"
+          rule={t.navCloserRule}
+          note={t.navCloserNote}
+          wide
+        >
+          {/* «2 de 3», no «N de 12»: las doce secciones de esta página ya tienen
+              su cierre real, y dos <nav> con el mismo nombre accesible rompen
+              landmark-unique. El enlace del índice es REAL, como el del
+              espécimen de PageCloser de aquí arriba. */}
+          <SectionCloser
+            position={2}
+            total={3}
+            indexLabel={t.navCloserIndexLabel}
+            indexHref="#indice"
+            nextLabel={t.navCloserNextLabel}
+            nextHref={`#${paradas[0]?.id ?? "indice"}`}
+            ariaLabel={t.navCloserAria}
+            positionLabel={t.navCloserPositionLabel}
+          />
+        </SpecimenCard>
+
         {/* La sección publica UNA regla, no dos: la poda de P70.33 dejó fuera el
             inventario de lo que la capa se llevó por delante, que contaba cómo se
             llegó aquí en vez de qué hay que hacer. */}
         <div className="mt-8 max-w-[var(--measure)]">
           <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );

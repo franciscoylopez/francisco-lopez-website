@@ -25,6 +25,12 @@ import {
   SECTION,
   WRAP,
 } from "@/components/ui/layout";
+import {
+  SectionCloser,
+  IndexNote,
+  SectionIndex,
+  type SeccionMarco,
+} from "@/components/ui/section-index";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
@@ -47,6 +53,28 @@ type AccesibilidadDict = Dictionary["accesibilidad"];
 // Lighthouse a11y 100). La cifra de conformidad y la fecha de
 // `conformance.updated` se revisan tras cada QA de accesibilidad del build, no se
 // declaran de memoria.
+/**
+ * LAS OCHO PARADAS, EN ORDEN — única fuente del recorrido (P70.41). El ordinal
+ * lo pone la POSICIÓN y el copy solo aporta el rótulo corto, así que reordenar
+ * la página no puede dejar el índice diciendo «07» donde la cabecera dice «08».
+ *
+ * Y AQUÍ ESO NO ES HIGIENE, ES COHERENCIA: esta es la página que publica el
+ * checklist de nueve puntos, así que un índice o un riel mal hechos no serían un
+ * defecto sino la página contradiciéndose.
+ */
+const ORDEN = [
+  "conformance",
+  "measures",
+  "inheritance",
+  "verify",
+  "blindspot",
+  "limits",
+  "term",
+  "report",
+] as const;
+
+const ANCLA_INDICE = "indice";
+
 export function Accesibilidad({
   dict,
   related,
@@ -68,6 +96,38 @@ export function Accesibilidad({
   // arriba crece sola, y el heredado, porque depende de si la pieza lo trae. El
   // dato vive PEGADO a cada punto (`inherited`) y no en una lista aparte, que es
   // lo que impide que digan cosas distintas.
+  const paradas = ORDEN.map((clave, i) => {
+    const ordinal = String(i + 1).padStart(2, "0");
+    return { clave, id: `s${ordinal}`, ordinal, label: t[clave].indexLabel };
+  });
+
+  const marcos = Object.fromEntries(
+    paradas.map((parada, i) => {
+      const siguiente = paradas[i + 1];
+      const marco: SeccionMarco = {
+        id: parada.id,
+        kicker: `${parada.ordinal} — ${parada.label}`,
+        closer: (
+          <SectionCloser
+            position={i + 1}
+            total={paradas.length}
+            indexLabel={t.indice.closerLabel}
+            indexHref={`#${ANCLA_INDICE}`}
+            nextLabel={
+              siguiente
+                ? `${t.indice.nextLabel} ${siguiente.ordinal} · ${siguiente.label}`
+                : undefined
+            }
+            nextHref={siguiente ? `#${siguiente.id}` : undefined}
+            ariaLabel={t.indice.closerAriaLabel}
+            positionLabel={`${i + 1} ${t.indice.of} ${paradas.length}`}
+          />
+        ),
+      };
+      return [parada.clave, marco] as const;
+    }),
+  ) as Record<(typeof ORDEN)[number], SeccionMarco>;
+
   const total = t.measures.items.length;
   const heredados = t.measures.items.filter((m) => m.inherited).length;
   const fillCounts = (text: string) =>
@@ -128,11 +188,36 @@ export function Accesibilidad({
         </div>
       </section>
 
+      <section id={ANCLA_INDICE} className={cn(SECTION, "scroll-mt-[5rem]")}>
+        <div className={WRAP}>
+          <SectionIndex
+            kicker={t.indice.kicker}
+            ariaLabel={t.indice.ariaLabel}
+            items={paradas}
+            intro={
+              <IndexNote
+                note={t.indice.note}
+                figures={[
+                  {
+                    value: String(paradas.length),
+                    suffix: t.indice.sectionsSuffix,
+                  },
+                ]}
+              />
+            }
+          />
+        </div>
+      </section>
+
       {/* ===================== (01) NIVEL DE CONFORMIDAD ===================== */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.conformance.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.conformance.num}
+            eyebrow={marcos.conformance.kicker}
             title={t.conformance.heading}
             size="section-sm"
           >
@@ -179,14 +264,19 @@ export function Accesibilidad({
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={t.conformance.note} />
           </p>
+          {marcos.conformance.closer}
         </div>
       </section>
 
       {/* ===================== (02) QUÉ SE HA HECHO ===================== */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.measures.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.measures.num}
+            eyebrow={marcos.measures.kicker}
             title={t.measures.heading}
             size="section-sm"
           >
@@ -231,6 +321,7 @@ export function Accesibilidad({
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={fillCounts(t.measures.note)} />
           </p>
+          {marcos.measures.closer}
         </div>
       </section>
 
@@ -242,10 +333,14 @@ export function Accesibilidad({
           pone la capa de componentes, y que el atenuado lo resuelve la superficie
           y no el punto de uso (D30/D39/D61). Es lo que un CPO lee como criterio
           de producto, y no estaba escrito en ninguna parte del sitio. */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.inheritance.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.inheritance.num}
+            eyebrow={marcos.inheritance.kicker}
             title={t.inheritance.heading}
             size="section-sm"
           >
@@ -353,14 +448,19 @@ export function Accesibilidad({
               </>
             }
           />
+          {marcos.inheritance.closer}
         </div>
       </section>
 
       {/* ===================== (04) CÓMO SE VERIFICA ===================== */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.verify.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.verify.num}
+            eyebrow={marcos.verify.kicker}
             title={t.verify.heading}
             size="section-sm"
           >
@@ -386,6 +486,7 @@ export function Accesibilidad({
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={t.verify.note} />
           </p>
+          {marcos.verify.closer}
         </div>
       </section>
 
@@ -396,10 +497,14 @@ export function Accesibilidad({
           en la entradilla de (04) y los hallazgos de NVDA colgando de los
           límites—, o sea contado como pie de página de otra cosa. Con titular
           propio es un argumento; enterrado, era una anécdota. */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.blindspot.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.blindspot.num}
+            eyebrow={marcos.blindspot.kicker}
             title={t.blindspot.heading}
             size="section-sm"
           >
@@ -453,14 +558,19 @@ export function Accesibilidad({
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={t.blindspot.note} />
           </p>
+          {marcos.blindspot.closer}
         </div>
       </section>
 
       {/* ===================== (06) LÍMITES CONOCIDOS ===================== */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.limits.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.limits.num}
+            eyebrow={marcos.limits.kicker}
             title={t.limits.heading}
             size="section-sm"
           >
@@ -478,6 +588,7 @@ export function Accesibilidad({
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
             <Rich text={t.limits.note} />
           </p>
+          {marcos.limits.closer}
         </div>
       </section>
 
@@ -508,10 +619,14 @@ export function Accesibilidad({
           anteriores ya son rejillas de `InfoCard`, y una más antes del cierre
           las convertiría en textura. Prosa + ilustración cambia el ritmo justo
           donde hace falta. */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.term.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.term.num}
+            eyebrow={marcos.term.kicker}
             title={t.term.heading}
             size="section-sm"
           >
@@ -566,14 +681,19 @@ export function Accesibilidad({
               <LoveA11yMark label={t.term.figura.alt} />
             </div>
           </div>
+          {marcos.term.closer}
         </div>
       </section>
 
       {/* ===================== (08) REPORTAR UNA BARRERA ===================== */}
-      <section data-reveal className={SECTION}>
+      <section
+        data-reveal
+        id={marcos.report.id}
+        className={cn(SECTION, "scroll-mt-[5rem]")}
+      >
         <div className={WRAP}>
           <SectionHeader
-            eyebrow={t.report.num}
+            eyebrow={marcos.report.kicker}
             title={t.report.heading}
             size="section-sm"
           >
@@ -596,6 +716,7 @@ export function Accesibilidad({
               <EmailLink subject={t.report.emailSubject} className="mt-6" />
             </div>
           </SectionHeader>
+          {marcos.report.closer}
         </div>
       </section>
 

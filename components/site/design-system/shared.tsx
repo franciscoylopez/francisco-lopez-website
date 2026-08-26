@@ -163,3 +163,10 @@ export function TypeMeta({
     </div>
   );
 }
+
+/**
+ * El marco de una parada SUBIÓ A LA CAPA (P70.40): lo usan tres páginas, no
+ * solo esta. Se reexporta desde aquí para que las doce secciones sigan
+ * importándolo de su hermano de carpeta, como todo lo demás.
+ */
+export type { SeccionMarco } from "@/components/ui/section-index";

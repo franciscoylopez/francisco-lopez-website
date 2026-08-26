@@ -8,7 +8,7 @@ import { isContrastId, levelOf, ratioText } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
-/* ===================== (13) ACCESIBILIDAD ===================== */
+/* ===================== ACCESIBILIDAD ===================== */
 // Marca de verificación de las listas de esta página. `size-[15px]` porque vive
 // dentro de una pastilla teñida de 26px y no sale de la capa de acción — no es un
 // control, es un adorno de contenido.
@@ -23,17 +23,25 @@ function ContrastBadge({ lv }: { lv: string | null }) {
   );
 }
 
+import type { SeccionMarco } from "./shared";
+
 export function Accesibilidad({
   t,
+  marco,
   lang,
 }: {
   t: Dictionary["designSystem"]["accesibilidad"];
+  marco: SeccionMarco;
   lang: Locale;
 }) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-6 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -112,6 +120,7 @@ export function Accesibilidad({
             </li>
           ))}
         </ol>
+        {marco.closer}
       </div>
     </section>
   );

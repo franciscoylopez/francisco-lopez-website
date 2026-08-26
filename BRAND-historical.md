@@ -49,6 +49,7 @@ Partido el **2026-08-09** (P37.685).
 - [El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)](#el-interlineado-que-sobrevivió-a-tres-medidas-y-por-qué-la-medición-aprobaba-2026-08-25)
 - [La variante que dimensiona una fila, usada en una pila (2026-08-25)](#la-variante-que-dimensiona-una-fila-usada-en-una-pila-2026-08-25)
 - [El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)](#el-hover-de-la-tarjeta-pulsable-y-por-qué-no-se-arregló-con-luminancia-2026-08-25)
+- [Las dos excepciones que salieron](#las-dos-excepciones-que-salieron)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -945,3 +946,42 @@ luminancia se vea de sobra y el número engañe». Las tres opciones se pusieron
 los tokens reales y un botón que las forzaba todas a hover a la vez, para poder compararlas sin
 pasar el cursor. Es el punto 8 de §Cómo medir: cuando alguien que está mirando la página
 contradice a la medición, la primera hipótesis es el alcance de la medición.
+
+## Las dos excepciones que salieron
+
+*(2026-08-26, P70.38 · D121)*
+
+La lista de «ningún control se escribe a mano» tuvo **cuatro** excepciones vivas entre el
+2026-08-25 y el 2026-08-26. Dos de ellas se escribieron con **condición de salida explícita**,
+y las dos la cumplieron el mismo día, al llevar el índice del artículo a las tres páginas
+hermanas:
+
+- **La celda de índice** decía «sale cuando la capa tenga el caso *celda pulsable*». Lo tiene:
+  `indexCellVariants`, en `ui/section-index.tsx`. Sigue sin ser `actionVariants({variant:"card"})`
+  y por el motivo que ya daba la excepción — una tarjeta dibuja su propia caja y la celda vive
+  dentro de una cuadrícula que ya cierra sus filetes—, pero lo que comparte con la tarjeta
+  (pastilla `muted` en hover, el mismo estado en foco, el objetivo táctil por altura) ya sale
+  de un solo sitio.
+- **El riel de secciones** decía «sale a `chrome.tsx`». Salió — a `railPillVariants`, en
+  `ui/section-index-islands.tsx` — **pero no allí**.
+
+Y esa es la parte que merece quedar escrita, porque es una lección sobre **cómo se redacta una
+condición de salida**, no sobre el riel.
+
+`chromeLinkVariants` gobierna el **ancla**: sus tres `shape` describen el contenedor del
+enlace. En el riel el ancla no tiene aspecto ninguno — es un cuadrado transparente de 44×44,
+el objetivo táctil, y nada más. Todo lo que se ve (el círculo, su expansión en hover, el
+estado activo) vive en un `<span>` interior, y ninguna `shape` de chrome puede describir una
+pieza *dentro* del enlace. La nota de 2026-08-22 apuntó al archivo vecino más plausible sin
+haber mirado la estructura.
+
+**Una condición de salida acierta el CUÁNDO mucho mejor que el DÓNDE.** El «cuándo» se deduce
+del problema —hay una sola copia, o falta un caso en la capa— y envejece bien; el «dónde» es
+una predicción sobre un refactor que todavía no se ha hecho, y envejece mal. Lo que la
+excepción pedía de verdad era que la píldora dejara de ser una cadena inline de veinte clases
+con un ternario dentro; eso se cumplió. Que el destino fuera otro archivo no es incumplimiento.
+
+**Corolario para la próxima:** al escribir una excepción, la condición se redacta sobre el
+estado del sistema («cuando exista el caso X», «cuando aparezca el segundo call site»), no
+sobre el destino del código. Si aun así se quiere dejar dicho a dónde parece que va, se marca
+como conjetura y no como compromiso.

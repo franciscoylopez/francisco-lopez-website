@@ -235,9 +235,9 @@ de icono— nace de una cadena de clases inline.** Si el caso no encaja en una v
 la variante**; si es una excepción, la decide Francisco y se **documenta con fecha** aquí (como
 el switch del consentimiento, aquí debajo).
 
-> **Cuatro excepciones vivas, y esta lista ya no se escribe de memoria: la comprueba
+> **Dos excepciones vivas, y esta lista ya no se escribe de memoria: la comprueba
 > `npm run check:excepciones`** *(2026-08-25)*, que le exige a cada control fuera de la capa
-> una marca `@fuera-de-capa` y que aquí esté nombrado. Las dos primeras
+> una marca `@fuera-de-capa` y que aquí esté nombrado. Las dos
 > comparten razón: hay **una** de cada, así que no hay repetición que factorizar y una pieza
 > con un solo call site solo añadiría indirección. **Salen cuando aparezca la segunda**, o
 > cuando haya que rehacerlas por otro motivo.
@@ -246,15 +246,11 @@ el switch del consentimiento, aquí debajo).
 >   cadena inline. Y traerlo hecho es lo que mandaría la cascada, que **aplica hacia
 >   delante, no hacia atrás**. Lo que **no** es excepción es su color: lo resuelve §Controles
 >   con dos fondos.
-> - **El índice de secciones del artículo** *(2026-08-22)*: el riel de `article-islands.tsx`
->   no compone `chromeLinkVariants` —es una píldora que se expande en hover/foco con estado
->   activo propio, y ninguna `shape` de `chrome.tsx` cubre ese caso—. Sale a `chrome.tsx`.
 > - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
 >   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
-> - **La celda de índice del artículo** *(2026-08-25)*, en `article.tsx`: **no es una tarjeta,
->   es una celda**, y la variante le pondría caja propia dentro de una cuadrícula ya cerrada.
->   El motivo entero lo imprime `check:excepciones` desde su marca `@fuera-de-capa` (D109).
->   **Sale cuando la capa tenga el caso «celda pulsable».**
+>
+> **Eran cuatro; las otras dos salieron el 2026-08-26 cumpliendo su condición de salida**
+> ([`BRAND-historical.md`](./BRAND-historical.md) §Las dos excepciones que salieron).
 >
 > **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
 > imagen del vídeo no es excepción: sale de `.video-facade`.

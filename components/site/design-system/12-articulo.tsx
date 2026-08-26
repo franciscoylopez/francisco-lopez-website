@@ -1,8 +1,6 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import {
-  ArticleIndex,
   ByLine,
-  ChapterNav,
   DiagramPanel,
   Pull,
   Pullquote,
@@ -13,18 +11,19 @@ import { LiveStat } from "@/components/ui/live-stat";
 import {
   FloatingShare,
   ReadingProgress,
-  SectionRail,
   ShareActions,
 } from "@/components/ui/article-islands";
+import { SectionRail } from "@/components/ui/section-index-islands";
 import { SectionHeader } from "@/components/ui/heading";
 import { fillPages } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 
-import { GroupHead, SpecimenCard } from "./shared";
+import { cn } from "@/lib/utils";
+import { GroupHead, SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (15) ARTÍCULO LARGO =====================
+/* ===================== ARTÍCULO LARGO =====================
     La familia de piezas que estrenó «Cómo se ha creado esta página» (P60):
     ninguna sabe nada de ESTE sitio —viven en `components/ui/article.tsx`, no
     en `site/`—, así que el espécimen las usa con contenido de muestra, no
@@ -46,16 +45,19 @@ import { GroupHead, SpecimenCard } from "./shared";
     real al lado, lo segundo no le dice nada a quien lee. */
 
 /** Los tres objetivos que activan el riel y el dock de compartir (design-review
- * P60, F3/60.6): son las mismas paradas que enseña `ArticleIndex` arriba, y no
- * hace falta más de tres para que el `IntersectionObserver` real tenga algo
- * que observar dentro de este panel. */
+ * P60, F3/60.6): no hace falta más de tres para que el `IntersectionObserver`
+ * real tenga algo que observar dentro de este panel. Sus rótulos salen de
+ * `indexItems`, que se queda aunque el índice ya no se demuestre aquí (P70.416):
+ * lo que alimenta ahora es el riel. */
 const RAIL_IDS = ["ds-rail-1", "ds-rail-2", "ds-rail-3"];
 
 export function ArticuloLargo({
   t,
+  marco,
   lang,
 }: {
   t: Dictionary["designSystem"]["articulo"];
+  marco: SeccionMarco;
   lang: Locale;
 }) {
   const railItems: { id: string; ordinal: string; label: string }[] =
@@ -73,9 +75,13 @@ export function ArticuloLargo({
   const f = t.fichas;
 
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -83,22 +89,22 @@ export function ArticuloLargo({
 
         {/* ── (a) La portada del artículo ───────────────────────────── */}
         <GroupHead first {...t.groups.portada} />
-        {/* LAS TRES BAJO UNA FICHA (P70.33). Eran tres especímenes con tres
-            reglas y las tres decían lo mismo con otras palabras: son lo que
-            aparece una sola vez, al principio. Aquí se demuestran juntas, que
-            además es como se ven en la página real. */}
+        {/* BAJO UNA FICHA (P70.33): eran especímenes con reglas distintas que
+            decían lo mismo con otras palabras, y son lo que aparece una sola vez,
+            al principio. Aquí se demuestran juntas, que además es como se ven en
+            la página real.
+
+            EL ÍNDICE YA NO ESTÁ AQUÍ (P70.416). Era la tercera de este grupo, y
+            desde P70.395 lo publica §10 —es una pieza general, la usan cuatro
+            páginas—, así que enseñarlo también aquí era la misma pieza dos veces
+            en la misma página, con dos fichas distintas. Lo que se queda en §12
+            es lo que solo es del artículo. */}
         <SpecimenCard wide {...f.portada}>
           <div className="flex flex-col gap-[var(--gutter)]">
             <div className="flex flex-wrap items-center justify-between gap-4">
               <ByLine name={t.bylineName} role={t.bylineRole} />
               <ShareActions shareLabel={t.shareLabel} {...shareStrings} />
             </div>
-            <ArticleIndex
-              kicker={t.indexKicker}
-              timeLabel={t.indexTimeLabel}
-              ariaLabel={t.indexAriaLabel}
-              items={railItems.map((it, i) => ({ ...it, minutes: 3 + i }))}
-            />
           </div>
         </SpecimenCard>
 
@@ -169,16 +175,19 @@ export function ArticuloLargo({
         </div>
 
         {/* ── (d) El pie de cada parada ───────────────────────────────
-            SIN FICHA PROPIA desde P70.33: las dos franjas se siguen viendo
-            —forman parte de `article.tsx`, que sí está publicada— pero dejan de
-            ocupar dos entradas del catálogo. Lo que enseñaban era el ORDEN en el
-            que cierran una sección, y eso se ve mirándolas. */}
+            SIN FICHA PROPIA desde P70.33: la franja se sigue viendo —forma parte
+            de `article.tsx`, que sí está publicada— pero deja de ocupar una
+            entrada del catálogo. Lo que enseña es el ORDEN en el que cierra una
+            sección, y eso se ve mirándola.
+
+            ERAN DOS (P70.416): la otra demostraba el cierre de bloque, que desde
+            P70.395 publica §10 por ser pieza general. */}
         <div className="mt-12 grid gap-[var(--gutter)]">
-          {/* Las dos franjas se enseñan CON la última línea del cuerpo encima
-              (P60.9): las dos abren con `border-t` y un margen superior de
-              2,5rem, así que sueltas en una caja se leían como un filete
-              huérfano sobre un hueco vacío. Pegadas a un párrafo, ese mismo
-              hueco es lo que son: el aire que las separa de la prosa. */}
+          {/* La franja se enseña CON la última línea del cuerpo encima (P60.9):
+              abre con `border-t` y un margen superior de 2,5rem, así que suelta
+              en una caja se leía como un filete huérfano sobre un hueco vacío.
+              Pegada a un párrafo, ese mismo hueco es lo que es: el aire que la
+              separa de la prosa. */}
           <div className="border-border bg-background rounded-xl border px-[clamp(1.25rem,3vw,2rem)] py-8">
             <p className="text-muted-foreground m-0 text-[1.02rem] leading-[1.7]">
               {t.pieSample}
@@ -189,20 +198,6 @@ export function ArticuloLargo({
                 t.repoText,
                 { label: "DECISIONS.md", path: "DECISIONS.md" },
               ]}
-            />
-          </div>
-          <div className="border-border bg-background rounded-xl border px-[clamp(1.25rem,3vw,2rem)] py-8">
-            <p className="text-muted-foreground m-0 text-[1.02rem] leading-[1.7]">
-              {t.pieSample}
-            </p>
-            <ChapterNav
-              position={5}
-              total={11}
-              indexLabel={t.chapterIndexLabel}
-              indexHref="#ds-articulo-cover"
-              nextLabel={t.chapterNextLabel}
-              nextHref="#ds-articulo-cover"
-              positionLabel={t.chapterPositionLabel}
             />
           </div>
         </div>
@@ -225,7 +220,7 @@ export function ArticuloLargo({
             misma caja vacía. */}
         <div className="border-border bg-background relative isolate h-[220px] [transform:translateZ(0)] overflow-hidden rounded-xl border">
           <ReadingProgress ariaLabel={t.progressAriaLabel} />
-          <SectionRail items={railItems} />
+          <SectionRail items={railItems} ariaLabel={t.railAriaLabel} />
           <FloatingShare
             items={railItems}
             shareLabel={t.shareLabel}
@@ -245,6 +240,7 @@ export function ArticuloLargo({
         <div className="mt-12 max-w-[var(--measure)]">
           <InfoCard title={t.ruleTitle} bullets={t.rule} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );

@@ -46,7 +46,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`) · **Tailwind CSS v4**
-- **Capa de componentes propia, con un núcleo de ocho piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `field` (el campo de formulario) · `table` · `stat-row` · `layout`. Aparte, no como novena pieza del núcleo: `article` + `article-islands`, la capa de artículo largo que usa «Cómo se ha creado esta página» (`D76`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: en un widget con foco atrapado se pregunta antes por la plataforma (`<dialog>`, `popover`, `anchor-name`), y shadcn entra donde ella no llega (`D6`, `D36`)
+- **Capa de componentes propia, con un núcleo de ocho piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `field` (el campo de formulario) · `table` · `stat-row` · `layout`. Aparte, no como novena pieza del núcleo: la capa de **artículo largo** que usa «Cómo se ha creado esta página» (`D76`), que se vacía por su propio criterio — cuando una segunda página quiere una de sus piezas, esa pieza sale (`D113`, `D121`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: en un widget con foco atrapado se pregunta antes por la plataforma (`<dialog>`, `popover`, `anchor-name`), y shadcn entra donde ella no llega (`D6`, `D36`)
 - **lucide-react** para iconos; los que lucide no trae se dibujan a mano con su propia regla de autoría, para que no se distingan de los de la librería
 - **next-themes** (claro/oscuro, `system` por defecto) · **Vercel** (`main` = producción)
 
@@ -235,13 +235,10 @@ app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i18n
 app/global-*           404/500 de marca e i18n (global-not-found, global-error)
 
-components/ui/         Primitivas SIN conocimiento del contenido: action.tsx (todo lo accionable),
-                       chrome.tsx (enlaces de navegación), badge.tsx (rótulos que no se pulsan),
-                       heading.tsx (eyebrow + titular), table.tsx (DataTable/TR/TD para datos,
-                       SPECIMEN_ROW para especímenes), stat-row.tsx (la fila de cifras de una
-                       apertura, D64), layout.ts (WRAP/SECTION/PROSE/CARD/PANEL/PAIR/HERO_ROW),
-                       logo, icons (los que lucide no trae), rich (markup inline del copy),
-                       info-card, video-embed (facade: sin iframe hasta el clic, D55)
+components/ui/         Primitivas SIN conocimiento del contenido. QUÉ HAY DENTRO no se escribe
+                       aquí: components/ui/README.md lo deriva del disco con `npm run indices`
+                       y check:indices lo comprueba en cada PR (D89). Esta lista SÍ estaba
+                       escrita a mano, y para agosto de 2026 le faltaban 9 de 21 piezas
 components/site/       Piezas que SÍ saben de este sitio: page-shell.tsx (el marco común de toda
                        página: JSON-LD, nav, isla de motion, el <main> y footer, D45/D46),
                        skip-link.tsx (WCAG 2.4.1 nivel A), bloques (nav, footer, breadcrumb,

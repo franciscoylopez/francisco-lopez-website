@@ -13,8 +13,18 @@
     "statAxe": "Violaciones axe",
     "statLighthouse": "Lighthouse accesibilidad"
   },
+  "indice": {
+    "kicker": "Índice",
+    "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras.",
+    "sectionsSuffix": "secciones",
+    "ariaLabel": "Índice de Accesibilidad",
+    "closerLabel": "Índice",
+    "closerAriaLabel": "Entre secciones",
+    "nextLabel": "Siguiente:",
+    "of": "de"
+  },
   "conformance": {
-    "num": "01 — Conformidad",
+    "indexLabel": "Conformidad",
     "heading": "WCAG 2.2 AA cumplido, con el contraste medido",
     "intro": "El contraste está medido, no estimado. El texto principal alcanza {bodyText.light} en claro y {bodyText.dark} en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.",
     "updated": "Última revisión de accesibilidad: {date}.",
@@ -39,7 +49,7 @@
     "note": "La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a [WCAG](https://www.w3.org/TR/WCAG22/). Es el criterio que se ha seguido."
   },
   "measures": {
-    "num": "02 — Qué se ha hecho",
+    "indexLabel": "Qué se ha hecho",
     "heading": "Las mismas comprobaciones que cierran cada página",
     "intro": "En lenguaje llano y con el criterio WCAG que cubre cada una.",
     "items": [
@@ -101,7 +111,7 @@
     "note": "De estos {total} puntos, {heredados} no se comprueban página a página, y ese es justo el punto: el contraste, el anillo de foco, el área de pulsación y el respeto al movimiento reducido vienen ya dentro del botón, del enlace y del campo de formulario. Una sección nueva nace con ellos puestos y no puede negociarlos. La sección siguiente cuenta cómo."
   },
   "inheritance": {
-    "num": "03 — Herencia",
+    "indexLabel": "Herencia",
     "heading": "La accesibilidad se hereda, no se vuelve a escribir",
     "figura": {
       "caption": "Los nueve puntos del checklist, cada uno asignado a la capa que lo pone y a quién lo verifica. Ocho los comprueba una máquina; uno, una persona."
@@ -134,7 +144,7 @@
     "note": "Esto es lo que sostiene la cifra de arriba. El sistema de color está en AAA, el nivel más exigente que define WCAG, en las {paginas} páginas y en los dos temas, en reposo y con el ratón encima. No se mantiene a base de revisiones: se mantiene porque los colores los eligen los componentes, y porque volver a medir es obligatorio en cuanto aparece uno que nadie ha medido."
   },
   "verify": {
-    "num": "04 — Verificación",
+    "indexLabel": "Verificación",
     "heading": "No es una autoevaluación de palabra",
     "intro": "Cada página se comprueba en modo claro y en modo oscuro, con herramientas reales ([axe-core](https://github.com/dequelabs/axe-core), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)) y también a mano. Las automáticas hacen bien su trabajo, pero solo saben mirar lo que alguien ha convertido en regla.",
     "items": [
@@ -178,7 +188,7 @@
     "note": "No todas caben en el mismo sitio, y decirlo importa. Las que solo necesitan leer el código se ejecutan solas en cada cambio, antes de que nada se publique. Las dos mediciones de color necesitan un navegador pintando la página de verdad, así que se lanzan a mano. Y las dos últimas necesitan a alguien delante. Hay además una comprobación que vigila a las demás: coge cada una, le mete a propósito el error que debería cazar y confirma que salta. Son catorce comprobaciones y veintitrés errores fingidos, porque una revisión que devuelve una lista vacía se parece demasiado a un aprobado."
   },
   "blindspot": {
-    "num": "05 — El punto ciego",
+    "indexLabel": "El punto ciego",
     "heading": "Lo que ninguna herramienta automática encuentra",
     "intro": "Una web puede cumplir todas las reglas y seguir siendo incómoda de usar. Las herramientas comprueban reglas; lo demás solo aparece usándola.",
     "figura": {
@@ -205,7 +215,7 @@
     "note": "Lo que esta prueba no cubre está justo debajo, en los límites: un solo lector de pantalla ([NVDA](https://www.nvaccess.org/)), un solo navegador, y ninguna persona que use tecnología de asistencia a diario."
   },
   "limits": {
-    "num": "06 — Límites",
+    "indexLabel": "Límites",
     "heading": "Ser honesto también es accesibilidad",
     "intro": "Lo que todavía no cumple, y qué falta para que cumpla.",
     "items": [
@@ -237,7 +247,7 @@
     "note": "Nada de esto está aquí por completismo. Un apartado de límites que solo dice «mejora continua» no informa de nada. Si algo de esta lista te afecta, escríbeme: sube de prioridad."
   },
   "term": {
-    "num": "07 — El término",
+    "indexLabel": "El término",
     "heading": "Qué es A11y y por qué lo usamos",
     "intro": "Es la palabra que el oficio usa a diario y casi nunca explica. Esta página la estaba usando igual: una vez, en la primera pantalla, sin decir qué era.",
     "what": "A11y es la abreviatura que el desarrollo web usa para la palabra inglesa accessibility, accesibilidad. Se forma con su primera letra, su última letra y el número de letras que hay entre las dos: once. Y lo que nombra es diseñar sitios y aplicaciones para que cualquier persona pueda usarlos, tenga o no limitaciones físicas, visuales, auditivas o cognitivas.",
@@ -247,7 +257,7 @@
     }
   },
   "report": {
-    "num": "08 — Contacto",
+    "indexLabel": "Contacto",
     "heading": "Si algo te bloquea, quiero saberlo",
     "body": "Si algo de esta web te resulta difícil de usar con tu tecnología de asistencia, es la mejor forma de arreglarlo. Cuéntame en qué página estabas, qué pasó y qué ayuda técnica usas, y te respondo.",
     "emailSubject": "Barrera de accesibilidad en franciscolopez.es"

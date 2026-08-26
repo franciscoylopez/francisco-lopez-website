@@ -9,16 +9,22 @@ import { cn } from "@/lib/utils";
 import { FocusSimulator } from "@/components/site/design-system-islands";
 
 import { VideoEmbed } from "@/components/ui/video-embed";
-import { SpecimenCard } from "./shared";
+import { SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (09) BOTONES Y ACCIONES =====================
+/* ===================== BOTONES Y ACCIONES =====================
     Hermana de (08): la otra mitad de la capa interactiva. Existe porque los
     enlaces eran coherentes y los botones no, y la diferencia era justo esta
     página — los enlaces habían hecho el recorrido regla → clase → sección
     publicada → uso, y los botones se habían quedado en el primer paso
     (P37.597). Los demos son los MISMOS `actionVariants` que usa el sitio: si
     una variante cambia, esta página cambia con ella y no puede mentir. */
-export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
+export function Botones({
+  t,
+  marco,
+}: {
+  t: Dictionary["designSystem"]["botones"];
+  marco: SeccionMarco;
+}) {
   // La última ficha —el control sobre imagen, que absorbió la antigua §18— se
   // pinta aparte y a lo ancho: su demo es un vídeo y no cabe en una columna de
   // la rejilla. El corte va aquí, en una línea, y no repartido por el JSX.
@@ -26,9 +32,13 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
   const sobreImagen = t.cases[t.cases.length - 1]!;
 
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -238,6 +248,7 @@ export function Botones({ t }: { t: Dictionary["designSystem"]["botones"] }) {
           />
           <InfoCard title={t.ruleTitle} bullets={t.rule} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );

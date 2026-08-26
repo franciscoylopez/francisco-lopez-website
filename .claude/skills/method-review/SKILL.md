@@ -205,9 +205,10 @@ trabajo humano.*
 anterior por el REMEDIO y no por el síntoma: la regla sin portador necesita un
 **disparador**; esta necesita un **guardián de frontera** —algo que note que apareció un
 archivo en `components/ui/` y le exija lo que la capa exige—. Sus dos instancias:
-`components/ui/article-islands.tsx`, que perdió los 44px, el hover y el foco al escribirse
-fuera de `components/ui/chrome.tsx`, y la sección 15 del Design System, que perdió la
-estructura de las otras
+el **riel de secciones**, que perdió los 44px, el hover y el foco al escribirse fuera de
+`components/ui/chrome.tsx` —vivía en `article-islands.tsx` y desde D121 está en
+`section-index-islands.tsx`, ya con su variante—, y la sección 15 del Design System, que
+perdió la estructura de las otras
 catorce. **Ojo al medirla: su firma es que el hallazgo aparece tarde y en plural** —ocho
 tareas de golpe en una revisión final, no una en cada PR.*
 

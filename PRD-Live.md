@@ -116,15 +116,16 @@ cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 Regla de dos capas (cian = único color de acción; morado decorativo con cuentagotas),
 tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
 
-### Capa de componentes — un núcleo de ocho, diecinueve archivos
+### Capa de componentes — un núcleo de ocho
 
 El **núcleo** son ocho: `action` (el control con caja), `chrome` (el enlace de la
 carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (el par
 eyebrow + titular), `field` (el campo de formulario), `table`, `stat-row` y `layout`
 (cajas y ritmos). Encima, la **capa
 de página**: `lib/page-meta.ts` y `components/site/page-shell.tsx` (D45/D46). Y aparte,
-no encima, la de **artículo largo** (`ui/article.tsx` + `ui/article-islands.tsx`), que
-D76 dejó fuera del núcleo a propósito.
+no encima, la de **artículo largo**, que D76 dejó fuera del núcleo a propósito — y que
+se vacía por su propio criterio: cuando una segunda página quiere una de sus piezas,
+esa pieza sale (`LiveStat` en D113, el índice y el riel en D121).
 
 **Qué hay exactamente en `components/ui/` no lo dice este párrafo: lo dice
 `components/ui/README.md`, derivado del disco** y comprobado en cada PR, con la frase de

@@ -1,4 +1,4 @@
-// @pieza artículo · design-system/12-articulo.tsx · Los bloques del texto largo: portada de capítulo, cita, diagrama, cierre.
+// @pieza artículo · design-system/12-articulo.tsx · Los bloques del texto largo: firma, portada de capítulo, cita, franja de repo y diagrama.
 
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
@@ -83,94 +83,6 @@ export function ByLine({
         </div>
       </div>
     </div>
-  );
-}
-
-/* ───────────────────────── ArticleIndex ───────────────────────── */
-
-export type IndexItem = {
-  id: string;
-  ordinal: string;
-  label: string;
-  minutes: number;
-};
-
-/** El índice navegable de 11 paradas, con tiempo por sección (pintado en
- * servidor: no hace falta JS para verlo ni para saltar). Rejilla continua —
- * el ordinal grande sobre la etiqueta, sin caja propia por celda, con
- * hairlines de división y una pastilla de hover que ocupa la celda entera
- * (P60, feedback de diseño: «variante C»). `intro` es un slot opcional entre
- * el eyebrow y la rejilla — el recuento de palabras/secciones y la nota de
- * lectura vivían ANTES del eyebrow «ÍNDICE» (dos elementos con la misma
- * función, uno encima del otro, feedback de P60 tanda 2); aquí quedan bajo su
- * propio rótulo. */
-export function ArticleIndex({
-  kicker,
-  timeLabel,
-  ariaLabel,
-  intro,
-  items,
-}: {
-  kicker: string;
-  timeLabel: string;
-  ariaLabel: string;
-  intro?: ReactNode;
-  items: IndexItem[];
-}) {
-  return (
-    <nav aria-label={ariaLabel} data-reveal>
-      <div className="border-border flex items-baseline justify-between gap-3 border-b px-1 pb-3">
-        <p className={cn(eyebrowVariants(), "m-0")}>{kicker}</p>
-        <span
-          className={cn(
-            "text-muted-foreground hidden text-[0.78rem] sm:inline",
-            LEADING.meta,
-          )}
-        >
-          {timeLabel}
-        </span>
-      </div>
-      {intro ? <div className="px-1 pt-4 pb-1">{intro}</div> : null}
-      {/* `border-t` además de `border-l` (P60 tanda 3-bis, punto 1): sin ella
-          la rejilla se leía cortada por arriba, como una tabla sin cabecera —
-          las celdas ya cierran su propio borde inferior y derecho, pero nada
-          dibujaba el de arriba. */}
-      <ol className="border-border m-0 mt-3 grid list-none grid-cols-1 border-t border-l p-0 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => (
-          <li key={item.id} className="border-border border-r border-b">
-            {/* @fuera-de-capa: celda de rejilla pulsable, no una tarjeta — los filetes
-                los dibuja el `<li>`, así que la variante `card` le pondría caja y radio
-                propios dentro de una cuadrícula ya cerrada. Sus dos hermanas sí salieron
-                a la variante en P70.15; esta no tiene la divergencia que las movió, porque
-                ya lleva su `focus-visible:bg-muted` (2026-08-25) */}
-            <a
-              href={`#${item.id}`}
-              className="hover:bg-muted focus-visible:bg-muted flex min-h-[7.5rem] flex-col justify-center gap-1 px-5 py-4 no-underline transition-colors"
-            >
-              <span className="font-display text-[1.9rem] leading-none font-semibold">
-                {item.ordinal}
-              </span>
-              <span
-                className={cn(
-                  "text-foreground text-[0.95rem] font-medium",
-                  LEADING.meta,
-                )}
-              >
-                {item.label}
-              </span>
-              <span
-                className={cn(
-                  "text-muted-foreground mt-1 font-mono text-[0.75rem]",
-                  LEADING.meta,
-                )}
-              >
-                ≈{item.minutes} min
-              </span>
-            </a>
-          </li>
-        ))}
-      </ol>
-    </nav>
   );
 }
 
@@ -298,7 +210,7 @@ export function ArticleProse({
     // `flow-root`: crea un contexto de bloque que CONTIENE los floats propios
     // de `Pullquote`/`Pull`/`DiagramPanel`. Sin esto, una cita o un diagrama
     // flotado cerca del final de la prosa se colaba visualmente sobre
-    // `RepoStrip`/`ChapterNav` —hermanos fuera de este contenedor, en normal
+    // `RepoStrip`/`SectionCloser` —hermanos fuera de este contenedor, en normal
     // flow— en vez de quedar contenido dentro de su propia sección (feedback
     // de P60 tanda 2, punto 12: «eso no tiene sentido, nunca debería ocurrir»).
     // El espaciado entre bloques sube de 1.15rem a 1.75rem por la misma tanda
@@ -541,7 +453,7 @@ export type RepoStripPart =
  *
  * `tone: "chrome"` por defecto, en TODAS sus apariciones (P60 tanda 3, punto
  * 5): la franja no vive nunca en medio de un párrafo, siempre ocupa la MISMA
- * posición, justo encima de `ChapterNav` (o de `ContactActions` en el
+ * posición, justo encima de `SectionCloser` (o de `ContactActions` en el
  * cierre) — es chrome de pie de sección, no contenido. La primera versión
  * (D76/P60 tanda 2) le daba tono de contenido en las diez secciones normales
  * y solo chrome en el cierre, así que dentro de un mismo pie convivían dos
@@ -599,82 +511,6 @@ export function RepoStrip({
         />
       </p>
     </footer>
-  );
-}
-
-/* ───────────────────────── ChapterNav ───────────────────────── */
-
-/** La transición entre secciones: puntos de posición + vuelta al índice +
- * siguiente parada. Los puntos son decorativos —«N de M» ya lo dice en
- * texto—, así que no repiten la info por color (punto 6 del checklist). */
-export function ChapterNav({
-  position,
-  total,
-  indexLabel,
-  indexHref,
-  nextLabel,
-  nextHref,
-  positionLabel,
-}: {
-  position: number;
-  total: number;
-  indexLabel: string;
-  indexHref: string;
-  /** Sin `nextHref` (el cierre, que no tiene «siguiente»), no se lee. */
-  nextLabel?: string;
-  nextHref?: string;
-  positionLabel: string;
-}) {
-  return (
-    // El `aria-label` incluye la posición: axe marca `landmark-unique` si once
-    // `<nav>` en la misma página comparten nombre accesible exacto, y aquí hay
-    // uno por sección.
-    <nav
-      aria-label={`Entre secciones · ${positionLabel}`}
-      className="border-border mt-[2.5rem] flex flex-wrap items-center gap-x-4 gap-y-3 border-t pt-5"
-    >
-      <p
-        className={cn(
-          "text-muted-foreground m-0 flex items-center gap-2 text-[0.85rem]",
-          LEADING.meta,
-        )}
-      >
-        {/* Vistas en negro, pendientes en gris, y la ACTUAL en morado — el eje
-            que faltaba (feedback de diseño de P60): antes «vista» y «actual»
-            se confundían en el mismo negro. */}
-        <span aria-hidden="true" className="flex gap-[3px]">
-          {Array.from({ length: total }, (_, i) => (
-            <span
-              key={i}
-              className={cn(
-                "size-[6px] rounded-full",
-                i === position - 1
-                  ? "bg-brand-purple"
-                  : i < position - 1
-                    ? "bg-foreground"
-                    : "bg-border",
-              )}
-            />
-          ))}
-        </span>
-        {positionLabel}
-      </p>
-      <span className="flex-1" />
-      <a
-        href={indexHref}
-        className={chromeLinkVariants({ shape: "inline", tone: "muted" })}
-      >
-        {indexLabel}
-      </a>
-      {nextHref ? (
-        <a
-          href={nextHref}
-          className={chromeLinkVariants({ shape: "inline", tone: "default" })}
-        >
-          {nextLabel}
-        </a>
-      ) : null}
-    </nav>
   );
 }
 

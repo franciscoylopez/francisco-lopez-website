@@ -1,6 +1,6 @@
 "use client";
 
-// @pieza artículo · design-system/12-articulo.tsx · Las islas de cliente del texto largo: riel de secciones, copiar enlace, compartir.
+// @pieza artículo · design-system/12-articulo.tsx · Las islas de cliente del texto largo: barra de progreso, copiar enlace y compartir.
 
 import { Copy, Link2, Share2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
@@ -8,6 +8,11 @@ import { useEffect, useRef, useState } from "react";
 import { actionVariants } from "@/components/ui/action";
 import { useCopyToClipboard } from "@/components/ui/copy-button";
 import { cn } from "@/lib/utils";
+
+// `FloatingShare` navega las MISMAS paradas que el riel, así que comparte su tipo
+// en vez de declarar uno gemelo. El riel se fue a `section-index-islands.tsx`
+// (P70.38); el dock se queda, porque compartir un enlace es cosa del artículo.
+import type { RailItem } from "./section-index-islands";
 
 // Las tres islas de «Cómo se ha creado esta página» (D7: JS solo donde hace
 // falta estado o una API del navegador). El resto de la página es Server
@@ -71,153 +76,6 @@ export function ReadingProgress({ ariaLabel }: { ariaLabel: string }) {
         style={{ transform: "scaleX(0)" }}
       />
     </div>
-  );
-}
-
-/* ───────────────────────── SectionRail ───────────────────────── */
-
-export type RailItem = { id: string; ordinal: string; label: string };
-
-/** El riel fijo de escritorio (≥1280px), con la sección activa resaltada por
- * `IntersectionObserver`. Es una MEJORA, no un requisito: el índice pintado
- * en servidor ya cubre la navegación sin JS, así que si el observer no puede
- * montarse, el riel simplemente no resalta nada — no rompe.
- *
- * Solo se monta a partir del capítulo 01 (P60 tanda 2, punto 3): antes de eso
- * —apertura + sección «Índice»— ya hay un elemento con su misma función
- * (orientar al lector), y el riel encima era un segundo índice compitiendo
- * con el primero. Como `active` arranca en `null` hasta que el observer
- * confirma la primera sección visible, basta con no pintar nada mientras sea
- * `null`. */
-export function SectionRail({ items }: { items: RailItem[] }) {
-  const [active, setActive] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") return;
-    const targets = items
-      .map((it) => document.getElementById(it.id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (targets.length === 0) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        }
-      },
-      { rootMargin: "-30% 0px -55% 0px" },
-    );
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [items]);
-
-  if (active === null) return null;
-
-  /* EL RIEL SE CENTRA EN EL HUECO QUE LE QUEDA, NO EN EL VIEWPORT (P68.57).
-        Antes era `top-1/2 -translate-y-1/2`, o sea centrado sobre la ventana
-        entera, cabecera pegajosa incluida. Con once capítulos medía 548px y no
-        molestaba; con doce mide 598 y la primera pastilla se mete DEBAJO del
-        nav por debajo de 728px de `innerHeight` — que es justo lo que da un
-        portátil de 15" a 1920/125% una vez Chrome se queda con su cromo (~720).
-        Medido: a 700 solapa 14px, a 660 son 34, a 620 son 54, y por debajo de
-        598 además se sale por los dos extremos. No era «se rompe a 1920»: era
-        el eje de ALTO, el que D50 obliga a mirar mientras se dibuja.
-
-        `top-[5rem]` es la MISMA distancia con la que las secciones con ancla
-        libran el nav (`scroll-mt-[5rem]`, tres call sites en
-        `como-se-ha-creado.tsx`); si algún día el nav cambia de alto, se mueven
-        los cuatro juntos.
-
-        Y el `ol` lleva `my-auto` en vez de que el `nav` centre con
-        `items-center`: cuando el contenido desborda un contenedor centrado por
-        alineación, el navegador recorta por ARRIBA y esa parte se vuelve
-        inalcanzable. Con margen automático se centra igual mientras cabe y
-        empieza a desplazarse cuando no, que es lo que tiene que pasar en el
-        capítulo trece.
-
-        El scroll vive en el `nav`, no en el `ol`, y por eso el `nav` mide
-        `w-64`: `overflow-y` distinto de `visible` obliga a `overflow-x` a
-        recortar también, y la pastilla se ensancha hasta `max-w-64` en hover.
-        Con el scroll en el `ol` —de 44px de ancho— la etiqueta se cortaría al
-        aparecer. A cambio, esa caja de 256px se queda `pointer-events-none` y
-        solo la lista los recupera: si no, el riel invisible interceptaría los
-        clics de una columna entera de texto. */
-  return (
-    <nav
-      aria-label="Índice de secciones"
-      className="pointer-events-none fixed top-[5rem] bottom-6 left-[clamp(0.75rem,2vw,1.75rem)] z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex [&::-webkit-scrollbar]:hidden"
-    >
-      {/* `mx-0 my-auto`, no `m-0 my-auto`: la abreviada y la de eje compiten por
-          la misma propiedad y quién gana lo decide el orden de la hoja, no el
-          de las clases. */}
-      <ol className="pointer-events-auto mx-0 my-auto flex w-11 list-none flex-col gap-[0.4rem] p-0">
-        {items.map((item) => {
-          const isActive = item.id === active;
-          return (
-            <li key={item.id}>
-              {/* La etiqueta ya NO es un tooltip flotante aparte: el propio
-                  círculo se ensancha en hover/foco y la revela dentro de la
-                  misma pastilla — «integrado con el índice», feedback de
-                  diseño de P60. `overflow-hidden` + `max-width` en vez de
-                  `width` porque el texto no puede reflowar durante la
-                  transición. `max-w-64` cabe la etiqueta más larga del
-                  índice («El sistema de componentes», 26 caracteres) sin
-                  cortarla — con `max-w-40` el hover truncaba a media palabra
-                  (P60 tanda 2, punto 4). La sección activa vuelve a
-                  blanco/negro: el morado no convenció en pantalla.
-                  El `<a>` es el objetivo táctil de 44×44 (design-review P60:
-                  la píldora visible de 24px medía por debajo del suelo del
-                  checklist); el aspecto entero — círculo, expansión, color —
-                  vive en el `<span>` interior, así que no crece en pantalla.
-                  No compone `chromeLinkVariants`: excepción documentada con
-                  fecha en BRAND.md §Ningún control se escribe a mano.
-                  `justify-start`, NO `-center` (aviso de Francisco: el hover
-                  se desplazaba a la izquierda y tapaba el texto): el pill
-                  crece desde su borde izquierdo, igual que antes del fix de
-                  44×44 — centrado, la mitad del crecimiento empujaba a la
-                  IZQUIERDA, hacia fuera del borde del riel. */}
-              {/* @fuera-de-capa: píldora que se expande en hover/foco con estado activo
-                  propio, y ninguna shape de chrome.tsx cubre ese caso (2026-08-22) */}
-              <a
-                href={`#${item.id}`}
-                aria-current={isActive ? "true" : undefined}
-                className="group flex size-11 shrink-0 items-center justify-start"
-              >
-                <span
-                  className={cn(
-                    // shrink-0 (regresión cazada tras el fix de 44×44, aviso
-                    // de Francisco viendo la página): el <a> exterior también
-                    // es `flex`, así que este pill —flex item suyo— heredaba
-                    // `flex-shrink: 1` por defecto y se encogía a los 44px
-                    // del padre en vez de desbordar hasta max-w-64, aunque el
-                    // padre tenga `overflow: visible`. El shrink ocurre en el
-                    // cálculo del layout flex, no lo evita overflow-visible.
-                    // `border-control-edge`, NO `border-border` (P68.585). El
-                    // filete decorativo y el contorno de un control se parecen
-                    // y no son lo mismo: al segundo WCAG 1.4.11 le pide 3:1,
-                    // porque es lo que permite reconocerlo COMO control, y aquí
-                    // la píldora es lo único que dice que ahí se pulsa. Con
-                    // `--border` medía 1,21:1 en claro y 1,36 en oscuro.
-                    // D97 hizo este cambio en la capa de componentes y este riel
-                    // se quedó fuera por ser la excepción que no compone
-                    // `chromeLinkVariants`; su cadena inline ES su variante, así
-                    // que el token va aquí y no en el call site.
-                    "border-control-edge flex h-6 max-w-6 shrink-0 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out group-hover:max-w-64 group-focus-visible:max-w-64",
-                    isActive
-                      ? "bg-foreground text-background border-foreground"
-                      : "bg-card text-muted-foreground group-hover:bg-card group-hover:text-foreground",
-                  )}
-                >
-                  <span className="flex size-[18px] shrink-0 items-center justify-center">
-                    {item.ordinal}
-                  </span>
-                  <span className="pr-3 text-[0.78rem]">{item.label}</span>
-                </span>
-              </a>
-            </li>
-          );
-        })}
-      </ol>
-    </nav>
   );
 }
 

@@ -7,10 +7,16 @@ import { chromeLinkVariants } from "@/components/ui/chrome";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
-import { SpecimenCard } from "./shared";
+import { SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (08) ENLACES ===================== */
-export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
+/* ===================== ENLACES ===================== */
+export function Enlaces({
+  t,
+  marco,
+}: {
+  t: Dictionary["designSystem"]["enlaces"];
+  marco: SeccionMarco;
+}) {
   // EL CASO INVERTIDO VIVE EN `cases` desde P70.33 —es un caso más de la misma
   // familia y no una excepción con claves propias— pero se PINTA aparte y a lo
   // ancho, por el motivo que explica el comentario de más abajo. El corte va
@@ -19,9 +25,13 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
   const invertido = t.cases[t.cases.length - 1]!;
 
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -155,6 +165,7 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
         <div className="mt-8 max-w-[var(--measure)]">
           <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );
