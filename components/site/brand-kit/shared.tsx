@@ -32,14 +32,10 @@ import { Logo } from "@/components/ui/logo";
 export const LEAD =
   "text-muted-foreground text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
 
-// Descarga con href único (assets neutros al tema: mono negro/blanco).
+// Glifo dimensionado por altura (reutiliza el componente Logo, fuente única de la
+// geometría). `h` en px.
 //
-// El icono ya no es opcional (P37.5988). Había una prop `icon` que cada uso ponía
-// o no, y el resultado era que dentro del MISMO panel el chip de SVG lo llevaba y
-// los de PNG no, aunque los cuatro descargan exactamente igual. La regla del icono
-// —lo lleva la acción que saca al usuario de la página— no admite matiz aquí:
-// estos componentes existen solo para descargar, así que el icono es suyo, no de
-// quien los invoca. Una decisión menos que tomar en cada llamada.
+// EL ENVOLTORIO ES FLEX Y NO BLOCK, y no es cosmético (P37.695). `Logo` es
 // `inline-flex`, así que dentro de un envoltorio `block` es una caja EN LÍNEA:
 // no rellena su hueco, se apoya en la línea de texto, y la altura de esa línea
 // la manda el `line-height` heredado —24px—, no el glifo. Mientras el glifo mide
