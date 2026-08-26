@@ -58,7 +58,13 @@ export function Rejilla({ t }: { t: Dictionary["designSystem"]["rejilla"] }) {
           // `color-mix()` y archiva esos elementos en `incomplete`, que es donde
           // nadie mira (P37.6565).
           data-surface="inverted"
-          className="border-border overflow-hidden rounded-xl border"
+          // A MEDIA ANCHURA, no a la del contenedor. Es un bloque de CÓDIGO, y
+          // el argumento es el mismo de `--measure`: a 1360px las cinco
+          // declaraciones quedan perdidas en una línea de trece centímetros con
+          // el ojo saltando de la propiedad a su valor. En la sección anterior a
+          // la fusión tenía tarjetas al lado que le fijaban este ancho; al
+          // quedarse solo se estiró, y así se veía.
+          className="border-border max-w-[38rem] overflow-hidden rounded-xl border"
           style={{ background: "var(--foreground)" }}
         >
           {/* El botón de copiar mide 44px de suelo táctil, así que la cabecera
@@ -95,6 +101,10 @@ export function Rejilla({ t }: { t: Dictionary["designSystem"]["rejilla"] }) {
                 announcement={t.copiedAnnounce}
                 copiedLabel={t.copiedLabel}
                 onInverted
+                // Debajo: esta barra mide poco más que el propio botón, así que
+                // una pastilla por encima se sale del panel y el
+                // `overflow-hidden` la corta.
+                confirmPlacement="below"
               />
             </span>
           </div>

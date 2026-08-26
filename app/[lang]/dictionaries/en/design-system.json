@@ -428,11 +428,7 @@
     "demoContentBefore": "Every decision on this page is",
     "demoContentLink": "documented and measured",
     "demoContentAfter": "before it reaches the code.",
-    "demoChromeItems": [
-      "Home",
-      "About",
-      "Brand Kit"
-    ],
+    "demoChromeItems": ["Home", "About", "Brand Kit"],
     "ruleTitle": "Why cyan does not live in the text",
     "rule": [
       "Cyan is the system's only action colour: if it also tints every link at rest, it stops signalling anything.",
@@ -496,11 +492,7 @@
     "demoOutlinePrimary": "Download CV",
     "demoNeutral": "Cancel",
     "demoGhost": "Preferences",
-    "demoSegments": [
-      "Desktop",
-      "Tablet",
-      "Mobile"
-    ],
+    "demoSegments": ["Desktop", "Tablet", "Mobile"],
     "stateOn": "Active",
     "stateOff": "Inactive",
     "demoCardLabel": "Email",
@@ -532,39 +524,27 @@
       {
         "kicker": "No weight",
         "cls": "neutral",
-        "demo": [
-          "Fixed",
-          "Coming soon"
-        ],
+        "demo": ["Fixed", "Coming soon"],
         "rule": "What tags along without standing out: a status, a note in the margin, the off half of a pair.",
         "note": "Its text can't be the system grey, tuned against the page background: on top of the pill it drops to 6.44:1."
       },
       {
         "kicker": "Verified figure",
         "cls": "cyan",
-        "demo": [
-          "AAA",
-          "Switches"
-        ],
+        "demo": ["AAA", "Switches"],
         "rule": "A cyan wash for what has been measured, or what passes. The cyan lives in the fill; never in the text."
       },
       {
         "kicker": "Brand mark",
         "cls": "purple",
-        "demo": [
-          "Exit",
-          "Split"
-        ],
+        "demo": ["Exit", "Split"],
         "rule": "A purple wash for what flags something singular: a career milestone, a variant of the logo.",
         "note": "Purple is decorative and never an action colour, so here it can only show up as fill."
       },
       {
         "kicker": "Three registers",
         "cls": "label · value · code",
-        "demo": [
-          "Exit",
-          "Split"
-        ],
+        "demo": ["Exit", "Split"],
         "rule": "Small caps for a status tag, ordinary case for a figure in prose, monospace for a technical value.",
         "note": "It's the only thing that changes from one label to another: height, size, radius and padding are shared."
       }
@@ -596,10 +576,7 @@
     "demoPlaceholder": "marta@company.com",
     "demoError": "That address doesn't look complete. Check the part after the at sign.",
     "demoSummary": "Check these fields before sending:",
-    "demoSummaryItems": [
-      "Name",
-      "Email"
-    ],
+    "demoSummaryItems": ["Name", "Email"],
     "redTitle": "Red isn't a text colour",
     "redRule": [
       "The system red measures 4.31:1 on the light background: it doesn't even reach the minimum a text needs.",
@@ -858,11 +835,7 @@
     "indexKicker": "Contents",
     "indexTimeLabel": "12 min read",
     "indexAriaLabel": "Sample article contents",
-    "indexItems": [
-      "Why it exists",
-      "How the work happens",
-      "The brand"
-    ],
+    "indexItems": ["Why it exists", "How the work happens", "The brand"],
     "diagramCaption": "A real diagram from the page, with its own color tokens.",
     "progressAriaLabel": "Reading progress of the sample article",
     "shareLabel": "Share",

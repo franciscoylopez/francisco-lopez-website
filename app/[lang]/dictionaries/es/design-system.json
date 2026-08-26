@@ -428,11 +428,7 @@
     "demoContentBefore": "Cada decisión de esta página está",
     "demoContentLink": "documentada y medida",
     "demoContentAfter": "antes de llegar al código.",
-    "demoChromeItems": [
-      "Inicio",
-      "Sobre mí",
-      "Brand Kit"
-    ],
+    "demoChromeItems": ["Inicio", "Sobre mí", "Brand Kit"],
     "ruleTitle": "Por qué el cian no vive en el texto",
     "rule": [
       "El cian es el único color de acción del sistema: si además tiñe todo enlace en reposo, deja de señalar nada.",
@@ -496,11 +492,7 @@
     "demoOutlinePrimary": "Descargar CV",
     "demoNeutral": "Cancelar",
     "demoGhost": "Preferencias",
-    "demoSegments": [
-      "Escritorio",
-      "Tablet",
-      "Móvil"
-    ],
+    "demoSegments": ["Escritorio", "Tablet", "Móvil"],
     "stateOn": "Activo",
     "stateOff": "Inactivo",
     "demoCardLabel": "Correo",
@@ -532,39 +524,27 @@
       {
         "kicker": "Sin carga",
         "cls": "neutral",
-        "demo": [
-          "Fijo",
-          "Próximamente"
-        ],
+        "demo": ["Fijo", "Próximamente"],
         "rule": "Lo que acompaña sin destacar: un estado, una nota al margen, la mitad apagada de un par.",
         "note": "Su texto no puede ser el gris del sistema, calibrado contra el fondo de la página: encima de la pastilla se queda en 6,44:1."
       },
       {
         "kicker": "Dato verificado",
         "cls": "cyan",
-        "demo": [
-          "AAA",
-          "Conmuta"
-        ],
+        "demo": ["AAA", "Conmuta"],
         "rule": "Velo de cian para lo que se ha medido o lo que se cumple. El cian está en el fondo; en el texto, nunca."
       },
       {
         "kicker": "Distintivo de marca",
         "cls": "purple",
-        "demo": [
-          "Exit",
-          "Split"
-        ],
+        "demo": ["Exit", "Split"],
         "rule": "Velo de morado para lo que señala una singularidad: un hito de la trayectoria, una variante del logo.",
         "note": "El morado es decorativo y nunca color de acción, así que aquí solo puede aparecer como relleno."
       },
       {
         "kicker": "Tres registros",
         "cls": "label · value · code",
-        "demo": [
-          "Exit",
-          "Split"
-        ],
+        "demo": ["Exit", "Split"],
         "rule": "Versalitas para un rótulo de estado, caja normal para un dato en prosa, monoespaciada para un valor técnico.",
         "note": "Es lo único que cambia de una etiqueta a otra: alto, cuerpo, radio y padding son los mismos para todas."
       }
@@ -596,10 +576,7 @@
     "demoPlaceholder": "marta@empresa.com",
     "demoError": "Ese correo no parece completo. Revisa la parte de después de la arroba.",
     "demoSummary": "Revisa estos campos antes de enviar:",
-    "demoSummaryItems": [
-      "Nombre",
-      "Correo"
-    ],
+    "demoSummaryItems": ["Nombre", "Correo"],
     "redTitle": "El rojo no es color de texto",
     "redRule": [
       "El rojo del sistema mide 4,31:1 sobre el fondo claro: no llega al mínimo que pide un texto.",
@@ -858,11 +835,7 @@
     "indexKicker": "Índice",
     "indexTimeLabel": "12 min de lectura",
     "indexAriaLabel": "Índice del artículo de muestra",
-    "indexItems": [
-      "Por qué existe",
-      "Cómo se trabaja",
-      "La marca"
-    ],
+    "indexItems": ["Por qué existe", "Cómo se trabaja", "La marca"],
     "diagramCaption": "Un diagrama real de la página, con sus mismos tokens de color.",
     "progressAriaLabel": "Progreso de lectura del artículo de muestra",
     "shareLabel": "Compartir",

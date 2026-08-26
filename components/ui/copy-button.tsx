@@ -91,16 +91,19 @@ function Confirm({
   text,
   on,
   onInverted,
+  placement,
 }: {
   text: string;
   on: boolean;
   onInverted: boolean;
+  placement: "above" | "below";
 }) {
   return (
     <span
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute right-0 bottom-full mb-1 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none",
+        "pointer-events-none absolute right-0 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none",
+        placement === "above" ? "bottom-full mb-1" : "top-full mt-1",
         // La pastilla se apoya en el carril contrario al del control, igual que
         // hace `onInverted`: sobre la banda invertida el fondo de la página ES
         // `--foreground`, así que vuelve a `--background` para verse. Es el par
@@ -150,6 +153,21 @@ type Comun = {
    * invertido ese `foreground` es `--background`.
    */
   onInverted?: boolean;
+  /**
+   * A qué lado del control aparece la confirmación. Arriba por defecto, que es
+   * donde no molesta en una tarjeta.
+   *
+   * NO ES UNA PREFERENCIA, ES EL RECORTE OTRA VEZ. La pastilla va absoluta, así
+   * que su contenedor con `overflow-hidden` la corta cuando en esa dirección no
+   * hay sitio: en la tarjeta del Brand Kit se salía por la derecha (resuelto
+   * anclándola a ese borde) y en la cabecera del panel de tokens se sale por
+   * ARRIBA, porque esa barra mide poco más que el propio botón. Ahí baja.
+   *
+   * Un popover se colocaría solo con `position-try-fallbacks`, pero esto no es
+   * un popover: no atrapa foco ni se cierra, es una etiqueta. Meterla en la capa
+   * superior para elegir un lado sería pagar un widget por un margen.
+   */
+  confirmPlacement?: "above" | "below";
   className?: string;
 };
 
@@ -170,6 +188,7 @@ export function CopyButton({
   announcement,
   copiedLabel,
   onInverted = false,
+  confirmPlacement = "above",
   className,
 }: Comun & { value: string }) {
   const { copied, announce, copy } = useCopyToClipboard();
@@ -191,6 +210,7 @@ export function CopyButton({
           text={copiedLabel.replaceAll("{value}", value)}
           on={copied}
           onInverted={onInverted}
+          placement={confirmPlacement}
         />
       </span>
       <p aria-live="polite" className="sr-only">
@@ -226,6 +246,7 @@ export function CopyChoice({
   announcement,
   copiedLabel,
   onInverted = false,
+  confirmPlacement = "above",
   className,
 }: Comun & {
   /** Los dos valores, en el orden en que se ofrecen. */
@@ -266,6 +287,7 @@ export function CopyChoice({
           text={copiedLabel.replaceAll("{value}", ultimo)}
           on={copied}
           onInverted={onInverted}
+          placement={confirmPlacement}
         />
       </span>
 

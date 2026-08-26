@@ -8,18 +8,25 @@ module.exports = (viejo) => ({
   lead: "Un campo no es un botón pequeño: tiene etiqueta, tiene estado de error, y tiene que decirlo en voz alta.",
 
   fieldTitle: viejo.formulario.fieldTitle,
-  fieldLead: "Etiqueta y control son una sola pieza, y el suelo táctil vive en el control, que es donde se pulsa.",
+  fieldLead:
+    "Etiqueta y control son una sola pieza, y el suelo táctil vive en el control, que es donde se pulsa.",
   fieldKicker: viejo.formulario.fieldKicker,
-  fieldRule: "La etiqueta va siempre visible y unida al campo, nunca dentro como texto de ayuda: un marcador de posición desaparece al escribir y deja el campo sin nombre.",
-  fieldNote: "Alto mínimo de 44px, el mismo suelo táctil que los botones. El anillo de foco lo pone la regla global.",
+  fieldRule:
+    "La etiqueta va siempre visible y unida al campo, nunca dentro como texto de ayuda: un marcador de posición desaparece al escribir y deja el campo sin nombre.",
+  fieldNote:
+    "Alto mínimo de 44px, el mismo suelo táctil que los botones. El anillo de foco lo pone la regla global.",
   errorKicker: viejo.formulario.errorKicker,
-  errorRule: "El mensaje se ata al campo, así que un lector de pantalla lo oye al llegar a él y no solo al intentar enviar.",
-  errorNote: "El borde rojo y el icono marcan la forma; el texto va en el color normal.",
+  errorRule:
+    "El mensaje se ata al campo, así que un lector de pantalla lo oye al llegar a él y no solo al intentar enviar.",
+  errorNote:
+    "El borde rojo y el icono marcan la forma; el texto va en el color normal.",
 
   summaryTitle: viejo.formulario.summaryTitle,
-  summaryLead: "Un aviso que se anuncia solo, sin robar el foco, y que enumera qué campos hay que revisar.",
+  summaryLead:
+    "Un aviso que se anuncia solo, sin robar el foco, y que enumera qué campos hay que revisar.",
   summaryKicker: viejo.formulario.summaryKicker,
-  summaryRule: "Aparece al intentar enviar y se anuncia como alerta. El foco lo mueve el formulario al primer campo que falla: dos saltos a la vez dejarían al lector sin saber dónde está.",
+  summaryRule:
+    "Aparece al intentar enviar y se anuncia como alerta. El foco lo mueve el formulario al primer campo que falla: dos saltos a la vez dejarían al lector sin saber dónde está.",
 
   demoLabel: viejo.formulario.demoLabel,
   demoPlaceholder: viejo.formulario.demoPlaceholder,
