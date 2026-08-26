@@ -52,11 +52,21 @@ function archivosTsx(carpetas: string[]): string[] {
   return salida;
 }
 
-/** De dónde puede salir legítimamente el aspecto de un control. */
+/**
+ * De dónde puede salir legítimamente el aspecto de un control.
+ *
+ * `indexCellVariants` y `railPillVariants` entran el 2026-08-26 con P70.38, y no
+ * son dos nombres más: son las dos capas que RETIRAN dos de las cuatro excepciones
+ * vivas de `BRAND.md` —la celda del índice y la píldora del riel—, que llevaban su
+ * condición de salida escrita desde agosto. Un nombre nuevo aquí es la prueba de
+ * que la excepción se cerró, no de que se añadió otra puerta.
+ */
 const CAPAS = [
   "actionVariants",
   "chromeLinkVariants",
   "badgeVariants",
+  "indexCellVariants",
+  "railPillVariants",
   "link-chrome",
   "link-content",
   "icon-chrome",

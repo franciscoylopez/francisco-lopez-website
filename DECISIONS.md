@@ -156,6 +156,7 @@
 - D118 · El `srcset` de `next/image` no baja de `deviceSizes[0]` cuando el `sizes` lleva un `vw`
 - D119 · Una descarga que conmuta con el tema está adivinando, y la mitad de sus anclas no existe
 - D120 · El primer `popover` del repositorio, y la etiqueta que no es un widget
+- D121 · El índice de una página con paradas deja de ser «de artículo», y dos excepciones cumplen su condición de salida
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -4617,6 +4618,14 @@ porque su variabilidad daría rojos falsos (D49).
 > `LiveStat` salió a `ui/live-stat.tsx` cuando `/accesibilidad` quiso publicar una cifra
 > derivada. Su premisa —«un formato que hoy solo tiene una página»— nunca fue cierta para
 > esa pieza; lo era para las otras siete, y ahí D76 sigue en pie.
+>
+> **Y EN TRES MÁS el 2026-08-26 por D121.** La capa son CUATRO: el índice, el riel y el
+> cierre de bloque salieron a `ui/section-index*.tsx` al entrar en las tres páginas
+> hermanas. Segunda vez que ocurre lo mismo, y eso ya no es un caso sino un patrón: **la
+> premisa de D76 no se rompe de golpe, se rompe pieza a pieza**, y lo que la rompe siempre
+> es una SEGUNDA página queriendo algo que se escribió para una. Lo que queda dentro
+> —firma, portada de capítulo, cita, franja de repo, diagrama, prosa y la barra de
+> progreso— sí es de texto largo, y ahí D76 sigue entero.
 
 **El problema.** «Cómo se ha creado esta página» (P60) es la primera página del sitio con
 ~6.000 palabras de prosa continua, y las siete piezas del sistema (D36) no cubren ese caso:
@@ -7067,3 +7076,59 @@ solo en el menú.
 escrito con clases sueltas. No lleva marca de excepción — se compone de `ghost` con `cn()`, como
 la variante `card`, así que la pastilla del hover, el foco y el suelo de 44px los sigue poniendo
 la capa.
+
+---
+
+## D121 · El índice de una página con paradas deja de ser «de artículo», y dos excepciones cumplen su condición de salida — 2026-08-26
+
+**El disparador.** Francisco planteó llevar el índice, el riel lateral y el cierre de bloque
+del artículo a las tres páginas hermanas, con una condición: *«si no vale para las tres, no se
+implementa en ninguna»*. La decisión se tomó **midiendo el sitio servido**, no leyendo el
+código, y está entera en la tarea P70.38. El resumen: Design System 31,1 pantallas, Brand Kit
+12,6 y Accesibilidad 11,0 — la 2.ª, 3.ª y 4.ª página más altas del sitio, y con el artículo
+(36,8) las únicas cuatro por encima de diez. Ninguna tenía **ni una** ancla de sección.
+
+**Lo que la medición corrigió.** La duda estaba puesta en el Brand Kit, y por palabras tenía
+fundamento: 1.350, la mitad que Accesibilidad. Por **alto** es la tercera del sitio, porque
+está hecha de assets. *Contar palabras en una página de especímenes mide la cosa que no es* —
+que es la misma familia de error que D50 (el eje que faltaba era el alto) y que el censo de
+contraste (leer el CSS en vez del DOM).
+
+**La consecuencia en la capa.** En cuanto son cuatro páginas, la premisa literal de D76
+—«resuelve un FORMATO que hoy solo tiene UNA página»— deja de ser cierta para esas tres
+piezas. Salen a `ui/section-index.tsx` (servidor: `SectionIndex`, `SectionCloser`) y
+`ui/section-index-islands.tsx` (cliente: `SectionRail`), en el grupo **primitiva**, no en el
+núcleo: el núcleo de D36 es lo que usa todo el sitio, y esto lo usan cuatro páginas de
+catorce. Su hermana de peldaño es `page-closer.tsx` — una cierra la página, esta la indexa.
+
+**`minutes` se convierte en `meta?: ReactNode`, y ese es el cambio que hace la pieza
+reutilizable.** `ArticleIndex` exigía un número de minutos y pintaba «≈4 min»; eso solo es
+verdad donde la sección es prosa. Publicar un tiempo de lectura calculado sobre especímenes
+habría sido inventarse una cifra, que es contra lo que existe D38. Como slot libre, la pieza
+deja de saber qué significa el dato y cada página decide qué pone o si no pone nada.
+
+**`ReadingProgress` NO se vino, y decirlo es parte de la decisión.** Mide cuánto texto queda
+por leer; en una página de consulta —a la que se llega buscando una sección concreta— esa
+cifra no significa nada. Que dos piezas vecinas se muevan no arrastra a la tercera.
+
+**Dos excepciones de `BRAND.md` cumplen su condición de salida, y quedan dos.** La celda del
+índice («sale cuando la capa tenga el caso celda pulsable») es ahora `indexCellVariants`; la
+píldora del riel es `railPillVariants`. La del riel decía «sale a `chrome.tsx`» **y no acabó
+allí**: `chromeLinkVariants` gobierna el ancla, y en el riel el ancla es solo el objetivo
+táctil de 44×44 — el aspecto entero vive en un `<span>` interior que ninguna `shape` de chrome
+puede describir. De ahí la regla que deja esto: **una condición de salida acierta el CUÁNDO
+mucho mejor que el DÓNDE**, y lo que la excepción pedía era que dejara de ser una cadena
+inline, no que aterrizara en un archivo concreto.
+
+**El gate que lo respalda.** `npm run gate:html` sobre las 28 variantes: **diff vacío**. Mover
+tres piezas de archivo, renombrarlas y cambiar la forma de un prop no altera ni un byte del
+HTML servido. Y la línea base se tomó del build anterior con su `BUILD_ID` comprobado en los
+dos lados (`pq8wDgOR…` contra `ySeDeFLK…`), que es la trampa de la que ya se avisó: un
+servidor viejo que no muere certifica `main` contra `main`.
+
+**Lo que queda pendiente a propósito.** La publicación sigue declarada en §12 del Design
+System, que ya demuestra las tres piezas con especímenes que P70.33 compuso a propósito.
+**Se mueve a §10 en P70.39**, no antes: es la tarea que pone un índice real en la propia
+página del Design System, y a partir de ahí la mejor demo posible no es un espécimen sino el
+índice vivo de la página, tres secciones más arriba. Es la promesa de «las piezas reales del
+sitio como demo» llevada a su límite.

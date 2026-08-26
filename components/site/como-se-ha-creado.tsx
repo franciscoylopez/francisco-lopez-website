@@ -2,10 +2,8 @@ import type { ComponentType, ReactNode } from "react";
 
 import type { ComoSeHaCreadoDict } from "@/app/[lang]/dictionaries";
 import {
-  ArticleIndex,
   ArticleProse,
   ByLine,
-  ChapterNav,
   RepoStrip,
   type RepoStripPart,
   SectionCover,
@@ -13,9 +11,10 @@ import {
 import {
   FloatingShare,
   ReadingProgress,
-  SectionRail,
   ShareActions,
 } from "@/components/ui/article-islands";
+import { SectionCloser, SectionIndex } from "@/components/ui/section-index";
+import { SectionRail } from "@/components/ui/section-index-islands";
 import { Badge } from "@/components/ui/badge";
 import { LEADING, SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
@@ -55,7 +54,7 @@ import { CIDiagram } from "./como-se-ha-creado-diagrams/09-ci";
 // la franja de contacto compartida (D29) al final del cierre, así que era la
 // única de las once secciones con un pie distinto al resto. Se quitó: el
 // contacto ya vive en la home, y el cierre gana en consistencia siendo una
-// sección más — mismo `SectionCover`, mismo `RepoStrip`, mismo `ChapterNav`
+// sección más — mismo `SectionCover`, mismo `RepoStrip`, mismo `SectionCloser`
 // (sin `nextHref`, por no tener «siguiente»).
 //
 // PASADA DE FEEDBACK (2026-08-21, revisión de Francisco sobre la página
@@ -205,18 +204,28 @@ export function ComoSeHaCreado({
   );
   const totalSections = t.sections.length + 1; // + cierre
 
+  // El tiempo por sección es el `meta` de la celda, no un campo que la pieza
+  // conozca (P70.38): `SectionIndex` sirve ahora a cuatro páginas y solo esta es
+  // prosa, así que quien sabe qué significa el dato es el llamador. Va como
+  // fragmento y no como plantilla —`≈{n} min`, no `` `≈${n} min` ``— para que el
+  // HTML servido no cambie ni un byte: React separa nodos de texto adyacentes con
+  // `<!-- -->` y una cadena única los fundiría en uno. Es lo que `gate:html` mira.
+  const metaTiempo = (body: Parameters<typeof blocksOf>[0]) => (
+    <>≈{sectionReadingTime(blocksOf(body)).minutes} min</>
+  );
+
   const indexItems = [
     ...t.sections.map((s) => ({
       id: s.id,
       ordinal: s.ordinal,
       label: s.indexLabel,
-      minutes: sectionReadingTime(blocksOf(s.body)).minutes,
+      meta: metaTiempo(s.body),
     })),
     {
       id: t.closing.id,
       ordinal: t.closing.ordinal,
       label: t.closing.indexLabel,
-      minutes: sectionReadingTime(blocksOf(t.closing.body)).minutes,
+      meta: metaTiempo(t.closing.body),
     },
   ];
 
@@ -231,7 +240,7 @@ export function ComoSeHaCreado({
   // «1 de 11 · 4 min», sin «Capítulo» ni el cero de relleno ni «de lectura»
   // (P60 tanda 3, punto 2): con el texto largo, la meta-línea competía en
   // ancho con el numeral y no cabía a su lado. «min» sin traducir es la
-  // misma convención que ya usa `ArticleIndex` para el tiempo por sección.
+  // misma convención que ya usa `SectionIndex` para el tiempo por sección.
   const metaLineFor = (position: number, minutes: number) =>
     `${position} ${t.sectionMeta.of} ${totalSections} · ${minutes} min`;
 
@@ -332,7 +341,7 @@ export function ComoSeHaCreado({
 
       {/* Apertura: prosa de entrada, ANTES del índice y fuera de él —no es una
           parada más del recorrido, no lleva ordinal ni cuenta en `indexItems`,
-          y por eso no aparece en el riel ni en `ChapterNav`. Lleva SU PROPIO
+          y por eso no aparece en el riel ni en `SectionCloser`. Lleva SU PROPIO
           titular (`SectionHeader`, `level={2}`) porque el `h1` de la página ya
           lo puso el hero — dos `h1` rompería el punto 4 del checklist, que
           `check:marco` verifica— pero en tamaño `section` (el mismo peldaño
@@ -364,15 +373,15 @@ export function ComoSeHaCreado({
 
       {/* scroll-mt-[5rem] en las tres secciones con ancla (design-review P60):
           el nav es sticky y ningún ancla tenía margen de scroll, así que los
-          30+ enlaces internos del artículo (índice, ChapterNav) dejaban la
+          30+ enlaces internos del artículo (índice, SectionCloser) dejaban la
           sección arrancando debajo del nav. 5rem es el mismo alto que ya
           asume la apertura (`calc(100svh-5rem)`), con margen de sobra sobre
           los ~65px reales del nav. */}
       <section id="indice" className={cn(SECTION, "scroll-mt-[5rem]")}>
         <div className={WRAP}>
-          <ArticleIndex
+          <SectionIndex
             kicker={t.index.kicker}
-            timeLabel={t.index.timeLabel}
+            aside={t.index.timeLabel}
             ariaLabel={t.index.ariaLabel}
             items={indexItems}
             intro={
@@ -435,7 +444,7 @@ export function ComoSeHaCreado({
                 label={s.enlace.label}
                 parts={conAncla(s.enlace.parts)}
               />
-              <ChapterNav
+              <SectionCloser
                 position={position}
                 total={totalSections}
                 indexLabel={t.chapterNav.indexLabel}
@@ -473,8 +482,8 @@ export function ComoSeHaCreado({
               su propio bloque de «Escríbeme / teléfono / LinkedIn / CV», que
               lo hacía la única sección con un pie distinto, y ese contacto ya
               vive en la home (D29). Sin «siguiente» —es la última—, así que
-              `ChapterNav` se llama sin `nextHref`. */}
-          <ChapterNav
+              `SectionCloser` se llama sin `nextHref`. */}
+          <SectionCloser
             position={totalSections}
             total={totalSections}
             indexLabel={t.chapterNav.indexLabel}

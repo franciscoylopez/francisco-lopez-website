@@ -1,8 +1,6 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import {
-  ArticleIndex,
   ByLine,
-  ChapterNav,
   DiagramPanel,
   Pull,
   Pullquote,
@@ -13,9 +11,10 @@ import { LiveStat } from "@/components/ui/live-stat";
 import {
   FloatingShare,
   ReadingProgress,
-  SectionRail,
   ShareActions,
 } from "@/components/ui/article-islands";
+import { SectionCloser, SectionIndex } from "@/components/ui/section-index";
+import { SectionRail } from "@/components/ui/section-index-islands";
 import { SectionHeader } from "@/components/ui/heading";
 import { fillPages } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
@@ -46,7 +45,7 @@ import { GroupHead, SpecimenCard } from "./shared";
     real al lado, lo segundo no le dice nada a quien lee. */
 
 /** Los tres objetivos que activan el riel y el dock de compartir (design-review
- * P60, F3/60.6): son las mismas paradas que enseña `ArticleIndex` arriba, y no
+ * P60, F3/60.6): son las mismas paradas que enseña `SectionIndex` arriba, y no
  * hace falta más de tres para que el `IntersectionObserver` real tenga algo
  * que observar dentro de este panel. */
 const RAIL_IDS = ["ds-rail-1", "ds-rail-2", "ds-rail-3"];
@@ -93,11 +92,14 @@ export function ArticuloLargo({
               <ByLine name={t.bylineName} role={t.bylineRole} />
               <ShareActions shareLabel={t.shareLabel} {...shareStrings} />
             </div>
-            <ArticleIndex
+            <SectionIndex
               kicker={t.indexKicker}
-              timeLabel={t.indexTimeLabel}
+              aside={t.indexTimeLabel}
               ariaLabel={t.indexAriaLabel}
-              items={railItems.map((it, i) => ({ ...it, minutes: 3 + i }))}
+              items={railItems.map((it, i) => ({
+                ...it,
+                meta: <>≈{3 + i} min</>,
+              }))}
             />
           </div>
         </SpecimenCard>
@@ -195,7 +197,7 @@ export function ArticuloLargo({
             <p className="text-muted-foreground m-0 text-[1.02rem] leading-[1.7]">
               {t.pieSample}
             </p>
-            <ChapterNav
+            <SectionCloser
               position={5}
               total={11}
               indexLabel={t.chapterIndexLabel}
