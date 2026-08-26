@@ -150,7 +150,7 @@ export function DesignSystem({
           sitio en el ORDEN DE TABULACIÓN sí. En el artículo precedía al `h1` y
           metía trece enlaces por delante del título de la página (design-review
           P60). Aquí nace ya detrás. */}
-      <SectionRail items={paradas} />
+      <SectionRail items={paradas} ariaLabel={t.indice.railAriaLabel} />
 
       {/* `scroll-mt-[5rem]`: el nav es sticky y sin margen de scroll el ancla deja
           la sección arrancando por debajo de él. Es la misma distancia que usa
@@ -179,7 +179,12 @@ export function DesignSystem({
       <Botones t={t.botones} marco={marcos.botones} />
       <Etiquetas t={t.etiquetas} marco={marcos.etiquetas} lang={lang} />
       <Formulario t={t.formulario} marco={marcos.formulario} />
-      <Composicion t={t.composicion} marco={marcos.composicion} lang={lang} />
+      <Composicion
+        t={t.composicion}
+        marco={marcos.composicion}
+        paradas={paradas}
+        lang={lang}
+      />
       <Accesibilidad
         t={t.accesibilidad}
         marco={marcos.accesibilidad}

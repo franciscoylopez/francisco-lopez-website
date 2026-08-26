@@ -16,6 +16,7 @@
   "indice": {
     "kicker": "Contents",
     "ariaLabel": "Design System contents",
+    "railAriaLabel": "Jump to a section",
     "closerLabel": "Contents",
     "nextLabel": "Next:",
     "of": "of"
@@ -646,6 +647,23 @@
       "Changing it moves the rhythm of every page at once, which is exactly what it exists for."
     ],
     "demoMonoFoot": "It's published in full in the layout tokens section, with its value and its reason.",
+    "navTitle": "Navigating a page with stops",
+    "navLead": "Three pieces that turn a long page into one you can move through. This page uses all three: the contents grid sits right below the hero, the rail runs down the left above 1280px, and the block footer closes each of its twelve sections.",
+    "navIndexKicker": "The map",
+    "navIndexRule": "A grid of stops rendered on the server: it navigates without JavaScript.",
+    "navIndexNote": "The third line of each cell is a free, optional slot. The article puts its per-section reading time there; a page of specimens has no prose to time, so it stays empty.",
+    "navIndexDemoKicker": "Contents",
+    "navIndexDemoAria": "Contents (specimen)",
+    "navCloserKicker": "The foot of every stop",
+    "navCloserRule": "Where you are, the way back to the contents, and the next stop.",
+    "navCloserNote": "The dots are decorative: the position is spelled out in text too, which is what satisfies point 6 of the checklist. The label carries that position so twelve footers never share a name.",
+    "navCloserIndexLabel": "Contents",
+    "navCloserNextLabel": "Next stop",
+    "navCloserPositionLabel": "2 of 3",
+    "navRailKicker": "The standing shortcut",
+    "navRailRule": "A client island, pinned to the window and only above 1280px.",
+    "navRailNote": "An enhancement, not a requirement: without JavaScript the contents grid above already covers navigation. The circle widens on hover and reveals its label inside the same pill.",
+    "navRailDemoAria": "Section rail (specimen)",
     "closerTitle": "The page closer",
     "closerLead": "The end of the content before the footer: where you go from here, with the same format across all fourteen pages.",
     "closerKicker": "Two destinations",
@@ -850,6 +868,7 @@
     "shareCopiedLabel": "Link copied",
     "shareCopiedAnnounce": "Link copied to clipboard",
     "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
+    "railAriaLabel": "Section rail (specimen)",
     "railHint": "Just like the real page, but contained to this panel: outside it they're pinned to the window."
   }
 }

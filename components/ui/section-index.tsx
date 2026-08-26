@@ -1,4 +1,4 @@
-// @pieza primitiva · design-system/12-articulo.tsx · La navegación de una página con paradas: el índice y el cierre de bloque.
+// @pieza primitiva · design-system/10-composicion.tsx · La navegación de una página con paradas: el índice y el cierre de bloque.
 
 import { cva } from "class-variance-authority";
 import type { ReactNode } from "react";

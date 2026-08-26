@@ -1,6 +1,6 @@
 "use client";
 
-// @pieza primitiva · design-system/12-articulo.tsx · El riel fijo que sigue la sección activa de una página con paradas.
+// @pieza primitiva · design-system/10-composicion.tsx · El riel fijo que sigue la sección activa de una página con paradas.
 
 import { cva } from "class-variance-authority";
 import { useEffect, useState } from "react";
@@ -78,7 +78,31 @@ export const railPillVariants = cva(
  * misma función, y el riel encima era un segundo índice compitiendo con el
  * primero. Como `active` arranca en `null` hasta que el observer confirma la
  * primera sección visible, basta con no pintar nada mientras sea `null`. */
-export function SectionRail({ items }: { items: RailItem[] }) {
+export function SectionRail({
+  items,
+  ariaLabel,
+}: {
+  items: RailItem[];
+  /**
+   * EL NOMBRE ACCESIBLE, QUE ANTES ESTABA HARDCODEADO EN ESPAÑOL (P70.39).
+   *
+   * Dos defectos de una vez, los dos vistos en la página SERVIDA y ninguno
+   * detectable leyendo el JSX:
+   *
+   * 1. `/en/como-se-ha-creado` y `/en/design-system` anunciaban «Índice de
+   *    secciones» a un lector de pantalla en inglés. Es la regla más dura del
+   *    proyecto —cero strings hardcodeados— incumplida dentro de una pieza.
+   * 2. Con un nombre FIJO, dos rieles de la misma página comparten nombre
+   *    accesible: el del Design System y el de su propio espécimen de §12 se
+   *    montan a la vez en cuanto la caja de demo entra en la banda del observer,
+   *    y ahí `landmark-unique` deja de cumplirse. `SectionCloser` ya resolvía esto
+   *    metiendo la posición en su etiqueta; al riel le faltaba.
+   *
+   * Obligatorio, no opcional con valor por defecto: un defecto que reaparece en
+   * silencio no se cierra con un default.
+   */
+  ariaLabel: string;
+}) {
   const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
@@ -130,7 +154,7 @@ export function SectionRail({ items }: { items: RailItem[] }) {
         clics de una columna entera de texto. */
   return (
     <nav
-      aria-label="Índice de secciones"
+      aria-label={ariaLabel}
       className="pointer-events-none fixed top-[5rem] bottom-6 left-[clamp(0.75rem,2vw,1.75rem)] z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex [&::-webkit-scrollbar]:hidden"
     >
       {/* `mx-0 my-auto`, no `m-0 my-auto`: la abreviada y la de eje compiten por

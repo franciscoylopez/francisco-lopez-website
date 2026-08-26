@@ -43,6 +43,7 @@
     "kicker": "Contents",
     "timeLabel": "time per section",
     "ariaLabel": "Article contents",
+    "railAriaLabel": "Jump to a section",
     "wordsSuffix": "words",
     "sectionsSuffix": "sections",
     "note": "Every section closes on its own: you can read it in chunks, in any order. The bar along the top edge tracks where you are."

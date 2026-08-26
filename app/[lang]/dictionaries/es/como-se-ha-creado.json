@@ -43,6 +43,7 @@
     "kicker": "Índice",
     "timeLabel": "tiempo por sección",
     "ariaLabel": "Índice del artículo",
+    "railAriaLabel": "Ir a una sección",
     "wordsSuffix": "palabras",
     "sectionsSuffix": "secciones",
     "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas."

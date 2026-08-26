@@ -329,7 +329,7 @@ export function ComoSeHaCreado({
           teclado o lector de pantalla pasaba por 11 enlaces del índice + 2
           botones del dock antes de que se anunciara el `h1`. */}
       <ReadingProgress ariaLabel={t.progress.ariaLabel} />
-      <SectionRail items={railItems} />
+      <SectionRail items={railItems} ariaLabel={t.index.railAriaLabel} />
       <FloatingShare
         items={railItems}
         shareLabel={t.hero.shareLabel}

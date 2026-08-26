@@ -234,7 +234,7 @@ export function ArticuloLargo({
             misma caja vacía. */}
         <div className="border-border bg-background relative isolate h-[220px] [transform:translateZ(0)] overflow-hidden rounded-xl border">
           <ReadingProgress ariaLabel={t.progressAriaLabel} />
-          <SectionRail items={railItems} />
+          <SectionRail items={railItems} ariaLabel={t.railAriaLabel} />
           <FloatingShare
             items={railItems}
             shareLabel={t.shareLabel}

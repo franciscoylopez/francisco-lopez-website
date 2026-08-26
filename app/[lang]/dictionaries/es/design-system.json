@@ -16,6 +16,7 @@
   "indice": {
     "kicker": "Índice",
     "ariaLabel": "Índice del Design System",
+    "railAriaLabel": "Ir a una sección",
     "closerLabel": "Índice",
     "nextLabel": "Siguiente:",
     "of": "de"
@@ -646,6 +647,23 @@
       "Cambiarlo mueve el ritmo de todas las páginas a la vez, que es justo para lo que existe."
     ],
     "demoMonoFoot": "Se publica entero en la sección de tokens de layout, con su valor y su motivo.",
+    "navTitle": "La navegación de una página con paradas",
+    "navLead": "Tres piezas que convierten una página larga en una recorrible. Esta misma las usa: el índice va justo debajo del hero, el riel a la izquierda por encima de 1280px y el cierre al pie de cada una de sus doce secciones.",
+    "navIndexKicker": "El mapa",
+    "navIndexRule": "Rejilla de paradas pintada en servidor: se navega sin JavaScript.",
+    "navIndexNote": "La tercera línea de cada celda es libre y opcional. El artículo pone ahí su tiempo por sección; en una página de especímenes no hay prosa que cronometrar, así que va vacía.",
+    "navIndexDemoKicker": "Índice",
+    "navIndexDemoAria": "Índice (espécimen)",
+    "navCloserKicker": "El pie de cada parada",
+    "navCloserRule": "Dónde estás, la vuelta al índice y la parada siguiente.",
+    "navCloserNote": "Los puntos son decorativos: la posición va además en texto, que es lo que cumple el punto 6 del checklist. La etiqueta lleva la posición dentro para que doce cierres no compartan nombre.",
+    "navCloserIndexLabel": "Índice",
+    "navCloserNextLabel": "Siguiente parada",
+    "navCloserPositionLabel": "2 de 3",
+    "navRailKicker": "El atajo permanente",
+    "navRailRule": "Isla de cliente, fija a la ventana y solo por encima de 1280px.",
+    "navRailNote": "Es una mejora, no un requisito: sin JavaScript el índice de arriba ya cubre la navegación. El círculo se ensancha al pasar por encima y revela el rótulo dentro de la misma pastilla.",
+    "navRailDemoAria": "Riel de secciones (espécimen)",
     "closerTitle": "El cierre de página",
     "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en las catorce páginas.",
     "closerKicker": "Dos destinos",
@@ -850,6 +868,7 @@
     "shareCopiedLabel": "Enlace copiado",
     "shareCopiedAnnounce": "Enlace copiado al portapapeles",
     "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
+    "railAriaLabel": "Riel de secciones (espécimen)",
     "railHint": "Igual que en la página real, pero contenidos a este panel: fuera de él van fijos a la ventana."
   }
 }
