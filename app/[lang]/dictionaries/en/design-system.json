@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Design foundations",
     "title": "Design System",
-    "lead": "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy and light/dark behavior. It doesn't define the content: it defines how everything inside breathes.",
+    "lead": "A design system isn't there to make everything look alike: it's there so a decision gets made once. Change a button's hover or its touch target here and it reaches all fourteen pages at the same time.",
     "statContainer": "Max container width",
     "statBreakpoints": "Breakpoints",
     "statMeasure": "Reading measure (~91 char.)",
