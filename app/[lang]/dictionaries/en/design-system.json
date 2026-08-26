@@ -625,7 +625,7 @@
       {
         "part": "Row name",
         "markup": "th scope=row",
-        "what": "Ties each figure to its row: «Dimmed on card, light, 9.14:1» instead of three loose numbers."
+        "what": "Ties each figure to its row: «Dimmed on card, light, {mutedOnCard.light}» instead of three loose numbers."
       },
       {
         "part": "Column width",

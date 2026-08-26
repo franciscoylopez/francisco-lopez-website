@@ -625,7 +625,7 @@
       {
         "part": "Nombre de la fila",
         "markup": "th scope=row",
-        "what": "Ata cada cifra a su fila: «Atenuado sobre card, claro, 9,14:1» en vez de tres números sueltos."
+        "what": "Ata cada cifra a su fila: «Atenuado sobre card, claro, {mutedOnCard.light}» en vez de tres números sueltos."
       },
       {
         "part": "Ancho de columna",

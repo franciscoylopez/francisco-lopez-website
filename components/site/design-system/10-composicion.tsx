@@ -9,6 +9,7 @@ import {
   SectionIndex,
 } from "@/components/ui/section-index";
 import { DataTable, TD, TR } from "@/components/ui/table";
+import { fillRatios } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 
 import { cn } from "@/lib/utils";
@@ -104,7 +105,15 @@ export function Composicion({
               <TD>
                 <code className="font-mono text-[0.85rem]">{r.markup}</code>
               </TD>
-              <TD className="text-muted-foreground text-[0.88rem]">{r.what}</TD>
+              {/* PASA POR `fillRatios` porque una de estas tres filas ARGUMENTA
+                  CON UNA CIFRA VIVA («Atenuado sobre card, claro, 9,14:1»), y
+                  la tenía escrita a mano teniendo fuente: `mutedOnCard` en
+                  `design-values.ts`. Hoy coincidía. Es exactamente la deriva que
+                  D38 existe para impedir, y en este repo una cifra equivocada ya
+                  ha viajado dos veces, una de ellas trece días en producción. */}
+              <TD className="text-muted-foreground text-[0.88rem]">
+                {fillRatios(r.what, lang)}
+              </TD>
             </TR>
           ))}
         </DataTable>
