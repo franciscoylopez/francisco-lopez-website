@@ -241,7 +241,8 @@
     ],
     "pastelNote": "Los pasteles nunca como color de texto. Son fondos. Si va texto sobre un pastel, siempre en foreground (tinta), nunca al revés.",
     "copyAria": "Copiar el hex de {token}",
-    "copiedAnnounce": "{value} copiado al portapapeles"
+    "copiedAnnounce": "{value} copiado al portapapeles",
+    "copiedLabel": "Copiado"
   },
   "tipografia": {
     "num": "04 — Tipografía",

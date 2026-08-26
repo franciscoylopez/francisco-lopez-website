@@ -55,7 +55,8 @@
       }
     ],
     "copyAria": "Copiar el bloque de tokens de layout",
-    "copiedAnnounce": "Bloque de tokens copiado al portapapeles"
+    "copiedAnnounce": "Bloque de tokens copiado al portapapeles",
+    "copiedLabel": "Copiado"
   },
   "breakpoints": {
     "num": "03 — Breakpoints",

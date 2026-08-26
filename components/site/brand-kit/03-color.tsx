@@ -154,6 +154,7 @@ export function Color({
                       value={s.hex}
                       label={t.copyAria.replace("{token}", s.token)}
                       announcement={t.copiedAnnounce}
+                      copiedLabel={t.copiedLabel}
                       className="-my-2 shrink-0"
                     />
                   </div>

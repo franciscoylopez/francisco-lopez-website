@@ -89,6 +89,7 @@ export function CopyButton({
   value,
   label,
   announcement,
+  copiedLabel,
   onInverted = false,
   className,
 }: {
@@ -113,6 +114,15 @@ export function CopyButton({
    * la pantalla sepa cuál de los dos hexes se ha llevado.
    */
   announcement: string;
+  /**
+   * Lo que se PINTA al lograrlo, en una etiqueta anclada al botón.
+   *
+   * ES OTRA COSA QUE `announcement`, aunque digan lo mismo: el anuncio nombra el
+   * valor porque quien no ve la pantalla no puede saber cuál se llevó; la
+   * etiqueta no lo nombra porque quien la ve ya lo tiene delante. Dos audiencias,
+   * dos textos, y por eso son dos props y no una.
+   */
+  copiedLabel: string;
   /**
    * Sobre una banda cuyo fondo es `--foreground`. Es §Controles con dos fondos
    * de `BRAND.md`: la pieza es el `foreground` de su propio carril, y en un
@@ -142,19 +152,59 @@ export function CopyButton({
 
   return (
     <>
-      <button
-        type="button"
-        aria-label={label}
-        onClick={onClick}
-        className={cn(
-          actionVariants({ variant: "ghost", size: "icon" }),
-          onInverted &&
-            "text-background hover:bg-background/15 focus-visible:bg-background/15",
-          className,
-        )}
-      >
-        {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
-      </button>
+      {/* EL CHECK SOLO NO ORIENTA (P70.31). Un icono que pasa de copia a marca de
+          verificación dice que ALGO pasó, y en una rejilla de nueve tarjetas con
+          un botón cada una no dice ni qué ni cuál. La asimetría lo delataba: el
+          `aria-live` de abajo ya daba la frase completa, así que la única persona
+          informada era la que no ve la pantalla.
+
+          NI TOOLTIP NI TOAST. Un tooltip aparece en HOVER y esta confirmación
+          llega después de un CLIC, que en táctil no tiene hover: sería invisible
+          en móvil justo donde más falta hace. Un toast pide dependencia y saca la
+          confirmación del sitio donde ocurrió la acción. Esto es una etiqueta
+          anclada al propio botón: sin portal, sin posicionamiento en JS, sin
+          nada que instalar.
+
+          Y VA ABSOLUTA A PROPÓSITO. Si creciera dentro del flujo, el botón
+          engordaría ~70px y empujaría al hex que tiene al lado en la tarjeta del
+          Brand Kit —un salto de layout a los 1.800 ms y otro a la vuelta—. Fuera
+          del flujo, el control conserva su caja y su suelo táctil de 44px intacto
+          en los dos estados.
+
+          `aria-hidden` porque el `aria-live` ya lo anuncia: sin él, un lector de
+          pantalla lo diría dos veces. */}
+      <span className={cn("relative inline-flex shrink-0", className)}>
+        <button
+          type="button"
+          aria-label={label}
+          onClick={onClick}
+          className={cn(
+            actionVariants({ variant: "ghost", size: "icon" }),
+            onInverted &&
+              "text-background hover:bg-background/15 focus-visible:bg-background/15",
+          )}
+        >
+          {copied ? <Check aria-hidden="true" /> : <Copy aria-hidden="true" />}
+        </button>
+        <span
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute bottom-full left-1/2 mb-1 -translate-x-1/2 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none",
+            // La etiqueta se apoya en el carril contrario al del botón, igual que
+            // el propio botón hace con su `onInverted`: sobre la banda invertida
+            // el fondo de la página ES `--foreground`, así que la pastilla tiene
+            // que volver a `--background` para verse. Es el par de texto
+            // principal en los dos casos, ya medido por el censo; no estrena
+            // ningún color.
+            onInverted
+              ? "bg-background text-foreground"
+              : "bg-foreground text-background",
+            copied ? "opacity-100" : "opacity-0",
+          )}
+        >
+          {copiedLabel}
+        </span>
+      </span>
       <p aria-live="polite" className="sr-only">
         {announce}
       </p>

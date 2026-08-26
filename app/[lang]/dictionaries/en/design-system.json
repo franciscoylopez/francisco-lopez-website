@@ -55,7 +55,8 @@
       }
     ],
     "copyAria": "Copy the layout token block",
-    "copiedAnnounce": "Token block copied to clipboard"
+    "copiedAnnounce": "Token block copied to clipboard",
+    "copiedLabel": "Copied"
   },
   "breakpoints": {
     "num": "03 — Breakpoints",

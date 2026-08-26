@@ -62,6 +62,7 @@ export function Tokens({ t }: { t: Dictionary["designSystem"]["tokens"] }) {
                   value={LAYOUT_TOKENS_CSS}
                   label={t.copyAria}
                   announcement={t.copiedAnnounce}
+                  copiedLabel={t.copiedLabel}
                   onInverted
                 />
               </span>
