@@ -180,7 +180,8 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
   `font-size` computado (P68.59). En CI, no en el censo: no necesita navegador.
   **Confirma en vez de sostener**: el tamaño lo pone la capa, que lo deriva del
   único ancho que un diagrama declara, y un lienzo desconocido no compila (D114).
-  Uno de ancho fijo que se desplaza se mide y se nombra, no se juzga.
+  Uno de ancho fijo que se desplaza se mide y se nombra, no se juzga, y por
+  debajo de 360 tampoco: **ese suelo es del rótulo, no del sitio** (D124).
 - **`npm run check:marcas`**: que los nombres propios lleguen al HTML con
   `translate="no"`, o el traductor de Chrome hará «La Herramienta» de «TheTool».
   Lo pone una capa y el copy no lo escribe, así que recorre los nodos de TEXTO de

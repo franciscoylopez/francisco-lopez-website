@@ -61,12 +61,22 @@ export function Stat({
 /**
  * La fila. Trae el filete superior y el hueco que la separa de la apertura, que
  * también estaban escritos en los dos sitios.
+ *
+ * EL HUECO SE COMPACTA POR DEBAJO DE 700px DE ALTO, y esta fila es la que lo
+ * pedía: a 1280×618 quedaban **17px visibles de 84,6**, idéntico al píxel en las
+ * tres páginas del sistema (P70.45). El porqué largo —de dónde salen los 80px,
+ * por qué 700 y no 686, y por qué la invariante de D50 no se rompe— está en
+ * `ui/layout.ts`, junto a `FOLD_CRUMB`, que aporta los otros 40.
+ *
+ * EL `@media` VA ESCRITO ENTERO Y NO INTERPOLADO: Tailwind escanea el código
+ * como texto plano y una clase compuesta se queda sin estilo, sin dar error.
+ * Si el breakpoint cambia, cambia en los DOS sitios.
  */
 export function StatRow({ children }: { children: ReactNode }) {
   return (
     <div
       data-reveal
-      className="border-border mt-[clamp(3rem,6vw,4.5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-[var(--gutter)] border-t pt-8"
+      className="border-border mt-[clamp(3rem,6vw,4.5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-[var(--gutter)] border-t pt-8 [@media(max-height:43.75rem)]:mt-8"
     >
       {children}
     </div>

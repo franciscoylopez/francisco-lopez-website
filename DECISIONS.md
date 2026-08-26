@@ -159,6 +159,7 @@
 - D121 · El índice de una página con paradas deja de ser «de artículo», y dos excepciones cumplen su condición de salida
 - D122 · El ordinal de una sección deja de escribirse: lo pone el orden de la página
 - D123 · El riel va donde la página se LEE; el índice y el cierre, donde se consulta
+- D124 · El suelo de 360 deja de ser el comentario de un script y pasa a ser una decisión de producto
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7237,3 +7238,50 @@ por su propio criterio: cuando una segunda página quiere una de sus piezas, esa
 Cierto, y le faltaba la otra mitad: **la premisa también se comprueba al revés**. El riel
 salió, se probó en tres páginas y volvió. Que una pieza sirva a cuatro páginas no la convierte
 en general; lo que la hace general es que su motivo valga en las cuatro.
+
+## D124 · El suelo de 360 deja de ser el comentario de un script y pasa a ser una decisión de producto — 2026-08-26
+
+**Contexto.** `check-figuras.ts` lleva escrito en su cabecera, desde que existe, que **por
+debajo de 360 no juzga**, y que a 320 los lienzos estrechos del artículo pintan **9,7px**. Lo
+mide, lo declara fuera de contrato y lo **imprime en cada corrida** en vez de callárselo — que
+es la mitad correcta de la decisión. La otra mitad no existía: el propio comentario decía que
+cerrarlo «es decisión de producto, no de este script», y esa decisión **no la tenía pendiente
+nadie**. No había tarea, así que llevaba semanas siendo una decisión implícita escondida en el
+único sitio donde nadie la va a leer.
+
+Se abrió tarea (P70.46) cuando `viewport-verifier` lo reprodujo sobre los **dos diagramas
+nuevos de `/accesibilidad`**: 9,66px a 320, 11,24px a 360, 11,79px a 390, en ES y EN. Lo que
+cambió no fue el hecho sino el **tamaño del conjunto afectado**: la tanda 6 añadió dos figuras
+más al mismo lienzo de 280.
+
+**Lo que NO era.** No hay incumplimiento. El punto 11 de la columna A de la DoD pide **11px
+pintados a 360** y ahí dan 11,24. El gate está en verde y lo ha estado siempre.
+
+**Las tres salidas, y por qué la elegida.**
+
+| Salida | Qué costaba | Por qué no |
+|---|---|---|
+| Bajar los lienzos estrechos de **280 a 244 unidades** | Recalcular el layout de cada figura afectada | Es rehacer dibujos que hoy cumplen, para ganar un viewport al que el sitio no le promete nada |
+| Bajar el **suelo del contrato a 320** en la DoD y en `check:figuras` | Rojo inmediato en CI | Es estrictamente **más** exigente, así que arrastra la fila de arriba como trabajo obligatorio. Solo tiene sentido si ya se ha decidido rehacer los lienzos |
+| **Declarar 360 como suelo** y escribirlo donde se lea | Cuatro documentos | — |
+
+**Decisión (Francisco, 2026-08-26): 360 es el suelo del rótulo de figura, y se declara.**
+
+Y la parte que importa que quede exacta, porque es fácil leerla de más: **esto no dice que el
+sitio empiece en 360**. El sitio se maqueta y se verifica por debajo — D93 lo bajó a 320 sin
+scroll horizontal y P70.13 cerró las tres páginas que aún desbordaban a 280. Lo que se declara
+es más estrecho: **el tamaño PINTADO del rótulo de una figura solo se promete de 360 en
+adelante.** Entre 280 y 360 la página funciona, se lee y no desborda; lo que no se garantiza es
+que el texto dentro de un lienzo escalado llegue a 11px.
+
+**Dónde queda escrito**, que es la decisión entera y no un adorno: el punto 11 de la DoD en
+`CLAUDE.md`, el párrafo de `check:figuras` en `PRD-Live.md` §Cómo se verifica, y la cabecera de
+`scripts/check-figuras.ts`, que deja de pedir una decisión que ya está tomada y pasa a apuntar
+aquí. Es la regla 1 de `BRAND.md` §Cómo se escribe una regla aplicada a una decisión: **su
+disparador miraba al lugar equivocado** — el único sitio donde estaba escrita era el archivo que
+nadie abre hasta que se rompe.
+
+**La condición de reapertura, que es lo que impide que esto sea un cierre en falso.** Se vuelve
+a mirar si el suelo real de viewport del sitio baja por debajo de 360 **como compromiso**, o si
+una figura aparece en un hueco más estrecho que los 284px que `ANCHO_MINIMO` asume. Lo segundo
+lo delata el propio informe, que publica esa cifra en cada corrida.

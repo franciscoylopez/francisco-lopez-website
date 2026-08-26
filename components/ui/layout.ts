@@ -77,10 +77,51 @@ export const HERO_ROW =
  * una tiene su hueco elegido y razonado en su propio archivo. La home tampoco:
  * no tiene breadcrumb.
  */
-export const FOLD_CRUMB = "mb-[clamp(3rem,6vw,4.5rem)]";
+export const FOLD_CRUMB =
+  "mb-[clamp(3rem,6vw,4.5rem)] [@media(max-height:43.75rem)]:mb-8";
 
 /** @see FOLD_CRUMB — el grupo de apertura, centrado en el pliegue y con suelo. */
 export const FOLD_GROUP = "my-auto md:min-h-[29rem]";
+
+/**
+ * EL EJE QUE A ESTE ANDAMIAJE LE FALTABA: EL ALTO (P70.45, 2026-08-26).
+ *
+ * Todo lo de arriba razona por ANCHO —`clamp(…,6vw,…)`, `md:`— y el pliegue es
+ * un problema de alto. A **1280×618** (el escalado de Windows al 150%, viewport
+ * de la matriz de D50) las tres páginas del sistema medían, idénticas al píxel:
+ *
+ *     hero 723,2  ·  grupo 225→689  ·  h1 264,5  ·  fila de cifras 601→685,6
+ *
+ * o sea **17px visibles de 84,6 (20,1%)** de la fila de cifras. Y una franja de
+ * 17px sobre 85 no se lee como «hay más abajo»: se lee como un error de
+ * renderizado. O se ve entera, o no se ve.
+ *
+ * LO QUE NO ERA, y hubo que medir las CUATRO páginas para saberlo:
+ * · No es recorte —es `min-h`, no `h`: nada se oculta, solo hace falta scroll.
+ * · No es una regresión de P70.35, cuyo suelo añadió 3px sobre los 461 que las
+ *   tres medían por su cuenta.
+ * · No es un incumplimiento de D50, que compara la alineación ENTRE hermanas, y
+ *   esa seguía perfecta.
+ * · No es de ninguna de las tres páginas: era de esta capa. «Cómo se ha creado»
+ *   no lo tenía porque usa otro caparazón, que es justo lo que lo delató.
+ *
+ * LA COMPACTACIÓN, y de dónde salen los 80px. Por debajo de **700px de alto** el
+ * hueco del breadcrumb baja de 72 a 32 y el de la fila de cifras hace lo mismo
+ * (`stat-row.tsx`), así que la fila sube a **605,6** y cabe entera a 618 con
+ * 12px de margen. Se eligió 700 y no 686 —donde la fila justo dejaba de caber—
+ * para que el punto de conmutación no sea el mismo píxel que el síntoma.
+ *
+ * SE TOCA AQUÍ Y NUNCA EN LAS PÁGINAS. Las cuatro hermanas compactan a la vez,
+ * que es lo único que mantiene la invariante de D50: lo que esa decisión pide no
+ * es un alto concreto, es que los cuatro grupos midan LO MISMO.
+ *
+ * POR QUÉ EL `@media` ESTÁ ESCRITO DOS VECES Y NO SALE A UNA CONSTANTE: Tailwind
+ * escanea el código como TEXTO PLANO, así que una clase compuesta por
+ * interpolación no se genera —y no da error de compilación, se queda sin estilo
+ * (`BRAND.md` §Cómo medir, punto 5). El breakpoint se cambia en los dos sitios a
+ * la vez, y por eso cada uno apunta al otro. Un `export const 700` al lado sería
+ * peor: un número que nadie importa no es una fuente única, es un inquilino.
+ */
 
 /**
  * Prosa a la medida de lectura (~91 caracteres en Inter).
