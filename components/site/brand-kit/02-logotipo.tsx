@@ -262,9 +262,27 @@ export function Logotipo({
                   surface={SUPERFICIE_DE[pieza.preview]}
                 >
                   <div className="flex flex-wrap gap-2">
+                    {/* EL NOMBRE ACCESIBLE LLEVA LA VARIANTE, EL PINTADO NO.
+                        Las seis anclas decían «Descargar SVG» y apuntaban a seis
+                        archivos distintos: en lectura secuencial el contexto
+                        llega antes (nombre → meta → enlace) y 2.4.4 se salva,
+                        pero al recorrer la página por LISTA DE ENLACES —que es
+                        como se navega una página de descargas con lector— son
+                        seis entradas indistinguibles, y eso es 2.4.9 (AAA), que
+                        es el objetivo declarado de este sitio.
+                        No lo caza axe: `identical-links-same-purpose` es
+                        experimental y además juzga el caso CONTRARIO (mismo
+                        nombre, mismo destino). Aquí el destino difiere, que es
+                        peor.
+                        El texto pintado no cambia porque no cabe: seis botones
+                        diciendo su nombre entero no entran en la tarjeta. Y el
+                        `aria-label` EMPIEZA por la etiqueta visible, que es lo
+                        que 2.5.3 (Label in Name) pide para que el control siga
+                        siendo invocable por voz. */}
                     <a
                       href={svgDe(pieza)}
                       download
+                      aria-label={`${t.descargarSvg}: ${card.name}`}
                       className={actionVariants({
                         variant: "outline-primary",
                         size: "sm",
