@@ -9,9 +9,9 @@ import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { PALETTE, paletteHex } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
-import { GroupHead } from "./shared";
+import { GroupHead, type SeccionMarco } from "./shared";
 
-/* ===================== (06) CLARO / OSCURO ===================== */
+/* ===================== CLARO / OSCURO ===================== */
 // Tarjeta de tema fijo (§06): muestra claro y oscuro con la paleta literal,
 // independiente del tema activo, para enseñar ambas superficies a la vez.
 function ThemeCard({
@@ -110,13 +110,19 @@ function ThemeCard({
 
 export function Claroscuro({
   t,
+  marco,
 }: {
   t: Dictionary["designSystem"]["claroscuro"];
+  marco: SeccionMarco;
 }) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -187,6 +193,7 @@ export function Claroscuro({
             );
           })}
         </div>
+        {marco.closer}
       </div>
     </section>
   );

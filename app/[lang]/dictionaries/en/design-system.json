@@ -13,8 +13,15 @@
     "statMeasure": "Reading measure (~91 char.)",
     "statA11y": "Accessibility target"
   },
+  "indice": {
+    "kicker": "Contents",
+    "ariaLabel": "Design System contents",
+    "closerLabel": "Contents",
+    "nextLabel": "Next:",
+    "of": "of"
+  },
   "rejilla": {
-    "num": "01 — Grid and measures",
+    "indexLabel": "Grid and measures",
     "title": "Wide to lay out, narrow to read",
     "lead": "Twelve columns, a container that caps at 1360 and a reading measure that never uses all of it. Everything laid out on this site rests on those three numbers.",
     "showGrid": "Show grid",
@@ -125,7 +132,7 @@
     ]
   },
   "ritmo": {
-    "num": "02 — Rhythm and spacing",
+    "indexLabel": "Rhythm and spacing",
     "title": "Whitespace is the hierarchy tool",
     "lead": "A 4px base scale (Tailwind).",
     "scaleTitle": "Spacing scale",
@@ -138,7 +145,7 @@
     ]
   },
   "tipografia": {
-    "num": "03 — Type and headers",
+    "indexLabel": "Type and headers",
     "title": "Width decides the size, not the device",
     "lead": "Bricolage Grotesque for headlines, Inter for text and UI. Mobile is the clamp minimum; desktop, the maximum.",
     "cols": {
@@ -320,7 +327,7 @@
     ]
   },
   "claroscuro": {
-    "num": "04 — Light and dark",
+    "indexLabel": "Light and dark",
     "title": "Depth comes from hairlines, not shadows",
     "lead": "Same skeleton and same surface hierarchy: background → card → border. Light is warm paper; dark is deep blue.",
     "lightLabel": "Light mode",
@@ -352,7 +359,7 @@
     "ruleFoot": "Use the header toggle to see this same page in both modes."
   },
   "movimiento": {
-    "num": "05 — Motion",
+    "indexLabel": "Motion",
     "title": "Restrained: it never competes with the content",
     "lead": "Durations aren't picked by taste: each one matches a kind of change on screen.",
     "timings": [
@@ -391,7 +398,7 @@
     "navFoot": "It's the transition you're seeing right now in this page's header."
   },
   "enlaces": {
-    "num": "06 — Links",
+    "indexLabel": "Links",
     "title": "Its function decides, not where it sits",
     "lead": "Inside content, cyan is the reward for interacting. Inside a block that is already navigation, cyan tells you nothing and only adds noise.",
     "hint": "Hover over them ▸",
@@ -438,7 +445,7 @@
     "ruleFoot": "The chrome's tone isn't decoration either: the secondary one lifts to foreground in the same gesture that brings the pill, because without that jump the pair drops to AA right on hover."
   },
   "botones": {
-    "num": "07 — Buttons and actions",
+    "indexLabel": "Buttons and actions",
     "title": "A button doesn't pick its look: its role does",
     "lead": "How many actions compete beside it, and whether it carries state, decide the variant. The variant already resolves hover, focus and touch target.",
     "hint": "Hover to see it ▸",
@@ -516,7 +523,7 @@
     ]
   },
   "etiquetas": {
-    "num": "08 — Labels",
+    "indexLabel": "Labels",
     "title": "It tags, it isn't pressed",
     "lead": "It sits outside the action layer: no state, no hover, no touch target. Its only job is to be read.",
     "hint": "These are the same labels the site uses: if one changes, this section changes with it.",
@@ -557,7 +564,7 @@
     "ruleFoot": "The text of both tinted ones is the ordinary text colour, not the wash's. That's what takes them to {badgeTinted.light} in light and {badgeTinted.dark} in dark; tinted they sat at 6.07 and 5.46."
   },
   "formulario": {
-    "num": "09 — Form",
+    "indexLabel": "Form",
     "title": "The first surface that receives, not the one that shows",
     "lead": "A field isn't a small button: it has a label, it has an error state, and it has to say so out loud.",
     "fieldTitle": "The field",
@@ -591,7 +598,7 @@
     ]
   },
   "composicion": {
-    "num": "10 — Page composition",
+    "indexLabel": "Page composition",
     "title": "Neither controls nor text: the boxes a page is built from",
     "lead": "A table, a side note and the closing block. All three moved up to the layer because their format is what cannot diverge from one page to the next.",
     "dataTitle": "The table",
@@ -661,7 +668,7 @@
     "ruleFoot": "It's the boundary that decides where a piece lives: if it knows something about this site, it isn't part of the system."
   },
   "accesibilidad": {
-    "num": "11 — Closing checklist",
+    "indexLabel": "Closing checklist",
     "title": "AA is the floor, not the goal",
     "lead": "The list each page closes with. It's the internal build criterion; the public conformance statement lives on the Accessibility page.",
     "contrastTitle": "Measured contrast",
@@ -752,7 +759,7 @@
     ]
   },
   "articulo": {
-    "num": "12 — Long article",
+    "indexLabel": "Long article",
     "title": "The shape for long text with stops",
     "lead": "Eleven sections and several thousand words need pieces the rest of the site doesn't use. It's a layer apart, not the core's eighth piece.",
     "groups": {

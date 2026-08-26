@@ -21,9 +21,10 @@ import type { Locale } from "@/lib/i18n/config";
 import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 
-import { GroupHead, SpecimenCard } from "./shared";
+import { cn } from "@/lib/utils";
+import { GroupHead, SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (15) ARTÍCULO LARGO =====================
+/* ===================== ARTÍCULO LARGO =====================
     La familia de piezas que estrenó «Cómo se ha creado esta página» (P60):
     ninguna sabe nada de ESTE sitio —viven en `components/ui/article.tsx`, no
     en `site/`—, así que el espécimen las usa con contenido de muestra, no
@@ -52,9 +53,11 @@ const RAIL_IDS = ["ds-rail-1", "ds-rail-2", "ds-rail-3"];
 
 export function ArticuloLargo({
   t,
+  marco,
   lang,
 }: {
   t: Dictionary["designSystem"]["articulo"];
+  marco: SeccionMarco;
   lang: Locale;
 }) {
   const railItems: { id: string; ordinal: string; label: string }[] =
@@ -72,9 +75,13 @@ export function ArticuloLargo({
   const f = t.fichas;
 
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -247,6 +254,7 @@ export function ArticuloLargo({
         <div className="mt-12 max-w-[var(--measure)]">
           <InfoCard title={t.ruleTitle} bullets={t.rule} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );

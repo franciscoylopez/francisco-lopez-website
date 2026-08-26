@@ -40,14 +40,21 @@ export type RailItem = { id: string; ordinal: string; label: string };
  * lo único que dice que ahí se pulsa. Con `--border` medía 1,21:1 en claro y 1,36
  * en oscuro.
  *
- * `shrink-0` (regresión cazada por Francisco viendo la página): el `<a>` exterior
+ * `motion-reduce:transition-none` (P70.39, medido por `viewport-verifier`): el
+ * archivo no tenía NINGUNA regla de movimiento reducido, y `globals.css` no trae
+ * un reseteo global —cada animación opta por su cuenta—, así que la píldora
+ * animaba con `prefers-reduced-motion` activo. Y no es un hover cualquiera: el
+ * estado `active` lo cambia el `IntersectionObserver` AL HACER SCROLL, o sea que
+ * la pastilla se expandía y se contraía sola, sin gesto del usuario. Es el punto
+ * 7 del checklist, y lo publica la página hermana de esta.
+ * * `shrink-0` (regresión cazada por Francisco viendo la página): el `<a>` exterior
  * también es `flex`, así que este pill —flex item suyo— heredaba `flex-shrink: 1` y
  * se encogía a los 44px del padre en vez de desbordar hasta `max-w-64`, aunque el
  * padre tenga `overflow: visible`. El shrink ocurre en el cálculo del layout flex;
  * no lo evita `overflow-visible`.
  */
 export const railPillVariants = cva(
-  "border-control-edge flex h-6 max-w-6 shrink-0 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out group-hover:max-w-64 group-focus-visible:max-w-64",
+  "border-control-edge flex h-6 max-w-6 shrink-0 items-center gap-2 overflow-hidden rounded-full border pl-[3px] font-mono text-[0.68rem] whitespace-nowrap transition-[max-width,background-color,color,border-color] duration-200 ease-out motion-reduce:transition-none group-hover:max-w-64 group-focus-visible:max-w-64",
   {
     variants: {
       state: {

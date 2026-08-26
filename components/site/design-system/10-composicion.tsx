@@ -6,9 +6,10 @@ import { PageCloser, type CloserItem } from "@/components/ui/page-closer";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { type Locale } from "@/lib/i18n/config";
 
-import { GroupHead, SpecimenCard } from "./shared";
+import { cn } from "@/lib/utils";
+import { GroupHead, SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (10) COMPOSICIÓN DE PÁGINA =====================
+/* ===================== COMPOSICIÓN DE PÁGINA =====================
     Fusión de las antiguas 12 (tablas) y 17 (bloques de página), P70.34.
 
     La 17 tenía razón de existir cuando se escribió —lo que faltaba no era una
@@ -27,9 +28,11 @@ import { GroupHead, SpecimenCard } from "./shared";
     documento es un defecto de accesibilidad, no un detalle. */
 export function Composicion({
   t,
+  marco,
   lang,
 }: {
   t: Dictionary["designSystem"]["composicion"];
+  marco: SeccionMarco;
   lang: Locale;
 }) {
   const base = lang === "es" ? "" : `/${lang}`;
@@ -56,9 +59,13 @@ export function Composicion({
   ];
 
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -138,6 +145,7 @@ export function Composicion({
         <div className="mt-8 max-w-[var(--measure)]">
           <InfoCard title={t.ruleTitle} bullets={t.rule} foot={t.ruleFoot} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );

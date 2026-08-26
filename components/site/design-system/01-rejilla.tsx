@@ -11,9 +11,9 @@ import {
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 import { DevicePreview, GridDemo } from "../design-system-islands";
-import { GroupHead } from "./shared";
+import { GroupHead, type SeccionMarco } from "./shared";
 
-/* ===================== (01) REJILLA Y MEDIDAS ===================== */
+/* ===================== REJILLA Y MEDIDAS ===================== */
 // Absorbe las antiguas 02 (tokens de layout) y 03 (breakpoints), y se queda con
 // la 14 (esqueleto navegable) como DEMO en vez de como sección.
 //
@@ -26,12 +26,22 @@ import { GroupHead } from "./shared";
 // La cabecera de la sección la dibuja `GridDemo`, no este archivo: el toggle de
 // rejilla va en la misma fila que el titular. Los subapartados de abajo usan
 // `GroupHead`.
-export function Rejilla({ t }: { t: Dictionary["designSystem"]["rejilla"] }) {
+export function Rejilla({
+  t,
+  marco,
+}: {
+  t: Dictionary["designSystem"]["rejilla"];
+  marco: SeccionMarco;
+}) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
         <GridDemo
-          num={t.num}
+          num={marco.kicker}
           title={t.title}
           showLabel={t.showGrid}
           hideLabel={t.hideGrid}
@@ -194,6 +204,7 @@ export function Rejilla({ t }: { t: Dictionary["designSystem"]["rejilla"] }) {
           devMobile={t.devMobile}
           rows={t.esqRows}
         />
+        {marco.closer}
       </div>
     </section>
   );

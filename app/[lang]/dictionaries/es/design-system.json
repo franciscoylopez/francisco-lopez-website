@@ -13,8 +13,15 @@
     "statMeasure": "Medida de lectura (~91 car.)",
     "statA11y": "Objetivo de accesibilidad"
   },
+  "indice": {
+    "kicker": "Índice",
+    "ariaLabel": "Índice del Design System",
+    "closerLabel": "Índice",
+    "nextLabel": "Siguiente:",
+    "of": "de"
+  },
   "rejilla": {
-    "num": "01 — Rejilla y medidas",
+    "indexLabel": "Rejilla y medidas",
     "title": "Ancha para maquetar, estrecha para leer",
     "lead": "Doce columnas, un contenedor que tope en 1360 y una medida de lectura que nunca lo usa entero. Lo que se maqueta en el sitio se apoya en estos tres números.",
     "showGrid": "Mostrar rejilla",
@@ -125,7 +132,7 @@
     ]
   },
   "ritmo": {
-    "num": "02 — Ritmo y espaciado",
+    "indexLabel": "Ritmo y espaciado",
     "title": "El aire es la herramienta de jerarquía",
     "lead": "Escala de base 4px (Tailwind).",
     "scaleTitle": "Escala de espaciado",
@@ -138,7 +145,7 @@
     ]
   },
   "tipografia": {
-    "num": "03 — Tipografía y cabeceras",
+    "indexLabel": "Tipografía y cabeceras",
     "title": "El tamaño lo decide el ancho, no el dispositivo",
     "lead": "Bricolage Grotesque para titulares, Inter para texto y UI. Móvil es el mínimo del clamp; escritorio, el máximo.",
     "cols": {
@@ -320,7 +327,7 @@
     ]
   },
   "claroscuro": {
-    "num": "04 — Claro y oscuro",
+    "indexLabel": "Claro y oscuro",
     "title": "La profundidad la dan los filetes, no las sombras",
     "lead": "Mismo esqueleto y misma jerarquía de superficies: fondo → tarjeta → borde. El claro es papel cálido; el oscuro, azul profundo.",
     "lightLabel": "Modo claro",
@@ -352,7 +359,7 @@
     "ruleFoot": "Usa el conmutador de la cabecera para ver esta misma página en ambos modos."
   },
   "movimiento": {
-    "num": "05 — Movimiento",
+    "indexLabel": "Movimiento",
     "title": "Sobrio: nunca compite con el contenido",
     "lead": "Las duraciones no se eligen por gusto: cada una corresponde a un tipo de cambio en pantalla.",
     "timings": [
@@ -391,7 +398,7 @@
     "navFoot": "Es la transición que ves ahora mismo en la cabecera de esta página."
   },
   "enlaces": {
-    "num": "06 — Enlaces",
+    "indexLabel": "Enlaces",
     "title": "Lo decide su función, no dónde cae",
     "lead": "Si es contenido, el cian aparece como recompensa de la interacción. Si su bloque entero ya es navegación, el cian no distingue nada y sobra.",
     "hint": "Pasa el cursor por encima ▸",
@@ -438,7 +445,7 @@
     "ruleFoot": "El tono del chrome tampoco es decoración: el secundario sube a foreground en el mismo gesto en que aparece la pastilla, porque sin ese salto el par cae a AA justo en hover."
   },
   "botones": {
-    "num": "07 — Botones y acciones",
+    "indexLabel": "Botones y acciones",
     "title": "Un botón no elige su aspecto: lo elige su papel",
     "lead": "Cuántas acciones compiten a su lado, y si lleva estado, deciden la variante. La variante ya trae resueltos el hover, el foco y el objetivo táctil.",
     "hint": "Pasa el cursor por encima ▸",
@@ -516,7 +523,7 @@
     ]
   },
   "etiquetas": {
-    "num": "08 — Etiquetas",
+    "indexLabel": "Etiquetas",
     "title": "Rotula, no se pulsa",
     "lead": "No sale de la capa de acción: no tiene estado, ni hover, ni objetivo táctil. Solo tiene que leerse.",
     "hint": "Son las mismas etiquetas que usa el sitio: si una cambia, esta sección cambia con ella.",
@@ -557,7 +564,7 @@
     "ruleFoot": "El texto de las dos teñidas es el color de texto normal, no el del velo. Es lo que las lleva a {badgeTinted.light} en claro y {badgeTinted.dark} en oscuro; teñido se quedaban en 6,07 y 5,46."
   },
   "formulario": {
-    "num": "09 — Formulario",
+    "indexLabel": "Formulario",
     "title": "La primera superficie que recibe, no la que enseña",
     "lead": "Un campo no es un botón pequeño: tiene etiqueta, tiene estado de error, y tiene que decirlo en voz alta.",
     "fieldTitle": "El campo",
@@ -591,7 +598,7 @@
     ]
   },
   "composicion": {
-    "num": "10 — Composición de página",
+    "indexLabel": "Composición de página",
     "title": "Ni controles ni texto: las cajas con las que se monta una página",
     "lead": "Una tabla, una nota al margen y el remate del final. Las tres suben a la capa porque su formato es lo que no puede divergir de una página a otra.",
     "dataTitle": "La tabla",
@@ -661,7 +668,7 @@
     "ruleFoot": "Es la frontera que decide dónde vive una pieza: si sabe algo de este sitio, no es del sistema."
   },
   "accesibilidad": {
-    "num": "11 — Checklist de cierre",
+    "indexLabel": "Checklist de cierre",
     "title": "AA es el suelo, no el objetivo",
     "lead": "La lista con la que se cierra cada página. Es el criterio interno de construcción; la declaración pública de conformidad vive en la página de Accesibilidad.",
     "contrastTitle": "Contraste medido",
@@ -752,7 +759,7 @@
     ]
   },
   "articulo": {
-    "num": "12 — Artículo largo",
+    "indexLabel": "Artículo largo",
     "title": "La forma para texto largo con paradas",
     "lead": "Once secciones y varios miles de palabras necesitan piezas que el resto del sitio no usa. Es una capa aparte, no la octava del núcleo.",
     "groups": {

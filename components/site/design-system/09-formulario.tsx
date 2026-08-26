@@ -5,9 +5,9 @@ import { InfoCard } from "@/components/ui/info-card";
 import { PAIR, SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
-import { GroupHead, SpecimenCard } from "./shared";
+import { GroupHead, SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (16) FORMULARIO =====================
+/* ===================== FORMULARIO =====================
     Sección propia y no un subapartado de (09), y el criterio es el que la skill
     `publicar-en-design-system` pide aplicar: se justifica cuando la pieza es una
     CAPA, no cuando es una pieza más. Esta lo es. Hasta P67 el sitio no tenía
@@ -27,13 +27,19 @@ import { GroupHead, SpecimenCard } from "./shared";
     comprobar aquí mismo. */
 export function Formulario({
   t,
+  marco,
 }: {
   t: Dictionary["designSystem"]["formulario"];
+  marco: SeccionMarco;
 }) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -91,6 +97,7 @@ export function Formulario({
           <InfoCard title={t.redTitle} bullets={t.redRule} />
           <InfoCard title={t.serverTitle} bullets={t.serverRule} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );

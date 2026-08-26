@@ -6,9 +6,10 @@ import { SECTION, WRAP } from "@/components/ui/layout";
 import { fillRatios, ratioText } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 
-import { SpecimenCard } from "./shared";
+import { cn } from "@/lib/utils";
+import { SpecimenCard, type SeccionMarco } from "./shared";
 
-/* ===================== (10) ETIQUETAS =====================
+/* ===================== ETIQUETAS =====================
     La tercera capa del sistema, publicada aquí por el mismo motivo que (09):
     el recorrido completo es regla → componente → sección publicada → uso, y
     una regla que hay que recordar es una regla que se incumple (P37.655).
@@ -16,15 +17,21 @@ import { SpecimenCard } from "./shared";
     puede enseñar una pastilla que no exista. */
 export function Etiquetas({
   t,
+  marco,
   lang,
 }: {
   t: Dictionary["designSystem"]["etiquetas"];
+  marco: SeccionMarco;
   lang: Locale;
 }) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -91,6 +98,7 @@ export function Etiquetas({
             foot={fillRatios(t.ruleFoot, lang)}
           />
         </div>
+        {marco.closer}
       </div>
     </section>
   );

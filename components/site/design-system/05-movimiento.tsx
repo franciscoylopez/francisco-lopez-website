@@ -3,8 +3,9 @@ import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { RevealDemo } from "../design-system-islands";
+import type { SeccionMarco } from "./shared";
 
-/* ===================== (07) MOVIMIENTO ===================== */
+/* ===================== MOVIMIENTO ===================== */
 // Glifo del nav (§07 transición) — split/flat dimensionado por altura.
 function NavGlyph({ variant, h }: { variant: "split" | "flat"; h: number }) {
   const w = +((h * 58) / 70).toFixed(2);
@@ -77,13 +78,19 @@ function NavGlyph({ variant, h }: { variant: "split" | "flat"; h: number }) {
 
 export function Movimiento({
   t,
+  marco,
 }: {
   t: Dictionary["designSystem"]["movimiento"];
+  marco: SeccionMarco;
 }) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           {/* Era la única sección del sitio sin prosa de ningún tipo: abría con
               una palabra y una tabla de duraciones. La entradilla es nueva y su
               trabajo es presentar esa tabla (P37.695). */}
@@ -147,6 +154,7 @@ export function Movimiento({
             </div>
           </div>
         </div>
+        {marco.closer}
       </div>
     </section>
   );

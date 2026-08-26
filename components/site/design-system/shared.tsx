@@ -163,3 +163,25 @@ export function TypeMeta({
     </div>
   );
 }
+
+/**
+ * EL MARCO DE UNA PARADA: lo que una sección necesita saber de su sitio en el
+ * recorrido, y que por definición no puede saber ella (P70.39).
+ *
+ * Las tres cosas de aquí dependen del ORDEN de la página, no del contenido de la
+ * sección: su ancla, el ordinal que abre su cabecera y el cierre de bloque que
+ * dice «7 de 12 · siguiente». Ese orden vive en un solo sitio, `index.tsx`, que
+ * es lo que impide que el índice diga «07» y la cabecera «08» — la clase de
+ * deriva silenciosa que D38 existe para cerrar.
+ *
+ * Por eso es UN prop y no tres: una sección no compone su marco, lo recibe
+ * entero. Y por eso el tipo vive aquí, que es donde va lo que usan varias.
+ */
+export type SeccionMarco = {
+  /** `s01`…`s12`. Idéntico en `es/` y `en/` porque lo deriva el orden, no el copy. */
+  id: string;
+  /** El eyebrow ya compuesto: «01 — Rejilla y medidas» (D43). */
+  kicker: string;
+  /** El `SectionCloser` ya montado, con su posición y su siguiente parada. */
+  closer: ReactNode;
+};

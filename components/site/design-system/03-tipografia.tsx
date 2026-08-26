@@ -17,10 +17,10 @@ import {
   CONTAINER_PX,
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
-import { GroupHead, SpecimenCard, TypeMeta } from "./shared";
+import { GroupHead, SpecimenCard, TypeMeta, type SeccionMarco } from "./shared";
 import { Marcas } from "@/components/ui/marcas";
 
-/* ===================== (03) TIPOGRAFÍA Y CABECERAS =====================
+/* ===================== TIPOGRAFÍA Y CABECERAS =====================
     Fusión de las antiguas 05 (tipografía) y 11 (cabeceras), P70.34. Eran una
     ESCALA y su APLICACIÓN, y separadas contestaban dos veces «cómo de grande es
     un titular», a 187 y a 873 palabras. Primero la tabla de niveles, después el
@@ -59,13 +59,19 @@ const SAMPLE: Record<string, string> = {
 
 export function Tipografia({
   t,
+  marco,
 }: {
   t: Dictionary["designSystem"]["tipografia"];
+  marco: SeccionMarco;
 }) {
   return (
-    <section data-reveal className={SECTION}>
+    <section
+      data-reveal
+      id={marco.id}
+      className={cn(SECTION, "scroll-mt-[5rem]")}
+    >
       <div className={WRAP}>
-        <SectionHeader eyebrow={t.num} title={t.title} size="section-sm">
+        <SectionHeader eyebrow={marco.kicker} title={t.title} size="section-sm">
           <p className="text-muted-foreground m-0 mb-10 max-w-[var(--measure)] text-[0.95rem]">
             {t.lead}
           </p>
@@ -208,6 +214,7 @@ export function Tipografia({
           />
           <InfoCard title={t.ruleTitle} bullets={t.rule} />
         </div>
+        {marco.closer}
       </div>
     </section>
   );
