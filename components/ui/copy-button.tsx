@@ -1,6 +1,6 @@
 "use client";
 
-// @pieza primitiva · design-system/02-tokens.tsx · Copiar un valor al portapapeles: directo si hay uno, con menú si hay dos.
+// @pieza primitiva · design-system/01-rejilla.tsx · Copiar un valor al portapapeles: directo si hay uno, con menú si hay dos.
 
 import { Check, Copy } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";

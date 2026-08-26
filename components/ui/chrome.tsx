@@ -1,4 +1,4 @@
-// @pieza núcleo · design-system/08-enlaces.tsx · El enlace de la carpintería de navegación: `shape` × `tone`.
+// @pieza núcleo · design-system/06-enlaces.tsx · El enlace de la carpintería de navegación: `shape` × `tone`.
 
 import { cva, type VariantProps } from "class-variance-authority";
 

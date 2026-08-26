@@ -10,6 +10,13 @@ import { SpecimenCard } from "./shared";
 
 /* ===================== (08) ENLACES ===================== */
 export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
+  // EL CASO INVERTIDO VIVE EN `cases` desde P70.33 —es un caso más de la misma
+  // familia y no una excepción con claves propias— pero se PINTA aparte y a lo
+  // ancho, por el motivo que explica el comentario de más abajo. El corte va
+  // aquí, en una línea, en vez de repartido por el JSX.
+  const rejilla = t.cases.slice(0, -1);
+  const invertido = t.cases[t.cases.length - 1]!;
+
   return (
     <section data-reveal className={SECTION}>
       <div className={WRAP}>
@@ -19,7 +26,7 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
           </p>
         </SectionHeader>
         <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,19rem),1fr))] items-start gap-[var(--gutter)]">
-          {t.cases.map((c, i) => (
+          {rejilla.map((c, i) => (
             /* Demo vivo: el hover real de cada clase, no una captura. */
             <SpecimenCard
               key={c.cls}
@@ -122,9 +129,9 @@ export function Enlaces({ t }: { t: Dictionary["designSystem"]["enlaces"] }) {
             la pastilla de hover (D39/D61). */}
         <SpecimenCard
           kicker={t.invertedKicker}
-          cls={t.invertedCls}
-          rule={t.invertedRule}
-          note={t.invertedNote}
+          cls={invertido.cls}
+          rule={invertido.rule}
+          note={invertido.note}
           wide
         >
           <div

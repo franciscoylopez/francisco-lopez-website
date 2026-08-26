@@ -1,4 +1,4 @@
-// @pieza artículo · design-system/15-articulo.tsx · Los bloques del texto largo: portada de capítulo, cita, diagrama, cierre.
+// @pieza artículo · design-system/12-articulo.tsx · Los bloques del texto largo: portada de capítulo, cita, diagrama, cierre.
 
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";

@@ -1,9 +1,14 @@
 import { Download } from "lucide-react";
-import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import {
+  eyebrowVariants,
+  SectionHeader,
+  titleVariants,
+} from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { CARD, SECTION, WRAP } from "@/components/ui/layout";
+import { CARD, PAIR, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { PALETTE, paletteHex } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
+import { GroupHead } from "./shared";
 
 /* ===================== (06) CLARO / OSCURO ===================== */
 // Tarjeta de tema fijo (§06): muestra claro y oscuro con la paleta literal,
@@ -143,6 +148,51 @@ export function Claroscuro({
           <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.85rem]">
             {t.ruleFoot}
           </p>
+        </div>
+
+        {/* ---------- el gris que pone la superficie ----------
+            VIENE DE LA VIEJA §11 (P70.33): enseñaba que el atenuado lo decide la
+            SUPERFICIE donde cae el texto, y eso es jerarquía de superficies, que
+            es de lo que va esta sección. Allí era el cuarto subapartado de la
+            segunda sección más larga de la página.
+
+            La superficie ES la demo: los dos rótulos salen de la MISMA clase,
+            sin prop que los distinga, y se pintan distinto solo porque el fondo
+            que tienen debajo es otro (`--surface-dim`). Por eso el espécimen
+            tiene que traer la superficie de verdad y no un color parecido. */}
+        <GroupHead title={t.toneTitle} lead={t.toneLead} />
+        <div className={PAIR}>
+          {t.tones.map((tone) => {
+            const band = tone.surface === "--muted";
+            return (
+              <div key={tone.surface} className={cn(PANEL, "flex flex-col")}>
+                <div
+                  className={cn(
+                    "flex flex-1 flex-col justify-center px-5 py-8",
+                    band ? "bg-muted" : "bg-background",
+                  )}
+                >
+                  <p className={cn(eyebrowVariants(), "mb-3")}>{tone.label}</p>
+                  <span
+                    className={cn(
+                      titleVariants({ size: "section-sm" }),
+                      "block text-[1.5rem]",
+                    )}
+                  >
+                    {tone.sample}
+                  </span>
+                </div>
+                <div className="border-border bg-card border-t px-5 pt-[1.1rem] pb-[1.35rem]">
+                  <code className="text-muted-foreground font-mono text-[0.74rem]">
+                    {tone.surface}
+                  </code>
+                  <p className="text-muted-foreground m-0 mt-[0.5rem] text-[0.82rem] leading-[1.55]">
+                    {tone.note}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

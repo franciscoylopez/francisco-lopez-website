@@ -51,7 +51,7 @@ export function Etiquetas({
                 kicker={c.kicker}
                 cls={c.cls}
                 rule={c.rule}
-                note={fillRatios(c.note, lang)}
+                note={c.note ? fillRatios(c.note, lang) : undefined}
               >
                 {/* Las tres primeras tarjetas enseñan un TONO con dos ejemplos
                     reales; la cuarta enseña los tres `kind` sobre un mismo tono,

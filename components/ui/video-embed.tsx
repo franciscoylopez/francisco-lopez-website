@@ -1,6 +1,6 @@
 "use client";
 
-// @pieza primitiva · design-system/18-video.tsx · La facade de vídeo de terceros: póster propio y el clic como gate (D55).
+// @pieza primitiva · design-system/07-botones.tsx · La facade de vídeo de terceros: póster propio y el clic como gate (D55).
 
 import { Play } from "lucide-react";
 import Image from "next/image";

@@ -1,4 +1,4 @@
-// @pieza primitiva · design-system/17-bloques.tsx · El cierre común de las páginas: a dónde se va desde aquí.
+// @pieza primitiva · design-system/10-composicion.tsx · El cierre común de las páginas: a dónde se va desde aquí.
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
 

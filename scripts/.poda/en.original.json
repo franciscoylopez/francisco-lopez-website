@@ -1,0 +1,992 @@
+{
+  "meta": {
+    "title": "Design System · Francisco López",
+    "description": "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy, light/dark, motion and the full accessibility measurement."
+  },
+  "crumb": "Design System",
+  "hero": {
+    "kicker": "Design foundations",
+    "title": "Design System",
+    "lead": "A design system isn't there to make everything look alike: it's there so a decision gets made once. Change a button's hover or its touch target here and it reaches all fourteen pages at the same time.",
+    "statContainer": "Max container width",
+    "statBreakpoints": "Breakpoints",
+    "statMeasure": "Reading measure (~91 char.)",
+    "statA11y": "Accessibility target"
+  },
+  "rejilla": {
+    "num": "01 — Grid",
+    "title": "Wide to lay out, narrow to read",
+    "showGrid": "Show grid",
+    "hideGrid": "Hide grid",
+    "lead": "Running text never uses the container width: it sits at the reading measure.",
+    "baseLabel": "Base grid:",
+    "baseVal": "12 columns",
+    "gutterLabel": "Gutter:",
+    "hint": "The band marks the 12 columns. Use the “grid” button above to toggle it.",
+    "cards": [
+      {
+        "title": "Container",
+        "body": "Max 1360px, centered. Above xl the margins grow; the content never stretches."
+      },
+      {
+        "title": "Margins (page-x)",
+        "body": "clamp(1.25rem, 5vw, 2.5rem): 20px on mobile, up to 40px on desktop."
+      },
+      {
+        "title": "Reading measure",
+        "body": "Running text never exceeds 42rem (~91 char.) even when the container is wide. The classic comfortable measure runs 45 to 75 characters, so 91 is above it: a conscious wide-container decision, not an oversight."
+      }
+    ]
+  },
+  "tokens": {
+    "num": "02 — Layout tokens",
+    "title": "What this system adds on top of Tailwind",
+    "lead": "They don't exist anywhere else in the system and move to the repository when the site is built.",
+    "copyLabel": ":root { }",
+    "copyHint": "Copy at a glance",
+    "cards": [
+      {
+        "title": "Fixed, not editable in production",
+        "body": "--section-y and --measure have fixed values: clamp(4.5rem, 9vw, 9rem) and 42rem. There's no tuning panel anymore: the rhythm is the same across the whole site."
+      },
+      {
+        "title": "Defined once",
+        "body": "They live in the site's :root alongside the color tokens; each page consumes them. Changing a value here changes it everywhere."
+      }
+    ],
+    "copyAria": "Copy the layout token block",
+    "copiedAnnounce": "Token block copied to clipboard",
+    "copiedLabel": "Copied"
+  },
+  "breakpoints": {
+    "num": "03 — Breakpoints",
+    "title": "Nothing jumps between one breakpoint and the next",
+    "lead": "They match the repo's Tailwind scale. Type and spacing are fluid with clamp(), so sizes interpolate continuously.",
+    "cols": {
+      "token": "Token / min-width",
+      "ctx": "Context",
+      "change": "What changes in the layout"
+    },
+    "rows": [
+      {
+        "token": "base",
+        "min": "0 – 639px",
+        "ctx": "Mobile",
+        "change": "One column, everything stacked. aside above the content. Type at the clamp minimum."
+      },
+      {
+        "token": "sm",
+        "min": "≥ 640px",
+        "ctx": "Large mobile",
+        "change": "Buttons and metadata in a row; still one content column."
+      },
+      {
+        "token": "md",
+        "min": "≥ 768px",
+        "ctx": "Tablet",
+        "change": "The aside + content two-column grid appears. Margins grow."
+      },
+      {
+        "token": "lg",
+        "min": "≥ 1024px",
+        "ctx": "Desktop",
+        "change": "Full 12-column grid; aside can go sticky; 3-card grids."
+      },
+      {
+        "token": "xl",
+        "min": "≥ 1280px",
+        "ctx": "Wide desktop",
+        "change": "Container caps at 1360px, centered. Margins absorb the extra width."
+      }
+    ]
+  },
+  "ritmo": {
+    "num": "04 — Rhythm and spacing",
+    "title": "Whitespace is the hierarchy tool",
+    "lead": "A 4px base scale (Tailwind).",
+    "scaleTitle": "Spacing scale",
+    "rhythmTitle": "Rhythm between sections",
+    "rhythm": [
+      "Between major sections: --section-y, from 72px on mobile to 144px on desktop.",
+      "Section title → content: 40px (2.5rem).",
+      "Between blocks within a section: 24–32px. Optional hairline divider.",
+      "Every section opens with a 1px var(--border) divider full width."
+    ]
+  },
+  "tipografia": {
+    "num": "05 — Typography",
+    "title": "Width decides the size, not the device",
+    "lead": "Bricolage Grotesque (600) for headlines · Inter for text and UI. Mobile = clamp minimum, desktop = maximum.",
+    "cols": {
+      "level": "Level",
+      "font": "Font",
+      "desktop": "Desktop",
+      "mobile": "Mobile",
+      "lh": "Line height",
+      "use": "Use"
+    },
+    "rows": [
+      {
+        "name": "Display",
+        "font": "Bricolage 600",
+        "desktop": "80px / 5rem",
+        "mobile": "44px",
+        "lh": "1.0",
+        "use": "Hero only",
+        "sample": "Discovery",
+        "kind": "display"
+      },
+      {
+        "name": "H1",
+        "font": "Bricolage 600",
+        "desktop": "52px / 3.25rem",
+        "mobile": "32px",
+        "lh": "1.05",
+        "use": "Section title",
+        "sample": "Milestones",
+        "kind": "h1"
+      },
+      {
+        "name": "H2",
+        "font": "Bricolage 600",
+        "desktop": "32px / 2rem",
+        "mobile": "24px",
+        "lh": "1.15",
+        "use": "Subsection",
+        "sample": "How I work",
+        "kind": "h2"
+      },
+      {
+        "name": "H3",
+        "font": "Bricolage 600",
+        "desktop": "20px / 1.25rem",
+        "mobile": "18px",
+        "lh": "1.3",
+        "use": "Card / case title",
+        "sample": "TheTool · SaaS B2B",
+        "kind": "h3"
+      },
+      {
+        "name": "H4",
+        "font": "Bricolage 600",
+        "desktop": "16px / 1rem",
+        "mobile": "16px",
+        "lh": "1.4",
+        "use": "Minor heading",
+        "sample": "Results",
+        "kind": "h4"
+      },
+      {
+        "name": "Body L",
+        "font": "Inter 400",
+        "desktop": "18px / 1.125rem",
+        "mobile": "17px",
+        "lh": "1.6",
+        "use": "Subheadline, intro",
+        "sample": "I research, prototype, build and measure.",
+        "kind": "bodyL"
+      },
+      {
+        "name": "Body",
+        "font": "Inter 400",
+        "desktop": "16px / 1rem",
+        "mobile": "16px",
+        "lh": "1.65",
+        "use": "Running text (max 42rem)",
+        "sample": "Senior Product Manager with 10+ years in B2B and B2C SaaS.",
+        "kind": "body"
+      },
+      {
+        "name": "Small / meta",
+        "font": "Inter 400–500",
+        "desktop": "14px",
+        "mobile": "14px",
+        "lh": "1.5",
+        "use": "Dates, captions, labels",
+        "sample": "Cofounder & PM · May 2016 – Oct 2021",
+        "kind": "small"
+      },
+      {
+        "name": "Eyebrow",
+        "font": "Inter 600 · UPPER",
+        "desktop": "13px",
+        "mobile": "13px",
+        "lh": "1.4",
+        "use": "Kicker above title",
+        "sample": "SENIOR PRODUCT MANAGER · UX · SAAS",
+        "kind": "eyebrow"
+      }
+    ]
+  },
+  "claroscuro": {
+    "num": "06 — Light and dark",
+    "title": "Depth comes from hairlines, not shadows",
+    "lead": "Same skeleton, same surface hierarchy: background → card → border. Light is warm paper; dark is deep blue.",
+    "lightLabel": "Light mode",
+    "darkLabel": "Dark mode",
+    "sampleHeadline": "From discovery to data.",
+    "cta": "Download CV",
+    "ruleTitle": "Color rule",
+    "rule": [
+      "primary is the only action color. secondary / muted / accent stay neutral.",
+      "Links, in two rules: primary for content links; foreground / muted-foreground for navigation chrome (nav, breadcrumb, footer).",
+      "Brand tones decorate or sign the logo, with one exception: brand-purple-accent is a brand tone used as text over inverted backgrounds, and it swaps with the theme because no fixed colour reads on both. Splits and pastels, never as text."
+    ],
+    "ruleFoot": "Use the header toggle to see this same page in both modes."
+  },
+  "movimiento": {
+    "num": "07 — Motion",
+    "title": "Restrained: it never competes with the content",
+    "lead": "Durations aren't picked by taste: each one matches a kind of change on screen.",
+    "timings": [
+      {
+        "k": "150ms",
+        "v": "Micro-interactions: hover, focus, buttons."
+      },
+      {
+        "k": "250ms",
+        "v": "State changes: accordions, tabs."
+      },
+      {
+        "k": "600ms",
+        "v": "Section scroll-reveal on entry."
+      },
+      {
+        "k": "easing",
+        "v": "cubic-bezier(.4, 0, .2, 1), the standard one."
+      }
+    ],
+    "bullets": [
+      "Reveal = fade + 12px rise, staggered ~60ms between children.",
+      "prefers-reduced-motion: transforms and auto-scroll are disabled. Content always appears, even if the JS fails."
+    ],
+    "demoLabel": "Scroll-reveal demo",
+    "replay": "Replay ▸",
+    "navTitle": "Nav transition · shared across the whole site",
+    "navBullets": [
+      "Symbol 48 → 28px and bar 80 → 64px, continuously with scroll.",
+      "The split's color layers extinguish before the symbol drops below 48px: it never passes through a mis-registration state.",
+      "The wordmark fades in opacity without clipping glyphs: the gap only collapses once it's invisible.",
+      "prefers-reduced-motion: a jump between states, no interpolation."
+    ],
+    "navState1": "on load · 80px",
+    "navState2": "on scroll · 64px · flat",
+    "navFoot": "It's the transition you're seeing right now in this page's header."
+  },
+  "enlaces": {
+    "num": "08 — Links",
+    "title": "Its function decides, not where it sits",
+    "lead": "Inside content, cyan is the reward for interacting; inside a block that is already navigation, cyan tells you nothing and only adds noise.",
+    "hint": "Hover over them ▸",
+    "invertedKicker": "Content, on an inverted band",
+    "invertedCls": ".link-content · data-surface",
+    "invertedRule": "On an inverted band the page's text colour IS the background, so a link that pinned it would vanish and leave the underline floating on its own. The link doesn't pick it here: the band does, by declaring which surface it is.",
+    "invertedNote": "All three colours are the other theme's, not new values: that's why the hover contrast is exactly the one already verified for text on a button, with the themes swapped.",
+    "demoInvertedBefore": "An inverted band is one painted in the text colour that then writes on top in the background colour. Inside it,",
+    "demoInvertedLink": "a content link",
+    "demoInvertedAfter": "still behaves the same way: a thin underline at rest and a solid fill on hover.",
+    "cases": [
+      {
+        "kicker": "Content",
+        "cls": ".link-content",
+        "rule": "At rest, foreground text with a thin primary underline. On hover or focus, a solid fill grows from the bottom up and the text flips to primary-foreground.",
+        "note": "It reuses the already-verified “text on button” contrast pair (AAA in both themes) rather than inventing a new one."
+      },
+      {
+        "kicker": "Navigation chrome",
+        "cls": ".link-chrome",
+        "rule": "Nav, breadcrumb, footer and menus: foreground or muted-foreground, never primary. On hover and focus, a muted background pill.",
+        "note": "Their position already reads as a link. Colour is not what carries the state: the pill works just as well without telling hues apart."
+      },
+      {
+        "kicker": "Icon-only chrome",
+        "cls": ".icon-chrome",
+        "rule": "Theme toggle, menu and social icons: the same pill as the rest of the chrome, filling the full 44px touch target.",
+        "note": "A control without a label needs the same affordance as one with text; otherwise it is the only piece of chrome that ignores the cursor."
+      },
+      {
+        "kicker": "Chrome on an inverted band",
+        "cls": ".link-chrome · tone inverted",
+        "rule": "On a block whose background is foreground, chrome lifts to background on hover or focus, and the pill is built from the opposite end of that same background.",
+        "note": "The usual secondary tone lifts to foreground, which here IS the background colour: invisible text. The surface overrules the variant."
+      }
+    ],
+    "demoContentBefore": "Every decision on this page is",
+    "demoContentLink": "documented and measured",
+    "demoContentAfter": "before it reaches the code.",
+    "demoChromeItems": ["Home", "About", "Brand Kit"],
+    "ruleTitle": "Why cyan does not live in the text",
+    "rule": [
+      "Cyan is the system's only action colour: if it also tints every link at rest, it stops signalling anything.",
+      "Holding it back for the moment of interaction turns it back into a signal instead of a paragraph colour.",
+      "No state is encoded by colour alone: underline, fill and pill are changes of shape, not of hue."
+    ],
+    "ruleFoot": "A chrome tone is not decoration. The secondary one (footer, breadcrumb, language switch) lifts to foreground in the same gesture that brings up the pill, because without that jump the pair drops to AA exactly on hover; and on an inverted band it lifts to background, because there foreground is the background colour. No call site writes that rule: the tone does."
+  },
+  "botones": {
+    "num": "09 — Buttons and actions",
+    "title": "A button doesn't pick its look: its role does",
+    "lead": "How many actions compete beside it, and whether it carries state, decide the variant, and the variant already has hover, focus and touch target settled.",
+    "hint": "Hover to see it ▸",
+    "cases": [
+      {
+        "kicker": "Primary action",
+        "cls": "solid",
+        "rule": "The only cyan fill on the screen. On hover the fill blends towards the text colour instead of lightening.",
+        "note": "Blending raises the text contrast on hover; dropping the opacity would have lowered it. Today it's used by the button that leads to Contact and by the one that sends the form."
+      },
+      {
+        "kicker": "Content action",
+        "cls": "outline-primary",
+        "rule": "Cyan border and text, turning into the full fill on hover. For actions that stand alone, with no other button beside them to compete with.",
+        "note": "Downloading the CV, managing cookie preferences and the Brand Kit downloads."
+      },
+      {
+        "kicker": "Utility",
+        "cls": "outline-neutral · ghost",
+        "rule": "No cyan: a neutral border or no box at all, plus a grey pill on hover. This is what a button wears when it sits next to a solid one in the same group.",
+        "note": "If cyan showed up here, two buttons in the same group would both claim to be the main action."
+      },
+      {
+        "kicker": "Switch",
+        "cls": "toggle-primary",
+        "rule": "A single control that turns on something that wasn't there. On, full fill; off, cyan border with a tint on hover, never the fill.",
+        "note": "If the off state filled on hover it would look identical to the on state, and the control would stop saying which one it's in. Within that tint the text darkens slightly: that's what takes it to AAA without having to dim the tint."
+      },
+      {
+        "kicker": "Set of alternatives",
+        "cls": "toggle-neutral",
+        "rule": "Several segments where exactly one is active. The active one takes the solid cyan; the rest stay neutral.",
+        "note": "The group picks how to look at content that's already on screen. Painting them all cyan distinguishes nothing and swallows the section."
+      },
+      {
+        "kicker": "Icon only",
+        "cls": "icon",
+        "rule": "Controls with no label: the same pill as the rest of the chrome, filling the full 44px touch target.",
+        "note": "The minimum size lives in the component, not in each call. Back when it was written by hand, the footer icon was left at 40px."
+      },
+      {
+        "kicker": "Pressable card",
+        "cls": "card",
+        "rule": "When the click target is the whole box rather than a line of text: card background, grey pill on hover, and box padding instead of button padding.",
+        "note": "Its hover is grey and not cyan because it's a channel, not the standout action on the screen. Today the two contact routes on their own page use it."
+      }
+    ],
+    "demoSolid": "Get in touch",
+    "demoOutlinePrimary": "Download CV",
+    "demoNeutral": "Cancel",
+    "demoGhost": "Preferences",
+    "demoSegments": ["Desktop", "Tablet", "Mobile"],
+    "stateOn": "Active",
+    "stateOff": "Inactive",
+    "iconTitle": "When an action gets an icon",
+    "iconRule": [
+      "One question does the work: does this action take me out of the page? Downloading a file, opening another app (mail, phone) or leaving for another site all get an icon.",
+      "Anything that happens inside the page goes without one: accept, save, close, pick a tab, move around the site. \"Manage preferences\" opens a dialog, so it stays bare.",
+      "The icon sits before the label, because it classifies the action. Only on the solid button does it sit after and travel two pixels on hover: there it marks the direction of the trip."
+    ],
+    "iconFoot": "Size, gap and side come from the variant, not from each call. Back when each call decided, the same download icon measured 15, 17 and 18 pixels in three places, and \"Download CV\" showed up with an icon in two of the three appearances it had back then.",
+    "ruleTitle": "Why this is a component and not a convention",
+    "rule": [
+      "Before it existed, the same decision was hand-written across six files: two radii for the same box, four hover behaviours for the same button, and the 44px touch target copied fourteen times.",
+      "No control is written with loose classes. If a case fits no variant, the variant gets created; if it's an exception, it gets documented with a date.",
+      "Changing a hover means changing one line, and it reaches every button on the site at once."
+    ],
+    "ruleFoot": "No variant declares focus: a single global rule does, the same one everywhere. Three used to coexist, and one of them drew a white halo in dark mode.",
+    "demoCardLabel": "Email",
+    "demoCardValue": "hello@example.com",
+    "focusShow": "Show the focus ring",
+    "focusHide": "Hide the focus ring"
+  },
+  "etiquetas": {
+    "num": "10 — Labels",
+    "title": "It labels; it isn't pressed",
+    "lead": "It sits outside the action layer, with no state, no hover and no touch target: its only job is to be read. The tinted wash says which family it belongs to, and the text always takes the ordinary text colour, which is the only thing that reaches AAA on top of a tint.",
+    "cases": [
+      {
+        "kicker": "No weight",
+        "cls": "neutral",
+        "demo": ["Fixed", "Coming soon"],
+        "rule": "What tags along without standing out: a status, a note in the margin, the off half of a pair.",
+        "note": "Its text can't be the system's dimmed grey, which is tuned against the page background: on top of the pill it drops to 6.44:1. Blended into that same fill it gives {badgeNeutral.light}."
+      },
+      {
+        "kicker": "Verified figure",
+        "cls": "cyan",
+        "demo": ["AAA", "Switches"],
+        "rule": "A cyan wash for what has been measured, or what passes. The cyan lives in the fill; never in the text.",
+        "note": "With cyan text over its own wash the pair sits at 6.07:1, and thinning the wash doesn't help: painting cyan over cyan can't raise the contrast of cyan."
+      },
+      {
+        "kicker": "Brand mark",
+        "cls": "purple",
+        "demo": ["Exit", "Split"],
+        "rule": "A purple wash for what flags something singular: a career milestone, a variant of the logo.",
+        "note": "Purple is decorative and is never an action colour, so here it can only show up as fill."
+      },
+      {
+        "kicker": "Three registers",
+        "cls": "label · value · code",
+        "demo": ["Exit", "Split"],
+        "rule": "Small caps for a status tag, ordinary case for a figure in prose, monospace for a technical value.",
+        "note": "That's the only thing that changes from one label to the next. Height, size, radius and padding are the same for all of them, and no longer decided page by page."
+      }
+    ],
+    "ruleTitle": "Why this is its own layer",
+    "rule": [
+      "It isn't in the action layer because a label isn't an action: it can't be pressed. Half of a button's base (touch floor, focus ring, states) would mean nothing here.",
+      "Before it existed there were eight pills written by hand across six files, with five padding widths, three text sizes and four different heights. Three of them shared a single page.",
+      "A difference that means something is a variant; one that means nothing is a value to unify. The monospace for technical values stays; the four heights don't."
+    ],
+    "ruleFoot": "The text on both tinted labels is the ordinary text colour, not the colour of the wash. That's what takes them to {badgeTinted.light} in light and {badgeTinted.dark} in dark; with tinted text they sat at 6.07 and 5.46: the worst pair in the system was, of all things, the pill that marks “AAA” in the table just below.",
+    "hint": "These are the same labels the site uses: if one changes, this section changes with it."
+  },
+  "cabeceras": {
+    "num": "11 — Headers",
+    "title": "Every page and every section opens the same way",
+    "lead": "A short label above, a headline below. The pair comes from a single piece, so the size of the headline also decides the gap that separates it from the label, and whoever writes the section doesn't pick it.",
+    "cols": {
+      "leadGap": "Gap to the lead",
+      "use": "Where it's used",
+      "gap": "Gap to the label"
+    },
+    "sizes": [
+      {
+        "size": "page",
+        "eyebrow": "Design fundamentals",
+        "sample": "Design System",
+        "use": "The h1 that opens a page: the home, Accessibility, Brand Kit and this one."
+      },
+      {
+        "size": "page-sm",
+        "eyebrow": "Who's behind this",
+        "sample": "About me",
+        "use": "The h1 of the long-read pages: About me, the cookie policy and the Career index."
+      },
+      {
+        "size": "section",
+        "eyebrow": "Journey",
+        "sample": "Career",
+        "use": "The h2 that opens a section inside a page."
+      },
+      {
+        "size": "section-sm",
+        "eyebrow": "Header layer",
+        "sample": "Headers",
+        "use": "A section of a long index, like every one on this page. No figure on purpose: it used to carry one and fell behind twice."
+      },
+      {
+        "size": "card",
+        "eyebrow": "",
+        "sample": "Discovery",
+        "use": "The headline of a PIECE inside a grid: a stage of “How I work”, a row of Education, a role in the Career index. It's the mode of four values that all fitted inside half a rem and meant the same thing, with different heading levels and the same visual job."
+      },
+      {
+        "size": "sub",
+        "eyebrow": "",
+        "sample": "The product that already existed",
+        "use": "The h3 of a sub-section inside a section. It goes without an eyebrow above, like sub-sm: it serves the free-form blocks of “The story” on the experience pages."
+      },
+      {
+        "size": "sub-sm",
+        "eyebrow": "",
+        "sample": "Before and after",
+        "use": "The step below sub: the heading of a supporting block inside a section. It serves the nine demo headings on this page, where the same string was hand-written nine times. The only size without a clamp: at 1rem there is nothing to scale."
+      }
+    ],
+    "toneTitle": "The label takes its grey from the surface",
+    "toneLead": "Both labels below come from the same class, with nothing at the call site to tell them apart. They render differently because the surface underneath is not the same.",
+    "tones": [
+      {
+        "surface": "--background",
+        "label": "Design fundamentals",
+        "sample": "On the page background",
+        "note": "The default case: the system's dimmed grey, tuned against precisely this background."
+      },
+      {
+        "surface": "--muted",
+        "label": "The next step",
+        "sample": "On the contact band",
+        "note": "Over any other surface that grey has to be recomputed, not reused (D30): it blends 85% into the surface underneath. This used to be a prop you had to remember; now the token resolves it."
+      }
+    ],
+    "labelTitle": "The other small-caps label, which is not this one",
+    "labelLead": "They look alike and do different jobs, so they're two pieces rather than one with an axis. The left one opens a section and comes paired with a headline; the right one labels a piece of data inside the content, which is why it runs a notch smaller and a notch tighter.",
+    "labelEyebrowKicker": "Opens a section",
+    "labelEyebrowRule": "It always sits above a headline, and the gap between them isn't written anywhere: the size of the headline below sets it.",
+    "labelEyebrowNote": "This is the piece that ended up written by hand fourteen times before it had a name.",
+    "labelEyebrowSample": "Career",
+    "labelEyebrowTitle": "Ten years of product",
+    "labelDataKicker": "Labels a value",
+    "labelDataRule": "It has no headline beside it, so there's no gap to derive: the margin belongs to whoever uses it. It's a fact's label, a row heading, or the name of a block inside a section.",
+    "labelDataNote": "It was written by hand nine times when it finally got a name, and two of those called the one next to it and overrode its size, which is the tell that the variant they were using wasn't theirs.",
+    "labelDataSample": "Length",
+    "labelDataValue": "5 years and 6 months",
+    "statTitle": "Below the headline, the row of figures",
+    "statLead": "When an opening sums itself up in numbers, the page doesn't assemble that row: a piece brings it, with its rule, its gap and its grid. The one below is the same row that opens this page, with the same values, so you can check by scrolling up.",
+    "stat": {
+      "kicker": "Row of figures",
+      "cls": "StatRow · Stat",
+      "rule": "StatRow brings the rule above it, the gap that separates it from the opening, and the grid that shares out the columns. Stat brings the figure, its optional unit and the label underneath.",
+      "note": "The minimum column width is 11rem, and it isn't a parameter: at 900px wide, 13rem breaks a row of four into three plus one and strands a figure on its own line. An orphan reads as a layout bug; a wrapped label doesn't.",
+      "labels": {
+        "container": "Maximum container width",
+        "breakpointsUnit": "breakpoints",
+        "contrast": "Contrast floor and target"
+      }
+    },
+    "ruleTitle": "What the variant decides and what the call site does",
+    "rule": [
+      "The size picks the gap between label and headline. There used to be six values for that one relationship, spread across fourteen files.",
+      "Line height lives in the variant: the hero wrote leading-none and everything else leading-[1.0], the same value in two notations.",
+      "The call site only sets what depends on the content: the max width in characters, or the text-balance of a headline that breaks badly."
+    ],
+    "ruleFoot": "The four sizes aren't drift, they're hierarchy: the h1 that opens a page isn't the h2 that opens a section, and merging them would break the ladder. It's the CARD/PANEL lesson: before merging values that look alike, check whether they mean different things."
+  },
+  "tablas": {
+    "num": "12 — Tables",
+    "title": "A table isn't laid out: it's declared",
+    "lead": "The layer owns the header row, the column widths, the paddings and the markup, so that the system's five tables read as one piece rather than five attempts.",
+    "dataTitle": "Data table",
+    "dataLead": "A grid of cells with column headers. It is real table markup, and that isn't cosmetic: the measured-contrast one is thirteen rows by three columns of numbers, and without cells tied to their column a screen reader reads a string of figures with no way to tell the light theme from the dark. No automated tool catches it, because a div isn't a broken table: it simply isn't a table.",
+    "demoCols": {
+      "part": "Piece",
+      "markup": "Markup",
+      "what": "What it solves"
+    },
+    "demoRows": [
+      {
+        "part": "The table's name",
+        "markup": "caption",
+        "what": "Says what the table is to whoever can't see it. It isn't painted: the heading above already says it on screen."
+      },
+      {
+        "part": "Column header",
+        "markup": "th scope=col",
+        "what": "One definition. Of the three that existed, each property takes the most common value."
+      },
+      {
+        "part": "Row name",
+        "markup": "th scope=row",
+        "what": "Ties every figure to its row: \"Dimmed text over card, light, 9.14:1\" instead of three loose numbers."
+      },
+      {
+        "part": "Column width",
+        "markup": "colgroup",
+        "what": "Declared once. With a grid it was written twice per table and kept in sync by hand."
+      }
+    ],
+    "ruleTitle": "What the layer took with it",
+    "rule": [
+      "Three different header-row definitions diverging across seven properties: layout, gap, horizontal padding, vertical padding, tracking, weight and fill.",
+      "Five different vertical row paddings, none of which meant anything.",
+      "The column template written twice per table (header and row) and kept matching by hand.",
+      "The zebra striping a single table carried. There is one table separator in this system, and it's the hairline."
+    ],
+    "ruleFoot": "That zebra had a reasonable argument behind it (a hairline doesn't group a tall row that wraps) and it was deleted anyway once measured: it stepped 1.02 in light, against the 3.89 of the hover pill, which is the step this site uses as its reference for something being visible. It wasn't grouping rows; it was laying down a tint below the threshold. A well-built design argument is still a hypothesis until it's measured."
+  },
+  "accesibilidad": {
+    "num": "13 — Closing checklist",
+    "title": "AA is the floor, not the goal",
+    "lead": "The list each page of the site closes with. It's the internal criterion the site is built and audited against; the public conformance statement lives on the Accessibility page.",
+    "contrastTitle": "Measured contrast",
+    "contrastCols": {
+      "measure": "Measurement",
+      "light": "Light",
+      "dark": "Dark"
+    },
+    "contrastRows": [
+      {
+        "id": "bodyText",
+        "label": "Body text",
+        "note": "foreground over background"
+      },
+      {
+        "id": "primaryText",
+        "label": "primary as text",
+        "note": "links and accent"
+      },
+      {
+        "id": "buttonText",
+        "label": "Text on button",
+        "note": "primary-foreground over primary"
+      },
+      {
+        "id": "solidHover",
+        "label": "Solid button hover",
+        "note": "the fill mixes toward foreground"
+      },
+      {
+        "id": "toggleHover",
+        "label": "Toggle-off hover",
+        "note": "the tightest state in the system"
+      },
+      {
+        "id": "chromeHover",
+        "label": "Secondary chrome hover",
+        "note": "the text rises to foreground with the pill"
+      },
+      {
+        "id": "mutedForeground",
+        "label": "Dimmed text over background",
+        "note": "the token as-is: it is tuned against this surface"
+      },
+      {
+        "id": "mutedOnCard",
+        "label": "Dimmed text over card",
+        "note": "cards and panels: recomputed against their own fill"
+      },
+      {
+        "id": "badgeNeutral",
+        "label": "Dimmed text over muted",
+        "note": "the contact band and the neutral label"
+      },
+      {
+        "id": "mutedOnInverted",
+        "label": "Dimmed text over an inverted surface",
+        "note": "built from the other end, like the inverted cyan"
+      },
+      {
+        "id": "badgeTinted",
+        "label": "Tinted label",
+        "note": "the worse of the two, cyan and purple"
+      },
+      {
+        "id": "switchKnobOff",
+        "label": "Switch knob, off",
+        "note": "foreground over its own track; when on it reuses the button pair"
+      },
+      {
+        "id": "purpleAccent",
+        "label": "brand-purple-accent",
+        "note": "Over inverted bg; swaps with the theme to reach AAA"
+      }
+    ],
+    "contrastNote": "Every text pair in the system reaches AAA in light and dark, and not only at rest: hover states too, which is where this usually slips. There are no exceptions left. The last to fall was brand-purple-accent, the purple of the inverted bands, and picking a different purple was never going to fix it: those bands are painted in the page's own ink, so their background flips from charcoal to bone with the theme, and against both surfaces at once no fixed colour can beat 3.71:1. That's arithmetic, not pigment. The fix was to give it two values, one per theme, exactly as the cyan on those same backgrounds already did.",
+    "checklistTitle": "Closing checklist",
+    "checklist": [
+      "Measured contrast, with a figure, in both themes. AA is the non-negotiable floor; AAA whenever it's reached without visual cost.",
+      "Visible focus: a 2px ring with var(--ring) and a 2px offset on every interactive element. Never outline:none without a replacement.",
+      "Touch targets of 44×44px minimum, including small controls like the breadcrumb or the theme toggle.",
+      "A single h1 per page and an h2–h4 hierarchy with no skips. Reading order is DOM order.",
+      "Breadcrumb on every internal page, with <nav aria-label>, an ordered list and aria-current=\"page\" on the current level.",
+      "Nothing encoded by color alone: any state or category distinguished by color also carries text or shape.",
+      "prefers-reduced-motion respected in every animation.",
+      "Text alternatives: alt and labels where they inform, aria-hidden on the decorative.",
+      "A keyboard escape route: a skip link to the content as the first focusable element on the page, with a real destination (<main> with tabindex=\"-1\"). No automated tool catches it: their bypass rule is satisfied by landmarks or headings."
+    ]
+  },
+  "esqueleto": {
+    "num": "14 — Navigable skeleton",
+    "title": "The home page with no content, so the rhythm shows",
+    "devGroupLabel": "Device preview",
+    "devFull": "Desktop",
+    "devTablet": "Tablet",
+    "devMobile": "Mobile",
+    "lead": "A schematic mockup with placeholders: it only demonstrates the vertical rhythm and grid shared by Hero, Milestones, How I work and the rest of the sections.",
+    "mobileNote": "The mobile version is shown. The Desktop / Tablet / Mobile comparison is available on wide screens.",
+    "rows": [
+      {
+        "idx": "(01)",
+        "name": "Hero",
+        "h": "clamp(9rem,22vw,15rem)"
+      },
+      {
+        "idx": "(02)",
+        "name": "Milestones",
+        "h": "clamp(11rem,26vw,18rem)"
+      },
+      {
+        "idx": "(03)",
+        "name": "How I work",
+        "h": "clamp(8rem,18vw,12rem)"
+      },
+      {
+        "idx": "(04)",
+        "name": "Beyond the PM",
+        "h": "clamp(8rem,18vw,12rem)"
+      },
+      {
+        "idx": "(05)",
+        "name": "Career",
+        "h": "clamp(9rem,20vw,13rem)"
+      },
+      {
+        "idx": "(06)",
+        "name": "Education",
+        "h": "clamp(7rem,16vw,10rem)"
+      },
+      {
+        "idx": "(07)",
+        "name": "Toolkit",
+        "h": "clamp(9rem,20vw,13rem)"
+      },
+      {
+        "idx": "(08)",
+        "name": "Contact",
+        "h": "clamp(8rem,18vw,12rem)"
+      }
+    ]
+  },
+  "articulo": {
+    "num": "15 — Long-form article",
+    "title": "The shape for long text with stops",
+    "lead": "\"How this page was built\" introduced this family: eleven sections and several thousand words needed a cover per section, a quote that stops the reader, a fact that doesn't go stale, and an explicit transition between stops. Thirteen pieces, grouped below by where each one lives inside the article.",
+    "groups": {
+      "portada": {
+        "title": "The article's opening",
+        "lead": "Three pieces that appear only once, at the top: who signs it, how it gets shared, and the map of stops."
+      },
+      "parada": {
+        "title": "How every stop opens",
+        "lead": "A single piece, repeated eleven times. It's what makes every section of the article read as the same kind of thing."
+      },
+      "cuerpo": {
+        "title": "What floats alongside the text",
+        "lead": "Four pieces that don't cut the column: they sit to one side and the text keeps running around them, magazine-style. Which side is decided by the prose container, not at the point of use."
+      },
+      "pie": {
+        "title": "How every stop closes",
+        "lead": "Two strips that close the section in the same order every time: the evidence first, the transition after."
+      },
+      "islas": {
+        "title": "What doesn't scroll away",
+        "lead": "The three client islands, fixed to the window. They're demonstrated together here inside a box that contains them, because on the real page their frame of reference is the whole window."
+      }
+    },
+    "fichas": {
+      "byline": {
+        "kicker": "Byline",
+        "cls": "<ByLine>",
+        "rule": "Avatar, name and role, before the text begins. With a real photo cropped to a circle; without one, the initials on neutral grey.",
+        "note": "A signed article says who signs it at the top, not in the footer."
+      },
+      "share": {
+        "kicker": "Share",
+        "cls": "<ShareActions>",
+        "rule": "The system's native share, with copy-link as the fallback, next to the byline.",
+        "note": "navigator.share isn't in every browser: without it the button copies anyway and announces it via aria-live. The action is never silent."
+      },
+      "index": {
+        "kicker": "Map of stops",
+        "cls": "<ArticleIndex>",
+        "rule": "The map of stops with a time for each, rendered on the server: visible and clickable without JavaScript.",
+        "note": "A continuous grid with no box per cell: hairlines do the dividing and the hover pill fills the whole cell."
+      },
+      "cover": {
+        "kicker": "Section cover",
+        "cls": "<SectionCover>",
+        "rule": "Kicker and heading on the left; on the right, the illustrated ordinal with its meta line beneath it.",
+        "note": "The big numeral is aria-hidden because the kicker already says the ordinal, but it's still bound by contrast: someone with low vision does read it. It uses progress-ink, calibrated against the page background."
+      },
+      "pullquote": {
+        "kicker": "Pull quote",
+        "cls": "<Pullquote>",
+        "rule": "The line that stops the reader: rules above and below, and a purple bar down the edge.",
+        "note": "The purple carries no information here, it's ornament on text that already reads on its own. It's the one graphic use of purple that doesn't need 3:1."
+      },
+      "pull": {
+        "kicker": "Minor quote",
+        "cls": "<Pull>",
+        "rule": "The quote that accompanies without stopping the reader: a pastel purple rule and nothing else.",
+        "note": "It floats to the opposite side from the pull quote when both land in the same section, so the graphic weight doesn't pile up on one edge."
+      },
+      "diagram": {
+        "kicker": "Diagram",
+        "cls": "<DiagramPanel>",
+        "rule": "The frame for an in-house diagram or a real artefact, with its caption. The drawing comes from the page; this only supplies the box.",
+        "note": "Unfloated it takes the full width of the column, not the reading measure: a panel isn't prose, it squares up with the block rather than with the line."
+      },
+      "livestat": {
+        "kicker": "Live figure",
+        "cls": "<LiveStat>",
+        "rule": "A number that isn't written into the dictionary: it links to the page that actually publishes it.",
+        "note": "It takes an example underneath built from the real imported piece, not a recreation. The strip declares its own surface so the dimmed text recalculates against it."
+      },
+      "repo": {
+        "kicker": "Link to the evidence",
+        "cls": "<RepoStrip>",
+        "rule": "Every claim in the section points at the code behind it, and each decision cited is its own link rather than one covering the whole sentence.",
+        "note": "Chrome tone in all of its appearances: the strip never lands mid-paragraph, it always sits in the same place at the foot."
+      },
+      "chapter": {
+        "kicker": "Transition",
+        "cls": "<ChapterNav>",
+        "rule": "Where you are and where it goes next: position dots, back to the contents, and the following stop.",
+        "note": "Read ones in black, pending in grey, the current one in purple. The dots are decorative: the position is already stated in text."
+      },
+      "progress": {
+        "kicker": "Reading progress",
+        "cls": "<ReadingProgress>",
+        "rule": "The bar along the top edge, advancing with the scroll.",
+        "note": "Its width follows the scroll rather than animating on its own, so it needs no prefers-reduced-motion exception."
+      },
+      "rail": {
+        "kicker": "Section rail",
+        "cls": "<SectionRail>",
+        "rule": "The floating desktop index, highlighting the stop you're currently in.",
+        "note": "An enhancement, not a requirement: the server-rendered contents already covers navigation. If the observer can't mount, the rail highlights nothing and nothing breaks."
+      },
+      "dock": {
+        "kicker": "Share dock",
+        "cls": "<FloatingShare>",
+        "rule": "The rail's counterpart on the right edge, icon only: sharing without scrolling back to the top.",
+        "note": "It shares the opening piece's logic instead of duplicating it, because state logic with two call sites doesn't get copied."
+      }
+    },
+    "ruleTitle": "What this layer is, and what it isn't",
+    "rule": [
+      "None of these pieces knows anything about this site: they take text and links, not copy or routes of their own. That's why they live in components/ui/, like the badges or the headings.",
+      "It isn't an eighth piece of the system's core: it's a separate layer, for long text with stops.",
+      "The container is ArticleProse, which walks the dictionary's blocks and decides which side each quote and diagram floats to. It has no specimen here because its demonstration is the whole page.",
+      "The specimens above are the real pieces, imported, with sample content: if one of them changes, this section changes with it."
+    ],
+    "ruleFoot": "Introduced by \"How this page was built\", the first content on the site that needed a shape for several thousand words.",
+    "coverKicker": "05 — Specimen",
+    "coverTitle": "The illustrated ordinal opens every section",
+    "coverMeta": "5 of 11 · 3 min",
+    "pullquote": "A rule you have to remember is a rule that gets broken.",
+    "pull": "The record of why something else was thought at the time is worth more than retroactive consistency.",
+    "liveStatLabel": "Example · live data",
+    "liveStatSource": "lib/design-values.ts",
+    "liveStatValue": "AAA across all {paginas} pages",
+    "liveStatLink": "See the measured census",
+    "repoLabel": "LINK ·",
+    "repoText": "Decisions D39, D41 and D73, in ",
+    "pieSample": "…and that's why the section ends here, with the evidence and the way out towards the next one.",
+    "chapterPositionLabel": "5 of 11",
+    "chapterIndexLabel": "Contents",
+    "chapterNextLabel": "Next: 06 · From design to code",
+    "bylineName": "Francisco López",
+    "bylineRole": "Senior Product Manager",
+    "indexKicker": "Contents",
+    "indexTimeLabel": "12 min read",
+    "indexAriaLabel": "Sample article contents",
+    "indexItems": ["Why it exists", "How the work happens", "The brand"],
+    "diagramCaption": "A real diagram from the page, with its own color tokens.",
+    "progressAriaLabel": "Reading progress of the sample article",
+    "shareLabel": "Share",
+    "shareCopyLabel": "Copy link",
+    "shareCopiedLabel": "Link copied",
+    "shareCopiedAnnounce": "Link copied to clipboard",
+    "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
+    "railHint": "Same as on the real page, but contained to this panel: the section rail and the share dock activate once this section scrolls to the middle of the window."
+  },
+  "formulario": {
+    "num": "16 — Form",
+    "title": "The first surface that receives, not the one that shows",
+    "lead": "Until the contact form existed, this site was read-only from end to end. A field isn't a small button: it has a label, it has an error state, and it has to say so out loud.",
+    "fieldTitle": "The field",
+    "fieldLead": "Label and control are one piece, and the touch target floor lives on the control, which is where you press.",
+    "fieldKicker": "At rest",
+    "fieldRule": "The label is always visible and tied to the field, never tucked inside as helper text: a placeholder vanishes as you type and leaves the field with no name.",
+    "fieldNote": "Minimum height of 44px, the same touch floor as the buttons. The focus ring doesn't come from this piece: it comes from the global rule, like everything else that can be focused.",
+    "errorKicker": "With an error",
+    "errorRule": "The message is tied to the field, so a screen reader hears it on arrival and not only when you try to send.",
+    "errorNote": "The red border and the icon carry the shape; the text stays in the normal colour. The system red doesn't reach the contrast a text needs, which is also why the error never depends on colour alone.",
+    "summaryTitle": "When sending fails",
+    "summaryLead": "A notice that announces itself without stealing focus, listing which fields need another look.",
+    "summaryKicker": "Error summary",
+    "summaryRule": "It appears when you try to send and is announced as an alert. Focus is moved by the form to the first failing field: two jumps at once would leave a screen reader with no idea where it is.",
+    "summaryNote": "The same piece serves the notice without a list, which is the one you see if the send never leaves the server.",
+    "demoLabel": "Email",
+    "demoPlaceholder": "marta@company.com",
+    "demoError": "That address doesn't look complete. Check the part after the at sign.",
+    "demoSummary": "Check these fields before sending:",
+    "demoSummaryItems": ["Name", "Email"],
+    "redTitle": "Red isn't a text colour",
+    "redRule": [
+      "The system red measures 4.31:1 on the light background: it doesn't even reach the minimum a text needs.",
+      "So the message is written in the normal text colour, and red stays on the border and the icon, where the threshold is lower and it does pass.",
+      "As a bonus, the error stops being encoded by colour alone."
+    ],
+    "redFoot": "The contrast census could never have found this: it walks what the site paints, and that colour wasn't painted anywhere until the form existed.",
+    "serverTitle": "What really validates is the server",
+    "serverRule": [
+      "Browser validation exists so a blank field doesn't cost a round trip, not to decide.",
+      "The same rule runs on the server, because whoever posts by hand never ran the browser's.",
+      "And it returns codes, not sentences: the words come from the dictionary, in both languages."
+    ],
+    "serverFoot": "It's where a form's language gets forgotten: half the page translated and the errors always speaking the same one."
+  },
+  "bloques": {
+    "num": "17 — Page blocks",
+    "title": "Neither the closer nor the aside is up to each page",
+    "lead": "Not controls, not text: the two boxes a page is assembled from. Both were written by hand in two different places and both already read differently before anyone noticed, which is why they moved into the layer. What can't diverge here isn't the colour: it's the format.",
+    "noteTitle": "The aside",
+    "noteLead": "A measurement, a tool's verdict, a rule worth stating separately: what a page says outside the body of the text.",
+    "noteKicker": "With a paragraph",
+    "noteRule": "A title and its explanation on the card surface. This piece doesn't pick the grey of the body: the background it lands on resolves it, and inside a card it lands heavier than outside.",
+    "noteNote": "It takes three bodies and they combine: paragraph, list, and a smaller foot for the closing nuance.",
+    "monoKicker": "Monospaced title",
+    "monoRule": "When the title is the name of a token, a file or a tool, it goes monospaced: that way it reads as what it is, an identifier and not a sentence.",
+    "monoNote": "It's the piece's only axis. Everything else is decided by which bodies you pass, not by a variant.",
+    "demoNoteTitle": "A value is not copy",
+    "demoNoteBody": "If a section publishes a figure from the system, it comes from the values file and never from the dictionary. The test is literal: if the Spanish entry and the English one are identical character for character, it's a value with two copies.",
+    "demoMonoTitle": "--measure",
+    "demoMonoBullets": [
+      "The width of the reading column, measured in characters rather than pixels.",
+      "Section standfirsts and article bodies both use it.",
+      "Changing it moves the rhythm of every page at once, which is exactly what it exists for."
+    ],
+    "demoMonoFoot": "It's published in full in the layout tokens section, with its value and its reason.",
+    "closerTitle": "The page closer",
+    "closerLead": "What finishes the content before the footer: where you go from here, in the same format across all fourteen pages.",
+    "closerKicker": "Two destinations",
+    "closerRule": "The whole thing moved into the layer, not just the card: its own vertical rhythm (shorter than a section, because it's a closer), the rule above it and the gap under the label are what must not diverge. Had only the card moved up, the second case would have decided those three things again on its own.",
+    "closerNote": "The arrow nudges the way it points, and the nudge is off under reduced motion. A destination that doesn't exist yet isn't linked: it's drawn dashed, dimmed and with its label.",
+    "demoCloserEyebrow": "Keep reading",
+    "demoBackKicker": "Previous role",
+    "demoBackName": "KUOTIP",
+    "demoBackDesc": "A real link: the arrow sits in front and points left, which is what reads as going back without having to read the label.",
+    "demoSoonKicker": "Next role",
+    "demoSoonName": "A destination that doesn't exist yet",
+    "demoSoonDesc": "With no link, the card is drawn dashed and dimmed. It's what happens to the most recent role, which never has a next one.",
+    "demoSoonBadge": "Coming soon",
+    "twiceTitle": "Both were born twice",
+    "twiceRule": [
+      "The aside was written on two pages and only one of them accepted the monospaced title.",
+      "The closer was introduced by the three system pages, and when the second case turned up it was decided all over again.",
+      "Neither divergence was visible in the code: you saw them by putting the pages side by side."
+    ],
+    "twiceFoot": "It's the pattern the build rule warns about: when the piece doesn't cover the case, what gets written by hand is the case, and then it drifts.",
+    "wholeTitle": "The format moves up whole, not just the box",
+    "wholeRule": [
+      "What must not diverge is the entire closer, not the look of one card.",
+      "The block knows nothing about this site: it takes a label and a list of destinations.",
+      "Which page is a sibling of which is decided by its two callers, which do know."
+    ],
+    "wholeFoot": "It's the border that decides where a piece lives: if it knows something about this site, it doesn't belong to the system."
+  },
+  "video": {
+    "num": "18 — Video",
+    "title": "The click is the consent",
+    "lead": "A video from somewhere else isn't embedded: it's announced. Until someone clicks there's no third-party frame, no YouTube JavaScript and not a single request to Google. What you see before that is an image served from this very domain.",
+    "facadeTitle": "The facade",
+    "facadeLead": "What gets painted while the video hasn't been asked for: the site's own poster with the play disc on top.",
+    "facadeKicker": "Before the click",
+    "facadeRule": "The click target is the whole poster and not the disc, so it sits far above the 44px touch floor. On click, and only then, the video frame replaces the image and starts on its own: the intent has already been expressed, and asking for two clicks for one intent would be worse.",
+    "facadeNote": "Go ahead and click it: this demo is the real piece, so it will load the video exactly as it does on the page where it lives.",
+    "controlTitle": "A control on top of an image",
+    "controlLead": "A control resting on a photo has its background outside the system, so it can't fix its own colour: the poster decides it.",
+    "controlKicker": "Veil and disc",
+    "controlRule": "The veil between the image and the control is the colour of the page background, never black: black fixes one theme and makes the other worse. And the disc is two-tone, fill plus ring, so its inner edge doesn't depend on whatever is underneath.",
+    "controlNote": "That guarantees the inner edge, not the whole outline: the two outer ones fall on the photo and can't be promised point by point.",
+    "demoVideoTitle": "TheTool, the App Store Optimization platform",
+    "demoPlayLabel": "Play the video",
+    "clickTitle": "A click says more than a checkbox",
+    "clickRule": [
+      "Before the click there's nothing to consent to: no storage and no third-party request.",
+      "So it doesn't hang off a cookie category but off the click itself, which is an explicit, informed act.",
+      "That's stricter, not looser: accepting every cookie still doesn't load the video without a click."
+    ],
+    "clickFoot": "Where the piece actually lives, the caption states what happens on click, and that sentence is what makes the click informed.",
+    "posterTitle": "The poster doesn't come from YouTube",
+    "posterRule": [
+      "The official thumbnail is served from a Google domain, so using it would make the very request the facade exists to avoid.",
+      "It's downloaded once, versioned with the rest of the images and served from here.",
+      "And the allowlist of image origins doesn't have to grow."
+    ],
+    "posterFoot": "It costs one file in the repository and saves hundreds of kilobytes of a player nobody has asked for yet."
+  }
+}

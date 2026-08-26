@@ -79,7 +79,6 @@ export function Formulario({
           kicker={t.summaryKicker}
           cls="FieldErrorSummary"
           rule={t.summaryRule}
-          note={t.summaryNote}
           wide
         >
           <FieldErrorSummary title={t.demoSummary} items={t.demoSummaryItems} />
@@ -89,12 +88,8 @@ export function Formulario({
             campo. En `PAIR` y no apiladas: son hermanas y a la medida de lectura
             dejarían media sección vacía (P37.62). */}
         <div className={cn(PAIR, "mt-8")}>
-          <InfoCard title={t.redTitle} bullets={t.redRule} foot={t.redFoot} />
-          <InfoCard
-            title={t.serverTitle}
-            bullets={t.serverRule}
-            foot={t.serverFoot}
-          />
+          <InfoCard title={t.redTitle} bullets={t.redRule} />
+          <InfoCard title={t.serverTitle} bullets={t.serverRule} />
         </div>
       </div>
     </section>

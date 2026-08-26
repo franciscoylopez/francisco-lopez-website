@@ -1,4 +1,4 @@
-// @pieza núcleo · design-system/16-formulario.tsx · El campo de formulario: etiqueta, control y su error, con el resumen del envío.
+// @pieza núcleo · design-system/09-formulario.tsx · El campo de formulario: etiqueta, control y su error, con el resumen del envío.
 
 import { CircleAlert } from "lucide-react";
 import type { ReactNode } from "react";

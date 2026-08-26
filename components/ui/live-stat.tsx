@@ -1,4 +1,4 @@
-// @pieza primitiva · design-system/15-articulo.tsx · La regleta de un dato en vivo: la cifra no se escribe, se enlaza a quien la publica.
+// @pieza primitiva · design-system/12-articulo.tsx · La regleta de un dato en vivo: la cifra no se escribe, se enlaza a quien la publica.
 
 import type { ReactNode } from "react";
 
