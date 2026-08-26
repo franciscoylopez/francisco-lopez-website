@@ -649,8 +649,13 @@ type Swatch = {
    * ERA UN STRING ÚNICO con los dos hexes pegados por «·» —"#F7F3EC · #191D21"—
    * y eso bastaba mientras el dato solo se IMPRIMÍA. Al hacerse copiable (P70.24)
    * dejó de bastar: copiar esa cadena entrega dos colores y un separador, que no
-   * se puede pegar en ningún sitio. El texto compuesto lo pone ahora
-   * `swatchHexText()`, y el valor que se copia, `swatchHexFor()`.
+   * se puede pegar en ningún sitio. El valor que se copia lo resuelve
+   * `swatchHexFor()`.
+   *
+   * Y EL TEXTO YA NO LO COMPONE NADIE AQUÍ. Hubo un `swatchHexText()` que los
+   * pegaba con «·», y se fue con P70.30: la tarjeta tiene que rotular cada hex
+   * con su tema para decir cuál se va a copiar, y eso son dos nodos, no una
+   * cadena. Un helper que devuelve texto plano no puede llevar esa marca.
    *
    * Y CON ÉL SE FUE `swaps`, que era un `boolean` al lado diciendo lo mismo: en
    * las nueve muestras valía `true` exactamente cuando el hex traía dos valores.
@@ -778,14 +783,6 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
  * Se deriva en vez de declararse: ver la nota de `Swatch.hex`.
  */
 export const swatchSwaps = (s: Swatch): boolean => typeof s.hex !== "string";
-
-/**
- * El hex como TEXTO, que es lo que la tarjeta imprime: los dos valores separados
- * por «·» cuando conmuta. El «·» aquí separa dos campos, que es el único uso que
- * `CLAUDE.md` le deja.
- */
-export const swatchHexText = (s: Swatch): string =>
-  typeof s.hex === "string" ? s.hex : `${s.hex.light} · ${s.hex.dark}`;
 
 /**
  * El hex que se COPIA: **uno solo, el del tema que se está viendo**.

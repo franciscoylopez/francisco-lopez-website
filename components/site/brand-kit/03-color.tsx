@@ -5,7 +5,6 @@ import { CARD, SECTION, WRAP } from "@/components/ui/layout";
 import { CopyButton } from "@/components/ui/copy-button";
 import {
   BRAND_SWATCHES,
-  swatchHexText,
   swatchRatioParts,
   swatchSwaps,
 } from "@/lib/design-values";
@@ -19,6 +18,57 @@ import { Callout, LEAD } from "./shared";
 // nota de cada muestra, que es lo único que un traductor toca (P37.66).
 const SWATCH: Record<string, (typeof BRAND_SWATCHES)[number] | undefined> =
   Object.fromEntries(BRAND_SWATCHES.map((s) => [s.id, s]));
+
+/**
+ * EL HEX DEL PIE, y cuál de los dos se va a copiar cuando hay dos.
+ *
+ * El token que conmuta imprime sus dos valores y el botón de al lado copia UNO,
+ * el del tema que se está viendo. Eso ya era así; lo que faltaba era decirlo.
+ *
+ * NO SE RESUELVE EN EL RENDER, Y NO ES UN DETALLE: quien pinta esta tarjeta es un
+ * Server Component, que no sabe en qué tema está el navegador. Leerlo en el
+ * primer render de cliente sería una discrepancia de hidratación esperando a
+ * ocurrir —es el mismo motivo por el que `CopyButton` resuelve el valor en el
+ * CLIC y no al renderizar—. Así que lo decide el CSS: los dos valores se pintan
+ * siempre y la variante `dark:` intercambia cuál va en tinta plena. Cero
+ * JavaScript nuevo.
+ *
+ * Y LA ETIQUETA NO ES DECORADO, ES EL PUNTO 6 DEL GATE. Si el único indicio de
+ * cuál se copia fuera el contraste entre tinta y gris, sería un estado codificado
+ * solo por color. El rótulo «claro» / «oscuro» está siempre escrito, así que la
+ * información se lee sin depender del tono; el tono la refuerza.
+ */
+function SwatchHex({
+  hex,
+  labels,
+}: {
+  hex: string | { light: string; dark: string };
+  labels: { light: string; dark: string };
+}) {
+  if (typeof hex === "string") {
+    return (
+      <code className="text-foreground block font-mono text-[0.78rem]">
+        {hex}
+      </code>
+    );
+  }
+  return (
+    <span className="flex min-w-0 flex-wrap items-baseline gap-x-[0.6rem] gap-y-[0.1rem] text-[0.78rem]">
+      <span className="text-foreground dark:text-muted-foreground">
+        <span className="mr-[0.3rem] text-[0.68rem] tracking-[0.04em] uppercase">
+          {labels.light}
+        </span>{" "}
+        <code className="font-mono">{hex.light}</code>
+      </span>
+      <span className="text-muted-foreground dark:text-foreground">
+        <span className="mr-[0.3rem] text-[0.68rem] tracking-[0.04em] uppercase">
+          {labels.dark}
+        </span>{" "}
+        <code className="font-mono">{hex.dark}</code>
+      </span>
+    </span>
+  );
+}
 
 export function Color({
   t,
@@ -84,13 +134,22 @@ export function Color({
                       nota de `swatchHexFor` en design-values). El anuncio dice
                       cuál se ha llevado, que es lo que deshace la ambigüedad
                       para quien no ve la pantalla.
+
+                      Y ESA ERA LA MITAD QUE FALTABA (P70.30): la única persona a
+                      la que se le decía cuál de los dos se llevaba era la que no
+                      ve la pantalla. Quien la mira leía «#F7F3EC · #191D21» y un
+                      botón, sin nada que dijera cuál de los dos. Francisco
+                      esperaba dos botones; lo que faltaba no era un control, era
+                      la etiqueta.
+
                       El `-my-2` deja el suelo táctil de 44px intacto y evita
                       que la tarjeta crezca 26px: los vecinos de arriba y abajo
                       no son interactivos, así que solaparlos no quita nada. */}
                   <div className="mt-[0.15rem] flex items-center justify-between gap-2">
-                    <code className="text-foreground block font-mono text-[0.78rem]">
-                      {swatchHexText(s)}
-                    </code>
+                    <SwatchHex
+                      hex={s.hex}
+                      labels={{ light: t.hexLight, dark: t.hexDark }}
+                    />
                     <CopyButton
                       value={s.hex}
                       label={t.copyAria.replace("{token}", s.token)}

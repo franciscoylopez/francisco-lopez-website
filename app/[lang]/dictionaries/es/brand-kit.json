@@ -179,6 +179,8 @@
     "lead": "La regla de las dos capas: una capa de tinta (fondo + trazo) que conmuta con el tema, y una capa de color (cian + morado) que solo aparece en el split y no cambia entre claro y oscuro. Cada muestra lleva su token, su hex y su ratio de contraste medido. Cambia el tema con el toggle del nav para ver la capa de tinta conmutar.",
     "swapConmuta": "Conmuta",
     "swapFijo": "Fijo",
+    "hexLight": "claro",
+    "hexDark": "oscuro",
     "ratioLabels": {
       "inkOver": "Tinta encima",
       "bodyText": "Texto principal",

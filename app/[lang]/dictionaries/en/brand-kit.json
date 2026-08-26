@@ -179,6 +179,8 @@
     "lead": "The two-layer rule: an ink layer (background + stroke) that switches with the theme, and a color layer (cyan + purple) that only appears in the split and doesn't change between light and dark. Each swatch carries its token, its hex and its measured contrast ratio. Switch the theme with the nav toggle to watch the ink layer flip.",
     "swapConmuta": "Switches",
     "swapFijo": "Fixed",
+    "hexLight": "light",
+    "hexDark": "dark",
     "ratioLabels": {
       "inkOver": "Ink over it",
       "bodyText": "Body text",
