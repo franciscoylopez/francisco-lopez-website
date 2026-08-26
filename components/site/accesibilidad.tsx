@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { CheckPill } from "@/components/ui/check-pill";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
@@ -288,16 +288,7 @@ export function Accesibilidad({
             {t.measures.items.map((c) => (
               <li key={c.title} className={cn(CARD, "px-[1.15rem] py-4")}>
                 <div className="flex items-start gap-[0.9rem]">
-                  <span
-                    aria-hidden="true"
-                    className="text-primary inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[7px]"
-                    style={{
-                      background:
-                        "color-mix(in oklch, var(--primary), transparent 86%)",
-                    }}
-                  >
-                    <Check className="size-[15px]" />
-                  </span>
+                  <CheckPill />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <p className="text-foreground m-0 text-[0.95rem] font-semibold">
@@ -820,15 +811,7 @@ function HeroComposition() {
         >
           {[100, 82, 94].map((w, i) => (
             <div key={i} className="flex items-center gap-[0.55rem]">
-              <span
-                className="text-primary inline-flex h-[18px] w-[18px] flex-none items-center justify-center rounded-[5px]"
-                style={{
-                  background:
-                    "color-mix(in oklch, var(--primary), transparent 86%)",
-                }}
-              >
-                <Check className="size-[15px]" />
-              </span>
+              <CheckPill size="sm" />
               <div
                 className="bg-muted h-[0.32rem] rounded-full"
                 style={{ width: `${w}%` }}
