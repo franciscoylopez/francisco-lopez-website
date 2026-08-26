@@ -288,8 +288,24 @@
     font-family: var(--font-display);
     font-weight: 600;
   }
-  /* Foco visible AA (checklist a11y §20, punto 2): anillo de 2px + offset 2px. */
-  :focus-visible {
+  /* Foco visible AA (checklist a11y §20, punto 2): anillo de 2px + offset 2px.
+     El segundo selector es el SIMULADOR de foco de §09 del Design System
+     (P70.25). El anillo que enseña es LITERALMENTE este, no una copia con los
+     mismos valores: se añade aquí el selector en vez de redeclarar el `outline`
+     en otro sitio, y así una demo que miente deja de ser posible por
+     construcción. Es el mismo motivo por el que los especímenes de esa sección
+     son los `actionVariants` reales y no un facsímil.
+
+     LA ESPECIFICIDAD ESTÁ IGUALADA A PROPÓSITO, y es la parte delicada. La
+     regla trae `border-radius: 3px`, que en un control REAL nunca se aplica:
+     `:focus-visible` pesa (0,1,0), lo mismo que `rounded-md`, y las utilidades
+     van después en la cascada. Un selector descendente normal pesaría (0,2,0),
+     ganaría, y el simulador redondearía los botones a 3px mientras el foco de
+     verdad los deja en 8. El `:where()` no aporta especificidad, así que
+     `[data-specimen-demo] > *` se queda también en (0,1,0) y pierde contra las
+     utilidades exactamente igual que el foco real. */
+  :focus-visible,
+  :where([data-focus-sim="on"]) [data-specimen-demo] > * {
     outline: 2px solid var(--ring);
     outline-offset: 2px;
     border-radius: 3px;

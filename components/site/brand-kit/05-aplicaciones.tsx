@@ -90,6 +90,15 @@ export function Aplicaciones({
               width={1200}
               height={630}
               alt={t.og.previewAlt}
+              // 47 KiB de PNG que se pedían EAGER para algo que vive en la
+              // sección 05, muy por debajo del pliegue (P70.28). No se puede
+              // reescalar: /api/og es una ruta con query, y el optimizador de
+              // Next exige para eso un `images.localPatterns` con la cadena de
+              // búsqueda EXACTA — una config que falla en silencio con un 400 el
+              // día que cambie un parámetro. Sacarla de la carga inicial cuesta
+              // dos atributos y no puede romperse.
+              loading="lazy"
+              decoding="async"
               className="border-border mb-[1.2rem] block w-full rounded-lg border"
             />
             {/* Mismo orden y misma jerarquía que las otras cuatro tarjetas de

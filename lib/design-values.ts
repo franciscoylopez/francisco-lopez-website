@@ -186,6 +186,18 @@ export const LAYOUT_TOKENS = [
   { name: "--section-y", value: "clamp(4.5rem, 9vw, 9rem)" },
 ] as const;
 
+/**
+ * Los cinco tokens como bloque de CSS pegable: lo que se lleva quien pulsa
+ * «copiar» en §02 del Design System. Se DERIVA de `LAYOUT_TOKENS` en vez de
+ * escribirse al lado, que sería otra copia de un valor que ya tiene fuente (D38)
+ * y, peor, una copia que el guardián de la paleta no vigila porque no es color.
+ */
+export const LAYOUT_TOKENS_CSS = [
+  ":root {",
+  ...LAYOUT_TOKENS.map((t) => `  ${t.name}: ${t.value};`),
+  "}",
+].join("\n");
+
 /** Ancho máximo del contenedor, sin unidad, para la estadística de portada. */
 export const CONTAINER_PX = 1360;
 
@@ -631,10 +643,21 @@ type Swatch = {
   id: string;
   /** Nombre del token, tal cual se escribe en `globals.css`. */
   token: string;
-  /** Cómo se pinta. Dos valores separados por «·» cuando conmuta con el tema. */
-  hex: string;
-  /** `true` = pertenece a la capa de tinta, que conmuta con el tema. */
-  swaps: boolean;
+  /**
+   * Cómo se pinta: **un valor, o dos cuando conmuta con el tema**.
+   *
+   * ERA UN STRING ÚNICO con los dos hexes pegados por «·» —"#F7F3EC · #191D21"—
+   * y eso bastaba mientras el dato solo se IMPRIMÍA. Al hacerse copiable (P70.24)
+   * dejó de bastar: copiar esa cadena entrega dos colores y un separador, que no
+   * se puede pegar en ningún sitio. El texto compuesto lo pone ahora
+   * `swatchHexText()`, y el valor que se copia, `swatchHexFor()`.
+   *
+   * Y CON ÉL SE FUE `swaps`, que era un `boolean` al lado diciendo lo mismo: en
+   * las nueve muestras valía `true` exactamente cuando el hex traía dos valores.
+   * Era la regla 5 de `BRAND.md` —la misma decisión escrita en dos sitios acaba
+   * diciendo dos cosas— esperando a cobrarse. Ahora se deriva: `swatchSwaps()`.
+   */
+  hex: string | { light: string; dark: string };
   /** Fondo de la muestra y color de la «Aa» que va encima. */
   sample: string;
   sampleFg: string;
@@ -649,7 +672,7 @@ type Swatch = {
  * muestra son copy y siguen en el diccionario; esto es lo que se puede verificar
  * contra el CSS o contra una medición.
  *
- * EL TONO DE LA PASTILLA se deriva de `swaps` y no se escribe: cian para
+ * EL TONO DE LA PASTILLA se deriva de `swatchSwaps()` y no se escribe: cian para
  * «Conmuta», neutro para «Fijo». Decidido el 2026-08-09 que ahí el cian es
  * correcto —cian = medición o comportamiento de un token; morado = cosa de la
  * marca—, así que «Split/Flat» de la tabla del logo se queda en morado aunque
@@ -659,8 +682,7 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
   {
     id: "background",
     token: "--background",
-    hex: "#F7F3EC · #191D21",
-    swaps: true,
+    hex: { light: "#F7F3EC", dark: "#191D21" },
     sample: "var(--background)",
     sampleFg: "var(--foreground)",
     ratioLabel: "inkOver",
@@ -669,8 +691,7 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
   {
     id: "foreground",
     token: "--foreground",
-    hex: "#21262B · #F7F3EC",
-    swaps: true,
+    hex: { light: "#21262B", dark: "#F7F3EC" },
     sample: "var(--foreground)",
     sampleFg: "var(--background)",
     ratioLabel: "bodyText",
@@ -679,8 +700,7 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
   {
     id: "primary",
     token: "--primary · --brand-cyan",
-    hex: "#005859 · #3FC9C4",
-    swaps: true,
+    hex: { light: "#005859", dark: "#3FC9C4" },
     sample: "var(--primary)",
     sampleFg: "var(--primary-foreground)",
     figures: [
@@ -693,7 +713,6 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
     id: "purple",
     token: "--brand-purple",
     hex: "#9B87F5",
-    swaps: false,
     sample: "var(--brand-purple)",
     sampleFg: "#21262B",
     ratioLabel: "decorative",
@@ -702,8 +721,7 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
   {
     id: "purpleAccent",
     token: "--brand-purple-accent",
-    hex: "#B7A3FF · #583DA6",
-    swaps: true,
+    hex: { light: "#B7A3FF", dark: "#583DA6" },
     sample: "var(--brand-purple-accent)",
     // El «Aa» se pinta con `--foreground`, que es LA SUPERFICIE donde este token
     // vive de verdad (la banda invertida usa `--foreground` de fondo). Así la
@@ -721,7 +739,6 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
     id: "cyanSplit",
     token: "--brand-cyan-split",
     hex: "#16BDBD",
-    swaps: false,
     sample: "var(--brand-cyan-split)",
     sampleFg: "#21262B",
     ratioLabel: "logoOnly",
@@ -731,7 +748,6 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
     id: "purpleSplit",
     token: "--brand-purple-split",
     hex: "#9B87F5",
-    swaps: false,
     sample: "var(--brand-purple-split)",
     sampleFg: "#21262B",
     ratioLabel: "logoOnly",
@@ -741,7 +757,6 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
     id: "cyanSoft",
     token: "--brand-cyan-soft",
     hex: "#A7E1DE",
-    swaps: false,
     sample: "var(--brand-cyan-soft)",
     sampleFg: "#21262B",
     ratioLabel: "inkOver",
@@ -751,13 +766,37 @@ export const BRAND_SWATCHES: readonly Swatch[] = [
     id: "purpleSoft",
     token: "--brand-purple-soft",
     hex: "#C6B9F0",
-    swaps: false,
     sample: "var(--brand-purple-soft)",
     sampleFg: "#21262B",
     ratioLabel: "inkOver",
     figures: [{ ref: "inkOnPurpleSoft", theme: "light" }],
   },
 ];
+
+/**
+ * `true` si el token conmuta con el tema — es decir, si su hex trae dos valores.
+ * Se deriva en vez de declararse: ver la nota de `Swatch.hex`.
+ */
+export const swatchSwaps = (s: Swatch): boolean => typeof s.hex !== "string";
+
+/**
+ * El hex como TEXTO, que es lo que la tarjeta imprime: los dos valores separados
+ * por «·» cuando conmuta. El «·» aquí separa dos campos, que es el único uso que
+ * `CLAUDE.md` le deja.
+ */
+export const swatchHexText = (s: Swatch): string =>
+  typeof s.hex === "string" ? s.hex : `${s.hex.light} · ${s.hex.dark}`;
+
+/**
+ * El hex que se COPIA: **uno solo, el del tema que se está viendo**.
+ *
+ * Es la diferencia entre imprimir y copiar, y por eso son dos funciones. Un pie
+ * de muestra que dice «#F7F3EC · #191D21» informa —el token vale esto aquí y
+ * aquello allá—; ese mismo string en el portapapeles no se puede pegar en ningún
+ * sitio. Quien copia quiere el color que está viendo.
+ */
+export const swatchHexFor = (s: Swatch, theme: Theme): string =>
+  typeof s.hex === "string" ? s.hex : s.hex[theme];
 
 /**
  * El pie de una muestra, ya compuesto: rótulo · cifras con su matiz · nivel WCAG.

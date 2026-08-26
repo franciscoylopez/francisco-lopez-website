@@ -6,6 +6,7 @@ import { Copy, Link2, Share2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 import { actionVariants } from "@/components/ui/action";
+import { useCopyToClipboard } from "@/components/ui/copy-button";
 import { cn } from "@/lib/utils";
 
 // Las tres islas de «Cómo se ha creado esta página» (D7: JS solo donde hace
@@ -243,23 +244,13 @@ function useShareLink({
   copiedAnnounce,
   shareUnavailableAnnounce,
 }: ShareLinkStrings) {
-  const [copyText, setCopyText] = useState(copyLabel);
-  const [announce, setAnnounce] = useState("");
+  // La mecánica (escribir, confirmar 1800 ms, anunciar, fallar en silencio) se
+  // fue a `copy-button.tsx` cuando aparecieron el segundo y el tercer call site
+  // (P70.24). Aquí queda lo que de verdad es del artículo: QUÉ se copia, y qué
+  // se anuncia según por qué camino se llegó.
+  const { copied, announce, copy } = useCopyToClipboard();
 
-  const copyLink = () => {
-    if (typeof navigator === "undefined" || !navigator.clipboard) return;
-    navigator.clipboard
-      .writeText(window.location.href)
-      .then(() => {
-        setCopyText(copiedLabel);
-        setAnnounce(copiedAnnounce);
-        setTimeout(() => {
-          setCopyText(copyLabel);
-          setAnnounce("");
-        }, 1800);
-      })
-      .catch(() => {});
-  };
+  const copyLink = () => copy(window.location.href, copiedAnnounce);
 
   const share = () => {
     if (typeof navigator !== "undefined" && navigator.share) {
@@ -268,11 +259,16 @@ function useShareLink({
         .catch(() => {});
       return;
     }
-    copyLink();
-    setAnnounce(shareUnavailableAnnounce);
+    // ANTES ANUNCIABA LO CONTRARIO DE LO QUE QUERÍA. El fallback llamaba a
+    // `copyLink()` y ponía el aviso de «compartir no disponible» justo después,
+    // en la misma vuelta: la promesa del portapapeles resolvía más tarde y lo
+    // pisaba con «enlace copiado». O sea que el motivo por el que se había
+    // copiado, que es la única información que ese aviso añade, no llegaba
+    // nunca al lector de pantalla. Ahora el aviso ES el anuncio de esta copia.
+    copy(window.location.href, shareUnavailableAnnounce);
   };
 
-  const copied = copyText !== copyLabel;
+  const copyText = copied ? copiedLabel : copyLabel;
   return { copyText, copied, announce, share, copyLink };
 }
 

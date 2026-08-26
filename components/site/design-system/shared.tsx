@@ -59,6 +59,12 @@ export function SpecimenCard({
     <div className="border-border flex flex-col overflow-hidden rounded-xl border">
       {children ? (
         <div
+          // El simulador de foco de §09 necesita alcanzar los especímenes sin
+          // que cada uno lleve una marca propia, y sus hijos DIRECTOS son
+          // exactamente los controles de la demo. El atributo es inerte en las
+          // otras secciones que usan esta tarjeta: solo lo mira la regla de
+          // `globals.css`, y solo dentro del envoltorio que lo enciende.
+          data-specimen-demo=""
           className={cn(
             "bg-background flex-1",
             wide

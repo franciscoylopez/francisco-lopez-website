@@ -230,7 +230,9 @@
         "note": "Background, never text"
       }
     ],
-    "pastelNote": "Pastels never as text color. They're backgrounds. If text goes over a pastel, always in foreground (ink), never the other way around."
+    "pastelNote": "Pastels never as text color. They're backgrounds. If text goes over a pastel, always in foreground (ink), never the other way around.",
+    "copyAria": "Copy the hex for {token}",
+    "copiedAnnounce": "{value} copied to clipboard"
   },
   "tipografia": {
     "num": "04 — Typography",

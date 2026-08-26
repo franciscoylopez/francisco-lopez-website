@@ -53,7 +53,9 @@
         "title": "Definidos una sola vez",
         "body": "Viven en el :root del sitio junto a los tokens de color; cada página los consume. Cambiar un valor aquí lo cambia en todas partes."
       }
-    ]
+    ],
+    "copyAria": "Copiar el bloque de tokens de layout",
+    "copiedAnnounce": "Bloque de tokens copiado al portapapeles"
   },
   "breakpoints": {
     "num": "03 — Breakpoints",
@@ -391,7 +393,9 @@
     ],
     "ruleFoot": "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio. Antes convivían tres, y una de ellas dibujaba un halo blanco en tema oscuro.",
     "demoCardLabel": "Correo",
-    "demoCardValue": "hola@ejemplo.com"
+    "demoCardValue": "hola@ejemplo.com",
+    "focusShow": "Ver el anillo de foco",
+    "focusHide": "Ocultar el anillo de foco"
   },
   "etiquetas": {
     "num": "10 — Etiquetas",

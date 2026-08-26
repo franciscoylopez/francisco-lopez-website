@@ -53,7 +53,9 @@
         "title": "Defined once",
         "body": "They live in the site's :root alongside the color tokens; each page consumes them. Changing a value here changes it everywhere."
       }
-    ]
+    ],
+    "copyAria": "Copy the layout token block",
+    "copiedAnnounce": "Token block copied to clipboard"
   },
   "breakpoints": {
     "num": "03 — Breakpoints",
@@ -391,7 +393,9 @@
     ],
     "ruleFoot": "No variant declares focus: a single global rule does, the same one everywhere. Three used to coexist, and one of them drew a white halo in dark mode.",
     "demoCardLabel": "Email",
-    "demoCardValue": "hello@example.com"
+    "demoCardValue": "hello@example.com",
+    "focusShow": "Show the focus ring",
+    "focusHide": "Hide the focus ring"
   },
   "etiquetas": {
     "num": "10 — Labels",
