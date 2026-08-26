@@ -58,6 +58,24 @@ const SUPERFICIE_DE: Record<Preview, keyof typeof PREVIEW_SURFACE> = {
   "mono-blanco": "ink",
 };
 
+/**
+ * Lo que se pinta en el marco de cada tarjeta. Sale de la pieza y no del punto de
+ * uso: el símbolo split y el lockup split se DIBUJAN igual y lo que cambia es si va
+ * acompañado del wordmark, así que las dos preguntas viven juntas o no se entienden.
+ */
+function Especimen({ pieza }: { pieza: Pieza }) {
+  const variant = pieza.preview === "split" ? "split" : "flat";
+  if (pieza.esLockup) return <Lockup variant={variant} />;
+
+  const mono =
+    pieza.preview === "mono-negro"
+      ? "black"
+      : pieza.preview === "mono-blanco"
+        ? "white"
+        : undefined;
+  return <Glyph variant={variant} h={96} mono={mono} />;
+}
+
 /** «1024, 512 y 256», con la conjunción que ponga el diccionario. */
 function enumera(xs: (string | number)[], y: string): string {
   if (xs.length <= 1) return String(xs[0] ?? "");
@@ -231,25 +249,7 @@ export function Logotipo({ t }: { t: Dictionary["brandKit"]["logotipo"] }) {
               return (
                 <VariantCard
                   key={pieza.id}
-                  glyph={
-                    pieza.esLockup ? (
-                      <Lockup
-                        variant={pieza.preview === "split" ? "split" : "flat"}
-                      />
-                    ) : (
-                      <Glyph
-                        variant={pieza.preview === "split" ? "split" : "flat"}
-                        h={96}
-                        mono={
-                          pieza.preview === "mono-negro"
-                            ? "black"
-                            : pieza.preview === "mono-blanco"
-                              ? "white"
-                              : undefined
-                        }
-                      />
-                    )
-                  }
+                  glyph={<Especimen pieza={pieza} />}
                   name={card.name}
                   meta={card.meta}
                   surface={SUPERFICIE_DE[pieza.preview]}
