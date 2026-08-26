@@ -101,6 +101,30 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
   lo que `check:palette` compara en cada PR (D90). Lo que **no** juzga es el texto sobre foto:
   esos pares salen listados aparte y se miden sobre el píxel pintado.
 - **`psi`** no se mide en local y no es un gate de CI: su variabilidad daría rojos falsos.
+  **Y esa variabilidad NO se queda fuera del sello, que es lo que hay que saber antes de
+  commitearlo** *(2026-08-26)*: el modo registro toma **una sola muestra por página** y publica
+  el **min/max**, así que la peor toma manda sobre el rango entero. Medido el mismo día, en
+  producción y sin tocar nada entre medias: `/design-system` dio **76** en el barrido y **98 y
+  99** al re-medirla; `/como-se-ha-creado`, **81** y luego **89 y 99**; `/sobre-mi` en móvil,
+  **88** y **97**. El barrido sellaba «76-100 escritorio», y el artículo publica esa cifra
+  (D102). **Antes de commitear el sello, re-mide cualquier página bajo 90 con
+  `npm run psi -- <url> --solo=escritorio`**; si sube, el sello no vale y no se commitea.
+
+### Y una trampa de ejecución del censo, que no da error
+
+**`npm run censo` se cuelga si lo lanzas desde una shell no interactiva sin cerrarle el
+stdin** *(2026-08-26)*. Su helper usa `execFileSync` sin `timeout` y hereda un stdin que nunca
+se cierra, así que una de las seis llamadas por corrida se queda esperando para siempre. Y como
+el censo **solo imprime al terminar**, el síntoma es catorce minutos de silencio absoluto: no
+distingues «va lento» de «está muerto».
+
+```bash
+npm run censo < /dev/null      # así corre entero: 28 corridas en menos de dos minutos
+```
+
+**Cómo saber cuál de las dos cosas es**, sin esperar: mira si la página avanza.
+`agent-browser eval "location.href"` dos veces separadas un minuto. Si no se mueve, está
+colgado. (Y ojo: `| tail` bloquea la salida en búfer, así que un log vacío no prueba nada.)
 
 ## Paso 5 · Lo que deja detrás
 
