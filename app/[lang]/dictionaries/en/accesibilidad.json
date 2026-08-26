@@ -18,7 +18,6 @@
     "note": "Every section closes on its own: you can read it in chunks, in any order.",
     "sectionsSuffix": "sections",
     "ariaLabel": "Accessibility contents",
-    "railAriaLabel": "Jump to a section",
     "closerLabel": "Contents",
     "closerAriaLabel": "Between sections",
     "nextLabel": "Next:",

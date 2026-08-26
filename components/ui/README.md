@@ -34,7 +34,7 @@
 - **`marcas.tsx`** — Marca los nombres propios del sitio como no traducibles. *(interna — no pinta nada: envuelve los nombres propios en un atributo invisible, y una sección que la enseñara mostraría un texto idéntico al de al lado. La vigila `npm run check:marcas` sobre las 28 variantes)*
 - **`page-closer.tsx`** — El cierre común de las páginas: a dónde se va desde aquí. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*
 - **`rich.tsx`** — El render de markup inline del copy del diccionario: negrita, cursiva y enlace. *(interna — no tiene aspecto propio que enseñar: es infraestructura de texto (D23), y lo que de ella sí se ve —el enlace de contenido— se publica en §08)*
-- **`section-index-islands.tsx`** — El riel fijo que sigue la sección activa de una página con paradas. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*
+- **`section-index-islands.tsx`** — El riel fijo que sigue la sección activa de una página con paradas. *([design-system/12-articulo](../site/design-system/12-articulo.tsx))*
 - **`section-index.tsx`** — La navegación de una página con paradas: el índice y el cierre de bloque. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*
 - **`video-embed.tsx`** — La facade de vídeo de terceros: póster propio y el clic como gate (D55). *([design-system/07-botones](../site/design-system/07-botones.tsx))*
 <!-- FIN ÍNDICE -->

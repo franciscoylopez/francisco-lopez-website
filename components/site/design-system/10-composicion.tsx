@@ -8,7 +8,6 @@ import {
   SectionCloser,
   SectionIndex,
 } from "@/components/ui/section-index";
-import { SectionRail } from "@/components/ui/section-index-islands";
 import { DataTable, TD, TR } from "@/components/ui/table";
 import { type Locale } from "@/lib/i18n/config";
 
@@ -50,13 +49,6 @@ export function Composicion({
   lang: Locale;
 }) {
   const base = lang === "es" ? "" : `/${lang}`;
-
-  // Anclas PROPIAS para el riel de demo: con los id reales, el observer
-  // apuntaría a las secciones 01-03 y la pastilla no se encendería nunca
-  // estando el lector aquí, en la 10. Los rótulos sí son los de verdad.
-  const railDemo = paradas
-    .slice(0, 3)
-    .map((parada, i) => ({ ...parada, id: `ds-comp-rail-${i + 1}` }));
 
   // Los dos estados de un destino, que son los dos que el sitio pinta: el que
   // enlaza y el que todavía no existe. El enlace es REAL, como todo en esta
@@ -217,28 +209,6 @@ export function Composicion({
             ariaLabel={t.navCloserAria}
             positionLabel={t.navCloserPositionLabel}
           />
-        </SpecimenCard>
-        <SpecimenCard
-          kicker={t.navRailKicker}
-          cls="SectionRail"
-          rule={t.navRailRule}
-          note={t.navRailNote}
-          wide
-        >
-          {/* El riel nace fixed A LA VENTANA. La caja de abajo le crea su propio
-              containing block con [transform:translateZ(0)] —misma técnica que
-              §12— para que no se salga por encima del resto de la página. Los
-              objetivos del IntersectionObserver viven dentro, así que se activa
-              al llegar aquí haciendo scroll: mismo componente, mismo
-              comportamiento. */}
-          <div className="border-border bg-background relative isolate h-[220px] [transform:translateZ(0)] overflow-hidden rounded-xl border">
-            <SectionRail items={railDemo} ariaLabel={t.navRailDemoAria} />
-            <div className="flex h-full flex-col justify-between p-4">
-              {railDemo.map((it) => (
-                <span key={it.id} id={it.id} aria-hidden="true" />
-              ))}
-            </div>
-          </div>
         </SpecimenCard>
 
         {/* La sección publica UNA regla, no dos: la poda de P70.33 dejó fuera el

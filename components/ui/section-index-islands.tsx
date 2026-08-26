@@ -1,6 +1,6 @@
 "use client";
 
-// @pieza primitiva · design-system/10-composicion.tsx · El riel fijo que sigue la sección activa de una página con paradas.
+// @pieza primitiva · design-system/12-articulo.tsx · El riel fijo que sigue la sección activa de una página con paradas.
 
 import { cva } from "class-variance-authority";
 import { useEffect, useState } from "react";
@@ -13,6 +13,30 @@ import { cn } from "@/lib/utils";
 //
 // Se movió aquí desde `article-islands.tsx` con sus dos hermanas de servidor
 // (P70.38): el porqué del traslado, entero, en la cabecera de `section-index.tsx`.
+
+// CUÁNDO LLEVA RIEL UNA PÁGINA (P70.415, 2026-08-26). Regla, no gusto:
+//
+//   El riel va donde la página se LEE. El índice y el cierre de bloque, donde la
+//   página se CONSULTA.
+//
+// Es el mismo eje con el que D121 dejó fuera `ReadingProgress` de las páginas del
+// sistema —«mide cuánto texto queda por leer, y en una página de consulta eso no
+// significa nada»—, solo que entonces se aplicó a dos de las tres piezas y esta se
+// vino por inercia. Estuvo tres commits en Design System, Brand Kit y
+// Accesibilidad, y se retiró de las tres al verlas: a una página de referencia se
+// llega buscando una sección, se salta una vez desde el índice y se lee. No se
+// recorre, así que un indicador permanente de posición no orienta: decora.
+//
+// Y ADEMÁS SOLO CUADRA EN UNA FRANJA ESTRECHA DE ANCHOS, que es lo que lo hizo
+// evidente. A 2560px acaba en x=72 y el texto empieza en 640: 568px de vacío,
+// porque va pegado al borde de la VENTANA y no al contenido. Por debajo de 1536
+// pasa lo contrario —no tiene canal y se mete encima—, que es lo que se comió los
+// clics de los botones de descarga del Brand Kit (P70.40).
+//
+// Hoy su único consumidor es el artículo, y por eso se publica en su sección del
+// Design System, con las otras dos islas fijas. El archivo NO vuelve a la capa de
+// artículo: la pieza está escrita genérica —recibe su `ariaLabel` y no sabe nada
+// del artículo— y moverla sería ruido.
 
 export type RailItem = { id: string; ordinal: string; label: string };
 

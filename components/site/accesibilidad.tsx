@@ -31,7 +31,6 @@ import {
   SectionIndex,
   type SeccionMarco,
 } from "@/components/ui/section-index";
-import { SectionRail } from "@/components/ui/section-index-islands";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
 import { RelatedPages, type RelatedDict } from "./related-pages";
@@ -188,12 +187,6 @@ export function Accesibilidad({
           </div>
         </div>
       </section>
-
-      {/* Después del hero, o sea después del `h1`. El riel es `fixed`, así que su
-          sitio en pantalla no depende de dónde se escriba, pero su sitio en el
-          ORDEN DE TABULACIÓN sí — y el punto 9 del checklist que ESTA página
-          publica exige que el enlace de salto sea el primer focalizable. */}
-      <SectionRail items={paradas} ariaLabel={t.indice.railAriaLabel} />
 
       <section id={ANCLA_INDICE} className={cn(SECTION, "scroll-mt-[5rem]")}>
         <div className={WRAP}>

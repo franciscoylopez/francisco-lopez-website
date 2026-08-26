@@ -6,7 +6,6 @@ import {
   SectionIndex,
   type SeccionMarco,
 } from "@/components/ui/section-index";
-import { SectionRail } from "@/components/ui/section-index-islands";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
@@ -109,10 +108,6 @@ export function BrandKit({
         breadcrumb={breadcrumb}
         homeHref={homeHref}
       />
-
-      {/* Después del hero, o sea después del `h1`: el riel es `fixed`, así que
-          moverlo no cambia nada en pantalla pero sí el orden de tabulación. */}
-      <SectionRail items={paradas} ariaLabel={t.indice.railAriaLabel} />
 
       <section id={ANCLA_INDICE} className={cn(SECTION, "scroll-mt-[5rem]")}>
         <div className={WRAP}>

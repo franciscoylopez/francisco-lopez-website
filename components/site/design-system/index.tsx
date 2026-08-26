@@ -5,7 +5,6 @@ import {
   SectionCloser,
   SectionIndex,
 } from "@/components/ui/section-index";
-import { SectionRail } from "@/components/ui/section-index-islands";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
@@ -149,13 +148,6 @@ export function DesignSystem({
         breadcrumb={breadcrumb}
         homeHref={homeHref}
       />
-
-      {/* El riel va DESPUÉS del hero en el DOM, y eso no es cosmética: es `fixed`,
-          así que su sitio en pantalla no depende de dónde se escriba, pero su
-          sitio en el ORDEN DE TABULACIÓN sí. En el artículo precedía al `h1` y
-          metía trece enlaces por delante del título de la página (design-review
-          P60). Aquí nace ya detrás. */}
-      <SectionRail items={paradas} ariaLabel={t.indice.railAriaLabel} />
 
       {/* `scroll-mt-[5rem]`: el nav es sticky y sin margen de scroll el ancla deja
           la sección arrancando por debajo de él. Es la misma distancia que usa
