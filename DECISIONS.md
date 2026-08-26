@@ -157,6 +157,8 @@
 - D119 · Una descarga que conmuta con el tema está adivinando, y la mitad de sus anclas no existe
 - D120 · El primer `popover` del repositorio, y la etiqueta que no es un widget
 - D121 · El índice de una página con paradas deja de ser «de artículo», y dos excepciones cumplen su condición de salida
+- D122 · El ordinal de una sección deja de escribirse: lo pone el orden de la página
+- D123 · El riel va donde la página se LEE; el índice y el cierre, donde se consulta
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7132,3 +7134,106 @@ System, que ya demuestra las tres piezas con especímenes que P70.33 compuso a p
 página del Design System, y a partir de ahí la mejor demo posible no es un espécimen sino el
 índice vivo de la página, tres secciones más arriba. Es la promesa de «las piezas reales del
 sitio como demo» llevada a su límite.
+
+## D122 · El ordinal de una sección deja de escribirse: lo pone el orden de la página — 2026-08-26
+
+**El disparador.** Las tareas P70.39, P70.40 y P70.41 pedían escribir un `indexLabel` nuevo
+por sección, ES y EN, en las tres páginas del sistema: 52 cadenas. No hizo falta ninguna. El
+rótulo corto **ya existía** dentro del campo que pinta el eyebrow —`num: "01 — Rejilla y
+medidas"`— pegado a un ordinal que `SectionIndex` necesita **suelto** para el numeral grande
+de su celda, y `SectionRail` para la pastilla. Estaba escrito; no era direccionable.
+
+**Lo que se hace.** `num` sale del diccionario. Queda `indexLabel` con el rótulo corto, y el
+número lo pone la **posición** en un registro por página:
+
+```ts
+const ORDEN = ["rejilla", "ritmo", …] as const;   // la única fuente del recorrido
+const paradas = ORDEN.map((clave, i) => {
+  const ordinal = String(i + 1).padStart(2, "0");
+  return { clave, id: `s${ordinal}`, ordinal, label: t[clave].indexLabel };
+});
+```
+
+De ahí salen tres cosas que antes se escribían por separado: el **ancla** (`s01`…`sNN`), el
+**ordinal**, y la **posición** que anuncia el cierre de bloque («7 de 12»).
+
+**Qué cierra, que es el motivo.** Antes el ordinal vivía en tres sitios —el diccionario ES, el
+EN, y el banner de comentario de cada archivo de sección— y los tres podían decir cosas
+distintas. **Decían cosas distintas**: al hacer esto, nueve de los doce banners del Design
+System seguían declarando el ordinal ANTERIOR al reorden de P70.34, y `09-formulario.tsx`
+anunciaba «(16) FORMULARIO». Ahora reordenar una página no puede dejar el índice diciendo
+«07» donde la cabecera dice «08». Es la misma puerta que D72 cerró con la lista de páginas y
+D38 con los valores publicados.
+
+Y la corrección de los banners fue **retirar el número**, no actualizarlo: el nombre del
+archivo ya lo lleva. *La corrección de un recuento caducado es dejar de escribirlo.*
+
+**El detalle que hace esto transparente, y que no es cosmético.** El eyebrow se recompone con
+una **plantilla** —`` `${ordinal} — ${label}` ``—, nunca con dos nodos JSX adyacentes: React
+los separa con `<!-- -->`, y el rótulo que hoy sirve el sitio es una sola cadena. Comprobado
+en el prerender de ES y EN: **las 26 cabeceras salen byte a byte como antes**. Sin eso, un
+cambio de fuente única habría movido el HTML de las tres páginas.
+
+**Y el marco va por NOMBRE, no por posición.** Lo que cada sección recibe es un solo prop
+—`SeccionMarco`: su ancla, su eyebrow ya compuesto y su cierre ya montado— indexado por clave:
+`marco={marcos.botones}`, no `marco(6)`. Insertar una sección en medio no puede desalinear a
+las demás. El tipo vive en `components/ui/section-index.tsx`, con las piezas que describe,
+porque lo usan tres páginas.
+
+**Lo que queda pendiente y está tareado.** El bloque que deriva `paradas` y `marcos` está
+escrito **tres veces** —26 líneas idénticas, medidas por `qlty` en la PR #193— porque cada
+página tiene su `ORDEN` y su rama del diccionario. Es la Regla de construcción aplicada a la
+capa de página, y sube a un constructor de la capa en su propia tarea; su gate será
+`gate:html` con diff vacío, porque el refactor se declara transparente.
+
+## D123 · El riel va donde la página se LEE; el índice y el cierre, donde se consulta — 2026-08-26
+
+**El disparador.** D121 llevó las tres piezas —índice, riel y cierre de bloque— a Design
+System, Brand Kit y Accesibilidad. Tres tandas después, con las tres páginas en producción y
+mirándolas en pantalla grande, Francisco lo dijo: *«solo encaja bien en Design System; en
+Brand Kit y Accesibilidad no acaba de aportar»*. El riel sale de las tres. El índice y el
+cierre se quedan.
+
+**La regla, que es lo reutilizable:**
+
+> El riel va donde la página se **lee**. El índice y el cierre de bloque, donde la página se
+> **consulta**.
+
+Con eso, una página larga futura hereda el riel sola y una de referencia no, sin que nadie
+tenga que acordarse. Queda escrita en la cabecera de `section-index-islands.tsx`, que es donde
+la leerá quien vaya a usar la pieza.
+
+**No es gusto: es el eje que D121 ya había usado y que se aplicó a dos de las tres piezas.**
+D121 dejó fuera `ReadingProgress` con este argumento textual — «mide cuánto texto queda por
+LEER, y en una página de consulta eso no significa nada». El riel es de la misma familia: un
+indicador permanente de posición dentro de una lectura lineal. Se vino por inercia. A una
+página de referencia se llega buscando una sección, se salta una vez desde el índice y se
+lee; no se recorre.
+
+**Y solo cuadra en una franja estrecha de anchos, que es lo que lo hizo evidente.** Medido: a
+2560px el riel acaba en x=72 y el texto empieza en 640 — **568px de vacío**, porque va pegado
+al borde de la VENTANA y no al contenido. Por debajo de 1536 pasa lo contrario: no tiene canal
+y se mete encima, que es lo que **se comió los clics** de los tres «Descargar SVG» del Brand
+Kit (medido con `elementFromPoint`; no era solape visual, era el riel recibiendo el punto, y
+axe no lo ve porque no evalúa qué elemento recibe el clic).
+
+**El coste, que es real.** El Design System pierde algo: doce secciones son largas y ahí el
+riel funcionaba. Lo asumible es que el **recorrido** no se pierde —cada sección conserva su
+cierre con «7 de 12 · Índice · Siguiente: 08»—, así que se recorre entera sin volver a subir.
+Se pierde el indicador siempre visible, no la navegación. Y tenía que ser en las tres: dejarlo
+solo en el Design System rompería el «si lo hacemos, lo hacemos en las tres» con el que se
+abrió la tanda.
+
+**El corolario: la publicación sigue al CONSUMIDOR, no al archivo.** Con un solo consumidor,
+la línea `@pieza` del riel vuelve de §10 a §12, con las otras dos islas fijas
+(`ReadingProgress`, `FloatingShare`). El reparto queda: **§10** las piezas que usa cualquier
+página con paradas; **§12** lo que es del artículo y solo suyo. Lo que **no** se hace es
+devolver el archivo a la capa de artículo: la pieza está escrita genérica —recibe su
+`ariaLabel` y no sabe nada del artículo— y moverla sería ruido. **Cambia dónde se publica, no
+dónde vive.**
+
+**Lo que la premisa de D76 gana con esto.** D121 escribió que la capa de artículo «se vacía
+por su propio criterio: cuando una segunda página quiere una de sus piezas, esa pieza sale».
+Cierto, y le faltaba la otra mitad: **la premisa también se comprueba al revés**. El riel
+salió, se probó en tres páginas y volvió. Que una pieza sirva a cuatro páginas no la convierte
+en general; lo que la hace general es que su motivo valga en las cuatro.
