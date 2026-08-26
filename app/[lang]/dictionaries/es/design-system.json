@@ -784,7 +784,7 @@
     "groups": {
       "portada": {
         "title": "La portada del artículo",
-        "lead": "Lo que solo aparece una vez, al principio: quién firma, cómo se comparte y el mapa de paradas."
+        "lead": "Lo que solo aparece una vez, al principio: quién firma y cómo se comparte."
       },
       "parada": {
         "title": "La apertura de cada parada",
@@ -802,8 +802,8 @@
     "fichas": {
       "portada": {
         "kicker": "Portada",
-        "cls": "<ByLine> · <ShareActions> · <ArticleIndex>",
-        "rule": "Autoría, compartir y el mapa de paradas con el tiempo de cada una. El índice se pinta en servidor: se ve y se salta sin JavaScript.",
+        "cls": "<ByLine> · <ShareActions>",
+        "rule": "Autoría y compartir, resueltas en la misma fila de apertura.",
         "note": "Un artículo firmado dice quién lo firma en la apertura, no en el pie. Y sin `navigator.share` el botón copia el enlace igualmente."
       },
       "cover": {
@@ -853,14 +853,8 @@
     "repoLabel": "ENLACE ·",
     "repoText": "Las decisiones D39, D41 y D73, en ",
     "pieSample": "…y por eso la sección termina aquí, con la prueba y la salida hacia la siguiente.",
-    "chapterPositionLabel": "5 de 11",
-    "chapterIndexLabel": "Índice",
-    "chapterNextLabel": "Siguiente: 06 · Del diseño al código",
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
-    "indexKicker": "Índice",
-    "indexTimeLabel": "12 min de lectura",
-    "indexAriaLabel": "Índice del artículo de muestra",
     "indexItems": ["Por qué existe", "Cómo se trabaja", "La marca"],
     "diagramCaption": "Un diagrama real de la página, con sus mismos tokens de color.",
     "progressAriaLabel": "Progreso de lectura del artículo de muestra",
@@ -870,7 +864,6 @@
     "shareCopiedAnnounce": "Enlace copiado al portapapeles",
     "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
     "railAriaLabel": "Riel de secciones (espécimen)",
-    "chapterNavAria": "Cierre de bloque (espécimen)",
     "railHint": "Igual que en la página real, pero contenidos a este panel: fuera de él van fijos a la ventana."
   }
 }

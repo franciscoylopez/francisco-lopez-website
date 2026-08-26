@@ -784,7 +784,7 @@
     "groups": {
       "portada": {
         "title": "The article's opening",
-        "lead": "What only shows up once, at the start: who signs it, how it's shared and the map of stops."
+        "lead": "What only shows up once, at the start: who signs it and how it is shared."
       },
       "parada": {
         "title": "How every stop opens",
@@ -802,8 +802,8 @@
     "fichas": {
       "portada": {
         "kicker": "Opening",
-        "cls": "<ByLine> · <ShareActions> · <ArticleIndex>",
-        "rule": "Byline, sharing and the map of stops with a time for each. The index is server-rendered: you can see it and jump from it without JavaScript.",
+        "cls": "<ByLine> · <ShareActions>",
+        "rule": "Byline and sharing, settled in the same opening row.",
         "note": "A signed article says who signs it in the opening, not in the footer. And without `navigator.share` the button copies the link anyway."
       },
       "cover": {
@@ -853,14 +853,8 @@
     "repoLabel": "LINK ·",
     "repoText": "Decisions D39, D41 and D73, in ",
     "pieSample": "…and that's why the section ends here, with the evidence and the way out towards the next one.",
-    "chapterPositionLabel": "5 of 11",
-    "chapterIndexLabel": "Contents",
-    "chapterNextLabel": "Next: 06 · From design to code",
     "bylineName": "Francisco López",
     "bylineRole": "Senior Product Manager",
-    "indexKicker": "Contents",
-    "indexTimeLabel": "12 min read",
-    "indexAriaLabel": "Sample article contents",
     "indexItems": ["Why it exists", "How the work happens", "The brand"],
     "diagramCaption": "A real diagram from the page, with its own color tokens.",
     "progressAriaLabel": "Reading progress of the sample article",
@@ -870,7 +864,6 @@
     "shareCopiedAnnounce": "Link copied to clipboard",
     "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
     "railAriaLabel": "Section rail (specimen)",
-    "chapterNavAria": "Block footer (specimen)",
     "railHint": "Just like the real page, but contained to this panel: outside it they're pinned to the window."
   }
 }
