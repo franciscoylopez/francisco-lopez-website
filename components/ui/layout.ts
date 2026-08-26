@@ -107,9 +107,17 @@ export const FOLD_GROUP = "my-auto md:min-h-[29rem]";
  *
  * LA COMPACTACIÓN, y de dónde salen los 80px. Por debajo de **700px de alto** el
  * hueco del breadcrumb baja de 72 a 32 y el de la fila de cifras hace lo mismo
- * (`stat-row.tsx`), así que la fila sube a **605,6** y cabe entera a 618 con
- * 12px de margen. Se eligió 700 y no 686 —donde la fila justo dejaba de caber—
+ * (`stat-row.tsx`). Se eligió 700 y no 686 —donde la fila justo dejaba de caber—
  * para que el punto de conmutación no sea el mismo píxel que el síntoma.
+ *
+ * MEDIDO DESPUÉS, no razonado: a 1280×618 la fila queda en **521→605,6**, entera
+ * sobre el pliegue con **12,4px de margen**, idéntica en las tres. Y se comprobó
+ * por el `margin` COMPUTADO y no por la posición, que es lo único que distingue
+ * «el override gana» de «algo más lo movió»: 32px a 618 de alto y 72px a 900, en
+ * las cuatro páginas. La invariante de D50 sobrevive intacta —`h1` en 224,5 y
+ * grupo de 464 en las CUATRO, Contacto incluida—, que era el riesgo real de meter
+ * un eje nuevo aquí: el grupo pierde 40px de altura de golpe, y si una sola de
+ * las cuatro no lo perdiera, se descuadrarían todas.
  *
  * SE TOCA AQUÍ Y NUNCA EN LAS PÁGINAS. Las cuatro hermanas compactan a la vez,
  * que es lo único que mantiene la invariante de D50: lo que esa decisión pide no
