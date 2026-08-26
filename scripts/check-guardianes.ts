@@ -296,17 +296,25 @@ const CASOS: Caso[] = [
   {
     guardian: "check:excepciones",
     rotura: "un control a mano se queda sin su marca `@fuera-de-capa`",
-    // Se le quita la marca al control a mano que queda en la capa de artículo: la
-    // celda de rejilla pulsable de `article.tsx`. Es el caso real —así estaba el
-    // repo hasta que D109 puso la marca en el punto de uso, y BRAND.md no lo sabía—.
+    // Se le quita la marca al switch del consentimiento, que es un control a mano
+    // real y declarado en BRAND.md.
     //
-    // APUNTABA A `page-closer.tsx` Y EL CASO CADUCÓ EL 2026-08-25: P70.15 sacó esa
-    // tarjeta a la variante `card`, así que el archivo se quedó sin marca que
-    // quitar y la mutación dejó de mutar nada. Lo cazó este mismo script en CI, que
-    // es exactamente para lo que existe: un caso malo que ya no muerde puntúa como
-    // verde. Al elegir el archivo de un caso, conviene preferir el que NO está
-    // tareado para salir de la lista.
-    archivo: "components/ui/article.tsx",
+    // HA CADUCADO DOS VECES, Y LAS DOS POR EL MISMO MOTIVO: el archivo elegido dejó
+    // de tener marca porque su pieza SALIÓ de la lista de excepciones. Apuntaba a
+    // `page-closer.tsx` y P70.15 lo sacó a la variante `card` (2026-08-25);
+    // apuntaba después a `article.tsx` y P70.38 se llevó la celda del índice a
+    // `indexCellVariants` (2026-08-26). Las dos veces la mutación dejó de mutar y
+    // las dos las cazó este script — que es exactamente para lo que existe: un caso
+    // malo que ya no muerde puntúa como verde.
+    //
+    // LA LECCIÓN, que ya no es «prefiere el que no está tareado» sino algo más
+    // fuerte: **la lista de excepciones es la peor fuente posible de un caso malo,
+    // porque su razón de ser es vaciarse**. Cada excepción que se cierra —que es
+    // trabajo bueno— rompe este caso. De los dos que quedan, el switch es el más
+    // estable: su motivo declarado no es «falta una variante» (que alguien puede
+    // crear) sino que la cascada **aplica hacia delante y no hacia atrás**, así que
+    // no sale por hacer bien el trabajo, solo si se rehace el banner entero.
+    archivo: "components/site/consent-banner.tsx",
     mutar: (o) => o.replace("@fuera-de-capa:", "control a mano:"),
   },
 ];
