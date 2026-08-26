@@ -49,6 +49,7 @@ Partido el **2026-08-09** (P37.685).
 - [El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)](#el-interlineado-que-sobrevivió-a-tres-medidas-y-por-qué-la-medición-aprobaba-2026-08-25)
 - [La variante que dimensiona una fila, usada en una pila (2026-08-25)](#la-variante-que-dimensiona-una-fila-usada-en-una-pila-2026-08-25)
 - [El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)](#el-hover-de-la-tarjeta-pulsable-y-por-qué-no-se-arregló-con-luminancia-2026-08-25)
+- [Las dos excepciones que salieron](#las-dos-excepciones-que-salieron)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
