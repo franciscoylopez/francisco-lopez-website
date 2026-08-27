@@ -21,10 +21,12 @@ import { WRAP } from "@/components/ui/layout";
  * página real (`/prototype`, 2026-08-26):
  *
  * · **Teñir bloques enteros** con `bg-muted`. Funciona, y destapó que `--border`
- *   está calibrado contra `--background` y solo contra él: sobre la banda el
- *   contorno de una tarjeta cae de 1,29 a **1,10** y la tarjeta pierde el filo.
- *   Es la misma deuda que D39 cerró para el atenuado y D97 para el contorno de un
- *   control, y sigue abierta para el filete. Tareado aparte.
+ *   estaba calibrado contra `--background` y solo contra él: sobre la banda el
+ *   contorno de una tarjeta caía de 1,29 a **1,10** y la tarjeta perdía el filo.
+ *   Era la misma deuda que D39 cerró para el atenuado y D97 para el contorno de un
+ *   control, y **la cerró D131 el 2026-08-27** — el filete se recalcula por
+ *   superficie como sus dos hermanos, así que esta dirección ya no tiene ese pero.
+ *   Sigue descartada por lo de abajo, que es lo que de verdad la descartaba.
  * · **Dar superficie al cierre de sección**, sin fondo nuevo. Es la más barata y
  *   la más fiel a D123, y se quedó a un paso.
  * · **INVERTIR LA SECCIÓN-TESIS de cada página, que es lo que la tarea pedía

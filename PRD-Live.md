@@ -254,9 +254,12 @@ la historia de TheTool y no una experiencia con historia separable.
 
 Sin fecha ni compromiso de release conjunto: entran en el sprint que las toque o cuando
 dejen de poder esperar. Agrupadas por dónde viven — *General* (higiene de validadores,
-dependencias, `qlty`), *Home*
-(gesto-firma de marca, presencia del morado, kicker del Hero, `WebSite` en JSON-LD),
-*Brand Kit*, *Design System* y *Accesibilidad*.
+dependencias, `qlty`), *Home* (gesto-firma de marca, presencia del morado, kicker del
+Hero), *Brand Kit*, *Design System* y *Accesibilidad*.
+
+**Y desde el 2026-08-27 lleva algo que no es una superficie: la DISTRIBUCIÓN.** Con la
+métrica primaria en 1 envío en 28 días, el cuello de botella dejó de ser la calidad del
+sitio. Entra en alcance —decisión escrita, no omisión— y va detrás de «Home» en la cola.
 
 ### V4 — IA conversacional
 

@@ -167,6 +167,9 @@
 - D129 · El presupuesto gana su tercera mitad: techo a la SUMA de las skills
 - D130 · El porqué de las convenciones se parte, y el arranque cabe en el objetivo sin mudanza
 - D131 · El filete era el tercero de la familia y el único sin tratamiento por superficie
+- D132 · El equilibrado de línea y el destello del toque bajan a la capa
+- D133 · El filete de la banda invertida es uno solo, y el ordinal no toma color
+- D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7667,3 +7670,160 @@ DoD leída por una máquina (D90), y esta vez no hubo que acordarse de nada.
 cero bajo AA, cero bajo AAA y cero por debajo del 3:1. Los dos recuentos son **idénticos** a los
 de antes del cambio, que es lo que debía pasar: un filete decorativo no es un par de texto ni el
 contorno de un control.
+
+## D132 · El equilibrado de línea y el destello del toque bajan a la capa — 2026-08-27
+
+**Dos reglas de la guía de interfaz sin portador, las dos en `globals.css`.** `text-wrap:
+balance` reparte las líneas de un titular para que la última no quede huérfana;
+`-webkit-tap-highlight-color` decide de qué color destella un control al tocarlo en un
+teléfono.
+
+**La tarea decía «0 hits en todo el proyecto» y era falso**, así que se descarta por escrito:
+hay **29 usos** de `text-balance` / `text-pretty` en 20 archivos, y `components/ui/heading.tsx`
+ya nombraba `text-balance` como override legítimo del call site. El `design-review` grepeó la
+propiedad CSS (`text-wrap`) y lo que hay escrito son las utilidades de Tailwind, que compilan
+a ella. **El defecto medido sí era real y reproduce exacto.**
+
+**Medido A/B sobre la MISMA página servida** —mismo DOM, mismas fuentes, forzando `text-wrap`
+a `wrap` y a `balance` sobre los mismos nodos—, `/accesibilidad` a 390px, última línea como %
+de la más larga:
+
+| Titular | antes | después |
+|---|---|---|
+| «Cinco cosas que no incumplían…» (h3) | **13 %** | 100 % |
+| «Dos diagramas que se miden…» (h3) | **18 %** | 96 % |
+| «El marco lo pone la página…» (h3) | **20 %** | 100 % |
+| «Dónde no llega, y cómo decirlo» (h2) | **30 %** | 98 % |
+| «Qué cumple, y cómo se prueba» (h2) | **31 %** | 100 % |
+
+**12 de 16 mejoran, 4 no cambian, ninguno empeora.** Y los peores no eran los dos `h2` que
+encontró la tarea: eran los **h3**, que se le escaparon enteros.
+
+**LA FILA 5 DE LA DoD, CONTESTADA CON UNA MEDIDA Y NO CON UN CRITERIO.** 93 titulares en
+cuatro páginas: **cero cambian de alto**. `balance` reparte dentro del mismo número de
+líneas, así que no hay pliegue que recalcular ni layout shift que temer.
+
+**En cuerpo va `pretty`, que es otra propiedad y no la misma con otro nombre.** `balance`
+iguala TODAS las líneas de un bloque corto y los navegadores lo ignoran por encima de cuatro
+o seis; `pretty` deja el párrafo como está y solo impide la palabra suelta al final. Viudas
+(última línea < 25 %): home 7→1, `/accesibilidad` 15→9, el artículo 48→30. Un solo bloque de
+338 crece una línea, y es un párrafo en flujo.
+
+**VA SOBRE EL ELEMENTO Y NO SOBRE `titleVariants`**, que era la otra opción: no todos los
+titulares del sitio pasan por la capa de cabecera —los de `system-message`,
+`global-not-found` y las bandas los escriben sus bloques—. El selector `h1..h4` ya existía en
+`globals.css` para la familia tipográfica, así que el equilibrado entra por la misma puerta.
+
+**Y POR QUÉ ESTO NO PODÍA VIVIR EN EL PUNTO DE USO**, que es la parte reutilizable: el defecto
+solo salía en una de las tres páginas hermanas, con el MISMO componente. Lo que divergía era
+el **registro del copy** — Design System y Brand Kit le dan sintagmas cortos que nunca rompen;
+Accesibilidad, oraciones con coma. Una propiedad que hace falta o no según lo que alguien
+escriba en el diccionario no se puede recordar en cada call site.
+
+**El destello del toque se DECLARA, no se apaga.** Apagarlo con `transparent` era la otra
+respuesta y es peor: en un teléfono el hover no existe, así que el destello es la ÚNICA
+confirmación de que el toque se ha registrado. Se tiñe de `--primary` al 18 % y conmuta con el
+tema solo porque el token ya lo hace. Sin umbral WCAG que cumplir: es transitorio y no
+delimita el control.
+
+**Lo que deja detrás, medido y tareado (P68.753):** con la regla en la capa, **165 de las 172
+utilidades del call site dicen lo mismo que ella**. Las **7 que sobreviven son un hallazgo, no
+un resto** — un párrafo o una cita que pide `balance` porque **se lee como titular sin ser un
+encabezado**: la subheadline del Hero, la apertura de Sobre mí y las cinco citas del artículo.
+
+## D133 · El filete de la banda invertida es uno solo, y el ordinal no toma color — 2026-08-27
+
+**La pregunta era si la banda de bloque (D125) debía tomar el acento morado**, y la tarea
+ofrecía dos salidas: teñir el ordinal de cada parada, o dejarla cromáticamente muda. **Ganó
+una tercera que no estaba escrita** (Francisco, 2026-08-27): reusar el **filete morado** que
+la banda-manifiesto de la home ya lleva entre su titular y su bajada.
+
+**POR QUÉ EL ORDINAL ERA LA RESPUESTA EQUIVOCADA**, medido sobre el píxel pintado y con el
+metro validado en la misma corrida —la etiqueta de la banda da **13,79 / 15,32**, que son
+exactamente los dos anclajes de `BRAND.md`:
+
+| Color del ordinal (12,8px · AAA = 7) | claro | oscuro |
+|---|---|---|
+| Hoy (`text-muted-foreground`) | **10,32** | **9,89** |
+| `--brand-purple-accent` | **7,04** | **7,21** |
+| `--brand-purple` estándar | 5,21 | 2,65 ✗ |
+
+1. **Pasa AAA por cuatro centésimas** en claro, en la superficie invertida más repetida del
+   sitio. Cualquier retoque futuro del token lo tumba.
+2. **Le quita contraste**: 10,32 → 7,04.
+3. **Le daría al morado un segundo significado en páginas donde ya tiene uno.** El punto de
+   6px del índice de sección marca «estás en la sección N de N» y sale **catorce veces** en
+   `/design-system`. Enumerar y «estás aquí» no pueden ser el mismo color en la misma página.
+4. **D127 es del día anterior** y movió ese mismo ordinal de un `opacity-70` elegido a mano a
+   la capa. Teñirlo devolvería un color a mano al mismo texto veinticuatro horas después.
+
+**El filete no tiene ninguno de esos problemas** y sí resuelve lo que la tarea quería: va
+`aria-hidden`, no lleva información y no delimita ningún control, así que cae en «detalles» de
+`BRAND.md` §Color y **no tiene umbral que cumplir**.
+
+**SALE A LA CAPA AL APARECER EL SEGUNDO CALL SITE:** `.band-rule` en `globals.css` con la
+geometría (2px × 3,5rem, `--brand-purple-accent`). Escribirlo dos veces se cargaría el motivo
+del cambio, que es justamente que las dos bandas se lean como la misma familia.
+
+**LO QUE LA CLASE NO DECLARA ES EL MARGEN, y no es olvido.** El ritmo vertical es una
+propiedad del bloque que lo aloja: el manifiesto abre con un titular de hasta 3,75rem y
+respira más; la banda de bloque abre con uno de 3rem y es mobiliario de orientación. Es la
+regla 4 de `BRAND.md` — dos valores que se parecen y significan cosas distintas no se
+unifican. Va además **sin `@layer`**, así que un margen ahí ganaría a cualquier `my-*` del
+call site sin avisar.
+
+La banda pasa de 386 a 420px de alto; la regla de densidad de `block-opener` no se mueve. Y
+**se publica sola**: §10 del Design System monta el `BlockOpener` real, no una recreación.
+
+## D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba — 2026-08-27
+
+**La tarea estaba caducada y se descarta por escrito.** Decía que `lib/structured-data.ts`
+tenía «SOLO dos constructores» y que `WebPage` no estaba en las internas: hay **cinco** y
+`WebPage` está ahí desde P50. **Pero el hallazgo sale reforzado**, porque el propio código
+llevaba meses declarando su condición de salida:
+
+> `experiencePageLd`, desde P50: *«NO LLEVA `isPartOf`, y la ausencia es deliberada: el nodo
+> `WebSite` no existe todavía, así que apuntar a `#website` sería una referencia `@id`
+> COLGANDO — valida igual, porque un validador de esquema no resuelve referencias, y no
+> significa nada. Se añade el día que exista el nodo, no antes.»*
+
+El nodo se declara **entero y solo en la home** (`profilePageLd`); lo referencian las siete
+páginas con nodo propio: el artículo, Contacto y los cinco deep-dive.
+
+**DOS FORMAS DE REFERENCIARLO, Y CUÁL TOCA LO DECIDE LA ELEGIBILIDAD PARA RICH RESULTS** — la
+misma regla que `techArticleLd` ya había escrito para su `author`. La Rich Results Test evalúa
+una página **aislada**: en un tipo elegible (`TechArticle`) degradaría la referencia a `Thing`
+anónimo y avisaría, así que ahí va con `@type`, `name` y `url`; en los que no lo son
+(`WebPage`, `ContactPage`) basta el `@id` pelado.
+
+**`inLanguage` LISTA LOS DOS IDIOMAS Y NO EL DE LA PÁGINA**, que es la parte que no es obvia.
+El `@id` es uno solo para las veintiocho variantes, así que si la home ES dijera `es` y la EN
+dijera `en`, **el mismo nodo afirmaría dos cosas distintas según por dónde se entre**. Lo
+cierto del SITIO —y no de la página que lo declara— es que está en los dos; la página ya
+declara el suyo aparte.
+
+**NO LLEVA `potentialAction: SearchAction`**: es el campo que pinta la caja de búsqueda de
+Google y este sitio no tiene buscador interno. Declararlo sería afirmar una capacidad
+inexistente, que es el mismo criterio por el que el deep-dive no es `Article`.
+
+**El metro se movió con el cambio, que es como se comprueba que lo ve:** `check:marco` pasa de
+**3 `@id` declarados y 1 referenciado** a **4 y 2**.
+
+**Cierre con el Schema Markup Validator sobre el preview**, las seis páginas con nodo propio
+en ES y EN: **cero errores** en home, artículo y deep-dive. El validador reconstruye
+`ProfilePage → isPartOf → WebSite` con su `@id`, `name`, `url`, los dos `inLanguage` y el
+`author` apuntando al `Person`.
+
+**Y dos cosas medidas que conviene no redescubrir:**
+
+- **El aviso de `/contacto` es un falso positivo y es PREEXISTENTE**, idéntico en producción,
+  que no lleva `isPartOf`. Es el vocabulario reducido de Google (SPORE) marcando
+  `UNKNOWN_FIELD contactPoint / ContactPage` con `isSevere: false`; en Schema.org
+  `contactPoint` es válido en cualquier `CreativeWork`. Queda documentado **junto a
+  `contactPageLd`**, porque si no la siguiente pasada lo levanta como hallazgo nuevo — ya pasó
+  con seis de once.
+- **La referencia `@id` pelada sale como `CreativeWork`** en vez de `WebSite`. Cero errores y
+  cero avisos, así que se queda; pero el «no cuesta nada» que esta regla heredó queda más
+  preciso: **no cuesta un aviso, cuesta que un lector AISLADO vea un tipo genérico**. Para el
+  rastreador que recorre el sitio entero —que es quien une las entidades— el `@id` hace su
+  trabajo igual.
