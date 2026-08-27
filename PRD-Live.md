@@ -160,63 +160,24 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 
 ### Cómo se verifica lo que no ve un compilador
 
-- **Gate de accesibilidad**: `agent-browser` conducido por el subagente
-  `viewport-verifier`, con su matriz de viewports × temas + `reduced-motion`. **Cuándo se
-  dispara —dos veces, y la primera mientras se dibuja— lo dice `CLAUDE.md`** (D50/D52).
-- **Pasada con lector de pantalla**: NVDA sobre el sitio entero, no por página. Es la
-  única capa que encuentra lo que **no incumple ninguna regla** y por tanto ningún motor
-  automático puede señalar: un `Esc` que no cierra, un cambio de tema que no se anuncia, un
-  aviso de consentimiento que se lee el último. Lo que encuentra se publica en la propia
-  página (D73).
-- **`npm run check:marco`**: el criterio de cierre de página nueva, en cada PR (D75). Sobre
-  el HTML **prerenderizado** de las 28 variantes: axe estructural, el enlace de salto que axe
-  no ve, `h1` y jerarquía, breadcrumb, que la metadata derivada **llegó**, que el `?card=`
-  de cada variante **resuelve a su propia tarjeta** y no a la de la home (P70.03), y que los
-  `@id` del JSON-LD **resuelven** — las dos últimas, cosas que ningún validador externo
-  hace. Contraste y objetivo táctil quedan fuera a propósito: se heredan, y necesitan pintar.
-- **`npm run check:figuras`**: el rótulo **pintado** de toda figura con lienzo
-  escalado, sobre el prerender de las 28 variantes. `text-[11px]` dentro de un
-  `viewBox` son 11 unidades, no 11 píxeles, y esa escala no está en el
-  `font-size` computado (P68.59). En CI, no en el censo: no necesita navegador.
-  **Confirma en vez de sostener**: el tamaño lo pone la capa, que lo deriva del
-  único ancho que un diagrama declara, y un lienzo desconocido no compila (D114).
-  Uno de ancho fijo que se desplaza se mide y se nombra, no se juzga, y por
-  debajo de 360 tampoco: **ese suelo es del rótulo, no del sitio** (D124).
-- **`npm run check:marcas`**: que los nombres propios lleguen al HTML con
-  `translate="no"`, o el traductor de Chrome hará «La Herramienta» de «TheTool».
-  Lo pone una capa y el copy no lo escribe, así que recorre los nodos de TEXTO de
-  las 28 variantes exigiendo un ancestro marcado, en vez de contar cuántos hay
-  (D116). Fuera del contrato, dicho en cada corrida: el `<head>`, los atributos y
-  el interior de un `<svg>`.
-- **`npm test`**: la lógica que no necesita navegador, y por eso en CI al revés que `psi` y el
-  censo. Son dos: la del formulario —validación, saneado de cabeceras y decisiones de la Server
-  Action, medidas sobre el mensaje que nodemailer **emite** (D101)— y las reglas del tablero,
-  que es lo que deja a su guardián vivir fuera de CI (D107).
-- **`npm run gate:html`**: compara el HTML servido de las 28 variantes antes y después de
-  un refactor. Diff vacío = transparente por construcción. Es el gate que más ha cazado
-  y no está en CI (D42/D45).
-- **`npm run check:articulo`**: cada sección de «Cómo se ha creado esta página» declara de
-  qué depende y lleva su sello. Cuando una fuente se mueve, CI sale rojo **nombrando la
-  sección**, en el PR que la mueve — no dice que el texto sea falso, dice que hay que
-  mirarlo (D84). Y qué líneas cambiaron lo dice `articulo:novedades` (D103). Sella
-  aparte **el copy del artículo**, y ahí la pregunta es otra: si ese sello se mueve y
-  `ARTICLE_UPDATED` no, sale rojo, porque esa constante es el `dateModified` que ve
-  Google y no se pinta en ninguna página (D110).
-- **`npm run censo`**: el contraste de las páginas del registro × dos temas, fuera de CI
-  porque necesita navegador (D85). **Son dos pases**: los pares de TEXTO (1.4.3/1.4.6) y el
-  **contorno de cada control** (1.4.11, 3:1), que axe no implementa y por tanto no mira
-  nadie más (D97). **Y deja sello**: al pasar en verde firma los tokens
-  de color, las superficies y las animaciones que había, y `check:palette` compara ese
-  sello en cada PR, así que la condición de re-medir de la DoD la lee una máquina (D90).
-- **`npm run psi -- --registro`**: la nota de PageSpeed de las páginas del registro contra
-  producción, a demanda y nunca como gate de CI, porque su variabilidad daría rojos falsos
-  (D49/D99).
-- **`npm run check:kit`**: que el registro del kit (`lib/logo-kit.ts`) y `public/logo-kit/`
-  cuadren **en los dos sentidos**. El ZIP no se vigila: se genera en el build (D119).
-- **`npm run check:tablero`**: que `Prioridad` siga siendo un orden —números únicos, estados de
-  ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, que era la
-  última fuente de verdad sin red. Fuera de CI (leer Notion necesita su MCP); el criterio,
-  vigilado en `npm test` (D107).
+> **Aquí, el CONTRATO: qué garantiza cada gate, qué deja fuera y dónde corre.** El porqué lo
+> lleva su entrada de `DECISIONS.md`, a demanda por el índice de su cabecera (D88). Estaba
+> escrito en los dos sitios, y este no se lee hasta que un check sale rojo diciendo su nombre.
+
+| Gate | Qué garantiza, y qué deja fuera | Dónde | Porqué |
+|---|---|---|---|
+| **Gate de accesibilidad** | `agent-browser` conducido por el subagente `viewport-verifier`: viewports × temas + `reduced-motion`. Se dispara **dos veces**, y la primera mientras se dibuja | a mano | D50/D52 |
+| **Pasada con NVDA** | Lo que **no incumple ninguna regla** y por tanto ningún motor automático puede señalar. Sobre el sitio entero, no por página; lo que encuentra se publica en `/accesibilidad` | a mano | D73 |
+| `check:marco` | El criterio de cierre de página nueva, sobre el HTML **prerenderizado** de las 28 variantes: axe estructural, enlace de salto, `h1` y jerarquía, breadcrumb, que la metadata derivada llegó, que el `?card=` de cada variante resuelve a su propia tarjeta, y que los `@id` del JSON-LD resuelven. **Fuera:** contraste y objetivo táctil, que se heredan y necesitan pintar | CI | D75 |
+| `check:figuras` | El rótulo **pintado** de toda figura con lienzo escalado, sobre el prerender: dentro de un `viewBox` el `font-size` computado no dice el tamaño real. **Fuera:** por debajo de 360, que es suelo del rótulo y no del sitio | CI | D114/D124 |
+| `check:marcas` | Que los nombres propios lleguen al HTML con `translate="no"`, recorriendo los nodos de TEXTO de las 28 variantes. **Fuera:** el `<head>`, los atributos y el interior de un `<svg>` | CI | D116 |
+| `npm test` | La lógica que no necesita navegador. Son dos: el formulario, medido sobre lo que nodemailer **emite**, y las reglas del tablero | CI | D101/D107 |
+| `gate:html` | El HTML servido de las 28 variantes antes y después de un refactor: diff vacío = transparente por construcción | a mano | D42/D45 |
+| `check:articulo` | Que ninguna sección del artículo dependa de una fuente que se movió, **nombrando la sección** en el PR que la mueve; `articulo:novedades` dice qué líneas. Sella aparte el copy, contra `ARTICLE_UPDATED`, que es el `dateModified` que ve Google | CI | D84/D103/D110 |
+| `censo` | **Dos pases** sobre las páginas del registro × dos temas: los pares de TEXTO (1.4.3/1.4.6) y el **contorno de cada control** (1.4.11, 3:1), que axe no implementa. Deja sello, y `check:palette` lo compara en cada PR | a mano | D85/D97/D90 |
+| `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99 |
+| `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**. **Fuera:** el ZIP, que se genera en el build | CI | D119 |
+| `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero | a mano | D107 |
 
 ### Calidad y seguridad
 

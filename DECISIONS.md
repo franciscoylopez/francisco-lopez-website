@@ -163,6 +163,7 @@
 - D125 · Una banda no se tiñe sobre una sección que ya existe: se inserta
 - D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho
 - D127 · El atenuado de un texto no se escribe con `opacity`, y el censo no sabía verlo
+- D128 · El contrato de un gate se publica; su porqué se consulta
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7429,3 +7430,66 @@ aparte** (P68.7115), porque su modo de fallo es un tick verde.
 **La confirmación fina:** tras el arreglo el censo pasó de **408 a 414 pares**, y esos seis son
 3 páginas × 2 temas — el ordinal dejó de ser un duplicado de `--background` y pasó a ser un par
 propio. Un arreglo que no hubiera cambiado nada habría dejado el recuento igual.
+
+## D128 · El contrato de un gate se publica; su porqué se consulta — 2026-08-27
+
+**El encargo era encontrar el archivo culpable, y no hay ninguno.** El techo del presupuesto
+de contexto subió a 12.700 el 2026-08-25 sin una medida detrás, y P68.5905 pedía la revisión
+manual que lo convirtiera en dato. Medido sobre 29 commits de documentación (23 → 27 de
+agosto), en palabras y con el contador de `check:contexto`:
+
+| archivo | tocado en | churn | neto | tamaño |
+|---|---|---|---|---|
+| `PRD-Live.md` | 21/29 | 934 | +176 | 3.186 |
+| `CLAUDE.md` | 13/29 | 609 | +149 | 4.693 |
+| `BRAND.md` | 10/29 | 817 | +107 | 4.724 |
+| `AGENTS.md` | 0/29 | 0 | 0 | 95 |
+
+**+432 palabras netas en cinco días, repartidas casi a partes iguales entre tres archivos.**
+Eso es lo que explica por qué las dos pasadas de retirada anteriores —Método II (−1.026) y
+P68.675 (−440)— se las comió el sprint siguiente: no estaban tapando una fuga localizada,
+estaban barriendo lluvia fina. Una tercera pasada del mismo tipo habría dado el mismo
+resultado, y por eso lo que cambia es el régimen y no la cifra.
+
+**La hipótesis con la que empecé era falsa, y comprobarla es la mitad útil del trabajo.**
+Supuse que `BRAND.md` guardaba inline el porqué *estructural* de sus variantes —§Jerarquía de
+hover y sus siete subsecciones suman 1.629 palabras, y el propio archivo las etiqueta como
+«explica **por qué** cada variante es como es»—. Contrastado contra `BRAND-historical.md`
+§El hover de la tarjeta pulsable: la regla en `BRAND.md` son 151 palabras de regla + una
+cláusula de porqué + puntero, y las 400 de barrido de mezcla y descartes están en el
+histórico. **El corte del 2026-08-09 funcionó**, y por eso el movimiento que P68.5908 propone
+para `CLAUDE.md` es el correcto.
+
+**Dónde sí estaba escrito dos veces.** `PRD-Live.md` §Cómo se verifica lo que no ve un
+compilador: **769 palabras, el 24 % del archivo**, describiendo once gates — y cada bullet
+**ya citaba su entrada de `DECISIONS.md`** (D42/D45, D49/D99, D50/D52, D73, D75, D84/D103/D110,
+D85/D97/D90, D101/D107, D114/D124, D116, D119). El porqué estaba en los dos sitios.
+
+**La decisión.** Esa sección pasa a **tabla de contrato**: por gate, qué garantiza, **qué deja
+fuera**, dónde corre y el puntero a su D-entry. Lo que se retira es el porqué —qué falló para
+que existiera, qué se descartó, qué caza en la práctica—, que se consulta a demanda por el
+índice de cabecera de `DECISIONS.md` (D88). El criterio de corte: **el catálogo de aquí no se
+lee hasta que un check sale rojo, y entonces el check dice su nombre.**
+
+La columna «qué deja fuera» no es adorno: es la mitad del contrato que un guardián nunca
+declara solo, y la que evita darlo por más ancho de lo que es (contraste y objetivo táctil
+fuera de `check:marco`, el suelo de 360 fuera de `check:figuras`, el `<head>` fuera de
+`check:marcas`, el ZIP fuera de `check:kit`).
+
+**Lo que NO se toca, con su motivo.**
+
+- **La regla de la raya** (`CLAUDE.md`, ~200 palabras) la comprueba `check:raya` en CI, así
+  que parecía candidata. No lo es: el guardián caza la infracción **después** de escribirla, y
+  la enumeración de sustitutos es lo que evita escribirla. Un guardián reactivo no releva a
+  una regla de redacción.
+- **El bloque del tablero de Notion** (`CLAUDE.md`, 1.488 palabras, el 32 % del archivo) se
+  consulta en tres momentos y ninguno es escribir código. Sacarlo a un doc a demanda es la
+  partición más grande disponible y se descarta **hoy**: el arranque de sesión sí toca el
+  tablero, y mover 1.488 palabras a un destino sin techo es la «reducción que fue una mudanza»
+  que el sexto `method-review` acaba de nombrar.
+
+**El resultado, y es honesto decir que se quedó corto de la proyección.** La sección baja de
+**769 a 542** palabras, no a las ~280 estimadas: al escribir la tabla resultó que más de la
+mitad de esas 769 era contrato, no porqué. El arranque baja de **12.698 a 12.454**, y la
+holgura pasa de **2 a 246 palabras** — por encima de las 240 que el propio guardián define
+como la magnitud que hay que sostener, por primera vez desde que el techo subió.
