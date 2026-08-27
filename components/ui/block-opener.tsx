@@ -105,7 +105,39 @@ export function BlockOpener({
         >
           {items.map((item) => (
             <li key={item.ordinal} className="flex items-baseline gap-2">
-              <span className="font-mono text-[0.8rem] tabular-nums opacity-70">
+              {/*
+               * EL ATENUADO DEL ORDINAL LO PONE LA SUPERFICIE, NO UN `opacity`
+               * (design-review de la tanda 8, 2026-08-27).
+               *
+               * Nació como `opacity-70` y era el ÚNICO texto del repositorio
+               * atenuado así —los otros siete `opacity-*` son barras de
+               * esqueleto, o sea ilustración—. Dos motivos para que saliera, y
+               * el segundo es el que importa:
+               *
+               * · `BRAND.md` §El atenuado lo pone la superficie: «no se elige
+               *   el color del texto atenuado». La entradilla de esta misma
+               *   banda, doce líneas más arriba, ya lo hacía bien. Dos
+               *   mecanismos para el mismo trabajo en un componente de 40
+               *   líneas es la señal de drift, no un detalle.
+               *
+               * · EL CENSO NO SABE VER UN `opacity`. Lee `getComputedStyle().color`
+               *   y solo descarta `opacity: 0`, así que puntuaba este ordinal
+               *   con **15,32** —el anclaje, la mejor cifra del sitio— cuando
+               *   la pantalla pintaba **5,97 en oscuro** y **7,52 en claro**.
+               *   A 12,8px el umbral AAA es 7, así que el sitio publicaba
+               *   «cero pares bajo AAA» con uno debajo. No es que el metro se
+               *   quedara corto: señalaba como mejor par de la página el peor.
+               *   (`BRAND.md` §Cómo medir, punto 8, por cuarta vez.)
+               *
+               * Con `text-muted-foreground` el ordinal sube a 9,89 / 10,32 —lo
+               * mismo que la entradilla— y sigue muy por debajo de la etiqueta
+               * de al lado, que va a `--background` pleno: la jerarquía que
+               * buscaba el `opacity` se mantiene, medida en vez de pintada a
+               * ojo. NO se añadió un segundo escalón de `--surface-dim` para
+               * conservar el tono exacto de antes: sería un token con un solo
+               * call site, que es indirección y no fuente única.
+               */}
+              <span className="text-muted-foreground font-mono text-[0.8rem] tabular-nums">
                 {item.ordinal}
               </span>
               <span className="text-[0.95rem]">{item.label}</span>
