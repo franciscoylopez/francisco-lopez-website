@@ -1305,10 +1305,14 @@
    florecer del 404, y con la misma coartada medida — ocurre UNA vez, al cargar,
    y no compite con nada porque el titular ya está pintado.
 
-   DOS CURVAS, Y ESA ES LA DIRECCIÓN ELEGIDA. La bajada ACELERA
-   (cubic-bezier(.55,0,1,.45)), que es lo que hace la gravedad; un ease-out ahí
-   leería como frenada, no como caída. El asentamiento sí decelera. El rebote es
-   0,20, dentro del 0,1–0,3 que el catálogo de motion da por sobrio.
+   DOS CURVAS, Y LA PRIMERA ROMPE UNA REGLA A PROPÓSITO. El catálogo de motion
+   prohíbe `ease-in` en UI, y `cubic-bezier(.55,0,1,.45)` es exactamente eso: una
+   curva que acelera. Se usa igual, y este es el único sitio del sitio donde se
+   usa, porque aquí describe algo real —lo que cae, acelera— y porque el tramo
+   acelerado es menos de la mitad del gesto: el aterrizaje, que es donde mira el
+   ojo, sí decelera. Con un ease-out en la bajada el punto no cae, frena, y
+   parece un ascensor. El rebote es 0,20, dentro del 0,1–0,3 que el mismo
+   catálogo da por sobrio.
 
    EL TITULAR NO NACE INVISIBLE, que es la restricción dura: solo se anima el
    `span` del punto, nunca el h1. El LCP de la home es la foto, y esto no lo
@@ -1367,9 +1371,15 @@
 @property --rp {
   syntax: "<number>";
   inherits: true;
-  /* Sin soporte de `animation-timeline`, o sin que la fila esté en su rango,
-     el estado es el FINAL: el sitio se queda exactamente como está hoy. */
-  initial-value: 1;
+  /* CERO, NO UNO, y el motivo es el que se me escapó a la primera. Un valor por
+     defecto de 1 parece lo sensato —«si no puedes animarlo, enseña el estado
+     final»— y es correcto para una animación que VA a correr. Pero en un motor
+     sin `animation-timeline` la animación no existe, y ahí el estado final no es
+     un final: es un adorno permanente. Con 1, Firefox pintaba los cinco años con
+     su filete cian a la vez, para siempre, y un diseño que nadie aprobó.
+     Con 0 no se dibuja nada y la página queda como está hoy, que es lo que la
+     mejora progresiva significa: se pierde el adorno, no se gana otro. */
+  initial-value: 0;
 }
 @keyframes gesto-fila {
   from {
@@ -1380,43 +1390,36 @@
   }
 }
 
+/* ── «Estratos» · el eje de años ya estaba en la fila; el gesto lo hace regla.
+      NINGÚN texto se atenúa: la lectura no se toca, que es lo que separa esto
+      de un fundido por scroll.
+
+      TODO LO QUE PINTA VIVE DENTRO DEL `@supports`, no solo la animación. Es la
+      otra mitad de la nota de arriba: si las reglas que dibujan quedan fuera, el
+      navegador sin soporte las aplica igual y solo se queda sin el movimiento. ── */
 @supports (animation-timeline: view()) {
   .hito-fila {
     animation: gesto-fila linear both;
     animation-timeline: view();
     animation-range: entry 25% cover 45%;
   }
-}
-
-/* ── «Estratos» · el eje de años ya estaba en la fila; el gesto lo hace regla.
-      NINGÚN texto se atenúa: la lectura no se toca, que es lo que separa esto
-      de un fundido por scroll. ── */
-.hito-anio {
-  position: relative;
-}
-.hito-anio::after {
-  content: "";
-  position: absolute;
-  inset-inline: 0;
-  bottom: -6px;
-  height: 2px;
-  background: var(--primary);
-  transform-origin: left;
-  transform: scaleX(var(--rp));
-}
-/* El índice se llena conforme el estrato se deposita. Es el mismo par que ya
-   mide el censo (`--muted-foreground` → `--foreground` sobre `--background`),
-   así que no aparece ningún color nuevo. */
-.hito-idx {
-  color: color-mix(
-    in srgb,
-    var(--muted-foreground),
-    var(--foreground) calc(var(--rp) * 100%)
-  );
+  .hito-anio {
+    position: relative;
+  }
+  .hito-anio::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -6px;
+    height: 2px;
+    background: var(--primary);
+    transform-origin: left;
+    transform: scaleX(var(--rp));
+  }
 }
 
 /* MOVIMIENTO REDUCIDO: AQUÍ NO HAY NADA QUE AMORTIGUAR, y por eso no hay regla.
-   Lo que quedó del spike no desplaza ni escala nada: el filete del año y el
-   llenado del índice expresan ESTADO, y amortiguar una lectura la convertiría en
+   Lo que queda no desplaza ni escala nada: el filete del año expresa ESTADO, y
+   amortiguar una lectura la convertiría en
    un indicador que miente (D136). El único desplazamiento del gesto vivía en
    «Registro», que se descarta con él. */

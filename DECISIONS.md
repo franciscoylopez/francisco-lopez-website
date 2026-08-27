@@ -8112,6 +8112,32 @@ grande que le tocaría a 80px. No hay debate.
 **Y el censo lo confirma solo:** pasa de **414 pares a 416**. Los dos que aparecen son
 exactamente el punto en cada tema. 28 corridas, metro validado en las 28, cero bajo AAA.
 
+### Lo que `/review-animations` encontró, y que no se veía mirando la página
+
+**El estado por defecto de un gesto de scroll no es su estado final.** `--rp` se registró con
+`initial-value: 1` porque parecía lo sensato —«si el navegador no puede animarlo, que enseñe el
+final»— y es correcto **para una animación que va a correr**. En un motor sin
+`animation-timeline` la animación no existe, y ahí el estado final deja de ser un final: es un
+adorno permanente. Firefox pintaba **los cinco años con su filete cian a la vez y para
+siempre**, más los índices oscurecidos: un diseño que nadie aprobó, invisible desde Chrome, y
+contradiciendo por escrito lo que el propio comentario del bloque prometía.
+
+Son dos cambios y van juntos: el valor por defecto pasa a **0**, y **todo lo que pinta se mete
+dentro del `@supports`**, no solo la animación. Lo segundo es la mitad que se olvida: con las
+reglas de dibujo fuera, el navegador sin soporte las aplica igual y solo se queda sin el
+movimiento. Comprobado sobre el CSS compilado —que es donde se ve, no en el fuente—: no queda
+ni una regla de `.hito-anio` fuera del bloque.
+
+**La regla que sale de aquí:** en mejora progresiva, el estado sin soporte se elige mirando la
+página de ANTES, no el fotograma final de la animación. Se pierde el adorno; no se gana otro.
+
+**Y dos de calidad, aplicadas a la vez.** El comentario de la caída explicaba la curva pero no
+decía contra qué regla iba: `cubic-bezier(.55,0,1,.45)` es un `ease-in`, que el catálogo
+prohíbe en UI, y una excepción que no nombra la regla que rompe no es una excepción escrita
+sino una preferencia con buena prosa. Y el índice de cada fila cambiaba de color con el scroll:
+`color` no es propiedad de compositor, repintaba en cinco filas por frame, y no decía nada que
+el filete no dijera ya. Retirado.
+
 ### Un hallazgo de método que costó dos intentos
 
 **El censo no cabe en una llamada de primer plano** —28 corridas con navegador se comen los 600
