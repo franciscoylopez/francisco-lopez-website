@@ -61,11 +61,14 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
           </span>
           {rest}
         </p>
+        {/* El filete sale de `.band-rule` desde P68.7117: la banda que abre un
+            bloque de secciones lleva el mismo, y eran los mismos tres valores
+            escritos dos veces. El MARGEN se queda aquí, que es lo que separa el
+            ritmo de este manifiesto del de aquella banda. */}
         <div
           data-reveal
           aria-hidden="true"
-          className="my-[clamp(1.75rem,3.5vw,2.75rem)] h-0.5 w-14"
-          style={{ background: "var(--brand-purple-accent)" }}
+          className="band-rule my-[clamp(1.75rem,3.5vw,2.75rem)]"
         />
         <p
           data-reveal

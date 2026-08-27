@@ -780,6 +780,31 @@
    sin capa gana siempre a las utilidades, así que si algún día un caller mezcla
    esta clase con `px-*`/`py-*` propios, gana esta — hay que evitar esa combinación
    en vez de confiar en la cascada. */
+/* EL FILETE DE UNA BANDA INVERTIDA (P68.7117, 2026-08-27).
+   Nace al aparecer su SEGUNDO call site, que es cuando la copia empieza a poder
+   derivar: lo estrenó la banda-manifiesto de la home y ahora lo lleva también la
+   banda que abre un bloque de secciones. La homogeneidad entre las dos bandas es
+   justo el motivo del cambio, así que escribirlo dos veces se cargaría el motivo.
+
+   ES EL ÚNICO SITIO DEL SITIO DONDE EL MORADO ES ESTRUCTURA Y NO DATO, y por eso
+   puede serlo: `--brand-purple-accent` existe exactamente para fondos invertidos y
+   conmuta con el tema (un color fijo no pasa de 3,71:1 contra las dos superficies
+   a la vez). Aquí además no hay umbral que cumplir — va `aria-hidden`, no lleva
+   información y no delimita ningún control, así que cae en «detalles» de §Color y
+   no en el 3:1 de WCAG 1.4.11 que sí le tocaría a un gráfico que hay que entender.
+
+   LO QUE NO DECLARA, Y NO ES UN OLVIDO: el MARGEN. El ritmo vertical es una
+   propiedad del bloque que lo aloja, no del filete — el manifiesto respira más que
+   la banda de bloque porque su titular es mayor. Es la regla 4 de `BRAND.md`: dos
+   valores que se parecen y significan cosas distintas no se unifican. Y ojo, que
+   esta clase va SIN `@layer`, así que si algún día declarara margen ganaría a
+   cualquier `my-*` del call site sin avisar. */
+.band-rule {
+  background: var(--brand-purple-accent);
+  block-size: 2px;
+  inline-size: 3.5rem;
+}
+
 .link-content {
   color: var(--foreground);
   border-radius: 4px;
