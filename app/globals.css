@@ -113,7 +113,15 @@
 
   --destructive: oklch(0.577 0.245 27.325);
 
-  --border: oklch(0.901 0.0142 88.69);
+  /* El filete tal como se autoró, y la referencia contra la que se calibra todo lo
+     demás: 1,21:1 sobre `--background`. Lo consume `--border`, que desde P68.749 se
+     recalcula por superficie (más abajo). El `-base` es lo que permite volver a este
+     valor dentro de una superficie, igual que `--surface-dim` vuelve a
+     `--muted-foreground`. */
+  --border-base: oklch(0.901 0.0142 88.69);
+  --border: var(--border-base);
+  --border-mix: 11%;
+  --border-mix-inverted: 7%;
   /* Token de la base de shadcn, hoy SIN USAR: el borde de un campo lo pone
      `--control-edge`, que se deriva de la superficie y llega al 3:1 de WCAG
      1.4.11. Se conserva por no tocar la base, pero no lo consume nadie — y
@@ -232,9 +240,16 @@
 
   --destructive: oklch(0.704 0.191 22.216);
 
-  --border: oklch(0.3252 0.0157 248.31);
+  --border-base: oklch(0.3252 0.0157 248.31);
   --input: oklch(0.3252 0.0157 248.31);
   --control-edge-mix: 45%;
+  /* La mezcla del filete NO conmuta con el tema, y eso es un resultado, no un
+     descuido: el barrido dio 11% en los dos. Es la diferencia con
+     `--control-edge-mix` (60/45), y sale de que aquí no hay umbral que alcanzar
+     sino una referencia que reproducir — y la referencia ya conmuta sola, porque
+     es el propio `--border-base` contra el fondo de cada tema. La invertida sí
+     necesita su número, y en los dos temas tira en direcciones opuestas. */
+  --border-mix-inverted: 15%;
   --ring: oklch(0.7626 0.1156 191.46);
 
   --chart-1: var(--brand-cyan);
@@ -736,6 +751,106 @@
     var(--foreground) var(--control-edge-mix),
     var(--background)
   );
+}
+
+/* ── Y EL FILETE, QUE ERA EL TERCERO DE LA FAMILIA (2026-08-27, P68.749) ─────
+   `--surface-dim` se recalcula por superficie desde D39 y `--control-edge` desde
+   D97. `--border` era el único de los tres definido UNA VEZ POR TEMA, calibrado
+   contra `--background` y solo contra él. El resultado es que el mismo filete se
+   veía distinto según dónde cayera, medido sobre el píxel pintado:
+
+     Superficie      claro          oscuro
+     página (ref.)   1,21           1,36
+     tarjeta         1,29           1,23
+     muted           1,10           1,07
+     BANDA INVERTIDA 11,35          11,23   ← ocho veces la referencia
+
+   LA INVERTIDA ES EL HALLAZGO, y no estaba en la tarea. Sin regla, un elemento con
+   `border-border` dentro de una banda hereda el filete de la PÁGINA: un hairline
+   casi blanco sobre carbón, o casi negro sobre hueso. No es que se difumine, es que
+   grita. Hoy no hay ni un ocupante —medido: cero en las ocho páginas—, así que es
+   deuda latente, pero es la que más lejos estaba.
+
+   NO ES LATENTE EN TARJETA, que es donde la ficha decía que no afectaba a nada:
+   249 elementos de las ocho páginas dibujan su `border-border` DENTRO de una
+   superficie de tarjeta. En claro eran un pelo más marcados que la referencia
+   (1,29 frente a 1,21) y en OSCURO un tercio menos (1,23 frente a 1,36), que es
+   una debilidad real y ya enviada.
+
+   LA FORMA LA DECIDE EL PRECEDENTE, no el gusto: `--surface-dim` conserva su valor
+   de autor en `:root` (`var(--muted-foreground)`) y solo mezcla en las demás
+   superficies, mientras que `--control-edge` mezcla también en `:root` porque nació
+   sin valor previo. `--border` tiene valor de autor, así que va por el primer
+   camino: `--border-base` se queda intacto y la mezcla solo entra donde el fondo
+   deja de ser el de la página. Ni un filete de página se mueve.
+
+   EL 11% SALE DE UN BARRIDO, no de una intuición, y el objetivo no es un umbral
+   —un filete decorativo no tiene ninguno— sino REPRODUCIR la referencia de su
+   propio tema. Del 8% al 20%, en las dos superficies y los dos temas, el 11% es el
+   que deja las cuatro cifras dentro de ±0,03 de su referencia, y del lado de arriba
+   a propósito: el modo de fallo que esto arregla es un filete que se borra.
+
+     Superficie      claro          oscuro
+     tarjeta         1,29 → 1,23    1,23 → 1,39
+     muted           1,10 → 1,22    1,07 → 1,38
+     invertida       11,35 → 1,22   11,23 → 1,35
+
+   Y OJO A D61 AL LEER ESTE BLOQUE: `hover:bg-muted` no compila a `.bg-muted`, así
+   que el eje de ESTADO va aparte o el arreglo se escapa por donde ya se escapó una
+   vez. Se cubren las dos puertas, igual que arriba. */
+.bg-card,
+.bg-popover,
+[data-surface="card"] {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--card)
+  );
+}
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+[data-surface="muted"] {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--muted)
+  );
+}
+@media (hover: hover) {
+  .hover\:bg-muted:hover {
+    --border: color-mix(
+      in srgb,
+      var(--foreground) var(--border-mix),
+      var(--muted)
+    );
+  }
+}
+.focus-visible\:bg-muted:focus-visible {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--muted)
+  );
+}
+/* En una banda invertida el primer plano es `--background`, así que la mezcla parte
+   del otro extremo. Aquí la proporción SÍ conmuta con el tema —7% claro, 15%
+   oscuro— y en direcciones opuestas: es el único de los cuatro casos donde un solo
+   número no sirve, porque los dos `--foreground` no son simétricos en luminancia. */
+[data-surface="inverted"] {
+  --border: color-mix(
+    in srgb,
+    var(--background) var(--border-mix-inverted),
+    var(--foreground)
+  );
+}
+/* Vuelta al filete de autor para la caja que se apoya otra vez en el fondo de la
+   página dentro de una superficie. Sin esto heredaría la mezcla de la tarjeta que
+   la envuelve — y `.bg-background` dentro de `.bg-card` existe de verdad: los
+   especímenes del Design System lo hacen. */
+.bg-background,
+[data-surface="page"] {
+  --border: var(--border-base);
 }
 
 /* El CTA de email tenía aquí `.contact-cta` / `.contact-cta-icon`, y en P37.5988 se

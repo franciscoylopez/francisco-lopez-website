@@ -166,6 +166,7 @@
 - D128 · El contrato de un gate se publica; su porqué se consulta
 - D129 · El presupuesto gana su tercera mitad: techo a la SUMA de las skills
 - D130 · El porqué de las convenciones se parte, y el arranque cabe en el objetivo sin mudanza
+- D131 · El filete era el tercero de la familia y el único sin tratamiento por superficie
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7598,3 +7599,71 @@ retirándolas.
 | Arranque total | 12.698 | **11.794** |
 | Techo · objetivo | 12.700 · 11.800 | **12.300 · 11.600** |
 | Holgura de trabajo | 2 | **506** |
+
+## D131 · El filete era el tercero de la familia y el único sin tratamiento por superficie — 2026-08-27
+
+**La familia son tres y solo dos estaban hechas.** `--surface-dim` se recalcula contra la
+superficie donde cae el texto desde **D39**; `--control-edge`, contra la que rodea al control,
+desde **D97**. `--border` —el filete decorativo: divisores, hairlines, el borde de una tarjeta
+que no se pulsa— seguía definido **una sola vez por tema**, calibrado contra `--background` y
+solo contra él. Medido sobre el píxel pintado, con el metro validado contra el ancla de siempre:
+
+| Superficie | claro | oscuro |
+|---|---|---|
+| página (referencia) | 1,21 | 1,36 |
+| tarjeta | 1,29 | 1,23 |
+| `muted` | 1,10 | 1,07 |
+| **banda invertida** | **11,35** | **11,23** |
+
+**La invertida es el hallazgo, y no estaba en la tarea.** Sin regla, un elemento con
+`border-border` dentro de una banda hereda el filete de la PÁGINA: un hairline casi blanco
+sobre carbón, o casi negro sobre hueso — **ocho veces la referencia**. No es que se difumine:
+grita. Hoy no tiene ni un ocupante (medido: cero en las ocho páginas), así que era deuda
+latente, pero era la que más lejos estaba. Y desde D125 el sitio tiene nueve bandas invertidas,
+o sea que el caso dejó de ser hipotético hace un día.
+
+**Y no era latente en tarjeta, que es donde la ficha decía que no afectaba a nada.** 249
+elementos de las ocho páginas dibujan su `border-border` **dentro** de una superficie de
+tarjeta. En claro iban un pelo más marcados que la referencia (1,29 frente a 1,21) y en oscuro
+**un tercio menos** (1,23 frente a 1,36). Eso último es una debilidad real, ya enviada, que
+nadie había mirado.
+
+**La forma la decide el precedente, no el gusto.** Los dos hermanos resuelven esto distinto y
+por un motivo: `--surface-dim` conserva su valor de autor en `:root` (`var(--muted-foreground)`)
+y solo mezcla en las demás superficies, mientras que `--control-edge` mezcla también en `:root`
+porque **nació sin valor previo**. `--border` tiene valor de autor, así que va por el primer
+camino: se renombra a `--border-base`, `--border` lo consume tal cual en `:root`, y la mezcla
+entra solo donde el fondo deja de ser el de la página. **Ni un filete de página se mueve.**
+
+**El 11% sale de un barrido, y el objetivo no es un umbral.** Un filete decorativo no tiene
+ninguno: lo que hay que reproducir es la referencia de su propio tema. Del 8% al 20%, sobre las
+dos superficies y los dos temas, el 11% es el único que deja las cuatro cifras dentro de ±0,03
+—y del lado de arriba a propósito, porque el modo de fallo que esto arregla es un filete que se
+borra. **La mezcla NO conmuta con el tema**, al revés que `--control-edge-mix` (60/45), y eso es
+un resultado: la referencia ya conmuta sola, porque es el propio `--border-base` contra el fondo
+de cada tema. La **invertida** sí necesita su número —7% claro, 15% oscuro— y en direcciones
+opuestas, porque los dos `--foreground` no son simétricos en luminancia.
+
+Verificado sobre el sitio servido, inyectando una caja `border-border` en cada superficie y
+leyendo su borde pintado:
+
+| Superficie | claro | oscuro |
+|---|---|---|
+| página | 1,21 → **1,21** | 1,36 → **1,36** |
+| tarjeta | 1,29 → **1,23** | 1,23 → **1,39** |
+| `muted` | 1,10 → **1,22** | 1,07 → **1,38** |
+| invertida | 11,35 → **1,22** | 11,23 → **1,35** |
+
+**Se cubren las dos puertas de D61**, igual que sus hermanos: `hover:bg-muted` no compila a
+`.bg-muted`, así que el eje de ESTADO va aparte o el arreglo se escapa por donde ya se escapó
+una vez.
+
+**El guardián hizo su trabajo en el momento.** El hook de paleta saltó en la primera edición
+—`lib/design-values.ts` seguía publicando `--border` con el valor autorado— y volvió a saltar
+pidiendo el censo, porque las superficies pasaron de 16 a 19. Es la condición de re-medir de la
+DoD leída por una máquina (D90), y esta vez no hubo que acordarse de nada.
+
+**Censo tras el cambio:** 391 pares de texto y 272 contornos, metro validado en las 28 corridas,
+cero bajo AA, cero bajo AAA y cero por debajo del 3:1. Los dos recuentos son **idénticos** a los
+de antes del cambio, que es lo que debía pasar: un filete decorativo no es un par de texto ni el
+contorno de un control.
