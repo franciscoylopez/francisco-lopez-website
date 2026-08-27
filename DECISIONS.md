@@ -164,6 +164,7 @@
 - D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho
 - D127 · El atenuado de un texto no se escribe con `opacity`, y el censo no sabía verlo
 - D128 · El contrato de un gate se publica; su porqué se consulta
+- D129 · El presupuesto gana su tercera mitad: techo a la SUMA de las skills
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7493,3 +7494,53 @@ fuera de `check:marco`, el suelo de 360 fuera de `check:figuras`, el `<head>` fu
 mitad de esas 769 era contrato, no porqué. El arranque baja de **12.698 a 12.454**, y la
 holgura pasa de **2 a 246 palabras** — por encima de las 240 que el propio guardián define
 como la magnitud que hay que sostener, por primera vez desde que el techo subió.
+
+## D129 · El presupuesto gana su tercera mitad: techo a la SUMA de las skills — 2026-08-27
+
+**El hallazgo, y es de los que solo aparecen mirando las dos direcciones a la vez.** El sexto
+`method-review` midió el corpus de instrucciones entre el 19 y el 27 de agosto:
+
+| Fecha | Docs `@`-importados | Skills a demanda | Corpus total |
+|---|---|---|---|
+| 2026-08-19 | 18.098 | 13.311 | 31.409 |
+| 2026-08-27 | 12.689 | 20.616 | 33.305 |
+| *variación* | **−30 %** | **+55 %** | **+6 %** |
+
+Se celebró una reducción del 30 % en el lado medido mientras el lado sin medir absorbía el
+coste **y algo más**. Es una familia de fallo propia y ya tiene nombre: **«la reducción que fue
+una mudanza»**.
+
+**La causa estaba escrita en la salida del propio guardián.** `check:contexto` ponía techo
+**total** a los cuatro documentos, techo **por entrada** a las skills y **ninguno al conjunto**,
+y lo decía en cada corrida: *«suma (NO es un presupuesto: no se cargan a la vez)»*. Era cierto y
+no era toda la verdad. Un trinquete asimétrico hace que **mover una regla de un documento a una
+skill salga gratis**, y esa gratuidad es lo que produjo el trasvase. El argumento de la
+concurrencia además se cae en la práctica: un cierre de etapa encadena `sprint-review` →
+`method-review` → `close-session` en la misma sesión, encima de los cuatro documentos.
+
+**La decisión: `TECHO_SUMA = 20.500`, y falla.** Nace en verde, por la misma razón que los otros
+dos techos: uno que nace en rojo se sube hasta que no significa nada. Se sella contra la suma de
+**después** de la propia tarea —20.262, no las 20.203 de antes—, porque actualizar la tabla de
+umbrales de `method-review` es parte de ella. Holgura resultante **238**, que es exactamente la
+magnitud de trabajo que este archivo ya defiende para los documentos (240): las tres mitades del
+presupuesto quedan igual de apretadas.
+
+**Sin objetivo, y es deliberado.** Los otros dos presupuestos llevan techo + objetivo porque su
+objetivo sale de una historia medida. Para la suma de skills esa curva no existe todavía: poner
+un objetivo hoy sería elegir un número y llamarlo medida, que es justo lo que D128 acaba de
+corregir. Se sella y se mide; el objetivo se pone cuando haya curva.
+
+**El caso malo tuvo que diseñarse para no cruzar el techo de al lado.** `check:guardianes` gana
+su caso para este control, y engordar la skill más grande no habría servido: habría reventado el
+techo **por entrada** y el guardián saldría rojo por el control equivocado, dejando este sin
+probar — el modo de fallo que ese archivo entero existe para cazar. El caso rellena
+`sprint-review` hasta **~3.900** palabras, por debajo del techo (4.600) y del objetivo (4.500)
+por entrada, y sube la suma a 22.697. Verificado: sale por la rama de la suma, con código 1. El
+relleno se calcula desde el tamaño real del archivo, así que si algún día esa skill ya midiera
+más, el relleno sale cero y el caso falla **ruidosamente** en vez de aprobar.
+
+**Y una trampa de método que conviene no repetir: dos corpus medidos con dos varas distintas.**
+El informe decía 20.616 donde el guardián dice 20.203. No es drift ni una medida vieja:
+`check:contexto` **descuenta los bloques de código** y el informe no. Comprobado — 20.688
+contando el código, 20.203 sin él, 485 palabras de diferencia en las nueve entradas. El número
+que gobierna es el del guardián, que es la misma vara con la que se miden los documentos.
