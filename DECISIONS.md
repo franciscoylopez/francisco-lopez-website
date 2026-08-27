@@ -160,6 +160,8 @@
 - D122 · El ordinal de una sección deja de escribirse: lo pone el orden de la página
 - D123 · El riel va donde la página se LEE; el índice y el cierre, donde se consulta
 - D124 · El suelo de 360 deja de ser el comentario de un script y pasa a ser una decisión de producto
+- D125 · Una banda no se tiñe sobre una sección que ya existe: se inserta
+- D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7285,3 +7287,88 @@ nadie abre hasta que se rompe.
 a mirar si el suelo real de viewport del sitio baja por debajo de 360 **como compromiso**, o si
 una figura aparece en un hueco más estrecho que los 284px que `ANCHO_MINIMO` asume. Lo segundo
 lo delata el propio informe, que publica esa cifra en cada corrida.
+
+## D125 · Una banda no se tiñe sobre una sección que ya existe: se inserta — 2026-08-27
+
+**El problema, medido antes de tocar nada.** Las tres páginas del sistema sumaban **60,3
+pantallas de 900px con el 0% de su alto en banda**: ni un solo cambio de fondo a ancho
+completo en Design System (33,8), Brand Kit (13,9) y Accesibilidad (12,6). Lo único que salía
+en el conteo era el header sticky de 81px, que es cromo. La referencia: la home dedica el
+**17%** de su alto a banda y el artículo el **2,7%**.
+
+Y un dato que conviene no perder: la ficha contaba 54,7 pantallas. El Design System pasó de 18
+secciones a 12 en la tanda 6 y **aun así creció**, porque la tanda 7 le añadió índice y cierre.
+**El trabajo de orientación alargó el tramo plano**, que es justo lo que la ficha avisaba de no
+confundir: el índice y el riel resuelven ORIENTACIÓN, no RITMO.
+
+**Las tres direcciones, probadas sobre la página real con `/prototype`.**
+
+| Dirección | Veredicto |
+|---|---|
+| Teñir bloques con `bg-muted` | Funciona, y destapa que `--border` está calibrado solo contra `--background`: sobre la banda el contorno de una tarjeta cae de **1,29 a 1,10**. Deuda de capa, tareada aparte |
+| Dar superficie al cierre de sección | La más barata y la más fiel a D123. Se quedó a un paso |
+| **Insertar una banda invertida por bloque** | **Elegida** |
+
+**Y el hallazgo que vale para la próxima vez: invertir una sección existente era IMPOSIBLE, y
+la tarea lo pedía literalmente.** Estas secciones son **galerías**: dentro hay tarjetas
+`bg-card`, tablas y especímenes que dan por hecho el fondo de página. Teñir una entera no
+habría enseñado la dirección, habría enseñado una sección rota. La banda de la home no es
+contenido invertido: es un **manifiesto**, o sea tipo sola. Traducida bien, la dirección era
+**insertar** la banda, no teñir lo que ya hay — y eso la convierte en una pieza
+(`ui/block-opener.tsx`), no en una variante de sección.
+
+**Lo que resuelve de paso.** El orden de las doce dejó de ser cronológico en P70.34 y pasó a
+`fundamentos → piezas → composición → excepción`, pero esa jerarquía **solo existía en un
+comentario**: doce secciones seguidas, todas con el mismo filete, no dicen dónde acaba una
+familia. Ahora se ve, y la banda lista qué lleva dentro con los rótulos **reales** del índice,
+así que también sirve para orientarse — que es lo que una página de consulta necesita (D123).
+
+**LA REGLA DE DENSIDAD, que es lo que decide si esto escala.** Lo que fija cada cuánto aparece
+una banda es el número de **BLOQUES, no el de secciones**. Con el reparto elegido cae una cada
+**8,9 pantallas** en Design System, **7,4** en Brand Kit y **6,8** en Accesibilidad. Partir el
+Brand Kit en tres bloques daría una cada 4,6 y la página se leería a golpes. **Si una página
+pide más de un bloque cada ~6 pantallas, lo que sobra son bloques, no banda.**
+
+**Dos detalles que costaron y no se re-derivan.** Hubo un rótulo de rango encima de cada banda
+(«Secciones 05 a 08») y salió: la lista de abajo ya lleva los ordinales, así que decía dos
+veces lo mismo con menos información. Y la lista va en **texto, no en enlaces**: sobre banda
+invertida `.link-content` no tiene contraparte —hallazgo de P66, todavía abierto—, así que
+enlazar ahí pediría antes esa variante.
+
+**Coste asumido.** Accesibilidad no está partida en un archivo por sección como sus hermanas,
+así que sus dos bandas van insertadas a mano en el JSX en vez de salir de un bucle. Tareado.
+
+## D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho — 2026-08-27
+
+**El síntoma.** A **1280×618** —el escalado de Windows al 150%, viewport de la matriz de D50—
+las tres páginas del sistema cortaban su fila de cifras dejando **17px visibles de 84,6
+(20,1%)**, idéntico al píxel en las tres. Una franja de 17px sobre 85 no se lee como «hay más
+abajo»: se lee como un error de renderizado.
+
+**Lo que NO era, y hubo que medir las CUATRO páginas para saberlo.** No es recorte (`min-h`,
+no `h`: nada se oculta, solo hace falta scroll). No es la regresión de P70.35, cuyo suelo añadió
+3px sobre los 461 que las tres medían solas. No incumple D50, que compara la alineación ENTRE
+hermanas y seguía perfecta. Y no era de ninguna de las tres páginas: **«Cómo se ha creado» no
+lo tenía porque usa otro caparazón**, y eso fue lo que lo delató.
+
+**La decisión.** Compactar por **alto**. Todo el andamiaje del pliegue razonaba por ancho
+—`clamp(…,6vw,…)`, `md:`— y el pliegue es un problema de alto. Por debajo de **700px** de
+viewport, el hueco del breadcrumb y el de la fila bajan de 72 a 32 cada uno.
+
+**Se descartó empujar la fila hasta que cayera entera debajo**, y el motivo es la parte
+reutilizable: **un offset fijo no arregla un corte, lo traslada a otro viewport**. Solo un
+umbral sobre el eje que causa el problema lo cierra.
+
+700 y no 686 —donde la fila justo dejaba de caber— para que el punto de conmutación no sea el
+mismo píxel que el síntoma.
+
+**Medido después, y por el `margin` COMPUTADO, no por la posición** —que es lo único que
+distingue «el override gana» de «algo más lo movió»—: la fila queda en 521→605,6, entera, con
+12,4px de margen; 32px a 618 de alto y 72px a 900. Y `h1` en 224,5 con grupo de 464 **en las
+CUATRO**, Contacto incluida. Esa última línea era el riesgo real de meter un eje nuevo aquí:
+**el grupo pierde 40px de golpe, y si una sola de las cuatro no los perdiera se descuadrarían
+todas** — que es exactamente la invariante que D50 protege.
+
+**El `@media` va escrito entero en los dos archivos y no interpolado a una constante**:
+Tailwind escanea el código como texto plano, así que una clase compuesta no se genera y se
+queda sin estilo SIN dar error de compilación (`BRAND.md` §Cómo medir, punto 5).

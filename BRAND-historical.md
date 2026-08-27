@@ -50,6 +50,7 @@ Partido el **2026-08-09** (P37.685).
 - [La variante que dimensiona una fila, usada en una pila (2026-08-25)](#la-variante-que-dimensiona-una-fila-usada-en-una-pila-2026-08-25)
 - [El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)](#el-hover-de-la-tarjeta-pulsable-y-por-qué-no-se-arregló-con-luminancia-2026-08-25)
 - [Las dos excepciones que salieron](#las-dos-excepciones-que-salieron)
+- [El velo que no declara superficie, y por qué la regla prometía de más (2026-08-27)](#el-velo-que-no-declara-superficie-y-por-qué-la-regla-prometía-de-más-2026-08-27)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -985,3 +986,35 @@ con un ternario dentro; eso se cumplió. Que el destino fuera otro archivo no es
 estado del sistema («cuando exista el caso X», «cuando aparezca el segundo call site»), no
 sobre el destino del código. Si aun así se quiere dejar dicho a dónde parece que va, se marca
 como conjetura y no como compromiso.
+
+## El velo que no declara superficie, y por qué la regla prometía de más (2026-08-27)
+
+**La regla, tal y como estaba escrita.** §El atenuado lo pone la superficie decía, sin
+excepción, que un bloque que se pinta su PROPIA superficie con un `color-mix` **tiene que**
+declarar a qué familia pertenece. Nació de un caso real y bien medido: cuatro pares de
+contraste se escaparon porque un velo escrito a mano no llevaba `data-surface` y la capa no
+podía verlo.
+
+**Dónde falló.** P70.44 sacó a la capa la marca de verificación del checklist, que estaba
+escrita tres veces (`ui/check-pill.tsx`). La pieza es una pastilla teñida con
+`color-mix(in oklch, var(--primary), transparent 86%)`, así que cae de lleno en el supuesto
+de la regla. La ficha de la tarea, siguiendo la regla al pie de la letra, pedía declararle
+`data-surface` al sacarla.
+
+**Y era el arreglo equivocado.** El velo es un **86% transparente**: lo que manda debajo sigue
+siendo la superficie de la que cuelga, y esa ya se hereda bien. Las tres copias viven sobre
+fondos distintos —`bg-card` en las dos listas de puntos, `bg-background` en el collage del hero
+de `/accesibilidad`—, así que **cualquier familia que se declarase en la pieza sería la
+equivocada en dos de los tres usos**. Declararla no habría corregido nada: habría introducido
+el fallo que la regla existe para evitar, y encima de forma estática y difícil de ver.
+
+**Lo que distingue un caso del otro no es «pintarse su propia superficie», es cuánto tapa.**
+Un velo opaco sustituye la superficie y hay que declararlo; uno casi transparente la deja
+pasar y no debe. El corte no se ha fijado en un número porque no hace falta: la pregunta es
+si el texto de dentro se lee contra el velo o contra lo que hay debajo, y eso se mide.
+
+**Corolario, que es la parte reutilizable.** Una regla nacida de un caso concreto tiende a
+escribirse con el alcance de ese caso y a leerse con alcance universal. Aquí el caso original
+eran velos opacos y la regla se redactó como si cubriera todos. Es la misma forma que
+§La regla del control sobre imagen prometía de más: **la regla no estaba mal, prometía de
+más**, y la corrección no es una excepción al margen sino apretar el enunciado.

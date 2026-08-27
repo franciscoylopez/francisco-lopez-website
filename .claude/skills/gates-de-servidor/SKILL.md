@@ -92,6 +92,20 @@ npm run censo        # contraste de todas las páginas × 2 temas, con el sitio 
 npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no contra local
 ```
 
+> **`gate:html` PRIMERO y el censo después, siempre.** El primero tarda segundos y el segundo
+> puede tardar mucho: se coge la información barata antes de comprometerse con la cara.
+
+> **NO CANALICES EL CENSO POR `tail` NI POR `head`** *(2026-08-27)*. Se lanzó
+> `npm run censo 2>&1 | tail -45` y `tail` no suelta nada hasta que el proceso termina: **dos
+> horas y media con el log a 0 bytes**, sin poder distinguir «trabajando» de «atascado» más que
+> mirando los procesos de Chrome del sistema. El gate ya tiene tareado que le falta progreso
+> (P68.736), pero la mitad de aquella ceguera la puso el comando, no el script. Salida directa.
+
+> **Y DESPEJA EL NAVEGADOR ANTES.** Aquella corrida arrancó con **38 procesos de Chrome vivos**
+> de una sesión de `agent-browser`, compitiendo con los que levanta el censo. Es la principal
+> sospecha de que tardara horas en vez de minutos, y cuesta un comando comprobarlo:
+> `agent-browser close --all` antes de empezar.
+
 - **`gate:html`** compara contra la base del paso 2. Si sale diff y el cambio era intencionado,
   vuelve a guardar la base y sigue; si no lo era, abre la página.
 - **`censo`** falla si aparece **un solo par por debajo de AAA** o **un solo contorno de
