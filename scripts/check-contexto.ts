@@ -86,21 +86,34 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  * tarea que quiere escribir una regla. 500 palabras de holgura son media docena de
  * sesiones en vez de un cuarto de sprint.
  *
- * ES INTERINO Y ESTÁ ATADO. El número sigue sin salir de una medida de coste real
- * —nadie ha medido qué cuesta este contexto, solo cuánto ocupa—, y esa es la tarea
- * que abre con él: revisar a mano qué archivos generan la fricción para decidir con
- * un dato si esto se compacta de verdad o si el techo sube otra vez con razón. El
- * trinquete vuelve a apretar en cuanto haya ese dato.
+ *   12.300  el 2026-08-27 (P68.5908), y el trinquete vuelve a apretar como su
+ *           entrada anterior prometía: la subida a 12.700 quedó atada a que
+ *           apareciera el dato, y apareció. La revisión manual (D128) encontró
+ *           que el crecimiento no viene de un archivo gordo sino de lluvia fina
+ *           sobre los tres, y que el porqué estaba escrito dos veces —en el
+ *           documento de reglas y en su D-entry—. Con `PRD-Live` §Cómo se
+ *           verifica en tabla de contrato (769 → 542) y el porqué de `CLAUDE.md`
+ *           partido a `CLAUDE-historical.md` (4.693 → 4.033), el arranque baja a
+ *           **11.794**: por debajo del objetivo, y por primera vez sin que la
+ *           bajada sea una mudanza —el histórico no se `@`-importa y la suma de
+ *           skills ya tiene techo (D129)—.
+ *
+ * Y LA HOLGURA QUE SE DEJA ES 500, NO 240, que es lo que el párrafo de arriba
+ * pedía sin poder pagarlo: 500 palabras son media docena de sesiones escribiendo
+ * reglas en vez de un cuarto de sprint retirándolas.
  */
-const TECHO = 12_700;
+const TECHO = 12_300;
 
 /**
  * A dónde se quiere llegar. No falla; solo se publica la distancia. Necesita número
  * nuevo cada vez que se alcanza, porque un objetivo ya cumplido deja de tirar.
  *   12.000  alcanzado el 2026-08-22 y sostenido desde entonces
- *   11.800  desde el 2026-08-24
+ *   11.800  desde el 2026-08-24; alcanzado el 2026-08-27 (11.794)
+ *   11.600  desde el 2026-08-27, al alcanzarse el anterior. Mismo escalón de 200
+ *           que el salto de antes: la cadencia sale de la escalera, no de elegir
+ *           un número nuevo cada vez.
  */
-const OBJETIVO = 11_800;
+const OBJETIVO = 11_600;
 
 /** Palabras «de verdad»: sin bloques de código, que no son prosa que haya que leer. */
 function palabras(texto: string): number {

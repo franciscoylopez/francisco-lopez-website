@@ -165,6 +165,7 @@
 - D127 · El atenuado de un texto no se escribe con `opacity`, y el censo no sabía verlo
 - D128 · El contrato de un gate se publica; su porqué se consulta
 - D129 · El presupuesto gana su tercera mitad: techo a la SUMA de las skills
+- D130 · El porqué de las convenciones se parte, y el arranque cabe en el objetivo sin mudanza
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7544,3 +7545,56 @@ El informe decía 20.616 donde el guardián dice 20.203. No es drift ni una medi
 `check:contexto` **descuenta los bloques de código** y el informe no. Comprobado — 20.688
 contando el código, 20.203 sin él, 485 palabras de diferencia en las nueve entradas. El número
 que gobierna es el del guardián, que es la misma vara con la que se miden los documentos.
+
+## D130 · El porqué de las convenciones se parte, y el arranque cabe en el objetivo sin mudanza — 2026-08-27
+
+**El movimiento estaba probado en este repo y `CLAUDE.md` nunca lo recibió.** `BRAND.md`
+partió su porqué fechado a `BRAND-historical.md` el 2026-08-09 (P37.685) y funcionó: la regla
+quedó en presente, el relato a demanda. D128 lo comprobó midiendo —151 palabras de regla más
+puntero en `BRAND.md` contra 400 de barrido en el histórico— y `CLAUDE.md` seguía mezclando
+las dos cosas en sus 4.693.
+
+La aritmética que lo justifica: **una regla enunciada más puntero cuesta ~15 palabras; con su
+historia dentro, ~150.**
+
+**Qué se ha movido, y el criterio.** Nace `CLAUDE-historical.md` (a demanda, con índice
+derivado por `npm run indices`, nunca `@`-importado), con seis secciones que espejan las de
+`CLAUDE.md`. Dentro va el caso que escribió cada regla: que `General` llegó a acumular el 80 %
+del tablero con «Optimización», que la lista de piezas estaba escrita a mano en cinco sitios y
+ninguno acertaba, que el capítulo doce metió el riel debajo del nav, que el mismo radio estaba
+escrito de tres formas, que cuatro gates fallaron por depender de acordarse (D54, D60, D63),
+que el interlineado del artículo sobrevivió a tres mediciones.
+
+**El corte no fue solo extraer relato: la mitad del ahorro salió de duplicación.** El
+inventario de gates estaba en `CLAUDE.md`, en la DoD y en `PRD-Live`; el «shippear vs. pulir»
+estaba en §Metodología y en la Columna B; el «se publica en el Design System» estaba en la
+Regla de construcción y en la fila 1 de la DoD. Y **dos listas estaban caducadas** —los sprints
+y bloques concretos, y el reparto V2/V3/V4—, así que ahora apuntan al tablero y a `PRD-Live`
+§9 en vez de enumerarse.
+
+**La trampa que el split tiene que evitar, y que `BRAND.md` ya pagó una vez.** Si el puntero no
+se lee, la regla se vuelve a discutir desde cero. `BRAND.md` lo resolvió escribiendo **cuándo**
+hay que abrir el histórico, no solo que existe, y aquí se copia esa frase a los dos sitios: a
+la cabecera del histórico y a §Régimen de docs. La formulación es **«antes de CAMBIAR una
+regla, no antes de aplicarla»** — aplicarlas no necesita el relato; discutirlas, sí.
+
+**El resultado, y por qué esta vez no es una mudanza.** El arranque baja de 12.454 a
+**11.794**: por debajo del objetivo de 11.800, que solo se había alcanzado una vez y no se
+sostuvo. Lo que hace que la bajada sea real y no un traslado es que las dos salidas están
+tapadas — el histórico **no se `@`-importa**, y la suma de skills **ya tiene techo** desde D129
+(20.500), que era justo el agujero por el que se fue el 30 % anterior.
+
+**Y el trinquete vuelve a apretar, como su propia entrada prometía.** La subida a 12.700 del
+2026-08-25 quedó atada a que apareciera un dato de coste; apareció (D128), así que el techo baja
+a **12.300** y el objetivo al siguiente peldaño de su escalera, **11.600**. La holgura que se
+deja es **506**, no 240: es lo que el propio guardián pedía sin poder pagarlo, porque 500
+palabras son media docena de sesiones escribiendo reglas en vez de un cuarto de sprint
+retirándolas.
+
+| | Antes | Después |
+|---|---|---|
+| `CLAUDE.md` | 4.693 | **4.033** |
+| `PRD-Live.md` | 3.186 | **2.942** |
+| Arranque total | 12.698 | **11.794** |
+| Techo · objetivo | 12.700 · 11.800 | **12.300 · 11.600** |
+| Holgura de trabajo | 2 | **506** |

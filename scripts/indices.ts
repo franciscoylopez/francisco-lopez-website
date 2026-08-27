@@ -138,7 +138,11 @@ export function decisionesActual(): string[] {
 
 // --- Los índices de los históricos --------------------------------------------
 
-export const HISTORICOS = ["PRD-Historical.md", "BRAND-historical.md"] as const;
+export const HISTORICOS = [
+  "PRD-Historical.md",
+  "BRAND-historical.md",
+  "CLAUDE-historical.md",
+] as const;
 
 /**
  * El ancla que GitHub genera para una cabecera: minúsculas, fuera la puntuación
