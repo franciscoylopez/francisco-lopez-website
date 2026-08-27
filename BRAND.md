@@ -61,18 +61,20 @@ color.
 ### El atenuado lo pone la superficie, no el punto de uso
 
 `--muted-foreground` está calibrado contra `--background` **y solo contra él**. Encima de
-cualquier otra superficie hay que recalcularlo, nunca reusarlo — es **D30**, y desde el
-2026-08-09 **ya no hay que acordarse**: la utilidad `text-muted-foreground` resuelve al
+cualquier otra superficie hay que recalcularlo, nunca reusarlo — es **D30**, y **ya no hay que
+acordarse**: la utilidad `text-muted-foreground` resuelve al
 atenuado del fondo donde cae, porque cada superficie redefine `--surface-dim` mezclando el
 texto un **85% hacia el fondo que tiene debajo** (D39).
 
 Lo que hay que saber al escribir UI:
 
-- **No se elige el color del texto atenuado.** Se escribe `text-muted-foreground` y ya. Dentro
-  de una tarjeta pesa más que fuera, y eso es correcto: es lo que hace falta para que se lea.
+- **No se elige el atenuado de un texto: ni el color, ni la `opacity`.** Se escribe
+  `text-muted-foreground` y ya. Dentro de una tarjeta pesa más que fuera, y eso es correcto: es
+  lo que hace falta para que se lea. Un `opacity` además el censo no lo ve, así que su cifra
+  sale de un color que nadie ha pintado (**D127**).
 - **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix` en vez de la utilidad—,
   tiene que declarar a qué familia pertenece con `data-surface="card" | "muted" | "inverted" |
-  "page"`. Sin eso la capa no puede verlo, y ahí es donde se escaparon cuatro pares.
+  "page"`. Sin eso la capa no puede verlo.
   **Salvo que el velo sea casi transparente**: al 86% manda la superficie de debajo, que ya se
   hereda bien, y declarar familia fijaría la equivocada donde la pieza se reutilice.
 - **Una superficie también cambia por ESTADO, no solo por clase o por atributo** (D61).
@@ -265,7 +267,7 @@ el switch del consentimiento, aquí debajo).
   **«Que pinta» es el límite del metro:** un token que existe y no se usa le resulta invisible.
   De ahí **el rojo no es color de texto**: el mensaje va en `--foreground` y `--destructive`
   marca la forma (icono, filete), donde basta el 3:1 de WCAG 1.4.11.
-  *(Las tres veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
+  *(Las veces que este «sin excepciones» fue falso, y por qué la pasada tenía que dejar de
   ser un hábito, en [`BRAND-historical.md`](./BRAND-historical.md) §La pasada completa.)*
 - **El censo con las cifras vive en `lib/design-values.ts`, no aquí** (D38). Este documento es
   la fuente del **porqué** —qué par existe, por qué se eligió ese color y qué se probó antes—;
@@ -281,9 +283,9 @@ de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así 
 hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
 `scripts/design-review/contrast-census.js`.
 
-> **Publica cuántas reglas `:hover` ha indexado y cuántos pares ha medido con ellas**, porque
-> *un metro que devuelve una lista vacía parece un aprobado*: se ha roto dos veces, las dos en
-> silencio. Los dos fallos, en [`BRAND-historical.md`](./BRAND-historical.md) §El censo de
+> **Publica cuántas reglas `:hover` ha indexado, cuántos pares ha medido y cuántos ha
+> compuesto**, porque *un metro que devuelve una lista vacía parece un aprobado*. Los fallos
+> que lo escribieron, en [`BRAND-historical.md`](./BRAND-historical.md) §El censo de
 > contraste se rompió dos veces.
 
 
