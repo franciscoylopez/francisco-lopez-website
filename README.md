@@ -90,7 +90,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 - El censo de contraste se hace **recorriendo el DOM de la página servida**, no leyendo el CSS: un par que solo existe al componer un velo, o una pastilla de hover, no aparece en ningún inventario de tokens.
 - **Enlace de salto** (WCAG 2.4.1, nivel A), que axe no detecta y por eso se comprueba a mano (`D46`).
 - **Probado con lector de pantalla** (NVDA sobre Chrome), no solo con motores de reglas. Es lo que encuentra los defectos que no violan ningún criterio y que por eso ningún escáner ve; los que encontró están publicados en la propia página de Accesibilidad (`D73`).
-- `prefers-reduced-motion` respetado en toda animación. Con motion reducido, el vídeo de apertura de «Sobre mí» **ni siquiera se descarga** (`D65`).
+- `prefers-reduced-motion` **retira lo que desplaza o escala, no lo que se funde** (`D136`): la opacidad y el color se quedan, y el fundido que se queda se acorta. Una animación mixta se parte; solo se apaga entera la que es movimiento de principio a fin, o la que va acoplada al scroll. Y con motion reducido el vídeo de apertura de «Sobre mí» **ni siquiera se descarga** (`D65`).
 - El método completo, y los tres metros que este proyecto se ha encontrado descalibrados, en [`BRAND.md`](./BRAND.md) §Accesibilidad.
 
 </details>
@@ -101,8 +101,9 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 - **PageSpeed >90 en las catorce páginas** — móvil 95-99 · escritorio 97-100, medido el 2026-08-24 (`npm run psi -- --registro`) — y CLS 0. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
 - **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
+- **Un gesto de marca, y solo uno** (`D137`): el punto final de «Del discovery al dato.» cae y se asienta al cargar, en morado, con dos curvas porque lo que cae acelera. Es la **firma**; el filete que crece bajo los años de Hitos es su **textura**, subordinada a propósito. Se eligieron viéndolos, no razonándolos.
 - **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** con allowlist mínima por origen exacto. La letra que le pone cada escáner no se escribe aquí: se comprueba en vivo, y por qué no sube está en `DECISIONS.md` D26.
-- **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar (CSS, seguro con motion reducido).
+- **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar. Puro CSS, y con motion reducido **sigue floreciendo, en 0,2 s en vez de 0,9**: es opacidad de principio a fin, así que no hay nada vestibular que retirar (`D136`).
 
 </details>
 

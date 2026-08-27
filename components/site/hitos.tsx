@@ -74,6 +74,13 @@ function Row({
 // Hitos (PRD §8.1/§21). Quick-scan de reconocimientos, orden cronológico
 // descendente. Sin icono. INDYA (02) anima contadores; TheTool exit (04) lleva
 // el chip EXIT con reveal retardado.
+//
+// Y desde P81 la sección lleva «Estratos», la TEXTURA del gesto de marca: un
+// filete crece bajo el año conforme la fila cruza (`.hito-fila`/`.hito-anio` en
+// globals.css, con `animation-timeline`). Es textura y no firma: la firma es el
+// punto del titular del Hero, y dos firmas compitiendo serían peor que ninguna
+// (D137). Ningún texto se atenúa, que es lo que lo separa de un fundido por
+// scroll.
 export function Hitos({ dict }: { dict: HitosDict }) {
   return (
     <section id="hitos" className={SECTION}>
