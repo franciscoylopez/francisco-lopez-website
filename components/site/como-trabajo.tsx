@@ -1,4 +1,5 @@
 import { SECTION, WRAP } from "@/components/ui/layout";
+import { Tile } from "@/components/ui/tile";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { cn } from "@/lib/utils";
 
@@ -39,16 +40,18 @@ export function ComoTrabajo({ dict }: { dict: ProcesoDict }) {
                   aria-hidden="true"
                   className="border-primary absolute top-[clamp(1.5rem,3vw,2.25rem)] right-0 h-[14px] w-[14px] border-t-2 border-r-2"
                 />
-                {/* `bg-card` y no el velo `color-mix(--card 70%, transparent)`
-                    que llevaba antes: era esta misma superficie escrita a mano y
-                    aclarada un poco (en oscuro se separaban tres pasos de RGB,
-                    en claro ni eso), pero al no ser la utilidad quedaba fuera de
-                    `--surface-dim` y el número se quedaba con el atenuado de la
-                    página — 6,62:1 en oscuro, por debajo de AAA (P37.6565). Es el
-                    caso de manual de por qué la superficie sale de la capa. */}
-                <div className="border-border bg-card text-muted-foreground flex h-10 w-10 flex-none items-center justify-center rounded-md border font-mono text-[0.85rem]">
+                {/* La casilla sale de `Tile` desde P83.5: era la misma caja que
+                    la del logo de marca, escrita aquí a mano, y por eso las dos
+                    podían discrepar (y discrepaban, en tamaño y en relleno).
+                    El `bg-card` que llevaba a mano se conserva porque es la
+                    utilidad, no un velo: al velo `color-mix` que hubo antes lo
+                    ignoraba `--surface-dim` y el número se quedaba con el
+                    atenuado de la página, 6,62:1 en oscuro y por debajo de AAA
+                    (P37.6565). Es el caso de manual de por qué la superficie
+                    sale de la capa. */}
+                <Tile className="text-muted-foreground font-mono text-[0.85rem]">
                   {String(i + 1).padStart(2, "0")}
-                </div>
+                </Tile>
                 <div className="min-w-[min(100%,14rem)] flex-[1_1_16rem]">
                   <h3
                     className={cn(

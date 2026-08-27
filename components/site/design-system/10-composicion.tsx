@@ -9,6 +9,8 @@ import {
   SectionIndex,
 } from "@/components/ui/section-index";
 import { DataTable, TD, TR } from "@/components/ui/table";
+import { Tile } from "@/components/ui/tile";
+import { BrandLogoBox } from "../brand-logo-box";
 import { BlockOpener } from "@/components/ui/block-opener";
 import { fillRatios } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
@@ -232,6 +234,44 @@ export function Composicion({
             positionLabel={t.navCloserPositionLabel}
           />
         </SpecimenCard>
+
+        {/* ---------- la casilla ---------- */}
+        {/* VA AQUÍ porque es la más pequeña de la familia que abre la sección:
+            una caja que no es control ni texto. Y se publica con sus DOS usos
+            vivos, no con uno, porque el defecto que la creó era justamente que
+            los dos se escribían por separado y podían discrepar (P83.5). */}
+        <GroupHead title={t.tileTitle} lead={t.tileLead} />
+        <div className={PAIR}>
+          <SpecimenCard
+            kicker={t.tileLogoKicker}
+            cls="BrandLogoBox"
+            rule={t.tileLogoRule}
+            note={t.tileLogoNote}
+          >
+            <div className="flex items-center gap-3">
+              <BrandLogoBox name="companies/indya" />
+              <BrandLogoBox name="companies/thetool" />
+              <BrandLogoBox name="tools/figma" />
+            </div>
+          </SpecimenCard>
+          <SpecimenCard
+            kicker={t.tileNumKicker}
+            cls="Tile"
+            rule={t.tileNumRule}
+            note={t.tileNumNote}
+          >
+            <div className="flex items-center gap-3">
+              {["01", "02", "03"].map((n) => (
+                <Tile
+                  key={n}
+                  className="text-muted-foreground font-mono text-[0.85rem]"
+                >
+                  {n}
+                </Tile>
+              ))}
+            </div>
+          </SpecimenCard>
+        </div>
 
         {/* ---------- la apertura de bloque ---------- */}
         {/* VA AQUÍ Y NO EN §01 «Rejilla» (P70.47): no es un ritmo de espaciado,

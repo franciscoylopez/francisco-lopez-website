@@ -25,7 +25,7 @@
 - **`article-islands.tsx`** — Las islas de cliente del texto largo: barra de progreso, copiar enlace y compartir. *([design-system/12-articulo](../site/design-system/12-articulo.tsx))*
 - **`article.tsx`** — Los bloques del texto largo: firma, portada de capítulo, cita, franja de repo y diagrama. *([design-system/12-articulo](../site/design-system/12-articulo.tsx))*
 
-### primitiva · 13
+### primitiva · 14
 - **`block-opener.tsx`** — La banda que abre un bloque de secciones: qué las agrupa y cuáles son. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*
 - **`check-pill.tsx`** — La marca de verificación de un checklist: pastilla teñida y su check. *([design-system/11-accesibilidad](../site/design-system/11-accesibilidad.tsx))*
 - **`copy-button.tsx`** — Copiar un valor al portapapeles: directo si hay uno, con menú si hay dos. *([design-system/01-rejilla](../site/design-system/01-rejilla.tsx))*
@@ -38,5 +38,6 @@
 - **`rich.tsx`** — El render de markup inline del copy del diccionario: negrita, cursiva y enlace. *(interna — no tiene aspecto propio que enseñar: es infraestructura de texto (D23), y lo que de ella sí se ve —el enlace de contenido— se publica en §08)*
 - **`section-index-islands.tsx`** — El riel fijo que sigue la sección activa de una página con paradas. *([design-system/12-articulo](../site/design-system/12-articulo.tsx))*
 - **`section-index.tsx`** — La navegación de una página con paradas: el índice y el cierre de bloque. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*
+- **`tile.tsx`** — La casilla cuadrada que sostiene una marca: un logo, un ordinal o un glifo. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*
 - **`video-embed.tsx`** — La facade de vídeo de terceros: póster propio y el clic como gate (D55). *([design-system/07-botones](../site/design-system/07-botones.tsx))*
 <!-- FIN ÍNDICE -->
