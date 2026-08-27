@@ -59,6 +59,14 @@ const WEBSITE_ID = `${SITE_URL}/#website`;
  * `npm run check:marco` sí resuelve los `@id` contra TODO el sitio (D75), así que
  * la referencia pelada no es un cabo suelto aquí dentro: es un cabo suelto solo
  * para quien mire una página sola.
+ *
+ * Y CUÁNTO CUESTA EXACTAMENTE ESO, medido contra el Schema Markup Validator sobre
+ * el preview (2026-08-27): en `ContactPage` y en `WebPage` la referencia pelada
+ * sale como **`CreativeWork`** en vez de como `WebSite`. **Cero errores y cero
+ * avisos** —por eso se queda—, pero el «no cuesta nada» que heredó esta regla de
+ * `techArticleLd` es más preciso así: no cuesta un aviso; cuesta que un lector
+ * AISLADO vea un tipo genérico. Para el rastreador que recorre el sitio entero,
+ * que es quien de verdad une las entidades, el `@id` hace su trabajo igual.
  */
 const isPartOfSite = (conCampos = false) =>
   conCampos
@@ -319,6 +327,14 @@ export function experiencePageLd({
  * Los canales van dentro del `ContactPoint`: el correo y el teléfono que la
  * página ya pinta, leídos de `lib/contact.ts` por quien la llama, para que no
  * exista una segunda versión del dato en el marcado.
+ *
+ * EL AVISO DE `contactPoint` ES UN FALSO POSITIVO Y SE DEJA (medido 2026-08-27,
+ * P80). El Schema Markup Validator marca `UNKNOWN_FIELD contactPoint / ContactPage`
+ * con `isSevere: false`: es el vocabulario REDUCIDO de Google (SPORE), no
+ * Schema.org, donde `contactPoint` es válido en cualquier `CreativeWork`.
+ * Comprobado idéntico en producción, o sea que no lo introdujo ningún cambio
+ * reciente. Queda escrito aquí porque si no, la siguiente pasada de validación lo
+ * levanta como hallazgo nuevo — que es lo que ya pasó con seis de once.
  */
 export function contactPageLd({
   lang,
