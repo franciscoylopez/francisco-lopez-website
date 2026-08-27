@@ -37,6 +37,7 @@ Partido el **2026-08-09** (P37.685).
 - [El morado de los fondos invertidos](#el-morado-de-los-fondos-invertidos)
 - [La regla del control sobre imagen prometía de más (2026-08-18)](#la-regla-del-control-sobre-imagen-prometía-de-más-2026-08-18)
 - [El censo de contraste se rompió dos veces, y la segunda destapó un par real (2026-08-17 → 18)](#el-censo-de-contraste-se-rompió-dos-veces-y-la-segunda-destapó-un-par-real-2026-08-17-→-18)
+- [El censo midió 15,32 lo que la pantalla pintaba a 5,97 (2026-08-27)](#el-censo-midió-1532-lo-que-la-pantalla-pintaba-a-597-2026-08-27)
 - [Cómo se escribe una regla](#cómo-se-escribe-una-regla)
 - [El morado como gráfico, y la tercera vez del mismo peldaño (2026-08-17)](#el-morado-como-gráfico-y-la-tercera-vez-del-mismo-peldaño-2026-08-17)
 - [Un control sobre una imagen no puede fijar su color (2026-08-17)](#un-control-sobre-una-imagen-no-puede-fijar-su-color-2026-08-17)
@@ -416,6 +417,30 @@ detrás del fallo: la dirección de email de Accesibilidad daba **6,42 claro / 5
 hover —AA, no AAA— porque pisaba el color a mano en vez de usar el `tone: "muted"` de la
 variante. Era el quinto uso del mismo fallo, y sobrevivió a tres auditorías porque el par solo
 existe mientras el cursor está encima.
+
+## El censo midió 15,32 lo que la pantalla pintaba a 5,97 (2026-08-27)
+
+**La tercera rotura del censo, y la primera que sale con forma de sobresaliente.** Las dos
+anteriores devolvían listas vacías o cortas. Esta devolvió una cifra concreta, alta y falsa.
+
+El ordinal de la banda de bloque (`ui/block-opener.tsx`, D125) llevaba `opacity-70`. El censo
+lo puntuó con **15,32** —el anclaje, la mejor cifra del sitio— porque lee
+`getComputedStyle(el).color` y de la opacidad solo mira si vale 0. El píxel pintado daba
+**5,97 en oscuro**, por debajo del 7 que WCAG pide a AAA en texto de 12,8px.
+
+**Lo que hace este caso distinto de los dos anteriores:** aquellos se destaparon porque el
+resultado era sospechosamente vacío. Este no tenía nada de sospechoso — era el mejor par de la
+página. Lo destapó una revisión de diseño mirando la pantalla, no el informe.
+
+**Por eso la regla que faltaba no era del metro.** El punto 8 de §Cómo medir ya decía «un clon
+del DOM, un `getComputedStyle` o el JSX no son la página», y describe este fallo con
+precisión literal. La regla existía, tenía tres semanas y se incumplió igual. Lo que faltaba era
+la regla de UI: **el atenuado de un texto no se elige, ni por color ni por opacidad** (D127).
+
+**Y una nota sobre el «sin excepciones» de §Accesibilidad:** esta es otra vez en que la frase
+«todos los pares que el sitio pinta están en AAA» fue falsa mientras se publicaba. Por eso el
+recuento salió de esa línea: un número que caduca cada vez que ocurre lo que describe no es un
+dato, es una promesa de tener que editarlo.
 
 ## Cómo se escribe una regla
 

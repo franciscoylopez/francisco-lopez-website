@@ -162,6 +162,7 @@
 - D124 · El suelo de 360 deja de ser el comentario de un script y pasa a ser una decisión de producto
 - D125 · Una banda no se tiñe sobre una sección que ya existe: se inserta
 - D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho
+- D127 · El atenuado de un texto no se escribe con `opacity`, y el censo no sabía verlo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7372,3 +7373,59 @@ todas** — que es exactamente la invariante que D50 protege.
 **El `@media` va escrito entero en los dos archivos y no interpolado a una constante**:
 Tailwind escanea el código como texto plano, así que una clase compuesta no se genera y se
 queda sin estilo SIN dar error de compilación (`BRAND.md` §Cómo medir, punto 5).
+
+## D127 · El atenuado de un texto no se escribe con `opacity`, y el censo no sabía verlo — 2026-08-27
+
+**El síntoma, y lo raro es que era un aprobado.** El ordinal de la lista de paradas de
+`ui/block-opener.tsx` (la banda de D125) nacía con `opacity-70`. Corriendo el propio script
+del censo sobre `/accesibilidad` en oscuro, ese elemento salía puntuado así:
+
+```
+15.32  12.8px  AAA   span.font-mono.text-[0.8rem].tabular-nums
+```
+
+**15,32 es el anclaje** —la mejor cifra que este sitio puede dar, la del texto principal en
+oscuro—. La pantalla pintaba **5,97**. A 12,8px el umbral AAA es 7, así que `PRD-Live.md`
+publicaba «cero pares bajo AAA en las catorce × 2 temas» con uno debajo.
+
+No es que el metro se quedara corto: **señalaba como mejor par de la página el peor.**
+
+**La causa.** `scripts/design-review/contrast-census.js` lee el color con
+`getComputedStyle(el).color` y lo único que hace con la opacidad es descartar el elemento si
+vale exactamente 0 (líneas 279 y 519). **Nunca compone por la opacidad del elemento ni por la
+de sus ancestros.** Un `opacity` sobre texto es, para él, invisible.
+
+**La regla que ya existía y aun así se incumplió.** `BRAND.md` §Cómo medir sin equivocarse,
+punto 8, lleva desde el 2026-08-25 diciendo: *«Corolario: se mira la página servida — un clon
+del DOM, un `getComputedStyle` o el JSX no son la página.»* Eso describe este fallo con
+precisión literal. **Es su tercera instancia**, no una regla nueva — y por eso lo que se añade
+a `BRAND.md` no es el corolario otra vez, sino la regla de UI que faltaba.
+
+**La decisión, y es de mecanismo, no de color.** El atenuado sale de la capa
+(`text-muted-foreground`), que lo resuelve la superficie (D39). La entradilla de esa **misma
+banda**, doce líneas más arriba, ya lo hacía bien: dos mecanismos para el mismo trabajo en un
+componente de 40 líneas era la señal de drift, antes que la cifra.
+
+Medido después, con el motion congelado y el metro revalidado en cada corrida (13,79 claro /
+15,32 oscuro, exactos):
+
+| | Antes (`opacity-70`) | Después (`text-muted-foreground`) | Umbral AAA a 12,8px |
+|---|---|---|---|
+| Claro | 7,52 | **10,32** | 7 |
+| Oscuro | **5,97** | **9,89** | 7 |
+
+Y la jerarquía que buscaba el `opacity` se mantiene: la etiqueta de al lado sigue en 13,79 /
+15,32, así que el ordinal recede igual, ahora medido en vez de elegido a ojo.
+
+**Se descartó añadir un segundo escalón de `--surface-dim`** para conservar el tono exacto de
+antes: sería un token con un solo call site, que es indirección y no fuente única.
+
+**El alcance era exactamente uno.** De los ocho `opacity-*` del repositorio, siete son barras
+de esqueleto en `accesibilidad.tsx` y `design-system/hero.tsx` —ilustración, exenta— y **este
+era el único que llevaba texto**. Así que hoy el censo no tiene ningún caso que fallar, y ese
+es justamente el problema: el próximo volverá a ser invisible. **El agujero del guardián va
+aparte** (P68.7115), porque su modo de fallo es un tick verde.
+
+**La confirmación fina:** tras el arreglo el censo pasó de **408 a 414 pares**, y esos seis son
+3 páginas × 2 temas — el ordinal dejó de ser un duplicado de `--background` y pasó a ser un par
+propio. Un arreglo que no hubiera cambiado nada habría dejado el recuento igual.

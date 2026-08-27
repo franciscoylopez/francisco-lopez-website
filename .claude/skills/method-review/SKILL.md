@@ -177,6 +177,7 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 
 | Familia | Cómo se reconoce | Instancias |
 | :-- | :-- | :-- |
+| **La reducción que fue una mudanza** | Una métrica mejora porque el coste se movió al cubo que **nadie mide**. Firma: la cifra celebrada describe *una parte* y se lee como si describiera *el todo* | **1** |
 | **El metro que declara su alcance, y su alcance no incluye el síntoma** | Una verificación que **aprueba**, dice qué ha mirado —y por eso convence— y lo que ha mirado no es donde está el defecto que una persona está señalando | **2** |
 | **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 · **0 vivas** |
 | **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 6 |
@@ -258,15 +259,37 @@ y su caso en `BRAND-historical.md`.*
   recortar sino qué gobierna el número.** El presupuesto de contexto subió por primera vez este
   día, y hasta entonces ninguno de sus cinco valores había tenido un porqué escrito.*
 
-**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-25)*:
+*Sexto disparo, 2026-08-27: **nace «la reducción que fue una mudanza», y la trajo Francisco
+desde una sensación** —«redujimos las skills y no lo hemos vuelto a comparar»—. Medido: los
+docs `@`-importados bajaron un 30% (18.098 → 12.689) mientras las skills subían un 55%
+(13.311 → 20.616), o sea que **el corpus total creció un 6%**. `check:contexto` pone techo a
+los docs y techo por entrada a las skills, y **ninguno a su suma** — lo dice en su propia
+salida: «suma (NO es un presupuesto: no se cargan a la vez)». Cierto, y no toda la verdad: una
+sesión de cierre carga ~9.000 palabras de skills encima de los docs. **Tercera vez que las dos
+direcciones convergen y tercera vez que ese es el hallazgo de más confianza.***
+
+*Y dos cosas de método que este disparo deja:*
+
+- ***Un indicador sin fuente deja de vigilarse en silencio.** «Skills sin estrenar» llevaba dos
+  disparos en la tabla y no se pudo medir: nada en el repo registra qué skill se ha invocado, y
+  el valor anterior salió de recordarlo. Una fila muerta en una tabla de umbrales es peor que
+  no tenerla, porque da sensación de cobertura. **Al añadir un indicador, se escribe con qué
+  comando se saca**; si no lo tiene, no entra.*
+- ***Una sospecha apuntada como hecho envejece igual de mal que una cifra.** El cuelgue del
+  censo se atribuyó a 38 Chrome de `agent-browser` —«es la principal sospecha»— y la nota
+  siguiente ya lo daba por causa. Era falsa: el censo se colgó con el navegador despejado, y la
+  causa real era el `stdin`. **Lo que se apunta como hipótesis se escribe como hipótesis.***
+
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-27)*:
 
 | Indicador | Hoy | Verde | Rojo |
 | :-- | :-- | :-- | :-- |
-| Variación neta de `General` por sprint | +6 (cerró en 34, abrió en 31) | ≤ 0 | ≥ +4 |
-| Margen del presupuesto de contexto | 345 | ≥ 400 | < 100 |
-| Skills sin estrenar | 2 | 0 | ≥ 3 |
-| Hallazgos de `design-review` cuya regla ya existía | 4 de 8 | ≤ 1 | ≥ 3 |
-| Proporción de tareas de método sobre el ciclo | 50% | ≤ 25% | — |
+| Variación neta de `General` por sprint | **+11** (cerró en 45) 🔴 | ≤ 0 | ≥ +4 |
+| Margen del presupuesto de contexto | **1** 🔴 | ≥ 400 | < 100 |
+| Suma de skills a demanda | **20.616** · sin techo 🔴 | *por definir* | — |
+| Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 |
+| Sprint de método abierto en el ciclo | **No** 🟢 | No | Sí |
+| ~~Skills sin estrenar~~ | *retirado: sin fuente medible* | — | — |
 
 ## La salida
 

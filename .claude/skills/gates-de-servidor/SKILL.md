@@ -16,6 +16,18 @@ disable-model-invocation: true
 > **Tiene efectos: levanta un servidor y escribe archivos** (la línea base del HTML y el sello
 > del censo). Por eso solo corre invocada.
 
+> **QUIÉN LOS LANZA cambió el 2026-08-27.** Hasta esa fecha esta skill se leía como que el
+> modelo no podía pasarlos ni replicar su flujo por otros medios. **Ya no**: Francisco
+> autorizó que los lance el modelo, y desde entonces se han pasado así los cuatro. Lo que
+> sigue siendo cierto es que **la skill no se autoinvoca** —lleva `disable-model-invocation`
+> porque levanta un servidor y escribe archivos, no porque el trabajo esté prohibido—, así que
+> hace falta que alguien diga «pasa los gates».
+>
+> Esto importa más de lo que parece: el sprint de tareas mecánicas depende de poder tocar un
+> token o un refactor transparente **y cerrar su gate en la misma sesión**. Con la lectura
+> anterior, cualquier tanda que rozara un color dejaba CI en rojo hasta que Francisco tuviera
+> un rato.
+
 ## Las dos cosas que hay que saber antes de nada
 
 1. **La línea base y la comprobación tienen que salir del MISMO modo.** `next dev` y
@@ -101,10 +113,23 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
 > mirando los procesos de Chrome del sistema. El gate ya tiene tareado que le falta progreso
 > (P68.736), pero la mitad de aquella ceguera la puso el comando, no el script. Salida directa.
 
-> **Y DESPEJA EL NAVEGADOR ANTES.** Aquella corrida arrancó con **38 procesos de Chrome vivos**
-> de una sesión de `agent-browser`, compitiendo con los que levanta el censo. Es la principal
-> sospecha de que tardara horas en vez de minutos, y cuesta un comando comprobarlo:
-> `agent-browser close --all` antes de empezar.
+> **LA CAUSA DEL CUELGUE ESTÁ MEDIDA, Y NO ERA EL NAVEGADOR** *(2026-08-27)*. Se sospechó de
+> 38 procesos de Chrome compitiendo con los del censo, y esa sospecha se apuntó como si fuera
+> un hecho. **Es falsa.** Con el navegador despejado —`close --all` devolvió «No active
+> sessions», y los Chrome vivos eran el navegador personal— el censo se colgó **dos veces
+> más**, 13 y 10 minutos, con **0,1 s de CPU acumulada** y cero procesos hijo.
+>
+> Lo que cuelga es el **`stdin`**: el `execFileSync` del helper lo hereda, y en modo background
+> el harness nunca lo cierra. **`< /dev/null` NO lo salva**, porque ahí no manda el shell.
+>
+> **Lánzalo en PRIMER PLANO.** Así corre entero en dos minutos:
+>
+> ```bash
+> npm run censo < /dev/null      # en primer plano, sin encadenar otro comando delante
+> ```
+>
+> **Cómo distinguir «va lento» de «está muerto» sin esperar:** mira el CPU acumulado del
+> proceso. Décimas de segundo tras diez minutos es un cuelgue, no trabajo.
 
 - **`gate:html`** compara contra la base del paso 2. Si sale diff y el cambio era intencionado,
   vuelve a guardar la base y sigue; si no lo era, abre la página.
@@ -115,6 +140,12 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
   lo que `check:palette` compara en cada PR (D90). Lo que **no** juzga es el texto sobre foto:
   esos pares salen listados aparte y se miden sobre el píxel pintado.
 - **`psi`** no se mide en local y no es un gate de CI: su variabilidad daría rojos falsos.
+  **Y cuenta con que su sello NO se pueda commitear** *(2026-08-27)*: el barrido dio **móvil
+  74** en la home y el re-medido, **96 y 95**. Se hicieron **dos barridos completos y no
+  coincidieron ni en qué páginas bajaban** —en el segundo la home dio 96 y cayeron otras tres,
+  más un `ERROR`—. Las cuatro páginas bajo 90 subieron por encima de 95 al re-medirlas una a
+  una. Cuando eso pase, **se revierte `content/psi/registro.json` y no se commitea**: el
+  artículo publica esa cifra (D102) y un 74 falso es peor que un sello de hace tres días.
   **Y esa variabilidad NO se queda fuera del sello, que es lo que hay que saber antes de
   commitearlo** *(2026-08-26)*: el modo registro toma **una sola muestra por página** y publica
   el **min/max**, así que la peor toma manda sobre el rango entero. Medido el mismo día, en

@@ -80,6 +80,7 @@
 - [62. Los dos sprints hacia septiembre: coherencia de las hermanas, con el activo que se lanza arrastrado dentro (2026-08-25)](#62-los-dos-sprints-hacia-septiembre-coherencia-de-las-hermanas-con-el-activo-que-se-lanza-arrastrado-dentro-2026-08-25)
 - [63. La página que documenta el sistema dejaba fuera justo la parte que no tiene nadie (2026-08-25)](#63-la-página-que-documenta-el-sistema-dejaba-fuera-justo-la-parte-que-no-tiene-nadie-2026-08-25)
 - [64. La revisión de las hermanas destapa que el Design System había cambiado de género (2026-08-26)](#64-la-revisión-de-las-hermanas-destapa-que-el-design-system-había-cambiado-de-género-2026-08-26)
+- [65. «Páginas hermanas» cierra, y el method-review mide que la reducción de contexto fue una mudanza (2026-08-27)](#65-páginas-hermanas-cierra-y-el-method-review-mide-que-la-reducción-de-contexto-fue-una-mudanza-2026-08-27)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3227,6 +3228,77 @@ podía copiar**. Se resolvió con `/prototype` y cinco direcciones, y de ahí sa
 **Y una cosa que no se hizo.** El sprint «Páginas hermanas» se queda sin tareas abiertas, pero
 no se cierra: falta `design-review` sobre el resultado, y Francisco decidió lanzarlo con
 contexto limpio antes del ritual de cierre.
+
+## 65. «Páginas hermanas» cierra, y el method-review mide que la reducción de contexto fue una mudanza (2026-08-27)
+
+**El sprint cierra entero**: 57 tareas archivadas, 1 descartada, cero abiertas. Ocho tandas, de
+las que la última entró hoy en producción (PR #195, `main` = `7afda6d`). Lo que dejó, en una
+línea: las tres páginas del sistema pasan a leerse como hermanas de verdad — mismo marco, mismo
+índice, mismo cierre de sección, y una banda de bloque que rompe 60,3 pantallas sin un solo
+cambio de fondo (D125).
+
+### El hallazgo que llegó por la puerta de al lado
+
+El `design-review` de la tanda encontró algo que **ningún gate automático podía ver, con los 22
+pasos de CI en verde**: el ordinal de la banda nueva llevaba `opacity-70`, el censo lo puntuaba
+con **15,32** —el anclaje, la mejor cifra del sitio— y la pantalla pintaba **5,97**. Durante ese
+rato, la frase de §5 «cero pares bajo AAA en las catorce × 2 temas» era falsa por un par.
+
+Se arregló en la rama antes de mergear (D127) y el censo pasó de 408 a 414 pares medidos. **La
+lectura de producto no es la cifra**: es que la verificación automática comprueba lo que ya
+sabemos comprobar, y solo una revisión manual descubre qué falta comprobar. Por eso
+`design-review` sigue siendo caro y periódico en vez de sustituirse por un check.
+
+### El check de medición cierra el bucle que el sprint anterior dejó abierto
+
+El panel ya tiene el **cuarto marcador**: `contact_submit`, la métrica primaria de §7, que en el
+cierre anterior contaba sin que ningún tile la enseñara (D71). Últimos 28 días: **1 envío de
+formulario**, 9 clics de contacto, 4 descargas de CV, 48 eventos de scroll.
+
+**Y la lectura honesta de esas cifras es que no hay lectura.** Son ventanas de 28 días rodantes
+medidas con pocos días de diferencia, así que se solapan en más del 90%: los 9 clics son casi
+los mismos 9, y las descargas «bajan» de 6 a 4 porque eventos viejos salen de la ventana, no
+porque se descargue menos. Lo que hay no es una tendencia, es **falta de muestra**.
+
+Eso movió una prioridad, que es justo lo que el paso 3 del check pregunta: **la tarea de
+distribución sube a `Must` y por delante de todo el bloque de deuda técnica.** El argumento es
+del propio producto: el instrumento funciona, el sitio está en AAA en las catorce páginas y por
+encima de 90 en PageSpeed, así que **el cuello de botella dejó de ser la calidad y pasó a ser
+que no lo ve nadie**. Seguir puliendo instrumentos sobre n=1 es optimizar el termómetro en una
+habitación vacía.
+
+### El sexto method-review: la familia nueva
+
+Informe completo en el Artifact publicado ese día. Lo que importa para el registro:
+
+**«La reducción que fue una mudanza»**, familia nueva del catálogo. Entre el 2026-08-19 y hoy,
+los documentos `@`-importados bajaron un 30% (18.098 → 12.689 palabras) mientras las skills
+subían un 55% (13.311 → 20.616). **El corpus total de instrucciones creció un 6%.** Se celebró
+un recorte en el lado medido mientras el lado sin medir absorbía el coste y algo más.
+
+La causa está escrita en la salida del propio guardián: `check:contexto` pone techo total a los
+docs y techo *por entrada* a las skills, pero **ninguno a su suma**. Se aprobó atacarlo por dos
+vías: cerrar el trasvase con un techo a la suma, y partir el porqué fechado de `CLAUDE.md` como
+`BRAND.md` ya hizo con el suyo — que es la única de las cuatro alternativas evaluadas que
+**reduce** en vez de trasladar.
+
+**Y el desagüe de `General` resultó no necesitar una regla nueva.** Con 45 tareas abiertas y
+**2 archivadas en toda la vida del bloque**, el cupo de «3-4 por sprint» quedó demostrado como
+aspiración: drena *durante* la ejecución y los hallazgos se producen *en* los cierres, dos
+momentos que no se solapan. Lo que lo resuelve es el plan de sprints de abajo, no un mecanismo.
+
+### Los dos sprints que vienen, y por qué en ese orden
+
+1. **«Home + General»**, abierto hoy con 14 tareas: las 5 de Home, 7 de `General` que generan
+   dependencia con ella —el morado, el `text-wrap`, los dos de motion, `--border`— y las 2 del
+   presupuesto.
+2. **Después**, un sprint de **tareas mecánicas** que se ejecutan de forma autónoma, mientras
+   Francisco revisa a fondo todos los contenidos de cara al lanzamiento. Es lo que drena
+   `General` de verdad: unas 21 candidatas, todas guardianes, refactors y dependencias, ninguna
+   con criterio de producto dentro.
+
+El orden importa y es deliberado: **primero lo que pide criterio compartido, después lo que no
+lo pide.** Al revés, la revisión de contenidos competiría con las decisiones de diseño de Home.
 
 ## Fuentes
 
