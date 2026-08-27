@@ -472,13 +472,20 @@
   transition-delay: calc(var(--i, 0) * 130ms);
 }
 
+/* AQUÍ HABÍA UN OVERRIDE DEL REVEAL Y NO CASABA CON NADA (P74.36). Devolvía
+   `opacity: 1 !important` a `.reveal-on [data-reveal]` con movimiento reducido, y
+   `.reveal-on` NO EXISTE en ese caso: el island hace `if (reduce) return` antes de
+   añadir la clase. Medido sobre el sitio servido con reduced-motion activo: 0
+   elementos con `.reveal-on`, 0 coincidencias de la regla, 34 `[data-reveal]` en
+   opacidad 1 y sin transición. La protección la da el island, no el CSS, y tenerla
+   escrita dos veces hacía creer que el reveal se apagaba **aquí**.
+
+   Y ES LA RAZÓN POR LA QUE EL REVEAL NO SE ATENÚA en vez de apagarse, que es lo
+   que la regla de abajo pediría: para dar un fundido habría que añadir `reveal-on`
+   igualmente, o sea volver a poner `opacity: 0` en 34 elementos justo para quien ha
+   pedido menos movimiento, reabriendo el mecanismo que costó 2.090 ms de LCP (D47).
+   El scroll sí se queda, que es lo único que esta regla apagaba de verdad. */
 @media (prefers-reduced-motion: reduce) {
-  .reveal-on [data-reveal],
-  .reveal-on [data-reveal] .exit-chip {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
   html {
     scroll-behavior: auto !important;
   }
@@ -496,19 +503,35 @@
     transform: none;
   }
 }
+/* El mismo recorrido sin el desplazamiento, para movimiento reducido (P74.36).
+   Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca:
+   se va el `translateY`, se queda el fundido. */
+@keyframes consent-in-quiet {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .consent-enter {
   animation: consent-in var(--duration-entrance) var(--ease-entrance) both;
 }
 @media (prefers-reduced-motion: reduce) {
+  /* Solo el nombre: la duración, la curva y el `both` los sigue poniendo la
+     abreviada de arriba, así que el banner no puede quedarse con dos ritmos. */
   .consent-enter {
-    animation: none;
+    animation-name: consent-in-quiet;
   }
 }
 
 /* 404 — el "0" del número hace "florecer" la firma: las capas de color del split (el
    <g> de los anillos cian/morado) suben su opacidad sobre el aro base, que ya está
    visible. Puro CSS (sin JS/rAF): corre en la carga sin depender de hidratación.
-   Reduced-motion: split ya visible, sin interpolar (BRAND.md regla 7).
+   ES DE LAS POCAS QUE SIGUEN CORRIENDO CON MOVIMIENTO REDUCIDO, y con motivo
+   (P74.36): el «florecer» es opacidad de principio a fin, sin una sola propiedad
+   que desplace o escale, así que no hay nada vestibular que retirar. Apagarla era
+   quitar información gratis.
    ES LA ÚNICA ENTRADA QUE SE QUEDA POR ENCIMA DEL LISTÓN, y con motivo (P74.35):
    no es una entrada de contenido sino el gesto de marca de una página de error,
    donde no compite con nada porque no hay nada más que leer. Su curva ya era
@@ -524,12 +547,6 @@
 .split-zero > g {
   animation: split-bloom 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
 }
-@media (prefers-reduced-motion: reduce) {
-  .split-zero > g {
-    animation: none;
-  }
-}
-
 /* Hitos — fila responsive (D7: en CSS, no en JS). Móvil: grid que apila el
    impacto bajo el nombre. ≥768px (md): flex, todo en una fila. */
 .hitos-row {
@@ -998,12 +1015,6 @@
     text-decoration-color: transparent;
   }
 }
-@media (prefers-reduced-motion: reduce) {
-  .link-content {
-    transition: none;
-  }
-}
-
 /* La contraparte invertida (P70.18). `.link-content` fija `color: var(--foreground)`
    y sobre una banda invertida `--foreground` ES EL FONDO: el enlace se pintaba del
    color de la banda y desaparecía, dejando flotando solo el subrayado cian. No se ve
@@ -1097,12 +1108,6 @@
 .link-chrome:focus-visible {
   background-color: var(--chrome-hover-bg);
 }
-@media (prefers-reduced-motion: reduce) {
-  .link-chrome {
-    transition: none;
-  }
-}
-
 /* Controles de chrome solo-icono (toggle de tema, hamburguesa, LinkedIn del
    footer): mismo hover de pastilla que `.link-chrome` (P37.57). El fondo de
    reposo vive aquí, no en la utilidad `bg-card` del punto de uso.
@@ -1133,12 +1138,6 @@
 .icon-chrome:focus-visible {
   background-color: var(--chrome-hover-bg);
 }
-@media (prefers-reduced-motion: reduce) {
-  .icon-chrome {
-    transition: none;
-  }
-}
-
 /* Facade del vídeo incrustado (`components/ui/video-embed.tsx`, P48). El aspecto
    vive aquí y no en clases sueltas del punto de uso por D35: los dos extremos de
    cada transición tienen que pertenecer a la regla que la declara.
@@ -1217,8 +1216,9 @@
 .video-facade:focus-visible .video-play {
   transform: translate(-50%, -50%) scale(1.08);
 }
+/* El velo (`::after`) es opacidad y se queda; el disco ESCALA, y eso si se
+   retira (P74.36). Es el reparto por propiedad dentro de una misma pieza. */
 @media (prefers-reduced-motion: reduce) {
-  .video-facade::after,
   .video-play {
     transition: none;
   }

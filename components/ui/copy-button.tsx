@@ -102,7 +102,10 @@ function Confirm({
     <span
       aria-hidden="true"
       className={cn(
-        "pointer-events-none absolute right-0 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150 motion-reduce:transition-none",
+        // SIN `motion-reduce:transition-none` A PROPOSITO (P74.36): esto es
+        // opacidad y nada mas, y con movimiento reducido se retira lo que
+        // desplaza o escala, no lo que se funde.
+        "pointer-events-none absolute right-0 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150",
         placement === "above" ? "bottom-full mb-1" : "top-full mt-1",
         // La pastilla se apoya en el carril contrario al del control, igual que
         // hace `onInverted`: sobre la banda invertida el fondo de la página ES

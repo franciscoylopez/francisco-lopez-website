@@ -171,6 +171,7 @@
 - D133 · El filete de la banda invertida es uno solo, y el ordinal no toma color
 - D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba
 - D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias
+- D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7951,3 +7952,70 @@ un defecto táctil por uno de accesibilidad.
 **El resto de la familia sigue sin puerta** —`.link-chrome`, `.icon-chrome`, `.video-facade`—
 y queda señalado, no hecho: son de otra tarea y su hover es una pastilla neutra, mucho menos
 llamativa que una inversión de color.
+
+## D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde — 2026-08-27
+
+**La regla, en una línea: se va el `translate` y el `scale`; la opacidad y el color se
+quedan.** Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca.
+Y una animación **mixta se parte** en vez de apagarse entera.
+
+Hasta hoy el sitio tenía un interruptor: siete bloques de `@media (prefers-reduced-motion:
+reduce)` que ponían `transition: none` o `animation: none`. Cumplía —el catálogo de motion
+no obliga a atenuar—, pero apagaba de paso **dos fundidos puros y tres cambios de color**,
+que no tienen nada que retirar.
+
+### El bloque que la ficha citaba no casaba con nada
+
+La tarea abría citando el override del reveal. **Ese selector estaba muerto**, y no se ve
+leyéndolo: `RevealRoot` hace `if (reduce) return` **antes** de añadir `reveal-on`, así que
+con movimiento reducido la clase no existe y `.reveal-on [data-reveal]` no encuentra nada.
+
+Medido sobre el sitio servido con reduced-motion activo: **0** elementos con `.reveal-on`,
+**0** coincidencias de la regla, **34** `[data-reveal]` en opacidad 1 y sin transición. La
+protección la daba el island; el CSS solo la repetía, y repetirla hacía creer que el reveal
+se apagaba ahí.
+
+**Y es la razón por la que el reveal es justo el que NO se atenúa.** Para darle un fundido
+habría que añadir `reveal-on` igualmente, o sea volver a poner `opacity: 0` en 34 elementos
+**justo para quien ha pedido menos movimiento**, reabriendo el mecanismo que costó 2.090 ms
+de LCP (D47). El precio no lo paga quien lo pide. Se borra el selector y se queda escrito el
+porqué; el `scroll-behavior: auto` sigue, que era lo único que ese bloque apagaba de verdad.
+
+### El reparto, pieza por pieza
+
+| Pieza | Qué anima | Con movimiento reducido |
+|---|---|---|
+| Scroll-reveal | opacidad + `translateY(14px)` | **Sigue apagado**, y por el motivo de arriba |
+| `.split-zero > g` (el «0» del 404) | solo opacidad | **Corre** |
+| `.video-facade::after` (velo) | solo opacidad | **Corre** |
+| `.link-chrome` · `.icon-chrome` | solo `background-color` | **Corre** |
+| `.link-content` | relleno + color + subrayado | **Corre** |
+| `.consent-enter` | opacidad + `translateY(12px)` | **Se parte**: `consent-in-quiet`, fundido sin recorrido |
+| `.video-play` | `scale(1.08)` | Apagado |
+| Pastilla de `CopyButton` | solo opacidad | **Corre** |
+| Cabecera del 404 | fundido + deslizamiento | **Se parte**: `motion-reduce:slide-in-from-bottom-0` |
+
+**El banner se parte cambiando solo `animation-name`**, no la abreviada: la duración, la
+curva y el `both` los sigue poniendo la declaración de arriba, así que no puede acabar con
+dos ritmos distintos según el ajuste del visitante.
+
+**La cabecera del 404 se parte sin apagar nada**: `slide-in-from-bottom-0` compila a
+`--tw-enter-translate-y: calc(0*100%)`, así que el recorrido se anula y el fundido sigue.
+Es mejor que `animate-none` porque no hay que mantener una segunda animación.
+
+### `.link-content` es todo o nada, y eso hay que saberlo antes de intentarlo
+
+La tentación es apagar solo el relleno —que es lo único que «se mueve»— y dejar el color.
+**No se puede:** si el relleno cian salta instantáneo y el color del texto tarda sus 160 ms,
+hay una ventana con `--foreground` sobre `--primary` —gris oscuro sobre cian oscuro en tema
+claro— que es ilegible. Los dos extremos de la transición pertenecen a la misma regla (D35)
+y aquí además **al mismo umbral**. Como no hay desplazamiento en ninguna de las tres
+propiedades, «todo» es la respuesta correcta.
+
+### Lo que esto le cuesta al censo
+
+Pasa de **2 animaciones selladas a 3**, porque `consent-in-quiet` es una más. El sello lo
+detecta y `check:palette` lo exige, así que la pasada completa entró en la tarea en vez de
+quedar pendiente: **28 corridas, 414 pares de texto y 300 contornos, metro validado en las
+28, cero bajo AAA y cero por debajo del 3:1.** `LAST_A11Y_REVIEW` ya estaba en la fecha de
+hoy y no se toca.
