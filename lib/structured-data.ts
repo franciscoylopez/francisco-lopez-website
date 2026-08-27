@@ -43,6 +43,33 @@ export function pageUrl(lang: Locale, slug = ""): string {
 /** La home de un locale. Azúcar sobre `pageUrl`, que es lo que casi todo usa. */
 export const homeUrl = (lang: Locale): string => pageUrl(lang);
 
+/** El nodo del sitio. `@id` estable y sin locale: es UNO, no uno por idioma. */
+const WEBSITE_ID = `${SITE_URL}/#website`;
+
+/**
+ * REFERENCIA al nodo `WebSite`, para que una página diga de qué sitio forma parte
+ * (P80). El nodo completo lo declara `profilePageLd` en la home, una sola vez.
+ *
+ * DOS FORMAS, y cuál toca lo decide la ELEGIBILIDAD PARA RICH RESULTS, que es la
+ * misma regla que `techArticleLd` ya escribió para su `author`: la Rich Results
+ * Test evalúa una página AISLADA, así que en un tipo elegible ve la referencia
+ * colgando, la degrada a `Thing` anónimo y avisa. En un tipo que no es elegible no
+ * la mira nadie y el `@id` pelado hace su trabajo sin coste.
+ *
+ * `npm run check:marco` sí resuelve los `@id` contra TODO el sitio (D75), así que
+ * la referencia pelada no es un cabo suelto aquí dentro: es un cabo suelto solo
+ * para quien mire una página sola.
+ */
+const isPartOfSite = (conCampos = false) =>
+  conCampos
+    ? {
+        "@type": "WebSite" as const,
+        "@id": WEBSITE_ID,
+        name: SITE_NAME,
+        url: `${SITE_URL}/`,
+      }
+    : { "@id": WEBSITE_ID };
+
 // ProfilePage + Person: la entidad principal del sitio, en la home.
 export function profilePageLd(lang: Locale, description: string) {
   const url = homeUrl(lang);
@@ -51,6 +78,33 @@ export function profilePageLd(lang: Locale, description: string) {
     "@type": "ProfilePage",
     url,
     inLanguage: lang,
+    /**
+     * EL NODO `WebSite`, DECLARADO ENTERO Y SOLO AQUÍ (P80). Sin él, cada página
+     * del dominio es una isla para un rastreador: el `isPartOf` de las otras siete
+     * es lo que las une, y `experiencePageLd` llevaba desde P50 sin poder
+     * escribirlo porque apuntar a un nodo inexistente habría sido una referencia
+     * colgando —valida igual, y no significa nada—.
+     *
+     * `inLanguage` LISTA LOS DOS IDIOMAS Y NO EL DE LA PÁGINA, que es la parte
+     * que no es obvia. El `@id` es uno solo para las veintiocho variantes, así que
+     * si la home ES dijera `es` y la EN dijera `en`, el mismo nodo afirmaría dos
+     * cosas distintas según por dónde se entre. Lo que es cierto del SITIO —y no
+     * de la página que lo declara— es que está en los dos. La página ya dice el
+     * suyo en su propio `inLanguage`, dos líneas más arriba.
+     *
+     * NO LLEVA `potentialAction: SearchAction`, y la ausencia es deliberada: es el
+     * campo que pinta la caja de búsqueda de Google, y este sitio no tiene buscador
+     * interno. Declararlo sería afirmar una capacidad inexistente — el mismo
+     * criterio por el que el deep-dive no es `Article`.
+     */
+    isPartOf: {
+      "@type": "WebSite",
+      "@id": WEBSITE_ID,
+      name: SITE_NAME,
+      url: `${SITE_URL}/`,
+      inLanguage: ["es", "en"],
+      author: { "@id": `${SITE_URL}/#person` },
+    },
     mainEntity: {
       "@type": "Person",
       "@id": `${SITE_URL}/#person`,
@@ -183,6 +237,10 @@ export function techArticleLd({
     image: `${SITE_URL}${ogImagePath(ARTICLE_SLUG, lang)}`,
     datePublished: isoConHora(ARTICLE_PUBLISHED),
     dateModified: isoConHora(ARTICLE_UPDATED),
+    // Con campos, por lo mismo que el `author` de aquí abajo: `TechArticle` SÍ es
+    // elegible para rich results, así que la Rich Results Test evalúa esta página
+    // sola y degradaría una referencia pelada a `Thing` anónimo.
+    isPartOf: isPartOfSite(true),
     author: {
       "@type": "Person",
       "@id": `${SITE_URL}/#person`,
@@ -213,12 +271,12 @@ export function techArticleLd({
  * `about` es la empresa y `mainEntity` la persona, y el orden importa: la página
  * VA SOBRE la experiencia en esa organización, pero de quien habla es de él.
  *
- * NO LLEVA `isPartOf`, y la ausencia es deliberada: el nodo `WebSite` del sitio
- * no existe todavía (está en el backlog de V3), así que apuntar a
- * `${SITE_URL}/#website` sería una referencia `@id` COLGANDO — un identificador
- * que ningún nodo declara. Valida igual, porque un validador de esquema no
- * resuelve referencias, y no significa nada. Se añade el día que exista el nodo,
- * no antes.
+ * YA LLEVA `isPartOf` (P80, 2026-08-27). Aquí estaba escrito que no lo llevaba
+ * «porque el nodo `WebSite` no existe todavía, así que apuntar a
+ * `${SITE_URL}/#website` sería una referencia colgando — valida igual y no
+ * significa nada». El nodo existe desde hoy, lo declara `profilePageLd`, y esta
+ * era su condición de salida. Va como `@id` PELADO: `WebPage` no es elegible para
+ * rich results, así que ningún validador externo evalúa esta página aislada.
  */
 export function experiencePageLd({
   lang,
@@ -242,6 +300,7 @@ export function experiencePageLd({
     name,
     description,
     inLanguage: lang,
+    isPartOf: isPartOfSite(),
     about: { "@type": "Organization", name: company },
     author: { "@id": `${SITE_URL}/#person` },
     mainEntity: { "@id": `${SITE_URL}/#person` },
@@ -281,6 +340,8 @@ export function contactPageLd({
     name,
     description,
     inLanguage: lang,
+    // Pelado: `ContactPage` tampoco es elegible para rich results.
+    isPartOf: isPartOfSite(),
     mainEntity: { "@id": `${SITE_URL}/#person` },
     contactPoint: {
       "@type": "ContactPoint",
