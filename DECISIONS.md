@@ -170,6 +170,7 @@
 - D132 · El equilibrado de línea y el destello del toque bajan a la capa
 - D133 · El filete de la banda invertida es uno solo, y el ordinal no toma color
 - D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba
+- D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7827,3 +7828,81 @@ en ES y EN: **cero errores** en home, artículo y deep-dive. El validador recons
   preciso: **no cuesta un aviso, cuesta que un lector AISLADO vea un tipo genérico**. Para el
   rastreador que recorre el sitio entero —que es quien une las entidades— el `@id` hace su
   trabajo igual.
+
+## D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias — 2026-08-27
+
+**El reveal duraba 600 ms con la curva *standard* de Material —que es ease-in-**out**— y esa
+curva estaba escrita a mano en siete sitios.** Ninguno de los siete era un descuido: cada uno
+se copió del de al lado, que es como se propaga un valor que no tiene nombre. Ahora lo tiene:
+`--ease-entrance` (`cubic-bezier(0, 0, .2, 1)`) y `--duration-entrance` (`.28s`), en `:root`,
+mismo patrón que `--surface-dim` (D39) o `--control-edge` (D97) — **no se elige la curva de una
+entrada en el punto de uso**.
+
+**La duración es el TECHO de la entrada, no su valor obligatorio.** Los 280 ms son para el
+recorrido más largo que hace el sitio (el fade-up de 14px); el chip EXIT se queda en sus
+250 ms, y el enlace de contenido baja a 220. Lo que no puede una entrada es ir por encima.
+
+**Qué cambió, medido sobre el sitio servido** (`getComputedStyle` con el build de producción):
+
+| Pieza | Antes | Ahora |
+|---|---|---|
+| `[data-reveal]` | 600 ms · ease-in-out | **280 ms · ease-out** |
+| Chip EXIT | 250 ms · ease-in-out · retardo 280 ms | 250 ms · **ease-out** · retardo `var(--duration-entrance)` |
+| Barrido `.rlz` de los diagramas | 320 ms · ease-in-out | **280 ms · ease-out** |
+| Banner de consentimiento | 400 ms · ease-in-out | **280 ms · ease-out** |
+| `.link-content` | 220 + 300 + 80 = **380 ms** · `ease` | 160 + 220 + 60 = **280 ms** · ease-out |
+
+El retardo del chip **es** ahora la duración del reveal, no un número que coincidía con ella:
+así «entra tras el reveal de su fila» sigue significando lo mismo si la entrada vuelve a
+cambiar.
+
+**Y una entrada se queda por encima del listón, con motivo escrito:** el `split-bloom` del 404,
+0,9 s. No es una entrada de contenido sino el gesto de marca de una página de error, donde no
+compite con nada porque no hay nada más que leer; su curva ya era ease-out (easeOutQuint), así
+que nunca fue parte del problema.
+
+### La séptima declaración estaba en la página que publica la regla
+
+La ficha hablaba de seis. Había **siete**: la demo de scroll-reveal del Design System se
+dibujaba con una transición inline propia. Y con ella, **tres fuentes y tres respuestas para
+las mismas dos cifras** — la página publicaba «600 ms» y «subida de 12px», `globals.css` decía
+600 ms y 14px, y la demo, `.5s` y 12px — en la página cuyo trabajo entero es no poder mentir.
+
+**La demo ya no describe el reveal: lo usa.** Sus piezas son `[data-reveal]` normales y el
+botón «Repetir» solo les quita y les devuelve `data-shown`; la duración, la curva y el
+recorrido los pone la capa. La tabla publicada pasa a 280 ms y a la curva nueva, y el bullet
+del recorrido a los 14px reales.
+
+**De paso arregla un incumplimiento del punto 7 del checklist que ningún gate podía ver:** con
+`prefers-reduced-motion` el estilo inline animaba igual, porque no preguntaba. La regla vive en
+`.reveal-on`, que el island de motion **no** añade con reduced-motion, así que ahora el botón
+deja las piezas quietas. Medido: `.reveal-on` ausente y opacidad 1 antes del clic, a los 40 ms
+y a los 240 ms.
+
+**Y el primer intento de rebobinado estaba mal, lo cual solo se supo mirándolo.** Quitar
+`data-shown` con la transición puesta arranca un fundido *hacia fuera*: al devolver el atributo
+un frame después, el elemento sigue casi opaco y no hay recorrido que ver. La medición fue
+`opacidad 1 → 1 → 1`, un botón que no hacía nada y compilaba perfecto. Hay que rebobinar **sin
+transición** y solo entonces devolverla — que es, exactamente, lo que hacía el código inline
+que se retiró.
+
+### El relleno del enlace se queda repintando, y eso es una decisión
+
+`background-size` no es propiedad de compositor. La alternativa —un pseudoelemento con
+`transform: scaleY()`— **no puede dar este gesto**: un enlace de contenido parte a mitad de
+párrafo, y lo que hace que el relleno crezca por separado en cada línea es
+`box-decoration-break: clone`, que es de fondo y de borde, no de hijos; un `::before` absoluto
+se dibujaría una sola vez sobre la caja entera. El gesto es de marca (`BRAND.md` §Enlaces) y el
+repintado es de un renglón en hover, no de una sección.
+
+### La mejora doble que la ficha esperaba no existe, y es una buena noticia
+
+La ficha daba por probable que bajar la duración mejorase el LCP, porque este mismo reveal se
+comió 2.090 ms de *element render delay* en su día. **Ya no puede: D47 cortó el vínculo, no la
+duración.** Desde entonces lo que está en el primer pliegue se marca `data-shown` **antes** de
+encender `reveal-on`, así que nunca llega a ocultarse. Comprobado sobre el build servido: los
+**4** `[data-reveal]` del primer pliegue de la home están todos marcados y en opacidad 1, y el
+elemento LCP es la foto del hero.
+
+Así que este cambio es de sensación, no de métrica. La nota de PageSpeed se vuelve a sellar
+tras el deploy por el registro (`npm run psi -- --registro`), no porque se espere movimiento.

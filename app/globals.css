@@ -79,6 +79,17 @@
     1.5rem
   ); /* separación entre columnas: 16 → 24px */
 
+  /* --- Tokens de motion: el listón de una ENTRADA (P74.35) ---
+         Estaban escritos a mano en cada declaración, y así fue como la curva
+         *standard* de Material —que es ease-in-OUT— llegó a siete sitios
+         copiándose siempre de la de al lado. Un elemento que ENTRA no tiene por
+         qué acelerar: ya viene lanzado, así que la curva es ease-out pura.
+         La duración es el techo de la entrada, no su mínimo: los 280 ms son para
+         el recorrido más largo que hace el sitio (el fade-up de 14px); una
+         entrada más corta puede ir por debajo, nunca por encima. */
+  --ease-entrance: cubic-bezier(0, 0, 0.2, 1);
+  --duration-entrance: 0.28s;
+
   /* --- Neutros + superficies (blanco hueso / gris) --- */
   --background: oklch(0.9653 0.0102 81.8); /* #F7F3EC blanco hueso */
   --foreground: oklch(0.2657 0.0118 248.27); /* #21262B gris oscuro  */
@@ -410,24 +421,30 @@
    bucle". La clase `reveal-on` la añade el island de cliente solo si NO hay
    prefers-reduced-motion; sin JS o con reduced-motion, el contenido se queda
    visible (opacity:1), nunca oculto. === */
+/* Duraba 600 ms, el doble del listón, y con la curva equivocada (P74.35). No era
+   solo estético: este mismo reveal se comió el LCP de la home una vez, porque la
+   foto del hero YA PINTADA se ocultaba al hidratar para volver con la transición
+   (D47 rescató 1.000 ms arreglando el orden; la duración seguía intacta). */
 .reveal-on [data-reveal] {
   opacity: 0;
   transform: translateY(14px);
   transition:
-    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity var(--duration-entrance) var(--ease-entrance),
+    transform var(--duration-entrance) var(--ease-entrance);
 }
 .reveal-on [data-reveal][data-shown] {
   opacity: 1;
   transform: none;
 }
-/* Chip EXIT: entra con retardo tras el reveal de su fila (PRD §21). */
+/* Chip EXIT: entra con retardo tras el reveal de su fila (PRD §21). El retardo ES
+   la duración del reveal, no un número suelto: así «tras» sigue significando lo
+   mismo si la entrada vuelve a cambiar de duración. */
 .reveal-on [data-reveal] .exit-chip {
   opacity: 0;
   transform: translateY(4px);
   transition:
-    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s,
-    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s;
+    opacity 0.25s var(--ease-entrance) var(--duration-entrance),
+    transform 0.25s var(--ease-entrance) var(--duration-entrance);
 }
 .reveal-on [data-reveal][data-shown] .exit-chip {
   opacity: 1;
@@ -448,7 +465,7 @@
 }
 .reveal-on .diagram-realce .rlz {
   opacity: 0.34;
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity var(--duration-entrance) var(--ease-entrance);
 }
 .reveal-on .diagram-realce[data-shown] .rlz {
   opacity: 1;
@@ -480,7 +497,7 @@
   }
 }
 .consent-enter {
-  animation: consent-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: consent-in var(--duration-entrance) var(--ease-entrance) both;
 }
 @media (prefers-reduced-motion: reduce) {
   .consent-enter {
@@ -491,7 +508,11 @@
 /* 404 — el "0" del número hace "florecer" la firma: las capas de color del split (el
    <g> de los anillos cian/morado) suben su opacidad sobre el aro base, que ya está
    visible. Puro CSS (sin JS/rAF): corre en la carga sin depender de hidratación.
-   Reduced-motion: split ya visible, sin interpolar (BRAND.md regla 7). */
+   Reduced-motion: split ya visible, sin interpolar (BRAND.md regla 7).
+   ES LA ÚNICA ENTRADA QUE SE QUEDA POR ENCIMA DEL LISTÓN, y con motivo (P74.35):
+   no es una entrada de contenido sino el gesto de marca de una página de error,
+   donde no compite con nada porque no hay nada más que leer. Su curva ya era
+   ease-out (easeOutQuint), así que no entraba en el arreglo de la curva. */
 @keyframes split-bloom {
   from {
     opacity: 0;
@@ -943,10 +964,23 @@
   text-decoration-color: var(--primary);
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
+  /* SUMABA 380 ms —300 de relleno + 80 de retardo del color— y el listón de una
+     entrada es 300 (P74.35). Ahora suma 280: el relleno y el color duran 220 ms
+     y el color entra 60 ms después, que es lo que hace falta para que el texto
+     no cambie antes de tener detrás con qué leerse.
+
+     Y EL RELLENO SE QUEDA EN `background-size`, que repinta, con motivo. La
+     alternativa de compositor —un pseudoelemento con `transform: scaleY()`— no
+     puede dar este gesto: un enlace de contenido parte a mitad de párrafo, y lo
+     que hace que el relleno crezca por SEPARADO en cada línea es
+     `box-decoration-break: clone`, que es de fondo y de borde, no de hijos. Un
+     `::before` absoluto se dibujaría una sola vez sobre la caja entera. El
+     gesto de marca (`BRAND.md` §Enlaces) manda sobre el ahorro de repintado, y
+     el repintado es de un renglón de texto en hover, no de una sección. */
   transition:
-    background-size 0.3s ease,
-    color 0.3s ease 0.08s,
-    text-decoration-color 0.22s ease;
+    background-size 0.22s var(--ease-entrance),
+    color 0.22s var(--ease-entrance) 0.06s,
+    text-decoration-color 0.16s var(--ease-entrance);
 }
 .link-content:hover,
 .link-content:focus-visible {

@@ -393,16 +393,16 @@
         "v": "Cambios de estado: acordeones, tabs."
       },
       {
-        "k": "600ms",
+        "k": "280ms",
         "v": "Scroll-reveal de entrada de sección."
       },
       {
         "k": "easing",
-        "v": "cubic-bezier(.4, 0, .2, 1), la estándar."
+        "v": "cubic-bezier(0, 0, .2, 1): ease-out al entrar."
       }
     ],
     "bullets": [
-      "Reveal = fundido + subida de 12px, escalonado ~60ms entre hijos.",
+      "Reveal = fundido + subida de 14px, una vez al entrar en viewport y nunca en bucle. Un grupo que entra junto escalona sus piezas (90ms en esta demo).",
       "prefers-reduced-motion: se desactivan transformaciones y auto-scroll. El contenido aparece siempre, aunque falle el JS."
     ],
     "demoLabel": "Demo de scroll-reveal",

@@ -133,6 +133,19 @@ export function GridDemo({
 }
 
 // (07) Demo de scroll-reveal — botón que reproduce la animación fade-up.
+//
+// LA DEMO NO DESCRIBE EL REVEAL: LO USA (P74.35). Se dibujaba con una transición
+// inline propia, y por eso llevaba una tercera versión de las mismas cifras: la
+// página publicaba 600 ms y 12px, `globals.css` decía 600 ms y 14px, y esto de
+// aquí, .5s y 12px. Tres fuentes, tres respuestas, en la página cuyo trabajo es
+// no poder mentir. Ahora las piezas son `[data-reveal]` normales y el replay solo
+// les quita y les devuelve `data-shown`: la duración, la curva y el recorrido los
+// pone la capa, así que la demo cambia sola cuando cambie el reveal.
+//
+// Y de paso arregla un incumplimiento que no se veía: con `prefers-reduced-motion`
+// el estilo inline animaba igual, porque no preguntaba. La regla vive en
+// `.reveal-on`, que el island de motion NO añade cuando hay reduced-motion, así
+// que ahora el botón deja las piezas donde están, que es lo correcto.
 export function RevealDemo({
   demoLabel,
   replayLabel,
@@ -146,16 +159,21 @@ export function RevealDemo({
     const demo = ref.current;
     if (!demo) return;
     const items = demo.querySelectorAll<HTMLElement>(".demo-item");
-    items.forEach((el, i) => {
+    // Rebobinar al estado oculto SIN transición, y solo entonces devolverla. Con
+    // el reflow a secas no basta y se ve vacío: quitar `data-shown` con la
+    // transición puesta arranca un fundido HACIA fuera, así que al devolverlo un
+    // frame después el elemento sigue casi opaco y no hay recorrido que ver.
+    // (Medido: opacidad 1 → 1 → 1 antes de esto.)
+    items.forEach((el) => {
       el.style.transition = "none";
-      el.style.opacity = "0";
-      el.style.transform = "translateY(12px)";
-      void el.offsetWidth;
-      el.style.transition =
-        "opacity .5s cubic-bezier(.4,0,.2,1), transform .5s cubic-bezier(.4,0,.2,1)";
+      el.removeAttribute("data-shown");
+    });
+    void demo.offsetWidth;
+    items.forEach((el, i) => {
+      // Cadena vacía = se devuelve la transición de la capa, no una copia suya.
+      el.style.transition = "";
       el.style.transitionDelay = `${i * 90}ms`;
-      el.style.opacity = "1";
-      el.style.transform = "none";
+      el.setAttribute("data-shown", "1");
     });
   };
 
@@ -172,9 +190,15 @@ export function RevealDemo({
         </button>
       </div>
       <div ref={ref} className="flex flex-col gap-[0.6rem]">
-        <div className="demo-item bg-muted h-[2.2rem] rounded-md" />
-        <div className="demo-item bg-muted h-[2.2rem] w-[85%] rounded-md" />
-        <div className="demo-item bg-muted h-[2.2rem] w-[70%] rounded-md" />
+        <div data-reveal className="demo-item bg-muted h-[2.2rem] rounded-md" />
+        <div
+          data-reveal
+          className="demo-item bg-muted h-[2.2rem] w-[85%] rounded-md"
+        />
+        <div
+          data-reveal
+          className="demo-item bg-muted h-[2.2rem] w-[70%] rounded-md"
+        />
       </div>
     </div>
   );
