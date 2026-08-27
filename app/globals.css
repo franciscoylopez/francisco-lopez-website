@@ -978,15 +978,25 @@
      gesto de marca (`BRAND.md` §Enlaces) manda sobre el ahorro de repintado, y
      el repintado es de un renglón de texto en hover, no de una sección. */
   transition:
-    background-size 0.22s var(--ease-entrance),
-    color 0.22s var(--ease-entrance) 0.06s,
-    text-decoration-color 0.16s var(--ease-entrance);
+    background-size 0.16s var(--ease-entrance),
+    color 0.16s ease 0.04s,
+    text-decoration-color 0.12s ease;
 }
-.link-content:hover,
+/* EL FOCO NO PASA POR LA PUERTA. El hover se cierra a punteros finos porque en
+   táctil el tap dispara un hover falso Y SE QUEDA PEGADO: al volver atrás, el
+   enlace sigue relleno de cian. `:focus-visible` es la misma pintura por otra
+   vía —la del teclado—, así que vive fuera y no depende del tipo de puntero. */
 .link-content:focus-visible {
   background-size: 100% 100%;
   color: var(--primary-foreground);
   text-decoration-color: transparent;
+}
+@media (hover: hover) and (pointer: fine) {
+  .link-content:hover {
+    background-size: 100% 100%;
+    color: var(--primary-foreground);
+    text-decoration-color: transparent;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .link-content {
@@ -1020,9 +1030,16 @@
   );
   text-decoration-color: var(--primary-on-inverted);
 }
-[data-surface="inverted"] .link-content:hover,
+/* La misma puerta que arriba, por el mismo motivo: si el hover de la banda
+   invertida no se cerrara a punteros finos, el tap dejaría el enlace en el color
+   del estado relleno mientras el relleno ya se ha ido. */
 [data-surface="inverted"] .link-content:focus-visible {
   color: var(--primary-foreground-on-inverted);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-surface="inverted"] .link-content:hover {
+    color: var(--primary-foreground-on-inverted);
+  }
 }
 
 /* Enlaces de chrome (nav/breadcrumb/footer) — nunca `primary`, ni en texto ni en

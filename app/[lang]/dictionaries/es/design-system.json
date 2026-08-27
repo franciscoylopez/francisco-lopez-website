@@ -402,7 +402,7 @@
       }
     ],
     "bullets": [
-      "Reveal = fundido + subida de 14px, una vez al entrar en viewport y nunca en bucle. Un grupo que entra junto escalona sus piezas (90ms en esta demo).",
+      "Reveal = fundido + subida de 14px, una vez al entrar en viewport y nunca en bucle. Un grupo que entra junto escalona sus piezas (80ms en esta demo).",
       "prefers-reduced-motion: se desactivan transformaciones y auto-scroll. El contenido aparece siempre, aunque falle el JS."
     ],
     "demoLabel": "Demo de scroll-reveal",

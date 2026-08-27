@@ -172,7 +172,7 @@ export function RevealDemo({
     items.forEach((el, i) => {
       // Cadena vacía = se devuelve la transición de la capa, no una copia suya.
       el.style.transition = "";
-      el.style.transitionDelay = `${i * 90}ms`;
+      el.style.transitionDelay = `${i * 80}ms`;
       el.setAttribute("data-shown", "1");
     });
   };

@@ -7906,3 +7906,48 @@ elemento LCP es la foto del hero.
 
 Así que este cambio es de sensación, no de métrica. La nota de PageSpeed se vuelve a sellar
 tras el deploy por el registro (`npm run psi -- --registro`), no porque se espere movimiento.
+
+### El cierre lo puso `/review-animations` y lo decidió un banco, no un argumento
+
+La revisión de motion aprobó el cambio y dejó siete afinados. **Los tres perceptuales no se
+razonaron: se montaron.** Un banco con las tres candidatas en columnas **sincronizadas** —en
+secuencia no se distinguen— con los tokens reales, los dos temas, un interruptor de
+reduced-motion y cámara lenta ×1/×3/×5, porque a 280 ms una curva no se juzga a ojo.
+
+| Decisión | Candidatas | Elegida |
+|---|---|---|
+| Curva de entrada | `(0, 0, .2, 1)` · `(0.23, 1, 0.32, 1)` · `(0.22, 1, 0.36, 1)` | **`(0, 0, .2, 1)`, la que ya estaba** |
+| Hover de `.link-content` | 280 · 200 · 160 ms | **200 ms** (160 de relleno + 40 de retardo del color) |
+| Escalonado de un grupo | 60 · 80 · 90 ms | **80 ms** |
+
+**La curva se queda donde estaba, y eso NO es «no se hizo nada».** La revisión pedía una
+ease-out más fuerte citando el catálogo, y el catálogo tiene razón en abstracto: `(0.22, 1,
+0.36, 1)` decelera mucho más. Vista sobre el bloque real y a la vez que las otras dos, la
+fuerte se lee como un frenazo en un recorrido de 14px, que es un desplazamiento demasiado
+corto para que una curva agresiva tenga dónde expresarse. **El valor no cambia; lo que cambia
+es su estado: pasa de heredado a elegido**, y esa es toda la diferencia entre una decisión y
+una omisión. Si vuelve a aparecer, ya está contestada.
+
+**Los otros dos sí se movieron, y los dos en la misma dirección: menos.** El enlace baja a 200
+porque no compite por «no pasarse de 300» sino por quitarse de en medio: es un hover de
+contenido, y la tabla de frecuencia del catálogo pone eso en «decenas de veces al día», donde
+la instrucción no es acortar sino desaparecer. Y el escalonado entra en la banda 30-80 por el
+extremo lento, que es donde un grupo de tres o cuatro piezas todavía se lee como grupo.
+
+**Y el color del enlace vuelve a `ease`.** Solo el relleno *entra*; el color del texto y el del
+subrayado nada más cambian de valor, y para eso la curva de entrada no aporta. Es la tabla de
+decisión del catálogo aplicada por partes en vez de a la declaración entera.
+
+### La puerta del hover, que no era perceptual y estaba desde antes
+
+`.link-content:hover` no tenía `@media (hover: hover) and (pointer: fine)`, así que en táctil el
+tap disparaba un hover falso **y se quedaba pegado**: al volver atrás, el enlace seguía relleno
+de cian. Se cierra aquí y en su contraparte invertida.
+
+**`:focus-visible` se saca de la puerta**, que es la parte que hay que no olvidar: es la misma
+pintura por la vía del teclado y no depende del tipo de puntero. Meterlo dentro habría cambiado
+un defecto táctil por uno de accesibilidad.
+
+**El resto de la familia sigue sin puerta** —`.link-chrome`, `.icon-chrome`, `.video-facade`—
+y queda señalado, no hecho: son de otra tarea y su hover es una pastilla neutra, mucho menos
+llamativa que una inversión de color.
