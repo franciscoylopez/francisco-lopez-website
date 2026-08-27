@@ -412,7 +412,7 @@ export const CONTRAST = {
  * una verificación que no ocurrió, y eso es peor que una fecha vieja: mentiría
  * cada día en vez de solo quedarse atrás.
  */
-export const LAST_A11Y_REVIEW = "2026-08-26";
+export const LAST_A11Y_REVIEW = "2026-08-27";
 
 /**
  * CUÁNTAS PÁGINAS tiene el sitio por idioma, derivado del registro y nunca
