@@ -142,7 +142,7 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 4. **Un solo `h1` por página** y jerarquía `h2`–`h4` sin saltos. El orden de lectura = el orden del DOM.
 5. **Breadcrumb** en toda página interna: `<nav aria-label>`, lista ordenada, `aria-current="page"` en el nivel actual.
 6. **Nada codificado solo por color:** todo estado/categoría distinguido por color lleva además texto o forma.
-7. **`prefers-reduced-motion` retira lo que DESPLAZA o ESCALA, no lo que se funde** *(2026-08-27, D136)*. Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca: la opacidad y el color se quedan. Una animación mixta **se parte** (fuera el `translate`, dentro el fundido); solo se apaga entera la que es movimiento de principio a fin.
+7. **`prefers-reduced-motion` retira lo que DESPLAZA o ESCALA, no lo que se funde** *(2026-08-27, D136)*. Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca: la opacidad y el color se quedan. Una animación mixta **se parte** (fuera el `translate`, dentro el fundido) y **el fundido que se queda se acorta**; solo se apaga entera la que es movimiento de principio a fin, o la que va acoplada al scroll, que es la que nombra WCAG 2.3.3.
 8. **Alternativas textuales:** `alt` y etiquetas donde informan, `aria-hidden` en lo decorativo.
 9. **Vía de escape del teclado:** enlace de salto al contenido como primer elemento focalizable, con destino real (`<main>` con `tabindex="-1"`).
 

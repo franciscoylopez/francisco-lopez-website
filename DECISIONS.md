@@ -7975,18 +7975,29 @@ Medido sobre el sitio servido con reduced-motion activo: **0** elementos con `.r
 protección la daba el island; el CSS solo la repetía, y repetirla hacía creer que el reveal
 se apagaba ahí.
 
-**Y es la razón por la que el reveal es justo el que NO se atenúa.** Para darle un fundido
-habría que añadir `reveal-on` igualmente, o sea volver a poner `opacity: 0` en 34 elementos
-**justo para quien ha pedido menos movimiento**, reabriendo el mecanismo que costó 2.090 ms
-de LCP (D47). El precio no lo paga quien lo pide. Se borra el selector y se queda escrito el
-porqué; el `scroll-behavior: auto` sigue, que era lo único que ese bloque apagaba de verdad.
+**EL REVEAL ES EL ÚNICO FUNDIDO QUE NO SE CONSERVA, y el motivo no es el LCP.** Esta entrada
+decía primero otra cosa —que atenuarlo obligaría a poner `opacity: 0` en 34 elementos y
+reabriría el mecanismo que costó 2.090 ms (D47)— y **`/review-animations` lo tumbó en el acto**:
+el orden de D47 marca el primer pliegue como `data-shown` ANTES de encender la clase, y eso
+protege al elemento LCP **de todo el mundo**, no solo de quien no ha activado el ajuste. Serían
+los **30** de debajo del pliegue, exactamente los mismos que ya lo hacen en el camino normal, y
+ninguno toca la métrica. *(Queda escrito porque es la cuarta vez que este proyecto le da a una
+excepción un motivo más sólido del que tiene; el motivo malo es el hallazgo.)*
+
+**El motivo real: es el único efecto ACOPLADO AL SCROLL.** WCAG 2.3.3 habla justamente de la
+animación que dispara la interacción, y ahí está la línea que separa este caso de los otros:
+los fundidos que sí se conservan ocurren **una vez y no los pide nadie** —el «0» del 404 y el
+banner entran al cargar— o duran lo que un gesto —los de hover—. Este se repite **treinta
+veces** mientras alguien baja por la página, y a quien ha pedido menos movimiento eso es
+exactamente lo que le sobra. Se borra el selector muerto y se queda escrito el porqué; el
+`scroll-behavior: auto` sigue, que era lo único que ese bloque apagaba de verdad.
 
 ### El reparto, pieza por pieza
 
 | Pieza | Qué anima | Con movimiento reducido |
 |---|---|---|
 | Scroll-reveal | opacidad + `translateY(14px)` | **Sigue apagado**, y por el motivo de arriba |
-| `.split-zero > g` (el «0» del 404) | solo opacidad | **Corre** |
+| `.split-zero > g` (el «0» del 404) | solo opacidad | **Corre, y en 0,2 s** en vez de 0,9 |
 | `.video-facade::after` (velo) | solo opacidad | **Corre** |
 | `.link-chrome` · `.icon-chrome` | solo `background-color` | **Corre** |
 | `.link-content` | relleno + color + subrayado | **Corre** |
@@ -7994,6 +8005,13 @@ porqué; el `scroll-behavior: auto` sigue, que era lo único que ese bloque apag
 | `.video-play` | `scale(1.08)` | Apagado |
 | Pastilla de `CopyButton` | solo opacidad | **Corre** |
 | Cabecera del 404 | fundido + deslizamiento | **Se parte**: `motion-reduce:slide-in-from-bottom-0` |
+
+**Y «más suave» también es «más corto», que es la otra mitad de la regla.** El florecer del 404
+se conservaba entero: **900 ms** de fundido para quien ha pedido menos movimiento. Ahí «se
+queda» no puede significar «se queda igual», porque lo que para el resto es un gesto de marca,
+para quien activa el ajuste es una espera. Bajo movimiento reducido corre en **0,2 s y sin
+retardo**, sobreescribiendo solo esas dos longhands. La regla completa son tres cosas y no dos:
+**fuera lo que desplaza, dentro el fundido, y el fundido más corto.**
 
 **El banner se parte cambiando solo `animation-name`**, no la abreviada: la duración, la
 curva y el `both` los sigue poniendo la declaración de arriba, así que no puede acabar con

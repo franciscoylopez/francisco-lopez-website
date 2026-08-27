@@ -480,11 +480,19 @@
    opacidad 1 y sin transición. La protección la da el island, no el CSS, y tenerla
    escrita dos veces hacía creer que el reveal se apagaba **aquí**.
 
-   Y ES LA RAZÓN POR LA QUE EL REVEAL NO SE ATENÚA en vez de apagarse, que es lo
-   que la regla de abajo pediría: para dar un fundido habría que añadir `reveal-on`
-   igualmente, o sea volver a poner `opacity: 0` en 34 elementos justo para quien ha
-   pedido menos movimiento, reabriendo el mecanismo que costó 2.090 ms de LCP (D47).
-   El scroll sí se queda, que es lo único que esta regla apagaba de verdad. */
+   EL REVEAL ES EL ÚNICO FUNDIDO QUE NO SE CONSERVA, y el motivo NO es el LCP.
+   Se escribió que serían «34 elementos volviendo a opacity 0», y es falso: el orden
+   de D47 marca el primer pliegue como `data-shown` ANTES de encender la clase, y
+   eso protege al elemento LCP de todo el mundo, no solo de quien no ha pedido nada.
+   Serían los 30 de debajo del pliegue, que no tocan la métrica.
+
+   El motivo real es que este es el único efecto ACOPLADO AL SCROLL, y WCAG 2.3.3
+   habla justamente de la animación que dispara la interacción. Los otros fundidos
+   que sí se conservan ocurren una vez y no los pide el usuario: el «0» del 404 y el
+   banner entran al cargar; los de hover son discretos y duran lo que un gesto. Este
+   se repite treinta veces mientras alguien baja por la página, y a quien ha pedido
+   menos movimiento eso es exactamente lo que le sobra.
+   El scroll suave se queda apagado, que es lo único que esta regla apagaba. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto !important;
@@ -546,6 +554,17 @@
 }
 .split-zero > g {
   animation: split-bloom 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+/* Y SE CONSERVA MÁS CORTO, que es la otra mitad de la regla: «más suave» no es solo
+   «sin desplazamiento», también es «sin hacer esperar». Novecientos milisegundos de
+   florecer son un gesto de marca para quien no ha pedido nada; para quien sí, son
+   una espera. Solo la duración y el retardo: el fundido, la curva y el `both` los
+   sigue poniendo la abreviada de arriba. */
+@media (prefers-reduced-motion: reduce) {
+  .split-zero > g {
+    animation-duration: 0.2s;
+    animation-delay: 0s;
+  }
 }
 /* Hitos — fila responsive (D7: en CSS, no en JS). Móvil: grid que apila el
    impacto bajo el nombre. ≥768px (md): flex, todo en una fila. */
