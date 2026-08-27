@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { CheckPill } from "@/components/ui/check-pill";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { Badge } from "@/components/ui/badge";
@@ -9,10 +9,11 @@ import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 /* ===================== ACCESIBILIDAD ===================== */
-// Marca de verificación de las listas de esta página. `size-[15px]` porque vive
-// dentro de una pastilla teñida de 26px y no sale de la capa de acción — no es un
-// control, es un adorno de contenido.
-const CHECK = "size-[15px]";
+// La marca de verificación del checklist ya NO se dibuja aquí: sale de
+// `ui/check-pill.tsx` (P70.44). Estaba escrita a mano en esta sección y dos veces
+// más en `/accesibilidad`, y son justo las dos páginas cuyo argumento es que el
+// sistema es coherente: la que documenta el checklist no puede enseñar un check
+// distinto del que pinta la página real.
 
 function ContrastBadge({ lv }: { lv: string | null }) {
   if (!lv) return null;
@@ -99,16 +100,7 @@ export function Accesibilidad({
                 "flex items-start gap-[0.9rem] px-[1.15rem] py-4",
               )}
             >
-              <span
-                aria-hidden="true"
-                className="text-primary inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[7px]"
-                style={{
-                  background:
-                    "color-mix(in oklch, var(--primary), transparent 86%)",
-                }}
-              >
-                <Check className={CHECK} />
-              </span>
+              <CheckPill />
               <div className="flex-1">
                 <span className="text-muted-foreground font-mono text-[0.72rem]">
                   {String(i + 1).padStart(2, "0")}

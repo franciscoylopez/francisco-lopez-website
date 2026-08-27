@@ -23,6 +23,24 @@
     "nextLabel": "Next:",
     "of": "of"
   },
+  "bloques": {
+    "fundamentos": {
+      "title": "Fundamentals",
+      "lead": "The five decisions everything else hangs from. They are made once and reach all fourteen pages."
+    },
+    "piezas": {
+      "title": "Pieces",
+      "lead": "The catalogue of what you press and what labels. None of them is written with loose classes: if a case does not fit a variant, the variant gets created."
+    },
+    "composicion": {
+      "title": "Composition",
+      "lead": "How a page is assembled from all of the above, and the accessibility criteria each one is closed with."
+    },
+    "excepcion": {
+      "title": "The exception",
+      "lead": "Long-form text has a shape of its own, and it comes last on purpose: it is what the core does not cover, so it closes."
+    }
+  },
   "rejilla": {
     "indexLabel": "Grid and measures",
     "title": "Wide to lay out, narrow to read",
@@ -625,7 +643,7 @@
       {
         "part": "Row name",
         "markup": "th scope=row",
-        "what": "Ties each figure to its row: «Dimmed on card, light, 9.14:1» instead of three loose numbers."
+        "what": "Ties each figure to its row: «Dimmed on card, light, {mutedOnCard.light}» instead of three loose numbers."
       },
       {
         "part": "Column width",
@@ -684,7 +702,12 @@
       "The block knows nothing about this site: it receives a label and a list of destinations.",
       "Which page is sibling to which is decided by its callers, who do know."
     ],
-    "ruleFoot": "It's the boundary that decides where a piece lives: if it knows something about this site, it isn't part of the system."
+    "ruleFoot": "It's the boundary that decides where a piece lives: if it knows something about this site, it isn't part of the system.",
+    "blockTitle": "The opening of a block",
+    "blockLead": "Twelve sections in a row do not say where one family ends and the next begins. The band says it, and shows what it contains.",
+    "blockKicker": "Block opener",
+    "blockRule": "Inverted background and type alone. An existing section is never tinted: the ones here are galleries and assume the page background.",
+    "blockNote": "The band below is not a recreation: it is the one that opens the «Pieces» block of this very page."
   },
   "accesibilidad": {
     "indexLabel": "Closing checklist",

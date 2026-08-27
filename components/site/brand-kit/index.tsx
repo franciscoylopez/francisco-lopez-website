@@ -1,4 +1,7 @@
+import { Fragment, type ReactNode } from "react";
+
 import type { Dictionary } from "@/app/[lang]/dictionaries";
+import { BlockOpener } from "@/components/ui/block-opener";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import {
   SectionCloser,
@@ -41,6 +44,17 @@ const ORDEN = [
 
 /** El ancla del índice. Misma convención que sus hermanas. */
 const ANCLA_INDICE = "indice";
+
+/**
+ * LOS DOS BLOQUES (P70.47). Aquí van las CLAVES y nada más: el título y la
+ * entradilla son copy y viven en el diccionario, y los ordinales de la banda
+ * salen de `paradas`. Reordenar la página no puede dejar una banda anunciando
+ * secciones que ya no están debajo.
+ */
+const BLOQUES = [
+  { id: "hecha", claves: ["concepto", "logotipo", "color", "tipografia"] },
+  { id: "uso", claves: ["aplicaciones", "uso"] },
+] as const;
 
 // Página Brand Kit (PRD §21). Server Component completo — no tiene islas.
 //
@@ -100,6 +114,24 @@ export function BrandKit({
     }),
   ) as Record<(typeof ORDEN)[number], SeccionMarco>;
 
+  /** Cada sección con su rebanada, indexada por clave: las reparte el bucle de
+   *  `BLOQUES`, y un mapa por clave no se desalinea al insertar una en medio. */
+  const secciones: Record<(typeof ORDEN)[number], ReactNode> = {
+    concepto: <Concepto t={t.concepto} marco={marcos.concepto} />,
+    logotipo: <Logotipo t={t.logotipo} marco={marcos.logotipo} />,
+    color: <Color t={t.color} marco={marcos.color} lang={lang} />,
+    tipografia: <Tipografia t={t.tipografia} marco={marcos.tipografia} />,
+    aplicaciones: (
+      <Aplicaciones
+        t={t.aplicaciones}
+        marco={marcos.aplicaciones}
+        tKit={t.logotipo.enElKit}
+        lang={lang}
+      />
+    ),
+    uso: <Uso t={t.uso} marco={marcos.uso} />,
+  };
+
   return (
     <>
       <Hero
@@ -131,17 +163,25 @@ export function BrandKit({
         </div>
       </section>
 
-      <Concepto t={t.concepto} marco={marcos.concepto} />
-      <Logotipo t={t.logotipo} marco={marcos.logotipo} />
-      <Color t={t.color} marco={marcos.color} lang={lang} />
-      <Tipografia t={t.tipografia} marco={marcos.tipografia} />
-      <Aplicaciones
-        t={t.aplicaciones}
-        marco={marcos.aplicaciones}
-        tKit={t.logotipo.enElKit}
-        lang={lang}
-      />
-      <Uso t={t.uso} marco={marcos.uso} />
+      {/* LAS SEIS, EN DOS BLOQUES (P70.47). Dos y no tres, y no es estético:
+          lo que fija cada cuánto aparece una banda es el número de BLOQUES, no
+          el de secciones. Con tres caería una cada 4,6 pantallas en una página
+          de 13,9 y se leería a golpes; con dos cae cada 7,4, que es el terreno
+          del Design System. El porqué medido, en `ui/block-opener.tsx`. */}
+      {BLOQUES.map((bloque) => (
+        <Fragment key={bloque.id}>
+          <BlockOpener
+            title={t.bloques[bloque.id].title}
+            lead={t.bloques[bloque.id].lead}
+            items={paradas.filter((p) =>
+              (bloque.claves as readonly string[]).includes(p.clave),
+            )}
+          />
+          {bloque.claves.map((clave) => (
+            <Fragment key={clave}>{secciones[clave]}</Fragment>
+          ))}
+        </Fragment>
+      ))}
 
       <RelatedPages dict={related} current="brandKit" lang={lang} />
     </>

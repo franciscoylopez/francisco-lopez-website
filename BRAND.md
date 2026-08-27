@@ -73,6 +73,8 @@ Lo que hay que saber al escribir UI:
 - **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix` en vez de la utilidad—,
   tiene que declarar a qué familia pertenece con `data-surface="card" | "muted" | "inverted" |
   "page"`. Sin eso la capa no puede verlo, y ahí es donde se escaparon cuatro pares.
+  **Salvo que el velo sea casi transparente**: al 86% manda la superficie de debajo, que ya se
+  hereda bien, y declarar familia fijaría la equivocada donde la pieza se reutilice.
 - **Una superficie también cambia por ESTADO, no solo por clase o por atributo** (D61).
   `hover:bg-muted` **no** compila a `.bg-muted`: compila a `.hover\:bg-muted:hover`, y dentro
   de `@media (hover: hover)`. Es otro selector, así que una tarjeta que se aclaraba al pasar el
@@ -248,9 +250,6 @@ el switch del consentimiento, aquí debajo).
 >   con dos fondos.
 > - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
 >   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
->
-> **Eran cuatro; las otras dos salieron el 2026-08-26 cumpliendo su condición de salida**
-> ([`BRAND-historical.md`](./BRAND-historical.md) §Las dos excepciones que salieron).
 >
 > **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
 > imagen del vídeo no es excepción: sale de `.video-facade`.

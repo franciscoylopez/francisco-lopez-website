@@ -9,6 +9,8 @@ import {
   SectionIndex,
 } from "@/components/ui/section-index";
 import { DataTable, TD, TR } from "@/components/ui/table";
+import { BlockOpener } from "@/components/ui/block-opener";
+import { fillRatios } from "@/lib/design-values";
 import { type Locale } from "@/lib/i18n/config";
 
 import { cn } from "@/lib/utils";
@@ -35,6 +37,7 @@ export function Composicion({
   t,
   marco,
   paradas,
+  bloqueDemo,
   lang,
 }: {
   t: Dictionary["designSystem"]["composicion"];
@@ -46,6 +49,17 @@ export function Composicion({
    * con ella. Es «las piezas reales del sitio como demo» llevado al dato.
    */
   paradas: { id: string; ordinal: string; label: string }[];
+  /**
+   * EL BLOQUE REAL QUE SE ENSEÑA, por el mismo motivo que `paradas`: el
+   * espécimen de `BlockOpener` no es una recreación, es literalmente la banda
+   * que abre el bloque «Piezas» de esta misma página, con su copy y sus cuatro
+   * paradas. Si el bloque cambia, la demo cambia con él y no puede mentir.
+   */
+  bloqueDemo: {
+    title: string;
+    lead: string;
+    items: { ordinal: string; label: string }[];
+  };
   lang: Locale;
 }) {
   const base = lang === "es" ? "" : `/${lang}`;
@@ -104,7 +118,15 @@ export function Composicion({
               <TD>
                 <code className="font-mono text-[0.85rem]">{r.markup}</code>
               </TD>
-              <TD className="text-muted-foreground text-[0.88rem]">{r.what}</TD>
+              {/* PASA POR `fillRatios` porque una de estas tres filas ARGUMENTA
+                  CON UNA CIFRA VIVA («Atenuado sobre card, claro, 9,14:1»), y
+                  la tenía escrita a mano teniendo fuente: `mutedOnCard` en
+                  `design-values.ts`. Hoy coincidía. Es exactamente la deriva que
+                  D38 existe para impedir, y en este repo una cifra equivocada ya
+                  ha viajado dos veces, una de ellas trece días en producción. */}
+              <TD className="text-muted-foreground text-[0.88rem]">
+                {fillRatios(r.what, lang)}
+              </TD>
             </TR>
           ))}
         </DataTable>
@@ -208,6 +230,27 @@ export function Composicion({
             nextHref={`#${paradas[0]?.id ?? "indice"}`}
             ariaLabel={t.navCloserAria}
             positionLabel={t.navCloserPositionLabel}
+          />
+        </SpecimenCard>
+
+        {/* ---------- la apertura de bloque ---------- */}
+        {/* VA AQUÍ Y NO EN §01 «Rejilla» (P70.47): no es un ritmo de espaciado,
+            es una CAJA a nivel de página, hermana de PageCloser y de las dos de
+            arriba. Y el espécimen no es una recreación: es literalmente la banda
+            que abre el bloque «Piezas» de ESTA página, con su copy y sus cuatro
+            paradas. Si el bloque cambia, la demo cambia con él. */}
+        <GroupHead title={t.blockTitle} lead={t.blockLead} />
+        <SpecimenCard
+          kicker={t.blockKicker}
+          cls="BlockOpener"
+          rule={t.blockRule}
+          note={t.blockNote}
+          wide
+        >
+          <BlockOpener
+            title={bloqueDemo.title}
+            lead={bloqueDemo.lead}
+            items={bloqueDemo.items}
           />
         </SpecimenCard>
 

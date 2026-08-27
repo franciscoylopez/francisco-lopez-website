@@ -23,6 +23,24 @@
     "nextLabel": "Siguiente:",
     "of": "de"
   },
+  "bloques": {
+    "fundamentos": {
+      "title": "Fundamentos",
+      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a las catorce páginas."
+    },
+    "piezas": {
+      "title": "Piezas",
+      "lead": "El catálogo de lo que se pulsa y lo que rotula. Ninguna se escribe con clases sueltas: si un caso no encaja en una variante, se crea la variante."
+    },
+    "composicion": {
+      "title": "Composición",
+      "lead": "Cómo se monta una página con todo lo anterior, y el criterio de accesibilidad con el que se cierra cada una."
+    },
+    "excepcion": {
+      "title": "La excepción",
+      "lead": "El texto largo tiene su propia forma, y va el último a propósito: es lo que el núcleo no cubre, así que cierra."
+    }
+  },
   "rejilla": {
     "indexLabel": "Rejilla y medidas",
     "title": "Ancha para maquetar, estrecha para leer",
@@ -625,7 +643,7 @@
       {
         "part": "Nombre de la fila",
         "markup": "th scope=row",
-        "what": "Ata cada cifra a su fila: «Atenuado sobre card, claro, 9,14:1» en vez de tres números sueltos."
+        "what": "Ata cada cifra a su fila: «Atenuado sobre card, claro, {mutedOnCard.light}» en vez de tres números sueltos."
       },
       {
         "part": "Ancho de columna",
@@ -684,7 +702,12 @@
       "El bloque no sabe nada de este sitio: recibe un rótulo y una lista de destinos.",
       "Quién es hermana de quién lo deciden sus llamadores, que sí lo saben."
     ],
-    "ruleFoot": "Es la frontera que decide dónde vive una pieza: si sabe algo de este sitio, no es del sistema."
+    "ruleFoot": "Es la frontera que decide dónde vive una pieza: si sabe algo de este sitio, no es del sistema.",
+    "blockTitle": "La apertura de un bloque",
+    "blockLead": "Doce secciones seguidas no dicen dónde acaba una familia y empieza otra. La banda lo dice, y de paso enseña qué lleva dentro.",
+    "blockKicker": "Apertura de bloque",
+    "blockRule": "Fondo invertido y tipo sola. Nunca se tiñe una sección existente: las de aquí son galerías y dan por hecho el fondo de página.",
+    "blockNote": "La banda de abajo no es una recreación: es la que abre el bloque «Piezas» de esta misma página."
   },
   "accesibilidad": {
     "indexLabel": "Checklist de cierre",

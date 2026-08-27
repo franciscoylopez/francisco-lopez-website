@@ -59,9 +59,16 @@
  *   describe `BRAND.md` §Cómo se escribe una regla.
  * - **Por debajo de 360.** El suelo de la DoD es 360 y aquí se aplica ese. A 320
  *   los lienzos estrechos del artículo pintan 9,7px: está medido, está fuera del
- *   contrato, y cerrarlo pide lienzos de 244 unidades en vez de 280. Es decisión
- *   de producto, no de este script — y por eso el informe lo dice en voz alta en
- *   vez de callárselo.
+ *   contrato, y cerrarlo pediría lienzos de 244 unidades en vez de 280.
+ *   **Y esa decisión de producto YA ESTÁ TOMADA: es D124** (2026-08-26). 360 es
+ *   el suelo declarado del RÓTULO —no del sitio, que se verifica hasta 280 por
+ *   D93 y P70.13—, así que esto no es una pregunta abierta esperando a que
+ *   alguien abra este archivo. Lo que sigue en pie es que el informe lo diga en
+ *   voz alta en vez de callárselo, que es lo que impide que el alcance quede
+ *   recortado en silencio.
+ *   **Se reabre** si el suelo de viewport del sitio baja de 360 como compromiso,
+ *   o si una figura aparece en un hueco más estrecho que el `ANCHO_MINIMO` de
+ *   aquí abajo — lo segundo lo delata el propio informe, que publica esa cifra.
  * - **Que el rótulo QUEPA.** Esto mide tamaño, no desbordamiento: un texto de 11
  *   unidades que se sale de su caja pasa por aquí. Eso se ve dibujando.
  * - **Texto que no sea `<text>` o `<p>` dentro del SVG.** Si aparece otra forma
@@ -383,8 +390,9 @@ function main() {
       "Compáralo con el navegador si el marco cambia de paddings.",
   );
   console.log(
-    "  · fuera del contrato: por debajo de 360 no se juzga. A 320, los lienzos " +
-      "estrechos del artículo pintan 9,7px (medido, P68.59).",
+    "  · fuera del contrato: por debajo de 360 no se juzga — 360 es el suelo " +
+      "DECLARADO del rótulo, no del sitio (D124). A 320, los lienzos estrechos " +
+      "del artículo pintan 9,7px (medido, P68.59).",
   );
 
   // MEDIDOS Y NO JUZGADOS. Van al final y con su cifra, uno a uno, porque un

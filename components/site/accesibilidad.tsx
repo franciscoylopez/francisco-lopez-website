@@ -1,4 +1,5 @@
-import { Check } from "lucide-react";
+import { BlockOpener } from "@/components/ui/block-opener";
+import { CheckPill } from "@/components/ui/check-pill";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { cn } from "@/lib/utils";
@@ -209,6 +210,19 @@ export function Accesibilidad({
         </div>
       </section>
 
+      {/* LOS DOS BLOQUES (P70.47). Esta página NO está partida en un archivo por
+          sección como sus dos hermanas, así que las bandas van insertadas a mano
+          en el JSX en vez de salir de un bucle. El reparto es el mismo que allí y
+          el corte cae donde la página CAMBIA DE ARGUMENTO: primero declara lo que
+          cumple y cómo lo prueba (01-04); después, dónde no llega y cómo avisarlo
+          (05-08). Los ordinales de cada banda salen de `paradas`, no se
+          escriben. */}
+      <BlockOpener
+        title={t.bloques.cumple.title}
+        lead={t.bloques.cumple.lead}
+        items={paradas.slice(0, 4)}
+      />
+
       {/* ===================== (01) NIVEL DE CONFORMIDAD ===================== */}
       <section
         data-reveal
@@ -288,16 +302,7 @@ export function Accesibilidad({
             {t.measures.items.map((c) => (
               <li key={c.title} className={cn(CARD, "px-[1.15rem] py-4")}>
                 <div className="flex items-start gap-[0.9rem]">
-                  <span
-                    aria-hidden="true"
-                    className="text-primary inline-flex h-[26px] w-[26px] flex-none items-center justify-center rounded-[7px]"
-                    style={{
-                      background:
-                        "color-mix(in oklch, var(--primary), transparent 86%)",
-                    }}
-                  >
-                    <Check className="size-[15px]" />
-                  </span>
+                  <CheckPill />
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                       <p className="text-foreground m-0 text-[0.95rem] font-semibold">
@@ -489,6 +494,12 @@ export function Accesibilidad({
           {marcos.verify.closer}
         </div>
       </section>
+
+      <BlockOpener
+        title={t.bloques.limites.title}
+        lead={t.bloques.limites.lead}
+        items={paradas.slice(4)}
+      />
 
       {/* ===================== (05) EL PUNTO CIEGO ===================== */}
       {/* La otra mitad del hueco de P70.02, y la que da credibilidad: qué
@@ -820,15 +831,7 @@ function HeroComposition() {
         >
           {[100, 82, 94].map((w, i) => (
             <div key={i} className="flex items-center gap-[0.55rem]">
-              <span
-                className="text-primary inline-flex h-[18px] w-[18px] flex-none items-center justify-center rounded-[5px]"
-                style={{
-                  background:
-                    "color-mix(in oklch, var(--primary), transparent 86%)",
-                }}
-              >
-                <Check className="size-[15px]" />
-              </span>
+              <CheckPill size="sm" />
               <div
                 className="bg-muted h-[0.32rem] rounded-full"
                 style={{ width: `${w}%` }}

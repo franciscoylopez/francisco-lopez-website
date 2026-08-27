@@ -159,6 +159,9 @@
 - D121 · El índice de una página con paradas deja de ser «de artículo», y dos excepciones cumplen su condición de salida
 - D122 · El ordinal de una sección deja de escribirse: lo pone el orden de la página
 - D123 · El riel va donde la página se LEE; el índice y el cierre, donde se consulta
+- D124 · El suelo de 360 deja de ser el comentario de un script y pasa a ser una decisión de producto
+- D125 · Una banda no se tiñe sobre una sección que ya existe: se inserta
+- D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7237,3 +7240,135 @@ por su propio criterio: cuando una segunda página quiere una de sus piezas, esa
 Cierto, y le faltaba la otra mitad: **la premisa también se comprueba al revés**. El riel
 salió, se probó en tres páginas y volvió. Que una pieza sirva a cuatro páginas no la convierte
 en general; lo que la hace general es que su motivo valga en las cuatro.
+
+## D124 · El suelo de 360 deja de ser el comentario de un script y pasa a ser una decisión de producto — 2026-08-26
+
+**Contexto.** `check-figuras.ts` lleva escrito en su cabecera, desde que existe, que **por
+debajo de 360 no juzga**, y que a 320 los lienzos estrechos del artículo pintan **9,7px**. Lo
+mide, lo declara fuera de contrato y lo **imprime en cada corrida** en vez de callárselo — que
+es la mitad correcta de la decisión. La otra mitad no existía: el propio comentario decía que
+cerrarlo «es decisión de producto, no de este script», y esa decisión **no la tenía pendiente
+nadie**. No había tarea, así que llevaba semanas siendo una decisión implícita escondida en el
+único sitio donde nadie la va a leer.
+
+Se abrió tarea (P70.46) cuando `viewport-verifier` lo reprodujo sobre los **dos diagramas
+nuevos de `/accesibilidad`**: 9,66px a 320, 11,24px a 360, 11,79px a 390, en ES y EN. Lo que
+cambió no fue el hecho sino el **tamaño del conjunto afectado**: la tanda 6 añadió dos figuras
+más al mismo lienzo de 280.
+
+**Lo que NO era.** No hay incumplimiento. El punto 11 de la columna A de la DoD pide **11px
+pintados a 360** y ahí dan 11,24. El gate está en verde y lo ha estado siempre.
+
+**Las tres salidas, y por qué la elegida.**
+
+| Salida | Qué costaba | Por qué no |
+|---|---|---|
+| Bajar los lienzos estrechos de **280 a 244 unidades** | Recalcular el layout de cada figura afectada | Es rehacer dibujos que hoy cumplen, para ganar un viewport al que el sitio no le promete nada |
+| Bajar el **suelo del contrato a 320** en la DoD y en `check:figuras` | Rojo inmediato en CI | Es estrictamente **más** exigente, así que arrastra la fila de arriba como trabajo obligatorio. Solo tiene sentido si ya se ha decidido rehacer los lienzos |
+| **Declarar 360 como suelo** y escribirlo donde se lea | Cuatro documentos | — |
+
+**Decisión (Francisco, 2026-08-26): 360 es el suelo del rótulo de figura, y se declara.**
+
+Y la parte que importa que quede exacta, porque es fácil leerla de más: **esto no dice que el
+sitio empiece en 360**. El sitio se maqueta y se verifica por debajo — D93 lo bajó a 320 sin
+scroll horizontal y P70.13 cerró las tres páginas que aún desbordaban a 280. Lo que se declara
+es más estrecho: **el tamaño PINTADO del rótulo de una figura solo se promete de 360 en
+adelante.** Entre 280 y 360 la página funciona, se lee y no desborda; lo que no se garantiza es
+que el texto dentro de un lienzo escalado llegue a 11px.
+
+**Dónde queda escrito**, que es la decisión entera y no un adorno: el punto 11 de la DoD en
+`CLAUDE.md`, el párrafo de `check:figuras` en `PRD-Live.md` §Cómo se verifica, y la cabecera de
+`scripts/check-figuras.ts`, que deja de pedir una decisión que ya está tomada y pasa a apuntar
+aquí. Es la regla 1 de `BRAND.md` §Cómo se escribe una regla aplicada a una decisión: **su
+disparador miraba al lugar equivocado** — el único sitio donde estaba escrita era el archivo que
+nadie abre hasta que se rompe.
+
+**La condición de reapertura, que es lo que impide que esto sea un cierre en falso.** Se vuelve
+a mirar si el suelo real de viewport del sitio baja por debajo de 360 **como compromiso**, o si
+una figura aparece en un hueco más estrecho que los 284px que `ANCHO_MINIMO` asume. Lo segundo
+lo delata el propio informe, que publica esa cifra en cada corrida.
+
+## D125 · Una banda no se tiñe sobre una sección que ya existe: se inserta — 2026-08-27
+
+**El problema, medido antes de tocar nada.** Las tres páginas del sistema sumaban **60,3
+pantallas de 900px con el 0% de su alto en banda**: ni un solo cambio de fondo a ancho
+completo en Design System (33,8), Brand Kit (13,9) y Accesibilidad (12,6). Lo único que salía
+en el conteo era el header sticky de 81px, que es cromo. La referencia: la home dedica el
+**17%** de su alto a banda y el artículo el **2,7%**.
+
+Y un dato que conviene no perder: la ficha contaba 54,7 pantallas. El Design System pasó de 18
+secciones a 12 en la tanda 6 y **aun así creció**, porque la tanda 7 le añadió índice y cierre.
+**El trabajo de orientación alargó el tramo plano**, que es justo lo que la ficha avisaba de no
+confundir: el índice y el riel resuelven ORIENTACIÓN, no RITMO.
+
+**Las tres direcciones, probadas sobre la página real con `/prototype`.**
+
+| Dirección | Veredicto |
+|---|---|
+| Teñir bloques con `bg-muted` | Funciona, y destapa que `--border` está calibrado solo contra `--background`: sobre la banda el contorno de una tarjeta cae de **1,29 a 1,10**. Deuda de capa, tareada aparte |
+| Dar superficie al cierre de sección | La más barata y la más fiel a D123. Se quedó a un paso |
+| **Insertar una banda invertida por bloque** | **Elegida** |
+
+**Y el hallazgo que vale para la próxima vez: invertir una sección existente era IMPOSIBLE, y
+la tarea lo pedía literalmente.** Estas secciones son **galerías**: dentro hay tarjetas
+`bg-card`, tablas y especímenes que dan por hecho el fondo de página. Teñir una entera no
+habría enseñado la dirección, habría enseñado una sección rota. La banda de la home no es
+contenido invertido: es un **manifiesto**, o sea tipo sola. Traducida bien, la dirección era
+**insertar** la banda, no teñir lo que ya hay — y eso la convierte en una pieza
+(`ui/block-opener.tsx`), no en una variante de sección.
+
+**Lo que resuelve de paso.** El orden de las doce dejó de ser cronológico en P70.34 y pasó a
+`fundamentos → piezas → composición → excepción`, pero esa jerarquía **solo existía en un
+comentario**: doce secciones seguidas, todas con el mismo filete, no dicen dónde acaba una
+familia. Ahora se ve, y la banda lista qué lleva dentro con los rótulos **reales** del índice,
+así que también sirve para orientarse — que es lo que una página de consulta necesita (D123).
+
+**LA REGLA DE DENSIDAD, que es lo que decide si esto escala.** Lo que fija cada cuánto aparece
+una banda es el número de **BLOQUES, no el de secciones**. Con el reparto elegido cae una cada
+**8,9 pantallas** en Design System, **7,4** en Brand Kit y **6,8** en Accesibilidad. Partir el
+Brand Kit en tres bloques daría una cada 4,6 y la página se leería a golpes. **Si una página
+pide más de un bloque cada ~6 pantallas, lo que sobra son bloques, no banda.**
+
+**Dos detalles que costaron y no se re-derivan.** Hubo un rótulo de rango encima de cada banda
+(«Secciones 05 a 08») y salió: la lista de abajo ya lleva los ordinales, así que decía dos
+veces lo mismo con menos información. Y la lista va en **texto, no en enlaces**: sobre banda
+invertida `.link-content` no tiene contraparte —hallazgo de P66, todavía abierto—, así que
+enlazar ahí pediría antes esa variante.
+
+**Coste asumido.** Accesibilidad no está partida en un archivo por sección como sus hermanas,
+así que sus dos bandas van insertadas a mano en el JSX en vez de salir de un bucle. Tareado.
+
+## D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho — 2026-08-27
+
+**El síntoma.** A **1280×618** —el escalado de Windows al 150%, viewport de la matriz de D50—
+las tres páginas del sistema cortaban su fila de cifras dejando **17px visibles de 84,6
+(20,1%)**, idéntico al píxel en las tres. Una franja de 17px sobre 85 no se lee como «hay más
+abajo»: se lee como un error de renderizado.
+
+**Lo que NO era, y hubo que medir las CUATRO páginas para saberlo.** No es recorte (`min-h`,
+no `h`: nada se oculta, solo hace falta scroll). No es la regresión de P70.35, cuyo suelo añadió
+3px sobre los 461 que las tres medían solas. No incumple D50, que compara la alineación ENTRE
+hermanas y seguía perfecta. Y no era de ninguna de las tres páginas: **«Cómo se ha creado» no
+lo tenía porque usa otro caparazón**, y eso fue lo que lo delató.
+
+**La decisión.** Compactar por **alto**. Todo el andamiaje del pliegue razonaba por ancho
+—`clamp(…,6vw,…)`, `md:`— y el pliegue es un problema de alto. Por debajo de **700px** de
+viewport, el hueco del breadcrumb y el de la fila bajan de 72 a 32 cada uno.
+
+**Se descartó empujar la fila hasta que cayera entera debajo**, y el motivo es la parte
+reutilizable: **un offset fijo no arregla un corte, lo traslada a otro viewport**. Solo un
+umbral sobre el eje que causa el problema lo cierra.
+
+700 y no 686 —donde la fila justo dejaba de caber— para que el punto de conmutación no sea el
+mismo píxel que el síntoma.
+
+**Medido después, y por el `margin` COMPUTADO, no por la posición** —que es lo único que
+distingue «el override gana» de «algo más lo movió»—: la fila queda en 521→605,6, entera, con
+12,4px de margen; 32px a 618 de alto y 72px a 900. Y `h1` en 224,5 con grupo de 464 **en las
+CUATRO**, Contacto incluida. Esa última línea era el riesgo real de meter un eje nuevo aquí:
+**el grupo pierde 40px de golpe, y si una sola de las cuatro no los perdiera se descuadrarían
+todas** — que es exactamente la invariante que D50 protege.
+
+**El `@media` va escrito entero en los dos archivos y no interpolado a una constante**:
+Tailwind escanea el código como texto plano, así que una clase compuesta no se genera y se
+queda sin estilo SIN dar error de compilación (`BRAND.md` §Cómo medir, punto 5).
