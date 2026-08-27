@@ -281,12 +281,49 @@
   html {
     @apply font-sans;
   }
+  /* EL EQUILIBRADO DE LÍNEA VA EN LA CAPA, NO EN EL CALL SITE (P68.7116).
+     `text-wrap: balance` reparte las líneas de un titular para que la última no
+     quede huérfana. Estaba escrito a mano en el punto de uso —29 veces entre
+     `text-balance` y `text-pretty`, en 20 archivos— y aun así faltaba justo
+     donde se medía el peor caso: los `h2` de banda de `ui/block-opener.tsx`, con
+     la última línea al 30% de la primera a 390px en `/accesibilidad`.
+
+     POR QUÉ EL DEFECTO SOLO SALÍA EN UNA DE LAS TRES HERMANAS, que es la parte
+     que dice dónde va el arreglo: el componente es el mismo, y lo que diverge es
+     el REGISTRO DEL COPY. Design System y Brand Kit le dan sintagmas cortos
+     («Fundamentos», «Piezas») que nunca rompen; Accesibilidad le da oraciones con
+     coma. Una propiedad que hace falta o no según lo que alguien escriba en el
+     diccionario no puede vivir en el punto de uso: no hay forma de acordarse.
+
+     SOBRE EL ELEMENTO Y NO SOBRE LA VARIANTE, porque no todos los titulares del
+     sitio pasan por `titleVariants` — los de `system-message`, `global-not-found`
+     y las bandas los escriben sus bloques. El selector ya existía aquí para la
+     familia tipográfica, así que el equilibrado entra por la misma puerta. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
     font-weight: 600;
+    text-wrap: balance;
+  }
+
+  /* Y `pretty` para el texto corrido, que es OTRA propiedad y no la misma con
+     otro nombre: `balance` iguala el largo de TODAS las líneas de un bloque corto
+     y solo tiene sentido en un titular; `pretty` deja el párrafo como está y se
+     limita a impedir que la última línea quede en una palabra suelta. Aplicarle
+     `balance` a un párrafo de doce líneas no haría nada —los navegadores lo
+     ignoran por encima de cuatro o seis— y aplicarle `pretty` a un titular
+     desperdicia la mitad del arreglo.
+
+     Los navegadores que no lo implementan se quedan en `wrap`, que es lo que hay
+     hoy: mejora progresiva, sin fallback que escribir. */
+  p,
+  li,
+  figcaption,
+  dd,
+  blockquote {
+    text-wrap: pretty;
   }
   /* Foco visible AA (checklist a11y §20, punto 2): anillo de 2px + offset 2px.
      El segundo selector es el SIMULADOR de foco de §09 del Design System
@@ -326,6 +363,24 @@
   select,
   textarea {
     touch-action: manipulation;
+
+    /* EL DESTELLO DEL TOQUE SE DECLARA, NO SE APAGA (P68.7116). Sin esta línea
+       cada navegador móvil pinta el suyo —un rectángulo gris o azul del sistema—
+       sobre cada control del sitio, y ese color no es de esta marca. Apagarlo con
+       `transparent` sería la otra respuesta y es peor: en un teléfono el hover no
+       existe, así que el destello es la ÚNICA confirmación de que el toque se ha
+       registrado, y quitarla deja al control mudo hasta que la página responde.
+
+       Así que se tiñe de `--primary`, que es el color de acción de `BRAND.md`, y
+       conmuta con el tema solo porque el token ya lo hace. El 18% es velo: tiene
+       que leerse como un destello y no como un estado. No hay umbral WCAG que
+       cumplir aquí —es transitorio y no delimita el control—, así que la cifra es
+       de expresión, no de contraste. */
+    -webkit-tap-highlight-color: color-mix(
+      in srgb,
+      var(--primary) 18%,
+      transparent
+    );
   }
 
   /* El scroll dentro del diálogo de preferencias no se encadena al documento de
