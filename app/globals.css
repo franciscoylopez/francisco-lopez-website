@@ -1285,3 +1285,138 @@
     translate: -50% -50%;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   P81 · GESTO DE MARCA — son DOS piezas y no la misma, y conviene saber cuál es
+   cuál: el punto del titular es la FIRMA (el momento memorable que P81 pedía) y
+   «Estratos», aquí abajo, es la TEXTURA de Hitos. Dos firmas compitiendo serían
+   peor que ninguna, así que esta se subordina a aquella.
+
+   Se eligieron viéndolas, no razonándolas: tres direcciones para la textura
+   —«Recorrido», «Estratos» y «Registro»— y cuatro formas de aterrizar para el
+   punto. Lo descartado y su porqué, en DECISIONS.md.
+
+   El progreso de cada fila es UN número, 0 a 1, que escribe el scroll. Todo lo
+   visual lo lee de ahí, así que no hay dos fuentes que puedan discrepar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── LA FIRMA · el punto de «Del discovery al dato.» cae y se asienta ──
+   Es el único gesto del sitio que existe para ser RECORDADO, y por eso es el
+   único que se sale del listón de 300 ms: 420. Mismo tipo de excepción que el
+   florecer del 404, y con la misma coartada medida — ocurre UNA vez, al cargar,
+   y no compite con nada porque el titular ya está pintado.
+
+   DOS CURVAS, Y ESA ES LA DIRECCIÓN ELEGIDA. La bajada ACELERA
+   (cubic-bezier(.55,0,1,.45)), que es lo que hace la gravedad; un ease-out ahí
+   leería como frenada, no como caída. El asentamiento sí decelera. El rebote es
+   0,20, dentro del 0,1–0,3 que el catálogo de motion da por sobrio.
+
+   EL TITULAR NO NACE INVISIBLE, que es la restricción dura: solo se anima el
+   `span` del punto, nunca el h1. El LCP de la home es la foto, y esto no lo
+   toca. Y el punto ocupa su hueco desde el primer frame —`inline-block` con la
+   línea base explícita, y solo `transform`/`opacity`—, así que no hay CLS:
+   medido, la caja del h1 y la posición del subtítulo no se mueven ni un píxel.
+
+   LA TINTA ES `--progress-ink`, el morado calibrado para texto grande sobre
+   `--background`. Un punto es un detalle tipográfico, no un gráfico que haya que
+   entender, así que §Color deja entrar el morado; y aun así llega a AAA por el
+   umbral ESTRICTO: 7,21 en claro y 7,83 en oscuro, medidos sobre el píxel
+   pintado con el metro validado contra los anclajes de 13,79 y 15,32. */
+.punto-firma {
+  display: inline-block;
+  vertical-align: baseline;
+  color: var(--progress-ink);
+  animation: punto-cae 420ms both;
+}
+@keyframes punto-cae {
+  0% {
+    transform: translateY(-0.85em);
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  46% {
+    transform: translateY(0);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  68% {
+    transform: translateY(-0.1em);
+  }
+  86% {
+    transform: translateY(0.012em);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+/* Se retira el desplazamiento y el rebote; se conserva el fundido, y más corto
+   (D136). El punto sigue apareciendo: lo que se va es la caída. */
+@media (prefers-reduced-motion: reduce) {
+  .punto-firma {
+    animation: punto-entra 160ms var(--ease-entrance) both;
+  }
+}
+@keyframes punto-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@property --rp {
+  syntax: "<number>";
+  inherits: true;
+  /* Sin soporte de `animation-timeline`, o sin que la fila esté en su rango,
+     el estado es el FINAL: el sitio se queda exactamente como está hoy. */
+  initial-value: 1;
+}
+@keyframes gesto-fila {
+  from {
+    --rp: 0;
+  }
+  to {
+    --rp: 1;
+  }
+}
+
+@supports (animation-timeline: view()) {
+  .hito-fila {
+    animation: gesto-fila linear both;
+    animation-timeline: view();
+    animation-range: entry 25% cover 45%;
+  }
+}
+
+/* ── «Estratos» · el eje de años ya estaba en la fila; el gesto lo hace regla.
+      NINGÚN texto se atenúa: la lectura no se toca, que es lo que separa esto
+      de un fundido por scroll. ── */
+.hito-anio {
+  position: relative;
+}
+.hito-anio::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -6px;
+  height: 2px;
+  background: var(--primary);
+  transform-origin: left;
+  transform: scaleX(var(--rp));
+}
+/* El índice se llena conforme el estrato se deposita. Es el mismo par que ya
+   mide el censo (`--muted-foreground` → `--foreground` sobre `--background`),
+   así que no aparece ningún color nuevo. */
+.hito-idx {
+  color: color-mix(
+    in srgb,
+    var(--muted-foreground),
+    var(--foreground) calc(var(--rp) * 100%)
+  );
+}
+
+/* MOVIMIENTO REDUCIDO: AQUÍ NO HAY NADA QUE AMORTIGUAR, y por eso no hay regla.
+   Lo que quedó del spike no desplaza ni escala nada: el filete del año y el
+   llenado del índice expresan ESTADO, y amortiguar una lectura la convertiría en
+   un indicador que miente (D136). El único desplazamiento del gesto vivía en
+   «Registro», que se descarta con él. */

@@ -172,6 +172,7 @@
 - D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba
 - D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias
 - D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde
+- D137 · El gesto de marca son dos piezas, y una manda sobre la otra
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8037,3 +8038,88 @@ detecta y `check:palette` lo exige, así que la pasada completa entró en la tar
 quedar pendiente: **28 corridas, 414 pares de texto y 300 contornos, metro validado en las
 28, cero bajo AAA y cero por debajo del 3:1.** `LAST_A11Y_REVIEW` ya estaba en la fecha de
 hoy y no se toca.
+
+## D137 · El gesto de marca son dos piezas, y una manda sobre la otra — 2026-08-27
+
+**La firma es el punto de «Del discovery al dato.», que cae y se asienta. La textura es
+«Estratos», el filete que crece bajo el año en Hitos.** No son dos gestos: son uno y su
+acompañamiento, y decirlo importa porque **dos firmas compitiendo serían peor que ninguna**.
+P81 pedía UN momento memorable, no un repertorio.
+
+Que la firma acabara siendo el punto no estaba en ninguna de las tres direcciones que se
+prototiparon: **lo propuso Francisco al ver la primera ronda**, y es mejor respuesta que las
+tres. Está en el titular, en el primer pliegue, es lo primero que se ve, y **ya existía**: no
+es un elemento inventado para tener un gesto.
+
+### Se eligieron viéndolas, y lo descartado es la mitad del valor
+
+Dos rondas de `/prototype`, las dos con los tokens reales, los dos temas y el interruptor de
+movimiento reducido.
+
+**Ronda 1 — la textura.** Tres direcciones sobre secciones distintas: «Recorrido» (el camino
+de las seis etapas, con el bucle que el copy ya nombra), «Estratos» (el tiempo en Hitos) y
+«Registro» (la forma del split traída al contenido).
+
+**«Registro» se descarta, y el motivo es de la DIRECCIÓN, no de la ejecución.** Se llegó a
+montar sobre el sitio real para verlo servido. Cada fila tiene su propio progreso, así que a
+media pantalla siempre hay tres o cuatro en fases distintas, y esa mezcla no es un instante de
+paso: **es el estado permanente**, visible ya al cargar. Ahí está la diferencia con «Estratos»,
+que tiene exactamente la misma mezcla y no molesta: *un filete a medio dibujar se lee como «en
+progreso»; un símbolo del split a medio registrar se lee como un error de impresión*, porque
+desalineado es justo la señal de que algo está mal calibrado. **El estado de reposo del gesto
+era un estado que parece roto.** Y no se arregla afinando: acortar el recorrido lo saca de
+pantalla, y gobernar las seis desde un solo reloj mueve el problema de sitio.
+
+**Ronda 2 — la firma.** Cuatro formas de aterrizar, cada una con un eje distinto: «Caída»
+(gravedad), «Deriva» (inercia), «Sello» (impacto) y «Cursor» (confirmación). Gana **Caída**.
+
+### Lo que la firma tiene de particular
+
+**El punto se separa en el COMPONENTE, no en el diccionario.** Para animarlo necesita ser su
+propio elemento, y la tentación es quitarle el punto al copy. No: el diccionario es la fuente
+de verdad y una frase sin su punto **dice algo que no es**. La separación es de presentación y
+vive donde se pinta. Vale para los dos idiomas sin condicionales —los dos titulares terminan
+igual— y si algún día uno no lleva punto se pinta entero y no hay gesto.
+
+**Dos curvas, y esa es la dirección elegida.** La bajada **acelera**
+(`cubic-bezier(.55,0,1,.45)`), que es lo que hace la gravedad; un ease-out ahí leería como
+frenada, no como caída. El asentamiento sí decelera. El rebote es **0,20**, elegido barriendo
+el 0,1–0,3 que el catálogo de motion da por sobrio.
+
+**Dura 420 ms, por encima del listón de 300, y es la segunda excepción escrita** —la otra es el
+florecer del 404 (D135)—. Misma coartada y medida igual: ocurre **una vez, al cargar**, es el
+único gesto del sitio que existe para ser recordado, y no compite con nada porque el titular ya
+está pintado.
+
+**El titular no nace invisible, que era la restricción dura.** Solo se anima el `span` del
+punto; el `h1` está en opacidad 1 desde el primer frame, y el elemento LCP de la home es la
+foto. Y el punto ocupa su hueco desde el principio —`inline-block` con la línea base explícita,
+y solo `transform`/`opacity`—, así que **no hay CLS**: medido sobre el sitio servido, la caja
+del `h1` y la posición del subtítulo no se mueven ni un píxel en cuatro muestreos durante la
+animación.
+
+### El morado, que era la pregunta abierta, y ya no lo es
+
+La tinta es **`--progress-ink`**, el morado calibrado para texto grande sobre `--background`.
+Un punto es un detalle tipográfico y no un gráfico que haya que entender, así que §Color deja
+entrar el morado; pero **es texto**, así que había que medirlo antes de darlo por bueno.
+
+Medido sobre el píxel pintado y **con el metro validado primero contra los anclajes de
+`BRAND.md`** (13,79 claro y 15,32 oscuro, reproducidos exactos): **7,21 en claro y 7,83 en
+oscuro**. Eso es AAA por el umbral **estricto** de texto pequeño, no solo por el de texto
+grande que le tocaría a 80px. No hay debate.
+
+**Y el censo lo confirma solo:** pasa de **414 pares a 416**. Los dos que aparecen son
+exactamente el punto en cada tema. 28 corridas, metro validado en las 28, cero bajo AAA.
+
+### Un hallazgo de método que costó dos intentos
+
+**El censo no cabe en una llamada de primer plano** —28 corridas con navegador se comen los 600
+segundos— **y en segundo plano solo arranca con el sandbox desactivado**. Sin él muere en dos
+segundos con `0xC0000142` al lanzar Chrome, que es un fallo de arranque de proceso y no del
+script.
+
+Y el primer diagnóstico fue falso: se anotó «no cabe en el reloj» cuando la segunda pasada
+había fallado en dos segundos. **Una sospecha no es una causa**, y la diferencia entre las
+llamadas que funcionaron y la que no era el sandbox, que ya estaba escrito para `agent-browser`
+y no se había heredado a lo que conduce el navegador por debajo.

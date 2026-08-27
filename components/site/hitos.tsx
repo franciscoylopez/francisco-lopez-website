@@ -41,9 +41,9 @@ function Row({
   return (
     <div
       data-reveal
-      className="hitos-row border-border border-b [padding-block:clamp(1.15rem,2.4vw,1.6rem)]"
+      className="hito-fila hitos-row border-border border-b [padding-block:clamp(1.15rem,2.4vw,1.6rem)]"
     >
-      <span className="text-muted-foreground w-10 shrink-0 font-mono text-[0.8rem] [grid-area:idx]">
+      <span className="hito-idx w-10 shrink-0 font-mono text-[0.8rem] [grid-area:idx]">
         {idx}
       </span>
       <div className="min-w-[12rem] flex-[1_1_15rem] [grid-area:name]">
@@ -61,7 +61,7 @@ function Row({
       </p>
       <span
         className={cn(
-          "text-foreground ml-auto shrink-0 font-mono text-[0.9rem] [grid-area:year]",
+          "hito-anio text-foreground ml-auto shrink-0 font-mono text-[0.9rem] [grid-area:year]",
           boldYear && "font-semibold",
         )}
       >

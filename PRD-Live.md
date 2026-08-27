@@ -68,8 +68,12 @@ descarga** (D65).
 
 1. **Nav sticky** — logo (split→flat al scroll), Descargar CV, Contacto, Sobre mí, toggle
    claro/oscuro; por debajo de 768px los tres enlaces colapsan tras el menú.
-2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio.
+2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio. **El
+   punto final del titular es la firma de marca** (D137): cae y se asienta al cargar, en
+   morado, y es el único gesto del sitio que existe para ser recordado.
 3. **Hitos** — 5 reconocimientos, cronológico descendente; chip "Exit" en el de TheTool.
+   Un filete crece bajo cada año conforme la fila cruza: es la **textura** que acompaña a
+   la firma, subordinada a ella a propósito (D137).
 4. **Cómo trabajo** — 6 etapas: Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica.
 5. **Más allá del PM** — banda de manifiesto (founder + growth), fondo de marca invertido.
 6. **Trayectoria** — bloque Producto + bloque Experiencia previa (Marketing & Growth); logos reales monocromo; el rol enlaza al deep-dive; CTA Descargar CV.
