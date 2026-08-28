@@ -42,9 +42,19 @@ const csp = [
   "frame-src https://www.googletagmanager.com https://www.youtube-nocookie.com",
 ].join("; ");
 
-// Cabeceras de seguridad — Fase 1 (tarea 30.4): las triviales y sin riesgo. Riesgo
-// bajo hoy (portfolio estático, sin auth, sin formularios ni input de usuario), pero
-// es el hueco más barato de cerrar y un sitio que argumenta rigor debería servirlas.
+// Cabeceras de seguridad — Fase 1 (tarea 30.4): las triviales y sin riesgo.
+//
+// LA JUSTIFICACIÓN ORIGINAL CADUCÓ EL 2026-08-23, y se sustituye aquí en vez de
+// anotarse al pie (P50.81): decía «portfolio estático, sin auth, sin formularios ni
+// input de usuario», y desde ese día `/contacto` recibe algo escrito por otra
+// persona. `DECISIONS.md` ya se había corregido (D95); el comentario vivo que
+// gobierna la CSP, no — que es el que alguien va a leer la próxima vez que se
+// plantee tocarla.
+//
+// EL RIESGO SIGUE SIENDO BAJO, y ahora por otro motivo: no hay auth ni base de
+// datos, y la única superficie de entrada es un formulario que se envía por Server
+// Action del MISMO origen, así que `form-action 'self'` ya lo cubría y las
+// cabeceras servidas no cambiaron. Lo que cambió es el razonamiento.
 const securityHeaders = [
   // No adivinar el MIME: evita que un recurso servido como texto se ejecute como script.
   { key: "X-Content-Type-Options", value: "nosniff" },
