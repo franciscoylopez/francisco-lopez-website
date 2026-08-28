@@ -141,8 +141,12 @@ export function Accesibilidad({
       // `scripts/guardianes/casos.ts`, sellado en `design-values` y verificado
       // por `check:accesibilidad`: escritas a mano llegaron a decir catorce y
       // veintitrés habiendo quince y veintisiete (P50.73).
-      .replace(/{comprobaciones}/g, cardinal(GUARDIAN_COUNT, lang))
-      .replace(/{fingidos}/g, cardinal(GUARDIAN_CASE_COUNT, lang));
+      //
+      // Y van en NUMERAL, no en letra como los otros dos: la tabla de cardinales
+      // llega a veinte y estas dos ya la pasan. Estirarla era inventar veinte
+      // palabras de datos para dos cifras que además crecen solas.
+      .replace(/{comprobaciones}/g, String(GUARDIAN_COUNT))
+      .replace(/{fingidos}/g, String(GUARDIAN_CASE_COUNT));
 
   return (
     <>

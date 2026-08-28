@@ -355,8 +355,15 @@ export const CASOS: Caso[] = [
     // sí está en el repo es su CRITERIO, y es lo que se muerde — con la rotura
     // exacta que lo dejaría ciego al caso que lo motivó, dos tareas con 69,93.
     archivo: "scripts/tablero/reglas.ts",
+    // HA CADUCADO UNA VEZ (2026-08-28): apuntaba a `if (grupo.length > 1) {`, y
+    // partir `revisarTablero` en una función por regla dejó esa línea como un
+    // `.filter()`. La mutación dejó de mutar el mismo día que se escribió el
+    // refactor, y la cazó este script — que es para lo que existe.
     mutar: (o) =>
-      o.replace("if (grupo.length > 1) {", "if (grupo.length > 2) {"),
+      o.replace(
+        ".filter(([, grupo]) => grupo.length > 1)",
+        ".filter(([, grupo]) => grupo.length > 2)",
+      ),
   },
   {
     guardian: "test",

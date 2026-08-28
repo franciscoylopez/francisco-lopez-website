@@ -32,7 +32,7 @@ import {
   DIVERGENCIAS,
   type TextoTarjeta,
 } from "../content/og/copy";
-import { OG_CARDS } from "../lib/routes";
+import { OG_CARDS, type OgCard } from "../lib/routes";
 
 type Lang = "es" | "en";
 const LANGS: Lang[] = ["es", "en"];
@@ -64,6 +64,57 @@ function porRuta(
   return typeof actual === "string" ? actual : undefined;
 }
 
+/**
+ * El veredicto de UN campo de UNA tarjeta en UN idioma. Devuelve el fallo o
+ * `null`: sacar esto del triple bucle es lo que deja el recorrido legible, y de
+ * paso convierte cada regla en una frase que se lee sola.
+ */
+function juzgar(
+  card: OgCard,
+  lang: Lang,
+  campo: keyof TextoTarjeta,
+  dict: Record<string, unknown>,
+): { fallo?: string; comparado: boolean } {
+  const ruta = CLAVE_EN_DICCIONARIO[card][campo];
+  const enPagina = porRuta(dict, ruta);
+  const enTarjeta = COPY[card][lang][campo];
+  const donde = `${card} · ${lang} · ${campo}`;
+
+  if (enPagina === undefined) {
+    return {
+      comparado: false,
+      fallo:
+        `${donde}: la clave no existe en el diccionario (se buscaba en ` +
+        `\`${ruta.join(".")}\`). Si el copy se reestructuró, actualiza ` +
+        "\`CLAVE_EN_DICCIONARIO\`.",
+    };
+  }
+
+  const declarada = DIVERGENCIAS.find(
+    (d) => d.card === card && d.lang === lang && d.campo === campo,
+  );
+
+  if (declarada) {
+    if (enTarjeta !== enPagina) return { comparado: true };
+    return {
+      comparado: true,
+      fallo:
+        `${donde}: hay una divergencia DECLARADA que ya no diverge ` +
+        `(«${enTarjeta}»). La nota ha caducado: retírala de \`DIVERGENCIAS\`, o ` +
+        "una excepción muerta acabará tapando una de verdad.",
+    };
+  }
+
+  if (enTarjeta === enPagina) return { comparado: true };
+  return {
+    comparado: true,
+    fallo:
+      `${donde}: la tarjeta dice «${enTarjeta}» y la página «${enPagina}». O se ` +
+      "actualiza \`content/og/copy.ts\`, o la diferencia es a propósito y se " +
+      "declara en \`DIVERGENCIAS\` con su motivo.",
+  };
+}
+
 const fallos: string[] = [];
 let comparaciones = 0;
 
@@ -71,44 +122,9 @@ for (const card of OG_CARDS) {
   for (const lang of LANGS) {
     const dict = diccionario(card, lang);
     for (const campo of CAMPOS) {
-      const enTarjeta = COPY[card][lang][campo];
-      const ruta = CLAVE_EN_DICCIONARIO[card][campo];
-      const enPagina = porRuta(dict, ruta);
-      const declarada = DIVERGENCIAS.find(
-        (d) => d.card === card && d.lang === lang && d.campo === campo,
-      );
-
-      if (enPagina === undefined) {
-        fallos.push(
-          `${card} · ${lang} · ${campo}: la clave no existe en el diccionario ` +
-            `(se buscaba en \`${ruta.join(".")}\`). ` +
-            "Si el copy se reestructuró, actualiza `CLAVE_EN_DICCIONARIO`.",
-        );
-        continue;
-      }
-
-      comparaciones++;
-
-      if (declarada) {
-        if (enTarjeta === enPagina) {
-          fallos.push(
-            `${card} · ${lang} · ${campo}: hay una divergencia DECLARADA que ya no ` +
-              `diverge («${enTarjeta}»). La nota ha caducado: retírala de ` +
-              "`DIVERGENCIAS`, o una excepción muerta acabará tapando una de verdad.",
-          );
-        }
-        continue;
-      }
-
-      if (enTarjeta !== enPagina) {
-        fallos.push(
-          `${card} · ${lang} · ${campo}: la tarjeta dice «${enTarjeta}» y la página ` +
-            `«${enPagina}». O se actualiza `.concat(
-              "`content/og/copy.ts`, o la diferencia es a propósito y se declara en ",
-              "`DIVERGENCIAS` con su motivo.",
-            ),
-        );
-      }
+      const v = juzgar(card, lang, campo, dict);
+      if (v.comparado) comparaciones++;
+      if (v.fallo) fallos.push(v.fallo);
     }
   }
 }

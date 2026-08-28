@@ -458,7 +458,7 @@ export const GUARDIAN_CASE_COUNT = 31;
 /**
  * El cardinal en palabras, porque el copy de este sitio escribe los recuentos
  * pequeños con letra («siete piezas», «ocho puntos», «dieciséis pasos») y un
- * numeral suelto rompería esa voz. Cubre hasta treinta: si un recuento pasa de ahí,
+ * numeral suelto rompería esa voz. Cubre hasta veinte: si un recuento pasa de ahí,
  * `fillPages` cae al numeral en vez de inventarse una palabra.
  */
 const CARDINALES: Record<Locale, readonly string[]> = {
@@ -484,16 +484,6 @@ const CARDINALES: Record<Locale, readonly string[]> = {
     "dieciocho",
     "diecinueve",
     "veinte",
-    "veintiuna",
-    "veintidós",
-    "veintitrés",
-    "veinticuatro",
-    "veinticinco",
-    "veintiséis",
-    "veintisiete",
-    "veintiocho",
-    "veintinueve",
-    "treinta",
   ],
   en: [
     "zero",
@@ -517,16 +507,6 @@ const CARDINALES: Record<Locale, readonly string[]> = {
     "eighteen",
     "nineteen",
     "twenty",
-    "twenty-one",
-    "twenty-two",
-    "twenty-three",
-    "twenty-four",
-    "twenty-five",
-    "twenty-six",
-    "twenty-seven",
-    "twenty-eight",
-    "twenty-nine",
-    "thirty",
   ],
 };
 

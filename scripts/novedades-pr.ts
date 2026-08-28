@@ -108,8 +108,75 @@ function sello(texto: string | undefined): Map<string, string> {
   );
 }
 
+type Superficie = (typeof SUPERFICIES)[number];
+
+/** Qué secciones cambian de TEXTO. Se compara el diccionario partido en
+ *  secciones, no el archivo entero: la respuesta útil es un nombre, no un sí. */
+function copyTocado(s: Superficie): Set<string> {
+  const tocadas = new Set<string>();
+  for (const ruta of s.copy) {
+    if (!existsSync(ruta)) continue;
+    const ahora = s.partir(
+      JSON.parse(readFileSync(ruta, "utf8")) as Record<string, unknown>,
+    );
+    const antesTexto = enBase(ruta);
+    const antes = antesTexto
+      ? s.partir(JSON.parse(antesTexto) as Record<string, unknown>)
+      : new Map<string, string>();
+    for (const [clave, valor] of ahora) {
+      if (antes.get(clave) !== valor) tocadas.add(clave);
+    }
+    for (const clave of antes.keys()) {
+      if (!ahora.has(clave)) tocadas.add(`${clave} (retirada)`);
+    }
+  }
+  return tocadas;
+}
+
+/** Qué secciones se han RE-sellado. Las nuevas no cuentan: un sello que no
+ *  existía en la base no se ha movido, ha nacido. */
+function sellosMovidos(s: Superficie): string[] {
+  const ahora = existsSync(s.huella)
+    ? sello(readFileSync(s.huella, "utf8"))
+    : new Map<string, string>();
+  const antes = sello(enBase(s.huella));
+  return [...ahora]
+    .filter(([k, v]) => antes.has(k) && antes.get(k) !== v)
+    .map(([k]) => k);
+}
+
 const lineas: string[] = [];
 const di = (l = "") => lineas.push(l);
+const listar = (xs: string[]) => xs.map((x) => `\`${x}\``).join(" · ");
+
+function informar(s: Superficie): boolean {
+  const tocadas = [...copyTocado(s)].sort();
+  const resellados = sellosMovidos(s);
+  if (tocadas.length === 0 && resellados.length === 0) return false;
+
+  di(`### ${s.nombre}`);
+  di();
+  if (tocadas.length > 0) {
+    di(
+      `**Cambia el texto de ${tocadas.length} sección(es):** ${listar(tocadas)}`,
+    );
+    di();
+    di("Esto lo lee un visitante: conviene releerlo antes de mergear.");
+    di();
+  }
+  if (resellados.length > 0) {
+    di(
+      `**Se ha re-sellado ${resellados.length} sección(es):** ${listar(resellados)}`,
+    );
+    di();
+    di(
+      "Se movió una FUENTE que esa sección describe, no necesariamente el texto. " +
+        "\`npm run articulo:novedades\` dice qué líneas.",
+    );
+    di();
+  }
+  return true;
+}
 
 di("## Qué secciones publicadas toca este PR");
 di();
@@ -119,79 +186,17 @@ if (!baseAlcanzable()) {
   // «no cambia nada», que es el verde falso de siempre.
   di(
     `> No se ha podido resolver \`${base}\`, así que **esto no ha comparado nada**. ` +
-      "Si corre en CI, el checkout necesita `fetch-depth: 0`.",
+      "Si corre en CI, el checkout necesita \`fetch-depth: 0\`.",
   );
 } else {
-  let algo = false;
-
-  for (const s of SUPERFICIES) {
-    // 1 · EL COPY, que es lo que hay que leer.
-    const seccionesTocadas = new Set<string>();
-    for (const ruta of s.copy) {
-      if (!existsSync(ruta)) continue;
-      const ahora = s.partir(
-        JSON.parse(readFileSync(ruta, "utf8")) as Record<string, unknown>,
-      );
-      const antesTexto = enBase(ruta);
-      const antes = antesTexto
-        ? s.partir(JSON.parse(antesTexto) as Record<string, unknown>)
-        : new Map<string, string>();
-      for (const [clave, valor] of ahora) {
-        if (antes.get(clave) !== valor) seccionesTocadas.add(clave);
-      }
-      for (const clave of antes.keys()) {
-        if (!ahora.has(clave)) seccionesTocadas.add(`${clave} (retirada)`);
-      }
-    }
-
-    // 2 · EL SELLO, que casi nunca hay que leer.
-    const ahoraSello = existsSync(s.huella)
-      ? sello(readFileSync(s.huella, "utf8"))
-      : new Map<string, string>();
-    const antesSello = sello(enBase(s.huella));
-    const sellosMovidos = [...ahoraSello]
-      .filter(([k, v]) => antesSello.has(k) && antesSello.get(k) !== v)
-      .map(([k]) => k);
-
-    if (seccionesTocadas.size === 0 && sellosMovidos.length === 0) continue;
-    algo = true;
-
-    di(`### ${s.nombre}`);
-    di();
-    if (seccionesTocadas.size > 0) {
-      di(
-        `**Cambia el texto de ${seccionesTocadas.size} sección(es):** ` +
-          [...seccionesTocadas]
-            .sort()
-            .map((x) => `\`${x}\``)
-            .join(" · "),
-      );
-      di();
-      di("Esto lo lee un visitante: conviene releerlo antes de mergear.");
-      di();
-    }
-    if (sellosMovidos.length > 0) {
-      di(
-        `**Se ha re-sellado ${sellosMovidos.length} sección(es):** ` +
-          sellosMovidos.map((x) => `\`${x}\``).join(" · "),
-      );
-      di();
-      di(
-        "Se movió una FUENTE que esa sección describe, no necesariamente el texto. " +
-          "`npm run articulo:novedades` dice qué líneas.",
-      );
-      di();
-    }
-  }
-
-  if (!algo) {
+  const conCambios = SUPERFICIES.map(informar).filter(Boolean).length;
+  if (conCambios === 0) {
     di(
       "Ninguna sección del artículo ni de la página de accesibilidad cambia de " +
         "texto ni de sello en este PR.",
     );
     di();
   }
-
   di(
     `<sub>Comparado contra \`${base}\` · ${SUPERFICIES.length} superficie(s) con sello por sección.</sub>`,
   );

@@ -161,19 +161,10 @@ function etiqueta(t: Tarea): string {
 }
 
 /**
- * Las cinco reglas, sobre las tareas ABIERTAS. Devuelve hallazgos; no imprime ni
- * sale con código, que es lo que permite probarla.
- *
- * El `sello` es opcional porque las cuatro primeras reglas no lo necesitan: sin él
- * se juzga el tablero y no el embalse. Quien lo tiene es `check-tablero.ts`.
+ * REGLA 1 · Prioridades únicas. Un número repetido no es un empate: es que el
+ * orden dejó de ser un orden. Pasó con 69,93 y se detectó a mano.
  */
-export function revisarTablero(todas: Tarea[], sello?: Sello): Hallazgo[] {
-  const abiertas = todas.filter((t) => ABIERTAS.includes(t.estado));
-  const hallazgos: Hallazgo[] = [];
-  const activo = sprintActivo(abiertas);
-
-  // 1 · Prioridades únicas. Un número repetido no es un empate: es que el orden
-  // dejó de ser un orden. Pasó con 69,93 y se detectó a mano.
+function prioridadesUnicas(abiertas: Tarea[]): Hallazgo[] {
   const porPrioridad = new Map<number, Tarea[]>();
   for (const t of abiertas) {
     if (t.prioridad === null) continue;
@@ -182,20 +173,22 @@ export function revisarTablero(todas: Tarea[], sello?: Sello): Hallazgo[] {
       t,
     ]);
   }
-  for (const [p, grupo] of [...porPrioridad.entries()].sort(
-    (a, b) => a[0] - b[0],
-  )) {
-    if (grupo.length > 1) {
-      hallazgos.push({
-        regla: "prioridad-duplicada",
-        mensaje: `${grupo.length} tareas abiertas comparten la prioridad ${p}.`,
-        tareas: grupo.map(etiqueta),
-      });
-    }
-  }
+  return [...porPrioridad.entries()]
+    .sort((a, b) => a[0] - b[0])
+    .filter(([, grupo]) => grupo.length > 1)
+    .map(([p, grupo]) => ({
+      regla: "prioridad-duplicada" as const,
+      mensaje: `${grupo.length} tareas abiertas comparten la prioridad ${p}.`,
+      tareas: grupo.map(etiqueta),
+    }));
+}
 
-  // 2 · Ninguna abierta sin `Área`, ni sin `Prioridad` — que es peor, porque una
-  // tarea sin número no está en ninguna parte del orden.
+/**
+ * REGLA 2 · Ninguna abierta sin `Área`, ni sin `Prioridad` — que es peor, porque
+ * una tarea sin número no está en ninguna parte del orden.
+ */
+function camposObligatorios(abiertas: Tarea[]): Hallazgo[] {
+  const hallazgos: Hallazgo[] = [];
   const sinPrioridad = abiertas.filter((t) => t.prioridad === null);
   if (sinPrioridad.length > 0) {
     hallazgos.push({
@@ -212,77 +205,109 @@ export function revisarTablero(todas: Tarea[], sello?: Sello): Hallazgo[] {
       tareas: sinArea.map(etiqueta),
     });
   }
-
-  // 3 · Los tres estados de ejecución son del sprint activo, más el carril de
-  // contenido. Es regla escrita en `CLAUDE.md` y no la miraba nadie.
-  if (activo) {
-    const fuera = abiertas.filter(
-      (t) =>
-        EN_EJECUCION.includes(t.estado) &&
-        t.etapa !== activo &&
-        t.area !== CARRIL_PARALELO,
-    );
-    if (fuera.length > 0) {
-      hallazgos.push({
-        regla: "estado-fuera-del-sprint",
-        mensaje: `${fuera.length} tarea(s) en To-Do/En progreso/Blocked fuera de «${activo}», y no son del carril de contenido.`,
-        tareas: fuera.map((t) => `${etiqueta(t)}  [${t.etapa ?? "sin etapa"}]`),
-      });
-    }
-
-    // 4 · Coherencia sprint ↔ orden. Solo se compara contra otras etapas que
-    // TAMBIÉN tienen tareas en ejecución: un bloque es un backlog temático, no
-    // una cola, así que su numeración puede entrelazarse con la del sprint sin
-    // que eso signifique nada. Entre dos sprints abiertos a la vez, sí.
-    const etapasEnEjecucion = new Set(
-      abiertas
-        .filter(
-          (t) =>
-            EN_EJECUCION.includes(t.estado) && t.etapa && t.etapa !== activo,
-        )
-        .map((t) => t.etapa as string),
-    );
-    const tope = Math.max(
-      ...abiertas
-        .filter((t) => t.etapa === activo && t.prioridad !== null)
-        .map((t) => t.prioridad as number),
-      -Infinity,
-    );
-    const adelantadas = abiertas.filter(
-      (t) =>
-        t.etapa !== null &&
-        etapasEnEjecucion.has(t.etapa) &&
-        t.prioridad !== null &&
-        t.prioridad < tope,
-    );
-    if (adelantadas.length > 0) {
-      hallazgos.push({
-        regla: "orden-entre-sprints",
-        mensaje: `${adelantadas.length} tarea(s) de otro sprint abierto van por delante del final de «${activo}» (P${tope}).`,
-        tareas: adelantadas.map((t) => `${etiqueta(t)}  [${t.etapa}]`),
-      });
-    }
-  }
-
-  // 5 · ¿`General` drena o crece? El cupo de `CLAUDE.md` no se puede comprobar
-  // —una tarea movida pierde de qué bloque venía—, así que se vigila el neto, que
-  // es lo máximo que el tablero permite medir sin una propiedad nueva.
-  if (sello) {
-    const medida = medirGeneral(abiertas, sello);
-    if (medida.nivel === "rojo") {
-      hallazgos.push({
-        regla: "general-no-drena",
-        mensaje:
-          `«${BLOQUE_TRANSVERSAL}» ha ganado ${medida.variacion} neta(s) desde el ` +
-          `cierre de «${sello.cierre}» (${sello.fecha}): ${sello.abiertas} → ` +
-          `${medida.abiertas}, umbral +${VARIACION_ROJA}.`,
-        tareas: [
-          "El cupo dice que cada sprint arrastra 3-4 de este bloque; el neto dice que no está saliendo.",
-          "Una revisión no cierra dejando más tareas nuevas de las que el cupo va a sacar: falta decidir qué se retira.",
-        ],
-      });
-    }
-  }
-
   return hallazgos;
+}
+
+/**
+ * REGLA 3 · Los tres estados de ejecución son del sprint activo, más el carril de
+ * contenido. Es regla escrita en `CLAUDE.md` y no la miraba nadie.
+ */
+function estadosDelSprint(abiertas: Tarea[], activo: string): Hallazgo[] {
+  const fuera = abiertas.filter(
+    (t) =>
+      EN_EJECUCION.includes(t.estado) &&
+      t.etapa !== activo &&
+      t.area !== CARRIL_PARALELO,
+  );
+  if (fuera.length === 0) return [];
+  return [
+    {
+      regla: "estado-fuera-del-sprint",
+      mensaje: `${fuera.length} tarea(s) en To-Do/En progreso/Blocked fuera de «${activo}», y no son del carril de contenido.`,
+      tareas: fuera.map((t) => `${etiqueta(t)}  [${t.etapa ?? "sin etapa"}]`),
+    },
+  ];
+}
+
+/**
+ * REGLA 4 · Coherencia sprint ↔ orden. Solo se compara contra otras etapas que
+ * TAMBIÉN tienen tareas en ejecución: un bloque es un backlog temático, no una
+ * cola, así que su numeración puede entrelazarse con la del sprint sin que eso
+ * signifique nada. Entre dos sprints abiertos a la vez, sí.
+ */
+function ordenEntreSprints(abiertas: Tarea[], activo: string): Hallazgo[] {
+  const etapasEnEjecucion = new Set(
+    abiertas
+      .filter(
+        (t) => EN_EJECUCION.includes(t.estado) && t.etapa && t.etapa !== activo,
+      )
+      .map((t) => t.etapa as string),
+  );
+  const tope = Math.max(
+    ...abiertas
+      .filter((t) => t.etapa === activo && t.prioridad !== null)
+      .map((t) => t.prioridad as number),
+    -Infinity,
+  );
+  const adelantadas = abiertas.filter(
+    (t) =>
+      t.etapa !== null &&
+      etapasEnEjecucion.has(t.etapa) &&
+      t.prioridad !== null &&
+      t.prioridad < tope,
+  );
+  if (adelantadas.length === 0) return [];
+  return [
+    {
+      regla: "orden-entre-sprints",
+      mensaje: `${adelantadas.length} tarea(s) de otro sprint abierto van por delante del final de «${activo}» (P${tope}).`,
+      tareas: adelantadas.map((t) => `${etiqueta(t)}  [${t.etapa}]`),
+    },
+  ];
+}
+
+/**
+ * REGLA 5 · ¿`General` drena o crece? El cupo de `CLAUDE.md` no se puede
+ * comprobar —una tarea movida pierde de qué bloque venía—, así que se vigila el
+ * neto, que es lo máximo que el tablero permite medir sin una propiedad nueva.
+ */
+function embalseTransversal(abiertas: Tarea[], sello: Sello): Hallazgo[] {
+  const medida = medirGeneral(abiertas, sello);
+  if (medida.nivel !== "rojo") return [];
+  return [
+    {
+      regla: "general-no-drena",
+      mensaje:
+        `«${BLOQUE_TRANSVERSAL}» ha ganado ${medida.variacion} neta(s) desde el ` +
+        `cierre de «${sello.cierre}» (${sello.fecha}): ${sello.abiertas} → ` +
+        `${medida.abiertas}, umbral +${VARIACION_ROJA}.`,
+      tareas: [
+        "El cupo dice que cada sprint arrastra 3-4 de este bloque; el neto dice que no está saliendo.",
+        "Una revisión no cierra dejando más tareas nuevas de las que el cupo va a sacar: falta decidir qué se retira.",
+      ],
+    },
+  ];
+}
+
+/**
+ * Las cinco reglas, sobre las tareas ABIERTAS. Devuelve hallazgos; no imprime ni
+ * sale con código, que es lo que permite probarla.
+ *
+ * Cada regla es su propia función y esto solo las encadena: así se lee cuáles son
+ * de un vistazo, y añadir la sexta no engorda a nadie.
+ *
+ * El `sello` es opcional porque las cuatro primeras no lo necesitan: sin él se
+ * juzga el tablero y no el embalse. Quien lo tiene es `check-tablero.ts`.
+ */
+export function revisarTablero(todas: Tarea[], sello?: Sello): Hallazgo[] {
+  const abiertas = todas.filter((t) => ABIERTAS.includes(t.estado));
+  const activo = sprintActivo(abiertas);
+
+  return [
+    ...prioridadesUnicas(abiertas),
+    ...camposObligatorios(abiertas),
+    ...(activo ? estadosDelSprint(abiertas, activo) : []),
+    ...(activo ? ordenEntreSprints(abiertas, activo) : []),
+    ...(sello ? embalseTransversal(abiertas, sello) : []),
+  ];
 }

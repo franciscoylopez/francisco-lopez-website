@@ -136,46 +136,42 @@ async function comprobar(enlace: Hallada): Promise<Veredicto> {
   }
 }
 
-async function main() {
-  const veredictos = await Promise.all(enlaces.map(comprobar));
-  veredictos.sort((a, b) => a.enlace.url.localeCompare(b.enlace.url));
+/** La marca de una línea del informe, por su veredicto. */
+function marca(v: Veredicto): string {
+  if (v.juicio === "muerto") return "✗";
+  if (v.juicio === "no concluyente") return "?";
+  return v.nota ? "→" : "·";
+}
 
+/** La coletilla del verde: qué se ha visto que no falla pero conviene saber. */
+function matices(dudosos: number, redirigidos: number): string {
+  const partes: string[] = [];
+  if (dudosos > 0) {
+    partes.push(
+      ` ${dudosos} responde(n) con un código que NO concluye (escudo antibot o ` +
+        "acceso restringido): se miran a ojo, no fallan.",
+    );
+  }
+  if (redirigidos > 0) {
+    partes.push(
+      ` ${redirigidos} redirige(n) a otra ruta: no falla, pero una redirección ` +
+        "que desaparezca es el 404 de mañana.",
+    );
+  }
+  return partes.join("");
+}
+
+function informar(veredictos: Veredicto[]): void {
   console.log("");
   for (const v of veredictos) {
-    const marca =
-      v.juicio === "muerto"
-        ? "✗"
-        : v.juicio === "no concluyente"
-          ? "?"
-          : v.nota
-            ? "→"
-            : "·";
     console.log(
-      `  ${marca} ${v.estado.padEnd(13)} ${v.enlace.url}` +
+      `  ${marca(v)} ${v.estado.padEnd(13)} ${v.enlace.url}` +
         (v.nota ? `\n      ${v.nota}` : ""),
     );
   }
+}
 
-  const muertos = veredictos.filter((v) => v.juicio === "muerto");
-  const dudosos = veredictos.filter((v) => v.juicio === "no concluyente");
-  const redirigidos = veredictos.filter((v) => v.juicio === "vivo" && v.nota);
-
-  if (muertos.length === 0) {
-    console.log(
-      `\n✓ Ninguno de los ${enlaces.length} enlaces externos está caído.` +
-        (dudosos.length > 0
-          ? ` ${dudosos.length} responde(n) con un código que NO concluye` +
-            " (escudo antibot o acceso restringido): se miran a ojo, no fallan."
-          : "") +
-        (redirigidos.length > 0
-          ? ` ${redirigidos.length} redirige(n) a otra ruta: no falla, pero una` +
-            " redirección que desaparezca es el 404 de mañana."
-          : "") +
-        "\n",
-    );
-    process.exit(0);
-  }
-
+function morir(muertos: Veredicto[]): never {
   console.error(
     `\ncheck:enlaces — ${muertos.length} enlace(s) que no responden:\n`,
   );
@@ -193,5 +189,23 @@ async function main() {
   process.exit(1);
 }
 
-//  compila a CJS, donde el await de nivel superior no existe.
+async function main() {
+  const veredictos = await Promise.all(enlaces.map(comprobar));
+  veredictos.sort((a, b) => a.enlace.url.localeCompare(b.enlace.url));
+  informar(veredictos);
+
+  const muertos = veredictos.filter((v) => v.juicio === "muerto");
+  if (muertos.length > 0) morir(muertos);
+
+  console.log(
+    `\n✓ Ninguno de los ${enlaces.length} enlaces externos está caído.` +
+      matices(
+        veredictos.filter((v) => v.juicio === "no concluyente").length,
+        veredictos.filter((v) => v.juicio === "vivo" && v.nota).length,
+      ) +
+      "\n",
+  );
+}
+
+// `tsx` compila a CJS, donde el await de nivel superior no existe.
 void main();
