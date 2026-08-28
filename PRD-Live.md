@@ -256,14 +256,17 @@ la historia de TheTool y no una experiencia con historia separable.
 
 ### V3 — deuda y mejoras por bloque
 
-Sin fecha ni compromiso de release conjunto: entran en el sprint que las toque o cuando
-dejen de poder esperar. Agrupadas por dónde viven — *General* (higiene de validadores,
-dependencias, `qlty`), *Home* (gesto-firma de marca, presencia del morado, kicker del
-Hero), *Brand Kit*, *Design System* y *Accesibilidad*.
+Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
+*Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
+decisión escrita, no por omisión.
 
-**Y desde el 2026-08-27 lleva algo que no es una superficie: la DISTRIBUCIÓN.** Con la
-métrica primaria en 1 envío en 28 días, el cuello de botella dejó de ser la calidad del
-sitio. Entra en alcance —decisión escrita, no omisión— y va detrás de «Home» en la cola.
+**Y desde el 2026-08-28 hay secuencia hasta el lanzamiento**, en tres pasos: **«Drenaje»**,
+el sprint en curso, donde Francisco relee el contenido servido mientras en paralelo se drena
+la deuda que no pide criterio → **el sprint de mejoras**, cuyo alcance lo define esa lectura
+y que no existe hasta que exista la lista → **el lanzamiento**.
+
+*(Por qué son dos carriles y por qué el orden de las tandas lo manda la visibilidad y no la
+prioridad, en `PRD-Historical.md`.)*
 
 ### V4 — IA conversacional
 
