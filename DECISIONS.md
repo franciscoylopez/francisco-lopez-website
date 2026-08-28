@@ -174,6 +174,7 @@
 - D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde
 - D137 · El gesto de marca son dos piezas, y una manda sobre la otra
 - D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse
+- D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8202,3 +8203,67 @@ el borde que deja pasar 3. Y su caso malo entra en `check:guardianes`: subir `VA
 4 a 400 deja el guardián **imprimiendo su línea y sin rechazar nada**, que es exactamente la
 forma en que este tipo de gate se muere. Comprobado que muerde: 1 de 20 tests en rojo con la
 mutación puesta, 20 verdes al restaurarla.
+
+---
+
+## D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta — 2026-08-28
+
+**Contexto.** `check:contexto` (D69) puso techo al contexto de arranque y funcionó: el arranque
+bajó de 19.805 palabras a ~12.000. Lo que no vigilaba nadie es **el techo**. En nueve días tuvo
+**siete valores, en las dos direcciones** —16.000 → 13.500 → 12.500 → 12.400 → 12.200 → **12.700**
+→ 12.300—, y el margen **nunca pasó de 442 ni bajó de 5**.
+
+**La medición que lo cierra.** El sprint «Home» hizo la primera retirada real desde el 22 de
+agosto: **−651 palabras** al partir el porqué de `CLAUDE.md` a su histórico. **El margen pasó de
+246 a 253.** Retirar 651 compró **7**, porque el techo bajó 400 en el mismo commit. El techo de la
+suma de skills tiene la misma firma: nació el 27-08 en 20.500 sobre 20.296, o sea **ya tocando**.
+
+Es familia propia en el catálogo de `method-review` —**«el umbral que persigue al dato»**— y se
+separa de «la cifra apuntada que caduca» **por el remedio**: aquella es un número que envejece
+porque nadie lo toca; esta es un número que se actualiza *demasiado bien*.
+
+**Decisión, en dos piezas que solo funcionan juntas.**
+
+1. **El techo se DERIVA de su historial, que pasa a ser DATO.** `HISTORIAL_TECHO`,
+   `HISTORIAL_TECHO_SKILL` y `HISTORIAL_TECHO_SUMA` son arrays de `{fecha, valor, motivo}`, y
+   `TECHO = vigente(HISTORIAL_TECHO)`. **No se puede mover un techo sin añadir una entrada, y una
+   entrada exige `motivo`: lo pide el tipo.** De paso desaparece la duplicación que tenía el
+   archivo —la lista en prosa arriba, el valor abajo—, que es exactamente cómo una de las dos
+   mitades acaba diciendo otra cosa.
+2. **Se cuentan los movimientos del ciclo en curso**, contra `CICLO_ABIERTO`, y se publican en
+   cada corrida con su motivo: **verde 0 · ámbar 1** —el trinquete apretando, que es su trabajo—
+   **· rojo ≥ 2**, que ya no es apretar sino perseguir al dato. Se cuenta **por techo**: dos
+   movimientos del mismo en un ciclo es la firma; dos de techos distintos puede ser un ciclo que
+   compactó en dos frentes.
+
+**Por qué en el repo y no en `git log`.** La alternativa era arqueología de commits sobre la
+constante. Sale peor: depende de la profundidad del `fetch` en CI, no puede exigir un motivo, y
+convierte en implícito lo que aquí es un campo obligatorio. Criterio de D51 igualmente cumplido —
+se dispara en un evento y no requiere criterio—, pero sin depender del historial de git.
+
+**Y el criterio de cierre se cumplió sin tocar el techo, que era la mitad difícil.** El margen
+pasó de **253 a 405** (12.047 → 11.895 sobre el mismo 12.300) **retirando copias, no reglas** — y
+además **añadiendo dos**, la del cupo (D138) y la de los dos sellos de apertura y cierre:
+
+| Qué se retiró | Dónde estaba repetido |
+|---|---|
+| La descripción del gate de accesibilidad | `CLAUDE.md` **y** la tabla de contrato de `PRD-Live` (D128) |
+| El reparto de los 9 puntos del checklist | En prosa **y** en la tabla de la DoD |
+| El porqué de cada excepción de control | `BRAND.md`, `BRAND-historical.md` **y** la marca `@fuera-de-capa` que imprime `check:excepciones` |
+| El historial de los tres techos | El comentario **y** —ahora— el dato |
+
+Es la **primera vez que el margen sube solo por trabajo del dato**, que es justo lo que la regla
+nueva existe para forzar.
+
+**Lo que NO puede ver.** Si es el **objetivo** el que persigue al dato en vez del techo, esto no
+lo mira: el objetivo no falla, solo tira, y un objetivo que se relaja se nota en que la distancia
+no baja. Se vigila lo que muerde.
+
+**El sello es ritual de apertura, y está escrito donde se hace.** `CICLO_ABIERTO` se actualiza al
+**abrir** una etapa, igual que `SELLO_GENERAL` (D138) se actualiza al **cerrarla**. Los dos están
+en `CLAUDE.md` §Gestión de etapas, uno a cada lado del cruce.
+
+**Validado disparándolo.** Caso malo en `check:guardianes`: retrasar `CICLO_ABIERTO` a 2026-08-01
+mete los siete movimientos reales dentro de la ventana. Sale rojo nombrando los dos techos
+afectados y con código 1; restaurado, verde. Se muerde la apertura del ciclo y no el historial a
+propósito: inventar un movimiento que no ocurrió vale menos que contar los que sí.

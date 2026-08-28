@@ -246,12 +246,9 @@ el switch del consentimiento, aquí debajo).
 > con un solo call site solo añadiría indirección. **Salen cuando aparezca la segunda**, o
 > cuando haya que rehacerlas por otro motivo.
 >
-> - **El switch del consentimiento** *(2026-08-08)*: `consent-banner.tsx` lo dibuja con una
->   cadena inline. Y traerlo hecho es lo que mandaría la cascada, que **aplica hacia
->   delante, no hacia atrás**. Lo que **no** es excepción es su color: lo resuelve §Controles
->   con dos fondos.
-> - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`: etiqueta de dos letras,
->   así que el ancho lo daba el texto y el suelo táctil se escribe en el call site.
+> - **El switch del consentimiento** *(2026-08-08)*, en `consent-banner.tsx`. Lo que **no**
+>   es excepción es su color: lo resuelve §Controles con dos fondos.
+> - **El conmutador de idioma del nav** *(2026-08-18)*, en `nav.tsx`.
 >
 > **Y una clase de `globals.css` es tan capa como una variante**, así que el control sobre
 > imagen del vídeo no es excepción: sale de `.video-facade`.
@@ -295,8 +292,6 @@ hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script e
    anclajes son **texto principal (13,79 claro / 15,32 oscuro)** y **la bolita apagada del
    switch (12,47 / 12,04)**: son pares sin cian, así que no dependen del recorte de gamut y
    tienen que reproducirse **exactos**. Si no lo hacen, el fallo es del método, no del color.
-   *(Los pares que llevan cian sirven mal de anclaje — son justo los que se han corregido dos
-   veces.)*
 2. **Los cianes de esta marca caen ligeramente fuera del gamut sRGB.** El navegador los recorta
    al pintarlos, así que `getComputedStyle` devuelve `color(srgb …)` con **componentes
    negativas**. Leerlas sin recortar a [0,1] da un color que no existe en pantalla. Recorta
@@ -311,13 +306,12 @@ hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script e
    clase construida por interpolación no se genera y el elemento se queda sin hover, **sin
    error de compilación**. La cifra puede ser perfecta sobre el papel y no estar aplicándose a
    nada. Mide sobre el elemento real, en su estado real.
-6. **Una cifra corregida se SUSTITUYE en todos los párrafos que la citan; no basta con anotarla
-   al final.** Una nota fechada al pie no corrige el texto de arriba.
+6. **Una cifra corregida se SUSTITUYE en todos los párrafos que la citan.** Una nota fechada al
+   pie no corrige el texto de arriba.
 7. **La cifra no dice nada sin el umbral, y el umbral lo pone el TAMAÑO del texto.** WCAG llama
-   grande a ≥24px, o ≥18,66px con peso ≥700: ahí AAA es 4,5 y AA es 3, no 7 y 4,5. Puntuarlo
-   todo contra 7:1 hizo publicar cuatro incumplimientos donde había **uno** (D41). El censo ya
-   lo aplica y ordena por **holgura**, no por ratio — con umbrales mixtos, la cifra más baja no
-   señala al peor par. *Un umbral mal aplicado inventa hallazgos igual que un metro mal
+   grande a ≥24px, o ≥18,66px con peso ≥700: ahí AAA es 4,5 y AA es 3, no 7 y 4,5 (D41). El
+   censo ya lo aplica y ordena por **holgura**, no por ratio — con umbrales mixtos, la cifra más
+   baja no señala al peor par. *Un umbral mal aplicado inventa hallazgos igual que un metro mal
    calibrado.*
 8. **Valida también el APROBADO, no solo el hallazgo** *(2026-08-25)*. El punto 1 cubre el
    hallazgo y le faltaba la otra mitad. **Si alguien que está mirando la página señala un

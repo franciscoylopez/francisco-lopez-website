@@ -195,6 +195,12 @@ Lo que **no** era excepción es su color. Anotarlo importa porque el hallazgo qu
 justo esa confusión: el comentario del componente justificaba el **color** y se leyó como si
 justificara la **excepción**, que es otra pregunta.
 
+**Y el conmutador de idioma del nav** *(2026-08-18)*: etiqueta de dos letras, así que el ancho
+lo daba el texto y el suelo táctil de 44px hubo que escribirlo en el call site. Su razón, la
+misma que la del switch y la que las dos comparten: **hay una de cada**, y una pieza con un solo
+call site solo añadiría indirección. *(Retirado de `BRAND.md` el 2026-08-28, P50.72; allí queda
+la lista, que es lo que comprueba `check:excepciones`.)*
+
 ---
 
 ## Accesibilidad

@@ -145,6 +145,26 @@ const CASOS: Caso[] = [
     },
   },
   {
+    // La CUARTA mitad del presupuesto (P50.72): no el dato contra el umbral, sino
+    // el UMBRAL. Los tres techos se movieron siete veces en nueve días y nadie
+    // estaba apuntado a eso; la métrica que lo abrió es que retirar 651 palabras
+    // de verdad compró 7 de margen, porque el techo bajó 400 en el mismo commit.
+    //
+    // Se muerde la apertura del ciclo, no el historial: retrasarla mete los siete
+    // movimientos reales dentro de la ventana y el contador tiene que salir rojo.
+    // Mutar el historial en su lugar sería inventar un movimiento que no ocurrió,
+    // y este caso vale más contando los que sí.
+    guardian: "check:contexto",
+    rotura:
+      "un techo se mueve dos veces en el mismo ciclo y el contador no lo ve",
+    archivo: "scripts/check-contexto.ts",
+    mutar: (o) =>
+      o.replace(
+        'const CICLO_ABIERTO = "2026-08-28";',
+        'const CICLO_ABIERTO = "2026-08-01";',
+      ),
+  },
+  {
     guardian: "check:indices",
     rotura: "una pieza de components/ui/ se queda sin declarar su línea",
     // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja

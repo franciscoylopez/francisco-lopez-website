@@ -88,23 +88,19 @@ descarga** (D65).
 
 - **Las páginas que documentan el sistema no pueden mentir.** El Design System y el
   Brand Kit publican **las piezas reales del sitio como demo**: si una variante cambia,
-  la página cambia con ella. Y no leen sus valores
-  del diccionario, sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio
-  publica sobre sí mismo — tokens de layout, breakpoints y el censo de pares de contraste
-  medidos. El diccionario se queda solo con el copy.
+  la página cambia con ella. Y sus cifras no salen del diccionario —que se queda solo con
+  el copy— sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio publica
+  sobre sí mismo.
 - **Las superficies de contacto son dos, y la diferencia es deliberada** (D29): la franja
   de la home y el cierre de Sobre mí llevan a `/contacto`; el «reportar una barrera» de
   Accesibilidad **no**, y enseña la dirección escrita con su asunto. Obligar a usar el
   formulario para reportar una barrera sería una trampa el día que la barrera fuera él.
-- **Una página no se escribe: se compone.** `pageMetadata` deriva canonical, los tres
-  `hreflang`, OG y Twitter de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de
-  motion, el `<main>` y footer (D45/D46). Las catorce se **prerenderizan** por locale y el
-  diccionario está **partido por página** (D48). Y **qué páginas hay lo dice un solo
-  sitio**: registrarlas mal no es un hallazgo de auditoría sino un error del
-  compilador, y un guardián contrasta el registro con el disco (D72). Es lo que hace
-  que una página nueva nazca con el `hreflang` correcto, con enlace de salto,
-  estática, y dentro del sitemap, del gate, de `/llms.txt` y de su propia tarjeta
-  OG, sin que nadie se acuerde.
+- **Una página no se escribe: se compone.** `pageMetadata` y `<PageShell>` derivan la
+  metadata, el JSON-LD y el marco (D45/D46), las catorce se **prerenderizan** por locale
+  (D48), y **qué páginas hay lo dice un solo sitio**, contrastado con el disco por un
+  guardián (D72). Es lo que hace que una página nueva nazca con el `hreflang` correcto,
+  con enlace de salto, estática, y dentro del sitemap, del gate, de `/llms.txt` y de su
+  propia tarjeta OG, sin que nadie se acuerde.
 
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 
@@ -127,10 +123,9 @@ carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (e
 eyebrow + titular), `field` (el campo de formulario), `table`, `stat-row` y `layout`
 (cajas y ritmos). Encima, la **capa
 de página**: `lib/page-meta.ts` y `components/site/page-shell.tsx` (D45/D46). Y aparte,
-no encima, la de **artículo largo**, que D76 dejó fuera del núcleo a propósito — y que
-se vacía por su propio criterio: cuando una segunda página quiere una de sus piezas,
-esa pieza sale (`LiveStat` en D113, el índice y el cierre en D121) — **y vuelve si su
-motivo no valía en las cuatro**: el riel se probó en tres páginas y volvió (D123).
+no encima, la de **artículo largo**, que D76 dejó fuera del núcleo a propósito y que se
+vacía por su propio criterio: cuando una segunda página quiere una de sus piezas, esa
+pieza sale — **y vuelve si su motivo no valía en las cuatro** (D113, D121, D123).
 
 **Qué hay exactamente en `components/ui/` no lo dice este párrafo: lo dice
 `components/ui/README.md`, derivado del disco** y comprobado en cada PR, con la frase de
@@ -248,7 +243,7 @@ ellos se intercalaron tres bloques de método. El recorrido sprint a sprint, con
 de cada uno, en `PRD-Historical.md`.
 
 **Traducción a EN**: la arquitectura i18n ya está; se traduce a medida que se añade
-contenido, revisando el EN contra el ES y no al revés (D20).
+contenido, con la regla de `CLAUDE.md` (D20).
 
 **Qué NO lleva deep-dive, y no es por alcance:** las dos entradas de Marketing & Growth
 (diluirían el orden del posicionamiento de §3) y **PICKASO**, que es el primer capítulo de
