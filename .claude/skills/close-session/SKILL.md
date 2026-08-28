@@ -148,7 +148,8 @@ ha contestado por inercia.
    históricos, regenéralos con `npm run indices` — se DERIVAN de las
    cabeceras y no se escriben a mano. Si un título no basta para saber si abrir esa
    sección, arregla LA CABECERA, nunca el índice.
-3. **El artículo, que casi siempre va a saltar.** `check:articulo` sella **por archivo**
+3. **Los dos sellos, que casi siempre van a saltar.** `check:articulo` y —desde D140—
+   `check:accesibilidad` sellan **por archivo**
    y esta skill edita justo los archivos sellados —`PRD-Live.md`, `DECISIONS.md`,
    `BRAND.md`, `CLAUDE.md`—, así que **cuenta con que salga rojo**: el 2026-08-22 saltó
    cuatro veces. **No selles por reflejo**, que es exactamente como un guardián deja de
@@ -158,6 +159,8 @@ ha contestado por inercia.
    `app/[lang]/dictionaries/{es,en}/como-se-ha-creado.json` las secciones que sigan en
    duda y decide. Si sigue siendo cierto, `npm run articulo:sellar`. Si no, corrige el
    copy **ES y EN** (D20) y sella después.
+   **Igual con `/accesibilidad`**, que depende de tres de los archivos que esta skill
+   edita: `npm run accesibilidad:sellar` cuando el texto siga siendo cierto.
    **Las CIFRAS escritas con letra ya no hay que mirarlas a mano**: desde D102 las que el
    artículo publica se derivan del disco o se sellan al medir, y `check:articulo` no deja
    teclear una nueva. Lo que sí hay que leer es lo que AFIRMA la prosa, que ninguna
