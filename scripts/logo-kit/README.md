@@ -43,10 +43,14 @@ de alto mediría 3400 de ancho.
 formato— con el símbolo centrado al 87,5% del alto. El de 16px lleva el trazo
 engordado de 6 a 10 unidades; a partir de 32px no hace falta.
 
-**Nombres.** El sufijo de los PNG nombra la **tinta**, no el fondo:
-`tintaOscura` va sobre fondos claros y `tintaClara` sobre oscuros. Los SVG usan
-`claro`/`oscuro` por el tema al que sirven, que es la convención heredada del
-kit original.
+**Nombres.** Todo el kit nombra la **tinta**, no el fondo: `tintaOscura` va
+sobre fondos claros y `tintaClara` sobre oscuros. Los SVG llevaban hasta el
+2026-08-28 la convención heredada del kit original (`claro`/`oscuro`, por el tema
+al que sirven), que era la OPUESTA a la de los PNG de la misma pieza: se unificó
+en P50.96, y con eso desapareció el campo `png` de `VARIANTS` y la mitad de la
+sección de nombres del `LEEME.txt` del ZIP. Los favicon son la excepción y se
+quedan en `claro`/`oscuro`: ahí el sufijo no es un fondo sino el
+`prefers-color-scheme` con el que el navegador los elige.
 
 **Colores fijos.** Los SVG llevan hex, no tokens CSS, para que sean portables
 fuera de la web. La versión con tokens que conmutan es el componente.

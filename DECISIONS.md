@@ -7067,12 +7067,31 @@ que existen, y el par `favicon-*-48.png`, que duplica los de la raíz que usa el
 decidió que **viajan en el kit sin tarjeta propia**, y ahora están **declarados** en
 `SOLO_EN_EL_KIT` con su motivo, que es la diferencia entre una decisión y un descuido.
 
-**Lo que queda pendiente, dicho para que no se dé por cerrado.** El **renombrado de los
-assets**: en disco los SVG se nombran por TEMA (`-claro`/`-oscuro`) y los PNG por TINTA
-(`tintaOscura`/`tintaClara`), y son **opuestos** (`simbolo-split-claro.svg` lleva tinta
-oscura). El cruce está encapsulado en `svgDe()` y `pngDe()`, así que la página nunca lo expone,
-y el `LEEME.txt` que viaja dentro del ZIP lo explica en los dos idiomas, que es donde el
-usuario tropieza con él. Renombrarlos es otra tarea.
+**Lo que quedaba pendiente, y se cerró el 2026-08-28 (P50.96).** El **renombrado de los
+assets**: en disco los SVG se nombraban por TEMA (`-claro`/`-oscuro`) y los PNG por TINTA
+(`tintaOscura`/`tintaClara`), y eran **opuestos** (`simbolo-split-claro.svg` llevaba tinta
+oscura). Ahora **todo el kit se nombra por tinta**, que es la propiedad DEL ARCHIVO: «claro» y
+«oscuro» describen el contexto donde se coloca, y por eso se invertían. El argumento ya estaba
+escrito en el generador para los PNG —«un asset transparente se pone sobre el fondo que sea»—;
+lo que faltaba era aplicárselo a la otra familia.
+
+**Y lo que se llevó por delante mide lo que costaba la convención que mentía:** `svgDe()` y
+`pngDe()` colapsan en un solo `nombreDe()`, el campo `png` de `VARIANTS` desaparece —era el
+que traducía— y la sección de nombres del `LEEME.txt` del ZIP encoge a la mitad en los dos
+idiomas, porque ya no tiene que avisar de que las dos convenciones se leen al revés.
+
+**Los favicon se quedan en `-claro`/`-oscuro`, y eso es una decisión, no un resto.** Ahí el
+sufijo no nombra un fondo sobre el que alguien coloca el asset: nombra el
+`prefers-color-scheme` con el que el navegador lo elige (`app/[lang]/layout.tsx` los declara
+con esa `media`). El nombre que sirve es el de la consulta que lo selecciona, así que
+renombrarlos rompería la única correspondencia clara que hay.
+
+**Un hallazgo lateral, sin tarea: el generador ya no reproduce sus propios PNG byte a byte.**
+Al reconstruir el kit para comprobar que el generador escribe los nombres nuevos, los 12 SVG
+salieron idénticos y **15 de los 43 binarios cambiaron** —distinta versión de sharp/libvips que
+la del día que se generaron—. No es un fallo del kit, pero sí el límite de `check:kit`, que
+cuadra NOMBRES y no contenido; se revirtieron los binarios para no meter ruido en el commit del
+renombrado.
 
 **Y una medición que no se hizo.** Esto **borra una capacidad que existía**: hasta hoy se podía
 bajar exactamente el PNG 512 en tinta clara. GA4 captura descargas de fábrica, así que el
