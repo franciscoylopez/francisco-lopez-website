@@ -5827,6 +5827,24 @@ se habría visto el día que se escribió. Fue además la **segunda vez en el mi
 el censo no podía ver algo (D-entry de `--destructive`, doce días antes): aquella vez se
 arregló el caso y se escribió una regla, no se tocó el metro.
 
+**Addendum 2026-08-28 (P50.92) — la regla invertida estaba calibrada al revés, y no se notó
+porque no tenía ocupante.** `[data-surface="inverted"]` construye el contorno desde
+`--background`, que es su primer plano, pero usaba `--control-edge-mix`, el número calibrado
+contra el fondo del PROPIO tema. En una banda invertida el fondo es el del OTRO, así que el
+número que sirve es el otro: medido sobre el píxel pintado, el 45% de oscuro daba **2,78:1**
+contra la banda —por debajo del 3:1 de 1.4.11— y el 60% de claro daba 5,89, holgado pero más
+duro que el ~4 que busca el resto de la familia. Nace `--control-edge-mix-inverted` (45% claro
+/ 60% oscuro, 3,96 y 4,30), con la misma forma que `--border-mix-inverted`.
+
+**Y por qué el censo no lo cazó, siendo un pase que existe desde esta misma decisión:** el
+único control que vive hoy sobre una banda invertida —el compartir de la apertura del
+artículo, `ShareActions`— **se pintaba el borde a mano** (`border-background/70`, escrito en
+P60, un día antes de que existiera `--control-edge`). El censo medía el borde que el elemento
+pinta, y ese estaba bien. La regla de la capa era la que estaba mal, y no había nadie que la
+ejecutara. Es la variante «regla sin ocupante» del metro que devuelve lista vacía: aquí lo que
+devolvía vacío no era el metro sino el CONJUNTO MEDIDO. Al devolver el borde a la capa, la
+regla invertida tiene por fin su primer ocupante y entra en el censo.
+
 ## D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro — 2026-08-23
 
 **El hallazgo del cuarto `method-review`, y lo que lo hace distinto de los tres anteriores.** No

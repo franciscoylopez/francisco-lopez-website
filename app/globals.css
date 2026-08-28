@@ -140,6 +140,12 @@
      año y medio a 1,21:1. */
   --input: oklch(0.901 0.0142 88.69);
   --control-edge-mix: 60%;
+  /* La invertida necesita su propio número, y por el mismo motivo que
+     `--border-mix-inverted`: ahí la banda es `--foreground`, o sea el fondo del
+     OTRO tema, así que la calibración que sirve es la del otro tema. Con el 60%
+     de aquí el contorno sale a 5,89 (holgado pero más duro que el ~4 que busca
+     el resto de la familia); con el 45%, a 3,96. */
+  --control-edge-mix-inverted: 45%;
   --ring: oklch(0.41 0.0886 194.82); /* foco = cian primario */
 
   --chart-1: var(--brand-cyan);
@@ -254,6 +260,12 @@
   --border-base: oklch(0.3252 0.0157 248.31);
   --input: oklch(0.3252 0.0157 248.31);
   --control-edge-mix: 45%;
+  /* Y aquí está el que importa: con el 45% del propio tema, el contorno sobre la
+     banda invertida sale a 2,78 — POR DEBAJO del 3:1 de WCAG 1.4.11. Pasó
+     desapercibido porque la regla invertida no tenía ocupante: su único
+     candidato, el compartir de la apertura del artículo, se pintaba el borde a
+     mano. Con el 60%, 4,30. */
+  --control-edge-mix-inverted: 60%;
   /* La mezcla del filete NO conmuta con el tema, y eso es un resultado, no un
      descuido: el barrido dio 11% en los dos. Es la diferencia con
      `--control-edge-mix` (60/45), y sale de que aquí no hay umbral que alcanzar
@@ -793,11 +805,13 @@
   );
 }
 /* En una banda invertida el primer plano es `--background`, así que el contorno
-   se construye desde el otro extremo — igual que hace `--surface-dim`. */
+   se construye desde el otro extremo — igual que hace `--surface-dim`. Y con su
+   PROPIA proporción, que conmuta al revés que la de arriba: medido sobre el píxel
+   pintado, claro 3,96 y oscuro 4,30 contra la banda. */
 [data-surface="inverted"] {
   --control-edge: color-mix(
     in srgb,
-    var(--background) var(--control-edge-mix),
+    var(--background) var(--control-edge-mix-inverted),
     var(--foreground)
   );
 }

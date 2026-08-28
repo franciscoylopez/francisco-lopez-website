@@ -140,11 +140,11 @@ export function ShareActions({
 }: ShareLinkStrings & {
   shareLabel: string;
   /** El único uso hoy: la apertura del artículo, sobre `bg-foreground`. Ahí
-   * `outline-neutral` pinta un rectángulo con `--background` normal —claro en
+   * `outline-neutral` pinta un RELLENO con `--background` normal —claro en
    * claro— flotando sobre la banda oscura: legible mal, no un fallo de
-   * contraste. Controles CON DOS FONDOS (BRAND.md): el color se toma del
-   * fondo, no se fija, así que aquí se deriva de `--background`/`--foreground`
-   * en vez de reusar la variante pensada para superficies normales. */
+   * contraste. Controles CON DOS FONDOS (BRAND.md): el color se toma del fondo,
+   * no se fija. El CONTORNO ya no entra aquí —lo resuelve `--control-edge` por
+   * superficie desde D97—; lo que queda es el relleno, que la capa no cubre. */
   onInverted?: boolean;
 }) {
   const { copyText, announce, share, copyLink } = useShareLink({
@@ -154,14 +154,17 @@ export function ShareActions({
     shareUnavailableAnnounce,
   });
 
-  // El borde al 35% daba 2,1-3:1 contra la banda (viewport-verifier, P60):
-  // por debajo del 3:1 que WCAG 1.4.11 pide a un componente de UI en los dos
-  // temas. El texto interior ya es AAA (mismo par que el resto del sitio);
-  // solo el límite del control necesitaba más opacidad de `--background`.
+  // EL BORDE YA NO SE ELIGE AQUÍ (2026-08-28, P50.92). Lo pone la variante con
+  // `border-control-edge` y lo resuelve la superficie: el hero declara
+  // `data-surface="inverted"`, que en globals.css mezcla el contorno desde
+  // `--background`. Lo que queda del override son los dos que la capa NO
+  // resuelve, y por eso siguen: no hay regla de `--muted` ni de `--foreground`
+  // para la banda invertida, así que el relleno de reposo, el color del texto y
+  // la pastilla de hover se derivan a mano del par de la banda.
   const btnClass = cn(
     actionVariants({ variant: "outline-neutral", size: "sm" }),
     onInverted &&
-      "border-background/70 bg-transparent text-background hover:bg-background/15 focus-visible:bg-background/15",
+      "bg-transparent text-background hover:bg-background/15 focus-visible:bg-background/15",
   );
 
   return (
