@@ -90,8 +90,7 @@ Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cua
 
 ### Metodología de trabajo (fase V2+)
 
-- **Contenido primero** en secciones bloqueadas por contenido (Sobre mí, Accesibilidad): el texto es el cuello de botella real y solo lo escribe Francisco. Desbloquear el contenido **antes o en paralelo** al diseño/dev; Claude puede redactar un borrador editable (como el CV o Sobre mí) para arrancarlo.
-- **Bucle medir→aprender.** Al cerrar cada etapa, revisar los números de GA4 (clics de contacto, descargas de CV, scroll) para informar la priorización.
+- **Contenido primero.** El texto es el cuello de botella real y solo lo escribe Francisco; el carril de arriba dice cuándo. Claude puede redactar un borrador editable para arrancarlo.
 - **Definition of Done por sección.** Cada tarea de sección hereda el checklist de cierre, al final de este archivo.
 - **Revisión con IA en los PR grandes.** Sin segundo revisor humano, usa `/code-review` (o ultrareview) en cambios sustanciales como segundo par de ojos.
 - **Shippear vs. pulir.** Que las secciones salgan en vez de dorarse: lo de la columna B de la DoD no bloquea el envío.

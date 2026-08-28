@@ -453,7 +453,7 @@ export const PAGE_COUNT = PAGE_SLUGS.length;
  * porque nada ataba la prosa al inventario (P50.73).
  */
 export const GUARDIAN_COUNT = 16;
-export const GUARDIAN_CASE_COUNT = 29;
+export const GUARDIAN_CASE_COUNT = 30;
 
 /**
  * El cardinal en palabras, porque el copy de este sitio escribe los recuentos

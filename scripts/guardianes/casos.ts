@@ -206,6 +206,21 @@ export const CASOS: Caso[] = [
       o.replace('"text": "', '"text": "Un párrafo nuevo del artículo. '),
   },
   {
+    guardian: "test",
+    rotura: "el umbral de «enlace muerto» vuelve a tragarse el escudo antibot",
+    // `check:enlaces` corre FUERA de CI porque sale a la red, así que aquí se
+    // muerde su criterio, como con el tablero. Y la rotura es el fallo REAL que
+    // tuvo el día que se escribió: `999 >= 500` puntuaba el perfil de LinkedIn
+    // como caído. Un umbral mal aplicado inventa hallazgos igual que un metro mal
+    // calibrado.
+    archivo: "scripts/enlaces/reglas.ts",
+    mutar: (o) =>
+      o.replace(
+        'if (status < 100 || status >= 600) return "no concluyente";',
+        "",
+      ),
+  },
+  {
     guardian: "check:accesibilidad",
     rotura:
       "cambia una fuente que /accesibilidad describe y su bloque no se revisa",

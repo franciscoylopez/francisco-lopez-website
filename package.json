@@ -27,6 +27,7 @@
     "check:articulo": "tsx scripts/check-articulo.ts",
     "accesibilidad:sellar": "tsx scripts/check-accesibilidad.ts --seal",
     "check:accesibilidad": "tsx scripts/check-accesibilidad.ts",
+    "check:enlaces": "tsx scripts/check-enlaces.ts",
     "check:contexto": "tsx scripts/check-contexto.ts",
     "check:skills": "tsx scripts/check-skills.ts",
     "check:guardianes": "tsx scripts/check-guardianes.ts",

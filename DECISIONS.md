@@ -176,6 +176,7 @@
 - D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse
 - D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta
 - D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido
+- D141 · El 404 de un enlace saliente lo sirve un tercero, así que no sale en ningún gate
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8343,3 +8344,67 @@ persona; esto existe para que sepa cuándo mirar.
 —fuente de los «Límites», donde la página dice que dos diagramas se miden y no se juzgan— y
 publicar un recuento de casos que ya no es el que hay. Y afirma cuánto ha mirado en cada
 corrida: cinco bloques, trece dependencias, dos cifras.
+
+---
+
+## D141 · El 404 de un enlace saliente lo sirve un tercero, así que no sale en ningún gate — 2026-08-28
+
+**Contexto.** P70.105 le añadió cinco enlaces externos a `/accesibilidad` —WCAG, axe-core,
+Lighthouse, NV Access, The A11Y Project—. Se comprobaron **a mano** al cerrarla, y esa es
+exactamente la forma de fallo que nombra `BRAND.md` §Cómo se escribe una regla, punto 2: *una
+regla que hay que recordar es una regla que se incumple*. La propia ficha de aquella tarea lo
+señaló como riesgo antes de ejecutarla.
+
+**Y duele más aquí que en otro sitio.** El 404 de un enlace saliente **lo sirve un tercero**: no
+aparece en `check:marco`, ni en `gate:html`, ni en el build. No lo ve nadie hasta que lo
+encuentra un lector. Y la página donde primero pasaría es la que presume de no mentir.
+
+**El recuento, que era lo primero que pedía la tarea.** No eran siete: el barrido sobre `app/`,
+`components/`, `content/` y `lib/` encuentra **23 enlaces externos** en 181 archivos, más 7
+descartados. Los siete de `/accesibilidad` eran la punta.
+
+**Decisión.** `npm run check:enlaces`, con **la E/S y el criterio separados**, igual que
+`check:tablero` (D107):
+
+- **`scripts/enlaces/reglas.ts`** — funciones puras sobre texto: qué es una URL, qué no es un
+  enlace, qué cuenta como muerto, qué redirección merece informe. Sin red. Las prueba `npm test`
+  en CI, con caso bueno y caso malo por regla.
+- **`scripts/check-enlaces.ts`** — el barrido y las peticiones. Corre **fuera de CI**: sale a la
+  red, y un servidor ajeno caído cinco minutos pondría un PR en rojo sin que nada de este repo
+  esté mal. Es el argumento de D49/D99 para `psi`, aplicado igual.
+
+**La lista sale del DISCO, no de una lista escrita**, que es lo que hace que un enlace nuevo
+entre en la comprobación sin que nadie se acuerde (misma forma que `PAGE_SLUGS` en D72). Y cada
+descarte **se imprime con su motivo**: un metro que descarta en silencio miente igual que uno que
+no mira.
+
+**Dónde se equivoca un metro así, que es la parte que costó pensar.**
+
+| Respuesta | Veredicto | Por qué |
+|---|---|---|
+| 404 · 410 · 500–599 | **muerto** | El enlace no lleva a ninguna parte |
+| DNS sin resolver · tiempo agotado | **muerto** | Las dos formas en que un dominio muere de verdad |
+| 401 · 403 · 405 | **no concluyente** | Varios sitios los devuelven a quien no parece un navegador |
+| < 100 o ≥ 600 | **no concluyente** | No es HTTP: es un escudo antibot |
+
+**Y el primer falso positivo lo dio él solo, en su primera corrida:** puntuó como caído el perfil
+de LinkedIn, que responde **999** — el escudo antibot de LinkedIn—, porque la regla decía
+`status >= 500`. Es el punto 7 de `BRAND.md` §Cómo medir con otra ropa: **un umbral mal aplicado
+inventa hallazgos igual que un metro mal calibrado**. Se corrigió antes de escribir nada más, y
+el caso está en `npm test` con su nombre.
+
+Se mitiga además por el lado de la petición: **User-Agent de navegador, redirecciones seguidas, y
+`HEAD` con reintento en `GET`** porque hay servidores que solo rechazan el `HEAD`.
+
+**Una redirección no falla, pero se informa — y solo si cambia de HOST o de RUTA.** Las que solo
+añaden idioma o parámetros de seguimiento no dicen nada (`developer.chrome.com` devuelve `?hl=`
+según quién pregunte) y llenarían la salida de ruido, que es cómo un informe deja de leerse. Una
+redirección real sí importa: es el 404 de mañana, cuando el tercero deje de mantenerla.
+
+**Estado en la primera corrida:** 23 enlaces, **ninguno caído**, 3 no concluyentes (LinkedIn,
+securityheaders y w3.org, los tres con escudo antibot y los tres verificados a ojo) y 2
+redirecciones reales.
+
+**Lo que NO puede ver, dicho para que no se dé por cubierto:** que la página de destino siga
+diciendo lo que el texto del enlace promete. Detecta que la URL responde, no que sea la misma
+página. Un dominio caducado y recomprado devuelve 200 tan campante.
