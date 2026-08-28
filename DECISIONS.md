@@ -2041,6 +2041,32 @@ tienen Design System, Accesibilidad y Brand Kit. Cambiar el rótulo **es** un ca
 eyebrow no puede repetir el título—, así que va en P37.695, commit aparte y misma rama. Mezclarlo
 aquí habría costado la propiedad que hace barato este refactor: diff vacío = correcto.
 
+### La excepción: `design-system-islands.tsx` no es una sección, es la frontera de cliente
+
+*(Escrito el 2026-08-28, P50.86. La excepción existía desde el refactor y no estaba en ninguna
+parte, así que quien llegara después la leía como deriva de este mismo commit en vez de como una
+decisión.)*
+
+**«Un archivo por sección» ordena el markup, no la frontera `"use client"`.** Las **cuatro
+piezas interactivas** del Design System —el toggle de rejilla y las pestañas de dispositivo
+(§01), la demo de reveal (§05) y el simulador de foco (§07)— viven juntas en
+`components/site/design-system-islands.tsx`, fuera de la carpeta.
+
+**El motivo es que la frontera se paga por archivo, no por componente.** Repartirlas a sus
+`NN-*.tsx` convertiría **tres archivos de sección en Client Components enteros**, y con ellos
+todo el markup servidor que hoy los acompaña. Aquí la unidad natural no es la sección: es «lo que
+necesita JavaScript», que es exactamente lo que dice D7 —**JS solo en islas**—. Las dos reglas no
+chocan; gobiernan ejes distintos.
+
+**Si alguna vez se prefiere coherencia estricta, el precio se MIDE antes:** mover cada isla a su
+sección y comparar el JS de cliente servido, no razonarlo. Y el mismo criterio decide al revés —
+una isla nueva va a este archivo, no a su sección.
+
+**Y una lección de contador, cazada al escribir esto:** el comentario de `index.tsx` decía «tres
+islas interactivas» habiendo cuatro desde que apareció `FocusSimulator`. La cifra se ha quitado
+en vez de actualizarse, que es lo que argumenta D149: un contador que se puede borrar no
+necesita quien lo vigile.
+
 ## D43 · Toda página y toda sección abren igual: el ordinal va dentro del eyebrow — 2026-08-10
 
 > **AMPLIADA el 2026-08-25 por D111.** El ordinal sigue viviendo en el eyebrow, y desde
