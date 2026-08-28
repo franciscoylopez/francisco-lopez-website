@@ -187,6 +187,7 @@
 - D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
 - D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse
 - D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado
+- D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9061,3 +9062,41 @@ directamente lo que otro paquete instala para sí es una dependencia real escrit
 **No se pone un `ignore` en `dependabot.yml` a propósito.** El PR semanal en rojo *es* el
 detector: el día que sus checks salgan verdes, upstream lo soporta y la subida es un merge. Un
 `ignore` apagaría justo la señal que queremos.
+
+---
+
+## D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint — 2026-08-28
+
+Hermana de **D151**, y por el mismo motivo por el que sus dos fichas se escribieron juntas: los
+dos son saltos que el bump automático no puede hacer. El veredicto también es el mismo, pero
+aquí **la mitad cara está medida y sale a favor**.
+
+### Lo que bloquea
+
+`typescript-eslint@8.68.0`, la última publicada, declara `peer typescript: ">=4.8.4 <6.1.0"`.
+No entran ni la 6 ni la 7, y su canary (`8.68.1-alpha.6`) sigue en la misma línea. `npm install
+-D typescript@7` **falla con ERESOLVE**, no con un aviso.
+
+**Y falla ahora porque D151 lo hizo visible.** Mientras `typescript-eslint` venía por *hoisting*
+de `eslint-config-next`, npm resolvía el peer en silencio; declarado como dependencia real, el
+conflicto es un error de instalación. Es el argumento de aquella decisión, cobrado el mismo día.
+
+### Lo que ya no hay que averiguar
+
+Medido con un `tsc` suelto contra nuestro propio `tsconfig.json`, sin tocar el árbol:
+
+| | TS 5.9.3 | TS 7.0.2 |
+|---|---|---|
+| Errores de diagnóstico | 0 | **0** |
+| `tsc --noEmit`, tomas estabilizadas | 3100 · 3139 ms | **1724 · 1776 ms** |
+
+**Cero errores nuevos y un 43% menos de tiempo.** La reescritura en Go no pide tocar una línea de
+este repo: el salto es un cambio de versión el día que el peer lo permita, y no la tarde de yak
+con riesgo de build rojo que la ficha temía. Lo que sí queda anotado es que la ganancia es real y
+está en el paso más caro de CI.
+
+### Cómo se sabrá que ya se puede
+
+Igual que en D151, y por la misma razón: **sin `ignore` en `dependabot.yml`**. Cuando
+`typescript-eslint` publique una versión que admita `typescript >=7`, la subida es un
+`npm install` y estas dos fichas se cierran juntas.
