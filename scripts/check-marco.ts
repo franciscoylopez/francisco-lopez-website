@@ -143,6 +143,8 @@ const idsReferenciados = new Map<string, string>();
 let bloquesLd = 0;
 /** Tarjetas OG cuyo `?card=` se ha resuelto de verdad contra el despacho. */
 let tarjetasResueltas = 0;
+/** Permalinks a una línea de un archivo del repo, para afirmar cuánto se ha mirado. */
+let permalinksVistos = 0;
 
 /**
  * Recorre un JSON-LD y separa las dos formas de usar un `@id`: un objeto que solo
@@ -534,6 +536,43 @@ async function revisarConAxe(
  * `problemas`— porque un informe que se para en el primer fallo obliga a tantas
  * pasadas como fallos haya.
  */
+/**
+ * Un permalink a una línea de un `.md` de GitHub sin `?plain=1` aterriza en el
+ * sitio equivocado, y es la clase de fallo que ningún otro gate puede ver: el
+ * enlace EXISTE, resuelve 200 y abre el archivo correcto — solo que por el
+ * principio. `check:enlaces` comprueba que responda; nadie comprobaba dónde cae.
+ *
+ * El hecho es de GitHub, no de este sitio: la vista por defecto de un Markdown
+ * es el documento formateado, donde las anclas de línea no existen. Solo la
+ * vista de código las tiene, y se pide con `?plain=1`. Con un `.ts` no pasa,
+ * porque no tiene vista formateada — así que la regla mira la extensión.
+ *
+ * Va aquí y no en `check:articulo`, que es quien vigila el artículo, por lo de
+ * siempre con el disparador: `check:articulo` corre ANTES del build y estos
+ * enlaces solo existen ya compuestos, en el HTML. Y mirándolo aquí la regla
+ * cubre además cualquier página futura que cite una línea de un `.md`, no solo
+ * el artículo.
+ */
+function revisarPermalinks(pagina: Pagina): void {
+  const { doc, variante } = pagina;
+  for (const a of doc.querySelectorAll<HTMLAnchorElement>(
+    'a[href*="github.com"]',
+  )) {
+    const href = a.getAttribute("href") ?? "";
+    const md = /\/blob\/[^?#]+\.md(\?[^#]*)?#L\d+/.exec(href);
+    if (!md) continue;
+    permalinksVistos++;
+    if (!(md[1] ?? "").includes("plain=1")) {
+      fallo(
+        variante,
+        `el permalink «${a.textContent?.trim()}» apunta a una línea de un \`.md\` sin ` +
+          `\`?plain=1\` (${href}). GitHub ignora \`#L…\` en la vista formateada, así que ` +
+          "el enlace abre el archivo por el principio en vez de por la línea que cita.",
+      );
+    }
+  }
+}
+
 async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
   const variante = `${lang}${slug ? `/${slug}` : " (home)"}`;
   const archivo = archivoDe(lang, slug);
@@ -570,6 +609,7 @@ async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
     revisarBreadcrumb(pagina);
     revisarCanonical(pagina);
     revisarTarjetas(pagina);
+    revisarPermalinks(pagina);
     revisarJsonLd(pagina);
     await revisarConAxe(pagina, dom.window);
   } finally {
@@ -610,6 +650,7 @@ async function main() {
       `  axe        ${reglasEvaluadas.size} reglas evaluadas · ${Object.keys(DELEGADAS).length} delegadas\n` +
       `  a mano     enlace de salto · un h1 · un main · breadcrumb · canonical y hreflang · OG\n` +
       `  tarjetas   ${tarjetasResueltas} \`?card=\` resueltos contra el despacho de \`/api/og\`\n` +
+      `  permalinks ${permalinksVistos} a una línea de un .md del repo, todos con ?plain=1\n` +
       `  JSON-LD    ${bloquesLd} bloques · ${idsDeclarados.size} \`@id\` declarados · ${idsReferenciados.size} referenciados\n`,
   );
   for (const [id, motivo] of Object.entries(DELEGADAS)) {

@@ -537,6 +537,26 @@ export type RepoStripPart =
  * en pastilla) — la inconsistencia que este cambio unifica. `tone: "content"`
  * se queda disponible por si algún día la franja SÍ cae en medio de un
  * párrafo, caso que hoy no existe. */
+/**
+ * El permalink a un archivo del repo, con su línea si la trae.
+ *
+ * EL `?plain=1` NO ES DECORACIÓN, y es lo único que no se ve leyendo la URL:
+ * **GitHub ignora `#L…` en un `.md`** (2026-08-28, P50.95). La vista por
+ * defecto de un Markdown es el documento formateado, donde las anclas de línea
+ * no existen; solo la vista de código las tiene, y se pide con `?plain=1`. Sin
+ * él, las 38 citas del artículo aterrizaban al principio de `DECISIONS.md` en
+ * vez de en la decisión que citan — resolviendo 200, que es lo que hizo que
+ * ningún check pudiera verlo.
+ *
+ * Va condicionado a la extensión y no puesto siempre porque es un hecho sobre el
+ * MARKDOWN, no sobre este sitio: un `.ts` no tiene vista formateada, así que su
+ * `#L…` funciona en la de por defecto y no hay nada que pedir.
+ */
+export const repoHref = (path: string, line?: number) =>
+  `${GITHUB_URL}/blob/main/${path}${
+    line ? `${path.endsWith(".md") ? "?plain=1" : ""}#L${line}` : ""
+  }`;
+
 export function RepoStrip({
   label,
   parts,
@@ -562,9 +582,7 @@ export function RepoStrip({
           // Las dos formas de `part` resuelven a un destino fuera del sitio
           // (github.com, o una URL externa citada) — siempre `target="_blank"`.
           const href =
-            "external" in part
-              ? part.external
-              : `${GITHUB_URL}/blob/main/${part.path}${part.line ? `#L${part.line}` : ""}`;
+            "external" in part ? part.external : repoHref(part.path, part.line);
           return (
             <a
               key={i}

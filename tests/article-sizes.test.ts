@@ -45,7 +45,7 @@ const anchoReal = (f: number, vw: number) =>
 function anchoDeclarado(sizes: string, vw: number): number {
   for (const tramo of sizes.split(", ")) {
     const mq = tramo.match(/^\(min-width: (\d+)px\) (.+)$/);
-    const valor = mq ? mq[2] : tramo;
+    const valor = mq?.[2] ?? tramo;
     if (mq && vw < Number(mq[1])) continue;
     const px = valor.match(/^(\d+(?:\.\d+)?)px$/);
     if (px) return Number(px[1]);
