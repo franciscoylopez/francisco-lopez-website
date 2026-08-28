@@ -186,6 +186,7 @@
 - D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
 - D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
 - D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse
+- D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8983,3 +8984,80 @@ gana la decisión.**
 
 **Estado: descartada, no pendiente.** Se reabre solo si aparece un tercero que se pida *dentro*
 de la ventana del LCP — y entonces lo dirá «Preconnect candidates», que es donde hay que mirar.
+
+---
+
+## D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado — 2026-08-28
+
+**El PR de Dependabot llevaba desde el 2026-08-24 en rojo**, y la ficha lo atribuía a una
+incompatibilidad entre dependencias transitivas que el bump automático no arrastra, diciendo
+explícitamente que *no era culpa de nuestra config*. **Se intentó a mano y esa premisa era falsa
+en su primera mitad y cierta en la segunda.**
+
+### Lo que de verdad rompía: un override nuestro, congelado en el mundo de ESLint 9
+
+El crash reproducido en local es el mismo del CI:
+
+```
+TypeError: (0 , brace_expansion_1.expand) is not a function
+    at braceExpand (node_modules/minimatch/dist/commonjs/index.js:157)
+    at doMatch (node_modules/@eslint/config-array/dist/cjs/index.cjs:422)
+```
+
+Y la causa está en `package.json`, no en el lockfile de Dependabot. El commit `6bd2fd6`
+(2026-08-03, dos alertas High de Dependabot) fijó overrides **anidados por línea mayor de
+minimatch**:
+
+```json
+"eslint":                                { "minimatch": { "brace-expansion": "^1.1.17" } },
+"@typescript-eslint/typescript-estree":  { "minimatch": { "brace-expansion": "^5.0.8"  } }
+```
+
+Con ESLint 9 el `minimatch` de debajo era el **3.x**, que usa la API v1 (`module.exports` es la
+función). ESLint 10 trae `@eslint/config-array` con **`minimatch@10.2.6`**, que pide
+`brace-expansion@^5` y llama a `expand` como named export — y el override se lo forzaba a 1.x.
+
+**La lección de método: un override anidado por línea mayor caduca cuando la línea mayor cambia,
+y no falla en la subida que lo escribe, sino en la SIGUIENTE.** Once meses invisible, y visible
+solo al intentar el salto que rompía.
+
+**Se ha retirado, y no hacía falta ya:** hoy npm resuelve `brace-expansion@5.0.9` en la raíz y
+`1.1.18` bajo el `minimatch@3.x` de `eslint-config-next` — las dos parcheadas. `npm audit` sigue
+en **0 vulnerabilidades** sin él. El de `typescript-estree` se queda: ese sí describe su árbol.
+
+### Lo que sí bloquea, y no es nuestro
+
+Quitado el override, ESLint 10 avanza y choca con el muro real:
+
+```
+TypeError: Error while loading rule 'react/display-name':
+  contextOrFilename.getFilename is not a function
+    at detectReactVersion (eslint-config-next/node_modules/eslint-plugin-react/…/version.js:85)
+```
+
+`context.getFilename()` se eliminó en ESLint 10. **Tres de los plugins que `eslint-config-next`
+arrastra declaran, en su última versión publicada, un peer máximo de `eslint ^9`:**
+
+| Plugin | Última versión | Peer de `eslint` |
+|---|---|---|
+| `eslint-plugin-react` | 7.37.5 | `… \|\| ^9.7` |
+| `eslint-plugin-import` | 2.32.0 | `… \|\| ^9` |
+| `eslint-plugin-jsx-a11y` | 6.10.2 | `… \|\| ^9` |
+
+`eslint-config-next@16.3.3` declara `eslint: ">=9.0.0"`, que es permisivo y **miente sobre su
+propio árbol**. No hay nada que resolver a mano: hasta que upstream publique, la subida no
+existe.
+
+### Qué se conserva del intento
+
+Además de retirar el override, el intento destapó que **`eslint.config.mjs` importaba tres
+paquetes que nunca estuvieron en `package.json`** — `@eslint/js`, `globals` y `typescript-eslint`
+funcionaban por *hoisting* de las dependencias de `eslint-config-next`. En ESLint 9 el config
+carga igual; en 10 falló con `ERR_MODULE_NOT_FOUND` uno tras otro. **Se declaran**: importar
+directamente lo que otro paquete instala para sí es una dependencia real escrita en ningún sitio.
+
+### Cómo se sabrá que ya se puede
+
+**No se pone un `ignore` en `dependabot.yml` a propósito.** El PR semanal en rojo *es* el
+detector: el día que sus checks salgan verdes, upstream lo soporta y la subida es un merge. Un
+`ignore` apagaría justo la señal que queremos.
