@@ -117,7 +117,7 @@ Las fuentes que tienen que decir lo mismo:
 | Valores **publicados** | `lib/design-values.ts` (D38) |
 | Documentación publicada | página **Design System** (`components/site/design-system/`, un archivo por sección desde D42) |
 | Assets publicados | página **Brand Kit** (`components/site/brand-kit/`, misma forma) |
-| Cifras publicadas | página **Accesibilidad** (`components/site/accesibilidad.tsx`) |
+| Cifras publicadas | página **Accesibilidad** (`components/site/accesibilidad/`, misma forma desde P50.89) |
 
 Qué buscar:
 
