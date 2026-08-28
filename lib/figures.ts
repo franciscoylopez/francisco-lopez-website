@@ -1,6 +1,6 @@
 import { readFileSync, readdirSync } from "node:fs";
 
-import { cardinal, reviewDate } from "./design-values";
+import { cardinal, reviewDate } from "./i18n/palabras";
 import type { Locale } from "./i18n/config";
 
 /**

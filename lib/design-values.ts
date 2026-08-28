@@ -32,6 +32,7 @@
 // tenerlo escrito al lado solo abre la puerta a que un día no coincidan.
 
 import type { Locale } from "@/lib/i18n/config";
+import { cardinal, reviewDate } from "@/lib/i18n/palabras";
 import { PAGE_SLUGS } from "@/lib/routes";
 
 /* -------------------------------------------------------------------------- */
@@ -456,70 +457,13 @@ export const GUARDIAN_COUNT = 18;
 export const GUARDIAN_CASE_COUNT = 32;
 
 /**
- * El cardinal en palabras, porque el copy de este sitio escribe los recuentos
- * pequeños con letra («siete piezas», «ocho puntos», «dieciséis pasos») y un
- * numeral suelto rompería esa voz. Cubre hasta veinte: si un recuento pasa de ahí,
- * `fillPages` cae al numeral en vez de inventarse una palabra.
+ * Sustituye `{paginas}` en el copy, como `fillDate` hace con `{date}`.
+ *
+ * SE QUEDA AQUÍ, aunque P50.91 se llevara la tabla de cardinales a
+ * `lib/i18n/palabras.ts`: esto es una línea sobre `PAGE_COUNT`, o sea la
+ * publicación de un valor de este módulo. Lo que subió a i18n es CÓMO se dice un
+ * número, que no depende de ningún dato; el porqué del corte, allí.
  */
-const CARDINALES: Record<Locale, readonly string[]> = {
-  es: [
-    "cero",
-    "una",
-    "dos",
-    "tres",
-    "cuatro",
-    "cinco",
-    "seis",
-    "siete",
-    "ocho",
-    "nueve",
-    "diez",
-    "once",
-    "doce",
-    "trece",
-    "catorce",
-    "quince",
-    "dieciséis",
-    "diecisiete",
-    "dieciocho",
-    "diecinueve",
-    "veinte",
-  ],
-  en: [
-    "zero",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-    "eleven",
-    "twelve",
-    "thirteen",
-    "fourteen",
-    "fifteen",
-    "sixteen",
-    "seventeen",
-    "eighteen",
-    "nineteen",
-    "twenty",
-  ],
-};
-
-/**
- * El cardinal en palabras de un número, o el numeral si se sale de la tabla.
- * Exportado desde P68.495: el recuento de páginas dejó de ser el único que el
- * copy escribe con letra, y la tabla vive aquí para no tener dos.
- */
-export function cardinal(n: number, locale: Locale): string {
-  return CARDINALES[locale][n] ?? String(n);
-}
-
-/** Sustituye `{paginas}` en el copy, como `fillDate` hace con `{date}`. */
 export function fillPages(text: string, locale: Locale): string {
   return text.replace(/{paginas}/g, cardinal(PAGE_COUNT, locale));
 }
@@ -550,15 +494,6 @@ export const LAST_COOKIES_UPDATE = "2026-08-23";
  */
 export const ARTICLE_PUBLISHED = "2026-08-21";
 export const ARTICLE_UPDATED = "2026-08-25";
-
-/** La fecha larga en el idioma de la página. */
-export function reviewDate(iso: string, locale: Locale): string {
-  return new Intl.DateTimeFormat(locale === "es" ? "es-ES" : "en-GB", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(`${iso}T00:00:00Z`));
-}
 
 /** Sustituye `{date}` en el copy, como `fillRatios` hace con `{par.tema}`. */
 export function fillDate(text: string, iso: string, locale: Locale): string {
