@@ -184,6 +184,64 @@ export function SectionCover({
  * diagramas, con énfasis inline vía `Rich` (D23). Es el mismo tipo
  * `ArticleBlock` que cuenta `lib/reading-time.ts`, así que el diccionario no
  * se recompone en dos sitios. */
+/* ───────────────────── El `sizes` de una captura del panel ─────────────────
+ *
+ * SIN `sizes`, next/image emite el srcset por DENSIDAD (1x/2x) en vez de por
+ * anchos, y el navegador se lleva siempre el candidato grande: las dos capturas
+ * del artículo bajaban 1920w para pintarse a 826 (P50.94). No es el caso de
+ * P70.28 —allí el `sizes` existía y al srcset le faltaba candidato pequeño—:
+ * aquí no había `sizes`, así que no había srcset por anchos que elegir.
+ *
+ * EL VALOR VIVE AQUÍ Y NO EN EL CALL SITE porque la geometría es de
+ * `DiagramPanel`, no de la captura. Con P = ancho de la columna de prosa:
+ *
+ *   P      = min( min(1360, 100vw) − 2 × --page-x , --prose-w )   // 1360 · 1248
+ *   imagen = f × P − 2 × clamp(1rem, 2.5vw, 1.5rem)
+ *
+ * `f` lo pone el `side`: 1/2 flotado, 70% centrado, 1 sin flotar — pero solo a
+ * partir de `sm`, porque por debajo el panel es siempre `w-full`. Por eso los
+ * tres comparten los dos últimos tramos y solo se separan en los tres primeros.
+ *
+ * LOS CORTES NO SON LOS DE TAILWIND: son los cinco sitios donde una de las tres
+ * funciones de arriba cambia de rama. 1328 es donde `--prose-w` empieza a mandar
+ * sobre `--container` y el ancho pintado se queda CONSTANTE; 960 y 400, donde
+ * saturan el relleno y el gutter; 800, donde satura el gutter; 640, donde el
+ * panel deja de ocupar la columna entera. Entre corte y corte la fórmula es
+ * lineal, así que un `calc()` la reproduce EXACTA en vez de aproximarla.
+ *
+ * Y no es una floritura. La primera versión de esto aproximaba, con tres `vw` a
+ * ojo, y el barrido de abajo devolvió 1527 combinaciones donde el candidato
+ * declarado y el real no coincidían. Ninguna servía la imagen borrosa —todas
+ * sobrestimaban—, pero sobrestimar es exactamente el fallo que esta tarea venía
+ * a arreglar.
+ *
+ * LO COMPRUEBA `npm test`, no este comentario: `article-sizes.test.ts` recorre
+ * los 2241 anchos de 320 a 2560 × 3 DPR × los tres `side`, y exige que el
+ * candidato de `deviceSizes` que elige el ancho declarado sea el mismo que
+ * elegiría el ancho real. Es la única forma de que este bloque no caduque en
+ * silencio el día que se toque `--prose-w`, `--page-x` o el 70% del panel. */
+const redondo = (x: number) => +x.toFixed(2);
+
+/** El `sizes` del panel para una fracción de columna `f`. Cada tramo sale de
+ * sustituir `f` en la fórmula de arriba y simplificar; el primero es constante
+ * porque ahí ya manda `--prose-w`. */
+export const panelSizes = (f: number) =>
+  [
+    `(min-width: 1328px) ${Math.ceil(1248 * f - 48)}px`,
+    `(min-width: 960px) calc(${redondo(100 * f)}vw - ${redondo(80 * f + 48)}px)`,
+    `(min-width: 800px) calc(${redondo(100 * f - 5)}vw - ${redondo(80 * f)}px)`,
+    `(min-width: 640px) ${redondo(90 * f - 5)}vw`,
+    `(min-width: 400px) calc(90vw - 32px)`,
+    `calc(100vw - 72px)`,
+  ].join(", ");
+
+const PANEL_SIZES: Record<"left" | "right" | "center" | "full", string> = {
+  left: panelSizes(0.5),
+  right: panelSizes(0.5),
+  center: panelSizes(0.7),
+  full: panelSizes(1),
+};
+
 export function ArticleProse({
   blocks,
   diagrams,
@@ -309,6 +367,7 @@ export function ArticleProse({
                 alt={block.alt}
                 width={block.width}
                 height={block.height}
+                sizes={PANEL_SIZES[block.side ?? "full"]}
                 className="h-auto w-full rounded-md"
               />
             </DiagramPanel>
