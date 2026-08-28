@@ -845,7 +845,7 @@
       "citas": {
         "kicker": "Quotes",
         "cls": "<Pullquote> · <Pull>",
-        "rule": "The featured one stops the reading, with hairlines above and below; the minor one only accompanies, with a pastel rule on its edge.",
+        "rule": "The featured one stops the reading, with hairlines above and below; the minor one only accompanies, with a lighter rule in the same purple on its edge.",
         "note": "Purple here is ornament, not information. And when both land in the same section, they float to opposite sides."
       },
       "diagram": {

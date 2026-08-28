@@ -412,9 +412,21 @@ export function Pullquote({
   );
 }
 
-/** Cita en el flujo: la cita menor, que no debe parar la lectura. Filete
- * morado pastel, flota al lado contrario que `Pullquote` cuando ambas caen en
- * la misma sección, para que el peso gráfico no se acumule en un solo borde.
+/** Cita en el flujo: la cita menor, que no debe parar la lectura. Flota al lado
+ * contrario que `Pullquote` cuando ambas caen en la misma sección, para que el
+ * peso gráfico no se acumule en un solo borde.
+ *
+ * EL FILETE ES `--brand-purple` AL 55%, NO EL PASTEL (2026-08-28, P50.93). El
+ * pastel es FIJO entre temas y el fondo no, así que el mismo filete pesaba
+ * ΔL* 18,10 en claro y 67,35 en oscuro: por encima de la barra de `Pullquote`
+ * (51,89), o sea que la cita MENOR marcaba más que la mayor. La jerarquía no
+ * estaba floja, estaba invertida, y solo en un tema. Al 55% del mismo morado
+ * que su hermana, la mezcla ocurre contra el fondo real y la proporción se
+ * mantiene: 18,47 claro y 29,99 oscuro, un 55% y un 58% de la barra mayor. El
+ * claro no se mueve (18,10 → 18,47, indistinguible); lo que se arregla es el
+ * oscuro. No le toca el 3:1 de 1.4.11: la cita ya se identifica sin el filete
+ * —flota, va en negrita y tiene su propia medida—, así que el filete acompaña,
+ * no informa.
  *
  * `leading-[1.45]`: mismo criterio que `Pullquote` (fuera de `LEADING`, es
  * cita y no cuerpo/meta), pero más suelto que su 1,3 — a menor tamaño de
@@ -431,7 +443,7 @@ export function Pull({
     <blockquote
       data-reveal
       className={cn(
-        "border-brand-purple-soft text-foreground my-2 w-full max-w-[17rem] border-l-2 pl-4 text-[1rem] leading-[1.45] font-medium sm:w-[38%]",
+        "border-brand-purple/55 text-foreground my-2 w-full max-w-[17rem] border-l-2 pl-4 text-[1rem] leading-[1.45] font-medium sm:w-[38%]",
         side === "right" ? "sm:float-right sm:ml-8" : "sm:float-left sm:mr-8",
       )}
     >
