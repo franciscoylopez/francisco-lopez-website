@@ -93,14 +93,26 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  *           sobre los tres, y que el porqué estaba escrito dos veces —en el
  *           documento de reglas y en su D-entry—. Con `PRD-Live` §Cómo se
  *           verifica en tabla de contrato (769 → 542) y el porqué de `CLAUDE.md`
- *           partido a `CLAUDE-historical.md` (4.693 → 4.033), el arranque baja a
- *           **11.794**: por debajo del objetivo, y por primera vez sin que la
- *           bajada sea una mudanza —el histórico no se `@`-importa y la suma de
- *           skills ya tiene techo (D129)—.
+ *           partido a `CLAUDE-historical.md`, y por primera vez la bajada no es
+ *           una mudanza —el histórico no se `@`-importa y la suma de skills ya
+ *           tiene techo (D129)—.
  *
- * Y LA HOLGURA QUE SE DEJA ES 500, NO 240, que es lo que el párrafo de arriba
- * pedía sin poder pagarlo: 500 palabras son media docena de sesiones escribiendo
- * reglas en vez de un cuarto de sprint retirándolas.
+ * LO QUE ESTE PÁRRAFO PREDIJO Y LO QUE MIDIÓ EL COMANDO, que no es lo mismo
+ * (corregido el 2026-08-28, séptimo `method-review`). Decía «4.693 → 4.033», un
+ * arranque de «11.794» y una holgura de «500». Medido al cerrar el sprint:
+ * `CLAUDE.md` **4.185**, arranque **12.047**, holgura **253**. Las tres cifras
+ * eran una PREVISIÓN escrita mientras se trabajaba, y se leían como una
+ * medición; el resto del sprint siguió escribiendo en los tres archivos y se
+ * comió la diferencia.
+ *
+ * Vale como aviso permanente, porque es la quinta instancia de «la cifra
+ * apuntada que caduca» y ocurrió en el archivo cuyo trabajo es cazarlas: **una
+ * cifra de este comentario no se escribe hasta que el comando la devuelve.**
+ *
+ * Y LA HOLGURA QUE SE PRETENDÍA DEJAR ERA 500, que es lo que el párrafo de
+ * arriba pedía sin poder pagarlo: 500 palabras son media docena de sesiones
+ * escribiendo reglas en vez de un cuarto de sprint retirándolas. Hoy son 253, o
+ * sea que el trinquete sigue sin margen y esa deuda está tareada (P68.5909).
  */
 const TECHO = 12_300;
 
