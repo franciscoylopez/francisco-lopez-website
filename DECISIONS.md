@@ -183,6 +183,7 @@
 - D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra
 - D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira
 - D147 · El andamiaje es el 30% del código y no lo lintaba nadie
+- D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8753,3 +8754,54 @@ prohíbe, a cambio de cero hallazgos.
 **Lo que ese archivo necesita ya lo tiene**, y son dos redes distintas: el lint que acaba de
 ganar, y `check:guardianes`, que le pasa un caso malo conocido y comprueba que lo rechaza —
 cobertura de comportamiento, que es la correcta para un metro.
+
+
+## D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja — 2026-08-28
+
+**Los tres, medidos con qlty en local antes de tocar nada:** `check-palette.ts` **63**,
+`contrast-census.js` **165** (con su función principal en 164 y 30 retornos), `psi.ts` **122**.
+Ninguno es código de la web: los tres son andamiaje, y los tres estaban por encima del umbral
+por el mismo motivo — **cantidad, no enredo**. Cada comprobación estaba justificada y comentada;
+lo que sobraba era que todas vivieran en el mismo archivo.
+
+**La lección, que ya estaba medida y ahorró repetir el experimento.** En el PR #166 se intentó
+bajar el censo extrayendo su segundo pase a una función **anidada**: quedó en 155 igual, porque
+**qlty suma la complejidad de las anidadas al padre**, y se revirtió para no meter indirección a
+cambio de nada. Así que la regla es: **lo que parte el conteo de un ARCHIVO es el módulo; lo que
+parte el de una FUNCIÓN es dejar de estar dentro de otra.** Son dos cosas distintas y hacen
+falta las dos.
+
+**Qué salió, y el resultado:**
+
+| Archivo | Antes | Después | Qué se sacó |
+|---|---|---|---|
+| `check-palette.ts` | 63 | **25** | `palette/pintados.ts` (la tabla del navegador + su cobertura) y `palette/copias.ts` (el barrido del repo) |
+| `psi.ts` | 122 | **40** | `psi/medicion.ts`, `psi/muestreo.ts`, `psi/informe.ts` y `psi/sello.ts` — los cuatro dominios que tenía dentro |
+| `contrast-census.js` | 165 | **165** | los helpers de color y el pase de contornos suben a nivel superior: la función principal cae de **164 a 40** y pierde el aviso de 30 retornos |
+
+**La complejidad no se ha escondido, se ha REPARTIDO**, y eso se dice porque la diferencia
+importa: el total de la familia de la paleta pasa de 63 a 64. Lo que cambia es que ninguna pieza
+cruza el umbral y cada archivo contesta una sola pregunta.
+
+**Y `contrast-census.js` se queda en 165 a propósito, porque NO PUEDE ser un módulo.** Se
+inyecta verbatim en la página y se evalúa allí; la CSP del sitio no permite `unsafe-eval` y el
+archivo también se pega a mano en una consola. Partirlo en dos archivos inyectados es posible y
+no se hace: añadiría un orden de inyección que se puede equivocar a un guion cuya cabecera dice
+«no lo reescribas» tras tres reescrituras. Lo que sí se ha arreglado es lo que **sí** se podía —
+una función de 550 líneas y 30 retornos— y eso era el problema de lectura de verdad.
+
+**Un aviso nuevo que se acepta a sabiendas:** `porQueNo()` en `psi/sello.ts` sale marcada por
+«muchos retornos» (7). Son cláusulas de guarda, y sustituyen a una cadena de seis ternarios
+anidados que qlty marcaba por complejidad **y** por anidamiento a cinco niveles. Cambiar tres
+avisos por uno que describe la forma correcta del código es un buen cambio; el aviso se queda
+sin silenciar, porque la regla de `.qlty/qlty.toml` es excluir por lo que un archivo **es**,
+nunca por lo que puntúa.
+
+**Cómo se validó que no se ha roto nada:**
+
+- **La paleta**: misma salida exacta — 30 tokens, 18 conversiones, 175 archivos, 17 hex.
+- **`psi`**: un barrido real contra producción, que ejercita la llamada, el muestreo, el informe
+  y la negativa a sellar.
+- **El censo**: la condición que su ficha exigía, **las mismas cifras antes y después**. Medido
+  sobre `/accesibilidad` servida: 17 pares, 8 controles con caja y 6 contornos, 34 reglas
+  `:hover`, metro validado, cero bajo AAA y cero bajo 3:1. Idénticas.
