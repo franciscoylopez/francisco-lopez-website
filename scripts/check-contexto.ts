@@ -86,21 +86,34 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  * tarea que quiere escribir una regla. 500 palabras de holgura son media docena de
  * sesiones en vez de un cuarto de sprint.
  *
- * ES INTERINO Y ESTÁ ATADO. El número sigue sin salir de una medida de coste real
- * —nadie ha medido qué cuesta este contexto, solo cuánto ocupa—, y esa es la tarea
- * que abre con él: revisar a mano qué archivos generan la fricción para decidir con
- * un dato si esto se compacta de verdad o si el techo sube otra vez con razón. El
- * trinquete vuelve a apretar en cuanto haya ese dato.
+ *   12.300  el 2026-08-27 (P68.5908), y el trinquete vuelve a apretar como su
+ *           entrada anterior prometía: la subida a 12.700 quedó atada a que
+ *           apareciera el dato, y apareció. La revisión manual (D128) encontró
+ *           que el crecimiento no viene de un archivo gordo sino de lluvia fina
+ *           sobre los tres, y que el porqué estaba escrito dos veces —en el
+ *           documento de reglas y en su D-entry—. Con `PRD-Live` §Cómo se
+ *           verifica en tabla de contrato (769 → 542) y el porqué de `CLAUDE.md`
+ *           partido a `CLAUDE-historical.md` (4.693 → 4.033), el arranque baja a
+ *           **11.794**: por debajo del objetivo, y por primera vez sin que la
+ *           bajada sea una mudanza —el histórico no se `@`-importa y la suma de
+ *           skills ya tiene techo (D129)—.
+ *
+ * Y LA HOLGURA QUE SE DEJA ES 500, NO 240, que es lo que el párrafo de arriba
+ * pedía sin poder pagarlo: 500 palabras son media docena de sesiones escribiendo
+ * reglas en vez de un cuarto de sprint retirándolas.
  */
-const TECHO = 12_700;
+const TECHO = 12_300;
 
 /**
  * A dónde se quiere llegar. No falla; solo se publica la distancia. Necesita número
  * nuevo cada vez que se alcanza, porque un objetivo ya cumplido deja de tirar.
  *   12.000  alcanzado el 2026-08-22 y sostenido desde entonces
- *   11.800  desde el 2026-08-24
+ *   11.800  desde el 2026-08-24; alcanzado el 2026-08-27 (11.794)
+ *   11.600  desde el 2026-08-27, al alcanzarse el anterior. Mismo escalón de 200
+ *           que el salto de antes: la cadencia sale de la escalera, no de elegir
+ *           un número nuevo cada vez.
  */
-const OBJETIVO = 11_800;
+const OBJETIVO = 11_600;
 
 /** Palabras «de verdad»: sin bloques de código, que no son prosa que haya que leer. */
 function palabras(texto: string): number {
@@ -171,10 +184,29 @@ if (total > OBJETIVO) {
  * documentos —crece porque nada pregunta qué sobra—, en el sitio donde nadie
  * miraba.
  *
- * POR QUÉ UN TECHO POR SKILL Y NO UN TOTAL. Un total aquí no significa nada:
- * las nueve entradas no se cargan nunca a la vez. Una skill se carga ENTERA
- * cuando se dispara, de una en una y a mano, así que el coste es puntual y lo
- * que importa es cuánto cuesta LA MÁS CARA, no cuánto suman todas.
+ * POR QUÉ UN TECHO POR SKILL. Una skill se carga ENTERA cuando se dispara, así
+ * que lo primero que importa es cuánto cuesta LA MÁS CARA.
+ *
+ * Y POR QUÉ TAMBIÉN A LA SUMA, desde el 2026-08-27 (P68.5907). Este comentario
+ * decía «un total aquí no significa nada: las nueve entradas no se cargan nunca
+ * a la vez», y la salida lo repetía en cada corrida. Era cierto y no era toda la
+ * verdad: **un techo por entrada y ninguno al conjunto hace que mover una regla
+ * de un documento a una skill salga GRATIS**, y eso es exactamente lo que pasó.
+ * El sexto `method-review` lo midió entre el 19 y el 27 de agosto: docs −30 %,
+ * skills +55 %, corpus total **+6 %**. Se celebró una reducción en el lado
+ * medido mientras el lado sin medir absorbía el coste y algo más. Es una familia
+ * de fallo propia —«la reducción que fue una mudanza»— y el trinquete solo la
+ * cierra si es simétrico.
+ *
+ * El argumento de la concurrencia además se cae solo en la práctica: un cierre
+ * de etapa encadena `sprint-review` → `method-review` → `close-session` en la
+ * misma sesión, encima de los cuatro documentos. Ahí sí suman.
+ *
+ * SIN OBJETIVO, Y ES DELIBERADO. Los otros dos presupuestos llevan techo +
+ * objetivo porque su objetivo sale de una historia medida. Para la suma de
+ * skills esa curva no existe todavía: poner un objetivo hoy sería elegir un
+ * número y llamarlo medida, que es justo lo que D128 acaba de corregir. Se sella
+ * y se mide; el objetivo se pone cuando haya curva que lo justifique.
  *
  * EL NÚMERO SALE DE MEDIR EL RUIDO PRIMERO, no de elegirlo. Barrido sobre las
  * nueve entradas reales: a 4.500 lo cruza UNA, a 2.500 dos, a 2.000 tres y a
@@ -208,6 +240,27 @@ const TECHO_SKILL = 4_600;
 
 /** A dónde se quiere llegar por entrada: el tamaño del mayor `@`-importado. */
 const OBJETIVO_SKILL = 4_500;
+
+/**
+ * Falla por encima de aquí, SUMANDO todas las entradas. **Se aprieta conforme se
+ * compacta**, igual que el de arriba.
+ *   20.500  al crearlo (2026-08-27, P68.5907). Nace en verde, por la misma razón
+ *           que los otros dos: un gate que nace en rojo se sube hasta que no
+ *           significa nada. Y se sella contra la suma de DESPUÉS de la propia
+ *           tarea —20.262, no las 20.203 de antes—, porque actualizar la tabla
+ *           de umbrales de `method-review` es parte de ella. Holgura resultante
+ *           **238**, que es la magnitud de trabajo que este archivo defiende
+ *           para los documentos (240): las tres mitades del presupuesto quedan
+ *           igual de apretadas.
+ *
+ * OJO AL COMPARAR CON EL INFORME que originó esto, que dice 20.616 donde aquí
+ * pone 20.203. No es drift ni una medida vieja: **este contador descuenta los
+ * bloques de código y el del informe no** (20.688 con ellos, comprobado). El
+ * número que gobierna es el de aquí, que es el mismo con el que se miden los
+ * documentos — comparar dos corpus con dos varas distintas era la mitad del
+ * problema.
+ */
+const TECHO_SUMA = 20_500;
 
 /** Las carpetas de contexto a demanda que vivan en el repo. Del DISCO, nunca de
  *  una lista escrita: una skill nueva entra en el presupuesto sin que nadie se
@@ -264,7 +317,8 @@ for (const [nombre, v] of porTamano) {
   console.log(`  ${String(v.palabras).padStart(6)}  ${nombre}${marca}`);
 }
 console.log(
-  `  ${String(sumaSkills).padStart(6)}  suma (NO es un presupuesto: no se cargan a la vez)`,
+  `  ${String(sumaSkills).padStart(6)}  suma · techo ${TECHO_SUMA}` +
+    ` (holgura ${TECHO_SUMA - sumaSkills})`,
 );
 
 const pasadas = porTamano.filter(([, v]) => v.palabras > TECHO_SKILL);
@@ -276,6 +330,20 @@ if (pasadas.length > 0) {
       "\n\nUna skill se carga ENTERA al dispararse. Lo que toca no es subir el techo,\n" +
       "es retirar: ¿hay una fase que ya no se usa, un ejemplo que repite al de\n" +
       "arriba, o un porqué fechado que debería estar en el documento histórico?\n",
+  );
+  process.exit(1);
+}
+
+if (sumaSkills > TECHO_SUMA) {
+  console.error(
+    `\ncheck:contexto — LA SUMA DE SKILLS NO CABE: ${sumaSkills} palabras, ` +
+      `${sumaSkills - TECHO_SUMA} por encima del techo de ${TECHO_SUMA}.\n\n` +
+      "El techo por entrada ya está en verde, así que esto no lo arregla compactar\n" +
+      "la mayor: es que el conjunto ha crecido. Y lo que NO vale es subir el techo,\n" +
+      "porque este existe para que mover una regla de un documento a una skill deje\n" +
+      "de salir gratis — sin él, una retirada de docs puede ser una mudanza y el\n" +
+      "corpus total crece mientras el informe celebra la bajada.\n" +
+      "Lo que toca: retirar de alguna entrada, o no añadir.\n",
   );
   process.exit(1);
 }

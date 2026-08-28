@@ -34,11 +34,14 @@ function ThemeCard({
   // Ahora `npm run check:palette` no deja que vuelva a pasar.
   const p = PALETTE[variant];
   const c = {
-    border: p.border,
+    // El borde del mock es el de la TARJETA, y el borde de una tarjeta se dibuja
+    // contra la página: por eso sigue siendo el valor de autor y no la mezcla por
+    // superficie que P68.749 le puso a lo que va DENTRO de una tarjeta.
+    border: p["border-base"],
     bg: p.background,
     fg: p.foreground,
     eyebrow: p["muted-foreground"],
-    innerBorder: p.border,
+    innerBorder: p["border-base"],
     innerBg: p.card,
     bar: p.muted,
     btnBg: p.primary,
@@ -53,7 +56,7 @@ function ThemeCard({
   // porque son texto, no color, y ninguna herramienta compara un párrafo con el
   // píxel que tiene al lado. Ahora se derivan del mismo sitio que los pinta.
   const hex = paletteHex(variant);
-  const caption = `bg ${hex.background} · card ${hex.card} · border ${hex.border}`;
+  const caption = `bg ${hex.background} · card ${hex.card} · border ${hex["border-base"]}`;
 
   return (
     <div

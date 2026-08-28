@@ -75,7 +75,10 @@ export default async function GlobalNotFound() {
             {/* Hero: el "404" como pieza central, con el "0" convertido en el círculo
                 con split que florece en la carga (Split404 · .split-zero, globals.css). */}
             <Split404 className="text-[clamp(4.5rem,17vw,10rem)]" />
-            <div className="animate-in fade-in slide-in-from-bottom-3 flex flex-col items-center gap-3 duration-700 motion-reduce:animate-none">
+            {/* Con movimiento reducido se queda el fundido y se va el deslizamiento
+                (P74.36): `slide-in-from-bottom-0` neutraliza el recorrido sin
+                apagar la animacion entera, que es lo que hacia `animate-none`. */}
+            <div className="animate-in fade-in slide-in-from-bottom-3 motion-reduce:slide-in-from-bottom-0 flex flex-col items-center gap-3 duration-700">
               <h1 className="font-display text-[clamp(1.35rem,3.4vw,1.9rem)] font-semibold tracking-[-0.01em] text-balance">
                 {t.notFound.title}
               </h1>
@@ -85,7 +88,8 @@ export default async function GlobalNotFound() {
             </div>
             <a
               href={homeHref}
-              className={`${SYSTEM_BTN_PRIMARY} animate-in fade-in duration-700 motion-reduce:animate-none`}
+              // Fundido puro: no hay nada que retirar con movimiento reducido.
+              className={`${SYSTEM_BTN_PRIMARY} animate-in fade-in duration-700`}
             >
               {t.home}
             </a>

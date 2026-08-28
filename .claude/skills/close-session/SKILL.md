@@ -28,6 +28,7 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 | Convención que aplica en adelante | `CLAUDE.md` | — (se `@`-importa, se carga cada sesión) |
 | Regla de identidad / marca (core), en presente | `BRAND.md` | — (se `@`-importa) |
 | Porqué fechado de una regla de marca (qué se probó, qué falló) | `BRAND-historical.md` | — (**a demanda**, NO `@`-importado — D28) |
+| El caso que escribió una CONVENCIÓN (qué falló para que exista) | `CLAUDE-historical.md` | — (**a demanda**, NO `@`-importado — D130) |
 | Detalle exhaustivo del logo (tabla de uso, umbrales split→flat, proporciones, rationale) | `BRAND-logo.md` | — (**a demanda**, NO `@`-importado — D28) |
 | Overview / stack / estructura / scripts / capacidades nuevas | `README.md` | GitHub. Mantenido al día, **no** es un one-off |
 | Progreso, estados y prioridades de tareas | Tablero Notion "Tareas — Web personal" | [Tablero](https://app.notion.com/p/f3ee9a949c58482888423d5917087962) · vista [MoSCoW](https://app.notion.com/p/3a62caec08be81989325c9fce678de5b) |
@@ -45,7 +46,7 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
   y esta.
 - No dupliques: cada cosa en su documento. **Estado** de producto → `PRD-Live.md`;
   **histórico** de decisiones de producto → `PRD-Historical.md`; técnica → `DECISIONS.md`;
-  convención → `CLAUDE.md`; marca (core) → `BRAND.md`; el porqué fechado de esa regla → `BRAND-historical.md`; detalle del logo → `BRAND-logo.md`.
+  convención → `CLAUDE.md`, y su caso → `CLAUDE-historical.md`; marca (core) → `BRAND.md`, y su porqué fechado → `BRAND-historical.md`; detalle del logo → `BRAND-logo.md`.
 - **Fechas relativas → absolutas** (p. ej. "hoy" → la fecha real).
 - Si algo es ambiguo (¿PRD o DECISIONS? ¿cambia una decisión previa, que se marca
   *Revertida* y se enlaza la nueva?), **pregúntale a Francisco** antes de escribir.
@@ -115,9 +116,9 @@ respuesta silenciosa es la que dejó crecer el contexto un 113%.
 1. **¿Algo de lo escrito hoy SUSTITUYE a un párrafo que ya está**, en vez de añadirse a su
    lado? Una cifra corregida se sustituye en todos los párrafos que la citan; una nota
    fechada al pie no corrige el texto de arriba (`BRAND.md` §Cómo medir sin equivocarse, 6).
-2. **¿Algún párrafo FECHADO de `PRD-Live.md` o `BRAND.md` ya es historia?** Si una frase
+2. **¿Algún párrafo FECHADO de `PRD-Live.md`, `BRAND.md` o `CLAUDE.md` ya es historia?** Si una frase
    lleva fecha, o cuenta lo que se probó y se descartó, no es de un documento en presente:
-   su sitio es `PRD-Historical.md` o `BRAND-historical.md`, que van a demanda y por tanto
+   su sitio es un histórico —`PRD-Historical.md`, `BRAND-historical.md` o `CLAUDE-historical.md`—, que van a demanda y por tanto
    no cuestan tokens por sesión.
 3. **¿Alguna regla ha quedado escrita en DOS de los `@`-importados?** La misma decisión en
    dos sitios acaba diciendo dos cosas (`BRAND.md` §Cómo se escribe una regla, 5). Ahí va
@@ -143,8 +144,8 @@ ha contestado por inercia.
    nuevo importa más de lo que parece: es la línea que acaba en el índice de la cabecera
    de `DECISIONS.md`, que es lo único que se lee antes de abrir nada. Tiene que bastar
    para decidir si abrir esa entrada, porque el índice no tiene texto propio (ver paso 2).
-2. **Índices**: si añadiste una sección a `DECISIONS.md`, `PRD-Historical.md` o
-   `BRAND-historical.md`, regenéralos con `npm run indices` — se DERIVAN de las
+2. **Índices**: si añadiste una sección a `DECISIONS.md` o a cualquiera de los tres
+   históricos, regenéralos con `npm run indices` — se DERIVAN de las
    cabeceras y no se escriben a mano. Si un título no basta para saber si abrir esa
    sección, arregla LA CABECERA, nunca el índice.
 3. **El artículo, que casi siempre va a saltar.** `check:articulo` sella **por archivo**

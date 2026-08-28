@@ -21,10 +21,12 @@ import { WRAP } from "@/components/ui/layout";
  * página real (`/prototype`, 2026-08-26):
  *
  * · **Teñir bloques enteros** con `bg-muted`. Funciona, y destapó que `--border`
- *   está calibrado contra `--background` y solo contra él: sobre la banda el
- *   contorno de una tarjeta cae de 1,29 a **1,10** y la tarjeta pierde el filo.
- *   Es la misma deuda que D39 cerró para el atenuado y D97 para el contorno de un
- *   control, y sigue abierta para el filete. Tareado aparte.
+ *   estaba calibrado contra `--background` y solo contra él: sobre la banda el
+ *   contorno de una tarjeta caía de 1,29 a **1,10** y la tarjeta perdía el filo.
+ *   Era la misma deuda que D39 cerró para el atenuado y D97 para el contorno de un
+ *   control, y **la cerró D131 el 2026-08-27** — el filete se recalcula por
+ *   superficie como sus dos hermanos, así que esta dirección ya no tiene ese pero.
+ *   Sigue descartada por lo de abajo, que es lo que de verdad la descartaba.
  * · **Dar superficie al cierre de sección**, sin fondo nuevo. Es la más barata y
  *   la más fiel a D123, y se quedó a un paso.
  * · **INVERTIR LA SECCIÓN-TESIS de cada página, que es lo que la tarea pedía
@@ -78,9 +80,38 @@ export function BlockOpener({
         >
           {title}
         </h2>
+        {/*
+         * EL FILETE MORADO, QUE ES DE LA OTRA BANDA (P68.7117, 2026-08-27).
+         *
+         * La pregunta era si esta banda debía tomar el acento morado, y la
+         * respuesta que se descartó fue teñir el ORDINAL de cada parada: mide
+         * 12,8px, así que su umbral AAA es 7 y `--brand-purple-accent` da 7,04
+         * en claro —pasa por cuatro centésimas, el margen más fino del sitio, en
+         * la superficie invertida más repetida que hay—. Además le quitaría
+         * contraste (hoy da 10,32 / 9,89) y le daría al morado un segundo
+         * significado en páginas donde ya tiene uno: el punto de 6px del índice
+         * de sección, que marca «estás en la sección N de N», sale catorce veces
+         * en el Design System.
+         *
+         * El filete no tiene ninguno de esos problemas y sí resuelve lo que la
+         * tarea quería: es EL MISMO RECURSO que ya usa la banda-manifiesto de la
+         * home, así que las dos bandas invertidas del sitio se leen como la misma
+         * familia en vez de como dos piezas que coinciden en el fondo. Va
+         * `aria-hidden` y sin información, así que no tiene umbral que cumplir.
+         *
+         * SU RITMO ES MÁS CORTO QUE EL DEL MANIFIESTO a propósito: aquel abre con
+         * un titular de hasta 3,75rem y este con uno de 3, y la banda de bloque es
+         * mobiliario de orientación, no una declaración. La geometría es común
+         * (`.band-rule`); el margen, de cada bloque.
+         */}
+        <div
+          data-reveal
+          aria-hidden="true"
+          className="band-rule my-[clamp(1.25rem,2.5vw,1.75rem)]"
+        />
         <p
           data-reveal
-          className="text-muted-foreground m-0 mt-[clamp(1rem,2vw,1.5rem)] max-w-[var(--measure)] text-[1.0625rem] leading-[1.6]"
+          className="text-muted-foreground m-0 max-w-[var(--measure)] text-[1.0625rem] leading-[1.6]"
         >
           {lead}
         </p>

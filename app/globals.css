@@ -79,6 +79,17 @@
     1.5rem
   ); /* separación entre columnas: 16 → 24px */
 
+  /* --- Tokens de motion: el listón de una ENTRADA (P74.35) ---
+         Estaban escritos a mano en cada declaración, y así fue como la curva
+         *standard* de Material —que es ease-in-OUT— llegó a siete sitios
+         copiándose siempre de la de al lado. Un elemento que ENTRA no tiene por
+         qué acelerar: ya viene lanzado, así que la curva es ease-out pura.
+         La duración es el techo de la entrada, no su mínimo: los 280 ms son para
+         el recorrido más largo que hace el sitio (el fade-up de 14px); una
+         entrada más corta puede ir por debajo, nunca por encima. */
+  --ease-entrance: cubic-bezier(0, 0, 0.2, 1);
+  --duration-entrance: 0.28s;
+
   /* --- Neutros + superficies (blanco hueso / gris) --- */
   --background: oklch(0.9653 0.0102 81.8); /* #F7F3EC blanco hueso */
   --foreground: oklch(0.2657 0.0118 248.27); /* #21262B gris oscuro  */
@@ -113,7 +124,15 @@
 
   --destructive: oklch(0.577 0.245 27.325);
 
-  --border: oklch(0.901 0.0142 88.69);
+  /* El filete tal como se autoró, y la referencia contra la que se calibra todo lo
+     demás: 1,21:1 sobre `--background`. Lo consume `--border`, que desde P68.749 se
+     recalcula por superficie (más abajo). El `-base` es lo que permite volver a este
+     valor dentro de una superficie, igual que `--surface-dim` vuelve a
+     `--muted-foreground`. */
+  --border-base: oklch(0.901 0.0142 88.69);
+  --border: var(--border-base);
+  --border-mix: 11%;
+  --border-mix-inverted: 7%;
   /* Token de la base de shadcn, hoy SIN USAR: el borde de un campo lo pone
      `--control-edge`, que se deriva de la superficie y llega al 3:1 de WCAG
      1.4.11. Se conserva por no tocar la base, pero no lo consume nadie — y
@@ -232,9 +251,16 @@
 
   --destructive: oklch(0.704 0.191 22.216);
 
-  --border: oklch(0.3252 0.0157 248.31);
+  --border-base: oklch(0.3252 0.0157 248.31);
   --input: oklch(0.3252 0.0157 248.31);
   --control-edge-mix: 45%;
+  /* La mezcla del filete NO conmuta con el tema, y eso es un resultado, no un
+     descuido: el barrido dio 11% en los dos. Es la diferencia con
+     `--control-edge-mix` (60/45), y sale de que aquí no hay umbral que alcanzar
+     sino una referencia que reproducir — y la referencia ya conmuta sola, porque
+     es el propio `--border-base` contra el fondo de cada tema. La invertida sí
+     necesita su número, y en los dos temas tira en direcciones opuestas. */
+  --border-mix-inverted: 15%;
   --ring: oklch(0.7626 0.1156 191.46);
 
   --chart-1: var(--brand-cyan);
@@ -281,12 +307,49 @@
   html {
     @apply font-sans;
   }
+  /* EL EQUILIBRADO DE LÍNEA VA EN LA CAPA, NO EN EL CALL SITE (P68.7116).
+     `text-wrap: balance` reparte las líneas de un titular para que la última no
+     quede huérfana. Estaba escrito a mano en el punto de uso —29 veces entre
+     `text-balance` y `text-pretty`, en 20 archivos— y aun así faltaba justo
+     donde se medía el peor caso: los `h2` de banda de `ui/block-opener.tsx`, con
+     la última línea al 30% de la primera a 390px en `/accesibilidad`.
+
+     POR QUÉ EL DEFECTO SOLO SALÍA EN UNA DE LAS TRES HERMANAS, que es la parte
+     que dice dónde va el arreglo: el componente es el mismo, y lo que diverge es
+     el REGISTRO DEL COPY. Design System y Brand Kit le dan sintagmas cortos
+     («Fundamentos», «Piezas») que nunca rompen; Accesibilidad le da oraciones con
+     coma. Una propiedad que hace falta o no según lo que alguien escriba en el
+     diccionario no puede vivir en el punto de uso: no hay forma de acordarse.
+
+     SOBRE EL ELEMENTO Y NO SOBRE LA VARIANTE, porque no todos los titulares del
+     sitio pasan por `titleVariants` — los de `system-message`, `global-not-found`
+     y las bandas los escriben sus bloques. El selector ya existía aquí para la
+     familia tipográfica, así que el equilibrado entra por la misma puerta. */
   h1,
   h2,
   h3,
   h4 {
     font-family: var(--font-display);
     font-weight: 600;
+    text-wrap: balance;
+  }
+
+  /* Y `pretty` para el texto corrido, que es OTRA propiedad y no la misma con
+     otro nombre: `balance` iguala el largo de TODAS las líneas de un bloque corto
+     y solo tiene sentido en un titular; `pretty` deja el párrafo como está y se
+     limita a impedir que la última línea quede en una palabra suelta. Aplicarle
+     `balance` a un párrafo de doce líneas no haría nada —los navegadores lo
+     ignoran por encima de cuatro o seis— y aplicarle `pretty` a un titular
+     desperdicia la mitad del arreglo.
+
+     Los navegadores que no lo implementan se quedan en `wrap`, que es lo que hay
+     hoy: mejora progresiva, sin fallback que escribir. */
+  p,
+  li,
+  figcaption,
+  dd,
+  blockquote {
+    text-wrap: pretty;
   }
   /* Foco visible AA (checklist a11y §20, punto 2): anillo de 2px + offset 2px.
      El segundo selector es el SIMULADOR de foco de §09 del Design System
@@ -326,6 +389,24 @@
   select,
   textarea {
     touch-action: manipulation;
+
+    /* EL DESTELLO DEL TOQUE SE DECLARA, NO SE APAGA (P68.7116). Sin esta línea
+       cada navegador móvil pinta el suyo —un rectángulo gris o azul del sistema—
+       sobre cada control del sitio, y ese color no es de esta marca. Apagarlo con
+       `transparent` sería la otra respuesta y es peor: en un teléfono el hover no
+       existe, así que el destello es la ÚNICA confirmación de que el toque se ha
+       registrado, y quitarla deja al control mudo hasta que la página responde.
+
+       Así que se tiñe de `--primary`, que es el color de acción de `BRAND.md`, y
+       conmuta con el tema solo porque el token ya lo hace. El 18% es velo: tiene
+       que leerse como un destello y no como un estado. No hay umbral WCAG que
+       cumplir aquí —es transitorio y no delimita el control—, así que la cifra es
+       de expresión, no de contraste. */
+    -webkit-tap-highlight-color: color-mix(
+      in srgb,
+      var(--primary) 18%,
+      transparent
+    );
   }
 
   /* El scroll dentro del diálogo de preferencias no se encadena al documento de
@@ -340,24 +421,30 @@
    bucle". La clase `reveal-on` la añade el island de cliente solo si NO hay
    prefers-reduced-motion; sin JS o con reduced-motion, el contenido se queda
    visible (opacity:1), nunca oculto. === */
+/* Duraba 600 ms, el doble del listón, y con la curva equivocada (P74.35). No era
+   solo estético: este mismo reveal se comió el LCP de la home una vez, porque la
+   foto del hero YA PINTADA se ocultaba al hidratar para volver con la transición
+   (D47 rescató 1.000 ms arreglando el orden; la duración seguía intacta). */
 .reveal-on [data-reveal] {
   opacity: 0;
   transform: translateY(14px);
   transition:
-    opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity var(--duration-entrance) var(--ease-entrance),
+    transform var(--duration-entrance) var(--ease-entrance);
 }
 .reveal-on [data-reveal][data-shown] {
   opacity: 1;
   transform: none;
 }
-/* Chip EXIT: entra con retardo tras el reveal de su fila (PRD §21). */
+/* Chip EXIT: entra con retardo tras el reveal de su fila (PRD §21). El retardo ES
+   la duración del reveal, no un número suelto: así «tras» sigue significando lo
+   mismo si la entrada vuelve a cambiar de duración. */
 .reveal-on [data-reveal] .exit-chip {
   opacity: 0;
   transform: translateY(4px);
   transition:
-    opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s,
-    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1) 0.28s;
+    opacity 0.25s var(--ease-entrance) var(--duration-entrance),
+    transform 0.25s var(--ease-entrance) var(--duration-entrance);
 }
 .reveal-on [data-reveal][data-shown] .exit-chip {
   opacity: 1;
@@ -378,20 +465,35 @@
 }
 .reveal-on .diagram-realce .rlz {
   opacity: 0.34;
-  transition: opacity 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: opacity var(--duration-entrance) var(--ease-entrance);
 }
 .reveal-on .diagram-realce[data-shown] .rlz {
   opacity: 1;
   transition-delay: calc(var(--i, 0) * 130ms);
 }
 
+/* AQUÍ HABÍA UN OVERRIDE DEL REVEAL Y NO CASABA CON NADA (P74.36). Devolvía
+   `opacity: 1 !important` a `.reveal-on [data-reveal]` con movimiento reducido, y
+   `.reveal-on` NO EXISTE en ese caso: el island hace `if (reduce) return` antes de
+   añadir la clase. Medido sobre el sitio servido con reduced-motion activo: 0
+   elementos con `.reveal-on`, 0 coincidencias de la regla, 34 `[data-reveal]` en
+   opacidad 1 y sin transición. La protección la da el island, no el CSS, y tenerla
+   escrita dos veces hacía creer que el reveal se apagaba **aquí**.
+
+   EL REVEAL ES EL ÚNICO FUNDIDO QUE NO SE CONSERVA, y el motivo NO es el LCP.
+   Se escribió que serían «34 elementos volviendo a opacity 0», y es falso: el orden
+   de D47 marca el primer pliegue como `data-shown` ANTES de encender la clase, y
+   eso protege al elemento LCP de todo el mundo, no solo de quien no ha pedido nada.
+   Serían los 30 de debajo del pliegue, que no tocan la métrica.
+
+   El motivo real es que este es el único efecto ACOPLADO AL SCROLL, y WCAG 2.3.3
+   habla justamente de la animación que dispara la interacción. Los otros fundidos
+   que sí se conservan ocurren una vez y no los pide el usuario: el «0» del 404 y el
+   banner entran al cargar; los de hover son discretos y duran lo que un gesto. Este
+   se repite treinta veces mientras alguien baja por la página, y a quien ha pedido
+   menos movimiento eso es exactamente lo que le sobra.
+   El scroll suave se queda apagado, que es lo único que esta regla apagaba. */
 @media (prefers-reduced-motion: reduce) {
-  .reveal-on [data-reveal],
-  .reveal-on [data-reveal] .exit-chip {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
   html {
     scroll-behavior: auto !important;
   }
@@ -409,19 +511,39 @@
     transform: none;
   }
 }
+/* El mismo recorrido sin el desplazamiento, para movimiento reducido (P74.36).
+   Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca:
+   se va el `translateY`, se queda el fundido. */
+@keyframes consent-in-quiet {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 .consent-enter {
-  animation: consent-in 0.4s cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: consent-in var(--duration-entrance) var(--ease-entrance) both;
 }
 @media (prefers-reduced-motion: reduce) {
+  /* Solo el nombre: la duración, la curva y el `both` los sigue poniendo la
+     abreviada de arriba, así que el banner no puede quedarse con dos ritmos. */
   .consent-enter {
-    animation: none;
+    animation-name: consent-in-quiet;
   }
 }
 
 /* 404 — el "0" del número hace "florecer" la firma: las capas de color del split (el
    <g> de los anillos cian/morado) suben su opacidad sobre el aro base, que ya está
    visible. Puro CSS (sin JS/rAF): corre en la carga sin depender de hidratación.
-   Reduced-motion: split ya visible, sin interpolar (BRAND.md regla 7). */
+   ES DE LAS POCAS QUE SIGUEN CORRIENDO CON MOVIMIENTO REDUCIDO, y con motivo
+   (P74.36): el «florecer» es opacidad de principio a fin, sin una sola propiedad
+   que desplace o escale, así que no hay nada vestibular que retirar. Apagarla era
+   quitar información gratis.
+   ES LA ÚNICA ENTRADA QUE SE QUEDA POR ENCIMA DEL LISTÓN, y con motivo (P74.35):
+   no es una entrada de contenido sino el gesto de marca de una página de error,
+   donde no compite con nada porque no hay nada más que leer. Su curva ya era
+   ease-out (easeOutQuint), así que no entraba en el arreglo de la curva. */
 @keyframes split-bloom {
   from {
     opacity: 0;
@@ -433,12 +555,17 @@
 .split-zero > g {
   animation: split-bloom 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
 }
+/* Y SE CONSERVA MÁS CORTO, que es la otra mitad de la regla: «más suave» no es solo
+   «sin desplazamiento», también es «sin hacer esperar». Novecientos milisegundos de
+   florecer son un gesto de marca para quien no ha pedido nada; para quien sí, son
+   una espera. Solo la duración y el retardo: el fundido, la curva y el `both` los
+   sigue poniendo la abreviada de arriba. */
 @media (prefers-reduced-motion: reduce) {
   .split-zero > g {
-    animation: none;
+    animation-duration: 0.2s;
+    animation-delay: 0s;
   }
 }
-
 /* Hitos — fila responsive (D7: en CSS, no en JS). Móvil: grid que apila el
    impacto bajo el nombre. ≥768px (md): flex, todo en una fila. */
 .hitos-row {
@@ -683,6 +810,106 @@
   );
 }
 
+/* ── Y EL FILETE, QUE ERA EL TERCERO DE LA FAMILIA (2026-08-27, P68.749) ─────
+   `--surface-dim` se recalcula por superficie desde D39 y `--control-edge` desde
+   D97. `--border` era el único de los tres definido UNA VEZ POR TEMA, calibrado
+   contra `--background` y solo contra él. El resultado es que el mismo filete se
+   veía distinto según dónde cayera, medido sobre el píxel pintado:
+
+     Superficie      claro          oscuro
+     página (ref.)   1,21           1,36
+     tarjeta         1,29           1,23
+     muted           1,10           1,07
+     BANDA INVERTIDA 11,35          11,23   ← ocho veces la referencia
+
+   LA INVERTIDA ES EL HALLAZGO, y no estaba en la tarea. Sin regla, un elemento con
+   `border-border` dentro de una banda hereda el filete de la PÁGINA: un hairline
+   casi blanco sobre carbón, o casi negro sobre hueso. No es que se difumine, es que
+   grita. Hoy no hay ni un ocupante —medido: cero en las ocho páginas—, así que es
+   deuda latente, pero es la que más lejos estaba.
+
+   NO ES LATENTE EN TARJETA, que es donde la ficha decía que no afectaba a nada:
+   249 elementos de las ocho páginas dibujan su `border-border` DENTRO de una
+   superficie de tarjeta. En claro eran un pelo más marcados que la referencia
+   (1,29 frente a 1,21) y en OSCURO un tercio menos (1,23 frente a 1,36), que es
+   una debilidad real y ya enviada.
+
+   LA FORMA LA DECIDE EL PRECEDENTE, no el gusto: `--surface-dim` conserva su valor
+   de autor en `:root` (`var(--muted-foreground)`) y solo mezcla en las demás
+   superficies, mientras que `--control-edge` mezcla también en `:root` porque nació
+   sin valor previo. `--border` tiene valor de autor, así que va por el primer
+   camino: `--border-base` se queda intacto y la mezcla solo entra donde el fondo
+   deja de ser el de la página. Ni un filete de página se mueve.
+
+   EL 11% SALE DE UN BARRIDO, no de una intuición, y el objetivo no es un umbral
+   —un filete decorativo no tiene ninguno— sino REPRODUCIR la referencia de su
+   propio tema. Del 8% al 20%, en las dos superficies y los dos temas, el 11% es el
+   que deja las cuatro cifras dentro de ±0,03 de su referencia, y del lado de arriba
+   a propósito: el modo de fallo que esto arregla es un filete que se borra.
+
+     Superficie      claro          oscuro
+     tarjeta         1,29 → 1,23    1,23 → 1,39
+     muted           1,10 → 1,22    1,07 → 1,38
+     invertida       11,35 → 1,22   11,23 → 1,35
+
+   Y OJO A D61 AL LEER ESTE BLOQUE: `hover:bg-muted` no compila a `.bg-muted`, así
+   que el eje de ESTADO va aparte o el arreglo se escapa por donde ya se escapó una
+   vez. Se cubren las dos puertas, igual que arriba. */
+.bg-card,
+.bg-popover,
+[data-surface="card"] {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--card)
+  );
+}
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+[data-surface="muted"] {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--muted)
+  );
+}
+@media (hover: hover) {
+  .hover\:bg-muted:hover {
+    --border: color-mix(
+      in srgb,
+      var(--foreground) var(--border-mix),
+      var(--muted)
+    );
+  }
+}
+.focus-visible\:bg-muted:focus-visible {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--muted)
+  );
+}
+/* En una banda invertida el primer plano es `--background`, así que la mezcla parte
+   del otro extremo. Aquí la proporción SÍ conmuta con el tema —7% claro, 15%
+   oscuro— y en direcciones opuestas: es el único de los cuatro casos donde un solo
+   número no sirve, porque los dos `--foreground` no son simétricos en luminancia. */
+[data-surface="inverted"] {
+  --border: color-mix(
+    in srgb,
+    var(--background) var(--border-mix-inverted),
+    var(--foreground)
+  );
+}
+/* Vuelta al filete de autor para la caja que se apoya otra vez en el fondo de la
+   página dentro de una superficie. Sin esto heredaría la mezcla de la tarjeta que
+   la envuelve — y `.bg-background` dentro de `.bg-card` existe de verdad: los
+   especímenes del Design System lo hacen. */
+.bg-background,
+[data-surface="page"] {
+  --border: var(--border-base);
+}
+
 /* El CTA de email tenía aquí `.contact-cta` / `.contact-cta-icon`, y en P37.5988 se
    borraron las dos. P37.592 ya les había quitado el hover del relleno (se lo lleva
    la variante `solid`) y lo único que quedaba era el empujón de 2px del icono, que
@@ -725,6 +952,31 @@
    sin capa gana siempre a las utilidades, así que si algún día un caller mezcla
    esta clase con `px-*`/`py-*` propios, gana esta — hay que evitar esa combinación
    en vez de confiar en la cascada. */
+/* EL FILETE DE UNA BANDA INVERTIDA (P68.7117, 2026-08-27).
+   Nace al aparecer su SEGUNDO call site, que es cuando la copia empieza a poder
+   derivar: lo estrenó la banda-manifiesto de la home y ahora lo lleva también la
+   banda que abre un bloque de secciones. La homogeneidad entre las dos bandas es
+   justo el motivo del cambio, así que escribirlo dos veces se cargaría el motivo.
+
+   ES EL ÚNICO SITIO DEL SITIO DONDE EL MORADO ES ESTRUCTURA Y NO DATO, y por eso
+   puede serlo: `--brand-purple-accent` existe exactamente para fondos invertidos y
+   conmuta con el tema (un color fijo no pasa de 3,71:1 contra las dos superficies
+   a la vez). Aquí además no hay umbral que cumplir — va `aria-hidden`, no lleva
+   información y no delimita ningún control, así que cae en «detalles» de §Color y
+   no en el 3:1 de WCAG 1.4.11 que sí le tocaría a un gráfico que hay que entender.
+
+   LO QUE NO DECLARA, Y NO ES UN OLVIDO: el MARGEN. El ritmo vertical es una
+   propiedad del bloque que lo aloja, no del filete — el manifiesto respira más que
+   la banda de bloque porque su titular es mayor. Es la regla 4 de `BRAND.md`: dos
+   valores que se parecen y significan cosas distintas no se unifican. Y ojo, que
+   esta clase va SIN `@layer`, así que si algún día declarara margen ganaría a
+   cualquier `my-*` del call site sin avisar. */
+.band-rule {
+  background: var(--brand-purple-accent);
+  block-size: 2px;
+  inline-size: 3.5rem;
+}
+
 .link-content {
   color: var(--foreground);
   border-radius: 4px;
@@ -748,23 +1000,40 @@
   text-decoration-color: var(--primary);
   text-decoration-thickness: 2px;
   text-underline-offset: 4px;
+  /* SUMABA 380 ms —300 de relleno + 80 de retardo del color— y el listón de una
+     entrada es 300 (P74.35). Ahora suma 280: el relleno y el color duran 220 ms
+     y el color entra 60 ms después, que es lo que hace falta para que el texto
+     no cambie antes de tener detrás con qué leerse.
+
+     Y EL RELLENO SE QUEDA EN `background-size`, que repinta, con motivo. La
+     alternativa de compositor —un pseudoelemento con `transform: scaleY()`— no
+     puede dar este gesto: un enlace de contenido parte a mitad de párrafo, y lo
+     que hace que el relleno crezca por SEPARADO en cada línea es
+     `box-decoration-break: clone`, que es de fondo y de borde, no de hijos. Un
+     `::before` absoluto se dibujaría una sola vez sobre la caja entera. El
+     gesto de marca (`BRAND.md` §Enlaces) manda sobre el ahorro de repintado, y
+     el repintado es de un renglón de texto en hover, no de una sección. */
   transition:
-    background-size 0.3s ease,
-    color 0.3s ease 0.08s,
-    text-decoration-color 0.22s ease;
+    background-size 0.16s var(--ease-entrance),
+    color 0.16s ease 0.04s,
+    text-decoration-color 0.12s ease;
 }
-.link-content:hover,
+/* EL FOCO NO PASA POR LA PUERTA. El hover se cierra a punteros finos porque en
+   táctil el tap dispara un hover falso Y SE QUEDA PEGADO: al volver atrás, el
+   enlace sigue relleno de cian. `:focus-visible` es la misma pintura por otra
+   vía —la del teclado—, así que vive fuera y no depende del tipo de puntero. */
 .link-content:focus-visible {
   background-size: 100% 100%;
   color: var(--primary-foreground);
   text-decoration-color: transparent;
 }
-@media (prefers-reduced-motion: reduce) {
-  .link-content {
-    transition: none;
+@media (hover: hover) and (pointer: fine) {
+  .link-content:hover {
+    background-size: 100% 100%;
+    color: var(--primary-foreground);
+    text-decoration-color: transparent;
   }
 }
-
 /* La contraparte invertida (P70.18). `.link-content` fija `color: var(--foreground)`
    y sobre una banda invertida `--foreground` ES EL FONDO: el enlace se pintaba del
    color de la banda y desaparecía, dejando flotando solo el subrayado cian. No se ve
@@ -791,9 +1060,16 @@
   );
   text-decoration-color: var(--primary-on-inverted);
 }
-[data-surface="inverted"] .link-content:hover,
+/* La misma puerta que arriba, por el mismo motivo: si el hover de la banda
+   invertida no se cerrara a punteros finos, el tap dejaría el enlace en el color
+   del estado relleno mientras el relleno ya se ha ido. */
 [data-surface="inverted"] .link-content:focus-visible {
   color: var(--primary-foreground-on-inverted);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-surface="inverted"] .link-content:hover {
+    color: var(--primary-foreground-on-inverted);
+  }
 }
 
 /* Enlaces de chrome (nav/breadcrumb/footer) — nunca `primary`, ni en texto ni en
@@ -851,12 +1127,6 @@
 .link-chrome:focus-visible {
   background-color: var(--chrome-hover-bg);
 }
-@media (prefers-reduced-motion: reduce) {
-  .link-chrome {
-    transition: none;
-  }
-}
-
 /* Controles de chrome solo-icono (toggle de tema, hamburguesa, LinkedIn del
    footer): mismo hover de pastilla que `.link-chrome` (P37.57). El fondo de
    reposo vive aquí, no en la utilidad `bg-card` del punto de uso.
@@ -887,12 +1157,6 @@
 .icon-chrome:focus-visible {
   background-color: var(--chrome-hover-bg);
 }
-@media (prefers-reduced-motion: reduce) {
-  .icon-chrome {
-    transition: none;
-  }
-}
-
 /* Facade del vídeo incrustado (`components/ui/video-embed.tsx`, P48). El aspecto
    vive aquí y no en clases sueltas del punto de uso por D35: los dos extremos de
    cada transición tienen que pertenecer a la regla que la declara.
@@ -971,8 +1235,9 @@
 .video-facade:focus-visible .video-play {
   transform: translate(-50%, -50%) scale(1.08);
 }
+/* El velo (`::after`) es opacidad y se queda; el disco ESCALA, y eso si se
+   retira (P74.36). Es el reparto por propiedad dentro de una misma pieza. */
 @media (prefers-reduced-motion: reduce) {
-  .video-facade::after,
   .video-play {
     transition: none;
   }
@@ -1020,3 +1285,141 @@
     translate: -50% -50%;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   P81 · GESTO DE MARCA — son DOS piezas y no la misma, y conviene saber cuál es
+   cuál: el punto del titular es la FIRMA (el momento memorable que P81 pedía) y
+   «Estratos», aquí abajo, es la TEXTURA de Hitos. Dos firmas compitiendo serían
+   peor que ninguna, así que esta se subordina a aquella.
+
+   Se eligieron viéndolas, no razonándolas: tres direcciones para la textura
+   —«Recorrido», «Estratos» y «Registro»— y cuatro formas de aterrizar para el
+   punto. Lo descartado y su porqué, en DECISIONS.md.
+
+   El progreso de cada fila es UN número, 0 a 1, que escribe el scroll. Todo lo
+   visual lo lee de ahí, así que no hay dos fuentes que puedan discrepar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── LA FIRMA · el punto de «Del discovery al dato.» cae y se asienta ──
+   Es el único gesto del sitio que existe para ser RECORDADO, y por eso es el
+   único que se sale del listón de 300 ms: 420. Mismo tipo de excepción que el
+   florecer del 404, y con la misma coartada medida — ocurre UNA vez, al cargar,
+   y no compite con nada porque el titular ya está pintado.
+
+   DOS CURVAS, Y LA PRIMERA ROMPE UNA REGLA A PROPÓSITO. El catálogo de motion
+   prohíbe `ease-in` en UI, y `cubic-bezier(.55,0,1,.45)` es exactamente eso: una
+   curva que acelera. Se usa igual, y este es el único sitio del sitio donde se
+   usa, porque aquí describe algo real —lo que cae, acelera— y porque el tramo
+   acelerado es menos de la mitad del gesto: el aterrizaje, que es donde mira el
+   ojo, sí decelera. Con un ease-out en la bajada el punto no cae, frena, y
+   parece un ascensor. El rebote es 0,20, dentro del 0,1–0,3 que el mismo
+   catálogo da por sobrio.
+
+   EL TITULAR NO NACE INVISIBLE, que es la restricción dura: solo se anima el
+   `span` del punto, nunca el h1. El LCP de la home es la foto, y esto no lo
+   toca. Y el punto ocupa su hueco desde el primer frame —`inline-block` con la
+   línea base explícita, y solo `transform`/`opacity`—, así que no hay CLS:
+   medido, la caja del h1 y la posición del subtítulo no se mueven ni un píxel.
+
+   LA TINTA ES `--progress-ink`, el morado calibrado para texto grande sobre
+   `--background`. Un punto es un detalle tipográfico, no un gráfico que haya que
+   entender, así que §Color deja entrar el morado; y aun así llega a AAA por el
+   umbral ESTRICTO: 7,21 en claro y 7,83 en oscuro, medidos sobre el píxel
+   pintado con el metro validado contra los anclajes de 13,79 y 15,32. */
+.punto-firma {
+  display: inline-block;
+  vertical-align: baseline;
+  color: var(--progress-ink);
+  animation: punto-cae 420ms both;
+}
+@keyframes punto-cae {
+  0% {
+    transform: translateY(-0.85em);
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  46% {
+    transform: translateY(0);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  68% {
+    transform: translateY(-0.1em);
+  }
+  86% {
+    transform: translateY(0.012em);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+/* Se retira el desplazamiento y el rebote; se conserva el fundido, y más corto
+   (D136). El punto sigue apareciendo: lo que se va es la caída. */
+@media (prefers-reduced-motion: reduce) {
+  .punto-firma {
+    animation: punto-entra 160ms var(--ease-entrance) both;
+  }
+}
+@keyframes punto-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@property --rp {
+  syntax: "<number>";
+  inherits: true;
+  /* CERO, NO UNO, y el motivo es el que se me escapó a la primera. Un valor por
+     defecto de 1 parece lo sensato —«si no puedes animarlo, enseña el estado
+     final»— y es correcto para una animación que VA a correr. Pero en un motor
+     sin `animation-timeline` la animación no existe, y ahí el estado final no es
+     un final: es un adorno permanente. Con 1, Firefox pintaba los cinco años con
+     su filete cian a la vez, para siempre, y un diseño que nadie aprobó.
+     Con 0 no se dibuja nada y la página queda como está hoy, que es lo que la
+     mejora progresiva significa: se pierde el adorno, no se gana otro. */
+  initial-value: 0;
+}
+@keyframes gesto-fila {
+  from {
+    --rp: 0;
+  }
+  to {
+    --rp: 1;
+  }
+}
+
+/* ── «Estratos» · el eje de años ya estaba en la fila; el gesto lo hace regla.
+      NINGÚN texto se atenúa: la lectura no se toca, que es lo que separa esto
+      de un fundido por scroll.
+
+      TODO LO QUE PINTA VIVE DENTRO DEL `@supports`, no solo la animación. Es la
+      otra mitad de la nota de arriba: si las reglas que dibujan quedan fuera, el
+      navegador sin soporte las aplica igual y solo se queda sin el movimiento. ── */
+@supports (animation-timeline: view()) {
+  .hito-fila {
+    animation: gesto-fila linear both;
+    animation-timeline: view();
+    animation-range: entry 25% cover 45%;
+  }
+  .hito-anio {
+    position: relative;
+  }
+  .hito-anio::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -6px;
+    height: 2px;
+    background: var(--primary);
+    transform-origin: left;
+    transform: scaleX(var(--rp));
+  }
+}
+
+/* MOVIMIENTO REDUCIDO: AQUÍ NO HAY NADA QUE AMORTIGUAR, y por eso no hay regla.
+   Lo que queda no desplaza ni escala nada: el filete del año expresa ESTADO, y
+   amortiguar una lectura la convertiría en
+   un indicador que miente (D136). El único desplazamiento del gesto vivía en
+   «Registro», que se descarta con él. */

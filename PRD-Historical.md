@@ -81,6 +81,7 @@
 - [63. La página que documenta el sistema dejaba fuera justo la parte que no tiene nadie (2026-08-25)](#63-la-página-que-documenta-el-sistema-dejaba-fuera-justo-la-parte-que-no-tiene-nadie-2026-08-25)
 - [64. La revisión de las hermanas destapa que el Design System había cambiado de género (2026-08-26)](#64-la-revisión-de-las-hermanas-destapa-que-el-design-system-había-cambiado-de-género-2026-08-26)
 - [65. «Páginas hermanas» cierra, y el method-review mide que la reducción de contexto fue una mudanza (2026-08-27)](#65-páginas-hermanas-cierra-y-el-method-review-mide-que-la-reducción-de-contexto-fue-una-mudanza-2026-08-27)
+- [66. La distribución entra en el alcance del proyecto, y el orden se decide aparte (2026-08-27)](#66-la-distribución-entra-en-el-alcance-del-proyecto-y-el-orden-se-decide-aparte-2026-08-27)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3299,6 +3300,61 @@ momentos que no se solapan. Lo que lo resuelve es el plan de sprints de abajo, n
 
 El orden importa y es deliberado: **primero lo que pide criterio compartido, después lo que no
 lo pide.** Al revés, la revisión de contenidos competiría con las decisiones de diseño de Home.
+
+## 66. La distribución entra en el alcance del proyecto, y el orden se decide aparte (2026-08-27)
+
+Al abrir el sprint «Home», la primera tarea de la cola no pedía construir nada: pedía
+**contestar si la distribución es trabajo de este proyecto o no**. Estaba elegida por
+omisión desde que el tablero existe — cincuenta y una tareas abiertas y **cero sobre
+tráfico** — y el check de medición del cierre anterior la había puesto delante de toda la
+deuda técnica.
+
+### El dato que la adelantó
+
+Panel de Looker, 28 días:
+
+| Marcador | Valor |
+|---|---|
+| Usuarios | 37 |
+| Clics de contacto | 9, de **2 usuarios** |
+| Descargas de CV | 4, de 2 usuarios |
+| **Envíos del formulario** (métrica primaria, §7) | **1** |
+
+Con n=1 en la primaria, esa métrica no es débil: **no puede discriminar nada**. Ningún dato
+de ahí puede informar una priorización, así que el bucle medir→aprender que declaran el
+método y la propia web está cerrado en la mitad de medir y vacío en la de aprender.
+
+Y lo bueno del cierre anterior es que **ya no queda nada que arreglar aguas arriba**: el
+instrumento funciona, el sitio está en AAA en las catorce páginas por dos temas, PageSpeed
+por encima de 90 y el SEO resuelto. **El cuello de botella dejó de ser la calidad del sitio
+y pasó a ser que no lo ve nadie.**
+
+### La decisión, y es de dos partes
+
+**Sí, entra en alcance** (Francisco, 2026-08-27). El sitio no es solo un soporte para
+conversaciones que se abren por otra vía, así que conseguir que alguien llegue a él es
+trabajo del proyecto y no un extra. La otra respuesta era legítima y su consecuencia habría
+sido sobre la MEDICIÓN, no sobre el marketing: con este volumen los tres scorecards no
+informan nada y el paso de medición del cierre debería decirlo en vez de repetir tres cifras
+planas.
+
+**Pero no en este sprint.** Primero se cierra la deuda de diseño de «Home», que es lo
+comprometido. La tarea sale del sprint activo y vuelve a `General` con la prioridad justo
+detrás de la última de «Home».
+
+### El riesgo asumido, escrito para que no se lea como olvido
+
+Es la opción que más se parece a no decidir, y conviene decirlo. La diferencia es que ahora
+hay fecha y hay sitio en la cola: el siguiente check de medición **no la levanta como
+descuido, la levanta como pendiente con orden**. Si al cerrar «Home» la métrica primaria
+sigue en n=1, esta es literalmente la siguiente.
+
+### Lo que sigue sin definir
+
+El **cómo**. Los candidatos —publicar el artículo en LinkedIn y en comunidades de producto,
+enviar el enlace directamente al ICP de §2, SEO de cola larga sobre lo que el sitio ya
+documenta, el README de perfil de GitHub— siguen sin evaluar. Esa parte se resuelve cuando
+la tarea entre, no ahora.
 
 ## Fuentes
 

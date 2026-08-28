@@ -125,6 +125,26 @@ const CASOS: Caso[] = [
     mutar: append("\n" + "relleno ".repeat(7000) + "\n"),
   },
   {
+    // La TERCERA mitad del presupuesto (P68.5907): el techo a la SUMA de skills,
+    // que es lo que impide que retirar de un documento sea una mudanza.
+    //
+    // El caso tiene que engordar el conjunto SIN cruzar el techo por entrada, o
+    // el guardián saldría rojo por el control de al lado y este quedaría sin
+    // probar — que es exactamente el modo de fallo que este archivo combate. Por
+    // eso el relleno se calcula desde el tamaño real del archivo y lo deja en
+    // ~3.900 palabras, por debajo del techo (4.600) y del objetivo (4.500) por
+    // entrada. Si algún día la skill ya midiera más que eso, el relleno sale cero
+    // y el caso falla RUIDOSAMENTE (el guardián no dice que no), que es la
+    // dirección correcta de fallo.
+    guardian: "check:contexto",
+    rotura: "la suma de skills engorda por encima del techo del conjunto",
+    archivo: ".claude/skills/sprint-review/SKILL.md",
+    mutar: (o) => {
+      const falta = 3_900 - o.split(/\s+/).filter(Boolean).length;
+      return o + "\n" + "relleno ".repeat(Math.max(0, falta)) + "\n";
+    },
+  },
+  {
     guardian: "check:indices",
     rotura: "una pieza de components/ui/ se queda sin declarar su línea",
     // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja

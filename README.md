@@ -90,7 +90,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 - El censo de contraste se hace **recorriendo el DOM de la página servida**, no leyendo el CSS: un par que solo existe al componer un velo, o una pastilla de hover, no aparece en ningún inventario de tokens.
 - **Enlace de salto** (WCAG 2.4.1, nivel A), que axe no detecta y por eso se comprueba a mano (`D46`).
 - **Probado con lector de pantalla** (NVDA sobre Chrome), no solo con motores de reglas. Es lo que encuentra los defectos que no violan ningún criterio y que por eso ningún escáner ve; los que encontró están publicados en la propia página de Accesibilidad (`D73`).
-- `prefers-reduced-motion` respetado en toda animación. Con motion reducido, el vídeo de apertura de «Sobre mí» **ni siquiera se descarga** (`D65`).
+- `prefers-reduced-motion` **retira lo que desplaza o escala, no lo que se funde** (`D136`): la opacidad y el color se quedan, y el fundido que se queda se acorta. Una animación mixta se parte; solo se apaga entera la que es movimiento de principio a fin, o la que va acoplada al scroll. Y con motion reducido el vídeo de apertura de «Sobre mí» **ni siquiera se descarga** (`D65`).
 - El método completo, y los tres metros que este proyecto se ha encontrado descalibrados, en [`BRAND.md`](./BRAND.md) §Accesibilidad.
 
 </details>
@@ -101,8 +101,9 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 - **PageSpeed >90 en las catorce páginas** — móvil 95-99 · escritorio 97-100, medido el 2026-08-24 (`npm run psi -- --registro`) — y CLS 0. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
 - **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
+- **Un gesto de marca, y solo uno** (`D137`): el punto final de «Del discovery al dato.» cae y se asienta al cargar, en morado, con dos curvas porque lo que cae acelera. Es la **firma**; el filete que crece bajo los años de Hitos es su **textura**, subordinada a propósito. Se eligieron viéndolos, no razonándolos.
 - **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** con allowlist mínima por origen exacto. La letra que le pone cada escáner no se escribe aquí: se comprueba en vivo, y por qué no sube está en `DECISIONS.md` D26.
-- **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar (CSS, seguro con motion reducido).
+- **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar. Puro CSS, y con motion reducido **sigue floreciendo, en 0,2 s en vez de 0,9**: es opacidad de principio a fin, así que no hay nada vestibular que retirar (`D136`).
 
 </details>
 
@@ -306,7 +307,7 @@ scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio s
 
 El «porqué» vive en documentos dedicados, partidos por una regla que **no es de estilo sino de coste**: lo que se lee en cada sesión de trabajo se paga en cada sesión de trabajo. Así que solo las **reglas activas** están siempre delante; la **historia** y el **detalle exhaustivo** se consultan cuando hacen falta.
 
-**Siempre cargados.** Son las reglas que aplican al escribir código, y su peso conjunto tiene techo medido en CI (`npm run check:contexto`): si crecen, el build falla. La salida por defecto es **retirar**, y el techo se ha apretado cinco veces por esa vía. El 2026-08-25 subió por primera vez, con la holgura de trabajo en dos palabras y el porqué escrito en el propio guardián: un techo que no deja escribir no produce compactación.
+**Siempre cargados.** Son las reglas que aplican al escribir código, y su peso conjunto tiene techo medido en CI (`npm run check:contexto`): si crecen, el build falla. La salida por defecto es **retirar**. El techo subió una sola vez, el 2026-08-25, con la holgura de trabajo en dos palabras y atado a que apareciera un dato — un techo que no deja escribir no produce compactación, produce el reflejo de subirlo. El dato llegó el 2026-08-27: **el crecimiento no venía de un archivo gordo sino de lluvia fina sobre los tres**, y el porqué de cada regla estaba escrito dos veces. El techo volvió a bajar detrás. Y el mismo guardián pone ahora techo a la **suma de las skills**, que es lo que impide que retirar de un documento sea mudarlo.
 
 | Documento | Qué contiene |
 | :-- | :-- |
@@ -315,13 +316,14 @@ El «porqué» vive en documentos dedicados, partidos por una regla que **no es 
 | [PRD-Live.md](./PRD-Live.md) | Spec viva: qué es el producto **hoy** y qué tiene que cumplir |
 | [AGENTS.md](./AGENTS.md) | Aviso: este Next tiene breaking changes; leer los docs del paquete antes de tocar APIs |
 
-**A demanda, con índice.** Aquí vive el porqué completo: qué se probó, qué se descartó y qué falló antes de que cada regla quedara escrita. No se cargan nunca enteros, y por eso **los tres llevan índice derivado de sus propias cabeceras** — un archivo de 46.000 palabras sin índice es inservible, y con índice está bien. Los genera `npm run indices` y los vigila `check:indices`: no se escriben a mano, así que no pueden mentir sobre lo que hay dentro.
+**A demanda, con índice.** Aquí vive el porqué completo: qué se probó, qué se descartó y qué falló antes de que cada regla quedara escrita. No se cargan nunca enteros, y por eso **todos llevan índice derivado de sus propias cabeceras** — un archivo de 46.000 palabras sin índice es inservible, y con índice está bien. Los genera `npm run indices` y los vigila `check:indices`: no se escriben a mano, así que no pueden mentir sobre lo que hay dentro.
 
 | Documento | Qué contiene | Su índice |
 | :-- | :-- | :-- |
 | [DECISIONS.md](./DECISIONS.md) | Las decisiones técnicas del build (ADR-lite), numeradas y fechadas | En `CLAUDE.md`: se lo gana, porque el código las cita por número |
 | [PRD-Historical.md](./PRD-Historical.md) | Registro fechado de decisiones de producto, diseño y alcance | En su cabecera |
 | [BRAND-historical.md](./BRAND-historical.md) | El porqué fechado de las reglas de marca | En su cabecera |
+| [CLAUDE-historical.md](./CLAUDE-historical.md) | El caso que escribió cada convención: qué falló para que la regla exista | En su cabecera |
 
 **Y dos que no son ninguna de las dos cosas:** [BRAND-logo.md](./BRAND-logo.md), la enciclopedia del logo y la firma split, y [LICENSE](./LICENSE) — público para consulta, no código abierto: todos los derechos reservados.
 

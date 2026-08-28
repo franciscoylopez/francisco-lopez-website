@@ -393,16 +393,16 @@
         "v": "State changes: accordions, tabs."
       },
       {
-        "k": "600ms",
+        "k": "280ms",
         "v": "Section scroll-reveal on entry."
       },
       {
         "k": "easing",
-        "v": "cubic-bezier(.4, 0, .2, 1), the standard one."
+        "v": "cubic-bezier(0, 0, .2, 1): ease-out on entry."
       }
     ],
     "bullets": [
-      "Reveal = fade + 12px rise, staggered ~60ms between children.",
+      "Reveal = fade + 14px rise, once on entering the viewport and never on a loop. A group entering together staggers its pieces (80ms in this demo).",
       "prefers-reduced-motion: transforms and auto-scroll are disabled. Content always appears, even if the JS fails."
     ],
     "demoLabel": "Scroll-reveal demo",
@@ -703,6 +703,14 @@
       "Which page is sibling to which is decided by its callers, who do know."
     ],
     "ruleFoot": "It's the boundary that decides where a piece lives: if it knows something about this site, it isn't part of the system.",
+    "tileTitle": "The tile: one box for a logo or an ordinal",
+    "tileLead": "It is the smallest piece in this family and the one that behaved worst: the same box was painted at two sizes and with two fills depending on who wrote it. Size and fill now live in the piece, so there is nowhere left to disagree.",
+    "tileLogoKicker": "With a logo inside",
+    "tileLogoRule": "Company, tool and institution logos, monochrome and swapping light/dark in pure CSS. They are announced as decorative: the name is already written next to them.",
+    "tileLogoNote": "The wrapper knows where this site keeps its assets; the box knows nothing, which is why the box is the part that moved up into the layer.",
+    "tileNumKicker": "With an ordinal inside",
+    "tileNumRule": "The number of a stage in «How I work». Same box, same fill and same size as the logo one: the only difference is what it holds.",
+    "tileNumNote": "This one is announced, unlike the logo: the order of the stages is information, not decoration.",
     "blockTitle": "The opening of a block",
     "blockLead": "Twelve sections in a row do not say where one family ends and the next begins. The band says it, and shows what it contains.",
     "blockKicker": "Block opener",

@@ -44,10 +44,7 @@ function Group({
             key={item.title}
             className="border-border flex items-start gap-[1.1rem] border-b py-[clamp(1.3rem,2.6vw,1.7rem)]"
           >
-            <BrandLogoBox
-              name={logos[i] ?? ""}
-              className="h-10 w-10 flex-none"
-            />
+            <BrandLogoBox name={logos[i] ?? ""} />
             <div>
               <h3
                 className={cn(titleVariants({ size: "card" }), "mb-[0.3rem]")}

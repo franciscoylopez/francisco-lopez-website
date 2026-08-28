@@ -71,7 +71,11 @@ export const PALETTE = {
     background: "oklch(0.9653 0.0102 81.8)",
     foreground: "oklch(0.2657 0.0118 248.27)",
     card: "oklch(0.9855 0.0057 84.57)",
-    border: "oklch(0.901 0.0142 88.69)",
+    // El filete de AUTOR, que desde P68.749 se llama `--border-base`: `--border`
+    // pasó a derivarse de la superficie donde cae, como ya hacían `--surface-dim`
+    // (D39) y `--control-edge` (D97). Lo que se publica y se compara es el valor
+    // autorado, que es el único que alguien escribió.
+    "border-base": "oklch(0.901 0.0142 88.69)",
     muted: "oklch(0.9316 0.0128 86.83)",
     "muted-foreground": "oklch(0.4365 0.0064 95.19)",
     primary: "oklch(0.41 0.0886 194.82)",
@@ -87,7 +91,7 @@ export const PALETTE = {
     background: "oklch(0.2283 0.0098 248.26)",
     foreground: "oklch(0.9653 0.0102 81.8)",
     card: "oklch(0.2657 0.0118 248.27)",
-    border: "oklch(0.3252 0.0157 248.31)",
+    "border-base": "oklch(0.3252 0.0157 248.31)",
     muted: "oklch(0.3063 0.0152 252.34)",
     "muted-foreground": "oklch(0.7295 0.0116 95.22)",
     primary: "oklch(0.7626 0.1156 191.46)",

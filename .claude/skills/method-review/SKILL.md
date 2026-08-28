@@ -266,7 +266,8 @@ docs `@`-importados bajaron un 30% (18.098 → 12.689) mientras las skills subí
 los docs y techo por entrada a las skills, y **ninguno a su suma** — lo dice en su propia
 salida: «suma (NO es un presupuesto: no se cargan a la vez)». Cierto, y no toda la verdad: una
 sesión de cierre carga ~9.000 palabras de skills encima de los docs. **Tercera vez que las dos
-direcciones convergen y tercera vez que ese es el hallazgo de más confianza.***
+direcciones convergen y tercera vez que ese es el hallazgo de más confianza.** Cerrado el mismo
+día por P68.5907: techo de 20.500 a la suma, y esa frase de la salida ya no existe.*
 
 *Y dos cosas de método que este disparo deja:*
 
@@ -285,11 +286,14 @@ direcciones convergen y tercera vez que ese es el hallazgo de más confianza.***
 | Indicador | Hoy | Verde | Rojo |
 | :-- | :-- | :-- | :-- |
 | Variación neta de `General` por sprint | **+11** (cerró en 45) 🔴 | ≤ 0 | ≥ +4 |
-| Margen del presupuesto de contexto | **1** 🔴 | ≥ 400 | < 100 |
-| Suma de skills a demanda | **20.616** · sin techo 🔴 | *por definir* | — |
+| Margen del presupuesto de contexto | **246** tras P68.5905 🟡 | ≥ 400 | < 100 |
+| Suma de skills a demanda | **20.203** · techo 20.500 desde P68.5907 🟢 | ≤ techo | > techo |
 | Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 |
 | Sprint de método abierto en el ciclo | **No** 🟢 | No | Sí |
 | ~~Skills sin estrenar~~ | *retirado: sin fuente medible* | — | — |
+
+*Las dos filas van en la vara de `check:contexto`, que **descuenta los bloques de código**: por
+eso 20.203 aquí y 20.616 arriba. No es drift, y el porqué está en el propio script.*
 
 ## La salida
 

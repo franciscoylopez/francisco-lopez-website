@@ -41,7 +41,7 @@ function Row({
   return (
     <div
       data-reveal
-      className="hitos-row border-border border-b [padding-block:clamp(1.15rem,2.4vw,1.6rem)]"
+      className="hito-fila hitos-row border-border border-b [padding-block:clamp(1.15rem,2.4vw,1.6rem)]"
     >
       <span className="text-muted-foreground w-10 shrink-0 font-mono text-[0.8rem] [grid-area:idx]">
         {idx}
@@ -61,7 +61,7 @@ function Row({
       </p>
       <span
         className={cn(
-          "text-foreground ml-auto shrink-0 font-mono text-[0.9rem] [grid-area:year]",
+          "hito-anio text-foreground ml-auto shrink-0 font-mono text-[0.9rem] [grid-area:year]",
           boldYear && "font-semibold",
         )}
       >
@@ -74,6 +74,13 @@ function Row({
 // Hitos (PRD §8.1/§21). Quick-scan de reconocimientos, orden cronológico
 // descendente. Sin icono. INDYA (02) anima contadores; TheTool exit (04) lleva
 // el chip EXIT con reveal retardado.
+//
+// Y desde P81 la sección lleva «Estratos», la TEXTURA del gesto de marca: un
+// filete crece bajo el año conforme la fila cruza (`.hito-fila`/`.hito-anio` en
+// globals.css, con `animation-timeline`). Es textura y no firma: la firma es el
+// punto del titular del Hero, y dos firmas compitiendo serían peor que ninguna
+// (D137). Ningún texto se atenúa, que es lo que lo separa de un fundido por
+// scroll.
 export function Hitos({ dict }: { dict: HitosDict }) {
   return (
     <section id="hitos" className={SECTION}>

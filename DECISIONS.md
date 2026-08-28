@@ -163,6 +163,16 @@
 - D125 · Una banda no se tiñe sobre una sección que ya existe: se inserta
 - D126 · El pliegue es un problema de ALTO, y su andamiaje solo razonaba por ancho
 - D127 · El atenuado de un texto no se escribe con `opacity`, y el censo no sabía verlo
+- D128 · El contrato de un gate se publica; su porqué se consulta
+- D129 · El presupuesto gana su tercera mitad: techo a la SUMA de las skills
+- D130 · El porqué de las convenciones se parte, y el arranque cabe en el objetivo sin mudanza
+- D131 · El filete era el tercero de la familia y el único sin tratamiento por superficie
+- D132 · El equilibrado de línea y el destello del toque bajan a la capa
+- D133 · El filete de la banda invertida es uno solo, y el ordinal no toma color
+- D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba
+- D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias
+- D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde
+- D137 · El gesto de marca son dos piezas, y una manda sobre la otra
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7429,3 +7439,713 @@ aparte** (P68.7115), porque su modo de fallo es un tick verde.
 **La confirmación fina:** tras el arreglo el censo pasó de **408 a 414 pares**, y esos seis son
 3 páginas × 2 temas — el ordinal dejó de ser un duplicado de `--background` y pasó a ser un par
 propio. Un arreglo que no hubiera cambiado nada habría dejado el recuento igual.
+
+## D128 · El contrato de un gate se publica; su porqué se consulta — 2026-08-27
+
+**El encargo era encontrar el archivo culpable, y no hay ninguno.** El techo del presupuesto
+de contexto subió a 12.700 el 2026-08-25 sin una medida detrás, y P68.5905 pedía la revisión
+manual que lo convirtiera en dato. Medido sobre 29 commits de documentación (23 → 27 de
+agosto), en palabras y con el contador de `check:contexto`:
+
+| archivo | tocado en | churn | neto | tamaño |
+|---|---|---|---|---|
+| `PRD-Live.md` | 21/29 | 934 | +176 | 3.186 |
+| `CLAUDE.md` | 13/29 | 609 | +149 | 4.693 |
+| `BRAND.md` | 10/29 | 817 | +107 | 4.724 |
+| `AGENTS.md` | 0/29 | 0 | 0 | 95 |
+
+**+432 palabras netas en cinco días, repartidas casi a partes iguales entre tres archivos.**
+Eso es lo que explica por qué las dos pasadas de retirada anteriores —Método II (−1.026) y
+P68.675 (−440)— se las comió el sprint siguiente: no estaban tapando una fuga localizada,
+estaban barriendo lluvia fina. Una tercera pasada del mismo tipo habría dado el mismo
+resultado, y por eso lo que cambia es el régimen y no la cifra.
+
+**La hipótesis con la que empecé era falsa, y comprobarla es la mitad útil del trabajo.**
+Supuse que `BRAND.md` guardaba inline el porqué *estructural* de sus variantes —§Jerarquía de
+hover y sus siete subsecciones suman 1.629 palabras, y el propio archivo las etiqueta como
+«explica **por qué** cada variante es como es»—. Contrastado contra `BRAND-historical.md`
+§El hover de la tarjeta pulsable: la regla en `BRAND.md` son 151 palabras de regla + una
+cláusula de porqué + puntero, y las 400 de barrido de mezcla y descartes están en el
+histórico. **El corte del 2026-08-09 funcionó**, y por eso el movimiento que P68.5908 propone
+para `CLAUDE.md` es el correcto.
+
+**Dónde sí estaba escrito dos veces.** `PRD-Live.md` §Cómo se verifica lo que no ve un
+compilador: **769 palabras, el 24 % del archivo**, describiendo once gates — y cada bullet
+**ya citaba su entrada de `DECISIONS.md`** (D42/D45, D49/D99, D50/D52, D73, D75, D84/D103/D110,
+D85/D97/D90, D101/D107, D114/D124, D116, D119). El porqué estaba en los dos sitios.
+
+**La decisión.** Esa sección pasa a **tabla de contrato**: por gate, qué garantiza, **qué deja
+fuera**, dónde corre y el puntero a su D-entry. Lo que se retira es el porqué —qué falló para
+que existiera, qué se descartó, qué caza en la práctica—, que se consulta a demanda por el
+índice de cabecera de `DECISIONS.md` (D88). El criterio de corte: **el catálogo de aquí no se
+lee hasta que un check sale rojo, y entonces el check dice su nombre.**
+
+La columna «qué deja fuera» no es adorno: es la mitad del contrato que un guardián nunca
+declara solo, y la que evita darlo por más ancho de lo que es (contraste y objetivo táctil
+fuera de `check:marco`, el suelo de 360 fuera de `check:figuras`, el `<head>` fuera de
+`check:marcas`, el ZIP fuera de `check:kit`).
+
+**Lo que NO se toca, con su motivo.**
+
+- **La regla de la raya** (`CLAUDE.md`, ~200 palabras) la comprueba `check:raya` en CI, así
+  que parecía candidata. No lo es: el guardián caza la infracción **después** de escribirla, y
+  la enumeración de sustitutos es lo que evita escribirla. Un guardián reactivo no releva a
+  una regla de redacción.
+- **El bloque del tablero de Notion** (`CLAUDE.md`, 1.488 palabras, el 32 % del archivo) se
+  consulta en tres momentos y ninguno es escribir código. Sacarlo a un doc a demanda es la
+  partición más grande disponible y se descarta **hoy**: el arranque de sesión sí toca el
+  tablero, y mover 1.488 palabras a un destino sin techo es la «reducción que fue una mudanza»
+  que el sexto `method-review` acaba de nombrar.
+
+**El resultado, y es honesto decir que se quedó corto de la proyección.** La sección baja de
+**769 a 542** palabras, no a las ~280 estimadas: al escribir la tabla resultó que más de la
+mitad de esas 769 era contrato, no porqué. El arranque baja de **12.698 a 12.454**, y la
+holgura pasa de **2 a 246 palabras** — por encima de las 240 que el propio guardián define
+como la magnitud que hay que sostener, por primera vez desde que el techo subió.
+
+## D129 · El presupuesto gana su tercera mitad: techo a la SUMA de las skills — 2026-08-27
+
+**El hallazgo, y es de los que solo aparecen mirando las dos direcciones a la vez.** El sexto
+`method-review` midió el corpus de instrucciones entre el 19 y el 27 de agosto:
+
+| Fecha | Docs `@`-importados | Skills a demanda | Corpus total |
+|---|---|---|---|
+| 2026-08-19 | 18.098 | 13.311 | 31.409 |
+| 2026-08-27 | 12.689 | 20.616 | 33.305 |
+| *variación* | **−30 %** | **+55 %** | **+6 %** |
+
+Se celebró una reducción del 30 % en el lado medido mientras el lado sin medir absorbía el
+coste **y algo más**. Es una familia de fallo propia y ya tiene nombre: **«la reducción que fue
+una mudanza»**.
+
+**La causa estaba escrita en la salida del propio guardián.** `check:contexto` ponía techo
+**total** a los cuatro documentos, techo **por entrada** a las skills y **ninguno al conjunto**,
+y lo decía en cada corrida: *«suma (NO es un presupuesto: no se cargan a la vez)»*. Era cierto y
+no era toda la verdad. Un trinquete asimétrico hace que **mover una regla de un documento a una
+skill salga gratis**, y esa gratuidad es lo que produjo el trasvase. El argumento de la
+concurrencia además se cae en la práctica: un cierre de etapa encadena `sprint-review` →
+`method-review` → `close-session` en la misma sesión, encima de los cuatro documentos.
+
+**La decisión: `TECHO_SUMA = 20.500`, y falla.** Nace en verde, por la misma razón que los otros
+dos techos: uno que nace en rojo se sube hasta que no significa nada. Se sella contra la suma de
+**después** de la propia tarea —20.262, no las 20.203 de antes—, porque actualizar la tabla de
+umbrales de `method-review` es parte de ella. Holgura resultante **238**, que es exactamente la
+magnitud de trabajo que este archivo ya defiende para los documentos (240): las tres mitades del
+presupuesto quedan igual de apretadas.
+
+**Sin objetivo, y es deliberado.** Los otros dos presupuestos llevan techo + objetivo porque su
+objetivo sale de una historia medida. Para la suma de skills esa curva no existe todavía: poner
+un objetivo hoy sería elegir un número y llamarlo medida, que es justo lo que D128 acaba de
+corregir. Se sella y se mide; el objetivo se pone cuando haya curva.
+
+**El caso malo tuvo que diseñarse para no cruzar el techo de al lado.** `check:guardianes` gana
+su caso para este control, y engordar la skill más grande no habría servido: habría reventado el
+techo **por entrada** y el guardián saldría rojo por el control equivocado, dejando este sin
+probar — el modo de fallo que ese archivo entero existe para cazar. El caso rellena
+`sprint-review` hasta **~3.900** palabras, por debajo del techo (4.600) y del objetivo (4.500)
+por entrada, y sube la suma a 22.697. Verificado: sale por la rama de la suma, con código 1. El
+relleno se calcula desde el tamaño real del archivo, así que si algún día esa skill ya midiera
+más, el relleno sale cero y el caso falla **ruidosamente** en vez de aprobar.
+
+**Y una trampa de método que conviene no repetir: dos corpus medidos con dos varas distintas.**
+El informe decía 20.616 donde el guardián dice 20.203. No es drift ni una medida vieja:
+`check:contexto` **descuenta los bloques de código** y el informe no. Comprobado — 20.688
+contando el código, 20.203 sin él, 485 palabras de diferencia en las nueve entradas. El número
+que gobierna es el del guardián, que es la misma vara con la que se miden los documentos.
+
+## D130 · El porqué de las convenciones se parte, y el arranque cabe en el objetivo sin mudanza — 2026-08-27
+
+**El movimiento estaba probado en este repo y `CLAUDE.md` nunca lo recibió.** `BRAND.md`
+partió su porqué fechado a `BRAND-historical.md` el 2026-08-09 (P37.685) y funcionó: la regla
+quedó en presente, el relato a demanda. D128 lo comprobó midiendo —151 palabras de regla más
+puntero en `BRAND.md` contra 400 de barrido en el histórico— y `CLAUDE.md` seguía mezclando
+las dos cosas en sus 4.693.
+
+La aritmética que lo justifica: **una regla enunciada más puntero cuesta ~15 palabras; con su
+historia dentro, ~150.**
+
+**Qué se ha movido, y el criterio.** Nace `CLAUDE-historical.md` (a demanda, con índice
+derivado por `npm run indices`, nunca `@`-importado), con seis secciones que espejan las de
+`CLAUDE.md`. Dentro va el caso que escribió cada regla: que `General` llegó a acumular el 80 %
+del tablero con «Optimización», que la lista de piezas estaba escrita a mano en cinco sitios y
+ninguno acertaba, que el capítulo doce metió el riel debajo del nav, que el mismo radio estaba
+escrito de tres formas, que cuatro gates fallaron por depender de acordarse (D54, D60, D63),
+que el interlineado del artículo sobrevivió a tres mediciones.
+
+**El corte no fue solo extraer relato: la mitad del ahorro salió de duplicación.** El
+inventario de gates estaba en `CLAUDE.md`, en la DoD y en `PRD-Live`; el «shippear vs. pulir»
+estaba en §Metodología y en la Columna B; el «se publica en el Design System» estaba en la
+Regla de construcción y en la fila 1 de la DoD. Y **dos listas estaban caducadas** —los sprints
+y bloques concretos, y el reparto V2/V3/V4—, así que ahora apuntan al tablero y a `PRD-Live`
+§9 en vez de enumerarse.
+
+**La trampa que el split tiene que evitar, y que `BRAND.md` ya pagó una vez.** Si el puntero no
+se lee, la regla se vuelve a discutir desde cero. `BRAND.md` lo resolvió escribiendo **cuándo**
+hay que abrir el histórico, no solo que existe, y aquí se copia esa frase a los dos sitios: a
+la cabecera del histórico y a §Régimen de docs. La formulación es **«antes de CAMBIAR una
+regla, no antes de aplicarla»** — aplicarlas no necesita el relato; discutirlas, sí.
+
+**El resultado, y por qué esta vez no es una mudanza.** El arranque baja de 12.454 a
+**11.794**: por debajo del objetivo de 11.800, que solo se había alcanzado una vez y no se
+sostuvo. Lo que hace que la bajada sea real y no un traslado es que las dos salidas están
+tapadas — el histórico **no se `@`-importa**, y la suma de skills **ya tiene techo** desde D129
+(20.500), que era justo el agujero por el que se fue el 30 % anterior.
+
+**Y el trinquete vuelve a apretar, como su propia entrada prometía.** La subida a 12.700 del
+2026-08-25 quedó atada a que apareciera un dato de coste; apareció (D128), así que el techo baja
+a **12.300** y el objetivo al siguiente peldaño de su escalera, **11.600**. La holgura que se
+deja es **506**, no 240: es lo que el propio guardián pedía sin poder pagarlo, porque 500
+palabras son media docena de sesiones escribiendo reglas en vez de un cuarto de sprint
+retirándolas.
+
+| | Antes | Después |
+|---|---|---|
+| `CLAUDE.md` | 4.693 | **4.033** |
+| `PRD-Live.md` | 3.186 | **2.942** |
+| Arranque total | 12.698 | **11.794** |
+| Techo · objetivo | 12.700 · 11.800 | **12.300 · 11.600** |
+| Holgura de trabajo | 2 | **506** |
+
+## D131 · El filete era el tercero de la familia y el único sin tratamiento por superficie — 2026-08-27
+
+**La familia son tres y solo dos estaban hechas.** `--surface-dim` se recalcula contra la
+superficie donde cae el texto desde **D39**; `--control-edge`, contra la que rodea al control,
+desde **D97**. `--border` —el filete decorativo: divisores, hairlines, el borde de una tarjeta
+que no se pulsa— seguía definido **una sola vez por tema**, calibrado contra `--background` y
+solo contra él. Medido sobre el píxel pintado, con el metro validado contra el ancla de siempre:
+
+| Superficie | claro | oscuro |
+|---|---|---|
+| página (referencia) | 1,21 | 1,36 |
+| tarjeta | 1,29 | 1,23 |
+| `muted` | 1,10 | 1,07 |
+| **banda invertida** | **11,35** | **11,23** |
+
+**La invertida es el hallazgo, y no estaba en la tarea.** Sin regla, un elemento con
+`border-border` dentro de una banda hereda el filete de la PÁGINA: un hairline casi blanco
+sobre carbón, o casi negro sobre hueso — **ocho veces la referencia**. No es que se difumine:
+grita. Hoy no tiene ni un ocupante (medido: cero en las ocho páginas), así que era deuda
+latente, pero era la que más lejos estaba. Y desde D125 el sitio tiene nueve bandas invertidas,
+o sea que el caso dejó de ser hipotético hace un día.
+
+**Y no era latente en tarjeta, que es donde la ficha decía que no afectaba a nada.** 249
+elementos de las ocho páginas dibujan su `border-border` **dentro** de una superficie de
+tarjeta. En claro iban un pelo más marcados que la referencia (1,29 frente a 1,21) y en oscuro
+**un tercio menos** (1,23 frente a 1,36). Eso último es una debilidad real, ya enviada, que
+nadie había mirado.
+
+**La forma la decide el precedente, no el gusto.** Los dos hermanos resuelven esto distinto y
+por un motivo: `--surface-dim` conserva su valor de autor en `:root` (`var(--muted-foreground)`)
+y solo mezcla en las demás superficies, mientras que `--control-edge` mezcla también en `:root`
+porque **nació sin valor previo**. `--border` tiene valor de autor, así que va por el primer
+camino: se renombra a `--border-base`, `--border` lo consume tal cual en `:root`, y la mezcla
+entra solo donde el fondo deja de ser el de la página. **Ni un filete de página se mueve.**
+
+**El 11% sale de un barrido, y el objetivo no es un umbral.** Un filete decorativo no tiene
+ninguno: lo que hay que reproducir es la referencia de su propio tema. Del 8% al 20%, sobre las
+dos superficies y los dos temas, el 11% es el único que deja las cuatro cifras dentro de ±0,03
+—y del lado de arriba a propósito, porque el modo de fallo que esto arregla es un filete que se
+borra. **La mezcla NO conmuta con el tema**, al revés que `--control-edge-mix` (60/45), y eso es
+un resultado: la referencia ya conmuta sola, porque es el propio `--border-base` contra el fondo
+de cada tema. La **invertida** sí necesita su número —7% claro, 15% oscuro— y en direcciones
+opuestas, porque los dos `--foreground` no son simétricos en luminancia.
+
+Verificado sobre el sitio servido, inyectando una caja `border-border` en cada superficie y
+leyendo su borde pintado:
+
+| Superficie | claro | oscuro |
+|---|---|---|
+| página | 1,21 → **1,21** | 1,36 → **1,36** |
+| tarjeta | 1,29 → **1,23** | 1,23 → **1,39** |
+| `muted` | 1,10 → **1,22** | 1,07 → **1,38** |
+| invertida | 11,35 → **1,22** | 11,23 → **1,35** |
+
+**Se cubren las dos puertas de D61**, igual que sus hermanos: `hover:bg-muted` no compila a
+`.bg-muted`, así que el eje de ESTADO va aparte o el arreglo se escapa por donde ya se escapó
+una vez.
+
+**El guardián hizo su trabajo en el momento.** El hook de paleta saltó en la primera edición
+—`lib/design-values.ts` seguía publicando `--border` con el valor autorado— y volvió a saltar
+pidiendo el censo, porque las superficies pasaron de 16 a 19. Es la condición de re-medir de la
+DoD leída por una máquina (D90), y esta vez no hubo que acordarse de nada.
+
+**Censo tras el cambio:** 391 pares de texto y 272 contornos, metro validado en las 28 corridas,
+cero bajo AA, cero bajo AAA y cero por debajo del 3:1. Los dos recuentos son **idénticos** a los
+de antes del cambio, que es lo que debía pasar: un filete decorativo no es un par de texto ni el
+contorno de un control.
+
+## D132 · El equilibrado de línea y el destello del toque bajan a la capa — 2026-08-27
+
+**Dos reglas de la guía de interfaz sin portador, las dos en `globals.css`.** `text-wrap:
+balance` reparte las líneas de un titular para que la última no quede huérfana;
+`-webkit-tap-highlight-color` decide de qué color destella un control al tocarlo en un
+teléfono.
+
+**La tarea decía «0 hits en todo el proyecto» y era falso**, así que se descarta por escrito:
+hay **29 usos** de `text-balance` / `text-pretty` en 20 archivos, y `components/ui/heading.tsx`
+ya nombraba `text-balance` como override legítimo del call site. El `design-review` grepeó la
+propiedad CSS (`text-wrap`) y lo que hay escrito son las utilidades de Tailwind, que compilan
+a ella. **El defecto medido sí era real y reproduce exacto.**
+
+**Medido A/B sobre la MISMA página servida** —mismo DOM, mismas fuentes, forzando `text-wrap`
+a `wrap` y a `balance` sobre los mismos nodos—, `/accesibilidad` a 390px, última línea como %
+de la más larga:
+
+| Titular | antes | después |
+|---|---|---|
+| «Cinco cosas que no incumplían…» (h3) | **13 %** | 100 % |
+| «Dos diagramas que se miden…» (h3) | **18 %** | 96 % |
+| «El marco lo pone la página…» (h3) | **20 %** | 100 % |
+| «Dónde no llega, y cómo decirlo» (h2) | **30 %** | 98 % |
+| «Qué cumple, y cómo se prueba» (h2) | **31 %** | 100 % |
+
+**12 de 16 mejoran, 4 no cambian, ninguno empeora.** Y los peores no eran los dos `h2` que
+encontró la tarea: eran los **h3**, que se le escaparon enteros.
+
+**LA FILA 5 DE LA DoD, CONTESTADA CON UNA MEDIDA Y NO CON UN CRITERIO.** 93 titulares en
+cuatro páginas: **cero cambian de alto**. `balance` reparte dentro del mismo número de
+líneas, así que no hay pliegue que recalcular ni layout shift que temer.
+
+**En cuerpo va `pretty`, que es otra propiedad y no la misma con otro nombre.** `balance`
+iguala TODAS las líneas de un bloque corto y los navegadores lo ignoran por encima de cuatro
+o seis; `pretty` deja el párrafo como está y solo impide la palabra suelta al final. Viudas
+(última línea < 25 %): home 7→1, `/accesibilidad` 15→9, el artículo 48→30. Un solo bloque de
+338 crece una línea, y es un párrafo en flujo.
+
+**VA SOBRE EL ELEMENTO Y NO SOBRE `titleVariants`**, que era la otra opción: no todos los
+titulares del sitio pasan por la capa de cabecera —los de `system-message`,
+`global-not-found` y las bandas los escriben sus bloques—. El selector `h1..h4` ya existía en
+`globals.css` para la familia tipográfica, así que el equilibrado entra por la misma puerta.
+
+**Y POR QUÉ ESTO NO PODÍA VIVIR EN EL PUNTO DE USO**, que es la parte reutilizable: el defecto
+solo salía en una de las tres páginas hermanas, con el MISMO componente. Lo que divergía era
+el **registro del copy** — Design System y Brand Kit le dan sintagmas cortos que nunca rompen;
+Accesibilidad, oraciones con coma. Una propiedad que hace falta o no según lo que alguien
+escriba en el diccionario no se puede recordar en cada call site.
+
+**El destello del toque se DECLARA, no se apaga.** Apagarlo con `transparent` era la otra
+respuesta y es peor: en un teléfono el hover no existe, así que el destello es la ÚNICA
+confirmación de que el toque se ha registrado. Se tiñe de `--primary` al 18 % y conmuta con el
+tema solo porque el token ya lo hace. Sin umbral WCAG que cumplir: es transitorio y no
+delimita el control.
+
+**Lo que deja detrás, medido y tareado (P68.753):** con la regla en la capa, **165 de las 172
+utilidades del call site dicen lo mismo que ella**. Las **7 que sobreviven son un hallazgo, no
+un resto** — un párrafo o una cita que pide `balance` porque **se lee como titular sin ser un
+encabezado**: la subheadline del Hero, la apertura de Sobre mí y las cinco citas del artículo.
+
+## D133 · El filete de la banda invertida es uno solo, y el ordinal no toma color — 2026-08-27
+
+**La pregunta era si la banda de bloque (D125) debía tomar el acento morado**, y la tarea
+ofrecía dos salidas: teñir el ordinal de cada parada, o dejarla cromáticamente muda. **Ganó
+una tercera que no estaba escrita** (Francisco, 2026-08-27): reusar el **filete morado** que
+la banda-manifiesto de la home ya lleva entre su titular y su bajada.
+
+**POR QUÉ EL ORDINAL ERA LA RESPUESTA EQUIVOCADA**, medido sobre el píxel pintado y con el
+metro validado en la misma corrida —la etiqueta de la banda da **13,79 / 15,32**, que son
+exactamente los dos anclajes de `BRAND.md`:
+
+| Color del ordinal (12,8px · AAA = 7) | claro | oscuro |
+|---|---|---|
+| Hoy (`text-muted-foreground`) | **10,32** | **9,89** |
+| `--brand-purple-accent` | **7,04** | **7,21** |
+| `--brand-purple` estándar | 5,21 | 2,65 ✗ |
+
+1. **Pasa AAA por cuatro centésimas** en claro, en la superficie invertida más repetida del
+   sitio. Cualquier retoque futuro del token lo tumba.
+2. **Le quita contraste**: 10,32 → 7,04.
+3. **Le daría al morado un segundo significado en páginas donde ya tiene uno.** El punto de
+   6px del índice de sección marca «estás en la sección N de N» y sale **catorce veces** en
+   `/design-system`. Enumerar y «estás aquí» no pueden ser el mismo color en la misma página.
+4. **D127 es del día anterior** y movió ese mismo ordinal de un `opacity-70` elegido a mano a
+   la capa. Teñirlo devolvería un color a mano al mismo texto veinticuatro horas después.
+
+**El filete no tiene ninguno de esos problemas** y sí resuelve lo que la tarea quería: va
+`aria-hidden`, no lleva información y no delimita ningún control, así que cae en «detalles» de
+`BRAND.md` §Color y **no tiene umbral que cumplir**.
+
+**SALE A LA CAPA AL APARECER EL SEGUNDO CALL SITE:** `.band-rule` en `globals.css` con la
+geometría (2px × 3,5rem, `--brand-purple-accent`). Escribirlo dos veces se cargaría el motivo
+del cambio, que es justamente que las dos bandas se lean como la misma familia.
+
+**LO QUE LA CLASE NO DECLARA ES EL MARGEN, y no es olvido.** El ritmo vertical es una
+propiedad del bloque que lo aloja: el manifiesto abre con un titular de hasta 3,75rem y
+respira más; la banda de bloque abre con uno de 3rem y es mobiliario de orientación. Es la
+regla 4 de `BRAND.md` — dos valores que se parecen y significan cosas distintas no se
+unifican. Va además **sin `@layer`**, así que un margen ahí ganaría a cualquier `my-*` del
+call site sin avisar.
+
+La banda pasa de 386 a 420px de alto; la regla de densidad de `block-opener` no se mueve. Y
+**se publica sola**: §10 del Design System monta el `BlockOpener` real, no una recreación.
+
+## D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba — 2026-08-27
+
+**La tarea estaba caducada y se descarta por escrito.** Decía que `lib/structured-data.ts`
+tenía «SOLO dos constructores» y que `WebPage` no estaba en las internas: hay **cinco** y
+`WebPage` está ahí desde P50. **Pero el hallazgo sale reforzado**, porque el propio código
+llevaba meses declarando su condición de salida:
+
+> `experiencePageLd`, desde P50: *«NO LLEVA `isPartOf`, y la ausencia es deliberada: el nodo
+> `WebSite` no existe todavía, así que apuntar a `#website` sería una referencia `@id`
+> COLGANDO — valida igual, porque un validador de esquema no resuelve referencias, y no
+> significa nada. Se añade el día que exista el nodo, no antes.»*
+
+El nodo se declara **entero y solo en la home** (`profilePageLd`); lo referencian las siete
+páginas con nodo propio: el artículo, Contacto y los cinco deep-dive.
+
+**DOS FORMAS DE REFERENCIARLO, Y CUÁL TOCA LO DECIDE LA ELEGIBILIDAD PARA RICH RESULTS** — la
+misma regla que `techArticleLd` ya había escrito para su `author`. La Rich Results Test evalúa
+una página **aislada**: en un tipo elegible (`TechArticle`) degradaría la referencia a `Thing`
+anónimo y avisaría, así que ahí va con `@type`, `name` y `url`; en los que no lo son
+(`WebPage`, `ContactPage`) basta el `@id` pelado.
+
+**`inLanguage` LISTA LOS DOS IDIOMAS Y NO EL DE LA PÁGINA**, que es la parte que no es obvia.
+El `@id` es uno solo para las veintiocho variantes, así que si la home ES dijera `es` y la EN
+dijera `en`, **el mismo nodo afirmaría dos cosas distintas según por dónde se entre**. Lo
+cierto del SITIO —y no de la página que lo declara— es que está en los dos; la página ya
+declara el suyo aparte.
+
+**NO LLEVA `potentialAction: SearchAction`**: es el campo que pinta la caja de búsqueda de
+Google y este sitio no tiene buscador interno. Declararlo sería afirmar una capacidad
+inexistente, que es el mismo criterio por el que el deep-dive no es `Article`.
+
+**El metro se movió con el cambio, que es como se comprueba que lo ve:** `check:marco` pasa de
+**3 `@id` declarados y 1 referenciado** a **4 y 2**.
+
+**Cierre con el Schema Markup Validator sobre el preview**, las seis páginas con nodo propio
+en ES y EN: **cero errores** en home, artículo y deep-dive. El validador reconstruye
+`ProfilePage → isPartOf → WebSite` con su `@id`, `name`, `url`, los dos `inLanguage` y el
+`author` apuntando al `Person`.
+
+**Y dos cosas medidas que conviene no redescubrir:**
+
+- **El aviso de `/contacto` es un falso positivo y es PREEXISTENTE**, idéntico en producción,
+  que no lleva `isPartOf`. Es el vocabulario reducido de Google (SPORE) marcando
+  `UNKNOWN_FIELD contactPoint / ContactPage` con `isSevere: false`; en Schema.org
+  `contactPoint` es válido en cualquier `CreativeWork`. Queda documentado **junto a
+  `contactPageLd`**, porque si no la siguiente pasada lo levanta como hallazgo nuevo — ya pasó
+  con seis de once.
+- **La referencia `@id` pelada sale como `CreativeWork`** en vez de `WebSite`. Cero errores y
+  cero avisos, así que se queda; pero el «no cuesta nada» que esta regla heredó queda más
+  preciso: **no cuesta un aviso, cuesta que un lector AISLADO vea un tipo genérico**. Para el
+  rastreador que recorre el sitio entero —que es quien une las entidades— el `@id` hace su
+  trabajo igual.
+
+## D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias — 2026-08-27
+
+**El reveal duraba 600 ms con la curva *standard* de Material —que es ease-in-**out**— y esa
+curva estaba escrita a mano en siete sitios.** Ninguno de los siete era un descuido: cada uno
+se copió del de al lado, que es como se propaga un valor que no tiene nombre. Ahora lo tiene:
+`--ease-entrance` (`cubic-bezier(0, 0, .2, 1)`) y `--duration-entrance` (`.28s`), en `:root`,
+mismo patrón que `--surface-dim` (D39) o `--control-edge` (D97) — **no se elige la curva de una
+entrada en el punto de uso**.
+
+**La duración es el TECHO de la entrada, no su valor obligatorio.** Los 280 ms son para el
+recorrido más largo que hace el sitio (el fade-up de 14px); el chip EXIT se queda en sus
+250 ms, y el enlace de contenido baja a 220. Lo que no puede una entrada es ir por encima.
+
+**Qué cambió, medido sobre el sitio servido** (`getComputedStyle` con el build de producción):
+
+| Pieza | Antes | Ahora |
+|---|---|---|
+| `[data-reveal]` | 600 ms · ease-in-out | **280 ms · ease-out** |
+| Chip EXIT | 250 ms · ease-in-out · retardo 280 ms | 250 ms · **ease-out** · retardo `var(--duration-entrance)` |
+| Barrido `.rlz` de los diagramas | 320 ms · ease-in-out | **280 ms · ease-out** |
+| Banner de consentimiento | 400 ms · ease-in-out | **280 ms · ease-out** |
+| `.link-content` | 220 + 300 + 80 = **380 ms** · `ease` | 160 + 220 + 60 = **280 ms** · ease-out |
+
+El retardo del chip **es** ahora la duración del reveal, no un número que coincidía con ella:
+así «entra tras el reveal de su fila» sigue significando lo mismo si la entrada vuelve a
+cambiar.
+
+**Y una entrada se queda por encima del listón, con motivo escrito:** el `split-bloom` del 404,
+0,9 s. No es una entrada de contenido sino el gesto de marca de una página de error, donde no
+compite con nada porque no hay nada más que leer; su curva ya era ease-out (easeOutQuint), así
+que nunca fue parte del problema.
+
+### La séptima declaración estaba en la página que publica la regla
+
+La ficha hablaba de seis. Había **siete**: la demo de scroll-reveal del Design System se
+dibujaba con una transición inline propia. Y con ella, **tres fuentes y tres respuestas para
+las mismas dos cifras** — la página publicaba «600 ms» y «subida de 12px», `globals.css` decía
+600 ms y 14px, y la demo, `.5s` y 12px — en la página cuyo trabajo entero es no poder mentir.
+
+**La demo ya no describe el reveal: lo usa.** Sus piezas son `[data-reveal]` normales y el
+botón «Repetir» solo les quita y les devuelve `data-shown`; la duración, la curva y el
+recorrido los pone la capa. La tabla publicada pasa a 280 ms y a la curva nueva, y el bullet
+del recorrido a los 14px reales.
+
+**De paso arregla un incumplimiento del punto 7 del checklist que ningún gate podía ver:** con
+`prefers-reduced-motion` el estilo inline animaba igual, porque no preguntaba. La regla vive en
+`.reveal-on`, que el island de motion **no** añade con reduced-motion, así que ahora el botón
+deja las piezas quietas. Medido: `.reveal-on` ausente y opacidad 1 antes del clic, a los 40 ms
+y a los 240 ms.
+
+**Y el primer intento de rebobinado estaba mal, lo cual solo se supo mirándolo.** Quitar
+`data-shown` con la transición puesta arranca un fundido *hacia fuera*: al devolver el atributo
+un frame después, el elemento sigue casi opaco y no hay recorrido que ver. La medición fue
+`opacidad 1 → 1 → 1`, un botón que no hacía nada y compilaba perfecto. Hay que rebobinar **sin
+transición** y solo entonces devolverla — que es, exactamente, lo que hacía el código inline
+que se retiró.
+
+### El relleno del enlace se queda repintando, y eso es una decisión
+
+`background-size` no es propiedad de compositor. La alternativa —un pseudoelemento con
+`transform: scaleY()`— **no puede dar este gesto**: un enlace de contenido parte a mitad de
+párrafo, y lo que hace que el relleno crezca por separado en cada línea es
+`box-decoration-break: clone`, que es de fondo y de borde, no de hijos; un `::before` absoluto
+se dibujaría una sola vez sobre la caja entera. El gesto es de marca (`BRAND.md` §Enlaces) y el
+repintado es de un renglón en hover, no de una sección.
+
+### La mejora doble que la ficha esperaba no existe, y es una buena noticia
+
+La ficha daba por probable que bajar la duración mejorase el LCP, porque este mismo reveal se
+comió 2.090 ms de *element render delay* en su día. **Ya no puede: D47 cortó el vínculo, no la
+duración.** Desde entonces lo que está en el primer pliegue se marca `data-shown` **antes** de
+encender `reveal-on`, así que nunca llega a ocultarse. Comprobado sobre el build servido: los
+**4** `[data-reveal]` del primer pliegue de la home están todos marcados y en opacidad 1, y el
+elemento LCP es la foto del hero.
+
+Así que este cambio es de sensación, no de métrica. La nota de PageSpeed se vuelve a sellar
+tras el deploy por el registro (`npm run psi -- --registro`), no porque se espere movimiento.
+
+### El cierre lo puso `/review-animations` y lo decidió un banco, no un argumento
+
+La revisión de motion aprobó el cambio y dejó siete afinados. **Los tres perceptuales no se
+razonaron: se montaron.** Un banco con las tres candidatas en columnas **sincronizadas** —en
+secuencia no se distinguen— con los tokens reales, los dos temas, un interruptor de
+reduced-motion y cámara lenta ×1/×3/×5, porque a 280 ms una curva no se juzga a ojo.
+
+| Decisión | Candidatas | Elegida |
+|---|---|---|
+| Curva de entrada | `(0, 0, .2, 1)` · `(0.23, 1, 0.32, 1)` · `(0.22, 1, 0.36, 1)` | **`(0, 0, .2, 1)`, la que ya estaba** |
+| Hover de `.link-content` | 280 · 200 · 160 ms | **200 ms** (160 de relleno + 40 de retardo del color) |
+| Escalonado de un grupo | 60 · 80 · 90 ms | **80 ms** |
+
+**La curva se queda donde estaba, y eso NO es «no se hizo nada».** La revisión pedía una
+ease-out más fuerte citando el catálogo, y el catálogo tiene razón en abstracto: `(0.22, 1,
+0.36, 1)` decelera mucho más. Vista sobre el bloque real y a la vez que las otras dos, la
+fuerte se lee como un frenazo en un recorrido de 14px, que es un desplazamiento demasiado
+corto para que una curva agresiva tenga dónde expresarse. **El valor no cambia; lo que cambia
+es su estado: pasa de heredado a elegido**, y esa es toda la diferencia entre una decisión y
+una omisión. Si vuelve a aparecer, ya está contestada.
+
+**Los otros dos sí se movieron, y los dos en la misma dirección: menos.** El enlace baja a 200
+porque no compite por «no pasarse de 300» sino por quitarse de en medio: es un hover de
+contenido, y la tabla de frecuencia del catálogo pone eso en «decenas de veces al día», donde
+la instrucción no es acortar sino desaparecer. Y el escalonado entra en la banda 30-80 por el
+extremo lento, que es donde un grupo de tres o cuatro piezas todavía se lee como grupo.
+
+**Y el color del enlace vuelve a `ease`.** Solo el relleno *entra*; el color del texto y el del
+subrayado nada más cambian de valor, y para eso la curva de entrada no aporta. Es la tabla de
+decisión del catálogo aplicada por partes en vez de a la declaración entera.
+
+### La puerta del hover, que no era perceptual y estaba desde antes
+
+`.link-content:hover` no tenía `@media (hover: hover) and (pointer: fine)`, así que en táctil el
+tap disparaba un hover falso **y se quedaba pegado**: al volver atrás, el enlace seguía relleno
+de cian. Se cierra aquí y en su contraparte invertida.
+
+**`:focus-visible` se saca de la puerta**, que es la parte que hay que no olvidar: es la misma
+pintura por la vía del teclado y no depende del tipo de puntero. Meterlo dentro habría cambiado
+un defecto táctil por uno de accesibilidad.
+
+**El resto de la familia sigue sin puerta** —`.link-chrome`, `.icon-chrome`, `.video-facade`—
+y queda señalado, no hecho: son de otra tarea y su hover es una pastilla neutra, mucho menos
+llamativa que una inversión de color.
+
+## D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde — 2026-08-27
+
+**La regla, en una línea: se va el `translate` y el `scale`; la opacidad y el color se
+quedan.** Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca.
+Y una animación **mixta se parte** en vez de apagarse entera.
+
+Hasta hoy el sitio tenía un interruptor: siete bloques de `@media (prefers-reduced-motion:
+reduce)` que ponían `transition: none` o `animation: none`. Cumplía —el catálogo de motion
+no obliga a atenuar—, pero apagaba de paso **dos fundidos puros y tres cambios de color**,
+que no tienen nada que retirar.
+
+### El bloque que la ficha citaba no casaba con nada
+
+La tarea abría citando el override del reveal. **Ese selector estaba muerto**, y no se ve
+leyéndolo: `RevealRoot` hace `if (reduce) return` **antes** de añadir `reveal-on`, así que
+con movimiento reducido la clase no existe y `.reveal-on [data-reveal]` no encuentra nada.
+
+Medido sobre el sitio servido con reduced-motion activo: **0** elementos con `.reveal-on`,
+**0** coincidencias de la regla, **34** `[data-reveal]` en opacidad 1 y sin transición. La
+protección la daba el island; el CSS solo la repetía, y repetirla hacía creer que el reveal
+se apagaba ahí.
+
+**EL REVEAL ES EL ÚNICO FUNDIDO QUE NO SE CONSERVA, y el motivo no es el LCP.** Esta entrada
+decía primero otra cosa —que atenuarlo obligaría a poner `opacity: 0` en 34 elementos y
+reabriría el mecanismo que costó 2.090 ms (D47)— y **`/review-animations` lo tumbó en el acto**:
+el orden de D47 marca el primer pliegue como `data-shown` ANTES de encender la clase, y eso
+protege al elemento LCP **de todo el mundo**, no solo de quien no ha activado el ajuste. Serían
+los **30** de debajo del pliegue, exactamente los mismos que ya lo hacen en el camino normal, y
+ninguno toca la métrica. *(Queda escrito porque es la cuarta vez que este proyecto le da a una
+excepción un motivo más sólido del que tiene; el motivo malo es el hallazgo.)*
+
+**El motivo real: es el único efecto ACOPLADO AL SCROLL.** WCAG 2.3.3 habla justamente de la
+animación que dispara la interacción, y ahí está la línea que separa este caso de los otros:
+los fundidos que sí se conservan ocurren **una vez y no los pide nadie** —el «0» del 404 y el
+banner entran al cargar— o duran lo que un gesto —los de hover—. Este se repite **treinta
+veces** mientras alguien baja por la página, y a quien ha pedido menos movimiento eso es
+exactamente lo que le sobra. Se borra el selector muerto y se queda escrito el porqué; el
+`scroll-behavior: auto` sigue, que era lo único que ese bloque apagaba de verdad.
+
+### El reparto, pieza por pieza
+
+| Pieza | Qué anima | Con movimiento reducido |
+|---|---|---|
+| Scroll-reveal | opacidad + `translateY(14px)` | **Sigue apagado**, y por el motivo de arriba |
+| `.split-zero > g` (el «0» del 404) | solo opacidad | **Corre, y en 0,2 s** en vez de 0,9 |
+| `.video-facade::after` (velo) | solo opacidad | **Corre** |
+| `.link-chrome` · `.icon-chrome` | solo `background-color` | **Corre** |
+| `.link-content` | relleno + color + subrayado | **Corre** |
+| `.consent-enter` | opacidad + `translateY(12px)` | **Se parte**: `consent-in-quiet`, fundido sin recorrido |
+| `.video-play` | `scale(1.08)` | Apagado |
+| Pastilla de `CopyButton` | solo opacidad | **Corre** |
+| Cabecera del 404 | fundido + deslizamiento | **Se parte**: `motion-reduce:slide-in-from-bottom-0` |
+
+**Y «más suave» también es «más corto», que es la otra mitad de la regla.** El florecer del 404
+se conservaba entero: **900 ms** de fundido para quien ha pedido menos movimiento. Ahí «se
+queda» no puede significar «se queda igual», porque lo que para el resto es un gesto de marca,
+para quien activa el ajuste es una espera. Bajo movimiento reducido corre en **0,2 s y sin
+retardo**, sobreescribiendo solo esas dos longhands. La regla completa son tres cosas y no dos:
+**fuera lo que desplaza, dentro el fundido, y el fundido más corto.**
+
+**El banner se parte cambiando solo `animation-name`**, no la abreviada: la duración, la
+curva y el `both` los sigue poniendo la declaración de arriba, así que no puede acabar con
+dos ritmos distintos según el ajuste del visitante.
+
+**La cabecera del 404 se parte sin apagar nada**: `slide-in-from-bottom-0` compila a
+`--tw-enter-translate-y: calc(0*100%)`, así que el recorrido se anula y el fundido sigue.
+Es mejor que `animate-none` porque no hay que mantener una segunda animación.
+
+### `.link-content` es todo o nada, y eso hay que saberlo antes de intentarlo
+
+La tentación es apagar solo el relleno —que es lo único que «se mueve»— y dejar el color.
+**No se puede:** si el relleno cian salta instantáneo y el color del texto tarda sus 160 ms,
+hay una ventana con `--foreground` sobre `--primary` —gris oscuro sobre cian oscuro en tema
+claro— que es ilegible. Los dos extremos de la transición pertenecen a la misma regla (D35)
+y aquí además **al mismo umbral**. Como no hay desplazamiento en ninguna de las tres
+propiedades, «todo» es la respuesta correcta.
+
+### Lo que esto le cuesta al censo
+
+Pasa de **2 animaciones selladas a 3**, porque `consent-in-quiet` es una más. El sello lo
+detecta y `check:palette` lo exige, así que la pasada completa entró en la tarea en vez de
+quedar pendiente: **28 corridas, 414 pares de texto y 300 contornos, metro validado en las
+28, cero bajo AAA y cero por debajo del 3:1.** `LAST_A11Y_REVIEW` ya estaba en la fecha de
+hoy y no se toca.
+
+## D137 · El gesto de marca son dos piezas, y una manda sobre la otra — 2026-08-27
+
+**La firma es el punto de «Del discovery al dato.», que cae y se asienta. La textura es
+«Estratos», el filete que crece bajo el año en Hitos.** No son dos gestos: son uno y su
+acompañamiento, y decirlo importa porque **dos firmas compitiendo serían peor que ninguna**.
+P81 pedía UN momento memorable, no un repertorio.
+
+Que la firma acabara siendo el punto no estaba en ninguna de las tres direcciones que se
+prototiparon: **lo propuso Francisco al ver la primera ronda**, y es mejor respuesta que las
+tres. Está en el titular, en el primer pliegue, es lo primero que se ve, y **ya existía**: no
+es un elemento inventado para tener un gesto.
+
+### Se eligieron viéndolas, y lo descartado es la mitad del valor
+
+Dos rondas de `/prototype`, las dos con los tokens reales, los dos temas y el interruptor de
+movimiento reducido.
+
+**Ronda 1 — la textura.** Tres direcciones sobre secciones distintas: «Recorrido» (el camino
+de las seis etapas, con el bucle que el copy ya nombra), «Estratos» (el tiempo en Hitos) y
+«Registro» (la forma del split traída al contenido).
+
+**«Registro» se descarta, y el motivo es de la DIRECCIÓN, no de la ejecución.** Se llegó a
+montar sobre el sitio real para verlo servido. Cada fila tiene su propio progreso, así que a
+media pantalla siempre hay tres o cuatro en fases distintas, y esa mezcla no es un instante de
+paso: **es el estado permanente**, visible ya al cargar. Ahí está la diferencia con «Estratos»,
+que tiene exactamente la misma mezcla y no molesta: *un filete a medio dibujar se lee como «en
+progreso»; un símbolo del split a medio registrar se lee como un error de impresión*, porque
+desalineado es justo la señal de que algo está mal calibrado. **El estado de reposo del gesto
+era un estado que parece roto.** Y no se arregla afinando: acortar el recorrido lo saca de
+pantalla, y gobernar las seis desde un solo reloj mueve el problema de sitio.
+
+**Ronda 2 — la firma.** Cuatro formas de aterrizar, cada una con un eje distinto: «Caída»
+(gravedad), «Deriva» (inercia), «Sello» (impacto) y «Cursor» (confirmación). Gana **Caída**.
+
+### Lo que la firma tiene de particular
+
+**El punto se separa en el COMPONENTE, no en el diccionario.** Para animarlo necesita ser su
+propio elemento, y la tentación es quitarle el punto al copy. No: el diccionario es la fuente
+de verdad y una frase sin su punto **dice algo que no es**. La separación es de presentación y
+vive donde se pinta. Vale para los dos idiomas sin condicionales —los dos titulares terminan
+igual— y si algún día uno no lleva punto se pinta entero y no hay gesto.
+
+**Dos curvas, y esa es la dirección elegida.** La bajada **acelera**
+(`cubic-bezier(.55,0,1,.45)`), que es lo que hace la gravedad; un ease-out ahí leería como
+frenada, no como caída. El asentamiento sí decelera. El rebote es **0,20**, elegido barriendo
+el 0,1–0,3 que el catálogo de motion da por sobrio.
+
+**Dura 420 ms, por encima del listón de 300, y es la segunda excepción escrita** —la otra es el
+florecer del 404 (D135)—. Misma coartada y medida igual: ocurre **una vez, al cargar**, es el
+único gesto del sitio que existe para ser recordado, y no compite con nada porque el titular ya
+está pintado.
+
+**El titular no nace invisible, que era la restricción dura.** Solo se anima el `span` del
+punto; el `h1` está en opacidad 1 desde el primer frame, y el elemento LCP de la home es la
+foto. Y el punto ocupa su hueco desde el principio —`inline-block` con la línea base explícita,
+y solo `transform`/`opacity`—, así que **no hay CLS**: medido sobre el sitio servido, la caja
+del `h1` y la posición del subtítulo no se mueven ni un píxel en cuatro muestreos durante la
+animación.
+
+### El morado, que era la pregunta abierta, y ya no lo es
+
+La tinta es **`--progress-ink`**, el morado calibrado para texto grande sobre `--background`.
+Un punto es un detalle tipográfico y no un gráfico que haya que entender, así que §Color deja
+entrar el morado; pero **es texto**, así que había que medirlo antes de darlo por bueno.
+
+Medido sobre el píxel pintado y **con el metro validado primero contra los anclajes de
+`BRAND.md`** (13,79 claro y 15,32 oscuro, reproducidos exactos): **7,21 en claro y 7,83 en
+oscuro**. Eso es AAA por el umbral **estricto** de texto pequeño, no solo por el de texto
+grande que le tocaría a 80px. No hay debate.
+
+**Y el censo lo confirma solo:** pasa de **414 pares a 416**. Los dos que aparecen son
+exactamente el punto en cada tema. 28 corridas, metro validado en las 28, cero bajo AAA.
+
+### Lo que `/review-animations` encontró, y que no se veía mirando la página
+
+**El estado por defecto de un gesto de scroll no es su estado final.** `--rp` se registró con
+`initial-value: 1` porque parecía lo sensato —«si el navegador no puede animarlo, que enseñe el
+final»— y es correcto **para una animación que va a correr**. En un motor sin
+`animation-timeline` la animación no existe, y ahí el estado final deja de ser un final: es un
+adorno permanente. Firefox pintaba **los cinco años con su filete cian a la vez y para
+siempre**, más los índices oscurecidos: un diseño que nadie aprobó, invisible desde Chrome, y
+contradiciendo por escrito lo que el propio comentario del bloque prometía.
+
+Son dos cambios y van juntos: el valor por defecto pasa a **0**, y **todo lo que pinta se mete
+dentro del `@supports`**, no solo la animación. Lo segundo es la mitad que se olvida: con las
+reglas de dibujo fuera, el navegador sin soporte las aplica igual y solo se queda sin el
+movimiento. Comprobado sobre el CSS compilado —que es donde se ve, no en el fuente—: no queda
+ni una regla de `.hito-anio` fuera del bloque.
+
+**La regla que sale de aquí:** en mejora progresiva, el estado sin soporte se elige mirando la
+página de ANTES, no el fotograma final de la animación. Se pierde el adorno; no se gana otro.
+
+**Y dos de calidad, aplicadas a la vez.** El comentario de la caída explicaba la curva pero no
+decía contra qué regla iba: `cubic-bezier(.55,0,1,.45)` es un `ease-in`, que el catálogo
+prohíbe en UI, y una excepción que no nombra la regla que rompe no es una excepción escrita
+sino una preferencia con buena prosa. Y el índice de cada fila cambiaba de color con el scroll:
+`color` no es propiedad de compositor, repintaba en cinco filas por frame, y no decía nada que
+el filete no dijera ya. Retirado.
+
+### Un hallazgo de método que costó dos intentos
+
+**El censo no cabe en una llamada de primer plano** —28 corridas con navegador se comen los 600
+segundos— **y en segundo plano solo arranca con el sandbox desactivado**. Sin él muere en dos
+segundos con `0xC0000142` al lanzar Chrome, que es un fallo de arranque de proceso y no del
+script.
+
+Y el primer diagnóstico fue falso: se anotó «no cabe en el reloj» cuando la segunda pasada
+había fallado en dos segundos. **Una sospecha no es una causa**, y la diferencia entre las
+llamadas que funcionaron y la que no era el sandbox, que ya estaba escrito para `agent-browser`
+y no se había heredado a lo que conduce el navegador por debajo.
