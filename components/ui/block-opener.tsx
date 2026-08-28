@@ -1,5 +1,7 @@
 // @pieza primitiva · design-system/10-composicion.tsx · La banda que abre un bloque de secciones: qué las agrupa y cuáles son.
 
+import { Fragment, type ReactNode } from "react";
+
 import { WRAP } from "@/components/ui/layout";
 
 /**
@@ -177,5 +179,55 @@ export function BlockOpener({
         </ul>
       </div>
     </section>
+  );
+}
+
+/* ─────────────────── El reparto: bandas + secciones ─────────────────── */
+
+/**
+ * LAS SECCIONES DE UNA PÁGINA, REPARTIDAS EN SUS BLOQUES (P50.88).
+ *
+ * El cableado de la banda —abrir el bloque y detrás sus secciones— entró en el
+ * Design System y en el Brand Kit por duplicado el mismo día (D125), y `qlty` lo
+ * mide: **15 líneas idénticas en dos sitios** (mass 101). Es el mismo argumento
+ * que subió el recorrido a la capa en `section-index.tsx`: la misma decisión
+ * escrita en dos sitios acaba diciendo dos cosas.
+ *
+ * Aquí van las CLAVES y nada más. El título y la entradilla de cada bloque son
+ * copy y llegan por `copy`; los ordinales de la banda salen de `paradas`, así que
+ * reordenar la página no puede dejar una banda anunciando secciones que ya no
+ * están debajo.
+ *
+ * Sigue sin saber nada de este sitio (frontera de D36): recibe listas, copy ya
+ * resuelto y nodos ya montados.
+ */
+export function SectionBlocks<K extends string, B extends string>({
+  bloques,
+  copy,
+  paradas,
+  secciones,
+}: {
+  bloques: readonly { id: B; claves: readonly K[] }[];
+  copy: Record<B, { title: string; lead: string }>;
+  paradas: readonly { clave: K; ordinal: string; label: string }[];
+  secciones: Record<K, ReactNode>;
+}) {
+  return (
+    <>
+      {bloques.map((bloque) => (
+        <Fragment key={bloque.id}>
+          <BlockOpener
+            title={copy[bloque.id].title}
+            lead={copy[bloque.id].lead}
+            items={paradas.filter((p) =>
+              (bloque.claves as readonly string[]).includes(p.clave),
+            )}
+          />
+          {bloque.claves.map((clave) => (
+            <Fragment key={clave}>{secciones[clave]}</Fragment>
+          ))}
+        </Fragment>
+      ))}
+    </>
   );
 }

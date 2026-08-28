@@ -29,10 +29,9 @@ import {
   WRAP,
 } from "@/components/ui/layout";
 import {
-  SectionCloser,
+  construirRecorrido,
   IndexNote,
   SectionIndex,
-  type SeccionMarco,
 } from "@/components/ui/section-index";
 import { Stat, StatRow } from "@/components/ui/stat-row";
 import { EmailLink } from "./contact-actions";
@@ -99,37 +98,14 @@ export function Accesibilidad({
   // arriba crece sola, y el heredado, porque depende de si la pieza lo trae. El
   // dato vive PEGADO a cada punto (`inherited`) y no en una lista aparte, que es
   // lo que impide que digan cosas distintas.
-  const paradas = ORDEN.map((clave, i) => {
-    const ordinal = String(i + 1).padStart(2, "0");
-    return { clave, id: `s${ordinal}`, ordinal, label: t[clave].indexLabel };
-  });
-
-  const marcos = Object.fromEntries(
-    paradas.map((parada, i) => {
-      const siguiente = paradas[i + 1];
-      const marco: SeccionMarco = {
-        id: parada.id,
-        kicker: `${parada.ordinal} — ${parada.label}`,
-        closer: (
-          <SectionCloser
-            position={i + 1}
-            total={paradas.length}
-            indexLabel={t.indice.closerLabel}
-            indexHref={`#${ANCLA_INDICE}`}
-            nextLabel={
-              siguiente
-                ? `${t.indice.nextLabel} ${siguiente.ordinal} · ${siguiente.label}`
-                : undefined
-            }
-            nextHref={siguiente ? `#${siguiente.id}` : undefined}
-            ariaLabel={t.indice.closerAriaLabel}
-            positionLabel={`${i + 1} ${t.indice.of} ${paradas.length}`}
-          />
-        ),
-      };
-      return [parada.clave, marco] as const;
-    }),
-  ) as Record<(typeof ORDEN)[number], SeccionMarco>;
+  /** El recorrido lo deriva la capa desde P50.88, igual que en sus dos hermanas.
+   *  El porqué y lo que se comprobó antes de unificar, en `ui/section-index.tsx`. */
+  const { paradas, marcos } = construirRecorrido(
+    ORDEN,
+    t,
+    t.indice,
+    ANCLA_INDICE,
+  );
 
   const total = t.measures.items.length;
   const heredados = t.measures.items.filter((m) => m.inherited).length;
