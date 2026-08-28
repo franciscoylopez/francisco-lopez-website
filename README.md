@@ -286,7 +286,8 @@ scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts
 scripts/check-*.ts         Los guardianes de CI. Todos comparten dos reglas de método:
                            buscan la AUSENCIA (no el patrón) y afirman cuánto han mirado
-scripts/indices.ts         Genera los tres índices derivados de sus cabeceras (D69)
+scripts/indices.ts         Genera los índices de markdown derivados de sus cabeceras (D69)
+scripts/inventario.ts      El inventario de components/ui/ y la política de qué se publica
 scripts/check-guardianes.ts  Un caso malo conocido por guardián. Muta archivos para
                            provocar el fallo, así que exige árbol limpio y restaura (D70)
 scripts/design-review/     Censo de pares de contraste del DOM servido

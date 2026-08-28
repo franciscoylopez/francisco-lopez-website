@@ -1,16 +1,23 @@
 /**
  * ¿Los índices son los derivados? — `npm run check:indices`, en CI.
  *
- * El porqué, el método y dónde vive cada índice, en `scripts/indices.ts`. Aquí
- * solo el veredicto, para los tres: los tres viven en la cabecera de su propio
- * archivo, y ninguno cuesta nada en el contexto de arranque.
+ * El porqué y el método, en `scripts/indices.ts` (los de markdown) y en
+ * `scripts/inventario.ts` (el de `components/ui/`, con su política). Aquí
+ * solo el veredicto. Los de markdown viven en la cabecera de su propio archivo y
+ * ninguno cuesta nada en el contexto de arranque.
+ *
+ * LOS DOS DOMINIOS SE VERIFICAN JUNTOS A PROPÓSITO (2026-08-28, P50.82), aunque se
+ * generen por separado: contestan **una sola pregunta** —«¿lo derivado cuadra con
+ * el disco?»— y partir el veredicto en dos pasos de CI daría dos rojos donde hay un
+ * problema. El argumento viejo para no partirlo («no mover la cifra de pasos de CI
+ * que publican el artículo, el PRD y el README») sí caducó: esa cifra la deriva
+ * `pasosDeCI()`. Este es mejor y es el que queda.
  *
  * Y AFIRMA CUÁNTO HA MIRADO, con su guarda de cero.
  */
 import { existsSync, readFileSync } from "node:fs";
 
 import {
-  archivosDePiezas,
   DECISIONES,
   decisiones,
   decisionesActual,
@@ -18,13 +25,16 @@ import {
   HISTORICOS,
   historico,
   historicoActual,
+} from "./indices";
+import {
+  archivosDePiezas,
   INTERNAS,
   INVENTARIO,
   inventario,
   inventarioActual,
   pieza,
   SIN_PUBLICAR,
-} from "./indices";
+} from "./inventario";
 
 type Caso = {
   /** Qué se indexa. */
@@ -119,7 +129,7 @@ for (const archivo of archivosDePiezas()) {
         "      `components/site/`, o uno de los dos valores que NO son una ruta:\n" +
         "      `pendiente` (deuda: se va a publicar y todavía no) e `interna`\n" +
         "      (decisión: no se publica). Los dos van también a su lista de\n" +
-        "      `scripts/indices.ts` —SIN_PUBLICAR o INTERNAS— con su motivo.",
+        "      `scripts/inventario.ts` —SIN_PUBLICAR o INTERNAS— con su motivo.",
     );
     continue;
   }

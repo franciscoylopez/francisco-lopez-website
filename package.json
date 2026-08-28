@@ -34,7 +34,7 @@
     "check:contexto": "tsx scripts/check-contexto.ts",
     "check:skills": "tsx scripts/check-skills.ts",
     "check:guardianes": "tsx scripts/check-guardianes.ts",
-    "indices": "tsx scripts/indices.ts --escribir",
+    "indices": "tsx scripts/indices.ts --escribir && tsx scripts/inventario.ts --escribir",
     "check:indices": "tsx scripts/check-indices.ts",
     "check:excepciones": "tsx scripts/check-excepciones.ts",
     "check:rutas": "tsx scripts/check-rutas.ts",

@@ -28,68 +28,20 @@
  * palabras diarias **por construcción**, así que era el único componente del
  * contexto de arranque que se alimentaba solo. Un techo no se defiende de eso.
  *
- * En los tres casos vale la misma regla: **si un título no basta para saber si
+ * En los cuatro casos vale la misma regla: **si un título no basta para saber si
  * abrir esa sección, se arregla LA CABECERA, nunca el índice.** El índice no
  * tiene texto propio, y eso es lo que impide que los dos títulos divierjan.
+ *
+ * AQUÍ SOLO HAY PROSA (2026-08-28, P50.82). El inventario de `components/ui/` se
+ * generaba también desde aquí y se ha ido a `scripts/inventario.ts`: no indexa
+ * cabeceras de markdown sino la primera línea de archivos de código, y arrastraba
+ * consigo un tercer inquilino que no era un índice en absoluto —la POLÍTICA de qué
+ * piezas pueden estar sin publicar—. Lo que los dos siguen compartiendo, el bloque
+ * delimitado, vive en `scripts/indices/bloque.ts`.
  */
-import { readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 
-// --- El bloque, que es el mismo para los tres ---------------------------------
-
-const ABRE =
-  "<!-- ÍNDICE · lo genera `npm run indices`; no se edita a mano -->";
-const CIERRA = "<!-- FIN ÍNDICE -->";
-
-/** Las líneas de índice que hoy tiene un archivo en su cabecera, si tiene alguno. */
-function bloqueActual(archivo: string, esEntrada: RegExp): string[] {
-  const lineas = readFileSync(archivo, "utf8").split("\n");
-  const ini = lineas.indexOf(ABRE);
-  const fin = lineas.indexOf(CIERRA);
-  if (ini < 0 || fin < 0 || fin < ini) return [];
-  return lineas.slice(ini + 1, fin).filter((l) => esEntrada.test(l));
-}
-
-/**
- * Dónde se inserta: **después del último bloque de cita de la cabecera** y antes
- * de la primera sección. Los tres archivos abren con un `>` que explica qué son y
- * a dónde ir si buscas otra cosa; ese texto va primero porque orienta, y el índice
- * detrás porque enruta.
- */
-function escribeIndice(archivo: string, entradas: string[]): number {
-  const lineas = readFileSync(archivo, "utf8").split("\n");
-  const iniViejo = lineas.indexOf(ABRE);
-  const finViejo = lineas.indexOf(CIERRA);
-  const sinIndice =
-    iniViejo >= 0 && finViejo > iniViejo
-      ? [...lineas.slice(0, iniViejo), ...lineas.slice(finViejo + 1)]
-      : lineas;
-
-  const primeraSeccion = sinIndice.findIndex((l) => /^## /.test(l));
-  if (primeraSeccion < 0) {
-    throw new Error(`${archivo} no tiene ninguna cabecera de nivel 2.`);
-  }
-
-  // El blanco se normaliza SOLO en la costura, nunca en todo el archivo. Con un
-  // `replace(/\n{3,}/g)` global el generador reescribía párrafos que no son
-  // suyos: al bajar aquí el índice de decisiones se comió tres líneas en blanco
-  // repartidas por `DECISIONS.md` y dejó en rojo a `check:articulo`, que vigila
-  // justo esas entradas. Un guardián que salta por un blanco ajeno es un
-  // guardián que se acaba ignorando.
-  const cabecera = sinIndice.slice(0, primeraSeccion);
-  while (cabecera.at(-1)?.trim() === "") cabecera.pop();
-
-  const salida = [
-    ...cabecera,
-    "",
-    ABRE,
-    ...entradas,
-    CIERRA,
-    "",
-    ...sinIndice.slice(primeraSeccion),
-  ];
-  writeFileSync(archivo, salida.join("\n"), "utf8");
-  return entradas.length;
-}
+import { bloqueActual, escribeIndice } from "./indices/bloque";
 
 // --- El índice de decisiones, en la cabecera de DECISIONS.md ------------------
 
@@ -179,196 +131,10 @@ export function historicoActual(archivo: string): string[] {
   return bloqueActual(archivo, /^- \[/);
 }
 
-// --- El inventario de `components/ui/` ----------------------------------------
-
-/**
- * EL CUARTO ÍNDICE, y el único que no indexa prosa: indexa una CARPETA.
- *
- * El paso 1 de la «Regla de construcción» de `CLAUDE.md` es «¿existe ya la
- * pieza?», y se contesta leyendo una lista. Esa lista estaba escrita a mano en
- * CINCO sitios y ninguno acertaba: `design-review` decía cinco capas, `PRD-Live`
- * y `README` siete piezas, `CLAUDE.md` nombraba diez, y en disco había quince.
- * Dos piezas —`page-closer` y `video-embed`— no salían en ningún inventario, así
- * que la regla que gobierna todo lo que se construye mandaba mirar donde no
- * estaban. Es la regla 1 de `BRAND.md` aplicada a sí misma.
- *
- * LAS TRES CIFRAS NO ERAN LA MISMA MAL CONTADA, y por eso no se unifican (regla 4
- * de `BRAND.md`): siete es el **núcleo** del sistema, dos son la **capa de
- * artículo** que D76 dejó explícitamente fuera del núcleo, y el resto son
- * **primitivas**. Lo que faltaba no era un número común: era el nombre de cada
- * grupo, y que el recuento saliera del disco.
- *
- * CADA PIEZA APORTA SU PROPIA LÍNEA, en la primera línea del archivo:
- *
- *     // @pieza <grupo> · <publicación> · <una frase>
- *
- * Misma regla que los otros tres índices: el índice no tiene texto propio, así
- * que si una frase no basta para saber si esa es la pieza, se arregla LA LÍNEA.
- *
- * LA PUBLICACIÓN TIENE TRES VALORES, NO DOS (2026-08-25). Con dos —una ruta o
- * `pendiente`— no había forma de decir «esta pieza NO se publica, y este es el
- * motivo»: `rich.tsx` iba a salir como deuda para siempre, o había que publicar
- * una sección que no enseña nada solo para que el contador quedara a cero, que es
- * el metro mandando sobre el criterio en vez de al revés. El tercer valor es
- * `interna`, y el recuento las separa: «N publicadas · N internas · N
- * pendientes». Así `pendiente` vuelve a significar UNA sola cosa: deuda.
- *
- * GRUPO Y SECCIÓN SON EJES INDEPENDIENTES, y queda dicho a propósito. El grupo
- * dice de qué capa es la pieza; la publicación, dónde se la ve funcionando. Que
- * `live-stat.tsx` sea una PRIMITIVA y se demuestre dentro de §15 «Artículo
- * largo» no es una incoherencia que haya que corregir: su espécimen vive donde
- * la pieza se usa, que es lo que hace que la demo sea real. Forzarlos a
- * concordar movería especímenes buenos a secciones donde no ilustran nada.
- */
-export const PIEZAS_DIR = "components/ui";
-export const INVENTARIO = "components/ui/README.md";
-
-export type Pieza = {
-  archivo: string;
-  grupo: string;
-  /** Ruta bajo `components/site/`, o `pendiente`, o `interna`. */
-  publica: string;
-  frase: string;
-};
-
-const GRUPOS = ["núcleo", "artículo", "primitiva"] as const;
-
-/**
- * Las piezas que hoy declaran `pendiente`, con el motivo. Es la lista que hace
- * que un archivo NUEVO sin sección salga en rojo: si no está aquí y declara
- * `pendiente`, falla. Añadir una línea es un acto visible en el diff, que es
- * justo lo que no era «se me olvidó publicarla».
- *
- * EL MOTIVO ES UN DATO, NO UN COMENTARIO (2026-08-25): la lista y sus motivos
- * estaban escritos dos veces —el array, y el bloque de arriba que lo describía—,
- * que es la trampa de la regla 5 de `BRAND.md`. Ahora el motivo se DERIVA al
- * inventario, así que quien contesta el paso 1 de la «Regla de construcción» lee
- * por qué esa pieza no tiene sección sin abrir este archivo.
- *
- * ESTÁ VACÍA, y eso es el estado bueno, no un metro roto: la guarda de cero de
- * `check:indices` mira los ARCHIVOS de la carpeta, que nunca son cero. Que aquí
- * no haya nadie significa que ninguna pieza del sistema está sin documentar.
- * `stat-row.tsx` salió el 2026-08-22 (§11); `info-card`, `page-closer` y
- * `video-embed`, el 2026-08-25, ya con sección propia.
- */
-export const SIN_PUBLICAR: Record<string, string> = {};
-
-/**
- * Y las piezas que NO se publican, con el motivo. Es el tercer valor del
- * vocabulario, y lo que lo separa del de arriba es el tiempo verbal: `pendiente`
- * es deuda —se va a publicar y todavía no—, `interna` es una DECISIÓN tomada.
- * Con dos valores las dos se contaban juntas, así que una pieza que no se puede
- * publicar salía como deuda para siempre.
- *
- * La condición es la del Design System entero: la página enseña LAS PIEZAS
- * REALES como demo. Una pieza que no pinta nada no tiene demo posible, así que
- * publicarla sería escribir una sección falsa para bajar un contador.
- */
-export const INTERNAS: Record<string, string> = {
-  "marcas.tsx":
-    "no pinta nada: envuelve los nombres propios en un atributo invisible, y " +
-    "una sección que la enseñara mostraría un texto idéntico al de al lado. La " +
-    "vigila `npm run check:marcas` sobre las 28 variantes",
-  "rich.tsx":
-    "no tiene aspecto propio que enseñar: es infraestructura de texto (D23), y " +
-    "lo que de ella sí se ve —el enlace de contenido— se publica en §08",
-};
-
-/** Los archivos de la carpeta, sin el README generado. */
-export function archivosDePiezas(): string[] {
-  return readdirSync(PIEZAS_DIR)
-    .filter((f: string) => /\.tsx?$/.test(f))
-    .sort();
-}
-
-/** La declaración de una pieza, o `undefined` si no la lleva. */
-export function pieza(archivo: string): Pieza | undefined {
-  const texto = readFileSync(`${PIEZAS_DIR}/${archivo}`, "utf8");
-  const m = /^\/\/ @pieza ([^·]+) · ([^·]+) · (.+)$/m.exec(texto);
-  if (!m) return undefined;
-  return {
-    archivo,
-    grupo: (m[1] ?? "").trim(),
-    publica: (m[2] ?? "").trim(),
-    frase: (m[3] ?? "").trim(),
-  };
-}
-
-/** Las líneas del inventario, agrupadas y derivadas de las declaraciones. */
-export function inventario(): string[] {
-  const piezas = archivosDePiezas()
-    .map(pieza)
-    .filter((p): p is Pieza => p !== undefined);
-
-  const lineas: string[] = [];
-  for (const grupo of GRUPOS) {
-    const delGrupo = piezas.filter((p) => p.grupo === grupo);
-    if (!delGrupo.length) continue;
-    lineas.push(`### ${grupo} · ${delGrupo.length}`);
-    for (const p of delGrupo) {
-      // Los tres valores del vocabulario, y los dos que no son una ruta LLEVAN
-      // SU MOTIVO al inventario: «sin publicar» a secas no dice si es deuda o
-      // criterio, que es justo la distinción que el tercer valor vino a hacer.
-      const donde =
-        p.publica === "pendiente"
-          ? `sin publicar — ${SIN_PUBLICAR[p.archivo] ?? "sin motivo declarado"}`
-          : p.publica === "interna"
-            ? `interna — ${INTERNAS[p.archivo] ?? "sin motivo declarado"}`
-            : `[${p.publica.replace(/\.tsx?$/, "")}](../site/${p.publica})`;
-      lineas.push(`- **\`${p.archivo}\`** — ${p.frase} *(${donde})*`);
-    }
-  }
-  return lineas;
-}
-
-/** El inventario que hoy tiene el README, si tiene alguno. */
-export function inventarioActual(): string[] {
-  return bloqueActual(INVENTARIO, /^(### |- \*\*`)/);
-}
-
-/**
- * El README del inventario se genera ENTERO: no tiene parte escrita a mano que
- * preservar, y así no hay dónde escribir una línea que el disco no respalde.
- */
-function escribeInventario(): number {
-  const lineas = inventario();
-  // EL BLANCO ANTES DE CADA GRUPO LO PONE QUIEN PRESENTA, NUNCA `inventario()`.
-  // Esas líneas son la UNIDAD DE COMPARACIÓN de `check:indices`: metiéndole
-  // cadenas vacías, `bloqueActual` las filtraría al leer y el check diría que el
-  // índice no coincide consigo mismo. El blanco es presentación —CommonMark deja
-  // que un encabezado corte una lista, así que renderiza igual—, y es solo que
-  // pegado al último ítem del grupo anterior se lee apretado en GitHub, que desde
-  // D68 es donde de verdad se navegan estos documentos.
-  const conAire = lineas.flatMap((l, i) =>
-    l.startsWith("### ") && i > 0 ? ["", l] : [l],
-  );
-  const salida = [
-    "# `components/ui/` — el inventario de piezas",
-    "",
-    "> **Derivado, no escrito.** Lo genera `npm run indices` leyendo la primera",
-    "> línea de cada archivo (`// @pieza grupo · publicación · frase`) y lo",
-    "> comprueba `npm run check:indices` en cada PR. Para cambiar una frase se",
-    "> edita el archivo, nunca este README.",
-    ">",
-    "> **Es la lista que contesta el paso 1 de la «Regla de construcción»**",
-    "> (`CLAUDE.md`): ¿existe ya la pieza? Los tres grupos no son la misma cifra",
-    "> mal contada: el **núcleo** es el sistema, la capa de **artículo** quedó",
-    "> fuera de él a propósito (D76) y las **primitivas** son piezas sueltas.",
-    "",
-    ABRE,
-    ...conAire,
-    CIERRA,
-    "",
-  ];
-  writeFileSync(INVENTARIO, salida.join("\n"), "utf8");
-  return lineas.filter((l) => l.startsWith("- ")).length;
-}
-
 // --- Escritura ----------------------------------------------------------------
 
 if (process.argv.includes("--escribir")) {
   const escritos: Array<[string, number]> = [
-    [INVENTARIO, escribeInventario()],
     [DECISIONES, escribeIndice(DECISIONES, decisiones())],
     ...HISTORICOS.map((archivo): [string, number] => [
       archivo,
