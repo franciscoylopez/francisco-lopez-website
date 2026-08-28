@@ -650,7 +650,7 @@ async function main() {
       `  axe        ${reglasEvaluadas.size} reglas evaluadas · ${Object.keys(DELEGADAS).length} delegadas\n` +
       `  a mano     enlace de salto · un h1 · un main · breadcrumb · canonical y hreflang · OG\n` +
       `  tarjetas   ${tarjetasResueltas} \`?card=\` resueltos contra el despacho de \`/api/og\`\n` +
-      `  permalinks ${permalinksVistos} a una línea de un .md del repo, todos con ?plain=1\n` +
+      `  permalinks ${permalinksVistos} a una línea de un .md del repo, comprobado su ?plain=1\n` +
       `  JSON-LD    ${bloquesLd} bloques · ${idsDeclarados.size} \`@id\` declarados · ${idsReferenciados.size} referenciados\n`,
   );
   for (const [id, motivo] of Object.entries(DELEGADAS)) {
