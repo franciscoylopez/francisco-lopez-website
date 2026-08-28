@@ -179,6 +179,7 @@
 - D141 · El 404 de un enlace saliente lo sirve un tercero, así que no sale en ningún gate
 - D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba
 - D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia
+- D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8518,3 +8519,58 @@ diagrama habría dibujado 23 pasos habiendo 24.
 **No lleva caso malo en `check:guardianes`, y es deliberado:** no es un guardián. Su modo de
 fallo no es dar verde sobre algo roto, sino callarse — y contra eso está la guarda del punto 4,
 que es lo que sí se puede comprobar.
+
+---
+
+## D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo — 2026-08-28
+
+**La invariante.** Brand Kit, Design System, Accesibilidad y Contacto comparten
+`md:min-h-[calc(100svh-5rem)]` y centran su grupo de apertura con `my-auto`. **Centrar reparte el
+sobrante arriba y abajo, así que solo es seguro mientras los grupos midan lo mismo.** Está
+escrito con esas palabras en `components/ui/layout.ts`.
+
+**Y aun así se rompió tres veces, y las tres las encontró Francisco cambiando de pestaña:**
+grupos a 428/484/477; Accesibilidad a 505 contra 461 al ganar un párrafo de fecha (P70.29); y
+Contacto a 297 por estructura, que se cerró con un SUELO de 29rem y no compactando (P70.35). Una
+regla escrita, tres incumplimientos y cero guardianes: es el punto 1 de `BRAND.md` §Cómo se
+escribe una regla —la condición hay que comprobarla **donde la cosa ocurre**, y aquí ocurre en
+píxeles pintados.
+
+**Decisión.** `npm run pliegue`, **fuera de CI** junto al censo y a `psi` porque necesita
+navegador y servidor delante. Mide a **1920×1080** el alto del grupo y la posición del `h1` de
+cada apertura, y falla si se separan más de **8px**.
+
+**Cuatro elecciones, y ninguna es obvia.**
+
+- **Quién entra no se escribe.** Se recorren las páginas del registro (`PAGE_SLUGS`, D72) y entra
+  la que **tenga grupo de pliegue, detectado en el DOM**. Una apertura nueva entra sola; una que
+  deje de usarlo, sale sola. Las diez que no lo tienen se **cuentan y se nombran**, no se saltan.
+- **Se busca por el TEXTO del atributo `class`, no con un selector CSS.** Las utilidades de
+  Tailwind llevan corchetes y dos puntos (`md:min-h-[29rem]`), que en un selector hay que
+  escapar, y el escapado mal puesto ya rompió cuatro comprobadores de este repo en una sola
+  tarea. Leer el atributo como texto no tiene escapado que equivocar.
+- **La tolerancia sale de medir el ruido**, no de elegirla: las cuatro miden hoy **464 y 389
+  exactos**, y las tres regresiones reales fueron de 44, 56 y 164 px. 8 las caza todas sin saltar
+  por un redondeo subpíxel.
+- **El viewport es 1920×1080 a propósito.** Es donde `md:` aplica y donde el sobrante del
+  centrado es mayor. El eje estrecho —1280×618— es de `viewport-verifier` (D52), y mide otra
+  cosa: que la apertura no **desborde**. Aquí se mide que las cuatro **coincidan**.
+
+**Validado reproduciendo la regresión, no inventándola.** Se reinyectó en el DOM el párrafo de
+fecha que causó P70.29 y el metro devolvió **505 / 368** — las cifras exactas que quedaron
+escritas en `layout.ts` el día de aquella regresión. Contra los 464/389 de las otras tres, son 41
+y 21 px de separación: rojo con holgura sobre la tolerancia de 8.
+
+**Y de paso, el conductor del navegador dejó de estar escrito dos veces.** La resolución del
+binario de `agent-browser` —con su rodeo por la CVE-2024-27980 en Windows— y el desenvuelto doble
+del JSON que devuelve `eval` los había escrito el censo. Ahora viven en
+`scripts/navegador/agent-browser.ts` y los comparten los dos: dos conductores se arreglan por
+separado el día que el binario cambie de sitio.
+
+**Un cuelgue que cuesta una hora si no está escrito:** `set viewport` **sin ninguna página
+abierta se queda esperando**, no falla. Se abre primero y solo entonces se fija el tamaño.
+
+**Lo que NO cubre:** las aperturas que comparten el andamiaje del pliegue pero no esta familia
+—el deep-dive, «Cómo se ha creado» y la home—. Sus aperturas son tipográficas, de alto constante,
+no se comparan de un vistazo con estas cuatro y cada una tiene su hueco razonado en su archivo.
+Esa exclusión no está escrita en el guardián: **sale sola**, porque no llevan `FOLD_GROUP`.

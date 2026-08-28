@@ -47,7 +47,7 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
   origen (la CSP no cambió) y por el SMTP de la propia cuenta, sin encargado nuevo.
 - **El deep-dive por experiencia**: el índice `/trayectoria` y las cinco páginas de
   `/trayectoria/[slug]` (Emendu, KUOTIP, INDYA, Freepik y TheTool). Catorce por idioma son
-  las **28 variantes** que usan `gate:html`, el sitemap y el recorrido de `design-review`.
+  las **28 variantes** que recorren los gates.
 
 Y con ellas: **CV en PDF bilingüe** descargable con identidad de marca y generado por
 código · **SEO técnico y Open Graph** por página · **medición** (GA4/GTM con
@@ -69,10 +69,10 @@ descarga** (D65).
    claro/oscuro; por debajo de 768px los tres enlaces colapsan tras el menú.
 2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio. **El
    punto final del titular es la firma de marca** (D137): cae y se asienta al cargar, en
-   morado, y es el único gesto del sitio que existe para ser recordado.
+   morado.
 3. **Hitos** — 5 reconocimientos, cronológico descendente; chip "Exit" en el de TheTool.
    Un filete crece bajo cada año conforme la fila cruza: es la **textura** que acompaña a
-   la firma, subordinada a ella a propósito (D137).
+   la firma (D137).
 4. **Cómo trabajo** — 6 etapas: Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica.
 5. **Más allá del PM** — banda de manifiesto (founder + growth), fondo de marca invertido.
 6. **Trayectoria** — bloque Producto + bloque Experiencia previa (Marketing & Growth); logos reales monocromo; el rol enlaza al deep-dive; CTA Descargar CV.
@@ -92,8 +92,8 @@ descarga** (D65).
   sobre sí mismo.
 - **Las superficies de contacto son dos, y la diferencia es deliberada** (D29): la franja
   de la home y el cierre de Sobre mí llevan a `/contacto`; el «reportar una barrera» de
-  Accesibilidad **no**, y enseña la dirección escrita con su asunto. Obligar a usar el
-  formulario para reportar una barrera sería una trampa el día que la barrera fuera él.
+  Accesibilidad **no**, y enseña la dirección escrita. Obligar a usar el formulario para
+  reportar una barrera sería una trampa el día que la barrera fuera él.
 - **Una página no se escribe: se compone.** `pageMetadata` y `<PageShell>` derivan la
   metadata, el JSON-LD y el marco (D45/D46), las catorce se **prerenderizan** por locale
   (D48), y **qué páginas hay lo dice un solo sitio**, contrastado con el disco por un
@@ -170,10 +170,11 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | `npm test` | La lógica que no necesita navegador. Son dos: el formulario, medido sobre lo que nodemailer **emite**, y las reglas del tablero | CI | D101/D107 |
 | `gate:html` | El HTML servido de las 28 variantes antes y después de un refactor: diff vacío = transparente por construcción | a mano | D42/D45 |
 | `check:articulo` | Que ninguna sección del artículo dependa de una fuente que se movió, **nombrando la sección** en el PR que la mueve; `articulo:novedades` dice qué líneas. Sella aparte el copy, contra `ARTICLE_UPDATED`, que es el `dateModified` que ve Google | CI | D84/D103/D110 |
-| `check:accesibilidad` | Lo mismo para `/accesibilidad`: sus cinco bloques con fuente declarada, y que las dos cifras del arnés que publica en prosa cuadren con los casos que hay. **Fuera:** lo que es una MEDICIÓN y no un archivo (los pares sobre foto, el desbordamiento bajo 320) | CI | D140 |
-| `check:og` | Que las 8 tarjetas OG digan lo que dice su página en los dos idiomas, salvo lo declarado distinto **con su motivo** — y que lo declarado siga siéndolo. **Fuera:** el dibujo, que es `check:marco` | CI | D142 |
+| `check:accesibilidad` | Lo mismo para `/accesibilidad`: sus cinco bloques con fuente declarada, y que las dos cifras del arnés que publica cuadren con los casos que hay. **Fuera:** lo que es MEDICIÓN y no archivo (los pares sobre foto, el desbordamiento bajo 320) | CI | D140 |
+| `check:og` | Que las 8 tarjetas OG digan lo que su página, en los dos idiomas, salvo lo declarado distinto **con su motivo** — y que lo declarado siga siéndolo. **Fuera:** el dibujo | CI | D142 |
 | `censo` | **Dos pases** sobre las páginas del registro × dos temas: los pares de TEXTO (1.4.3/1.4.6) y el **contorno de cada control** (1.4.11, 3:1), que axe no implementa. Deja sello, y `check:palette` lo compara en cada PR | a mano | D85/D97/D90 |
-| `check:enlaces` | Que las URLs externas que el sitio publica sigan respondiendo, sacadas del disco y no de una lista. **Fuera de su juicio:** el 403 y el 999, que son escudo antibot y no un enlace muerto | a mano | D141 |
+| `check:enlaces` | Que las URLs externas del sitio sigan respondiendo, sacadas del disco y no de una lista. **Fuera de su juicio:** el 403 y el 999, escudo antibot y no enlace muerto | a mano | D141 |
+| `pliegue` | Que las aperturas que comparten pliegue midan lo mismo —grupo y `h1`— a 1920×1080; entra la que lo tenga, detectado en el DOM. **Fuera:** que no desborde, que es `viewport-verifier` | a mano | D144 |
 | `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99 |
 | `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**. **Fuera:** el ZIP, que se genera en el build | CI | D119 |
 | `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, y que el embalse transversal no crezca contra el sello del cierre anterior. **Fuera:** si el CUPO se cumplió, que el esquema del tablero no permite ver | a mano | D107/D138 |
