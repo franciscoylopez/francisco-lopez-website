@@ -481,7 +481,7 @@ export function Pullquote({
  * (51,89), o sea que la cita MENOR marcaba más que la mayor. La jerarquía no
  * estaba floja, estaba invertida, y solo en un tema. Al 55% del mismo morado
  * que su hermana, la mezcla ocurre contra el fondo real y la proporción se
- * mantiene: 18,47 claro y 29,99 oscuro, un 55% y un 58% de la barra mayor. El
+ * mantiene: 18,47 claro y 29,84 oscuro, un 55% y un 57% de la barra mayor. El
  * claro no se mueve (18,10 → 18,47, indistinguible); lo que se arregla es el
  * oscuro. No le toca el 3:1 de 1.4.11: la cita ya se identifica sin el filete
  * —flota, va en negrita y tiene su propia medida—, así que el filete acompaña,
