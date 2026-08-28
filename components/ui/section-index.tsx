@@ -6,6 +6,7 @@ import { Fragment, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 import { chromeLinkVariants } from "./chrome";
+import { SECTION, WRAP } from "./layout";
 import { eyebrowVariants, LEADING } from "./heading";
 
 // LA NAVEGACIÓN DE UNA PÁGINA CON PARADAS (P70.38, 2026-08-26).
@@ -317,5 +318,160 @@ export function SectionCloser({
         </a>
       ) : null}
     </nav>
+  );
+}
+
+/* ─────────────────── El recorrido, construido una sola vez ─────────────────── */
+
+/**
+ * UNA PARADA YA DERIVADA. Es un `IndexItem` con su clave: lo que la página
+ * necesita para indexar por nombre (`marcos.botones`) sin dejar de servir tal
+ * cual como `items` del índice y de la banda de bloque.
+ */
+export type Parada<K extends string = string> = {
+  clave: K;
+  id: string;
+  ordinal: string;
+  label: string;
+};
+
+/**
+ * El copy del bloque de índice ENTERO: lo que el recorrido necesita (arriba) más
+ * lo que rotula la rejilla. Es la rama `indice` del diccionario de las tres
+ * páginas del sistema, tal cual.
+ */
+export type IndiceDict = RecorridoDict & {
+  kicker: string;
+  ariaLabel: string;
+  note: string;
+  sectionsSuffix: string;
+};
+
+/** El copy que el recorrido necesita, y que la pieza no puede inventarse. */
+export type RecorridoDict = {
+  closerLabel: string;
+  nextLabel: string;
+  of: string;
+  closerAriaLabel: string;
+};
+
+/**
+ * EL RECORRIDO DE UNA PÁGINA CON PARADAS, DERIVADO DE SU ORDEN (P50.88).
+ *
+ * Estaban las mismas 26 líneas escritas TRES VECES —Design System, Brand Kit y
+ * Accesibilidad—, y `qlty` las medía como duplicación idéntica (mass 163). Es la
+ * Regla de construcción de `CLAUDE.md` aplicada a la capa de página en vez de a un
+ * control: si un caso se repite, sube a la capa. El modo de fallo no es estético
+ * y está escrito en `BRAND.md` §Cómo se escribe una regla (5): lo que hoy es
+ * idéntico deja de serlo al primer retoque, y entonces hay que acordarse de tres
+ * sitios.
+ *
+ * EL CUARTO CONSUMIDOR NO ENTRA, y se comprobó antes de unificar (regla 4 de
+ * `BRAND.md`): las paradas del artículo salen de un array del diccionario con
+ * `id` y `ordinal` propios —más un `meta` con su tiempo de lectura— y su cierre
+ * se monta por sección dentro del bucle. No es el mismo cálculo, así que el
+ * constructor sirve a tres y no a cuatro. No hay que forzarlo.
+ *
+ * Devuelve el `Record` INDEXADO POR CLAVE y no por posición: en el JSX se lee
+ * `marcos.botones`, que no puede desalinearse al insertar una sección en medio
+ * como sí haría un `marco(6)`.
+ *
+ * El eyebrow se compone con una PLANTILLA y no con dos nodos JSX a propósito:
+ * React separa nodos de texto adyacentes con `<!-- -->`, y el rótulo que hoy
+ * sirve el sitio es una sola cadena.
+ */
+export function construirRecorrido<K extends string>(
+  orden: readonly K[],
+  labels: Record<K, { indexLabel: string }>,
+  indice: RecorridoDict,
+  anclaIndice: string,
+): { paradas: Parada<K>[]; marcos: Record<K, SeccionMarco> } {
+  const paradas: Parada<K>[] = orden.map((clave, i) => {
+    const ordinal = String(i + 1).padStart(2, "0");
+    return {
+      clave,
+      id: `s${ordinal}`,
+      ordinal,
+      label: labels[clave].indexLabel,
+    };
+  });
+
+  const marcos = Object.fromEntries(
+    paradas.map((parada, i) => {
+      const siguiente = paradas[i + 1];
+      const marco: SeccionMarco = {
+        id: parada.id,
+        kicker: `${parada.ordinal} — ${parada.label}`,
+        closer: (
+          <SectionCloser
+            position={i + 1}
+            total={paradas.length}
+            indexLabel={indice.closerLabel}
+            indexHref={`#${anclaIndice}`}
+            nextLabel={
+              siguiente
+                ? `${indice.nextLabel} ${siguiente.ordinal} · ${siguiente.label}`
+                : undefined
+            }
+            nextHref={siguiente ? `#${siguiente.id}` : undefined}
+            ariaLabel={indice.closerAriaLabel}
+            positionLabel={`${i + 1} ${indice.of} ${paradas.length}`}
+          />
+        ),
+      };
+      return [parada.clave, marco] as const;
+    }),
+  ) as Record<K, SeccionMarco>;
+
+  return { paradas, marcos };
+}
+
+/**
+ * EL BLOQUE DE ÍNDICE DE UNA PÁGINA CON PARADAS — la sección entera, con su ancla
+ * y su nota (P50.88, tercera familia).
+ *
+ * `qlty` la medía como 23 líneas similares en dos sitios (mass 84), y en realidad
+ * eran TRES con las hermanas: mismo `<section>`, mismo `WRAP`, mismo `SectionIndex`
+ * y misma `IndexNote` con la única figura que estas páginas publican, el recuento
+ * de secciones — que además sale de `items.length`, así que nadie lo escribe.
+ *
+ * `scroll-mt-[5rem]`: el nav es sticky y sin margen de scroll el ancla deja la
+ * sección arrancando por debajo de él. Es la misma distancia que usa el riel para
+ * librarlo (`top-[5rem]`), así que si el nav cambia de alto se mueven los dos
+ * juntos.
+ *
+ * SIN `meta` POR CELDA, y no es un olvido: en el artículo esa línea es el tiempo
+ * de lectura, y en las tres páginas del sistema no hay prosa que cronometrar.
+ * Publicar un tiempo calculado sobre especímenes sería inventarse una cifra, que
+ * es contra lo que existe D38 — por eso `meta` es opcional desde P70.38. El
+ * artículo, que sí lo publica, monta su índice a mano: no pasa por aquí.
+ */
+export function SectionIndexBlock({
+  id,
+  t,
+  items,
+}: {
+  id: string;
+  t: IndiceDict;
+  items: IndexItem[];
+}) {
+  return (
+    <section id={id} className={cn(SECTION, "scroll-mt-[5rem]")}>
+      <div className={WRAP}>
+        <SectionIndex
+          kicker={t.kicker}
+          ariaLabel={t.ariaLabel}
+          items={items}
+          intro={
+            <IndexNote
+              note={t.note}
+              figures={[
+                { value: String(items.length), suffix: t.sectionsSuffix },
+              ]}
+            />
+          }
+        />
+      </div>
+    </section>
   );
 }

@@ -200,6 +200,9 @@ export function SobreMi({
               className="absolute inset-0 bg-[linear-gradient(to_top,rgba(0,0,0,0.85)_0,rgba(0,0,0,0.55)_min(60%,13rem),transparent_min(100%,22rem))]"
             />
             <figcaption className="absolute inset-x-0 bottom-0 p-[clamp(1.5rem,4vw,3rem)]">
+              {/* `text-balance` SE QUEDA (P50.90): la capa da `pretty` a un `<p>`
+                  y esta apertura se lee como titular sin ser un encabezado. No
+                  repite a la capa, la contradice a propósito. */}
               <p className="font-display m-0 max-w-[24ch] text-[clamp(1.5rem,3.4vw,2.4rem)] leading-[1.15] font-semibold tracking-[-0.02em] text-balance text-white">
                 {t.quote}
               </p>

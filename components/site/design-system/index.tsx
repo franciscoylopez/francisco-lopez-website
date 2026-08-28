@@ -1,15 +1,12 @@
-import { Fragment, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { BlockOpener } from "@/components/ui/block-opener";
-import { SECTION, WRAP } from "@/components/ui/layout";
+import { SectionBlocks } from "@/components/ui/block-opener";
 import {
-  IndexNote,
-  SectionCloser,
-  SectionIndex,
+  construirRecorrido,
+  SectionIndexBlock,
 } from "@/components/ui/section-index";
 import type { Locale } from "@/lib/i18n/config";
-import { cn } from "@/lib/utils";
 
 import { type BreadcrumbDict } from "../breadcrumb";
 import { RelatedPages, type RelatedDict } from "../related-pages";
@@ -26,7 +23,6 @@ import { Formulario } from "./09-formulario";
 import { Composicion } from "./10-composicion";
 import { Accesibilidad } from "./11-accesibilidad";
 import { ArticuloLargo } from "./12-articulo";
-import type { SeccionMarco } from "./shared";
 
 type DesignSystemDict = Dictionary["designSystem"];
 
@@ -129,49 +125,15 @@ export function DesignSystem({
 }) {
   const t = dict;
 
-  // Las paradas, derivadas del orden: el ordinal es la POSICIÓN y el rótulo lo
-  // pone el copy. Nada de esto se escribe dos veces.
-  const paradas = ORDEN.map((clave, i) => {
-    const ordinal = String(i + 1).padStart(2, "0");
-    return { clave, id: `s${ordinal}`, ordinal, label: t[clave].indexLabel };
-  });
-
-  /**
-   * El marco de cada parada, INDEXADO POR SU CLAVE y no por su posición: en el
-   * JSX se lee `marco={marcos.botones}`, que no puede desalinearse al insertar una
-   * sección en medio como sí haría un `marco(6)`.
-   *
-   * El eyebrow se compone con una PLANTILLA y no con dos nodos JSX a propósito:
-   * React separa nodos de texto adyacentes con `<!-- -->`, y el rótulo que hoy
-   * sirve el sitio es una sola cadena. Así el HTML de las doce cabeceras no
-   * cambia ni un byte al mover el ordinal del diccionario al código.
-   */
-  const marcos = Object.fromEntries(
-    paradas.map((parada, i) => {
-      const siguiente = paradas[i + 1];
-      const marco: SeccionMarco = {
-        id: parada.id,
-        kicker: `${parada.ordinal} — ${parada.label}`,
-        closer: (
-          <SectionCloser
-            position={i + 1}
-            total={paradas.length}
-            indexLabel={t.indice.closerLabel}
-            indexHref={`#${ANCLA_INDICE}`}
-            nextLabel={
-              siguiente
-                ? `${t.indice.nextLabel} ${siguiente.ordinal} · ${siguiente.label}`
-                : undefined
-            }
-            nextHref={siguiente ? `#${siguiente.id}` : undefined}
-            ariaLabel={t.indice.closerAriaLabel}
-            positionLabel={`${i + 1} ${t.indice.of} ${paradas.length}`}
-          />
-        ),
-      };
-      return [parada.clave, marco] as const;
-    }),
-  ) as Record<(typeof ORDEN)[number], SeccionMarco>;
+  // Las paradas y sus marcos, derivados del orden: el ordinal es la POSICIÓN y el
+  // rótulo lo pone el copy. Nada de esto se escribe dos veces — ni aquí, ni en las
+  // dos páginas hermanas: el cálculo vive en la capa desde P50.88.
+  const { paradas, marcos } = construirRecorrido(
+    ORDEN,
+    t,
+    t.indice,
+    ANCLA_INDICE,
+  );
 
   /**
    * Cada sección con SU rebanada del diccionario, indexada por su clave. Existe
@@ -232,52 +194,17 @@ export function DesignSystem({
         homeHref={homeHref}
       />
 
-      {/* `scroll-mt-[5rem]`: el nav es sticky y sin margen de scroll el ancla deja
-          la sección arrancando por debajo de él. Es la misma distancia que usa
-          el riel para librarlo (`top-[5rem]`), así que si el nav cambia de alto se
-          mueven los dos juntos. */}
-      <section id={ANCLA_INDICE} className={cn(SECTION, "scroll-mt-[5rem]")}>
-        <div className={WRAP}>
-          {/* Sin `meta` por celda: en el artículo esa línea es el tiempo de lectura,
-              y aquí no hay prosa que cronometrar. Publicar un tiempo calculado
-              sobre especímenes sería inventarse una cifra, que es contra lo que
-              existe D38 — por eso `meta` es opcional desde P70.38. */}
-          <SectionIndex
-            kicker={t.indice.kicker}
-            ariaLabel={t.indice.ariaLabel}
-            items={paradas}
-            intro={
-              <IndexNote
-                note={t.indice.note}
-                figures={[
-                  {
-                    value: String(paradas.length),
-                    suffix: t.indice.sectionsSuffix,
-                  },
-                ]}
-              />
-            }
-          />
-        </div>
-      </section>
+      <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
 
       {/* LAS DOCE, REPARTIDAS EN SUS CUATRO BLOQUES. La lista de secciones sigue
           leyéndose de un vistazo, que es lo que este archivo tiene que ser; lo
           único que cambia es que ahora se ve dónde empieza cada familia. */}
-      {BLOQUES.map((bloque) => (
-        <Fragment key={bloque.id}>
-          <BlockOpener
-            title={t.bloques[bloque.id].title}
-            lead={t.bloques[bloque.id].lead}
-            items={paradas.filter((p) =>
-              (bloque.claves as readonly string[]).includes(p.clave),
-            )}
-          />
-          {bloque.claves.map((clave) => (
-            <Fragment key={clave}>{secciones[clave]}</Fragment>
-          ))}
-        </Fragment>
-      ))}
+      <SectionBlocks
+        bloques={BLOQUES}
+        copy={t.bloques}
+        paradas={paradas}
+        secciones={secciones}
+      />
 
       <RelatedPages dict={related} current="designSystem" lang={lang} />
     </>

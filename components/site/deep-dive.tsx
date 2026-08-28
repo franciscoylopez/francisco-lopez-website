@@ -123,7 +123,6 @@ function Seccion({
             eyebrow={`${String(n).padStart(2, "0")} — ${label}`}
             title={title}
             size="section-sm"
-            titleClassName="text-balance"
           />
         </div>
         <div data-reveal className="mt-[clamp(1.5rem,3vw,2.25rem)]">
@@ -174,7 +173,7 @@ function Datos({
       {filas.map((f) => (
         <div key={f.label}>
           <dt className={dataLabelVariants()}>{f.label}</dt>
-          <dd className="m-0 mt-[0.45rem] text-[0.95rem] leading-[1.5] text-pretty">
+          <dd className="m-0 mt-[0.45rem] text-[0.95rem] leading-[1.5]">
             {f.value}
           </dd>
         </div>
@@ -246,7 +245,7 @@ function Artefacto({
           />
         </div>
       </div>
-      <figcaption className="text-muted-foreground m-0 mt-3 text-[0.9rem] leading-[1.55] text-pretty">
+      <figcaption className="text-muted-foreground m-0 mt-3 text-[0.9rem] leading-[1.55]">
         {caption}
       </figcaption>
     </figure>
@@ -300,7 +299,7 @@ function BloqueHistoria({
         title={video.title}
         playLabel={video.playLabel}
       />
-      <figcaption className="text-muted-foreground m-0 mt-3 text-[0.9rem] leading-[1.55] text-pretty">
+      <figcaption className="text-muted-foreground m-0 mt-3 text-[0.9rem] leading-[1.55]">
         {video.nota}
       </figcaption>
     </figure>
@@ -377,7 +376,7 @@ function Resultados({
             <p className="font-display m-0 text-[clamp(1.5rem,3vw,1.9rem)] leading-[1.1] font-semibold tracking-[-0.02em] [font-variant-numeric:tabular-nums]">
               {r.value}
             </p>
-            <p className="text-muted-foreground m-0 mt-2 text-[0.9rem] leading-[1.55] text-pretty">
+            <p className="text-muted-foreground m-0 mt-2 text-[0.9rem] leading-[1.55]">
               {r.desc}
             </p>
           </li>
@@ -479,7 +478,7 @@ export function DeepDive({
                 // afirmaciones escritas, que además es lo que hace que las cinco
                 // aperturas pesen parecido en vez de depender de cuántas
                 // palabras tenga cada frase.
-                titleClassName="max-w-[20ch] text-balance"
+                titleClassName="max-w-[20ch]"
               />
             </header>
 

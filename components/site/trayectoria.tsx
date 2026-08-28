@@ -111,7 +111,7 @@ function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
         <div className="text-muted-foreground mt-1 text-[0.9rem]">
           <Marcas>{row.company}</Marcas>
         </div>
-        <p className="text-muted-foreground m-0 mt-[0.7rem] max-w-[60ch] text-[0.92rem] leading-[1.6] text-pretty">
+        <p className="text-muted-foreground m-0 mt-[0.7rem] max-w-[60ch] text-[0.92rem] leading-[1.6]">
           <Marcas>{shortOf(lang, row.company)}</Marcas>
         </p>
       </div>
@@ -145,7 +145,7 @@ function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
         <div className="text-muted-foreground mt-[0.2rem] text-[0.88rem]">
           <Marcas>{row.company}</Marcas>
         </div>
-        <p className="text-muted-foreground m-0 mt-[0.6rem] max-w-[58ch] text-[0.9rem] leading-[1.6] text-pretty">
+        <p className="text-muted-foreground m-0 mt-[0.6rem] max-w-[58ch] text-[0.9rem] leading-[1.6]">
           <Marcas>{shortOf(lang, row.company)}</Marcas>
         </p>
       </div>
@@ -185,7 +185,7 @@ export function Trayectoria({
             <p className={cn(dataLabelVariants(), "mb-2")}>
               {dict.productoLabel}
             </p>
-            <p className="m-0 max-w-[64ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty">
+            <p className="m-0 max-w-[64ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6]">
               {dict.productoIntro}
             </p>
           </div>
@@ -247,7 +247,7 @@ export function Trayectoria({
         </p>
         <p
           data-reveal
-          className="m-0 mb-[clamp(1.5rem,3vw,2.25rem)] max-w-[64ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty"
+          className="m-0 mb-[clamp(1.5rem,3vw,2.25rem)] max-w-[64ch] text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6]"
         >
           {dict.previoIntro}
         </p>

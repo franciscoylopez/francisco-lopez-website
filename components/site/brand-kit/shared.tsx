@@ -30,7 +30,7 @@ import { Logo } from "@/components/ui/logo";
 // `SectionHeader`, así que el rótulo de estas seis secciones es el mismo que el
 // del hero de esta misma página, que ya lo usaba.
 export const LEAD =
-  "text-muted-foreground text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6] text-pretty";
+  "text-muted-foreground text-[clamp(1rem,1.4vw,1.15rem)] leading-[1.6]";
 
 // Glifo dimensionado por altura (reutiliza el componente Logo, fuente única de la
 // geometría). `h` en px.

@@ -1,16 +1,12 @@
-import { Fragment, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { BlockOpener } from "@/components/ui/block-opener";
-import { SECTION, WRAP } from "@/components/ui/layout";
+import { SectionBlocks } from "@/components/ui/block-opener";
 import {
-  SectionCloser,
-  IndexNote,
-  SectionIndex,
-  type SeccionMarco,
+  construirRecorrido,
+  SectionIndexBlock,
 } from "@/components/ui/section-index";
 import type { Locale } from "@/lib/i18n/config";
-import { cn } from "@/lib/utils";
 
 import { type BreadcrumbDict } from "../breadcrumb";
 import { RelatedPages, type RelatedDict } from "../related-pages";
@@ -78,41 +74,15 @@ export function BrandKit({
 }) {
   const t = dict;
 
-  const paradas = ORDEN.map((clave, i) => {
-    const ordinal = String(i + 1).padStart(2, "0");
-    return { clave, id: `s${ordinal}`, ordinal, label: t[clave].indexLabel };
-  });
-
-  /** Indexado por clave, no por posición: `marcos.color` no se desalinea al
-   *  insertar una sección en medio. El eyebrow se compone con una PLANTILLA para
-   *  que salga como un solo nodo de texto —React separa los adyacentes con
-   *  `<!-- -->`— y las seis cabeceras no cambien ni un byte. */
-  const marcos = Object.fromEntries(
-    paradas.map((parada, i) => {
-      const siguiente = paradas[i + 1];
-      const marco: SeccionMarco = {
-        id: parada.id,
-        kicker: `${parada.ordinal} — ${parada.label}`,
-        closer: (
-          <SectionCloser
-            position={i + 1}
-            total={paradas.length}
-            indexLabel={t.indice.closerLabel}
-            indexHref={`#${ANCLA_INDICE}`}
-            nextLabel={
-              siguiente
-                ? `${t.indice.nextLabel} ${siguiente.ordinal} · ${siguiente.label}`
-                : undefined
-            }
-            nextHref={siguiente ? `#${siguiente.id}` : undefined}
-            ariaLabel={t.indice.closerAriaLabel}
-            positionLabel={`${i + 1} ${t.indice.of} ${paradas.length}`}
-          />
-        ),
-      };
-      return [parada.clave, marco] as const;
-    }),
-  ) as Record<(typeof ORDEN)[number], SeccionMarco>;
+  /** El recorrido lo deriva la capa desde P50.88: las mismas 26 líneas estaban
+   *  escritas aquí, en el Design System y en Accesibilidad. El porqué y lo que se
+   *  comprobó antes de unificar, en `ui/section-index.tsx`. */
+  const { paradas, marcos } = construirRecorrido(
+    ORDEN,
+    t,
+    t.indice,
+    ANCLA_INDICE,
+  );
 
   /** Cada sección con su rebanada, indexada por clave: las reparte el bucle de
    *  `BLOQUES`, y un mapa por clave no se desalinea al insertar una en medio. */
@@ -141,47 +111,19 @@ export function BrandKit({
         homeHref={homeHref}
       />
 
-      <section id={ANCLA_INDICE} className={cn(SECTION, "scroll-mt-[5rem]")}>
-        <div className={WRAP}>
-          {/* Sin `meta` por celda: aquí no hay prosa que cronometrar. */}
-          <SectionIndex
-            kicker={t.indice.kicker}
-            ariaLabel={t.indice.ariaLabel}
-            items={paradas}
-            intro={
-              <IndexNote
-                note={t.indice.note}
-                figures={[
-                  {
-                    value: String(paradas.length),
-                    suffix: t.indice.sectionsSuffix,
-                  },
-                ]}
-              />
-            }
-          />
-        </div>
-      </section>
+      <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
 
       {/* LAS SEIS, EN DOS BLOQUES (P70.47). Dos y no tres, y no es estético:
           lo que fija cada cuánto aparece una banda es el número de BLOQUES, no
           el de secciones. Con tres caería una cada 4,6 pantallas en una página
           de 13,9 y se leería a golpes; con dos cae cada 7,4, que es el terreno
           del Design System. El porqué medido, en `ui/block-opener.tsx`. */}
-      {BLOQUES.map((bloque) => (
-        <Fragment key={bloque.id}>
-          <BlockOpener
-            title={t.bloques[bloque.id].title}
-            lead={t.bloques[bloque.id].lead}
-            items={paradas.filter((p) =>
-              (bloque.claves as readonly string[]).includes(p.clave),
-            )}
-          />
-          {bloque.claves.map((clave) => (
-            <Fragment key={clave}>{secciones[clave]}</Fragment>
-          ))}
-        </Fragment>
-      ))}
+      <SectionBlocks
+        bloques={BLOQUES}
+        copy={t.bloques}
+        paradas={paradas}
+        secciones={secciones}
+      />
 
       <RelatedPages dict={related} current="brandKit" lang={lang} />
     </>

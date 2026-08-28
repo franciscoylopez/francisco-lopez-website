@@ -29,13 +29,7 @@ export const content: CvContent = {
     toolkit: "Toolkit",
   },
 
-  contact: {
-    email: "franciscojavier.lopezmartinez@gmail.com",
-    phone: "629 832 720",
-    web: "franciscolopez.es",
-    linkedin: "linkedin.com/in/franciscolopez1975",
-    location: "Valencia",
-  },
+  location: "Valencia",
 
   summary:
     "Senior Product Manager con más de 10 años construyendo y escalando productos SaaS B2B y B2C, con experiencia end-to-end desde idea, MVP, crecimiento y data. Especializado en estrategia de producto, UX, métricas SaaS, IA aplicada y pricing. Trabajo estrechamente con diseño, tecnología y negocio para crear productos coherentes, escalables y con una experiencia de uso fantástica.",

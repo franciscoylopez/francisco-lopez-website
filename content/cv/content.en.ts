@@ -20,13 +20,7 @@ export const content: CvContent = {
     toolkit: "Toolkit",
   },
 
-  contact: {
-    email: "franciscojavier.lopezmartinez@gmail.com",
-    phone: "629 832 720",
-    web: "franciscolopez.es",
-    linkedin: "linkedin.com/in/franciscolopez1975",
-    location: "Valencia, Spain",
-  },
+  location: "Valencia, Spain",
 
   summary:
     "Senior Product Manager with 10+ years building and scaling B2B and B2C SaaS products, end-to-end from idea and MVP to growth and data. Specialised in product strategy, UX, SaaS metrics, applied AI and pricing. I work closely with design, engineering and business to build coherent, scalable products with an outstanding user experience.",

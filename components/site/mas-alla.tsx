@@ -50,7 +50,7 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
         </p>
         <p
           data-reveal
-          className="font-display m-0 max-w-[20ch] text-[clamp(1.9rem,4.6vw,3.75rem)] leading-[1.12] font-semibold tracking-[-0.022em] text-pretty"
+          className="font-display m-0 max-w-[20ch] text-[clamp(1.9rem,4.6vw,3.75rem)] leading-[1.12] font-semibold tracking-[-0.022em]"
         >
           {dict.line1a}
           <span className="whitespace-nowrap">
@@ -70,6 +70,11 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
           aria-hidden="true"
           className="band-rule my-[clamp(1.75rem,3.5vw,2.75rem)]"
         />
+        {/* `text-balance` SE QUEDA, y es una de las tres del sitio que no son
+            redundantes (P50.90): la capa da `pretty` a un `<p>`, y esto es un
+            párrafo que SE LEE COMO TITULAR. Es información que la etiqueta no
+            puede llevar, así que aquí la utilidad no repite a la capa: la
+            contradice a propósito. */}
         <p
           data-reveal
           className="font-display m-0 text-[clamp(1.125rem,1.6vw,1.25rem)] leading-[1.45] font-normal tracking-[0.01em] text-balance"

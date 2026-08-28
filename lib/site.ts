@@ -19,6 +19,12 @@ export const SITE_URL =
 
 export const SITE_NAME = "Francisco López";
 
+// El dominio canónico, PARA MOSTRARLO. No sale de `SITE_URL` a propósito: esa
+// resuelve el host del ENTORNO donde corre, y hay un consumidor que se genera
+// fuera del sitio —el CV en PDF, `npm run cv`— donde el entorno es la máquina de
+// Francisco. Derivarlo de `SITE_URL` imprimiría «localhost:3000» en el papel.
+export const SITE_DOMAIN = "franciscolopez.es";
+
 // ID del contenedor de Google Tag Manager (P21), solo cuando la analítica debe
 // correr: en producción (D13 — nunca en dev/preview, para no ensuciar los datos) y
 // con NEXT_PUBLIC_GTM_ID definido en el entorno de Vercel. Devuelve `undefined` en

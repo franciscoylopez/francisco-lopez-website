@@ -3,7 +3,7 @@ import {
   DIAGRAMA_CI,
   pasosDibujados,
 } from "@/content/articulo/ci-steps";
-import { cardinal } from "@/lib/design-values";
+import { cardinal } from "@/lib/i18n/palabras";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 

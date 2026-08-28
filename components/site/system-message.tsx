@@ -57,10 +57,10 @@ export function SystemMessage({
             {eyebrow}
           </p>
         )}
-        <h1 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-semibold tracking-[-0.01em] text-balance">
+        <h1 className="font-display text-[clamp(1.75rem,4vw,2.5rem)] font-semibold tracking-[-0.01em]">
           {title}
         </h1>
-        <p className="text-muted-foreground max-w-[42ch] text-[1.02rem] text-pretty">
+        <p className="text-muted-foreground max-w-[42ch] text-[1.02rem]">
           {body}
         </p>
       </div>
