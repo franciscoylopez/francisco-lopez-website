@@ -73,11 +73,11 @@ const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
   home: {
     es: {
       title: "Del discovery al dato.",
-      kicker: "Senior Product Manager · UX · SaaS · IA aplicada",
+      kicker: "Senior Product Manager · UX · SaaS · IA · Builder",
     },
     en: {
       title: "From discovery to data.",
-      kicker: "Senior Product Manager · UX · SaaS · Applied AI",
+      kicker: "Senior Product Manager · UX · SaaS · AI · Builder",
     },
   },
   "brand-kit": {
