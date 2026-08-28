@@ -87,6 +87,8 @@ type Contorno = {
 type Censo = {
   metro: string;
   reglasHover: string;
+  /** Cuántos reveals había, y cuántos hubo que encender para poder medirlos. */
+  reveals: string;
   tema: string;
   pares: number;
   bajoAA: Par[];
@@ -136,6 +138,12 @@ for (const slug of PAGE_SLUGS) {
     // Y se espera al `IntersectionObserver`, que no resuelve en el mismo
     // fotograma: sin esta pausa el riel sigue sin montar y el arreglo de arriba
     // no serviría de nada.
+    //
+    // OJO CON LO QUE ESTO **NO** ARREGLA (P50.79, 2026-08-28): el scroll resuelve
+    // lo que no está MONTADO, no lo que está a `opacity: 0`. Bajar al 50% y
+    // esperar encendió 9 de los 29 reveals de `/accesibilidad`, porque el
+    // observador solo dispara lo que cruza en ese momento. De eso se encarga
+    // `mostrarReveals()`, dentro del propio guion, y por eso son dos cosas.
     ab(["eval", "new Promise((r) => setTimeout(() => r('ok'), 900))"]);
     ab(["eval", "--stdin"], guionCenso);
     const crudo = ab(["eval", "JSON.stringify(window.contrastCensus())"]);
@@ -189,7 +197,7 @@ for (const slug of PAGE_SLUGS) {
     console.log(
       `  [${String(corridas).padStart(2)}/${TOTAL_CORRIDAS}] ` +
         `${etiqueta.padEnd(34)} ${String(c.pares).padStart(3)} pares · ` +
-        `${c.sinMedir.length} sobre imagen · metro ${c.metro}`,
+        `${c.sinMedir.length} sobre imagen · ${c.reveals} · metro ${c.metro}`,
     );
 
     // Y SE NOMBRAN, no solo se cuentan (P68.587, 2026-08-24). Un recuento al pie

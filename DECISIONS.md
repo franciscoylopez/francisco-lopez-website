@@ -181,6 +181,7 @@
 - D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia
 - D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo
 - D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra
+- D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8646,3 +8647,48 @@ salta.
 
 **Coste aceptado:** el barrido pasa de 28 llamadas a 84 y de varios minutos a bastantes más.
 `--tomas=1` existe para tantear sobre un Preview, y **no sella**, a propósito.
+
+
+## D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira — 2026-08-28
+
+**El síntoma, que parecía ruido.** Verificando `/accesibilidad`, la primera llamada a axe tras
+abrir la página devolvía **1 elemento** en `incomplete`; repitiendo la misma medición sin
+recargar, **43**. Se apuntó como rareza de la herramienta. No lo era, y detrás había **dos**
+cosas distintas.
+
+**Causa 1 · el reveal.** `.reveal-on [data-reveal]` sin `[data-shown]` es `opacity: 0`, y **axe
+excluye del contraste todo elemento con un ancestro invisible**. Con la página recién abierta
+solo han entrado los reveals de la primera pantalla, así que la pasada mide una fracción de la
+página. Reproducido en `/accesibilidad`: **8 de 29** reveals encendidos → axe da **2 nodos**;
+con los 29 encendidos → **44**.
+
+**Y no se arregla haciendo scroll.** Bajar al 50% y esperar 900 ms —lo que ya hacía el censo
+para montar islas— encendió **9 de 29**: el `IntersectionObserver` solo dispara lo que cruza en
+ese momento. Son dos problemas distintos, montar y encender, y el scroll solo resuelve el
+primero.
+
+**Causa 2 · el «1» no era un elemento.** `counts.incomplete` cuenta **reglas**, no nodos: vale 1
+con dos nodos y vale 1 con cuarenta y cuatro, porque todos son de `color-contrast`. El «1 de
+43» del enunciado eran dos pasadas leyendo dos campos distintos. *Un informe que dice «1
+incompleto» se lee como «casi limpio»; uno que dice 44 se mira.*
+
+**Decisión.** `window.mostrarReveals()`, en `contrast-census.js` al lado de `freezeMotion` —
+misma familia: poner la página en su estado final antes de medirla—. Enciende todos los
+`[data-reveal]`, **devuelve cuántos ha tenido que encender** y no se revierte, porque encendido
+es el estado real de la página y no un apaño para la foto. `contrastCensus()` lo llama de
+entrada, y el `viewport-verifier` lo tiene como precondición de la primera pasada de axe, junto
+al congelado.
+
+**Al censo también le faltaba, y estaba medido antes de decirlo.** Su `esVisible` mira la
+`opacity` del propio elemento y no la de sus ancestros, así que perdía menos que axe pero
+perdía: `/accesibilidad` daba **16 pares** en frío y **17** con los reveals encendidos. El
+sello del censo se rehizo con el número correcto.
+
+**Y lo dice.** Cada corrida publica «29 reveals · 28 encendidos para medir», por lo mismo que
+publica las reglas `:hover` indexadas: sin la cifra, una pasada sobre media página se lee igual
+que una sobre la página entera. Es el modo de fallo de la casa por sexta vez (D38, D57, D60,
+D63, D85).
+
+**Lo que NO era:** un falso negativo de `violations`. Esas salieron **0 de forma estable** en
+las cuatro combinaciones tema × locale. Afecta a `incomplete`, que es donde axe archiva lo que
+no sabe resolver — `color-mix()`, gradientes y SVG.

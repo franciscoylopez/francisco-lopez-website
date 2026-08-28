@@ -81,8 +81,44 @@ window.freezeMotion = () => {
   return () => freeze.remove();
 };
 
+/**
+ * Enciende TODOS los reveals, y devuelve cuántos ha tenido que encender.
+ *
+ * POR QUÉ (P50.79, 2026-08-28). `.reveal-on [data-reveal]` sin `[data-shown]` es
+ * `opacity: 0`, y **axe excluye del contraste todo lo que tiene un ancestro
+ * invisible**. Medido en `/accesibilidad`: en frío la página tenía 8 de 29 reveals
+ * encendidos y axe devolvía **2 nodos** en `incomplete`; con los 29 encendidos,
+ * **44**. O sea que la primera pasada de cada sesión miraba una fracción de la
+ * página y el informe se leía igual de limpio. Es el modo de fallo de la casa: un
+ * metro que devuelve menos de lo que hay parece un aprobado.
+ *
+ * NO SIRVE HACER SCROLL Y ESPERAR, que es lo que hacía el censo: bajar al 50% y
+ * esperar 900ms encendió **9 de 29**, porque el `IntersectionObserver` solo dispara
+ * lo que cruza en ese momento. Encenderlos a mano es determinista y no depende de
+ * un reloj.
+ *
+ * DEVUELVE LA CIFRA a propósito, para que quien mida pueda decir sobre cuánta
+ * página ha medido. Y no se revierte: encendido es el estado final de la página,
+ * no un apaño para la foto.
+ */
+window.mostrarReveals = () => {
+  const ocultos = [...document.querySelectorAll("[data-reveal]")].filter(
+    (el) => !el.hasAttribute("data-shown"),
+  );
+  for (const el of ocultos) el.setAttribute("data-shown", "");
+  void document.body.offsetHeight;
+  return {
+    encendidos: ocultos.length,
+    total: document.querySelectorAll("[data-reveal]").length,
+  };
+};
+
 window.contrastCensus = () => {
   const round = (n) => Math.round(n * 100) / 100;
+
+  // Antes de medir nada: la página entera, no la parte que el observador haya
+  // encendido por dónde cayó el scroll. Ver `mostrarReveals` aquí arriba.
+  const reveals = window.mostrarReveals();
 
   const descongelar = window.freezeMotion();
 
@@ -682,6 +718,10 @@ window.contrastCensus = () => {
         ? `OK (${ancla})`
         : `SOSPECHOSO: ${ancla} ≠ ${esperado}`,
     reglasHover,
+    // Cuántos reveals había apagados al llegar. Se publica por lo mismo que
+    // `reglasHover`: sin la cifra, una pasada sobre media página se lee igual que
+    // una sobre la página entera (P50.79).
+    reveals: `${reveals.total} reveals · ${reveals.encendidos} encendidos para medir`,
     tema: document.documentElement.classList.contains("dark")
       ? "oscuro"
       : "claro",
