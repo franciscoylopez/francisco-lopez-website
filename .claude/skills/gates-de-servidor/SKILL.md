@@ -1,6 +1,6 @@
 ---
 name: gates-de-servidor
-description: Los tres gates que necesitan el sitio SERVIDO y por eso no están en CI — `gate:html` (el HTML no cambia en un refactor), `npm run censo` (contraste de todas las páginas × dos temas) y `npm run psi` (la nota de PageSpeed). Encapsula la secuencia entera, incluida la línea base que hay que guardar ANTES de tocar nada. Invócalo antes de empezar un refactor que se diga transparente, al cerrar un cambio que toque colores o superficies, o cuando Francisco diga «pasa los gates», «guarda la línea base» o «mide esto servido». Solo corre cuando se le invoca: levanta un servidor y escribe archivos.
+description: Los gates que necesitan el sitio SERVIDO y por eso no están en CI — `gate:html` (el HTML no cambia en un refactor), `npm run censo` (contraste de todas las páginas × dos temas), `npm run pliegue` (que las aperturas que comparten pliegue midan lo mismo) y `npm run psi` (la nota de PageSpeed). No se dice cuántos son: el recuento es lo primero que caduca. Encapsula la secuencia entera, incluida la línea base que hay que guardar ANTES de tocar nada. Invócalo antes de empezar un refactor que se diga transparente, al cerrar un cambio que toque colores o superficies, o cuando Francisco diga «pasa los gates», «guarda la línea base» o «mide esto servido». Solo corre cuando se le invoca: levanta un servidor y escribe archivos.
 disable-model-invocation: true
 ---
 
@@ -96,11 +96,12 @@ forma de reconstruir el «antes».
 
 Y vuelve aquí.
 
-## Paso 4 · Los tres gates
+## Paso 4 · Los gates
 
 ```bash
 npm run gate:html    # ¿cambió el HTML? Ver arriba: vacío = cerrado
 npm run censo        # contraste de todas las páginas × 2 temas, con el sitio servido
+npm run pliegue      # que las aperturas que comparten pliegue midan lo mismo (D144)
 npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no contra local
 ```
 

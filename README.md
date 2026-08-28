@@ -46,7 +46,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) · **TypeScript** (`strict`) · **Tailwind CSS v4**
-- **Capa de componentes propia, con un núcleo de ocho piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `field` (el campo de formulario) · `table` · `stat-row` · `layout`. Aparte, no como novena pieza del núcleo: la capa de **artículo largo** que usa «Cómo se ha creado esta página» (`D76`), que se vacía por su propio criterio — cuando una segunda página quiere una de sus piezas, esa pieza sale (`D113`, `D121`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: en un widget con foco atrapado se pregunta antes por la plataforma (`<dialog>`, `popover`, `anchor-name`), y shadcn entra donde ella no llega (`D6`, `D36`)
+- **Capa de componentes propia, con un núcleo de ocho piezas** — `action` (todo lo accionable) · `chrome` (enlaces de navegación) · `badge` (rótulos que no se pulsan) · `heading` (eyebrow + titular) · `field` (el campo de formulario) · `table` · `stat-row` · `layout`. Aparte, no como novena pieza del núcleo: la capa de **artículo largo** que usa «Cómo se ha creado esta página» (`D76`), que se vacía por su propio criterio — cuando una segunda página quiere una de sus piezas, esa pieza sale, y vuelve si su motivo no valía en las cuatro (`D113`, `D121`, `D123`). El inventario completo de `components/ui/` se **deriva del disco** en [`components/ui/README.md`](./components/ui/README.md) (`npm run indices`). **shadcn/ui** está configurado (estilo `base-nova`) y **sin usar**: en un widget con foco atrapado se pregunta antes por la plataforma (`<dialog>`, `popover`, `anchor-name`), y shadcn entra donde ella no llega (`D6`, `D36`)
 - **lucide-react** para iconos; los que lucide no trae se dibujan a mano con su propia regla de autoría, para que no se distingan de los de la librería
 - **next-themes** (claro/oscuro, `system` por defecto) · **Vercel** (`main` = producción)
 
@@ -124,6 +124,8 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `check:indices` | Que un índice deje de ser el derivado de sus fuentes. Son cuatro y se generan con `npm run indices` (`D69`); el cuarto indexa una carpeta —`components/ui/`— y además comprueba que cada pieza salga de verdad en la sección que dice publicarla (`D89`) |
 | `check:excepciones` | Que la lista de controles escritos a mano de `BRAND.md` se lleve de memoria. Era la última que quedaba así, y al derivarla del disco estaba mal por los dos lados: nombraba una que no lo era y le faltaba otra, escrita tres veces. Cada control fuera de la capa lleva su marca `@fuera-de-capa` y el documento tiene que nombrarlo (`D109`) |
 | `check:articulo` | Que «Cómo se ha creado esta página» describa un proyecto que ya se ha movido. Cada sección declara de qué depende y lleva su sello: cuando una fuente cambia, CI sale rojo **nombrando la sección** (`D84`) |
+| `check:accesibilidad` | Que `/accesibilidad` siga diciendo la verdad. Publica el mismo tipo de afirmación que el artículo y no tenía nada: la frase «aún no hay formulario» sobrevivió tres días al sprint que lo construyó, y se encontró de casualidad leyendo la página. Sus cinco bloques verificables declaran de qué dependen y llevan sello, y las dos cifras del arnés que escribe en prosa se comparan con los casos que hay (`D140`) |
+| `check:og` | Que la tarjeta que se ve al compartir el sitio diga otra cosa que la página. Sus dieciséis cadenas repetían copy del diccionario y nada las comparaba: al afilar el kicker del Hero, cambiarlo eran **tres** sitios y el tercero solo apareció por un `grep` a mano. La divergencia deliberada se declara con su motivo — y el gate exige que **siga** divergiendo (`D142`) |
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
 | `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
 | `check:figuras` | Que una figura pinte sus rótulos ilegibles. `text-[11px]` dentro de un `viewBox` son 11 **unidades de dibujo**, no 11 píxeles, y esa escala no está en el `font-size` computado: los diagramas del artículo pintaron entre 5,0 y 8,2px durante meses sin que lo viera nadie. Mide el prerender, así que no necesita navegador (`D106`) |
@@ -133,7 +135,7 @@ Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml))
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
 
-Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`** y **`npm run psi`** necesitan navegador y red; **`npm run check:tablero`** necesita el MCP de Notion, y por eso su criterio se prueba aparte, en `npm test` (`D107`).
+Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`** y **`npm run pliegue`** necesitan un navegador de verdad —el segundo comprueba que las aperturas que comparten pliegue midan lo mismo, una invariante que se rompió tres veces y siempre la vio un ojo (`D144`)—; **`npm run psi`** y **`npm run check:enlaces`** necesitan red, y el segundo no puede ser gate de CI por la misma razón que el primero: un servidor ajeno caído cinco minutos daría un rojo que no es nuestro (`D141`). **`npm run check:tablero`** necesita el MCP de Notion. Los cuatro últimos tienen su criterio probado aparte, en `npm test`, para que vivir fuera de CI no lo deje sin red (`D107`).
 
 ## Arrancar
 
@@ -168,6 +170,10 @@ npm run check:marcas        # que los nombres propios lleguen al HTML con transl
                             # o el traductor de Chrome los destroza (D116). Prerender también
 npm run check:kit           # que el registro del kit de marca y public/logo-kit/ cuadren en
                             # los dos sentidos (D119). El ZIP no se vigila: se hace al build
+npm run check:accesibilidad # que /accesibilidad siga siendo cierta: sus cinco bloques con
+                            # fuente sellada, y las cifras del arnés contra los casos (D140)
+npm run check:og            # que cada tarjeta OG diga lo que su página, en los dos idiomas,
+                            # salvo lo declarado distinto con su motivo (D142)
 
 # Generadores
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza su sello
@@ -176,6 +182,11 @@ npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
 # Medición
 npm run gate:html -- save   # instantánea del HTML de todas las páginas × 2 idiomas
 npm run gate:html           # …y comprueba que un refactor no lo cambió (D42, D45)
+npm run pliegue             # que las aperturas que comparten pliegue midan lo mismo (D144).
+                            # Necesita el sitio servido y agent-browser
+npm run check:enlaces       # que las URLs externas del sitio sigan respondiendo (D141)
+npm run novedades           # qué secciones publicadas toca este PR, y si es copy o solo
+                            # una fuente que se movió (D143). Lo lanza CI en cada PR
 npm run articulo:novedades  # QUÉ cambió en cada dependencia del artículo desde el sello
                             # vigente, con las de solo comentarios marcadas (D103).
                             # Se invoca PORQUE check:articulo está en rojo
