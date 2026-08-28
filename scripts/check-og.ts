@@ -86,7 +86,7 @@ function juzgar(
       fallo:
         `${donde}: la clave no existe en el diccionario (se buscaba en ` +
         `\`${ruta.join(".")}\`). Si el copy se reestructuró, actualiza ` +
-        "\`CLAVE_EN_DICCIONARIO\`.",
+        "`CLAVE_EN_DICCIONARIO`.",
     };
   }
 
@@ -110,8 +110,8 @@ function juzgar(
     comparado: true,
     fallo:
       `${donde}: la tarjeta dice «${enTarjeta}» y la página «${enPagina}». O se ` +
-      "actualiza \`content/og/copy.ts\`, o la diferencia es a propósito y se " +
-      "declara en \`DIVERGENCIAS\` con su motivo.",
+      "actualiza `content/og/copy.ts`, o la diferencia es a propósito y se " +
+      "declara en `DIVERGENCIAS` con su motivo.",
   };
 }
 

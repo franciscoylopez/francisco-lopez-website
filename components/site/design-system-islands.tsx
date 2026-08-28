@@ -8,8 +8,13 @@ import { cn } from "@/lib/utils";
 
 import { PANEL } from "@/components/ui/layout";
 
-// Las cuatro piezas interactivas del Design System (D7: JS solo en islas). El
-// resto de la página es Server Component.
+// Las piezas interactivas del Design System, juntas y FUERA de su carpeta de
+// secciones (D7: JS solo en islas; el porqué de que no vayan a su NN-*.tsx, en
+// D42 §La excepción). La frontera `"use client"` se paga por archivo: repartirlas
+// convertiría tres archivos de sección enteros en Client Components. El resto de
+// la página es Server Component.
+//
+// Una isla nueva viene AQUÍ, no a su sección.
 
 const COLS = Array.from({ length: 12 });
 

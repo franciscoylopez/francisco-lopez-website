@@ -109,11 +109,11 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 
 ## Que no se rompa
 
-Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
+Los pasos de CI de cada PR se leen en [GitHub Actions](./.github/workflows/ci.yml), que es donde no pueden mentir, y `main` está protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
 
 | Paso | Qué impide |
 | :-- | :-- |
-| `format:check` · `typecheck` · `lint` | Lo de siempre. Nada que no compile entra en `main` |
+| `format:check` · `typecheck` · `lint` | Lo de siempre. Nada que no compile entra en `main` — y desde `D147` el `lint` cubre también `scripts/`, que es el 30% del código y no lo miraba nadie |
 | `check:palette` | Dos cosas: que quede **ninguna** copia de un valor de token fuera de su fuente —busca valores, no patrones (`D38`)— y que no haya aparecido ningún color, superficie o animación que el censo de contraste no haya visto. Medir necesita navegador; comprobar si hay que medir, no (`D90`) |
 | `check:experiencias` | Que las tres longitudes de una experiencia se descuadren: misma cobertura en ES y EN, y ninguna cifra en una y no en la otra (`D57`) |
 | `check:cv` | Que los PDFs commiteados se queden viejos. Sella la **huella de las entradas**, no bytes: el PDF no es determinista (`D60`) |
@@ -286,7 +286,8 @@ scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts
 scripts/check-*.ts         Los guardianes de CI. Todos comparten dos reglas de método:
                            buscan la AUSENCIA (no el patrón) y afirman cuánto han mirado
-scripts/indices.ts         Genera los tres índices derivados de sus cabeceras (D69)
+scripts/indices.ts         Genera los índices de markdown derivados de sus cabeceras (D69)
+scripts/inventario.ts      El inventario de components/ui/ y la política de qué se publica
 scripts/check-guardianes.ts  Un caso malo conocido por guardián. Muta archivos para
                            provocar el fallo, así que exige árbol limpio y restaura (D70)
 scripts/design-review/     Censo de pares de contraste del DOM servido

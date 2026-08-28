@@ -155,7 +155,7 @@ Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**,
 
 - **Precondición: el sandbox de Bash desactivado** en TODAS las llamadas, no solo las de navegación. Un comando que cuelga es ese síntoma: se desactiva el sandbox, no se reintenta (D51).
 - **Lo que sigue a mano:** el punto **6** (nada codificado solo por color) y la nota de PageSpeed (`npm run psi`, no `vitals`).
-- **Tras el `censo`**, y no al cerrar una página: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, la fecha que publica `/accesibilidad` (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
+- **Tras el censo Y las dos pasadas manuales** —`viewport-verifier` y NVDA—, no al cerrar una página ni con el censo solo: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`. **Es una fecha de CONFORMIDAD**, así que moverla con media revisión hecha afirma lo que no se ha comprobado (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
 
 # Definition of Done
 

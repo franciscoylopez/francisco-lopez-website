@@ -452,8 +452,8 @@ export const PAGE_COUNT = PAGE_SLUGS.length;
  * comprobaciones y veintitrés errores fingidos» habiendo quince y veintisiete,
  * porque nada ataba la prosa al inventario (P50.73).
  */
-export const GUARDIAN_COUNT = 17;
-export const GUARDIAN_CASE_COUNT = 31;
+export const GUARDIAN_COUNT = 18;
+export const GUARDIAN_CASE_COUNT = 32;
 
 /**
  * El cardinal en palabras, porque el copy de este sitio escribe los recuentos

@@ -91,8 +91,10 @@ const BLOQUES = [
 ] as const;
 
 // Página Design System (PRD §20). Traducida del mockup de Claude Design (D1).
-// Server Component salvo tres islas interactivas (design-system-islands.tsx):
-// toggle de rejilla, demo de reveal y tabs de dispositivo. La sección de
+// Server Component salvo las islas interactivas, que viven juntas en
+// `design-system-islands.tsx` y NO en su sección: la frontera `"use client"` se
+// paga por archivo, así que repartirlas convertiría varias secciones enteras en
+// Client Components. El porqué largo, en D42 §La excepción. La sección de
 // Accesibilidad es la checklist de cierre de todo el sitio (§20).
 //
 // DOCE SECCIONES, Y EL ORDEN ES UNA JERARQUÍA (P70.34): fundamentos → piezas →

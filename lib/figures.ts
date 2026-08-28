@@ -76,6 +76,10 @@ export type RegistroPsi = {
   fecha: string;
   /** Cuántas páginas se midieron, para que el sello no se lea fuera de escala. */
   paginas: number;
+  /** Cuántas tomas hay detrás de cada extremo del rango (P50.78). **Ausente
+   *  significa UNA**: es el sello de antes de que el barrido muestreara, y por eso
+   *  el campo es opcional en vez de rellenarse con un 1 inventado. */
+  tomas?: number;
   movil: { min: number; max: number };
   escritorio: { min: number; max: number };
 };

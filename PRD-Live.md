@@ -172,10 +172,10 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | `check:articulo` | Que ninguna sección del artículo dependa de una fuente que se movió, **nombrando la sección** en el PR que la mueve; `articulo:novedades` dice qué líneas. Sella aparte el copy, contra `ARTICLE_UPDATED`, que es el `dateModified` que ve Google | CI | D84/D103/D110 |
 | `check:accesibilidad` | Lo mismo para `/accesibilidad`: sus cinco bloques con fuente declarada, y que las dos cifras del arnés que publica cuadren con los casos que hay. **Fuera:** lo que es MEDICIÓN y no archivo (los pares sobre foto, el desbordamiento bajo 320) | CI | D140 |
 | `check:og` | Que las 8 tarjetas OG digan lo que su página, en los dos idiomas, salvo lo declarado distinto **con su motivo** — y que lo declarado siga siéndolo. **Fuera:** el dibujo | CI | D142 |
-| `censo` | **Dos pases** sobre las páginas del registro × dos temas: los pares de TEXTO (1.4.3/1.4.6) y el **contorno de cada control** (1.4.11, 3:1), que axe no implementa. Deja sello, y `check:palette` lo compara en cada PR | a mano | D85/D97/D90 |
+| `censo` | **Dos pases** sobre las páginas del registro × dos temas: los pares de TEXTO (1.4.3/1.4.6) y el **contorno de cada control** (1.4.11, 3:1), que axe no implementa. Enciende los reveals antes de medir, porque lo que no ha entrado está a `opacity: 0`. Deja sello, y `check:palette` lo compara en cada PR | a mano | D85/D97/D90/D146 |
 | `check:enlaces` | Que las URLs externas del sitio sigan respondiendo, sacadas del disco y no de una lista. **Fuera de su juicio:** el 403 y el 999, escudo antibot y no enlace muerto | a mano | D141 |
 | `pliegue` | Que las aperturas que comparten pliegue midan lo mismo —grupo y `h1`— a 1920×1080; entra la que lo tenga, detectado en el DOM. **Fuera:** que no desborde, que es `viewport-verifier` | a mano | D144 |
-| `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99 |
+| `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción, como **mediana de tres tomas** deduplicadas por análisis: con una sola muestra el min/max sellaba ruido. **No sella** un par que se quedó en un análisis. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99/D145 |
 | `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**. **Fuera:** el ZIP, que se genera en el build | CI | D119 |
 | `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, y que el embalse transversal no crezca contra el sello del cierre anterior. **Fuera:** si el CUPO se cumplió, que el esquema del tablero no permite ver | a mano | D107/D138 |
 
@@ -256,10 +256,13 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 *Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
 decisión escrita, no por omisión.
 
-**Y desde el 2026-08-28 hay secuencia hasta el lanzamiento**, en tres pasos: **«Drenaje»**,
-el sprint en curso, donde Francisco relee el contenido servido mientras en paralelo se drena
-la deuda que no pide criterio → **el sprint de mejoras**, cuyo alcance lo define esa lectura
-y que no existe hasta que exista la lista → **el lanzamiento**.
+**Y hay secuencia hasta el lanzamiento**, en tres pasos: **«Drenaje»**, el sprint en curso,
+donde se drena la deuda que no pide criterio → **el sprint de mejoras** → **el lanzamiento**.
+
+**El carril de contenido de «Drenaje» ya cerró** *(2026-08-28)*: Francisco releyó el sitio
+servido y dejó **22 hallazgos** en «Detalle de cambios por sección», once de ellos en «Cómo se
+ha creado». Así que el sprint de mejoras **ya tiene entrada**, y lo que falta antes de abrirlo
+es triarlos —verificar premisa, agrupar y abrir tareas—, que es la última tarea de «Drenaje».
 
 *(Por qué son dos carriles y por qué el orden de las tandas lo manda la visibilidad y no la
 prioridad, en `PRD-Historical.md`.)*

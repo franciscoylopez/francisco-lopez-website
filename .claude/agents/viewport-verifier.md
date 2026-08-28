@@ -81,6 +81,28 @@ agent-browser eval "window.__unfreeze = window.freezeMotion(); 'frozen'"
 agent-browser eval "window.__unfreeze(); 'thawed'"
 ```
 
+## Y enciende los reveals ANTES de la primera medición
+
+Congelar el motion no basta: **lo que aún no ha entrado no está a mitad de transición, está a
+`opacity: 0`**, y **axe excluye del contraste todo lo que tiene un ancestro invisible**. Con la
+página recién abierta solo han entrado los reveals de la primera pantalla, así que la primera
+pasada de cada sesión mide una fracción de la página **y el informe se lee igual de limpio**.
+
+Medido en `/accesibilidad` *(2026-08-28, P50.79)*: en frío, **8 de 29** reveals encendidos y
+axe devolvía **2 nodos** en `incomplete`; con los 29 encendidos, **44**.
+
+**No sirve hacer scroll y esperar.** Bajar al 50% y esperar 900 ms —que es lo que hace el
+censo para montar islas— encendió **9 de 29**: el `IntersectionObserver` solo dispara lo que
+cruza en ese momento. Se encienden a mano, que es determinista:
+
+```bash
+agent-browser eval "document.querySelectorAll('[data-reveal]').forEach(e=>e.setAttribute('data-shown','')); JSON.stringify({reveals: document.querySelectorAll('[data-reveal]').length})"
+```
+
+Una vez por página, antes de la primera medición; sobreviven al cambio de tema y al de
+viewport, así que no hay que repetirlo como el congelado. **Y di cuántos has encendido** en el
+informe: es la diferencia entre «0 violaciones» y «0 violaciones sobre la página entera».
+
 ## La matriz
 
 **Viewports.** Los dos del medio son los que produjeron D50; el escalado de Windows mueve el
@@ -142,6 +164,12 @@ Reporta **las violaciones** con regla, impacto y selector, y **el recuento de `i
 sus selectores**. Los `passes` no se vuelcan (solo su cifra, como referencia: la home daba 0
 violaciones, 25 passes, 0 incomplete con axe-core 4.12.1).
 
+> **`counts.incomplete` CUENTA REGLAS, NO ELEMENTOS** *(2026-08-28, P50.79)*. Vale 1 tanto con
+> dos nodos como con cuarenta y cuatro, porque los cuarenta y cuatro son de la misma regla
+> (`color-contrast`). La cifra accionable es **`nodeCount`**, y de ahí salió el «1 de 43» que
+> abrió esta tarea: dos pasadas leyendo dos campos distintos. Reporta el nodeCount, y nombra
+> la regla al lado.
+
 **El `incomplete` no es ruido, es donde se esconde lo que axe no sabe juzgar.** No resuelve
 `color-mix()`, así que mete esos elementos ahí y se abstiene — en el Design System eran
 **ocho**, y entre ellos un par a **4,33:1 en oscuro**, por debajo de AA, mientras el informe
@@ -168,12 +196,10 @@ Verifica el orden del DOM = orden de lectura, un solo `h1` y jerarquía `h2`–`
 agent-browser vitals --json
 ```
 
-Referencia viva (medida sobre las catorce páginas el 2026-08-24): **móvil 95-99 · escritorio
-97-100**, con LCP móvil de 2,6-3,2 s. Del LCP móvil, el retraso de renderizado va del 43% al
-83% **entre corridas de la misma página y el mismo despliegue**, así que ni ese reparto ni una
-nota suelta sirven de hallazgo: PSI varía tanto que la home ha dado 72 y 100 en escritorio con
-veinte minutos de diferencia (D99). Repite antes de reportar, y reporta solo lo que se
-reproduzca.
+**La referencia no se escribe aquí: está sellada** en `content/psi/registro.json` (D102, D145).
+
+**Una nota suelta no es un hallazgo**: la home ha dado 72 y 100 en escritorio con veinte
+minutos de diferencia (D99). Repite antes de reportar, y reporta solo lo que se reproduzca.
 
 **5 · Contraste, solo si el trabajo introdujo un par nuevo** — un color nuevo, un fondo que no
 sea `--background`, o una superficie propia. Si todo sale de piezas existentes, el contraste

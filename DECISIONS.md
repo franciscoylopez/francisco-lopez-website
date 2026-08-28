@@ -180,6 +180,11 @@
 - D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba
 - D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia
 - D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo
+- D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra
+- D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira
+- D147 · El andamiaje es el 30% del código y no lo lintaba nadie
+- D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
+- D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -2035,6 +2040,32 @@ hay que mirar la página**. No hay lectura de diff que sustituya eso.
 tienen Design System, Accesibilidad y Brand Kit. Cambiar el rótulo **es** un cambio de copy —el
 eyebrow no puede repetir el título—, así que va en P37.695, commit aparte y misma rama. Mezclarlo
 aquí habría costado la propiedad que hace barato este refactor: diff vacío = correcto.
+
+### La excepción: `design-system-islands.tsx` no es una sección, es la frontera de cliente
+
+*(Escrito el 2026-08-28, P50.86. La excepción existía desde el refactor y no estaba en ninguna
+parte, así que quien llegara después la leía como deriva de este mismo commit en vez de como una
+decisión.)*
+
+**«Un archivo por sección» ordena el markup, no la frontera `"use client"`.** Las **cuatro
+piezas interactivas** del Design System —el toggle de rejilla y las pestañas de dispositivo
+(§01), la demo de reveal (§05) y el simulador de foco (§07)— viven juntas en
+`components/site/design-system-islands.tsx`, fuera de la carpeta.
+
+**El motivo es que la frontera se paga por archivo, no por componente.** Repartirlas a sus
+`NN-*.tsx` convertiría **tres archivos de sección en Client Components enteros**, y con ellos
+todo el markup servidor que hoy los acompaña. Aquí la unidad natural no es la sección: es «lo que
+necesita JavaScript», que es exactamente lo que dice D7 —**JS solo en islas**—. Las dos reglas no
+chocan; gobiernan ejes distintos.
+
+**Si alguna vez se prefiere coherencia estricta, el precio se MIDE antes:** mover cada isla a su
+sección y comparar el JS de cliente servido, no razonarlo. Y el mismo criterio decide al revés —
+una isla nueva va a este archivo, no a su sección.
+
+**Y una lección de contador, cazada al escribir esto:** el comentario de `index.tsx` decía «tres
+islas interactivas» habiendo cuatro desde que apareció `FocusSimulator`. La cifra se ha quitado
+en vez de actualizarse, que es lo que argumenta D149: un contador que se puede borrar no
+necesita quien lo vigile.
 
 ## D43 · Toda página y toda sección abren igual: el ordinal va dentro del eyebrow — 2026-08-10
 
@@ -8574,3 +8605,296 @@ abierta se queda esperando**, no falla. Se abre primero y solo entonces se fija 
 —el deep-dive, «Cómo se ha creado» y la home—. Sus aperturas son tipográficas, de alto constante,
 no se comparan de un vistazo con estas cuatro y cada una tiene su hueco razonado en su archivo.
 Esa exclusión no está escrita en el guardián: **sale sola**, porque no llevan `FOLD_GROUP`.
+
+
+## D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra — 2026-08-28
+
+Son dos fallos distintos y la misma familia — **un metro que no dice lo que está haciendo**—,
+así que se arreglan juntos.
+
+### 1 · El censo se colgaba en silencio, y la causa no era el navegador
+
+**El síntoma:** catorce minutos sin una línea. Sin forma de distinguir «va lento» de «está
+muerto» más que sondeando `agent-browser eval "location.href"` cada veinte segundos.
+
+**La causa, medida:** `execFileSync` **sin `input` deja `stdio[0]` en `inherit`**, así que el
+hijo se queda con el `stdin` del padre; en una shell no interactiva —el harness en segundo
+plano, CI— ese `stdin` no se cierra nunca y una de las seis llamadas por corrida espera para
+siempre. Se sospechó primero de 38 Chrome de `agent-browser` y **esa sospecha era falsa**: con
+el navegador despejado se colgó dos veces más, 13 y 10 minutos, con **0,1 s de CPU acumulada** y
+cero procesos hijo. *Una sospecha no es una causa.*
+
+**Decisión.** `ab()` pasa `input` **siempre**, aunque sea la cadena vacía, y lleva **tope de
+reloj** (`AB_TIMEOUT_MS`, 120 s por llamada) que traduce el SIGTERM a un mensaje con el comando
+que no respondió. El `< /dev/null` que se usaba de parche **se retira**: no valía, porque en
+segundo plano no manda el shell desde el que se lanza.
+
+**Y progreso, que es la otra mitad.** El censo ya imprimía una línea por corrida; lo que no
+decía era **por dónde iba**. Ahora lleva `[14/28]` delante. Con 28 corridas, eso es la
+diferencia entre esperar y matar el proceso.
+
+### 2 · `psi --registro` sellaba un rango sacado de una sola muestra
+
+**El sello publica el min/max de las catorce páginas, y el artículo lo lee (D102).** Con una
+toma por página, **la peor toma manda sobre el rango entero**. Medido el mismo día, contra
+producción y sin tocar nada entre medias: `/design-system` dio **76** en el barrido y **98 y
+99** al re-medirla; `/como-se-ha-creado`, **81** y luego **89 y 99**. El barrido iba a sellar
+«76-100 escritorio» cuando `PRD-Live` §No funcionales afirma «>90 en las catorce». *El sitio
+habría publicado un número que contradice su propio criterio de aceptación, por ruido.*
+
+**Decisión: tres tomas y la MEDIANA.** No la media, porque el ruido de PSI es asimétrico hacia
+abajo —la media de 76, 98 y 99 da 91, que no es ninguna de las tres— y no el mejor de tres,
+porque en un dato que se publica es peor pasarse de optimista. Con un número **par** de valores
+se coge el bajo de los dos centrales, por lo mismo: promediar inventaría una nota que la página
+no ha sacado nunca.
+
+**Tres elecciones que no son obvias:**
+
+- **Las tomas van por FUERA del recorrido.** Medir una página tres veces seguidas devuelve tres
+  veces el mismo análisis cacheado, que es la primera trampa de D108: *una n alta sobre filas
+  repetidas da la apariencia de rigor y el veredicto contrario*. Dando una vuelta entera al
+  registro entre toma y toma, cada página se remide varios minutos después. **Funcionó a la
+  primera y con holgura: 28 llamadas → 28 análisis distintos, el 100%.**
+- **Se deduplica por el sello del ANÁLISIS**, el «(medido …)» que ya se imprimía al lado de la
+  nota, no por el de la llamada. Y lo que se guarda es la **medición** cuya nota es la mediana,
+  no la cifra suelta: sus avisos y su desglose tienen que venir de la misma corrida.
+- **Un par que se queda en un solo análisis distinto NO sella**, y se dice cuál. Es la regla que
+  ya tenía la función —«no sella una pasada parcial»— llevada a su forma correcta: *una pasada
+  completa medida una vez es tan parcial como una pasada a medias*. La caché de la API expira,
+  así que el remedio es repetir un rato después, no bajar el listón.
+
+**Y afirma cuánto ha muestreado**, no solo qué encontró: tomas, llamadas, análisis distintos y
+**los tres pares que más se movieron**. Esa tabla es la evidencia de por qué esto existe —
+`/brand-kit` dio **89 y 100** sobre el mismo despliegue, con minutos de diferencia.
+
+**Lo que NO se ha comprobado, dicho para que no se dé por comprobado:** el criterio que abría la
+tarea era «un barrido repetido dos veces da el mismo rango ±2». Eso son 168 llamadas y más de
+una hora de API, desproporcionado para lo que aporta sobre lo ya medido. Se validó con un
+barrido real de **dos tomas × 14 páginas en escritorio**, que es donde se leen las tres cosas
+que importan: el 100% de análisis distintos, la dispersión real, y que la negativa a sellar
+salta.
+
+**Coste aceptado:** el barrido pasa de 28 llamadas a 84 y de varios minutos a bastantes más.
+`--tomas=1` existe para tantear sobre un Preview, y **no sella**, a propósito.
+
+
+## D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira — 2026-08-28
+
+**El síntoma, que parecía ruido.** Verificando `/accesibilidad`, la primera llamada a axe tras
+abrir la página devolvía **1 elemento** en `incomplete`; repitiendo la misma medición sin
+recargar, **43**. Se apuntó como rareza de la herramienta. No lo era, y detrás había **dos**
+cosas distintas.
+
+**Causa 1 · el reveal.** `.reveal-on [data-reveal]` sin `[data-shown]` es `opacity: 0`, y **axe
+excluye del contraste todo elemento con un ancestro invisible**. Con la página recién abierta
+solo han entrado los reveals de la primera pantalla, así que la pasada mide una fracción de la
+página. Reproducido en `/accesibilidad`: **8 de 29** reveals encendidos → axe da **2 nodos**;
+con los 29 encendidos → **44**.
+
+**Y no se arregla haciendo scroll.** Bajar al 50% y esperar 900 ms —lo que ya hacía el censo
+para montar islas— encendió **9 de 29**: el `IntersectionObserver` solo dispara lo que cruza en
+ese momento. Son dos problemas distintos, montar y encender, y el scroll solo resuelve el
+primero.
+
+**Causa 2 · el «1» no era un elemento.** `counts.incomplete` cuenta **reglas**, no nodos: vale 1
+con dos nodos y vale 1 con cuarenta y cuatro, porque todos son de `color-contrast`. El «1 de
+43» del enunciado eran dos pasadas leyendo dos campos distintos. *Un informe que dice «1
+incompleto» se lee como «casi limpio»; uno que dice 44 se mira.*
+
+**Decisión.** `window.mostrarReveals()`, en `contrast-census.js` al lado de `freezeMotion` —
+misma familia: poner la página en su estado final antes de medirla—. Enciende todos los
+`[data-reveal]`, **devuelve cuántos ha tenido que encender** y no se revierte, porque encendido
+es el estado real de la página y no un apaño para la foto. `contrastCensus()` lo llama de
+entrada, y el `viewport-verifier` lo tiene como precondición de la primera pasada de axe, junto
+al congelado.
+
+**Al censo también le faltaba, y estaba medido antes de decirlo.** Su `esVisible` mira la
+`opacity` del propio elemento y no la de sus ancestros, así que perdía menos que axe pero
+perdía: `/accesibilidad` daba **16 pares** en frío y **17** con los reveals encendidos. El
+sello del censo se rehizo con el número correcto.
+
+**Y lo dice.** Cada corrida publica «29 reveals · 28 encendidos para medir», por lo mismo que
+publica las reglas `:hover` indexadas: sin la cifra, una pasada sobre media página se lee igual
+que una sobre la página entera. Es el modo de fallo de la casa por sexta vez (D38, D57, D60,
+D63, D85).
+
+**Lo que NO era:** un falso negativo de `violations`. Esas salieron **0 de forma estable** en
+las cuatro combinaciones tema × locale. Afecta a `incomplete`, que es donde axe archiva lo que
+no sabe resolver — `color-mix()`, gradientes y SVG.
+
+
+## D147 · El andamiaje es el 30% del código y no lo lintaba nadie — 2026-08-28
+
+**El hueco, con la medida correcta.** `eslint.config.mjs` ignoraba **`scripts/**` entero** —no
+los `.js`: todo—, y `tsconfig.json` tiene `allowJs` **sin** `checkJs`. Resultado en dos niveles:
+los **39 `.ts`** los typechea `tsc` y no los linta nadie; los **8 no-TS** (1.235 líneas) no los
+mira ninguno de los dos. En total **8.446 líneas, el 30% del repo** — más que `lib/` (2.063) y
+`app/` (3.178) juntos.
+
+**Y el ignore tenía razón.** Decía «usa `require()` y APIs de Node, no es código de Next», y es
+verdad: la config de Next sobre un CommonJS de Node da errores que no son errores. **La
+respuesta no era levantarlo, era darle a esa mitad su propia config.**
+
+**Decisión: dos programas, dos configs.** `scripts/` se linta con **`@eslint/js` recomendado +
+`typescript-eslint`**, no con la de Next, y **partido por entorno**, porque ahí abajo no hay uno
+solo:
+
+| Qué | Globales | Módulos |
+|---|---|---|
+| `scripts/**/*.ts` · gates, guardianes, generadores | Node | ESM |
+| `scripts/**/*.mjs` · hooks del harness | Node | ESM |
+| `scripts/logo-kit/`, `scripts/logos/` | Node + CommonJS | `require()` |
+| `scripts/design-review/*.js` · el censo | **navegador** | script inyectado |
+
+El censo es el caso que justifica la tabla: **no es código de Node**, se evalúa dentro de la
+página, así que sus globales son `window` y `document`. Es además el archivo peor puntuado por
+qlty y el que se ha roto en silencio dos veces (D70).
+
+**Fuera queda `scripts/.poda/`**, que son recortes generados para medir y se regeneran enteros.
+
+**Lo que encontró la primera pasada, y era el argumento entero:** 22 errores reales. Un tipo
+importado y sin usar en `articulo/huella.ts` —justo la clase de aviso que el sprint anterior
+dejó pasar—, seis backticks escapados de más dentro de cadenas con comillas dobles, y dos
+regex con espacios contados a ojo en los casos de los guardianes.
+
+### Y un guardián, porque el ignore es UNA LÍNEA
+
+El agujero se abrió con una línea y se cierra con otra: **vuelve a abrirse igual de fácil, y su
+modo de fallo es un `npm run lint` en verde que no ha mirado nada.** Así que `check:guardianes`
+gana un caso —una variable sin usar dentro de `scripts/censo.ts`— que **solo puede saltar si
+`scripts/` sigue dentro del alcance**. Es el mismo razonamiento que el resto del arnés: lo que
+se comprueba no es qué encontró, es cuánto miró.
+
+### Lo que se descartó, con su medida
+
+El enunciado proponía tres escalones y **el primero y el tercero no se hacen**: `// @ts-check`
+en `contrast-census.js`.
+
+`tsc` **no ve `scripts/**/*.js` en absoluto** —el `include` de `tsconfig.json` solo lista `.ts`,
+`.tsx` y `.mts`—, así que el `@ts-check` sin más no habría hecho nada; es una regla cuyo
+disparador mira al sitio equivocado. Se probó de verdad, metiendo
+`scripts/design-review/*.js` en el `include`: **63 errores**, todos `implicit any` y nulos
+estrictos de un archivo de navegador sin tipos, en un archivo de 720 líneas cuya propia cabecera
+dice «no lo reescribas». Anotarlo entero para silenciarlos sería el rewrite que la cabecera
+prohíbe, a cambio de cero hallazgos.
+
+**Lo que ese archivo necesita ya lo tiene**, y son dos redes distintas: el lint que acaba de
+ganar, y `check:guardianes`, que le pasa un caso malo conocido y comprueba que lo rechaza —
+cobertura de comportamiento, que es la correcta para un metro.
+
+
+## D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja — 2026-08-28
+
+**Los tres, medidos con qlty en local antes de tocar nada:** `check-palette.ts` **63**,
+`contrast-census.js` **165** (con su función principal en 164 y 30 retornos), `psi.ts` **122**.
+Ninguno es código de la web: los tres son andamiaje, y los tres estaban por encima del umbral
+por el mismo motivo — **cantidad, no enredo**. Cada comprobación estaba justificada y comentada;
+lo que sobraba era que todas vivieran en el mismo archivo.
+
+**La lección, que ya estaba medida y ahorró repetir el experimento.** En el PR #166 se intentó
+bajar el censo extrayendo su segundo pase a una función **anidada**: quedó en 155 igual, porque
+**qlty suma la complejidad de las anidadas al padre**, y se revirtió para no meter indirección a
+cambio de nada. Así que la regla es: **lo que parte el conteo de un ARCHIVO es el módulo; lo que
+parte el de una FUNCIÓN es dejar de estar dentro de otra.** Son dos cosas distintas y hacen
+falta las dos.
+
+**Qué salió, y el resultado:**
+
+| Archivo | Antes | Después | Qué se sacó |
+|---|---|---|---|
+| `check-palette.ts` | 63 | **25** | `palette/pintados.ts` (la tabla del navegador + su cobertura) y `palette/copias.ts` (el barrido del repo) |
+| `psi.ts` | 122 | **40** | `psi/medicion.ts`, `psi/muestreo.ts`, `psi/informe.ts` y `psi/sello.ts` — los cuatro dominios que tenía dentro |
+| `contrast-census.js` | 165 | **165** | los helpers de color y el pase de contornos suben a nivel superior: la función principal cae de **164 a 40** y pierde el aviso de 30 retornos |
+
+**La complejidad no se ha escondido, se ha REPARTIDO**, y eso se dice porque la diferencia
+importa: el total de la familia de la paleta pasa de 63 a 64. Lo que cambia es que ninguna pieza
+cruza el umbral y cada archivo contesta una sola pregunta.
+
+**Y `contrast-census.js` se queda en 165 a propósito, porque NO PUEDE ser un módulo.** Se
+inyecta verbatim en la página y se evalúa allí; la CSP del sitio no permite `unsafe-eval` y el
+archivo también se pega a mano en una consola. Partirlo en dos archivos inyectados es posible y
+no se hace: añadiría un orden de inyección que se puede equivocar a un guion cuya cabecera dice
+«no lo reescribas» tras tres reescrituras. Lo que sí se ha arreglado es lo que **sí** se podía —
+una función de 550 líneas y 30 retornos— y eso era el problema de lectura de verdad.
+
+**Un aviso nuevo que se acepta a sabiendas:** `porQueNo()` en `psi/sello.ts` sale marcada por
+«muchos retornos» (7). Son cláusulas de guarda, y sustituyen a una cadena de seis ternarios
+anidados que qlty marcaba por complejidad **y** por anidamiento a cinco niveles. Cambiar tres
+avisos por uno que describe la forma correcta del código es un buen cambio; el aviso se queda
+sin silenciar, porque la regla de `.qlty/qlty.toml` es excluir por lo que un archivo **es**,
+nunca por lo que puntúa.
+
+**Cómo se validó que no se ha roto nada:**
+
+- **La paleta**: misma salida exacta — 30 tokens, 18 conversiones, 175 archivos, 17 hex.
+- **`psi`**: un barrido real contra producción, que ejercita la llamada, el muestreo, el informe
+  y la negativa a sellar.
+- **El censo**: la condición que su ficha exigía, **las mismas cifras antes y después**. Medido
+  sobre `/accesibilidad` servida: 17 pares, 8 controles con caja y 6 contornos, 34 reglas
+  `:hover`, metro validado, cero bajo AAA y cero bajo 3:1. Idénticas.
+
+
+## D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido — 2026-08-28
+
+**La idea era razonable:** en tres días caducaron cuatro contadores —`design-review` recorría
+«las seis páginas» cuando ya eran doce, `PRD-Live` y `README` se contradecían consigo mismos—,
+así que se propuso un guardián que buscara afirmaciones de conteo en los `.md` y las contrastara
+con su fuente derivada.
+
+**Y la tarea traía su propia condición, que es lo que la salva de haberse construido:** *el
+primer paso no es construirlo, es MEDIR EL RUIDO*. Se ha medido.
+
+### La medición
+
+Un detector de un solo uso —cifra en palabra o en dígito seguida de uno de los 25 sustantivos
+que este repo cuenta— sobre todos los `.md`:
+
+| | |
+|---|---|
+| Coincidencias totales | **625** |
+| En documentos **históricos** (registro fechado: una cifra vieja ahí es CORRECTA) | 331 |
+| En documentos **vivos** | **294** |
+
+Y sobre los vivos, clasificando a mano las dos familias que un guardián podría atar a una fuente
+derivada:
+
+- **`páginas`, que es el mejor caso posible** —tiene fuente (`PAGE_COUNT`) y es el sustantivo
+  que originó la tarea—: **13 apariciones vivas, y solo 3 hablan del conjunto de páginas del
+  sitio.** Las otras diez son las **2 páginas del CV en PDF**, las **5 del deep-dive**, las
+  **3 del sistema**, una narración histórica dentro de un documento vivo («durante meses, las
+  trece páginas…») y una referencia **fechada** en el `viewport-verifier`. **77% de falsos
+  positivos.**
+- **`guardianes`, `comprobaciones`, `piezas`, `decisiones`, `entradas`, `pasos`, `índices` y
+  `skills`: catorce apariciones vivas y NINGUNA cuenta un conjunto derivable.** Son «las cuatro
+  piezas del facade», «un núcleo de ocho piezas» (un subconjunto deliberado, no el inventario de
+  24), «dos comprobaciones de dos segundos», «tres pasos hasta el lanzamiento».
+
+**Total: 3 candidatos reales sobre 27 — un 89% de falsos positivos.** Y los tres están
+correctos hoy. *Un gate ruidoso es peor que ninguno*, que es el criterio con el que se abrió.
+
+### Por qué no hay forma de afinarlo
+
+El detector no falla por poco vocabulario: **falla porque «catorce páginas» y «dos páginas» son
+sintácticamente idénticas y hablan de conjuntos distintos**, y porque una cifra dentro de una
+frase fechada o de una narración histórica es correcta precisamente por ser vieja. Distinguirlas
+pide entender la frase, no reconocerla.
+
+### Lo que hace innecesario el guardián
+
+**Donde la cifra se PUBLICA ya está derivada, y eso es lo que importaba.** `/accesibilidad` y el
+artículo interpolan `{paginas}`, `{comprobaciones}` y `{fingidos}`; `pasosDeCI()` cuenta los
+pasos leyendo el workflow; `check:accesibilidad` compara `GUARDIAN_COUNT` contra el disco — y lo
+hizo en esta misma tanda, parando el commit que subía los guardianes de 17 a 18 sin mover la
+cifra. Lo que queda en prosa son los `.md`, que no los lee ningún visitante y sí un `grep`.
+
+**Y la mitad barata que la propia tarea encontró: un contador que se puede borrar no necesita
+guardián.** Las tres instancias de `ci.yml` se arreglaron **borrando** el contador, no
+actualizándolo, y el argumento estaba escrito treinta líneas más abajo en el mismo archivo. Esa
+es la regla que queda viva: **antes de escribir una cifra en prosa, preguntarse si la frase
+funciona sin ella.** `method-review` ya lo tiene escrito con su propia cicatriz: *«cuando esta
+línea decía "20 pasos" ya eran 21»*.
+
+**El solape con P68.5 también está medido, y es real:** el sello de `check:articulo` es por
+ARCHIVO, así que un cambio de comentario en `contrast-census.js` encendió §s09 tres veces en
+esta tanda sin que ninguna afirmación del artículo se moviera. Ese ruido sí tiene arreglo posible
+—sellar por contenido sustantivo y no por archivo— y se queda en su tarea.

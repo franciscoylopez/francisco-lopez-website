@@ -137,6 +137,16 @@ la terminal (D51).
 `check:marco` a mano: la regla de bypass de axe se da por satisfecha con landmarks o
 encabezados, así que una página sin enlace de salto le sale verde (D46).
 
+**`LAST_A11Y_REVIEW` decía «tras el censo», y eso invitaba a firmar media revisión**
+*(2026-08-28, cierre de la tanda 2 de «Drenaje»)*. La tanda pasó el censo entero —424 pares,
+300 contornos, cero incumplimientos— y **no** las dos pasadas manuales, así que seguir la regla
+al pie de la letra habría movido la fecha que `/accesibilidad` publica bajo «WCAG 2.2 AA
+cumplido». No se movió, y la razón de fondo es la que dejó la regla como está ahora: **la fecha
+no estaba caducada, porque nada de lo que cubre había cambiado** —el diff de la tanda sobre
+`app/` y `components/` era **solo comentarios**—. Un disparador que mira al evento equivocado
+es el punto 1 de `BRAND.md` §Cómo se escribe una regla; aquí el evento no es «ha corrido el
+censo» sino «se ha vuelto a revisar lo que la frase afirma».
+
 **Los dos validadores de Schema.org no son intercambiables**, y conviene saberlo el día que
 una página estrene tipo: el **Schema Markup Validator** cubre los tipos **no** elegibles para
 rich results (`Person`, `ProfilePage`), y la **Rich Results Test**, los elegibles

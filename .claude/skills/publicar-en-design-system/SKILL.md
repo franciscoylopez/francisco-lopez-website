@@ -121,7 +121,7 @@ vertical sin ganar nada (P37.62). **Una sola** sí va a la medida de lectura.
 1. Si es sección nueva: impórtala en `components/site/design-system/index.tsx`, en su orden.
 2. **Actualiza la línea `@pieza` del archivo en `components/ui/`**: la publicación deja de ser
    `pendiente` y pasa a ser la ruta de su sección **relativa a `components/site/`**.
-3. **Quítala de `SIN_PUBLICAR`** en `scripts/indices.ts`, o `check:indices` avisará de que
+3. **Quítala de `SIN_PUBLICAR`** en `scripts/inventario.ts`, o `check:indices` avisará de que
    sobra la excusa. Son **dos** listas desde D117 —`SIN_PUBLICAR` para lo que declara
    `pendiente`, `INTERNAS` para lo que declara `interna`— y las dos son
    `Record<archivo, motivo>`: **el motivo es un dato y se deriva al inventario**, así que se

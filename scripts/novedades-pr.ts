@@ -171,7 +171,7 @@ function informar(s: Superficie): boolean {
     di();
     di(
       "Se movió una FUENTE que esa sección describe, no necesariamente el texto. " +
-        "\`npm run articulo:novedades\` dice qué líneas.",
+        "`npm run articulo:novedades` dice qué líneas.",
     );
     di();
   }
@@ -186,7 +186,7 @@ if (!baseAlcanzable()) {
   // «no cambia nada», que es el verde falso de siempre.
   di(
     `> No se ha podido resolver \`${base}\`, así que **esto no ha comparado nada**. ` +
-      "Si corre en CI, el checkout necesita \`fetch-depth: 0\`.",
+      "Si corre en CI, el checkout necesita `fetch-depth: 0`.",
   );
 } else {
   const conCambios = SUPERFICIES.map(informar).filter(Boolean).length;
