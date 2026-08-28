@@ -113,7 +113,7 @@ export function TrayectoriaIndice({
             level={1}
             size="page-sm"
           >
-            <p className="text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6] text-pretty">
+            <p className="text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6]">
               {dict.lead}
             </p>
           </SectionHeader>
@@ -141,12 +141,7 @@ export function TrayectoriaIndice({
                       navegable la rejilla con un lector de pantalla: cinco
                       encabezados de segundo nivel bajo el h1 de la página, sin
                       saltos (punto 4 del checklist). */}
-                  <h2
-                    className={cn(
-                      titleVariants({ size: "card" }),
-                      "text-balance",
-                    )}
-                  >
+                  <h2 className={titleVariants({ size: "card" })}>
                     {claims[slug]}
                   </h2>
 
@@ -187,7 +182,7 @@ export function TrayectoriaIndice({
             <Download aria-hidden="true" />
             {dict.cta}
           </a>
-          <p className="text-muted-foreground m-0 max-w-[52ch] text-[0.92rem] leading-[1.6] text-pretty">
+          <p className="text-muted-foreground m-0 max-w-[52ch] text-[0.92rem] leading-[1.6]">
             {dict.ctaNota}
           </p>
         </div>

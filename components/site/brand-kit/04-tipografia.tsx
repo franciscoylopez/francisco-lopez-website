@@ -31,7 +31,7 @@ function TypeCard({
       <p className="text-muted-foreground mt-2 mb-[1.1rem] text-[0.72rem] font-semibold tracking-[0.06em] uppercase">
         {data.tag}
       </p>
-      <p className="text-muted-foreground m-0 mb-[1.1rem] text-[0.95rem] leading-[1.6] text-pretty">
+      <p className="text-muted-foreground m-0 mb-[1.1rem] text-[0.95rem] leading-[1.6]">
         {data.desc}
       </p>
       <p

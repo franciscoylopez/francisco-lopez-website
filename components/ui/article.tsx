@@ -353,7 +353,7 @@ export function ArticleProse({
           <p
             key={i}
             className={cn(
-              "m-0 text-[1.02rem] text-pretty [&+p]:mt-[1.75rem]",
+              "m-0 text-[1.02rem] [&+p]:mt-[1.75rem]",
               LEADING.prose,
             )}
           >
@@ -400,6 +400,11 @@ export function Pullquote({
         aria-hidden="true"
         className="bg-brand-purple absolute top-0 bottom-0 left-0 w-[2px]"
       />
+      {/* `text-balance` SE QUEDA, y aquí ya está donde tiene que estar (P50.90):
+          la capa da `pretty` a un `<blockquote>`, y una cita destacada se lee
+          como titular. Es la tercera y última no redundante del sitio, y la
+          única que sirve a SEIS apariciones —las cinco citas del artículo más su
+          espécimen del Design System— desde un solo sitio. */}
       <blockquote className="font-display text-foreground m-0 text-[1.15rem] leading-[1.3] font-semibold text-balance">
         {children}
       </blockquote>

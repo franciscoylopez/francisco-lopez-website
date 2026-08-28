@@ -324,7 +324,8 @@ export function SectionHeader({
    * entran por separado. Las páginas que revelan el `<header>` entero no lo pasan.
    */
   reveal?: boolean;
-  /** Solo para lo que depende del contenido: `max-w-[14ch]`, `text-balance`. */
+  /** Solo para lo que depende del contenido: `max-w-[14ch]`. El equilibrado ya no
+   *  entra por aquí — lo pone la capa a `h1..h4` desde P68.7116 (P50.90). */
   titleClassName?: string;
   /**
    * Entradilla u otro contenido bajo el titular. El hueco que la separa del

@@ -378,7 +378,7 @@ export function Logotipo({
                     {r.title}
                   </h4>
                 </div>
-                <p className="text-muted-foreground m-0 text-[0.9rem] leading-[1.6] text-pretty">
+                <p className="text-muted-foreground m-0 text-[0.9rem] leading-[1.6]">
                   {r.body}
                 </p>
               </div>

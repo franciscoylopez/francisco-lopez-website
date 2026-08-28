@@ -287,7 +287,7 @@ export function ComoSeHaCreado({
             </p>
             <h1
               data-reveal
-              className="font-display m-0 mb-5 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.025em] text-balance"
+              className="font-display m-0 mb-5 text-[clamp(2.25rem,5.5vw,3.75rem)] leading-[1.02] font-semibold tracking-[-0.025em]"
             >
               {t.hero.title}
             </h1>

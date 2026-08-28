@@ -79,10 +79,10 @@ export default async function GlobalNotFound() {
                 (P74.36): `slide-in-from-bottom-0` neutraliza el recorrido sin
                 apagar la animacion entera, que es lo que hacia `animate-none`. */}
             <div className="animate-in fade-in slide-in-from-bottom-3 motion-reduce:slide-in-from-bottom-0 flex flex-col items-center gap-3 duration-700">
-              <h1 className="font-display text-[clamp(1.35rem,3.4vw,1.9rem)] font-semibold tracking-[-0.01em] text-balance">
+              <h1 className="font-display text-[clamp(1.35rem,3.4vw,1.9rem)] font-semibold tracking-[-0.01em]">
                 {t.notFound.title}
               </h1>
-              <p className="text-muted-foreground max-w-[42ch] text-[1.02rem] text-pretty">
+              <p className="text-muted-foreground max-w-[42ch] text-[1.02rem]">
                 {t.notFound.body}
               </p>
             </div>
