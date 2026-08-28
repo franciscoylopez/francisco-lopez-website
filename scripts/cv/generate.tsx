@@ -30,6 +30,7 @@ import type { CV, CvContent, Job } from "../../content/cv/types";
 import { assemble } from "./assemble";
 import { cvFingerprint, HUELLA_PATH } from "./fingerprint";
 import { brandHex, paletteHex } from "../../lib/design-values";
+import { LINKEDIN_URL, mailtoHref, PHONE_TEL } from "../../lib/contact";
 
 const ROOT = process.cwd();
 const asset = (p: string) => path.join(ROOT, p);
@@ -353,14 +354,14 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
             </View>
             <Text style={s.role}>{data.role}</Text>
             <Text style={s.contact}>
-              <Link src={`mailto:${data.contact.email}`} style={s.contactLink}>
+              {/* Los `href` no se reconstruyen desde el texto visible: salen de
+                  `lib/contact.ts`, que es donde el sitio ya tiene el `mailto:` y
+                  el `tel:` con su prefijo. Rearmarlos aquí era la cuarta copia. */}
+              <Link src={mailtoHref()} style={s.contactLink}>
                 {data.contact.email}
               </Link>
               {"   ·   "}
-              <Link
-                src={`tel:+34${data.contact.phone.replace(/\s/g, "")}`}
-                style={s.contactLink}
-              >
+              <Link src={`tel:${PHONE_TEL}`} style={s.contactLink}>
                 {data.contact.phone}
               </Link>
               {"\n"}
@@ -368,10 +369,7 @@ function Cv({ data, lang }: { data: CV; lang: "es" | "en" }) {
                 {data.contact.web}
               </Link>
               {"   ·   "}
-              <Link
-                src={`https://${data.contact.linkedin}`}
-                style={s.contactLink}
-              >
+              <Link src={LINKEDIN_URL} style={s.contactLink}>
                 {data.contact.linkedin}
               </Link>
               {"   ·   "}

@@ -8,6 +8,8 @@
 
 import type { CV, CvContent, Job, AuthoredJob } from "../../content/cv/types";
 import { cvBullets, factsOf, reportingOf } from "../../content/experience-copy";
+import { EMAIL, LINKEDIN_DISPLAY, PHONE_DISPLAY } from "../../lib/contact";
+import { SITE_DOMAIN } from "../../lib/site";
 import {
   loadDict,
   buildEducation,
@@ -50,7 +52,18 @@ export function assemble(lang: "es" | "en", content: CvContent): CV {
     role: content.role,
     subject: content.subject,
     ui: content.ui,
-    contact: content.contact,
+    // La cabecera de contacto se RESUELVE, no se autora: `lib/contact.ts` se
+    // declara fuente única del email, el teléfono y el LinkedIn, y el CV era el
+    // único consumidor del sitio que se los escribía a mano — en los dos idiomas,
+    // con valores idénticos. El fallo que evita no es de hoy sino del día que uno
+    // cambie: nada compara un PDF ya enviado con la fuente.
+    contact: {
+      email: EMAIL,
+      phone: PHONE_DISPLAY,
+      web: SITE_DOMAIN,
+      linkedin: LINKEDIN_DISPLAY,
+      location: content.location,
+    },
     summary: content.summary,
     skills: content.skills,
     milestones: content.milestones,

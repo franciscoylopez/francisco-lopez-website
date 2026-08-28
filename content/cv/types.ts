@@ -75,6 +75,10 @@ export interface CvUi {
   toolkit: string;
 }
 
+// La cabecera de contacto del CV, ya resuelta. Cuatro de sus cinco campos NO se
+// autoran: los pone `assemble()` desde `lib/contact.ts` y `lib/site.ts`, que es
+// donde el sitio los tiene declarados como fuente única. `location` sí es copy
+// —«Valencia» en ES, «Valencia, Spain» en EN— y por eso se queda arriba.
 export interface Contact {
   email: string;
   phone: string;
@@ -89,7 +93,8 @@ export interface CvContent {
   role: string;
   subject: string;
   ui: CvUi;
-  contact: Contact;
+  /** Ver `Contact`: el resto de la cabecera no es contenido, es un dato. */
+  location: string;
   summary: string;
   milestones: Milestone[];
   skills: SkillRow[];
