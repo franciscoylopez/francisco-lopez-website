@@ -175,6 +175,7 @@
 - D137 · El gesto de marca son dos piezas, y una manda sobre la otra
 - D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse
 - D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta
+- D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8267,3 +8268,78 @@ en `CLAUDE.md` §Gestión de etapas, uno a cada lado del cruce.
 mete los siete movimientos reales dentro de la ventana. Sale rojo nombrando los dos techos
 afectados y con código 1; restaurado, verde. Se muerde la apertura del ciclo y no el historial a
 propósito: inventar un movimiento que no ocurrió vale menos que contar los que sí.
+
+---
+
+## D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido — 2026-08-28
+
+**Contexto.** D84 le dio al artículo un guardián de caducidad: cada sección declara de qué
+depende, se sella, y cuando una fuente se mueve CI sale rojo **nombrando la sección**, en el PR
+que la mueve. `/accesibilidad` publica exactamente el mismo tipo de frase —qué mide cada gate,
+cuántos guardianes hay, qué cubre el censo de contornos, qué encontró la pasada con NVDA, qué
+queda pendiente— y **no tenía nada**. Por eso «aún no hay formulario de contacto» sobrevivió
+tres días al sprint que construyó el formulario, y se encontró **de casualidad, leyendo la
+página**.
+
+Y P70.02 subió la apuesta: la página pasó de 5.399 a 12.066 caracteres y de cinco secciones a
+siete, casi todo afirmaciones comprobables sobre el propio repo.
+
+**Lo que se encontró antes de escribir una línea.** La página decía «son **catorce**
+comprobaciones y **veintitrés** errores fingidos». Contados: **quince y veintisiete**. Las dos
+cifras llevaban caducadas desde que alguien añadió un caso, porque **nada las ataba al
+inventario**. La tarea nació de una frase caducada y encontró otras dos vivas.
+
+**Decisión, en tres piezas.**
+
+1. **El aparato sale a `scripts/dependencias/huella.ts`.** La resolución de las tres formas de
+   dependencia —archivo, `archivo.md#fragmento`, `directorio/`— y el hasheo por bloque dejan de
+   ser del artículo y pasan a ser compartidos. Copiarlos habría dejado **dos metros midiendo
+   distinto**; es la Regla de construcción de `CLAUDE.md` aplicada a `scripts/`. El artículo los
+   re-exporta, así que ningún importador cambió.
+2. **`check:accesibilidad`**, con su `--seal`, sobre los **cinco bloques que afirman algo
+   verificable** (`conformance`, `measures`, `verify`, `blindspot`, `limits`). Fuera quedan
+   `hero`, `indice`, `term` y `report` —rótulo, navegación, definición y un correo: no hay
+   fuente que se mueva debajo— e `inheritance`, que el componente ya deriva. Meterlos daría
+   rojos que no significan nada, y a la tercera vez nadie lee el rojo.
+3. **Las dos cifras del arnés dejan de escribirse a mano.** `GUARDIAN_COUNT` y
+   `GUARDIAN_CASE_COUNT` viven en `lib/design-values.ts`, el copy interpola
+   `{comprobaciones}` / `{fingidos}` con `cardinal()` —como ya hacía con `{paginas}`— y el
+   guardián **contrasta el valor publicado contra `scripts/guardianes/casos.ts`** en cada PR.
+
+**Por qué SELLADAS y no derivadas, que es la única elección no obvia.** `PAGE_COUNT` sale de
+`PAGE_SLUGS` porque ese registro ya está en el bundle. El inventario de casos malos vive en
+`scripts/`, y traérselo al navegador para contar dos números enviaría a cada visitante una
+treintena de mutaciones de archivos que nunca va a ejecutar. Así que el valor se escribe una vez
+y el guardián lo mantiene honesto: **D38 con el guardián puesto donde la derivación no llega.**
+Para poder contarlas sin arrancar la maquinaria, `CASOS` salió a `scripts/guardianes/casos.ts`
+—misma partición que `scripts/tablero/reglas.ts`: el dato aparte de la E/S—.
+
+**Por qué es OTRO guardián y no una fila de `check:articulo`.** Dos documentos con dos ritmos:
+el artículo describe cómo se construyó el sitio y se mueve con la arquitectura; esta página
+describe lo que el sitio **cumple hoy** y se mueve con una medición. Un solo sello los mezclaría
+y haría que retocar el artículo pidiera releer los límites. El aparato sí es el mismo, y por eso
+está compartido.
+
+**El susto que dejó una regla.** Al mover el hasheo se copió su separador como un **espacio**, y
+el original era un **byte NUL**. Consecuencia: los doce sellos del artículo cambiaban, y
+re-sellar habría congelado la mentira sin que nadie lo notara — el guardián habría seguido
+saliendo verde midiendo otra cosa. Se cazó porque el número de secciones movidas pasó de 4 a 12
+sin motivo. **Lo que lo escondió tiene nombre:** el byte NUL hacía que `grep` tratase el archivo
+como **binario** y lo dejara fuera de toda búsqueda de texto, así que el separador era invisible
+a la herramienta con la que se lee este repo. Ahora va como escape (`\0`), que compila al mismo
+carácter y deja el archivo legible.
+
+> **Regla que sale de aquí, y va al catálogo de método:** al mover una función que alimenta un
+> HASH, la prueba no es que compile — es que el hash **no cambie** sobre el mismo árbol. Un
+> sello es un metro cuyo fallo es un verde.
+
+**Lo que NO cubre, dicho para que no se dé por cubierto.** Las cifras sin fuente en el repo:
+«tres páginas se desbordan por debajo de 320» y «dieciséis pares sobre fotografía» son
+**mediciones**, no archivos, y no hay nada que sellar debajo. Están atadas a las tareas que las
+cerrarán, y ese día habrá que venir a mano. Y que el párrafo diga la verdad lo decide una
+persona; esto existe para que sepa cuándo mirar.
+
+**Validado disparándolo**, con dos casos malos en `check:guardianes`: mover `lib/figures.ts`
+—fuente de los «Límites», donde la página dice que dos diagramas se miden y no se juzgan— y
+publicar un recuento de casos que ya no es el que hay. Y afirma cuánto ha mirado en cada
+corrida: cinco bloques, trece dependencias, dos cifras.

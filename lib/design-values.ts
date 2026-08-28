@@ -436,9 +436,29 @@ export const LAST_A11Y_REVIEW = "2026-08-27";
 export const PAGE_COUNT = PAGE_SLUGS.length;
 
 /**
+ * CUÁNTOS GUARDIANES hay y CUÁNTOS casos malos los prueban — las dos cifras que
+ * `/accesibilidad` publica en prosa sobre el arnés que la respalda.
+ *
+ * SELLADAS AQUÍ Y NO DERIVADAS, y la diferencia importa. `PAGE_COUNT` sale de
+ * `PAGE_SLUGS` porque ese registro ya está en el bundle; el inventario de casos
+ * malos vive en `scripts/`, y traérselo al navegador para contar dos números
+ * enviaría a cada visitante una treintena de mutaciones de archivos que nunca va a
+ * ejecutar. Así que el valor se escribe una vez aquí y **lo verifica
+ * `npm run check:accesibilidad`** contra `scripts/guardianes/casos.ts`: si no
+ * cuadran, CI sale rojo con las dos cifras delante.
+ *
+ * Es el mismo reparto que D38 —el valor en un solo sitio— con el guardián puesto
+ * donde la derivación no llega. Y hacía falta: la página decía «catorce
+ * comprobaciones y veintitrés errores fingidos» habiendo quince y veintisiete,
+ * porque nada ataba la prosa al inventario (P50.73).
+ */
+export const GUARDIAN_COUNT = 16;
+export const GUARDIAN_CASE_COUNT = 29;
+
+/**
  * El cardinal en palabras, porque el copy de este sitio escribe los recuentos
  * pequeños con letra («siete piezas», «ocho puntos», «dieciséis pasos») y un
- * numeral suelto rompería esa voz. Cubre hasta veinte: si el sitio pasa de ahí,
+ * numeral suelto rompería esa voz. Cubre hasta treinta: si un recuento pasa de ahí,
  * `fillPages` cae al numeral en vez de inventarse una palabra.
  */
 const CARDINALES: Record<Locale, readonly string[]> = {
@@ -464,6 +484,16 @@ const CARDINALES: Record<Locale, readonly string[]> = {
     "dieciocho",
     "diecinueve",
     "veinte",
+    "veintiuna",
+    "veintidós",
+    "veintitrés",
+    "veinticuatro",
+    "veinticinco",
+    "veintiséis",
+    "veintisiete",
+    "veintiocho",
+    "veintinueve",
+    "treinta",
   ],
   en: [
     "zero",
@@ -487,6 +517,16 @@ const CARDINALES: Record<Locale, readonly string[]> = {
     "eighteen",
     "nineteen",
     "twenty",
+    "twenty-one",
+    "twenty-two",
+    "twenty-three",
+    "twenty-four",
+    "twenty-five",
+    "twenty-six",
+    "twenty-seven",
+    "twenty-eight",
+    "twenty-nine",
+    "thirty",
   ],
 };
 

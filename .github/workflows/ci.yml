@@ -197,6 +197,14 @@ jobs:
       - name: Artículo al día
         run: npm run check:articulo
 
+      # Y la OTRA página que publica afirmaciones verificables sobre el propio
+      # repo. Mismo aparato y misma razón: la frase «aún no hay formulario»
+      # sobrevivió tres días al sprint que construyó el formulario, y se encontró
+      # de casualidad leyendo la página. Comprueba además que las dos cifras del
+      # arnés que escribe en prosa cuadran con los casos que hay (P50.73).
+      - name: Accesibilidad al día
+        run: npm run check:accesibilidad
+
       - name: Build
         run: npm run build
 

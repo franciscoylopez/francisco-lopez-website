@@ -55,10 +55,9 @@ consentimiento RGPD) · **dominio propio** · **páginas 404/500 de marca e i18n
 **cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy,
 Permissions-Policy, HSTS y CSP con allowlist mínima).
 
-**La marca no termina en el dominio.** Firma de email (monograma split, nombre en
-Bricolage y canales), banner de LinkedIn y portada del repositorio comparten el mismo
-titular que el Hero, «Del discovery al dato», y el mismo monograma. Es la prueba de
-coherencia que un sistema de marca solo puede dar fuera de su propio sitio.
+**La marca no termina en el dominio.** Firma de email, banner de LinkedIn y portada del
+repositorio comparten el titular del Hero, «Del discovery al dato», y el mismo monograma:
+la prueba de coherencia que un sistema de marca solo puede dar fuera de su propio sitio.
 
 La apertura de **Sobre mí es un vídeo**: se reproduce una vez y se queda en su último
 fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
@@ -82,7 +81,7 @@ descarga** (D65).
 9. **Franja-CTA de cierre** — banda de fondo propio con copy de posicionamiento al ICP y
    **una sola acción**, el botón sólido que lleva a `/contacto`. Los canales sueltos que
    la acompañaban salieron al existir esa página: allí están mejor.
-10. **Footer**, en dos filas — arriba, la firma con el nombre en lockup, los enlaces y los dos canales de icono; abajo, una línea fina con los derechos y el enlace de privacidad y cookies. Los enlaces van en jerarquía: **El Making of** destacado y las tres páginas del sistema (Brand Kit, Design System, Accesibilidad) agrupadas detrás de un filete. La distinción la hace el tono del chrome, nunca `primary`.
+10. **Footer**, en dos filas — arriba, la firma en lockup, los enlaces y los dos canales de icono; abajo, una línea fina con los derechos y el enlace de privacidad y cookies. Los enlaces van en jerarquía: **El Making of** destacado y las tres páginas del sistema agrupadas detrás de un filete, con el tono del chrome y nunca `primary`.
 
 ### Tres cosas que el sitio hace y no se ven mirándolo
 
@@ -131,10 +130,8 @@ pieza sale — **y vuelve si su motivo no valía en las cuatro** (D113, D121, D1
 `components/ui/README.md`, derivado del disco** y comprobado en cada PR, con la frase de
 cada pieza y la sección donde se publica (D89).
 
-Cuál toca se decide con dos preguntas — **¿se pulsa?** y, si sí, **¿tiene caja propia?** —
-no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
-tampoco. **Ninguno se escribe con clases sueltas**: si un caso no encaja en una variante,
-se crea la variante; la excepción se documenta con fecha. Es lo que hace que un cambio de
+**Cuál toca, y que ninguno se escriba con clases sueltas, lo decide la cascada de
+`CLAUDE.md` §Regla de construcción**, no este párrafo. Lo que compra es que un cambio de
 hover, de radio, del objetivo táctil o del icono de una acción llegue a todo el sitio a la
 vez. Los iconos son de **lucide**; los que lucide no trae (LinkedIn y GitHub) se dibujan a
 mano con la regla de autoría de iconos propios. Detalle en `BRAND.md` y en
@@ -173,6 +170,7 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | `npm test` | La lógica que no necesita navegador. Son dos: el formulario, medido sobre lo que nodemailer **emite**, y las reglas del tablero | CI | D101/D107 |
 | `gate:html` | El HTML servido de las 28 variantes antes y después de un refactor: diff vacío = transparente por construcción | a mano | D42/D45 |
 | `check:articulo` | Que ninguna sección del artículo dependa de una fuente que se movió, **nombrando la sección** en el PR que la mueve; `articulo:novedades` dice qué líneas. Sella aparte el copy, contra `ARTICLE_UPDATED`, que es el `dateModified` que ve Google | CI | D84/D103/D110 |
+| `check:accesibilidad` | Lo mismo para `/accesibilidad`: sus cinco bloques con fuente declarada, y que las dos cifras del arnés que publica en prosa cuadren con los casos que hay. **Fuera:** lo que es una MEDICIÓN y no un archivo (los pares sobre foto, el desbordamiento bajo 320) | CI | D140 |
 | `censo` | **Dos pases** sobre las páginas del registro × dos temas: los pares de TEXTO (1.4.3/1.4.6) y el **contorno de cada control** (1.4.11, 3:1), que axe no implementa. Deja sello, y `check:palette` lo compara en cada PR | a mano | D85/D97/D90 |
 | `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99 |
 | `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**. **Fuera:** el ZIP, que se genera en el build | CI | D119 |

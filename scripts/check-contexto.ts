@@ -153,9 +153,11 @@ function movimientosDelCiclo(historial: Movimiento[]): Movimiento[] {
  * arriba pedía sin poder pagarlo: 500 palabras son media docena de sesiones
  * escribiendo reglas en vez de un cuarto de sprint retirándolas.
  *
- * EL 2026-08-28 (P50.72) SON **405**, Y ESTA VEZ EL TECHO NO SE HA MOVIDO. Es la
- * primera vez que el margen sube solo por trabajo del dato: 12.047 → 11.895 sobre
- * el mismo 12.300, y añadiendo dos reglas por el camino. Salió de retirar COPIAS, no reglas — el gate de accesibilidad
+ * EL 2026-08-28 SON **410**, Y ESTA VEZ EL TECHO NO SE HA MOVIDO. Es la primera vez
+ * que el margen sube solo por trabajo del dato: 12.047 → 11.890 sobre el mismo
+ * 12.300, y añadiendo reglas por el camino — P50.72 lo dejó en 405 y P50.73, que
+ * trajo un gate nuevo y su fila de contrato, PAGÓ su alta retirando copias en vez
+ * de mover el techo. Es el trinquete funcionando como se pedía. Salió de retirar COPIAS, no reglas — el gate de accesibilidad
  * estaba descrito en `CLAUDE.md` y en la tabla de contrato de `PRD-Live`, el
  * reparto de los 9 puntos estaba en prosa y en la DoD, y el porqué de cada
  * excepción de control estaba en `BRAND.md`, en el histórico y en la propia marca
