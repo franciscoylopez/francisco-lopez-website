@@ -17,11 +17,24 @@
  * que cambiar el tema de la web, y nada lo decía. Ahora la tinta del suelto se
  * anuncia y el resto está en el kit.
  *
- * EL CRUCE DE NOMBRES ESTÁ ENCAPSULADO AQUÍ. En disco los SVG se nombran por TEMA
- * (`-claro` / `-oscuro`) y los PNG por TINTA (`tintaOscura` / `tintaClara`), y son
- * opuestos: `simbolo-split-claro.svg` lleva tinta OSCURA (#21262B). La página habla
- * siempre de tinta, que es lo que se elige; la traducción a nombre de archivo no
- * sale de estas dos funciones. El renombrado de los assets sigue pendiente.
+ * TODO EL KIT SE NOMBRA POR TINTA (2026-08-28, P50.96). Hasta hoy los SVG llevaban
+ * el sufijo del TEMA (`-claro` / `-oscuro`) y los PNG el de la TINTA
+ * (`-tintaOscura` / `-tintaClara`), y las dos convenciones eran OPUESTAS:
+ * `simbolo-split-claro.svg` llevaba tinta oscura, porque era el que se pinta sobre
+ * fondo claro. El cruce estaba encapsulado en `svgDe()`/`pngDe()` —así que la
+ * página nunca lo expuso— pero el `LEEME.txt` del ZIP tenía que dedicarle doce
+ * líneas en dos idiomas: era una convención que mentía sobre sí misma justo donde
+ * alguien la iba a leer sin las dos funciones delante.
+ *
+ * GANA LA TINTA porque es una propiedad DEL ARCHIVO; «claro/oscuro» es una
+ * propiedad del CONTEXTO donde se coloca, y por eso se invertía. Es el mismo
+ * argumento que ya estaba escrito en el generador para los PNG: un asset
+ * transparente se pone sobre el fondo que sea, así que el fondo no lo describe.
+ *
+ * LOS FAVICON SE QUEDAN EN `-claro` / `-oscuro`, y no es una excepción olvidada:
+ * ahí el sufijo no nombra un fondo sino el `prefers-color-scheme` con el que el
+ * navegador los elige (`app/[lang]/layout.tsx`). No los coloca nadie, así que el
+ * nombre que sirve es el de la consulta que los selecciona.
  */
 
 /** Dónde viven los assets, relativo a la raíz del repo. */
@@ -117,12 +130,20 @@ export const FAVICON_PNGS = [32, 16] as const;
 export const HREF_FAVICON_ICO = "/logo-kit/favicon/favicon.ico";
 
 /**
- * El SVG de una pieza en la tinta pedida. En los mono no hay sufijo: su tinta ya
- * está en el nombre.
+ * El nombre de archivo de una pieza en la tinta pedida, sin carpeta ni extensión.
+ * En los mono no hay sufijo: su tinta ya está en el nombre.
+ *
+ * Una sola función para las dos familias es lo que compró el renombrado: antes
+ * había dos, y traducían la misma tinta a dos sufijos opuestos.
  */
+function nombreDe(pieza: Pieza, tinta: Tinta): string {
+  if (!pieza.dosTintas) return pieza.base;
+  return `${pieza.base}-${tinta === "oscura" ? "tintaOscura" : "tintaClara"}`;
+}
+
+/** El SVG de una pieza en la tinta pedida. */
 export function svgDe(pieza: Pieza, tinta: Tinta = TINTA_SUELTA): string {
-  if (!pieza.dosTintas) return `/logo-kit/svg/${pieza.base}.svg`;
-  return `/logo-kit/svg/${pieza.base}-${tinta === "oscura" ? "claro" : "oscuro"}.svg`;
+  return `/logo-kit/svg/${nombreDe(pieza, tinta)}.svg`;
 }
 
 /** El PNG de una pieza en un tamaño y una tinta. */
@@ -131,9 +152,7 @@ export function pngDe(
   tamano: number,
   tinta: Tinta = TINTA_SUELTA,
 ): string {
-  if (!pieza.dosTintas) return `/logo-kit/png/${pieza.base}-${tamano}.png`;
-  const sufijo = tinta === "oscura" ? "tintaOscura" : "tintaClara";
-  return `/logo-kit/png/${pieza.base}-${sufijo}-${tamano}.png`;
+  return `/logo-kit/png/${nombreDe(pieza, tinta)}-${tamano}.png`;
 }
 
 /**
@@ -181,8 +200,12 @@ export const SOLO_EN_EL_KIT: readonly string[] = [
 
 /**
  * El LEEME que viaja dentro del ZIP. Va en los dos idiomas porque el kit es UNO
- * para los dos locales, y explica el cruce de nombres, que es lo primero con lo que
- * tropieza quien descomprime.
+ * para los dos locales.
+ *
+ * SU SECCIÓN DE NOMBRES ENCOGIÓ A LA MITAD cuando los SVG pasaron a nombrarse por
+ * tinta (P50.96): antes tenía que enseñar dos convenciones opuestas y avisar de que
+ * se leían al revés la una de la otra. La documentación que sobra es la medida de
+ * lo que costaba la convención que mentía.
  */
 export function leemeDelKit(numeroDeArchivos: number): string {
   return [
@@ -192,25 +215,28 @@ export function leemeDelKit(numeroDeArchivos: number): string {
     `${numeroDeArchivos} archivos.`,
     "",
     "SOBRE LOS NOMBRES DE ARCHIVO (ES)",
-    "  Los SVG llevan el sufijo del FONDO para el que sirven y los PNG el de su",
-    "  TINTA, asi que se leen al reves el uno del otro:",
+    "  Todo lleva el sufijo de su propia TINTA, SVG y PNG igual:",
     "",
-    "    *-claro.svg          tinta oscura, para fondos claros",
-    "    *-oscuro.svg         tinta clara, para fondos oscuros",
-    "    *-tintaOscura-*.png  tinta oscura, para fondos claros",
-    "    *-tintaClara-*.png   tinta clara, para fondos oscuros",
+    "    *-tintaOscura*  tinta oscura, para fondos claros",
+    "    *-tintaClara*   tinta clara, para fondos oscuros",
     "",
     "  Los archivos mono (simbolo-mono-negro, simbolo-mono-blanco, lockup-mono-*)",
     "  son de una sola tinta y la llevan en el nombre.",
     "",
-    "ABOUT THE FILE NAMES (EN)",
-    "  SVG files are named after the BACKGROUND they are meant for, PNG files after",
-    "  their own INK, so the two read as opposites:",
+    "  Los favicon van aparte, en -claro / -oscuro: ahi el sufijo no es la tinta",
+    "  sino el tema del navegador con el que se eligen.",
     "",
-    "    *-claro.svg          dark ink, for light backgrounds",
-    "    *-oscuro.svg         light ink, for dark backgrounds",
-    "    *-tintaOscura-*.png  dark ink, for light backgrounds",
-    "    *-tintaClara-*.png   light ink, for dark backgrounds",
+    "ABOUT THE FILE NAMES (EN)",
+    "  Everything is named after its own INK, SVG and PNG alike:",
+    "",
+    "    *-tintaOscura*  dark ink, for light backgrounds",
+    "    *-tintaClara*   light ink, for dark backgrounds",
+    "",
+    "  Mono files (simbolo-mono-negro, simbolo-mono-blanco, lockup-mono-*) come in",
+    "  a single ink and carry it in the name.",
+    "",
+    "  Favicons are the exception, in -claro / -oscuro: there the suffix is not the",
+    "  ink but the browser theme they are picked by.",
     "",
     "USO / USAGE",
     "  El split es la firma de marca y solo se usa a 48px o mas. Por debajo, el",

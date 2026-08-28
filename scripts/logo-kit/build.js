@@ -41,37 +41,21 @@ function lockup({ ink, split }) {
   return svgDoc(split ? VIEWBOX.lockupSplit : VIEWBOX.lockupFlat, body);
 }
 
-// nombre de archivo -> { ink, split, pngSuffix }
-// pngSuffix nombra la TINTA, no el fondo: un PNG transparente se coloca sobre
-// el fondo que sea, así que "tintaOscura" (para fondos claros) es la etiqueta
-// útil, no "claro".
+// nombre de archivo -> { ink, split }
+// EL NOMBRE ES LA TINTA, no el fondo, y desde P50.96 también en los SVG: un asset
+// transparente se coloca sobre el fondo que sea, así que "tintaOscura" (la que
+// sirve para fondos claros) describe el archivo y "claro" describe dónde acaba.
+// Hasta entonces el SVG y el PNG de la misma pieza llevaban sufijos OPUESTOS, y
+// el cruce vivía tapado en dos funciones de `lib/logo-kit.ts` y en doce líneas
+// del LEEME del ZIP. Al unificarlo desaparece el campo `png`: era el que
+// traducía.
 const VARIANTS = [
-  {
-    name: "plano-claro",
-    ink: COLORS.inkLight,
-    split: false,
-    png: "plano-tintaOscura",
-  },
-  {
-    name: "plano-oscuro",
-    ink: COLORS.inkDark,
-    split: false,
-    png: "plano-tintaClara",
-  },
-  {
-    name: "split-claro",
-    ink: COLORS.inkLight,
-    split: true,
-    png: "split-tintaOscura",
-  },
-  {
-    name: "split-oscuro",
-    ink: COLORS.inkDark,
-    split: true,
-    png: "split-tintaClara",
-  },
-  { name: "mono-negro", ink: COLORS.black, split: false, png: "mono-negro" },
-  { name: "mono-blanco", ink: COLORS.white, split: false, png: "mono-blanco" },
+  { name: "plano-tintaOscura", ink: COLORS.inkLight, split: false },
+  { name: "plano-tintaClara", ink: COLORS.inkDark, split: false },
+  { name: "split-tintaOscura", ink: COLORS.inkLight, split: true },
+  { name: "split-tintaClara", ink: COLORS.inkDark, split: true },
+  { name: "mono-negro", ink: COLORS.black, split: false },
+  { name: "mono-blanco", ink: COLORS.white, split: false },
 ];
 
 async function writePng(svg, file, dim) {
@@ -144,7 +128,7 @@ function buildIco(pngs) {
       for (const size of PNG_SIZES) {
         await writePng(
           svg,
-          path.join(OUT, "png", `${shape}-${v.png}-${size}.png`),
+          path.join(OUT, "png", `${shape}-${v.name}-${size}.png`),
           { [dimKey]: size },
         );
         pngCount++;

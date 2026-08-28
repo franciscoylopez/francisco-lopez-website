@@ -5827,6 +5827,24 @@ se habría visto el día que se escribió. Fue además la **segunda vez en el mi
 el censo no podía ver algo (D-entry de `--destructive`, doce días antes): aquella vez se
 arregló el caso y se escribió una regla, no se tocó el metro.
 
+**Addendum 2026-08-28 (P50.92) — la regla invertida estaba calibrada al revés, y no se notó
+porque no tenía ocupante.** `[data-surface="inverted"]` construye el contorno desde
+`--background`, que es su primer plano, pero usaba `--control-edge-mix`, el número calibrado
+contra el fondo del PROPIO tema. En una banda invertida el fondo es el del OTRO, así que el
+número que sirve es el otro: medido sobre el píxel pintado, el 45% de oscuro daba **2,78:1**
+contra la banda —por debajo del 3:1 de 1.4.11— y el 60% de claro daba 5,89, holgado pero más
+duro que el ~4 que busca el resto de la familia. Nace `--control-edge-mix-inverted` (45% claro
+/ 60% oscuro, 3,96 y 4,30), con la misma forma que `--border-mix-inverted`.
+
+**Y por qué el censo no lo cazó, siendo un pase que existe desde esta misma decisión:** el
+único control que vive hoy sobre una banda invertida —el compartir de la apertura del
+artículo, `ShareActions`— **se pintaba el borde a mano** (`border-background/70`, escrito en
+P60, un día antes de que existiera `--control-edge`). El censo medía el borde que el elemento
+pinta, y ese estaba bien. La regla de la capa era la que estaba mal, y no había nadie que la
+ejecutara. Es la variante «regla sin ocupante» del metro que devuelve lista vacía: aquí lo que
+devolvía vacío no era el metro sino el CONJUNTO MEDIDO. Al devolver el borde a la capa, la
+regla invertida tiene por fin su primer ocupante y entra en el censo.
+
 ## D98 · Tres instrumentos sanos midiendo la mitad de su objeto, y el filtro barato que iba después del caro — 2026-08-23
 
 **El hallazgo del cuarto `method-review`, y lo que lo hace distinto de los tres anteriores.** No
@@ -7049,12 +7067,31 @@ que existen, y el par `favicon-*-48.png`, que duplica los de la raíz que usa el
 decidió que **viajan en el kit sin tarjeta propia**, y ahora están **declarados** en
 `SOLO_EN_EL_KIT` con su motivo, que es la diferencia entre una decisión y un descuido.
 
-**Lo que queda pendiente, dicho para que no se dé por cerrado.** El **renombrado de los
-assets**: en disco los SVG se nombran por TEMA (`-claro`/`-oscuro`) y los PNG por TINTA
-(`tintaOscura`/`tintaClara`), y son **opuestos** (`simbolo-split-claro.svg` lleva tinta
-oscura). El cruce está encapsulado en `svgDe()` y `pngDe()`, así que la página nunca lo expone,
-y el `LEEME.txt` que viaja dentro del ZIP lo explica en los dos idiomas, que es donde el
-usuario tropieza con él. Renombrarlos es otra tarea.
+**Lo que quedaba pendiente, y se cerró el 2026-08-28 (P50.96).** El **renombrado de los
+assets**: en disco los SVG se nombraban por TEMA (`-claro`/`-oscuro`) y los PNG por TINTA
+(`tintaOscura`/`tintaClara`), y eran **opuestos** (`simbolo-split-claro.svg` llevaba tinta
+oscura). Ahora **todo el kit se nombra por tinta**, que es la propiedad DEL ARCHIVO: «claro» y
+«oscuro» describen el contexto donde se coloca, y por eso se invertían. El argumento ya estaba
+escrito en el generador para los PNG —«un asset transparente se pone sobre el fondo que sea»—;
+lo que faltaba era aplicárselo a la otra familia.
+
+**Y lo que se llevó por delante mide lo que costaba la convención que mentía:** `svgDe()` y
+`pngDe()` colapsan en un solo `nombreDe()`, el campo `png` de `VARIANTS` desaparece —era el
+que traducía— y la sección de nombres del `LEEME.txt` del ZIP encoge a la mitad en los dos
+idiomas, porque ya no tiene que avisar de que las dos convenciones se leen al revés.
+
+**Los favicon se quedan en `-claro`/`-oscuro`, y eso es una decisión, no un resto.** Ahí el
+sufijo no nombra un fondo sobre el que alguien coloca el asset: nombra el
+`prefers-color-scheme` con el que el navegador lo elige (`app/[lang]/layout.tsx` los declara
+con esa `media`). El nombre que sirve es el de la consulta que lo selecciona, así que
+renombrarlos rompería la única correspondencia clara que hay.
+
+**Un hallazgo lateral, sin tarea: el generador ya no reproduce sus propios PNG byte a byte.**
+Al reconstruir el kit para comprobar que el generador escribe los nombres nuevos, los 12 SVG
+salieron idénticos y **15 de los 43 binarios cambiaron** —distinta versión de sharp/libvips que
+la del día que se generaron—. No es un fallo del kit, pero sí el límite de `check:kit`, que
+cuadra NOMBRES y no contenido; se revirtieron los binarios para no meter ruido en el commit del
+renombrado.
 
 **Y una medición que no se hizo.** Esto **borra una capacidad que existía**: hasta hoy se podía
 bajar exactamente el PNG 512 en tinta clara. GA4 captura descargas de fábrica, así que el
