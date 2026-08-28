@@ -184,6 +184,7 @@
 - D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira
 - D147 · El andamiaje es el 30% del código y no lo lintaba nadie
 - D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
+- D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8805,3 +8806,69 @@ nunca por lo que puntúa.
 - **El censo**: la condición que su ficha exigía, **las mismas cifras antes y después**. Medido
   sobre `/accesibilidad` servida: 17 pares, 8 controles con caja y 6 contornos, 34 reglas
   `:hover`, metro validado, cero bajo AAA y cero bajo 3:1. Idénticas.
+
+
+## D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido — 2026-08-28
+
+**La idea era razonable:** en tres días caducaron cuatro contadores —`design-review` recorría
+«las seis páginas» cuando ya eran doce, `PRD-Live` y `README` se contradecían consigo mismos—,
+así que se propuso un guardián que buscara afirmaciones de conteo en los `.md` y las contrastara
+con su fuente derivada.
+
+**Y la tarea traía su propia condición, que es lo que la salva de haberse construido:** *el
+primer paso no es construirlo, es MEDIR EL RUIDO*. Se ha medido.
+
+### La medición
+
+Un detector de un solo uso —cifra en palabra o en dígito seguida de uno de los 25 sustantivos
+que este repo cuenta— sobre todos los `.md`:
+
+| | |
+|---|---|
+| Coincidencias totales | **625** |
+| En documentos **históricos** (registro fechado: una cifra vieja ahí es CORRECTA) | 331 |
+| En documentos **vivos** | **294** |
+
+Y sobre los vivos, clasificando a mano las dos familias que un guardián podría atar a una fuente
+derivada:
+
+- **`páginas`, que es el mejor caso posible** —tiene fuente (`PAGE_COUNT`) y es el sustantivo
+  que originó la tarea—: **13 apariciones vivas, y solo 3 hablan del conjunto de páginas del
+  sitio.** Las otras diez son las **2 páginas del CV en PDF**, las **5 del deep-dive**, las
+  **3 del sistema**, una narración histórica dentro de un documento vivo («durante meses, las
+  trece páginas…») y una referencia **fechada** en el `viewport-verifier`. **77% de falsos
+  positivos.**
+- **`guardianes`, `comprobaciones`, `piezas`, `decisiones`, `entradas`, `pasos`, `índices` y
+  `skills`: catorce apariciones vivas y NINGUNA cuenta un conjunto derivable.** Son «las cuatro
+  piezas del facade», «un núcleo de ocho piezas» (un subconjunto deliberado, no el inventario de
+  24), «dos comprobaciones de dos segundos», «tres pasos hasta el lanzamiento».
+
+**Total: 3 candidatos reales sobre 27 — un 89% de falsos positivos.** Y los tres están
+correctos hoy. *Un gate ruidoso es peor que ninguno*, que es el criterio con el que se abrió.
+
+### Por qué no hay forma de afinarlo
+
+El detector no falla por poco vocabulario: **falla porque «catorce páginas» y «dos páginas» son
+sintácticamente idénticas y hablan de conjuntos distintos**, y porque una cifra dentro de una
+frase fechada o de una narración histórica es correcta precisamente por ser vieja. Distinguirlas
+pide entender la frase, no reconocerla.
+
+### Lo que hace innecesario el guardián
+
+**Donde la cifra se PUBLICA ya está derivada, y eso es lo que importaba.** `/accesibilidad` y el
+artículo interpolan `{paginas}`, `{comprobaciones}` y `{fingidos}`; `pasosDeCI()` cuenta los
+pasos leyendo el workflow; `check:accesibilidad` compara `GUARDIAN_COUNT` contra el disco — y lo
+hizo en esta misma tanda, parando el commit que subía los guardianes de 17 a 18 sin mover la
+cifra. Lo que queda en prosa son los `.md`, que no los lee ningún visitante y sí un `grep`.
+
+**Y la mitad barata que la propia tarea encontró: un contador que se puede borrar no necesita
+guardián.** Las tres instancias de `ci.yml` se arreglaron **borrando** el contador, no
+actualizándolo, y el argumento estaba escrito treinta líneas más abajo en el mismo archivo. Esa
+es la regla que queda viva: **antes de escribir una cifra en prosa, preguntarse si la frase
+funciona sin ella.** `method-review` ya lo tiene escrito con su propia cicatriz: *«cuando esta
+línea decía "20 pasos" ya eran 21»*.
+
+**El solape con P68.5 también está medido, y es real:** el sello de `check:articulo` es por
+ARCHIVO, así que un cambio de comentario en `contrast-census.js` encendió §s09 tres veces en
+esta tanda sin que ninguna afirmación del artículo se moviera. Ese ruido sí tiene arreglo posible
+—sellar por contenido sustantivo y no por archivo— y se queda en su tarea.
