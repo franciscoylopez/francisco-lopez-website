@@ -64,7 +64,7 @@ export const CASOS: Caso[] = [
     // «exactamente la propiedad que check:experiencias existe para GARANTIZAR».
     // O sea que un informe de calidad se apoya en este guardián, y hasta hoy
     // nadie había comprobado que supiera fallar.
-    mutar: (o) => o.replace(/\n      \{\n        cv: [\s\S]*?\n      \},/, ""),
+    mutar: (o) => o.replace(/\n {6}\{\n {8}cv: [\s\S]*?\n {6}\},/, ""),
   },
   {
     guardian: "check:cv",
@@ -160,7 +160,7 @@ export const CASOS: Caso[] = [
     // compilaría —los dos Record del sitemap y de llms.txt dejarían de ser
     // exhaustivos—, pero el guardián corre con tsx, que transpila sin comprobar
     // tipos: aquí se mide lo que ve él, que es el disco contra el registro.
-    mutar: (o) => o.replace(/\n  "cookies",/, ""),
+    mutar: (o) => o.replace(/\n {2}"cookies",/, ""),
   },
   {
     guardian: "check:skills",
@@ -404,5 +404,22 @@ export const CASOS: Caso[] = [
     // no sale por hacer bien el trabajo, solo si se rehace el banner entero.
     archivo: "components/site/consent-banner.tsx",
     mutar: (o) => o.replace("@fuera-de-capa:", "control a mano:"),
+  },
+  {
+    guardian: "lint",
+    rotura:
+      "una variable sin usar dentro de `scripts/`, que hasta P50.80 no miraba nadie",
+    // EL CASO MALO ES EL AGUJERO QUE SE ACABA DE CERRAR (2026-08-28, P50.80).
+    // `eslint.config.mjs` ignoraba `scripts/**` entero — 8.446 líneas, el 30% del
+    // código del repo, más que `lib/` y `app/` juntos— y el ignore es una línea:
+    // vuelve a ponerse sin querer con la misma facilidad con la que se quitó, y su
+    // modo de fallo es un `npm run lint` en verde que no ha mirado nada.
+    //
+    // POR QUÉ ESTE ARCHIVO Y NO OTRO: se muta el censo porque es el andamiaje que
+    // más caro sale que se rompa en silencio, y porque una variable sin usar es lo
+    // MÍNIMO que una config viva tiene que cazar. Si esto pasa en verde, es que
+    // `scripts/` ha vuelto a quedarse fuera.
+    archivo: "scripts/censo.ts",
+    mutar: append("\nconst sinUsarGuardian = 1;\n"),
   },
 ];

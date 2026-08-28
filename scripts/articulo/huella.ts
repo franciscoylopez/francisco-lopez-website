@@ -29,7 +29,6 @@ import {
 import {
   DEPENDENCIAS,
   SECCIONES,
-  type Dependencia,
   type SeccionId,
 } from "../../content/articulo/dependencias";
 

@@ -182,6 +182,7 @@
 - D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo
 - D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra
 - D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira
+- D147 · El andamiaje es el 30% del código y no lo lintaba nadie
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8692,3 +8693,63 @@ D63, D85).
 **Lo que NO era:** un falso negativo de `violations`. Esas salieron **0 de forma estable** en
 las cuatro combinaciones tema × locale. Afecta a `incomplete`, que es donde axe archiva lo que
 no sabe resolver — `color-mix()`, gradientes y SVG.
+
+
+## D147 · El andamiaje es el 30% del código y no lo lintaba nadie — 2026-08-28
+
+**El hueco, con la medida correcta.** `eslint.config.mjs` ignoraba **`scripts/**` entero** —no
+los `.js`: todo—, y `tsconfig.json` tiene `allowJs` **sin** `checkJs`. Resultado en dos niveles:
+los **39 `.ts`** los typechea `tsc` y no los linta nadie; los **8 no-TS** (1.235 líneas) no los
+mira ninguno de los dos. En total **8.446 líneas, el 30% del repo** — más que `lib/` (2.063) y
+`app/` (3.178) juntos.
+
+**Y el ignore tenía razón.** Decía «usa `require()` y APIs de Node, no es código de Next», y es
+verdad: la config de Next sobre un CommonJS de Node da errores que no son errores. **La
+respuesta no era levantarlo, era darle a esa mitad su propia config.**
+
+**Decisión: dos programas, dos configs.** `scripts/` se linta con **`@eslint/js` recomendado +
+`typescript-eslint`**, no con la de Next, y **partido por entorno**, porque ahí abajo no hay uno
+solo:
+
+| Qué | Globales | Módulos |
+|---|---|---|
+| `scripts/**/*.ts` · gates, guardianes, generadores | Node | ESM |
+| `scripts/**/*.mjs` · hooks del harness | Node | ESM |
+| `scripts/logo-kit/`, `scripts/logos/` | Node + CommonJS | `require()` |
+| `scripts/design-review/*.js` · el censo | **navegador** | script inyectado |
+
+El censo es el caso que justifica la tabla: **no es código de Node**, se evalúa dentro de la
+página, así que sus globales son `window` y `document`. Es además el archivo peor puntuado por
+qlty y el que se ha roto en silencio dos veces (D70).
+
+**Fuera queda `scripts/.poda/`**, que son recortes generados para medir y se regeneran enteros.
+
+**Lo que encontró la primera pasada, y era el argumento entero:** 22 errores reales. Un tipo
+importado y sin usar en `articulo/huella.ts` —justo la clase de aviso que el sprint anterior
+dejó pasar—, seis backticks escapados de más dentro de cadenas con comillas dobles, y dos
+regex con espacios contados a ojo en los casos de los guardianes.
+
+### Y un guardián, porque el ignore es UNA LÍNEA
+
+El agujero se abrió con una línea y se cierra con otra: **vuelve a abrirse igual de fácil, y su
+modo de fallo es un `npm run lint` en verde que no ha mirado nada.** Así que `check:guardianes`
+gana un caso —una variable sin usar dentro de `scripts/censo.ts`— que **solo puede saltar si
+`scripts/` sigue dentro del alcance**. Es el mismo razonamiento que el resto del arnés: lo que
+se comprueba no es qué encontró, es cuánto miró.
+
+### Lo que se descartó, con su medida
+
+El enunciado proponía tres escalones y **el primero y el tercero no se hacen**: `// @ts-check`
+en `contrast-census.js`.
+
+`tsc` **no ve `scripts/**/*.js` en absoluto** —el `include` de `tsconfig.json` solo lista `.ts`,
+`.tsx` y `.mts`—, así que el `@ts-check` sin más no habría hecho nada; es una regla cuyo
+disparador mira al sitio equivocado. Se probó de verdad, metiendo
+`scripts/design-review/*.js` en el `include`: **63 errores**, todos `implicit any` y nulos
+estrictos de un archivo de navegador sin tipos, en un archivo de 720 líneas cuya propia cabecera
+dice «no lo reescribas». Anotarlo entero para silenciarlos sería el rewrite que la cabecera
+prohíbe, a cambio de cero hallazgos.
+
+**Lo que ese archivo necesita ya lo tiene**, y son dos redes distintas: el lint que acaba de
+ganar, y `check:guardianes`, que le pasa un caso malo conocido y comprueba que lo rechaza —
+cobertura de comportamiento, que es la correcta para un metro.
