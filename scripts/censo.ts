@@ -106,6 +106,8 @@ const fallo = (msg: string) => problemas.push(msg);
 
 const guionCenso = readFileSync(CENSO, "utf8");
 
+const TOTAL_CORRIDAS = PAGE_SLUGS.length * TEMAS.length;
+
 let corridas = 0;
 let paresTotales = 0;
 let sinMedirTotales = 0;
@@ -180,8 +182,13 @@ for (const slug of PAGE_SLUGS) {
           `${c11.ejemplo}${c11.veces > 1 ? ` ×${c11.veces}` : ""}`,
       );
 
+    // CON EL CONTADOR DELANTE (P50.78, 2026-08-28). La línea por corrida ya
+    // estaba; lo que faltaba era saber **por dónde va**. Con 28 corridas de un par
+    // de minutos, «14/28» es la diferencia entre esperar y matar el proceso, y es
+    // justo lo que no se podía decir el día que el censo se colgó en silencio.
     console.log(
-      `  ${etiqueta.padEnd(34)} ${String(c.pares).padStart(3)} pares · ` +
+      `  [${String(corridas).padStart(2)}/${TOTAL_CORRIDAS}] ` +
+        `${etiqueta.padEnd(34)} ${String(c.pares).padStart(3)} pares · ` +
         `${c.sinMedir.length} sobre imagen · metro ${c.metro}`,
     );
 

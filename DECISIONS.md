@@ -180,6 +180,7 @@
 - D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba
 - D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia
 - D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo
+- D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8574,3 +8575,74 @@ abierta se queda esperando**, no falla. Se abre primero y solo entonces se fija 
 —el deep-dive, «Cómo se ha creado» y la home—. Sus aperturas son tipográficas, de alto constante,
 no se comparan de un vistazo con estas cuatro y cada una tiene su hueco razonado en su archivo.
 Esa exclusión no está escrita en el guardián: **sale sola**, porque no llevan `FOLD_GROUP`.
+
+
+## D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra — 2026-08-28
+
+Son dos fallos distintos y la misma familia — **un metro que no dice lo que está haciendo**—,
+así que se arreglan juntos.
+
+### 1 · El censo se colgaba en silencio, y la causa no era el navegador
+
+**El síntoma:** catorce minutos sin una línea. Sin forma de distinguir «va lento» de «está
+muerto» más que sondeando `agent-browser eval "location.href"` cada veinte segundos.
+
+**La causa, medida:** `execFileSync` **sin `input` deja `stdio[0]` en `inherit`**, así que el
+hijo se queda con el `stdin` del padre; en una shell no interactiva —el harness en segundo
+plano, CI— ese `stdin` no se cierra nunca y una de las seis llamadas por corrida espera para
+siempre. Se sospechó primero de 38 Chrome de `agent-browser` y **esa sospecha era falsa**: con
+el navegador despejado se colgó dos veces más, 13 y 10 minutos, con **0,1 s de CPU acumulada** y
+cero procesos hijo. *Una sospecha no es una causa.*
+
+**Decisión.** `ab()` pasa `input` **siempre**, aunque sea la cadena vacía, y lleva **tope de
+reloj** (`AB_TIMEOUT_MS`, 120 s por llamada) que traduce el SIGTERM a un mensaje con el comando
+que no respondió. El `< /dev/null` que se usaba de parche **se retira**: no valía, porque en
+segundo plano no manda el shell desde el que se lanza.
+
+**Y progreso, que es la otra mitad.** El censo ya imprimía una línea por corrida; lo que no
+decía era **por dónde iba**. Ahora lleva `[14/28]` delante. Con 28 corridas, eso es la
+diferencia entre esperar y matar el proceso.
+
+### 2 · `psi --registro` sellaba un rango sacado de una sola muestra
+
+**El sello publica el min/max de las catorce páginas, y el artículo lo lee (D102).** Con una
+toma por página, **la peor toma manda sobre el rango entero**. Medido el mismo día, contra
+producción y sin tocar nada entre medias: `/design-system` dio **76** en el barrido y **98 y
+99** al re-medirla; `/como-se-ha-creado`, **81** y luego **89 y 99**. El barrido iba a sellar
+«76-100 escritorio» cuando `PRD-Live` §No funcionales afirma «>90 en las catorce». *El sitio
+habría publicado un número que contradice su propio criterio de aceptación, por ruido.*
+
+**Decisión: tres tomas y la MEDIANA.** No la media, porque el ruido de PSI es asimétrico hacia
+abajo —la media de 76, 98 y 99 da 91, que no es ninguna de las tres— y no el mejor de tres,
+porque en un dato que se publica es peor pasarse de optimista. Con un número **par** de valores
+se coge el bajo de los dos centrales, por lo mismo: promediar inventaría una nota que la página
+no ha sacado nunca.
+
+**Tres elecciones que no son obvias:**
+
+- **Las tomas van por FUERA del recorrido.** Medir una página tres veces seguidas devuelve tres
+  veces el mismo análisis cacheado, que es la primera trampa de D108: *una n alta sobre filas
+  repetidas da la apariencia de rigor y el veredicto contrario*. Dando una vuelta entera al
+  registro entre toma y toma, cada página se remide varios minutos después. **Funcionó a la
+  primera y con holgura: 28 llamadas → 28 análisis distintos, el 100%.**
+- **Se deduplica por el sello del ANÁLISIS**, el «(medido …)» que ya se imprimía al lado de la
+  nota, no por el de la llamada. Y lo que se guarda es la **medición** cuya nota es la mediana,
+  no la cifra suelta: sus avisos y su desglose tienen que venir de la misma corrida.
+- **Un par que se queda en un solo análisis distinto NO sella**, y se dice cuál. Es la regla que
+  ya tenía la función —«no sella una pasada parcial»— llevada a su forma correcta: *una pasada
+  completa medida una vez es tan parcial como una pasada a medias*. La caché de la API expira,
+  así que el remedio es repetir un rato después, no bajar el listón.
+
+**Y afirma cuánto ha muestreado**, no solo qué encontró: tomas, llamadas, análisis distintos y
+**los tres pares que más se movieron**. Esa tabla es la evidencia de por qué esto existe —
+`/brand-kit` dio **89 y 100** sobre el mismo despliegue, con minutos de diferencia.
+
+**Lo que NO se ha comprobado, dicho para que no se dé por comprobado:** el criterio que abría la
+tarea era «un barrido repetido dos veces da el mismo rango ±2». Eso son 168 llamadas y más de
+una hora de API, desproporcionado para lo que aporta sobre lo ya medido. Se validó con un
+barrido real de **dos tomas × 14 páginas en escritorio**, que es donde se leen las tres cosas
+que importan: el 100% de análisis distintos, la dispersión real, y que la negativa a sellar
+salta.
+
+**Coste aceptado:** el barrido pasa de 28 llamadas a 84 y de varios minutos a bastantes más.
+`--tomas=1` existe para tantear sobre un Preview, y **no sella**, a propósito.

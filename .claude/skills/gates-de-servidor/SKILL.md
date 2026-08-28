@@ -111,26 +111,22 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
 > **NO CANALICES EL CENSO POR `tail` NI POR `head`** *(2026-08-27)*. Se lanzó
 > `npm run censo 2>&1 | tail -45` y `tail` no suelta nada hasta que el proceso termina: **dos
 > horas y media con el log a 0 bytes**, sin poder distinguir «trabajando» de «atascado» más que
-> mirando los procesos de Chrome del sistema. El gate ya tiene tareado que le falta progreso
-> (P68.736), pero la mitad de aquella ceguera la puso el comando, no el script. Salida directa.
+> mirando los procesos de Chrome del sistema. Salida directa: ahora el censo publica
+> `[14/28]` por corrida, y canalizarlo tira justo eso.
 
-> **LA CAUSA DEL CUELGUE ESTÁ MEDIDA, Y NO ERA EL NAVEGADOR** *(2026-08-27)*. Se sospechó de
-> 38 procesos de Chrome compitiendo con los del censo, y esa sospecha se apuntó como si fuera
-> un hecho. **Es falsa.** Con el navegador despejado —`close --all` devolvió «No active
-> sessions», y los Chrome vivos eran el navegador personal— el censo se colgó **dos veces
-> más**, 13 y 10 minutos, con **0,1 s de CPU acumulada** y cero procesos hijo.
+> **EL CUELGUE ESTÁ ARREGLADO EN EL CÓDIGO** *(2026-08-28, P50.78)*. Lo que colgaba era el
+> **`stdin`**: `execFileSync` sin `input` deja `stdio[0]` en `inherit`, así que el hijo se
+> quedaba con el `stdin` del padre y en background el harness no lo cierra nunca. Se midió bien
+> —navegador despejado, dos cuelgues de 13 y 10 minutos con **0,1 s de CPU** y cero procesos
+> hijo—, así que la sospecha del navegador era falsa.
 >
-> Lo que cuelga es el **`stdin`**: el `execFileSync` del helper lo hereda, y en modo background
-> el harness nunca lo cierra. **`< /dev/null` NO lo salva**, porque ahí no manda el shell.
+> `scripts/navegador/agent-browser.ts` ahora pasa `input` siempre y tiene **tope de reloj**
+> (`AB_TIMEOUT_MS`, 120 s por llamada). **El `< /dev/null` de antes ya no hace falta**, y
+> tampoco valía: en background no manda el shell desde el que se lanza.
 >
-> **Lánzalo en PRIMER PLANO.** Así corre entero en dos minutos:
->
-> ```bash
-> npm run censo < /dev/null      # en primer plano, sin encadenar otro comando delante
-> ```
->
-> **Cómo distinguir «va lento» de «está muerto» sin esperar:** mira el CPU acumulado del
-> proceso. Décimas de segundo tras diez minutos es un cuelgue, no trabajo.
+> **Cómo distinguir «va lento» de «está muerto» sin esperar:** ya lo dice él —una línea
+> `[n/28]` por corrida—. Si aun así calla, mira el CPU acumulado del proceso: décimas de
+> segundo tras diez minutos es un cuelgue, no trabajo.
 
 - **`gate:html`** compara contra la base del paso 2. Si sale diff y el cambio era intencionado,
   vuelve a guardar la base y sigue; si no lo era, abre la página.
@@ -141,36 +137,31 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
   lo que `check:palette` compara en cada PR (D90). Lo que **no** juzga es el texto sobre foto:
   esos pares salen listados aparte y se miden sobre el píxel pintado.
 - **`psi`** no se mide en local y no es un gate de CI: su variabilidad daría rojos falsos.
-  **Y cuenta con que su sello NO se pueda commitear** *(2026-08-27)*: el barrido dio **móvil
-  74** en la home y el re-medido, **96 y 95**. Se hicieron **dos barridos completos y no
-  coincidieron ni en qué páginas bajaban** —en el segundo la home dio 96 y cayeron otras tres,
-  más un `ERROR`—. Las cuatro páginas bajo 90 subieron por encima de 95 al re-medirlas una a
-  una. Cuando eso pase, **se revierte `content/psi/registro.json` y no se commitea**: el
-  artículo publica esa cifra (D102) y un 74 falso es peor que un sello de hace tres días.
-  **Y esa variabilidad NO se queda fuera del sello, que es lo que hay que saber antes de
-  commitearlo** *(2026-08-26)*: el modo registro toma **una sola muestra por página** y publica
-  el **min/max**, así que la peor toma manda sobre el rango entero. Medido el mismo día, en
-  producción y sin tocar nada entre medias: `/design-system` dio **76** en el barrido y **98 y
-  99** al re-medirla; `/como-se-ha-creado`, **81** y luego **89 y 99**; `/sobre-mi` en móvil,
-  **88** y **97**. El barrido sellaba «76-100 escritorio», y el artículo publica esa cifra
-  (D102). **Antes de commitear el sello, re-mide cualquier página bajo 90 con
-  `npm run psi -- <url> --solo=escritorio`**; si sube, el sello no vale y no se commitea.
+  **Esa variabilidad es enorme y está medida**: el barrido dio **móvil 74** en la home y el
+  re-medido, **96 y 95**; dos barridos completos **no coincidieron ni en qué páginas bajaban**.
+  Medido el mismo día, en producción y sin tocar nada entre medias: `/design-system` **76** y
+  luego **98 y 99**; `/como-se-ha-creado`, **81** y luego **89 y 99**.
+  **Desde P50.78 el barrido lo absorbe él** *(2026-08-28)*: toma **tres medidas** de cada
+  página×estrategia —una vuelta entera al registro entre toma y toma, para que la caché de la
+  API no devuelva tres veces el mismo análisis— y sella la **mediana**. Publica cuántos
+  análisis distintos consiguió y **se niega a sellar** si algún par se quedó en uno solo; en
+  ese caso se repite un rato después, cuando la caché haya expirado.
+  Aun así, **mira la tabla de dispersión antes de commitear**: si un par se mueve veinte puntos
+  entre tomas, la mediana es la mejor cifra disponible pero el sitio tiene algo que mirar.
+  `--tomas=1` existe para tantear sobre un Preview y **no sella**, a propósito.
 
-### Y una trampa de ejecución del censo, que no da error
+### Y una trampa de ejecución del censo, ya sin parche
 
-**`npm run censo` se cuelga si lo lanzas desde una shell no interactiva sin cerrarle el
-stdin** *(2026-08-26)*. Su helper usa `execFileSync` sin `timeout` y hereda un stdin que nunca
-se cierra, así que una de las seis llamadas por corrida se queda esperando para siempre. Y como
-el censo **solo imprime al terminar**, el síntoma es catorce minutos de silencio absoluto: no
-distingues «va lento» de «está muerto».
+**Lo que se colgaba era el `stdin`, y está arreglado en el helper** *(P50.78, 2026-08-28; el
+detalle, en el aviso de arriba)*. Se lanza sin más:
 
 ```bash
-npm run censo < /dev/null      # así corre entero: 28 corridas en menos de dos minutos
+npm run censo      # 28 corridas, con una línea [n/28] por corrida
 ```
 
-**Cómo saber cuál de las dos cosas es**, sin esperar: mira si la página avanza.
-`agent-browser eval "location.href"` dos veces separadas un minuto. Si no se mueve, está
-colgado. (Y ojo: `| tail` bloquea la salida en búfer, así que un log vacío no prueba nada.)
+Si alguna vez vuelve a callarse, el tope de reloj lo mata en 120 s por llamada y dice el
+comando que no respondió. Y `| tail` sigue bloqueando la salida en búfer: un log vacío no
+prueba nada.
 
 ## Paso 5 · Lo que deja detrás
 

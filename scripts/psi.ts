@@ -33,6 +33,7 @@
 //     npm run psi -- https://… --solo=movil        # o --solo=escritorio
 //     npm run psi -- --registro                    # las páginas del registro
 //     npm run psi -- --registro --base=https://…   # sobre un Preview
+//     npm run psi -- --registro --tomas=1          # barrido de tanteo, no sella
 //
 // CLAVE: la API sin clave devuelve 429 casi siempre. Se lee de `PSI_API_KEY`, del
 // entorno o de `.env.local` (que está en .gitignore). Cómo obtenerla, en el README.
@@ -56,12 +57,20 @@
 //     `check:marco`, `censo` y el `viewport-verifier`, que no gastan cuota de API
 //     ni dependen de que Google esté de buenas.
 //
-// DOS TRAMPAS AL REPETIR CORRIDAS (D108, 2026-08-25). Si alguna vez se lanza esto
-// N veces para sacar una mediana:
+// Y EL MODO REGISTRO MUESTREA (P50.78, 2026-08-28). Toma tres medidas de cada
+// página×estrategia y publica la MEDIANA, porque con una sola muestra el min/max
+// sellaba ruido: `/design-system` dio 76 y, re-medida sin tocar nada, 98 y 99. Las
+// tomas van por fuera del recorrido —una vuelta entera al registro entre toma y
+// toma— para que la caché de la API no devuelva tres veces el mismo análisis.
+//
+// DOS TRAMPAS AL REPETIR CORRIDAS (D108, 2026-08-25), y la primera es justo la que
+// obliga a lo de arriba:
 //   · LA API DEVUELVE RESULTADO CACHEADO. Seis de ocho corridas seguidas pueden ser
-//     la misma respuesta byte a byte. DEDUPLICA por el «(medido …)» que se imprime
-//     al lado de la nota: es el sello del análisis, no el de la llamada. Una n alta
-//     sobre filas repetidas da la apariencia de rigor y el veredicto contrario.
+//     la misma respuesta byte a byte. Por eso `consolida()` deduplica por el
+//     «(medido …)» que se imprime al lado de la nota: es el sello del ANÁLISIS, no
+//     el de la llamada. Una n alta sobre filas repetidas da la apariencia de rigor
+//     y el veredicto contrario, así que un par que se queda en un solo análisis
+//     distinto NO sella.
 //   · Y EL DESGLOSE DEL LCP NO ES UNA PROPIEDAD DE LA PÁGINA. Sobre el mismo
 //     despliegue, el render delay se movió entre 15 y 2058 ms (137×) y su cuota
 //     entre el 1% y el 90%. El TOTAL sí es estable. No abras una tarea sobre una
@@ -362,6 +371,9 @@ async function midePagina(
   ruta: string,
   estrategias: readonly Estrategia[],
   key: string,
+  /** Los avisos se callan mientras se muestrea: los buenos son los de la mediana,
+   *  y esos se imprimen una sola vez al consolidar. */
+  conAvisos = true,
 ): Promise<{ medidas: Medicion[]; fallos: Fallo[] }> {
   const url = `${base}${ruta}`;
   const medidas: Medicion[] = [];
@@ -387,12 +399,130 @@ async function midePagina(
   }
 
   console.log(`\n  ${ruta.padEnd(28)} ${notas.join("   ")}`);
+  if (!conAvisos) return { medidas, fallos };
+
   for (const { estrategia, aviso } of avisos) {
     console.log(`      ${enLinea(aviso)}   (${enCastellano(estrategia)})`);
   }
   if (!avisos.length && !fallos.length) console.log("      sin avisos");
 
   return { medidas, fallos };
+}
+
+/**
+ * Cuántas veces se mide cada página×estrategia en modo registro (P50.78).
+ *
+ * POR QUÉ NO ES UNA. El barrido tomaba UNA muestra y publicaba el min/max, así que
+ * la peor toma mandaba sobre el rango entero — y ese rango lo publica el artículo
+ * (D102). Medido el mismo día contra producción y sin tocar nada entre medias:
+ * `/design-system` 76 y luego 98 y 99; `/como-se-ha-creado` 81 y luego 89 y 99. El
+ * barrido iba a sellar «76-100 escritorio» cuando el criterio de aceptación del
+ * PRD dice «>90 en las catorce». El sitio habría publicado un número que
+ * contradice su propio criterio, por ruido.
+ */
+const TOMAS_POR_DEFECTO = 3;
+
+/**
+ * La mediana, no la media: el ruido de PSI es ASIMÉTRICO hacia abajo —una toma
+ * mala hunde la media y no mueve la mediana—, y la media de 76, 98 y 99 da 91,
+ * que no es ninguna de las tres.
+ *
+ * Con un número PAR de valores se queda con el bajo de los dos centrales en vez de
+ * promediarlos. Es deliberado: promediar inventaría una nota que la página no ha
+ * sacado nunca, y en un sello que se publica es peor pasarse de optimista.
+ */
+const mediana = (notas: number[]): number => {
+  const orden = [...notas].sort((a, b) => a - b);
+  return orden[Math.floor((orden.length - 1) / 2)]!;
+};
+
+/** Cuánto se movió un par entre tomas, en puntos. */
+const dispersion = (c: Consolidada) => c.notas.at(-1)! - c.notas[0]!;
+
+/** Las tomas de UNA página×estrategia, reducidas a la medición que las representa. */
+interface Consolidada {
+  /** La corrida cuya nota es la mediana. Se guarda la MEDICIÓN, no la cifra: sus
+   *  avisos y su desglose tienen que venir de la misma corrida que la nota. */
+  medida: Medicion;
+  /** Cuántas llamadas se hicieron. */
+  tomas: number;
+  /** Cuántos ANÁLISIS distintos devolvieron esas llamadas. */
+  distintas: number;
+  /** Las notas distintas, ordenadas, para poder enseñar la dispersión. */
+  notas: number[];
+}
+
+/**
+ * Reduce las N tomas de cada página×estrategia a una sola medición.
+ *
+ * DEDUPLICA POR EL SELLO DEL ANÁLISIS, no por el de la llamada, y es la mitad
+ * importante (D108): la API devuelve resultado cacheado, y seis corridas seguidas
+ * pueden ser la misma respuesta byte a byte. Una n alta sobre filas repetidas da
+ * la apariencia de rigor y el veredicto contrario.
+ */
+function consolida(brutas: Medicion[]): Consolidada[] {
+  const grupos = new Map<string, Medicion[]>();
+  for (const m of brutas) {
+    const clave = `${m.ruta}|${m.estrategia}`;
+    grupos.set(clave, [...(grupos.get(clave) ?? []), m]);
+  }
+
+  return [...grupos.values()].map((tomas) => {
+    const unicas = [...new Map(tomas.map((m) => [m.medido, m])).values()];
+    const objetivo = mediana(unicas.map((m) => m.nota));
+    return {
+      medida: unicas.find((m) => m.nota === objetivo)!,
+      tomas: tomas.length,
+      distintas: unicas.length,
+      notas: unicas.map((m) => m.nota).sort((a, b) => a - b),
+    };
+  });
+}
+
+/**
+ * AFIRMA CUÁNTO HA MUESTREADO, que es lo que separa una mediana de tres análisis
+ * de una mediana de tres copias del mismo. Y enseña la dispersión, que es la
+ * evidencia de por qué esto existe: si el peor par se mueve 23 puntos entre tomas,
+ * sellar la peor habría sido publicar ruido.
+ */
+function imprimeMuestreo(consolidadas: Consolidada[], tomas: number) {
+  const llamadas = consolidadas.reduce((s, c) => s + c.tomas, 0);
+  const analisis = consolidadas.reduce((s, c) => s + c.distintas, 0);
+  const cacheadas = consolidadas.filter((c) => c.distintas < 2);
+
+  console.log(
+    "\n─── Qué se muestreó, y cuánto se movió ──────────────────────",
+  );
+  console.log(
+    `  ${tomas} tomas × ${consolidadas.length} pares · ${llamadas} llamadas · ` +
+      `${analisis} análisis distintos (${Math.round((analisis / llamadas) * 100)}%)`,
+  );
+
+  const dispersas = [...consolidadas]
+    .filter((c) => c.notas.length > 1)
+    .sort((x, y) => dispersion(y) - dispersion(x))
+    .slice(0, 3);
+  for (const c of dispersas) {
+    console.log(
+      `  ${c.medida.ruta.padEnd(28)} ${enCastellano(c.medida.estrategia).padEnd(10)} ` +
+        `${c.notas.join("·")}  → mediana ${c.medida.nota} ` +
+        `(${dispersion(c)} puntos de diferencia)`,
+    );
+  }
+  if (!dispersas.length) console.log("  Ningún par se movió entre tomas.");
+
+  if (cacheadas.length) {
+    console.log(
+      `\n  ${cacheadas.length} par(es) con UN SOLO análisis distinto — la API los ` +
+        `devolvió cacheados:\n` +
+        cacheadas
+          .map(
+            (c) =>
+              `      ${c.medida.ruta} (${enCastellano(c.medida.estrategia)})`,
+          )
+          .join("\n"),
+    );
+  }
 }
 
 /**
@@ -450,6 +580,7 @@ function imprimeResumen(
   fallos: Fallo[],
   estrategias: readonly Estrategia[],
   totalPaginas: number,
+  tomas = 1,
 ) {
   const llamadas = totalPaginas * estrategias.length;
   const resumen = estrategias.map((estrategia) => {
@@ -461,9 +592,10 @@ function imprimeResumen(
   });
 
   console.log(
-    `\npsi ${fallos.length ? "✗" : "✓"} — ${medidas.length}/${llamadas} llamadas ` +
-      `(${totalPaginas} páginas × ${estrategias.length} estrategia(s)), ` +
-      `${fallos.length} fallidas · ${resumen.join(" · ")}\n`,
+    `\npsi ${fallos.length ? "✗" : "✓"} — ${medidas.length}/${llamadas} pares medidos ` +
+      `(${totalPaginas} páginas × ${estrategias.length} estrategia(s)` +
+      `${tomas > 1 ? `, mediana de ${tomas} tomas` : ""}), ` +
+      `${fallos.length} llamada(s) fallida(s) · ${resumen.join(" · ")}\n`,
   );
 
   if (!fallos.length) return;
@@ -482,12 +614,14 @@ async function recorreElRegistro(
   base: string,
   estrategias: readonly Estrategia[],
   key: string,
+  tomas: number,
 ) {
   const rutas = PAGE_SLUGS.map((slug) => pagePath(defaultLocale, slug));
 
   console.log(
-    `\npsi — ${rutas.length} páginas × ${estrategias.length} estrategia(s) sobre ${base}` +
-      `\n  ${rutas.length * estrategias.length} llamadas en serie: esto tarda varios minutos.`,
+    `\npsi — ${rutas.length} páginas × ${estrategias.length} estrategia(s) × ` +
+      `${tomas} toma(s) sobre ${base}` +
+      `\n  ${rutas.length * estrategias.length * tomas} llamadas en serie: esto tarda varios minutos.`,
   );
 
   try {
@@ -499,17 +633,33 @@ async function recorreElRegistro(
     console.log("  (no se pudo leer la huella del despliegue)");
   }
 
-  const medidas: Medicion[] = [];
+  // LAS TOMAS VAN POR FUERA, y no es orden arbitrario: medir una página tres
+  // veces seguidas devuelve tres veces el mismo análisis cacheado (D108). Dando
+  // una vuelta entera al registro entre toma y toma, cada página se remide varios
+  // minutos después, que es lo que hace que la segunda toma sea una medición y no
+  // una copia.
+  const brutas: Medicion[] = [];
   const fallos: Fallo[] = [];
-  for (const ruta of rutas) {
-    const r = await midePagina(base, ruta, estrategias, key);
-    medidas.push(...r.medidas);
-    fallos.push(...r.fallos);
+  for (let toma = 1; toma <= tomas; toma++) {
+    if (tomas > 1) {
+      console.log(
+        `\n─── toma ${toma}/${tomas} ─────────────────────────────────`,
+      );
+    }
+    for (const ruta of rutas) {
+      const r = await midePagina(base, ruta, estrategias, key, tomas === 1);
+      brutas.push(...r.medidas);
+      fallos.push(...r.fallos);
+    }
   }
 
+  const consolidadas = consolida(brutas);
+  const medidas = consolidadas.map((c) => c.medida);
+  if (tomas > 1) imprimeMuestreo(consolidadas, tomas);
+
   imprimeAgregado(medidas, rutas.length);
-  imprimeResumen(medidas, fallos, estrategias, rutas.length);
-  sella(medidas, fallos, estrategias, rutas.length, base);
+  imprimeResumen(medidas, fallos, estrategias, rutas.length, tomas);
+  sella(consolidadas, fallos, estrategias, rutas.length, base, tomas);
 }
 
 /**
@@ -523,15 +673,27 @@ async function recorreElRegistro(
  * del sitio es peor que no publicar nada: se lee igual y es falso. Con un solo
  * fallo, una estrategia de menos o una `--base` que no sea producción, se dice
  * por qué no se ha sellado y se deja el sello anterior intacto.
+ *
+ * Y DESDE P50.78, TAMPOCO UNA DE UNA SOLA MUESTRA. Una pasada completa medida una
+ * vez es tan parcial como una pasada a medias: el min/max publica los extremos, y
+ * un extremo sacado de una toma es ruido con formato de dato.
  */
 function sella(
-  medidas: Medicion[],
+  consolidadas: Consolidada[],
   fallos: Fallo[],
   estrategias: readonly Estrategia[],
   totalPaginas: number,
   base: string,
+  tomas: number,
 ) {
+  const medidas = consolidadas.map((c) => c.medida);
   const esperadas = totalPaginas * 2;
+  // NI UNA PASADA DE UNA SOLA MUESTRA (P50.78). Es la misma regla que las de
+  // arriba, con la evidencia que la escribió: el barrido del 2026-08-26 iba a
+  // sellar «76-100 escritorio» porque el 76 salió de una toma que al repetirla dio
+  // 98 y 99. Y da igual pedir tres tomas si la API devolvió tres veces el mismo
+  // análisis cacheado: lo que se exige no son llamadas, son ANÁLISIS distintos.
+  const deUnaMuestra = consolidadas.filter((c) => c.distintas < 2);
   const motivo =
     base !== PRODUCCION
       ? `se ha medido ${base} y el sello solo describe producción`
@@ -541,7 +703,16 @@ function sella(
           ? `${fallos.length} medición(es) fallaron`
           : medidas.length !== esperadas
             ? `hay ${medidas.length} mediciones y se esperaban ${esperadas}`
-            : null;
+            : tomas < 2
+              ? "una sola toma por página, y cada extremo del rango saldría de una sola muestra"
+              : deUnaMuestra.length
+                ? `${deUnaMuestra.length} par(es) se quedaron en un solo análisis distinto ` +
+                  `(${deUnaMuestra
+                    .slice(0, 3)
+                    .map((c) => c.medida.ruta)
+                    .join(", ")}${deUnaMuestra.length > 3 ? "…" : ""}). ` +
+                  "La caché de la API expira: repítelo dentro de un rato"
+                : null;
 
   if (motivo) {
     console.log(`\n  Sin sellar: ${motivo}.`);
@@ -557,6 +728,10 @@ function sella(
   const registro = {
     fecha: new Date().toISOString().slice(0, 10),
     paginas: totalPaginas,
+    // Cuántas tomas hay detrás de cada extremo. Va en el sello y no solo en la
+    // consola porque es lo que separa este rango del de 2026-08-24, que salió de
+    // una: sin el número, los dos archivos se leen igual.
+    tomas,
     movil: rango("mobile"),
     escritorio: rango("desktop"),
   };
@@ -564,7 +739,8 @@ function sella(
   writeFileSync(PSI_REGISTRO, `${JSON.stringify(registro, null, 2)}\n`);
   console.log(
     `\n  Sellado en ${PSI_REGISTRO} — ${registro.escritorio.min}-${registro.escritorio.max} escritorio · ` +
-      `${registro.movil.min}-${registro.movil.max} móvil, ${totalPaginas} páginas, ${registro.fecha}.`,
+      `${registro.movil.min}-${registro.movil.max} móvil, ${totalPaginas} páginas, ` +
+      `mediana de ${tomas} tomas, ${registro.fecha}.`,
   );
   console.log("  El artículo publica esa cifra con esa fecha (D102).");
 }
@@ -631,7 +807,19 @@ async function main() {
       delEntorno("NEXT_PUBLIC_SITE_URL") ??
       PRODUCCION
     ).replace(/\/$/, "");
-    await recorreElRegistro(base, estrategias, key);
+
+    // `--tomas=N` existe para poder bajar el coste a propósito (un barrido de
+    // tanteo sobre un Preview no necesita mediana, y un Preview no sella igual).
+    // Un valor que no se entiende NO cae de vuelta al defecto: multiplicaría por
+    // tres el gasto de cuota sin que nadie lo hubiera pedido.
+    const pedidas = args.find((a) => a.startsWith("--tomas="))?.split("=")[1];
+    const tomas = pedidas ? Number(pedidas) : TOMAS_POR_DEFECTO;
+    if (!Number.isInteger(tomas) || tomas < 1) {
+      console.error(`\n--tomas=${pedidas} no es un entero ≥ 1.\n`);
+      process.exit(2);
+    }
+
+    await recorreElRegistro(base, estrategias, key, tomas);
     return;
   }
 
