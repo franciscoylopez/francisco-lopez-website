@@ -251,6 +251,16 @@ export const CASOS: Caso[] = [
       ),
   },
   {
+    guardian: "check:og",
+    rotura: "el copy de la página cambia y su tarjeta OG se queda con el viejo",
+    // EL CASO REAL, no uno inventado: al afilar el kicker del Hero (P83), cambiar
+    // esa cadena eran TRES sitios y el tercero solo apareció por un grep a mano.
+    // Se muerde el diccionario y no la tabla de la tarjeta, que es la dirección en
+    // que ocurre: el copy se edita donde se lee.
+    archivo: "app/[lang]/dictionaries/es/home.json",
+    mutar: (o) => o.replace("Del discovery al dato.", "Del discovery al dato"),
+  },
+  {
     guardian: "check:marcas",
     rotura: 'un nombre propio se pinta suelto, sin `translate="no"`',
     // Tercer caso que muerde el build, por lo de siempre: la entrada de este

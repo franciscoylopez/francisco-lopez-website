@@ -205,6 +205,13 @@ jobs:
       - name: Accesibilidad al día
         run: npm run check:accesibilidad
 
+      # Las dieciséis cadenas de las tarjetas OG repiten copy del diccionario, y
+      # nada las comparaba: al afilar el kicker del Hero, cambiarlo eran TRES sitios
+      # y el tercero solo apareció por un grep a mano. Es lo que se ve al compartir
+      # el sitio, y el único texto que no mira nadie (P50.75).
+      - name: Tarjetas OG al día
+        run: npm run check:og
+
       - name: Build
         run: npm run build
 

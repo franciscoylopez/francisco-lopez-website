@@ -24,11 +24,10 @@ Tabla de modelo por defecto según el trabajo. **Convención:** al empezar un bl
 | Tablero de Notion, cableado de componentes, refactors mecánicos, actualización de docs, regenerar CV | **Sonnet** |
 | Tareas triviales/repetitivas sin criterio | **Haiku** |
 
-Micro-tarea mecánica dentro de una sesión Opus → delegar a un subagente con modelo barato **solo si es "chunky"** (el arranque en frío no compensa para un one-liner).
+Micro-tarea mecánica en una sesión Opus → subagente barato **solo si es "chunky"**: el arranque en frío no compensa un one-liner.
 
 ## Higiene de sesión
 
-- **Lecturas dirigidas:** preferir Grep / Read con `offset`/`limit` sobre leer archivos enteros — sobre todo `PRD-Historical.md` (~30k tok) y `DECISIONS.md`. Para una decisión concreta, `grep` del D-número, no cargar el archivo.
 - **Una sesión por bloque coherente;** `/clear` entre tareas no relacionadas para no arrastrar historial/tool-outputs acumulados.
 - **No re-leer tras editar** (el harness ya rastrea el estado del archivo).
 - **Concisión por defecto:** liderar con la respuesta, cortar preámbulos y recaps, tablas/bullets sobre párrafos; extenderse cuando se pida.

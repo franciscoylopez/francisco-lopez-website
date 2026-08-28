@@ -177,6 +177,7 @@
 - D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta
 - D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido
 - D141 · El 404 de un enlace saliente lo sirve un tercero, así que no sale en ningún gate
+- D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8408,3 +8409,60 @@ redirecciones reales.
 **Lo que NO puede ver, dicho para que no se dé por cubierto:** que la página de destino siga
 diciendo lo que el texto del enlace promete. Detecta que la URL responde, no que sea la misma
 página. Un dominio caducado y recomprado devuelve 200 tan campante.
+
+---
+
+## D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba — 2026-08-28
+
+**Contexto.** `app/api/og/route.tsx` llevaba una constante `COPY` con dieciséis cadenas (8
+tarjetas × 2 idiomas) que repetían texto ya escrito en los diccionarios. Los dos guardianes que
+tocan esa ruta miran otra cosa: `check:marco` (D75) comprueba que el `?card=` de cada variante
+resuelve a **su** tarjeta, y `check:rutas` (D72) que la unión `OgCard` cuadra con el registro de
+páginas. **Ninguno mira el texto de dentro.**
+
+**No es hipotético.** Al afilar el kicker del Hero (P83), cambiar una cadena resultaron ser
+**tres sitios**: `es/home.json`, `en/home.json` y ese literal. El tercero no lo señaló ningún
+check — apareció por un `grep` hecho a mano antes de tocar nada. Y es la familia que este repo ya
+cerró dos veces, **D60** (una fuente única no mantiene al día una copia impresa) y **D72** (qué
+páginas hay estaba escrito a mano en cuatro sitios): era la última instancia abierta.
+
+**La premisa de la tarea era falsa, y en la dirección que amplía el arreglo.** Decía que tres
+tarjetas —`cookies`, `contacto` y `sobre-mi`— no tenían de dónde leer, así que no se podían
+comparar. Sí lo tienen: `title` y `kicker`, **sueltos en la raíz** en vez de bajo `hero`. Con eso,
+**las dieciséis parejas son comparables** y el guardián hace 32 comparaciones en vez de las 10
+que la ficha daba por alcanzables.
+
+**Decisión.** `COPY` sale de la ruta a `content/og/copy.ts` —dato aparte de quien lo ejecuta,
+misma partición que `scripts/tablero/reglas.ts` y `scripts/guardianes/casos.ts`, y aquí además
+necesaria para que el guardián lo lea sin importar `next/og`— y `npm run check:og` lo compara en
+CI con tres reglas:
+
+1. **Lo que no está declarado como distinto, tiene que coincidir.**
+2. **Una divergencia declarada tiene que seguir divergiendo.** Si vuelve a coincidir, sale rojo:
+   una excepción que ya no muerde es una nota caducada haciéndose pasar por regla — la lección
+   que `check:guardianes` se llevó dos veces con sus casos malos.
+3. **La clave del diccionario tiene que existir**, por su ruta EXACTA.
+
+**Por qué se declara y no se deriva.** Derivarlo obligaría a la ruta OG a importar ocho
+diccionarios de página × dos idiomas para sacar dos cadenas de cada uno, y esa ruta se sirve en
+frío. (El motivo que daba la ficha —«tres no tienen de dónde leer»— era el falso.)
+
+**La ruta se declara, no se adivina, y esto es lo que más se acercó a un verde falso.** Hay
+**tres formas vivas** de guardar el par: `hero.title`, `hero.headline` (la home) y la clave suelta
+en la raíz. Un `??` encadenado buscando en las tres habría **dado verde sobre una clave que ya no
+existe**, que es exactamente el modo de fallo que este guardián viene a cerrar. Con la ruta
+declarada, una reestructuración del copy sale roja diciendo qué ruta ya no resuelve.
+
+**La única divergencia viva, ahora con motivo escrito:** el kicker de «Cómo se ha creado esta
+página» dice `Making-of` en la tarjeta y «El «Making of» de franciscolopez.es» en la página,
+porque el largo no cabe en 1200px. Antes eso era indistinguible de un descuido; ahora está
+declarado, y **el propio guardián exige que siga siendo distinto**.
+
+**Por qué merece gate propio y no una fila de `check:marco`:** aquél mide el HTML prerenderizado
+y necesita el build; esto compara dos ficheros de datos y corre con los guardianes baratos. Y el
+coste de que falle es alto para lo barato que es: la tarjeta OG es la primera impresión del
+tráfico que llega por recomendación, y el único texto del sitio que no mira nadie.
+
+**Validado disparándolo**, con su caso malo en `check:guardianes`: se toca el titular en
+`es/home.json` —la dirección en que ocurre de verdad, porque el copy se edita donde se lee— y el
+guardián nombra la tarjeta, el idioma y el campo.
