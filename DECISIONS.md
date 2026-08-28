@@ -185,6 +185,7 @@
 - D147 · El andamiaje es el 30% del código y no lo lintaba nadie
 - D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
 - D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
+- D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8935,3 +8936,50 @@ línea decía "20 pasos" ya eran 21»*.
 ARCHIVO, así que un cambio de comentario en `contrast-census.js` encendió §s09 tres veces en
 esta tanda sin que ninguna afirmación del artículo se moviera. Ese ruido sí tiene arreglo posible
 —sellar por contenido sustantivo y no por archivo— y se queda en su tarea.
+
+---
+
+## D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse — 2026-08-28
+
+**La guía de Vercel pide `preconnect` a los dominios de assets, y este sitio no tiene ni uno**
+(cero `preconnect`, cero `dns-prefetch`). El único dominio de tercero que se pide al cargar es
+`www.googletagmanager.com`; el resto son enlaces de salida, que no se piden hasta que alguien los
+pulsa.
+
+### La medición, y la trampa que casi la invalida
+
+`npm run psi` sobre la home de producción **no lista ningún aviso de preconnect**, y eso
+*parecía* el aprobado. No lo era: **Lighthouse 13 ya no tiene auditoría `uses-rel-preconnect`**
+—de las 47 del informe, cero mencionan preconnect en su clave—, así que la ausencia del aviso no
+decía nada. Es el fallo de método de `BRAND.md` §Cómo se escribe una regla, punto 3, encontrado a
+tiempo: *un metro que devuelve lista vacía parece un aprobado*.
+
+Donde vive hoy el veredicto es dentro de `network-dependency-tree-insight`, y ahí es explícito.
+Igual en las dos estrategias:
+
+```
+Preconnected origins  → no origins were preconnected
+Preconnect candidates → No additional origins are good candidates for preconnecting
+```
+
+### Por qué el sitio no tiene candidatos
+
+Porque **GTM entra a propósito tarde**. La estrategia es `lazyOnload` desde P26.5, y el timing
+medido lo confirma: en escritorio `gtm.js` se pide a **843 ms** con el LCP en **500 ms** — la
+petición ocurre *después* del elemento que puntúa. Un `preconnect` adelantaría una conexión TLS a
+la ventana crítica para un recurso que no la necesita, y en móvil el LCP ya está dominado por el
+`resource load delay` del hero (1592 ms, 63% del desglose), que es D59 y no tiene nada que ver
+con la red hacia terceros.
+
+La cadena crítica que sí sale en rojo son **dos CSS del propio sitio** (la más larga, 2366 ms).
+Ese es otro hallazgo, y no se arregla preconectando a Google.
+
+### Y la parte que hay que conservar: a `youtube-nocookie` NO se le hace
+
+La misma guía pediría preconectar al dominio del vídeo, y sería **exactamente la petición que el
+facade existe para evitar** (D55): sin iframe en el DOM hasta que alguien pulsa, y sin una sola
+petición a Google antes de eso. **Una regla general puede contradecir una decisión ya tomada;
+gana la decisión.**
+
+**Estado: descartada, no pendiente.** Se reabre solo si aparece un tercero que se pida *dentro*
+de la ventana del LCP — y entonces lo dirá «Preconnect candidates», que es donde hay que mirar.
