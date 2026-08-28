@@ -187,32 +187,20 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **5** |
 | **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **3** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
+| **El umbral que persigue al dato** | Un techo que se reescribe para seguir a lo que mide, así que nunca se incumple y nunca obliga. Firma: cambia más a menudo que la cosa medida, y su distancia al dato es constante | **2** |
 | **Añadir sin retirar** | Un documento que crece porque nada pregunta qué sobra (D69) | el marco |
 
-*Segundo disparo, 2026-08-19: nace «arreglar la mitad que se abre» —el* cooldown *de
-Dependabot controló cuántos PR se abren y no quién los cierra; D59 derivó el sitemap del
-deep-dive dejando las páginas estáticas a mano en tres listas—. Y la lección sobre esta
+*Segundo disparo, 2026-08-19: nace «arreglar la mitad que se abre». Y la lección sobre esta
 tabla: **actualizarla es el último paso del disparo y es el que se olvida.***
 
-*Tercer disparo, 2026-08-22: **«la regla sin portador» pasa de 3 instancias a 6 y se
-convierte en la familia dominante.** Las tres nuevas salieron del mismo sprint: cuatro de
-los ocho hallazgos del `design-review` tenían la regla ya escrita antes de empezar (el
-fondo invertido, el morado como gráfico, los 44px, la cascada de construcción); la regla
-de publicar en el Design System no tiene disparador **ni plantilla**; y la condición de
-re-medir de la DoD se cumplió por sus tres vías a la vez y nadie la leyó, porque leerla es
-trabajo humano.*
-
-*Y la familia nueva es **«la pieza que nace fuera de la capa»**, que se separó de la
-anterior por el REMEDIO y no por el síntoma: la regla sin portador necesita un
-**disparador**; esta necesita un **guardián de frontera** —algo que note que apareció un
-archivo en `components/ui/` y le exija lo que la capa exige—. Sus dos instancias:
-el **riel de secciones**, que perdió los 44px, el hover y el foco al escribirse fuera de
-`components/ui/chrome.tsx` —vivía en `article-islands.tsx` y desde D121 está en
-`section-index-islands.tsx`, ya con su variante—, y la sección de la capa de artículo del
-Design System, que nació sin la estructura de las demás. *(Aquí decía «la sección 15» y
-«las otras catorce»: dos recuentos que caducaron cuando P70.34 dejó la página en doce. No
-se escribe el número, se nombra la sección.)* **Ojo al medirla: su firma es que el hallazgo aparece tarde y en plural** —ocho
-tareas de golpe en una revisión final, no una en cada PR.*
+*Tercer disparo, 2026-08-22: «la regla sin portador» se vuelve la familia dominante, y nace
+**«la pieza que nace fuera de la capa»**, separada de ella **por el REMEDIO y no por el
+síntoma**: la regla sin portador necesita un **disparador**; esta, un **guardián de
+frontera** —algo que note que apareció un archivo en `components/ui/` y le exija lo que la
+capa exige—. **Su firma al medirla: el hallazgo aparece tarde y en plural**, ocho tareas de
+golpe en una revisión final en vez de una en cada PR. Y de rebote, una regla de redacción:
+cuando aquí se escribieron «la sección 15» y «las otras catorce», los dos recuentos
+caducaron el día que la página pasó a doce. **No se escribe el número, se nombra la cosa.***
 
 *Cuarto disparo, 2026-08-22 (el mismo día que el tercero, tras Método II): **«arreglar la
 mitad que se abre» alcanza al propio método, y esa es la instancia 4.** Las revisiones
@@ -281,16 +269,21 @@ día por P68.5907: techo de 20.500 a la suma, y esa frase de la salida ya no exi
   siguiente ya lo daba por causa. Era falsa: el censo se colgó con el navegador despejado, y la
   causa real era el `stdin`. **Lo que se apunta como hipótesis se escribe como hipótesis.***
 
-**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-27)*:
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-28)*:
 
-| Indicador | Hoy | Verde | Rojo |
-| :-- | :-- | :-- | :-- |
-| Variación neta de `General` por sprint | **+11** (cerró en 45) 🔴 | ≤ 0 | ≥ +4 |
-| Margen del presupuesto de contexto | **246** tras P68.5905 🟡 | ≥ 400 | < 100 |
-| Suma de skills a demanda | **20.203** · techo 20.500 desde P68.5907 🟢 | ≤ techo | > techo |
-| Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 |
-| Sprint de método abierto en el ciclo | **No** 🟢 | No | Sí |
-| ~~Skills sin estrenar~~ | *retirado: sin fuente medible* | — | — |
+| Indicador | Hoy | Verde | Rojo | Comando |
+| :-- | :-- | :-- | :-- | :-- |
+| Variación neta de `General` por sprint | **0** (45 → 45) 🟢 | ≤ 0 | ≥ +4 | tablero |
+| **Veces que se movió un techo en el ciclo** | **2** 🔴 | 0 | ≥ 2 | `git log -- check-contexto.ts` |
+| Margen del presupuesto de contexto | **253** 🟡 | ≥ 400 | < 100 | `check:contexto` |
+| Suma de skills a demanda | **20.296** · techo 20.500 🟡 | ≤ techo | > techo | `check:contexto` |
+| **Verificación ÷ producto** | **0,40** 🟢 | ≤ 0,45 | > 0,55 | `git ls-tree` + `wc -l` |
+| Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 | `design-review` |
+| Sprint de método abierto en el ciclo | **No** 🟢 | No | Sí | tablero |
+| ~~Skills sin estrenar~~ | *retirado: sin fuente medible* | — | — | — |
+
+*La variación de `General` **todavía no tiene línea base fiable**: el 45 anterior se midió
+DENTRO del sprint, no al abrirlo. Tómala siempre al abrir, o la cifra no compara nada.*
 
 *Las dos filas van en la vara de `check:contexto`, que **descuenta los bloques de código**: por
 eso 20.203 aquí y 20.616 arriba. No es drift, y el porqué está en el propio script.*

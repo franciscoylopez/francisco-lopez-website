@@ -82,6 +82,7 @@
 - [64. La revisión de las hermanas destapa que el Design System había cambiado de género (2026-08-26)](#64-la-revisión-de-las-hermanas-destapa-que-el-design-system-había-cambiado-de-género-2026-08-26)
 - [65. «Páginas hermanas» cierra, y el method-review mide que la reducción de contexto fue una mudanza (2026-08-27)](#65-páginas-hermanas-cierra-y-el-method-review-mide-que-la-reducción-de-contexto-fue-una-mudanza-2026-08-27)
 - [66. La distribución entra en el alcance del proyecto, y el orden se decide aparte (2026-08-27)](#66-la-distribución-entra-en-el-alcance-del-proyecto-y-el-orden-se-decide-aparte-2026-08-27)
+- [El sprint «Home» cierra, y el siguiente se parte en dos carriles — 2026-08-28](#el-sprint-home-cierra-y-el-siguiente-se-parte-en-dos-carriles--2026-08-28)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3355,6 +3356,80 @@ El **cómo**. Los candidatos —publicar el artículo en LinkedIn y en comunidad
 enviar el enlace directamente al ICP de §2, SEO de cola larga sobre lo que el sitio ya
 documenta, el README de perfil de GitHub— siguen sin evaluar. Esa parte se resuelve cuando
 la tarea entre, no ahora.
+
+## El sprint «Home» cierra, y el siguiente se parte en dos carriles — 2026-08-28
+
+**Entregado.** «Home» cierra con **12 tareas** y sale a producción entero en `acece01`
+(PR #197, squash, 19 commits, 35 archivos). Cuatro hilos: el presupuesto de contexto gana
+techo a la suma de las skills y `CLAUDE.md` parte su porqué a un histórico; tres decisiones
+bajan a la capa (equilibrado de línea, destello del toque, el filete por superficie); el
+motion deja **D135** y **D136** y el punto del titular resulta ser dos piezas (**D137**); y
+la parte visible son el nodo `WebSite` con su `isPartOf`, la casilla que no estaba en la
+capa, y el kicker del Hero.
+
+**El kicker, porque el diagnóstico de su ficha era medio correcto.** Decía «sopa de
+keywords» y proponía listar menos. Lo que la fila hace es **filtrar** —rol, seniority y
+stack en el escaneo de 5-10 s del ICP de RRHH (§2)—, así que las direcciones que la
+convertían en afirmación («Diseño y construyo lo que gestiono») le daban el trabajo del
+titular. Se afila el vocabulario, no la forma: **«Senior Product Manager · UX · SaaS · IA ·
+Builder»**. «Builder» es el único de los cinco que no es una categoría que cualquier PM
+lista, y es lo más cerca del founder que cabe sin quemar el reveal gradual de §3.
+
+### El check de medición queda PENDIENTE, y se escribe como pendiente
+
+No se hizo: la sesión no tenía acceso a GA4 ni a Looker. **La cifra de partida contra la que
+leer sigue siendo la de D71** (28 días hasta el 2026-08-24): `contact_click` 9 ·
+`file_download` 6 · `scroll` 62 · **`contact_submit` 1**, con 46 usuarios.
+
+Lo que sí se verificó, por el lado del repo, es el **instrumento**: `trackContactSubmit`
+sigue empujando `contact_submit` al `dataLayer` y solo se llama con `state.status === "sent"`,
+o sea cuando el servidor confirma. Y la pregunta 3 se contesta con un «no» escrito: la
+ventana se solapa casi entera con la del cierre anterior y cuatro días no producen lectura
+nueva. **Distribución sigue en alcance, y es el tercer cierre que lo dice.**
+
+### «Drenaje»: dos carriles a la vez, y por qué eso no es partir el trabajo por la mitad
+
+El cuello de botella dejó de ser técnico. Lo que decide si el sitio está listo para lanzar es
+si **el contenido aguanta una lectura entera**, y eso solo lo hace Francisco. Pero es lento, y
+dejar el repo parado mientras dura sería tirar el tiempo.
+
+Así que el sprint corre **en paralelo**: Francisco relee las catorce páginas apuntando lo que
+vea, y en paralelo se drena la deuda que no pide criterio. **La salida de la lectura es el
+sprint siguiente**, el de mejoras de contenido; la de las tandas, un tablero limpio.
+
+**Y el orden de las tandas no lo manda la prioridad: lo manda cuánto se VE lo que tocan.** Si
+el sitio cambia bajo los pies de quien lo está leyendo, sus notas caducan mientras las
+escribe. Por eso van primero los guardianes y la deuda de `scripts/` (invisibles), después los
+refactors que cierra un `gate:html` vacío, y **al final** lo que se ve en el artículo y el
+Brand Kit, con una condición explícita: esa tanda no empieza hasta que esas dos páginas estén
+leídas.
+
+**Eso obligó a renumerar el sprint entero**, y conviene decir por qué: `CLAUDE.md` dice que
+`Tanda` no es un eje de ejecución y que quien manda es `Prioridad`. Con las tandas ordenadas
+por visibilidad y las prioridades heredadas de sus bloques, las dos cosas se contradecían —
+ejecutar la tanda 1 significaba saltarse tareas de prioridad menor. Las 30 pasan a la banda
+**50.705 → 50.99**, contigua y por delante de los bloques, que es donde tiene que estar el
+sprint activo. Es la excepción que la propia regla contempla: reestructuración completa, no
+inserción puntual.
+
+### Lo que este sprint hace y no se ve en su lista: drenar `General`
+
+`General` tenía **45 tareas abiertas** y ningún sprint que lo drene, porque la regla de
+movimiento («cambia de `Etapa` al sprint que la toca») funciona para bloques de página y no
+puede funcionar para uno transversal. Su único desagüe histórico había sido **inventar un
+sprint de método**, dos veces. Este no lo es: es un drenaje, y **sale gratis porque el trabajo
+de producto está bloqueado en la lectura, no compitiendo con ella.** `General` queda en **18**.
+
+### Tres tareas descartadas por premisa caducada
+
+Y se escriben en su ficha, que es lo que impide que vuelvan:
+
+- **P86.5 «Introducir tests»** y **P75 «¿Sigue vigente D11 (sin tests)?»** — el umbral que
+  pedían llegó con el formulario de Contacto. Hay cuatro suites, `npm test` está en CI y
+  tienen su caso malo en `check:guardianes`. La decisión se tomó **construyendo**.
+- **P71.61 «Skills sin estrenar no se puede medir»** — resuelta **retirando el indicador**,
+  que era su propia conclusión. Una fila muerta en una tabla de umbrales es peor que no
+  tenerla, porque da sensación de cobertura.
 
 ## Fuentes
 
