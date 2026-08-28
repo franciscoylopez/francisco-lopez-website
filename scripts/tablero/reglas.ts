@@ -36,7 +36,8 @@ export type Hallazgo = {
     | "sin-prioridad"
     | "sin-area"
     | "estado-fuera-del-sprint"
-    | "orden-entre-sprints";
+    | "orden-entre-sprints"
+    | "general-no-drena";
   mensaje: string;
   tareas: string[];
 };
@@ -58,6 +59,70 @@ export const ABIERTAS = [...EN_EJECUCION, "Sin empezar"];
  * rojo justo sobre lo que el tablero protege.
  */
 const CARRIL_PARALELO = "Contenido";
+
+/**
+ * El bloque transversal: la deuda que no es de ninguna página. No lo drena ningún
+ * sprint —por definición, ninguno lo tiene como etapa—, así que `CLAUDE.md` lo
+ * drena por CUPO: 3-4 tareas arrastradas por sprint.
+ */
+export const BLOQUE_TRANSVERSAL = "General";
+
+/**
+ * A partir de cuánto la variación neta deja de ser ruido. Acordado con Francisco
+ * el 2026-08-25: **verde ≤ 0** · **rojo ≥ +4**. Entre medias, ámbar: se dice y no
+ * se falla, porque una sola tarea nueva no significa que el cupo se haya saltado.
+ */
+export const VARIACION_ROJA = 4;
+
+/**
+ * El tamaño de `General` en el cierre anterior. Es un valor que solo cambia al
+ * cerrar una etapa, así que no necesita almacén: vive como constante fechada en
+ * `check-tablero.ts`, igual que `check:contexto` guarda ahí su techo. Aquí solo
+ * se recibe, para que la regla se pueda probar con cualquier sello.
+ */
+export type Sello = {
+  /** ISO corta, para que el informe diga contra qué se compara. */
+  fecha: string;
+  /** Qué etapa se cerró ese día. */
+  cierre: string;
+  /** Abiertas en `General` justo después de ese cierre. */
+  abiertas: number;
+};
+
+export type MedidaGeneral = {
+  abiertas: number;
+  sello: Sello;
+  /** Positiva = el embalse sube. Es lo único que el tablero permite medir. */
+  variacion: number;
+  nivel: "verde" | "ambar" | "rojo";
+};
+
+/**
+ * ¿`General` drena o crece? — la única pregunta que el tablero no puede contestar
+ * solo.
+ *
+ * LO QUE NO PUEDE HACER, y conviene leerlo antes de creerse un verde: **no dice si
+ * el cupo se cumplió**. Cuando una tarea se mueve de `General` a un sprint pierde
+ * de qué bloque venía, y `CLAUDE.md` acepta por escrito ese coste antes que añadir
+ * una séptima propiedad. Así que esto mide el NETO del embalse, que es menos de lo
+ * que la regla pedía y lo máximo que se puede medir sin tocar el esquema.
+ *
+ * Si sale rojo dos cierres seguidos, la conversación ya no es sobre el cupo: es
+ * sobre si `General` debe existir tal como está.
+ */
+export function medirGeneral(todas: Tarea[], sello: Sello): MedidaGeneral {
+  const abiertas = todas.filter(
+    (t) => t.etapa === BLOQUE_TRANSVERSAL && ABIERTAS.includes(t.estado),
+  ).length;
+  const variacion = abiertas - sello.abiertas;
+  return {
+    abiertas,
+    sello,
+    variacion,
+    nivel:
+      variacion >= VARIACION_ROJA ? "rojo" : variacion <= 0 ? "verde" : "ambar",
+  };
+}
 
 /**
  * Cuál es el sprint activo. No se declara en ningún sitio —eso sería otra lista
@@ -96,10 +161,13 @@ function etiqueta(t: Tarea): string {
 }
 
 /**
- * Las cuatro reglas, sobre las tareas ABIERTAS. Devuelve hallazgos; no imprime ni
+ * Las cinco reglas, sobre las tareas ABIERTAS. Devuelve hallazgos; no imprime ni
  * sale con código, que es lo que permite probarla.
+ *
+ * El `sello` es opcional porque las cuatro primeras reglas no lo necesitan: sin él
+ * se juzga el tablero y no el embalse. Quien lo tiene es `check-tablero.ts`.
  */
-export function revisarTablero(todas: Tarea[]): Hallazgo[] {
+export function revisarTablero(todas: Tarea[], sello?: Sello): Hallazgo[] {
   const abiertas = todas.filter((t) => ABIERTAS.includes(t.estado));
   const hallazgos: Hallazgo[] = [];
   const activo = sprintActivo(abiertas);
@@ -192,6 +260,26 @@ export function revisarTablero(todas: Tarea[]): Hallazgo[] {
         regla: "orden-entre-sprints",
         mensaje: `${adelantadas.length} tarea(s) de otro sprint abierto van por delante del final de «${activo}» (P${tope}).`,
         tareas: adelantadas.map((t) => `${etiqueta(t)}  [${t.etapa}]`),
+      });
+    }
+  }
+
+  // 5 · ¿`General` drena o crece? El cupo de `CLAUDE.md` no se puede comprobar
+  // —una tarea movida pierde de qué bloque venía—, así que se vigila el neto, que
+  // es lo máximo que el tablero permite medir sin una propiedad nueva.
+  if (sello) {
+    const medida = medirGeneral(abiertas, sello);
+    if (medida.nivel === "rojo") {
+      hallazgos.push({
+        regla: "general-no-drena",
+        mensaje:
+          `«${BLOQUE_TRANSVERSAL}» ha ganado ${medida.variacion} neta(s) desde el ` +
+          `cierre de «${sello.cierre}» (${sello.fecha}): ${sello.abiertas} → ` +
+          `${medida.abiertas}, umbral +${VARIACION_ROJA}.`,
+        tareas: [
+          "El cupo dice que cada sprint arrastra 3-4 de este bloque; el neto dice que no está saliendo.",
+          "Una revisión no cierra dejando más tareas nuevas de las que el cupo va a sacar: falta decidir qué se retira.",
+        ],
       });
     }
   }

@@ -314,6 +314,22 @@ const CASOS: Caso[] = [
       o.replace("if (grupo.length > 1) {", "if (grupo.length > 2) {"),
   },
   {
+    guardian: "test",
+    rotura:
+      "el umbral del embalse transversal sube y `General` puede crecer sin avisar",
+    // La otra mitad del criterio del tablero, y la que más fácil se queda muda: el
+    // cupo de `General` llevaba un sprint escrito SIN instrumento, así que aquí lo
+    // que se muerde es el número que decide si el neto es ruido o alarma. Con el
+    // umbral por las nubes el guardián sigue imprimiendo su línea —que es lo que
+    // lo haría parecer vivo— y ya no rechaza nada.
+    archivo: "scripts/tablero/reglas.ts",
+    mutar: (o) =>
+      o.replace(
+        "export const VARIACION_ROJA = 4;",
+        "export const VARIACION_ROJA = 400;",
+      ),
+  },
+  {
     guardian: "check:excepciones",
     rotura: "un control a mano se queda sin su marca `@fuera-de-capa`",
     // Se le quita la marca al switch del consentimiento, que es un control a mano

@@ -62,6 +62,8 @@ Al empezar una sesión de desarrollo:
 > **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote.
 
 > **A `General` no lo drena ningún sprint, así que se drena por CUPO.** **Cada sprint arrastra 3-4 tareas de `General`** —las que no piden criterio, por `Prioridad`— dentro del propio sprint, y **una revisión no cierra dejando en `General` más tareas nuevas de las que ese cupo va a sacar**. Si las deja, la revisión no ha terminado: falta decidir qué se retira.
+>
+> **El cupo no se puede comprobar, así que lo que se vigila es el NETO** (D138): `check:tablero` compara el tamaño de `General` con el sello del cierre anterior — **verde ≤ 0 · rojo ≥ +4**. **Ese sello se actualiza al CERRAR una etapa**, en `scripts/check-tablero.ts`.
 
 > **`Tanda` agrupa el sprint por lotes de trabajo, y es GENÉRICA:** `Tanda 1`…`Tanda 5` se
 > **repueblan al abrir cada sprint**, así que la tanda 1 de uno y la de otro no son lo mismo.

@@ -181,7 +181,7 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | `censo` | **Dos pases** sobre las páginas del registro × dos temas: los pares de TEXTO (1.4.3/1.4.6) y el **contorno de cada control** (1.4.11, 3:1), que axe no implementa. Deja sello, y `check:palette` lo compara en cada PR | a mano | D85/D97/D90 |
 | `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99 |
 | `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**. **Fuera:** el ZIP, que se genera en el build | CI | D119 |
-| `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero | a mano | D107 |
+| `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, y que el embalse transversal no crezca contra el sello del cierre anterior. **Fuera:** si el CUPO se cumplió, que el esquema del tablero no permite ver | a mano | D107/D138 |
 
 ### Calidad y seguridad
 

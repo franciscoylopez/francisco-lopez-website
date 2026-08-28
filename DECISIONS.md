@@ -173,6 +173,7 @@
 - D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias
 - D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde
 - D137 · El gesto de marca son dos piezas, y una manda sobre la otra
+- D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8149,3 +8150,55 @@ Y el primer diagnóstico fue falso: se anotó «no cabe en el reloj» cuando la 
 había fallado en dos segundos. **Una sospecha no es una causa**, y la diferencia entre las
 llamadas que funcionaron y la que no era el sandbox, que ya estaba escrito para `agent-browser`
 y no se había heredado a lo que conduce el navegador por debajo.
+
+---
+
+## D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse — 2026-08-28
+
+**Contexto.** `CLAUDE.md` drena la deuda transversal por **cupo**: «cada sprint arrastra 3-4
+tareas de `General`», y «una revisión no cierra dejando en `General` más tareas nuevas de las
+que ese cupo va a sacar». La escribió el cuarto `method-review` después de medir el bloque; un
+sprint más tarde, `General` había ganado **6 netas** y estaba en 34 abiertas contra 2 cerradas
+en toda su vida, 2,6× el siguiente bloque. El quinto `method-review` lo volvió a encontrar.
+
+**El hallazgo no es el tamaño: es que la regla no tenía instrumento.** Cuando una tarea se mueve
+de `General` a un sprint **pierde de qué bloque venía** —`Etapa` es una sola propiedad, y
+`CLAUDE.md` acepta ese coste por escrito antes que añadir una séptima—, así que es literalmente
+**imposible saber si el cupo se cumplió alguna vez**. Una regla sin instrumento es una nota, y
+esta la escribió la propia revisión que existe para cazar ese patrón.
+
+**Decisión.** No una propiedad nueva: la vía ya estaba rechazada y el argumento sigue siendo
+bueno. Se mide **el neto**, que es lo máximo que el esquema permite.
+
+- **La regla, en `scripts/tablero/reglas.ts`** — `medirGeneral()` cuenta las abiertas del bloque
+  transversal y las resta del sello anterior. Es la quinta regla del guardián, y **su hallazgo
+  `general-no-drena` sale por la misma puerta que los otros cuatro**: `check:tablero` en rojo.
+- **El umbral, acordado con Francisco el 2026-08-25** — **verde ≤ 0** · **ámbar +1 a +3**, que
+  se dice y no falla, porque una tarea nueva no significa que el cupo se haya saltado · **rojo
+  ≥ +4**.
+- **El sello es una constante fechada en `check-tablero.ts`**, no un archivo de estado. Es un
+  número que solo cambia al cerrar una etapa: un almacén sería la segunda fuente de verdad para
+  un dato que se toca tres veces al mes. Mismo régimen que el techo de `check:contexto`. **Se
+  actualiza al CERRAR**, nunca al pasar por aquí — si se refrescara solo, la variación sería
+  siempre 0 y el guardián no diría nada, que es el verde falso de siempre.
+- **Y publica la cifra aunque esté verde.** El informe imprime el tamaño y la variación en cada
+  corrida, no solo cuando falla: es la regla de este repo de que un metro afirme cuánto ha
+  mirado.
+
+**El sello nace bajo a propósito, y conviene que quede escrito.** La ficha midió 34 abiertas.
+Entre que se escribió y que se implementó, el sprint «Drenaje» **comprometió 16 tareas de
+`General`** y el bloque bajó a **18**, que es el cupo funcionando a lo grande. El primer sello
+es 18 y no 34: el próximo cierre se mide contra un suelo honesto y no contra el máximo
+histórico, aunque eso haga más probable que el primer veredicto sea ámbar.
+
+**Lo que NO puede hacer, y hay que saberlo antes de creerse un verde.** No dice si el cupo se
+respetó — solo si el embalse sube o baja. Es menos de lo que la regla pedía. **Si el neto sale
+rojo dos cierres seguidos, la conversación ya no es sobre el cupo: es sobre si `General` debe
+existir tal como está.**
+
+**Validado disparándolo.** Cuatro casos nuevos en `npm test` —el sano con sello al día, el
+descenso que es verde y no ámbar, la tarea suelta que es ámbar, y las cuatro que son rojas— más
+el borde que deja pasar 3. Y su caso malo entra en `check:guardianes`: subir `VARIACION_ROJA` de
+4 a 400 deja el guardián **imprimiendo su línea y sin rechazar nada**, que es exactamente la
+forma en que este tipo de gate se muere. Comprobado que muerde: 1 de 20 tests en rojo con la
+mutación puesta, 20 verdes al restaurarla.
