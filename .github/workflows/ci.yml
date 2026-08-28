@@ -46,6 +46,10 @@ jobs:
       # SHA al día y actualiza el comentario de versión con él.
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          # Historia completa: el paso «Qué toca este PR» compara el copy y los
+          # sellos contra la base, y con el checkout somero (depth 1) no habría
+          # contra qué comparar — diría «no cambia nada», que es el verde falso.
+          fetch-depth: 0
           # checkout deja el token en .git/config para que pasos posteriores puedan
           # usarlo. Aquí ninguno lo necesita, y ese fichero viaja dentro de cualquier
           # artefacto que se suba desde el workspace.
@@ -211,6 +215,23 @@ jobs:
       # el sitio, y el único texto que no mira nadie (P50.75).
       - name: Tarjetas OG al día
         run: npm run check:og
+
+      # LO QUE FRANCISCO PIDIÓ: que el PR diga, antes de mergear, qué secciones
+      # publicadas toca — y que distinga «cambió el copy» (hay que leerlo) de «se
+      # movió una dependencia» (casi nunca). Las dos piezas existían y ninguna
+      # llegaba: `articulo:novedades` no estaba en CI, y `check:articulo` en verde
+      # no nombra ninguna sección. Escribe en el RESUMEN del job, que es donde se
+      # lee un PR, y NUNCA falla: un aviso que puede poner un PR en rojo se acaba
+      # silenciando (P50.76).
+      - name: Qué secciones publicadas toca este PR
+        if: github.event_name == 'pull_request'
+        # La base va por ENTORNO y no interpolada en el `run:`: un `${{ }}` dentro de
+        # la línea de comando es el vector de inyección clásico de Actions, y
+        # además dejaría el paso fuera del recuento que el artículo dibuja, que
+        # busca `run: npm run <script>` a final de línea.
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+        run: npm run novedades
 
       - name: Build
         run: npm run build

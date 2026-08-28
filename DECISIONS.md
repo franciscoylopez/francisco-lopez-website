@@ -178,6 +178,7 @@
 - D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido
 - D141 · El 404 de un enlace saliente lo sirve un tercero, así que no sale en ningún gate
 - D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba
+- D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8466,3 +8467,54 @@ tráfico que llega por recomendación, y el único texto del sitio que no mira n
 **Validado disparándolo**, con su caso malo en `check:guardianes`: se toca el titular en
 `es/home.json` —la dirección en que ocurre de verdad, porque el copy se edita donde se lee— y el
 guardián nombra la tarjeta, el idioma y el campo.
+
+---
+
+## D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia — 2026-08-28
+
+**Lo que pidió Francisco**, con sus palabras: «necesito que cuando se cambie algo automáticamente
+en el artículo o en otra sección se me avise de forma explícita antes de subir, algo como *esta
+PR modifica Artículo secciones 1, 2, 6 añadiendo/modificando X, Y, Z*, para poder revisarlo».
+
+**El hueco era de PORTADOR, no de herramienta.** Las dos piezas existían y ninguna llegaba:
+`articulo:novedades` dice qué líneas se movieron pero **no está en CI**, así que solo lo ve quien
+lo lanza a mano; `check:articulo` sí está en CI, pero **en verde solo dice «el sello cuadra»** y
+no nombra ninguna sección. El 2026-08-27 se re-selló §s09 por un cambio de fecha y CI pasó a
+verde sin nombrarla: que Francisco se enterara dependió de que se le contara en prosa, que es
+justo lo que pide que deje de depender de una persona.
+
+**Y `articulo:novedades` no valía tal cual, por un motivo que costó verlo.** Aquel compara contra
+el **sello vigente**, y para cuando el PR llega a CI su autor ya ha re-sellado: no queda
+diferencia que contar. La pregunta de un PR es otra —**qué cambia respecto a `main`**— y se
+contesta comparando las dos puntas, no contra el sello.
+
+**Decisión.** `npm run novedades` (`scripts/novedades-pr.ts`), paso de CI en los PR por el
+criterio de D51 —se dispara en un evento y no requiere criterio—, con cuatro elecciones que son
+las que deciden si sirve:
+
+1. **Distingue copy de dependencia.** *Cambió el copy* → hay que leerlo, es texto que verá un
+   visitante. *Se movió el sello* → casi nunca: los permalinks a `DECISIONS.md` se desplazan
+   solos con cada entrada nueva, y el 2026-08-27 eso movió 82 líneas de HTML sin cambiar una
+   palabra.
+2. **Sale en el RESUMEN del job** (`$GITHUB_STEP_SUMMARY`), que es donde se lee un PR, no
+   enterrado en un log de cuatrocientas líneas. Fuera de CI escribe por pantalla y sirve igual
+   antes de abrir el PR.
+3. **Nunca falla.** Informa; no juzga. Un aviso que puede poner un PR en rojo se acaba
+   silenciando, y aquí lo que hace falta es que se lea.
+4. **Y no se calla cuando no ha podido comparar.** Si la base no resuelve, lo dice en el propio
+   resumen. Una salida vacía se leería como «no cambia nada», que es el verde falso de siempre.
+
+**El alcance se decidió, no se supuso.** La ficha dejaba abierto si se extendía más allá del
+artículo. La respuesta la había dado P50.73 dos tareas antes: `/accesibilidad` ya tiene sellos por
+bloque, así que entra. Son **dos superficies**, y añadir una tercera es añadir su fila.
+
+**Y el paso enseñó algo del metro de al lado.** Escrito como `run: npm run novedades -- "${{ ...
+}}"`, el recuento de pasos de CI que el artículo dibuja **no lo veía**: su patrón busca `run: npm
+run <script>` a final de línea, y con argumentos dejaba de casar. Pasarlo por `env:` lo arregla y
+además quita un `${{ }}` interpolado dentro de una línea de comando, que es el vector de
+inyección clásico de Actions. **Las dos cosas se arreglan con el mismo cambio**, y sin él el
+diagrama habría dibujado 23 pasos habiendo 24.
+
+**No lleva caso malo en `check:guardianes`, y es deliberado:** no es un guardián. Su modo de
+fallo no es dar verde sobre algo roto, sino callarse — y contra eso está la guarda del punto 4,
+que es lo que sí se puede comprobar.

@@ -29,6 +29,7 @@
     "check:accesibilidad": "tsx scripts/check-accesibilidad.ts",
     "check:enlaces": "tsx scripts/check-enlaces.ts",
     "check:og": "tsx scripts/check-og.ts",
+    "novedades": "tsx scripts/novedades-pr.ts",
     "check:contexto": "tsx scripts/check-contexto.ts",
     "check:skills": "tsx scripts/check-skills.ts",
     "check:guardianes": "tsx scripts/check-guardianes.ts",
