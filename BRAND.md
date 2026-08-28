@@ -101,13 +101,11 @@ estados incluidos. Lo lleva todo lo que se pulsa y dibuja caja neutra; lo bordea
 no lo necesita. La mezcla **conmuta con el tema**, como `--primary-on-inverted`: un porcentaje
 fijo no llega a las dos superficies a la vez.
 
-**Y son DOS mezclas, que conmutan en direcciones opuestas** *(2026-08-28)*. Sobre una banda
-invertida el contorno se construye desde `--background`, o sea desde el fondo del **otro** tema,
-así que la calibración que sirve ahí es también la del otro: `--control-edge-mix` va 60% en claro
-y 45% en oscuro, y `--control-edge-mix-inverted` al revés. Con la de arriba, el contorno sobre la
-banda caía a **2,78 en oscuro**, por debajo del 3:1. Al escribir UI esto no cambia nada —sigue
-siendo `border-control-edge` y lo resuelve la superficie—; se anota porque un solo porcentaje es
-justo lo que parece razonable y no lo es. Cifras y addendum en `DECISIONS.md` D97.
+**Y son DOS mezclas, que conmutan en direcciones opuestas** *(2026-08-28)*: sobre una banda
+invertida el contorno se construye desde el fondo del **otro** tema, así que la calibración que
+sirve ahí es también la del otro. Al escribir UI no cambia nada —sigue siendo
+`border-control-edge` y lo resuelve la superficie—; se anota porque un solo porcentaje es justo
+lo que parece razonable y no lo es.
 
 *(Cifras, barrido de mezcla y por qué esto pasó año y medio invisible, en
 [`BRAND-historical.md`](./BRAND-historical.md) §El contorno de un control; componente y metro en

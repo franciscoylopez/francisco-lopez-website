@@ -849,6 +849,35 @@ es casi indistinguible entre candidatos, y el salto que de verdad se ve es el de
 los campos pasan de insinuarse a **parecer campos**. No engorda el diseño; lo que hacía el
 valor viejo era esconderlo.
 
+### Addendum: la banda invertida necesitaba su propia mezcla, y estuvo un mes sin ocupante (2026-08-28)
+
+La regla de arriba dejó `[data-surface="inverted"]` construyendo el contorno desde
+`--background` —el fondo del **otro** tema— pero con `--control-edge-mix`, que está calibrado
+contra el fondo del **propio**. Medido sobre el píxel pintado, con el metro anclado en los dos
+valores que D97 publica (4,00 claro / 4,11 oscuro):
+
+| banda invertida | contorno vs banda |
+|---|---|
+| claro, mix 60% (el heredado) | 5,89 |
+| claro, mix 45% | **3,96** |
+| oscuro, mix 45% (el heredado) | **2,78 — bajo el 3:1 de 1.4.11** |
+| oscuro, mix 60% | **4,30** |
+
+De ahí `--control-edge-mix-inverted`, 45% claro / 60% oscuro: la misma forma que
+`--border-mix-inverted`, que ya conmutaba al revés por este motivo.
+
+**Y la parte reutilizable no es el número: es por qué el censo no lo cazó**, siendo un pase que
+existe desde D97. La regla invertida **no tenía ocupante**. Su único candidato —el compartir de
+la apertura del artículo— se pintaba el borde a mano, y el censo mide el borde que el elemento
+**pinta**. Lo que devolvía vacío no era el metro sino el conjunto medido: la variante del punto 1
+de §Cómo medir sin equivocarse en la que el metro está bien y lo que falla es a qué se le aplica.
+
+**Coda, del `design-review` de cierre de esa misma tanda:** devolverle el borde a la capa
+**bajó** el contorno de 7,50 a 3,96 en claro y de 5,97 a 4,30 en oscuro, porque el valor escrito
+a mano era más duro que el del sistema. Cumple con holgura y se lee a tamaño real en los dos
+temas, así que se queda — pero la coherencia de sistema se pagó con contraste, y eso se escribe
+en vez de dejarlo implícito.
+
 ## El interlineado que sobrevivió a tres medidas, y por qué la medición aprobaba (2026-08-25)
 
 *(El caso que escribió el punto 8 de `BRAND.md` §Cómo medir sin equivocarse.)*
