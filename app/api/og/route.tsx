@@ -6,6 +6,7 @@ import type { NextRequest } from "next/server";
 
 import { getExperience, getTrayectoriaIndice } from "@/app/[lang]/dictionaries";
 import { eyebrowOf } from "@/content/experience-copy";
+import { COPY } from "@/content/og/copy";
 import { brandHex, paletteHex } from "@/lib/design-values";
 import { type OgCard, resolveOgCard } from "@/lib/routes";
 
@@ -66,55 +67,12 @@ type Lang = "es" | "en";
  *
  * Las dos exclusiones: la home no es un slug (es `""`), y `/trayectoria` y sus
  * cinco experiencias las resuelve `deepDiveCopy` antes de llegar aquí.
+ *
+ * Y `COPY` YA NO VIVE AQUÍ (2026-08-28, P50.75): es dato, está en
+ * `content/og/copy.ts` con su declaración de qué tiene que cuadrar con el
+ * diccionario, y lo compara `npm run check:og`. Aquí solo se pinta.
  */
 type Card = OgCard;
-
-const COPY: Record<Card, Record<Lang, { title: string; kicker: string }>> = {
-  home: {
-    es: {
-      title: "Del discovery al dato.",
-      kicker: "Senior Product Manager · UX · SaaS · IA · Builder",
-    },
-    en: {
-      title: "From discovery to data.",
-      kicker: "Senior Product Manager · UX · SaaS · AI · Builder",
-    },
-  },
-  "brand-kit": {
-    es: { title: "Brand Kit", kicker: "Identidad de marca" },
-    en: { title: "Brand Kit", kicker: "Brand identity" },
-  },
-  "design-system": {
-    es: { title: "Design System", kicker: "Fundamentos de diseño" },
-    en: { title: "Design System", kicker: "Design foundations" },
-  },
-  cookies: {
-    es: { title: "Privacidad y cookies", kicker: "Legal" },
-    en: { title: "Privacy and cookies", kicker: "Legal" },
-  },
-  contacto: {
-    es: { title: "Hablemos", kicker: "Contacto" },
-    en: { title: "Let's talk", kicker: "Contact" },
-  },
-  "sobre-mi": {
-    es: { title: "Sobre mí", kicker: "Quién hay detrás" },
-    en: { title: "About me", kicker: "The person behind" },
-  },
-  accesibilidad: {
-    es: { title: "Accesibilidad", kicker: "Compromiso" },
-    en: { title: "Accessibility", kicker: "Commitment" },
-  },
-  "como-se-ha-creado": {
-    es: {
-      title: "Cómo se ha creado esta página",
-      kicker: "Making-of",
-    },
-    en: {
-      title: "How this page was built",
-      kicker: "Making-of",
-    },
-  },
-};
 
 const WORDMARK = "Francisco López";
 const LOGO = splitLogoDataUri();

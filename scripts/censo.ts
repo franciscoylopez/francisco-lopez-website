@@ -58,13 +58,12 @@
  * - **Un solo viewport.** El censo mide colores, que no dependen del ancho; el
  *   pliegue y el objetivo táctil son de `viewport-verifier` (D52).
  */
-import { execFileSync } from "node:child_process";
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { readFileSync } from "node:fs";
 
 import { locales, pagePath } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
 import { HUELLA_PATH, sellar } from "./censo/huella";
+import { ab } from "./navegador/agent-browser";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const CENSO = "scripts/design-review/contrast-census.js";
@@ -97,46 +96,10 @@ type Censo = {
   bajo3: Contorno[];
 };
 
-/**
- * El ENTRY REAL de `agent-browser`, no su nombre.
- *
- * En Windows el binario global es un `.cmd`, y desde la CVE-2024-27980 Node se
- * niega a lanzarlo con `execFileSync` sin `shell: true` — que aquí no vale,
- * porque los argumentos llevan URLs y trozos de JavaScript que el shell
- * destrozaría. El shim POSIX del propio paquete dice dónde está lo que ejecuta:
- * `node <root-global>/agent-browser/bin/agent-browser.js`. Se resuelve una vez.
- */
-const ENTRY = (() => {
-  const cola = join("agent-browser", "bin", "agent-browser.js");
-  const raices = [
-    process.env.npm_config_prefix &&
-      join(process.env.npm_config_prefix, "lib", "node_modules"),
-    process.env.npm_config_prefix &&
-      join(process.env.npm_config_prefix, "node_modules"),
-    process.env.APPDATA && join(process.env.APPDATA, "npm", "node_modules"),
-    join(dirname(process.execPath), "node_modules"),
-    join(dirname(process.execPath), "..", "lib", "node_modules"),
-    "/usr/local/lib/node_modules",
-    "/usr/lib/node_modules",
-  ].filter((r): r is string => Boolean(r));
-
-  for (const raiz of raices) {
-    const entry = join(raiz, cola);
-    if (existsSync(entry)) return entry;
-  }
-  throw new Error(
-    `no encuentro agent-browser en ninguna raíz global (${raices.join(" · ")}). ` +
-      `Instálalo con \`npm i -g agent-browser\` — el censo necesita un navegador de verdad.`,
-  );
-})();
-
-function ab(args: string[], input?: string): string {
-  return execFileSync(process.execPath, [ENTRY, ...args], {
-    encoding: "utf8",
-    input,
-    maxBuffer: 64 * 1024 * 1024,
-  });
-}
+/* El conductor de `agent-browser` vive en `scripts/navegador/agent-browser.ts`
+ * desde 2026-08-28 (P50.77): la segunda pasada que necesita navegador —la del
+ * pliegue— lo quería entero, y dos conductores se arreglan por separado el día
+ * que el binario cambie de sitio. */
 
 const problemas: string[] = [];
 const fallo = (msg: string) => problemas.push(msg);

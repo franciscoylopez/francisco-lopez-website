@@ -78,6 +78,12 @@ export const DIAGRAMA_CI: Record<Locale, DiagramaCI> = {
           { n: "Rutas registradas", cat: "ausencia" },
           { n: "Registro del kit", cat: "ausencia" },
           { n: "Artículo al día", cat: "ausencia" },
+          { n: "Accesibilidad al día", cat: "ausencia" },
+          { n: "Tarjetas OG al día", cat: "ausencia" },
+          // INFORMA y no falla: dice qué secciones publicadas toca el PR. Se
+          // clasifica como `ausencia` porque lo que encuentra es lo que nadie
+          // estaba mirando, no un patrón conocido (P50.76).
+          { n: "Qué secciones toca el PR", cat: "ausencia" },
         ],
       },
       {
@@ -127,6 +133,9 @@ export const DIAGRAMA_CI: Record<Locale, DiagramaCI> = {
           { n: "Registered routes", cat: "ausencia" },
           { n: "Brand kit registry", cat: "ausencia" },
           { n: "Article freshness", cat: "ausencia" },
+          { n: "Accessibility freshness", cat: "ausencia" },
+          { n: "OG cards freshness", cat: "ausencia" },
+          { n: "Which sections this PR touches", cat: "ausencia" },
         ],
       },
       {

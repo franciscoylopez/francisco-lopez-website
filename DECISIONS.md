@@ -173,6 +173,13 @@
 - D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias
 - D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde
 - D137 · El gesto de marca son dos piezas, y una manda sobre la otra
+- D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse
+- D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta
+- D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido
+- D141 · El 404 de un enlace saliente lo sirve un tercero, así que no sale en ningún gate
+- D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba
+- D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia
+- D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8149,3 +8156,421 @@ Y el primer diagnóstico fue falso: se anotó «no cabe en el reloj» cuando la 
 había fallado en dos segundos. **Una sospecha no es una causa**, y la diferencia entre las
 llamadas que funcionaron y la que no era el sandbox, que ya estaba escrito para `agent-browser`
 y no se había heredado a lo que conduce el navegador por debajo.
+
+---
+
+## D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse — 2026-08-28
+
+**Contexto.** `CLAUDE.md` drena la deuda transversal por **cupo**: «cada sprint arrastra 3-4
+tareas de `General`», y «una revisión no cierra dejando en `General` más tareas nuevas de las
+que ese cupo va a sacar». La escribió el cuarto `method-review` después de medir el bloque; un
+sprint más tarde, `General` había ganado **6 netas** y estaba en 34 abiertas contra 2 cerradas
+en toda su vida, 2,6× el siguiente bloque. El quinto `method-review` lo volvió a encontrar.
+
+**El hallazgo no es el tamaño: es que la regla no tenía instrumento.** Cuando una tarea se mueve
+de `General` a un sprint **pierde de qué bloque venía** —`Etapa` es una sola propiedad, y
+`CLAUDE.md` acepta ese coste por escrito antes que añadir una séptima—, así que es literalmente
+**imposible saber si el cupo se cumplió alguna vez**. Una regla sin instrumento es una nota, y
+esta la escribió la propia revisión que existe para cazar ese patrón.
+
+**Decisión.** No una propiedad nueva: la vía ya estaba rechazada y el argumento sigue siendo
+bueno. Se mide **el neto**, que es lo máximo que el esquema permite.
+
+- **La regla, en `scripts/tablero/reglas.ts`** — `medirGeneral()` cuenta las abiertas del bloque
+  transversal y las resta del sello anterior. Es la quinta regla del guardián, y **su hallazgo
+  `general-no-drena` sale por la misma puerta que los otros cuatro**: `check:tablero` en rojo.
+- **El umbral, acordado con Francisco el 2026-08-25** — **verde ≤ 0** · **ámbar +1 a +3**, que
+  se dice y no falla, porque una tarea nueva no significa que el cupo se haya saltado · **rojo
+  ≥ +4**.
+- **El sello es una constante fechada en `check-tablero.ts`**, no un archivo de estado. Es un
+  número que solo cambia al cerrar una etapa: un almacén sería la segunda fuente de verdad para
+  un dato que se toca tres veces al mes. Mismo régimen que el techo de `check:contexto`. **Se
+  actualiza al CERRAR**, nunca al pasar por aquí — si se refrescara solo, la variación sería
+  siempre 0 y el guardián no diría nada, que es el verde falso de siempre.
+- **Y publica la cifra aunque esté verde.** El informe imprime el tamaño y la variación en cada
+  corrida, no solo cuando falla: es la regla de este repo de que un metro afirme cuánto ha
+  mirado.
+
+**El sello nace bajo a propósito, y conviene que quede escrito.** La ficha midió 34 abiertas.
+Entre que se escribió y que se implementó, el sprint «Drenaje» **comprometió 16 tareas de
+`General`** y el bloque bajó a **18**, que es el cupo funcionando a lo grande. El primer sello
+es 18 y no 34: el próximo cierre se mide contra un suelo honesto y no contra el máximo
+histórico, aunque eso haga más probable que el primer veredicto sea ámbar.
+
+**Lo que NO puede hacer, y hay que saberlo antes de creerse un verde.** No dice si el cupo se
+respetó — solo si el embalse sube o baja. Es menos de lo que la regla pedía. **Si el neto sale
+rojo dos cierres seguidos, la conversación ya no es sobre el cupo: es sobre si `General` debe
+existir tal como está.**
+
+**Validado disparándolo.** Cuatro casos nuevos en `npm test` —el sano con sello al día, el
+descenso que es verde y no ámbar, la tarea suelta que es ámbar, y las cuatro que son rojas— más
+el borde que deja pasar 3. Y su caso malo entra en `check:guardianes`: subir `VARIACION_ROJA` de
+4 a 400 deja el guardián **imprimiendo su línea y sin rechazar nada**, que es exactamente la
+forma en que este tipo de gate se muere. Comprobado que muerde: 1 de 20 tests en rojo con la
+mutación puesta, 20 verdes al restaurarla.
+
+---
+
+## D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta — 2026-08-28
+
+**Contexto.** `check:contexto` (D69) puso techo al contexto de arranque y funcionó: el arranque
+bajó de 19.805 palabras a ~12.000. Lo que no vigilaba nadie es **el techo**. En nueve días tuvo
+**siete valores, en las dos direcciones** —16.000 → 13.500 → 12.500 → 12.400 → 12.200 → **12.700**
+→ 12.300—, y el margen **nunca pasó de 442 ni bajó de 5**.
+
+**La medición que lo cierra.** El sprint «Home» hizo la primera retirada real desde el 22 de
+agosto: **−651 palabras** al partir el porqué de `CLAUDE.md` a su histórico. **El margen pasó de
+246 a 253.** Retirar 651 compró **7**, porque el techo bajó 400 en el mismo commit. El techo de la
+suma de skills tiene la misma firma: nació el 27-08 en 20.500 sobre 20.296, o sea **ya tocando**.
+
+Es familia propia en el catálogo de `method-review` —**«el umbral que persigue al dato»**— y se
+separa de «la cifra apuntada que caduca» **por el remedio**: aquella es un número que envejece
+porque nadie lo toca; esta es un número que se actualiza *demasiado bien*.
+
+**Decisión, en dos piezas que solo funcionan juntas.**
+
+1. **El techo se DERIVA de su historial, que pasa a ser DATO.** `HISTORIAL_TECHO`,
+   `HISTORIAL_TECHO_SKILL` y `HISTORIAL_TECHO_SUMA` son arrays de `{fecha, valor, motivo}`, y
+   `TECHO = vigente(HISTORIAL_TECHO)`. **No se puede mover un techo sin añadir una entrada, y una
+   entrada exige `motivo`: lo pide el tipo.** De paso desaparece la duplicación que tenía el
+   archivo —la lista en prosa arriba, el valor abajo—, que es exactamente cómo una de las dos
+   mitades acaba diciendo otra cosa.
+2. **Se cuentan los movimientos del ciclo en curso**, contra `CICLO_ABIERTO`, y se publican en
+   cada corrida con su motivo: **verde 0 · ámbar 1** —el trinquete apretando, que es su trabajo—
+   **· rojo ≥ 2**, que ya no es apretar sino perseguir al dato. Se cuenta **por techo**: dos
+   movimientos del mismo en un ciclo es la firma; dos de techos distintos puede ser un ciclo que
+   compactó en dos frentes.
+
+**Por qué en el repo y no en `git log`.** La alternativa era arqueología de commits sobre la
+constante. Sale peor: depende de la profundidad del `fetch` en CI, no puede exigir un motivo, y
+convierte en implícito lo que aquí es un campo obligatorio. Criterio de D51 igualmente cumplido —
+se dispara en un evento y no requiere criterio—, pero sin depender del historial de git.
+
+**Y el criterio de cierre se cumplió sin tocar el techo, que era la mitad difícil.** El margen
+pasó de **253 a 405** (12.047 → 11.895 sobre el mismo 12.300) **retirando copias, no reglas** — y
+además **añadiendo dos**, la del cupo (D138) y la de los dos sellos de apertura y cierre:
+
+| Qué se retiró | Dónde estaba repetido |
+|---|---|
+| La descripción del gate de accesibilidad | `CLAUDE.md` **y** la tabla de contrato de `PRD-Live` (D128) |
+| El reparto de los 9 puntos del checklist | En prosa **y** en la tabla de la DoD |
+| El porqué de cada excepción de control | `BRAND.md`, `BRAND-historical.md` **y** la marca `@fuera-de-capa` que imprime `check:excepciones` |
+| El historial de los tres techos | El comentario **y** —ahora— el dato |
+
+Es la **primera vez que el margen sube solo por trabajo del dato**, que es justo lo que la regla
+nueva existe para forzar.
+
+**Lo que NO puede ver.** Si es el **objetivo** el que persigue al dato en vez del techo, esto no
+lo mira: el objetivo no falla, solo tira, y un objetivo que se relaja se nota en que la distancia
+no baja. Se vigila lo que muerde.
+
+**El sello es ritual de apertura, y está escrito donde se hace.** `CICLO_ABIERTO` se actualiza al
+**abrir** una etapa, igual que `SELLO_GENERAL` (D138) se actualiza al **cerrarla**. Los dos están
+en `CLAUDE.md` §Gestión de etapas, uno a cada lado del cruce.
+
+**Validado disparándolo.** Caso malo en `check:guardianes`: retrasar `CICLO_ABIERTO` a 2026-08-01
+mete los siete movimientos reales dentro de la ventana. Sale rojo nombrando los dos techos
+afectados y con código 1; restaurado, verde. Se muerde la apertura del ciclo y no el historial a
+propósito: inventar un movimiento que no ocurrió vale menos que contar los que sí.
+
+---
+
+## D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido — 2026-08-28
+
+**Contexto.** D84 le dio al artículo un guardián de caducidad: cada sección declara de qué
+depende, se sella, y cuando una fuente se mueve CI sale rojo **nombrando la sección**, en el PR
+que la mueve. `/accesibilidad` publica exactamente el mismo tipo de frase —qué mide cada gate,
+cuántos guardianes hay, qué cubre el censo de contornos, qué encontró la pasada con NVDA, qué
+queda pendiente— y **no tenía nada**. Por eso «aún no hay formulario de contacto» sobrevivió
+tres días al sprint que construyó el formulario, y se encontró **de casualidad, leyendo la
+página**.
+
+Y P70.02 subió la apuesta: la página pasó de 5.399 a 12.066 caracteres y de cinco secciones a
+siete, casi todo afirmaciones comprobables sobre el propio repo.
+
+**Lo que se encontró antes de escribir una línea.** La página decía «son **catorce**
+comprobaciones y **veintitrés** errores fingidos». Contados: **quince y veintisiete**. Las dos
+cifras llevaban caducadas desde que alguien añadió un caso, porque **nada las ataba al
+inventario**. La tarea nació de una frase caducada y encontró otras dos vivas.
+
+**Decisión, en tres piezas.**
+
+1. **El aparato sale a `scripts/dependencias/huella.ts`.** La resolución de las tres formas de
+   dependencia —archivo, `archivo.md#fragmento`, `directorio/`— y el hasheo por bloque dejan de
+   ser del artículo y pasan a ser compartidos. Copiarlos habría dejado **dos metros midiendo
+   distinto**; es la Regla de construcción de `CLAUDE.md` aplicada a `scripts/`. El artículo los
+   re-exporta, así que ningún importador cambió.
+2. **`check:accesibilidad`**, con su `--seal`, sobre los **cinco bloques que afirman algo
+   verificable** (`conformance`, `measures`, `verify`, `blindspot`, `limits`). Fuera quedan
+   `hero`, `indice`, `term` y `report` —rótulo, navegación, definición y un correo: no hay
+   fuente que se mueva debajo— e `inheritance`, que el componente ya deriva. Meterlos daría
+   rojos que no significan nada, y a la tercera vez nadie lee el rojo.
+3. **Las dos cifras del arnés dejan de escribirse a mano.** `GUARDIAN_COUNT` y
+   `GUARDIAN_CASE_COUNT` viven en `lib/design-values.ts`, el copy interpola
+   `{comprobaciones}` / `{fingidos}` con `cardinal()` —como ya hacía con `{paginas}`— y el
+   guardián **contrasta el valor publicado contra `scripts/guardianes/casos.ts`** en cada PR.
+
+**Por qué SELLADAS y no derivadas, que es la única elección no obvia.** `PAGE_COUNT` sale de
+`PAGE_SLUGS` porque ese registro ya está en el bundle. El inventario de casos malos vive en
+`scripts/`, y traérselo al navegador para contar dos números enviaría a cada visitante una
+treintena de mutaciones de archivos que nunca va a ejecutar. Así que el valor se escribe una vez
+y el guardián lo mantiene honesto: **D38 con el guardián puesto donde la derivación no llega.**
+Para poder contarlas sin arrancar la maquinaria, `CASOS` salió a `scripts/guardianes/casos.ts`
+—misma partición que `scripts/tablero/reglas.ts`: el dato aparte de la E/S—.
+
+**Por qué es OTRO guardián y no una fila de `check:articulo`.** Dos documentos con dos ritmos:
+el artículo describe cómo se construyó el sitio y se mueve con la arquitectura; esta página
+describe lo que el sitio **cumple hoy** y se mueve con una medición. Un solo sello los mezclaría
+y haría que retocar el artículo pidiera releer los límites. El aparato sí es el mismo, y por eso
+está compartido.
+
+**El susto que dejó una regla.** Al mover el hasheo se copió su separador como un **espacio**, y
+el original era un **byte NUL**. Consecuencia: los doce sellos del artículo cambiaban, y
+re-sellar habría congelado la mentira sin que nadie lo notara — el guardián habría seguido
+saliendo verde midiendo otra cosa. Se cazó porque el número de secciones movidas pasó de 4 a 12
+sin motivo. **Lo que lo escondió tiene nombre:** el byte NUL hacía que `grep` tratase el archivo
+como **binario** y lo dejara fuera de toda búsqueda de texto, así que el separador era invisible
+a la herramienta con la que se lee este repo. Ahora va como escape (`\0`), que compila al mismo
+carácter y deja el archivo legible.
+
+> **Regla que sale de aquí, y va al catálogo de método:** al mover una función que alimenta un
+> HASH, la prueba no es que compile — es que el hash **no cambie** sobre el mismo árbol. Un
+> sello es un metro cuyo fallo es un verde.
+
+**Lo que NO cubre, dicho para que no se dé por cubierto.** Las cifras sin fuente en el repo:
+«tres páginas se desbordan por debajo de 320» y «dieciséis pares sobre fotografía» son
+**mediciones**, no archivos, y no hay nada que sellar debajo. Están atadas a las tareas que las
+cerrarán, y ese día habrá que venir a mano. Y que el párrafo diga la verdad lo decide una
+persona; esto existe para que sepa cuándo mirar.
+
+**Validado disparándolo**, con dos casos malos en `check:guardianes`: mover `lib/figures.ts`
+—fuente de los «Límites», donde la página dice que dos diagramas se miden y no se juzgan— y
+publicar un recuento de casos que ya no es el que hay. Y afirma cuánto ha mirado en cada
+corrida: cinco bloques, trece dependencias, dos cifras.
+
+---
+
+## D141 · El 404 de un enlace saliente lo sirve un tercero, así que no sale en ningún gate — 2026-08-28
+
+**Contexto.** P70.105 le añadió cinco enlaces externos a `/accesibilidad` —WCAG, axe-core,
+Lighthouse, NV Access, The A11Y Project—. Se comprobaron **a mano** al cerrarla, y esa es
+exactamente la forma de fallo que nombra `BRAND.md` §Cómo se escribe una regla, punto 2: *una
+regla que hay que recordar es una regla que se incumple*. La propia ficha de aquella tarea lo
+señaló como riesgo antes de ejecutarla.
+
+**Y duele más aquí que en otro sitio.** El 404 de un enlace saliente **lo sirve un tercero**: no
+aparece en `check:marco`, ni en `gate:html`, ni en el build. No lo ve nadie hasta que lo
+encuentra un lector. Y la página donde primero pasaría es la que presume de no mentir.
+
+**El recuento, que era lo primero que pedía la tarea.** No eran siete: el barrido sobre `app/`,
+`components/`, `content/` y `lib/` encuentra **23 enlaces externos** en 181 archivos, más 7
+descartados. Los siete de `/accesibilidad` eran la punta.
+
+**Decisión.** `npm run check:enlaces`, con **la E/S y el criterio separados**, igual que
+`check:tablero` (D107):
+
+- **`scripts/enlaces/reglas.ts`** — funciones puras sobre texto: qué es una URL, qué no es un
+  enlace, qué cuenta como muerto, qué redirección merece informe. Sin red. Las prueba `npm test`
+  en CI, con caso bueno y caso malo por regla.
+- **`scripts/check-enlaces.ts`** — el barrido y las peticiones. Corre **fuera de CI**: sale a la
+  red, y un servidor ajeno caído cinco minutos pondría un PR en rojo sin que nada de este repo
+  esté mal. Es el argumento de D49/D99 para `psi`, aplicado igual.
+
+**La lista sale del DISCO, no de una lista escrita**, que es lo que hace que un enlace nuevo
+entre en la comprobación sin que nadie se acuerde (misma forma que `PAGE_SLUGS` en D72). Y cada
+descarte **se imprime con su motivo**: un metro que descarta en silencio miente igual que uno que
+no mira.
+
+**Dónde se equivoca un metro así, que es la parte que costó pensar.**
+
+| Respuesta | Veredicto | Por qué |
+|---|---|---|
+| 404 · 410 · 500–599 | **muerto** | El enlace no lleva a ninguna parte |
+| DNS sin resolver · tiempo agotado | **muerto** | Las dos formas en que un dominio muere de verdad |
+| 401 · 403 · 405 | **no concluyente** | Varios sitios los devuelven a quien no parece un navegador |
+| < 100 o ≥ 600 | **no concluyente** | No es HTTP: es un escudo antibot |
+
+**Y el primer falso positivo lo dio él solo, en su primera corrida:** puntuó como caído el perfil
+de LinkedIn, que responde **999** — el escudo antibot de LinkedIn—, porque la regla decía
+`status >= 500`. Es el punto 7 de `BRAND.md` §Cómo medir con otra ropa: **un umbral mal aplicado
+inventa hallazgos igual que un metro mal calibrado**. Se corrigió antes de escribir nada más, y
+el caso está en `npm test` con su nombre.
+
+Se mitiga además por el lado de la petición: **User-Agent de navegador, redirecciones seguidas, y
+`HEAD` con reintento en `GET`** porque hay servidores que solo rechazan el `HEAD`.
+
+**Una redirección no falla, pero se informa — y solo si cambia de HOST o de RUTA.** Las que solo
+añaden idioma o parámetros de seguimiento no dicen nada (`developer.chrome.com` devuelve `?hl=`
+según quién pregunte) y llenarían la salida de ruido, que es cómo un informe deja de leerse. Una
+redirección real sí importa: es el 404 de mañana, cuando el tercero deje de mantenerla.
+
+**Estado en la primera corrida:** 23 enlaces, **ninguno caído**, 3 no concluyentes (LinkedIn,
+securityheaders y w3.org, los tres con escudo antibot y los tres verificados a ojo) y 2
+redirecciones reales.
+
+**Lo que NO puede ver, dicho para que no se dé por cubierto:** que la página de destino siga
+diciendo lo que el texto del enlace promete. Detecta que la URL responde, no que sea la misma
+página. Un dominio caducado y recomprado devuelve 200 tan campante.
+
+---
+
+## D142 · La tarjeta OG repetía el copy de la página y nadie las comparaba — 2026-08-28
+
+**Contexto.** `app/api/og/route.tsx` llevaba una constante `COPY` con dieciséis cadenas (8
+tarjetas × 2 idiomas) que repetían texto ya escrito en los diccionarios. Los dos guardianes que
+tocan esa ruta miran otra cosa: `check:marco` (D75) comprueba que el `?card=` de cada variante
+resuelve a **su** tarjeta, y `check:rutas` (D72) que la unión `OgCard` cuadra con el registro de
+páginas. **Ninguno mira el texto de dentro.**
+
+**No es hipotético.** Al afilar el kicker del Hero (P83), cambiar una cadena resultaron ser
+**tres sitios**: `es/home.json`, `en/home.json` y ese literal. El tercero no lo señaló ningún
+check — apareció por un `grep` hecho a mano antes de tocar nada. Y es la familia que este repo ya
+cerró dos veces, **D60** (una fuente única no mantiene al día una copia impresa) y **D72** (qué
+páginas hay estaba escrito a mano en cuatro sitios): era la última instancia abierta.
+
+**La premisa de la tarea era falsa, y en la dirección que amplía el arreglo.** Decía que tres
+tarjetas —`cookies`, `contacto` y `sobre-mi`— no tenían de dónde leer, así que no se podían
+comparar. Sí lo tienen: `title` y `kicker`, **sueltos en la raíz** en vez de bajo `hero`. Con eso,
+**las dieciséis parejas son comparables** y el guardián hace 32 comparaciones en vez de las 10
+que la ficha daba por alcanzables.
+
+**Decisión.** `COPY` sale de la ruta a `content/og/copy.ts` —dato aparte de quien lo ejecuta,
+misma partición que `scripts/tablero/reglas.ts` y `scripts/guardianes/casos.ts`, y aquí además
+necesaria para que el guardián lo lea sin importar `next/og`— y `npm run check:og` lo compara en
+CI con tres reglas:
+
+1. **Lo que no está declarado como distinto, tiene que coincidir.**
+2. **Una divergencia declarada tiene que seguir divergiendo.** Si vuelve a coincidir, sale rojo:
+   una excepción que ya no muerde es una nota caducada haciéndose pasar por regla — la lección
+   que `check:guardianes` se llevó dos veces con sus casos malos.
+3. **La clave del diccionario tiene que existir**, por su ruta EXACTA.
+
+**Por qué se declara y no se deriva.** Derivarlo obligaría a la ruta OG a importar ocho
+diccionarios de página × dos idiomas para sacar dos cadenas de cada uno, y esa ruta se sirve en
+frío. (El motivo que daba la ficha —«tres no tienen de dónde leer»— era el falso.)
+
+**La ruta se declara, no se adivina, y esto es lo que más se acercó a un verde falso.** Hay
+**tres formas vivas** de guardar el par: `hero.title`, `hero.headline` (la home) y la clave suelta
+en la raíz. Un `??` encadenado buscando en las tres habría **dado verde sobre una clave que ya no
+existe**, que es exactamente el modo de fallo que este guardián viene a cerrar. Con la ruta
+declarada, una reestructuración del copy sale roja diciendo qué ruta ya no resuelve.
+
+**La única divergencia viva, ahora con motivo escrito:** el kicker de «Cómo se ha creado esta
+página» dice `Making-of` en la tarjeta y «El «Making of» de franciscolopez.es» en la página,
+porque el largo no cabe en 1200px. Antes eso era indistinguible de un descuido; ahora está
+declarado, y **el propio guardián exige que siga siendo distinto**.
+
+**Por qué merece gate propio y no una fila de `check:marco`:** aquél mide el HTML prerenderizado
+y necesita el build; esto compara dos ficheros de datos y corre con los guardianes baratos. Y el
+coste de que falle es alto para lo barato que es: la tarjeta OG es la primera impresión del
+tráfico que llega por recomendación, y el único texto del sitio que no mira nadie.
+
+**Validado disparándolo**, con su caso malo en `check:guardianes`: se toca el titular en
+`es/home.json` —la dirección en que ocurre de verdad, porque el copy se edita donde se lee— y el
+guardián nombra la tarjeta, el idioma y el campo.
+
+---
+
+## D143 · Un PR dice ahora qué secciones publicadas toca, y distingue el copy de la dependencia — 2026-08-28
+
+**Lo que pidió Francisco**, con sus palabras: «necesito que cuando se cambie algo automáticamente
+en el artículo o en otra sección se me avise de forma explícita antes de subir, algo como *esta
+PR modifica Artículo secciones 1, 2, 6 añadiendo/modificando X, Y, Z*, para poder revisarlo».
+
+**El hueco era de PORTADOR, no de herramienta.** Las dos piezas existían y ninguna llegaba:
+`articulo:novedades` dice qué líneas se movieron pero **no está en CI**, así que solo lo ve quien
+lo lanza a mano; `check:articulo` sí está en CI, pero **en verde solo dice «el sello cuadra»** y
+no nombra ninguna sección. El 2026-08-27 se re-selló §s09 por un cambio de fecha y CI pasó a
+verde sin nombrarla: que Francisco se enterara dependió de que se le contara en prosa, que es
+justo lo que pide que deje de depender de una persona.
+
+**Y `articulo:novedades` no valía tal cual, por un motivo que costó verlo.** Aquel compara contra
+el **sello vigente**, y para cuando el PR llega a CI su autor ya ha re-sellado: no queda
+diferencia que contar. La pregunta de un PR es otra —**qué cambia respecto a `main`**— y se
+contesta comparando las dos puntas, no contra el sello.
+
+**Decisión.** `npm run novedades` (`scripts/novedades-pr.ts`), paso de CI en los PR por el
+criterio de D51 —se dispara en un evento y no requiere criterio—, con cuatro elecciones que son
+las que deciden si sirve:
+
+1. **Distingue copy de dependencia.** *Cambió el copy* → hay que leerlo, es texto que verá un
+   visitante. *Se movió el sello* → casi nunca: los permalinks a `DECISIONS.md` se desplazan
+   solos con cada entrada nueva, y el 2026-08-27 eso movió 82 líneas de HTML sin cambiar una
+   palabra.
+2. **Sale en el RESUMEN del job** (`$GITHUB_STEP_SUMMARY`), que es donde se lee un PR, no
+   enterrado en un log de cuatrocientas líneas. Fuera de CI escribe por pantalla y sirve igual
+   antes de abrir el PR.
+3. **Nunca falla.** Informa; no juzga. Un aviso que puede poner un PR en rojo se acaba
+   silenciando, y aquí lo que hace falta es que se lea.
+4. **Y no se calla cuando no ha podido comparar.** Si la base no resuelve, lo dice en el propio
+   resumen. Una salida vacía se leería como «no cambia nada», que es el verde falso de siempre.
+
+**El alcance se decidió, no se supuso.** La ficha dejaba abierto si se extendía más allá del
+artículo. La respuesta la había dado P50.73 dos tareas antes: `/accesibilidad` ya tiene sellos por
+bloque, así que entra. Son **dos superficies**, y añadir una tercera es añadir su fila.
+
+**Y el paso enseñó algo del metro de al lado.** Escrito como `run: npm run novedades -- "${{ ...
+}}"`, el recuento de pasos de CI que el artículo dibuja **no lo veía**: su patrón busca `run: npm
+run <script>` a final de línea, y con argumentos dejaba de casar. Pasarlo por `env:` lo arregla y
+además quita un `${{ }}` interpolado dentro de una línea de comando, que es el vector de
+inyección clásico de Actions. **Las dos cosas se arreglan con el mismo cambio**, y sin él el
+diagrama habría dibujado 23 pasos habiendo 24.
+
+**No lleva caso malo en `check:guardianes`, y es deliberado:** no es un guardián. Su modo de
+fallo no es dar verde sobre algo roto, sino callarse — y contra eso está la guarda del punto 4,
+que es lo que sí se puede comprobar.
+
+---
+
+## D144 · La invariante del pliegue se rompió tres veces y siempre la vio un ojo — 2026-08-28
+
+**La invariante.** Brand Kit, Design System, Accesibilidad y Contacto comparten
+`md:min-h-[calc(100svh-5rem)]` y centran su grupo de apertura con `my-auto`. **Centrar reparte el
+sobrante arriba y abajo, así que solo es seguro mientras los grupos midan lo mismo.** Está
+escrito con esas palabras en `components/ui/layout.ts`.
+
+**Y aun así se rompió tres veces, y las tres las encontró Francisco cambiando de pestaña:**
+grupos a 428/484/477; Accesibilidad a 505 contra 461 al ganar un párrafo de fecha (P70.29); y
+Contacto a 297 por estructura, que se cerró con un SUELO de 29rem y no compactando (P70.35). Una
+regla escrita, tres incumplimientos y cero guardianes: es el punto 1 de `BRAND.md` §Cómo se
+escribe una regla —la condición hay que comprobarla **donde la cosa ocurre**, y aquí ocurre en
+píxeles pintados.
+
+**Decisión.** `npm run pliegue`, **fuera de CI** junto al censo y a `psi` porque necesita
+navegador y servidor delante. Mide a **1920×1080** el alto del grupo y la posición del `h1` de
+cada apertura, y falla si se separan más de **8px**.
+
+**Cuatro elecciones, y ninguna es obvia.**
+
+- **Quién entra no se escribe.** Se recorren las páginas del registro (`PAGE_SLUGS`, D72) y entra
+  la que **tenga grupo de pliegue, detectado en el DOM**. Una apertura nueva entra sola; una que
+  deje de usarlo, sale sola. Las diez que no lo tienen se **cuentan y se nombran**, no se saltan.
+- **Se busca por el TEXTO del atributo `class`, no con un selector CSS.** Las utilidades de
+  Tailwind llevan corchetes y dos puntos (`md:min-h-[29rem]`), que en un selector hay que
+  escapar, y el escapado mal puesto ya rompió cuatro comprobadores de este repo en una sola
+  tarea. Leer el atributo como texto no tiene escapado que equivocar.
+- **La tolerancia sale de medir el ruido**, no de elegirla: las cuatro miden hoy **464 y 389
+  exactos**, y las tres regresiones reales fueron de 44, 56 y 164 px. 8 las caza todas sin saltar
+  por un redondeo subpíxel.
+- **El viewport es 1920×1080 a propósito.** Es donde `md:` aplica y donde el sobrante del
+  centrado es mayor. El eje estrecho —1280×618— es de `viewport-verifier` (D52), y mide otra
+  cosa: que la apertura no **desborde**. Aquí se mide que las cuatro **coincidan**.
+
+**Validado reproduciendo la regresión, no inventándola.** Se reinyectó en el DOM el párrafo de
+fecha que causó P70.29 y el metro devolvió **505 / 368** — las cifras exactas que quedaron
+escritas en `layout.ts` el día de aquella regresión. Contra los 464/389 de las otras tres, son 41
+y 21 px de separación: rojo con holgura sobre la tolerancia de 8.
+
+**Y de paso, el conductor del navegador dejó de estar escrito dos veces.** La resolución del
+binario de `agent-browser` —con su rodeo por la CVE-2024-27980 en Windows— y el desenvuelto doble
+del JSON que devuelve `eval` los había escrito el censo. Ahora viven en
+`scripts/navegador/agent-browser.ts` y los comparten los dos: dos conductores se arreglan por
+separado el día que el binario cambie de sitio.
+
+**Un cuelgue que cuesta una hora si no está escrito:** `set viewport` **sin ninguna página
+abierta se queda esperando**, no falla. Se abre primero y solo entonces se fija el tamaño.
+
+**Lo que NO cubre:** las aperturas que comparten el andamiaje del pliegue pero no esta familia
+—el deep-dive, «Cómo se ha creado» y la home—. Sus aperturas son tipográficas, de alto constante,
+no se comparan de un vistazo con estas cuatro y cada una tiene su hueco razonado en su archivo.
+Esa exclusión no está escrita en el guardián: **sale sola**, porque no llevan `FOLD_GROUP`.

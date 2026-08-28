@@ -24,11 +24,10 @@ Tabla de modelo por defecto según el trabajo. **Convención:** al empezar un bl
 | Tablero de Notion, cableado de componentes, refactors mecánicos, actualización de docs, regenerar CV | **Sonnet** |
 | Tareas triviales/repetitivas sin criterio | **Haiku** |
 
-Micro-tarea mecánica dentro de una sesión Opus → delegar a un subagente con modelo barato **solo si es "chunky"** (el arranque en frío no compensa para un one-liner).
+Micro-tarea mecánica en una sesión Opus → subagente barato **solo si es "chunky"**: el arranque en frío no compensa un one-liner.
 
 ## Higiene de sesión
 
-- **Lecturas dirigidas:** preferir Grep / Read con `offset`/`limit` sobre leer archivos enteros — sobre todo `PRD-Historical.md` (~30k tok) y `DECISIONS.md`. Para una decisión concreta, `grep` del D-número, no cargar el archivo.
 - **Una sesión por bloque coherente;** `/clear` entre tareas no relacionadas para no arrastrar historial/tool-outputs acumulados.
 - **No re-leer tras editar** (el harness ya rastrea el estado del archivo).
 - **Concisión por defecto:** liderar con la respuesta, cortar preámbulos y recaps, tablas/bullets sobre párrafos; extenderse cuando se pida.
@@ -62,6 +61,8 @@ Al empezar una sesión de desarrollo:
 > **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote.
 
 > **A `General` no lo drena ningún sprint, así que se drena por CUPO.** **Cada sprint arrastra 3-4 tareas de `General`** —las que no piden criterio, por `Prioridad`— dentro del propio sprint, y **una revisión no cierra dejando en `General` más tareas nuevas de las que ese cupo va a sacar**. Si las deja, la revisión no ha terminado: falta decidir qué se retira.
+>
+> **El cupo no se puede comprobar, así que lo que se vigila es el NETO** (D138): `check:tablero` compara el tamaño de `General` con el sello del cierre anterior — **verde ≤ 0 · rojo ≥ +4**.
 
 > **`Tanda` agrupa el sprint por lotes de trabajo, y es GENÉRICA:** `Tanda 1`…`Tanda 5` se
 > **repueblan al abrir cada sprint**, así que la tanda 1 de uno y la de otro no son lo mismo.
@@ -84,10 +85,11 @@ Sin fechas, la **etapa en curso** es el sprint de menor `Prioridad` con tareas a
 
 Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara. Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** y (4) **antes de abrir el siguiente** se dispara **`method-review`**, que audita cómo se trabaja. Va en ese hueco y no al cerrar porque **el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener**.
 
+**Dos sellos se ponen a mano en ese cruce:** al cerrar, `SELLO_GENERAL` (`check-tablero.ts`); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso, los dos guardianes miden contra una etapa que ya no es.
+
 ### Metodología de trabajo (fase V2+)
 
-- **Contenido primero** en secciones bloqueadas por contenido (Sobre mí, Accesibilidad): el texto es el cuello de botella real y solo lo escribe Francisco. Desbloquear el contenido **antes o en paralelo** al diseño/dev; Claude puede redactar un borrador editable (como el CV o Sobre mí) para arrancarlo.
-- **Bucle medir→aprender.** Al cerrar cada etapa, revisar los números de GA4 (clics de contacto, descargas de CV, scroll) para informar la priorización.
+- **Contenido primero.** El texto es el cuello de botella real y solo lo escribe Francisco; el carril de arriba dice cuándo. Claude puede redactar un borrador editable para arrancarlo.
 - **Definition of Done por sección.** Cada tarea de sección hereda el checklist de cierre, al final de este archivo.
 - **Revisión con IA en los PR grandes.** Sin segundo revisor humano, usa `/code-review` (o ultrareview) en cambios sustanciales como segundo par de ojos.
 - **Shippear vs. pulir.** Que las secciones salgan en vez de dorarse: lo de la columna B de la DoD no bloquea el envío.
@@ -128,9 +130,9 @@ Antes de escribir markup nuevo, la cascada, en orden:
 
 ### Qué compra esto: la accesibilidad se hereda, no se vuelve a medir
 
-De los 9 puntos de abajo, la pieza ya trae **1, 2, 3 y 7** (contraste, foco, 44px, `reduced-motion`) y `<PageShell>` trae el **9**: lo que queda es comprobar que **se heredaron**, y **en pantalla, no leyendo el JSX** — una clase puede no estar aplicándose a nada sin dar error de compilación (`BRAND.md` §Cómo medir, punto 5). De los que pone quien escribe la página —**4, 5, 6 y 8**— **solo el 6 se verifica a mano**.
+La mayoría de los 9 puntos de abajo los trae la pieza o `<PageShell>`, así que lo que queda no es medirlos otra vez: es comprobar que **se heredaron**, y **en pantalla, no leyendo el JSX** — una clase puede no estar aplicándose a nada sin dar error de compilación (`BRAND.md` §Cómo medir, punto 5).
 
-Quién mira cada punto, y cuándo hay que volver a medir, lo dice la tabla de la **Definition of Done** al final de este archivo.
+**Quién mira cada punto, y cuándo hay que volver a medir, lo dice la tabla de la Definition of Done** al final de este archivo; no se repite aquí.
 
 ## Checklist de accesibilidad — gate de cierre de cada página/sección
 
@@ -149,12 +151,11 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 ### Cómo se verifica
 
 
-Sobre el sitio **servido**, con **`agent-browser`** —Chrome propio en primer plano, donde `:focus`, el LCP, `rAF` y el `IntersectionObserver` sí funcionan— y **conducido por el subagente `viewport-verifier`**, que ya lleva la matriz (cuatro viewports × dos temas + `reduced-motion`), congela el motion antes de medir y devuelve **hallazgos, no el volcado**. No se conduce a mano.
+Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `PRD-Live.md` §Cómo se verifica**; aquí solo lo que hay que hacer:
 
-- **Se dispara dos veces, y la primera no es al cerrar** (D50/D52). Si la sección lleva banda o hero dimensionado por `vw`, también **mientras se dibuja**, porque ahí el eje que falla es el **alto**. Al cerrar, el resto del checklist.
-- **Precondición:** el **sandbox de Bash desactivado** en TODAS las llamadas, no solo las de navegación. Un comando que cuelga es ese síntoma: se desactiva el sandbox, no se reintenta (D51).
-- **Lo que sigue a mano:** el punto **6** (nada codificado solo por color) y la **nota de PageSpeed** (`npm run psi`, no `vitals`). Lo demás lo cubren `check:marco` en CI y `npm run censo` fuera de ella; **qué garantiza cada uno lo dice `PRD-Live.md` §Cómo se verifica**, no esta lista.
-- **La pasada completa de contraste es `npm run censo`**, con el sitio construido y servido (D85). **Tras ella**, y no al cerrar una página: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, la fecha que publica `/accesibilidad` (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
+- **Precondición: el sandbox de Bash desactivado** en TODAS las llamadas, no solo las de navegación. Un comando que cuelga es ese síntoma: se desactiva el sandbox, no se reintenta (D51).
+- **Lo que sigue a mano:** el punto **6** (nada codificado solo por color) y la nota de PageSpeed (`npm run psi`, no `vitals`).
+- **Tras el `censo`**, y no al cerrar una página: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`, la fecha que publica `/accesibilidad` (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
 
 # Definition of Done
 

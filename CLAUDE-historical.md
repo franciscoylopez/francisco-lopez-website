@@ -124,6 +124,10 @@ de los marcos de dispositivo, los esqueletos y el «0» del 404.
 eso tiene dos disparos y el primero es *mientras se dibuja*: al cerrar, el alto de una banda
 dimensionada por `vw` ya no es un ajuste sino un rediseño.
 
+**Por qué `agent-browser` y no el navegador de la sesión** *(retirado de la convención el
+2026-08-28, P50.72)*: es un Chrome propio en **primer plano**, y ahí `:focus`, el LCP, `rAF` y
+el `IntersectionObserver` sí funcionan. En una pestaña oculta no, y el metro miente sin decirlo.
+
 **Lo del sandbox no es solo la navegación.** Bajo el sandbox de Bash **ningún** comando llega
 al daemon de `agent-browser`, ni con la página ya cargada. Un comando que se queda colgado es
 ese síntoma, y lo que toca es desactivar el sandbox — no reintentar, y no abrir la URL desde

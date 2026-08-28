@@ -11,7 +11,9 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  medirGeneral,
   revisarTablero,
+  type Sello,
   sprintActivo,
   type Tarea,
 } from "@/scripts/tablero/reglas";
@@ -175,6 +177,83 @@ describe("revisarTablero", () => {
     ];
     const reglas = revisarTablero(dosSprints).map((h) => h.regla);
     expect(reglas).toContain("orden-entre-sprints");
+  });
+});
+
+/** SANO tiene exactamente una abierta en `General`: la «Deuda transversal». */
+const SELLO_AL_DIA: Sello = {
+  fecha: "2026-08-28",
+  cierre: "Home",
+  abiertas: 1,
+};
+
+/** Cuatro más en el bloque transversal, que es justo el umbral rojo. */
+const CUATRO_NUEVAS: Tarea[] = [1, 2, 3, 4].map((n) => ({
+  nombre: `Deuda transversal recién archivada en General ${n}`,
+  prioridad: 30 + n,
+  etapa: "General",
+  area: "Infra",
+  estado: "Sin empezar",
+}));
+
+describe("medirGeneral", () => {
+  it("cuenta las abiertas del bloque transversal y nada más", () => {
+    // Ni las de otros bloques ni las cerradas: SANO tiene una sola en `General`.
+    expect(medirGeneral(SANO, SELLO_AL_DIA).abiertas).toBe(1);
+  });
+
+  it("no cuenta como crecimiento una cerrada de General", () => {
+    const conCerrada: Tarea[] = [
+      ...SANO,
+      {
+        nombre: "Deuda transversal ya archivada",
+        prioridad: 31,
+        etapa: "General",
+        area: "Infra",
+        estado: "Archivado",
+      },
+    ];
+    expect(medirGeneral(conCerrada, SELLO_AL_DIA).variacion).toBe(0);
+  });
+
+  it("un embalse que baja es verde, no ámbar", () => {
+    const drenado = SANO.filter((t) => t.etapa !== "General");
+    const medida = medirGeneral(drenado, SELLO_AL_DIA);
+    expect(medida.variacion).toBe(-1);
+    expect(medida.nivel).toBe("verde");
+  });
+
+  it("una sola tarea nueva es ámbar: se dice y no se falla", () => {
+    const medida = medirGeneral(
+      [...SANO, CUATRO_NUEVAS[0] as Tarea],
+      SELLO_AL_DIA,
+    );
+    expect(medida.variacion).toBe(1);
+    expect(medida.nivel).toBe("ambar");
+  });
+});
+
+describe("revisarTablero · el embalse transversal", () => {
+  it("no dice nada del embalse si no se le da sello", () => {
+    // Las cuatro primeras reglas no lo necesitan, y sin sello no hay contra qué
+    // comparar: inventarse un cero sería el verde falso de siempre.
+    expect(revisarTablero([...SANO, ...CUATRO_NUEVAS])).toEqual([]);
+  });
+
+  it("con el sello al día, un tablero sano sigue sin hallazgos", () => {
+    expect(revisarTablero(SANO, SELLO_AL_DIA)).toEqual([]);
+  });
+
+  it("rechaza que General gane 4 netas desde el cierre anterior", () => {
+    const hallazgos = revisarTablero([...SANO, ...CUATRO_NUEVAS], SELLO_AL_DIA);
+    expect(hallazgos.map((h) => h.regla)).toContain("general-no-drena");
+    expect(hallazgos[0]?.mensaje).toContain("1 → 5");
+  });
+
+  it("no lo rechaza con 3, que es el ruido que el umbral deja pasar", () => {
+    expect(
+      revisarTablero([...SANO, ...CUATRO_NUEVAS.slice(0, 3)], SELLO_AL_DIA),
+    ).toEqual([]);
   });
 });
 

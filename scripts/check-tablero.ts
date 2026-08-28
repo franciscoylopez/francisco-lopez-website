@@ -14,6 +14,14 @@
  * tablero se lee de todas formas — por eso además de fallar, informa: dice cuál es
  * el sprint activo y qué toca, que es lo que hace que apetezca lanzarlo.
  *
+ * Y VIGILA UNA COSA QUE EL TABLERO NO PUEDE CORREGIR SOLO: que `General` —la deuda
+ * transversal, que no drena ningún sprint— no crezca. `CLAUDE.md` la drena por
+ * cupo, y el cupo NO se puede comprobar: al mover una tarea a un sprint se pierde
+ * de qué bloque venía, coste aceptado por escrito antes que una séptima propiedad.
+ * Lo que sí se puede medir es el neto contra el cierre anterior, y eso es lo que
+ * hace `SELLO_GENERAL` aquí abajo. Menos de lo que la regla pedía; lo máximo que
+ * el esquema permite.
+ *
  * Y LAS REGLAS NO SE QUEDAN SIN RED POR ESO. Viven aparte, en
  * `scripts/tablero/reglas.ts`, como función pura sin nada de Notion dentro, y las
  * prueba `npm test` en CI con casos buenos y malos. Aquí solo hay E/S e informe.
@@ -28,16 +36,42 @@
 import { existsSync, readFileSync, statSync } from "node:fs";
 
 import {
+  BLOQUE_TRANSVERSAL,
   EN_EJECUCION,
+  medirGeneral,
   revisarTablero,
+  type Sello,
   sprintActivo,
   type Tarea,
+  VARIACION_ROJA,
 } from "./tablero/reglas";
 
 const RUTA = process.argv[2] ?? "scripts/.tablero.json";
 
 /** Más viejo que esto y el verde no dice nada del tablero de hoy. */
 const HORAS_FRESCURA = 12;
+
+/**
+ * El tamaño de `General` en el último cierre de etapa. Constante fechada y no
+ * almacén: es un número que solo cambia cuando se cierra un sprint, así que un
+ * archivo de estado sería una segunda fuente de verdad para un dato que se toca
+ * tres veces al mes. Mismo régimen que el techo de `check:contexto`.
+ *
+ * SE ACTUALIZA AL CERRAR UNA ETAPA, no al abrirla y no al pasar por aquí. Si se
+ * refrescara solo, la variación sería siempre 0 y el guardián no diría nada.
+ *
+ * HISTORIAL
+ * · 2026-08-28 · cierre de «Home» · 18. La ficha que abrió este guardián medía 34,
+ *   +6 netas en un sprint; entre medias, el sprint «Drenaje» se comprometió 16 de
+ *   `General` y el embalse bajó a 18. Es el cupo funcionando a lo grande, así que
+ *   el primer sello nace bajo a propósito: el próximo cierre se mide contra un
+ *   suelo honesto y no contra el máximo histórico.
+ */
+const SELLO_GENERAL: Sello = {
+  fecha: "2026-08-28",
+  cierre: "Home",
+  abiertas: 18,
+};
 
 /**
  * El volcado llega tal como lo devuelve la consulta del MCP: propiedades con sus
@@ -98,7 +132,8 @@ const filas: FilaNotion[] = Array.isArray(crudo)
 const tareas = filas.map(normalizar);
 const activo = sprintActivo(tareas);
 const enEjecucion = tareas.filter((t) => EN_EJECUCION.includes(t.estado));
-const hallazgos = revisarTablero(tareas);
+const hallazgos = revisarTablero(tareas, SELLO_GENERAL);
+const general = medirGeneral(tareas, SELLO_GENERAL);
 
 // CUÁNTO HA MIRADO, siempre y antes del veredicto. Una lista de hallazgos vacía
 // sobre cero tareas parece un aprobado, y en este repo eso ya ha pasado cinco
@@ -119,6 +154,20 @@ if (siguientes.length > 0) {
   }
 }
 
+// EL EMBALSE, siempre y no solo cuando falla. Es la mitad que hacía falta: la
+// regla del cupo llevaba un sprint escrita sin instrumento, y una regla que no se
+// puede comprobar es una nota.
+const signo =
+  general.variacion > 0
+    ? `+${general.variacion}`
+    : `${general.variacion || "±0"}`;
+console.log(
+  `  · «${BLOQUE_TRANSVERSAL}» ${general.abiertas} abierta(s) · ${signo} ` +
+    `desde el cierre de «${general.sello.cierre}» (${general.sello.fecha}: ` +
+    `${general.sello.abiertas}) · umbral +${VARIACION_ROJA}` +
+    (general.nivel === "ambar" ? " ⚠ sube, aún bajo umbral" : ""),
+);
+
 const bloqueadas = tareas.filter((t) => t.estado === "Blocked").length;
 if (bloqueadas > 0) {
   // No es un fallo, es el síntoma que se nota antes que la causa: si el número
@@ -134,7 +183,8 @@ if (bloqueadas > 0) {
 
 if (hallazgos.length === 0) {
   console.log(
-    "✓ Prioridades únicas, estados dentro del sprint activo y Área en todas.\n",
+    "✓ Prioridades únicas, estados dentro del sprint activo, Área en todas y el\n" +
+      "  embalse transversal sin crecer por encima del umbral.\n",
   );
   process.exit(0);
 }

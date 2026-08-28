@@ -47,7 +47,7 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
   origen (la CSP no cambió) y por el SMTP de la propia cuenta, sin encargado nuevo.
 - **El deep-dive por experiencia**: el índice `/trayectoria` y las cinco páginas de
   `/trayectoria/[slug]` (Emendu, KUOTIP, INDYA, Freepik y TheTool). Catorce por idioma son
-  las **28 variantes** que usan `gate:html`, el sitemap y el recorrido de `design-review`.
+  las **28 variantes** que recorren los gates.
 
 Y con ellas: **CV en PDF bilingüe** descargable con identidad de marca y generado por
 código · **SEO técnico y Open Graph** por página · **medición** (GA4/GTM con
@@ -55,10 +55,9 @@ consentimiento RGPD) · **dominio propio** · **páginas 404/500 de marca e i18n
 **cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy,
 Permissions-Policy, HSTS y CSP con allowlist mínima).
 
-**La marca no termina en el dominio.** Firma de email (monograma split, nombre en
-Bricolage y canales), banner de LinkedIn y portada del repositorio comparten el mismo
-titular que el Hero, «Del discovery al dato», y el mismo monograma. Es la prueba de
-coherencia que un sistema de marca solo puede dar fuera de su propio sitio.
+**La marca no termina en el dominio.** Firma de email, banner de LinkedIn y portada del
+repositorio comparten el titular del Hero, «Del discovery al dato», y el mismo monograma:
+la prueba de coherencia que un sistema de marca solo puede dar fuera de su propio sitio.
 
 La apertura de **Sobre mí es un vídeo**: se reproduce una vez y se queda en su último
 fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
@@ -70,10 +69,10 @@ descarga** (D65).
    claro/oscuro; por debajo de 768px los tres enlaces colapsan tras el menú.
 2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio. **El
    punto final del titular es la firma de marca** (D137): cae y se asienta al cargar, en
-   morado, y es el único gesto del sitio que existe para ser recordado.
+   morado.
 3. **Hitos** — 5 reconocimientos, cronológico descendente; chip "Exit" en el de TheTool.
    Un filete crece bajo cada año conforme la fila cruza: es la **textura** que acompaña a
-   la firma, subordinada a ella a propósito (D137).
+   la firma (D137).
 4. **Cómo trabajo** — 6 etapas: Discovery → UX → Prototipado → Desarrollo → Lanzamiento → Analítica.
 5. **Más allá del PM** — banda de manifiesto (founder + growth), fondo de marca invertido.
 6. **Trayectoria** — bloque Producto + bloque Experiencia previa (Marketing & Growth); logos reales monocromo; el rol enlaza al deep-dive; CTA Descargar CV.
@@ -82,29 +81,25 @@ descarga** (D65).
 9. **Franja-CTA de cierre** — banda de fondo propio con copy de posicionamiento al ICP y
    **una sola acción**, el botón sólido que lleva a `/contacto`. Los canales sueltos que
    la acompañaban salieron al existir esa página: allí están mejor.
-10. **Footer**, en dos filas — arriba, la firma con el nombre en lockup, los enlaces y los dos canales de icono; abajo, una línea fina con los derechos y el enlace de privacidad y cookies. Los enlaces van en jerarquía: **El Making of** destacado y las tres páginas del sistema (Brand Kit, Design System, Accesibilidad) agrupadas detrás de un filete. La distinción la hace el tono del chrome, nunca `primary`.
+10. **Footer**, en dos filas — arriba, la firma en lockup, los enlaces y los dos canales de icono; abajo, una línea fina con los derechos y el enlace de privacidad y cookies. Los enlaces van en jerarquía: **El Making of** destacado y las tres páginas del sistema agrupadas detrás de un filete, con el tono del chrome y nunca `primary`.
 
 ### Tres cosas que el sitio hace y no se ven mirándolo
 
 - **Las páginas que documentan el sistema no pueden mentir.** El Design System y el
   Brand Kit publican **las piezas reales del sitio como demo**: si una variante cambia,
-  la página cambia con ella. Y no leen sus valores
-  del diccionario, sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio
-  publica sobre sí mismo — tokens de layout, breakpoints y el censo de pares de contraste
-  medidos. El diccionario se queda solo con el copy.
+  la página cambia con ella. Y sus cifras no salen del diccionario —que se queda solo con
+  el copy— sino de `lib/design-values.ts` (D38), fuente única de lo que el sitio publica
+  sobre sí mismo.
 - **Las superficies de contacto son dos, y la diferencia es deliberada** (D29): la franja
   de la home y el cierre de Sobre mí llevan a `/contacto`; el «reportar una barrera» de
-  Accesibilidad **no**, y enseña la dirección escrita con su asunto. Obligar a usar el
-  formulario para reportar una barrera sería una trampa el día que la barrera fuera él.
-- **Una página no se escribe: se compone.** `pageMetadata` deriva canonical, los tres
-  `hreflang`, OG y Twitter de una sola fuente, y `<PageShell>` pone JSON-LD, nav, isla de
-  motion, el `<main>` y footer (D45/D46). Las catorce se **prerenderizan** por locale y el
-  diccionario está **partido por página** (D48). Y **qué páginas hay lo dice un solo
-  sitio**: registrarlas mal no es un hallazgo de auditoría sino un error del
-  compilador, y un guardián contrasta el registro con el disco (D72). Es lo que hace
-  que una página nueva nazca con el `hreflang` correcto, con enlace de salto,
-  estática, y dentro del sitemap, del gate, de `/llms.txt` y de su propia tarjeta
-  OG, sin que nadie se acuerde.
+  Accesibilidad **no**, y enseña la dirección escrita. Obligar a usar el formulario para
+  reportar una barrera sería una trampa el día que la barrera fuera él.
+- **Una página no se escribe: se compone.** `pageMetadata` y `<PageShell>` derivan la
+  metadata, el JSON-LD y el marco (D45/D46), las catorce se **prerenderizan** por locale
+  (D48), y **qué páginas hay lo dice un solo sitio**, contrastado con el disco por un
+  guardián (D72). Es lo que hace que una página nueva nazca con el `hreflang` correcto,
+  con enlace de salto, estática, y dentro del sitemap, del gate, de `/llms.txt` y de su
+  propia tarjeta OG, sin que nadie se acuerde.
 
 ## 5. Sistema (criterios de aceptación, no aspiraciones)
 
@@ -127,19 +122,16 @@ carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (e
 eyebrow + titular), `field` (el campo de formulario), `table`, `stat-row` y `layout`
 (cajas y ritmos). Encima, la **capa
 de página**: `lib/page-meta.ts` y `components/site/page-shell.tsx` (D45/D46). Y aparte,
-no encima, la de **artículo largo**, que D76 dejó fuera del núcleo a propósito — y que
-se vacía por su propio criterio: cuando una segunda página quiere una de sus piezas,
-esa pieza sale (`LiveStat` en D113, el índice y el cierre en D121) — **y vuelve si su
-motivo no valía en las cuatro**: el riel se probó en tres páginas y volvió (D123).
+no encima, la de **artículo largo**, que D76 dejó fuera del núcleo a propósito y que se
+vacía por su propio criterio: cuando una segunda página quiere una de sus piezas, esa
+pieza sale — **y vuelve si su motivo no valía en las cuatro** (D113, D121, D123).
 
 **Qué hay exactamente en `components/ui/` no lo dice este párrafo: lo dice
 `components/ui/README.md`, derivado del disco** y comprobado en cada PR, con la frase de
 cada pieza y la sección donde se publica (D89).
 
-Cuál toca se decide con dos preguntas — **¿se pulsa?** y, si sí, **¿tiene caja propia?** —
-no por parecido: un chip que solo rotula no es un botón pequeño, y un enlace de nav
-tampoco. **Ninguno se escribe con clases sueltas**: si un caso no encaja en una variante,
-se crea la variante; la excepción se documenta con fecha. Es lo que hace que un cambio de
+**Cuál toca, y que ninguno se escriba con clases sueltas, lo decide la cascada de
+`CLAUDE.md` §Regla de construcción**, no este párrafo. Lo que compra es que un cambio de
 hover, de radio, del objetivo táctil o del icono de una acción llegue a todo el sitio a la
 vez. Los iconos son de **lucide**; los que lucide no trae (LinkedIn y GitHub) se dibujan a
 mano con la regla de autoría de iconos propios. Detalle en `BRAND.md` y en
@@ -178,10 +170,14 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | `npm test` | La lógica que no necesita navegador. Son dos: el formulario, medido sobre lo que nodemailer **emite**, y las reglas del tablero | CI | D101/D107 |
 | `gate:html` | El HTML servido de las 28 variantes antes y después de un refactor: diff vacío = transparente por construcción | a mano | D42/D45 |
 | `check:articulo` | Que ninguna sección del artículo dependa de una fuente que se movió, **nombrando la sección** en el PR que la mueve; `articulo:novedades` dice qué líneas. Sella aparte el copy, contra `ARTICLE_UPDATED`, que es el `dateModified` que ve Google | CI | D84/D103/D110 |
+| `check:accesibilidad` | Lo mismo para `/accesibilidad`: sus cinco bloques con fuente declarada, y que las dos cifras del arnés que publica cuadren con los casos que hay. **Fuera:** lo que es MEDICIÓN y no archivo (los pares sobre foto, el desbordamiento bajo 320) | CI | D140 |
+| `check:og` | Que las 8 tarjetas OG digan lo que su página, en los dos idiomas, salvo lo declarado distinto **con su motivo** — y que lo declarado siga siéndolo. **Fuera:** el dibujo | CI | D142 |
 | `censo` | **Dos pases** sobre las páginas del registro × dos temas: los pares de TEXTO (1.4.3/1.4.6) y el **contorno de cada control** (1.4.11, 3:1), que axe no implementa. Deja sello, y `check:palette` lo compara en cada PR | a mano | D85/D97/D90 |
+| `check:enlaces` | Que las URLs externas del sitio sigan respondiendo, sacadas del disco y no de una lista. **Fuera de su juicio:** el 403 y el 999, escudo antibot y no enlace muerto | a mano | D141 |
+| `pliegue` | Que las aperturas que comparten pliegue midan lo mismo —grupo y `h1`— a 1920×1080; entra la que lo tenga, detectado en el DOM. **Fuera:** que no desborde, que es `viewport-verifier` | a mano | D144 |
 | `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99 |
 | `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**. **Fuera:** el ZIP, que se genera en el build | CI | D119 |
-| `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero | a mano | D107 |
+| `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, y que el embalse transversal no crezca contra el sello del cierre anterior. **Fuera:** si el CUPO se cumplió, que el esquema del tablero no permite ver | a mano | D107/D138 |
 
 ### Calidad y seguridad
 
@@ -248,7 +244,7 @@ ellos se intercalaron tres bloques de método. El recorrido sprint a sprint, con
 de cada uno, en `PRD-Historical.md`.
 
 **Traducción a EN**: la arquitectura i18n ya está; se traduce a medida que se añade
-contenido, revisando el EN contra el ES y no al revés (D20).
+contenido, con la regla de `CLAUDE.md` (D20).
 
 **Qué NO lleva deep-dive, y no es por alcance:** las dos entradas de Marketing & Growth
 (diluirían el orden del posicionamiento de §3) y **PICKASO**, que es el primer capítulo de

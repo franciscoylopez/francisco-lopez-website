@@ -44,24 +44,66 @@ import { join, relative } from "node:path";
 /** Lo que se `@`-importa en cada arranque de sesión, vía `CLAUDE.md`. */
 const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
 
+/* ─────────────────────────────────────────────────────────────────────────────
+ * MOVER UN TECHO TIENE QUE COSTAR ALGO (2026-08-28, P50.72 · D139).
+ *
+ * Los tres techos de este archivo se habían movido SIETE veces en nueve días, en
+ * las dos direcciones, y el margen nunca pasó de 442 ni bajó de 5. La medición que
+ * lo abrió es la que duele: el sprint «Home» retiró 651 palabras de verdad —la
+ * primera reducción real desde el 22 de agosto— y el margen subió de 246 a 253,
+ * porque el techo bajó 400 en el mismo commit. **Retirar 651 compró 7.**
+ *
+ * Un trinquete cuyo trinquete se mueve es un termómetro que se repinta. Es familia
+ * propia en el catálogo de `method-review` —«el umbral que persigue al dato»— y se
+ * distingue de «la cifra apuntada que caduca» POR EL REMEDIO: aquella envejece
+ * porque nadie la toca, esta se actualiza *demasiado bien*.
+ *
+ * EL REMEDIO, en dos piezas que solo funcionan juntas:
+ *
+ * 1. **El techo se DERIVA de su historial**, que es un dato y no un comentario. No
+ *    se puede mover sin añadir una entrada, y una entrada exige `motivo`: lo pide
+ *    el tipo, así que no hay forma de subir un número en silencio. Y el historial
+ *    deja de estar escrito dos veces —prosa arriba, valor abajo—, que es como una
+ *    de las dos mitades acaba diciendo otra cosa.
+ * 2. **Se cuentan los movimientos del ciclo en curso** y se publican en cada
+ *    corrida: **verde 0 · ámbar 1** —el trinquete apretando, que es su trabajo— ·
+ *    **rojo ≥ 2**, que ya no es apretar sino perseguir al dato.
+ *
+ * LO QUE NO PUEDE VER. Si el objetivo persigue al dato en vez del techo, esto no lo
+ * mira: el objetivo no falla, solo tira, y un objetivo que se relaja se nota en que
+ * la distancia no baja. Se vigila lo que muerde.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+/** Un movimiento de techo. `motivo` es obligatorio a propósito: es el coste. */
+type Movimiento = { fecha: string; valor: number; motivo: string };
+
+/**
+ * Desde cuándo se cuentan los movimientos. **Se actualiza al ABRIR una etapa**, que
+ * es lo que hace de «ciclo» una unidad comprobable en vez de una intuición. Hoy:
+ * apertura del sprint «Drenaje».
+ */
+const CICLO_ABIERTO = "2026-08-28";
+
+/** El techo vigente es el último movimiento, nunca un número escrito aparte. */
+function vigente(historial: Movimiento[]): number {
+  const ultimo = historial.at(-1);
+  if (!ultimo) throw new Error("Un techo sin historial no se puede derivar.");
+  return ultimo.valor;
+}
+
+/** Los de este ciclo. El de apertura cuenta: mover el techo el día que se abre la
+ *  etapa es exactamente el reflejo que esto vigila. */
+function movimientosDelCiclo(historial: Movimiento[]): Movimiento[] {
+  return historial.filter((m) => m.fecha >= CICLO_ABIERTO);
+}
+
 /**
  * Falla por encima de aquí. **Se aprieta conforme se compacta, nunca se afloja.**
  *
- * Historial del techo, que es la prueba de que el trinquete funciona:
- *   16.000  al crearlo (2026-08-19), con 15.466 medidos tras compactar PRD-Live
- *   13.500  el mismo día, al derivar el índice de decisiones (3.610 → 924)
- *   12.500  el 2026-08-22, al BAJAR ese índice a la cabecera de `DECISIONS.md`
- *           (13.494 → 12.224). D88: era el único componente del presupuesto que
- *           crecía por construcción, y contra eso un techo no defiende.
- *   12.400  el mismo día, tras la pasada de retirada sobre `BRAND.md` (12.224 →
- *           11.976, la primera vez que el arranque cabe en el objetivo)
- *   12.200  el 2026-08-24 (12.397 → 11.957), retirando historia fechada y tres
- *           duplicaciones: el inventario de verificación estaba escrito en
- *           `CLAUDE.md`, en la DoD y en `PRD-Live`, y las dos «excepciones vivas»
- *           de `BRAND.md` repetían justificación y condición de salida palabra
- *           por palabra. Ninguna regla se retiró; solo su historia y sus copias.
- *   12.700  el 2026-08-25, y es la PRIMERA vez que el techo SUBE. Decisión de
- *           Francisco en el quinto `method-review`, con el porqué medido abajo.
+ * **El historial es el dato de abajo, `HISTORIAL_TECHO`, y el techo sale de él.**
+ * Aquí no se repite: una lista en prosa al lado del valor es cómo una de las dos
+ * mitades acaba diciendo otra cosa. Lo que queda aquí es lo que un `motivo` de una
+ * línea no puede llevar — los dos episodios que costaron una decisión.
  *
  * LA VEZ QUE SE AFLOJÓ, Y POR QUÉ NO CONTRADICE LA REGLA DE ARRIBA. Este bloque
  * dice «nunca se afloja» y predice este momento con precisión incómoda: «un techo
@@ -86,16 +128,14 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  * tarea que quiere escribir una regla. 500 palabras de holgura son media docena de
  * sesiones en vez de un cuarto de sprint.
  *
- *   12.300  el 2026-08-27 (P68.5908), y el trinquete vuelve a apretar como su
- *           entrada anterior prometía: la subida a 12.700 quedó atada a que
- *           apareciera el dato, y apareció. La revisión manual (D128) encontró
- *           que el crecimiento no viene de un archivo gordo sino de lluvia fina
- *           sobre los tres, y que el porqué estaba escrito dos veces —en el
- *           documento de reglas y en su D-entry—. Con `PRD-Live` §Cómo se
- *           verifica en tabla de contrato (769 → 542) y el porqué de `CLAUDE.md`
- *           partido a `CLAUDE-historical.md`, y por primera vez la bajada no es
- *           una mudanza —el histórico no se `@`-importa y la suma de skills ya
- *           tiene techo (D129)—.
+ * Y EL 2026-08-27 (P68.5908) EL TRINQUETE VOLVIÓ A APRETAR, como esa entrada
+ * prometía: la subida quedó atada a que apareciera el dato, y apareció. La revisión
+ * manual (D128) encontró que el crecimiento no viene de un archivo gordo sino de
+ * lluvia fina sobre los tres, y que el porqué estaba escrito dos veces —en el
+ * documento de reglas y en su D-entry—. Con `PRD-Live` §Cómo se verifica en tabla
+ * de contrato (769 → 542) y el porqué de `CLAUDE.md` partido a
+ * `CLAUDE-historical.md`, y por primera vez la bajada no es una mudanza —el
+ * histórico no se `@`-importa y la suma de skills ya tiene techo (D129)—.
  *
  * LO QUE ESTE PÁRRAFO PREDIJO Y LO QUE MIDIÓ EL COMANDO, que no es lo mismo
  * (corregido el 2026-08-28, séptimo `method-review`). Decía «4.693 → 4.033», un
@@ -111,10 +151,63 @@ const IMPORTADOS = ["CLAUDE.md", "AGENTS.md", "BRAND.md", "PRD-Live.md"];
  *
  * Y LA HOLGURA QUE SE PRETENDÍA DEJAR ERA 500, que es lo que el párrafo de
  * arriba pedía sin poder pagarlo: 500 palabras son media docena de sesiones
- * escribiendo reglas en vez de un cuarto de sprint retirándolas. Hoy son 253, o
- * sea que el trinquete sigue sin margen y esa deuda está tareada (P68.5909).
+ * escribiendo reglas en vez de un cuarto de sprint retirándolas.
+ *
+ * EL 2026-08-28 SON **410**, Y ESTA VEZ EL TECHO NO SE HA MOVIDO. Es la primera vez
+ * que el margen sube solo por trabajo del dato: 12.047 → 11.890 sobre el mismo
+ * 12.300, y añadiendo reglas por el camino — P50.72 lo dejó en 405 y P50.73, que
+ * trajo un gate nuevo y su fila de contrato, PAGÓ su alta retirando copias en vez
+ * de mover el techo. Es el trinquete funcionando como se pedía. Salió de retirar COPIAS, no reglas — el gate de accesibilidad
+ * estaba descrito en `CLAUDE.md` y en la tabla de contrato de `PRD-Live`, el
+ * reparto de los 9 puntos estaba en prosa y en la DoD, y el porqué de cada
+ * excepción de control estaba en `BRAND.md`, en el histórico y en la propia marca
+ * `@fuera-de-capa` que imprime `check:excepciones`. Cifra devuelta por el comando,
+ * como pide el párrafo de arriba.
  */
-const TECHO = 12_300;
+const HISTORIAL_TECHO: Movimiento[] = [
+  {
+    fecha: "2026-08-19",
+    valor: 16_000,
+    motivo: "nace, con 15.466 medidos tras compactar PRD-Live",
+  },
+  {
+    fecha: "2026-08-19",
+    valor: 13_500,
+    motivo: "el índice de decisiones se deriva (3.610 → 924)",
+  },
+  {
+    fecha: "2026-08-22",
+    valor: 12_500,
+    motivo:
+      "ese índice baja a la cabecera de DECISIONS.md (13.494 → 12.224). D88: era el único componente que crecía por construcción, y contra eso un techo no defiende",
+  },
+  {
+    fecha: "2026-08-22",
+    valor: 12_400,
+    motivo:
+      "pasada de retirada sobre BRAND.md (12.224 → 11.976, la primera vez que el arranque cabe en el objetivo)",
+  },
+  {
+    fecha: "2026-08-24",
+    valor: 12_200,
+    motivo:
+      "historia fechada y tres duplicaciones fuera (12.397 → 11.957); ninguna regla se retiró, solo su historia y sus copias",
+  },
+  {
+    fecha: "2026-08-25",
+    valor: 12_700,
+    motivo:
+      "PRIMERA subida: con 2 palabras de holgura la invariante ya estaba rota y apretar más no era una opción. Decisión de Francisco en el quinto method-review",
+  },
+  {
+    fecha: "2026-08-27",
+    valor: 12_300,
+    motivo:
+      "el trinquete vuelve a apretar: la subida quedó atada a que apareciera el dato (D128), y apareció",
+  },
+];
+
+const TECHO = vigente(HISTORIAL_TECHO);
 
 /**
  * A dónde se quiere llegar. No falla; solo se publica la distancia. Necesita número
@@ -240,30 +333,31 @@ if (total > OBJETIVO) {
  * ───────────────────────────────────────────────────────────────────────────── */
 
 /**
- * Falla por encima de aquí, POR ENTRADA. **Se aprieta conforme se compacta.**
- *   6.400  al crearlo (2026-08-24), con `design-review` medida en 6.290
- *   4.600  el mismo día (P68.655), tras la retirada sobre `design-review`
- *          (6.290 → 4.499). Ninguna regla se retiró: la Fase 3 pesaba 1.963
- *          palabras reescribiendo el censo que ya está en `BRAND.md` y el axe
- *          que ya lleva `viewport-verifier`, y el filtro mecánico estaba escrito
- *          dos veces seguidas. Ahora la más cara es `method-review`, 2.630.
+ * Falla por encima de aquí, POR ENTRADA. **Se aprieta conforme se compacta**, y su
+ * historial es dato como el de arriba.
  */
-const TECHO_SKILL = 4_600;
+const HISTORIAL_TECHO_SKILL: Movimiento[] = [
+  {
+    fecha: "2026-08-24",
+    valor: 6_400,
+    motivo: "nace, con design-review medida en 6.290",
+  },
+  {
+    fecha: "2026-08-24",
+    valor: 4_600,
+    motivo:
+      "retirada sobre design-review (6.290 → 4.499). Ninguna regla se retiró: la Fase 3 reescribía el censo de BRAND.md y el axe de viewport-verifier, y el filtro mecánico estaba dos veces seguidas",
+  },
+];
+
+const TECHO_SKILL = vigente(HISTORIAL_TECHO_SKILL);
 
 /** A dónde se quiere llegar por entrada: el tamaño del mayor `@`-importado. */
 const OBJETIVO_SKILL = 4_500;
 
 /**
  * Falla por encima de aquí, SUMANDO todas las entradas. **Se aprieta conforme se
- * compacta**, igual que el de arriba.
- *   20.500  al crearlo (2026-08-27, P68.5907). Nace en verde, por la misma razón
- *           que los otros dos: un gate que nace en rojo se sube hasta que no
- *           significa nada. Y se sella contra la suma de DESPUÉS de la propia
- *           tarea —20.262, no las 20.203 de antes—, porque actualizar la tabla
- *           de umbrales de `method-review` es parte de ella. Holgura resultante
- *           **238**, que es la magnitud de trabajo que este archivo defiende
- *           para los documentos (240): las tres mitades del presupuesto quedan
- *           igual de apretadas.
+ * compacta**, igual que el de arriba, y su historial también es dato.
  *
  * OJO AL COMPARAR CON EL INFORME que originó esto, que dice 20.616 donde aquí
  * pone 20.203. No es drift ni una medida vieja: **este contador descuenta los
@@ -272,7 +366,16 @@ const OBJETIVO_SKILL = 4_500;
  * documentos — comparar dos corpus con dos varas distintas era la mitad del
  * problema.
  */
-const TECHO_SUMA = 20_500;
+const HISTORIAL_TECHO_SUMA: Movimiento[] = [
+  {
+    fecha: "2026-08-27",
+    valor: 20_500,
+    motivo:
+      "nace en verde (P68.5907), sellado contra la suma de DESPUÉS de la propia tarea —20.262, no las 20.203 de antes—, porque actualizar la tabla de umbrales de method-review es parte de ella. Holgura 238, la misma magnitud que defiende el techo de los documentos",
+  },
+];
+
+const TECHO_SUMA = vigente(HISTORIAL_TECHO_SUMA);
 
 /** Las carpetas de contexto a demanda que vivan en el repo. Del DISCO, nunca de
  *  una lista escrita: una skill nueva entra en el presupuesto sin que nadie se
@@ -381,3 +484,61 @@ if (sobreObjetivo.length > 0) {
         : `La mayor mide ${mayor}, a ${holgura} del techo: el trinquete está apretado.`),
   );
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+ * TERCERA MITAD: ¿SE HA MOVIDO ALGÚN TECHO EN ESTE CICLO? (2026-08-28, P50.72).
+ *
+ * Las dos de arriba vigilan el DATO contra el umbral. Esta vigila el UMBRAL, que
+ * es lo que llevaba nueve días sin nadie apuntado: siete valores en las dos
+ * direcciones, margen entre 5 y 442, y una retirada real de 651 palabras que
+ * compró 7. Se publica siempre, y se cuenta por techo: dos movimientos del MISMO
+ * en un ciclo es la firma de perseguir al dato, y dos de techos distintos puede
+ * ser simplemente un ciclo que compactó en dos frentes.
+ * ───────────────────────────────────────────────────────────────────────────── */
+
+const TECHOS = [
+  { nombre: "documentos", historial: HISTORIAL_TECHO },
+  { nombre: "skill (entrada)", historial: HISTORIAL_TECHO_SKILL },
+  { nombre: "skills (suma)", historial: HISTORIAL_TECHO_SUMA },
+];
+
+const movidos = TECHOS.map((t) => ({
+  ...t,
+  ciclo: movimientosDelCiclo(t.historial),
+}));
+const totalMovimientos = movidos.reduce((n, t) => n + t.ciclo.length, 0);
+
+console.log(
+  `\ncheck:contexto — techos movidos desde que abrió el ciclo (${CICLO_ABIERTO}): ` +
+    `${totalMovimientos} de ${TECHOS.length} vigilados`,
+);
+for (const t of movidos) {
+  for (const m of t.ciclo) {
+    console.log(`  ${m.fecha}  ${t.nombre} → ${m.valor} · ${m.motivo}`);
+  }
+}
+
+const perseguidos = movidos.filter((t) => t.ciclo.length >= 2);
+if (perseguidos.length > 0) {
+  console.error(
+    `\ncheck:contexto — UN TECHO PERSIGUIENDO AL DATO: ` +
+      perseguidos
+        .map((t) => `«${t.nombre}» se ha movido ${t.ciclo.length} veces`)
+        .join(", ") +
+      ` en este ciclo.\n\n` +
+      "Un trinquete cuyo trinquete se mueve es un termómetro que se repinta. La\n" +
+      "medición que abrió esta regla: retirar 651 palabras de verdad subió el margen\n" +
+      "de 246 a 253, porque el techo bajó 400 en el mismo commit.\n\n" +
+      "Lo que toca NO es un tercer movimiento con mejor motivo: es dejar el techo\n" +
+      "quieto un ciclo entero y que el margen suba por trabajo del dato. Si la\n" +
+      "conclusión razonada es que estaba mal calibrado desde el principio, vale —\n" +
+      "pero entonces se escribe el porqué UNA vez y se deja de tocar.\n",
+  );
+  process.exit(1);
+}
+
+console.log(
+  totalMovimientos === 0
+    ? "✓ Ningún techo se ha movido en este ciclo: lo que suba el margen lo sube el dato."
+    : "  ⚠ Un movimiento por techo es el trinquete apretando. El segundo ya no.",
+);

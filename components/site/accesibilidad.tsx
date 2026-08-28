@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
 
 import { Badge } from "@/components/ui/badge";
 import {
+  GUARDIAN_CASE_COUNT,
+  GUARDIAN_COUNT,
   LAST_A11Y_REVIEW,
   cardinal,
   levelOf,
@@ -134,7 +136,17 @@ export function Accesibilidad({
   const fillCounts = (text: string) =>
     text
       .replace(/{heredados}/g, cardinal(heredados, lang))
-      .replace(/{total}/g, cardinal(total, lang));
+      .replace(/{total}/g, cardinal(total, lang))
+      // Las dos del arnés no salen de la lista de al lado sino de
+      // `scripts/guardianes/casos.ts`, sellado en `design-values` y verificado
+      // por `check:accesibilidad`: escritas a mano llegaron a decir catorce y
+      // veintitrés habiendo quince y veintisiete (P50.73).
+      //
+      // Y van en NUMERAL, no en letra como los otros dos: la tabla de cardinales
+      // llega a veinte y estas dos ya la pasan. Estirarla era inventar veinte
+      // palabras de datos para dos cifras que además crecen solas.
+      .replace(/{comprobaciones}/g, String(GUARDIAN_COUNT))
+      .replace(/{fingidos}/g, String(GUARDIAN_CASE_COUNT));
 
   return (
     <>
@@ -489,7 +501,7 @@ export function Accesibilidad({
           {/* El matiz que no cabe en una tarjeta: más largo que el resto y
               deformaba la rejilla. Mismo patrón que la nota de (01). */}
           <p className="text-muted-foreground m-0 mt-8 max-w-[var(--measure)] text-[0.95rem] leading-[1.7]">
-            <Rich text={t.verify.note} />
+            <Rich text={fillCounts(t.verify.note)} />
           </p>
           {marcos.verify.closer}
         </div>
