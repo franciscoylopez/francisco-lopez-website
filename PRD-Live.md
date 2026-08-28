@@ -256,10 +256,13 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 *Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
 decisión escrita, no por omisión.
 
-**Y desde el 2026-08-28 hay secuencia hasta el lanzamiento**, en tres pasos: **«Drenaje»**,
-el sprint en curso, donde Francisco relee el contenido servido mientras en paralelo se drena
-la deuda que no pide criterio → **el sprint de mejoras**, cuyo alcance lo define esa lectura
-y que no existe hasta que exista la lista → **el lanzamiento**.
+**Y hay secuencia hasta el lanzamiento**, en tres pasos: **«Drenaje»**, el sprint en curso,
+donde se drena la deuda que no pide criterio → **el sprint de mejoras** → **el lanzamiento**.
+
+**El carril de contenido de «Drenaje» ya cerró** *(2026-08-28)*: Francisco releyó el sitio
+servido y dejó **22 hallazgos** en «Detalle de cambios por sección», once de ellos en «Cómo se
+ha creado». Así que el sprint de mejoras **ya tiene entrada**, y lo que falta antes de abrirlo
+es triarlos —verificar premisa, agrupar y abrir tareas—, que es la última tarea de «Drenaje».
 
 *(Por qué son dos carriles y por qué el orden de las tandas lo manda la visibilidad y no la
 prioridad, en `PRD-Historical.md`.)*

@@ -109,11 +109,11 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 
 ## Que no se rompa
 
-Dieciséis pasos de CI en cada PR ([GitHub Actions](./.github/workflows/ci.yml)), y `main` protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
+Los pasos de CI de cada PR se leen en [GitHub Actions](./.github/workflows/ci.yml), que es donde no pueden mentir, y `main` está protegida por ruleset: no hay push directo, y un PR no mergea con CI en rojo.
 
 | Paso | Qué impide |
 | :-- | :-- |
-| `format:check` · `typecheck` · `lint` | Lo de siempre. Nada que no compile entra en `main` |
+| `format:check` · `typecheck` · `lint` | Lo de siempre. Nada que no compile entra en `main` — y desde `D147` el `lint` cubre también `scripts/`, que es el 30% del código y no lo miraba nadie |
 | `check:palette` | Dos cosas: que quede **ninguna** copia de un valor de token fuera de su fuente —busca valores, no patrones (`D38`)— y que no haya aparecido ningún color, superficie o animación que el censo de contraste no haya visto. Medir necesita navegador; comprobar si hay que medir, no (`D90`) |
 | `check:experiencias` | Que las tres longitudes de una experiencia se descuadren: misma cobertura en ES y EN, y ninguna cifra en una y no en la otra (`D57`) |
 | `check:cv` | Que los PDFs commiteados se queden viejos. Sella la **huella de las entradas**, no bytes: el PDF no es determinista (`D60`) |
