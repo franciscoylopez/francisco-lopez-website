@@ -257,12 +257,21 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 decisión escrita, no por omisión.
 
 **Y hay secuencia hasta el lanzamiento**, en tres pasos: **«Drenaje»**, el sprint en curso,
-donde se drena la deuda que no pide criterio → **el sprint de mejoras** → **el lanzamiento**.
+donde se drena la deuda que no pide criterio → **«Voz»**, el sprint de mejoras → **el
+lanzamiento**.
 
-**El carril de contenido de «Drenaje» ya cerró** *(2026-08-28)*: Francisco releyó el sitio
-servido y dejó **22 hallazgos** en «Detalle de cambios por sección», once de ellos en «Cómo se
-ha creado». Así que el sprint de mejoras **ya tiene entrada**, y lo que falta antes de abrirlo
-es triarlos —verificar premisa, agrupar y abrir tareas—, que es la última tarea de «Drenaje».
+**«Voz» ya existe en el tablero** *(2026-08-29)*: Francisco releyó el sitio servido y dejó **22
+hallazgos**, once de ellos en «Cómo se ha creado», y el triaje los convirtió en **17 tareas**:
+doce nuevas y cinco arrastradas, una por compartir prototipo y dos por compartir componente. Se
+llama así porque su grueso es de voz y no de código: **el artículo deja de contarse desde lo que
+se rompió y pasa a contarse desde lo que aporta**, que es el mismo defecto que aparece en las
+cards de `/accesibilidad`.
+
+De los 22, **uno se descartó con su motivo escrito** (la cifra de páginas de Accesibilidad no
+está tecleada, es `{paginas}` y no puede caducar) y **otro ya estaba tareado** en «Drenaje». El
+triaje también amplió tres: el contador del Design System está escrito **cuatro** veces y no
+dos, el riel y los botones de compartir fallan por **dos causas distintas**, y el número de
+KUOTIP aparece **dos** veces en el mismo aprendizaje.
 
 *(Por qué son dos carriles y por qué el orden de las tandas lo manda la visibilidad y no la
 prioridad, en `PRD-Historical.md`.)*

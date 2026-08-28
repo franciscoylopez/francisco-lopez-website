@@ -185,6 +185,9 @@
 - D147 · El andamiaje es el 30% del código y no lo lintaba nadie
 - D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
 - D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
+- D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse
+- D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado
+- D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8935,3 +8938,165 @@ línea decía "20 pasos" ya eran 21»*.
 ARCHIVO, así que un cambio de comentario en `contrast-census.js` encendió §s09 tres veces en
 esta tanda sin que ninguna afirmación del artículo se moviera. Ese ruido sí tiene arreglo posible
 —sellar por contenido sustantivo y no por archivo— y se queda en su tarea.
+
+---
+
+## D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse — 2026-08-28
+
+**La guía de Vercel pide `preconnect` a los dominios de assets, y este sitio no tiene ni uno**
+(cero `preconnect`, cero `dns-prefetch`). El único dominio de tercero que se pide al cargar es
+`www.googletagmanager.com`; el resto son enlaces de salida, que no se piden hasta que alguien los
+pulsa.
+
+### La medición, y la trampa que casi la invalida
+
+`npm run psi` sobre la home de producción **no lista ningún aviso de preconnect**, y eso
+*parecía* el aprobado. No lo era: **Lighthouse 13 ya no tiene auditoría `uses-rel-preconnect`**
+—de las 47 del informe, cero mencionan preconnect en su clave—, así que la ausencia del aviso no
+decía nada. Es el fallo de método de `BRAND.md` §Cómo se escribe una regla, punto 3, encontrado a
+tiempo: *un metro que devuelve lista vacía parece un aprobado*.
+
+Donde vive hoy el veredicto es dentro de `network-dependency-tree-insight`, y ahí es explícito.
+Igual en las dos estrategias:
+
+```
+Preconnected origins  → no origins were preconnected
+Preconnect candidates → No additional origins are good candidates for preconnecting
+```
+
+### Por qué el sitio no tiene candidatos
+
+Porque **GTM entra a propósito tarde**. La estrategia es `lazyOnload` desde P26.5, y el timing
+medido lo confirma: en escritorio `gtm.js` se pide a **843 ms** con el LCP en **500 ms** — la
+petición ocurre *después* del elemento que puntúa. Un `preconnect` adelantaría una conexión TLS a
+la ventana crítica para un recurso que no la necesita, y en móvil el LCP ya está dominado por el
+`resource load delay` del hero (1592 ms, 63% del desglose), que es D59 y no tiene nada que ver
+con la red hacia terceros.
+
+La cadena crítica que sí sale en rojo son **dos CSS del propio sitio** (la más larga, 2366 ms).
+Ese es otro hallazgo, y no se arregla preconectando a Google.
+
+### Y la parte que hay que conservar: a `youtube-nocookie` NO se le hace
+
+La misma guía pediría preconectar al dominio del vídeo, y sería **exactamente la petición que el
+facade existe para evitar** (D55): sin iframe en el DOM hasta que alguien pulsa, y sin una sola
+petición a Google antes de eso. **Una regla general puede contradecir una decisión ya tomada;
+gana la decisión.**
+
+**Estado: descartada, no pendiente.** Se reabre solo si aparece un tercero que se pida *dentro*
+de la ventana del LCP — y entonces lo dirá «Preconnect candidates», que es donde hay que mirar.
+
+---
+
+## D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado — 2026-08-28
+
+**El PR de Dependabot llevaba desde el 2026-08-24 en rojo**, y la ficha lo atribuía a una
+incompatibilidad entre dependencias transitivas que el bump automático no arrastra, diciendo
+explícitamente que *no era culpa de nuestra config*. **Se intentó a mano y esa premisa era falsa
+en su primera mitad y cierta en la segunda.**
+
+### Lo que de verdad rompía: un override nuestro, congelado en el mundo de ESLint 9
+
+El crash reproducido en local es el mismo del CI:
+
+```
+TypeError: (0 , brace_expansion_1.expand) is not a function
+    at braceExpand (node_modules/minimatch/dist/commonjs/index.js:157)
+    at doMatch (node_modules/@eslint/config-array/dist/cjs/index.cjs:422)
+```
+
+Y la causa está en `package.json`, no en el lockfile de Dependabot. El commit `6bd2fd6`
+(2026-08-03, dos alertas High de Dependabot) fijó overrides **anidados por línea mayor de
+minimatch**:
+
+```json
+"eslint":                                { "minimatch": { "brace-expansion": "^1.1.17" } },
+"@typescript-eslint/typescript-estree":  { "minimatch": { "brace-expansion": "^5.0.8"  } }
+```
+
+Con ESLint 9 el `minimatch` de debajo era el **3.x**, que usa la API v1 (`module.exports` es la
+función). ESLint 10 trae `@eslint/config-array` con **`minimatch@10.2.6`**, que pide
+`brace-expansion@^5` y llama a `expand` como named export — y el override se lo forzaba a 1.x.
+
+**La lección de método: un override anidado por línea mayor caduca cuando la línea mayor cambia,
+y no falla en la subida que lo escribe, sino en la SIGUIENTE.** Once meses invisible, y visible
+solo al intentar el salto que rompía.
+
+**Se ha retirado, y no hacía falta ya:** hoy npm resuelve `brace-expansion@5.0.9` en la raíz y
+`1.1.18` bajo el `minimatch@3.x` de `eslint-config-next` — las dos parcheadas. `npm audit` sigue
+en **0 vulnerabilidades** sin él. El de `typescript-estree` se queda: ese sí describe su árbol.
+
+### Lo que sí bloquea, y no es nuestro
+
+Quitado el override, ESLint 10 avanza y choca con el muro real:
+
+```
+TypeError: Error while loading rule 'react/display-name':
+  contextOrFilename.getFilename is not a function
+    at detectReactVersion (eslint-config-next/node_modules/eslint-plugin-react/…/version.js:85)
+```
+
+`context.getFilename()` se eliminó en ESLint 10. **Tres de los plugins que `eslint-config-next`
+arrastra declaran, en su última versión publicada, un peer máximo de `eslint ^9`:**
+
+| Plugin | Última versión | Peer de `eslint` |
+|---|---|---|
+| `eslint-plugin-react` | 7.37.5 | `… \|\| ^9.7` |
+| `eslint-plugin-import` | 2.32.0 | `… \|\| ^9` |
+| `eslint-plugin-jsx-a11y` | 6.10.2 | `… \|\| ^9` |
+
+`eslint-config-next@16.3.3` declara `eslint: ">=9.0.0"`, que es permisivo y **miente sobre su
+propio árbol**. No hay nada que resolver a mano: hasta que upstream publique, la subida no
+existe.
+
+### Qué se conserva del intento
+
+Además de retirar el override, el intento destapó que **`eslint.config.mjs` importaba tres
+paquetes que nunca estuvieron en `package.json`** — `@eslint/js`, `globals` y `typescript-eslint`
+funcionaban por *hoisting* de las dependencias de `eslint-config-next`. En ESLint 9 el config
+carga igual; en 10 falló con `ERR_MODULE_NOT_FOUND` uno tras otro. **Se declaran**: importar
+directamente lo que otro paquete instala para sí es una dependencia real escrita en ningún sitio.
+
+### Cómo se sabrá que ya se puede
+
+**No se pone un `ignore` en `dependabot.yml` a propósito.** El PR semanal en rojo *es* el
+detector: el día que sus checks salgan verdes, upstream lo soporta y la subida es un merge. Un
+`ignore` apagaría justo la señal que queremos.
+
+---
+
+## D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint — 2026-08-28
+
+Hermana de **D151**, y por el mismo motivo por el que sus dos fichas se escribieron juntas: los
+dos son saltos que el bump automático no puede hacer. El veredicto también es el mismo, pero
+aquí **la mitad cara está medida y sale a favor**.
+
+### Lo que bloquea
+
+`typescript-eslint@8.68.0`, la última publicada, declara `peer typescript: ">=4.8.4 <6.1.0"`.
+No entran ni la 6 ni la 7, y su canary (`8.68.1-alpha.6`) sigue en la misma línea. `npm install
+-D typescript@7` **falla con ERESOLVE**, no con un aviso.
+
+**Y falla ahora porque D151 lo hizo visible.** Mientras `typescript-eslint` venía por *hoisting*
+de `eslint-config-next`, npm resolvía el peer en silencio; declarado como dependencia real, el
+conflicto es un error de instalación. Es el argumento de aquella decisión, cobrado el mismo día.
+
+### Lo que ya no hay que averiguar
+
+Medido con un `tsc` suelto contra nuestro propio `tsconfig.json`, sin tocar el árbol:
+
+| | TS 5.9.3 | TS 7.0.2 |
+|---|---|---|
+| Errores de diagnóstico | 0 | **0** |
+| `tsc --noEmit`, tomas estabilizadas | 3100 · 3139 ms | **1724 · 1776 ms** |
+
+**Cero errores nuevos y un 43% menos de tiempo.** La reescritura en Go no pide tocar una línea de
+este repo: el salto es un cambio de versión el día que el peer lo permita, y no la tarde de yak
+con riesgo de build rojo que la ficha temía. Lo que sí queda anotado es que la ganancia es real y
+está en el paso más caro de CI.
+
+### Cómo se sabrá que ya se puede
+
+Igual que en D151, y por la misma razón: **sin `ignore` en `dependabot.yml`**. Cuando
+`typescript-eslint` publique una versión que admita `typescript >=7`, la subida es un
+`npm install` y estas dos fichas se cierran juntas.
