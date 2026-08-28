@@ -2,14 +2,11 @@ import { type ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionBlocks } from "@/components/ui/block-opener";
-import { SECTION, WRAP } from "@/components/ui/layout";
 import {
   construirRecorrido,
-  IndexNote,
-  SectionIndex,
+  SectionIndexBlock,
 } from "@/components/ui/section-index";
 import type { Locale } from "@/lib/i18n/config";
-import { cn } from "@/lib/utils";
 
 import { type BreadcrumbDict } from "../breadcrumb";
 import { RelatedPages, type RelatedDict } from "../related-pages";
@@ -114,27 +111,7 @@ export function BrandKit({
         homeHref={homeHref}
       />
 
-      <section id={ANCLA_INDICE} className={cn(SECTION, "scroll-mt-[5rem]")}>
-        <div className={WRAP}>
-          {/* Sin `meta` por celda: aquí no hay prosa que cronometrar. */}
-          <SectionIndex
-            kicker={t.indice.kicker}
-            ariaLabel={t.indice.ariaLabel}
-            items={paradas}
-            intro={
-              <IndexNote
-                note={t.indice.note}
-                figures={[
-                  {
-                    value: String(paradas.length),
-                    suffix: t.indice.sectionsSuffix,
-                  },
-                ]}
-              />
-            }
-          />
-        </div>
-      </section>
+      <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
 
       {/* LAS SEIS, EN DOS BLOQUES (P70.47). Dos y no tres, y no es estético:
           lo que fija cada cuánto aparece una banda es el número de BLOQUES, no

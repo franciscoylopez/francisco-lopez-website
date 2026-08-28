@@ -2,14 +2,11 @@ import { type ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionBlocks } from "@/components/ui/block-opener";
-import { SECTION, WRAP } from "@/components/ui/layout";
 import {
   construirRecorrido,
-  IndexNote,
-  SectionIndex,
+  SectionIndexBlock,
 } from "@/components/ui/section-index";
 import type { Locale } from "@/lib/i18n/config";
-import { cn } from "@/lib/utils";
 
 import { type BreadcrumbDict } from "../breadcrumb";
 import { RelatedPages, type RelatedDict } from "../related-pages";
@@ -197,34 +194,7 @@ export function DesignSystem({
         homeHref={homeHref}
       />
 
-      {/* `scroll-mt-[5rem]`: el nav es sticky y sin margen de scroll el ancla deja
-          la sección arrancando por debajo de él. Es la misma distancia que usa
-          el riel para librarlo (`top-[5rem]`), así que si el nav cambia de alto se
-          mueven los dos juntos. */}
-      <section id={ANCLA_INDICE} className={cn(SECTION, "scroll-mt-[5rem]")}>
-        <div className={WRAP}>
-          {/* Sin `meta` por celda: en el artículo esa línea es el tiempo de lectura,
-              y aquí no hay prosa que cronometrar. Publicar un tiempo calculado
-              sobre especímenes sería inventarse una cifra, que es contra lo que
-              existe D38 — por eso `meta` es opcional desde P70.38. */}
-          <SectionIndex
-            kicker={t.indice.kicker}
-            ariaLabel={t.indice.ariaLabel}
-            items={paradas}
-            intro={
-              <IndexNote
-                note={t.indice.note}
-                figures={[
-                  {
-                    value: String(paradas.length),
-                    suffix: t.indice.sectionsSuffix,
-                  },
-                ]}
-              />
-            }
-          />
-        </div>
-      </section>
+      <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
 
       {/* LAS DOCE, REPARTIDAS EN SUS CUATRO BLOQUES. La lista de secciones sigue
           leyéndose de un vistazo, que es lo que este archivo tiene que ser; lo

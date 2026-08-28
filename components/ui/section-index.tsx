@@ -6,6 +6,7 @@ import { Fragment, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 import { chromeLinkVariants } from "./chrome";
+import { SECTION, WRAP } from "./layout";
 import { eyebrowVariants, LEADING } from "./heading";
 
 // LA NAVEGACIÓN DE UNA PÁGINA CON PARADAS (P70.38, 2026-08-26).
@@ -334,6 +335,18 @@ export type Parada<K extends string = string> = {
   label: string;
 };
 
+/**
+ * El copy del bloque de índice ENTERO: lo que el recorrido necesita (arriba) más
+ * lo que rotula la rejilla. Es la rama `indice` del diccionario de las tres
+ * páginas del sistema, tal cual.
+ */
+export type IndiceDict = RecorridoDict & {
+  kicker: string;
+  ariaLabel: string;
+  note: string;
+  sectionsSuffix: string;
+};
+
 /** El copy que el recorrido necesita, y que la pieza no puede inventarse. */
 export type RecorridoDict = {
   closerLabel: string;
@@ -411,4 +424,54 @@ export function construirRecorrido<K extends string>(
   ) as Record<K, SeccionMarco>;
 
   return { paradas, marcos };
+}
+
+/**
+ * EL BLOQUE DE ÍNDICE DE UNA PÁGINA CON PARADAS — la sección entera, con su ancla
+ * y su nota (P50.88, tercera familia).
+ *
+ * `qlty` la medía como 23 líneas similares en dos sitios (mass 84), y en realidad
+ * eran TRES con las hermanas: mismo `<section>`, mismo `WRAP`, mismo `SectionIndex`
+ * y misma `IndexNote` con la única figura que estas páginas publican, el recuento
+ * de secciones — que además sale de `items.length`, así que nadie lo escribe.
+ *
+ * `scroll-mt-[5rem]`: el nav es sticky y sin margen de scroll el ancla deja la
+ * sección arrancando por debajo de él. Es la misma distancia que usa el riel para
+ * librarlo (`top-[5rem]`), así que si el nav cambia de alto se mueven los dos
+ * juntos.
+ *
+ * SIN `meta` POR CELDA, y no es un olvido: en el artículo esa línea es el tiempo
+ * de lectura, y en las tres páginas del sistema no hay prosa que cronometrar.
+ * Publicar un tiempo calculado sobre especímenes sería inventarse una cifra, que
+ * es contra lo que existe D38 — por eso `meta` es opcional desde P70.38. El
+ * artículo, que sí lo publica, monta su índice a mano: no pasa por aquí.
+ */
+export function SectionIndexBlock({
+  id,
+  t,
+  items,
+}: {
+  id: string;
+  t: IndiceDict;
+  items: IndexItem[];
+}) {
+  return (
+    <section id={id} className={cn(SECTION, "scroll-mt-[5rem]")}>
+      <div className={WRAP}>
+        <SectionIndex
+          kicker={t.kicker}
+          ariaLabel={t.ariaLabel}
+          items={items}
+          intro={
+            <IndexNote
+              note={t.note}
+              figures={[
+                { value: String(items.length), suffix: t.sectionsSuffix },
+              ]}
+            />
+          }
+        />
+      </div>
+    </section>
+  );
 }
