@@ -296,7 +296,18 @@ function Section({
   prose?: boolean;
 }) {
   return (
-    <section id={id} data-reveal className={prose ? PROSE : undefined}>
+    <section
+      id={id}
+      data-reveal
+      // `scroll-mt-[5rem]` SOLO CUANDO HAY ANCLA, y es la misma constante que
+      // llevan todas las secciones enlazables del sitio: 5rem es el alto del
+      // header sticky, y sin ella `scrollIntoView` deja el `h2` a 0px del borde
+      // superior, o sea DEBAJO del nav. Medido el 2026-08-29 sobre el sitio
+      // servido: /contacto → /cookies#privacidad aterrizaba en y=532 con el
+      // titular tapado. Era el único enlace interno del sitio que arrastra un
+      // hash, y el único sitio con ancla que no tenía la clase.
+      className={cn(prose && PROSE, id && "scroll-mt-[5rem]") || undefined}
+    >
       <h2 className={cn(titleVariants({ size: "sub" }), "mb-3")}>{heading}</h2>
       {/* EL ESPACIO ENTRE BLOQUES LO PONE EL `gap`, NO UN MARGEN POR HIJO, y no
           es preferencia: los márgenes NO FUNCIONABAN. `[&_p]:m-0` compila a un
