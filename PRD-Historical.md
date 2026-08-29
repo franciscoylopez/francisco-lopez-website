@@ -87,6 +87,7 @@
 - [La tanda 1 de «Voz», y el cruce que puso la métrica primaria en su sitio — 2026-08-29](#la-tanda-1-de-voz-y-el-cruce-que-puso-la-métrica-primaria-en-su-sitio--2026-08-29)
 - [La tanda 2 de «Voz», y el diagrama que se arregló mirándolo — 2026-08-29](#la-tanda-2-de-voz-y-el-diagrama-que-se-arregló-mirándolo--2026-08-29)
 - [La tanda 3 de «Voz», y las dos veces que la medición mandó sobre la intuición — 2026-08-29](#la-tanda-3-de-voz-y-las-dos-veces-que-la-medición-mandó-sobre-la-intuición--2026-08-29)
+- [La tanda 4 de «Voz»: dos premisas de ficha que no aguantaron la medición — 2026-08-29](#la-tanda-4-de-voz-dos-premisas-de-ficha-que-no-aguantaron-la-medición--2026-08-29)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3777,6 +3778,68 @@ censo daban verde con la banda puesta.
 
 Van cinco fichas caducadas en tres tandas. La regla que las caza —*verifica la premisa contra el
 disco antes de darla por mecánica*— sigue pagándose sola.
+
+
+## La tanda 4 de «Voz»: dos premisas de ficha que no aguantaron la medición — 2026-08-29
+
+Cuatro tareas de código (P63.5 → P64.6), y **dos de las cuatro fichas resultaron estar
+razonando con una cifra o una causa equivocada**. No es anécdota: es la razón por la que la
+convención dice verificar la premisa contra el disco antes de dar una tarea por mecánica. El
+descarte es el hallazgo, y las dos veces se escribió en la ficha.
+
+### La invariante del pliegue deja de depender de un gate
+
+Las tres aperturas del sistema —Brand Kit, Design System, Accesibilidad— estaban escritas tres
+veces, y lo que las mantenía coherentes era `npm run pliegue`, un gate por medición, después de
+tres roturas que siempre vio un ojo. Ahora salen de una pieza y no pueden divergir; el gate pasa
+a red de seguridad. El detalle técnico, con **qué NO sube** y el descarte de Contacto, en
+`DECISIONS.md` D156.
+
+Lo que importa desde producto es el corte, porque es el que impide que esto siga: **sube lo que
+tiene una invariante que proteger, no lo que solo comparte silueta**. Los `index.tsx` de las tres
+hermanas siguen pareciéndose y se quedan como están — lo que repiten es que son la misma clase de
+página, y factorizarlo escondería justo lo que esos archivos existen para enseñar.
+
+### «La navegación no aterriza arriba»: 340 navegaciones y el síntoma no aparece
+
+La ficha describía que al pulsar un enlace interno la página destino abría a media altura, «más o
+menos donde estaba el scroll en la de origen», y traía cuatro sospechas. Se midió el `scrollY`
+después de **340 navegaciones**: cada enlace interno de diez páginas, a 1920×1080 y a 1280×618,
+desde el fondo y desde la mitad, contra el build de producción **y contra producción**, en cadena
+sin recargar, tras pulsar un ancla, con enlaces a la página en la que ya estás, con el conmutador
+de idioma y en `next dev`. **Todas aterrizan arriba.** Las tres primeras sospechas quedan
+descartadas por medición, no por opinión.
+
+La cuarta era la buena, y llevaba a un defecto real que ninguna de las dos descripciones habría
+encontrado: **`/contacto` → `/cookies#privacidad` es el único enlace interno del sitio que
+arrastra un hash**, y su destino era el único sitio con ancla sin `scroll-mt-[5rem]`. Aterrizaba
+con el titular tapado por el header sticky. *El síntoma reportado no existía; el que había al
+lado, sí.*
+
+Se dejó escrito el par origen-destino con el que se comprueba la regresión, y se dejó **sin
+guardián a propósito**: con un solo enlace de ese tipo en todo el sitio, automatizarlo sería más
+maquinaria que regla. Si aparece un segundo, deja de caber en la cabeza y toca.
+
+### El rendimiento de Sobre mí, que era criterio de lanzamiento
+
+Las dos tareas de la página se hicieron juntas porque comparten archivos y el mismo ciclo de
+medición. El elemento LCP es el vídeo de apertura y lo que pinta es su póster, que por
+construcción no puede llevar `fetchpriority`: se marca desde la cabeza (D65, addendum). Y la
+mitad móvil de las fotos, que P70.28 dejó abierta, **se cerró contra una cifra distinta de la que
+la ficha suponía**: el móvil de referencia de Lighthouse tiene DPR 1,75, no 2,625, así que el
+navegador no pedía el candidato correcto sino uno demasiado grande, y el reparto de anchos no
+tenía ningún peldaño donde hacía falta (D118, sustituido).
+
+Lo que deja para el método: **el metro no era `psi`**, que corre contra producción y solo da la
+nota. Fue Lighthouse en local contra el build servido, leyendo el detalle por auditoría. Eso es
+lo que convierte «el aviso sale» en una causa, y lo que permite medir un antes/después **sin
+desplegar**.
+
+### Y el sprint
+
+Con esto cierra la tanda 4. Queda la **tanda 5**, cinco tareas de guardianes y de sellado —entre
+ellas re-sellar la nota de PageSpeed con la mediana de tres tomas, que corre contra producción y
+por eso va después de esta—. «Voz» sigue siendo el último sprint antes de lanzar.
 
 
 ## Fuentes
