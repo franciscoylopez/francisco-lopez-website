@@ -1,6 +1,6 @@
 # Sello de /accesibilidad — lo escribe `npm run accesibilidad:sellar`.
 # El porqué, en `content/accesibilidad/dependencias.ts`.
-conformance 1eee19101cbe2c2e8f3381e8294760e2548f0cfdd3f7cf94c6acd25a95d8ea0b
+conformance 3a2784cbc413520ac9ff898d26c8767764590fbcf5910c0c995bc0a02cd068c5
 measures 101e500dddd3e7ff592a56cb06e62c740e37784cad721e7e58f42e324a5f9037
 verify ac95424bd122d2954dd7ab45ac2b42d2ab00adadea1e6bc6dfdd9653ef7e5ba1
 blindspot 766e6656135d338b7bf83428a11889cd53e65edbd3a3330201fdc6ddf82c4e3d

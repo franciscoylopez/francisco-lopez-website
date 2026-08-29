@@ -71,6 +71,15 @@ una etapa no se cierra sin haberlas escrito.
    cuántos son —decía «los tres» y el panel iba camino de cuatro—: se lee lo que haya, últimos
    28 días, cifra y no impresión. Panel:
    `https://datastudio.google.com/reporting/6126da1d-21ba-480b-b56e-f124e47c2e01/page/I7T5F`
+   **CÓMO SE LEEN, que es lo que faltaba** *(2026-08-29)*: con el navegador, que usa la sesión
+   de Chrome de Francisco, así que panel y GA4 cargan autenticados. Los tabs que él ya tenga
+   abiertos **no se ven** —se navega uno nuevo—. **Y no basta el panel:** solo publica «número
+   de eventos», mientras que las lecturas que han valido algo salieron de la columna de
+   **usuarios** de *GA4 → Informes → Interacción → Eventos*, a 28 días — el `9 / 2 usuarios`
+   que abrió P69.91, y el par `form_start` ↔ `contact_submit`.
+   **Ojo a la ventana RODANTE:** una caída puede ser solo que los eventos viejos salieron de
+   los 28 días. Antes de leerla como regresión, comprueba si el solape con la ventana anterior
+   la explica; el 2026-08-29 un 6 → 1 lo explicaba entero.
    **Y la primaria se busca aunque no esté en el panel**: `contact_submit` llevaba desde el
    2026-08-24 contando y ningún marcador la enseñaba, así que leer solo el panel habría dado
    «cero» donde el dato decía «la cadena funciona» (D71, cierre del sprint 4).

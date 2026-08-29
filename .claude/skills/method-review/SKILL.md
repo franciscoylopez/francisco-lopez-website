@@ -17,13 +17,10 @@ hizo la primera vez el 2026-08-19, antes del sprint «Cómo se ha creado», y sa
 hallazgos y dieciséis tareas. Lo que sigue es ese recorrido, con lo que aprendió al ejecutarse.
 
 > **Y aquí mismo, la primera lección de su propio catálogo** *(corregido en el cuarto disparo,
-> 2026-08-23)*. Esta línea presumía «una reducción del 35% del contexto de arranque». El total
-> `@`-importado pasó de **13.521 a 13.084 palabras: −3,2%**. Lo que cayó un 42% fue
-> `PRD-Live.md` sola, mientras `CLAUDE.md` (+452) y `BRAND.md` (+959) se comían el hueco **el
-> mismo día**. La cifra describía un archivo y se leía como si describiera el arranque entero
-> — familia «la cifra apuntada que caduca», dentro del documento que define cómo se cazan.
-> **Si esta skill se lo hizo a sí misma, no des por buena ninguna cifra en prosa de las que
-> vas a leer: reprodúcela.**
+> 2026-08-23)*. Esta línea presumía «una reducción del 35% del contexto de arranque»; el total
+> `@`-importado había bajado un **3,2%**. El 35% era un archivo, y se leía como si fuera el
+> arranque entero. **Si esta skill se lo hizo a sí misma, no des por buena ninguna cifra en
+> prosa de las que vas a leer: reprodúcela.**
 
 ## Cuándo
 
@@ -178,13 +175,13 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | Familia | Cómo se reconoce | Instancias |
 | :-- | :-- | :-- |
 | **La reducción que fue una mudanza** | Una métrica mejora porque el coste se movió al cubo que **nadie mide**. Firma: la cifra celebrada describe *una parte* y se lee como si describiera *el todo* | **1** |
-| **El metro que declara su alcance, y su alcance no incluye el síntoma** | Una verificación que **aprueba**, dice qué ha mirado —y por eso convence— y lo que ha mirado no es donde está el defecto que una persona está señalando | **2** |
+| **El metro que declara su alcance, y su alcance no incluye el síntoma** | Una verificación que **aprueba**, dice qué ha mirado —y por eso convence— y lo que ha mirado no es donde está el defecto que una persona está señalando | **3** |
 | **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 · **0 vivas** |
 | **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 6 |
 | **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 3 |
-| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **7** |
-| **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 4 |
-| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **5** |
+| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **9** |
+| **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 5 |
+| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **6** |
 | **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **3** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **El umbral que persigue al dato** | Un techo que se reescribe para seguir a lo que mide, así que nunca se incumple y nunca obliga. Firma: cambia más a menudo que la cosa medida, y su distancia al dato es constante | **2** |
@@ -195,67 +192,40 @@ tabla: **actualizarla es el último paso del disparo y es el que se olvida.***
 
 *Tercer disparo, 2026-08-22: «la regla sin portador» se vuelve la familia dominante, y nace
 **«la pieza que nace fuera de la capa»**, separada de ella **por el REMEDIO y no por el
-síntoma**: la regla sin portador necesita un **disparador**; esta, un **guardián de
-frontera** —algo que note que apareció un archivo en `components/ui/` y le exija lo que la
-capa exige—. **Su firma al medirla: el hallazgo aparece tarde y en plural**, ocho tareas de
-golpe en una revisión final en vez de una en cada PR. Y de rebote, una regla de redacción:
-cuando aquí se escribieron «la sección 15» y «las otras catorce», los dos recuentos
-caducaron el día que la página pasó a doce. **No se escribe el número, se nombra la cosa.***
+síntoma**: aquella necesita un **disparador**; esta, un **guardián de frontera**. **Su firma al
+medirla: el hallazgo aparece tarde y en plural** —ocho tareas de golpe en una revisión final en
+vez de una en cada PR—. Y una regla de redacción, de rebote: **no se escribe el número, se
+nombra la cosa.***
 
-*Cuarto disparo, 2026-08-22 (el mismo día que el tercero, tras Método II): **«arreglar la
-mitad que se abre» alcanza al propio método, y esa es la instancia 4.** Las revisiones
-producen hallazgos mejor que nunca y nada los saca: `General` acumula 28 abiertas con 1
-archivada en toda su vida, y su único desagüe histórico ha sido abrir un sprint de método
-—dos veces, 24 tareas, exactamente las mismas que costó construir la página del sprint—.
-El aviso lo trajo Francisco desde el tiempo invertido y el barrido lo confirmó desde los
-contadores del tablero: **segunda vez que las dos direcciones convergen y segunda vez que
-ese es el hallazgo de más confianza.***
-
-*Y dos cosas que este disparo deja como método, no como hallazgo:*
-
-- ***Un aviso sin umbral se olvida.** Cuando Francisco pide anotar algo «como aviso, no como
-  accionable», el trabajo de la revisión es convertirlo en una cifra con verde y rojo para el
-  próximo cierre. Aquí fueron dos: hallazgos del `design-review` cuya regla ya existía (4 de 8
-  hoy · verde ≤1 · rojo ≥3) y proporción de tareas de método sobre el ciclo (50% hoy · verde
-  ≤25%). Sin eso, dentro de un mes vuelve a ser una conversación de sensación.*
-- ***Mide el drenaje, no solo la clasificación*** *(ver el paso 8, corregido). Es lo que se le
-  escapó al segundo disparo mirando el mismo eje.*
+*Cuarto disparo, 2026-08-22 (tras Método II): **«arreglar la mitad que se abre» alcanza al
+propio método, y esa es la instancia 4.** Las revisiones producen hallazgos mejor que nunca y
+nada los saca: `General` acumulaba 28 abiertas con 1 archivada en toda su vida, y su único
+desagüe había sido abrir un sprint de método —dos veces, 24 tareas—. Segunda convergencia con
+las notas de Francisco, y otra vez el hallazgo de más confianza. Deja dos reglas: **un aviso
+sin umbral se olvida**, así que se convierte en una fila de la tabla de arriba con verde y
+rojo; y **mide el drenaje, no solo la clasificación** (paso 8, corregido).*
 
 *Quinto disparo, 2026-08-25: **nace «el metro que declara su alcance, y su alcance no incluye
-el síntoma», y es la familia que faltaba para el otro lado del método.** Se separa de «el metro
-que aprueba sobre lista vacía» **por el remedio**: aquella necesita CONTAR —y ya no tiene
-instancias vivas, los guardianes de CI publican cuánto han mirado—; esta necesita MIRAR EL
-RESULTADO RENDERIZADO. Sus dos instancias son del mismo sprint y las trajo Francisco: el
-interlineado del artículo, medido y aprobado tres veces «clonando el DOM servido en los dos
-casos que podían envolver», que era un bug real; y siete diagramas a 5-6px en móvil cuyo texto
-descriptivo se leía perfecto. La regla que sale de ahí vive en `BRAND.md` §Cómo medir, punto 8,
-y su caso en `BRAND-historical.md`.*
+el síntoma».** Se separa de «el metro que aprueba sobre lista vacía» **por el remedio**: aquella
+necesita CONTAR —y ya no tiene instancias vivas—; esta necesita MIRAR EL RESULTADO RENDERIZADO.
+La regla vive en `BRAND.md` §Cómo medir, punto 8, y sus casos en `BRAND-historical.md`.*
 
 *Y tres cosas de método que este disparo deja:*
 
-- ***Aplícate la regla del punto 8 a ti mismo, porque este informe la incumplió dos veces.** Un
-  `grep` que devuelve cero es un aprobado, y aquí dio dos falsos: «cero decisiones tomadas con
-  un dato» —el bucle SÍ se cerró el 2026-08-23 y redefinió un sprint entero— y «tres skills sin
-  estrenar», que eran dos porque el recorrido en seco de `deep-dive-page` está documentado
-  dentro de la propia skill, donde no se miró. **Antes de publicar un cero, búscalo con otras
-  palabras y en otro sitio.***
-- ***La asimetría entre lo automático y lo visual es medible y conviene medirla cada vez:**
-  cuenta los pasos de `ci.yml` y el agente de dos disparos para accesibilidad, y ponlos
-  contra UN gate manual (`design-review`) para lo visual, que además se dispara al final. **No
-  se escribe la cifra**: cuando esta línea decía «20 pasos» ya eran 21.*
+- ***Antes de publicar un cero, búscalo con otras palabras y en otro sitio.** Un `grep` que
+  devuelve cero es un aprobado, y ese informe publicó dos falsos.*
+- ***La asimetría entre lo automático y lo visual se mide cada vez:** los pasos de `ci.yml` y el
+  agente de accesibilidad, contra UN gate manual (`design-review`) para lo visual, que además se
+  dispara al final. **No se escribe la cifra**: cuando esta línea decía «20 pasos» ya eran 21.*
 - ***Cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es cuánto
-  recortar sino qué gobierna el número.** El presupuesto de contexto subió por primera vez este
-  día, y hasta entonces ninguno de sus cinco valores había tenido un porqué escrito.*
+  recortar sino qué gobierna el número.***
 
 *Sexto disparo, 2026-08-27: **nace «la reducción que fue una mudanza», y la trajo Francisco
-desde una sensación** —«redujimos las skills y no lo hemos vuelto a comparar»—. Medido: los
-docs `@`-importados bajaron un 30% (18.098 → 12.689) mientras las skills subían un 55%
-(13.311 → 20.616), o sea que **el corpus total creció un 6%**. `check:contexto` pone techo a
-los docs y techo por entrada a las skills, y **ninguno a su suma** — lo dice en su propia
-salida: «suma (NO es un presupuesto: no se cargan a la vez)». Cierto, y no toda la verdad: una
-sesión de cierre carga ~9.000 palabras de skills encima de los docs. **Tercera vez que las dos
-direcciones convergen y tercera vez que ese es el hallazgo de más confianza.** Cerrado el mismo
-día por P68.5907: techo de 20.500 a la suma, y esa frase de la salida ya no existe.*
+desde una sensación** —«redujimos las skills y no lo hemos vuelto a comparar»—. Medido: los docs
+`@`-importados bajaron un 30% mientras las skills subían un 55%, o sea que **el corpus total
+creció un 6%**; había techo a los docs y techo por entrada a las skills, y **ninguno a su suma**.
+**Tercera convergencia, y otra vez el hallazgo de más confianza.** Cerrado el mismo día por
+P68.5907: techo de 20.500 a la suma.*
 
 *Y dos cosas de método que este disparo deja:*
 
@@ -269,24 +239,54 @@ día por P68.5907: techo de 20.500 a la suma, y esa frase de la salida ya no exi
   siguiente ya lo daba por causa. Era falsa: el censo se colgó con el navegador despejado, y la
   causa real era el `stdin`. **Lo que se apunta como hipótesis se escribe como hipótesis.***
 
-**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-28)*:
+*Octavo disparo, 2026-08-29: **ninguna familia nueva, y eso es el resultado** — los seis
+hallazgos caen en cuatro que ya existían. Los tres primeros son la misma forma, **un indicador
+que mira al sitio equivocado**: «sprint de método» leía el nombre sobre un sprint con 52% de
+Infra; `sprint-review` nombraba el panel sin decir cómo llegar, y dos cierres escribieron «no
+tengo acceso» siendo falso; y «verificación ÷ producto» cruzó su umbral sin decir qué divide
+entre qué. **Sin notas de Francisco este ciclo**: ninguno tiene convergencia.*
+
+- ***Un indicador cuya definición no es copiable no es reproducible, y reconstruirlo puede dar
+  varias cifras.** Aquí, tres sobre el mismo árbol: 0,47 · 0,52 · 0,62. La regla del sexto
+  disparo ya existía y esta fila era anterior: **al heredar una tabla, se auditan también las
+  filas viejas.***
+- ***Un objetivo que no se ha cumplido nunca no está gobernando nada.** El del contexto (11.600)
+  lleva su vida entera sin alcanzarse, con la banda real entre 12.058 y 12.698. No se toca el
+  techo —lo prohíbe el séptimo disparo—: se decide el objetivo, o qué baja a un histórico.*
+
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-29, tras «Drenaje»)*:
 
 | Indicador | Hoy | Verde | Rojo | Comando |
 | :-- | :-- | :-- | :-- | :-- |
-| Variación neta de `General` por sprint | **0** (45 → 45) 🟢 | ≤ 0 | ≥ +4 | tablero |
-| **Veces que se movió un techo en el ciclo** | **2** 🔴 | 0 | ≥ 2 | `git log -- check-contexto.ts` |
-| Margen del presupuesto de contexto | **253** 🟡 | ≥ 400 | < 100 | `check:contexto` |
-| Suma de skills a demanda | **20.296** · techo 20.500 🟡 | ≤ techo | > techo | `check:contexto` |
-| **Verificación ÷ producto** | **0,40** 🟢 | ≤ 0,45 | > 0,55 | `git ls-tree` + `wc -l` |
-| Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 | `design-review` |
-| Sprint de método abierto en el ciclo | **No** 🟢 | No | Sí | tablero |
+| Variación neta de `General` por sprint | **+1** (18 → 19) 🟡 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
+| Veces que se movió un techo en el ciclo | **0** de 3 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
+| Margen del presupuesto de contexto | **103** 🟡 | ≥ 400 | < 100 | `check:contexto` |
+| Suma de skills a demanda | **20.443** · techo 20.500 🟡 | ≤ techo | > techo | `check:contexto` |
+| **Verificación ÷ producto** | **0,47** 🟡 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
+| **% Infra del sprint que cierra** | **52%** (15/29) 🔴 | ≤ 35% | ≥ 50% | tablero, `GROUP BY Área` |
+| **Verificación ÷ producto DEL SPRINT** | **3,5 : 1** 🔴 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
+| Hallazgos de `design-review` cuya regla ya existía | *no se disparó* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
+| ~~Sprint de método abierto en el ciclo~~ | *retirado: leía el nombre* | — | — | — |
 | ~~Skills sin estrenar~~ | *retirado: sin fuente medible* | — | — | — |
 
-*La variación de `General` **todavía no tiene línea base fiable**: el 45 anterior se midió
-DENTRO del sprint, no al abrirlo. Tómala siempre al abrir, o la cifra no compara nada.*
+*Las dos filas de `check:contexto` van en su vara, que **descuenta los bloques de código**.*
 
-*Las dos filas van en la vara de `check:contexto`, que **descuenta los bloques de código**: por
-eso 20.203 aquí y 20.616 arriba. No es drift, y el porqué está en el propio script.*
+**La operación exacta de «verificación ÷ producto»**, porque sin ella la fila no es
+reproducible — se descubrió al reconstruirla, y tres definiciones razonables daban 0,47, 0,52 y
+0,62 sobre el mismo árbol. Solo archivos **rastreados**, que si no entra `scripts/.poda/`:
+
+```bash
+n(){ git ls-files "$@" | grep -E '\.(ts|tsx|js|mjs)$' | xargs wc -l | tail -1 | awk '{print $1}'; }
+echo "scripts=$(n scripts) producto=$(( $(n app) + $(n components) + $(n lib) + $(n content) ))"
+```
+
+*Numerador: `scripts/` sola. Denominador: app + components + lib + content. `tests/` queda
+FUERA del numerador a propósito — un test prueba el producto, un guardián vigila el método.*
+
+**Las dos filas nuevas sustituyen a «sprint de método abierto en el ciclo», que contestaba «No»
+mirando el NOMBRE del sprint** *(octavo disparo)*. «Drenaje» no se llamaba de método y lo fue:
+52% Infra y 3,5 líneas de verificación por cada una de producto. Se miden **al cerrar**, sobre
+el sprint que cierra, con su commit base y `HEAD`.
 
 ## La salida
 
