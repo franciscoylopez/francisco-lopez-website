@@ -26,7 +26,7 @@
     "body": [
       {
         "type": "p",
-        "text": "Cuando empecé a pensar en este proyecto tenía claro que no quería un CV en HTML, quería una prueba de criterio: en producto, en lo técnico y en usabilidad y diseño. Algo que enseñara cómo trabajo, el peso que le doy al diseño y a la experiencia de uso, y un enfoque de product builder que no consista en hacer vibe coding funcional pero lleno de incoherencias técnicas y de riesgos de seguridad. Sin ser programador o product designer hoy se puede hacer un trabajo muy fino en todos los aspectos."
+        "text": "Cuando empecé a pensar en este proyecto tenía claro que no quería un CV en HTML, quería una prueba de criterio: en producto, en lo técnico y en usabilidad. Algo que enseñara cómo trabajo, el peso que le doy al diseño y a la UX, un enfoque de product builder que no consista en hacer vibe coding funcional pero lleno de incoherencias técnicas y de riesgos de seguridad. Soy PM, no busco ser otra cosa, pero hoy en día, sin ser programador ni product designer pero dedicándole algo de tiempo, se puede hacer un trabajo muy fino en todos los aspectos."
       },
       {
         "type": "p",
@@ -116,7 +116,7 @@
         {
           "type": "ul",
           "items": [
-            "**El asistente conversacional está aplazado, y ya tiene escrito su límite antes de existir**: lo que no está por escrito en el sitio tampoco entra en su corpus. Un agente público publica igual que una página, pero responde sin mí delante y en frases que no puedo revisar, así que no sirve de papelera para lo que se cuenta en una entrevista y no en abierto. Fijar ese límite antes de construirlo es mucho más barato que discutirlo después. Y lo que decidirá cuándo se construye no es la gana de estrenarlo: es que las preguntas que llegan por el formulario empiecen a repetirse."
+            "**El asistente conversacional está aplazado, y ya tiene escrito su límite antes de existir**: lo que no está por escrito en el sitio tampoco entra en su corpus. Es algo que vamos a hacer, tiene sentido y es una prueba más de criterio y de IA aplicada, pero todo a su debido tiempo: lanzamiento, métricas y nuevas iniciativas."
           ]
         },
         {
@@ -421,9 +421,23 @@
       "title": "El sistema de componentes: nada nuevo se escribe a mano",
       "body": [
         { "type": "h3", "text": "Dos preguntas deciden qué pieza toca" },
+        { "type": "p", "text": "El sistema se construye con estas piezas:" },
+        {
+          "type": "ul",
+          "items": [
+            "**La acción**, que es todo lo que se pulsa y tiene caja propia: botón, chip, interruptor, pestaña y control de solo icono.",
+            "**El enlace de navegación**, el de la carpintería: menú, miga de pan y pie.",
+            "**La etiqueta**, el rótulo que no se pulsa.",
+            "**El titular**, el par de antetítulo y título con el que abren la página y cada sección.",
+            "**El campo de formulario**, con su etiqueta, su error y el resumen del envío.",
+            "**La tabla**, que es una tabla de verdad si son datos y una rejilla si son ejemplos.",
+            "**La fila de cifras** que resume una apertura.",
+            "**Las cajas y los ritmos**: anchos, márgenes y el andamiaje del pliegue."
+          ]
+        },
         {
           "type": "p",
-          "text": "El sitio tiene ocho piezas, y cuál toca se decide preguntando **¿se pulsa?** y, si se pulsa, **¿tiene caja propia?** Un chip que solo rotula un dato no es un botón pequeño: es una etiqueta, y no necesita ni estado, ni hover, ni objetivo táctil. Un enlace del menú tampoco es un botón: es carpintería de navegación, y ahí el cian no distingue nada porque todo el bloque navega. Parecen distinciones de vocabulario y son justo lo que evita que cada sección invente su propio botón."
+          "text": "Cuál toca se decide preguntando **¿se pulsa?** y, si se pulsa, **¿tiene caja propia?** Un chip que solo rotula un dato no es un botón pequeño: es una etiqueta, y no necesita ni estado, ni hover, ni objetivo táctil. Un enlace del menú tampoco es un botón: es carpintería de navegación, y ahí el cian no distingue nada porque todo el bloque navega. Parecen distinciones de vocabulario y son justo lo que evita que cada sección invente su propio botón."
         },
         { "type": "h3", "text": "La cascada: antes de escribir markup nuevo" },
         {
@@ -463,7 +477,7 @@
         },
         {
           "type": "p",
-          "text": "Encima de las ocho piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una."
+          "text": "Encima de esas piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una."
         },
         { "type": "h3", "text": "Qué compra todo esto" },
         {
@@ -735,10 +749,6 @@
         },
         {
           "type": "p",
-          "text": "Lo que no sabía al escribir esto por primera vez es que **esa línea tiene precio**. Quitarla obliga a firmar cada script con un número distinto en cada visita, y ese número solo existe si la página se construye al pedirla; hoy las catorce se construyen antes, que es de donde sale el número de rendimiento de aquí abajo. La puerta de atrás sería firmarlos por su contenido, y no existe: compilé el sitio dos veces sin tocar una coma y **ninguna de las veintiocho variantes produjo las mismas firmas**, porque dentro van los nombres de archivo que el compilador renombra en cada pasada. Y una firma que no coincide no degrada, bloquea."
-        },
-        {
-          "type": "p",
           "text": "Así que se queda en B+, con la fecha puesta y el motivo escrito: subirla mejoraría la nota de una herramienta empeorando la del visitante. El día que haya un asistente respondiendo texto generado se pagará lo que valga."
         },
         {
@@ -850,7 +860,7 @@
       "ordinal": "09",
       "indexLabel": "Accesibilidad",
       "kicker": "09 — Accesibilidad",
-      "title": "AA es el suelo, y el metro no midió lo que yo creía cuatro veces",
+      "title": "AA es solo el suelo, AAA el objetivo",
       "body": [
         {
           "type": "p",

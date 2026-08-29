@@ -26,7 +26,7 @@
     "body": [
       {
         "type": "p",
-        "text": "When I started thinking about this project, I knew I didn't want a CV in HTML. I wanted proof of judgment: in product, in engineering, in usability and design. Something that showed how I work, the weight I give to design and user experience, and a product-builder approach that isn't about shipping vibe-coded output that works but is riddled with technical inconsistencies and security risks. Without being an engineer or a product designer, it's possible today to do genuinely meticulous work across every layer."
+        "text": "When I started thinking about this project I knew I didn't want a CV in HTML, I wanted a proof of judgement: in product, in the technical side and in usability. Something that showed how I work, the weight I give to design and UX, and a product-builder approach that isn't functional vibe coding riddled with technical inconsistencies and security risks. I'm a PM and I'm not trying to be anything else, but these days, without being a developer or a product designer, putting some time into it gets you work that holds up on every front."
       },
       {
         "type": "p",
@@ -116,7 +116,7 @@
         {
           "type": "ul",
           "items": [
-            "**The conversational assistant is on hold, and its limit is already written before it exists**: whatever isn't written on the site publicly doesn't go into its corpus either. A public agent publishes just like a page, but it answers without me there and in sentences I can't review, so it can't serve as a dumping ground for what gets said in an interview and not in the open. Fixing that limit before building it is far cheaper than arguing about it afterward. And what will decide when it gets built isn't the itch to ship it: it's the questions coming in through the form starting to repeat."
+            "**The conversational assistant is on hold, and its limit is written down before it exists**: what isn't in writing on the site doesn't go into its corpus either. It's something I will build, it makes sense and it's one more proof of judgement and of AI applied, but everything in its own order: launch, metrics, then new bets."
           ]
         },
         {
@@ -421,9 +421,23 @@
       "title": "The component system: nothing new gets hand-written",
       "body": [
         { "type": "h3", "text": "Two questions decide which piece applies" },
+        { "type": "p", "text": "The system is built from these pieces:" },
+        {
+          "type": "ul",
+          "items": [
+            "**The action**, which is everything that gets clicked and has a box of its own: button, chip, toggle, tab and icon-only control.",
+            "**The navigation link**, the joinery one: menu, breadcrumb and footer.",
+            "**The badge**, the label that doesn't get clicked.",
+            "**The heading**, the eyebrow-and-title pair that opens the page and every section.",
+            "**The form field**, with its label, its error and the summary of the submission.",
+            "**The table**, a real table when it's data and a grid when it's specimens.",
+            "**The row of figures** that sums up an opening.",
+            "**The boxes and the rhythms**: widths, margins and the scaffolding of the fold."
+          ]
+        },
         {
           "type": "p",
-          "text": "The site has eight pieces, and which one applies is decided by asking **does it get clicked?** and, if it does, **does it have its own box?** A chip that only labels a value isn't a small button: it's a badge, and it needs no state, no hover, no touch target. A menu link isn't a button either: it's navigation chrome, and there cyan distinguishes nothing because the whole block is about navigating. They sound like vocabulary distinctions, and they're exactly what stops every section from inventing its own button."
+          "text": "Which one applies is decided by asking **does it get clicked?** and, if it does, **does it have its own box?** A chip that only labels a value isn't a small button: it's a badge, and it needs no state, no hover, no touch target. A menu link isn't a button either: it's navigation chrome, and there cyan distinguishes nothing because the whole block is about navigating. They sound like vocabulary distinctions, and they're exactly what stops every section from inventing its own button."
         },
         { "type": "h3", "text": "The cascade: before writing any new markup" },
         {
@@ -463,7 +477,7 @@
         },
         {
           "type": "p",
-          "text": "On top of the eight pieces there's one more layer. A helper derives the canonical URL, the per-language variants, the social card and the structured markup from a single source, and a component adds the skip link, navigation, main content and footer. And which pages the site has is decided by a single file, which is where the sitemap, the HTML gate and each page's social card all come from."
+          "text": "On top of those pieces there's one more layer. A helper derives the canonical URL, the per-language variants, the social card and the structured markup from a single source, and a component adds the skip link, navigation, main content and footer. And which pages the site has is decided by a single file, which is where the sitemap, the HTML gate and each page's social card all come from."
         },
         { "type": "h3", "text": "What all this buys" },
         {
@@ -739,10 +753,6 @@
         },
         {
           "type": "p",
-          "text": "What I didn't know when I first wrote this is that **that line has a price**. Removing it means signing every script with a different number on every visit, and that number only exists if the page is built at the moment it's requested; today all fourteen are built beforehand, which is where the performance number just below comes from. The back door would be signing them by their content, and it isn't there: I compiled the site twice without touching a comma and **not one of the twenty-eight variants produced the same signatures**, because inside them are the file names the compiler renames on every pass. And a signature that doesn't match doesn't degrade, it blocks."
-        },
-        {
-          "type": "p",
           "text": "So it stays at B+, with the date on it and the reason written down: raising it would improve a tool's score by making the visitor's worse. The day there's an assistant answering generated text it'll get paid for whatever it costs."
         },
         {
@@ -855,7 +865,7 @@
       "ordinal": "09",
       "indexLabel": "Accessibility",
       "kicker": "09 — Accessibility",
-      "title": "AA is the floor, and four times the meter measured something other than what I thought",
+      "title": "AA is only the floor, AAA is the target",
       "body": [
         {
           "type": "p",
