@@ -216,11 +216,10 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 - **Primaria**: **envíos del formulario de `/contacto`** (`contact_submit`), contados
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
-  **El TRANSPORTE está entero desde el 2026-08-24**: el `dataLayer` lo recoge un trigger de
-  Custom Event con su tag de GA4 —comprobado en el `gtm.js` publicado, que es como se
-  audita la mitad que vive fuera del repo (D71)— y en GA4 está marcado como **evento
-  clave**. La marca no es retroactiva: cuenta desde ahí.
-  **Y «cuando el servidor confirma» era ambiguo** *(2026-08-29)*: el `status: "sent"` tiene
+  El transporte está entero y en GA4 es **evento clave** desde el 2026-08-24; la marca no es
+  retroactiva, así que **antes de esa fecha no hay serie**. Cómo se audita la mitad que vive
+  fuera del repo, en D71.
+  **Y «cuando el servidor confirma» era ambiguo** *(2026-08-29, D153)*: el `status: "sent"` tiene
   **tres causas** —el envío y los dos filtros que callan, honeypot y suelo de 3 s— y solo una
   manda correo. Se cuenta esa, y lo decide `cuentaComoEnvio` en `lib/contact-form.ts`, no una
   comparación en el componente: ahí la regla tiene tests y caso malo. El silencio hacia el bot

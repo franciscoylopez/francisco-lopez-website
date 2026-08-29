@@ -84,6 +84,7 @@
 - [66. La distribución entra en el alcance del proyecto, y el orden se decide aparte (2026-08-27)](#66-la-distribución-entra-en-el-alcance-del-proyecto-y-el-orden-se-decide-aparte-2026-08-27)
 - [El sprint «Home» cierra, y el siguiente se parte en dos carriles — 2026-08-28](#el-sprint-home-cierra-y-el-siguiente-se-parte-en-dos-carriles--2026-08-28)
 - [«Drenaje» cierra con su medición hecha por fin, y el lanzamiento reencuadra qué entra en «Voz» — 2026-08-29](#drenaje-cierra-con-su-medición-hecha-por-fin-y-el-lanzamiento-reencuadra-qué-entra-en-voz--2026-08-29)
+- [La tanda 1 de «Voz», y el cruce que puso la métrica primaria en su sitio — 2026-08-29](#la-tanda-1-de-voz-y-el-cruce-que-puso-la-métrica-primaria-en-su-sitio--2026-08-29)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3532,6 +3533,98 @@ se usara, pero es la misma familia que todo lo demás del día: **el guardián a
 el volcado» y no puede saber cuántas le faltan.** Queda sin tarear a propósito, con el cupo ya
 desbordado.
 
+
+## La tanda 1 de «Voz», y el cruce que puso la métrica primaria en su sitio — 2026-08-29
+
+Seis tareas cerradas (P51 → P55) y una que se quedó abierta a propósito. Lo que distingue a
+esta tanda es que **el hallazgo grande no salió de ninguna de sus fichas**: salió de cruzar la
+bandeja de entrada con GA4, que es un sitio donde nadie había mirado.
+
+### El criterio de «Voz» funcionando, con su medida
+
+El sprint se abrió para que el artículo dejara de contarse desde lo que se rompió. §04 cambió
+de tesis con el mismo presupuesto —459 palabras de «tres sorpresas de estrenar versión» pasan a
+483 de «por qué estas piezas»—, §06 explicó por fin el trámite de alta de una pieza, y §01 dejó
+de describir un mecanismo que la página no tiene: la doble lectura no está repartida entre el
+índice y el deep-dive, está **dentro** del deep-dive.
+
+Y la tanda dejó dos mediciones que cambiaron el alcance de su propia tarea:
+
+- **Las negritas tienen un ritmo, y se puede contar.** Las zonas tratadas caen en 68-101
+  palabras por negrita, y §11 —que ya venía marcada y sirve de referencia— en 87. Contra eso,
+  §04 salía a **1 cada 813**: el bloque más plano del artículo, y era el que se acababa de
+  reescribir tres commits antes. La ficha lo excluía porque «en esas la negrita se decide al
+  escribir el texto nuevo», y al escribirlo no se hizo. *Una exclusión que confía en que el
+  paso anterior hizo el trabajo necesita comprobar que lo hizo.*
+- **Un contador se fue con un párrafo.** El de §08 que se borró por denso llevaba «las
+  catorce», el único contador de páginas tecleado que quedaba vivo en el artículo. Los dos que
+  quedan no lo son —«la página catorce» es retórico y «el mes catorce» son meses—, así que la
+  tarea del contador del Design System no hereda nada de aquí.
+
+### El cruce que nadie había hecho: la bandeja contra GA4
+
+El check de medición del cierre anterior dejó dos preguntas abiertas sobre la métrica primaria:
+**qué** cuenta y **a quién** cuenta. Las dos se contestaron el mismo día, y la segunda solo
+porque Francisco trajo tres correos de spam que habían entrado por el formulario.
+
+**Qué cuenta.** `contact_submit` se disparaba con `status: "sent"`, y ese estado tiene tres
+causas de las que solo una manda correo. Se arregló, y el arreglo tiene su decisión técnica
+aparte (D153).
+
+**A quién cuenta.** Los 9 `contact_click` con 2 usuarios que llevaban dos cierres sin verificar
+son **tráfico propio**, y lo que lo cierra no es que sean de Valencia, que es circunstancial:
+es la fecha. Los nueve cayeron el **lunes 3 de agosto**, que es el día en que se construyó y
+desplegó ese mismo evento —`5aa6402`, «tracking de clics mailto/tel vía dataLayer»—, en un
+escritorio (7) y un móvil (2), y ni uno después. Son la verificación del propio instrumento.
+*Dos personas mostraron intención* era, medido, **cero**.
+
+**Y el spam no explicaba nada de eso, pero destapó otra cosa.** Los tres correos entraron por
+el formulario tres semanas después, así que no tocan a `contact_click`. Lo que enseñan es el
+otro lado: GA4 registró **cero eventos** por los tres, incluido el del 28 de agosto a las
+21:38, en una ventana que ya lo incluía. La causa es el consentimiento —sin aceptar no carga
+GTM—, de modo que **la primaria no cuenta envíos: cuenta envíos de quien aceptó cookies**, y la
+diferencia medida es 1 contado contra 4 entregados. Es la primera cifra real detrás de la
+tarea de la tasa de consentimiento, y abrió una nueva: los tres pasaron el honeypot y el suelo
+de 3 s, o sea que los dos filtros cazan al bot ingenuo y a nadie más.
+
+De paso quedó descartada la hipótesis cómoda: **el único `contact_submit` no es spam.** Lleva
+un `form_start` delante, el mismo día y el mismo dispositivo, un móvil Android. Es una persona.
+
+### El arreglo elegido no es el que proponía la ficha, y el motivo es el caso medido
+
+La ficha decía «ampliar el tráfico interno más allá de una sola IP: una IP adicional o un
+parámetro de depuración». **Pero de los dos usuarios contaminantes uno era un móvil**, o sea
+fuera de cualquier IP fija: la vía de las IPs habría cubierto el escritorio y dejado fuera
+justo el caso que apareció. *Un arreglo que no cubre el caso que lo motivó es peor que ninguno,
+porque cierra la duda sin cerrarla.*
+
+**Lo elegido es no aceptar cookies en los dispositivos propios**, y funciona por el mismo
+mecanismo que acabábamos de medir con el spam: sin consentimiento no carga GTM, así que no hay
+evento. Cobertura total, coste cero y efecto inmediato, sin tocar la configuración de la cuenta.
+Su única grieta es que **para verificar la medición sí hay que aceptar**, que es exactamente el
+tráfico del 3 de agosto, así que la regla completa lleva la excepción dentro: rechazar por
+defecto, aceptar solo mientras se verifica, y anotar el día.
+
+**El parámetro de depuración se descarta con su motivo escrito**, que es lo que impide que
+vuelva en cada revisión: es una tarea de GTM más código, no un ajuste, y con el lanzamiento la
+proporción de tráfico propio cae sola. Se reabre si alguna vez estorba, no antes.
+
+**Y lo que no arregla ninguna de las tres:** los filtros de GA4 no son retroactivos. La serie de
+agosto se queda contaminada haga lo que haga, y lo único que valía ahí es lo que ya está hecho,
+dejarlo escrito.
+
+**Y el embalse transversal sube a 17.** La tarea del spam nace en `General` y no en un bloque
+de página porque hoy no hay bloque de Contacto vivo y porque la mitad del hallazgo es de
+medición, que es transversal. Se anota aquí porque el sprint ya había desbordado su cupo a 6 y
+esto lo empeora: el próximo cierre se mide contra un sello de 19 con el embalse subiendo.
+
+### Y una regla de método que salió de un rojo
+
+`check:guardianes` reportó «4 guardianes sin dientes» y los cuatro eran **el mismo**,
+`check:contexto`, rechazado por fallar ya sobre el árbol limpio. Estaba rojo porque la nota
+nueva de `PRD-Live` §7 se pasó del techo por 19 palabras, y se pagó retirando, no subiendo el
+techo. Lo que conviene recordar es la forma: **un guardián en rojo por otra causa deja sin
+valor a todos sus casos malos, y el informe lo presenta como fallos distintos.**
 
 ## Fuentes
 
