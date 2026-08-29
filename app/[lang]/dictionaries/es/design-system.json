@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Fundamentos de diseño",
     "title": "Design System",
-    "lead": "Un sistema de diseño no está para que todo se parezca: está para que una decisión se tome una sola vez. Cambiar aquí el hover de un botón o su objetivo táctil llega a las catorce páginas a la vez.",
+    "lead": "Un sistema de diseño no está para que todo se parezca: está para que una decisión se tome una sola vez. Cambiar aquí el hover de un botón o su objetivo táctil llega a todas las páginas a la vez.",
     "statContainer": "Ancho máximo del contenedor",
     "statBreakpoints": "Breakpoints",
     "statMeasure": "Medida de lectura (~91 car.)",
@@ -26,7 +26,7 @@
   "bloques": {
     "fundamentos": {
       "title": "Fundamentos",
-      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a las catorce páginas."
+      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a todas las páginas a la vez."
     },
     "piezas": {
       "title": "Piezas",
@@ -62,7 +62,7 @@
       }
     ],
     "tokensTitle": "Lo que este sistema le añade a Tailwind",
-    "tokensLead": "Los tokens que la escala de Tailwind no trae. Viven en el :root del sitio, así que cambiar uno lo cambia en las catorce páginas.",
+    "tokensLead": "Los tokens que la escala de Tailwind no trae. Viven en el :root del sitio, así que cambiar uno lo cambia en todas las páginas a la vez.",
     "copyLabel": ":root { }",
     "copyHint": "Copia de un vistazo",
     "copyAria": "Copiar el bloque de tokens de layout",
@@ -684,7 +684,7 @@
     "navCloserPositionLabel": "2 de 3",
     "navCloserAria": "Entre secciones (espécimen)",
     "closerTitle": "El cierre de página",
-    "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en las catorce páginas.",
+    "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en todas las páginas.",
     "closerKicker": "Dos destinos",
     "closerRule": "Sube entero a la capa, y no solo la tarjeta: el ritmo vertical, el filete de arriba y el hueco del rótulo son lo que tiene que no divergir.",
     "closerNote": "La flecha empuja hacia donde apunta, y el empujón se apaga con movimiento reducido. Un destino que aún no existe se dibuja punteado y apagado.",

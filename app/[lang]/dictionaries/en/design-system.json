@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Design foundations",
     "title": "Design System",
-    "lead": "A design system isn't there to make everything look alike: it's there so a decision gets made once. Change a button's hover or its touch target here and it reaches all fourteen pages at the same time.",
+    "lead": "A design system isn't there to make everything look alike: it's there so a decision gets made once. Change a button's hover or its touch target here and it reaches every page at the same time.",
     "statContainer": "Max container width",
     "statBreakpoints": "Breakpoints",
     "statMeasure": "Reading measure (~91 char.)",
@@ -26,7 +26,7 @@
   "bloques": {
     "fundamentos": {
       "title": "Fundamentals",
-      "lead": "The five decisions everything else hangs from. They are made once and reach all fourteen pages."
+      "lead": "The five decisions everything else hangs from. They are made once and reach every page at the same time."
     },
     "piezas": {
       "title": "Pieces",
@@ -62,7 +62,7 @@
       }
     ],
     "tokensTitle": "What this system adds to Tailwind",
-    "tokensLead": "The tokens Tailwind's scale doesn't ship. They live in the site's :root, so changing one changes it across all fourteen pages.",
+    "tokensLead": "The tokens Tailwind's scale doesn't ship. They live in the site's :root, so changing one changes it across every page at the same time.",
     "copyLabel": ":root { }",
     "copyHint": "Copy at a glance",
     "copyAria": "Copy the layout token block",
@@ -684,7 +684,7 @@
     "navCloserPositionLabel": "2 of 3",
     "navCloserAria": "Between sections (specimen)",
     "closerTitle": "The page closer",
-    "closerLead": "The end of the content before the footer: where you go from here, with the same format across all fourteen pages.",
+    "closerLead": "The end of the content before the footer: where you go from here, with the same format across every page.",
     "closerKicker": "Two destinations",
     "closerRule": "The whole thing moves up to the layer, not just the card: the vertical rhythm, the hairline above and the gap for the label are what must not diverge.",
     "closerNote": "The arrow nudges toward where it points, and the nudge is off under reduced motion. A destination that doesn't exist yet is drawn dotted and dimmed.",
