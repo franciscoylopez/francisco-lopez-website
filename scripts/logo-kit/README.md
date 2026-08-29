@@ -70,3 +70,36 @@ nombre es el objetivo.
 
 Regla 5 matizada en consecuencia (2026-07-21): 40-45% compuestos en UI, ~60%
 lockup cerrado.
+
+## Reproducibilidad: los SVG sí, los binarios no
+
+*(Medido el 2026-08-28 al cerrar P50.96, escrito el 2026-08-30.)* Regenerar el kit
+entero sobre la caja de hoy da esto:
+
+| | resultado |
+|---|---|
+| 12 SVG | **idénticos byte a byte** |
+| 43 binarios (42 PNG + `favicon.ico`) | **15 distintos** de los que hay en `main` |
+
+Y no es un fallo: los SVG salen de `geometry.js` como texto, así que son
+deterministas por construcción; los binarios los rasteriza **sharp**, y ahí el
+byte depende de la versión nativa de libvips y libpng que npm haya resuelto en la
+máquina que lo corrió, no del código del repo.
+
+**La consecuencia, que es lo que hay que saber al volver:** los PNG y el `.ico` de
+`public/logo-kit/` son **artefactos versionados**, no la salida reproducible de un
+comando. Este script es la **receta**, no el contrato. Quien clone el repo y lo
+ejecute obtendrá un diff en unos cuantos binarios sin haber cambiado nada, y **ese
+diff no se commitea**: se revierte, como se hizo en el PR #203.
+
+Se descartó pinnear `sharp` a versión exacta. Reduciría la deriva y no la
+eliminaría —el binario nativo varía por plataforma—, así que compra una sensación
+de cierre que no es verdad.
+
+**Lo que sí se hizo, porque es el fallo que duele:** `npm run check:kit` ya no
+cuadra solo nombres. Abre los 43 binarios y comprueba que cada uno es del formato
+que dice su extensión, que mide lo que su nombre promete y que **tiene tinta**. Un
+PNG en blanco es un archivo perfectamente válido, se ve perfectamente bien desde la
+página, y se descarga roto. Lo que el check **no** promete es que el dibujo sea el
+correcto: para eso habría que rasterizar el SVG dentro del guardián, y eso vuelve a
+meter ahí la misma cadena nativa que esta sección acaba de declarar no determinista.

@@ -7222,12 +7222,43 @@ sufijo no nombra un fondo sobre el que alguien coloca el asset: nombra el
 con esa `media`). El nombre que sirve es el de la consulta que lo selecciona, así que
 renombrarlos rompería la única correspondencia clara que hay.
 
-**Un hallazgo lateral, sin tarea: el generador ya no reproduce sus propios PNG byte a byte.**
-Al reconstruir el kit para comprobar que el generador escribe los nombres nuevos, los 12 SVG
-salieron idénticos y **15 de los 43 binarios cambiaron** —distinta versión de sharp/libvips que
-la del día que se generaron—. No es un fallo del kit, pero sí el límite de `check:kit`, que
-cuadra NOMBRES y no contenido; se revirtieron los binarios para no meter ruido en el commit del
-renombrado.
+**Un hallazgo lateral que tardó dos días en tener tarea: el generador no reproduce sus propios
+PNG byte a byte.** Al reconstruir el kit para comprobar que el generador escribe los nombres
+nuevos, los 12 SVG salieron idénticos y **15 de los 43 binarios cambiaron** —distinta versión
+de sharp/libvips que la del día que se generaron—. Se revirtieron para no meter ruido en el
+commit del renombrado.
+
+**No es un fallo del kit y no se ha «arreglado»: se ha ESCRITO** *(2026-08-30, P85.2)*. Los SVG
+salen de `geometry.js` como texto y son deterministas por construcción; los binarios los
+rasteriza una cadena nativa cuyo byte depende de la máquina, no del repo. Así que los PNG y el
+`.ico` son **artefactos versionados**, el generador es la **receta y no el contrato**, y quien
+clone el repo y lo ejecute obtendrá un diff que **no se commitea**. Está en
+`scripts/logo-kit/README.md` §Reproducibilidad, que es donde se lee al volver. Se descartó
+pinnear `sharp` a versión exacta: reduce la deriva sin eliminarla —el binario nativo varía por
+plataforma— y compra una sensación de cierre que no es verdad.
+
+**Lo que sí cambió es lo que `check:kit` PROMETE.** Cuadraba nombres, y un PNG en blanco,
+truncado o regenerado al tamaño equivocado los cuadra igual de bien: es un archivo válido, se
+ve perfectamente bien desde la página y se descarga roto. Ahora **abre los 43 binarios** y
+comprueba tres cosas del archivo y no de su nombre — que sea del formato que dice su extensión,
+que mida lo que su nombre promete, y que tenga **tinta**. Lo tercero necesita decodificar de
+verdad: se inflan los IDAT, se deshacen los cinco filtros de PNG y se suma el canal alfa, con
+`node:zlib` y sin dependencia nueva. **Qué mide el número del nombre lo dice el REGISTRO**
+(`medidaDeclarada`, en `lib/logo-kit.ts`), porque no significa lo mismo en las tres familias:
+alto en el símbolo, ancho en el lockup, lado en el favicon. Y un PNG cuyo nombre no case con
+ninguna es rojo, no verde: un hueco del metro no es un aprobado.
+
+**Lo que NO promete, escrito para no prometer de más:** que el dibujo sea el correcto. Un PNG
+del tamaño justo, con tinta y con el logo de otra versión pasa. Cazarlo exigiría rasterizar el
+SVG dentro del guardián, que es volver a meter ahí la cadena nativa que el párrafo anterior
+acaba de declarar no determinista.
+
+**El metro, validado rompiéndolo** (2026-08-30), sobre archivos reales y restaurando el árbol:
+un PNG válido de 425×512 enteramente transparente, uno truncado al 60%, uno sustituido por el
+de 256 y un `.ico` recortado. Los cuatro salen rojos nombrando el archivo. Y **el ancla que
+valida el decodificador** es el favicon de 16px, que lleva el trazo engordado de 6 a 10 unidades
+a propósito: tiene que salir **28,1% de tinta frente al 17,9% del de 32**. Si los dos salieran
+iguales, el que está mal es el decodificador.
 
 **Y una medición que no se hizo.** Esto **borra una capacidad que existía**: hasta hoy se podía
 bajar exactamente el PNG 512 en tinta clara. GA4 captura descargas de fábrica, así que el

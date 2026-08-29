@@ -129,7 +129,7 @@ Los pasos de CI de cada PR se leen en [GitHub Actions](./.github/workflows/ci.ym
 | `check:rutas` | Que «qué páginas tiene el sitio» vuelva a estar escrito en cuatro listas. Contrasta el registro contra `app/[lang]/**/page.tsx`, y `pageMetadata` pide el tipo derivado: olvidar una página no compila (`D72`) |
 | `check:marco` | Que una página nueva salga sin enlace de salto, sin su `h1`, sin breadcrumb o con la metadata de otra. Mide el HTML **prerenderizado**, no el código: los helpers son opt-in, y escribirse la metadata a mano compila igual. De paso resuelve las referencias `@id` del JSON-LD, que ningún validador externo comprueba (`D75`) |
 | `check:figuras` | Que una figura pinte sus rótulos ilegibles. `text-[11px]` dentro de un `viewBox` son 11 **unidades de dibujo**, no 11 píxeles, y esa escala no está en el `font-size` computado: los diagramas del artículo pintaron entre 5,0 y 8,2px durante meses sin que lo viera nadie. Mide el prerender, así que no necesita navegador (`D106`) |
-| `check:kit` | Que un asset del kit de marca entre sin que nadie lo cuente. El ZIP se genera en el build leyendo el directorio, así que **no puede caducar**; lo que sí deriva es el registro, y así aparecieron diez huérfanos que nunca tuvieron tarjeta: nadie los metió a propósito, simplemente no había nada que los contara (`D119`) |
+| `check:kit` | Que un asset del kit de marca entre sin que nadie lo cuente, **y que los binarios no estén vacíos**. El ZIP se genera en el build leyendo el directorio, así que **no puede caducar**; lo que sí deriva es el registro, y así aparecieron diez huérfanos que nunca tuvieron tarjeta: nadie los metió a propósito, simplemente no había nada que los contara. Desde el 2026-08-30 abre además cada PNG y el `.ico`: formato, medida declarada y cobertura de tinta (`D119`) |
 | `check:marcas` | Que un nombre propio se publique traducible. El traductor automático de Chrome convierte «TheTool» en «La Herramienta», y esta web es bilingüe: la traducción se ofrece de verdad. El atributo lo pone una capa y el copy no lo escribe, así que el gate comprueba que **llegó** — busca la ausencia sobre cada nodo de texto, no cuenta cuántos hay (`D116`) |
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
@@ -169,7 +169,8 @@ npm run check:figuras       # el rótulo PINTADO de cada figura con lienzo escal
 npm run check:marcas        # que los nombres propios lleguen al HTML con translate="no",
                             # o el traductor de Chrome los destroza (D116). Prerender también
 npm run check:kit           # que el registro del kit de marca y public/logo-kit/ cuadren en
-                            # los dos sentidos (D119). El ZIP no se vigila: se hace al build
+                            # los dos sentidos, y que los binarios no estén vacíos (D119).
+                            # El ZIP no se vigila: se hace al build leyendo el directorio
 npm run check:accesibilidad # que /accesibilidad siga siendo cierta: sus cinco bloques con
                             # fuente sellada, y las cifras del arnés contra los casos (D140)
 npm run check:og            # que cada tarjeta OG diga lo que su página, en los dos idiomas,

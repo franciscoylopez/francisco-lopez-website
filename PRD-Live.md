@@ -176,7 +176,7 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | `check:enlaces` | Que las URLs externas del sitio sigan respondiendo, sacadas del disco y no de una lista. **Fuera de su juicio:** el 403 y el 999, escudo antibot y no enlace muerto | a mano | D141 |
 | `pliegue` | Que las aperturas que comparten pliegue midan lo mismo —grupo y `h1`— a 1920×1080; entra la que lo tenga, detectado en el DOM. **Fuera:** que no desborde, que es `viewport-verifier` | a mano | D144 |
 | `psi -- --registro` | La nota de PageSpeed de las páginas del registro contra producción, como **mediana de tres tomas** deduplicadas por análisis: con una sola muestra el min/max sellaba ruido. **No sella** un par que se quedó en un análisis. **Nunca gate de CI:** su variabilidad daría rojos falsos | a mano | D49/D99/D145 |
-| `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**. **Fuera:** el ZIP, que se genera en el build | CI | D119 |
+| `check:kit` | Que `lib/logo-kit.ts` y `public/logo-kit/` cuadren **en los dos sentidos**, y que los 43 binarios sean del formato, la medida y la tinta que su nombre promete — un PNG en blanco se ve bien desde la página y se descarga roto. **Fuera:** el ZIP, que se genera en el build, y que el DIBUJO sea el correcto | CI | D119 |
 | `check:tablero` | Que `Prioridad` siga siendo un orden —números únicos, estados de ejecución dentro del sprint, `Área` en todas—, sobre un volcado del tablero, y que el embalse transversal no crezca contra el sello del cierre anterior. **Fuera:** si el CUPO se cumplió, que el esquema del tablero no permite ver | a mano | D107/D138 |
 
 ### Calidad y seguridad

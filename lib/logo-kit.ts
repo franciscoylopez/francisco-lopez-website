@@ -247,3 +247,30 @@ export function leemeDelKit(numeroDeArchivos: number): string {
     "",
   ].join("\n");
 }
+
+/**
+ * La MEDIDA que el nombre de un binario promete, para que un guardián pueda abrir
+ * el archivo y comprobarla. `null` si la ruta no es un binario del kit.
+ *
+ * EL NÚMERO DEL NOMBRE NO SIGNIFICA LO MISMO EN LAS TRES FAMILIAS, y esa es toda
+ * la razón de que esto exista en vez de comparar `ancho === alto === N`:
+ *
+ *   · El **símbolo** se dimensiona por ALTO (`simbolo-…-512.png` mide 512 de alto y
+ *     425 de ancho), que es la medida con la que `BRAND.md` expresa sus reglas.
+ *   · El **lockup** por ANCHO, su dimensión natural: a 512 de alto mediría 3400.
+ *   · El **favicon** es cuadrado, porque el formato lo exige.
+ *
+ * Está aquí y no en el guardián porque es una propiedad del REGISTRO —la misma que
+ * `scripts/logo-kit/README.md` §Dimensionado explica en prosa—, y porque escrita en
+ * el check se quedaría atrás el día que entre una cuarta familia.
+ */
+export type Medida = { eje: "alto" | "ancho" | "cuadrado"; px: number };
+
+export function medidaDeclarada(ruta: string): Medida | null {
+  const px = Number(ruta.match(/-(\d+)\.png$/)?.[1]);
+  if (!px) return null;
+  if (ruta.startsWith("/logo-kit/favicon/")) return { eje: "cuadrado", px };
+  if (ruta.startsWith("/logo-kit/png/simbolo-")) return { eje: "alto", px };
+  if (ruta.startsWith("/logo-kit/png/lockup-")) return { eje: "ancho", px };
+  return null;
+}
