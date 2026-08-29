@@ -283,7 +283,9 @@
   "aplicaciones": {
     "indexLabel": "Applications",
     "title": "The brand in its place",
-    "lead": "Where the logo lives and how each piece is downloaded. The symbol PNG is sized by height and the lockup PNG by width. It's not obvious, which is why it's stated here.",
+    "lead": "Where the logo lives: inside the site, where every piece can be downloaded, and outside it, where it is only placed. The symbol PNG is sized by height and the lockup PNG by width. It's not obvious, which is why it's stated here.",
+    "dentroTitle": "On the site",
+    "dentroLead": "The two surfaces this domain serves itself. Here the piece can be downloaded.",
     "favicon": {
       "title": "Favicon",
       "desc": "A dedicated asset, not a rescale. At 16px the stroke rises to 10 units for optical compensation. Flat, centered.",
@@ -294,7 +296,27 @@
       "desc": "The real card served to social: split logo, wordmark, title and kicker over the brand background. Fixed in light and dark, each page generates its own. The lockup below is the piece that builds it.",
       "previewAlt": "Brand Open Graph image: split logo, wordmark and title over a dark background"
     },
-    "pngNote": "The PNG suffix names the ink, not the background. tintaOscura (dark ink) goes over light backgrounds; tintaClara (light ink) over dark ones. Available at 256 / 512 / 1024 px."
+    "pngNote": "The PNG suffix names the ink, not the background. tintaOscura (dark ink) goes over light backgrounds; tintaClara (light ink) over dark ones. Available at 256 / 512 / 1024 px.",
+    "fueraTitle": "Off the site",
+    "fueraLead": "Three pieces that don't live on this domain and carry the same brand. They are the proof a system can only give away from its own page, and that is why there is nothing to download here: none of them is placed here. All three are versioned with the repository, which is what stops two versions of the truth from existing.",
+    "fueraWhere": "Where it lives",
+    "fueraItems": [
+      {
+        "title": "Email signature",
+        "desc": "The split symbol at 75px, the name in bold and the two channels, split by a vertical rule. It is built as a table with inline styles, the only thing that survives Gmail and Outlook, and the images point at absolute URLs on this domain because Gmail strips data URIs.",
+        "where": "Gmail and Outlook, pasted into their signature settings"
+      },
+      {
+        "title": "LinkedIn banner",
+        "desc": "1584 × 396 over the site's dark background, with the Hero headline and the domain. The bottom-left corner is left empty on purpose: that is where LinkedIn lays the profile photo, so the banner doesn't carry one.",
+        "where": "linkedin.com/in/franciscolopez1975"
+      },
+      {
+        "title": "Repository cover",
+        "desc": "The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.",
+        "where": "github.com/franciscoylopez"
+      }
+    ]
   },
   "uso": {
     "indexLabel": "Correct and incorrect use",

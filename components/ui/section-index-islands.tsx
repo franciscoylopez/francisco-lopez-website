@@ -3,7 +3,7 @@
 // @pieza primitiva · design-system/12-articulo.tsx · El riel fijo que sigue la sección activa de una página con paradas.
 
 import { cva } from "class-variance-authority";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -97,6 +97,86 @@ export function useActiveSection(items: RailItem[]): string | null {
 }
 
 /**
+ * ¿QUÉ BORDE DEL RIEL ESCONDE PARADAS? (P63, 2026-08-29.)
+ *
+ * A 1280×618 —el portátil de 15" con escalado de Windows que D50 obliga a
+ * mirar— un riel de doce paradas mide 598px de contenido contra 514 de hueco:
+ * `618 − 80 (top-[5rem]) − 24 (bottom-6)`, y `12 × 44 + 11 × 6,4` por el otro
+ * lado. La aritmética cuadra exacta y **nada estaba roto**: el scroll interno
+ * recorta, el teclado llega porque el navegador auto-desplaza el contenedor al
+ * enfocar, y `my-auto` centra mientras cabe. Lo que faltaba era la AFORDANCIA:
+ * `[scrollbar-width:none]` oculta la barra a propósito, así que quien usa el
+ * ratón no tenía ninguna señal de que ahí abajo había más.
+ *
+ * SE DEVUELVE COMO DESVANECIDO Y NO COMO BARRA. La barra viviría en el borde
+ * derecho del `nav`, que mide `w-64` por lo del hover, o sea a 256px del riel y
+ * flotando sobre la columna de texto: señalaría en el sitio equivocado. El
+ * desvanecido señala donde está el corte.
+ *
+ * Y SE MIDE POR SEPARADO CADA BORDE, que es lo que impide que la señal mienta.
+ * Un desvanecido fijo arriba y abajo teñiría el primer y el último círculo aun
+ * cuando no hay nada escondido: sería decoración con forma de aviso. Aquí el de
+ * arriba solo existe si `scrollTop > 0` y el de abajo solo si queda contenido,
+ * así que cuando el riel cabe entero —Accesibilidad con 8 paradas, Brand Kit con
+ * 6— no se pinta ninguno.
+ *
+ * NO TOCA NINGÚN PAR DE CONTRASTE. La fila de una parada mide 44px y su píldora
+ * 24, así que sobran 10px por arriba y 10 por abajo; con el degradado en 14px lo
+ * único que llega a atenuarse es una píldora que YA está cortada por el borde,
+ * que es exactamente la que hay que anunciar. Una parada entera dentro del hueco
+ * se pinta intacta.
+ */
+function useBordesOcultos(deps: unknown) {
+  const ref = useRef<HTMLElement>(null);
+  const [bordes, setBordes] = useState({ arriba: false, abajo: false });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const medir = () => {
+      // El margen de 1px absorbe el redondeo subpíxel del zoom del navegador:
+      // sin él, un `scrollHeight` de 514,4 contra un `clientHeight` de 514
+      // encendería el aviso en una lista que cabe entera.
+      const arriba = el.scrollTop > 1;
+      const abajo = el.scrollTop + el.clientHeight < el.scrollHeight - 1;
+      setBordes((prev) =>
+        prev.arriba === arriba && prev.abajo === abajo
+          ? prev
+          : { arriba, abajo },
+      );
+    };
+    medir();
+    el.addEventListener("scroll", medir, { passive: true });
+    // El alto del hueco depende del viewport, y el del contenido de cuántas
+    // paradas haya: las dos cosas cambian sin que haya scroll de por medio.
+    const ro = new ResizeObserver(medir);
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", medir);
+      ro.disconnect();
+    };
+  }, [deps]);
+
+  return { ref, ...bordes };
+}
+
+/**
+ * Las cuatro máscaras, escritas ENTERAS y no compuestas por interpolación.
+ * Tailwind escanea el código como texto plano: una clase construida con una
+ * plantilla no se genera, y el elemento se queda sin regla **sin error de
+ * compilación** (`BRAND.md` §Cómo medir, punto 5).
+ */
+const MASCARA = {
+  ninguno: "",
+  arriba:
+    "[mask-image:linear-gradient(to_bottom,transparent_0,black_14px,black_100%)]",
+  abajo:
+    "[mask-image:linear-gradient(to_bottom,black_0,black_calc(100%-14px),transparent_100%)]",
+  ambos:
+    "[mask-image:linear-gradient(to_bottom,transparent_0,black_14px,black_calc(100%-14px),transparent_100%)]",
+} as const;
+
+/**
  * LA PÍLDORA DEL RIEL, que era la cuarta excepción viva de `BRAND.md` §Ningún
  * control se escribe a mano — «no compone `chromeLinkVariants`; sale a
  * `chrome.tsx`».
@@ -184,6 +264,14 @@ export function SectionRail({
   ariaLabel: string;
 }) {
   const active = useActiveSection(items);
+  // La dependencia es un NÚMERO y no `items`, y no es un atajo: el riel no se
+  // pinta mientras `active` es `null`, así que la primera vez que el efecto
+  // corre el `nav` todavía no existe y no hay nada que medir. Con el número de
+  // paradas —0 mientras no hay riel— el efecto vuelve a correr justo cuando el
+  // elemento entra en el DOM, y no en cada render, que es lo que haría un array.
+  const { ref, arriba, abajo } = useBordesOcultos(
+    active === null ? 0 : items.length,
+  );
 
   if (active === null) return null;
 
@@ -234,8 +322,18 @@ export function SectionRail({
         clics de una columna entera de texto. */
   return (
     <nav
+      ref={ref}
       aria-label={ariaLabel}
-      className="pointer-events-none fixed top-[5rem] bottom-6 left-2 z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex 2xl:left-[clamp(0.75rem,2vw,1.75rem)] [&::-webkit-scrollbar]:hidden"
+      className={cn(
+        "pointer-events-none fixed top-[5rem] bottom-6 left-2 z-30 hidden w-64 [scrollbar-width:none] flex-col overflow-y-auto xl:flex 2xl:left-[clamp(0.75rem,2vw,1.75rem)] [&::-webkit-scrollbar]:hidden",
+        arriba && abajo
+          ? MASCARA.ambos
+          : arriba
+            ? MASCARA.arriba
+            : abajo
+              ? MASCARA.abajo
+              : MASCARA.ninguno,
+      )}
     >
       {/* `mx-0 my-auto`, no `m-0 my-auto`: la abreviada y la de eje compiten por
           la misma propiedad y quién gana lo decide el orden de la hoja, no el

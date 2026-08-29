@@ -100,8 +100,85 @@ export function Composicion({
           </p>
         </SectionHeader>
 
+        {/* EL ORDEN DE ESTA SECCIÓN ES EL DE UNA PÁGINA, DE ARRIBA ABAJO (P62,
+            2026-08-29). Las siete piezas eran correctas y la SECUENCIA no: el
+            bloque abría por la tabla, el cierre de página era el tercer
+            elemento y el índice caía a mitad de sección. Un bloque que publica
+            las piezas de composición de página las presentaba en un orden que
+            ninguna página tiene.
+
+            Ahora se recorren como se recorre una página: el índice, la banda que
+            abre un bloque, las tres cajas del cuerpo, y los dos cierres. Es un
+            orden que el lector reconoce sin que nadie se lo explique, y por eso
+            no lleva rótulo que lo anuncie.
+
+            EL PAR DE NAVEGACIÓN SE PARTE, y el motivo es ese mismo orden: el
+            índice y el cierre de sección son hermanos de familia pero no de
+            posición —uno va debajo del hero y el otro al pie de cada parada—,
+            así que publicarlos juntos era lo que metía el índice en mitad de la
+            sección. Al partirlos, `SectionCloser` queda pegado a `PageCloser`,
+            que es su hermana de peldaño: la nota que lo decía sigue siendo
+            cierta, y ahora además se ve. */}
+
+        {/* ---------- el índice ---------- */}
+        {/* AQUÍ, Y NO EN §12 «Artículo largo» (P70.395). D121 sacó estas piezas
+            de la capa de artículo en cuanto el índice entró también en Design
+            System, Brand Kit y Accesibilidad, pero su línea @pieza seguía
+            declarando la sección del artículo: la página decía que eran piezas
+            de un formato cuando ya sirven a cuatro. §12 conserva sus
+            especímenes, que ahora se leen como USO del artículo y no como la
+            publicación. */}
+        <GroupHead title={t.navIndexTitle} lead={t.navIndexLead} first />
+        <SpecimenCard
+          kicker={t.navIndexKicker}
+          cls="SectionIndex"
+          rule={t.navIndexRule}
+          note={t.navIndexNote}
+          wide
+        >
+          {/* Tres paradas, no las doce: el índice completo ya está unas cuantas
+              secciones más arriba y repetirlo entero aquí sería la misma
+              rejilla dos veces en la misma página. */}
+          <SectionIndex
+            kicker={t.navIndexDemoKicker}
+            ariaLabel={t.navIndexDemoAria}
+            items={paradas.slice(0, 3)}
+            intro={
+              // La nota va en el espécimen porque va en las cuatro páginas que
+              // usan la pieza: sin ella la demo se parecería menos al índice
+              // real que hay unas cuantas secciones más arriba. La cifra es la
+              // de ESTA demo —tres paradas—, no la de la página.
+              <IndexNote
+                note={t.navIndexDemoNote}
+                figures={[{ value: "3", suffix: t.navIndexDemoSuffix }]}
+              />
+            }
+          />
+        </SpecimenCard>
+
+        {/* ---------- la apertura de bloque ---------- */}
+        {/* VA EN ESTA SECCIÓN Y NO EN §01 «Rejilla» (P70.47): no es un ritmo de
+            espaciado, es una CAJA a nivel de página, hermana de PageCloser y de
+            las del cuerpo. Y el espécimen no es una recreación: es literalmente
+            la banda que abre el bloque «Piezas» de ESTA página, con su copy y
+            sus paradas. Si el bloque cambia, la demo cambia con él. */}
+        <GroupHead title={t.blockTitle} lead={t.blockLead} />
+        <SpecimenCard
+          kicker={t.blockKicker}
+          cls="BlockOpener"
+          rule={t.blockRule}
+          note={t.blockNote}
+          wide
+        >
+          <BlockOpener
+            title={bloqueDemo.title}
+            lead={bloqueDemo.lead}
+            items={bloqueDemo.items}
+          />
+        </SpecimenCard>
+
         {/* ---------- la tabla ---------- */}
-        <GroupHead title={t.dataTitle} lead={t.dataLead} first />
+        <GroupHead title={t.dataTitle} lead={t.dataLead} />
         {/* La demo es una tabla de verdad y con la pieza de verdad: si la capa
             cambia, este espécimen cambia con ella y no puede mentir. */}
         <DataTable
@@ -160,86 +237,11 @@ export function Composicion({
           </SpecimenCard>
         </div>
 
-        {/* ---------- el cierre de página ---------- */}
-        <GroupHead title={t.closerTitle} lead={t.closerLead} />
-        <SpecimenCard
-          kicker={t.closerKicker}
-          cls="PageCloser"
-          rule={t.closerRule}
-          note={t.closerNote}
-          wide
-        >
-          <PageCloser
-            eyebrow={t.demoCloserEyebrow}
-            items={demoItems}
-            labelId="ds-closer-demo-label"
-          />
-        </SpecimenCard>
-
-        {/* ---------- la navegación por paradas ---------- */}
-        {/* AQUÍ, Y NO EN §12 «Artículo largo» (P70.395). D121 sacó estas tres de
-            la capa de artículo en cuanto el índice entró también en Design
-            System, Brand Kit y Accesibilidad, pero su línea @pieza seguía
-            declarando la sección del artículo: la página decía que eran piezas
-            de un formato cuando ya sirven a cuatro. Su hermana de peldaño es
-            PageCloser, que se publica justo arriba, y por eso van detrás de él.
-            §12 conserva sus especímenes, que ahora se leen como USO del
-            artículo y no como la publicación. */}
-        <GroupHead title={t.navTitle} lead={t.navLead} />
-        <SpecimenCard
-          kicker={t.navIndexKicker}
-          cls="SectionIndex"
-          rule={t.navIndexRule}
-          note={t.navIndexNote}
-          wide
-        >
-          {/* Tres paradas, no las doce: el índice completo ya está tres
-              secciones más arriba y repetirlo entero aquí sería la misma
-              rejilla dos veces en la misma página. */}
-          <SectionIndex
-            kicker={t.navIndexDemoKicker}
-            ariaLabel={t.navIndexDemoAria}
-            items={paradas.slice(0, 3)}
-            intro={
-              // La nota va en el espécimen porque va en las cuatro páginas que
-              // usan la pieza: sin ella la demo se parecería menos al índice
-              // real que hay tres secciones más arriba. La cifra es la de ESTA
-              // demo —tres paradas—, no la de la página.
-              <IndexNote
-                note={t.navIndexDemoNote}
-                figures={[{ value: "3", suffix: t.navIndexDemoSuffix }]}
-              />
-            }
-          />
-        </SpecimenCard>
-        <SpecimenCard
-          kicker={t.navCloserKicker}
-          cls="SectionCloser"
-          rule={t.navCloserRule}
-          note={t.navCloserNote}
-          wide
-        >
-          {/* «2 de 3», no «N de 12»: las doce secciones de esta página ya tienen
-              su cierre real, y dos <nav> con el mismo nombre accesible rompen
-              landmark-unique. El enlace del índice es REAL, como el del
-              espécimen de PageCloser de aquí arriba. */}
-          <SectionCloser
-            position={2}
-            total={3}
-            indexLabel={t.navCloserIndexLabel}
-            indexHref="#indice"
-            nextLabel={t.navCloserNextLabel}
-            nextHref={`#${paradas[0]?.id ?? "indice"}`}
-            ariaLabel={t.navCloserAria}
-            positionLabel={t.navCloserPositionLabel}
-          />
-        </SpecimenCard>
-
         {/* ---------- la casilla ---------- */}
-        {/* VA AQUÍ porque es la más pequeña de la familia que abre la sección:
-            una caja que no es control ni texto. Y se publica con sus DOS usos
-            vivos, no con uno, porque el defecto que la creó era justamente que
-            los dos se escribían por separado y podían discrepar (P83.5). */}
+        {/* CIERRA EL CUERPO porque es la más pequeña de la familia: una caja que
+            no es control ni texto. Y se publica con sus DOS usos vivos, no con
+            uno, porque el defecto que la creó era justamente que los dos se
+            escribían por separado y podían discrepar (P83.5). */}
         <GroupHead title={t.tileTitle} lead={t.tileLead} />
         <div className={PAIR}>
           <SpecimenCard
@@ -273,24 +275,44 @@ export function Composicion({
           </SpecimenCard>
         </div>
 
-        {/* ---------- la apertura de bloque ---------- */}
-        {/* VA AQUÍ Y NO EN §01 «Rejilla» (P70.47): no es un ritmo de espaciado,
-            es una CAJA a nivel de página, hermana de PageCloser y de las dos de
-            arriba. Y el espécimen no es una recreación: es literalmente la banda
-            que abre el bloque «Piezas» de ESTA página, con su copy y sus cuatro
-            paradas. Si el bloque cambia, la demo cambia con él. */}
-        <GroupHead title={t.blockTitle} lead={t.blockLead} />
+        {/* ---------- el cierre de sección ---------- */}
+        <GroupHead title={t.navCloserTitle} lead={t.navCloserLead} />
         <SpecimenCard
-          kicker={t.blockKicker}
-          cls="BlockOpener"
-          rule={t.blockRule}
-          note={t.blockNote}
+          kicker={t.navCloserKicker}
+          cls="SectionCloser"
+          rule={t.navCloserRule}
+          note={t.navCloserNote}
           wide
         >
-          <BlockOpener
-            title={bloqueDemo.title}
-            lead={bloqueDemo.lead}
-            items={bloqueDemo.items}
+          {/* «2 de 3», no «N de 12»: las secciones de esta página ya tienen su
+              cierre real, y dos <nav> con el mismo nombre accesible rompen
+              landmark-unique. El enlace del índice es REAL, como el del
+              espécimen de PageCloser de aquí abajo. */}
+          <SectionCloser
+            position={2}
+            total={3}
+            indexLabel={t.navCloserIndexLabel}
+            indexHref="#indice"
+            nextLabel={t.navCloserNextLabel}
+            nextHref={`#${paradas[0]?.id ?? "indice"}`}
+            ariaLabel={t.navCloserAria}
+            positionLabel={t.navCloserPositionLabel}
+          />
+        </SpecimenCard>
+
+        {/* ---------- el cierre de página ---------- */}
+        <GroupHead title={t.closerTitle} lead={t.closerLead} />
+        <SpecimenCard
+          kicker={t.closerKicker}
+          cls="PageCloser"
+          rule={t.closerRule}
+          note={t.closerNote}
+          wide
+        >
+          <PageCloser
+            eyebrow={t.demoCloserEyebrow}
+            items={demoItems}
+            labelId="ds-closer-demo-label"
           />
         </SpecimenCard>
 

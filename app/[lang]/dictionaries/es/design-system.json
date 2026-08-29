@@ -7,7 +7,7 @@
   "hero": {
     "kicker": "Fundamentos de diseño",
     "title": "Design System",
-    "lead": "Un sistema de diseño no está para que todo se parezca: está para que una decisión se tome una sola vez. Cambiar aquí el hover de un botón o su objetivo táctil llega a las catorce páginas a la vez.",
+    "lead": "Un sistema de diseño no está para que todo se parezca: está para que una decisión se tome una sola vez. Cambiar aquí el hover de un botón o su objetivo táctil llega a todas las páginas a la vez.",
     "statContainer": "Ancho máximo del contenedor",
     "statBreakpoints": "Breakpoints",
     "statMeasure": "Medida de lectura (~91 car.)",
@@ -26,7 +26,7 @@
   "bloques": {
     "fundamentos": {
       "title": "Fundamentos",
-      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a las catorce páginas."
+      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a todas las páginas a la vez."
     },
     "piezas": {
       "title": "Piezas",
@@ -62,7 +62,7 @@
       }
     ],
     "tokensTitle": "Lo que este sistema le añade a Tailwind",
-    "tokensLead": "Los tokens que la escala de Tailwind no trae. Viven en el :root del sitio, así que cambiar uno lo cambia en las catorce páginas.",
+    "tokensLead": "Los tokens que la escala de Tailwind no trae. Viven en el :root del sitio, así que cambiar uno lo cambia en todas las páginas a la vez.",
     "copyLabel": ":root { }",
     "copyHint": "Copia de un vistazo",
     "copyAria": "Copiar el bloque de tokens de layout",
@@ -667,8 +667,10 @@
       "Cambiarlo mueve el ritmo de todas las páginas a la vez, que es justo para lo que existe."
     ],
     "demoMonoFoot": "Se publica entero en la sección de tokens de layout, con su valor y su motivo.",
-    "navTitle": "La navegación de una página con paradas",
-    "navLead": "Dos piezas que convierten una página larga en una recorrible, y esta misma las usa: el índice va justo debajo del hero y el cierre al pie de cada una de sus doce secciones. La tercera de la familia, el riel fijo, no vive aquí: se publica en la sección del artículo largo, que es la única página que lo lleva.",
+    "navIndexTitle": "El índice de una página con paradas",
+    "navIndexLead": "La rejilla que abre el recorrido, justo debajo del hero, y esta misma la lleva. La familia tiene tres piezas: esta, el cierre de sección que va más abajo, y el riel fijo, que no vive aquí porque se publica en la sección del artículo largo, la única página que lo usa.",
+    "navCloserTitle": "El cierre de una sección",
+    "navCloserLead": "El pie de cada parada, y por eso va aquí y no arriba: dice en cuál está el lector, cómo vuelve al índice y qué viene después. Es la hermana de peldaño del cierre de página, que se publica justo debajo.",
     "navIndexKicker": "El mapa",
     "navIndexRule": "Rejilla de paradas pintada en servidor: se navega sin JavaScript.",
     "navIndexNote": "La tercera línea de cada celda es libre y opcional. El artículo pone ahí su tiempo por sección; en una página de especímenes no hay prosa que cronometrar, así que va vacía.",
@@ -684,7 +686,7 @@
     "navCloserPositionLabel": "2 de 3",
     "navCloserAria": "Entre secciones (espécimen)",
     "closerTitle": "El cierre de página",
-    "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en las catorce páginas.",
+    "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en todas las páginas.",
     "closerKicker": "Dos destinos",
     "closerRule": "Sube entero a la capa, y no solo la tarjeta: el ritmo vertical, el filete de arriba y el hueco del rótulo son lo que tiene que no divergir.",
     "closerNote": "La flecha empuja hacia donde apunta, y el empujón se apaga con movimiento reducido. Un destino que aún no existe se dibuja punteado y apagado.",

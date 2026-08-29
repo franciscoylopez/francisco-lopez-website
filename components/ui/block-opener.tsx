@@ -15,7 +15,7 @@ import { WRAP } from "@/components/ui/layout";
  *
  * Y hay un segundo problema que esta pieza resuelve de paso: las doce secciones
  * del Design System dejaron de estar en orden cronológico en P70.34 y pasaron a
- * una jerarquía —`fundamentos → piezas → composición → excepción`—, pero esa
+ * una jerarquía —`espacio → materia → piezas → composición → excepción`—, pero esa
  * decisión **solo existía en un comentario**. Doce secciones seguidas, todas
  * separadas por el mismo filete, no dicen dónde acaba una familia y empieza otra.
  *
@@ -40,11 +40,42 @@ import { WRAP } from "@/components/ui/layout";
  *   sección.
  *
  * CUÁNTAS CABEN, que es lo que decide si esto escala. Lo que fija la densidad es
- * el número de BLOQUES, no el de secciones: con el reparto actual sale una banda
- * cada 8,9 pantallas en el Design System, 7,4 en el Brand Kit y 6,8 en
- * Accesibilidad. Partir el Brand Kit en tres bloques daría una cada 4,6 y la
- * página pasaría a leerse a golpes. **Si una página nueva pide más de un bloque
- * cada ~6 pantallas, lo que sobra son bloques, no banda.**
+ * el número de BLOQUES, no el de secciones. Medido sobre las páginas servidas a
+ * 1440×900, con los reveals encendidos antes de medir (2026-08-29, P62.5):
+ *
+ *   | Página        | Tramos entre bandas             | Peor | Total |
+ *   |---------------|---------------------------------|------|-------|
+ *   | Design System | 1,9 · 6,9 · 6,8 · 7,5 · 7,8 · 4,4 | 7,8 | 37,7 |
+ *   | Brand Kit     | 1,7 · 7,8 · 5,1                 | 7,8  | 15,4  |
+ *   | Accesibilidad | 1,8 · 5,8 · 4,9                 | 5,8  | 13,4  |
+ *
+ * SE PUBLICA EL PEOR TRAMO Y NO LA MEDIA, y esa es la corrección de fondo. Hasta
+ * hoy aquí ponía «una banda cada 8,9 pantallas» en el Design System, que era una
+ * MEDIA y estaba escondiendo un tramo de **14,1 pantallas seguidas** entre
+ * «Fundamentos» y «Piezas»: más largo que la página entera del Brand Kit. Una
+ * media no puede detectar el defecto que la regla existe para evitar, porque
+ * repartir mal es exactamente lo que una media promedia. (Las otras dos cifras
+ * publicadas tampoco cuadraban con la medición, 7,4 y 6,8 contra lo de arriba.)
+ *
+ * Y LA REGLA TENÍA UNA SOLA MITAD. El techo estaba escrito y el suelo no, así que
+ * vigilaba el exceso y dejaba pasar justo el caso que D125 nació a corregir
+ * —«60,3 pantallas sin un solo cambio de fondo»—. Las dos:
+ *
+ *   · **Techo.** Si una página nueva pide más de un bloque cada ~6 pantallas, lo
+ *     que sobra son bloques, no banda. Partir el Brand Kit en tres daría una cada
+ *     4,6 y la página pasaría a leerse a golpes.
+ *   · **Suelo.** Un tramo por encima de ~10 pantallas sin cambio de fondo pide
+ *     romperse. Y el corte lo decide la MEDICIÓN por sección, no la familia: en el
+ *     Design System el reparto por familia dejaba el tramo malo en 10,9, porque
+ *     §01 mide ella sola 5,88 pantallas.
+ *
+ * EL SUELO TIENE DOS PALANCAS Y EL TECHO SOLO UNA, y es lo que impide que el
+ * suelo se coma al techo. Romper un tramo con otra BANDA cuesta un bloque, así
+ * que un suelo servido solo con bandas empujaría contra el techo en cuanto una
+ * página creciera: es la contradicción con la que nació esta regla a medias.
+ * `tinteDesde` la deshace — cambia el fondo sin gastar un bloque—, y cuál toca lo
+ * decide el CONTENIDO: banda si de verdad empieza otra familia, tinte si sigue la
+ * misma. En esta página el segundo tramo de «Fundamentos» es lo segundo.
  *
  * ESTÁ EN `ui/` Y NO EN `site/` porque no sabe nada de este sitio: recibe un
  * título, una entradilla y una lista de paradas, y no conoce ni copy, ni rutas,
@@ -200,6 +231,38 @@ export function BlockOpener({
  *
  * Sigue sin saber nada de este sitio (frontera de D36): recibe listas, copy ya
  * resuelto y nodos ya montados.
+ *
+ * ───────────────────────────────────────────────────────────────────────────────
+ * UN BLOQUE LARGO PUEDE CAMBIAR DE FONDO SIN PARTIRSE (`tinteDesde`, P62.5).
+ *
+ * La banda dice «empieza otra familia». Cuando lo que hace falta es que la página
+ * RESPIRE dentro de la misma familia, una segunda banda dice algo que no es
+ * cierto: anuncia un bloque nuevo donde solo hay más del mismo. `tinteDesde` sirve
+ * ese caso con lo que a un bloque le sobra y a una banda le falta — un cambio de
+ * fondo sin titular: de esa parada en adelante las secciones se sirven sobre
+ * `--muted` hasta la siguiente banda.
+ *
+ * SON DOS PALANCAS PARA DOS PREGUNTAS DISTINTAS, y por eso no se sustituyen:
+ * ¿empieza otra familia? banda. ¿sigue la misma y se hace larga? tinte.
+ *
+ * Y ESTO ES LA DIRECCIÓN QUE D125 DESCARTÓ, revivida porque sus dos peros
+ * caducaron. El filete de una tarjeta sobre banda caía de 1,29 a 1,10, y D131 lo
+ * cerró recalculando `--border` por superficie. Y «las galerías dan por hecho el
+ * fondo de página» resultó ser falso al medirlo: una tarjeta se separa MEJOR
+ * sobre muted que sobre el fondo en tema claro (ΔL* 6,25 contra 2,35; en oscuro
+ * 4,70 contra 4,34). Lo que sigue en pie de D125 es lo otro, y no lo contradice
+ * esto: la BANDA se inserta, no se tiñe una sección para fabricarla.
+ *
+ * LA CLASE ES `bg-muted` Y NO UN `data-surface`, a propósito: la utilidad ya
+ * dispara la maquinaria de superficie de `globals.css` —atenuado (D39), filete
+ * (D131) y contorno de control (D97)—, y `data-surface` es para lo que se pinta su
+ * propia superficie con un `color-mix`. Aquí no hay nada que declarar a mano.
+ *
+ * Y EL SALTO ES CALLADO Y ASIMÉTRICO, que es lo que hay que saber al usarlo:
+ * ΔL* 3,89 en claro y 9,04 en oscuro contra el fondo de página, frente a los 81,1
+ * y 85,45 de la banda. En claro lo que hace legible el borde no es el color, es
+ * que la sección de debajo ya trae su filete superior (`SECTION`).
+ * ───────────────────────────────────────────────────────────────────────────────
  */
 export function SectionBlocks<K extends string, B extends string>({
   bloques,
@@ -207,27 +270,60 @@ export function SectionBlocks<K extends string, B extends string>({
   paradas,
   secciones,
 }: {
-  bloques: readonly { id: B; claves: readonly K[] }[];
+  bloques: readonly {
+    id: B;
+    claves: readonly K[];
+    /**
+     * Desde qué parada del bloque las secciones cambian a `--muted`. Opcional: sin
+     * ella el bloque entero va sobre el fondo de página, que es el caso normal.
+     */
+    tinteDesde?: K;
+  }[];
   copy: Record<B, { title: string; lead: string }>;
   paradas: readonly { clave: K; ordinal: string; label: string }[];
   secciones: Record<K, ReactNode>;
 }) {
   return (
     <>
-      {bloques.map((bloque) => (
-        <Fragment key={bloque.id}>
-          <BlockOpener
-            title={copy[bloque.id].title}
-            lead={copy[bloque.id].lead}
-            items={paradas.filter((p) =>
-              (bloque.claves as readonly string[]).includes(p.clave),
+      {bloques.map((bloque) => {
+        // SE REVIENTA EL PRERENDER SI LA PARADA NO ESTÁ EN EL BLOQUE, en vez de
+        // no teñir nada. Un tinte que desaparece en silencio al renombrar una
+        // clave es indistinguible de un tinte que nadie pidió, y este repo lleva
+        // cinco comprobadores caídos así.
+        const corte = bloque.tinteDesde
+          ? bloque.claves.indexOf(bloque.tinteDesde)
+          : -1;
+        if (bloque.tinteDesde && corte < 0) {
+          throw new Error(
+            `SectionBlocks: el bloque «${bloque.id}» tiñe desde «${bloque.tinteDesde}», que no está entre sus paradas (${bloque.claves.join(", ")}).`,
+          );
+        }
+        const sinTinte =
+          corte < 0 ? bloque.claves : bloque.claves.slice(0, corte);
+        const conTinte = corte < 0 ? [] : bloque.claves.slice(corte);
+
+        return (
+          <Fragment key={bloque.id}>
+            <BlockOpener
+              title={copy[bloque.id].title}
+              lead={copy[bloque.id].lead}
+              items={paradas.filter((p) =>
+                (bloque.claves as readonly string[]).includes(p.clave),
+              )}
+            />
+            {sinTinte.map((clave) => (
+              <Fragment key={clave}>{secciones[clave]}</Fragment>
+            ))}
+            {conTinte.length > 0 && (
+              <div className="bg-muted">
+                {conTinte.map((clave) => (
+                  <Fragment key={clave}>{secciones[clave]}</Fragment>
+                ))}
+              </div>
             )}
-          />
-          {bloque.claves.map((clave) => (
-            <Fragment key={clave}>{secciones[clave]}</Fragment>
-          ))}
-        </Fragment>
-      ))}
+          </Fragment>
+        );
+      })}
     </>
   );
 }

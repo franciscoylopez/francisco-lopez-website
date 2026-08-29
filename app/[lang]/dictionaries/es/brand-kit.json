@@ -283,7 +283,9 @@
   "aplicaciones": {
     "indexLabel": "Aplicaciones",
     "title": "La marca en su sitio",
-    "lead": "Dónde vive el logo y cómo se descarga cada pieza. El PNG del símbolo se dimensiona por altura y el del lockup por ancho. No es evidente, por eso se dice aquí.",
+    "lead": "Dónde vive el logo: dentro del sitio, donde cada pieza se descarga, y fuera de él, donde solo se coloca. El PNG del símbolo se dimensiona por altura y el del lockup por ancho. No es evidente, por eso se dice aquí.",
+    "dentroTitle": "En el sitio",
+    "dentroLead": "Las dos superficies que sirve este mismo dominio. Aquí la pieza se baja.",
     "favicon": {
       "title": "Favicon",
       "desc": "Asset dedicado, no un reescalado. A 16px el trazo sube a 10 unidades para compensar ópticamente. Plano, centrado.",
@@ -294,7 +296,27 @@
       "desc": "La tarjeta real que se sirve a las redes: logo split, wordmark, título y kicker sobre el fondo de marca. Fija en claro y oscuro, la genera cada página. El lockup de abajo es la pieza con la que se construye.",
       "previewAlt": "Imagen Open Graph de marca: logo split, wordmark y título sobre fondo oscuro"
     },
-    "pngNote": "El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos claros; tintaClara sobre fondos oscuros. Disponibles en 256 / 512 / 1024 px."
+    "pngNote": "El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos claros; tintaClara sobre fondos oscuros. Disponibles en 256 / 512 / 1024 px.",
+    "fueraTitle": "Fuera del sitio",
+    "fueraLead": "Tres piezas que no viven en este dominio y llevan la misma marca. Son la prueba que un sistema solo puede dar fuera de su propia página, y por eso no hay nada que bajar aquí: ninguna se coloca aquí. Las tres se versionan con el repositorio, que es lo que impide que existan dos verdades.",
+    "fueraWhere": "Dónde vive",
+    "fueraItems": [
+      {
+        "title": "Firma de email",
+        "desc": "Símbolo split a 75px, el nombre en negrita y los dos canales, separados por un filete vertical. Va en tabla y con los estilos en línea, que es lo único que sobrevive a Gmail y a Outlook, y las imágenes por URL absoluta a este dominio porque los data-URI los capa Gmail.",
+        "where": "Gmail y Outlook, pegada en sus ajustes de firma"
+      },
+      {
+        "title": "Banner de LinkedIn",
+        "desc": "1584 × 396 sobre el fondo oscuro del sitio, con el titular del Hero y el dominio. La esquina inferior izquierda va vacía a propósito: ahí LinkedIn superpone la foto de perfil, así que el banner no la lleva.",
+        "where": "linkedin.com/in/franciscolopez1975"
+      },
+      {
+        "title": "Portada del repositorio",
+        "desc": "La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.",
+        "where": "github.com/franciscoylopez"
+      }
+    ]
   },
   "uso": {
     "indexLabel": "Uso correcto e incorrecto",

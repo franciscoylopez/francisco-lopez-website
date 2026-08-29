@@ -60,7 +60,7 @@ const ANCLA_INDICE = "indice";
 
 /**
  * LOS CUATRO BLOQUES, y esta lista es lo que hace VISIBLE una jerarquía que hasta
- * hoy solo existía en el comentario de abajo (P70.47).
+ * P70.47 solo existía en el comentario de abajo.
  *
  * El orden de las doce dejó de ser cronológico en P70.34 y pasó a ser
  * `fundamentos → piezas → composición → excepción`. Estaba escrito, estaba bien
@@ -72,14 +72,44 @@ const ANCLA_INDICE = "indice";
  * no se escriben. Así reordenar la página no puede dejar una banda anunciando
  * secciones que ya no están debajo.
  *
- * SI HAY QUE AÑADIR UN QUINTO BLOQUE, la pregunta antes es la densidad: la banda
- * cae hoy cada 8,9 pantallas y por debajo de ~6 la página se lee a golpes. El
- * porqué medido, en `ui/block-opener.tsx`.
+ * ───────────────────────────────────────────────────────────────────────────────
+ * «FUNDAMENTOS» CAMBIA DE FONDO A MITAD, Y NO SE PARTE (P62.5, 2026-08-29).
+ *
+ * EL PROBLEMA. Sus cinco secciones dejaban **14,1 pantallas seguidas sin un solo
+ * cambio de fondo** hasta la banda de «Piezas»: más que la página entera del
+ * Brand Kit (15,4) y que Accesibilidad completa (13,4). El tramo más plano del
+ * sitio medía lo que una hermana entera, que es el síntoma que D125 nació a
+ * corregir.
+ *
+ * POR QUÉ NO UNA SEGUNDA BANDA, que fue mi primera versión y la descartó
+ * Francisco viéndola: la banda significa «empieza otra familia», y aquí no
+ * empieza ninguna. Una banda más habría comprado ritmo diciendo algo falso, y de
+ * paso habría gastado la moneda: cinco bandas en una página hacen que ninguna
+ * signifique gran cosa. El fondo cambia y la banda inicial conserva su valor.
+ *
+ * DÓNDE CAE EL CORTE LO DECIDIÓ LA MEDICIÓN, y la primera intuición falló. Por
+ * familia —las tres decisiones de medida contra las dos que no se miden en
+ * píxeles, o sea desde §04— el tramo malo se quedaba en **10,9**, porque el peso
+ * no está repartido: §01 «Rejilla» mide ella sola **5,88 pantallas** y §03
+ * «Tipografía» otras 3,99, contra 1,01 de §02 y 1,22 de §05. Cortando en §03
+ * salen **6,89 y 6,82**, la única de las cuatro particiones posibles que deja las
+ * dos mitades por debajo del techo y por encima del suelo.
+ *
+ * Y por eso el corte NO coincide con la frontera de familia: manda la aritmética,
+ * porque el tinte no anuncia nada — no tiene titular que pudiera mentir.
+ * ───────────────────────────────────────────────────────────────────────────────
+ *
+ * ANTES DE AÑADIR UN QUINTO BLOQUE, la pregunta es la densidad, y ahora tiene DOS
+ * mitades y DOS palancas: por arriba, más de un bloque cada ~6 pantallas se lee a
+ * golpes; por abajo, un tramo de más de ~10 sin cambio de fondo pide romperse
+ * —con banda si de verdad empieza otra familia, con `tinteDesde` si sigue la
+ * misma—. El porqué medido, en `ui/block-opener.tsx`.
  */
 const BLOQUES = [
   {
     id: "fundamentos",
     claves: ["rejilla", "ritmo", "tipografia", "claroscuro", "movimiento"],
+    tinteDesde: "tipografia",
   },
   { id: "piezas", claves: ["enlaces", "botones", "etiquetas", "formulario"] },
   { id: "composicion", claves: ["composicion", "accesibilidad"] },
