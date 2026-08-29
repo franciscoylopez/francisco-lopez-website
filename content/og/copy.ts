@@ -115,8 +115,8 @@ export const COPY: Record<OgCard, Record<Lang, TextoTarjeta>> = {
     en: { title: "Privacy and cookies", kicker: "Legal" },
   },
   contacto: {
-    es: { title: "Hablemos", kicker: "Contacto" },
-    en: { title: "Let's talk", kicker: "Contact" },
+    es: { title: "Hablemos", kicker: "Aquí estoy" },
+    en: { title: "Let's talk", kicker: "I'm here" },
   },
   "sobre-mi": {
     es: { title: "Sobre mí", kicker: "Quién hay detrás" },

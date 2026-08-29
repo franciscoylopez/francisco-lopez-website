@@ -53,7 +53,7 @@
       },
       {
         "label": "Norma europea",
-        "value": "Alineada con los criterios de EN 301 549, la norma armonizada de accesibilidad TIC que la Unión Europea referencia y que a su vez remite a WCAG."
+        "value": "Alineada con los criterios de EN 301 549, que remite a WCAG."
       }
     ],
     "note": "La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a [WCAG](https://www.w3.org/TR/WCAG22/). Es el criterio que se ha seguido."
@@ -121,7 +121,7 @@
     "note": "De estos {total} puntos, {heredados} no se comprueban página a página, y ese es justo el punto: el contraste, el anillo de foco, el área de pulsación y el respeto al movimiento reducido vienen ya dentro del botón, del enlace y del campo de formulario. Una sección nueva nace con ellos puestos y no puede negociarlos. La sección siguiente cuenta cómo."
   },
   "inheritance": {
-    "indexLabel": "Herencia",
+    "indexLabel": "Accesibilidad heredada",
     "heading": "La accesibilidad se hereda, no se vuelve a escribir",
     "figura": {
       "caption": "Los nueve puntos del checklist, cada uno asignado a la capa que lo pone y a quién lo verifica. Ocho los comprueba una máquina; uno, una persona."
@@ -130,19 +130,19 @@
     "items": [
       {
         "title": "Ningún control se escribe a mano",
-        "body": "Todo lo que se pulsa (botones, enlaces, chips, pestañas, el cambio de tema) sale de una capa de componentes común. El anillo de foco, los 44 píxeles de área de pulsación y el contraste de cada estado viven ahí dentro, así que cambiarlos es cambiarlos en todo el sitio a la vez. Cuando un control tiene que quedarse fuera de esa capa lleva una marca con su motivo y su fecha, y hay una comprobación que no deja pasar ninguno sin ella."
+        "body": "Todo lo que se pulsa (botones, enlaces, chips, pestañas, el cambio de tema) sale de una capa de componentes común. El anillo de foco, los 44 píxeles de área de pulsación y el contraste de cada estado viven ahí dentro: cambiarlos es cambiarlos en todo el sitio a la vez."
       },
       {
         "title": "El gris lo decide el fondo, no quien escribe",
-        "body": "Un texto atenuado sobre el fondo de la página y ese mismo texto dentro de una tarjeta no pueden ser del mismo gris: el segundo se leería peor. Aquí no se elige. Cada superficie recalcula su propio atenuado a partir del fondo que tiene debajo, incluidas las que cambian de color al pasar el ratón por encima. Ahí se escondían los casos que dos revisiones anteriores no vieron: no existen hasta que dos capas se superponen."
+        "body": "Un texto atenuado sobre el fondo de la página y ese mismo texto dentro de una tarjeta no pueden ser del mismo gris: el segundo se leería peor. Aquí no se elige. Cada superficie recalcula su atenuado desde el fondo que tiene debajo, también al pasar el ratón por encima."
       },
       {
         "title": "El marco lo pone la página, no quien la escribe",
-        "body": "El enlace de salto al contenido y su destino, el idioma del documento y los dos landmarks de navegación los pone el armazón que comparten las {paginas} páginas: una página nueva los trae puestos el día que se crea. La miga de pan y la estructura de títulos no, porque dependen de lo que cuente cada página, y por eso son justo las que una comprobación verifica sobre el HTML ya generado de las {paginas} en los dos idiomas."
+        "body": "El enlace de salto al contenido, el idioma del documento y los dos landmarks los pone el armazón que comparten las {paginas} páginas: una página nueva nace con ellos. La miga de pan y la jerarquía de títulos dependen de lo que cuente cada una, y se verifican sobre el HTML generado."
       },
       {
         "title": "Cuándo hay que volver a medir lo dice una máquina",
-        "body": "La medición completa de color es cara: hay que servir el sitio y recorrerlo con un navegador de verdad, así que no se repite en cada cambio, sino cuando aparece algo nuevo que medir. Una comprobación guarda la huella de los colores, las superficies y las animaciones que había en la última medición, y se pone en rojo nombrando lo que no estaba. La regla dejó de depender de que alguien la recordara."
+        "body": "Medir el color entero es caro: hay que servir el sitio y recorrerlo con un navegador de verdad, así que no se repite en cada cambio, sino cuando aparece algo nuevo que medir. Una comprobación guarda la huella de lo ya medido y se pone en rojo nombrando lo que no estaba."
       }
     ],
     "livestat": {
@@ -230,8 +230,8 @@
     "intro": "Lo que todavía no cumple, y qué falta para que cumpla.",
     "items": [
       {
-        "title": "Sin usuarios reales",
-        "body": "Todo lo que hay en esta página lo he medido yo. Nadie que use tecnología de asistencia a diario ha probado esta web, y esa es la comprobación que ninguna cifra sustituye. Si quieres serlo, la sección de abajo es exactamente para eso."
+        "title": "Testing de usuarios",
+        "body": "Todo lo que hay en esta página lo he medido yo. Nadie (que yo sepa) que use tecnología de asistencia a diario ha probado esta web hasta ahora, y esa es la comprobación que ninguna cifra sustituye. Si quieres ser tú la primera persona, la sección de abajo es exactamente para eso."
       },
       {
         "title": "Un lector y un navegador",
