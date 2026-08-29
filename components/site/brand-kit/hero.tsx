@@ -179,7 +179,7 @@ export function Hero({
       eyebrow={t.kicker}
       title={t.title}
       lead={t.lead}
-      leadClassName="max-w-[40ch] text-[clamp(1.0625rem,1.6vw,1.25rem)]"
+      leadMeasure="max-w-[40ch]"
       /* Fila de datos (P54.3). Las otras dos páginas que documentan el sistema
          —Design System y Accesibilidad— abrían con su resumen en cifras y esta
          no, siendo de la misma familia. Los VALORES salen de

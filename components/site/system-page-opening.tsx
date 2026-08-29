@@ -48,7 +48,7 @@ export function SystemPageOpening({
   eyebrow,
   title,
   lead,
-  leadClassName,
+  leadMeasure,
   stats,
   children,
 }: {
@@ -59,17 +59,18 @@ export function SystemPageOpening({
   title: string;
   lead: string;
   /**
-   * Medida y tamaño de la entradilla, que es lo que cada página ajusta a su
-   * copy: `max-w-[46ch] text-[clamp(…)]`. Va aquí y no dentro porque las tres
-   * traen entradillas de largo distinto y la medida es decisión de página.
+   * LA MEDIDA de la entradilla y nada más: `max-w-[46ch]`. Va en el punto de uso
+   * porque las tres traen entradillas de largo distinto y cuántos caracteres
+   * caben por línea es decisión de copy.
    *
-   * OJO: hoy Brand Kit trae además un tamaño distinto (1,0625→1,25rem contra
-   * 1,05→1,2rem de las otras dos). Eso es DRIFT, no decisión —no hay nada
-   * escrito que lo justifique—, y no se unifica aquí porque este refactor se
-   * declara transparente (`gate:html` con diff vacío, D42/D45) y cambiarlo
-   * movería píxeles. Se arregla en una tarea de copy, no en una de estructura.
+   * EL TAMAÑO NO, y por eso ya no cabe aquí. Estaba en el punto de uso y las
+   * tres habían divergido: Brand Kit servía `clamp(1,0625rem…1,25rem)` contra
+   * el `clamp(1,05rem…1,2rem)` de sus dos hermanas —y del de Contacto, que
+   * comparte pliegue sin compartir bloque—, sin nada escrito que lo
+   * justificara. Un valor que tienen que compartir tres páginas no se escribe
+   * tres veces: se sube a la capa (D34).
    */
-  leadClassName: string;
+  leadMeasure: string;
   stats: ReactNode;
   children: ReactNode;
 }) {
@@ -138,7 +139,7 @@ export function SystemPageOpening({
               >
                 <p
                   data-reveal
-                  className={`text-muted-foreground ${leadClassName} leading-[1.6]`}
+                  className={`text-muted-foreground ${leadMeasure} text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]`}
                 >
                   {lead}
                 </p>
