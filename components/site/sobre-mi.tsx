@@ -174,7 +174,21 @@ export function SobreMi({
               src="/img/francisco-sobre-mi-quieto.webp"
               alt={t.photoAlt}
               fill
-              fetchPriority="high"
+              // SIN `fetchPriority="high"` DESDE 2026-08-30, y no es un descuido:
+              // esta imagen está en `display:none` para quien NO pide menos
+              // movimiento, o sea para casi todo el mundo, y aun así el atributo
+              // le pedía prioridad alta al navegador. Medido: se bajaba con
+              // prioridad **High**, compitiendo con el póster, que sí es el LCP
+              // de ese caso (D65, addendum).
+              //
+              // `loading="eager"` SE QUEDA, que es la mitad que sí hace falta:
+              // sin él `next/image` la marca `lazy` y quien pide menos
+              // movimiento —para quien esta imagen SÍ es el LCP— se la
+              // encontraría diferida. Con `eager` y sin `fetchPriority`, Chrome
+              // hace lo correcto en los dos casos por su cuenta: la deja en baja
+              // mientras está oculta y la sube al descubrir que está en el
+              // viewport. Es el navegador quien sabe cuál de las dos ramas se
+              // está pintando; el JSX no.
               loading="eager"
               sizes="100vw"
               className="hidden object-cover object-[50%_18%] motion-reduce:block"

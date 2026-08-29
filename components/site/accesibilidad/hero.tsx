@@ -31,7 +31,7 @@ export function Hero({
       eyebrow={t.kicker}
       title={t.title}
       lead={t.lead}
-      leadClassName="max-w-[46ch] text-[clamp(1.05rem,1.6vw,1.2rem)]"
+      leadMeasure="max-w-[46ch]"
       stats={
         <>
           <Stat value="AA" label={t.statConformidad} />

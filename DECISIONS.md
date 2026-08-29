@@ -3990,11 +3990,32 @@ Chrome pide el `poster` de un `<video>` esté el elemento oculto o no, así que 
 bajan igual; lo que el `media` evita es **priorizar lo que no se pinta**. Está escrito también
 al lado del código, para que nadie le atribuya el ahorro.
 
-**Lo que queda vivo y no se toca aquí:** el fotograma quieto (`francisco-sobre-mi-quieto.webp`,
-7,2 KB servidos) va con `fetchPriority="high"` y `loading="eager"` **para todo el mundo**,
-aunque solo se pinta con motion reducido —`next/image` no admite `media`—, y compite por
-prioridad con el póster. Para quien sí tiene motion reducido esa imagen **es** su LCP, así que
-bajarla es cambiar esta decisión, no un ajuste: pide su propia medición.
+**Y EL FOTOGRAMA QUIETO DEJA DE PEDIR PRIORIDAD ALTA ESTANDO OCULTO** *(2026-08-30)*. Iba con
+`fetchPriority="high"` **para todo el mundo** aunque solo se pinta con motion reducido, así que
+casi todos los visitantes se bajaban 7,2 KB en `display:none` **con prioridad High**,
+compitiendo con el póster, que es el LCP de su rama. Se retira el atributo.
+
+`loading="eager"` **se queda**, y es la mitad que sí hace falta: sin él `next/image` lo marca
+`lazy` y quien pide menos movimiento —para quien esta imagen SÍ es el LCP— se lo encontraría
+diferido. `next/image` no admite `media`, así que quien tiene que distinguir las dos ramas es
+el navegador, que sabe cuál se está pintando; el JSX no.
+
+**Y no se cambia un incumplimiento por otro, que era el riesgo real de tocarlo.** Medido con
+Lighthouse sobre el build de producción, en las dos ramas —la de motion reducido forzada con
+`--force-prefers-reduced-motion`—:
+
+| | antes | después |
+|---|---|---|
+| Quieto, sin preferencia (oculto) | High | **Low** |
+| Póster, sin preferencia (LCP) | High | High |
+| `prioritize-lcp-image` con motion reducido | 1 | **1** |
+
+O sea que en la rama donde esa imagen SÍ es el LCP, Lighthouse sigue sin ver nada que ganar
+priorizándola: con el póster fuera de la competición, esa página no tiene con qué competir.
+
+**Lo que esa misma medición dejó a la vista y no tiene arreglo:** con motion reducido el póster
+se sigue bajando —13,8 KB, prioridad Medium— y **no se pinta nunca**. Es el `poster` del
+`<video>`, no el preload, y por eso el `media` de arriba no lo evita.
 
 ---
 
@@ -9449,8 +9470,14 @@ viejo matado y el puerto verificado libre antes de levantar el de la rama —que
 ya hizo mentir a este gate una vez—. Y `npm run pliegue` en verde después: las cuatro aperturas
 siguen midiendo 464px de grupo y 389px de `h1`.
 
-**Lo que se dejó escrito y no se tocó:** al juntar las tres entradillas se ve que Brand Kit trae
-un tamaño distinto (`clamp(1,0625rem…1,25rem)` contra `clamp(1,05rem…1,2rem)`) sin nada que lo
-justifique. Es drift, y **no se unifica en un refactor que se declara transparente**: movería
-píxeles y rompería lo único que este cambio promete. Queda anotado en el `leadClassName` del
-propio bloque.
+**LO QUE JUNTAR LAS TRES DEJÓ A LA VISTA, corregido el 2026-08-30 en un cambio aparte.** Brand
+Kit servía la entradilla a `clamp(1,0625rem…1,25rem)` contra el `clamp(1,05rem…1,2rem)` de sus
+dos hermanas —y de Contacto, que comparte pliegue sin compartir bloque—, sin nada escrito que lo
+justificara. **No se unificó dentro del refactor**, y eso no era pereza: mover píxeles habría
+roto lo único que ese cambio promete, que es el diff vacío. Se hizo después, y ahí el tamaño
+**subió a la capa** (D34): un valor que tienen que compartir tres páginas no se escribe tres
+veces. El punto de uso conserva solo la MEDIDA —`leadMeasure`, `max-w-[46ch]`—, que sí es
+decisión de copy porque las tres entradillas son de largo distinto.
+
+*Es el patrón de esta entrada aplicado a sí misma: un refactor transparente no arregla de paso
+lo que encuentra, lo deja escrito y lo arregla en su propio cambio, donde se puede medir.*
