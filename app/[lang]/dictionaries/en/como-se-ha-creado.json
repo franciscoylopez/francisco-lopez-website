@@ -346,7 +346,7 @@
           "type": "p",
           "text": "The question every tool has to answer to get into this project isn't \"is it good?\" but \"what work of mine does it solve?\" It sounds obvious, and it isn't: almost all the software that ends up over-installed gets in through the first question."
         },
-        { "type": "h3", "text": "Three surprises from a fresh major version" },
+        { "type": "h3", "text": "Why these pieces, and not others" },
         {
           "type": "diagram",
           "id": "s04",
@@ -355,27 +355,27 @@
         },
         {
           "type": "p",
-          "text": "Next with the App Router, TypeScript in strict mode, and Tailwind. None of that is exotic. What is surprising is adopting a brand-new version: part of what you think you know has stopped being true, and it doesn't always warn you. It happened to me three times, and the third while I was writing this."
+          "text": "Next takes care of three jobs I didn't want to do by hand: routing by language, having every page written out as HTML before anyone asks for it, and the boundary between what gets computed on the server and what runs in the browser. That third one is what you notice reading the site: interactive is the exception here (the menu, the theme switch, not much else), so the page arrives already painted and the JavaScript is only paid for where it's needed."
         },
         {
           "type": "p",
-          "text": "The first, with the file that decides which language a page is served in. In the previous version that file had one name; in the new one, another. If you leave the old one in place it throws no error, doesn't complain, doesn't show up anywhere: it simply never runs. Everything looks correct until you discover nobody is picking a language."
+          "text": "Strict TypeScript gets in on the same question. All the copy lives in a typed dictionary, so a missing translation or a renamed key breaks the build. The alternative isn't a site with an error: it's a site with a blank gap that a visitor finds months later."
         },
         {
           "type": "p",
-          "text": "The second is subtler, and it's about how design values get written. The system has a value for \"medium rounded corner,\" and that value can be written two ways: by its name, or by hardcoding the pixels it measures today. Both paint the same thing on screen, so as long as you don't touch anything they look equivalent. They stop being equivalent the day you decide that corner should be a bit rounder: the ones written by name all change at once, and the ones with the number written by hand stay exactly as they were, with nothing failing and nobody noticing. I found the same value written three different ways in fourteen places, and the rule to always write the name was born from that."
+          "text": "**I chose Tailwind for what it prevents more than for what it allows.** Colours, radii and spacing live in a single file and get written by name, never by the number they happen to measure today: changing the brand cyan is changing one line, and there's no separate stylesheet to keep in step. Without that discipline, a site built in stolen hours over months ends up with four near-identical greys and no way to tell which one is right."
         },
         {
           "type": "p",
-          "text": "The third one is my favourite, because it had been in front of me for months and I found it while writing this article. The system has a way of saying «space these blocks apart», and it governs the gap between the paragraphs you are reading. It has never worked. In the previous version that instruction outweighed the «no margins» each paragraph carries on top of it; in the new one it weighs less, deliberately, so that it is easy to override. So the air I have been asking for between paragraphs has not been painted once."
+          "text": "lucide is the small case where the criterion shows best, because it isn't there to save me drawing. It's there because a whole catalogue sharing one canvas, one stroke weight and the same line caps reads as a family, and a set of icons picked from here and there doesn't. What lucide doesn't ship, for trademark reasons, are the LinkedIn and GitHub marks, and those do have to be drawn: to lucide's own rules, so that side by side you can't tell which is which."
         },
         {
           "type": "p",
-          "text": "And it went unnoticed because every other block brings its own margin: subheadings, lists and diagrams space themselves. Paragraphs were the only ones relying on that instruction, and there is exactly one place on this page made only of paragraphs, which is the last chapter. I caught it comparing a mockup against the real page: the mockup reproduced what the code said and the page showed something else. Had I trusted the mockup, I'd have picked a nice new rhythm on top of something that was broken."
+          "text": "The last two pieces in the diagram never reach the browser: they only helped build the site. Claude Design solved the start, which is where a personal project dies, with the logo and a publishable first version in days. And the whole build happens in Claude Code, which here is quite a bit more than writing code with company. MCPs give it access to the task board and to the browser, so a task gets opened, done and closed without me carrying messages between tools. And skills turn into routine what otherwise depends on my remembering: closing a stage, reviewing the design, regenerating the résumé."
         },
         {
           "type": "p",
-          "text": "All three share the same signature, and it's the one that keeps repeating in everything that follows: **the error doesn't show its face.**"
+          "text": "That's the line the diagram draws: solid for what reaches the visitor, dashed for what only reached me. Vercel isn't in there because it isn't a piece of the stack but the place where this gets tested before it's published, and that comes later."
         },
         { "type": "h3", "text": "Installed for the day it's needed" },
         {
@@ -406,7 +406,7 @@
           ", ",
           { "label": "D6", "path": "DECISIONS.md" },
           ", ",
-          { "label": "D34", "path": "DECISIONS.md" },
+          { "label": "D7", "path": "DECISIONS.md" },
           " and ",
           { "label": "D51", "path": "DECISIONS.md" },
           " in the technical record"
@@ -532,7 +532,15 @@
         { "type": "h3", "text": "The catalogue of pieces writes itself" },
         {
           "type": "p",
-          "text": "I don't maintain the list of system pieces: it's derived from disk by reading the first line of each file, where every piece declares what it solves and which section publishes it. And continuous integration names the one that's still unpublished. It exists because the rule about publishing each new piece had been written down for months and got broken twice in a row: what was missing wasn't the rule, it was someone checking it without depending on my memory."
+          "text": "I don't maintain the list of system pieces: it's derived from disk by reading the first line of each file, where each piece declares which group it belongs to, what it solves and which section publishes it."
+        },
+        {
+          "type": "p",
+          "text": "That first line is also the intake form, and it's three questions in order. Whose piece is it: if it knows anything about this site (a route, a piece of data, the copy of a section) it goes with the site blocks, and if it knows nothing about it, into the system. Which group inside the system: the core, the long-text layer that was deliberately left out of it, or a standalone primitive. And where it gets shown: the Design System section it belongs in by what it does, or the Brand Kit one if what it documents is brand."
+        },
+        {
+          "type": "p",
+          "text": "\"It doesn't get shown\" is a valid answer too, but it has to be written down: a piece that paints nothing declares itself internal and leaves its reason on that same line. **What you can't do is leave the box empty**, because continuous integration names, on every change, the one left unpublished."
         },
         {
           "type": "h3",
