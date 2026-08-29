@@ -86,6 +86,7 @@
 - [«Drenaje» cierra con su medición hecha por fin, y el lanzamiento reencuadra qué entra en «Voz» — 2026-08-29](#drenaje-cierra-con-su-medición-hecha-por-fin-y-el-lanzamiento-reencuadra-qué-entra-en-voz--2026-08-29)
 - [La tanda 1 de «Voz», y el cruce que puso la métrica primaria en su sitio — 2026-08-29](#la-tanda-1-de-voz-y-el-cruce-que-puso-la-métrica-primaria-en-su-sitio--2026-08-29)
 - [La tanda 2 de «Voz», y el diagrama que se arregló mirándolo — 2026-08-29](#la-tanda-2-de-voz-y-el-diagrama-que-se-arregló-mirándolo--2026-08-29)
+- [La tanda 3 de «Voz», y las dos veces que la medición mandó sobre la intuición — 2026-08-29](#la-tanda-3-de-voz-y-las-dos-veces-que-la-medición-mandó-sobre-la-intuición--2026-08-29)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3698,6 +3699,85 @@ el recorte lo cantaba el propio informe del gate en cada corrida mientras el con
 cosa. **Hoy la fila es cierta sin haberla tocado**, porque la excepción se retiró al retirarse su
 causa. Lo que queda anotado es el modo de fallo: *un contrato que se escribe una vez y se
 comprueba a ojo caduca por el lado que nadie relee.*
+
+## La tanda 3 de «Voz», y las dos veces que la medición mandó sobre la intuición — 2026-08-29
+
+Cinco tareas cerradas (P60 → P63). Tres pedían `/prototype`, que solo dispara Francisco, y se
+resolvieron por el acuerdo de esta sesión: **se implementa la recomendación, se publica un
+artefacto con la medición de cada decisión y la alternativa descartada, y se revisa después.**
+Funcionó, y lo que lo demuestra es que una de las tres se revirtió al verla.
+
+### El contenido: publicar lo que ya existía, y borrar cifras en vez de derivarlas
+
+**§05 del Brand Kit prometía «dónde vive el logo» y enseñaba dos superficies del propio
+dominio**, mientras `PRD-Live` §4 ya declaraba tres usos fuera de él —firma de email, banner de
+LinkedIn y portada del repositorio— como «la prueba de coherencia que un sistema de marca solo
+puede dar fuera de su propio sitio». No faltaba contenido por inventar: faltaba publicar lo que
+ya está versionado en `brand-assets/`. La sección pasa a dos grupos y el eje es **quién sirve la
+pieza**: «En el sitio», donde se baja, y «Fuera del sitio», donde solo se coloca.
+
+Francisco eligió los tres **sin descarga**, y la falta de previsualización es consecuencia del
+mismo argumento: son artefactos reales que viven fuera de `public/`, así que recrearlos en JSX
+daría una maqueta que se desincroniza del artefacto sin que nada falle. *La página de marca
+publica piezas reales o no publica ninguna.* La portada del repo entra **con su límite escrito**:
+la sirve GitHub desde sus ajustes, no acepta una URL, y por eso no lleva ni una cifra — que es el
+argumento de D60 puesto en la página que lo demuestra.
+
+**Y los contadores del Design System se borran, no se interpolan.** La relectura pedía cambiar
+dos apariciones de «las catorce páginas»; en el disco había **cuatro**. Se podía derivarlas de
+`PAGE_COUNT` como ya hace `liveStatValue`, y habría sido peor: ninguna de las cuatro frases
+necesita la cifra para decir lo que dice. Es **D149** llevado al final — *un contador que se puede
+borrar no necesita guardián*—, y lo que se conserva es el matiz que las frases defienden: «a la
+vez». Lo que argumentan no es cuántas páginas hay, es que la decisión se toma una sola vez.
+
+### §10 se leía en un orden que ninguna página tiene
+
+El bloque que publica las piezas de composición de página abría por la tabla, ponía el cierre de
+página tercero y dejaba el índice a mitad de sección. Las siete piezas eran correctas: fallaba la
+**secuencia**. El orden nuevo es el de una página de arriba abajo, y por eso no lleva rótulo que
+lo explique.
+
+**El cambio de fondo es que el par de navegación se parte.** El índice y el cierre de sección son
+hermanos de familia pero **no de posición** —uno va debajo del hero y el otro al pie de cada
+parada—, así que publicarlos juntos era justo lo que metía el índice en mitad de la sección.
+Partidos, `SectionCloser` queda pegado a `PageCloser`: la nota que ya decía «su hermana de
+peldaño» sigue siendo cierta y **ahora además se ve**.
+
+### Las dos veces que la medición mandó, y las dos fueron correcciones
+
+**La primera me corrigió a mí.** El tramo plano de 14,1 pantallas se partió primero **por
+familia** —las tres decisiones de medida contra las dos que no se miden en píxeles—, que es el
+corte que parece obvio leyendo los títulos. Medido, dejaba el tramo malo en **10,9**: el peso no
+está repartido, §01 «Rejilla» mide ella sola 5,88 pantallas. El corte que funciona es tras §02, y
+es la única de las cuatro particiones posibles que cabe entre el suelo y el techo.
+
+**La segunda la hizo Francisco viendo la página, y tumbó la solución entera.** El corte se había
+resuelto con una **segunda banda negra**, y el argumento contra no es de gusto: *la banda
+significa «empieza otra familia», y entre §02 y §03 no empieza ninguna.* Comprar ritmo con una
+banda ahí es comprarlo diciendo algo falso, y de paso gastar la moneda — cinco bandas en una
+página hacen que ninguna signifique gran cosa. Se rehízo cambiando el fondo a `--muted` sin banda:
+**mismo ritmo exacto, una banda menos y media pantalla menos de página.**
+
+Y eso destapó que la regla de D125 no estaba incompleta sino **contradicha**: con la banda como
+única herramienta, romper un tramo largo costaba un bloque, así que el suelo empujaba contra el
+techo en cuanto una página creciera. El detalle técnico, en **D154**; el del riel, en **D155**.
+
+*Las dos correcciones tienen la misma forma y merece la pena verla junta: en la primera, una
+intuición razonable con la medición en contra; en la segunda, una implementación medida y
+correcta con el significado en contra.* Ningún gate podía cazar la segunda: `check:palette` y el
+censo daban verde con la banda puesta.
+
+### Dos premisas de ficha caducadas, y las dos se cerraron con un `grep`
+
+- **P62** avisaba de comprobar que las anclas siguieran resolviendo al reordenar. **No aplica**:
+  `ORDEN` y `construirRecorrido` operan a nivel de sección y aquí se reordena *dentro* de una.
+- **P63** decía que el riel lo pisan «el Design System (12) y el artículo (12)». **P70.415 lo
+  retiró de las tres páginas del sistema**: hoy su único consumidor es `/como-se-ha-creado`. Se
+  descubrió al ir a verificarlo y no encontrar riel donde la ficha decía que había uno.
+
+Van cinco fichas caducadas en tres tandas. La regla que las caza —*verifica la premisa contra el
+disco antes de darla por mecánica*— sigue pagándose sola.
+
 
 ## Fuentes
 
