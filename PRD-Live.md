@@ -216,10 +216,15 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 - **Primaria**: **envíos del formulario de `/contacto`** (`contact_submit`), contados
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
-  **La cadena está entera desde el 2026-08-24**: el `dataLayer` lo recoge un trigger de
+  **El TRANSPORTE está entero desde el 2026-08-24**: el `dataLayer` lo recoge un trigger de
   Custom Event con su tag de GA4 —comprobado en el `gtm.js` publicado, que es como se
   audita la mitad que vive fuera del repo (D71)— y en GA4 está marcado como **evento
   clave**. La marca no es retroactiva: cuenta desde ahí.
+  **Lo que todavía NO es cierto es que cuente envíos** *(medido el 2026-08-29)*: se dispara con
+  el `status: "sent"` de la Server Action, y ese estado tiene **tres causas** —el envío real y
+  los dos filtros que callan, el honeypot y el suelo de 3 s—, de las que solo una manda correo.
+  El silencio del servidor es correcto; propagarlo a la analítica no. Con la primaria en `n=1`,
+  un solo falso positivo la deja en cero. Lo cierra la tarea P52.5.
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
   Trayectoria, Contacto) y profundidad de scroll.
 - **Herramienta**: GA4 (captura scroll y descarga de fábrica).
@@ -256,25 +261,23 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 *Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
 decisión escrita, no por omisión.
 
-**Y hay secuencia hasta el lanzamiento**, en tres pasos: **«Drenaje»**, el sprint en curso,
-donde se drena la deuda que no pide criterio → **«Voz»**, el sprint de mejoras → **el
-lanzamiento**.
+**Y queda un paso hasta el lanzamiento: «Voz», el sprint en curso.** «Drenaje», que drenó la
+deuda que no pedía criterio, cerró el 2026-08-29.
 
-**«Voz» ya existe en el tablero** *(2026-08-29)*: Francisco releyó el sitio servido y dejó **22
-hallazgos**, once de ellos en «Cómo se ha creado», y el triaje los convirtió en **17 tareas**:
-doce nuevas y cinco arrastradas, una por compartir prototipo y dos por compartir componente. Se
-llama así porque su grueso es de voz y no de código: **el artículo deja de contarse desde lo que
-se rompió y pasa a contarse desde lo que aporta**, que es el mismo defecto que aparece en las
-cards de `/accesibilidad`.
+**«Voz» es el ÚLTIMO sprint antes de lanzar, y eso es lo que decide qué entra** — no de qué
+bloque es una tarea, sino **si tiene que ser verdad el día de lanzar**. Se llama así porque su
+grueso es de voz y no de código: **el artículo deja de contarse desde lo que se rompió y pasa a
+contarse desde lo que aporta**, que es el mismo defecto que aparece en las cards de
+`/accesibilidad`. Pero ese criterio le añadió además la deuda de página que un lanzamiento no
+puede arrastrar: el rendimiento de Sobre mí, un diagrama ilegible en móvil y el kicker de
+`/contacto`.
 
-De los 22, **uno se descartó con su motivo escrito** (la cifra de páginas de Accesibilidad no
-está tecleada, es `{paginas}` y no puede caducar) y **otro ya estaba tareado** en «Drenaje». El
-triaje también amplió tres: el contador del Design System está escrito **cuatro** veces y no
-dos, el riel y los botones de compartir fallan por **dos causas distintas**, y el número de
-KUOTIP aparece **dos** veces en el mismo aprendizaje.
+**Y lo que NO entra lleva su motivo escrito**, que es lo que impide que vuelva cada revisión: la
+medición de `file_download` del Brand Kit se queda fuera porque **no se puede ejecutar** hasta
+que exista una ventana de 28 días posterior al cambio de anclas, no porque no importe.
 
-*(Por qué son dos carriles y por qué el orden de las tandas lo manda la visibilidad y no la
-prioridad, en `PRD-Historical.md`.)*
+*(El recorrido de «Drenaje», el triaje que creó «Voz», y por qué el orden de sus tandas lo mandó
+la visibilidad y no la prioridad, en `PRD-Historical.md`.)*
 
 ### V4 — IA conversacional
 

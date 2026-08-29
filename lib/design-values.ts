@@ -493,7 +493,7 @@ export const LAST_COOKIES_UPDATE = "2026-08-23";
  * Google, y tarde.
  */
 export const ARTICLE_PUBLISHED = "2026-08-21";
-export const ARTICLE_UPDATED = "2026-08-25";
+export const ARTICLE_UPDATED = "2026-08-29";
 
 /** Sustituye `{date}` en el copy, como `fillRatios` hace con `{par.tema}`. */
 export function fillDate(text: string, iso: string, locale: Locale): string {

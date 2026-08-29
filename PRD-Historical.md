@@ -83,6 +83,7 @@
 - [65. «Páginas hermanas» cierra, y el method-review mide que la reducción de contexto fue una mudanza (2026-08-27)](#65-páginas-hermanas-cierra-y-el-method-review-mide-que-la-reducción-de-contexto-fue-una-mudanza-2026-08-27)
 - [66. La distribución entra en el alcance del proyecto, y el orden se decide aparte (2026-08-27)](#66-la-distribución-entra-en-el-alcance-del-proyecto-y-el-orden-se-decide-aparte-2026-08-27)
 - [El sprint «Home» cierra, y el siguiente se parte en dos carriles — 2026-08-28](#el-sprint-home-cierra-y-el-siguiente-se-parte-en-dos-carriles--2026-08-28)
+- [«Drenaje» cierra con su medición hecha por fin, y el lanzamiento reencuadra qué entra en «Voz» — 2026-08-29](#drenaje-cierra-con-su-medición-hecha-por-fin-y-el-lanzamiento-reencuadra-qué-entra-en-voz--2026-08-29)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3430,6 +3431,107 @@ Y se escriben en su ficha, que es lo que impide que vuelvan:
 - **P71.61 «Skills sin estrenar no se puede medir»** — resuelta **retirando el indicador**,
   que era su propia conclusión. Una fila muerta en una tabla de umbrales es peor que no
   tenerla, porque da sensación de cobertura.
+
+## «Drenaje» cierra con su medición hecha por fin, y el lanzamiento reencuadra qué entra en «Voz» — 2026-08-29
+
+El ritual completo en una sesión: `sprint-review`, las 29 archivadas, el check de medición,
+`SELLO_GENERAL`, `method-review` VIII y la apertura de «Voz». Lo que lo distingue de los dos
+cierres anteriores es que **el punto 12 dejó de escribirse «pendiente»**.
+
+### El check de medición se hizo, y llevaba dos cierres sin poder hacerse por una suposición falsa
+
+«Home» y el primer intento de «Drenaje» lo cerraron escribiendo *«no tengo acceso a GA4 ni a
+Looker»*. **Era falso.** El navegador de la sesión usa el perfil de Chrome de Francisco, así que
+los dos cargan autenticados; se leyeron en tres llamadas. Dos ciclos del bucle medir→aprender
+perdidos porque nadie comprobó la suposición — en la skill cuyo punto 12 nació precisamente
+porque cinco etapas se habían cerrado sin medir.
+
+El arreglo no es la anécdota: **el punto 12 nombraba el panel y no decía cómo llegar a él.** Una
+regla sin portador, en el documento que las caza. Ahora lleva el cómo, y con él dos cosas que el
+panel solo no da:
+
+- **No basta el panel.** Publica «número de eventos»; las lecturas que han valido algo salieron
+  de la columna de **usuarios** de GA4 → Informes → Interacción → Eventos.
+- **La ventana es RODANTE.** `file_download` cayó de 6 a 1 entre los dos cierres y parecía una
+  regresión del cambio de anclas del Brand Kit. No lo era: las dos ventanas comparten 24 de sus
+  28 días, así que cinco de las seis descargas estaban en los cuatro días de julio que salieron
+  del recuento. *Antes de leer una caída, comprobar si el solape la explica.*
+
+**Las cifras (GA4, 1-28 ago 2026, 425 eventos y 46 usuarios):** `contact_click` 9 / 2 usuarios ·
+`scroll` 41 / 10 · `file_download` 1 / 1 · `form_start` 1 / 1 · **`contact_submit` 1 / 1**.
+Usuarios planos (46 → 46) frente a la línea de D71. Distribución sigue delante por **cuarta**
+vez, y esta vez con un «no» escrito y un dato detrás.
+
+### El instrumento medía mal, y no por donde se miraba
+
+La pregunta 4 —«¿sigue midiendo bien el instrumento?»— dio el hallazgo del cierre. `contact_submit`
+se dispara con `state.status === "sent"`, que es lo que D71 dejó garantizado. **Lo que nadie había
+mirado es que ese estado tiene tres causas**: el envío real y los dos filtros que callan, el
+honeypot y el suelo de 3 s. Solo una manda correo.
+
+El silencio del servidor hacia el bot es correcto y los tests lo fijan a propósito. Propagarlo a
+la analítica no lo es: **con la primaria en `n=1`, un falso positivo la deja en cero**, y el
+camino de los 3 s lo puede recorrer una persona que pega el mensaje y pulsa. `PRD-Live` §7 se
+corrigió el mismo día, sustituyendo el párrafo que afirmaba que la cadena estaba entera.
+
+### `method-review` VIII: seis hallazgos, y ninguna familia nueva
+
+Que no naciera ninguna familia **es** el resultado: los seis caen en cuatro que ya existían, o
+sea que el catálogo cubre lo que este método produce. Los tres primeros son la misma forma —**un
+indicador que mira al sitio equivocado**—, y el más instructivo es el primero:
+
+**La fila «¿sprint de método abierto en el ciclo?» contestaba «No» leyendo el NOMBRE del sprint.**
+«Drenaje» no se llamaba de método y lo fue: **15 de sus 29 tareas eran Infra**, y su diff añadió
+**2.686 líneas de verificación contra 757 de producto — 3,5 a 1**. La fila se retira y la
+sustituyen dos que miden composición: % Infra del sprint que cierra, y verificación÷producto de
+su propio diff. La parte justa, que también se midió: **«Voz» corrige el desequilibrio sola**,
+con un 68% de tareas de cara al usuario.
+
+Los otros dos: `sprint-review` nombraba el panel sin decir cómo (arriba), y **«verificación ÷
+producto» cruzó su umbral sin decir qué divide entre qué** — hubo que reconstruir la definición
+probando cuatro candidatas contra el 0,40 histórico, y tres definiciones razonables daban 0,47,
+0,52 y 0,62 sobre el mismo árbol. La skill se había escrito esa regla a sí misma en su sexto
+disparo; la fila era anterior y sobrevivió sin cumplirla. *Al heredar una tabla, se auditan
+también las filas viejas.*
+
+**Y los ajustes se pagaron retirando, que es lo que hace que esto no sea un método que solo
+crece.** La suma de skills tenía 57 palabras de holgura y las adiciones costaron 376:
+`check:contexto` salió rojo, y hubo que **retirar 376 palabras** de las narrativas de disparos
+anteriores conservando todas sus reglas. Es la corrección del séptimo disparo funcionando un
+ciclo entero sin que nadie tuviera que acordarse — **0 techos movidos, contra 2 en el anterior**.
+
+### La apertura de «Voz» la reencuadró una pregunta de Francisco
+
+Con el sprint ya abierto, preguntó por qué quedaba deuda de Sobre mí y del Brand Kit fuera si
+este sprint tiene que dejar listo el lanzamiento. **El filtro correcto no es de qué bloque es una
+tarea, sino qué tiene que ser verdad el día de lanzar** — y el lanzamiento no es un sprint con
+tareas, es un release, así que lo que no esté en «Voz» no está.
+
+Ese filtro metió seis, y **la más urgente no estaba en la lista original**: el artefacto de
+Emendu pinta sus 44 rótulos a **5,4px** en una página que se lanza, es **peor que los 5,0px** que
+ya se consideraron bloqueantes en el artículo, y `check:figuras` **lo imprime en cada corrida de
+CI** bajo «medidos y NO juzgados». Con él, el LCP y las imágenes de Sobre mí —que **cierran antes
+que el re-sellado de PageSpeed**, o hay que medir contra producción dos veces—, el kicker de
+`/contacto`, y el par del kit acoplado por archivos.
+
+**Y una se quedó fuera con su motivo escrito:** la medición de `file_download` del Brand Kit no
+se puede ejecutar hasta que exista una ventana de 28 días posterior al cambio de anclas. Meterla
+habría sido programar una tarea que solo puede contestar «todavía no».
+
+El coste, dicho: **el cupo de `General` se fue a 6 contra una regla de 3-4** y el sprint creció
+un 29%. Es un desbordamiento consciente —drena más, no menos— y `General` quedó en 16, lo más
+bajo que ha estado.
+
+### Dos discrepancias del volcado que ningún guardián podía ver
+
+Al sincronizar el tablero aparecieron dos: una tarea creada por otra sesión que **no estaba** en
+el volcado, y una de «Home» archivada que **seguía** como «Listo». O sea que todos los
+`check:tablero` de la sesión —incluido el que validó el cierre— corrieron sobre un tablero que no
+era el real. No cambió ninguna conclusión, porque ninguna de las dos afectaba a un recuento que
+se usara, pero es la misma familia que todo lo demás del día: **el guardián afirma «45 tareas en
+el volcado» y no puede saber cuántas le faltan.** Queda sin tarear a propósito, con el cupo ya
+desbordado.
+
 
 ## Fuentes
 

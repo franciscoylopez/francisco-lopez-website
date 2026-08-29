@@ -66,11 +66,17 @@ const HORAS_FRESCURA = 12;
  *   `General` y el embalse bajó a 18. Es el cupo funcionando a lo grande, así que
  *   el primer sello nace bajo a propósito: el próximo cierre se mide contra un
  *   suelo honesto y no contra el máximo histórico.
+ * · 2026-08-29 · cierre de «Drenaje» · 19. +1 neto, y el neto es lo que se vigila:
+ *   «Drenaje» no arrastró cupo de `General` —su compromiso fue la deuda de las
+ *   tandas—, así que lo único que movió el embalse fueron las dos que devolvió al
+ *   volverse imposibles (ESLint 10 y TypeScript 7, bloqueadas upstream) y las dos
+ *   que dejó el `sprint-review` de cierre. Bajo umbral, pero es la primera vez que
+ *   sube: el sprint siguiente tiene que llevarse su cupo de verdad.
  */
 const SELLO_GENERAL: Sello = {
-  fecha: "2026-08-28",
-  cierre: "Home",
-  abiertas: 18,
+  fecha: "2026-08-29",
+  cierre: "Drenaje",
+  abiertas: 19,
 };
 
 /**

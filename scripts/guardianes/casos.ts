@@ -127,10 +127,17 @@ export const CASOS: Caso[] = [
     guardian: "check:contexto",
     rotura:
       "un techo se mueve dos veces en el mismo ciclo y el contador no lo ve",
+    //
+    // LA FECHA VA POR REGEX Y NO LITERAL, y es la corrección de un caso que nació
+    // caducando: llevaba `"2026-08-28"` escrito a mano, así que dejó de morder en
+    // cuanto se abrió el sprint siguiente y `CICLO_ABIERTO` pasó al 29. Es el peor
+    // momento posible para perder los dientes —abrir una etapa es justo cuando se
+    // mueve un techo—, y lo cazó CI y no una lectura. Un caso malo cuyo anclaje es
+    // un valor que cambia por diseño tiene que emparejar la FORMA, nunca el valor.
     archivo: "scripts/check-contexto.ts",
     mutar: (o) =>
       o.replace(
-        'const CICLO_ABIERTO = "2026-08-28";',
+        /const CICLO_ABIERTO = "\d{4}-\d{2}-\d{2}";/,
         'const CICLO_ABIERTO = "2026-08-01";',
       ),
   },
