@@ -5,6 +5,7 @@ import {
   INITIAL_STATE,
   MIN_FILL_MS,
   TIMESTAMP_FIELD,
+  cuentaComoEnvio,
 } from "@/lib/contact-form";
 import type { SendResult } from "@/lib/mailer";
 
@@ -97,7 +98,7 @@ describe("submitContact", () => {
     it("con la trampa rellena contesta «enviado» y no envía nada", async () => {
       await expect(
         enviar(envio({ [HONEYPOT_FIELD]: "Acme S.L." })),
-      ).resolves.toEqual({ status: "sent" });
+      ).resolves.toEqual({ status: "sent", contabiliza: false });
       expect(entorno.enviar).not.toHaveBeenCalled();
     });
 
@@ -113,7 +114,7 @@ describe("submitContact", () => {
     it("un envío más rápido de lo que se tarda en leer se calla igual", async () => {
       await expect(
         enviar(envio({}, { antiguedadMs: MIN_FILL_MS - 500 })),
-      ).resolves.toEqual({ status: "sent" });
+      ).resolves.toEqual({ status: "sent", contabiliza: false });
       expect(entorno.enviar).not.toHaveBeenCalled();
     });
 
@@ -137,6 +138,40 @@ describe("submitContact", () => {
 
       await expect(enviar(data)).resolves.toEqual({ status: "sent" });
       expect(entorno.enviar).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  // La métrica primaria del PRD §7 se define como «envíos», y hasta P52.5 sumaba
+  // los tres «enviado»: el real y los dos que callan. Con la primaria en n=1, un
+  // falso positivo la deja en cero. Se afirma sobre lo que la acción DEVUELVE y
+  // sobre la función que decide, no sobre el efecto del componente, que no tiene
+  // quien lo mire.
+  describe("qué cuenta como envío para la analítica", () => {
+    it("los dos filtros que callan devuelven contabiliza: false", async () => {
+      const trampa = await enviar(envio({ [HONEYPOT_FIELD]: "Acme S.L." }));
+      const rapido = await enviar(
+        envio({}, { antiguedadMs: MIN_FILL_MS - 500 }),
+      );
+
+      expect(cuentaComoEnvio(trampa)).toBe(false);
+      expect(cuentaComoEnvio(rapido)).toBe(false);
+      expect(entorno.enviar).not.toHaveBeenCalled();
+    });
+
+    it("el envío real no lleva la marca, así que sí cuenta", async () => {
+      const real = await enviar(envio());
+
+      expect(real).toEqual({ status: "sent" });
+      expect(cuentaComoEnvio(real)).toBe(true);
+      expect(entorno.enviar).toHaveBeenCalledTimes(1);
+    });
+
+    it.each([
+      [{ status: "idle" } as const],
+      [{ status: "invalid", errors: { email: "email" } } as const],
+      [{ status: "failed", reason: "server" } as const],
+    ])("no cuenta lo que no es un envío: %o", (state) => {
+      expect(cuentaComoEnvio(state)).toBe(false);
     });
   });
 

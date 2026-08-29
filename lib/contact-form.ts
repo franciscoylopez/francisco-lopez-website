@@ -89,10 +89,30 @@ export function validateContact(values: ContactValues): FieldErrors {
 export type ContactState =
   | { status: "idle" }
   | { status: "invalid"; errors: FieldErrors }
-  | { status: "sent" }
+  | { status: "sent"; contabiliza?: false }
   | { status: "failed"; reason: "rate" | "server" };
 
 export const INITIAL_STATE: ContactState = { status: "idle" };
+
+/**
+ * Si este envío cuenta para la métrica primaria del PRD §7. NO es lo mismo que
+ * `status === "sent"`, y creer que lo era es lo que la dejaba inflada: el
+ * «enviado» tiene TRES causas —el envío real y los dos filtros que callan, la
+ * trampa y el suelo de 3 s— y solo una manda correo.
+ *
+ * El silencio hacia el bot es correcto y no se toca: lo que estaba mal era
+ * propagarlo a la analítica. Con la primaria en `n=1` (GA4, 1-28 ago 2026), un
+ * solo falso positivo la deja en cero, y el camino de los 3 s lo recorre una
+ * persona que pega los tres campos y pulsa.
+ *
+ * ES UNA FUNCIÓN Y NO UNA COMPARACIÓN EN EL COMPONENTE a propósito: aquí la
+ * decisión tiene tests y un caso malo en `check:guardianes`, y dentro de un
+ * `useEffect` no tendría ninguno de los dos. La UI pinta lo mismo en los tres
+ * casos, así que un bot no aprende nada: lo único que cambia es el `dataLayer`.
+ */
+export function cuentaComoEnvio(state: ContactState): boolean {
+  return state.status === "sent" && state.contabiliza !== false;
+}
 
 export function hasErrors(errors: FieldErrors): boolean {
   return FIELD_NAMES.some((name) => errors[name]);

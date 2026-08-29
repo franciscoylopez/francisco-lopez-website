@@ -18,6 +18,7 @@ import {
   type ContactValues,
   type FieldErrors,
   type FieldName,
+  cuentaComoEnvio,
   hasErrors,
   validateContact,
 } from "@/lib/contact-form";
@@ -71,10 +72,14 @@ export function ContactForm({
   }, []);
 
   // El envío se mide cuando el SERVIDOR confirma, no al pulsar: un clic que
-  // falla la validación o que no sale no es un contacto (PRD §7).
+  // falla la validación o que no sale no es un contacto (PRD §7). Y «confirma»
+  // no es `status === "sent"`: ese estado también lo devuelven los dos filtros
+  // que callan, que no mandan correo. Quién cuenta lo decide `cuentaComoEnvio`,
+  // que vive en `lib/` porque ahí la regla tiene tests (P52.5).
+  const cuenta = cuentaComoEnvio(state);
   useEffect(() => {
-    if (state.status === "sent") trackContactSubmit();
-  }, [state.status]);
+    if (cuenta) trackContactSubmit();
+  }, [cuenta]);
 
   // Si el servidor rechaza algo que el cliente dio por bueno, manda el
   // servidor. Se DERIVA en el render en vez de copiarse al estado con un

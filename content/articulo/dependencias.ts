@@ -88,6 +88,14 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "PRD-Live.md#7. Métricas de éxito",
     "DECISIONS.md#D29",
     "lib/routes.ts",
+    // Desde el 2026-08-29 el texto sitúa la doble lectura DENTRO de la página de
+    // experiencia y nombra su orden: los datos del puesto, «En un minuto», y el
+    // resto debajo. La forma la fija D53 y la lista de rótulos vive en el
+    // diccionario común, que es pequeño y cambia solo cuando cambia la forma —
+    // hashear `deep-dive.tsx` entero mandaría a releer esto en cada retoque de
+    // maquetación, que es justo el ruido que D103 quitó.
+    "DECISIONS.md#D53",
+    "app/[lang]/dictionaries/es/trayectoria/comun.json",
   ],
 
   // «Del brief al tablero» — el proceso, el registro de decisiones, el ciclo de
@@ -99,19 +107,22 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
   // archivo cuya evolución preocupa, y cambia una o dos veces por sprint.
   s03: ["BRAND.md", "BRAND-logo.md"],
 
-  // «El stack, y por qué ese» — Next, i18n, shadcn sin usar, Tailwind sin
-  // `@layer`, y por qué entra una herramienta externa. Las versiones concretas
-  // no están selladas (ver «lo que no cubre», arriba).
+  // «El stack, y por qué ese» — Next, i18n, la frontera servidor/cliente,
+  // shadcn sin usar, y por qué entra una herramienta externa. Las versiones
+  // concretas no están selladas (ver «lo que no cubre», arriba).
+  //
+  // D34 (`@layer`) y D100 (el `space-y` dentro de `:where()`) SALIERON el
+  // 2026-08-29 con las «tres sorpresas de estrenar versión»: el capítulo pasó
+  // a contar por qué se eligió cada pieza y ya no narra ninguna de las dos, así
+  // que mandar a releer esta sección cuando se muevan sería ruido. D7 entra por
+  // lo contrario: la afirmación de que aquí lo interactivo es la excepción es
+  // nueva, y es suya.
   s04: [
     "DECISIONS.md#D2",
     "DECISIONS.md#D3",
     "DECISIONS.md#D6",
-    "DECISIONS.md#D34",
+    "DECISIONS.md#D7",
     "DECISIONS.md#D51",
-    // La TERCERA sorpresa de estrenar v4, añadida el 2026-08-24: el `space-y`
-    // dentro de `:where()`. Es la única de las tres que el capítulo cuenta y
-    // que se descubrió DESPUÉS de publicarlo.
-    "DECISIONS.md#D100",
   ],
 
   // «El sistema de componentes» — la cascada y las OCHO piezas. El directorio
@@ -143,6 +154,10 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D89",
     "scripts/check-experience-copy.ts",
     "components/ui/README.md",
+    // Desde el 2026-08-29 el texto no solo dice que el inventario se deriva:
+    // describe el FORMATO de la primera línea (grupo · publicación · frase) y
+    // los tres grupos. Eso vive en el generador, no en el README que produce.
+    "scripts/indices.ts",
     // Las automatizaciones que el texto llama «las que no se ven»: los hooks que
     // se disparan al editar y quién cierra los PR de dependencias. Del
     // directorio de hooks se hashea la LISTA: lo que el artículo afirma es que

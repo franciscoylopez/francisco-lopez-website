@@ -3,7 +3,7 @@
 // @pieza artículo · design-system/12-articulo.tsx · Las islas de cliente del texto largo: barra de progreso, copiar enlace y compartir.
 
 import { Copy, Link2, Share2 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { actionVariants } from "@/components/ui/action";
 import { useCopyToClipboard } from "@/components/ui/copy-button";
@@ -12,7 +12,7 @@ import { cn } from "@/lib/utils";
 // `FloatingShare` navega las MISMAS paradas que el riel, así que comparte su tipo
 // en vez de declarar uno gemelo. El riel se fue a `section-index-islands.tsx`
 // (P70.38); el dock se queda, porque compartir un enlace es cosa del artículo.
-import type { RailItem } from "./section-index-islands";
+import { useActiveSection, type RailItem } from "./section-index-islands";
 
 // Las tres islas de «Cómo se ha creado esta página» (D7: JS solo donde hace
 // falta estado o una API del navegador). El resto de la página es Server
@@ -209,7 +209,6 @@ export function FloatingShare({
   items: RailItem[];
   shareLabel: string;
 }) {
-  const [visible, setVisible] = useState(false);
   const { copied, announce, share, copyLink } = useShareLink({
     copyLabel,
     copiedLabel,
@@ -217,29 +216,13 @@ export function FloatingShare({
     shareUnavailableAnnounce,
   });
 
-  useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") return;
-    const targets = items
-      .map((it) => document.getElementById(it.id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (targets.length === 0) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setVisible(true);
-            io.disconnect();
-            return;
-          }
-        }
-      },
-      { rootMargin: "-30% 0px -55% 0px" },
-    );
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [items]);
+  // MISMA PREGUNTA QUE EL RIEL, y por eso el mismo hook (P55). Aquí solo importa
+  // si hay alguna sección en la banda; cuál sea da igual. Antes esto era un
+  // observer propio que se DESCONECTABA al ver la primera, así que el dock
+  // aparecía y ya no se iba: al volver al hero seguía flotando.
+  const dentroDelCuerpo = useActiveSection(items) !== null;
 
-  if (!visible) return null;
+  if (!dentroDelCuerpo) return null;
 
   const btnClass = actionVariants({ variant: "icon" });
 
