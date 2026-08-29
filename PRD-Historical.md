@@ -3590,11 +3590,28 @@ de 3 s, o sea que los dos filtros cazan al bot ingenuo y a nadie más.
 De paso quedó descartada la hipótesis cómoda: **el único `contact_submit` no es spam.** Lleva
 un `form_start` delante, el mismo día y el mismo dispositivo, un móvil Android. Es una persona.
 
-### Lo que se decidió no hacer, y por qué
+### El arreglo elegido no es el que proponía la ficha, y el motivo es el caso medido
 
-**Ampliar el tráfico interno de GA4 se queda fuera de la sesión**: es un cambio de
-configuración de la cuenta, y ese lo hace Francisco. El diagnóstico queda escrito en la ficha,
-que es lo que impide que la duda se reabra cada trimestre.
+La ficha decía «ampliar el tráfico interno más allá de una sola IP: una IP adicional o un
+parámetro de depuración». **Pero de los dos usuarios contaminantes uno era un móvil**, o sea
+fuera de cualquier IP fija: la vía de las IPs habría cubierto el escritorio y dejado fuera
+justo el caso que apareció. *Un arreglo que no cubre el caso que lo motivó es peor que ninguno,
+porque cierra la duda sin cerrarla.*
+
+**Lo elegido es no aceptar cookies en los dispositivos propios**, y funciona por el mismo
+mecanismo que acabábamos de medir con el spam: sin consentimiento no carga GTM, así que no hay
+evento. Cobertura total, coste cero y efecto inmediato, sin tocar la configuración de la cuenta.
+Su única grieta es que **para verificar la medición sí hay que aceptar**, que es exactamente el
+tráfico del 3 de agosto, así que la regla completa lleva la excepción dentro: rechazar por
+defecto, aceptar solo mientras se verifica, y anotar el día.
+
+**El parámetro de depuración se descarta con su motivo escrito**, que es lo que impide que
+vuelva en cada revisión: es una tarea de GTM más código, no un ajuste, y con el lanzamiento la
+proporción de tráfico propio cae sola. Se reabre si alguna vez estorba, no antes.
+
+**Y lo que no arregla ninguna de las tres:** los filtros de GA4 no son retroactivos. La serie de
+agosto se queda contaminada haga lo que haga, y lo único que valía ahí es lo que ya está hecho,
+dejarlo escrito.
 
 **Y el embalse transversal sube a 17.** La tarea del spam nace en `General` y no en un bloque
 de página porque hoy no hay bloque de Contacto vivo y porque la mitad del hallazgo es de
