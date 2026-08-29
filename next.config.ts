@@ -107,7 +107,15 @@ const nextConfig: NextConfig = {
     //
     // No quita ningún ancho: solo AÑADE uno por debajo, así que ninguna imagen
     // del sitio puede empeorar — como mucho, pedir menos.
-    deviceSizes: [384, 640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    //
+    // Y UN 672 QUE TAMPOCO ESTABA (P84.1, 2026-08-29), por el mismo motivo un
+    // peldaño más arriba. La caja de las fotos de «Sobre mí» mide 384 CSS px
+    // como mucho (`max-w-[24rem]`), y en el móvil de referencia de Lighthouse
+    // —412×823 con DPR 1,75— eso son 672 píxeles reales exactos. El salto
+    // 640 → 750 del reparto por defecto no tiene nada ahí, así que el navegador
+    // se bajaba 750 para pintar 645: 25,7% de píxeles de más y 13,6 KiB. Como
+    // el 384, solo AÑADE un ancho: ninguna imagen puede empeorar.
+    deviceSizes: [384, 640, 672, 750, 828, 1080, 1200, 1920, 2048, 3840],
     // La doc pide que todos los `imageSizes` sean MENORES que el menor
     // `deviceSizes`. Al bajar el suelo a 384, el 384 que traía por defecto deja
     // de cumplirlo; se retira y el resto se queda igual.

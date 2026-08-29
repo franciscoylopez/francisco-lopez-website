@@ -392,7 +392,17 @@ function HobbyBlock({
                   src={photoSrc}
                   alt={photoAlt}
                   fill
-                  sizes="(max-width: 767px) 100vw, 384px"
+                  // EL `100vw` DE ANTES DECLARABA MÁS DE LO QUE SE PINTA, y esa
+                  // es la mitad móvil que P70.28 no cerró. La caja vive dentro de
+                  // `WRAP`, así que nunca ocupa el ancho entero: a 412px de
+                  // viewport se pinta a 369, no a 412 (el gutter es
+                  // `--page-x`, `clamp(1.25rem,5vw,2.5rem)`, a los dos lados).
+                  // Medido con Lighthouse a 412×823 · DPR 1,75: pedía 721px y
+                  // se bajaba el candidato de 750 para una caja que necesita
+                  // 645 → 25,7% de píxeles de más, 13,6 KiB. `90vw` es el
+                  // gutter ya descontado, y el `384px` de escritorio sigue
+                  // siendo el tope real de la caja (`max-w-[24rem]`).
+                  sizes="(max-width: 767px) 90vw, 384px"
                   className="object-cover"
                 />
               </div>
