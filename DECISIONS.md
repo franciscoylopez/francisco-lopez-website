@@ -5422,10 +5422,32 @@ la metadata y otra aquí (D66).
 RRT pide sesión de Google, así que se conduce con `claude-in-chrome` y no con `agent-browser`. Es
 justo el caso para el que `claude-in-chrome` no se retiró.
 
-**Lo que queda abierto.** `check:marco` no distingue un tipo elegible para rich results de uno que
-no lo es, así que no puede avisar de que una referencia que cruza de página va a degradarse. Hoy no
-hay caso vivo. Está tareado, **sin prejuzgar la forma**: puede que lo correcto no sea un guardián
-más sino la regla escrita donde ya está el porqué, en `lib/structured-data.ts`.
+**Lo que quedaba abierto se cerró el 2026-08-30 (P66), y no por donde parecía.** La salida
+evidente era enseñarle a `check:marco` qué tipos son elegibles para rich results —`Article` y
+familia, `Product`, `FAQPage`…— y avisar cuando uno de ellos referencia fuera de su página. Se
+descartó: es **otra lista que se queda vieja**, mantenida a mano contra un catálogo que decide
+Google, y este repo ya tiene medida la vida útil de una lista escrita a mano.
+
+Lo que entró es una invariante **posicional**, que no necesita saber de tipos: *toda referencia
+cuyo `@id` no se declara en su PROPIA página lleva `name` y `url`, salvo lo declarado en
+`REFERENCIAS_QUE_CRUZAN` con su motivo*. Es el patrón de `check:og` (D142), y como allí se mide
+**en las dos direcciones**: una excepción declarada que ya no ocurre también sale roja, porque
+una lista cuya razón de ser es vaciarse acumula entradas muertas que tapan el caso siguiente.
+
+Hoy son **cinco cruces declarados** y los cinco comparten motivo: tres en las páginas del
+deep-dive (`isPartOf`, `author`, `mainEntity`, que son `WebPage`) y dos en `/contacto`
+(`isPartOf`, `mainEntity`, que es `ContactPage`). Ninguno de los dos tipos es elegible, así que
+ningún validador externo evalúa esas páginas aisladas.
+
+**Y lo que NO mira, escrito para no prometer de más:** si el tipo es elegible. Una referencia
+declarada aquí en un tipo que MAÑANA pase a serlo seguiría en verde. Es el precio exacto de no
+mantener el catálogo, y se paga a sabiendas — por eso el motivo de cada entrada **nombra su
+tipo**: el día que cambie, lo que hay que releer está escrito al lado.
+
+**La regla no sustituyó al guardián, y esa era la tercera opción.** El porqué ya estaba escrito
+largo en `lib/structured-data.ts` y aun así el hueco existió: una regla que hay que recordar es
+una regla que se incumple (`BRAND.md` §Cómo se escribe una regla, 2). El texto se queda donde
+está —es donde se lee al escribir el JSON-LD— y ahora hay algo que lo comprueba.
 
 ## D88 · El único índice que se precargaba baja a su cabecera, y era el único que crecía solo — 2026-08-22
 

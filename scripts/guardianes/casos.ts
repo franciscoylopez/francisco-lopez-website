@@ -508,4 +508,21 @@ export const CASOS: Caso[] = [
     binario: true,
     mutar: (o) => o.subarray(0, Math.floor(o.length / 2)),
   },
+  {
+    guardian: "check:marco",
+    rotura:
+      "el `author` de un tipo elegible vuelve a cruzar de página con el `@id` pelado",
+    // EL CASO ES LITERALMENTE EL DE P60.99 (D87): la Rich Results Test veía el
+    // `author` del artículo como un `Thing` anónimo, y `check:marco` daba verde
+    // sobre lo mismo porque resuelve los `@id` contra TODO el sitio. Se le dieron
+    // `name` y `url` junto al `@id`; esto comprueba que si alguien vuelve a
+    // quitárselos, alguien lo dice. Cuarto caso que muerde el build, por lo de
+    // siempre: la entrada de este guardián es el HTML emitido.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) =>
+      o.replace(
+        /"author":\{"@type":"Person","@id":"([^"]+)","name":"[^"]*","url":"[^"]*"\}/,
+        '"author":{"@id":"$1"}',
+      ),
+  },
 ];

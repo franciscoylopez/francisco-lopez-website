@@ -454,7 +454,7 @@ export const PAGE_COUNT = PAGE_SLUGS.length;
  * porque nada ataba la prosa al inventario (P50.73).
  */
 export const GUARDIAN_COUNT = 19;
-export const GUARDIAN_CASE_COUNT = 36;
+export const GUARDIAN_CASE_COUNT = 37;
 
 /**
  * Sustituye `{paginas}` en el copy, como `fillDate` hace con `{date}`.
