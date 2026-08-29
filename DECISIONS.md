@@ -191,6 +191,7 @@
 - D153 · Lo que decide una métrica no vive dentro de un efecto
 - D154 · El suelo de la densidad tiene dos palancas, y la que faltaba es teñir sin gastar bloque
 - D155 · Una señal fija que no distingue es decoración con forma de aviso
+- D156 · La invariante del pliegue pasa a sostenerse por construcción, y el corte está escrito
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -3970,6 +3971,31 @@ póster de 12,3 KB, CLS 0** — el vídeo no es el LCP, que era el riesgo. Sin J
 que el `<noscript>` sirve el fotograma final. La CSP no se toca: el vídeo es auto-hospedado y
 `media-src` cae en `default-src 'self'`.
 
+**ADDENDUM (2026-08-29, P64.5) · El póster es el LCP, y un `poster` no acepta `fetchpriority`.**
+La línea de arriba sigue siendo cierta —el `.webm` no es el LCP— y por eso mismo la auditoría
+«Descubrimiento de solicitudes de LCP» fallaba una de sus tres comprobaciones: el **elemento**
+LCP es el `<video>`, lo que pinta es su `poster`, y el atributo `poster` no admite
+`fetchpriority`. No hay forma de marcarlo prioritario desde el propio elemento.
+
+Se marca desde la cabeza, con `ReactDOM.preload("/img/francisco-sobre-mi-poster.webp", { as:
+"image", fetchPriority: "high", media: "(prefers-reduced-motion: no-preference)" })`. **Va en el
+componente que pinta el vídeo, no en la capa de página** (D45/D46): lo que hay que precargar lo
+decide quién lo pinta, no el marco — y React lo iza al `<head>` él solo, así que la capa no
+necesita una vía nueva para esto. Medido: el póster pasa a pedirse con prioridad **High**, y el
+`.webm` **sigue sin pedirse** con motion reducido.
+
+**Y una corrección al razonamiento con el que se tareó, que importa porque es un ahorro que no
+existe:** el `media` **no evita la descarga** del póster para quien pide menos movimiento.
+Chrome pide el `poster` de un `<video>` esté el elemento oculto o no, así que esos ~12 KB se
+bajan igual; lo que el `media` evita es **priorizar lo que no se pinta**. Está escrito también
+al lado del código, para que nadie le atribuya el ahorro.
+
+**Lo que queda vivo y no se toca aquí:** el fotograma quieto (`francisco-sobre-mi-quieto.webp`,
+7,2 KB servidos) va con `fetchPriority="high"` y `loading="eager"` **para todo el mundo**,
+aunque solo se pinta con motion reducido —`next/image` no admite `media`—, y compite por
+prioridad con el póster. Para quien sí tiene motion reducido esa imagen **es** su LCP, así que
+bajarla es cambiar esta decisión, no un ajuste: pide su propia medición.
+
 ---
 
 ## D66 · Un asset tiene más consumidores de los que se ven
@@ -7051,10 +7077,39 @@ en home, deep-dive y artículo: los logos siguen en `w=48` y el hero en 640 para
 
 **39,3 KiB**, contra los 21 que estimaba la tarea.
 
-**Y ES UN ARREGLO DE ESCRITORIO, que es el límite y no se puede callar.** En móvil el navegador
-pide ~1080w para esa misma caja (412 CSS px × DPR 2,625) y este cambio no toca ese caso:
-`psi --registro` del 2026-08-26 sigue marcando los 21 KiB en `/sobre-mi` móvil. La mitad móvil
-queda tareada aparte.
+**LA MITAD MÓVIL, CERRADA EL 2026-08-29 — y la premisa con la que se tareó era falsa.** Esta
+entrada decía que en móvil el navegador pide ~1080w «para esa misma caja (412 CSS px × DPR
+2,625)». El móvil de referencia de Lighthouse es 412×823 con **DPR 1,75**, no 2,625, y se lee en
+`configSettings.screenEmulation` de su propio informe. Con la cifra buena el navegador no pide
+1080: pide **750** para una caja que necesita **645**, o sea 25,7% de píxeles de más y 13,6 KiB.
+
+Y las causas eran dos, no una:
+
+- **El `sizes` declaraba más de lo que se pinta.** Decía `100vw`, pero la caja vive dentro de
+  `WRAP`: a 412px de viewport se pinta a **369**, no a 412, porque el gutter es `--page-x`
+  —`clamp(1.25rem, 5vw, 2.5rem)`— a los dos lados. Pasa a `(max-width: 767px) 90vw, 384px`.
+- **El reparto no tiene nada entre 640 y 750.** Esa caja mide 384 CSS px como mucho
+  (`max-w-[24rem]`), y en el móvil de referencia son **672 píxeles reales exactos**. Se añade el
+  672 — el mismo lever de arriba un peldaño más arriba, con la misma garantía de que solo añade.
+
+**Y el `sizes` por sí solo no movía la aguja**, que es lo que hace falta saber para no volver a
+intentarlo: 412 × 1,75 = 721 y 369 × 1,75 = 649 **caen los dos entre 640 y 750**, así que el
+navegador se bajaba 750 en los dos casos. Hacía falta el peldaño. *Un `sizes` correcto no
+arregla lo que la escalera no puede servir.*
+
+| | antes (w=750) | después (w=672) |
+|---|---|---|
+| `francisco-reposteria-4x5` | 52.926 B | **47.096 B** |
+| `francisco-montana-4x5` | 43.856 B | 38.310 B |
+
+`uses-responsive-images` pasa de **0,5 · 13,6 KiB** a **1 · sin ahorro**. Reparto final:
+`[384, 640, 672, 750, 828, 1080, 1200, 1920, 2048, 3840]`.
+
+**Y el metro no fue `psi`, que corre contra producción y solo da la nota:** fue **Lighthouse por
+`npx` contra el build servido en local**, con `--only-audits` y leyendo `details.items` —`url`,
+`totalBytes`, `wastedBytes`, el `boundingRect` pintado—. Lanza su propio Chrome con perfil
+nuevo, así que **no arrastra la caché de imágenes**, que es justo la trampa del párrafo de
+abajo.
 
 **La trampa de medirlo, que costó una lectura falsa.** Chrome **nunca baja a un candidato más
 pequeño si ya tiene uno grande en caché**, y `location.reload(true)` no lo evita: está obsoleto
@@ -8706,6 +8761,11 @@ separado el día que el binario cambie de sitio.
 **Un cuelgue que cuesta una hora si no está escrito:** `set viewport` **sin ninguna página
 abierta se queda esperando**, no falla. Se abre primero y solo entonces se fija el tamaño.
 
+**DESDE D156 (2026-08-29) YA NO ES EL ÚNICO GUARDIÁN, y solo para tres de las cuatro.** Brand
+Kit, Design System y Accesibilidad salen de una pieza compartida y no pueden divergir: este gate
+pasa ahí a red de seguridad. **Contacto sigue dependiendo solo de él** — no entra en el bloque,
+y el porqué está en D156.
+
 **Lo que NO cubre:** las aperturas que comparten el andamiaje del pliegue pero no esta familia
 —el deep-dive, «Cómo se ha creado» y la home—. Sus aperturas son tipográficas, de alto constante,
 no se comparan de un vistazo con estas cuatro y cada una tiene su hueco razonado en su archivo.
@@ -9345,3 +9405,52 @@ regla **sin error de compilación**.
 su único consumidor es `/como-se-ha-creado`. Ahí se verificó.
 
 **Dónde vive.** `components/ui/section-index-islands.tsx`.
+
+## D156 · La invariante del pliegue pasa a sostenerse por construcción, y el corte está escrito — 2026-08-29
+
+**Qué cambia respecto a D144.** Allí la invariante —los grupos de apertura tienen que medir lo
+mismo, porque `my-auto` reparte el sobrante arriba y abajo— la sostenía **un gate por medición y
+nada más**, y llevaba tres incumplimientos, los tres vistos por un ojo. Ahora las tres aperturas
+del sistema (Brand Kit, Design System, Accesibilidad) salen de **una sola pieza**,
+`components/site/system-page-opening.tsx`: no pueden divergir porque son la misma. `npm run
+pliegue` sigue corriendo, pero pasa a ser **red de seguridad**. Es la regla 2 de `BRAND.md`
+§Cómo se escribe una regla — lo que impide el drift es el recorrido completo, no la disciplina.
+
+**Contacto sigue dependiendo solo del gate**, y eso no es un olvido: ver el descarte de abajo.
+
+**Qué sube y qué baja.** Sube el esqueleto entero: la sección de pliegue, `WRAP`, el breadcrumb,
+`FOLD_GROUP`, `HERO_ROW`, la columna de texto con su `self-start` y la `StatRow`. Bajan por
+props las tres cosas que de verdad varían: el copy, las cifras y **la composición decorativa,
+que entra por `children`**. Los tres `hero.tsx` pasan de 154, 184 y 308 líneas a 126, 148 y 232,
+y lo que les queda es su ilustración y sus datos.
+
+**El descarte, que es la parte que hay que leer antes de "mejorarlo".** `contacto-pagina.tsx`
+**no entra**, comprobado contra el disco y no supuesto (regla 4 de `BRAND.md`): usa el mismo
+`FOLD_GROUP`, pero su grupo es un **grid con `content-start`** —con su porqué escrito al lado—,
+no usa `HERO_ROW` y no tiene fila de cifras. Es otra cosa que se parece, no la misma con un
+mando. El bloque sirve a tres y está bien.
+
+**HASTA AQUÍ Y NO MÁS ALLÁ, y por eso está escrito y no solo hecho.** Después de esto `qlty`
+sigue viendo **79 de masa** entre `brand-kit/index.tsx` y `design-system/index.tsx`, y ahí se
+paró a propósito. Lo que queda parecido a esa altura ya no es una decisión escrita dos veces: es
+la **FORMA** de la página —firma, `return`, hero, índice, bloques, páginas relacionadas—, o sea
+el hecho de que las tres hermanas son la misma clase de página. Factorizarlo pediría un
+envoltorio que se tragara justo lo que esos archivos existen para enseñar: **el orden de la
+página, legible de un vistazo**.
+
+> **El corte, entonces: sube lo que tiene una invariante que proteger; no sube lo que solo
+> comparte silueta.** Es la regla 4 de `BRAND.md` aplicada al revés — antes de unificar dos
+> cosas que se parecen, mira si significan cosas distintas; aquí lo que se repite es el
+> significado, no la decisión.
+
+**Lo que permite afirmar que no se movió un píxel:** `npm run gate:html` con **diff vacío en las
+28 variantes** (D42/D45), con la línea base tomada de `main` construido y servido, el servidor
+viejo matado y el puerto verificado libre antes de levantar el de la rama —que es la trampa que
+ya hizo mentir a este gate una vez—. Y `npm run pliegue` en verde después: las cuatro aperturas
+siguen midiendo 464px de grupo y 389px de `h1`.
+
+**Lo que se dejó escrito y no se tocó:** al juntar las tres entradillas se ve que Brand Kit trae
+un tamaño distinto (`clamp(1,0625rem…1,25rem)` contra `clamp(1,05rem…1,2rem)`) sin nada que lo
+justifique. Es drift, y **no se unifica en un refactor que se declara transparente**: movería
+píxeles y rompería lo único que este cambio promete. Queda anotado en el `leadClassName` del
+propio bloque.

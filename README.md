@@ -253,6 +253,8 @@ components/ui/         Primitivas SIN conocimiento del contenido. QUÉ HAY DENTR
                        escrita a mano, y para agosto de 2026 le faltaban 9 de 21 piezas
 components/site/       Piezas que SÍ saben de este sitio: page-shell.tsx (el marco común de toda
                        página: JSON-LD, nav, isla de motion, el <main> y footer, D45/D46),
+                       system-page-opening.tsx (la apertura compartida de las tres páginas que
+                       documentan el sistema, donde vive la invariante del pliegue, D156),
                        skip-link.tsx (WCAG 2.4.1 nivel A), bloques (nav, footer, breadcrumb,
                        banner de cookies…) y secciones de página (hero, hitos, toolkit…)
 components/site/{design-system,brand-kit}/  Los dos showcase, UN ARCHIVO POR SECCIÓN (D42)

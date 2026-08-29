@@ -11,20 +11,17 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
  * System y Accesibilidad (P63.5, 2026-08-29).
  *
  * POR QUÉ ES UNA PIEZA Y NO TRES COPIAS, que es lo único que la justifica: estas
- * tres aperturas comparten una INVARIANTE, no un aspecto. El grupo va centrado
- * (`my-auto`) dentro del pliegue, y centrar reparte el sobrante ARRIBA y abajo:
- * un grupo que mide más que sus hermanas sube su borde superior la mitad de la
- * diferencia, y el `h1` de esa página cae a distinta altura que el de las otras
- * dos. Se ha roto DOS VECES, y las dos las encontró un ojo comparando pestañas,
- * nunca una herramienta: la última, con la fecha colgando de la `StatRow`, el
- * grupo de Accesibilidad medía 505 contra los 461 de sus hermanas y su `h1`
- * caía a 368 contra 390 (P70.29).
+ * tres aperturas comparten una INVARIANTE, no un aspecto. **Cuál es, cuántas
+ * veces se ha roto y con qué cifras, en `components/ui/layout.ts`** —`FOLD_CRUMB`
+ * y `FOLD_GROUP`, que son quienes la producen— y en `DECISIONS.md` D144. Aquí
+ * solo lo que cambia por existir esta pieza:
  *
- * Hoy la vigila `npm run pliegue` (D144), que mide el grupo y el `h1` de las
- * páginas del registro. Con una pieza compartida esa vigilancia pasa a ser RED
- * DE SEGURIDAD en vez de único guardián: tres aperturas no pueden divergir
- * porque son la misma. Es la regla 2 de `BRAND.md` §Cómo se escribe una regla
- * —lo que impide el drift es el recorrido completo, no la disciplina—.
+ * La vigilaba `npm run pliegue` (D144) y nada más. Con una pieza compartida esa
+ * vigilancia pasa a ser RED DE SEGURIDAD en vez de único guardián: tres
+ * aperturas no pueden divergir porque son la misma. Es la regla 2 de
+ * `BRAND.md` §Cómo se escribe una regla —lo que impide el drift es el recorrido
+ * completo, no la disciplina—. Contacto sigue dependiendo solo del gate: no
+ * entra en el bloque, y el porqué está más abajo.
  *
  * QUÉ VARÍA, Y ES TODO LO QUE PUEDE VARIAR: el copy, la fila de datos y la
  * composición decorativa de la derecha, que entra por `children`.
