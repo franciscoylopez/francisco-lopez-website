@@ -92,7 +92,7 @@
           "type": "ul",
           "items": [
             "**La home tiene una red de seguridad para el lector rápido.** Justo debajo de la portada van cinco hitos, en una pantalla y sin tener que bajar: es lo que contesta «rol, seniority y stack» a quien va a estar diez segundos. Lo que viene después, cómo trabajo, la trayectoria, las herramientas y la formación, ya no le habla a esa persona: se despliega para quien sigue bajando.",
-            "**La trayectoria hace lo mismo, pero repartido en dos páginas.** El listado resume cada experiencia en lo que se lee de un vistazo, y el rol enlaza a una página propia donde esa historia se cuenta entera. Así nadie tiene que leerse el caso completo para saber si le interesa, y quien quiere el detalle no se queda con el resumen.",
+            "**Y cada página de experiencia repite el mecanismo dentro de sí misma.** El índice de la trayectoria enlaza a cada una, pero la doble lectura no está en ese salto: está dentro de la página. Se abre con los datos del puesto, y lo primero que se lee es «En un minuto», un puñado de bullets que contestan qué hice ahí sin tener que bajar. Debajo queda lo que un lector rápido no necesita: la historia, el caso concreto y los aprendizajes.",
             "**Y las tres páginas del sistema abren igual, mires en la pantalla que mires.** El Brand Kit, el [Design System](/design-system) y la [declaración de accesibilidad](/accesibilidad) empiezan con una entradilla y una fila de cifras clave, y el desarrollo viene después. Esa fila no la decide cada página: es una pieza del sistema que existe para esto, así que las tres se comportan igual sin que nadie tenga que acordarse."
           ]
         },

@@ -88,6 +88,14 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "PRD-Live.md#7. Métricas de éxito",
     "DECISIONS.md#D29",
     "lib/routes.ts",
+    // Desde el 2026-08-29 el texto sitúa la doble lectura DENTRO de la página de
+    // experiencia y nombra su orden: los datos del puesto, «En un minuto», y el
+    // resto debajo. La forma la fija D53 y la lista de rótulos vive en el
+    // diccionario común, que es pequeño y cambia solo cuando cambia la forma —
+    // hashear `deep-dive.tsx` entero mandaría a releer esto en cada retoque de
+    // maquetación, que es justo el ruido que D103 quitó.
+    "DECISIONS.md#D53",
+    "app/[lang]/dictionaries/es/trayectoria/comun.json",
   ],
 
   // «Del brief al tablero» — el proceso, el registro de decisiones, el ciclo de
