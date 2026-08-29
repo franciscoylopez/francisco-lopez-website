@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { preload } from "react-dom";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 
@@ -49,6 +50,28 @@ export function SobreMi({
   contactoHref: string;
 }) {
   const t = dict;
+  // EL ELEMENTO LCP DE ESTA PÁGINA ES EL PÓSTER DEL VÍDEO DE APERTURA, y un
+  // atributo `poster` no acepta `fetchpriority`: no hay forma de marcarlo
+  // prioritario desde el propio elemento, así que la comprobación
+  // «fetchpriority aplicado» de «Descubrimiento de solicitudes de LCP» no se
+  // podía pasar tocando el vídeo. Se marca desde la cabeza, con el preload.
+  //
+  // EL `media` DICE LO QUE SE MIDIÓ, no más: con motion reducido el vídeo está
+  // en `display:none` y el póster no se pinta nunca —se sirve el fotograma
+  // quieto—, así que ahí no hay LCP que priorizar y el preload no aplica. Lo
+  // que NO hace es ahorrar la descarga: Chrome pide el `poster` del `<video>`
+  // igual, esté oculto o no, y eso viene del elemento, no de aquí. D65 sigue
+  // en pie por su propio mecanismo, y se comprobó: con motion reducido el
+  // .webm no se pide.
+  //
+  // Va aquí y no en la capa de página (`pageMetadata`/`PageShell`, D45/D46):
+  // lo que hay que precargar lo decide quién pinta el vídeo, no el marco. React
+  // lo iza al `<head>` él solo.
+  preload("/img/francisco-sobre-mi-poster.webp", {
+    as: "image",
+    fetchPriority: "high",
+    media: "(prefers-reduced-motion: no-preference)",
+  });
   return (
     <>
       <div className="py-[clamp(1.5rem,3vw,1.75rem)]">
