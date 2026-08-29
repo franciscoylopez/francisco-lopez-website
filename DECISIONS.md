@@ -189,6 +189,8 @@
 - D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado
 - D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint
 - D153 · Lo que decide una métrica no vive dentro de un efecto
+- D154 · El suelo de la densidad tiene dos palancas, y la que faltaba es teñir sin gastar bloque
+- D155 · Una señal fija que no distingue es decoración con forma de aviso
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7449,7 +7451,7 @@ confundir: el índice y el riel resuelven ORIENTACIÓN, no RITMO.
 
 | Dirección | Veredicto |
 |---|---|
-| Teñir bloques con `bg-muted` | Funciona, y destapa que `--border` está calibrado solo contra `--background`: sobre la banda el contorno de una tarjeta cae de **1,29 a 1,10**. Deuda de capa, tareada aparte |
+| Teñir bloques con `bg-muted` | Funciona, y destapa que `--border` está calibrado solo contra `--background`: sobre la banda el contorno de una tarjeta cae de **1,29 a 1,10**. Deuda de capa, tareada aparte. **Su motivo caducó y la dirección volvió: D154** |
 | Dar superficie al cierre de sección | La más barata y la más fiel a D123. Se quedó a un paso |
 | **Insertar una banda invertida por bloque** | **Elegida** |
 
@@ -7467,11 +7469,19 @@ comentario**: doce secciones seguidas, todas con el mismo filete, no dicen dónd
 familia. Ahora se ve, y la banda lista qué lleva dentro con los rótulos **reales** del índice,
 así que también sirve para orientarse — que es lo que una página de consulta necesita (D123).
 
-**LA REGLA DE DENSIDAD, que es lo que decide si esto escala.** Lo que fija cada cuánto aparece
-una banda es el número de **BLOQUES, no el de secciones**. Con el reparto elegido cae una cada
-**8,9 pantallas** en Design System, **7,4** en Brand Kit y **6,8** en Accesibilidad. Partir el
-Brand Kit en tres bloques daría una cada 4,6 y la página se leería a golpes. **Si una página
-pide más de un bloque cada ~6 pantallas, lo que sobra son bloques, no banda.**
+**LA REGLA DE DENSIDAD, que es lo que decide si esto escala.** Lo que fija cada cuánto cambia
+el fondo es el número de **BLOQUES, no el de secciones**. **Si una página pide más de un bloque
+cada ~6 pantallas, lo que sobra son bloques, no banda**: partir el Brand Kit en tres daría una
+cada 4,6 y la página se leería a golpes.
+
+> **Enmendado el 2026-08-29 por D154, en las dos mitades.** La regla escrita aquí solo tenía
+> **techo**, y un techo sin suelo deja pasar el caso que esta decisión nació a corregir: el
+> Design System encadenaba **14,1 pantallas** entre dos bandas. Y las cifras que este párrafo
+> publicaba —8,9 en Design System, 7,4 en Brand Kit, 6,8 en Accesibilidad— eran **medias**, que
+> es justo lo que no puede detectar un reparto malo. **Se sustituyen por el peor tramo de cada
+> página**, medido a 1440×900 sobre el sitio servido con los reveals encendidos: Design System
+> `1,9 · 6,9 · 6,8 · 7,5 · 7,8 · 4,4` (peor **7,8**), Brand Kit `1,7 · 7,8 · 5,1` (peor **7,8**),
+> Accesibilidad `1,8 · 5,8 · 4,9` (peor **5,8**). El suelo y su segunda palanca, en **D154**.
 
 **Dos detalles que costaron y no se re-derivan.** Hubo un rótulo de rango encima de cada banda
 («Secciones 05 a 08») y salió: la lista de abajo ya lleva los ordinales, así que decía dos
@@ -9188,3 +9198,150 @@ correo no la hace completa: sigue contando únicamente a quien acepta cookies, p
 consentimiento no carga GTM. Con tres envíos de spam entregados y cero eventos, la diferencia
 medida es 1 contado contra 4 entregados. Eso es de otra tarea y de otra causa; aquí se anota
 para que nadie lea esta entrada como si cerrara la medición del formulario entera.
+
+## D154 · El suelo de la densidad tiene dos palancas, y la que faltaba es teñir sin gastar bloque — 2026-08-29
+
+**El hueco, y por qué la regla no podía verlo.** D125 dejó escrito el techo —«más de un bloque
+cada ~6 pantallas, lo que sobra son bloques»— y no escribió el suelo. Sin él, la regla vigilaba
+el exceso y **dejaba pasar el caso que D125 nació a corregir**: el Design System encadenaba
+**14,1 pantallas seguidas sin un solo cambio de fondo** entre la banda de «Fundamentos» y la de
+«Piezas». Más que la página entera del Brand Kit (15,4) y que Accesibilidad completa (13,4). El
+tramo más plano del sitio medía lo que una hermana entera.
+
+Y no se veía porque **la cifra publicada era una media**. D125 decía «8,9 pantallas en Design
+System», que es el promedio de `1,9 · 14,1 · 7,5 · 7,8 · 4,4`. *Una media no puede detectar un
+reparto malo, porque repartir mal es exactamente lo que una media promedia.* Se sustituye por el
+**peor tramo**, que es lo que la regla necesita ver. (Las otras dos cifras tampoco cuadraban con
+la medición: 7,4 y 6,8 contra 7,8 y 5,8.)
+
+### La primera versión metía otra banda, y la tumbó mirarla
+
+Se implementó partiendo «Fundamentos» en dos bloques, con banda nueva, título y entradilla. Lo
+descartó Francisco viendo la página, y el argumento no es de gusto: **la banda significa «empieza
+otra familia», y entre §02 y §03 no empieza ninguna.** Comprar ritmo con una banda ahí es
+comprarlo diciendo algo falso. Y hay un coste de segundo orden: cinco bandas en una página hacen
+que ninguna signifique gran cosa, así que la banda inicial pierde valor pagando el ritmo de la
+mitad de abajo.
+
+**La palanca correcta era la que D125 había descartado**, y sus dos peros habían caducado:
+
+- El filete de una tarjeta sobre superficie teñida caía de 1,29 a 1,10 → **lo cerró D131**,
+  que recalcula `--border` por superficie.
+- «Las galerías dan por hecho el fondo de página» → **falso al medirlo, y en dirección
+  contraria**: una tarjeta se separa **mejor** sobre muted que sobre el fondo de página en tema
+  claro, ΔL\* **6,25 contra 2,35**; en oscuro 4,70 contra 4,34. Verificado además en pantalla,
+  dentro del tramo, en los dos temas.
+
+Lo que sigue en pie de D125 y esto no contradice: **la banda se inserta, no se tiñe una sección
+para fabricarla.** Aquí no se fabrica ninguna banda — se cambia el fondo y nada más.
+
+### Dos palancas para dos preguntas, y es lo que deshace una contradicción
+
+La regla a medias no solo era incompleta: **con la banda como única herramienta, el suelo
+empujaba contra el techo.** Romper un tramo largo costaba un bloque, así que una página que
+creciera acabaría chocando con «no más de un bloque cada ~6 pantallas». Las dos mitades se
+contradecían.
+
+`tinteDesde` lo deshace porque **cambia el fondo sin gastar bloque**. Cuál toca no lo decide la
+longitud, lo decide el contenido:
+
+| Pregunta | Palanca |
+|---|---|
+| ¿Empieza otra familia? | Banda (`BlockOpener`) |
+| ¿Sigue la misma y se hace larga? | Tinte (`tinteDesde`) |
+
+Y la regla queda con sus dos mitades: **techo**, más de un bloque cada ~6 pantallas se lee a
+golpes; **suelo**, un tramo por encima de ~10 pantallas sin cambio de fondo pide romperse.
+
+### Dónde cae el corte lo decidió la medición, y la intuición falló
+
+El corte por **familia** —las tres decisiones de medida contra las dos que no se miden en
+píxeles, o sea desde §04— dejaba el tramo malo en **10,9**, porque el peso no está repartido.
+Medido por sección, en pantallas de 900px:
+
+| §01 Rejilla | §02 Ritmo | §03 Tipografía | §04 Claroscuro | §05 Movimiento |
+|---|---|---|---|---|
+| **5,88** | 1,01 | **3,99** | 1,61 | 1,22 |
+
+De las cuatro particiones posibles, solo una deja las dos mitades bajo el techo y sobre el suelo:
+
+| Corte | Primera | Segunda | Peor |
+|---|---|---|---|
+| tras §01 | 5,88 | 7,83 | 7,83 |
+| **tras §02** | **6,89** | **6,82** | **6,89** |
+| tras §03 *(por familia)* | 10,88 | 2,83 | 10,88 |
+| tras §04 | 12,49 | 1,22 | 12,49 |
+
+**Y el corte NO coincide con la frontera de familia, a propósito.** Con un tinte eso es legítimo
+y con una banda no lo sería: **el tinte no tiene titular que pudiera mentir.** Es la diferencia
+que justifica que sean dos palancas y no una con variante de color.
+
+### Lo que hay que saber al usarlo
+
+- **La clase es `bg-muted`, no un `data-surface`.** La utilidad ya dispara la maquinaria de
+  superficie de `globals.css` —atenuado (D39), filete (D131) y contorno de control (D97)—;
+  `data-surface` es para lo que se pinta su propia superficie con un `color-mix`.
+- **El salto es callado y asimétrico**, y conviene tenerlo en cifra antes de usarlo en una página
+  nueva: fondo ↔ muted da **1,105 · ΔL\* 3,89** en claro y **1,272 · ΔL\* 9,04** en oscuro,
+  frente a los 13,79 · 81,1 y 15,32 · 85,45 de la banda. En claro lo que hace legible el borde no
+  es el color: es que la sección de debajo ya trae su filete superior (`SECTION`).
+  *El metro se validó solo: esas dos cifras son exactamente las que `BRAND.md` publica para la
+  pastilla de hover.*
+- **`tinteDesde` revienta el prerender** si nombra una parada que no está en el bloque, en vez de
+  no teñir nada. Un tinte que desaparece en silencio al renombrar una clave es indistinguible de
+  un tinte que nadie pidió, y este repo lleva seis metros caídos así.
+
+**Verificado.** Censo completo en verde tras el cambio: 427 pares de texto y 328 contornos, cero
+bajo AAA y cero por debajo del 3:1 de WCAG 1.4.11, metro validado en las 28 corridas. Aparecen
+**3 pares nuevos** —los que compone el tramo teñido— y los tres pasan. `censo.huella` se re-sella
+con la misma huella (58 · 19 · 6); `LAST_A11Y_REVIEW` **no** se mueve, porque faltan las dos
+pasadas manuales (D38).
+
+**Dónde vive esto.** `components/ui/block-opener.tsx` (la palanca y las cifras) y
+`components/site/design-system/index.tsx` (el reparto y el porqué del corte). Enmienda **D125**;
+la maquinaria de superficie es **D39**/**D97**/**D131**.
+
+## D155 · Una señal fija que no distingue es decoración con forma de aviso — 2026-08-29
+
+**El caso.** A 1280×618 —el portátil de 15" con escalado de Windows que D50 obliga a mirar— el
+riel de doce paradas mide **598px de contenido en 514 de hueco**. La aritmética cuadra exacta:
+`618 − 80 (top-[5rem]) − 24 (bottom-6)` por un lado, `12 × 44 + 11 × 6,4` por el otro.
+
+**Y nada estaba roto**, que es la mitad que conviene tener escrita: el `overflow-y: auto` recorta
+sin derramarse sobre el texto, el teclado llega porque el navegador auto-desplaza el contenedor al
+enfocar el último enlace (`scrollTop` 0 → 84), y el `my-auto` centra mientras cabe y empieza a
+desplazarse cuando no, que es lo que P68.57 fue a arreglar. Lo que faltaba era la **afordancia**:
+`[scrollbar-width:none]` oculta la barra a propósito, así que con el ratón no había ninguna señal
+de que abajo hubiera más.
+
+**Por qué desvanecido y no barra.** La barra vive en el borde derecho del `nav`, que mide `w-64`
+porque la píldora se ensancha en hover. O sea a 256px del riel y flotando sobre la columna de
+texto: **señalaría en el sitio equivocado.** El desvanecido señala donde está el corte.
+
+### La parte reutilizable, que no es del riel
+
+**Cada borde se mide por separado.** Un desvanecido fijo arriba y abajo teñiría el primer y el
+último círculo aun cuando no esconden nada: sería *decoración con forma de aviso*, y el coste no
+es estético — un aviso que está siempre encendido deja de informar, igual que una lista vacía
+parece un aprobado. Aquí el de arriba solo existe si `scrollTop > 0` y el de abajo solo si queda
+contenido, así que en las páginas donde el riel cabe entero no se pinta ninguno. Verificado sobre
+el sitio servido: a 1280×618 la máscara es la de abajo sin desplazar y la de arriba al llegar al
+final; a 1440×900 el riel no desborda y la máscara es `none`.
+
+**Y no toca ningún par de contraste**, que es lo que permite meter una máscara en una pieza de un
+sitio que promete AAA: la fila de una parada mide 44px y la píldora 24, así que sobran 10 por
+arriba y 10 por abajo. Con el degradado en 14px, lo único que llega a atenuarse es una píldora
+**que ya está cortada por el borde**, que es exactamente la que hay que anunciar.
+
+**Dos detalles de implementación que no se re-derivan.** La dependencia del efecto es el NÚMERO
+de paradas y no `items`: el riel no se pinta mientras `active` es `null`, así que la primera vez
+que el efecto corre el `nav` todavía no existe y no habría nada que medir. Y las cuatro máscaras
+se escriben **enteras**, no compuestas por interpolación — la trampa del punto 5 de `BRAND.md`
+§Cómo medir: una clase construida con plantilla no la genera Tailwind y el elemento se queda sin
+regla **sin error de compilación**.
+
+**Y una premisa de ficha que estaba caducada:** la tarea decía que esto lo pisan «el Design System
+(12) y el artículo (12)». **P70.415 retiró el riel de las tres páginas del sistema**, así que hoy
+su único consumidor es `/como-se-ha-creado`. Ahí se verificó.
+
+**Dónde vive.** `components/ui/section-index-islands.tsx`.
