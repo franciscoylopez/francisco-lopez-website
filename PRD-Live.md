@@ -220,14 +220,11 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
   Custom Event con su tag de GA4 —comprobado en el `gtm.js` publicado, que es como se
   audita la mitad que vive fuera del repo (D71)— y en GA4 está marcado como **evento
   clave**. La marca no es retroactiva: cuenta desde ahí.
-  **Y «cuando el servidor confirma» resultó ser ambiguo, así que aquí va qué cuenta y qué no**
-  *(2026-08-29, P52.5)*: el `status: "sent"` de la Server Action tiene **tres causas** —el envío
-  real y los dos filtros que callan, el honeypot y el suelo de 3 s—, y solo una manda correo.
-  Se cuenta **la que manda correo**, y lo decide `cuentaComoEnvio` en `lib/contact-form.ts`, no
-  una comparación dentro del componente: ahí la regla tiene tests y un caso malo en
-  `check:guardianes`. El silencio del servidor hacia el bot **no se toca** —la UI pinta lo mismo
-  en los tres casos y lo único que cambia es el `dataLayer`—; lo que estaba mal era propagarlo a
-  la analítica, y con la primaria en `n=1` un solo falso positivo la deja en cero.
+  **Y «cuando el servidor confirma» era ambiguo** *(2026-08-29)*: el `status: "sent"` tiene
+  **tres causas** —el envío y los dos filtros que callan, honeypot y suelo de 3 s— y solo una
+  manda correo. Se cuenta esa, y lo decide `cuentaComoEnvio` en `lib/contact-form.ts`, no una
+  comparación en el componente: ahí la regla tiene tests y caso malo. El silencio hacia el bot
+  no se toca; propagarlo a la analítica era lo que estaba mal.
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
   Trayectoria, Contacto) y profundidad de scroll.
 - **Herramienta**: GA4 (captura scroll y descarga de fábrica).
