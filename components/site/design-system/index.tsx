@@ -59,11 +59,11 @@ const ORDEN = [
 const ANCLA_INDICE = "indice";
 
 /**
- * LOS CINCO BLOQUES, y esta lista es lo que hace VISIBLE una jerarquía que hasta
- * P70.47 solo existía en el comentario de abajo (P70.47).
+ * LOS CUATRO BLOQUES, y esta lista es lo que hace VISIBLE una jerarquía que hasta
+ * P70.47 solo existía en el comentario de abajo.
  *
  * El orden de las doce dejó de ser cronológico en P70.34 y pasó a ser
- * `espacio → materia → piezas → composición → excepción`. Estaba escrito, estaba bien
+ * `fundamentos → piezas → composición → excepción`. Estaba escrito, estaba bien
  * pensado, y en pantalla no se veía: doce secciones seguidas, todas separadas por
  * el mismo filete, no dicen dónde acaba una familia y empieza otra.
  *
@@ -72,36 +72,45 @@ const ANCLA_INDICE = "indice";
  * no se escriben. Así reordenar la página no puede dejar una banda anunciando
  * secciones que ya no están debajo.
  *
- * SON CINCO Y NO CUATRO DESDE P62.5 (2026-08-29), y el que se partió es el
- * primero. «Fundamentos» agrupaba las cinco secciones de apertura y eso dejaba
- * **14,1 pantallas seguidas sin un solo cambio de fondo** entre su banda y la de
- * «Piezas»: más que la página entera del Brand Kit (15,4) y que Accesibilidad
- * completa (13,4). El tramo más plano del sitio medía lo que una hermana entera,
- * que es exactamente el síntoma que D125 nació a corregir.
+ * ───────────────────────────────────────────────────────────────────────────────
+ * «FUNDAMENTOS» CAMBIA DE FONDO A MITAD, Y NO SE PARTE (P62.5, 2026-08-29).
+ *
+ * EL PROBLEMA. Sus cinco secciones dejaban **14,1 pantallas seguidas sin un solo
+ * cambio de fondo** hasta la banda de «Piezas»: más que la página entera del
+ * Brand Kit (15,4) y que Accesibilidad completa (13,4). El tramo más plano del
+ * sitio medía lo que una hermana entera, que es el síntoma que D125 nació a
+ * corregir.
+ *
+ * POR QUÉ NO UNA SEGUNDA BANDA, que fue mi primera versión y la descartó
+ * Francisco viéndola: la banda significa «empieza otra familia», y aquí no
+ * empieza ninguna. Una banda más habría comprado ritmo diciendo algo falso, y de
+ * paso habría gastado la moneda: cinco bandas en una página hacen que ninguna
+ * signifique gran cosa. El fondo cambia y la banda inicial conserva su valor.
  *
  * DÓNDE CAE EL CORTE LO DECIDIÓ LA MEDICIÓN, y la primera intuición falló. Por
- * familia —las tres de medida y las dos que no se miden en píxeles— el tramo
- * malo se quedaba en **10,9**, porque el peso no está repartido: §01 «Rejilla»
- * mide ella sola **5,88 pantallas** y §03 «Tipografía» otras 3,99, contra 1,01
- * de §02 y 1,22 de §05. Cortando tras §02 salen **6,89 y 6,82**, que es la única
- * partición de las cuatro posibles que deja las dos mitades por debajo del techo
- * y por encima del suelo.
+ * familia —las tres decisiones de medida contra las dos que no se miden en
+ * píxeles, o sea desde §04— el tramo malo se quedaba en **10,9**, porque el peso
+ * no está repartido: §01 «Rejilla» mide ella sola **5,88 pantallas** y §03
+ * «Tipografía» otras 3,99, contra 1,01 de §02 y 1,22 de §05. Cortando en §03
+ * salen **6,89 y 6,82**, la única de las cuatro particiones posibles que deja las
+ * dos mitades por debajo del techo y por encima del suelo.
  *
- * Y EL NOMBRE SIGUE AL CORTE, no al revés: «Fundamentos» no describía dos
- * mitades, así que desaparece como rótulo de bloque y las dos se llaman por lo
- * que agrupan —«El espacio» dónde cae el contenido y cada cuánto respira, «La
- * materia» de qué está hecho lo que se coloca—. Las cinco siguen siendo los
- * fundamentos; lo que deja de existir es una banda que anunciaba una familia y
- * enseñaba dos.
+ * Y por eso el corte NO coincide con la frontera de familia: manda la aritmética,
+ * porque el tinte no anuncia nada — no tiene titular que pudiera mentir.
+ * ───────────────────────────────────────────────────────────────────────────────
  *
- * ANTES DE AÑADIR UN SEXTO, la pregunta es la densidad, y tiene DOS mitades: por
- * arriba, más de un bloque cada ~6 pantallas se lee a golpes; por abajo, un tramo
- * de más de ~10 sin banda es el defecto que acaba de corregirse. El porqué
- * medido, en `ui/block-opener.tsx`.
+ * ANTES DE AÑADIR UN QUINTO BLOQUE, la pregunta es la densidad, y ahora tiene DOS
+ * mitades y DOS palancas: por arriba, más de un bloque cada ~6 pantallas se lee a
+ * golpes; por abajo, un tramo de más de ~10 sin cambio de fondo pide romperse
+ * —con banda si de verdad empieza otra familia, con `tinteDesde` si sigue la
+ * misma—. El porqué medido, en `ui/block-opener.tsx`.
  */
 const BLOQUES = [
-  { id: "espacio", claves: ["rejilla", "ritmo"] },
-  { id: "materia", claves: ["tipografia", "claroscuro", "movimiento"] },
+  {
+    id: "fundamentos",
+    claves: ["rejilla", "ritmo", "tipografia", "claroscuro", "movimiento"],
+    tinteDesde: "tipografia",
+  },
   { id: "piezas", claves: ["enlaces", "botones", "etiquetas", "formulario"] },
   { id: "composicion", claves: ["composicion", "accesibilidad"] },
   { id: "excepcion", claves: ["articulo"] },
@@ -114,10 +123,9 @@ const BLOQUES = [
 // Client Components. El porqué largo, en D42 §La excepción. La sección de
 // Accesibilidad es la checklist de cierre de todo el sitio (§20).
 //
-// DOCE SECCIONES, Y EL ORDEN ES UNA JERARQUÍA (P70.34, en cinco bloques desde
-// P62.5): espacio → materia → piezas → composición → excepción. Antes eran
-// dieciocho y su orden era CRONOLÓGICO —cada capa nueva se añadía al final—, y
-// por eso el vídeo y los bloques de página
+// DOCE SECCIONES, Y EL ORDEN ES UNA JERARQUÍA (P70.34): fundamentos → piezas →
+// composición → excepción. Antes eran dieciocho y su orden era CRONOLÓGICO —cada
+// capa nueva se añadía al final—, y por eso el vídeo y los bloques de página
 // acabaron debajo de la capa de artículo, que es la excepción del sistema y
 // debería cerrar. Con la jerarquía, «nada debajo del artículo» sale solo, y
 // además queda dicho dónde va lo que se añada en el futuro.
@@ -218,7 +226,7 @@ export function DesignSystem({
 
       <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
 
-      {/* LAS DOCE, REPARTIDAS EN SUS CINCO BLOQUES. La lista de secciones sigue
+      {/* LAS DOCE, REPARTIDAS EN SUS CUATRO BLOQUES. La lista de secciones sigue
           leyéndose de un vistazo, que es lo que este archivo tiene que ser; lo
           único que cambia es que ahora se ve dónde empieza cada familia. */}
       <SectionBlocks

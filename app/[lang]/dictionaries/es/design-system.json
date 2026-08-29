@@ -24,13 +24,9 @@
     "of": "de"
   },
   "bloques": {
-    "espacio": {
-      "title": "El espacio",
-      "lead": "Dónde cae el contenido y cada cuánto respira: las dos decisiones que se toman antes de que haya nada que colocar. Se toman una vez y llegan a todas las páginas a la vez."
-    },
-    "materia": {
-      "title": "La materia",
-      "lead": "De qué está hecho lo que se coloca: el texto, el color que toma cada superficie en los dos temas, y cuánto dura lo que aparece."
+    "fundamentos": {
+      "title": "Fundamentos",
+      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a todas las páginas a la vez."
     },
     "piezas": {
       "title": "Piezas",

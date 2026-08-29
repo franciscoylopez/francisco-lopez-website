@@ -24,13 +24,9 @@
     "of": "of"
   },
   "bloques": {
-    "espacio": {
-      "title": "Space",
-      "lead": "Where the content falls and how often it breathes: the two decisions made before there is anything to place. They are made once and reach every page at the same time."
-    },
-    "materia": {
-      "title": "Material",
-      "lead": "What the placed thing is made of: the type, the color each surface takes in both themes, and how long anything that appears lasts."
+    "fundamentos": {
+      "title": "Fundamentals",
+      "lead": "The five decisions everything else hangs from. They are made once and reach every page at the same time."
     },
     "piezas": {
       "title": "Pieces",
