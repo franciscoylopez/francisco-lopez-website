@@ -30,6 +30,7 @@ Partido el **2026-08-27** (P68.5908). Ver `DECISIONS.md` D130.
 - [Cómo se verifica](#cómo-se-verifica)
 - [La Definition of Done](#la-definition-of-done)
 - [Lo que el bucle de medición predica](#lo-que-el-bucle-de-medición-predica)
+- [El kicker no repite el breadcrumb](#el-kicker-no-repite-el-breadcrumb)
 <!-- FIN ÍNDICE -->
 
 ## Eficiencia de sesión
@@ -179,3 +180,23 @@ El bucle medir→aprender no es higiene de proceso: **es lo que la propia web pr
 titular del Hero es «Del discovery al dato», y un sitio que argumenta eso y no mide lo que
 hace se contradice a sí mismo. Por eso el check de medición es un paso del cierre de etapa y
 no una buena intención.
+
+## El kicker no repite el breadcrumb
+
+*(2026-08-29, P59.5.)* La regla de `CLAUDE.md` decía solo que **el kicker de una sección no
+repite su título**, y pasó por delante de un caso que no cubría: `/contacto` se leía
+«Inicio / Contacto» y, 220px debajo, **«CONTACTO»** otra vez, antes de «Hablemos». No repetía
+su titular —el titular era otro—, así que la regla escrita la dejaba pasar; lo que repetía era
+el elemento que tenía justo encima.
+
+**Que fuera un caso y no un descuido lo dice el resto del sitio:** de las siete páginas con
+kicker, las otras seis lo usan para decir algo que el titular no dice —«Legal», «Compromiso»,
+«Identidad de marca», «Fundamentos de diseño», «Quién hay detrás», «El "Making of"»—. Una sola
+se salía, y salió en una revisión de diseño que ni siquiera revisa copy.
+
+**Y la elección enseña por qué la regla necesita las dos mitades.** Francisco propuso dos
+salidas, «Conectemos» y «Aquí estoy». La primera no repite el breadcrumb, pero comparte forma
+verbal exacta con el titular y significa casi lo mismo: `CONECTEMOS / Hablemos` son dos
+invitaciones apiladas. O sea que arreglaba la mitad nueva de la regla incumpliendo la vieja.
+Se quedó **«Aquí estoy»**, que no repite ninguna de las dos y añade lo que el titular no dice.
+La regla vive completa en `CLAUDE.md` §i18n.

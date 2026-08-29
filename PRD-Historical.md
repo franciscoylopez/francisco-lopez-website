@@ -85,6 +85,7 @@
 - [El sprint «Home» cierra, y el siguiente se parte en dos carriles — 2026-08-28](#el-sprint-home-cierra-y-el-siguiente-se-parte-en-dos-carriles--2026-08-28)
 - [«Drenaje» cierra con su medición hecha por fin, y el lanzamiento reencuadra qué entra en «Voz» — 2026-08-29](#drenaje-cierra-con-su-medición-hecha-por-fin-y-el-lanzamiento-reencuadra-qué-entra-en-voz--2026-08-29)
 - [La tanda 1 de «Voz», y el cruce que puso la métrica primaria en su sitio — 2026-08-29](#la-tanda-1-de-voz-y-el-cruce-que-puso-la-métrica-primaria-en-su-sitio--2026-08-29)
+- [La tanda 2 de «Voz», y el diagrama que se arregló mirándolo — 2026-08-29](#la-tanda-2-de-voz-y-el-diagrama-que-se-arregló-mirándolo--2026-08-29)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3625,6 +3626,78 @@ esto lo empeora: el próximo cierre se mide contra un sello de 19 con el embalse
 nueva de `PRD-Live` §7 se pasó del techo por 19 palabras, y se pagó retirando, no subiendo el
 techo. Lo que conviene recordar es la forma: **un guardián en rojo por otra causa deja sin
 valor a todos sus casos malos, y el informe lo presenta como fallos distintos.**
+
+## La tanda 2 de «Voz», y el diagrama que se arregló mirándolo — 2026-08-29
+
+Seis tareas cerradas (P55.5 → P59.5). Cinco eran de voz y salieron como estaban previstas;
+la sexta era la única de código, y **es la que enseña algo**: su ficha nombraba la palanca
+equivocada, la medición la confirmó, y lo que la tumbó fue mirar el dibujo.
+
+### El criterio de «Voz», aplicado a cinco rótulos
+
+Las cinco de copy comparten forma: **algo que ocupa el sitio de otra cosa.** Las cuatro cards
+de §03 de Accesibilidad bajan de 433/421/423/400 a 269/269/282/270 caracteres, y lo que sale de
+las cuatro es el mismo material —el relato de cómo se descubrió la regla—, que es el defecto que
+P51 acababa de corregir en el artículo y que aquí aparecía por segunda vez. «Herencia» pasa a
+«Accesibilidad heredada» porque sola en un índice no decía nada; «Sin usuarios reales» pasa a
+«Testing de usuarios» con un «(que yo sepa)» dentro, porque nadie puede saber quién ha visitado
+el sitio con un lector de pantalla. Y el kicker de `/contacto` deja de repetir su propia miga de
+pan: **«Aquí estoy»**, elegido por Francisco entre dos que propuso él mismo, descartando
+«Conectemos» porque comparte forma verbal con el titular («Hablemos») y cambiaba un solapamiento
+por otro.
+
+**Dos fichas traían la premisa mal, y las dos veces el descarte valía más que la tarea.** La de
+la fila «Norma europea» mandaba mirar si la palanca estaba en la capa: **no lo estaba**, y se
+midió —las cuatro tarjetas ya medían 187px iguales, lo descompensado era el relleno: 23, 23, 45
+y 113px de texto—, así que el recorte se eligió probando tres candidatos en el DOM hasta dar con
+el que pinta 45px, lo mismo que su hermana. Y la del `indexLabel` avisaba de comprobarlo «en el
+riel»: `/accesibilidad` **no tiene riel**, solo lo montan el artículo y el Design System.
+
+### La palanca de una ficha puede estar medida y aun así ser la equivocada
+
+`check:figuras` llevaba desde el 2026-08-24 imprimiendo en cada corrida de CI que los 44 rótulos
+del artefacto de Emendu se pintan a **5,4px a 360**, contra los 11px del contrato. La ficha, y
+D54 antes que ella, decían que la palanca era **re-renderizar con una tipografía mayor**. Se hizo
+y funcionó en la cifra: 56 unidades dan 11,3px. Lo que no se había previsto es lo que se ve:
+
+- **Recoloca el grafo entero.** Mismos 22 nodos, 22 aristas, 20 etiquetas y 5 clusters
+  —comprobado uno a uno—, pero dagre vuelve a correr desde cero. *En una máquina de estados la
+  colocación es parte de lo que se cuenta*, que es literalmente el argumento con el que D54
+  había elegido el ancho de panel: la decisión se contradecía a sí misma.
+- **Los cinco títulos de cluster quedan tapados por un nodo** (71/57/33/17/0%), por un fallo de
+  Mermaid que resta el alto del título del alto del cluster en vez de sumarlo. Sin ajuste
+  posible y sin tamaño intermedio limpio.
+- **El rótulo se leía tan grande como la prosa**, 17,6px contra los 17 del cuerpo.
+
+Los cuatro defectos los señaló Francisco abriendo la página, no una medición. **La cifra estaba
+bien y el resultado era peor**, que es el caso que ningún gate puede cazar: `check:figuras`
+habría dado verde. Se resolvió por la otra palanca —el `min-w` de 46 a 96rem, 11,21px con el
+dibujo intacto— aceptando el coste escrito: el diagrama ya no entra en el panel en escritorio.
+
+### El metro acertaba por coincidencia, que es peor que fallar
+
+De paso salió que **`check:figuras` no sabía leer este lienzo**. Su último recurso llamaba a
+`getComputedStyle` de jsdom, y **jsdom no registra un `<style>` que vive dentro de un `<svg>`**:
+`document.styleSheets` sale en 0 y devuelve su tamaño por defecto, 16px, para cualquier SVG de
+Mermaid. El artefacto declaraba justamente 16, así que su cifra publicada era correcta **por
+casualidad**, y solo se cayó al re-renderizarlo: el gate siguió diciendo 16 y bajó la cifra a
+3,2px, o sea peor cuanto más grande el rótulo.
+
+Es el sexto metro de este repo que falla en silencio, y trae un matiz nuevo. **La guarda que lo
+cubría miraba al sitio equivocado**: comprobaba que la hoja del SVG declarase `font-size` y
+luego se lo preguntaba a quien no había leído esa hoja. *Una guarda que valida la entrada de un
+tercero y no su respuesta no protege de nada.*
+
+### Y un contrato que llevaba cinco días siendo falso sin que nadie lo notara
+
+La tabla de `PRD-Live` §5 promete, por gate, **qué garantiza y qué deja fuera**. La fila de
+`check:figuras` decía «el rótulo pintado de **toda** figura con lienzo escalado», y desde el
+2026-08-24 dos figuras estaban medidas y **no juzgadas** por una decisión legítima que la fila
+nunca recogió. La tabla existe justo para que un alcance recortado no quede en silencio, y aquí
+el recorte lo cantaba el propio informe del gate en cada corrida mientras el contrato decía otra
+cosa. **Hoy la fila es cierta sin haberla tocado**, porque la excepción se retiró al retirarse su
+causa. Lo que queda anotado es el modo de fallo: *un contrato que se escribe una vez y se
+comprueba a ojo caduca por el lado que nadie relee.*
 
 ## Fuentes
 
