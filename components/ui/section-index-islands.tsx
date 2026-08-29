@@ -41,6 +41,62 @@ import { cn } from "@/lib/utils";
 export type RailItem = { id: string; ordinal: string; label: string };
 
 /**
+ * ¿EN QUÉ SECCIÓN ESTÁ EL LECTOR, Y `null` CUANDO NO ESTÁ EN NINGUNA?
+ *
+ * Las dos islas flotantes del artículo —el riel y el dock de compartir— hacían
+ * la misma pregunta con dos observers gemelos, y **las dos sabían encender y
+ * ninguna apagar** (P55). Al volver al hero o al índice se quedaban en pantalla,
+ * que es justo donde no tienen nada que hacer. Eran dos defectos distintos con
+ * el mismo síntoma: el dock hacía `io.disconnect()` en cuanto veía la primera
+ * sección —o sea que destruía el mecanismo que podría detectar la salida— y el
+ * riel conservaba el observer pero solo asignaba `active`, nunca lo limpiaba.
+ *
+ * LO QUE FALTABA ES EL CONJUNTO, no una rama más. El callback solo trae los
+ * elementos que HAN CAMBIADO, así que desde una entrada suelta no se puede
+ * contestar «ninguna»: hay que llevar la cuenta de quién sigue dentro de la
+ * banda. Con eso, «fuera del cuerpo» es simplemente que el conjunto está vacío.
+ *
+ * Y CUÁL DE LAS DE DENTRO ES LA ACTIVA NO CAMBIA: sigue ganando la última
+ * entrada del lote, exactamente como antes. Es la mitad que ya funcionaba y que
+ * esta tarea no toca; tocarla habría movido el resaltado del riel sin que nadie
+ * lo hubiera pedido.
+ *
+ * El `rootMargin` era el mismo en los dos sitios y ahora se escribe una vez.
+ * Vive en `ui/` porque no sabe nada de este sitio: recibe ids y devuelve un id.
+ */
+export function useActiveSection(items: RailItem[]): string | null {
+  const [active, setActive] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof IntersectionObserver === "undefined") return;
+    const targets = items
+      .map((it) => document.getElementById(it.id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (targets.length === 0) return;
+
+    const dentro = new Set<string>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            dentro.add(entry.target.id);
+            setActive(entry.target.id);
+          } else {
+            dentro.delete(entry.target.id);
+          }
+        }
+        if (dentro.size === 0) setActive(null);
+      },
+      { rootMargin: "-30% 0px -55% 0px" },
+    );
+    targets.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [items]);
+
+  return active;
+}
+
+/**
  * LA PÍLDORA DEL RIEL, que era la cuarta excepción viva de `BRAND.md` §Ningún
  * control se escribe a mano — «no compone `chromeLinkVariants`; sale a
  * `chrome.tsx`».
@@ -127,25 +183,7 @@ export function SectionRail({
    */
   ariaLabel: string;
 }) {
-  const [active, setActive] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (typeof IntersectionObserver === "undefined") return;
-    const targets = items
-      .map((it) => document.getElementById(it.id))
-      .filter((el): el is HTMLElement => el !== null);
-    if (targets.length === 0) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(entry.target.id);
-        }
-      },
-      { rootMargin: "-30% 0px -55% 0px" },
-    );
-    targets.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [items]);
+  const active = useActiveSection(items);
 
   if (active === null) return null;
 
