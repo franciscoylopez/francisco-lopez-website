@@ -169,36 +169,10 @@ sistema. *¿esto representa algo que se puede pulsar?* → dibujo, y se juzga po
 | Iconos dimensionados en el call site | `size-\[1[0-9]px\]` sobre `svg` | `action.tsx`, `.link-chrome svg` en `globals.css` |
 | Foco compitiendo | `outline-none` · `focus:` sin `focus-visible:` | ninguno (el foco es una sola regla global) |
 | Motion sin escape | `transition`/`animate-` sin `motion-reduce` ni `prefers-reduced-motion` cerca | los que lo declaran en `globals.css` |
-| **Clases interpoladas** | La interpolación **pegada** a un token de utilidad, no cualquier `${` dentro de un `className` — el patrón exacto, en la nota de debajo de la tabla | ninguno, nunca, **con ese patrón**. Con el anterior había 16 |
+| **Clases interpoladas** | La interpolación **pegada** a un token (antes, después, o dos sin espacio): ``className=[{]`[^`]*([A-Za-z0-9_-][$][{]\|[}][A-Za-z0-9_-]\|[}][$][{])`` | ninguno, nunca **con ese patrón**. El viejo (`${` a secas) daba **16**, todos legítimos: son constantes de clases COMPLETAS (`WRAP`, `PROSE`, `CARD`), que Tailwind ve literales donde se definen. Lo que falla es la utilidad CONSTRUIDA, `text-${color}-500`, que no se genera y deja al elemento sin clase sin error de compilación |
 | Inventario de controles con estado | `aria-pressed` · `aria-selected` · `role="tab"` | — |
 | **Inventario de glifos dibujados a mano** | `<svg` en todo `components/` y `app/`, **no** una lectura de `icons.tsx` | ilustraciones y maquetas; el logo |
 | Pasteles como primer plano | `brand-(cyan\|purple)-soft` en `text-`/`border-` | solo relleno decorativo |
-
-**La fila de clases interpoladas persigue una forma, no un carácter** *(2026-08-30, P65)*. El
-modo de fallo es la utilidad **construida** por interpolación —`text-${color}-500`—, que
-Tailwind no genera porque escanea el código como texto plano, y el elemento se queda sin la
-clase **sin error de compilación** (`BRAND.md` §Cómo medir, 5). Una **constante de clases
-completas** concatenada —`` `${WRAP} flex w-full` ``— no es eso: Tailwind ve esas clases
-literales donde la constante se define, y no hay ninguna que falte.
-
-Lo que separa los dos casos es si la interpolación está **pegada** al token o lo delimita
-entera. El `grep` lo distingue:
-
-```
-grep -rEn 'className=\{`[^`]*([A-Za-z0-9_-]\$\{|\}[A-Za-z0-9_-]|\}\$\{)' \
-  --include=*.tsx --include=*.ts components/ app/ lib/
-```
-
-Las tres alternativas son las tres formas de romperlo: interpolación **precedida** por parte
-de un token (`text-${…}`), **seguida** por parte de un token (`${…}-500`), y **dos
-interpolaciones sin espacio** (`${A}${B}`), que concatena dos clases en una que no existe.
-
-**Validado rompiéndolo** el 2026-08-30: caza esos cuatro casos malos y da **0 hits** sobre el
-repo, donde el patrón anterior (`className={\`` con `${`) daba **16**, todos legítimos —
-`WRAP`, `PROSE`, `CARD`, las variables de fuente del layout. Una fila que devuelve dieciséis
-hits legítimos por pasada no es una comprobación: es ruido en el informe más caro del sistema,
-y la propia Fase 1 empieza diciendo que de eso vive.
-
 **De qué piezas tiene que salir todo, y cuál toca: la cascada de `CLAUDE.md` §Regla de
 construcción**, con el inventario **derivado del disco** en
 [`components/ui/README.md`](../../../components/ui/README.md). Ábrelo antes de la pasada —son
