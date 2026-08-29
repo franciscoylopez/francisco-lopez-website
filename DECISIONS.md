@@ -188,6 +188,7 @@
 - D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse
 - D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado
 - D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint
+- D153 · Lo que decide una métrica no vive dentro de un efecto
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9100,3 +9101,36 @@ está en el paso más caro de CI.
 Igual que en D151, y por la misma razón: **sin `ignore` en `dependabot.yml`**. Cuando
 `typescript-eslint` publique una versión que admita `typescript >=7`, la subida es un
 `npm install` y estas dos fichas se cierran juntas.
+
+## D153 · Lo que decide una métrica no vive dentro de un efecto — 2026-08-29
+
+**Decisión.** La condición que decide si un evento de analítica se dispara vive en un módulo
+puro con nombre propio —`cuentaComoEnvio`, en `lib/contact-form.ts`—, no como una comparación
+escrita dentro del `useEffect` que lo dispara.
+
+**El defecto que lo escribió.** `contact_submit`, la métrica primaria del PRD §7, se disparaba
+con `state.status === "sent"`. D71 había dejado garantizado el transporte y nadie había mirado
+la otra mitad: **ese estado tiene tres causas y solo una manda correo.** Las otras dos son los
+filtros que callan a propósito —el honeypot y el suelo de 3 s— y devuelven «enviado» para no
+enseñarle a un bot que lo han cazado. El silencio hacia el bot es correcto; propagarlo a la
+analítica no. Y el camino de los 3 s no es teórico: lo recorre una persona que pega los tres
+campos y pulsa.
+
+**Por qué es una decisión y no un arreglo.** El arreglo cabía en una línea dentro del efecto, y
+ahí la regla no habría tenido **ni tests ni caso malo**: `tests/` no monta React, así que una
+comparación dentro de un `useEffect` no la mira nadie, y `check:guardianes` no tiene nada que
+mutar. Sacándola a `lib/` la misma regla pasa a tener las dos cosas, y el caso malo —dejarla
+sin mirar `contabiliza`— pone `npm test` en rojo. Es la forma de D101 aplicada a la medición:
+**se prueba lo que el código emite, no las instrucciones que se le dan.**
+
+**El estado lleva la marca, no el componente.** `ContactState` gana `contabiliza?: false` y lo
+devuelven solo las dos ramas que callan. La UI pinta exactamente lo mismo en los tres casos, así
+que un bot no aprende nada: lo único que cambia es el `dataLayer`, y un bot de honeypot no lo
+lee. Un bot que ejecutara JS *y* comparara el `dataLayer` para detectar que lo han cazado está
+muy por encima del modelo de amenaza de un formulario de portfolio.
+
+**Lo que esto NO arregla, y se midió el mismo día.** Que la primaria cuente solo lo que envía
+correo no la hace completa: sigue contando únicamente a quien acepta cookies, porque sin
+consentimiento no carga GTM. Con tres envíos de spam entregados y cero eventos, la diferencia
+medida es 1 contado contra 4 entregados. Eso es de otra tarea y de otra causa; aquí se anota
+para que nadie lea esta entrada como si cerrara la medición del formulario entera.
