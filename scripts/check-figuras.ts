@@ -49,14 +49,14 @@
  * LO QUE NO CUBRE, dicho para que no se dé por cubierto:
  *
  * - **Los lienzos que se DESPLAZAN a ancho fijo**, como el artefacto de Emendu:
- *   se miden y se nombran en cada corrida con su cifra, pero no tumban el gate
- *   (decisión de Francisco, 2026-08-24). El motivo es que la palanca no es la
- *   misma — a un lienzo anclado por `min-w` no se le puede estrechar el dibujo,
- *   hay que RE-RENDERIZARLO con otra tipografía, que es otro subsistema (D54) y
- *   recalcula el layout entero. Hoy hay uno y está a 5,4px.
- *   **Que salga por pantalla en cada corrida es la mitad de la decisión**: sin
- *   eso sería un alcance recortado en silencio, que es el antipatrón que
- *   describe `BRAND.md` §Cómo se escribe una regla.
+ *   se juzgan igual que el resto, y además se nombran aparte con su cifra. Lo
+ *   que cambia no es el suelo sino la SALIDA: a un lienzo anclado por `min-w` no
+ *   se le puede estrechar el dibujo, y re-renderizarlo con otra tipografía
+ *   tampoco vale —Mermaid recoloca el grafo entero, y en una máquina de estados
+ *   la colocación es parte de lo que se cuenta (medido y descartado en P55.5)—,
+ *   así que la única palanca es ese mínimo. **Estuvieron medidos y no juzgados**
+ *   entre el 2026-08-24 y el 2026-08-29, mientras no se sabía si tenían arreglo.
+ *
  * - **Por debajo de 360.** El suelo de la DoD es 360 y aquí se aplica ese. A 320
  *   los lienzos estrechos del artículo pintan 9,7px: está medido, está fuera del
  *   contrato, y cerrarlo pediría lienzos de 244 unidades en vez de 280.
@@ -78,7 +78,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { JSDOM, type DOMWindow } from "jsdom";
+import { JSDOM } from "jsdom";
 
 import { locales } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
@@ -141,11 +141,7 @@ function px(clases: string, patron: RegExp): number | null {
  * el navegador y como lo escribe Mermaid (un `<g>` con la clase, los `<text>`
  * dentro sin nada).
  */
-function tamanoRotulo(
-  nodo: Element,
-  svg: Element,
-  ventana: DOMWindow,
-): number | null {
+function tamanoRotulo(nodo: Element, svg: Element): number | null {
   for (let n: Element | null = nodo; n; n = n.parentElement) {
     const clases = n.getAttribute("class") ?? "";
     const porUtilidad = px(clases, /text-\[([\d.]+)px\]/);
@@ -164,20 +160,120 @@ function tamanoRotulo(
     if (n === svg) break;
   }
 
-  // ÚLTIMO RECURSO, y con condición: un SVG que trae su PROPIA hoja de estilos
-  // —los que genera Mermaid— declara ahí el tamaño, heredado desde la raíz, y
-  // eso no se ve subiendo por atributos. `getComputedStyle` de jsdom sí lo
-  // resuelve, porque ese `<style>` está en el documento.
+  // ÚLTIMO RECURSO: LA HOJA QUE EL PROPIO LIENZO SE TRAE. Los SVG que genera
+  // Mermaid no ponen el tamaño en ningún atributo: lo declaran en un `<style>`
+  // dentro del `<svg>` y lo dejan heredar desde la raíz. Eso no se ve subiendo
+  // por atributos, así que hay que resolver la cascada.
   //
-  // La condición no es cosmética: el CSS de Tailwind viaja en un `<link>` que
-  // jsdom NO descarga, así que para nuestros propios diagramas `getComputedStyle`
-  // devolvería el tamaño POR DEFECTO del documento y el gate mediría 16 donde
-  // hay 11. Solo se usa cuando el propio lienzo declara `font-size`, que es la
-  // evidencia de que hay una regla detrás y no un valor inventado.
-  const hoja = svg.querySelector("style")?.textContent ?? "";
-  if (!/font-size/.test(hoja)) return null;
-  const calculado = Number.parseFloat(ventana.getComputedStyle(nodo).fontSize);
-  return Number.isFinite(calculado) ? calculado : null;
+  // Y NO LA RESUELVE `getComputedStyle`, que es lo que hacía aquí hasta el
+  // 2026-08-29 y es el fallo más silencioso que ha tenido este repo: **jsdom no
+  // registra un `<style>` que vive dentro de un `<svg>`** —queda en el namespace
+  // SVG y `document.styleSheets` sale en 0—, así que devolvía su tamaño POR
+  // DEFECTO, 16px, para cualquier lienzo. El artefacto de Emendu declaraba
+  // justamente 16, así que su cifra publicada (5,4px) era correcta **por
+  // coincidencia**: al re-renderizarlo a 56 el gate siguió diciendo 16 y bajó la
+  // cifra a 3,2px, que es cuando se cayó. Un metro que devuelve el valor por
+  // defecto se lee igual que uno que mide (`BRAND.md` §Cómo medir, punto 3).
+  //
+  // La cascada de aquí abajo es mínima a propósito —selectores planos, que es
+  // todo lo que Mermaid emite— pero es de verdad: recorre del nodo hacia la
+  // raíz, y en cada escalón se queda con la regla de mayor especificidad, y a
+  // igualdad, con la última. La HERENCIA es el propio recorrido.
+  const declarado = porHojaInterna(nodo, svg);
+  if (declarado !== null) return declarado;
+
+  return null;
+}
+
+/** Una regla de la hoja interna que declara `font-size`, ya puntuada. */
+type Regla = { selector: string; px: number; peso: number; orden: number };
+
+/** Se parsea una vez por lienzo: 36 lienzos × 332 rótulos si no. */
+const reglasPorLienzo = new WeakMap<Element, Regla[]>();
+
+/**
+ * La especificidad de un selector plano, en la cuenta de siempre: ids ×100,
+ * clases/atributos/pseudos ×10, tipos ×1. No cubre `:not()` ni combinadores
+ * raros porque Mermaid no los emite; si algún día los emite, lo que pasa es que
+ * dos reglas empatan y gana la última, que es el desempate correcto de CSS.
+ */
+function especificidad(sel: string): number {
+  const ids = (sel.match(/#[\w-]+/g) ?? []).length;
+  const clases = (sel.match(/[.[:][\w-]+/g) ?? []).length;
+  const tipos = (sel.match(/(^|[\s>+~])[a-zA-Z][\w-]*/g) ?? []).length;
+  return ids * 100 + clases * 10 + tipos;
+}
+
+/** Las reglas con `font-size` de la hoja que el lienzo trae dentro. */
+function reglasDe(svg: Element): Regla[] {
+  const cache = reglasPorLienzo.get(svg);
+  if (cache) return cache;
+
+  // Fuera los bloques `@…{…}` (los `@keyframes` de Mermaid): sin esto, partir
+  // por `}` deja «selectores» como `from` y una llave suelta.
+  let hoja = [...svg.querySelectorAll("style")]
+    .map((n) => n.textContent ?? "")
+    .join("\n");
+  hoja = hoja.replace(/@[\w-]+[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}/g, "");
+
+  const reglas: Regla[] = [];
+  let orden = 0;
+  for (const m of hoja.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const px = m[2]?.match(/font-size:\s*([\d.]+)px/);
+    if (!px?.[1]) continue;
+    const valor = Number(px[1]);
+    for (const sel of (m[1] ?? "").split(",")) {
+      const s = sel.trim();
+      if (s === "") continue;
+      reglas.push({
+        selector: s,
+        px: valor,
+        peso: especificidad(s),
+        orden: orden++,
+      });
+    }
+  }
+  reglasPorLienzo.set(svg, reglas);
+  return reglas;
+}
+
+/**
+ * El `font-size` que la hoja interna le da a este nodo, heredado como lo hereda
+ * un navegador: el primer ancestro (él incluido) al que le aplique una regla.
+ */
+/** ¿Le aplica esta regla a este elemento? Un selector que jsdom no sabe leer no
+ * puntúa: se descarta en vez de tumbar la medición del lienzo entero. */
+function aplica(el: Element, regla: Regla): boolean {
+  try {
+    return el.matches(regla.selector);
+  } catch {
+    return false;
+  }
+}
+
+/** La regla que gana en UN elemento: mayor especificidad y, a igualdad, la
+ * última declarada. Es el desempate de CSS, reducido a lo que Mermaid emite. */
+function reglaGanadora(el: Element, reglas: Regla[]): Regla | null {
+  return reglas.reduce<Regla | null>((mejor, r) => {
+    if (!aplica(el, r)) return mejor;
+    if (mejor === null) return r;
+    if (r.peso > mejor.peso) return r;
+    return r.peso === mejor.peso && r.orden > mejor.orden ? r : mejor;
+  }, null);
+}
+
+function porHojaInterna(nodo: Element, svg: Element): number | null {
+  const reglas = reglasDe(svg);
+  if (reglas.length === 0) return null;
+
+  // La HERENCIA es este recorrido: el primer ancestro (él incluido) al que le
+  // aplique una regla es de quien se hereda el tamaño.
+  for (let n: Element | null = nodo; n; n = n.parentElement) {
+    const ganadora = reglaGanadora(n, reglas);
+    if (ganadora) return ganadora.px;
+    if (n === svg) break;
+  }
+  return null;
 }
 
 /**
@@ -246,67 +342,106 @@ function peorAncho(svg: Element): {
   };
 }
 
-function revisarLienzo(variante: string, svg: Element, ventana: DOMWindow) {
-  const vb = svg.getAttribute("viewBox")?.trim().split(/\s+/);
-  const anchoVb = vb?.length === 4 ? Number(vb[2]) : NaN;
-  if (!Number.isFinite(anchoVb) || anchoVb <= 0) return;
-
-  const textos = [
+/** Los rótulos de un lienzo: `<text>` y las dos formas de meter HTML dentro. */
+function rotulosDe(svg: Element): Element[] {
+  return [
     ...svg.querySelectorAll("text"),
     ...svg.querySelectorAll("foreignObject p"),
     ...svg.querySelectorAll("foreignObject span:not(:has(*))"),
   ].filter((n) => (n.textContent ?? "").trim().length > 0);
+}
+
+/** El principio del texto de un rótulo, para nombrarlo en el informe. */
+function cita(nodo: Element, corte = 40): string {
+  return (nodo.textContent ?? "").trim().slice(0, corte);
+}
+
+/** El ancho del `viewBox`, o `null` si el lienzo no declara uno usable. */
+function anchoDelViewBox(svg: Element): number | null {
+  const vb = svg.getAttribute("viewBox")?.trim().split(/\s+/);
+  const ancho = vb?.length === 4 ? Number(vb[2]) : NaN;
+  return Number.isFinite(ancho) && ancho > 0 ? ancho : null;
+}
+
+/**
+ * El aviso de un rótulo por debajo del suelo. La SALIDA depende de cómo esté
+ * dimensionado el lienzo, y es la única diferencia que queda entre los dos
+ * casos: uno se puede estrechar y el otro no.
+ */
+function avisoDeSuelo(m: {
+  pintado: number;
+  fs: number;
+  anchoVb: number;
+  ancho: number;
+  motivo: string;
+  nodo: Element;
+  seDesplaza: boolean;
+}): string {
+  const cabecera =
+    `rótulo a **${m.pintado.toFixed(1).replace(".", ",")}px** pintados (suelo ${SUELO_PX}): ` +
+    `${m.fs} unidades en un lienzo de ${m.anchoVb}`;
+  return m.seDesplaza
+    ? `${cabecera} anclado a ${m.ancho}px (${m.motivo}). «${cita(m.nodo)}» — este NO se ` +
+        "estrecha ni se re-renderiza: la palanca es su `min-w`."
+    : `${cabecera}, dibujado como mucho a ${m.ancho}px (${m.motivo}). «${cita(m.nodo)}» — ` +
+        "o el lienzo se estrecha, o el rótulo sube.";
+}
+
+function revisarLienzo(variante: string, svg: Element) {
+  const anchoVb = anchoDelViewBox(svg);
+  if (anchoVb === null) return;
+
+  const textos = rotulosDe(svg);
   if (textos.length === 0) return; // un dibujo sin rótulos no tiene nada que medir
 
   const { ancho, motivo, seDesplaza } = peorAncho(svg);
   const escala = ancho / anchoVb;
+  lienzos++;
   if (seDesplaza) lienzosDesplazados++;
-  else lienzos++;
 
   for (const nodo of textos) {
-    const fs = tamanoRotulo(nodo, svg, ventana);
+    const fs = tamanoRotulo(nodo, svg);
     if (fs === null) {
       // No se puede medir ⇒ no aprueba. Es la doctrina del repo: un rótulo que
       // el metro no sabe leer no es un rótulo correcto, es un punto ciego.
       fallo(
         variante,
-        `un rótulo del lienzo \`${anchoVb}\` no declara su tamaño con \`text-[Npx]\`, ` +
-          `así que no se puede saber a cuántos píxeles se pinta: «${(nodo.textContent ?? "").trim().slice(0, 40)}»`,
+        `un rótulo del lienzo \`${anchoVb}\` no declara su tamaño —ni con \`text-[Npx]\`, ` +
+          "ni por atributo, ni en la hoja que el propio lienzo trae dentro—, así que no " +
+          `se puede saber a cuántos píxeles se pinta: «${cita(nodo)}»`,
       );
       continue;
     }
+
     const pintado = fs * escala;
-
-    // UN LIENZO QUE SE DESPLAZA SE MIDE, PERO NO SE JUZGA AQUÍ (decisión de
-    // Francisco, 2026-08-24). Su ancho pintado no lo decide el hueco sino su
-    // propio `min-w`, así que la palanca no es la misma: en el artefacto de
-    // Emendu no se puede estrechar el lienzo, hay que RE-RENDERIZARLO con una
-    // tipografía mayor, que es otro subsistema (D54) y recalcula el layout
-    // entero. Se le pone cifra y se NOMBRA en cada corrida —callarlo sería
-    // exactamente el aprobado silencioso que este gate existe para evitar—,
-    // pero no tumba el PR de otra página.
-    if (seDesplaza) {
-      const antes = desplazados.get(variante);
-      if (!antes || pintado < antes.px) {
-        desplazados.set(variante, { px: pintado, vb: anchoVb, ancho, fs });
-      }
-      rotulosDesplazados++;
-      continue;
-    }
-
     rotulos++;
     if (pintado < peor.px) {
       peor = {
         px: pintado,
-        donde: `${variante} · lienzo ${anchoVb} · ${(nodo.textContent ?? "").trim().slice(0, 30)}`,
+        donde: `${variante} · lienzo ${anchoVb} · ${cita(nodo, 30)}`,
       };
     }
+
+    // UN LIENZO QUE SE DESPLAZA YA SE JUZGA COMO LOS DEMÁS (2026-08-29, P55.5).
+    // Estuvo medido y no juzgado desde el 2026-08-24, y el motivo era honesto:
+    // su ancho no lo decide el hueco sino su propio `min-w`, así que no se le
+    // podía pedir que se estrechara y no se sabía si tenía arreglo. **Ese motivo
+    // ya no existe**: el artefacto de Emendu pasó de 5,4 a 11,21px ensanchando
+    // ese mínimo de 46 a 96rem. Una excepción se retira cuando se retira su
+    // causa, no cuando alguien se acuerda. Lo único que sigue siendo distinto es
+    // la salida, y de eso se encarga `avisoDeSuelo`.
+    if (seDesplaza) {
+      rotulosDesplazados++;
+      const antes = desplazados.get(variante);
+      if (!antes || pintado < antes.px) {
+        desplazados.set(variante, { px: pintado, vb: anchoVb, ancho, fs });
+      }
+    }
+
     if (pintado + 0.05 < SUELO_PX) {
       fallo(
         variante,
-        `rótulo a **${pintado.toFixed(1).replace(".", ",")}px** pintados (suelo ${SUELO_PX}): ` +
-          `${fs} unidades en un lienzo de ${anchoVb}, dibujado como mucho a ${ancho}px (${motivo}). ` +
-          `«${(nodo.textContent ?? "").trim().slice(0, 40)}» — o el lienzo se estrecha, o el rótulo sube.`,
+        avisoDeSuelo({ pintado, fs, anchoVb, ancho, motivo, nodo, seDesplaza }),
       );
     }
   }
@@ -329,7 +464,7 @@ function revisar(lang: (typeof locales)[number], slug: string) {
   const dom = new JSDOM(readFileSync(archivo, "utf8"));
   try {
     for (const svg of dom.window.document.querySelectorAll("svg[viewBox]")) {
-      revisarLienzo(variante, svg, dom.window);
+      revisarLienzo(variante, svg);
     }
   } finally {
     dom.window.close();
@@ -395,22 +530,23 @@ function main() {
       "del artículo pintan 9,7px (medido, P68.59).",
   );
 
-  // MEDIDOS Y NO JUZGADOS. Van al final y con su cifra, uno a uno, porque un
-  // recuento agregado es donde se esconden: el censo ya se lo encontró con los
-  // pares sobre imagen (P68.587) y la lección fue nombrarlos.
+  // ANCLADOS POR `min-w`. Se juzgan como el resto —lo hacen desde el
+  // 2026-08-29—, pero se listan aparte y uno a uno, porque su salida es otra:
+  // no se estrechan ni se re-renderizan, se les ensancha el mínimo. Un recuento
+  // agregado es donde se esconden, y el censo ya se lo encontró con los pares
+  // sobre imagen (P68.587).
   if (desplazados.size > 0) {
     console.log(
-      `  · medidos y NO juzgados: ${lienzosDesplazados} ${lienzosDesplazados === 1 ? "lienzo" : "lienzos"} ` +
-        `que se desplazan a ancho fijo (${rotulosDesplazados} rótulos). Su ancho no lo decide ` +
-        "el hueco, así que la palanca no es estrecharlos sino re-renderizarlos:",
+      `  · de esos, ${lienzosDesplazados} ${lienzosDesplazados === 1 ? "lienzo se desplaza" : "lienzos se desplazan"} ` +
+        `a ancho fijo (${rotulosDesplazados} rótulos): su ancho no lo decide el hueco sino su ` +
+        "`min-w`, que es también la única palanca si algún día bajan del suelo:",
     );
     for (const [variante, d] of [...desplazados].sort((a, b) =>
       a[0].localeCompare(b[0]),
     )) {
       console.log(
         `      ${variante} — el más justo a ${d.px.toFixed(1).replace(".", ",")}px ` +
-          `(${d.fs} unidades en un lienzo de ${d.vb}, anclado a ${d.ancho}px)` +
-          (d.px + 0.05 < SUELO_PX ? `  ← por debajo de ${SUELO_PX}` : ""),
+          `(${d.fs} unidades en un lienzo de ${d.vb}, anclado a ${d.ancho}px)`,
       );
     }
   }

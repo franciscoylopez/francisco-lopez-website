@@ -2863,8 +2863,8 @@ Al montar KUOTIP e INDYA, el bloque de «La historia» gana **tres campos opcion
 por omisión, que es lo que mantiene la plantilla única.
 
 **`imagen` va AL LADO del texto y no debajo, y el criterio no es de gusto.** Debajo, a ancho de
-contenedor, la captura mide 1.280px y se lee entera —es lo que hace el artefacto de Emendu, que
-incluso scrollea antes que encogerse—. Pero **un artefacto hay que LEERLO nodo a nodo y una
+contenedor, la captura mide 1.280px y se lee entera —el artefacto de Emendu va debajo por lo mismo, solo que él
+scrollea antes que encogerse, y desde P55.5 lo hace también en escritorio (D54)—. Pero **un artefacto hay que LEERLO nodo a nodo y una
 captura de producto hay que RECONOCERLA**: a 544px se pierde la letra pequeña del dashboard y
 siguen legibles el nombre, la navegación y las tres cifras grandes, que es lo que la imagen viene
 a decir. Y decide el contexto: va pegada al párrafo que afirma que las reseñas «seguían
@@ -3046,14 +3046,68 @@ ilegible» y hacía lo contrario: con `w-full` y un mínimo de 46rem solo scroll
 texto se lee pero el diagrama **se sale**, y en una pantalla normal solo entra la mitad — *una
 máquina de estados que no se ve entera deja de contar lo que vino a contar, que es la forma del
 proceso, no cada etiqueta*. Se queda **a ancho de panel**, que con el `viewBox` ya corregido llena
-la caja y gana un 42% sin tocar nada más. Si las etiquetas de flecha (10px) se quedan cortas, la
-palanca **no es escalar el dibujo**: es renderizarlo con una tipografía mayor —Mermaid recalcula
-el layout y las cajas crecen con ella—, que es distinto de cambiar la fuente **después** del
-render, lo que este mismo ADR prohíbe.
+la caja y gana un 42% sin tocar nada más. **Ese mínimo pasó a 96rem el 2026-08-29** y con él el
+diagrama dejó de entrar entero en escritorio: ver el addendum al final de esta entrada, donde
+está el porqué y lo que cuesta.
+
+**Y aquí decía que la palanca, si las etiquetas se quedaban cortas, era «renderizarlo con una
+tipografía mayor». ERA FALSO, y no un matiz: se hizo, se midió y se descartó** (2026-08-29,
+P55.5). Funciona en la cifra y recoloca el grafo entero, que es justo lo que este párrafo dice
+que no se puede perder. Lo que sigue siendo cierto es la mitad negativa: **no se escala el dibujo
+después del render**, que es lo que este ADR prohíbe. La palanca buena está en el addendum.
+*(Y el «(10px)» que llevaba esta frase también era falso: los 44 rótulos son de 16 unidades; los
+`font-size:10px` de la hoja son selectores del renderer v1, que este diagrama no usa.)*
 
 De paso, la región que scrollea pasa a ser **operable con teclado** (`tabIndex` + nombre
-accesible). Solo scrollea en móvil, pero ahí quien navega con teclado no llegaba a lo que queda
-fuera (WCAG 2.1.1). Hueco preexistente que el experimento del 1:1 hizo evidente.
+accesible). Entonces solo scrollaba en móvil, pero ahí quien navega con teclado no llegaba a lo
+que queda fuera (WCAG 2.1.1). Hueco preexistente que el experimento del 1:1 hizo evidente, y que
+desde el addendum importa el doble: hoy scrollea también en escritorio.
+
+### El mínimo pasa de 46 a 96rem, y la palanca que este ADR nombraba no valía — 2026-08-29 (P55.5)
+
+**Por qué había que tocar algo.** `check:figuras` (D124) pide **11px pintados a 360**, y un rótulo
+dentro de un `viewBox` se pinta a `unidades × (ancho pintado / ancho del viewBox)`. Con 16 unidades
+en un lienzo de 2.192 anclado a 736px, salían **5,4px**. Y este lienzo no se encoge con el hueco
+—lo ancla su `min-w`—, así que solo tenía dos palancas.
+
+**La palanca A, re-renderizar: medida y rechazada.** A 56 unidades el rótulo llega a 11,3px, y la
+ganancia es real pero viene del salto de línea (el lienzo crece de alto, que no entra en la
+escala): 16u → 5,4px · 24u → 7,3 · 32u → 9,0 · 40u → 10,3 · 48u → 10,9 · 52u → 11,1 · 56u → 11,3 ·
+64u → 11,5. Se rechazó por **cuatro defectos que solo se ven mirando la página**, y los cuatro los
+señaló Francisco:
+
+1. **Recoloca el grafo.** Mismos 22 nodos, 22 aristas, 20 etiquetas y 5 clusters —comprobado nodo a
+   nodo, no entra ni sale ninguno—, pero dagre vuelve a correr y los pone en otro sitio. *En una
+   máquina de estados la colocación es parte de lo que se cuenta*, que es el mismo argumento con el
+   que este ADR eligió el ancho de panel.
+2. **Los cinco títulos de cluster quedan tapados por un nodo** (71/57/33/17/0% del rótulo cubierto).
+   Es un fallo de Mermaid, no del sitio: `roundedWithTitle` **resta** el alto del título del alto
+   del cluster en vez de sumarlo, así que los hijos se meten en su banda. **No tiene ajuste** —
+   `state.nodeSpacing`, `state.rankSpacing`, `state.padding` y `wrappingWidth` devuelven un SVG
+   byte a byte idéntico, porque `state.*` es config del renderer v1 y esto es `stateDiagram-v2`— y
+   **no hay tamaño intermedio limpio**: aparece en cuanto la tipografía pasa de 16 y crece
+   monótonamente.
+3. **El rótulo se leía tan grande como la prosa**: 17,6px a 1.280 contra los 17px del cuerpo del
+   deep-dive. Una figura no puede rotular como su propio texto.
+4. **El lienzo pasaba a 3.652×6.146**, o sea 1.935px de alto en escritorio, con huecos vacíos a
+   los lados.
+
+**La palanca B, ensanchar el mínimo: es la que se queda.** `min-w` de 46rem a **96rem** (1.536px):
+`16 × 1536 / 2192` = **11,21px**, con el dibujo intacto y **constante en los cuatro viewports**
+—antes iba de 5,4 a 8,4 según el ancho—. De paso resuelve el defecto 3 al revés: el rótulo pasa a
+leerse por debajo del cuerpo.
+
+**Lo que cuesta, dicho entero, porque contradice en parte la decisión del 2026-08-18:** el
+diagrama **ya no entra en el panel en escritorio** (1,3 pantallas a 1.280, 1,2 a 1.920) y en móvil
+pide 4,8 pantallas de desplazamiento en vez de 2,6. Se acepta porque a 5,4px no se leía en ninguna
+de las dos, y porque el argumento original —«una máquina de estados que no se ve entera deja de
+contar la forma del proceso»— se sostiene mejor con B que con A: B conserva la forma, A la
+cambiaba.
+
+**Y `check:figuras` deja de mirar hacia otro lado.** Los lienzos anclados por `min-w` estaban
+«medidos y no juzgados» desde el 2026-08-24 porque no se sabía si tenían arreglo. Ahora se juzgan
+como el resto: 38 lienzos y 420 rótulos, ninguno por debajo del suelo. Se siguen listando aparte
+solo porque su salida es otra, y ahora está escrita: **la palanca es su `min-w`, no el dibujo**.
 
 ---
 

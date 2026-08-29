@@ -53,7 +53,7 @@
       },
       {
         "label": "European standard",
-        "value": "Aligned with the criteria of EN 301 549, the harmonised ICT accessibility standard the European Union references, which in turn points to WCAG."
+        "value": "Aligned with the criteria of EN 301 549, which points to WCAG."
       }
     ],
     "note": "The [European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj) covers commercial products and services (e-commerce, banking, transport), not a personal site: saying this one «complies with the EAA» would be inaccurate. What does apply is its technical reference standard, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), which points to [WCAG](https://www.w3.org/TR/WCAG22/). That is the criterion followed here."
@@ -121,7 +121,7 @@
     "note": "Of these {total} points, {heredados} are not checked page by page, and that is exactly the point: contrast, the focus ring, the tap area and reduced motion already live inside the button, the link and the form field. A new section is born with them in place and cannot negotiate them. The next section explains how."
   },
   "inheritance": {
-    "indexLabel": "Inheritance",
+    "indexLabel": "Inherited accessibility",
     "heading": "Accessibility is inherited, not rewritten",
     "figura": {
       "caption": "The nine checklist points, each assigned to the layer that puts it and to whoever verifies it. Eight are checked by a machine; one, by a person."
@@ -130,19 +130,19 @@
     "items": [
       {
         "title": "No control is written by hand",
-        "body": "Everything you press (buttons, links, chips, tabs, the theme switch) comes out of one shared component layer. The focus ring, the 44 pixels of tap area and the contrast of every state live in there, so changing them changes the whole site at once. When a control has to stay outside that layer it carries a marker with its reason and its date, and a check refuses to let any of them through without one."
+        "body": "Everything you press (buttons, links, chips, tabs, the theme switch) comes from one shared component layer. The focus ring, the 44-pixel tap target and the contrast of every state live inside it: changing them changes them everywhere at once."
       },
       {
         "title": "The background picks the grey, not the author",
-        "body": "Dimmed text on the page background and that same text inside a card cannot be the same grey: the second one would read worse. Here it isn't a choice. Every surface recalculates its own dimmed tone from the background underneath it, including the surfaces that change colour on hover. That is where the cases two earlier reviews missed were hiding: they don't exist until two layers overlap."
+        "body": "Dimmed text on the page background and that same text inside a card cannot be the same grey: the second one would read worse. It isn't a choice here. Each surface recomputes its own dimmed tone from the background beneath it, hover included."
       },
       {
         "title": "The frame comes from the shell, not the author",
-        "body": "The skip link and its target, the document language and the two navigation landmarks come from the shell the {paginas} pages share: a new page is born with them on the day it's created. The breadcrumb and the heading structure do not, because they depend on what each page has to say, and that is exactly why they are the ones a check verifies against the already generated HTML of all {paginas}, in both languages."
+        "body": "The skip link, the document language and the two navigation landmarks come from the shell the {paginas} pages share: a new page is born with them. The breadcrumb and the heading hierarchy depend on what each page says, so they are checked against the generated HTML."
       },
       {
         "title": "A machine decides when to measure again",
-        "body": "Measuring colour properly is expensive: the site has to be served and walked with a real browser, so it isn't repeated on every change. It's repeated when something new shows up to measure. A check stores a fingerprint of the colours, the surfaces and the animations present at the last measurement, and turns red naming whatever wasn't there. The rule stopped depending on anyone remembering it."
+        "body": "Measuring colour in full is expensive: the site has to be served and walked with a real browser, so it isn't repeated on every change, only when something new shows up. A check keeps a fingerprint of what was measured and turns red naming what wasn't."
       }
     ],
     "livestat": {
@@ -230,8 +230,8 @@
     "intro": "What doesn't meet the bar yet, and what it would take.",
     "items": [
       {
-        "title": "No real users",
-        "body": "Everything on this page was measured by me. Nobody who uses assistive technology every day has tried this site, and that is the check no number replaces. If you'd like to be that person, the section below is exactly for that."
+        "title": "User testing",
+        "body": "Everything on this page was measured by me. Nobody (that I know of) who uses assistive technology every day has tried this site so far, and that is the check no number replaces. If you'd like to be the first, the section below is exactly for that."
       },
       {
         "title": "One reader, one browser",
