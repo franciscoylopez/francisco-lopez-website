@@ -2,7 +2,7 @@ import { Download } from "lucide-react";
 
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { actionVariants } from "@/components/ui/action";
-import { SectionHeader } from "@/components/ui/heading";
+import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { type Locale } from "@/lib/i18n/config";
 import { FAVICON_PNGS, HREF_FAVICON_ICO } from "@/lib/logo-kit";
@@ -38,6 +38,25 @@ export function Aplicaciones({
             <p className={LEAD}>{t.lead}</p>
           </SectionHeader>
         </div>
+        {/* LOS DOS GRUPOS, Y EL EJE ES QUIÉN SIRVE LA PIEZA (P60, 2026-08-29).
+            La sección prometía «dónde vive el logo» y enseñaba dos superficies
+            de este mismo dominio, mientras `PRD-Live` §4 ya declaraba tres usos
+            fuera de él —firma de email, banner de LinkedIn y portada del repo—
+            como «la prueba de coherencia que un sistema de marca solo puede dar
+            fuera de su propio sitio». No faltaba contenido por inventar: faltaba
+            publicar lo que ya existe y ya está versionado en `brand-assets/`. */}
+        <h3
+          data-reveal
+          className={cn(titleVariants({ size: "sub-sm" }), "mb-2")}
+        >
+          {t.dentroTitle}
+        </h3>
+        <p
+          data-reveal
+          className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]"
+        >
+          {t.dentroLead}
+        </p>
         <div
           data-reveal
           className="mb-8 grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]"
@@ -135,6 +154,58 @@ export function Aplicaciones({
         <Callout data-reveal accent="primary">
           {t.pngNote}
         </Callout>
+
+        {/* AQUÍ NO VA NINGUNA PREVISUALIZACIÓN, y es deliberado. Las tres piezas
+            de fuera son artefactos reales que viven en `brand-assets/`, no en
+            `public/`: recrearlas en JSX daría una maqueta que se desincroniza
+            del artefacto sin que nada falle, que es el modo de fallo que este
+            repo lleva documentado desde el README del logo-kit. La página de
+            marca publica piezas reales o no publica ninguna. Por el mismo
+            motivo tampoco hay ancla de descarga: ninguna de las tres se coloca
+            en este dominio, así que bajarla desde aquí no serviría de nada. */}
+        <h3
+          data-reveal
+          className={cn(titleVariants({ size: "sub-sm" }), "mt-12 mb-2")}
+        >
+          {t.fueraTitle}
+        </h3>
+        <p
+          data-reveal
+          className="text-muted-foreground m-0 mb-4 max-w-[var(--measure)] text-[0.9rem] leading-[1.55]"
+        >
+          {t.fueraLead}
+        </p>
+        <div
+          data-reveal
+          className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]"
+        >
+          {t.fueraItems.map((item) => (
+            <div
+              key={item.title}
+              className={cn(
+                PANEL,
+                "flex flex-col p-[clamp(1.4rem,3vw,1.9rem)]",
+              )}
+            >
+              <div className="font-display mb-[0.35rem] text-[1.15rem] font-semibold">
+                {item.title}
+              </div>
+              <p className="text-muted-foreground m-0 mb-[1.2rem] text-[0.88rem] leading-[1.55]">
+                {item.desc}
+              </p>
+              {/* El «dónde» va al pie y con `mt-auto` para que las tres fichas
+                  lo alineen aunque sus descripciones midan distinto. */}
+              <p className="m-0 mt-auto text-[0.8rem] leading-[1.5]">
+                <span className="text-foreground font-semibold">
+                  {t.fueraWhere}
+                </span>{" "}
+                <span className="text-muted-foreground font-mono">
+                  {item.where}
+                </span>
+              </p>
+            </div>
+          ))}
+        </div>
         {marco.closer}
       </div>
     </section>
