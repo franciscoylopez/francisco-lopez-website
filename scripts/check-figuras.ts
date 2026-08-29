@@ -241,28 +241,35 @@ function reglasDe(svg: Element): Regla[] {
  * El `font-size` que la hoja interna le da a este nodo, heredado como lo hereda
  * un navegador: el primer ancestro (él incluido) al que le aplique una regla.
  */
+/** ¿Le aplica esta regla a este elemento? Un selector que jsdom no sabe leer no
+ * puntúa: se descarta en vez de tumbar la medición del lienzo entero. */
+function aplica(el: Element, regla: Regla): boolean {
+  try {
+    return el.matches(regla.selector);
+  } catch {
+    return false;
+  }
+}
+
+/** La regla que gana en UN elemento: mayor especificidad y, a igualdad, la
+ * última declarada. Es el desempate de CSS, reducido a lo que Mermaid emite. */
+function reglaGanadora(el: Element, reglas: Regla[]): Regla | null {
+  return reglas.reduce<Regla | null>((mejor, r) => {
+    if (!aplica(el, r)) return mejor;
+    if (mejor === null) return r;
+    if (r.peso > mejor.peso) return r;
+    return r.peso === mejor.peso && r.orden > mejor.orden ? r : mejor;
+  }, null);
+}
+
 function porHojaInterna(nodo: Element, svg: Element): number | null {
   const reglas = reglasDe(svg);
   if (reglas.length === 0) return null;
 
+  // La HERENCIA es este recorrido: el primer ancestro (él incluido) al que le
+  // aplique una regla es de quien se hereda el tamaño.
   for (let n: Element | null = nodo; n; n = n.parentElement) {
-    let ganadora: Regla | null = null;
-    for (const r of reglas) {
-      let encaja = false;
-      try {
-        encaja = n.matches(r.selector);
-      } catch {
-        continue; // un selector que jsdom no sabe leer no puntúa
-      }
-      if (!encaja) continue;
-      if (
-        ganadora === null ||
-        r.peso > ganadora.peso ||
-        (r.peso === ganadora.peso && r.orden > ganadora.orden)
-      ) {
-        ganadora = r;
-      }
-    }
+    const ganadora = reglaGanadora(n, reglas);
     if (ganadora) return ganadora.px;
     if (n === svg) break;
   }
@@ -335,16 +342,56 @@ function peorAncho(svg: Element): {
   };
 }
 
-function revisarLienzo(variante: string, svg: Element) {
-  const vb = svg.getAttribute("viewBox")?.trim().split(/\s+/);
-  const anchoVb = vb?.length === 4 ? Number(vb[2]) : NaN;
-  if (!Number.isFinite(anchoVb) || anchoVb <= 0) return;
-
-  const textos = [
+/** Los rótulos de un lienzo: `<text>` y las dos formas de meter HTML dentro. */
+function rotulosDe(svg: Element): Element[] {
+  return [
     ...svg.querySelectorAll("text"),
     ...svg.querySelectorAll("foreignObject p"),
     ...svg.querySelectorAll("foreignObject span:not(:has(*))"),
   ].filter((n) => (n.textContent ?? "").trim().length > 0);
+}
+
+/** El principio del texto de un rótulo, para nombrarlo en el informe. */
+function cita(nodo: Element, corte = 40): string {
+  return (nodo.textContent ?? "").trim().slice(0, corte);
+}
+
+/** El ancho del `viewBox`, o `null` si el lienzo no declara uno usable. */
+function anchoDelViewBox(svg: Element): number | null {
+  const vb = svg.getAttribute("viewBox")?.trim().split(/\s+/);
+  const ancho = vb?.length === 4 ? Number(vb[2]) : NaN;
+  return Number.isFinite(ancho) && ancho > 0 ? ancho : null;
+}
+
+/**
+ * El aviso de un rótulo por debajo del suelo. La SALIDA depende de cómo esté
+ * dimensionado el lienzo, y es la única diferencia que queda entre los dos
+ * casos: uno se puede estrechar y el otro no.
+ */
+function avisoDeSuelo(m: {
+  pintado: number;
+  fs: number;
+  anchoVb: number;
+  ancho: number;
+  motivo: string;
+  nodo: Element;
+  seDesplaza: boolean;
+}): string {
+  const cabecera =
+    `rótulo a **${m.pintado.toFixed(1).replace(".", ",")}px** pintados (suelo ${SUELO_PX}): ` +
+    `${m.fs} unidades en un lienzo de ${m.anchoVb}`;
+  return m.seDesplaza
+    ? `${cabecera} anclado a ${m.ancho}px (${m.motivo}). «${cita(m.nodo)}» — este NO se ` +
+        "estrecha ni se re-renderiza: la palanca es su `min-w`."
+    : `${cabecera}, dibujado como mucho a ${m.ancho}px (${m.motivo}). «${cita(m.nodo)}» — ` +
+        "o el lienzo se estrecha, o el rótulo sube.";
+}
+
+function revisarLienzo(variante: string, svg: Element) {
+  const anchoVb = anchoDelViewBox(svg);
+  if (anchoVb === null) return;
+
+  const textos = rotulosDe(svg);
   if (textos.length === 0) return; // un dibujo sin rótulos no tiene nada que medir
 
   const { ancho, motivo, seDesplaza } = peorAncho(svg);
@@ -360,18 +407,18 @@ function revisarLienzo(variante: string, svg: Element) {
       fallo(
         variante,
         `un rótulo del lienzo \`${anchoVb}\` no declara su tamaño —ni con \`text-[Npx]\`, ` +
-          `ni por atributo, ni en la hoja que el propio lienzo trae dentro—, así que no ` +
-          `se puede saber a cuántos píxeles se pinta: «${(nodo.textContent ?? "").trim().slice(0, 40)}»`,
+          "ni por atributo, ni en la hoja que el propio lienzo trae dentro—, así que no " +
+          `se puede saber a cuántos píxeles se pinta: «${cita(nodo)}»`,
       );
       continue;
     }
+
     const pintado = fs * escala;
     rotulos++;
-    if (seDesplaza) rotulosDesplazados++;
     if (pintado < peor.px) {
       peor = {
         px: pintado,
-        donde: `${variante} · lienzo ${anchoVb} · ${(nodo.textContent ?? "").trim().slice(0, 30)}`,
+        donde: `${variante} · lienzo ${anchoVb} · ${cita(nodo, 30)}`,
       };
     }
 
@@ -381,34 +428,20 @@ function revisarLienzo(variante: string, svg: Element) {
     // podía pedir que se estrechara y no se sabía si tenía arreglo. **Ese motivo
     // ya no existe**: el artefacto de Emendu pasó de 5,4 a 11,21px ensanchando
     // ese mínimo de 46 a 96rem. Una excepción se retira cuando se retira su
-    // causa, no cuando alguien se acuerda.
-    //
-    // Lo único que sigue siendo distinto es la SALIDA, y por eso se le lista
-    // aparte y su mensaje de fallo dice otra cosa: aquí «estrechar el lienzo»
-    // no es una opción, y re-renderizar tampoco lo fue (recoloca el grafo).
+    // causa, no cuando alguien se acuerda. Lo único que sigue siendo distinto es
+    // la salida, y de eso se encarga `avisoDeSuelo`.
     if (seDesplaza) {
+      rotulosDesplazados++;
       const antes = desplazados.get(variante);
       if (!antes || pintado < antes.px) {
         desplazados.set(variante, { px: pintado, vb: anchoVb, ancho, fs });
       }
-      if (pintado + 0.05 < SUELO_PX) {
-        fallo(
-          variante,
-          `rótulo a **${pintado.toFixed(1).replace(".", ",")}px** pintados (suelo ${SUELO_PX}): ` +
-            `${fs} unidades en un lienzo de ${anchoVb} anclado a ${ancho}px (${motivo}). ` +
-            `«${(nodo.textContent ?? "").trim().slice(0, 40)}» — este NO se estrecha ni se ` +
-            "re-renderiza: la palanca es su `min-w`.",
-        );
-      }
-      continue;
     }
 
     if (pintado + 0.05 < SUELO_PX) {
       fallo(
         variante,
-        `rótulo a **${pintado.toFixed(1).replace(".", ",")}px** pintados (suelo ${SUELO_PX}): ` +
-          `${fs} unidades en un lienzo de ${anchoVb}, dibujado como mucho a ${ancho}px (${motivo}). ` +
-          `«${(nodo.textContent ?? "").trim().slice(0, 40)}» — o el lienzo se estrecha, o el rótulo sube.`,
+        avisoDeSuelo({ pintado, fs, anchoVb, ancho, motivo, nodo, seDesplaza }),
       );
     }
   }
