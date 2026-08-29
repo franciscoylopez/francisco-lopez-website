@@ -24,9 +24,13 @@
     "of": "of"
   },
   "bloques": {
-    "fundamentos": {
-      "title": "Fundamentals",
-      "lead": "The five decisions everything else hangs from. They are made once and reach every page at the same time."
+    "espacio": {
+      "title": "Space",
+      "lead": "Where the content falls and how often it breathes: the two decisions made before there is anything to place. They are made once and reach every page at the same time."
+    },
+    "materia": {
+      "title": "Material",
+      "lead": "What the placed thing is made of: the type, the color each surface takes in both themes, and how long anything that appears lasts."
     },
     "piezas": {
       "title": "Pieces",
@@ -667,8 +671,10 @@
       "Changing it moves the rhythm of every page at once, which is exactly what it exists for."
     ],
     "demoMonoFoot": "It's published in full in the layout tokens section, with its value and its reason.",
-    "navTitle": "Navigating a page with stops",
-    "navLead": "Two pieces that turn a long page into one you can move through, and this page uses both: the contents grid sits right below the hero and the block footer closes each of its twelve sections. The third of the family, the fixed rail, does not live here: it is published in the long-article section, the only page that carries it.",
+    "navIndexTitle": "The contents of a page with stops",
+    "navIndexLead": "The grid that opens the route, right below the hero, and this page carries it. The family has three pieces: this one, the section closer further down, and the fixed rail, which does not live here because it is published in the long-article section, the only page that uses it.",
+    "navCloserTitle": "The closing of a section",
+    "navCloserLead": "The foot of every stop, which is why it sits here and not above: it says which one the reader is in, how to get back to the contents, and what comes next. It is the step-sibling of the page closer, published right below.",
     "navIndexKicker": "The map",
     "navIndexRule": "A grid of stops rendered on the server: it navigates without JavaScript.",
     "navIndexNote": "The third line of each cell is a free, optional slot. The article puts its per-section reading time there; a page of specimens has no prose to time, so it stays empty.",

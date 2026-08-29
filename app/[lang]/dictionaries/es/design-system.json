@@ -24,9 +24,13 @@
     "of": "de"
   },
   "bloques": {
-    "fundamentos": {
-      "title": "Fundamentos",
-      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a todas las páginas a la vez."
+    "espacio": {
+      "title": "El espacio",
+      "lead": "Dónde cae el contenido y cada cuánto respira: las dos decisiones que se toman antes de que haya nada que colocar. Se toman una vez y llegan a todas las páginas a la vez."
+    },
+    "materia": {
+      "title": "La materia",
+      "lead": "De qué está hecho lo que se coloca: el texto, el color que toma cada superficie en los dos temas, y cuánto dura lo que aparece."
     },
     "piezas": {
       "title": "Piezas",
@@ -667,8 +671,10 @@
       "Cambiarlo mueve el ritmo de todas las páginas a la vez, que es justo para lo que existe."
     ],
     "demoMonoFoot": "Se publica entero en la sección de tokens de layout, con su valor y su motivo.",
-    "navTitle": "La navegación de una página con paradas",
-    "navLead": "Dos piezas que convierten una página larga en una recorrible, y esta misma las usa: el índice va justo debajo del hero y el cierre al pie de cada una de sus doce secciones. La tercera de la familia, el riel fijo, no vive aquí: se publica en la sección del artículo largo, que es la única página que lo lleva.",
+    "navIndexTitle": "El índice de una página con paradas",
+    "navIndexLead": "La rejilla que abre el recorrido, justo debajo del hero, y esta misma la lleva. La familia tiene tres piezas: esta, el cierre de sección que va más abajo, y el riel fijo, que no vive aquí porque se publica en la sección del artículo largo, la única página que lo usa.",
+    "navCloserTitle": "El cierre de una sección",
+    "navCloserLead": "El pie de cada parada, y por eso va aquí y no arriba: dice en cuál está el lector, cómo vuelve al índice y qué viene después. Es la hermana de peldaño del cierre de página, que se publica justo debajo.",
     "navIndexKicker": "El mapa",
     "navIndexRule": "Rejilla de paradas pintada en servidor: se navega sin JavaScript.",
     "navIndexNote": "La tercera línea de cada celda es libre y opcional. El artículo pone ahí su tiempo por sección; en una página de especímenes no hay prosa que cronometrar, así que va vacía.",

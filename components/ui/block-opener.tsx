@@ -15,7 +15,7 @@ import { WRAP } from "@/components/ui/layout";
  *
  * Y hay un segundo problema que esta pieza resuelve de paso: las doce secciones
  * del Design System dejaron de estar en orden cronológico en P70.34 y pasaron a
- * una jerarquía —`fundamentos → piezas → composición → excepción`—, pero esa
+ * una jerarquía —`espacio → materia → piezas → composición → excepción`—, pero esa
  * decisión **solo existía en un comentario**. Doce secciones seguidas, todas
  * separadas por el mismo filete, no dicen dónde acaba una familia y empieza otra.
  *
@@ -40,11 +40,34 @@ import { WRAP } from "@/components/ui/layout";
  *   sección.
  *
  * CUÁNTAS CABEN, que es lo que decide si esto escala. Lo que fija la densidad es
- * el número de BLOQUES, no el de secciones: con el reparto actual sale una banda
- * cada 8,9 pantallas en el Design System, 7,4 en el Brand Kit y 6,8 en
- * Accesibilidad. Partir el Brand Kit en tres bloques daría una cada 4,6 y la
- * página pasaría a leerse a golpes. **Si una página nueva pide más de un bloque
- * cada ~6 pantallas, lo que sobra son bloques, no banda.**
+ * el número de BLOQUES, no el de secciones. Medido sobre las páginas servidas a
+ * 1440×900, con los reveals encendidos antes de medir (2026-08-29, P62.5):
+ *
+ *   | Página        | Tramos entre bandas             | Peor | Total |
+ *   |---------------|---------------------------------|------|-------|
+ *   | Design System | 1,9 · 6,9 · 6,8 · 7,5 · 7,8 · 4,4 | 7,8 | 37,7 |
+ *   | Brand Kit     | 1,7 · 7,8 · 5,1                 | 7,8  | 15,4  |
+ *   | Accesibilidad | 1,8 · 5,8 · 4,9                 | 5,8  | 13,4  |
+ *
+ * SE PUBLICA EL PEOR TRAMO Y NO LA MEDIA, y esa es la corrección de fondo. Hasta
+ * hoy aquí ponía «una banda cada 8,9 pantallas» en el Design System, que era una
+ * MEDIA y estaba escondiendo un tramo de **14,1 pantallas seguidas** entre
+ * «Fundamentos» y «Piezas»: más largo que la página entera del Brand Kit. Una
+ * media no puede detectar el defecto que la regla existe para evitar, porque
+ * repartir mal es exactamente lo que una media promedia. (Las otras dos cifras
+ * publicadas tampoco cuadraban con la medición, 7,4 y 6,8 contra lo de arriba.)
+ *
+ * Y LA REGLA TENÍA UNA SOLA MITAD. El techo estaba escrito y el suelo no, así que
+ * vigilaba el exceso y dejaba pasar justo el caso que D125 nació a corregir
+ * —«60,3 pantallas sin un solo cambio de fondo»—. Las dos:
+ *
+ *   · **Techo.** Si una página nueva pide más de un bloque cada ~6 pantallas, lo
+ *     que sobra son bloques, no banda. Partir el Brand Kit en tres daría una cada
+ *     4,6 y la página pasaría a leerse a golpes.
+ *   · **Suelo.** Un tramo por encima de ~10 pantallas sin banda pide partir el
+ *     bloque. Y el corte lo decide la MEDICIÓN por sección, no la familia: en el
+ *     Design System el reparto por familia dejaba el tramo malo en 10,9, porque
+ *     §01 mide ella sola 5,88 pantallas.
  *
  * ESTÁ EN `ui/` Y NO EN `site/` porque no sabe nada de este sitio: recibe un
  * título, una entradilla y una lista de paradas, y no conoce ni copy, ni rutas,
