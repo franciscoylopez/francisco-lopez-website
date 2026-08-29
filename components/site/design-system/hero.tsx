@@ -1,14 +1,14 @@
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionHeader } from "@/components/ui/heading";
-import { FOLD_CRUMB, FOLD_GROUP, HERO_ROW, WRAP } from "@/components/ui/layout";
-import { Stat, StatRow } from "@/components/ui/stat-row";
+import { Stat } from "@/components/ui/stat-row";
 import {
   BREAKPOINT_COUNT,
   BREAKPOINTS,
   CONTAINER_PX,
   MEASURE_REM,
 } from "@/lib/design-values";
-import { Breadcrumb, type BreadcrumbDict } from "../breadcrumb";
+
+import { type BreadcrumbDict } from "../breadcrumb";
+import { SystemPageOpening } from "../system-page-opening";
 
 /* ===================== HERO ===================== */
 // Composición decorativa del hero: tres marcos de página escalonados con la
@@ -105,6 +105,9 @@ function HeroComposition() {
   );
 }
 
+// El esqueleto —pliegue, breadcrumb, grupo centrado, fila de texto y fila de
+// datos— lo pone `SystemPageOpening`, compartido con Brand Kit y Accesibilidad.
+// Ahí está el porqué de cada pieza y la invariante que protege (P63.5).
 export function Hero({
   t,
   crumb,
@@ -117,68 +120,34 @@ export function Hero({
   homeHref: string;
 }) {
   return (
-    <section className="flex flex-col py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)] md:min-h-[calc(100svh-5rem)]">
-      {/* La apertura ocupa el pliegue (P54). Misma constante que el hero de la
-          home y que el deep-dive; el porqué largo, en `brand-kit/hero.tsx`.
-          Medido antes: a 1920×1080 dejaba 227px de hueco por debajo, con el
-          rótulo de la segunda sección asomando. Es `min-h` porque a 1280×618
-          esta apertura ya desborda el pliegue y la regla no debe recortar. El
-          `w-full` evita que el `mx-auto` de `WRAP` desactive el stretch. */}
-      <div className={`${WRAP} flex w-full flex-1 flex-col`}>
-        <div data-reveal className={FOLD_CRUMB}>
-          <Breadcrumb
-            routeLabel={breadcrumb.routeLabel}
-            items={[
-              { label: breadcrumb.home, href: homeHref },
-              { label: crumb },
-            ]}
+    <SystemPageOpening
+      crumb={crumb}
+      breadcrumb={breadcrumb}
+      homeHref={homeHref}
+      eyebrow={t.kicker}
+      title={t.title}
+      lead={t.lead}
+      leadClassName="max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)]"
+      stats={
+        <>
+          <Stat
+            value={String(CONTAINER_PX)}
+            unit="px"
+            label={t.statContainer}
           />
-        </div>
-        <div className={FOLD_GROUP}>
-          <div className={HERO_ROW}>
-            {/* `self-start` — el porqué, en `brand-kit/hero.tsx`: sin él el hueco
-              breadcrumb→eyebrow lo decide el alto de la ilustración de al lado. */}
-            <div className="min-w-[min(100%,18rem)] flex-[1.2_1_24rem] self-start">
-              <SectionHeader
-                eyebrow={t.kicker}
-                title={t.title}
-                level={1}
-                size="page"
-                reveal
-              >
-                <p
-                  data-reveal
-                  className="text-muted-foreground max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]"
-                >
-                  {t.lead}
-                </p>
-              </SectionHeader>
-            </div>
-            <HeroComposition />
-          </div>
-          {/* stats */}
-          <StatRow>
-            <Stat
-              value={String(CONTAINER_PX)}
-              unit="px"
-              label={t.statContainer}
-            />
-            <Stat
-              value={String(BREAKPOINT_COUNT)}
-              unit={` ${t.statBreakpoints}`}
-              label={BREAKPOINTS.filter((b) => b.min !== null)
-                .map((b) => b.min)
-                .join(" · ")}
-            />
-            <Stat
-              value={String(MEASURE_REM)}
-              unit="rem"
-              label={t.statMeasure}
-            />
-            <Stat value="AA→AAA" label={t.statA11y} />
-          </StatRow>
-        </div>
-      </div>
-    </section>
+          <Stat
+            value={String(BREAKPOINT_COUNT)}
+            unit={` ${t.statBreakpoints}`}
+            label={BREAKPOINTS.filter((b) => b.min !== null)
+              .map((b) => b.min)
+              .join(" · ")}
+          />
+          <Stat value={String(MEASURE_REM)} unit="rem" label={t.statMeasure} />
+          <Stat value="AA→AAA" label={t.statA11y} />
+        </>
+      }
+    >
+      <HeroComposition />
+    </SystemPageOpening>
   );
 }
