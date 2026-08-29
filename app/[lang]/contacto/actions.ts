@@ -77,7 +77,12 @@ export async function submitContact(
   // 1. La trampa. Si viene rellena, quien envió no leyó: el campo está oculto.
   //    Se contesta «enviado» y no se envía nada — decirle a un bot que lo ha
   //    detectado solo le enseña a evitarlo la próxima vez.
-  if (field(data, HONEYPOT_FIELD).trim()) return { status: "sent" };
+  //
+  //    `contabiliza: false` es lo ÚNICO que distingue este «enviado» del real:
+  //    la UI pinta lo mismo, y lo que cambia es que la analítica no lo sume
+  //    (P52.5). Un bot de honeypot no lee el `dataLayer`.
+  if (field(data, HONEYPOT_FIELD).trim())
+    return { status: "sent", contabiliza: false };
 
   // 2. El filtro de velocidad, con el mismo silencio. El sello lo pone el
   //    cliente al montar; si no hay JS no hay sello, y entonces no se juzga.
@@ -91,7 +96,7 @@ export async function submitContact(
   //    que caza bots es el suelo (P68.48, 2026-08-23).
   const stamp = Number(field(data, TIMESTAMP_FIELD));
   if (Number.isFinite(stamp) && stamp > 0 && Date.now() - stamp < MIN_FILL_MS) {
-    return { status: "sent" };
+    return { status: "sent", contabiliza: false };
   }
 
   // 3. La validación de verdad, la que decide. La del cliente no cuenta aquí:

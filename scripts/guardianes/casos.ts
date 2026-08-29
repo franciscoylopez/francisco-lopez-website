@@ -228,6 +228,21 @@ export const CASOS: Caso[] = [
       ),
   },
   {
+    guardian: "test",
+    rotura: "la métrica primaria vuelve a sumar los dos filtros que callan",
+    // El defecto real, encontrado en el check de medición del cierre de
+    // «Drenaje»: `contact_submit` se disparaba con `status === "sent"`, y ese
+    // estado tiene tres causas de las que solo una manda correo. Con la primaria
+    // en n=1, un falso positivo la deja en cero. La regla vive en `lib/` en vez
+    // de dentro del `useEffect` precisamente para que se le pueda hacer esto.
+    archivo: "lib/contact-form.ts",
+    mutar: (o) =>
+      o.replace(
+        'return state.status === "sent" && state.contabiliza !== false;',
+        'return state.status === "sent";',
+      ),
+  },
+  {
     guardian: "check:accesibilidad",
     rotura:
       "cambia una fuente que /accesibilidad describe y su bloque no se revisa",
