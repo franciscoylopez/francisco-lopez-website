@@ -202,33 +202,52 @@ function Artefacto({
             lector de pantalla no puede seguir flechas, así que no se etiqueta el
             dibujo, se CUENTA lo que dice (punto 8 del checklist). */}
         <p className="sr-only">{description}</p>
-        {/* EL DIAGRAMA CABE EN SU PANEL, y solo scrollea por debajo de 46rem.
-            Se probaron las tres y se eligió viéndolas servidas (2026-08-18,
-            Francisco):
+        {/* EL DIAGRAMA SE DESPLAZA, Y ESO CAMBIÓ EL 2026-08-29 (P55.5). Hasta
+            ese día el mínimo eran 46rem: a ancho de panel el dibujo entraba
+            entero en escritorio y solo scrolleaba en móvil, que es lo que se
+            eligió el 2026-08-18 viendo las tres opciones servidas. Lo que tumbó
+            esa decisión no fue una preferencia: es que a 46rem el rótulo se
+            pinta a **5,4px a 360**, contra los 11px que pide el contrato de la
+            figura (D124, DoD columna A punto 11).
 
-             - A 1:1 con scroll horizontal (mínimo = las 2.192 unidades del
-               dibujo) el texto se lee, pero el diagrama **se sale**: en una
-               pantalla normal solo entra la mitad, y una máquina de estados que
-               no se ve entera deja de contar lo que vino a contar — que es la
-               forma del proceso, no cada etiqueta.
-             - A ancho de panel se ve entero. Es lo que se queda.
+            UN LIENZO ANCLADO POR `min-w` TIENE DOS PALANCAS Y NADA MÁS, porque
+            lo pintado es `unidades × (ancho pintado / ancho del viewBox)` y el
+            ancho pintado aquí no lo decide el hueco sino este mínimo:
+
+             - **Re-renderizar con una tipografía mayor**, que es lo que decía
+               esta nota hasta hoy. MEDIDO Y DESCARTADO, con el dibujo delante:
+               a 56 unidades el rótulo llega a 11,3px, pero Mermaid recoloca el
+               grafo entero —mismos 22 nodos y 22 aristas, otra disposición— y
+               en una máquina de estados la colocación es parte de lo que se
+               cuenta. Además `roundedWithTitle` RESTA el alto del título del
+               alto del cluster en vez de sumarlo, así que los cinco títulos
+               quedan tapados por un nodo (71/57/33/17/0% del rótulo cubierto),
+               y no hay tamaño intermedio limpio: el solape aparece en cuanto la
+               tipografía pasa de 16 y crece monótonamente. No tiene ajuste:
+               `state.nodeSpacing`, `state.rankSpacing`, `state.padding` y
+               `wrappingWidth` devuelven un SVG byte a byte idéntico, porque
+               `state.*` es config del renderer v1 y esto es `stateDiagram-v2`.
+             - **Ensanchar el mínimo**, que es lo que se queda. 96rem son
+               1.536px pintados: `16 × 1536 / 2192` = **11,21px**, y el dibujo no
+               se toca ni un píxel. De paso resuelve lo que de verdad se veía
+               mal, que era la proporción: el rótulo pasa a leerse por debajo de
+               los 17px del cuerpo del artículo, en vez de a la mitad.
+
+            LO QUE CUESTA, dicho entero: el diagrama ya NO entra en el panel en
+            escritorio (1,3 pantallas a 1280), y en móvil pide 5,4 pantallas de
+            desplazamiento en vez de 2,6. Es el precio de que se pueda leer: a
+            5,4px no se leía en ninguna de las dos.
 
             LO QUE SÍ ERA UN FALLO, y es de donde venía la sensación de «se ve
             diminuto», NO estaba aquí: el `viewBox` publicado venía un 40% más
             ancho y un 55% más alto que el dibujo, así que el grafo ocupaba dos
             tercios de su propio lienzo y el resto del panel salía vacío. Ver
-            `scripts/artefacto-svg.ts`. Corregido eso, a ancho de panel el
-            diagrama gana un 42% sin tocar nada más.
+            `scripts/artefacto-svg.ts`.
 
-            SI LAS ETIQUETAS DE FLECHA (10px) se quedan cortas, la palanca NO es
-            escalar el dibujo: es renderizarlo con una tipografía mayor —Mermaid
-            recalcula el layout y las cajas crecen con ella—, que es distinto de
-            cambiar la fuente después del render, lo que D54 prohíbe.
-
-            Y AUNQUE SOLO SCROLLE EN MÓVIL, la región es operable con teclado:
-            lleva `tabIndex` y nombre accesible. Sin eso, quien navega con
-            teclado no llega a lo que queda fuera (WCAG 2.1.1) — el `sr-only` de
-            arriba cuenta el diagrama, pero no lo mueve. */}
+            Y COMO SCROLLEA EN LOS DOS, la región es operable con teclado: lleva
+            `tabIndex` y nombre accesible. Sin eso, quien navega con teclado no
+            llega a lo que queda fuera (WCAG 2.1.1) — el `sr-only` de arriba
+            cuenta el diagrama, pero no lo mueve. */}
         <div
           className="overflow-x-auto p-[var(--gutter)]"
           tabIndex={0}
@@ -236,7 +255,7 @@ function Artefacto({
           aria-label={title}
         >
           <div
-            className="[&>svg]:block [&>svg]:h-auto [&>svg]:w-full [&>svg]:min-w-[46rem]"
+            className="[&>svg]:block [&>svg]:h-auto [&>svg]:w-full [&>svg]:min-w-[96rem]"
             // El SVG viene de `content/artefactos/`, generado por
             // `scripts/artefacto-svg.ts` desde el `.mmd`. Va inline y no como
             // `<img>` porque una imagen no ve las variables CSS de la página, y
@@ -257,14 +276,16 @@ function Artefacto({
  * contenedor; con captura se parte en dos y la imagen va a la DERECHA.
  *
  * POR QUÉ AL LADO Y NO DEBAJO. Debajo, a ancho de contenedor, la captura mide
- * 1.280px y se lee entera —es lo que hace el artefacto de Emendu, que además
- * scrollea antes que encogerse—. Pero un artefacto y una captura de producto no
- * piden lo mismo: el diagrama hay que LEERLO nodo a nodo, y esta captura hay que
- * RECONOCERLA. A media columna (624px, o sea 0,27 del máster de 2.268) siguen
- * legibles el nombre, la navegación y las tres cifras grandes; se pierde la letra
- * pequeña («142.879 All time»), que no es lo que la imagen viene a decir. A
- * cambio, al lado del párrafo que afirma que el formato de las reseñas «parece de
- * hace veinte años», la prueba y la afirmación se leen a la vez.
+ * 1.280px y se lee entera —el artefacto de Emendu va debajo por eso mismo, solo
+ * que él además scrollea antes que encogerse, y desde P55.5 lo hace también en
+ * escritorio para que su rótulo llegue al suelo de 11px—. Pero un artefacto y una
+ * captura de producto no piden lo mismo: el diagrama hay que LEERLO nodo a nodo,
+ * y esta captura hay que RECONOCERLA. A media columna (624px, o sea 0,27 del
+ * máster de 2.268) siguen legibles el nombre, la navegación y las tres cifras
+ * grandes; se pierde la letra pequeña («142.879 All time»), que no es lo que la
+ * imagen viene a decir. A cambio, al lado del párrafo que afirma que el formato
+ * de las reseñas «parece de hace veinte años», la prueba y la afirmación se leen
+ * a la vez.
  *
  * EL ORDEN DEL DOM ES TEXTO → IMAGEN en los dos breakpoints, así que el orden de
  * lectura no depende del grid (punto 4 del checklist). En móvil apila sin más.

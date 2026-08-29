@@ -49,14 +49,14 @@
  * LO QUE NO CUBRE, dicho para que no se dé por cubierto:
  *
  * - **Los lienzos que se DESPLAZAN a ancho fijo**, como el artefacto de Emendu:
- *   se miden y se nombran en cada corrida con su cifra, pero no tumban el gate
- *   (decisión de Francisco, 2026-08-24). El motivo es que la palanca no es la
- *   misma — a un lienzo anclado por `min-w` no se le puede estrechar el dibujo,
- *   hay que RE-RENDERIZARLO con otra tipografía, que es otro subsistema (D54) y
- *   recalcula el layout entero. Hoy hay uno y está a 5,4px.
- *   **Que salga por pantalla en cada corrida es la mitad de la decisión**: sin
- *   eso sería un alcance recortado en silencio, que es el antipatrón que
- *   describe `BRAND.md` §Cómo se escribe una regla.
+ *   se juzgan igual que el resto, y además se nombran aparte con su cifra. Lo
+ *   que cambia no es el suelo sino la SALIDA: a un lienzo anclado por `min-w` no
+ *   se le puede estrechar el dibujo, y re-renderizarlo con otra tipografía
+ *   tampoco vale —Mermaid recoloca el grafo entero, y en una máquina de estados
+ *   la colocación es parte de lo que se cuenta (medido y descartado en P55.5)—,
+ *   así que la única palanca es ese mínimo. **Estuvieron medidos y no juzgados**
+ *   entre el 2026-08-24 y el 2026-08-29, mientras no se sabía si tenían arreglo.
+ *
  * - **Por debajo de 360.** El suelo de la DoD es 360 y aquí se aplica ese. A 320
  *   los lienzos estrechos del artículo pintan 9,7px: está medido, está fuera del
  *   contrato, y cerrarlo pediría lienzos de 244 unidades en vez de 280.
@@ -349,8 +349,8 @@ function revisarLienzo(variante: string, svg: Element) {
 
   const { ancho, motivo, seDesplaza } = peorAncho(svg);
   const escala = ancho / anchoVb;
+  lienzos++;
   if (seDesplaza) lienzosDesplazados++;
-  else lienzos++;
 
   for (const nodo of textos) {
     const fs = tamanoRotulo(nodo, svg);
@@ -359,37 +359,50 @@ function revisarLienzo(variante: string, svg: Element) {
       // el metro no sabe leer no es un rótulo correcto, es un punto ciego.
       fallo(
         variante,
-        `un rótulo del lienzo \`${anchoVb}\` no declara su tamaño con \`text-[Npx]\`, ` +
-          `así que no se puede saber a cuántos píxeles se pinta: «${(nodo.textContent ?? "").trim().slice(0, 40)}»`,
+        `un rótulo del lienzo \`${anchoVb}\` no declara su tamaño —ni con \`text-[Npx]\`, ` +
+          `ni por atributo, ni en la hoja que el propio lienzo trae dentro—, así que no ` +
+          `se puede saber a cuántos píxeles se pinta: «${(nodo.textContent ?? "").trim().slice(0, 40)}»`,
       );
       continue;
     }
     const pintado = fs * escala;
-
-    // UN LIENZO QUE SE DESPLAZA SE MIDE, PERO NO SE JUZGA AQUÍ (decisión de
-    // Francisco, 2026-08-24). Su ancho pintado no lo decide el hueco sino su
-    // propio `min-w`, así que la palanca no es la misma: en el artefacto de
-    // Emendu no se puede estrechar el lienzo, hay que RE-RENDERIZARLO con una
-    // tipografía mayor, que es otro subsistema (D54) y recalcula el layout
-    // entero. Se le pone cifra y se NOMBRA en cada corrida —callarlo sería
-    // exactamente el aprobado silencioso que este gate existe para evitar—,
-    // pero no tumba el PR de otra página.
-    if (seDesplaza) {
-      const antes = desplazados.get(variante);
-      if (!antes || pintado < antes.px) {
-        desplazados.set(variante, { px: pintado, vb: anchoVb, ancho, fs });
-      }
-      rotulosDesplazados++;
-      continue;
-    }
-
     rotulos++;
+    if (seDesplaza) rotulosDesplazados++;
     if (pintado < peor.px) {
       peor = {
         px: pintado,
         donde: `${variante} · lienzo ${anchoVb} · ${(nodo.textContent ?? "").trim().slice(0, 30)}`,
       };
     }
+
+    // UN LIENZO QUE SE DESPLAZA YA SE JUZGA COMO LOS DEMÁS (2026-08-29, P55.5).
+    // Estuvo medido y no juzgado desde el 2026-08-24, y el motivo era honesto:
+    // su ancho no lo decide el hueco sino su propio `min-w`, así que no se le
+    // podía pedir que se estrechara y no se sabía si tenía arreglo. **Ese motivo
+    // ya no existe**: el artefacto de Emendu pasó de 5,4 a 11,21px ensanchando
+    // ese mínimo de 46 a 96rem. Una excepción se retira cuando se retira su
+    // causa, no cuando alguien se acuerda.
+    //
+    // Lo único que sigue siendo distinto es la SALIDA, y por eso se le lista
+    // aparte y su mensaje de fallo dice otra cosa: aquí «estrechar el lienzo»
+    // no es una opción, y re-renderizar tampoco lo fue (recoloca el grafo).
+    if (seDesplaza) {
+      const antes = desplazados.get(variante);
+      if (!antes || pintado < antes.px) {
+        desplazados.set(variante, { px: pintado, vb: anchoVb, ancho, fs });
+      }
+      if (pintado + 0.05 < SUELO_PX) {
+        fallo(
+          variante,
+          `rótulo a **${pintado.toFixed(1).replace(".", ",")}px** pintados (suelo ${SUELO_PX}): ` +
+            `${fs} unidades en un lienzo de ${anchoVb} anclado a ${ancho}px (${motivo}). ` +
+            `«${(nodo.textContent ?? "").trim().slice(0, 40)}» — este NO se estrecha ni se ` +
+            "re-renderiza: la palanca es su `min-w`.",
+        );
+      }
+      continue;
+    }
+
     if (pintado + 0.05 < SUELO_PX) {
       fallo(
         variante,
@@ -484,22 +497,23 @@ function main() {
       "del artículo pintan 9,7px (medido, P68.59).",
   );
 
-  // MEDIDOS Y NO JUZGADOS. Van al final y con su cifra, uno a uno, porque un
-  // recuento agregado es donde se esconden: el censo ya se lo encontró con los
-  // pares sobre imagen (P68.587) y la lección fue nombrarlos.
+  // ANCLADOS POR `min-w`. Se juzgan como el resto —lo hacen desde el
+  // 2026-08-29—, pero se listan aparte y uno a uno, porque su salida es otra:
+  // no se estrechan ni se re-renderizan, se les ensancha el mínimo. Un recuento
+  // agregado es donde se esconden, y el censo ya se lo encontró con los pares
+  // sobre imagen (P68.587).
   if (desplazados.size > 0) {
     console.log(
-      `  · medidos y NO juzgados: ${lienzosDesplazados} ${lienzosDesplazados === 1 ? "lienzo" : "lienzos"} ` +
-        `que se desplazan a ancho fijo (${rotulosDesplazados} rótulos). Su ancho no lo decide ` +
-        "el hueco, así que la palanca no es estrecharlos sino re-renderizarlos:",
+      `  · de esos, ${lienzosDesplazados} ${lienzosDesplazados === 1 ? "lienzo se desplaza" : "lienzos se desplazan"} ` +
+        `a ancho fijo (${rotulosDesplazados} rótulos): su ancho no lo decide el hueco sino su ` +
+        "`min-w`, que es también la única palanca si algún día bajan del suelo:",
     );
     for (const [variante, d] of [...desplazados].sort((a, b) =>
       a[0].localeCompare(b[0]),
     )) {
       console.log(
         `      ${variante} — el más justo a ${d.px.toFixed(1).replace(".", ",")}px ` +
-          `(${d.fs} unidades en un lienzo de ${d.vb}, anclado a ${d.ancho}px)` +
-          (d.px + 0.05 < SUELO_PX ? `  ← por debajo de ${SUELO_PX}` : ""),
+          `(${d.fs} unidades en un lienzo de ${d.vb}, anclado a ${d.ancho}px)`,
       );
     }
   }
