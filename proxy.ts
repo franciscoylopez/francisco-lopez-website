@@ -1,6 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-import { defaultLocale } from "@/lib/i18n/config";
+import { defaultLocale, type Locale } from "@/lib/i18n/config";
+import { cuerpo404 } from "@/lib/md-404";
+import { PAGE_SLUGS } from "@/lib/routes";
 
 // D3: Next 16 renombra `middleware` → `proxy` (misma funcionalidad). El propio
 // doc de i18n del paquete usa `export function proxy`.
@@ -68,14 +70,54 @@ function conVary(respuesta: NextResponse): NextResponse {
   return respuesta;
 }
 
+/**
+ * QUÉ PÁGINAS EXISTEN, para no reescribir a un `.md` que no está. Es el mismo
+ * registro del que salen el sitemap, el gate y `/llms.txt` (D72), así que una
+ * página nueva entra aquí sin que nadie se acuerde — y una retirada sale.
+ */
+const PAGINAS = new Set<string>(PAGE_SLUGS);
+
+/** El slug del registro (`""` para la home) a partir del resto de la ruta. */
+function slugDe(resto: string): string {
+  return resto.replace(/\/+$/, "").replace(/^\//, "");
+}
+
+/**
+ * EL 404 QUE UN AGENTE PUEDE LEER (2026-08-30). Sin esto, una ruta inexistente
+ * pedida en markdown reescribía a un `.md` que tampoco existe y el agente se
+ * llevaba la página 404 de marca: 27 KB de HTML como respuesta a una petición de
+ * markdown. El estado ya era correcto; el cuerpo no le servía para recuperarse.
+ *
+ * VA AQUÍ Y NO EN `global-not-found.tsx` por lo mismo que la negociación entera
+ * (D158): leer `Accept` dentro de una página la haría dinámica. Y no cambia nada
+ * para quien mira con un navegador, que sigue recibiendo su 404 de marca: esta
+ * rama solo la pisa quien pidió `text/markdown` por su nombre.
+ */
+function markdown404(locale: Locale, pathname: string): NextResponse {
+  return conVary(
+    new NextResponse(cuerpo404(locale, pathname), {
+      status: 404,
+      headers: {
+        "Content-Type": "text/markdown; charset=utf-8",
+        // Una respuesta de error no se indexa ni se guarda: la siguiente
+        // petición a esa ruta puede ser a una página que ya exista.
+        "X-Robots-Tag": "noindex",
+        "Cache-Control": "no-store",
+      },
+    }),
+  );
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const markdown = quiereMarkdown(request);
 
   if (pathname === "/en" || pathname.startsWith("/en/")) {
     if (markdown) {
+      const resto = pathname.slice("/en".length);
+      if (!PAGINAS.has(slugDe(resto))) return markdown404("en", pathname);
       const url = request.nextUrl.clone();
-      url.pathname = rutaMarkdown("en", pathname.slice("/en".length));
+      url.pathname = rutaMarkdown("en", resto);
       return conVary(NextResponse.rewrite(url));
     }
     return conVary(
@@ -94,6 +136,8 @@ export function proxy(request: NextRequest) {
 
   const url = request.nextUrl.clone();
   if (markdown) {
+    if (!PAGINAS.has(slugDe(pathname)))
+      return markdown404(defaultLocale, pathname);
     url.pathname = rutaMarkdown(defaultLocale, pathname);
     return conVary(NextResponse.rewrite(url));
   }

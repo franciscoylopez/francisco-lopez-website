@@ -13,6 +13,7 @@ import { SYSTEM_BTN_PRIMARY } from "@/components/site/system-message";
 import { ThemeProvider } from "@/components/theme-provider";
 import { defaultLocale, isLocale } from "@/lib/i18n/config";
 import { getSystemMessages } from "@/lib/i18n/system-messages";
+import { chromeLinkVariants } from "@/components/ui/chrome";
 import { WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
@@ -93,6 +94,44 @@ export default async function GlobalNotFound() {
             >
               {t.home}
             </a>
+            {/* LAS DOS SALIDAS PARA QUIEN NO VE (2026-08-30). Esta página ya daba
+                salidas reales a una persona —el nav, el pie y el botón de arriba—,
+                y ninguna a un cliente que no las lee: un agente que aterriza en una
+                URL rota se llevaba el gesto de marca y ningún sitio al que ir. Son
+                las MISMAS dos que sirve el 404 en markdown (`lib/md-404.ts`),
+                porque las dos puertas del mismo error tienen que decir lo mismo.
+
+                Chrome secundario y no acción: navegan dentro del sitio, así que por
+                §Enlaces de `BRAND.md` no llevan `primary` ni compiten con el botón
+                de volver, que sigue siendo la única acción de la pantalla. Y sin
+                icono, por la pregunta de §Cuándo una acción lleva icono: no sacan
+                a nadie del sitio. */}
+            <div className="animate-in fade-in flex flex-wrap items-center justify-center gap-x-1 duration-700">
+              <a
+                href="/sitemap.xml"
+                className={cn(
+                  chromeLinkVariants({ tone: "muted" }),
+                  "text-[0.85rem]",
+                )}
+              >
+                {t.notFound.recover.sitemap}
+              </a>
+              <span
+                aria-hidden
+                className="text-muted-foreground text-[0.85rem]"
+              >
+                ·
+              </span>
+              <a
+                href="/llms.txt"
+                className={cn(
+                  chromeLinkVariants({ tone: "muted" }),
+                  "text-[0.85rem]",
+                )}
+              >
+                {t.notFound.recover.agents}
+              </a>
+            </div>
           </main>
           <Footer dict={dict.footer} lang={lang} />
         </ThemeProvider>

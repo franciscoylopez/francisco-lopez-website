@@ -242,6 +242,23 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replace("<main ", "<article></article><main "),
   },
   {
+    guardian: "check:marco",
+    rotura:
+      "un título de chrome vuelve a encabezar la página por delante del `h1`",
+    // EL CASO MALO ES EL ESTADO DE PRODUCCIÓN HASTA EL 2026-08-30, literal: el
+    // diálogo de consentimiento vive en el layout y titulaba con `h2`, así que
+    // las 28 variantes abrían con «Preferencias de cookies» y no con su `h1`.
+    //
+    // Y ES EL CASO QUE JUSTIFICA LA REGLA NUEVA, porque los tres guardianes que
+    // ya había lo daban por bueno: hay un solo `h1` y no está vacío, y
+    // `heading-order` de axe mira saltos hacia ABAJO (h2 → h4) mientras que
+    // h2 → h1 baja de nivel, que es legal. Lo cazó un escáner externo leyendo el
+    // HTML servido. Muerde el build por lo de siempre: lo que este guardián mira
+    // es el HTML emitido.
+    archivo: ".next/server/app/es/contacto.html",
+    mutar: (o) => o.replace("<main ", "<h2>Preferencias de cookies</h2><main "),
+  },
+  {
     guardian: "check:agentes",
     rotura: "`llms.txt` deja de nombrar una página del registro",
     // El modo de fallo REAL, y el que este archivo ya tuvo: las cinco páginas del
