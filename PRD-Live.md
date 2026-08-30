@@ -260,9 +260,9 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 *Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
 decisión escrita, no por omisión.
 
-**Ya no queda sprint de build.** «Voz», el último antes de lanzar, cerró el 2026-08-30, y con él
-el tablero se queda sin etapa en curso: lo único **Must** abierto es la **Distribución**, que
-sale delante por quinta vez y ahora no tiene nada por delante.
+**«Agentes» es el sprint en curso** desde el 2026-08-30: que un agente pueda encontrar, leer y
+citar este sitio, que es el canal de distribución que aquí faltaba. Arrastra cuatro de *General*
+y deja la **Distribución** humana aplazada por sexta vez, esta vez con motivo y no por inercia.
 
 *(El recorrido de «Drenaje» y de «Voz», el triaje que lo creó, por qué el orden de sus tandas lo
 mandó la visibilidad y no la prioridad, y lo que dejó su cierre, en `PRD-Historical.md`.)*

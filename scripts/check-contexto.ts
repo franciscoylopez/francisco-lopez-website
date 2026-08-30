@@ -80,13 +80,17 @@ type Movimiento = { fecha: string; valor: number; motivo: string };
 /**
  * Desde cuándo se cuentan los movimientos. **Se actualiza al ABRIR una etapa**, que
  * es lo que hace de «ciclo» una unidad comprobable en vez de una intuición. Hoy:
- * apertura del sprint «Voz».
+ * apertura del sprint «Agentes».
  *
- * El ciclo de «Drenaje» cerró con **0 de 3 techos movidos**, contra 2 en el anterior:
- * la corrección del séptimo `method-review` —congelar el techo y pagar las adiciones
- * retirando— aguantó un ciclo entero. Es la primera vez que esta fila sale verde.
+ * «Drenaje» y «Voz» cerraron los dos con **0 de 3 techos movidos**, contra 2 en el
+ * anterior: la corrección del séptimo `method-review` —congelar el techo y pagar las
+ * adiciones retirando— lleva dos ciclos enteros aguantando.
+ *
+ * Y el octavo dice qué vigilar en este: el techo no se mueve, pero el DATO se le pega
+ * («el dato que persigue al techo»). Un ciclo verde aquí ya no basta si el margen sigue
+ * viviendo en el epsilon, que es lo que tarea P68.7405 dentro de este mismo sprint.
  */
-const CICLO_ABIERTO = "2026-08-29";
+const CICLO_ABIERTO = "2026-08-30";
 
 /** El techo vigente es el último movimiento, nunca un número escrito aparte. */
 function vigente(historial: Movimiento[]): number {
