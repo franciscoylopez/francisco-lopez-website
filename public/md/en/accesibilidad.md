@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/accesibilidad
+canonical: https://franciscolopez.es/en/accesibilidad
 lang: en
 title: Accessibility
+description: "How this site is built to be usable by everyone: WCAG 2.2 AA met, a colour system at AAA, what gets inherited from the component layer, and what the manual screen reader pass turned up."
+last-updated: 2026-08-10
 ---
 
 1. [Home](https://franciscolopez.es/en)

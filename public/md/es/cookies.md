@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/cookies
+canonical: https://franciscolopez.es/cookies
 lang: es
 title: Privacidad y cookies
+description: Qué hago con tus datos si me escribes y qué cookies usa franciscolopez.es, con qué finalidad, y cómo gestionar o retirar tu consentimiento.
+last-updated: 2026-08-23
 ---
 
 1. [Inicio](https://franciscolopez.es/)

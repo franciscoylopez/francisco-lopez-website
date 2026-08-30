@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/como-se-ha-creado
+canonical: https://franciscolopez.es/en/como-se-ha-creado
 lang: en
 title: How this page was built
+description: "The making-of of this site: brand before code, the stack, how accessibility gets inherited instead of measured, security and hosting, what an AI catches and what it doesn't, and what went wrong along the way. All of it linked to the public repository."
+last-updated: 2026-08-29
 ---
 
 1. [Home](https://franciscolopez.es/en)

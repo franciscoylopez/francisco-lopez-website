@@ -369,6 +369,23 @@ export const CASOS: Caso[] = [
     mutar: append("\nUn párrafo que la página no dice.\n"),
   },
   {
+    guardian: "md:verificar",
+    rotura: "el frontmatter se queda viejo aunque el cuerpo esté al día",
+    // LA OTRA MITAD DEL ARTEFACTO *(P68.746, 2026-08-31)*. Desde que la cabecera
+    // lleva `description` y `last-updated`, el markdown puede quedarse atrás sin
+    // que el cuerpo cambie ni una palabra: se retoca la descripción de la página
+    // —o se sube la fecha del artículo— y el `.md` sigue anunciando lo de antes.
+    // Y es la mitad que MÁS calla, porque el texto de debajo sigue siendo
+    // correcto: lo que engaña es la ficha, que es justo lo que un agente lee para
+    // decidir si esta fuente entra en la conversación.
+    //
+    // Se muerde la fecha y no la descripción a propósito: `last-updated` es el
+    // campo cuyo modo de fallo —quedarse congelado— ya le pasó a este proyecto
+    // con `ARTICLE_UPDATED` (doce commits, D84).
+    archivo: "public/md/es/como-se-ha-creado.md",
+    mutar: (o) => o.replace(/^last-updated: .*$/m, "last-updated: 2026-01-01"),
+  },
+  {
     guardian: "check:articulo",
     rotura: "cambia el copy del artículo y la fecha que ve Google no se mueve",
     // El caso malo es el estado real hasta P70.04: `ARTICLE_UPDATED` pasó DOCE

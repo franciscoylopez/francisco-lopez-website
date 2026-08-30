@@ -40,6 +40,7 @@ import { dirname, join } from "node:path";
 import { JSDOM } from "jsdom";
 
 import { locales, pagePath, type Locale } from "../../lib/i18n/config";
+import { PAGE_MODIFIED } from "../../lib/page-modified";
 import { PAGE_SLUGS, type PageSlug } from "../../lib/routes";
 import { SITE_DOMAIN } from "../../lib/site";
 
@@ -97,11 +98,69 @@ function anota(lista: Omitido[]) {
 }
 
 /**
- * La cabecera del archivo. Tres campos y ninguno decorativo: sin la URL, un
- * markdown que un agente se lleva a otro contexto deja de ser citable.
+ * UN ESCALAR YAML QUE NO MIENTE. Las descripciones de este sitio llevan dos
+ * puntos seguidos de espacio —«Del discovery al dato: investigo…»— y eso en YAML
+ * plano parte la línea en clave y valor: el frontmatter dejaría de parsear, o
+ * peor, parsearía a otra cosa. Se cita cuando hace falta y solo entonces, para
+ * que el archivo se siga leyendo bien con los ojos.
+ *
+ * La lista de indicadores es la del estándar; se cubre además el valor vacío y el
+ * que empieza o acaba en espacio, que YAML recorta sin avisar.
  */
-function cabecera(titulo: string, url: string, lang: Locale): string {
-  return `---\nurl: ${url}\nlang: ${lang}\ntitle: ${titulo}\n---\n\n`;
+function escalar(valor: string): string {
+  const arriesgado =
+    valor === "" ||
+    /^[-?:,[\]{}#&*!|>'"%@`]/.test(valor) ||
+    /: |\s#/.test(valor) ||
+    valor.trim() !== valor;
+  if (!arriesgado) return valor;
+  return `"${valor.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+}
+
+/**
+ * La cabecera del archivo. Cinco campos y ninguno decorativo, que hasta el
+ * 2026-08-31 eran tres *(P68.746)*. Los dos que faltaban son los que deciden si
+ * esto sirve para algo cuando el `.md` ya no está en el sitio del que salió:
+ *
+ * - **`description`**: lo que hace que un agente sepa si esta fuente entra en la
+ *   conversación **antes** de descargarla entera. Es el mismo trabajo que hace el
+ *   «cuándo usar» de `llms.txt` a nivel de sitio, aquí a nivel de página.
+ * - **`last-updated`**: la única señal de frescura que puede tener un agente que
+ *   cachee el archivo. Sin ella, un `.md` de hace seis meses y el de hoy son
+ *   indistinguibles.
+ *
+ * Y NINGUNO DE LOS DOS SE ESCRIBE AQUÍ, que es la parte que importa. La
+ * descripción sale del `<meta name="description">` de la página —el mismo texto
+ * que va a la tarjeta OG y al `<head>`, no una tercera versión del copy—, y la
+ * fecha, de `lib/page-modified.ts`, que es de donde salen también las del
+ * sitemap. Dos verdades sobre lo mismo son la familia D60 y aquí no hay ninguna.
+ *
+ * `url` PASA A LLAMARSE `canonical`, y es un renombrado, no un campo nuevo: ya
+ * llevaba la URL absoluta y canónica, y lo único que fallaba era el nombre por el
+ * que un lector la busca. Se puede renombrar porque el campo tiene un día de vida
+ * (D158, 2026-08-30) y ningún consumidor dentro del repo.
+ */
+function cabecera({
+  titulo,
+  descripcion,
+  canonical,
+  lang,
+  modificado,
+}: {
+  titulo: string;
+  descripcion: string;
+  canonical: string;
+  lang: Locale;
+  modificado: string;
+}): string {
+  const campos: [string, string][] = [
+    ["canonical", canonical],
+    ["lang", lang],
+    ["title", titulo],
+    ["description", descripcion],
+    ["last-updated", modificado],
+  ];
+  return `---\n${campos.map(([k, v]) => `${k}: ${escalar(v)}`).join("\n")}\n---\n\n`;
 }
 
 function procesar(lang: Locale, slug: PageSlug) {
@@ -134,7 +193,35 @@ function procesar(lang: Locale, slug: PageSlug) {
     anota(o);
 
     const titulo = (document.querySelector("h1")?.textContent ?? "").trim();
-    const salida = cabecera(titulo, urlDe(lang, slug), lang) + markdown + "\n";
+
+    // LA DESCRIPCIÓN, DEL HTML COMO TODO LO DEMÁS. `pageMetadata` la deriva y la
+    // pinta en el `<head>`, así que leerla aquí es el mismo trato que el cuerpo:
+    // si la página cambia, su markdown cambia. Y SE EXIGE: una página sin
+    // `description` es un fallo de `check:marco`, y un frontmatter con el campo
+    // vacío sería justo lo que este repo llama un metro que aprueba de más.
+    const descripcion = (
+      document
+        .querySelector('meta[name="description"]')
+        ?.getAttribute("content") ?? ""
+    ).trim();
+    if (!descripcion) {
+      fallos.push(
+        `${variante} — sin \`<meta name="description">\`. La deriva \`pageMetadata\` (D45), ` +
+          "así que si falta aquí también falta en el `<head>` y en la tarjeta OG.",
+      );
+      return;
+    }
+
+    const salida =
+      cabecera({
+        titulo,
+        descripcion,
+        canonical: urlDe(lang, slug),
+        lang,
+        modificado: PAGE_MODIFIED[slug],
+      }) +
+      markdown +
+      "\n";
     const destino = rutaMd(lang, slug);
 
     if (verificar) {

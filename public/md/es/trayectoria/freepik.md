@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/trayectoria/freepik
+canonical: https://franciscolopez.es/trayectoria/freepik
 lang: es
 title: Gran empresa, mal momento
+description: "Tres meses en el squad de contributors de Freepik: investigación sin analítica de producto, rediseño de un registro donde el 75% desistía, y por qué el encaje pesa más que el nombre."
+last-updated: 2026-08-17
 ---
 
 1. [Inicio](https://franciscolopez.es/)

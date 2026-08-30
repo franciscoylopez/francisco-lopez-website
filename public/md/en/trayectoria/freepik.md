@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/trayectoria/freepik
+canonical: https://franciscolopez.es/en/trayectoria/freepik
 lang: en
 title: Great company, wrong time
+description: "Three months in Freepik's contributors squad: research with no product analytics, redesigning a sign-up where 75% dropped off, and why fit weighs more than the name on the door."
+last-updated: 2026-08-17
 ---
 
 1. [Home](https://franciscolopez.es/en)

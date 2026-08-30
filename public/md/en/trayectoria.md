@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/trayectoria
+canonical: https://franciscolopez.es/en/trayectoria
 lang: en
 title: Five experiences, told from the inside
+description: "Five product experiences told from the inside: the context I found, the decisions I made and how they turned out. Emendu, KUOTIP, INDYA, Freepik and TheTool."
+last-updated: 2026-08-18
 ---
 
 1. [Home](https://franciscolopez.es/en)

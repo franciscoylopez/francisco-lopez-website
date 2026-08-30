@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/design-system
+canonical: https://franciscolopez.es/design-system
 lang: es
 title: Design System
+description: "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica, claro/oscuro, movimiento y la medición completa de accesibilidad."
+last-updated: 2026-08-10
 ---
 
 1. [Inicio](https://franciscolopez.es/)

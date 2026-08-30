@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/sobre-mi
+canonical: https://franciscolopez.es/en/sobre-mi
 lang: en
 title: About me
+description: "The person behind the PM: how I ended up in Product from marketing and growth, baking, the mountains, and where I'm headed now."
+last-updated: 2026-08-15
 ---
 
 1. [Home](https://franciscolopez.es/en)

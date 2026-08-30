@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/contacto
+canonical: https://franciscolopez.es/contacto
 lang: es
 title: Hablemos
+description: Escríbeme por el formulario, por correo o por teléfono. Respuesta en 24 horas.
+last-updated: 2026-08-23
 ---
 
 1. [Inicio](https://franciscolopez.es/)

@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/como-se-ha-creado
+canonical: https://franciscolopez.es/como-se-ha-creado
 lang: es
 title: Cómo se ha creado esta página
+description: "El making-of de esta web: la marca antes que el código, el stack, cómo se hereda la accesibilidad, seguridad y alojamiento, qué revisa una IA y qué no, y lo que salió mal por el camino. Todo enlazado al repositorio público."
+last-updated: 2026-08-29
 ---
 
 1. [Inicio](https://franciscolopez.es/)
