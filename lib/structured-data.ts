@@ -138,6 +138,34 @@ export function profilePageLd(lang: Locale, description: string) {
         addressLocality: "Valencia",
         addressCountry: "ES",
       },
+      /**
+       * EL CANAL, ADEMÁS DE LOS DATOS (2026-08-30). `email` y `telephone` ya
+       * estaban dos líneas arriba, y son los mismos: lo que añade `contactPoint`
+       * es el nodo que un agente busca cuando la pregunta es «¿cómo contacto?» en
+       * vez de «¿quién es?», con la página donde hacerlo y en qué idiomas.
+       *
+       * `contactType` va en inglés y no traducido: no es copy, es un valor de
+       * vocabulario que lee una máquina, y el sitio ya tiene su idioma dicho en
+       * `inLanguage`. Los canales salen de `lib/contact`, que es la fuente de la
+       * que también beben la página y el pie.
+       *
+       * LO QUE NO SE HACE, Y SE ESCRIBE PARA QUE NO SE REABRA: un escáner de
+       * agentes pide `contactPoint` y `address` en el nodo `Organization`, que
+       * aquí es el `worksFor` de arriba. Ese nodo es el EMPLEADOR, así que
+       * rellenarlo significaría publicar los datos de contacto de Emendu —que no
+       * son nuestros— o poner los de Francisco como si lo fueran, que es falso.
+       * Este sitio es una persona y lo dice en `/llms.txt` («no es una agencia ni
+       * un estudio»). Se queda el 50% de ese check a cambio de no afirmar algo
+       * que no es cierto.
+       */
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "recruitment",
+        email: EMAIL,
+        telephone: TELEPHONE,
+        url: `${SITE_URL}/contacto`,
+        availableLanguage: ["es", "en"],
+      },
     },
   };
 }

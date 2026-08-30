@@ -104,6 +104,41 @@ const nextConfig: NextConfig = {
       { source: "/:path*", headers: [...securityHeaders, ...varyHeader] },
     ];
   },
+  // LAS RUTAS QUE UN AGENTE ADIVINA (2026-08-30). No es SEO ni son URLs viejas:
+  // un agente que quiere verificar quién hay detrás de un sitio prueba
+  // `/about`, `/privacy` y `/contact` ANTES de leer el sitemap, porque es la
+  // convención de la web en inglés. Aquí los slugs son españoles en los dos
+  // idiomas —decisión de contenido, no descuido—, así que esas tres pruebas
+  // daban 404 y el sitio parecía no tener páginas de confianza. Se vio en la
+  // traza de un escáner: pidió `/es/servicios` y `/en/services`, que no existen
+  // ni existirán, y dio por no verificadas «About» y «Privacy», que sí.
+  //
+  // SON REDIRECCIONES Y NO PÁGINAS: no se duplica contenido ni se añade nada al
+  // sitemap, que sigue listando solo las 28 variantes canónicas.
+  //
+  // VAN AQUÍ Y NO EN `proxy.ts` por dos motivos, y el orden importa: la doc de
+  // Next recomienda `redirects` para lo estático y deja el proxy para lo que
+  // necesita datos de la petición, y en la cadena de ejecución `redirects` (2)
+  // corre ANTES que el proxy (3) — así que estas rutas ni siquiera llegan a la
+  // rama que las reescribiría a un `/es/about` inexistente.
+  //
+  // `permanent: false` (307) A PROPÓSITO: un 308 se cachea para siempre en el
+  // navegador, y estos alias son una comodidad reversible, no un canónico. Si un
+  // día `/about` fuera una página de verdad, un 308 cacheado la haría
+  // inalcanzable para quien ya hubiera pasado por aquí.
+  async redirects() {
+    const alias: [string, string][] = [
+      ["/about", "/sobre-mi"],
+      ["/about-me", "/sobre-mi"],
+      ["/privacy", "/cookies"],
+      ["/privacidad", "/cookies"],
+      ["/contact", "/contacto"],
+    ];
+    return alias.flatMap(([desde, hacia]) => [
+      { source: desde, destination: hacia, permanent: false },
+      { source: `/en${desde}`, destination: `/en${hacia}`, permanent: false },
+    ]);
+  },
   // Next emite `x-powered-by: Next.js` por defecto, que anuncia el stack a cualquiera
   // que mire las cabeceras y no aporta nada. Va aquí, junto a `headers()`, porque es
   // lo mismo: qué se sirve en la respuesta.

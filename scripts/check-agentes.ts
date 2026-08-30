@@ -54,6 +54,7 @@ import robots from "../app/robots";
 import esLlms from "../app/[lang]/dictionaries/es/llms.json";
 import { locales, defaultLocale, type Locale } from "../lib/i18n/config";
 import { PAGE_SLUGS, type PageSlug } from "../lib/routes";
+import { cuerpo404 } from "../lib/md-404";
 import { SITE_URL } from "../lib/site";
 import { proxy } from "../proxy";
 
@@ -295,6 +296,41 @@ function revisarNegociacion(): void {
         "El canónico no depende de lo que se pida.",
     );
   }
+
+  // LA RUTA QUE NO EXISTE TAMBIÉN SE NEGOCIA (2026-08-30). Antes reescribía a un
+  // `.md` que tampoco existe, así que el agente recibía la 404 de marca en HTML:
+  // el estado era correcto y el cuerpo no le servía para recuperarse. Se
+  // comprueban las TRES cosas que lo hacen útil —404 de verdad, cuerpo markdown y
+  // un destino al que ir—, en los dos idiomas, porque el 404 inglés que devolviera
+  // el índice español sería el fallo silencioso de este cambio.
+  for (const [path, locale] of [
+    ["/no-existe-esta-ruta", "es"],
+    ["/en/no-existe-esta-ruta", "en"],
+  ] as const) {
+    vistos.negociaciones++;
+    const res = pide(path, "text/markdown");
+    if (res.status !== 404) {
+      fallo(
+        "negociación",
+        `\`${path}\` con \`Accept: text/markdown\` responde ${res.status} y tenía que ser 404.`,
+      );
+      continue;
+    }
+    const tipo = res.headers.get("Content-Type") ?? "";
+    if (!tipo.startsWith("text/markdown")) {
+      fallo(
+        "negociación",
+        `el 404 de \`${path}\` se sirve como \`${tipo || "nada"}\` a quien pidió markdown.`,
+      );
+    }
+    if (!cuerpo404(locale, path).includes(`${SITE_URL}/llms.txt`)) {
+      fallo(
+        "negociación",
+        `el 404 de \`${path}\` no apunta a \`/llms.txt\`. Un 404 sin salida deja al agente sin ` +
+          "dónde seguir, que es la mitad de lo que se le pide a un 404.",
+      );
+    }
+  }
 }
 
 /* -------------------------------------------------------------------------- */
@@ -476,7 +512,7 @@ console.log(
   `check:agentes — lo que este sitio le promete a un agente\n` +
     `  llms.txt   ${vistos.paginasEnLlms} páginas del registro nombradas · 2 secciones del sprint\n` +
     `  markdown   ${vistos.variantesMd} variantes en disco · las URLs que anuncia resuelven\n` +
-    `  negociar   ${vistos.negociaciones} casos por \`proxy()\`: markdown sí, navegador no, \`Vary\` en ambos\n` +
+    `  negociar   ${vistos.negociaciones} casos por \`proxy()\`: markdown sí, navegador no, \`Vary\` en ambos, 404 con salida\n` +
     `  robots     ${vistos.entornosRobots} entornos (producción abre y sella el sitemap; el resto cierra, D13)\n` +
     `  señales    ${vistos.senalesDeContenido} Content Signals comprobadas por su valor decidido (P67.8)\n` +
     `  404        ${vistos.segmentosDinamicos} segmentos dinámicos, ninguno catch-all`,

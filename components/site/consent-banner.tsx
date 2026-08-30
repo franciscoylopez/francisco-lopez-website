@@ -185,12 +185,32 @@ export function ConsentBanner({
       >
         <div className="p-5 md:p-6">
           <div className="mb-4 flex items-start justify-between gap-4">
-            <h2
+            {/* EL TÍTULO DEL DIÁLOGO NO ES UN ENCABEZADO, y la diferencia no es
+                cosmética (2026-08-30). Era un `h2`, y este diálogo vive en el
+                layout: se renderiza cerrado pero PRESENTE en el DOM de las 28
+                variantes, y por delante del `<main>` desde P70.08 —que lo puso
+                ahí a propósito, para que el orden del documento dijera lo mismo
+                que la prominencia visual—. Resultado: el primer encabezado de
+                todas las páginas del sitio era «Preferencias de cookies», por
+                delante del `h1`.
+
+                NADA LO CAZABA, y son tres guardianes: `check:marco` exige UN solo
+                `h1` no vacío, y eso se cumplía; `heading-order` de axe mira saltos
+                hacia ABAJO (h2 → h4), y h2 → h1 baja de nivel, que es legal. Lo vio
+                un escáner externo leyendo el HTML servido: «first content heading
+                is H2, not H1».
+
+                La forma correcta es la que ya usaba la franja doce líneas más
+                arriba: un `p` con el mismo aspecto. El diálogo conserva su nombre
+                accesible por `aria-labelledby`, que es de donde lo toma un lector
+                de pantalla al abrirse —nunca del nivel del encabezado—, así que no
+                se pierde nada. Lo vigila ahora `check:marco`. */}
+            <p
               id="consent-prefs-title"
               className="font-display text-foreground text-[1.2rem] font-semibold"
             >
               {dict.prefs.title}
-            </h2>
+            </p>
             <button
               type="button"
               aria-label={dict.close}

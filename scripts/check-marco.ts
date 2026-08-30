@@ -322,8 +322,8 @@ function revisarIdioma({ doc, variante, lang }: Pagina): void {
 }
 
 /**
- * Un `<main>` y un solo `h1` (checklist 4). Son las dos reglas que axe no
- * concluye en jsdom, así que se miran aquí.
+ * Un `<main>`, un solo `h1`, y que el `h1` sea el PRIMER encabezado. Son las
+ * reglas que axe no concluye en jsdom, así que se miran aquí.
  *
  * La jerarquía sin saltos NO está: es la regla `heading-order` de axe, que sí
  * evalúa. Duplicarla sería tener dos verdades.
@@ -341,6 +341,30 @@ function revisarEsqueleto({ doc, variante }: Pagina): void {
     );
   } else if (!h1s[0]!.textContent?.trim()) {
     fallo(variante, "el `<h1>` está vacío.");
+  }
+
+  // Y EL `h1` ES EL PRIMER ENCABEZADO DEL DOCUMENTO, que no es lo mismo que
+  // haber uno solo (2026-08-30). El hueco entre las dos reglas es donde cabe un
+  // encabezado del CHROME —un diálogo del layout, un aviso— que se cuela por
+  // delante del titular de la página: axe no lo señala porque `heading-order`
+  // mira saltos hacia ABAJO (h2 → h4) y h2 → h1 baja de nivel, que es legal.
+  //
+  // No es teórico: el diálogo de preferencias de cookies encabezaba con «h2» las
+  // 28 variantes por delante de su propio `h1`, y lo cazó un escáner externo, no
+  // los tres guardianes de este repo. Es la regla 1 de `BRAND.md` §Cómo se
+  // escribe una regla —un disparador que mira al sitio equivocado no es una
+  // regla—, aplicada al metro en vez de a la norma.
+  const encabezados = doc.querySelectorAll("h1, h2, h3, h4, h5, h6");
+  const primero = encabezados[0];
+  if (primero && primero.tagName !== "H1") {
+    const texto = primero.textContent?.trim().slice(0, 40) ?? "";
+    fallo(
+      variante,
+      `abre con \`<${primero.tagName.toLowerCase()}>\` («${texto}») por delante del \`<h1>\`. ` +
+        "El primer encabezado del documento tiene que ser el `h1` de la página: un título de " +
+        "chrome (diálogo, aviso) se escribe con `p` + `aria-labelledby`, que es de donde un " +
+        "lector toma el nombre.",
+    );
   }
 }
 
@@ -833,7 +857,7 @@ async function main() {
   console.log(
     `check:marco — ${VARIANTES.length} variantes del build ${buildId}\n` +
       `  axe        ${reglasEvaluadas.size} reglas evaluadas · ${Object.keys(DELEGADAS).length} delegadas\n` +
-      `  a mano     enlace de salto · un h1 · un main · breadcrumb · canonical y hreflang · OG\n` +
+      `  a mano     enlace de salto · un h1 y que abra el documento · un main · breadcrumb · canonical y hreflang · OG\n` +
       `  artículos  ${articulosMirados} variantes cruzadas: og:type=article ⇔ un solo <article>\n` +
       `  tarjetas   ${tarjetasResueltas} \`?card=\` resueltos contra el despacho de \`/api/og\`\n` +
       `  permalinks ${permalinksVistos} a una línea de un .md del repo, comprobado su ?plain=1\n` +
