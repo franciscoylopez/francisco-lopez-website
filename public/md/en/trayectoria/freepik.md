@@ -36,9 +36,9 @@ Head of Product
 
 ## 01. Three months in the contributors squad
 
-- **Research and feature definition for the contributors area** · , with qualitative and quantitative analysis. The product analytics tool was being chosen at that very moment, so the evidence came from surveys, interviews and the previous quarter's discovery.
-- **Redesign of the contributor sign-up and onboarding** · , where · **75% dropped off or got stuck** · : a simplified flow and an email sequence that walks through every step up to profile approval.
-- **Ownership of the squad's OKRs** · : the first quarterly goal system I worked with in a formal way, and at a company that took them seriously.
+- **Research and feature definition for the contributors area**, with qualitative and quantitative analysis. The product analytics tool was being chosen at that very moment, so the evidence came from surveys, interviews and the previous quarter's discovery.
+- **Redesign of the contributor sign-up and onboarding**, where **75% dropped off or got stuck**: a simplified flow and an email sequence that walks through every step up to profile approval.
+- **Ownership of the squad's OKRs**: the first quarterly goal system I worked with in a formal way, and at a company that took them seriously.
 
 02 — The story
 
@@ -54,7 +54,7 @@ So I trained formally, and in that order. Agility first: a master's degree in Sc
 
 Freepik was the opposite of what I came from: around 400 people, a product with years behind it, results the pandemic had catapulted, and a product team that was reorganising and growing. On paper it was exactly what I was looking for: a large project, plenty of data and, for the first time, other PMs to debate and align with.
 
-I landed in the · **contributors** · squad: the area that sources graphic assets from freelancers and individual creators worldwide. It is half the equation of a content marketplace, and until then it had grown organically.
+I landed in the **contributors** squad: the area that sources graphic assets from freelancers and individual creators worldwide. It is half the equation of a content marketplace, and until then it had grown organically.
 
 ### No product analytics, plenty of people to ask
 
@@ -62,13 +62,13 @@ The product analytics tool was being chosen right then, so the evidence had to b
 
 That is where I learned what volume changes. A survey at Freepik returns hundreds of responses in a few days, an enormous advantage and, at the same time, an analysis job that looks nothing like reading fifteen interviews.
 
-Out of all that came the first initiative, which also matched the take-home exercise I had done to get in: · **75% of contributors dropped off or got stuck during sign-up** · . We redesigned the flow, simplified the process and set up an email sequence walking through every step, with two goals: bringing that 75% down and reducing time to profile approval.
+Out of all that came the first initiative, which also matched the take-home exercise I had done to get in: **75% of contributors dropped off or got stuck during sign-up**. We redesigned the flow, simplified the process and set up an email sequence walking through every step, with two goals: bringing that 75% down and reducing time to profile approval.
 
 ### Why I lasted three months
 
 Three months in I had doubts: little output, little impact and a lot of meetings with people who, in many cases, had just landed like me. It was probably normal for a hypergrowth scaleup reorganising its product team. But I was neither adding value nor getting any, and that is not how I work.
 
-That is when INDYA appeared, a much smaller project with the ambition of becoming the best nutrition app on the market. · **What told me it was time to move was not the offer: it was how little it took me to decide.**
+That is when INDYA appeared, a much smaller project with the ambition of becoming the best nutrition app on the market. **What told me it was time to move was not the offer: it was how little it took me to decide.**
 
 Nothing to reproach Freepik for. I arrived at the wrong moment in the wrong squad, and that was confirmed later: the contributors area did not continue and its goals were refocused towards acquiring graphic-resource companies.
 

@@ -1085,7 +1085,7 @@ Una cifra que no se escribe en el diccionario: se enlaza a la página que la pub
 
 ENLACE ·
 
-Las decisiones D39, D41 y D73, en · [DECISIONS.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md)
+Las decisiones D39, D41 y D73, en [DECISIONS.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md)
 
 ### Lo que no se va con el scroll
 

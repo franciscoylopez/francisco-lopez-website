@@ -99,9 +99,41 @@ describe("la frontera de CSS", () => {
     );
   });
 
-  it("NO se dispara en prosa, porque ahí siempre hay un nodo de texto en medio", () => {
-    expect(md("<p><em>Discovery</em> y <em>dato</em></p>")).toBe(
-      "_Discovery_ y _dato_",
+  // LA FORMA QUE EL SITIO EMITE DE VERDAD, y no una escrita a mano (P68.8). Esta
+  // suite tenía un caso «no se dispara en prosa» con `<p><em>a</em> y <em>b</em></p>`,
+  // que lleva un nodo de TEXTO entre los dos elementos. El sitio no emitía eso:
+  // `Rich` envolvía cada tramo de texto plano en un `<span>` para llevar la `key`,
+  // así que la prosa real era `<span>…</span><strong>…</strong><span>…</span>` y el
+  // conversor le metía un ` · ` a cada costura. **El test pasaba en verde con la
+  // conversión rota**, que es el metro validado contra un caso que no existe
+  // (`BRAND.md` §Cómo medir, 1). Se reproduce aquí la forma de antes y la de ahora.
+  it("NO se dispara en prosa: los tramos de texto son nodos de TEXTO", () => {
+    expect(md("<p>texto, <strong>negrita</strong>: y sigue.</p>")).toBe(
+      "texto, **negrita**: y sigue.",
+    );
+  });
+
+  it("tampoco cuando la prosa venía envuelta y el envoltorio se retiró", () => {
+    // Lo que `Rich` emite desde que usa `Fragment`: un solo nodo de texto por tramo.
+    expect(
+      md("<p>en HTML, <strong>una prueba</strong>: en producto.</p>"),
+    ).toBe("en HTML, **una prueba**: en producto.");
+  });
+
+  it("separa un rótulo que entra justo detrás de un final de frase", () => {
+    // El chip «Exit» de Hitos, detrás de un nodo de texto y separado por `ml-2`.
+    expect(md("<p>Adquirida por AppRadar.<span>Exit</span></p>")).toBe(
+      "Adquirida por AppRadar. · Exit",
+    );
+  });
+
+  it("y NO cuando lo que sigue continúa la frase o lo de antes la abre", () => {
+    // Los dos casos que la versión ancha rompía, medidos sobre las 28 variantes.
+    expect(md("<p>activación <strong>+<span>28</span>%</strong>.</p>")).toBe(
+      "activación **+28%**.",
+    );
+    expect(md("<p>(<em>entre paréntesis</em>)</p>")).toBe(
+      "(_entre paréntesis_)",
     );
   });
 });

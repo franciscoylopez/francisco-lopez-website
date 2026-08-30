@@ -36,9 +36,9 @@ Head of Product
 
 ## 01. Tres meses en el squad de contributors
 
-- **Investigación y definición de funcionalidades para el área de contributors** · , con análisis cualitativo y cuantitativo. La herramienta de analítica de producto se estaba eligiendo justo entonces, así que la evidencia salió de encuestas, entrevistas y el discovery del trimestre anterior.
-- **Rediseño del registro y el onboarding del contributor** · , donde el · **75% desistía o se quedaba bloqueado** · : flujo simplificado y una secuencia de emails que acompaña cada paso hasta la aprobación del perfil.
-- **Gestión de los OKR del squad** · : el primer sistema de objetivos trimestrales con el que trabajé de forma reglada, y en una empresa que se los tomaba en serio.
+- **Investigación y definición de funcionalidades para el área de contributors**, con análisis cualitativo y cuantitativo. La herramienta de analítica de producto se estaba eligiendo justo entonces, así que la evidencia salió de encuestas, entrevistas y el discovery del trimestre anterior.
+- **Rediseño del registro y el onboarding del contributor**, donde el **75% desistía o se quedaba bloqueado**: flujo simplificado y una secuencia de emails que acompaña cada paso hasta la aprobación del perfil.
+- **Gestión de los OKR del squad**: el primer sistema de objetivos trimestrales con el que trabajé de forma reglada, y en una empresa que se los tomaba en serio.
 
 02 — La historia
 
@@ -54,7 +54,7 @@ Así que me formé de forma reglada, y en ese orden. Primero agilidad: un máste
 
 Freepik era lo contrario de lo que venía de hacer: unas 400 personas, un producto con años de recorrido, unos resultados que la pandemia había catapultado y un equipo de producto que estaba reorganizándose y creciendo. Sobre el papel era justo lo que buscaba: proyecto grande, mucho dato y, por primera vez, otros PM con los que debatir y alinearme.
 
-Aterricé en el squad de · **contributors** · : el área que consigue los recursos gráficos de freelances y creadores individuales de todo el mundo. Es media ecuación de un marketplace de contenido, y hasta entonces había crecido de forma orgánica.
+Aterricé en el squad de **contributors**: el área que consigue los recursos gráficos de freelances y creadores individuales de todo el mundo. Es media ecuación de un marketplace de contenido, y hasta entonces había crecido de forma orgánica.
 
 ### Sin analítica de producto, con mucha gente a la que preguntar
 
@@ -62,13 +62,13 @@ La herramienta de analítica de producto se estaba eligiendo en ese momento, as�
 
 Ahí aprendí lo que cambia el volumen. Una encuesta en Freepik devuelve cientos de respuestas en pocos días, es una ventaja enorme y, a la vez, un trabajo de análisis que no se parece en nada a leer quince entrevistas.
 
-De todo aquello salió la primera iniciativa, que además coincidía con la prueba técnica que había hecho para entrar: · **el 75% de los contributors desistía o se quedaba bloqueado en el registro** · . Rediseñamos el flujo, simplificamos el proceso y montamos una secuencia de emails que acompañaba cada paso, con dos objetivos: bajar ese 75% y reducir el tiempo hasta la aprobación del perfil.
+De todo aquello salió la primera iniciativa, que además coincidía con la prueba técnica que había hecho para entrar: **el 75% de los contributors desistía o se quedaba bloqueado en el registro**. Rediseñamos el flujo, simplificamos el proceso y montamos una secuencia de emails que acompañaba cada paso, con dos objetivos: bajar ese 75% y reducir el tiempo hasta la aprobación del perfil.
 
 ### Por qué duré tres meses
 
 A los tres meses tenía dudas: poca producción, poco impacto y muchas reuniones con gente que, en muchos casos, estaba recién aterrizada como yo. Probablemente fuera lo normal en una scaleup en hipercrecimiento reorganizando su equipo de producto. Pero yo no estaba aportando valor ni recibiéndolo, y esa no es mi forma de trabajar.
 
-En ese momento apareció INDYA, un proyecto mucho más pequeño con la ambición de ser la mejor app de nutrición del mercado. · **Lo que me dijo que era el momento de moverme no fue la oferta: fue lo poco que me costó decidirme.**
+En ese momento apareció INDYA, un proyecto mucho más pequeño con la ambición de ser la mejor app de nutrición del mercado. **Lo que me dijo que era el momento de moverme no fue la oferta: fue lo poco que me costó decidirme.**
 
 Nada que reprochar a Freepik. Llegué en el momento equivocado al squad equivocado, y eso se confirmó después: el área de contributors no tuvo continuidad y sus objetivos se reenfocaron hacia la adquisición de empresas de recursos gráficos.
 

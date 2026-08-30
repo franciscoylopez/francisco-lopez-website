@@ -2,7 +2,7 @@
 
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
-import type { ComponentType, ReactNode } from "react";
+import { Fragment, type ComponentType, type ReactNode } from "react";
 
 import { GITHUB_URL } from "@/lib/contact";
 import type { ArticleBlock } from "@/lib/reading-time";
@@ -578,7 +578,13 @@ export function RepoStrip({
       </span>
       <p className="m-0">
         {parts.map((part, i) => {
-          if (typeof part === "string") return <span key={i}>{part}</span>;
+          // FRAGMENT Y NO `<span>` (P68.8), por lo mismo que `ui/rich.tsx`: el
+          // envoltorio solo llevaba la `key`, y convertía en ELEMENTO el «, » que
+          // separa dos decisiones citadas. El conversor a markdown lee «elemento
+          // pegado a elemento» como una separación que hacía el CSS y metía un
+          // « · » a cada lado de la coma.
+          if (typeof part === "string")
+            return <Fragment key={i}>{part}</Fragment>;
           // Las dos formas de `part` resuelven a un destino fuera del sitio
           // (github.com, o una URL externa citada) — siempre `target="_blank"`.
           const href =

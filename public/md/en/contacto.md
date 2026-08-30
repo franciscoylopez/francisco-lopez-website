@@ -28,4 +28,4 @@ Message
 
 Send message
 
-I use your details only to reply to you, and they aren't shared with anyone else. You can ask for access, correction or deletion at any time. · [Privacy and cookies](https://franciscolopez.es/en/cookies#privacidad) · .
+I use your details only to reply to you, and they aren't shared with anyone else. You can ask for access, correction or deletion at any time. [Privacy and cookies](https://franciscolopez.es/en/cookies#privacidad).

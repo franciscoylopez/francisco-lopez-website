@@ -28,7 +28,13 @@
  * `http://localhost:3000` dentro de un archivo que se publica. Mismo motivo por el
  * que el CV en PDF usa `SITE_DOMAIN` (`lib/site.ts`).
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join } from "node:path";
 
 import { JSDOM } from "jsdom";
@@ -56,6 +62,21 @@ const VARIANTES = locales.flatMap((lang) =>
  */
 const rutaHtml = (lang: Locale, slug: PageSlug) =>
   join(RAIZ_BUILD, `${lang}${slug ? `/${slug}` : ""}.html`);
+/** Todo `.md` que hay bajo una raíz, con la misma forma que devuelve `rutaMd`. */
+function mdEnDisco(raiz: string): string[] {
+  const out: string[] = [];
+  const baja = (dir: string) => {
+    if (!existsSync(dir)) return;
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) baja(p);
+      else if (e.name.endsWith(".md")) out.push(p);
+    }
+  };
+  baja(raiz);
+  return out;
+}
+
 const rutaMd = (lang: Locale, slug: PageSlug) =>
   join(RAIZ_MD, `${lang}${slug ? `/${slug}` : ""}.md`);
 
@@ -152,6 +173,25 @@ function main() {
   console.log("");
   for (const { lang, slug } of VARIANTES) procesar(lang, slug);
 
+  // Y EN EL OTRO SENTIDO: los .md que sobran *(P68.8, hallazgo del code-review)*.
+  // Hasta aquí esto solo comprobaba que cada variante ESPERADA existiera y
+  // cuadrara, así que un slug retirado o renombrado dejaba su archivo commiteado
+  // para siempre, con CI en verde. Y no es cosmético: el proxy sigue reescribiendo
+  // `Accept: text/markdown` sobre la ruta vieja, así que `/vieja` daría 404 como
+  // HTML y 200 en markdown con el contenido retirado. Es la misma doctrina de
+  // `check:kit`, que cuadra su registro en los dos sentidos.
+  const esperados = new Set(
+    VARIANTES.map(({ lang, slug }) => rutaMd(lang, slug)),
+  );
+  const enDisco = mdEnDisco(RAIZ_MD);
+  for (const archivo of enDisco) {
+    if (esperados.has(archivo)) continue;
+    fallos.push(
+      `\`${archivo}\` sobra: no le corresponde ninguna variante del registro. ` +
+        "Un .md huérfano se sigue sirviendo por negociación de `Accept`.",
+    );
+  }
+
   // Guarda de cero: una corrida que no ha mirado nada se lee igual que un
   // aprobado, y en este repo eso ya ha pasado seis veces.
   if (variantesLeidas === 0 || visitados === 0) {
@@ -165,7 +205,8 @@ function main() {
   const etiqueta = verificar ? "md --verificar" : "md";
   console.log(
     `${etiqueta} — ${variantesLeidas} de ${VARIANTES.length} variantes · ` +
-      `${visitados} elementos convertidos`,
+      `${visitados} elementos convertidos · ` +
+      `${enDisco.length} archivos en disco, ninguno de más`,
   );
 
   // MEDIDO Y NO CONVERTIDO, con su cifra: un alcance recortado en silencio se lee

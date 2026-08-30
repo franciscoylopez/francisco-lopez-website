@@ -12,6 +12,8 @@
 // un enlace es igual de traducible que uno suelto, y es justo el sitio donde se
 // habría escapado. El copy del diccionario no sabe nada de esto — ver
 // `components/ui/marcas.tsx`.
+import { Fragment } from "react";
+
 import { marcarMarcas } from "./marcas";
 
 const RICH_TOKEN = /(\[[^\]]+\]\([^)]+\)|\*\*[^*]+\*\*|\*[^*]+\*)/g;
@@ -49,7 +51,16 @@ export function Rich({ text }: { text: string }) {
         if (part.startsWith("*") && part.endsWith("*")) {
           return <em key={i}>{marcarMarcas(part.slice(1, -1))}</em>;
         }
-        return <span key={i}>{marcarMarcas(part)}</span>;
+        // FRAGMENT Y NO `<span>` (P68.8). El envoltorio existía solo para llevar
+        // la `key` de React: sin clase, sin semántica y sin efecto visual. Pero
+        // convertía CADA tramo de texto plano en un ELEMENTO, así que en prosa lo
+        // normal pasaba a ser «elemento pegado a elemento» — que es justo la señal
+        // con la que `scripts/md/convertir.ts` recupera una separación hecha por
+        // CSS. Resultado: 391 « · » metidos en medio de frases del markdown que
+        // leen los agentes, y su propio comentario diciendo que en prosa no se
+        // disparaba. Con un fragmento, el texto plano vuelve a ser un nodo de
+        // TEXTO y esa premisa vuelve a ser cierta.
+        return <Fragment key={i}>{marcarMarcas(part)}</Fragment>;
       })}
     </>
   );

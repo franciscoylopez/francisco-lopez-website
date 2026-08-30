@@ -75,7 +75,7 @@ AAA en claro y oscuro, con el contraste medido.
 
 Alineada con los criterios de EN 301 549, que remite a WCAG.
 
-La · [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) · obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, · [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf) · , que remite a · [WCAG](https://www.w3.org/TR/WCAG22/) · . Es el criterio que se ha seguido.
+La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj) obliga a productos y servicios comerciales (comercio electrónico, banca, transporte), no a una web personal: decir que este sitio «cumple la EAA» sería inexacto. Lo que sí aplica es su norma técnica de referencia, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), que remite a [WCAG](https://www.w3.org/TR/WCAG22/). Es el criterio que se ha seguido.
 
 1 de 8
 
@@ -181,7 +181,7 @@ Ocho piezas en el núcleo, y ninguna se escribe a mano
 
 ## 04. No es una autoevaluación de palabra
 
-Cada página se comprueba en modo claro y en modo oscuro, con herramientas reales ( · [axe-core](https://github.com/dequelabs/axe-core) · , · [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview) · ) y también a mano. Las automáticas hacen bien su trabajo, pero solo saben mirar lo que alguien ha convertido en regla.
+Cada página se comprueba en modo claro y en modo oscuro, con herramientas reales ([axe-core](https://github.com/dequelabs/axe-core), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)) y también a mano. Las automáticas hacen bien su trabajo, pero solo saben mirar lo que alguien ha convertido en regla.
 
 ### axe-core
 
@@ -258,7 +258,7 @@ Y por eso ninguna herramienta tenía nada que decir. El menú del móvil no se c
 
 Y tres de ellas no eran el arreglo de una página: cambiaron el armazón que comparten las catorce. Ahora el aviso de cookies se anuncia en cuanto aparece y va al principio del documento, la barra de navegación es una región con nombre propio, y el número de sección se oye al recorrer los títulos. Esa es la diferencia entre una prueba a mano y un informe: el informe habría salido en verde las dos veces.
 
-Lo que esta prueba no cubre está justo debajo, en los límites: un solo lector de pantalla ( · [NVDA](https://www.nvaccess.org/) · ), un solo navegador, y ninguna persona que use tecnología de asistencia a diario.
+Lo que esta prueba no cubre está justo debajo, en los límites: un solo lector de pantalla ([NVDA](https://www.nvaccess.org/)), un solo navegador, y ninguna persona que use tecnología de asistencia a diario.
 
 5 de 8
 
@@ -308,7 +308,7 @@ Es la palabra que el oficio usa a diario y casi nunca explica. Esta página la e
 
 A11y es la abreviatura que el desarrollo web usa para la palabra inglesa accessibility, accesibilidad. Se forma con su primera letra, su última letra y el número de letras que hay entre las dos: once. Y lo que nombra es diseñar sitios y aplicaciones para que cualquier persona pueda usarlos, tenga o no limitaciones físicas, visuales, auditivas o cognitivas.
 
-[The A11Y Project](https://www.a11yproject.com/) · es el espacio abierto donde el oficio reúne los principios y los patrones de accesibilidad que funcionan, del diseño al despliegue. Su idea de fondo es la que sigue esta web: la accesibilidad no es una capa que se añade al final, es un criterio de cierre. Aquí eso se traduce en tres cosas concretas. La lista de comprobación se pega en la tarea antes de empezarla, no al revisarla. Cuatro de sus nueve puntos ya no se miran página a página, porque los pone la capa de componentes. Y todo lo que se pudo convertir en comprobación automática se convirtió.
+[The A11Y Project](https://www.a11yproject.com/) es el espacio abierto donde el oficio reúne los principios y los patrones de accesibilidad que funcionan, del diseño al despliegue. Su idea de fondo es la que sigue esta web: la accesibilidad no es una capa que se añade al final, es un criterio de cierre. Aquí eso se traduce en tres cosas concretas. La lista de comprobación se pega en la tarea antes de empezarla, no al revisarla. Cuatro de sus nueve puntos ya no se miran página a página, porque los pone la capa de componentes. Y todo lo que se pudo convertir en comprobación automática se convirtió.
 
 7 de 8
 

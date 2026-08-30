@@ -117,12 +117,22 @@ function revisarLlmsTxt(): string | null {
   // callada: una página que faltara aquí simplemente no existía para un modelo.
   // El `Record` de la ruta impide olvidarla al compilar; esto comprueba que
   // además LLEGÓ al texto, que es otra cosa.
+  // Y SE BUSCA LA URL ANCLADA COMO DESTINO DE UN ENLACE —`](…)`— y no como
+  // subcadena suelta *(P68.8, hallazgo del code-review)*. Con `includes` a pelo,
+  // dos de las nueve comprobaciones aprobaban SIEMPRE: la home es
+  // `${SITE_URL}/`, prefijo de todas las demás URLs del archivo, así que no podía
+  // faltar nunca; y `${SITE_URL}/trayectoria` es prefijo de
+  // `${SITE_URL}/trayectoria/emendu`, que sale en la lista de experiencias, así
+  // que quitar el ÍNDICE de la lista de páginas habría pasado en verde. El caso
+  // malo del arnés usa `cookies`, que no tiene ese solape, así que tampoco lo
+  // destapaba: un metro que aprueba de más y un caso malo que no lo toca.
   for (const slug of PAGE_SLUGS) {
     vistos.paginasEnLlms++;
-    if (!texto.includes(urlDe(defaultLocale, slug))) {
+    const url = urlDe(defaultLocale, slug);
+    if (!texto.includes(`](${url})`)) {
       fallo(
         "llms.txt",
-        `no nombra \`${urlDe(defaultLocale, slug)}\`, y esa página está en el registro. ` +
+        `no enlaza \`${url}\`, y esa página está en el registro. ` +
           "Un agente que lea este archivo no puede descubrirla.",
       );
     }

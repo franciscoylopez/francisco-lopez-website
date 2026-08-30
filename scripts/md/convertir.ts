@@ -179,20 +179,51 @@ const APLANABLES = new Set([
 ]);
 
 /**
- * DOS ELEMENTOS PEGADOS SIN TEXTO EN MEDIO ESTABAN SEPARADOS POR CSS, NO POR PROSA.
- * Es la única señal que el HTML deja de una separación que la hacía la hoja de
- * estilos, y sin ella el markdown pega dos rótulos en una palabra que no existe:
- * medido en el prerender, «Correo» + el email salían como
+ * DOS TROZOS PEGADOS SIN UN ESPACIO EN MEDIO ESTABAN SEPARADOS POR CSS, NO POR
+ * PROSA. Es la única señal que el HTML deja de una separación que la hacía la
+ * hoja de estilos, y sin ella el markdown pega dos rótulos en una palabra que no
+ * existe: medido en el prerender, «Correo» + el email salían como
  * `Correofranciscojavier…`, y la cabecera de Hitos como `NombreImpactoAño`.
  *
- * En prosa no se dispara, y no por suerte: React emite el espacio entre palabras
- * como nodo de TEXTO, así que entre `<strong>` y lo que sigue siempre hay uno. La
- * frontera es «elemento inmediatamente después de elemento», y el separador es el
- * `·` que `CLAUDE.md` reserva justo para separar dos etiquetas.
+ * LA PRIMERA VERSIÓN MIRABA LA ADYACENCIA DE ELEMENTOS Y ESO ERA UN METRO MAL
+ * CALIBRADO *(P68.8)*. Decía —y lo dejó escrito— que «en prosa no se dispara,
+ * porque React emite el espacio entre palabras como nodo de TEXTO». La premisa
+ * era falsa en este sitio: `ui/rich.tsx` y `ui/article.tsx` envolvían cada tramo
+ * de texto plano en un `<span>` que solo llevaba la `key`, así que en prosa lo
+ * NORMAL era «elemento pegado a elemento». Resultado: **391 « · » metidos en
+ * medio de frases** del markdown que leen los agentes. Los dos envoltorios ya son
+ * fragmentos, y con eso la premisa vuelve a ser cierta; esto es la otra mitad.
+ *
+ * Y SE AÑADE UN SEGUNDO DISPARO, ESTRECHO, porque el caso espejo existía y nadie
+ * lo veía: el chip «Exit» va detrás de un nodo de TEXTO («Adquirida por
+ * AppRadar.») separado por un `ml-2`, así que la regla de adyacencia no lo tocaba
+ * y salía `AppRadar.Exit`. Es el mismo `Correofranciscojavier…` por el otro lado.
+ * El disparo es **un elemento que entra justo después de un final de frase**
+ * (`.!?…`) sin un espacio en medio.
+ *
+ * ESTRECHO PORQUE LO ANCHO SE PROBÓ Y ROMPÍA. La primera versión disparaba
+ * siempre que faltara el espacio, del tipo que fuera el nodo anterior, y medida
+ * sobre las 28 variantes **inventaba separadores nuevos**: `+ · 28%` en la cifra
+ * de Hitos —el `+` es texto y el contador un elemento— y `palabras · · ·` en la
+ * cabecera del artículo. Con el disparo atado a un final de frase, el diff sobre
+ * las 28 es **exactamente las dos líneas del chip y nada más**. Es la regla de
+ * validar el metro antes de creérselo, aplicada al propio arreglo.
+ *
+ * Y LLEVA DOS GUARDAS: un trozo que EMPIEZA por signo de continuación
+ * (`, . : ) »`) continúa la frase anterior, y uno que TERMINA en signo de
+ * apertura (`( « ¿`) abre la siguiente. En ninguno hubo separación que recuperar.
  */
+
+/** Continúa la frase de antes: nunca se le pone separador delante. */
+const CONTINUA = /^[.,;:!?)\]»…%]/;
+
+/** Abre lo que viene detrás: nunca se le pone separador detrás. */
+const ABRE = /[[(«¿¡]$/;
+
 function pega(salida: string, trozo: string, frontera: boolean): string {
   if (!frontera) return salida + trozo;
   if (!trozo.trim()) return salida;
+  if (CONTINUA.test(trozo) || ABRE.test(salida)) return salida + trozo;
   return (salida.trim() ? `${salida.trimEnd()} · ` : salida) + trozo.trim();
 }
 
@@ -206,7 +237,13 @@ function hijosEnLinea(el: Element, ctx: Contexto): string {
     // Lo vacío no cuenta como frontera: un `<span>` que solo lleva un icono no
     // separa su etiqueta de nada.
     if (!trozo) continue;
-    salida = pega(salida, trozo, esElemento && anterior);
+    // HAY FRONTERA cuando entra un ELEMENTO y no queda ni un espacio entre lo que
+    // ya se llevaba y él. Que lo de antes fuera elemento o texto da igual: lo que
+    // se recupera es una separación visual, y de eso el tipo de nodo no dice nada
+    // —el chip «Exit» iba detrás de texto y salía pegado—. `anterior` se queda
+    // para el caso en que el trozo previo se haya emitido ya recortado.
+    const trasFrase = /[.!?…]$/.test(salida) && !/^\s/.test(trozo);
+    salida = pega(salida, trozo, esElemento && (anterior || trasFrase));
     anterior = esElemento;
   }
   return salida;

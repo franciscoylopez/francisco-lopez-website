@@ -28,4 +28,4 @@ Mensaje
 
 Enviar mensaje
 
-Tus datos los uso solo para contestarte y no se ceden a nadie más. Puedes pedir acceso, corrección o borrado cuando quieras. · [Privacidad y cookies](https://franciscolopez.es/cookies#privacidad) · .
+Tus datos los uso solo para contestarte y no se ceden a nadie más. Puedes pedir acceso, corrección o borrado cuando quieras. [Privacidad y cookies](https://franciscolopez.es/cookies#privacidad).

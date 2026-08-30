@@ -36,9 +36,9 @@ Co-founder, 1 of 3 partners
 
 ## 01. Validating both sides before building anything
 
-- **I validated the problem on both sides of the market** · , users and brands: fraud, manipulation and rising costs on the traditional platforms. · **More than 30 user interviews and 15 with companies** · , which not only confirmed the hypothesis but picked our go-to-market for us.
-- **I designed the product's full flows** · , integrating voice-based identity verification and automatic AI summaries.
-- **I defined the MVP with the product designer** · , with a UI focused on the chosen sector and built for a visual format, not for the same old star chart.
+- **I validated the problem on both sides of the market**, users and brands: fraud, manipulation and rising costs on the traditional platforms. **More than 30 user interviews and 15 with companies**, which not only confirmed the hypothesis but picked our go-to-market for us.
+- **I designed the product's full flows**, integrating voice-based identity verification and automatic AI summaries.
+- **I defined the MVP with the product designer**, with a UI focused on the chosen sector and built for a visual format, not for the same old star chart.
 - **I supported the CEO on strategy and in the meetings with pre-seed funds.**
 
 02 — The story
@@ -47,19 +47,19 @@ Co-founder, 1 of 3 partners
 
 ### A problem everyone sees from outside and nobody fixes from inside
 
-Reviews are broken: fraud, manipulation and a rising cost for brands. Meanwhile, many brands were shifting that product endorsement to social posts with micro-influencers, an investment that works and · **does not last** · : you pay, it gets published, and two weeks later there is nothing left.
+Reviews are broken: fraud, manipulation and a rising cost for brands. Meanwhile, many brands were shifting that product endorsement to social posts with micro-influencers, an investment that works and **does not last**: you pay, it gets published, and two weeks later there is nothing left.
 
 Our idea was to bring the two together and present them in a completely different way.
 
-We started by validating both sides, because a marketplace that only validates one has validated nothing: · **more than 30 user interviews and 15 with companies** · . They did not just confirm the hypothesis: they pointed us at a specific go-to-market. Fashion, home decor and cosmetics was the closest fit: it needed review volume · **and** · quality, and not only in the content but in the format.
+We started by validating both sides, because a marketplace that only validates one has validated nothing: **more than 30 user interviews and 15 with companies**. They did not just confirm the hypothesis: they pointed us at a specific go-to-market. Fashion, home decor and cosmetics was the closest fit: it needed review volume **and** quality, and not only in the content but in the format.
 
 ### The three pieces
 
-**That you are you.** · We partnered with a voice recognition company that identified people unambiguously and left a real signature. That blocked multiple accounts from the same person and helped detect anomalous behaviour.
+**That you are you.** We partnered with a voice recognition company that identified people unambiguously and left a real signature. That blocked multiple accounts from the same person and helped detect anomalous behaviour.
 
-**That reviews are actually useful.** · What good are 5,000 reviews if the user only reads the last ten? AI helped a lot there: summaries of all of them and sentiment classification about the brand. And once that worked, the possibilities opened up on their own: being able to · **talk** · to the reviews, spot patterns, “this product is for you if…”.
+**That reviews are actually useful.** What good are 5,000 reviews if the user only reads the last ten? AI helped a lot there: summaries of all of them and sentiment classification about the brand. And once that worked, the possibilities opened up on their own: being able to **talk** to the reviews, spot patterns, “this product is for you if…”.
 
-**That they do not look twenty years old.** · We had tackled two problems and the look was still the same five-to-one star chart with the occasional low-quality photo. The third path was to bring the weight of social and micro-influencers into reviews, and make it · **last** · : a B2B2C block where brands ran product trial campaigns with a base of micro-influencers who gave their honest opinion in visually rich reviews.
+**That they do not look twenty years old.** We had tackled two problems and the look was still the same five-to-one star chart with the occasional low-quality photo. The third path was to bring the weight of social and micro-influencers into reviews, and make it **last**: a B2B2C block where brands ran product trial campaigns with a base of micro-influencers who gave their honest opinion in visually rich reviews.
 
 ![KUOTIP dashboard: last month's review count, average rating and verification rate; below, the star distribution, the monthly trend of the three metrics, and the status of product campaigns with micro-influencers.](https://franciscolopez.es/_next/image?url=%2Fimg%2Fkuotip-dashboard.webp&w=3840&q=75)
 
@@ -67,9 +67,9 @@ Identity verification + content that helps + a current format. With those three 
 
 ### The year we gave ourselves
 
-We knocked on many doors, and at none of them were we told the project made no sense. In several cases we made it through every stage. We got tired of hearing · _“you’ve got further than 99% of people ever do, don’t give up”_ · . But the money never arrived, in a 2024 that was probably not the year for a pre-seed like ours.
+We knocked on many doors, and at none of them were we told the project made no sense. In several cases we made it through every stage. We got tired of hearing _“you’ve got further than 99% of people ever do, don’t give up”_. But the money never arrived, in a 2024 that was probably not the year for a pre-seed like ours.
 
-After a year researching, conceptualising, building, fundraising and self-financing, we decided to stop. And we decided it because of a sentence that had come up in our first partner meetings: · _how long do we give ourselves to see whether this makes sense?_ · The answer was unanimous: · **if there is no traction in a year, we stop** · .
+After a year researching, conceptualising, building, fundraising and self-financing, we decided to stop. And we decided it because of a sentence that had come up in our first partner meetings: _how long do we give ourselves to see whether this makes sense?_ The answer was unanimous: **if there is no traction in a year, we stop**.
 
 So we stayed true to what we had agreed and moved on to other projects.
 

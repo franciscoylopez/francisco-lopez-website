@@ -1085,7 +1085,7 @@ A figure that isn't typed into the dictionary: it links to the page that actuall
 
 LINK ·
 
-Decisions D39, D41 and D73, in · [DECISIONS.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md)
+Decisions D39, D41 and D73, in [DECISIONS.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md)
 
 ### What doesn't scroll away
 

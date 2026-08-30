@@ -75,7 +75,7 @@ AAA in light and dark, with contrast measured.
 
 Aligned with the criteria of EN 301 549, which points to WCAG.
 
-The · [European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj) · covers commercial products and services (e-commerce, banking, transport), not a personal site: saying this one «complies with the EAA» would be inaccurate. What does apply is its technical reference standard, · [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf) · , which points to · [WCAG](https://www.w3.org/TR/WCAG22/) · . That is the criterion followed here.
+The [European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj) covers commercial products and services (e-commerce, banking, transport), not a personal site: saying this one «complies with the EAA» would be inaccurate. What does apply is its technical reference standard, [EN 301 549 (PDF)](https://www.etsi.org/deliver/etsi_en/301500_301599/301549/03.02.01_60/en_301549v030201p.pdf), which points to [WCAG](https://www.w3.org/TR/WCAG22/). That is the criterion followed here.
 
 1 of 8
 
@@ -181,7 +181,7 @@ Eight pieces in the core, and none is written by hand
 
 ## 04. Not a self-assessment on my word
 
-Every page is checked in light mode and in dark mode, with real tools ( · [axe-core](https://github.com/dequelabs/axe-core) · , · [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview) · ) and by hand as well. The automated ones do their job well, but they can only look at what somebody has turned into a rule.
+Every page is checked in light mode and in dark mode, with real tools ([axe-core](https://github.com/dequelabs/axe-core), [Lighthouse](https://developer.chrome.com/docs/lighthouse/overview)) and by hand as well. The automated ones do their job well, but they can only look at what somebody has turned into a rule.
 
 ### axe-core
 
@@ -258,7 +258,7 @@ Which is why no tool had anything to say. The mobile menu didn't close with the 
 
 And three of them weren't one page's fix: they changed the shell all fourteen share. The cookie notice now announces itself as it appears and sits at the start of the document, the navigation bar is a region with a name of its own, and the section number is spoken when walking the headings. That is the difference between a manual pass and a report: the report would have come back green both times.
 
-What this pass doesn't cover is right below, in the limits: one screen reader ( · [NVDA](https://www.nvaccess.org/) · ), one browser, and nobody who uses assistive technology every day.
+What this pass doesn't cover is right below, in the limits: one screen reader ([NVDA](https://www.nvaccess.org/)), one browser, and nobody who uses assistive technology every day.
 
 5 of 8
 
@@ -308,7 +308,7 @@ It's the word the trade uses daily and almost never explains. This page was usin
 
 A11y is the shorthand web development uses for the word accessibility. It's built from its first letter, its last letter, and the number of letters in between: eleven. What it names is designing sites and apps so that anyone can use them, whether or not they have physical, visual, hearing or cognitive limitations.
 
-[The A11Y Project](https://www.a11yproject.com/) · is the open space where the trade gathers the accessibility principles and patterns that work, from design through to deployment. Its underlying idea is the one this site follows: accessibility isn't a layer added at the end, it's a closing criterion. Here that turns into three concrete things. The checklist goes into the task before the work starts, not when it gets reviewed. Four of its nine points are no longer checked page by page, because the component layer supplies them. And everything that could become an automated check became one.
+[The A11Y Project](https://www.a11yproject.com/) is the open space where the trade gathers the accessibility principles and patterns that work, from design through to deployment. Its underlying idea is the one this site follows: accessibility isn't a layer added at the end, it's a closing criterion. Here that turns into three concrete things. The checklist goes into the task before the work starts, not when it gets reviewed. Four of its nine points are no longer checked page by page, because the component layer supplies them. And everything that could become an automated check became one.
 
 7 of 8
 

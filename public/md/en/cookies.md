@@ -21,7 +21,7 @@ This first part isn't about cookies. It's about what happens to your data if you
 
 ### Who the controller is
 
-Francisco Javier López Martínez, in Valencia, Spain. There's no company behind this site: it's personal, and I write and maintain it myself. For anything to do with your data you can · [write to me](#contacto) · .
+Francisco Javier López Martínez, in Valencia, Spain. There's no company behind this site: it's personal, and I write and maintain it myself. For anything to do with your data you can [write to me](#contacto).
 
 ### What data I process, and what for
 
@@ -41,7 +41,7 @@ Your message stays in the mailbox for as long as the conversation makes sense, a
 
 ### What rights you have
 
-You can ask me for access to your data, for it to be corrected or deleted, and you can also object to the processing, restrict it, or ask for it back in a portable format. Just write to the address at the end of this page. And if you think I've got it wrong, you can complain to the · [Spanish Data Protection Agency](https://www.aepd.es) · .
+You can ask me for access to your data, for it to be corrected or deleted, and you can also object to the processing, restrict it, or ask for it back in a portable format. Just write to the address at the end of this page. And if you think I've got it wrong, you can complain to the [Spanish Data Protection Agency](https://www.aepd.es).
 
 ## What cookies are
 

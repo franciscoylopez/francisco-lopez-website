@@ -48,7 +48,7 @@ Seleccionada por Apple App Store Foundations.
 
 TheTool
 
-Adquirida por AppRadar.Exit
+Adquirida por AppRadar. · Exit
 
 2021
 

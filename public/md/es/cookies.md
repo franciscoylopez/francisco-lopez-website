@@ -21,7 +21,7 @@ Esta primera parte no va de cookies, sino de qué pasa con tus datos si te pones
 
 ### Quién es el responsable
 
-Francisco Javier López Martínez, en Valencia (España). No hay ninguna empresa detrás de esta web: es personal, y la escribo y la mantengo yo. Para cualquier cosa relacionada con tus datos puedes · [escribirme](#contacto) · .
+Francisco Javier López Martínez, en Valencia (España). No hay ninguna empresa detrás de esta web: es personal, y la escribo y la mantengo yo. Para cualquier cosa relacionada con tus datos puedes [escribirme](#contacto).
 
 ### Qué datos trato y para qué
 
@@ -41,7 +41,7 @@ El mensaje se queda en el buzón mientras la conversación tenga sentido, y como
 
 ### Qué derechos tienes
 
-Puedes pedirme acceso a tus datos, su rectificación o su supresión, y también oponerte al tratamiento, limitarlo o pedir que te los devuelva en un formato portable. Basta con que me escribas a la dirección del final de esta página. Y si crees que no lo he hecho bien, puedes reclamar ante la · [Agencia Española de Protección de Datos](https://www.aepd.es) · .
+Puedes pedirme acceso a tus datos, su rectificación o su supresión, y también oponerte al tratamiento, limitarlo o pedir que te los devuelva en un formato portable. Basta con que me escribas a la dirección del final de esta página. Y si crees que no lo he hecho bien, puedes reclamar ante la [Agencia Española de Protección de Datos](https://www.aepd.es).
 
 ## Qué son las cookies
 
