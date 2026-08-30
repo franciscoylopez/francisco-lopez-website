@@ -192,6 +192,7 @@
 - D154 · El suelo de la densidad tiene dos palancas, y la que faltaba es teñir sin gastar bloque
 - D155 · Una señal fija que no distingue es decoración con forma de aviso
 - D156 · La invariante del pliegue pasa a sostenerse por construcción, y el corte está escrito
+- D157 · La nota de un escáner agéntico no es un criterio de aceptación, y su hallazgo más ruidoso no reproduce
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9554,3 +9555,98 @@ decisión de copy porque las tres entradillas son de largo distinto.
 
 *Es el patrón de esta entrada aplicado a sí misma: un refactor transparente no arregla de paso
 lo que encuentra, lo deja escrito y lo arregla en su propio cambio, donde se puede medir.*
+
+---
+
+## D157 · La nota de un escáner agéntico no es un criterio de aceptación, y su hallazgo más ruidoso no reproduce — 2026-08-30
+
+**Decisión.** Los dos escáneres que abrieron el sprint «Agentes» —**`is-agentic.com`** (Vercel /
+Ora API, 75/100) e **`isitagentready.com`** (20/100)— quedan registrados como **entrada de
+descubrimiento y nunca como metro**. Ninguna de sus dos notas es un umbral de este proyecto, y
+esto se escribe *antes* de construir nada del sprint porque el proyecto ya sabe cómo acaba lo
+contrario: *de 11 hallazgos de un auditor externo, 6 eran falsos positivos, y lo descartado hay
+que documentarlo o vuelve*.
+
+### Los dos falsos positivos, con el comando que los tumba
+
+Medidos contra **producción**, no contra local, el 2026-08-30:
+
+| Su hallazgo | Comando | Lo que devuelve |
+|---|---|---|
+| «Content without JavaScript: asegura un `h1` y 500+ caracteres en el HTML crudo» | `curl -s https://franciscolopez.es/ \| grep -o '<h1' \| wc -l` | **1** |
+| — la misma, en su mitad de caracteres | ver el bloque de abajo | **6.497 caracteres de prosa**, 13 veces su umbral |
+| «Agent-friendly 404s: nunca un 200 con tu app shell» | `curl -s -o /dev/null -w "%{http_code}" https://franciscolopez.es/no-existe-xyz` | **404**, y **404** también en `/en/…` |
+
+El conteo de caracteres, que es el que necesita el bloque propio:
+
+```bash
+curl -s https://franciscolopez.es/ | node -e "
+let h='';process.stdin.on('data',d=>h+=d).on('end',()=>{
+  const t = h.replace(/<(script|style)[\s\S]*?<\/\1>/gi,' ')
+             .replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  console.log(t.length);
+});"
+```
+
+### Y el metro de este mismo descarte estuvo mal la primera vez
+
+La ficha de la tarea tumbaba el primer hallazgo con **«~77.500 caracteres de texto»**. Es
+**77.180**, y **no son texto**: salen de contar como prosa el `self.__next_f.push(...)` que Next
+inlinea dentro de un `<script>` con el payload RSC. Quitando `script` y `style` —que es lo que
+hace el comando de arriba— quedan **6.497**, y el resto de la página cuadra con esa cifra: 75
+`p`, 7 `h2` y 10 `h3` en las mismas 218 KB.
+
+**El veredicto no cambia y la cifra sí**, y por eso se escribe: 6.497 sigue siendo 13 veces el
+umbral de 500, así que el hallazgo sigue siendo falso. Pero es la regla 3 de `BRAND.md`
+—*valida el metro antes de creerte el hallazgo*— apareciendo **dentro de la tarea que existe para
+validar el metro de otro**. Un `replace(/<[^>]+>/g)` sin quitar antes los `<script>` es
+exactamente el error que comete un escáner que promete leer «el HTML crudo», y aquí se cometió al
+refutarlo.
+
+### Los doce checks que NO aplican, y el criterio que lo decide
+
+El 20/100 del segundo escáner es la cifra que más impresiona y la que menos dice: **12 de sus
+checks miden superficies que este sitio no tiene**.
+
+| Familia | Checks | Por qué no aplica |
+|---|---|---|
+| `API, Auth, MCP & Skill Discovery` | API Catalog · OAuth/OIDC · OAuth Protected Resource · `auth.md` · MCP Server Card · Agent Skills index · WebMCP · DNS-AID · Web Bot Auth | El sitio **no tiene API, ni autenticación, ni servidor MCP**. Un 0/9 aquí es la respuesta correcta |
+| Comercio agéntico | x402 · MPP · UCP · ACP | **No hay nada que vender**. Un portfolio no tiene checkout |
+
+> **El criterio, que es lo reutilizable: un check de superficie agéntica aplica si el sitio TIENE
+> esa superficie.** Publicar un `api-catalog` sin API no es estar preparado para agentes: es
+> mentir en un formato que un agente sabe leer, y encima con la firma de un estándar.
+
+Y hay una segunda razón para no engancharlos a la rutina, que es el criterio de D51 en su otra
+mitad: **sus checks son estándares emergentes en borrador**, así que un metro que no controlamos
+puede ponerse rojo o verde por algo que aquí no se ha decidido. Lo que va a CI es un guardián
+propio (P68), y vigila las invariantes que este sprint adopte, no la nota de nadie.
+
+### Lo que sí queda en pie, que es de dónde sale el sprint
+
+De los dos informes juntos sobreviven **tres** huecos reales, y los tres están tareados:
+
+- **La negociación de markdown** (P67.2), el **único que señalan los dos a la vez** y el único que
+  cambia lo que un agente puede *hacer* con el sitio. Hoy: `Accept: text/markdown` devuelve
+  `text/html`, y el `Vary` que sirve Next (`rsc, next-router-state-tree, …`) **no incluye
+  `Accept`**.
+- **El *when-to-use* de `llms.txt`** (P67.4). El archivo describe **quién es**; no dice **cuándo
+  traer esta fuente a una conversación**.
+- **Las señales de contenido en `robots.txt`** (P67.8), que hoy dice `Allow: /` y nada más.
+
+### Y la media frase del 404, que se DESCARTA con motivo
+
+La segunda mitad del hallazgo del 404 —*que el cuerpo apunte al sitemap o a `llms.txt`*— es
+literalmente cierta y aun así no se hace. El 404 servido **no es un app shell vacío**: trae el nav
+y el footer completos, o sea **nueve enlaces reales del sitio** y un «Volver al inicio», que es
+justo lo que su hallazgo pide que exista. Lo que falta es un puntero a un artefacto de máquina, y
+`/llms.txt` ya está anunciado donde un agente lo busca —`robots.txt` y el `Sitemap`—, así que
+enlazarlo desde una página que lee una persona sería **publicar un artefacto de máquina en una
+superficie humana** para satisfacer un check.
+
+*Lo que sí se queda es la mitad que vale, y como invariante en vez de como nota:* **`check:agentes`
+comprueba que una ruta inexistente devuelve 404 de verdad** (P68). El falso positivo, convertido
+en la comprobación que sí protege algo.
+
+**Estado:** Aceptada. La entrada se cierra con el sprint; si alguna de las tres tareas cambia de
+alcance, es aquí donde se anota por qué.
