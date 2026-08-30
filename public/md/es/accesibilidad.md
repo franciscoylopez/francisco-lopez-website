@@ -57,7 +57,7 @@ El nivel declarado, las comprobaciones que cierran cada página, lo que se hered
 
 El contraste está medido, no estimado. El texto principal alcanza 13,79:1 en claro y 15,32:1 en oscuro; los enlaces y botones de acción superan 7:1 en ambos temas. AA exige 4,5:1: se supera con margen.
 
-Última revisión de accesibilidad: 27 de agosto de 2026.
+Última revisión de accesibilidad: 27 de agosto de 2026 (2026-08-27).
 
 ### Estándar
 

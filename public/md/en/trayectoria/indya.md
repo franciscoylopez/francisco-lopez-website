@@ -18,7 +18,7 @@ Product Lead
 
 Period
 
-Jan 2022 - Dec 2023
+Jan 2022 (2022-01) - Dec 2023 (2023-12)
 
 Sector
 

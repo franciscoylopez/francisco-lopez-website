@@ -11,7 +11,7 @@ Legal
 
 # Privacidad y cookies
 
-Última actualización: 23 de agosto de 2026
+Última actualización: 23 de agosto de 2026 (2026-08-23)
 
 Aquí te cuento dos cosas: qué hago con tus datos si te pones en contacto conmigo, y qué cookies usa esta web. En las dos, el mismo criterio: el mínimo, con nombres y plazos concretos, y ninguna cookie de analítica sin tu consentimiento.
 

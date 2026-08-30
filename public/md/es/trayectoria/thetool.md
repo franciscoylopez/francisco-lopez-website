@@ -18,7 +18,7 @@ Cofounder & Product
 
 Periodo
 
-May 2016 - Oct 2021
+May 2016 (2016-05) - Oct 2021 (2021-10)
 
 Sector
 

@@ -11,7 +11,7 @@
 
 import type { Locale } from "@/lib/i18n/config";
 
-import { EXPERIENCES } from "../experiences";
+import { EXPERIENCES, experienceOf } from "../experiences";
 import { copy as es } from "./es";
 import { copy as en } from "./en";
 import type { Company, ExperienceCopy, ExperienceCopyMap } from "./types";
@@ -74,6 +74,65 @@ export function factsOf(
   const { role, period, sector } = copyOf(lang, company);
   return { role, period, sector };
 }
+
+/**
+ * EL SEPARADOR DE UN RANGO DE FECHAS, que no es una elección de este archivo:
+ * lo fija `CLAUDE.md` §copy —guion con espacios en un rango, porque el «·» ya es
+ * el separador de campos— y lo vigila `check:raya`. Por eso partir por aquí es
+ * fiable en los dos idiomas y en las ocho experiencias.
+ */
+const SEPARADOR = " - ";
+
+/**
+ * El periodo partido en sus dos extremos, cada uno con su texto y su ISO, para
+ * que la página pueda pintar un `<time datetime>` por extremo (P67.6). `<time>`
+ * no sabe expresar un rango, así que un periodo son dos elementos, que es lo que
+ * hace todo CV marcado en condiciones.
+ *
+ * EL TEXTO SALE DEL COPY Y EL ISO DEL REGISTRO, así que la pareja puede
+ * divergir. Se comprueba en vez de confiarse: el año del ISO tiene que aparecer
+ * en su mitad del texto. Corre en build —las 28 variantes se prerenderizan—, o
+ * sea que una fecha cambiada en un sitio y no en el otro rompe la build en vez
+ * de servir dos verdades. Es el mismo modo de fallo que P48.55 encontró en este
+ * campo, con la diferencia de que aquí las dos copias son de tipos distintos y
+ * ninguna revisión visual las habría cruzado.
+ */
+export function periodPartsOf(
+  lang: Locale,
+  company: string,
+): { texto: string; iso: string | null }[] {
+  const { period } = factsOf(lang, company);
+  const { desde, hasta } = experienceOf(company);
+
+  const partes = period.split(SEPARADOR);
+  if (partes.length !== 2) {
+    throw new Error(
+      `Periodo de "${company}" (${lang}): «${period}» no se parte en dos por «${SEPARADOR}». ` +
+        "Un rango de fechas lleva guion con espacios (CLAUDE.md §copy); si esta " +
+        "experiencia de verdad no es un rango, el sitio de arreglarlo es el copy.",
+    );
+  }
+
+  const extremos = [
+    { texto: partes[0]!, iso: desde },
+    { texto: partes[1]!, iso: hasta },
+  ];
+
+  for (const { texto, iso } of extremos) {
+    if (iso && !texto.includes(iso.slice(0, 4))) {
+      throw new Error(
+        `Periodo de "${company}" (${lang}): el copy dice «${texto}» y el registro «${iso}». ` +
+          "Las dos mitades tienen que decir lo mismo: o se corrige el `period` de " +
+          "content/experience-copy/, o se corrigen `desde`/`hasta` de content/experiences.ts.",
+      );
+    }
+  }
+
+  return extremos;
+}
+
+/** El separador, para que la página lo pinte entre los dos extremos. */
+export const PERIOD_SEPARATOR = SEPARADOR;
 
 /**
  * El reporting en la longitud que toca. `"deep"` es la corta de los Datos y

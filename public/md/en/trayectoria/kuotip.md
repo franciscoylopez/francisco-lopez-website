@@ -18,7 +18,7 @@ Cofounder & Product
 
 Period
 
-Feb 2024 - Dec 2024
+Feb 2024 (2024-02) - Dec 2024 (2024-12)
 
 Sector
 

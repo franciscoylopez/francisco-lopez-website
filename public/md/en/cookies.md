@@ -11,7 +11,7 @@ Legal
 
 # Privacy and cookies
 
-Last updated: 23 August 2026
+Last updated: 23 August 2026 (2026-08-23)
 
 Two things here: what I do with your data if you get in touch, and what cookies this site uses. Same approach for both: the minimum, with real names and real deadlines, and no analytics cookie without your consent.
 

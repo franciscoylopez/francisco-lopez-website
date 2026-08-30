@@ -18,7 +18,7 @@ Product Manager
 
 Period
 
-Feb 2025 - Present
+Feb 2025 (2025-02) - Present
 
 Sector
 

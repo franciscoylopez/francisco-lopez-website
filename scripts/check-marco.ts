@@ -120,6 +120,9 @@ const FOCUSABLES =
 
 const problemas: string[] = [];
 
+/** Cuántas variantes han pasado por la invariante del `<article>` (P67.6). */
+let articulosMirados = 0;
+
 /** Un problema, siempre con la variante delante: el informe se lee sin abrir nada. */
 const fallo = (variante: string, msg: string) =>
   problemas.push(`${variante}: ${msg}`);
@@ -338,6 +341,50 @@ function revisarEsqueleto({ doc, variante }: Pagina): void {
     );
   } else if (!h1s[0]!.textContent?.trim()) {
     fallo(variante, "el `<h1>` está vacío.");
+  }
+}
+
+/**
+ * QUE LAS DOS CAPAS DIGAN LO MISMO: si la metadata declara `og:type=article`, el
+ * contenido tiene que servirse dentro de un `<article>`, y solo entonces (P67.6).
+ *
+ * POR QUÉ ESTA INVARIANTE Y NO OTRA. La forma natural era mirar el `@type` del
+ * JSON-LD, pero de las seis páginas que son artículos solo `/como-se-ha-creado`
+ * declara la familia `Article`: las cinco del deep-dive declaran `WebPage`, que
+ * es correcto y no se toca. El `og:type` sí cubre las seis exactas, ya viaja en
+ * el prerender y lo pone `pageMetadata`, así que aquí no hay lista de páginas
+ * que mantener — la misma razón por la que el breadcrumb se deriva y no se
+ * escribe.
+ *
+ * SE MIRA EN LOS DOS SENTIDOS. Sin la vuelta, envolver media página de más en un
+ * `<article>` pasaría igual de verde, y `<article>` significa «contenido
+ * autónomo y redistribuible»: repartido por una página que no lo es, deja de
+ * decir nada. Por eso también se exige que sea UNO.
+ */
+function revisarArticulo({ doc, variante }: Pagina): void {
+  const esArticulo =
+    doc
+      .querySelector('meta[property="og:type"]')
+      ?.getAttribute("content")
+      ?.trim() === "article";
+  const articles = doc.querySelectorAll("article");
+  articulosMirados++;
+
+  if (esArticulo && articles.length !== 1) {
+    fallo(
+      variante,
+      `declara \`og:type=article\` y tiene ${articles.length} \`<article>\`, y tiene que haber uno. ` +
+        "El marcado semántico y la metadata están diciendo cosas distintas de la misma página; " +
+        "lo pone `<PageShell article>`.",
+    );
+  }
+  if (!esArticulo && articles.length > 0) {
+    fallo(
+      variante,
+      `tiene ${articles.length} \`<article>\` y no declara \`og:type=article\`. ` +
+        "O la página es un artículo y le falta el `ogType`, o ese `<article>` está afirmando " +
+        "que un trozo de página es contenido autónomo y redistribuible cuando no lo es.",
+    );
   }
 }
 
@@ -729,6 +776,7 @@ async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
   try {
     revisarIdioma(pagina);
     revisarEsqueleto(pagina);
+    revisarArticulo(pagina);
     revisarEnlaceDeSalto(pagina);
     revisarBreadcrumb(pagina);
     revisarCanonical(pagina);
@@ -786,6 +834,7 @@ async function main() {
     `check:marco — ${VARIANTES.length} variantes del build ${buildId}\n` +
       `  axe        ${reglasEvaluadas.size} reglas evaluadas · ${Object.keys(DELEGADAS).length} delegadas\n` +
       `  a mano     enlace de salto · un h1 · un main · breadcrumb · canonical y hreflang · OG\n` +
+      `  artículos  ${articulosMirados} variantes cruzadas: og:type=article ⇔ un solo <article>\n` +
       `  tarjetas   ${tarjetasResueltas} \`?card=\` resueltos contra el despacho de \`/api/og\`\n` +
       `  permalinks ${permalinksVistos} a una línea de un .md del repo, comprobado su ?plain=1\n` +
       `  JSON-LD    ${bloquesLd} bloques · ${idsDeclarados.size} \`@id\` declarados · ${idsReferenciados.size} referenciados\n` +

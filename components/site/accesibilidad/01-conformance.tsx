@@ -3,7 +3,8 @@ import { SectionHeader } from "@/components/ui/heading";
 import { InfoCard } from "@/components/ui/info-card";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
-import { LAST_A11Y_REVIEW, fillDate, fillRatios } from "@/lib/design-values";
+import { LAST_A11Y_REVIEW, fillRatios } from "@/lib/design-values";
+import { FechaCopy } from "@/components/site/fecha";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
@@ -57,7 +58,7 @@ export function Conformance({
                 todavía: es la segunda vez que se rompe y las dos las encontró un
                 ojo, no una herramienta. */}
           <p className="text-muted-foreground m-0 mt-3 mb-8 text-[0.85rem]">
-            {fillDate(t.updated, LAST_A11Y_REVIEW, lang)}
+            <FechaCopy text={t.updated} iso={LAST_A11Y_REVIEW} lang={lang} />
           </p>
         </SectionHeader>
         <div className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-[var(--gutter)]">

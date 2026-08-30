@@ -107,7 +107,7 @@ export const FIGURAS = [
 
 /**
  * Sustituye las cifras derivadas en una cadena de copy, como `fillPages` hace
- * con `{paginas}` y `fillDate` con `{date}`.
+ * con `{paginas}` y `fillRatios` con `{par.tema}`.
  *
  * SE CAPITALIZA LO QUE CAE AL PRINCIPIO, y por eso el copy puede escribir
  * «{piezasNucleo} piezas» sin que salga «ocho piezas» en mitad de una pastilla

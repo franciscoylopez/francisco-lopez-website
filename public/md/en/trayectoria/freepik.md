@@ -18,7 +18,7 @@ Product Manager
 
 Period
 
-Oct 2021 - Dec 2021
+Oct 2021 (2021-10) - Dec 2021 (2021-12)
 
 Sector
 

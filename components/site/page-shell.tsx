@@ -32,6 +32,28 @@ import { MAIN_ID } from "./skip-link";
 // Las dos páginas que no pasan por aquí —`SystemMessage` (404/error) y el 404
 // global— ponen el suyo, y llevan el mismo `MAIN_ID` para no depender de que
 // alguien copie bien la cadena.
+//
+// Y EL `<article>` TAMBIÉN LO PONE EL SHELL (P67.6), por el mismo argumento con
+// el que pone el `<main>` y con el que DERIVA el `BreadcrumbList` de `parents`:
+// cuando el marco lo pone, no puede divergir del contenido. El sitio tenía seis
+// artículos —las cinco páginas del deep-dive y `/como-se-ha-creado`— servidos
+// dentro de un `<section>`, mientras la metadata de esas mismas seis ya decía
+// `og:type: "article"` y el JSON-LD de una decía `TechArticle`. Dos capas de la
+// misma página afirmando cosas distintas.
+//
+// ES UNA PROP EXPLÍCITA Y NO SE DERIVA DEL JSON-LD, que era la primera forma
+// escrita: el `@type` de la familia `Article` solo lo declara `/como-se-ha-creado`
+// —las cinco del deep-dive declaran `WebPage`, y eso es correcto y no se toca—,
+// así que derivarlo del `extraLd` habría cubierto una de seis. Lo que sí cubre
+// las seis exactas es el `og:type`, y por ahí lo vigila `check:marco`: una página
+// con `og:type=article` tiene que servir un `<article>`, y solo esa. La prop no
+// es algo que haya que recordar, es algo que el gate no deja olvidar.
+//
+// ENVUELVE TODO EL CONTENIDO DEL `<main>`, breadcrumb y cierre de página
+// incluidos. Es la imprecisión que se acepta a cambio de que el elemento lo
+// ponga una sola línea: partirlo obligaría a que las dos páginas largas
+// devolvieran su carpintería por separado, y `<nav>` dentro de `<article>` es
+// válido y lo contempla la propia especificación.
 
 type ShellDict = {
   nav: NavDict;
@@ -43,6 +65,13 @@ type PageShellProps = {
   dict: ShellDict;
   lang: Locale;
   children: ReactNode;
+  /**
+   * El contenido de esta página es un ARTÍCULO: contenido autónomo y
+   * redistribuible, que es la definición del elemento. Lo llevan las seis que
+   * declaran `og:type: "article"` en su metadata, y `check:marco` comprueba que
+   * esas dos afirmaciones dicen lo mismo en las 28 variantes.
+   */
+  article?: boolean;
 } & (
   | {
       crumb: string;
@@ -99,7 +128,7 @@ export function PageShell(props: PageShellProps) {
       />
       <RevealRoot>
         <main id={MAIN_ID} tabIndex={-1}>
-          {children}
+          {props.article ? <article>{children}</article> : children}
         </main>
       </RevealRoot>
       <Footer dict={dict.footer} lang={lang} />

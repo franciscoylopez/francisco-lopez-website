@@ -8,7 +8,7 @@
  * maquinaria de copy, y su vecino natural es `system-messages.ts`.
  *
  * EL DISPARADOR ERA «UN SEGUNDO `fill*`» Y SE PASÓ DE LARGO: hoy hay cuatro
- * —`fillPages`, `fillDate` y `fillRatios` en `design-values.ts`, `fillFigures` en
+ * —`fillPages` y `fillRatios` en `design-values.ts`, `fillFigures` en
  * `figures.ts`—. Pero la forma que aquel disparador predecía ya no encaja, y esa
  * es la parte que conviene dejar escrita para que nadie la «complete» luego:
  *

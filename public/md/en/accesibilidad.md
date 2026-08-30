@@ -57,7 +57,7 @@ The declared level, the checks that close every page, what is inherited from the
 
 Contrast is measured, not estimated. Body text reaches 13.79:1 in light and 15.32:1 in dark; links and action buttons exceed 7:1 in both themes. AA requires 4.5:1, cleared with room to spare.
 
-Last accessibility review: 27 August 2026.
+Last accessibility review: 27 August 2026 (2026-08-27).
 
 ### Standard
 

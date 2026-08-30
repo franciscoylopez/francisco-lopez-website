@@ -118,7 +118,7 @@ Ten years leading product in B2B and B2C SaaS, from founder with an exit to Prod
 
 [Download CV](https://franciscolopez.es/cv/francisco-lopez-cv-en.pdf)
 
-Feb 2025 - Present
+Feb 2025 (2025-02) - Present
 
 [Product Manager](https://franciscolopez.es/en/trayectoria/emendu)
 
@@ -126,7 +126,7 @@ Emendu
 
 Turned a newly built SaaS into the company's business model: redefined the ICP, digitalized the operation and opened a channel with the Sesame HR partnership.
 
-Feb 2024 - Dec 2024
+Feb 2024 (2024-02) - Dec 2024 (2024-12)
 
 [Cofounder & Product](https://franciscolopez.es/en/trayectoria/kuotip)
 
@@ -134,7 +134,7 @@ KUOTIP
 
 Validated review fraud with users and brands before building anything; defined the MVP with voice verification and AI, and supported the CEO in the pre-seed fundraising.
 
-Jan 2022 - Dec 2023
+Jan 2022 (2022-01) - Dec 2023 (2023-12)
 
 [Product Lead](https://franciscolopez.es/en/trayectoria/indya)
 
@@ -142,7 +142,7 @@ INDYA
 
 Organised growth around the lifecycle rather than features: monthly churn from 16% to 10%, with activation, engagement and retention as the roadmap's levers.
 
-Oct 2021 - Dec 2021
+Oct 2021 (2021-10) - Dec 2021 (2021-12)
 
 [Product Manager](https://franciscolopez.es/en/trayectoria/freepik)
 
@@ -156,7 +156,7 @@ Shutapp Projects
 
 One venture · two roles
 
-May 2016 - Oct 2021
+May 2016 (2016-05) - Oct 2021 (2021-10)
 
 [Cofounder & Product](https://franciscolopez.es/en/trayectoria/thetool)
 
@@ -164,7 +164,7 @@ TheTool
 
 Cofounder and product lead from zero to the sale: vision, MVP, roadmap and the development team, through to the acquisition by AppRadar in 2021.
 
-Sep 2015 - Dec 2016
+Sep 2015 (2015-09) - Dec 2016 (2016-12)
 
 COO
 
@@ -176,7 +176,7 @@ Earlier experience · Marketing & Growth
 
 This earlier stage in marketing and growth builds the analytical, experimentation and user-first foundation that defines my approach as a Product Manager.
 
-Sep 2013 - Sep 2015
+Sep 2013 (2013-09) - Sep 2015 (2015-09)
 
 Digital Marketing Manager
 

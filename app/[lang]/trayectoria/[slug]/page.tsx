@@ -104,6 +104,7 @@ export default async function ExperiencePage({ params }: Params) {
       lang={lang}
       crumb={t.crumb}
       parents={[{ name: comun.crumbIndice, url: pageUrl(lang, BASE) }]}
+      article
       extraLd={experiencePageLd({
         lang,
         slug,

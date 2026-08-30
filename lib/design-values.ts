@@ -32,7 +32,7 @@
 // tenerlo escrito al lado solo abre la puerta a que un día no coincidan.
 
 import type { Locale } from "@/lib/i18n/config";
-import { cardinal, reviewDate } from "@/lib/i18n/palabras";
+import { cardinal } from "@/lib/i18n/palabras";
 import { PAGE_SLUGS } from "@/lib/routes";
 
 /* -------------------------------------------------------------------------- */
@@ -457,7 +457,7 @@ export const GUARDIAN_COUNT = 20;
 export const GUARDIAN_CASE_COUNT = 38;
 
 /**
- * Sustituye `{paginas}` en el copy, como `fillDate` hace con `{date}`.
+ * Sustituye `{paginas}` en el copy, como `fillRatios` hace con `{par.tema}`.
  *
  * SE QUEDA AQUÍ, aunque P50.91 se llevara la tabla de cardinales a
  * `lib/i18n/palabras.ts`: esto es una línea sobre `PAGE_COUNT`, o sea la
@@ -495,10 +495,10 @@ export const LAST_COOKIES_UPDATE = "2026-08-23";
 export const ARTICLE_PUBLISHED = "2026-08-21";
 export const ARTICLE_UPDATED = "2026-08-29";
 
-/** Sustituye `{date}` en el copy, como `fillRatios` hace con `{par.tema}`. */
-export function fillDate(text: string, iso: string, locale: Locale): string {
-  return text.replace(/{date}/g, reviewDate(iso, locale));
-}
+// `fillDate` vivía aquí y se retiró en P67.6: la fecha se pinta dentro de un
+// `<time datetime>`, y una función que devuelve `string` no puede llevar un
+// elemento dentro. Lo hace `components/site/fecha.tsx`, que es esto mismo con el
+// hueco partido en vez de sustituido.
 
 export type ContrastId = keyof typeof CONTRAST;
 export type Theme = "light" | "dark";

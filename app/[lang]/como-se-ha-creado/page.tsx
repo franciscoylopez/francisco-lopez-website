@@ -44,6 +44,7 @@ export default async function ComoSeHaCreadoPage({ params }: LangParams) {
       dict={common}
       lang={lang}
       crumb={t.crumb}
+      article
       extraLd={techArticleLd({
         lang,
         headline: t.hero.title,
