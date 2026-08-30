@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/como-se-ha-creado
+canonical: https://franciscolopez.es/como-se-ha-creado
 lang: es
 title: Cómo se ha creado esta página
+description: "El making-of de esta web: la marca antes que el código, el stack, cómo se hereda la accesibilidad, seguridad y alojamiento, qué revisa una IA y qué no, y lo que salió mal por el camino. Todo enlazado al repositorio público."
+last-updated: 2026-08-29
 ---
 
 1. [Inicio](https://franciscolopez.es/)
@@ -100,7 +102,7 @@ Si la web dice que sé de producto, de UX y de datos, la web tiene que estar hec
 
 ENLACE ·
 
-[PRD-Live.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/PRD-Live.md), secciones 1 a 3 y 9, y la decisión [D29](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1172) para la franja de contacto
+[PRD-Live.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/PRD-Live.md), secciones 1 a 3 y 9, y la decisión [D29](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1173) para la franja de contacto
 
 1 de 12
 
@@ -161,7 +163,7 @@ Y la parte que aprendí tarde: sin push directo, sin fusionar con los checks en 
 
 ENLACE ·
 
-El apartado de seguimiento de tareas de [CLAUDE.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/CLAUDE.md), y las decisiones [D10](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L400), [D12](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L426) y [D68](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4141)
+El apartado de seguimiento de tareas de [CLAUDE.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/CLAUDE.md), y las decisiones [D10](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L401), [D12](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L427) y [D68](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4142)
 
 2 de 12
 
@@ -259,7 +261,7 @@ Sobre los idiomas, solo indicar fue decisión y no configuración: español sin 
 
 ENLACE ·
 
-Decisiones [D2](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L234), [D3](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L246), [D6](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L295), [D7](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L375) y [D51](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2545) del registro técnico
+Decisiones [D2](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L235), [D3](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L247), [D6](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L296), [D7](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L376) y [D51](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2546) del registro técnico
 
 4 de 12
 
@@ -323,7 +325,7 @@ Ocho piezas + capa de página
 
 ENLACE ·
 
-Decisiones [D36](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1435), [D40](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1848), [D45](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2212), [D46](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2267) y [D72](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4494), y el directorio [components/ui/](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/components/ui)
+Decisiones [D36](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1436), [D40](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1849), [D45](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2213), [D46](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2268) y [D72](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4495), y el directorio [components/ui/](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/components/ui)
 
 5 de 12
 
@@ -375,7 +377,7 @@ Es el mismo razonamiento que la política de contenido de más adelante, y por e
 
 ENLACE ·
 
-Decisiones [D22](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L671), [D84](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L5188) y [D89](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L5490), el registro de dependencias en [content/articulo/dependencias.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/content/articulo/dependencias.ts) y el inventario derivado en [components/ui/README.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/components/ui/README.md)
+Decisiones [D22](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L672), [D84](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L5189) y [D89](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L5491), el registro de dependencias en [content/articulo/dependencias.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/content/articulo/dependencias.ts) y el inventario derivado en [components/ui/README.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/components/ui/README.md)
 
 6 de 12
 
@@ -422,7 +424,7 @@ Queda la voz, que es lo que más fácil se pierde trabajando así, y la gobierna
 
 ENLACE ·
 
-Decisión [D1](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L205), con su nota de superación y la decisión original conservada debajo
+Decisión [D1](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L206), con su nota de superación y la decisión original conservada debajo
 
 7 de 12
 
@@ -516,7 +518,7 @@ Se prueba eso y nada más: la validación, el saneado de las cabeceras y las dec
 
 ENLACE ·
 
-Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L453), [D15](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L504), [D26](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L930), [D27](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1061), [D32](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1285) y [D55](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3125), el archivo [next.config.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/next.config.ts) y la configuración de [Qlty](https://qlty.sh)
+Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L454), [D15](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L505), [D26](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L931), [D27](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1062), [D32](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1286) y [D55](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3126), el archivo [next.config.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/next.config.ts) y la configuración de [Qlty](https://qlty.sh)
 
 8 de 12
 
@@ -585,7 +587,7 @@ Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de
 
 ENLACE ·
 
-Decisiones [D39](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1779), [D41](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1911), [D52](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2714), [D61](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3678) y [D73](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4589), y el script [contrast-census.js](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/scripts/design-review/contrast-census.js)
+Decisiones [D39](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1780), [D41](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1912), [D52](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2715), [D61](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3679) y [D73](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4590), y el script [contrast-census.js](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/scripts/design-review/contrast-census.js)
 
 9 de 12
 
@@ -636,7 +638,7 @@ Me ha pasado cinco veces, y la mejor de todas fue esta: descubrí que la capa qu
 
 ENLACE ·
 
-Decisiones [D37](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1587), [D63](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3762), [D67](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4054), [D70](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4268) y [D72](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4494), el [workflow de CI](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/.github/workflows/ci.yml) y las rutinas versionadas en [.claude/skills/](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/.claude/skills)
+Decisiones [D37](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1588), [D63](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3763), [D67](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4055), [D70](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4269) y [D72](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4495), el [workflow de CI](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/.github/workflows/ci.yml) y las rutinas versionadas en [.claude/skills/](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/.claude/skills)
 
 10 de 12
 
@@ -668,7 +670,7 @@ Y una sexta que va en dirección contraria, para que no parezca que la moraleja 
 
 ENLACE ·
 
-El apartado «Cómo se escribe una regla aquí» de [BRAND.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/BRAND.md), y las decisiones [D60](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3597), [D63](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3762) y [D70](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4268)
+El apartado «Cómo se escribe una regla aquí» de [BRAND.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/BRAND.md), y las decisiones [D60](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3598), [D63](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3763) y [D70](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4269)
 
 11 de 12
 
@@ -698,7 +700,7 @@ Si esa es la clase de criterio que buscas para tu equipo, hablemos.
 
 ENLACE ·
 
-Decisiones [D17](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L525), [D18](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L565), [D31](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1257) y [D71](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4333)
+Decisiones [D17](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L526), [D18](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L566), [D31](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1258) y [D71](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4334)
 
 12 de 12
 

@@ -328,6 +328,54 @@ export const CASOS: Caso[] = [
       ),
   },
   {
+    guardian: "check:agentes",
+    rotura:
+      "`Vary: Accept` vuelve a caer sobre las tarjetas OG, los PDF y las fuentes",
+    // El estado real hasta P68.742: las cabeceras de seguridad y el `Vary` iban en
+    // la MISMA regla de `headers()`, así que la segunda llegaba a assets que no
+    // negocian nada y una caché compartida guardaba una copia por familia de
+    // navegador. No da error en ninguna parte —es coste, no incorrección—, y por
+    // eso el caso malo es el único que puede defenderlo.
+    //
+    // MUERDE EL MANIFIESTO Y NO `next.config.ts`, porque es donde el guardián
+    // mira: la regex compilada que el servidor usa para decidir qué cabeceras
+    // pone. Se le devuelve al `Vary` la regla ancha, que es exactamente la
+    // regresión.
+    archivo: ".next/routes-manifest.json",
+    mutar: (o) => {
+      const m = JSON.parse(o) as {
+        headers: { source: string; regex: string; headers: unknown[] }[];
+      };
+      const ancha = m.headers.find((r) => r.source === "/:path*");
+      const vary = m.headers.find((r) =>
+        (r.headers as { key: string }[]).some(
+          (h) => h.key.toLowerCase() === "vary",
+        ),
+      );
+      if (!ancha || !vary)
+        throw new Error("el manifiesto no tiene las dos reglas");
+      vary.regex = ancha.regex;
+      return JSON.stringify(m);
+    },
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "se cae un alias y la ruta que un agente adivina vuelve a dar 404",
+    // Los diez alias de D161 y el `/agents.md` de P68.748 se comprobaron a mano el
+    // día que se escribieron y no los miraba nadie — que es el modo de fallo del
+    // que avisa `BRAND.md` §Cómo se escribe una regla, punto 2. Se retira el
+    // primero del manifiesto, que es lo que pasaría si alguien tocara
+    // `redirects()` sin darse cuenta de para quién estaban.
+    archivo: ".next/routes-manifest.json",
+    mutar: (o) => {
+      const m = JSON.parse(o) as {
+        redirects: { source: string }[];
+      };
+      m.redirects = m.redirects.filter((r) => r.source !== "/agents.md");
+      return JSON.stringify(m);
+    },
+  },
+  {
     guardian: "md:verificar",
     rotura:
       "el markdown commiteado de una página deja de decir lo que dice la página",
@@ -336,6 +384,23 @@ export const CASOS: Caso[] = [
     // artefacto y no la página, que es la dirección en que esto se estropea.
     archivo: "public/md/es/contacto.md",
     mutar: append("\nUn párrafo que la página no dice.\n"),
+  },
+  {
+    guardian: "md:verificar",
+    rotura: "el frontmatter se queda viejo aunque el cuerpo esté al día",
+    // LA OTRA MITAD DEL ARTEFACTO *(P68.746, 2026-08-31)*. Desde que la cabecera
+    // lleva `description` y `last-updated`, el markdown puede quedarse atrás sin
+    // que el cuerpo cambie ni una palabra: se retoca la descripción de la página
+    // —o se sube la fecha del artículo— y el `.md` sigue anunciando lo de antes.
+    // Y es la mitad que MÁS calla, porque el texto de debajo sigue siendo
+    // correcto: lo que engaña es la ficha, que es justo lo que un agente lee para
+    // decidir si esta fuente entra en la conversación.
+    //
+    // Se muerde la fecha y no la descripción a propósito: `last-updated` es el
+    // campo cuyo modo de fallo —quedarse congelado— ya le pasó a este proyecto
+    // con `ARTICLE_UPDATED` (doce commits, D84).
+    archivo: "public/md/es/como-se-ha-creado.md",
+    mutar: (o) => o.replace(/^last-updated: .*$/m, "last-updated: 2026-01-01"),
   },
   {
     guardian: "check:articulo",

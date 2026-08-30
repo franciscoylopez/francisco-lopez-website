@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/contacto
+canonical: https://franciscolopez.es/en/contacto
 lang: en
 title: Let's talk
+description: Write to me through the form, by email or by phone. Reply within 24 hours.
+last-updated: 2026-08-23
 ---
 
 1. [Home](https://franciscolopez.es/en)

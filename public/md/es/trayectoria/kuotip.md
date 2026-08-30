@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/trayectoria/kuotip
+canonical: https://franciscolopez.es/trayectoria/kuotip
 lang: es
 title: La oportunidad perdida de cambiar una industria
+description: "Cofundador de un proyecto para arreglar las reseñas: validación por los dos lados del mercado, MVP con verificación por voz e IA, y la decisión de parar en el plazo acordado."
+last-updated: 2026-08-17
 ---
 
 1. [Inicio](https://franciscolopez.es/)

@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/design-system
+canonical: https://franciscolopez.es/en/design-system
 lang: en
 title: Design System
+description: "The skeleton shared by every page of the site: grid, layout tokens, vertical rhythm, type hierarchy, light/dark, motion and the full accessibility measurement."
+last-updated: 2026-08-10
 ---
 
 1. [Home](https://franciscolopez.es/en)

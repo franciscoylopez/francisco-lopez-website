@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/trayectoria/indya
+canonical: https://franciscolopez.es/en/trayectoria/indya
 lang: en
 title: Changing sports nutrition from the product side
+description: "Product Lead at a nutrition app: churn from 16% to 10%, activation +28%, a pricing redesign with A/B testing, and the case of check-ins: a leading indicator nobody was watching."
+last-updated: 2026-08-18
 ---
 
 1. [Home](https://franciscolopez.es/en)

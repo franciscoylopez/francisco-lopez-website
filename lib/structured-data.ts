@@ -7,6 +7,7 @@
 
 import {
   EMAIL,
+  GITHUB_PROFILE_URL,
   GITHUB_URL,
   LINKEDIN_URL,
   PHONE_TEL as TELEPHONE,
@@ -112,6 +113,29 @@ export function profilePageLd(lang: Locale, description: string) {
       url: `${SITE_URL}/`,
       inLanguage: ["es", "en"],
       author: { "@id": `${SITE_URL}/#person` },
+      /**
+       * EL REPOSITORIO ES DEL SITIO, NO DE LA PERSONA *(P68.747, 2026-08-31)*.
+       * Estaba en el `sameAs` del `Person`, que es la lista de «quién es esta
+       * persona en otros sitios», y ahí decía algo falso: un repositorio es una
+       * obra, no una identidad. Baja aquí, al nodo que sí es de lo que el repo es
+       * el código.
+       *
+       * ES `isBasedOn` Y NO `codeRepository`, Y ESO SE MIDIÓ EN VEZ DE
+       * SUPONERSE. `codeRepository` es la propiedad que uno escribiría —dice
+       * literalmente «el repositorio de esto»—, pero su dominio en Schema.org es
+       * **solo `SoftwareSourceCode`**: en un `WebSite` sería una propiedad fuera
+       * de dominio, o sea marcado inválido publicado para aprobar una casilla,
+       * que es exactamente lo que D157 prohíbe. `isBasedOn` tiene dominio
+       * `CreativeWork` —del que `WebSite` desciende—, admite una `URL` en el
+       * rango, y dice lo que es cierto: este sitio se deriva de ese código.
+       *
+       * Y NO SE ENVUELVE EN UN NODO `SoftwareSourceCode` propio, que sería la
+       * otra forma de decirlo con todas las letras: costaría un tipo más que
+       * mantener sincronizado para colgar una URL que el pie de página ya
+       * publica con un enlace visible. Que sea cierto es condición necesaria, no
+       * suficiente.
+       */
+      isBasedOn: GITHUB_URL,
     },
     mainEntity: {
       "@type": "Person",
@@ -126,10 +150,20 @@ export function profilePageLd(lang: Locale, description: string) {
       description,
       email: EMAIL,
       telephone: TELEPHONE,
-      // `sameAs` es el campo de «los otros perfiles de esta persona», así que el
-      // repo entra aquí en cuanto es público: es el consumidor que no se ve mirando
-      // la página, igual que el `image` del JSON-LD en D66.
-      sameAs: [LINKEDIN_URL, GITHUB_URL],
+      /**
+       * PERFILES, Y SOLO PERFILES *(P68.747, 2026-08-31)*. Aquí ponía
+       * `[LINKEDIN_URL, GITHUB_URL]`, y la segunda es el **repositorio**: una obra
+       * que Francisco publica, no una identidad suya. Schema.org define `sameAs`
+       * como «la URL de una página web que identifica INEQUÍVOCAMENTE a la
+       * entidad — su perfil en Wikipedia, en Wikidata o en una red social», y un
+       * repo no identifica a nadie: identifica un proyecto.
+       *
+       * SE CORRIGE AUNQUE EL ESCÁNER NO SE MUEVA, que es la distinción de D161:
+       * la cifra de un escáner no valida un arreglo ni lo invalida, solo dice qué
+       * mide él. El repo no desaparece — baja al nodo `WebSite`, que es de quien
+       * es de verdad (arriba, `isBasedOn`).
+       */
+      sameAs: [LINKEDIN_URL, GITHUB_PROFILE_URL],
       knowsLanguage: ["es", "en"],
       knowsAbout: KNOWS_ABOUT,
       worksFor: { "@type": "Organization", name: "Emendu" },

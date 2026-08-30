@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/
+canonical: https://franciscolopez.es/
 lang: es
 title: Del discovery al dato.
+description: "Senior Product Manager con más de 10 años en SaaS B2B y B2C, y un exit (TheTool → AppRadar). Del discovery al dato: investigo, prototipo, construyo y mido."
+last-updated: 2026-08-17
 ---
 
 Senior Product Manager · UX · SaaS · IA · Builder

@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/brand-kit
+canonical: https://franciscolopez.es/en/brand-kit
 lang: en
 title: Brand Kit
+description: "Francisco López's identity system: logo and geometry, the two-layer palette, typography and the rules that govern its use. Downloadable in light and dark."
+last-updated: 2026-08-10
 ---
 
 1. [Home](https://franciscolopez.es/en)

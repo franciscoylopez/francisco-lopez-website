@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/trayectoria/thetool
+canonical: https://franciscolopez.es/trayectoria/thetool
 lang: es
 title: De una herramienta que no existía a un exit
+description: "Cofundador y responsable de producto de una herramienta de ASO: del MVP financiado por la agencia que la incubó a la nominación europea y la adquisición por AppRadar en 2021."
+last-updated: 2026-08-17
 ---
 
 1. [Inicio](https://franciscolopez.es/)

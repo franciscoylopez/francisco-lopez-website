@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/en/trayectoria/kuotip
+canonical: https://franciscolopez.es/en/trayectoria/kuotip
 lang: en
 title: The missed chance to change an industry
+description: "Co-founder of a project to fix online reviews: validating both sides of the market, an MVP with voice-based identity and AI summaries, and the decision to stop on the agreed terms."
+last-updated: 2026-08-17
 ---
 
 1. [Home](https://franciscolopez.es/en)

@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 
 import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
-import { ARTICLE_UPDATED } from "@/lib/design-values";
+import { PAGE_MODIFIED } from "@/lib/page-modified";
 import {
   STATIC_PAGE_SLUGS,
   type PageSlug,
@@ -42,55 +42,44 @@ import { pageUrl } from "@/lib/structured-data";
 //     detecta poco fiable, así que la señal no es que fuera ruidosa, es que se
 //     estaba tirando. Ahora es una fecha declarada por página.
 //
-//     POR QUÉ DECLARADA Y NO DERIVADA DEL GIT, que sería lo obvio: Vercel clona
-//     en superficial, así que `git log -1 -- <archivo>` devuelve vacío para todo
-//     lo que no se haya tocado en los últimos commits. Una fecha derivada de un
-//     historial que no está no es derivada: es un hueco.
-//
-//     Y EL RIESGO DE QUE SE QUEDEN VIEJAS SE ACOTA EN LAS DOCE: las fechas van
-//     en dos `Record` completos —uno por `ExperienceSlug` y otro por
-//     `StaticPageSlug`—, así que **una página nueva sin fecha rompe el
-//     typecheck**. Hasta P54.98 las estáticas eran una lista fija escrita aquí,
-//     que era además una de las tres copias de «qué páginas tiene el sitio» (D72).
+//     ESAS FECHAS YA NO VIVEN AQUÍ (P68.746, 2026-08-31): están en
+//     `lib/page-modified.ts`, con el porqué de que no salgan del git y el
+//     `Record` completo que hace que una página nueva sin fecha no compile. Se
+//     mudaron el día que el markdown para agentes empezó a publicar la misma
+//     fecha en su frontmatter, para que no hubiera dos tablas (D60).
 
 /** Una página del sitio, con la fecha real de su último cambio de CONTENIDO. */
 type Pagina = { slug: PageSlug; priority: number; lastModified: string };
 
 /**
- * Lo ÚNICO que este archivo escribe de las páginas estáticas: su prioridad y su
- * fecha. Cuáles son y en qué orden lo pone `lib/routes.ts` (D72), y el `Record`
- * completo hace que una página nueva sin fecha no compile — el mismo guardián que
- * las cinco del deep-dive tenían desde D59.
+ * Lo ÚNICO que este archivo escribe de las páginas estáticas: su prioridad.
+ * Cuáles son y en qué orden lo pone `lib/routes.ts` (D72), y el `Record` completo
+ * hace que una página nueva sin prioridad no compile — el mismo guardián que las
+ * cinco del deep-dive tenían desde D59.
+ *
+ * LAS FECHAS SE MUDARON A `lib/page-modified.ts` *(P68.746, 2026-08-31)*, y no
+ * por orden: el markdown para agentes publica ahora la misma respuesta a la misma
+ * pregunta —«¿de cuándo es esto?»— en su frontmatter, y dos tablas de fechas
+ * habrían sido dos verdades divergiendo en silencio (D60). El `Record` completo y
+ * el porqué de que no salgan del git viajan con ellas.
  */
-const ESTATICAS: Record<StaticPageSlug, Omit<Pagina, "slug">> = {
-  "": { priority: 1, lastModified: "2026-08-17" },
-  "sobre-mi": { priority: 0.8, lastModified: "2026-08-15" },
-  trayectoria: { priority: 0.8, lastModified: "2026-08-18" },
-  "brand-kit": { priority: 0.8, lastModified: "2026-08-10" },
-  "design-system": { priority: 0.8, lastModified: "2026-08-10" },
-  accesibilidad: { priority: 0.8, lastModified: "2026-08-10" },
-  cookies: { priority: 0.3, lastModified: "2026-08-23" },
-  contacto: { priority: 0.9, lastModified: "2026-08-23" },
-  "como-se-ha-creado": { priority: 0.8, lastModified: ARTICLE_UPDATED },
+const PRIORIDAD: Record<StaticPageSlug, number> = {
+  "": 1,
+  "sobre-mi": 0.8,
+  trayectoria: 0.8,
+  "brand-kit": 0.8,
+  "design-system": 0.8,
+  accesibilidad: 0.8,
+  cookies: 0.3,
+  contacto: 0.9,
+  "como-se-ha-creado": 0.8,
 };
 
 const PAGES: Pagina[] = STATIC_PAGE_SLUGS.map((slug) => ({
   slug,
-  ...ESTATICAS[slug],
+  priority: PRIORIDAD[slug],
+  lastModified: PAGE_MODIFIED[slug],
 }));
-
-/**
- * La fecha de cada deep-dive. Es lo ÚNICO que se escribe a mano de esas cinco
- * páginas —la URL y la existencia salen del registro—, y el `Record` completo
- * hace que una experiencia nueva sin fecha no compile.
- */
-const DEEP_DIVE_MODIFICADO: Record<ExperienceSlug, string> = {
-  emendu: "2026-08-18",
-  kuotip: "2026-08-17",
-  indya: "2026-08-18",
-  freepik: "2026-08-17",
-  thetool: "2026-08-17",
-};
 
 const DEEP_DIVE: Pagina[] = EXPERIENCES.filter(
   (e): e is (typeof EXPERIENCES)[number] & { slug: ExperienceSlug } =>
@@ -98,7 +87,7 @@ const DEEP_DIVE: Pagina[] = EXPERIENCES.filter(
 ).map(({ slug }) => ({
   slug: `trayectoria/${slug}` as const,
   priority: 0.8,
-  lastModified: DEEP_DIVE_MODIFICADO[slug],
+  lastModified: PAGE_MODIFIED[`trayectoria/${slug}`],
 }));
 
 export default function sitemap(): MetadataRoute.Sitemap {

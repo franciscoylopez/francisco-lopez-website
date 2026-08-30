@@ -1,7 +1,9 @@
 ---
-url: https://franciscolopez.es/trayectoria/emendu
+canonical: https://franciscolopez.es/trayectoria/emendu
 lang: es
 title: De vender a mano a un SaaS con canal propio
+description: "Estrategia de producto end-to-end en un SaaS B2B de IT Management: redefinir el ICP con discovery fuera del pipeline, digitalizar la operación y convertirla en canal con el partnership de Sesame HR."
+last-updated: 2026-08-18
 ---
 
 1. [Inicio](https://franciscolopez.es/)
