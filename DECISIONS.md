@@ -10261,3 +10261,76 @@ anotan aquí para que no vuelvan como novedad:
 **Y uno que se queda como está, con su motivo ya escrito:** `org-schema-completeness` sigue en 1/2
 pidiendo `contactPoint` y `address` en el nodo `Organization`, que aquí es el **empleador** de
 Francisco. Rellenarlo sería publicar datos de Emendu que no son nuestros (D161).
+
+### Addendum *(2026-08-31)* · El rescaneo, con las predicciones escritas antes de mirar
+
+Medido contra **producción** tras el merge de la tanda, y con el escaneo lanzado de verdad —no
+leyendo el informe guardado— por `POST https://ora.ai/api/scan` con `{"url": "…"}`.
+
+> **Dos avisos de método, porque los dos hacen mentir al metro.** El CLI
+> (`npx is-agentic <dominio> --json`) y el `GET /api/v1/report` **NO lanzan escaneo**: devuelven
+> el último guardado, y con él se compararía el sitio de ayer consigo mismo. Y el `scannedAt` del
+> payload **no es la hora del escaneo**: siguió diciendo la de la pasada anterior en un informe
+> que ya veía `/agents.md`, que llevaba minutos existiendo.
+
+**67 → 69.** Los dos puntos son exactamente los de un check, y por eso la atribución es limpia
+aunque en la tanda entraran cinco cosas:
+
+| Check | Predicción escrita antes | Qué pasó |
+|---|---|---|
+| `agent-discovery-file` 0/2 | «parcial o nada: entra 1 de las 3 rutas» | **Pasada de largo.** ✓ **2/2** — «Agent discovery file found at /agents.md». Una de las tres basta |
+| `schema-type-breadth` 0/2 | «no se mueve, es el control» | **Acertada.** Sigue 0/2, palabra por palabra |
+| `content-no-js` 2/3 | «no se mueve, descartado en D157» | **Acertada.** Sigue 2/3, con la misma cifra |
+| `json-ld-entity-linking` 0/2 | «debería moverse» | **FALLADA.** Sigue 0/2, con el texto idéntico |
+| `markdown-frontmatter` 0/1 | «debe pasar, los tres campos están» | **FALLADA**, y el texto del hallazgo cambió entero |
+
+**Y eso convierte la hipótesis de P68.747 en descarte medido.** El `sameAs` ahora lleva dos
+perfiles, uno de ellos `github.com/franciscoylopez`, que es el dominio exacto que el subtítulo
+del check dice mirar — y no se movió ni un punto. Las tres causas alternativas que la ficha dejó
+abiertas se reducen a la que queda en pie: **pide varias de {Wikipedia, Wikidata, GitHub}**, y de
+esas este sitio no tiene ni tendrá las dos primeras. *El arreglo sigue siendo correcto por su
+propio motivo* —un repositorio no identifica a una persona— y esa es la distinción de D161, ahora
+con las dos mitades medidas.
+
+**La otra fallada es la más útil, y hubo que verificarla contra producción antes de creérsela.**
+El hallazgo pasó de «Frontmatter **on /** carries a title but none of description / canonical /
+last-updated» a «**None of the 1 served markdown doc** opens with a `---` frontmatter block». O
+sea que dejó de mirar la página negociada y mira **`/llms.txt`**, que no lleva frontmatter y no
+lo lleva por diseño: el formato empieza por su `h1`.
+
+Que el sitio sí lo sirve lo dicen tres cosas, y una es del propio informe:
+
+```bash
+$ curl -s -H "Accept: text/markdown" https://franciscolopez.es/ | head -6
+---
+canonical: https://franciscolopez.es/
+lang: es
+title: Del discovery al dato.
+description: "Senior Product Manager con más de 10 años en SaaS B2B y B2C, y un exit …"
+last-updated: 2026-08-17
+```
+
+…lo mismo por la URL directa `/md/es.md`, y **su propio `markdown-negotiation-vary`, que pasa
+1/1** diciendo «Canonical URL serves text/markdown and text/html via Accept negotiation with
+`Vary: Accept`». El informe se contradice consigo mismo, igual que `json-ld` ✓ 4/4 («…and
+**sameAs**/jobTitle») contradice a `json-ld-entity-linking` ✗ 0/2 («No sameAs entity linking»).
+
+> **La regla que ya estaba escrita, confirmada por segunda vez en el mismo sprint:** *la cifra de
+> un escáner no valida un arreglo ni lo invalida, solo dice qué mide él.* La primera fue el `h2`
+> por delante del `h1`, que era un defecto real y no movió un punto. Esta es la simétrica: un
+> arreglo real, correcto y verificable con `curl`, que no mueve un punto **porque el check cambió
+> de objetivo entre dos pasadas**. Un metro de terceros que se mueve solo es justo el segundo
+> argumento por el que `check:agentes` existe (D159).
+
+**Lo que NO se hace, y se escribe para que no se reabra:** poner frontmatter a `/llms.txt` para
+aprobar esa casilla. `llms.txt` no es una página, es el índice del sitio, y su formato empieza por
+el `h1` — anteponerle un bloque `---` lo saca de su propia convención para contentar a un check
+que hace dos días miraba otra cosa. Si alguna vez se hace, será porque el formato lo adopte, no
+porque lo pida un escáner.
+
+**Y el `Vary` acotado no rompió la negociación**, que era el riesgo real de P68.742: sus dos
+checks, `markdown-negotiation` y `markdown-negotiation-vary`, siguen en verde.
+
+**El Schema Markup Validator, el mismo comando que dio la línea base:** producción antes,
+1 objeto · 0 errores · 0 avisos; producción después, **1 objeto · 0 errores · 0 avisos**. El
+`isBasedOn` del nodo `WebSite` no introduce ni un aviso.

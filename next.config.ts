@@ -83,13 +83,28 @@ const securityHeaders = [
 // `Vary: Accept`, desde que el proxy negocia markdown (P67.2): la misma URL puede
 // devolver HTML o markdown, así que una caché compartida necesita saberlo.
 //
-// Y HASTA DÓNDE LLEGA, QUE ES LO QUE HAY QUE SABER AL LEER ESTO. Llega a los
-// `.md` y a los route handlers; NO llega a las 28 páginas prerenderizadas. Medido
-// el 2026-08-30 contra `next start`: en `/robots.txt` salen las dos cabeceras
-// (`vary: Accept` y `vary: rsc, …`), y en `/` sale solo la de Next. La diferencia
-// es el camino: una página que se sirve del prerender (`x-nextjs-cache: HIT`,
-// `x-nextjs-prerender: 1`) lleva el `Vary` que escribe Next, y ni esta
-// configuración ni el proxy pueden añadirle nada.
+// Y HASTA DÓNDE LLEGA, QUE ES LO QUE HAY QUE SABER AL LEER ESTO — reescrito el
+// 2026-08-31 con la regla acotada, porque el párrafo anterior describía la ancha y
+// ya no era cierto. **Esta configuración no pone el `Vary` de ninguna respuesta
+// que un agente vaya a ver.** A las 28 páginas prerenderizadas nunca llegó: una
+// página servida del prerender (`x-nextjs-cache: HIT`, `x-nextjs-prerender: 1`)
+// lleva el `Vary` que escribe Next y ni esto ni el proxy pueden añadirle nada. Y
+// a los `.md` y a los route handlers ya no llega **a propósito**: esas URLs
+// devuelven siempre lo mismo, así que no negocian (P68.742).
+//
+// EL `Vary` DE LO QUE SÍ SE NEGOCIA LO PONE `conVary()` EN EL PROXY, y eso está
+// medido: `/`, `/sobre-mi` y `/en/sobre-mi` pedidas con `Accept: text/markdown`
+// —y una ruta inexistente— responden `Vary: Accept` con esta regla acotada igual
+// que con la ancha.
+//
+// ASÍ QUE ESTA REGLA HOY ES REDUNDANTE, y se dice en vez de disimularlo: su
+// `source` es la misma silueta que el `matcher` del proxy, así que no hay ninguna
+// ruta que la necesite y que el proxy no cubra ya. Se queda por dos motivos
+// pequeños y uno no vale para siempre: declara **dónde** ocurre la negociación,
+// junto a la regla de seguridad de la que se separó; y es lo que hace que
+// `check:agentes` pueda comprobar sobre el manifiesto que la cabecera NO cae
+// sobre los assets, que era el defecto de verdad. El día que estorbe, se retira
+// y el guardián se queda con esa mitad, que es la que tiene valor.
 //
 // POR ESO EL CONTRATO NO SE APOYA EN ESTA CABECERA. La vía estable para un agente
 // es la URL explícita `/md/<locale>/<pagina>.md`, que llms.txt anuncia; la

@@ -99,7 +99,7 @@ buscándolo:** el índice `/trayectoria`, el paso a la experiencia vecina,
 **derivan del registro** y recogen la página nueva solos (D44/D59/D72).
 
 Lo único que dos de esas superficies siguen pidiendo es un dato **por experiencia**
-—su fecha en `app/sitemap.ts` y su diccionario en `app/llms.txt/route.ts`—, y
+—su fecha en `lib/page-modified.ts` y su diccionario en `app/llms.txt/route.ts`—, y
 ninguno se puede olvidar: los dos van en un `Record<ExperienceSlug, …>` que **no
 compila** incompleto.
 
