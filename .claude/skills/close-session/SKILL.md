@@ -30,6 +30,7 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
 | Porqué fechado de una regla de marca (qué se probó, qué falló) | `BRAND-historical.md` | — (**a demanda**, NO `@`-importado — D28) |
 | El caso que escribió una CONVENCIÓN (qué falló para que exista) | `CLAUDE-historical.md` | — (**a demanda**, NO `@`-importado — D130) |
 | Detalle exhaustivo del logo (tabla de uso, umbrales split→flat, proporciones, rationale) | `BRAND-logo.md` | — (**a demanda**, NO `@`-importado — D28) |
+| Contrato de un gate (qué garantiza, qué deja fuera, dónde corre) | `GATES.md` | — (**a demanda**, NO `@`-importado — D163) |
 | Overview / stack / estructura / scripts / capacidades nuevas | `README.md` | GitHub. Mantenido al día, **no** es un one-off |
 | Progreso, estados y prioridades de tareas | Tablero Notion "Tareas — Web personal" | [Tablero](https://app.notion.com/p/f3ee9a949c58482888423d5917087962) · vista [MoSCoW](https://app.notion.com/p/3a62caec08be81989325c9fce678de5b) |
 | "Por qué" de un trozo de código | Mensaje de commit / PR | — |
@@ -44,9 +45,9 @@ alcance, tareas cerradas/abiertas). Sobre eso decides qué documentos tocan.
   cosas, y este proyecto lo ha cerrado ya por cuatro puertas: los valores publicados (D38),
   las cuatro listas de páginas (D59 abrió la puerta y D72 la cerró), el índice de decisiones
   y esta.
-- No dupliques: cada cosa en su documento. **Estado** de producto → `PRD-Live.md`;
-  **histórico** de decisiones de producto → `PRD-Historical.md`; técnica → `DECISIONS.md`;
-  convención → `CLAUDE.md`, y su caso → `CLAUDE-historical.md`; marca (core) → `BRAND.md`, y su porqué fechado → `BRAND-historical.md`; detalle del logo → `BRAND-logo.md`.
+- **No dupliques: cada cosa en su documento** — cuál es cada una lo dice la tabla de arriba, y
+  aquí se reenumeraba entera *(retirado el 2026-08-30: la regla contra la duplicación estaba ella
+  misma duplicada, tres líneas por debajo de su propia tabla)*.
 - **Fechas relativas → absolutas** (p. ej. "hoy" → la fecha real).
 - Si algo es ambiguo (¿PRD o DECISIONS? ¿cambia una decisión previa, que se marca
   *Revertida* y se enlaza la nueva?), **pregúntale a Francisco** antes de escribir.
@@ -140,7 +141,7 @@ ha contestado por inercia.
 
 ## Paso 3 · Aplica
 1. **Repo**: edita `PRD-Live.md` / `PRD-Historical.md` / `DECISIONS.md` / `README.md` /
-   `CLAUDE.md` / `BRAND.md` / `BRAND-historical.md` / `BRAND-logo.md` según lo acordado. La CABECERA de un D-entry
+   `CLAUDE.md` / `BRAND.md` / `BRAND-historical.md` / `BRAND-logo.md` / `GATES.md` según lo acordado. La CABECERA de un D-entry
    nuevo importa más de lo que parece: es la línea que acaba en el índice de la cabecera
    de `DECISIONS.md`, que es lo único que se lee antes de abrir nada. Tiene que bastar
    para decidir si abrir esa entrada, porque el índice no tiene texto propio (ver paso 2).
@@ -177,7 +178,6 @@ pendiente de su input (una decisión que solo puede tomar él), déjalo anotado.
 
 ## Referencias rápidas (Notion)
 - New Website (raíz de todo): `39f2caec08be8040b6d4d2bb07ed24e7`
-- **PRD Live** (ya NO es espejo: es un puntero al archivo de GitHub): `3ad2caec08be8122b6a4cc379874ed0c`
+- **PRD Live**, puntero al archivo de GitHub: `3ad2caec08be8122b6a4cc379874ed0c`
 - Tablero Tareas (base): `f3ee9a949c58482888423d5917087962` · data source `collection://02005967-2f8c-44ff-975c-68b86364d4c4`
 - Vista MoSCoW: `3a62caec08be81989325c9fce678de5b`
-- *(Ningún documento tiene espejo. Toda la documentación vive en el repo.)*

@@ -92,6 +92,7 @@
 - [El cierre de «Voz» — 2026-08-30](#el-cierre-de-voz--2026-08-30)
 - [El sprint «Agentes» — abierto el 2026-08-30](#el-sprint-agentes--abierto-el-2026-08-30)
 - [La tanda 3 y la 4 de «Agentes», y lo que el techo de contexto obligó a retirar — 2026-08-30](#la-tanda-3-y-la-4-de-agentes-y-lo-que-el-techo-de-contexto-obligó-a-retirar--2026-08-30)
+- [La tanda 5 de «Agentes»: cuatro metros que no decían lo que estaban haciendo — 2026-08-30](#la-tanda-5-de-agentes-cuatro-metros-que-no-decían-lo-que-estaban-haciendo--2026-08-30)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -4136,6 +4137,73 @@ había concluido una semana antes con otras palabras.
 **El techo de contexto quedó en 12.300 de 12.300**, cero holgura, después de cuatro retiradas para
 pagar dos filas de gate y dos decisiones. El corpus de skills, en cambio, encogió pese a ganar un
 gate. Está tareado desde antes (P68.7405) y hoy es un ejemplo más de lo que esa tarea nombra.
+
+## La tanda 5 de «Agentes»: cuatro metros que no decían lo que estaban haciendo — 2026-08-30
+
+Cuatro tareas de Infra, ninguna de página, y todas con la misma forma: **un mecanismo que ya
+existía y publicaba sobre sí mismo algo que no era exacto**. Lo específico de cada una está en su
+ficha y en D162, D163 y D164; aquí queda lo que no es de una tarea.
+
+**Dos premisas de ficha no aguantaron la ejecución, y las dos por el mismo motivo: se habían
+escrito mirando el código y no corriéndolo.** La de `check:excepciones` decía «85 = 79 + 2 + 4
+sin nombrar»; al ejecutarla eran **87 = 81 + 2**, seis sin explicar, y la segunda casilla ni
+siquiera era una casilla —publicaba el número de MARCAS en los archivos, no de controles que se
+van por llevar una cerca—. La de Dependabot proponía que el workflow dijera en el PR por qué no
+se mergea, y **eso llevaba implementado desde el 2026-08-22**: el #152 tenía su etiqueta y su
+motivo escrito. Es la tercera tanda seguida que abre con una premisa caducada, y las tres veces
+comprobarla ha costado menos que ejecutar la tarea equivocada.
+
+**Y en las dos, comprobar la premisa produjo un hallazgo mejor que el de la ficha.** En la
+primera, que el reparto no sumaba era el síntoma y la causa era que no había forma de saberlo:
+ahora hay un contador por salida y **la partición se comprueba en ejecución**, así que una salida
+nueva sin casilla pone el check en rojo en vez de dejar un residuo mudo. En la segunda, que el
+aviso existía llevó a mirar el PR de verdad y ahí estaba lo bueno: **se había publicado cinco
+veces**, una por cada push de Dependabot, y el motivo visible arriba era el del *primer* bump y no
+el de la rama de ahora. Un aviso que se repite no avisa más: enseña a no leerlo. Eso vuelve la
+conclusión de la propia ficha —«es un problema de atención, no de detección»— más fuerte de lo que
+ella sabía, porque el PR gritó cinco veces y no había nadie escuchando.
+
+**La retirada estructural que la tanda 3 dejó pendiente.** Aquella cerró con el techo en 12.300
+de 12.300 y cero holgura, después de cuatro retiradas para pagar dos filas de gate. Aquí bajó la
+pieza gorda: la tabla de contrato de los gates, **992 palabras** —el 8 % del presupuesto, y 824
+cuando se escribió la ficha dos días antes: creció 168 con las filas de este mismo sprint— a
+`GATES.md`, a demanda. `12.289 → 11.455`.
+
+**Lo que eso contestó, y no era la pregunta que traía la ficha.** Traía como salida decidir que el
+objetivo de 11.600 estaba mal, con el argumento de que **no se había alcanzado nunca** en toda la
+vida del techo — cierto, la banda vivía entre 12.058 y 12.698. No estaba mal: **estaba esperando a
+que se retirara algo estructural**, y las dos podas anteriores habían sido de lluvia fina. Una vez
+alcanzado no hay nada que discutir, solo lo que ya estaba escrito: el objetivo baja un escalón de
+200 a **11.400** y el techo aprieta a **11.700**. La lección de método es que *un objetivo que no
+se cumple nunca* tiene dos lecturas —está mal puesto, o le falta la operación que lo alcanzaría— y
+la segunda no se le había ocurrido a nadie en tres revisiones.
+
+**Y por eso el cierre no es una victoria: la familia sigue abierta.** El `method-review` proponía
+además convertir la retirada en un **paso del ciclo**, en el momento de abrir sprint. Francisco lo
+dejó fuera, así que esto cierra **una instancia** de «el dato que persigue al techo», no la
+familia: mientras retirar sea una reacción al rojo, el equilibrio vuelve a ser el rojo y lo único
+que ha cambiado es desde dónde se sube.
+
+**Dos decisiones se tomaron para no volver a levantarlas.** Que el barrido de huérfanos **no** se
+generaliza al resto de `public/` —con criterio de salida: el día que aparezca una segunda carpeta
+enumerada por un registro del repo—, y que un PR de Dependabot que espera **se cierra** en vez de
+revisarse, porque a los ocho días ya no es el bump que había que mirar. Las dos estaban planteadas
+como preguntas abiertas en sus fichas, que es como una revisión las vuelve a hacer cada trimestre.
+
+**Un efecto lateral que resultó ser la prueba de que el arnés funciona.** Mover la sección puso en
+rojo `check:accesibilidad` y `check:articulo`, que la declaraban como fuente sin que nadie lo
+recordara. Ninguna copia había dejado de ser cierta, así que se re-selló. Los otros cinco punteros
+—`CLAUDE.md` ×2, `BRAND.md`, `README.md` y la declaración de `content/accesibilidad/`— se
+actualizaron a mano y **ninguno tiene guardián**: es deuda conocida y no se tarea, porque el ratio
+no la justifica todavía.
+
+**Y el cierre lo volvió a demostrar en pequeño.** Documentar la tanda pedía una fila nueva en la
+tabla de documentos de la skill `close-session` —`GATES.md` es un documento a demanda más— y esa
+fila puso **la suma de skills en 20.520 sobre un techo de 20.500**. El techo hizo lo suyo: no se
+sube, se retira. Y lo retirado fue el bullet «no dupliques: cada cosa en su documento», que a
+continuación **reenumeraba entera la tabla que tenía tres líneas por encima**, más la séptima
+repetición de «ningún documento tiene espejo» dentro del mismo archivo. La regla contra la
+duplicación estaba duplicada, y hasta que un techo no se cruzó nadie la leyó dos veces seguidas.
 
 ## Fuentes
 
