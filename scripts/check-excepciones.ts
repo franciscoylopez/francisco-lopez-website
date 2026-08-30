@@ -135,8 +135,19 @@ function resolverIdentificador(id: string, archivo: string): string {
 
 const sinMarca: Hallazgo[] = [];
 const marcas: { archivo: string; motivo: string; fecha: string }[] = [];
-let controles = 0;
+// EL REPARTO TIENE QUE SUMAR, Y ESO SE COMPRUEBA (2026-08-30, P68.738).
+// La línea publicaba «N controles · M salen de la capa · K marcados como
+// excepción» y las casillas no sumaban: el contador se incrementaba antes de dos
+// `continue` que no contaba nadie, y `marcas.length` cuenta MARCAS en los
+// archivos, no controles que se van por llevar una cerca. Un desglose que PARECE
+// una partición y no lo es invita a suponer que el residuo está bien — la familia
+// del punto 1 de BRAND.md §Cómo se escribe una regla. Por eso ahora hay un
+// contador por salida y una comprobación al final: si algún día se añade una
+// salida sin casilla, el check se cae en vez de publicar un residuo mudo.
+let candidatos = 0;
 let deLaCapa = 0;
+let sinAspecto = 0;
+let conMarca = 0;
 
 for (const archivo of fuentes) {
   const texto = readFileSync(archivo, "utf8");
@@ -168,7 +179,7 @@ for (const archivo of fuentes) {
       lineaTexto.trimStart().startsWith("*")
     )
       continue;
-    controles++;
+    candidatos++;
 
     // La cadena de clases del elemento, y lo que resuelvan sus identificadores.
     const trozo = texto.slice(inicio, inicio + 700);
@@ -216,7 +227,10 @@ for (const archivo of fuentes) {
 
     // Un enlace sin decisión de aspecto, ni suya ni de lo que envuelve, no es un
     // control escrito a mano: es un enlace sin pintar.
-    if (!ASPECTO.test(conHijos)) continue;
+    if (!ASPECTO.test(conHijos)) {
+      sinAspecto++;
+      continue;
+    }
     if (CAPAS.some((c) => conHijos.includes(c))) {
       deLaCapa++;
       continue;
@@ -225,7 +239,10 @@ for (const archivo of fuentes) {
     // Sin capa: o lleva marca cerca, o es deriva.
     const linea = texto.slice(0, inicio).split("\n").length;
     const contexto = lineas.slice(Math.max(0, linea - 14), linea).join("\n");
-    if (MARCA.test(contexto) || MARCA.test(resuelto)) continue;
+    if (MARCA.test(contexto) || MARCA.test(resuelto)) {
+      conMarca++;
+      continue;
+    }
 
     sinMarca.push({
       archivo: rel,
@@ -246,9 +263,20 @@ const huerfanas = marcas.filter(
 );
 
 console.log(
-  `\ncheck:excepciones — ${controles} controles en ${fuentes.length} archivos · ` +
-    `${deLaCapa} salen de la capa · ${marcas.length} marcados como excepción`,
+  `\ncheck:excepciones — ${candidatos} candidatos en ${fuentes.length} archivos, ` +
+    `y el reparto suma: ${deLaCapa} salen de la capa · ` +
+    `${sinAspecto} sin decisión de aspecto (un enlace sin pintar no es un control) · ` +
+    `${conMarca} fuera de la capa con marca · ${sinMarca.length} fuera de la capa sin marca`,
 );
+const reparto = deLaCapa + sinAspecto + conMarca + sinMarca.length;
+if (reparto !== candidatos) {
+  console.error(
+    `\n  El reparto no suma: ${reparto} de ${candidatos} candidatos.\n` +
+      "  Hay una salida del barrido sin casilla que la cuente, así que el desglose\n" +
+      "  de arriba está afirmando algo que no ha mirado. Se añade el contador.\n",
+  );
+  process.exit(1);
+}
 for (const m of marcas) {
   console.log(`    ${m.fecha}  ${m.archivo} — ${m.motivo}`);
 }
