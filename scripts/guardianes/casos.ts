@@ -275,6 +275,19 @@ export const CASOS: Caso[] = [
   },
   {
     guardian: "check:agentes",
+    rotura:
+      "`ai-train` pasa a `yes` y contradice al `LICENSE` en un archivo que nadie abre",
+    // De las tres Content Signals (P67.8) esta es la única que alguien podría
+    // cambiar por parecer más abierto, y es justo la que no se puede: el
+    // `LICENSE` nombra los textos del sitio y `content/` entre lo que NO se
+    // licencia para obras derivadas. Un `yes` aquí no es una preferencia
+    // distinta, es una contradicción publicada — y viviría en un `robots.txt`,
+    // que es un archivo que nadie vuelve a leer después de escribirlo.
+    archivo: "app/robots.ts",
+    mutar: (o) => o.replace("ai-train=no", "ai-train=yes"),
+  },
+  {
+    guardian: "check:agentes",
     rotura: "robots.txt se abre en todos los entornos y un preview se indexa",
     // La salida fácil el día que el gate diera rojo sería quitarle a `robots()` su
     // gateo por entorno. Entonces un deployment de rama entraría en el índice, que

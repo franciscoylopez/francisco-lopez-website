@@ -73,6 +73,7 @@ const vistos = {
   variantesMd: 0,
   negociaciones: 0,
   entornosRobots: 0,
+  senalesDeContenido: 0,
   segmentosDinamicos: 0,
 };
 
@@ -322,6 +323,8 @@ function revisarRobots(): void {
     );
   }
 
+  revisarSenales(reglas);
+
   // Y FUERA DE PRODUCCIÓN SIGUE CERRADO (D13). Va aquí y no en otro sitio porque
   // el modo de fallo es concreto: el día que este gate diera rojo, la salida
   // fácil sería quitarle el gateo por entorno a `robots()` y dejar todo abierto.
@@ -334,6 +337,73 @@ function revisarRobots(): void {
       "robots.txt",
       "fuera de producción NO bloquea el rastreo, y D13 dice que solo producción " +
         "es indexable: un deployment de rama se colaría en el índice.",
+    );
+  }
+}
+
+/**
+ * LAS TRES CONTENT SIGNALS, POR SU VALOR DECIDIDO (P67.8) y no leyendo el que
+ * haya puesto `robots()`, que sería una tautología: un guardián que compara una
+ * cosa consigo misma aprueba siempre. Aquí están escritas las tres decisiones,
+ * con el porqué de cada una, y esta lista es lo que las defiende.
+ *
+ * `ai-train=no` ES LA QUE HAY QUE VIGILAR DE VERDAD, porque es la única que
+ * alguien podría cambiar por parecer más abierto. El `LICENSE` del repositorio
+ * nombra los textos del sitio y `content/` entre lo que NO se licencia para obras
+ * derivadas; un `yes` aquí convertiría eso en una contradicción publicada, y la
+ * contradicción viviría en un archivo que nadie abre.
+ *
+ * Las otras dos van a `yes` porque el trabajo del sitio es que lo encuentren, y
+ * ponerlas a `no` cerraría el canal que este sprint existe para abrir. Se
+ * vigilan igual: una señal que desaparece no da error en ninguna parte.
+ */
+const SENALES: Record<string, string> = {
+  "ai-train": "no",
+  search: "yes",
+  "ai-input": "yes",
+};
+
+function revisarSenales(reglas: { other?: unknown }[]): void {
+  const crudo = reglas
+    .map(
+      (r) =>
+        (r.other as Record<string, unknown> | undefined)?.["Content-Signal"],
+    )
+    .find((v) => typeof v === "string") as string | undefined;
+
+  if (!crudo) {
+    fallo(
+      "Content-Signal",
+      "en producción `robots.txt` no declara ninguna, y las tres están decididas " +
+        "(P67.8). Sin la línea, lo que se puede hacer con este contenido vuelve a " +
+        "quedar permitido por omisión y no por decisión.",
+    );
+    return;
+  }
+
+  // Se parte y se compara PAR A PAR, no con la cadena entera: así el orden y los
+  // espacios pueden cambiar sin dar un rojo falso, y cambiar un VALOR sí lo da.
+  const declaradas = new Map(
+    crudo.split(",").map((par) => {
+      const [k, v] = par.split("=");
+      return [k?.trim() ?? "", v?.trim() ?? ""];
+    }),
+  );
+
+  for (const [senal, valor] of Object.entries(SENALES)) {
+    vistos.senalesDeContenido++;
+    const dice = declaradas.get(senal);
+    if (dice === valor) continue;
+    fallo(
+      "Content-Signal",
+      dice === undefined
+        ? `falta \`${senal}\`, que está decidida en \`${valor}\` (P67.8).`
+        : `\`${senal}\` dice «${dice}» y la decisión es «${valor}» (P67.8). ` +
+            (senal === "ai-train"
+              ? "Y esta en concreto no es una preferencia suelta: el `LICENSE` dice que " +
+                "los textos del sitio no se licencian para obras derivadas, así que un " +
+                "`yes` aquí sería una contradicción publicada."
+              : "El trabajo de este sitio es que lo encuentren; un `no` aquí cierra el canal."),
     );
   }
 }
@@ -398,6 +468,7 @@ console.log(
     `  markdown   ${vistos.variantesMd} variantes en disco · las URLs que anuncia resuelven\n` +
     `  negociar   ${vistos.negociaciones} casos por \`proxy()\`: markdown sí, navegador no, \`Vary\` en ambos\n` +
     `  robots     ${vistos.entornosRobots} entornos (producción abre y sella el sitemap; el resto cierra, D13)\n` +
+    `  señales    ${vistos.senalesDeContenido} Content Signals comprobadas por su valor decidido (P67.8)\n` +
     `  404        ${vistos.segmentosDinamicos} segmentos dinámicos, ninguno catch-all`,
 );
 

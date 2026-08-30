@@ -195,6 +195,7 @@
 - D157 · La nota de un escáner agéntico no es un criterio de aceptación, y su hallazgo más ruidoso no reproduce
 - D158 · El markdown para agentes sale del `<main>` prerenderizado, y es un artefacto commiteado con guardián
 - D159 · El guardián propio en vez del escáner ajeno: `check:agentes`
+- D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9802,3 +9803,45 @@ cabecera del script y en la fila de `PRD-Live`.
 Nace con **tres casos malos en `check:guardianes` el mismo día**, uno por cada una de las tres
 fuentes, y no cuatro días después como `check:kit`. Los seis que se le probaron al escribirlo
 —incluido el `includes` que le serviría markdown a un navegador— los rechaza todos.
+
+## D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina — 2026-08-30
+
+**Decisión.** `robots.txt` declara, sobre el comodín,
+`Content-Signal: ai-train=no, search=yes, ai-input=yes`.
+
+**`search=yes` y `ai-input=yes` no son permisividad: son el objetivo del sitio.** Su trabajo es
+que lo encuentren, y cada vez más ese encuentro pasa por un asistente que lee para responder a
+alguien **ahora**, citando la fuente. Decir que no ahí sería cerrarle la puerta al canal que el
+sprint «Agentes» existe para abrir.
+
+**`ai-train=no` porque ya estaba dicho.** El `LICENSE` del repositorio —«público para consulta,
+no código abierto»— nombra explícitamente los textos del sitio y `content/` entre lo que no se
+licencia para obras derivadas. **Un `ai-train=yes` al lado de esa licencia sería una contradicción
+publicada.** No es una postura sobre la IA: es la misma frase, en un formato que una máquina puede
+leer. Y la distinción que hace coherentes a las tres es esa: `ai-input` es *leer para responder
+citando*; `ai-train` es *quedarse el contenido*.
+
+**Es una preferencia, no un control de acceso**, igual que el resto de `robots.txt`. No la hace
+cumplir nadie. Se pone porque es coherente, no porque impida nada, y eso se escribe aquí para no
+vender de más.
+
+### Lo que NO lleva, y es decisión
+
+**Reglas por bot con nombre** (`GPTBot`, `Google-Extended`…). Sería una lista escrita a mano contra
+un catálogo que cambia solo, o sea la familia D60: se queda vieja en silencio. Sobre el comodín
+dice lo mismo sin lista que mantener. El día que haya que bloquear a uno en concreto, será por un
+motivo específico y con fecha.
+
+### Dos cosas de implementación que no eran obvias
+
+**No hace falta cambiar la ruta por un handler propio.** `MetadataRoute.Robots` de esta versión de
+Next tiene un campo `other` para directivas no estándar, que emite verbatim dentro del grupo de su
+`User-Agent`. La suposición contraria —que un tipo cerrado obligaba a bajar a un `route.ts`— era
+justo lo que `AGENTS.md` avisa: esta no es la versión de Next que uno recuerda.
+
+**El guardián comprueba las tres por su VALOR DECIDIDO, no leyendo el que haya puesto `robots()`.**
+Comparar una cosa consigo misma aprueba siempre. `check:agentes` lleva las tres escritas con su
+porqué, y de las tres la que de verdad vigila es `ai-train`: es la única que alguien podría
+cambiar por parecer más abierto, y la contradicción viviría en un `robots.txt`, que es un archivo
+que nadie vuelve a leer después de escribirlo. Su caso malo entra en `check:guardianes` el mismo
+día (D159).

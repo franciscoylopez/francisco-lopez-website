@@ -195,12 +195,13 @@ proyecto se lo ha encontrado cinco veces (D38/D57/D60/D63).
 `main` **la protege el servidor y no la disciplina**: sin push directo, sin merge con CI
 en rojo, sin bypass de admin, y solo `squash` o `rebase` (D68). Escaneo de dependencias
 con Dependabot. Cabeceras de seguridad servidas, con la CSP en allowlist mínima: base +
-GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'`, desde el
-2026-08-24 **por coste medido**: quitarlo exige nonces, y el nonce cuesta el prerenderizado
-de las catorce páginas (D26). Va con la IA conversacional (V4), que hereda ese coste.
+GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'` **por coste
+medido**: el nonce cuesta el prerenderizado de las catorce (D26), así que va con V4.
 
 El **repositorio es público** desde el 2026-08-19, con `LICENSE` explícito («público para
-consulta, no código abierto») y enlace en el footer.
+consulta, no código abierto») y enlace en el footer. Y esa frase la dice también `robots.txt`
+en formato máquina —**`Content-Signal: ai-train=no, search=yes, ai-input=yes`**—, como
+preferencia y no como control de acceso (D160).
 
 ### Revisiones recurrentes
 
@@ -267,8 +268,7 @@ decisión escrita, no por omisión.
 citar este sitio, que es el canal de distribución que aquí faltaba. Arrastra cuatro de *General*
 y deja la **Distribución** humana aplazada por sexta vez, esta vez con motivo y no por inercia.
 
-*(El recorrido de «Drenaje» y de «Voz», el triaje que lo creó, por qué el orden de sus tandas lo
-mandó la visibilidad y no la prioridad, y lo que dejó su cierre, en `PRD-Historical.md`.)*
+*(El recorrido de cada sprint cerrado, en `PRD-Historical.md`.)*
 
 ### V4 — IA conversacional
 
