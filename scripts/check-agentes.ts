@@ -297,12 +297,19 @@ function revisarNegociacion(): void {
     );
   }
 
-  // LA RUTA QUE NO EXISTE TAMBIÉN SE NEGOCIA (2026-08-30). Antes reescribía a un
-  // `.md` que tampoco existe, así que el agente recibía la 404 de marca en HTML:
-  // el estado era correcto y el cuerpo no le servía para recuperarse. Se
-  // comprueban las TRES cosas que lo hacen útil —404 de verdad, cuerpo markdown y
-  // un destino al que ir—, en los dos idiomas, porque el 404 inglés que devolviera
-  // el índice español sería el fallo silencioso de este cambio.
+  revisar404Markdown();
+}
+
+/**
+ * LA RUTA QUE NO EXISTE TAMBIÉN SE NEGOCIA (2026-08-30). Antes reescribía a un
+ * `.md` que tampoco existe, así que el agente recibía la 404 de marca en HTML: el
+ * estado era correcto y el cuerpo no le servía para recuperarse.
+ *
+ * Se comprueban las TRES cosas que lo hacen útil —404 de verdad, cuerpo markdown
+ * y un destino al que ir—, y en LOS DOS IDIOMAS, porque un 404 inglés que
+ * devolviera el índice español sería el fallo silencioso de este cambio.
+ */
+function revisar404Markdown(): void {
   for (const [path, locale] of [
     ["/no-existe-esta-ruta", "es"],
     ["/en/no-existe-esta-ruta", "en"],
