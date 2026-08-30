@@ -166,11 +166,9 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 > diciendo su nombre o cuando hay que decidir si un gate nuevo hace falta (D163).
 
 Lo que sí es criterio de producto, y por eso se queda aquí: **que una parte corra a mano no es
-deuda, es alcance**. Se lanzan a mano los que necesitan pintar (el gate de accesibilidad, el
-pliegue), los que por coste o por varianza no caben en CI (el censo, `psi`) y los que solo
-tienen sentido alrededor de un momento concreto (`gate:html` en un refactor, `check:tablero` al
-cerrar). Esa frontera se decide gate a gate y se escribe en su fila; lo que no vale es que un
-gate acabe siendo manual porque nadie lo automatizó.
+deuda, es alcance** — se es manual por necesitar pintar, por coste o por depender de un momento
+concreto, y el motivo va en la fila de cada gate. Lo que no vale es serlo porque nadie lo
+automatizó.
 
 ### Calidad y seguridad
 

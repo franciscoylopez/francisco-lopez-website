@@ -85,7 +85,7 @@ Sin fechas, la **etapa en curso** es el sprint de menor `Prioridad` con tareas a
 
 Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara. Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** y (4) **antes de abrir el siguiente** se dispara **`method-review`**, que audita cómo se trabaja. Va en ese hueco y no al cerrar porque **el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener**.
 
-**Y se mira la cola de Dependabot, que es lo único del repo que se pudre solo.** El triaje ya dice en cada PR por qué no se mergea (`dependabot-automerge.yml`), pero decirlo no es leerlo: a los pocos días el PR que espera ya no es el bump que hay que revisar. Así que **el que no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente en su siguiente pasada. Revisar uno podrido es trabajo tirado.
+**Y se mira la cola de Dependabot, que es lo único del repo que se pudre solo.** El triaje ya dice en cada PR por qué no se mergea, pero decirlo no es leerlo: a los pocos días el PR que espera ya no es el bump que había que revisar. Así que **el que no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente (D164).
 
 **Dos sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
 
