@@ -347,7 +347,7 @@ El «porqué» vive en documentos dedicados, partidos por una regla que **no es 
 | [BRAND-historical.md](./BRAND-historical.md) | El porqué fechado de las reglas de marca | En su cabecera |
 | [CLAUDE-historical.md](./CLAUDE-historical.md) | El caso que escribió cada convención: qué falló para que la regla exista | En su cabecera |
 
-**Y dos que no son ninguna de las dos cosas:** [BRAND-logo.md](./BRAND-logo.md), la enciclopedia del logo y la firma split, y [LICENSE](./LICENSE) — público para consulta, no código abierto: todos los derechos reservados.
+**Y tres que no son ninguna de las dos cosas:** [GATES.md](./GATES.md), el contrato de cada gate —qué garantiza, qué deja fuera y dónde corre—, que se abre cuando un check sale rojo diciendo su nombre y no para aplicar ninguna regla; [BRAND-logo.md](./BRAND-logo.md), la enciclopedia del logo y la firma split; y [LICENSE](./LICENSE) — público para consulta, no código abierto: todos los derechos reservados.
 
 **Nada tiene copia en otro sitio.** El repositorio es la única fuente de la documentación: no hay espejos, y los índices se derivan en vez de escribirse. Es la misma regla que gobierna el código de este sitio —una cosa, un sitio— aplicada a lo que se dice sobre él, y por el mismo motivo: *la misma cosa escrita en dos sitios acaba diciendo dos cosas.*
 

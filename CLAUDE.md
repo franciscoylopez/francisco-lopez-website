@@ -9,7 +9,7 @@
 ## Régimen de docs (qué se carga y qué se consulta)
 
 - **`@`-importados (siempre en contexto):** `AGENTS.md`, `BRAND.md` (core de reglas), `PRD-Live.md`, y este `CLAUDE.md`.
-- **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md`** y **`CLAUDE-historical.md`** (el porqué fechado de las reglas de marca y de las de aquí), `BRAND-logo.md` (enciclopedia del logo).
+- **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md`** y **`CLAUDE-historical.md`** (el porqué fechado de las reglas de marca y de las de aquí), `BRAND-logo.md` (enciclopedia del logo) y **`GATES.md`** (el contrato de cada gate, que se abre cuando un check sale rojo diciendo su nombre).
 - **Y cómo se consultan, que es lo que hace barata esa mitad:** todos llevan índice derivado **en su propia cabecera**, así que no cuestan nada en el arranque (D88). Se abren con un `Read` limitado a sus primeras líneas —130 en `DECISIONS.md`, 90 en los históricos— y solo después se va a la sección, nunca grepeando a ciegas.
 - **Convención de mitigación:** antes de tocar un subsistema con ADR, `grep`/Read de su D-entry en `DECISIONS.md` — así no se pierde ninguna regla, solo deja de estar precargada.
 - **Cuándo abrir un histórico: antes de CAMBIAR una regla, no antes de aplicarla.** Casi todas las de aquí y las de `BRAND.md` nacieron corrigiendo algo, y el caso que las escribió es lo que impide revertirlas por parecer arbitrarias. Aplicarlas no necesita el relato; discutirlas, sí.
@@ -85,6 +85,8 @@ Sin fechas, la **etapa en curso** es el sprint de menor `Prioridad` con tareas a
 
 Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cuando Francisco lo declara. Al cerrarla: (1) se dispara el skill **`sprint-review`** (revisión técnica crítica), (2) sus tareas en Listo pasan a **Archivado**, (3) se hace el **check de medición** y (4) **antes de abrir el siguiente** se dispara **`method-review`**, que audita cómo se trabaja. Va en ese hueco y no al cerrar porque **el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener**.
 
+**Y se mira la cola de Dependabot, que es lo único del repo que se pudre solo.** El triaje ya dice en cada PR por qué no se mergea (`dependabot-automerge.yml`), pero decirlo no es leerlo: a los pocos días el PR que espera ya no es el bump que hay que revisar. Así que **el que no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente en su siguiente pasada. Revisar uno podrido es trabajo tirado.
+
 **Dos sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
 
 ### Metodología de trabajo (fase V2+)
@@ -151,7 +153,7 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 ### Cómo se verifica
 
 
-Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `PRD-Live.md` §Cómo se verifica**; aquí solo lo que hay que hacer:
+Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `GATES.md`**, a demanda; aquí solo lo que hay que hacer:
 
 - **Precondición: el sandbox de Bash desactivado** en TODAS las llamadas, no solo las de navegación. Un comando que cuelga es ese síntoma: se desactiva el sandbox, no se reintenta (D51).
 - **Lo que sigue a mano:** el punto **6** (nada codificado solo por color) y la nota de PageSpeed (`npm run psi`, no `vitals`).

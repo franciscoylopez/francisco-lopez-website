@@ -197,6 +197,9 @@
 - D159 · El guardián propio en vez del escáner ajeno: `check:agentes`
 - D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina
 - D161 · Cuatro huecos que vio un escáner ajeno, y el que no se tapa
+- D162 · El barrido de huérfanos se queda en `logo-kit`, y eso se decide en vez de heredarse
+- D163 · La sección más pesada del arranque era la que nadie lee hasta que algo sale rojo
+- D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9963,3 +9966,146 @@ lo puntúe no lo convierte en un no-defecto — es exactamente la distinción de
 el sitio y perseguir una nota. **La cifra de un escáner no valida un arreglo ni lo invalida: solo
 dice qué mide él.** Escribir la predicción antes de mirar es lo que permite verlo; sin ella, el
 salto de doce puntos se habría atribuido a los cuatro cambios por igual.
+
+## D162 · El barrido de huérfanos se queda en `logo-kit`, y eso se decide en vez de heredarse — 2026-08-30
+
+**El hecho, y era pequeño.** En `public/` seguían los cinco SVG que trae `create-next-app`
+—`file`, `globe`, `next`, `vercel`, `window`— con **cero referencias** en todo el repositorio,
+no solo en `app/`, `components/`, `lib/` y `content/`. Se borran, y no puede romper nada:
+`check:marco` corre sobre el prerender de las 28 variantes, así que un 404 saldría. Con eso,
+`public/` deja de tener un solo archivo suelto en su raíz que no sea un favicon.
+
+**Lo que lo hizo hallazgo y no limpieza.** La regla que declara este caso rojo **ya existe y ya
+tiene portador**: es el barrido de `check:kit` (D119), que compara el disco contra lo declarado
+en `lib/logo-kit.ts` **en los dos sentidos** y considera un archivo huérfano exactamente igual
+que uno declarado y ausente. Pero corre **solo dentro de `public/logo-kit/`**. El resto de
+`public/` —`img`, `og`, `video`, `cv`, `logos`, `email-signature`, `md`, los seis favicons— no lo
+cuenta nadie. Familia «la regla sin portador»: declarada, con remedio conocido y aplicada a una
+fracción de su alcance. Es la misma forma que D112, donde un guardián que hashea una carpeta se
+estrechaba en silencio al irse un archivo.
+
+**Y la decisión es NO generalizarlo.** No por coste de implementación —la forma está escrita y
+sería copiar `check:kit`—, sino porque **el barrido de `logo-kit` funciona por una propiedad que
+las demás carpetas no tienen: todo lo que hay dentro está declarado en un registro**. `logo-kit`
+existe para que `lib/logo-kit.ts` lo enumere; ahí la lista es la fuente y el disco es la copia.
+En el resto de `public/` la relación es la contraria: los favicons los consume el navegador por
+convención y no los nombra ningún registro, `robots` y `sitemap` los genera Next, y el markdown
+de `public/md/` ya tiene su propio guardián en los dos sentidos (`md:verificar`, D158). Un
+barrido general sería **casi todo allowlist**, y una allowlist que cubre casi todo el alcance no
+distingue: aprueba por omisión, que es justo el fallo que este repositorio lleva seis veces
+encontrando. Añadiría además un guardián más al presupuesto de contexto, con el problema que
+mide P68.7405 y D163.
+
+**El criterio de salida, para que la próxima revisión no lo levante otra vez.** Se generaliza el
+día que aparezca en `public/` una segunda carpeta **enumerada por un registro del repo** —la
+misma condición que cumple `logo-kit`—, y entonces lo que se escribe no es un barrido general
+sino el segundo caso del mismo patrón. Mientras la respuesta sea «hay una sola», generalizar es
+inventar indirección, y es la regla de D113 aplicada a un guardián en vez de a una capa.
+
+## D163 · La sección más pesada del arranque era la que nadie lee hasta que algo sale rojo — 2026-08-30
+
+**El dato, y no era el que decía la ficha.** P68.7405 nació el 2026-08-30 diciendo «quedan 13
+palabras de margen», que se lee como un accidente de una tanda. El octavo `method-review` midió
+la **curva** y el diagnóstico cambió de forma: 13.084 el 19 de agosto, 12.058 tras la primera
+poda, 12.695 tres días después, 12.698, 12.251 tras la segunda poda, 12.287 hoy. **La banda vive
+entre 12.058 y 12.698, y el objetivo declarado de 11.600 no se había alcanzado NUNCA** en toda la
+vida del techo. Dos podas reales, las dos funcionaron, y las dos acabaron rozando el techo otra
+vez.
+
+**La familia, que es lo que lo hace una decisión y no una limpieza.** No es «el umbral que
+persigue al dato» del catálogo, porque **ese techo no se ha movido nunca** —0 de 3 en el ciclo,
+verificado por el propio `check:contexto`—. Es su imagen especular, y el `method-review` la dio
+de alta con nombre: **el dato que persigue al techo**. El techo aguanta y es el dato el que se le
+pega, porque **la operación de retirar solo se dispara cuando se cruza**. El sistema equilibra en
+«techo menos épsilon» de forma permanente, y un indicador que siempre está al 99,9 % no distingue
+sano de a-punto-de-romperse. Se vivió dos veces en una sola tanda: la nota nueva de
+`design-review` dejó la skill en 4.716 con techo 4.600, y después dos filas de la tabla de gates
+subieron el arranque a 12.335. Las dos veces se comprimió, las dos veces funcionó, y las dos
+veces el resultado fue volver a rozar.
+
+**El candidato estructural tenía cifra y se hizo más gordo mientras se discutía.** La sección
+«Cómo se verifica lo que no ve un compilador» de `PRD-Live.md` medía **824 palabras** cuando se
+escribió la ficha y **992** al ejecutarla dos días después: creció 168 con las filas de
+`check:agentes` y `md:verificar` del propio sprint. El **8 % del presupuesto**, y la sección que
+**el propio `PRD-Live` describía así**: *«este no se lee hasta que un check sale rojo diciendo su
+nombre»*. Es la definición literal de contenido a demanda viviendo en el presupuesto que se
+precarga siempre — la misma forma que D88 encontró en el índice de `DECISIONS.md`, que era el
+único componente que crecía por construcción.
+
+**Qué se hizo.** La tabla baja a **`GATES.md`**, a demanda y nunca `@`-importada, con la
+condición de apertura escrita en su cabecera: se abre cuando un check sale rojo diciendo su
+nombre, o cuando hay que decidir si un gate nuevo hace falta, y **nunca para aplicar una regla**
+—eso lo llevan `CLAUDE.md` y `BRAND.md`, que sí están siempre en contexto—. En `PRD-Live` queda
+el puntero y **lo que sí es criterio de producto**: que una parte de los gates corra a mano no es
+deuda, es alcance, y esa frontera se decide gate a gate. `12.289 → 11.455`.
+
+**Y con eso el objetivo deja de ser discutible, que era la otra mitad de la ficha.** La ficha
+ofrecía como salida decidir que 11.600 estaba mal, con el argumento de que un objetivo que no se
+cumple nunca no gobierna nada. **No estaba mal: estaba esperando a que se retirara algo
+estructural.** Alcanzado (11.455), lo que corresponde no es discutirlo sino lo que ya estaba
+escrito en `check-contexto.ts`: el objetivo baja un escalón de 200 —**11.400**, la misma cadencia
+que 12.000 → 11.800 → 11.600— porque un objetivo cumplido deja de tirar, y el techo **aprieta a
+11.700** dejando los ~245 de holgura que la regla de D139 fija como magnitud a sostener. Un
+movimiento por techo es el trinquete apretando; el segundo ya no.
+
+**Lo que NO se hizo, y hay que decirlo porque la familia sigue abierta.** El `method-review`
+proponía además convertir la **retirada en un paso del ciclo**, en el momento de abrir sprint
+donde ya se sella `CICLO_ABIERTO`. Francisco lo dejó fuera. Así que esto cierra **una instancia**,
+no la familia: mientras retirar siga siendo una reacción al rojo, el equilibrio vuelve a ser el
+rojo, y lo único que ha cambiado es desde dónde se sube. El propio `check:contexto` lo tiene
+escrito en su cabecera —*«si el objetivo persigue al dato en vez del techo, esto no lo mira»*—, y
+sigue sin mirarlo.
+
+**Una nota sobre el coste de mover una sección, que resultó ser la prueba de que el arnés
+funciona.** Moverla puso en rojo `check:accesibilidad` y `check:articulo`: las dos declaran esa
+sección como fuente, la primera en su bloque §verify y la segunda en tres de sus doce secciones.
+Ninguna de las dos copias había dejado de ser cierta —cambió dónde vive la tabla, no lo que
+dice—, así que se re-selló; pero **el aviso llegó sin que nadie se acordara de que existía la
+dependencia**, que es exactamente lo que D84 y D140 existen para producir. Cinco punteros más se
+actualizaron a mano (`CLAUDE.md` ×2, `BRAND.md`, `README.md` y la declaración de
+`content/accesibilidad/dependencias.ts`); ninguno de ellos tiene guardián, y esa asimetría es
+deuda que no se tarea aquí porque el ratio no la justifica todavía.
+
+## D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo — 2026-08-30
+
+**La ficha proponía dos mitades y una ya estaba hecha.** El `sprint-review` de cierre de «Voz»
+encontró tres PR abiertos, dos de Dependabot con 8 días —#152 (grupo `next`, CI verde) y #154
+(ESLint 10, en rojo y ya tareado como salto manual en P68.77)—, **los dos obsoletos al
+encontrarlos**: ESLint iba por 10.9.1 y `next` por 16.3.3, así que el PR que esperaba ya no era
+el bump que había que hacer. Y proponía **B** («que el propio workflow diga por qué no se
+mergea, porque hoy ese motivo se queda en el log del job, que no lee nadie») más **A** (un paso
+del ritual de cierre que mire la cola).
+
+**B estaba implementada desde el 2026-08-22 y había funcionado.** El paso «Decir qué le falta al
+que no entra» de `dependabot-automerge.yml` entró en el mismo commit que el automerge acotado
+(P64.6), y #152 lo demuestra: etiqueta `revisar a mano` puesta y el motivo escrito en el PR, con
+la lista de paquetes y los tres pasos de `gate:html`. La premisa de la ficha estaba **caducada**,
+y comprobarlo costó un `gh pr view`.
+
+**Lo que sí apareció al comprobarlo es peor y más útil: el aviso se había publicado CINCO
+veces.** Dependabot reescribe la rama cada vez que aparece una versión nueva, y cada push
+volvía a disparar el paso. Cinco comentarios idénticos en un PR que nadie estaba leyendo — y con
+un detalle que los hacía activamente falsos: **el motivo visible arriba era el del PRIMER bump**,
+no el del que había en la rama. Un aviso que se repite no avisa más: avisa peor, porque enseña a
+no leerlo. Se arregla con `--edit-last`: un solo comentario, siempre con los paquetes de ahora.
+
+**Y eso vuelve la conclusión de la ficha más fuerte de lo que ella sabía.** Decía «es un problema
+de atención, no de detección», y descartaba por eso la opción C (un guardián con umbral de
+antigüedad, con el coste de contexto que mide D163). El PR **gritó cinco veces y nadie
+escuchaba**: no falta señal, falta un momento en que alguien mire. Ese momento es el **cierre de
+etapa**, que ya mira el tablero y la medición, y ahí queda escrito con su criterio: **el PR que
+no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente en su siguiente pasada. La
+regla no es «revisar la cola» sino «vaciarla», porque revisar uno podrido es trabajo tirado y era
+justo lo que había pasado dos veces.
+
+**Se cerró #152 con eso**, sin criterio sobre el bump y por antigüedad, dejando la cola a cero.
+El automerge acotado sigue sin tocarse: su allowlist es correcta y su argumento —que CI no puede
+ver un cambio de render, porque `gate:html` está fuera a propósito (D42/D45)— sigue en pie. El
+hueco estaba **después** de su veredicto, y era el único sitio donde no había nadie.
+
+**Lo que queda abierto, y no se tarea.** El paso del ritual es un párrafo en `CLAUDE.md`, así que
+depende de que el cierre se ejecute; entre cierres puede pasar más de una semana y un PR puede
+pudrirse igual. Es la misma forma que D163 dejó abierta —una operación que solo se dispara en un
+momento concreto— y el remedio conocido (C, el umbral de antigüedad) se descarta hoy por su coste
+de contexto, no porque no funcionara. Se revisa el día que la cola vuelva a acumular dos PR entre
+dos cierres consecutivos: ese es el dato que convertiría el descarte en un error.
