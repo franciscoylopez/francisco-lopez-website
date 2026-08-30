@@ -199,6 +199,7 @@
 - D161 · Cuatro huecos que vio un escáner ajeno, y el que no se tapa
 - D162 · El barrido de huérfanos se queda en `logo-kit`, y eso se decide en vez de heredarse
 - D163 · La sección más pesada del arranque era la que nadie lee hasta que algo sale rojo
+- D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10064,3 +10065,47 @@ dependencia**, que es exactamente lo que D84 y D140 existen para producir. Cinco
 actualizaron a mano (`CLAUDE.md` ×2, `BRAND.md`, `README.md` y la declaración de
 `content/accesibilidad/dependencias.ts`); ninguno de ellos tiene guardián, y esa asimetría es
 deuda que no se tarea aquí porque el ratio no la justifica todavía.
+
+## D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo — 2026-08-30
+
+**La ficha proponía dos mitades y una ya estaba hecha.** El `sprint-review` de cierre de «Voz»
+encontró tres PR abiertos, dos de Dependabot con 8 días —#152 (grupo `next`, CI verde) y #154
+(ESLint 10, en rojo y ya tareado como salto manual en P68.77)—, **los dos obsoletos al
+encontrarlos**: ESLint iba por 10.9.1 y `next` por 16.3.3, así que el PR que esperaba ya no era
+el bump que había que hacer. Y proponía **B** («que el propio workflow diga por qué no se
+mergea, porque hoy ese motivo se queda en el log del job, que no lee nadie») más **A** (un paso
+del ritual de cierre que mire la cola).
+
+**B estaba implementada desde el 2026-08-22 y había funcionado.** El paso «Decir qué le falta al
+que no entra» de `dependabot-automerge.yml` entró en el mismo commit que el automerge acotado
+(P64.6), y #152 lo demuestra: etiqueta `revisar a mano` puesta y el motivo escrito en el PR, con
+la lista de paquetes y los tres pasos de `gate:html`. La premisa de la ficha estaba **caducada**,
+y comprobarlo costó un `gh pr view`.
+
+**Lo que sí apareció al comprobarlo es peor y más útil: el aviso se había publicado CINCO
+veces.** Dependabot reescribe la rama cada vez que aparece una versión nueva, y cada push
+volvía a disparar el paso. Cinco comentarios idénticos en un PR que nadie estaba leyendo — y con
+un detalle que los hacía activamente falsos: **el motivo visible arriba era el del PRIMER bump**,
+no el del que había en la rama. Un aviso que se repite no avisa más: avisa peor, porque enseña a
+no leerlo. Se arregla con `--edit-last`: un solo comentario, siempre con los paquetes de ahora.
+
+**Y eso vuelve la conclusión de la ficha más fuerte de lo que ella sabía.** Decía «es un problema
+de atención, no de detección», y descartaba por eso la opción C (un guardián con umbral de
+antigüedad, con el coste de contexto que mide D163). El PR **gritó cinco veces y nadie
+escuchaba**: no falta señal, falta un momento en que alguien mire. Ese momento es el **cierre de
+etapa**, que ya mira el tablero y la medición, y ahí queda escrito con su criterio: **el PR que
+no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente en su siguiente pasada. La
+regla no es «revisar la cola» sino «vaciarla», porque revisar uno podrido es trabajo tirado y era
+justo lo que había pasado dos veces.
+
+**Se cerró #152 con eso**, sin criterio sobre el bump y por antigüedad, dejando la cola a cero.
+El automerge acotado sigue sin tocarse: su allowlist es correcta y su argumento —que CI no puede
+ver un cambio de render, porque `gate:html` está fuera a propósito (D42/D45)— sigue en pie. El
+hueco estaba **después** de su veredicto, y era el único sitio donde no había nadie.
+
+**Lo que queda abierto, y no se tarea.** El paso del ritual es un párrafo en `CLAUDE.md`, así que
+depende de que el cierre se ejecute; entre cierres puede pasar más de una semana y un PR puede
+pudrirse igual. Es la misma forma que D163 dejó abierta —una operación que solo se dispara en un
+momento concreto— y el remedio conocido (C, el umbral de antigüedad) se descarta hoy por su coste
+de contexto, no porque no funcionara. Se revisa el día que la cola vuelva a acumular dos PR entre
+dos cierres consecutivos: ese es el dato que convertiría el descarte en un error.

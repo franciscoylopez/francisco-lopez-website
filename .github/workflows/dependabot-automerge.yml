@@ -129,6 +129,14 @@ jobs:
 
       # La otra mitad, que es la que se olvida. Un PR que no entra por automerge no puede
       # quedarse en silencio: si nadie sabe que le toca mirarlo, vuelve a haber una cola.
+      #
+      # Y EL AVISO SE EDITA, NO SE REPITE (2026-08-30, P68.741). Esto se escribió el
+      # 2026-08-22 y funcionó: el #152 salió con su etiqueta y con el motivo escrito. Pero
+      # Dependabot reescribe la rama cada vez que aparece una versión nueva, y cada push
+      # volvía a disparar el paso: cinco comentarios idénticos en un PR que nadie estaba
+      # leyendo. Un aviso que se repite no avisa más, avisa peor — y encima el motivo
+      # visible era el del PRIMER bump, no el del que hay. Con `--edit-last` hay un solo
+      # comentario y dice siempre los paquetes de ahora.
       - name: Decir qué le falta al que no entra
         if: steps.juicio.outputs.seguro != 'true'
         env:
@@ -152,4 +160,5 @@ jobs:
           3. La secuencia entera, incluida la línea base, está en la skill `gates-de-servidor`.
           FIN
           } > aviso.md
-          gh pr comment "$PR" --body-file aviso.md
+          gh pr comment "$PR" --edit-last --body-file aviso.md ||
+            gh pr comment "$PR" --body-file aviso.md
