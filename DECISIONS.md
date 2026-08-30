@@ -6113,12 +6113,19 @@ pero el `README.md` **tecleaba el rango a mano**, así que había dos sitios y s
 Ya no: el README cita la fuente y no la copia. Las cifras de este párrafo se quedan como están
 porque son el registro de lo que se midió ese día, no una afirmación viva.
 
-Queda **re-sellar**, y es de Francisco: el sello del 2026-08-24 se tomó con **una** muestra por
-página, y **D145 declaró ese método no fiable cuatro días después** —el mismo día, sin tocar
-nada, `/design-system` dio 76 y luego 98 y 99—. No está sobre-vendiendo: con una toma el ruido
-de PSI es asimétrico hacia abajo, así que el mínimo sale pesimista y el >90 de `PRD-Live` §No
-funcionales no está en riesgo. Pero es una cifra publicada con un método que el propio repo ya
-retiró, y se re-mide con «Voz» mergeado, contra producción, que es la foto del sitio terminado.
+Re-sellado el **2026-08-30**, con «Voz» mergeado y contra producción: **móvil 93-99 · escritorio
+97-100**, mediana de tres tomas, **84 llamadas y 84 análisis distintos** (ninguna deduplicación,
+así que ningún par se selló con una sola muestra) y **cero llamadas fallidas**.
+
+**Y la predicción que acompañaba a esta tarea era FALSA, que es lo que hay que anotar.** Estaba
+escrito que con una sola toma el ruido de PSI es asimétrico hacia abajo, así que el mínimo salía
+pesimista y lo más probable era que **subiera**. **Bajó dos puntos** en móvil (95 → 93). El
+razonamiento tenía forma de causa y era una sospecha: el ruido de PSI no es asimétrico, es
+**ancho** —esta misma corrida vio `/sobre-mi` en móvil dar 74, 96 y 97, y dos deep-dive con 22
+puntos de recorrido—, y con un rango que es un min/max sobre catorce páginas, más muestras
+**ensanchan** el rango tanto por abajo como por arriba. Lo que sí se sostiene es la única
+afirmación que importaba: el >90 de `PRD-Live` §No funcionales no está en riesgo, ahora con un
+método que el repo no ha retirado.
 
 **Lo que queda abierto.** El retraso de renderizado del LCP móvil (P68.62) sigue sin causa
 accionable: su premisa decía «~81% del LCP móvil», y midiendo la misma página del mismo
