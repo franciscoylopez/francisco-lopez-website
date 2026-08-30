@@ -59,6 +59,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 - **SEO técnico**: metadata + `canonical` + `hreflang` por página, `robots.txt` y `sitemap.xml` (gateados por entorno) y datos estructurados JSON-LD (`ProfilePage`/`Person` en la home, `BreadcrumbList` en páginas internas, `WebPage` en el deep-dive).
 - **Qué páginas tiene el sitio no se escribe en ningún sitio**: las páginas del deep-dive, el índice, el sitemap, `llms.txt` y las tarjetas OG **derivan** de `content/experiences.ts` (`D44`, `D59`). Estaba escrito a mano en tres sitios.
 - **`llms.txt`**: resumen curado para LLMs y agentes, generado desde el diccionario y los datos de contacto.
+- **Markdown por página**: cada una se sirve también como markdown (`/md/<locale>/<pagina>.md`, o pidiendo `Accept: text/markdown`), derivado del `<main>` prerenderizado con `npm run md` y vigilado por `npm run md:verificar` en CI (`D158`).
 - **Imágenes Open Graph** de marca generadas al vuelo (`/api/og`, `next/og`).
 
 </details>
@@ -246,6 +247,7 @@ app/[lang]/dictionaries/{es,en}/  Diccionario PARTIDO POR PÁGINA (D48): common 
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i18n
+public/md/             Markdown de las 28 variantes, derivado del prerender (D158)
 app/global-*           404/500 de marca e i18n (global-not-found, global-error)
 
 components/ui/         Primitivas SIN conocimiento del contenido. QUÉ HAY DENTRO no se escribe

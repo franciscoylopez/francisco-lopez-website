@@ -254,6 +254,17 @@ jobs:
       - name: Marco de página
         run: npm run check:marco
 
+      # El markdown de `public/md/` es un ARTEFACTO DERIVADO del prerender (P67.2,
+      # D158): se genera con `npm run md` y se commitea, porque negociar `Accept`
+      # dentro de una página la haría dinámica y las 28 variantes tienen que seguir
+      # siendo estáticas (D48). Un artefacto commiteado se queda viejo en silencio
+      # —familia D60—, así que nace con su guardián el MISMO día y no cuatro
+      # después como `check:kit`. Vuelve a convertir el prerender y compara: si el
+      # copy de una página cambió y nadie regeneró, esto sale rojo nombrando la
+      # variante.
+      - name: Markdown al día
+        run: npm run md:verificar
+
       # El rótulo PINTADO de toda figura con lienzo escalado (P68.59). Un
       # `text-[11px]` dentro de un `viewBox` son 11 unidades de dibujo, no 11
       # píxeles: los siete diagramas del artículo llevaban desde que existen

@@ -80,9 +80,29 @@ const securityHeaders = [
     : []),
 ];
 
+// `Vary: Accept`, desde que el proxy negocia markdown (P67.2): la misma URL puede
+// devolver HTML o markdown, así que una caché compartida necesita saberlo.
+//
+// Y HASTA DÓNDE LLEGA, QUE ES LO QUE HAY QUE SABER AL LEER ESTO. Llega a los
+// `.md` y a los route handlers; NO llega a las 28 páginas prerenderizadas. Medido
+// el 2026-08-30 contra `next start`: en `/robots.txt` salen las dos cabeceras
+// (`vary: Accept` y `vary: rsc, …`), y en `/` sale solo la de Next. La diferencia
+// es el camino: una página que se sirve del prerender (`x-nextjs-cache: HIT`,
+// `x-nextjs-prerender: 1`) lleva el `Vary` que escribe Next, y ni esta
+// configuración ni el proxy pueden añadirle nada.
+//
+// POR ESO EL CONTRATO NO SE APOYA EN ESTA CABECERA. La vía estable para un agente
+// es la URL explícita `/md/<locale>/<pagina>.md`, que llms.txt anuncia; la
+// negociación por `Accept` es la comodidad que los dos escáneres piden, y detrás
+// de una caché compartida que ya tenga guardado el HTML puede no llegar. Está
+// dicho así en D158 y en `llms.txt`, en vez de prometer de más.
+const varyHeader = [{ key: "Vary", value: "Accept" }];
+
 const nextConfig: NextConfig = {
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: [...securityHeaders, ...varyHeader] },
+    ];
   },
   // Next emite `x-powered-by: Next.js` por defecto, que anuncia el stack a cualquiera
   // que mire las cabeceras y no aporta nada. Va aquí, junto a `headers()`, porque es

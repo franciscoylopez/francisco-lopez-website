@@ -55,6 +55,10 @@ consentimiento RGPD) · **dominio propio** · **páginas 404/500 de marca e i18n
 **cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy,
 Permissions-Policy, HSTS y CSP con allowlist mínima).
 
+**Cada página se sirve también en markdown** para quien la lea con un agente: el `<main>` sin
+el HTML de alrededor, por URL explícita (`/md/<locale>/<pagina>.md`, la vía estable) o pidiendo
+`Accept: text/markdown`. La home baja de 216 a 6,6 KB (D158).
+
 **La marca no termina en el dominio.** Firma de email, banner de LinkedIn y portada del
 repositorio comparten el titular del Hero, «Del discovery al dato», y el mismo monograma:
 la prueba de coherencia que un sistema de marca solo puede dar fuera de su propio sitio.
@@ -165,6 +169,7 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | **Gate de accesibilidad** | `agent-browser` conducido por el subagente `viewport-verifier`: viewports × temas + `reduced-motion`. Se dispara **dos veces**, y la primera mientras se dibuja | a mano | D50/D52 |
 | **Pasada con NVDA** | Lo que **no incumple ninguna regla** y por tanto ningún motor automático puede señalar. Sobre el sitio entero, no por página; lo que encuentra se publica en `/accesibilidad` | a mano | D73 |
 | `check:marco` | El criterio de cierre de página nueva, sobre el HTML **prerenderizado** de las 28 variantes: axe estructural, enlace de salto, `h1` y jerarquía, breadcrumb, que la metadata derivada llegó, que el `?card=` de cada variante resuelve a su propia tarjeta, y que los `@id` del JSON-LD resuelven **dos veces**: contra el sitio entero y dentro de cada página (D87). **Fuera:** contraste y objetivo táctil, que se heredan y necesitan pintar | CI | D75/D87 |
+| `md:verificar` | Que el markdown commiteado de las 28 variantes siga siendo el que emite la página, reconvirtiendo el prerender. **Fuera:** que el markdown sea bonito | CI | D158 |
 | `check:figuras` | El rótulo **pintado** de toda figura con lienzo escalado, sobre el prerender: dentro de un `viewBox` el `font-size` computado no dice el tamaño real. **Fuera:** por debajo de 360, que es suelo del rótulo y no del sitio | CI | D114/D124 |
 | `check:marcas` | Que los nombres propios lleguen al HTML con `translate="no"`, recorriendo los nodos de TEXTO de las 28 variantes. **Fuera:** el `<head>`, los atributos y el interior de un `<svg>` | CI | D116 |
 | `npm test` | La lógica que no necesita navegador, y **cuáles son lo dice `tests/`**: enumerarlas aquí ya caducó una vez. Hoy, el formulario (medido sobre lo que nodemailer **emite**), las reglas del tablero, el criterio de `check:enlaces` y la geometría del `sizes` del artículo. **Fuera:** todo lo que necesite pintar | CI | D101/D107/D141 |

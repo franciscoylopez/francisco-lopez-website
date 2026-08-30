@@ -91,6 +91,7 @@ export const DIAGRAMA_CI: Record<Locale, DiagramaCI> = {
         items: [
           { n: "Build", cat: "patron" },
           { n: "Marco de página", cat: "ausencia" },
+          { n: "Markdown al día", cat: "ausencia" },
           { n: "Rótulo de las figuras", cat: "ausencia" },
           { n: "Nombres propios sin traducir", cat: "ausencia" },
           { n: "Guardianes con dientes", cat: "ausencia" },
@@ -143,6 +144,7 @@ export const DIAGRAMA_CI: Record<Locale, DiagramaCI> = {
         items: [
           { n: "Build", cat: "patron" },
           { n: "Page frame", cat: "ausencia" },
+          { n: "Markdown up to date", cat: "ausencia" },
           { n: "Figure labels", cat: "ausencia" },
           { n: "Untranslated proper nouns", cat: "ausencia" },
           { n: "Guardians with teeth", cat: "ausencia" },

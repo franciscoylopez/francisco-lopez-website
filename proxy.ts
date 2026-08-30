@@ -21,15 +21,71 @@ function withLocale(request: NextRequest, locale: string) {
   return headers;
 }
 
+// Negociación de contenido para agentes (P67.2). Un agente que pide markdown se
+// lleva el `<main>` de la misma página en unos KB en vez de las 218 del HTML.
+//
+// POR QUÉ AQUÍ Y NO EN LA PÁGINA. Leer `Accept` dentro de una página la haría
+// DINÁMICA, y que las 28 variantes sigan prerenderizándose es criterio de
+// aceptación (D48). El proxy corre antes y reescribe a un archivo estático, así
+// que la negociación no le cuesta el prerender a nadie.
+const MARKDOWN = "text/markdown";
+
+/**
+ * TOKEN EXACTO, NO `includes`. Un navegador manda
+ * `text/html,application/xhtml+xml,…,*​/*`, y cualquier cliente puede mandar
+ * `*​/*`: con una comprobación laxa, el sitio serviría markdown a una persona.
+ * Se pide el tipo por su nombre o no se pide.
+ */
+function quiereMarkdown(request: NextRequest): boolean {
+  return (request.headers.get("accept") ?? "")
+    .split(",")
+    .some((t) => t.trim().split(";")[0]?.toLowerCase() === MARKDOWN);
+}
+
+/**
+ * La misma silueta que deja el prerender y que escribe `npm run md`: la home es
+ * `<locale>.md` y no `<locale>/index.md`.
+ */
+function rutaMarkdown(locale: string, resto: string): string {
+  return `/md/${locale}${resto === "/" || resto === "" ? "" : resto}.md`;
+}
+
+/**
+ * `Vary: Accept` NO ES OPCIONAL desde que la misma URL puede devolver dos cosas:
+ * sin él, una caché intermedia le sirve a una persona el markdown que pidió un
+ * agente, o al revés. Se AÑADE a lo que Next ya pone (`rsc`,
+ * `next-router-state-tree`, …) en vez de sustituirlo, que es el modo de fallo
+ * que este proyecto ya conoce: reemplazar una cabecera compuesta rompe lo que no
+ * escribiste tú.
+ */
+function conVary(respuesta: NextResponse): NextResponse {
+  const previo = respuesta.headers.get("Vary");
+  const partes = previo
+    ? previo.split(",").map((v) => v.trim())
+    : ([] as string[]);
+  if (!partes.some((v) => v.toLowerCase() === "accept")) partes.push("Accept");
+  respuesta.headers.set("Vary", partes.join(", "));
+  return respuesta;
+}
+
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const markdown = quiereMarkdown(request);
 
   if (pathname === "/en" || pathname.startsWith("/en/")) {
-    return NextResponse.next({
-      request: { headers: withLocale(request, "en") },
-    });
+    if (markdown) {
+      const url = request.nextUrl.clone();
+      url.pathname = rutaMarkdown("en", pathname.slice("/en".length));
+      return conVary(NextResponse.rewrite(url));
+    }
+    return conVary(
+      NextResponse.next({ request: { headers: withLocale(request, "en") } }),
+    );
   }
 
+  // El redirect de `/es` va ANTES de la negociación a propósito: el canónico no
+  // depende de lo que se pida, y servir markdown desde una URL no canónica
+  // publicaría un segundo sitio en el idioma por defecto.
   if (pathname === "/es" || pathname.startsWith("/es/")) {
     const url = request.nextUrl.clone();
     url.pathname = pathname.slice("/es".length) || "/";
@@ -37,10 +93,16 @@ export function proxy(request: NextRequest) {
   }
 
   const url = request.nextUrl.clone();
+  if (markdown) {
+    url.pathname = rutaMarkdown(defaultLocale, pathname);
+    return conVary(NextResponse.rewrite(url));
+  }
   url.pathname = `/${defaultLocale}${pathname === "/" ? "" : pathname}`;
-  return NextResponse.rewrite(url, {
-    request: { headers: withLocale(request, defaultLocale) },
-  });
+  return conVary(
+    NextResponse.rewrite(url, {
+      request: { headers: withLocale(request, defaultLocale) },
+    }),
+  );
 }
 
 export const config = {

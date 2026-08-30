@@ -135,6 +135,19 @@ ${es.contacto.intro}
 
 ${pageList()}
 
+## Markdown para agentes
+
+Cada página se sirve también en markdown, solo el contenido y sin el HTML de alrededor
+(la home pesa unos 6 KB en vez de 218 KB). Dos vías, y la primera es la estable:
+
+- Por URL directa: ${SITE_URL}/md/es/sobre-mi.md (la home es ${SITE_URL}/md/es.md, y el
+  inglés va en /md/en/). El patrón es /md/<idioma>/<misma ruta que la página>.md
+- Por negociación: pide la página de siempre con la cabecera Accept: text/markdown.
+  Es una comodidad, y detrás de una caché compartida puede no llegar; la URL directa
+  siempre llega.
+
+El markdown sale del contenido publicado de cada página, así que dice lo mismo que ella.
+
 ## Trayectoria (Producto)
 
 ${trayectoriaList()}

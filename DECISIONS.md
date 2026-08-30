@@ -193,6 +193,7 @@
 - D155 · Una señal fija que no distingue es decoración con forma de aviso
 - D156 · La invariante del pliegue pasa a sostenerse por construcción, y el corte está escrito
 - D157 · La nota de un escáner agéntico no es un criterio de aceptación, y su hallazgo más ruidoso no reproduce
+- D158 · El markdown para agentes sale del `<main>` prerenderizado, y es un artefacto commiteado con guardián
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9650,3 +9651,86 @@ en la comprobación que sí protege algo.
 
 **Estado:** Aceptada. La entrada se cierra con el sprint; si alguna de las tres tareas cambia de
 alcance, es aquí donde se anota por qué.
+
+---
+
+## D158 · El markdown para agentes sale del `<main>` prerenderizado, y es un artefacto commiteado con guardián — 2026-08-30
+
+**Decisión.** Cada página se sirve también en markdown. El texto sale del **`<main>` del HTML
+prerenderizado**, se genera con `npm run md` como **artefacto commiteado** en `public/md/`, y se
+llega a él por **dos vías**: la URL explícita `/md/<locale>/<pagina>.md` —que es la estable— y la
+**negociación por `Accept: text/markdown`**, que resuelve el proxy. Medido: la home pasa de
+**216.323 a 6.585 bytes**, 33 veces menos, y las **28 variantes** responden.
+
+**De dónde sale el texto: del HTML, no del diccionario.** Las tres razones están en la ficha de
+P67.2 y dos ya eran reglas: **D38** sacó del diccionario todo valor publicado, así que un
+compositor de diccionario sería *estructuralmente incapaz* de contener las cifras que varias
+páginas existen para publicar (el diccionario de la home pesa ~440 palabras y la página emite 75
+`p`, 7 `h2` y 10 `h3`); sería un **segundo renderizador** de lo mismo, la familia mejor
+documentada de este proyecto; y **D75** ya decidió que la verdad de una página es el HTML que
+emite. Se ancla en `<main>` porque es exactamente el contenido y porque «un solo `main` por
+página» **ya lo vigila `check:marco`**: es la diferencia entre elegir un selector y elegir uno que
+alguien ya defiende.
+
+**Y artefacto commiteado, no ruta dinámica, por una condición que no se negocia:** leer `Accept`
+dentro de una página la haría dinámica, y que las 28 variantes sigan prerenderizándose es criterio
+de aceptación (D48). El proxy corre antes y reescribe a un archivo estático, así que la
+negociación no le cuesta el prerender a nadie. La contrapartida —un artefacto commiteado se queda
+viejo— es la familia D60, y por eso **`md:verificar` nace en CI el mismo día**, no cuatro después
+como `check:kit`. En su primera corrida ya cazó dos variantes.
+
+### El conversor es propio, y su regla es fallar en voz alta
+
+`turndown` ante una etiqueta que no conoce la tira en silencio y deja un agujero que nadie ve. Con
+un `<main>` que emite un conjunto pequeño y conocido de elementos —porque todo sale de la capa—,
+la lista puede ser un **contrato**: lo que no está, **rompe el build nombrando la etiqueta y su
+contexto**. Es «afirma cuánto has mirado» aplicado a un conversor. Y las reglas viven aparte de la
+E/S (`convertir.ts` ↔ `extraer.ts`, misma partición que `tablero/reglas.ts`), con **16 casos en
+`npm test`**, caso malo incluido.
+
+### Dos elementos pegados sin texto en medio estaban separados por CSS
+
+Es el hallazgo reutilizable, y salió del prerender, no de un ejemplo. El HTML no dice qué
+separaba la hoja de estilos, así que un conversor por etiquetas pega los rótulos:
+
+| Dónde | Lo que salía | Lo que sale |
+|---|---|---|
+| El enlace de correo de `/contacto` | `Correofranciscojavier.lopezmartinez@gmail.com` | `Correo · franciscojavier…` |
+| La cabecera de Hitos, tres `<span>` hermanos | `NombreImpactoAño` | `Nombre · Impacto · Año` |
+
+**La señal es «elemento inmediatamente después de elemento», y en prosa no se dispara por
+construcción:** React emite el espacio entre palabras como nodo de TEXTO, así que entre un
+`<strong>` y lo que sigue siempre hay uno. El separador es el `·` que `CLAUDE.md` reserva justo
+para separar dos etiquetas. Los dos casos son test.
+
+### El `Vary` no llega a la página prerenderizada, y eso cambia lo que se promete
+
+Se puso `Vary: Accept` en el proxy, no llegó; se puso además en `next.config.ts`, tampoco. Medido
+contra `next start` el 2026-08-30:
+
+| Ruta | `Vary` servido |
+|---|---|
+| `/md/es.md` y `/robots.txt` | `Accept` **sí** llega (en `robots.txt` salen las dos cabeceras) |
+| `/` y `/en/sobre-mi` | solo el de Next: `rsc, next-router-state-tree, …, Accept-Encoding` |
+
+La diferencia es el camino: una página servida del prerender (`x-nextjs-cache: HIT`,
+`x-nextjs-prerender: 1`) lleva el `Vary` que escribe Next, y **ni el proxy ni `headers()` pueden
+añadirle nada**.
+
+> **Así que el contrato no se apoya en esa cabecera.** La vía estable es la **URL explícita**, que
+> `llms.txt` anuncia; la negociación por `Accept` es la comodidad que piden los dos escáneres, y
+> detrás de una caché compartida que ya tenga guardado el HTML puede no llegar. **Está dicho así
+> en `llms.txt`, en vez de prometer de más** — que es el fallo que `BRAND.md` ya se anotó cuando
+> la regla del control sobre imagen prometía un contorno entero.
+
+### Lo que cuesta, dicho antes de que lo diga nadie
+
+- **Las páginas muy visuales dan un markdown más delgado que su página.** Es correcto, no un
+  defecto: lo que un agente puede usar de una rejilla de muestras de color *es* el texto.
+- **Lo que no entra se cuenta y se nombra en cada corrida:** 228 `svg` (ilustraciones), 96
+  controles —de los que **sí entra su etiqueta**, porque dice qué ofrece la página— y 460
+  elementos marcados `aria-hidden`. Un alcance recortado en silencio se lee como cobertura.
+- **Una fila de Hitos sale como bloques sueltos** («(01)», «Emendu», «2026»), porque en el DOM son
+  `div` hermanos y ahí no hay señal que distinguir. Se deja: la ficha puso fuera de alcance que el
+  markdown sea bonito, y adivinar qué `div` es una fila es justo la clase de listeza que hace
+  divergir un conversor de su página.

@@ -1,0 +1,123 @@
+---
+url: https://franciscolopez.es/en/trayectoria/emendu
+lang: en
+title: From manual sales to a SaaS with its own channel
+---
+
+1. [Home](https://franciscolopez.es/en)
+2. [Experience](https://franciscolopez.es/en/trayectoria)
+3. Emendu
+
+Emendu · B2B SaaS · IT Management
+
+# From manual sales to a SaaS with its own channel
+
+Role
+
+Product Manager
+
+Period
+
+Feb 2025 - Present
+
+Sector
+
+B2B SaaS · IT Management
+
+Team size
+
+From 8 to 16 people
+
+Reporting
+
+Member of the leadership team
+
+01 — In a minute
+
+## 01. Giving a brand-new SaaS a business model
+
+- **End-to-end product strategy, starting with the ICP.** · I redefined it through discovery outside the sales pipeline (companies of 20 to 150 employees with no in-house IT) and used it to reorient onboarding and the key flows: · **from 0 to more than 50 SaaS customers** · in the first year.
+- **From a manual operation to a digital, API-first system.** · Sales, Accounts and Operations worked outside the software and the operation left almost no trace: · **from 23% to 90% pipeline traceability** · .
+- **Strategic partnership with Sesame HR** · , led together with the Tech Lead: embedding the entire renting and MDM flow inside an HR software. · **Phase 1 delivered in 7 product weeks** · , and a new acquisition channel for Emendu.
+- **LISA, the AI agent:** · from an inconsistent system to a working agent, with dynamic access to data, living documentation and multilingual capabilities.
+- **From an outsourced SaaS to an in-house engineering team.** · The Bubble platform had validated the model, but it was slowing down precisely the two highest-value areas. I pushed for the change and took part in hiring the Tech Lead.
+- **As a product builder, I built the internal tooling hub** · , developed with Claude Code for reports, briefs and proposals: · **38% less time** · spent on operational management.
+
+02 — The story
+
+## 02. Making the SaaS stop being an add-on
+
+### The assumption nobody had questioned
+
+Emendu sold and operated soundly doing things by hand. It was a · **sales-led company with a SaaS on top** · , and the brief was not to manage a roadmap: it was to turn a brand-new SaaS into the company's main business model.
+
+Underneath sat an assumption nobody had challenged: the renting customer base was taken to be, one by one, the SaaS customer base. To test it I joined the sales team in · **more than 20 meetings** · and interviewed · **10 companies that were not in the pipeline** · . The assumption proved shaky, and that explained the weak uptake among those users: they used the beta, but never became paying customers.
+
+The finding split the market in two. Companies with in-house IT already covered almost everything we offered. In those without it, IT work fell on HR, on the office manager, on the CEO or on “whoever was around”. That is where the ICP came from ( · **companies of 20 to 150 employees with no in-house IT** · , with at least one of three pains: device management, remote support and no technical criteria to decide) and with it the whole 2025 roadmap: evolving the SaaS towards those pains, focusing on remote support, reorienting LISA and rewriting the product's language for whoever was actually going to use it.
+
+### The platform's ceiling
+
+What remained unvalidated was what it had been built with. The platform had been made by an external agency on · **Bubble** · , and that was the right call to validate. But it could not keep up with the development pace or the technical weight of what was coming (LISA and MDM, the two highest-value areas) and it carried three debts: · **no traceability** · (only 23% of operations were recorded in any system; the rest lived in emails and calls, and did not even exist as data), a · **concierge model** · (registering a device was handled by hand) and · **fragmented data** · , with no repository to feed automation or the agent.
+
+That is why I pushed for an in-house engineering team. Hiring the · **Tech Lead** · confirmed the needs we had already identified and added what I could not bring myself: a technical roadmap with order and dates.
+
+### When engineering is the scarce resource, I build it myself
+
+With the engineering team focused on the foundations and the agency winding down, what internal stakeholders were asking for had no way out. Instead of queueing it, I built it with · **Claude Code** · : a renting financial calculator and a proposal system integrated with HubSpot for Sales, report generation from the MDM for Account Managers, and a presentation design system for the whole company. Not for me: each piece has its own team.
+
+It is also where AI stopped being a lookup tool. Analysing interviews with AI let me review not only the user but · **myself as an interviewer** · ; v0 put working prototypes in customers' hands in the time it used to take to describe them.
+
+### From efficiency to channel
+
+With the technical roadmap on the table, · **Sesame HR** · appeared, and it changed the nature of the project. Until then, digitising the operation was · **efficiency** · : tidying up internally, removing manual work, being able to measure. A project like that has a known ceiling.
+
+A partnership changes it at the root. When a third party is going to consume your operation from inside their own product, that operation can no longer be “our processes, now documented” and has to become · **an interface** · : data contracts, explicit states and behaviour that does not depend on someone in Operations knowing what to do. The very thing that was going to make Emendu more efficient inside becomes, outside, an · **acquisition channel** · .
+
+Phase 2 (MDM) is in development today and the API work advances module by module: every integration that lands removes one manual step. Next is · **replicating the model in other sectors** · , so that partnerships become a channel and not an isolated deal.
+
+03 — The case
+
+## 03. The Sesame HR partnership
+
+Sesame HR is one of the largest HR software players in Spain, and the proposal cut both ways: their customers could request and manage a new employee's equipment · **from the same place where they already onboard them** · ; we would gain a B2B channel inside the customer's native workflow. The operational goal did not change: the architecture did, and the deadline was set by someone else.
+
+**Discovery on three fronts, to digitise without stopping a live operation.** · Inside: interviews with Operations, Sales and Account Managers to map every manual task. Outside: the dependency map a renting operation hangs from: financial institutions, hardware suppliers, identity verification, insurers, digital signature. And Sesame: their flows and the approach they wanted for the service.
+
+**The technical decision was a transition, not a rewrite.** · A single backoffice behind an API, fed in the first phase by the internal team ( · _human in the loop_ · ) so that traceability did not wait for the integrations; that backoffice as LISA's brain and data source; and progressive API work, each external tool removing one manual step. To hit the partner's deadline I scoped it down: · **phase 1, renting end to end** · ; MDM to phase 2.
+
+**The artefacts.** · A product spec with features, data contracts and sub-processes; · **flow diagrams as code** · with their states and transitions (the engineering team had just joined, and a state diagram leaves no room for interpretation where a list of requirements does); and a · **navigable HTML prototype, low fidelity and with no UI** · , which became the only shared language of four audiences at once: engineering, Operations and Sales, Sesame, and product.
+
+### The MDM module as a state machine
+
+State map of the MDM module in four blocks. Activation (flow 0): from the active renting module, the superadmin opens the MDM section, sees which devices can be activated and confirms, which leaves MDM active; cancelling returns to the section. With MDM active, three surfaces open in parallel: the MDM module for the fleet, with consolidated dashboard, catalogue and declarative packages (flow 4), company and team policies (flow 5), teams as the single source Renting consumes (flow 7), and the configuration tab; the inventory and its MDM tab, with administrative data, device management and a derived timeline; and enrollment (flow 1), where computers stay pending installation and become active once the employee installs the agent, disconnected if the agent loses connection for a long period, and back to pending if it is uninstalled when someone leaves; smartphones, tablets and accessories are not eligible. Finally, cancellation (flow 6): the superadmin schedules it, can reactivate before the period ends, and when it ends the MDM provider is offboarded and the module is cancelled.
+
+The main flow: the whole process in a single view. The engineering team, which had just joined, used it as the contract, with seven numbered flows, their states and the jumps between them; each one also had its own diagram with the detail of its phase. A list of requirements leaves room for interpretation; a state diagram does not, and it tells the reader where they are in the document.
+
+### Results
+
+- 23% → 90%
+  
+  pipeline traceability, 67 percentage points more operations with a trace in the system
+- −24%
+  
+  manual time across the internal teams
+- 31%
+  
+  of processes automated end to end, with the API work still ongoing
+
+Phase 1 delivered in · **7 product weeks** · , with weekly releases; the development that followed is already in production. Phase 2, · **5 product weeks** · , in development today. The documentation system, the prototype and the business logic were validated by the partner on the first delivery.
+
+And one result that is not a figure: process changes · **stopped being designed around what each area did by hand** · and are now designed from the backoffice.
+
+04 — Takeaways
+
+## 04. Four takeaways, and the costliest was an assumption
+
+1. **The most expensive thing in the first year was not building anything: it was an assumption nobody had questioned.** Taking for granted who you serve costs more than any mis-prioritised feature, because you cannot see it until you look outside your own pipeline.
+2. **A navigable prototype aligns better than a long specification.** With an external partner and an engineering team that had just joined, a low-fidelity HTML did in days what a document would not have done in weeks.
+3. **Digitising a process means changing who is in charge.** It is not about writing code: it is about the operation adapting to the system, instead of the system documenting the operation.
+4. **AI stopped being a lookup tool and became part of the method.** In interviews, in specs, in prioritisation and in prototypes. That is where my · _product builder_ · stage comes from.
+
+Keep reading
+
+[Previous role · KUOTIP · Cofounder & Product · Feb 2024 - Dec 2024](https://franciscolopez.es/en/trayectoria/kuotip)
