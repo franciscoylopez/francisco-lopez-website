@@ -194,6 +194,7 @@
 - D156 · La invariante del pliegue pasa a sostenerse por construcción, y el corte está escrito
 - D157 · La nota de un escáner agéntico no es un criterio de aceptación, y su hallazgo más ruidoso no reproduce
 - D158 · El markdown para agentes sale del `<main>` prerenderizado, y es un artefacto commiteado con guardián
+- D159 · El guardián propio en vez del escáner ajeno: `check:agentes`
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9756,3 +9757,48 @@ en CI nombrando la variante, no en producción.
 *Es, además, la confirmación de por qué el guardián tenía que nacer el mismo día que el artefacto:
 si hubiera entrado en la tanda 5, entre medias habrían pasado tres tandas con el markdown diciendo
 lo de antes y nadie mirándolo.*
+
+## D159 · El guardián propio en vez del escáner ajeno: `check:agentes` — 2026-08-30
+
+**Decisión.** Lo que este sitio le promete a un agente lo vigila un guardián **nuestro** en CI
+—`npm run check:agentes`— y **no** la nota de ninguno de los dos escáneres públicos que abrieron
+el sprint. Vigila exactamente las invariantes que este sprint adoptó, y ninguna más.
+
+**La pregunta que lo abrió fue si había un plugin o una skill para meter esos escáneres en la
+rutina, y la respuesta honesta es que no debería haberla**, por dos razones que este repo ya
+tenía medidas. **Su nota mezcla lo que aplica con lo que no:** un 20/100 donde doce de los checks
+son de superficies que el sitio no tiene no es una señal, es ruido con forma de nota, y
+perseguirla lleva a publicar un `api-catalog` sin API — que es justo lo que P67 descartó tras
+verificar los hallazgos uno a uno. **Y un metro que no controlamos cambia sin avisar:** sus
+checks son estándares emergentes en borrador, así que el día que uno se mueva el gate se pone
+rojo o verde por algo que no hemos decidido. Un escáner es **descubrimiento** —se pasa cuando se
+quiere mirar—; la rutina es esto. Es el criterio de **D51**: si se dispara en un evento y no
+requiere criterio, es un script en CI.
+
+### Lo reutilizable: mira en tres sitios distintos porque la promesa ocurre en tres sitios
+
+Es la regla 1 de `BRAND.md` §Cómo se escribe una regla —la condición se comprueba **donde** la
+cosa ocurre— aplicada a un solo guardián, y mezclarlas habría sido el fallo:
+
+| Qué promete | Dónde se comprueba | Por qué no vale el prerender |
+|---|---|---|
+| `llms.txt` nombra las catorce y trae sus dos secciones | El **artefacto** del build | Es un archivo, no una página |
+| Markdown a quien lo pide, HTML a un navegador, `Vary: Accept` en ambos | **Ejecutando `proxy()`** | Una cabecera no está en el HTML: el prerender no sabe con qué `Vary` se sirvió |
+| `robots.txt` abre en producción y cierra fuera (D13) | **Ejecutando `robots()`** en los dos entornos | El robots que se construye en CI es el de **no** producción: leerlo daría por bueno un `Disallow: /` |
+
+**El caso de `robots` es el que más enseña.** Un guardián que leyera el artefacto habría
+certificado exactamente lo contrario de lo que cree, y en verde. Y comprueba **los dos** entornos
+a propósito: el día que este gate diera rojo, la salida fácil sería quitarle a `robots()` su gateo
+por entorno y dejar todo abierto, y entonces un preview de rama se indexaría.
+
+### Lo que deja fuera, y lo dice
+
+La nota de ningún escáner, lo primero. Y **el estado HTTP real**: que una ruta inexistente
+devuelva 404 se comprueba por **estructura** —que no aparezca un segmento catch-all, que es lo
+que de verdad convierte los 404 de un sitio en 200 vacíos— y no haciendo la petición, que
+necesitaría servidor. Es un proxy honesto del modo de fallo, no la medición, y va escrito en la
+cabecera del script y en la fila de `PRD-Live`.
+
+Nace con **tres casos malos en `check:guardianes` el mismo día**, uno por cada una de las tres
+fuentes, y no cuatro días después como `check:kit`. Los seis que se le probaron al escribirlo
+—incluido el `includes` que le serviría markdown a un navegador— los rechaza todos.

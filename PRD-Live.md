@@ -170,6 +170,7 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 | **Pasada con NVDA** | Lo que **no incumple ninguna regla** y por tanto ningún motor automático puede señalar. Sobre el sitio entero, no por página; lo que encuentra se publica en `/accesibilidad` | a mano | D73 |
 | `check:marco` | El criterio de cierre de página nueva, sobre el HTML **prerenderizado** de las 28 variantes: axe estructural, enlace de salto, `h1` y jerarquía, breadcrumb, que la metadata derivada llegó, que el `?card=` de cada variante resuelve a su propia tarjeta, que los `@id` del JSON-LD resuelven **dos veces** —contra el sitio entero y dentro de cada página (D87)—, y que la metadata y el marcado dicen lo mismo del mismo contenido: `og:type=article` ⇔ un solo `<article>`, en los dos sentidos. **Fuera:** contraste y objetivo táctil, que se heredan y necesitan pintar | CI | D75/D87 |
 | `md:verificar` | Que el markdown commiteado de las 28 variantes siga siendo el que emite la página, reconvirtiendo el prerender. **Fuera:** que el markdown sea bonito | CI | D158 |
+| `check:agentes` | Lo que el sitio le **promete** a un agente, comprobado **donde ocurre**: `llms.txt` y el markdown de las 28, en el artefacto; la negociación y el `Vary`, ejecutando `proxy()`; y `robots()` en sus **dos** entornos, porque el que se construye en CI es el de no producción. **Fuera:** la nota de ningún escáner, lo primero y a propósito, y el estado HTTP real, que se mira por estructura (ningún catch-all) y no pidiendo la URL | CI | D159 |
 | `check:figuras` | El rótulo **pintado** de toda figura con lienzo escalado, sobre el prerender: dentro de un `viewBox` el `font-size` computado no dice el tamaño real. **Fuera:** por debajo de 360, que es suelo del rótulo y no del sitio | CI | D114/D124 |
 | `check:marcas` | Que los nombres propios lleguen al HTML con `translate="no"`, recorriendo los nodos de TEXTO de las 28 variantes. **Fuera:** el `<head>`, los atributos y el interior de un `<svg>` | CI | D116 |
 | `npm test` | La lógica que no necesita navegador, y **cuáles son lo dice `tests/`**: enumerarlas aquí ya caducó una vez. Hoy, el formulario (medido sobre lo que nodemailer **emite**), las reglas del tablero, el criterio de `check:enlaces` y la geometría del `sizes` del artículo. **Fuera:** todo lo que necesite pintar | CI | D101/D107/D141 |
@@ -224,11 +225,8 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
   El transporte está entero y en GA4 es **evento clave** desde el 2026-08-24; la marca no es
   retroactiva, así que **antes de esa fecha no hay serie**. Cómo se audita la mitad que vive
   fuera del repo, en D71.
-  **Y «cuando el servidor confirma» era ambiguo** *(2026-08-29, D153)*: el `status: "sent"` tiene
-  **tres causas** —el envío y los dos filtros que callan, honeypot y suelo de 3 s— y solo una
-  manda correo. Se cuenta esa, y lo decide `cuentaComoEnvio` en `lib/contact-form.ts`, no una
-  comparación en el componente: ahí la regla tiene tests y caso malo. El silencio hacia el bot
-  no se toca; propagarlo a la analítica era lo que estaba mal.
+  **«Confirma» es el envío que manda correo, no los dos filtros que callan a un bot**: lo decide
+  `cuentaComoEnvio` en `lib/contact-form.ts`, donde la regla tiene tests y caso malo (D153).
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
   Trayectoria, Contacto) y profundidad de scroll.
 - **Herramienta**: GA4 (captura scroll y descarga de fábrica).

@@ -242,6 +242,52 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replace("<main ", "<article></article><main "),
   },
   {
+    guardian: "check:agentes",
+    rotura: "`llms.txt` deja de nombrar una página del registro",
+    // El modo de fallo REAL, y el que este archivo ya tuvo: las cinco páginas del
+    // deep-dive existían y `llms.txt` no las enlazaba, así que un modelo que
+    // leyera el índice no podía descubrir el contenido más profundo del sitio
+    // (P50). El tipo impide olvidar una página al compilar; esto comprueba que
+    // además LLEGÓ al texto, que es otra cosa. Muerde el artefacto del build
+    // porque es ahí donde el archivo existe de verdad.
+    archivo: ".next/server/app/llms.txt.body",
+    mutar: (o) =>
+      o.replace(
+        new RegExp("https?://[^\\s)]*/cookies"),
+        "https://ejemplo.test/x",
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura:
+      "el proxy deja de poner `Vary: Accept` y una caché mezcla los dos cuerpos",
+    // La misma URL devuelve HTML o markdown según el `Accept`, así que sin
+    // `Vary` una caché compartida le sirve a una persona el markdown que pidió un
+    // agente, o al revés. No se ve en el prerender —el HTML no sabe con qué
+    // cabeceras se sirvió—, así que el guardián EJECUTA `proxy()` y por eso este
+    // caso muerde el código del proxy y no un artefacto.
+    archivo: "proxy.ts",
+    mutar: (o) =>
+      o.replace(
+        'if (!partes.some((v) => v.toLowerCase() === "accept")) partes.push("Accept");',
+        "",
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "robots.txt se abre en todos los entornos y un preview se indexa",
+    // La salida fácil el día que el gate diera rojo sería quitarle a `robots()` su
+    // gateo por entorno. Entonces un deployment de rama entraría en el índice, que
+    // es justo lo que D13 evita. Por eso el guardián comprueba los DOS entornos y
+    // no solo el bueno: certificar solo producción dejaría esta puerta abierta.
+    archivo: "app/robots.ts",
+    mutar: (o) =>
+      o.replace(
+        'const isProduction = process.env.VERCEL_ENV === "production";',
+        "const isProduction = true;",
+      ),
+  },
+  {
     guardian: "md:verificar",
     rotura:
       "el markdown commiteado de una página deja de decir lo que dice la página",

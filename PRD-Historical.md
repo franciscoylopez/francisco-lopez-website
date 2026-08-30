@@ -91,6 +91,7 @@
 - [La tanda 5 de «Voz», que era toda de andamiaje — 2026-08-30](#la-tanda-5-de-voz-que-era-toda-de-andamiaje--2026-08-30)
 - [El cierre de «Voz» — 2026-08-30](#el-cierre-de-voz--2026-08-30)
 - [El sprint «Agentes» — abierto el 2026-08-30](#el-sprint-agentes--abierto-el-2026-08-30)
+- [La tanda 3 y la 4 de «Agentes», y lo que el techo de contexto obligó a retirar — 2026-08-30](#la-tanda-3-y-la-4-de-agentes-y-lo-que-el-techo-de-contexto-obligó-a-retirar--2026-08-30)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -4067,6 +4068,42 @@ cifras, corregidas en `design-values.ts`, que es donde D38 dice que viven.
 *La lección de orden, que no llega a convención porque ya la vigila un guardián: un sello se pone al
 final, sobre el estado final del árbol. Se incumplió dos veces en la misma sesión y las dos salieron
 en rojo, que es exactamente lo que tiene que pasar.*
+
+
+## La tanda 3 y la 4 de «Agentes», y lo que el techo de contexto obligó a retirar — 2026-08-30
+
+**La tanda 3** puso la sección «Cuándo usar esta fuente» en `llms.txt` y los tres elementos
+semánticos que faltaban. Las tres decisiones que cambiaron respecto a lo escrito en las fichas
+—dónde vive el copy, de qué cuelga la invariante del `<article>` y qué fechas existen de verdad—
+están en las propias fichas y en D159; aquí queda lo que no es de una tarea.
+
+**La tanda 4 estrenó `check:agentes` (D159), y lo que enseña es dónde mira cada cosa.** Un solo
+guardián con **tres fuentes distintas**, porque la promesa ocurre en tres sitios: el artefacto de
+`llms.txt`, el proxy **ejecutado** —una cabecera no está en el prerender— y `robots()` con sus dos
+entornos, porque el `robots.txt` que se construye en CI es el de **no** producción y leerlo habría
+certificado en verde lo contrario de lo que se cree.
+
+### El techo de contexto es una regla de suma cero, y así se nota
+
+Añadir la fila del gate nuevo a la tabla de `PRD-Live` **tiró `check:contexto`**: 12.341 palabras
+contra un techo de 12.300. El guardián no pide recortar lo recién escrito, pide **retirar**, y su
+primera pregunta —¿hay párrafos fechados en `PRD-Live`?— señalaba a uno concreto: la aclaración
+del 2026-08-29 sobre qué cuenta como envío del formulario, que narraba una corrección (el
+`status: "sent"` tenía tres causas y solo una manda correo) donde bastaba la regla en presente.
+La regla se queda en una línea y apunta a `cuentaComoEnvio`; el relato baja aquí y a D153.
+
+**Lo reutilizable: un documento @-importado con techo convierte cada añadido en una decisión de
+qué sale.** Sin el techo, la tabla de gates habría crecido una fila por sprint hasta que nadie la
+leyera, que es exactamente el destino del que este método intenta escapar.
+
+### Qué contaba como envío, antes de que la regla quedara en una línea *(2026-08-29, D153)*
+
+`status: "sent"` tenía **tres causas** —el envío de verdad y los dos filtros que callan a un bot,
+el honeypot y el suelo de 3 segundos— y solo una manda correo. La analítica las contaba las tres,
+así que la métrica primaria del sitio incluía bots silenciados. Se corrigió contándola en
+`cuentaComoEnvio` (`lib/contact-form.ts`) y no con una comparación en el componente: ahí la regla
+tiene tests y caso malo. **El silencio hacia el bot no se tocó** —callar es lo correcto—;
+propagarlo a la analítica era lo que estaba mal.
 
 ## Fuentes
 

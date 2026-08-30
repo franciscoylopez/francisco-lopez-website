@@ -290,6 +290,20 @@ jobs:
       - name: Nombres propios sin traducir
         run: npm run check:marcas
 
+      # Lo que este sitio le PROMETE a un agente (P68). Nace de una pregunta con
+      # respuesta incómoda: no, los dos escáneres de agentes no se enganchan a la
+      # rutina, y no deberían. Su nota mezcla lo que aplica con lo que no —un
+      # 20/100 donde doce checks son de superficies que el sitio no tiene— y sus
+      # reglas son borradores que cambian sin avisar, así que el gate se pondría
+      # rojo o verde por algo que no hemos decidido. Un escáner es DESCUBRIMIENTO;
+      # la rutina es un guardián nuestro sobre las invariantes que este sprint
+      # adoptó. Mira en tres sitios distintos a propósito: el ARTEFACTO de
+      # llms.txt, el proxy EJECUTADO (una cabecera no está en el prerender) y
+      # `robots()` con sus dos entornos, porque el robots.txt que se construye en
+      # CI es el de NO producción (D13) y leerlo daría por bueno un Disallow.
+      - name: Promesas a los agentes
+        run: npm run check:agentes
+
       # Y el que mira a todos los demás: a cada guardián le pasa un caso malo
       # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que
       # funciona — el modo de fallo de un guardián es una luz verde, y el censo de
