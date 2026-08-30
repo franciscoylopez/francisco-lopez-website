@@ -219,6 +219,29 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replaceAll("card=contacto", "card=home"),
   },
   {
+    guardian: "check:marco",
+    rotura:
+      "un artículo se sirve dentro de un `<section>` mientras su `og:type` dice `article`",
+    // El caso malo es el estado del sitio hasta P67.6: seis páginas declaraban
+    // `og:type: "article"` —y una además `TechArticle` en su JSON-LD— y ninguna
+    // servía un `<article>`. Dos capas de la misma página afirmando cosas
+    // distintas, y nada que las cruzara. Muerde el build por lo de siempre: lo
+    // que este guardián mira es el HTML emitido.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) =>
+      o.replace("<article>", "<section>").replace("</article>", "</section>"),
+  },
+  {
+    guardian: "check:marco",
+    rotura: "un trozo de una página cualquiera se envuelve en un `<article>`",
+    // LA VUELTA de la invariante, y no es simetría por gusto: sin ella, envolver
+    // media página de más pasaría igual de verde. `<article>` significa
+    // «contenido autónomo y redistribuible»; repartido por una página que no lo
+    // es, deja de decir nada.
+    archivo: ".next/server/app/es/contacto.html",
+    mutar: (o) => o.replace("<main ", "<article></article><main "),
+  },
+  {
     guardian: "md:verificar",
     rotura:
       "el markdown commiteado de una página deja de decir lo que dice la página",
