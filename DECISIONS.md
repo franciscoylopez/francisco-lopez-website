@@ -9734,3 +9734,25 @@ añadirle nada**.
   `div` hermanos y ahí no hay señal que distinguir. Se deja: la ficha puso fuera de alcance que el
   markdown sea bonito, y adivinar qué `div` es una fila es justo la clase de listeza que hace
   divergir un conversor de su página.
+
+### Y el coste que no estaba previsto: cada entrada de aquí caduca el markdown del artículo
+
+Lo encontró CI en la primera corrida del guardián, y la causa no era ninguna de las dos que se
+plantearon primero. El artículo enlaza sus fuentes con **enlaces profundos que llevan número de
+línea** (`DECISIONS.md?plain=1#L1165`), calculados en el build. Y el índice de la cabecera de este
+archivo **lo genera `npm run indices` con una línea por entrada**, así que **una D nueva empuja una
+línea a todas las de debajo**: D157 y D158 movieron **22 enlaces** entre las dos variantes del
+artículo.
+
+> **Consecuencia, dicha entera: casi todo PR de este proyecto añade una entrada aquí, así que casi
+> todo PR deja el markdown del artículo viejo.** El guardián lo caza y el arreglo es un comando
+> (`npm run build && npm run md`), pero es fricción recurrente y no se descubre leyendo el diseño.
+
+**No se arregla quitando los números de línea**, que son lo que hace que el enlace caiga en la
+entrada y no en un archivo de 9.000 líneas. Y no se arregla generando en el build, que es la
+opción que D48 ya cerró. Se acepta, y lo que la hace aceptable es que **el fallo es ruidoso**: sale
+en CI nombrando la variante, no en producción.
+
+*Es, además, la confirmación de por qué el guardián tenía que nacer el mismo día que el artefacto:
+si hubiera entrado en la tanda 5, entre medias habrían pasado tres tandas con el markdown diciendo
+lo de antes y nadie mirándolo.*
