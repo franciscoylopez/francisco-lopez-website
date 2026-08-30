@@ -198,6 +198,7 @@
 - D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina
 - D161 · Cuatro huecos que vio un escáner ajeno, y el que no se tapa
 - D162 · El barrido de huérfanos se queda en `logo-kit`, y eso se decide en vez de heredarse
+- D163 · La sección más pesada del arranque era la que nadie lee hasta que algo sale rojo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9999,3 +10000,67 @@ día que aparezca en `public/` una segunda carpeta **enumerada por un registro d
 misma condición que cumple `logo-kit`—, y entonces lo que se escribe no es un barrido general
 sino el segundo caso del mismo patrón. Mientras la respuesta sea «hay una sola», generalizar es
 inventar indirección, y es la regla de D113 aplicada a un guardián en vez de a una capa.
+
+## D163 · La sección más pesada del arranque era la que nadie lee hasta que algo sale rojo — 2026-08-30
+
+**El dato, y no era el que decía la ficha.** P68.7405 nació el 2026-08-30 diciendo «quedan 13
+palabras de margen», que se lee como un accidente de una tanda. El octavo `method-review` midió
+la **curva** y el diagnóstico cambió de forma: 13.084 el 19 de agosto, 12.058 tras la primera
+poda, 12.695 tres días después, 12.698, 12.251 tras la segunda poda, 12.287 hoy. **La banda vive
+entre 12.058 y 12.698, y el objetivo declarado de 11.600 no se había alcanzado NUNCA** en toda la
+vida del techo. Dos podas reales, las dos funcionaron, y las dos acabaron rozando el techo otra
+vez.
+
+**La familia, que es lo que lo hace una decisión y no una limpieza.** No es «el umbral que
+persigue al dato» del catálogo, porque **ese techo no se ha movido nunca** —0 de 3 en el ciclo,
+verificado por el propio `check:contexto`—. Es su imagen especular, y el `method-review` la dio
+de alta con nombre: **el dato que persigue al techo**. El techo aguanta y es el dato el que se le
+pega, porque **la operación de retirar solo se dispara cuando se cruza**. El sistema equilibra en
+«techo menos épsilon» de forma permanente, y un indicador que siempre está al 99,9 % no distingue
+sano de a-punto-de-romperse. Se vivió dos veces en una sola tanda: la nota nueva de
+`design-review` dejó la skill en 4.716 con techo 4.600, y después dos filas de la tabla de gates
+subieron el arranque a 12.335. Las dos veces se comprimió, las dos veces funcionó, y las dos
+veces el resultado fue volver a rozar.
+
+**El candidato estructural tenía cifra y se hizo más gordo mientras se discutía.** La sección
+«Cómo se verifica lo que no ve un compilador» de `PRD-Live.md` medía **824 palabras** cuando se
+escribió la ficha y **992** al ejecutarla dos días después: creció 168 con las filas de
+`check:agentes` y `md:verificar` del propio sprint. El **8 % del presupuesto**, y la sección que
+**el propio `PRD-Live` describía así**: *«este no se lee hasta que un check sale rojo diciendo su
+nombre»*. Es la definición literal de contenido a demanda viviendo en el presupuesto que se
+precarga siempre — la misma forma que D88 encontró en el índice de `DECISIONS.md`, que era el
+único componente que crecía por construcción.
+
+**Qué se hizo.** La tabla baja a **`GATES.md`**, a demanda y nunca `@`-importada, con la
+condición de apertura escrita en su cabecera: se abre cuando un check sale rojo diciendo su
+nombre, o cuando hay que decidir si un gate nuevo hace falta, y **nunca para aplicar una regla**
+—eso lo llevan `CLAUDE.md` y `BRAND.md`, que sí están siempre en contexto—. En `PRD-Live` queda
+el puntero y **lo que sí es criterio de producto**: que una parte de los gates corra a mano no es
+deuda, es alcance, y esa frontera se decide gate a gate. `12.289 → 11.455`.
+
+**Y con eso el objetivo deja de ser discutible, que era la otra mitad de la ficha.** La ficha
+ofrecía como salida decidir que 11.600 estaba mal, con el argumento de que un objetivo que no se
+cumple nunca no gobierna nada. **No estaba mal: estaba esperando a que se retirara algo
+estructural.** Alcanzado (11.455), lo que corresponde no es discutirlo sino lo que ya estaba
+escrito en `check-contexto.ts`: el objetivo baja un escalón de 200 —**11.400**, la misma cadencia
+que 12.000 → 11.800 → 11.600— porque un objetivo cumplido deja de tirar, y el techo **aprieta a
+11.700** dejando los ~245 de holgura que la regla de D139 fija como magnitud a sostener. Un
+movimiento por techo es el trinquete apretando; el segundo ya no.
+
+**Lo que NO se hizo, y hay que decirlo porque la familia sigue abierta.** El `method-review`
+proponía además convertir la **retirada en un paso del ciclo**, en el momento de abrir sprint
+donde ya se sella `CICLO_ABIERTO`. Francisco lo dejó fuera. Así que esto cierra **una instancia**,
+no la familia: mientras retirar siga siendo una reacción al rojo, el equilibrio vuelve a ser el
+rojo, y lo único que ha cambiado es desde dónde se sube. El propio `check:contexto` lo tiene
+escrito en su cabecera —*«si el objetivo persigue al dato en vez del techo, esto no lo mira»*—, y
+sigue sin mirarlo.
+
+**Una nota sobre el coste de mover una sección, que resultó ser la prueba de que el arnés
+funciona.** Moverla puso en rojo `check:accesibilidad` y `check:articulo`: las dos declaran esa
+sección como fuente, la primera en su bloque §verify y la segunda en tres de sus doce secciones.
+Ninguna de las dos copias había dejado de ser cierta —cambió dónde vive la tabla, no lo que
+dice—, así que se re-selló; pero **el aviso llegó sin que nadie se acordara de que existía la
+dependencia**, que es exactamente lo que D84 y D140 existen para producir. Cinco punteros más se
+actualizaron a mano (`CLAUDE.md` ×2, `BRAND.md`, `README.md` y la declaración de
+`content/accesibilidad/dependencias.ts`); ninguno de ellos tiene guardián, y esa asimetría es
+deuda que no se tarea aquí porque el ratio no la justifica todavía.

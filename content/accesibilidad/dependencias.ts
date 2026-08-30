@@ -69,7 +69,7 @@ export const DEPENDENCIAS: Record<BloqueId, readonly string[]> = {
   verify: [
     "scripts/guardianes/casos.ts",
     ".github/workflows/ci.yml",
-    "PRD-Live.md#Cómo se verifica lo que no ve un compilador",
+    "GATES.md#Cómo se verifica lo que no ve un compilador",
     "scripts/design-review/contrast-census.js",
   ],
 

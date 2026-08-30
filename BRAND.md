@@ -265,7 +265,7 @@ el switch del consentimiento, aquí debajo).
   suelo, no el objetivo:** se empuja a AAA siempre que se pueda. **Todos los pares que el sitio
   PINTA están en AAA en ambos temas, en reposo y en hover.**
   **La pasada es `npm run censo`, no se conduce a mano** (D85; el cómo, en `CLAUDE.md`, y qué
-  mide cada uno de sus dos pases, en `PRD-Live` §Cómo se verifica).
+  mide cada uno de sus dos pases, en `GATES.md`).
   Lo único que no juzga es el **texto sobre foto**, que se mide aparte sobre el píxel pintado.
   **«Que pinta» es el límite del metro:** un token que existe y no se usa le resulta invisible.
   De ahí **el rojo no es color de texto**: el mensaje va en `--foreground` y `--destructive`

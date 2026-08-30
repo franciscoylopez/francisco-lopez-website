@@ -9,7 +9,7 @@
 ## Régimen de docs (qué se carga y qué se consulta)
 
 - **`@`-importados (siempre en contexto):** `AGENTS.md`, `BRAND.md` (core de reglas), `PRD-Live.md`, y este `CLAUDE.md`.
-- **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md`** y **`CLAUDE-historical.md`** (el porqué fechado de las reglas de marca y de las de aquí), `BRAND-logo.md` (enciclopedia del logo).
+- **A demanda (Read/Grep cuando la tarea lo pide, NUNCA `@`-importar):** `DECISIONS.md` (registro técnico), `PRD-Historical.md` (histórico de producto), **`BRAND-historical.md`** y **`CLAUDE-historical.md`** (el porqué fechado de las reglas de marca y de las de aquí), `BRAND-logo.md` (enciclopedia del logo) y **`GATES.md`** (el contrato de cada gate, que se abre cuando un check sale rojo diciendo su nombre).
 - **Y cómo se consultan, que es lo que hace barata esa mitad:** todos llevan índice derivado **en su propia cabecera**, así que no cuestan nada en el arranque (D88). Se abren con un `Read` limitado a sus primeras líneas —130 en `DECISIONS.md`, 90 en los históricos— y solo después se va a la sección, nunca grepeando a ciegas.
 - **Convención de mitigación:** antes de tocar un subsistema con ADR, `grep`/Read de su D-entry en `DECISIONS.md` — así no se pierde ninguna regla, solo deja de estar precargada.
 - **Cuándo abrir un histórico: antes de CAMBIAR una regla, no antes de aplicarla.** Casi todas las de aquí y las de `BRAND.md` nacieron corrigiendo algo, y el caso que las escribió es lo que impide revertirlas por parecer arbitrarias. Aplicarlas no necesita el relato; discutirlas, sí.
@@ -151,7 +151,7 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 ### Cómo se verifica
 
 
-Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `PRD-Live.md` §Cómo se verifica**; aquí solo lo que hay que hacer:
+Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `GATES.md`**, a demanda; aquí solo lo que hay que hacer:
 
 - **Precondición: el sandbox de Bash desactivado** en TODAS las llamadas, no solo las de navegación. Un comando que cuelga es ese síntoma: se desactiva el sandbox, no se reintenta (D51).
 - **Lo que sigue a mano:** el punto **6** (nada codificado solo por color) y la nota de PageSpeed (`npm run psi`, no `vitals`).

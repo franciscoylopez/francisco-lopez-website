@@ -213,6 +213,12 @@ const HISTORIAL_TECHO: Movimiento[] = [
     motivo:
       "el trinquete vuelve a apretar: la subida quedó atada a que apareciera el dato (D128), y apareció",
   },
+  {
+    fecha: "2026-08-30",
+    valor: 11_700,
+    motivo:
+      "la tabla de contrato de los gates baja a `GATES.md` (12.289 → 11.455): 992 palabras que el propio `PRD-Live` describía como algo que no se lee hasta que un check sale rojo. Se aprieta dejando 245 de margen para que el hueco no se rellene solo, que es la familia que abrió esta tarea",
+  },
 ];
 
 const TECHO = vigente(HISTORIAL_TECHO);
@@ -225,8 +231,16 @@ const TECHO = vigente(HISTORIAL_TECHO);
  *   11.600  desde el 2026-08-27, al alcanzarse el anterior. Mismo escalón de 200
  *           que el salto de antes: la cadencia sale de la escalera, no de elegir
  *           un número nuevo cada vez.
+ *   11.400  desde el 2026-08-30. Y aquí la escalera contesta a la tarea que la
+ *           puso en duda: P68.7405 nació diciendo que 11.600 no se había
+ *           alcanzado NUNCA en la vida del techo —cierto, la banda vivía entre
+ *           12.058 y 12.698— y la conclusión que se ofrecía era que el objetivo
+ *           estaba mal. No lo estaba: estaba esperando a que se retirara algo
+ *           estructural. Bajar la tabla de gates lo alcanzó de golpe (11.455),
+ *           así que el objetivo no se discute, se baja un escalón como estaba
+ *           escrito. Un objetivo ya cumplido deja de tirar.
  */
-const OBJETIVO = 11_600;
+const OBJETIVO = 11_400;
 
 /** Palabras «de verdad»: sin bloques de código, que no son prosa que haya que leer. */
 function palabras(texto: string): number {
