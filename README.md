@@ -98,7 +98,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <details>
 <summary><b>Rendimiento, medición y seguridad</b></summary>
 
-- **PageSpeed >90 en las catorce páginas** — móvil 95-99 · escritorio 97-100, medido el 2026-08-24 (`npm run psi -- --registro`) — y CLS 0. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
+- **PageSpeed >90 en las catorce páginas**, y CLS 0. La nota y su fecha **no se teclean aquí**: las sella `npm run psi -- --registro` en `content/psi/registro.json`, que es la fuente única de la que también las lee el artículo (`D102`). Un rango escrito a mano en dos sitios se queda atrás en uno sin que nada falle, y este ya lo hizo. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
 - **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
 - **Un gesto de marca, y solo uno** (`D137`): el punto final de «Del discovery al dato.» cae y se asienta al cargar, en morado, con dos curvas porque lo que cae acelera. Es la **firma**; el filete que crece bajo los años de Hitos es su **textura**, subordinada a propósito. Se eligieron viéndolos, no razonándolos.

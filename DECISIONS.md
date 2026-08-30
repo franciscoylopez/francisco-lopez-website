@@ -6107,6 +6107,19 @@ suelto. Un número sin fecha afirma una estabilidad que PSI no tiene. Es tambié
 faltaba a D49 para justificarse: `psi` sigue **fuera de CI** porque 28 puntos de diferencia en
 la misma URL serían rojos falsos.
 
+**Y la mitad que faltaba, cerrada el 2026-08-30 (P66.5).** «Publicar el rango con su fecha» dejó
+la fuente única a medias: `content/psi/registro.json` la sella el script y el artículo la lee,
+pero el `README.md` **tecleaba el rango a mano**, así que había dos sitios y solo uno se movía.
+Ya no: el README cita la fuente y no la copia. Las cifras de este párrafo se quedan como están
+porque son el registro de lo que se midió ese día, no una afirmación viva.
+
+Queda **re-sellar**, y es de Francisco: el sello del 2026-08-24 se tomó con **una** muestra por
+página, y **D145 declaró ese método no fiable cuatro días después** —el mismo día, sin tocar
+nada, `/design-system` dio 76 y luego 98 y 99—. No está sobre-vendiendo: con una toma el ruido
+de PSI es asimétrico hacia abajo, así que el mínimo sale pesimista y el >90 de `PRD-Live` §No
+funcionales no está en riesgo. Pero es una cifra publicada con un método que el propio repo ya
+retiró, y se re-mide con «Voz» mergeado, contra producción, que es la foto del sitio terminado.
+
 **Lo que queda abierto.** El retraso de renderizado del LCP móvil (P68.62) sigue sin causa
 accionable: su premisa decía «~81% del LCP móvil», y midiendo la misma página del mismo
 despliegue ese reparto va de 108 ms (43%) a 1.983 ms (83%). El elemento LCP es la foto del hero,
