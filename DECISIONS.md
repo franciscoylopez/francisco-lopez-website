@@ -200,6 +200,7 @@
 - D162 · El barrido de huérfanos se queda en `logo-kit`, y eso se decide en vez de heredarse
 - D163 · La sección más pesada del arranque era la que nadie lee hasta que algo sale rojo
 - D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo
+- D165 · El informe del escáner era una API, y con ella un suspenso se descarta con cifra
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10109,3 +10110,154 @@ pudrirse igual. Es la misma forma que D163 dejó abierta —una operación que s
 momento concreto— y el remedio conocido (C, el umbral de antigüedad) se descarta hoy por su coste
 de contexto, no porque no funcionara. Se revisa el día que la cola vuelva a acumular dos PR entre
 dos cierres consecutivos: ese es el dato que convertiría el descarte en un error.
+
+## D165 · El informe del escáner era una API, y con ella un suspenso se descarta con cifra — 2026-08-31
+
+**Decisión.** La tanda 6 de «Agentes» cierra cinco huecos, y el que cambia el método es el
+último: **el informe de los dos escáneres se lee por API, en JSON, no por captura recortada**.
+`is-agentic.com` publica su `openapi.json` y un `GET /api/v1/report?url=…` de solo lectura; y la
+página de ora (`ora.ai/score/<dominio>`) trae el payload completo embebido. De ahí salen **125
+checks y 294 puntos** con su `id`, su `status`, su cifra y su `details`, en un comando.
+
+> **Esto retira una regla escrita.** Hasta hoy el método decía que *«el detalle de ora solo sale
+> de la captura recortada»*, y con él una tarea de medición costaba abrir Chrome, buscar el check
+> a ojo y transcribir su frase. Leer 125 `details` a ojo no es que sea caro: es que **no se hace**,
+> y por eso los tres hallazgos nuevos de abajo llevaban dos pasadas invisibles.
+
+### La brecha 96 ↔ 67 tiene número, y es el denominador
+
+`is-agentic` declara **16 checks elegibles** (essential 7 + recommended 9). Ora puntúa los mismos
+**dentro de 125**, y **52 de 294 puntos** salen de superficies que este sitio no tiene: MCP, API
+REST/GraphQL, OAuth, SDK, CLI, sandbox, pricing, comercio agéntico. Es D157 medido en vez de
+argumentado: *un check de superficie agéntica aplica si el sitio TIENE esa superficie*.
+
+### «Schema type breadth» 0/2 — DESCARTADO, con la cifra que lo descarta (P68.749)
+
+La ficha planteó que la primera hipótesis fuera **el alcance del escáner**, no el sitio. Se
+confirma, y con tres pruebas del propio informe:
+
+| Del informe | Qué dice |
+|---|---|
+| `json-ld` ✓ 4/4 | «Rich JSON-LD identity: Person … **(1 block(s))**» |
+| `schema-type-breadth` ✗ 0/2 | «No extended schema types found» — y su recomendación pide, literalmente, **`BreadcrumbList`** |
+| `markdown-frontmatter` ✗ | «Frontmatter **on /** …» |
+
+**Un bloque.** El sitio emite JSON-LD en las 28 variantes y, contadas sobre el HTML
+prerenderizado, **once `@type` distintos**: 26 `BreadcrumbList`, 12 `Organization`, 10 `WebPage`,
+más `TechArticle`, `ContactPage`, `ProfilePage`, `WebSite`, `Person`, `ContactPoint`,
+`PostalAddress` y 62 `ListItem`. El escáner **sí visita varias páginas** —otros checks del mismo
+informe dicen «6 measured pages», «6 checked pages», «5 sampled pages»—, pero **el JSON-LD lo lee
+solo de la home**. Y encima pide un tipo que las trece internas ya publican.
+
+Así que el hallazgo es **cierto de la home sola y falso del sitio**, y no se toca nada: los dos
+únicos tipos que serían verdad —`Occupation` y `EducationalOccupationalCredential`— se añadirían
+justo en la página que el escáner mira, que es la definición de perseguir una nota. *Si vuelve:
+está medido y descartado, no sin mirar.*
+
+Es `BRAND.md` §Cómo medir punto 8 en su otra dirección: ahí se valida el **aprobado**, aquí el
+**suspenso**. Un informe que declara su alcance —«5 sampled pages»— parece riguroso justo cuando
+el alcance es el fallo.
+
+### `sameAs` llevaba un repositorio, y el campo que lo recoge no era el que parecía (P68.747)
+
+El `sameAs` del `Person` es «quién es esta persona en otros sitios», y la segunda URL era el
+**repositorio** de este sitio: una obra, no una identidad. Pasa a `github.com/franciscoylopez`, el
+perfil.
+
+**El repo baja al nodo `WebSite`, que es de quien es** — y ahí la ficha proponía `codeRepository`,
+que es la propiedad que uno escribiría porque dice literalmente «el repositorio de esto».
+**Medido contra Schema.org antes de escribirlo: su `domainIncludes` es solo `SoftwareSourceCode`.**
+En un `WebSite` sería marcado inválido publicado para aprobar una casilla. Va como **`isBasedOn`**
+—dominio `CreativeWork`, `URL` en el rango, definición oficial *«un recurso del que esta obra se
+deriva»*—, y no envuelto en un nodo `SoftwareSourceCode` propio, que costaría un tipo más que
+mantener para colgar una URL que el pie ya publica con un enlace visible.
+
+> **La regla, que es la parte reutilizable: el nombre de una propiedad no dice su dominio.**
+> `codeRepository` en un `WebSite` se lee perfecto y no existe. Cuesta un `fetch` a schema.org.
+
+**Y la hipótesis sigue siendo hipótesis.** Que ora suspenda `json-ld-entity-linking` POR ESTO está
+sin comprobar, y el rescaneo no aísla la variable porque en la misma tanda entra `/agents.md`. Si
+el check se mueve no se le podrá atribuir a uno solo; si **no** se mueve, eso sí es informativo.
+
+### `Vary: Accept` caía sobre todo, y ningún gate podía verlo (P68.742)
+
+Las cabeceras de seguridad y la de negociación iban en la **misma** regla de `headers()`,
+`/:path*`. Una caché compartida keyea por el `Vary`, y el `Accept` de un asset varía por familia
+de navegador: cada tarjeta OG, cada PDF del CV y cada fuente pasaba a tener **una copia guardada
+por familia** en vez de una.
+
+**No es incorrección, es coste**, y por eso llevaba un sprint sin verse: no rompe nada, no sale en
+ningún informe, y solo se paga en una caché que no es nuestra. Medido con `curl -I` antes y
+después, sobre las cinco familias:
+
+| Ruta | Antes | Después |
+|---|---|---|
+| tarjeta OG · PDF del CV · `.woff2` | `Vary: Accept` | sin `Vary` |
+| `/md/es.md` | `Accept, Accept-Encoding` | `Accept-Encoding` |
+| `/robots.txt`, `/llms.txt`, `/favicon.ico` | `Accept` + la de Next | solo la de Next |
+| `/`, `/sobre-mi`, `/en/sobre-mi` y una ruta inexistente, con `Accept: text/markdown` | `Accept` | **igual** |
+
+**La última fila es el hallazgo:** el `Vary` de las respuestas negociadas no lo ponía esta
+configuración, lo pone `conVary()` dentro del proxy. Por eso acotar la regla no le quita nada a la
+negociación. La cabecera se recorta a la misma silueta que el `matcher` del proxy —fuera `_next`,
+`api` y toda ruta con extensión—, porque donde el proxy no corre no hay dos cuerpos posibles.
+
+### `/agents.md`, y los diez alias de D161 que no miraba nadie (P68.748)
+
+Un escáner prueba tres rutas para encontrar la documentación para agentes de un sitio:
+`/agents.md`, `/.well-known/agent-skills` y `/skills.sh`. **Entra una**, con un 307 a `/llms.txt`;
+las otras dos son índices de skills ejecutables y aquí no hay ninguna — publicarlas sería el
+`api-catalog` sin API de D157. Consecuencia aceptada por escrito: el check se queda en 1/2 como
+mucho, y en 0/2 si exige las tres.
+
+**Lo que apareció al hacerlo es el hallazgo:** los diez alias de D161 se comprobaron a mano el día
+que se escribieron y **se quedaron sin guardián**, que es el punto 2 de `BRAND.md` §Cómo se
+escribe una regla en directo. Ahora `check:agentes` prueba **las once rutas contra la regex
+compilada de `routes-manifest.json`**: que redirijan, a dónde, con **307** —un 308 se cachea para
+siempre y estos alias son reversibles— y que el destino sea una página del registro o `/llms.txt`.
+
+### El manifiesto compilado es una entrada de guardián que no se estaba usando
+
+Las dos comprobaciones nuevas de `check:agentes` —cabeceras y alias— leen
+**`.next/routes-manifest.json`**, que trae la **regex ya compilada** de cada regla: la que el
+servidor usa de verdad para decidir qué cabecera pone y a dónde redirige. Leer el `source` de
+`next.config.ts` habría sido opinar sobre una cadena, y comparar la configuración consigo misma
+aprueba siempre. Es la regla 1 de `BRAND.md` —la condición se comprueba donde la cosa ocurre—
+aplicada a un archivo que llevaba dos sprints ahí sin que nadie lo abriera.
+
+### El markdown ya dice de qué habla y de cuándo es (P68.746)
+
+El frontmatter de las 28 variantes tenía tres campos y ahora tiene cinco. `description` sale del
+`<meta name="description">` del prerender —el mismo texto del `<head>` y de la tarjeta OG—, y
+`last-updated` de **`lib/page-modified.ts`**, donde se mudan las fechas que vivían dentro de
+`app/sitemap.ts`: el sitemap ya publicaba esa misma respuesta a esa misma pregunta, así que una
+segunda tabla habría sido D60 en su forma más tonta. `url` pasa a `canonical`, que es el nombre
+por el que un lector lo busca; se puede renombrar porque el campo tenía un día de vida (D158) y
+ningún consumidor.
+
+**Y el git se descartó con motivo, que era la trampa de la ficha:** el `.md` se genera ANTES del
+commit que lo movió, así que `md:verificar` recalcularía una fecha distinta a la guardada y CI se
+quedaría rojo en cada PR de contenido. Más el motivo que ya estaba en `sitemap.ts`: Vercel clona
+en superficial.
+
+**Hubo que citar el YAML**, y no era previsible: las descripciones de este sitio llevan dos puntos
+y espacio —«Del discovery al dato: investigo…»—, que en un escalar plano parten la línea en clave
+y valor. Comprobado que las 28 parsean con los cinco campos.
+
+### Lo que este informe encontró y NO se toca hoy
+
+Tres hallazgos ciertos que salieron del volcado de los 125 checks, y que no son de esta tanda. Se
+anotan aquí para que no vuelvan como novedad:
+
+- **`markdown-link-alternate` 0/1** — ninguna página anuncia su gemelo en markdown con
+  `<link rel="alternate" type="text/markdown">`. Es la forma estándar de decir lo que D158
+  construyó, y hoy solo se anuncia en prosa dentro de `llms.txt`.
+- **`markdown-url-fallback` 0/2** — la home no responde al sufijo `.md` (`/index.md`). Nuestra vía
+  estable es `/md/<locale>/<pagina>.md`, que es una decisión, no un olvido; pero el sufijo es la
+  convención que prueba un agente primero.
+- **`wikipedia-presence`** dice «could not be verified - try rescanning», o sea que su 0/4 puede
+  ser ruido del escáner y no un dato.
+
+**Y uno que se queda como está, con su motivo ya escrito:** `org-schema-completeness` sigue en 1/2
+pidiendo `contactPoint` y `address` en el nodo `Organization`, que aquí es el **empleador** de
+Francisco. Rellenarlo sería publicar datos de Emendu que no son nuestros (D161).

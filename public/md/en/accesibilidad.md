@@ -221,7 +221,7 @@ Manual review of keyboard navigation and of the order in which focus walks the p
 
 NVDA on Chrome, walking the whole site rather than page by page, which is how it actually gets used.
 
-They don't all fit in the same place, and saying so matters. The ones that only need to read the code run on their own with every change, before anything ships. The two colour measurements need a browser actually painting the page, so they're launched by hand. And the last two need a person in front of the screen. There's also a check that watches the others: it takes each one, plants the exact fault it should catch, and confirms it fires. There are 21 checks and 45 planted faults, because a review that comes back with an empty list looks far too much like a pass.
+They don't all fit in the same place, and saying so matters. The ones that only need to read the code run on their own with every change, before anything ships. The two colour measurements need a browser actually painting the page, so they're launched by hand. And the last two need a person in front of the screen. There's also a check that watches the others: it takes each one, plants the exact fault it should catch, and confirms it fires. There are 21 checks and 48 planted faults, because a review that comes back with an empty list looks far too much like a pass.
 
 4 of 8
 
