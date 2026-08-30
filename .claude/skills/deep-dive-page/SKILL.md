@@ -17,12 +17,6 @@ Extraído **de** las cinco que ya existen (Emendu, KUOTIP, INDYA, Freepik,
 TheTool), no antes de escribirlas. Lo que sigue es lo que de verdad se repitió;
 lo que parecía plantilla y no lo era está marcado como tal.
 
-> **Recorrido en seco el 2026-08-22 contra Emendu**, porque llevaba desde el 18 de agosto
-> sin dispararse nunca y una skill se **sigue** en vez de leerse: la que no se ha ejecutado
-> es la que más riesgo tiene. La lista de archivos del §3 y el metro del §5 cuadraron; lo
-> que estaba desfasado eran **los gates**, y el sprint que acababa de cerrar había añadido
-> los tres que faltaban (`check:marco`, `censo`, `check:rutas`).
-
 ---
 
 ## 0 · Antes de nada: ¿esta experiencia tiene página?
@@ -78,8 +72,11 @@ qué va en cada sección, la política de artefactos y el gate de accesibilidad.
 
 ## 3 · Los archivos, en orden de dependencia
 
-1. **`content/experiences.ts`** — `{ company, slug, logo }`. El `slug` es neutro
-   al idioma (el sitio no traduce segmentos de ruta) y va en minúsculas.
+1. **`content/experiences.ts`** — `{ company, slug, logo, desde, hasta }`. El
+   `slug` es neutro al idioma y va en minúsculas. **`desde`/`hasta` son las fechas
+   ISO del periodo** y no son opcionales: de ahí salen los `<time>`, y
+   `periodPartsOf` rompe el build si su año no aparece en el `period` del copy.
+   `hasta: null` es «sigue en curso», no «falta el dato».
 2. **`content/experience-copy/es.ts` y `en.ts`** — `role`, `period`, `sector`,
    `reporting: { deep, cv }`, `short` (la frase de Trayectoria) y `bullets`
    (`{ cv, deep }`). **Los `deep` son «En un minuto»**: no se escriben en el
@@ -104,9 +101,7 @@ buscándolo:** el índice `/trayectoria`, el paso a la experiencia vecina,
 Lo único que dos de esas superficies siguen pidiendo es un dato **por experiencia**
 —su fecha en `app/sitemap.ts` y su diccionario en `app/llms.txt/route.ts`—, y
 ninguno se puede olvidar: los dos van en un `Record<ExperienceSlug, …>` que **no
-compila** incompleto. *(Hasta el 2026-08-19 esas dos llevaban además listas de
-páginas a mano y este documento mandaba mirarlas; ya no, y mirarlas ahora es tiempo
-perdido.)*
+compila** incompleto.
 
 ---
 
@@ -211,13 +206,17 @@ cierra el hueco**.
    el breadcrumb, que la metadata derivada **llegó** y que los `@id` del JSON-LD
    **resuelven** — cosa que ningún validador externo hace. Con esto, los puntos 4,
    5 y 8 del checklist dejan de comprobarse a mano.
-4. **Gate de accesibilidad (D52)** con el subagente `viewport-verifier`, sobre el
+4. **`npm run check:agentes`** (D159) — también es cierre de página nueva, y se
+   olvida porque no habla de la página sino de lo que el sitio PROMETE sobre
+   ella: que `llms.txt` la nombre y que exista su markdown. Salen del registro,
+   así que lo único que hay que hacer es **`npm run md` tras el build**.
+5. **Gate de accesibilidad (D52)** con el subagente `viewport-verifier`, sobre el
    sitio servido. **No se conduce a mano.** Y **son dos disparos**, no uno: si la
    página lleva hero o banda dimensionada por `vw`, uno **mientras se dibuja**
    —al cerrar, el alto ya no es un ajuste sino un rediseño (D50/D56)— y otro al
    cerrar. Precondición: `agent-browser` con el **sandbox de Bash desactivado**;
    un comando que cuelga es ese síntoma, así que no se reintenta igual.
-5. **Los tres que necesitan el sitio SERVIDO van juntos**, y su secuencia entera
+6. **Los tres que necesitan el sitio SERVIDO van juntos**, y su secuencia entera
    —incluida la línea base que hay que guardar antes de tocar nada— la lleva la
    skill `gates-de-servidor`: `gate:html` (solo si has tocado algo COMPARTIDO;
    para una página nueva no hay línea base contra la que compararla, su valor está
@@ -225,7 +224,7 @@ cierra el hueco**.
    **`npm run psi`** (D49). Del censo **no hay que acordarse**: si la página
    introduce un par de color, una superficie o una animación nuevos, CI lo dice
    por su nombre (D90).
-6. **Lo que sigue a mano, y es poco:** el punto **6** del checklist —nada
+7. **Lo que sigue a mano, y es poco:** el punto **6** del checklist —nada
    codificado solo por color—, que no tiene forma automática.
 
 **La apertura ocupa el pliegue** (D56): el bloque de apertura termina siempre a

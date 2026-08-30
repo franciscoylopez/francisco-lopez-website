@@ -284,7 +284,17 @@ export const CASOS: Caso[] = [
     // distinta, es una contradicción publicada — y viviría en un `robots.txt`,
     // que es un archivo que nadie vuelve a leer después de escribirlo.
     archivo: "app/robots.ts",
-    mutar: (o) => o.replace("ai-train=no", "ai-train=yes"),
+    // APUNTA A LA DIRECTIVA, NO A LA CADENA. `ai-train=no` aparece dos veces en ese
+    // archivo —primero en el comentario que la explica, después en la línea que se
+    // sirve— y `String.replace` cambia la PRIMERA. Con la cadena suelta, el caso
+    // mutaba el comentario, el `robots.txt` salía intacto y el arnés acusaba de
+    // desdentado a un guardián que estaba bien. Lo cazó CI, y el arnés no podía:
+    // comprueba que la mutación cambie el archivo, y el archivo cambiaba.
+    mutar: (o) =>
+      o.replace(
+        '"Content-Signal": "ai-train=no',
+        '"Content-Signal": "ai-train=yes',
+      ),
   },
   {
     guardian: "check:agentes",
