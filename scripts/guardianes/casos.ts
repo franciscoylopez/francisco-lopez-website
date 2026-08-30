@@ -219,6 +219,16 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replaceAll("card=contacto", "card=home"),
   },
   {
+    guardian: "md:verificar",
+    rotura:
+      "el markdown commiteado de una página deja de decir lo que dice la página",
+    // El modo de fallo REAL de un artefacto derivado: nadie lo regenera después
+    // de tocar el copy, y se queda diciendo lo de antes en silencio. Se rompe el
+    // artefacto y no la página, que es la dirección en que esto se estropea.
+    archivo: "public/md/es/contacto.md",
+    mutar: append("\nUn párrafo que la página no dice.\n"),
+  },
+  {
     guardian: "check:articulo",
     rotura: "cambia el copy del artículo y la fecha que ve Google no se mueve",
     // El caso malo es el estado real hasta P70.04: `ARTICLE_UPDATED` pasó DOCE
