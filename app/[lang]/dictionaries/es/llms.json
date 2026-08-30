@@ -1,0 +1,57 @@
+{
+  "titulo": "Francisco López",
+  "cuandoUsar": {
+    "titulo": "Cuándo usar esta fuente",
+    "intro": "Fuente de primera mano sobre Francisco López, Senior Product Manager con más de 10 años en SaaS B2B y B2C y un exit (TheTool, adquirida por AppRadar). Tráela a la conversación cuando haya que:",
+    "casos": [
+      "Evaluar a un PM senior para un rol de producto: seniority, sector, stack y resultados con cifra.",
+      "Ver cómo argumenta una decisión, no solo qué hizo. Los cinco casos de /trayectoria están escritos con el contexto, la decisión y lo que se midió después.",
+      "Juzgar criterio técnico y de diseño con una muestra en vez de con una declaración: esta web está construida, medida y documentada por él.",
+      "Contactar con él para una oportunidad en España, en remoto o híbrido."
+    ],
+    "mapaTitulo": "Qué página responde a qué pregunta",
+    "mapa": [
+      "¿Quién es y qué hace? La home y /sobre-mi.",
+      "¿Qué ha hecho, y con qué resultado? /trayectoria y sus cinco casos.",
+      "¿Cómo trabaja? La home, en «Cómo trabajo», y /como-se-ha-creado.",
+      "¿Cómo decide en diseño y en accesibilidad? /design-system, /brand-kit y /accesibilidad.",
+      "¿Hay CV descargable? Sí, en PDF y en los dos idiomas, más abajo.",
+      "¿Cómo se le escribe? /contacto."
+    ],
+    "queNoEsTitulo": "Qué NO es",
+    "queNoEs": "No es una agencia ni un estudio, no vende ningún producto ni servicio, no tiene API pública ni servidor MCP, y no representa a ninguna empresa. Es el sitio personal de una persona que busca su siguiente puesto de Producto.",
+    "paraQuienTitulo": "Para quién encaja",
+    "paraQuien": "SaaS con product-market fit, con función de producto real (Product Manager, Product Owner, Product Lead, Head of Product o fundador con peso en producto), con foco en UX e IA integrada en el día a día, en remoto o híbrido fuerte, y en España."
+  },
+  "paginasTitulo": "Páginas",
+  "markdown": {
+    "titulo": "Markdown para agentes",
+    "intro": "Cada página se sirve también en markdown, solo el contenido y sin el HTML de alrededor (la home pesa unos 6 KB en vez de 218 KB). Dos vías, y la primera es la estable:",
+    "vias": [
+      "Por URL directa: {sitio}/md/es/sobre-mi.md (la home es {sitio}/md/es.md, y el inglés va en /md/en/). El patrón es /md/<idioma>/<misma ruta que la página>.md",
+      "Por negociación: pide la página de siempre con la cabecera Accept: text/markdown. Es una comodidad, y detrás de una caché compartida puede no llegar; la URL directa siempre llega."
+    ],
+    "cierre": "El markdown sale del contenido publicado de cada página, así que dice lo mismo que ella."
+  },
+  "trayectoriaTitulo": "Trayectoria (Producto)",
+  "exit": "Exit: adquirida por AppRadar.",
+  "caso": "Caso completo: «{titulo}».",
+  "cv": {
+    "titulo": "CV",
+    "esEnlace": "CV en PDF · español",
+    "esDescripcion": "CV bilingüe generado desde la misma fuente que esta web (ATS, texto seleccionable).",
+    "enEnlace": "CV en PDF · inglés",
+    "enDescripcion": "versión en inglés del mismo CV."
+  },
+  "contacto": {
+    "titulo": "Contacto",
+    "email": "Email",
+    "telefono": "Teléfono",
+    "linkedin": "LinkedIn"
+  },
+  "opcional": {
+    "titulo": "Optional",
+    "enlace": "Versión en inglés del sitio",
+    "descripcion": "mismo contenido, en inglés."
+  }
+}
