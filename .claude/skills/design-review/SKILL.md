@@ -169,11 +169,10 @@ sistema. *¿esto representa algo que se puede pulsar?* → dibujo, y se juzga po
 | Iconos dimensionados en el call site | `size-\[1[0-9]px\]` sobre `svg` | `action.tsx`, `.link-chrome svg` en `globals.css` |
 | Foco compitiendo | `outline-none` · `focus:` sin `focus-visible:` | ninguno (el foco es una sola regla global) |
 | Motion sin escape | `transition`/`animate-` sin `motion-reduce` ni `prefers-reduced-motion` cerca | los que lo declaran en `globals.css` |
-| **Clases interpoladas** | `className={\`` con `${` dentro de una utilidad | ninguno, nunca — es el fallo sin error de compilación de `BRAND.md` §Cómo medir (5), y ya tumbó a la vez el hover del sólido y el del toggle |
+| **Clases interpoladas** | La interpolación **pegada** a un token (antes, después, o dos sin espacio): ``className=[{]`[^`]*([A-Za-z0-9_-][$][{]\|[}][A-Za-z0-9_-]\|[}][$][{])`` | ninguno, nunca **con ese patrón**. El viejo (`${` a secas) daba **16**, todos legítimos: son constantes de clases COMPLETAS (`WRAP`, `PROSE`, `CARD`), que Tailwind ve literales donde se definen. Lo que falla es la utilidad CONSTRUIDA, `text-${color}-500`, que no se genera y deja al elemento sin clase sin error de compilación |
 | Inventario de controles con estado | `aria-pressed` · `aria-selected` · `role="tab"` | — |
 | **Inventario de glifos dibujados a mano** | `<svg` en todo `components/` y `app/`, **no** una lectura de `icons.tsx` | ilustraciones y maquetas; el logo |
 | Pasteles como primer plano | `brand-(cyan\|purple)-soft` en `text-`/`border-` | solo relleno decorativo |
-
 **De qué piezas tiene que salir todo, y cuál toca: la cascada de `CLAUDE.md` §Regla de
 construcción**, con el inventario **derivado del disco** en
 [`components/ui/README.md`](../../../components/ui/README.md). Ábrelo antes de la pasada —son

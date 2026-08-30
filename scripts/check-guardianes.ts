@@ -89,9 +89,15 @@ console.log(
 const fallos: string[] = [];
 
 for (const caso of CASOS) {
-  let original: string;
+  // Un caso BINARIO se lee y se restaura como bytes. Pasar un PNG por `utf8` en
+  // los dos sentidos lo destroza: volvería «restaurado» y distinto, y el arnés lo
+  // cazaría al final como que no ha sabido limpiar (2026-08-30, P68.737).
+  const binario = caso.binario === true;
+  let original: string | Buffer;
   try {
-    original = readFileSync(caso.archivo, "utf8");
+    original = binario
+      ? readFileSync(caso.archivo)
+      : readFileSync(caso.archivo, "utf8");
   } catch {
     // Un caso sin material NO se salta en silencio: saltarlo dejaría a su
     // guardián sin comprobar y con el mismo ✓ final, que es exactamente el modo
@@ -108,7 +114,12 @@ for (const caso of CASOS) {
   }
   let veredicto: string;
   try {
-    const mutado = caso.mutar(original);
+    const mutado = binario
+      ? caso.mutar(original as Buffer)
+      : caso.mutar(original as string);
+    const intacto = binario
+      ? (mutado as Buffer).equals(original as Buffer)
+      : mutado === original;
     // ANTES de romper nada: ¿está verde? Un código distinto de 0 no significa por
     // sí solo «lo rechaza» — un guardián roto por otra causa (un error suyo, una
     // dependencia que no resuelve) también sale con 1 sobre el archivo mutado, y
@@ -121,14 +132,17 @@ for (const caso of CASOS) {
         `${caso.guardian}: falla ya sobre el árbol limpio, así que rechazar su caso ` +
           "malo no prueba nada. Arréglalo y vuelve a pasar esto.",
       );
-    } else if (mutado === original) {
+    } else if (intacto) {
       veredicto = "NO SE PUDO ROMPER";
       fallos.push(
         `${caso.guardian}: la mutación no cambió ${caso.archivo}. El caso malo ha ` +
           "caducado — el archivo ya no tiene la forma que esta prueba esperaba.",
       );
     } else {
-      writeFileSync(caso.archivo, mutado, "utf8");
+      // Sin encoding cuando es un Buffer: `writeFileSync` escribe los bytes tal
+      // cual, que es lo único que devuelve el archivo idéntico al restaurarlo.
+      if (binario) writeFileSync(caso.archivo, mutado as Buffer);
+      else writeFileSync(caso.archivo, mutado as string, "utf8");
       const codigo = salida(caso.guardian);
       if (codigo === 0) {
         veredicto = "NO LO VE";
@@ -141,7 +155,8 @@ for (const caso of CASOS) {
       }
     }
   } finally {
-    writeFileSync(caso.archivo, original, "utf8");
+    if (binario) writeFileSync(caso.archivo, original as Buffer);
+    else writeFileSync(caso.archivo, original as string, "utf8");
   }
   console.log(
     `  ${veredicto.padEnd(18)} ${caso.guardian.padEnd(20)} ${caso.rotura}`,

@@ -5422,10 +5422,32 @@ la metadata y otra aquí (D66).
 RRT pide sesión de Google, así que se conduce con `claude-in-chrome` y no con `agent-browser`. Es
 justo el caso para el que `claude-in-chrome` no se retiró.
 
-**Lo que queda abierto.** `check:marco` no distingue un tipo elegible para rich results de uno que
-no lo es, así que no puede avisar de que una referencia que cruza de página va a degradarse. Hoy no
-hay caso vivo. Está tareado, **sin prejuzgar la forma**: puede que lo correcto no sea un guardián
-más sino la regla escrita donde ya está el porqué, en `lib/structured-data.ts`.
+**Lo que quedaba abierto se cerró el 2026-08-30 (P66), y no por donde parecía.** La salida
+evidente era enseñarle a `check:marco` qué tipos son elegibles para rich results —`Article` y
+familia, `Product`, `FAQPage`…— y avisar cuando uno de ellos referencia fuera de su página. Se
+descartó: es **otra lista que se queda vieja**, mantenida a mano contra un catálogo que decide
+Google, y este repo ya tiene medida la vida útil de una lista escrita a mano.
+
+Lo que entró es una invariante **posicional**, que no necesita saber de tipos: *toda referencia
+cuyo `@id` no se declara en su PROPIA página lleva `name` y `url`, salvo lo declarado en
+`REFERENCIAS_QUE_CRUZAN` con su motivo*. Es el patrón de `check:og` (D142), y como allí se mide
+**en las dos direcciones**: una excepción declarada que ya no ocurre también sale roja, porque
+una lista cuya razón de ser es vaciarse acumula entradas muertas que tapan el caso siguiente.
+
+Hoy son **cinco cruces declarados** y los cinco comparten motivo: tres en las páginas del
+deep-dive (`isPartOf`, `author`, `mainEntity`, que son `WebPage`) y dos en `/contacto`
+(`isPartOf`, `mainEntity`, que es `ContactPage`). Ninguno de los dos tipos es elegible, así que
+ningún validador externo evalúa esas páginas aisladas.
+
+**Y lo que NO mira, escrito para no prometer de más:** si el tipo es elegible. Una referencia
+declarada aquí en un tipo que MAÑANA pase a serlo seguiría en verde. Es el precio exacto de no
+mantener el catálogo, y se paga a sabiendas — por eso el motivo de cada entrada **nombra su
+tipo**: el día que cambie, lo que hay que releer está escrito al lado.
+
+**La regla no sustituyó al guardián, y esa era la tercera opción.** El porqué ya estaba escrito
+largo en `lib/structured-data.ts` y aun así el hueco existió: una regla que hay que recordar es
+una regla que se incumple (`BRAND.md` §Cómo se escribe una regla, 2). El texto se queda donde
+está —es donde se lee al escribir el JSON-LD— y ahora hay algo que lo comprueba.
 
 ## D88 · El único índice que se precargaba baja a su cabecera, y era el único que crecía solo — 2026-08-22
 
@@ -6084,6 +6106,19 @@ como estado** —móvil 95-99 · escritorio 97-100, medido el 2026-08-24— en v
 suelto. Un número sin fecha afirma una estabilidad que PSI no tiene. Es también la cifra que le
 faltaba a D49 para justificarse: `psi` sigue **fuera de CI** porque 28 puntos de diferencia en
 la misma URL serían rojos falsos.
+
+**Y la mitad que faltaba, cerrada el 2026-08-30 (P66.5).** «Publicar el rango con su fecha» dejó
+la fuente única a medias: `content/psi/registro.json` la sella el script y el artículo la lee,
+pero el `README.md` **tecleaba el rango a mano**, así que había dos sitios y solo uno se movía.
+Ya no: el README cita la fuente y no la copia. Las cifras de este párrafo se quedan como están
+porque son el registro de lo que se midió ese día, no una afirmación viva.
+
+Queda **re-sellar**, y es de Francisco: el sello del 2026-08-24 se tomó con **una** muestra por
+página, y **D145 declaró ese método no fiable cuatro días después** —el mismo día, sin tocar
+nada, `/design-system` dio 76 y luego 98 y 99—. No está sobre-vendiendo: con una toma el ruido
+de PSI es asimétrico hacia abajo, así que el mínimo sale pesimista y el >90 de `PRD-Live` §No
+funcionales no está en riesgo. Pero es una cifra publicada con un método que el propio repo ya
+retiró, y se re-mide con «Voz» mergeado, contra producción, que es la foto del sitio terminado.
 
 **Lo que queda abierto.** El retraso de renderizado del LCP móvil (P68.62) sigue sin causa
 accionable: su premisa decía «~81% del LCP móvil», y midiendo la misma página del mismo
@@ -7222,12 +7257,43 @@ sufijo no nombra un fondo sobre el que alguien coloca el asset: nombra el
 con esa `media`). El nombre que sirve es el de la consulta que lo selecciona, así que
 renombrarlos rompería la única correspondencia clara que hay.
 
-**Un hallazgo lateral, sin tarea: el generador ya no reproduce sus propios PNG byte a byte.**
-Al reconstruir el kit para comprobar que el generador escribe los nombres nuevos, los 12 SVG
-salieron idénticos y **15 de los 43 binarios cambiaron** —distinta versión de sharp/libvips que
-la del día que se generaron—. No es un fallo del kit, pero sí el límite de `check:kit`, que
-cuadra NOMBRES y no contenido; se revirtieron los binarios para no meter ruido en el commit del
-renombrado.
+**Un hallazgo lateral que tardó dos días en tener tarea: el generador no reproduce sus propios
+PNG byte a byte.** Al reconstruir el kit para comprobar que el generador escribe los nombres
+nuevos, los 12 SVG salieron idénticos y **15 de los 43 binarios cambiaron** —distinta versión
+de sharp/libvips que la del día que se generaron—. Se revirtieron para no meter ruido en el
+commit del renombrado.
+
+**No es un fallo del kit y no se ha «arreglado»: se ha ESCRITO** *(2026-08-30, P85.2)*. Los SVG
+salen de `geometry.js` como texto y son deterministas por construcción; los binarios los
+rasteriza una cadena nativa cuyo byte depende de la máquina, no del repo. Así que los PNG y el
+`.ico` son **artefactos versionados**, el generador es la **receta y no el contrato**, y quien
+clone el repo y lo ejecute obtendrá un diff que **no se commitea**. Está en
+`scripts/logo-kit/README.md` §Reproducibilidad, que es donde se lee al volver. Se descartó
+pinnear `sharp` a versión exacta: reduce la deriva sin eliminarla —el binario nativo varía por
+plataforma— y compra una sensación de cierre que no es verdad.
+
+**Lo que sí cambió es lo que `check:kit` PROMETE.** Cuadraba nombres, y un PNG en blanco,
+truncado o regenerado al tamaño equivocado los cuadra igual de bien: es un archivo válido, se
+ve perfectamente bien desde la página y se descarga roto. Ahora **abre los 43 binarios** y
+comprueba tres cosas del archivo y no de su nombre — que sea del formato que dice su extensión,
+que mida lo que su nombre promete, y que tenga **tinta**. Lo tercero necesita decodificar de
+verdad: se inflan los IDAT, se deshacen los cinco filtros de PNG y se suma el canal alfa, con
+`node:zlib` y sin dependencia nueva. **Qué mide el número del nombre lo dice el REGISTRO**
+(`medidaDeclarada`, en `lib/logo-kit.ts`), porque no significa lo mismo en las tres familias:
+alto en el símbolo, ancho en el lockup, lado en el favicon. Y un PNG cuyo nombre no case con
+ninguna es rojo, no verde: un hueco del metro no es un aprobado.
+
+**Lo que NO promete, escrito para no prometer de más:** que el dibujo sea el correcto. Un PNG
+del tamaño justo, con tinta y con el logo de otra versión pasa. Cazarlo exigiría rasterizar el
+SVG dentro del guardián, que es volver a meter ahí la cadena nativa que el párrafo anterior
+acaba de declarar no determinista.
+
+**El metro, validado rompiéndolo** (2026-08-30), sobre archivos reales y restaurando el árbol:
+un PNG válido de 425×512 enteramente transparente, uno truncado al 60%, uno sustituido por el
+de 256 y un `.ico` recortado. Los cuatro salen rojos nombrando el archivo. Y **el ancla que
+valida el decodificador** es el favicon de 16px, que lleva el trazo engordado de 6 a 10 unidades
+a propósito: tiene que salir **28,1% de tinta frente al 17,9% del de 32**. Si los dos salieran
+iguales, el que está mal es el decodificador.
 
 **Y una medición que no se hizo.** Esto **borra una capacidad que existía**: hasta hoy se podía
 bajar exactamente el PNG 512 en tinta clara. GA4 captura descargas de fábrica, así que el

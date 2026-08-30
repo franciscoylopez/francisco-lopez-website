@@ -21,9 +21,26 @@ export type Caso = {
    * build, que es su entrada de verdad. Rastreado o no: se restaura desde memoria.
    */
   archivo: string;
-  /** Del contenido original al mutado. */
-  mutar: (original: string) => string;
-};
+} & (
+  | {
+      binario?: false;
+      /** Del contenido original al mutado. */
+      mutar: (original: string) => string;
+    }
+  | {
+      /**
+       * EL ARCHIVO SE LEE Y SE RESTAURA COMO BYTES (2026-08-30, P68.737). Un caso
+       * de texto pasa por `utf8` en los dos sentidos, y eso a un PNG lo destroza:
+       * volvería «restaurado» y distinto, y el arnés lo cazaría al final como que
+       * no ha sabido limpiar. Lo trajo `check:kit`, cuyo caso interesante —un
+       * binario roto que cuadra los nombres igual de bien que el bueno— no se
+       * puede fingir desde ningún archivo de texto.
+       */
+      binario: true;
+      /** Del contenido original al mutado, en bytes. */
+      mutar: (original: Buffer) => Buffer;
+    }
+);
 
 /** Añade texto al final. Sirve para los que miran un archivo entero. */
 const append = (texto: string) => (o: string) => o + texto;
@@ -443,5 +460,69 @@ export const CASOS: Caso[] = [
     // `scripts/` ha vuelto a quedarse fuera.
     archivo: "scripts/censo.ts",
     mutar: append("\nconst sinUsarGuardian = 1;\n"),
+  },
+  // --- `check:kit`, tres casos (2026-08-30, P68.737 + P85.2) ---------------
+  //
+  // Era el ÚNICO guardián de ausencia de CI sin caso malo: se escribió con D119 y
+  // nadie le puso ninguno. Y de los que más fácil se quedan mudos, porque recorre
+  // un directorio y lo compara con un registro. Tenía ya media defensa hecha
+  // —falla explícitamente si no encuentra `RAIZ_KIT`, para no aprobar mirando
+  // cero—, pero nadie comprobaba que RECHAZARA el caso para el que se escribió.
+  //
+  // Van tres porque el guardián promete tres cosas distintas, y un caso por
+  // dirección es lo que impide que arreglar una tape a las otras dos.
+  {
+    guardian: "check:kit",
+    rotura: "una ruta declarada cuyo archivo no está en disco",
+    // SE MUTA EL REGISTRO, NO EL DISCO, y la comparación que se ejerce es la
+    // misma: `declarado ∉ disco`. Borrar el archivo daría el mismo rojo, pero el
+    // arnés restaura CONTENIDO y no existencia, así que un caso que borra no
+    // sabría devolverlo. Es el caso que originó los diez huérfanos de P70.27
+    // visto desde el otro lado.
+    archivo: "lib/logo-kit.ts",
+    mutar: (o) =>
+      o.replace(
+        '  "/logo-kit/svg/lockup-mono-negro.svg",',
+        '  "/logo-kit/svg/lockup-mono-negro.svg",\n  "/logo-kit/svg/pieza-que-no-existe.svg",',
+      ),
+  },
+  {
+    guardian: "check:kit",
+    rotura: "un archivo en disco que ya no lo declara nadie",
+    // La dirección contraria, que es la que de verdad dejó pasar a los huérfanos:
+    // se retira una declaración y el archivo real se queda sin quién lo cuente.
+    archivo: "lib/logo-kit.ts",
+    mutar: (o) =>
+      o.replace('  "/logo-kit/favicon/favicon-claro-48.png",\n', ""),
+  },
+  {
+    guardian: "check:kit",
+    rotura: "un PNG que cuadra su nombre y ya no es una imagen",
+    // EL CASO QUE OBLIGÓ A QUE EL ARNÉS SUPIERA DE BYTES. Hasta P85.2 el guardián
+    // cuadraba nombres, y un binario roto los cuadra igual de bien que el bueno:
+    // es el fallo que se ve perfectamente bien desde la página y se descarga
+    // roto. Truncar el PNG por la mitad no cambia ni su ruta ni su nombre, así
+    // que este caso no puede salir rojo por ninguna de las dos comprobaciones de
+    // arriba — solo por la de contenido.
+    archivo: "public/logo-kit/png/simbolo-plano-tintaOscura-512.png",
+    binario: true,
+    mutar: (o) => o.subarray(0, Math.floor(o.length / 2)),
+  },
+  {
+    guardian: "check:marco",
+    rotura:
+      "el `author` de un tipo elegible vuelve a cruzar de página con el `@id` pelado",
+    // EL CASO ES LITERALMENTE EL DE P60.99 (D87): la Rich Results Test veía el
+    // `author` del artículo como un `Thing` anónimo, y `check:marco` daba verde
+    // sobre lo mismo porque resuelve los `@id` contra TODO el sitio. Se le dieron
+    // `name` y `url` junto al `@id`; esto comprueba que si alguien vuelve a
+    // quitárselos, alguien lo dice. Cuarto caso que muerde el build, por lo de
+    // siempre: la entrada de este guardián es el HTML emitido.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) =>
+      o.replace(
+        /"author":\{"@type":"Person","@id":"([^"]+)","name":"[^"]*","url":"[^"]*"\}/,
+        '"author":{"@id":"$1"}',
+      ),
   },
 ];
