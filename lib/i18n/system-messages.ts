@@ -14,7 +14,20 @@ import type { Locale } from "./config";
 type SystemMessages = {
   homeAria: string;
   home: string;
-  notFound: { code: string; title: string; body: string };
+  /**
+   * `recover` son las DOS SALIDAS QUE NO SON EL INICIO, y existen por un cliente
+   * que no ve (2026-08-30). El 404 ya daba salidas reales a una persona —nav,
+   * footer y el botón de volver—, pero un agente que aterriza aquí no tiene
+   * ninguna: se lleva el gesto de marca y ningún sitio al que ir. Son las mismas
+   * dos que sirve el 404 en markdown (`lib/md-404.ts`), y a propósito: las dos
+   * puertas del mismo error tienen que decir lo mismo.
+   */
+  notFound: {
+    code: string;
+    title: string;
+    body: string;
+    recover: { sitemap: string; agents: string };
+  };
   error: { title: string; body: string; retry: string };
 };
 
@@ -25,6 +38,7 @@ const es: SystemMessages = {
     code: "Error 404",
     title: "Página no encontrada",
     body: "La página que buscas no existe o se ha movido.",
+    recover: { sitemap: "Mapa del sitio", agents: "Índice para agentes" },
   },
   error: {
     title: "Algo ha ido mal",
@@ -40,6 +54,7 @@ const en: SystemMessages = {
     code: "Error 404",
     title: "Page not found",
     body: "The page you’re looking for doesn’t exist or has moved.",
+    recover: { sitemap: "Site map", agents: "Index for agents" },
   },
   error: {
     title: "Something went wrong",
