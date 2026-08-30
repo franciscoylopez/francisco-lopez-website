@@ -196,6 +196,7 @@
 - D158 · El markdown para agentes sale del `<main>` prerenderizado, y es un artefacto commiteado con guardián
 - D159 · El guardián propio en vez del escáner ajeno: `check:agentes`
 - D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina
+- D161 · Cuatro huecos que vio un escáner ajeno, y el que no se tapa
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9887,3 +9888,58 @@ porqué, y de las tres la que de verdad vigila es `ai-train`: es la única que a
 cambiar por parecer más abierto, y la contradicción viviría en un `robots.txt`, que es un archivo
 que nadie vuelve a leer después de escribirlo. Su caso malo entra en `check:guardianes` el mismo
 día (D159).
+
+## D161 · Cuatro huecos que vio un escáner ajeno, y el que no se tapa — 2026-08-30
+
+**Contexto.** D157 fijó que la nota de un escáner agéntico no es un criterio de aceptación, y
+sigue en pie. Lo que esta entrada añade es la otra mitad: **un escáner que mira desde fuera ve
+cosas que ningún guardián de aquí puede ver**, y esas sí se arreglan. La segunda pasada, tras
+mergear el sprint, subió de 75 a 87 con los doce puntos saliendo de una sola casilla (el
+`Vary: Accept` de D158). De lo que quedaba, tres hallazgos eran ciertos y uno tenía la premisa
+caducada.
+
+**El `h1` no era el primer encabezado, y era invisible por construcción.** El diálogo de
+consentimiento vive en el layout y se renderiza cerrado pero presente, por delante del `<main>`
+desde P70.08, así que su título en `h2` encabezaba las 28 variantes. Los tres guardianes lo daban
+por bueno y **ninguno estaba roto**: `check:marco` pide *un solo* `h1` no vacío y se cumplía;
+`heading-order` de axe mira saltos hacia abajo (h2 → h4) y h2 → h1 baja de nivel, que es legal;
+NVDA no lo señala porque el diálogo tiene su nombre accesible correcto. Es la regla 1 de
+`BRAND.md` §Cómo se escribe una regla aplicada al metro: **el hueco entre dos reglas correctas no
+lo cubre ninguna de las dos.** Arreglo: el título pasa a `p` con `aria-labelledby`, que es de
+donde un lector toma el nombre; y la regla que faltaba —el `h1` abre el documento— entra en
+`check:marco` con su caso malo.
+
+**El 404 no hablaba markdown, que es la mitad de D158 que no se vio.** La negociación cubría las
+páginas que existen; una ruta que no existe reescribía a un `.md` que tampoco, así que el agente
+recibía 27 KB de HTML donde pidió texto. El estado HTTP siempre fue correcto. Ahora el proxy
+responde 404 con un cuerpo corto que apunta a `/llms.txt`, al sitemap y al inicio, y **la página
+404 en HTML publica esos mismos dos destinos**: las dos puertas del mismo error tienen que decir
+lo mismo, o lo que un agente encuentra depende de qué cabecera mandó.
+
+**Las rutas que un agente adivina.** `/about`, `/privacy` y `/contact` daban 404 porque los slugs
+son españoles en los dos idiomas. Diez redirecciones 307 en `next.config.ts` —no páginas, no
+entran en el sitemap—, con `permanent: false` a propósito: un 308 se cachea para siempre y estos
+alias son una comodidad reversible.
+
+### Lo que NO se hace, que es la parte que evita repetir la discusión
+
+**El `Organization` no se rellena.** El escáner pide `contactPoint` y `address` en el nodo
+`Organization`, y el único de la home es el `worksFor` de Francisco, o sea **su empleador**.
+Rellenarlo es publicar datos de un tercero o fingir que los propios son suyos, y contradice lo que
+el propio `llms.txt` afirma: «no es una agencia ni un estudio». Se acepta el 50 % de ese check.
+Lo que sí entra es `contactPoint` en el `Person`, que ya tenía email, teléfono y dirección: la
+premisa del hallazgo estaba caducada y comprobarlo costó un `grep`.
+
+**El ratio de contenido tampoco, y con cifra.** El escáner pide ≥5 % de texto sobre el HTML; la
+home da **2,9 %**, porque **73 de sus 220 KB (33 %) son `<script>`**: el payload RSC del App
+Router. La métrica mide el envoltorio, no el contenido, y el problema real que intenta detectar
+—que un cliente sin JS no encuentre texto— **este sitio ya lo resuelve por otra puerta**: la home
+en markdown son 6,6 KB contra 216 (D158). Las palancas que quedan empeorarían el sitio para las
+personas a cambio de un punto. Mismo criterio que el `api-catalog` sin API de D159. **Si el
+hallazgo vuelve: está medido y descartado, no sin mirar.**
+
+**Y una hipótesis marcada como tal.** El escáner no encuentra la sección «cuándo usar» de
+`llms.txt`, que existe entera desde P67.4. Lo único medido es que su título está en español; que
+busque la cadena inglesa es *probable* y **no está comprobado**. Va con alias bilingüe en el
+encabezado y tarea propia con las cuatro opciones ordenadas, porque una sospecha escrita como
+causa redirige la siguiente investigación.
