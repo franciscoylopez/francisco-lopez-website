@@ -9759,6 +9759,48 @@ en CI nombrando la variante, no en producción.
 si hubiera entrado en la tanda 5, entre medias habrían pasado tres tandas con el markdown diciendo
 lo de antes y nadie mirándolo.*
 
+### Addendum *(2026-08-30)* · Los 391 separadores, y por qué se arregló la premisa y no la regla
+
+El conversor mete un `·` entre dos elementos pegados para recuperar una separación que hacía el
+CSS, y dejó escrito que **«en prosa no se dispara, porque React emite el espacio entre palabras
+como nodo de TEXTO»**. La premisa era falsa en este sitio: `ui/rich.tsx` y `ui/article.tsx`
+envolvían **cada tramo de texto plano** en un `<span>` que solo llevaba la `key` —sin clase, sin
+semántica, sin efecto visual—, así que en prosa lo NORMAL era «elemento pegado a elemento».
+Medido sobre lo commiteado: **391 « · » colocados justo antes de un signo de puntuación** en las
+28 variantes. El artículo servía `no quería un CV en HTML, · **quería una prueba de criterio** · :
+en producto`.
+
+**Se arregló la premisa.** Los dos envoltorios pasan a `Fragment`: el texto plano vuelve a ser un
+nodo de TEXTO y los 391 desaparecen **por construcción**, no por una regla nueva que haya que
+mantener. Cero cambios visuales, comprobado además que ningún selector de `globals.css` apuntaba a
+esos `span`.
+
+**Y el disparo que se añadió es estrecho, porque lo ancho se probó y rompía.** El caso espejo —el
+chip «Exit» detrás de un nodo de texto separado por `ml-2`, que salía `AppRadar.Exit`— pedía
+disparar también sin adyacencia de elementos. La primera versión disparaba siempre que faltara el
+espacio, y **medida sobre las 28 variantes inventaba separadores nuevos**: `+ · 28%` en la cifra
+de Hitos y `palabras · · ·` en la cabecera del artículo. Atado a un **final de frase**, el diff
+sobre las 28 es exactamente las dos líneas del chip y nada más.
+
+#### Lo reutilizable: tres metros validados contra casos que no existen, el mismo día
+
+Es el patrón que `BRAND.md` §Cómo medir nombra en su punto 1, y esta sesión lo produjo **tres
+veces**, las tres en cosas escritas ese mismo día:
+
+| Metro | Contra qué se validó | Qué no veía |
+|---|---|---|
+| El test de «no se dispara en prosa» | `<p><em>a</em> y <em>b</em></p>`, escrito a mano | La forma real, `<span>…</span><strong>…</strong>`, que el sitio sí emite |
+| Dos de las nueve comprobaciones de `check:agentes` | `includes` de la URL | Que la home es prefijo de todas y `/trayectoria` de `/trayectoria/emendu`, así que aprobaban siempre |
+| El caso malo de `ai-train` en el arnés | Un `sed`, que sustituye una vez **por línea** | Que `String.replace` cambia la primera del ARCHIVO, y era la del comentario |
+
+**La forma del fallo es siempre la misma: el caso de prueba se escribe a mano y se parece a lo
+real sin serlo.** Los tres pasaban en verde. El primero lo destapó una revisión con IA, el segundo
+también, y el tercero CI. Ninguno lo habría destapado mirar el código, porque los tres estaban
+*bien* leídos: lo que fallaba era contra qué se comparaban.
+
+*(Y una cuarta del mismo día, de otra familia: el sello de `/accesibilidad` se puso **antes** del
+último cambio tres veces seguidas. Esa sí la cazó su guardián las tres.)*
+
 ## D159 · El guardián propio en vez del escáner ajeno: `check:agentes` — 2026-08-30
 
 **Decisión.** Lo que este sitio le promete a un agente lo vigila un guardián **nuestro** en CI
