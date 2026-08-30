@@ -219,6 +219,108 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replaceAll("card=contacto", "card=home"),
   },
   {
+    guardian: "check:marco",
+    rotura:
+      "un artículo se sirve dentro de un `<section>` mientras su `og:type` dice `article`",
+    // El caso malo es el estado del sitio hasta P67.6: seis páginas declaraban
+    // `og:type: "article"` —y una además `TechArticle` en su JSON-LD— y ninguna
+    // servía un `<article>`. Dos capas de la misma página afirmando cosas
+    // distintas, y nada que las cruzara. Muerde el build por lo de siempre: lo
+    // que este guardián mira es el HTML emitido.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) =>
+      o.replace("<article>", "<section>").replace("</article>", "</section>"),
+  },
+  {
+    guardian: "check:marco",
+    rotura: "un trozo de una página cualquiera se envuelve en un `<article>`",
+    // LA VUELTA de la invariante, y no es simetría por gusto: sin ella, envolver
+    // media página de más pasaría igual de verde. `<article>` significa
+    // «contenido autónomo y redistribuible»; repartido por una página que no lo
+    // es, deja de decir nada.
+    archivo: ".next/server/app/es/contacto.html",
+    mutar: (o) => o.replace("<main ", "<article></article><main "),
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "`llms.txt` deja de nombrar una página del registro",
+    // El modo de fallo REAL, y el que este archivo ya tuvo: las cinco páginas del
+    // deep-dive existían y `llms.txt` no las enlazaba, así que un modelo que
+    // leyera el índice no podía descubrir el contenido más profundo del sitio
+    // (P50). El tipo impide olvidar una página al compilar; esto comprueba que
+    // además LLEGÓ al texto, que es otra cosa. Muerde el artefacto del build
+    // porque es ahí donde el archivo existe de verdad.
+    archivo: ".next/server/app/llms.txt.body",
+    mutar: (o) =>
+      o.replace(
+        new RegExp("https?://[^\\s)]*/cookies"),
+        "https://ejemplo.test/x",
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura:
+      "el proxy deja de poner `Vary: Accept` y una caché mezcla los dos cuerpos",
+    // La misma URL devuelve HTML o markdown según el `Accept`, así que sin
+    // `Vary` una caché compartida le sirve a una persona el markdown que pidió un
+    // agente, o al revés. No se ve en el prerender —el HTML no sabe con qué
+    // cabeceras se sirvió—, así que el guardián EJECUTA `proxy()` y por eso este
+    // caso muerde el código del proxy y no un artefacto.
+    archivo: "proxy.ts",
+    mutar: (o) =>
+      o.replace(
+        'if (!partes.some((v) => v.toLowerCase() === "accept")) partes.push("Accept");',
+        "",
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura:
+      "`ai-train` pasa a `yes` y contradice al `LICENSE` en un archivo que nadie abre",
+    // De las tres Content Signals (P67.8) esta es la única que alguien podría
+    // cambiar por parecer más abierto, y es justo la que no se puede: el
+    // `LICENSE` nombra los textos del sitio y `content/` entre lo que NO se
+    // licencia para obras derivadas. Un `yes` aquí no es una preferencia
+    // distinta, es una contradicción publicada — y viviría en un `robots.txt`,
+    // que es un archivo que nadie vuelve a leer después de escribirlo.
+    archivo: "app/robots.ts",
+    // APUNTA A LA DIRECTIVA, NO A LA CADENA. `ai-train=no` aparece dos veces en ese
+    // archivo —primero en el comentario que la explica, después en la línea que se
+    // sirve— y `String.replace` cambia la PRIMERA. Con la cadena suelta, el caso
+    // mutaba el comentario, el `robots.txt` salía intacto y el arnés acusaba de
+    // desdentado a un guardián que estaba bien. Lo cazó CI, y el arnés no podía:
+    // comprueba que la mutación cambie el archivo, y el archivo cambiaba.
+    mutar: (o) =>
+      o.replace(
+        '"Content-Signal": "ai-train=no',
+        '"Content-Signal": "ai-train=yes',
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "robots.txt se abre en todos los entornos y un preview se indexa",
+    // La salida fácil el día que el gate diera rojo sería quitarle a `robots()` su
+    // gateo por entorno. Entonces un deployment de rama entraría en el índice, que
+    // es justo lo que D13 evita. Por eso el guardián comprueba los DOS entornos y
+    // no solo el bueno: certificar solo producción dejaría esta puerta abierta.
+    archivo: "app/robots.ts",
+    mutar: (o) =>
+      o.replace(
+        'const isProduction = process.env.VERCEL_ENV === "production";',
+        "const isProduction = true;",
+      ),
+  },
+  {
+    guardian: "md:verificar",
+    rotura:
+      "el markdown commiteado de una página deja de decir lo que dice la página",
+    // El modo de fallo REAL de un artefacto derivado: nadie lo regenera después
+    // de tocar el copy, y se queda diciendo lo de antes en silencio. Se rompe el
+    // artefacto y no la página, que es la dirección en que esto se estropea.
+    archivo: "public/md/es/contacto.md",
+    mutar: append("\nUn párrafo que la página no dice.\n"),
+  },
+  {
     guardian: "check:articulo",
     rotura: "cambia el copy del artículo y la fecha que ve Google no se mueve",
     // El caso malo es el estado real hasta P70.04: `ARTICLE_UPDATED` pasó DOCE

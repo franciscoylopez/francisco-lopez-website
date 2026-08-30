@@ -40,6 +40,24 @@ export interface Experience {
   slug: string | null;
   /** Nombre del asset en `public/logos/`. `null` = fila sin logo (PRD §8.5). */
   logo: string | null;
+  /**
+   * Los dos extremos del periodo en ISO 8601, para el `datetime` de los `<time>`
+   * que pinta `components/site/periodo.tsx` (P67.6).
+   *
+   * VIVEN AQUÍ Y NO EN EL COPY, y es la línea que separa este archivo del
+   * diccionario: `"Feb 2025 - Actualidad"` es display y cambia con el idioma;
+   * `2025-02` es el mismo dato en los dos. Meterlo en `experience-copy` habría
+   * sido escribir dos veces la misma fecha, que es el error que este proyecto ya
+   * se ha encontrado cuatro veces con este mismo campo (P48.55).
+   *
+   * `hasta: null` es «sigue en curso», no «falta el dato»: ahí el copy dice
+   * «Actualidad»/«Present», que no es una fecha y por tanto no se marca.
+   *
+   * Que las dos mitades digan lo mismo no se confía a la vista: lo comprueba
+   * `periodPartsOf` contrastando el año ISO contra el texto, y corre en build.
+   */
+  desde: string;
+  hasta: string | null;
 }
 
 // `as const satisfies` y no `: Experience[]`: la anotación clásica borraba los
@@ -49,14 +67,62 @@ export interface Experience {
 // existe — el mismo modo de fallo silencioso que este módulo mata en los logos,
 // una capa más arriba.
 export const EXPERIENCES = [
-  { company: "Emendu", slug: "emendu", logo: "companies/emendu" },
-  { company: "KUOTIP", slug: "kuotip", logo: "companies/kuotip" },
-  { company: "INDYA", slug: "indya", logo: "companies/indya" },
-  { company: "Freepik", slug: "freepik", logo: "companies/freepik" },
-  { company: "TheTool", slug: "thetool", logo: "companies/thetool" },
-  { company: "PICKASO", slug: null, logo: "companies/pickaso" },
-  { company: "Ontecnia", slug: null, logo: "companies/ontecnia" },
-  { company: "Havas Media", slug: null, logo: null },
+  {
+    company: "Emendu",
+    slug: "emendu",
+    logo: "companies/emendu",
+    desde: "2025-02",
+    hasta: null,
+  },
+  {
+    company: "KUOTIP",
+    slug: "kuotip",
+    logo: "companies/kuotip",
+    desde: "2024-02",
+    hasta: "2024-12",
+  },
+  {
+    company: "INDYA",
+    slug: "indya",
+    logo: "companies/indya",
+    desde: "2022-01",
+    hasta: "2023-12",
+  },
+  {
+    company: "Freepik",
+    slug: "freepik",
+    logo: "companies/freepik",
+    desde: "2021-10",
+    hasta: "2021-12",
+  },
+  {
+    company: "TheTool",
+    slug: "thetool",
+    logo: "companies/thetool",
+    desde: "2016-05",
+    hasta: "2021-10",
+  },
+  {
+    company: "PICKASO",
+    slug: null,
+    logo: "companies/pickaso",
+    desde: "2015-09",
+    hasta: "2016-12",
+  },
+  {
+    company: "Ontecnia",
+    slug: null,
+    logo: "companies/ontecnia",
+    desde: "2013-09",
+    hasta: "2015-09",
+  },
+  {
+    company: "Havas Media",
+    slug: null,
+    logo: null,
+    desde: "2009",
+    hasta: "2013",
+  },
 ] as const satisfies readonly Experience[];
 
 /** Los slugs que SÍ tienen página, como unión de literales. */

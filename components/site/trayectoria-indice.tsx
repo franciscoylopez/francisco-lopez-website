@@ -17,6 +17,7 @@ import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
+import { Periodo } from "./periodo";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { Marcas } from "@/components/ui/marcas";
 
@@ -125,7 +126,7 @@ export function TrayectoriaIndice({
         >
           {CON_PAGINA.map((exp) => {
             const slug = exp.slug as ExperienceSlug;
-            const { role, period, sector } = factsOf(lang, exp.company);
+            const { role, sector } = factsOf(lang, exp.company);
             return (
               <li key={slug} className="m-0">
                 <a href={hrefDe(slug)} className={TARJETA}>
@@ -147,7 +148,7 @@ export function TrayectoriaIndice({
 
                   <p className="text-muted-foreground mt-auto flex items-center justify-between gap-3 pt-[1.4rem] text-[0.9rem] [font-variant-numeric:tabular-nums]">
                     <span>
-                      {role} · {period}
+                      {role} · <Periodo lang={lang} company={exp.company} />
                     </span>
                     {/* Mismo gesto y misma excepción de movimiento que la flecha
                         del cierre de página: la clase va escrita entera, no

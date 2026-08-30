@@ -42,7 +42,10 @@
     "check:tablero": "tsx scripts/check-tablero.ts",
     "check:marco": "tsx scripts/check-marco.ts",
     "check:figuras": "tsx scripts/check-figuras.ts",
-    "check:marcas": "tsx scripts/check-marcas.ts"
+    "check:marcas": "tsx scripts/check-marcas.ts",
+    "md": "tsx scripts/md/extraer.ts",
+    "md:verificar": "tsx scripts/md/extraer.ts --verificar",
+    "check:agentes": "tsx scripts/check-agentes.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",

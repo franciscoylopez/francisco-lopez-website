@@ -1,6 +1,7 @@
 import type { Dictionary } from "@/app/[lang]/dictionaries";
 import { EMAIL } from "@/lib/contact";
-import { LAST_COOKIES_UPDATE, fillDate } from "@/lib/design-values";
+import { LAST_COOKIES_UPDATE } from "@/lib/design-values";
+import { FechaCopy } from "@/components/site/fecha";
 import type { Locale } from "@/lib/i18n/config";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
@@ -71,7 +72,11 @@ export function CookiesPolicy({
               size="page-sm"
             >
               <p className="text-muted-foreground text-[0.9rem]">
-                {fillDate(t.updated, LAST_COOKIES_UPDATE, lang)}
+                <FechaCopy
+                  text={t.updated}
+                  iso={LAST_COOKIES_UPDATE}
+                  lang={lang}
+                />
               </p>
             </SectionHeader>
             <p className="mt-6 text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6]">

@@ -90,6 +90,8 @@
 - [La tanda 4 de «Voz»: dos premisas de ficha que no aguantaron la medición — 2026-08-29](#la-tanda-4-de-voz-dos-premisas-de-ficha-que-no-aguantaron-la-medición--2026-08-29)
 - [La tanda 5 de «Voz», que era toda de andamiaje — 2026-08-30](#la-tanda-5-de-voz-que-era-toda-de-andamiaje--2026-08-30)
 - [El cierre de «Voz» — 2026-08-30](#el-cierre-de-voz--2026-08-30)
+- [El sprint «Agentes» — abierto el 2026-08-30](#el-sprint-agentes--abierto-el-2026-08-30)
+- [La tanda 3 y la 4 de «Agentes», y lo que el techo de contexto obligó a retirar — 2026-08-30](#la-tanda-3-y-la-4-de-agentes-y-lo-que-el-techo-de-contexto-obligó-a-retirar--2026-08-30)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3997,6 +3999,111 @@ el 6,7 % del arranque y **63 veces el margen que queda** — y es la sección qu
 
 **El informe completo, con el panel de los siete indicadores:**
 <https://claude.ai/code/artifact/5c85a53e-4fba-4aa2-8a22-028ceae74ec6>
+
+
+## El sprint «Agentes» — abierto el 2026-08-30
+
+Diez tareas: **seis propias** y **cuatro de cupo de `General`**, que es lo que no hicieron ni
+«Drenaje» ni «Voz». El embalse baja de 20 a 16, el primer verde en tres cierres.
+
+### Por qué entra por delante de la Distribución, que llevaba cinco «no»
+
+`PRD-Live` §9 acababa de decir, esa misma mañana, que no quedaba sprint de build y que lo único
+Must abierto era la **Distribución**. El triaje de dos escáneres agénticos y de un post sobre
+elementos semánticos dejó seis tareas en P67-68, y se abren por delante con un argumento que no es
+«ya lo haremos»: **«Agentes» *es* distribución**, en el canal que el sitio no tenía cubierto. Un
+agente al que le piden «PMs senior de SaaS B2B en España» se tragaba 218 KB de HTML y no tenía
+forma de saber cuándo elegir esta fuente. La Distribución humana va a su **sexto** aplazamiento,
+ahora con motivo escrito en vez de por inercia.
+
+**Lo que se arrastró de `General`, y por qué esas cuatro:** las tres que no piden criterio y son de
+la familia del sprint —un guardián que no particiona su recuento, cinco assets sin dueño en un repo
+público, el triaje de Dependabot— más el **Must del octavo `method-review`**, el objetivo de
+contexto que no se ha cumplido nunca. Fuera del cupo a propósito: el trío del censo, que pide
+criterio de medición, y los saltos de ESLint y TypeScript, que son riesgo dentro de un sprint de
+contenido servido.
+
+### Tanda 1 — el descarte se escribe antes de construir (D157)
+
+La primera tarea del sprint no construye nada: fija la premisa. De los dos escáneres, **dos de los
+tres «críticos» no reproducen** —la home sirve 1 `h1` y 6.497 caracteres de prosa, y una ruta
+inexistente devuelve 404 de verdad en los dos idiomas— y **12 checks del segundo miden superficies
+que este sitio no tiene**. El criterio reutilizable quedó escrito: *un check de superficie agéntica
+aplica si el sitio TIENE esa superficie; publicar un `api-catalog` sin API no es estar preparado
+para agentes, es mentir en un formato que un agente sabe leer*.
+
+**Y el metro del propio descarte estaba mal.** La ficha tumbaba el primer hallazgo con «~77.500
+caracteres de texto», que salían de contar como prosa el payload RSC de dentro de un `<script>`. El
+texto real son 6.497. El veredicto no cambia —sigue siendo 13 veces el umbral, no 155— pero es la
+regla 3 de `BRAND.md` apareciendo **dentro de la tarea que existe para validar el metro de otro**.
+
+### Tanda 2 — el markdown por página, y tres cosas que no estaban en la ficha (D158)
+
+La entrega: cada página también en markdown, por URL explícita y por negociación `Accept`, con la
+home pasando de 216.323 a 6.585 bytes y las 28 variantes intactas como estáticas. El *cuándo* que
+la ficha dejaba abierto se resolvió como **artefacto commiteado**, porque leer `Accept` dentro de
+una página la haría dinámica y eso lo cerró D48.
+
+Lo que no estaba previsto, y las tres las encontró un metro y no una revisión:
+
+- **La frontera de CSS.** Dos elementos pegados sin texto en medio estaban separados por la hoja de
+  estilos, no por prosa; sin esa regla el markdown decía `Correofranciscojavier…` y
+  `NombreImpactoAño`. En prosa no se dispara por construcción, porque React emite el espacio entre
+  palabras como nodo de texto.
+- **`Vary: Accept` no llega a la página prerenderizada.** Puesto en el proxy y en `next.config`, y
+  medido que Next lo sobrescribe en las dos. La consecuencia se escribió en vez de esconderse: el
+  contrato se apoya en la URL explícita y la negociación se anuncia como comodidad.
+- **Cada entrada de `DECISIONS.md` deja viejo el markdown del artículo**, porque el artículo enlaza
+  sus fuentes con número de línea y el índice de la cabecera crece una línea por entrada. D157 y
+  D158 desplazaron 22 enlaces. Se acepta con el motivo escrito, y se **tarea la revisión** (P68.79)
+  para cuando el precio se haya pagado unas cuantas veces, que es la única forma honesta de saber
+  si sigue pareciendo bueno.
+
+**El arnés de guardianes hizo de tercer revisor**, y no en abstracto: avisó de que `md:verificar` y
+`check:accesibilidad` ya fallaban sobre el árbol limpio, así que rechazar su caso malo no probaba
+nada. Los dos eran **sellos puestos antes del último cambio**, no defectos. Y destapó que
+`/accesibilidad` publica cuántos guardianes y cuántos casos malos hay: el caso nuevo movió las dos
+cifras, corregidas en `design-values.ts`, que es donde D38 dice que viven.
+
+*La lección de orden, que no llega a convención porque ya la vigila un guardián: un sello se pone al
+final, sobre el estado final del árbol. Se incumplió dos veces en la misma sesión y las dos salieron
+en rojo, que es exactamente lo que tiene que pasar.*
+
+
+## La tanda 3 y la 4 de «Agentes», y lo que el techo de contexto obligó a retirar — 2026-08-30
+
+**La tanda 3** puso la sección «Cuándo usar esta fuente» en `llms.txt` y los tres elementos
+semánticos que faltaban. Las tres decisiones que cambiaron respecto a lo escrito en las fichas
+—dónde vive el copy, de qué cuelga la invariante del `<article>` y qué fechas existen de verdad—
+están en las propias fichas y en D159; aquí queda lo que no es de una tarea.
+
+**La tanda 4 estrenó `check:agentes` (D159), y lo que enseña es dónde mira cada cosa.** Un solo
+guardián con **tres fuentes distintas**, porque la promesa ocurre en tres sitios: el artefacto de
+`llms.txt`, el proxy **ejecutado** —una cabecera no está en el prerender— y `robots()` con sus dos
+entornos, porque el `robots.txt` que se construye en CI es el de **no** producción y leerlo habría
+certificado en verde lo contrario de lo que se cree.
+
+### El techo de contexto es una regla de suma cero, y así se nota
+
+Añadir la fila del gate nuevo a la tabla de `PRD-Live` **tiró `check:contexto`**: 12.341 palabras
+contra un techo de 12.300. El guardián no pide recortar lo recién escrito, pide **retirar**, y su
+primera pregunta —¿hay párrafos fechados en `PRD-Live`?— señalaba a uno concreto: la aclaración
+del 2026-08-29 sobre qué cuenta como envío del formulario, que narraba una corrección (el
+`status: "sent"` tenía tres causas y solo una manda correo) donde bastaba la regla en presente.
+La regla se queda en una línea y apunta a `cuentaComoEnvio`; el relato baja aquí y a D153.
+
+**Lo reutilizable: un documento @-importado con techo convierte cada añadido en una decisión de
+qué sale.** Sin el techo, la tabla de gates habría crecido una fila por sprint hasta que nadie la
+leyera, que es exactamente el destino del que este método intenta escapar.
+
+### Qué contaba como envío, antes de que la regla quedara en una línea *(2026-08-29, D153)*
+
+`status: "sent"` tenía **tres causas** —el envío de verdad y los dos filtros que callan a un bot,
+el honeypot y el suelo de 3 segundos— y solo una manda correo. La analítica las contaba las tres,
+así que la métrica primaria del sitio incluía bots silenciados. Se corrigió contándola en
+`cuentaComoEnvio` (`lib/contact-form.ts`) y no con una comparación en el componente: ahí la regla
+tiene tests y caso malo. **El silencio hacia el bot no se tocó** —callar es lo correcto—;
+propagarlo a la analítica era lo que estaba mal.
 
 ## Fuentes
 

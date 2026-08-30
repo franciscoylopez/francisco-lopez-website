@@ -128,34 +128,51 @@ export function ContactoPagina({
 
             {/* Apilados en móvil, el hueco lo pone este margen; en la rejilla de
               dos columnas se anula y manda el centrado vertical. */}
-            <ul
+            {/* `<address>` (P67.6): es el elemento exacto para los datos de
+              contacto de la persona de la que habla el documento, y esta es la
+              única página del sitio que los PUBLICA como contenido. El footer no
+              lo lleva a propósito: allí los mismos canales son carpintería de
+              navegación, y un `<address>` por página repetiría la afirmación
+              catorce veces.
+
+              ENVUELVE Y NO SUSTITUYE A LA LISTA: son dos cosas distintas —esto
+              es información de contacto, aquello es una lista de dos canales— y
+              `<address>` no puede tener `<li>`. Se lleva la colocación en la
+              rejilla y la lista se queda con su forma; `not-italic` desactiva la
+              cursiva que el navegador le pone por defecto, que es lo único que
+              este elemento cambia de aspecto. */}
+            <address
               data-reveal
-              aria-label={dict.channels.label}
-              className="m-0 mt-[clamp(2rem,4vw,2.5rem)] flex list-none flex-col gap-[0.6rem] p-0 lg:col-start-2 lg:row-start-2 lg:mt-0 lg:self-center"
+              className="mt-[clamp(2rem,4vw,2.5rem)] not-italic lg:col-start-2 lg:row-start-2 lg:mt-0 lg:self-center"
             >
-              {canales.map(({ icon: Icon, rotulo, valor, href }) => (
-                <li key={valor} className="min-w-0">
-                  {/* La tarjeta pulsable entera: `variant="card"` de la capa de
+              <ul
+                aria-label={dict.channels.label}
+                className="m-0 flex list-none flex-col gap-[0.6rem] p-0"
+              >
+                {canales.map(({ icon: Icon, rotulo, valor, href }) => (
+                  <li key={valor} className="min-w-0">
+                    {/* La tarjeta pulsable entera: `variant="card"` de la capa de
                     acciones, creada aquí (P67). El prototipo la escribió con
                     clases sueltas y dejó anotado que eso era deuda. El interior
                     —icono, rótulo y valor— sale de `ActionCardLines`, de la misma
                     capa: estaba escrito aquí y otra vez en su demo del Design
                     System, byte a byte (design-review, 2026-08-23). */}
-                  <a
-                    href={href}
-                    className={cn(
-                      actionVariants({ variant: "card", size: "card" }),
-                    )}
-                  >
-                    <ActionCardLines
-                      icon={<Icon aria-hidden />}
-                      label={rotulo}
-                      value={valor}
-                    />
-                  </a>
-                </li>
-              ))}
-            </ul>
+                    <a
+                      href={href}
+                      className={cn(
+                        actionVariants({ variant: "card", size: "card" }),
+                      )}
+                    >
+                      <ActionCardLines
+                        icon={<Icon aria-hidden />}
+                        label={rotulo}
+                        value={valor}
+                      />
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </address>
           </div>
         </div>
       </section>

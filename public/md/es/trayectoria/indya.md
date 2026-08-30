@@ -1,0 +1,117 @@
+---
+url: https://franciscolopez.es/trayectoria/indya
+lang: es
+title: Cambiando la nutrición deportiva desde producto
+---
+
+1. [Inicio](https://franciscolopez.es/)
+2. [Trayectoria](https://franciscolopez.es/trayectoria)
+3. INDYA
+
+INDYA · SaaS B2C · Health tech
+
+# Cambiando la nutrición deportiva desde producto
+
+Rol
+
+Product Lead
+
+Periodo
+
+Ene 2022 (2022-01) - Dic 2023 (2023-12)
+
+Sector
+
+SaaS B2C · Health tech
+
+Tamaño
+
+De 13 a 27 personas
+
+Reporting
+
+CPO y CTO
+
+01 — En un minuto
+
+## 01. Crecimiento sobre el ciclo de vida, no sobre features
+
+- **Estrategia de crecimiento sobre el ciclo de vida, no sobre funcionalidades.** Co-definí las tres palancas (activación, engagement y retención) y con ellas se ordenaron el roadmap y los OKR del equipo.
+- **Práctica de user research donde no había ninguna.** Entrevistas, encuestas y análisis post-churn en cadencia continua: INDYA tenía una estructura de datos muy buena y poca conversación con sus usuarios.
+- **Churn mensual del 16% al 10%.** Varios frentes a la vez para entender y atajar el churn voluntario y el involuntario: acciones de producto combinadas con customer success.
+- **Activación del primer mes: +28%.** Onboarding, personalización y comprensión de valor: que el usuario nuevo entienda para qué sirve la app antes de que se le pase la motivación con la que se la descargó.
+- **Rediseño del pricing con A/B testing.** Unifiqué planes y quité barreras de entrada: **+13% de conversión y +5% de ARPU**, sin tocar la retención.
+- **Delivery más consistente.** De Trello a Jira, ceremonias ágiles de verdad, criterios de entrega y aprobación, sprints con un solo foco y retrospectivas para mejorar como equipo.
+
+02 — La historia
+
+## 02. De software de un servicio a producto
+
+### Muchos datos y poca conversación
+
+INDYA llevaba camino andado cuando entré, en enero de 2022. Había nacido como un centro de nutrición en Valencia: los fundadores vieron que podían dar un servicio mejor si monitorizaban el día a día de sus clientes y encargaron la primera versión de la app a una agencia externa. Funcionó (demostró que el servicio mejora cuando el nutricionista ve el día a día) y con eso se contrató equipo interno y se cerró la primera ronda, que puso la app en manos de los primeros clientes **fuera de Valencia y ajenos al centro físico**. Ahí INDYA deja de ser el software de un servicio y pasa a ser un producto.
+
+Entré con el encargo de profesionalizarla (producto, metodología, datos y escalabilidad) para convertirla en la app de nutrición de referencia. Tenía clientes, monetizaba y tenía un diseño cuidado, y eso es justo lo que hacía difícil ver lo que faltaba: un sistema de objetivos que no ordenaba las decisiones, sprints bisemanales que no cabían en dos semanas, un nivel de bugs alto y (lo más llamativo en una empresa con muy buena estructura de datos) poca conversación con los usuarios.
+
+### Cómo trabajé allí
+
+**El foco, antes que la cadencia.** Heredé sprints bisemanales que existían pero no cerraban. Lo que cambié no fue la duración: un sprint con quince iniciativas abiertas no es un sprint, es una lista de deseos con fecha. Pasamos de Trello a Jira y, con el cambio, la gestión de tareas ganó criterios explícitos (**definition of ready** y **definition of done**), que es lo que permite discutir si algo está listo sin discutir con quien lo hizo.
+
+**La retro como mantenimiento del equipo, no como juicio del sprint.** Las incorporé en cuanto la fricción entre diseño y desarrollo se hizo recurrente. La regla que las hizo útiles: no se habla de qué salió bien o mal, ni de quién; se habla de qué va a aportar cada uno al producto la próxima vez.
+
+**Del dato de instalación al dato de producto.** Con el impulso del CPO pasamos de las métricas básicas de Firebase a **Amplitude**. El efecto no fue tener gráficas: fue dejar de mirar únicamente las métricas de negocio para empezar a comprender de verdad al usuario.
+
+**Y hablar con los usuarios, que era lo que no se hacía.** Entré por la puerta del churn (un problema con dueño abre una puerta que una iniciativa de research no abre) y de ahí salieron cuatro entradas permanentes: post-churn (por qué se van), hardusers (qué les hace quedarse y qué necesitan), usuarios nuevos (qué les activa y qué les frena) y encuestas generales para el pulso.
+
+### Apple, Gasol y las apps donde ya vivía el usuario
+
+El tándem con el product designer fue una de las piezas del salto, y no tardó en verse desde fuera: Apple se fijó en la app y nos incorporó a **Apple App Store Foundations**, su programa de mentoría. De ahí salimos siendo **una de las primeras empresas de Europa en lanzar widgets** (una funcionalidad que Android tenía desde hacía años y que en iOS se estrenaba entonces) y destacados en la App Store: para el usuario, resolver la nutrición del día sin abrir la app; para nosotros, visibilidad que no se compra.
+
+Y nos integramos donde el usuario ya estaba: **Apple Health**, **Salud conectada**, **Strava** y **TrainingPeaks**. El beneficio directo era no tener que contar dos veces lo mismo, pero el grande fue para el servicio: el equipo de nutrición pasó a planificar **sobre el rendimiento real, no sobre lo que el cliente recordaba**.
+
+Todas estas acciones marcan un camino de trabajo bien hecho, y eso da sus frutos: en los clientes y en el tipo de socio que se acerca. Poco después, nada menos que [Pau Gasol entró en el accionariado](https://getindya.com/pau-gasol-indya/). Lo relevante no fue el importe: fue lo que significaba para un cliente que entrena.
+
+Al pulsar, el vídeo se carga desde YouTube y se aplican sus condiciones.
+
+03 — El caso
+
+## 03. Multiplicando los marcados
+
+Podría contar aquí cómo subimos la activación o cómo bajamos el churn, que son los casos que se esperan de un SaaS. Prefiero uno menos estándar, porque enseña mejor cómo trabajo: **la palanca no estaba en la métrica del problema, sino dos pasos antes.**
+
+Buscando qué hacían distinto los usuarios más activos, filtramos en Amplitude a los que llevaban más de cinco meses y tenían más del 50% de actividad diaria. Lo que apareció fueron los **marcados**: cada usuario marca el cumplimiento de las actividades que le planifica su nutricionista (entrenamientos y comidas) en una escala de cinco niveles. Funciona en parte como gamificación, pero sobre todo **es el dato con el que el nutricionista ajusta la planificación**.
+
+Y aparecieron dos paralelismos. Los usuarios que no se activaban, en su mayoría no tocaban la funcionalidad. Y en los que sí la usaban, **el uso caía entre dos y cuatro semanas antes de cancelar**. Eso convierte una funcionalidad en un **indicador adelantado**: no explica por qué se van, avisa de que se van a ir.
+
+Antes de tocar nada, las preguntas: ¿explicábamos bien para qué sirven? ¿Bastaban cinco estados? ¿Era fácil marcarlos? ¿Ser constante te devolvía algo? Las entrevistas confirmaron que casi todas tenían razón de ser, incluidos los que ya los usaban a diario, que querían aportar más que un porcentaje: notas, fotos.
+
+Así que hicimos **dos cambios mínimos, para aprender**: explicar por qué importan (al usuario y al nutricionista) y poner un contador diario de actividades completadas. No se buscaba mover el número, se buscaba saber si bastaba con explicar el valor y devolver señal. La respuesta fue inmediata: **un 32% más de marcados**.
+
+Con el aprendizaje validado dejamos de preguntar y empezamos a empujar: **Completa en un minuto** (un wizard de final del día), **notificación post-fallo** (si un día quedó vacío, al siguiente te lleva al wizard), **Sentimiento** (tags opcionales que le dicen al nutricionista qué alimento funciona antes de entrenar) y un **report mensual** con cumplimiento, mejores entrenamientos y ranking por deporte. A los tres meses ya no era el 34% de los usuarios el que registraba sus marcados, sino el 52%, y **el volumen total se había multiplicado por 2,2**: más usuarios usaban la funcionalidad, y los que ya la usaban lo hacían más.
+
+### Resultados
+
+- +32%
+  
+  de marcados con solo dos cambios mínimos: explicar por qué importan y devolver señal diaria
+- ×2,2
+  
+  el volumen total de marcados tres meses después, con los usuarios que los registran pasando del 34% al 52%
+- 2-4 semanas
+  
+  de antelación con la que la caída de uso avisa de una cancelación
+
+Más usuarios nuevos activados, más retención por encima de los tres meses, mejor información para planificar y detección preventiva de los usuarios en riesgo: todo a partir de mirar un comportamiento que nadie estaba mirando.
+
+04 — Aprendizajes
+
+## 04. Cuatro cosas que me llevo de dos años
+
+1. **La palanca no estaba en la métrica del problema, estaba dos pasos antes.** Atacar el churn de frente habría dado una lista de motivos; mirar qué hacían distinto los que se quedaban dio un comportamiento que se podía mover **y que además avisaba con semanas de antelación**. Desde entonces busco primero el indicador adelantado, no la causa.
+2. **Las retros bien llevadas son lo más barato que puede hacer un equipo por su propia velocidad.** No por lo que se corrige en cada una, sino porque convierten la fricción en algo que se dice en voz alta en vez de acumularse. La condición es que no se hable de culpables.
+3. **Integrarte donde ya vive tu usuario vale más que pedirle que venga.** Apple Health, Strava y TrainingPeaks no añadieron funcionalidad: quitaron el trabajo de contar dos veces lo mismo, y de paso le dieron al nutricionista el dato que no tenía.
+4. **El flujo de caja es el monstruo que devora startups.** Es una de las métricas que más hay que controlar: si no está alineado con el plan, puede acabar con productos fantásticos.
+
+Seguir leyendo
+
+[Experiencia anterior · Freepik · Product Manager · Oct 2021 - Dic 2021](https://franciscolopez.es/trayectoria/freepik) · [Experiencia siguiente · KUOTIP · Cofounder & Product · Feb 2024 - Dic 2024](https://franciscolopez.es/trayectoria/kuotip)

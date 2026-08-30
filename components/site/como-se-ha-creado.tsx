@@ -178,7 +178,7 @@ export function ComoSeHaCreado({
   // así que se estrecha aquí UNA vez en vez de en cada punto de consumo.
   // Los bloques del diccionario, con las cifras DERIVADAS ya sustituidas: el
   // copy escribe `{paginas}` y el recuento lo pone `lib/design-values.ts`
-  // leyéndolo del registro de rutas (D72). Mismo mecanismo que `fillDate` y
+  // leyéndolo del registro de rutas (D72). Mismo mecanismo que `fillRatios` y
   // `fillRatios`, y por el mismo motivo: «AAA en las doce páginas» llevaba días
   // siendo falso porque la cifra estaba escrita a mano en los dos diccionarios.
   //

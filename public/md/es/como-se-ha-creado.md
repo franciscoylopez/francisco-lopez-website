@@ -1,0 +1,705 @@
+---
+url: https://franciscolopez.es/como-se-ha-creado
+lang: es
+title: Cómo se ha creado esta página
+---
+
+1. [Inicio](https://franciscolopez.es/)
+2. Cómo se ha creado
+
+El «Making of» de franciscolopez.es
+
+# Cómo se ha creado esta página
+
+En este artículo puedes ver todo lo que me ha llevado a montar esta página: el porqué y el proceso que he seguido para llegar hasta donde estás ahora.
+
+Una pequeña aventura de aprendizaje y criterio, de estrategia a UX, de UX a diseño y de diseño a código.
+
+![Retrato de Francisco López](https://franciscolopez.es/_next/image?url=%2Fimg%2Ffrancisco-como-se-ha-creado-byline-1x1.webp&w=3840&q=75)
+
+Francisco López
+
+Senior Product Manager
+
+Compartir
+
+Copiar enlace
+
+Apertura
+
+## Construir con criterio en tiempos de IA
+
+Cuando empecé a pensar en este proyecto tenía claro que no quería un CV en HTML, **quería una prueba de criterio**: en producto, en lo técnico y en usabilidad. Algo que enseñara cómo trabajo, el peso que le doy al diseño y a la UX, un enfoque de product builder que no consista en hacer vibe coding funcional pero lleno de incoherencias técnicas y de riesgos de seguridad. Soy PM, no busco ser otra cosa, pero hoy en día, sin ser programador ni product designer pero dedicándole algo de tiempo, se puede hacer un trabajo muy fino en todos los aspectos.
+
+Y la forma más honesta de demostrarlo es enseñarlo. Tan sencillo como abrir el taller y enseñar el motor: por qué existe esta página, cómo está construida, qué se rompió por el camino y qué aprendí de cada rotura.
+
+Todo lo que afirmo aquí abajo está enlazado al código que lo sostiene. El repositorio es público, así que **no hace falta que me creas**: échale un ojo.
+
+Vamos a ello.
+
+Índice
+
+tiempo por sección
+
+Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas. **9581** palabras· · **12** secciones
+
+1. [01 · Por qué existe · ≈4 min](#s01)
+2. [02 · Cómo se trabaja · ≈4 min](#s02)
+3. [03 · La marca · ≈4 min](#s03)
+4. [04 · El stack · ≈5 min](#s04)
+5. [05 · El sistema de componentes · ≈4 min](#s05)
+6. [06 · Automatizaciones · ≈6 min](#s06)
+7. [07 · Del diseño al código · ≈4 min](#s07)
+8. [08 · Seguridad y alojamiento · ≈7 min](#s08)
+9. [09 · Accesibilidad · ≈7 min](#s09)
+10. [10 · Qué revisa una IA · ≈4 min](#s10)
+11. [11 · Lo que salió mal · ≈3 min](#s11)
+12. [12 · Ahora empieza lo bueno · ≈3 min](#s12)
+
+1 de 12 · 4 min
+
+01 — Por qué existe
+
+## 01. Una web no demuestra criterio por existir
+
+1 de 12 · 4 min
+
+Cuando decidí abordar este proyecto, lo primero que escribí no fue una línea de código, y tampoco hice una investigación con usuarios. Lo que sí hice fue revisar los perfiles de algunos referentes en Producto, leer artículos de gente de selección, y tener claro dos cosas: que quería una primera versión rápida, y que quería una web preparada para los distintos perfiles que iban a leerla. De ahí salió una hipótesis escrita de quién lee y en cuánto tiempo, y de esa hipótesis salen todas las decisiones.
+
+### Dos lectores, dos velocidades
+
+Una persona de selección escanea entre cinco y diez segundos, y necesita tres datos: rol, seniority y stack. Un CPO o un VP Product puede leerla más despacio, y lo que busca no son datos, sino criterio: qué decidiste, con qué información, y qué pasó después.
+
+Un mismo texto no sirve para los dos. La solución fue de arquitectura, no de redacción: el primer pantallazo pasa el filtro de selección, y el contenido se hace más profundo conforme bajas. Lo que un lector rápido necesita está antes de tener que hacer scroll; lo que un lector lento busca está debajo, con espacio para explicarse.
+
+### Qué decidieron esas dos velocidades
+
+No se quedaron en el documento: decidieron la forma de las páginas. Las tres que más se leen están construidas igual, con un resumen arriba y el desarrollo debajo.
+
+El mismo scroll, leído a dos ritmos: quien escanea solo llega al primer tramo; quien lee en profundidad recorre la página entera.
+
+- **La home tiene una red de seguridad para el lector rápido.** Justo debajo de la portada van cinco hitos, en una pantalla y sin tener que bajar: es lo que contesta «rol, seniority y stack» a quien va a estar diez segundos. Lo que viene después, cómo trabajo, la trayectoria, las herramientas y la formación, ya no le habla a esa persona: se despliega para quien sigue bajando.
+- **Y cada página de experiencia repite el mecanismo dentro de sí misma.** El índice de la trayectoria enlaza a cada una, pero la doble lectura no está en ese salto: está dentro de la página. Se abre con los datos del puesto, y lo primero que se lee es «En un minuto», un puñado de bullets que contestan qué hice ahí sin tener que bajar. Debajo queda lo que un lector rápido no necesita: la historia, el caso concreto y los aprendizajes.
+- **Y las tres páginas del sistema abren igual, mires en la pantalla que mires.** El Brand Kit, el [Design System](https://franciscolopez.es/design-system) y la [declaración de accesibilidad](https://franciscolopez.es/accesibilidad) empiezan con una entradilla y una fila de cifras clave, y el desarrollo viene después. Esa fila no la decide cada página: es una pieza del sistema que existe para esto, así que las tres se comportan igual sin que nadie tenga que acordarse.
+
+### Lo que no está (de momento) y por qué
+
+La parte del criterio de producto que menos se enseña, sin embargo, es la que se ve en lo que **no** está. Van dos ausencias, y ninguna de las dos es un «nunca»: las dos esperan a que un dato diga que hacen falta.
+
+- **Esto no es un blog.** Es una página con estructura de artículo, sin índice de entradas, sin etiquetas y sin feed. Montar un blog no es publicar una vez, es comprometerse a publicar, y ese compromiso se adquiere cuando haya algo que contar por segunda vez y alguien esperándolo. Lo que estás leyendo es la primera medición de eso: si esta página se lee, la siguiente decisión se toma con lectores reales encima de la mesa en vez de con ganas.
+
+> Una hipótesis explícita que dirige decisiones vale más que un discovery de adorno.
+
+- **El asistente conversacional está aplazado, y ya tiene escrito su límite antes de existir**: lo que no está por escrito en el sitio tampoco entra en su corpus. Es algo que vamos a hacer, tiene sentido y es una prueba más de criterio y de IA aplicada, pero todo a su debido tiempo: lanzamiento, métricas y nuevas iniciativas.
+
+Ninguna de las dos es una limitación técnica. Son dos sitios donde lo fácil era decir que sí, y donde decir «todavía no» obliga a algo más incómodo que decir «no»: a dejar escrito qué tendría que pasar para cambiar de idea.
+
+### La regla que condicionó todo lo demás
+
+Si la web dice que sé de producto, de UX y de datos, la web tiene que estar hecha con esas tres cosas. Una página lenta, inaccesible, mal medida o poco segura contradice su propio texto. Eso es lo que convierte cada decisión técnica de las que vienen en una decisión de contenido.
+
+ENLACE ·
+
+[PRD-Live.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/PRD-Live.md), secciones 1 a 3 y 9, y la decisión [D29](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1168) para la franja de contacto
+
+1 de 12
+
+[Índice](#indice) · [Siguiente: 02 · Cómo se trabaja](#s02)
+
+2 de 12 · 4 min
+
+02 — Cómo se trabaja
+
+## 02. Del brief al tablero, y un solo despliegue por tanda
+
+2 de 12 · 4 min
+
+Esto empezó como empieza cualquier producto: con un brief. Media página contestando a qué es esto, para quién y qué tiene que conseguir. De ahí salió un PRD, que no es un documento de ceremonia sino **el sitio donde vive la respuesta a «¿esto para qué?»** cuando ya llevas tres semanas metido en el código y se te ha olvidado.
+
+### Un PRD partido en dos
+
+Ese PRD acabó fuera de Notion, vive en el repo como un archivo markdown, y hoy está partido en dos, y es de las decisiones que mejor han envejecido. Uno vivo, que dice qué es el producto hoy, escrito en presente. Otro histórico, que guarda el registro fechado de cada decisión y de por qué se descartó lo que se descartó. **Mezclarlos es lo que convierte un PRD en un documento que nadie abre**: cuando la mayoría de lo que lees ya no es verdad, dejas de leerlo entero, y entonces deja de servir para lo único que servía.
+
+### El tablero, y por qué sus columnas no son decorativas
+
+Del PRD sale el tablero. Cada tarea lleva su alcance, sus dependencias, su tamaño y sus notas, y esas notas son el sitio donde escribo el porqué mientras lo pienso, no después. Los estados tampoco están puestos por poner:
+
+- **Sin empezar**, para todo lo que ni siquiera está comprometido.
+- **Pendiente, en curso y bloqueada**, los tres reservados a la etapa activa. Ninguna tarea de una etapa futura puede estar ahí.
+- **Listo**, solo para lo terminado de esa etapa.
+- **Archivado**, adonde pasa todo cuando la etapa se cierra.
+
+Esa última columna es la que mantiene el tablero legible: si lo terminado se queda a la vista para siempre, a los dos meses el tablero es un museo.
+
+### Dos tableros, porque son dos preguntas
+
+Las tareas no se ordenan por lo que apetece. Están vinculadas a un tablero de priorización aparte donde se clasifican con MoSCoW: imprescindible, debería, podría, no ahora. Los dos tableros contestan preguntas distintas y por eso están separados: el de ejecución dice **en qué orden** se hace, el de priorización dice **por qué ese orden**. Juntarlos convierte cualquier revisión de prioridades en una discusión conmigo mismo sobre si mover una tarjeta.
+
+![Tablero de priorización MoSCoW en Notion con tareas agrupadas en cuatro columnas: imprescindible, debería, podría y no ahora.](https://franciscolopez.es/_next/image?url=%2Fimg%2Fcomo-se-ha-creado-moscow-tablero.webp&w=3840&q=75)
+
+El tablero de priorización, separado del de ejecución: uno dice en qué orden se hace, el otro por qué.
+
+### Sin fechas
+
+Lo que no hay son fechas. Empecé utilizándolas, pero rápidamente me di cuenta de que **las fechas en un proyecto personal de una sola persona son ficción**, y una ficción que además hay que mantener al día cada semana. Lo que dirige la ejecución son otras tres cosas:
+
+- Si algo es imprescindible o puede esperar.
+- En qué orden va.
+- Cuánto ocupa.
+
+> Un tablero de una sola persona sigue necesitando MoSCoW, orden y tamaño: el criterio de delivery no depende de ser un equipo.
+
+Hay dos campos que se confunden siempre, y separarlos fue lo que hizo el tablero utilizable. Uno contesta «¿esto está comprometido o está esperando?». El otro contesta «¿en qué versión sale?». Son preguntas distintas: una tarea puede estar comprometida para la etapa que viene y salir en una versión posterior, y mezclarlas convierte el tablero en una lista de deseos ordenada por optimismo.
+
+Hay además un carril que corre por delante del resto, y es el contenido. En las páginas que dependen de un texto que solo puedo escribir yo, **el texto es el cuello de botella real, no el desarrollo**. Así que el contenido de una etapa se desbloquea mientras se construye la anterior.
+
+### Un commit por tarea, un despliegue por tanda
+
+Cada tarea cierra con su commit y con su porqué escrito en el mensaje, pero todo va a una rama de tanda con una pull request en borrador: eso da integración continua en cada push y una vista previa acumulada para revisarlo entero antes de tocar producción una sola vez.
+
+Y la parte que aprendí tarde: sin push directo, sin fusionar con los checks en rojo, sin saltarse la protección por ser administrador. Escribí esa configuración el mismo día que hice público el repositorio, y **el orden correcto habría sido el inverso**.
+
+ENLACE ·
+
+El apartado de seguimiento de tareas de [CLAUDE.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/CLAUDE.md), y las decisiones [D10](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L396), [D12](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L422) y [D68](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4137)
+
+2 de 12
+
+[Índice](#indice) · [Siguiente: 03 · La marca](#s03)
+
+3 de 12 · 4 min
+
+03 — La marca
+
+## 03. La marca, antes que la primera línea de código
+
+3 de 12 · 4 min
+
+Este proyecto está concebido como un producto, así que antes de abrir el editor pensé en qué iba a ser esto visualmente. No por vanidad de diseñador, que no lo soy, sino porque un sistema de color que se decide después del código es **un sistema que se negocia sección a sección**, y eso acaba siempre en una paleta de doce grises y tres azules que nadie recuerda de dónde salieron y que no hay manera de mantener.
+
+### El logo, y por qué se comporta así
+
+El logo tiene un sentido: una base sólida y firme sobre la que se trabaja (método, datos, documentación) y una firma con un efecto de aberración cromática que desplaza ligeramente los canales de color, generando esa sensación de ambigüedad e incertidumbre con la que vivimos en el día a día los que nos dedicamos a producto.
+
+Elegidos el logo y la tipografía, había que darles un comportamiento con sentido. Para mí lo lógico fue un desplazamiento entre sus dos mitades, en cian y morado, que solo aparece en el monograma y solo por encima de 48 píxeles. Por debajo de ese tamaño el desplazamiento deja de leerse como intención y empieza a parecer un error de impresión, así que ahí el logo cambia a su versión plana. Es la primera regla del sistema y ya tiene la forma de todas las demás: no dice «úsalo con cuidado», **dice a partir de qué número deja de valer**.
+
+### Dos capas de color que no se mezclan
+
+Después había que darle lógica a su uso en el resto del sitio. El color son dos capas:
+
+- **La semántica.** El cian es el único color de acción del sitio. Si algo es cian, se pulsa.
+- **La decorativa.** Cian y morado, para fondos de sección, ilustración y gráficos, sin significado funcional. Aquí el cian sigue mandando y el morado entra con cuentagotas, para detalles importantes. Y de cada uno hay una versión suave, de bajo contraste a propósito, que solo vale de relleno: un pastel nunca es color de texto ni de botón.
+
+Los cuatro colores de marca: cian y morado estándar, y sus versiones suaves para fondos y gráficos.
+
+Y lo que hace que esto se sostenga **no es el permiso, es la prohibición**: los slots neutros del sistema no se pintan nunca de color de marca, por bien que quede.
+
+Donde esa regla enseña los dientes es en los diagramas. Un gráfico que hay que entender tiene que separar sus elementos con un mínimo de contraste, y el morado decorativo no llega en tema claro. La conclusión no fue subirle el contraste al morado: fue que en un gráfico la información la lleva el cian, y lo que no llega se atenúa a gris. Un camino y otro se distinguen además por el trazo y por la etiqueta, no solo por el color, que es lo que hace que el diagrama siga funcionando para quien no distingue esos dos tonos.
+
+### Dos páginas que no describen el sistema: lo usan
+
+Una marca no es el logo: **es lo que impide que la página catorce se parezca poco a la primera**. Por eso el sistema tiene dos páginas publicadas dentro del propio sitio.
+
+- El [Design System](https://franciscolopez.es/design-system) enseña los tokens, la tipografía, cada variante de cada control y el checklist de accesibilidad.
+- El [Brand Kit](https://franciscolopez.es/brand-kit) enseña el logo, sus usos, sus mínimos y sus descargas.
+
+> Coherencia, en un producto, no es solo que el diseño sea homogéneo: es que nada haya que actualizarlo dos veces.
+
+Las dos tienen una propiedad que me importa más que su contenido: **no describen el sistema, lo usan**. Los botones que se ven en el Design System son los botones del sitio, no una imitación. Si mañana cambio el hover de una variante, la página que lo documenta cambia sola. Una guía de estilo escrita a mano empieza a mentir el día dos.
+
+### Fuera de su sitio, que es donde se comprueba
+
+La prueba de que una marca existe de verdad es que sobrevive fuera de su sitio. La firma de mis correos lleva el monograma con su split, el nombre en la tipografía de los titulares y los canales, sin banner ni floritura. El banner de LinkedIn lleva ese mismo monograma y la frase que preside la home. Y la portada del repositorio de GitHub abre otra vez con esa frase, sobre el mismo fondo carbón. No es que las tres se parezcan: es que **las tres dicen literalmente lo mismo**, «Del discovery al dato», que es el titular del sitio. Cuando alguien te encuentra en tres sitios distintos en la misma semana, esa repetición es lo único que hace que los tres sean la misma persona.
+
+ENLACE ·
+
+[BRAND.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/BRAND.md), [BRAND-logo.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/BRAND-logo.md) y su porqué fechado en [BRAND-historical.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/BRAND-historical.md)
+
+3 de 12
+
+[Índice](#indice) · [Siguiente: 04 · El stack](#s04)
+
+4 de 12 · 5 min
+
+04 — El stack
+
+## 04. El stack, y por qué ese
+
+4 de 12 · 5 min
+
+La pregunta con la que entra cada herramienta en este proyecto no es «¿es buena?», sino «¿qué trabajo mío resuelve?». Suena obvio y no lo es: casi todo el software que se instala de más entra por la primera pregunta.
+
+### Por qué estas piezas, y no otras
+
+El núcleo que se despliega (Next 16, TypeScript estricto y Tailwind v4) con dos piezas que también viajan en el bundle: lucide-react, y shadcn/ui, instalado y todavía sin estrenar. Y dos herramientas que solo ayudaron a construirlo: Claude Design en el diseño inicial, Claude Code en el desarrollo.
+
+Next resuelve tres trabajos que no quería hacer a mano: el enrutado por idioma, dejar cada página escrita en HTML antes de que nadie la pida, y la frontera entre lo que se calcula en el servidor y lo que se ejecuta en el navegador. La tercera es la que más se nota al leer el sitio: aquí lo interactivo es la excepción (el menú, el cambio de tema, poco más), así que **la página llega ya pintada y el JavaScript se paga solo donde hace falta**.
+
+TypeScript en estricto entra por la misma pregunta. Todo el copy vive en un diccionario tipado, así que una traducción que falta o una clave que cambia de nombre rompen el build. La alternativa no es un sitio con un error: es **un sitio con un hueco en blanco que descubre un visitante meses después**.
+
+**Tailwind lo elegí por lo que impide más que por lo que permite.** Los colores, los radios y los espaciados viven en un solo archivo y se escriben por su nombre, nunca por el número que miden hoy: cambiar el cian de la marca es cambiar una línea, y no hay una hoja de estilos aparte que mantener en paralelo. Sin esa disciplina, un sitio construido a ratos durante meses acaba con cuatro grises casi iguales y sin forma de saber cuál es el bueno.
+
+lucide es el caso pequeño donde mejor se ve el criterio, porque no entra por ahorrarme dibujar. Entra porque un catálogo entero con el mismo lienzo, el mismo grosor de trazo y las mismas terminaciones **se lee como una familia**, y una colección de iconos elegidos de aquí y de allá no. Lo que lucide no trae por marca registrada, los logos de LinkedIn y de GitHub, hay que dibujarlo, y se dibuja con sus reglas para que al lado no se note cuál es cuál.
+
+Las dos últimas piezas del gráfico no viajan al navegador: solo ayudaron a construir el sitio. Claude Design resolvió el arranque, que es donde un proyecto personal se muere, con el logo y una primera versión publicable en días. Y el desarrollo entero ocurre en Claude Code, que aquí es bastante más que escribir código acompañado. Los MCP le dan acceso al tablero de tareas y al navegador, así que una tarea se abre, se hace y se cierra sin que yo tenga que hacer de mensajero entre herramientas. Y las skills convierten en rutina lo que si no depende de que me acuerde: cerrar una etapa, revisar el diseño, regenerar el CV.
+
+Esa es la línea que separa el gráfico: **sólida lo que le llega al visitante, discontinua lo que solo me llegó a mí**. Vercel no sale ahí porque no es una pieza del stack sino el sitio donde esto se prueba antes de publicarse, y eso se cuenta más adelante.
+
+### Instalado para el día que haga falta
+
+Toda la capa de componentes de este sitio es propia. Aun así, shadcn/ui está instalado y configurado desde el principio, y hasta hoy no ha entrado ni uno solo de sus componentes. No es purismo ni es olvido: hay un problema muy concreto (comportamiento de teclado, foco atrapado, portales) que no pienso resolver a mano, y lo que dejé escrito es de dónde tiene que salir la solución el día que aparezca. Primero del navegador, que ya trae el diálogo, el popover y hasta el anclaje; de shadcn solo donde el navegador no llega, que hoy sigue siendo un combobox o un selector de fechas.
+
+Así que la regla mira hacia delante: el día que haga falta un diálogo, un menú o un combobox, no se escribe, se trae. Escribir a mano el manejo del foco de un modal es la forma más fácil de publicar un problema de accesibilidad con aspecto de componente terminado.
+
+Lo último que he construido es un buen ejemplo de por qué la regla no dispara con todo. El formulario de contacto parecía el candidato obvio, y no lo era: un campo con su etiqueta y su mensaje de error no atrapa el foco de nadie ni abre un portal, así que salió como una pieza más del sistema en vez de como una dependencia nueva. La pregunta no es «¿existe algo hecho?», es «¿qué trabajo mío resuelve?».
+
+### Dos idiomas, cero frases dentro del código
+
+Sobre los idiomas, solo indicar fue decisión y no configuración: español sin prefijo en la raíz, inglés en su propia rama, y cero frases escritas dentro de un componente. Todo el copy sale de un diccionario tipado. Eso hace imposible el bug clásico de las webs en dos idiomas, que es la frase que alguien tradujo en el HTML y nadie volvió a tocar.
+
+ENLACE ·
+
+Decisiones [D2](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L230), [D3](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L242), [D6](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L291), [D7](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L371) y [D51](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2541) del registro técnico
+
+4 de 12
+
+[Índice](#indice) · [Siguiente: 05 · El sistema de componentes](#s05)
+
+5 de 12 · 4 min
+
+05 — El sistema de componentes
+
+## 05. El sistema de componentes: nada nuevo se escribe a mano
+
+5 de 12 · 4 min
+
+### Dos preguntas deciden qué pieza toca
+
+El sistema se construye con estas piezas:
+
+- **La acción**, que es todo lo que se pulsa y tiene caja propia: botón, chip, interruptor, pestaña y control de solo icono.
+- **El enlace de navegación**, el de la carpintería: menú, miga de pan y pie.
+- **La etiqueta**, el rótulo que no se pulsa.
+- **El titular**, el par de antetítulo y título con el que abren la página y cada sección.
+- **El campo de formulario**, con su etiqueta, su error y el resumen del envío.
+- **La tabla**, que es una tabla de verdad si son datos y una rejilla si son ejemplos.
+- **La fila de cifras** que resume una apertura.
+- **Las cajas y los ritmos**: anchos, márgenes y el andamiaje del pliegue.
+
+Cuál toca se decide preguntando **¿se pulsa?** y, si se pulsa, **¿tiene caja propia?** Un chip que solo rotula un dato no es un botón pequeño: es una etiqueta, y no necesita ni estado, ni hover, ni objetivo táctil. Un enlace del menú tampoco es un botón: es carpintería de navegación, y ahí el cian no distingue nada porque todo el bloque navega. Parecen distinciones de vocabulario y son justo lo que evita que cada sección invente su propio botón.
+
+### La cascada: antes de escribir markup nuevo
+
+Encima de esas dos preguntas hay una regla que gobierna todo lo que se construye, y es una cascada:
+
+La cascada de la Regla de construcción: cuatro preguntas, en orden, antes de escribir markup nuevo.
+
+- **¿Existe ya la pieza?** Se usa, y no se replica su aspecto con clases sueltas.
+- **¿No existe, pero el caso es del sistema?** Se crea la variante, no la excepción: un botón que no encaja en ninguna variante no es un botón especial, es una variante que falta.
+- **¿Es un widget con estado, foco atrapado o portal?** Se trae hecho, no se escribe.
+- **¿No encaja nada de lo anterior?** Se decide y se documenta con fecha.
+
+La señal de alarma es fácil de reconocer: si estoy escribiendo una cadena de más de cuatro clases sueltas para algo que se pulsa, es que me he saltado la primera pregunta.
+
+### Un ejemplo real: la etiqueta que no era un botón pequeño
+
+Un caso real de esa cascada. Un dato como «AAA» o una decisión como «Exit» necesitaba un rótulo, y la primera versión fue un botón pequeño: sin hover que significara nada, con un objetivo táctil que no protegía nada porque no se pulsaba. La pregunta **¿se pulsa?** contestó que no, así que salió de la familia de acciones y se convirtió en su propia pieza, con dos ejes que nunca se combinan a mano: `tone` dice de qué familia es el dato (una medición en cian, una cosa de marca en morado, o neutro) y `kind` dice cómo se escribe (versalitas para un estado, caja normal para un dato en prosa, monoespaciada para un valor técnico). Abajo tienes las mismas pastillas que usa el resto del sitio, no una recreación.
+
+### La capa de página: una página no se escribe, se compone
+
+Encima de esas piezas hay una capa más. Un helper deriva la URL canónica, las variantes por idioma, la tarjeta social y el marcado estructurado de una sola fuente, y un componente pone el enlace de salto, la navegación, el contenido principal y el pie. Y qué páginas tiene el sitio lo dice un solo archivo, del que salen el mapa del sitio, el gate de HTML y la tarjeta social de cada una.
+
+### Qué compra todo esto
+
+Cuatro de los nueve puntos del checklist de accesibilidad dejan de verificarse a mano al cerrar una página, porque los pone la pieza: el contraste de los pares del sistema, el anillo de foco, el objetivo táctil mínimo y el respeto a quien ha pedido menos movimiento. Es la mitad de un capítulo que viene más adelante, y por eso ese capítulo puede dedicarse entero a lo que de verdad costó.
+
+Piezas del sistema · dato en vivo · `components/ui/`
+
+Ocho piezas + capa de página
+
+[Ver el catálogo](https://franciscolopez.es/design-system)
+
+13,79:1 · Exit · AAA
+
+ENLACE ·
+
+Decisiones [D36](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1431), [D40](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1844), [D45](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2208), [D46](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2263) y [D72](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4490), y el directorio [components/ui/](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/components/ui)
+
+5 de 12
+
+[Índice](#indice) · [Siguiente: 06 · Automatizaciones](#s06)
+
+6 de 12 · 6 min
+
+06 — Automatizaciones
+
+## 06. Los componentes no se escriben a mano, y los datos tampoco
+
+6 de 12 · 6 min
+
+El capítulo anterior iba de que ninguna pieza de interfaz nace de una cadena de clases sueltas. Con los datos pasa lo mismo y se ve menos: cada hecho de este proyecto vive en un sitio y todo lo demás se deriva de ahí. No es manía de ingeniero, es la única defensa que he encontrado contra el error que más veces me ha mordido, que es el mismo dato escrito en dos sitios y actualizado en uno.
+
+### Un hecho, tres longitudes
+
+De cada experiencia de mi carrera se cuenta lo mismo tres veces y con tres tamaños distintos: la frase que aparece en la trayectoria, el bullet que va al CV y la versión larga que se lee en la página del caso. Las tres viven juntas en el mismo sitio, en los dos idiomas, precisamente porque se editan mirándose entre ellas.
+
+El CV en PDF se produce por código a partir de esos mismos datos, así que sale con la misma tipografía, el mismo cian y exactamente los mismos hechos: no hay una versión del CV y otra de la página, solo adaptaciones programadas del mismo material. Las tarjetas que se ven al compartir un enlace también se generan por código, una por página, en vez de ser una imagen fija subida a mano.
+
+Y encima hay un guardián que comprueba lo que la estructura sola no puede: que el español y el inglés tengan el mismo número de bullets, que tenga versión larga exactamente quien tiene página propia, y **que una cifra no viva en una longitud y falte en la otra**. Esa tercera es la que había fallado siete veces, con métricas que existían solo en el caso largo, o solo en el CV.
+
+El mismo dato baja por tres carriles hasta tres destinos distintos: la web, el PDF y la página del caso, cada uno con la longitud que le toca.
+
+### El catálogo de piezas se escribe solo
+
+La lista de piezas del sistema no la mantengo yo: se deriva del disco leyendo la primera línea de cada archivo, donde cada pieza declara a qué grupo pertenece, qué resuelve y en qué sección se publica.
+
+Esa primera línea es también el trámite de alta, y son tres preguntas por orden. De quién es la pieza: si sabe algo de este sitio (una ruta, un dato, el copy de una sección) va con los bloques del sitio, y si no sabe nada de él, al sistema. De qué grupo dentro del sistema: el núcleo, la capa de texto largo que quedó fuera de él a propósito, o una primitiva suelta. Y dónde se enseña: la sección del Design System que le toca por lo que hace, o la del Brand Kit si lo que documenta es de marca.
+
+«No se enseña» también vale, pero hay que escribirlo: una pieza que no pinta nada declara que es interna y deja su motivo en esa misma línea. **Lo que no se puede es dejar la casilla vacía**, porque la integración continua nombra en cada cambio la que se quedó sin publicar.
+
+### Y este mismo artículo, que sabe cuándo ha caducado
+
+Esta página es lo más difícil de mantener de todo el sitio, porque cuenta el estado de un proyecto que sigue cambiando. Hay tres clases de frase que caducan sin avisar: la cifra contable («AAA en las doce páginas»), el estado del producto («todavía no hay formulario») y la medición externa («B+, 80 sobre 100»). Ninguna la ve un compilador.
+
+Así que **cada sección de este artículo declara de qué depende**: una decisión concreta del registro, un archivo, un directorio. Cuando todo cuadra, se sella. Y el día que una de esas fuentes se mueve, la integración continua sale roja nombrando la sección, dentro del mismo cambio que la movió. No dice que el párrafo sea mentira, que eso no puede saberlo: dice que alguien tiene que releerlo, que es justo lo que antes no hacía nadie.
+
+Y el fallo, porque aquí también lo hay: el guardián vigila las fuentes declaradas y no ve una cifra tecleada dentro del texto. En esta misma página había tres recuadros rotulados «dato en vivo» y **solo uno lo era**; los otros dos llevaban el número escrito a mano y los dos habían dejado de ser ciertos. Los encontró una lectura con calma, no una máquina. Un mecanismo que impide que el texto caduque en silencio puede seguir dejando caducar justo lo que nunca le pediste que mirara.
+
+### Y las que no se ven
+
+Todo lo anterior se nota porque produce algo que se mira. Las que más me han ahorrado no se ven en ninguna parte. Dos se disparan solas **mientras escribo**, en cuanto se toca un archivo: una lo formatea, y la otra lanza el guardián de color, pero solo cuando esa edición concreta ha podido romper el invariante. Ninguna de las dos añade nada al sitio; las dos existen porque el trabajo que hacen dependía de que yo me acordara, y acordarse no es un mecanismo.
+
+Y otra vive **después**, en el sitio menos glamuroso de todos: quién cierra las actualizaciones de dependencias que llegan solas cada semana. El criterio es una pregunta, ¿puede este paquete cambiar lo que el visitante recibe? Si no, se integra sola; si sí, o si no se sabe, espera a una persona. Y la lista dice qué **sí**, nunca qué no, porque la regla evidente («las de desarrollo se integran solas») resultó ser falsa aquí: la herramienta que genera la hoja de estilos del sitio es una dependencia de desarrollo. Una lista de excepciones habría fallado abierta, dejando pasar sola cualquier dependencia nueva que nadie hubiera clasificado todavía.
+
+Es el mismo razonamiento que la política de contenido de más adelante, y por eso lo cuento aquí: **cuando el coste de equivocarse es asimétrico, se enumera lo permitido y lo desconocido espera**. Y hay un motivo concreto para no fiarse en este caso: ninguno de los pasos automáticos abre la página pintada, así que un cambio de aspecto pasaría por delante de todos ellos sin que ninguno pudiera verlo.
+
+ENLACE ·
+
+Decisiones [D22](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L667), [D84](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L5184) y [D89](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L5486), el registro de dependencias en [content/articulo/dependencias.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/content/articulo/dependencias.ts) y el inventario derivado en [components/ui/README.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/components/ui/README.md)
+
+6 de 12
+
+[Índice](#indice) · [Siguiente: 07 · Del diseño al código](#s07)
+
+7 de 12 · 4 min
+
+07 — Del diseño al código
+
+## 07. Del diseño al código, y el día en que la fuente de diseño cambió
+
+7 de 12 · 4 min
+
+### La maqueta como punto de partida
+
+La primera versión de esta web se diseñó con Claude Design: potente y rápido, fácil de iterar y de obtener una primera versión. Un archivo de maqueta que se puede traducir. Y **traducir no es copiar**: la maqueta da la intención (qué manda, qué acompaña, qué ritmo tiene la página) y el sistema da los valores (qué radio, qué gris, qué espaciado). Copiar píxeles produce el problema contrario, que es una sección que se parece mucho al diseño y no se parece nada al resto del sitio.
+
+Eso me sirvió para tener un MVP publicable en muy poco tiempo y disponible al público. Pero enseguida llegó lo que ya sabía que iba a ocurrir: la decisión iba a caducar, y en poco tiempo.
+
+### El día que caducó
+
+Cuando el sistema en código creció hasta ser lo que acabo de describir (ocho piezas, una capa de página y una página que las publica), la maqueta pasó a ser más pobre que el sitio. A partir de ahí, mantener las dos en paralelo no era rigor: **era garantizar que acabaran diciendo cosas distintas**, que es justo lo que la decisión original quería evitar.
+
+> El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.
+
+El diseño de Claude Design cumplió su objetivo: coger el aire de la página, ser fácil de traducir y publicar rápido la primera versión. La maqueta queda como cuaderno de bocetos desechable para movimientos visuales que el sistema todavía no tiene. Es **la primera decisión del proyecto que anulé por escrito**, y dejé la original debajo, con su fecha.
+
+### Cómo se diseña hoy: en el navegador, y decidiendo con los ojos
+
+La herramienta de diseño de este sitio es el navegador. Una sección nueva se dibuja en código, con los tokens de verdad, y eso quita del medio el paso más caro: la traducción. No hay una versión bonita en una herramienta y otra real en la web, hay una sola, y se mira donde va a vivir. De ahí sale la única regla de método que tengo sobre esto: **si una decisión visual se puede ver, no se decide leyendo**. Cuando hay más de una dirección posible construyo las dos o las tres y elijo mirándolas, porque entre dos descripciones suele ganar la mejor explicada, que no es lo mismo que la mejor.
+
+Después viene lo que no sale en ningún método: el ajuste fino. **Ninguna sección ha quedado bien a la primera**, y entre esa y la buena hay rondas de mirarla servida y anotar lo que chirría, que casi nunca es lo que uno esperaba.
+
+Y hay rutinas para el diseño, de otra familia que las que cuento más adelante: aquellas saben de este sitio y estas no saben nada de él, saben de diseño. Tres son de [Emil Kowalski](https://github.com/emilkowalski/skills) y la cuarta, de [Vercel](https://github.com/vercel-labs/web-interface-guidelines).
+
+- **prototype**, antes de escribir el componente: construye varias versiones de la misma pieza y las pone tras un selector para verlas en vivo.
+- **pick-ui-library**, antes de instalar nada: obliga a elegir de una lista razonada. Una dependencia entra en cinco segundos y se queda años.
+- **web-design-guidelines**, al terminar la interfaz: estados vacíos, textos que desbordan, cifras que bailan al actualizarse, márgenes en un móvil con muesca.
+- **review-animations**, al terminar cualquier movimiento: revisa con el listón por defecto puesto en «esto sobra».
+
+Tres de las cuatro están marcadas para que la IA **no pueda lanzarlas por su cuenta**, y esa marca es lo más importante de la lista: no son comprobaciones, son decisiones. Una comprobación se automatiza entera; una decisión, como mucho, se prepara. La máquina me pone las opciones delante construidas y en pantalla; elegir sigue siendo mío.
+
+Queda la voz, que es lo que más fácil se pierde trabajando así, y la gobierna una regla escrita: **el español es la fuente y el inglés se revisa contra él, nunca al revés**, porque traducir literalmente un texto con criterio produce un texto correcto sin criterio.
+
+ENLACE ·
+
+Decisión [D1](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L201), con su nota de superación y la decisión original conservada debajo
+
+7 de 12
+
+[Índice](#indice) · [Siguiente: 08 · Seguridad y alojamiento](#s08)
+
+8 de 12 · 7 min
+
+08 — Seguridad y alojamiento
+
+## 08. Lo que no se ve: seguridad, alojamiento y la deuda que no se acumuló
+
+8 de 12 · 7 min
+
+Un portfolio no tiene sesión y no guarda datos de nadie: el único que recibe es lo que alguien escriba en el formulario de contacto, y ese no se guarda en ninguna parte, va a un buzón y se acabó. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo.
+
+### Una sola superficie que recibe, y todo lo demás lleva a ella
+
+Que el formulario sea el único es en sí una decisión: cuantas menos formas haya de escribirme, menos sitios hay que proteger. Y su formato salió de quitar. Sin captcha, que es una barrera de accesibilidad en un sitio que publica una declaración de conformidad. Sin servicio externo de correo, porque el envío sale por la cuenta que ya existía. Y sin salir a ningún sitio, porque ocurre en el mismo origen que la página. La validación que manda es la del servidor, el correo sale en texto plano para que el cuerpo no interprete nada de lo que le escriban, y todo eso funciona con JavaScript desactivado.
+
+El agujero que sí existía estaba donde no miraba, en las cabeceras del correo. La dirección del visitante va en el campo de respuesta, y ese campo se componía juntando cadenas: quien escribiera su nombre con la forma adecuada conseguía que el correo saliera con **dos** direcciones en vez de una, y en un caso la suya iba primero. Al pulsar «Responder» yo le habría contestado también a alguien que nunca escribió. No lo encontró ningún escáner, lo encontró la revisión técnica de cierre de etapa.
+
+Con los robots el criterio es el silencio: un campo invisible, un suelo de tiempo, y en los dos casos la pantalla dice «enviado» sin enviar nada, porque avisar a un bot de que lo has cazado solo le enseña a esquivarte. Ahí está el fallo del capítulo: ese filtro tenía también un techo, así que quien dejaba la pestaña abierta y enviaba al día siguiente veía la misma pantalla de éxito con el mensaje en la basura. **El silencio que es correcto con un bot es una mentira con una persona.**
+
+La única página que no lleva al formulario es la declaración de accesibilidad, que enseña la dirección escrita con su asunto. Obligar a usar un formulario para reportar una barrera sería una trampa el día que la barrera fuera el formulario.
+
+### Las cabeceras: los huecos baratos de cerrar
+
+El sitio sirve cinco, y ninguna cuesta nada:
+
+- **No adivinar el tipo de un archivo**, para que algo servido como texto no acabe ejecutándose como script.
+- **Prohibir que nadie meta el sitio dentro de un iframe.**
+
+> Si el argumento de la página es el rigor, el rigor tiene que estar también donde no se ve.
+
+- **Recortar lo que se filtra en el referer** cuando sales hacia fuera.
+- **Apagar las APIs del navegador que no uso**, como cámara, micrófono o ubicación.
+- **Forzar HTTPS durante dos años.** Esta va sin entrar en la lista de precarga a propósito, porque entrar es fácil y salir no, y una decisión difícil de revertir no se toma para ganar un punto en un informe.
+
+### La política de contenido, y lo que no protege
+
+Dos escáneres públicos puntúan esto y conviene mirar los dos, porque dicen cosas distintas por el mismo motivo. [Security Headers](https://securityheaders.com/?q=franciscolopez.es&followRedirects=on) le pone una **A**: las seis cabeceras están servidas y no falta ninguna. Lo que le impide el A+ no es una cabecera que falte, es una línea dentro de la que sí está. Y el [HTTP Observatory de Mozilla](https://developer.mozilla.org/en-US/observatory/analyze?host=franciscolopez.es), que es más duro, descuenta por esa misma línea veinte puntos y deja el sitio en **B+**.
+
+Y aquí toca ser honesto, porque es donde casi todo el mundo exagera: **esta política no es una protección fuerte contra inyección de scripts**, porque mantiene la ejecución de scripts en línea. Lo que sí hace, gratis: bloquear objetos incrustados, fijar la base de las URLs, limitar a dónde puede enviar un formulario y prohibir que nadie enmarque el sitio.
+
+Así que se queda en B+, con la fecha puesta y el motivo escrito: subirla mejoraría la nota de una herramienta empeorando la del visitante. El día que haya un asistente respondiendo texto generado se pagará lo que valga.
+
+Un detalle de esa política que me gusta especialmente. Los vídeos de terceros del sitio entran por el dominio sin cookies de YouTube, y además no existen en la página hasta que alguien le da al play. Las dos cosas juntas significan que la página no hace ni una sola petición a Google mientras nadie pulse. Cualquiera de las dos por separado no bastaba: el dominio normal escribe cookies en cuanto se pinta el iframe, y un iframe que existe desde el principio ya ha hablado con el servidor aunque nadie lo mire.
+
+Sin consentimiento y sin clic en el vídeo, la página no hace ni una petición de red hacia terceros.
+
+### Vercel no compra el despliegue, compra el entorno de pruebas
+
+Aquí no hay un staging montado, porque un staging persistente para una persona sola es sobreingeniería. Cada rama publica su propia URL con el mismo build que producción, y ahí se validan las tres cosas que en local no se pueden validar:
+
+- **El consentimiento y las cookies**, que necesitan dominios de verdad.
+- **Las tarjetas sociales**, que necesitan una URL pública para que el robot que las lee las vea.
+- **El número de rendimiento**, medido sobre infraestructura desplegada, porque el servidor de desarrollo da cifras engañosas.
+
+Con una tanda entera de trabajo en una sola rama, esa URL acumula toda la tanda y se revisa junta antes de tocar producción una única vez.
+
+### El número de rendimiento, y dónde comprobarlo
+
+El objetivo no funcional es un mínimo de 90 en PageSpeed, en escritorio y en móvil. No es una captura fija: se puede repetir en cualquier momento contra producción.
+
+Rendimiento · PageSpeed · `npm run psi · 30 de agosto de 2026`
+
+97-100 escritorio · 93-99 móvil
+
+[Ver el informe](https://pagespeed.web.dev/analysis?url=https://franciscolopez.es)
+
+SEO 100 · Accesibilidad 100 · Buenas prácticas 100
+
+### La deuda que el analizador sí encontró
+
+Aquí hay una respuesta cómoda y una verdadera. La cómoda es que casi no hay. La verdadera es que uso [Qlty](https://qlty.sh), un analizador externo, y este fue quien me dijo que sí la había, y al mirar de cerca resultó que los cinco archivos peor puntuados no eran código de la web: eran el censo de contraste, dos registros de contenido y dos guardianes. De ahí salen dos lecturas que son ciertas a la vez:
+
+- **Qlty señalaba con puntería el punto ciego real**, porque su peor archivo era justo el que se había roto dos veces en silencio. Eso no se silencia: se arregla.
+- **Y a la vez penalizaba los dos registros de contenido** por duplicación estructural entre el español y el inglés, que es exactamente la propiedad que un guardián de este repositorio existe para garantizar. Medir como deuda lo que se impone a propósito no informa de nada.
+
+De ahí salió la regla que me dejé escrita para no engañarme: en ese archivo se excluye por lo que un archivo **es** (datos generados, contenido paralelo por idioma), nunca por lo que un archivo **puntúa**. Silenciar un hallazgo incómodo habría convertido el informe en el metro que aprueba sobre una lista vacía, que es el error que más veces he cometido en este proyecto.
+
+![Panel de Qlty sobre este repositorio: nota A en mantenibilidad (29 code smells) y nota A en seguridad (sin incidencias abiertas), un gráfico de ratio de deuda técnica y tiempo de remediación con un pico el 19 de agosto de 2026, un sunburst de los puntos calientes de mantenibilidad, y el listado de los cinco archivos peor puntuados: contrast-census.js y artefacto-svg.ts (nota F), check-experience-copy.ts (nota F), check-palette.ts y reveal-root.tsx (nota D).](https://franciscolopez.es/_next/image?url=%2Fimg%2Fcomo-se-ha-creado-qlty-deuda.webp&w=3840&q=75)
+
+El panel de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con los cinco archivos peor puntuados que señaló el ratio de deuda técnica.
+
+### Los tests llegaron cuando llegó la lógica
+
+Durante un tiempo este repositorio no tuvo tests, y no era un olvido: era una decisión fijada hasta el día que apareciera la primera función con condiciones de verdad. Apareció con el formulario de contacto, que valida lo que escribe un desconocido, compone una cabecera de correo y decide si un envío se acepta.
+
+Se prueba eso y nada más: la validación, el saneado de las cabeceras y las decisiones del envío. Y se prueba sobre el correo que sale, no sobre las instrucciones que se le dan a quien lo manda. El mensaje se genera entero, con su codificación y su entrecomillado, porque el agujero de ahí arriba era justo una cabecera de aspecto razonable que acababa con dos direcciones: afirmar que las instrucciones eran correctas lo habría vuelto a aprobar. Corren en cada PR y tienen su propio caso malo en el verificador de verificadores, porque una suite en verde y una suite que no prueba nada se parecen demasiado.
+
+ENLACE ·
+
+Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L449), [D15](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L500), [D26](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L926), [D27](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1057), [D32](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1281) y [D55](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3121), el archivo [next.config.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/next.config.ts) y la configuración de [Qlty](https://qlty.sh)
+
+8 de 12
+
+[Índice](#indice) · [Siguiente: 09 · Accesibilidad](#s09)
+
+9 de 12 · 7 min
+
+09 — Accesibilidad
+
+## 09. AA es solo el suelo, AAA el objetivo
+
+9 de 12 · 7 min
+
+Ya tenía la primera versión en marcha, una marca creada, un [Design System](https://franciscolopez.es/design-system) que la mantenía e incluso un [Brand Kit](https://franciscolopez.es/brand-kit) para su uso. Pero faltaba algo que tenía claro desde el principio que debía incluir esta página: una accesibilidad excelente. No solo porque todo el mundo tiene que poder acceder a todo el contenido, sino porque cuando piensas en accesibilidad, aunque no te des cuenta, estás mejorando la experiencia de uso de todos los usuarios, no solo la de quienes necesitan unos estándares mínimos.
+
+Tener un AA según WCAG no era el objetivo: es un mínimo garantizado. A partir de ahí trabajo para llegar a AAA en todo lo que se pueda, en los dos temas, en reposo y también mientras el cursor está encima, que es donde casi nadie mide.
+
+La Ley Europea de Accesibilidad no obliga a una web personal, solo a comercio electrónico, banca o transporte, pero sí sigo su norma técnica de referencia: EN 301 549, que remite a WCAG. El porqué completo, en la [página de accesibilidad](https://franciscolopez.es/accesibilidad).
+
+Contraste · dato en vivo · `lib/design-values.ts`
+
+AAA en las catorce páginas
+
+[Ver el censo medido](https://franciscolopez.es/accesibilidad)
+
+### Cinco puntos se heredan, cuatro se ponen a mano
+
+El checklist son nueve puntos que hay que cumplir antes de dar una página por cerrada, y ya conté que cuatro dejaron de verificarse a mano el día que los puso la pieza. El noveno, el enlace de salto al contenido, lo pone la capa de página y lo comprueba un guardián en cada cambio. Los otros cuatro siguen a mano y seguirán, porque dependen del contenido y no puede ponerlos ningún componente:
+
+- La jerarquía de encabezados, sin saltos.
+- La miga de pan de toda página interna.
+- Que nada esté codificado solo por color.
+- Las alternativas textuales.
+
+Esa división es el único motivo por el que un checklist de nueve puntos sigue cumpliéndose el mes catorce: nadie sostiene nueve verificaciones manuales, y cuatro sí.
+
+Aunque heredarlo tampoco basta siempre, y el vídeo que abre la página Sobre mí es el ejemplo. Se reproduce una vez y se queda en su último fotograma. Cuando el navegador avisa de que quien mira prefiere menos movimiento, no es que el vídeo se quede quieto: es que no llega a descargarse, y en su lugar se sirve una imagen. Apagar la animación y dejar el archivo bajando habría cumplido la regla igual, y le habría cobrado un megabyte a la única persona que había pedido explícitamente lo contrario.
+
+### La regla de color de la que estoy más contento
+
+No es un componente. El gris del texto secundario está calibrado contra el fondo de la página, y solo contra él. Encima de una tarjeta, de una banda invertida o de un velo, ese mismo gris se queda corto. La primera versión de la regla decía «recalcúlalo cuando cambies de superficie», que es una regla que hay que recordar, es decir, una regla que se incumple. La segunda versión no hay que recordarla: cada superficie declara su propio atenuado mezclando el texto hacia el fondo que tiene debajo, y el punto de uso escribe siempre lo mismo.
+
+> El gris correcto lo decide el sitio donde cae el texto.
+
+Y aquí va el primer fallo, porque la regla buena tenía un agujero que tardé tiempo en ver. Una superficie no cambia solo por clase: cambia por estado. Una tarjeta que se aclara al pasar el cursor está cambiando de fondo, y mi capa no se enteraba, porque el hover compila a un selector distinto. Durante todo ese tiempo hubo tarjetas que en reposo cumplían de sobra y en hover se quedaban por debajo del objetivo. No lo encontró ningún escáner. Lo encontró preguntarme por qué había medido ocho páginas y no las doce.
+
+### Las veces que el metro no medía lo que yo creía
+
+Y lo demás no es que el sitio no llegara. Es que para llegar tuve que arreglar el instrumento con el que medía más veces de las que me gustaría contar, y siempre el resultado se leía igual que un aprobado.
+
+**De color.** Los cianes de esta marca caen ligeramente fuera del espacio de color que usa la pantalla. El navegador los recorta al pintarlos, pero si le preguntas por el valor te devuelve el original, con componentes negativas. Medir contraste sobre eso es medir un color que nadie ha visto nunca: cifras perfectas de un color inexistente.
+
+**De cobertura.** El censo que recorre la página y mide cada par de colores se rompió dos veces, y las dos en silencio, devolviendo una lista vacía. Una lista vacía de incumplimientos y un sitio impecable se escriben igual en un informe. La segunda vez tapaba un incumplimiento real. Desde entonces el censo publica cuántas reglas ha indexado y cuántos pares ha medido con ellas, porque lo que hay que comprobarle a un verificador no es qué encontró: es cuánto miró.
+
+**De umbral.** La norma no le pide lo mismo a un texto pequeño que a un titular: por encima de cierto tamaño, el listón baja. Yo estaba puntuándolo todo contra el listón del texto pequeño, así que publiqué cuatro incumplimientos donde en realidad había uno. Un umbral mal aplicado inventa hallazgos igual que un metro descalibrado, y cuesta más de deshacer, porque nadie duda de un informe que trae malas noticias.
+
+**De alcance.** El cuarto es de otra clase, y por eso es el que más me ha enseñado: no es que el instrumento estuviera roto, es que no existía. Todo lo que medía eran pares de texto sobre fondo, y hay un segundo requisito que casi nadie recuerda: un control también tiene que poder reconocerse como control. El borde de un campo de formulario, que es lo único que dice dónde se escribe, tiene su propio listón. El mío estaba a menos de la mitad, en todos los controles neutros del sitio, y desde la primera versión. No lo vio nadie porque el escáner automático no comprueba esa regla, mi censo medía otra cosa y cada eslabón delegaba en el siguiente, así que la cadena entera terminaba en un sitio donde no había nadie. Y ayudó el nombre que le puse: «censo de pares de contraste» suena a todo. Si lo hubiera llamado «censo de pares de texto», el hueco se habría visto el primer día.
+
+**De criterio.** El quinto llegó al día siguiente de arreglar el cuarto, y es el que peor me sabe: el instrumento no estaba roto ni faltaba. Medía, publicaba su cifra, y la cifra era cierta de lo que medía. Lo que fallaba era qué había decidido mirar. Daba por control lo que se pulsa y además se dibuja a sí mismo un borde, y el índice lateral de esta página se dibuja el suyo en una pieza de dentro: así que ni contaba como control ni se miraba como borde. Doce controles invisibles, once por debajo del listón, con el mismo número que acababa de corregir en todos los demás. Y encima la pasada medía sin bajar por la página, así que ese índice ni siquiera existía cuando iba a medirlo: dos motivos independientes para el mismo cero, y cada uno bastaba para producirlo. Ahora la pasada dice cuántos controles encuentra por esa puerta, para que un cero no pueda volver a parecerse a un aprobado.
+
+### La capa que no se puede automatizar
+
+Recorrí el sitio entero con [NVDA](https://www.nvaccess.org/), un lector de pantalla, y encontró cosas que no incumplen ninguna regla y que por eso ningún escáner podía señalar: una tecla que no cerraba lo que parecía que iba a cerrar, un cambio que ocurría sin anunciarse a quien no lo ve. Lo que encontró está publicado en la [página de accesibilidad](https://franciscolopez.es/accesibilidad) del sitio, con nombre y apellidos, junto a lo que todavía no he arreglado. Una declaración de accesibilidad que solo dice lo que cumple no es una declaración: es una portada.
+
+Cada capa de verificación encuentra lo que la anterior no puede ver. Solo la de abajo, una persona, encuentra lo que no incumple ninguna regla.
+
+ENLACE ·
+
+Decisiones [D39](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1775), [D41](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1907), [D52](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L2710), [D61](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3674) y [D73](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4585), y el script [contrast-census.js](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/scripts/design-review/contrast-census.js)
+
+9 de 12
+
+[Índice](#indice) · [Siguiente: 10 · Qué revisa una IA](#s10)
+
+10 de 12 · 4 min
+
+10 — Qué revisa una IA
+
+## 10. Qué revisa una IA y qué no
+
+10 de 12 · 4 min
+
+Esta web la he construido trabajando con una IA, así que la pregunta honesta no es si ayuda: **es qué encuentra y qué no**.
+
+### Quién decide
+
+Un apunte antes de seguir, porque afecta a cómo hay que leer todo lo anterior. Cuando en este artículo digo «decidí», la decisión es mía y la firmo. Pero casi ninguna se tomó en silencio: se discutieron en conversación, y de ahí salió buena parte de las objeciones que me hicieron cambiar de idea. **Lo que no delego es la decisión, ni el criterio con el que se juzga después**.
+
+### Lo que encuentra: lo que existe
+
+Un patrón mal escrito, una incoherencia entre dos archivos, un valor duplicado, una función que se puede simplificar. Le pides una revisión del código y te la da, y suele ser mejor que la mía a las once de la noche.
+
+Sobre eso he montado un puñado de rutinas propias, escritas por mí para este proyecto, que se disparan en un momento concreto y no cuando me acuerdo:
+
+- **Al cerrar una etapa**, una revisión técnica del repositorio entero con mirada de desarrollador externo que lo ve por primera vez: deuda, huecos, y dónde la documentación y el código han dejado de decir lo mismo. Termina proponiendo tareas concretas, no un informe para archivar.
+- **Entre etapas**, una revisión del método: los gates y cuántos dependen de acordarse, lo que cuesta arrancar una sesión, si los guardianes saben fallar, si el tablero sigue diciendo la verdad. Va en el hueco entre dos etapas y no al cerrar una, por una razón que me costó ver: el andamiaje hay que ponerlo antes de que existan las cosas que tiene que sostener.
+
+> Un verificador que devuelve una lista vacía y un verificador que no ha mirado nada producen exactamente el mismo informe: verde.
+
+- **Antes de un cambio visual grande**, una revisión de diseño que mira dos cosas distintas: si el sistema se está cumpliendo, y si la marca se está expresando. Se verifica en pantalla, no leyendo el código, porque una clase puede estar mal aplicada sin dar un solo error.
+- **Al crear una pieza nueva**, una rutina para publicarla en la página que documenta el sistema: contra qué sección hay que compararla, cómo está estructurada una sección y qué subapartados pide. Existe porque la regla de publicarlas llevaba meses escrita y se incumplió dos veces seguidas: lo que faltaba no era la regla, era con qué compararse.
+- **Al cerrar la sesión**, una rutina de documentación que repasa qué hay que actualizar y lo actualiza, incluida la operación que siempre se olvida, que es retirar lo que ha dejado de ser verdad.
+- **Y una para el CV**, que regenera los dos PDF desde la fuente única, comprueba que siguen cabiendo en dos páginas y deja el enlace listo. Existe porque la primera vez que cambié un dato de mi carrera la web quedó al día y el PDF no.
+- **Y una séptima que es la excepción, y por eso la cuento:** hay tres comprobaciones que necesitan el sitio funcionando delante, así que no hay ningún momento del editor al que atarlas. Están empaquetadas en una rutina que se invoca a mano. Si algo no se puede atar a un evento, al menos que se ate a un comando en vez de a siete pasos que hay que recordar en orden.
+
+Ninguna de las siete es un prompt que reescribo cada vez. Son instrucciones versionadas dentro del repositorio, y por eso mejoran: **cuando una falla, se corrige el archivo, no la siguiente conversación**.
+
+### Lo que no encuentra: lo que falta
+
+Y en este proyecto, lo que falta ha sido siempre el problema caro.
+
+Por eso los verificadores de este repositorio están escritos al revés de como se escriben normalmente. **No buscan el patrón malo: buscan la ausencia del bueno**. No preguntan «¿hay algún color con poco contraste?», preguntan «¿hay algún par de colores que este censo no haya medido?». Y todos terminan diciendo cuántas cosas han revisado.
+
+Los 26 pasos de integración continua, agrupados por rol y en su orden real: la mayoría busca la ausencia de un patrón bueno, no la presencia de uno malo.
+
+Me ha pasado cinco veces, y la mejor de todas fue esta: descubrí que la capa que verifica no estaba verificada. Los guardianes de este repositorio comprueban que nadie se salte las reglas, y no había nada que comprobara que los guardianes funcionaban. **Su modo de fallo no es una alarma, es una luz verde**. Ahora cada guardián tiene un caso malo de mentira que tiene que ser capaz de cazar, y si no lo caza, falla la integración.
+
+ENLACE ·
+
+Decisiones [D37](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1583), [D63](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3758), [D67](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4050), [D70](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4264) y [D72](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4490), el [workflow de CI](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/.github/workflows/ci.yml) y las rutinas versionadas en [.claude/skills/](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/.claude/skills)
+
+10 de 12
+
+[Índice](#indice) · [Siguiente: 11 · Lo que salió mal](#s11)
+
+11 de 12 · 3 min
+
+11 — Lo que salió mal
+
+## 11. Lo que salió mal, y qué tenían todos en común
+
+11 de 12 · 3 min
+
+Como en todo proyecto, aquí ha habido fallos. Algunos estaban previstos: lanzar rápido y sabiendo que eso genera deuda es una decisión, no un descuido. Otros no lo estaban, simplemente ocurrieron, y los he ido solventando, mejorando y puliendo sobre la marcha. Y como esto va de abrir el taller y enseñar el motor, aquí van algunas de las piezas que he tenido que cambiar. Ordenándolas me encontré con algo que no esperaba: se parecen demasiado entre sí, y ese parecido es lo único de todo esto que me llevaría a otro equipo.
+
+**Una regla que hay que recordar es una regla que se incumple.** No hay ni una excepción en el registro del proyecto. Las reglas que se han sostenido son las que llegaron a convertirse en un componente, una utilidad o un verificador. Las que se quedaron escritas en un documento se incumplieron todas, incluidas las que yo mismo había escrito la semana anterior.
+
+> Una regla que hay que recordar es una regla que se incumple.
+
+**Una regla cuyo disparador mira al sitio equivocado no es una regla, es una nota.** Tenía escrito «si hay más de dos iconos propios, publícalos». Lo comprobaba mirando el archivo de iconos, donde había uno. El sitio tenía siete, repartidos por otros archivos. La regla era correcta y la condición miraba a otro lado. Y pasa igual con el momento: el gate de accesibilidad se disparaba al cerrar una sección, y ahí ya es tarde, porque cambiar el alto de una apertura no es un ajuste, es un rediseño. Ahora salta también mientras se dibuja.
+
+**Valida el instrumento antes de creerte el hallazgo.** Se me han caído tres: un medidor de contraste, una norma de dibujo de iconos y un censo de pares. Los tres daban resultados verosímiles. La única defensa que he encontrado es empezar midiendo algo cuyo resultado ya conozco: si el instrumento no reproduce eso, el problema es mío y no del sitio.
+
+**La misma decisión escrita en dos sitios acaba diciendo dos cosas.** Siempre. La versión de este error que más me dolió no fue de documentación: fue un PDF generado desde una fuente única que dejó de regenerarse. Una fuente única evita dos verdades mientras genera. El día que la copia impresa se queda quieta, vuelves a tener dos.
+
+**La métrica que tienes no es la métrica que importa, y confundirlas es facilísimo.** Durante meses este sitio no tuvo formulario de contacto, y yo defendía que el clic en el correo era una señal más honesta que un envío. No lo era: era la única que tenía. Este error tampoco da la cara, porque el argumento suena bien; la única pista es que justificaba exactamente lo que ya estaba construido, y esas razones casi siempre se escriben después.
+
+Y una sexta que va en dirección contraria, para que no parezca que la moraleja es unificarlo todo: **antes de juntar dos valores que se parecen, comprueba que no signifiquen cosas distintas.** Encontré dos radios de esquina diferentes en lo que parecía el mismo componente y estuve a punto de igualarlos. No era incoherencia: eran dos cajas distintas y a una le faltaba el nombre. Unificarlas habría roto la jerarquía visual de media web.
+
+ENLACE ·
+
+El apartado «Cómo se escribe una regla aquí» de [BRAND.md](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/BRAND.md), y las decisiones [D60](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3593), [D63](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3758) y [D70](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4264)
+
+11 de 12
+
+[Índice](#indice) · [Siguiente: 12 · Ahora empieza lo bueno](#s12)
+
+12 de 12 · 3 min
+
+12 — Cierre
+
+## 12. Ahora empieza lo bueno
+
+12 de 12 · 3 min
+
+Más allá de sacar esa versión MVP y poder tenerla para ir mostrándola cuando fuera necesario, quería tomarme un tiempo para crear esto con rigor, y creo que lo he conseguido. **Seguro que tú le ves fallos**: desde tu punto de vista de HR, como diseñador seguro que echas en falta temas o tienes críticas razonables, y como developer seguro que algo te ha hecho guiñar un ojo. Como decía al principio, esto es una prueba de criterio a la hora de construir un producto, por pequeño que sea. Y estoy contento con el resultado.
+
+Pero falta la pieza que cierra el ciclo, y es la que le da sentido a todo lo anterior: empezar a ver datos e iterar con ellos. ¿Cómo lo he preparado? Te lo cuento.
+
+La medición entra con consentimiento y no antes: **sin aceptar no se carga nada**, ni el gestor de etiquetas, ni la analítica, ni el mapa de calor. Y la [política de cookies](https://franciscolopez.es/cookies) no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia.
+
+**La métrica principal no es la visita, es el mensaje**. Durante meses fue el clic en un canal de contacto, porque sin formulario era el proxy de intención más honesto que tenía: alguien que copia mi correo ha decidido algo. Desde que el formulario existe, la principal es el envío, y se cuenta cuando el correo sale, no cuando alguien pulsa el botón: un clic que se queda en un campo mal rellenado no es un contacto, y contarlo infla justo la cifra que uno quiere creerse. El clic en el teléfono y en el correo directo se quedan como secundarios. También lo son la descarga del CV, medida en los diferentes sitios donde se ofrece, y la profundidad de scroll, que es la que dice si el lector lento del que hablaba al principio existe de verdad. Y con Clarity voy a mirar cómo son esas visitas: qué recorrido hacen, cómo se mueven por la página, todo lo que ayude a aprender de quien la lee.
+
+El primer objetivo ya está cubierto: el ejercicio de crear este proyecto ha sido un aprendizaje fantástico. Lo que me llevo es la forma de trabajar que hay debajo: escribir las decisiones con su porqué y su fecha, convertir en código toda regla que dependa de acordarse, y **desconfiar del instrumento antes que del resultado, sobre todo cuando el resultado es bueno**.
+
+Al principio decía que quería abrir el taller y enseñar el motor. Esto era el motor. **No hace falta ser programador para construir así: hace falta decidir así**, y dejar escrito por qué.
+
+Si esa es la clase de criterio que buscas para tu equipo, hablemos.
+
+ENLACE ·
+
+Decisiones [D17](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L521), [D18](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L561), [D31](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1253) y [D71](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L4329)
+
+12 de 12
+
+[Índice](#indice)

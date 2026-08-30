@@ -6,6 +6,7 @@ import type {
 import Image from "next/image";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { Periodo } from "./periodo";
 import {
   companyOfSlug,
   deepBulletsOfSlug,
@@ -156,10 +157,13 @@ function Datos({
   lang: Locale;
   company: string;
 }) {
-  const { role, period, sector } = factsOf(lang, company);
+  const { role, sector } = factsOf(lang, company);
+  // `value` es `ReactNode` y no `string` desde P67.6: el periodo pinta dos
+  // `<time datetime>`, uno por extremo, y los otros cuatro datos siguen siendo
+  // texto. Es la fila la que cambia de tipo, no la tabla.
   const filas = [
     { label: labels.rol, value: role },
-    { label: labels.periodo, value: period },
+    { label: labels.periodo, value: <Periodo lang={lang} company={company} /> },
     { label: labels.sector, value: sector },
     { label: labels.tamano, value: datos.tamano },
     {

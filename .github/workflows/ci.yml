@@ -254,6 +254,17 @@ jobs:
       - name: Marco de página
         run: npm run check:marco
 
+      # El markdown de `public/md/` es un ARTEFACTO DERIVADO del prerender (P67.2,
+      # D158): se genera con `npm run md` y se commitea, porque negociar `Accept`
+      # dentro de una página la haría dinámica y las 28 variantes tienen que seguir
+      # siendo estáticas (D48). Un artefacto commiteado se queda viejo en silencio
+      # —familia D60—, así que nace con su guardián el MISMO día y no cuatro
+      # después como `check:kit`. Vuelve a convertir el prerender y compara: si el
+      # copy de una página cambió y nadie regeneró, esto sale rojo nombrando la
+      # variante.
+      - name: Markdown al día
+        run: npm run md:verificar
+
       # El rótulo PINTADO de toda figura con lienzo escalado (P68.59). Un
       # `text-[11px]` dentro de un `viewBox` son 11 unidades de dibujo, no 11
       # píxeles: los siete diagramas del artículo llevaban desde que existen
@@ -278,6 +289,20 @@ jobs:
       # va detrás del build y cuesta segundos.
       - name: Nombres propios sin traducir
         run: npm run check:marcas
+
+      # Lo que este sitio le PROMETE a un agente (P68). Nace de una pregunta con
+      # respuesta incómoda: no, los dos escáneres de agentes no se enganchan a la
+      # rutina, y no deberían. Su nota mezcla lo que aplica con lo que no —un
+      # 20/100 donde doce checks son de superficies que el sitio no tiene— y sus
+      # reglas son borradores que cambian sin avisar, así que el gate se pondría
+      # rojo o verde por algo que no hemos decidido. Un escáner es DESCUBRIMIENTO;
+      # la rutina es un guardián nuestro sobre las invariantes que este sprint
+      # adoptó. Mira en tres sitios distintos a propósito: el ARTEFACTO de
+      # llms.txt, el proxy EJECUTADO (una cabecera no está en el prerender) y
+      # `robots()` con sus dos entornos, porque el robots.txt que se construye en
+      # CI es el de NO producción (D13) y leerlo daría por bueno un Disallow.
+      - name: Promesas a los agentes
+        run: npm run check:agentes
 
       # Y el que mira a todos los demás: a cada guardián le pasa un caso malo
       # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que

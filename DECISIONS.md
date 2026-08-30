@@ -192,6 +192,10 @@
 - D154 · El suelo de la densidad tiene dos palancas, y la que faltaba es teñir sin gastar bloque
 - D155 · Una señal fija que no distingue es decoración con forma de aviso
 - D156 · La invariante del pliegue pasa a sostenerse por construcción, y el corte está escrito
+- D157 · La nota de un escáner agéntico no es un criterio de aceptación, y su hallazgo más ruidoso no reproduce
+- D158 · El markdown para agentes sale del `<main>` prerenderizado, y es un artefacto commiteado con guardián
+- D159 · El guardián propio en vez del escáner ajeno: `check:agentes`
+- D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9554,3 +9558,290 @@ decisión de copy porque las tres entradillas son de largo distinto.
 
 *Es el patrón de esta entrada aplicado a sí misma: un refactor transparente no arregla de paso
 lo que encuentra, lo deja escrito y lo arregla en su propio cambio, donde se puede medir.*
+
+---
+
+## D157 · La nota de un escáner agéntico no es un criterio de aceptación, y su hallazgo más ruidoso no reproduce — 2026-08-30
+
+**Decisión.** Los dos escáneres que abrieron el sprint «Agentes» —**`is-agentic.com`** (Vercel /
+Ora API, 75/100) e **`isitagentready.com`** (20/100)— quedan registrados como **entrada de
+descubrimiento y nunca como metro**. Ninguna de sus dos notas es un umbral de este proyecto, y
+esto se escribe *antes* de construir nada del sprint porque el proyecto ya sabe cómo acaba lo
+contrario: *de 11 hallazgos de un auditor externo, 6 eran falsos positivos, y lo descartado hay
+que documentarlo o vuelve*.
+
+### Los dos falsos positivos, con el comando que los tumba
+
+Medidos contra **producción**, no contra local, el 2026-08-30:
+
+| Su hallazgo | Comando | Lo que devuelve |
+|---|---|---|
+| «Content without JavaScript: asegura un `h1` y 500+ caracteres en el HTML crudo» | `curl -s https://franciscolopez.es/ \| grep -o '<h1' \| wc -l` | **1** |
+| — la misma, en su mitad de caracteres | ver el bloque de abajo | **6.497 caracteres de prosa**, 13 veces su umbral |
+| «Agent-friendly 404s: nunca un 200 con tu app shell» | `curl -s -o /dev/null -w "%{http_code}" https://franciscolopez.es/no-existe-xyz` | **404**, y **404** también en `/en/…` |
+
+El conteo de caracteres, que es el que necesita el bloque propio:
+
+```bash
+curl -s https://franciscolopez.es/ | node -e "
+let h='';process.stdin.on('data',d=>h+=d).on('end',()=>{
+  const t = h.replace(/<(script|style)[\s\S]*?<\/\1>/gi,' ')
+             .replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+  console.log(t.length);
+});"
+```
+
+### Y el metro de este mismo descarte estuvo mal la primera vez
+
+La ficha de la tarea tumbaba el primer hallazgo con **«~77.500 caracteres de texto»**. Es
+**77.180**, y **no son texto**: salen de contar como prosa el `self.__next_f.push(...)` que Next
+inlinea dentro de un `<script>` con el payload RSC. Quitando `script` y `style` —que es lo que
+hace el comando de arriba— quedan **6.497**, y el resto de la página cuadra con esa cifra: 75
+`p`, 7 `h2` y 10 `h3` en las mismas 218 KB.
+
+**El veredicto no cambia y la cifra sí**, y por eso se escribe: 6.497 sigue siendo 13 veces el
+umbral de 500, así que el hallazgo sigue siendo falso. Pero es la regla 3 de `BRAND.md`
+—*valida el metro antes de creerte el hallazgo*— apareciendo **dentro de la tarea que existe para
+validar el metro de otro**. Un `replace(/<[^>]+>/g)` sin quitar antes los `<script>` es
+exactamente el error que comete un escáner que promete leer «el HTML crudo», y aquí se cometió al
+refutarlo.
+
+### Los doce checks que NO aplican, y el criterio que lo decide
+
+El 20/100 del segundo escáner es la cifra que más impresiona y la que menos dice: **12 de sus
+checks miden superficies que este sitio no tiene**.
+
+| Familia | Checks | Por qué no aplica |
+|---|---|---|
+| `API, Auth, MCP & Skill Discovery` | API Catalog · OAuth/OIDC · OAuth Protected Resource · `auth.md` · MCP Server Card · Agent Skills index · WebMCP · DNS-AID · Web Bot Auth | El sitio **no tiene API, ni autenticación, ni servidor MCP**. Un 0/9 aquí es la respuesta correcta |
+| Comercio agéntico | x402 · MPP · UCP · ACP | **No hay nada que vender**. Un portfolio no tiene checkout |
+
+> **El criterio, que es lo reutilizable: un check de superficie agéntica aplica si el sitio TIENE
+> esa superficie.** Publicar un `api-catalog` sin API no es estar preparado para agentes: es
+> mentir en un formato que un agente sabe leer, y encima con la firma de un estándar.
+
+Y hay una segunda razón para no engancharlos a la rutina, que es el criterio de D51 en su otra
+mitad: **sus checks son estándares emergentes en borrador**, así que un metro que no controlamos
+puede ponerse rojo o verde por algo que aquí no se ha decidido. Lo que va a CI es un guardián
+propio (P68), y vigila las invariantes que este sprint adopte, no la nota de nadie.
+
+### Lo que sí queda en pie, que es de dónde sale el sprint
+
+De los dos informes juntos sobreviven **tres** huecos reales, y los tres están tareados:
+
+- **La negociación de markdown** (P67.2), el **único que señalan los dos a la vez** y el único que
+  cambia lo que un agente puede *hacer* con el sitio. Hoy: `Accept: text/markdown` devuelve
+  `text/html`, y el `Vary` que sirve Next (`rsc, next-router-state-tree, …`) **no incluye
+  `Accept`**.
+- **El *when-to-use* de `llms.txt`** (P67.4). El archivo describe **quién es**; no dice **cuándo
+  traer esta fuente a una conversación**.
+- **Las señales de contenido en `robots.txt`** (P67.8), que hoy dice `Allow: /` y nada más.
+
+### Y la media frase del 404, que se DESCARTA con motivo
+
+La segunda mitad del hallazgo del 404 —*que el cuerpo apunte al sitemap o a `llms.txt`*— es
+literalmente cierta y aun así no se hace. El 404 servido **no es un app shell vacío**: trae el nav
+y el footer completos, o sea **nueve enlaces reales del sitio** y un «Volver al inicio», que es
+justo lo que su hallazgo pide que exista. Lo que falta es un puntero a un artefacto de máquina, y
+`/llms.txt` ya está anunciado donde un agente lo busca —`robots.txt` y el `Sitemap`—, así que
+enlazarlo desde una página que lee una persona sería **publicar un artefacto de máquina en una
+superficie humana** para satisfacer un check.
+
+*Lo que sí se queda es la mitad que vale, y como invariante en vez de como nota:* **`check:agentes`
+comprueba que una ruta inexistente devuelve 404 de verdad** (P68). El falso positivo, convertido
+en la comprobación que sí protege algo.
+
+**Estado:** Aceptada. La entrada se cierra con el sprint; si alguna de las tres tareas cambia de
+alcance, es aquí donde se anota por qué.
+
+---
+
+## D158 · El markdown para agentes sale del `<main>` prerenderizado, y es un artefacto commiteado con guardián — 2026-08-30
+
+**Decisión.** Cada página se sirve también en markdown. El texto sale del **`<main>` del HTML
+prerenderizado**, se genera con `npm run md` como **artefacto commiteado** en `public/md/`, y se
+llega a él por **dos vías**: la URL explícita `/md/<locale>/<pagina>.md` —que es la estable— y la
+**negociación por `Accept: text/markdown`**, que resuelve el proxy. Medido: la home pasa de
+**216.323 a 6.585 bytes**, 33 veces menos, y las **28 variantes** responden.
+
+**De dónde sale el texto: del HTML, no del diccionario.** Las tres razones están en la ficha de
+P67.2 y dos ya eran reglas: **D38** sacó del diccionario todo valor publicado, así que un
+compositor de diccionario sería *estructuralmente incapaz* de contener las cifras que varias
+páginas existen para publicar (el diccionario de la home pesa ~440 palabras y la página emite 75
+`p`, 7 `h2` y 10 `h3`); sería un **segundo renderizador** de lo mismo, la familia mejor
+documentada de este proyecto; y **D75** ya decidió que la verdad de una página es el HTML que
+emite. Se ancla en `<main>` porque es exactamente el contenido y porque «un solo `main` por
+página» **ya lo vigila `check:marco`**: es la diferencia entre elegir un selector y elegir uno que
+alguien ya defiende.
+
+**Y artefacto commiteado, no ruta dinámica, por una condición que no se negocia:** leer `Accept`
+dentro de una página la haría dinámica, y que las 28 variantes sigan prerenderizándose es criterio
+de aceptación (D48). El proxy corre antes y reescribe a un archivo estático, así que la
+negociación no le cuesta el prerender a nadie. La contrapartida —un artefacto commiteado se queda
+viejo— es la familia D60, y por eso **`md:verificar` nace en CI el mismo día**, no cuatro después
+como `check:kit`. En su primera corrida ya cazó dos variantes.
+
+### El conversor es propio, y su regla es fallar en voz alta
+
+`turndown` ante una etiqueta que no conoce la tira en silencio y deja un agujero que nadie ve. Con
+un `<main>` que emite un conjunto pequeño y conocido de elementos —porque todo sale de la capa—,
+la lista puede ser un **contrato**: lo que no está, **rompe el build nombrando la etiqueta y su
+contexto**. Es «afirma cuánto has mirado» aplicado a un conversor. Y las reglas viven aparte de la
+E/S (`convertir.ts` ↔ `extraer.ts`, misma partición que `tablero/reglas.ts`), con **16 casos en
+`npm test`**, caso malo incluido.
+
+### Dos elementos pegados sin texto en medio estaban separados por CSS
+
+Es el hallazgo reutilizable, y salió del prerender, no de un ejemplo. El HTML no dice qué
+separaba la hoja de estilos, así que un conversor por etiquetas pega los rótulos:
+
+| Dónde | Lo que salía | Lo que sale |
+|---|---|---|
+| El enlace de correo de `/contacto` | `Correofranciscojavier.lopezmartinez@gmail.com` | `Correo · franciscojavier…` |
+| La cabecera de Hitos, tres `<span>` hermanos | `NombreImpactoAño` | `Nombre · Impacto · Año` |
+
+**La señal es «elemento inmediatamente después de elemento», y en prosa no se dispara por
+construcción:** React emite el espacio entre palabras como nodo de TEXTO, así que entre un
+`<strong>` y lo que sigue siempre hay uno. El separador es el `·` que `CLAUDE.md` reserva justo
+para separar dos etiquetas. Los dos casos son test.
+
+### El `Vary` no llega a la página prerenderizada, y eso cambia lo que se promete
+
+Se puso `Vary: Accept` en el proxy, no llegó; se puso además en `next.config.ts`, tampoco. Medido
+contra `next start` el 2026-08-30:
+
+| Ruta | `Vary` servido |
+|---|---|
+| `/md/es.md` y `/robots.txt` | `Accept` **sí** llega (en `robots.txt` salen las dos cabeceras) |
+| `/` y `/en/sobre-mi` | solo el de Next: `rsc, next-router-state-tree, …, Accept-Encoding` |
+
+La diferencia es el camino: una página servida del prerender (`x-nextjs-cache: HIT`,
+`x-nextjs-prerender: 1`) lleva el `Vary` que escribe Next, y **ni el proxy ni `headers()` pueden
+añadirle nada**.
+
+> **Así que el contrato no se apoya en esa cabecera.** La vía estable es la **URL explícita**, que
+> `llms.txt` anuncia; la negociación por `Accept` es la comodidad que piden los dos escáneres, y
+> detrás de una caché compartida que ya tenga guardado el HTML puede no llegar. **Está dicho así
+> en `llms.txt`, en vez de prometer de más** — que es el fallo que `BRAND.md` ya se anotó cuando
+> la regla del control sobre imagen prometía un contorno entero.
+
+### Lo que cuesta, dicho antes de que lo diga nadie
+
+- **Las páginas muy visuales dan un markdown más delgado que su página.** Es correcto, no un
+  defecto: lo que un agente puede usar de una rejilla de muestras de color *es* el texto.
+- **Lo que no entra se cuenta y se nombra en cada corrida:** 228 `svg` (ilustraciones), 96
+  controles —de los que **sí entra su etiqueta**, porque dice qué ofrece la página— y 460
+  elementos marcados `aria-hidden`. Un alcance recortado en silencio se lee como cobertura.
+- **Una fila de Hitos sale como bloques sueltos** («(01)», «Emendu», «2026»), porque en el DOM son
+  `div` hermanos y ahí no hay señal que distinguir. Se deja: la ficha puso fuera de alcance que el
+  markdown sea bonito, y adivinar qué `div` es una fila es justo la clase de listeza que hace
+  divergir un conversor de su página.
+
+### Y el coste que no estaba previsto: cada entrada de aquí caduca el markdown del artículo
+
+Lo encontró CI en la primera corrida del guardián, y la causa no era ninguna de las dos que se
+plantearon primero. El artículo enlaza sus fuentes con **enlaces profundos que llevan número de
+línea** (`DECISIONS.md?plain=1#L1165`), calculados en el build. Y el índice de la cabecera de este
+archivo **lo genera `npm run indices` con una línea por entrada**, así que **una D nueva empuja una
+línea a todas las de debajo**: D157 y D158 movieron **22 enlaces** entre las dos variantes del
+artículo.
+
+> **Consecuencia, dicha entera: casi todo PR de este proyecto añade una entrada aquí, así que casi
+> todo PR deja el markdown del artículo viejo.** El guardián lo caza y el arreglo es un comando
+> (`npm run build && npm run md`), pero es fricción recurrente y no se descubre leyendo el diseño.
+
+**No se arregla quitando los números de línea**, que son lo que hace que el enlace caiga en la
+entrada y no en un archivo de 9.000 líneas. Y no se arregla generando en el build, que es la
+opción que D48 ya cerró. Se acepta, y lo que la hace aceptable es que **el fallo es ruidoso**: sale
+en CI nombrando la variante, no en producción.
+
+*Es, además, la confirmación de por qué el guardián tenía que nacer el mismo día que el artefacto:
+si hubiera entrado en la tanda 5, entre medias habrían pasado tres tandas con el markdown diciendo
+lo de antes y nadie mirándolo.*
+
+## D159 · El guardián propio en vez del escáner ajeno: `check:agentes` — 2026-08-30
+
+**Decisión.** Lo que este sitio le promete a un agente lo vigila un guardián **nuestro** en CI
+—`npm run check:agentes`— y **no** la nota de ninguno de los dos escáneres públicos que abrieron
+el sprint. Vigila exactamente las invariantes que este sprint adoptó, y ninguna más.
+
+**La pregunta que lo abrió fue si había un plugin o una skill para meter esos escáneres en la
+rutina, y la respuesta honesta es que no debería haberla**, por dos razones que este repo ya
+tenía medidas. **Su nota mezcla lo que aplica con lo que no:** un 20/100 donde doce de los checks
+son de superficies que el sitio no tiene no es una señal, es ruido con forma de nota, y
+perseguirla lleva a publicar un `api-catalog` sin API — que es justo lo que P67 descartó tras
+verificar los hallazgos uno a uno. **Y un metro que no controlamos cambia sin avisar:** sus
+checks son estándares emergentes en borrador, así que el día que uno se mueva el gate se pone
+rojo o verde por algo que no hemos decidido. Un escáner es **descubrimiento** —se pasa cuando se
+quiere mirar—; la rutina es esto. Es el criterio de **D51**: si se dispara en un evento y no
+requiere criterio, es un script en CI.
+
+### Lo reutilizable: mira en tres sitios distintos porque la promesa ocurre en tres sitios
+
+Es la regla 1 de `BRAND.md` §Cómo se escribe una regla —la condición se comprueba **donde** la
+cosa ocurre— aplicada a un solo guardián, y mezclarlas habría sido el fallo:
+
+| Qué promete | Dónde se comprueba | Por qué no vale el prerender |
+|---|---|---|
+| `llms.txt` nombra las catorce y trae sus dos secciones | El **artefacto** del build | Es un archivo, no una página |
+| Markdown a quien lo pide, HTML a un navegador, `Vary: Accept` en ambos | **Ejecutando `proxy()`** | Una cabecera no está en el HTML: el prerender no sabe con qué `Vary` se sirvió |
+| `robots.txt` abre en producción y cierra fuera (D13) | **Ejecutando `robots()`** en los dos entornos | El robots que se construye en CI es el de **no** producción: leerlo daría por bueno un `Disallow: /` |
+
+**El caso de `robots` es el que más enseña.** Un guardián que leyera el artefacto habría
+certificado exactamente lo contrario de lo que cree, y en verde. Y comprueba **los dos** entornos
+a propósito: el día que este gate diera rojo, la salida fácil sería quitarle a `robots()` su gateo
+por entorno y dejar todo abierto, y entonces un preview de rama se indexaría.
+
+### Lo que deja fuera, y lo dice
+
+La nota de ningún escáner, lo primero. Y **el estado HTTP real**: que una ruta inexistente
+devuelva 404 se comprueba por **estructura** —que no aparezca un segmento catch-all, que es lo
+que de verdad convierte los 404 de un sitio en 200 vacíos— y no haciendo la petición, que
+necesitaría servidor. Es un proxy honesto del modo de fallo, no la medición, y va escrito en la
+cabecera del script y en la fila de `PRD-Live`.
+
+Nace con **tres casos malos en `check:guardianes` el mismo día**, uno por cada una de las tres
+fuentes, y no cuatro días después como `check:kit`. Los seis que se le probaron al escribirlo
+—incluido el `includes` que le serviría markdown a un navegador— los rechaza todos.
+
+## D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina — 2026-08-30
+
+**Decisión.** `robots.txt` declara, sobre el comodín,
+`Content-Signal: ai-train=no, search=yes, ai-input=yes`.
+
+**`search=yes` y `ai-input=yes` no son permisividad: son el objetivo del sitio.** Su trabajo es
+que lo encuentren, y cada vez más ese encuentro pasa por un asistente que lee para responder a
+alguien **ahora**, citando la fuente. Decir que no ahí sería cerrarle la puerta al canal que el
+sprint «Agentes» existe para abrir.
+
+**`ai-train=no` porque ya estaba dicho.** El `LICENSE` del repositorio —«público para consulta,
+no código abierto»— nombra explícitamente los textos del sitio y `content/` entre lo que no se
+licencia para obras derivadas. **Un `ai-train=yes` al lado de esa licencia sería una contradicción
+publicada.** No es una postura sobre la IA: es la misma frase, en un formato que una máquina puede
+leer. Y la distinción que hace coherentes a las tres es esa: `ai-input` es *leer para responder
+citando*; `ai-train` es *quedarse el contenido*.
+
+**Es una preferencia, no un control de acceso**, igual que el resto de `robots.txt`. No la hace
+cumplir nadie. Se pone porque es coherente, no porque impida nada, y eso se escribe aquí para no
+vender de más.
+
+### Lo que NO lleva, y es decisión
+
+**Reglas por bot con nombre** (`GPTBot`, `Google-Extended`…). Sería una lista escrita a mano contra
+un catálogo que cambia solo, o sea la familia D60: se queda vieja en silencio. Sobre el comodín
+dice lo mismo sin lista que mantener. El día que haya que bloquear a uno en concreto, será por un
+motivo específico y con fecha.
+
+### Dos cosas de implementación que no eran obvias
+
+**No hace falta cambiar la ruta por un handler propio.** `MetadataRoute.Robots` de esta versión de
+Next tiene un campo `other` para directivas no estándar, que emite verbatim dentro del grupo de su
+`User-Agent`. La suposición contraria —que un tipo cerrado obligaba a bajar a un `route.ts`— era
+justo lo que `AGENTS.md` avisa: esta no es la versión de Next que uno recuerda.
+
+**El guardián comprueba las tres por su VALOR DECIDIDO, no leyendo el que haya puesto `robots()`.**
+Comparar una cosa consigo misma aprueba siempre. `check:agentes` lleva las tres escritas con su
+porqué, y de las tres la que de verdad vigila es `ai-train`: es la única que alguien podría
+cambiar por parecer más abierto, y la contradicción viviría en un `robots.txt`, que es un archivo
+que nadie vuelve a leer después de escribirlo. Su caso malo entra en `check:guardianes` el mismo
+día (D159).

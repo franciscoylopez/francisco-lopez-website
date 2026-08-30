@@ -4,10 +4,10 @@ description: Los gates que necesitan el sitio SERVIDO y por eso no están en CI 
 disable-model-invocation: true
 ---
 
-# Los tres gates que necesitan un servidor delante
+# Los gates que necesitan un servidor delante
 
 > **Por qué esto es una skill y no un hook.** P47.4 ató a un evento de editor los dos gates
-> que se podían atar. Estos tres no: necesitan el sitio **servido**, y el primero necesita
+> que se podían atar. Estos no: necesitan el sitio **servido**, y el primero necesita
 > además una **línea base guardada ANTES del refactor**. No existe evento que signifique «voy
 > a empezar a refactorizar», así que el disparador tiene que ser un momento, y el momento lo
 > decide una persona (D51). Lo que no se puede atar a un evento, al menos se ata a **un**

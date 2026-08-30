@@ -1,0 +1,117 @@
+---
+url: https://franciscolopez.es/en/trayectoria/thetool
+lang: en
+title: From a tool that did not exist to an exit
+---
+
+1. [Home](https://franciscolopez.es/en)
+2. [Experience](https://franciscolopez.es/en/trayectoria)
+3. TheTool
+
+TheTool · B2B SaaS · ASO
+
+# From a tool that did not exist to an exit
+
+Role
+
+Cofounder & Product
+
+Period
+
+May 2016 (2016-05) - Oct 2021 (2021-10)
+
+Sector
+
+B2B SaaS · ASO
+
+Team size
+
+From 4 to 24 people
+
+Reporting
+
+Co-founder, 1 of 4 partners
+
+01 — In a minute
+
+## 01. Five and a half years of product, from zero to the sale
+
+- **Co-founder responsible for the product vision**, the MVP design, its validation and the launch of the paid version. TheTool was born bootstrapped, funded by the agency that incubated it.
+- **I designed and evolved the features that set us apart:** correlation between installs and ASO, tracking dashboards, ASO score, international analysis, competitor timeline and bulk monitoring.
+- **In 3 days we turned a hidden Google Play beta into a feature open to all our customers**: we had it **7 months** before the market and it gave us **+30% MRR in 2 months**.
+- **I led roadmap, discovery, functional definition and coordination** with engineering, marketing and customer success.
+- **I brought in the first Product Designer**, and with them the full redesign of the brand and the platform.
+- **TheTool established itself among the reference ASO tools** (nominated Best ASO Software in Europe at the App Promotion Summit in Berlin) and **was acquired by AppRadar in 2021**.
+
+02 — The story
+
+## 02. Bootstrapped, fast, and the bill design sends
+
+### The agency that needed a tool that did not exist
+
+Dani and Miriam, who I had worked with before, had founded **PICKASO**: the first agency in Spain dedicated exclusively to app marketing. They needed tools to track the apps they managed, produce reports and pull insights on the competition; tools existed, and none covered the whole job. That is where TheTool comes from: building the one that was missing. They called me for that (I was at the end of my digital marketing stage, with my head more on what happens to the user than on how to attract them) and Rubén joined as CTO.
+
+I worked in two directions. One, **professionalising the agency**: TheTool was bootstrapped and PICKASO funded it, so the agency's growth was, literally, the product's budget: I repositioned its brand and its service portfolio, and along the way mapped the companies that would become our competitors. Two, **finding the gap**, with a four-input discovery: agency clients, indie developers, PICKASO's consultants and the agency's own way of working, which was the value we wanted to put inside the product. The MVP was presented where the market was: **Applause**, the first professional app conference in Spain, organised by PICKASO. TheTool was announced and the free tier opened, doing two jobs instead of one: our first acquisition channel and **the best discovery input we ever had**.
+
+### Speed first, method later
+
+It gained traction, and with it came the first frontend, a new backend, customer success and the first customers. We worked in Kanban and at a very high pace, because occupying our gap was not enough: we also had to offer what the other tools already had. It worked for almost a year, and then the usual showed up: plenty of speed and little method.
+
+We reorganised: a branching and deployment architecture that would scale, two-week sprints and a goal system with one simple rule: **one disruptive feature per quarter** (ASO score, international analysis, competitor timeline, related-app tracking), with the rest of the sprint to optimise on user feedback. That dynamic is what brought the nomination for **best ASO software** at the App Promotion Summit in Berlin, alongside competitors with serious funding and far bigger teams than ours.
+
+### Stability, turned into a feature
+
+Analysing the entire App Store and Google Play daily is not simple, and putting that data into the product solidly is less so. It showed: sprints shipped fine, but the scraping bugs appeared **during launch week**, after the nightly crons ran.
+
+So we changed the sprint: **monthly, three weeks of development and one of external testing** with PICKASO's ASO consultants and with a customer or two. Less delivery cadence, and stable value. And we turned the cost around with **TheTool Monthly**, a monthly communication with every new feature explained step by step: on the 1st there was something new and you knew how to use it. Stability stopped being an internal constraint and became something the customer noticed.
+
+With delivery stable we could go back to product, with a focus we passed on to the whole team: give the customer the maximum information about their competitors. Out of that came **decoding the real install numbers behind the “1 M – 5 M” band** that Google Play publishes as a black box, and with it a whole line of market analysis on verified data: sector and trend reports, some of which made it onto national television news.
+
+Pressing play loads the video from YouTube, under their terms.
+
+### The piece that arrived late, and the round that never did
+
+Growing bootstrapped has advantages and a bill. Ours was design: we had started from a template that served us well, and five years later the platform was a Frankenstein. I pushed for hiring the **first product designer**, who rebuilt the brand and the platform and gave it the usability users had been missing.
+
+Even so, by year five we were flat: the market had matured, competitors had more financial muscle and we had already received acquisition offers. Our path was a different one: stop being bootstrapped and look for partners who would bring investment, but also market knowledge and the capacity to expand. The round was going well; and then the pandemic arrived. It stalled, nobody knew whether the world would still be the one we knew, and the decision was to **protect PICKASO and close the sale of TheTool**. That is how [the acquisition by AppRadar](https://appradar.com/blog/app-radar-acquires-thetool) came about.
+
+I could have stayed at the agency; I had already worked there during my marketing and growth years. But product had got under my skin by then, and the next challenge had to be a product one.
+
+03 — The case
+
+## 03. The Google Play beta we opened to the whole market
+
+One of the goals we had passed on to the whole team was to be first on every new development in the market. It was our way of competing with bigger, longer-established but less agile tools.
+
+Google had enabled in its Developer Console, in beta and only for a few accounts, the ability to see **which keywords generated installs**: real data where until then there had been a black box. One of our customers had access and gave us permission to investigate on their account; before long, Rubén had worked out how to put that beta in anyone's hands.
+
+He told us on a Friday and ideas came out: share it in the Slack communities we were part of, write a post, earn links and traffic. We could do better. I got the team together: we already had the Google Play integration, so **we could replicate inside TheTool the same view Google was offering to a few**. By Monday it was live.
+
+And then the other half of the work began: an article explaining that we were giving all our customers what was only available to some, distributed wherever we could; the newsletter; and one-to-one contact with everyone who had taken the trial or signed up to the free plan.
+
+### Results
+
+- +30%
+  
+  MRR in 2 months
+- 3 days
+  
+  from the finding to production, Friday to Monday
+- 7 months
+  
+  of advantage: the beta did not open to the market until then
+
+By the time Google released it and the other tools started adopting it, we already had it integrated, it was already part of our data pool for keyword research, and we already had history.
+
+04 — Takeaways
+
+## 04. Four things I take from five and a half years
+
+1. **A small, motivated team can compete with anyone.** We were nominated in Berlin alongside tools with serious funding and far bigger teams. What a funding round does not buy is decision speed: we had Google's beta in production by Monday.
+2. **Frameworks are studied, adopted and adapted.** Two-week sprints were correct in the manual and wrong for us, because our bugs did not come from the code but from the nightly crons. The monthly sprint with a week of external testing is in no book, and it is what gave us clean launches.
+3. **Fewer releases can mean more value, if the customer notices.** The monthly sprint lowered the cadence; TheTool Monthly turned that cadence into a certainty. Stability only counts as a feature if it is communicated.
+4. **Being born bootstrapped is a valid path; postponing design is not.** The product designer arrived in year five and fixed something we had been paying for in usability for a long time. I wish they had joined at least a year earlier.
+
+Keep reading
+
+[Next role · Freepik · Product Manager · Oct 2021 - Dec 2021](https://franciscolopez.es/en/trayectoria/freepik)

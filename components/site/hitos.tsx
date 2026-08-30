@@ -59,14 +59,19 @@ function Row({
       >
         {children}
       </p>
-      <span
+      {/* `<time>` y no `<span>` (P67.6): el año ya es un dato legible por
+          máquina —cuatro cifras son una fecha ISO 8601 válida—, así que servirlo
+          como texto suelto era tirar información que ya se tenía. El elemento no
+          pinta nada distinto; `.hito-anio` sigue siendo quien anima el filete. */}
+      <time
+        dateTime={year}
         className={cn(
           "hito-anio text-foreground ml-auto shrink-0 font-mono text-[0.9rem] [grid-area:year]",
           boldYear && "font-semibold",
         )}
       >
         {year}
-      </span>
+      </time>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { actionVariants } from "@/components/ui/action";
 import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
+import { Periodo } from "./periodo";
 import { type Locale, pagePath } from "@/lib/i18n/config";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { SectionHeader, dataLabelVariants } from "@/components/ui/heading";
@@ -96,11 +97,11 @@ function LogoCell({ company }: { company: string }) {
 }
 
 function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
-  const { role, period } = factsOf(lang, row.company);
+  const { role } = factsOf(lang, row.company);
   return (
     <div className="tray-grid border-border border-b py-[clamp(1.35rem,3vw,1.85rem)]">
       <p className="text-muted-foreground m-0 pt-[0.15rem] text-[0.9rem] whitespace-nowrap [font-variant-numeric:tabular-nums]">
-        {period}
+        <Periodo lang={lang} company={row.company} />
       </p>
       <div>
         <div className="font-display text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
@@ -121,7 +122,7 @@ function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
 }
 
 function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
-  const { role, period } = factsOf(lang, row.company);
+  const { role } = factsOf(lang, row.company);
   return (
     <div className="tray-grid-nested relative">
       {/* conector horizontal hacia el borde vertical del contenedor */}
@@ -134,7 +135,7 @@ function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
         }}
       />
       <p className="text-muted-foreground m-0 pt-[0.15rem] text-[0.85rem] whitespace-nowrap [font-variant-numeric:tabular-nums]">
-        {period}
+        <Periodo lang={lang} company={row.company} />
       </p>
       <div>
         <div className="font-display text-[clamp(0.98rem,1.4vw,1.15rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
