@@ -328,6 +328,37 @@ export const CASOS: Caso[] = [
       ),
   },
   {
+    guardian: "check:agentes",
+    rotura:
+      "`Vary: Accept` vuelve a caer sobre las tarjetas OG, los PDF y las fuentes",
+    // El estado real hasta P68.742: las cabeceras de seguridad y el `Vary` iban en
+    // la MISMA regla de `headers()`, así que la segunda llegaba a assets que no
+    // negocian nada y una caché compartida guardaba una copia por familia de
+    // navegador. No da error en ninguna parte —es coste, no incorrección—, y por
+    // eso el caso malo es el único que puede defenderlo.
+    //
+    // MUERDE EL MANIFIESTO Y NO `next.config.ts`, porque es donde el guardián
+    // mira: la regex compilada que el servidor usa para decidir qué cabeceras
+    // pone. Se le devuelve al `Vary` la regla ancha, que es exactamente la
+    // regresión.
+    archivo: ".next/routes-manifest.json",
+    mutar: (o) => {
+      const m = JSON.parse(o) as {
+        headers: { source: string; regex: string; headers: unknown[] }[];
+      };
+      const ancha = m.headers.find((r) => r.source === "/:path*");
+      const vary = m.headers.find((r) =>
+        (r.headers as { key: string }[]).some(
+          (h) => h.key.toLowerCase() === "vary",
+        ),
+      );
+      if (!ancha || !vary)
+        throw new Error("el manifiesto no tiene las dos reglas");
+      vary.regex = ancha.regex;
+      return JSON.stringify(m);
+    },
+  },
+  {
     guardian: "md:verificar",
     rotura:
       "el markdown commiteado de una página deja de decir lo que dice la página",

@@ -98,10 +98,43 @@ const securityHeaders = [
 // dicho así en D158 y en `llms.txt`, en vez de prometer de más.
 const varyHeader = [{ key: "Vary", value: "Accept" }];
 
+/**
+ * DÓNDE SE NEGOCIA DE VERDAD, que hasta el 2026-08-30 era «en todas partes»
+ * *(P68.742, hallazgo del code-review del sprint)*. Las dos cabeceras iban en la
+ * MISMA regla, `/:path*`, así que `Vary: Accept` caía también sobre cosas que no
+ * negocian nada: las tarjetas OG, los dos PDF del CV y las fuentes.
+ *
+ * NO ES INCORRECCIÓN, ES COSTE, y por eso llevaba un sprint sin verse. Una caché
+ * compartida keyea por el `Vary`, y el `Accept` de un asset varía por familia de
+ * navegador (`image/avif,image/webp,*​/*` y sus variantes): un archivo inmutable
+ * pasaba a tener una copia guardada por familia en vez de una.
+ *
+ * MEDIDO CONTRA `next start` ANTES DE TOCAR NADA, que es lo que no se hizo al
+ * encontrarlo. `/og/og-home-600x630.jpg`, `/cv/francisco-lopez-cv-es.pdf` y una
+ * `.woff2` de `_next/static/media` respondían las tres `Vary: Accept`, y ninguna
+ * de las tres puede devolver dos cuerpos distintos.
+ *
+ * ES EL MISMO RECORTE QUE EL `matcher` DEL PROXY, y no por parecido: la
+ * negociación la hace `proxy()`, así que donde el proxy no corre no hay dos
+ * cuerpos posibles. Fuera quedan `_next`, `api` y toda ruta con extensión de
+ * archivo, que es exactamente la lista de arriba. Dentro quedan las 28 páginas y
+ * las rutas inexistentes, que también se negocian (el 404 en markdown de D161).
+ *
+ * LAS DE SEGURIDAD NO SE MUEVEN: siguen en `/:path*`, sobre todas las respuestas.
+ * Partir la regla en dos es justo lo que permite acotar una sin arrastrar la otra.
+ *
+ * Y LO VIGILA `check:agentes` SOBRE `routes-manifest.json`, no aquí: el manifiesto
+ * trae la regex ya compilada de cada regla, así que el guardián puede probar rutas
+ * de ejemplo contra ella en vez de leer este archivo. Si alguien vuelve a fundir
+ * las dos reglas, lo dice la tarjeta OG.
+ */
+const NEGOCIAN = "/((?!_next|api|.*\\..*).*)";
+
 const nextConfig: NextConfig = {
   async headers() {
     return [
-      { source: "/:path*", headers: [...securityHeaders, ...varyHeader] },
+      { source: "/:path*", headers: securityHeaders },
+      { source: NEGOCIAN, headers: varyHeader },
     ];
   },
   // LAS RUTAS QUE UN AGENTE ADIVINA (2026-08-30). No es SEO ni son URLs viejas:
