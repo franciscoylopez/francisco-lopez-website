@@ -197,6 +197,7 @@
 - D159 · El guardián propio en vez del escáner ajeno: `check:agentes`
 - D160 · Content Signals: la frase del `LICENSE`, dicha para una máquina
 - D161 · Cuatro huecos que vio un escáner ajeno, y el que no se tapa
+- D162 · El barrido de huérfanos se queda en `logo-kit`, y eso se decide en vez de heredarse
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9963,3 +9964,38 @@ lo puntúe no lo convierte en un no-defecto — es exactamente la distinción de
 el sitio y perseguir una nota. **La cifra de un escáner no valida un arreglo ni lo invalida: solo
 dice qué mide él.** Escribir la predicción antes de mirar es lo que permite verlo; sin ella, el
 salto de doce puntos se habría atribuido a los cuatro cambios por igual.
+
+## D162 · El barrido de huérfanos se queda en `logo-kit`, y eso se decide en vez de heredarse — 2026-08-30
+
+**El hecho, y era pequeño.** En `public/` seguían los cinco SVG que trae `create-next-app`
+—`file`, `globe`, `next`, `vercel`, `window`— con **cero referencias** en todo el repositorio,
+no solo en `app/`, `components/`, `lib/` y `content/`. Se borran, y no puede romper nada:
+`check:marco` corre sobre el prerender de las 28 variantes, así que un 404 saldría. Con eso,
+`public/` deja de tener un solo archivo suelto en su raíz que no sea un favicon.
+
+**Lo que lo hizo hallazgo y no limpieza.** La regla que declara este caso rojo **ya existe y ya
+tiene portador**: es el barrido de `check:kit` (D119), que compara el disco contra lo declarado
+en `lib/logo-kit.ts` **en los dos sentidos** y considera un archivo huérfano exactamente igual
+que uno declarado y ausente. Pero corre **solo dentro de `public/logo-kit/`**. El resto de
+`public/` —`img`, `og`, `video`, `cv`, `logos`, `email-signature`, `md`, los seis favicons— no lo
+cuenta nadie. Familia «la regla sin portador»: declarada, con remedio conocido y aplicada a una
+fracción de su alcance. Es la misma forma que D112, donde un guardián que hashea una carpeta se
+estrechaba en silencio al irse un archivo.
+
+**Y la decisión es NO generalizarlo.** No por coste de implementación —la forma está escrita y
+sería copiar `check:kit`—, sino porque **el barrido de `logo-kit` funciona por una propiedad que
+las demás carpetas no tienen: todo lo que hay dentro está declarado en un registro**. `logo-kit`
+existe para que `lib/logo-kit.ts` lo enumere; ahí la lista es la fuente y el disco es la copia.
+En el resto de `public/` la relación es la contraria: los favicons los consume el navegador por
+convención y no los nombra ningún registro, `robots` y `sitemap` los genera Next, y el markdown
+de `public/md/` ya tiene su propio guardián en los dos sentidos (`md:verificar`, D158). Un
+barrido general sería **casi todo allowlist**, y una allowlist que cubre casi todo el alcance no
+distingue: aprueba por omisión, que es justo el fallo que este repositorio lleva seis veces
+encontrando. Añadiría además un guardián más al presupuesto de contexto, con el problema que
+mide P68.7405 y D163.
+
+**El criterio de salida, para que la próxima revisión no lo levante otra vez.** Se generaliza el
+día que aparezca en `public/` una segunda carpeta **enumerada por un registro del repo** —la
+misma condición que cumple `logo-kit`—, y entonces lo que se escribe no es un barrido general
+sino el segundo caso del mismo patrón. Mientras la respuesta sea «hay una sola», generalizar es
+inventar indirección, y es la regla de D113 aplicada a un guardián en vez de a una capa.
