@@ -133,7 +133,7 @@ Los pasos de CI de cada PR se leen en [GitHub Actions](./.github/workflows/ci.ym
 | `check:figuras` | Que una figura pinte sus rótulos ilegibles. `text-[11px]` dentro de un `viewBox` son 11 **unidades de dibujo**, no 11 píxeles, y esa escala no está en el `font-size` computado: los diagramas del artículo pintaron entre 5,0 y 8,2px durante meses sin que lo viera nadie. Mide el prerender, así que no necesita navegador (`D106`) |
 | `check:kit` | Que un asset del kit de marca entre sin que nadie lo cuente, **y que los binarios no estén vacíos**. El ZIP se genera en el build leyendo el directorio, así que **no puede caducar**; lo que sí deriva es el registro, y así aparecieron diez huérfanos que nunca tuvieron tarjeta: nadie los metió a propósito, simplemente no había nada que los contara. Desde el 2026-08-30 abre además cada PNG y el `.ico`: formato, medida declarada y cobertura de tinta (`D119`) |
 | `check:marcas` | Que un nombre propio se publique traducible. El traductor automático de Chrome convierte «TheTool» en «La Herramienta», y esta web es bilingüe: la traducción se ofrece de verdad. El atributo lo pone una capa y el copy no lo escribe, así que el gate comprueba que **llegó** — busca la ausencia sobre cada nodo de texto, no cuenta cuántos hay (`D116`) |
-| `check:agentes` | Que el sitio deje de cumplir lo que le **promete** a un agente. Mira en tres sitios porque la promesa ocurre en tres: `llms.txt` y el markdown de las 28 variantes, en el artefacto; la negociación de `Accept` y el `Vary`, **ejecutando el proxy**, porque una cabecera no está en el prerender; y `robots()` en sus **dos** entornos, porque el `robots.txt` que se construye en CI es el de no producción y leerlo daría por bueno un `Disallow`. Lo primero que deja fuera, a propósito, es la nota de los escáneres de agentes: su puntuación mezcla lo que aplica con lo que no, y sus reglas son borradores que cambian sin avisar (`D159`, `D160`) |
+| `check:agentes` | Que el sitio deje de cumplir lo que le **promete** a un agente. Mira en cuatro sitios porque la promesa ocurre en cuatro: `llms.txt` y el markdown de las 28 variantes, en el artefacto; la negociación de `Accept` y el `Vary`, **ejecutando el proxy**, porque una cabecera no está en el prerender; `robots()` en sus **dos** entornos, porque el `robots.txt` que se construye en CI es el de no producción y leerlo daría por bueno un `Disallow`; y las cabeceras y los alias, contra la **regex ya compilada** de `routes-manifest.json`, que es la que el servidor usa de verdad. Lo primero que deja fuera, a propósito, es la nota de los escáneres de agentes: su puntuación mezcla lo que aplica con lo que no, y sus reglas son borradores que cambian sin avisar (`D159`, `D160`) |
 | `check:guardianes` | Que un guardián pierda los dientes **en silencio**. A cada uno de los otros le pasa un caso malo conocido y comprueba que lo rechaza: es un test de que sabe fallar, no de que funciona (`D70`) |
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
@@ -179,8 +179,9 @@ npm run check:accesibilidad # que /accesibilidad siga siendo cierta: sus cinco b
 npm run check:og            # que cada tarjeta OG diga lo que su página, en los dos idiomas,
                             # salvo lo declarado distinto con su motivo (D142)
 npm run check:agentes       # lo que el sitio le promete a un agente: llms.txt, el canal
-                            # markdown, la negociación de Accept y las señales de robots.txt
-                            # (D159, D160). Necesita `npm run build` antes
+                            # markdown, la negociación de Accept, las señales de robots.txt
+                            # y —contra la regex compilada del manifiesto— las cabeceras y
+                            # los alias (D159, D160, D165). Necesita `npm run build` antes
 
 # Generadores
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza su sello
@@ -287,7 +288,9 @@ content/psi/           registro.json: el rango de PageSpeed con su fecha, escrit
 lib/                   i18n (fuente única de ruta↔locale), page-meta (D45), site (SITE_URL),
                        contact, analítica, consentimiento, datos estructurados, design-values
                        (fuente única de lo que el sitio publica sobre sí mismo, D38), figures
-                       (las cifras del artículo, derivadas del disco o selladas, D102) y utils
+                       (las cifras del artículo, derivadas del disco o selladas, D102),
+                       page-modified (cuándo cambió el contenido de cada página: la leen el
+                       sitemap y el frontmatter del markdown, D165) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
 public/                Assets: logo-kit, cv, img, og, video, favicons
 brand-assets/          Piezas de marca fuera de la web — no se despliega
