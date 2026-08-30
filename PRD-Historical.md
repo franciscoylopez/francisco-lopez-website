@@ -4105,6 +4105,38 @@ así que la métrica primaria del sitio incluía bots silenciados. Se corrigió 
 tiene tests y caso malo. **El silencio hacia el bot no se tocó** —callar es lo correcto—;
 propagarlo a la analítica era lo que estaba mal.
 
+### El cierre de las tandas 3 y 4, y lo que encontró la revisión antes de mergear
+
+Las cuatro tandas salieron a producción juntas el 2026-08-30 (`ed55c1b`), y el batch fue **todo
+el carril de agentes**: la tanda 5 es deuda transversal y no comparte tema.
+
+**La revisión con IA sobre el PR fue lo que impidió publicar el sprint roto.** Encontró que el
+conversor a markdown metía **391 separadores en medio de las frases** —el detalle está en el
+addendum de D158— y ahí es donde se ve para qué sirve la convención de pasar `/code-review` en un
+PR grande: los quince commits estaban en verde, CI incluido, y el artefacto que el sprint existe
+para publicar estaba corrupto. Ningún gate podía verlo, porque `md:verificar` compara el artefacto
+**consigo mismo**.
+
+**Lo que el escáner externo dijo mientras tanto, y por qué no significaba lo que parecía.** El
+mismo día, los dos informes de is-agentic daban 75 al dominio y 84 al preview de la rama, con
+notas cualitativas peores en el segundo. Medido antes de interpretarlo: producción **no tenía
+nada del sprint** —el PR seguía sin mergear— y el preview servía `Disallow: /`, que es D13
+haciendo su trabajo. El propio evaluador lo delataba: *«pivoted to web search and a related
+canonical domain»*, o sea que se fue a leer el sitio viejo. Y su afirmación técnica —«client-side
+rendering, minimal text content»— era **falsa en las dos**: las dos servían 742 palabras dentro
+de `<main>` en el HTML prerenderizado, con su `<h1>`.
+
+**Lo reutilizable no es que el escáner se equivocara, sino cuál era la comparación honesta:**
+producción antes contra producción después. Un escaneo de un preview no puede leer bien mientras
+se respete D13, y respetarlo es correcto. En su grafo, además, el agente buscó `/es/servicios` y
+`/en/services` —dos rutas que no existen— y se quejó de que faltaban *pricing* y *service scope*:
+la plantilla de evaluación es la de un negocio que vende servicios, que es exactamente lo que D157
+había concluido una semana antes con otras palabras.
+
+**El techo de contexto quedó en 12.300 de 12.300**, cero holgura, después de cuatro retiradas para
+pagar dos filas de gate y dos decisiones. El corpus de skills, en cambio, encogió pese a ganar un
+gate. Está tareado desde antes (P68.7405) y hoy es un ejemplo más de lo que esa tarea nombra.
+
 ## Fuentes
 
 - [Brief — Web Portfolio / CV · Francisco López](https://app.notion.com/p/39f2caec08be80d29d81d07da9a5e478) (Notion)
