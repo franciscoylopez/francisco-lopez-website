@@ -14,6 +14,10 @@ import { PAGE_SLUGS } from "@/lib/routes";
 //   - resto              → español por defecto: rewrite interno a `/es/...` sin
 //                          cambiar la URL del navegador (la raíz sirve ES directo,
 //                          sin redirect).
+// LOS ALIAS QUE UN AGENTE ADIVINA NO ESTÁN AQUÍ — /about, /privacy y /contact
+// viven en `next.config.ts`, que es donde la doc de Next manda lo estático y que
+// además corre ANTES que el proxy en la cadena de ejecución (2 contra 3).
+//
 // Cabecera con el locale detectado. La lee `not-found.tsx` (server component), que
 // no recibe `params` y no puede deducir el idioma de otra forma. Se propaga en la
 // request reescrita/pasada, no en la respuesta.

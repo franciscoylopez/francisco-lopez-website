@@ -141,7 +141,7 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 1. **Contraste medido, con cifra, en ambos temas.** AA es el suelo; AAA siempre que se alcance sin coste visual. Verificar también los estados interactivos (hover/focus), no solo el reposo.
 2. **Foco visible:** anillo de 2px con `var(--ring)` y offset de 2px en todo elemento interactivo. Nunca `outline:none` sin sustituto.
 3. **Objetivos táctiles ≥ 44×44px**, también en controles pequeños (breadcrumb, toggle de tema).
-4. **Un solo `h1` por página** y jerarquía `h2`–`h4` sin saltos. El orden de lectura = el orden del DOM.
+4. **Un solo `h1` por página, y que ABRA el documento**, con jerarquía `h2`–`h4` sin saltos. El orden de lectura = el orden del DOM. Un título de chrome (diálogo, aviso) no es un encabezado: va en `p` + `aria-labelledby`, o encabeza la página por delante del `h1` sin que axe lo vea.
 5. **Breadcrumb** en toda página interna: `<nav aria-label>`, lista ordenada, `aria-current="page"` en el nivel actual.
 6. **Nada codificado solo por color:** todo estado/categoría distinguido por color lleva además texto o forma.
 7. **`prefers-reduced-motion` retira lo que DESPLAZA o ESCALA, no lo que se funde** *(2026-08-27, D136)*. Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca: la opacidad y el color se quedan. Una animación mixta **se parte** (fuera el `translate`, dentro el fundido) y **el fundido que se queda se acorta**; solo se apaga entera la que es movimiento de principio a fin, o la que va acoplada al scroll, que es la que nombra WCAG 2.3.3.

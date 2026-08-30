@@ -9943,3 +9943,23 @@ hallazgo vuelve: está medido y descartado, no sin mirar.**
 busque la cadena inglesa es *probable* y **no está comprobado**. Va con alias bilingüe en el
 encabezado y tarea propia con las cuatro opciones ordenadas, porque una sospecha escrita como
 causa redirige la siguiente investigación.
+
+### La tercera pasada, y la predicción que falló — 2026-08-30
+
+**75 → 87 → 96**, esta última con los cuatro arreglos en producción. Essential 76,2/80 · seis de
+siete. Pasaron «Agent-friendly 404s» —*«the strongest 404 contract»*—, «Trust anchor pages»
+—*«All trust anchor pages verified: About, Contact, Privacy»*— y «Agent instruction», que era la
+hipótesis: *«When-to-use guidance found in llms.txt»*. Con una sola variable cambiada en ese
+archivo, así que la sospecha pasa a causa y las opciones B, C y D se quedan sin usar.
+
+**Y una predicción escrita antes de mirar que salió MAL, que es la que enseña algo.** «Content
+without JavaScript» tenía que subir del 67 % al arreglar el `h2`, y **no se movió ni un punto**:
+el 67 % lo fijaba el ratio de contenido, solo. Lo que cambió es el texto del hallazgo, que ya
+solo se queja del 4,4 %.
+
+**El arreglo seguía siendo correcto, y esa es la moraleja.** Era un defecto real en las 28
+variantes que tres guardianes daban por bueno, y ahora tiene regla y caso malo. Que un escáner no
+lo puntúe no lo convierte en un no-defecto — es exactamente la distinción de D157 entre arreglar
+el sitio y perseguir una nota. **La cifra de un escáner no valida un arreglo ni lo invalida: solo
+dice qué mide él.** Escribir la predicción antes de mirar es lo que permite verlo; sin ella, el
+salto de doce puntos se habría atribuido a los cuatro cambios por igual.
