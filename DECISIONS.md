@@ -10284,13 +10284,36 @@ aunque en la tanda entraran cinco cosas:
 | `json-ld-entity-linking` 0/2 | «debería moverse» | **FALLADA.** Sigue 0/2, con el texto idéntico |
 | `markdown-frontmatter` 0/1 | «debe pasar, los tres campos están» | **FALLADA**, y el texto del hallazgo cambió entero |
 
-**Y eso convierte la hipótesis de P68.747 en descarte medido.** El `sameAs` ahora lleva dos
-perfiles, uno de ellos `github.com/franciscoylopez`, que es el dominio exacto que el subtítulo
-del check dice mirar — y no se movió ni un punto. Las tres causas alternativas que la ficha dejó
-abiertas se reducen a la que queda en pie: **pide varias de {Wikipedia, Wikidata, GitHub}**, y de
-esas este sitio no tiene ni tendrá las dos primeras. *El arreglo sigue siendo correcto por su
-propio motivo* —un repositorio no identifica a una persona— y esa es la distinción de D161, ahora
-con las dos mitades medidas.
+**Y eso deja la hipótesis de P68.747 refutada, pero NO por lo que se escribió primero.** El
+`sameAs` lleva ya dos perfiles, uno de ellos `github.com/franciscoylopez`, que es el dominio
+exacto que el subtítulo del check dice mirar — y no se movió ni un punto.
+
+> **Aquí este párrafo decía que la causa superviviente era «pide varias de {Wikipedia, Wikidata,
+> GitHub}, y de esas este sitio no tiene ni tendrá las dos primeras». Es FALSO, y se sustituye en
+> vez de anotarse al pie** *(2026-08-31, mismo día; el control lo trajo Francisco)*. Se escribió
+> razonando sobre el subtítulo del check en vez de midiendo contra un caso que pasa, que es
+> exactamente lo que `BRAND.md` §Cómo medir manda hacer antes de creerse un hallazgo — y lo que
+> D157 y D161 llevan dos sprints diciendo sobre estos escáneres.
+
+**Lo que dicen tres controles medidos**, y el tercero es el que importa porque es un sitio
+personal con la misma entidad que el nuestro:
+
+| Sitio | `json-ld-entity-linking` | Dónde vive su `sameAs` |
+|---|---|---|
+| `urvagandhi.tech` — personal, `Person` | **2/2** · «github.com, linkedin.com» | nodo `Person` de **primer nivel** en un `@graph` |
+| `stripe.com` | **2/2** · cinco dominios | nodo `Organization` **raíz**, y con **un solo bloque** |
+| `franciscolopez.es` | **0/2** · lista **vacía** | `ProfilePage` → `mainEntity` → `Person` → `sameAs` |
+
+**Urva pasa con nuestros dos dominios exactos**, así que no es Wikipedia, no es Wikidata y no es
+la cantidad; y Stripe pasa con un bloque, así que tampoco es el número de bloques. **El check
+enumera los dominios que encuentra, y en el nuestro la lista sale vacía** —se ve el hueco del
+template en el doble espacio de «JSON-LD  - agents»—. No dice «1 de 3»: dice cero. No está
+leyendo nuestro nodo.
+
+La única diferencia estructural que queda es **dónde vive el `sameAs`: en un nodo de primer nivel
+o enterrado bajo `mainEntity`**. Eso es P68.751, y va con su predicción escrita. *El arreglo de
+P68.747 sigue siendo correcto por su propio motivo* —un repositorio no identifica a una persona—,
+que es la distinción de D161 y no depende de ninguna de estas mediciones.
 
 **La otra fallada es la más útil, y hubo que verificarla contra producción antes de creérsela.**
 El hallazgo pasó de «Frontmatter **on /** carries a title but none of description / canonical /
@@ -10334,3 +10357,53 @@ checks, `markdown-negotiation` y `markdown-negotiation-vary`, siguen en verde.
 **El Schema Markup Validator, el mismo comando que dio la línea base:** producción antes,
 1 objeto · 0 errores · 0 avisos; producción después, **1 objeto · 0 errores · 0 avisos**. El
 `isBasedOn` del nodo `WebSite` no introduce ni un aviso.
+
+### Addendum 2 *(2026-08-31)* · Tres controles externos, y una premisa mía que no aguantó
+
+El addendum de arriba se escribió midiendo **solo este sitio**, y eso alcanza para ver que un
+check no se movió, no para saber por qué. Escanear sitios que **sí pasan** cuesta un `POST` y
+cambia tres conclusiones. Es la validación del metro de `BRAND.md` §Cómo medir, aplicada al
+suspenso en vez de al hallazgo.
+
+#### `schema-type-breadth` — el descarte se refuerza, y ahora no depende de nuestro alcance
+
+| Sitio | Resultado |
+|---|---|
+| `stripe.com` | **0/2**, con `Organization` completo y `sameAs` a cinco dominios |
+| `urvagandhi.tech` (personal, `Person`, como el nuestro) | **0/2**, mismo texto |
+| `vercel.com` | **1/2**, y solo por publicar `Service` |
+
+Su lista es literal —`FAQPage`, `Service`, `Product`, `AggregateRating`, `BreadcrumbList`— y aquí
+no hay FAQ, ni servicios, ni nada que vender, ni reseñas, y la home no lleva miga de pan porque es
+la home. **Que Stripe también falle es lo que cierra el asunto:** no es que a este sitio le falte
+superficie, es que el check pide un catálogo que ni Stripe publica.
+
+#### `json-ld-entity-linking` — la causa está arriba, sustituida
+
+Lo que la tumbó es el mismo barrido: `urvagandhi.tech` pasa 2/2 con **nuestros dos dominios
+exactos**. Ver el párrafo corregido del addendum anterior y **P68.751**.
+
+#### El catálogo ARD: mi premisa estaba mal, y sale de leer un ejemplo real
+
+El triaje del sprint lo descartó como *«el `api-catalog` sin API de D159»*, y eso salió de leer
+**la descripción del check** —«One catalog that tells agents everything you offer them: MCP
+servers, APIs, agents, and skills»— y no la especificación ni un catálogo servido. **El de Vercel,
+que es quien pasa el check con 4/4 entradas, tiene dos que son contenido puro**: una
+`text/markdown` de documentación y un índice `application/json`. Y el modelo de entrada que se
+valida es `identifier` + `displayName` + media type + exactamente uno de `url` o `data`: nada
+exige API.
+
+> **Así que el criterio de D157 no lo tumba: lo aprueba.** *Un check de superficie agéntica aplica
+> si el sitio TIENE esa superficie* — y `/llms.txt`, el canal markdown y el sitemap existen y se
+> sirven. Publicar un índice de recursos que están ahí no es lo mismo que publicar un catálogo de
+> APIs que no están. **La distinción no se ve leyendo el nombre del check.** Es P68.752.
+
+**Y el `api-catalog` de la RFC 9727 sigue fuera, que es otra cosa y por eso D157 no cambia**: ese
+sí es literalmente un catálogo de API, y aquí no hay API.
+
+#### La lección de método, que es la que se repite
+
+Las tres correcciones salen del mismo gesto —**escanear un sitio que pasa y mirar en qué se
+diferencia**— y ninguna se habría visto razonando sobre el texto del check, que es lo que se hizo
+las tres veces. Con la API de escaneo cuesta un comando; sin ella costaba abrir el navegador, y
+por eso no se hacía.
