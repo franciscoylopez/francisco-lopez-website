@@ -168,9 +168,9 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 |---|---|---|---|
 | **Gate de accesibilidad** | `agent-browser` conducido por el subagente `viewport-verifier`: viewports × temas + `reduced-motion`. Se dispara **dos veces**, y la primera mientras se dibuja | a mano | D50/D52 |
 | **Pasada con NVDA** | Lo que **no incumple ninguna regla** y por tanto ningún motor automático puede señalar. Sobre el sitio entero, no por página; lo que encuentra se publica en `/accesibilidad` | a mano | D73 |
-| `check:marco` | El criterio de cierre de página nueva, sobre el HTML **prerenderizado** de las 28 variantes: axe estructural, enlace de salto, `h1` y jerarquía, breadcrumb, que la metadata derivada llegó, que el `?card=` de cada variante resuelve a su propia tarjeta, que los `@id` del JSON-LD resuelven **dos veces** —contra el sitio entero y dentro de cada página (D87)—, y que la metadata y el marcado dicen lo mismo del mismo contenido: `og:type=article` ⇔ un solo `<article>`, en los dos sentidos. **Fuera:** contraste y objetivo táctil, que se heredan y necesitan pintar | CI | D75/D87 |
+| `check:marco` | El criterio de cierre de página nueva, sobre el HTML **prerenderizado** de las 28 variantes: axe estructural, enlace de salto, un `h1` que ABRE el documento y jerarquía, breadcrumb, que la metadata derivada llegó, que el `?card=` de cada variante resuelve a su propia tarjeta, que los `@id` del JSON-LD resuelven **dos veces** —contra el sitio entero y dentro de cada página (D87)—, y que la metadata y el marcado dicen lo mismo del mismo contenido: `og:type=article` ⇔ un solo `<article>`, en los dos sentidos. **Fuera:** contraste y objetivo táctil, que se heredan y necesitan pintar | CI | D75/D87 |
 | `md:verificar` | Que el markdown commiteado de las 28 variantes siga siendo el que emite la página, reconvirtiendo el prerender, **y en los dos sentidos**: un `.md` que no corresponda a ninguna variante sobra, y la negociación lo seguiría sirviendo. **Fuera:** que el markdown sea bonito | CI | D158 |
-| `check:agentes` | Lo que el sitio le **promete** a un agente, comprobado **donde ocurre**: `llms.txt` y el markdown de las 28, en el artefacto; la negociación y el `Vary`, ejecutando `proxy()`; y `robots()` en sus **dos** entornos, porque el que se construye en CI es el de no producción. **Fuera:** la nota de ningún escáner, lo primero y a propósito, y el estado HTTP real, que se mira por estructura (ningún catch-all) y no pidiendo la URL | CI | D159 |
+| `check:agentes` | Lo que el sitio le **promete** a un agente, comprobado **donde ocurre**: `llms.txt` y el markdown de las 28, en el artefacto; la negociación, el `Vary` y el 404 con salida, ejecutando `proxy()`; y `robots()` en sus **dos** entornos, porque el que se construye en CI es el de no producción. **Fuera:** la nota de ningún escáner, lo primero y a propósito, y el estado HTTP del 404 en HTML, que se mira por estructura (ningún catch-all) y no pidiendo la URL | CI | D159 |
 | `check:figuras` | El rótulo **pintado** de toda figura con lienzo escalado, sobre el prerender: dentro de un `viewBox` el `font-size` computado no dice el tamaño real. **Fuera:** por debajo de 360, que es suelo del rótulo y no del sitio | CI | D114/D124 |
 | `check:marcas` | Que los nombres propios lleguen al HTML con `translate="no"`, recorriendo los nodos de TEXTO de las 28 variantes. **Fuera:** el `<head>`, los atributos y el interior de un `<svg>` | CI | D116 |
 | `npm test` | La lógica que no necesita navegador, y **cuáles son lo dice `tests/`**: enumerarlas aquí ya caducó una vez. Hoy, el formulario (medido sobre lo que nodemailer **emite**), las reglas del tablero, el criterio de `check:enlaces` y la geometría del `sizes` del artículo. **Fuera:** todo lo que necesite pintar | CI | D101/D107/D141 |
@@ -244,19 +244,15 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 > aquí solo qué entra en cada release y qué queda fuera. El porqué de cada decisión, en
 > **[PRD-Historical.md](./PRD-Historical.md)**.
 
-### V2 — entregada (2026-08-23)
+### V2 — entregada
 
-Sus tres sprints de valor para el visitante están **en producción**: el deep-dive por
-experiencia, «Cómo se ha creado esta página», y Contacto ampliada con su footer. Entre
-ellos se intercalaron tres bloques de método. El recorrido sprint a sprint, con el porqué
-de cada uno, en `PRD-Historical.md`.
+Entera y en producción. El recorrido, en `PRD-Historical.md`.
 
 **Traducción a EN**: la arquitectura i18n ya está; se traduce a medida que se añade
 contenido, con la regla de `CLAUDE.md` (D20).
 
-**Qué NO lleva deep-dive, y no es por alcance:** las dos entradas de Marketing & Growth
-(diluirían el orden del posicionamiento de §3) y **PICKASO**, que es el primer capítulo de
-la historia de TheTool y no una experiencia con historia separable.
+**Qué NO lleva deep-dive, y no es por alcance:** las dos entradas de Marketing & Growth y
+**PICKASO**, primer capítulo de TheTool y no una experiencia separable.
 
 ### V3 — deuda y mejoras por bloque
 

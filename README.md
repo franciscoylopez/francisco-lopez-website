@@ -59,7 +59,8 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 - **SEO técnico**: metadata + `canonical` + `hreflang` por página, `robots.txt` y `sitemap.xml` (gateados por entorno; el primero declara además `Content-Signal: ai-train=no, search=yes, ai-input=yes`, que es la frase del `LICENSE` en formato máquina, `D160`) y datos estructurados JSON-LD (`ProfilePage`/`Person` en la home, `BreadcrumbList` en páginas internas, `WebPage` en el deep-dive).
 - **Qué páginas tiene el sitio no se escribe en ningún sitio**: las páginas del deep-dive, el índice, el sitemap, `llms.txt` y las tarjetas OG **derivan** de `content/experiences.ts` (`D44`, `D59`). Estaba escrito a mano en tres sitios.
 - **`llms.txt`**: índice curado para LLMs y agentes, generado desde el diccionario y los datos de contacto. Desde `P67.4` abre diciendo **cuándo** usar esta fuente y qué página contesta a qué pregunta, que es lo que un agente necesita para elegirla sin leerse las catorce.
-- **Markdown por página**: cada una se sirve también como markdown (`/md/<locale>/<pagina>.md`, o pidiendo `Accept: text/markdown`), derivado del `<main>` prerenderizado con `npm run md` y vigilado por `npm run md:verificar` en CI (`D158`).
+- **Markdown por página**: cada una se sirve también como markdown (`/md/<locale>/<pagina>.md`, o pidiendo `Accept: text/markdown`), derivado del `<main>` prerenderizado con `npm run md` y vigilado por `npm run md:verificar` en CI (`D158`). **Una ruta que no existe también responde en markdown**: 404 de verdad con un cuerpo corto que apunta a `/llms.txt`, al sitemap y al inicio, en el idioma de la URL (`D161`).
+- **Las rutas que un agente adivina**: `/about`, `/privacy` y `/contact` —y sus variantes en `/en`— redirigen a los slugs españoles del sitio. Un agente prueba esas tres antes de leer el sitemap, y aquí no existían (`D161`).
 - **Imágenes Open Graph** de marca generadas al vuelo (`/api/og`, `next/og`).
 
 </details>
@@ -104,7 +105,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
 - **Un gesto de marca, y solo uno** (`D137`): el punto final de «Del discovery al dato.» cae y se asienta al cargar, en morado, con dos curvas porque lo que cae acelera. Es la **firma**; el filete que crece bajo los años de Hitos es su **textura**, subordinada a propósito. Se eligieron viéndolos, no razonándolos.
 - **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** con allowlist mínima por origen exacto. La letra que le pone cada escáner no se escribe aquí: se comprueba en vivo, y por qué no sube está en `DECISIONS.md` D26.
-- **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar. Puro CSS, y con motion reducido **sigue floreciendo, en 0,2 s en vez de 0,9**: es opacidad de principio a fin, así que no hay nada vestibular que retirar (`D136`).
+- **Páginas de error 404 y 500** con marca e i18n: el 404 convierte el «0» en el círculo del split, que florece al cargar. Puro CSS, y con motion reducido **sigue floreciendo, en 0,2 s en vez de 0,9**: es opacidad de principio a fin, así que no hay nada vestibular que retirar (`D136`). Y publica las **mismas dos salidas** que su gemelo en markdown —mapa del sitio e índice para agentes—, porque las dos puertas del mismo error tienen que decir lo mismo (`D161`).
 
 </details>
 
