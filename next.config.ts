@@ -167,10 +167,35 @@ const nextConfig: NextConfig = {
       ["/privacidad", "/cookies"],
       ["/contact", "/contacto"],
     ];
-    return alias.flatMap(([desde, hacia]) => [
-      { source: desde, destination: hacia, permanent: false },
-      { source: `/en${desde}`, destination: `/en${hacia}`, permanent: false },
-    ]);
+    return [
+      ...alias.flatMap(([desde, hacia]) => [
+        { source: desde, destination: hacia, permanent: false },
+        { source: `/en${desde}`, destination: `/en${hacia}`, permanent: false },
+      ]),
+      // `/agents.md` — LA MISMA IDEA, PARA EL LECTOR QUE NO ES UNA PERSONA
+      // *(P68.748, 2026-08-31)*. Un escáner de agentes prueba tres rutas para
+      // encontrar «la documentación para agentes de este sitio»: `/agents.md`,
+      // `/.well-known/agent-skills` y `/skills.sh`. Las tres daban 404.
+      //
+      // ENTRA UNA, Y LAS OTRAS DOS NO. Las dos que faltan son índices de SKILLS
+      // EJECUTABLES, y aquí no hay ninguna: publicarlas sería el `api-catalog`
+      // sin API de D157 — mentir en un formato que un agente sabe leer. La que
+      // entra apunta a contenido que YA existe y no inventa superficie, que es la
+      // condición que hizo baratos los cinco alias de arriba.
+      //
+      // CONSECUENCIA ACEPTADA POR ESCRITO: el check se queda en 1/2 como mucho, y
+      // en 0/2 si exige las tres. Mismo trato que el 50% del nodo `Organization`
+      // en D161.
+      //
+      // NO SE CONFUNDE CON EL `AGENTS.md` DE LA RAÍZ DEL REPO, y conviene decir
+      // por qué: aquel lo escribe `next dev` y va dirigido a quien PROGRAMA aquí;
+      // esto va dirigido a quien LEE el sitio. Son dos audiencias que solo se
+      // solapan en quien mire las dos cosas, y el riesgo se acota solo porque
+      // esto es un alias: nunca sirve un documento propio, así que no hay una
+      // segunda versión que pueda divergir de nada. Quien lo siga aterriza en
+      // `/llms.txt`, que se presenta a sí mismo en su primera línea.
+      { source: "/agents.md", destination: "/llms.txt", permanent: false },
+    ];
   },
   // Next emite `x-powered-by: Next.js` por defecto, que anuncia el stack a cualquiera
   // que mire las cabeceras y no aporta nada. Va aquí, junto a `headers()`, porque es

@@ -359,6 +359,23 @@ export const CASOS: Caso[] = [
     },
   },
   {
+    guardian: "check:agentes",
+    rotura: "se cae un alias y la ruta que un agente adivina vuelve a dar 404",
+    // Los diez alias de D161 y el `/agents.md` de P68.748 se comprobaron a mano el
+    // día que se escribieron y no los miraba nadie — que es el modo de fallo del
+    // que avisa `BRAND.md` §Cómo se escribe una regla, punto 2. Se retira el
+    // primero del manifiesto, que es lo que pasaría si alguien tocara
+    // `redirects()` sin darse cuenta de para quién estaban.
+    archivo: ".next/routes-manifest.json",
+    mutar: (o) => {
+      const m = JSON.parse(o) as {
+        redirects: { source: string }[];
+      };
+      m.redirects = m.redirects.filter((r) => r.source !== "/agents.md");
+      return JSON.stringify(m);
+    },
+  },
+  {
     guardian: "md:verificar",
     rotura:
       "el markdown commiteado de una página deja de decir lo que dice la página",

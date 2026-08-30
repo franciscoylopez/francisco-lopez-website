@@ -20,7 +20,7 @@
  * evento y no requiere criterio, es un script en CI.
  *
  * QUÉ MIRA, Y DÓNDE MIRA CADA COSA. La regla 1 de `BRAND.md` §Cómo se escribe una
- * regla —la condición se comprueba donde la cosa ocurre— aquí obliga a tres
+ * regla —la condición se comprueba donde la cosa ocurre— aquí obliga a cuatro
  * fuentes distintas, y mezclarlas habría sido el fallo:
  *
  *   · `llms.txt`  → el ARTEFACTO del build, no el código que lo genera.
@@ -29,9 +29,10 @@
  *   · `robots.txt` → EJECUTANDO `robots()` con los dos entornos, porque el
  *     artefacto que se construye en CI es el de NO producción (D13) y leerlo
  *     daría por bueno un `Disallow: /` que en producción sería catastrófico.
- *   · las cabeceras → probando rutas contra la REGEX COMPILADA que el build deja
- *     en `routes-manifest.json`, que es la que el servidor usa de verdad. Leer el
- *     `source` de `next.config.ts` habría sido opinar sobre una cadena.
+ *   · las cabeceras y los ALIAS → probando rutas contra la REGEX COMPILADA que el
+ *     build deja en `routes-manifest.json`, que es la que el servidor usa de
+ *     verdad. Leer el `source` de `next.config.ts` habría sido opinar sobre una
+ *     cadena, y comparar la configuración consigo misma aprueba siempre.
  *
  * LO QUE NO MIRA, dicho para que no se dé por cubierto:
  *
@@ -80,6 +81,7 @@ const vistos = {
   senalesDeContenido: 0,
   segmentosDinamicos: 0,
   rutasDeCabecera: 0,
+  alias: 0,
 };
 
 /* -------------------------------------------------------------------------- */
@@ -636,6 +638,114 @@ function revisarCabeceras(): void {
 }
 
 /* -------------------------------------------------------------------------- */
+/* 7. Las rutas que un agente ADIVINA, sobre el mismo manifiesto                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * LOS ALIAS, QUE HASTA HOY NO LOS MIRABA NADIE *(P68.748, 2026-08-31)*. D161
+ * añadió diez redirecciones porque un agente que quiere verificar quién hay
+ * detrás de un sitio prueba `/about`, `/privacy` y `/contact` antes de leer el
+ * sitemap, y aquí los slugs son españoles en los dos idiomas. Se comprobaron a
+ * mano el día que se escribieron y se quedaron sin guardián — que es el modo de
+ * fallo del que avisa `BRAND.md` §Cómo se escribe una regla, punto 2.
+ *
+ * ESTA TABLA ES LA DECISIÓN, NO UNA COPIA DE `next.config.ts`. Comparar la
+ * configuración consigo misma aprobaría siempre; lo que se defiende aquí es que
+ * estas rutas concretas —las que un escáner prueba de verdad— sigan resolviendo,
+ * y que su destino sea una página que existe. Si alguien retira un alias, esto lo
+ * dice.
+ *
+ * `permanent: false` (307) TAMBIÉN SE VIGILA. Un 308 se cachea para siempre en el
+ * navegador, y estos alias son una comodidad reversible: el día que `/about`
+ * fuera una página de verdad, un 308 cacheado la haría inalcanzable para quien ya
+ * hubiera pasado por aquí.
+ */
+const ADIVINADAS: [string, string][] = [
+  ["/about", "/sobre-mi"],
+  ["/about-me", "/sobre-mi"],
+  ["/privacy", "/cookies"],
+  ["/privacidad", "/cookies"],
+  ["/contact", "/contacto"],
+  ["/en/about", "/en/sobre-mi"],
+  ["/en/about-me", "/en/sobre-mi"],
+  ["/en/privacy", "/en/cookies"],
+  ["/en/privacidad", "/en/cookies"],
+  ["/en/contact", "/en/contacto"],
+  // La ruta de descubrimiento para agentes. Apunta a `/llms.txt`, que no es una
+  // página del registro: es el índice que ya contesta lo que la ruta pregunta.
+  ["/agents.md", "/llms.txt"],
+];
+
+type Alias = {
+  regex: string;
+  destination: string;
+  statusCode?: number;
+  internal?: boolean;
+};
+
+function revisarAlias(): void {
+  if (!existsSync(MANIFIESTO)) return; // ya lo ha dicho `revisarCabeceras`
+
+  const redirecciones = (
+    JSON.parse(readFileSync(MANIFIESTO, "utf8")) as { redirects?: Alias[] }
+  ).redirects?.filter((r) => !r.internal);
+
+  if (!Array.isArray(redirecciones) || redirecciones.length === 0) {
+    fallo(
+      "alias",
+      `\`${MANIFIESTO}\` no trae ninguna redirección propia. Las diez de D161 y la de ` +
+        "P68.748 son lo que impide que un agente vea 404 en las rutas que adivina.",
+    );
+    return;
+  }
+
+  // El destino tiene que ser algo que exista: una página del registro o el índice
+  // para agentes. Un alias que apunte a un 404 es peor que no tenerlo.
+  const destinosValidos = new Set<string>([
+    "/llms.txt",
+    ...locales.flatMap((lang) =>
+      PAGE_SLUGS.map((slug) => {
+        const path = slug ? `/${slug}` : "";
+        return lang === defaultLocale ? path || "/" : `/${lang}${path}`;
+      }),
+    ),
+  ]);
+
+  for (const [desde, hacia] of ADIVINADAS) {
+    vistos.alias++;
+    const regla = redirecciones.find((r) => new RegExp(r.regex).test(desde));
+    if (!regla) {
+      fallo(
+        "alias",
+        `\`${desde}\` no redirige a ninguna parte, así que devuelve 404. Es una de las rutas ` +
+          "que un escáner de agentes prueba antes de leer el sitemap.",
+      );
+      continue;
+    }
+    if (regla.destination !== hacia) {
+      fallo(
+        "alias",
+        `\`${desde}\` redirige a \`${regla.destination}\` y la decisión es \`${hacia}\`.`,
+      );
+    }
+    if (regla.statusCode !== 307) {
+      fallo(
+        "alias",
+        `\`${desde}\` redirige con ${regla.statusCode} y tenía que ser 307. Un 308 se cachea ` +
+          "para siempre en el navegador, y estos alias son una comodidad reversible (D161).",
+      );
+    }
+    if (!destinosValidos.has(regla.destination)) {
+      fallo(
+        "alias",
+        `\`${desde}\` apunta a \`${regla.destination}\`, que no es ninguna página del registro ` +
+          "ni `/llms.txt`. Un alias que lleva a un 404 es peor que no tenerlo.",
+      );
+    }
+  }
+}
+
+/* -------------------------------------------------------------------------- */
 
 const llms = revisarLlmsTxt();
 revisarCanalMarkdown(llms);
@@ -643,6 +753,7 @@ revisarNegociacion();
 revisarRobots();
 revisarCatchAll();
 revisarCabeceras();
+revisarAlias();
 
 console.log(
   `check:agentes — lo que este sitio le promete a un agente\n` +
@@ -652,7 +763,8 @@ console.log(
     `  robots     ${vistos.entornosRobots} entornos (producción abre y sella el sitemap; el resto cierra, D13)\n` +
     `  señales    ${vistos.senalesDeContenido} Content Signals comprobadas por su valor decidido (P67.8)\n` +
     `  404        ${vistos.segmentosDinamicos} segmentos dinámicos, ninguno catch-all\n` +
-    `  cabeceras  ${vistos.rutasDeCabecera} rutas contra la regex compilada del manifiesto: \`Vary\` solo donde se negocia, seguridad en todas`,
+    `  cabeceras  ${vistos.rutasDeCabecera} rutas contra la regex compilada del manifiesto: \`Vary\` solo donde se negocia, seguridad en todas\n` +
+    `  alias      ${vistos.alias} rutas que un agente adivina: 307 a un destino que existe`,
 );
 
 // El suelo del metro. Con cero entradas esto aprobaría siempre, que es el modo de
