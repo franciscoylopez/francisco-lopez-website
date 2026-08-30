@@ -15,7 +15,21 @@ export const LINKEDIN_DISPLAY = "linkedin.com/in/franciscolopez1975";
 // un sitio. Enlazarlo solo tiene sentido desde que el repo es público.
 export const GITHUB_URL =
   "https://github.com/franciscoylopez/francisco-lopez-website";
-export const GITHUB_DISPLAY = "github.com/franciscoylopez";
+
+/**
+ * EL PERFIL, QUE NO ES EL REPOSITORIO *(P68.747, 2026-08-31)*. Son dos URLs y
+ * dos cosas: `GITHUB_URL` es una obra que Francisco publica; esto es él. La
+ * distinción no era académica — el `sameAs` del `Person` en JSON-LD, que
+ * Schema.org define como «la URL de una página que identifica INEQUÍVOCAMENTE a
+ * la entidad», llevaba el repositorio.
+ *
+ * Y AQUÍ YA HABÍA UNA PISTA DE QUE FALTABA: la constante de abajo se llamaba
+ * `GITHUB_DISPLAY`, vivía pegada a `GITHUB_URL` y decía el perfil, no el repo.
+ * Era la etiqueta de una URL que no estaba, y no la usaba nadie desde que se
+ * escribió.
+ */
+export const GITHUB_PROFILE_URL = "https://github.com/franciscoylopez";
+export const GITHUB_PROFILE_DISPLAY = "github.com/franciscoylopez";
 
 /**
  * El `mailto:` del sitio, con asunto OPCIONAL. El asunto entra por parámetro y
