@@ -72,11 +72,23 @@ const HORAS_FRESCURA = 12;
  *   volverse imposibles (ESLint 10 y TypeScript 7, bloqueadas upstream) y las dos
  *   que dejó el `sprint-review` de cierre. Bajo umbral, pero es la primera vez que
  *   sube: el sprint siguiente tiene que llevarse su cupo de verdad.
+ * · 2026-08-30 · cierre de «Voz» · 20. **+1 neto**, mismo signo que «Drenaje» y
+ *   por la misma razón: «Voz» tampoco arrastró cupo —su compromiso fue la deuda
+ *   de página que un lanzamiento no puede llevarse dentro—, así que el embalse
+ *   se movió solo por sus bordes, y los bordes lo llenan más rápido de lo que
+ *   lo vacían. **Dos cierres seguidos en ámbar sin haber tocado el cupo ni una
+ *   vez.**
+ *
+ *   Y una trampa que este cierre se comió, escrita para el siguiente: **el sello
+ *   se pone DESPUÉS de crear las tareas del propio `sprint-review`, y sobre un
+ *   volcado nuevo.** Aquí se selló 18 sobre la foto anterior a escribirlas, o
+ *   sea un número que no existió en ningún momento. Un volcado es una foto, no
+ *   una consulta.
  */
 const SELLO_GENERAL: Sello = {
-  fecha: "2026-08-29",
-  cierre: "Drenaje",
-  abiertas: 19,
+  fecha: "2026-08-30",
+  cierre: "Voz",
+  abiertas: 20,
 };
 
 /**

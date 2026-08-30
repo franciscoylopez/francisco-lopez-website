@@ -88,6 +88,8 @@
 - [La tanda 2 de «Voz», y el diagrama que se arregló mirándolo — 2026-08-29](#la-tanda-2-de-voz-y-el-diagrama-que-se-arregló-mirándolo--2026-08-29)
 - [La tanda 3 de «Voz», y las dos veces que la medición mandó sobre la intuición — 2026-08-29](#la-tanda-3-de-voz-y-las-dos-veces-que-la-medición-mandó-sobre-la-intuición--2026-08-29)
 - [La tanda 4 de «Voz»: dos premisas de ficha que no aguantaron la medición — 2026-08-29](#la-tanda-4-de-voz-dos-premisas-de-ficha-que-no-aguantaron-la-medición--2026-08-29)
+- [La tanda 5 de «Voz», que era toda de andamiaje — 2026-08-30](#la-tanda-5-de-voz-que-era-toda-de-andamiaje--2026-08-30)
+- [El cierre de «Voz» — 2026-08-30](#el-cierre-de-voz--2026-08-30)
 - [Fuentes](#fuentes)
 <!-- FIN ÍNDICE -->
 
@@ -3841,6 +3843,160 @@ Con esto cierra la tanda 4. Queda la **tanda 5**, cinco tareas de guardianes y d
 ellas re-sellar la nota de PageSpeed con la mediana de tres tomas, que corre contra producción y
 por eso va después de esta—. «Voz» sigue siendo el último sprint antes de lanzar.
 
+
+
+## La tanda 5 de «Voz», que era toda de andamiaje — 2026-08-30
+
+Cinco tareas que no ve el visitante y que sostienen lo que sí ve. Ninguna tocó una página.
+
+### Un metro que daba dieciséis falsos positivos por pasada, no uno
+
+La ficha de **P65** decía que la fila de «clases interpoladas» de `design-review` daba **un**
+falso positivo por pasada. Medido, daban **16**, y los dieciséis eran legítimos: `WRAP`, `PROSE`,
+`CARD` y las variables de fuente del layout son **constantes de clases completas**, y Tailwind
+las ve literales donde se definen.
+
+El modo de fallo real es otro: la utilidad **construida** por interpolación, que no se genera y
+deja al elemento sin la clase **sin error de compilación**. Y los dos casos sí se distinguen por
+`grep`, porque lo que los separa es si la interpolación va **pegada** al token. Tres
+alternativas, que son las tres formas de romperlo: token antes, token después, y dos
+interpolaciones sin espacio. Validado rompiéndolo: caza las cuatro y da **0 hits** sobre el repo.
+
+**Y el arreglo no cupo.** La nota que lo explicaba dejó la skill en 4.716 palabras con techo
+4.600, así que el patrón volvió a la columna donde vive el de todas las demás filas y la
+narración se quedó en el commit. Es la primera de las dos veces que esta tanda desbordó el
+presupuesto de contexto.
+
+### `check:kit` cuadraba nombres, y un PNG en blanco los cuadra igual de bien
+
+**P85.2** venía de un hallazgo lateral de «Drenaje»: regenerar el kit da 12 SVG idénticos y **15
+de 43 binarios distintos**, porque los rasteriza una cadena nativa cuyo byte depende de la
+máquina. Eso **no se arregló: se escribió**. Los PNG y el `.ico` son **artefactos versionados**,
+el generador es la **receta y no el contrato**, y ese diff no se commitea. Pinnear `sharp` se
+descartó con motivo: reduce la deriva sin eliminarla y compra una sensación de cierre falsa.
+
+Lo que sí cambió es **lo que el guardián promete**. Ahora abre los 43 binarios y comprueba tres
+cosas del archivo y no de su nombre: formato, medida declarada y **tinta**. Lo tercero necesita
+decodificar de verdad —inflar los IDAT, deshacer los cinco filtros de PNG y sumar el canal
+alfa—, con `node:zlib` y sin dependencia nueva. **Qué mide el número del nombre lo dice el
+registro**, porque no significa lo mismo en las tres familias: alto en el símbolo, ancho en el
+lockup, lado en el favicon. Un PNG cuyo nombre no case con ninguna sale **rojo**: un hueco del
+metro no es un aprobado.
+
+**Y lo que NO promete, escrito para no prometer de más:** que el dibujo sea el correcto. Cazarlo
+exigiría rasterizar el SVG dentro del guardián, que es volver a meter ahí la cadena nativa que
+el párrafo anterior acaba de declarar no determinista.
+
+### El arnés de guardianes aprendió a manejar bytes
+
+`check:kit` era el **único guardián de ausencia de CI sin caso malo** (**P68.737**). Le entraron
+tres, uno por cada cosa que promete, para que arreglar una no pueda tapar a las otras dos: una
+ruta declarada sin archivo, un archivo sin declarar, y **un PNG que cuadra su nombre y ya no es
+una imagen**.
+
+El tercero obligó a cambiar el arnés. Un caso de texto pasa por `utf8` en los dos sentidos, y eso
+a un PNG lo destroza: volvería «restaurado» y distinto, y el propio arnés lo cazaría al final
+como que no ha sabido limpiar. Ahora un caso puede declararse `binario: true` y se lee y se
+restaura como `Buffer`. Los tres salen «lo rechaza» y el árbol queda limpio.
+
+### El `@id` que cruza de página, y la lista que se decidió no mantener
+
+**P66** cerraba el hueco que D87 dejó abierto: `check:marco` resuelve los `@id` contra todo el
+sitio —lo que ningún validador externo hace— mientras la Rich Results Test evalúa **una página
+aislada**, y ahí una referencia que cruza le llega como un `Thing` anónimo.
+
+La salida evidente era enseñarle qué tipos son elegibles para rich results. **Se descartó**: es
+otra lista escrita a mano contra un catálogo que decide Google. Lo que entró es una invariante
+**posicional**, que no necesita saber de tipos: *toda referencia cuyo `@id` no se declara en su
+propia página lleva `name` y `url`, salvo lo declarado con su motivo*. Patrón de `check:og`, y
+como allí medido **en las dos direcciones**: una excepción que ya no ocurre también sale roja.
+
+Cinco cruces declarados, los cinco con el mismo motivo: tres del deep-dive (`WebPage`) y dos de
+`/contacto` (`ContactPage`), ninguno elegible. Validado en tres direcciones, la tercera sobre el
+caso literal de P60.99.
+
+### La nota de PageSpeed, y una predicción que salió al revés
+
+**P66.5** iba a medias por construcción: el `README` dejó de teclear el rango y pasó a citar
+`content/psi/registro.json`, y la medición la lanzó Francisco contra producción con el sprint ya
+mergeado. Sello nuevo: **móvil 93-99 · escritorio 97-100**, mediana de tres tomas, **84 llamadas
+y 84 análisis distintos** —ninguna deduplicación, así que ningún par se selló con una sola
+muestra— y cero fallidas.
+
+**Y la predicción escrita en la ficha era falsa.** Decía que con una sola toma el ruido de PSI es
+asimétrico hacia abajo, así que el mínimo salía pesimista y lo más probable era que **subiera**.
+**Bajó dos puntos** en móvil (95 a 93). El razonamiento tenía forma de causa y era una sospecha:
+el ruido de PSI no es asimétrico, es **ancho** —esta corrida vio `/sobre-mi` dar 74, 96 y 97, y
+dos deep-dive con 22 puntos de recorrido—, y sobre un min/max de catorce páginas más muestras
+**ensanchan** el rango por los dos lados. Lo que sí se sostiene es lo único que importaba: el
+umbral de PageSpeed sigue cumplido en las catorce.
+
+## El cierre de «Voz» — 2026-08-30
+
+Veintisiete tareas, cinco tandas, y **el último sprint de build antes de lanzar**.
+
+### Lo que dijo el `sprint-review`
+
+El código no era el problema: cero `any`, cero `@ts-ignore`, cero `TODO` reales, cero
+vulnerabilidades, cero módulos huérfanos, y los ocho `eslint-disable` con su motivo al lado. Los
+dos hallazgos estaban **en los bordes**:
+
+- **El contexto de arranque a 13 palabras de su techo**, tras desbordarlo dos veces en una sola
+  tanda. Se tareó, y el `method-review` lo convirtió en otra cosa (abajo).
+- **El triaje manual de Dependabot sin dueño.** Tres PRs abiertos, dos de hace ocho días y **los
+  dos ya obsoletos al encontrarlos**. El `automerge acotado` los triajó bien —`next` toca el
+  build, así que va a mano— pero esa persona no existe en ningún sitio. Es el M1 del cuarto
+  `method-review` (D91) otra vez, en la mitad que el automerge no cierra. Se cerraron el draft
+  de diseño de la vieja P66 y el de ESLint, que ya estaba tareado como salto manual.
+
+### El check de medición
+
+GA4, 2-29 ago, 419 eventos y 46 usuarios. `contact_submit` **1/1**, `form_start` 1/1,
+`contact_click` 9/2, `file_download` 1/1, `scroll` 41/10 — **idéntico en los cinco** al cierre
+anterior, con las dos ventanas compartiendo 27 de sus 28 días. Los cuatro marcadores del panel
+cuadran con GA4.
+
+**El «no» escrito, con un matiz nuevo:** Distribución sale delante por **quinta** vez, y esta vez
+ya no tiene nada por delante — el tablero se queda sin sprint de build. Y un «no» acotado con
+fecha: **P85.1** (`file_download` del Brand Kit) sigue sin poder ejecutarse hasta que exista una
+ventana de 28 días posterior al cambio de anclas del 26 de agosto, o sea **no antes del
+2026-09-23**.
+
+**Lo que no se puede verificar todavía:** la corrección de D153 —que `contact_submit` solo cuente
+envíos reales— entró un día antes y la primaria vale 1. No hay dato con el que comprobar que hace
+lo que dice.
+
+### El sello, y un número que no existió
+
+`SELLO_GENERAL` pasa a **20**: **+1 neto, el segundo ámbar seguido**, y en los dos cierres por lo
+mismo — ni «Drenaje» ni «Voz» arrastraron cupo, así que el embalse se movió solo por sus bordes.
+
+**Primero se selló 18, y estaba mal.** El volcado se tomó *antes* de crear las dos tareas del
+propio `sprint-review`, así que 18 no existió en ningún momento. Es la regla nueva de `CLAUDE.md`
+y su caso está en `CLAUDE-historical.md`.
+
+### Y el `method-review`: una familia nueva
+
+**Convergió con la nota de Francisco** —«ha sido un sprint bastante limpio pero seguimos
+**siempre** al límite del presupuesto»—, escrita sin ver la medición. Cuarta convergencia de esa
+revisión, y las tres anteriores fueron su hallazgo de más confianza.
+
+Su «siempre» es lo que convirtió «quedan 13 palabras» en un diagnóstico. La curva va de 13.084 el
+19 de agosto a 12.287 hoy, oscilando entre **12.058 y 12.698**, y **el objetivo de 11.600 no se
+ha alcanzado nunca**. El techo, en cambio, **no se ha movido** (0 de 3, verificado). Así que no
+es «el umbral que persigue al dato» del catálogo: es su **imagen especular**, y nace como familia
+propia — **«el dato que persigue al techo»**: el techo aguanta y es el dato el que se le pega,
+porque retirar solo se dispara al cruzarlo. El sistema equilibra en «techo menos épsilon», y un
+indicador que siempre está al 99,9 % no distingue sano de a-punto-de-romperse.
+
+Los dos rojos que dejó «Drenaje» se dieron la vuelta con holgura: **18,5 % de Infra** (era 52 %)
+y **0,71 : 1** de verificación por producto (era 3,5 : 1). Y hay un candidato estructural medido
+para la retirada: la sección «Cómo se verifica lo que no ve un compilador» son **824 palabras**,
+el 6,7 % del arranque y **63 veces el margen que queda** — y es la sección que el propio
+`PRD-Live` describe como *«este no se lee hasta que un check sale rojo diciendo su nombre»*.
+
+**El informe completo, con el panel de los siete indicadores:**
+<https://claude.ai/code/artifact/5c85a53e-4fba-4aa2-8a22-028ceae74ec6>
 
 ## Fuentes
 

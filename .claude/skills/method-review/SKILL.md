@@ -12,9 +12,9 @@ description: >
 
 # Revisión de metodología — entre sprints
 
-Un técnico que **acaba de ver este método por primera vez** lo audita buscando margen. Se
-hizo la primera vez el 2026-08-19, antes del sprint «Cómo se ha creado», y salió con nueve
-hallazgos y dieciséis tareas. Lo que sigue es ese recorrido, con lo que aprendió al ejecutarse.
+Un técnico que **acaba de ver este método por primera vez** lo audita buscando margen. La
+primera vez fue el 2026-08-19 y salió con nueve hallazgos. Lo que sigue es ese recorrido, con
+lo que aprendió al ejecutarse.
 
 > **Y aquí mismo, la primera lección de su propio catálogo** *(corregido en el cuarto disparo,
 > 2026-08-23)*. Esta línea presumía «una reducción del 35% del contexto de arranque»; el total
@@ -139,7 +139,9 @@ si algo creado en el último sprint debería estar enganchado en una skill y no 
 
 ```bash
 grep -c "GA4\|Clarity" *.md          # cuántas veces se habla de medir
-grep -inE "porque (los datos|GA4|el dato)" *.md   # cuántas veces se DECIDIÓ con un dato
+# Busca el NOMBRE del evento, no la palabra «porque»: la redacción varía y el
+# patrón de «porque…» dio 0 con el bucle cerrado (noveno disparo).
+grep -icE "contact_submit|contact_click|file_download|n=[12]" DECISIONS.md PRD-Historical.md PRD-Live.md
 ```
 
 Si la segunda cifra es cero, el bucle no se ha cerrado nunca. **Y si un scorecard está a cero,
@@ -185,40 +187,25 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **3** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **El umbral que persigue al dato** | Un techo que se reescribe para seguir a lo que mide, así que nunca se incumple y nunca obliga. Firma: cambia más a menudo que la cosa medida, y su distancia al dato es constante | **2** |
+| **El dato que persigue al techo** | El techo **no** se mueve y la medida vive pegada a él, porque retirar solo se dispara al cruzarlo. Firma: el objetivo no se ha cumplido **nunca** | **1** |
 | **Añadir sin retirar** | Un documento que crece porque nada pregunta qué sobra (D69) | el marco |
 
 *Segundo disparo, 2026-08-19: nace «arreglar la mitad que se abre». Y la lección sobre esta
 tabla: **actualizarla es el último paso del disparo y es el que se olvida.***
 
-*Tercer disparo, 2026-08-22: «la regla sin portador» se vuelve la familia dominante, y nace
-**«la pieza que nace fuera de la capa»**, separada de ella **por el REMEDIO y no por el
-síntoma**: aquella necesita un **disparador**; esta, un **guardián de frontera**. **Su firma al
-medirla: el hallazgo aparece tarde y en plural** —ocho tareas de golpe en una revisión final en
-vez de una en cada PR—. Y una regla de redacción, de rebote: **no se escribe el número, se
-nombra la cosa.***
-
-*Cuarto disparo, 2026-08-22 (tras Método II): **«arreglar la mitad que se abre» alcanza al
-propio método, y esa es la instancia 4.** Las revisiones producen hallazgos mejor que nunca y
-nada los saca: `General` acumulaba 28 abiertas con 1 archivada en toda su vida, y su único
-desagüe había sido abrir un sprint de método —dos veces, 24 tareas—. Segunda convergencia con
-las notas de Francisco, y otra vez el hallazgo de más confianza. Deja dos reglas: **un aviso
-sin umbral se olvida**, así que se convierte en una fila de la tabla de arriba con verde y
-rojo; y **mide el drenaje, no solo la clasificación** (paso 8, corregido).*
-
-*Quinto disparo, 2026-08-25: **nace «el metro que declara su alcance, y su alcance no incluye
-el síntoma».** Se separa de «el metro que aprueba sobre lista vacía» **por el remedio**: aquella
-necesita CONTAR —y ya no tiene instancias vivas—; esta necesita MIRAR EL RESULTADO RENDERIZADO.
-La regla vive en `BRAND.md` §Cómo medir, punto 8, y sus casos en `BRAND-historical.md`.*
-
-*Y tres cosas de método que este disparo deja:*
+*Tercero (2026-08-22), cuarto (2026-08-22) y quinto (2026-08-25): nacen **«la pieza que nace
+fuera de la capa»** y **«el metro que declara su alcance…»**, y las dos se separan de su
+vecina **por el REMEDIO y no por el síntoma** —disparador contra guardián de frontera; contar
+contra mirar el resultado renderizado—. **Ese es el criterio para dar de alta una familia
+nueva.** Dejan tres reglas ya aplicadas arriba: un aviso sin umbral se olvida, así que se
+vuelve fila de la tabla con verde y rojo; **mide el drenaje, no solo la clasificación** (paso
+8); y **cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es
+cuánto recortar sino qué gobierna el número**.*
 
 - ***Antes de publicar un cero, búscalo con otras palabras y en otro sitio.** Un `grep` que
   devuelve cero es un aprobado, y ese informe publicó dos falsos.*
-- ***La asimetría entre lo automático y lo visual se mide cada vez:** los pasos de `ci.yml` y el
-  agente de accesibilidad, contra UN gate manual (`design-review`) para lo visual, que además se
-  dispara al final. **No se escribe la cifra**: cuando esta línea decía «20 pasos» ya eran 21.*
-- ***Cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es cuánto
-  recortar sino qué gobierna el número.***
+- ***La asimetría entre lo automático y lo visual se mide cada vez**, y **no se escribe la
+  cifra**: cuando esta línea decía «20 pasos» ya eran 21.*
 
 *Sexto disparo, 2026-08-27: **nace «la reducción que fue una mudanza», y la trajo Francisco
 desde una sensación** —«redujimos las skills y no lo hemos vuelto a comparar»—. Medido: los docs
@@ -254,22 +241,38 @@ entre qué. **Sin notas de Francisco este ciclo**: ninguno tiene convergencia.*
   lleva su vida entera sin alcanzarse, con la banda real entre 12.058 y 12.698. No se toca el
   techo —lo prohíbe el séptimo disparo—: se decide el objetivo, o qué baja a un histórico.*
 
-**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-29, tras «Drenaje»)*:
+*Noveno disparo, 2026-08-30 (tras «Voz»): **nace «el dato que persigue al techo», imagen
+especular de «el umbral que persigue al dato»** — misma patología, mecanismo opuesto y por eso
+remedio opuesto: a aquella se le pone un techo intocable (ya se le puso); a esta, **una retirada
+programada**, porque mientras retirar sea una reacción al rojo, el equilibrio es el rojo.
+**Cuarta convergencia con Francisco** («seguimos siempre al límite»), y otra vez el hallazgo de
+más confianza: su «siempre» es lo que convirtió «quedan 13 palabras» en un diagnóstico. La curva:
+el objetivo de 11.600 no se ha alcanzado en la vida del techo, con la banda entre 12.058 y
+12.698.*
+
+*Y dos cosas de método que este disparo deja:*
+
+- ***El `grep` del paso 7 daba un falso cero**, que es el aviso del quinto disparo aplicándose a
+  un comando de esta skill. Corregido abajo. **Un comando publicado aquí también caduca.***
+- ***El sello se pone DESPUÉS de crear las tareas del propio `sprint-review`, y sobre un volcado
+  NUEVO.** Este cierre selló 18 sobre la foto anterior a escribirlas: un número que no existió en
+  ningún momento. **Un volcado es una foto, no una consulta.***
+
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-30, tras «Voz»)*:
 
 | Indicador | Hoy | Verde | Rojo | Comando |
 | :-- | :-- | :-- | :-- | :-- |
-| Variación neta de `General` por sprint | **+1** (18 → 19) 🟡 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
+| Variación neta de `General` por sprint | **+1** (19 → 20) 🟡 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
 | Veces que se movió un techo en el ciclo | **0** de 3 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
-| Margen del presupuesto de contexto | **103** 🟡 | ≥ 400 | < 100 | `check:contexto` |
-| Suma de skills a demanda | **20.443** · techo 20.500 🟡 | ≤ techo | > techo | `check:contexto` |
-| **Verificación ÷ producto** | **0,47** 🟡 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
-| **% Infra del sprint que cierra** | **52%** (15/29) 🔴 | ≤ 35% | ≥ 50% | tablero, `GROUP BY Área` |
-| **Verificación ÷ producto DEL SPRINT** | **3,5 : 1** 🔴 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
-| Hallazgos de `design-review` cuya regla ya existía | *no se disparó* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
-| ~~Sprint de método abierto en el ciclo~~ | *retirado: leía el nombre* | — | — | — |
-| ~~Skills sin estrenar~~ | *retirado: sin fuente medible* | — | — | — |
+| Margen del presupuesto de contexto | **13** 🔴 | ≥ 400 | < 100 | `check:contexto` |
+| Suma de skills a demanda | **techo 20.500** 🟡 | ≤ techo | > techo | `check:contexto` |
+| Verificación ÷ producto | **0,49** 🟡 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
+| % Infra del sprint que cierra | **18,5 %** (5/27) 🟢 | ≤ 35 % | ≥ 50 % | tablero, `GROUP BY Área` |
+| Verificación ÷ producto DEL SPRINT | **0,71 : 1** 🟢 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
+| Hallazgos de `design-review` cuya regla ya existía | *tercer ciclo sin disparar* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
 
-*Las dos filas de `check:contexto` van en su vara, que **descuenta los bloques de código**.*
+*Las dos filas de `check:contexto` van en su vara, que **descuenta los bloques de código**. La
+suma de skills no lleva cifra a propósito: la mueve esta misma skill al escribirse.*
 
 **La operación exacta de «verificación ÷ producto»**, porque sin ella la fila no es
 reproducible — se descubrió al reconstruirla, y tres definiciones razonables daban 0,47, 0,52 y
@@ -283,10 +286,9 @@ echo "scripts=$(n scripts) producto=$(( $(n app) + $(n components) + $(n lib) + 
 *Numerador: `scripts/` sola. Denominador: app + components + lib + content. `tests/` queda
 FUERA del numerador a propósito — un test prueba el producto, un guardián vigila el método.*
 
-**Las dos filas nuevas sustituyen a «sprint de método abierto en el ciclo», que contestaba «No»
-mirando el NOMBRE del sprint** *(octavo disparo)*. «Drenaje» no se llamaba de método y lo fue:
-52% Infra y 3,5 líneas de verificación por cada una de producto. Se miden **al cerrar**, sobre
-el sprint que cierra, con su commit base y `HEAD`.
+**Las dos filas del sprint se miden AL CERRAR**, sobre el que cierra, con su commit base y
+`HEAD`. Sustituyeron a «sprint de método abierto en el ciclo», que leía el NOMBRE: «Drenaje»
+no se llamaba de método y lo fue.
 
 ## La salida
 

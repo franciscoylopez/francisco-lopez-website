@@ -31,6 +31,7 @@ Partido el **2026-08-27** (P68.5908). Ver `DECISIONS.md` D130.
 - [La Definition of Done](#la-definition-of-done)
 - [Lo que el bucle de medición predica](#lo-que-el-bucle-de-medición-predica)
 - [El kicker no repite el breadcrumb](#el-kicker-no-repite-el-breadcrumb)
+- [El sello que se puso sobre una foto — 2026-08-30](#el-sello-que-se-puso-sobre-una-foto--2026-08-30)
 <!-- FIN ÍNDICE -->
 
 ## Eficiencia de sesión
@@ -200,3 +201,30 @@ verbal exacta con el titular y significa casi lo mismo: `CONECTEMOS / Hablemos` 
 invitaciones apiladas. O sea que arreglaba la mitad nueva de la regla incumpliendo la vieja.
 Se quedó **«Aquí estoy»**, que no repite ninguna de las dos y añade lo que el titular no dice.
 La regla vive completa en `CLAUDE.md` §i18n.
+
+## El sello que se puso sobre una foto — 2026-08-30
+
+**La convención:** el `SELLO_GENERAL` se pone **después** de crear las tareas del propio
+`sprint-review`, y sobre un volcado nuevo.
+
+**El caso.** Al cerrar «Voz», el orden fue: volcar el tablero, medir «General», sellar **18**, y
+después crear las dos tareas que el `sprint-review` había producido. El número real al cerrar
+era **20**, así que el 18 **no existió en ningún momento** — ni antes ni después de nada.
+
+Lo que lo hace peor que un despiste es adónde iba: ese sello es contra lo que el siguiente cierre
+compara. Con 18 sellado, un cierre que midiera 20 habría publicado **+2 de crecimiento sin que
+nada hubiera crecido**, y el guardián del embalse habría dado un ámbar falso sobre un sprint
+limpio. Un metro mal calibrado inventa hallazgos igual que uno roto.
+
+**La causa, que es la parte reutilizable:** el volcado del tablero (`scripts/.tablero.json`) es
+una **foto**, no una consulta. Nada en él avisa de que se tomó hace diez minutos y de que la
+sesión ha escrito en el tablero desde entonces. El mismo archivo que hace posible medir el
+tablero fuera de CI es el que permite medirlo contra un pasado.
+
+**Y por qué la regla es de ORDEN y no de «re-volcar por si acaso»:** re-volcar por si acaso es
+una nota que se olvida. El orden es comprobable —las tareas del review existen o no existen— y
+cae en el único momento del ciclo en que alguien está mirando el tablero de todos modos.
+
+*(La familia a la que pertenece, «el indicador sin fuente», está en el catálogo de
+`method-review`; el mismo cierre encontró su hermana mayor: el neto que se sella no se puede
+descomponer, porque el tablero no guarda historia de cambios de `Etapa`.)*

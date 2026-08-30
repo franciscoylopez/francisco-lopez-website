@@ -260,23 +260,12 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 *Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
 decisión escrita, no por omisión.
 
-**Y queda un paso hasta el lanzamiento: «Voz», el sprint en curso.** «Drenaje», que drenó la
-deuda que no pedía criterio, cerró el 2026-08-29.
+**Ya no queda sprint de build.** «Voz», el último antes de lanzar, cerró el 2026-08-30, y con él
+el tablero se queda sin etapa en curso: lo único **Must** abierto es la **Distribución**, que
+sale delante por quinta vez y ahora no tiene nada por delante.
 
-**«Voz» es el ÚLTIMO sprint antes de lanzar, y eso es lo que decide qué entra** — no de qué
-bloque es una tarea, sino **si tiene que ser verdad el día de lanzar**. Se llama así porque su
-grueso es de voz y no de código: **el artículo deja de contarse desde lo que se rompió y pasa a
-contarse desde lo que aporta**, que es el mismo defecto que aparece en las cards de
-`/accesibilidad`. Pero ese criterio le añadió además la deuda de página que un lanzamiento no
-puede arrastrar: el rendimiento de Sobre mí, un diagrama ilegible en móvil y el kicker de
-`/contacto`.
-
-**Y lo que NO entra lleva su motivo escrito**, que es lo que impide que vuelva cada revisión: la
-medición de `file_download` del Brand Kit se queda fuera porque **no se puede ejecutar** hasta
-que exista una ventana de 28 días posterior al cambio de anclas, no porque no importe.
-
-*(El recorrido de «Drenaje», el triaje que creó «Voz», y por qué el orden de sus tandas lo mandó
-la visibilidad y no la prioridad, en `PRD-Historical.md`.)*
+*(El recorrido de «Drenaje» y de «Voz», el triaje que lo creó, por qué el orden de sus tandas lo
+mandó la visibilidad y no la prioridad, y lo que dejó su cierre, en `PRD-Historical.md`.)*
 
 ### V4 — IA conversacional
 
