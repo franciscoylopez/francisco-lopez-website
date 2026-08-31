@@ -194,14 +194,36 @@ export function Aplicaciones({
                 {item.desc}
               </p>
               {/* El «dónde» va al pie y con `mt-auto` para que las tres fichas
-                  lo alineen aunque sus descripciones midan distinto. */}
+                  lo alineen aunque sus descripciones midan distinto.
+
+                  Y ES ENLACE SOLO EN DOS DE LAS TRES, que es la parte que no se
+                  ve leyendo el copy *(2026-08-31)*. El rótulo hace un trabajo y
+                  las tres fichas lo contestan distinto: el banner VIVE en un
+                  perfil y la portada en un repositorio —los dos, sitios a los
+                  que se puede ir—, pero la firma vive en los ajustes de un
+                  cliente de correo, que no son una URL de nadie. Así que el
+                  destino es un campo aparte y opcional: `href: null` no es un
+                  hueco por rellenar, es la respuesta correcta para esa ficha.
+
+                  Sin eso, la alternativa era enlazar las tres inventándole un
+                  destino a la primera, o no enlazar ninguna — que es lo que
+                  había, y dejaba dos URLs pintadas como texto muerto. */}
               <p className="m-0 mt-auto text-[0.8rem] leading-[1.5]">
                 <span className="text-foreground font-semibold">
                   {t.fueraWhere}
                 </span>{" "}
-                <span className="text-muted-foreground font-mono">
-                  {item.where}
-                </span>
+                {item.href ? (
+                  <a
+                    href={item.href}
+                    className="link-content font-mono [overflow-wrap:anywhere]"
+                  >
+                    {item.where}
+                  </a>
+                ) : (
+                  <span className="text-muted-foreground font-mono">
+                    {item.where}
+                  </span>
+                )}
               </p>
             </div>
           ))}
