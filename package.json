@@ -25,6 +25,7 @@
     "check:artefacto": "tsx scripts/check-artefacto.ts",
     "articulo:sellar": "tsx scripts/check-articulo.ts --seal",
     "articulo:novedades": "tsx scripts/articulo-novedades.ts",
+    "agentes:sellar": "tsx scripts/agentes.ts",
     "check:articulo": "tsx scripts/check-articulo.ts",
     "accesibilidad:sellar": "tsx scripts/check-accesibilidad.ts --seal",
     "check:accesibilidad": "tsx scripts/check-accesibilidad.ts",

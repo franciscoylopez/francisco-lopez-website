@@ -139,7 +139,7 @@ Los pasos de CI de cada PR se leen en [GitHub Actions](./.github/workflows/ci.ym
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
 
-Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`** y **`npm run pliegue`** necesitan un navegador de verdad —el segundo comprueba que las aperturas que comparten pliegue midan lo mismo, una invariante que se rompió tres veces y siempre la vio un ojo (`D144`)—; **`npm run psi`** y **`npm run check:enlaces`** necesitan red, y el segundo no puede ser gate de CI por la misma razón que el primero: un servidor ajeno caído cinco minutos daría un rojo que no es nuestro (`D141`). **`npm run check:tablero`** necesita el MCP de Notion. Los cuatro últimos tienen su criterio probado aparte, en `npm test`, para que vivir fuera de CI no lo deje sin red (`D107`).
+Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`** y **`npm run pliegue`** necesitan un navegador de verdad —el segundo comprueba que las aperturas que comparten pliegue midan lo mismo, una invariante que se rompió tres veces y siempre la vio un ojo (`D144`)—; **`npm run psi`** y **`npm run check:enlaces`** necesitan red, y el segundo no puede ser gate de CI por la misma razón que el primero: un servidor ajeno caído cinco minutos daría un rojo que no es nuestro (`D141`). **`npm run check:tablero`** necesita el MCP de Notion. Y **`npm run agentes:sellar`** queda fuera por un motivo distinto de todos ellos: sella la nota de un tercero que `D157` declara explícitamente que **no** es criterio de aceptación de este proyecto, así que ponerla en CI sería convertir en umbral justo lo que se decidió que no lo era. Los cuatro últimos tienen su criterio probado aparte, en `npm test`, para que vivir fuera de CI no lo deje sin red (`D107`).
 
 ## Arrancar
 
@@ -203,6 +203,8 @@ npm run psi -- <url>        # PageSpeed de UNA página: nota, métricas y desglo
 npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99).
                             # Al terminar SELLA el rango en content/psi/ y el artículo lo
                             # publica con su fecha; una pasada parcial no sella (D102)
+npm run agentes:sellar      # la nota de preparación agéntica de ora.ai contra producción, sellada
+                            # en content/agentes/. Se niega con un informe de caché (D167)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
 npm run check:tablero       # que Prioridad siga siendo un orden, sobre un volcado del
                             # tablero de Notion. Al empezar la sesión, no en CI (D107)
@@ -286,6 +288,8 @@ content/articulo/      Lo que el artículo declara de sí mismo: dependencias.ts
                        comparados contra el workflow en cada PR, D102)
 content/psi/           registro.json: el rango de PageSpeed con su fecha, escrito por
                        `npm run psi -- --registro`. El artículo lo publica de ahí (D102)
+content/agentes/       registro.json: la nota de ora.ai con su fecha, escrita por
+                       `npm run agentes:sellar`. Misma idea, otro tercero (D167)
 
 lib/                   i18n (fuente única de ruta↔locale), page-meta (D45), site (SITE_URL),
                        contact, analítica, consentimiento, datos estructurados, design-values
@@ -308,6 +312,8 @@ scripts/check-guardianes.ts  Un caso malo conocido por guardián. Muta archivos 
 scripts/design-review/     Censo de pares de contraste del DOM servido
 scripts/psi.ts             PageSpeed desde la terminal: una página con su desglose del LCP,
                            o el registro entero con el agregado de avisos (D49, D99)
+scripts/agentes.ts         Sella la nota de ora.ai que publica el artículo. Sin `force` el
+                           POST no escanea, así que rechaza el informe de caché (D167)
 scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las páginas del registro,
                            en sus dos idiomas, no puede cambiar
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
