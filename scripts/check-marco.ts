@@ -261,6 +261,22 @@ function recorrerIds(
       pagina.declarados.add(id);
     }
   }
+  /**
+   * `@graph` ES LA ÚNICA CLAVE RESERVADA QUE CONTIENE NODOS, y por eso se recorre
+   * a mano *(P68.751, 2026-08-31)*. El bucle de abajo se salta todo lo que empieza
+   * por `@` —`@context`, `@type`, el `@id` que ya se ha leído—, que es correcto
+   * para las demás: son metadatos, no entidades. Con `@graph` esa poda dejaba de
+   * mirar el 100% del bloque, y en silencio: el día que la home pasó a `@graph`,
+   * los `@id` del `Person` y del `WebSite` no se habrían apuntado como declarados
+   * y este guardián habría acusado de referencia colgada a las trece páginas que
+   * los apuntan — un rojo cuya causa está en el guardián, que es la peor clase.
+   *
+   * El `campo` no se cambia al entrar: los hijos de un `@graph` son nodos de
+   * primer nivel, no el valor de una propiedad, y `REFERENCIAS_QUE_CRUZAN` mira
+   * precisamente la propiedad bajo la que cuelga una referencia.
+   */
+  if ("@graph" in obj) recorrerIds(obj["@graph"], variante, pagina, campo);
+
   for (const [clave, valor] of Object.entries(obj)) {
     if (clave.startsWith("@")) continue;
     recorrerIds(valor, variante, pagina, clave);

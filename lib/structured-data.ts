@@ -1,7 +1,7 @@
 // Constructores de datos estructurados JSON-LD (Schema.org), fuente única para todo
 // el marcado del sitio. Criterio de cierre por página (CLAUDE.md, DECISIONS.md D14):
-//   - Home: ProfilePage con mainEntity Person (no elegible para rich results → se
-//     valida con el Schema Markup Validator).
+//   - Home: un `@graph` con ProfilePage, WebSite y Person como nodos hermanos (no
+//     elegible para rich results → se valida con el Schema Markup Validator).
 //   - Páginas internas: BreadcrumbList (elegible → se valida con la Rich Results Test).
 // URLs SIEMPRE absolutas vía SITE_URL (los rastreadores no resuelven relativas en JSON-LD).
 
@@ -48,6 +48,15 @@ export const homeUrl = (lang: Locale): string => pageUrl(lang);
 const WEBSITE_ID = `${SITE_URL}/#website`;
 
 /**
+ * El nodo de la persona, con el mismo criterio: uno solo para las 28 variantes.
+ * Era un literal repetido en cinco sitios de este archivo —los cuatro que lo
+ * REFERENCIAN y el que lo declara—, y desde que la home lo saca a nodo hermano
+ * (`profilePageLd`) es la bisagra de todo el grafo: la constante hace que
+ * declaración y referencias no puedan escribirse distinto.
+ */
+const PERSON_ID = `${SITE_URL}/#person`;
+
+/**
  * REFERENCIA al nodo `WebSite`, para que una página diga de qué sitio forma parte
  * (P80). El nodo completo lo declara `profilePageLd` en la home, una sola vez.
  *
@@ -79,128 +88,171 @@ const isPartOfSite = (conCampos = false) =>
       }
     : { "@id": WEBSITE_ID };
 
-// ProfilePage + Person: la entidad principal del sitio, en la home.
+/**
+ * ProfilePage + WebSite + Person: la entidad principal del sitio, en la home.
+ *
+ * TRES NODOS HERMANOS EN UN `@graph`, Y NO UN ÁRBOL ANIDADO *(P68.751,
+ * 2026-08-31)*. Hasta hoy esto era un solo objeto `ProfilePage` con el `WebSite`
+ * colgando de `isPartOf` y el `Person` de `mainEntity`, así que el `sameAs` de
+ * Francisco vivía a tres saltos de la raíz. Las dos formas son JSON-LD válido y
+ * dicen lo mismo al expandirlas; lo que cambia es que en el `@graph` **cada
+ * entidad es un nodo con identidad propia** y las relaciones se expresan por
+ * `@id` —que es justo lo que este archivo ya hace ENTRE páginas desde P50, y lo
+ * que emiten casi todos los generadores de datos estructurados—.
+ *
+ * EL ORDEN DE LOS MOTIVOS IMPORTA, y se escribe porque la tentación es la
+ * contraria. Un escáner de agentes lee `sameAs` en 0 dominios aquí y en 2 en un
+ * sitio personal que declara los MISMOS dos —`urvagandhi.tech`, medido el
+ * 2026-08-31—, y la única diferencia estructural que quedaba tras descartar
+ * Wikipedia, Wikidata y la cantidad era la profundidad. Pero eso es la
+ * CONSECUENCIA esperada, no la razón: si el escáner no se mueve, el cambio sigue
+ * siendo el correcto por sí solo, que es la distinción de D161 y la pregunta que
+ * D157 obliga a hacerse antes de tocar nada por una casilla.
+ *
+ * LO QUE ESTO NO CAMBIA: el contenido. Los mismos tres nodos, los mismos campos
+ * y los mismos `@id` que ya se referenciaban desde las otras trece páginas. Un
+ * rastreador que ya nos leía bien lee exactamente lo mismo — y eso está MEDIDO,
+ * no supuesto: el Schema Markup Validator devuelve el mismo árbol para las dos
+ * formas (2026-08-31, la anidada contra producción y la nueva contra el build),
+ * con el `Person` y sus dos `sameAs` colgando igual de `mainEntity` y de
+ * `author`. **1 objeto · 0 errores · 0 avisos** a los dos lados, que es la línea
+ * base de la fila 6 de la DoD; la única diferencia es el `@id` propio del
+ * `ProfilePage`, que antes no existía.
+ */
 export function profilePageLd(lang: Locale, description: string) {
   const url = homeUrl(lang);
   return {
     "@context": "https://schema.org",
-    "@type": "ProfilePage",
-    url,
-    inLanguage: lang,
-    /**
-     * EL NODO `WebSite`, DECLARADO ENTERO Y SOLO AQUÍ (P80). Sin él, cada página
-     * del dominio es una isla para un rastreador: el `isPartOf` de las otras siete
-     * es lo que las une, y `experiencePageLd` llevaba desde P50 sin poder
-     * escribirlo porque apuntar a un nodo inexistente habría sido una referencia
-     * colgando —valida igual, y no significa nada—.
-     *
-     * `inLanguage` LISTA LOS DOS IDIOMAS Y NO EL DE LA PÁGINA, que es la parte
-     * que no es obvia. El `@id` es uno solo para las veintiocho variantes, así que
-     * si la home ES dijera `es` y la EN dijera `en`, el mismo nodo afirmaría dos
-     * cosas distintas según por dónde se entre. Lo que es cierto del SITIO —y no
-     * de la página que lo declara— es que está en los dos. La página ya dice el
-     * suyo en su propio `inLanguage`, dos líneas más arriba.
-     *
-     * NO LLEVA `potentialAction: SearchAction`, y la ausencia es deliberada: es el
-     * campo que pinta la caja de búsqueda de Google, y este sitio no tiene buscador
-     * interno. Declararlo sería afirmar una capacidad inexistente — el mismo
-     * criterio por el que el deep-dive no es `Article`.
-     */
-    isPartOf: {
-      "@type": "WebSite",
-      "@id": WEBSITE_ID,
-      name: SITE_NAME,
-      url: `${SITE_URL}/`,
-      inLanguage: ["es", "en"],
-      author: { "@id": `${SITE_URL}/#person` },
-      /**
-       * EL REPOSITORIO ES DEL SITIO, NO DE LA PERSONA *(P68.747, 2026-08-31)*.
-       * Estaba en el `sameAs` del `Person`, que es la lista de «quién es esta
-       * persona en otros sitios», y ahí decía algo falso: un repositorio es una
-       * obra, no una identidad. Baja aquí, al nodo que sí es de lo que el repo es
-       * el código.
-       *
-       * ES `isBasedOn` Y NO `codeRepository`, Y ESO SE MIDIÓ EN VEZ DE
-       * SUPONERSE. `codeRepository` es la propiedad que uno escribiría —dice
-       * literalmente «el repositorio de esto»—, pero su dominio en Schema.org es
-       * **solo `SoftwareSourceCode`**: en un `WebSite` sería una propiedad fuera
-       * de dominio, o sea marcado inválido publicado para aprobar una casilla,
-       * que es exactamente lo que D157 prohíbe. `isBasedOn` tiene dominio
-       * `CreativeWork` —del que `WebSite` desciende—, admite una `URL` en el
-       * rango, y dice lo que es cierto: este sitio se deriva de ese código.
-       *
-       * Y NO SE ENVUELVE EN UN NODO `SoftwareSourceCode` propio, que sería la
-       * otra forma de decirlo con todas las letras: costaría un tipo más que
-       * mantener sincronizado para colgar una URL que el pie de página ya
-       * publica con un enlace visible. Que sea cierto es condición necesaria, no
-       * suficiente.
-       */
-      isBasedOn: GITHUB_URL,
-    },
-    mainEntity: {
-      "@type": "Person",
-      "@id": `${SITE_URL}/#person`,
-      name: SITE_NAME,
-      jobTitle: "Senior Product Manager",
-      url: `${SITE_URL}/`,
-      // La MISMA foto que pinta el hero. Es el tercer consumidor del archivo
-      // —hero, tarjeta OG y esto—, y el único que no se ve al mirar la página:
-      // al renombrar el asset, este apuntaba a un 404 sin que nada lo notara.
-      image: `${SITE_URL}/img/francisco-hero-estudio-4x5.webp`,
-      description,
-      email: EMAIL,
-      telephone: TELEPHONE,
-      /**
-       * PERFILES, Y SOLO PERFILES *(P68.747, 2026-08-31)*. Aquí ponía
-       * `[LINKEDIN_URL, GITHUB_URL]`, y la segunda es el **repositorio**: una obra
-       * que Francisco publica, no una identidad suya. Schema.org define `sameAs`
-       * como «la URL de una página web que identifica INEQUÍVOCAMENTE a la
-       * entidad — su perfil en Wikipedia, en Wikidata o en una red social», y un
-       * repo no identifica a nadie: identifica un proyecto.
-       *
-       * SE CORRIGE AUNQUE EL ESCÁNER NO SE MUEVA, que es la distinción de D161:
-       * la cifra de un escáner no valida un arreglo ni lo invalida, solo dice qué
-       * mide él. El repo no desaparece — baja al nodo `WebSite`, que es de quien
-       * es de verdad (arriba, `isBasedOn`).
-       */
-      sameAs: [LINKEDIN_URL, GITHUB_PROFILE_URL],
-      knowsLanguage: ["es", "en"],
-      knowsAbout: KNOWS_ABOUT,
-      worksFor: { "@type": "Organization", name: "Emendu" },
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: "Valencia",
-        addressCountry: "ES",
+    "@graph": [
+      {
+        "@type": "ProfilePage",
+        /**
+         * `@id` PROPIO, que antes no tenía y ahora sí: en un `@graph` un nodo sin
+         * identificador es un nodo anónimo, y los otros dos la tienen. Lleva la
+         * URL de la página, así que hay uno por locale — al revés que los dos de
+         * abajo, que son del SITIO y de la PERSONA y por eso no llevan idioma.
+         */
+        "@id": `${url}#profilepage`,
+        url,
+        inLanguage: lang,
+        isPartOf: { "@id": WEBSITE_ID },
+        mainEntity: { "@id": PERSON_ID },
       },
       /**
-       * EL CANAL, ADEMÁS DE LOS DATOS (2026-08-30). `email` y `telephone` ya
-       * estaban dos líneas arriba, y son los mismos: lo que añade `contactPoint`
-       * es el nodo que un agente busca cuando la pregunta es «¿cómo contacto?» en
-       * vez de «¿quién es?», con la página donde hacerlo y en qué idiomas.
+       * EL NODO `WebSite`, DECLARADO ENTERO Y SOLO AQUÍ (P80). Sin él, cada página
+       * del dominio es una isla para un rastreador: el `isPartOf` de las otras siete
+       * es lo que las une, y `experiencePageLd` llevaba desde P50 sin poder
+       * escribirlo porque apuntar a un nodo inexistente habría sido una referencia
+       * colgando —valida igual, y no significa nada—.
        *
-       * `contactType` va en inglés y no traducido: no es copy, es un valor de
-       * vocabulario que lee una máquina, y el sitio ya tiene su idioma dicho en
-       * `inLanguage`. Los canales salen de `lib/contact`, que es la fuente de la
-       * que también beben la página y el pie.
+       * `inLanguage` LISTA LOS DOS IDIOMAS Y NO EL DE LA PÁGINA, que es la parte
+       * que no es obvia. El `@id` es uno solo para las veintiocho variantes, así que
+       * si la home ES dijera `es` y la EN dijera `en`, el mismo nodo afirmaría dos
+       * cosas distintas según por dónde se entre. Lo que es cierto del SITIO —y no
+       * de la página que lo declara— es que está en los dos. La página ya dice el
+       * suyo en su propio `inLanguage`, en el nodo `ProfilePage` de aquí arriba.
        *
-       * LO QUE NO SE HACE, Y SE ESCRIBE PARA QUE NO SE REABRA: un escáner de
-       * agentes pide `contactPoint` y `address` en el nodo `Organization`, que
-       * aquí es el `worksFor` de arriba. Ese nodo es el EMPLEADOR, así que
-       * rellenarlo significaría publicar los datos de contacto de Emendu —que no
-       * son nuestros— o poner los de Francisco como si lo fueran, que es falso.
-       * Este sitio es una persona y lo dice en `/llms.txt` («no es una agencia ni
-       * un estudio»). Se queda el 50% de ese check a cambio de no afirmar algo
-       * que no es cierto.
+       * NO LLEVA `potentialAction: SearchAction`, y la ausencia es deliberada: es el
+       * campo que pinta la caja de búsqueda de Google, y este sitio no tiene buscador
+       * interno. Declararlo sería afirmar una capacidad inexistente — el mismo
+       * criterio por el que el deep-dive no es `Article`.
        */
-      contactPoint: {
-        "@type": "ContactPoint",
-        contactType: "recruitment",
+      {
+        "@type": "WebSite",
+        "@id": WEBSITE_ID,
+        name: SITE_NAME,
+        url: `${SITE_URL}/`,
+        inLanguage: ["es", "en"],
+        author: { "@id": PERSON_ID },
+        /**
+         * EL REPOSITORIO ES DEL SITIO, NO DE LA PERSONA *(P68.747, 2026-08-31)*.
+         * Estaba en el `sameAs` del `Person`, que es la lista de «quién es esta
+         * persona en otros sitios», y ahí decía algo falso: un repositorio es una
+         * obra, no una identidad. Baja aquí, al nodo que sí es de lo que el repo es
+         * el código.
+         *
+         * ES `isBasedOn` Y NO `codeRepository`, Y ESO SE MIDIÓ EN VEZ DE
+         * SUPONERSE. `codeRepository` es la propiedad que uno escribiría —dice
+         * literalmente «el repositorio de esto»—, pero su dominio en Schema.org es
+         * **solo `SoftwareSourceCode`**: en un `WebSite` sería una propiedad fuera
+         * de dominio, o sea marcado inválido publicado para aprobar una casilla,
+         * que es exactamente lo que D157 prohíbe. `isBasedOn` tiene dominio
+         * `CreativeWork` —del que `WebSite` desciende—, admite una `URL` en el
+         * rango, y dice lo que es cierto: este sitio se deriva de ese código.
+         *
+         * Y NO SE ENVUELVE EN UN NODO `SoftwareSourceCode` propio, que sería la
+         * otra forma de decirlo con todas las letras: costaría un tipo más que
+         * mantener sincronizado para colgar una URL que el pie de página ya
+         * publica con un enlace visible. Que sea cierto es condición necesaria, no
+         * suficiente.
+         */
+        isBasedOn: GITHUB_URL,
+      },
+      {
+        "@type": "Person",
+        "@id": PERSON_ID,
+        name: SITE_NAME,
+        jobTitle: "Senior Product Manager",
+        url: `${SITE_URL}/`,
+        // La MISMA foto que pinta el hero. Es el tercer consumidor del archivo
+        // —hero, tarjeta OG y esto—, y el único que no se ve al mirar la página:
+        // al renombrar el asset, este apuntaba a un 404 sin que nada lo notara.
+        image: `${SITE_URL}/img/francisco-hero-estudio-4x5.webp`,
+        description,
         email: EMAIL,
         telephone: TELEPHONE,
-        url: `${SITE_URL}/contacto`,
-        availableLanguage: ["es", "en"],
+        /**
+         * PERFILES, Y SOLO PERFILES *(P68.747, 2026-08-31)*. Aquí ponía
+         * `[LINKEDIN_URL, GITHUB_URL]`, y la segunda es el **repositorio**: una obra
+         * que Francisco publica, no una identidad suya. Schema.org define `sameAs`
+         * como «la URL de una página web que identifica INEQUÍVOCAMENTE a la
+         * entidad — su perfil en Wikipedia, en Wikidata o en una red social», y un
+         * repo no identifica a nadie: identifica un proyecto.
+         *
+         * SE CORRIGE AUNQUE EL ESCÁNER NO SE MUEVA, que es la distinción de D161:
+         * la cifra de un escáner no valida un arreglo ni lo invalida, solo dice qué
+         * mide él. El repo no desaparece — baja al nodo `WebSite`, que es de quien
+         * es de verdad (arriba, `isBasedOn`).
+         */
+        sameAs: [LINKEDIN_URL, GITHUB_PROFILE_URL],
+        knowsLanguage: ["es", "en"],
+        knowsAbout: KNOWS_ABOUT,
+        worksFor: { "@type": "Organization", name: "Emendu" },
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Valencia",
+          addressCountry: "ES",
+        },
+        /**
+         * EL CANAL, ADEMÁS DE LOS DATOS (2026-08-30). `email` y `telephone` ya
+         * estaban dos líneas arriba, y son los mismos: lo que añade `contactPoint`
+         * es el nodo que un agente busca cuando la pregunta es «¿cómo contacto?» en
+         * vez de «¿quién es?», con la página donde hacerlo y en qué idiomas.
+         *
+         * `contactType` va en inglés y no traducido: no es copy, es un valor de
+         * vocabulario que lee una máquina, y el sitio ya tiene su idioma dicho en
+         * `inLanguage`. Los canales salen de `lib/contact`, que es la fuente de la
+         * que también beben la página y el pie.
+         *
+         * LO QUE NO SE HACE, Y SE ESCRIBE PARA QUE NO SE REABRA: un escáner de
+         * agentes pide `contactPoint` y `address` en el nodo `Organization`, que
+         * aquí es el `worksFor` de arriba. Ese nodo es el EMPLEADOR, así que
+         * rellenarlo significaría publicar los datos de contacto de Emendu —que no
+         * son nuestros— o poner los de Francisco como si lo fueran, que es falso.
+         * Este sitio es una persona y lo dice en `/llms.txt` («no es una agencia ni
+         * un estudio»). Se queda el 50% de ese check a cambio de no afirmar algo
+         * que no es cierto.
+         */
+        contactPoint: {
+          "@type": "ContactPoint",
+          contactType: "recruitment",
+          email: EMAIL,
+          telephone: TELEPHONE,
+          url: `${SITE_URL}/contacto`,
+          availableLanguage: ["es", "en"],
+        },
       },
-    },
+    ],
   };
 }
 
@@ -313,7 +365,7 @@ export function techArticleLd({
     isPartOf: isPartOfSite(true),
     author: {
       "@type": "Person",
-      "@id": `${SITE_URL}/#person`,
+      "@id": PERSON_ID,
       name: SITE_NAME,
       url: `${SITE_URL}/`,
     },
@@ -372,8 +424,8 @@ export function experiencePageLd({
     inLanguage: lang,
     isPartOf: isPartOfSite(),
     about: { "@type": "Organization", name: company },
-    author: { "@id": `${SITE_URL}/#person` },
-    mainEntity: { "@id": `${SITE_URL}/#person` },
+    author: { "@id": PERSON_ID },
+    mainEntity: { "@id": PERSON_ID },
   };
 }
 
@@ -420,7 +472,7 @@ export function contactPageLd({
     inLanguage: lang,
     // Pelado: `ContactPage` tampoco es elegible para rich results.
     isPartOf: isPartOfSite(),
-    mainEntity: { "@id": `${SITE_URL}/#person` },
+    mainEntity: { "@id": PERSON_ID },
     contactPoint: {
       "@type": "ContactPoint",
       contactType: "business",
