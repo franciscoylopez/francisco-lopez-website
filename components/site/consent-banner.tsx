@@ -6,12 +6,18 @@ import { useEffect, useRef, useState } from "react";
 import { BANNER_ACTIONS, DIALOG_ACTIONS } from "@/components/ui/layout";
 import { actionVariants } from "@/components/ui/action";
 import { Badge } from "@/components/ui/badge";
+import { registrarConsentimiento } from "@/app/consent-actions";
 import {
   type ConsentChoice,
   OPEN_CONSENT_EVENT,
   readConsent,
   saveConsent,
 } from "@/lib/consent";
+import {
+  CONSENT_SEEN_KEY,
+  cuentaComoAceptado,
+  type EventoConsentimiento,
+} from "@/lib/consent-metrics";
 import { cn } from "@/lib/utils";
 
 export type ConsentDict = {
@@ -38,6 +44,38 @@ export type ConsentDict = {
 const BTN_PRIMARY = actionVariants({ variant: "solid" });
 const BTN_OUTLINE = actionVariants({ variant: "outline-neutral" });
 const BTN_GHOST = actionVariants({ variant: "ghost" });
+
+// ── El contador de consentimiento (P68.61, D168) ──────────────────────────────
+//
+// DISPARO Y OLVIDO, SIEMPRE. Ni una de las tres llamadas puede hacer esperar a
+// nada: el «visto» corre detrás del primer pintado y las decisiones tienen que
+// cerrar el diálogo en el mismo gesto del clic. Un contador que retrasa un
+// mecanismo de consentimiento sería cambiar una medición por un defecto.
+//
+// Y el `catch` vacío no es descuido: `registrarConsentimiento` ya falla callada
+// hacia dentro, pero una Server Action puede fallar ANTES de entrar (la red), y
+// una promesa rechazada sin manejar en el cliente ensucia la consola de cualquiera
+// que abra el inspector, que es media audiencia de este sitio.
+function contar(evento: EventoConsentimiento): void {
+  void registrarConsentimiento(evento).catch(() => {});
+}
+
+// El «visto» se cuenta UNA VEZ POR NAVEGADOR, no por pintado. El porqué está en
+// `lib/consent-metrics.ts`: contarlo por pintado convierte el denominador en
+// páginas vistas y el ratio deja de significar lo que dice significar.
+//
+// El `try` envuelve la LECTURA además de la escritura porque en un navegador que
+// bloquea el almacenamiento `localStorage` lanza al tocarlo, no al escribir. Ahí
+// se cuenta de más y está contabilizado como salvedad, no como error.
+function contarVistoUnaVez(): void {
+  try {
+    if (window.localStorage.getItem(CONSENT_SEEN_KEY)) return;
+    window.localStorage.setItem(CONSENT_SEEN_KEY, "1");
+  } catch {
+    // Sin almacén local no hay marca posible: se cuenta y se sigue.
+  }
+  contar("visto");
+}
 
 // Banner de consentimiento + centro de preferencias granular (P22). Isla de cliente:
 // en producción el default denegado ya lo fijó consent-init (beforeInteractive) antes
@@ -76,6 +114,10 @@ export function ConsentBanner({
         setMarketing(stored.marketing);
       } else {
         setBannerOpen(true);
+        // Aquí y no en el render: este es el único punto del componente donde
+        // consta que el diálogo se le enseña a alguien que aún no ha decidido,
+        // que es exactamente lo que el denominador tiene que contar.
+        contarVistoUnaVez();
       }
     };
     applyStored();
@@ -100,7 +142,20 @@ export function ConsentBanner({
   }, [prefsOpen]);
 
   function decide(choice: ConsentChoice) {
+    // SOLO CUENTA LA PRIMERA DECISIÓN DE CADA NAVEGADOR, y hay que mirarlo ANTES
+    // de guardar. `decide` es la puerta de las tres formas de decidir —aceptar
+    // todo, rechazar todo y guardar preferencias— y también la del centro de
+    // preferencias cuando se reabre desde el pie. Sin esta guarda, quien cambia
+    // de opinión suma una decisión más contra un «visto» que solo contó una vez,
+    // y `aceptado + rechazado` puede superar al denominador.
+    //
+    // Se apoya en el registro que ya existe en vez de en una marca nueva: si
+    // había decisión previa, esto es un cambio de opinión y no una conversión.
+    const esPrimeraDecision = readConsent() === null;
     saveConsent(choice);
+    // Cuál de los dos sucesos es lo decide `cuentaComoAceptado`, no la etiqueta
+    // del botón que se pulsó: por eso significa lo mismo en las tres puertas.
+    if (esPrimeraDecision) contar(cuentaComoAceptado(choice));
     setAnalytics(choice.analytics);
     setMarketing(choice.marketing);
     setBannerOpen(false);
