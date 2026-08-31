@@ -56,6 +56,13 @@
       "category": "Necessary"
     },
     {
+      "name": "flm-consent-seen",
+      "provider": "franciscolopez.es",
+      "purpose": "Marks that you've already been counted as having seen the notice, so you're not counted twice.",
+      "duration": "Persistent",
+      "category": "Necessary"
+    },
+    {
       "name": "Container (GTM)",
       "provider": "Google",
       "purpose": "Manages the loading of the other tags. Stores no data on its own.",
@@ -91,9 +98,11 @@
       "category": "Analytics"
     }
   ],
-  "tableNote": "“flm-consent” is kept in the browser's local storage (localStorage); it's technically not a cookie, but it's listed here for transparency. No marketing or advertising cookies are used today.",
+  "tableNote": "“flm-consent” and “flm-consent-seen” are kept in the browser's local storage (localStorage); they're technically not cookies, but they're listed here for transparency. No marketing or advertising cookies are used today.",
   "legalHeading": "Legal basis",
   "legalBody": "Necessary cookies load so the site can work and need no consent. Analytics cookies only load with your prior consent, which you can give, deny or withdraw at any time without affecting how the site works.",
+  "counterHeading": "The one thing I count before you decide",
+  "counterBody": "There's an exception to the above and I'd rather spell it out: I count that you've seen this notice and what you chose. It's an aggregate counter, the first time and only once per browser, and Upstash holds it. It stores no IP address, no cookies and nothing that could identify you: three numbers going up. That's why I don't ask your permission for it, because there's no personal data to process. And it does one specific job: telling me what share of visits analytics actually sees, which is the only way the figures I look at mean anything.",
   "manageHeading": "How to manage or withdraw your consent",
   "manageBody": "The first time you visit, a notice lets you accept, reject or choose by category. You can change your choice, including analytics, at any time from the button below:",
   "manageButton": "Manage cookie preferences",

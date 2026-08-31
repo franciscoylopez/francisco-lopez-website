@@ -56,6 +56,13 @@
       "category": "Necesaria"
     },
     {
+      "name": "flm-consent-seen",
+      "provider": "franciscolopez.es",
+      "purpose": "Marca que ya se contó que viste el aviso, para no contarte dos veces.",
+      "duration": "Persistente",
+      "category": "Necesaria"
+    },
+    {
       "name": "Contenedor (GTM)",
       "provider": "Google",
       "purpose": "Gestiona la carga de las demás etiquetas. No almacena datos por sí mismo.",
@@ -91,9 +98,11 @@
       "category": "Analítica"
     }
   ],
-  "tableNote": "«flm-consent» se guarda en el almacenamiento local del navegador (localStorage); técnicamente no es una cookie, pero se incluye por transparencia. Hoy no se usan cookies de marketing ni de publicidad.",
+  "tableNote": "«flm-consent» y «flm-consent-seen» se guardan en el almacenamiento local del navegador (localStorage); técnicamente no son cookies, pero se incluyen por transparencia. Hoy no se usan cookies de marketing ni de publicidad.",
   "legalHeading": "Base legal",
   "legalBody": "Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las de analítica solo se cargan con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web.",
+  "counterHeading": "Lo único que cuento antes de que decidas",
+  "counterBody": "Hay una excepción a lo de arriba y prefiero contarla: cuento que has visto este aviso y qué elegiste. Es un contador agregado, la primera vez y solo una vez por navegador, y lo lleva Upstash. No guarda tu dirección IP, ni cookies, ni nada que permita identificarte: son tres números que suben. Por eso no te pido permiso para él, porque no hay ningún dato personal que tratar. Y sirve para una cosa concreta: saber qué parte de las visitas ve la analítica, que es la única forma de que las cifras que miro signifiquen algo.",
   "manageHeading": "Cómo gestionar o retirar tu consentimiento",
   "manageBody": "La primera vez que visitas la web aparece un aviso para aceptar, rechazar o elegir por categoría. Puedes cambiar tu decisión, incluida la analítica, cuando quieras desde el botón de aquí abajo:",
   "manageButton": "Gestionar preferencias de cookies",

@@ -204,6 +204,7 @@
 - D166 · La causa era la profundidad, y el catálogo que un descarte mal fundado había tumbado
 - D167 · Publicar la nota de un escáner sin convertirla en un criterio, y el sello que la sostiene
 - D168 · La primaria se lee como índice relativo, y ese párrafo es lo que desbloquea el lanzamiento
+- D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10723,5 +10724,82 @@ Cuando entre el contador de consentimiento, el índice **gana escala y deja de s
 esta entrada no se supera, se completa. Y si cambia el diálogo o la política de consentimiento,
 **la serie se parte ahí y hay que decirlo**, por la misma razón por la que los filtros de GA4 no
 son retroactivos (D71).
+
+**Estado:** Aceptada.
+
+## D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal — 2026-08-31
+
+**Decisión.** El sitio cuenta tres enteros —**visto**, **aceptado**, **rechazado**— con una
+Server Action del mismo origen y un `INCR` contra **Upstash Redis por su API REST**, sin paquete
+nuevo. Con eso, la fracción que D168 daba por desconocida pasa a medirse, y se lee con
+`npm run consentimiento`.
+
+**Se puede contar sin consentimiento porque no mide a nadie.** El diálogo se pinta siempre —esa
+es la premisa que hace posible la medición— y lo único que sale del navegador es cuál de tres
+cosas ocurrió. Ni IP, ni user-agent, ni identificador, ni marca de tiempo por suceso. Un contador
+agregado no es un tratamiento de datos personales, así que esto **no hereda** el límite de D168:
+lo levanta.
+
+### Las dos decisiones que hacen que la cifra signifique algo, y las dos tienen test
+
+- **«Aceptado» es `analytics === true`, no «pulsó Aceptar todo».** Quien abre las preferencias y
+  concede solo analíticas acepta a efectos del denominador, porque su visita **sí** la ve GA4, que
+  es lo único que la fracción describe. Es D153 otra vez: allí el «enviado» tenía tres causas y
+  solo una mandaba correo, y creer que eran la misma cosa dejaba la métrica inflada.
+- **«Visto» se cuenta una vez por navegador, no por pintado.** Por pintado el denominador serían
+  páginas vistas contra un numerador que ocurre una sola vez, y la tasa saldría arbitrariamente
+  baja: la cifra sería impecable y estaría midiendo otra cosa. Es el umbral mal aplicado de
+  `BRAND.md` §Cómo medir, punto 7, en su versión de denominador.
+
+**Y un tercero que apareció al cablearlo:** reabrir el centro de preferencias desde el pie vuelve
+a llamar a `decide`, así que un cambio de opinión sumaba una decisión más contra un «visto» que
+solo contó una vez, y `aceptado + rechazado` podía **superar** al denominador. Solo cuenta la
+primera decisión, y se comprueba leyendo el registro que ya existe **antes** de guardar, sin marca
+nueva. Lo encontró el cableado, no un test: el test vino después.
+
+### Upstash por REST y sin paquete
+
+`INCR` es atómico, que es exactamente lo que un JSON leído-modificado-escrito no puede dar sin
+perder escrituras concurrentes. Se llegó a considerar Vercel Blob por no meter proveedor —y su
+argumento era bueno: las pérdidas sesgarían numerador y denominador por igual, así que el **ratio**
+sobreviviría—, pero un contador que pierde cuentas es un instrumento que hay que explicar cada vez
+que se lee. Y se llama con `fetch` en vez de con `@upstash/redis`: son cuatro líneas contra once
+dependencias de producción (D27).
+
+**Los runtime logs quedaron descartados por un dato, no por gusto:** el plan es *hobby*, donde se
+retienen alrededor de una hora. No aguantan una ventana de lanzamiento.
+
+### La superficie nueva se lee como pública, porque lo es
+
+Una Server Action es un POST que puede invocar cualquiera, así que lo que la protege no es que
+solo la llame nuestro componente: **enum cerrado** validado contra la lista, **no devuelve nada**
+—ni el contador ni si escribió, así que no sirve de oráculo— y límite de frecuencia más bajo que
+el del formulario, porque aquí el peor caso no es una bandeja llena sino una **medición falsa que
+se usaría para decidir**. Lo que ese límite no puede —serverless, instancia fría, actor
+distribuido— va escrito al lado del código, con su señal de detección: una tasa que se mueve sin
+que se mueva el tráfico.
+
+**El `/security-review` de la DoD se pasó y salió limpio**, con el matiz de que el envenenamiento
+del contador no es reportable ahí por caer en sus exclusiones. No es un no-problema: es un riesgo
+de **integridad del dato**, asumido y escrito.
+
+### Lo que obligó a tocar un documento legal, que es la parte que casi se queda fuera
+
+La primera redacción de la nota para `/cookies` decía «un contador agregado **en nuestro propio
+servidor**, **sin tu IP**». Las dos mitades eran falsas: el contador lo lleva **Upstash**, que es
+un tercero, y la Server Action **recibe** la IP —como cualquier petición HTTP— y la usa en memoria
+una hora para el límite de frecuencia. Lo cierto es que **no se guarda**, que no es lo mismo que
+«no se usa».
+
+Es la familia de `BRAND.md` §La regla del control sobre imagen prometía de más, y aquí habría
+salido cara: es la página que enumera a Google como encargado y publica su transferencia
+internacional. **El sitio entero se apoya en que esa página dice la verdad literal.**
+
+Lo que entra, entonces, no es una frase: es **una fila de tabla y un bloque, en dos idiomas**. La
+fila, porque `flm-consent-seen` es almacenamiento en el dispositivo y esa tabla existe para
+enumerarlo; el bloque, justo **después de la base legal** y no al final entre los terceros, porque
+es lo único que ocurre *antes* de que el visitante decida y su sitio es donde acaba de leer que
+nada se carga sin su permiso. Y `LAST_COOKIES_UPDATE` se mueve, que es lo que D18 le pide a un
+documento vivo.
 
 **Estado:** Aceptada.

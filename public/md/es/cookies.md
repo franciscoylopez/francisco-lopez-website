@@ -13,7 +13,7 @@ Legal
 
 # Privacidad y cookies
 
-Última actualización: 23 de agosto de 2026 (2026-08-23)
+Última actualización: 31 de agosto de 2026 (2026-08-31)
 
 Aquí te cuento dos cosas: qué hago con tus datos si te pones en contacto conmigo, y qué cookies usa esta web. En las dos, el mismo criterio: el mínimo, con nombres y plazos concretos, y ninguna cookie de analítica sin tu consentimiento.
 
@@ -58,17 +58,22 @@ Este es el detalle de lo que puede cargarse, agrupado por categoría:
 | Nombre | Proveedor | Finalidad | Duración | Categoría |
 | --- | --- | --- | --- | --- |
 | `flm-consent` | franciscolopez.es | Guarda tu decisión sobre las cookies para no volver a preguntártelo. | Persistente | Necesaria |
+| `flm-consent-seen` | franciscolopez.es | Marca que ya se contó que viste el aviso, para no contarte dos veces. | Persistente | Necesaria |
 | `Contenedor (GTM)` | Google | Gestiona la carga de las demás etiquetas. No almacena datos por sí mismo. | — | Necesaria |
 | `_ga` | Google Analytics | Distingue usuarios de forma agregada para medir el uso de la web. | 2 años | Analítica |
 | `_ga_*` | Google Analytics | Mantiene el estado de la sesión de medición. | 2 años | Analítica |
 | `_clck` | Microsoft Clarity | Identifica al navegador entre visitas para asociar tus sesiones grabadas y mapas de calor. | 1 año | Analítica |
 | `_clsk` | Microsoft Clarity | Une varias vistas de página en una sola sesión de grabación. | 1 día | Analítica |
 
-«flm-consent» se guarda en el almacenamiento local del navegador (localStorage); técnicamente no es una cookie, pero se incluye por transparencia. Hoy no se usan cookies de marketing ni de publicidad.
+«flm-consent» y «flm-consent-seen» se guardan en el almacenamiento local del navegador (localStorage); técnicamente no son cookies, pero se incluyen por transparencia. Hoy no se usan cookies de marketing ni de publicidad.
 
 ## Base legal
 
 Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las de analítica solo se cargan con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web.
+
+## Lo único que cuento antes de que decidas
+
+Hay una excepción a lo de arriba y prefiero contarla: cuento que has visto este aviso y qué elegiste. Es un contador agregado, la primera vez y solo una vez por navegador, y lo lleva Upstash. No guarda tu dirección IP, ni cookies, ni nada que permita identificarte: son tres números que suben. Por eso no te pido permiso para él, porque no hay ningún dato personal que tratar. Y sirve para una cosa concreta: saber qué parte de las visitas ve la analítica, que es la única forma de que las cifras que miro signifiquen algo.
 
 ## Cómo gestionar o retirar tu consentimiento
 

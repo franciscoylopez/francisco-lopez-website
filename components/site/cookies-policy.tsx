@@ -199,6 +199,15 @@ export function CookiesPolicy({
               <p>{t.legalBody}</p>
             </Section>
 
+            {/* El contador de consentimiento (P68.61, D168). VA JUSTO DESPUÉS DE
+                LA BASE LEGAL a propósito: es la única cosa que ocurre ANTES de
+                que el visitante decida, así que su sitio es donde acaba de leer
+                que nada se carga sin su permiso — no al final, entre los
+                terceros, donde parecería una nota al pie. */}
+            <Section heading={t.counterHeading}>
+              <p>{t.counterBody}</p>
+            </Section>
+
             {/* Gestionar / retirar */}
             <Section heading={t.manageHeading}>
               <p>{t.manageBody}</p>

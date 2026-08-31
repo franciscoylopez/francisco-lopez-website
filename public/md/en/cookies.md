@@ -13,7 +13,7 @@ Legal
 
 # Privacy and cookies
 
-Last updated: 23 August 2026 (2026-08-23)
+Last updated: 31 August 2026 (2026-08-31)
 
 Two things here: what I do with your data if you get in touch, and what cookies this site uses. Same approach for both: the minimum, with real names and real deadlines, and no analytics cookie without your consent.
 
@@ -58,17 +58,22 @@ Here's the detail of what may load, grouped by category:
 | Name | Provider | Purpose | Duration | Category |
 | --- | --- | --- | --- | --- |
 | `flm-consent` | franciscolopez.es | Stores your cookie choice so you're not asked again. | Persistent | Necessary |
+| `flm-consent-seen` | franciscolopez.es | Marks that you've already been counted as having seen the notice, so you're not counted twice. | Persistent | Necessary |
 | `Container (GTM)` | Google | Manages the loading of the other tags. Stores no data on its own. | — | Necessary |
 | `_ga` | Google Analytics | Distinguishes users in aggregate to measure site usage. | 2 years | Analytics |
 | `_ga_*` | Google Analytics | Keeps the measurement session state. | 2 years | Analytics |
 | `_clck` | Microsoft Clarity | Identifies the browser across visits to link your recorded sessions and heatmaps. | 1 year | Analytics |
 | `_clsk` | Microsoft Clarity | Connects multiple page views into a single recording session. | 1 day | Analytics |
 
-“flm-consent” is kept in the browser's local storage (localStorage); it's technically not a cookie, but it's listed here for transparency. No marketing or advertising cookies are used today.
+“flm-consent” and “flm-consent-seen” are kept in the browser's local storage (localStorage); they're technically not cookies, but they're listed here for transparency. No marketing or advertising cookies are used today.
 
 ## Legal basis
 
 Necessary cookies load so the site can work and need no consent. Analytics cookies only load with your prior consent, which you can give, deny or withdraw at any time without affecting how the site works.
+
+## The one thing I count before you decide
+
+There's an exception to the above and I'd rather spell it out: I count that you've seen this notice and what you chose. It's an aggregate counter, the first time and only once per browser, and Upstash holds it. It stores no IP address, no cookies and nothing that could identify you: three numbers going up. That's why I don't ask your permission for it, because there's no personal data to process. And it does one specific job: telling me what share of visits analytics actually sees, which is the only way the figures I look at mean anything.
 
 ## How to manage or withdraw your consent
 
