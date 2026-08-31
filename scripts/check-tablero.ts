@@ -84,10 +84,27 @@ const HORAS_FRESCURA = 12;
  *   volcado nuevo.** Aquí se selló 18 sobre la foto anterior a escribirlas, o
  *   sea un número que no existió en ningún momento. Un volcado es una foto, no
  *   una consulta.
+ * · 2026-08-31 · cierre de «Agentes» · 20. **±0, el primer verde en tres
+ *   cierres**, y la aritmética dice por qué en vez de dejarlo en «salió bien»:
+ *   «Agentes» **sí** arrastró cupo —cuatro de `General`, que es lo que ni
+ *   «Drenaje» ni «Voz» hicieron— y su `sprint-review` devolvió **tres**. 20 − 4
+ *   + 3 = 19… y 20, porque el propio cierre añadió además la de Qlty que trajo
+ *   Francisco. Cuatro fuera, cuatro dentro.
+ *
+ *   LO QUE ESTO CONFIRMA, y es lo que hacía falta saber: el cupo **es** la
+ *   palanca. Los dos ámbares anteriores no fueron mala suerte ni bordes que
+ *   llenan solos; fueron dos sprints que no lo tocaron. En cuanto uno se lleva
+ *   sus cuatro, el embalse deja de subir aunque la revisión escriba tres nuevas.
+ *
+ *   Y LO QUE NO CONFIRMA: ±0 **no es drenar**. El embalse lleva tres cierres
+ *   entre 18 y 20 sin bajar, así que el cupo de 3-4 solo alcanza para empatar
+ *   con lo que cada revisión encuentra. Bajarlo de verdad pide o un cupo mayor,
+ *   o una revisión que retire tareas en vez de solo añadirlas — que es
+ *   exactamente lo que el sprint de limpieza tiene que hacer.
  */
 const SELLO_GENERAL: Sello = {
-  fecha: "2026-08-30",
-  cierre: "Voz",
+  fecha: "2026-08-31",
+  cierre: "Agentes",
   abiertas: 20,
 };
 
