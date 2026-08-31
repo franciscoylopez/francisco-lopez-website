@@ -785,15 +785,99 @@ function recursoEnDisco(pathname: string): boolean {
 }
 
 /**
+ * El modelo de entrada del conformance (§4.2 y §4.3), sobre UNA entrada. Devuelve
+ * si hay `url` que comprobar: la resolución contra el disco va aparte, porque es
+ * la mitad que ninguna especificación puede hacer por nosotros.
+ */
+function revisarModeloDeEntrada(
+  e: Record<string, unknown>,
+  quien: string,
+): boolean {
+  if (
+    typeof e.identifier !== "string" ||
+    !e.identifier.startsWith(URN_PREFIJO) ||
+    !URN_RESTO.test(e.identifier.slice(URN_PREFIJO.length))
+  ) {
+    fallo(
+      "catálogo ARD",
+      `\`${quien}\` no es un identificador \`urn:air:${SITE_DOMAIN}:<espacio>:<nombre>\`. ` +
+        "El dominio del URN es el ancla de autoridad de la especificación: uno que " +
+        "nombre otro dominio es una entrada reclamando algo que no es nuestro.",
+    );
+  }
+  if (typeof e.displayName !== "string" || !e.displayName.trim()) {
+    fallo("catálogo ARD", `\`${quien}\` no tiene \`displayName\`.`);
+  }
+  if (typeof e.type !== "string" || !MEDIA_TYPE.test(e.type)) {
+    fallo(
+      "catálogo ARD",
+      `el \`type\` de \`${quien}\` no tiene forma de tipo IANA (\`${String(e.type)}\`).`,
+    );
+  }
+
+  // Value-or-reference (§4.3): uno de los dos, nunca los dos, nunca ninguno.
+  const tieneUrl = typeof e.url === "string" && e.url.length > 0;
+  const tieneData = e.data !== undefined;
+  if (tieneUrl === tieneData) {
+    fallo(
+      "catálogo ARD",
+      `\`${quien}\` tiene ${tieneUrl ? "`url` y `data` a la vez" : "ni `url` ni `data`"}, ` +
+        "y la especificación pide exactamente uno.",
+    );
+  }
+
+  // `representativeQueries` es de lo que un registro construye su índice: sin
+  // ellas la entrada valida y no la encuentra nadie buscando. La especificación
+  // lo deja en SHOULD con 2-5; aquí es rojo, porque una entrada que no se puede
+  // encontrar no cumple el motivo por el que este catálogo existe.
+  const consultas = e.representativeQueries;
+  const cuantas = Array.isArray(consultas) ? consultas.length : 0;
+  if (cuantas < 2 || cuantas > 5) {
+    fallo(
+      "catálogo ARD",
+      `\`${quien}\` tiene ${cuantas} \`representativeQueries\` y la especificación pide ` +
+        "de 2 a 5. Es el texto que un registro indexa: sin ellas, la entrada no se " +
+        "encuentra buscando.",
+    );
+  }
+
+  return tieneUrl;
+}
+
+/**
+ * Que lo que la entrada anuncia EXISTA. Es la mitad que de verdad importa: un
+ * catálogo estructuralmente perfecto que apunta a un archivo renombrado le cuesta
+ * al agente una petición y le hace desconfiar del resto.
+ */
+function revisarDestino(e: Record<string, unknown>, quien: string): void {
+  const url = e.url as string;
+  if (!url.startsWith(SITE_URL)) {
+    fallo(
+      "catálogo ARD",
+      `\`${quien}\` apunta a \`${url}\`, que está fuera de \`${SITE_URL}\`. ` +
+        "Este catálogo describe lo que sirve ESTE sitio.",
+    );
+    return;
+  }
+  const pathname = new URL(url).pathname;
+  if (!recursoEnDisco(pathname)) {
+    fallo(
+      "catálogo ARD",
+      `\`${quien}\` anuncia \`${pathname}\` y no existe ni en \`public/\` ni como ruta ` +
+        "estática del build. Una entrada muerta le cuesta al agente una petición y " +
+        "le hace desconfiar del resto del catálogo.",
+    );
+  }
+}
+
+/**
  * El catálogo de Agentic Resource Discovery (P68.752).
  *
- * QUÉ COMPRUEBA, Y POR QUÉ ESTAS DOS COSAS. La primera es el modelo de entrada
- * del conformance (§4.2): identificador anclado al dominio, nombre, tipo de medio
- * y **exactamente uno** de `url` o `data`. La segunda es la que de verdad importa
- * aquí y ninguna especificación puede hacer por nosotros: que la `url` de cada
- * entrada RESUELVA. Un catálogo estructuralmente perfecto que apunta a un archivo
- * que se renombró es peor que no tener catálogo — le cuesta al agente una
- * petición y le hace desconfiar del resto.
+ * SON DOS COSAS, Y ESTÁN PARTIDAS PORQUE SON DE NATURALEZA DISTINTA: el modelo
+ * de entrada del conformance, que es lo que la especificación pide
+ * (`revisarModeloDeEntrada`), y que lo que la entrada anuncia exista, que es lo
+ * que ninguna especificación puede hacer por nosotros (`revisarDestino`). El
+ * porqué de cada una, en su propia cabecera.
  *
  * LO QUE NO COMPRUEBA: que el tipo declarado sea el que el servidor devuelve de
  * verdad. Eso necesita una petición HTTP y este gate corre en CI sin servidor,
@@ -832,77 +916,7 @@ function revisarCatalogo(): void {
   for (const e of entradas as Record<string, unknown>[]) {
     vistos.entradasArd++;
     const quien = typeof e.identifier === "string" ? e.identifier : "(sin id)";
-
-    if (
-      typeof e.identifier !== "string" ||
-      !e.identifier.startsWith(URN_PREFIJO) ||
-      !URN_RESTO.test(e.identifier.slice(URN_PREFIJO.length))
-    ) {
-      fallo(
-        "catálogo ARD",
-        `\`${quien}\` no es un identificador \`urn:air:${SITE_DOMAIN}:<espacio>:<nombre>\`. ` +
-          "El dominio del URN es el ancla de autoridad de la especificación: uno que " +
-          "nombre otro dominio es una entrada reclamando algo que no es nuestro.",
-      );
-    }
-    if (typeof e.displayName !== "string" || !e.displayName.trim()) {
-      fallo("catálogo ARD", `\`${quien}\` no tiene \`displayName\`.`);
-    }
-    if (typeof e.type !== "string" || !MEDIA_TYPE.test(e.type)) {
-      fallo(
-        "catálogo ARD",
-        `el \`type\` de \`${quien}\` no tiene forma de tipo IANA (\`${String(e.type)}\`).`,
-      );
-    }
-
-    // Value-or-reference (§4.3): uno de los dos, nunca los dos, nunca ninguno.
-    const tieneUrl = typeof e.url === "string" && e.url.length > 0;
-    const tieneData = e.data !== undefined;
-    if (tieneUrl === tieneData) {
-      fallo(
-        "catálogo ARD",
-        `\`${quien}\` tiene ${tieneUrl ? "`url` y `data` a la vez" : "ni `url` ni `data`"}, ` +
-          "y la especificación pide exactamente uno.",
-      );
-    }
-
-    // `representativeQueries` es de lo que un registro construye su índice: sin
-    // ellas la entrada valida y no la encuentra nadie buscando. La especificación
-    // lo deja en SHOULD con 2-5; aquí es rojo, porque una entrada que no se puede
-    // encontrar no cumple el motivo por el que este catálogo existe.
-    const consultas = e.representativeQueries;
-    if (
-      !Array.isArray(consultas) ||
-      consultas.length < 2 ||
-      consultas.length > 5
-    ) {
-      fallo(
-        "catálogo ARD",
-        `\`${quien}\` tiene ${Array.isArray(consultas) ? consultas.length : "0"} ` +
-          "`representativeQueries` y la especificación pide de 2 a 5. Es el texto que " +
-          "un registro indexa: sin ellas, la entrada no se encuentra buscando.",
-      );
-    }
-
-    if (!tieneUrl) continue;
-    const url = e.url as string;
-    if (!url.startsWith(SITE_URL)) {
-      fallo(
-        "catálogo ARD",
-        `\`${quien}\` apunta a \`${url}\`, que está fuera de \`${SITE_URL}\`. ` +
-          "Este catálogo describe lo que sirve ESTE sitio.",
-      );
-      continue;
-    }
-    const pathname = new URL(url).pathname;
-    if (!recursoEnDisco(pathname)) {
-      fallo(
-        "catálogo ARD",
-        `\`${quien}\` anuncia \`${pathname}\` y no existe ni en \`public/\` ni como ruta ` +
-          "estática del build. Una entrada muerta le cuesta al agente una petición y " +
-          "le hace desconfiar del resto del catálogo.",
-      );
-    }
+    if (revisarModeloDeEntrada(e, quien)) revisarDestino(e, quien);
   }
 }
 /* -------------------------------------------------------------------------- */
