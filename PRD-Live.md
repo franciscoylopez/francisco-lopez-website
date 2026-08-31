@@ -210,9 +210,10 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
 
 - **Primaria**: **envíos del formulario de `/contacto`** (`contact_submit`), contados
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
-  El transporte está entero y en GA4 es **evento clave** desde el 2026-08-24; la marca no es
-  retroactiva, así que **antes de esa fecha no hay serie**. Cómo se audita la mitad que vive
-  fuera del repo, en D71.
+  El transporte está entero y en GA4 es **evento clave**, sin serie anterior a la marca. Cómo
+  se audita la mitad que vive fuera del repo, en D71.
+  **Es un índice relativo, no un volumen**: GA4 solo ve al tráfico que consiente, y esa
+  fracción se desconoce (D168).
   **«Confirma» es el envío que manda correo, no los dos filtros que callan a un bot**: lo decide
   `cuentaComoEnvio` en `lib/contact-form.ts`, donde la regla tiene tests y caso malo (D153).
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de

@@ -203,6 +203,7 @@
 - D165 · El informe del escáner era una API, y con ella un suspenso se descarta con cifra
 - D166 · La causa era la profundidad, y el catálogo que un descarte mal fundado había tumbado
 - D167 · Publicar la nota de un escáner sin convertirla en un criterio, y el sello que la sostiene
+- D168 · La primaria se lee como índice relativo, y ese párrafo es lo que desbloquea el lanzamiento
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10657,5 +10658,70 @@ cuatro tarjetas de dos páginas y ensancharla por un caso las mueve todas. Con �
 **A 360 px se sigue partiendo, y no se toca:** le pasa igual a la de PageSpeed (170 + 221 en 280
 disponibles) y a las otras dos, así que es comportamiento del componente y no de esta tarjeta.
 Arreglarlo es un cambio en la pieza que afecta a las cuatro, y va tareado aparte.
+
+**Estado:** Aceptada.
+
+## D168 · La primaria se lee como índice relativo, y ese párrafo es lo que desbloquea el lanzamiento — 2026-08-31
+
+**Decisión.** `contact_submit` y todo lo que GA4 mide en este sitio se leen como **índice
+relativo** —comparable consigo mismo mientras la puerta del consentimiento no cambie— y **nunca
+como volumen absoluto**. La fracción de visitas que la analítica ve se desconoce, y **el
+lanzamiento de «Distribución» no espera a conocerla**.
+
+**Es la opción 3 de tres, y va primera precisamente porque no mide nada.** Las otras dos sí dan
+denominador: un contador propio de consentimiento —el único que da la fracción— y Vercel Web
+Analytics. Las dos siguen en pie y las dos cuestan más que esto: la primera es superficie nueva
+que recibe una petición de un tercero, así que dispara `/security-review` por la DoD; la segunda
+no es una decisión técnica sino de postura, y está escrita en su tarea. Lo que compra este
+párrafo es que **dejan de ser prerrequisito y pasan a ser mejora**.
+
+### El 0 % no es un fallo de configuración
+
+GTM marca el contenedor como «Calidad: Urgente» por una tasa de consentimiento del 0 % detectada
+en varios territorios, incluidos los de fuera del EEE. Es la consecuencia directa de D13/D17:
+este sitio **exige consentimiento a todo el mundo**, no solo al Espacio Económico Europeo, y
+hasta que alguien acepta no carga ni el gestor de etiquetas, ni la analítica, ni el mapa de
+calor. Google lo mide como anomalía porque le interesa el dato, no porque esté roto.
+
+Lo que sí es cierto, y es lo que obliga a escribir esto: **la analítica ve una fracción de las
+visitas y no se sabe cuál.** Los 45 usuarios de la última ventana medida (GA4, 3-30 ago) no son el tráfico;
+son el tráfico que consiente.
+
+### Por qué el orden importa: el pico es irrepetible
+
+Sin denominador, lo que se mide en el pico del lanzamiento es **volumen × tasa de
+consentimiento**, convolucionado y sin poder separarlo. Un pico se puede repetir; **el primer
+lanzamiento tras un año callado, no**. Esperar al contador para no perder ese dato es cambiar un
+dato imperfecto por ninguno, porque el sprint no arranca mientras tanto.
+
+### Lo que se pierde al aceptarlo, escrito para no descubrirlo después
+
+- **El volumen absoluto en el sitio** y el embudo **clic → lectura** para quien no consiente.
+- **Y una comparación que parece legítima y no lo es: antes del lanzamiento contra después.** Un
+  índice relativo solo es comparable si la puerta no se mueve, y un lanzamiento **cambia la
+  mezcla de tráfico** —una audiencia que llega de LinkedIn no tiene por qué aceptar en la misma
+  proporción que la que llega de búsqueda—. Así que la serie es comparable **entre posts de la
+  misma ventana**, y el salto pre/post arrastra un cambio de mezcla sin cuantificar. Escrito como
+  hipótesis porque es una hipótesis: nadie ha medido esa diferencia, y no se puede hasta que
+  entre el contador.
+
+**Lo que NO se pierde, y es la mitad de la que depende el sprint:** la distribución se mide
+entera y sin consentimiento, porque la da LinkedIn —impresiones, clics y engagement por post, que
+es dato de LinkedIn sobre LinkedIn—. El criterio de éxito de «Distribución» es alcance y visitas
+cualificadas, no `contact_submit`, así que **la mitad que este párrafo degrada no es la que
+juzga el sprint**.
+
+### Lo que este párrafo NO arregla
+
+La muestra. La primaria vale **1** en 28 días, y un índice relativo con n=1 sigue sin poder
+discriminar nada. Aceptarlo no convierte el dato en útil: **quita el bloqueo para ir a buscar la
+muestra**, que es lo que el sprint entero existe para hacer.
+
+### Condición de salida
+
+Cuando entre el contador de consentimiento, el índice **gana escala y deja de ser solo relativo**;
+esta entrada no se supera, se completa. Y si cambia el diálogo o la política de consentimiento,
+**la serie se parte ahí y hay que decirlo**, por la misma razón por la que los filtros de GA4 no
+son retroactivos (D71).
 
 **Estado:** Aceptada.
