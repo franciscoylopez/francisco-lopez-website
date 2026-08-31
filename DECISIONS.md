@@ -10802,4 +10802,31 @@ es lo único que ocurre *antes* de que el visitante decida y su sitio es donde a
 nada se carga sin su permiso. Y `LAST_COOKIES_UPDATE` se mueve, que es lo que D18 le pide a un
 documento vivo.
 
+### La clave lleva el entorno dentro, y eso corrige una premisa que duró tres horas
+
+Este D-entry se escribió diciendo que en local y en Preview *no hay almacén y no debe haberlo*.
+**Falso al conectar la integración:** el Marketplace reparte las credenciales de Upstash a
+**Production y Preview**, así que cada despliegue de vista previa habría escrito en el mismo
+contador que producción. El denominador que esto existe para dar lo habría inflado el propio
+trabajo de construirlo, y el PR que lo construye genera una vista previa por empujón.
+
+La clave pasa a ser `flm:consent:<VERCEL_ENV>:<suceso>`. **Se resuelve en el código y no borrando
+la variable en Vercel** por dos razones: la integración puede volver a inyectarla al sincronizar,
+y una configuración de panel no la revisa nadie en un PR. Y separar es mejor que apagar Preview,
+porque deja **verificar la cadena entera antes de mergear** — que es justo lo que le faltaba a
+esto para estar comprobado de verdad, en vez de comprobado de que no rompe.
+
+El lector toma `--entorno=`, y **por defecto `production`**, nunca la suma: un total que mezclara
+las pruebas con las visitas reales sería el dato envenenado que la separación evita.
+
+**Verificado el 2026-08-31 contra el almacén real**, ejercitando el camino del código y no la API:
+`almacenConfigurado` cierto, `INCR` y `MGET` de ida y vuelta, y —la mitad que importa— el espacio
+`local` en 1 con **producción todavía en 0**.
+
+**Cómo se encontró, que es lo reutilizable:** no lo vio ningún gate, porque ninguno puede verlo.
+Salió de mirar `vercel env ls` al conectar la integración, o sea de comprobar la premisa **en el
+sitio donde de verdad vive** en vez de en el comentario donde estaba escrita. Es la regla 1 de
+`BRAND.md` §Cómo se escribe una regla —el disparador que mira al lugar equivocado— aplicada a un
+supuesto sobre infraestructura.
+
 **Estado:** Aceptada.

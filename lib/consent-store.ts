@@ -16,13 +16,27 @@ import { EVENTOS_CONSENTIMIENTO } from "./consent-metrics";
 // del tratamiento y no cambia lo que `/cookies` declara — el porqué, en
 // `lib/consent-metrics.ts`.
 //
-// SIN VARIABLES DE ENTORNO NO ESCRIBE, Y NO FALLA. En local y en Preview no hay
-// almacén y no debe haberlo: contaminaría la cuenta de producción con cada
-// recarga de desarrollo. Lo que NO hace es fallar en silencio de la otra forma —
-// `leerContadores` distingue «cero» de «sin configurar», que es la diferencia que
-// D71 pagó cara.
+// SIN VARIABLES DE ENTORNO NO ESCRIBE, Y NO FALLA. Lo que NO hace es fallar en
+// silencio de la otra forma — `leerContadores` distingue «cero» de «sin
+// configurar», que es la diferencia que D71 pagó cara.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// Y LA CLAVE LLEVA EL ENTORNO DENTRO, que es la corrección de una premisa mía que
+// resultó falsa a las tres horas de escribirla. Aquí ponía «en local y en Preview
+// no hay almacén y no debe haberlo». Al conectar la integración de Upstash, sus
+// credenciales entraron en **Production Y Preview** —así las reparte el
+// Marketplace—, así que cada despliegue de vista previa habría escrito en el mismo
+// contador que producción. El denominador que este módulo existe para dar lo
+// habría inflado el propio trabajo de construirlo.
+//
+// SE RESUELVE EN EL CÓDIGO Y NO BORRANDO LA VARIABLE EN VERCEL, por dos razones:
+// la integración puede volver a inyectarla al sincronizar, y una configuración de
+// panel no la revisa nadie en un PR. Y separar por clave es mejor que apagar
+// Preview: deja **verificar la cadena entera antes de mergear**, que es justo lo
+// que a esto le faltaba para estar comprobado de verdad.
+const ENTORNO = process.env.VERCEL_ENV ?? "local";
 
-const PREFIJO = "flm:consent:";
+const PREFIJO = `flm:consent:${ENTORNO}:`;
 
 /**
  * Las credenciales que crea la integración de Upstash en Vercel. Se aceptan los

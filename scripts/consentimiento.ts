@@ -50,7 +50,16 @@ async function main() {
     process.exit(1);
   }
 
-  const PREFIJO = "flm:consent:";
+  // El entorno va en la clave (ver `lib/consent-store.ts`), así que hay que
+  // elegirlo al leer. POR DEFECTO PRODUCTION y no «todos sumados»: la cifra que
+  // significa algo es la de producción, y un total que mezcla las pruebas de
+  // Preview con las visitas reales sería exactamente el dato envenenado que la
+  // separación existe para evitar.
+  const entorno =
+    process.argv.find((a) => a.startsWith("--entorno="))?.split("=")[1] ??
+    "production";
+
+  const PREFIJO = `flm:consent:${entorno}:`;
   const CLAVES = ["visto", "aceptado", "rechazado"] as const;
 
   const res = await fetch(
@@ -83,7 +92,7 @@ async function main() {
     contadores.visto - contadores.aceptado - contadores.rechazado;
 
   console.log(
-    `\nconsentimiento — ${contadores.visto} navegador(es) vieron el diálogo:`,
+    `\nconsentimiento — entorno «${entorno}» · ${contadores.visto} navegador(es) vieron el diálogo:`,
   );
   console.log(
     `  ${String(contadores.aceptado).padStart(6)}  aceptaron analíticas`,
