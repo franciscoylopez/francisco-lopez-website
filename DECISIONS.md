@@ -202,6 +202,7 @@
 - D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo
 - D165 · El informe del escáner era una API, y con ella un suspenso se descarta con cifra
 - D166 · La causa era la profundidad, y el catálogo que un descarte mal fundado había tumbado
+- D167 · Publicar la nota de un escáner sin convertirla en un criterio, y el sello que la sostiene
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10542,3 +10543,73 @@ mi carrera», la tarjeta A2A deja de ser una afirmación falsa y pasa a ser la s
 descubrimiento que ese agente necesita — publicada, no inventada. Queda anotado en la ficha de esa
 tarea para que llegue con el trabajo y no dependa de que alguien se acuerde. *Si el hallazgo
 vuelve antes: está medido y descartado, no sin mirar.*
+
+---
+
+## D167 · Publicar la nota de un escáner sin convertirla en un criterio, y el sello que la sostiene — 2026-08-31
+
+**Decisión.** El artículo gana el apartado **«Preparada para SEO y GEO»** dentro de §s08, que
+reencuadra el que había sobre el número de rendimiento en vez de añadirse a él, y publica la nota
+de `ora.ai` en una tarjeta de dato en vivo sellada por **`npm run agentes:sellar`**.
+
+**El hueco no era el sprint, era el SEO.** Ninguna de las once secciones del artículo hablaba de
+indexación, datos estructurados ni metadata, que son criterio de cierre (DoD fila 6) y criterio de
+aceptación (`PRD-Live` §No funcionales). Así que esto no es un anexo de novedades: es tapar un
+hueco que ya estaba, y el GEO es su otra mitad. Ese orden importa porque es lo que hace que la
+sección no se lea como una nota de versión.
+
+### El conflicto con D157, y por qué la forma de la tarjeta no bastaba
+
+D157 dice que la nota de un escáner agéntico **no** es un criterio de aceptación de este proyecto,
+y la de PageSpeed **sí** lo es. Dos tarjetas idénticas, una debajo de otra, las igualan.
+
+La primera salida fue publicar las **dos** notas del mismo motor —97 en `is-agentic`, 78 en ora—
+porque una tarjeta con dos cifras que se contradicen no se puede leer como un umbral aprobado. Se
+descarta: **el lector no tiene por qué reconstruir un argumento de denominadores para entender una
+tarjeta.** Lo que queda es más simple y dice lo mismo: **una sola nota, con lo que mide al lado**
+—125 comprobaciones, de las que 60 marca el propio informe como no aplicables— y la frase de D157
+cerrando el párrafo, *«es una foto de dónde está el sitio, no un objetivo que me haya puesto»*.
+
+**Y no se publica el 97.** Es la cifra favorable del mismo escaneo, y este artículo no elige
+marcador en ningún otro sitio. La brecha sigue documentada en D165, que es donde se explica.
+
+### `servedFromCache` retira una regla que era un hábito
+
+D165 dejó escrito que para saber si un informe es fresco había que **mirar un `details` que solo
+pudiera ser nuevo**, porque el `scannedAt` del payload no es la hora del escaneo. Es una regla
+correcta y es una regla que hay que recordar, o sea la familia que `BRAND.md` §Cómo se escribe una
+regla nombra entera.
+
+Leyendo el payload entero aparece el campo que la sustituye: **`servedFromCache`**, con
+`resultAgeSeconds` al lado. El sello se niega a escribir con él puesto, y de paso comprueba el
+destino, `analysisStatus`, `pendingChecks` y que haya al menos una comprobación. Es el mismo
+reparto de `scripts/psi/sello.ts`: **no sella una pasada parcial**, dice por qué y deja el sello
+anterior. La regla manual se queda para la lectura a mano; para la cifra que se publica, ya no
+hace falta acordarse.
+
+> **Sigue haciendo falta `force: true`.** Sin él el POST no escanea y devuelve el informe
+> guardado; `refresh` no hace nada. Eso no lo arregla ningún campo: va escrito en el script.
+
+### El hueco de D102 tenía una segunda puerta: el `ReactNode`
+
+D102 cerró la cifra tecleada dentro del `value` de un `livestat`. Las **pastillas** de esa misma
+tarjeta salen de `LIVESTAT_EXTRAS`, que es un `Record<string, ReactNode>` en el componente, y ahí
+`check:articulo` no puede mirar: no es copy, es JSX. Las tres de la tarjeta de PageSpeed están
+escritas a mano y no pasa nada, porque son las otras categorías de Lighthouse y llevan clavadas en
+100 desde que existen; las de esta se mueven en cada pasada.
+
+Así que **derivan del sello**, no del componente. Y el grado baja del `value` a una pastilla, que
+es lo que deja el dato de arriba en una sola cifra, como en PageSpeed.
+
+### Lo que se recortó, medido en navegador
+
+La cabecera de la tarjeta se partía en dos líneas: el `label` era «Preparación para agentes ·
+ora.ai». **Se recorta el texto en vez de ensanchar la caja**, porque `live-stat.tsx` lo comparten
+cuatro tarjetas de dos páginas y ensancharla por un caso las mueve todas. Con «Agentes · ora.ai»:
+113 px de rótulo + 293 px de fuente = 406 de los 504 disponibles a 1440, en una línea.
+
+**A 360 px se sigue partiendo, y no se toca:** le pasa igual a la de PageSpeed (170 + 221 en 280
+disponibles) y a las otras dos, así que es comportamiento del componente y no de esta tarjeta.
+Arreglarlo es un cambio en la pieza que afecta a las cuatro, y va tareado aparte.
+
+**Estado:** Aceptada.
