@@ -94,6 +94,7 @@
 - [La tanda 3 y la 4 de «Agentes», y lo que el techo de contexto obligó a retirar — 2026-08-30](#la-tanda-3-y-la-4-de-agentes-y-lo-que-el-techo-de-contexto-obligó-a-retirar--2026-08-30)
 - [La tanda 5 de «Agentes»: cuatro metros que no decían lo que estaban haciendo — 2026-08-30](#la-tanda-5-de-agentes-cuatro-metros-que-no-decían-lo-que-estaban-haciendo--2026-08-30)
 - [Fuentes](#fuentes)
+- [El cierre de «Agentes» — 2026-08-31](#el-cierre-de-agentes--2026-08-31)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4211,3 +4212,86 @@ duplicación estaba duplicada, y hasta que un techo no se cruzó nadie la leyó 
 - [Referencias — moodboard visual](https://app.notion.com/p/39f2caec08be8090bf5bf6cb39ee63e2) (Notion)
 - [CV — Francisco López](https://docs.google.com/document/d/1bPn6IhP5v-RfVIPkpIxQTP8dC4FDQVofQcHt80BO_1Y/edit) (Google Docs)
 - [Análisis de mejora V1 — Diseño, Marca y Arquitectura](https://app.notion.com/p/3a12caec08be8133b636eefaccd9bbb2) (Notion, 2026-07-19)
+
+## El cierre de «Agentes» — 2026-08-31
+
+Diez tareas comprometidas y **veintitrés cerradas**: las diez más las trece que fueron
+apareciendo por el camino, casi todas de los propios `code-review` y de los dos escáneres. El
+sprint entregó lo que abrió a decir: que un agente pueda **encontrar, leer y citar** este sitio.
+
+### El `sprint-review`
+
+**Veredicto:** el criterio de aceptación duro se cumplió y se verificó contra producción, no
+leyendo el código. La negociación de `Accept` funciona y **es segura en caché en los dos
+sentidos** — sobre `/trayectoria`: HTML `PRERENDER` → `HIT` (86.859 B), markdown `MISS` → `HIT`
+(1.846 B), y el HTML vuelve a servirse HTML. Ninguna dirección envenena a la otra.
+
+**Eso corrige a la baja lo que `next.config.ts` y D158 escribían** («detrás de una caché
+compartida que ya tenga guardado el HTML puede no llegar»): en Vercel llega. Un documento que
+promete de menos, hermana del defecto que D162 corrigió.
+
+**Los hallazgos, y los dos que se arreglaron en el acto:**
+
+- **`q=0` era un «sí».** RFC 9110 §12.5.1 da al peso cero el significado «este tipo NO es
+  aceptable», y `quiereMarkdown()` leía solo el token, así que `Accept: text/markdown;q=0`
+  servía markdown. Arreglado con guardián —el caso no aparece en producción, así que sin él se
+  deshace solo— y **comprobado que muerde**: con el proxy de ayer, `check:agentes` da 5 fallos.
+- **`check-marco.ts` decía «las 24 variantes»** tres líneas encima del código que calcula 28.
+- **`GATES.md` promete «una fila por gate» y le faltan doce** (`check:guardianes` incluido), lo
+  que deja su `grep` devolviendo vacío para más de la mitad de los gates de CI. Tareado.
+- **La cifra estrella del sprint está tecleada y ya derivó**: el artículo publica «de 216 KB a
+  6,6 KB» y hoy son **221.678 y 6.925 bytes**, mientras la nota de ora del mismo párrafo sí se
+  sella. Tareado.
+- **La ruta del prerender, a mano en cuatro guardianes** más cuatro usos en línea, sin primitiva
+  compartida. No es peligroso —los cuatro derivan sus variantes del registro y afirman cuántas
+  leyeron—, es coste.
+- **La fricción de `md:verificar` tiene número:** 3 de los 4 CI en rojo del sprint. Escrito en
+  P68.79, que pedía exactamente ese dato.
+
+### El check de medición
+
+GA4, 3-30 ago: **342 eventos y 45 usuarios**. `contact_submit` **1/1**, `form_start` 1/1,
+`contact_click` 9/2, `file_download` 1/1 — **idénticos** al cierre anterior. `scroll` baja de
+**41/10 a 27/9**, y es la ventana rodante, con la aritmética cuadrando: las dos comparten 27 de
+28 días, sale el 2 de agosto y entra el 30, y 419 − 77 = 342.
+
+**El instrumento se verificó con prueba positiva, no con ausencia de rojo:** los cuatro
+scorecards del panel cuadran evento a evento con GA4 (9 / 1 / 27 / 1), **incluido el scroll que
+se movió**. Un panel congelado habría seguido diciendo 41.
+
+**El «no» escrito:** ninguna prioridad cambia. Y **segundo cierre consecutivo** en el que la
+corrección de D153 no se puede verificar, porque con la primaria en 1 no hay dato con el que
+comprobarla. Si al tercero sigue igual, el problema no es el instrumento: es que n=1 no es
+medible, y eso lo arregla la distribución.
+
+### El sello: 20, ±0, primer verde en tres cierres
+
+Y la aritmética dice por qué: **«Agentes» sí arrastró cupo** —cuatro de `General`, que es lo que
+ni «Drenaje» ni «Voz» hicieron— y su revisión devolvió cuatro. **El cupo es la palanca**, y los
+dos ámbares anteriores fueron sprints que no lo tocaron. Lo que no confirma: ±0 no es drenar.
+Cuatro cierres en la banda 18-20.
+
+### El `method-review` X: la nota que corrigió el diagnóstico
+
+**Quinta convergencia con Francisco, y la primera que CORRIGE en vez de confirmar.** La medición
+decía que el andamiaje crece más rápido que lo que sostiene (`verificación ÷ producto` a **rojo
+por primera vez**, 0,49 → 0,554, empujado por un sprint con ratio propio de **1,57 : 1**). Su
+nota apuntaba a otro órgano: no al tamaño del presupuesto de contexto sino **al tiempo de
+negociarlo**.
+
+**No converge el órgano, converge la enfermedad: el método no tenía retirada programada en
+ninguna parte.** Tres órganos, la misma causa, y el peaje del tercero medido en **31 de 236
+commits (13 %)**. De ahí sale la regla nueva de `CLAUDE.md` —retirar en lote al abrir— cuyo caso
+está en `CLAUDE-historical.md`, y que **se demostró sola**: guardar el hallazgo en el catálogo
+puso `check:contexto` en −576.
+
+**Nace también «el arreglo que se quedó en su archivo»**: un defecto de familia conocida se
+corrige donde se encontró y nadie barre a sus hermanos. Tres instancias el mismo día — los
+recuentos de pasos de CI en `.github/` («dieciséis», «doce», con 27) con la regla escrita en
+`ci.yml`; el «24 variantes» de `check-marco.ts`; y las doce filas de `GATES.md`.
+
+**Cero tareas nuevas**, que en este disparo importaba más de lo normal: un hallazgo sobre el
+exceso de andamiaje no se arregla añadiendo andamiaje.
+
+**El informe completo:**
+<https://claude.ai/code/artifact/f0242963-2e52-4ee7-a0c2-b3d3f8740ae8>

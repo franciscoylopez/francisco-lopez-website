@@ -9808,6 +9808,52 @@ también, y el tercero CI. Ninguno lo habría destapado mirar el código, porque
 *(Y una cuarta del mismo día, de otra familia: el sello de `/accesibilidad` se puso **antes** del
 último cambio tres veces seguidas. Esa sí la cazó su guardián las tres.)*
 
+
+### Addendum (2026-08-31) · `q=0` es un «NO», y el proxy lo leía como un «sí»
+
+RFC 9110 §12.5.1 le da al peso cero un significado explícito: *«este tipo no es aceptable»*. Así
+que `Accept: text/markdown;q=0` pide **lo contrario** que `text/markdown` — y `quiereMarkdown()`
+miraba solo el token, de modo que las dos cabeceras hacían lo mismo. Encontrado leyendo, no
+midiendo: ningún cliente de los que hoy visitan el sitio manda `q=0`.
+
+**No se implementa un negociador de contenido, y por eso el arreglo cabe en ocho líneas.** Aquí
+no hay preferencia entre tipos que resolver: o se pide markdown por su nombre, o se sirve el
+HTML. Lo único que se añade es leer el peso **de ese token**. El orden de preferencia entre
+tipos sigue sin existir, a propósito.
+
+**Un peso mal escrito NO cuenta como rechazo, y la asimetría es deliberada.** La misma sección
+manda ignorar el parámetro que no se entiende, y los dos errores no cuestan igual: tratar
+`q=abc` como un «no» **apagaría el canal entero** por un cliente que escribe mal la cabecera,
+que sale mucho más caro que servirle markdown a quien lo pidió raro. Solo un `q=0` válido
+rechaza.
+
+**Con guardián, porque el caso no aparece en producción.** Un arreglo que ningún cliente ejerce
+se deshace solo y no lo nota nadie, así que `check:agentes` lleva el caso y se comprobó que
+**muerde**: con el `quiereMarkdown()` anterior da 5 fallos y sale con código 1. Las ocho formas,
+medidas sobre `proxy()`:
+
+| `Accept` | Sirve |
+|---|---|
+| `text/markdown` | `/md/es/sobre-mi.md` |
+| `text/markdown;q=0` · `;q=0.000` · `; q=0` | HTML |
+| `text/markdown;q=0.1` | `/md/es/sobre-mi.md` |
+| `text/markdown;q=abc` | `/md/es/sobre-mi.md` |
+| `text/html,text/markdown;q=0,*/*` | HTML |
+| el `Accept` de un navegador | HTML |
+
+### Addendum (2026-08-31) · lo que esta entrada prometía de menos
+
+D158 escribió, y `next.config.ts` con ella, que detrás de una caché compartida la negociación
+por `Accept` **«puede no llegar»**. Medido contra producción en el cierre de «Agentes», llega —
+y es segura en los dos sentidos. Sobre `/trayectoria`: HTML `PRERENDER` → `HIT` (86.859 B),
+markdown `MISS` → `HIT` (1.846 B), y el HTML siguiente vuelve a ser HTML. **Ninguna dirección
+envenena a la otra.**
+
+No cambia el contrato —la vía estable sigue siendo la URL explícita `/md/<locale>/<pagina>.md`,
+y prometer de menos es el lado bueno en el que equivocarse—, pero se anota porque **un documento
+que promete de menos también es drift**, y este proyecto ya tiene escrito el caso contrario
+(D162, la regla que prometía de más).
+
 ## D159 · El guardián propio en vez del escáner ajeno: `check:agentes` — 2026-08-30
 
 **Decisión.** Lo que este sitio le promete a un agente lo vigila un guardián **nuestro** en CI
