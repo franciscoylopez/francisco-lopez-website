@@ -709,4 +709,20 @@ export const CASOS: Caso[] = [
         '"author":{"@id":"$1"}',
       ),
   },
+  {
+    guardian: "check:agentes",
+    rotura: "una entrada del catálogo ARD apunta a un archivo que ya no existe",
+    // EL MODO DE FALLO QUE HACE QUE UN CATÁLOGO SEA PEOR QUE NINGUNO. La lista de
+    // recursos es una promesa que se cumple una petición después: una entrada que
+    // apunta a un archivo renombrado le cuesta al agente esa petición y le hace
+    // desconfiar del resto, y no da error en ninguna parte —el JSON sigue siendo
+    // válido y la entrada sigue cumpliendo el modelo del conformance—.
+    //
+    // MUERDE EL ARTEFACTO Y NO `lib/ard.ts`, quinto caso que lo hace, y aquí no es
+    // una preferencia: el guardián lee el cuerpo que el build prerenderiza, así
+    // que una mutación del generador no llegaría a lo que él mira y el arnés
+    // acusaría de desdentado a un guardián que está bien.
+    archivo: ".next/server/app/.well-known/ard.json.body",
+    mutar: (o) => o.replace('/md/es.md"', '/md/es-que-ya-no-existe.md"'),
+  },
 ];
