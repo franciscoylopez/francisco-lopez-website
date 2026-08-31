@@ -10901,4 +10901,29 @@ la clave.
   cookies. Se anota porque es la misma familia que §s12 del artículo, y esa clase de frase
   aguanta una vez y no dos.
 
+### Dos cosas que confirmó Francisco, y una que medí mal
+
+**La vía de oposición es solo la escrita** *(Francisco, 2026-08-31)*. No entra un cuarto control
+en el diálogo de preferencias: quien no quiera que se le cuente escribe, y se le deja de contar.
+La página ya ofrece ese derecho y lo que se hace es enlazarlo, así que **el mecanismo existe
+antes que la promesa** y no al revés. Y el copy de `/cookies`, revisado y aprobado por él.
+
+**Y el gate de producción NO es por lo que este D-entry decía.** Se escribió que fuera de
+producción el endpoint no existe. Medido el mismo día: **el Preview de la rama sirve
+`/_vercel/insights/script.js` con 200** y producción daba 404, porque lo inyecta el despliegue y
+el de producción era anterior a activar la herramienta. Es el tercer supuesto sobre
+infraestructura que este sprint escribe primero y comprueba después, y los tres han salido
+falsos: las credenciales en Preview (D169), este, y el propio 404 leído como «no está activado»
+cuando lo que faltaba era desplegar.
+
+Los motivos que sí sostienen el gate son otros dos, y el segundo manda: en Preview el tráfico
+somos nosotros revisando un PR —Vercel separa por entorno, así que es ruido y no
+envenenamiento—, y sobre todo **la cuota del plan *hobby*: 2.500 eventos al mes**, que es lo
+único con lo que hay que medir el lanzamiento.
+
+**La contrapartida, dicha porque contradice al hermano:** para el contador se eligió *separar* en
+vez de apagar, precisamente para poder verificar antes de mergear. Aquí se apaga, así que **esto
+se verifica DESPUÉS del merge**, contra producción, y hasta entonces no está comprobado que
+funcione. Se acepta por la cuota, no por descuido.
+
 **Estado:** Aceptada.
