@@ -76,7 +76,7 @@ const RAIZ_BUILD = join(".next", "server", "app");
 const archivoDe = (lang: Locale, slug: PageSlug) =>
   join(RAIZ_BUILD, `${lang}${slug ? `/${slug}` : ""}.html`);
 
-/** Las 24 variantes, derivadas del registro y de `locales` — ninguna a mano (D72). */
+/** Las 28 variantes, derivadas del registro y de `locales` — ninguna a mano (D72). */
 const VARIANTES = locales.flatMap((lang) =>
   PAGE_SLUGS.map((slug) => ({ lang, slug })),
 );

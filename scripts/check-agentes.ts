@@ -289,6 +289,21 @@ function revisarNegociacion(): void {
         );
       }
     }
+
+    // (d) Y `q=0` TAMPOCO SE LO LLEVA. En RFC 9110 §12.5.1 el peso cero es «este
+    // tipo NO es aceptable», así que `text/markdown;q=0` pide justo lo contrario
+    // que `text/markdown`. Leyendo solo el token —que es lo que se hacía hasta
+    // el 2026-08-31— las dos cabeceras hacían lo mismo. Se vigila aquí porque el
+    // caso no aparece en producción: sin guardián, el arreglo se deshace solo y
+    // nadie lo nota.
+    const conCero = pide(path, `${"text/markdown"};q=0`);
+    if (destino(conCero) === esperada) {
+      fallo(
+        "negociación",
+        `\`${path}\` sirve markdown a quien mandó \`Accept: text/markdown;q=0\`, que es ` +
+          "la forma de decir que NO lo quiere. El peso se lee, no solo el token.",
+      );
+    }
   }
 
   // EL CANÓNICO NO SE NEGOCIA. `/es/...` redirige SIEMPRE, pida lo que pida:
@@ -969,7 +984,7 @@ console.log(
   `check:agentes — lo que este sitio le promete a un agente\n` +
     `  llms.txt   ${vistos.paginasEnLlms} páginas del registro nombradas · 2 secciones del sprint\n` +
     `  markdown   ${vistos.variantesMd} variantes en disco · las URLs que anuncia resuelven\n` +
-    `  negociar   ${vistos.negociaciones} casos por \`proxy()\`: markdown sí, navegador no, \`Vary\` en ambos, 404 con salida\n` +
+    `  negociar   ${vistos.negociaciones} casos por \`proxy()\`: markdown sí, navegador no, \`q=0\` no, \`Vary\` en ambos, 404 con salida\n` +
     `  robots     ${vistos.entornosRobots} entornos (producción abre y sella el sitemap; el resto cierra, D13)\n` +
     `  señales    ${vistos.senalesDeContenido} Content Signals comprobadas por su valor decidido (P67.8)\n` +
     `  404        ${vistos.segmentosDinamicos} segmentos dinámicos, ninguno catch-all\n` +

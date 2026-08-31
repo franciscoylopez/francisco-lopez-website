@@ -41,11 +41,33 @@ const MARKDOWN = "text/markdown";
  * `text/html,application/xhtml+xml,…,*​/*`, y cualquier cliente puede mandar
  * `*​/*`: con una comprobación laxa, el sitio serviría markdown a una persona.
  * Se pide el tipo por su nombre o no se pide.
+ *
+ * Y `q=0` ES UN «NO», NO UN «SÍ CON MATIZ» *(2026-08-31)*. En RFC 9110 §12.5.1
+ * el peso cero significa «este tipo NO es aceptable», así que
+ * `Accept: text/markdown;q=0` pide exactamente lo contrario de lo que pide
+ * `text/markdown`. Hasta hoy se leía solo el token y se ignoraba el peso, así
+ * que las dos cabeceras hacían lo mismo. No lo manda ningún cliente de los que
+ * hoy nos visitan —se encontró leyendo, no en producción—, y por eso el arreglo
+ * es este y no un negociador completo: **el orden de preferencia entre tipos no
+ * se implementa**, porque aquí no hay preferencia que resolver. O se pide
+ * markdown por su nombre, o se sirve el HTML.
+ *
+ * UN PESO MAL ESCRITO NO CUENTA COMO RECHAZO. La misma sección manda ignorar el
+ * parámetro que no se entiende, y la asimetría importa: tratar `q=abc` como un
+ * «no» apagaría el canal entero por un cliente que escribe mal la cabecera, que
+ * es un fallo mucho más caro que servir markdown a quien lo pidió raro.
  */
 function quiereMarkdown(request: NextRequest): boolean {
-  return (request.headers.get("accept") ?? "")
-    .split(",")
-    .some((t) => t.trim().split(";")[0]?.toLowerCase() === MARKDOWN);
+  return (request.headers.get("accept") ?? "").split(",").some((entrada) => {
+    const [tipo, ...parametros] = entrada.trim().split(";");
+    if (tipo?.trim().toLowerCase() !== MARKDOWN) return false;
+    const peso = parametros
+      .map((p) => p.trim().toLowerCase())
+      .find((p) => p.startsWith("q="));
+    if (peso === undefined) return true;
+    const valor = Number(peso.slice(2));
+    return Number.isNaN(valor) || valor > 0;
+  });
 }
 
 /**
