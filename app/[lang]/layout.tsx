@@ -6,6 +6,7 @@ import "../globals.css";
 
 import { ConsentInit } from "@/components/analytics/consent-init";
 import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
+import { WebAnalytics } from "@/components/analytics/web-analytics";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { SkipLink } from "@/components/site/skip-link";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -13,7 +14,7 @@ import { ARD_URL } from "@/lib/ard";
 import { paletteHex } from "@/lib/design-values";
 import { locales, isLocale } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
-import { GTM_ID, SITE_URL } from "@/lib/site";
+import { GTM_ID, SITE_URL, WEB_ANALYTICS } from "@/lib/site";
 import { getCommon } from "./dictionaries";
 
 const inter = Inter({
@@ -175,6 +176,11 @@ export default async function RootLayout({
             <GoogleTagManager gtmId={GTM_ID} />
           </>
         )}
+        {/* Vercel Web Analytics (D170). VA FUERA DEL GATE DE CONSENTIMIENTO A
+            PROPÓSITO, y esa es la decisión entera: es lo único de este sitio que
+            mide sin preguntar. Lo que sí comparte con GTM es el gate de
+            PRODUCCIÓN. El saneado de la URL vive en la propia isla. */}
+        {WEB_ANALYTICS && <WebAnalytics />}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

@@ -203,6 +203,9 @@
 - D165 · El informe del escáner era una API, y con ella un suspenso se descarta con cifra
 - D166 · La causa era la profundidad, y el catálogo que un descarte mal fundado había tumbado
 - D167 · Publicar la nota de un escáner sin convertirla en un criterio, y el sello que la sostiene
+- D168 · La primaria se lee como índice relativo, y ese párrafo es lo que desbloquea el lanzamiento
+- D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal
+- D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10657,5 +10660,270 @@ cuatro tarjetas de dos páginas y ensancharla por un caso las mueve todas. Con �
 **A 360 px se sigue partiendo, y no se toca:** le pasa igual a la de PageSpeed (170 + 221 en 280
 disponibles) y a las otras dos, así que es comportamiento del componente y no de esta tarjeta.
 Arreglarlo es un cambio en la pieza que afecta a las cuatro, y va tareado aparte.
+
+**Estado:** Aceptada.
+
+## D168 · La primaria se lee como índice relativo, y ese párrafo es lo que desbloquea el lanzamiento — 2026-08-31
+
+**Decisión.** `contact_submit` y todo lo que GA4 mide en este sitio se leen como **índice
+relativo** —comparable consigo mismo mientras la puerta del consentimiento no cambie— y **nunca
+como volumen absoluto**. La fracción de visitas que la analítica ve se desconoce, y **el
+lanzamiento de «Distribución» no espera a conocerla**.
+
+**Es la opción 3 de tres, y va primera precisamente porque no mide nada.** Las otras dos sí dan
+denominador: un contador propio de consentimiento —el único que da la fracción— y Vercel Web
+Analytics. Las dos siguen en pie y las dos cuestan más que esto: la primera es superficie nueva
+que recibe una petición de un tercero, así que dispara `/security-review` por la DoD; la segunda
+no es una decisión técnica sino de postura, y está escrita en su tarea. Lo que compra este
+párrafo es que **dejan de ser prerrequisito y pasan a ser mejora**.
+
+### El 0 % no es un fallo de configuración
+
+GTM marca el contenedor como «Calidad: Urgente» por una tasa de consentimiento del 0 % detectada
+en varios territorios, incluidos los de fuera del EEE. Es la consecuencia directa de D13/D17:
+este sitio **exige consentimiento a todo el mundo**, no solo al Espacio Económico Europeo, y
+hasta que alguien acepta no carga ni el gestor de etiquetas, ni la analítica, ni el mapa de
+calor. Google lo mide como anomalía porque le interesa el dato, no porque esté roto.
+
+Lo que sí es cierto, y es lo que obliga a escribir esto: **la analítica ve una fracción de las
+visitas y no se sabe cuál.** Los 45 usuarios de la última ventana medida (GA4, 3-30 ago) no son el tráfico;
+son el tráfico que consiente.
+
+### Por qué el orden importa: el pico es irrepetible
+
+Sin denominador, lo que se mide en el pico del lanzamiento es **volumen × tasa de
+consentimiento**, convolucionado y sin poder separarlo. Un pico se puede repetir; **el primer
+lanzamiento tras un año callado, no**. Esperar al contador para no perder ese dato es cambiar un
+dato imperfecto por ninguno, porque el sprint no arranca mientras tanto.
+
+### Lo que se pierde al aceptarlo, escrito para no descubrirlo después
+
+- **El volumen absoluto en el sitio** y el embudo **clic → lectura** para quien no consiente.
+- **Y una comparación que parece legítima y no lo es: antes del lanzamiento contra después.** Un
+  índice relativo solo es comparable si la puerta no se mueve, y un lanzamiento **cambia la
+  mezcla de tráfico** —una audiencia que llega de LinkedIn no tiene por qué aceptar en la misma
+  proporción que la que llega de búsqueda—. Así que la serie es comparable **entre posts de la
+  misma ventana**, y el salto pre/post arrastra un cambio de mezcla sin cuantificar. Escrito como
+  hipótesis porque es una hipótesis: nadie ha medido esa diferencia, y no se puede hasta que
+  entre el contador.
+
+**Lo que NO se pierde, y es la mitad de la que depende el sprint:** la distribución se mide
+entera y sin consentimiento, porque la da LinkedIn —impresiones, clics y engagement por post, que
+es dato de LinkedIn sobre LinkedIn—. El criterio de éxito de «Distribución» es alcance y visitas
+cualificadas, no `contact_submit`, así que **la mitad que este párrafo degrada no es la que
+juzga el sprint**.
+
+### Lo que este párrafo NO arregla
+
+La muestra. La primaria vale **1** en 28 días, y un índice relativo con n=1 sigue sin poder
+discriminar nada. Aceptarlo no convierte el dato en útil: **quita el bloqueo para ir a buscar la
+muestra**, que es lo que el sprint entero existe para hacer.
+
+### Condición de salida
+
+Cuando entre el contador de consentimiento, el índice **gana escala y deja de ser solo relativo**;
+esta entrada no se supera, se completa. Y si cambia el diálogo o la política de consentimiento,
+**la serie se parte ahí y hay que decirlo**, por la misma razón por la que los filtros de GA4 no
+son retroactivos (D71).
+
+**Estado:** Aceptada.
+
+## D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal — 2026-08-31
+
+**Decisión.** El sitio cuenta tres enteros —**visto**, **aceptado**, **rechazado**— con una
+Server Action del mismo origen y un `INCR` contra **Upstash Redis por su API REST**, sin paquete
+nuevo. Con eso, la fracción que D168 daba por desconocida pasa a medirse, y se lee con
+`npm run consentimiento`.
+
+**Se puede contar sin consentimiento porque no mide a nadie.** El diálogo se pinta siempre —esa
+es la premisa que hace posible la medición— y lo único que sale del navegador es cuál de tres
+cosas ocurrió. Ni IP, ni user-agent, ni identificador, ni marca de tiempo por suceso. Un contador
+agregado no es un tratamiento de datos personales, así que esto **no hereda** el límite de D168:
+lo levanta.
+
+### Las dos decisiones que hacen que la cifra signifique algo, y las dos tienen test
+
+- **«Aceptado» es `analytics === true`, no «pulsó Aceptar todo».** Quien abre las preferencias y
+  concede solo analíticas acepta a efectos del denominador, porque su visita **sí** la ve GA4, que
+  es lo único que la fracción describe. Es D153 otra vez: allí el «enviado» tenía tres causas y
+  solo una mandaba correo, y creer que eran la misma cosa dejaba la métrica inflada.
+- **«Visto» se cuenta una vez por navegador, no por pintado.** Por pintado el denominador serían
+  páginas vistas contra un numerador que ocurre una sola vez, y la tasa saldría arbitrariamente
+  baja: la cifra sería impecable y estaría midiendo otra cosa. Es el umbral mal aplicado de
+  `BRAND.md` §Cómo medir, punto 7, en su versión de denominador.
+
+**Y un tercero que apareció al cablearlo:** reabrir el centro de preferencias desde el pie vuelve
+a llamar a `decide`, así que un cambio de opinión sumaba una decisión más contra un «visto» que
+solo contó una vez, y `aceptado + rechazado` podía **superar** al denominador. Solo cuenta la
+primera decisión, y se comprueba leyendo el registro que ya existe **antes** de guardar, sin marca
+nueva. Lo encontró el cableado, no un test: el test vino después.
+
+### Upstash por REST y sin paquete
+
+`INCR` es atómico, que es exactamente lo que un JSON leído-modificado-escrito no puede dar sin
+perder escrituras concurrentes. Se llegó a considerar Vercel Blob por no meter proveedor —y su
+argumento era bueno: las pérdidas sesgarían numerador y denominador por igual, así que el **ratio**
+sobreviviría—, pero un contador que pierde cuentas es un instrumento que hay que explicar cada vez
+que se lee. Y se llama con `fetch` en vez de con `@upstash/redis`: son cuatro líneas contra once
+dependencias de producción (D27).
+
+**Los runtime logs quedaron descartados por un dato, no por gusto:** el plan es *hobby*, donde se
+retienen alrededor de una hora. No aguantan una ventana de lanzamiento.
+
+### La superficie nueva se lee como pública, porque lo es
+
+Una Server Action es un POST que puede invocar cualquiera, así que lo que la protege no es que
+solo la llame nuestro componente: **enum cerrado** validado contra la lista, **no devuelve nada**
+—ni el contador ni si escribió, así que no sirve de oráculo— y límite de frecuencia más bajo que
+el del formulario, porque aquí el peor caso no es una bandeja llena sino una **medición falsa que
+se usaría para decidir**. Lo que ese límite no puede —serverless, instancia fría, actor
+distribuido— va escrito al lado del código, con su señal de detección: una tasa que se mueve sin
+que se mueva el tráfico.
+
+**El `/security-review` de la DoD se pasó y salió limpio**, con el matiz de que el envenenamiento
+del contador no es reportable ahí por caer en sus exclusiones. No es un no-problema: es un riesgo
+de **integridad del dato**, asumido y escrito.
+
+### Lo que obligó a tocar un documento legal, que es la parte que casi se queda fuera
+
+La primera redacción de la nota para `/cookies` decía «un contador agregado **en nuestro propio
+servidor**, **sin tu IP**». Las dos mitades eran falsas: el contador lo lleva **Upstash**, que es
+un tercero, y la Server Action **recibe** la IP —como cualquier petición HTTP— y la usa en memoria
+una hora para el límite de frecuencia. Lo cierto es que **no se guarda**, que no es lo mismo que
+«no se usa».
+
+Es la familia de `BRAND.md` §La regla del control sobre imagen prometía de más, y aquí habría
+salido cara: es la página que enumera a Google como encargado y publica su transferencia
+internacional. **El sitio entero se apoya en que esa página dice la verdad literal.**
+
+Lo que entra, entonces, no es una frase: es **una fila de tabla y un bloque, en dos idiomas**. La
+fila, porque `flm-consent-seen` es almacenamiento en el dispositivo y esa tabla existe para
+enumerarlo; el bloque, justo **después de la base legal** y no al final entre los terceros, porque
+es lo único que ocurre *antes* de que el visitante decida y su sitio es donde acaba de leer que
+nada se carga sin su permiso. Y `LAST_COOKIES_UPDATE` se mueve, que es lo que D18 le pide a un
+documento vivo.
+
+### La clave lleva el entorno dentro, y eso corrige una premisa que duró tres horas
+
+Este D-entry se escribió diciendo que en local y en Preview *no hay almacén y no debe haberlo*.
+**Falso al conectar la integración:** el Marketplace reparte las credenciales de Upstash a
+**Production y Preview**, así que cada despliegue de vista previa habría escrito en el mismo
+contador que producción. El denominador que esto existe para dar lo habría inflado el propio
+trabajo de construirlo, y el PR que lo construye genera una vista previa por empujón.
+
+La clave pasa a ser `flm:consent:<VERCEL_ENV>:<suceso>`. **Se resuelve en el código y no borrando
+la variable en Vercel** por dos razones: la integración puede volver a inyectarla al sincronizar,
+y una configuración de panel no la revisa nadie en un PR. Y separar es mejor que apagar Preview,
+porque deja **verificar la cadena entera antes de mergear** — que es justo lo que le faltaba a
+esto para estar comprobado de verdad, en vez de comprobado de que no rompe.
+
+El lector toma `--entorno=`, y **por defecto `production`**, nunca la suma: un total que mezclara
+las pruebas con las visitas reales sería el dato envenenado que la separación evita.
+
+**Verificado el 2026-08-31 contra el almacén real**, ejercitando el camino del código y no la API:
+`almacenConfigurado` cierto, `INCR` y `MGET` de ida y vuelta, y —la mitad que importa— el espacio
+`local` en 1 con **producción todavía en 0**.
+
+**Cómo se encontró, que es lo reutilizable:** no lo vio ningún gate, porque ninguno puede verlo.
+Salió de mirar `vercel env ls` al conectar la integración, o sea de comprobar la premisa **en el
+sitio donde de verdad vive** en vez de en el comentario donde estaba escrita. Es la regla 1 de
+`BRAND.md` §Cómo se escribe una regla —el disparador que mira al lugar equivocado— aplicada a un
+supuesto sobre infraestructura.
+
+**Estado:** Aceptada.
+
+## D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento — 2026-08-31
+
+**Decisión.** El sitio monta **Vercel Web Analytics** en el layout, **fuera del gate de
+consentimiento** y dentro del de producción. Es lo único de este sitio que mide sin preguntar, y
+esa es la decisión entera: **detrás del consentimiento no aportaría nada sobre GA4** —mismo
+denominador, mismo sesgo— y no habría razón para tenerlo.
+
+**Lo que compra, y que D169 no puede dar:** el **volumen absoluto** y el **embudo clic → lectura**
+de quien no consiente. El contador de D169 solo sabe del diálogo: cuánta gente lo vio y qué
+eligió. No sabe cuántas páginas leyó nadie.
+
+### La pregunta era de postura y estaba escrita como tal
+
+La ficha de P68.61 lo dejó dicho: *«la decisión de la 1 no es ¿lo instalo? sino ¿mi postura de
+consentimiento admite una excepción, y la escribo?»*. La respuesta es **sí, y se escribe**.
+
+Y hay que decirlo en el orden incómodo: **este sitio exige consentimiento a todo el mundo por
+decisión propia, más estricta que la norma** (D13/D17), y esto no lo pide. La ley no lo exige
+—sin cookies ni almacenamiento en el equipo, el art. 22.2 de la LSSI no aplica, y la base es el
+interés legítimo del art. 6.1.f del RGPD—, así que **es una excepción al criterio propio, no a la
+norma**. Esa frase va literal en `/cookies`, con el «presume de pedir permiso a todo el mundo, y
+esto no lo pide» delante y la vía de oposición detrás.
+
+**El derecho de oposición no se inventa una vía nueva:** la página ya lo ofrece por escrito en
+«Qué derechos tienes». Se enlaza a él en vez de añadir un cuarto control al diálogo, que sería
+UI nueva para un caso que el documento ya cubre.
+
+### Lo que casi entra mal: recortar la cadena de consulta entera
+
+La primera versión de `beforeSend` tiraba la query completa. Parecía lo prudente y **habría
+costado la mitad del motivo de tener esto**: los UTM de los posts del lanzamiento son
+precisamente la separación por post que esta herramienta puede dar para *todo* el tráfico y GA4
+solo para el que consiente. Y no son un dato personal: son la etiqueta de una campaña.
+
+Lo que entra es una **allowlist** de los cinco `utm_*`, misma forma que la CSP de este sitio.
+Garantiza la otra mitad: **nada que no esté en la lista llega a medirse**, venga de donde venga.
+El fragmento se borra también, porque aquí son anclas de sección y a qué apartado saltó alguien
+no hace falta para contar una visita.
+
+**Y `beforeSend` obliga a una isla de cliente**, no por estilo: es una función, y una función no
+cruza de un Server Component a uno de cliente. Por eso existe `components/analytics/web-analytics.tsx`.
+
+### La CSP no cambia, y eso es un hecho comprobable, no un supuesto
+
+El script se sirve de `/_vercel/insights/script.js` y la baliza va a `/_vercel/insights/view`:
+**mismo origen**, así que `script-src 'self'` y `connect-src 'self'` ya lo cubren. Es la primera
+herramienta de medición de este sitio que no abre un dominio en la allowlist — GTM, GA4 y Clarity
+abrieron los suyos. Queda por **verificar en producción** que ninguna directiva salta, porque un
+supuesto sobre infraestructura es exactamente lo que falló en D169.
+
+### Gate de producción, y por el motivo de D169 y no por simetría
+
+Fuera de producción el endpoint no existe, así que montarlo solo dejaría peticiones fallidas en
+la consola de quien desarrolla. Y en Preview, si existiera, contaría las visitas de revisar un PR
+como tráfico — el mismo envenenamiento que el contador acabó de resolver con el entorno dentro de
+la clave.
+
+### Tres frases del sitio que esto vuelve imprecisas, y qué se hizo con cada una
+
+- **`/cookies` §Terceros** decía «la analítica la proporcionan Google y Microsoft». Pasa a «la
+  analítica **que requiere tu consentimiento**», y la otra queda cubierta por su propio bloque.
+- **`/cookies` §Lo que se mide antes de que decidas** se escribió el mismo día para el contador y
+  se titulaba «lo único que cuento antes de que decidas». Ya no es *lo único*: se reescribe para
+  las dos en vez de añadir un segundo bloque de excepción al lado.
+- **El `lead` de `/cookies` y `whatBody`** dicen «ninguna cookie de analítica sin tu
+  consentimiento». **Sobreviven en lectura literal y se dejan**: Vercel Web Analytics no usa
+  cookies. Se anota porque es la misma familia que §s12 del artículo, y esa clase de frase
+  aguanta una vez y no dos.
+
+### Dos cosas que confirmó Francisco, y una que medí mal
+
+**La vía de oposición es solo la escrita** *(Francisco, 2026-08-31)*. No entra un cuarto control
+en el diálogo de preferencias: quien no quiera que se le cuente escribe, y se le deja de contar.
+La página ya ofrece ese derecho y lo que se hace es enlazarlo, así que **el mecanismo existe
+antes que la promesa** y no al revés. Y el copy de `/cookies`, revisado y aprobado por él.
+
+**Y el gate de producción NO es por lo que este D-entry decía.** Se escribió que fuera de
+producción el endpoint no existe. Medido el mismo día: **el Preview de la rama sirve
+`/_vercel/insights/script.js` con 200** y producción daba 404, porque lo inyecta el despliegue y
+el de producción era anterior a activar la herramienta. Es el tercer supuesto sobre
+infraestructura que este sprint escribe primero y comprueba después, y los tres han salido
+falsos: las credenciales en Preview (D169), este, y el propio 404 leído como «no está activado»
+cuando lo que faltaba era desplegar.
+
+Los motivos que sí sostienen el gate son otros dos, y el segundo manda: en Preview el tráfico
+somos nosotros revisando un PR —Vercel separa por entorno, así que es ruido y no
+envenenamiento—, y sobre todo **la cuota del plan *hobby*: 2.500 eventos al mes**, que es lo
+único con lo que hay que medir el lanzamiento.
+
+**La contrapartida, dicha porque contradice al hermano:** para el contador se eligió *separar* en
+vez de apagar, precisamente para poder verificar antes de mergear. Aquí se apaga, así que **esto
+se verifica DESPUÉS del merge**, contra producción, y hasta entonces no está comprobado que
+funcione. Se acepta por la cuota, no por descuido.
 
 **Estado:** Aceptada.

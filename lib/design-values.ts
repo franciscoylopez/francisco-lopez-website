@@ -473,7 +473,7 @@ export function fillPages(text: string, locale: Locale): string {
  * de arriba: fecha lo que CAMBIÓ, no lo que se midió. Comparten mecanismo, no
  * significado, y unificarlas haría que tocar el censo moviera una fecha legal.
  */
-export const LAST_COOKIES_UPDATE = "2026-08-23";
+export const LAST_COOKIES_UPDATE = "2026-08-31";
 
 /**
  * Cuándo se publicó y cuándo se revisó por última vez «Cómo se ha creado esta

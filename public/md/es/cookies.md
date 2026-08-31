@@ -13,7 +13,7 @@ Legal
 
 # Privacidad y cookies
 
-Última actualización: 23 de agosto de 2026 (2026-08-23)
+Última actualización: 31 de agosto de 2026 (2026-08-31)
 
 Aquí te cuento dos cosas: qué hago con tus datos si te pones en contacto conmigo, y qué cookies usa esta web. En las dos, el mismo criterio: el mínimo, con nombres y plazos concretos, y ninguna cookie de analítica sin tu consentimiento.
 
@@ -58,17 +58,26 @@ Este es el detalle de lo que puede cargarse, agrupado por categoría:
 | Nombre | Proveedor | Finalidad | Duración | Categoría |
 | --- | --- | --- | --- | --- |
 | `flm-consent` | franciscolopez.es | Guarda tu decisión sobre las cookies para no volver a preguntártelo. | Persistente | Necesaria |
+| `flm-consent-seen` | franciscolopez.es | Marca que ya se contó que viste el aviso, para no contarte dos veces. | Persistente | Necesaria |
 | `Contenedor (GTM)` | Google | Gestiona la carga de las demás etiquetas. No almacena datos por sí mismo. | — | Necesaria |
 | `_ga` | Google Analytics | Distingue usuarios de forma agregada para medir el uso de la web. | 2 años | Analítica |
 | `_ga_*` | Google Analytics | Mantiene el estado de la sesión de medición. | 2 años | Analítica |
 | `_clck` | Microsoft Clarity | Identifica al navegador entre visitas para asociar tus sesiones grabadas y mapas de calor. | 1 año | Analítica |
 | `_clsk` | Microsoft Clarity | Une varias vistas de página en una sola sesión de grabación. | 1 día | Analítica |
 
-«flm-consent» se guarda en el almacenamiento local del navegador (localStorage); técnicamente no es una cookie, pero se incluye por transparencia. Hoy no se usan cookies de marketing ni de publicidad.
+«flm-consent» y «flm-consent-seen» se guardan en el almacenamiento local del navegador (localStorage); técnicamente no son cookies, pero se incluyen por transparencia. Hoy no se usan cookies de marketing ni de publicidad.
 
 ## Base legal
 
 Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las de analítica solo se cargan con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web.
+
+## Lo que se mide antes de que decidas, que son dos cosas
+
+La primera es un contador: cuento que has visto este aviso y qué elegiste. Agregado, la primera vez y solo una vez por navegador, y lo lleva [Upstash](https://upstash.com/trust/privacy.pdf). No guarda tu dirección IP, ni cookies, ni nada que permita identificarte: son tres números que suben. Por eso no te pido permiso para él, porque no hay ningún dato personal que tratar.
+
+La segunda sí trata datos, y es la que quiero explicarte sin adornos: **[Vercel Web Analytics](https://vercel.com/legal/privacy-policy)**, que cuenta las páginas que se visitan. No usa cookies y no guarda nada en tu dispositivo, pero para no contarte dos veces el mismo día calcula un identificador temporal a partir de tu dirección IP y de tu navegador. Ese identificador se regenera cada día y la IP no se conserva. De ahí salen el país, el tipo de dispositivo y la página vista; nada que te señale a ti.
+
+Y la parte incómoda, que prefiero decir yo: **este sitio presume de pedir permiso a todo el mundo, y esto no lo pide.** La ley no lo exige (sin cookies ni almacenamiento en tu equipo, el consentimiento previo del artículo 22.2 de la LSSI no aplica, y la base legal es mi interés legítimo del artículo 6.1.f del RGPD en saber cuánta gente lee esto), pero es una excepción a mi propio criterio y no a la norma. La razón es que la analítica con permiso solo ve a quien acepta, así que no puede decirme cuánta gente hay realmente. Si no te parece bien, [escríbeme](#contacto) y dejo de contarte: es el derecho de oposición de más arriba y lo respeto sin pedir explicaciones.
 
 ## Cómo gestionar o retirar tu consentimiento
 
@@ -80,7 +89,7 @@ También puedes bloquear o borrar cookies desde la configuración de tu navegado
 
 ## Terceros
 
-La analítica la proporcionan Google (Google Tag Manager y Google Analytics) y Microsoft (Clarity), que tratan los datos conforme a sus propias políticas. Puedes consultarlas en [las políticas de privacidad de Google](https://policies.google.com/technologies/partner-sites) y en [la declaración de privacidad de Microsoft](https://privacy.microsoft.com/privacystatement).
+La analítica que requiere tu consentimiento la proporcionan Google (Google Tag Manager y Google Analytics) y Microsoft (Clarity), que tratan los datos conforme a sus propias políticas. Puedes consultarlas en [las políticas de privacidad de Google](https://policies.google.com/technologies/partner-sites) y en [la declaración de privacidad de Microsoft](https://privacy.microsoft.com/privacystatement).
 
 ## Vídeo incrustado
 

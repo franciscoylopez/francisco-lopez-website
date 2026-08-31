@@ -45,3 +45,34 @@ export const GTM_ID =
   process.env.VERCEL_ENV === "production"
     ? process.env.NEXT_PUBLIC_GTM_ID
     : undefined;
+
+/**
+ * Vercel Web Analytics, y **solo en producción** (P68.61 opción 1, D170).
+ *
+ * MISMO GATE QUE GTM, Y CONVIENE SABER POR QUÉ **NO** ES POR LO QUE PARECE.
+ * Aquí ponía que fuera de producción el endpoint no existe. **Medido el
+ * 2026-08-31: es al revés.** El Preview de la rama sirve
+ * `/_vercel/insights/script.js` con 200 y producción daba 404, porque lo inyecta
+ * el despliegue y el de producción era anterior a activar la herramienta.
+ *
+ * Los motivos que sí se sostienen son otros dos, y el segundo manda:
+ *
+ *   1. En Preview el tráfico somos nosotros revisando un PR. Vercel separa los
+ *      datos por entorno —su panel tiene el filtro—, así que no es
+ *      envenenamiento como el que el contador tuvo que resolver; es ruido que
+ *      alguien tendría que acordarse de filtrar.
+ *   2. **La cuota.** El plan es *hobby*: 2.500 eventos al mes. Navegar los
+ *      previews de un sprint se come una parte apreciable de lo único con lo que
+ *      hay que medir el lanzamiento. Esa es la razón de verdad.
+ *
+ * LA CONTRAPARTIDA, dicha porque contradice lo que se decidió para el contador:
+ * allí se eligió SEPARAR en vez de apagar, precisamente para poder verificar
+ * antes de mergear. Aquí se apaga, así que la verificación de esto ocurre
+ * DESPUÉS del merge, contra producción. Se acepta por la cuota.
+ *
+ * LO QUE **NO** COMPARTE CON GTM ES EL OTRO GATE, y es toda la decisión de D170:
+ * esto carga **sin consentimiento**. Es la excepción a la postura del sitio, está
+ * argumentada en su D-entry y declarada en `/cookies`. Si algún día se revierte,
+ * lo que cambia es dónde se monta en el layout, no esta constante.
+ */
+export const WEB_ANALYTICS = process.env.VERCEL_ENV === "production";

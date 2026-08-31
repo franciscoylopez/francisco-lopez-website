@@ -102,7 +102,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <summary><b>Rendimiento, medición y seguridad</b></summary>
 
 - **PageSpeed >90 en las catorce páginas**, y CLS 0. La nota y su fecha **no se teclean aquí**: las sella `npm run psi -- --registro` en `content/psi/registro.json`, que es la fuente única de la que también las lee el artículo (`D102`). Un rango escrito a mano en dos sitios se queda atrás en uno sin que nada falle, y este ya lo hizo. Server Components por defecto, responsive en CSS y JS de cliente solo en las islas interactivas.
-- **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él.
+- **Analítica y consentimiento**: Google Tag Manager + GA4 y **Microsoft Clarity**, con **Consent Mode v2** y banner de consentimiento granular (RGPD), con página propia de privacidad y cookies. Todo gateado a producción **y** a consentimiento: nada mide sin él. **Con dos excepciones escritas, y las dos declaradas en `/cookies`**: el contador de consentimiento (`D169`), tres enteros que dicen qué fracción del tráfico ve la analítica y que no son dato personal; y **Vercel Web Analytics** (`D170`), que sí lo trata y carga igualmente sin permiso, porque detrás del consentimiento mediría lo mismo que GA4 y con el mismo sesgo. La segunda es una excepción al criterio propio de este sitio, no a la norma, y así está escrita.
 - **CV en PDF bilingüe** (ES/EN) generado por código, con identidad de marca y texto seleccionable (ATS).
 - **Un gesto de marca, y solo uno** (`D137`): el punto final de «Del discovery al dato.» cae y se asienta al cargar, en morado, con dos curvas porque lo que cae acelera. Es la **firma**; el filete que crece bajo los años de Hitos es su **textura**, subordinada a propósito. Se eligieron viéndolos, no razonándolos.
 - **Cabeceras de seguridad**: nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy, HSTS y **CSP** con allowlist mínima por origen exacto. La letra que le pone cada escáner no se escribe aquí: se comprueba en vivo, y por qué no sube está en `DECISIONS.md` D26.
@@ -194,6 +194,10 @@ npm run gate:html           # …y comprueba que un refactor no lo cambió (D42,
 npm run pliegue             # que las aperturas que comparten pliegue midan lo mismo (D144).
                             # Necesita el sitio servido y agent-browser
 npm run check:enlaces       # que las URLs externas del sitio sigan respondiendo (D141)
+npm run consentimiento      # qué fracción del tráfico ve la analítica: los tres contadores
+                            # y la tasa (D169). Distingue «cero» de «sin configurar», que
+                            # es media utilidad del script. Necesita las credenciales del
+                            # almacén: `vercel env pull .env.local`
 npm run novedades           # qué secciones publicadas toca este PR, y si es copy o solo
                             # una fuente que se movió (D143). Lo lanza CI en cada PR
 npm run articulo:novedades  # QUÉ cambió en cada dependencia del artículo desde el sello
