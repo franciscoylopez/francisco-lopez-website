@@ -201,6 +201,7 @@
 - D163 · La sección más pesada del arranque era la que nadie lee hasta que algo sale rojo
 - D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo
 - D165 · El informe del escáner era una API, y con ella un suspenso se descarta con cifra
+- D166 · La causa era la profundidad, y el catálogo que un descarte mal fundado había tumbado
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10407,3 +10408,137 @@ Las tres correcciones salen del mismo gesto —**escanear un sitio que pasa y mi
 diferencia**— y ninguna se habría visto razonando sobre el texto del check, que es lo que se hizo
 las tres veces. Con la API de escaneo cuesta un comando; sin ella costaba abrir el navegador, y
 por eso no se hacía.
+
+## D166 · La causa era la profundidad, y el catálogo que un descarte mal fundado había tumbado — 2026-08-31
+
+**Decisión.** La tanda 7 de «Agentes» entra con dos cambios y un método corregido. El JSON-LD de
+la home pasa a **`@graph`** —`ProfilePage`, `WebSite` y `Person` como nodos hermanos enlazados
+por `@id`, en vez de un árbol de tres niveles— y el sitio publica un **catálogo ARD** en
+`/.well-known/ard.json`, con su gemela en `/.well-known/ai-catalog.json` y un `rel="ard"` en las
+28 variantes. **Producción: 69 → 78 en ora, grade C → B.**
+
+### La causa del `sameAs` era la profundidad, y ahora está demostrada
+
+`json-ld-entity-linking` pasa de **0/2** a **2/2**, «Strong entity linking via sameAs:
+linkedin.com, github.com». **El `sameAs` no cambió ni un carácter**: lo único que cambió es que el
+`Person` dejó de colgar de `mainEntity` y pasó a ser nodo de primer nivel.
+
+Eso cierra un hilo de tres pasos que conviene dejar entero, porque cada paso corrigió al
+anterior. P68.747 arregló el `sameAs` por su propio motivo —un repositorio no identifica a una
+persona— y el escáner no se movió, que es D161: *la cifra de un escáner no valida un arreglo ni lo
+invalida.* D165 escribió entonces una causa superviviente **razonando sobre el subtítulo del
+check**, y era falsa. El control que Francisco trajo la tumbó: `urvagandhi.tech`, sitio personal
+con entidad `Person`, pasa 2/2 **con nuestros dos dominios exactos**, y su `sameAs` vive en un
+nodo de primer nivel de un `@graph`.
+
+**Un control no valida un arreglo, pero sí valida una CAUSA.** Es la mitad que le faltaba a D161,
+y es lo que separa esta corrección de las dos anteriores: no se dedujo del texto del check, se
+midió contra un sitio que pasa.
+
+**Y la forma nueva es la correcta por sí sola**, que es el orden en que hay que leer esto: en un
+`@graph` cada entidad es un nodo con identidad propia y las relaciones van por `@id`, que es lo
+que este archivo ya hacía **entre** páginas desde P50. Medido en vez de supuesto: el Schema Markup
+Validator devuelve **el mismo árbol** para las dos formas —la anidada contra producción, la de
+`@graph` contra el build—, **1 objeto · 0 errores · 0 avisos** a los dos lados. Lo único que
+cambia es el `@id` propio del `ProfilePage`.
+
+> **Y destapó un hueco en `check:marco`.** `recorrerIds` se saltaba toda clave que empieza por
+> `@` —correcto para `@context` y `@type`, que son metadatos— y con ella **`@graph`, que contiene
+> nodos**. Habría dejado de ver los `@id` que la home DECLARA y habría acusado de referencia
+> colgada a las trece páginas que los apuntan: un rojo cuya causa está en el guardián, que es la
+> peor clase. Se recorre a mano, con el motivo al lado.
+
+### El catálogo ARD: un descarte que salió de leer la descripción del check
+
+El triaje lo había tumbado como «el `api-catalog` sin API de D159». Ese descarte estaba **mal
+fundado**, y se dice porque el error es de método, no de criterio: salió de leer la **descripción**
+del check —«MCP servers, APIs, agents, and skills»— en vez de la especificación o un catálogo
+real. El de Vercel, que pasa 4/4, tiene **dos de sus cuatro entradas en contenido puro** (un `.md`
+de documentación y un índice JSON), y el modelo de entrada que valida el conformance es
+`identifier` + `displayName` + tipo de medio + **exactamente uno** de `url` o `data`. Nada exige
+una API.
+
+Así que el criterio de D157 —*un check de superficie agéntica aplica si el sitio TIENE esa
+superficie*— **aquí se cumple**. Entran seis entradas, todas servidas hoy: `/llms.txt`,
+`/sitemap.xml`, el canal markdown y el CV en PDF, los dos últimos derivados de `locales`.
+
+**Y la mitad del trabajo es lo que NO entra:** nada de MCP, agentes, skills ni API, porque no
+existen; ni `trustManifest`, porque la especificación solo exige `trustManifest.identity` y aquí
+no hay ninguna identidad criptográfica que declarar; ni las 28 páginas, que serían la tercera
+copia de la lista que cerró D72 — para eso están las dos entradas de índice.
+
+**Dos rutas, un solo documento.** `/.well-known/ai-catalog.json` no es «la ruta vieja de ARD»: es
+el mecanismo de descubrimiento del **AI Catalog Standard**, de donde sale el formato que este
+sitio emite —`specVersion`, `host`, `entries`— y contra cuyo modelo valida el conformance. ARD
+hereda ese formato y le pone ruta nueva. El cuerpo lo compone `respuestaDelCatalogo()` una sola
+vez, y `check:agentes` **compara los dos artefactos byte a byte**: no hay dos documentos, hay dos
+puertas.
+
+**El `rel="ard"` va en el layout y no en `pageMetadata`**, porque la Metadata API de Next no sabe
+emitir un `rel` arbitrario (`alternates` solo genera `rel="alternate"`). Es un `<link>` en el
+árbol y **quien lo iza al `<head>` es React** — y esa izada es justo lo que no se puede dar por
+hecho, así que `check:marco` lo comprueba en las 28: que esté, que esté en el `<head>`, que apunte
+al catálogo y que sea uno.
+
+### Las cinco predicciones, escritas antes de mirar
+
+| Check | Antes | Después | Predicción |
+|---|---|---|---|
+| `json-ld-entity-linking` | fail 0/2 | **pass 2/2** · enumera `linkedin.com, github.com` | Acertada, dominios incluidos |
+| `ard-catalog` | fail 0/1 | **pass 1/1** · «6/6 entries» | Acertada |
+| `ard-entries-valid` | na 0/2 | **pass 2/2** | Acertada |
+| `ai-catalog-published` | na 0/1 | **pass 1/1** | Acertada tras ampliar el alcance |
+| `ard-trust-manifest` | na 0/2 | **fail 0/2** | Acertada: sigue en 0 a propósito |
+
+Controles quietos, como estaba escrito: `json-ld` 4/4, `schema-type-breadth` 0/2, `content-no-js`
+2/3, `markdown-negotiation-vary` 1/1, `agent-discovery-file` 2/2. **is-agentic no se mueve y sigue
+en 96:** los checks de ARD no están entre sus 16 elegibles.
+
+**Los nueve puntos no son los seis brutos**, y decirlo evita prometer de más la próxima vez: en
+bruto fue 51/66 → 57/69. El salto sale de que estos checks viven en **Discovery, la capa con el
+denominador más pequeño** (2/6 → 6/9, del 33 % al 67 %), más los 2 de Access (35/41 → 37/41). Un
+punto en Discovery vale mucho más que uno en Usability.
+
+> **Y de esa aritmética sale un dato reutilizable: un bonus SUSPENDIDO no cuesta nada.** Los 2 de
+> `ard-trust-manifest` no entraron en el denominador al fallar, mientras que los de
+> `ard-entries-valid` sí entraron al pasar. Así que un check bonus en rojo no es deuda: es una
+> casilla que no se ha querido rellenar.
+
+### La trampa del método, que casi hizo publicar lo contrario
+
+**`POST https://ora.ai/api/scan` no escanea sin `force: true`.** Devuelve el informe GUARDADO, con
+`analysisStatus: complete` y su `durationMs`, o sea con toda la pinta de una pasada nueva. La
+primera lectura tras el deploy dio **69 y «No /.well-known/ard.json»** con la ruta ya sirviendo
+200 en producción, comprobado con `curl`: una tanda de nueve puntos parecía no haber movido nada.
+`refresh: true` no hace nada; el que fuerza es `force`.
+
+Lo cazó la regla que D165 ya había escrito: **mirar un `details` que solo pueda ser nuevo, nunca
+el `scannedAt`**. Es la tercera vez en dos días que un metro de terceros miente sobre su propia
+frescura, y la primera en que la regla escrita lo detiene antes de publicar la cifra.
+
+### Lo que queda mejorable, y qué se hace con cada cosa
+
+**`org-schema-completeness` 1/2 — ya descartado en D161, sin novedad.** El único `Organization`
+de la home es el `worksFor`, o sea Emendu. Rellenarle `contactPoint` y `address` es publicar
+datos de un tercero o hacer pasar los propios por suyos. Quitar el nodo daría 0/2, peor.
+
+**`schema-type-breadth` 0/2 — descartado dos veces, y el descarte se sostiene.** Su lista es
+literal (`FAQPage`, `Service`, `Product`, `AggregateRating`, `BreadcrumbList`) y `stripe.com`
+también saca 0/2. Aparte, y **separado del check a propósito**: la home publica a la vista cinco
+hitos con año, la trayectoria y la formación, y el nodo `Person` no los marca. `award`,
+`hasOccupation` y `alumniOf` son las propiedades exactas de Schema.org para eso y serían ciertas.
+Está tareado **por su propio mérito**, con el motivo escrito de que probablemente no mueva esta
+casilla — `Occupation` no está en su lista.
+
+**`a2a-agent-card` — no se publica, y esta es su primera vez por escrito.** Pide un
+`/.well-known/agent-card.json` que describa «las capacidades, skills y endpoint de contacto de tu
+agente». **Aquí no hay agente.** Es el mismo caso que `/.well-known/agent-skills` y `/skills.sh`,
+que P68.748 ya rechazó, y el mismo criterio que tumbó el `api-catalog` sin API: mentir en un
+formato que una máquina sabe leer. Además es **bonus**, así que por la aritmética de arriba
+**cuesta cero**.
+
+**Su condición de salida está fijada y no es una fecha: es V4.** El día que exista «Pregúntale a
+mi carrera», la tarjeta A2A deja de ser una afirmación falsa y pasa a ser la superficie de
+descubrimiento que ese agente necesita — publicada, no inventada. Queda anotado en la ficha de esa
+tarea para que llegue con el trabajo y no dependa de que alguien se acuerde. *Si el hallazgo
+vuelve antes: está medido y descartado, no sin mirar.*

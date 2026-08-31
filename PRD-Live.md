@@ -57,7 +57,9 @@ Permissions-Policy, HSTS y CSP con allowlist mínima).
 
 **Cada página se sirve también en markdown** para quien la lea con un agente: el `<main>` sin
 el HTML de alrededor, por URL explícita (`/md/<locale>/<pagina>.md`, la vía estable) o pidiendo
-`Accept: text/markdown`. La home baja de 216 a 6,6 KB (D158).
+`Accept: text/markdown`. La home baja de 216 a 6,6 KB (D158). Y esos recursos están además
+**catalogados** en `/.well-known/ard.json` —con su gemela `ai-catalog.json` y un `rel="ard"` en
+cada página—. Lo que no existe no se cataloga: ni MCP, ni agentes, ni skills, ni API (D166).
 
 **La marca no termina en el dominio.** Firma de email, banner de LinkedIn y portada del
 repositorio comparten el titular del Hero, «Del discovery al dato», y el mismo monograma:
@@ -254,7 +256,9 @@ y deja la **Distribución** humana aplazada por sexta vez, esta vez con motivo y
 ### V4 — IA conversacional
 
 **«Pregúntale a mi carrera»** — sin definir: modelo, arquitectura, datos, coste y UX.
-Arrastra la CSP estricta con nonces (§5).
+Arrastra la CSP estricta con nonces (§5) y la tarjeta A2A de `/.well-known/agent-card.json`,
+hoy descartada porque no hay agente: el día que lo haya, es la puerta por la que se le
+encuentra, y una entrada más del catálogo (D166).
 
 **Su corpus tiene un límite fijado antes de que exista el agente: lo que no va por escrito
 en el sitio, tampoco va aquí.** Un agente público publica igual que una página, y además
