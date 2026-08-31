@@ -9,6 +9,7 @@ import { GoogleTagManager } from "@/components/analytics/google-tag-manager";
 import { ConsentBanner } from "@/components/site/consent-banner";
 import { SkipLink } from "@/components/site/skip-link";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ARD_URL } from "@/lib/ard";
 import { paletteHex } from "@/lib/design-values";
 import { locales, isLocale } from "@/lib/i18n/config";
 import { pageMetadata } from "@/lib/page-meta";
@@ -126,6 +127,24 @@ export default async function RootLayout({
       suppressHydrationWarning
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
+      {/* EL ENLACE AL CATÁLOGO DE AGENTES (2026-08-31). ARD v0.91 §5.1 pide dos
+          cosas a un consumidor: pedir `/.well-known/ard.json` y **honrar un
+          `rel="ard"`**. Lo primero funciona sin nosotros; lo segundo hay que
+          emitirlo, y es lo que hace que un agente que ya tiene el HTML en la mano
+          no necesite una petición a ciegas para saber si existe catálogo.
+
+          VA AQUÍ Y NO EN `pageMetadata`, que es donde vive todo lo demás del
+          `<head>`: la Metadata API de Next no sabe emitir un `rel` arbitrario
+          —`alternates` solo genera `rel="alternate"`—, así que un `<link>` en el
+          árbol es la vía, y React lo iza al `<head>` él solo. Que llegue de
+          verdad no se supone: lo comprueba `check:marco` sobre las 28 variantes.
+
+          Y SOLO ESTE `rel`. El heredado `ai-catalog` no se emite aunque sí
+          sirvamos su ruta: la relación normativa hoy es esta, apunta al mismo
+          documento, y un segundo `<link>` en veintiocho páginas no lo consulta
+          nadie que no encuentre ya el well-known. El porqué de las dos rutas,
+          en `lib/ard.ts`. */}
+      <link rel="ard" href={ARD_URL} />
       <body className="flex min-h-full flex-col">
         {/* Primer hijo del <body>, por delante del bloque de GTM: es lo primero
             que tiene que recibir el foco al tabular (WCAG 2.4.1, nivel A). */}
