@@ -185,91 +185,74 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 5 |
 | **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **6** |
 | **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **3** |
+| **El arreglo que se quedó en su archivo** | Un defecto de familia conocida se corrige **donde se encontró**, la regla se escribe, y sus hermanos siguen vivos en archivos vecinos porque nadie los buscó. Firma: el mismo repo contiene la lección escrita **y** su incumplimiento, a un directorio de distancia | **3** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **El umbral que persigue al dato** | Un techo que se reescribe para seguir a lo que mide, así que nunca se incumple y nunca obliga. Firma: cambia más a menudo que la cosa medida, y su distancia al dato es constante | **2** |
 | **El dato que persigue al techo** | El techo **no** se mueve y la medida vive pegada a él, porque retirar solo se dispara al cruzarlo. Firma: el objetivo no se ha cumplido **nunca** | **1** |
-| **Añadir sin retirar** | Un documento que crece porque nada pregunta qué sobra (D69) | el marco |
+| **Añadir sin retirar** | Algo del método crece porque **nada programa la retirada**: solo hay techo, y retirar es siempre una reacción al rojo. Nació mirando documentos (D69) y el décimo disparo la encontró en tres órganos a la vez | **4** |
 
-*Segundo disparo, 2026-08-19: nace «arreglar la mitad que se abre». Y la lección sobre esta
-tabla: **actualizarla es el último paso del disparo y es el que se olvida.***
+> **El RELATO de cada disparo —qué encontró, con quién convergió y qué se cerró— vive en
+> `PRD-Historical.md`, con su informe enlazado.** Aquí solo la tabla de arriba y las reglas que
+> dejaron, porque son lo único que se vuelve a usar. *Retirado en lote el 2026-08-31: eran ~1.900
+> palabras que duplicaban el histórico, o sea la regla 5 de `BRAND.md` —«si ya está en otro sitio,
+> aquí va el puntero, nunca la copia»— incumplida por la skill que audita el método. La retirada
+> es la que Francisco eligió en ese mismo disparo, sobre el caso que la generó.*
 
-*Tercero (2026-08-22), cuarto (2026-08-22) y quinto (2026-08-25): nacen **«la pieza que nace
-fuera de la capa»** y **«el metro que declara su alcance…»**, y las dos se separan de su
-vecina **por el REMEDIO y no por el síntoma** —disparador contra guardián de frontera; contar
-contra mirar el resultado renderizado—. **Ese es el criterio para dar de alta una familia
-nueva.** Dejan tres reglas ya aplicadas arriba: un aviso sin umbral se olvida, así que se
-vuelve fila de la tabla con verde y rojo; **mide el drenaje, no solo la clasificación** (paso
-8); y **cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es
-cuánto recortar sino qué gobierna el número**.*
+**Las reglas que dejaron los diez disparos.** Sin fecha y sin autor a propósito: quien las lee
+las va a aplicar, no a datar.
 
-- ***Antes de publicar un cero, búscalo con otras palabras y en otro sitio.** Un `grep` que
-  devuelve cero es un aprobado, y ese informe publicó dos falsos.*
-- ***La asimetría entre lo automático y lo visual se mide cada vez**, y **no se escribe la
-  cifra**: cuando esta línea decía «20 pasos» ya eran 21.*
+*Sobre el catálogo*
 
-*Sexto disparo, 2026-08-27: **nace «la reducción que fue una mudanza», y la trajo Francisco
-desde una sensación** —«redujimos las skills y no lo hemos vuelto a comparar»—. Medido: los docs
-`@`-importados bajaron un 30% mientras las skills subían un 55%, o sea que **el corpus total
-creció un 6%**; había techo a los docs y techo por entrada a las skills, y **ninguno a su suma**.
-**Tercera convergencia, y otra vez el hallazgo de más confianza.** Cerrado el mismo día por
-P68.5907: techo de 20.500 a la suma.*
+- **Actualizar la tabla es el último paso del disparo, y es el que se olvida.**
+- **Una familia nueva se da de alta por el REMEDIO, no por el síntoma.** Dos hallazgos que se
+  parecen y se arreglan distinto son dos familias; dos que se arreglan igual, una.
+- **Un disparo cabe en un párrafo.** El detalle va al informe.
 
-*Y dos cosas de método que este disparo deja:*
+*Sobre los indicadores*
 
-- ***Un indicador sin fuente deja de vigilarse en silencio.** «Skills sin estrenar» llevaba dos
-  disparos en la tabla y no se pudo medir: nada en el repo registra qué skill se ha invocado, y
-  el valor anterior salió de recordarlo. Una fila muerta en una tabla de umbrales es peor que
-  no tenerla, porque da sensación de cobertura. **Al añadir un indicador, se escribe con qué
-  comando se saca**; si no lo tiene, no entra.*
-- ***Una sospecha apuntada como hecho envejece igual de mal que una cifra.** El cuelgue del
-  censo se atribuyó a 38 Chrome de `agent-browser` —«es la principal sospecha»— y la nota
-  siguiente ya lo daba por causa. Era falsa: el censo se colgó con el navegador despejado, y la
-  causa real era el `stdin`. **Lo que se apunta como hipótesis se escribe como hipótesis.***
+- **Un aviso sin umbral se olvida**, así que se vuelve fila de la tabla con su verde y su rojo.
+- **Al añadir un indicador se escribe con qué comando se saca.** Si no lo tiene, no entra: una
+  fila que no se puede medir da sensación de cobertura y no cubre nada.
+- **Un indicador cuya definición no es copiable no es reproducible** — reconstruirlo dio tres
+  cifras sobre el mismo árbol. Y **al heredar una tabla se auditan también las filas viejas**.
+- **Un objetivo que no se ha cumplido nunca no está gobernando nada.** Se decide el objetivo o
+  se decide qué baja a un histórico; **el techo no se toca**.
+- **Mide el DRENAJE, no solo la clasificación** (paso 8). Clasificar bien una tarea no la mueve.
+- **La asimetría entre lo automático y lo visual se mide cada vez, y no se escribe la cifra.**
 
-*Octavo disparo, 2026-08-29: **ninguna familia nueva, y eso es el resultado** — los seis
-hallazgos caen en cuatro que ya existían. Los tres primeros son la misma forma, **un indicador
-que mira al sitio equivocado**: «sprint de método» leía el nombre sobre un sprint con 52% de
-Infra; `sprint-review` nombraba el panel sin decir cómo llegar, y dos cierres escribieron «no
-tengo acceso» siendo falso; y «verificación ÷ producto» cruzó su umbral sin decir qué divide
-entre qué. **Sin notas de Francisco este ciclo**: ninguno tiene convergencia.*
+*Sobre medir*
 
-- ***Un indicador cuya definición no es copiable no es reproducible, y reconstruirlo puede dar
-  varias cifras.** Aquí, tres sobre el mismo árbol: 0,47 · 0,52 · 0,62. La regla del sexto
-  disparo ya existía y esta fila era anterior: **al heredar una tabla, se auditan también las
-  filas viejas.***
-- ***Un objetivo que no se ha cumplido nunca no está gobernando nada.** El del contexto (11.600)
-  lleva su vida entera sin alcanzarse, con la banda real entre 12.058 y 12.698. No se toca el
-  techo —lo prohíbe el séptimo disparo—: se decide el objetivo, o qué baja a un histórico.*
+- **Antes de publicar un cero, búscalo con otras palabras y en otro sitio.** Un `grep` que
+  devuelve cero es un aprobado, y esta skill ya publicó dos falsos.
+- **Al medir sobre `git log`, el registro es el COMMIT**: `RS` en el separador, nunca `grep -c`.
+- **Un comando publicado aquí también caduca.**
+- **Lo que se apunta como hipótesis se escribe como hipótesis.** Una sospecha dada por causa
+  envejece igual de mal que una cifra, y redirige la investigación.
+- **El sello se pone DESPUÉS de crear las tareas del propio `sprint-review`, sobre un volcado
+  NUEVO.** Un volcado es una foto, no una consulta.
 
-*Noveno disparo, 2026-08-30 (tras «Voz»): **nace «el dato que persigue al techo», imagen
-especular de «el umbral que persigue al dato»** — misma patología, mecanismo opuesto y por eso
-remedio opuesto: a aquella se le pone un techo intocable (ya se le puso); a esta, **una retirada
-programada**, porque mientras retirar sea una reacción al rojo, el equilibrio es el rojo.
-**Cuarta convergencia con Francisco** («seguimos siempre al límite»), y otra vez el hallazgo de
-más confianza: su «siempre» es lo que convirtió «quedan 13 palabras» en un diagnóstico. La curva:
-el objetivo de 11.600 no se ha alcanzado en la vida del techo, con la banda entre 12.058 y
-12.698.*
+*Sobre qué preguntar*
 
-*Y dos cosas de método que este disparo deja:*
+- **Cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es cuánto
+  recortar: es qué gobierna el número.**
 
-- ***El `grep` del paso 7 daba un falso cero**, que es el aviso del quinto disparo aplicándose a
-  un comando de esta skill. Corregido abajo. **Un comando publicado aquí también caduca.***
-- ***El sello se pone DESPUÉS de crear las tareas del propio `sprint-review`, y sobre un volcado
-  NUEVO.** Este cierre selló 18 sobre la foto anterior a escribirlas: un número que no existió en
-  ningún momento. **Un volcado es una foto, no una consulta.***
-
-**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-30, tras «Voz»)*:
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-31, tras «Agentes»)*:
 
 | Indicador | Hoy | Verde | Rojo | Comando |
 | :-- | :-- | :-- | :-- | :-- |
-| Variación neta de `General` por sprint | **+1** (19 → 20) 🟡 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
-| Veces que se movió un techo en el ciclo | **0** de 3 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
-| Margen del presupuesto de contexto | **13** 🔴 | ≥ 400 | < 100 | `check:contexto` |
-| Suma de skills a demanda | **techo 20.500** 🟡 | ≤ techo | > techo | `check:contexto` |
-| Verificación ÷ producto | **0,49** 🟡 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
-| % Infra del sprint que cierra | **18,5 %** (5/27) 🟢 | ≤ 35 % | ≥ 50 % | tablero, `GROUP BY Área` |
-| Verificación ÷ producto DEL SPRINT | **0,71 : 1** 🟢 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
-| Hallazgos de `design-review` cuya regla ya existía | *tercer ciclo sin disparar* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
+| Variación neta de `General` por sprint | **±0** (20 → 20) 🟢 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
+| Veces que se movió un techo en el ciclo | **1** de 3 🟡 | 0 | ≥ 2 | `check:contexto` (última sección) |
+| Margen del presupuesto de contexto | **133** 🟡 | ≥ 400 | < 100 | `check:contexto` |
+| Suma de skills a demanda | **holgura 277** 🟢 | ≤ techo | > techo | `check:contexto` |
+| Verificación ÷ producto | **0,554** 🔴 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
+| % Infra del sprint que cierra | **34,8 %** (8/23) 🟢 | ≤ 35 % | ≥ 50 % | tablero, `GROUP BY Área` |
+| Verificación ÷ producto DEL SPRINT | **1,57 : 1** 🟡 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
+| Hallazgos de `design-review` cuya regla ya existía | *quinto ciclo sin disparar* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
+
+*Dos filas se movieron a verde por una retirada en lote y no por haber apretado nada: la suma de
+skills pasó de holgura 14 a 277 al bajar el relato de los disparos a `PRD-Historical`. **Es la
+primera vez que un indicador de esta tabla mejora retirando en vez de recortando**, y es el caso
+que la fila roja de abajo está pidiendo a gritos para `scripts/`.*
 
 *Las dos filas de `check:contexto` van en su vara, que **descuenta los bloques de código**. La
 suma de skills no lleva cifra a propósito: la mueve esta misma skill al escribirse.*

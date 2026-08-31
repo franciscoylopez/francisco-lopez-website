@@ -509,21 +509,21 @@ Three pieces that don't live on this domain and carry the same brand. They are t
 
 Email signature
 
-The split symbol at 75px, the name in bold and the two channels, split by a vertical rule. It is built as a table with inline styles, the only thing that survives Gmail and Outlook, and the images point at absolute URLs on this domain because Gmail strips data URIs.
+The split symbol at 75px, the name in bold and the two channels, split by a vertical rule. It is built as a table with inline styles, the only thing an email client leaves intact, and the images point at absolute URLs on this domain because Gmail strips data URIs.
 
-Where it lives Gmail and Outlook, pasted into their signature settings
+Where it lives Gmail, pasted into its signature settings
 
 LinkedIn banner
 
 1584 × 396 over the site's dark background, with the Hero headline and the domain. The bottom-left corner is left empty on purpose: that is where LinkedIn lays the profile photo, so the banner doesn't carry one.
 
-Where it lives linkedin.com/in/franciscolopez1975
+Where it lives [linkedin.com/in/franciscolopez1975](https://www.linkedin.com/in/franciscolopez1975)
 
 Repository cover
 
 The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.
 
-Where it lives github.com/franciscoylopez
+Where it lives [github.com/franciscoylopez](https://github.com/franciscoylopez)
 
 5 of 6
 

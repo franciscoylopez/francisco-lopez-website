@@ -509,21 +509,21 @@ Tres piezas que no viven en este dominio y llevan la misma marca. Son la prueba 
 
 Firma de email
 
-Símbolo split a 75px, el nombre en negrita y los dos canales, separados por un filete vertical. Va en tabla y con los estilos en línea, que es lo único que sobrevive a Gmail y a Outlook, y las imágenes por URL absoluta a este dominio porque los data-URI los capa Gmail.
+Símbolo split a 75px, el nombre en negrita y los dos canales, separados por un filete vertical. Va en tabla y con los estilos en línea, que es lo único que sobrevive intacto a un cliente de correo, y las imágenes por URL absoluta a este dominio porque los data-URI los capa Gmail.
 
-Dónde vive Gmail y Outlook, pegada en sus ajustes de firma
+Dónde vive Gmail, pegada en sus ajustes de firma
 
 Banner de LinkedIn
 
 1584 × 396 sobre el fondo oscuro del sitio, con el titular del Hero y el dominio. La esquina inferior izquierda va vacía a propósito: ahí LinkedIn superpone la foto de perfil, así que el banner no la lleva.
 
-Dónde vive linkedin.com/in/franciscolopez1975
+Dónde vive [linkedin.com/in/franciscolopez1975](https://www.linkedin.com/in/franciscolopez1975)
 
 Portada del repositorio
 
 La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.
 
-Dónde vive github.com/franciscoylopez
+Dónde vive [github.com/franciscoylopez](https://github.com/franciscoylopez)
 
 5 de 6
 

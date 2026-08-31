@@ -2,17 +2,25 @@ name: Dependabot
 
 # QUIÉN CIERRA LOS PR DE DEPENDABOT. El `cooldown` de `dependabot.yml` controla cuántos se
 # abren y cuándo; esto controla quién los cierra. Sin las dos mitades, la cola se repone
-# cada lunes y nadie la vacía: llegó a haber cuatro PR abiertos tres días con los dieciséis
-# checks en verde (hallazgo M1 del cuarto `method-review`, D91).
+# cada lunes y nadie la vacía: llegó a haber cuatro PR abiertos tres días con CI entero en
+# verde (hallazgo M1 del cuarto `method-review`, D91).
 #
 # EL CRITERIO ES UNO: ¿puede este paquete cambiar lo que el sitio sirve? No → automerge.
 # Sí, o no se sabe → espera a una persona.
 #
-# Y no es prudencia genérica: es que **CI no puede ver ese cambio**. Los dieciséis pasos
+# Y no es prudencia genérica: es que **CI no puede ver ese cambio**. Los pasos de CI
 # compilan, tipan y validan estructura, pero ninguno abre la página pintada — `gate:html`
 # está fuera de CI a propósito (D42/D45) porque necesita el sitio servido. Un cambio de
 # comportamiento en el render pasaría el gate entero. Es el mismo argumento con el que se
 # escribió el `cooldown`, aplicado a la mitad que faltaba.
+#
+# CUÁNTOS PASOS SON NO SE ESCRIBE AQUÍ, y hasta el 2026-08-31 se escribía tres veces en
+# este archivo —«los dieciséis»— con veintisiete pasos en `ci.yml`. La regla que lo
+# prohíbe llevaba desde antes en la cabecera de `ci.yml`, con su propio caso: «enumeró
+# cinco durante once pasos». Se aplicó donde se encontró y nadie miró al archivo de al
+# lado, que es la forma que el décimo `method-review` dio de alta como familia. El
+# argumento no necesita la cifra: lo que importa es que NINGÚN paso abre la página, y eso
+# es cierto con dieciséis y con cien.
 #
 # POR QUÉ ALLOWLIST Y NO «LAS DE DESARROLLO». Era la regla obvia y es falsa en este repo:
 # `tailwindcss` y `@tailwindcss/postcss` son `devDependencies` y generan la hoja de estilos
@@ -151,7 +159,7 @@ jobs:
             printf '**Este no se mergea solo**, y no es prudencia genérica: %s.\n\n' "$MOTIVO"
             printf 'Paquetes del bump: `%s`\n\n' "${NOMBRES:-(ninguno)}"
             cat <<'FIN'
-          Los dieciséis pasos de CI compilan, tipan y validan estructura, pero **ninguno abre la página pintada**: `gate:html` está fuera de CI a propósito (D42/D45) porque necesita el sitio servido. Un cambio de comportamiento en el render pasaría el gate entero sin que nadie lo viera.
+          CI compila, tipa y valida estructura, pero **ninguno de sus pasos abre la página pintada**: `gate:html` está fuera de CI a propósito (D42/D45) porque necesita el sitio servido. Un cambio de comportamiento en el render pasaría el gate entero sin que nadie lo viera.
 
           Antes de mergear:
 

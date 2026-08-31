@@ -55,7 +55,7 @@ Al empezar una sesión de desarrollo:
 >
 > - **Sprints**, lo comprometido con su orden, y **Bloques**, el backlog temático aún sin comprometer. **Cuáles son en cada momento lo dice el tablero, no este archivo.**
 > - **`General` significa TRANSVERSAL, no «no sé dónde ponerla».** Higiene de CI, dependencias, docs y proceso: cosas que no son de ninguna página. Si una tarea es de una página o de una capa concreta, va a su bloque.
-> - **Cerradas** (solo archivadas, no se usan para tareas nuevas): las que el tablero ya no lista como sprint ni como bloque. **Los «Método» no se vuelven bloque:** no tienen página, y su deuda es transversal (*General*).
+> - **Cerradas** (solo archivadas, no se usan para tareas nuevas): las que el tablero ya no lista como sprint ni como bloque.
 > - **Un sprint que cierra no se archiva: se convierte en su BLOQUE.** Su página sigue viva y va a generar deuda, y esa deuda es de ella, no transversal.
 >
 > **Regla de movimiento: una tarea de deuda nace en su bloque y cambia de `Etapa` al sprint cuando se compromete** — porque desbloquea algo de ese sprint, o porque toca los mismos archivos y sale gratis hacerla de paso. Es lo que hace que un sprint arrastre deuda con criterio en vez de por lote.
@@ -88,6 +88,8 @@ Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cua
 **Y se mira la cola de Dependabot, que es lo único del repo que se pudre solo.** El triaje ya dice en cada PR por qué no se mergea, pero decirlo no es leerlo: a los pocos días el PR que espera ya no es el bump que había que revisar. Así que **el que no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente (D164).
 
 **Dos sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
+
+**Y ABRIR EMPIEZA RETIRANDO, EN LOTE Y ANTES DE AÑADIR NADA** *(2026-08-31)*. Es la generalización de lo que el cupo ya pide arriba, a los tres sitios donde este método solo tiene techo: el conjunto `@`-importado, `General` y `scripts/`. **Un techo dispara la retirada cuando ya se cruzó**, así que sin esto el equilibrio es el rojo y cada edición paga peaje en deliberación — medido: el 13% de los commits. **Durante el sprint no se negocia:** si algo no cabe, entra, y la apertura siguiente lo paga. Y el candidato a retirar **no es el bloque más grande, es el DUPLICADO**: lo que ya está en un histórico o en otro documento. El caso que lo escribió, en `CLAUDE-historical.md`.
 
 ### Metodología de trabajo (fase V2+)
 

@@ -32,6 +32,7 @@ Partido el **2026-08-27** (P68.5908). Ver `DECISIONS.md` D130.
 - [Lo que el bucle de medición predica](#lo-que-el-bucle-de-medición-predica)
 - [El kicker no repite el breadcrumb](#el-kicker-no-repite-el-breadcrumb)
 - [El sello que se puso sobre una foto — 2026-08-30](#el-sello-que-se-puso-sobre-una-foto--2026-08-30)
+- [La retirada en lote — 2026-08-31](#la-retirada-en-lote--2026-08-31)
 <!-- FIN ÍNDICE -->
 
 ## Eficiencia de sesión
@@ -228,3 +229,57 @@ cae en el único momento del ciclo en que alguien está mirando el tablero de to
 *(La familia a la que pertenece, «el indicador sin fuente», está en el catálogo de
 `method-review`; el mismo cierre encontró su hermana mayor: el neto que se sella no se puede
 descomponer, porque el tablero no guarda historia de cambios de `Etapa`.)*
+
+## La retirada en lote — 2026-08-31
+
+**La regla:** al abrir una etapa se retira **en lote y antes de añadir nada**, en los tres
+sitios donde este método solo tiene techo. Durante el sprint no se negocia.
+
+**Lo que la escribió fue una nota de Francisco, no una medición.** El décimo `method-review`
+medía el andamiaje —`verificación ÷ producto` acababa de cruzar a rojo, 0,49 → 0,554— y su
+nota, escrita sin ver ese análisis, apuntaba a otro sitio: *«No me preocupa tanto el
+presupuesto porque al final del sprint siempre acaba ajustado, me preocupa más el tiempo y
+esfuerzo que dedicamos a esto, ya que recurrentemente estemos valorando si la frase está
+duplicada, si tenemos que concretarla para que quede, si para añadir una frase hay que ver qué
+podemos quitar»*.
+
+**No converge el órgano, converge la enfermedad.** El método no tenía **ninguna** retirada
+programada —`grep` verificado: cero— y todo lo que existía para frenar el crecimiento era un
+techo. Un techo dispara la retirada **cuando ya se cruzó**, así que el sistema equilibra en
+«techo menos épsilon» y **cada edición paga peaje**. Medido sobre el registro: **31 de 236
+commits (13 %)** desde el 15 de agosto tuvieron que hablar del presupuesto, con frases como
+«corregido SIN añadir palabras» o «20.486, holgura 14» dentro del propio mensaje. Tres órganos
+con la misma causa: `scripts/` crecía por adición, `General` no bajaba de 18 en cuatro cierres,
+y los documentos vivían pegados al techo.
+
+**El noveno disparo ya había recetado «una retirada programada» y nadie la construyó.** Lo que
+añadió el décimo es la FORMA, y sale entera de la nota: **en lote, una vez, al abrir**. Eso es
+lo que convierte una deliberación repetida en un momento.
+
+### El caso se demostró solo, que es por lo que la regla existe
+
+Al guardar ese hallazgo en el catálogo de `method-review`, `check:contexto` se puso en **−576**.
+Comprimí la entrada a un tercio y siguió en rojo, −360. **Y la cifra que importaba no era esa:
+era el +14 de holgura de partida** — con catorce palabras, cualquier entrada rompe el techo,
+mientras el paso 6 de esa misma skill dice que el catálogo *«es lo único que tiene que crecer»*.
+Dos reglas del método en contradicción directa.
+
+**El candidato correcto a retirar no era el bloque más grande: era el DUPLICADO.** El relato de
+los diez disparos —unas 1.900 palabras— ya vivía en `PRD-Historical.md` con sus informes
+enlazados, así que la skill que audita el método estaba incumpliendo la regla 5 de `BRAND.md`
+(*«si ya está en otro sitio, aquí va el puntero, nunca la copia»*). Bajó al histórico y quedaron
+la tabla de familias y las quince reglas que dejaron:
+
+    method-review    3.428 → 3.233 palabras   (con la entrada del disparo DENTRO)
+    suma de skills   20.486 → 20.291          holgura +14 → +209
+
+La skill quedó **más pequeña que antes del disparo, con el disparo dentro**. Primera vez que un
+indicador de esa tabla mejora **retirando** en vez de recortando.
+
+### Y lo que esta regla NO permite hacer
+
+Escribir la regla en `CLAUDE.md` costó 125 palabras y solo se pagaron 20 —la cláusula sobre los
+sprints «Método», que era una excepción histórica—, así que el documento quedó a **28 palabras
+del techo**. No se fabricó una retirada a destiempo para cuadrarlo, y eso es deliberado: **una
+retirada reactiva es exactamente la patología que esta regla corrige.** La primera aplicación
+de verdad es la apertura siguiente, y esas 28 palabras son la razón de que no se pueda saltar.

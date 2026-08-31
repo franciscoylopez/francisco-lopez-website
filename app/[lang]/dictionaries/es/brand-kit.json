@@ -303,18 +303,21 @@
     "fueraItems": [
       {
         "title": "Firma de email",
-        "desc": "Símbolo split a 75px, el nombre en negrita y los dos canales, separados por un filete vertical. Va en tabla y con los estilos en línea, que es lo único que sobrevive a Gmail y a Outlook, y las imágenes por URL absoluta a este dominio porque los data-URI los capa Gmail.",
-        "where": "Gmail y Outlook, pegada en sus ajustes de firma"
+        "desc": "Símbolo split a 75px, el nombre en negrita y los dos canales, separados por un filete vertical. Va en tabla y con los estilos en línea, que es lo único que sobrevive intacto a un cliente de correo, y las imágenes por URL absoluta a este dominio porque los data-URI los capa Gmail.",
+        "where": "Gmail, pegada en sus ajustes de firma",
+        "href": null
       },
       {
         "title": "Banner de LinkedIn",
         "desc": "1584 × 396 sobre el fondo oscuro del sitio, con el titular del Hero y el dominio. La esquina inferior izquierda va vacía a propósito: ahí LinkedIn superpone la foto de perfil, así que el banner no la lleva.",
-        "where": "linkedin.com/in/franciscolopez1975"
+        "where": "linkedin.com/in/franciscolopez1975",
+        "href": "https://www.linkedin.com/in/franciscolopez1975"
       },
       {
         "title": "Portada del repositorio",
         "desc": "La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.",
-        "where": "github.com/franciscoylopez"
+        "where": "github.com/franciscoylopez",
+        "href": "https://github.com/franciscoylopez"
       }
     ]
   },

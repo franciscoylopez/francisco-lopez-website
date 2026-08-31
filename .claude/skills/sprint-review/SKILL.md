@@ -113,6 +113,11 @@ puntos de entrada (routing, layout, `lib/`); cruza con `PRD-Live.md` / `PRD-Hist
 3. **Crea/actualiza tareas** en el tablero para lo acordado, respetando las **reglas del
    tablero** de `CLAUDE.md` (Estado, MoSCoW, Prioridad con decimales para insertar, Área,
    Versión, Sprint, Tamaño). Sin duplicar las existentes.
+4. **Y antes de dar un hallazgo por cerrado, BARRE A SUS HERMANOS** *(2026-08-31)*. Si encaja
+   en una familia conocida, `grep` del mismo defecto en los archivos vecinos: la corrección se
+   aplica donde se encontró y sus gemelos siguen vivos porque nadie los buscó. Se dio de alta
+   como familia el día que `ci.yml` llevaba la regla escrita mientras sus dos vecinos de
+   `.github/` la incumplían — y ese mismo día había otras dos instancias.
 
 ## Al terminar, dispara `method-review`
 

@@ -303,18 +303,21 @@
     "fueraItems": [
       {
         "title": "Email signature",
-        "desc": "The split symbol at 75px, the name in bold and the two channels, split by a vertical rule. It is built as a table with inline styles, the only thing that survives Gmail and Outlook, and the images point at absolute URLs on this domain because Gmail strips data URIs.",
-        "where": "Gmail and Outlook, pasted into their signature settings"
+        "desc": "The split symbol at 75px, the name in bold and the two channels, split by a vertical rule. It is built as a table with inline styles, the only thing an email client leaves intact, and the images point at absolute URLs on this domain because Gmail strips data URIs.",
+        "where": "Gmail, pasted into its signature settings",
+        "href": null
       },
       {
         "title": "LinkedIn banner",
         "desc": "1584 × 396 over the site's dark background, with the Hero headline and the domain. The bottom-left corner is left empty on purpose: that is where LinkedIn lays the profile photo, so the banner doesn't carry one.",
-        "where": "linkedin.com/in/franciscolopez1975"
+        "where": "linkedin.com/in/franciscolopez1975",
+        "href": "https://www.linkedin.com/in/franciscolopez1975"
       },
       {
         "title": "Repository cover",
         "desc": "The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.",
-        "where": "github.com/franciscoylopez"
+        "where": "github.com/franciscoylopez",
+        "href": "https://github.com/franciscoylopez"
       }
     ]
   },

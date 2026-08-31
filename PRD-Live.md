@@ -247,9 +247,10 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 *Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
 decisión escrita, no por omisión.
 
-**«Agentes» es el sprint en curso** desde el 2026-08-30: que un agente pueda encontrar, leer y
-citar este sitio, que es el canal de distribución que aquí faltaba. Arrastra cuatro de *General*
-y deja la **Distribución** humana aplazada por sexta vez, esta vez con motivo y no por inercia.
+**«Agentes» cerró el 2026-08-31** con veintitrés tareas: un agente ya puede encontrar, leer y
+citar este sitio. **La DISTRIBUCIÓN humana es lo siguiente y ya no tiene nada por delante** —
+único *Must* abierto, seis aplazamientos, y con el cuello de botella fuera del producto: el
+sitio está en AAA y sobre 90, pero **la métrica primaria vive en n=1**.
 
 *(El recorrido de cada sprint cerrado, en `PRD-Historical.md`.)*
 
