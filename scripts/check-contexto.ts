@@ -80,17 +80,31 @@ type Movimiento = { fecha: string; valor: number; motivo: string };
 /**
  * Desde cuándo se cuentan los movimientos. **Se actualiza al ABRIR una etapa**, que
  * es lo que hace de «ciclo» una unidad comprobable en vez de una intuición. Hoy:
- * apertura del sprint «Agentes».
+ * apertura del sprint «Distribución».
  *
- * «Drenaje» y «Voz» cerraron los dos con **0 de 3 techos movidos**, contra 2 en el
- * anterior: la corrección del séptimo `method-review` —congelar el techo y pagar las
- * adiciones retirando— lleva dos ciclos enteros aguantando.
+ * «Agentes» cerró con **1 de 3 techos movidos** —el de documentos, para bajar la tabla
+ * de gates a `GATES.md`—, contra 0 en los dos anteriores. Uno es el trinquete
+ * apretando; el segundo ya no.
  *
- * Y el octavo dice qué vigilar en este: el techo no se mueve, pero el DATO se le pega
- * («el dato que persigue al techo»). Un ciclo verde aquí ya no basta si el margen sigue
- * viviendo en el epsilon, que es lo que tarea P68.7405 dentro de este mismo sprint.
+ * LO QUE ESTE CICLO ESTRENA, y por eso se anota aquí: `CLAUDE.md` gana la regla de la
+ * **retirada en lote al abrir**, que es la receta que el noveno `method-review` dejó sin
+ * construir. Su primera aplicación es esta apertura, y sale **a medias, dicho a
+ * propósito**:
+ *
+ * · **`General`: retirado.** 20 → 18, al comprometer dos tareas en el sprint. Es la
+ *   regla de movimiento del tablero haciendo de desagüe, que es justo lo que se pedía.
+ * · **Documentos: NO retirado, y no por olvido.** Se buscó el duplicado que la regla
+ *   manda buscar y **no lo hay**: el candidato obvio —los 9 puntos del checklist de
+ *   accesibilidad, que el propio documento llama «los mismos que publica el Design
+ *   System»— resultó ser el original y no la copia; la página del sitio los espeja a
+ *   ellos. Son reglas operativas con valores (anillo de 2px, 44×44, `tabindex="-1"`).
+ *
+ * Y ESO ES EL HALLAZGO DEL CICLO, escrito por adelantado para el `method-review` que lo
+ * cierre: **si no queda duplicado que retirar, la próxima retirada ya no es un traslado
+ * — es decidir qué deja de ser regla.** Es un acto distinto y más caro, y el margen de
+ * 17 palabras dice que toca pronto.
  */
-const CICLO_ABIERTO = "2026-08-30";
+const CICLO_ABIERTO = "2026-08-31";
 
 /** El techo vigente es el último movimiento, nunca un número escrito aparte. */
 function vigente(historial: Movimiento[]): number {
