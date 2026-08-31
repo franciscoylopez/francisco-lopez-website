@@ -111,7 +111,7 @@ async function main() {
   } else {
     const pct = (tasa * 100).toFixed(1);
     console.log(
-      `\n  Tasa de aceptación: ${pct} %  ·  la analítica ve ${pct} de cada 100 visitas\n` +
+      `\n  Tasa de aceptación: ${pct} %  ·  la analítica ve ${pct} de cada 100 visitantes NUEVOS\n` +
         `  ${SALVEDAD_TASA}\n`,
     );
   }
