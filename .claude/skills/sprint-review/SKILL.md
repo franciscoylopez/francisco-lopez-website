@@ -80,6 +80,11 @@ una etapa no se cierra sin haberlas escrito.
    **Ojo a la ventana RODANTE:** una caída puede ser solo que los eventos viejos salieron de
    los 28 días. Antes de leerla como regresión, comprueba si el solape con la ventana anterior
    la explica; el 2026-08-29 un 6 → 1 lo explicaba entero.
+   **Y DESDE EL 2026-08-31 EL PANEL Y GA4 YA NO SON TODA LA MEDICIÓN** (D168/D169/D170). Dos
+   fuentes más, y ninguna depende del consentimiento: **Vercel Web Analytics** (volumen
+   absoluto, en el panel de Vercel) y **`npm run consentimiento`**, que da la tasa de
+   aceptación. Y cambia CÓMO se lee GA4: sus cifras son un **índice relativo**, nunca un
+   volumen. Ojo al denominador, que no es el mismo: el contador solo ve visitantes NUEVOS.
    **Y la primaria se busca aunque no esté en el panel**: `contact_submit` llevaba desde el
    2026-08-24 contando y ningún marcador la enseñaba, así que leer solo el panel habría dado
    «cero» donde el dato decía «la cadena funciona» (D71, cierre del sprint 4).
