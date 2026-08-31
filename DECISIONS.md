@@ -10830,6 +10830,26 @@ sitio donde de verdad vive** en vez de en el comentario donde estaba escrita. Es
 `BRAND.md` §Cómo se escribe una regla —el disparador que mira al lugar equivocado— aplicada a un
 supuesto sobre infraestructura.
 
+### Verificado en producción, y con ello el matiz que decide qué significa la cifra
+
+El 2026-08-31, con las tres opciones desplegadas: **Vercel Web Analytics registra** (1 visitante,
+4 páginas, las cuatro de la propia comprobación) y **el contador se queda en 0**. Las dos cosas
+son correctas a la vez, y entenderlo es lo que da el matiz:
+
+**Este contador solo ve a los visitantes NUEVOS.** A quien ya decidió no se le vuelve a pintar el
+diálogo, así que no suma en `visto`; D170 sí lo cuenta. **No son el mismo denominador y no se
+dividen el uno por el otro sin decirlo.** El navegador de la comprobación ya tenía decisión
+guardada: por eso 0, y por eso 0 es el resultado correcto.
+
+No es un defecto. Para lo que este contador existe —leer el pico de un lanzamiento, que es
+tráfico que llega por primera vez— la población correcta es exactamente esa. Lo que había que
+arreglar era el enunciado: la tasa es **de cada cien visitantes NUEVOS, cuántos aceptan**, y así
+se dice ahora en `SALVEDAD_TASA` y en la salida de `npm run consentimiento`.
+
+**Y cómo se encontró, que vuelve a no ser un gate:** de leer un 0 y preguntarse por qué, en vez
+de darlo por «todavía no ha entrado nadie». El mismo cero habría sido compatible con las dos
+explicaciones, y solo una era cierta.
+
 **Estado:** Aceptada.
 
 ## D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento — 2026-08-31

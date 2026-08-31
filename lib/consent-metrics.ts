@@ -109,10 +109,20 @@ export function tasaDeAceptacion(contadores: Contadores): number | null {
  * primera decisión de cada navegador, así que `aceptado + rechazado` no puede
  * superar a `visto` por esa vía.
  *
+ * Y LA QUE MÁS CAMBIA LO QUE LA CIFRA SIGNIFICA, vista en producción el 2026-08-31:
+ * **este contador solo ve a los visitantes NUEVOS.** A quien ya decidió no se le vuelve a
+ * pintar el diálogo, así que no suma en `visto` — mientras que Vercel Web Analytics
+ * (D170) sí lo cuenta. Las dos cifras no son el mismo denominador y no se dividen la una
+ * por la otra sin decirlo.
+ *
+ * No es un defecto: para lo que existe —leer el pico de un lanzamiento, que es tráfico
+ * que llega por primera vez— la población correcta es justamente esa. Pero la tasa hay
+ * que enunciarla entera: **de cada cien visitantes NUEVOS, cuántos aceptan.**
+ *
  * De las tres que quedan, la del almacenamiento bloqueado es la única que sesga en
  * una dirección conocida, así que la tasa medida es un SUELO de la real y no una
  * estimación centrada. Se dice aquí porque el sitio de una salvedad es al lado del
  * número, no en un documento aparte.
  */
 export const SALVEDAD_TASA =
-  "La tasa medida es un suelo: quien bloquea el almacenamiento local cuenta como visto en cada visita y nunca como decisión.";
+  "Es la tasa de los visitantes NUEVOS, no del total: a quien ya decidió no se le vuelve a pintar el diálogo. Y es un suelo, porque quien bloquea el almacenamiento local cuenta como visto en cada visita y nunca como decisión.";
