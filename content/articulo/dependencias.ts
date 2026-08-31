@@ -181,6 +181,27 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D32",
     "DECISIONS.md#D55",
     "next.config.ts",
+    // Desde el 2026-08-31 la sección tiene un apartado de SEO y GEO, y estas son
+    // sus fuentes. Las tres primeras son la mitad de SEO: la metadata que deriva
+    // `pageMetadata` (canonical, los tres `hreflang`, la tarjeta OG), el registro
+    // del que salen el sitemap y `robots.txt`, y los tipos de Schema.org que el
+    // texto enumera página a página. `lib/routes.ts` entra además porque el
+    // párrafo publica una CIFRA de páginas vía `{paginas}`.
+    "DECISIONS.md#D45",
+    "DECISIONS.md#D72",
+    "lib/routes.ts",
+    "lib/structured-data.ts",
+    // Y la mitad de GEO: el canal markdown con su cifra de bytes, la línea de
+    // Content Signals (que vive en `app/robots.ts`, donde alguien la cambiaría),
+    // el catálogo ARD, y las dos entradas que sostienen el párrafo de lo que NO
+    // se publica: el criterio del `api-catalog` sin API y el descarte de la
+    // tarjeta A2A. D157 sostiene además la última frase, la que dice que esta
+    // nota no es un objetivo de este proyecto.
+    "DECISIONS.md#D157",
+    "DECISIONS.md#D158",
+    "DECISIONS.md#D160",
+    "DECISIONS.md#D166",
+    "app/robots.ts",
   ],
 
   // «AA es el suelo, y el metro estuvo mal calibrado tres veces» — el censo, las

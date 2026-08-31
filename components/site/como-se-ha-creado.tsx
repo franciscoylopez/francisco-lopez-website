@@ -20,7 +20,7 @@ import { LEADING, SectionHeader } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { GITHUB_URL } from "@/lib/contact";
 import { fillPages } from "@/lib/design-values";
-import { fillFigures, rellena } from "@/lib/figures";
+import { fillFigures, registroAgentes, rellena } from "@/lib/figures";
 import {
   DECISIONES_PATH,
   ES_DECISION,
@@ -170,6 +170,33 @@ export function ComoSeHaCreado({
         </Badge>
       </>
     ),
+    // Las tres pastillas de la tarjeta de agentes SALEN DEL SELLO, no escritas
+    // aquí. La regleta de al lado las tiene a mano porque son las otras
+    // categorías de Lighthouse, que llevan clavadas en 100 desde que existen;
+    // estas tres se mueven en cada pasada, y una cifra tecleada en un extra es
+    // el mismo hueco que D102 cerró en el `value` de un `livestat`: dentro de un
+    // `ReactNode` no la ve `check:articulo`. El grado vive aquí y no en el
+    // `value` para que el dato de arriba sea una sola cifra, como en PageSpeed.
+    "s08-geo": (() => {
+      const a = registroAgentes();
+      return (
+        <>
+          <Badge tone="cyan" kind="value">
+            {lang === "es" ? `Grado ${a.grado}` : `Grade ${a.grado}`}
+          </Badge>
+          <Badge tone="cyan" kind="value">
+            {lang === "es"
+              ? `${a.checks} comprobaciones`
+              : `${a.checks} checks`}
+          </Badge>
+          <Badge tone="cyan" kind="value">
+            {lang === "es"
+              ? `${a.noAplican} no aplican`
+              : `${a.noAplican} not applicable`}
+          </Badge>
+        </>
+      );
+    })(),
   };
 
   // El diccionario viene de JSON: `type` se infiere como `string`, no como el

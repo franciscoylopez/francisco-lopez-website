@@ -3,7 +3,7 @@ canonical: https://franciscolopez.es/como-se-ha-creado
 lang: es
 title: Cómo se ha creado esta página
 description: "El making-of de esta web: la marca antes que el código, el stack, cómo se hereda la accesibilidad, seguridad y alojamiento, qué revisa una IA y qué no, y lo que salió mal por el camino. Todo enlazado al repositorio público."
-last-updated: 2026-08-29
+last-updated: 2026-08-31
 ---
 
 1. [Inicio](https://franciscolopez.es/)
@@ -43,7 +43,7 @@ Vamos a ello.
 
 tiempo por sección
 
-Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas. **9581** palabras· · **12** secciones
+Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas. **9916** palabras· · **12** secciones
 
 1. [01 · Por qué existe · ≈4 min](#s01)
 2. [02 · Cómo se trabaja · ≈4 min](#s02)
@@ -52,7 +52,7 @@ Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La
 5. [05 · El sistema de componentes · ≈4 min](#s05)
 6. [06 · Automatizaciones · ≈6 min](#s06)
 7. [07 · Del diseño al código · ≈4 min](#s07)
-8. [08 · Seguridad y alojamiento · ≈7 min](#s08)
+8. [08 · Seguridad, SEO y alojamiento · ≈9 min](#s08)
 9. [09 · Accesibilidad · ≈7 min](#s09)
 10. [10 · Qué revisa una IA · ≈4 min](#s10)
 11. [11 · Lo que salió mal · ≈3 min](#s11)
@@ -428,15 +428,15 @@ Decisión [D1](https://github.com/franciscoylopez/francisco-lopez-website/blob/m
 
 7 de 12
 
-[Índice](#indice) · [Siguiente: 08 · Seguridad y alojamiento](#s08)
+[Índice](#indice) · [Siguiente: 08 · Seguridad, SEO y alojamiento](#s08)
 
-8 de 12 · 7 min
+8 de 12 · 9 min
 
-08 — Seguridad y alojamiento
+08 — Seguridad, SEO y alojamiento
 
-## 08. Lo que no se ve: seguridad, alojamiento y la deuda que no se acumuló
+## 08. Lo que no se ve: aspectos técnicos y la deuda que no se acumuló
 
-8 de 12 · 7 min
+8 de 12 · 9 min
 
 Un portfolio no tiene sesión y no guarda datos de nadie: el único que recibe es lo que alguien escriba en el formulario de contacto, y ese no se guarda en ninguna parte, va a un buzón y se acabó. Es exactamente el tipo de sitio donde nadie se molesta en configurar seguridad, y por eso me pareció el sitio adecuado para hacerlo.
 
@@ -485,9 +485,11 @@ Aquí no hay un staging montado, porque un staging persistente para una persona 
 
 Con una tanda entera de trabajo en una sola rama, esa URL acumula toda la tanda y se revisa junta antes de tocar producción una única vez.
 
-### El número de rendimiento, y dónde comprobarlo
+### Preparada para SEO y GEO
 
-El objetivo no funcional es un mínimo de 90 en PageSpeed, en escritorio y en móvil. No es una captura fija: se puede repetir en cualquier momento contra producción.
+El SEO técnico está hecho página a página. Cada una de las catorce páginas lleva su título y su descripción propios, su **dirección canónica**, sus **tres etiquetas de idioma** para que la versión en español y la inglesa no compitan entre sí, su **tarjeta de Open Graph** para cuando alguien comparte el enlace, y su bloque de **datos estructurados de Schema.org** con el tipo que le toca: ficha de persona en la portada, artículo técnico en esta, página de contacto en Contacto y ruta de migas en todas las internas. El sitemap y el robots.txt las listan todas, en los dos idiomas.
+
+**Y la velocidad, que también es SEO.** El objetivo no funcional es un mínimo de 90 en PageSpeed, en escritorio y en móvil. No es una captura fija: se puede repetir en cualquier momento contra producción.
 
 Rendimiento · PageSpeed · `npm run psi · 30 de agosto de 2026`
 
@@ -496,6 +498,18 @@ Rendimiento · PageSpeed · `npm run psi · 30 de agosto de 2026`
 [Ver el informe](https://pagespeed.web.dev/analysis?url=https://franciscolopez.es)
 
 SEO 100 · Accesibilidad 100 · Buenas prácticas 100
+
+GEO es la otra mitad, y las siglas son de _Generative Engine Optimization_: que el sitio lo pueda leer y citar un asistente, no solo indexarlo un buscador. Un asistente no navega, pide el contenido y lo cita. Así que cada página se sirve también en **markdown**, con el texto y sin el andamiaje de alrededor, y así la portada baja de **216 KB a 6,6 KB**. Hay un archivo llms.txt que dice quién soy y cuándo tiene sentido traer esta fuente a una conversación, un catálogo en /.well-known/ard.json con los recursos que el sitio ofrece a una máquina, y una línea en el robots.txt que dice lo mismo que la licencia del repositorio: se puede indexar, se puede leer para responder citando, no se puede usar para entrenar.
+
+Lo que el sitio no tiene tampoco lo anuncia: no hay servidor MCP, ni API, ni catálogo de habilidades, ni tarjeta de agente, así que ninguno de esos formatos se publica. **Un catálogo de API sin API no es estar preparado para agentes, es mentir en un formato que una máquina sabe leer.** Eso deja casillas vacías a propósito, y por eso esta nota se lee distinto de la de arriba: de las 125 comprobaciones del informe, 60 miden superficies que aquí no existen. Es una foto de dónde está el sitio, no un objetivo que me haya puesto.
+
+Agentes · ora.ai · `npm run agentes:sellar · 31 de agosto de 2026`
+
+78 sobre 100
+
+[Ver el informe](https://ora.ai/score/franciscolopez.es)
+
+Grado B · 125 comprobaciones · 60 no aplican
 
 ### La deuda que el analizador sí encontró
 
@@ -518,7 +532,7 @@ Se prueba eso y nada más: la validación, el saneado de las cabeceras y las dec
 
 ENLACE ·
 
-Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L455), [D15](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L506), [D26](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L932), [D27](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1063), [D32](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1287) y [D55](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3127), el archivo [next.config.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/next.config.ts) y la configuración de [Qlty](https://qlty.sh)
+Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L455), [D15](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L506), [D26](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L932), [D27](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1063), [D32](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1287) y [D55](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3127), [D157](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9570), [D158](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9665), [D160](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9855) y [D166](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L10412), los archivos [next.config.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/next.config.ts) y [app/robots.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/app/robots.ts) y la configuración de [Qlty](https://qlty.sh)
 
 8 de 12
 

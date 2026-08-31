@@ -684,9 +684,9 @@
     {
       "id": "s08",
       "ordinal": "08",
-      "indexLabel": "Seguridad y alojamiento",
-      "kicker": "08 — Seguridad y alojamiento",
-      "title": "Lo que no se ve: seguridad, alojamiento y la deuda que no se acumuló",
+      "indexLabel": "Seguridad, SEO y alojamiento",
+      "kicker": "08 — Seguridad, SEO y alojamiento",
+      "title": "Lo que no se ve: aspectos técnicos y la deuda que no se acumuló",
       "body": [
         {
           "type": "p",
@@ -783,11 +783,15 @@
         },
         {
           "type": "h3",
-          "text": "El número de rendimiento, y dónde comprobarlo"
+          "text": "Preparada para SEO y GEO"
         },
         {
           "type": "p",
-          "text": "El objetivo no funcional es un mínimo de 90 en PageSpeed, en escritorio y en móvil. No es una captura fija: se puede repetir en cualquier momento contra producción."
+          "text": "El SEO técnico está hecho página a página. Cada una de las {paginas} páginas lleva su título y su descripción propios, su **dirección canónica**, sus **tres etiquetas de idioma** para que la versión en español y la inglesa no compitan entre sí, su **tarjeta de Open Graph** para cuando alguien comparte el enlace, y su bloque de **datos estructurados de Schema.org** con el tipo que le toca: ficha de persona en la portada, artículo técnico en esta, página de contacto en Contacto y ruta de migas en todas las internas. El sitemap y el robots.txt las listan todas, en los dos idiomas."
+        },
+        {
+          "type": "p",
+          "text": "**Y la velocidad, que también es SEO.** El objetivo no funcional es un mínimo de 90 en PageSpeed, en escritorio y en móvil. No es una captura fija: se puede repetir en cualquier momento contra producción."
         },
         {
           "type": "livestat",
@@ -797,6 +801,23 @@
           "value": "{psiEscritorio} escritorio · {psiMovil} móvil",
           "linkLabel": "Ver el informe",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
+        },
+        {
+          "type": "p",
+          "text": "GEO es la otra mitad, y las siglas son de *Generative Engine Optimization*: que el sitio lo pueda leer y citar un asistente, no solo indexarlo un buscador. Un asistente no navega, pide el contenido y lo cita. Así que cada página se sirve también en **markdown**, con el texto y sin el andamiaje de alrededor, y así la portada baja de **216 KB a 6,6 KB**. Hay un archivo llms.txt que dice quién soy y cuándo tiene sentido traer esta fuente a una conversación, un catálogo en /.well-known/ard.json con los recursos que el sitio ofrece a una máquina, y una línea en el robots.txt que dice lo mismo que la licencia del repositorio: se puede indexar, se puede leer para responder citando, no se puede usar para entrenar."
+        },
+        {
+          "type": "p",
+          "text": "Lo que el sitio no tiene tampoco lo anuncia: no hay servidor MCP, ni API, ni catálogo de habilidades, ni tarjeta de agente, así que ninguno de esos formatos se publica. **Un catálogo de API sin API no es estar preparado para agentes, es mentir en un formato que una máquina sabe leer.** Eso deja casillas vacías a propósito, y por eso esta nota se lee distinto de la de arriba: de las {agentesChecks} comprobaciones del informe, {agentesNa} miden superficies que aquí no existen. Es una foto de dónde está el sitio, no un objetivo que me haya puesto."
+        },
+        {
+          "type": "livestat",
+          "id": "s08-geo",
+          "label": "Agentes · ora.ai",
+          "source": "npm run agentes:sellar · {agentesFecha}",
+          "value": "{agentesOra} sobre 100",
+          "linkLabel": "Ver el informe",
+          "href": "https://ora.ai/score/franciscolopez.es"
         },
         { "type": "h3", "text": "La deuda que el analizador sí encontró" },
         {
@@ -848,8 +869,18 @@
           { "label": "D32", "path": "DECISIONS.md" },
           " y ",
           { "label": "D55", "path": "DECISIONS.md" },
-          ", el archivo ",
+          ", ",
+          { "label": "D157", "path": "DECISIONS.md" },
+          ", ",
+          { "label": "D158", "path": "DECISIONS.md" },
+          ", ",
+          { "label": "D160", "path": "DECISIONS.md" },
+          " y ",
+          { "label": "D166", "path": "DECISIONS.md" },
+          ", los archivos ",
           { "label": "next.config.ts", "path": "next.config.ts" },
+          " y ",
+          { "label": "app/robots.ts", "path": "app/robots.ts" },
           " y la configuración de ",
           { "label": "Qlty", "external": "https://qlty.sh" }
         ]

@@ -493,7 +493,7 @@ export const LAST_COOKIES_UPDATE = "2026-08-23";
  * Google, y tarde.
  */
 export const ARTICLE_PUBLISHED = "2026-08-21";
-export const ARTICLE_UPDATED = "2026-08-29";
+export const ARTICLE_UPDATED = "2026-08-31";
 
 // `fillDate` vivía aquí y se retiró en P67.6: la fecha se pinta dentro de un
 // `<time datetime>`, y una función que devuelve `string` no puede llevar un

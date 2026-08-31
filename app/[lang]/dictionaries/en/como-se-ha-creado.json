@@ -685,9 +685,9 @@
     {
       "id": "s08",
       "ordinal": "08",
-      "indexLabel": "Security and hosting",
-      "kicker": "08 — Security and hosting",
-      "title": "What you don't see: security, hosting, and the debt that didn't pile up",
+      "indexLabel": "Security, SEO and hosting",
+      "kicker": "08 — Security, SEO and hosting",
+      "title": "What you don't see: the technical side, and the debt that didn't pile up",
       "body": [
         {
           "type": "p",
@@ -787,11 +787,15 @@
         },
         {
           "type": "h3",
-          "text": "The performance number, and where to check it"
+          "text": "Ready for SEO and GEO"
         },
         {
           "type": "p",
-          "text": "The non-functional target is a minimum of 90 on PageSpeed, desktop and mobile. It isn't a frozen screenshot: you can rerun it anytime against production."
+          "text": "The technical SEO is done page by page. Each of the {paginas} pages carries its own title and description, its **canonical URL**, its **three language tags** so the Spanish and the English version don't compete with each other, its **Open Graph card** for when someone shares the link, and its **Schema.org structured data** block with the type it should have: a person entity on the home page, a technical article on this one, a contact page on Contacto, and a breadcrumb trail on every inner page. The sitemap and robots.txt list them all, in both languages."
+        },
+        {
+          "type": "p",
+          "text": "**And speed, which is also SEO.** The non-functional target is a minimum of 90 on PageSpeed, desktop and mobile. It isn't a frozen screenshot: you can rerun it anytime against production."
         },
         {
           "type": "livestat",
@@ -801,6 +805,23 @@
           "value": "{psiEscritorio} desktop · {psiMovil} mobile",
           "linkLabel": "See the report",
           "href": "https://pagespeed.web.dev/analysis?url=https://franciscolopez.es"
+        },
+        {
+          "type": "p",
+          "text": "GEO is the other half, and it stands for *Generative Engine Optimization*: making the site readable and quotable by an assistant, not just indexable by a search engine. An assistant doesn't browse, it fetches the content and cites it. So every page is also served as **markdown**, with the text and none of the scaffolding around it, which takes the home page from **216 KB down to 6.6 KB**. There's an llms.txt file that says who I am and when it makes sense to bring this source into a conversation, a catalogue at /.well-known/ard.json with the resources the site offers a machine, and a line in robots.txt saying the same thing the repository licence says: it can be indexed, it can be read to answer while citing it, it can't be used for training."
+        },
+        {
+          "type": "p",
+          "text": "What the site doesn't have, it doesn't advertise either: there's no MCP server, no API, no skills catalogue and no agent card, so none of those formats get published. **An API catalogue without an API isn't being ready for agents, it's lying in a format a machine knows how to read.** That leaves boxes deliberately empty, and it's why this number reads differently from the one above: of the report's {agentesChecks} checks, {agentesNa} measure surfaces that don't exist here. It's a snapshot of where the site is, not a target I set myself."
+        },
+        {
+          "type": "livestat",
+          "id": "s08-geo",
+          "label": "Agents · ora.ai",
+          "source": "npm run agentes:sellar · {agentesFecha}",
+          "value": "{agentesOra} out of 100",
+          "linkLabel": "See the report",
+          "href": "https://ora.ai/score/franciscolopez.es"
         },
         { "type": "h3", "text": "The debt the analyzer actually found" },
         {
@@ -852,9 +873,19 @@
           { "label": "D32", "path": "DECISIONS.md" },
           " and ",
           { "label": "D55", "path": "DECISIONS.md" },
+          ", ",
+          { "label": "D157", "path": "DECISIONS.md" },
+          ", ",
+          { "label": "D158", "path": "DECISIONS.md" },
+          ", ",
+          { "label": "D160", "path": "DECISIONS.md" },
+          " and ",
+          { "label": "D166", "path": "DECISIONS.md" },
           ", the ",
           { "label": "next.config.ts", "path": "next.config.ts" },
-          " file and the ",
+          " and ",
+          { "label": "app/robots.ts", "path": "app/robots.ts" },
+          " files and the ",
           { "label": "Qlty", "external": "https://qlty.sh" },
           " configuration"
         ]

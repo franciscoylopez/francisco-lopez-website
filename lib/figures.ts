@@ -39,6 +39,7 @@ import type { Locale } from "./i18n/config";
 const PIEZAS_DIR = "components/ui";
 const CI_WORKFLOW = ".github/workflows/ci.yml";
 export const PSI_REGISTRO = "content/psi/registro.json";
+export const AGENTES_REGISTRO = "content/agentes/registro.json";
 
 /**
  * Las piezas del NÚCLEO del sistema. Cada archivo de `components/ui/` declara su
@@ -92,6 +93,33 @@ const rango = (r: { min: number; max: number }) =>
   r.min === r.max ? String(r.min) : `${r.min}-${r.max}`;
 
 /**
+ * Lo que dejó escrito la última pasada de `npm run agentes:sellar`. Mismo caso
+ * que el de PSI y por el mismo motivo: la mide un tercero contra producción, así
+ * que no se puede derivar al construir, pero sí puede llegar con su fecha pegada
+ * en vez de envejecer en silencio (D102).
+ */
+export type RegistroAgentes = {
+  /** El día de la medición, en ISO. */
+  fecha: string;
+  /** La nota sobre 100 y su grado, tal y como los publica el informe. */
+  nota: number;
+  grado: string;
+  /** Cuántas comprobaciones tiene el informe. */
+  checks: number;
+  /**
+   * Cuántas de ellas marca el propio informe como no aplicables. Va en el sello
+   * porque el artículo la publica AL LADO de la nota: es lo que impide leer la
+   * cifra como un umbral suspendido cuando lo que dice es que este sitio no
+   * tiene esas superficies (D157).
+   */
+  noAplican: number;
+};
+
+export function registroAgentes(): RegistroAgentes {
+  return JSON.parse(readFileSync(AGENTES_REGISTRO, "utf8")) as RegistroAgentes;
+}
+
+/**
  * Los nombres que el copy puede interpolar. **Es la lista que hace fallar a un
  * token mal escrito**: sin ella, `{psiMovil}` con una l de más se renderiza tal
  * cual, en producción, sin que nada se rompa. Lo comprueba `check:articulo`.
@@ -103,6 +131,11 @@ export const FIGURAS = [
   "psiMovil",
   "psiEscritorio",
   "psiFecha",
+  "agentesOra",
+  "agentesGrado",
+  "agentesChecks",
+  "agentesNa",
+  "agentesFecha",
 ] as const;
 
 /**
@@ -134,6 +167,7 @@ export function rellena<T>(nodo: T, f: (s: string) => string): T {
 
 export function fillFigures(text: string, locale: Locale): string {
   const psi = registroPsi();
+  const agentes = registroAgentes();
   const valores: Record<(typeof FIGURAS)[number], string> = {
     // `{paginas}` lo resuelve `fillPages` antes que esto; se declara aquí para
     // que `check:articulo` lo reconozca como token válido y no lo denuncie.
@@ -143,6 +177,13 @@ export function fillFigures(text: string, locale: Locale): string {
     psiMovil: rango(psi.movil),
     psiEscritorio: rango(psi.escritorio),
     psiFecha: reviewDate(psi.fecha, locale),
+    // En dígitos y no en cardinal: son las cifras de un informe ajeno, y el
+    // artículo las publica como las publica él.
+    agentesOra: String(agentes.nota),
+    agentesGrado: agentes.grado,
+    agentesChecks: String(agentes.checks),
+    agentesNa: String(agentes.noAplican),
+    agentesFecha: reviewDate(agentes.fecha, locale),
   };
 
   return text.replace(/{(\w+)}/g, (crudo, nombre: string, posicion: number) => {
