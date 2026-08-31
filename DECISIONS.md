@@ -205,6 +205,7 @@
 - D167 · Publicar la nota de un escáner sin convertirla en un criterio, y el sello que la sostiene
 - D168 · La primaria se lee como índice relativo, y ese párrafo es lo que desbloquea el lanzamiento
 - D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal
+- D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10828,5 +10829,76 @@ Salió de mirar `vercel env ls` al conectar la integración, o sea de comprobar 
 sitio donde de verdad vive** en vez de en el comentario donde estaba escrita. Es la regla 1 de
 `BRAND.md` §Cómo se escribe una regla —el disparador que mira al lugar equivocado— aplicada a un
 supuesto sobre infraestructura.
+
+**Estado:** Aceptada.
+
+## D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento — 2026-08-31
+
+**Decisión.** El sitio monta **Vercel Web Analytics** en el layout, **fuera del gate de
+consentimiento** y dentro del de producción. Es lo único de este sitio que mide sin preguntar, y
+esa es la decisión entera: **detrás del consentimiento no aportaría nada sobre GA4** —mismo
+denominador, mismo sesgo— y no habría razón para tenerlo.
+
+**Lo que compra, y que D169 no puede dar:** el **volumen absoluto** y el **embudo clic → lectura**
+de quien no consiente. El contador de D169 solo sabe del diálogo: cuánta gente lo vio y qué
+eligió. No sabe cuántas páginas leyó nadie.
+
+### La pregunta era de postura y estaba escrita como tal
+
+La ficha de P68.61 lo dejó dicho: *«la decisión de la 1 no es ¿lo instalo? sino ¿mi postura de
+consentimiento admite una excepción, y la escribo?»*. La respuesta es **sí, y se escribe**.
+
+Y hay que decirlo en el orden incómodo: **este sitio exige consentimiento a todo el mundo por
+decisión propia, más estricta que la norma** (D13/D17), y esto no lo pide. La ley no lo exige
+—sin cookies ni almacenamiento en el equipo, el art. 22.2 de la LSSI no aplica, y la base es el
+interés legítimo del art. 6.1.f del RGPD—, así que **es una excepción al criterio propio, no a la
+norma**. Esa frase va literal en `/cookies`, con el «presume de pedir permiso a todo el mundo, y
+esto no lo pide» delante y la vía de oposición detrás.
+
+**El derecho de oposición no se inventa una vía nueva:** la página ya lo ofrece por escrito en
+«Qué derechos tienes». Se enlaza a él en vez de añadir un cuarto control al diálogo, que sería
+UI nueva para un caso que el documento ya cubre.
+
+### Lo que casi entra mal: recortar la cadena de consulta entera
+
+La primera versión de `beforeSend` tiraba la query completa. Parecía lo prudente y **habría
+costado la mitad del motivo de tener esto**: los UTM de los posts del lanzamiento son
+precisamente la separación por post que esta herramienta puede dar para *todo* el tráfico y GA4
+solo para el que consiente. Y no son un dato personal: son la etiqueta de una campaña.
+
+Lo que entra es una **allowlist** de los cinco `utm_*`, misma forma que la CSP de este sitio.
+Garantiza la otra mitad: **nada que no esté en la lista llega a medirse**, venga de donde venga.
+El fragmento se borra también, porque aquí son anclas de sección y a qué apartado saltó alguien
+no hace falta para contar una visita.
+
+**Y `beforeSend` obliga a una isla de cliente**, no por estilo: es una función, y una función no
+cruza de un Server Component a uno de cliente. Por eso existe `components/analytics/web-analytics.tsx`.
+
+### La CSP no cambia, y eso es un hecho comprobable, no un supuesto
+
+El script se sirve de `/_vercel/insights/script.js` y la baliza va a `/_vercel/insights/view`:
+**mismo origen**, así que `script-src 'self'` y `connect-src 'self'` ya lo cubren. Es la primera
+herramienta de medición de este sitio que no abre un dominio en la allowlist — GTM, GA4 y Clarity
+abrieron los suyos. Queda por **verificar en producción** que ninguna directiva salta, porque un
+supuesto sobre infraestructura es exactamente lo que falló en D169.
+
+### Gate de producción, y por el motivo de D169 y no por simetría
+
+Fuera de producción el endpoint no existe, así que montarlo solo dejaría peticiones fallidas en
+la consola de quien desarrolla. Y en Preview, si existiera, contaría las visitas de revisar un PR
+como tráfico — el mismo envenenamiento que el contador acabó de resolver con el entorno dentro de
+la clave.
+
+### Tres frases del sitio que esto vuelve imprecisas, y qué se hizo con cada una
+
+- **`/cookies` §Terceros** decía «la analítica la proporcionan Google y Microsoft». Pasa a «la
+  analítica **que requiere tu consentimiento**», y la otra queda cubierta por su propio bloque.
+- **`/cookies` §Lo que se mide antes de que decidas** se escribió el mismo día para el contador y
+  se titulaba «lo único que cuento antes de que decidas». Ya no es *lo único*: se reescribe para
+  las dos en vez de añadir un segundo bloque de excepción al lado.
+- **El `lead` de `/cookies` y `whatBody`** dicen «ninguna cookie de analítica sin tu
+  consentimiento». **Sobreviven en lectura literal y se dejan**: Vercel Web Analytics no usa
+  cookies. Se anota porque es la misma familia que §s12 del artículo, y esa clase de frase
+  aguanta una vez y no dos.
 
 **Estado:** Aceptada.

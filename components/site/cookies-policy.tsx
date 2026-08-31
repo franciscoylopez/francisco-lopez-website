@@ -205,7 +205,19 @@ export function CookiesPolicy({
                 que nada se carga sin su permiso — no al final, entre los
                 terceros, donde parecería una nota al pie. */}
             <Section heading={t.counterHeading}>
-              <p>{t.counterBody}</p>
+              {/* Con `Rich` y no texto plano: los tres párrafos llevan enlaces a
+                  las políticas de los dos proveedores y a la sección de contacto
+                  de esta misma página, que es la vía de oposición que el tercero
+                  ofrece. Un enlace ahí no es adorno: es el mecanismo. */}
+              <p>
+                <Rich text={t.counterBody} />
+              </p>
+              <p>
+                <Rich text={t.counterBody2} />
+              </p>
+              <p>
+                <Rich text={t.counterBody3} />
+              </p>
             </Section>
 
             {/* Gestionar / retirar */}

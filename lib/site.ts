@@ -45,3 +45,20 @@ export const GTM_ID =
   process.env.VERCEL_ENV === "production"
     ? process.env.NEXT_PUBLIC_GTM_ID
     : undefined;
+
+/**
+ * Vercel Web Analytics, y **solo en producción** (P68.61 opción 1, D170).
+ *
+ * MISMO GATE QUE GTM Y POR EL MISMO MOTIVO, no por simetría: fuera de producción
+ * el endpoint `/_vercel/insights/view` no existe, así que montarlo en local o en
+ * Preview solo produce peticiones fallidas en la consola de quien desarrolla. Y
+ * en Preview, si existiera, contaría las visitas de revisar un PR como si fueran
+ * tráfico — que es exactamente el envenenamiento que el contador de
+ * consentimiento acaba de tener que resolver con el entorno dentro de la clave.
+ *
+ * LO QUE **NO** COMPARTE CON GTM ES EL OTRO GATE, y es toda la decisión de D170:
+ * esto carga **sin consentimiento**. Es la excepción a la postura del sitio, está
+ * argumentada en su D-entry y declarada en `/cookies`. Si algún día se revierte,
+ * lo que cambia es dónde se monta en el layout, no esta constante.
+ */
+export const WEB_ANALYTICS = process.env.VERCEL_ENV === "production";

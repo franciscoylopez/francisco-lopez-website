@@ -71,9 +71,13 @@ Here's the detail of what may load, grouped by category:
 
 Necessary cookies load so the site can work and need no consent. Analytics cookies only load with your prior consent, which you can give, deny or withdraw at any time without affecting how the site works.
 
-## The one thing I count before you decide
+## What gets measured before you decide, and it's two things
 
-There's an exception to the above and I'd rather spell it out: I count that you've seen this notice and what you chose. It's an aggregate counter, the first time and only once per browser, and Upstash holds it. It stores no IP address, no cookies and nothing that could identify you: three numbers going up. That's why I don't ask your permission for it, because there's no personal data to process. And it does one specific job: telling me what share of visits analytics actually sees, which is the only way the figures I look at mean anything.
+The first is a counter: I count that you've seen this notice and what you chose. Aggregate, the first time and only once per browser, and [Upstash](https://upstash.com/trust/privacy.pdf) holds it. It stores no IP address, no cookies and nothing that could identify you: three numbers going up. That's why I don't ask your permission for it, because there's no personal data to process.
+
+The second one does process data, and I'd rather explain it plainly: **[Vercel Web Analytics](https://vercel.com/legal/privacy-policy)**, which counts the pages people visit. It uses no cookies and stores nothing on your device, but to avoid counting you twice on the same day it derives a temporary identifier from your IP address and your browser. That identifier is regenerated daily and the IP is not kept. What comes out of it is the country, the kind of device and the page viewed; nothing that points at you.
+
+And the awkward part, which I'd rather say myself: **this site makes a point of asking everyone for permission, and this doesn't ask.** The law doesn't require it (with no cookies and nothing stored on your device, the prior-consent rule of article 22.2 of the Spanish LSSI doesn't apply, and the legal basis is my legitimate interest under article 6.1.f of the GDPR in knowing how many people read this), but it's an exception to my own standard, not to the rule. The reason is that analytics behind a permission prompt only sees the people who accept, so it can't tell me how many there actually are. If you're not comfortable with it, [write to me](#contacto) and I'll stop counting you: it's the right to object listed above and I honour it without asking why.
 
 ## How to manage or withdraw your consent
 
@@ -85,7 +89,7 @@ You can also block or delete cookies from your browser settings.
 
 ## Third parties
 
-Analytics is provided by Google (Google Tag Manager and Google Analytics) and Microsoft (Clarity), which process data under their own policies. You can read them at [Google's privacy policies](https://policies.google.com/technologies/partner-sites) and at [Microsoft's privacy statement](https://privacy.microsoft.com/privacystatement).
+The analytics that needs your consent is provided by Google (Google Tag Manager and Google Analytics) and Microsoft (Clarity), which process data under their own policies. You can read them at [Google's privacy policies](https://policies.google.com/technologies/partner-sites) and at [Microsoft's privacy statement](https://privacy.microsoft.com/privacystatement).
 
 ## Embedded video
 

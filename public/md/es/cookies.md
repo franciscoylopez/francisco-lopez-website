@@ -71,9 +71,13 @@ Este es el detalle de lo que puede cargarse, agrupado por categoría:
 
 Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las de analítica solo se cargan con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web.
 
-## Lo único que cuento antes de que decidas
+## Lo que se mide antes de que decidas, que son dos cosas
 
-Hay una excepción a lo de arriba y prefiero contarla: cuento que has visto este aviso y qué elegiste. Es un contador agregado, la primera vez y solo una vez por navegador, y lo lleva Upstash. No guarda tu dirección IP, ni cookies, ni nada que permita identificarte: son tres números que suben. Por eso no te pido permiso para él, porque no hay ningún dato personal que tratar. Y sirve para una cosa concreta: saber qué parte de las visitas ve la analítica, que es la única forma de que las cifras que miro signifiquen algo.
+La primera es un contador: cuento que has visto este aviso y qué elegiste. Agregado, la primera vez y solo una vez por navegador, y lo lleva [Upstash](https://upstash.com/trust/privacy.pdf). No guarda tu dirección IP, ni cookies, ni nada que permita identificarte: son tres números que suben. Por eso no te pido permiso para él, porque no hay ningún dato personal que tratar.
+
+La segunda sí trata datos, y es la que quiero explicarte sin adornos: **[Vercel Web Analytics](https://vercel.com/legal/privacy-policy)**, que cuenta las páginas que se visitan. No usa cookies y no guarda nada en tu dispositivo, pero para no contarte dos veces el mismo día calcula un identificador temporal a partir de tu dirección IP y de tu navegador. Ese identificador se regenera cada día y la IP no se conserva. De ahí salen el país, el tipo de dispositivo y la página vista; nada que te señale a ti.
+
+Y la parte incómoda, que prefiero decir yo: **este sitio presume de pedir permiso a todo el mundo, y esto no lo pide.** La ley no lo exige (sin cookies ni almacenamiento en tu equipo, el consentimiento previo del artículo 22.2 de la LSSI no aplica, y la base legal es mi interés legítimo del artículo 6.1.f del RGPD en saber cuánta gente lee esto), pero es una excepción a mi propio criterio y no a la norma. La razón es que la analítica con permiso solo ve a quien acepta, así que no puede decirme cuánta gente hay realmente. Si no te parece bien, [escríbeme](#contacto) y dejo de contarte: es el derecho de oposición de más arriba y lo respeto sin pedir explicaciones.
 
 ## Cómo gestionar o retirar tu consentimiento
 
@@ -85,7 +89,7 @@ También puedes bloquear o borrar cookies desde la configuración de tu navegado
 
 ## Terceros
 
-La analítica la proporcionan Google (Google Tag Manager y Google Analytics) y Microsoft (Clarity), que tratan los datos conforme a sus propias políticas. Puedes consultarlas en [las políticas de privacidad de Google](https://policies.google.com/technologies/partner-sites) y en [la declaración de privacidad de Microsoft](https://privacy.microsoft.com/privacystatement).
+La analítica que requiere tu consentimiento la proporcionan Google (Google Tag Manager y Google Analytics) y Microsoft (Clarity), que tratan los datos conforme a sus propias políticas. Puedes consultarlas en [las políticas de privacidad de Google](https://policies.google.com/technologies/partner-sites) y en [la declaración de privacidad de Microsoft](https://privacy.microsoft.com/privacystatement).
 
 ## Vídeo incrustado
 
