@@ -1,19 +1,17 @@
-import { ardCatalog } from "@/lib/ard";
+import { respuestaDelCatalogo } from "@/lib/ard";
 
-// `/.well-known/ard.json` — el catálogo de Agentic Resource Discovery.
+// `/.well-known/ard.json` — la ruta CANÓNICA del catálogo.
 //
-// LA RUTA CANÓNICA, Y SOLO ELLA. La especificación (v0.91, §5.1) es explícita:
-// un consumidor conformante DEBE pedir `/.well-known/ard.json`, y la ruta
-// anterior `/.well-known/ai-catalog.json` es una cortesía que un consumidor
-// PUEDE consultar, no un requisito. En sus palabras, «un publicador que sirve
-// ard.json es descubrible por todo consumidor conformante». Servir además la
-// heredada valdría un punto de bonus del escáner, y por eso se dice que no se
-// hace: sería una segunda URL pública abierta por una casilla, que es lo que
-// D157 no deja hacer. Está anotado en la ficha para que sea una decisión y no un
-// olvido.
+// Agentic Resource Discovery v0.91, §5.1: «un consumidor resolviendo las entradas
+// de un dominio DEBE pedir `/.well-known/ard.json`». Es la que un cliente
+// conformante prueba sin que nadie se la diga, igual que `/about` o `/agents.md`.
 //
-// EL CONTENIDO SE DERIVA (`lib/ard.ts`) y aquí no se escribe nada: este archivo
-// es el transporte. Misma división que `/llms.txt`, `/robots.txt` y el sitemap.
+// LA GEMELA DE AL LADO (`ai-catalog.json`) SIRVE EL MISMO DOCUMENTO, y el porqué
+// —dos especificaciones, dos mecanismos de descubrimiento, un solo cuerpo— está
+// escrito una vez en `lib/ard.ts`, no dos veces aquí.
+//
+// EL CONTENIDO SE DERIVA y aquí no se escribe nada: este archivo es transporte.
+// Misma división que `/llms.txt`, `/robots.txt` y el sitemap.
 //
 // ESTÁTICA, como el resto: el catálogo no depende de la petición, así que se
 // prerenderiza en build y se sirve desde el CDN. Y no lleva `Vary: Accept` —la
@@ -25,7 +23,5 @@ import { ardCatalog } from "@/lib/ard";
 export const dynamic = "force-static";
 
 export async function GET() {
-  return new Response(JSON.stringify(ardCatalog(), null, 2) + "\n", {
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-  });
+  return respuestaDelCatalogo();
 }

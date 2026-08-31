@@ -570,6 +570,7 @@ const MUESTRA: { ruta: string; negocia: boolean }[] = [
   { ruta: "/llms.txt", negocia: false },
   { ruta: "/sitemap.xml", negocia: false },
   { ruta: "/.well-known/ard.json", negocia: false },
+  { ruta: "/.well-known/ai-catalog.json", negocia: false },
 ];
 
 type ReglaDeCabecera = {
@@ -759,6 +760,21 @@ function revisarAlias(): void {
 const ARD = join(".next", "server", "app", ".well-known", "ard.json.body");
 
 /**
+ * La gemela: el MISMO documento en la ruta del AI Catalog Standard. No es una
+ * copia —el cuerpo lo compone una sola función— y por eso lo que se comprueba es
+ * exactamente eso: que los dos artefactos sean **idénticos byte a byte**. El día
+ * que uno de los dos route handlers empiece a componer lo suyo, las dos
+ * especificaciones estarían leyendo dos catálogos con el mismo nombre.
+ */
+const AI_CATALOG = join(
+  ".next",
+  "server",
+  "app",
+  ".well-known",
+  "ai-catalog.json.body",
+);
+
+/**
  * El identificador de descubrimiento: `urn:air:<dominio FQDN>:<espacio>:<nombre>`.
  * El prefijo se compara como cadena y no dentro de una expresión regular: el
  * dominio lleva puntos, y meterlo en un patrón sin escapar convierte el ancla de
@@ -895,9 +911,28 @@ function revisarCatalogo(): void {
     return;
   }
 
+  const cuerpo = readFileSync(ARD, "utf8");
+
+  // LAS DOS PUERTAS SIRVEN EL MISMO DOCUMENTO, y eso no se supone: se compara.
+  if (!existsSync(AI_CATALOG)) {
+    fallo(
+      "catálogo ARD",
+      `no hay artefacto en \`${AI_CATALOG}\`. Es la ruta de descubrimiento del AI ` +
+        "Catalog Standard, de donde sale el formato de este documento: sin ella, el " +
+        "consumidor que sigue esa especificación no encuentra nada.",
+    );
+  } else if (readFileSync(AI_CATALOG, "utf8") !== cuerpo) {
+    fallo(
+      "catálogo ARD",
+      "`/.well-known/ard.json` y `/.well-known/ai-catalog.json` sirven cuerpos " +
+        "DISTINTOS. Son dos puertas al mismo documento, no dos documentos: si difieren, " +
+        "cada especificación está leyendo un catálogo distinto con el mismo nombre.",
+    );
+  }
+
   let doc: { entries?: unknown };
   try {
-    doc = JSON.parse(readFileSync(ARD, "utf8")) as { entries?: unknown };
+    doc = JSON.parse(cuerpo) as { entries?: unknown };
   } catch (e) {
     fallo("catálogo ARD", `no es JSON válido: ${(e as Error).message}.`);
     return;
@@ -940,7 +975,7 @@ console.log(
     `  404        ${vistos.segmentosDinamicos} segmentos dinámicos, ninguno catch-all\n` +
     `  cabeceras  ${vistos.rutasDeCabecera} rutas contra la regex compilada del manifiesto: \`Vary\` solo donde se negocia, seguridad en todas\n` +
     `  alias      ${vistos.alias} rutas que un agente adivina: 307 a un destino que existe\n` +
-    `  catálogo   ${vistos.entradasArd} entradas de \`/.well-known/ard.json\`: el modelo de entrada del conformance, y cada \`url\` resuelta contra el disco`,
+    `  catálogo   ${vistos.entradasArd} entradas, servidas idénticas en sus dos rutas (\`ard.json\` y \`ai-catalog.json\`): el modelo de entrada del conformance, y cada \`url\` resuelta contra el disco`,
 );
 
 // El suelo del metro. Con cero entradas esto aprobaría siempre, que es el modo de

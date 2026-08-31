@@ -59,6 +59,7 @@ import { join } from "node:path";
 import type { AxeResults, RunOptions } from "axe-core";
 import { JSDOM, type DOMWindow } from "jsdom";
 
+import { ARD_URL } from "../lib/ard";
 import { locales, pagePath, type Locale } from "../lib/i18n/config";
 import { PAGE_SLUGS, type PageSlug, resolveOgCard } from "../lib/routes";
 
@@ -226,6 +227,8 @@ let bloquesLd = 0;
 let tarjetasResueltas = 0;
 /** Permalinks a una línea de un archivo del repo, para afirmar cuánto se ha mirado. */
 let permalinksVistos = 0;
+/** `<link rel="ard">` encontrados, para afirmar que se ha mirado en las 28. */
+let enlacesArdVistos = 0;
 
 /**
  * Recorre un JSON-LD y separa las dos formas de usar un `@id`: un objeto que solo
@@ -784,6 +787,57 @@ function revisarPermalinks(pagina: Pagina): void {
   }
 }
 
+/**
+ * EL `rel="ard"` DE CADA VARIANTE *(2026-08-31, P68.752)*.
+ *
+ * ARD v0.91 §5.1 le pide dos cosas a un consumidor: pedir
+ * `/.well-known/ard.json` y **honrar un `rel="ard"`**. La primera no depende de
+ * nosotros; la segunda es un `<link>` que el layout emite y que **React iza al
+ * `<head>`**, y esa izada es justo lo que no se puede dar por hecho: si un día
+ * dejara de ocurrir, el enlace se quedaría dentro del `<body>` —o desaparecería—
+ * sin error de compilación y sin que nada se viera raro en pantalla.
+ *
+ * SE COMPRUEBAN LAS TRES COSAS QUE PUEDEN FALLAR POR SEPARADO: que esté, que
+ * esté **en el `<head>`** y que apunte a la URL del catálogo. Y que sea UNO:
+ * dos `rel="ard"` con destinos distintos es un sitio que dice tener dos
+ * catálogos.
+ *
+ * VA AQUÍ Y NO EN `check:agentes`, que es quien vigila lo demás del catálogo,
+ * por el disparador de siempre: esto solo existe en el HTML servido, y las 28
+ * variantes ya están abiertas aquí. `check:agentes` corre sin DOM.
+ */
+function revisarEnlaceArd({ doc, variante }: Pagina): void {
+  const enlaces = [...doc.querySelectorAll('link[rel="ard"]')];
+  enlacesArdVistos += enlaces.length;
+
+  if (enlaces.length !== 1) {
+    fallo(
+      variante,
+      `tiene ${enlaces.length} \`<link rel="ard">\` y tiene que haber uno. ` +
+        "Es la relación que ARD §5.1 obliga a honrar a un consumidor; sin ella, " +
+        "descubrir el catálogo depende de que el agente pruebe el well-known a ciegas.",
+    );
+    return;
+  }
+
+  const enlace = enlaces[0]!;
+  if (enlace.closest("head") === null) {
+    fallo(
+      variante,
+      'el `<link rel="ard">` no está en el `<head>`. El layout lo emite en el ' +
+        "árbol y quien lo iza es React: si deja de hacerlo, el enlace se queda en el " +
+        "`<body>`, donde no lo lee ningún consumidor, y nada más se rompe.",
+    );
+  }
+  const href = enlace.getAttribute("href");
+  if (href !== ARD_URL) {
+    fallo(
+      variante,
+      `el \`<link rel="ard">\` apunta a «${href}» y el catálogo está en «${ARD_URL}».`,
+    );
+  }
+}
+
 async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
   const variante = `${lang}${slug ? `/${slug}` : " (home)"}`;
   const archivo = archivoDe(lang, slug);
@@ -822,6 +876,7 @@ async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
     revisarCanonical(pagina);
     revisarTarjetas(pagina);
     revisarPermalinks(pagina);
+    revisarEnlaceArd(pagina);
     revisarJsonLd(pagina);
     await revisarConAxe(pagina, dom.window);
   } finally {
@@ -877,6 +932,7 @@ async function main() {
       `  artículos  ${articulosMirados} variantes cruzadas: og:type=article ⇔ un solo <article>\n` +
       `  tarjetas   ${tarjetasResueltas} \`?card=\` resueltos contra el despacho de \`/api/og\`\n` +
       `  permalinks ${permalinksVistos} a una línea de un .md del repo, comprobado su ?plain=1\n` +
+      `  catálogo   ${enlacesArdVistos} \`<link rel="ard">\` en el <head>, apuntando al catálogo de agentes\n` +
       `  JSON-LD    ${bloquesLd} bloques · ${idsDeclarados.size} \`@id\` declarados · ${idsReferenciados.size} referenciados\n` +
       `  cruces     ${referenciasMiradas} referencias miradas por página · ${REFERENCIAS_QUE_CRUZAN.length} cruces declarados con motivo\n`,
   );

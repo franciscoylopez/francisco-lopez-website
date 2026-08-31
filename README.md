@@ -61,7 +61,7 @@ No es un portfolio con un `README` de portfolio. Lo que hay debajo son unas cuan
 - **`llms.txt`**: índice curado para LLMs y agentes, generado desde el diccionario y los datos de contacto. Desde `P67.4` abre diciendo **cuándo** usar esta fuente y qué página contesta a qué pregunta, que es lo que un agente necesita para elegirla sin leerse las catorce.
 - **Markdown por página**: cada una se sirve también como markdown (`/md/<locale>/<pagina>.md`, o pidiendo `Accept: text/markdown`), derivado del `<main>` prerenderizado con `npm run md` y vigilado por `npm run md:verificar` en CI (`D158`). **Una ruta que no existe también responde en markdown**: 404 de verdad con un cuerpo corto que apunta a `/llms.txt`, al sitemap y al inicio, en el idioma de la URL (`D161`).
 - **Las rutas que un agente adivina**: `/about`, `/privacy` y `/contact` —y sus variantes en `/en`— redirigen a los slugs españoles del sitio. Un agente prueba esas tres antes de leer el sitemap, y aquí no existían (`D161`).
-- **Catálogo ARD** en `/.well-known/ard.json`: la ruta que un cliente conformante pide para resolver un dominio, con las seis cosas que este sitio le sirve a una máquina (el índice, el sitemap, el markdown y el CV en sus dos idiomas). No lleva MCP, agentes, skills, API ni `trustManifest`, porque no existen.
+- **Catálogo ARD** en `/.well-known/ard.json`: la ruta que un cliente conformante pide para resolver un dominio, con las seis cosas que este sitio le sirve a una máquina (el índice, el sitemap, el markdown y el CV en sus dos idiomas). No lleva MCP, agentes, skills, API ni `trustManifest`, porque no existen. **El mismo documento se sirve en `/.well-known/ai-catalog.json`** —la ruta del AI Catalog Standard, de donde sale el formato— y cada página lo anuncia con un `<link rel="ard">`, que es la otra mitad que la especificación obliga a honrar.
 - **Imágenes Open Graph** de marca generadas al vuelo (`/api/og`, `next/og`).
 
 </details>
@@ -254,7 +254,7 @@ app/[lang]/dictionaries/{es,en}/  Diccionario PARTIDO POR PÁGINA (D48): common 
 app/api/og/            Generación de imágenes OG (ImageResponse)
 app/{robots,sitemap}   Metadata routes (robots.txt, sitemap.xml)
 app/llms.txt/          Route handler: /llms.txt generado desde el diccionario i18n
-app/.well-known/       Route handler: /.well-known/ard.json, el catálogo ARD (lib/ard.ts)
+app/.well-known/       Route handlers: el catálogo ARD en sus dos rutas (lib/ard.ts)
 public/md/             Markdown de las 28 variantes, derivado del prerender (D158)
 app/global-*           404/500 de marca e i18n (global-not-found, global-error)
 

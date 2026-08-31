@@ -48,6 +48,32 @@ import { cvPath, locales, type Locale } from "@/lib/i18n/config";
 import { SITE_DOMAIN, SITE_NAME, SITE_URL } from "@/lib/site";
 
 /**
+ * LAS DOS RUTAS, Y POR QUÉ SON DOS *(2026-08-31)*.
+ *
+ * `ard.json` es la canónica de ARD v0.91: «un consumidor resolviendo las entradas
+ * de un dominio DEBE pedir `/.well-known/ard.json`» (§5.1). `ai-catalog.json` es
+ * la del **AI Catalog Standard** (ai-catalog.io), que es de quien sale el formato
+ * de documento que hay aquí abajo — ARD define la ruta y el modelo de entrada, y
+ * hereda el resto.
+ *
+ * Así que no es «la canónica y la vieja»: son **dos especificaciones con dos
+ * mecanismos de descubrimiento y un solo documento**, que es literalmente lo que
+ * dice la recomendación de ai-catalog.io («el mismo documento que sirves en
+ * `/.well-known/ard.json` vale sin cambios»). Servir las dos no duplica ninguna
+ * decisión: el cuerpo lo compone una sola función y las dos rutas la llaman.
+ *
+ * Y ES LA ÚNICA DUPLICACIÓN QUE SE ACEPTA AQUÍ: el `rel` heredado `ai-catalog`
+ * NO se emite. La relación que hoy es normativa es `ard` (§5.1), la sirve la
+ * misma URL, y un segundo `<link>` en las 28 variantes no lo consulta nadie que
+ * no encuentre ya el well-known.
+ */
+export const ARD_PATH = "/.well-known/ard.json";
+export const AI_CATALOG_PATH = "/.well-known/ai-catalog.json";
+
+/** La URL absoluta del catálogo: la que anuncia el `rel="ard"` de cada página. */
+export const ARD_URL = `${SITE_URL}${ARD_PATH}`;
+
+/**
  * Una entrada del catálogo, con los cuatro términos que el conformance exige
  * (§4.2 de ARD) y los dos que recomienda.
  *
@@ -248,4 +274,19 @@ export function ardCatalog() {
     },
     entries: ARD_ENTRIES,
   };
+}
+
+/**
+ * LA RESPUESTA, compuesta UNA vez para las dos rutas. Los dos route handlers son
+ * transporte y nada más: si cada uno construyera su `Response`, las dos
+ * especificaciones podrían acabar recibiendo cabeceras distintas del mismo
+ * documento, que es la forma callada de que dejen de ser el mismo documento.
+ *
+ * Sangrado a dos espacios y con salto final: lo lee una máquina, pero también
+ * quien haga `curl` para comprobar qué anuncia el sitio, y este archivo es corto.
+ */
+export function respuestaDelCatalogo(): Response {
+  return new Response(JSON.stringify(ardCatalog(), null, 2) + "\n", {
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+  });
 }
