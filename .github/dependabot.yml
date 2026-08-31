@@ -16,8 +16,11 @@ updates:
     # El riesgo es el TIEMPO: Dependabot saltaba a la versión nueva la semana en que
     # salía, con CI como única puerta. Y ya mordió una vez (el PR #47 de TypeScript 7
     # rompía el build), aunque ahí el fallo fue RUIDOSO. Un cambio de comportamiento
-    # en el render, no en la compilación, pasaría los doce checks enteros: ninguno
+    # en el render, no en la compilación, pasaría CI entero: ninguno de sus pasos
     # mira la página servida, porque `gate:html` no está en CI a propósito.
+    # (Aquí decía «los doce checks» con veintisiete pasos en `ci.yml`. La cifra no
+    # hacía falta para el argumento y se retira, como en `ci.yml` y en el workflow
+    # de automerge: los tres recuentos se corrigieron juntos el 2026-08-31.)
     # Los parches no esperan, y las actualizaciones de SEGURIDAD son otro mecanismo
     # (alertas), así que este reposo no las retrasa.
     #
