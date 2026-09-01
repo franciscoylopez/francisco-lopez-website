@@ -95,6 +95,7 @@
 - [La tanda 5 de «Agentes»: cuatro metros que no decían lo que estaban haciendo — 2026-08-30](#la-tanda-5-de-agentes-cuatro-metros-que-no-decían-lo-que-estaban-haciendo--2026-08-30)
 - [Fuentes](#fuentes)
 - [El cierre de «Agentes» — 2026-08-31](#el-cierre-de-agentes--2026-08-31)
+- [El cierre de «Distribución» y el `method-review` XI — 2026-09-01](#el-cierre-de-distribución-y-el-method-review-xi--2026-09-01)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4295,3 +4296,94 @@ exceso de andamiaje no se arregla añadiendo andamiaje.
 
 **El informe completo:**
 <https://claude.ai/code/artifact/f0242963-2e52-4ee7-a0c2-b3d3f8740ae8>
+
+## El cierre de «Distribución» y el `method-review` XI — 2026-09-01
+
+La etapa cerró con las **nueve piezas de la serie escritas y aprobadas** y solo R1 publicada,
+que es lo que la decisión de ese mismo día había previsto: el seguimiento de las ocho restantes
+vive en una base de Notion aparte y sobrevive al cierre, porque el desarrollo no se para
+esperando datos.
+
+### El `sprint-review`: el sprint más de contenido subió la fila de andamiaje
+
+Seis commits, de los que solo tres tocan código. Y aun así **`verificación ÷ producto` pasó de
+0,554 a 0,571** —rojo y subiendo—, con `scripts/` creciendo 780 líneas contra 543 del producto.
+Las 780 son casi enteras el generador de carruseles (622) y `consentimiento.ts` (127). Es el
+hallazgo que hay que tener delante al planificar: **publicar contenido en este proyecto
+significa construir herramientas para publicarlo**, así que esa fila no baja cambiando de tipo
+de sprint.
+
+### El check de medición, y la caída que no era una caída
+
+GA4, 4-31 ago: **240 eventos / 39 usuarios**, con `contact_submit` en **1 evento / 1 usuario**.
+El cierre anterior medía 45 usuarios (3-30 ago) y la primaria también en 1. Los 6 usuarios de
+diferencia **los explica la ventana rodante** —salió el 3 de agosto, entró el 31—, no una
+regresión: es la trampa que el propio check nombra, aplicada correctamente por primera vez sin
+que costara una investigación.
+
+Y dejó dos huecos que se tarearon: **la tasa de consentimiento no se pudo leer** (las
+credenciales de Upstash no están en `.env.local` y el camino documentado, `vercel env pull`,
+sobrescribe el archivo y se lleva `PSI_API_KEY`), y **la cifra de Vercel Web Analytics tampoco**
+—su transporte sí quedó verificado, con el POST a su ruta ofuscada devolviendo 200 en
+producción—. De las cuatro fuentes de medición, solo una se pudo leer entera.
+
+### La cola de Dependabot, donde el triaje valió lo que costó
+
+Seis PR. Cuatro entraron y dos se cerraron con su motivo medido, y las dos mitades importan:
+
+- **`next` 16.3.1 → 16.3.4 no era un bump menor**: parchea dos advisories **críticos** —RCE no
+  autenticado en servidores Windows y en la Image Optimization API con AVIF—. **`npm audit`
+  daba 0 y no los conocía**; los trajo Dependabot. Pasó el `gate:html` con **diff vacío en las
+  28 variantes**, así que entró verificado.
+- **`@react-pdf/renderer` 4.8.1 rompe `npm run cv`**, comprobado con su control (4.6.1 genera
+  los dos PDF a 2 páginas; 4.8.1 sale con `ERR_PACKAGE_PATH_NOT_EXPORTED`). La causa es
+  upstream y precisa: `@react-pdf/textkit` importa `@react-pdf/hyphenate/en-us`, y el `exports`
+  de `hyphenate@0.1.0` declara `"./*"` **solo bajo la condición `import`**, mientras `tsx`
+  resuelve por CJS. Se abrió ficha porque, a diferencia de ESLint 10 y TypeScript 7, **media
+  solución es nuestra**: dejar de resolver el generador de CV por CJS.
+
+### El `method-review` XI: el hallazgo de más impacto no lo encontró la revisión
+
+**Lo trajo Francisco**, en una nota de tres palabras: *«seguimos teniendo muchos fallos de PR
+run failed: CI»*. Medido, **14 de 80 runs en rojo en tres días (18 %)**, agrupados en la misma
+rama —tres fallos en 34 minutos—, o sea empujar y ver qué dice CI.
+
+Y el desglose convierte la queja en diagnóstico: **12 de los 14 son gates «al día»** —Markdown
+7, Artículo 4, Accesibilidad 1—, artefactos derivados que quedaron viejos. Los tres son
+deterministas, corren en segundos en local y **cada uno ya tiene su regenerador**. El control
+que cierra el argumento: **el paso «Formato» no ha fallado ni una vez en 80 runs**, porque
+tiene un *hook* (`scripts/hooks/format-stop.mjs`) que lo arregla al terminar. **El mecanismo
+existe en este repo y nunca se extendió a los cinco regeneradores.**
+
+**Convergencia con las notas de Francisco: cero.** Ninguna de sus dos notas estaba en los
+cuatro hallazgos de la revisión, y ninguno de los cuatro en sus notas. Verificadas las suyas
+con cifra, las dos se sostienen — y eso deja escrito un límite del barrido: **sus nueve medidas
+no incluían mirar si CI pasa**. Celebraba «27 gates automáticos contra 9 manuales» sin ver que
+el 18 % falla. Se añadió como décimo paso, con su comando y su umbral.
+
+### Y la regla que se pagó con el margen que existía para aplicarla
+
+El margen del presupuesto `@`-importado cayó de **133 a 10**, y la traza dice dónde: el cierre
+de «Agentes» añadió 105 palabras a `CLAUDE.md` —que **son, literalmente, la regla «ABRIR
+EMPIEZA RETIRANDO»**— y la apertura de «Distribución» retiró **cero**. Todo el sprint sumó +7
+palabras: el margen ya estaba en 17 cuando abrió.
+
+La apertura de «Higiene» lo corrigió, y encontrando el duplicado **donde el ciclo anterior no
+lo buscó: en lo que el propio cierre acababa de escribir**. Las 105 palabras repetían su porqué
+y su medida con `CLAUDE-historical.md`, al que ya apuntaban; se dejó la regla y se retiró la
+justificación. Con eso cupieron dos reglas nuevas y `CLAUDE.md` salió en **−4 palabras netas**.
+
+### Lo que abre «Higiene»
+
+**31 tareas en 7 tandas**, y la decisión de alcance es de Francisco: hacer todo lo que quedaba
+en `Sin empezar` salvo V4, para entrar en la IA conversacional sin deuda. La tanda 1 la forman
+las cuatro que **producen información o abaratan el resto** —el *hook*, Silktide, Search
+Console y el «About» de GitHub—, y las tres últimas son auditorías cuyo resultado puede generar
+tareas para tandas posteriores.
+
+**El embalse transversal pasó de 23 a 2** con eso, que es el drenaje que `SELLO_GENERAL` llevaba
+tres cierres pidiendo. Conviene decir que no lo consiguió el cupo: lo consiguió absorber el
+bloque entero, que es una operación que solo cabe una vez.
+
+**El informe completo:**
+<https://claude.ai/code/artifact/fbf55041-74b8-405a-9285-0528ed3b0fe2>
