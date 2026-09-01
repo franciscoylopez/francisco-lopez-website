@@ -64,6 +64,10 @@ cada página—. Lo que no existe no se cataloga: ni MCP, ni agentes, ni skills,
 **La marca no termina en el dominio.** Firma de email, banner de LinkedIn y portada del
 repositorio comparten el titular del Hero, «Del discovery al dato», y el mismo monograma:
 la prueba de coherencia que un sistema de marca solo puede dar fuera de su propio sitio.
+**Desde el 2026-09-01 son cuatro, y la cuarta es la más fuerte**: los carruseles de la
+serie de LinkedIn no colocan un lockup sobre una plantilla ajena, llevan el sistema entero
+—tokens del tema oscuro, las dos tipografías, el monograma con split y el punto morado—
+gobernado por una plantilla que cada pieza reutiliza sin tocar.
 
 La apertura de **Sobre mí es un vídeo**: se reproduce una vez y se queda en su último
 fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
