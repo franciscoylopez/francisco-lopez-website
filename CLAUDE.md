@@ -89,7 +89,9 @@ Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cua
 
 **Dos sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
 
-**Y ABRIR EMPIEZA RETIRANDO, EN LOTE Y ANTES DE AÑADIR NADA** *(2026-08-31)*. Es la generalización de lo que el cupo ya pide arriba, a los tres sitios donde este método solo tiene techo: el conjunto `@`-importado, `General` y `scripts/`. **Un techo dispara la retirada cuando ya se cruzó**, así que sin esto el equilibrio es el rojo y cada edición paga peaje en deliberación — medido: el 13% de los commits. **Durante el sprint no se negocia:** si algo no cabe, entra, y la apertura siguiente lo paga. Y el candidato a retirar **no es el bloque más grande, es el DUPLICADO**: lo que ya está en un histórico o en otro documento. El caso que lo escribió, en `CLAUDE-historical.md`.
+**Y ABRIR EMPIEZA RETIRANDO, EN LOTE Y ANTES DE AÑADIR NADA** *(2026-08-31)*: del conjunto `@`-importado, de `General` y de `scripts/`, los tres sitios donde este método solo tiene techo. **Durante el sprint no se negocia:** si algo no cabe, entra, y la apertura siguiente lo paga. El candidato **no es el bloque más grande, es el DUPLICADO**. Porqué, medida y el caso que lo escribió, en `CLAUDE-historical.md`.
+
+**Y lo que el cierre APRENDE va al histórico**; aquí solo sube lo que cambia una regla activa. Si no, el ciclo gasta siempre e ingresa solo a veces, y el margen únicamente baja: de 133 a 10 en un ciclo *(2026-09-01)*.
 
 ### Metodología de trabajo (fase V2+)
 
@@ -134,9 +136,7 @@ Antes de escribir markup nuevo, la cascada, en orden:
 
 ### Qué compra esto: la accesibilidad se hereda, no se vuelve a medir
 
-La mayoría de los 9 puntos de abajo los trae la pieza o `<PageShell>`, así que lo que queda no es medirlos otra vez: es comprobar que **se heredaron**, y **en pantalla, no leyendo el JSX** — una clase puede no estar aplicándose a nada sin dar error de compilación (`BRAND.md` §Cómo medir, punto 5).
-
-**Quién mira cada punto, y cuándo hay que volver a medir, lo dice la tabla de la Definition of Done** al final de este archivo; no se repite aquí.
+La mayoría de los 9 puntos de abajo los trae la pieza o `<PageShell>`, así que lo que queda no es medirlos otra vez: es comprobar que **se heredaron**, y **en pantalla, no leyendo el JSX** (`BRAND.md` §Cómo medir, punto 5). Quién mira cada punto lo dice la Definition of Done, al final de este archivo.
 
 ## Checklist de accesibilidad — gate de cierre de cada página/sección
 
@@ -193,10 +193,13 @@ pulido tipográfico o de ritmo que aparezca al mirarla.
 
 ## Antes de construir, no al cerrar
 
-- **¿Hay decisión visual abierta?** → `/prototype` **antes** de escribir el componente.
+- **¿Hay decisión visual abierta?** → `/prototype` **antes de construir la pieza**: componente,
+  ilustración, carrusel o **vídeo** — decir «componente» ya dejó pasar uno *(2026-09-01)*.
   Solo puede invocarla Francisco, así que **ofrécela** en cuanto la tarea tenga más de una
   dirección posible. **Y también cuando una medición visual contradiga lo que Francisco ve
-  en la página** (`BRAND.md` §Cómo medir, punto 8).
+  en la página** (`BRAND.md` §Cómo medir, punto 8). **En lo audiovisual la dirección se
+  acuerda en vistas FIJAS** —contenido, formato, cierre y qué gráficos salen— antes de montar
+  ningún pipeline.
 - **¿Dependencia frontend nueva?** → `/pick-ui-library`, misma condición.
 - **¿Toca motion?** → `/review-animations` al terminarlo.
 - **¿La tarea añade una superficie que recibe input de un tercero** (formulario, subida,
