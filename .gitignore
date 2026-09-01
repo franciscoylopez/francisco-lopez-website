@@ -66,3 +66,7 @@ next-env.d.ts
 # archivo que el historial de git ya tiene, y una segunda copia acaba diciendo
 # otra cosa. El registro de cómo se hizo es el diff y el mensaje del commit.
 /scripts/.poda/
+
+# El HTML intermedio del generador de carruseles: se escribe junto al slides.mjs
+# para poder depurar una lámina, y solo cae dentro del repo con el caso malo.
+scripts/carrusel/carrusel.html

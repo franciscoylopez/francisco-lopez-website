@@ -187,6 +187,10 @@ npm run check:agentes       # lo que el sitio le promete a un agente: llms.txt, 
 # Generadores
 npm run cv         # regenera el CV en PDF (ES + EN) → public/cv/ y actualiza su sello
 npm run artefacto  # re-renderiza el diagrama de Emendu desde su .mmd (D54)
+npm run carrusel -- <ruta a slides.mjs>
+                   # los PNG y el PDF de un carrusel de LinkedIn, con la plantilla
+                   # de marca del sitio (D171). El contenido de cada pieza vive
+                   # fuera del repo; aquí está solo lo reutilizable
 
 # Medición
 npm run gate:html -- save   # instantánea del HTML de todas las páginas × 2 idiomas
@@ -225,6 +229,16 @@ qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 > tengas instalado**: no se descarga ningún Chromium. El render es local — el diagrama no
 > sale a ningún servidor — y **determinista**, así que regenerar sin cambiar el `.mmd` no
 > ensucia el diff.
+
+> **`npm run carrusel`** usa `puppeteer`, que **descarga su propio Chromium** (a diferencia
+> de `artefacto`, que reusa el Chrome del sistema). Su guardián comprueba tres cosas antes
+> de exportar nada —que el bloque no desborde, que la firma no se salga del pie y que dos
+> celdas no se pisen— y **dice cuántas ha mirado**. Su caso malo está al lado y se dispara a
+> mano (`npm run carrusel -- scripts/carrusel/caso-malo.mjs`, tiene que salir 1), porque el
+> generador no es un gate de CI y no entra en `check:guardianes`. Aun así se miran los PNG, porque cubre
+> los tres modos de fallo conocidos y no «que la lámina esté bien». El render **no es
+> determinista byte a byte**: dos corridas del mismo contenido dan PNG distintos, así que
+> comparar hashes no sirve como comprobación (el HTML sí lo es).
 
 > **`npm run censo`** necesita el sitio **servido** (`npm run build && npm start`) y
 > `agent-browser`: la mitad de los pares de este sitio no existen hasta que el navegador
@@ -307,6 +321,10 @@ brand-assets/          Piezas de marca fuera de la web — no se despliega
 
 scripts/logo-kit/      Generación del kit de logo desde su geometría
 scripts/cv/            Generador del CV en PDF (react-pdf) + facts.ts
+scripts/carrusel/      Plantilla y render de los carruseles de LinkedIn. La plantilla
+                       es sistema de marca —tokens del tema oscuro, las dos tipografías
+                       y el monograma con split—; el contenido de cada pieza NO está
+                       aquí, se le pasa por ruta (D171)
 scripts/check-*.ts         Los guardianes de CI. Todos comparten dos reglas de método:
                            buscan la AUSENCIA (no el patrón) y afirman cuánto han mirado
 scripts/indices.ts         Genera los índices de markdown derivados de sus cabeceras (D69)

@@ -206,6 +206,7 @@
 - D168 · La primaria se lee como índice relativo, y ese párrafo es lo que desbloquea el lanzamiento
 - D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal
 - D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento
+- D171 · El generador de carruseles entra al repo, y su guardián pasa de uno a tres criterios
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10945,5 +10946,92 @@ envenenamiento—, y sobre todo **la cuota del plan *hobby*: 2.500 eventos al me
 vez de apagar, precisamente para poder verificar antes de mergear. Aquí se apaga, así que **esto
 se verifica DESPUÉS del merge**, contra producción, y hasta entonces no está comprobado que
 funcione. Se acepta por la cuota, no por descuido.
+
+**Estado:** Aceptada.
+
+---
+
+## D171 · El generador de carruseles entra al repo, y su guardián pasa de uno a tres criterios — 2026-09-01
+
+**Contexto.** Las tres piezas de carrusel de la serie de LinkedIn (R1, R2, R3) se montaron con un
+generador que vivía en el Escritorio, con una carpeta `fuente/` por pieza. Dentro de cada una,
+tres archivos: `slides.mjs` (el contenido), `plantilla.mjs` (el aspecto) y `render.mjs`. Los dos
+últimos se copiaban de una pieza a la siguiente.
+
+Es decir: **el aspecto de la marca fuera del dominio —los tokens del tema oscuro, las dos
+tipografías y el monograma con split— no estaba en git, y se propagaba copiando.** `PRD-Live` §4
+llama a esos carruseles «la cuarta superficie, y la más fuerte» precisamente porque llevan el
+sistema entero; el sistema entero estaba en tres copias sin versionar.
+
+**La premisa de la ficha era que ya no hacía falta.** P68.655 avisaba de que el carrusel se agota
+en la primera tanda, así que con R3 escrito el generador no tenía más usos previstos, y proponía
+decidir si mudarlo entero o salvar solo la plantilla. **Decisión de Francisco (2026-09-01): se
+muda entero**, porque no hay más piezas previstas pero puede haberlas.
+
+**Qué entra y qué no.** Entran `plantilla.mjs` y `render.mjs`, en `scripts/carrusel/`, que es lo
+reutilizable. **No entra el contenido**: el `slides.mjs` de cada pieza vive con la pieza, fuera
+del repo, igual que su artículo. Por eso el comando recibe una ruta —`npm run carrusel -- <ruta a
+slides.mjs>`— en vez de tener las piezas dentro. Es la misma partición que ya usa
+`check:tablero`: el criterio en el repo, el dato fuera (`D107`).
+
+De paso desaparece la variable `REPO=`: la plantilla deduce la raíz de su propia ruta, que es
+algo que solo podía hacer una vez dentro.
+
+### El guardián miraba una cosa de tres, y las otras dos ya habían dado verde sobre PNG rotos
+
+La versión anterior comparaba `scrollHeight` con `clientHeight` del bloque. Eso solo ve un modo
+de fallo, y los otros dos ya habían ocurrido:
+
+1. **El bloque desborda su caja** — lo que ya miraba.
+2. **El bloque empuja la firma fuera del pie.** Con una tabla de seis filas el bloque no
+   desbordaba: *crecía*, y el pie se salía de la lámina, que tiene `overflow:hidden`. Salida:
+   «Sin desbordes en 10 láminas», y el PNG cortado por abajo.
+3. **Dos celdas se pisan en horizontal.** Las columnas 2 y 3 de `tabla` son pistas fijas de
+   140px: dos cabeceras largas se solapan y el alto no se entera.
+
+Es el modo de fallo que este proyecto ya se había encontrado cinco veces —un metro que devuelve
+lista vacía parece un aprobado—, aquí por sexta. Así que el guardián nuevo **afirma cuántas
+láminas y cuántos pares de celdas ha mirado**, y **se validó disparándolo**: un `slides.mjs` de
+caso malo con las dos láminas que rompían, y hasta que no las cazó las dos no se dio por bueno.
+
+**Y ese caso malo queda en el repo, no en un temporal:** `scripts/carrusel/caso-malo.mjs`, que
+tiene que salir 1. No entra en `check:guardianes` porque este generador no es un gate de CI
+—necesita navegador y la ruta de una pieza—, así que se dispara a mano; pero existir por escrito
+es lo que permite volver a comprobar que el guardián no se ha quedado ciego.
+
+**Y la primera versión del criterio 3 no las cazaba.** Comparaba las cajas de los *elementos*, y
+una celda de pista fija mide sus 140px pase lo que pase: el texto que no cabe se pinta fuera sin
+mover la caja. `scrollWidth` tampoco sirve, porque va en `text-align:right` y el derrame va hacia
+la izquierda, que es el lado de inicio y el que `scrollWidth` ignora. Lo que sí sirve es medir la
+caja del **texto** con un `Range`, y por **líneas** y no por envolvente: un texto que parte en dos
+dentro de su celda es correcto, y la envolvente daría un falso positivo con la anchura entera.
+
+**Tercera trampa, de operación, arreglada de camino:** `node render.mjs | head` mataba el proceso
+por `SIGPIPE` tras la primera lámina y dejaba las otras nueve viejas, con el comando en verde.
+Ahora el proceso ignora `EPIPE` en su salida.
+
+### La comprobación de transparencia no puede ser el PNG
+
+Se quiso demostrar que el generador mudado produce lo mismo, con el patrón de `gate:html` (`D42`,
+`D45`): comparar la salida antes y después. **Comparando los PNG byte a byte, 18 de 21
+coincidían y 3 no.** Antes de creerse la regresión se validó el metro, que es la regla 3 de
+`BRAND.md`: dos corridas seguidas **del mismo generador sobre el mismo contenido** ya dan un PNG
+distinto. **El render no es determinista byte a byte**, así que comparar hashes de PNG no puede
+ser la comprobación, ni aquí ni en un gate futuro.
+
+Lo que sí es determinista es el HTML que produce la plantilla, y ahí la comprobación sale
+limpia: **idéntico en las dos piezas** (141.408 y 140.367 bytes, fuentes en base64 incluidas).
+Esa es la prueba de que la mudanza es transparente.
+
+### `puppeteer` era una dependencia transitiva, y ahora está declarada
+
+El generador lo resolvía con `createRequire` contra el `package.json` del repo, donde llegaba
+como dependencia transitiva de `@mermaid-js/mermaid-cli`. Un script del repo que depende de algo
+que nadie declaró se rompe el día que otro paquete cambia su árbol. Queda como `devDependency`
+explícita, en la versión que ya estaba instalada, y con eso entra además en el radar de
+Dependabot.
+
+**Lo que esto NO resuelve, y hay que saberlo:** el guardián cubre los tres modos de fallo
+conocidos, no «que la lámina esté bien». Se siguen mirando los PNG.
 
 **Estado:** Aceptada.
