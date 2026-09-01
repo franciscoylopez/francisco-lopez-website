@@ -101,11 +101,32 @@ const HORAS_FRESCURA = 12;
  *   con lo que cada revisión encuentra. Bajarlo de verdad pide o un cupo mayor,
  *   o una revisión que retire tareas en vez de solo añadirlas — que es
  *   exactamente lo que el sprint de limpieza tiene que hacer.
+ * · 2026-09-01 · cierre de «Distribución» · 23. **+3, el peor de los cuatro
+ *   cierres sellados**, y la aritmética vuelve a decir lo mismo que la entrada
+ *   anterior predijo: «Distribución» **no arrastró cupo**. Ni una de las trece
+ *   tareas que archivó venía de `General` — eran suyas (las nueve piezas de la
+ *   serie, el plan, el denominador y el generador de carruseles). Cupo llevado:
+ *   **0 de 3-4**. Y su `sprint-review` escribió cuatro, de las que una murió el
+ *   mismo día. 20 − 0 + 4 − 1 = 23.
+ *
+ *   TERCER ÁMBAR EN CUATRO CIERRES, Y LOS TRES SON EL MISMO CASO. «Drenaje»,
+ *   «Voz» y «Distribución» no tocaron el cupo y subieron; «Agentes» se llevó
+ *   sus cuatro y empató. Ya no es una hipótesis de una muestra: **es la única
+ *   variable que se mueve con el signo**. Un sprint de contenido no se lleva
+ *   deuda transversal por su cuenta, así que o se le asigna explícitamente al
+ *   abrirlo, o el embalse sube.
+ *
+ *   Y UNA COSA NUEVA, que es la primera vez que pasa: **el cierre RETIRÓ una
+ *   tarea**, la de `npm audit fix`, descartada horas después de nacer porque
+ *   Dependabot abrió el PR que la resolvía. Es lo que la entrada anterior pedía
+ *   («una revisión que retire en vez de solo añadir») y **no cuenta como
+ *   prueba**: no la retiró el criterio, la retiró la suerte. Se anota para no
+ *   leer el −1 como que el método ya drena.
  */
 const SELLO_GENERAL: Sello = {
-  fecha: "2026-08-31",
-  cierre: "Agentes",
-  abiertas: 20,
+  fecha: "2026-09-01",
+  cierre: "Distribución",
+  abiertas: 23,
 };
 
 /**
