@@ -88,12 +88,24 @@ for d in <fechas>; do sha=$(git rev-list -1 --before="$d" HEAD); \
 El techo avisa el día que se cruza; **la curva avisa antes**. Compara con el cierre anterior:
 si subió sin que entrara una regla nueva de verdad, se añadió donde tocaba sustituir.
 
-### 2 · La proporción entre gates automáticos y manuales
+### 2 · La proporción entre gates automáticos y manuales — y si PASAN
 
 Cuenta los pasos de `.github/workflows/ci.yml` y enumera los que dependen de acordarse
 (`gate:html`, `psi`, el censo, `viewport-verifier`, las tres skills de revisión, la revisión
 EN↔ES, los generadores). **La proporción es el hallazgo**: en el primer disparo eran 8 contra
 9, y los manuales habían fallado cuatro veces documentadas.
+
+**Y luego mide si los automáticos pasan, que es la mitad que faltaba** *(añadida en el 11.º
+disparo, donde el hallazgo de más impacto lo trajo Francisco porque esta skill no podía verlo)*:
+
+```bash
+gh run list --workflow=CI --limit 80 --json conclusion,headBranch,databaseId
+gh run view <id> --json jobs -q '[.jobs[].steps[]|select(.conclusion=="failure")|.name]'
+```
+
+Verde ≤ 5 % de runs en rojo, rojo ≥ 15 %. **Y agrupa por PASO y por RAMA**: varios fallos en la
+misma rama en minutos no son *flakiness*, son empujar y ver qué dice CI. Si el paso que falla
+tiene un regenerador, lo que falta no es una herramienta — es el disparador.
 
 ### 3 · Los guardianes, en tres preguntas
 
@@ -193,10 +205,7 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 
 > **El RELATO de cada disparo —qué encontró, con quién convergió y qué se cerró— vive en
 > `PRD-Historical.md`, con su informe enlazado.** Aquí solo la tabla de arriba y las reglas que
-> dejaron, porque son lo único que se vuelve a usar. *Retirado en lote el 2026-08-31: eran ~1.900
-> palabras que duplicaban el histórico, o sea la regla 5 de `BRAND.md` —«si ya está en otro sitio,
-> aquí va el puntero, nunca la copia»— incumplida por la skill que audita el método. La retirada
-> es la que Francisco eligió en ese mismo disparo, sobre el caso que la generó.*
+> dejaron, porque son lo único que se vuelve a usar.
 
 **Las reglas que dejaron los diez disparos.** Sin fecha y sin autor a propósito: quien las lee
 las va a aplicar, no a datar.
@@ -236,23 +245,23 @@ las va a aplicar, no a datar.
 - **Cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es cuánto
   recortar: es qué gobierna el número.**
 
-**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-08-31, tras «Agentes»)*:
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-09-01, tras «Distribución»)*:
 
 | Indicador | Hoy | Verde | Rojo | Comando |
 | :-- | :-- | :-- | :-- | :-- |
-| Variación neta de `General` por sprint | **±0** (20 → 20) 🟢 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
-| Veces que se movió un techo en el ciclo | **1** de 3 🟡 | 0 | ≥ 2 | `check:contexto` (última sección) |
-| Margen del presupuesto de contexto | **133** 🟡 | ≥ 400 | < 100 | `check:contexto` |
-| Suma de skills a demanda | **holgura 277** 🟢 | ≤ techo | > techo | `check:contexto` |
-| Verificación ÷ producto | **0,554** 🔴 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
-| % Infra del sprint que cierra | **34,8 %** (8/23) 🟢 | ≤ 35 % | ≥ 50 % | tablero, `GROUP BY Área` |
-| Verificación ÷ producto DEL SPRINT | **1,57 : 1** 🟡 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
-| Hallazgos de `design-review` cuya regla ya existía | *quinto ciclo sin disparar* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
+| **Runs de CI en rojo** | **18 %** (14/80) 🔴 | ≤ 5 % | ≥ 15 % | `gh run list --workflow=CI --json conclusion` |
+| Variación neta de `General` por sprint | **+3** (20 → 23) 🟡 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
+| Veces que se movió un techo en el ciclo | **0** de 3 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
+| Margen del presupuesto de contexto | **14** 🔴 | ≥ 400 | < 100 | `check:contexto` |
+| Suma de skills a demanda | **holgura 62** 🟡 | ≤ techo | > techo | `check:contexto` |
+| Verificación ÷ producto | **0,571** 🔴 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
+| % Infra del sprint que cierra | **0 %** (0/13) 🟢 | ≤ 35 % | ≥ 50 % | tablero, `GROUP BY Área` |
+| Verificación ÷ producto DEL SPRINT | **1,56 : 1** 🟡 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
+| Hallazgos de `design-review` cuya regla ya existía | *sexto ciclo sin disparar* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
 
-*Dos filas se movieron a verde por una retirada en lote y no por haber apretado nada: la suma de
-skills pasó de holgura 14 a 277 al bajar el relato de los disparos a `PRD-Historical`. **Es la
-primera vez que un indicador de esta tabla mejora retirando en vez de recortando**, y es el caso
-que la fila roja de abajo está pidiendo a gritos para `scripts/`.*
+*El margen de contexto entró en rojo profundo sin que ningún sprint lo gastara: **lo gastó el
+cierre anterior**, con las 105 palabras de la regla que ordena retirar, y la apertura que esa
+regla manda retiró cero. Es la fila que hay que mirar primero el disparo que viene.*
 
 *Las dos filas de `check:contexto` van en su vara, que **descuenta los bloques de código**. La
 suma de skills no lleva cifra a propósito: la mueve esta misma skill al escribirse.*

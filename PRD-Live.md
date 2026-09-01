@@ -248,9 +248,9 @@ Deuda agrupada por dónde vive —*General*, *Brand Kit*, *Design System* y
 *Accesibilidad*—, más la **DISTRIBUCIÓN**, que no es una superficie y está en alcance por
 decisión escrita, no por omisión.
 
-**La DISTRIBUCIÓN humana es lo que se construye ahora**, único *Must* abierto tras seis
-aplazamientos y con el cuello de botella fuera del producto: el sitio está en AAA y sobre 90,
-y **la métrica primaria vive en n=1**.
+**La DISTRIBUCIÓN está entregada** —nueve piezas escritas, la primera publicada— y ahora se
+construye **HIGIENE**: cerrar la deuda de los bloques antes de abrir V4. La primaria sigue en
+**n=1**; su lectura es del cierre siguiente.
 
 *(El recorrido de cada sprint cerrado, en `PRD-Historical.md`.)*
 

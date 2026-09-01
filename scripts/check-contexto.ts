@@ -103,8 +103,22 @@ type Movimiento = { fecha: string; valor: number; motivo: string };
  * cierre: **si no queda duplicado que retirar, la próxima retirada ya no es un traslado
  * — es decidir qué deja de ser regla.** Es un acto distinto y más caro, y el margen de
  * 17 palabras dice que toca pronto.
+ *
+ * ─────────────────────────────────────────────────────────────────────────────
+ * CICLO «HIGIENE», abierto el 2026-09-02. La retirada SÍ se hizo, y esta vez el
+ * duplicado apareció donde el ciclo anterior no lo buscó: **en el propio bloque que
+ * escribió la regla**. Las 105 palabras de «ABRIR EMPIEZA RETIRANDO» duplicaban su
+ * porqué y su medida con `CLAUDE-historical.md`, al que ya apuntaban; se dejó la regla
+ * y se retiró la justificación. Con eso cupieron **dos reglas nuevas** —lo que el
+ * cierre aprende va al histórico, y `/prototype` dispara ante cualquier pieza visual y
+ * no solo un «componente»— y `CLAUDE.md` salió en **−4 palabras netas**.
+ *
+ * LA LECCIÓN, para el `method-review` que cierre este ciclo: el ciclo anterior buscó
+ * duplicado y concluyó que no lo había mirando **el contenido viejo**. No miró lo que
+ * él mismo acababa de escribir. Un cierre que documenta lo que aprendió es el sitio
+ * más probable del próximo duplicado, no el menos.
  */
-const CICLO_ABIERTO = "2026-08-31";
+const CICLO_ABIERTO = "2026-09-02";
 
 /** El techo vigente es el último movimiento, nunca un número escrito aparte. */
 function vigente(historial: Movimiento[]): number {
