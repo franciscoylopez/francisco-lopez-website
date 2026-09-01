@@ -147,9 +147,6 @@ vez. Los iconos son de **lucide**; los que lucide no trae (LinkedIn y GitHub) se
 mano con la regla de autoría de iconos propios. Detalle en `BRAND.md` y en
 `DECISIONS.md` D6/D35/D36/D40/D43/D64.
 
-**Y toda página y toda sección abren igual**: el ordinal dentro del eyebrow, el titular
-como afirmación y entradilla debajo, con el hueco puesto por la capa (D43).
-
 ### No funcionales
 
 | Criterio | Umbral | Estado |
@@ -189,9 +186,8 @@ con Dependabot. Cabeceras de seguridad servidas, con la CSP en allowlist mínima
 GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'` **por coste
 medido**: el nonce cuesta el prerenderizado de las catorce (D26), así que va con V4.
 
-El **repositorio es público** desde el 2026-08-19, con `LICENSE` explícito («público para
-consulta, no código abierto») y enlace en el footer. Y esa frase la dice también `robots.txt`
-en formato máquina —**`Content-Signal: ai-train=no, search=yes, ai-input=yes`**—, como
+El **repositorio es público**, con `LICENSE` explícito («público para consulta, no código
+abierto»), enlace en el footer y la misma frase en formato máquina en `robots.txt`, como
 preferencia y no como control de acceso (D160).
 
 ### Revisiones recurrentes
