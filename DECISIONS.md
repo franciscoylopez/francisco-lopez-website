@@ -12065,3 +12065,26 @@ cabecera larga que el guion tenía dentro.
   `contrast-census.js`, casi idéntico; se queda el completo.
 - `sobre-imagen.ts` desenvolvía a mano el JSON de `agent-browser eval` **tres veces**, teniendo
   `evalJSON()` en `navegador/agent-browser.ts` escrito para exactamente eso. Ahora lo usa.
+
+### Y el trinquete NO se amplía, que era la cuarta cosa por decidir
+
+La ficha dejaba abierto si `check:deuda` debía llevar además un **tope de
+complejidad/KLOC por directorio**. La respuesta es que no, y por dos razones que
+conviene tener escritas antes de que alguien lo proponga otra vez:
+
+1. **Sería un número elegido a ojo**, que es exactamente contra lo que D186 escribió
+   su criterio —*«no persigue un número: prohíbe empeorar»*— y lo que la propia ficha
+   avisaba: hay funciones complejas porque el problema lo es.
+2. **El trinquete que hay ya cubre la regresión que este trabajo teme.** Volver a
+   juntar el censo en un archivo, o dejar que uno de los partidos vuelva a pasar de
+   50, **crea un hallazgo nuevo** y el sello no cuadra. No hace falta una segunda
+   métrica para eso.
+
+**El hueco que sí queda, dicho para no prometer de más:** dentro de un archivo que YA
+está marcado, la complejidad puede crecer sin que el recuento se mueva. Hoy eso aplica
+a los siete que quedan por encima del umbral —`check-articulo`, `check-figuras`,
+`check-excepciones`, `check-experience-copy`, `censo.ts`, `check-contexto` y
+`artefacto-svg`—, que son justo la segunda tanda de esta tarea. **Cuando esa lista se
+vacíe, el trinquete de recuento pasa a ser exacto**: sin ningún archivo marcado,
+cruzar el umbral es siempre un +1. O sea que lo que cierra el hueco no es un gate
+nuevo, es terminar el trabajo.
