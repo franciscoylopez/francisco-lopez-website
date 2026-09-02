@@ -1,16 +1,13 @@
 import { type ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionBlocks } from "@/components/ui/block-opener";
-import {
-  construirRecorrido,
-  SectionIndexBlock,
-} from "@/components/ui/section-index";
+import { construirRecorrido } from "@/components/ui/section-index";
 import { GUARDIAN_CASE_COUNT, GUARDIAN_COUNT } from "@/lib/design-values";
 import type { Locale } from "@/lib/i18n/config";
 
 import { type BreadcrumbDict } from "../breadcrumb";
-import { RelatedPages, type RelatedDict } from "../related-pages";
+import { PaginaDocumental } from "../pagina-documental";
+import { type RelatedDict } from "../related-pages";
 import { Hero } from "./hero";
 import { Conformance } from "./01-conformance";
 import { Measures } from "./02-measures";
@@ -43,8 +40,6 @@ const ORDEN = [
   "term",
   "report",
 ] as const;
-
-const ANCLA_INDICE = "indice";
 
 /**
  * LOS DOS BLOQUES (P70.47). El corte cae donde la página CAMBIA DE ARGUMENTO:
@@ -109,12 +104,7 @@ export function Accesibilidad({
 
   /** El recorrido lo deriva la capa desde P50.88, igual que en sus dos hermanas.
    *  El porqué y lo que se comprobó antes de unificar, en `ui/section-index.tsx`. */
-  const { paradas, marcos } = construirRecorrido(
-    ORDEN,
-    t,
-    t.indice,
-    ANCLA_INDICE,
-  );
+  const { paradas, marcos } = construirRecorrido(ORDEN, t, t.indice);
 
   // Los recuentos del checklist, derivados una vez donde está su fuente y bajados
   // a las dos secciones que los pintan. El porqué de cada cifra, en `shared.tsx`.
@@ -156,24 +146,22 @@ export function Accesibilidad({
   };
 
   return (
-    <>
-      <Hero
-        t={t.hero}
-        crumb={t.crumb}
-        breadcrumb={breadcrumb}
-        homeHref={homeHref}
-      />
-
-      <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
-
-      <SectionBlocks
-        bloques={BLOQUES}
-        copy={t.bloques}
-        paradas={paradas}
-        secciones={secciones}
-      />
-
-      <RelatedPages dict={related} current="accesibilidad" lang={lang} />
-    </>
+    <PaginaDocumental
+      hero={
+        <Hero
+          t={t.hero}
+          crumb={t.crumb}
+          breadcrumb={breadcrumb}
+          homeHref={homeHref}
+        />
+      }
+      t={t}
+      paradas={paradas}
+      bloques={BLOQUES}
+      secciones={secciones}
+      related={related}
+      current="accesibilidad"
+      lang={lang}
+    />
   );
 }

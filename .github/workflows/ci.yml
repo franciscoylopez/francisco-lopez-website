@@ -233,6 +233,28 @@ jobs:
           BASE_REF: ${{ github.event.pull_request.base.sha }}
         run: npm run novedades
 
+      # TRINQUETE DE DEUDA (P72.19, D186): ningún PR puede subir la cifra que mide
+      # Qlty. No hay número objetivo —hay funciones complejas porque el problema lo
+      # es, y partirlas para bajar un contador las empeora—: lo que se prohíbe es
+      # EMPEORAR. Lo que hay se acepta; lo que se añada, no, salvo re-sello a
+      # propósito que salga en el diff.
+      #
+      # Existe por una medida: entre el 2026-08-31 y el 2026-09-02 la deuda pasó de
+      # 51 hallazgos a 71, y los VEINTE de diferencia estaban todos en `scripts/` —
+      # el producto no se movió un punto. No era un problema de stock sino de
+      # crecimiento, y eso un refactor no lo arregla: lo retrasa un sprint.
+      #
+      # NO es `qlty smells --upstream main`, que fue lo primero que se probó: ese
+      # modo mira los archivos que toca el PR y reporta los defectos que ya había en
+      # ellos, y sale con código 0. Mide otra cosa. El porqué, en `check-deuda.ts`.
+      #
+      # Va DELANTE del build porque no lo necesita: lee el código fuente.
+      - name: Instalar Qlty
+        uses: qltysh/qlty-action/install@08a0a862c159eae9b9003081da6663d96efef637 # v2.3.0
+
+      - name: Trinquete de deuda
+        run: npm run check:deuda
+
       - name: Build
         run: npm run build
 

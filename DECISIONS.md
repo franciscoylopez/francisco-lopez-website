@@ -187,7 +187,7 @@
 - D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
 - D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse
 - D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado
-- D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint
+- D152 (corregido en D185) · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint
 - D153 · Lo que decide una métrica no vive dentro de un efecto
 - D154 · El suelo de la densidad tiene dos palancas, y la que faltaba es teñir sin gastar bloque
 - D155 · Una señal fija que no distingue es decoración con forma de aviso
@@ -220,6 +220,8 @@
 - D182 · El punto 6 deja de mirarse y pasa a detectarse, sin filtro y sin cámara
 - D183 · Un auditor externo ve 19 fallos de contraste donde hay cero, y la respuesta se guarda hecha
 - D184 · La barra de navegación deja de ser un frosted y pasa a ser opaca, por una medición
+- D185 · El rango decía `<6.1.0` y se leyó como «ni la 6 ni la 7»: TypeScript sube a 6.0.3
+- D186 · La deuda no tenía problema de stock sino de crecimiento, y lo para un trinquete
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9312,7 +9314,7 @@ detector: el día que sus checks salgan verdes, upstream lo soporta y la subida 
 
 ---
 
-## D152 · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint — 2026-08-28
+## D152 (corregido en D185) · TypeScript 7 ya pasa, y quien lo bloquea es el mismo tipo de peer que a ESLint — 2026-08-28
 
 Hermana de **D151**, y por el mismo motivo por el que sus dos fichas se escribieron juntas: los
 dos son saltos que el bump automático no puede hacer. El veredicto también es el mismo, pero
@@ -9321,8 +9323,14 @@ aquí **la mitad cara está medida y sale a favor**.
 ### Lo que bloquea
 
 `typescript-eslint@8.68.0`, la última publicada, declara `peer typescript: ">=4.8.4 <6.1.0"`.
-No entran ni la 6 ni la 7, y su canary (`8.68.1-alpha.6`) sigue en la misma línea. `npm install
+**No entra la 7**, y su canary (`8.68.1-alpha.6`) sigue en la misma línea. `npm install
 -D typescript@7` **falla con ERESOLVE**, no con un aviso.
+
+> **Esta entrada decía «no entran ni la 6 ni la 7», y la mitad de esa frase era falsa el día
+> que se escribió.** `6.0.3` está publicada desde el 2026-04-16 y satisface `<6.1.0`: lo que el
+> peer excluía era la 7, no la línea 6. Se corrige aquí, no al pie, porque una nota fechada
+> abajo no corrige el texto de arriba. **La 6 se instaló el 2026-09-02** y el porqué del error
+> —haber leído el rango por su etiqueta y no por su límite— está en **D185**.
 
 **Y falla ahora porque D151 lo hizo visible.** Mientras `typescript-eslint` venía por *hoisting*
 de `eslint-config-next`, npm resolvía el peer en silencio; declarado como dependencia real, el
@@ -11808,3 +11816,140 @@ Sin salida, el primer cambio de ese tipo habría dejado el censo bloqueado, y un
 se puede satisfacer se acaba desactivando entero. Ahora existe `--inventario-nuevo`: nombra los
 pares uno a uno, exige la bandera a mano y lo dice en voz alta, para que aceptar sea una decisión
 visible y no el estado por defecto.
+
+## D185 · El rango decía `<6.1.0` y se leyó como «ni la 6 ni la 7»: TypeScript sube a 6.0.3 — 2026-09-02
+
+**Decisión.** `typescript` pasa de `^5` (5.9.3) a **`^6.0.3`**. El salto a la 7 sigue bloqueado
+por el mismo peer, y eso no ha cambiado; lo que ha cambiado es que **la 6 nunca lo estuvo**.
+
+### El error, que es de lectura y no de medición
+
+D152 midió bien y concluyó de más. Con el peer de `typescript-eslint` delante —
+`">=4.8.4 <6.1.0"` — escribió: *«No entran ni la 6 ni la 7»*. Pero `6.0.3` está publicada desde
+el **2026-04-16**, cuatro meses antes de aquella entrada, y `6.0.3 < 6.1.0`: **el límite excluía
+la 7 y la línea 6.1, no la línea 6**.
+
+La comprobación que faltaba cuesta un comando y no se hizo:
+
+```
+npm install --save-dev typescript@6   →   changed 1 package in 3s
+```
+
+Resuelve limpio, sin `--force` y sin tocar el árbol. La misma sesión que en agosto probó
+`typescript@7` y se llevó un `ERESOLVE` no probó la 6, porque la frase ya estaba escrita.
+
+**La lección de método, que es la reutilizable: un rango de versiones se lee por su LÍMITE, no
+por el major que aparece en él.** `<6.1.0` contiene un `6` y aun así admite toda la línea 6.0.
+Es el mismo error de forma que ya tiene entrada propia en `BRAND.md` §Cómo medir, punto 7 —*la
+cifra no dice nada sin el umbral*—: aquí el umbral estaba a la vista y se leyó por su etiqueta.
+
+### Lo que se gana, y lo que no
+
+Medido en esta sesión, tres tomas por versión, con el mismo binario y sin `npx` de por medio
+para que la comparación sea entre iguales:
+
+| | TS 5.9.3 | TS 6.0.3 |
+|---|---|---|
+| Errores de diagnóstico | 0 | **0** |
+| `tsc --noEmit`, media de 3 tomas | 8573 ms | **8643 ms** |
+
+**Cero errores nuevos y cero ganancia de tiempo, que es exactamente lo que había que esperar:**
+la 6 sigue siendo el compilador en JavaScript. La mejora del 43% que midió D152 es de la
+reescritura en Go, y esa sigue al otro lado del peer. Así que este salto **no se hace por
+velocidad**: se hace porque dejar fija una versión mayor que ya se puede instalar es deuda que
+solo crece, y porque acorta a uno el salto que queda.
+
+*(Las cifras absolutas de esta tabla **no son comparables** con las de D152 —3100 ms allí— porque
+no se tomaron con el mismo instrumento ni en la misma máquina en el mismo estado. Lo que compara
+es la columna contra la columna, medidas seguidas en la misma sesión.)*
+
+### Verde, y por qué el HTML no entra en la lista
+
+`typecheck` (0 errores) · `lint` · `format:check` · **173 tests** · `npm run build`, con las 28
+variantes prerenderizadas · `npm audit` sin novedades (las dos alertas vivas son `fast-uri` y
+`qs`, anteriores a esto y ajenas a TypeScript).
+
+**No se pasa `gate:html`, y no por descuido: es transparente por construcción y de una forma que
+el gate no añadiría nada a demostrar.** `tsconfig.json` va con `noEmit: true` y quien transpila
+es Turbopack, no `tsc`: el compilador de tipos no toca un solo byte de lo que se sirve.
+
+### ESLint 10, en cambio, sigue exactamente igual
+
+Re-verificado el mismo día, porque las dos fichas viajan juntas desde D151. `npm install -D
+eslint@10` **ni siquiera resuelve**, y los tres plugins que lo rechazan siguen en la misma
+versión publicada que en agosto — `eslint-plugin-react@7.37.5`, `eslint-plugin-import@2.32.0`,
+`eslint-plugin-jsx-a11y@6.10.2`, todos con peer máximo `^9`. La línea culpable sigue en disco:
+`eslint-plugin-react/lib/util/version.js:31` llama a `contextOrFilename.getFilename()`, que
+ESLint 10 eliminó.
+
+Lo que sí se mueve es el cerco: `typescript-eslint@8.69.0` ya admite `eslint ^10`, y
+`eslint-plugin-react-hooks@7.1.1` también. **Van cayendo de uno en uno**, así que el detector de
+D151 —el PR de Dependabot en rojo, sin `ignore` que lo silencie— sigue siendo el instrumento
+correcto y no hay nada que automatizar todavía.
+
+## D186 · La deuda no tenía problema de stock sino de crecimiento, y lo para un trinquete — 2026-09-02
+
+**Decisión.** La deuda que mide Qlty pasa a tener gate en CI, y el gate **no persigue un
+número: prohíbe empeorar**. `npm run check:deuda` compara el total de `qlty smells --all`
+contra un sello versionado, y sale rojo si no cuadra.
+
+### Lo que cambió el planteamiento, que fue volver a medir
+
+La ficha nació con una cifra del 2026-08-31 —51 hallazgos en 32 archivos— y la intuición de
+que había que refactorizar. **Al re-medir dos días después, el instrumento reprodujo ese 51/32
+exacto** —así que lo que viniera después era del código y no del metro— y devolvió **71 en 38**.
+
+| Área | 31-ago | 02-sep | Δ |
+|---|---|---|---|
+| `scripts/` | 27 | **47** | **+20** |
+| `components/` | 17 | 17 | 0 |
+| `app/` | 4 | 4 | 0 |
+| `lib/` | 2 | 2 | 0 |
+| raíz | 1 | 1 | 0 |
+
+**El producto no se movió un punto en tres tandas, archivo por archivo, y los veinte de
+diferencia estaban todos en el andamiaje** — en `censo.ts`, `sobre-imagen.ts`, `color-solo.js`,
+`contrast-census.js`, `medicion/registro.ts` y `md/extraer.ts`, o sea el metro que la tanda 3
+acababa de rehacer.
+
+Eso invierte la tarea: **no había un problema de stock, había uno de crecimiento**. Y contra el
+crecimiento un refactor no sirve — solo lo retrasa hasta el sprint siguiente, que vuelve a sumar.
+
+### Por qué el criterio no es una cifra
+
+Porque la propia ficha lo avisaba y tenía razón: *hay funciones que son complejas porque el
+problema lo es, y partirlas por la métrica las empeora*. Un objetivo numérico invita
+exactamente a eso. Lo que hay se acepta con su motivo; lo que se añada, no.
+
+### Por qué NO es `qlty smells --upstream main`, que era el comando previsto
+
+Se probó el primero, sobre esta misma rama. Ese modo mira los archivos que toca el PR y reporta
+los defectos que hay **en ellos**, los que ya estaban incluidos, y **sale con código 0**. En esa
+corrida reportó el par de `page.tsx` que el trabajo de esa misma tarde acababa de reducir de
+mass 244 a 160: **un PR que mejora sale rojo, y uno que empeora otro archivo sale verde.** Suena
+a trinquete y mide otra cosa.
+
+### El agujero que destapó su propio caso malo
+
+La primera versión daba por bueno cualquier total **por debajo** del sello. Suena razonable
+—bajar es mejorar— y abre el único agujero que un trinquete puede tener: **la forma de
+desactivarlo no es tocar el script, es inflar el número.** Con `<=`, un sello subido a mano se
+traga toda la deuda que quepa por debajo y el check sigue verde.
+
+Lo destapó escribir su caso malo para `check:guardianes` —«el sello se afloja para que un PR que
+empeora salga verde»—, antes de que el gate llegara a merecer la pena. **El sello cuadra exacto:
+por debajo también sale rojo**, con el mensaje de que hay una mejora que fijar. Cualquier deriva
+pasa por un `deuda:sellar` que se ve en el diff.
+
+Es la misma regla que el resto de sellos de esta casa: no dicen «va por buen camino», dicen
+«cuadra».
+
+### Lo que este gate NO drena
+
+**Al andamiaje no se le paga el stock: se le pone tope.** Su drenaje ya tiene dueño en
+`CLAUDE.md` —«abrir empieza retirando, en lote y antes de añadir nada»— y montar un segundo
+instrumento para lo mismo sería el duplicado que esa regla persigue. Los 47 hallazgos de
+`scripts/` se quedan sellados; lo que no se queda es la puerta abierta.
+
+*(Y sí, este gate añade 190 líneas a `scripts/`, que es justo lo que vigila. Se acepta con el
+motivo escrito: es el instrumento que impide el próximo +20, y el sello lo incluye.)*

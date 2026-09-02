@@ -780,4 +780,20 @@ export const CASOS: Caso[] = [
     archivo: ".next/server/app/.well-known/ard.json.body",
     mutar: (o) => o.replace('/md/es.md"', '/md/es-que-ya-no-existe.md"'),
   },
+  {
+    guardian: "check:deuda",
+    rotura:
+      "el sello de deuda se afloja para que un PR que empeora salga verde",
+    // EL MODO DE FALLO DE UN TRINQUETE ES SU PROPIO SELLO. El gate compara el total
+    // que mide Qlty contra un número guardado, así que la forma de desactivarlo no
+    // es tocar el script: es subir el número. Y eso no rompe nada visible — el
+    // archivo sigue siendo JSON válido, el check sigue saliendo verde, y la deuda
+    // que el gate existía para frenar entra sin que nadie la vea.
+    //
+    // El caso malo lo mueve HACIA ARRIBA a propósito, que es la dirección peligrosa:
+    // con el sello inflado, el guardián tiene que seguir sabiendo decir que no. Si
+    // pasara, este gate sería el adorno que su propia cabecera dice no ser.
+    archivo: "scripts/.deuda-sello.json",
+    mutar: (o) => o.replace(/"total": (\d+)/, (_, n) => `"total": ${+n + 50}`),
+  },
 ];

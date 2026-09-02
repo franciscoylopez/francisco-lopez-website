@@ -6,6 +6,17 @@
  *   npx tsx scripts/cv/generate.tsx
  *
  * Salida: public/cv/francisco-lopez-cv-es.pdf
+ *
+ * ESTA CARPETA ES ESM, Y ESO ES UN REQUISITO, NO UN GUSTO (2026-09-02). El
+ * `package.json` de al lado —cinco líneas y ninguna dependencia— existe solo para
+ * declarar `"type": "module"`, porque el raíz no lo declara y `tsx` decide el
+ * formato por el package.json más cercano. Corriendo por CJS, `@react-pdf/textkit`
+ * importa `@react-pdf/hyphenate/en-us`, y ese paquete publica sus subpaths bajo la
+ * condición `import` y solo bajo ella: sin condición `require`, el subpath no
+ * existe para quien resuelve por CJS y el generador muere con
+ * ERR_PACKAGE_PATH_NOT_EXPORTED. Es lo que dejó @react-pdf/renderer clavado en
+ * 4.6.1 y cerró el PR #236. Comprobado con su control: quitando ese package.json,
+ * 4.9.0 vuelve a romper por `node:internal/modules/cjs/loader`.
  */
 import path from "node:path";
 import fs from "node:fs";

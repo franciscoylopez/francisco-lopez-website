@@ -2,16 +2,10 @@
 
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
 
 import "./globals.css";
 
-import {
-  SystemMessage,
-  SYSTEM_BTN_OUTLINE,
-  SYSTEM_BTN_PRIMARY,
-} from "@/components/site/system-message";
-import { getSystemMessages } from "@/lib/i18n/system-messages";
+import { ErrorBoundaryBody, errorLang } from "@/components/site/error-boundary";
 
 // Error boundary global (tarea 30.2). El root layout de este sitio es un segmento
 // dinámico (app/[lang]/layout.tsx), así que un error del layout —o cualquiera que
@@ -19,6 +13,11 @@ import { getSystemMessages } from "@/lib/i18n/system-messages";
 // layout cuando se activa, por lo que trae sus propias dependencias globales
 // (fuentes, estilos, tema) y define su <html>/<body>. Debe ser client component
 // (contrato de Next): el locale se deduce de la URL con usePathname.
+//
+// ESO —EL MARCO— ES LO ÚNICO QUE ESTE ARCHIVO TIENE DE PROPIO (P72.19). La pantalla
+// es la misma que la del boundary anidado y sale de `ErrorBoundaryBody`. Estaba
+// escrita dos veces, y la copia era de las peligrosas: esta mitad solo se ve si se
+// cae el layout raíz, así que un cambio hecho a medias no se nota mirando el sitio.
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const bricolage = Bricolage_Grotesque({
@@ -38,18 +37,9 @@ export default function GlobalError({
   error: Error & { digest?: string };
   unstable_retry: () => void;
 }) {
-  useEffect(() => {
-    console.error(error);
-  }, [error]);
-
-  const pathname = usePathname() || "/";
-  const lang = pathname === "/en" || pathname.startsWith("/en/") ? "en" : "es";
-  const t = getSystemMessages(lang);
-  const homeHref = lang === "es" ? "/" : "/en";
-
   return (
     <html
-      lang={lang}
+      lang={errorLang(usePathname())}
       suppressHydrationWarning
       className={`${inter.variable} ${bricolage.variable} h-full antialiased`}
     >
@@ -58,23 +48,7 @@ export default function GlobalError({
             se fija con el componente <title> de React (doc error.md). */}
         <title>Error — Francisco López</title>
         <script dangerouslySetInnerHTML={{ __html: themeInit }} />
-        <SystemMessage
-          homeHref={homeHref}
-          homeAria={t.homeAria}
-          title={t.error.title}
-          body={t.error.body}
-        >
-          <button
-            type="button"
-            onClick={() => unstable_retry()}
-            className={SYSTEM_BTN_PRIMARY}
-          >
-            {t.error.retry}
-          </button>
-          <a href={homeHref} className={SYSTEM_BTN_OUTLINE}>
-            {t.home}
-          </a>
-        </SystemMessage>
+        <ErrorBoundaryBody error={error} onRetry={unstable_retry} />
       </body>
     </html>
   );

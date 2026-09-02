@@ -380,11 +380,21 @@ export type RecorridoDict = {
  * React separa nodos de texto adyacentes con `<!-- -->`, y el rótulo que hoy
  * sirve el sitio es una sola cadena.
  */
+/**
+ * EL ANCLA DEL BLOQUE DE ÍNDICE, UNA SOLA VEZ (P72.19). Estaba declarada como
+ * `const ANCLA_INDICE = "indice"` en las tres páginas con paradas, con el mismo
+ * valor y dos usos cada una —`construirRecorrido` y `SectionIndexBlock`—, y que
+ * las tres coincidieran era una casualidad mantenida a mano: si una se desviaba,
+ * su propio índice enlazaba a un ancla que su sección no tenía, y eso no lo ve ni
+ * el typecheck ni axe. Vive aquí porque aquí viven sus dos consumidoras.
+ */
+export const ANCLA_INDICE = "indice";
+
 export function construirRecorrido<K extends string>(
   orden: readonly K[],
   labels: Record<K, { indexLabel: string }>,
   indice: RecorridoDict,
-  anclaIndice: string,
+  anclaIndice: string = ANCLA_INDICE,
 ): { paradas: Parada<K>[]; marcos: Record<K, SeccionMarco> } {
   const paradas: Parada<K>[] = orden.map((clave, i) => {
     const ordinal = String(i + 1).padStart(2, "0");

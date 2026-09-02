@@ -1,0 +1,4 @@
+{
+  "//": "NO BORRAR. Marca esta carpeta como ESM para `tsx`. Sin esto el generador se resuelve por CJS, y @react-pdf/hyphenate publica sus subpaths SOLO bajo la condición `import`: cualquier versión de @react-pdf/renderer por encima de 4.6.1 muere con ERR_PACKAGE_PATH_NOT_EXPORTED. El porqué completo, en la cabecera de generate.tsx.",
+  "type": "module"
+}

@@ -1,15 +1,12 @@
 import { type ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionBlocks } from "@/components/ui/block-opener";
-import {
-  construirRecorrido,
-  SectionIndexBlock,
-} from "@/components/ui/section-index";
+import { construirRecorrido } from "@/components/ui/section-index";
 import type { Locale } from "@/lib/i18n/config";
 
 import { type BreadcrumbDict } from "../breadcrumb";
-import { RelatedPages, type RelatedDict } from "../related-pages";
+import { PaginaDocumental } from "../pagina-documental";
+import { type RelatedDict } from "../related-pages";
 import { Hero } from "./hero";
 import { Concepto } from "./01-concepto";
 import { Logotipo } from "./02-logotipo";
@@ -38,14 +35,16 @@ const ORDEN = [
   "uso",
 ] as const;
 
-/** El ancla del índice. Misma convención que sus hermanas. */
-const ANCLA_INDICE = "indice";
-
 /**
  * LOS DOS BLOQUES (P70.47). Aquí van las CLAVES y nada más: el título y la
  * entradilla son copy y viven en el diccionario, y los ordinales de la banda
  * salen de `paradas`. Reordenar la página no puede dejar una banda anunciando
  * secciones que ya no están debajo.
+ *
+ * DOS Y NO TRES, y no es estético: lo que fija cada cuánto aparece una banda es el
+ * número de BLOQUES, no el de secciones. Con tres caería una cada 4,6 pantallas en
+ * una página de 13,9 y se leería a golpes; con dos cae cada 7,4, que es el terreno
+ * del Design System. El porqué medido, en `ui/block-opener.tsx`.
  */
 const BLOQUES = [
   { id: "hecha", claves: ["concepto", "logotipo", "color", "tipografia"] },
@@ -77,12 +76,7 @@ export function BrandKit({
   /** El recorrido lo deriva la capa desde P50.88: las mismas 26 líneas estaban
    *  escritas aquí, en el Design System y en Accesibilidad. El porqué y lo que se
    *  comprobó antes de unificar, en `ui/section-index.tsx`. */
-  const { paradas, marcos } = construirRecorrido(
-    ORDEN,
-    t,
-    t.indice,
-    ANCLA_INDICE,
-  );
+  const { paradas, marcos } = construirRecorrido(ORDEN, t, t.indice);
 
   /** Cada sección con su rebanada, indexada por clave: las reparte el bucle de
    *  `BLOQUES`, y un mapa por clave no se desalinea al insertar una en medio. */
@@ -103,29 +97,22 @@ export function BrandKit({
   };
 
   return (
-    <>
-      <Hero
-        t={t.hero}
-        crumb={t.crumb}
-        breadcrumb={breadcrumb}
-        homeHref={homeHref}
-      />
-
-      <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
-
-      {/* LAS SEIS, EN DOS BLOQUES (P70.47). Dos y no tres, y no es estético:
-          lo que fija cada cuánto aparece una banda es el número de BLOQUES, no
-          el de secciones. Con tres caería una cada 4,6 pantallas en una página
-          de 13,9 y se leería a golpes; con dos cae cada 7,4, que es el terreno
-          del Design System. El porqué medido, en `ui/block-opener.tsx`. */}
-      <SectionBlocks
-        bloques={BLOQUES}
-        copy={t.bloques}
-        paradas={paradas}
-        secciones={secciones}
-      />
-
-      <RelatedPages dict={related} current="brandKit" lang={lang} />
-    </>
+    <PaginaDocumental
+      hero={
+        <Hero
+          t={t.hero}
+          crumb={t.crumb}
+          breadcrumb={breadcrumb}
+          homeHref={homeHref}
+        />
+      }
+      t={t}
+      paradas={paradas}
+      bloques={BLOQUES}
+      secciones={secciones}
+      related={related}
+      current="brandKit"
+      lang={lang}
+    />
   );
 }
