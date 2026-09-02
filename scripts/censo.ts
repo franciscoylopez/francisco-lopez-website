@@ -125,7 +125,21 @@ const fallo = (msg: string) => problemas.push(msg);
 
 const guionCenso = readFileSync(CENSO, "utf8");
 
-const TOTAL_CORRIDAS = PAGE_SLUGS.length * TEMAS.length;
+/**
+ * `--pagina=` acota la pasada mientras se valida el propio metro — por ejemplo,
+ * para comprobar que la composición por opacidad caza el caso malo sin gastar las
+ * 28 corridas. **Una pasada parcial NO sella ni escribe inventario**: un sello
+ * sacado de dos páginas se lee igual que uno de catorce y es falso, que es la
+ * misma regla que ya aplica `psi -- --registro`.
+ */
+const FILTRO = process.argv
+  .find((a) => a.startsWith("--pagina="))
+  ?.split("=")[1];
+const PAGINAS = FILTRO
+  ? PAGE_SLUGS.filter((s) => String(s).includes(FILTRO))
+  : PAGE_SLUGS;
+
+const TOTAL_CORRIDAS = PAGINAS.length * TEMAS.length;
 
 let corridas = 0;
 let paresTotales = 0;
@@ -139,7 +153,7 @@ console.log(
   `censo — ${PAGE_SLUGS.length} páginas × ${TEMAS.length} temas sobre ${BASE}\n`,
 );
 
-for (const slug of PAGE_SLUGS) {
+for (const slug of PAGINAS) {
   const ruta = pagePath(LOCALE, slug);
   for (const tema of TEMAS) {
     ab(["open", `${BASE}${ruta}`]);
@@ -313,8 +327,21 @@ if (problemas.length) {
 // superficie o una animación nuevos ponen `check:palette` en rojo NOMBRÁNDOLOS,
 // sin necesitar navegador — que es la mitad de la condición de re-medir de la
 // DoD que hasta ahora había que acordarse de leer (D90).
-const sello = sellar(new Date().toISOString().slice(0, 10));
 const fecha = new Date().toISOString().slice(0, 10);
+
+// UNA PASADA PARCIAL NO SELLA NI ESCRIBE INVENTARIO. Un sello sacado de dos
+// páginas se lee exactamente igual que uno de catorce y es falso; y un inventario
+// parcial haría que la pasada siguiente viera desaparecer doce corridas enteras.
+// Misma regla que `psi -- --registro`, y por el mismo motivo.
+if (FILTRO) {
+  console.log(
+    `censo — PASADA PARCIAL (--pagina=${FILTRO}): ${corridas} corridas, ` +
+      `${paresTotales} pares. No se sella ni se escribe inventario, y esto NO es un veredicto.\n`,
+  );
+  process.exit(0);
+}
+
+const sello = sellar(fecha);
 
 // Y el conjunto, no solo el total: es lo que hace que la pasada siguiente pueda
 // decir QUÉ par entró o salió en vez de restar dos números (P72.15).

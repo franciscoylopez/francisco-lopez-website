@@ -48,9 +48,15 @@ const CENSO = "scripts/design-review/contrast-census.js";
 const TEMAS = ["light", "dark"] as const;
 const LOCALE = locales[0];
 
-/** A qué alturas se mira el nav. El fondo translúcido cambia con lo que pase por
- *  debajo, así que una sola toma mediría una casualidad. */
-const ALTURAS = [0, 0.2, 0.4, 0.6, 0.8];
+/**
+ * A qué alturas se mira el nav. El fondo translúcido cambia con lo que pase por
+ * debajo, así que una sola toma mediría una casualidad.
+ *
+ * EL 50 % ESTÁ PORQUE ES DONDE MIDE `npm run censo`. Sin él, esta pasada podría
+ * encontrar menos pares que la pasada que dice cuáles hay que medir — y un metro
+ * que ve menos que su propia lista de deberes se lee como un aprobado.
+ */
+const ALTURAS = [0, 0.2, 0.4, 0.5, 0.6, 0.8];
 
 /** En cuántos puntos se muestrea un vídeo, repartidos por su duración. */
 const FOTOGRAMAS = 4;

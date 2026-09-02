@@ -899,6 +899,51 @@ window.contrastCensus = () => {
 const CLAVE_SOBRE_IMAGEN = (el, px) =>
   `${label(el)}|${(el.textContent || "").trim().slice(0, 24)}|${px}`;
 
+/**
+ * La caja de las LETRAS, no la del elemento.
+ *
+ * POR QUÉ IMPORTA, y es la diferencia entre encontrar un hallazgo e inventarlo.
+ * Un enlace del nav tiene 44px de alto por el suelo táctil y su texto ocupa 17:
+ * el resto es relleno, y por ahí asoma la foto. Midiendo la caja del elemento, el
+ * «peor píxel» salía de una zona donde no hay ninguna letra que leer — y con eso
+ * el nav de `/trayectoria/kuotip` puntuaba **4,60:1** cuando ninguna de sus letras
+ * cae ahí. WCAG 1.4.3 pide el contraste del TEXTO contra su fondo, así que lo que
+ * hay que fotografiar es dónde están los glifos.
+ *
+ * Se saca con un `Range` sobre los nodos de texto PROPIOS del elemento —los
+ * mismos que `paintsText` exige— y la unión de sus rectángulos de línea. Sigue
+ * siendo conservador: dentro de una línea hay huecos entre letras que no se
+ * descuentan, y ahí se prefiere pasarse a quedarse corto.
+ */
+function cajaDelTexto(el) {
+  const rango = document.createRange();
+  let u = null;
+  for (const n of el.childNodes) {
+    if (n.nodeType !== 3 || !n.textContent.trim()) continue;
+    rango.selectNodeContents(n);
+    for (const r of rango.getClientRects()) {
+      if (r.width === 0 || r.height === 0) continue;
+      u = u
+        ? {
+            left: Math.min(u.left, r.left),
+            top: Math.min(u.top, r.top),
+            right: Math.max(u.right, r.right),
+            bottom: Math.max(u.bottom, r.bottom),
+          }
+        : { left: r.left, top: r.top, right: r.right, bottom: r.bottom };
+    }
+  }
+  if (!u) return null;
+  return {
+    left: u.left,
+    top: u.top,
+    right: u.right,
+    bottom: u.bottom,
+    width: u.right - u.left,
+    height: u.bottom - u.top,
+  };
+}
+
 /** ¿Este `fixed` se interpone entre la cámara y la caja que se va a medir? */
 function tapaFijo(n, cajas) {
   const cs = getComputedStyle(n);
@@ -942,7 +987,10 @@ window.paresSobreImagen = () => {
     if (!overImage(el)) continue;
 
     const cs = getComputedStyle(el);
-    const r = el.getBoundingClientRect();
+    // La caja de las LETRAS, no la del elemento: ver `cajaDelTexto`. El
+    // `getBoundingClientRect` queda de reserva para el caso raro en que el rango
+    // no devuelva rectángulos.
+    const r = cajaDelTexto(el) ?? el.getBoundingClientRect();
     // Fuera del viewport no hay píxel que leer. No se descarta en silencio: se
     // devuelve con `visible: false` para que el conductor pueda decir cuántos
     // no ha podido fotografiar, que es la diferencia entre un cero y un aprobado.
@@ -1008,7 +1056,10 @@ window.paresSobreImagen = () => {
     if (!paintsText(el)) continue;
     if (overImage(el)) continue;
     if (el.closest("[data-tapa-la-foto]")) continue;
-    const r = el.getBoundingClientRect();
+    // El ancla se mide por el MISMO camino que los pares, caja de letras
+    // incluida: si no, validaría una ruta que luego no se usa.
+    const r = cajaDelTexto(el);
+    if (!r) continue;
     if (r.width < 40 || r.height < 8) continue;
     if (!(r.top >= 0 && r.bottom <= window.innerHeight)) continue;
     const bg = backdrop(el);

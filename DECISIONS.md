@@ -214,6 +214,9 @@
 - D176 · El check de medición deja sello, y dice en voz alta las tres fuentes que no pudo leer
 - D177 · Un techo por IP no se calcula por persona, y el límite de frecuencia se escribía dos veces
 - D178 · No entra defensa antispam nueva, y la primaria dice en el PRD lo que de verdad cuenta
+- D179 · El texto sobre foto se mide sobre el píxel pintado, y el metro se valida en cada corrida
+- D180 · El censo compone por opacidad efectiva, y publica cuántos textos ha mirado para hacerlo
+- D181 · El censo publica de QUÉ conjunto habla, y decide el diálogo en vez de heredarlo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11529,3 +11532,123 @@ lee como una cautela y esto es un factor de cuatro.
 spam —lleva un `form_start` delante, el mismo día y el mismo dispositivo—, y el spam **no**
 explica el `contact_click` del 3 de agosto, que son clics en `mailto:`/`tel:` de tres semanas
 antes.
+
+## D179 · El texto sobre foto se mide sobre el píxel pintado, y el metro se valida en cada corrida — 2026-09-02
+
+**Decisión.** `npm run censo:imagen` (`scripts/censo/sobre-imagen.ts`) mide los pares que
+`npm run censo` manda a `sinMedir`: oculta el texto con `visibility: hidden` —para que
+conserve su caja—, fotografía, recorta esa caja y mide el color del texto contra el **peor
+píxel** de la región. La mitad in-page vive en `contrast-census.js`, junto al criterio
+`overImage` que decide cuáles son.
+
+**Por qué hacía falta otro comando y no bastaba con mejorar el censo.** El censo compone velos
+con `color-mix`, y eso funciona mientras haya **un** color detrás del texto. Sobre una foto hay
+tantos como píxeles y WCAG pide el peor; con `backdrop-blur` de por medio, el color efectivo ni
+siquiera está en el DOM — lo calcula el compositor. No hay forma de rasterizar desde JavaScript
+lo que hay detrás de un elemento, así que hace falta captura de pantalla y lectura de píxel.
+
+**Los dos casos del sitio no son el mismo problema.** El hero de Sobre mí es un **vídeo**: una
+foto de un fotograma no dice nada del resto, así que se muestrea por `currentTime` **esperando
+al evento `seeked`** y no a un reloj — fotografiar a mitad de salto da el fotograma anterior o un
+lienzo en blanco, que es la versión en vídeo de «leer estilos a mitad de transición». El **nav**
+es `sticky` y translúcido: su fondo depende de por dónde vaya el scroll, así que no hay una cifra
+sino un rango, y se muestrea a seis alturas. Una de ellas es el **50 %**, que es donde mide el
+censo: sin ella, esta pasada podía encontrar menos pares que la lista que dice cuáles medir.
+
+**Tres guardas, y las tres salieron de fallos de esta misma pasada.**
+
+1. **El metro se valida en cada corrida.** La página devuelve además un **ancla** —un par que el
+   censo sabe medir por su cuenta— con su caja y su cifra; el conductor lo mide por el camino
+   del píxel y las dos tienen que coincidir. Un recorte desplazado o un DPR mal aplicado dan
+   cifras plausibles sobre la región equivocada, que es la forma de error que no se ve en el
+   informe. El ancla se elige **fuera de los `fixed` que se van a retirar**: la primera versión
+   cayó en el titular del diálogo de consentimiento y, al retirarlo, se declaró rota estando bien.
+2. **Se retiran de la foto los `fixed` que tapan.** El diálogo de consentimiento pinta `bg-card`
+   opaco sobre el hero: al ocultar el titular, la cámara leía la tarjeta blanca y devolvía
+   **1,04:1** sobre un par que no tiene nada que ver. Es el mismo falso positivo que ya tuvo
+   `overImage` en 2026-08-22, por el otro lado. Un `fixed` que **contiene** al elemento medido no
+   se toca: el nav es justo uno de los que hay que medir.
+3. **Restaurar no desmarca.** De una sola detección salen varias tomas —los fotogramas del
+   vídeo—, así que desmarcar al restaurar devolvía el diálogo a la foto a partir de la segunda.
+   El fallo era silencioso: la cifra salía y era de otra cosa.
+
+**`--recortes=<dir>` guarda lo que midió**, y no es adorno: es lo que convirtió aquel 1,04:1 en
+un diagnóstico en vez de en una discusión.
+
+## D180 · El censo compone por opacidad efectiva, y publica cuántos textos ha mirado para hacerlo — 2026-09-02
+
+**Decisión.** `contrast-census.js` compone el color del texto por la **opacidad efectiva** —el
+producto de la del elemento y la de sus ancestros— antes de medir, en los dos pases (reposo y
+hover), y publica en cada corrida `N textos inspeccionados · M compuestos por opacidad efectiva`.
+
+**Qué pasaba.** El censo leía el color con `getComputedStyle(el).color` y de la opacidad solo
+hacía una cosa: descartar el elemento si valía exactamente 0. **Nunca componía.** Medido sobre
+`/accesibilidad` en oscuro, un `span` con `opacity: .7` se publicaba a **15,32** —que es el
+ANCLA, la mejor cifra que este sitio puede dar— cuando la pantalla pintaba **5,97**. No es que
+el metro se quedara corto: señalaba como mejor par de la página el peor.
+
+**Por qué se arregla aunque hoy no haya ningún caso.** El elemento concreto ya se corrigió en
+`34cd07a`, y era el único texto del repositorio atenuado con `opacity` —los otros siete
+`opacity-*` son barras de esqueleto, o sea ilustración, exentas—. **Ese es justamente el
+problema:** el próximo `opacity` sobre texto volvería a ser invisible, y su modo de fallo es un
+tick verde. Es `BRAND.md` §Cómo medir, punto 8 por cuarta vez.
+
+**Dónde para la cuenta, que es la parte que no es obvia.** La opacidad de un ancestro que
+**pinta fondo opaco** no cambia el par: desvanece el fondo y el texto a la vez, así que la razón
+entre los dos se conserva. La que sí cuenta es la de los ancestros intermedios, entre el texto y
+ese fondo. Por eso el bucle sube y se para en el primer fondo opaco, exactamente donde para
+`backdrop()`.
+
+**El caso malo, disparado de verdad y no razonado.** Se le puso `opacity-70` al ordinal de
+`ui/block-opener.tsx` —**sin tocar nada más**—, se reconstruyó y se midió `/accesibilidad`: el
+censo lo caza en **5,82:1 en claro (bajo AAA)** y **4,26:1 en oscuro (FALLA AA)**, sobre un par
+que antes del arreglo puntuaba 9,89 / 10,32 y pasaba en verde. Y con el ordinal revertido, la
+pasada limpia vuelve a decir «0 compuestos» con sus 324 textos inspeccionados delante.
+
+**Dos trampas del método que costaron una corrida cada una, y valen para cualquier verificación
+sobre el sitio servido:**
+
+1. **La marca conocida tiene que ser ÚNICA.** El primer intento comprobó que el servidor traía
+   el build nuevo grepeando `opacity-70` en el HTML… y esa clase ya estaba en la página, en las
+   barras de esqueleto. El servidor viejo seguía vivo, el censo midió una página sin caso malo y
+   dijo «0 compuestos». La comprobación que sí vale es la cadena de clases entera.
+2. **El caso malo no puede cambiar dos cosas.** El segundo intento puso `text-foreground` además
+   de la opacidad, y ese `span` vive sobre una banda invertida: salió 1,00:1, un incumplimiento
+   perfecto producido por el color y no por lo que se estaba probando. Un caso malo que mueve
+   dos variables no prueba ninguna.
+
+## D181 · El censo publica de QUÉ conjunto habla, y decide el diálogo en vez de heredarlo — 2026-09-02
+
+**Decisión.** `npm run censo` escribe `scripts/censo/inventario.json` con la **lista de claves**
+de cada corrida —no el total—, y compara la pasada nueva con la anterior par a par. Y antes de
+medir cada página **limpia el `localStorage` del consentimiento y recarga**, así que el diálogo
+entra siempre.
+
+**El hecho que lo escribió.** D127 anotó el 2026-08-27 que «tras el arreglo el censo pasó de 408
+a 414 pares». Al correrlo al día siguiente, sobre el mismo contenido, dio **391**. La atribución
+costó dos builds completos y descartó las dos hipótesis obvias: ninguno de los tres commits de
+aquella tanda lo causaba, y **dentro de una misma sesión el número era estable**. O sea que el
+conjunto medido cambiaba entre sesiones sin que el sitio cambiara.
+
+**Por qué no es cosmético.** El censo sostiene la afirmación publicada de `PRD-Live` §5 —«cero
+pares bajo AAA en las catorce × 2 temas»—. Si el conjunto varía un 6 % entre sesiones, el
+veredicto es sobre un conjunto que no sabemos cuál es. **Un par que hoy no está en la lista no
+está aprobado: está sin mirar.** Es la familia de D38, D57, D60 y D63.
+
+**La causa era la que la ficha listaba como primera hipótesis, y ahora está comprobada.** El
+diálogo de consentimiento aporta pares y su estado **dependía del `localStorage` del navegador
+que conducía la pasada**: en una sesión donde alguien ya había aceptado, el diálogo no se pintaba
+y sus pares desaparecían de las catorce páginas a la vez. Con el reinicio, la pasada del
+2026-09-02 mide **424 pares** —y dos corridas seguidas dan el mismo número—, contra los 391 de
+una sesión con el diálogo ya decidido. El instrumento no lo hereda: lo decide.
+
+**El veredicto del inventario es ASIMÉTRICO, y es lo que lo salva de ser un guardián que se
+ignora.** Un par que **aparece** es cobertura nueva y puede venir de un cambio de contenido
+legítimo: se informa y ya. Un par que **desaparece con la huella intacta** es el metro viendo
+menos que la vez anterior, que es el modo de fallo de la casa: eso suspende, y el mensaje nombra
+cuál. Con solo el total —391 contra 414— no había forma de decir cuál faltaba.
+
+**Y una pasada parcial no sella ni escribe inventario.** `--pagina=` existe para validar el
+propio metro sin gastar 28 corridas, y por eso mismo tenía que quedar claro que no produce
+veredicto: un inventario a medias haría que la pasada siguiente viera desaparecer doce corridas
+enteras y suspendiera con razón sobre un hecho falso.
