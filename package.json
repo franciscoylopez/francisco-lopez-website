@@ -45,6 +45,8 @@
     "check:rutas": "tsx scripts/check-rutas.ts",
     "check:kit": "tsx scripts/check-kit.ts",
     "check:tablero": "tsx scripts/check-tablero.ts",
+    "check:deuda": "tsx scripts/check-deuda.ts",
+    "deuda:sellar": "tsx scripts/check-deuda.ts --sellar",
     "check:marco": "tsx scripts/check-marco.ts",
     "check:figuras": "tsx scripts/check-figuras.ts",
     "check:marcas": "tsx scripts/check-marcas.ts",

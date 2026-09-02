@@ -221,6 +221,7 @@
 - D183 · Un auditor externo ve 19 fallos de contraste donde hay cero, y la respuesta se guarda hecha
 - D184 · La barra de navegación deja de ser un frosted y pasa a ser opaca, por una medición
 - D185 · El rango decía `<6.1.0` y se leyó como «ni la 6 ni la 7»: TypeScript sube a 6.0.3
+- D186 · La deuda no tenía problema de stock sino de crecimiento, y lo para un trinquete
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11885,3 +11886,70 @@ Lo que sí se mueve es el cerco: `typescript-eslint@8.69.0` ya admite `eslint ^1
 `eslint-plugin-react-hooks@7.1.1` también. **Van cayendo de uno en uno**, así que el detector de
 D151 —el PR de Dependabot en rojo, sin `ignore` que lo silencie— sigue siendo el instrumento
 correcto y no hay nada que automatizar todavía.
+
+## D186 · La deuda no tenía problema de stock sino de crecimiento, y lo para un trinquete — 2026-09-02
+
+**Decisión.** La deuda que mide Qlty pasa a tener gate en CI, y el gate **no persigue un
+número: prohíbe empeorar**. `npm run check:deuda` compara el total de `qlty smells --all`
+contra un sello versionado, y sale rojo si no cuadra.
+
+### Lo que cambió el planteamiento, que fue volver a medir
+
+La ficha nació con una cifra del 2026-08-31 —51 hallazgos en 32 archivos— y la intuición de
+que había que refactorizar. **Al re-medir dos días después, el instrumento reprodujo ese 51/32
+exacto** —así que lo que viniera después era del código y no del metro— y devolvió **71 en 38**.
+
+| Área | 31-ago | 02-sep | Δ |
+|---|---|---|---|
+| `scripts/` | 27 | **47** | **+20** |
+| `components/` | 17 | 17 | 0 |
+| `app/` | 4 | 4 | 0 |
+| `lib/` | 2 | 2 | 0 |
+| raíz | 1 | 1 | 0 |
+
+**El producto no se movió un punto en tres tandas, archivo por archivo, y los veinte de
+diferencia estaban todos en el andamiaje** — en `censo.ts`, `sobre-imagen.ts`, `color-solo.js`,
+`contrast-census.js`, `medicion/registro.ts` y `md/extraer.ts`, o sea el metro que la tanda 3
+acababa de rehacer.
+
+Eso invierte la tarea: **no había un problema de stock, había uno de crecimiento**. Y contra el
+crecimiento un refactor no sirve — solo lo retrasa hasta el sprint siguiente, que vuelve a sumar.
+
+### Por qué el criterio no es una cifra
+
+Porque la propia ficha lo avisaba y tenía razón: *hay funciones que son complejas porque el
+problema lo es, y partirlas por la métrica las empeora*. Un objetivo numérico invita
+exactamente a eso. Lo que hay se acepta con su motivo; lo que se añada, no.
+
+### Por qué NO es `qlty smells --upstream main`, que era el comando previsto
+
+Se probó el primero, sobre esta misma rama. Ese modo mira los archivos que toca el PR y reporta
+los defectos que hay **en ellos**, los que ya estaban incluidos, y **sale con código 0**. En esa
+corrida reportó el par de `page.tsx` que el trabajo de esa misma tarde acababa de reducir de
+mass 244 a 160: **un PR que mejora sale rojo, y uno que empeora otro archivo sale verde.** Suena
+a trinquete y mide otra cosa.
+
+### El agujero que destapó su propio caso malo
+
+La primera versión daba por bueno cualquier total **por debajo** del sello. Suena razonable
+—bajar es mejorar— y abre el único agujero que un trinquete puede tener: **la forma de
+desactivarlo no es tocar el script, es inflar el número.** Con `<=`, un sello subido a mano se
+traga toda la deuda que quepa por debajo y el check sigue verde.
+
+Lo destapó escribir su caso malo para `check:guardianes` —«el sello se afloja para que un PR que
+empeora salga verde»—, antes de que el gate llegara a merecer la pena. **El sello cuadra exacto:
+por debajo también sale rojo**, con el mensaje de que hay una mejora que fijar. Cualquier deriva
+pasa por un `deuda:sellar` que se ve en el diff.
+
+Es la misma regla que el resto de sellos de esta casa: no dicen «va por buen camino», dicen
+«cuadra».
+
+### Lo que este gate NO drena
+
+**Al andamiaje no se le paga el stock: se le pone tope.** Su drenaje ya tiene dueño en
+`CLAUDE.md` —«abrir empieza retirando, en lote y antes de añadir nada»— y montar un segundo
+instrumento para lo mismo sería el duplicado que esa regla persigue. Los 47 hallazgos de
+`scripts/` se quedan sellados; lo que no se queda es la puerta abierta.
+
+*(Y sí, este gate añade 190 líneas a `scripts/`, que es justo lo que vigila. Se acepta con el
+motivo escrito: es el instrumento que impide el próximo +20, y el sello lo incluye.)*
