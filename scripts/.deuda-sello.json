@@ -1,11 +1,11 @@
 {
-  "total": 67,
+  "total": 65,
   "porArea": {
     "raíz": 1,
-    "components/": 15,
     "scripts/": 47,
-    "lib/": 2,
-    "app/": 2
+    "components/": 13,
+    "app/": 2,
+    "lib/": 2
   },
   "hallazgos": [
     "qlty:boolean-logic|scripts/design-review/contrast-census.js",
@@ -58,9 +58,8 @@
     "qlty:similar-code|components/site/brand-kit/06-uso.tsx",
     "qlty:similar-code|components/site/brand-kit/hero.tsx",
     "qlty:similar-code|components/site/como-se-ha-creado-diagrams/04-stack.tsx",
-    "qlty:similar-code|components/site/como-se-ha-creado-diagrams/07-sin-consentimiento.tsx",
     "qlty:similar-code|lib/ard.ts"
   ],
-  "commit": "5e8f9d9acded3c23a1407244a456749c96aa818b",
+  "commit": "63d9e4044f72be31eb9aa7322cc66aec9a4e65ac",
   "fecha": "2026-09-02"
 }

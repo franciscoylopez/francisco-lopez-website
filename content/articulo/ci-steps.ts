@@ -89,6 +89,11 @@ export const DIAGRAMA_CI: Record<Locale, DiagramaCI> = {
       {
         label: "Build y marco",
         items: [
+          // El trinquete de deuda (P72.19) abre el grupo porque corre antes del
+          // build: lee el código fuente y no necesita el artefacto. Es `ausencia`
+          // como el resto de guardianes propios — lo que busca es deuda que nadie
+          // estaba mirando, no un patrón conocido.
+          { n: "Trinquete de deuda", cat: "ausencia" },
           { n: "Build", cat: "patron" },
           { n: "Marco de página", cat: "ausencia" },
           { n: "Markdown al día", cat: "ausencia" },
@@ -143,6 +148,7 @@ export const DIAGRAMA_CI: Record<Locale, DiagramaCI> = {
       {
         label: "Build and frame",
         items: [
+          { n: "Debt ratchet", cat: "ausencia" },
           { n: "Build", cat: "patron" },
           { n: "Page frame", cat: "ausencia" },
           { n: "Markdown up to date", cat: "ausencia" },
