@@ -1,0 +1,40 @@
+{
+  "fecha": "2026-09-02",
+  "ventana": {
+    "desde": "2026-08-04",
+    "hasta": "2026-08-31"
+  },
+  "etapa": "Distribución",
+  "fuentes": [
+    {
+      "fuente": "ga4",
+      "estado": "leida",
+      "aMano": true,
+      "cifras": {
+        "eventos": 240,
+        "usuarios": 39,
+        "contact_submit": 1
+      }
+    },
+    {
+      "fuente": "looker",
+      "estado": "no-aporta",
+      "motivo": "publica «número de eventos», un subconjunto de lo que da GA4; y su canvas no pinta en pestaña automatizada"
+    },
+    {
+      "fuente": "consentimiento",
+      "estado": "leida",
+      "cifras": {
+        "visto": 13,
+        "aceptado": 0,
+        "rechazado": 0,
+        "tasa_pct": 0
+      }
+    },
+    {
+      "fuente": "vercel-web-analytics",
+      "estado": "ilegible",
+      "motivo": "la API contesta 404 en plan Hobby — la cifra existe y solo se lee a mano en el panel de Vercel (comprobado 2026-09-02 por dos caminos)"
+    }
+  ]
+}

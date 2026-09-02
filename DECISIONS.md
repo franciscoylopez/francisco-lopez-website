@@ -211,6 +211,7 @@
 - D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie
 - D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo
 - D175 · La regla que ordena retirar entró como una adición, y no tenía quién la comprobara
+- D176 · El check de medición deja sello, y dice en voz alta las tres fuentes que no pudo leer
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11413,3 +11414,41 @@ valor** —que es la lección del caso que nació caducando aquí mismo—: copi
 ciclo que ya no es). Comprobado que los dos muerden y que el árbol limpio pasa.
 
 **Estado:** Aceptada.
+
+## D176 · El check de medición deja sello, y dice en voz alta las tres fuentes que no pudo leer — 2026-09-02
+
+**Decisión.** `npm run medicion` (`scripts/medicion.ts`) lee las cuatro fuentes del paso 3 del
+ritual de cierre, imprime el diff contra la pasada anterior y, con `--sellar`, escribe
+`scripts/medicion/registro.json`. **En el sello van siempre las cuatro**, y las que no dieron
+cifra van con su motivo escrito. Las credenciales se resuelven en `scripts/medicion/entorno.ts`,
+que lee **dos** archivos: `.env.local` (a mano, `PSI_API_KEY`) y `.env.vercel` (regenerable,
+`vercel env pull .env.vercel --environment=production`).
+
+**Contexto.** El cierre de «Distribución» (2026-09-01) tenía cuatro fuentes desde D168/D169/D170
+y solo pudo leer una. Dos problemas distintos, y el segundo es el que hace esto una decisión y
+no un apaño:
+
+1. **De acceso.** `consentimiento` necesita las `KV_REST_API_*`, y el camino que el propio
+   script documentaba —`vercel env pull .env.local`— **sobrescribe** el archivo llevándose la
+   `PSI_API_KEY` de PageSpeed. Un comando documentado que rompe otra herramienta no es una
+   instrucción, es una trampa. La salida no es un merge: son **dos archivos con dueños
+   distintos**, uno que escribe una persona y otro que se regenera. Resultado el mismo día:
+   **la tasa de consentimiento se leyó por primera vez fuera del PR que la construyó** —13
+   navegadores vieron el diálogo, 0 aceptaron, 0 rechazaron.
+2. **De rastro.** Ninguna de las cuatro dejaba nada escrito. La pregunta 2 del check («¿ha
+   cambiado algo desde el cierre anterior?») dependía de que alguien apuntara la cifra en la
+   prosa de un D-entry: el «45 usuarios» del cierre anterior hubo que sacarlo grepeando. Es el
+   modo de fallo que este repo lleva doce entradas corrigiendo, y la salida ya estaba probada
+   al lado: `psi -- --registro` sella lo que midió y el artículo lo publica sin teclearlo
+   (D102).
+
+**Lo que se decidió sobre Vercel Web Analytics, porque la ficha lo pedía explícitamente.** Su
+cifra **es alcance manual, no deuda**: la API contesta 404 en plan Hobby, comprobado por dos
+caminos distintos el 2026-09-02 —REST con el token de la CLI y el conector de Vercel—. El
+script **lo sigue intentando en cada pasada** en vez de llevar el «no legible» escrito a mano,
+porque un motivo copiado envejece igual de mal que la cifra que sustituye: el día que el plan
+cambie, lo dirá el sello. Su fila está en `GATES.md`.
+
+**Lo que esto NO es.** No automatiza GA4 ni monta un ETL: GA4 necesita sesión autenticada en el
+navegador y sigue siendo trabajo de quien cierra. Lo que cambia es que su cifra entra por
+bandera y el sello anota que se tecleó (`aMano: true`), en vez de vivir en un párrafo.

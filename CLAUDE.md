@@ -87,7 +87,7 @@ Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cua
 
 **Y se mira la cola de Dependabot, que es lo único del repo que se pudre solo.** El triaje ya dice en cada PR por qué no se mergea, pero decirlo no es leerlo: a los pocos días el PR que espera ya no es el bump que había que revisar. Así que **el que no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente (D164).
 
-**Dos sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
+**Tres sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`) y el de medición (`npm run medicion -- --sellar`, D176); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
 
 **Y ABRIR EMPIEZA RETIRANDO, EN LOTE Y ANTES DE AÑADIR NADA** *(2026-08-31)*: del conjunto `@`-importado, de `General` y de `scripts/`, los tres sitios donde este método solo tiene techo. **Durante el sprint no se negocia:** si algo no cabe, entra, y la apertura siguiente lo paga. El candidato **no es el bloque más grande, es el DUPLICADO**. Porqué, medida y el caso que lo escribió, en `CLAUDE-historical.md`.
 

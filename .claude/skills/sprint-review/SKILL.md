@@ -67,6 +67,14 @@ como diario en vez de spec viva, espejos de Notion que se desincronizan solos.
 Cuatro preguntas, no más. **Se contestan con cifra y van en la salida como sección propia**;
 una etapa no se cierra sin haberlas escrito.
 
+> **EMPIEZA POR `npm run medicion`, y termina sellando** *(2026-09-02, D176)*. El comando lee
+> las cuatro fuentes, **imprime el diff contra el cierre anterior** —que es la pregunta 2, ya
+> contestada— y nombra las que no pudo leer con su motivo. Solo `consentimiento` se lee sola;
+> GA4 lo lee una persona con el navegador y entra por bandera. Al cerrar:
+> `npm run medicion -- --sellar --etapa=<la que cierra> --ventana=DESDE..HASTA --ga4-eventos=N --ga4-usuarios=N --primaria=N`.
+> Sin ese sello, el cierre siguiente vuelve a depender de que alguien apuntara el número en un
+> párrafo, que es de donde hubo que sacar grepeando el «45 usuarios» de julio.
+
 1. **¿Qué dicen los marcadores del panel, y qué dice la métrica PRIMARIA?** No se escribe
    cuántos son —decía «los tres» y el panel iba camino de cuatro—: se lee lo que haya, últimos
    28 días, cifra y no impresión. Panel:
