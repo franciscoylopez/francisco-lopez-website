@@ -3,7 +3,7 @@ canonical: https://franciscolopez.es/como-se-ha-creado
 lang: es
 title: Cómo se ha creado esta página
 description: "El making-of de esta web: la marca antes que el código, el stack, cómo se hereda la accesibilidad, seguridad y alojamiento, qué revisa una IA y qué no, y lo que salió mal por el camino. Todo enlazado al repositorio público."
-last-updated: 2026-08-31
+last-updated: 2026-09-02
 ---
 
 1. [Inicio](https://franciscolopez.es/)
@@ -43,7 +43,7 @@ Vamos a ello.
 
 tiempo por sección
 
-Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas. **9916** palabras· · **12** secciones
+Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas. **9915** palabras· · **12** secciones
 
 1. [01 · Por qué existe · ≈4 min](#s01)
 2. [02 · Cómo se trabaja · ≈4 min](#s02)
@@ -499,7 +499,7 @@ Rendimiento · PageSpeed · `npm run psi · 30 de agosto de 2026`
 
 SEO 100 · Accesibilidad 100 · Buenas prácticas 100
 
-GEO es la otra mitad, y las siglas son de _Generative Engine Optimization_: que el sitio lo pueda leer y citar un asistente, no solo indexarlo un buscador. Un asistente no navega, pide el contenido y lo cita. Así que cada página se sirve también en **markdown**, con el texto y sin el andamiaje de alrededor, y así la portada baja de **216 KB a 6,6 KB**. Hay un archivo llms.txt que dice quién soy y cuándo tiene sentido traer esta fuente a una conversación, un catálogo en /.well-known/ard.json con los recursos que el sitio ofrece a una máquina, y una línea en el robots.txt que dice lo mismo que la licencia del repositorio: se puede indexar, se puede leer para responder citando, no se puede usar para entrenar.
+GEO es la otra mitad, y las siglas son de _Generative Engine Optimization_: que el sitio lo pueda leer y citar un asistente, no solo indexarlo un buscador. Un asistente no navega, pide el contenido y lo cita. Así que cada página se sirve también en **markdown**, con el texto y sin el andamiaje de alrededor, y así la portada pesa más de **30 veces menos**. Hay un archivo llms.txt que dice quién soy y cuándo tiene sentido traer esta fuente a una conversación, un catálogo en /.well-known/ard.json con los recursos que el sitio ofrece a una máquina, y una línea en el robots.txt que dice lo mismo que la licencia del repositorio: se puede indexar, se puede leer para responder citando, no se puede usar para entrenar.
 
 Lo que el sitio no tiene tampoco lo anuncia: no hay servidor MCP, ni API, ni catálogo de habilidades, ni tarjeta de agente, así que ninguno de esos formatos se publica. **Un catálogo de API sin API no es estar preparado para agentes, es mentir en un formato que una máquina sabe leer.** Eso deja casillas vacías a propósito, y por eso esta nota se lee distinto de la de arriba: de las 125 comprobaciones del informe, 60 miden superficies que aquí no existen. Es una foto de dónde está el sitio, no un objetivo que me haya puesto.
 
@@ -532,7 +532,7 @@ Se prueba eso y nada más: la validación, el saneado de las cabeceras y las dec
 
 ENLACE ·
 
-Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L463), [D15](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L514), [D26](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L940), [D27](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1071), [D32](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1295) y [D55](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3135), [D157](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9578), [D158](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9673), [D160](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9909) y [D166](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L10466), los archivos [next.config.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/next.config.ts) y [app/robots.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/app/robots.ts) y la configuración de [Qlty](https://qlty.sh)
+Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L463), [D15](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L514), [D26](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L940), [D27](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1071), [D32](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L1295) y [D55](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L3135), [D157](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9578), [D158](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9673), [D160](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L9976) y [D166](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/DECISIONS.md?plain=1#L10533), los archivos [next.config.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/next.config.ts) y [app/robots.ts](https://github.com/franciscoylopez/francisco-lopez-website/blob/main/app/robots.ts) y la configuración de [Qlty](https://qlty.sh)
 
 8 de 12
 

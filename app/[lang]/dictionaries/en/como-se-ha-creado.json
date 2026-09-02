@@ -808,7 +808,7 @@
         },
         {
           "type": "p",
-          "text": "GEO is the other half, and it stands for *Generative Engine Optimization*: making the site readable and quotable by an assistant, not just indexable by a search engine. An assistant doesn't browse, it fetches the content and cites it. So every page is also served as **markdown**, with the text and none of the scaffolding around it, which takes the home page from **216 KB down to 6.6 KB**. There's an llms.txt file that says who I am and when it makes sense to bring this source into a conversation, a catalogue at /.well-known/ard.json with the resources the site offers a machine, and a line in robots.txt saying the same thing the repository licence says: it can be indexed, it can be read to answer while citing it, it can't be used for training."
+          "text": "GEO is the other half, and it stands for *Generative Engine Optimization*: making the site readable and quotable by an assistant, not just indexable by a search engine. An assistant doesn't browse, it fetches the content and cites it. So every page is also served as **markdown**, with the text and none of the scaffolding around it, which makes the home page more than **{mdVeces} times lighter**. There's an llms.txt file that says who I am and when it makes sense to bring this source into a conversation, a catalogue at /.well-known/ard.json with the resources the site offers a machine, and a line in robots.txt saying the same thing the repository licence says: it can be indexed, it can be read to answer while citing it, it can't be used for training."
         },
         {
           "type": "p",

@@ -9895,6 +9895,39 @@ costar veinticinco minutos para costar un comando.
 número de rojos —ese ya bajó— sino que el arreglo deje de ser mecánico: el día que regenerar el
 markdown cambie una palabra de copy y no solo un permalink, esto es otra cosa.
 
+### Addendum *(2026-09-02)* · La cifra de bytes que publicaba esto se derivó, y pasó a ser una banda
+
+Aquí se selló «la portada baja de 216 KB a 6,6 KB», y el artículo lo publicaba tecleado en el
+diccionario, en los dos idiomas. **Un día después ya era falso**: medido contra producción el
+2026-08-31, 221.678 B de HTML y 6.925 B de markdown. No fue un descuido — el HTML de la portada
+crece con cada párrafo de copy y el markdown crece menos, así que **la divergencia es
+estructural**.
+
+Y era la única cifra de su párrafo con ese trato: la nota de preparación agéntica que va al lado
+sale de `content/agentes/registro.json` con `agentes:sellar` detrás. Dos cifras vecinas, dos
+tratos. **Ningún gate podía verlo**, y esa es la parte reutilizable: `check:articulo` sella
+*dependencias que se mueven*, no *valores medidos que derivan*, así que un número tecleado dentro
+de un `text` no declara nada y envejece en silencio. Es D38 en el último sitio donde no se
+aplicaba.
+
+**Se sella al final de `npm run md`** (`content/md/registro.json`), que es quien conoce los dos
+archivos: el prerender de la portada ES y el `.md` que acaba de escribir. Medirlo en otro sitio
+sería un segundo módulo que sabe lo mismo. Y se lee en la vuelta siguiente, por `lib/figures.ts`,
+como el sello de PSI y el de agentes: **el HTML de la portada no existe cuando el build corre,
+porque lo está emitiendo ese mismo build**.
+
+**Lo que la página publica es una BANDA, no los dos bytes**, y esa es la decisión de fondo. Un
+valor exacto derivado no mentiría, pero cambiaría en casi todo PR y arrastraría con él el `.md`
+commiteado del artículo: compraría exactitud pagando con la fricción del addendum anterior. La
+banda —el múltiplo de cinco por debajo del ratio— es cierta en las dos puntas del rango de hoy
+(31,6× en el build local, 32,0× en producción) y **solo se mueve cuando la afirmación deja de ser
+cierta**. Por eso el sello solo se reescribe entonces: los dos tamaños que lleva dentro son la
+evidencia de la última vez que cambió, no una cifra publicable.
+
+`md --verificar` comprueba la banda en cada corrida y sale rojo nombrándola si se movió. El drift
+de bytes lo imprime, no lo suspende: suspenderlo pondría en rojo todo PR de copy, que es
+exactamente lo que esta forma existe para no hacer.
+
 ## D159 · El guardián propio en vez del escáner ajeno: `check:agentes` — 2026-08-30
 
 **Decisión.** Lo que este sitio le promete a un agente lo vigila un guardián **nuestro** en CI

@@ -804,7 +804,7 @@
         },
         {
           "type": "p",
-          "text": "GEO es la otra mitad, y las siglas son de *Generative Engine Optimization*: que el sitio lo pueda leer y citar un asistente, no solo indexarlo un buscador. Un asistente no navega, pide el contenido y lo cita. Así que cada página se sirve también en **markdown**, con el texto y sin el andamiaje de alrededor, y así la portada baja de **216 KB a 6,6 KB**. Hay un archivo llms.txt que dice quién soy y cuándo tiene sentido traer esta fuente a una conversación, un catálogo en /.well-known/ard.json con los recursos que el sitio ofrece a una máquina, y una línea en el robots.txt que dice lo mismo que la licencia del repositorio: se puede indexar, se puede leer para responder citando, no se puede usar para entrenar."
+          "text": "GEO es la otra mitad, y las siglas son de *Generative Engine Optimization*: que el sitio lo pueda leer y citar un asistente, no solo indexarlo un buscador. Un asistente no navega, pide el contenido y lo cita. Así que cada página se sirve también en **markdown**, con el texto y sin el andamiaje de alrededor, y así la portada pesa más de **{mdVeces} veces menos**. Hay un archivo llms.txt que dice quién soy y cuándo tiene sentido traer esta fuente a una conversación, un catálogo en /.well-known/ard.json con los recursos que el sitio ofrece a una máquina, y una línea en el robots.txt que dice lo mismo que la licencia del repositorio: se puede indexar, se puede leer para responder citando, no se puede usar para entrenar."
         },
         {
           "type": "p",
