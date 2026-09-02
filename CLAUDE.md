@@ -87,7 +87,7 @@ Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cua
 
 **Y se mira la cola de Dependabot, que es lo único del repo que se pudre solo.** El triaje ya dice en cada PR por qué no se mergea, pero decirlo no es leerlo: a los pocos días el PR que espera ya no es el bump que había que revisar. Así que **el que no se mergee en el cierre se CIERRA**, y Dependabot reabre el vigente (D164).
 
-**Dos sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
+**Tres sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`) y el de medición (`npm run medicion -- --sellar`, D176); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
 
 **Y ABRIR EMPIEZA RETIRANDO, EN LOTE Y ANTES DE AÑADIR NADA** *(2026-08-31)*: del conjunto `@`-importado, de `General` y de `scripts/`, los tres sitios donde este método solo tiene techo. **Durante el sprint no se negocia:** si algo no cabe, entra, y la apertura siguiente lo paga. El candidato **no es el bloque más grande, es el DUPLICADO**. Porqué, medida y el caso que lo escribió, en `CLAUDE-historical.md`.
 
@@ -158,7 +158,7 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `GATES.md`**, a demanda; aquí solo lo que hay que hacer:
 
 - **Precondición: el sandbox de Bash desactivado** en TODAS las llamadas, no solo las de navegación. Un comando que cuelga es ese síntoma: se desactiva el sandbox, no se reintenta (D51).
-- **Lo que sigue a mano:** el punto **6** (nada codificado solo por color) y la nota de PageSpeed (`npm run psi`, no `vitals`).
+- **Lo que sigue a mano:** la nota de PageSpeed (`npm run psi`, no `vitals`).
 - **Tras el censo Y las dos pasadas manuales** —`viewport-verifier` y NVDA—, no al cerrar una página ni con el censo solo: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`. **Es una fecha de CONFORMIDAD**, así que moverla con media revisión hecha afirma lo que no se ha comprobado (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
 
 # Definition of Done
@@ -172,7 +172,7 @@ refactors internos, config ni docs. Se pega en el cuerpo de la tarea de Notion a
 | # | Comprobación | Cómo |
 |---|---|---|
 | 1 | **Sale de las piezas, no de clases sueltas** | La cascada de la «Regla de construcción»; `check:indices` nombra lo que quede sin publicar |
-| 2 | **Accesibilidad de contenido**: un solo `h1` y jerarquía sin saltos · breadcrumb · nada codificado solo por color · alternativas textuales | `npm run check:marco` en CI para los puntos 4, 5 y 8 (D75). A mano solo el **6**, que no tiene forma automática |
+| 2 | **Accesibilidad de contenido**: un solo `h1` y jerarquía sin saltos · breadcrumb · nada codificado solo por color · alternativas textuales | `npm run check:marco` en CI para los puntos 4, 5 y 8 (D75); el **6**, `npm run color-solo` (D182) |
 | 3 | **Accesibilidad heredada**: contraste, foco, 44px, `reduced-motion` | `viewport-verifier` (D52). **Solo se vuelve a MEDIR cuando `check:palette` lo pide**: compara contra el sello del último censo y sale rojo nombrando el par, el fondo o la animación que apareció (D90) |
 | 4 | **Enlace de salto** | `npm run check:marco`: axe no lo detecta, y por eso lo mira él (D46/D75) |
 | 5 | **Pliegue**, si lleva banda o hero por `vw` | `viewport-verifier` **mientras se dibuja**, no al cerrar (D50/D52) |

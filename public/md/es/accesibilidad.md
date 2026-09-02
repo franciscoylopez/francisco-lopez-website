@@ -93,7 +93,7 @@ En lenguaje llano y con el criterio WCAG que cubre cada una.
   
   WCAG 1.4.3 · 1.4.11
   
-  Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto o una barra translúcida: ahí no hay un color que medir, y se miran a ojo.
+  Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto: ahí no hay un color que medir, sino tantos como píxeles, así que los mide otra pasada que fotografía la caja de las letras y busca su peor píxel. Son cuatro, el titular y la entradilla de Sobre mí sobre el vídeo, y los cuatro llegan a AAA.
 2. Foco siempre visible
   
   WCAG 2.4.7
@@ -213,6 +213,14 @@ Comprueba lo que axe da por bueno: que el enlace de salto exista, que haya un so
 
 Los diagramas se dibujan sobre un lienzo que se escala, así que un rótulo declarado a 11 píxeles puede acabar pintado a 5. Se mide el tamaño real de cada rótulo a 360 píxeles de ancho, que es un teléfono normal.
 
+### Texto sobre foto
+
+Lo que el censo no puede juzgar, porque detrás del texto no hay un color sino una imagen. Se oculta el texto sin quitarle su hueco, se fotografía lo que queda debajo y se mide contra el peor píxel de esa caja. La barra del menú se mira a varias alturas de scroll y el vídeo de la portada en varios fotogramas, porque ahí no hay una cifra sino un rango.
+
+### Nunca solo el color
+
+Una simulación de daltonismo total es, en el fondo, quedarse con la luminancia. Así que en vez de comparar dos capturas se compara el gris de cada color: si dos elementos hermanos solo se distinguen por un tono cuyo gris es el mismo, y no cambian en nada más, ahí hay información que se pierde. Y sabe fallar: la propia página se fabrica un caso indistinguible en gris para comprobar que lo caza.
+
 ### Teclado y foco
 
 Revisión manual de la navegación por teclado y del orden en que el foco recorre la página.
@@ -279,10 +287,6 @@ Todo lo que hay en esta página lo he medido yo. Nadie (que yo sepa) que use tec
 ### Un lector y un navegador
 
 La prueba a mano se ha hecho con NVDA sobre Chrome. Ni VoiceOver, ni JAWS, ni TalkBack en el móvil. Cada combinación se comporta distinto, así que lo que funciona aquí no está probado en las demás. Ampliarlo está en el plan.
-
-### Texto sobre foto
-
-El censo de contraste se abstiene a propósito en dieciséis pares: los ocho textos que caen sobre una fotografía, medidos en los dos temas. Ahí el fondo lo decide la imagen y no el sistema de color, así que medirlos exige leer el píxel pintado uno a uno. Están identificados y pendientes.
 
 ### Pantallas muy estrechas
 

@@ -123,16 +123,29 @@ export function Nav({
   const isDark = resolvedTheme === "dark";
 
   return (
-    <header
-      className="border-border sticky top-0 z-50 border-b backdrop-blur-[10px]"
-      style={{
-        // Frosted translúcido al 86%. Se mezcla en sRGB, no en oklch: mezclar con
-        // `transparent` en oklch deja el tono en `none` (hue powerless) y el nav
-        // pierde el matiz del fondo → se ve gris/rosado junto al body. En sRGB el
-        // tono se conserva y el nav casa con el fondo cuando no hay scroll debajo.
-        background: "color-mix(in srgb, var(--background) 86%, transparent)",
-      }}
-    >
+    // LA BARRA ES OPACA, Y HASTA EL 2026-09-02 ERA UN FROSTED AL 86 %.
+    //
+    // Lo que la cambió es una medición, no una preferencia. Con el velo al 86 %,
+    // el 14 % restante deja pasar la foto de la página, y los enlaces del menú en
+    // su estado compacto caían a **4,67:1** sobre `/trayectoria/kuotip` en oscuro:
+    // cumplen AA y no llegan a AAA, que es el objetivo declarado del sitio.
+    //
+    // Y NO SE ARREGLABA SUBIENDO EL VELO. Se midió la escalera entera sobre los
+    // cuatro casos peores, fotografiando el píxel pintado: 90 % → 5,35 · 92 % →
+    // 5,67 · 95 % → 6,16 · 97 % → 6,56. La curva es asintótica, así que al 97 % la
+    // barra ya es casi opaca a la vista y el peor par sigue por debajo del 7. Solo
+    // el opaco lo resuelve, y lo resuelve **por construcción**: detrás del texto
+    // vuelve a haber un color en vez de tantos como píxeles, y ese par —chrome
+    // sobre `--background`— es de los que el censo ya mide en AAA en las catorce
+    // páginas.
+    //
+    // SE VA CON ÉL EL `backdrop-blur-[10px]`, que ya no difumina nada.
+    //
+    // Y NO NECESITA `data-surface`: pinta exactamente `--background`, que es la
+    // superficie de la página, así que el atenuado que hereda ya es el correcto.
+    // La regla de BRAND.md pide declarar familia a quien se pinta una superficie
+    // PROPIA; esta no lo es. La medición completa, en `DECISIONS.md` D184.
+    <header className="border-border bg-background sticky top-0 z-50 border-b">
       {/* LA BARRA ES UN LANDMARK DE NAVEGACIÓN, Y ANTES NO LO ERA (P70.09).
           Aquí ponía que el grupo de controles «no es navegación de sitio, así
           que <div>», para evitar un segundo landmark sin nombre único. El

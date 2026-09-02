@@ -91,6 +91,17 @@ const eslintConfig = defineConfig([
     },
   },
 
+  // Y `color-solo.js` se inyecta DESPUÉS del censo, en la misma página, así que
+  // usa sus helpers de color. Se declaran aquí y solo para él —no para todo
+  // `design-review/`— para que un `paint` mal escrito dentro del propio censo
+  // siga saliendo en rojo, que es donde se ha roto dos veces.
+  {
+    files: ["scripts/design-review/color-solo.js"],
+    languageOptions: {
+      globals: { paint: "readonly", label: "readonly" },
+    },
+  },
+
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",

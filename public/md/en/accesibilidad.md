@@ -93,7 +93,7 @@ In plain language and with the WCAG criterion each one covers.
   
   WCAG 1.4.3 · 1.4.11
   
-  Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single colour to measure there, so they get looked at by eye.
+  Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single colour to measure there but as many as there are pixels, so a separate pass photographs the box the letters occupy and looks for its worst pixel. There are four of them, the heading and the standfirst of Sobre mí over the video, and all four reach AAA.
 2. Focus always visible
   
   WCAG 2.4.7
@@ -213,6 +213,14 @@ Checks what axe waves through: that the skip link exists, that there is a single
 
 Diagrams are drawn on a canvas that scales, so a label declared at 11 pixels can end up painted at 5. The real size of every label is measured at 360 pixels wide, which is an ordinary phone.
 
+### Text over photography
+
+What the census cannot judge, because behind that text there is not one colour but an image. The text is hidden without losing its space, what sits underneath is photographed, and the measurement runs against the worst pixel in that box. The menu bar is checked at several scroll positions and the cover video across several frames, because there the answer is a range and not a figure.
+
+### Never colour alone
+
+Simulating total colour blindness is, at bottom, keeping only luminance. So instead of comparing two screenshots it compares the grey of each colour: if two sibling elements are told apart by a hue whose grey is the same, and nothing else changes, information is being lost there. And it knows how to fail: the page builds itself a case that is indistinguishable in grey to check that the detector catches it.
+
 ### Keyboard and focus
 
 Manual review of keyboard navigation and of the order in which focus walks the page.
@@ -279,10 +287,6 @@ Everything on this page was measured by me. Nobody (that I know of) who uses ass
 ### One reader, one browser
 
 The manual pass was done with NVDA on Chrome. Not VoiceOver, not JAWS, not TalkBack on mobile. Each combination behaves differently, so what works here isn't proven on the others. Widening it is on the roadmap.
-
-### Text over photography
-
-The contrast census deliberately abstains on sixteen pairs: the eight pieces of text that sit over a photograph, measured in both themes. There the background is decided by the image and not by the colour system, so measuring them means reading the painted pixel one by one. They're identified and pending.
 
 ### Very narrow screens
 

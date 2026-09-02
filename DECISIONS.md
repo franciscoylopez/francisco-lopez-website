@@ -211,6 +211,15 @@
 - D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie
 - D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo
 - D175 · La regla que ordena retirar entró como una adición, y no tenía quién la comprobara
+- D176 · El check de medición deja sello, y dice en voz alta las tres fuentes que no pudo leer
+- D177 · Un techo por IP no se calcula por persona, y el límite de frecuencia se escribía dos veces
+- D178 · No entra defensa antispam nueva, y la primaria dice en el PRD lo que de verdad cuenta
+- D179 · El texto sobre foto se mide sobre el píxel pintado, y el metro se valida en cada corrida
+- D180 · El censo compone por opacidad efectiva, y publica cuántos textos ha mirado para hacerlo
+- D181 · El censo publica de QUÉ conjunto habla, y decide el diálogo en vez de heredarlo
+- D182 · El punto 6 deja de mirarse y pasa a detectarse, sin filtro y sin cámara
+- D183 · Un auditor externo ve 19 fallos de contraste donde hay cero, y la respuesta se guarda hecha
+- D184 · La barra de navegación deja de ser un frosted y pasa a ser opaca, por una medición
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11413,3 +11422,389 @@ valor** —que es la lección del caso que nació caducando aquí mismo—: copi
 ciclo que ya no es). Comprobado que los dos muerden y que el árbol limpio pasa.
 
 **Estado:** Aceptada.
+
+## D176 · El check de medición deja sello, y dice en voz alta las tres fuentes que no pudo leer — 2026-09-02
+
+**Decisión.** `npm run medicion` (`scripts/medicion.ts`) lee las cuatro fuentes del paso 3 del
+ritual de cierre, imprime el diff contra la pasada anterior y, con `--sellar`, escribe
+`scripts/medicion/registro.json`. **En el sello van siempre las cuatro**, y las que no dieron
+cifra van con su motivo escrito. Las credenciales se resuelven en `scripts/medicion/entorno.ts`,
+que lee **dos** archivos: `.env.local` (a mano, `PSI_API_KEY`) y `.env.vercel` (regenerable,
+`vercel env pull .env.vercel --environment=production`).
+
+**Contexto.** El cierre de «Distribución» (2026-09-01) tenía cuatro fuentes desde D168/D169/D170
+y solo pudo leer una. Dos problemas distintos, y el segundo es el que hace esto una decisión y
+no un apaño:
+
+1. **De acceso.** `consentimiento` necesita las `KV_REST_API_*`, y el camino que el propio
+   script documentaba —`vercel env pull .env.local`— **sobrescribe** el archivo llevándose la
+   `PSI_API_KEY` de PageSpeed. Un comando documentado que rompe otra herramienta no es una
+   instrucción, es una trampa. La salida no es un merge: son **dos archivos con dueños
+   distintos**, uno que escribe una persona y otro que se regenera. Resultado el mismo día:
+   **la tasa de consentimiento se leyó por primera vez fuera del PR que la construyó** —13
+   navegadores vieron el diálogo, 0 aceptaron, 0 rechazaron.
+2. **De rastro.** Ninguna de las cuatro dejaba nada escrito. La pregunta 2 del check («¿ha
+   cambiado algo desde el cierre anterior?») dependía de que alguien apuntara la cifra en la
+   prosa de un D-entry: el «45 usuarios» del cierre anterior hubo que sacarlo grepeando. Es el
+   modo de fallo que este repo lleva doce entradas corrigiendo, y la salida ya estaba probada
+   al lado: `psi -- --registro` sella lo que midió y el artículo lo publica sin teclearlo
+   (D102).
+
+**Lo que se decidió sobre Vercel Web Analytics, porque la ficha lo pedía explícitamente.** Su
+cifra **es alcance manual, no deuda**: la API contesta 404 en plan Hobby, comprobado por dos
+caminos distintos el 2026-09-02 —REST con el token de la CLI y el conector de Vercel—. El
+script **lo sigue intentando en cada pasada** en vez de llevar el «no legible» escrito a mano,
+porque un motivo copiado envejece igual de mal que la cifra que sustituye: el día que el plan
+cambie, lo dirá el sello. Su fila está en `GATES.md`.
+
+**Lo que esto NO es.** No automatiza GA4 ni monta un ETL: GA4 necesita sesión autenticada en el
+navegador y sigue siendo trabajo de quien cierra. Lo que cambia es que su cifra entra por
+bandera y el sello anota que se tecleó (`aMano: true`), en vez de vivir en un párrafo.
+
+## D177 · Un techo por IP no se calcula por persona, y el límite de frecuencia se escribía dos veces — 2026-09-02
+
+**Decisión.** El techo del contador de consentimiento sube de **10 a 100 sucesos por hora y por
+IP**, y las reglas del límite salen de las dos Server Actions a `lib/rate-limit.ts`, con tests y
+caso malo. La **cuarta salvedad** queda escrita en `lib/consent-metrics.ts` y dentro de
+`SALVEDAD_TASA`, que es lo que imprime `npm run consentimiento`.
+
+**Contexto.** El razonamiento del techo bajo —«una persona genera como mucho dos sucesos por
+navegador»— es correcto **por persona** y falso **por IP**, que es la clave que el límite usa.
+Detrás de un CGNAT móvil o de la red de una oficina, decenas comparten la IP saliente: a partir
+del undécimo, `registrarConsentimiento` retornaba sin incrementar y `visto` dejaba de contar
+gente que sí vio el diálogo. El límite protegía al contador de inflarse y a cambio lo
+**deflactaba**, justo en el escenario que existe para medir: el pico de un lanzamiento, que es
+tráfico concentrado llegado por un mismo canal.
+
+**Y la cuenta que deshace el argumento original.** 10/hora ya eran 240 sucesos al día desde una
+sola IP, contra los 13 «visto» que el contador llevaba acumulados. **El techo nunca fue lo que
+impedía envenenar la cifra**; lo que lo detecta es el contraste con GA4, que ya estaba escrito.
+Así que el techo solo tiene que acotar una inundación, y 100 —unos 50 visitantes nuevos por hora
+tras una misma NAT— deja sitio a una oficina sin dejar de acotarla.
+
+**Se descartó clavear por navegador**, que es lo que de verdad se quiere contar: la marca del
+navegador (`CONSENT_SEEN_KEY`) es del cliente y por tanto falsificable, o sea exactamente
+aquello de lo que el límite protege.
+
+**Y la salvedad se escribe aunque el número suba**, que era la condición de la ficha: el modo de
+fallo sigue existiendo por encima del techo nuevo y sesga en la misma dirección que la del
+almacenamiento bloqueado, así que la tasa medida sigue siendo un **suelo** de la real. Su caso
+raro es el peor de leer: si el «visto» se descarta y la decisión llega con el cupo repuesto,
+`aceptado + rechazado` puede superar a `visto` y los «sin decidir» salen negativos. Una salvedad
+que falta en el sitio donde se enumeran las salvedades es peor que no tener lista.
+
+**La extracción no es aseo.** El limitador estaba escrito dos veces, carácter por carácter salvo
+el techo, y ninguna de las dos copias tenía un solo test. Es la partición de `lib/contact-form.ts`
+↔ `contacto/actions.ts`: aquí la decisión, con caso malo; la E/S —leer la IP de las cabeceras— se
+queda en la acción, que es lo único que no se puede probar. Los tests fijan lo que el código
+hacía sin decirlo: que el golpe rechazado **no se apunta**, así que insistir no alarga el
+castigo, y que el barrido del mapa no se lleva claves vivas.
+
+## D178 · No entra defensa antispam nueva, y la primaria dice en el PRD lo que de verdad cuenta — 2026-09-02
+
+**Decisión.** El formulario de `/contacto` **se queda con los dos filtros que tiene** —honeypot
+y suelo de tres segundos— y no se le añade ninguna heurística. Y `PRD-Live` §7 deja de decir que
+la fracción que consiente «se desconoce»: la brecha está medida y va con su cifra.
+
+**Contexto.** El cruce de la bandeja con GA4 (2026-08-29) dejó dos hechos. Tres correos de
+perfil SEO/dominios **pasaron los dos filtros**, así que rellenan campos y esperan: los filtros
+cazan al bot ingenuo y a nadie más. Y de los cuatro envíos entregados en el mes, GA4 contó
+**uno**.
+
+**Por qué no entra defensa, que es la mitad que había que decidir.** Cuatro envíos al mes es un
+volumen que el filtro de Gmail ya absorbe, y el coste del error no es simétrico: **un filtro que
+se equivoca por arriba tira el mensaje de una persona enseñándole la pantalla de éxito**, que es
+exactamente lo que este proyecto ya se cobró una vez (P68.48). Una web que existe para que
+alguien escriba no puede pagar ese precio para ahorrarse tres correos que se borran en dos
+segundos. Y el sitio no tiene hoy con qué calibrar una heurística: con n=3 cualquier umbral se
+elige a ojo, y lo que se estaría midiendo es el ruido.
+
+**Cuándo se reabre**, para que esto no sea un «no» perpetuo escrito una vez: si el volumen sube
+de forma que **la bandeja deje de ser legible de un vistazo** —del orden de un envío basura al
+día—, o si aparece un envío basura que **cuenta como `contact_submit`** y por tanto envenena la
+métrica primaria. Hoy no ocurre ninguna de las dos, y la segunda tiene su propia razón de no
+ocurrir: los bots no aceptan cookies, así que no cargan GTM.
+
+**Y esa misma razón es la que había que escribir en el PRD.** La métrica primaria no cuenta
+envíos: cuenta **envíos de quien aceptó cookies**. La cifra que lo dimensiona es la de este
+cruce —4 entregados, 1 contado— junto a la primera lectura del contador de consentimiento, 0
+aceptaciones de 13 (D176). Las dos van en §7, porque una salvedad enunciada sin su magnitud se
+lee como una cautela y esto es un factor de cuatro.
+
+**Lo que este cruce dejó cerrado y no se vuelve a abrir:** el único `contact_submit` **no** es
+spam —lleva un `form_start` delante, el mismo día y el mismo dispositivo—, y el spam **no**
+explica el `contact_click` del 3 de agosto, que son clics en `mailto:`/`tel:` de tres semanas
+antes.
+
+## D179 · El texto sobre foto se mide sobre el píxel pintado, y el metro se valida en cada corrida — 2026-09-02
+
+**Decisión.** `npm run censo:imagen` (`scripts/censo/sobre-imagen.ts`) mide los pares que
+`npm run censo` manda a `sinMedir`: oculta el texto con `visibility: hidden` —para que
+conserve su caja—, fotografía, recorta esa caja y mide el color del texto contra el **peor
+píxel** de la región. La mitad in-page vive en `contrast-census.js`, junto al criterio
+`overImage` que decide cuáles son.
+
+**Por qué hacía falta otro comando y no bastaba con mejorar el censo.** El censo compone velos
+con `color-mix`, y eso funciona mientras haya **un** color detrás del texto. Sobre una foto hay
+tantos como píxeles y WCAG pide el peor; con `backdrop-blur` de por medio, el color efectivo ni
+siquiera está en el DOM — lo calcula el compositor. No hay forma de rasterizar desde JavaScript
+lo que hay detrás de un elemento, así que hace falta captura de pantalla y lectura de píxel.
+
+**Los dos casos del sitio no son el mismo problema.** El hero de Sobre mí es un **vídeo**: una
+foto de un fotograma no dice nada del resto, así que se muestrea por `currentTime` **esperando
+al evento `seeked`** y no a un reloj — fotografiar a mitad de salto da el fotograma anterior o un
+lienzo en blanco, que es la versión en vídeo de «leer estilos a mitad de transición». El **nav**
+es `sticky` y translúcido: su fondo depende de por dónde vaya el scroll, así que no hay una cifra
+sino un rango, y se muestrea a seis alturas. Una de ellas es el **50 %**, que es donde mide el
+censo: sin ella, esta pasada podía encontrar menos pares que la lista que dice cuáles medir.
+
+**Tres guardas, y las tres salieron de fallos de esta misma pasada.**
+
+1. **El metro se valida en cada corrida.** La página devuelve además un **ancla** —un par que el
+   censo sabe medir por su cuenta— con su caja y su cifra; el conductor lo mide por el camino
+   del píxel y las dos tienen que coincidir. Un recorte desplazado o un DPR mal aplicado dan
+   cifras plausibles sobre la región equivocada, que es la forma de error que no se ve en el
+   informe. El ancla se elige **fuera de los `fixed` que se van a retirar**: la primera versión
+   cayó en el titular del diálogo de consentimiento y, al retirarlo, se declaró rota estando bien.
+2. **Se retiran de la foto los `fixed` que tapan.** El diálogo de consentimiento pinta `bg-card`
+   opaco sobre el hero: al ocultar el titular, la cámara leía la tarjeta blanca y devolvía
+   **1,04:1** sobre un par que no tiene nada que ver. Es el mismo falso positivo que ya tuvo
+   `overImage` en 2026-08-22, por el otro lado. Un `fixed` que **contiene** al elemento medido no
+   se toca: el nav es justo uno de los que hay que medir.
+3. **Restaurar no desmarca.** De una sola detección salen varias tomas —los fotogramas del
+   vídeo—, así que desmarcar al restaurar devolvía el diálogo a la foto a partir de la segunda.
+   El fallo era silencioso: la cifra salía y era de otra cosa.
+
+**`--recortes=<dir>` guarda lo que midió**, y no es adorno: es lo que convirtió aquel 1,04:1 en
+un diagnóstico en vez de en una discusión.
+
+## D180 · El censo compone por opacidad efectiva, y publica cuántos textos ha mirado para hacerlo — 2026-09-02
+
+**Decisión.** `contrast-census.js` compone el color del texto por la **opacidad efectiva** —el
+producto de la del elemento y la de sus ancestros— antes de medir, en los dos pases (reposo y
+hover), y publica en cada corrida `N textos inspeccionados · M compuestos por opacidad efectiva`.
+
+**Qué pasaba.** El censo leía el color con `getComputedStyle(el).color` y de la opacidad solo
+hacía una cosa: descartar el elemento si valía exactamente 0. **Nunca componía.** Medido sobre
+`/accesibilidad` en oscuro, un `span` con `opacity: .7` se publicaba a **15,32** —que es el
+ANCLA, la mejor cifra que este sitio puede dar— cuando la pantalla pintaba **5,97**. No es que
+el metro se quedara corto: señalaba como mejor par de la página el peor.
+
+**Por qué se arregla aunque hoy no haya ningún caso.** El elemento concreto ya se corrigió en
+`34cd07a`, y era el único texto del repositorio atenuado con `opacity` —los otros siete
+`opacity-*` son barras de esqueleto, o sea ilustración, exentas—. **Ese es justamente el
+problema:** el próximo `opacity` sobre texto volvería a ser invisible, y su modo de fallo es un
+tick verde. Es `BRAND.md` §Cómo medir, punto 8 por cuarta vez.
+
+**Dónde para la cuenta, que es la parte que no es obvia.** La opacidad de un ancestro que
+**pinta fondo opaco** no cambia el par: desvanece el fondo y el texto a la vez, así que la razón
+entre los dos se conserva. La que sí cuenta es la de los ancestros intermedios, entre el texto y
+ese fondo. Por eso el bucle sube y se para en el primer fondo opaco, exactamente donde para
+`backdrop()`.
+
+**El caso malo, disparado de verdad y no razonado.** Se le puso `opacity-70` al ordinal de
+`ui/block-opener.tsx` —**sin tocar nada más**—, se reconstruyó y se midió `/accesibilidad`: el
+censo lo caza en **5,82:1 en claro (bajo AAA)** y **4,26:1 en oscuro (FALLA AA)**, sobre un par
+que antes del arreglo puntuaba 9,89 / 10,32 y pasaba en verde. Y con el ordinal revertido, la
+pasada limpia vuelve a decir «0 compuestos» con sus 324 textos inspeccionados delante.
+
+**Dos trampas del método que costaron una corrida cada una, y valen para cualquier verificación
+sobre el sitio servido:**
+
+1. **La marca conocida tiene que ser ÚNICA.** El primer intento comprobó que el servidor traía
+   el build nuevo grepeando `opacity-70` en el HTML… y esa clase ya estaba en la página, en las
+   barras de esqueleto. El servidor viejo seguía vivo, el censo midió una página sin caso malo y
+   dijo «0 compuestos». La comprobación que sí vale es la cadena de clases entera.
+2. **El caso malo no puede cambiar dos cosas.** El segundo intento puso `text-foreground` además
+   de la opacidad, y ese `span` vive sobre una banda invertida: salió 1,00:1, un incumplimiento
+   perfecto producido por el color y no por lo que se estaba probando. Un caso malo que mueve
+   dos variables no prueba ninguna.
+
+## D181 · El censo publica de QUÉ conjunto habla, y decide el diálogo en vez de heredarlo — 2026-09-02
+
+**Decisión.** `npm run censo` escribe `scripts/censo/inventario.json` con la **lista de claves**
+de cada corrida —no el total—, y compara la pasada nueva con la anterior par a par. Y antes de
+medir cada página **limpia el `localStorage` del consentimiento y recarga**, así que el diálogo
+entra siempre.
+
+**El hecho que lo escribió.** D127 anotó el 2026-08-27 que «tras el arreglo el censo pasó de 408
+a 414 pares». Al correrlo al día siguiente, sobre el mismo contenido, dio **391**. La atribución
+costó dos builds completos y descartó las dos hipótesis obvias: ninguno de los tres commits de
+aquella tanda lo causaba, y **dentro de una misma sesión el número era estable**. O sea que el
+conjunto medido cambiaba entre sesiones sin que el sitio cambiara.
+
+**Por qué no es cosmético.** El censo sostiene la afirmación publicada de `PRD-Live` §5 —«cero
+pares bajo AAA en las catorce × 2 temas»—. Si el conjunto varía un 6 % entre sesiones, el
+veredicto es sobre un conjunto que no sabemos cuál es. **Un par que hoy no está en la lista no
+está aprobado: está sin mirar.** Es la familia de D38, D57, D60 y D63.
+
+**La causa era la que la ficha listaba como primera hipótesis, y ahora está comprobada.** El
+diálogo de consentimiento aporta pares y su estado **dependía del `localStorage` del navegador
+que conducía la pasada**: en una sesión donde alguien ya había aceptado, el diálogo no se pintaba
+y sus pares desaparecían de las catorce páginas a la vez. Con el reinicio, la pasada del
+2026-09-02 mide **424 pares** —y dos corridas seguidas dan el mismo número—, contra los 391 de
+una sesión con el diálogo ya decidido. El instrumento no lo hereda: lo decide.
+
+**El veredicto del inventario es ASIMÉTRICO, y es lo que lo salva de ser un guardián que se
+ignora.** Un par que **aparece** es cobertura nueva y puede venir de un cambio de contenido
+legítimo: se informa y ya. Un par que **desaparece con la huella intacta** es el metro viendo
+menos que la vez anterior, que es el modo de fallo de la casa: eso suspende, y el mensaje nombra
+cuál. Con solo el total —391 contra 414— no había forma de decir cuál faltaba.
+
+**Y una pasada parcial no sella ni escribe inventario.** `--pagina=` existe para validar el
+propio metro sin gastar 28 corridas, y por eso mismo tenía que quedar claro que no produce
+veredicto: un inventario a medias haría que la pasada siguiente viera desaparecer doce corridas
+enteras y suspendiera con razón sobre un hecho falso.
+
+## D182 · El punto 6 deja de mirarse y pasa a detectarse, sin filtro y sin cámara — 2026-09-02
+
+**Decisión.** `npm run color-solo` comprueba «nada codificado solo por color», que era la
+**única fila de la Definition of Done sin forma automática**. Y la comprobación no rasteriza:
+compara los colores que el navegador pinta y pregunta si su **gris** coincide.
+
+**Por qué no hace falta el filtro que motivó la tarea.** La idea venía de P72.02, que miró
+Silktide por su simulador de daltonismo, y de que `agent-browser` sabe inyectar
+`filter: grayscale(1)`. Pero una simulación de acromatopsia es, en el fondo, quedarse con la
+**luminancia** — y la luminancia se calcula. Dos colores distintos cuyo gris coincide son
+exactamente los que pierden la información. Mismo criterio, sin capturas que diffear, sin ruido
+de compresión y con el elemento culpable nombrado en vez de dos imágenes para mirar.
+
+**Cuándo marca, y las tres condiciones importan.** Dos **hermanos comparables** —mismo NODO
+padre, misma etiqueta, mismas clases sin las de estado— que (1) difieren en un color de texto,
+fondo o borde, (2) cuyos grises coinciden dentro de 0,02, y (3) **no difieren en nada que
+sobreviva al gris**: peso, cursiva, subrayado, filete, radio, versalitas. Si el estado además
+engorda la letra o dibuja un borde, la información no depende del tono y no hay hallazgo.
+
+**La premisa cambió el día que se iba a hacer, y eso cambió el producto.** El barrido manual ya
+lo había hecho Francisco esa misma mañana, con acromatopsia simulada y sección por sección:
+salió limpio. Así que la tarea dejó de descubrir nada y pasó a ser lo otro —que un cambio futuro
+no lo rompa en silencio, la familia D60 aplicada a una propiedad visual—. Y esa pasada limpia se
+convirtió en **la línea base con la que calibrarlo**: cualquier cosa que marcara hoy era, por
+construcción, un falso positivo.
+
+**Los dos falsos positivos que efectivamente aparecieron, y eran fallos reales del detector:**
+
+1. **Agrupaba por el NOMBRE de la etiqueta del padre**, no por el padre. Metía en un mismo grupo
+   todos los `li` de la página —los de una lista y los de otra—, así que un `--border` que
+   cambia porque las dos listas están sobre superficies distintas se leía como un estado
+   codificado por color.
+2. **Comparaba `borderTopColor` en elementos sin borde.** Esa propiedad tiene valor computado
+   aunque el ancho sea 0, y un filete que no se pinta no codifica nada.
+
+Sin la línea base, los dos habrían pasado por hallazgos y se habría «arreglado» un sitio que no
+tenía nada roto.
+
+**Y trae su propio caso malo, porque su resultado normal es cero** (D70). Con `--caso-malo` la
+página se fabrica el incumplimiento —coge dos hermanos que el detector mira y le cambia a uno el
+color por otro de la **misma luminancia y distinto tono**— y el veredicto se invierte: suspende
+si el detector NO lo caza. También ahí hubo que corregir el método: la primera versión elegía su
+víctima por su cuenta, caía en grupos que el detector ni mira y suspendía sin que hubiera nada
+roto. **Un caso malo tiene que estar escrito en los términos del guardián que pone a prueba**,
+así que los dos comparten ahora la función de agrupación.
+
+**Estado al escribir esto:** 28 corridas, **1320 grupos comparables y 3378 pares comparados,
+cero hallazgos** — el mismo veredicto que el ojo, y ahora repetible.
+
+## D183 · Un auditor externo ve 19 fallos de contraste donde hay cero, y la respuesta se guarda hecha — 2026-09-02
+
+**Decisión.** Los tokens **no se tocan** (salida 3, descartada de antemano) y **no entra copy
+nuevo en ninguna página pública por ahora** (salida 1). Lo que sí queda hecho es la respuesta:
+el snippet vive en `scripts/design-review/rgb-para-auditores.js`, con el experimento al lado.
+Publicarlo en `/accesibilidad` o en el Design System —la salida 2— sigue sobre la mesa y es
+decisión de Francisco; el trabajo para hacerlo es pegar el archivo.
+
+**El hecho.** Chrome serializa el valor computado de los 59 tokens en `oklch()` como `lab(...)`:
+
+```
+getComputedStyle(document.body).color → lab(14.8102 -1.28566 -4.10883)
+```
+
+Una herramienta que solo entiende `rgb()` y hex no lo parsea, cae a `#FFFFFF` en los dos lados
+de cada par y publica un **1:1 · FAIL** en cada elemento. Silktide da **19 «Text contrast
+issues»** en la home y sigue dándolos en las demás.
+
+**Y está probado que es eso y no otra cosa.** Se reescribieron los colores computados a `rgb()`
+sin cambiar un píxel —leyendo cada color y volviéndolo a escribir tras pasarlo por un canvas de
+1×1— y se relanzó el checker sobre `/como-se-ha-creado`:
+
+| | con `lab()` | con `rgb()` |
+|---|---|---|
+| Text contrast | **19** | **desaparece de la lista** |
+| Semantic links | 3 | 3 |
+| Links with different destinations | 2 | 1 |
+
+Los otros dos hallazgos se mantienen, o sea que el override no falseó el análisis. **Cuando
+puede leer los colores, la herramienta coincide con el censo: cero fallos.**
+
+**«Sin cambiar un píxel» se ha medido, no supuesto** *(2026-09-02)*. Se corrió el censo sobre
+`/como-se-ha-creado` antes y después de aplicar el snippet: **20 pares antes / 20 después en
+claro y 22 / 22 en oscuro, cero cifras distintas y cero pares desaparecidos**. Si el override
+moviera una cifra, no serviría como respuesta — sería otro metro.
+
+**Por qué no se ha ampliado el barrido a WAVE, Lighthouse y DevTools.** La ficha lo pedía para
+saber si con n=1 esto es una anécdota. Francisco decidió el 2026-09-02 trabajar solo con
+Silktide, así que **el alcance de la evidencia es una herramienta y así queda escrito**: no se
+afirma que el problema sea general, se afirma lo que se midió. Ampliarlo es barato el día que
+haga falta.
+
+**Y no es un problema de gamut, que es la lectura fácil y equivocada.** Los cianes de esta marca
+sí caen ligeramente fuera de sRGB y el navegador los recorta al pintarlos (`BRAND.md` §Cómo
+medir, punto 2), pero eso no tiene nada que ver: aquí el color que se pinta es el correcto y la
+herramienta no sabe **leerlo**. Confundir las dos cosas llevaría a tocar los tokens, que es
+justo lo que no se va a hacer: renunciar a `oklch()` mataría `color-mix` perceptual, de lo que
+dependen `--surface-dim` y `--control-edge` (D39, D97). **No se cambia el sistema de color por
+un parser ajeno.**
+
+## D184 · La barra de navegación deja de ser un frosted y pasa a ser opaca, por una medición — 2026-09-02
+
+**Decisión.** El nav pasa de `color-mix(in srgb, var(--background) 86%, transparent)` con
+`backdrop-blur-[10px]` a **`bg-background` opaco**, en las catorce páginas. El desenfoque sale
+con el velo, porque ya no difumina nada.
+
+**Qué lo forzó.** Con el velo al 86 %, el 14 % restante deja pasar la foto de la página, y
+D179 midió por primera vez esos pares sobre el píxel pintado: los enlaces del menú **en su
+estado compacto** caían a **4,67:1** sobre `/trayectoria/kuotip` en oscuro. Cumplen AA (4,5) y
+no llegan a AAA (7), que es el objetivo declarado del sitio.
+
+**Y no se arreglaba subiendo el velo, que era la salida que parecía obvia.** Se midió la
+escalera entera sobre los cuatro casos peores, sobrescribiendo el fondo en la página servida
+—sin reconstruir— y fotografiando el píxel:
+
+| Velo | Peor par |
+|---|---|
+| 86 % (el que había) | 4,60 |
+| 90 % | 5,35 |
+| 92 % | 5,67 |
+| 95 % | 6,16 |
+| 97 % | 6,56 |
+| opaco | el nav deja de estar sobre foto |
+
+La curva es **asintótica**: al 97 % la barra ya es casi opaca a la vista y el peor par sigue por
+debajo del 7. **Ningún valor translúcido llega**, así que la elección real no era «cuánto
+subirlo» sino «velo o AAA».
+
+**Por qué el opaco sí, y por construcción y no por suerte.** Detrás del texto vuelve a haber
+**un** color en vez de tantos como píxeles: el recorrido de `overImage()` se para en el primer
+fondo opaco, y el par que queda —chrome sobre `--background`— es de los que el censo ya mide en
+AAA en las catorce páginas.
+
+**Lo medido después del cambio**, que es lo que lo cierra: el censo pasa de **424 a 400 pares**
+—los 24 que desaparecen son exactamente los que componía el velo—, los pares **sobre imagen
+bajan de 16 a 4**, y esos cuatro (el titular y la entradilla de Sobre mí sobre el vídeo) salen a
+**8,41 y 6,90**. Por primera vez el sitio tiene **cero pares bajo AAA incluidos los que caen
+sobre imagen**.
+
+**Lo que se pierde, y va escrito porque es marca y no accesibilidad:** el efecto esmerilado de
+ver el contenido correr por debajo de la barra. Se cambia a sabiendas.
+
+**No necesita `data-surface`.** Pinta exactamente `--background`, que es la superficie de la
+página, así que el atenuado que hereda ya es el correcto. La regla de `BRAND.md` pide declarar
+familia a quien se pinta una superficie **propia**, y esta no lo es.
+
+**Y destapó un defecto del guardián que se había escrito ese mismo día.** El inventario del
+censo (D181) suspende cuando desaparece un par con la huella intacta — y aquí desaparecían 24
+por un cambio legítimo, porque **el velo del nav no es un token** y la huella no puede enterarse.
+Sin salida, el primer cambio de ese tipo habría dejado el censo bloqueado, y un guardián que no
+se puede satisfacer se acaba desactivando entero. Ahora existe `--inventario-nuevo`: nombra los
+pares uno a uno, exige la bandera a mano y lo dice en voz alta, para que aceptar sea una decisión
+visible y no el estado por defecto.

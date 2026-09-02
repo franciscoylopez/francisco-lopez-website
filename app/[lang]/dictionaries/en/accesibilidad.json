@@ -65,7 +65,7 @@
     "items": [
       {
         "title": "Contrast measured in both themes",
-        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single colour to measure there, so they get looked at by eye.",
+        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single colour to measure there but as many as there are pixels, so a separate pass photographs the box the letters occupy and looks for its worst pixel. There are four of them, the heading and the standfirst of Sobre mí over the video, and all four reach AAA.",
         "wcag": "WCAG 1.4.3 · 1.4.11",
         "inherited": true
       },
@@ -187,6 +187,14 @@
         "result": "Diagrams are drawn on a canvas that scales, so a label declared at 11 pixels can end up painted at 5. The real size of every label is measured at 360 pixels wide, which is an ordinary phone."
       },
       {
+        "tool": "Text over photography",
+        "result": "What the census cannot judge, because behind that text there is not one colour but an image. The text is hidden without losing its space, what sits underneath is photographed, and the measurement runs against the worst pixel in that box. The menu bar is checked at several scroll positions and the cover video across several frames, because there the answer is a range and not a figure."
+      },
+      {
+        "tool": "Never colour alone",
+        "result": "Simulating total colour blindness is, at bottom, keeping only luminance. So instead of comparing two screenshots it compares the grey of each colour: if two sibling elements are told apart by a hue whose grey is the same, and nothing else changes, information is being lost there. And it knows how to fail: the page builds itself a case that is indistinguishable in grey to check that the detector catches it."
+      },
+      {
         "tool": "Keyboard and focus",
         "result": "Manual review of keyboard navigation and of the order in which focus walks the page."
       },
@@ -236,10 +244,6 @@
       {
         "title": "One reader, one browser",
         "body": "The manual pass was done with NVDA on Chrome. Not VoiceOver, not JAWS, not TalkBack on mobile. Each combination behaves differently, so what works here isn't proven on the others. Widening it is on the roadmap."
-      },
-      {
-        "title": "Text over photography",
-        "body": "The contrast census deliberately abstains on sixteen pairs: the eight pieces of text that sit over a photograph, measured in both themes. There the background is decided by the image and not by the colour system, so measuring them means reading the painted pixel one by one. They're identified and pending."
       },
       {
         "title": "Very narrow screens",

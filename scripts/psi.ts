@@ -88,7 +88,6 @@
 //     entre el 1% y el 90%. El TOTAL sí es estable. No abras una tarea sobre una
 //     fase sin mediana de corridas deduplicadas.
 
-import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 
 import { defaultLocale, pagePath } from "../lib/i18n/config";
@@ -109,6 +108,7 @@ import {
   imprimeResumen,
 } from "./psi/informe";
 import { sella } from "./psi/sello";
+import { delEntorno } from "./medicion/entorno";
 
 /** El sitio que se mide cuando nadie dice otra cosa. */
 const PRODUCCION = "https://franciscolopez.es";
@@ -117,26 +117,6 @@ const PRODUCCION = "https://franciscolopez.es";
 const RESPIRO_MS = 400;
 
 const espera = (cuanto: number) => new Promise((r) => setTimeout(r, cuanto));
-
-/**
- * Lee una variable del entorno y, si no está, de `.env.local` (en .gitignore).
- * Generaliza lo que antes hacía solo con `PSI_API_KEY`, porque el modo registro
- * necesita además saber sobre qué dominio mide.
- */
-function delEntorno(nombre: string): string | undefined {
-  if (process.env[nombre]) return process.env[nombre];
-  try {
-    const linea = readFileSync(".env.local", "utf8")
-      .split(/\r?\n/)
-      .find((l) => l.trimStart().startsWith(`${nombre}=`));
-    return linea
-      ?.slice(linea.indexOf("=") + 1)
-      .trim()
-      .replace(/^["']|["']$/g, "");
-  } catch {
-    return undefined;
-  }
-}
 
 /**
  * Huella del despliegue: el hash de los assets de `/_next/static` que sirve la

@@ -89,7 +89,7 @@ Los **artefactos son documentos reales**, no recreaciones (`D53`, `D54`). Y hay 
 <details>
 <summary><b>Accesibilidad</b></summary>
 
-- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover**, sobre las catorce páginas × dos temas y con el metro validado en las 28 corridas. La pasada es un comando (`npm run censo`) y lee las páginas del registro, así que una nueva entra sin que nadie se acuerde (`D85`).
+- **Todos los pares de color del sistema en WCAG AAA**, en ambos temas, **en reposo y en hover**, sobre las catorce páginas × dos temas y con el metro validado en las 28 corridas — **incluidos los que caen sobre una foto**, que desde el 2026-09-02 se miden sobre el píxel pintado en vez de quedar fuera del veredicto (`D179`). La pasada es un comando (`npm run censo`) y lee las páginas del registro, así que una nueva entra sin que nadie se acuerde (`D85`).
 - El censo de contraste se hace **recorriendo el DOM de la página servida**, no leyendo el CSS: un par que solo existe al componer un velo, o una pastilla de hover, no aparece en ningún inventario de tokens.
 - **Enlace de salto** (WCAG 2.4.1, nivel A), que axe no detecta y por eso se comprueba a mano (`D46`).
 - **Probado con lector de pantalla** (NVDA sobre Chrome), no solo con motores de reglas. Es lo que encuentra los defectos que no violan ningún criterio y que por eso ningún escáner ve; los que encontró están publicados en la propia página de Accesibilidad (`D73`).
@@ -143,7 +143,7 @@ La tabla los lista todos, y eso incluye los dos **regeneradores**: no comprueban
 | `test` | Que la lógica del formulario se rompa sin que nadie se entere: validación, saneado de cabeceras del correo y decisiones de la Server Action. Vitest, sin DOM falso, y midiendo el mensaje que nodemailer **emite** en vez del objeto que recibe (`D101`) |
 | `build` | — |
 
-Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`** y **`npm run pliegue`** necesitan un navegador de verdad —el segundo comprueba que las aperturas que comparten pliegue midan lo mismo, una invariante que se rompió tres veces y siempre la vio un ojo (`D144`)—; **`npm run psi`** y **`npm run check:enlaces`** necesitan red, y el segundo no puede ser gate de CI por la misma razón que el primero: un servidor ajeno caído cinco minutos daría un rojo que no es nuestro (`D141`). **`npm run check:tablero`** necesita el MCP de Notion. Y **`npm run agentes:sellar`** queda fuera por un motivo distinto de todos ellos: sella la nota de un tercero que `D157` declara explícitamente que **no** es criterio de aceptación de este proyecto, así que ponerla en CI sería convertir en umbral justo lo que se decidió que no lo era. Los cuatro últimos tienen su criterio probado aparte, en `npm test`, para que vivir fuera de CI no lo deje sin red (`D107`).
+Y fuera de CI quedan los que necesitan algo que un runner no tiene. El que más ha cazado es **`npm run gate:html`**: compara el HTML servido de todas las páginas × dos idiomas antes y después de un refactor, y ahí vive lo que nadie revisa —un `hreflang` mal copiado no lo ve el typecheck, ni el linter, ni axe—. **`npm run censo`**, sus dos pasadas hermanas —**`censo:imagen`**, que mide el texto sobre foto que el censo se abstiene de juzgar (`D179`), y **`color-solo`**, que comprueba que nada se distinga solo por el tono (`D182`)— y **`npm run pliegue`** necesitan un navegador de verdad —el segundo comprueba que las aperturas que comparten pliegue midan lo mismo, una invariante que se rompió tres veces y siempre la vio un ojo (`D144`)—; **`npm run psi`** y **`npm run check:enlaces`** necesitan red, y el segundo no puede ser gate de CI por la misma razón que el primero: un servidor ajeno caído cinco minutos daría un rojo que no es nuestro (`D141`). **`npm run check:tablero`** necesita el MCP de Notion. Y **`npm run agentes:sellar`** queda fuera por un motivo distinto de todos ellos: sella la nota de un tercero que `D157` declara explícitamente que **no** es criterio de aceptación de este proyecto, así que ponerla en CI sería convertir en umbral justo lo que se decidió que no lo era. Los cuatro últimos tienen su criterio probado aparte, en `npm test`, para que vivir fuera de CI no lo deje sin red (`D107`).
 
 ## Arrancar
 
@@ -205,7 +205,11 @@ npm run check:enlaces       # que las URLs externas del sitio sigan respondiendo
 npm run consentimiento      # qué fracción del tráfico ve la analítica: los tres contadores
                             # y la tasa (D169). Distingue «cero» de «sin configurar», que
                             # es media utilidad del script. Necesita las credenciales del
-                            # almacén: `vercel env pull .env.local`
+                            # almacén: `vercel env pull .env.vercel --environment=production`,
+                            # a archivo APARTE para no pisar .env.local (D176)
+npm run medicion            # el check de medición del cierre de etapa: lee las cuatro fuentes,
+                            # compara con el sello anterior y nombra las que no pudo leer.
+                            # Con --sellar deja la foto para el cierre siguiente (D176)
 npm run novedades           # qué secciones publicadas toca este PR, y si es copy o solo
                             # una fuente que se movió (D143). Lo lanza CI en cada PR
 npm run articulo:novedades  # QUÉ cambió en cada dependencia del artículo desde el sello
@@ -218,6 +222,10 @@ npm run psi -- --registro   # …y de todas las del registro, con el agregado de
 npm run agentes:sellar      # la nota de preparación agéntica de ora.ai contra producción, sellada
                             # en content/agentes/. Se niega con un informe de caché (D167)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
+npm run censo:imagen        # los pares que el censo SE ABSTIENE de juzgar: el texto sobre
+                            # foto, medido sobre el píxel pintado (D179)
+npm run color-solo          # que ningún estado se distinga solo por el tono, comparando el
+                            # gris de cada color. Con --caso-malo se pone a prueba (D182)
 npm run check:tablero       # que Prioridad siga siendo un orden, sobre un volcado del
                             # tablero de Notion. Al empezar la sesión, no en CI (D107)
 qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)

@@ -14,6 +14,7 @@ import {
 } from "@/lib/contact-form";
 import { sendContactMessage } from "@/lib/mailer";
 import { isLocale, defaultLocale } from "@/lib/i18n/config";
+import { creaLimitador } from "@/lib/rate-limit";
 
 // El envío del formulario, como Server Action (P67).
 //
@@ -32,32 +33,16 @@ import { isLocale, defaultLocale } from "@/lib/i18n/config";
 // En memoria del proceso, a propósito, y hay que saber lo que eso NO es: en
 // serverless cada instancia tiene su mapa y una instancia fría empieza a cero,
 // así que esto no es un límite duro sino un tope al envío repetido desde una
-// misma IP en una misma instancia. Es lo proporcionado al tráfico de un
+// misma IP en una misma instancia. Las reglas viven en `lib/rate-limit.ts`, con
+// sus tests. Es lo proporcionado al tráfico de un
 // portfolio: la alternativa —un almacén compartido— mete una dependencia y un
 // servicio nuevo para defender un buzón que ya tiene el filtro de Gmail detrás.
 // El honeypot y el filtro de velocidad son los que paran al bot; esto solo evita
 // que un humano insistente llene la bandeja.
 const WINDOW_MS = 60 * 60 * 1_000;
 const MAX_PER_WINDOW = 5;
-const hits = new Map<string, number[]>();
 
-function rateLimited(key: string): boolean {
-  const now = Date.now();
-  const recent = (hits.get(key) ?? []).filter((t) => now - t < WINDOW_MS);
-  if (recent.length >= MAX_PER_WINDOW) {
-    hits.set(key, recent);
-    return true;
-  }
-  recent.push(now);
-  hits.set(key, recent);
-  // El mapa no crece sin fin: cada envío barre las claves que ya caducaron.
-  if (hits.size > 500) {
-    for (const [k, times] of hits) {
-      if (times.every((t) => now - t >= WINDOW_MS)) hits.delete(k);
-    }
-  }
-  return false;
-}
+const limite = creaLimitador({ ventanaMs: WINDOW_MS, max: MAX_PER_WINDOW });
 
 async function clientKey(): Promise<string> {
   const h = await headers();
@@ -109,7 +94,7 @@ export async function submitContact(
   const errors = validateContact(values);
   if (hasErrors(errors)) return { status: "invalid", errors };
 
-  if (rateLimited(await clientKey())) {
+  if (limite.limitado(await clientKey())) {
     return { status: "failed", reason: "rate" };
   }
 

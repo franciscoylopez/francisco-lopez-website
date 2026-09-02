@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 
 import { esEventoConsentimiento } from "@/lib/consent-metrics";
 import { incrementar } from "@/lib/consent-store";
+import { creaLimitador } from "@/lib/rate-limit";
 
 // El registro del contador de consentimiento (P68.61, opción 2).
 //
@@ -31,10 +32,8 @@ import { incrementar } from "@/lib/consent-store";
 //      que no supiera.
 //   3. HAY UN LÍMITE DE FRECUENCIA, y aquí importa MÁS que en el formulario: allí
 //      el peor caso era una bandeja llena; aquí es un contador envenenado, o sea
-//      una MEDICIÓN falsa que se usaría para decidir. El techo es bajo a propósito
-//      —una persona genera como mucho dos sucesos por navegador— y sigue el patrón
-//      de `contacto/actions.ts`: en memoria de instancia, con lo que eso NO es
-//      escrito al lado.
+//      una MEDICIÓN falsa que se usaría para decidir. Las reglas están en
+//      `lib/rate-limit.ts`, con sus tests; aquí solo el techo y la clave.
 //
 // LO QUE ESTE LÍMITE NO PUEDE: en serverless cada instancia tiene su mapa y una
 // instancia fría empieza a cero, así que un actor distribuido y decidido puede
@@ -42,29 +41,32 @@ import { incrementar } from "@/lib/consent-store";
 // —un almacén compartido de tasas— cuesta más que el dato que protege. La señal
 // de que ha pasado es una tasa que se mueve sin que se mueva el tráfico, y el
 // contraste vive fuera: GA4 sigue contando los `aceptado` por su cuenta.
+//
+// ─────────────────────────────────────────────────────────────────────────────
+// EL TECHO: 100 POR HORA Y POR IP, subido desde 10 el 2026-09-02.
+//
+// El razonamiento del techo bajo era «una persona genera como mucho dos sucesos
+// por navegador». Correcto **por persona** y falso **por IP**: detrás de un CGNAT
+// móvil o de la red de una oficina, decenas comparten la misma IP saliente, y a
+// partir del undécimo esta acción retornaba sin incrementar. O sea que el límite
+// protegía al contador de inflarse y a cambio lo **deflactaba**, justo en el
+// escenario que existe para medir —el pico de un lanzamiento, que es tráfico
+// concentrado llegado por un mismo canal.
+//
+// Y LA CUENTA QUE DESHACE EL ARGUMENTO ORIGINAL: 10/hora ya eran 240 sucesos al
+// día desde una sola IP, contra los 13 «visto» que llevaba el contador. El techo
+// nunca fue lo que impedía envenenarlo; lo que lo detecta es el contraste con GA4,
+// que es lo que sí está escrito. Así que el techo solo tiene que acotar una
+// inundación, y 100 —unos 50 visitantes nuevos por hora tras una misma NAT— deja
+// sitio a una oficina sin dejar de acotarla.
+//
+// LA SALVEDAD SE QUEDA ESCRITA IGUAL, en `lib/consent-metrics.ts`: el modo de
+// fallo sigue existiendo por encima del número nuevo, solo que más arriba.
 
 const VENTANA_MS = 60 * 60 * 1_000;
-const MAX_POR_VENTANA = 10;
-const golpes = new Map<string, number[]>();
+const MAX_POR_VENTANA = 100;
 
-function limitado(clave: string): boolean {
-  const ahora = Date.now();
-  const recientes = (golpes.get(clave) ?? []).filter(
-    (t) => ahora - t < VENTANA_MS,
-  );
-  if (recientes.length >= MAX_POR_VENTANA) {
-    golpes.set(clave, recientes);
-    return true;
-  }
-  recientes.push(ahora);
-  golpes.set(clave, recientes);
-  if (golpes.size > 500) {
-    for (const [k, tiempos] of golpes) {
-      if (tiempos.every((t) => ahora - t >= VENTANA_MS)) golpes.delete(k);
-    }
-  }
-  return false;
-}
+const limite = creaLimitador({ ventanaMs: VENTANA_MS, max: MAX_POR_VENTANA });
 
 /**
  * La IP solo se usa para el límite de frecuencia, en memoria y durante una hora.
@@ -84,6 +86,6 @@ async function claveCliente(): Promise<string> {
  */
 export async function registrarConsentimiento(evento: unknown): Promise<void> {
   if (!esEventoConsentimiento(evento)) return;
-  if (limitado(await claveCliente())) return;
+  if (limite.limitado(await claveCliente())) return;
   await incrementar(evento);
 }
