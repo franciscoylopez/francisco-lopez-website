@@ -53,16 +53,48 @@ import { CASOS } from "./guardianes/casos";
  * fallado, y este script lo puntuaría como «lo rechaza» — un verde falso dentro
  * del verificador de verificadores.
  */
-function salida(guardian: string): number {
+function salida(guardian: string): { codigo: number; texto: string } {
   try {
-    execSync(`npm run ${guardian}`, {
+    const texto = execSync(`npm run ${guardian}`, {
       stdio: "pipe",
       maxBuffer: 32 * 1024 * 1024,
+      encoding: "utf8",
     });
-    return 0;
+    return { codigo: 0, texto };
   } catch (e) {
-    return (e as { status?: number }).status ?? 1;
+    const err = e as { status?: number; stdout?: string; stderr?: string };
+    return {
+      codigo: err.status ?? 1,
+      texto: `${err.stdout ?? ""}${err.stderr ?? ""}`,
+    };
   }
+}
+
+/**
+ * LO QUE EL GUARDIÁN DICE DE SÍ MISMO, para no tener que adivinarlo *(P72.08,
+ * 2026-09-02)*.
+ *
+ * Cuando uno falla ya sobre el árbol limpio, esto decía «Arréglalo», o sea
+ * AFIRMABA una causa que no había comprobado. En el cierre de «Distribución» eso
+ * mandó a arreglar tres guardianes que estaban bien —CI pasó en verde sobre el
+ * mismo commit—: lo que fallaba era el árbol local. Es lo que este repo llama
+ * *una sospecha no es una causa*, y cuesta más que una cifra vieja porque
+ * redirige la investigación.
+ *
+ * El arreglo no es adivinar mejor: es enseñar la evidencia que ya estaba en la
+ * mano. `salida()` capturaba lo que el guardián decía y lo tiraba. Ahora la
+ * cabeza de su propio mensaje va en el informe, y quien lee decide.
+ */
+function loQueDice(texto: string): string {
+  const lineas = texto
+    .split(/\r?\n/)
+    // Las dos primeras líneas de cualquier `npm run` son el nombre del paquete y
+    // el comando: ruido conocido, no lo que el guardián tiene que decir.
+    .filter((l) => l.trim() && !l.startsWith("> "))
+    .slice(0, 6);
+  if (lineas.length === 0)
+    return "      (no ha dicho nada por salida estándar)";
+  return lineas.map((l) => `      ${l.trimEnd()}`).join("\n");
 }
 
 const sucio = execSync("git status --porcelain", { encoding: "utf8" }).trim();
@@ -126,11 +158,16 @@ for (const caso of CASOS) {
     // sin esta pasada quedaría puntuado como que tiene dientes. Es el verde falso
     // viviendo DENTRO del verificador de verificadores, que es la única clase de
     // fallo que este script no puede permitirse.
-    if (salida(caso.guardian) !== 0) {
+    const limpio = salida(caso.guardian);
+    if (limpio.codigo !== 0) {
       veredicto = "YA ESTABA ROJO";
       fallos.push(
         `${caso.guardian}: falla ya sobre el árbol limpio, así que rechazar su caso ` +
-          "malo no prueba nada. Arréglalo y vuelve a pasar esto.",
+          "malo no prueba nada.\n" +
+          "    Esto NO dice que el guardián esté roto: dice que sobre ESTE árbol no se\n" +
+          "    puede probar, y la causa puede ser suya o de un artefacto del build\n" +
+          "    viejo. Lo que él mismo dice:\n" +
+          loQueDice(limpio.texto),
       );
     } else if (intacto) {
       veredicto = "NO SE PUDO ROMPER";
@@ -143,7 +180,7 @@ for (const caso of CASOS) {
       // cual, que es lo único que devuelve el archivo idéntico al restaurarlo.
       if (binario) writeFileSync(caso.archivo, mutado as Buffer);
       else writeFileSync(caso.archivo, mutado as string, "utf8");
-      const codigo = salida(caso.guardian);
+      const codigo = salida(caso.guardian).codigo;
       if (codigo === 0) {
         veredicto = "NO LO VE";
         fallos.push(

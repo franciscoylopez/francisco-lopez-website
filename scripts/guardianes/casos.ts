@@ -54,8 +54,14 @@ export const CASOS: Caso[] = [
   },
   {
     guardian: "check:palette",
-    rotura: "un hex de token copiado a mano en un componente",
-    archivo: "lib/utils.ts",
+    rotura: "un hex de token copiado a mano en un `.mjs`",
+    // EL CASO MUTA UN `.mjs` Y NO UN `.ts` *(P72.07, 2026-09-02)*, que es donde
+    // estaba el hueco: el barrido de copias filtraba por `.ts` y `.tsx`, así que
+    // diez hexes de token vivieron en `scripts/carrusel/plantilla.mjs` sin que
+    // nadie los viera. Y un caso malo escrito sobre un `.ts` seguía pasando con la
+    // regex vieja, o sea que el caso malo tenía el mismo punto ciego que el
+    // guardián. Ahora ejerce la extensión que se acaba de abrir.
+    archivo: "scripts/carrusel/plantilla.mjs",
     mutar: append(
       '\n// #005859 copiado a mano donde no toca\nexport const MAL = "#005859";\n',
     ),
@@ -156,6 +162,37 @@ export const CASOS: Caso[] = [
       o.replace(
         /const CICLO_ABIERTO = "\d{4}-\d{2}-\d{2}";/,
         'const CICLO_ABIERTO = "2026-08-01";',
+      ),
+  },
+  {
+    guardian: "check:contexto",
+    rotura:
+      "la apertura de un ciclo no retira nada y el sello sale verde igual",
+    // POR FORMA Y NO POR VALOR, que es la lección del caso de aquí arriba: los dos
+    // números del sello cambian en cada apertura por diseño, así que el mutador
+    // empareja la ESTRUCTURA —`antes`/`despues` del corpus de documentos— y copia
+    // el primero sobre el segundo. Eso es exactamente «no se retiró»: el caso que
+    // dejó el margen de contexto en 10 sin cruzar ningún techo.
+    archivo: "scripts/check-contexto.ts",
+    mutar: (o) =>
+      o.replace(
+        /documentos: \{ antes: ([\d_]+), despues: [\d_]+ \}/,
+        "documentos: { antes: $1, despues: $1 }",
+      ),
+  },
+  {
+    guardian: "check:contexto",
+    rotura:
+      "se abre un ciclo nuevo y el sello sigue midiendo contra el anterior",
+    // La otra mitad, y la que le da los dientes a la primera: los dos números se
+    // miden A MANO, así que lo único que impide que se queden viejos es que el
+    // sello lleve la fecha del ciclo abierto. Se muta la del sello y no
+    // `CICLO_ABIERTO`, que ya tiene su propio caso arriba.
+    archivo: "scripts/check-contexto.ts",
+    mutar: (o) =>
+      o.replace(
+        /fecha: "\d{4}-\d{2}-\d{2}",\n {2}cierra:/,
+        'fecha: "2026-01-01",\n  cierra:',
       ),
   },
   {

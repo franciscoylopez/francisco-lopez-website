@@ -40,6 +40,7 @@ const PIEZAS_DIR = "components/ui";
 const CI_WORKFLOW = ".github/workflows/ci.yml";
 export const PSI_REGISTRO = "content/psi/registro.json";
 export const AGENTES_REGISTRO = "content/agentes/registro.json";
+export const MD_REGISTRO = "content/md/registro.json";
 
 /**
  * Las piezas del NÚCLEO del sistema. Cada archivo de `components/ui/` declara su
@@ -120,6 +121,36 @@ export function registroAgentes(): RegistroAgentes {
 }
 
 /**
+ * Lo que dejó sellado la última corrida de `npm run md`: cuántas veces pesa menos
+ * la portada en markdown que en HTML *(P72.06)*.
+ *
+ * TERCERA FORMA DE DERIVAR, y por eso se anota junto a las otras dos. No se lee
+ * del disco al construir como las piezas y los pasos de CI —el HTML de la portada
+ * no existe todavía cuando esto corre: lo está emitiendo el mismo build—, y
+ * tampoco la mide un tercero contra producción como PSI y la nota de agentes. La
+ * miden los DOS ARTEFACTOS que el build acaba de dejar, así que se sella al final
+ * de `npm run md`, que es quien los conoce, y se lee aquí en la vuelta siguiente.
+ *
+ * SE PUBLICA `veces` Y NADA MÁS. Los dos tamaños viajan en el sello como
+ * evidencia de la última vez que la banda se movió, no como cifra publicable: eran
+ * exactamente eso —«216 KB a 6,6 KB» tecleado en el diccionario— lo que envejeció
+ * en un día. El porqué entero, en la cabecera de `scripts/md/extraer.ts`.
+ */
+export type RegistroMd = {
+  /** El día en que la banda se selló por última vez, en ISO. */
+  fecha: string;
+  /** Los dos tamaños de la portada ES, en bytes, ese día. */
+  html: number;
+  markdown: number;
+  /** El múltiplo de cinco por debajo del ratio. Es lo único que la página publica. */
+  veces: number;
+};
+
+export function registroMd(): RegistroMd {
+  return JSON.parse(readFileSync(MD_REGISTRO, "utf8")) as RegistroMd;
+}
+
+/**
  * Los nombres que el copy puede interpolar. **Es la lista que hace fallar a un
  * token mal escrito**: sin ella, `{psiMovil}` con una l de más se renderiza tal
  * cual, en producción, sin que nada se rompa. Lo comprueba `check:articulo`.
@@ -136,6 +167,7 @@ export const FIGURAS = [
   "agentesChecks",
   "agentesNa",
   "agentesFecha",
+  "mdVeces",
 ] as const;
 
 /**
@@ -168,6 +200,7 @@ export function rellena<T>(nodo: T, f: (s: string) => string): T {
 export function fillFigures(text: string, locale: Locale): string {
   const psi = registroPsi();
   const agentes = registroAgentes();
+  const md = registroMd();
   const valores: Record<(typeof FIGURAS)[number], string> = {
     // `{paginas}` lo resuelve `fillPages` antes que esto; se declara aquí para
     // que `check:articulo` lo reconozca como token válido y no lo denuncie.
@@ -184,6 +217,8 @@ export function fillFigures(text: string, locale: Locale): string {
     agentesChecks: String(agentes.checks),
     agentesNa: String(agentes.noAplican),
     agentesFecha: reviewDate(agentes.fecha, locale),
+    // En dígitos: pasa de veinte, que es donde `cardinal` cae al numeral.
+    mdVeces: String(md.veces),
   };
 
   return text.replace(/{(\w+)}/g, (crudo, nombre: string, posicion: number) => {

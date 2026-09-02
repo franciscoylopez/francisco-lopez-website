@@ -49,7 +49,8 @@
     "md:verificar": "tsx scripts/md/extraer.ts --verificar",
     "md:anclas": "tsx scripts/md/anclas.ts",
     "check:agentes": "tsx scripts/check-agentes.ts",
-    "carrusel": "node scripts/carrusel/render.mjs"
+    "carrusel": "tsx scripts/carrusel/render.mjs",
+    "kit:logo": "tsx scripts/logo-kit/build.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",

@@ -6,6 +6,7 @@
  * acolchado que el componente ya no usa. Generar el kit desde aquí es lo que
  * impide que vuelva a pasar.
  */
+import { brandHex, paletteHex } from "../../lib/design-values";
 
 // --- Formas, en unidades del lienzo original de 120x120 ---
 const CIRCLE = { cx: 60, cy: 46, r: 26, strokeWidth: 6 };
@@ -16,17 +17,22 @@ const BASE = { x: 42, y: 82, width: 36, height: 5, rx: 2.5 };
 // de leerse como capa (BRAND.md, regla 1).
 const SPLIT_OFFSET = { cyan: { dx: -3, dy: -2 }, purple: { dx: 3, dy: 2 } };
 
-// --- Colores (BRAND.md). Fijos a propósito: los SVG del kit son portables y
-// no dependen de tokens CSS. La versión con tokens vive en el componente. ---
+// --- Colores. LOS CUATRO QUE SON TOKEN SE DERIVAN *(P72.07, 2026-09-02)*.
+// Estaban copiados a mano aquí, y el barrido de `check:palette` no los veía
+// porque solo abría `.ts` y `.tsx`. Lo que sigue siendo cierto es que el SVG que
+// sale es portable y no depende de tokens CSS: lleva el hex escrito. Lo que no
+// puede ser es que el hex se decida aquí, porque entonces un cambio de token deja
+// el kit descargable con la tinta de antes y no lo dice nadie.
+// El negro y el blanco puros del mono NO son tokens y por eso siguen literales.
+// Por eso este generador corre bajo `tsx`: es lo que le deja importar
+// `lib/design-values.ts`. ---
 const COLORS = {
-  inkLight: "#21262B", // tinta sobre fondo claro
-  inkDark: "#F7F3EC", // tinta sobre fondo oscuro
+  inkLight: paletteHex("light").foreground, // tinta sobre fondo claro
+  inkDark: paletteHex("dark").foreground, // tinta sobre fondo oscuro
   black: "#000000",
   white: "#FFFFFF",
-  cyan: "#16BDBD",
-  purple: "#9B87F5",
-  bgLight: "#F7F3EC",
-  bgDark: "#191D21",
+  cyan: brandHex()["brand-cyan-split"],
+  purple: brandHex()["brand-purple-split"],
 };
 
 // --- Cajas recortadas exactamente a la tinta ---
@@ -74,7 +80,7 @@ function symbolShapes({ ink, split, strokeWidth = CIRCLE.strokeWidth }) {
   return parts.join("\n  ");
 }
 
-module.exports = {
+export {
   CIRCLE,
   BASE,
   SPLIT_OFFSET,
