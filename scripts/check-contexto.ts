@@ -624,13 +624,24 @@ console.log(
  * de aquí abajo — el sello tiene que llevar la fecha del ciclo abierto, así que no se
  * puede abrir un ciclo sin volver a medir, y no se puede medir sin enterarse.
  *
- * POR QUÉ LOS DOCUMENTOS SUSPENDEN Y LAS SKILLS SOLO AVISAN. La regla de `CLAUDE.md`
- * nombra tres sitios —el conjunto `@`-importado, `General` y `scripts/`— y las skills
- * no están entre ellos. Se vigilan aquí porque el mismo mecanismo las alcanza y
- * porque la ficha lo pedía, pero convertirlas en rojo sería inventar la regla desde
- * el guardián en vez de portarla. **Hoy el ámbar está encendido y dice algo cierto:**
- * la apertura de «Higiene» retiró de los documentos (−7) y AÑADIÓ 42 palabras en las
- * skills, en el propio `method-review` que audita el método.
+ * SOLO SUSPENDEN LOS DOCUMENTOS, Y LOS OTROS DOS AVISAN POR RAZONES DISTINTAS.
+ *
+ * · **Las skills** no están en la regla: `CLAUDE.md` nombra el conjunto `@`-importado,
+ *   `General` y `scripts/`. Se vigilan aquí porque el mismo mecanismo las alcanza,
+ *   pero ponerlas en rojo sería inventar la regla desde el guardián en vez de
+ *   portarla.
+ * · **`scripts/` sí está en la regla, y aun así avisa**, por una razón medida: **la
+ *   propia ceremonia de apertura escribe ahí**. Los +35 de esta apertura son
+ *   exactamente los dos sellos que el ritual exige —`CICLO_ABIERTO` en este archivo y
+ *   `SELLO_GENERAL` en `check-tablero.ts`—, y añadir un guardián cuesta líneas: esta
+ *   misma tanda lleva +734. Un rojo aquí significaría «no se puede añadir un guardián
+ *   sin borrar otro», que en un proyecto cuyo método SON los guardianes es la regla
+ *   equivocada. Lo que sí hace falta es que el número esté a la vista y se vuelva a
+ *   medir en cada apertura, que es lo que este sello compra.
+ *
+ * **Hoy el ámbar está encendido y dice algo cierto:** de los tres corpus, la apertura
+ * de «Higiene» retiró en UNO. Los documentos, −7. Las skills, +42 palabras en el
+ * propio `method-review` que audita el método. `scripts/`, +35 líneas.
  *
  * LO QUE NO PUEDE VER, dicho para que no se dé por cubierto: si los dos números son
  * los de verdad. Salen de medir en el cruce, y esto solo comprueba que se han vuelto
@@ -647,6 +658,7 @@ const SELLO_CICLO: {
   cierra: string;
   documentos: Retirada;
   skills: Retirada;
+  scripts: Retirada;
 } = {
   // Tiene que coincidir con `CICLO_ABIERTO`: es lo que obliga a volver a medir.
   fecha: "2026-09-02",
@@ -655,7 +667,32 @@ const SELLO_CICLO: {
   // commit que cierra y abre, con la retirada dentro).
   documentos: { antes: 11_690, despues: 11_683 },
   skills: { antes: 20_438, despues: 20_480 },
+  // En LÍNEAS, no en palabras: `scripts/` es código, y su peso no se lee, se
+  // mantiene. La unidad va dicha en el informe para que nadie sume las tres.
+  scripts: { antes: 15_623, despues: 15_658 },
 };
+
+/**
+ * Las líneas de `scripts/`, del disco. Es el tercer sitio que nombra la regla de
+ * `CLAUDE.md`, y el único de los tres que no tenía ni techo ni sello.
+ *
+ * SE SALTAN LAS CARPETAS QUE EMPIEZAN POR PUNTO, que es lo mismo que hace
+ * `scripts/palette/copias.ts`, y no es cosmético: `scripts/.poda/` es un montón de
+ * archivos locales que git ignora, y contarlos daba **17.850 líneas donde el repo
+ * tiene 16.346**. Un sello que mide lo que no está versionado dice cosas distintas
+ * en cada máquina.
+ */
+function lineasDeScripts(): number {
+  const cuenta = (dir: string): number =>
+    readdirSync(dir, { withFileTypes: true }).reduce((n, e) => {
+      const p = join(dir, e.name);
+      if (e.isDirectory()) return e.name.startsWith(".") ? n : n + cuenta(p);
+      return /\.(ts|tsx|mjs|cjs|js)$/.test(e.name)
+        ? n + readFileSync(p, "utf8").split("\n").length
+        : n;
+    }, 0);
+  return cuenta("scripts");
+}
 
 console.log(
   `\ncheck:contexto — la apertura del ciclo (${CICLO_ABIERTO}, tras «${SELLO_CICLO.cierra}»):`,
@@ -674,8 +711,24 @@ if (SELLO_CICLO.fecha !== CICLO_ABIERTO) {
 }
 
 const CORPUS = [
-  { nombre: "documentos @-importados", r: SELLO_CICLO.documentos, vivo: total },
-  { nombre: "skills (suma)", r: SELLO_CICLO.skills, vivo: sumaSkills },
+  {
+    nombre: "documentos @-importados",
+    unidad: "palabras",
+    r: SELLO_CICLO.documentos,
+    vivo: total,
+  },
+  {
+    nombre: "skills (suma)",
+    unidad: "palabras",
+    r: SELLO_CICLO.skills,
+    vivo: sumaSkills,
+  },
+  {
+    nombre: "scripts/",
+    unidad: "líneas",
+    r: SELLO_CICLO.scripts,
+    vivo: lineasDeScripts(),
+  },
 ] as const;
 
 for (const c of CORPUS) {
@@ -683,7 +736,7 @@ for (const c of CORPUS) {
   const signo = delta > 0 ? `+${delta}` : String(delta);
   const deriva = c.vivo - c.r.despues;
   console.log(
-    `  ${c.nombre}: ${c.r.antes} → ${c.r.despues} (${signo})` +
+    `  ${c.nombre}: ${c.r.antes} → ${c.r.despues} (${signo} ${c.unidad})` +
       ` · hoy ${c.vivo} (${deriva >= 0 ? "+" : ""}${deriva} desde la apertura)`,
   );
 }
@@ -705,9 +758,13 @@ if (noRetiro) {
   process.exit(1);
 }
 
-const skillsSinRetirar = SELLO_CICLO.skills.despues >= SELLO_CICLO.skills.antes;
+const sinRetirar = CORPUS.filter(
+  (c) => c.nombre !== "documentos @-importados" && c.r.despues >= c.r.antes,
+);
 console.log(
-  skillsSinRetirar
-    ? `  ⚠ Los documentos retiraron; las skills no (${SELLO_CICLO.skills.despues - SELLO_CICLO.skills.antes >= 0 ? "+" : ""}${SELLO_CICLO.skills.despues - SELLO_CICLO.skills.antes}). No suspende: la regla nombra el conjunto @-importado, no las skills.`
-    : "✓ La apertura retiró de los dos corpus antes de añadir nada.",
+  sinRetirar.length === 0
+    ? "✓ La apertura retiró de los tres corpus antes de añadir nada."
+    : `  ⚠ Los documentos retiraron; ${sinRetirar
+        .map((c) => `${c.nombre} no (+${c.r.despues - c.r.antes} ${c.unidad})`)
+        .join(" · ")}. No suspende: ver el porqué arriba.`,
 );

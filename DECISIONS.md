@@ -11380,12 +11380,25 @@ una comprobación de frescura: el sello lleva la fecha del ciclo abierto y tiene
 `CICLO_ABIERTO`, así que **no se puede abrir un ciclo sin volver a medir, y no se puede medir sin
 enterarse**. Ahí están los dientes; el resto es aritmética.
 
-**Los documentos suspenden y las skills solo avisan.** La regla de `CLAUDE.md` nombra tres
-sitios —el conjunto `@`-importado, `General` y `scripts/`— y las skills no están entre ellos. Se
-vigilan porque el mismo mecanismo las alcanza, pero convertirlas en rojo sería **inventar la
-regla desde el guardián** en vez de portarla. Y el ámbar ya dice algo cierto en su primera
-corrida: la apertura de «Higiene» retiró de los documentos (**−7**) y **añadió 42 palabras en las
-skills**, en el propio `method-review` que audita el método.
+**Los tres corpus se miden y solo suspenden los documentos, por razones distintas.** Las
+**skills** no están en la regla —`CLAUDE.md` nombra el conjunto `@`-importado, `General` y
+`scripts/`—, así que ponerlas en rojo sería **inventar la regla desde el guardián** en vez de
+portarla. **`scripts/` sí está, y aun así avisa**, por una razón medida: **la propia ceremonia de
+apertura escribe ahí**. Los +35 de esta apertura son exactamente los dos sellos que el ritual
+exige —`CICLO_ABIERTO` y `SELLO_GENERAL`—, y añadir un guardián cuesta líneas: la tanda que
+escribió esto lleva +734. Un rojo ahí significaría «no se puede añadir un guardián sin borrar
+otro», que en un proyecto cuyo método SON los guardianes es la regla equivocada. Lo que sí hace
+falta es que el número esté a la vista y se vuelva a medir en cada apertura.
+
+Y el ámbar dice algo cierto en su primera corrida: de los tres, la apertura de «Higiene» retiró
+en **uno**. Documentos **−7**; skills **+42 palabras**, en el propio `method-review` que audita
+el método; `scripts/` **+35 líneas**.
+
+**La unidad de `scripts/` son LÍNEAS y no palabras**, y va dicha en el informe: es código, y su
+peso no se lee, se mantiene. Se saltan las carpetas que empiezan por punto —lo mismo que hace el
+barrido de copias de la paleta—, porque contar `scripts/.poda/`, que git ignora, daba **17.850
+líneas donde el repo tiene 16.346**: un sello que mide lo que no está versionado dice cosas
+distintas en cada máquina.
 
 **La deriva del ciclo en curso se publica y no suspende.** `CLAUDE.md` dice que durante el sprint
 no se negocia: si algo no cabe, entra, y lo paga la apertura siguiente. Un guardián que

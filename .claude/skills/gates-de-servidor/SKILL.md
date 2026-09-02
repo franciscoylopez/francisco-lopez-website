@@ -130,38 +130,14 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
 
 - **`gate:html`** compara contra la base del paso 2. Si sale diff y el cambio era intencionado,
   vuelve a guardar la base y sigue; si no lo era, abre la página.
-- **`censo`** falla si aparece **un solo par por debajo de AAA** o **un solo contorno de
-  control por debajo del 3:1** de WCAG 1.4.11 (D97), y valida su propio metro en
-  cada corrida (los anclajes sin cian, 13,79 y 15,32, que tienen que salir exactos). Al pasar
-  en verde **sella** lo que había —tokens de color, superficies y animaciones—, y ese sello es
-  lo que `check:palette` compara en cada PR (D90). Lo que **no** juzga es el texto sobre foto:
-  esos pares salen listados aparte y se miden sobre el píxel pintado.
-- **`psi`** no se mide en local y no es un gate de CI: su variabilidad daría rojos falsos.
-  **Esa variabilidad es enorme y está medida**: el barrido dio **móvil 74** en la home y el
-  re-medido, **96 y 95**; dos barridos completos **no coincidieron ni en qué páginas bajaban**.
-  Medido el mismo día, en producción y sin tocar nada entre medias: `/design-system` **76** y
-  luego **98 y 99**; `/como-se-ha-creado`, **81** y luego **89 y 99**.
-  **Desde P50.78 el barrido lo absorbe él** *(2026-08-28)*: toma **tres medidas** de cada
-  página×estrategia —una vuelta entera al registro entre toma y toma, para que la caché de la
-  API no devuelva tres veces el mismo análisis— y sella la **mediana**. Publica cuántos
-  análisis distintos consiguió y **se niega a sellar** si algún par se quedó en uno solo; en
-  ese caso se repite un rato después, cuando la caché haya expirado.
-  Aun así, **mira la tabla de dispersión antes de commitear**: si un par se mueve veinte puntos
-  entre tomas, la mediana es la mejor cifra disponible pero el sitio tiene algo que mirar.
-  `--tomas=1` existe para tantear sobre un Preview y **no sella**, a propósito.
-
-### Y una trampa de ejecución del censo, ya sin parche
-
-**Lo que se colgaba era el `stdin`, y está arreglado en el helper** *(P50.78, 2026-08-28; el
-detalle, en el aviso de arriba)*. Se lanza sin más:
-
-```bash
-npm run censo      # 28 corridas, con una línea [n/28] por corrida
-```
-
-Si alguna vez vuelve a callarse, el tope de reloj lo mata en 120 s por llamada y dice el
-comando que no respondió. Y `| tail` sigue bloqueando la salida en búfer: un log vacío no
-prueba nada.
+- **El CONTRATO de cada uno está en `GATES.md`**, una fila por gate: qué garantiza, qué deja
+  fuera y por qué corre a mano. Aquí solo lo que hay que hacer con su resultado.
+- **`censo`**: si sale rojo, nombra el par y el umbral. Su sello es lo que `check:palette`
+  compara en cada PR, así que un verde de aquí es lo que mantiene ese otro en verde.
+- **`psi`**: **mira la tabla de dispersión antes de commitear.** Si un par se mueve veinte
+  puntos entre tomas, la mediana es la mejor cifra disponible pero el sitio tiene algo que
+  mirar. `--tomas=1` existe para tantear sobre un Preview y **no sella**, a propósito. *(Por
+  qué hacen falta tres tomas, con las cifras de variabilidad medidas: D145.)*
 
 ## Paso 5 · Lo que deja detrás
 
