@@ -209,6 +209,7 @@
 - D171 · El generador de carruseles entra al repo, y su guardián pasa de uno a tres criterios
 - D172 · Las once «sin indexar» de Search Console son cero páginas, y el «nada» se escribe once veces
 - D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie
+- D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11187,5 +11188,57 @@ tampoco, y el `LICENSE` y `robots.txt` no publican recuentos. No hay plantillas 
 PR. En el `README`, la prosa ya decía «Catorce páginas» y **los guardianes se listan en una
 tabla en vez de contarse**, que es la forma correcta: una fila de más es visible en el diff, un
 número de más no.
+
+**Estado:** Aceptada.
+
+## D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo — 2026-09-02
+
+**El hecho, y lo caro que fue.** `regeneradores-stop.mjs` (P72.01) se construyó para que un
+artefacto derivado que se queda atrás se vea **al cerrar el turno** y no diez minutos después en
+CI. **Las dos primeras tareas hechas después de construirlo —P72.03 y P72.04— se fueron a CI en
+rojo por `md:verificar`, que es exactamente el fallo que evita.** Con el hook registrado, el
+fallo presente y el aviso emitiéndose sin error.
+
+**La causa no era el hook: era el destinatario.** El contrato de un hook de `Stop` reparte por
+código de salida, y lo dice el propio menú de `/hooks`:
+
+| Salida | Quién lo ve |
+|---|---|
+| `0` | **nadie** — stdout y stderr no se muestran |
+| `2` | **el modelo**, por stderr, y la conversación continúa |
+| otros | solo la persona |
+
+Los dos hooks de cierre —este y `format-stop.mjs`, anterior— emitían por
+`console.log(JSON.stringify({systemMessage}))` **con exit 0**. O sea que el aviso llegaba como
+mucho a la persona. **Y la persona no es quien actúa:** quien edita, commitea y empuja es el
+modelo. Un guardián que funciona perfectamente y habla hacia el lado equivocado es
+indistinguible de uno que no existe, que es la familia de fallo que este repositorio lleva
+encontrando desde D38 — solo que aquí lo mudo no era el metro, era el altavoz.
+
+**La red ya estaba tendida para el exit 2 y no se entregó.** Los dos ficheros llevaban
+`if (evento?.stop_hook_active) process.exit(0)`, y esa guarda **solo hace falta si el hook
+bloquea alguna vez**. Estaba puesta la protección contra el bucle de un mecanismo que se envió
+sin usar.
+
+**La decisión: bloquear una vez, y solo una.** Cuando hay rojo, el aviso sale por **stderr** con
+**exit 2**; en la segunda llamada, `stop_hook_active` lo hace salir 0 y el turno cierra. El coste
+máximo es un turno de más. El que se estaba pagando era un viaje de diez minutos a CI, dos veces
+seguidas.
+
+**Y `format-stop.mjs` cambia también, donde además importa más:** ese hook **reescribe
+archivos**. Si Prettier toca algo después de que el modelo haya commiteado, el árbol deja de
+coincidir con el commit, y un aviso que el modelo no ve no puede corregir un commit que el modelo
+acaba de hacer.
+
+**Lo que esto revisa de P72.01, y conviene decirlo entero.** Aquella tarea escribió que «los dos
+se validaron rompiéndolos», y es verdad: se rompieron los **scripts** y se comprobó que salían
+rojos. Lo que no se disparó fue **el hook dentro de una sesión**, que es donde vivía el defecto.
+Es la regla de validar un método ejecutándolo sobre el caso real, aplicada un escalón más
+arriba: no basta con que el guardián detecte, tiene que **llegar**. Aquí se validaron los cinco
+estados —árbol limpio, rojo, guarda de bucle, con reescritura y sin ella— antes de commitear.
+
+**Lo que sigue fuera, y no cambia:** ninguno de los dos arregla nada por su cuenta. Dicen qué
+está rojo y con qué comando se resuelve. Sellar sin mirar congelaría el fallo (P72.01), y un
+`npm run build && npm run md` de 46 segundos no cabe en un cierre de turno.
 
 **Estado:** Aceptada.

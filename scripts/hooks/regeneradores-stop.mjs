@@ -52,14 +52,33 @@
 // certifica el markdown entero, y este hook solo adelanta la parte barata. Un
 // verde de aquí no es un verde del PR.
 //
-// NO BLOQUEA NUNCA. Sale 0 pase lo que pase; lo que encuentre lo cazaría igual
-// CI. Un hook de cierre que puede impedir cerrar el turno es peor que el fallo
-// que evita.
+// DEJA RASTRO, Y EL RASTRO TIENE QUE LLEGARLE A QUIEN ACTÚA — reescrito el
+// 2026-09-02, y esto es la corrección de un cabo suelto, no un cambio de idea.
+// Aquí decía «NO BLOQUEA NUNCA: sale 0 pase lo que pase», razonando que un hook
+// de cierre que impide cerrar el turno es peor que el fallo que evita. El
+// razonamiento sigue siendo bueno; lo que no se comprobó es a QUIÉN le llegaba
+// el aviso. El contrato de un hook de Stop reparte por código de salida:
 //
-// DEJA RASTRO. Todo lo que encuentra sale por `systemMessage`. Un hook mudo es el
-// modo de fallo de esta casa —el metro que aprueba sobre lista vacía—, y aquí
-// además el silencio sería indistinguible del caso normal, que es que no haya
-// nada que decir.
+//   · exit 0  — stdout/stderr NO se muestran
+//   · exit 2  — stderr va AL MODELO y la conversación continúa
+//   · otros   — stderr va solo al usuario
+//
+// Con `systemMessage` y exit 0, el aviso llegaba como mucho a la persona, y
+// **quien commitea y empuja es el modelo**. Medido el día que se escribió esto:
+// las dos primeras tareas hechas DESPUÉS de construir este hook (P72.03 y
+// P72.04) se fueron a CI en rojo por `md:verificar`, con el hook registrado, el
+// fallo presente y el aviso emitiéndose correctamente. El guardián funcionaba y
+// hablaba hacia el lado equivocado.
+//
+// ASÍ QUE BLOQUEA UNA VEZ, Y SOLO UNA. Sale 2 con el aviso por stderr cuando hay
+// rojo, que es el único canal al modelo que el contrato ofrece. No puede
+// encadenarse: la guarda de `stop_hook_active` de más abajo ya estaba puesta
+// —red tendida para un exit 2 que nunca se entregó—, así que en la segunda
+// llamada sale 0 y el turno cierra. El coste máximo es un turno extra; el que
+// evitaba era un viaje de diez minutos a CI, y se pagó dos veces seguidas.
+//
+// SIGUE SIN ARREGLAR NADA POR SU CUENTA: dice qué está rojo y con qué comando se
+// resuelve. Sellar sin mirar congelaría el fallo, que es el motivo de siempre.
 
 import { spawn } from "node:child_process";
 import { dirname, resolve } from "node:path";
@@ -171,14 +190,14 @@ for (const [i, { codigo, salida }] of resultados.entries()) {
 }
 
 if (avisos.length > 0) {
-  console.log(
-    JSON.stringify({
-      systemMessage:
-        "Artefactos derivados al cierre — " +
-        avisos.join(" · ") +
-        " (CI lo vería igual, diez minutos más tarde).",
-    }),
+  // stderr + exit 2: el único canal que le llega al modelo, que es quien
+  // commitea. Ver la cabecera.
+  process.stderr.write(
+    "Artefactos derivados al cierre — " +
+      avisos.join(" · ") +
+      " (CI lo vería igual, diez minutos más tarde).\n",
   );
+  process.exit(2);
 }
 
 process.exit(0);
