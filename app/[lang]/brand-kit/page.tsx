@@ -1,35 +1,30 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 import { BrandKit } from "@/components/site/brand-kit";
 import { PageShell } from "@/components/site/page-shell";
-import { locales, isLocale, pagePath } from "@/lib/i18n/config";
-import { pageMetadata } from "@/lib/page-meta";
+import { pagePath } from "@/lib/i18n/config";
+import {
+  cargaPagina,
+  metadataDePagina,
+  paramsPorLocale,
+  type LangParams,
+} from "@/lib/page-route";
 import { getCommon, getBrandKit } from "../dictionaries";
-
-type LangParams = { params: Promise<{ lang: string }> };
 
 const SLUG = "brand-kit";
 
 export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
+  return paramsPorLocale();
 }
 
 export async function generateMetadata({
   params,
 }: LangParams): Promise<Metadata> {
-  const { lang } = await params;
-  if (!isLocale(lang)) notFound();
-
-  const t = await getBrandKit(lang);
-  return pageMetadata({ lang, slug: SLUG, meta: t.meta });
+  return metadataDePagina(params, SLUG, getBrandKit);
 }
 
 export default async function BrandKitPage({ params }: LangParams) {
-  const { lang } = await params;
-  if (!isLocale(lang)) notFound();
-
-  const [common, t] = await Promise.all([getCommon(lang), getBrandKit(lang)]);
+  const { lang, common, t } = await cargaPagina(params, getCommon, getBrandKit);
 
   return (
     <PageShell dict={common} lang={lang} crumb={t.crumb}>

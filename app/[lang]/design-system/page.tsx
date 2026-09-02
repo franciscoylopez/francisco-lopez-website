@@ -1,38 +1,34 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 import { DesignSystem } from "@/components/site/design-system";
 import { PageShell } from "@/components/site/page-shell";
-import { locales, isLocale, pagePath } from "@/lib/i18n/config";
-import { pageMetadata } from "@/lib/page-meta";
+import { pagePath } from "@/lib/i18n/config";
+import {
+  cargaPagina,
+  metadataDePagina,
+  paramsPorLocale,
+  type LangParams,
+} from "@/lib/page-route";
 import { getCommon, getDesignSystem } from "../dictionaries";
-
-type LangParams = { params: Promise<{ lang: string }> };
 
 const SLUG = "design-system";
 
 export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
+  return paramsPorLocale();
 }
 
 export async function generateMetadata({
   params,
 }: LangParams): Promise<Metadata> {
-  const { lang } = await params;
-  if (!isLocale(lang)) notFound();
-
-  const t = await getDesignSystem(lang);
-  return pageMetadata({ lang, slug: SLUG, meta: t.meta });
+  return metadataDePagina(params, SLUG, getDesignSystem);
 }
 
 export default async function DesignSystemPage({ params }: LangParams) {
-  const { lang } = await params;
-  if (!isLocale(lang)) notFound();
-
-  const [common, t] = await Promise.all([
-    getCommon(lang),
-    getDesignSystem(lang),
-  ]);
+  const { lang, common, t } = await cargaPagina(
+    params,
+    getCommon,
+    getDesignSystem,
+  );
 
   return (
     <PageShell dict={common} lang={lang} crumb={t.crumb}>

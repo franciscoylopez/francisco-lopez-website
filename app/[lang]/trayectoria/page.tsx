@@ -1,11 +1,15 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 
 import { PageShell } from "@/components/site/page-shell";
 import { TrayectoriaIndice } from "@/components/site/trayectoria-indice";
 import type { ExperienceSlug } from "@/content/experiences";
-import { locales, isLocale, pagePath, cvPath } from "@/lib/i18n/config";
-import { pageMetadata } from "@/lib/page-meta";
+import { pagePath, cvPath } from "@/lib/i18n/config";
+import {
+  localeDe,
+  metadataDePagina,
+  paramsPorLocale,
+  type LangParams,
+} from "@/lib/page-route";
 import {
   experienceSlugs,
   getCommon,
@@ -14,25 +18,19 @@ import {
   getTrayectoriaIndice,
 } from "../dictionaries";
 
-type LangParams = { params: Promise<{ lang: string }> };
-
 const SLUG = "trayectoria";
 
 export function generateStaticParams() {
-  return locales.map((lang) => ({ lang }));
+  return paramsPorLocale();
 }
 
 export async function generateMetadata({
   params,
 }: LangParams): Promise<Metadata> {
-  const { lang } = await params;
-  if (!isLocale(lang)) notFound();
-
-  const t = await getTrayectoriaIndice(lang);
   // Misma tarjeta OG que las cinco páginas, y con el mismo cabo suelto: `/api/og`
   // no tiene todavía la del deep-dive y una card desconocida cae en la de la
   // home. Lo cierra P50 junto con el sitemap derivado y el JSON-LD.
-  return pageMetadata({ lang, slug: SLUG, meta: t.meta });
+  return metadataDePagina(params, SLUG, getTrayectoriaIndice);
 }
 
 // ÍNDICE DEL DEEP-DIVE (P49). Las cinco tarjetas no llevan copy propio: su
@@ -46,8 +44,8 @@ export async function generateMetadata({
 // `content/experiences.ts` (D44). Una experiencia nueva entra en este índice sin
 // tocar este archivo; una que se registre sin diccionario rompe el build.
 export default async function TrayectoriaIndexPage({ params }: LangParams) {
-  const { lang } = await params;
-  if (!isLocale(lang)) notFound();
+  // Cuatro cargas y no dos, así que aquí no encaja `cargaPagina`: solo el locale.
+  const lang = await localeDe(params);
 
   const [common, comun, t, claims] = await Promise.all([
     getCommon(lang),
