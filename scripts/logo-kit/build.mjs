@@ -1,21 +1,26 @@
 /**
  * Genera el kit de logo descargable en public/logo-kit/.
  *
- *   node scripts/logo-kit/build.js
+ *   npm run kit:logo
  *
  * Salida: 12 SVG + 36 PNG transparentes + favicons. Todo derivado de
- * geometry.js, que replica components/ui/logo.tsx — ver el porqué allí.
+ * geometry.mjs, que replica components/ui/logo.tsx — ver el porqué allí.
  */
 
-const fs = require("fs");
-const path = require("path");
-const sharp = require("sharp");
-const {
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import sharp from "sharp";
+
+import {
   COLORS,
   VIEWBOX,
   WORDMARK_TRANSFORM,
   symbolShapes,
-} = require("./geometry");
+} from "./geometry.mjs";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const OUT = path.join(__dirname, "..", "..", "public", "logo-kit");
 const WORDMARK = fs

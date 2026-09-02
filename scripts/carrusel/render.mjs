@@ -49,6 +49,8 @@ import { pathToFileURL } from "node:url";
 
 import puppeteer from "puppeteer";
 
+import { paletteHex } from "../../lib/design-values";
+
 import { construirHtml, DIMENSIONES } from "./plantilla.mjs";
 
 // `node render.mjs … | head` mataba el render por SIGPIPE tras la primera lámina
@@ -190,7 +192,7 @@ for (let i = 0; i < laminas.length; i++) {
 // El PDF va a 1 lámina por página, al tamaño exacto en px (LinkedIn lo escala).
 await pagina.addStyleTag({
   content: `@page{size:${DIMENSIONES.W}px ${DIMENSIONES.H}px;margin:0}
-            body{background:${"#191D21"}}
+            body{background:${paletteHex("dark").background}}
             .lamina{break-after:page;page-break-after:always}`,
 });
 await pagina.pdf({

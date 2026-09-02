@@ -4,7 +4,7 @@ Genera los assets que la página **Brand Kit** ofrece en descarga, en
 `public/logo-kit/`.
 
 ```bash
-node scripts/logo-kit/build.js
+npm run kit:logo
 ```
 
 Salida: 12 SVG, 36 PNG transparentes y 7 favicons (6 PNG + `favicon.ico`).
@@ -23,7 +23,7 @@ componente `components/ui/logo.tsx`. Los dos derivaron, y al auditarlo el
   tamaño el trazo cae a ~1,4px y el antialiasing lo lava a gris.
 - El `LEEME.md` documentaba reglas anteriores a la tabla de uso del logo.
 
-Generar el kit desde `geometry.js`, que replica el componente, es lo que impide
+Generar el kit desde `geometry.mjs`, que replica el componente, es lo que impide
 que vuelva a pasar. **Si cambia la geometría del logo, se cambia en los dos
 sitios y se reconstruye el kit.**
 
@@ -81,7 +81,7 @@ entero sobre la caja de hoy da esto:
 | 12 SVG | **idénticos byte a byte** |
 | 43 binarios (42 PNG + `favicon.ico`) | **15 distintos** de los que hay en `main` |
 
-Y no es un fallo: los SVG salen de `geometry.js` como texto, así que son
+Y no es un fallo: los SVG salen de `geometry.mjs` como texto, así que son
 deterministas por construcción; los binarios los rasteriza **sharp**, y ahí el
 byte depende de la versión nativa de libvips y libpng que npm haya resuelto en la
 máquina que lo corrió, no del código del repo.

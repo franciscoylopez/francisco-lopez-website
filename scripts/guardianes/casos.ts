@@ -54,8 +54,14 @@ export const CASOS: Caso[] = [
   },
   {
     guardian: "check:palette",
-    rotura: "un hex de token copiado a mano en un componente",
-    archivo: "lib/utils.ts",
+    rotura: "un hex de token copiado a mano en un `.mjs`",
+    // EL CASO MUTA UN `.mjs` Y NO UN `.ts` *(P72.07, 2026-09-02)*, que es donde
+    // estaba el hueco: el barrido de copias filtraba por `.ts` y `.tsx`, así que
+    // diez hexes de token vivieron en `scripts/carrusel/plantilla.mjs` sin que
+    // nadie los viera. Y un caso malo escrito sobre un `.ts` seguía pasando con la
+    // regex vieja, o sea que el caso malo tenía el mismo punto ciego que el
+    // guardián. Ahora ejerce la extensión que se acaba de abrir.
+    archivo: "scripts/carrusel/plantilla.mjs",
     mutar: append(
       '\n// #005859 copiado a mano donde no toca\nexport const MAL = "#005859";\n',
     ),

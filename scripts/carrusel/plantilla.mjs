@@ -16,23 +16,41 @@ import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { brandHex, paletteHex } from "../../lib/design-values";
+
 /** La plantilla vive dentro del repo desde el 2026-09-01, así que la raíz la
  *  deduce de su propia ruta en vez de pedirla. Antes se pasaba en `raizRepo`
  *  (o en `REPO=`) porque el generador vivía en el Escritorio, y eso significaba
  *  que el aspecto de la marca no estaba en git. */
 const RAIZ_REPO = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
+/**
+ * LOS DIEZ COLORES SE DERIVAN, NO SE COPIAN *(P72.07, 2026-09-02)*. Estaban
+ * escritos a mano aquí desde que el generador entró al repo, y el barrido de
+ * copias de `check:palette` no los veía porque solo abría `.ts` y `.tsx`: la
+ * misma copia era invisible en un `.mjs` y roja en un `.ts`. Cerrada la ceguera,
+ * salieron los diez de golpe.
+ *
+ * Por eso este archivo corre bajo `tsx` y no bajo `node` a secas: es lo que le
+ * permite importar `lib/design-values.ts`, que es la fuente de la que ya beben el
+ * Design System, el Brand Kit y las imágenes OG. Un carrusel publicado con el cian
+ * de antes de un cambio de token es exactamente la clase de deriva que la marca
+ * fuera del sitio no puede permitirse.
+ */
+const OSCURO = paletteHex("dark");
+const MARCA = brandHex();
+
 const T = {
-  bg: "#191D21",
-  fg: "#F7F3EC",
-  card: "#21262B",
-  primary: "#3FC9C4",
-  muted: "#2A3037",
-  mutedFg: "#AAA8A0",
-  border: "#2E353C",
-  purple: "#9B87F5",
-  cyanSplit: "#16BDBD",
-  purpleSplit: "#9B87F5",
+  bg: OSCURO.background,
+  fg: OSCURO.foreground,
+  card: OSCURO.card,
+  primary: OSCURO.primary,
+  muted: OSCURO.muted,
+  mutedFg: OSCURO["muted-foreground"],
+  border: OSCURO["border-base"],
+  purple: MARCA["brand-purple"],
+  cyanSplit: MARCA["brand-cyan-split"],
+  purpleSplit: MARCA["brand-purple-split"],
 };
 
 const W = 1080;

@@ -73,7 +73,7 @@ function* sources(dir: string): Generator<string> {
     if (entry.isDirectory()) {
       if (entry.name === "node_modules" || entry.name.startsWith(".")) continue;
       yield* sources(full);
-    } else if (/\.(ts|tsx)$/.test(entry.name)) {
+    } else if (/\.(ts|tsx|mjs|cjs|js)$/.test(entry.name)) {
       yield full;
     }
   }
