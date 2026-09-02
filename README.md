@@ -339,12 +339,17 @@ scripts/carrusel/      Plantilla y render de los carruseles de LinkedIn. La plan
                        y el monograma con split—; el contenido de cada pieza NO está
                        aquí, se le pasa por ruta (D171)
 scripts/check-*.ts         Los guardianes de CI. Todos comparten dos reglas de método:
-                           buscan la AUSENCIA (no el patrón) y afirman cuánto han mirado
+                           buscan la AUSENCIA (no el patrón) y afirman cuánto han mirado.
+                           Los que crecieron guardan sus bloques en la carpeta hermana de
+                           su nombre —agentes/, marco/, kit/, md/— y el archivo suelto se
+                           queda con el orden en que corren y el informe (D187)
 scripts/indices.ts         Genera los índices de markdown derivados de sus cabeceras (D69)
 scripts/inventario.ts      El inventario de components/ui/ y la política de qué se publica
 scripts/check-guardianes.ts  Un caso malo conocido por guardián. Muta archivos para
                            provocar el fallo, así que exige árbol limpio y restaura (D70)
-scripts/design-review/     Censo de pares de contraste del DOM servido
+scripts/design-review/     Censo de pares de contraste del DOM servido. No es código de
+                           Node: son piezas que se inyectan CONCATENADAS en la página, y
+                           las compone guion.ts por el número de su nombre (D187)
 scripts/psi.ts             PageSpeed desde la terminal: una página con su desglose del LCP,
                            o el registro entero con el agregado de avisos (D49, D99)
 scripts/agentes.ts         Sella la nota de ora.ai que publica el artículo. Sin `force` el

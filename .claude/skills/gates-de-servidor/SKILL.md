@@ -116,19 +116,19 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
 > mirando los procesos de Chrome del sistema. Salida directa: ahora el censo publica
 > `[14/28]` por corrida, y canalizarlo tira justo eso.
 
-> **EL CUELGUE ESTÁ ARREGLADO EN EL CÓDIGO** *(2026-08-28, P50.78)*. Lo que colgaba era el
-> **`stdin`**: `execFileSync` sin `input` deja `stdio[0]` en `inherit`, así que el hijo se
-> quedaba con el `stdin` del padre y en background el harness no lo cierra nunca. Se midió bien
-> —navegador despejado, dos cuelgues de 13 y 10 minutos con **0,1 s de CPU** y cero procesos
-> hijo—, así que la sospecha del navegador era falsa.
->
-> `scripts/navegador/agent-browser.ts` ahora pasa `input` siempre y tiene **tope de reloj**
-> (`AB_TIMEOUT_MS`, 120 s por llamada). **El `< /dev/null` de antes ya no hace falta**, y
-> tampoco valía: en background no manda el shell desde el que se lanza.
+> **EL CUELGUE DEL `stdin` ESTÁ ARREGLADO EN EL CÓDIGO** *(2026-08-28)*:
+> `scripts/navegador/agent-browser.ts` pasa `input` siempre y tiene **tope de reloj**
+> (`AB_TIMEOUT_MS`, 120 s por llamada), y el `< /dev/null` de antes ya no hace falta ni valía.
+> El forense —por qué la sospecha del navegador era falsa— está entero en **D145**.
 >
 > **Cómo distinguir «va lento» de «está muerto» sin esperar:** ya lo dice él —una línea
 > `[n/28]` por corrida—. Si aun así calla, mira el CPU acumulado del proceso: décimas de
 > segundo tras diez minutos es un cuelgue, no trabajo.
+
+> **LA PRIMERA LLAMADA PUEDE AGOTAR LOS 120 s CON EL SANDBOX YA QUITADO** *(2026-09-02,
+> visto una vez)*. El mensaje del error afirma que «casi siempre es el sandbox», y esa vez no
+> lo era: un `open` suelto respondió a la primera y luego fueron 28 corridas seguidas. Si pasa,
+> se calienta el navegador antes de lanzar el gate en vez de creerse la causa del mensaje.
 
 - **`gate:html`** compara contra la base del paso 2. Si sale diff y el cambio era intencionado,
   vuelve a guardar la base y sigue; si no lo era, abre la página.
