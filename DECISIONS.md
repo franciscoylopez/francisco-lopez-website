@@ -213,6 +213,7 @@
 - D175 · La regla que ordena retirar entró como una adición, y no tenía quién la comprobara
 - D176 · El check de medición deja sello, y dice en voz alta las tres fuentes que no pudo leer
 - D177 · Un techo por IP no se calcula por persona, y el límite de frecuencia se escribía dos veces
+- D178 · No entra defensa antispam nueva, y la primaria dice en el PRD lo que de verdad cuenta
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11492,3 +11493,39 @@ el techo, y ninguna de las dos copias tenía un solo test. Es la partición de `
 queda en la acción, que es lo único que no se puede probar. Los tests fijan lo que el código
 hacía sin decirlo: que el golpe rechazado **no se apunta**, así que insistir no alarga el
 castigo, y que el barrido del mapa no se lleva claves vivas.
+
+## D178 · No entra defensa antispam nueva, y la primaria dice en el PRD lo que de verdad cuenta — 2026-09-02
+
+**Decisión.** El formulario de `/contacto` **se queda con los dos filtros que tiene** —honeypot
+y suelo de tres segundos— y no se le añade ninguna heurística. Y `PRD-Live` §7 deja de decir que
+la fracción que consiente «se desconoce»: la brecha está medida y va con su cifra.
+
+**Contexto.** El cruce de la bandeja con GA4 (2026-08-29) dejó dos hechos. Tres correos de
+perfil SEO/dominios **pasaron los dos filtros**, así que rellenan campos y esperan: los filtros
+cazan al bot ingenuo y a nadie más. Y de los cuatro envíos entregados en el mes, GA4 contó
+**uno**.
+
+**Por qué no entra defensa, que es la mitad que había que decidir.** Cuatro envíos al mes es un
+volumen que el filtro de Gmail ya absorbe, y el coste del error no es simétrico: **un filtro que
+se equivoca por arriba tira el mensaje de una persona enseñándole la pantalla de éxito**, que es
+exactamente lo que este proyecto ya se cobró una vez (P68.48). Una web que existe para que
+alguien escriba no puede pagar ese precio para ahorrarse tres correos que se borran en dos
+segundos. Y el sitio no tiene hoy con qué calibrar una heurística: con n=3 cualquier umbral se
+elige a ojo, y lo que se estaría midiendo es el ruido.
+
+**Cuándo se reabre**, para que esto no sea un «no» perpetuo escrito una vez: si el volumen sube
+de forma que **la bandeja deje de ser legible de un vistazo** —del orden de un envío basura al
+día—, o si aparece un envío basura que **cuenta como `contact_submit`** y por tanto envenena la
+métrica primaria. Hoy no ocurre ninguna de las dos, y la segunda tiene su propia razón de no
+ocurrir: los bots no aceptan cookies, así que no cargan GTM.
+
+**Y esa misma razón es la que había que escribir en el PRD.** La métrica primaria no cuenta
+envíos: cuenta **envíos de quien aceptó cookies**. La cifra que lo dimensiona es la de este
+cruce —4 entregados, 1 contado— junto a la primera lectura del contador de consentimiento, 0
+aceptaciones de 13 (D176). Las dos van en §7, porque una salvedad enunciada sin su magnitud se
+lee como una cautela y esto es un factor de cuatro.
+
+**Lo que este cruce dejó cerrado y no se vuelve a abrir:** el único `contact_submit` **no** es
+spam —lleva un `form_start` delante, el mismo día y el mismo dispositivo—, y el spam **no**
+explica el `contact_click` del 3 de agosto, que son clics en `mailto:`/`tel:` de tres semanas
+antes.

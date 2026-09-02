@@ -61,13 +61,11 @@ el HTML de alrededor, por URL explícita (`/md/<locale>/<pagina>.md`, la vía es
 **catalogados** en `/.well-known/ard.json` —con su gemela `ai-catalog.json` y un `rel="ard"` en
 cada página—. Lo que no existe no se cataloga: ni MCP, ni agentes, ni skills, ni API (D166).
 
-**La marca no termina en el dominio.** Firma de email, banner de LinkedIn y portada del
-repositorio comparten el titular del Hero, «Del discovery al dato», y el mismo monograma:
-la prueba de coherencia que un sistema de marca solo puede dar fuera de su propio sitio.
-**Desde el 2026-09-01 son cuatro, y la cuarta es la más fuerte**: los carruseles de la
-serie de LinkedIn no colocan un lockup sobre una plantilla ajena, llevan el sistema entero
-—tokens del tema oscuro, las dos tipografías, el monograma con split y el punto morado—
-gobernado por una plantilla que cada pieza reutiliza sin tocar.
+**La marca no termina en el dominio.** Cuatro superficies fuera del sitio —firma de
+email, banner de LinkedIn, portada del repositorio y los carruseles de la serie—
+comparten el titular del Hero, «Del discovery al dato», y el mismo monograma. **La más
+fuerte es la cuarta**: los carruseles no colocan un lockup sobre una plantilla ajena,
+llevan el sistema entero, gobernado por una plantilla que cada pieza reutiliza sin tocar.
 
 La apertura de **Sobre mí es un vídeo**: se reproduce una vez y se queda en su último
 fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
@@ -212,8 +210,9 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
   El transporte está entero y en GA4 es **evento clave**, sin serie anterior a la marca. Cómo
   se audita la mitad que vive fuera del repo, en D71.
-  **Es un índice relativo, no un volumen**: GA4 solo ve al tráfico que consiente, y esa
-  fracción se desconoce (D168).
+  **Es un índice relativo, no un volumen, y la brecha ya está medida**: GA4 solo ve al
+  tráfico que consiente. En agosto llegaron **4 correos y se contó 1** —los otros tres eran
+  spam que no acepta cookies—, y el contador dice **0 aceptaciones de 13** (D168/D176).
   **«Confirma» es el envío que manda correo, no los dos filtros que callan a un bot**: lo decide
   `cuentaComoEnvio` en `lib/contact-form.ts`, donde la regla tiene tests y caso malo (D153).
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
