@@ -23,6 +23,11 @@
         "hooks": [
           {
             "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/regeneradores-stop.mjs\"",
+            "timeout": 90
+          },
+          {
+            "type": "command",
             "command": "node \"$CLAUDE_PROJECT_DIR/scripts/hooks/format-stop.mjs\"",
             "timeout": 60
           }
