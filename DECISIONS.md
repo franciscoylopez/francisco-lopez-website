@@ -208,6 +208,7 @@
 - D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento
 - D171 · El generador de carruseles entra al repo, y su guardián pasa de uno a tres criterios
 - D172 · Las once «sin indexar» de Search Console son cero páginas, y el «nada» se escribe once veces
+- D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11114,5 +11115,77 @@ del marcador, no el sitio. **Si alguien vuelve a abrir Search Console y ve estas
 respuesta está aquí y es «nada», una por una** — y el criterio de salida es concreto: se vuelve a
 mirar el día que aparezca en «sin indexar» una URL que **sea una página**, o el día que el
 recuento de indexadas baje de las 28 variantes.
+
+**Estado:** Aceptada.
+
+## D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie — 2026-09-02
+
+**El hecho.** El «About» del repositorio público decía «**Doce** páginas bilingües, WCAG AAA en
+ambos temas y **ocho** guardianes en CI». Son **catorce** (`PAGE_COUNT`) y **veintidós**
+(`new Set(CASOS.map(c => c.guardian)).size`, con 50 casos malos). Quien llega desde LinkedIn lee
+esas cifras antes que el código.
+
+**Lo que lo convierte en decisión y no en una edición de dos números: la decisión ya estaba
+tomada, y para esta frase exacta.** El 2026-08-19, el commit `198e206` la retiró de
+`social-preview.png` —«la social preview deja de contar cosas: las cifras caducan, la imagen
+no»— citando D60: *«una fuente única evita dos verdades; no mantiene al día una copia
+impresa»*. El barrido cubrió la imagen y **no cubrió el About**, que dice lo mismo y se edita
+con una llamada a la API. Media superficie hecha, media olvidada.
+
+**Y aquel commit predijo el tamaño del error.** Escribió: «el tercero ya estaba a una línea de
+YAML de dejar de serlo: `check:guardianes` existe en `package.json` y no está en `ci.yml`, así
+que en cuanto se cablee son nueve». Dos semanas después son veintidós. La cifra no se quedó a
+uno de distancia: se fue a catorce. **La ficha de esta tarea, escrita el 2026-09-01, decía
+veintiuno** — se equivocó en el mismo sentido y en menos de un día, porque el guardián número
+veintidós entró esa noche. Es la prueba más limpia que va a dar este repositorio de por qué la
+cifra no puede estar ahí.
+
+**La regla, que es lo reutilizable — y no es «nada de números».** La línea la marca **quién
+puede leer la superficie**: `PAGE_COUNT` y `GUARDIAN_COUNT` están vivos porque un gate del repo
+los deriva o los sella, pero **ningún gate puede leer el About de GitHub**. Así que ahí solo
+aguanta lo que no cambia por su cuenta:
+
+| Se queda | Por qué | Se va | Por qué |
+|---|---|---|---|
+| «bilingüe» | estructural, no cambia | «Doce páginas» | cambia al añadir una página |
+| «Next.js 16, TypeScript, Tailwind v4» | un salto de mayor es un acto deliberado y visible | «ocho guardianes en CI» | cambió catorce veces en dos semanas |
+| «WCAG AAA en ambos temas» | es una **política**, no un recuento, y `censo` + `check:palette` impiden que se vuelva falsa en silencio | | |
+
+O sea: **un RECUENTO cambia cada sprint y no puede vivir fuera del alcance de un gate; una
+POLÍTICA no cambia nunca y además está vigilada puertas adentro.** El About queda: «El código de
+franciscolopez.es: web personal bilingüe de un Senior Product Manager. Next.js 16, TypeScript y
+Tailwind v4, WCAG AAA en ambos temas, con el sistema de diseño y la accesibilidad publicados en
+el propio sitio». Las dos últimas cláusulas **apuntan a la fuente viva** en vez de copiarla, que
+es D38 aplicado a una superficie que no puede derivar nada.
+
+**Por qué NO el guardián que compare el About por API**, que era la otra salida sobre la mesa.
+Metería una llamada de red en CI, y eso ya está decidido en contra por D141: `check:enlaces` y
+`psi` viven fuera de CI porque un servidor ajeno caído cinco minutos da un rojo que no es
+nuestro. Y sería un guardián para sostener un dato que **no hace falta publicar**: se paga
+mantenimiento por conservar el modo de fallo. Quitar la cifra no lo vigila, lo **elimina**, que
+es más barato y no puede fallar.
+
+**La otra mitad del barrido: las capturas del README eran una copia impresa igual.**
+`home-light.png` y `home-dark.png` eran del 2026-08-19 y enseñaban un sitio que ya no existe,
+con **tres** derivas en dos semanas: el kicker decía «UX · SaaS · IA aplicada» y hoy es «UX ·
+SaaS · IA · Builder»; el nav **no llevaba «Contacto»**, que se construyó el 23; y al titular le
+faltaba **el punto de marca en morado** (D137, del 27). Regeneradas contra producción a 1440×900
+en los dos temas, con el consentimiento presembrado para que la franja no salga en la foto.
+
+**Y aquí la regla es otra, porque una captura ES una copia por naturaleza y no se puede
+desinventar.** No se puede quitar «la cifra» de una foto del sitio: la foto entera es el dato.
+Así que lo que se escribe es **cuándo se regenera**: cuando cambie algo que se vea en el pliegue
+de la home — el nav, el titular, el kicker o el gesto de marca. Las tres derivas de esta vez
+fueron exactamente esas cuatro cosas, así que el criterio no es teórico. No lleva gate: pesarían
+más un navegador y una captura en CI que las dos veces al año que esto se mueve, y ese reparto
+—manual por coste, con el motivo escrito— es el que `PRD-Live.md` §5 declara aceptable.
+
+**El resto de superficies públicas se barrió y estaba limpio**, que también se escribe para que
+no se vuelvan a mirar: la social preview **subida** a GitHub es ya la sin cifras (mismos bytes
+que el fichero del repo, comprobado), los once *topics* no llevan ninguna, la bio del perfil
+tampoco, y el `LICENSE` y `robots.txt` no publican recuentos. No hay plantillas de issue ni de
+PR. En el `README`, la prosa ya decía «Catorce páginas» y **los guardianes se listan en una
+tabla en vez de contarse**, que es la forma correcta: una fila de más es visible en el diff, un
+número de más no.
 
 **Estado:** Aceptada.
