@@ -93,7 +93,7 @@ En lenguaje llano y con el criterio WCAG que cubre cada una.
   
   WCAG 1.4.3 · 1.4.11
   
-  Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto o una barra translúcida: ahí no hay un color que medir, y se miran a ojo.
+  Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto o una barra translúcida: ahí no hay un color que medir, sino tantos como píxeles, así que se miden con otra pasada que fotografía la caja del texto y busca su peor píxel.
 2. Foco siempre visible
   
   WCAG 2.4.7
@@ -213,6 +213,14 @@ Comprueba lo que axe da por bueno: que el enlace de salto exista, que haya un so
 
 Los diagramas se dibujan sobre un lienzo que se escala, así que un rótulo declarado a 11 píxeles puede acabar pintado a 5. Se mide el tamaño real de cada rótulo a 360 píxeles de ancho, que es un teléfono normal.
 
+### Texto sobre foto
+
+Lo que el censo no puede juzgar, porque detrás del texto no hay un color sino una imagen. Se oculta el texto sin quitarle su hueco, se fotografía lo que queda debajo y se mide contra el peor píxel de esa caja. La barra del menú se mira a varias alturas de scroll y el vídeo de la portada en varios fotogramas, porque ahí no hay una cifra sino un rango.
+
+### Nunca solo el color
+
+Una simulación de daltonismo total es, en el fondo, quedarse con la luminancia. Así que en vez de comparar dos capturas se compara el gris de cada color: si dos elementos hermanos solo se distinguen por un tono cuyo gris es el mismo, y no cambian en nada más, ahí hay información que se pierde. Y sabe fallar: la propia página se fabrica un caso indistinguible en gris para comprobar que lo caza.
+
 ### Teclado y foco
 
 Revisión manual de la navegación por teclado y del orden en que el foco recorre la página.
@@ -282,7 +290,7 @@ La prueba a mano se ha hecho con NVDA sobre Chrome. Ni VoiceOver, ni JAWS, ni Ta
 
 ### Texto sobre foto
 
-El censo de contraste se abstiene a propósito en dieciséis pares: los ocho textos que caen sobre una fotografía, medidos en los dos temas. Ahí el fondo lo decide la imagen y no el sistema de color, así que medirlos exige leer el píxel pintado uno a uno. Están identificados y pendientes.
+El censo de contraste se abstiene a propósito en dieciséis pares: los ocho textos que caen sobre una fotografía, medidos en los dos temas. Ahí el fondo lo decide la imagen y no el sistema de color, así que hay que leer el píxel que se pinta. Ya están medidos así: doce llegan a AAA y cuatro se quedan entre AA y AAA, el peor en 4,67:1. Los cuatro son el mismo elemento: los enlaces del menú cuando la barra pasa por encima de una foto. Cumplen el mínimo y no el objetivo, y falta decidir si la barra se hace menos transparente.
 
 ### Pantallas muy estrechas
 
