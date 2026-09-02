@@ -219,6 +219,7 @@
 - D181 · El censo publica de QUÉ conjunto habla, y decide el diálogo en vez de heredarlo
 - D182 · El punto 6 deja de mirarse y pasa a detectarse, sin filtro y sin cámara
 - D183 · Un auditor externo ve 19 fallos de contraste donde hay cero, y la respuesta se guarda hecha
+- D184 · La barra de navegación deja de ser un frosted y pasa a ser opaca, por una medición
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11753,3 +11754,57 @@ herramienta no sabe **leerlo**. Confundir las dos cosas llevaría a tocar los to
 justo lo que no se va a hacer: renunciar a `oklch()` mataría `color-mix` perceptual, de lo que
 dependen `--surface-dim` y `--control-edge` (D39, D97). **No se cambia el sistema de color por
 un parser ajeno.**
+
+## D184 · La barra de navegación deja de ser un frosted y pasa a ser opaca, por una medición — 2026-09-02
+
+**Decisión.** El nav pasa de `color-mix(in srgb, var(--background) 86%, transparent)` con
+`backdrop-blur-[10px]` a **`bg-background` opaco**, en las catorce páginas. El desenfoque sale
+con el velo, porque ya no difumina nada.
+
+**Qué lo forzó.** Con el velo al 86 %, el 14 % restante deja pasar la foto de la página, y
+D179 midió por primera vez esos pares sobre el píxel pintado: los enlaces del menú **en su
+estado compacto** caían a **4,67:1** sobre `/trayectoria/kuotip` en oscuro. Cumplen AA (4,5) y
+no llegan a AAA (7), que es el objetivo declarado del sitio.
+
+**Y no se arreglaba subiendo el velo, que era la salida que parecía obvia.** Se midió la
+escalera entera sobre los cuatro casos peores, sobrescribiendo el fondo en la página servida
+—sin reconstruir— y fotografiando el píxel:
+
+| Velo | Peor par |
+|---|---|
+| 86 % (el que había) | 4,60 |
+| 90 % | 5,35 |
+| 92 % | 5,67 |
+| 95 % | 6,16 |
+| 97 % | 6,56 |
+| opaco | el nav deja de estar sobre foto |
+
+La curva es **asintótica**: al 97 % la barra ya es casi opaca a la vista y el peor par sigue por
+debajo del 7. **Ningún valor translúcido llega**, así que la elección real no era «cuánto
+subirlo» sino «velo o AAA».
+
+**Por qué el opaco sí, y por construcción y no por suerte.** Detrás del texto vuelve a haber
+**un** color en vez de tantos como píxeles: el recorrido de `overImage()` se para en el primer
+fondo opaco, y el par que queda —chrome sobre `--background`— es de los que el censo ya mide en
+AAA en las catorce páginas.
+
+**Lo medido después del cambio**, que es lo que lo cierra: el censo pasa de **424 a 400 pares**
+—los 24 que desaparecen son exactamente los que componía el velo—, los pares **sobre imagen
+bajan de 16 a 4**, y esos cuatro (el titular y la entradilla de Sobre mí sobre el vídeo) salen a
+**8,41 y 6,90**. Por primera vez el sitio tiene **cero pares bajo AAA incluidos los que caen
+sobre imagen**.
+
+**Lo que se pierde, y va escrito porque es marca y no accesibilidad:** el efecto esmerilado de
+ver el contenido correr por debajo de la barra. Se cambia a sabiendas.
+
+**No necesita `data-surface`.** Pinta exactamente `--background`, que es la superficie de la
+página, así que el atenuado que hereda ya es el correcto. La regla de `BRAND.md` pide declarar
+familia a quien se pinta una superficie **propia**, y esta no lo es.
+
+**Y destapó un defecto del guardián que se había escrito ese mismo día.** El inventario del
+censo (D181) suspende cuando desaparece un par con la huella intacta — y aquí desaparecían 24
+por un cambio legítimo, porque **el velo del nav no es un token** y la huella no puede enterarse.
+Sin salida, el primer cambio de ese tipo habría dejado el censo bloqueado, y un guardián que no
+se puede satisfacer se acaba desactivando entero. Ahora existe `--inventario-nuevo`: nombra los
+pares uno a uno, exige la bandera a mano y lo dice en voz alta, para que aceptar sea una decisión
+visible y no el estado por defecto.

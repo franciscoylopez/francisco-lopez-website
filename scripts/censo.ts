@@ -139,6 +139,23 @@ const PAGINAS = FILTRO
   ? PAGE_SLUGS.filter((s) => String(s).includes(FILTRO))
   : PAGE_SLUGS;
 
+/**
+ * La salida del inventario, y **hace falta que exista** (2026-09-02, el mismo día
+ * que el inventario).
+ *
+ * La huella cubre tokens, superficies y animaciones. Un color que NO es token —el
+ * velo del nav es un `color-mix` escrito en el propio componente— puede cambiar de
+ * verdad sin que la huella se entere, y entonces el diff ve pares desaparecer con
+ * la huella intacta y suspende con razón aparente. Sin esta bandera, el primer
+ * cambio legítimo de ese tipo dejaría el censo bloqueado y sin forma de aceptarlo:
+ * un guardián que no se puede satisfacer se acaba desactivando entero, que es peor
+ * que no tenerlo.
+ *
+ * Se pide a mano y se dice en voz alta en la salida, para que aceptar sea una
+ * decisión visible y no el estado por defecto.
+ */
+const ACEPTA_INVENTARIO = process.argv.includes("--inventario-nuevo");
+
 const TOTAL_CORRIDAS = PAGINAS.length * TEMAS.length;
 
 let corridas = 0;
@@ -303,11 +320,19 @@ if (inventarioAnterior && diffs.length) {
   console.log("");
 
   const perdidos = diffs.reduce((n, d) => n + d.salieron.length, 0);
-  if (perdidos && mismaHuella) {
+  if (perdidos && mismaHuella && !ACEPTA_INVENTARIO) {
     fallo(
       `${perdidos} par(es) han DESAPARECIDO del censo con la huella intacta. ` +
         `Eso no es un aprobado: es el metro viendo menos que la vez anterior. ` +
-        `Los nombra la lista de arriba, con «−» delante.`,
+        `Los nombra la lista de arriba, con «−» delante. Si el cambio es LEGÍTIMO ` +
+        `—se ha tocado un color que no es token, y por eso la huella no se entera—, ` +
+        `se vuelve a lanzar con \`--inventario-nuevo\`.`,
+    );
+  }
+  if (perdidos && ACEPTA_INVENTARIO) {
+    console.log(
+      `  ${perdidos} par(es) desaparecidos ACEPTADOS a mano (--inventario-nuevo).\n` +
+        "  El inventario nuevo pasa a ser la referencia.\n",
     );
   }
 }

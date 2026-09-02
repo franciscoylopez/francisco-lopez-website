@@ -65,7 +65,7 @@
     "items": [
       {
         "title": "Contraste medido en ambos temas",
-        "body": "Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto o una barra translúcida: ahí no hay un color que medir, sino tantos como píxeles, así que se miden con otra pasada que fotografía la caja del texto y busca su peor píxel.",
+        "body": "Todo texto y todo control se comprueba con cifra en claro y oscuro, incluidos los estados de hover y foco. Quedan aparte los pocos casos en los que el fondo es una foto: ahí no hay un color que medir, sino tantos como píxeles, así que los mide otra pasada que fotografía la caja de las letras y busca su peor píxel. Son cuatro, el titular y la entradilla de Sobre mí sobre el vídeo, y los cuatro llegan a AAA.",
         "wcag": "WCAG 1.4.3 · 1.4.11",
         "inherited": true
       },
@@ -244,10 +244,6 @@
       {
         "title": "Un lector y un navegador",
         "body": "La prueba a mano se ha hecho con NVDA sobre Chrome. Ni VoiceOver, ni JAWS, ni TalkBack en el móvil. Cada combinación se comporta distinto, así que lo que funciona aquí no está probado en las demás. Ampliarlo está en el plan."
-      },
-      {
-        "title": "Texto sobre foto",
-        "body": "El censo de contraste se abstiene a propósito en dieciséis pares: los ocho textos que caen sobre una fotografía, medidos en los dos temas. Ahí el fondo lo decide la imagen y no el sistema de color, así que hay que leer el píxel que se pinta. Ya están medidos así: doce llegan a AAA y cuatro se quedan entre AA y AAA, el peor en 4,67:1. Los cuatro son el mismo elemento: los enlaces del menú cuando la barra pasa por encima de una foto. Cumplen el mínimo y no el objetivo, y falta decidir si la barra se hace menos transparente."
       },
       {
         "title": "Pantallas muy estrechas",

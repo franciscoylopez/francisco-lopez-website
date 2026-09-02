@@ -65,7 +65,7 @@
     "items": [
       {
         "title": "Contrast measured in both themes",
-        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single colour to measure there but as many as there are pixels, so a separate pass photographs the text box and looks for its worst pixel.",
+        "body": "Every piece of text and every control is checked with a number in light and dark, including hover and focus states. The few cases where the background is a photo or a translucent bar are set aside: there is no single colour to measure there but as many as there are pixels, so a separate pass photographs the box the letters occupy and looks for its worst pixel. There are four of them, the heading and the standfirst of Sobre mí over the video, and all four reach AAA.",
         "wcag": "WCAG 1.4.3 · 1.4.11",
         "inherited": true
       },
@@ -244,10 +244,6 @@
       {
         "title": "One reader, one browser",
         "body": "The manual pass was done with NVDA on Chrome. Not VoiceOver, not JAWS, not TalkBack on mobile. Each combination behaves differently, so what works here isn't proven on the others. Widening it is on the roadmap."
-      },
-      {
-        "title": "Text over photography",
-        "body": "The contrast census deliberately abstains on sixteen pairs: the eight pieces of text that sit over a photograph, measured in both themes. There the background is decided by the image and not by the colour system, so it takes reading the pixel that actually gets painted. They are now measured that way: twelve reach AAA and four land between AA and AAA, the worst at 4.67:1. All four are the same element: the menu links when the bar passes over a photo. They meet the floor and not the target, and whether the bar should be made less transparent is still open."
       },
       {
         "title": "Very narrow screens",
