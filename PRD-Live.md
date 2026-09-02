@@ -129,7 +129,8 @@ El **núcleo** son ocho: `action` (el control con caja), `chrome` (el enlace de 
 carpintería de navegación), `badge` (el rótulo que no se pulsa), `heading` (el par
 eyebrow + titular), `field` (el campo de formulario), `table`, `stat-row` y `layout`
 (cajas y ritmos). Encima, la **capa
-de página**: `lib/page-meta.ts` y `components/site/page-shell.tsx` (D45/D46). Y aparte,
+de página**, que son tres: `lib/page-meta.ts` (metadata), `page-shell.tsx` (marco) y
+`lib/page-route.ts` (el contrato de ruta) (D45/D46). Y aparte,
 no encima, la de **artículo largo**, que D76 dejó fuera del núcleo a propósito y que se
 vacía por su propio criterio: cuando una segunda página quiere una de sus piezas, esa
 pieza sale — **y vuelve si su motivo no valía en las cuatro** (D113, D121, D123).
