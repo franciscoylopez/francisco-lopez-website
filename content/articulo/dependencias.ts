@@ -212,7 +212,7 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D52",
     "DECISIONS.md#D61",
     "DECISIONS.md#D73",
-    "scripts/design-review/contrast-census.js",
+    "scripts/design-review/censo/",
     "lib/design-values.ts",
     // El texto publica una CIFRA de páginas («AAA en las catorce páginas»), así
     // que añadir una tiene que mandar a releer esta sección.

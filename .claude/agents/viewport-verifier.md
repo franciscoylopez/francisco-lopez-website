@@ -48,7 +48,7 @@ Carga el censo —que define `window.freezeMotion` y `window.contrastCensus`— 
 nada:
 
 ```bash
-agent-browser eval --stdin < scripts/design-review/contrast-census.js
+cat scripts/design-review/censo/*.js | agent-browser eval --stdin
 ```
 
 Ancla contra estos dos pares, que no llevan cian y por tanto no dependen del recorte de

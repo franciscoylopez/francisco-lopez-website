@@ -284,7 +284,7 @@ el switch del consentimiento, aquí debajo).
 incluidos.** Un par que solo aparece al **componer** —un velo `color-mix` sobre la superficie
 de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así que un inventario
 hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
-`scripts/design-review/contrast-census.js`.
+`scripts/design-review/censo/`.
 
 > **Publica cuántas reglas `:hover` ha indexado, cuántos pares ha medido y cuántos ha
 > compuesto**, porque *un metro que devuelve una lista vacía parece un aprobado*. Los fallos

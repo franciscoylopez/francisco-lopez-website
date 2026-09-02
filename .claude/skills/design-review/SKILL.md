@@ -322,9 +322,9 @@ los cuatro hallazgos que originaron esta skill):
 **No se conduce a mano y no se reescribe: es `npm run censo`** (D85, D97), que recorre las
 páginas del registro × los dos temas sobre el sitio servido, valida el metro en cada corrida
 y falla si aparece un par de texto bajo AAA o un contorno de control bajo 3:1. Para **una**
-página suelta, el script que hay detrás es `scripts/design-review/contrast-census.js`
-—escrito a mano tres veces antes de quedarse ahí— y se inyecta con `agent-browser eval
---stdin`.
+página suelta, el guion que hay detrás son las ocho piezas de
+`scripts/design-review/censo/` —escrito a mano tres veces antes de quedarse ahí— y se
+inyecta CONCATENADO: `cat scripts/design-review/censo/*.js | agent-browser eval --stdin`.
 
 **Las reglas de medición ya están en contexto, y son de `BRAND.md`, no de aquí:** §Cómo se
 hace el censo —recorriendo el DOM de la página servida, con los estados incluidos, porque un

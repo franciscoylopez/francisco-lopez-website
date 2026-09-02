@@ -58,11 +58,11 @@
  * - **Un solo viewport.** El censo mide colores, que no dependen del ancho; el
  *   pliegue y el objetivo táctil son de `viewport-verifier` (D52).
  */
-import { readFileSync } from "node:fs";
 
 import { locales, pagePath } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
 import { HUELLA_PATH, huella, sellar } from "./censo/huella";
+import { guionDelCenso } from "./design-review/guion";
 import {
   compara,
   escribeInventario,
@@ -73,7 +73,6 @@ import {
 import { ab } from "./navegador/agent-browser";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
-const CENSO = "scripts/design-review/contrast-census.js";
 const TEMAS = ["light", "dark"] as const;
 
 /** El locale que se mide. El censo mira COLORES, y el color no se traduce: medir
@@ -123,7 +122,7 @@ type Censo = {
 const problemas: string[] = [];
 const fallo = (msg: string) => problemas.push(msg);
 
-const guionCenso = readFileSync(CENSO, "utf8");
+const guionCenso = guionDelCenso();
 
 /**
  * `--pagina=` acota la pasada mientras se valida el propio metro — por ejemplo,
