@@ -218,6 +218,7 @@
 - D180 · El censo compone por opacidad efectiva, y publica cuántos textos ha mirado para hacerlo
 - D181 · El censo publica de QUÉ conjunto habla, y decide el diálogo en vez de heredarlo
 - D182 · El punto 6 deja de mirarse y pasa a detectarse, sin filtro y sin cámara
+- D183 · Un auditor externo ve 19 fallos de contraste donde hay cero, y la respuesta se guarda hecha
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11702,3 +11703,53 @@ así que los dos comparten ahora la función de agrupación.
 
 **Estado al escribir esto:** 28 corridas, **1320 grupos comparables y 3378 pares comparados,
 cero hallazgos** — el mismo veredicto que el ojo, y ahora repetible.
+
+## D183 · Un auditor externo ve 19 fallos de contraste donde hay cero, y la respuesta se guarda hecha — 2026-09-02
+
+**Decisión.** Los tokens **no se tocan** (salida 3, descartada de antemano) y **no entra copy
+nuevo en ninguna página pública por ahora** (salida 1). Lo que sí queda hecho es la respuesta:
+el snippet vive en `scripts/design-review/rgb-para-auditores.js`, con el experimento al lado.
+Publicarlo en `/accesibilidad` o en el Design System —la salida 2— sigue sobre la mesa y es
+decisión de Francisco; el trabajo para hacerlo es pegar el archivo.
+
+**El hecho.** Chrome serializa el valor computado de los 59 tokens en `oklch()` como `lab(...)`:
+
+```
+getComputedStyle(document.body).color → lab(14.8102 -1.28566 -4.10883)
+```
+
+Una herramienta que solo entiende `rgb()` y hex no lo parsea, cae a `#FFFFFF` en los dos lados
+de cada par y publica un **1:1 · FAIL** en cada elemento. Silktide da **19 «Text contrast
+issues»** en la home y sigue dándolos en las demás.
+
+**Y está probado que es eso y no otra cosa.** Se reescribieron los colores computados a `rgb()`
+sin cambiar un píxel —leyendo cada color y volviéndolo a escribir tras pasarlo por un canvas de
+1×1— y se relanzó el checker sobre `/como-se-ha-creado`:
+
+| | con `lab()` | con `rgb()` |
+|---|---|---|
+| Text contrast | **19** | **desaparece de la lista** |
+| Semantic links | 3 | 3 |
+| Links with different destinations | 2 | 1 |
+
+Los otros dos hallazgos se mantienen, o sea que el override no falseó el análisis. **Cuando
+puede leer los colores, la herramienta coincide con el censo: cero fallos.**
+
+**«Sin cambiar un píxel» se ha medido, no supuesto** *(2026-09-02)*. Se corrió el censo sobre
+`/como-se-ha-creado` antes y después de aplicar el snippet: **20 pares antes / 20 después en
+claro y 22 / 22 en oscuro, cero cifras distintas y cero pares desaparecidos**. Si el override
+moviera una cifra, no serviría como respuesta — sería otro metro.
+
+**Por qué no se ha ampliado el barrido a WAVE, Lighthouse y DevTools.** La ficha lo pedía para
+saber si con n=1 esto es una anécdota. Francisco decidió el 2026-09-02 trabajar solo con
+Silktide, así que **el alcance de la evidencia es una herramienta y así queda escrito**: no se
+afirma que el problema sea general, se afirma lo que se midió. Ampliarlo es barato el día que
+haga falta.
+
+**Y no es un problema de gamut, que es la lectura fácil y equivocada.** Los cianes de esta marca
+sí caen ligeramente fuera de sRGB y el navegador los recorta al pintarlos (`BRAND.md` §Cómo
+medir, punto 2), pero eso no tiene nada que ver: aquí el color que se pinta es el correcto y la
+herramienta no sabe **leerlo**. Confundir las dos cosas llevaría a tocar los tokens, que es
+justo lo que no se va a hacer: renunciar a `oklch()` mataría `color-mix` perceptual, de lo que
+dependen `--surface-dim` y `--control-edge` (D39, D97). **No se cambia el sistema de color por
+un parser ajeno.**
