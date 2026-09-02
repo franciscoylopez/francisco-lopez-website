@@ -210,6 +210,7 @@
 - D172 · Las once «sin indexar» de Search Console son cero páginas, y el «nada» se escribe once veces
 - D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie
 - D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo
+- D175 · La regla que ordena retirar entró como una adición, y no tenía quién la comprobara
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -10189,6 +10190,42 @@ actualizaron a mano (`CLAUDE.md` ×2, `BRAND.md`, `README.md` y la declaración 
 `content/accesibilidad/dependencias.ts`); ninguno de ellos tiene guardián, y esa asimetría es
 deuda que no se tarea aquí porque el ratio no la justifica todavía.
 
+### Addendum *(2026-09-02, P72.08)* · La cabecera prometía una fila por gate, y la tabla nunca la cumplió
+
+Al mover la tabla aquí se le escribió una cabecera que la tabla heredada no cumplía: **«una fila
+por gate»**, con 19 filas contra 22 gates propios de `ci.yml` y otros dos manuales nacidos
+después. **Catorce sin fila, `check:guardianes` incluido** — el meta-gate, el único cuyo modo de
+fallo es una luz verde y cuyo contrato (muta archivos rastreados, exige árbol limpio, va el
+último porque muerde el HTML del build) es justo el que nadie recuerda de memoria.
+
+**El hueco se heredó de `PRD-Live` §5; lo nuevo era la promesa.** Y eso cambia el arreglo: no era
+«se olvidaron catorce al mover», era que al mover se escribió algo que la tabla nunca había
+cumplido.
+
+**Lo que duele no es la deuda de catorce filas, es cómo se lee el vacío.** Este documento se abre
+«cuando un check sale rojo diciendo su nombre», así que para esos catorce el `grep` devolvía
+**vacío**, y vacío se lee como «no hay contrato escrito para esto»: el modo de fallo que este
+repo tiene nombrado desde D38/D57/D60/D63, *un metro que devuelve lista vacía parece un
+aprobado*.
+
+**Se corrige la PROMESA y no la tabla:** una fila por gate **cuyo contrato no es evidente por su
+nombre**, y la cabecera dice explícitamente que un `grep` vacío significa «el nombre lo dice
+todo». La enumeración completa se remite a `ci.yml` y a los `scripts` de `package.json`, que es
+donde no puede mentir. Completar la tabla habría devuelto la sección al tamaño que motivó esta
+decisión, y `check:skills` contrastando filas contra `ci.yml` solo tiene sentido si la promesa es
+«una por gate» — que ya no lo es.
+
+**Y se escriben las cuatro que sí la necesitaban:** `check:palette` (hace dos preguntas y la
+segunda no la dice el nombre), `check:guardianes`, `consentimiento` (distingue «cero» de «sin
+almacén», y el entorno va dentro de la clave) y el caso malo del carrusel (el único guardián del
+repo que no entra en `check:guardianes`).
+
+**El mismo defecto estaba en el `README`**, con su propia tabla de pasos de CI: le faltaban
+**dos**, `md:verificar` y `novedades`, y los dos son **regeneradores** —rehacen un artefacto y
+exigen diff vacío—, o sea la categoría que no encajaba en su columna «Qué impide». Se completan y
+la tabla nombra la categoría. *(La ficha decía tres e incluía `npm run md`; no es un paso de
+`ci.yml`, solo se nombra en un comentario.)*
+
 ## D164 · El aviso ya estaba puesto y gritó cinco veces: el hueco no era decirlo, era leerlo — 2026-08-30
 
 **La ficha proponía dos mitades y una ya estaba hecha.** El `sprint-review` de cierre de «Voz»
@@ -11307,5 +11344,59 @@ estados —árbol limpio, rojo, guarda de bucle, con reescritura y sin ella— a
 **Lo que sigue fuera, y no cambia:** ninguno de los dos arregla nada por su cuenta. Dicen qué
 está rojo y con qué comando se resuelve. Sellar sin mirar congelaría el fallo (P72.01), y un
 `npm run build && npm run md` de 46 segundos no cabe en un cierre de turno.
+
+**Estado:** Aceptada.
+
+## D175 · La regla que ordena retirar entró como una adición, y no tenía quién la comprobara — 2026-09-02
+
+**Contexto.** `CLAUDE.md` dice desde el 2026-08-31 que **abrir una etapa empieza retirando, en
+lote y antes de añadir nada**. La regla existía y nada la portaba. Medido commit a commit:
+
+| Commit | Suma de los 4 `@`-importados | Margen (techo 11.700) |
+|---|---|---|
+| `6592278` · durante «Agentes» | 11.567 | **133** |
+| `76710b3` · **cierre de «Agentes»** | 11.683 | **17** |
+| `45208a7` · **apertura de «Distribución»** | 11.683 | **17** |
+| `1bc642f` · el 2026-09-01 | 11.690 | **10** |
+
+Todo el sprint «Distribución» sumó **+7 palabras**: el margen no se lo comió el sprint, ya estaba
+en 17 cuando abrió. Y las 105 que se lo comieron en el cierre anterior son, literalmente, **la
+propia regla que ordena retirar**, entrada como adición sobre un margen de 133. La apertura que
+ella misma manda dejó el total exactamente donde estaba.
+
+**Decisión.** Una cuarta mitad en `check:contexto` que compara el corpus **antes y después de la
+retirada de apertura**, con `SELLO_CICLO`. No mide el techo —el techo sigue siendo el techo y no
+se toca— sino **la dirección del ciclo**.
+
+**Por qué un guardián y no una nota.** Es la forma de D51: se dispara **en un momento** (la
+apertura) y detectarlo no requiere criterio. *Elegir* qué se retira sí, y eso lo sigue haciendo
+una persona; el guardián solo comprueba que se haya retirado, y su mensaje recuerda que el
+candidato no es el bloque más grande sino el **duplicado**.
+
+**Por qué los dos números se miden a mano.** Como `SELLO_GENERAL` y `CICLO_ABIERTO`, y por el
+mismo motivo escrito allí: **si se refrescaran solos, la variación saldría siempre 0 y el
+guardián no diría nada** — el umbral que persigue al dato. Lo que impide que se queden viejos es
+una comprobación de frescura: el sello lleva la fecha del ciclo abierto y tiene que coincidir con
+`CICLO_ABIERTO`, así que **no se puede abrir un ciclo sin volver a medir, y no se puede medir sin
+enterarse**. Ahí están los dientes; el resto es aritmética.
+
+**Los documentos suspenden y las skills solo avisan.** La regla de `CLAUDE.md` nombra tres
+sitios —el conjunto `@`-importado, `General` y `scripts/`— y las skills no están entre ellos. Se
+vigilan porque el mismo mecanismo las alcanza, pero convertirlas en rojo sería **inventar la
+regla desde el guardián** en vez de portarla. Y el ámbar ya dice algo cierto en su primera
+corrida: la apertura de «Higiene» retiró de los documentos (**−7**) y **añadió 42 palabras en las
+skills**, en el propio `method-review` que audita el método.
+
+**La deriva del ciclo en curso se publica y no suspende.** `CLAUDE.md` dice que durante el sprint
+no se negocia: si algo no cabe, entra, y lo paga la apertura siguiente. Un guardián que
+suspendiera a mitad de sprint estaría contradiciendo la regla que porta.
+
+**Lo que no puede ver, dicho para que no se dé por cubierto:** si los dos números son los de
+verdad. Salen de medir en el cruce; esto comprueba que se han vuelto a medir y qué dicen.
+
+**Con dos casos malos en `check:guardianes`**, uno por mitad, y los dos **por forma y no por
+valor** —que es la lección del caso que nació caducando aquí mismo—: copiar `antes` sobre
+`despues` (la apertura que no retira) y desfasar la fecha del sello (el sello que mide contra un
+ciclo que ya no es). Comprobado que los dos muerden y que el árbol limpio pasa.
 
 **Estado:** Aceptada.

@@ -165,6 +165,37 @@ export const CASOS: Caso[] = [
       ),
   },
   {
+    guardian: "check:contexto",
+    rotura:
+      "la apertura de un ciclo no retira nada y el sello sale verde igual",
+    // POR FORMA Y NO POR VALOR, que es la lección del caso de aquí arriba: los dos
+    // números del sello cambian en cada apertura por diseño, así que el mutador
+    // empareja la ESTRUCTURA —`antes`/`despues` del corpus de documentos— y copia
+    // el primero sobre el segundo. Eso es exactamente «no se retiró»: el caso que
+    // dejó el margen de contexto en 10 sin cruzar ningún techo.
+    archivo: "scripts/check-contexto.ts",
+    mutar: (o) =>
+      o.replace(
+        /documentos: \{ antes: ([\d_]+), despues: [\d_]+ \}/,
+        "documentos: { antes: $1, despues: $1 }",
+      ),
+  },
+  {
+    guardian: "check:contexto",
+    rotura:
+      "se abre un ciclo nuevo y el sello sigue midiendo contra el anterior",
+    // La otra mitad, y la que le da los dientes a la primera: los dos números se
+    // miden A MANO, así que lo único que impide que se queden viejos es que el
+    // sello lleve la fecha del ciclo abierto. Se muta la del sello y no
+    // `CICLO_ABIERTO`, que ya tiene su propio caso arriba.
+    archivo: "scripts/check-contexto.ts",
+    mutar: (o) =>
+      o.replace(
+        /fecha: "\d{4}-\d{2}-\d{2}",\n {2}cierra:/,
+        'fecha: "2026-01-01",\n  cierra:',
+      ),
+  },
+  {
     guardian: "check:indices",
     rotura: "una pieza de components/ui/ se queda sin declarar su línea",
     // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja

@@ -454,7 +454,7 @@ export const PAGE_COUNT = PAGE_SLUGS.length;
  * porque nada ataba la prosa al inventario (P50.73).
  */
 export const GUARDIAN_COUNT = 22;
-export const GUARDIAN_CASE_COUNT = 50;
+export const GUARDIAN_CASE_COUNT = 52;
 
 /**
  * Sustituye `{paginas}` en el copy, como `fillRatios` hace con `{par.tema}`.
