@@ -1,6 +1,6 @@
 ---
 name: gates-de-servidor
-description: Los gates que necesitan el sitio SERVIDO y por eso no están en CI — `gate:html` (el HTML no cambia en un refactor), `npm run censo` (contraste de todas las páginas × dos temas), `npm run pliegue` (que las aperturas que comparten pliegue midan lo mismo) y `npm run psi` (la nota de PageSpeed). No se dice cuántos son: el recuento es lo primero que caduca. Encapsula la secuencia entera, incluida la línea base que hay que guardar ANTES de tocar nada. Invócalo antes de empezar un refactor que se diga transparente, al cerrar un cambio que toque colores o superficies, o cuando Francisco diga «pasa los gates», «guarda la línea base» o «mide esto servido». Solo corre cuando se le invoca: levanta un servidor y escribe archivos.
+description: Los gates que necesitan el sitio SERVIDO y por eso no están en CI — `gate:html` (el HTML no cambia en un refactor), `npm run censo` (contraste de todas las páginas × dos temas), `npm run censo:imagen` (los pares sobre foto, que el censo se abstiene de juzgar), `npm run color-solo` (que nada se distinga solo por el tono), `npm run pliegue` (que las aperturas que comparten pliegue midan lo mismo) y `npm run psi` (la nota de PageSpeed). No se dice cuántos son: el recuento es lo primero que caduca. Encapsula la secuencia entera, incluida la línea base que hay que guardar ANTES de tocar nada. Invócalo antes de empezar un refactor que se diga transparente, al cerrar un cambio que toque colores o superficies, o cuando Francisco diga «pasa los gates», «guarda la línea base» o «mide esto servido». Solo corre cuando se le invoca: levanta un servidor y escribe archivos.
 disable-model-invocation: true
 ---
 
@@ -101,6 +101,8 @@ Y vuelve aquí.
 ```bash
 npm run gate:html    # ¿cambió el HTML? Ver arriba: vacío = cerrado
 npm run censo        # contraste de todas las páginas × 2 temas, con el sitio servido
+npm run censo:imagen # los pares que el censo SE ABSTIENE de juzgar: texto sobre foto (D179)
+npm run color-solo   # que nada se distinga solo por el tono (D182)
 npm run pliegue      # que las aperturas que comparten pliegue midan lo mismo (D144)
 npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no contra local
 ```
@@ -134,6 +136,14 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
   fuera y por qué corre a mano. Aquí solo lo que hay que hacer con su resultado.
 - **`censo`**: si sale rojo, nombra el par y el umbral. Su sello es lo que `check:palette`
   compara en cada PR, así que un verde de aquí es lo que mantiene ese otro en verde.
+- **`censo:imagen`** va DESPUÉS del censo y no en su lugar: mide lo que el otro deja
+  fuera. Su cifra no la compara ningún guardián, así que si algo baja de AAA hay que verlo
+  aquí. `--recortes=<dir>` guarda lo que midió, y es lo que convierte una cifra rara en un
+  diagnóstico en vez de en una discusión.
+- **`color-solo`** dirá cero casi siempre, y por eso trae su propio caso malo:
+  `npm run color-solo -- --caso-malo` invierte el veredicto y suspende si NO caza el par que
+  la página se fabrica. Un guardián cuyo resultado normal es cero se rompe sin que nadie lo
+  note.
 - **`psi`**: **mira la tabla de dispersión antes de commitear.** Si un par se mueve veinte
   puntos entre tomas, la mediana es la mejor cifra disponible pero el sitio tiene algo que
   mirar. `--tomas=1` existe para tantear sobre un Preview y **no sella**, a propósito. *(Por
