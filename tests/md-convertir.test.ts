@@ -15,7 +15,8 @@
 import { JSDOM } from "jsdom";
 import { describe, expect, it } from "vitest";
 
-import { convertir, ElementoDesconocido } from "../scripts/md/convertir";
+import { ElementoDesconocido } from "../scripts/md/contrato";
+import { convertir } from "../scripts/md/convertir";
 
 const BASE = "https://franciscolopez.es";
 
