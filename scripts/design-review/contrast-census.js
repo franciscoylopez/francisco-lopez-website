@@ -138,6 +138,45 @@ function paint(css) {
 const over = (fg, bg) =>
   fg.slice(0, 3).map((c, i) => c * fg[3] + bg[i] * (1 - fg[3]));
 
+/* --- La opacidad, que este censo no miraba (P72.14, 2026-09-02) ------------
+ *
+ * QUÉ PASABA. El color del texto se leía con `getComputedStyle(el).color` y de la
+ * opacidad solo se hacía una cosa: descartar el elemento si valía exactamente 0.
+ * **Nunca se componía**, ni por la del elemento ni por la de sus ancestros. Medido
+ * sobre `/accesibilidad` en oscuro: un `span` con `opacity: .7` se publicaba a
+ * **15,32** —que es el ANCLA, la mejor cifra que el sitio puede dar— cuando la
+ * pantalla pintaba **5,97**, por debajo del 7 que le tocaba. No es que el metro se
+ * quedara corto: señalaba como mejor par de la página el peor.
+ *
+ * DÓNDE PARA LA CUENTA, que es la parte que no es obvia. La opacidad de un
+ * ancestro que **pinta fondo opaco** no cambia el par: desvanece el fondo y el
+ * texto a la vez, así que la razón entre los dos se conserva. La que sí cuenta es
+ * la de los ancestros INTERMEDIOS, entre el texto y ese fondo — y la del propio
+ * elemento, salvo que sea él quien pinta el fondo. Por eso el bucle sube y se para
+ * en el primer fondo opaco, exactamente donde para `backdrop()`.
+ *
+ * LO QUE NO CUBRE, dicho para que no se dé por cubierto: si un ancestro
+ * intermedio tuviera a la vez opacidad y un fondo semitransparente, `backdrop()`
+ * seguiría componiendo ese fondo sin desvanecerlo. Hoy no hay ninguno; si lo
+ * hubiera, la cifra sería conservadora en el fondo y exacta en el texto.
+ */
+let compuestosPorOpacidad = 0;
+let conOpacidadInspeccionados = 0;
+
+function conOpacidad(el, fg) {
+  conOpacidadInspeccionados += 1;
+  let o = 1;
+  for (let n = el; n && n !== document.documentElement; n = n.parentElement) {
+    const cs = getComputedStyle(n);
+    if (paint(cs.backgroundColor)[3] === 1) break;
+    const v = parseFloat(cs.opacity);
+    if (Number.isFinite(v)) o *= v;
+  }
+  if (o >= 1) return fg;
+  compuestosPorOpacidad += 1;
+  return [fg[0], fg[1], fg[2], fg[3] * o];
+}
+
 const luminance = ([r, g, b]) => {
   const lin = [r, g, b]
     .map((v) => v / 255)
@@ -624,6 +663,11 @@ window.contrastCensus = () => {
   // encendido por dónde cayó el scroll. Ver `mostrarReveals` aquí arriba.
   const reveals = window.mostrarReveals();
 
+  // Los contadores de opacidad son de MÓDULO —los usan los dos pases— así que se
+  // ponen a cero aquí: dos censos seguidos en la misma página sumarían si no.
+  compuestosPorOpacidad = 0;
+  conOpacidadInspeccionados = 0;
+
   const descongelar = window.freezeMotion();
 
   const pairs = new Map();
@@ -644,6 +688,12 @@ window.contrastCensus = () => {
     const destino = sobreImagen ? sinMedir : pairs;
     if (!destino.has(key))
       destino.set(key, {
+        // La clave SALE en el resultado (P72.15, 2026-09-02). Es lo que permite
+        // comparar dos corridas par a par en vez de comparar dos totales: el
+        // mismo commit midió 414 pares un día y 391 al siguiente, y con solo el
+        // total no había forma de decir CUÁL faltaba. Un par que no está en la
+        // lista no está aprobado: está sin mirar.
+        clave: key,
         state,
         ratio: r,
         px: u.px,
@@ -668,7 +718,7 @@ window.contrastCensus = () => {
   for (const el of document.querySelectorAll("body *")) {
     if (!paintsText(el)) continue;
     const bg = backdrop(el);
-    const fg = paint(getComputedStyle(el).color);
+    const fg = conOpacidad(el, paint(getComputedStyle(el).color));
     add("reposo", el, fg[3] === 1 ? fg.slice(0, 3) : over(fg, bg), bg);
   }
 
@@ -694,7 +744,7 @@ window.contrastCensus = () => {
       : [...clone.querySelectorAll("*")].find(paintsText);
     if (target) {
       const bg = backdrop(target);
-      const fg = paint(getComputedStyle(target).color);
+      const fg = conOpacidad(target, paint(getComputedStyle(target).color));
       // El tamaño se lee del CLON, que es quien pinta el texto: la regla `:hover`
       // puede cambiar el cuerpo o el peso, y con ellos el umbral.
       add("hover", target, fg[3] === 1 ? fg.slice(0, 3) : over(fg, bg), bg);
@@ -744,6 +794,18 @@ window.contrastCensus = () => {
     // `reglasHover`: sin la cifra, una pasada sobre media página se lee igual que
     // una sobre la página entera (P50.79).
     reveals: `${reveals.total} reveals · ${reveals.encendidos} encendidos para medir`,
+    // Y la tercera cifra de cobertura (P72.14). Hoy este sitio no tiene ningún
+    // texto atenuado con `opacity` —el único que había se arregló en 34cd07a—,
+    // así que lo normal es «N inspeccionados · 0 compuestos». Ese cero solo
+    // significa algo con el N delante: sin él, un metro que dejara de mirar la
+    // opacidad se leería exactamente igual que uno que la mira y no encuentra
+    // nada. Es la cuarta vez que este archivo aplica esa regla.
+    opacidad:
+      conOpacidadInspeccionados === 0
+        ? "0 — EL METRO NO ESTÁ MIRANDO LA OPACIDAD. Esto NO es un aprobado: " +
+          "toda página tiene textos. Revisa `conOpacidad` antes de creerte el resto."
+        : `${conOpacidadInspeccionados} textos inspeccionados · ` +
+          `${compuestosPorOpacidad} compuestos por opacidad efectiva`,
     tema: document.documentElement.classList.contains("dark")
       ? "oscuro"
       : "claro",
@@ -782,4 +844,223 @@ window.contrastCensus = () => {
   };
   descongelar();
   return resultado;
+};
+
+/**
+ * LA MITAD IN-PAGE DE LA MEDICIÓN SOBRE IMAGEN (P72.13, 2026-09-02).
+ *
+ * `contrastCensus` manda estos pares a `sinMedir` y hace bien: sobre una foto no
+ * hay UN color detrás del texto, hay tantos como píxeles, y con `backdrop-blur`
+ * de por medio el color efectivo ni siquiera está en el DOM — lo calcula el
+ * compositor. No hay forma de rasterizar desde JavaScript lo que hay detrás de un
+ * elemento.
+ *
+ * Lo que sí puede hacerse desde aquí es **preparar la foto**: decir cuáles son,
+ * dónde caen, de qué color es su texto ya pintado y cuál es su umbral. Recortar el
+ * píxel y sacar el peor es trabajo del conductor, que sí tiene captura de pantalla
+ * (`scripts/censo/sobre-imagen.ts`).
+ *
+ * `ocultar()` usa `visibility: hidden` y no `display: none` a propósito: hace falta
+ * que el elemento SIGA ocupando su caja, porque lo que se va a fotografiar es
+ * justo lo que hay debajo de esa caja.
+ */
+
+/**
+ * LA MITAD IN-PAGE DE LA MEDICIÓN SOBRE IMAGEN (P72.13, 2026-09-02).
+ *
+ * `contrastCensus` manda estos pares a `sinMedir` y hace bien: sobre una foto no
+ * hay UN color detrás del texto, hay tantos como píxeles, y con `backdrop-blur`
+ * de por medio el color efectivo ni siquiera está en el DOM — lo calcula el
+ * compositor. No hay forma de rasterizar desde JavaScript lo que hay detrás de un
+ * elemento.
+ *
+ * Lo que sí puede hacerse desde aquí es **preparar la foto**: decir cuáles son,
+ * dónde caen, de qué color es su texto ya pintado y cuál es su umbral. Recortar el
+ * píxel y sacar el peor es trabajo del conductor, que sí tiene captura de pantalla
+ * (`scripts/censo/sobre-imagen.ts`).
+ *
+ * TRES COSAS QUE NO SE VEN Y SON LA MITAD DE ESTE BLOQUE:
+ *
+ * 1. **La clave es estable entre tomas, y el índice NO.** El nav sobre una foto
+ *    solo existe cuando la página se ha desplazado, así que hay que mirar a
+ *    varias alturas; si cada toma renumerase, el peor caso de una acabaría
+ *    atribuido a otro elemento. La clave es el elemento, no el orden.
+ * 2. **Se retiran de la foto los elementos ****`fixed`**** que tapan**, y el caso
+ *    que lo escribió es el diálogo de consentimiento: pinta `bg-card` OPACO sobre
+ *    el hero de Sobre mí, así que al ocultar el titular la cámara leía la tarjeta
+ *    blanca y devolvía **1,04:1** sobre un par que no tiene nada que ver. Es el
+ *    mismo falso positivo que ya tuvo `overImage` en 2026-08-22, por el otro lado.
+ *    Un `fixed` que CONTIENE al elemento medido no se toca: el nav es `sticky` y
+ *    es justo uno de los que hay que medir.
+ * 3. **`ocultar()` usa `visibility: hidden` y no `display: none`**, porque hace
+ *    falta que el elemento SIGA ocupando su caja: lo que se va a fotografiar es
+ *    exactamente lo que hay debajo de esa caja.
+ */
+const CLAVE_SOBRE_IMAGEN = (el, px) =>
+  `${label(el)}|${(el.textContent || "").trim().slice(0, 24)}|${px}`;
+
+/** ¿Este `fixed` se interpone entre la cámara y la caja que se va a medir? */
+function tapaFijo(n, cajas) {
+  const cs = getComputedStyle(n);
+  if (cs.position !== "fixed") return false;
+  if (cs.visibility === "hidden" || cs.display === "none") return false;
+  const r = n.getBoundingClientRect();
+  if (r.width === 0 || r.height === 0) return false;
+  return cajas.some(
+    ({ el, rect }) =>
+      !n.contains(el) &&
+      r.left < rect.right &&
+      r.right > rect.left &&
+      r.top < rect.bottom &&
+      r.bottom > rect.top,
+  );
+}
+
+window.paresSobreImagen = () => {
+  window.mostrarReveals();
+  const dpr = window.devicePixelRatio || 1;
+
+  // Las marcas de la toma anterior se retiran ANTES de nada. Sin esto, un
+  // elemento que dejó de estar sobre imagen seguiría oculto en la foto siguiente.
+  for (const el of document.querySelectorAll("[data-sobre-imagen]")) {
+    el.removeAttribute("data-sobre-imagen");
+    el.style.visibility = "";
+  }
+  for (const el of document.querySelectorAll("[data-tapa-la-foto]")) {
+    el.removeAttribute("data-tapa-la-foto");
+    el.style.visibility = "";
+  }
+
+  const encontrados = [];
+  const cajasVivas = [];
+  let i = 0;
+  let inspeccionados = 0;
+
+  for (const el of document.querySelectorAll("body *")) {
+    if (!paintsText(el)) continue;
+    inspeccionados += 1;
+    if (!overImage(el)) continue;
+
+    const cs = getComputedStyle(el);
+    const r = el.getBoundingClientRect();
+    // Fuera del viewport no hay píxel que leer. No se descarta en silencio: se
+    // devuelve con `visible: false` para que el conductor pueda decir cuántos
+    // no ha podido fotografiar, que es la diferencia entre un cero y un aprobado.
+    const visible =
+      r.width > 0 &&
+      r.height > 0 &&
+      r.bottom > 0 &&
+      r.top < window.innerHeight &&
+      r.right > 0 &&
+      r.left < window.innerWidth;
+
+    const u = umbralDe(el);
+    el.setAttribute("data-sobre-imagen", String(i));
+    if (visible) cajasVivas.push({ el, rect: r });
+    encontrados.push({
+      i,
+      clave: CLAVE_SOBRE_IMAGEN(el, u.px),
+      ejemplo: label(el),
+      texto: (el.textContent || "").trim().slice(0, 40),
+      color: paint(cs.color),
+      px: u.px,
+      peso: u.peso,
+      grande: u.grande,
+      AA: u.AA,
+      AAA: u.AAA,
+      visible,
+      // En píxeles de DISPOSITIVO, que es la unidad de la captura. Recortar con
+      // los CSS px daría una región desplazada en cuanto el DPR no sea 1.
+      caja: {
+        x: Math.max(0, Math.floor(r.left * dpr)),
+        y: Math.max(0, Math.floor(r.top * dpr)),
+        w: Math.ceil(r.width * dpr),
+        h: Math.ceil(r.height * dpr),
+      },
+    });
+    i += 1;
+  }
+
+  // Los `fixed` que tapan alguna de esas cajas: se marcan aparte para poder
+  // retirarlos de la foto y decir cuántos eran.
+  let fijos = 0;
+  for (const n of document.querySelectorAll("body *")) {
+    if (!tapaFijo(n, cajasVivas)) continue;
+    n.setAttribute("data-tapa-la-foto", "");
+    fijos += 1;
+  }
+
+  // EL ANCLA, y es la mitad que impide creerse el resto (BRAND.md §Cómo medir, 1).
+  // Un par que el censo SÍ sabe medir —texto normal sobre el fondo de la página—,
+  // devuelto con su caja y su cifra de referencia. El conductor lo mide por el
+  // camino del píxel y las dos tienen que coincidir: si no, lo que falla es el
+  // recorte o el DPR, no el color. Sin esto, un desalineamiento de la captura
+  // daría cifras plausibles sobre la región equivocada.
+  //
+  // Y NO SE ELIGE DENTRO DE UN `fixed` QUE SE VA A RETIRAR, que es el primer
+  // sitio donde este ancla se equivocó: cayó en el titular del diálogo de
+  // consentimiento —texto sobre su `bg-card` opaco, un par perfectamente
+  // medible— y al retirar el diálogo para la foto, la cámara leyó el vídeo que
+  // había detrás y el metro se declaró roto estando bien. El ancla tiene que
+  // seguir ahí cuando se dispara.
+  let ancla = null;
+  for (const el of document.querySelectorAll("body *")) {
+    if (!paintsText(el)) continue;
+    if (overImage(el)) continue;
+    if (el.closest("[data-tapa-la-foto]")) continue;
+    const r = el.getBoundingClientRect();
+    if (r.width < 40 || r.height < 8) continue;
+    if (!(r.top >= 0 && r.bottom <= window.innerHeight)) continue;
+    const bg = backdrop(el);
+    const fg = paint(getComputedStyle(el).color);
+    if (fg[3] !== 1) continue;
+    el.setAttribute("data-sobre-imagen", "ancla");
+    ancla = {
+      ejemplo: label(el),
+      color: fg,
+      esperado: ratio(fg.slice(0, 3), bg),
+      caja: {
+        x: Math.max(0, Math.floor(r.left * dpr)),
+        y: Math.max(0, Math.floor(r.top * dpr)),
+        w: Math.ceil(r.width * dpr),
+        h: Math.ceil(r.height * dpr),
+      },
+    };
+    break;
+  }
+
+  return {
+    dpr,
+    viewport: [window.innerWidth, window.innerHeight],
+    inspeccionados,
+    fijosRetirados: fijos,
+    encontrados,
+    ancla,
+  };
+};
+
+window.ocultarSobreImagen = () => {
+  const textos = document.querySelectorAll("[data-sobre-imagen]");
+  for (const el of textos) el.style.visibility = "hidden";
+  const fijos = document.querySelectorAll("[data-tapa-la-foto]");
+  for (const el of fijos) el.style.visibility = "hidden";
+  void document.body.offsetHeight;
+  return { textos: textos.length, fijos: fijos.length };
+};
+
+/**
+ * Devuelve la página a como estaba, y **NO desmarca**: las marcas las retira la
+ * llamada siguiente a `paresSobreImagen()`. Desmarcar aquí fue un fallo real y
+ * silencioso: de una sola detección salen varias tomas —los fotogramas del
+ * vídeo—, así que a partir de la segunda el diálogo de consentimiento volvía a
+ * estar en la foto y su tarjeta blanca ganaba el «peor píxel». La cifra que salía
+ * era 1,04:1 sobre un par que no tiene nada que ver con ella.
+ */
+window.mostrarSobreImagen = () => {
+  for (const el of document.querySelectorAll(
+    "[data-sobre-imagen], [data-tapa-la-foto]",
+  )) {
+    el.style.visibility = "";
+  }
+  return "ok";
 };

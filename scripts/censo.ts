@@ -62,7 +62,14 @@ import { readFileSync } from "node:fs";
 
 import { locales, pagePath } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
-import { HUELLA_PATH, sellar } from "./censo/huella";
+import { HUELLA_PATH, huella, sellar } from "./censo/huella";
+import {
+  compara,
+  escribeInventario,
+  INVENTARIO_PATH,
+  leeInventario,
+  type Corrida,
+} from "./censo/inventario";
 import { ab } from "./navegador/agent-browser";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
@@ -75,7 +82,13 @@ const TEMAS = ["light", "dark"] as const;
  *  lo ve `viewport-verifier`, no esto. */
 const LOCALE = locales[0];
 
-type Par = { ratio: number; px: number; nivel: string; ejemplo: string };
+type Par = {
+  clave: string;
+  ratio: number;
+  px: number;
+  nivel: string;
+  ejemplo: string;
+};
 /** Contorno de un control: WCAG 1.4.11, que no es contraste de texto. */
 type Contorno = {
   ejemplo: string;
@@ -89,11 +102,15 @@ type Censo = {
   reglasHover: string;
   /** Cuántos reveals había, y cuántos hubo que encender para poder medirlos. */
   reveals: string;
+  /** Cuántos textos ha mirado la composición por opacidad, y cuántos compuso. */
+  opacidad: string;
   tema: string;
   pares: number;
   bajoAA: Par[];
   bajoAAA: Par[];
   sinMedir: Par[];
+  /** Todos los pares medidos, con su clave: es el inventario de la corrida. */
+  censo: Par[];
   contornos: string;
   bajo3: Contorno[];
 };
@@ -115,6 +132,9 @@ let paresTotales = 0;
 let sinMedirTotales = 0;
 let contornosTotales = 0;
 
+/** El inventario de esta pasada: qué pares se midieron, no cuántos (P72.15). */
+const inventario: Corrida[] = [];
+
 console.log(
   `censo — ${PAGE_SLUGS.length} páginas × ${TEMAS.length} temas sobre ${BASE}\n`,
 );
@@ -123,6 +143,18 @@ for (const slug of PAGE_SLUGS) {
   const ruta = pagePath(LOCALE, slug);
   for (const tema of TEMAS) {
     ab(["open", `${BASE}${ruta}`]);
+    ab(["set", "media", tema]);
+    // EL DIÁLOGO DE CONSENTIMIENTO SE DECIDE, NO SE HEREDA (P72.15, 2026-09-02).
+    // Aporta pares, y su estado dependía del `localStorage` del navegador que
+    // conducía la pasada: en una sesión donde alguien ya había aceptado no se
+    // pintaba, y sus pares desaparecían de las catorce páginas a la vez. Es la
+    // causa del 414 → 391 del 2026-08-27 sobre el mismo contenido. Se limpia y se
+    // recarga, así que el diálogo entra SIEMPRE y la pasada es reproducible.
+    ab([
+      "eval",
+      "localStorage.removeItem('flm-consent'); localStorage.removeItem('flm-consent-seen'); 'ok'",
+    ]);
+    ab(["reload"]);
     ab(["set", "media", tema]);
     // SE DESPLAZA ANTES DE MEDIR (P68.585, 2026-08-24). La pasada abría la
     // página y medía ahí mismo, así que TODA isla que solo monta al hacer
@@ -151,6 +183,11 @@ for (const slug of PAGE_SLUGS) {
     const c = JSON.parse(JSON.parse(crudo.trim().split("\n").pop()!)) as Censo;
 
     corridas++;
+    inventario.push({
+      pagina: ruta,
+      tema,
+      claves: c.censo.map((p) => p.clave).sort(),
+    });
     paresTotales += c.pares;
     sinMedirTotales += c.sinMedir.length;
     contornosTotales += Number(c.contornos.match(/^\d+/)?.[0] ?? 0);
@@ -167,6 +204,7 @@ for (const slug of PAGE_SLUGS) {
       );
     if (c.reglasHover.startsWith("0")) fallo(`${etiqueta}: ${c.reglasHover}`);
     if (c.contornos.startsWith("0")) fallo(`${etiqueta}: ${c.contornos}`);
+    if (c.opacidad.startsWith("0 —")) fallo(`${etiqueta}: ${c.opacidad}`);
     if (c.pares === 0)
       fallo(`${etiqueta}: cero pares medidos. Una página siempre tiene pares.`);
 
@@ -197,7 +235,7 @@ for (const slug of PAGE_SLUGS) {
     console.log(
       `  [${String(corridas).padStart(2)}/${TOTAL_CORRIDAS}] ` +
         `${etiqueta.padEnd(34)} ${String(c.pares).padStart(3)} pares · ` +
-        `${c.sinMedir.length} sobre imagen · ${c.reveals} · metro ${c.metro}`,
+        `${c.sinMedir.length} sobre imagen · ${c.reveals} · ${c.opacidad} · metro ${c.metro}`,
     );
 
     // Y SE NOMBRAN, no solo se cuentan (P68.587, 2026-08-24). Un recuento al pie
@@ -218,6 +256,48 @@ if (corridas === 0 || paresTotales === 0 || contornosTotales === 0)
       `contornos: ${contornosTotales}). Un metro que devuelve lista vacía parece un aprobado.`,
   );
 
+/* --- El inventario: DE QUÉ CONJUNTO habla esta pasada (P72.15) -------------
+ *
+ * Se compara par a par con la anterior y el veredicto es ASIMÉTRICO. Uno que
+ * APARECE es cobertura nueva y puede venir de un cambio de contenido legítimo:
+ * se informa. Uno que DESAPARECE con la huella intacta es el metro viendo menos
+ * —el 414 → 391 del 2026-08-27—, y eso sí suspende: un par que no está en la
+ * lista no está aprobado, está sin mirar.
+ */
+const inventarioAnterior = leeInventario();
+const huellaHoy = huella();
+const diffs = inventarioAnterior
+  ? compara(inventarioAnterior, {
+      fecha: "",
+      huella: huellaHoy,
+      total: paresTotales,
+      corridas: inventario,
+    })
+  : [];
+
+if (inventarioAnterior && diffs.length) {
+  const mismaHuella = inventarioAnterior.huella === huellaHoy;
+  console.log(
+    `censo — el conjunto medido ha cambiado en ${diffs.length} corrida(s) ` +
+      `desde el inventario de ${inventarioAnterior.fecha} ` +
+      `(${inventarioAnterior.total} pares → ${paresTotales}):\n`,
+  );
+  for (const d of diffs) {
+    for (const k of d.salieron) console.log(`  − ${d.corrida}  ${k}`);
+    for (const k of d.entraron) console.log(`  + ${d.corrida}  ${k}`);
+  }
+  console.log("");
+
+  const perdidos = diffs.reduce((n, d) => n + d.salieron.length, 0);
+  if (perdidos && mismaHuella) {
+    fallo(
+      `${perdidos} par(es) han DESAPARECIDO del censo con la huella intacta. ` +
+        `Eso no es un aprobado: es el metro viendo menos que la vez anterior. ` +
+        `Los nombra la lista de arriba, con «−» delante.`,
+    );
+  }
+}
+
 if (problemas.length) {
   console.error(`censo — ${problemas.length} problema(s):\n`);
   for (const p of problemas) console.error(`  · ${p}`);
@@ -234,13 +314,25 @@ if (problemas.length) {
 // sin necesitar navegador — que es la mitad de la condición de re-medir de la
 // DoD que hasta ahora había que acordarse de leer (D90).
 const sello = sellar(new Date().toISOString().slice(0, 10));
+const fecha = new Date().toISOString().slice(0, 10);
+
+// Y el conjunto, no solo el total: es lo que hace que la pasada siguiente pueda
+// decir QUÉ par entró o salió en vez de restar dos números (P72.15).
+escribeInventario({
+  fecha,
+  huella: huellaHoy,
+  total: paresTotales,
+  corridas: inventario,
+});
 
 console.log(
   `censo ✓ — ${corridas} corridas (${PAGE_SLUGS.length} páginas × ${TEMAS.length} temas), ` +
     `${paresTotales} pares de texto y ${contornosTotales} contornos de control medidos, ` +
     `metro validado en las ${corridas}.\n` +
     `Cero bajo AA, cero bajo AAA y cero por debajo del 3:1 de WCAG 1.4.11. ` +
-    `${sinMedirTotales} pares sobre imagen quedan fuera del veredicto y se miran aparte.\n\n` +
+    `${sinMedirTotales} pares sobre imagen quedan fuera del veredicto y los mide ` +
+    `\`npm run censo:imagen\`.\n\n` +
     `Sellado en ${HUELLA_PATH} — ${sello.resumen}.\n` +
+    `Inventario en ${INVENTARIO_PATH} — ${paresTotales} pares en ${corridas} corridas.\n` +
     `Si esta pasada es la buena, actualiza LAST_A11Y_REVIEW en lib/design-values.ts.`,
 );
