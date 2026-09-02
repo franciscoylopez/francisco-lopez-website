@@ -9861,6 +9861,40 @@ y prometer de menos es el lado bueno en el que equivocarse—, pero se anota por
 que promete de menos también es drift**, y este proyecto ya tiene escrito el caso contrario
 (D162, la regla que prometía de más).
 
+### Addendum *(2026-09-02)* · Revisado el precio, y se acepta: la fricción es mecánica, acotada y ya no viaja a CI
+
+Arriba se escribió «se acepta, y lo que la hace aceptable es que el fallo es ruidoso». Eso era una
+predicción el día que se decidió. **Esto es la revisión después de haberlo pagado**, que es la única
+forma honesta de saber si el precio era bueno.
+
+**Lo que costó, medido sobre `ci.yml` al cerrar «Agentes»:** de los **5 CI en rojo de todo el
+sprint**, **4 fueron «Markdown al día»** (runs `33382110066`, `33375346772`, `33335239930` y el del
+cierre de sesión) y el quinto fue «Artículo al día», o sea la otra mitad de la misma familia.
+**Ningún otro gate se puso rojo en todo el sprint.** A 7-10 min por run, son ~25 min de ida y vuelta
+por vez, más el `npm run build && npm run md` local de cada una.
+
+**Y el diff de la última trae la medición exacta:** el commit de cierre añadió dos addenda aquí, y
+el markdown regenerado cambió **4 líneas, las 4 permalinks, 0 palabras de copy** — D160
+`L9856 → L9902` y D166 `L10413 → L10459`, las dos **+46**, que es exactamente el largo de los
+addenda. **El desplazamiento es constante y solo alcanza a las D posteriores a la inserción.** No
+hay nada que juzgar en el arreglo: es aritmética.
+
+**Las dos vías de escape siguen cerradas**, y por los motivos de arriba: quitar los números de línea
+deja el enlace cayendo en un archivo de 10.000 líneas, y generar en el build lo cerró D48. La
+tercera —anclas estables en vez de líneas— existe, pero **paga con D88**: el índice en la cabecera
+es lo que permite abrir este archivo con un `Read` de 130 líneas, y moverlo o congelarlo para que
+deje de crecer encarece cada consulta a cambio de ahorrar un comando.
+
+**Lo que sí cambió el precio es otra cosa, y por eso esto se cierra aceptando en vez de arreglando:
+el fallo ya no se descubre en CI.** `md:anclas` (2026-09-02) comprueba las 90 anclas de decisión en
+milisegundos y sin build, y corre en el cierre de turno. El caso dominante —siete de los catorce
+rojos de tres días— se ve ahora **antes de empujar**. La fricción no se ha eliminado; ha dejado de
+costar veinticinco minutos para costar un comando.
+
+**Decisión: se acepta, revisada con la cifra delante.** Si vuelve a mirarse, el disparador no es el
+número de rojos —ese ya bajó— sino que el arreglo deje de ser mecánico: el día que regenerar el
+markdown cambie una palabra de copy y no solo un permalink, esto es otra cosa.
+
 ## D159 · El guardián propio en vez del escáner ajeno: `check:agentes` — 2026-08-30
 
 **Decisión.** Lo que este sitio le promete a un agente lo vigila un guardián **nuestro** en CI
