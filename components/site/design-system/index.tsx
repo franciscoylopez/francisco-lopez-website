@@ -1,15 +1,12 @@
 import { type ReactNode } from "react";
 
 import type { Dictionary } from "@/app/[lang]/dictionaries";
-import { SectionBlocks } from "@/components/ui/block-opener";
-import {
-  construirRecorrido,
-  SectionIndexBlock,
-} from "@/components/ui/section-index";
+import { construirRecorrido } from "@/components/ui/section-index";
 import type { Locale } from "@/lib/i18n/config";
 
 import { type BreadcrumbDict } from "../breadcrumb";
-import { RelatedPages, type RelatedDict } from "../related-pages";
+import { PaginaDocumental } from "../pagina-documental";
+import { type RelatedDict } from "../related-pages";
 import { Hero } from "./hero";
 import { Rejilla } from "./01-rejilla";
 import { Ritmo } from "./02-ritmo";
@@ -55,9 +52,6 @@ const ORDEN = [
   "articulo",
 ] as const;
 
-/** El ancla del índice. Misma convención que el artículo, que ya la estrenó. */
-const ANCLA_INDICE = "indice";
-
 /**
  * LOS CUATRO BLOQUES, y esta lista es lo que hace VISIBLE una jerarquía que hasta
  * P70.47 solo existía en el comentario de abajo.
@@ -98,6 +92,10 @@ const ANCLA_INDICE = "indice";
  * Y por eso el corte NO coincide con la frontera de familia: manda la aritmética,
  * porque el tinte no anuncia nada — no tiene titular que pudiera mentir.
  * ───────────────────────────────────────────────────────────────────────────────
+ *
+ * Y LO QUE ESTA LISTA NO PUEDE COSTAR: que el archivo deje de leerse de un
+ * vistazo. Repartir las doce en cuatro familias es lo único que añade sobre
+ * escribirlas seguidas; el orden de la página sigue viéndose entero aquí.
  *
  * ANTES DE AÑADIR UN QUINTO BLOQUE, la pregunta es la densidad, y ahora tiene DOS
  * mitades y DOS palancas: por arriba, más de un bloque cada ~6 pantallas se lee a
@@ -158,12 +156,7 @@ export function DesignSystem({
   // Las paradas y sus marcos, derivados del orden: el ordinal es la POSICIÓN y el
   // rótulo lo pone el copy. Nada de esto se escribe dos veces — ni aquí, ni en las
   // dos páginas hermanas: el cálculo vive en la capa desde P50.88.
-  const { paradas, marcos } = construirRecorrido(
-    ORDEN,
-    t,
-    t.indice,
-    ANCLA_INDICE,
-  );
+  const { paradas, marcos } = construirRecorrido(ORDEN, t, t.indice);
 
   /**
    * Cada sección con SU rebanada del diccionario, indexada por su clave. Existe
@@ -216,27 +209,22 @@ export function DesignSystem({
   };
 
   return (
-    <>
-      <Hero
-        t={t.hero}
-        crumb={t.crumb}
-        breadcrumb={breadcrumb}
-        homeHref={homeHref}
-      />
-
-      <SectionIndexBlock id={ANCLA_INDICE} t={t.indice} items={paradas} />
-
-      {/* LAS DOCE, REPARTIDAS EN SUS CUATRO BLOQUES. La lista de secciones sigue
-          leyéndose de un vistazo, que es lo que este archivo tiene que ser; lo
-          único que cambia es que ahora se ve dónde empieza cada familia. */}
-      <SectionBlocks
-        bloques={BLOQUES}
-        copy={t.bloques}
-        paradas={paradas}
-        secciones={secciones}
-      />
-
-      <RelatedPages dict={related} current="designSystem" lang={lang} />
-    </>
+    <PaginaDocumental
+      hero={
+        <Hero
+          t={t.hero}
+          crumb={t.crumb}
+          breadcrumb={breadcrumb}
+          homeHref={homeHref}
+        />
+      }
+      t={t}
+      paradas={paradas}
+      bloques={BLOQUES}
+      secciones={secciones}
+      related={related}
+      current="designSystem"
+      lang={lang}
+    />
   );
 }
