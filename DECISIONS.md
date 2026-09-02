@@ -207,6 +207,9 @@
 - D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal
 - D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento
 - D171 · El generador de carruseles entra al repo, y su guardián pasa de uno a tres criterios
+- D172 · Las once «sin indexar» de Search Console son cero páginas, y el «nada» se escribe once veces
+- D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie
+- D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11033,5 +11036,209 @@ Dependabot.
 
 **Lo que esto NO resuelve, y hay que saberlo:** el guardián cubre los tres modos de fallo
 conocidos, no «que la lámina esté bien». Se siguen mirando los PNG.
+
+**Estado:** Aceptada.
+
+## D172 · Las once «sin indexar» de Search Console son cero páginas, y el «nada» se escribe once veces — 2026-09-02
+
+**El encargo, y por qué no se podía contestar de memoria.** Search Console listaba once URL sin
+indexar repartidas en tres motivos, más un vídeo sin indexar en su informe aparte, y la pregunta
+era la correcta: ¿se reindexa, se bloquea por `robots.txt`, o no se hace nada? Las URL concretas
+solo existían en cuatro capturas, así que lo primero fue sacar la lista exacta del panel. Las
+cuatro tablas venían completas —las cuatro decían «1-N de N»— y el panel del día lo confirmó:
+**tres motivos, 3 + 2 + 6 = 11, y un vídeo.** No había una cuarta categoría escondida.
+
+**El hallazgo de verdad no estaba en la lista de fallos, sino en la de aciertos.** Las 29
+indexadas se comprobaron una a una: son **las 28 variantes canónicas** —las catorce páginas por
+los dos idiomas— más el PDF del CV en EN. La cobertura es del 100%, y eso es lo que convierte
+las once en lo que son: **ninguna de las once es una página.** Son tres redirecciones de
+canonicalización y ocho assets.
+
+| # | URL | Categoría | Decisión | Motivo |
+|---|---|---|---|---|
+| 1 | `https://www.franciscolopez.es/` | Redirección | nada | www → apex |
+| 2 | `http://franciscolopez.es/` | Redirección | nada | http → https |
+| 3 | `http://www.franciscolopez.es/` | Redirección | nada | las dos a la vez |
+| 4 | `/_next/static/media/017d9bea…41rroleoq1br7.woff2` | 404 | nada | fuente de un build viejo |
+| 5 | `http://franciscolopez.es/index.htm` | 404 | nada | nunca existió, y nada enlaza ahí |
+| 6 | `/_next/static/immutable/media/017d9bea…woff2` | Rastreada | nada | fuente viva |
+| 7 | `/_next/static/immutable/media/83afe278…woff2` | Rastreada | nada | fuente viva |
+| 8 | `/favicon.ico?favicon.0_iexrdy4sj8d.ico` | Rastreada | nada | favicon con el hash de un build |
+| 9 | `/favicon.ico?favicon.379anfkyqyzgy.ico` | Rastreada | nada | ídem, otro build |
+| 10 | `/logo-kit/favicon/favicon.ico` | Rastreada | nada | descarga real del Brand Kit |
+| 11 | `/video/francisco-sobre-mi-apertura.webm` | Rastreada | nada | el mismo asset que el informe de vídeos |
+| 12 | el mismo `.webm`, en `/sobre-mi` | Vídeo | nada | «no está en una página de visualización», y es cierto |
+
+**Tres cosas se verificaron en vez de suponerse, y una tumbó la hipótesis de la ficha.**
+
+- **El 404 de `index.htm` no viene de fuera.** El informe de Enlaces da **un enlace externo en
+  todo el sitio**, desde `findit.co.in` a la home. No hay nada que redirigir: redirigir un 404
+  sin inbound es inventar una ruta para que no la pida nadie.
+- **El 404 de la `.woff2` es la definición de un asset inmutable.** Cambió el segmento
+  (`_next/static/media` → `_next/static/immutable/media`) y con él el hash. Una URL inmutable
+  cambia en cada build **por diseño**; que la vieja dé 404 es el comportamiento, no el fallo.
+- **La ficha suponía que las redirecciones eran los once alias que un agente adivina**
+  (`/about`, `/privacy`, `/contact`… de la config). **No lo son, y además esos alias no aparecen
+  en Search Console en absoluto.** Igual de importante: tampoco aparecen `/md/<locale>/<pagina>.md`
+  ni `/.well-known/ard.json`, que era la otra cosa que la ficha temía ver en «rastreadas sin
+  indexar» (D158, D166). Google no los rastrea. **No había nada que proteger ahí**, y el descarte
+  se escribe porque una preocupación sin comprobar vuelve.
+
+**Por qué `robots.txt` no se toca, que era una de las tres opciones del encargo.** En los ocho
+assets bloquear sería **peor que no hacer nada**, y no por conservadurismo: `_next/static/`
+bloqueado le rompe el renderizado a Google —necesita las fuentes y el CSS para ver la página que
+sí indexa— y `/favicon.ico` bloqueado le quita el favicon a los resultados de búsqueda. Es la
+forma de D41: el arreglo que mejora la columna del informe y empeora la cosa que el informe
+mide. Y además `robots.txt` es una superficie con decisión escrita encima (D160), así que
+tocarla por un ámbar cosmético habría costado más de lo que resuelve.
+
+**El único caso con dos respuestas defendibles era el vídeo, y se elige la de coste cero.** El
+`.webm` de `/sobre-mi` va con `aria-hidden`, `tabIndex={-1}`, sin `controls` y sin título: es
+**cómo abre la página**, no contenido (D65). Google lo rastrea, ve que `/sobre-mi` no es una
+página de visualización y no lo indexa — que es exactamente lo correcto. Se consideraron y se
+descartan dos alternativas:
+
+- **`VideoObject` + hacerla página de visualización.** Rechazada: contradice el `aria-hidden` del
+  propio elemento —marcarlo como contenido es afirmar lo contrario de lo que el DOM declara— y
+  mandaría a quien buscara a un clip decorativo de apertura.
+- **`X-Robots-Tag: noindex` sobre `/video/*`.** Defendible y barata (cuatro líneas en
+  `next.config.ts`): convertiría «Google decidió no indexarlo» en «lo decidimos nosotros»,
+  declarado y legible por una máquina, que es el criterio del `Content-Signal` de D160. Se
+  descarta porque **no cambia ningún resultado**: el vídeo ya no se indexa. Compraría una fila
+  verde en un panel a cambio de una regla más que mantener, y este repositorio ya tiene escrito
+  que un criterio de aceptación no lo pone la nota de un panel ajeno (D157, D167).
+
+**Consecuencia aceptada por escrito, que es la parte que hace que esto no se reabra.** El panel
+se queda **en 11 sin indexar y 1 vídeo sin indexar, indefinidamente**, y ninguna de las doce
+filas es un defecto. Mismo trato que el 1/2 de `/skills.sh` y el 50% del nodo `Organization`
+(D161): cuando la respuesta correcta deja el marcador en ámbar, lo que se corrige es la lectura
+del marcador, no el sitio. **Si alguien vuelve a abrir Search Console y ve estas doce, la
+respuesta está aquí y es «nada», una por una** — y el criterio de salida es concreto: se vuelve a
+mirar el día que aparezca en «sin indexar» una URL que **sea una página**, o el día que el
+recuento de indexadas baje de las 28 variantes.
+
+**Estado:** Aceptada.
+
+## D173 · Un recuento no vive donde ningún gate puede leerlo, y esta regla ya se había escrito para media superficie — 2026-09-02
+
+**El hecho.** El «About» del repositorio público decía «**Doce** páginas bilingües, WCAG AAA en
+ambos temas y **ocho** guardianes en CI». Son **catorce** (`PAGE_COUNT`) y **veintidós**
+(`new Set(CASOS.map(c => c.guardian)).size`, con 50 casos malos). Quien llega desde LinkedIn lee
+esas cifras antes que el código.
+
+**Lo que lo convierte en decisión y no en una edición de dos números: la decisión ya estaba
+tomada, y para esta frase exacta.** El 2026-08-19, el commit `198e206` la retiró de
+`social-preview.png` —«la social preview deja de contar cosas: las cifras caducan, la imagen
+no»— citando D60: *«una fuente única evita dos verdades; no mantiene al día una copia
+impresa»*. El barrido cubrió la imagen y **no cubrió el About**, que dice lo mismo y se edita
+con una llamada a la API. Media superficie hecha, media olvidada.
+
+**Y aquel commit predijo el tamaño del error.** Escribió: «el tercero ya estaba a una línea de
+YAML de dejar de serlo: `check:guardianes` existe en `package.json` y no está en `ci.yml`, así
+que en cuanto se cablee son nueve». Dos semanas después son veintidós. La cifra no se quedó a
+uno de distancia: se fue a catorce. **La ficha de esta tarea, escrita el 2026-09-01, decía
+veintiuno** — se equivocó en el mismo sentido y en menos de un día, porque el guardián número
+veintidós entró esa noche. Es la prueba más limpia que va a dar este repositorio de por qué la
+cifra no puede estar ahí.
+
+**La regla, que es lo reutilizable — y no es «nada de números».** La línea la marca **quién
+puede leer la superficie**: `PAGE_COUNT` y `GUARDIAN_COUNT` están vivos porque un gate del repo
+los deriva o los sella, pero **ningún gate puede leer el About de GitHub**. Así que ahí solo
+aguanta lo que no cambia por su cuenta:
+
+| Se queda | Por qué | Se va | Por qué |
+|---|---|---|---|
+| «bilingüe» | estructural, no cambia | «Doce páginas» | cambia al añadir una página |
+| «Next.js 16, TypeScript, Tailwind v4» | un salto de mayor es un acto deliberado y visible | «ocho guardianes en CI» | cambió catorce veces en dos semanas |
+| «WCAG AAA en ambos temas» | es una **política**, no un recuento, y `censo` + `check:palette` impiden que se vuelva falsa en silencio | | |
+
+O sea: **un RECUENTO cambia cada sprint y no puede vivir fuera del alcance de un gate; una
+POLÍTICA no cambia nunca y además está vigilada puertas adentro.** El About queda: «El código de
+franciscolopez.es: web personal bilingüe de un Senior Product Manager. Next.js 16, TypeScript y
+Tailwind v4, WCAG AAA en ambos temas, con el sistema de diseño y la accesibilidad publicados en
+el propio sitio». Las dos últimas cláusulas **apuntan a la fuente viva** en vez de copiarla, que
+es D38 aplicado a una superficie que no puede derivar nada.
+
+**Por qué NO el guardián que compare el About por API**, que era la otra salida sobre la mesa.
+Metería una llamada de red en CI, y eso ya está decidido en contra por D141: `check:enlaces` y
+`psi` viven fuera de CI porque un servidor ajeno caído cinco minutos da un rojo que no es
+nuestro. Y sería un guardián para sostener un dato que **no hace falta publicar**: se paga
+mantenimiento por conservar el modo de fallo. Quitar la cifra no lo vigila, lo **elimina**, que
+es más barato y no puede fallar.
+
+**La otra mitad del barrido: las capturas del README eran una copia impresa igual.**
+`home-light.png` y `home-dark.png` eran del 2026-08-19 y enseñaban un sitio que ya no existe,
+con **tres** derivas en dos semanas: el kicker decía «UX · SaaS · IA aplicada» y hoy es «UX ·
+SaaS · IA · Builder»; el nav **no llevaba «Contacto»**, que se construyó el 23; y al titular le
+faltaba **el punto de marca en morado** (D137, del 27). Regeneradas contra producción a 1440×900
+en los dos temas, con el consentimiento presembrado para que la franja no salga en la foto.
+
+**Y aquí la regla es otra, porque una captura ES una copia por naturaleza y no se puede
+desinventar.** No se puede quitar «la cifra» de una foto del sitio: la foto entera es el dato.
+Así que lo que se escribe es **cuándo se regenera**: cuando cambie algo que se vea en el pliegue
+de la home — el nav, el titular, el kicker o el gesto de marca. Las tres derivas de esta vez
+fueron exactamente esas cuatro cosas, así que el criterio no es teórico. No lleva gate: pesarían
+más un navegador y una captura en CI que las dos veces al año que esto se mueve, y ese reparto
+—manual por coste, con el motivo escrito— es el que `PRD-Live.md` §5 declara aceptable.
+
+**El resto de superficies públicas se barrió y estaba limpio**, que también se escribe para que
+no se vuelvan a mirar: la social preview **subida** a GitHub es ya la sin cifras (mismos bytes
+que el fichero del repo, comprobado), los once *topics* no llevan ninguna, la bio del perfil
+tampoco, y el `LICENSE` y `robots.txt` no publican recuentos. No hay plantillas de issue ni de
+PR. En el `README`, la prosa ya decía «Catorce páginas» y **los guardianes se listan en una
+tabla en vez de contarse**, que es la forma correcta: una fila de más es visible en el diff, un
+número de más no.
+
+**Estado:** Aceptada.
+
+## D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo — 2026-09-02
+
+**El hecho, y lo caro que fue.** `regeneradores-stop.mjs` (P72.01) se construyó para que un
+artefacto derivado que se queda atrás se vea **al cerrar el turno** y no diez minutos después en
+CI. **Las dos primeras tareas hechas después de construirlo —P72.03 y P72.04— se fueron a CI en
+rojo por `md:verificar`, que es exactamente el fallo que evita.** Con el hook registrado, el
+fallo presente y el aviso emitiéndose sin error.
+
+**La causa no era el hook: era el destinatario.** El contrato de un hook de `Stop` reparte por
+código de salida, y lo dice el propio menú de `/hooks`:
+
+| Salida | Quién lo ve |
+|---|---|
+| `0` | **nadie** — stdout y stderr no se muestran |
+| `2` | **el modelo**, por stderr, y la conversación continúa |
+| otros | solo la persona |
+
+Los dos hooks de cierre —este y `format-stop.mjs`, anterior— emitían por
+`console.log(JSON.stringify({systemMessage}))` **con exit 0**. O sea que el aviso llegaba como
+mucho a la persona. **Y la persona no es quien actúa:** quien edita, commitea y empuja es el
+modelo. Un guardián que funciona perfectamente y habla hacia el lado equivocado es
+indistinguible de uno que no existe, que es la familia de fallo que este repositorio lleva
+encontrando desde D38 — solo que aquí lo mudo no era el metro, era el altavoz.
+
+**La red ya estaba tendida para el exit 2 y no se entregó.** Los dos ficheros llevaban
+`if (evento?.stop_hook_active) process.exit(0)`, y esa guarda **solo hace falta si el hook
+bloquea alguna vez**. Estaba puesta la protección contra el bucle de un mecanismo que se envió
+sin usar.
+
+**La decisión: bloquear una vez, y solo una.** Cuando hay rojo, el aviso sale por **stderr** con
+**exit 2**; en la segunda llamada, `stop_hook_active` lo hace salir 0 y el turno cierra. El coste
+máximo es un turno de más. El que se estaba pagando era un viaje de diez minutos a CI, dos veces
+seguidas.
+
+**Y `format-stop.mjs` cambia también, donde además importa más:** ese hook **reescribe
+archivos**. Si Prettier toca algo después de que el modelo haya commiteado, el árbol deja de
+coincidir con el commit, y un aviso que el modelo no ve no puede corregir un commit que el modelo
+acaba de hacer.
+
+**Lo que esto revisa de P72.01, y conviene decirlo entero.** Aquella tarea escribió que «los dos
+se validaron rompiéndolos», y es verdad: se rompieron los **scripts** y se comprobó que salían
+rojos. Lo que no se disparó fue **el hook dentro de una sesión**, que es donde vivía el defecto.
+Es la regla de validar un método ejecutándolo sobre el caso real, aplicada un escalón más
+arriba: no basta con que el guardián detecte, tiene que **llegar**. Aquí se validaron los cinco
+estados —árbol limpio, rojo, guarda de bucle, con reescritura y sin ella— antes de commitear.
+
+**Lo que sigue fuera, y no cambia:** ninguno de los dos arregla nada por su cuenta. Dicen qué
+está rojo y con qué comando se resuelve. Sellar sin mirar congelaría el fallo (P72.01), y un
+`npm run build && npm run md` de 46 segundos no cabe en un cierre de turno.
 
 **Estado:** Aceptada.

@@ -26,13 +26,22 @@
 // Se le añade `--cache`, que baja la pasada del árbol entero de 2,5 s a 0,7 s
 // cuando no ha cambiado nada, que es el caso normal al cerrar un turno.
 //
-// DEJA RASTRO. `--list-different` hace que Prettier nombre solo lo que ha
-// reescrito, y eso sale por `systemMessage`. Un hook mudo es justo el modo de
-// fallo que este arregla: si vuelve a haber tres archivos por turno llegando sin
-// formatear, se ve en el momento en vez de en el PR.
+// DEJA RASTRO, Y HACIA EL LADO QUE ACTÚA — corregido el 2026-09-02, el mismo
+// cabo suelto que `regeneradores-stop.mjs`, donde está el porqué largo. En un
+// hook de Stop, `exit 0` significa «no muestres stdout ni stderr»: el
+// `systemMessage` que había aquí llegaba como mucho a la persona, y quien acaba
+// de editar y commitear es el modelo.
 //
-// NO BLOQUEA NUNCA. Sale 0 pase lo que pase; si Prettier peta, `format:check` lo
-// cazará igual en CI.
+// AQUÍ IMPORTA MÁS QUE EN EL OTRO, y por eso se cambia también: este hook
+// **reescribe archivos**. Si Prettier toca algo después de que el modelo haya
+// commiteado, el árbol deja de coincidir con el commit y nadie se entera hasta
+// el `format:check` del PR. Un aviso que el modelo no ve no puede corregir un
+// commit que acaba de hacer el modelo.
+//
+// BLOQUEA UNA VEZ Y SOLO UNA: exit 2 con el detalle por stderr, y la guarda de
+// `stop_hook_active` de abajo impide la segunda. Sigue sin poder «petar hacia
+// arriba»: si Prettier falla, esto no dice nada y `format:check` lo caza en CI
+// como siempre.
 
 import { spawnSync } from "node:child_process";
 import { dirname, resolve } from "node:path";
@@ -80,13 +89,12 @@ if (reescritos.length > 0) {
     reescritos.length === 1
       ? "1 archivo que no pasó"
       : `${reescritos.length} archivos que no pasaron`;
-  console.log(
-    JSON.stringify({
-      systemMessage:
-        `Formato al cierre: Prettier ha reescrito ${cuantos} por Edit/Write ` +
-        `(${reescritos.join(", ")}).`,
-    }),
+  // stderr + exit 2: el único canal que le llega al modelo. Ver la cabecera.
+  process.stderr.write(
+    `Formato al cierre: Prettier ha reescrito ${cuantos} por Edit/Write ` +
+      `(${reescritos.join(", ")}).\n`,
   );
+  process.exit(2);
 }
 
 process.exit(0);

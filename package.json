@@ -47,6 +47,7 @@
     "check:marcas": "tsx scripts/check-marcas.ts",
     "md": "tsx scripts/md/extraer.ts",
     "md:verificar": "tsx scripts/md/extraer.ts --verificar",
+    "md:anclas": "tsx scripts/md/anclas.ts",
     "check:agentes": "tsx scripts/check-agentes.ts",
     "carrusel": "node scripts/carrusel/render.mjs"
   },

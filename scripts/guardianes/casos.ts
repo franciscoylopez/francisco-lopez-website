@@ -403,6 +403,24 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replace(/^last-updated: .*$/m, "last-updated: 2026-01-01"),
   },
   {
+    guardian: "md:anclas",
+    rotura:
+      "una entrada nueva de DECISIONS.md desplaza las anclas que el markdown cita",
+    // EL CASO REAL, Y ES CASI TODO PR (P72.05). No hace falta tocar el artículo:
+    // basta con que `DECISIONS.md` crezca por arriba —una entrada nueva alarga el
+    // índice de su cabecera— para que TODAS las líneas de abajo se muevan y las
+    // 90 anclas del markdown commiteado apunten a la decisión de al lado. Se
+    // muerde ahí, en el archivo citado y no en el que cita, porque esa es la
+    // dirección en la que esto se estropea de verdad.
+    //
+    // Y es el caso que separa a este guardián de `md:verificar`: aquel lo ve
+    // también, pero tras 46 s y un build. Si algún día dejan de ser anclas por
+    // línea, este caso malo es lo primero que hay que releer.
+    archivo: "DECISIONS.md",
+    mutar: (o) =>
+      o.replace("\n## D", "\n\nUna línea que empuja el archivo.\n\n## D"),
+  },
+  {
     guardian: "check:articulo",
     rotura: "cambia el copy del artículo y la fecha que ve Google no se mueve",
     // El caso malo es el estado real hasta P70.04: `ARTICLE_UPDATED` pasó DOCE
