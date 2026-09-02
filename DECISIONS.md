@@ -207,6 +207,7 @@
 - D169 · El contador que da el denominador, y la excepción que hubo que escribir en un documento legal
 - D170 · Una excepción a la postura propia, no a la norma: Vercel Web Analytics carga sin consentimiento
 - D171 · El generador de carruseles entra al repo, y su guardián pasa de uno a tres criterios
+- D172 · Las once «sin indexar» de Search Console son cero páginas, y el «nada» se escribe once veces
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11033,5 +11034,85 @@ Dependabot.
 
 **Lo que esto NO resuelve, y hay que saberlo:** el guardián cubre los tres modos de fallo
 conocidos, no «que la lámina esté bien». Se siguen mirando los PNG.
+
+**Estado:** Aceptada.
+
+## D172 · Las once «sin indexar» de Search Console son cero páginas, y el «nada» se escribe once veces — 2026-09-02
+
+**El encargo, y por qué no se podía contestar de memoria.** Search Console listaba once URL sin
+indexar repartidas en tres motivos, más un vídeo sin indexar en su informe aparte, y la pregunta
+era la correcta: ¿se reindexa, se bloquea por `robots.txt`, o no se hace nada? Las URL concretas
+solo existían en cuatro capturas, así que lo primero fue sacar la lista exacta del panel. Las
+cuatro tablas venían completas —las cuatro decían «1-N de N»— y el panel del día lo confirmó:
+**tres motivos, 3 + 2 + 6 = 11, y un vídeo.** No había una cuarta categoría escondida.
+
+**El hallazgo de verdad no estaba en la lista de fallos, sino en la de aciertos.** Las 29
+indexadas se comprobaron una a una: son **las 28 variantes canónicas** —las catorce páginas por
+los dos idiomas— más el PDF del CV en EN. La cobertura es del 100%, y eso es lo que convierte
+las once en lo que son: **ninguna de las once es una página.** Son tres redirecciones de
+canonicalización y ocho assets.
+
+| # | URL | Categoría | Decisión | Motivo |
+|---|---|---|---|---|
+| 1 | `https://www.franciscolopez.es/` | Redirección | nada | www → apex |
+| 2 | `http://franciscolopez.es/` | Redirección | nada | http → https |
+| 3 | `http://www.franciscolopez.es/` | Redirección | nada | las dos a la vez |
+| 4 | `/_next/static/media/017d9bea…41rroleoq1br7.woff2` | 404 | nada | fuente de un build viejo |
+| 5 | `http://franciscolopez.es/index.htm` | 404 | nada | nunca existió, y nada enlaza ahí |
+| 6 | `/_next/static/immutable/media/017d9bea…woff2` | Rastreada | nada | fuente viva |
+| 7 | `/_next/static/immutable/media/83afe278…woff2` | Rastreada | nada | fuente viva |
+| 8 | `/favicon.ico?favicon.0_iexrdy4sj8d.ico` | Rastreada | nada | favicon con el hash de un build |
+| 9 | `/favicon.ico?favicon.379anfkyqyzgy.ico` | Rastreada | nada | ídem, otro build |
+| 10 | `/logo-kit/favicon/favicon.ico` | Rastreada | nada | descarga real del Brand Kit |
+| 11 | `/video/francisco-sobre-mi-apertura.webm` | Rastreada | nada | el mismo asset que el informe de vídeos |
+| 12 | el mismo `.webm`, en `/sobre-mi` | Vídeo | nada | «no está en una página de visualización», y es cierto |
+
+**Tres cosas se verificaron en vez de suponerse, y una tumbó la hipótesis de la ficha.**
+
+- **El 404 de `index.htm` no viene de fuera.** El informe de Enlaces da **un enlace externo en
+  todo el sitio**, desde `findit.co.in` a la home. No hay nada que redirigir: redirigir un 404
+  sin inbound es inventar una ruta para que no la pida nadie.
+- **El 404 de la `.woff2` es la definición de un asset inmutable.** Cambió el segmento
+  (`_next/static/media` → `_next/static/immutable/media`) y con él el hash. Una URL inmutable
+  cambia en cada build **por diseño**; que la vieja dé 404 es el comportamiento, no el fallo.
+- **La ficha suponía que las redirecciones eran los once alias que un agente adivina**
+  (`/about`, `/privacy`, `/contact`… de la config). **No lo son, y además esos alias no aparecen
+  en Search Console en absoluto.** Igual de importante: tampoco aparecen `/md/<locale>/<pagina>.md`
+  ni `/.well-known/ard.json`, que era la otra cosa que la ficha temía ver en «rastreadas sin
+  indexar» (D158, D166). Google no los rastrea. **No había nada que proteger ahí**, y el descarte
+  se escribe porque una preocupación sin comprobar vuelve.
+
+**Por qué `robots.txt` no se toca, que era una de las tres opciones del encargo.** En los ocho
+assets bloquear sería **peor que no hacer nada**, y no por conservadurismo: `_next/static/`
+bloqueado le rompe el renderizado a Google —necesita las fuentes y el CSS para ver la página que
+sí indexa— y `/favicon.ico` bloqueado le quita el favicon a los resultados de búsqueda. Es la
+forma de D41: el arreglo que mejora la columna del informe y empeora la cosa que el informe
+mide. Y además `robots.txt` es una superficie con decisión escrita encima (D160), así que
+tocarla por un ámbar cosmético habría costado más de lo que resuelve.
+
+**El único caso con dos respuestas defendibles era el vídeo, y se elige la de coste cero.** El
+`.webm` de `/sobre-mi` va con `aria-hidden`, `tabIndex={-1}`, sin `controls` y sin título: es
+**cómo abre la página**, no contenido (D65). Google lo rastrea, ve que `/sobre-mi` no es una
+página de visualización y no lo indexa — que es exactamente lo correcto. Se consideraron y se
+descartan dos alternativas:
+
+- **`VideoObject` + hacerla página de visualización.** Rechazada: contradice el `aria-hidden` del
+  propio elemento —marcarlo como contenido es afirmar lo contrario de lo que el DOM declara— y
+  mandaría a quien buscara a un clip decorativo de apertura.
+- **`X-Robots-Tag: noindex` sobre `/video/*`.** Defendible y barata (cuatro líneas en
+  `next.config.ts`): convertiría «Google decidió no indexarlo» en «lo decidimos nosotros»,
+  declarado y legible por una máquina, que es el criterio del `Content-Signal` de D160. Se
+  descarta porque **no cambia ningún resultado**: el vídeo ya no se indexa. Compraría una fila
+  verde en un panel a cambio de una regla más que mantener, y este repositorio ya tiene escrito
+  que un criterio de aceptación no lo pone la nota de un panel ajeno (D157, D167).
+
+**Consecuencia aceptada por escrito, que es la parte que hace que esto no se reabra.** El panel
+se queda **en 11 sin indexar y 1 vídeo sin indexar, indefinidamente**, y ninguna de las doce
+filas es un defecto. Mismo trato que el 1/2 de `/skills.sh` y el 50% del nodo `Organization`
+(D161): cuando la respuesta correcta deja el marcador en ámbar, lo que se corrige es la lectura
+del marcador, no el sitio. **Si alguien vuelve a abrir Search Console y ve estas doce, la
+respuesta está aquí y es «nada», una por una** — y el criterio de salida es concreto: se vuelve a
+mirar el día que aparezca en «sin indexar» una URL que **sea una página**, o el día que el
+recuento de indexadas baje de las 28 variantes.
 
 **Estado:** Aceptada.
