@@ -11,7 +11,7 @@
 # técnica estuvo en 0% hasta el 5 de agosto y subió al 3,74%, y los CINCO peores
 # archivos (los cinco en F) no eran código de la web:
 #
-#   contrast-census.js        463 líneas · el censo de contraste
+#   contrast-census.js        463 líneas · el censo de contraste (hoy `censo/`, P72.195)
 #   en.ts / es.ts             registros de contenido · 0 funciones, 0 condicionales
 #   check-experience-copy.ts  un guardián
 #   artefacto-svg.ts          el saneador del artefacto
