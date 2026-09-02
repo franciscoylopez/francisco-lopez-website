@@ -1011,10 +1011,9 @@
           { "label": "D73", "path": "DECISIONS.md" },
           ", and the ",
           {
-            "label": "contrast-census.js",
-            "path": "scripts/design-review/contrast-census.js"
-          },
-          " script"
+            "label": "contrast census",
+            "path": "scripts/design-review/censo/README.md"
+          }
         ]
       }
     },

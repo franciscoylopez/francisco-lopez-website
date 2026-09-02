@@ -1010,10 +1010,10 @@
           { "label": "D61", "path": "DECISIONS.md" },
           " y ",
           { "label": "D73", "path": "DECISIONS.md" },
-          ", y el script ",
+          ", y el ",
           {
-            "label": "contrast-census.js",
-            "path": "scripts/design-review/contrast-census.js"
+            "label": "censo de contraste",
+            "path": "scripts/design-review/censo/README.md"
           }
         ]
       }

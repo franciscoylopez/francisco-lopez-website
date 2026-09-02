@@ -70,7 +70,7 @@ export const DEPENDENCIAS: Record<BloqueId, readonly string[]> = {
     "scripts/guardianes/casos.ts",
     ".github/workflows/ci.yml",
     "GATES.md#Cómo se verifica lo que no ve un compilador",
-    "scripts/design-review/contrast-census.js",
+    "scripts/design-review/censo/",
   ],
 
   // El punto ciego: la pasada con NVDA, las cinco cosas que ninguna herramienta
@@ -81,7 +81,7 @@ export const DEPENDENCIAS: Record<BloqueId, readonly string[]> = {
   // mintiendo: por eso este bloque es el que más se mueve y el que más falta
   // hacía vigilar.
   limits: [
-    "scripts/design-review/contrast-census.js",
+    "scripts/design-review/censo/",
     "lib/figures.ts",
     "DECISIONS.md#D124",
     "content/cv/",

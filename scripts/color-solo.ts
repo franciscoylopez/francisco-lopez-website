@@ -29,15 +29,12 @@
  *     npm run build && npm start        # en otra terminal
  *     npm run color-solo
  */
-import { readFileSync } from "node:fs";
-
 import { locales, pagePath } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
+import { guionDelCenso, guionDelDetector } from "./design-review/guion";
 import { ab } from "./navegador/agent-browser";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
-const CENSO = "scripts/design-review/contrast-census.js";
-const DETECTOR = "scripts/design-review/color-solo.js";
 const TEMAS = ["light", "dark"] as const;
 const LOCALE = locales[0];
 
@@ -61,8 +58,8 @@ interface Resultado {
 
 // El detector se apoya en `paint`, `label`, `freezeMotion` y `mostrarReveals`,
 // que viven en el guion del censo: se inyectan los dos, en ese orden.
-const guionCenso = readFileSync(CENSO, "utf8");
-const guionDetector = readFileSync(DETECTOR, "utf8");
+const guionCenso = guionDelCenso();
+const guionDetector = guionDelDetector();
 
 const filtro = process.argv
   .find((a) => a.startsWith("--pagina="))

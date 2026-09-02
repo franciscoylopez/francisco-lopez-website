@@ -78,9 +78,8 @@ const eslintConfig = defineConfig([
 
   // EL CENSO DE CONTRASTE NO ES CÓDIGO DE NODE: es un guion que se INYECTA en la
   // página y se evalúa dentro del navegador, así que sus globales son `window` y
-  // `document`. Es el archivo peor puntuado por qlty y el que se ha roto en
-  // silencio dos veces (D70), o sea justo el que más falta hacía que mirara
-  // alguien.
+  // `document`. Es el que se ha roto en silencio dos veces (D70), o sea justo el
+  // que más falta hacía que mirara alguien.
   {
     files: ["scripts/design-review/*.js"],
     extends: [js.configs.recommended],
@@ -91,14 +90,92 @@ const eslintConfig = defineConfig([
     },
   },
 
-  // Y `color-solo.js` se inyecta DESPUÉS del censo, en la misma página, así que
-  // usa sus helpers de color. Se declaran aquí y solo para él —no para todo
-  // `design-review/`— para que un `paint` mal escrito dentro del propio censo
-  // siga saliendo en rojo, que es donde se ha roto dos veces.
+  // Y EL CENSO SON OCHO PIEZAS QUE SE INYECTAN CONCATENADAS (P72.195), así que
+  // comparten UN solo ámbito: lo que una declara, las siguientes lo usan. ESLint
+  // mira archivo por archivo, y sin decírselo pasarían dos cosas, las dos malas:
+  // `no-undef` marcaría en rojo cada referencia legítima entre piezas, y
+  // `no-unused-vars` marcaría cada declaración que se usa en otra.
+  //
+  // La lista de abajo ES la superficie compartida del guion, y mantenerla al día
+  // no es burocracia: es lo que conserva vivo `no-undef` dentro del censo, que es
+  // la protección que este bloque defendía desde el principio. Un `paint` mal
+  // escrito sigue saliendo en rojo; un nombre nuevo que se comparta y no se
+  // declare aquí, también.
+  //
+  // `vars: "local"` es la otra mitad: dentro de una función, una variable sin usar
+  // sigue siendo un error. Lo que deja de comprobarse es el nivel superior, que en
+  // este guion no es «el archivo» sino «el paquete entero».
   {
-    files: ["scripts/design-review/color-solo.js"],
+    files: ["scripts/design-review/censo/*.js"],
+    extends: [js.configs.recommended],
     languageOptions: {
-      globals: { paint: "readonly", label: "readonly" },
+      ecmaVersion: "latest",
+      sourceType: "script",
+      globals: {
+        ...globals.browser,
+        CLAVE_SOBRE_IMAGEN: "readonly",
+        CONTROL_SEL: "readonly",
+        HOVER_RULES: "readonly",
+        backdrop: "readonly",
+        cajaDelHijo: "readonly",
+        cajaDelTexto: "readonly",
+        censarContornos: "readonly",
+        compuestosPorOpacidad: "writable",
+        conOpacidad: "readonly",
+        conOpacidadInspeccionados: "writable",
+        dibujaCaja: "readonly",
+        esVisible: "readonly",
+        hoverDeclarations: "readonly",
+        label: "readonly",
+        ladosConBorde: "readonly",
+        over: "readonly",
+        overImage: "readonly",
+        paint: "readonly",
+        paintsText: "readonly",
+        ratio: "readonly",
+        round: "readonly",
+        solapan: "readonly",
+        tapaFijo: "readonly",
+        umbralDe: "readonly",
+      },
+    },
+    rules: {
+      // El «archivo» de este guion es el paquete entero, así que una declaración
+      // de nivel superior sin usar aquí es casi siempre una que usa la pieza
+      // siguiente. Lo que NO se apaga es `no-undef`, que es la protección que
+      // este bloque defiende y la que sigue cazando un `paint` mal escrito.
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
+    },
+  },
+
+  // Y el detector del punto 6 se inyecta DESPUÉS del censo, en la misma página,
+  // así que usa sus helpers de color. Se declaran aquí y solo para él —no para
+  // todo `design-review/`— para que un `paint` mal escrito dentro del propio censo
+  // siga saliendo en rojo, que es donde se ha roto dos veces. Sus cuatro piezas
+  // van concatenadas por la misma razón que las del censo, con la misma lista.
+  {
+    files: ["scripts/design-review/color-solo/*.js"],
+    extends: [js.configs.recommended],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "script",
+      globals: {
+        ...globals.browser,
+        paint: "readonly",
+        label: "readonly",
+        COLOR_PROPS: "readonly",
+        FORMA_PROPS: "readonly",
+        EPSILON_GRIS: "readonly",
+        dibujaBorde: "readonly",
+        forma: "readonly",
+        grisDe: "readonly",
+        gruposComparables: "readonly",
+      },
+    },
+    rules: {
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": "off",
     },
   },
 

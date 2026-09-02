@@ -183,7 +183,7 @@
 - D145 · Los dos gates de servidor mentían de la misma forma: uno callando y el otro con una sola muestra
 - D146 · Lo que aún no ha entrado está a `opacity: 0`, y axe no lo mira
 - D147 · El andamiaje es el 30% del código y no lo lintaba nadie
-- D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
+- D148 (su último párrafo, revertido por D187) · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja
 - D149 · El guardián de contadores en prosa se DESCARTA, y el ruido está medido
 - D150 · El `preconnect` a GTM se DESCARTA, y quien lo dice es Lighthouse
 - D151 · ESLint 10 lo bloquea upstream, y por el camino apareció un override caducado
@@ -222,6 +222,7 @@
 - D184 · La barra de navegación deja de ser un frosted y pasa a ser opaca, por una medición
 - D185 · El rango decía `<6.1.0` y se leyó como «ni la 6 ni la 7»: TypeScript sube a 6.0.3
 - D186 · La deuda no tenía problema de stock sino de crecimiento, y lo para un trinquete
+- D187 · El andamiaje se ordena por sus propias costuras, y el censo deja de ser un archivo de mil líneas
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -9072,7 +9073,7 @@ ganar, y `check:guardianes`, que le pasa un caso malo conocido y comprueba que l
 cobertura de comportamiento, que es la correcta para un metro.
 
 
-## D148 · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja — 2026-08-28
+## D148 (su último párrafo, revertido por D187) · Tres scripts por encima del umbral de complejidad, y lo que de verdad lo baja — 2026-08-28
 
 **Los tres, medidos con qlty en local antes de tocar nada:** `check-palette.ts` **63**,
 `contrast-census.js` **165** (con su función principal en 164 y 30 retornos), `psi.ts` **122**.
@@ -11953,3 +11954,114 @@ instrumento para lo mismo sería el duplicado que esa regla persigue. Los 47 hal
 
 *(Y sí, este gate añade 190 líneas a `scripts/`, que es justo lo que vigila. Se acepta con el
 motivo escrito: es el instrumento que impide el próximo +20, y el sello lo incluye.)*
+
+## D187 · El andamiaje se ordena por sus propias costuras, y el censo deja de ser un archivo de mil líneas — 2026-09-02
+
+**Decisión.** Los seis puntos de mayor remediación de `scripts/` se parten **por las costuras
+que ya tenían escritas por dentro**, no por la métrica: `check-agentes`, `check-marco`,
+`check-kit`, el canal `md/`, el censo de contraste y el pase sobre imagen. Y con ellos cae el
+último párrafo de **D148**, que había decidido que `contrast-census.js` no se partía.
+
+**El resultado, medido con el mismo instrumento antes y después:** la deuda que cuenta
+`check:deuda` pasa de **63 hallazgos a 30**, y los 33 que caen son todos de `scripts/` (47 → 14).
+El producto no se toca: sus 16 siguen exactamente donde estaban.
+
+### Por qué esta tarea y no la anterior
+
+**D186** bajó el PRODUCTO (24 → 16 hallazgos) y le puso tope al andamiaje, y eso fue una
+decisión, no un olvido. Lo que ese encuadre dejaba fuera es la cifra de la portada de Qlty: el
+titular no es el recuento de smells, es el **ratio de deuda** y la **remediación**, y las dos las
+domina `scripts/`. Medido sobre `main` a11cf59: **2.616 de complejidad en 11.319 líneas de
+andamiaje contra 789 en 15.501 de todo el producto junto** — 3,3× en un 27 % menos de líneas. El
+trinquete de D186 sella el recuento; no acota el ratio.
+
+Y el numerador de ese ratio es **tiempo de remediación**, así que el trabajo se ordena por
+minutos y no por número de hallazgos: seis sitios concentraban ~28 de los ~60 días que publicaba
+el panel.
+
+### La regla que ordenó el trabajo, y es la que hay que reusar
+
+**Lo que parte el conteo de una FUNCIÓN es dejar de estar dentro de otra; lo que parte el de un
+ARCHIVO es dejar de estar en el mismo.** Es de D148 y sigue exacta: extraer helpers dentro del
+mismo archivo no mueve su hallazgo ni un punto. De ahí que la pregunta útil no sea «¿cómo bajo
+este número?» sino **«¿cuántas cosas distintas hace este archivo?»** — y en los seis, la respuesta
+ya estaba escrita en sus propios comentarios: ocho bloques numerados en `check-agentes`, quince
+comprobaciones sobre la misma `Pagina` en `check-marco`, «cuadrar el registro» y «abrir el
+binario» en `check-kit`, contrato/línea/bloque en el conversor de markdown, y dos pases y un
+instrumental en el censo.
+
+| | Antes | Después |
+|---|---|---|
+| `contrast-census.js` | 1.117 líneas · complejidad **243** · 6 hallazgos | ocho piezas en `censo/`, máximo 44 · **0** |
+| `color-solo.js` | **94** · 4 | cuatro piezas, máximo 30 · **0** |
+| `check-agentes.ts` | 1.015 líneas · **134** · 2 | ocho módulos, máximo 30 · **0** |
+| `check-marco.ts` | 965 líneas · **118** · 2 | cinco módulos, máximo 48 · **0** |
+| `check-kit.ts` | **102** · 3 | 46 + 43 · **0** |
+| `md/` | 148 en dos archivos · 9 | 133 en siete, máximo 48 · **0** |
+| `censo/sobre-imagen.ts` | **124** · 7 | 39 + cuatro piezas (pixel, cámara, tipos, informe) · **0** |
+
+### El único que era una decisión escrita: `contrast-census.js`
+
+D148 lo dejó en 165 a propósito, y su argumento era bueno: *«partirlo en dos archivos inyectados
+es posible y no se hace: añadiría **un orden de inyección que se puede equivocar** a un guion cuya
+cabecera dice “no lo reescribas” tras tres reescrituras»*.
+
+**Lo que ha cambiado es que ese orden ya no lo mantiene nadie.**
+`scripts/design-review/guion.ts` lo compone: lee las piezas del directorio, las ordena por el
+número del nombre y comprueba que el texto resultante define las entradas que la página va a
+llamar. Si una se renombra o el directorio se mueve, se para **antes** de abrir el navegador, en
+vez de dar un `contrastCensus is not a function` veintiocho corridas más tarde. Y en la práctica
+el orden casi no manda: ninguna pieza usa a otra en tiempo de carga —la única IIFE,
+`HOVER_RULES`, solo mira `document.styleSheets`—, así que los números documentan la intención más
+que resolver una dependencia.
+
+Lo que **no** cambia es lo que D148 decía primero: sigue sin poder ser un módulo. Son scripts
+clásicos que se inyectan verbatim porque la CSP no permite `unsafe-eval`, y van concatenados
+porque han de compartir ámbito: ocho `<script>` separados no se verían entre ellos.
+
+### Lo que costó, dicho porque es el precio real
+
+**ESLint deja de mirar `no-unused-vars` dentro de `censo/` y de `color-solo/`**, porque la unidad
+de esos guiones es el paquete y no el archivo: lo que una pieza declara, la siguiente lo usa. Lo
+que **no** se apaga es `no-undef`, que era la protección que ese bloque de la config defendía
+—«que un `paint` mal escrito dentro del propio censo siga saliendo en rojo»—: la lista de
+globales del bloque ES la superficie compartida del guion, y se validó rompiéndola a propósito
+(`paintt` → un error, no un aviso).
+
+**Y la LOC sube**: `scripts/` pasa de 11.319 a 11.595 líneas (+276) mientras su complejidad baja
+de 2.616 a 2.495 (−121). Importa decirlo porque el ratio de la portada es remediación ÷
+COCOMO(LOC): **añadir líneas lo baja sin arreglar nada**. Por eso lo que se publica es el par
+—ratio y remediación absoluta—, y la que no se puede maquillar es la segunda.
+
+### Qué garantiza que no ha cambiado nada
+
+No es la lectura del diff, y en los tres gates de servidor no podía ser `check:guardianes`, que
+corre en CI sin navegador. Es esto, y en este orden:
+
+- **Los cuatro guardianes de CI**: sus 53 casos malos corridos ENTEROS antes de tocar nada y otra
+  vez después, más la salida de cada uno comparada byte a byte.
+- **El conversor de markdown**: `md:verificar` regenera las 28 variantes y las compara con las
+  commiteadas. Idénticas, y los 173 tests en verde.
+- **El censo**: el **inventario sellado** de P72.15 —400 pares con su clave, corrida a corrida—
+  no se movió ni una pareja, con `scripts/censo/inventario.json` intacto en `git status`. Es
+  mejor red que un caso malo: un caso malo dice que el metro sabe fallar; el inventario dice que
+  mide exactamente el mismo conjunto.
+- **`color-solo`** (1.320 grupos, 3.382 pares) y **`censo:imagen`** (4 pares sobre foto, las
+  mismas cuatro cifras y los mismos píxeles, ancla validada en las 28), idénticos a su corrida
+  previa.
+
+### El radio de acción que no se veía en el código
+
+`contrast-census.js` estaba declarado como **dependencia** de la §s09 del artículo y de dos
+bloques de `/accesibilidad`. Un renombrado silencioso habría dejado esos guardianes vigilando un
+archivo que ya no contiene lo que vigilaban: las tres declaraciones pasan a `censo/`, que es un
+directorio y por tanto también caza una pieza nueva. Y el artículo publicaba un permalink al
+archivo, que habría quedado en 404: ahora apunta al README del directorio, que es donde vive la
+cabecera larga que el guion tenía dentro.
+
+### Dos duplicaciones que salieron al partir, y que no se buscaban
+
+- El bloque de documentación de `paresSobreImagen` estaba **escrito dos veces** en
+  `contrast-census.js`, casi idéntico; se queda el completo.
+- `sobre-imagen.ts` desenvolvía a mano el JSON de `agent-browser eval` **tres veces**, teniendo
+  `evalJSON()` en `navegador/agent-browser.ts` escrito para exactamente eso. Ahora lo usa.
