@@ -1,9 +1,9 @@
 {
-  "total": 65,
+  "total": 63,
   "porArea": {
-    "raíz": 1,
     "scripts/": 47,
-    "components/": 13,
+    "raíz": 1,
+    "components/": 11,
     "app/": 2,
     "lib/": 2
   },
@@ -25,7 +25,6 @@
     "qlty:file-complexity|scripts/design-review/contrast-census.js",
     "qlty:file-complexity|scripts/md/convertir.ts",
     "qlty:file-complexity|scripts/md/extraer.ts",
-    "qlty:function-complexity|components/site/brand-kit/06-uso.tsx",
     "qlty:function-complexity|components/site/contact-form.tsx",
     "qlty:function-complexity|components/site/design-system/08-etiquetas.tsx",
     "qlty:function-complexity|components/site/diagrams/herencia.tsx",
@@ -46,7 +45,6 @@
     "qlty:nested-control-flow|scripts/censo/sobre-imagen.ts",
     "qlty:nested-control-flow|scripts/check-excepciones.ts",
     "qlty:nested-control-flow|scripts/check-kit.ts",
-    "qlty:return-statements|components/site/brand-kit/06-uso.tsx",
     "qlty:return-statements|components/site/contact-form.tsx",
     "qlty:return-statements|proxy.ts",
     "qlty:return-statements|scripts/agentes.ts",
@@ -60,6 +58,6 @@
     "qlty:similar-code|components/site/como-se-ha-creado-diagrams/04-stack.tsx",
     "qlty:similar-code|lib/ard.ts"
   ],
-  "commit": "63d9e4044f72be31eb9aa7322cc66aec9a4e65ac",
+  "commit": "ec612e9755ae164b21b87a1644d923e51fa87873",
   "fecha": "2026-09-02"
 }
