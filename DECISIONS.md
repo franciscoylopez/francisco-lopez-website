@@ -212,6 +212,7 @@
 - D174 · Un hook de cierre que sale 0 le habla a la persona, y quien commitea es el modelo
 - D175 · La regla que ordena retirar entró como una adición, y no tenía quién la comprobara
 - D176 · El check de medición deja sello, y dice en voz alta las tres fuentes que no pudo leer
+- D177 · Un techo por IP no se calcula por persona, y el límite de frecuencia se escribía dos veces
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11452,3 +11453,42 @@ cambie, lo dirá el sello. Su fila está en `GATES.md`.
 **Lo que esto NO es.** No automatiza GA4 ni monta un ETL: GA4 necesita sesión autenticada en el
 navegador y sigue siendo trabajo de quien cierra. Lo que cambia es que su cifra entra por
 bandera y el sello anota que se tecleó (`aMano: true`), en vez de vivir en un párrafo.
+
+## D177 · Un techo por IP no se calcula por persona, y el límite de frecuencia se escribía dos veces — 2026-09-02
+
+**Decisión.** El techo del contador de consentimiento sube de **10 a 100 sucesos por hora y por
+IP**, y las reglas del límite salen de las dos Server Actions a `lib/rate-limit.ts`, con tests y
+caso malo. La **cuarta salvedad** queda escrita en `lib/consent-metrics.ts` y dentro de
+`SALVEDAD_TASA`, que es lo que imprime `npm run consentimiento`.
+
+**Contexto.** El razonamiento del techo bajo —«una persona genera como mucho dos sucesos por
+navegador»— es correcto **por persona** y falso **por IP**, que es la clave que el límite usa.
+Detrás de un CGNAT móvil o de la red de una oficina, decenas comparten la IP saliente: a partir
+del undécimo, `registrarConsentimiento` retornaba sin incrementar y `visto` dejaba de contar
+gente que sí vio el diálogo. El límite protegía al contador de inflarse y a cambio lo
+**deflactaba**, justo en el escenario que existe para medir: el pico de un lanzamiento, que es
+tráfico concentrado llegado por un mismo canal.
+
+**Y la cuenta que deshace el argumento original.** 10/hora ya eran 240 sucesos al día desde una
+sola IP, contra los 13 «visto» que el contador llevaba acumulados. **El techo nunca fue lo que
+impedía envenenar la cifra**; lo que lo detecta es el contraste con GA4, que ya estaba escrito.
+Así que el techo solo tiene que acotar una inundación, y 100 —unos 50 visitantes nuevos por hora
+tras una misma NAT— deja sitio a una oficina sin dejar de acotarla.
+
+**Se descartó clavear por navegador**, que es lo que de verdad se quiere contar: la marca del
+navegador (`CONSENT_SEEN_KEY`) es del cliente y por tanto falsificable, o sea exactamente
+aquello de lo que el límite protege.
+
+**Y la salvedad se escribe aunque el número suba**, que era la condición de la ficha: el modo de
+fallo sigue existiendo por encima del techo nuevo y sesga en la misma dirección que la del
+almacenamiento bloqueado, así que la tasa medida sigue siendo un **suelo** de la real. Su caso
+raro es el peor de leer: si el «visto» se descarta y la decisión llega con el cupo repuesto,
+`aceptado + rechazado` puede superar a `visto` y los «sin decidir» salen negativos. Una salvedad
+que falta en el sitio donde se enumeran las salvedades es peor que no tener lista.
+
+**La extracción no es aseo.** El limitador estaba escrito dos veces, carácter por carácter salvo
+el techo, y ninguna de las dos copias tenía un solo test. Es la partición de `lib/contact-form.ts`
+↔ `contacto/actions.ts`: aquí la decisión, con caso malo; la E/S —leer la IP de las cabeceras— se
+queda en la acción, que es lo único que no se puede probar. Los tests fijan lo que el código
+hacía sin decirlo: que el golpe rechazado **no se apunta**, así que insistir no alarga el
+castigo, y que el barrido del mapa no se lleva claves vivas.

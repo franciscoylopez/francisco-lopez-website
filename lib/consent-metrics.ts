@@ -103,6 +103,16 @@ export function tasaDeAceptacion(contadores: Contadores): number | null {
  *   · Alguien borra su almacenamiento y vuelve → suma dos veces en las dos.
  *   · Un navegador que bloquea `localStorage` no marca nunca la marca de visto, así
  *     que suma en `visto` en cada visita. Infla el denominador y hunde la tasa.
+ *   · **El límite de frecuencia se aplica por IP, no por navegador** *(2026-09-02)*.
+ *     Detrás de un CGNAT móvil o de la red de una oficina, decenas de personas
+ *     comparten la IP saliente; pasado el techo horario de `app/consent-actions.ts`
+ *     los sucesos se descartan y `visto` deja de contar a gente que sí vio el
+ *     diálogo. El techo subió de 10 a 100 por hora ese mismo día, así que hoy
+ *     muerde mucho más arriba, **pero el modo de fallo no desaparece**: sigue ahí,
+ *     por encima del número nuevo, y sesga en la misma dirección que la anterior.
+ *     Su caso raro es el peor de leer: si el «visto» se descarta y la decisión
+ *     llega ya con el cupo repuesto, `aceptado + rechazado` puede superar a
+ *     `visto` y los «sin decidir» salen **negativos**.
  *
  * Lo que SÍ está cerrado, porque rompía la cuenta en la otra dirección: cambiar de
  * opinión desde el centro de preferencias NO vuelve a contar. Solo cuenta la
@@ -119,10 +129,10 @@ export function tasaDeAceptacion(contadores: Contadores): number | null {
  * que llega por primera vez— la población correcta es justamente esa. Pero la tasa hay
  * que enunciarla entera: **de cada cien visitantes NUEVOS, cuántos aceptan.**
  *
- * De las tres que quedan, la del almacenamiento bloqueado es la única que sesga en
- * una dirección conocida, así que la tasa medida es un SUELO de la real y no una
- * estimación centrada. Se dice aquí porque el sitio de una salvedad es al lado del
- * número, no en un documento aparte.
+ * De las que quedan, las DOS que sesgan en una dirección conocida —el
+ * almacenamiento bloqueado y el límite por IP— lo hacen en la misma, así que la
+ * tasa medida es un SUELO de la real y no una estimación centrada. Se dice aquí
+ * porque el sitio de una salvedad es al lado del número, no en un documento aparte.
  */
 export const SALVEDAD_TASA =
-  "Es la tasa de los visitantes NUEVOS, no del total: a quien ya decidió no se le vuelve a pintar el diálogo. Y es un suelo, porque quien bloquea el almacenamiento local cuenta como visto en cada visita y nunca como decisión.";
+  "Es la tasa de los visitantes NUEVOS, no del total: a quien ya decidió no se le vuelve a pintar el diálogo. Y es un suelo por dos vías: quien bloquea el almacenamiento local cuenta como visto en cada visita y nunca como decisión, y el límite de frecuencia va por IP, así que tras una misma NAT los sucesos que pasen del techo horario no se cuentan.";
