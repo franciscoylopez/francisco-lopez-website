@@ -20,6 +20,7 @@
     "psi": "tsx scripts/psi.ts",
     "censo": "tsx scripts/censo.ts",
     "censo:imagen": "tsx scripts/censo/sobre-imagen.ts",
+    "color-solo": "tsx scripts/color-solo.ts",
     "consentimiento": "tsx scripts/consentimiento.ts",
     "medicion": "tsx scripts/medicion.ts",
     "pliegue": "tsx scripts/pliegue.ts",

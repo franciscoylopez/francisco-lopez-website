@@ -217,6 +217,7 @@
 - D179 · El texto sobre foto se mide sobre el píxel pintado, y el metro se valida en cada corrida
 - D180 · El censo compone por opacidad efectiva, y publica cuántos textos ha mirado para hacerlo
 - D181 · El censo publica de QUÉ conjunto habla, y decide el diálogo en vez de heredarlo
+- D182 · El punto 6 deja de mirarse y pasa a detectarse, sin filtro y sin cámara
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -11652,3 +11653,52 @@ cuál. Con solo el total —391 contra 414— no había forma de decir cuál fal
 propio metro sin gastar 28 corridas, y por eso mismo tenía que quedar claro que no produce
 veredicto: un inventario a medias haría que la pasada siguiente viera desaparecer doce corridas
 enteras y suspendiera con razón sobre un hecho falso.
+
+## D182 · El punto 6 deja de mirarse y pasa a detectarse, sin filtro y sin cámara — 2026-09-02
+
+**Decisión.** `npm run color-solo` comprueba «nada codificado solo por color», que era la
+**única fila de la Definition of Done sin forma automática**. Y la comprobación no rasteriza:
+compara los colores que el navegador pinta y pregunta si su **gris** coincide.
+
+**Por qué no hace falta el filtro que motivó la tarea.** La idea venía de P72.02, que miró
+Silktide por su simulador de daltonismo, y de que `agent-browser` sabe inyectar
+`filter: grayscale(1)`. Pero una simulación de acromatopsia es, en el fondo, quedarse con la
+**luminancia** — y la luminancia se calcula. Dos colores distintos cuyo gris coincide son
+exactamente los que pierden la información. Mismo criterio, sin capturas que diffear, sin ruido
+de compresión y con el elemento culpable nombrado en vez de dos imágenes para mirar.
+
+**Cuándo marca, y las tres condiciones importan.** Dos **hermanos comparables** —mismo NODO
+padre, misma etiqueta, mismas clases sin las de estado— que (1) difieren en un color de texto,
+fondo o borde, (2) cuyos grises coinciden dentro de 0,02, y (3) **no difieren en nada que
+sobreviva al gris**: peso, cursiva, subrayado, filete, radio, versalitas. Si el estado además
+engorda la letra o dibuja un borde, la información no depende del tono y no hay hallazgo.
+
+**La premisa cambió el día que se iba a hacer, y eso cambió el producto.** El barrido manual ya
+lo había hecho Francisco esa misma mañana, con acromatopsia simulada y sección por sección:
+salió limpio. Así que la tarea dejó de descubrir nada y pasó a ser lo otro —que un cambio futuro
+no lo rompa en silencio, la familia D60 aplicada a una propiedad visual—. Y esa pasada limpia se
+convirtió en **la línea base con la que calibrarlo**: cualquier cosa que marcara hoy era, por
+construcción, un falso positivo.
+
+**Los dos falsos positivos que efectivamente aparecieron, y eran fallos reales del detector:**
+
+1. **Agrupaba por el NOMBRE de la etiqueta del padre**, no por el padre. Metía en un mismo grupo
+   todos los `li` de la página —los de una lista y los de otra—, así que un `--border` que
+   cambia porque las dos listas están sobre superficies distintas se leía como un estado
+   codificado por color.
+2. **Comparaba `borderTopColor` en elementos sin borde.** Esa propiedad tiene valor computado
+   aunque el ancho sea 0, y un filete que no se pinta no codifica nada.
+
+Sin la línea base, los dos habrían pasado por hallazgos y se habría «arreglado» un sitio que no
+tenía nada roto.
+
+**Y trae su propio caso malo, porque su resultado normal es cero** (D70). Con `--caso-malo` la
+página se fabrica el incumplimiento —coge dos hermanos que el detector mira y le cambia a uno el
+color por otro de la **misma luminancia y distinto tono**— y el veredicto se invierte: suspende
+si el detector NO lo caza. También ahí hubo que corregir el método: la primera versión elegía su
+víctima por su cuenta, caía en grupos que el detector ni mira y suspendía sin que hubiera nada
+roto. **Un caso malo tiene que estar escrito en los términos del guardián que pone a prueba**,
+así que los dos comparten ahora la función de agrupación.
+
+**Estado al escribir esto:** 28 corridas, **1320 grupos comparables y 3378 pares comparados,
+cero hallazgos** — el mismo veredicto que el ojo, y ahora repetible.
