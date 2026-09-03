@@ -69,14 +69,9 @@ export const SECCIONES = [
 export type SeccionId = (typeof SECCIONES)[number];
 
 /**
- * Las tres formas de una dependencia:
- *
- * - `"next.config.ts"` — un archivo. Se hashea entero.
- * - `"DECISIONS.md#D26"` — una sección de un markdown, por el principio de su
- *   titular. Se hashea el cuerpo de esa sección hasta el siguiente titular del
- *   mismo nivel o superior.
- * - `"components/ui/"` — un directorio (con barra final). Se hashea la LISTA
- *   ordenada de sus archivos, no su contenido.
+ * CUÁLES SON LAS FORMAS DE UNA DEPENDENCIA lo dice `scripts/dependencias/huella.ts`,
+ * que es quien las resuelve. Aquí no se copian: la lista ya caducó una vez, el día
+ * que D193 añadió la cuarta.
  */
 export type Dependencia = string;
 

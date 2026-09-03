@@ -18,7 +18,7 @@ import { createHash } from "node:crypto";
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 
 /**
- * Las tres formas de una dependencia, y son las mismas para toda página:
+ * Las formas de una dependencia, y son las mismas para toda página:
  *
  * - `"next.config.ts"` — un archivo. Se hashea entero.
  * - `"DECISIONS.md#D26"` — una sección de markdown, por el principio de su

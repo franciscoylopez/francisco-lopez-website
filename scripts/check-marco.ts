@@ -18,7 +18,9 @@
  *
  *   1. **Lo que pone quien ESCRIBE la página** — los puntos 4, 5 y 8 del
  *      checklist (un solo `h1` y jerarquía sin saltos, breadcrumb, alternativas
- *      textuales), más todo lo estructural que axe sabe ver sin pintar.
+ *      textuales), más todo lo estructural que axe sabe ver sin pintar — y desde
+ *      D195, lo que axe VE y no levanta: dos enlaces que se anuncian igual
+ *      llevando a sitios distintos, que su regla marca como «needs review».
  *   2. **Que la derivación LLEGÓ a la página.** Los helpers son opt-in: una
  *      página que se escriba su propia metadata a mano compila igual. Aquí se
  *      mira el HTML servido, que es el único sitio donde eso se nota.
