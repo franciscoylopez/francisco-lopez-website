@@ -223,6 +223,7 @@
 - D185 · El rango decía `<6.1.0` y se leyó como «ni la 6 ni la 7»: TypeScript sube a 6.0.3
 - D186 · La deuda no tenía problema de stock sino de crecimiento, y lo para un trinquete
 - D187 · El andamiaje se ordena por sus propias costuras, y el censo deja de ser un archivo de mil líneas
+- D188 · La barra del nav deja de encoger: animar su alto repintaba una franja de ancho completo en cada paso
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12088,3 +12089,63 @@ a los siete que quedan por encima del umbral —`check-articulo`, `check-figuras
 vacíe, el trinquete de recuento pasa a ser exacto**: sin ningún archivo marcado,
 cruzar el umbral es siempre un +1. O sea que lo que cierra el hueco no es un gate
 nuevo, es terminar el trabajo.
+
+---
+
+## D188 · La barra del nav deja de encoger: animar su alto repintaba una franja de ancho completo en cada paso — 2026-09-03
+
+**Decisión.** El nav sticky ya no anima el `min-height` de su barra (iba de 80 a 64px con el
+scroll). Se queda en **80px fijos**, y la compactación la cuentan las dos piezas que ya la
+contaban: el **símbolo 48→28px** y el **wordmark que se desvanece**. Nada más cambia: la cuenta
+de `p`, la cuantización a 1/50, la extinción del split y el salto con `prefers-reduced-motion`
+se quedan como estaban.
+
+**Lo que se paga:** 16px menos de above the fold mientras se scrollea. Al cargar no cambia nada.
+
+### La medida, que es lo que decidió
+
+Build de producción servido, Chrome real por CDP, gesto de scroll de verdad
+(`Input.synthesizeScrollGesture`, 240px abajo y 240 arriba a 400 px/s), traza de
+`devtools.timeline` sobre `CrRendererMain`, mediana de 5 corridas. El control **no** es otra
+rama del código: es un stylesheet con `!important` que congela la geometría **sin tocar React**,
+que sigue re-renderizando 50 veces y escribiendo el style inline. Así lo que se compara es la
+caja, no el estado.
+
+| Móvil ×4, por gesto | Main thread | Paint | Layout | Tareas > 16,7 ms |
+|---|---|---|---|---|
+| vivo | 795 ms | 313 | 27 | **20,6** |
+| solo la barra congelada | 610 ms | 136 | 34 | **3,0** |
+| solo el símbolo congelado | 781 ms | 327 | 15 | 22,2 |
+| todo congelado | 577 ms | 43 | 3 | 1,2 |
+
+En escritorio sin estrangular el mismo gesto cuesta 421 ms contra 226, y 470 contra 264 en
+`/design-system`.
+
+**Las dos cosas que dice, y la segunda no era la esperada.** Que no es despreciable: durante el
+gesto el hilo principal pasa de ~1 tarea larga a ~20, y aunque el scroll lo mueva el compositor,
+el nav va por detrás y cualquier toque espera. Y que **la paga la barra, no el logo**: congelar
+solo el símbolo deja la cifra donde estaba. El término gordo tampoco es `Layout` (15-30 ms) sino
+**`Paint`**: la barra es opaca, sticky y de ancho completo, así que cambiarle el alto repinta la
+franja entera a cada paso. La ficha sospechaba lo contrario —que la cuantización a 1/50 dejaría
+el coste en nada—, y la cuantización limita los **re-renders**, que no eran la factura.
+
+### Por qué esta y no la versión por `transform`
+
+La alternativa era mantener el encogimiento sacándolo de layout: caja de 80px fija, con el fondo
+y el filete desplazados por `translateY(-16px·p)` y la fila por `-8px·p`. Se prototipó junto a la
+elegida y **se midió que daba el mismo píxel** (filete inferior a 65px y símbolo a 28px en las
+dos). Se descarta por lo que cuesta mantener, no por lo que hace: una capa de fondo más en el
+nav y dos transforms acoplados a la misma `p`, para recuperar 16px de gesto.
+
+Y de camino cayó la premisa con la que se defendía: **el encogimiento de hoy tampoco mueve el
+contenido**, porque Chrome aplica *scroll anchoring* y retrocede el scroll para compensar lo que
+se encoge por encima del viewport. Medido en el mismo gesto: la versión que encoge acaba en
+`scrollY` 285 y las otras dos en 300. Lo que se movía por debajo era el scroll, no la página.
+
+### Lo que había que cambiar además del componente
+
+El Design System **publica** esta transición, con sus dos maquetas y su texto: la de abajo medía
+`h-16` y el bullet decía «símbolo 48 → 28px y barra 80 → 64px». Una figura que siguiera bajando a
+64 publicaría un comportamiento que la cabecera de esa misma página ya no tiene, así que se
+actualizan las dos maquetas, los dos bullets y los dos rótulos de estado, en ES y EN, más la
+regla 6 de `BRAND-logo.md`, que era donde la barra estaba escrita como norma.

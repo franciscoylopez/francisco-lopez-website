@@ -142,7 +142,10 @@ export function Movimiento({
                   {t.navState1}
                 </span>
               </div>
-              <div className="border-border bg-background flex h-16 items-center justify-between gap-4 rounded-lg border px-5">
+              {/* Las dos maquetas miden LO MISMO desde D188: la barra dejó de
+                  encoger, y una figura que siguiera bajando a h-16 publicaría un
+                  comportamiento que la cabecera de esta misma página ya no tiene. */}
+              <div className="border-border bg-background flex h-20 items-center justify-between gap-4 rounded-lg border px-5">
                 <NavGlyph variant="flat" h={28} />
                 <span className="text-muted-foreground font-mono text-[0.68rem]">
                   {t.navState2}
