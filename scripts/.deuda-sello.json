@@ -1,14 +1,13 @@
 {
-  "total": 24,
+  "total": 22,
   "porArea": {
-    "components/": 11,
-    "scripts/": 8,
     "raíz": 1,
+    "components/": 11,
+    "scripts/": 6,
     "lib/": 2,
     "app/": 2
   },
   "hallazgos": [
-    "qlty:file-complexity|scripts/artefacto-svg.ts",
     "qlty:file-complexity|scripts/censo.ts",
     "qlty:function-complexity|components/site/contact-form.tsx",
     "qlty:function-complexity|components/site/design-system/08-etiquetas.tsx",
@@ -16,7 +15,6 @@
     "qlty:function-complexity|components/site/nav.tsx",
     "qlty:function-complexity|components/site/reveal-root.tsx",
     "qlty:function-complexity|components/ui/article.tsx",
-    "qlty:function-complexity|scripts/artefacto-svg.ts",
     "qlty:function-complexity|scripts/logos/process_logo.js",
     "qlty:function-complexity|scripts/medicion/registro.ts",
     "qlty:return-statements|components/site/contact-form.tsx",
@@ -32,9 +30,6 @@
     "qlty:similar-code|lib/ard.ts"
   ],
   "magnitudes": {
-    "qlty:file-complexity|scripts/artefacto-svg.ts": [
-      52
-    ],
     "qlty:file-complexity|scripts/censo.ts": [
       69
     ],
@@ -55,9 +50,6 @@
     ],
     "qlty:function-complexity|components/ui/article.tsx": [
       18
-    ],
-    "qlty:function-complexity|scripts/artefacto-svg.ts": [
-      48
     ],
     "qlty:function-complexity|scripts/logos/process_logo.js": [
       26
@@ -101,6 +93,6 @@
       68
     ]
   },
-  "commit": "df90c4babfe0c6777b3a6718acb0c8c28b0b2f87",
+  "commit": "bcb2ee4e679cbbc339a359ad6ccf7c08659ea603",
   "fecha": "2026-09-03"
 }
