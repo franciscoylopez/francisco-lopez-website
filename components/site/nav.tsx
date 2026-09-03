@@ -58,7 +58,9 @@ const SALIDA = 32;
 // Nav sticky (BRAND.md regla 6 · PRD §6). Transición continua con el scroll:
 // p = clamp(scrollY/120) cuantizado a pasos de 1/50 para limitar re-renders.
 //   símbolo 48→28px · capas del split se extinguen a p/0.05 · wordmark a p/0.45.
-// Con prefers-reduced-motion salta en scrollY>48 (sin interpolar).
+// Con prefers-reduced-motion salta, sin interpolar, y con histéresis: entra en
+// compacto por encima de 48px y sale por debajo de 32 (P82; antes era un
+// solo corte en 48 y vibraba con el vaivén del scroll).
 //
 // LA BARRA NO ENCOGE, Y HASTA EL 2026-09-03 IBA DE 80 A 64px (D188). No es una
 // simplificación: es lo que costaba. Animar su `min-height` repinta a cada paso
