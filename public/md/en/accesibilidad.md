@@ -108,7 +108,7 @@ In plain language and with the WCAG criterion each one covers.
   
   WCAG 1.3.1 · 2.4.6
   
-  A single main heading per page and a hierarchy with no skipped levels; reading order matches source order, for screen readers and keyboard navigation.
+  A single main heading per page, and it comes first: no interface label heads the document ahead of it. A hierarchy with no skipped levels, and reading order matches source order, for screen readers and keyboard navigation.
 5. Clear location
   
   WCAG 2.4.8
