@@ -229,6 +229,7 @@
 - D191 · La entradilla sube a la capa, y el Design System deja de publicar un valor que ninguna página usa
 - D192 · La foto del CV sale del recorte que ya existía, y `cv.huella` no la vigila
 - D193 · La prosa no se vigila, la dependencia baja a símbolo, y el supuesto de infra se comprueba
+- D194 · Una captura no se sella por su render: se sella por lo que AFIRMA
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12472,3 +12473,65 @@ suficiente: como un bloque declarado, con sus dependencias, igual que `/accesibi
 **Coste de contexto, porque este ciclo lo cobra:** la regla nueva se paga retirando dos bullets
 de `CLAUDE.md` que ya vivían enteros en el subagente `viewport-verifier` y en `GATES.md`.
 `check:contexto` 11.690 → 11.683.
+
+---
+
+## D194 · Una captura no se sella por su render: se sella por lo que AFIRMA — 2026-09-03
+
+**El hueco.** El CV y el SVG del artefacto tienen su `.huella` y su guardián en CI (`check:cv`,
+`check:artefacto`, familia D60). Las tres capturas de `.github/assets/` —`banner.png`,
+`home-light.png`, `home-dark.png`— no tenían nada. Y desde el 2026-08-19 el **repositorio es
+público** (D68), así que esa portada es lo primero que ve quien llega. Familia «el artefacto
+commiteado que se queda viejo», **instancia 3**.
+
+### Por qué no se sella el render, que era la vía obvia
+
+Una captura **no es determinista**: dos capturas del mismo sitio no dan el mismo hash, igual que
+el PDF del CV. Así que comparar bytes está descartado y hay que sellar las **entradas** — hasta
+aquí, D60 tal cual.
+
+La entrada que la ficha proponía era «el HTML servido de esa ruta + `globals.css`», reusando
+`gate:html`. **Se midió antes de construirla y no sirve:**
+
+| Entrada candidata | Commits en quince días |
+|---|---|
+| `app/globals.css` | **11** |
+| `package.json` | **26** |
+| `app/[lang]/dictionaries/es/common.json` | 5 |
+| `app/[lang]/dictionaries/es/home.json` | 2 |
+| La foto del Hero | 0 |
+
+El HTML de la home se mueve casi cada tanda, y la captura **solo se queda vieja cuando cambia lo
+que se VE en ella**. Un sello sobre el HTML —o sobre `globals.css` entero— saldría rojo cada
+semana pidiendo rehacer una imagen que sigue siendo correcta, y *un gate ruidoso es peor que
+ninguno* (D59). Sellar el render habría sido construir el gate que la propia ficha advertía de no
+construir.
+
+### Lo que se sella en su lugar: la afirmación, no el píxel
+
+`content/readme/capturas.ts` transcribe **cada frase que la imagen enseña** y la empareja con la
+fuente viva de la que sale: el titular del Hero, el kicker, el subtitular, los cuatro rótulos del
+nav, el dominio, y los majors de Next y Tailwind del banner. Dieciocho afirmaciones sobre tres
+capturas. Es el bloque declarado de `/accesibilidad` (D84) aplicado a un artefacto binario: no se
+vigila el píxel, se vigila lo que promete.
+
+Y por eso el rojo es útil: no dice «algo cambió», dice **qué frase de qué captura** ha dejado de
+ser cierta, con las dos versiones enfrentadas.
+
+**La transcripción va LITERAL, y esto casi entra mal.** La primera versión escribía
+`dice: esHome.hero.kicker` junto a `fuente: () => esHome.hero.kicker`: compila, pasa siempre y no
+comprueba nada. Es el metro que devuelve lista vacía y parece un aprobado, esta vez en una sola
+línea. Por el mismo motivo el **caso malo muerde el diccionario y no la transcripción**: mordiendo
+la nota, el guardián saldría rojo igual sin distinguir «el sitio cambió» de «alguien tocó la
+nota».
+
+### Lo que deja fuera, dicho antes de que se note
+
+Un cambio **puramente visual** —una tipografía, un color, el orden de dos bloques— no mueve
+ninguna frase y esto no lo ve. No es un descuido: es la consecuencia directa de la medición de
+arriba, porque ahí no hay entrada barata que sellar. Va escrito en `GATES.md`, y su red es
+`design-review`, que mira en pantalla.
+
+**Y `social-preview.png` sigue fuera, por el motivo de D60:** GitHub la sirve desde *Settings* y
+exige subirla a mano, así que un guardián podría avisar y no arreglar. A esa se le quitaron las
+cifras en vez de ponerle huella, y esa decisión no cambia.

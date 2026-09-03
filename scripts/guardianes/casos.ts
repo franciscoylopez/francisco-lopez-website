@@ -809,4 +809,17 @@ export const CASOS: Caso[] = [
     archivo: "scripts/.deuda-sello.json",
     mutar: (o) => o.replace(/"total": (\d+)/, (_, n) => `"total": ${+n + 50}`),
   },
+  {
+    guardian: "check:capturas",
+    rotura:
+      "cambia el titular del Hero y la portada del repo público lo enseña viejo",
+    // EL CASO REAL Y EL PEOR, porque el titular sale en las TRES capturas: en el
+    // banner sin punto y en las dos de la home con él. Se muerde el DICCIONARIO,
+    // que es la fuente, y no la transcripción, que es lo que la imagen dice: al
+    // revés el guardián saldría rojo igual sin probar nada, porque no
+    // distinguiría entre «el sitio cambió» y «alguien tocó la nota».
+    archivo: "app/[lang]/dictionaries/es/home.json",
+    mutar: (o) =>
+      o.replace("Del discovery al dato.", "Del discovery al impacto."),
+  },
 ];
