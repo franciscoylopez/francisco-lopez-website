@@ -1,8 +1,8 @@
 {
-  "total": 26,
+  "total": 25,
   "porArea": {
     "components/": 11,
-    "scripts/": 10,
+    "scripts/": 9,
     "raíz": 1,
     "app/": 2,
     "lib/": 2
@@ -11,7 +11,6 @@
     "qlty:file-complexity|scripts/artefacto-svg.ts",
     "qlty:file-complexity|scripts/censo.ts",
     "qlty:file-complexity|scripts/check-contexto.ts",
-    "qlty:file-complexity|scripts/check-experience-copy.ts",
     "qlty:function-complexity|components/site/contact-form.tsx",
     "qlty:function-complexity|components/site/design-system/08-etiquetas.tsx",
     "qlty:function-complexity|components/site/diagrams/herencia.tsx",
@@ -42,9 +41,6 @@
     ],
     "qlty:file-complexity|scripts/check-contexto.ts": [
       60
-    ],
-    "qlty:file-complexity|scripts/check-experience-copy.ts": [
-      68
     ],
     "qlty:function-complexity|components/site/contact-form.tsx": [
       32
@@ -109,6 +105,6 @@
       68
     ]
   },
-  "commit": "1b2ab5ab18670cb16ea12b88b46d82853f49a45a",
+  "commit": "b8a921f6a9360ebaea3b99018c46cb60109958c4",
   "fecha": "2026-09-03"
 }

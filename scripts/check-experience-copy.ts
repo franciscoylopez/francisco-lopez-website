@@ -35,153 +35,36 @@ import { EXPERIENCES } from "../content/experiences";
 import { experienceCopy } from "../content/experience-copy";
 import type { Company } from "../content/experience-copy/types";
 import { locales, type Locale } from "../lib/i18n/config";
+import { revisaBullets } from "./experiencias/bullets";
+import { revisaCampos } from "./experiencias/campos";
+import type { PorIdioma } from "./experiencias/tipos";
 
 const problemas: string[] = [];
 const fallo = (msg: string) => problemas.push(msg);
-
-/**
- * Las cifras con FORMA DE MÉTRICA: porcentajes y magnitudes con sufijo. No todo
- * número — el bullet largo lleva legítimamente números que el corto no («fase 1»,
- * «empresas de 20 a 150 empleados»), y compararlos todos convertiría el guardián
- * en ruido. Lo que no puede diferir es la MEDICIÓN.
- */
-function metricas(texto: string): string[] {
-  const limpio = texto
-    .replace(/\*\*/g, "")
-    .replace(/[−–—]/g, "-")
-    .replace(/(\d)\s+%/g, "$1%");
-  const found = limpio.match(/[+-]?\d+(?:[.,]\d+)?\s*(?:%|[MK]\b)/g) ?? [];
-  return [...new Set(found.map((m) => m.replace(/\s+/g, "")))].sort();
-}
 
 let nExperiencias = 0;
 let nBullets = 0;
 let nComparaciones = 0;
 
+// LAS DOS PREGUNTAS SON DOS MÓDULOS (D148/D187): que no falte nada en un idioma,
+// y que las tres longitudes se correspondan entre sí. Aquí queda el recorrido y
+// el veredicto, que es lo que hace de esto un guardián.
 for (const { company, slug } of EXPERIENCES) {
   const key = company as Company;
   nExperiencias++;
 
   const porIdioma = Object.fromEntries(
     locales.map((l) => [l, experienceCopy(l as Locale)[key]]),
-  ) as Record<Locale, ReturnType<typeof experienceCopy>[Company]>;
+  ) as PorIdioma;
 
-  for (const lang of locales) {
-    if (!porIdioma[lang]) {
-      fallo(`[${company}] no tiene copy en «${lang}».`);
-      continue;
-    }
-    if (!porIdioma[lang].short?.trim()) {
-      fallo(
-        `[${company}/${lang}] la frase de Trayectoria (\`short\`) está vacía.`,
-      );
-    }
-    if (porIdioma[lang].bullets.length === 0) {
-      fallo(`[${company}/${lang}] no tiene ningún bullet.`);
-    }
-    // Los hechos que se pintan en más de una superficie (P48.55). `sector` puede
-    // ser vacío —Havas Media no tiene—, los otros dos no.
-    for (const campo of ["role", "period"] as const) {
-      if (!porIdioma[lang][campo]?.trim()) {
-        fallo(`[${company}/${lang}] le falta \`${campo}\`.`);
-      }
-    }
-    // El reporting sigue la misma regla que la versión larga de un bullet: lo
-    // lleva quien tiene página, porque es quien pinta los Datos.
-    const rep = porIdioma[lang].reporting;
-    if (slug !== null && !rep?.deep?.trim()) {
-      fallo(
-        `[${company}/${lang}] tiene página (/trayectoria/${slug}) pero no tiene \`reporting.deep\`, que es lo que pintan sus Datos.`,
-      );
-    }
-    if (slug === null && rep !== undefined) {
-      fallo(
-        `[${company}/${lang}] tiene \`reporting\` pero no tiene página de deep-dive ni lo lleva en el CV. Ese texto no lo renderiza nadie.`,
-      );
-    }
-  }
+  for (const p of revisaCampos(key, slug, porIdioma)) fallo(p);
+
   if (locales.some((l) => !porIdioma[l as Locale])) continue;
 
-  // 0 · El rol NO se traduce en este sitio («Product Manager», «Cofounder &
-  // Product»), así que si ES y EN divergen es una errata, no una traducción. El
-  // periodo SÍ se traduce («Actualidad»/«Present»), así que ese no se compara.
-  const [a0, b0] = locales as unknown as [Locale, Locale];
-  if (
-    porIdioma[a0] &&
-    porIdioma[b0] &&
-    porIdioma[a0].role !== porIdioma[b0].role
-  ) {
-    fallo(
-      `[${company}] el rol difiere entre idiomas: ${a0}="${porIdioma[a0].role}" y ${b0}="${porIdioma[b0].role}". ` +
-        `Los roles de este sitio no se traducen.`,
-    );
-  }
-
-  // 1 · Cobertura entre idiomas.
-  const [a, b] = locales as unknown as [Locale, Locale];
-  if (porIdioma[a].bullets.length !== porIdioma[b].bullets.length) {
-    fallo(
-      `[${company}] descuadre de cobertura: ${a} tiene ${porIdioma[a].bullets.length} bullets y ${b} tiene ${porIdioma[b].bullets.length}. ` +
-        `Un bullet que existe en un idioma y no en el otro es contenido perdido, no una traducción más corta.`,
-    );
-  }
-
-  for (const lang of locales as unknown as Locale[]) {
-    porIdioma[lang].bullets.forEach((bullet, i) => {
-      nBullets++;
-      const n = i + 1;
-
-      // 2 · Versión larga ⟺ tiene página de deep-dive.
-      if (slug !== null && bullet.deep === undefined) {
-        fallo(
-          `[${company}/${lang}] el bullet ${n} no tiene versión larga (\`deep\`), pero la experiencia SÍ tiene página (/trayectoria/${slug}). ` +
-            `La regla 1 del formato pide un bullet de «En un minuto» por bullet del CV.`,
-        );
-      }
-      if (slug === null && bullet.deep !== undefined) {
-        fallo(
-          `[${company}/${lang}] el bullet ${n} tiene versión larga (\`deep\`) pero la experiencia NO tiene página de deep-dive. ` +
-            `Ese texto no lo renderiza nadie.`,
-        );
-      }
-
-      // 3 · Las cifras no pueden vivir en una longitud y faltar en la otra.
-      if (bullet.deep === undefined) return;
-      nComparaciones++;
-      const enCv = metricas(bullet.cv);
-      const enDeep = metricas(bullet.deep);
-      const soloCv = enCv.filter((m) => !enDeep.includes(m));
-      const soloDeep = enDeep.filter((m) => !enCv.includes(m));
-      if (soloCv.length) {
-        fallo(
-          `[${company}/${lang}] bullet ${n}: ${soloCv.join(", ")} está en el CV y no en el deep-dive. ` +
-            `Si la cifra es buena, el deep-dive la adopta.`,
-        );
-      }
-      if (soloDeep.length) {
-        fallo(
-          `[${company}/${lang}] bullet ${n}: ${soloDeep.join(", ")} está en el deep-dive y no en el CV. ` +
-            `Si la cifra es buena, el CV la adopta.`,
-        );
-      }
-    });
-
-    // 4 · La frase de Trayectoria no puede inventarse una cifra.
-    const delShort = metricas(porIdioma[lang].short);
-    const delResto = new Set(
-      porIdioma[lang].bullets.flatMap((x) => [
-        ...metricas(x.cv),
-        ...(x.deep ? metricas(x.deep) : []),
-      ]),
-    );
-    const huerfanas = delShort.filter((m) => !delResto.has(m));
-    if (huerfanas.length) {
-      fallo(
-        `[${company}/${lang}] la frase de Trayectoria cita ${huerfanas.join(", ")}, que no aparece en ningún bullet. ` +
-          `Una cifra que solo vive en la home no la respalda nada.`,
-      );
-    }
-  }
+  const r = revisaBullets(key, slug, porIdioma);
+  for (const p of r.problemas) fallo(p);
+  nBullets += r.bullets;
+  nComparaciones += r.comparaciones;
 }
 
 // El metro afirma cuánto ha mirado (y no al revés).
