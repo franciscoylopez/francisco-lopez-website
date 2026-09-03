@@ -129,20 +129,44 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
               aria-hidden="true"
               className="bg-border mx-1 hidden h-5 w-px min-[820px]:block"
             />
-            <span className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
+            {/* LISTA DE VERDAD, Y SOLO ESTE GRUPO *(P82)*. Son tres rótulos
+                sueltos en una fila, sin prosa que los una: eso es una lista y le
+                faltaba decirlo, así que un lector no anunciaba cuántos elementos
+                hay ni por cuál va. No entra el `<nav>` entero: la jerarquía es
+                deliberada —«El Making of» destacado, y las tres del sistema
+                detrás de un filete— y una lista de cuatro la borraría.
+
+                `role="list"` EXPLÍCITO, y no es redundante: el preflight de
+                Tailwind pone `list-style: none` en todos los `<ul>`, y con eso
+                Safari y VoiceOver le quitan la semántica de lista. Sin el rol, el
+                anuncio que esta tarea pide no ocurre justo en el navegador donde
+                más se usa el lector del sistema.
+
+                La línea que separa este caso del de `RepoStrip` en el artículo
+                —tres enlaces seguidos que NO se marcan como lista— es la prosa:
+                allí hay conectores entre los enlaces y la franja es una frase. */}
+            <ul
+              role="list"
+              className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1"
+            >
               {FAMILIA.map(({ slug, label }) => (
-                <a
-                  key={slug}
-                  href={pagePath(lang, slug)}
-                  className={cn(
-                    chromeLinkVariants({ tone: "muted" }),
-                    "text-[0.9rem]",
-                  )}
-                >
-                  {dict[label]}
-                </a>
+                /* `flex` en el `<li>` y no solo en el `<ul>`: el enlace es
+                   `inline-flex`, así que dentro de un `<li>` de bloque se abriría
+                   una línea de texto debajo y la fila del pie crecería unos
+                   píxeles. El marcado cambia; el dibujo, no. */
+                <li key={slug} className="flex">
+                  <a
+                    href={pagePath(lang, slug)}
+                    className={cn(
+                      chromeLinkVariants({ tone: "muted" }),
+                      "text-[0.9rem]",
+                    )}
+                  >
+                    {dict[label]}
+                  </a>
+                </li>
               ))}
-            </span>
+            </ul>
           </nav>
 
           {/* Los dos canales de icono. El suelo táctil de 44px lo pone la
