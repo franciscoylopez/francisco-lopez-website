@@ -61,6 +61,7 @@
 
 import { locales, pagePath } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
+import { juzgaCorrida, mideCorrida } from "./censo/corrida";
 import { HUELLA_PATH, huella, sellar } from "./censo/huella";
 import { guionDelCenso } from "./design-review/guion";
 import {
@@ -70,7 +71,6 @@ import {
   leeInventario,
   type Corrida,
 } from "./censo/inventario";
-import { ab } from "./navegador/agent-browser";
 
 const BASE = process.env.BASE_URL ?? "http://localhost:3000";
 const TEMAS = ["light", "dark"] as const;
@@ -80,40 +80,6 @@ const TEMAS = ["light", "dark"] as const;
  *  componentes, y lo que sí cambia con el idioma —longitudes, saltos de línea—
  *  lo ve `viewport-verifier`, no esto. */
 const LOCALE = locales[0];
-
-type Par = {
-  clave: string;
-  ratio: number;
-  px: number;
-  nivel: string;
-  ejemplo: string;
-};
-/** Contorno de un control: WCAG 1.4.11, que no es contraste de texto. */
-type Contorno = {
-  ejemplo: string;
-  lados: string;
-  bordeVsFondo: number | null;
-  rellenoVsFondo: number | null;
-  veces: number;
-};
-type Censo = {
-  metro: string;
-  reglasHover: string;
-  /** Cuántos reveals había, y cuántos hubo que encender para poder medirlos. */
-  reveals: string;
-  /** Cuántos textos ha mirado la composición por opacidad, y cuántos compuso. */
-  opacidad: string;
-  tema: string;
-  pares: number;
-  bajoAA: Par[];
-  bajoAAA: Par[];
-  sinMedir: Par[];
-  /** Todos los pares medidos, con su clave: es el inventario de la corrida. */
-  censo: Par[];
-  contornos: string;
-  bajo3: Contorno[];
-};
-
 /* El conductor de `agent-browser` vive en `scripts/navegador/agent-browser.ts`
  * desde 2026-08-28 (P50.77): la segunda pasada que necesita navegador —la del
  * pliegue— lo quería entero, y dos conductores se arreglan por separado el día
@@ -172,45 +138,7 @@ console.log(
 for (const slug of PAGINAS) {
   const ruta = pagePath(LOCALE, slug);
   for (const tema of TEMAS) {
-    ab(["open", `${BASE}${ruta}`]);
-    ab(["set", "media", tema]);
-    // EL DIÁLOGO DE CONSENTIMIENTO SE DECIDE, NO SE HEREDA (P72.15, 2026-09-02).
-    // Aporta pares, y su estado dependía del `localStorage` del navegador que
-    // conducía la pasada: en una sesión donde alguien ya había aceptado no se
-    // pintaba, y sus pares desaparecían de las catorce páginas a la vez. Es la
-    // causa del 414 → 391 del 2026-08-27 sobre el mismo contenido. Se limpia y se
-    // recarga, así que el diálogo entra SIEMPRE y la pasada es reproducible.
-    ab([
-      "eval",
-      "localStorage.removeItem('flm-consent'); localStorage.removeItem('flm-consent-seen'); 'ok'",
-    ]);
-    ab(["reload"]);
-    ab(["set", "media", tema]);
-    // SE DESPLAZA ANTES DE MEDIR (P68.585, 2026-08-24). La pasada abría la
-    // página y medía ahí mismo, así que TODA isla que solo monta al hacer
-    // scroll —el riel de secciones del artículo es el caso— no estaba en el DOM
-    // cuando se la iba a medir. Doce controles que el censo no podía ver por
-    // este motivo, además de los que no veía por su criterio de caja.
-    //
-    // Desplazar es ESTRICTAMENTE ADITIVO para la cobertura: el censo recorre el
-    // DOM entero y su `esVisible` mira tamaño y visibilidad, no intersección
-    // con el viewport, así que bajar no quita nada de la lista — solo añade lo
-    // que hasta ahora no llegaba a existir.
-    ab(["eval", "window.scrollTo(0, document.body.scrollHeight * 0.5); 'ok'"]);
-    // Y se espera al `IntersectionObserver`, que no resuelve en el mismo
-    // fotograma: sin esta pausa el riel sigue sin montar y el arreglo de arriba
-    // no serviría de nada.
-    //
-    // OJO CON LO QUE ESTO **NO** ARREGLA (P50.79, 2026-08-28): el scroll resuelve
-    // lo que no está MONTADO, no lo que está a `opacity: 0`. Bajar al 50% y
-    // esperar encendió 9 de los 29 reveals de `/accesibilidad`, porque el
-    // observador solo dispara lo que cruza en ese momento. De eso se encarga
-    // `mostrarReveals()`, dentro del propio guion, y por eso son dos cosas.
-    ab(["eval", "new Promise((r) => setTimeout(() => r('ok'), 900))"]);
-    ab(["eval", "--stdin"], guionCenso);
-    const crudo = ab(["eval", "JSON.stringify(window.contrastCensus())"]);
-    // `eval` devuelve la cadena JSON entrecomillada; se desenvuelve dos veces.
-    const c = JSON.parse(JSON.parse(crudo.trim().split("\n").pop()!)) as Censo;
+    const c = mideCorrida(`${BASE}${ruta}`, tema, guionCenso);
 
     corridas++;
     inventario.push({
@@ -223,40 +151,7 @@ for (const slug of PAGINAS) {
     contornosTotales += Number(c.contornos.match(/^\d+/)?.[0] ?? 0);
 
     const etiqueta = `${ruta} · ${tema}`;
-    const temaPintado = tema === "dark" ? "oscuro" : "claro";
-
-    if (!c.metro.startsWith("OK"))
-      fallo(`${etiqueta}: EL METRO NO SE VALIDA — ${c.metro}`);
-    if (c.tema !== temaPintado)
-      fallo(
-        `${etiqueta}: se pidió tema ${tema} y la página pintó «${c.tema}». ` +
-          `El \`set media\` no ha llegado, así que esta corrida mide otra cosa.`,
-      );
-    if (c.reglasHover.startsWith("0")) fallo(`${etiqueta}: ${c.reglasHover}`);
-    if (c.contornos.startsWith("0")) fallo(`${etiqueta}: ${c.contornos}`);
-    if (c.opacidad.startsWith("0 —")) fallo(`${etiqueta}: ${c.opacidad}`);
-    if (c.pares === 0)
-      fallo(`${etiqueta}: cero pares medidos. Una página siempre tiene pares.`);
-
-    for (const p of c.bajoAA)
-      fallo(
-        `${etiqueta}: FALLA AA — ${p.ratio.toFixed(2)}:1 en ${p.px}px · ${p.ejemplo}`,
-      );
-    for (const p of c.bajoAAA)
-      if (p.nivel !== "FALLA AA")
-        fallo(
-          `${etiqueta}: bajo AAA — ${p.ratio.toFixed(2)}:1 en ${p.px}px · ${p.ejemplo}`,
-        );
-
-    // WCAG 1.4.11: el control tiene que poder reconocerse COMO control. Basta con
-    // que uno de los dos caminos llegue a 3:1, así que el mensaje dice los dos —
-    // si no, el lector no sabe cuál subir.
-    for (const c11 of c.bajo3)
-      fallo(
-        `${etiqueta}: FALLA 1.4.11 — ni el borde (${c11.bordeVsFondo ?? "—"}) ` +
-          `ni el relleno (${c11.rellenoVsFondo ?? "—"}) llegan a 3:1 · ` +
-          `${c11.ejemplo}${c11.veces > 1 ? ` ×${c11.veces}` : ""}`,
-      );
+    for (const p of juzgaCorrida(etiqueta, tema, c)) fallo(p);
 
     // CON EL CONTADOR DELANTE (P50.78, 2026-08-28). La línea por corrida ya
     // estaba; lo que faltaba era saber **por dónde va**. Con 28 corridas de un par
