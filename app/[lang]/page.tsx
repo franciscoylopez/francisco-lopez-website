@@ -1,8 +1,8 @@
 import { ComoTrabajo } from "@/components/site/como-trabajo";
 import { Contacto } from "@/components/site/contacto";
-import { Formacion } from "@/components/site/formacion";
+import { Formacion, alumniOf } from "@/components/site/formacion";
 import { Hero } from "@/components/site/hero";
-import { Hitos } from "@/components/site/hitos";
+import { Hitos, awardsOf } from "@/components/site/hitos";
 import { MasAlla } from "@/components/site/mas-alla";
 import { PageShell } from "@/components/site/page-shell";
 import { Toolkit } from "@/components/site/toolkit";
@@ -23,11 +23,19 @@ export default async function Home({ params }: LangParams) {
   const cvHref = cvPath(lang);
 
   // JSON-LD ProfilePage + Person (SEO técnico, D14): entidad principal del sitio.
+  // Los reconocimientos y las instituciones los componen las secciones que los
+  // pintan, no este archivo ni el marcado: así el JSON-LD no puede decir algo
+  // distinto de lo que se lee en la página (P82).
   return (
     <PageShell
       dict={common}
       lang={lang}
-      jsonLd={profilePageLd(lang, common.meta.description)}
+      jsonLd={profilePageLd({
+        lang,
+        description: common.meta.description,
+        awards: awardsOf(t.hitos),
+        alumni: alumniOf(t.formacion),
+      })}
     >
       <>
         <Hero dict={t.hero} />

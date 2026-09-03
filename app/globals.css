@@ -1135,9 +1135,32 @@
    `@layer` (D34), dejar el valor aquí habría seguido ganándole a la utilidad. */
 .link-chrome {
   background-color: transparent;
-  transition: background-color 0.18s ease;
+  transition: background-color 0.18s var(--ease-entrance);
 }
-.link-chrome:hover,
+/* LA PASTILLA DE HOVER LLEVA PUERTA DE PUNTERO, Y EL FOCO NO *(P82)*. Sin ella,
+   en un dispositivo táctil el `:hover` se queda pegado tras el toque hasta que se
+   toca en otro sitio, así que el control se queda encendido sin que nadie lo esté
+   señalando. Se nota justo en los que no navegan: el toggle de tema y la
+   hamburguesa, donde tras el toque te quedas en la misma página.
+
+   Y ERA UNA INCOHERENCIA, NO UNA PREFERENCIA: el resto del sitio ya está gateado
+   por construcción, porque Tailwind compila `hover:` dentro de
+   `@media (hover: hover)` — y este archivo ya replica ese media query a mano dos
+   veces, para recalcular `--surface-dim` y `--control-edge`. Las únicas dos
+   superficies de hover sin puerta eran estas dos, que son las escritas a mano.
+
+   POR ESO SE PARTE EL SELECTOR EN VEZ DE ENVOLVER LA REGLA: `:hover` y
+   `:focus-visible` compartían declaración, y meter las dos dentro del media query
+   dejaría sin fondo de foco a quien navega con teclado en un táctil. Es el mismo
+   reparto que las otras dos réplicas de aquí arriba.
+
+   La declaración de reposo NO se toca, que es lo que pide D35: los dos extremos de
+   la transición siguen en la regla que la declara. */
+@media (hover: hover) {
+  .link-chrome:hover {
+    background-color: var(--chrome-hover-bg);
+  }
+}
 .link-chrome:focus-visible {
   background-color: var(--chrome-hover-bg);
 }
@@ -1165,9 +1188,14 @@
    misma regla que la declara. Ver D35. */
 .icon-chrome {
   background-color: var(--icon-chrome-bg, var(--card));
-  transition: background-color 0.18s ease;
+  transition: background-color 0.18s var(--ease-entrance);
 }
-.icon-chrome:hover,
+/* La misma puerta de puntero que `.link-chrome`, y por lo mismo. */
+@media (hover: hover) {
+  .icon-chrome:hover {
+    background-color: var(--chrome-hover-bg);
+  }
+}
 .icon-chrome:focus-visible {
   background-color: var(--chrome-hover-bg);
 }

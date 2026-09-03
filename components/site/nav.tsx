@@ -3,7 +3,7 @@
 import { Download, Menu, Moon, Sun } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 import { actionVariants } from "@/components/ui/action";
 import { chromeLinkVariants } from "@/components/ui/chrome";
@@ -24,6 +24,36 @@ export type NavDict = {
   switchLanguage: string;
   switchLanguageShort: string;
 };
+
+/**
+ * LOS DOS UMBRALES DE LA RAMA `prefers-reduced-motion`, en píxeles de scroll:
+ * se ENTRA en compacto por encima de `ENTRADA` y se SALE por debajo de
+ * `SALIDA`. La banda entre ambos es la histéresis. Ver el efecto de scroll.
+ */
+/** La preferencia del sistema, escrita una vez: la leen el snapshot y la suscripción. */
+const REDUCE_MOTION = "(prefers-reduced-motion: reduce)";
+
+/**
+ * LAS TRES FUNCIONES DE `useSyncExternalStore`, A NIVEL DE MÓDULO Y NO INLINE.
+ * No es estilo: el hook RE-SUSCRIBE cada vez que `subscribe` cambia de
+ * identidad, así que escritas dentro del componente se desconectaba y se volvía a
+ * conectar el listener en cada render. Fuera, la identidad es estable y la
+ * suscripción se hace una vez.
+ *
+ * El snapshot de servidor es `false` a propósito: en el prerender no hay
+ * preferencia que consultar, así que se sirve el estado no reducido y el primer
+ * snapshot de cliente lo corrige si hace falta.
+ */
+const suscribirAReduce = (avisar: () => void) => {
+  const mq = window.matchMedia?.(REDUCE_MOTION);
+  mq?.addEventListener("change", avisar);
+  return () => mq?.removeEventListener("change", avisar);
+};
+const leerReduce = () => window.matchMedia?.(REDUCE_MOTION).matches ?? false;
+const reduceEnServidor = () => false;
+
+const ENTRADA = 48;
+const SALIDA = 32;
 
 // Nav sticky (BRAND.md regla 6 · PRD §6). Transición continua con el scroll:
 // p = clamp(scrollY/120) cuantizado a pasos de 1/50 para limitar re-renders.
@@ -65,6 +95,10 @@ export function Nav({
   const pathname = usePathname() || "/";
   const [p, setP] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  // El estado del símbolo en la rama `reduce`, para que el umbral pueda mirar de
+  // dónde viene. Va en una ref y no en el propio `p` porque `compute` corre en un
+  // rAF: leer el estado desde el cierre daría el valor del render anterior.
+  const compactoRef = useRef(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   // Selector de idioma (toggle al otro locale conservando la página actual, D2):
@@ -80,18 +114,55 @@ export function Nav({
   const isSobreMi = subpath === "/sobre-mi";
   const isContacto = subpath === "/contacto";
 
+  // LA PREFERENCIA SE ESCUCHA, NO SE MIRA UNA VEZ *(P82)*. Estaba leída con
+  // `.matches` dentro del efecto de scroll, así que el valor quedaba capturado en
+  // el cierre: quien activaba Reduce Motion con la pestaña ya abierta seguía
+  // viendo la interpolación continua hasta recargar. Es el mismo patrón que el
+  // tema ya usa, y el suscribirse es lo que lo hace cierto en el momento en que
+  // el usuario lo pide.
+  //
+  // `useSyncExternalStore` y no un efecto con `setState`: el media query ES una
+  // fuente externa, y suscribirse desde un efecto para copiar su valor a estado
+  // es justo el patrón que React desaconseja (y que el linter marca). El
+  // snapshot de servidor es `false` a propósito: en el prerender no hay
+  // preferencia que consultar, así que se sirve el estado no reducido y el
+  // primer snapshot de cliente lo corrige si hace falta.
+  const reduce = useSyncExternalStore(
+    suscribirAReduce,
+    leerReduce,
+    reduceEnServidor,
+  );
+
+  // EL UMBRAL DE LA RAMA `reduce` TIENE DOS PUNTOS DE CORTE, Y NO UNO *(P82)*.
+  // Con un solo corte en 48px, un scroll que se quedara parado justo ahí hacía
+  // saltar el símbolo 48↔28px con cada píxel de vaivén — o sea, movimiento
+  // repetido justo en el estado que quien activa esa preferencia ha pedido que NO
+  // se mueva. Se entra en compacto por encima de 48 y se sale por debajo de 32:
+  // los 16px de banda son más que cualquier vaivén de un dedo o de una rueda.
+  //
+  // Y CON `reduce` SALTA TODO, TAMBIÉN EL FUNDIDO DEL WORDMARK, que la ficha
+  // dejaba abierto por D136 («reduced-motion retira lo que DESPLAZA o ESCALA, no
+  // lo que se funde»). Se queda como está, y el motivo está en la otra mitad de
+  // esa misma regla: solo se apaga entera la animación «que es movimiento de
+  // principio a fin, o la que va ACOPLADA AL SCROLL, que es la que nombra WCAG
+  // 2.3.3» (CLAUDE.md §a11y, punto 7). Este fundido no corre contra un reloj:
+  // corre contra la rueda del usuario, y es exactamente el caso nombrado. Dejarlo
+  // vivo separaría además las dos piezas del mismo gesto: el nombre
+  // desvaneciéndose mientras el símbolo pega un salto.
   useEffect(() => {
-    const reduce = window.matchMedia?.(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
     let raf = 0;
     const compute = () => {
       raf = 0;
-      const next = reduce
-        ? window.scrollY > 48
-          ? 1
-          : 0
-        : Math.round(Math.min(1, Math.max(0, window.scrollY / 120)) * 50) / 50;
+      let next: number;
+      if (reduce) {
+        const compacto =
+          window.scrollY > (compactoRef.current ? SALIDA : ENTRADA);
+        compactoRef.current = compacto;
+        next = compacto ? 1 : 0;
+      } else {
+        next =
+          Math.round(Math.min(1, Math.max(0, window.scrollY / 120)) * 50) / 50;
+      }
       setP((prev) => (prev === next ? prev : next));
     };
     const onScroll = () => {
@@ -103,7 +174,7 @@ export function Nav({
       window.removeEventListener("scroll", onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, []);
+  }, [reduce]);
 
   // ESC CIERRA EL MENÚ Y DEVUELVE EL FOCO AL BOTÓN (P70.06, pasada con NVDA).
   // No había NINGÚN manejador de teclado en este archivo: durante la pasada

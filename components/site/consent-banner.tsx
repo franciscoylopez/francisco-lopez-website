@@ -179,8 +179,22 @@ export function ConsentBanner({
 
           Y la franja conserva su `role="region"` con nombre: el rol de live
           region anuncia, pero no es un punto de navegación. Son dos cosas y por
-          eso son dos elementos. */}
-      <div role="status" aria-live="polite">
+          eso son dos elementos.
+
+          Y NO LLEVA `role="status"`, QUE ES LO QUE SE CORRIGE HOY *(P82)*. El rol
+          hace dos cosas a la vez: anuncia —`aria-live="polite"` y
+          `aria-atomic="true"` implícitos— **y** expone un elemento que el cursor
+          virtual pisa. Vacío, ese elemento no tiene nombre, así que quien usa
+          lector se encontraba una parada muda en la SEGUNDA posición del
+          documento, en las catorce páginas y en los dos idiomas.
+
+          El envoltorio se queda —es el mecanismo, y sigue siendo bueno—; lo que
+          sale es el rol. Un `aria-live` a secas anuncia igual y deja el elemento
+          genérico, que es exactamente lo que hacen las otras cuatro live regions
+          del repo (`article-islands` ×2 y `copy-button` ×2): esta era la única
+          que se desviaba. `aria-atomic` va explícito porque el rol lo traía
+          implícito y se quiere el MISMO comportamiento, no uno parecido. */}
+      <div aria-live="polite" aria-atomic="true">
         {bannerOpen && !prefsOpen && (
           <div
             role="region"

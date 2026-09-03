@@ -19,6 +19,38 @@ export type FormacionDict = {
   marketing: EduItem[];
 };
 
+/**
+ * EL SEPARADOR DE CAMPOS del rótulo de una fila («TheHeroCamp · 2021»), que no lo
+ * elige este archivo: lo fija `CLAUDE.md` §copy y lo vigila `check:raya`.
+ */
+const SEPARADOR = " · ";
+
+/**
+ * LAS CUATRO INSTITUCIONES, para el `alumniOf` del nodo `Person` (P82).
+ *
+ * `alumniOf` quiere la ORGANIZACIÓN, no el programa: «TheHeroCamp», no «Product
+ * Management». El diccionario los publica juntos en la misma cadena porque es lo
+ * que la fila pinta, así que aquí se parte por el separador de campos en vez de
+ * escribir los cuatro nombres una segunda vez.
+ *
+ * LANZA SI LA CADENA NO SE PARTE EN DOS, misma cautela que `periodPartsOf`: un
+ * rótulo con otro formato emitiría «TheHeroCamp, 2021» como nombre de institución
+ * sin que nada lo notara, y eso es un dato mal publicado en las 28 variantes.
+ */
+export function alumniOf(dict: FormacionDict): string[] {
+  return [...dict.producto, ...dict.marketing].map((item) => {
+    const partes = item.institution.split(SEPARADOR);
+    if (partes.length !== 2) {
+      throw new Error(
+        `Formación: «${item.institution}» no se parte en «institución${SEPARADOR}año». ` +
+          "El nombre alimenta el `alumniOf` del JSON-LD; si el rótulo cambia de " +
+          "formato, el sitio de arreglarlo es el diccionario de la home.",
+      );
+    }
+    return partes[0]!;
+  });
+}
+
 const PRODUCTO_LOGOS = ["education/the-hero-camp", "education/the-uncoding"];
 const MARKETING_LOGOS = ["education/olea-europea", "education/esic"];
 

@@ -170,8 +170,12 @@ export function DesignSystem({
     tipografia: <Tipografia t={t.tipografia} marco={marcos.tipografia} />,
     claroscuro: <Claroscuro t={t.claroscuro} marco={marcos.claroscuro} />,
     movimiento: <Movimiento t={t.movimiento} marco={marcos.movimiento} />,
-    enlaces: <Enlaces t={t.enlaces} marco={marcos.enlaces} />,
-    botones: <Botones t={t.botones} marco={marcos.botones} />,
+    enlaces: (
+      <Enlaces t={t.enlaces} marco={marcos.enlaces} demoSufijo={t.demoSufijo} />
+    ),
+    botones: (
+      <Botones t={t.botones} marco={marcos.botones} demoSufijo={t.demoSufijo} />
+    ),
     etiquetas: (
       <Etiquetas t={t.etiquetas} marco={marcos.etiquetas} lang={lang} />
     ),

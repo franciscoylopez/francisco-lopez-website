@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 import { FocusSimulator } from "@/components/site/design-system-islands";
 
 import { VideoEmbed } from "@/components/ui/video-embed";
-import { SpecimenCard, type SeccionMarco } from "./shared";
+import { SpecimenCard, type SeccionMarco, demoAria } from "./shared";
 
 /* ===================== BOTONES Y ACCIONES =====================
     Hermana de (08): la otra mitad de la capa interactiva. Existe porque los
@@ -21,9 +21,12 @@ import { SpecimenCard, type SeccionMarco } from "./shared";
 export function Botones({
   t,
   marco,
+  demoSufijo,
 }: {
   t: Dictionary["designSystem"]["botones"];
   marco: SeccionMarco;
+  /** El sufijo del nombre accesible de un enlace de demo. Ver `demoAria`. */
+  demoSufijo: string;
 }) {
   // La última ficha —el control sobre imagen, que absorbió la antigua §18— se
   // pinta aparte y a lo ancho: su demo es un vídeo y no cabe en una columna de
@@ -77,6 +80,7 @@ export function Botones({
                 {i === 0 && (
                   <a
                     href="#top"
+                    aria-label={demoAria(t.demoSolid, demoSufijo)}
                     className={actionVariants({ variant: "solid" })}
                   >
                     <ArrowRight aria-hidden="true" />
@@ -86,6 +90,7 @@ export function Botones({
                 {i === 1 && (
                   <a
                     href="#top"
+                    aria-label={demoAria(t.demoOutlinePrimary, demoSufijo)}
                     className={actionVariants({ variant: "outline-primary" })}
                   >
                     <Download aria-hidden="true" />
@@ -96,6 +101,7 @@ export function Botones({
                   <>
                     <a
                       href="#top"
+                      aria-label={demoAria(t.demoNeutral, demoSufijo)}
                       className={actionVariants({
                         variant: "outline-neutral",
                       })}
@@ -104,6 +110,7 @@ export function Botones({
                     </a>
                     <a
                       href="#top"
+                      aria-label={demoAria(t.demoGhost, demoSufijo)}
                       className={actionVariants({ variant: "ghost" })}
                     >
                       {t.demoGhost}
@@ -160,6 +167,10 @@ export function Botones({
                 {i === 6 && (
                   <a
                     href="#top"
+                    aria-label={demoAria(
+                      `${t.demoCardLabel} · ${t.demoCardValue}`,
+                      demoSufijo,
+                    )}
                     className={cn(
                       actionVariants({ variant: "card", size: "card" }),
                       "max-w-[19rem]",
