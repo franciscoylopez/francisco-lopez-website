@@ -228,6 +228,10 @@
 - D190 · Dieciséis enlaces con el mismo nombre y distinto destino: cuatro patrones, cuatro arreglos, y el gate que no existe
 - D191 · La entradilla sube a la capa, y el Design System deja de publicar un valor que ninguna página usa
 - D192 · La foto del CV sale del recorte que ya existía, y `cv.huella` no la vigila
+- D193 · La prosa no se vigila, la dependencia baja a símbolo, y el supuesto de infra se comprueba
+- D194 · Una captura no se sella por su render: se sella por lo que AFIRMA
+- D195 · El nombre de enlace repetido pasa a guardián, y el sitio donde vive ya estaba abierto
+- D196 · El trinquete de deuda sella la magnitud, y con la lista de marcados vacía ya es exacto
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12380,3 +12384,304 @@ se queda viejo» que P72.29 tiene que decidir entera —ahí están las tres cap
 el mismo problema de no determinismo— y resolver una instancia por su cuenta es justo lo que
 haría que la decisión de familia no se tomara. Lo que sí queda escrito es el contrato, en
 `GATES.md`: `check:cv` garantiza el copy y **deja fuera la imagen**.
+
+---
+
+## D193 · La prosa no se vigila, la dependencia baja a símbolo, y el supuesto de infra se comprueba — 2026-09-03
+
+**La pregunta la trajo un caso medido, no una intuición:** en una sola tarde (2026-08-31)
+salieron **nueve** afirmaciones falsas de este repo. Cuatro eran **supuestos sobre
+infraestructura** escritos sin comprobarlos —«en Preview no hay almacén», «fuera de producción
+el endpoint no existe», «el 404 es que no está activado», «el componente de Analytics está
+roto»— y los cuatro se cayeron en un minuto cuando por fin se comprobaron. Las otras cinco eran
+**frases del repo que dejaron de ser ciertas** sin que se moviera ninguna dependencia declarada,
+dos de ellas en un documento del art. 13 del RGPD.
+
+Los veintitrés guardianes de aquí no vieron ninguna, y el motivo estaba bien diagnosticado:
+**detectan que una FUENTE se movió, no que una FRASE se volvió falsa.** La tarea preguntaba tres
+cosas y esta entrada las contesta: dos sí y un no, cada uno con su medida.
+
+### 1 · El guardián de prosa con cuantificadores se DESCARTA, y el ruido está medido
+
+La idea era buscar frases con cuantificador —«nada», «lo único», «todo», «ninguna», «siempre»,
+«cero»— sobre comportamiento del sitio, que es el patrón común de las cinco. Se ha medido con el
+método de D149: un detector de un solo uso sobre los documentos vivos, los históricos y el copy
+servido.
+
+| Dónde | Frases con cuantificador |
+|---|---|
+| Documentos **vivos** del repo | **1.332** |
+| Documentos **históricos** (una frase vieja ahí es CORRECTA) | 607 |
+| **Copy servido** (diccionario ES) | **264** |
+
+**1.596 candidatas vivas, y hoy son todas ciertas.** No es un problema de vocabulario ni de
+afinado: «AA cumplido en todo el sitio» y «nada mide sin él» son sintácticamente idénticas, y la
+segunda solo es falsa porque alguien desplegó algo. Distinguirlas pide **comprobar el mundo**, no
+reconocer la frase. *Un gate ruidoso es peor que ninguno* (D59), y aquí el ruido sería el 100%.
+
+**Lo que sí queda vivo, que es la mitad barata:** cuando una página publica afirmaciones
+verificables, no se vigila su prosa — se declara **de qué depende**, bloque a bloque, y el sello
+manda a releer. Es lo que ya hacen `/accesibilidad` y el artículo. La respuesta a «¿cómo evito la
+sexta frase falsa?» no es un detector: es que la página que la escriba tenga su
+`content/<pagina>/dependencias.ts`.
+
+### 2 · La dependencia SÍ baja a símbolo, y el ruido también está medido
+
+`scripts/dependencias/huella.ts` resolvía tres formas —archivo, `DECISIONS.md#D26` y
+directorio—, así que un `#fragmento` solo era fragmento en markdown. Consecuencia: un archivo que
+es **fuente única** por D38 solo se podía declarar entero.
+
+| `lib/design-values.ts` | |
+|---|---|
+| Commits que lo tocan | 35 |
+| Mueven algo que sus dos dependientes vigilan | 12 |
+| **Rojos con cero hallazgos dentro** | **23 (66%)** |
+
+Dos tercios de las alarmas no tenían nada dentro. Eso no es un guardián estricto: es el
+entrenamiento para sellar sin mirar, que es el modo de fallo peor.
+
+**Entra una cuarta forma: `lib/design-values.ts#CONTRAST`**, una declaración exportada de un
+archivo de código. Qué significa el `#` lo decide la **extensión**, no una heurística. Y a
+diferencia del punto 1, aquí **no hay falsos positivos posibles**: un símbolo está o no está.
+
+Se deja fuera, a propósito, **el comentario de encima**: un JSDoc reescrito no cambia lo que la
+declaración vale, y este resolutor existe justo para no disparar por eso. El precio es simétrico
+y hay que decirlo: **corregir un comentario que afirmaba algo falso tampoco manda a releer** —que
+es, literalmente, cuatro de los nueve casos de arriba.
+
+**Y la prueba está partida en dos porque el arnés solo sabe pedir una mitad.**
+`check:guardianes` verifica «verde en limpio, rojo sobre el caso malo», así que la mitad que
+justifica todo esto —que un cambio ajeno **no** mueva el sello— no cabe ahí: vive en
+`tests/dependencias-huella.test.ts`, con la fuente inyectada y sin tocar disco. En `casos.ts`
+queda la mitad positiva, sobre el archivo y el guardián reales.
+
+### 3 · Un supuesto sobre infraestructura no se escribe: se comprueba
+
+Es la regla que sale a `CLAUDE.md` §Higiene de sesión, y es la más barata de las tres porque no
+construye nada. Los cuatro casos tenían delante un comando de un minuto —`vercel env ls`, un
+`curl`, un panel— y ninguno se ejecutó antes de escribir la frase.
+
+Es la familia que `BRAND.md` §Cómo se escribe una regla ya nombra —«un disparador que mira al
+lugar o al momento equivocado»— en su variante de momento: comprobar **después** de escribirlo
+llega tarde, porque para entonces la frase ya está en un documento que alguien lee.
+
+### Lo que esta entrada NO hace
+
+No cubre `README.md` ni la prosa de `PRD-Live`, que siguen sin guardián. Es deliberado y es la
+conclusión del punto 1: no hay forma barata de vigilarlos, y decir que la hay habría sido peor
+que dejarlo escrito. Lo que sí hay es dónde ponerlos el día que una de sus frases importe lo
+suficiente: como un bloque declarado, con sus dependencias, igual que `/accesibilidad`.
+
+**Coste de contexto, porque este ciclo lo cobra:** la regla nueva se paga retirando dos bullets
+de `CLAUDE.md` que ya vivían enteros en el subagente `viewport-verifier` y en `GATES.md`.
+`check:contexto` 11.690 → 11.683.
+
+---
+
+## D194 · Una captura no se sella por su render: se sella por lo que AFIRMA — 2026-09-03
+
+**El hueco.** El CV y el SVG del artefacto tienen su `.huella` y su guardián en CI (`check:cv`,
+`check:artefacto`, familia D60). Las tres capturas de `.github/assets/` —`banner.png`,
+`home-light.png`, `home-dark.png`— no tenían nada. Y desde el 2026-08-19 el **repositorio es
+público** (D68), así que esa portada es lo primero que ve quien llega. Familia «el artefacto
+commiteado que se queda viejo», **instancia 3**.
+
+### Por qué no se sella el render, que era la vía obvia
+
+Una captura **no es determinista**: dos capturas del mismo sitio no dan el mismo hash, igual que
+el PDF del CV. Así que comparar bytes está descartado y hay que sellar las **entradas** — hasta
+aquí, D60 tal cual.
+
+La entrada que la ficha proponía era «el HTML servido de esa ruta + `globals.css`», reusando
+`gate:html`. **Se midió antes de construirla y no sirve:**
+
+| Entrada candidata | Commits en quince días |
+|---|---|
+| `app/globals.css` | **11** |
+| `package.json` | **26** |
+| `app/[lang]/dictionaries/es/common.json` | 5 |
+| `app/[lang]/dictionaries/es/home.json` | 2 |
+| La foto del Hero | 0 |
+
+El HTML de la home se mueve casi cada tanda, y la captura **solo se queda vieja cuando cambia lo
+que se VE en ella**. Un sello sobre el HTML —o sobre `globals.css` entero— saldría rojo cada
+semana pidiendo rehacer una imagen que sigue siendo correcta, y *un gate ruidoso es peor que
+ninguno* (D59). Sellar el render habría sido construir el gate que la propia ficha advertía de no
+construir.
+
+### Lo que se sella en su lugar: la afirmación, no el píxel
+
+`content/readme/capturas.ts` transcribe **cada frase que la imagen enseña** y la empareja con la
+fuente viva de la que sale: el titular del Hero, el kicker, el subtitular, los cuatro rótulos del
+nav, el dominio, y los majors de Next y Tailwind del banner. Dieciocho afirmaciones sobre tres
+capturas. Es el bloque declarado de `/accesibilidad` (D84) aplicado a un artefacto binario: no se
+vigila el píxel, se vigila lo que promete.
+
+Y por eso el rojo es útil: no dice «algo cambió», dice **qué frase de qué captura** ha dejado de
+ser cierta, con las dos versiones enfrentadas.
+
+**La transcripción va LITERAL, y esto casi entra mal.** La primera versión escribía
+`dice: esHome.hero.kicker` junto a `fuente: () => esHome.hero.kicker`: compila, pasa siempre y no
+comprueba nada. Es el metro que devuelve lista vacía y parece un aprobado, esta vez en una sola
+línea. Por el mismo motivo el **caso malo muerde el diccionario y no la transcripción**: mordiendo
+la nota, el guardián saldría rojo igual sin distinguir «el sitio cambió» de «alguien tocó la
+nota».
+
+### Lo que deja fuera, dicho antes de que se note
+
+Un cambio **puramente visual** —una tipografía, un color, el orden de dos bloques— no mueve
+ninguna frase y esto no lo ve. No es un descuido: es la consecuencia directa de la medición de
+arriba, porque ahí no hay entrada barata que sellar. Va escrito en `GATES.md`, y su red es
+`design-review`, que mira en pantalla.
+
+**Y `social-preview.png` sigue fuera, por el motivo de D60:** GitHub la sirve desde *Settings* y
+exige subirla a mano, así que un guardián podría avisar y no arreglar. A esa se le quitaron las
+cifras en vez de ponerle huella, y esa decisión no cambia.
+
+---
+
+## D195 · El nombre de enlace repetido pasa a guardián, y el sitio donde vive ya estaba abierto — 2026-09-03
+
+**Por qué ahora, y no antes.** La tarea que barrió el sitio a mano (2026-09-03) encontró **16
+pares de enlaces con el mismo nombre accesible y distinto destino**, repartidos en **cuatro
+patrones**: los roles del índice de Trayectoria, las regletas del artículo, los demos del
+Design System y un fallo de locale en el diccionario EN. Su propia ficha llevaba escrita la
+condición: *«si sale un cuarto par, es señal de que esto necesita un guardián y no una ronda de
+arreglos»*. Salieron cuatro.
+
+**Y era un hueco real del arnés, no una preferencia.** Axe tiene `identical-links-same-purpose`
+como **«needs review»**, no como violación, así que el barrido de axe que `check:marco` ya hace
+sobre las 28 variantes lo pasa por alto sin decir nada. No es color ni contraste, así que el
+censo tampoco. Entre los dos gates de accesibilidad del repo, este criterio no lo miraba nadie.
+
+### Dónde vive: dentro de `check:marco`, y no como script nuevo
+
+`check:marco` ya abre las 28 variantes con jsdom, así que agrupar sus `<a href>` cuesta cero.
+Un `npm run` nuevo habría sido un paso de CI más para volver a recorrer lo que ya estaba
+abierto. Va en `scripts/marco/contenido.ts`, que es «lo que pone quien escribe la página», y ahí
+mismo es donde el defecto se comete.
+
+El nombre accesible se calcula en el orden en que lo hace un lector de pantalla —`aria-label`,
+si no el texto, si no el `alt` de sus imágenes— y se ignora lo que lleva `aria-hidden`, porque
+lo que no se anuncia no puede ser ambiguo.
+
+### Los pares declarados, y por qué no basta con ignorar los anclajes
+
+Hay **una** excepción legítima viva: «Privacidad y cookies» del formulario de Contacto apunta a
+`/cookies#privacidad` y el del pie a `/cookies`. Mismo destino y mismo propósito; solo cambia
+dónde aterriza.
+
+La tentación era una regla —«ignora el fragmento»— y habría sido incorrecta: **dos anclas
+distintas de la misma página sí pueden ser dos propósitos**. Así que se declara el par, con su
+motivo, como los cruces de `REFERENCIAS_QUE_CRUZAN` (D87). Y **la comparación es por DESTINOS,
+no solo por nombre**: si mañana aparece un tercer enlace que se llame igual, el par declarado
+deja de cubrir el grupo y el caso vuelve a salir. La lista existe para vaciarse, así que una
+entrada que ya no ocurre también sale roja: *una excepción muerta tapa la siguiente*.
+
+### Qué afirma que ha mirado
+
+**944 enlaces con nombre accesible**, agrupados por destino en las 28 variantes, y los 2 pares
+declarados. Sin esa cifra en el informe, un selector que dejara de casar daría exactamente el
+mismo ✓ — que es el fallo que este repo se ha encontrado seis veces.
+
+**Lo que deja fuera, dicho:** el nombre repetido entre **páginas distintas**. No confunde a
+nadie, porque nadie los oye juntos; agruparlo daría ruido garantizado con los enlaces del nav y
+del pie, que salen en las catorce.
+
+---
+
+## D196 · El trinquete de deuda sella la magnitud, y con la lista de marcados vacía ya es exacto — 2026-09-03
+
+**Decisión.** Dos cosas, y la primera no estaba en la ficha:
+
+1. **`check:deuda` sella la MAGNITUD de cada hallazgo, no solo su presencia.** El SARIF de
+   Qlty ya trae la cifra en el mensaje —`count = 93` en una complejidad, `mass = 160` en un
+   bloque duplicado, `level = 5` en un anidamiento—, y el sello la guarda por `regla|archivo`
+   como multiconjunto, con la misma igualdad exacta que ya defendía el total.
+2. **Los siete archivos por encima del umbral de complejidad se parten por sus costuras**, con
+   lo que la lista de marcados queda **vacía**: cero hallazgos de `file-complexity` en el repo.
+
+**Lo medido:** la deuda pasa de **30 hallazgos a 21**, y los nueve que caen son todos de
+`scripts/`, que baja de **14 a 5**. El producto no se toca: sus 16 siguen exactamente donde
+estaban, como en D187.
+
+### Por qué el punto 1, si D187 decía que no hacía falta ningún gate nuevo
+
+Porque la frase de D187 —*«cuando esa lista se vacíe, el trinquete de recuento pasa a ser
+exacto»*— **solo vale para `file-complexity`**, y eso no se vio al escribirla. El hueco que
+describe —dentro de algo que ya está marcado, la cifra crece sin que el contador se mueva—
+aplica igual a los otros 21 hallazgos: `Nav` podía pasar de complejidad 43 a 90, y el par
+`design-system` ↔ `brand-kit` de masa 160 a 400, sin un solo +1. Vaciar los siete lo dejaba
+abierto en 21 sitios y habría permitido escribir una afirmación falsa.
+
+**Y no es el «tope de complejidad/KLOC por directorio» que D187 §punto-3 descartó**, que es lo
+que parece de lejos. Allí el problema era que el umbral sería **un número elegido a ojo**, que
+es contra lo que D186 escribió su criterio. Aquí no se elige ninguno: **se sella el que hay**.
+Sigue sin perseguir un objetivo, sigue prohibiendo empeorar — ahora también dentro de lo ya
+marcado.
+
+**El caso malo es uno nuevo y no un duplicado del que había.** Aquel infla el RECUENTO, que es
+lo que el gate sabía comparar; este infla una CIFRA dejando el recuento intacto, y contra el
+gate anterior pasaba en verde sin tocar nada más. Muerde la primera magnitud que encuentre y no
+una clave nombrada: las de `scripts/` son justo las que este trabajo vacía, y un caso malo que
+se queda sin material acusa al guardián de algo que no ha hecho.
+
+### La regla que ordenó el trabajo es la de D187, y apareció una segunda
+
+La primera sigue exacta: **la pregunta no es «¿cómo bajo este número?» sino «¿cuántas cosas
+distintas hace este archivo?»**, y en los siete la respuesta estaba escrita dentro — las seis
+comprobaciones numeradas de `check-articulo`, las cuatro «mitades» de `check-contexto`, las tres
+capas de `check-figuras`, las dos preguntas de `check-experience-copy`.
+
+**La segunda es nueva y salió tres veces seguidas: al partir un archivo, el hallazgo se MUEVE en
+vez de irse si la costura de dentro del bucle no se mira también.** `revisaCitas` nació con
+complejidad 22, `revisaCampos` con 18 y `revisaSkills` con 30 — las tres veces, un hallazgo de
+función nuevo que compensaba exactamente el de archivo que se iba, con el total quieto en la
+misma cifra. Se cierra sacando el criterio del cuerpo del bucle: lo que se le pide a UNA cita, a
+UN idioma, el índice de entradas.
+
+| | Antes | Después |
+|---|---|---|
+| `check-articulo.ts` | 369 líneas · **93** · 1 | cinco piezas en `articulo/` · **0** |
+| `check-figuras.ts` | 555 líneas · **93** · 1 | tres capas en `figuras/` · **0** |
+| `check-excepciones.ts` | **77** + anidamiento nivel 5 · 2 | dos piezas en `excepciones/` · **0** |
+| `censo.ts` | **69** · 1 | `censo/corrida.ts` (conducir · juzgar) · **0** |
+| `check-experience-copy.ts` | **68** · 1 | tres piezas en `experiencias/` · **0** |
+| `check-contexto.ts` | 770 líneas · **60** · 1 | cinco piezas en `contexto/` · **0** |
+| `artefacto-svg.ts` | **52** + `cajaDelGrafo` **48** · 2 | `artefacto/caja.ts` + `paleta.ts` · **0** |
+
+### Qué garantiza que no ha cambiado nada, gate por gate
+
+- **Los cinco guardianes de CI** (`articulo`, `figuras`, `excepciones`, `experiencias`,
+  `contexto`): su salida completa comparada **byte a byte** antes y después, y los 57 casos
+  malos del arnés corridos enteros.
+- **`artefacto-svg`**, que no es un guardián: es determinista, así que se corrió sobre el mismo
+  export crudo antes y después y **el SVG resultante es idéntico byte a byte**, con el mismo
+  `viewBox`. `check:artefacto` sigue en verde con la misma huella.
+- **El censo**, que necesita navegador y no tiene caso malo: se corrió **de verdad**, contra el
+  sitio servido, con el código viejo y con el nuevo, sobre `/cookies` y `/sobre-mi` × dos temas
+  —la segunda elegida porque ejerce la rama de «sin medir», el texto sobre foto—. Las cuatro
+  salidas, idénticas. **La pasada completa NO se corrió**, y se dice: sella y reescribe el
+  inventario, y el diff de ese cambio son tres líneas.
+
+**Una excepción medida y dicha:** la salida de `check:contexto` difiere en **una línea**, la que
+cuenta las líneas vivas de `scripts/`. Sube porque partir archivos añade líneas —el mismo precio
+que D187 midió (+276)— y es un dato en vivo, no un veredicto.
+
+### El radio de acción, que otra vez no se veía en el código
+
+`scripts/check-experience-copy.ts` estaba **declarado como dependencia de §s06 del artículo**, y
+la regla que ese texto afirma —las tres longitudes, y la cifra que no puede vivir en una y
+faltar en otra— se mudó a `scripts/experiencias/` al partirlo. Sin corregir la declaración, §s06
+seguiría vigilando un archivo que ya no contiene lo que vigilaba. Es exactamente lo que le pasó
+al censo en D187, y lo cazó el propio guardián. Van las dos entradas porque hashean cosas
+distintas: el **directorio** caza una pieza nueva (se hashea su lista) y `bullets.ts`, que la
+regla cambie.
+
+### Lo que queda fuera, nombrado
+
+Los 21 hallazgos restantes no son complejidad de archivo: seis `similar-code` (las dos páginas
+del sistema, los dos bloques del Brand Kit, `04-stack` y `lib/ard.ts`), ocho de complejidad de
+función y cinco de exceso de `return`. **No se tocan, y el motivo es el criterio de D186**:
+partir un componente de React para bajar un contador lo empeora, y aquí ya no hace falta —**el
+sello por magnitud impide que crezcan**, que era todo lo que el trinquete no sabía hacer.

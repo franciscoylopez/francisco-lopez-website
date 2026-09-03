@@ -191,6 +191,16 @@ jobs:
       - name: Registro del kit de marca
         run: npm run check:kit
 
+      # Las tres capturas de `.github/assets/` son artefactos commiteados sin
+      # huella, y desde el 2026-08-19 el repositorio es PÚBLICO: esa portada es lo
+      # primero que ve quien llega. No se sella el render —una captura no es
+      # determinista, y el HTML de la home se mueve casi cada tanda sin que la
+      # imagen deje de ser correcta—: se declara cada frase que la imagen enseña y
+      # se contrasta con su fuente viva. Corre aquí, con los de fuente, porque no
+      # necesita el build.
+      - name: Capturas del README al día
+        run: npm run check:capturas
+
       # «Cómo se ha creado esta página» describe un proyecto que sigue cambiando, y
       # sus afirmaciones caducan sin avisar: la cifra de páginas ya iba una por
       # detrás, y 27 de sus 38 permalinks a DECISIONS.md apuntaban diez líneas

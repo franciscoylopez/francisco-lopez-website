@@ -71,20 +71,18 @@ Definition of Done —que dice literalmente «**antes** de `design-review`»— 
 portador desde que se escribió.
 
 **Por qué delante, con la cifra que lo justifica.** De los cinco hallazgos del
-`design-review` del sprint 3, **dos** eran huecos de medición genuinos —el contorno de
-control a 1,21:1 y `--destructive` a 4,31:1— que ningún instrumento podía ver, y su
-respuesta correcta fue extender el metro (D85, D90, D97). **Los otros tres eran mecánicos**:
-un filete varado entre 768 y 829px, nueve copias de la misma cadena, y una excepción
-publicada en cuatro sitios tras retirarse del código. Esos tres no pedían criterio de
-diseño: pedían un filtro barato que la revisión más cara del sistema acabó haciendo a mano.
-Si el filtro no encuentra nada, has perdido un minuto.
+`design-review` del sprint 3, solo **dos** eran huecos de medición genuinos, y su respuesta
+correcta fue extender el metro (D85, D90, D97). **Los otros tres eran mecánicos** —un filete
+varado en un tramo de anchos, copias de una misma cadena, una excepción publicada tras
+retirarse del código— y no pedían criterio de diseño: pedían un filtro barato que la revisión
+más cara del sistema acabó haciendo a mano. Si no encuentra nada, has perdido un minuto.
 
 **Se mantienen separadas, no se fusionan:** fusionarlas crearía la copia que prohíbe
 `BRAND.md` §Cómo se escribe una regla (5), e impediría que las reglas de Vercel se
-actualicen solas sin tocar las nuestras. Cubren catorce familias que nuestro sistema **no
-codifica**: además de las cinco que nombra la DoD, `touch-action`, `overscroll-behavior`,
-`translate="no"`, fecha y número con `Intl`, y los antipatrones (`transition: all`,
-`outline-none` huérfano, `<div onClick>`, bloqueo de zoom).
+actualicen solas sin tocar las nuestras. Cubren familias que nuestro sistema **no
+codifica**: además de las que nombra la DoD, `touch-action`, `overscroll-behavior`, fecha y
+número con `Intl`, y los antipatrones (`transition: all`, `outline-none` huérfano, `<div
+onClick>`, bloqueo de zoom). `translate="no"` NO está ahí: lo cubre `check:marcas` desde D116.
 
 **Dos cosas al usarla:**
 
@@ -131,9 +129,8 @@ Qué buscar:
   comentario, en prosa— es hallazgo por sí sola, sin necesidad de medirla.
   **Y el drift va también al revés:** en el disparo del 2026-08-08 las páginas publicaban las
   cifras correctas y era `BRAND.md` el que llevaba las superadas. Un documento puede
-  contradecirse **consigo mismo** — es la regla 6 de `BRAND.md` §Cómo medir vista desde el
-  lado del auditor: si una corrección se escribió como nota fechada al final, los párrafos de
-  arriba siguen afirmando lo viejo.
+  contradecirse **consigo mismo**: es la regla 6 de `BRAND.md` §Cómo medir, vista desde el
+  lado del auditor.
 - **Demos que enseñan algo que no existe.** El empujón de 2px vivía en una clase «propia de
   este CTA y de ningún otro», así que la demo de esa variante en el Design System mostraba
   un botón que el sitio no tenía. Toda demo se compara con su uso real.
@@ -275,15 +272,13 @@ siendo la misma variante sobre la misma superficie que el toggle del nav (corola
 Con **`agent-browser`**, sobre el sitio **servido en local** —`npm run build && npm start`,
 no `dev`: lo que se mide es el build de producción (D8/D13)— y sobre el **CSS servido**
 cuando la duda es si una clase llegó a generarse. **Precondición:** el sandbox de Bash
-desactivado, con su síntoma y su porqué en `CLAUDE.md` §Cómo se verifica (D51).
+desactivado, con su síntoma y su porqué en el propio subagente `viewport-verifier` (D51).
 
 ### Quién mide qué — y no se solapan
 
-- **`viewport-verifier`** (subagente) hace **el barrido medible**: axe por tema con el motion
-  congelado, la aritmética del pliegue de D50, el orden de lectura y los vitals, en su matriz
-  de viewports. **Se le llama; no se reescribe aquí lo que él hace** — lleva escrito el
-  método, incluido cuándo hay que volver a congelar (corregido el 2026-08-23), y devuelve
-  hallazgos en vez del volcado, así que su salida no se come la sesión (D28).
+- **`viewport-verifier`** (subagente) hace **el barrido medible**, y **qué mide lo dice él**:
+  se le llama, no se reescribe aquí. Devuelve hallazgos en vez del volcado, así que su salida
+  no se come la sesión (D28).
 - **Esta fase** hace lo que él no puede: **los estados que hay que provocar** y el **criterio
   de diseño**, que es lo suyo. Un subagente te dice que un par da 6,4; no te dice que el cian
   está compitiendo consigo mismo en un grupo de cuatro pestañas.
@@ -327,11 +322,8 @@ página suelta, el guion que hay detrás son las ocho piezas de
 inyecta CONCATENADO: `cat scripts/design-review/censo/*.js | agent-browser eval --stdin`.
 
 **Las reglas de medición ya están en contexto, y son de `BRAND.md`, no de aquí:** §Cómo se
-hace el censo —recorriendo el DOM de la página servida, con los estados incluidos, porque un
-par que solo aparece al **componer** no está en ningún inventario de tokens— y §Cómo medir
-sin equivocarse, entera: los anclajes sin cian, el recorte de gamut, el color pintado, la
-afordancia que también se mide, la clase que puede no estar aplicándose a nada, y el umbral
-que lo decide el tamaño del texto.
+hace el censo y §Cómo medir sin equivocarse, las dos enteras. Aquí no se resumen: repetir sus
+ocho puntos es cómo dos metros acaban midiendo distinto.
 
 Lo que esta revisión aporta encima es **el criterio, no el número**: por qué se llegó a ese
 par, si el arreglo correcto es el color o la composición, y si subir el contraste apagó una
@@ -340,7 +332,7 @@ elementos con `color-mix` que axe no sabe resolver — ahí se escondía un par 
 el informe decía «0 violaciones». `viewport-verifier` lo reporta; léelo, y no des por buena
 una lista vacía sin mirar cuánto se ha medido.
 
-**Gate de cierre:** los 8 puntos de accesibilidad de `CLAUDE.md` **con el método que ese
+**Gate de cierre:** los puntos de accesibilidad de `CLAUDE.md` **con el método que ese
 documento publica** — no lo repitas aquí. Un fallo puede ser **preexistente**: la auditoría
 de P37.591 encontró tres, ninguno causado por la tanda que se estaba revisando.
 
@@ -352,11 +344,10 @@ El cumplimiento evita que el sistema se rompa; no hace que el sitio sea memorabl
 análisis del 2026-08-01 fue duro y sigue vigente: *«ejecución sobresaliente pero dentro de
 un lenguaje muy de género»*. Preguntas, con evidencia contable, no impresiones:
 
-- **Presencia del color.** ¿Cuántas veces aparece el morado en la home, y dónde? (al escribir
-  esto: **dos** en ocho secciones). ¿El cian está en su papel de acción o se ha vuelto
-  decoración — o al contrario?
-- **Ritmo de secciones.** Cuenta los fondos: 6 de 8 secciones sobre `--background` con
-  `border-t` es un ritmo plano. ¿Dónde respira? ¿Hay densidad variable o todo mide igual?
+- **Presencia del color.** ¿Cuántas veces aparece el morado en la home, y dónde? ¿El cian
+  está en su papel de acción o se ha vuelto decoración — o al contrario?
+- **Ritmo de secciones.** Cuenta los fondos: si la mayoría cae sobre `--background` con
+  `border-t`, el ritmo es plano. ¿Dónde respira? ¿Hay densidad variable o todo mide igual?
 - **Gesto-firma.** ¿Hay **un** momento memorable, propio, que no esté en la plantilla del
   género? (el split del logo y el «0» del 404 son los candidatos existentes). Si no hay
   ninguno, dilo.

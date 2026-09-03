@@ -25,6 +25,9 @@
 
 import { readFileSync, writeFileSync } from "node:fs";
 
+import { cajaPublicada } from "./artefacto/caja";
+import { aTokens, fugasDeColor } from "./artefacto/paleta";
+
 const [, , entrada, salida] = process.argv;
 if (!entrada || !salida) {
   console.error(
@@ -35,125 +38,7 @@ if (!entrada || !salida) {
 
 let svg = readFileSync(entrada, "utf8");
 
-/**
- * La caja del grafo, recorriendo el SVG y ACUMULANDO LOS `translate` de los
- * grupos que envuelven cada forma.
- *
- * La primera versión no lo hacía y por eso salió corta: en Mermaid las cajas de
- * los CLUSTER llevan coordenadas absolutas, pero las de los NODOS van centradas
- * en el origen (`x="-68" y="-22"`) dentro de un `<g transform="translate(cx,cy)">`.
- * Leyendo el `rect` sin su grupo, un nodo que vive en y=1.400 se contabilizaba
- * como si estuviera en y=-22 — así que el alto salió 1.203 cuando el dibujo mide
- * bastante más, y la última banda quedaba fuera del `viewBox` y la recortaba el
- * `overflow-hidden` del panel. Se vio en pantalla, no en el código: el SVG lleva
- * `overflow:visible`, así que pintaba fuera de su caja sin quejarse.
- */
-function cajaDelGrafo(fuente: string) {
-  let minX = Infinity;
-  let minY = Infinity;
-  let maxX = -Infinity;
-  let maxY = -Infinity;
-
-  const punto = (x: number, y: number) => {
-    if (!Number.isFinite(x) || !Number.isFinite(y)) return;
-    minX = Math.min(minX, x);
-    minY = Math.min(minY, y);
-    maxX = Math.max(maxX, x);
-    maxY = Math.max(maxY, y);
-  };
-
-  // Pila de traslaciones: se apila al abrir un `<g>` y se desapila al cerrarlo.
-  const pila: { x: number; y: number }[] = [{ x: 0, y: 0 }];
-  const actual = () => pila[pila.length - 1] ?? { x: 0, y: 0 };
-
-  for (const m of fuente.matchAll(/<(\/?)(g|rect|path|circle)\b([^>]*)>/g)) {
-    const [, cierre, tag, attrs = ""] = m;
-    const t = actual();
-
-    if (tag === "g") {
-      if (cierre) {
-        if (pila.length > 1) pila.pop();
-        continue;
-      }
-      const tr = /transform="translate\((-?[0-9.]+)[, ]\s*(-?[0-9.]+)\)"/.exec(
-        attrs,
-      );
-      pila.push(
-        tr
-          ? { x: t.x + Number(tr[1]), y: t.y + Number(tr[2]) }
-          : { x: t.x, y: t.y },
-      );
-      // Los `<g/>` autocerrados no llegan aquí; Mermaid no los emite.
-      continue;
-    }
-
-    const num = (k: string) =>
-      Number(new RegExp(`${k}="(-?[0-9.]+)"`).exec(attrs)?.[1] ?? NaN);
-
-    if (tag === "rect") {
-      const x = num("x");
-      const y = num("y");
-      const w = num("width");
-      const h = num("height");
-      if (Number.isFinite(w) && Number.isFinite(h)) {
-        const x0 = (Number.isFinite(x) ? x : 0) + t.x;
-        const y0 = (Number.isFinite(y) ? y : 0) + t.y;
-        punto(x0, y0);
-        punto(x0 + w, y0 + h);
-      }
-    } else if (tag === "circle") {
-      const cx = num("cx");
-      const cy = num("cy");
-      const r = num("r");
-      if (Number.isFinite(r)) {
-        const x0 = (Number.isFinite(cx) ? cx : 0) + t.x;
-        const y0 = (Number.isFinite(cy) ? cy : 0) + t.y;
-        punto(x0 - r, y0 - r);
-        punto(x0 + r, y0 + r);
-      }
-    } else if (tag === "path") {
-      const d = /\sd="([^"]+)"/.exec(attrs)?.[1] ?? "";
-      for (const p of d.matchAll(/(-?[0-9.]+)[, ](-?[0-9.]+)/g)) {
-        punto(Number(p[1]) + t.x, Number(p[2]) + t.y);
-      }
-    }
-  }
-
-  const M = 28; // margen, para que el trazo de los bordes no se corte
-  return {
-    x: Math.round(minX - M),
-    y: Math.round(minY - M),
-    w: Math.round(maxX - minX + M * 2),
-    h: Math.round(maxY - minY + M * 2),
-  };
-}
-
-/**
- * La caja que se publica: **la del propio SVG si la trae**, y solo si no, la
- * calculada.
- *
- * POR QUÉ, y es un fallo que costó ver (2026-08-18). `cajaDelGrafo` existe porque
- * el export de mermaid.live **no traía `viewBox`**: había que deducirlo. El de
- * `mermaid-cli` sí lo trae, y es autoritativo —lo calcula Mermaid, que es quien
- * ha colocado cada nodo—. Recalcularlo encima daba una caja **un 40% más ancha y
- * un 55% más alta** que el dibujo (3070×2692 frente a 2192×1742), así que el
- * grafo ocupaba dos tercios de su propio lienzo: en la página se veía **al 40%
- * de escala, ilegible, y con la mitad del panel vacía**.
- *
- * No lo cazó nada automático —el SVG era válido, los colores correctos y el
- * guardián de literales pasaba— sino mirar la página. El `viewBox` es de las
- * pocas cosas de un SVG que no se pueden verificar sin verlo.
- */
-const propio =
-  /viewBox="\s*([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s+([\d.+-]+)\s*"/.exec(svg);
-const caja = propio
-  ? {
-      x: Math.round(Number(propio[1])),
-      y: Math.round(Number(propio[2])),
-      w: Math.round(Number(propio[3])),
-      h: Math.round(Number(propio[4])),
-    }
-  : cajaDelGrafo(svg);
+const caja = cajaPublicada(svg);
 
 // 1 · Fuera la declaración XML y la hoja de estilos externa.
 svg = svg.replace(/<\?xml[^>]*\?>\s*/g, "");
@@ -181,55 +66,10 @@ svg = svg.replace(/<svg[^>]*>/, (tag) => {
     `aria-hidden="true" style="overflow:visible">`
   );
 });
-
-// 4 · La paleta, a tokens. El orden importa: primero los hex largos.
-//
-// EL LIENZO DE MERMAID ES `--card`, NO `--background`. Mermaid llama «blanco» a
-// su lienzo, y aquí el lienzo es el panel que envuelve al diagrama, que se pinta
-// `bg-card`. Por eso todo lo que Mermaid deja en blanco —el cuerpo del cluster,
-// el hueco del estado final, el estado compuesto— se mapea a `var(--card)`: son
-// huecos, no superficies nuevas. El relleno de NODO sigue yendo a
-// `var(--background)`, que es un peldaño por debajo del panel en los dos temas y
-// es lo que hace que la caja se vea.
-const PALETA: [RegExp, string][] = [
-  // Trazo de nodos, clusters y aristas → el cian de marca (7,47 / 8,36 contra
-  // `--background`, umbral de gráfico 3:1).
-  [/#9370DB/gi, "var(--brand-cyan)"],
-  // Relleno de nodo → el fondo de la página, para que la caja respire igual en
-  // los dos temas.
-  [/#ECECFF/gi, "var(--background)"],
-  // Texto. Mermaid escribe el mismo gris en las dos notaciones, y la corta se
-  // escapó de la primera versión de esta tabla: dejó 4 `fill:#333` vivos.
-  [/#333333/gi, "var(--foreground)"],
-  [/#333\b/gi, "var(--foreground)"],
-  [/#000000/gi, "var(--foreground)"],
-  // Cluster: relleno y filete.
-  [/#f0f0f0/gi, "var(--muted)"],
-  [/#e0e0e0/gi, "var(--border)"],
-  // Notas de Mermaid: si alguna aparece, que sea neutra y no amarilla.
-  [/#fff5ad/gi, "var(--muted)"],
-  [/#aaaa33/gi, "var(--border)"],
-  [/#552222/gi, "var(--foreground)"],
-  [/#131300/gi, "var(--foreground)"],
-  // La pastilla que Mermaid pone detrás de la etiqueta de una arista, para que
-  // el texto no se lea encima de la flecha. Va a `--muted` —que es a donde ya
-  // iba su `#f0f0f0`— y no a `--card`: si se funde con el lienzo deja de
-  // enmascarar, que es su único trabajo.
-  [/rgba\(232,\s*232,\s*232,\s*0?\.8\)/gi, "var(--muted)"],
-  // El fondo blanco del lienzo.
-  [/background-color:\s*rgb\(255,\s*255,\s*255\);?/gi, ""],
-  [/fill="rgb\(255,\s*255,\s*255\)"/gi, 'fill="transparent"'],
-  // Los nombres de color. Mermaid los mezcla con los hex en la misma hoja, y
-  // por ahí entraron los cinco slabs blancos que en oscuro dejaban el diagrama
-  // con pinta de captura pegada sobre la página. `red` es el color con el que
-  // Mermaid marca una etiqueta que no ha sabido resolver: aquí no puede quedar.
-  [/(fill|stroke|color|background-color)\s*:\s*white\b/gi, "$1:var(--card)"],
-  [
-    /(fill|stroke|color|background-color)\s*:\s*(black|red)\b/gi,
-    "$1:var(--foreground)",
-  ],
-];
-for (const [re, token] of PALETA) svg = svg.replace(re, token);
+// 4 · La paleta, a tokens, y el guardián que la respalda: los dos viven en
+// `artefacto/paleta.ts`, porque una tabla de colores conocidos sin su barrido
+// de ausencia falla en silencio (esto ya publicó 17 declaraciones fijas).
+svg = aTokens(svg);
 
 // 5 · LA TIPOGRAFÍA NO SE TOCA, y esto costó una vuelta. La primera versión la
 // cambiaba a la del sitio «para que el diagrama se integrara», y el resultado
@@ -250,29 +90,8 @@ for (const [re, token] of PALETA) svg = svg.replace(re, token);
 // pero un artefacto que sí lo use las heredaría.
 svg = svg.replace(/\s*filter="url\(#[^)]*drop-shadow[^)]*\)"/g, "");
 svg = svg.replace(/filter:\s*drop-shadow\([^)]*\)\s*;?/gi, "");
-
-// 7 · EL GUARDIÁN. Los pasos de arriba son una lista de colores CONOCIDOS, y una
-// lista de conocidos falla en silencio: la primera versión mapeaba `#333333` pero
-// no `#333`, y no cubría los nombres de color, así que el export se publicó con
-// 17 declaraciones de color fijo y cinco rectángulos blancos que en oscuro no
-// conmutaban. No lo cazó el typecheck, ni el linter, ni `gate:html` —el HTML era
-// idéntico, el que estaba mal era el color— sino mirar el diagrama en oscuro.
-//
-// Así que aquí no se comprueba que los conocidos cuadren, sino que NO QUEDA
-// NINGÚN color literal en el archivo: mismo giro que D38 le dio al guardián de
-// la paleta. Si Mermaid cambia su hoja o el diagrama estrena una forma nueva,
-// esto se rompe en la terminal y no en la página.
-const COLOR_LITERAL =
-  /(fill|stroke|color|background-color|flood-color|stop-color)\s*:\s*([^;}"']+)/gi;
-const PERMITIDO = /^(none|transparent|currentcolor|inherit|var\(--[\w-]+\))$/i;
-const fugas = [
-  ...new Set(
-    [...svg.matchAll(COLOR_LITERAL)]
-      .map(([, prop = "", valor = ""]) => [prop, valor.trim()] as const)
-      .filter(([, valor]) => valor !== "" && !PERMITIDO.test(valor))
-      .map(([prop, valor]) => `${prop}:${valor}`),
-  ),
-];
+// 7 · EL GUARDIÁN, cuyo porqué vive junto a la tabla que respalda.
+const fugas = fugasDeColor(svg);
 if (fugas.length > 0) {
   console.error(
     `\nColor fijo en el artefacto — ${fugas.length} declaración(es) que no ` +

@@ -32,6 +32,7 @@ Micro-tarea mecánica en una sesión Opus → subagente barato **solo si es "chu
 - **No re-leer tras editar** (el harness ya rastrea el estado del archivo).
 - **Concisión por defecto:** liderar con la respuesta, cortar preámbulos y recaps, tablas/bullets sobre párrafos; extenderse cuando se pida.
 - **Disciplina de alcance:** hacer lo pedido, **señalar** lo adyacente, dejar que Francisco decida — no construir de más.
+- **Un supuesto sobre INFRAESTRUCTURA no se escribe: se comprueba** *(2026-09-03, D193)* — qué hay desplegado, qué responde un endpoint, dónde reparte credenciales una integración. Cuatro escritos en una tarde, los cuatro falsos, los cuatro comprobables en un minuto.
 
 # Seguimiento de tareas (Notion)
 
@@ -155,11 +156,9 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 ### Cómo se verifica
 
 
-Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `GATES.md`**, a demanda; aquí solo lo que hay que hacer:
+Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: qué mide y cómo lo lleva escrito él. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `GATES.md`**, a demanda; aquí solo lo que hay que hacer:
 
-- **Precondición: el sandbox de Bash desactivado** en TODAS las llamadas, no solo las de navegación. Un comando que cuelga es ese síntoma: se desactiva el sandbox, no se reintenta (D51).
-- **Lo que sigue a mano:** la nota de PageSpeed (`npm run psi`, no `vitals`).
-- **Tras el censo Y las dos pasadas manuales** —`viewport-verifier` y NVDA—, no al cerrar una página ni con el censo solo: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`. **Es una fecha de CONFORMIDAD**, así que moverla con media revisión hecha afirma lo que no se ha comprobado (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
+- **Tras el censo Y las dos pasadas manuales** —`viewport-verifier` y NVDA—, no al cerrar una página ni con el censo solo: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`. **Es una fecha de CONFORMIDAD**, así que moverla con media revisión hecha afirma lo que no se ha comprobado (D38).
 
 # Definition of Done
 
@@ -193,6 +192,9 @@ pulido tipográfico o de ritmo que aparezca al mirarla.
 
 ## Antes de construir, no al cerrar
 
+- **¿La ficha está refinada?** → antes de planificar, las cuatro preguntas del arranque de
+  `deep-dive-page`, válidas para cualquier tarea: premisa, direcciones posibles, criterio de
+  cierre en una frase y qué queda fuera.
 - **¿Hay decisión visual abierta?** → `/prototype` **antes de construir la pieza**: componente,
   ilustración, carrusel o **vídeo** — decir «componente» ya dejó pasar uno *(2026-09-01)*.
   Solo puede invocarla Francisco, así que **ofrécela** en cuanto la tarea tenga más de una

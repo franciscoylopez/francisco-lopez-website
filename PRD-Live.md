@@ -49,11 +49,9 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
   `/trayectoria/[slug]` (Emendu, KUOTIP, INDYA, Freepik y TheTool). Catorce por idioma son
   las **28 variantes** que recorren los gates.
 
-Y con ellas: **CV en PDF bilingüe** descargable con identidad de marca y generado por
-código · **SEO técnico y Open Graph** por página · **medición** (GA4/GTM con
-consentimiento RGPD) · **dominio propio** · **páginas 404/500 de marca e i18n** ·
-**cabeceras de seguridad** (nosniff, X-Frame-Options, Referrer-Policy,
-Permissions-Policy, HSTS y CSP con allowlist mínima).
+Y con ellas: **CV en PDF bilingüe** descargable (§6) · **SEO técnico y Open Graph** por
+página · **medición** (GA4/GTM tras consentimiento, y Vercel Web Analytics sin él, D170) ·
+**dominio propio** · **páginas 404/500 de marca e i18n** · **cabeceras de seguridad**.
 
 **Cada página se sirve también en markdown** para quien la lea con un agente: el `<main>` sin
 el HTML de alrededor, por URL explícita (`/md/<locale>/<pagina>.md`, la vía estable) o pidiendo
@@ -182,12 +180,13 @@ proyecto se lo ha encontrado cinco veces (D38/D57/D60/D63).
 `main` **la protege el servidor y no la disciplina**: sin push directo, sin merge con CI
 en rojo, sin bypass de admin, y solo `squash` o `rebase` (D68). Escaneo de dependencias
 con Dependabot. Cabeceras de seguridad servidas, con la CSP en allowlist mínima: base +
-GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). Se mantiene `'unsafe-inline'` **por coste
-medido**: el nonce cuesta el prerenderizado de las catorce (D26), así que va con V4.
+GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). **Vercel Web Analytics no abre ninguno**:
+es del mismo origen (D170). Se mantiene `'unsafe-inline'` **por coste medido**: el nonce cuesta
+el prerenderizado de las catorce (D26), así que va con V4.
 
 El **repositorio es público**, con `LICENSE` explícito («público para consulta, no código
-abierto»), enlace en el footer y la misma frase en formato máquina en `robots.txt`, como
-preferencia y no como control de acceso (D160).
+abierto») y esa misma frase en formato máquina en `robots.txt`: preferencia, no control de
+acceso (D160).
 
 ### Revisiones recurrentes
 

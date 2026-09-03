@@ -157,7 +157,13 @@ export const CASOS: Caso[] = [
     // momento posible para perder los dientes —abrir una etapa es justo cuando se
     // mueve un techo—, y lo cazó CI y no una lectura. Un caso malo cuyo anclaje es
     // un valor que cambia por diseño tiene que emparejar la FORMA, nunca el valor.
-    archivo: "scripts/check-contexto.ts",
+    //
+    // Y EL ARCHIVO CAMBIÓ AL PARTIR EL GUARDIÁN (2026-09-03, P72.32): `CICLO_ABIERTO`
+    // vive ahora en `contexto/presupuesto.ts`. Lo cazó el arnés con «NO SE PUDO
+    // ROMPER», que es exactamente la salida que existe para esto — un caso malo que
+    // muta un archivo donde ya no está lo que muta se salta en silencio en cualquier
+    // otro diseño.
+    archivo: "scripts/contexto/presupuesto.ts",
     mutar: (o) =>
       o.replace(
         /const CICLO_ABIERTO = "\d{4}-\d{2}-\d{2}";/,
@@ -173,7 +179,7 @@ export const CASOS: Caso[] = [
     // empareja la ESTRUCTURA —`antes`/`despues` del corpus de documentos— y copia
     // el primero sobre el segundo. Eso es exactamente «no se retiró»: el caso que
     // dejó el margen de contexto en 10 sin cruzar ningún techo.
-    archivo: "scripts/check-contexto.ts",
+    archivo: "scripts/contexto/apertura.ts",
     mutar: (o) =>
       o.replace(
         /documentos: \{ antes: ([\d_]+), despues: [\d_]+ \}/,
@@ -188,7 +194,7 @@ export const CASOS: Caso[] = [
     // miden A MANO, así que lo único que impide que se queden viejos es que el
     // sello lleve la fecha del ciclo abierto. Se muta la del sello y no
     // `CICLO_ABIERTO`, que ya tiene su propio caso arriba.
-    archivo: "scripts/check-contexto.ts",
+    archivo: "scripts/contexto/apertura.ts",
     mutar: (o) =>
       o.replace(
         /fecha: "\d{4}-\d{2}-\d{2}",\n {2}cierra:/,
@@ -267,6 +273,28 @@ export const CASOS: Caso[] = [
     archivo: ".next/server/app/es/como-se-ha-creado.html",
     mutar: (o) =>
       o.replace("<article>", "<section>").replace("</article>", "</section>"),
+  },
+  {
+    guardian: "check:marco",
+    rotura:
+      "dos enlaces con el mismo nombre accesible llevan a sitios distintos (WCAG 2.4.9)",
+    // LA FAMILIA ES REAL: el barrido de P72.235 encontró dieciséis pares así en
+    // cuatro patrones, y el más caro era justo este —un segundo enlace de descarga
+    // que se llama igual que el del nav y baja otro archivo—, porque fuera de
+    // contexto los dos se anuncian «Descargar CV» y no hay forma de saber cuál es
+    // cuál.
+    //
+    // SE AÑADE UN ENLACE en vez de retocar uno existente: mover un `href` haría
+    // que dos nombres DISTINTOS apuntaran al mismo sitio, que es el defecto
+    // contrario y no lo que esto agrupa. Muerde el build por lo de siempre: lo que
+    // este guardián mira es el HTML emitido.
+    //
+    // Y VA DENTRO DEL `<main>`, no antes de `</body>`: fuera de un landmark axe
+    // levanta además su regla `region`, y el caso pasaría a probar dos cosas a la
+    // vez. Lo que aquí se prueba es que el detector de nombres tiene dientes.
+    archivo: ".next/server/app/es.html",
+    mutar: (o) =>
+      o.replace("</main>", '<a href="/cv-viejo.pdf">Descargar CV</a></main>'),
   },
   {
     guardian: "check:marco",
@@ -516,17 +544,30 @@ export const CASOS: Caso[] = [
     // comprobaciones y veintitrés errores fingidos» habiendo quince y
     // veintisiete. Se muerde la cifra publicada, que es la que un visitante lee.
     //
-    // DISPARA DOS DE LAS TRES REGLAS A LA VEZ —el recuento y el sello de
-    // `conformance`, que también depende de este archivo— y está bien: lo que se
-    // prueba es que el guardián tiene dientes, no cuál de ellos muerde. La regla
-    // del recuento tiene además su propia red en el informe, que imprime las dos
-    // cifras enfrentadas.
+    // DISPARABA DOS REGLAS A LA VEZ Y AHORA SOLO UNA, que es la mejora de D193:
+    // hasta el 2026-09-03 `conformance` declaraba `lib/design-values.ts` entero,
+    // así que morder aquí encendía también su sello sin que ninguna cifra de ese
+    // bloque se hubiera movido. Ahora declara los dos símbolos que usa y este
+    // caso prueba lo que dice que prueba: la regla del RECUENTO, con su red en el
+    // informe, que imprime las dos cifras enfrentadas.
     archivo: "lib/design-values.ts",
     mutar: (o) =>
       o.replace(
         "export const GUARDIAN_CASE_COUNT = ",
         "export const GUARDIAN_CASE_COUNT = 99; //",
       ),
+  },
+  {
+    guardian: "check:accesibilidad",
+    rotura:
+      "cambia una cifra de contraste que la página publica y su bloque no se revisa",
+    // LA OTRA MITAD DE D193, la que el caso de arriba dejó de cubrir: que la
+    // dependencia a nivel de SÍMBOLO tenga dientes de verdad, sobre el archivo y
+    // el guardián reales. La mitad negativa —que mover `LAST_COOKIES_UPDATE` no
+    // encienda nada— no se puede escribir aquí, porque este arnés solo sabe pedir
+    // rojo; vive en `tests/dependencias-huella.test.ts`.
+    archivo: "lib/design-values.ts",
+    mutar: (o) => o.replace("bodyText:", "bodyTextMovido:"),
   },
   {
     guardian: "check:og",
@@ -795,5 +836,40 @@ export const CASOS: Caso[] = [
     // pasara, este gate sería el adorno que su propia cabecera dice no ser.
     archivo: "scripts/.deuda-sello.json",
     mutar: (o) => o.replace(/"total": (\d+)/, (_, n) => `"total": ${+n + 50}`),
+  },
+  {
+    guardian: "check:deuda",
+    rotura:
+      "una magnitud sellada se infla y la deuda crece dentro de un archivo ya marcado",
+    // LA OTRA MITAD DEL MISMO TRINQUETE, Y LA QUE EL CASO DE ARRIBA NO PODÍA PROBAR
+    // (2026-09-03, P72.32). Aquel mueve el RECUENTO, que es lo que el gate sabía
+    // comparar; este mueve una CIFRA dejando el recuento intacto, que es justo el
+    // hueco que D187 dejó escrito para no prometer de más: dentro de un archivo que
+    // ya está marcado, la complejidad podía crecer sin que nada se moviera.
+    //
+    // Contra el gate anterior este caso pasaba en verde SIN TOCAR NADA MÁS, que es
+    // lo que lo hace un caso y no un duplicado del de arriba. Y muerde la primera
+    // magnitud que encuentre, no una clave nombrada: las claves de `scripts/` son
+    // justo las que este sprint está vaciando, y un caso malo que se queda sin
+    // material acusa al guardián de algo que no ha hecho.
+    archivo: "scripts/.deuda-sello.json",
+    mutar: (o) =>
+      o.replace(
+        /("magnitudes":[\s\S]*?\[\s*)(\d+)/,
+        (_, pre: string, n: string) => `${pre}${+n + 20}`,
+      ),
+  },
+  {
+    guardian: "check:capturas",
+    rotura:
+      "cambia el titular del Hero y la portada del repo público lo enseña viejo",
+    // EL CASO REAL Y EL PEOR, porque el titular sale en las TRES capturas: en el
+    // banner sin punto y en las dos de la home con él. Se muerde el DICCIONARIO,
+    // que es la fuente, y no la transcripción, que es lo que la imagen dice: al
+    // revés el guardián saldría rojo igual sin probar nada, porque no
+    // distinguiría entre «el sitio cambió» y «alguien tocó la nota».
+    archivo: "app/[lang]/dictionaries/es/home.json",
+    mutar: (o) =>
+      o.replace("Del discovery al dato.", "Del discovery al impacto."),
   },
 ];

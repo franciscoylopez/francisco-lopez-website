@@ -69,14 +69,9 @@ export const SECCIONES = [
 export type SeccionId = (typeof SECCIONES)[number];
 
 /**
- * Las tres formas de una dependencia:
- *
- * - `"next.config.ts"` — un archivo. Se hashea entero.
- * - `"DECISIONS.md#D26"` — una sección de un markdown, por el principio de su
- *   titular. Se hashea el cuerpo de esa sección hasta el siguiente titular del
- *   mismo nivel o superior.
- * - `"components/ui/"` — un directorio (con barra final). Se hashea la LISTA
- *   ordenada de sus archivos, no su contenido.
+ * CUÁLES SON LAS FORMAS DE UNA DEPENDENCIA lo dice `scripts/dependencias/huella.ts`,
+ * que es quien las resuelve. Aquí no se copian: la lista ya caducó una vez, el día
+ * que D193 añadió la cuarta.
  */
 export type Dependencia = string;
 
@@ -153,6 +148,15 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D84",
     "DECISIONS.md#D89",
     "scripts/check-experience-copy.ts",
+    // EL CRITERIO SE MUDÓ Y LA DECLARACIÓN LE SIGUE (2026-09-03, P72.32). Al
+    // partir el guardián, la regla de las tres longitudes —y la comparación de
+    // cifras entre el CV y el deep-dive, que es lo que este texto afirma— dejó de
+    // vivir en el archivo de arriba. Sin esto, la declaración seguiría vigilando
+    // un archivo que ya no contiene lo que vigilaba: el mismo radio de acción que
+    // D187 encontró al mover el censo. Van los dos: el DIRECTORIO caza una pieza
+    // nueva (se hashea su lista) y el archivo, que el cambio de la regla se vea.
+    "scripts/experiencias/",
+    "scripts/experiencias/bullets.ts",
     "components/ui/README.md",
     // Desde el 2026-08-29 el texto no solo dice que el inventario se deriva:
     // describe el FORMATO de la primera línea (grupo · publicación · frase) y
@@ -213,7 +217,11 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D61",
     "DECISIONS.md#D73",
     "scripts/design-review/censo/",
-    "lib/design-values.ts",
+    // El símbolo, no el archivo (D193): lo que esta sección afirma es la tabla
+    // de contraste y el recuento de páginas, no todo lo que `design-values.ts`
+    // guarda por ser fuente única.
+    "lib/design-values.ts#CONTRAST",
+    "lib/design-values.ts#PAGE_COUNT",
     // El texto publica una CIFRA de páginas («AAA en las catorce páginas»), así
     // que añadir una tiene que mandar a releer esta sección.
     "lib/routes.ts",

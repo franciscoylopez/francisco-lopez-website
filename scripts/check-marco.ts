@@ -18,7 +18,9 @@
  *
  *   1. **Lo que pone quien ESCRIBE la página** — los puntos 4, 5 y 8 del
  *      checklist (un solo `h1` y jerarquía sin saltos, breadcrumb, alternativas
- *      textuales), más todo lo estructural que axe sabe ver sin pintar.
+ *      textuales), más todo lo estructural que axe sabe ver sin pintar — y desde
+ *      D195, lo que axe VE y no levanta: dos enlaces que se anuncian igual
+ *      llevando a sitios distintos, que su regla marca como «needs review».
  *   2. **Que la derivación LLEGÓ a la página.** Los helpers son opt-in: una
  *      página que se escriba su propia metadata a mano compila igual. Aquí se
  *      mira el HTML servido, que es el único sitio donde eso se nota.
@@ -62,11 +64,14 @@ import { locales, pagePath, type Locale } from "../lib/i18n/config";
 import { PAGE_SLUGS, type PageSlug } from "../lib/routes";
 import { DELEGADAS, MINIMO_REGLAS_AXE, revisarConAxe } from "./marco/axe";
 import {
+  PARES_DECLARADOS_COUNT,
+  paresDeclaradosSinUsar,
   revisarArticulo,
   revisarBreadcrumb,
   revisarEnlaceDeSalto,
   revisarEsqueleto,
   revisarIdioma,
+  revisarNombresDeEnlace,
 } from "./marco/contenido";
 import {
   fallo,
@@ -142,6 +147,7 @@ async function revisar(lang: Locale, slug: PageSlug): Promise<void> {
     revisarArticulo(pagina);
     revisarEnlaceDeSalto(pagina);
     revisarBreadcrumb(pagina);
+    revisarNombresDeEnlace(pagina);
     revisarCanonical(pagina);
     revisarTarjetas(pagina);
     revisarPermalinks(pagina);
@@ -194,6 +200,8 @@ async function main() {
     );
   });
 
+  for (const muerto of paresDeclaradosSinUsar()) fallo("todo el sitio", muerto);
+
   console.log(
     `check:marco — ${VARIANTES.length} variantes del build ${buildId}\n` +
       `  axe        ${reglasEvaluadas.size} reglas evaluadas · ${Object.keys(DELEGADAS).length} delegadas\n` +
@@ -203,7 +211,8 @@ async function main() {
       `  permalinks ${vistos.permalinks} a una línea de un .md del repo, comprobado su ?plain=1\n` +
       `  catálogo   ${vistos.enlacesArd} \`<link rel="ard">\` en el <head>, apuntando al catálogo de agentes\n` +
       `  JSON-LD    ${vistos.bloquesLd} bloques · ${idsDeclarados.size} \`@id\` declarados · ${idsReferenciados.size} referenciados\n` +
-      `  cruces     ${vistos.referencias} referencias miradas por página · ${REFERENCIAS_QUE_CRUZAN.length} cruces declarados con motivo\n`,
+      `  cruces     ${vistos.referencias} referencias miradas por página · ${REFERENCIAS_QUE_CRUZAN.length} cruces declarados con motivo\n` +
+      `  nombres    ${vistos.enlacesConNombre} enlaces con nombre accesible agrupados por destino · ${PARES_DECLARADOS_COUNT} pares declarados con motivo\n`,
   );
   for (const [id, motivo] of Object.entries(DELEGADAS)) {
     console.log(`  delegada   ${id.padEnd(28)} ${motivo}`);

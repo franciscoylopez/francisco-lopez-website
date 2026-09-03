@@ -34,17 +34,36 @@ import { readFileSync, writeFileSync } from "node:fs";
 const SELLO = "scripts/.deuda-sello.json";
 const SELLAR = process.argv.includes("--sellar");
 
-type Hallazgo = { regla: string; archivo: string };
+type Hallazgo = { regla: string; archivo: string; magnitud: number | null };
 type Sello = {
   total: number;
   porArea: Record<string, number>;
   hallazgos: string[];
+  /** Por `regla|archivo`, las magnitudes de sus hallazgos, ordenadas. */
+  magnitudes: Record<string, number[]>;
   commit: string;
   fecha: string;
 };
 
 const AREAS = ["scripts/", "components/", "app/", "lib/"] as const;
 const areaDe = (f: string) => AREAS.find((a) => f.startsWith(a)) ?? "raíz";
+
+/**
+ * LA MAGNITUD, QUE ES LA SEGUNDA MITAD DEL TRINQUETE (2026-09-03, P72.32). Cada
+ * hallazgo de Qlty lleva su cifra en el mensaje —`count = 93` en una complejidad,
+ * `mass = 160` en un bloque duplicado, `level = 5` en un anidamiento—, y sellar
+ * solo la PRESENCIA dejaba abierto el hueco que D187 nombró para no prometer de
+ * más: dentro de algo que ya está marcado, la cifra puede crecer sin que el
+ * recuento se mueva. `Nav` podía pasar de 43 a 90 y el par `design-system` ↔
+ * `brand-kit` de masa 160 a 400 sin un solo +1.
+ *
+ * Y NO ES EL «TOPE POR DIRECTORIO» QUE D187 §punto-3 DESCARTÓ, que es lo que
+ * parece de lejos: allí el problema era que el umbral sería **un número elegido a
+ * ojo**, y aquí no se elige ninguno — se sella el que hay, con la misma igualdad
+ * exacta que ya defiende el total. Sigue sin perseguir un objetivo: sigue
+ * prohibiendo empeorar, ahora también dentro de lo ya marcado.
+ */
+const MAGNITUD = /\((?:count|mass|level) = (\d+)\)/;
 
 /**
  * La medición. `--all` y no el modo diff: lo que se compara es el TOTAL del repo
@@ -59,6 +78,7 @@ function medir(): Hallazgo[] {
     runs: {
       results: {
         ruleId: string;
+        message?: { text?: string };
         locations?: {
           physicalLocation?: { artifactLocation?: { uri?: string } };
         }[];
@@ -68,10 +88,51 @@ function medir(): Hallazgo[] {
   return (doc.runs[0]?.results ?? []).map((r) => ({
     regla: r.ruleId,
     archivo: r.locations?.[0]?.physicalLocation?.artifactLocation?.uri ?? "?",
+    magnitud: Number(MAGNITUD.exec(r.message?.text ?? "")?.[1] ?? NaN) || null,
   }));
 }
 
 const clave = (h: Hallazgo) => `${h.regla}|${h.archivo}`;
+
+/**
+ * Las magnitudes agrupadas por clave, ordenadas. Es un MULTICONJUNTO y no un
+ * número: `similar-code` reporta las dos puntas del par, así que un archivo puede
+ * traer dos veces la misma cifra y las dos cuentan.
+ */
+function magnitudesDe(hallazgos: Hallazgo[]): Record<string, number[]> {
+  const m: Record<string, number[]> = {};
+  for (const h of hallazgos) {
+    if (h.magnitud === null) continue;
+    (m[clave(h)] ??= []).push(h.magnitud);
+  }
+  for (const v of Object.values(m)) v.sort((a, b) => a - b);
+  return m;
+}
+
+/**
+ * Las claves cuyo multiconjunto de magnitudes ha cambiado, ya en prosa: el rojo
+ * nombra la cifra vieja y la nueva porque un «algo ha crecido» obliga a repetir la
+ * investigación entera, que es la misma razón por la que el bloque de abajo lista
+ * los pares nuevos.
+ */
+function comparaMagnitudes(
+  sellado: Record<string, number[]> | undefined,
+  actual: Record<string, number[]>,
+): string[] {
+  if (!sellado) {
+    return [
+      "el sello no tiene magnitudes: es de antes de que existieran. `npm run deuda:sellar`",
+    ];
+  }
+  const texto = (v: number[] | undefined) => (v ?? []).join(", ") || "—";
+  return [...new Set([...Object.keys(sellado), ...Object.keys(actual)])]
+    .sort()
+    .filter((k) => texto(sellado[k]) !== texto(actual[k]))
+    .map((k) => {
+      const [regla, archivo] = k.split("|");
+      return `${archivo} — ${regla}: ${texto(sellado[k])} → ${texto(actual[k])}`;
+    });
+}
 
 function resumen(hallazgos: Hallazgo[]) {
   const porArea: Record<string, number> = {};
@@ -85,10 +146,17 @@ function resumen(hallazgos: Hallazgo[]) {
 const hallazgos = medir();
 const porArea = resumen(hallazgos);
 const archivos = new Set(hallazgos.map((h) => h.archivo)).size;
+const magnitudes = magnitudesDe(hallazgos);
+const conMagnitud = hallazgos.filter((h) => h.magnitud !== null).length;
 
 // AFIRMA CUÁNTO HA MIRADO, no solo qué ha encontrado: un metro que devuelve lista
 // vacía parece un aprobado, y este repo se lo ha encontrado cinco veces.
-const linea = `check:deuda — ${hallazgos.length} hallazgos en ${archivos} archivos · ${Object.entries(
+//
+// Y DICE CUÁNTAS MAGNITUDES HA SABIDO LEER, que es el mismo principio aplicado a la
+// mitad nueva: si Qlty cambiara el texto de sus mensajes, la regex dejaría de casar
+// y el gate seguiría verde comparando un conjunto vacío contra otro vacío. Con la
+// cifra delante, esa avería se ve en la primera corrida.
+const linea = `check:deuda — ${hallazgos.length} hallazgos en ${archivos} archivos (${conMagnitud} con magnitud) · ${Object.entries(
   porArea,
 )
   .sort((a, b) => b[1] - a[1])
@@ -100,6 +168,9 @@ if (SELLAR) {
     total: hallazgos.length,
     porArea,
     hallazgos: [...new Set(hallazgos.map(clave))].sort(),
+    magnitudes: Object.fromEntries(
+      Object.entries(magnitudes).sort(([a], [b]) => a.localeCompare(b)),
+    ),
     commit: execFileSync("git", ["rev-parse", "HEAD"], {
       encoding: "utf8",
     }).trim(),
@@ -130,8 +201,34 @@ console.log(
 // misma regla que el resto de sellos de este repo: no dicen «va por buen camino»,
 // dicen «cuadra».
 if (hallazgos.length === sello.total) {
-  console.log("✓ El sello cuadra: la deuda no se mueve.");
-  process.exit(0);
+  // EL HUECO QUE D187 DEJÓ ESCRITO PARA NO PROMETER DE MÁS, y que se cierra aquí:
+  // con el recuento cuadrando, dentro de lo ya marcado la cifra todavía podía
+  // crecer sin que nada se moviera. Comparar el multiconjunto de magnitudes es lo
+  // que hace que «el sello cuadra» quiera decir lo que parece que dice.
+  const derivas = comparaMagnitudes(sello.magnitudes, magnitudes);
+  if (!derivas.length) {
+    console.log(
+      `✓ El sello cuadra: la deuda no se mueve, ni en recuento ni en magnitud (${conMagnitud} cifras).`,
+    );
+    process.exit(0);
+  }
+  console.error(
+    `\n✗ El recuento cuadra y las MAGNITUDES no: ${derivas.length} ${
+      derivas.length === 1 ? "cifra ha cambiado" : "cifras han cambiado"
+    } dentro de lo que ya estaba marcado.\n`,
+  );
+  for (const d of derivas) console.error(`  · ${d}`);
+  console.error(
+    `
+Es el hueco que este gate tenía escrito: un archivo ya marcado podía empeorar
+sin que el contador se moviera. Ahora no.
+
+  · Si ha SUBIDO, es deuda nueva escondida en deuda vieja: quítala, o re-sella a
+    propósito con \`npm run deuda:sellar\` y el motivo en el commit.
+  · Si ha BAJADO, es una mejora y sale en rojo igual, por lo mismo que el total:
+    un sello por encima de la realidad es holgura que se come el PR siguiente.`,
+  );
+  process.exit(1);
 }
 
 if (hallazgos.length < sello.total) {

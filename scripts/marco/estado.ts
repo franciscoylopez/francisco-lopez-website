@@ -47,6 +47,8 @@ export const vistos = {
   bloquesLd: 0,
   /** Referencias `@id` examinadas por página. */
   referencias: 0,
+  /** Enlaces con nombre accesible agrupados, en las 28 variantes. */
+  enlacesConNombre: 0,
 };
 
 /** Las reglas de axe que de verdad han llegado a evaluarse, en todas las variantes. */

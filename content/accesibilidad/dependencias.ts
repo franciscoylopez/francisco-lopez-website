@@ -50,13 +50,21 @@ export const BLOQUES = [
 export type BloqueId = (typeof BLOQUES)[number];
 
 /**
- * Las tres formas de una dependencia son las de `scripts/dependencias/huella.ts`:
- * archivo, `archivo.md#fragmento` y `directorio/`.
+ * CUÁLES SON LAS FORMAS DE UNA DEPENDENCIA lo dice `scripts/dependencias/huella.ts`,
+ * que es quien las resuelve. Aquí no se copian: la lista ya caducó una vez, el día
+ * que D193 añadió la cuarta.
  */
 export const DEPENDENCIAS: Record<BloqueId, readonly string[]> = {
   // «WCAG 2.2 AA cumplido, con el contraste medido», con las dos cifras del
   // texto principal interpoladas y la fecha de la última revisión.
-  conformance: ["lib/design-values.ts", "BRAND.md#Accesibilidad"],
+  // Se nombran los DOS SÍMBOLOS y no el archivo (D193): `design-values.ts` es
+  // fuente única por D38, así que mover ahí una fecha legal encendía este bloque
+  // sin que ninguna de sus cifras se hubiera movido.
+  conformance: [
+    "lib/design-values.ts#CONTRAST",
+    "lib/design-values.ts#LAST_A11Y_REVIEW",
+    "BRAND.md#Accesibilidad",
+  ],
 
   // Los nueve puntos en lenguaje llano, con el criterio WCAG de cada uno. Su
   // fuente es el checklist interno: si allí se añade un punto o cambia el
