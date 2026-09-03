@@ -832,6 +832,28 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replace(/"total": (\d+)/, (_, n) => `"total": ${+n + 50}`),
   },
   {
+    guardian: "check:deuda",
+    rotura:
+      "una magnitud sellada se infla y la deuda crece dentro de un archivo ya marcado",
+    // LA OTRA MITAD DEL MISMO TRINQUETE, Y LA QUE EL CASO DE ARRIBA NO PODÍA PROBAR
+    // (2026-09-03, P72.32). Aquel mueve el RECUENTO, que es lo que el gate sabía
+    // comparar; este mueve una CIFRA dejando el recuento intacto, que es justo el
+    // hueco que D187 dejó escrito para no prometer de más: dentro de un archivo que
+    // ya está marcado, la complejidad podía crecer sin que nada se moviera.
+    //
+    // Contra el gate anterior este caso pasaba en verde SIN TOCAR NADA MÁS, que es
+    // lo que lo hace un caso y no un duplicado del de arriba. Y muerde la primera
+    // magnitud que encuentre, no una clave nombrada: las claves de `scripts/` son
+    // justo las que este sprint está vaciando, y un caso malo que se queda sin
+    // material acusa al guardián de algo que no ha hecho.
+    archivo: "scripts/.deuda-sello.json",
+    mutar: (o) =>
+      o.replace(
+        /("magnitudes":[\s\S]*?\[\s*)(\d+)/,
+        (_, pre: string, n: string) => `${pre}${+n + 20}`,
+      ),
+  },
+  {
     guardian: "check:capturas",
     rotura:
       "cambia el titular del Hero y la portada del repo público lo enseña viejo",
