@@ -12605,6 +12605,14 @@ del pie, que salen en las catorce.
 `scripts/`, que baja de **14 a 5**. El producto no se toca: sus 16 siguen exactamente donde
 estaban, como en D187.
 
+**Y lo que dice el panel al construir `main`** *(2026-09-04, que es la cifra que no se puede
+maquillar añadiendo líneas)*: ratio de deuda **1,18 % → 0,36 %** y remediación **~2 semanas →
+4 días**, con la maintainability en **A**. Importa decirlo porque el refactor **sube** la LOC de
+`scripts/` —19.767 → 20.284 líneas en la sesión— y el ratio es remediación ÷ COCOMO(LOC), así
+que el que prueba algo es el segundo número. **Y los cinco hotspots que quedan son todos del
+PRODUCTO** —`nav.tsx`, `reveal-root.tsx`, `contact-form.tsx` y las dos `page.tsx`—: `scripts/`
+sale de la lista, que es donde terminaba el hilo que D186 abrió.
+
 ### Por qué el punto 1, si D187 decía que no hacía falta ningún gate nuevo
 
 Porque la frase de D187 —*«cuando esa lista se vacíe, el trinquete de recuento pasa a ser
