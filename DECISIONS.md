@@ -230,6 +230,7 @@
 - D192 · La foto del CV sale del recorte que ya existía, y `cv.huella` no la vigila
 - D193 · La prosa no se vigila, la dependencia baja a símbolo, y el supuesto de infra se comprueba
 - D194 · Una captura no se sella por su render: se sella por lo que AFIRMA
+- D195 · El nombre de enlace repetido pasa a guardián, y el sitio donde vive ya estaba abierto
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12535,3 +12536,53 @@ arriba, porque ahí no hay entrada barata que sellar. Va escrito en `GATES.md`, 
 **Y `social-preview.png` sigue fuera, por el motivo de D60:** GitHub la sirve desde *Settings* y
 exige subirla a mano, así que un guardián podría avisar y no arreglar. A esa se le quitaron las
 cifras en vez de ponerle huella, y esa decisión no cambia.
+
+---
+
+## D195 · El nombre de enlace repetido pasa a guardián, y el sitio donde vive ya estaba abierto — 2026-09-03
+
+**Por qué ahora, y no antes.** La tarea que barrió el sitio a mano (2026-09-03) encontró **16
+pares de enlaces con el mismo nombre accesible y distinto destino**, repartidos en **cuatro
+patrones**: los roles del índice de Trayectoria, las regletas del artículo, los demos del
+Design System y un fallo de locale en el diccionario EN. Su propia ficha llevaba escrita la
+condición: *«si sale un cuarto par, es señal de que esto necesita un guardián y no una ronda de
+arreglos»*. Salieron cuatro.
+
+**Y era un hueco real del arnés, no una preferencia.** Axe tiene `identical-links-same-purpose`
+como **«needs review»**, no como violación, así que el barrido de axe que `check:marco` ya hace
+sobre las 28 variantes lo pasa por alto sin decir nada. No es color ni contraste, así que el
+censo tampoco. Entre los dos gates de accesibilidad del repo, este criterio no lo miraba nadie.
+
+### Dónde vive: dentro de `check:marco`, y no como script nuevo
+
+`check:marco` ya abre las 28 variantes con jsdom, así que agrupar sus `<a href>` cuesta cero.
+Un `npm run` nuevo habría sido un paso de CI más para volver a recorrer lo que ya estaba
+abierto. Va en `scripts/marco/contenido.ts`, que es «lo que pone quien escribe la página», y ahí
+mismo es donde el defecto se comete.
+
+El nombre accesible se calcula en el orden en que lo hace un lector de pantalla —`aria-label`,
+si no el texto, si no el `alt` de sus imágenes— y se ignora lo que lleva `aria-hidden`, porque
+lo que no se anuncia no puede ser ambiguo.
+
+### Los pares declarados, y por qué no basta con ignorar los anclajes
+
+Hay **una** excepción legítima viva: «Privacidad y cookies» del formulario de Contacto apunta a
+`/cookies#privacidad` y el del pie a `/cookies`. Mismo destino y mismo propósito; solo cambia
+dónde aterriza.
+
+La tentación era una regla —«ignora el fragmento»— y habría sido incorrecta: **dos anclas
+distintas de la misma página sí pueden ser dos propósitos**. Así que se declara el par, con su
+motivo, como los cruces de `REFERENCIAS_QUE_CRUZAN` (D87). Y **la comparación es por DESTINOS,
+no solo por nombre**: si mañana aparece un tercer enlace que se llame igual, el par declarado
+deja de cubrir el grupo y el caso vuelve a salir. La lista existe para vaciarse, así que una
+entrada que ya no ocurre también sale roja: *una excepción muerta tapa la siguiente*.
+
+### Qué afirma que ha mirado
+
+**944 enlaces con nombre accesible**, agrupados por destino en las 28 variantes, y los 2 pares
+declarados. Sin esa cifra en el informe, un selector que dejara de casar daría exactamente el
+mismo ✓ — que es el fallo que este repo se ha encontrado seis veces.
+
+**Lo que deja fuera, dicho:** el nombre repetido entre **páginas distintas**. No confunde a
+nadie, porque nadie los oye juntos; agruparlo daría ruido garantizado con los enlaces del nav y
+del pie, que salen en las catorce.

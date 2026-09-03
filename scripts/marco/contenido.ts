@@ -178,7 +178,112 @@ export function revisarBreadcrumb({ doc, variante, esInterna }: Pagina): void {
 }
 
 /**
- * Canonical y los tres `hreflang`. No se comprueba el helper, que es correcto por
- * construcción: se comprueba que la página PASÓ por él, porque escribirse la
- * metadata a mano compila igual (D45).
+ * Dos enlaces con el MISMO nombre accesible y distinto destino, en la misma
+ * página (WCAG 2.4.9 / 3.2.4).
+ *
+ * POR QUÉ AQUÍ Y NO EN UN SCRIPT NUEVO. `check:marco` ya abre las 28 variantes
+ * con jsdom, así que esto cuesta cero: un `npm run` más habría sido un paso de CI
+ * más para recorrer otra vez lo que ya está abierto.
+ *
+ * POR QUÉ HACE FALTA. Ninguna herramienta de aquí lo ve: axe tiene
+ * `identical-links-same-purpose` como «needs review» y no como violación, así que
+ * el barrido de axe de esta misma corrida lo pasa por alto; y no es color ni
+ * contraste, así que el censo tampoco. La tarea que lo abrió (2026-09-03) barrió
+ * el sitio a mano y encontró **16 pares ambiguos en cuatro patrones distintos** —
+ * los roles de Trayectoria, las regletas del artículo, los demos del Design System
+ * y un fallo de locale en el diccionario EN—. Al cuarto patrón esto deja de ser
+ * una ronda de arreglos.
+ *
+ * EL NOMBRE ACCESIBLE, en el orden en que lo calcula un lector de pantalla:
+ * `aria-label`, si no el texto, si no el `alt` de las imágenes que contiene.
  */
+const PARES_DECLARADOS: readonly {
+  /** El nombre accesible, en minúsculas, tal y como agrupa el guardián. */
+  nombre: string;
+  /** Los destinos que comparten ese nombre a propósito, ordenados. */
+  destinos: readonly string[];
+  motivo: string;
+}[] = [
+  {
+    nombre: "privacidad y cookies",
+    destinos: ["/cookies", "/cookies#privacidad"],
+    motivo:
+      "mismo destino y mismo propósito: solo cambia dónde aterriza. El del formulario de Contacto salta al apartado que le toca; el del pie, a la página entera",
+  },
+  {
+    nombre: "privacy and cookies",
+    destinos: ["/en/cookies", "/en/cookies#privacidad"],
+    motivo: "el mismo par, en inglés",
+  },
+];
+
+/** Qué pares declarados se han usado de verdad, para poder retirar los muertos. */
+const pareUsado = new Set<number>();
+
+/** El nombre accesible de un enlace, o «» si no tiene ninguno. */
+function nombreAccesible(a: Element): string {
+  const aria = a.getAttribute("aria-label")?.trim();
+  if (aria) return aria;
+  const texto = (a.textContent ?? "").replace(/\s+/g, " ").trim();
+  if (texto) return texto;
+  return [...a.querySelectorAll("img[alt]")]
+    .map((i) => i.getAttribute("alt") ?? "")
+    .join(" ")
+    .trim();
+}
+
+export function revisarNombresDeEnlace({ doc, variante }: Pagina): void {
+  const grupos = new Map<string, Map<string, string>>();
+
+  for (const a of doc.querySelectorAll("a[href]")) {
+    // Lo que un lector de pantalla no anuncia no puede ser ambiguo para él.
+    if (a.getAttribute("aria-hidden") === "true") continue;
+    if (a.closest('[aria-hidden="true"]')) continue;
+    const nombre = nombreAccesible(a);
+    if (!nombre) continue;
+    vistos.enlacesConNombre++;
+    const clave = nombre.toLowerCase();
+    if (!grupos.has(clave)) grupos.set(clave, new Map());
+    grupos.get(clave)!.set(a.getAttribute("href") ?? "", nombre);
+  }
+
+  for (const [clave, destinos] of grupos) {
+    if (destinos.size < 2) continue;
+
+    // UN PAR DECLARADO SE COMPARA POR SUS DESTINOS, no solo por su nombre: si
+    // aparece un tercer enlace que se llama igual, la excepción deja de cubrirlo
+    // y tiene que volver a salir. Y NO se ignoran los anclajes en general: dos
+    // anclas distintas de la misma página sí pueden ser dos propósitos.
+    const rutas = [...destinos.keys()].sort();
+    const i = PARES_DECLARADOS.findIndex(
+      (p) =>
+        p.nombre === clave &&
+        p.destinos.length === rutas.length &&
+        p.destinos.every((d, n) => d === rutas[n]),
+    );
+    if (i !== -1) {
+      pareUsado.add(i);
+      continue;
+    }
+
+    fallo(
+      variante,
+      `«${[...destinos.values()][0]}» nombra ${destinos.size} destinos distintos ` +
+        `(${rutas.map((r) => `\`${r}\``).join(" · ")}). Fuera de contexto suenan iguales, ` +
+        "así que o se desambigua el nombre (`aria-label`), o el par se declara con su " +
+        "motivo en `PARES_DECLARADOS` de `scripts/marco/contenido.ts`.",
+    );
+  }
+}
+
+/** Los pares declarados que ya nadie usa: una excepción muerta tapa la siguiente. */
+export function paresDeclaradosSinUsar(): string[] {
+  return PARES_DECLARADOS.filter((_, i) => !pareUsado.has(i)).map(
+    (p) =>
+      `\`PARES_DECLARADOS\` declara que «${p.nombre}» comparte nombre en ` +
+      `${p.destinos.join(" · ")} y ya no ocurre. Quita la entrada.`,
+  );
+}
+
+/** Cuántos pares se declaran, para que el informe diga cuánto se perdona. */
+export const PARES_DECLARADOS_COUNT = PARES_DECLARADOS.length;

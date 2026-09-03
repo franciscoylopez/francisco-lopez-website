@@ -270,6 +270,28 @@ export const CASOS: Caso[] = [
   },
   {
     guardian: "check:marco",
+    rotura:
+      "dos enlaces con el mismo nombre accesible llevan a sitios distintos (WCAG 2.4.9)",
+    // LA FAMILIA ES REAL: el barrido de P72.235 encontró dieciséis pares así en
+    // cuatro patrones, y el más caro era justo este —un segundo enlace de descarga
+    // que se llama igual que el del nav y baja otro archivo—, porque fuera de
+    // contexto los dos se anuncian «Descargar CV» y no hay forma de saber cuál es
+    // cuál.
+    //
+    // SE AÑADE UN ENLACE en vez de retocar uno existente: mover un `href` haría
+    // que dos nombres DISTINTOS apuntaran al mismo sitio, que es el defecto
+    // contrario y no lo que esto agrupa. Muerde el build por lo de siempre: lo que
+    // este guardián mira es el HTML emitido.
+    //
+    // Y VA DENTRO DEL `<main>`, no antes de `</body>`: fuera de un landmark axe
+    // levanta además su regla `region`, y el caso pasaría a probar dos cosas a la
+    // vez. Lo que aquí se prueba es que el detector de nombres tiene dientes.
+    archivo: ".next/server/app/es.html",
+    mutar: (o) =>
+      o.replace("</main>", '<a href="/cv-viejo.pdf">Descargar CV</a></main>'),
+  },
+  {
+    guardian: "check:marco",
     rotura: "un trozo de una página cualquiera se envuelve en un `<article>`",
     // LA VUELTA de la invariante, y no es simetría por gusto: sin ella, envolver
     // media página de más pasaría igual de verde. `<article>` significa
