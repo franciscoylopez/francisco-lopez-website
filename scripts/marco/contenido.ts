@@ -232,9 +232,9 @@ function nombreAccesible(a: Element): string {
     .trim();
 }
 
-export function revisarNombresDeEnlace({ doc, variante }: Pagina): void {
+/** `nombre en minúsculas → destino → nombre tal cual`, sin lo que no se anuncia. */
+function enlacesPorNombre(doc: Document): Map<string, Map<string, string>> {
   const grupos = new Map<string, Map<string, string>>();
-
   for (const a of doc.querySelectorAll("a[href]")) {
     // Lo que un lector de pantalla no anuncia no puede ser ambiguo para él.
     if (a.getAttribute("aria-hidden") === "true") continue;
@@ -246,21 +246,32 @@ export function revisarNombresDeEnlace({ doc, variante }: Pagina): void {
     if (!grupos.has(clave)) grupos.set(clave, new Map());
     grupos.get(clave)!.set(a.getAttribute("href") ?? "", nombre);
   }
+  return grupos;
+}
 
-  for (const [clave, destinos] of grupos) {
+/**
+ * El índice del par declarado que cubre este grupo, o -1.
+ *
+ * SE COMPARA POR SUS DESTINOS, no solo por su nombre: si aparece un tercer enlace
+ * que se llama igual, la excepción deja de cubrirlo y el caso tiene que volver a
+ * salir. Y NO se ignoran los anclajes en general: dos anclas distintas de la
+ * misma página sí pueden ser dos propósitos.
+ */
+function parDeclarado(clave: string, rutas: string[]): number {
+  return PARES_DECLARADOS.findIndex(
+    (p) =>
+      p.nombre === clave &&
+      p.destinos.length === rutas.length &&
+      p.destinos.every((d, n) => d === rutas[n]),
+  );
+}
+
+export function revisarNombresDeEnlace({ doc, variante }: Pagina): void {
+  for (const [clave, destinos] of enlacesPorNombre(doc)) {
     if (destinos.size < 2) continue;
 
-    // UN PAR DECLARADO SE COMPARA POR SUS DESTINOS, no solo por su nombre: si
-    // aparece un tercer enlace que se llama igual, la excepción deja de cubrirlo
-    // y tiene que volver a salir. Y NO se ignoran los anclajes en general: dos
-    // anclas distintas de la misma página sí pueden ser dos propósitos.
     const rutas = [...destinos.keys()].sort();
-    const i = PARES_DECLARADOS.findIndex(
-      (p) =>
-        p.nombre === clave &&
-        p.destinos.length === rutas.length &&
-        p.destinos.every((d, n) => d === rutas[n]),
-    );
+    const i = parDeclarado(clave, rutas);
     if (i !== -1) {
       pareUsado.add(i);
       continue;
