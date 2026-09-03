@@ -156,9 +156,9 @@ Antes de cerrar una página o sección, los 9 puntos —los mismos que publica e
 ### Cómo se verifica
 
 
-Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: él ya lleva la matriz, congela el motion antes de medir y devuelve hallazgos, no el volcado. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `GATES.md`**, a demanda; aquí solo lo que hay que hacer:
+Sobre el sitio **servido** y conducido por el subagente **`viewport-verifier`**, nunca a mano: qué mide y cómo lo lleva escrito él. **Qué garantiza cada gate, dónde corre y qué deja fuera lo dice `GATES.md`**, a demanda; aquí solo lo que hay que hacer:
 
-- **Tras el censo Y las dos pasadas manuales** —`viewport-verifier` y NVDA—, no al cerrar una página ni con el censo solo: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`. **Es una fecha de CONFORMIDAD**, así que moverla con media revisión hecha afirma lo que no se ha comprobado (D38). El **recuento de páginas** no se toca: sale de `PAGE_COUNT`.
+- **Tras el censo Y las dos pasadas manuales** —`viewport-verifier` y NVDA—, no al cerrar una página ni con el censo solo: actualizar `LAST_A11Y_REVIEW` en `lib/design-values.ts`. **Es una fecha de CONFORMIDAD**, así que moverla con media revisión hecha afirma lo que no se ha comprobado (D38).
 
 # Definition of Done
 
@@ -192,6 +192,9 @@ pulido tipográfico o de ritmo que aparezca al mirarla.
 
 ## Antes de construir, no al cerrar
 
+- **¿La ficha está refinada?** → antes de planificar, las cuatro preguntas del arranque de
+  `deep-dive-page`, válidas para cualquier tarea: premisa, direcciones posibles, criterio de
+  cierre en una frase y qué queda fuera.
 - **¿Hay decisión visual abierta?** → `/prototype` **antes de construir la pieza**: componente,
   ilustración, carrusel o **vídeo** — decir «componente» ya dejó pasar uno *(2026-09-01)*.
   Solo puede invocarla Francisco, así que **ofrécela** en cuanto la tarea tenga más de una

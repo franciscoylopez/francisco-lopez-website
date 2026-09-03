@@ -33,6 +33,7 @@ Partido el **2026-08-27** (P68.5908). Ver `DECISIONS.md` D130.
 - [El kicker no repite el breadcrumb](#el-kicker-no-repite-el-breadcrumb)
 - [El sello que se puso sobre una foto — 2026-08-30](#el-sello-que-se-puso-sobre-una-foto--2026-08-30)
 - [La retirada en lote — 2026-08-31](#la-retirada-en-lote--2026-08-31)
+- [La fase que faltaba: refinar la ficha con preguntas — 2026-09-03](#la-fase-que-faltaba-refinar-la-ficha-con-preguntas--2026-09-03)
 <!-- FIN ÍNDICE -->
 
 ## Eficiencia de sesión
@@ -283,3 +284,44 @@ sprints «Método», que era una excepción histórica—, así que el documento
 del techo**. No se fabricó una retirada a destiempo para cuadrarlo, y eso es deliberado: **una
 retirada reactiva es exactamente la patología que esta regla corrige.** La primera aplicación
 de verdad es la apertura siguiente, y esas 28 palabras son la razón de que no se pueda saltar.
+
+---
+
+## La fase que faltaba: refinar la ficha con preguntas — 2026-09-03
+
+El ciclo de este proyecto tenía escrito todo menos un paso: **refinar la especificación
+preguntando, antes de planificar**. Lo hacía la conversación, así que funcionaba cuando salía
+bien y no dejaba rastro cuando no.
+
+**De dónde sale, y qué se descartó con ello.** La idea es la primera fase de
+`obra/superpowers`. **Se roba el paso y se tira la metodología**, y los dos motivos son
+concretos: exige TDD, que choca con D11 —sin tests hasta que haya lógica de negocio real—, y
+worktrees de git, que chocan con el ciclo por tanda (rama larga, PR draft, un solo merge). Un
+método que trae dos decisiones ya tomadas no es un método, es un paquete.
+
+**Dónde vive, y por qué NO es una skill nueva.** La ficha decía «paso dentro de una skill
+propia». Cuando se abrió, el presupuesto de skills estaba a **2 palabras** del techo del
+conjunto: una skill nueva lo rompía el mismo día. Así que el paso entra como **fase −1 de
+`deep-dive-page`** —la única skill que construye— y `CLAUDE.md` lo llama desde «Antes de
+construir, no al cerrar», que es donde una tarea se planifica. Una vez y un puntero, que es la
+regla 5 de `BRAND.md` §Cómo se escribe una regla.
+
+**Y se paga en el mismo commit, que es lo que pedía «abrir empieza retirando».** Lo retirado
+no es lo más grande: es lo duplicado, y de paso salieron tres cosas que ya no eran ciertas.
+
+| Retirado de `design-review` | Por qué |
+|---|---|
+| La re-enumeración de las reglas de medición | Las decía justo después de escribir «no las repitas aquí»; `BRAND.md` está en contexto siempre |
+| «dos en ocho secciones», «6 de 8 secciones» | La home tiene diez desde hace tiempo: cifras caducadas dentro de la skill que audita el drift |
+| «los **8** puntos de accesibilidad» | Son nueve |
+| `translate="no"` como familia «que nuestro sistema no codifica» | La codifica `check:marcas` desde D116 |
+| La enumeración de lo que mide `viewport-verifier` | Está en el subagente, y esta misma skill ya lo decía dos párrafos más abajo |
+
+`design-review` bajó de 4.538 a 4.412 palabras y, por primera vez, **por debajo del objetivo
+de 4.500**. La suma de skills quedó en 20.496 de 20.500, y los `@`-importados en 11.697: la
+tanda entera entra por debajo de donde empezó.
+
+**Un efecto lateral que conviene tener anotado:** al retirar de `CLAUDE.md` el bullet de la
+precondición del sandbox (D193), `design-review` se quedó apuntando a una sección que ya no
+lo decía. Un puntero a un documento vivo caduca **cuando se retira del otro lado**, y eso no
+lo ve `check:skills`, que comprueba archivos y comandos, no secciones.

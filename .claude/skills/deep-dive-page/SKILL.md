@@ -19,7 +19,21 @@ lo que parecía plantilla y no lo era está marcado como tal.
 
 ---
 
-## 0 · Antes de nada: ¿esta experiencia tiene página?
+## −1 · Refinar la ficha con preguntas, antes de planificar nada
+
+**El único paso que este ciclo no tenía explícito.** Hoy lo hace la conversación, así que
+depende de que salga bien; cuando no sale, se construye la tarea equivocada con toda la
+diligencia del mundo. Cuatro preguntas, y las respuestas van **a la ficha**:
+
+1. **¿La premisa sigue en pie?** Contra el disco, no contra la ficha: cinco caducaron en dos
+   tandas. **El descarte es un hallazgo y se escribe**, o vuelve.
+2. **¿Hay más de una dirección posible?** → ofrécele `/prototype`, que solo invoca él.
+3. **¿Cabe el criterio de cierre en una frase?** Si no, son dos tareas.
+4. **¿Qué queda FUERA a propósito?** Escribirlo ahora sale más barato que al cerrar.
+
+---
+
+## 0 · ¿Esta experiencia tiene página?
 
 **No es una decisión de alcance, es de contenido, y se ha equivocado una vez.**
 PICKASO parecía candidata —es producto, tiene métricas, tiene años— y no tiene
