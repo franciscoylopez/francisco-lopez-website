@@ -229,7 +229,7 @@ Revisión manual de la navegación por teclado y del orden en que el foco recorr
 
 NVDA sobre Chrome, recorriendo el sitio entero en vez de página a página, que es como se usa de verdad.
 
-No todas caben en el mismo sitio, y decirlo importa. Las que solo necesitan leer el código se ejecutan solas en cada cambio, antes de que nada se publique. Las dos mediciones de color necesitan un navegador pintando la página de verdad, así que se lanzan a mano. Y las dos últimas necesitan a alguien delante. Hay además una comprobación que vigila a las demás: coge cada una, le mete a propósito el error que debería cazar y confirma que salta. Son 23 comprobaciones y 53 errores fingidos, porque una revisión que devuelve una lista vacía se parece demasiado a un aprobado.
+No todas caben en el mismo sitio, y decirlo importa. Las que solo necesitan leer el código se ejecutan solas en cada cambio, antes de que nada se publique. Las dos mediciones de color necesitan un navegador pintando la página de verdad, así que se lanzan a mano. Y las dos últimas necesitan a alguien delante. Hay además una comprobación que vigila a las demás: coge cada una, le mete a propósito el error que debería cazar y confirma que salta. Son 23 comprobaciones y 54 errores fingidos, porque una revisión que devuelve una lista vacía se parece demasiado a un aprobado.
 
 4 de 8
 
