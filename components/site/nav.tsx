@@ -33,6 +33,25 @@ export type NavDict = {
 /** La preferencia del sistema, escrita una vez: la leen el snapshot y la suscripción. */
 const REDUCE_MOTION = "(prefers-reduced-motion: reduce)";
 
+/**
+ * LAS TRES FUNCIONES DE `useSyncExternalStore`, A NIVEL DE MÓDULO Y NO INLINE.
+ * No es estilo: el hook RE-SUSCRIBE cada vez que `subscribe` cambia de
+ * identidad, así que escritas dentro del componente se desconectaba y se volvía a
+ * conectar el listener en cada render. Fuera, la identidad es estable y la
+ * suscripción se hace una vez.
+ *
+ * El snapshot de servidor es `false` a propósito: en el prerender no hay
+ * preferencia que consultar, así que se sirve el estado no reducido y el primer
+ * snapshot de cliente lo corrige si hace falta.
+ */
+const suscribirAReduce = (avisar: () => void) => {
+  const mq = window.matchMedia?.(REDUCE_MOTION);
+  mq?.addEventListener("change", avisar);
+  return () => mq?.removeEventListener("change", avisar);
+};
+const leerReduce = () => window.matchMedia?.(REDUCE_MOTION).matches ?? false;
+const reduceEnServidor = () => false;
+
 const ENTRADA = 48;
 const SALIDA = 32;
 
@@ -109,13 +128,9 @@ export function Nav({
   // preferencia que consultar, así que se sirve el estado no reducido y el
   // primer snapshot de cliente lo corrige si hace falta.
   const reduce = useSyncExternalStore(
-    (onStoreChange) => {
-      const mq = window.matchMedia?.(REDUCE_MOTION);
-      mq?.addEventListener("change", onStoreChange);
-      return () => mq?.removeEventListener("change", onStoreChange);
-    },
-    () => window.matchMedia?.(REDUCE_MOTION).matches ?? false,
-    () => false,
+    suscribirAReduce,
+    leerReduce,
+    reduceEnServidor,
   );
 
   // EL UMBRAL DE LA RAMA `reduce` TIENE DOS PUNTOS DE CORTE, Y NO UNO *(P82)*.
