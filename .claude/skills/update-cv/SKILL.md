@@ -191,9 +191,8 @@ existen** en `public/cv/`.
 - **`matchFact` sigue existiendo, pero ya casi no aporta**: de la fila del
   diccionario solo saca el **proyecto paraguas** de los roles anidados («Shutapp
   Projects»), que es una agrupación de la home y no un hecho de la experiencia.
-- **Assets**: foto en `assets/cv/`, fuentes en `assets/fonts/`. La foto **deriva del recorte
-  cuadrado del byline**, no del hero: origen, encuadre y por qué no se reescala, en **D192**.
-  Y `check:cv` **no la vigila** — sella el copy, no la imagen.
+- **Assets**: foto en `assets/cv/`, fuentes en `assets/fonts/`. Si cambia la foto,
+  reprocésala con `sharp` (D192).
 - **Docs**: si el cambio altera una decisión, actualiza `DECISIONS.md` /
   `PRD-Live.md`; si hay tarea en Notion, refléjalo.
 
