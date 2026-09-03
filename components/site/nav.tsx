@@ -27,8 +27,18 @@ export type NavDict = {
 
 // Nav sticky (BRAND.md regla 6 · PRD §6). Transición continua con el scroll:
 // p = clamp(scrollY/120) cuantizado a pasos de 1/50 para limitar re-renders.
-//   símbolo 48→28px · capas del split se extinguen a p/0.05 · wordmark a p/0.45 ·
-//   barra 80→64px. Con prefers-reduced-motion salta en scrollY>48 (sin interpolar).
+//   símbolo 48→28px · capas del split se extinguen a p/0.05 · wordmark a p/0.45.
+// Con prefers-reduced-motion salta en scrollY>48 (sin interpolar).
+//
+// LA BARRA NO ENCOGE, Y HASTA EL 2026-09-03 IBA DE 80 A 64px (D188). No es una
+// simplificación: es lo que costaba. Animar su `min-height` repinta a cada paso
+// una franja opaca, sticky y de ancho completo, y eso eran 20,6 tareas de más de
+// 16,7 ms por gesto de scroll en un móvil estrangulado ×4, contra 3,0 con la
+// barra quieta. La cuantización a 1/50 limita los re-renders, que no era la
+// factura; la factura era el repintado.
+//
+// Y NO SE FUE CON ELLA LA COMPACTACIÓN: la cuentan el símbolo 48→28 y el
+// wordmark que se va. El método, el reparto por pieza y lo descartado, en D188.
 // CV/hamburguesa alternan por CSS (D7: responsive en CSS, no en JS).
 // `homeHref` por defecto es "#top" (scroll al inicio en la home); las páginas
 // internas pasan la URL de la home para que el logo navegue de vuelta.
@@ -118,7 +128,6 @@ export function Nav({
 
   const symH = 48 - 20 * p;
   const splitOpacity = Math.max(0, Math.min(1, 1 - p / 0.05));
-  const barMinHeight = 80 - 16 * p;
   const nameO = Math.max(0, Math.min(1, 1 - p / 0.45));
   const isDark = resolvedTheme === "dark";
 
@@ -162,8 +171,10 @@ export function Nav({
           barra sea UN landmark en vez de dos. */}
       <nav aria-label={dict.navLabel}>
         <div
-          className={cn(WRAP, "flex items-center justify-between gap-4")}
-          style={{ minHeight: `${barMinHeight}px` }}
+          className={cn(
+            WRAP,
+            "flex min-h-[80px] items-center justify-between gap-4",
+          )}
         >
           <a
             href={homeHref}

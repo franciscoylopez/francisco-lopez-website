@@ -530,14 +530,14 @@ Replay ▸
 
 ### Nav transition · shared across the whole site
 
-- Symbol 48 → 28px and bar 80 → 64px, continuously with the scroll.
+- Symbol 48 → 28px, continuously with the scroll. The bar keeps its height: animating it repainted a full-width opaque strip on every step.
 - The split's colour layers fade out before the symbol drops below 48px: it never passes through a badly registered state.
 - The wordmark fades in opacity without clipping glyphs: the gap only collapses once it is already invisible.
 - Under reduced motion, it jumps between states instead of interpolating.
 
-Francisco López · on load · 80px
+Francisco López · on load · 48px symbol · split
 
-on scroll · 64px · flat
+on scroll · 28px symbol · flat
 
 It's the transition you're seeing right now in this page's header.
 

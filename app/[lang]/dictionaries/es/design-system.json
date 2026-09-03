@@ -409,13 +409,13 @@
     "replay": "Repetir ▸",
     "navTitle": "Transición del nav · compartida por todo el sitio",
     "navBullets": [
-      "Símbolo 48 → 28px y barra 80 → 64px, de forma continua con el scroll.",
+      "Símbolo 48 → 28px, de forma continua con el scroll. La barra mantiene su alto: animarlo repintaba una franja opaca de ancho completo en cada paso.",
       "Las capas de color del split se extinguen antes de que el símbolo baje de 48px: nunca pasa por un estado de mala registración.",
       "El wordmark se desvanece en opacidad sin recortar glifos: el hueco solo se colapsa cuando ya es invisible.",
       "Con movimiento reducido, salto entre estados, sin interpolar."
     ],
-    "navState1": "al cargar · 80px",
-    "navState2": "con scroll · 64px · flat",
+    "navState1": "al cargar · símbolo 48px · split",
+    "navState2": "con scroll · símbolo 28px · flat",
     "navFoot": "Es la transición que ves ahora mismo en la cabecera de esta página."
   },
   "enlaces": {
