@@ -148,6 +148,15 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D84",
     "DECISIONS.md#D89",
     "scripts/check-experience-copy.ts",
+    // EL CRITERIO SE MUDÓ Y LA DECLARACIÓN LE SIGUE (2026-09-03, P72.32). Al
+    // partir el guardián, la regla de las tres longitudes —y la comparación de
+    // cifras entre el CV y el deep-dive, que es lo que este texto afirma— dejó de
+    // vivir en el archivo de arriba. Sin esto, la declaración seguiría vigilando
+    // un archivo que ya no contiene lo que vigilaba: el mismo radio de acción que
+    // D187 encontró al mover el censo. Van los dos: el DIRECTORIO caza una pieza
+    // nueva (se hashea su lista) y el archivo, que el cambio de la regla se vea.
+    "scripts/experiencias/",
+    "scripts/experiencias/bullets.ts",
     "components/ui/README.md",
     // Desde el 2026-08-29 el texto no solo dice que el inventario se deriva:
     // describe el FORMATO de la primera línea (grupo · publicación · frase) y
