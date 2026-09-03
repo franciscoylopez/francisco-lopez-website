@@ -226,6 +226,8 @@
 - D188 · La barra del nav deja de encoger: animar su alto repintaba una franja de ancho completo en cada paso
 - D189 · El `Person` de la home publica lo que la página ya enseña, y `award` son dos hitos de cinco
 - D190 · Dieciséis enlaces con el mismo nombre y distinto destino: cuatro patrones, cuatro arreglos, y el gate que no existe
+- D191 · La entradilla sube a la capa, y el Design System deja de publicar un valor que ninguna página usa
+- D192 · La foto del CV sale del recorte que ya existía, y `cv.huella` no la vigila
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12272,3 +12274,109 @@ distinguir esas dos cosas, y por eso ese hallazgo concreto **no vale como gate**
 `page-closer.tsx` se miró y se deja: sus ítems son tarjetas con su propia prosa, como mucho dos,
 dentro de un `<nav>` con nombre — y sus hijos **son** los ítems de la rejilla, así que una capa
 de `<li>` cambiaría el árbol de cajas.
+
+## D191 · La entradilla sube a la capa, y el Design System deja de publicar un valor que ninguna página usa — 2026-09-03
+
+**Decisión.** El tamaño del párrafo que va bajo el `h1` pasa a ser **`LEAD_SIZE`**, en
+`components/ui/heading.tsx`, con un solo valor para las siete páginas:
+`clamp(1.0625rem, 1.6vw, 1.2rem)`. Y el espécimen `bodyL` de §03 del Design System **se
+compone desde él** en vez de reescribir su valor.
+
+### El dato de partida
+
+Estaba escrito **siete veces con tres valores**: `1.05rem` de mínimo en Brand Kit, Design
+System, Accesibilidad y Contacto; `1.0625rem` en Trayectoria, Cookies y la home; `1.2rem` de
+máximo en seis, `1.25rem` en la home.
+
+**Y ninguno de los tres era el que el sitio PUBLICA sobre sí mismo.** La escala de §03
+declaraba `bodyL` = `clamp(1.0625rem, 1.5vw, 1.125rem)`, que no usaba ninguna entradilla. Una
+página que documenta el sistema publicando un valor que el sistema no usa es exactamente lo
+que **D38** existe para impedir, y llevaba meses así.
+
+*(Ojo con el recuento: la primera lectura habló de **seis** clamps distintos. Era falsa —
+metía dentro titulares en `font-display` y la propia tabla de tokens de §03. La cifra real,
+verificada línea a línea, es tres.)*
+
+### Qué gana cada extremo, y por qué la home no queda aparte
+
+El mínimo sube a `1.0625rem` porque son **17px justos** —el `1.05rem` daba 16,8 y no es
+peldaño de nada— y porque ya era el mínimo que la escala publicaba. El máximo se queda en
+`1.2rem`, el de seis de las siete: **la home baja 0,8px**, y es el único píxel que se mueve en
+todo el sitio.
+
+Se podía haber declarado la home otra familia —es la única apertura sin breadcrumb encima— y
+**se decidió que no** (Francisco, 2026-09-03): *una excepción de 0,8px no se ve y sí hay que
+recordarla*.
+
+### La parte reutilizable: `LEAD_SIZE` NO lleva el interlineado dentro
+
+Era la tentación, y habría sido un error. La entradilla usa `LEADING.lead` (1,6) y la intro de
+Sobre mí usa **este mismo peldaño** con `LEADING.prose` (1,7), porque es prosa de cuerpo y no
+una entradilla. Son dos registros del mismo tamaño; bundlear el interlineado obligaría a
+deshacerlo en el segundo caso, que es la forma de drift que `BRAND.md` §La variante que
+dimensiona una fila ya tiene documentada.
+
+Con eso, la cabecera tiene **tres ejes ortogonales y ninguno se escribe a mano**: `LEAD_GAP`
+(cuánto hueco deja el titular encima), `LEADING` (cómo respira por dentro) y `LEAD_SIZE`
+(cuánto mide). El tercero era el que faltaba.
+
+### Por qué componer el espécimen y no sincronizarlo
+
+`03-tipografia.tsx` ya llevaba escrita la regla para este caso —*«los tres niveles que YA son
+una variante del sistema se COMPONEN desde ella en vez de reescribir su valor: si la variante
+cambia, el espécimen cambia con ella y no puede mentir»*— y `bodyL` era el siguiente que la
+cumplía. Ahora la tabla no puede volver a desviarse del sitio porque **es el mismo objeto**.
+Lo que sigue siendo copy son las dos celdas de la fila (`19,2px / 1.2rem` · `19.2px /
+1.2rem`), que van al diccionario en ES y EN.
+
+### Verificación
+
+`npm run pliegue` sobre el build servido: las cuatro aperturas que comparten pliegue siguen
+midiendo lo mismo, **464px de grupo y 389px de `h1`**. Era el riesgo real del cambio, porque
+centrar con `my-auto` solo es seguro mientras los grupos midan igual (**D144/D156**).
+`check:palette` no pide censo nuevo: ni un color ni una superficie cambian, y a 19,2px el
+texto sigue sin ser «grande» para WCAG, así que tampoco se mueve el umbral.
+
+---
+
+## D192 · La foto del CV sale del recorte que ya existía, y `cv.huella` no la vigila — 2026-09-03
+
+**Decisión.** El avatar del CV (`assets/cv/francisco-avatar-rounded.png`) pasa a derivarse de
+**`public/img/francisco-como-se-ha-creado-byline-1x1.webp`**, el recorte cuadrado de la foto de
+portada que el artículo ya usaba como firma de autoría. **CV y byline pasan a ser derivados
+del mismo original**, no dos recortes que puedan divergir.
+
+### El origen NO era el hero, y la aritmética es la que lo decide
+
+La suposición de partida era recortar la cabeza de `francisco-hero-estudio-4x5.webp`. **No
+llega, y se mide antes de tocar:** el hero está en el repo a **614×768**, así que al encuadre
+de referencia —cabeza al 51% del alto— la cabeza sola es un cuadrado de **~269px**. A los 90pt
+a los que el PDF lo pinta, eso son **215 dpi**, por debajo de los 300 de imprenta. Barrido el
+repo: no hay ninguna versión mayor de esa foto.
+
+El byline está a **430×430** y ya viene centrado en la cara. De ahí se extraen **400×400** en
+(20, 25), calibrados contra el avatar anterior: cabeza al 51% del alto y un 5% de aire por
+encima del pelo.
+
+### Se escribe SIN reescalar, que es lo contrario de lo que parecía obvio
+
+El archivo anterior era 560×560 y la tentación era mantener esa medida. **Interpolar no añade
+información**: se escriben los **400 nativos**, que a 90pt son **320 dpi**, y el PNG baja de
+**472 a 131 KB**. La medida de un asset la fija el uso, no el archivo al que sustituye.
+
+El redondeado **se queda en el archivo**, con el mismo radio proporcional que tenía (10,7% del
+lado), que es justo el `borderRadius: 10` sobre 90 que el propio PDF aplica: coinciden y no se
+ven dos curvas.
+
+### El hueco: `check:cv` no podía ver esto
+
+`cv.huella` sella **las entradas de copy** —lo que la web dice—, que es la familia de **D60**:
+un PDF no es determinista, así que se sellan las entradas y no los bytes. **La imagen no es una
+de esas entradas.** O sea que la foto pudo quedarse vieja indefinidamente sin que ningún gate
+lo dijera, y por eso llegó como nota al margen de otra tarea (P72.16) en vez de como un rojo.
+
+**No se construye guardián aquí.** El caso pertenece a la familia «el artefacto commiteado que
+se queda viejo» que P72.29 tiene que decidir entera —ahí están las tres capturas del README, con
+el mismo problema de no determinismo— y resolver una instancia por su cuenta es justo lo que
+haría que la decisión de familia no se tomara. Lo que sí queda escrito es el contrato, en
+`GATES.md`: `check:cv` garantiza el copy y **deja fuera la imagen**.
