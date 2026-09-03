@@ -228,6 +228,7 @@
 - D190 · Dieciséis enlaces con el mismo nombre y distinto destino: cuatro patrones, cuatro arreglos, y el gate que no existe
 - D191 · La entradilla sube a la capa, y el Design System deja de publicar un valor que ninguna página usa
 - D192 · La foto del CV sale del recorte que ya existía, y `cv.huella` no la vigila
+- D193 · La prosa no se vigila, la dependencia baja a símbolo, y el supuesto de infra se comprueba
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12380,3 +12381,94 @@ se queda viejo» que P72.29 tiene que decidir entera —ahí están las tres cap
 el mismo problema de no determinismo— y resolver una instancia por su cuenta es justo lo que
 haría que la decisión de familia no se tomara. Lo que sí queda escrito es el contrato, en
 `GATES.md`: `check:cv` garantiza el copy y **deja fuera la imagen**.
+
+---
+
+## D193 · La prosa no se vigila, la dependencia baja a símbolo, y el supuesto de infra se comprueba — 2026-09-03
+
+**La pregunta la trajo un caso medido, no una intuición:** en una sola tarde (2026-08-31)
+salieron **nueve** afirmaciones falsas de este repo. Cuatro eran **supuestos sobre
+infraestructura** escritos sin comprobarlos —«en Preview no hay almacén», «fuera de producción
+el endpoint no existe», «el 404 es que no está activado», «el componente de Analytics está
+roto»— y los cuatro se cayeron en un minuto cuando por fin se comprobaron. Las otras cinco eran
+**frases del repo que dejaron de ser ciertas** sin que se moviera ninguna dependencia declarada,
+dos de ellas en un documento del art. 13 del RGPD.
+
+Los veintitrés guardianes de aquí no vieron ninguna, y el motivo estaba bien diagnosticado:
+**detectan que una FUENTE se movió, no que una FRASE se volvió falsa.** La tarea preguntaba tres
+cosas y esta entrada las contesta: dos sí y un no, cada uno con su medida.
+
+### 1 · El guardián de prosa con cuantificadores se DESCARTA, y el ruido está medido
+
+La idea era buscar frases con cuantificador —«nada», «lo único», «todo», «ninguna», «siempre»,
+«cero»— sobre comportamiento del sitio, que es el patrón común de las cinco. Se ha medido con el
+método de D149: un detector de un solo uso sobre los documentos vivos, los históricos y el copy
+servido.
+
+| Dónde | Frases con cuantificador |
+|---|---|
+| Documentos **vivos** del repo | **1.332** |
+| Documentos **históricos** (una frase vieja ahí es CORRECTA) | 607 |
+| **Copy servido** (diccionario ES) | **264** |
+
+**1.596 candidatas vivas, y hoy son todas ciertas.** No es un problema de vocabulario ni de
+afinado: «AA cumplido en todo el sitio» y «nada mide sin él» son sintácticamente idénticas, y la
+segunda solo es falsa porque alguien desplegó algo. Distinguirlas pide **comprobar el mundo**, no
+reconocer la frase. *Un gate ruidoso es peor que ninguno* (D59), y aquí el ruido sería el 100%.
+
+**Lo que sí queda vivo, que es la mitad barata:** cuando una página publica afirmaciones
+verificables, no se vigila su prosa — se declara **de qué depende**, bloque a bloque, y el sello
+manda a releer. Es lo que ya hacen `/accesibilidad` y el artículo. La respuesta a «¿cómo evito la
+sexta frase falsa?» no es un detector: es que la página que la escriba tenga su
+`content/<pagina>/dependencias.ts`.
+
+### 2 · La dependencia SÍ baja a símbolo, y el ruido también está medido
+
+`scripts/dependencias/huella.ts` resolvía tres formas —archivo, `DECISIONS.md#D26` y
+directorio—, así que un `#fragmento` solo era fragmento en markdown. Consecuencia: un archivo que
+es **fuente única** por D38 solo se podía declarar entero.
+
+| `lib/design-values.ts` | |
+|---|---|
+| Commits que lo tocan | 35 |
+| Mueven algo que sus dos dependientes vigilan | 12 |
+| **Rojos con cero hallazgos dentro** | **23 (66%)** |
+
+Dos tercios de las alarmas no tenían nada dentro. Eso no es un guardián estricto: es el
+entrenamiento para sellar sin mirar, que es el modo de fallo peor.
+
+**Entra una cuarta forma: `lib/design-values.ts#CONTRAST`**, una declaración exportada de un
+archivo de código. Qué significa el `#` lo decide la **extensión**, no una heurística. Y a
+diferencia del punto 1, aquí **no hay falsos positivos posibles**: un símbolo está o no está.
+
+Se deja fuera, a propósito, **el comentario de encima**: un JSDoc reescrito no cambia lo que la
+declaración vale, y este resolutor existe justo para no disparar por eso. El precio es simétrico
+y hay que decirlo: **corregir un comentario que afirmaba algo falso tampoco manda a releer** —que
+es, literalmente, cuatro de los nueve casos de arriba.
+
+**Y la prueba está partida en dos porque el arnés solo sabe pedir una mitad.**
+`check:guardianes` verifica «verde en limpio, rojo sobre el caso malo», así que la mitad que
+justifica todo esto —que un cambio ajeno **no** mueva el sello— no cabe ahí: vive en
+`tests/dependencias-huella.test.ts`, con la fuente inyectada y sin tocar disco. En `casos.ts`
+queda la mitad positiva, sobre el archivo y el guardián reales.
+
+### 3 · Un supuesto sobre infraestructura no se escribe: se comprueba
+
+Es la regla que sale a `CLAUDE.md` §Higiene de sesión, y es la más barata de las tres porque no
+construye nada. Los cuatro casos tenían delante un comando de un minuto —`vercel env ls`, un
+`curl`, un panel— y ninguno se ejecutó antes de escribir la frase.
+
+Es la familia que `BRAND.md` §Cómo se escribe una regla ya nombra —«un disparador que mira al
+lugar o al momento equivocado»— en su variante de momento: comprobar **después** de escribirlo
+llega tarde, porque para entonces la frase ya está en un documento que alguien lee.
+
+### Lo que esta entrada NO hace
+
+No cubre `README.md` ni la prosa de `PRD-Live`, que siguen sin guardián. Es deliberado y es la
+conclusión del punto 1: no hay forma barata de vigilarlos, y decir que la hay habría sido peor
+que dejarlo escrito. Lo que sí hay es dónde ponerlos el día que una de sus frases importe lo
+suficiente: como un bloque declarado, con sus dependencias, igual que `/accesibilidad`.
+
+**Coste de contexto, porque este ciclo lo cobra:** la regla nueva se paga retirando dos bullets
+de `CLAUDE.md` que ya vivían enteros en el subagente `viewport-verifier` y en `GATES.md`.
+`check:contexto` 11.690 → 11.683.

@@ -56,7 +56,14 @@ export type BloqueId = (typeof BLOQUES)[number];
 export const DEPENDENCIAS: Record<BloqueId, readonly string[]> = {
   // «WCAG 2.2 AA cumplido, con el contraste medido», con las dos cifras del
   // texto principal interpoladas y la fecha de la última revisión.
-  conformance: ["lib/design-values.ts", "BRAND.md#Accesibilidad"],
+  // Se nombran los DOS SÍMBOLOS y no el archivo (D193): `design-values.ts` es
+  // fuente única por D38, así que mover ahí una fecha legal encendía este bloque
+  // sin que ninguna de sus cifras se hubiera movido.
+  conformance: [
+    "lib/design-values.ts#CONTRAST",
+    "lib/design-values.ts#LAST_A11Y_REVIEW",
+    "BRAND.md#Accesibilidad",
+  ],
 
   // Los nueve puntos en lenguaje llano, con el criterio WCAG de cada uno. Su
   // fuente es el checklist interno: si allí se añade un punto o cambia el

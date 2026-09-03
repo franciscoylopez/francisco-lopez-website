@@ -516,17 +516,30 @@ export const CASOS: Caso[] = [
     // comprobaciones y veintitrés errores fingidos» habiendo quince y
     // veintisiete. Se muerde la cifra publicada, que es la que un visitante lee.
     //
-    // DISPARA DOS DE LAS TRES REGLAS A LA VEZ —el recuento y el sello de
-    // `conformance`, que también depende de este archivo— y está bien: lo que se
-    // prueba es que el guardián tiene dientes, no cuál de ellos muerde. La regla
-    // del recuento tiene además su propia red en el informe, que imprime las dos
-    // cifras enfrentadas.
+    // DISPARABA DOS REGLAS A LA VEZ Y AHORA SOLO UNA, que es la mejora de D193:
+    // hasta el 2026-09-03 `conformance` declaraba `lib/design-values.ts` entero,
+    // así que morder aquí encendía también su sello sin que ninguna cifra de ese
+    // bloque se hubiera movido. Ahora declara los dos símbolos que usa y este
+    // caso prueba lo que dice que prueba: la regla del RECUENTO, con su red en el
+    // informe, que imprime las dos cifras enfrentadas.
     archivo: "lib/design-values.ts",
     mutar: (o) =>
       o.replace(
         "export const GUARDIAN_CASE_COUNT = ",
         "export const GUARDIAN_CASE_COUNT = 99; //",
       ),
+  },
+  {
+    guardian: "check:accesibilidad",
+    rotura:
+      "cambia una cifra de contraste que la página publica y su bloque no se revisa",
+    // LA OTRA MITAD DE D193, la que el caso de arriba dejó de cubrir: que la
+    // dependencia a nivel de SÍMBOLO tenga dientes de verdad, sobre el archivo y
+    // el guardián reales. La mitad negativa —que mover `LAST_COOKIES_UPDATE` no
+    // encienda nada— no se puede escribir aquí, porque este arnés solo sabe pedir
+    // rojo; vive en `tests/dependencias-huella.test.ts`.
+    archivo: "lib/design-values.ts",
+    mutar: (o) => o.replace("bodyText:", "bodyTextMovido:"),
   },
   {
     guardian: "check:og",

@@ -213,7 +213,11 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "DECISIONS.md#D61",
     "DECISIONS.md#D73",
     "scripts/design-review/censo/",
-    "lib/design-values.ts",
+    // El símbolo, no el archivo (D193): lo que esta sección afirma es la tabla
+    // de contraste y el recuento de páginas, no todo lo que `design-values.ts`
+    // guarda por ser fuente única.
+    "lib/design-values.ts#CONTRAST",
+    "lib/design-values.ts#PAGE_COUNT",
     // El texto publica una CIFRA de páginas («AAA en las catorce páginas»), así
     // que añadir una tiene que mandar a releer esta sección.
     "lib/routes.ts",
