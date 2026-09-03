@@ -1,17 +1,16 @@
 {
-  "total": 28,
+  "total": 26,
   "porArea": {
-    "raíz": 1,
-    "scripts/": 12,
     "components/": 11,
-    "lib/": 2,
-    "app/": 2
+    "scripts/": 10,
+    "raíz": 1,
+    "app/": 2,
+    "lib/": 2
   },
   "hallazgos": [
     "qlty:file-complexity|scripts/artefacto-svg.ts",
     "qlty:file-complexity|scripts/censo.ts",
     "qlty:file-complexity|scripts/check-contexto.ts",
-    "qlty:file-complexity|scripts/check-excepciones.ts",
     "qlty:file-complexity|scripts/check-experience-copy.ts",
     "qlty:function-complexity|components/site/contact-form.tsx",
     "qlty:function-complexity|components/site/design-system/08-etiquetas.tsx",
@@ -22,7 +21,6 @@
     "qlty:function-complexity|scripts/artefacto-svg.ts",
     "qlty:function-complexity|scripts/logos/process_logo.js",
     "qlty:function-complexity|scripts/medicion/registro.ts",
-    "qlty:nested-control-flow|scripts/check-excepciones.ts",
     "qlty:return-statements|components/site/contact-form.tsx",
     "qlty:return-statements|proxy.ts",
     "qlty:return-statements|scripts/agentes.ts",
@@ -44,9 +42,6 @@
     ],
     "qlty:file-complexity|scripts/check-contexto.ts": [
       60
-    ],
-    "qlty:file-complexity|scripts/check-excepciones.ts": [
-      77
     ],
     "qlty:file-complexity|scripts/check-experience-copy.ts": [
       68
@@ -77,9 +72,6 @@
     ],
     "qlty:function-complexity|scripts/medicion/registro.ts": [
       28
-    ],
-    "qlty:nested-control-flow|scripts/check-excepciones.ts": [
-      5
     ],
     "qlty:return-statements|components/site/contact-form.tsx": [
       6
@@ -117,6 +109,6 @@
       68
     ]
   },
-  "commit": "c9f3cc7af53d94df228ed131b7e36c2a8e605bc5",
+  "commit": "1b2ab5ab18670cb16ea12b88b46d82853f49a45a",
   "fecha": "2026-09-03"
 }
