@@ -16,6 +16,8 @@ import { pagePath, type Locale } from "@/lib/i18n/config";
 import { ARTICLE_PUBLISHED, ARTICLE_UPDATED } from "@/lib/design-values";
 import { ogImagePath } from "@/lib/page-meta";
 import { SITE_NAME, SITE_URL } from "@/lib/site";
+import { copyOf } from "@/content/experience-copy";
+import { EXPERIENCES } from "@/content/experiences";
 
 // Especialidades declaradas en el PRD §10.
 const KNOWS_ABOUT = [
@@ -119,7 +121,23 @@ const isPartOfSite = (conCampos = false) =>
  * base de la fila 6 de la DoD; la única diferencia es el `@id` propio del
  * `ProfilePage`, que antes no existía.
  */
-export function profilePageLd(lang: Locale, description: string) {
+export function profilePageLd({
+  lang,
+  description,
+  awards,
+  alumni,
+}: {
+  lang: Locale;
+  description: string;
+  /**
+   * Los dos reconocimientos, ya compuestos por `awardsOf` en
+   * `components/site/hitos`: el marcado no los reescribe, los recibe de la
+   * sección que los pinta.
+   */
+  awards: string[];
+  /** Las instituciones, de `alumniOf` en `components/site/formacion`. */
+  alumni: string[];
+}) {
   const url = homeUrl(lang);
   return {
     "@context": "https://schema.org",
@@ -217,6 +235,53 @@ export function profilePageLd(lang: Locale, description: string) {
         sameAs: [LINKEDIN_URL, GITHUB_PROFILE_URL],
         knowsLanguage: ["es", "en"],
         knowsAbout: KNOWS_ABOUT,
+        /**
+         * LO QUE LA HOME YA PUBLICA A LA VISTA Y EL MARCADO NO DECÍA *(P82,
+         * 2026-09-03)*. Hitos, Trayectoria y Formación se leen en la página desde
+         * V1, y un agente que preguntara «¿qué premios tiene?» o «¿qué ha
+         * estudiado?» tenía que sacarlo de la prosa. Es D157 en su dirección
+         * buena: la superficie existe, así que declararla no afirma nada nuevo.
+         *
+         * LAS TRES SON DERIVADAS, NO ESCRITAS AQUÍ. `award` y `alumniOf` llegan
+         * de las secciones que los pintan, y los roles salen del registro de
+         * experiencias y de su copy — o sea de las MISMAS fuentes que la página.
+         * Un marcado con su propia copia de los datos es el modo de fallo de
+         * D57/D58, y aquí habría sido la enésima.
+         */
+        award: awards,
+        alumniOf: alumni.map((name) => ({
+          "@type": "EducationalOrganization",
+          name,
+        })),
+        /**
+         * LOS OCHO ROLES CON SU PERIODO, ENVUELTOS EN `Role` Y NO SUELTOS EN
+         * `Occupation`. `Occupation` no tiene fechas —sus propiedades son
+         * categoría, requisitos, salario y habilidades—, así que un rol pasado
+         * sin envolver perdería justo lo que lo distingue del actual. Schema.org
+         * documenta esta salida en `hasOccupation`: «para profesiones pasadas,
+         * usa `Role` para expresar fechas».
+         *
+         * SIN LA EMPRESA DENTRO, y la ausencia es deliberada. Meterla obligaría a
+         * declarar ocho nodos `Organization` en la home, y el único que hay hoy
+         * es el `worksFor` de aquí abajo, o sea el EMPLEADOR — que es la
+         * distinción sobre la que ya se decidió no rellenarle `contactPoint` ni
+         * `address` (nota de `contactPoint`, más abajo). Siete organizaciones
+         * más volverían ambigua esa lectura a cambio de un dato que la fila de
+         * Trayectoria ya publica con su enlace.
+         *
+         * `desde`/`hasta` salen de `content/experiences.ts` en ISO, que es de
+         * donde los toma también el `<time>` de cada fila; `hasta: null` es «en
+         * curso», y ahí no se emite `endDate` en vez de inventar una fecha.
+         */
+        hasOccupation: EXPERIENCES.map((e) => ({
+          "@type": "Role",
+          startDate: e.desde,
+          ...(e.hasta ? { endDate: e.hasta } : {}),
+          hasOccupation: {
+            "@type": "Occupation",
+            name: copyOf(lang, e.company).role,
+          },
+        })),
         worksFor: { "@type": "Organization", name: "Emendu" },
         address: {
           "@type": "PostalAddress",

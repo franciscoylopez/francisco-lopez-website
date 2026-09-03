@@ -76,6 +76,51 @@ function Row({
   );
 }
 
+/**
+ * EL AÑO DE CADA HITO, EN UN SITIO. Estaba escrito en el JSX de cada fila, que
+ * era su único consumidor; desde que el `Person` de la home marca los
+ * reconocimientos son dos, y un año que se escribe dos veces es el modo de fallo
+ * de D57/D58 con otro traje.
+ */
+const ANIO = {
+  emendu: "2026",
+  indyaMetricas: "2023",
+  indyaApple: "2022",
+  thetoolExit: "2021",
+  thetoolNominacion: "2019",
+} as const;
+
+/**
+ * LOS DOS HITOS QUE ADEMÁS SON UN RECONOCIMIENTO, para el `award` del nodo
+ * `Person` (P82).
+ *
+ * SON DOS DE CINCO, Y NO LOS CINCO, que es donde la tarea se corrigió a sí
+ * misma. `award` en Schema.org es «un premio ganado por o para esta entidad», y
+ * de los cinco hitos solo dos lo son: la selección de Apple y la nominación del
+ * App Promotion Summit. Los otros tres son un partnership, dos cifras de churn y
+ * activación, y una adquisición: hechos ciertos y publicados, pero ninguno es un
+ * premio. Marcarlos como `award` habría sido publicar marcado falso para llenar
+ * una propiedad, que es exactamente lo que D157 prohíbe (mismo criterio que
+ * descartó `codeRepository` en el `WebSite` y `SearchAction` en un sitio sin
+ * buscador).
+ *
+ * El exit no se pierde: lo cuenta la sección, su chip y el deep-dive de TheTool.
+ * Lo que no tiene es una propiedad de `Person` donde quepa sin mentir.
+ *
+ * SALE DEL DICCIONARIO Y DE `ANIO`, o sea de lo mismo que pinta la fila: si el
+ * copy de un hito cambia, el marcado cambia con él.
+ */
+export function awardsOf(dict: HitosDict): string[] {
+  const sinPunto = (t: string) => t.replace(/\.$/, "");
+  // Campo · campo · campo, que es el separador que fija `CLAUDE.md` §copy. Con
+  // paréntesis, el segundo saldría anidado dentro de los suyos: «… (App Promotion
+  // Summit) (TheTool, 2019)».
+  return [
+    `${sinPunto(dict.indyaApple)} · INDYA · ${ANIO.indyaApple}`,
+    `${sinPunto(dict.thetoolNomination)} · TheTool · ${ANIO.thetoolNominacion}`,
+  ];
+}
+
 // Hitos (PRD §8.1/§21). Quick-scan de reconocimientos, orden cronológico
 // descendente. Sin icono. INDYA (02) anima contadores; TheTool exit (04) lleva
 // el chip EXIT con reveal retardado.
@@ -118,11 +163,11 @@ export function Hitos({ dict }: { dict: HitosDict }) {
           <span className="ml-auto shrink-0">{dict.colYear}</span>
         </div>
 
-        <Row idx="(01)" name="Emendu" year="2026">
+        <Row idx="(01)" name="Emendu" year={ANIO.emendu}>
           <Marcas>{dict.emenduImpact}</Marcas>
         </Row>
 
-        <Row idx="(02)" name="INDYA" year="2023">
+        <Row idx="(02)" name="INDYA" year={ANIO.indyaMetricas}>
           {dict.indyaLabel1}{" "}
           <strong className="text-foreground font-semibold [font-variant-numeric:tabular-nums]">
             <span data-count="16">16</span>% → <span data-count="10">10</span>%
@@ -134,18 +179,24 @@ export function Hitos({ dict }: { dict: HitosDict }) {
           .
         </Row>
 
-        <Row idx="(03)" name="INDYA" year="2022">
+        <Row idx="(03)" name="INDYA" year={ANIO.indyaApple}>
           <Marcas>{dict.indyaApple}</Marcas>
         </Row>
 
-        <Row idx="(04)" name="TheTool" year="2021" emphasizeImpact boldYear>
+        <Row
+          idx="(04)"
+          name="TheTool"
+          year={ANIO.thetoolExit}
+          emphasizeImpact
+          boldYear
+        >
           <Marcas>{dict.thetoolAcquired}</Marcas>
           <Badge tone="purple" kind="label" className="exit-chip ml-2">
             {dict.exitChip}
           </Badge>
         </Row>
 
-        <Row idx="(05)" name="TheTool" year="2019">
+        <Row idx="(05)" name="TheTool" year={ANIO.thetoolNominacion}>
           <Marcas>{dict.thetoolNomination}</Marcas>
         </Row>
       </div>
