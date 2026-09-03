@@ -157,7 +157,13 @@ export const CASOS: Caso[] = [
     // momento posible para perder los dientes —abrir una etapa es justo cuando se
     // mueve un techo—, y lo cazó CI y no una lectura. Un caso malo cuyo anclaje es
     // un valor que cambia por diseño tiene que emparejar la FORMA, nunca el valor.
-    archivo: "scripts/check-contexto.ts",
+    //
+    // Y EL ARCHIVO CAMBIÓ AL PARTIR EL GUARDIÁN (2026-09-03, P72.32): `CICLO_ABIERTO`
+    // vive ahora en `contexto/presupuesto.ts`. Lo cazó el arnés con «NO SE PUDO
+    // ROMPER», que es exactamente la salida que existe para esto — un caso malo que
+    // muta un archivo donde ya no está lo que muta se salta en silencio en cualquier
+    // otro diseño.
+    archivo: "scripts/contexto/presupuesto.ts",
     mutar: (o) =>
       o.replace(
         /const CICLO_ABIERTO = "\d{4}-\d{2}-\d{2}";/,
@@ -173,7 +179,7 @@ export const CASOS: Caso[] = [
     // empareja la ESTRUCTURA —`antes`/`despues` del corpus de documentos— y copia
     // el primero sobre el segundo. Eso es exactamente «no se retiró»: el caso que
     // dejó el margen de contexto en 10 sin cruzar ningún techo.
-    archivo: "scripts/check-contexto.ts",
+    archivo: "scripts/contexto/apertura.ts",
     mutar: (o) =>
       o.replace(
         /documentos: \{ antes: ([\d_]+), despues: [\d_]+ \}/,
@@ -188,7 +194,7 @@ export const CASOS: Caso[] = [
     // miden A MANO, así que lo único que impide que se queden viejos es que el
     // sello lleve la fecha del ciclo abierto. Se muta la del sello y no
     // `CICLO_ABIERTO`, que ya tiene su propio caso arriba.
-    archivo: "scripts/check-contexto.ts",
+    archivo: "scripts/contexto/apertura.ts",
     mutar: (o) =>
       o.replace(
         /fecha: "\d{4}-\d{2}-\d{2}",\n {2}cierra:/,

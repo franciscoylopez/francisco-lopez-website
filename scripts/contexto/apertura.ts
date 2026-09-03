@@ -42,7 +42,7 @@ import { CICLO_ABIERTO } from "./presupuesto";
  *   portarla.
  * · **`scripts/` sí está en la regla, y aun así avisa**, por una razón medida: **la
  *   propia ceremonia de apertura escribe ahí**. Los +35 de esta apertura son
- *   exactamente los dos sellos que el ritual exige —`CICLO_ABIERTO` en este archivo y
+ *   exactamente los dos sellos que el ritual exige —`CICLO_ABIERTO` en `presupuesto.ts` y
  *   `SELLO_GENERAL` en `check-tablero.ts`—, y añadir un guardián cuesta líneas: esta
  *   misma tanda lleva +734. Un rojo aquí significaría «no se puede añadir un guardián
  *   sin borrar otro», que en un proyecto cuyo método SON los guardianes es la regla
