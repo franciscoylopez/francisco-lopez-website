@@ -4,7 +4,12 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ContactForm } from "./contact-form";
 import type { ContactoPaginaDict } from "@/app/[lang]/dictionaries";
 import { ActionCardLines, actionVariants } from "@/components/ui/action";
-import { LEAD_GAP, SectionHeader } from "@/components/ui/heading";
+import {
+  LEAD_GAP,
+  LEAD_SIZE,
+  LEADING,
+  SectionHeader,
+} from "@/components/ui/heading";
 import {
   FOLD_CRUMB,
   FOLD_GROUP,
@@ -121,7 +126,11 @@ export function ContactoPagina({
 
             <p
               data-reveal
-              className="text-muted-foreground m-0 max-w-[44ch] text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6] lg:col-start-1 lg:row-start-2"
+              className={cn(
+                LEAD_SIZE,
+                LEADING.lead,
+                "text-muted-foreground m-0 max-w-[44ch] lg:col-start-1 lg:row-start-2",
+              )}
             >
               {dict.lead}
             </p>

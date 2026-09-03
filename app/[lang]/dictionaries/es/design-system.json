@@ -232,7 +232,7 @@
       {
         "name": "Body L",
         "font": "Inter 400",
-        "desktop": "18px / 1.125rem",
+        "desktop": "19,2px / 1.2rem",
         "mobile": "17px",
         "lh": "1.6",
         "use": "Subheadline, intro",

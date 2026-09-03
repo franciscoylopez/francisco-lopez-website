@@ -108,7 +108,7 @@ En lenguaje llano y con el criterio WCAG que cubre cada una.
   
   WCAG 1.3.1 · 2.4.6
   
-  Un solo título principal por página y una jerarquía sin saltos; el orden de lectura coincide con el del código, para lectores de pantalla y navegación por teclado.
+  Un solo título principal por página, y es el primero que se encuentra: ningún rótulo de la interfaz encabeza por delante de él. Jerarquía sin saltos, y el orden de lectura coincide con el del código, para lectores de pantalla y navegación por teclado.
 5. Ubicación clara
   
   WCAG 2.4.8

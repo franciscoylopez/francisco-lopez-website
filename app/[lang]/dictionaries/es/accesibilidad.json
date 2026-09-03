@@ -83,7 +83,7 @@
       },
       {
         "title": "Estructura y orden lógicos",
-        "body": "Un solo título principal por página y una jerarquía sin saltos; el orden de lectura coincide con el del código, para lectores de pantalla y navegación por teclado.",
+        "body": "Un solo título principal por página, y es el primero que se encuentra: ningún rótulo de la interfaz encabeza por delante de él. Jerarquía sin saltos, y el orden de lectura coincide con el del código, para lectores de pantalla y navegación por teclado.",
         "wcag": "WCAG 1.3.1 · 2.4.6",
         "inherited": false
       },
