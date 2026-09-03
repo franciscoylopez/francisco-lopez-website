@@ -14,6 +14,28 @@ import { cn } from "@/lib/utils";
 // home y los cuatro heros: el ordinal va dentro del eyebrow.
 
 /**
+ * EL NOMBRE ACCESIBLE DE UN ENLACE DE DEMO *(P82)*.
+ *
+ * Esta página publica las piezas reales, así que sus demos llevan el MISMO
+ * rótulo que el sitio: «Inicio», «Brand Kit», «Descargar CV». Cada uno de esos
+ * aparece además una segunda vez en la página, en el nav de verdad y con destino
+ * de verdad, mientras el de la demo apunta a `#top`. En la lista de enlaces de un
+ * lector eso son dos etiquetas idénticas con dos destinos, que es 2.4.9 (AAA)
+ * fallando justo en la página que publica el checklist.
+ *
+ * EL SUFIJO VA DETRÁS, no delante: WCAG 2.5.3 (Label in Name) pide que el nombre
+ * CONTENGA la etiqueta visible, y empezar por ella es lo que además mantiene el
+ * control por voz. Y dice algo cierto que antes no se decía en ningún sitio: ese
+ * enlace no lleva a ninguna parte porque es una demostración.
+ *
+ * LO LLEVAN LOS DEMOS DE CONTROL Y DE CHROME, no los enlaces de contenido inline
+ * de la sección (6): el texto de aquellos es el rótulo de una pieza —el que
+ * colisiona— y el de estos es prosa escrita para la demo.
+ */
+export const demoAria = (etiqueta: string, sufijo: string): string =>
+  `${etiqueta} · ${sufijo}`;
+
+/**
  * LA TARJETA ESPÉCIMEN de esta página: la demo real arriba, sobre el fondo de
  * página, y debajo su ficha sobre `--card` — rótulo, nombre de la pieza en
  * monoespaciada, qué resuelve, y la letra pequeña tras un filete discontinuo.

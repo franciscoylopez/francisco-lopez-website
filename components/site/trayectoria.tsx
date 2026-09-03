@@ -37,6 +37,11 @@ export type TrayectoriaDict = {
   shutappTitle: string;
   shutappPeriod: string;
   shutappSubtitle: string;
+  /**
+   * La plantilla del NOMBRE ACCESIBLE del enlace al deep-dive, con `{role}` y
+   * `{company}`. Ver `CaseLink`.
+   */
+  casoAria: string;
   previoLabel: string;
   previoIntro: string;
   producto: TrayRow[];
@@ -64,19 +69,43 @@ export type TrayectoriaDict = {
 // emparejamiento ruta↔locale (D45). Escribir `/trayectoria/${slug}` aquí habría
 // dado un enlace roto en inglés —el sitio no traduce el segmento, pero sí lleva
 // el prefijo `/en`— y es justo el ternario que D45 borró de cinco sitios.
+// Y EL NOMBRE ACCESIBLE NO ES EL TEXTO VISIBLE, que es lo que la fila no podía
+// resolver sola (P82, hallazgo de Silktide verificado contra el disco). El enlace
+// es el ROL, y dos filas comparten rol: «Product Manager» lleva a Emendu y a
+// Freepik, «Cofounder & Product» a KUOTIP y a TheTool. La empresa está en un
+// `<div>` HERMANO, o sea fuera del contexto que WCAG 2.4.4 define, así que quien
+// navega por la lista de enlaces ve dos etiquetas idénticas con cuatro destinos.
+//
+// LO ARREGLA UN `aria-label` Y NO EL TEXTO VISIBLE porque el texto ya está
+// decidido viendo las dos formas en pantalla (arriba): el enlace es el rol. El
+// nombre accesible EMPIEZA por lo visible —«Product Manager en Emendu»— y por eso
+// cumple WCAG 2.5.3 (Label in Name), que pide que el nombre CONTENGA la etiqueta
+// visible; ponerlo al revés valdría igual para un lector y rompería el control por
+// voz.
+//
+// EL CONECTOR ES COPY («en» / «at»), así que vive en el diccionario y no
+// interpolado aquí (D20).
 function CaseLink({
   company,
   lang,
+  casoAria,
   children,
 }: {
   company: string;
   lang: Locale;
+  casoAria: string;
   children: React.ReactNode;
 }) {
   const { slug } = experienceOf(company);
   if (!slug) return <>{children}</>;
   return (
-    <a href={pagePath(lang, `trayectoria/${slug}`)} className="link-content">
+    <a
+      href={pagePath(lang, `trayectoria/${slug}`)}
+      className="link-content"
+      aria-label={casoAria
+        .replace("{role}", factsOf(lang, company).role)
+        .replace("{company}", company)}
+    >
       {children}
     </a>
   );
@@ -96,7 +125,15 @@ function LogoCell({ company }: { company: string }) {
   );
 }
 
-function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
+function Row({
+  row,
+  lang,
+  casoAria,
+}: {
+  row: TrayRow;
+  lang: Locale;
+  casoAria: string;
+}) {
   const { role } = factsOf(lang, row.company);
   return (
     <div className="tray-grid border-border border-b py-[clamp(1.35rem,3vw,1.85rem)]">
@@ -105,7 +142,7 @@ function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
       </p>
       <div>
         <div className="font-display text-[clamp(1.05rem,1.6vw,1.3rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
-          <CaseLink company={row.company} lang={lang}>
+          <CaseLink company={row.company} lang={lang} casoAria={casoAria}>
             {role}
           </CaseLink>
         </div>
@@ -121,7 +158,15 @@ function Row({ row, lang }: { row: TrayRow; lang: Locale }) {
   );
 }
 
-function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
+function NestedRow({
+  row,
+  lang,
+  casoAria,
+}: {
+  row: TrayRow;
+  lang: Locale;
+  casoAria: string;
+}) {
   const { role } = factsOf(lang, row.company);
   return (
     <div className="tray-grid-nested relative">
@@ -139,7 +184,7 @@ function NestedRow({ row, lang }: { row: TrayRow; lang: Locale }) {
       </p>
       <div>
         <div className="font-display text-[clamp(0.98rem,1.4vw,1.15rem)] leading-[1.2] font-semibold tracking-[-0.01em]">
-          <CaseLink company={row.company} lang={lang}>
+          <CaseLink company={row.company} lang={lang} casoAria={casoAria}>
             {role}
           </CaseLink>
         </div>
@@ -205,7 +250,12 @@ export function Trayectoria({
 
         <div data-reveal className="border-border border-t">
           {dict.producto.map((row) => (
-            <Row key={row.company} row={row} lang={lang} />
+            <Row
+              key={row.company}
+              row={row}
+              lang={lang}
+              casoAria={dict.casoAria}
+            />
           ))}
 
           {/* Shutapp Projects — fila padre con roles anidados */}
@@ -231,7 +281,12 @@ export function Trayectoria({
               }}
             >
               {dict.nested.map((row) => (
-                <NestedRow key={row.company} row={row} lang={lang} />
+                <NestedRow
+                  key={row.company}
+                  row={row}
+                  lang={lang}
+                  casoAria={dict.casoAria}
+                />
               ))}
             </div>
           </div>
@@ -254,7 +309,12 @@ export function Trayectoria({
         </p>
         <div data-reveal className="border-border border-t">
           {dict.previo.map((row) => (
-            <Row key={row.company} row={row} lang={lang} />
+            <Row
+              key={row.company}
+              row={row}
+              lang={lang}
+              casoAria={dict.casoAria}
+            />
           ))}
         </div>
       </div>

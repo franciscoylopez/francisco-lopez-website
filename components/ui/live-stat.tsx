@@ -84,10 +84,23 @@ export function LiveStat({
         >
           {value}
         </p>
+        {/* EL NOMBRE ACCESIBLE SE COMPONE AQUÍ, y por eso no puede recaer
+            (P82). El rótulo del enlace es genérico a propósito —«Ver el
+            informe»— y §s08 del artículo tiene dos regletas seguidas, así que en
+            la lista de enlaces de un lector salían dos etiquetas idénticas con
+            destinos distintos: PageSpeed y ora.ai. La caja ya sabe de qué dato
+            es (`label`), así que la desambiguación sale de la pieza y no de
+            cuatro cadenas del diccionario que habría que acordarse de mantener
+            distintas cuando entre la tercera.
+
+            EMPIEZA POR LO VISIBLE, que es lo que pide WCAG 2.5.3 (Label in
+            Name): «Ver el informe · Rendimiento · PageSpeed». Al revés valdría
+            para un lector de pantalla y rompería el control por voz. */}
         <a
           href={href}
           target={isExternal ? "_blank" : undefined}
           rel={isExternal ? "noopener noreferrer" : undefined}
+          aria-label={`${linkLabel} · ${label}`}
           className={cn("link-content text-[0.9rem] font-medium", LEADING.meta)}
         >
           {linkLabel}

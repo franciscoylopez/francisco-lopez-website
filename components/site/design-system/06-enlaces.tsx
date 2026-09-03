@@ -7,15 +7,18 @@ import { chromeLinkVariants } from "@/components/ui/chrome";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
-import { SpecimenCard, type SeccionMarco } from "./shared";
+import { SpecimenCard, demoAria, type SeccionMarco } from "./shared";
 
 /* ===================== ENLACES ===================== */
 export function Enlaces({
   t,
   marco,
+  demoSufijo,
 }: {
   t: Dictionary["designSystem"]["enlaces"];
   marco: SeccionMarco;
+  /** El sufijo del nombre accesible de un enlace de demo. Ver `demoAria`. */
+  demoSufijo: string;
 }) {
   // EL CASO INVERTIDO VIVE EN `cases` desde P70.33 —es un caso más de la misma
   // familia y no una excepción con claves propias— pero se PINTA aparte y a lo
@@ -61,6 +64,7 @@ export function Enlaces({
                     <a
                       key={item}
                       href="#top"
+                      aria-label={demoAria(item, demoSufijo)}
                       className={cn(
                         chromeLinkVariants({ shape: "bar" }),
                         "text-[0.88rem]",
@@ -110,6 +114,7 @@ export function Enlaces({
                     <a
                       key={item}
                       href="#top"
+                      aria-label={demoAria(item, demoSufijo)}
                       className={cn(
                         chromeLinkVariants({
                           shape: "bar",
