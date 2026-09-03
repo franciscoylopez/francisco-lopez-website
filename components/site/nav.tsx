@@ -32,15 +32,13 @@ export type NavDict = {
 //
 // LA BARRA NO ENCOGE, Y HASTA EL 2026-09-03 IBA DE 80 A 64px (D188). No es una
 // simplificación: es lo que costaba. Animar su `min-height` repinta a cada paso
-// una franja opaca, sticky y de ancho completo, y eso son 20,6 tareas de más de
+// una franja opaca, sticky y de ancho completo, y eso eran 20,6 tareas de más de
 // 16,7 ms por gesto de scroll en un móvil estrangulado ×4, contra 3,0 con la
-// barra quieta — medido sobre el build servido, con gesto real y traza de
-// `devtools.timeline`. La cuantización a 1/50 limita los re-renders, que no era
-// la factura; la factura era el repintado.
+// barra quieta. La cuantización a 1/50 limita los re-renders, que no era la
+// factura; la factura era el repintado.
 //
 // Y NO SE FUE CON ELLA LA COMPACTACIÓN: la cuentan el símbolo 48→28 y el
-// wordmark que se va, que son las dos piezas que de verdad se miran. Congelar
-// SOLO el símbolo no cambiaba nada medible (22,2 tareas), así que se queda.
+// wordmark que se va. El método, el reparto por pieza y lo descartado, en D188.
 // CV/hamburguesa alternan por CSS (D7: responsive en CSS, no en JS).
 // `homeHref` por defecto es "#top" (scroll al inicio en la home); las páginas
 // internas pasan la URL de la home para que el logo navegue de vuelta.
