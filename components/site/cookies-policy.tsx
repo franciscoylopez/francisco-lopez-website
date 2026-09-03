@@ -9,7 +9,12 @@ import { ConsentPreferencesButton } from "./consent-preferences-button";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
 import { DataTable, TD, TR } from "@/components/ui/table";
-import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import {
+  LEAD_SIZE,
+  LEADING,
+  SectionHeader,
+  titleVariants,
+} from "@/components/ui/heading";
 import { cn } from "@/lib/utils";
 import { Marcas } from "@/components/ui/marcas";
 
@@ -79,9 +84,7 @@ export function CookiesPolicy({
                 />
               </p>
             </SectionHeader>
-            <p className="mt-6 text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6]">
-              {t.lead}
-            </p>
+            <p className={cn("mt-6", LEAD_SIZE, LEADING.lead)}>{t.lead}</p>
           </header>
 
           {/* EL CUERPO VA A ANCHO DE CONTENEDOR, NO A LA MEDIDA DE LECTURA.

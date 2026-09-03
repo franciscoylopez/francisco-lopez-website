@@ -1,8 +1,9 @@
 import { type ReactNode } from "react";
 
-import { SectionHeader } from "@/components/ui/heading";
+import { LEAD_SIZE, LEADING, SectionHeader } from "@/components/ui/heading";
 import { FOLD_CRUMB, FOLD_GROUP, HERO_ROW, WRAP } from "@/components/ui/layout";
 import { StatRow } from "@/components/ui/stat-row";
+import { cn } from "@/lib/utils";
 
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 
@@ -139,7 +140,12 @@ export function SystemPageOpening({
               >
                 <p
                   data-reveal
-                  className={`text-muted-foreground ${leadMeasure} text-[clamp(1.05rem,1.6vw,1.2rem)] leading-[1.6]`}
+                  className={cn(
+                    LEAD_SIZE,
+                    LEADING.lead,
+                    "text-muted-foreground",
+                    leadMeasure,
+                  )}
                 >
                   {lead}
                 </p>

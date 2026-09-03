@@ -8,6 +8,8 @@ import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
 import { factsOf } from "@/content/experience-copy";
 import { actionVariants } from "@/components/ui/action";
 import {
+  LEAD_SIZE,
+  LEADING,
   SectionHeader,
   dataLabelVariants,
   titleVariants,
@@ -114,9 +116,7 @@ export function TrayectoriaIndice({
             level={1}
             size="page-sm"
           >
-            <p className="text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.6]">
-              {dict.lead}
-            </p>
+            <p className={cn(LEAD_SIZE, LEADING.lead)}>{dict.lead}</p>
           </SectionHeader>
         </header>
 

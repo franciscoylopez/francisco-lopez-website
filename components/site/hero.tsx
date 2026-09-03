@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { SectionHeader } from "@/components/ui/heading";
+import { LEAD_SIZE, LEADING, SectionHeader } from "@/components/ui/heading";
 import { WRAP } from "@/components/ui/layout";
 import { cn } from "@/lib/utils";
 
@@ -54,7 +54,11 @@ export function Hero({ dict }: { dict: HeroDict }) {
             />
             <p
               data-reveal
-              className="text-muted-foreground mt-[1.6rem] max-w-[34ch] text-[clamp(1.0625rem,1.6vw,1.25rem)] leading-[1.6]"
+              className={cn(
+                LEAD_SIZE,
+                LEADING.lead,
+                "text-muted-foreground mt-[1.6rem] max-w-[34ch]",
+              )}
             >
               {dict.subheadline}
             </p>

@@ -256,6 +256,42 @@ export const LEADING = {
 } as const;
 
 /**
+ * TAMAÑO de la entradilla: el párrafo que va bajo el `h1` de una apertura. Es el
+ * tercer eje de la cabecera, junto a `LEAD_GAP` (cuánto hueco deja el titular
+ * encima) y `LEADING` (cómo respira por dentro), y el último que seguía escrito
+ * a mano en cada página.
+ *
+ * POR QUÉ EXISTE *(2026-09-03, P72.26)*. Estaba escrito siete veces con TRES
+ * valores distintos —`1.05rem` de mínimo en cuatro páginas, `1.0625rem` en
+ * tres; `1.2rem` de máximo en seis, `1.25rem` en la home—, y ninguno de los
+ * tres era el que el Design System **publica** sobre sí mismo (`bodyL`, que
+ * declaraba `clamp(1.0625rem, 1.5vw, 1.125rem)` y no usaba nadie). Una página
+ * que documenta el sistema publicando un valor que el sistema no usa es
+ * exactamente lo que D38 existe para impedir.
+ *
+ * QUÉ GANA CADA EXTREMO. El mínimo sube a `1.0625rem` porque son **17px justos**
+ * —el `1.05rem` daba 16,8 y no es un peldaño de nada— y porque ya era el mínimo
+ * que la escala publicaba. El máximo se queda en `1.2rem`, que es el de seis de
+ * las siete; la home baja 0,8px desde `1.25rem`, que es el único píxel que se
+ * mueve en todo el sitio.
+ *
+ * LA HOME NO QUEDA APARTE, y es una decisión, no un descuido. Su entradilla es
+ * la única sin breadcrumb encima y se podía haber declarado otra familia; se
+ * decidió que no (Francisco, 2026-09-03) porque una excepción de 0,8px no se ve
+ * y sí hay que recordarla.
+ *
+ * SE COMPONE CON `LEADING`, NO LO LLEVA DENTRO. La entradilla usa `lead` (1,6) y
+ * la intro de Sobre mí usa este mismo tamaño con `prose` (1,7) porque es prosa
+ * de cuerpo, no una entradilla. Son dos registros del mismo peldaño: bundlear el
+ * interlineado aquí obligaría a deshacerlo en el segundo caso, que es la forma
+ * de drift que `BRAND.md` §La variante que dimensiona una fila ya documenta.
+ *
+ * Y ES EL `bodyL` DE §03: el espécimen de la escala se compone desde aquí, así
+ * que la página no puede volver a publicar un valor que el sitio no use.
+ */
+export const LEAD_SIZE = "text-[clamp(1.0625rem,1.6vw,1.2rem)]";
+
+/**
  * EL ORDINAL, DICHO EN EL NOMBRE ACCESIBLE DEL TITULAR (P70.10, pasada con NVDA).
  *
  * D43 fija que el ordinal va DENTRO del eyebrow, y el eyebrow es un `<p>`

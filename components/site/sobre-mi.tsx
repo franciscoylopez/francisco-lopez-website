@@ -7,7 +7,12 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 import { ContactCta, type ContactActionsDict } from "./contact-actions";
 import { PROSE, WRAP } from "@/components/ui/layout";
 import { Rich } from "@/components/ui/rich";
-import { SectionHeader, titleVariants } from "@/components/ui/heading";
+import {
+  LEAD_SIZE,
+  LEADING,
+  SectionHeader,
+  titleVariants,
+} from "@/components/ui/heading";
 import { cn } from "@/lib/utils";
 
 /**
@@ -268,10 +273,7 @@ export function SobreMi({
             className={`${PROSE} mt-[clamp(1.75rem,3.5vw,2.5rem)] flex flex-col gap-5`}
           >
             {t.intro.map((p, i) => (
-              <p
-                key={i}
-                className="m-0 text-[clamp(1.0625rem,1.6vw,1.2rem)] leading-[1.7]"
-              >
+              <p key={i} className={cn("m-0", LEAD_SIZE, LEADING.prose)}>
                 <Rich text={p} />
               </p>
             ))}

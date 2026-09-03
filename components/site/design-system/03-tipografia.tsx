@@ -4,6 +4,8 @@ import {
   EYEBROW_GAP,
   eyebrowVariants,
   LEAD_GAP,
+  LEAD_SIZE,
+  LEADING,
   SectionHeader,
   titleVariants,
 } from "@/components/ui/heading";
@@ -49,8 +51,13 @@ const SAMPLE: Record<string, string> = {
   h2: "font-display font-semibold text-[clamp(1.5rem,3vw,2rem)] leading-[1.15] tracking-[-0.015em]",
   h3: "font-display font-semibold text-[clamp(1.125rem,1.6vw,1.25rem)] leading-[1.3]",
   h4: "font-display font-semibold text-[1rem] leading-[1.4]",
-  bodyL:
-    "font-sans font-normal text-[clamp(1.0625rem,1.5vw,1.125rem)] leading-[1.6]",
+  // Body L SE COMPONE, no se reescribe (P72.26). Era el caso que la nota de
+  // arriba anticipaba: mientras estuvo escrito a mano publicó durante meses un
+  // valor que NINGUNA entradilla del sitio usaba —`clamp(1.0625rem, 1.5vw,
+  // 1.125rem)` contra los tres valores reales—, que es justo la mentira que D38
+  // existe para impedir. Ahora sale de `LEAD_SIZE`, así que la tabla no puede
+  // volver a desviarse del sitio: es el mismo objeto.
+  bodyL: cn("font-sans font-normal", LEAD_SIZE, LEADING.lead),
   body: "font-sans font-normal text-[1rem] leading-[1.65]",
   small:
     "font-sans font-normal text-[0.875rem] leading-[1.5] text-muted-foreground",

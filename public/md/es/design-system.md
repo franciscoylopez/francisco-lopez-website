@@ -289,7 +289,7 @@ Nivel · Body L
 
 Fuente · Inter 400
 
-Escritorio · 18px / 1.125rem
+Escritorio · 19,2px / 1.2rem
 
 Móvil · 17px
 

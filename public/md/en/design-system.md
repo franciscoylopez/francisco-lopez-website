@@ -289,7 +289,7 @@ Level · Body L
 
 Font · Inter 400
 
-Desktop · 18px / 1.125rem
+Desktop · 19.2px / 1.2rem
 
 Mobile · 17px
 
