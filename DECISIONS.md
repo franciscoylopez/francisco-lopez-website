@@ -224,6 +224,8 @@
 - D186 · La deuda no tenía problema de stock sino de crecimiento, y lo para un trinquete
 - D187 · El andamiaje se ordena por sus propias costuras, y el censo deja de ser un archivo de mil líneas
 - D188 · La barra del nav deja de encoger: animar su alto repintaba una franja de ancho completo en cada paso
+- D189 · El `Person` de la home publica lo que la página ya enseña, y `award` son dos hitos de cinco
+- D190 · Dieciséis enlaces con el mismo nombre y distinto destino: cuatro patrones, cuatro arreglos, y el gate que no existe
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12149,3 +12151,124 @@ El Design System **publica** esta transición, con sus dos maquetas y su texto: 
 64 publicaría un comportamiento que la cabecera de esa misma página ya no tiene, así que se
 actualizan las dos maquetas, los dos bullets y los dos rótulos de estado, en ES y EN, más la
 regla 6 de `BRAND-logo.md`, que era donde la barra estaba escrita como norma.
+
+## D189 · El `Person` de la home publica lo que la página ya enseña, y `award` son dos hitos de cinco — 2026-09-03
+
+**Decisión.** El nodo `Person` de la home marca tres cosas que la página lleva publicando desde
+V1 y el JSON-LD no decía: los **reconocimientos** (`award`), los **ocho roles con su periodo**
+(`hasOccupation`) y las **cuatro instituciones** (`alumniOf`). Un agente que preguntara «¿qué
+premios tiene?» o «¿qué ha estudiado?» tenía que sacarlo de la prosa. Es D157 en su dirección
+buena: **la superficie existe**, así que declararla no afirma nada nuevo.
+
+### Las tres son DERIVADAS, y de las secciones que las pintan
+
+`awardsOf` vive en `components/site/hitos.tsx` y `alumniOf` en `components/site/formacion.tsx`;
+los roles salen de `content/experiences.ts` (el ISO) y de `content/experience-copy/` (el rol por
+idioma). O sea de las **mismas fuentes que la página**. Un marcado con su propia copia de los
+datos es el modo de fallo de D57/D58, y aquí habría sido la enésima. De paso, los cinco años de
+los hitos dejan de estar escritos en el JSX de cada fila.
+
+### `award` marca DOS de los cinco hitos, y esa es la parte que hay que no reabrir
+
+La tarea pedía los cinco «el de TheTool con su exit». **No se hizo, y el descarte es el
+hallazgo.** `award` en Schema.org es «un premio ganado por o para esta entidad», y de los cinco
+hitos solo lo son la **selección de Apple App Store Foundations** (INDYA, 2022) y la
+**nominación a Mejor Software ASO de Europa** (TheTool, 2019). Un partnership, dos cifras de
+churn y activación y una adquisición son hechos ciertos y publicados, pero **ninguno es un
+premio**: marcarlos habría sido publicar marcado falso para llenar una propiedad, que es
+exactamente lo que D157 prohíbe — mismo criterio que descartó `codeRepository` en el `WebSite`
+y `SearchAction` en un sitio sin buscador.
+
+**El exit no se pierde:** lo cuentan la sección, su chip y el deep-dive de TheTool. Lo que no
+tiene es una propiedad de `Person` donde quepa sin mentir.
+
+### Dos formas que se eligieron mirando el vocabulario, no la intuición
+
+**Los roles van envueltos en `Role`, no sueltos en `Occupation`.** `Occupation` no tiene fechas
+—sus propiedades son categoría, requisitos, salario y habilidades—, así que un rol pasado sin
+envolver perdería justo lo que lo distingue del actual. Schema.org documenta esta salida en
+`hasOccupation`: «para profesiones pasadas, usa `Role` para expresar fechas». `hasta: null` es
+«en curso» y ahí no se emite `endDate` en vez de inventar una fecha.
+
+**Y van SIN la empresa dentro.** Meterla obligaría a declarar ocho nodos `Organization` en una
+home donde el único que hay es el `worksFor`, o sea **el empleador** — que es la distinción
+sobre la que D161 ya decidió no rellenarle `contactPoint` ni `address`. Siete organizaciones más
+volverían ambigua esa lectura a cambio de un dato que la fila de Trayectoria ya publica con su
+enlace.
+
+### Medido, no supuesto
+
+- **Tamaño:** +1.383 B de JSON-LD sobre 221.895 B de la home ES, **+0,6%**. El JSON-LD total
+  queda en 3.036 B. La home ya arrastra el ratio de contenido que D161 descartó con cifra, así
+  que el coste se miró antes y después.
+- **Schema Markup Validator** (por API, fila 6 de la DoD): **1 objeto · 0 errores · 0 avisos**,
+  idéntico a la línea base de P68.751. Las tres propiedades aparecen parseadas en la respuesta.
+- **`check:marco`** verde, con los seis `@id` resolviendo en los dos sentidos.
+- **La predicción, escrita antes de mirar:** `schema-type-breadth` no se mueve, porque su lista
+  es literal y no incluye ninguna de estas tres. **Y si no se mueve, eso no invalida la tarea**
+  (D161).
+
+## D190 · Dieciséis enlaces con el mismo nombre y distinto destino: cuatro patrones, cuatro arreglos, y el gate que no existe — 2026-09-03
+
+**Decisión.** Se barren las 28 variantes buscando enlaces que **compartan nombre accesible
+dentro de una misma página y lleven a sitios distintos**. Salieron **16 pares**, en **cuatro
+patrones que no se parecen entre sí**, y quedan **dos declarados**. El guardián **no se
+construye aquí**: se tarea (P72.315), que es lo que la propia ficha había fijado para el caso de
+que apareciera un cuarto patrón.
+
+### Por qué no lo veía nada de aquí
+
+`axe` tiene `identical-links-same-purpose` como **«needs review»**, no como violación, así que
+`check:marco` no lo levanta. No es color ni contraste, así que el censo tampoco. **Es un hueco
+real del arnés, no un descuido**: la regla 1 de `BRAND.md` §Cómo se escribe una regla —el hueco
+entre dos reglas correctas no lo cubre ninguna de las dos.
+
+### El método, que es lo reutilizable
+
+Sobre el **HTML construido** (`.next/server/app/**.html`, sin servidor ni navegador, igual que
+`check:marco`), agrupando los `<a href>` de **cada página** por nombre accesible —`aria-label`,
+si no el texto, si no el `alt` de sus imágenes— y sacando los grupos con más de un `href`.
+**944 enlaces con nombre · 16 pares · 2 tras los arreglos.**
+
+### Los cuatro patrones, y por qué cada uno pedía otra cosa
+
+| Dónde | El par | Arreglo, y por qué ese |
+|---|---|---|
+| Home ES+EN | «Product Manager» → Emendu / Freepik · «Cofounder & Product» → KUOTIP / TheTool | El texto visible es un **dato** (el `role`) y la empresa vive en un `<div>` **hermano**, fuera del contexto que WCAG 2.4.4 define → `aria-label` en `CaseLink`, con la plantilla en el diccionario porque el conector es copy |
+| `/como-se-ha-creado` ES+EN | «Ver el informe» → PageSpeed / ora.ai | El rótulo es genérico a propósito → lo compone **la pieza** (`LiveStat`) con el `label` que ya recibe, no cuatro cadenas del diccionario que habría que acordarse de mantener distintas cuando entre la tercera |
+| `/design-system` ES+EN | «Inicio», «Brand Kit», «Descargar CV», «Sobre mí» → nav real / demo a `#top` | La página **publica las piezas reales**, así que sus demos llevan el rótulo del sitio → sufijo del diccionario (`demoAria`), que además dice algo cierto que no se decía: ese enlace no lleva a ninguna parte |
+| `/en/como-se-ha-creado` | «Design System» → `/design-system` y `/en/design-system` | **No era de nombre, era de LOCALE** (abajo) |
+
+En los tres primeros el nombre accesible **empieza por el texto visible**, que es lo que pide
+WCAG 2.5.3 (Label in Name) y lo que mantiene el control por voz; al revés valdría para un lector
+de pantalla y rompería el dictado.
+
+### El hallazgo de rebote, que no buscaba nadie
+
+`[Design System](/design-system)` y `[accessibility statement](/accesibilidad)` en el diccionario
+**EN** del artículo: dos enlaces internos sin el prefijo `/en`, o sea **un lector inglés
+aterrizando en la página en castellano**. Eran los dos únicos de los ocho enlaces internos de ese
+archivo, y no los veía ningún gate. *(Y es la mitad barata del problema que P72.33 va a resolver
+entero: los slugs.)*
+
+### Lo que se declara y NO es defecto
+
+**«Privacidad y cookies» en `/contacto`.** El del formulario va a `/cookies#privacidad` y el del
+pie a `/cookies`: **mismo destino y mismo propósito**, solo cambia dónde aterriza. WCAG 2.4.9
+pide que el propósito se identifique por el texto del enlace, y aquí se identifica; el anclaje
+además es deliberado. **El guardián tendrá que declararlo con su motivo**, como `check:marco` ya
+hace con sus cruces, y **no** resolverlo con una regla que ignore los anclajes: dos anclas de la
+misma página sí pueden ser dos propósitos.
+
+### Y la línea que separa una lista de una frase, que salió de la misma pasada
+
+**Una lista se marca como lista cuando NO hay prosa que una sus elementos.** El grupo de tres del
+pie son tres rótulos pelados en una fila: es una lista y le faltaba decirlo (`<ul role="list">`,
+con el rol explícito porque el preflight de Tailwind pone `list-style: none` y con eso Safari y
+VoiceOver le quitan la semántica). La franja `ENLACE ·` de `RepoStrip` son enlaces **dentro de
+una oración**, con conectores: es prosa y ya lo dice. Un contador de enlaces adyacentes no puede
+distinguir esas dos cosas, y por eso ese hallazgo concreto **no vale como gate**.
+
+`page-closer.tsx` se miró y se deja: sus ítems son tarjetas con su propia prosa, como mucho dos,
+dentro de un `<nav>` con nombre — y sus hijos **son** los ítems de la rejilla, así que una capa
+de `<li>` cambiaría el árbol de cajas.
