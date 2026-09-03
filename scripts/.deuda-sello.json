@@ -1,16 +1,15 @@
 {
-  "total": 30,
+  "total": 29,
   "porArea": {
-    "raíz": 1,
-    "scripts/": 14,
     "components/": 11,
-    "lib/": 2,
-    "app/": 2
+    "scripts/": 13,
+    "raíz": 1,
+    "app/": 2,
+    "lib/": 2
   },
   "hallazgos": [
     "qlty:file-complexity|scripts/artefacto-svg.ts",
     "qlty:file-complexity|scripts/censo.ts",
-    "qlty:file-complexity|scripts/check-articulo.ts",
     "qlty:file-complexity|scripts/check-contexto.ts",
     "qlty:file-complexity|scripts/check-excepciones.ts",
     "qlty:file-complexity|scripts/check-experience-copy.ts",
@@ -43,9 +42,6 @@
     ],
     "qlty:file-complexity|scripts/censo.ts": [
       69
-    ],
-    "qlty:file-complexity|scripts/check-articulo.ts": [
-      93
     ],
     "qlty:file-complexity|scripts/check-contexto.ts": [
       60
@@ -125,6 +121,6 @@
       68
     ]
   },
-  "commit": "050da370646ad5085ddd77920be812033a69b4b1",
+  "commit": "a647abf08b2215226a23962bac6f31d9d19fe920",
   "fecha": "2026-09-03"
 }

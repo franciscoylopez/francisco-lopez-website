@@ -54,14 +54,13 @@
  * falsa. Lo segundo lo decide una persona, y este guardián existe para que sepa
  * cuándo.
  */
-import { existsSync, writeFileSync } from "node:fs";
+import { writeFileSync } from "node:fs";
 
-import enArticulo from "../app/[lang]/dictionaries/en/como-se-ha-creado.json";
-import esArticulo from "../app/[lang]/dictionaries/es/como-se-ha-creado.json";
-import { DIAGRAMA_CI, pasosDibujados } from "../content/articulo/ci-steps";
 import { DEPENDENCIAS, SECCIONES } from "../content/articulo/dependencias";
-import { ES_DECISION, lineasDeDecision } from "../lib/decisions";
-import { FIGURAS, pasosDeCI } from "../lib/figures";
+import { revisaCitas } from "./articulo/citas";
+import { revisaDiagramaCI } from "./articulo/diagrama-ci";
+import { revisaLiveStats } from "./articulo/livestats";
+import { revisaSecciones } from "./articulo/secciones";
 import {
   HUELLA_PATH,
   huellaDelArticulo,
@@ -79,171 +78,24 @@ import { ARTICLE_UPDATED } from "../lib/design-values";
 const problemas: string[] = [];
 const fallo = (msg: string) => problemas.push(msg);
 
-const DICCIONARIOS = [
-  { dict: esArticulo as unknown, ruta: "es/como-se-ha-creado.json" },
-  { dict: enArticulo as unknown, ruta: "en/como-se-ha-creado.json" },
-];
-
-type Cita = { label: string; path?: string; line?: number; external?: string };
-
-/** Recoge toda cita del diccionario, viva donde viva dentro del árbol. */
-function citas(nodo: unknown, acc: Cita[] = []): Cita[] {
-  if (Array.isArray(nodo)) {
-    for (const hijo of nodo) citas(hijo, acc);
-    return acc;
-  }
-  if (nodo && typeof nodo === "object") {
-    const o = nodo as Record<string, unknown>;
-    if (typeof o.label === "string" && (o.path !== undefined || o.external))
-      acc.push(o as Cita);
-    for (const k of Object.keys(o)) citas(o[k], acc);
-  }
-  return acc;
-}
-
-// ── 1 y 2 · Las citas resuelven, y ninguna guarda su línea ───────────────────
-
-const lineas = lineasDeDecision();
-let citasVistas = 0;
-
-for (const { dict, ruta } of DICCIONARIOS) {
-  const todas = citas(dict);
-  citasVistas += todas.length;
-
-  for (const cita of todas) {
-    if (cita.external) continue;
-    const destino = cita.path;
-    if (!destino) continue;
-
-    if (!existsSync(destino))
-      fallo(
-        `${ruta}: la cita «${cita.label}» apunta a \`${destino}\`, que ya no existe en el repo.`,
-      );
-
-    if (ES_DECISION.test(cita.label) && !lineas.has(cita.label))
-      fallo(
-        `${ruta}: se cita ${cita.label}, que no tiene cabecera en DECISIONS.md.`,
-      );
-
-    if (cita.line !== undefined)
-      fallo(
-        `${ruta}: la cita «${cita.label}» vuelve a guardar \`line\` a mano. El ancla la ` +
-          `deriva \`lib/decisions.ts\` de la cabecera real — una línea escrita es una ` +
-          `segunda verdad, y ya desincronizó 27 de 38 citas (el addendum de D26, 2026-08-22).`,
-      );
-  }
-}
-
-// ── 3 · Toda sección del artículo declara dependencias ───────────────────────
-
-const enDiccionario = [
-  ...esArticulo.sections.map((s) => s.id),
-  esArticulo.closing.id,
-];
-const declaradas = [...SECCIONES] as string[];
-
-for (const id of enDiccionario)
-  if (!declaradas.includes(id))
-    fallo(
-      `la sección «${id}» existe en el artículo y no declara dependencias en ` +
-        `content/articulo/dependencias.ts. Una sección sin declarar nace fuera del guardián.`,
-    );
-
-for (const id of declaradas)
-  if (!enDiccionario.includes(id))
-    fallo(
-      `se declaran dependencias de «${id}», que ya no es una sección del artículo.`,
-    );
-
-// ── 5 · Un «dato en vivo» no puede estar tecleado ────────────────────────────
+// ── Las seis comprobaciones, cada una en su módulo ───────────────────────────
 //
-// El hueco que las cuatro comprobaciones de arriba NO cubren, y que se encontró
-// leyendo, no midiendo (P68.495): las cuatro giran alrededor de las dependencias
-// DECLARADAS, y un número escrito dentro de un `value` no declara nada. La pieza
-// se llama `livestat` y su etiqueta dice «dato en vivo»; de los tres que había,
-// dos eran cifras a mano y las dos ya mentían.
-//
-// Comprobación de AUSENCIA, como el resto de la casa: no se busca un número
-// sospechoso, se busca que FALTE la interpolación. Y de paso, que el token
-// exista: `{psiMovil}` con una ele de más no rompe nada, se publica con las
-// llaves puestas.
+// Se parten POR SUS PROPIAS COSTURAS, que son las que ya estaban numeradas en la
+// cabecera de aquí arriba: lo que decide dónde corta no es la métrica, es cuántas
+// cosas distintas hace el archivo (D148/D187). Lo que se queda es el veredicto,
+// que es lo único que de verdad no se puede separar del sello.
 
-type LiveStat = { id?: string; value?: string; source?: string };
+const { problemas: deCitas, vistas: citasVistas } = revisaCitas();
+const { problemas: deLiveStats, vistos: liveStatsVistos } = revisaLiveStats();
+const { problemas: deDiagrama, pasos: pasosWorkflow } = revisaDiagramaCI();
 
-function liveStats(nodo: unknown, acc: LiveStat[] = []): LiveStat[] {
-  if (Array.isArray(nodo)) {
-    for (const hijo of nodo) liveStats(hijo, acc);
-    return acc;
-  }
-  if (nodo && typeof nodo === "object") {
-    const o = nodo as Record<string, unknown>;
-    if (o.type === "livestat") acc.push(o as LiveStat);
-    for (const k of Object.keys(o)) liveStats(o[k], acc);
-  }
-  return acc;
-}
-
-let liveStatsVistos = 0;
-
-for (const { dict, ruta } of DICCIONARIOS) {
-  for (const ls of liveStats(dict)) {
-    liveStatsVistos += 1;
-    const texto = `${ls.value ?? ""} ${ls.source ?? ""}`;
-    const tokens = [...texto.matchAll(/{(\w+)}/g)].map((m) => m[1] as string);
-
-    if (!tokens.length)
-      fallo(
-        `el livestat «${ls.id}» de ${ruta} promete un DATO EN VIVO y su valor está ` +
-          `tecleado: «${ls.value}». Tiene que interpolar una cifra derivada ` +
-          `(${FIGURAS.map((n: string) => `{${n}}`).join(", ")}) — ver lib/figures.ts.`,
-      );
-
-    for (const token of tokens)
-      if (!(FIGURAS as readonly string[]).includes(token))
-        fallo(
-          `el livestat «${ls.id}» de ${ruta} interpola «{${token}}», que no es una ` +
-            `cifra derivada. Se publicaría con las llaves puestas. Las que hay: ` +
-            `${FIGURAS.join(", ")}.`,
-        );
-  }
-}
-
-// ── 6 · El diagrama de CI dibuja tantos pasos como tiene el workflow ─────────
-//
-// El pie de §s10 dice «los {pasosCI} pasos» y esa cifra sale de `ci.yml`; las
-// pastillas del diagrama son un dibujo con su propio agrupado editorial. Sin
-// esto, un paso nuevo movería el pie y dejaría el dibujo corto, en silencio.
-
-const pasosWorkflow = pasosDeCI();
-for (const locale of ["es", "en"] as const) {
-  const dibujados = pasosDibujados(locale);
-  if (dibujados !== pasosWorkflow)
-    fallo(
-      `el diagrama de CI dibuja ${dibujados} pasos en ${locale} y ` +
-        `.github/workflows/ci.yml tiene ${pasosWorkflow}. Añade o quita el paso en ` +
-        `content/articulo/ci-steps.ts, con su grupo y su categoría.`,
-    );
-}
-
-// Y LAS DOS LISTAS TIENEN LA MISMA FORMA. Los pasos están escritos dos veces, una
-// por idioma, porque es el patrón de los siete diagramas de este artículo: la
-// etiqueta cambia y la estructura no. Lo que la duplicación permite es que la
-// ESTRUCTURA derive —que un paso sea `patron` en ES y `ausencia` en EN, o que
-// cambie de grupo—, y eso saldría en pantalla como dos leyendas distintas sin que
-// nada fallara. Comparar el recuento contra `ci.yml` no lo ve: los dos idiomas
-// pueden tener diecisiete pasos y repartirlos distinto.
-{
-  const forma = (locale: "es" | "en") =>
-    DIAGRAMA_CI[locale].groups
-      .map((g) => g.items.map((it) => it.cat).join(","))
-      .join(" | ");
-  if (forma("es") !== forma("en"))
-    fallo(
-      `el diagrama de CI reparte sus pasos distinto en cada idioma:\n` +
-        `        es: ${forma("es")}\n        en: ${forma("en")}\n` +
-        `      La etiqueta cambia con el idioma; el grupo y la categoría, no.`,
-    );
-}
+for (const p of [
+  ...deCitas,
+  ...revisaSecciones(),
+  ...deLiveStats,
+  ...deDiagrama,
+])
+  fallo(p);
 
 // ── Las dependencias resuelven (precondición de sellar) ──────────────────────
 
