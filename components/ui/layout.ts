@@ -73,9 +73,13 @@ export const HERO_ROW =
  *
  * QUIÉN NO LAS USA, Y NO ES UN OLVIDO: el deep-dive y «Cómo se ha creado» comparten
  * el andamiaje del pliegue pero no esta familia. Sus aperturas son tipográficas,
- * de alto constante, no se comparan de un vistazo con las cuatro de aquí, y cada
+ * de alto constante, no se comparan de un vistazo con las de aquí, y cada
  * una tiene su hueco elegido y razonado en su propio archivo. La home tampoco:
  * no tiene breadcrumb.
+ *
+ * CUÁNTAS SON NO SE ESCRIBE: lo cuenta `npm run pliegue`, que las detecta en el
+ * DOM y las nombra en cada corrida. Las cifras de más abajo llevan el número que
+ * había CUANDO SE MIDIERON, y eso sí se queda: son un registro, no un recuento.
  */
 export const FOLD_CRUMB =
   "mb-[clamp(3rem,6vw,4.5rem)] [@media(max-height:43.75rem)]:mb-8";
@@ -119,9 +123,9 @@ export const FOLD_GROUP = "my-auto md:min-h-[29rem]";
  * un eje nuevo aquí: el grupo pierde 40px de altura de golpe, y si una sola de
  * las cuatro no lo perdiera, se descuadrarían todas.
  *
- * SE TOCA AQUÍ Y NUNCA EN LAS PÁGINAS. Las cuatro hermanas compactan a la vez,
+ * SE TOCA AQUÍ Y NUNCA EN LAS PÁGINAS. Todas las hermanas compactan a la vez,
  * que es lo único que mantiene la invariante de D50: lo que esa decisión pide no
- * es un alto concreto, es que los cuatro grupos midan LO MISMO.
+ * es un alto concreto, es que los grupos midan LO MISMO.
  *
  * POR QUÉ EL `@media` ESTÁ ESCRITO DOS VECES Y NO SALE A UNA CONSTANTE: Tailwind
  * escanea el código como TEXTO PLANO, así que una clase compuesta por

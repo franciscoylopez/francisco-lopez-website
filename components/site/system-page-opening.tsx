@@ -8,11 +8,16 @@ import { cn } from "@/lib/utils";
 import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
 
 /**
- * LA APERTURA DE LAS TRES PÁGINAS QUE DOCUMENTAN EL SISTEMA — Brand Kit, Design
- * System y Accesibilidad (P63.5, 2026-08-29).
+ * LA APERTURA COMPARTIDA (P63.5, 2026-08-29). Nació para las tres páginas que
+ * documentan el sistema —Brand Kit, Design System y Accesibilidad— y hoy la usa
+ * también el índice de Trayectoria (P72.465, 2026-09-04).
  *
- * POR QUÉ ES UNA PIEZA Y NO TRES COPIAS, que es lo único que la justifica: estas
- * tres aperturas comparten una INVARIANTE, no un aspecto. **Cuál es, cuántas
+ * CUÁNTAS SON NO SE ESCRIBE AQUÍ: se cuentan sus llamadas, o se lanza
+ * `npm run pliegue`, que las detecta en el DOM. Este mismo párrafo decía «tres»
+ * el día que ya eran cuatro.
+ *
+ * POR QUÉ ES UNA PIEZA Y NO VARIAS COPIAS, que es lo único que la justifica:
+ * estas aperturas comparten una INVARIANTE, no un aspecto. **Cuál es, cuántas
  * veces se ha roto y con qué cifras, en `components/ui/layout.ts`** —`FOLD_CRUMB`
  * y `FOLD_GROUP`, que son quienes la producen— y en `DECISIONS.md` D144. Aquí
  * solo lo que cambia por existir esta pieza:
@@ -31,7 +36,30 @@ import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
  * Usa el mismo `FOLD_GROUP`, pero su grupo es un GRID con `content-start` —y ese
  * `content-start` tiene su porqué escrito al lado, en `contacto-pagina.tsx`—, no
  * usa `HERO_ROW` y no tiene fila de cifras. Es otra cosa que se parece, no la
- * misma con un mando. El bloque sirve a tres y está bien.
+ * misma con un mando.
+ *
+ * Y EL CRITERIO PARA ENTRAR, que hasta ahora no hacía falta escribir porque las
+ * tres primeras nacieron juntas: se entra cuando la apertura tiene composición
+ * decorativa Y fila de cifras. Trayectoria no las tenía y por eso escribía su
+ * apertura a mano; en cuanto las ganó, dejó de PARECERSE a estas y pasó a ser la
+ * misma cosa.
+ *
+ * ═══ LO QUE LE PIDE A QUIEN ENTRE DESPUÉS, y no se ve leyendo el código ═══
+ *
+ * **EL `h1` TIENE QUE CABER EN UNA LÍNEA.** Dentro de `HERO_ROW` la columna de
+ * texto mide **611px a 1920** —no el ancho del contenedor—, así que a `page`
+ * (80px) solo caben unos catorce caracteres por línea. Los tres titulares
+ * originales son rótulos cortos («Brand Kit», «Design System»), y por eso nadie
+ * lo había notado: cabían por casualidad, no por diseño.
+ *
+ * Medido con el cuarto caso, que llegó con un titular largo: a 80px caía a
+ * CUATRO líneas, la fila de texto se iba de 304 a 503 y el grupo de 464 a 655,
+ * o sea que `npm run pliegue` se ponía rojo. Con la fila de cifras puesta no hay
+ * holgura que lo absorba.
+ *
+ * **Y LO ARREGLA EL COPY, NO EL CSS**, que es la parte contraintuitiva: el
+ * titular pasó a «Mi Trayectoria» y el grupo volvió a 464 sin tocar una regla.
+ * Antes de meter una quinta apertura aquí, mírale el titular.
  *
  * HASTA AQUÍ Y NO MÁS ALLÁ. Lo que sigue pareciéndose entre `brand-kit/index.tsx`
  * y `design-system/index.tsx` (79 de masa para `qlty`) NO sube, y es a propósito:

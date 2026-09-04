@@ -1,8 +1,11 @@
 /**
  * ¿Miden lo mismo las aperturas que comparten pliegue? — `npm run pliegue`.
  *
- * LA INVARIANTE. Brand Kit, Design System, Accesibilidad y Contacto comparten
+ * LA INVARIANTE. Las aperturas de esta familia comparten
  * `md:min-h-[calc(100svh-5rem)]` y centran su grupo de apertura con `my-auto`.
+ * **Cuáles son no se escribe aquí y por eso este párrafo no caduca**: las nombra
+ * la propia corrida, que las detecta en el DOM (ver «QUIÉN ENTRA», más abajo).
+ * Enumeradas decían cuatro el día que ya eran cinco.
  * **Centrar reparte el sobrante arriba y abajo, así que solo es seguro mientras
  * los grupos midan lo mismo.** Está escrito con esas palabras en
  * `components/ui/layout.ts`, y aun así se rompió tres veces:
