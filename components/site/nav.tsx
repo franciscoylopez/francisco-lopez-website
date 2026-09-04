@@ -16,6 +16,15 @@ export type NavDict = {
   navLabel: string;
   homeAria: string;
   downloadCv: string;
+  /**
+   * LA MISMA PALABRA QUE EL BREADCRUMB, y no por gusto: `crumbIndice` de
+   * `trayectoria/comun.json` nombra esta misma página en el rastro de migas, así
+   * que dos redacciones distintas serían el sitio llamando de dos formas al
+   * mismo destino en dos superficies de chrome. Vive aquí porque el nav lo pinta
+   * en las catorce páginas y solo carga `common` (D48), y lo ata a la otra
+   * `tests/etiquetas-chrome.test.ts`.
+   */
+  trayectoria: string;
   contacto: string;
   sobreMi: string;
   menu: string;
@@ -91,6 +100,7 @@ export function Nav({
   // cvPath). Las otras apariciones del CV en el home (CTA de Trayectoria y
   // Contacto) lo resuelven igual desde la página.
   const cvHref = cvPath(lang);
+  const trayectoriaHref = `${lang === "es" ? "" : `/${lang}`}/trayectoria`;
   const sobreMiHref = `${lang === "es" ? "" : `/${lang}`}/sobre-mi`;
   const contactoHref = `${lang === "es" ? "" : `/${lang}`}/contacto`;
   const { resolvedTheme, setTheme } = useTheme();
@@ -115,6 +125,10 @@ export function Nav({
     lang === "en" ? subpath : subpath === "/" ? "/en" : `/en${subpath}`;
   const isSobreMi = subpath === "/sobre-mi";
   const isContacto = subpath === "/contacto";
+  // SOLO EL ÍNDICE, no los cinco casos: `aria-current="page"` dice «estás en
+  // ESTA página», no «estás en esta rama». En `/trayectoria/emendu` quien indica
+  // dónde estás es el breadcrumb, que para eso lleva los tres niveles.
+  const isTrayectoria = subpath === "/trayectoria";
 
   // LA PREFERENCIA SE ESCUCHA, NO SE MIRA UNA VEZ *(P82)*. Estaba leída con
   // `.matches` dentro del efecto de scroll, así que el valor quedaba capturado en
@@ -270,9 +284,26 @@ export function Nav({
               documento — recorta glifos a mitad de letra y se lee como un bug.
               El símbolo se queda, así que el momento de marca del split sobrevive.
               359 y no 348 para tener margen real: el corte cae por debajo del
-              iPhone SE (375) y de los Android de 360. */}
+              iPhone SE (375) y de los Android de 360.
+
+              `md:max-lg:hidden` — LA SEGUNDA VENTANA, y sale de la misma palanca
+              (P72.505, 2026-09-04). Con el cuarto enlace la fila mide 730px de
+              contenido y a 768 desborda 48: el toggle de tema se sale de la
+              pantalla y el sitio entero scrollea en horizontal. Se midieron las
+              tres salidas con los cuatro enlaces puestos, y las capturas las vio
+              Francisco antes de decidir: colapsar el menú en `lg` deja la franja
+              768–1023 sin «Descargar CV», que es uno de los tres puntos de
+              descarga medidos; acortar la etiqueta a «CV» cabe con 25px; soltar
+              el wordmark cabe con 38, los mismos que hoy. Eligió soltar el
+              wordmark.
+
+              Y ES LA MISMA REGLA DE ARRIBA, no una excepción nueva: cuando el
+              nav no cabe, la palanca es el wordmark, porque es lo único de la
+              fila que no encoge y lo único que la marca ya suelta en otros
+              contextos (al hacer scroll, y el footer nunca lo lleva). Entre 768
+              y 1023 queda el símbolo, que es la firma. */}
             <span
-              className="font-display overflow-hidden text-[1.375rem] font-semibold tracking-[-0.01em] whitespace-nowrap max-[359px]:hidden"
+              className="font-display overflow-hidden text-[1.375rem] font-semibold tracking-[-0.01em] whitespace-nowrap max-[359px]:hidden md:max-lg:hidden"
               style={
                 nameO <= 0
                   ? { opacity: 0, maxWidth: 0, marginLeft: 0 }
@@ -317,19 +348,29 @@ export function Nav({
               <Download aria-hidden="true" />
               {dict.downloadCv}
             </a>
-            {/* CONTACTO VA ENTRE EL CV Y SOBRE MÍ (P67): el orden es CV · Contacto ·
-              Sobre mí, de la acción más buscada a la más de contexto. NO lleva
-              icono: la regla mira la acción, y navegar dentro del sitio no saca
-              al usuario de él. */}
+            {/* EL ORDEN ES CV · TRAYECTORIA · SOBRE MÍ · CONTACTO (P72.505), y
+              cambia el de P67 —que era CV · Contacto · Sobre mí, «de la acción
+              más buscada a la más de contexto»—. Ahora la fila cuenta un
+              recorrido: las credenciales, lo que se ha hecho, quién lo hizo y
+              cómo hablar. Contacto se queda en el extremo a propósito, que es
+              donde termina esa lectura.
+              Ninguno lleva icono salvo el CV: la regla mira la ACCIÓN, y navegar
+              dentro del sitio no saca al usuario de él.
+
+              TRAYECTORIA ENTRA PORQUE ERA UNA PÁGINA HUÉRFANA. Medido sobre el
+              HTML servido de las catorce: recibía CINCO enlaces entrantes y los
+              cinco eran el breadcrumb de sus propios hijos. Cero desde la home,
+              cero desde el footer. Estaba en el sitemap y no había forma de
+              llegar sin entrar antes a un caso. */}
             <a
-              href={contactoHref}
-              aria-current={isContacto ? "page" : undefined}
+              href={trayectoriaHref}
+              aria-current={isTrayectoria ? "page" : undefined}
               className={cn(
                 chromeLinkVariants({ shape: "bar" }),
                 "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
               )}
             >
-              {dict.contacto}
+              {dict.trayectoria}
             </a>
             <a
               href={sobreMiHref}
@@ -340,6 +381,16 @@ export function Nav({
               )}
             >
               {dict.sobreMi}
+            </a>
+            <a
+              href={contactoHref}
+              aria-current={isContacto ? "page" : undefined}
+              className={cn(
+                chromeLinkVariants({ shape: "bar" }),
+                "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
+              )}
+            >
+              {dict.contacto}
             </a>
             {/* @fuera-de-capa: etiqueta de dos letras, el ancho lo daba el texto y el suelo
               táctil se escribe aquí; verificado el 2026-08-18 (2026-08-18) */}
@@ -443,16 +494,20 @@ export function Nav({
                 <Download aria-hidden="true" />
                 {dict.downloadCv}
               </a>
+              {/* MISMO ORDEN QUE LA FILA DE ESCRITORIO, y no es cosmético: el
+                  panel y la barra son la misma navegación en dos formatos, así
+                  que un orden distinto obligaría a reaprenderla al girar el
+                  móvil. */}
               <a
-                href={contactoHref}
-                aria-current={isContacto ? "page" : undefined}
+                href={trayectoriaHref}
+                aria-current={isTrayectoria ? "page" : undefined}
                 onClick={() => setMenuOpen(false)}
                 className={cn(
                   chromeLinkVariants({ shape: "stack" }),
                   "text-[0.95rem] aria-[current=page]:underline",
                 )}
               >
-                {dict.contacto}
+                {dict.trayectoria}
               </a>
               <a
                 href={sobreMiHref}
@@ -464,6 +519,17 @@ export function Nav({
                 )}
               >
                 {dict.sobreMi}
+              </a>
+              <a
+                href={contactoHref}
+                aria-current={isContacto ? "page" : undefined}
+                onClick={() => setMenuOpen(false)}
+                className={cn(
+                  chromeLinkVariants({ shape: "stack" }),
+                  "text-[0.95rem] aria-[current=page]:underline",
+                )}
+              >
+                {dict.contacto}
               </a>
               <a
                 href={altHref}

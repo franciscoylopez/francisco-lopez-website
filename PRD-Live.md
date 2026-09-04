@@ -72,8 +72,12 @@ descarga** (D65).
 
 ### Estructura de la home (orden actual)
 
-1. **Nav sticky** — logo (split→flat al scroll), Descargar CV, Contacto, Sobre mí, toggle
-   claro/oscuro; por debajo de 768px los tres enlaces colapsan tras el menú.
+1. **Nav sticky** — logo (split→flat al scroll), Descargar CV, Trayectoria, Sobre mí,
+   Contacto, toggle claro/oscuro; por debajo de 768px los cuatro enlaces colapsan tras el
+   menú, y entre 768 y 1023 el logo va sin wordmark para que quepan (`BRAND-logo.md`
+   §Tabla de uso). El orden cuenta un recorrido, no una jerarquía de clics, y
+   **Trayectoria entró porque era la única página huérfana**: recibía cinco enlaces y los
+   cinco eran el breadcrumb de sus propios casos.
 2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio. **El
    punto final del titular es la firma de marca** (D137): cae y se asienta al cargar, en
    morado.

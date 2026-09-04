@@ -38,12 +38,24 @@ Todos los tamaños son **altura visible del símbolo** (borde superior del círc
 
 | Contexto | Variante | Símbolo | Wordmark | Barra |
 |---|---|---|---|---|
-| Nav — al cargar | `split` | 48px | sí, ~22px | 80px |
+| Nav — al cargar | `split` | 48px | sí, ~22px (ver abajo) | 80px |
 | Nav — con scroll | `flat` | 28px | no | 64px |
 | Footer | `flat` | 32px | no | — |
 | Brand Kit (hero de página) | `split` | ≥120px | opcional | — |
 | OG image / redes | `split` | ≥200px | sí | — |
 | Favicon | `flat` | 32px / 16px | no | — |
+
+
+**El «sí» del wordmark del nav tiene DOS ventanas donde no aplica, y las dos salen del mismo sitio.** El wordmark son 168px que no encogen, así que cuando la fila del nav no cabe, es la única palanca: ni el gutter ni el hueco recuperan lo que falta, y encoger o recortar el texto está prohibido por la regla 6 de aquí abajo. Se suelta el wordmark y se queda el símbolo, que es la firma.
+
+| Ventana | Desde | Por qué |
+|---|---|---|
+| `< 360px` | 2026-08-22 | El nav pide 349px exactos: 20 de gutter + 217 de logo + 16 de hueco + 96 del grupo derecho. Por debajo, el sitio entero scrollea en horizontal. El corte se pone en 359 para caer por debajo del iPhone SE (375) y de los Android de 360. |
+| `768–1023px` | 2026-09-04 (P72.505) | Con el cuarto enlace del nav la fila mide 730px de contenido y a 768 desborda 48: el toggle de tema se sale de la pantalla. |
+
+*La segunda se decidió viendo las tres salidas medidas con los cuatro enlaces puestos: colapsar el menú en `lg` deja la franja 768–1023 sin «Descargar CV», que es uno de los tres puntos de descarga medidos; acortar la etiqueta a «CV» cabe con 25px de margen; soltar el wordmark cabe con 38, los mismos que hoy. Francisco eligió soltar el wordmark.*
+
+**Y no es una excepción, es la regla del propio nav aplicada dos veces:** esta barra ya suelta el wordmark al hacer scroll, y el footer no lo lleva nunca. Lo que la tabla llama «sí» es «sí cuando cabe».
 
 ### Reglas de uso
 
