@@ -75,13 +75,35 @@ export function Hero({ dict }: { dict: HeroDict }) {
                   `loading` (comprobado en el HTML servido del Preview). La doc
                   del propio Next dice que se use `loading="eager"` o
                   `fetchPriority="high"` en su lugar. Ver DECISIONS.md D47. */}
+              {/* `sizes` MEDIDO, NO ESTIMADO (P72.50). Decía `100vw` por debajo
+                  de 768 y la foto nunca ocupa el ancho entero: la columna es el
+                  86,9% del viewport hasta que `max-w-[26rem]` la topa en 414px,
+                  cosa que pasa a partir de ~479. A 767 eso declaraba 767 donde
+                  se pintan 414, o sea un 85% de más. Medido en once anchos sobre
+                  el build servido; por encima de 768 manda el alto
+                  (`min(34rem,64svh)`) y el ancho real tope es 433, así que 440.
+
+                  HOY NO COSTABA UN BYTE, y por eso llevaba ahí desde el primer
+                  día sin que ningún gate lo viera: el original tiene 614px de
+                  ancho y el optimizador de Next no amplía, así que pidiera el
+                  navegador `w=750` o `w=640` recibía el mismo archivo. Lo que
+                  arregla esto es el día que la foto se cambie por un original
+                  más grande —ya ha pasado dos veces— y de golpe cada móvil se
+                  baje el candidato de 1080 para pintar 358.
+
+                  NO QUITA EL AVISO DE PSI, y eso está comprobado: «Improve image
+                  delivery, 12 KiB» compara los 614×768 que se sirven contra los
+                  357×446 que se PINTAN, sin mirar el DPR — a 1,75 harían falta
+                  625, o sea más de los que hay. Servir lo que pide dejaría la
+                  foto blanda en cualquier móvil moderno. El desglose entero, en
+                  la ficha de P72.50. */}
               <Image
                 src="/img/francisco-hero-estudio-4x5.webp"
                 alt={dict.photoAlt}
                 fill
                 fetchPriority="high"
                 loading="eager"
-                sizes="(max-width: 767px) 100vw, 460px"
+                sizes="(max-width: 478px) 87vw, (max-width: 767px) 414px, 440px"
                 className="object-cover"
               />
             </div>
