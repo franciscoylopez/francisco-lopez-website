@@ -161,8 +161,8 @@ agent-browser a11y --tags wcag2a,wcag2aa --json
 ```
 
 Reporta **las violaciones** con regla, impacto y selector, y **el recuento de `incomplete` con
-sus selectores**. Los `passes` no se vuelcan (solo su cifra, como referencia: la home daba 0
-violaciones, 25 passes, 0 incomplete con axe-core 4.12.1).
+sus selectores**. Los `passes` no se vuelcan, solo su cifra. El `incomplete` **nunca es cero**:
+lo generan los enlaces de contenido.
 
 > **`counts.incomplete` CUENTA REGLAS, NO ELEMENTOS** *(2026-08-28, P50.79)*. Vale 1 tanto con
 > dos nodos como con cuarenta y cuatro, porque los cuarenta y cuatro son de la misma regla
