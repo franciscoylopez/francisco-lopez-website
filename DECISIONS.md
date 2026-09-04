@@ -236,6 +236,7 @@
 - D198 · GA4 sí ve al tráfico que no consiente, y desde esta máquina no se puede comprobar
 - D199 · El sello de medición guarda el instrumento, y avisa en vez de restar cuando cambia
 - D200 · El «visto» espera a que haya alguien delante, y la serie se parte ahí
+- D201 · Un par que cruza la frontera de 24px no ha desaparecido, y el diff del censo lo dice aparte
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12953,3 +12954,65 @@ carga CON PUNTERO   1 POST                  · marca puesta                 · c
 Más 189 tests en verde, cuatro de ellos nuevos: la lista prohibida, la cobertura de las tres
 formas de manejar una página, que la salvedad publicada nombra la puerta y su sesgo, y que el
 instrumento sellado cambia cuando cambia la puerta y no solo cuando cambia el techo.
+
+## D201 · Un par que cruza la frontera de 24px no ha desaparecido, y el diff del censo lo dice aparte — 2026-09-04
+
+**Decisión.** `compara()` clasifica como **basculado** —ni entrado ni salido— el par cuya clave
+solo cambia en su último segmento, el umbral derivado. Y **no afloja el guardián**: para contar
+como basculado, su **gemelo tiene que estar presente** en la corrida nueva, con el mismo estado
+y los mismos dos colores. Si de verdad desapareció, no hay gemelo y sigue suspendiendo.
+
+**El síntoma.** Al resellar el censo el 2026-09-04, el guardián dijo *«2 par(es) han
+DESAPARECIDO del censo con la huella intacta»* y el diff enseñaba dos claves nuevas en
+`/trayectoria` que nadie había tocado: la sesión solo había cambiado `table.tsx` y
+`mas-alla.tsx`. Las dos «nuevas» tenían **exactamente los mismos colores** que dos que ya
+estaban; lo único distinto era el umbral, `7` → `4.5`.
+
+**La causa.** La clave lleva el umbral a propósito (`06-pares.js`), para que dos textos del
+mismo color sobre el mismo fondo no colapsen en una fila y el pequeño —que es el que puede
+fallar— no desaparezca sin dejar rastro. Pero ese umbral sale de un `px >= 24` aplicado a un
+tamaño **continuo**: cinco titulares de `/trayectoria` miden **exactamente `24.00px`** con peso
+600, porque su tamaño sale de un `clamp()` con `vw`. Una diferencia subpíxel en el ancho de la
+ventana los cruza. El veredicto no cambiaba —el par pasa con los dos umbrales, y `4.5` es más
+laxo que el `7` que ya cumplía—, pero **aparecía mezclado con el diff legítimo del cambio que
+se estaba sellando**, y descartar que lo hubieras causado tú costó varias mediciones.
+
+**Por qué no se arregló donde parecía.** La ficha proponía tres direcciones y daba por buena la
+segunda —guardar el px en la clave en vez del umbral derivado—. Al mirarla de cerca, las dos
+primeras salen peor:
+
+- **Redondear el tamaño antes de decidir el bucket** mueve la frontera de sitio, y sobre todo
+  abre una ventana de colapso: entre 23,5 y 24 px, un texto que WCAG considera **pequeño**
+  compartiría clave con uno grande del mismo color, y el pequeño —el que puede fallar— podría
+  perderse. Es exactamente el agujero que el umbral en la clave existe para tapar.
+- **Guardar el px** no quita la basculación, **la empeora**: el px es el dato continuo, así que
+  `24.00` y `23.99` serían dos claves distintas en vez de dos umbrales distintos. Y si se
+  redondea para evitarlo, es la primera opción con otro nombre.
+
+Lo que no depende del tamaño es `estado|fg|bg`, y eso es lo que el emparejador usa. **La clave
+no se toca**: se mantiene la granularidad, se mantienen los veredictos y lo que cambia es solo
+cómo el diff los lee.
+
+**Y la clave no se usa para nada más**, que era la comprobación previa que pedía la ficha: sale
+en `tipos.ts` como campo y se consume en un solo sitio, `censo.ts:147`, para construir el
+inventario.
+
+**Lo verificado.** Sobre el inventario REAL —402 pares en 28 corridas—, basculando la frontera
+de los dos pares afectados en todas ellas:
+
+```
+desaparecidos: 0 · nuevos: 0 · basculados: 15
+  ejemplo: reposo|247,243,236|33,38,43|4.5  →  reposo|247,243,236|33,38,43|7
+```
+
+Antes del arreglo eso mismo eran **15 desapariciones y 15 apariciones**, o sea el guardián en
+rojo. Y siete casos en `tests/censo-inventario.test.ts`, cuatro de ellos malos: sin gemelo
+sigue siendo pérdida; dos pares que solo comparten umbral no se emparejan; el mismo par en
+**estados** distintos tampoco; y una clave sin separador no empareja con nada —preferimos no
+emparejar a emparejar de más, porque emparejar de más es lo único que podría esconder una
+desaparición—.
+
+*Lo reutilizable: cuando una clave de identidad lleva dentro un valor DERIVADO de una magnitud
+continua, el diff que la compara hereda el ruido de la frontera. El arreglo no suele ser mover
+la frontera —eso solo la cambia de sitio— sino que el comparador sepa qué parte de la clave es
+identidad y cuál es veredicto.*
