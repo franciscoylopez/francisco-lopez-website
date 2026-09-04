@@ -232,6 +232,7 @@
 - D194 · Una captura no se sella por su render: se sella por lo que AFIRMA
 - D195 · El nombre de enlace repetido pasa a guardián, y el sitio donde vive ya estaba abierto
 - D196 · El trinquete de deuda sella la magnitud, y con la lista de marcados vacía ya es exacto
+- D197 · Toda región con scroll propio es focalizable, y una cifra publicada puede no ser la que se pinta
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12693,3 +12694,53 @@ del sistema, los dos bloques del Brand Kit, `04-stack` y `lib/ard.ts`), ocho de 
 función y cinco de exceso de `return`. **No se tocan, y el motivo es el criterio de D186**:
 partir un componente de React para bajar un contador lo empeora, y aquí ya no hace falta —**el
 sello por magnitud impide que crezcan**, que era todo lo que el trinquete no sabía hacer.
+
+## D197 · Toda región con scroll propio es focalizable, y una cifra publicada puede no ser la que se pinta — 2026-09-04
+
+**Decisión.** Dos cosas del `design-review` del 2026-09-04, y la segunda no es una regla sino
+un hueco de medición que conviene tener escrito.
+
+1. **La región que scrollea la pinta la capa, y nace operable con teclado.** `DataTable`
+   envuelve su tabla en un `overflow-x-auto` que lleva `tabIndex={0}`, `role="group"` y nombre
+   accesible. No es una excepción de `/cookies`: es la pieza, así que llega a los seis
+   archivos que usan `<Table>` sin que nadie se acuerde.
+2. **`bg-foreground` no enciende la familia invertida**, y por eso `BRAND.md` §El atenuado lo
+   pone la superficie ya no dice «un velo en vez de la utilidad»: dice «una utilidad que
+   `globals.css` no resuelva».
+
+**El problema, medido.** En `/cookies` a 390×844: **572px de contenido dentro de 348px**, con
+`tabindex` nulo y `focusable: false`. Es **WCAG 2.1.1, nivel A** — axe lo marca
+`scrollable-region-focusable` con impacto *serious*—: lo que se desplaza con el dedo no se
+podía desplazar con las flechas. **No aparece a 1920×1080**, donde la tabla cabe entera, y **no
+desborda el `<body>`**, así que el guardián de desbordamiento de documento tampoco podía verlo.
+
+El desbordamiento era **deliberado y estaba medido** en el propio comentario del componente
+(«el suelo solo actúa en MÓVIL, medido a 390px: 572 y scrollea»). Lo que faltaba no era evitar
+el scroll: era el acceso por teclado a un scroll que ya se sabía que existía.
+
+**Por qué no lo cazó ningún gate, y por qué eso está bien.** `check:marco` **delega**
+`scrollable-region-focusable` a `viewport-verifier` a propósito (D52): la regla necesita layout
+y jsdom no lo tiene. El reparto era correcto; lo que faltaba era el disparo, porque esa pasada
+manual no se había corrido a ancho móvil sobre `/cookies`.
+
+**Va siempre, no solo cuando `minWidth` está puesto.** Hoy la única que desborda es la de
+cookies, pero eso depende del **contenido**, no de la prop: atarlo a ella dejaría a una tabla
+del Design System sin parada de tabulación en silencio el día que le crezca una columna. El
+precio es un tab stop en las tablas que caben; el otro reparto es una regresión que no avisa.
+
+**La segunda mitad: una cifra publicada que nadie pintaba.** `mas-alla.tsx` abría su banda con
+`bg-foreground` sin declarar `data-surface="inverted"` y mezclaba su atenuado a mano al 80%,
+pintando **9,24 claro / 8,31 oscuro**. Mientras tanto `lib/design-values.ts` publicaba
+`mutedOnInverted: { light: 10,32, dark: 9,89 }`, que es lo que da la fórmula de la capa. **Las
+dos parejas pasan AAA**, así que el censo las aprobaba y ningún gate comparaba lo pintado con
+lo publicado. Tras declarar la superficie, la banda mide exactamente lo que el sitio publica.
+
+*Lo reutilizable: una cifra publicada puede describir la fórmula del sistema mientras un punto
+de uso pinta otra cosa, y si las dos pasan el umbral no hay gate que lo note.* El caso completo
+—y el ancla de medición que no valía, porque las cuatro de `BRAND.md` son opacas y el par
+llevaba alfa— está en `BRAND-historical.md` §La banda que publicaba una cifra y pintaba otra.
+
+**Lo verificado.** axe con 0 violaciones en `/cookies` (390 y 320, claro y oscuro),
+`/design-system` y `/brand-kit`; `check:marco` en verde; y el censo resellado en **402 pares y
+328 contornos** —los 28 nuevos son las regiones de tabla, que al volverse focalizables pasan a
+contar como control y pasan el 3:1—, con el metro validado en las 28 corridas.
