@@ -10,6 +10,7 @@
       "fuente": "ga4",
       "estado": "leida",
       "aMano": true,
+      "instrumento": "GA4 · ventana 28 días · filtro Internal Traffic activo · cuenta pings sin consentimiento (D198)",
       "cifras": {
         "eventos": 256,
         "usuarios": 43,
@@ -24,6 +25,7 @@
     {
       "fuente": "consentimiento",
       "estado": "leida",
+      "instrumento": "techo 100/h por IP",
       "cifras": {
         "visto": 59,
         "aceptado": 0,

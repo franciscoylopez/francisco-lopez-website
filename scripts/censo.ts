@@ -210,8 +210,21 @@ if (inventarioAnterior && diffs.length) {
   for (const d of diffs) {
     for (const k of d.salieron) console.log(`  − ${d.corrida}  ${k}`);
     for (const k of d.entraron) console.log(`  + ${d.corrida}  ${k}`);
+    // Ni «−» ni «+»: el mismo par con el otro umbral. Sale con su propio signo
+    // para que no se confunda con el diff legítimo del cambio que se esté
+    // sellando, que es lo que el 2026-09-04 costó varias mediciones descartar.
+    for (const b of d.bascularon)
+      console.log(`  ~ ${d.corrida}  ${b.antes}  →  ${b.ahora}`);
   }
   console.log("");
+
+  const basculados = diffs.reduce((n, d) => n + d.bascularon.length, 0);
+  if (basculados)
+    console.log(
+      `  ~ ${basculados} par(es) han cambiado de bucket de tamaño sin moverse ` +
+        `(la frontera de «texto grande» de WCAG, a 24px). No es una desaparición: ` +
+        `su gemelo está en la corrida nueva con los mismos colores.\n`,
+    );
 
   const perdidos = diffs.reduce((n, d) => n + d.salieron.length, 0);
   if (perdidos && mismaHuella && !ACEPTA_INVENTARIO) {

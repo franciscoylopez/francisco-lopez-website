@@ -1,11 +1,11 @@
 {
-  "total": 21,
+  "total": 20,
   "porArea": {
-    "components/": 11,
     "raíz": 1,
-    "scripts/": 5,
-    "lib/": 2,
-    "app/": 2
+    "scripts/": 4,
+    "components/": 11,
+    "app/": 2,
+    "lib/": 2
   },
   "hallazgos": [
     "qlty:function-complexity|components/site/contact-form.tsx",
@@ -15,7 +15,6 @@
     "qlty:function-complexity|components/site/reveal-root.tsx",
     "qlty:function-complexity|components/ui/article.tsx",
     "qlty:function-complexity|scripts/logos/process_logo.js",
-    "qlty:function-complexity|scripts/medicion/registro.ts",
     "qlty:return-statements|components/site/contact-form.tsx",
     "qlty:return-statements|proxy.ts",
     "qlty:return-statements|scripts/agentes.ts",
@@ -38,7 +37,6 @@
     "qlty:function-complexity|components/site/reveal-root.tsx": [36],
     "qlty:function-complexity|components/ui/article.tsx": [18],
     "qlty:function-complexity|scripts/logos/process_logo.js": [26],
-    "qlty:function-complexity|scripts/medicion/registro.ts": [28],
     "qlty:return-statements|components/site/contact-form.tsx": [6],
     "qlty:return-statements|proxy.ts": [7],
     "qlty:return-statements|scripts/agentes.ts": [7],
@@ -53,6 +51,6 @@
     ],
     "qlty:similar-code|lib/ard.ts": [68, 68]
   },
-  "commit": "306ab0fafa66c7fb43d7151702f71e5db1ff59cd",
-  "fecha": "2026-09-03"
+  "commit": "0fe338e2033225b796da1ce2aed21192d159fa76",
+  "fecha": "2026-09-04"
 }

@@ -1,6 +1,13 @@
 # `scripts/medicion/` — el check de medición deja una cifra que restar
 
-`registro.json` **no se edita a mano**. Lo escribe `npm run medicion -- --sellar`
+`registro.json` **no se edita a mano** — con una excepción de una vez, hecha el
+2026-09-04 y escrita aquí para que no siente precedente: al introducir el campo
+`instrumento` se le **anotó** al sello vigente el metro con el que ya se había
+tomado, sin tocar ninguna cifra. Re-sellar habría sido peor: la lectura del
+contador se hace en vivo, así que habría sustituido la línea base del cierre de
+«Higiene» por el número de ese momento.
+
+Lo escribe `npm run medicion -- --sellar`
 al cerrar una etapa, y de ahí lo lee la pasada siguiente para contestar la
 pregunta 2 del check («¿ha cambiado algo desde el cierre anterior?»). Antes esa
 respuesta dependía de que alguien se acordara de escribir el número en la prosa de
@@ -25,6 +32,27 @@ npm run medicion -- --sellar --etapa=Higiene \
 Las dos que no se leen solas **salen en el sello igual, con su motivo**. Un sello
 que omitiera esa lista se leería como uno completo, que es la definición de un
 metro que engaña.
+
+## Y qué significa `instrumento` *(D199)*
+
+Junto a cada cifra se sella **con qué metro se tomó**, y la comparación siguiente
+**avisa en vez de restar** cuando los dos sellos no lo comparten:
+
+```
+consentimiento: NO SE RESTA — cambió el instrumento (techo 10/h por IP → techo 100/h por IP).
+    visto: 13 (antes) · 59 (ahora) — dos metros, no una serie
+```
+
+Existe porque el primer sello del contador viajó en el **mismo commit** que subía
+el techo del limitador de 10 a 100 por hora y por IP, así que la pasada siguiente
+imprimió `13 → 59 (+46)` como si fuera tráfico. Era, sobre todo, la deflación que
+se acababa de quitar.
+
+El del contador sale de `lib/consent-metrics.ts`, del mismo módulo que limita de
+verdad; el de GA4 se teclea con `--ga4-instrumento=` porque su cifra también se
+teclea. No se compara su contenido, solo su **identidad**: cualquier cadena vale
+mientras cambie cuando cambie el metro. Y **`undefined` tampoco se resta**, que es
+exactamente el caso que produjo el defecto.
 
 ## Qué significa `ventana`
 

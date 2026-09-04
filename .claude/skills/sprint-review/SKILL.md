@@ -91,8 +91,9 @@ una etapa no se cierra sin haberlas escrito.
    **Y DESDE EL 2026-08-31 EL PANEL Y GA4 YA NO SON TODA LA MEDICIÓN** (D168/D169/D170). Dos
    fuentes más, y ninguna depende del consentimiento: **Vercel Web Analytics** (volumen
    absoluto, en el panel de Vercel) y **`npm run consentimiento`**, que da la tasa de
-   aceptación. Y cambia CÓMO se lee GA4: sus cifras son un **índice relativo**, nunca un
-   volumen. Ojo al denominador, que no es el mismo: el contador solo ve visitantes NUEVOS.
+   aceptación. Y GA4 **no** está deflactado por consentimiento (D198): cuenta a quien no
+   acepta, un usuario nuevo por carga. Ojo al denominador del contador: solo ve visitantes
+   NUEVOS **que interactuaron** (D200).
    **Y la primaria se busca aunque no esté en el panel**: `contact_submit` llevaba desde el
    2026-08-24 contando y ningún marcador la enseñaba, así que leer solo el panel habría dado
    «cero» donde el dato decía «la cadena funciona» (D71, cierre del sprint 4).

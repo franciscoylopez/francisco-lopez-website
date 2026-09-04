@@ -4433,6 +4433,13 @@ limpio son las tres de antes; cuál es la brecha de verdad, y con ella la reescr
 es de después, porque escribirla con tráfico residual sería poner otra frase sin medir, que
 es como llegó la que había.
 
+**Contestado el mismo día, en la tanda 1 de «Cierre V3»** (D198 · D199 · D200): la hipótesis
+era cierta y GA4 cuenta esos pings; la sonda que lo demostró metió **12 «visto»** en el
+contador —59 → 71—, que es el tercer hueco de arriba medido al dígito en vez de descrito. Y
+las tres correcciones destaparon una cuarta cosa que aquí no se sospechaba: **desde la máquina
+de Francisco no se puede comprobar nada dentro de GA4**, porque la propiedad excluye el tráfico
+interno y el ping sale con `tt=internal`.
+
 ## El `method-review` XII: el andamiaje creció un 29 % y los indicadores no se movieron — 2026-09-04
 
 **El disparo se hizo con las notas de Francisco sin leer**, y convergió en uno. Él había

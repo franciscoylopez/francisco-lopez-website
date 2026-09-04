@@ -18,6 +18,10 @@
  *   2. **Las fuentes que NO se pudieron leer, con su motivo.** Un sello que
  *      omitiera esa lista se leería igual que uno completo, que es la definición
  *      de un metro que engaña. Cuatro fuentes hay; el sello dice siempre cuatro.
+ *   3. **Con qué instrumento se tomó cada cifra** *(D199)*, para que dos lecturas
+ *      hechas con metros distintos no se resten. Sin ese campo, el primer sello
+ *      del contador de consentimiento —que viajó en el mismo commit que cambiaba
+ *      el metro— convirtió la deflación retirada en «+46 de tráfico».
  *
  * LO QUE NO PROMETE. No dice que la medición esté bien: dice qué se leyó, cuándo y
  * qué no. Juzgarlo sigue siendo del cierre.
@@ -47,6 +51,16 @@ export interface FuenteSellada {
   cifras?: Record<string, number | null>;
   /** `true` cuando la cifra la tecleó una persona (GA4 hoy). */
   aMano?: boolean;
+  /**
+   * CON QUÉ METRO SE TOMÓ ESTA CIFRA *(D199)*. Es lo que separa una serie de dos
+   * series pegadas: si no coincide con la del sello anterior, `comparaConAnterior`
+   * **avisa en vez de restar**.
+   *
+   * No se compara su contenido, solo su **identidad**: cualquier cadena vale
+   * mientras cambie cuando cambie el instrumento. `undefined` significa «no se
+   * anotó», y eso tampoco se resta — es justo el caso que produjo el defecto.
+   */
+  instrumento?: string;
 }
 
 export interface RegistroMedicion {
@@ -79,6 +93,62 @@ export function escribeRegistro(registro: RegistroMedicion): void {
  * una fuente pase de legible a ilegible es justo el suceso que el cierre anterior
  * no supo contar. Por eso no se comparan solo los números.
  */
+/** Cómo se nombra un instrumento que el sello anterior no llegó a anotar. */
+const nombraInstrumento = (i?: string) => i ?? "sin anotar";
+
+/**
+ * Qué decir de UNA fuente, comparando sus dos lecturas. Vive aparte de
+ * `comparaConAnterior` porque el trinquete de deuda marcó la función entera al
+ * meterle la regla del instrumento, y porque son dos preguntas distintas: aquí,
+ * qué le pasó a una fuente; allí, cómo se ordena el informe.
+ *
+ * EL INSTRUMENTO MANDA SOBRE LA RESTA (D199). El primer sello del contador de
+ * consentimiento viajó en el mismo commit que subió el techo del limitador de 10 a
+ * 100 por hora y por IP, así que el `13 → 59 (+46)` de la pasada siguiente se leía
+ * como crecimiento de tráfico y era, sobre todo, la deflación que se acababa de
+ * quitar. Una resta entre dos metros distintos no es un cero de más ni de menos: es
+ * un número que no significa nada, y encima con toda la pinta de significar algo.
+ */
+function lineasDeFuente(
+  fuente: Fuente,
+  antes: FuenteSellada,
+  ahora: FuenteSellada,
+): string[] {
+  if (antes.estado !== ahora.estado) {
+    return [
+      `  ${fuente}: ${antes.estado} → ${ahora.estado}` +
+        (ahora.motivo ? ` (${ahora.motivo})` : ""),
+    ];
+  }
+  if (ahora.estado !== "leida") return [];
+
+  const mismoMetro = antes.instrumento === ahora.instrumento;
+  const lineas = mismoMetro
+    ? []
+    : [
+        `  ${fuente}: NO SE RESTA — cambió el instrumento ` +
+          `(${nombraInstrumento(antes.instrumento)} → ${nombraInstrumento(ahora.instrumento)}).`,
+      ];
+
+  for (const [clave, valor] of Object.entries(ahora.cifras ?? {})) {
+    const previo = antes.cifras?.[clave];
+    if (typeof valor !== "number" || typeof previo !== "number") continue;
+    if (!mismoMetro) {
+      lineas.push(
+        `      ${clave}: ${previo} (antes) · ${valor} (ahora) — dos metros, no una serie`,
+      );
+      continue;
+    }
+    const delta = valor - previo;
+    const signo = delta > 0 ? "+" : "";
+    lineas.push(
+      `  ${fuente} · ${clave}: ${previo} → ${valor}` +
+        (delta === 0 ? "  (igual)" : `  (${signo}${delta})`),
+    );
+  }
+  return lineas;
+}
+
 export function comparaConAnterior(
   anterior: RegistroMedicion | null,
   actual: RegistroMedicion,
@@ -96,27 +166,7 @@ export function comparaConAnterior(
   for (const fuente of FUENTES) {
     const antes = anterior.fuentes.find((f) => f.fuente === fuente);
     const ahora = actual.fuentes.find((f) => f.fuente === fuente);
-    if (!antes || !ahora) continue;
-
-    if (antes.estado !== ahora.estado) {
-      lineas.push(
-        `  ${fuente}: ${antes.estado} → ${ahora.estado}` +
-          (ahora.motivo ? ` (${ahora.motivo})` : ""),
-      );
-      continue;
-    }
-    if (ahora.estado !== "leida") continue;
-
-    for (const [clave, valor] of Object.entries(ahora.cifras ?? {})) {
-      const previo = antes.cifras?.[clave];
-      if (typeof valor !== "number" || typeof previo !== "number") continue;
-      const delta = valor - previo;
-      const signo = delta > 0 ? "+" : "";
-      lineas.push(
-        `  ${fuente} · ${clave}: ${previo} → ${valor}` +
-          (delta === 0 ? "  (igual)" : `  (${signo}${delta})`),
-      );
-    }
+    if (antes && ahora) lineas.push(...lineasDeFuente(fuente, antes, ahora));
   }
 
   if (lineas.length === 1) {

@@ -17,6 +17,7 @@ import {
   CONSENT_SEEN_KEY,
   cuentaComoAceptado,
   type EventoConsentimiento,
+  SENALES_DE_PERSONA,
 } from "@/lib/consent-metrics";
 import { cn } from "@/lib/utils";
 
@@ -67,6 +68,10 @@ function contar(evento: EventoConsentimiento): void {
 // El `try` envuelve la LECTURA además de la escritura porque en un navegador que
 // bloquea el almacenamiento `localStorage` lanza al tocarlo, no al escribir. Ahí
 // se cuenta de más y está contabilizado como salvedad, no como error.
+//
+// ES IDEMPOTENTE A PROPÓSITO, y de eso depende la corrección de lo de abajo: se
+// llama desde dos sitios —la primera señal de persona y la primera decisión— y el
+// segundo no puede volver a contar.
 function contarVistoUnaVez(): void {
   try {
     if (window.localStorage.getItem(CONSENT_SEEN_KEY)) return;
@@ -75,6 +80,108 @@ function contarVistoUnaVez(): void {
     // Sin almacén local no hay marca posible: se cuenta y se sigue.
   }
   contar("visto");
+}
+
+/**
+ * EL «VISTO» ESPERA A QUE HAYA ALGUIEN DELANTE *(2026-09-04, D200)*.
+ *
+ * Antes se contaba en el efecto de montaje, o sea a cualquier cliente que ejecute
+ * JS con perfil limpio — y uno de ellos es nuestro: `npm run psi -- --registro`
+ * son 84 cargas de producción por corrida, cada una un `visto` y ninguna una
+ * decisión. Con la puerta, el denominador pasa a ser «vistos con oportunidad de
+ * decidir», que es el honesto para una tasa de aceptación.
+ *
+ * SE ARMA SOLO SI EL DIÁLOGO SE ABRE, o sea solo a quien no ha decidido: quien ya
+ * decidió no ve nada que contar.
+ *
+ * `once` NO BASTA, y por eso el desarme es explícito: `once` retira **ese**
+ * oyente, no los otros cinco, y quedarían cinco cierres vivos esperando un suceso
+ * que ya no significa nada. `capture` para que un `stopPropagation` de cualquier
+ * isla no se coma la señal, y `passive` porque ninguno de los seis se cancela.
+ *
+ * Devuelve su propio desarme para el `return` del efecto: si el componente se va
+ * antes de que nadie toque nada, no queda nada enganchado a `window`.
+ */
+function cuentaVistoTrasInteraccion(): () => void {
+  const opciones = { capture: true, passive: true } as const;
+  let desarmado = false;
+
+  const desarmar = () => {
+    if (desarmado) return;
+    desarmado = true;
+    for (const senal of SENALES_DE_PERSONA) {
+      window.removeEventListener(senal, alHaberAlguien, opciones);
+    }
+  };
+
+  function alHaberAlguien() {
+    desarmar();
+    contarVistoUnaVez();
+  }
+
+  for (const senal of SENALES_DE_PERSONA) {
+    window.addEventListener(senal, alHaberAlguien, opciones);
+  }
+  return desarmar;
+}
+
+/**
+ * EL ARRANQUE DEL DIÁLOGO, fuera del componente *(2026-09-04)*.
+ *
+ * Hace tres cosas y ninguna se puede hacer en el render: leer la decisión guardada
+ * —`localStorage` no existe en SSR, y el servidor renderiza sin banner, así que no
+ * hay desajuste de hidratación—, **armar la espera de una señal de persona** si aún
+ * no hay decisión (D200), y escuchar el evento con el que el pie reabre las
+ * preferencias.
+ *
+ * SE EXTRAJO POR EL TRINQUETE DE DEUDA, y el motivo se anota porque el gate hizo
+ * justo lo suyo: al añadir la puerta del «visto», `ConsentBanner` cruzó el umbral
+ * de complejidad de Qlty. Sacar el arranque es la opción 1 de ese gate —quitar la
+ * deuda en vez de re-sellarla— y de paso el componente se queda con lo que
+ * renderiza.
+ *
+ * LOS `set*` VAN SUELTOS Y NO EN UN OBJETO: los que devuelve `useState` son
+ * estables, así que como dependencias equivalen a `[]` y `exhaustive-deps` queda
+ * contento sin silenciarlo. Un objeto literal cambiaría en cada render y habría que
+ * apagar la regla, que es cómo se cuelan los efectos que se re-arman solos.
+ */
+function useArranqueDelDialogo(
+  setAnalytics: (v: boolean) => void,
+  setMarketing: (v: boolean) => void,
+  setBannerOpen: (v: boolean) => void,
+  setPrefsOpen: (v: boolean) => void,
+): void {
+  useEffect(() => {
+    let desarmarVisto: (() => void) | undefined;
+    // Las escrituras de estado van envueltas en funciones (el efecto no las llama
+    // directas), como en `nav.tsx`.
+    const applyStored = () => {
+      const stored = readConsent();
+      if (stored) {
+        setAnalytics(stored.analytics);
+        setMarketing(stored.marketing);
+      } else {
+        setBannerOpen(true);
+        // Aquí y no en el render: este es el único punto donde consta que el
+        // diálogo se le enseña a alguien que aún no ha decidido. Pero «se le
+        // enseña a alguien» hay que comprobarlo, no suponerlo (D200).
+        desarmarVisto = cuentaVistoTrasInteraccion();
+      }
+    };
+    applyStored();
+    // El footer (u otra pieza) puede reabrir las preferencias con este evento.
+    const open = () => {
+      const current = readConsent();
+      setAnalytics(current?.analytics ?? false);
+      setMarketing(current?.marketing ?? false);
+      setPrefsOpen(true);
+    };
+    window.addEventListener(OPEN_CONSENT_EVENT, open);
+    return () => {
+      window.removeEventListener(OPEN_CONSENT_EVENT, open);
+      desarmarVisto?.();
+    };
+  }, [setAnalytics, setMarketing, setBannerOpen, setPrefsOpen]);
 }
 
 // Banner de consentimiento + centro de preferencias granular (P22). Isla de cliente:
@@ -102,35 +209,12 @@ export function ConsentBanner({
 
   const policyHref = `${lang === "es" ? "" : `/${lang}`}/cookies`;
 
-  // Lectura de localStorage tras el montaje (no existe en SSR): si no hay decisión,
-  // se muestra el banner. El SSR renderiza sin banner, así que no hay desajuste de
-  // hidratación. Las escrituras de estado van envueltas en funciones (el efecto no
-  // las llama directas), como en `nav.tsx`.
-  useEffect(() => {
-    const applyStored = () => {
-      const stored = readConsent();
-      if (stored) {
-        setAnalytics(stored.analytics);
-        setMarketing(stored.marketing);
-      } else {
-        setBannerOpen(true);
-        // Aquí y no en el render: este es el único punto del componente donde
-        // consta que el diálogo se le enseña a alguien que aún no ha decidido,
-        // que es exactamente lo que el denominador tiene que contar.
-        contarVistoUnaVez();
-      }
-    };
-    applyStored();
-    // El footer (u otra pieza) puede reabrir las preferencias con este evento.
-    const open = () => {
-      const current = readConsent();
-      setAnalytics(current?.analytics ?? false);
-      setMarketing(current?.marketing ?? false);
-      setPrefsOpen(true);
-    };
-    window.addEventListener(OPEN_CONSENT_EVENT, open);
-    return () => window.removeEventListener(OPEN_CONSENT_EVENT, open);
-  }, []);
+  useArranqueDelDialogo(
+    setAnalytics,
+    setMarketing,
+    setBannerOpen,
+    setPrefsOpen,
+  );
 
   // Sincroniza el <dialog> nativo con el estado (showModal atrapa el foco y ESC lo
   // cierra; el foco vuelve solo al elemento previo).
@@ -152,6 +236,13 @@ export function ConsentBanner({
     // Se apoya en el registro que ya existe en vez de en una marca nueva: si
     // había decisión previa, esto es un cambio de opinión y no una conversión.
     const esPrimeraDecision = readConsent() === null;
+    // Y EL «VISTO» SE ASEGURA ANTES DE LA DECISIÓN (D200). Decidir es la señal de
+    // persona más fuerte que hay, pero puede llegar por una vía que la puerta de
+    // arriba no oyó —un `click` sintético, un `Enter` que el botón traduce, o el
+    // desarme por desmontaje— y sin esto `aceptado + rechazado` podría superar a
+    // `visto`, que es justo la cuenta imposible que el resto del módulo evita.
+    // `contarVistoUnaVez` es idempotente, así que cuando ya se contó no hace nada.
+    if (esPrimeraDecision) contarVistoUnaVez();
     saveConsent(choice);
     // Cuál de los dos sucesos es lo decide `cuentaComoAceptado`, no la etiqueta
     // del botón que se pulsó: por eso significa lo mismo en las tres puertas.

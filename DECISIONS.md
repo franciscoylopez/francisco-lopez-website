@@ -233,6 +233,10 @@
 - D195 · El nombre de enlace repetido pasa a guardián, y el sitio donde vive ya estaba abierto
 - D196 · El trinquete de deuda sella la magnitud, y con la lista de marcados vacía ya es exacto
 - D197 · Toda región con scroll propio es focalizable, y una cifra publicada puede no ser la que se pinta
+- D198 · GA4 sí ve al tráfico que no consiente, y desde esta máquina no se puede comprobar
+- D199 · El sello de medición guarda el instrumento, y avisa en vez de restar cuando cambia
+- D200 · El «visto» espera a que haya alguien delante, y la serie se parte ahí
+- D201 · Un par que cruza la frontera de 24px no ha desaparecido, y el diff del censo lo dice aparte
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12744,3 +12748,271 @@ llevaba alfa— está en `BRAND-historical.md` §La banda que publicaba una cifr
 `/design-system` y `/brand-kit`; `check:marco` en verde; y el censo resellado en **402 pares y
 328 contornos** —los 28 nuevos son las regiones de tabla, que al volverse focalizables pasan a
 contar como control y pasan el 3:1—, con el metro validado en las 28 corridas.
+
+## D198 · GA4 sí ve al tráfico que no consiente, y desde esta máquina no se puede comprobar — 2026-09-04
+
+**Decisión.** Queda escrito, con la prueba al lado, **qué tráfico llega a GA4 sin
+consentimiento: llega todo**. Un `page_view` por carga, sin una sola cookie, con identidad
+nueva cada vez. No es modelado. Y va con la trampa de método que estuvo a punto de invertir la
+conclusión: **desde la máquina de Francisco esto no se puede comprobar dentro de GA4**, porque
+el tag manda `tt=internal` y la propiedad tiene un filtro que excluye ese tráfico.
+
+**La contradicción de partida.** `PRD-Live` §7 explicaba la métrica primaria sobre una premisa
+—*«GA4 solo ve al tráfico que consiente»*— que el cierre de «Higiene» midió y no se sostuvo:
+GA4 daba **43 usuarios y 39 `first_visit`** en 28 días (7 ago – 3 sept) contra **0 aceptaciones
+de 59 vistos** en el contador de consentimiento. La causa estaba escrita como **hipótesis**, no
+como diagnóstico. Esto la comprueba.
+
+**La prueba, en la red.** Sonda de Puppeteer con `channel: "chrome"` (la máquina de D54),
+**perfil de usuario nuevo en cada carga** y **sin tocar el diálogo**:
+
+```
+SIN CONSENTIR    POST region1.google-analytics.com/g/collect
+   carga 1       en=page_view · gcs=G100 · cid=539492003.1788522022 · _fv=1 · _ss=1
+                 cookies: ninguna
+   carga 2       en=page_view · gcs=G100 · cid=157246066.1788522031 · _fv=1 · _ss=1
+                 cookies: ninguna                       ← el cid CAMBIA entre cargas
+CON CONSENTIR    en=page_view · gcs=G101 · _fv=1
+                 cookies: _ga, _ga_MEG5BP629K, _clck, _clsk
+```
+
+Tres cosas que se leen ahí y no en el JSX:
+
+1. **El ping sale igual.** `analytics_storage:'denied'` gobierna el **almacenamiento**, no la
+   carga ni el envío. Es la misma frontera que el PR #261 corrigió en el copy del artículo, un
+   escalón más abajo: allí se demostró que el **contenedor** carga; aquí, que además **emite**.
+2. **Sin cookie no hay identidad que persistir, así que cada carga es un usuario nuevo.** El
+   `cid` es distinto entre dos cargas del mismo navegador, y el ping lleva `_fv=1`
+   (`first_visit`) y `_ss=1` (`session_start`) **todas las veces**.
+3. **Clarity no carga sin consentimiento**: sus dos cookies (`_clck`, `_clsk`) solo aparecen en
+   el escenario consentido. De las cuatro cláusulas de la frase que #261 tumbó, esta era la
+   cierta, y quedaba sin comprobar por depender de los disparadores del contenedor (D71).
+
+**Que GA4 los CUENTA se deduce de los dos instrumentos, no del ping.** El ping demuestra qué
+sale del navegador; que entre en los informes lo dice la aritmética: 43 usuarios y 39
+`first_visit` con **cero aceptaciones**, y con el tráfico interno excluido, así que esos 43
+tampoco son visitas de Francisco. Tampoco es **modelado**: el modelado de comportamiento de
+Consent Mode pide umbrales de orden mil eventos diarios que este sitio no roza —256 en 28
+días—, y además necesita una población consentida sobre la que modelar, que aquí es cero.
+
+**Con qué evento se distingue.** GA4 no publica el estado de consentimiento como dimensión en
+informes estándar (sí en BigQuery, `privacy_info.analytics_storage`). Lo que sí se puede leer
+es la **firma aritmética**: si cada carga sin consentir es un usuario y una sesión nuevos,
+entonces `first_visit ≈ session_start ≈ page_view`. El sitio, en 4-31 ago: **35 · 38 · 38**.
+Una población consentida daría `first_visit` muy por debajo de `page_view`, porque el visitante
+recurrente vuelve con su `_ga` puesto.
+
+**La trampa que casi invierte la conclusión, y es la parte reutilizable.** La primera
+comprobación fue mirar **Tiempo real** de GA4 tras disparar las cargas: marcó **0 usuarios
+activos y «no hay datos disponibles»**, que leído solo dice lo contrario de todo lo anterior.
+Dos anclas lo salvaron:
+
+- **La validación del metro.** La sonda corría en *headless*, y el UA `HeadlessChrome` lo
+  filtra GA4 como bot. Se repitió con Chrome real (`Chrome/151.0.0.0`, sin `Headless` en el
+  UA). Siguió dando **0**.
+- **El control positivo.** Se repitió **aceptando** —perfil limpio, 75 s con la pestaña
+  delante— y Tiempo real siguió dando **0**. Un aprobado y un suspenso idénticos no distinguen
+  nada: el sospechoso pasó a ser el instrumento.
+
+Y el instrumento era: **Administrador → Filtros de datos** tiene un `Internal Traffic ·
+Excluir · Activo`, y el ping desde esta máquina lleva **`tt = internal`** entre sus parámetros.
+Todo lo que se lance desde aquí queda fuera de los informes por diseño.
+
+*Lo reutilizable: cuando el metro dice cero, el control positivo no es opcional —`BRAND.md`
+§Cómo medir, punto 8—, y aquí el que falló no falló por el sujeto medido sino porque el
+instrumento excluye a quien mide. Un filtro de tráfico interno convierte cualquier
+comprobación hecha desde el ordenador de casa en un cero que parece un hallazgo.*
+
+**La receta, para no reconstruirla.** No queda script en `scripts/`: es un diagnóstico de una
+vez y el repo ya tiene un listón de volumen ahí. Puppeteer con `channel:"chrome"`,
+`headless:false`, `userDataDir` en un temporal **nuevo por carga**, escuchando `request` y
+filtrando `google-analytics\.com/g/collect`; los parámetros que contestan son `gcs`, `cid`,
+`_fv`, `_ss` y `tt`. Para el escenario consentido, `page.evaluateOnNewDocument()` que escriba
+`flm-consent` en `localStorage` antes de navegar.
+
+**Lo que esto NO decide.** Si el gate de GTM debe pasar a depender del consentimiento en vez de
+solo del entorno, y si `/cookies` tiene que declarar el ping sin cookies como declara la
+excepción de Vercel Web Analytics (D170). Son una decisión de postura, no de medición, y van en
+su propia ficha. Lo que sí queda cerrado es que **el número de GA4 no está deflactado por
+consentimiento**: el pico del lanzamiento se lee como volumen casi completo, y la tasa del
+contador no es el factor que hay que aplicarle.
+
+## D199 · El sello de medición guarda el instrumento, y avisa en vez de restar cuando cambia — 2026-09-04
+
+**Decisión.** Cada cifra de `scripts/medicion/registro.json` se sella con **la versión del
+instrumento que la produjo**, y `comparaConAnterior` **se niega a restar** cuando los dos
+sellos no la comparten: enseña los dos números y dice que son dos metros. `undefined` cuenta
+como «no comparable», no como «igual».
+
+**El problema, medido.** El commit `b1c109e` (2026-09-02 18:23) hizo **dos cosas a la vez**:
+subir el techo del limitador de consentimiento de 10 a 100 sucesos por hora y por IP, y
+escribir el **primer sello**, con `visto: 13`. Dos días después el contador iba por 59 y
+`npm run medicion` imprimía:
+
+```
+consentimiento · visto: 13 → 59  (+46)
+```
+
+que se lee como crecimiento de tráfico y era, sobre todo, **la deflación que se acababa de
+retirar**: mientras el techo estuvo en 10, todo lo que pasara de diez sucesos por hora tras una
+misma NAT no se contaba. La línea base se tomó con el metro viejo y la lectura siguiente con el
+nuevo.
+
+**Por qué esto y no elegir el número bueno.** No lo hay: son dos metros. Lo que hacía daño no
+era la cifra sino **la resta**, que es la operación que afirma que las dos pertenecen a la
+misma serie. Quitarla deja el dato entero —los dos números siguen impresos— y retira la única
+parte falsa.
+
+**Dónde vive el número, y por qué se movió.** El techo era una constante privada de
+`app/consent-actions.ts`, y un módulo `"use server"` **solo puede exportar funciones
+asíncronas**, así que el sello no podía leerla: habría tenido que copiarla, que es la forma
+exacta de que dentro de tres meses el registro anote un techo y el limitador aplique otro. Sube
+a `lib/consent-metrics.ts` —el módulo de reglas puras, que ya documenta la salvedad de ese
+mismo techo— y de ahí la leen los dos.
+
+**Lo que el mismo campo compró gratis en GA4.** Su cifra se teclea, así que su instrumento
+también, con `--ga4-instrumento=`; y por defecto anota las dos cosas que D198 acababa de
+descubrir y que cambian lo que la cifra significa: **el filtro `Internal Traffic` está activo**
+y **GA4 cuenta los pings sin consentimiento**. Estaban en la cabeza de quien cerró, no en el
+archivo.
+
+**Una excepción de una vez, escrita para que no siente precedente.** `registro.json` no se
+edita a mano. Al introducir el campo se le **anotó** al sello vigente el metro con el que ya se
+había tomado, sin tocar ninguna cifra, porque re-sellar habría sido peor: la lectura del
+contador se hace en vivo y habría sustituido la línea base del cierre de «Higiene» por el
+número del momento. Queda dicho en el README de al lado.
+
+**Lo verificado.** `tests/medicion-registro.test.ts`, cinco casos con la forma de
+`check:guardianes` —no que sepa restar, que sepa **negarse**—: mismo instrumento resta;
+instrumento distinto avisa y **no** imprime `+46`; anterior sin anotar tampoco resta; un cambio
+de estado sigue mandando por delante; y sin sello anterior lo dice. Más `npm run medicion`
+sobre producción, que ahora imprime `59 → 71 (+12)` compartiendo instrumento.
+
+*Y ese `+12` es la ficha siguiente:* los doce son las doce cargas de la sonda de D198, con
+perfil limpio y sin decidir nada. El contador no distingue una carga automatizada de una
+persona, y esta vez el contaminante fue medible al dígito.
+
+## D200 · El «visto» espera a que haya alguien delante, y la serie se parte ahí — 2026-09-04
+
+**Decisión.** El contador de consentimiento **deja de sumar en el efecto de montaje** y espera a
+una señal de persona —puntero, teclado o desplazamiento— antes de contar un `visto`. El
+denominador pasa a ser **«vistos con oportunidad de decidir»**, que es el honesto para una tasa
+de aceptación. Decidido por Francisco entre las dos direcciones que la ficha dejaba abiertas:
+la otra era declarar el sesgo y no tocar el conteo.
+
+**El problema.** `contarVistoUnaVez()` corría en un `useEffect`, así que contaba a **cualquier
+cliente que ejecute JS con perfil limpio**. Uno de ellos es nuestro: `npm run psi -- --registro`
+son 14 páginas × 2 estrategias × 3 tomas = **84 cargas de producción**, cada una sumando un
+`visto` y ninguna una decisión. Y `SALVEDAD_TASA` enumeraba **tres** sesgos sin nombrar este.
+
+**No era teórico, y esta vez el contaminante se midió al dígito.** La sonda de D198 hizo doce
+cargas de producción con perfil nuevo, sin tocar nada. El contador pasó de **59 a 71**: los doce
+son la sonda. El 100 % del crecimiento del contador esa tarde fue una carga automatizada, y sin
+esa coincidencia se habría leído como tráfico.
+
+**La puerta, y la única regla que la define.** `SENALES_DE_PERSONA` —`pointerdown`,
+`pointermove`, `keydown`, `touchstart`, `wheel`, `scroll`— vive en `lib/consent-metrics.ts` con
+el resto de las reglas, no en el componente. Es una lista **cerrada**, y lo que decide qué entra
+es: **todo suceso que pueda dispararse sin que nadie haga nada queda fuera**. `load`,
+`DOMContentLoaded`, `visibilitychange`, `resize` y `pageshow` los produce el navegador al abrir
+una pestaña, y un cliente automatizado los emite igual que una persona: admitir uno sería el
+contador de antes con otro nombre, sin que se notara en ningún diff. Hay un test que lo
+comprueba contra una lista explícita de sucesos prohibidos.
+
+**No es un antifraude**, y conviene decirlo porque se parece: un cliente automatizado que mueva
+el puntero cuenta, y está bien que cuente. Esto es **no contarnos a nosotros mismos**.
+
+**Los dos sitios desde los que se cuenta, y por qué son dos.** La puerta arma seis oyentes; el
+primero que salte desarma los seis (`once` retira **ese**, no los otros cinco) y cuenta.
+Además, `decide()` asegura el `visto` **antes** de contar la decisión: decidir es la señal de
+persona más fuerte que hay, pero puede llegar por una vía que la puerta no oyó, y sin ese
+seguro `aceptado + rechazado` podría superar a `visto` —la cuenta imposible que el resto del
+módulo lleva dos entradas evitando—. `contarVistoUnaVez` es idempotente por la marca de
+`localStorage`, así que el seguro no puede contar de más.
+
+**Y la tasa deja de ser un suelo limpio, que es la parte incómoda.** Las dos salvedades
+anteriores con dirección conocida sesgaban a la misma, así que lo medido era un suelo de lo
+real. Esta va **al revés**: deja fuera del denominador a quien lee sin mover nada. Así que la
+salvedad publicada ya no dice «es un suelo» sino que **no es una estimación centrada, y nombra
+las tres direcciones**. Peor titular, mejor descripción.
+
+**La serie se parte aquí, y el sello lo dirá solo.** `INSTRUMENTO_CONSENTIMIENTO` pasa a
+`techo 100/h por IP · visto tras interacción`, así que el primer `npm run medicion` posterior
+al despliegue **avisará en vez de restar** contra los 71 tomados sin puerta. Es D199
+funcionando el mismo día que se escribió, y no por casualidad: la ficha que lo pedía y la que
+rompe la serie iban en la misma tanda.
+
+**Lo verificado, sobre el build servido y contra el almacén `local`** —que existe porque
+`lib/consent-store.ts` mete `VERCEL_ENV` en la clave, así que una prueba local no toca la cifra
+de producción—:
+
+```
+carga QUIETA        0 POST al propio origen · sin marca `flm-consent-seen` · contador 1 → 1
+carga CON PUNTERO   1 POST                  · marca puesta                 · contador 1 → 2
+```
+
+Más 189 tests en verde, cuatro de ellos nuevos: la lista prohibida, la cobertura de las tres
+formas de manejar una página, que la salvedad publicada nombra la puerta y su sesgo, y que el
+instrumento sellado cambia cuando cambia la puerta y no solo cuando cambia el techo.
+
+## D201 · Un par que cruza la frontera de 24px no ha desaparecido, y el diff del censo lo dice aparte — 2026-09-04
+
+**Decisión.** `compara()` clasifica como **basculado** —ni entrado ni salido— el par cuya clave
+solo cambia en su último segmento, el umbral derivado. Y **no afloja el guardián**: para contar
+como basculado, su **gemelo tiene que estar presente** en la corrida nueva, con el mismo estado
+y los mismos dos colores. Si de verdad desapareció, no hay gemelo y sigue suspendiendo.
+
+**El síntoma.** Al resellar el censo el 2026-09-04, el guardián dijo *«2 par(es) han
+DESAPARECIDO del censo con la huella intacta»* y el diff enseñaba dos claves nuevas en
+`/trayectoria` que nadie había tocado: la sesión solo había cambiado `table.tsx` y
+`mas-alla.tsx`. Las dos «nuevas» tenían **exactamente los mismos colores** que dos que ya
+estaban; lo único distinto era el umbral, `7` → `4.5`.
+
+**La causa.** La clave lleva el umbral a propósito (`06-pares.js`), para que dos textos del
+mismo color sobre el mismo fondo no colapsen en una fila y el pequeño —que es el que puede
+fallar— no desaparezca sin dejar rastro. Pero ese umbral sale de un `px >= 24` aplicado a un
+tamaño **continuo**: cinco titulares de `/trayectoria` miden **exactamente `24.00px`** con peso
+600, porque su tamaño sale de un `clamp()` con `vw`. Una diferencia subpíxel en el ancho de la
+ventana los cruza. El veredicto no cambiaba —el par pasa con los dos umbrales, y `4.5` es más
+laxo que el `7` que ya cumplía—, pero **aparecía mezclado con el diff legítimo del cambio que
+se estaba sellando**, y descartar que lo hubieras causado tú costó varias mediciones.
+
+**Por qué no se arregló donde parecía.** La ficha proponía tres direcciones y daba por buena la
+segunda —guardar el px en la clave en vez del umbral derivado—. Al mirarla de cerca, las dos
+primeras salen peor:
+
+- **Redondear el tamaño antes de decidir el bucket** mueve la frontera de sitio, y sobre todo
+  abre una ventana de colapso: entre 23,5 y 24 px, un texto que WCAG considera **pequeño**
+  compartiría clave con uno grande del mismo color, y el pequeño —el que puede fallar— podría
+  perderse. Es exactamente el agujero que el umbral en la clave existe para tapar.
+- **Guardar el px** no quita la basculación, **la empeora**: el px es el dato continuo, así que
+  `24.00` y `23.99` serían dos claves distintas en vez de dos umbrales distintos. Y si se
+  redondea para evitarlo, es la primera opción con otro nombre.
+
+Lo que no depende del tamaño es `estado|fg|bg`, y eso es lo que el emparejador usa. **La clave
+no se toca**: se mantiene la granularidad, se mantienen los veredictos y lo que cambia es solo
+cómo el diff los lee.
+
+**Y la clave no se usa para nada más**, que era la comprobación previa que pedía la ficha: sale
+en `tipos.ts` como campo y se consume en un solo sitio, `censo.ts:147`, para construir el
+inventario.
+
+**Lo verificado.** Sobre el inventario REAL —402 pares en 28 corridas—, basculando la frontera
+de los dos pares afectados en todas ellas:
+
+```
+desaparecidos: 0 · nuevos: 0 · basculados: 15
+  ejemplo: reposo|247,243,236|33,38,43|4.5  →  reposo|247,243,236|33,38,43|7
+```
+
+Antes del arreglo eso mismo eran **15 desapariciones y 15 apariciones**, o sea el guardián en
+rojo. Y siete casos en `tests/censo-inventario.test.ts`, cuatro de ellos malos: sin gemelo
+sigue siendo pérdida; dos pares que solo comparten umbral no se emparejan; el mismo par en
+**estados** distintos tampoco; y una clave sin separador no empareja con nada —preferimos no
+emparejar a emparejar de más, porque emparejar de más es lo único que podría esconder una
+desaparición—.
+
+*Lo reutilizable: cuando una clave de identidad lleva dentro un valor DERIVADO de una magnitud
+continua, el diff que la compara hereda el ruido de la frontera. El arreglo no suele ser mover
+la frontera —eso solo la cambia de sitio— sino que el comparador sepa qué parte de la clave es
+identidad y cuál es veredicto.*
