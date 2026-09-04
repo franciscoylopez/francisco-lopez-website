@@ -87,6 +87,57 @@ const SALIDA = 32;
 // suelta porque los dos extremos tienen que decir lo mismo y viven a 100 líneas.
 const MENU_PANEL_ID = "nav-menu";
 
+/** Una página del sitio en el nav: a dónde va, si es la actual y cómo se llama. */
+type PaginaNav = { href: string; actual: boolean; etiqueta: string };
+
+/**
+ * LOS ENLACES DE PÁGINA, EN LAS DOS FORMAS EN QUE SE PINTAN (P72.505). La fila
+ * de escritorio y el panel del móvil son la misma navegación en dos formatos, y
+ * estaban escritos dos veces: con dos listas, un enlace nuevo podía entrar en una
+ * y no en la otra. Lo único que de verdad cambia es la forma del enlace y que en
+ * el panel, al pulsar, hay que cerrarlo.
+ *
+ * VIVE FUERA DE `Nav` A PROPÓSITO, y no por estilo: `qlty` suma las funciones
+ * ANIDADAS al padre, así que dos `map` dentro del componente cuentan como
+ * complejidad suya. El trinquete de deuda lo cazó al añadir el cuarto enlace
+ * —43 → 46— y esto es lo que lo devuelve por debajo del sello en vez de
+ * re-sellarlo.
+ *
+ * Y NO CAMBIA UN BYTE DEL HTML: `onClick` no se serializa, así que la forma de
+ * barra emite exactamente los mismos atributos y en el mismo orden que cuando
+ * estaban escritos a mano. Comprobado con `npm run gate:html` sobre las 28
+ * variantes.
+ */
+function EnlacesDePagina({
+  paginas,
+  forma,
+  onNavegar,
+}: {
+  paginas: PaginaNav[];
+  forma: "bar" | "stack";
+  onNavegar?: () => void;
+}) {
+  const extra =
+    forma === "bar"
+      ? "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex"
+      : "text-[0.95rem] aria-[current=page]:underline";
+  return (
+    <>
+      {paginas.map((p) => (
+        <a
+          key={p.href}
+          href={p.href}
+          aria-current={p.actual ? "page" : undefined}
+          onClick={onNavegar}
+          className={cn(chromeLinkVariants({ shape: forma }), extra)}
+        >
+          {p.etiqueta}
+        </a>
+      ))}
+    </>
+  );
+}
+
 export function Nav({
   dict,
   homeHref = "#top",
@@ -129,6 +180,40 @@ export function Nav({
   // ESTA página», no «estás en esta rama». En `/trayectoria/emendu` quien indica
   // dónde estás es el breadcrumb, que para eso lleva los tres niveles.
   const isTrayectoria = subpath === "/trayectoria";
+
+  /**
+   * LAS PÁGINAS DEL NAV, EN SU ORDEN, Y ESCRITAS UNA VEZ (P72.505). Las pintan
+   * la fila de escritorio y el panel del móvil, que son la misma navegación en
+   * dos formatos: con dos listas, un enlace nuevo podía entrar en una y no en la
+   * otra. El CV no entra aquí porque no es una página de este sitio: se descarga,
+   * lleva icono por eso, y no tiene estado de «estás aquí».
+   *
+   * EL ORDEN ES CV · TRAYECTORIA · SOBRE MÍ · CONTACTO, y cambia el de P67 —que
+   * era CV · Contacto · Sobre mí, «de la acción más buscada a la más de
+   * contexto»—. Ahora la fila cuenta un recorrido: las credenciales, lo que se ha
+   * hecho, quién lo hizo y cómo hablar. Contacto se queda en el extremo a
+   * propósito, que es donde termina esa lectura.
+   *
+   * TRAYECTORIA ENTRA PORQUE ERA UNA PÁGINA HUÉRFANA. Medido sobre el HTML
+   * servido de las catorce: recibía CINCO enlaces entrantes y los cinco eran el
+   * breadcrumb de sus propios hijos. Cero desde la home, cero desde el footer.
+   * Estaba en el sitemap y no había forma de llegar sin entrar antes a un caso.
+   *
+   * Y NINGUNO LLEVA ICONO: la regla mira la ACCIÓN, y navegar dentro del sitio no
+   * saca al usuario de él.
+   */
+  const PAGINAS: PaginaNav[] = [
+    {
+      href: trayectoriaHref,
+      actual: isTrayectoria,
+      etiqueta: dict.trayectoria,
+    },
+    { href: sobreMiHref, actual: isSobreMi, etiqueta: dict.sobreMi },
+    { href: contactoHref, actual: isContacto, etiqueta: dict.contacto },
+  ];
+
+  /** Todo lo que se pulsa en el panel del móvil lo cierra; escrito una vez. */
+  const cerrarMenu = () => setMenuOpen(false);
 
   // LA PREFERENCIA SE ESCUCHA, NO SE MIRA UNA VEZ *(P82)*. Estaba leída con
   // `.matches` dentro del efecto de scroll, así que el valor quedaba capturado en
@@ -348,50 +433,7 @@ export function Nav({
               <Download aria-hidden="true" />
               {dict.downloadCv}
             </a>
-            {/* EL ORDEN ES CV · TRAYECTORIA · SOBRE MÍ · CONTACTO (P72.505), y
-              cambia el de P67 —que era CV · Contacto · Sobre mí, «de la acción
-              más buscada a la más de contexto»—. Ahora la fila cuenta un
-              recorrido: las credenciales, lo que se ha hecho, quién lo hizo y
-              cómo hablar. Contacto se queda en el extremo a propósito, que es
-              donde termina esa lectura.
-              Ninguno lleva icono salvo el CV: la regla mira la ACCIÓN, y navegar
-              dentro del sitio no saca al usuario de él.
-
-              TRAYECTORIA ENTRA PORQUE ERA UNA PÁGINA HUÉRFANA. Medido sobre el
-              HTML servido de las catorce: recibía CINCO enlaces entrantes y los
-              cinco eran el breadcrumb de sus propios hijos. Cero desde la home,
-              cero desde el footer. Estaba en el sitemap y no había forma de
-              llegar sin entrar antes a un caso. */}
-            <a
-              href={trayectoriaHref}
-              aria-current={isTrayectoria ? "page" : undefined}
-              className={cn(
-                chromeLinkVariants({ shape: "bar" }),
-                "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
-              )}
-            >
-              {dict.trayectoria}
-            </a>
-            <a
-              href={sobreMiHref}
-              aria-current={isSobreMi ? "page" : undefined}
-              className={cn(
-                chromeLinkVariants({ shape: "bar" }),
-                "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
-              )}
-            >
-              {dict.sobreMi}
-            </a>
-            <a
-              href={contactoHref}
-              aria-current={isContacto ? "page" : undefined}
-              className={cn(
-                chromeLinkVariants({ shape: "bar" }),
-                "hidden text-[0.88rem] aria-[current=page]:underline md:inline-flex",
-              )}
-            >
-              {dict.contacto}
-            </a>
+            <EnlacesDePagina paginas={PAGINAS} forma="bar" />
             {/* @fuera-de-capa: etiqueta de dos letras, el ancho lo daba el texto y el suelo
               táctil se escribe aquí; verificado el 2026-08-18 (2026-08-18) */}
             <a
@@ -485,7 +527,7 @@ export function Nav({
               <a
                 href={cvHref}
                 download
-                onClick={() => setMenuOpen(false)}
+                onClick={cerrarMenu}
                 className={cn(
                   chromeLinkVariants({ shape: "stack" }),
                   "text-[0.95rem]",
@@ -494,48 +536,16 @@ export function Nav({
                 <Download aria-hidden="true" />
                 {dict.downloadCv}
               </a>
-              {/* MISMO ORDEN QUE LA FILA DE ESCRITORIO, y no es cosmético: el
-                  panel y la barra son la misma navegación en dos formatos, así
-                  que un orden distinto obligaría a reaprenderla al girar el
-                  móvil. */}
-              <a
-                href={trayectoriaHref}
-                aria-current={isTrayectoria ? "page" : undefined}
-                onClick={() => setMenuOpen(false)}
-                className={cn(
-                  chromeLinkVariants({ shape: "stack" }),
-                  "text-[0.95rem] aria-[current=page]:underline",
-                )}
-              >
-                {dict.trayectoria}
-              </a>
-              <a
-                href={sobreMiHref}
-                aria-current={isSobreMi ? "page" : undefined}
-                onClick={() => setMenuOpen(false)}
-                className={cn(
-                  chromeLinkVariants({ shape: "stack" }),
-                  "text-[0.95rem] aria-[current=page]:underline",
-                )}
-              >
-                {dict.sobreMi}
-              </a>
-              <a
-                href={contactoHref}
-                aria-current={isContacto ? "page" : undefined}
-                onClick={() => setMenuOpen(false)}
-                className={cn(
-                  chromeLinkVariants({ shape: "stack" }),
-                  "text-[0.95rem] aria-[current=page]:underline",
-                )}
-              >
-                {dict.contacto}
-              </a>
+              <EnlacesDePagina
+                paginas={PAGINAS}
+                forma="stack"
+                onNavegar={cerrarMenu}
+              />
               <a
                 href={altHref}
                 hrefLang={lang === "en" ? "es" : "en"}
                 aria-label={dict.switchLanguage}
-                onClick={() => setMenuOpen(false)}
+                onClick={cerrarMenu}
                 className={cn(
                   chromeLinkVariants({ shape: "stack" }),
                   "text-[0.95rem]",

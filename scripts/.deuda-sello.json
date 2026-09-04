@@ -1,11 +1,11 @@
 {
   "total": 20,
   "porArea": {
-    "raíz": 1,
-    "scripts/": 4,
     "components/": 11,
-    "app/": 2,
-    "lib/": 2
+    "scripts/": 4,
+    "raíz": 1,
+    "lib/": 2,
+    "app/": 2
   },
   "hallazgos": [
     "qlty:function-complexity|components/site/contact-form.tsx",
@@ -33,7 +33,7 @@
       19
     ],
     "qlty:function-complexity|components/site/diagrams/herencia.tsx": [18],
-    "qlty:function-complexity|components/site/nav.tsx": [43],
+    "qlty:function-complexity|components/site/nav.tsx": [40],
     "qlty:function-complexity|components/site/reveal-root.tsx": [36],
     "qlty:function-complexity|components/ui/article.tsx": [18],
     "qlty:function-complexity|scripts/logos/process_logo.js": [26],
@@ -51,6 +51,6 @@
     ],
     "qlty:similar-code|lib/ard.ts": [68, 68]
   },
-  "commit": "0fe338e2033225b796da1ce2aed21192d159fa76",
+  "commit": "beb920341b81630661ee515c0b03b652b83812b7",
   "fecha": "2026-09-04"
 }
