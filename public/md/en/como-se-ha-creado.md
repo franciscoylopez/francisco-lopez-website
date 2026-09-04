@@ -43,7 +43,7 @@ Contents
 
 time per section
 
-Every section closes on its own: you can read it in chunks, in any order. The bar along the top edge tracks where you are. **9685** words· · **12** sections
+Every section closes on its own: you can read it in chunks, in any order. The bar along the top edge tracks where you are. **9694** words· · **12** sections
 
 1. [01 · Why it exists · ≈4 min](#s01)
 2. [02 · How I work · ≈4 min](#s02)
@@ -520,9 +520,9 @@ There's a comfortable answer here and a true one. The comfortable one is that th
 
 Out of that came the rule I wrote down to keep myself honest: in that file, exclusions are based on what a file **is** (generated data, parallel per-language content), never on what a file **scores**. Silencing an uncomfortable finding would have turned the report into the same meter that passes on an empty list, which is the mistake I've made the most times in this project.
 
-![Qlty dashboard for this repository: an A grade in maintainability (29 code smells) and an A grade in security (no open issues), a technical debt ratio and remediation time chart peaking on August 19, 2026, a sunburst of maintainability hotspots, and the five worst-scored files: contrast-census.js and artefacto-svg.ts (F grade), check-experience-copy.ts (F grade), check-palette.ts and reveal-root.tsx (D grade).](https://franciscolopez.es/_next/image?url=%2Fimg%2Fcomo-se-ha-creado-qlty-deuda.webp&w=3840&q=75)
+![Qlty dashboard for this repository: an A grade in maintainability (21 code smells) and an A grade in security (no open issues); a technical debt ratio and remediation time chart from 5 August to 2 September 2026, with the ratio climbing to 3.4% and dropping to 0.36% in the final days; a sunburst of maintainability hotspots, and the five worst-scored files: nav.tsx, reveal-root.tsx and contact-form.tsx (D grade) and two page.tsx (C grade). At the bottom: technical debt ratio 0.36%, remediation time 4 days, duplication 0.5% and complexity per KLOC 113.](https://franciscolopez.es/_next/image?url=%2Fimg%2Fcomo-se-ha-creado-qlty-deuda.webp&w=3840&q=75)
 
-This repository's Qlty dashboard: an A grade in maintainability and security, with the five worst-scored files the technical debt ratio pointed at.
+The Qlty dashboard today, after «Higiene»: the technical debt ratio falls from 3.4% to 0.36% in the last days of the series, and the five hotspots left really are website code.
 
 ### The tests arrived when the logic did
 

@@ -43,7 +43,7 @@ Vamos a ello.
 
 tiempo por sección
 
-Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas. **9918** palabras· · **12** secciones
+Cada sección cierra sola: se puede leer por trozos, en el orden que quieras. La barra del borde superior marca por dónde vas. **9930** palabras· · **12** secciones
 
 1. [01 · Por qué existe · ≈4 min](#s01)
 2. [02 · Cómo se trabaja · ≈4 min](#s02)
@@ -520,9 +520,9 @@ Aquí hay una respuesta cómoda y una verdadera. La cómoda es que casi no hay. 
 
 De ahí salió la regla que me dejé escrita para no engañarme: en ese archivo se excluye por lo que un archivo **es** (datos generados, contenido paralelo por idioma), nunca por lo que un archivo **puntúa**. Silenciar un hallazgo incómodo habría convertido el informe en el metro que aprueba sobre una lista vacía, que es el error que más veces he cometido en este proyecto.
 
-![Panel de Qlty sobre este repositorio: nota A en mantenibilidad (29 code smells) y nota A en seguridad (sin incidencias abiertas), un gráfico de ratio de deuda técnica y tiempo de remediación con un pico el 19 de agosto de 2026, un sunburst de los puntos calientes de mantenibilidad, y el listado de los cinco archivos peor puntuados: contrast-census.js y artefacto-svg.ts (nota F), check-experience-copy.ts (nota F), check-palette.ts y reveal-root.tsx (nota D).](https://franciscolopez.es/_next/image?url=%2Fimg%2Fcomo-se-ha-creado-qlty-deuda.webp&w=3840&q=75)
+![Panel de Qlty sobre este repositorio: nota A en mantenibilidad (21 code smells) y nota A en seguridad (sin incidencias abiertas); un gráfico de ratio de deuda técnica y tiempo de remediación entre el 5 de agosto y el 2 de septiembre de 2026, con el ratio subiendo hasta el 3,4% y cayendo al 0,36% en los últimos días; un sunburst de los puntos calientes de mantenibilidad, y el listado de los cinco peores: nav.tsx, reveal-root.tsx y contact-form.tsx (nota D) y dos page.tsx (nota C). Al pie: ratio de deuda técnica 0,36%, tiempo de remediación 4 días, duplicación 0,5% y complejidad por KLOC 113.](https://franciscolopez.es/_next/image?url=%2Fimg%2Fcomo-se-ha-creado-qlty-deuda.webp&w=3840&q=75)
 
-El panel de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con los cinco archivos peor puntuados que señaló el ratio de deuda técnica.
+El panel de Qlty hoy, después de «Higiene»: el ratio de deuda técnica cae del 3,4% al 0,36% en los últimos días de la serie, y los cinco puntos calientes que quedan ya sí son código de la web.
 
 ### Los tests llegaron cuando llegó la lógica
 
