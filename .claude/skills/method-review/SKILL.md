@@ -12,9 +12,8 @@ description: >
 
 # Revisión de metodología — entre sprints
 
-Un técnico que **acaba de ver este método por primera vez** lo audita buscando margen. La
-primera vez fue el 2026-08-19 y salió con nueve hallazgos. Lo que sigue es ese recorrido, con
-lo que aprendió al ejecutarse.
+Un técnico que **acaba de ver este método por primera vez** lo audita buscando margen. Lo que
+sigue es lo que once disparos aprendieron al ejecutarse.
 
 > **Y aquí mismo, la primera lección de su propio catálogo** *(corregido en el cuarto disparo,
 > 2026-08-23)*. Esta línea presumía «una reducción del 35% del contexto de arranque»; el total
@@ -32,11 +31,8 @@ etapa cerrada → sprint-review (el codebase) → check de medición → METHOD-
 ```
 
 **Por qué ahí y no al cerrar.** El andamiaje hay que ponerlo **antes** de que existan las
-cosas que tiene que sostener. El primer disparo lo demostró: iba delante de un sprint que
-añade una entidad nueva con componentes propios, y la Definition of Done y el filtro mecánico
-de interfaz entraron a tiempo de aplicarse a lo que estaba por construir. Al cerrar habrían
-llegado para auditar, no para prevenir — que es la misma lección que D50/D52 sacaron del gate
-de accesibilidad.
+cosas que tiene que sostener: al cerrar llega para auditar, no para prevenir — la misma
+lección que D50/D52 sacaron del gate de accesibilidad.
 
 **Y no es «una cosa más que recordar»**, que era la objeción obvia: la dispara `sprint-review`
 al terminar, y el ritual de cierre de etapa de `CLAUDE.md` la nombra como paso 4. Si acaba
@@ -45,31 +41,25 @@ todo `DECISIONS.md` corrigiendo.
 
 ## Los tres principios, y el primero manda sobre todo lo demás
 
-1. **Mide el repositorio; no leas los documentos.** Casi todos los hallazgos del primer
-   disparo salieron de un comando, no de una lectura: el presupuesto de contexto había subido
-   un 113% mientras los tres documentos que lo gobiernan seguían describiéndolo como
-   controlado. **Un hallazgo sin cifra es una opinión.**
+1. **Mide el repositorio; no leas los documentos.** Casi todos los hallazgos salen de un
+   comando, no de una lectura. **Un hallazgo sin cifra es una opinión.**
 2. **Busca FAMILIAS, no bugs.** El valor no está en encontrar un guardián flojo: está en ver
    que es la quinta aparición de la misma forma. El catálogo de familias conocidas está más
    abajo y es lo que hace esta revisión barata la segunda vez.
-3. **Calibra con lo que está bien.** Antes de listar nada, mide algo que se sabe sano (`any`
-   en el código, vulnerabilidades, estado del tablero). Sin eso, el informe parece un
-   suspenso y se lee como ruido. El primer disparo abrió con «el código no es el problema de
-   este proyecto», y era verdad.
+3. **Calibra con lo que está bien.** Antes de listar nada, mide algo que se sabe sano (`any`,
+   vulnerabilidades, estado del tablero). Sin eso, el informe parece un suspenso y se lee
+   como ruido.
 
 Y una regla de honestidad que se ganó midiendo: **espera que algunas conclusiones cambien al
-ejecutarlas.** Tres de las nueve del primer disparo se cayeron —un guardián que sí tenía su
-guarda, un eje del tablero que no estaba degenerando, y un método que salió al revés del que
-se iba a copiar—. **Eso no es un fallo de la revisión: es la revisión funcionando.** Anótalas
-como corrección explícita, en el informe y en la tarea.
+ejecutarlas** — han caído así tres del primer disparo y dos del XII. **No es un fallo de la
+revisión: es la revisión funcionando.** Anótalas como corrección explícita, en el informe y en
+la tarea.
 
 ## Antes de medir: pide las notas de Francisco
 
-**Pregúntale qué lleva anotado y NO lo leas hasta tener tu propio análisis.** El primer
-disparo se hizo así a petición suya —«te paso mis notas, sin leer lo que me has pasado para no
-tener sesgo»— y fue lo que dio la señal más fuerte del informe: **tres hallazgos convergieron
-desde direcciones distintas**, y esos fueron los de más confianza. Los que solo aparecían en
-un lado necesitaron verificación extra, y ahí es donde se cayeron los tres.
+**Pregúntale qué lleva anotado y NO lo leas hasta tener tu propio análisis.** Lo que converge
+desde dos direcciones es lo de más confianza; lo que solo aparece en un lado necesita
+verificación extra, y es donde se han caído los que se cayeron.
 
 ## El barrido — nueve medidas, todas con comando
 
@@ -92,11 +82,9 @@ si subió sin que entrara una regla nueva de verdad, se añadió donde tocaba su
 
 Cuenta los pasos de `.github/workflows/ci.yml` y enumera los que dependen de acordarse
 (`gate:html`, `psi`, el censo, `viewport-verifier`, las tres skills de revisión, la revisión
-EN↔ES, los generadores). **La proporción es el hallazgo**: en el primer disparo eran 8 contra
-9, y los manuales habían fallado cuatro veces documentadas.
+EN↔ES, los generadores). **La proporción es el hallazgo.**
 
-**Y luego mide si los automáticos pasan, que es la mitad que faltaba** *(añadida en el 11.º
-disparo, donde el hallazgo de más impacto lo trajo Francisco porque esta skill no podía verlo)*:
+**Y luego mide si los automáticos PASAN, que es la mitad que faltaba:**
 
 ```bash
 gh run list --workflow=CI --limit 80 --json conclusion,headBranch,databaseId
@@ -126,9 +114,17 @@ grep -L "process.exit(1)" scripts/check-*.ts
 for f in PRD-Live.md BRAND.md; do echo "$f: $(grep -oE '2026-[0-9]{2}-[0-9]{2}' $f | wc -l) fechas"; done
 ```
 
-Una fecha en un documento en presente es historia que no se ha bajado. **Y mira si un
-documento está duplicando su propio histórico**: en el primer disparo, tres bloques de
-`BRAND.md` repetían lo que `BRAND-historical.md` ya contaba entero.
+**Cuenta el PESO, no las fechas** *(corregido en el XII, donde contarlas dio un hallazgo
+falso)*: en este repo la convención es **fechar la regla viva**, así que 18 marcadores pesaban
+**21 palabras** y no señalaban ni un párrafo retirable. `grep -oE '\*\(20[0-9]{2}-[^)]*\)\*'
+… | wc -w` antes de proponer nada.
+
+Lo que sí señala retirada es **que un documento duplique su propio histórico**: en el primer
+disparo, tres bloques de `BRAND.md` repetían lo que `BRAND-historical.md` contaba entero; en el
+XII, la sección que enseña a escribir reglas narraba los casos que su histórico ya tenía —su
+propia regla 5, incumplida por ella misma—, y ese corte solo valió 59 palabras. **Ordena los
+candidatos por duplicación, no por tamaño**: las secciones más gruesas suelen ser las que más
+se aplican.
 
 ### 5 · Listas escritas a mano que podrían derivarse
 
@@ -157,9 +153,7 @@ grep -icE "contact_submit|contact_click|file_download|n=[12]" DECISIONS.md PRD-H
 ```
 
 Si la segunda cifra es cero, el bucle no se ha cerrado nunca. **Y si un scorecard está a cero,
-la primera hipótesis es el instrumento, no la audiencia** — el primer disparo encontró un
-dashboard cuya tarea se cerró sobre la predicción de que los datos llegarían en 24-48 horas, y
-dieciséis días después seguían vacíos.
+la primera hipótesis es el instrumento, no la audiencia.**
 
 ### 8 · El tablero
 
@@ -189,19 +183,19 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | Familia | Cómo se reconoce | Instancias |
 | :-- | :-- | :-- |
 | **La reducción que fue una mudanza** | Una métrica mejora porque el coste se movió al cubo que **nadie mide**. Firma: la cifra celebrada describe *una parte* y se lee como si describiera *el todo* | **1** |
-| **El metro que declara su alcance, y su alcance no incluye el síntoma** | Una verificación que **aprueba**, dice qué ha mirado —y por eso convence— y lo que ha mirado no es donde está el defecto que una persona está señalando | **3** |
+| **El metro que declara su alcance, y su alcance no incluye el síntoma** | Una verificación que **aprueba**, dice qué ha mirado —y por eso convence— y lo que ha mirado no es donde está el defecto que una persona está señalando | **4** |
 | **El metro que aprueba sobre lista vacía** | Un verificador que no encuentra nada y calla, o que cuenta sus propias constantes | 6 · **0 vivas** |
 | **La misma cosa escrita en dos sitios** | Un espejo, un índice a mano, una cifra copiada (D38, D59) | 6 |
 | **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 3 |
-| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **9** |
+| **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **10** |
 | **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 5 |
-| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **6** |
+| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **7** |
 | **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **3** |
 | **El arreglo que se quedó en su archivo** | Un defecto de familia conocida se corrige **donde se encontró**, la regla se escribe, y sus hermanos siguen vivos en archivos vecinos porque nadie los buscó. Firma: el mismo repo contiene la lección escrita **y** su incumplimiento, a un directorio de distancia | **3** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **El umbral que persigue al dato** | Un techo que se reescribe para seguir a lo que mide, así que nunca se incumple y nunca obliga. Firma: cambia más a menudo que la cosa medida, y su distancia al dato es constante | **2** |
 | **El dato que persigue al techo** | El techo **no** se mueve y la medida vive pegada a él, porque retirar solo se dispara al cruzarlo. Firma: el objetivo no se ha cumplido **nunca** | **1** |
-| **Añadir sin retirar** | Algo del método crece porque **nada programa la retirada**: solo hay techo, y retirar es siempre una reacción al rojo. Nació mirando documentos (D69) y el décimo disparo la encontró en tres órganos a la vez | **4** |
+| **Añadir sin retirar** | Algo del método crece porque **nada programa la retirada**: solo hay techo, y retirar es siempre una reacción al rojo. Nació mirando documentos (D69) y el décimo disparo la encontró en tres órganos a la vez | **5** |
 
 > **El RELATO de cada disparo —qué encontró, con quién convergió y qué se cerró— vive en
 > `PRD-Historical.md`, con su informe enlazado.** Aquí solo la tabla de arriba y las reglas que
@@ -249,19 +243,33 @@ las va a aplicar, no a datar.
 
 | Indicador | Hoy | Verde | Rojo | Comando |
 | :-- | :-- | :-- | :-- | :-- |
-| **Runs de CI en rojo** | **18 %** (14/80) 🔴 | ≤ 5 % | ≥ 15 % | `gh run list --workflow=CI --json conclusion` |
-| Variación neta de `General` por sprint | **+3** (20 → 23) 🟡 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
+| **Runs de CI en rojo** | **21,3 %** (17/80) 🔴 | ≤ 5 % | ≥ 15 % | `gh run list --workflow=CI --json conclusion` |
+| Variación neta de `General` por sprint | **−15** (23 → 8) 🟢 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
 | Veces que se movió un techo en el ciclo | **0** de 3 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
-| Margen del presupuesto de contexto | **14** 🔴 | ≥ 400 | < 100 | `check:contexto` |
-| Suma de skills a demanda | **holgura 62** 🟡 | ≤ techo | > techo | `check:contexto` |
-| Verificación ÷ producto | **0,571** 🔴 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
-| % Infra del sprint que cierra | **0 %** (0/13) 🟢 | ≤ 35 % | ≥ 50 % | tablero, `GROUP BY Área` |
-| Verificación ÷ producto DEL SPRINT | **1,56 : 1** 🟡 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
-| Hallazgos de `design-review` cuya regla ya existía | *sexto ciclo sin disparar* ⚪ | ≤ 1 | ≥ 3 | `design-review` |
+| Margen del presupuesto de contexto | **73** 🔴 | ≥ 400 | < 100 | `check:contexto` |
+| Suma de skills a demanda | **holgura 7** 🔴 | ≤ techo | > techo | `check:contexto` |
+| Verificación ÷ producto | **0,716** 🔴 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
+| Verificación ÷ producto DEL SPRINT | **5,89 : 1** 🔴 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
+| Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 | `design-review` |
 
-*El margen de contexto entró en rojo profundo sin que ningún sprint lo gastara: **lo gastó el
-cierre anterior**, con las 105 palabras de la regla que ordena retirar, y la apertura que esa
-regla manda retiró cero. Es la fila que hay que mirar primero el disparo que viene.*
+*Se retira «% Infra del sprint que cierra» (2026-09-04): decía **28,6 % verde** sobre el mismo
+sprint en que la fila de líneas decía **5,89:1 rojo**, porque «Higiene» etiquetó su andamiaje
+como `Código` —honesto, y ciego—. Sustituyó a «sprint de método abierto en el ciclo» por leer
+el NOMBRE, y heredó el defecto un nivel más abajo: leía la ETIQUETA. **Una fila que se puede
+poner verde eligiendo bien la etiqueta no mide nada**; la de líneas no se puede.*
+
+*El margen se desatascó en el disparo XII —14 → 73— con **un solo corte**: la sección de
+`BRAND.md` que narraba los casos que su propio histórico ya contaba, o sea su regla 5 aplicada
+a sí misma. **Y ahí se acabaron los cortes limpios**: lo siguiente en la lista por peso son
+reglas que se aplican en cada censo, no historia narrada. Quien busque la próxima retirada
+empieza por duplicación, no por tamaño.*
+
+*Y **el objetivo NO se discute, aunque parezca incumplido** — se intentó dos veces y las dos
+estaban mal. Es una ESCALERA de escalones de 200 que baja al alcanzarse: 12.000 ✓, 11.800 ✓
+(11.794), 11.600 ✓ (11.455), y 11.400 vigente desde el 2026-08-30. P68.7405 argumentó «11.600
+no se alcanzó nunca» y era falso: esperaba una retirada estructural. El disparo XII repitió el
+argumento sobre el 11.400 con cinco días de vida. **Antes de proponer retirar un objetivo, lee
+su historial de escalones**: la cabecera de `scripts/contexto/documentos.ts` lo lleva entero.*
 
 *Las dos filas de `check:contexto` van en su vara, que **descuenta los bloques de código**. La
 suma de skills no lleva cifra a propósito: la mueve esta misma skill al escribirse.*
@@ -295,13 +303,10 @@ no se llamaba de método y lo fue.
 3. **Propón antes de crear**, y **consulta el tablero primero**: en el primer disparo, cinco
    de los once puntos del plan ya estaban tareados por revisiones anteriores. La salida no es
    una lista de tareas nuevas, es un bloque ensamblado con las que ya existen.
-4. **Un sprint de método propio es el último recurso, no el formato por defecto** *(desde el
-   cuarto disparo)*. Las dos primeras veces se abrió uno —*Método* y *Método II*, 24 tareas,
-   las mismas que costó la página del sprint que las generó— y eso es justo lo que el cupo de
-   `General` existe para evitar. El orden correcto: **la regla o la edición de documento se
-   hace ahora**, en la misma sesión; **el arreglo con código va al sprint que ya toca esos
-   archivos**; y solo lo que no encaje en ninguno de los dos cae en `General`, dentro del cupo.
-   Un sprint propio se abre únicamente si lo acordado no cabe en esas tres vías.
+4. **Un sprint de método propio es el último recurso, no el formato por defecto.** El orden:
+   **la regla o la edición de documento se hace ahora**, en la misma sesión; **el arreglo con
+   código va al sprint que ya toca esos archivos**; y solo lo que no encaje en ninguno de los
+   dos cae en `General`, dentro del cupo. Un sprint propio se abre si no cabe en esas tres.
 5. **Antes de dar por abierto el sprint siguiente, comprueba su tarea de contenido.** Si sigue
    en `Sin empezar`, el sprint abre bloqueado y esa es su primera tarea. Este es el hueco donde
    se comprueba porque es el último momento antes de abrir.

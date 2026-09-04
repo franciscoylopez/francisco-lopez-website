@@ -368,29 +368,22 @@ más se ha incumplido.
 ## Cómo se escribe una regla aquí
 
 Estas cinco no son de marca: son de **cómo redactar las de arriba**. Cada una salió de una
-regla que existía y aun así se incumplió, y el caso está en
-[`BRAND-historical.md`](./BRAND-historical.md).
+regla que existía y aun así se incumplió, y **el caso está en
+[`BRAND-historical.md`](./BRAND-historical.md) §Cómo se escribe una regla**: aquí, la regla y
+su ancla — que es la regla 5 aplicada a esta sección.
 
 1. **Una regla cuyo disparador mira al lugar —o al momento— equivocado no es una regla: es una
-   nota.** La condición tiene que ser comprobable **donde** y **cuando** la cosa de verdad
-   ocurre.
-   **De lugar:** «si hay más de dos iconos propios» se comprobaba leyendo `icons.tsx` —donde
-   había uno— mientras el sitio tenía siete; el censo de contraste se hacía leyendo
-   `globals.css`, donde los pares compuestos no existen.
-   **De momento:** el gate de accesibilidad se disparaba **al cerrar** una sección, y al
-   cerrar, el alto de una banda dimensionada por `vw` ya no es un ajuste sino un rediseño. Por
-   eso tiene **dos** disparos y el primero es *mientras se dibuja* (D50, D52).
+   nota.** La condición tiene que ser comprobable **donde** y **cuando** la cosa ocurre de
+   verdad. De lugar: el inventario de iconos se leía en `icons.tsx`, donde había uno, con siete
+   en el sitio. De momento: el gate de accesibilidad se disparaba al cerrar, y ahí el alto de
+   una banda por `vw` ya no es un ajuste sino un rediseño (D50, D52).
 2. **Una regla que hay que recordar es una regla que se incumple.** Lo que impide el drift es
-   el **recorrido completo** —regla → variante o clase → sección publicada en el Design System
-   → uso—, no la disciplina. Los enlaces lo hicieron entero y son coherentes; los botones se
-   quedaron en el primer paso.
+   el **recorrido completo** —regla → variante o clase → sección publicada → uso—, no la
+   disciplina.
 3. **Valida el metro antes de creerte el hallazgo.** Reproduce primero un caso que ya damos por
-   bueno. Se ha caído así un medidor de contraste (componentes fuera de gamut), una norma de
-   iconos (la «densidad de tinta») y un censo de pares (las reglas `:hover` dentro de
-   `@media`).
+   bueno: así se han caído tres metros de esta casa.
 4. **Antes de unificar dos valores que se parecen, mira si significan cosas distintas.** El
-   `CARD` con dos radios no era drift: eran dos cajas y a una le faltaba el nombre. Unificar
-   habría roto la jerarquía.
+   `CARD` con dos radios no era drift: eran dos cajas y a una le faltaba el nombre.
 5. **La misma decisión escrita en dos sitios acaba diciendo dos cosas.** Si una regla ya está
    en `CLAUDE.md` o en `DECISIONS.md`, aquí va el puntero y el porqué específico, nunca la
    copia.
