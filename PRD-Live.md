@@ -50,7 +50,8 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
   las **28 variantes** que recorren los gates.
 
 Y con ellas: **CV en PDF bilingüe** descargable (§6) · **SEO técnico y Open Graph** por
-página · **medición** (GA4/GTM tras consentimiento, y Vercel Web Analytics sin él, D170) ·
+página · **medición** (GA4/GTM y Clarity, con Vercel Web Analytics aparte; **solo Clarity y
+las cookies esperan al consentimiento**, D170/D198) ·
 **dominio propio** · **páginas 404/500 de marca e i18n** · **cabeceras de seguridad**.
 
 **Cada página se sirve también en markdown** para quien la lea con un agente: el `<main>` sin
@@ -210,14 +211,10 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
   El transporte está entero y en GA4 es **evento clave**, sin serie anterior a la marca. Cómo
   se audita la mitad que vive fuera del repo, en D71.
-  **Es un índice relativo, no un volumen** — y la brecha que estaba en duda ya no lo está:
-  **GA4 no está deflactado por consentimiento** (D198). Sin aceptar se envía igual un
-  `page_view` por carga, sin cookies y contado como usuario nuevo, así que las 39 visitas
-  nuevas y las **0 aceptaciones** del contador (hoy, 0 de 59) sí caben juntas y describen
-  casi todo el tráfico. Lo que el consentimiento gatea es la identidad y el mapa de calor,
-  no el recuento. En agosto llegaron **4 correos y se contó 1** (D168/D176; el caso, en
-  `PRD-Historical.md`). **La magnitud —cuánto tráfico real hay detrás— se reescribe con el
-  dato del lanzamiento.**
+  **GA4 no está deflactado por consentimiento** (D198), así que su cifra ya no es un índice
+  relativo: la brecha que D168 daba por desconocida no era tal. En agosto llegaron **4
+  correos y se contó 1** (D168/D176; el caso, en `PRD-Historical.md`). **Cuánto vale la
+  cifra de verdad se reescribe con el dato del lanzamiento.**
   **«Confirma» es el envío que manda correo, no los dos filtros que callan a un bot**: lo decide
   `cuentaComoEnvio` en `lib/contact-form.ts`, donde la regla tiene tests y caso malo (D153).
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
