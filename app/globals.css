@@ -547,9 +547,22 @@
    las utilidades de traslación de Tailwind v4 —`-translate-y-1/2`, que es como
    se centra la composición del Brand Kit— compilan a la propiedad `translate`,
    y animar ahí se las llevaría por delante. */
+/* `backwards` Y NO `both`, que es lo que la revisión de motion cambió. Los dos
+   pintan igual; la diferencia es lo que queda DESPUÉS. `both` retiene el último
+   fotograma para siempre, y una animación gana al resto de la cascada: con él,
+   la regla dejaba `transform: none` fijado en el elemento y cualquier utilidad
+   de `transform` que alguien añadiera aquí más adelante no se aplicaría, sin dar
+   un error. `backwards` conserva lo único que hacía falta —el primer fotograma
+   aplicado ANTES de arrancar, que es lo que impide el parpadeo durante el
+   retardo— y al terminar devuelve el elemento a su estilo normal, que ya es
+   opacidad 1 y sin transformar.
+   (Sus tres hermanas de esta hoja —`punto-cae`, `consent-in`, `split-bloom`—
+   siguen en `both` y comparten el rasgo. No se tocan aquí: ninguna está en un
+   elemento que vaya a recibir utilidades, y cambiarlas de paso sería meter tres
+   cambios sin medir en un commit de dos.) */
 .entrada-pliegue {
   animation: entrada-pliegue var(--duration-entrance) var(--ease-entrance)
-    var(--retardo-entrada, 0s) both;
+    var(--retardo-entrada, 0s) backwards;
 }
 @keyframes entrada-pliegue {
   from {

@@ -207,7 +207,7 @@ export function Hero({
         <div className="relative w-[min(21rem,100%)]">
           <div
             className="entrada-pliegue absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-            style={{ "--retardo-entrada": "0.16s" } as CSSProperties}
+            style={{ "--retardo-entrada": "0.08s" } as CSSProperties}
           >
             <div
               className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
@@ -218,7 +218,7 @@ export function Hero({
           </div>
           <div
             className="entrada-pliegue absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-            style={{ "--retardo-entrada": "0.24s" } as CSSProperties}
+            style={{ "--retardo-entrada": "0.16s" } as CSSProperties}
           >
             <div
               className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
