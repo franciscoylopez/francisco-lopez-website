@@ -125,6 +125,65 @@ function cuentaVistoTrasInteraccion(): () => void {
   return desarmar;
 }
 
+/**
+ * EL ARRANQUE DEL DIÁLOGO, fuera del componente *(2026-09-04)*.
+ *
+ * Hace tres cosas y ninguna se puede hacer en el render: leer la decisión guardada
+ * —`localStorage` no existe en SSR, y el servidor renderiza sin banner, así que no
+ * hay desajuste de hidratación—, **armar la espera de una señal de persona** si aún
+ * no hay decisión (D200), y escuchar el evento con el que el pie reabre las
+ * preferencias.
+ *
+ * SE EXTRAJO POR EL TRINQUETE DE DEUDA, y el motivo se anota porque el gate hizo
+ * justo lo suyo: al añadir la puerta del «visto», `ConsentBanner` cruzó el umbral
+ * de complejidad de Qlty. Sacar el arranque es la opción 1 de ese gate —quitar la
+ * deuda en vez de re-sellarla— y de paso el componente se queda con lo que
+ * renderiza.
+ *
+ * LOS `set*` VAN SUELTOS Y NO EN UN OBJETO: los que devuelve `useState` son
+ * estables, así que como dependencias equivalen a `[]` y `exhaustive-deps` queda
+ * contento sin silenciarlo. Un objeto literal cambiaría en cada render y habría que
+ * apagar la regla, que es cómo se cuelan los efectos que se re-arman solos.
+ */
+function useArranqueDelDialogo(
+  setAnalytics: (v: boolean) => void,
+  setMarketing: (v: boolean) => void,
+  setBannerOpen: (v: boolean) => void,
+  setPrefsOpen: (v: boolean) => void,
+): void {
+  useEffect(() => {
+    let desarmarVisto: (() => void) | undefined;
+    // Las escrituras de estado van envueltas en funciones (el efecto no las llama
+    // directas), como en `nav.tsx`.
+    const applyStored = () => {
+      const stored = readConsent();
+      if (stored) {
+        setAnalytics(stored.analytics);
+        setMarketing(stored.marketing);
+      } else {
+        setBannerOpen(true);
+        // Aquí y no en el render: este es el único punto donde consta que el
+        // diálogo se le enseña a alguien que aún no ha decidido. Pero «se le
+        // enseña a alguien» hay que comprobarlo, no suponerlo (D200).
+        desarmarVisto = cuentaVistoTrasInteraccion();
+      }
+    };
+    applyStored();
+    // El footer (u otra pieza) puede reabrir las preferencias con este evento.
+    const open = () => {
+      const current = readConsent();
+      setAnalytics(current?.analytics ?? false);
+      setMarketing(current?.marketing ?? false);
+      setPrefsOpen(true);
+    };
+    window.addEventListener(OPEN_CONSENT_EVENT, open);
+    return () => {
+      window.removeEventListener(OPEN_CONSENT_EVENT, open);
+      desarmarVisto?.();
+    };
+  }, [setAnalytics, setMarketing, setBannerOpen, setPrefsOpen]);
+}
+
 // Banner de consentimiento + centro de preferencias granular (P22). Isla de cliente:
 // en producción el default denegado ya lo fijó consent-init (beforeInteractive) antes
 // de GTM; aquí se recoge la elección, se persiste y se aplica al Consent Mode.
@@ -150,40 +209,12 @@ export function ConsentBanner({
 
   const policyHref = `${lang === "es" ? "" : `/${lang}`}/cookies`;
 
-  // Lectura de localStorage tras el montaje (no existe en SSR): si no hay decisión,
-  // se muestra el banner. El SSR renderiza sin banner, así que no hay desajuste de
-  // hidratación. Las escrituras de estado van envueltas en funciones (el efecto no
-  // las llama directas), como en `nav.tsx`.
-  useEffect(() => {
-    let desarmarVisto: (() => void) | undefined;
-    const applyStored = () => {
-      const stored = readConsent();
-      if (stored) {
-        setAnalytics(stored.analytics);
-        setMarketing(stored.marketing);
-      } else {
-        setBannerOpen(true);
-        // Aquí y no en el render: este es el único punto del componente donde
-        // consta que el diálogo se le enseña a alguien que aún no ha decidido.
-        // Pero «se le enseña a alguien» hay que comprobarlo, no suponerlo: lo que
-        // se arma es la espera de una señal de persona (D200).
-        desarmarVisto = cuentaVistoTrasInteraccion();
-      }
-    };
-    applyStored();
-    // El footer (u otra pieza) puede reabrir las preferencias con este evento.
-    const open = () => {
-      const current = readConsent();
-      setAnalytics(current?.analytics ?? false);
-      setMarketing(current?.marketing ?? false);
-      setPrefsOpen(true);
-    };
-    window.addEventListener(OPEN_CONSENT_EVENT, open);
-    return () => {
-      window.removeEventListener(OPEN_CONSENT_EVENT, open);
-      desarmarVisto?.();
-    };
-  }, []);
+  useArranqueDelDialogo(
+    setAnalytics,
+    setMarketing,
+    setBannerOpen,
+    setPrefsOpen,
+  );
 
   // Sincroniza el <dialog> nativo con el estado (showModal atrapa el foco y ESC lo
   // cierra; el foco vuelve solo al elemento previo).

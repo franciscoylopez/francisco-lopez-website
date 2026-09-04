@@ -93,6 +93,62 @@ export function escribeRegistro(registro: RegistroMedicion): void {
  * una fuente pase de legible a ilegible es justo el suceso que el cierre anterior
  * no supo contar. Por eso no se comparan solo los números.
  */
+/** Cómo se nombra un instrumento que el sello anterior no llegó a anotar. */
+const nombraInstrumento = (i?: string) => i ?? "sin anotar";
+
+/**
+ * Qué decir de UNA fuente, comparando sus dos lecturas. Vive aparte de
+ * `comparaConAnterior` porque el trinquete de deuda marcó la función entera al
+ * meterle la regla del instrumento, y porque son dos preguntas distintas: aquí,
+ * qué le pasó a una fuente; allí, cómo se ordena el informe.
+ *
+ * EL INSTRUMENTO MANDA SOBRE LA RESTA (D199). El primer sello del contador de
+ * consentimiento viajó en el mismo commit que subió el techo del limitador de 10 a
+ * 100 por hora y por IP, así que el `13 → 59 (+46)` de la pasada siguiente se leía
+ * como crecimiento de tráfico y era, sobre todo, la deflación que se acababa de
+ * quitar. Una resta entre dos metros distintos no es un cero de más ni de menos: es
+ * un número que no significa nada, y encima con toda la pinta de significar algo.
+ */
+function lineasDeFuente(
+  fuente: Fuente,
+  antes: FuenteSellada,
+  ahora: FuenteSellada,
+): string[] {
+  if (antes.estado !== ahora.estado) {
+    return [
+      `  ${fuente}: ${antes.estado} → ${ahora.estado}` +
+        (ahora.motivo ? ` (${ahora.motivo})` : ""),
+    ];
+  }
+  if (ahora.estado !== "leida") return [];
+
+  const mismoMetro = antes.instrumento === ahora.instrumento;
+  const lineas = mismoMetro
+    ? []
+    : [
+        `  ${fuente}: NO SE RESTA — cambió el instrumento ` +
+          `(${nombraInstrumento(antes.instrumento)} → ${nombraInstrumento(ahora.instrumento)}).`,
+      ];
+
+  for (const [clave, valor] of Object.entries(ahora.cifras ?? {})) {
+    const previo = antes.cifras?.[clave];
+    if (typeof valor !== "number" || typeof previo !== "number") continue;
+    if (!mismoMetro) {
+      lineas.push(
+        `      ${clave}: ${previo} (antes) · ${valor} (ahora) — dos metros, no una serie`,
+      );
+      continue;
+    }
+    const delta = valor - previo;
+    const signo = delta > 0 ? "+" : "";
+    lineas.push(
+      `  ${fuente} · ${clave}: ${previo} → ${valor}` +
+        (delta === 0 ? "  (igual)" : `  (${signo}${delta})`),
+    );
+  }
+  return lineas;
+}
+
 export function comparaConAnterior(
   anterior: RegistroMedicion | null,
   actual: RegistroMedicion,
@@ -110,49 +166,7 @@ export function comparaConAnterior(
   for (const fuente of FUENTES) {
     const antes = anterior.fuentes.find((f) => f.fuente === fuente);
     const ahora = actual.fuentes.find((f) => f.fuente === fuente);
-    if (!antes || !ahora) continue;
-
-    if (antes.estado !== ahora.estado) {
-      lineas.push(
-        `  ${fuente}: ${antes.estado} → ${ahora.estado}` +
-          (ahora.motivo ? ` (${ahora.motivo})` : ""),
-      );
-      continue;
-    }
-    if (ahora.estado !== "leida") continue;
-
-    // EL INSTRUMENTO MANDA SOBRE LA RESTA (D199). El primer sello del contador de
-    // consentimiento viajó en el mismo commit que subió el techo del limitador de
-    // 10 a 100 por hora y por IP, así que el `13 → 59 (+46)` de la pasada
-    // siguiente se leía como crecimiento de tráfico y era, sobre todo, la
-    // deflación que se acababa de quitar. Una resta entre dos metros distintos no
-    // es un cero de más ni de menos: es un número que no significa nada, y encima
-    // con toda la pinta de significar algo.
-    const mismoMetro = antes.instrumento === ahora.instrumento;
-    const nombra = (i?: string) => i ?? "sin anotar";
-
-    if (!mismoMetro) {
-      lineas.push(
-        `  ${fuente}: NO SE RESTA — cambió el instrumento (${nombra(antes.instrumento)} → ${nombra(ahora.instrumento)}).`,
-      );
-    }
-
-    for (const [clave, valor] of Object.entries(ahora.cifras ?? {})) {
-      const previo = antes.cifras?.[clave];
-      if (typeof valor !== "number" || typeof previo !== "number") continue;
-      if (!mismoMetro) {
-        lineas.push(
-          `      ${clave}: ${previo} (antes) · ${valor} (ahora) — dos metros, no una serie`,
-        );
-        continue;
-      }
-      const delta = valor - previo;
-      const signo = delta > 0 ? "+" : "";
-      lineas.push(
-        `  ${fuente} · ${clave}: ${previo} → ${valor}` +
-          (delta === 0 ? "  (igual)" : `  (${signo}${delta})`),
-      );
-    }
+    if (antes && ahora) lineas.push(...lineasDeFuente(fuente, antes, ahora));
   }
 
   if (lineas.length === 1) {
