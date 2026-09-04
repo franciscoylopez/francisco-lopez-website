@@ -8,19 +8,20 @@ import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
 import { factsOf } from "@/content/experience-copy";
 import { actionVariants } from "@/components/ui/action";
 import {
-  LEAD_SIZE,
   LEADING,
   SectionHeader,
   dataLabelVariants,
   titleVariants,
 } from "@/components/ui/heading";
-import { FOLD_CRUMB, FOLD_GROUP, SECTION, WRAP } from "@/components/ui/layout";
+import { PROSE, SECTION, WRAP } from "@/components/ui/layout";
+import { Stat } from "@/components/ui/stat-row";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 
 import { BrandLogoBox } from "./brand-logo-box";
 import { Periodo } from "./periodo";
-import { Breadcrumb, type BreadcrumbDict } from "./breadcrumb";
+import { type BreadcrumbDict } from "./breadcrumb";
+import { SystemPageOpening } from "./system-page-opening";
 import { Marcas } from "@/components/ui/marcas";
 
 // ÍNDICE DEL DEEP-DIVE (P49). La página que le faltaba a la ruta: el breadcrumb
@@ -48,6 +49,221 @@ import { Marcas } from "@/components/ui/marcas";
 
 /** Las que tienen página, en el orden canónico del registro. */
 const CON_PAGINA = EXPERIENCES.filter((e) => e.slug !== null);
+
+// LA FILA DE CIFRAS NO SE TECLEA: se DERIVA de `content/experiences.ts`, que es
+// la misma disciplina que D38 impuso a lo que el sitio publica sobre su propio
+// sistema. Cuando se añada una sexta experiencia con página, las cuatro cifras
+// se mueven solas; escritas a mano, tres de ellas mentirían ese mismo día.
+//
+// El diccionario se queda SOLO con las etiquetas, igual que en las tres
+// hermanas: la cifra y su rótulo no pueden divergir porque no viven juntos.
+
+/** Cuántos casos tienen página propia. */
+const CASOS = CON_PAGINA.length;
+
+/**
+ * Cuántos terminaron en exit. Campo del dato, no una cadena de copy.
+ *
+ * El `"exit" in e` no es defensa: `EXPERIENCES` se declara con
+ * `as const satisfies`, así que cada fila conserva sus literales y las que no
+ * llevan el campo no lo tienen en su tipo. Es el mismo rigor que hace que
+ * `ExperienceSlug` sea la unión real de los cinco y no `string`.
+ */
+const EXITS = CON_PAGINA.filter((e) => "exit" in e && e.exit).length;
+
+/**
+ * Desde qué año cubren estos cinco casos. Es el año de la más antigua CON
+ * PÁGINA —no el de la trayectoria entera, que arranca en 2009 en Marketing—,
+ * porque la cifra rotula lo que esta página lista y no otra cosa.
+ */
+const DESDE = Math.min(...CON_PAGINA.map((e) => Number(e.desde.slice(0, 4))));
+
+/**
+ * Los años que abarcan, contra el año en curso. Se recalcula en cada build, que
+ * es justo lo que se quiere: una cifra congelada caduca en silencio el 1 de
+ * enero y nadie se entera hasta que alguien la lee.
+ */
+const ANIOS = new Date().getFullYear() - DESDE;
+
+/**
+ * Cuántos sectores distintos cubren. Se cuenta sobre el copy porque el sector
+ * VIVE en el copy —es una etiqueta traducida, no un dato— y el recuento sale
+ * igual en los dos idiomas. Es función y no constante por eso mismo: necesita el
+ * locale.
+ */
+const sectoresDe = (lang: Locale) =>
+  new Set(CON_PAGINA.map((e) => factsOf(lang, e.company).sector)).size;
+
+// ═══════════════════ LA COMPOSICIÓN DEL HERO ═══════════════════
+//
+// Decorativa (`aria-hidden`), como las de sus tres hermanas, y elegida con
+// `/prototype` frente a otras dos direcciones: una ficha abierta por dentro
+// («Corte») y la misma desplegada en estratos («Capas»). Ganó ésta.
+//
+// QUÉ DIBUJA, que es lo único que la justifica: cada hermana dibuja SU asunto
+// —el Brand Kit, la anatomía del logo; el Design System, marcos con su rejilla—
+// y el de esta página es la cantidad. Cinco fichas girando sobre un pivote
+// común: las cuatro de atrás a filete, la de delante con contenido.
+//
+// SIN TEXTO, A PROPÓSITO. La versión del prototipo rotulaba la ficha de delante
+// con una empresa y un sector de verdad, y eso habría metido copy fuera del
+// diccionario en un elemento que nadie lee. Las líneas esquemáticas dicen lo
+// mismo y no tienen idioma.
+//
+// EL ALTO ES EL TECHO: 15rem (240px) contra los 19rem de `HERO_ROW`, en la
+// misma horquilla que las composiciones compactadas de las hermanas (207, 272 y
+// 240). Mientras la ilustración sea más baja que la fila, es el TEXTO quien
+// decide dónde cae la fila de cifras, que es lo que mantiene las cinco
+// aperturas cuadradas.
+
+/** Las cinco fichas: su giro, su retardo de entrada y su capa. */
+const FICHAS = [
+  { giro: -17, retardo: "0.06s", capa: "z-[1]" },
+  { giro: -8.5, retardo: "0.12s", capa: "z-[2]" },
+  { giro: 17, retardo: "0.18s", capa: "z-[1]" },
+  { giro: 8.5, retardo: "0.24s", capa: "z-[2]" },
+  { giro: 0, retardo: "0.3s", capa: "z-[3]" },
+] as const;
+
+/** El pivote común, por debajo del borde inferior: es lo que abre el abanico. */
+const PIVOTE = "50% 128%";
+
+const FICHA =
+  "border-border h-[186px] w-[140px] rounded-[14px] border p-[14px]";
+const LINEA = "h-[5px] rounded-[3px]";
+
+function Barras() {
+  return (
+    <div className="flex items-end gap-[5px]">
+      {[9, 15, 12, 21].map((alto) => (
+        <span
+          key={alto}
+          className="bg-brand-cyan block w-[8px] rounded-[2px]"
+          style={{ height: alto }}
+        />
+      ))}
+    </div>
+  );
+}
+
+function Dorso() {
+  return (
+    <>
+      <div className="mb-[14px] flex justify-end">
+        <div className="bg-muted size-[26px] rounded-[8px]" />
+      </div>
+      <div className="flex flex-col gap-[6px]">
+        {["70%", "100%", "88%", "95%", "60%"].map((ancho) => (
+          <div
+            key={ancho}
+            className={cn(LINEA, "bg-muted")}
+            style={{ width: ancho }}
+          />
+        ))}
+      </div>
+    </>
+  );
+}
+
+function Frente() {
+  return (
+    <>
+      <div className="mb-[12px] flex items-start justify-between gap-[10px]">
+        <div className={cn(LINEA, "bg-muted mt-[10px] w-[64px]")} />
+        <div className="bg-brand-cyan-soft size-[26px] rounded-[8px]" />
+      </div>
+      <div className="mb-[18px] flex flex-col gap-[6px]">
+        {["92%", "64%"].map((ancho) => (
+          <div
+            key={ancho}
+            className="bg-foreground h-[7px] rounded-[3px]"
+            style={{ width: ancho }}
+          />
+        ))}
+      </div>
+      <div className="mb-[16px] flex flex-col gap-[6px]">
+        {["100%", "82%", "94%"].map((ancho) => (
+          <div
+            key={ancho}
+            className={cn(LINEA, "bg-foreground")}
+            style={{ width: ancho }}
+          />
+        ))}
+      </div>
+      <Barras />
+    </>
+  );
+}
+
+function HeroComposition() {
+  return (
+    <div
+      aria-hidden="true"
+      className="flex flex-[1_1_26rem] items-center justify-center"
+    >
+      {/* escritorio */}
+      <div className="relative hidden h-60 w-[min(25rem,100%)] md:block">
+        {/* La tarjeta pastel de detrás, misma pieza y misma función que las dos
+            del Brand Kit: dar cuerpo sin meter color donde va tinta. Gira sobre
+            EL MISMO PIVOTE que las fichas, como una sexta del abanico — con un
+            giro propio se descolgaba 195px por debajo del dibujo y cruzaba el
+            filete de la fila de cifras (medido en el prototipo). */}
+        <div
+          data-reveal
+          className="absolute bottom-2 left-1/2 z-0 w-[140px]"
+          style={{ transitionDelay: "0.04s" }}
+        >
+          <div
+            className="bg-brand-cyan-soft h-[170px] w-[124px] rounded-[14px]"
+            style={{
+              transformOrigin: PIVOTE,
+              transform: "translateX(-50%) rotate(-25deg)",
+            }}
+          />
+        </div>
+
+        {/* El envoltorio ABSOLUTO lleva la entrada y la ficha de dentro lleva el
+            giro. Al revés no funciona: el `transform` de la entrada convierte al
+            envoltorio en bloque contenedor y la ficha se recolocaría mientras
+            dura la transición. Es el patrón de las tres hermanas. */}
+        {FICHAS.map(({ giro, retardo, capa }) => (
+          <div
+            key={giro}
+            data-reveal
+            className={cn("absolute bottom-2 left-1/2 w-[140px]", capa)}
+            style={{ transitionDelay: retardo }}
+          >
+            <div
+              className={cn(
+                FICHA,
+                giro === 0
+                  ? "border-foreground bg-background"
+                  : "bg-transparent",
+              )}
+              style={{
+                transformOrigin: PIVOTE,
+                transform: `translateX(-50%) rotate(${giro}deg)`,
+              }}
+            >
+              {giro === 0 ? <Frente /> : <Dorso />}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* móvil: una sola ficha, como hace Design System con su marco. Cinco
+          giradas a este ancho se pisan y no se lee ninguna. */}
+      <div className="relative mx-auto h-[11.5rem] w-[min(16rem,100%)] md:hidden">
+        <div
+          data-reveal
+          className="border-foreground bg-background absolute inset-0 rounded-[14px] border p-[14px]"
+        >
+          <Frente />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // La tarjeta comparte forma con la del cierre de página (`ui/page-closer.tsx`) y
 // aun así se escribe aquí. No es descuido: aquélla sube ENTERA —sección, rótulo y
@@ -95,73 +311,47 @@ export function TrayectoriaIndice({
 }) {
   return (
     <>
-      {/* LA APERTURA OCUPA EL PLIEGUE, como Brand Kit, Design System,
-          Accesibilidad y Contacto, y con su misma constante:
-          `md:min-h-[calc(100svh-5rem)]` (P54, D144). No es que la invariante se
-          hubiera roto: es que esta página NUNCA entró en ella. Sin grupo de
-          pliegue, `npm run pliegue` la contaba entre las diez que no lo usan, así
-          que no había nada que pudiera avisar. Medido antes de tocarlo, a
-          1920×1080: el `h1` caía a 249px contra los 389 de las otras cuatro, y la
-          rejilla de tarjetas asomaba a 569 — la página abría enseñando el índice
-          en vez de decir qué es.
+      {/* LA APERTURA SALE DE LA PIEZA COMPARTIDA, no de este archivo. Esta
+          página es el CUARTO caso de `SystemPageOpening`, que hasta ahora servía
+          a Brand Kit, Design System y Accesibilidad: en cuanto la apertura ganó
+          composición y fila de cifras dejó de parecerse a las tres y pasó a ser
+          la misma cosa, así que la cascada de `CLAUDE.md` §Regla de construcción
+          la resuelve en el paso 1 — existe, se usa.
 
-          Y SU CASO ES EL DE CONTACTO, no el de las tres del sistema: la apertura
-          es tipográfica —no usa `HERO_ROW` ni tiene fila de cifras—, así que por
-          estructura no llega a los 464px que miden las otras. Lo que la cuadra no
-          es compactar nada, es el SUELO de `FOLD_GROUP`, que existe exactamente
-          para este caso (P70.35). El sobrante cae debajo del contenido.
+          LO QUE ESO ARREGLA DE PASO. Antes esta página no tenía grupo de pliegue
+          siquiera: `npm run pliegue` la contaba entre las que no lo usan, así
+          que no había nada que pudiera avisar. Medido a 1920×1080, su `h1` caía
+          a 249px contra los 389 de las otras cuatro y la rejilla asomaba a 569,
+          o sea que abría enseñando el índice en vez de decir qué es.
 
-          Es `min-h` y no `h`, y va con `md:`, por lo mismo que en las otras
-          cuatro: en un portátil esta apertura ya desborda el pliegue y la regla no
-          debe recortar; en móvil, llenar el pliegue no compra nada. */}
-      <section className="flex flex-col py-[clamp(1.5rem,3vw,1.75rem)] pb-[var(--section-y)] md:min-h-[calc(100svh-5rem)]">
-        {/* El `w-full` evita que el `mx-auto` de `WRAP` desactive el stretch. */}
-        <div className={cn(WRAP, "flex w-full flex-1 flex-col")}>
-          <div data-reveal className={FOLD_CRUMB}>
-            <Breadcrumb
-              routeLabel={breadcrumb.routeLabel}
-              items={[
-                { label: breadcrumb.home, href: homeHref },
-                { label: comun.crumbIndice },
-              ]}
-            />
-          </div>
-
-          {/* `my-auto`: dentro del pliegue el grupo se centra en el aire que
-              sobra, en vez de quedarse pegado al breadcrumb. El `mb` que este
-              bloque llevaba —`clamp(2.5rem,5vw,4rem)` hasta la rejilla— se va con
-              la rejilla a su propia sección: el hueco lo pone ahora el ritmo del
-              sistema, no un valor escrito aquí. */}
-          <div className={FOLD_GROUP}>
-            {/* EL `h1` AL TAMAÑO DE SUS HERMANAS DEL PLIEGUE, que es la otra
-                mitad de esta tarea. Medido: el eyebrow (13px) y la entradilla
-                (19,2px) YA coincidían con las otras cuatro —lo dejó así P72.26 al
-                unificar las entradillas—, así que el único divergente era el
-                titular: 56px (`page-sm`) contra los 80 de `page`.
-
-                Y NO ERA UN CAMBIO DE UNA PALABRA. Con `page` dentro de `PROSE`
-                (42rem) este titular —el más largo de las cinco aperturas— cae a
-                CUATRO líneas y el grupo se va a 506px con el `h1` a 367: o sea,
-                subir el tamaño rompía el pliegue que esta misma tarea acaba de
-                arreglar. La medida de 50rem es donde vuelve a dos líneas, y con
-                ella el grupo mide 464 y el `h1` cae a 389, igual que las otras
-                cuatro. Es el ancho del TITULAR, no el de la página: la entradilla
-                se queda en su medida de lectura, como en las tres del sistema. */}
-            <header data-reveal className="max-w-[50rem]">
-              <SectionHeader
-                eyebrow={dict.eyebrow}
-                title={dict.title}
-                level={1}
-                size="page"
-              >
-                <p className={cn(LEAD_SIZE, LEADING.lead, "max-w-[46ch]")}>
-                  {dict.lead}
-                </p>
-              </SectionHeader>
-            </header>
-          </div>
-        </div>
-      </section>
+          Y LO QUE COSTÓ SABERLO, porque no se ve leyendo el código: dentro de
+          `HERO_ROW` la columna de texto mide 611px, no los 800 que esta página
+          tenía sueltos. Con el titular largo que llevaba —«Cinco experiencias,
+          contadas por dentro»— el `h1` a 80px caía a CUATRO líneas y el grupo se
+          iba a 655: el tamaño de sus hermanas y la fila de cifras no cabían a la
+          vez. Lo resolvió el copy, no el CSS: «Mi Trayectoria» es un rótulo
+          corto como «Brand Kit» o «Design System», entra en una línea y devuelve
+          el grupo a 464. Es la razón por la que las tres hermanas caben, y no se
+          había visto porque ninguna tiene un titular largo. */}
+      <SystemPageOpening
+        crumb={comun.crumbIndice}
+        breadcrumb={breadcrumb}
+        homeHref={homeHref}
+        eyebrow={dict.eyebrow}
+        title={dict.title}
+        lead={dict.lead}
+        leadMeasure="max-w-[46ch]"
+        stats={
+          <>
+            <Stat value={String(CASOS)} label={dict.statCasos} />
+            <Stat value={String(ANIOS)} label={dict.statAnios} />
+            <Stat value={String(EXITS)} label={dict.statExit} />
+            <Stat value={String(sectoresDe(lang))} label={dict.statSectores} />
+          </>
+        }
+      >
+        <HeroComposition />
+      </SystemPageOpening>
 
       {/* LA REJILLA SALE DE LA APERTURA, que es lo que hace que la apertura sea
           una portada y no una portada con el principio de otra cosa debajo.
@@ -169,6 +359,52 @@ export function TrayectoriaIndice({
           que la sección que sigue al pliegue en Contacto. */}
       <section className={SECTION}>
         <div className={WRAP}>
+          {/* LA INTRO ES ESTRUCTURA, NO PROSA, y esa es la única forma de que
+              diga algo. La entradilla del hero ya hacía de intro —anunciaba la
+              historia entera, las cifras acotadas y los aprendizajes—, así que
+              un párrafo aquí habría repetido esas mismas tres cosas casi palabra
+              por palabra. Lo que la entradilla NO puede decir sin alargarse es
+              en qué ORDEN aparecen dentro de cada página, y eso es lo que hace
+              navegables las cinco.
+
+              Los cuatro rótulos no se inventan aquí: son las secciones que ya
+              tiene todo deep-dive. */}
+          {/* El hueco de la cabecera a sus cuatro partes es MÁS CORTO que el de
+              las partes a la rejilla, y no es estética: con los dos iguales
+              —`--section-y` en ambos— la cabecera y sus partes se leían como dos
+              bloques sueltos en vez de como uno. El espacio agrupa. */}
+          <header
+            data-reveal
+            className={cn(PROSE, "mb-[clamp(2.5rem,5vw,3.5rem)]")}
+          >
+            <SectionHeader
+              eyebrow={dict.intro.eyebrow}
+              title={dict.intro.title}
+              size="section"
+            />
+          </header>
+
+          <ul
+            data-reveal
+            className="mb-[var(--section-y)] grid list-none grid-cols-1 gap-x-[var(--gutter)] gap-y-8 p-0 sm:grid-cols-2 lg:grid-cols-4"
+          >
+            {dict.intro.partes.map((parte) => (
+              <li key={parte.rotulo} className="m-0">
+                <p className={cn(dataLabelVariants(), "mb-[0.6rem]")}>
+                  {parte.rotulo}
+                </p>
+                <p
+                  className={cn(
+                    LEADING.prose,
+                    "text-muted-foreground m-0 text-[0.95rem]",
+                  )}
+                >
+                  {parte.texto}
+                </p>
+              </li>
+            ))}
+          </ul>
+
           <ul
             data-reveal
             className="m-0 grid list-none gap-[var(--gutter)] p-0 md:grid-cols-2 lg:grid-cols-3"
