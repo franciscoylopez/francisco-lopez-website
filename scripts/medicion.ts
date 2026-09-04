@@ -21,9 +21,20 @@
  *     --ga4-eventos=240 --ga4-usuarios=39 --primaria=1
  *     Escribe el sello. Exige ventana y etapa: una cifra de analítica sin su
  *     ventana no significa nada, y dos sellos sin etapa no se ordenan.
+ *
+ *   --ga4-instrumento="…"
+ *     Solo si el metro de GA4 ha cambiado (un filtro, la retención, la medición
+ *     mejorada). Por defecto se anota lo que hoy se sabe de la propiedad.
+ *
+ * Y EL CAMPO QUE HACE QUE LA RESTA SIGNIFIQUE ALGO (D199): cada cifra se sella con
+ * el INSTRUMENTO que la produjo, y la comparación **avisa en vez de restar**
+ * cuando los dos sellos no lo comparten. El del contador de consentimiento sale de
+ * `lib/consent-metrics.ts`, o sea del mismo módulo que limita de verdad.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+
+import { INSTRUMENTO_CONSENTIMIENTO } from "../lib/consent-metrics";
 
 import {
   declaraLooker,
@@ -40,6 +51,16 @@ import {
   type FuenteSellada,
   type RegistroMedicion,
 } from "./medicion/registro";
+
+/**
+ * Lo que hoy se sabe del metro de GA4, y no es poco: **la propiedad excluye el
+ * tráfico interno** con un filtro activo, así que nada lanzado desde la máquina de
+ * Francisco entra en estas cifras; y **cuenta el tráfico que no consiente**, como
+ * un usuario nuevo por carga (D198). Las dos cosas cambian lo que la cifra
+ * significa, así que las dos son el instrumento y no una nota al pie.
+ */
+const INSTRUMENTO_GA4 =
+  "GA4 · ventana 28 días · filtro Internal Traffic activo · cuenta pings sin consentimiento (D198)";
 
 const bandera = (nombre: string): string | undefined =>
   process.argv.find((a) => a.startsWith(`--${nombre}=`))?.split("=")[1];
@@ -123,6 +144,11 @@ async function main() {
           fuente: "ga4",
           estado: "leida",
           aMano: true,
+          // La cifra la teclea una persona, así que su instrumento también: entra
+          // por `--ga4-instrumento=` y por defecto anota lo que hoy se sabe de la
+          // propiedad (D198). Si algún día se toca un filtro o la retención, la
+          // bandera es el sitio donde queda dicho y la resta siguiente avisará.
+          instrumento: bandera("ga4-instrumento") ?? INSTRUMENTO_GA4,
           cifras: {
             eventos: eventos ?? null,
             usuarios: usuarios ?? null,
@@ -146,6 +172,8 @@ async function main() {
       ? {
           fuente: "consentimiento",
           estado: "leida",
+          // Del mismo módulo que limita de verdad, no de una copia (D199).
+          instrumento: INSTRUMENTO_CONSENTIMIENTO,
           cifras: {
             visto: consent.valor.contadores.visto,
             aceptado: consent.valor.contadores.aceptado,

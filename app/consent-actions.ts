@@ -2,7 +2,10 @@
 
 import { headers } from "next/headers";
 
-import { esEventoConsentimiento } from "@/lib/consent-metrics";
+import {
+  esEventoConsentimiento,
+  TECHO_CONSENTIMIENTO_POR_IP_HORA,
+} from "@/lib/consent-metrics";
 import { incrementar } from "@/lib/consent-store";
 import { creaLimitador } from "@/lib/rate-limit";
 
@@ -63,8 +66,11 @@ import { creaLimitador } from "@/lib/rate-limit";
 // LA SALVEDAD SE QUEDA ESCRITA IGUAL, en `lib/consent-metrics.ts`: el modo de
 // fallo sigue existiendo por encima del número nuevo, solo que más arriba.
 
+// EL NÚMERO VIVE EN `lib/consent-metrics.ts`, no aquí: el sello de medición tiene
+// que anotar el mismo techo que de verdad limita, y un módulo `"use server"` no
+// puede exportárselo (solo exporta funciones asíncronas). Ver D199.
 const VENTANA_MS = 60 * 60 * 1_000;
-const MAX_POR_VENTANA = 100;
+const MAX_POR_VENTANA = TECHO_CONSENTIMIENTO_POR_IP_HORA;
 
 const limite = creaLimitador({ ventanaMs: VENTANA_MS, max: MAX_POR_VENTANA });
 

@@ -234,6 +234,7 @@
 - D196 · El trinquete de deuda sella la magnitud, y con la lista de marcados vacía ya es exacto
 - D197 · Toda región con scroll propio es focalizable, y una cifra publicada puede no ser la que se pinta
 - D198 · GA4 sí ve al tráfico que no consiente, y desde esta máquina no se puede comprobar
+- D199 · El sello de medición guarda el instrumento, y avisa en vez de restar cuando cambia
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12833,3 +12834,58 @@ excepción de Vercel Web Analytics (D170). Son una decisión de postura, no de m
 su propia ficha. Lo que sí queda cerrado es que **el número de GA4 no está deflactado por
 consentimiento**: el pico del lanzamiento se lee como volumen casi completo, y la tasa del
 contador no es el factor que hay que aplicarle.
+
+## D199 · El sello de medición guarda el instrumento, y avisa en vez de restar cuando cambia — 2026-09-04
+
+**Decisión.** Cada cifra de `scripts/medicion/registro.json` se sella con **la versión del
+instrumento que la produjo**, y `comparaConAnterior` **se niega a restar** cuando los dos
+sellos no la comparten: enseña los dos números y dice que son dos metros. `undefined` cuenta
+como «no comparable», no como «igual».
+
+**El problema, medido.** El commit `b1c109e` (2026-09-02 18:23) hizo **dos cosas a la vez**:
+subir el techo del limitador de consentimiento de 10 a 100 sucesos por hora y por IP, y
+escribir el **primer sello**, con `visto: 13`. Dos días después el contador iba por 59 y
+`npm run medicion` imprimía:
+
+```
+consentimiento · visto: 13 → 59  (+46)
+```
+
+que se lee como crecimiento de tráfico y era, sobre todo, **la deflación que se acababa de
+retirar**: mientras el techo estuvo en 10, todo lo que pasara de diez sucesos por hora tras una
+misma NAT no se contaba. La línea base se tomó con el metro viejo y la lectura siguiente con el
+nuevo.
+
+**Por qué esto y no elegir el número bueno.** No lo hay: son dos metros. Lo que hacía daño no
+era la cifra sino **la resta**, que es la operación que afirma que las dos pertenecen a la
+misma serie. Quitarla deja el dato entero —los dos números siguen impresos— y retira la única
+parte falsa.
+
+**Dónde vive el número, y por qué se movió.** El techo era una constante privada de
+`app/consent-actions.ts`, y un módulo `"use server"` **solo puede exportar funciones
+asíncronas**, así que el sello no podía leerla: habría tenido que copiarla, que es la forma
+exacta de que dentro de tres meses el registro anote un techo y el limitador aplique otro. Sube
+a `lib/consent-metrics.ts` —el módulo de reglas puras, que ya documenta la salvedad de ese
+mismo techo— y de ahí la leen los dos.
+
+**Lo que el mismo campo compró gratis en GA4.** Su cifra se teclea, así que su instrumento
+también, con `--ga4-instrumento=`; y por defecto anota las dos cosas que D198 acababa de
+descubrir y que cambian lo que la cifra significa: **el filtro `Internal Traffic` está activo**
+y **GA4 cuenta los pings sin consentimiento**. Estaban en la cabeza de quien cerró, no en el
+archivo.
+
+**Una excepción de una vez, escrita para que no siente precedente.** `registro.json` no se
+edita a mano. Al introducir el campo se le **anotó** al sello vigente el metro con el que ya se
+había tomado, sin tocar ninguna cifra, porque re-sellar habría sido peor: la lectura del
+contador se hace en vivo y habría sustituido la línea base del cierre de «Higiene» por el
+número del momento. Queda dicho en el README de al lado.
+
+**Lo verificado.** `tests/medicion-registro.test.ts`, cinco casos con la forma de
+`check:guardianes` —no que sepa restar, que sepa **negarse**—: mismo instrumento resta;
+instrumento distinto avisa y **no** imprime `+46`; anterior sin anotar tampoco resta; un cambio
+de estado sigue mandando por delante; y sin sello anterior lo dice. Más `npm run medicion`
+sobre producción, que ahora imprime `59 → 71 (+12)` compartiendo instrumento.
+
+*Y ese `+12` es la ficha siguiente:* los doce son las doce cargas de la sonda de D198, con
+perfil limpio y sin decidir nada. El contador no distingue una carga automatizada de una
+persona, y esta vez el contaminante fue medible al dígito.

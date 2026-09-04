@@ -72,6 +72,28 @@ export function cuentaComoAceptado(
 }
 
 /**
+ * EL TECHO DEL LIMITADOR, Y POR QUÉ VIVE AQUÍ Y NO EN LA SERVER ACTION *(D199)*.
+ *
+ * Es un parámetro del INSTRUMENTO, no solo de la defensa: mientras estuvo en 10 el
+ * contador se deflactaba tras cualquier NAT compartida, y al subirlo a 100 el
+ * 2026-09-02 la misma población pasó a dar una cifra distinta. Dos lecturas
+ * tomadas a los dos lados de ese cambio no son una serie: son dos metros.
+ *
+ * Un módulo `"use server"` solo puede exportar funciones asíncronas, así que la
+ * constante no podía vivir en `app/consent-actions.ts` y ser leída por el sello a
+ * la vez. Aquí la leen los dos, que es lo que impide que el número anotado en el
+ * registro y el número que de verdad limita se separen sin que nadie lo note.
+ */
+export const TECHO_CONSENTIMIENTO_POR_IP_HORA = 100;
+
+/**
+ * Cómo se nombra ese instrumento en el sello de `npm run medicion`. Cadena y no
+ * número porque lo que el sello compara es **identidad**: si no coincide con la
+ * del sello anterior, avisa en vez de restar.
+ */
+export const INSTRUMENTO_CONSENTIMIENTO = `techo ${TECHO_CONSENTIMIENTO_POR_IP_HORA}/h por IP`;
+
+/**
  * La marca de «a este navegador ya se le contó el diálogo». Almacenamiento
  * necesario, igual que `flm-consent`: no es cookie y no requiere consentimiento.
  *
