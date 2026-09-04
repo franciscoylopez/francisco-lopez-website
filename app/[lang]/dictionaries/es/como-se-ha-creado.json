@@ -753,13 +753,13 @@
         },
         {
           "type": "p",
-          "text": "Un detalle de esa política que me gusta especialmente. Los vídeos de terceros del sitio entran por el dominio sin cookies de YouTube, y además no existen en la página hasta que alguien le da al play. Las dos cosas juntas significan que la página no hace ni una sola petición a Google mientras nadie pulse. Cualquiera de las dos por separado no bastaba: el dominio normal escribe cookies en cuanto se pinta el iframe, y un iframe que existe desde el principio ya ha hablado con el servidor aunque nadie lo mire."
+          "text": "Un detalle de esa política que me gusta especialmente. Los vídeos de terceros del sitio entran por el dominio sin cookies de YouTube, y además no existen en la página hasta que alguien le da al play. Las dos cosas juntas significan que la página no habla con YouTube mientras nadie pulse. Cualquiera de las dos por separado no bastaba: el dominio normal escribe cookies en cuanto se pinta el iframe, y un iframe que existe desde el principio ya ha hablado con el servidor aunque nadie lo mire."
         },
         {
           "type": "diagram",
           "id": "s08",
           "side": "center",
-          "caption": "Sin consentimiento y sin clic en el vídeo, la página no hace ni una petición de red hacia terceros."
+          "caption": "Sin consentimiento sale una sola petición a terceros: la analítica, sin cookies. El mapa de calor y el vídeo no aparecen hasta que aceptas y pulsas."
         },
         {
           "type": "h3",

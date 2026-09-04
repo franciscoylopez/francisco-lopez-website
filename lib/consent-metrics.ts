@@ -1,9 +1,18 @@
 // El contador de consentimiento (P68.61, opción 2) — las REGLAS, sin E/S.
 //
-// POR QUÉ EXISTE. `PRD-Live` §7 y D168: la analítica de este sitio solo ve al
-// tráfico que consiente, y hasta hoy la fracción que consiente se desconocía. Sin
-// ese denominador, lo que se mide en el pico de un lanzamiento es «volumen × tasa
-// de aceptación», convolucionado y sin poder separarlo. Esto lo separa.
+// POR QUÉ EXISTE. `PRD-Live` §7 y D168 lo justificaban diciendo que la analítica
+// de este sitio solo ve al tráfico que consiente, y que sin esa fracción el pico de
+// un lanzamiento se mide como «volumen × tasa de aceptación», convolucionado.
+//
+// ESA PREMISA ERA FALSA Y ESTÁ MEDIDA EN D198 (2026-09-04): sin consentimiento GA4
+// recibe igual un `page_view` por carga —sin cookies, con identidad nueva cada vez y
+// contado como usuario nuevo—, así que el recuento de GA4 NO está deflactado por
+// consentimiento y esto no es su deflactor. Lo que el consentimiento sí gatea es la
+// IDENTIDAD (sin `_ga` no hay visitante recurrente) y el mapa de calor, que no carga.
+//
+// Lo que este contador mide sigue siendo un número que no se tenía: qué fracción de
+// los visitantes nuevos acepta ser seguida, que es lo que dice cuánto vale lo que GA4
+// llama «usuario» y lo que gobierna la única categoría que hoy gatea algo.
 //
 // POR QUÉ PUEDE CONTARSE SIN CONSENTIMIENTO. Porque no mide a nadie: incrementa
 // tres enteros. El diálogo se pinta SIEMPRE —esa es la premisa que hace posible la

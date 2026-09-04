@@ -233,6 +233,7 @@
 - D195 · El nombre de enlace repetido pasa a guardián, y el sitio donde vive ya estaba abierto
 - D196 · El trinquete de deuda sella la magnitud, y con la lista de marcados vacía ya es exacto
 - D197 · Toda región con scroll propio es focalizable, y una cifra publicada puede no ser la que se pinta
+- D198 · GA4 sí ve al tráfico que no consiente, y desde esta máquina no se puede comprobar
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12744,3 +12745,91 @@ llevaba alfa— está en `BRAND-historical.md` §La banda que publicaba una cifr
 `/design-system` y `/brand-kit`; `check:marco` en verde; y el censo resellado en **402 pares y
 328 contornos** —los 28 nuevos son las regiones de tabla, que al volverse focalizables pasan a
 contar como control y pasan el 3:1—, con el metro validado en las 28 corridas.
+
+## D198 · GA4 sí ve al tráfico que no consiente, y desde esta máquina no se puede comprobar — 2026-09-04
+
+**Decisión.** Queda escrito, con la prueba al lado, **qué tráfico llega a GA4 sin
+consentimiento: llega todo**. Un `page_view` por carga, sin una sola cookie, con identidad
+nueva cada vez. No es modelado. Y va con la trampa de método que estuvo a punto de invertir la
+conclusión: **desde la máquina de Francisco esto no se puede comprobar dentro de GA4**, porque
+el tag manda `tt=internal` y la propiedad tiene un filtro que excluye ese tráfico.
+
+**La contradicción de partida.** `PRD-Live` §7 explicaba la métrica primaria sobre una premisa
+—*«GA4 solo ve al tráfico que consiente»*— que el cierre de «Higiene» midió y no se sostuvo:
+GA4 daba **43 usuarios y 39 `first_visit`** en 28 días (7 ago – 3 sept) contra **0 aceptaciones
+de 59 vistos** en el contador de consentimiento. La causa estaba escrita como **hipótesis**, no
+como diagnóstico. Esto la comprueba.
+
+**La prueba, en la red.** Sonda de Puppeteer con `channel: "chrome"` (la máquina de D54),
+**perfil de usuario nuevo en cada carga** y **sin tocar el diálogo**:
+
+```
+SIN CONSENTIR    POST region1.google-analytics.com/g/collect
+   carga 1       en=page_view · gcs=G100 · cid=539492003.1788522022 · _fv=1 · _ss=1
+                 cookies: ninguna
+   carga 2       en=page_view · gcs=G100 · cid=157246066.1788522031 · _fv=1 · _ss=1
+                 cookies: ninguna                       ← el cid CAMBIA entre cargas
+CON CONSENTIR    en=page_view · gcs=G101 · _fv=1
+                 cookies: _ga, _ga_MEG5BP629K, _clck, _clsk
+```
+
+Tres cosas que se leen ahí y no en el JSX:
+
+1. **El ping sale igual.** `analytics_storage:'denied'` gobierna el **almacenamiento**, no la
+   carga ni el envío. Es la misma frontera que el PR #261 corrigió en el copy del artículo, un
+   escalón más abajo: allí se demostró que el **contenedor** carga; aquí, que además **emite**.
+2. **Sin cookie no hay identidad que persistir, así que cada carga es un usuario nuevo.** El
+   `cid` es distinto entre dos cargas del mismo navegador, y el ping lleva `_fv=1`
+   (`first_visit`) y `_ss=1` (`session_start`) **todas las veces**.
+3. **Clarity no carga sin consentimiento**: sus dos cookies (`_clck`, `_clsk`) solo aparecen en
+   el escenario consentido. De las cuatro cláusulas de la frase que #261 tumbó, esta era la
+   cierta, y quedaba sin comprobar por depender de los disparadores del contenedor (D71).
+
+**Que GA4 los CUENTA se deduce de los dos instrumentos, no del ping.** El ping demuestra qué
+sale del navegador; que entre en los informes lo dice la aritmética: 43 usuarios y 39
+`first_visit` con **cero aceptaciones**, y con el tráfico interno excluido, así que esos 43
+tampoco son visitas de Francisco. Tampoco es **modelado**: el modelado de comportamiento de
+Consent Mode pide umbrales de orden mil eventos diarios que este sitio no roza —256 en 28
+días—, y además necesita una población consentida sobre la que modelar, que aquí es cero.
+
+**Con qué evento se distingue.** GA4 no publica el estado de consentimiento como dimensión en
+informes estándar (sí en BigQuery, `privacy_info.analytics_storage`). Lo que sí se puede leer
+es la **firma aritmética**: si cada carga sin consentir es un usuario y una sesión nuevos,
+entonces `first_visit ≈ session_start ≈ page_view`. El sitio, en 4-31 ago: **35 · 38 · 38**.
+Una población consentida daría `first_visit` muy por debajo de `page_view`, porque el visitante
+recurrente vuelve con su `_ga` puesto.
+
+**La trampa que casi invierte la conclusión, y es la parte reutilizable.** La primera
+comprobación fue mirar **Tiempo real** de GA4 tras disparar las cargas: marcó **0 usuarios
+activos y «no hay datos disponibles»**, que leído solo dice lo contrario de todo lo anterior.
+Dos anclas lo salvaron:
+
+- **La validación del metro.** La sonda corría en *headless*, y el UA `HeadlessChrome` lo
+  filtra GA4 como bot. Se repitió con Chrome real (`Chrome/151.0.0.0`, sin `Headless` en el
+  UA). Siguió dando **0**.
+- **El control positivo.** Se repitió **aceptando** —perfil limpio, 75 s con la pestaña
+  delante— y Tiempo real siguió dando **0**. Un aprobado y un suspenso idénticos no distinguen
+  nada: el sospechoso pasó a ser el instrumento.
+
+Y el instrumento era: **Administrador → Filtros de datos** tiene un `Internal Traffic ·
+Excluir · Activo`, y el ping desde esta máquina lleva **`tt = internal`** entre sus parámetros.
+Todo lo que se lance desde aquí queda fuera de los informes por diseño.
+
+*Lo reutilizable: cuando el metro dice cero, el control positivo no es opcional —`BRAND.md`
+§Cómo medir, punto 8—, y aquí el que falló no falló por el sujeto medido sino porque el
+instrumento excluye a quien mide. Un filtro de tráfico interno convierte cualquier
+comprobación hecha desde el ordenador de casa en un cero que parece un hallazgo.*
+
+**La receta, para no reconstruirla.** No queda script en `scripts/`: es un diagnóstico de una
+vez y el repo ya tiene un listón de volumen ahí. Puppeteer con `channel:"chrome"`,
+`headless:false`, `userDataDir` en un temporal **nuevo por carga**, escuchando `request` y
+filtrando `google-analytics\.com/g/collect`; los parámetros que contestan son `gcs`, `cid`,
+`_fv`, `_ss` y `tt`. Para el escenario consentido, `page.evaluateOnNewDocument()` que escriba
+`flm-consent` en `localStorage` antes de navegar.
+
+**Lo que esto NO decide.** Si el gate de GTM debe pasar a depender del consentimiento en vez de
+solo del entorno, y si `/cookies` tiene que declarar el ping sin cookies como declara la
+excepción de Vercel Web Analytics (D170). Son una decisión de postura, no de medición, y van en
+su propia ficha. Lo que sí queda cerrado es que **el número de GA4 no está deflactado por
+consentimiento**: el pico del lanzamiento se lee como volumen casi completo, y la tasa del
+contador no es el factor que hay que aplicarle.

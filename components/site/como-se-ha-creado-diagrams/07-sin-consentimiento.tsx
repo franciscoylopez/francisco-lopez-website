@@ -4,15 +4,25 @@ import type { Locale } from "@/lib/i18n/config";
 
 import { DosLienzos, LBL, LBL_STRONG, rlz } from "../diagrams/shared";
 
-/** 07 · Qué sale de la página antes de un clic: nada, hasta que alguien pulsa. */
+/**
+ * 07 · Qué sale de la página antes de aceptar y de pulsar.
+ *
+ * LA FILA DE ARRIBA NO ESTÁ VACÍA, Y HASTA EL 2026-09-04 LO DECÍA. Ponía
+ * «(ninguna petición)», y D198 midió la carga real: sin consentimiento sale un
+ * `page_view` a GA4, sin cookies. `analytics_storage:'denied'` gobierna el
+ * ALMACENAMIENTO, no el envío — la misma frontera que el PR #261 corrigió en el
+ * copy de al lado. Lo que sí es cierto, y es lo que la figura compara ahora, es que
+ * la petición de antes no lleva cookies y que el mapa de calor y el vídeo no
+ * existen hasta que alguien acepta y pulsa.
+ */
 export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
   const t = {
     es: {
       ariaLabel:
-        "Dos filas. Sin consentimiento y antes del clic en el vídeo, la fila de peticiones de red está vacía. Después del consentimiento y del clic, la fila muestra tres peticiones: analítica, mapa de calor y el vídeo.",
+        "Dos filas. Sin consentimiento y antes del clic en el vídeo, la fila de peticiones de red tiene una sola: la analítica, sin cookies. Después del consentimiento y del clic, la fila muestra tres peticiones: analítica, mapa de calor y el vídeo.",
       before: "Sin consentimiento · sin clic en el vídeo",
       beforeWrap: ["Sin consentimiento ·", "sin clic en el vídeo"],
-      empty: "(ninguna petición)",
+      empty: "analítica, sin cookies",
       after: "Con consentimiento y clic",
       analytics: "analítica",
       heatmap: "mapa de calor",
@@ -20,10 +30,10 @@ export function SinConsentimientoDiagram({ lang }: { lang: Locale }) {
     },
     en: {
       ariaLabel:
-        "Two rows. Without consent and before a click on the video, the row of network requests is empty. After consent and a click, the row shows three requests: analytics, heatmap and the video.",
+        "Two rows. Without consent and before a click on the video, the row of network requests has just one: analytics, with no cookies. After consent and a click, the row shows three requests: analytics, heatmap and the video.",
       before: "No consent · no click on the video",
       beforeWrap: ["No consent ·", "no click on the video"],
-      empty: "(no requests)",
+      empty: "analytics, no cookies",
       after: "With consent and a click",
       analytics: "analytics",
       heatmap: "heatmap",

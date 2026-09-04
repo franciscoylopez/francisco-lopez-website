@@ -757,13 +757,13 @@
         },
         {
           "type": "p",
-          "text": "One detail of that policy I'm particularly fond of. The site's third-party videos load through YouTube's cookieless domain, and on top of that they don't exist on the page until someone hits play. Together, both mean the page makes zero requests to Google until someone clicks. Either one on its own wasn't enough: the regular domain writes cookies the moment the iframe paints, and an iframe that exists from the start has already talked to the server even if nobody's looking at it."
+          "text": "One detail of that policy I'm particularly fond of. The site's third-party videos load through YouTube's cookieless domain, and on top of that they don't exist on the page until someone hits play. Together, both mean the page never talks to YouTube until someone clicks. Either one on its own wasn't enough: the regular domain writes cookies the moment the iframe paints, and an iframe that exists from the start has already talked to the server even if nobody's looking at it."
         },
         {
           "type": "diagram",
           "id": "s08",
           "side": "center",
-          "caption": "Without consent and without a click on the video, the page makes zero network requests to third parties."
+          "caption": "Without consent exactly one third-party request goes out: analytics, with no cookies. The heatmap and the video don't show up until you accept and click."
         },
         {
           "type": "h3",

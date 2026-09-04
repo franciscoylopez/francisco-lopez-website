@@ -210,10 +210,14 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
   El transporte está entero y en GA4 es **evento clave**, sin serie anterior a la marca. Cómo
   se audita la mitad que vive fuera del repo, en D71.
-  **Es un índice relativo, no un volumen, y cuál es la brecha está EN DUDA**: GA4 da 39
-  visitas nuevas contra **0 aceptaciones** del contador (hoy, 0 de 59), y las dos no caben
-  juntas. En agosto llegaron **4 correos y se contó 1** (D168/D176; el caso, en
-  `PRD-Historical.md`).
+  **Es un índice relativo, no un volumen** — y la brecha que estaba en duda ya no lo está:
+  **GA4 no está deflactado por consentimiento** (D198). Sin aceptar se envía igual un
+  `page_view` por carga, sin cookies y contado como usuario nuevo, así que las 39 visitas
+  nuevas y las **0 aceptaciones** del contador (hoy, 0 de 59) sí caben juntas y describen
+  casi todo el tráfico. Lo que el consentimiento gatea es la identidad y el mapa de calor,
+  no el recuento. En agosto llegaron **4 correos y se contó 1** (D168/D176; el caso, en
+  `PRD-Historical.md`). **La magnitud —cuánto tráfico real hay detrás— se reescribe con el
+  dato del lanzamiento.**
   **«Confirma» es el envío que manda correo, no los dos filtros que callan a un bot**: lo decide
   `cuentaComoEnvio` en `lib/contact-form.ts`, donde la regla tiene tests y caso malo (D153).
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
