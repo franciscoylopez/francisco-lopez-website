@@ -235,6 +235,7 @@
 - D197 · Toda región con scroll propio es focalizable, y una cifra publicada puede no ser la que se pinta
 - D198 · GA4 sí ve al tráfico que no consiente, y desde esta máquina no se puede comprobar
 - D199 · El sello de medición guarda el instrumento, y avisa en vez de restar cuando cambia
+- D200 · El «visto» espera a que haya alguien delante, y la serie se parte ahí
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -12889,3 +12890,66 @@ sobre producción, que ahora imprime `59 → 71 (+12)` compartiendo instrumento.
 *Y ese `+12` es la ficha siguiente:* los doce son las doce cargas de la sonda de D198, con
 perfil limpio y sin decidir nada. El contador no distingue una carga automatizada de una
 persona, y esta vez el contaminante fue medible al dígito.
+
+## D200 · El «visto» espera a que haya alguien delante, y la serie se parte ahí — 2026-09-04
+
+**Decisión.** El contador de consentimiento **deja de sumar en el efecto de montaje** y espera a
+una señal de persona —puntero, teclado o desplazamiento— antes de contar un `visto`. El
+denominador pasa a ser **«vistos con oportunidad de decidir»**, que es el honesto para una tasa
+de aceptación. Decidido por Francisco entre las dos direcciones que la ficha dejaba abiertas:
+la otra era declarar el sesgo y no tocar el conteo.
+
+**El problema.** `contarVistoUnaVez()` corría en un `useEffect`, así que contaba a **cualquier
+cliente que ejecute JS con perfil limpio**. Uno de ellos es nuestro: `npm run psi -- --registro`
+son 14 páginas × 2 estrategias × 3 tomas = **84 cargas de producción**, cada una sumando un
+`visto` y ninguna una decisión. Y `SALVEDAD_TASA` enumeraba **tres** sesgos sin nombrar este.
+
+**No era teórico, y esta vez el contaminante se midió al dígito.** La sonda de D198 hizo doce
+cargas de producción con perfil nuevo, sin tocar nada. El contador pasó de **59 a 71**: los doce
+son la sonda. El 100 % del crecimiento del contador esa tarde fue una carga automatizada, y sin
+esa coincidencia se habría leído como tráfico.
+
+**La puerta, y la única regla que la define.** `SENALES_DE_PERSONA` —`pointerdown`,
+`pointermove`, `keydown`, `touchstart`, `wheel`, `scroll`— vive en `lib/consent-metrics.ts` con
+el resto de las reglas, no en el componente. Es una lista **cerrada**, y lo que decide qué entra
+es: **todo suceso que pueda dispararse sin que nadie haga nada queda fuera**. `load`,
+`DOMContentLoaded`, `visibilitychange`, `resize` y `pageshow` los produce el navegador al abrir
+una pestaña, y un cliente automatizado los emite igual que una persona: admitir uno sería el
+contador de antes con otro nombre, sin que se notara en ningún diff. Hay un test que lo
+comprueba contra una lista explícita de sucesos prohibidos.
+
+**No es un antifraude**, y conviene decirlo porque se parece: un cliente automatizado que mueva
+el puntero cuenta, y está bien que cuente. Esto es **no contarnos a nosotros mismos**.
+
+**Los dos sitios desde los que se cuenta, y por qué son dos.** La puerta arma seis oyentes; el
+primero que salte desarma los seis (`once` retira **ese**, no los otros cinco) y cuenta.
+Además, `decide()` asegura el `visto` **antes** de contar la decisión: decidir es la señal de
+persona más fuerte que hay, pero puede llegar por una vía que la puerta no oyó, y sin ese
+seguro `aceptado + rechazado` podría superar a `visto` —la cuenta imposible que el resto del
+módulo lleva dos entradas evitando—. `contarVistoUnaVez` es idempotente por la marca de
+`localStorage`, así que el seguro no puede contar de más.
+
+**Y la tasa deja de ser un suelo limpio, que es la parte incómoda.** Las dos salvedades
+anteriores con dirección conocida sesgaban a la misma, así que lo medido era un suelo de lo
+real. Esta va **al revés**: deja fuera del denominador a quien lee sin mover nada. Así que la
+salvedad publicada ya no dice «es un suelo» sino que **no es una estimación centrada, y nombra
+las tres direcciones**. Peor titular, mejor descripción.
+
+**La serie se parte aquí, y el sello lo dirá solo.** `INSTRUMENTO_CONSENTIMIENTO` pasa a
+`techo 100/h por IP · visto tras interacción`, así que el primer `npm run medicion` posterior
+al despliegue **avisará en vez de restar** contra los 71 tomados sin puerta. Es D199
+funcionando el mismo día que se escribió, y no por casualidad: la ficha que lo pedía y la que
+rompe la serie iban en la misma tanda.
+
+**Lo verificado, sobre el build servido y contra el almacén `local`** —que existe porque
+`lib/consent-store.ts` mete `VERCEL_ENV` en la clave, así que una prueba local no toca la cifra
+de producción—:
+
+```
+carga QUIETA        0 POST al propio origen · sin marca `flm-consent-seen` · contador 1 → 1
+carga CON PUNTERO   1 POST                  · marca puesta                 · contador 1 → 2
+```
+
+Más 189 tests en verde, cuatro de ellos nuevos: la lista prohibida, la cobertura de las tres
+formas de manejar una página, que la salvedad publicada nombra la puerta y su sesgo, y que el
+instrumento sellado cambia cuando cambia la puerta y no solo cuando cambia el techo.

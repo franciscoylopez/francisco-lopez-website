@@ -87,11 +87,59 @@ export function cuentaComoAceptado(
 export const TECHO_CONSENTIMIENTO_POR_IP_HORA = 100;
 
 /**
+ * QUÉ CUENTA COMO SEÑAL DE QUE HAY UNA PERSONA DELANTE *(2026-09-04, D200)*.
+ *
+ * El «visto» se contaba desde un `useEffect`, o sea a cualquier cliente que
+ * ejecute JS con perfil limpio. Uno de esos clientes es NUESTRO: `npm run psi --
+ * --registro` son 14 páginas × 2 estrategias × 3 tomas = **84 cargas de
+ * producción**, cada una sumando un `visto` y ninguna una decisión. Y no es
+ * teórico: la sonda de D198 metió **12 vistos y 0 decisiones** en una tarde,
+ * medidos al dígito contra el sello anterior.
+ *
+ * Con esta lista el denominador pasa a ser **«vistos con oportunidad de decidir»**,
+ * que es el honesto para una tasa de aceptación. La lista es CERRADA y lo que la
+ * define es una sola regla: **todo suceso que pueda dispararse sin que nadie haga
+ * nada queda fuera** — `load`, `DOMContentLoaded`, `visibilitychange` y `resize`
+ * los produce el propio navegador al abrir una pestaña, y un cliente automatizado
+ * los emite igual que una persona. Hay un test que lo comprueba.
+ *
+ * NO ES UN ANTIFRAUDE. Un cliente automatizado que mueva el puntero cuenta, y está
+ * bien que cuente: esto no detecta bots, es no contarnos a nosotros mismos.
+ */
+export const SENALES_DE_PERSONA = [
+  "pointerdown",
+  "pointermove",
+  "keydown",
+  "touchstart",
+  "wheel",
+  "scroll",
+] as const;
+
+/**
+ * Sucesos que el navegador dispara SIN que nadie haga nada. No es documentación:
+ * `tests/consent-metrics.test.ts` comprueba que ninguno entra en la lista de
+ * arriba, porque añadir uno sería volver al contador de antes sin que se note.
+ */
+export const SENALES_QUE_NO_VALEN = [
+  "load",
+  "DOMContentLoaded",
+  "visibilitychange",
+  "resize",
+  "pageshow",
+  "readystatechange",
+] as const;
+
+/**
  * Cómo se nombra ese instrumento en el sello de `npm run medicion`. Cadena y no
  * número porque lo que el sello compara es **identidad**: si no coincide con la
- * del sello anterior, avisa en vez de restar.
+ * del sello anterior, avisa en vez de restar (D199).
+ *
+ * **Lleva las DOS cosas que definen el metro**, el techo y la puerta de entrada,
+ * porque las dos cambian qué población acaba en el denominador. El 2026-09-04 la
+ * segunda cambió, así que la serie se parte aquí y el sello siguiente lo dirá en
+ * voz alta en vez de restar.
  */
-export const INSTRUMENTO_CONSENTIMIENTO = `techo ${TECHO_CONSENTIMIENTO_POR_IP_HORA}/h por IP`;
+export const INSTRUMENTO_CONSENTIMIENTO = `techo ${TECHO_CONSENTIMIENTO_POR_IP_HORA}/h por IP · visto tras interacción`;
 
 /**
  * La marca de «a este navegador ya se le contó el diálogo». Almacenamiento
@@ -144,6 +192,15 @@ export function tasaDeAceptacion(contadores: Contadores): number | null {
  *     Su caso raro es el peor de leer: si el «visto» se descarta y la decisión
  *     llega ya con el cupo repuesto, `aceptado + rechazado` puede superar a
  *     `visto` y los «sin decidir» salen **negativos**.
+ *   · **Y la cuarta, que hasta el 2026-09-04 no estaba escrita porque no
+ *     existía la palabra para ella: el contador no separaba una CARGA
+ *     AUTOMATIZADA de una persona.** Sumaba a cualquier cliente que ejecutase JS
+ *     con perfil limpio, y uno de ellos es nuestro (`npm run psi -- --registro`,
+ *     84 cargas de producción por corrida). Desde hoy el «visto» espera a una de
+ *     las `SENALES_DE_PERSONA`, así que el denominador es «vistos con
+ *     **oportunidad de decidir**». Lo que eso deja fuera, y sesga en la
+ *     dirección CONTRARIA a las dos de arriba: quien lee sin mover nada —sin
+ *     puntero, sin teclado y sin scroll— ve el diálogo y no cuenta.
  *
  * Lo que SÍ está cerrado, porque rompía la cuenta en la otra dirección: cambiar de
  * opinión desde el centro de preferencias NO vuelve a contar. Solo cuenta la
@@ -160,10 +217,14 @@ export function tasaDeAceptacion(contadores: Contadores): number | null {
  * que llega por primera vez— la población correcta es justamente esa. Pero la tasa hay
  * que enunciarla entera: **de cada cien visitantes NUEVOS, cuántos aceptan.**
  *
- * De las que quedan, las DOS que sesgan en una dirección conocida —el
- * almacenamiento bloqueado y el límite por IP— lo hacen en la misma, así que la
- * tasa medida es un SUELO de la real y no una estimación centrada. Se dice aquí
- * porque el sitio de una salvedad es al lado del número, no en un documento aparte.
+ * Y LA TASA YA NO ES UN SUELO LIMPIO *(2026-09-04)*. Hasta hoy las dos salvedades
+ * con dirección conocida —almacenamiento bloqueado y límite por IP— sesgaban a la
+ * misma, así que lo medido era un suelo de lo real. La puerta de interacción sesga
+ * en la dirección contraria: deja fuera del denominador a quien lee sin mover nada.
+ * Así que lo honesto ya no es «suelo» sino **«no es una estimación centrada, y las
+ * dos direcciones están nombradas»** — que es peor titular y mejor descripción. Se
+ * dice aquí porque el sitio de una salvedad es al lado del número, no en un
+ * documento aparte.
  */
 export const SALVEDAD_TASA =
-  "Es la tasa de los visitantes NUEVOS, no del total: a quien ya decidió no se le vuelve a pintar el diálogo. Y es un suelo por dos vías: quien bloquea el almacenamiento local cuenta como visto en cada visita y nunca como decisión, y el límite de frecuencia va por IP, así que tras una misma NAT los sucesos que pasen del techo horario no se cuentan.";
+  "Es la tasa de los visitantes NUEVOS que llegaron a interactuar con la página, no la del total: a quien ya decidió no se le vuelve a pintar el diálogo, y desde el 2026-09-04 un «visto» solo cuenta tras una señal de persona (puntero, teclado o scroll), para no contar nuestras propias cargas automatizadas. No es una estimación centrada y se desvía por tres vías conocidas: quien bloquea el almacenamiento local cuenta como visto en cada visita y nunca como decisión; el límite de frecuencia va por IP, así que tras una misma NAT los sucesos que pasen del techo horario no se cuentan; y quien lee sin mover nada no entra en el denominador.";

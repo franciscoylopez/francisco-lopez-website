@@ -4,7 +4,12 @@ import {
   EVENTOS_CONSENTIMIENTO,
   cuentaComoAceptado,
   esEventoConsentimiento,
+  INSTRUMENTO_CONSENTIMIENTO,
+  SALVEDAD_TASA,
+  SENALES_DE_PERSONA,
+  SENALES_QUE_NO_VALEN,
   tasaDeAceptacion,
+  TECHO_CONSENTIMIENTO_POR_IP_HORA,
 } from "@/lib/consent-metrics";
 
 // Los tests del contador de consentimiento (P68.61, D168). Lo que se prueba aquí
@@ -87,5 +92,45 @@ describe("tasaDeAceptacion", () => {
 
   it("no confunde «nadie aceptó» con «nadie vio»", () => {
     expect(tasaDeAceptacion({ visto: 40, aceptado: 0, rechazado: 40 })).toBe(0);
+  });
+});
+
+describe("SENALES_DE_PERSONA · la puerta del «visto» (D200)", () => {
+  it("no admite ningún suceso que el navegador dispare solo", () => {
+    // EL CASO MALO DE VERDAD. Un `visto` que espera a `load` o a `resize` es el
+    // contador de antes con otro nombre: los dos los emite el navegador al abrir
+    // una pestaña, y un cliente automatizado los produce igual que una persona.
+    // Añadir uno sería deshacer la corrección sin que se notara en ningún diff.
+    for (const suceso of SENALES_QUE_NO_VALEN) {
+      expect(SENALES_DE_PERSONA as readonly string[]).not.toContain(suceso);
+    }
+  });
+
+  it("cubre las tres formas de manejar una página: puntero, teclado y desplazamiento", () => {
+    const senales = SENALES_DE_PERSONA as readonly string[];
+    expect(
+      senales.some((s) => s.startsWith("pointer") || s === "touchstart"),
+    ).toBe(true);
+    expect(senales).toContain("keydown");
+    expect(senales.some((s) => s === "scroll" || s === "wheel")).toBe(true);
+  });
+
+  it("la salvedad publicada nombra la puerta y su sesgo, no solo los dos viejos", () => {
+    // La regla es la de BRAND.md: el sitio de una salvedad es al lado del número.
+    // Si la puerta cambia y este texto no, la cifra sigue publicándose con una
+    // descripción que ya no es la suya.
+    expect(SALVEDAD_TASA).toMatch(/interact/i);
+    expect(SALVEDAD_TASA).toMatch(/sin mover nada/i);
+    // Y ya no puede decir que es un «suelo»: el sesgo nuevo va al revés.
+    expect(SALVEDAD_TASA).not.toMatch(/suelo/i);
+  });
+
+  it("el instrumento sellado cambia cuando cambia la puerta, no solo el techo", () => {
+    // Es lo que hace que D199 sirva de algo aquí: el sello siguiente tiene que
+    // avisar en vez de restar contra la serie tomada sin puerta.
+    expect(INSTRUMENTO_CONSENTIMIENTO).toContain(
+      String(TECHO_CONSENTIMIENTO_POR_IP_HORA),
+    );
+    expect(INSTRUMENTO_CONSENTIMIENTO).toMatch(/interacción/);
   });
 });
