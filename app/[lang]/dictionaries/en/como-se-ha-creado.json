@@ -1183,7 +1183,7 @@
       },
       {
         "type": "p",
-        "text": "Measurement kicks in with consent, and not before: **without acceptance nothing loads**, not the tag manager, not analytics, not the heatmap. And the [cookie policy](/en/cookies) isn't text copied from a template: it's a living document that says what loads today, and gets updated the day that changes."
+        "text": "Measurement starts with **everything denied**, not the other way round: the tag manager loads with consent set to \"no\" by default, so until you accept not a single analytics cookie is written. And the [cookie policy](/en/cookies) isn't text copied from a template: it's a living document that says what loads today, and gets updated the day that changes."
       },
       {
         "type": "p",

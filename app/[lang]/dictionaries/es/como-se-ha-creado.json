@@ -1184,7 +1184,7 @@
       },
       {
         "type": "p",
-        "text": "La medición entra con consentimiento y no antes: **sin aceptar no se carga nada**, ni el gestor de etiquetas, ni la analítica, ni el mapa de calor. Y la [política de cookies](/cookies) no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia."
+        "text": "La medición arranca con **todo denegado**, y no al revés: el gestor de etiquetas carga con el consentimiento puesto en «no» por defecto, así que hasta que aceptas no se escribe ni una cookie de analítica. Y la [política de cookies](/cookies) no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia."
       },
       {
         "type": "p",

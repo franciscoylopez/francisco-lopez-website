@@ -1,18 +1,18 @@
 {
-  "fecha": "2026-09-02",
+  "fecha": "2026-09-04",
   "ventana": {
-    "desde": "2026-08-04",
-    "hasta": "2026-08-31"
+    "desde": "2026-08-07",
+    "hasta": "2026-09-03"
   },
-  "etapa": "Distribución",
+  "etapa": "Higiene",
   "fuentes": [
     {
       "fuente": "ga4",
       "estado": "leida",
       "aMano": true,
       "cifras": {
-        "eventos": 240,
-        "usuarios": 39,
+        "eventos": 256,
+        "usuarios": 43,
         "contact_submit": 1
       }
     },
@@ -25,7 +25,7 @@
       "fuente": "consentimiento",
       "estado": "leida",
       "cifras": {
-        "visto": 13,
+        "visto": 59,
         "aceptado": 0,
         "rechazado": 0,
         "tasa_pct": 0

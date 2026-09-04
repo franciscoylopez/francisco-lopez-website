@@ -3,7 +3,7 @@ canonical: https://franciscolopez.es/como-se-ha-creado
 lang: es
 title: Cómo se ha creado esta página
 description: "El making-of de esta web: la marca antes que el código, el stack, cómo se hereda la accesibilidad, seguridad y alojamiento, qué revisa una IA y qué no, y lo que salió mal por el camino. Todo enlazado al repositorio público."
-last-updated: 2026-09-02
+last-updated: 2026-09-04
 ---
 
 1. [Inicio](https://franciscolopez.es/)
@@ -702,7 +702,7 @@ Más allá de sacar esa versión MVP y poder tenerla para ir mostrándola cuando
 
 Pero falta la pieza que cierra el ciclo, y es la que le da sentido a todo lo anterior: empezar a ver datos e iterar con ellos. ¿Cómo lo he preparado? Te lo cuento.
 
-La medición entra con consentimiento y no antes: **sin aceptar no se carga nada**, ni el gestor de etiquetas, ni la analítica, ni el mapa de calor. Y la [política de cookies](https://franciscolopez.es/cookies) no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia.
+La medición arranca con **todo denegado**, y no al revés: el gestor de etiquetas carga con el consentimiento puesto en «no» por defecto, así que hasta que aceptas no se escribe ni una cookie de analítica. Y la [política de cookies](https://franciscolopez.es/cookies) no es un texto copiado de una plantilla: es un documento vivo que dice qué se carga hoy, y que se actualiza el día que eso cambia.
 
 **La métrica principal no es la visita, es el mensaje**. Durante meses fue el clic en un canal de contacto, porque sin formulario era el proxy de intención más honesto que tenía: alguien que copia mi correo ha decidido algo. Desde que el formulario existe, la principal es el envío, y se cuenta cuando el correo sale, no cuando alguien pulsa el botón: un clic que se queda en un campo mal rellenado no es un contacto, y contarlo infla justo la cifra que uno quiere creerse. El clic en el teléfono y en el correo directo se quedan como secundarios. También lo son la descarga del CV, medida en los diferentes sitios donde se ofrece, y la profundidad de scroll, que es la que dice si el lector lento del que hablaba al principio existe de verdad. Y con Clarity voy a mirar cómo son esas visitas: qué recorrido hacen, cómo se mueven por la página, todo lo que ayude a aprender de quien la lee.
 

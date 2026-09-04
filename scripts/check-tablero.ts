@@ -122,11 +122,30 @@ const HORAS_FRESCURA = 12;
  *   («una revisión que retire en vez de solo añadir») y **no cuenta como
  *   prueba**: no la retiró el criterio, la retiró la suerte. Se anota para no
  *   leer el −1 como que el método ya drena.
- */
+ *
+ * · 2026-09-04 · cierre de «Higiene» · 8. **−15, y es el mayor drenaje de la
+ *   serie, pero NO lo hizo el cupo**: «Higiene» absorbió el bloque transversal
+ *   entero al abrirse, que es la operación que la entrada anterior decía que
+ *   solo cabe una vez. Ya se gastó. De las 23, veintiuna se hicieron dentro del
+ *   sprint y dos salieron por la puerta de al lado —ESLint 10 se quedó en
+ *   `General` y el `file_download` se fue a `Brand Kit`, que es su sitio—.
+ *
+ *   LO QUE SUBE SON CUATRO DEL PROPIO `sprint-review`, todas de medición, y el
+ *   cupo que las tiene que sacar es el del sprint SIGUIENTE, que aún no existe.
+ *   Así que el 8 de hoy no es un suelo estable: es 4 heredadas + 4 recién
+ *   escritas, y tres de esas cuatro tienen fecha de caducidad real —el
+ *   lanzamiento del 10 de septiembre—, no una prioridad blanda. Si el próximo
+ *   cierre las encuentra vivas, el problema no será el embalse: será que el
+ *   metro del lanzamiento se quedó sin arreglar y el dato del pico ya no vuelve.
+ *
+ *   Y LA LECTURA HONESTA DEL −15: este guardián mide el neto, y un neto que baja
+ *   por absorción no dice que el método drene. Dice que se movió un embalse de
+ *   sitio. La prueba de que el cupo funciona sigue pendiente, y ahora sin la
+ *   operación grande disponible para taparlo. */
 const SELLO_GENERAL: Sello = {
-  fecha: "2026-09-01",
-  cierre: "Distribución",
-  abiertas: 23,
+  fecha: "2026-09-04",
+  cierre: "Higiene",
+  abiertas: 8,
 };
 
 /**

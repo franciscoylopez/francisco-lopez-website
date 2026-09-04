@@ -3,7 +3,7 @@ canonical: https://franciscolopez.es/en/como-se-ha-creado
 lang: en
 title: How this page was built
 description: "The making-of of this site: brand before code, the stack, how accessibility gets inherited instead of measured, security and hosting, what an AI catches and what it doesn't, and what went wrong along the way. All of it linked to the public repository."
-last-updated: 2026-09-02
+last-updated: 2026-09-04
 ---
 
 1. [Home](https://franciscolopez.es/en)
@@ -702,7 +702,7 @@ Beyond shipping that MVP version and having something to show whenever it was ne
 
 But the piece that closes the loop is missing, and it's the one that gives everything above its point: starting to see data and iterate on it. How have I set that up? Let me walk through it.
 
-Measurement kicks in with consent, and not before: **without acceptance nothing loads**, not the tag manager, not analytics, not the heatmap. And the [cookie policy](https://franciscolopez.es/en/cookies) isn't text copied from a template: it's a living document that says what loads today, and gets updated the day that changes.
+Measurement starts with **everything denied**, not the other way round: the tag manager loads with consent set to "no" by default, so until you accept not a single analytics cookie is written. And the [cookie policy](https://franciscolopez.es/en/cookies) isn't text copied from a template: it's a living document that says what loads today, and gets updated the day that changes.
 
 **The primary metric isn't the visit, it's the message**. For months it was the click on a contact channel, because with no form that was the most honest proxy of intent I had: someone copying my address has decided something. Since the form exists, the primary one is the submission, and it's counted when the email goes out, not when someone presses the button: a click that dies on a badly filled field isn't a contact, and counting it inflates exactly the number you want to believe. Clicks on the phone and on the direct address stay as secondary. So are CV downloads, measured across the different places it's offered, and scroll depth, which is the one that tells whether the slow reader I talked about at the start actually exists. And with Clarity I'll be watching what those visits look like: what path they take, how they move through the page, anything that helps me learn from whoever's reading it.
 

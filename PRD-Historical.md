@@ -96,6 +96,7 @@
 - [Fuentes](#fuentes)
 - [El cierre de «Agentes» — 2026-08-31](#el-cierre-de-agentes--2026-08-31)
 - [El cierre de «Distribución» y el `method-review` XI — 2026-09-01](#el-cierre-de-distribución-y-el-method-review-xi--2026-09-01)
+- [El cierre de «Higiene»: la brecha de consentimiento deja de estar medida — 2026-09-04](#el-cierre-de-higiene-la-brecha-de-consentimiento-deja-de-estar-medida--2026-09-04)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4387,3 +4388,45 @@ bloque entero, que es una operación que solo cabe una vez.
 
 **El informe completo:**
 <https://claude.ai/code/artifact/fbf55041-74b8-405a-9285-0528ed3b0fe2>
+
+## El cierre de «Higiene»: la brecha de consentimiento deja de estar medida — 2026-09-04
+
+`PRD-Live` §7 llevaba desde D168 explicando la métrica primaria sobre una premisa: *«GA4
+solo ve al tráfico que consiente»*. El sprint-review del cierre la midió y no se sostiene.
+
+**Los dos números, del 2026-09-04.** GA4 en los últimos 28 días (7 ago – 3 sept): 256
+eventos, 43 usuarios, de ellos **39 `first_visit`**. El contador de consentimiento, en el
+mismo sitio: **59 vistos, 0 aceptados, 0 rechazados**. Con cero aceptaciones, GA4 debería
+reportar cerca de cero usuarios nuevos; reporta 39.
+
+**La causa candidata, que es hipótesis y no causa.** `app/[lang]/layout.tsx` carga GTM/GA4
+siempre que haya `GTM_ID`, o sea en producción, y Consent Mode v2 con `denied` por defecto
+no impide el ping: lo emite sin cookies. Queda por comprobar si GA4 los cuenta, y eso no
+necesita tráfico: es una pregunta de configuración. La alternativa —visitantes que
+aceptaron antes de que el contador existiera, el 2026-08-24— no explica 39 primeras
+visitas.
+
+**Y el número contra el que se comparaba tampoco era comparable.** El commit `b1c109e`
+(2026-09-02 18:23) hizo dos cosas a la vez: subió el techo del limitador de 10 a 100
+sucesos por hora y por IP, **y escribió el primer sello de medición, con `visto: 13`**. Dos
+días después el contador va por 59, y `npm run medicion` imprime `13 → 59 (+46)` como si
+fuera tráfico. Es, sobre todo, la deflación que se acababa de quitar. La regla que faltaba
+se escribió aquí: **un sello tomado en el mismo PR que cambia el instrumento es una línea
+base que nadie puede usar**, y el sello no guardaba con qué metro se tomó.
+
+**El tercer hueco, del mismo día.** `contarVistoUnaVez()` corre en un `useEffect`, así que
+cuenta a cualquier cliente que ejecute JS con perfil limpio. Uno de ellos es nuestro:
+`npm run psi -- --registro` son 14 páginas × 2 estrategias × 3 tomas = **84 cargas de
+producción**, cada una sumando un «visto» y ninguna una decisión. No explica los 46 de esos
+dos días —el último sello de PSI es del 2026-08-30 y no hubo corrida—, pero el contaminante
+es estructural, y `SALVEDAD_TASA` enumeraba tres sesgos sin nombrarlo.
+
+**Por qué las tres se arreglan ANTES del 10 de septiembre de 2026 y la lectura va después.**
+El tráfico de hoy es residual: 1 `contact_submit` y 0 descargas en 28 días no son señal y no
+mueven ninguna prioridad. La pieza central se publica el **jueves 10**, y el pico de un
+lanzamiento es exactamente lo que estos contadores existen para medir — y no se repite. Así
+que la partición no es urgente ↔ no urgente, sino **arreglar el metro antes** ↔ **leerlo
+después**: el mecanismo de GA4, la versión del instrumento en el sello y el denominador
+limpio son las tres de antes; cuál es la brecha de verdad, y con ella la reescritura de §7,
+es de después, porque escribirla con tráfico residual sería poner otra frase sin medir, que
+es como llegó la que había.
