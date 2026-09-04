@@ -842,11 +842,11 @@
         {
           "type": "image",
           "src": "/img/como-se-ha-creado-qlty-deuda.webp",
-          "alt": "Qlty dashboard for this repository: an A grade in maintainability (29 code smells) and an A grade in security (no open issues), a technical debt ratio and remediation time chart peaking on August 19, 2026, a sunburst of maintainability hotspots, and the five worst-scored files: contrast-census.js and artefacto-svg.ts (F grade), check-experience-copy.ts (F grade), check-palette.ts and reveal-root.tsx (D grade).",
-          "width": 1357,
-          "height": 750,
+          "alt": "Qlty dashboard for this repository: an A grade in maintainability (21 code smells) and an A grade in security (no open issues); a technical debt ratio and remediation time chart from 5 August to 2 September 2026, with the ratio climbing to 3.4% and dropping to 0.36% in the final days; a sunburst of maintainability hotspots, and the five worst-scored files: nav.tsx, reveal-root.tsx and contact-form.tsx (D grade) and two page.tsx (C grade). At the bottom: technical debt ratio 0.36%, remediation time 4 days, duplication 0.5% and complexity per KLOC 113.",
+          "width": 1306,
+          "height": 695,
           "side": "center",
-          "caption": "This repository's Qlty dashboard: an A grade in maintainability and security, with the five worst-scored files the technical debt ratio pointed at."
+          "caption": "The Qlty dashboard today, after «Higiene»: the technical debt ratio falls from 3.4% to 0.36% in the last days of the series, and the five hotspots left really are website code."
         },
         { "type": "h3", "text": "The tests arrived when the logic did" },
         {

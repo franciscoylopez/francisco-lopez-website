@@ -838,11 +838,11 @@
         {
           "type": "image",
           "src": "/img/como-se-ha-creado-qlty-deuda.webp",
-          "alt": "Panel de Qlty sobre este repositorio: nota A en mantenibilidad (29 code smells) y nota A en seguridad (sin incidencias abiertas), un gráfico de ratio de deuda técnica y tiempo de remediación con un pico el 19 de agosto de 2026, un sunburst de los puntos calientes de mantenibilidad, y el listado de los cinco archivos peor puntuados: contrast-census.js y artefacto-svg.ts (nota F), check-experience-copy.ts (nota F), check-palette.ts y reveal-root.tsx (nota D).",
-          "width": 1357,
-          "height": 750,
+          "alt": "Panel de Qlty sobre este repositorio: nota A en mantenibilidad (21 code smells) y nota A en seguridad (sin incidencias abiertas); un gráfico de ratio de deuda técnica y tiempo de remediación entre el 5 de agosto y el 2 de septiembre de 2026, con el ratio subiendo hasta el 3,4% y cayendo al 0,36% en los últimos días; un sunburst de los puntos calientes de mantenibilidad, y el listado de los cinco peores: nav.tsx, reveal-root.tsx y contact-form.tsx (nota D) y dos page.tsx (nota C). Al pie: ratio de deuda técnica 0,36%, tiempo de remediación 4 días, duplicación 0,5% y complejidad por KLOC 113.",
+          "width": 1306,
+          "height": 695,
           "side": "center",
-          "caption": "El panel de Qlty sobre este repositorio: nota A en mantenibilidad y en seguridad, con los cinco archivos peor puntuados que señaló el ratio de deuda técnica."
+          "caption": "El panel de Qlty hoy, después de «Higiene»: el ratio de deuda técnica cae del 3,4% al 0,36% en los últimos días de la serie, y los cinco puntos calientes que quedan ya sí son código de la web."
         },
         { "type": "h3", "text": "Los tests llegaron cuando llegó la lógica" },
         {
