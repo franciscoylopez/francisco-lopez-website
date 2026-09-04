@@ -1,3 +1,5 @@
+import { type CSSProperties } from "react";
+
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { Stat } from "@/components/ui/stat-row";
 import {
@@ -18,8 +20,7 @@ function BrowserMockup() {
     `color-mix(in srgb, var(--background), transparent ${t}%)`;
   return (
     <div
-      data-reveal
-      className="relative z-[2] w-full overflow-hidden rounded-[12px]"
+      className="entrada-pliegue relative z-[2] w-full overflow-hidden rounded-[12px]"
       style={{ background: "var(--foreground)" }}
     >
       {/* pestañas */}
@@ -205,9 +206,8 @@ export function Hero({
       >
         <div className="relative w-[min(21rem,100%)]">
           <div
-            data-reveal
-            className="absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-            style={{ transitionDelay: "0.16s" }}
+            className="entrada-pliegue absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+            style={{ "--retardo-entrada": "0.16s" } as CSSProperties}
           >
             <div
               className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
@@ -217,9 +217,8 @@ export function Hero({
             </div>
           </div>
           <div
-            data-reveal
-            className="absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
-            style={{ transitionDelay: "0.24s" }}
+            className="entrada-pliegue absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+            style={{ "--retardo-entrada": "0.24s" } as CSSProperties}
           >
             <div
               className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"

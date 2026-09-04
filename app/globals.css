@@ -511,6 +511,76 @@
   }
 }
 
+/* === ENTRADA DEL PLIEGUE (P72.466) · lo que entra AL CARGAR, no al hacer scroll ===
+
+   NO ES UN SEGUNDO MECANISMO DE ENTRADA: es el otro que ya había. `data-reveal`
+   significa «entra al ENTRAR en viewport», y por eso el island marca como
+   mostrado todo lo que ya está en pantalla ANTES de encender `reveal-on`
+   (P44/D47, 2.090 ms de retraso de renderizado). Lo del primer pliegue no entra:
+   ya está. Así que una composición del pliegue no puede animar por ahí, y eso no
+   es un fallo suyo.
+
+   LO QUE ENTRA AL CARGAR YA TENÍA SU FORMA en esta hoja: `punto-cae` (el punto
+   del titular de la home, D137), `consent-in` y `split-bloom`. Las tres son
+   `@keyframes` con `both`, sin JS y sin esperar a la hidratación. Ésta es la
+   cuarta y su caso es el mismo que el del punto: un elemento decorativo del
+   primer pliegue que aparece al cargar mientras el contenido de alrededor no.
+
+   POR QUÉ NO SE HIZO CON UNA EXCEPCIÓN DENTRO DEL ISLAND, que era la otra
+   dirección de la ficha: el HTML servido no lleva `opacity: 0` —la pone
+   `reveal-on`, que llega con la hidratación—, así que saltarse el premarcado no
+   consigue que el elemento empiece oculto. Consigue que se pinte, PARPADEE a
+   cero al hidratar y vuelva. Es el síntoma que quitó D47, sin su coste de
+   métrica.
+
+   Y NO TOCA EL LCP, comprobado antes de escribirlo y no supuesto: en las cuatro
+   páginas y en los dos viewports (1920×1080 y 412×823 a 1,75) el elemento LCP es
+   la ENTRADILLA, el `<p>` de la columna de texto, nunca la composición. Medido
+   con `PerformanceObserver` sobre el build servido. Si alguna composición gana
+   una imagen algún día, esto hay que volver a mirarlo.
+
+   EL GIRO DE LAS FICHAS VA EN `rotate`, NO EN `transform`. Un `transform` en el
+   punto de uso gana a cualquier hoja, y era lo que tenía muerto el `translateY`
+   del reveal en Design System y en Accesibilidad desde que se escribieron: sus
+   fichas solo podían fundirse. Con la propiedad individual `rotate` las dos
+   cosas componen. La entrada, en cambio, se queda en `transform` a propósito:
+   las utilidades de traslación de Tailwind v4 —`-translate-y-1/2`, que es como
+   se centra la composición del Brand Kit— compilan a la propiedad `translate`,
+   y animar ahí se las llevaría por delante. */
+.entrada-pliegue {
+  animation: entrada-pliegue var(--duration-entrance) var(--ease-entrance)
+    var(--retardo-entrada, 0s) both;
+}
+@keyframes entrada-pliegue {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* D136: se retira el desplazamiento y se conserva el fundido, más corto. Y el
+   escalonado se cierra, que es la mitad que no se ve venir: un retardo es una
+   espera, y a quien ha pedido menos movimiento el vestíbulo le sobra igual que
+   el desplazamiento (es lo que ya hace `split-bloom`). Por eso el retardo entra
+   por variable y no por `style` inline — así esta regla puede anularlo. */
+@media (prefers-reduced-motion: reduce) {
+  .entrada-pliegue {
+    animation-name: entrada-pliegue-quieta;
+    animation-duration: 0.16s;
+    animation-delay: 0s;
+  }
+}
+@keyframes entrada-pliegue-quieta {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 /* Banner de consentimiento (P22): entra una vez con fade-up. Sin bucle; respeta
    reduced-motion (PRD §6). */
 @keyframes consent-in {

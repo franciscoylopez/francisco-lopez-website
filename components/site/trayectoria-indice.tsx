@@ -1,3 +1,4 @@
+import { type CSSProperties } from "react";
 import { ArrowRight, Download } from "lucide-react";
 
 import type {
@@ -209,9 +210,8 @@ function HeroComposition() {
             giro propio se descolgaba 195px por debajo del dibujo y cruzaba el
             filete de la fila de cifras (medido en el prototipo). */}
         <div
-          data-reveal
-          className="absolute bottom-2 left-1/2 z-0 w-[140px]"
-          style={{ transitionDelay: "0.04s" }}
+          className="entrada-pliegue absolute bottom-2 left-1/2 z-0 w-[140px]"
+          style={{ "--retardo-entrada": "0.04s" } as CSSProperties}
         >
           <div
             className="bg-brand-cyan-soft h-[170px] w-[124px] rounded-[14px]"
@@ -225,13 +225,23 @@ function HeroComposition() {
         {/* El envoltorio ABSOLUTO lleva la entrada y la ficha de dentro lleva el
             giro. Al revés no funciona: el `transform` de la entrada convierte al
             envoltorio en bloque contenedor y la ficha se recolocaría mientras
-            dura la transición. Es el patrón de las tres hermanas. */}
+            dura la transición.
+
+            LO QUE NO HAY QUE COPIAR DE AQUÍ es que haga falta el envoltorio para
+            que giro y entrada convivan. Aquí hace falta por lo de arriba —el
+            giro va con un `translateX(-50%)` que la ficha necesita—, pero las
+            tres hermanas giran la ficha misma y no llevan envoltorio: usan la
+            propiedad individual `rotate`, que compone con el `transform` de la
+            entrada sin pisarlo. El porqué, en `globals.css` §Entrada del
+            pliegue. */}
         {FICHAS.map(({ giro, retardo, capa }) => (
           <div
             key={giro}
-            data-reveal
-            className={cn("absolute bottom-2 left-1/2 w-[140px]", capa)}
-            style={{ transitionDelay: retardo }}
+            className={cn(
+              "entrada-pliegue absolute bottom-2 left-1/2 w-[140px]",
+              capa,
+            )}
+            style={{ "--retardo-entrada": retardo } as CSSProperties}
           >
             <div
               className={cn(
@@ -254,10 +264,7 @@ function HeroComposition() {
       {/* móvil: una sola ficha, como hace Design System con su marco. Cinco
           giradas a este ancho se pisan y no se lee ninguna. */}
       <div className="relative mx-auto h-[11.5rem] w-[min(16rem,100%)] md:hidden">
-        <div
-          data-reveal
-          className="border-foreground bg-background absolute inset-0 rounded-[14px] border p-[14px]"
-        >
+        <div className="entrada-pliegue border-foreground bg-background absolute inset-0 rounded-[14px] border p-[14px]">
           <Frente />
         </div>
       </div>
