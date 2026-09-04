@@ -72,11 +72,11 @@ Lo que hay que saber al escribir UI:
   `text-muted-foreground` y ya. Dentro de una tarjeta pesa más que fuera, y eso es correcto: es
   lo que hace falta para que se lea. Un `opacity` además el censo no lo ve, así que su cifra
   sale de un color que nadie ha pintado (**D127**).
-- **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix` en vez de la utilidad—,
-  tiene que declarar a qué familia pertenece con `data-surface="card" | "muted" | "inverted" |
-  "page"`. Sin eso la capa no puede verlo.
-  **Salvo que el velo sea casi transparente**: al 86% manda la superficie de debajo, que ya se
-  hereda bien, y declarar familia fijaría la equivocada donde la pieza se reutilice.
+- **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix`, o una utilidad que
+  `globals.css` no resuelva—, tiene que declarar a qué familia pertenece con
+  `data-surface="card" | "muted" | "inverted" | "page"`. Sin eso la capa no puede verlo, y
+  **`bg-foreground` no está entre las resueltas** *(2026-09-04)*.
+  **Salvo un velo casi transparente**: al 86% manda la superficie de debajo, ya heredada.
 - **Una superficie también cambia por ESTADO, no solo por clase o por atributo** (D61).
   `hover:bg-muted` **no** compila a `.bg-muted`: compila a `.hover\:bg-muted:hover`, y dentro
   de `@media (hover: hover)`. Es otro selector, así que una tarjeta que se aclaraba al pasar el

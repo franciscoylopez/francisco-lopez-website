@@ -14,17 +14,26 @@ export type MasAllaDict = {
 // claro / 7,21 oscuro — AAA de texto normal. Antes era un color fijo y se quedaba
 // en 3,96/3,49: el fondo de esta banda es --foreground, o sea que salta de carbón
 // a hueso, y ningún color fijo puede pasar de 3,71:1 contra las dos superficies
-// (el cálculo, en globals.css). Los textos apagados se mezclan en sRGB para no
-// perder el tono (ver Nav).
+// (el cálculo, en globals.css).
 //
-// EL 80% NO ES ARBITRARIO. El eyebrow estaba al 58% y en tema OSCURO daba 4,07:1
-// (axe lo cazaba: AA pide 4,5 a 13px) — el fondo efectivo de la banda es
-// `--foreground`, que cambia de luminosidad con el tema mientras la mezcla se
-// quedaba fija. El umbral AAA está en el 75%, pero ahí quedaba en 7,05:1: el
-// mismo margen de nada que ya tumbó al cian viejo (BRAND.md, 2026-07-22). Al 80%
-// da 9,32:1 en claro y 8,34:1 en oscuro. Un solo nivel de atenuado para los dos
-// textos: la jerarquía la hace el tamaño, no el color (misma regla que la franja
-// de contacto, D30).
+// EL ATENUADO LO HEREDA, NO LO ELIGE (2026-09-04, design-review). Los dos textos
+// apagados mezclaban a mano un `color-mix(--background 80%, transparent)`, con su
+// 80% razonado y medido; y aun así era la respuesta a la pregunta equivocada. La
+// banda declara `data-surface="inverted"` y los dos escriben
+// `text-muted-foreground`, que es la regla de D39: no se elige el atenuado de un
+// texto, lo resuelve la superficie.
+//
+// Y NO ERA SOLO CONSISTENCIA: el sitio ya PUBLICABA esta cifra. `design-values.ts`
+// declara `mutedOnInverted: { light: 10,32, dark: 9,89 }` —la fórmula de la capa,
+// 85% hacia el fondo—, mientras esta banda pintaba 9,24 y 8,31 con su mezcla
+// propia. Las dos pasaban AAA, así que ningún gate lo veía; lo que fallaba es que
+// la página de Accesibilidad publicaba un número que esta banda no pintaba.
+// Medido tras el cambio sobre el píxel compuesto, con el metro validado contra el
+// ancla opaca (13,79 / 15,32) y contra una de alfa (negro al 50% sobre blanco =
+// 4,00): 10,32 en claro y 9,89 en oscuro. Exactamente lo publicado.
+//
+// Un solo nivel de atenuado para los dos textos: la jerarquía la hace el tamaño,
+// no el color (misma regla que la franja de contacto, D30).
 export function MasAlla({ dict }: { dict: MasAllaDict }) {
   // Mantener el acento y su cláusula corta ("Exit once." / "Exit una vez.")
   // como una unidad que no rompe: si no, el color queda colgando al final de
@@ -36,15 +45,21 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
   return (
     <section
       id="mas-alla"
+      // DECLARA SU SUPERFICIE (2026-09-04, design-review). `.bg-foreground` no
+      // enciende la familia invertida: el único selector que lo hace es
+      // `[data-surface="inverted"]`. Sin esto la banda era correcta por
+      // CALIBRACIÓN —sus dos apagados mezclaban un 80% a mano— y no por herencia,
+      // así que el primer `text-muted-foreground` que cayera dentro se habría
+      // llevado el atenuado de `--background` sobre un fondo `--foreground`, que
+      // es el fallo de D30. Su banda hermana de `/como-se-ha-creado` ya lo
+      // declaraba; eran dos bandas iguales resueltas de dos maneras.
+      data-surface="inverted"
       className="bg-foreground text-background py-[clamp(5rem,11vw,9.5rem)]"
     >
       <div className={WRAP}>
         <p
           data-reveal
-          className="m-0 mb-[clamp(1.75rem,4vw,3rem)] text-[0.8125rem] font-semibold tracking-[0.11em] uppercase"
-          style={{
-            color: "color-mix(in srgb, var(--background) 80%, transparent)",
-          }}
+          className="text-muted-foreground m-0 mb-[clamp(1.75rem,4vw,3rem)] text-[0.8125rem] font-semibold tracking-[0.11em] uppercase"
         >
           {dict.eyebrow}
         </p>
@@ -54,9 +69,7 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
         >
           {dict.line1a}
           <span className="whitespace-nowrap">
-            <span style={{ color: "var(--brand-purple-accent)" }}>
-              {dict.exitWord}
-            </span>
+            <span className="text-brand-purple-accent">{dict.exitWord}</span>
             {clause}
           </span>
           {rest}
@@ -77,10 +90,7 @@ export function MasAlla({ dict }: { dict: MasAllaDict }) {
             contradice a propósito. */}
         <p
           data-reveal
-          className="font-display m-0 text-[clamp(1.125rem,1.6vw,1.25rem)] leading-[1.45] font-normal tracking-[0.01em] text-balance"
-          style={{
-            color: "color-mix(in srgb, var(--background) 80%, transparent)",
-          }}
+          className="text-muted-foreground font-display m-0 text-[clamp(1.125rem,1.6vw,1.25rem)] leading-[1.45] font-normal tracking-[0.01em] text-balance"
         >
           {dict.line2}
         </p>

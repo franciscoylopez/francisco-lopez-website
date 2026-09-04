@@ -52,6 +52,7 @@ Partido el **2026-08-09** (P37.685).
 - [El hover de la tarjeta pulsable, y por qué no se arregló con luminancia (2026-08-25)](#el-hover-de-la-tarjeta-pulsable-y-por-qué-no-se-arregló-con-luminancia-2026-08-25)
 - [Las dos excepciones que salieron](#las-dos-excepciones-que-salieron)
 - [El velo que no declara superficie, y por qué la regla prometía de más (2026-08-27)](#el-velo-que-no-declara-superficie-y-por-qué-la-regla-prometía-de-más-2026-08-27)
+- [La banda que publicaba una cifra y pintaba otra, y el ancla que no valía (2026-09-04)](#la-banda-que-publicaba-una-cifra-y-pintaba-otra-y-el-ancla-que-no-valía-2026-09-04)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -1078,3 +1079,56 @@ escribirse con el alcance de ese caso y a leerse con alcance universal. Aquí el
 eran velos opacos y la regla se redactó como si cubriera todos. Es la misma forma que
 §La regla del control sobre imagen prometía de más: **la regla no estaba mal, prometía de
 más**, y la corrección no es una excepción al margen sino apretar el enunciado.
+
+## La banda que publicaba una cifra y pintaba otra, y el ancla que no valía (2026-09-04)
+
+Sale del `design-review` del 2026-09-04. Dos cosas, y la segunda es de método.
+
+### La banda
+
+`components/site/mas-alla.tsx` abría su banda de manifiesto con `bg-foreground
+text-background` y **sin `data-surface="inverted"`**, y mezclaba a mano el atenuado de sus
+dos textos apagados: `color-mix(in srgb, var(--background) 80%, transparent)`.
+
+El 80% no era arbitrario y estaba medido — el eyebrow había estado al 58% y daba 4,07:1 en
+oscuro. Lo que fallaba no era el número: era que la banda resolvía por su cuenta algo que
+D39 puso en la capa. Su banda hermana de `/como-se-ha-creado` sí lo declaraba, así que había
+dos bandas iguales resueltas de dos maneras — la señal de la regla 7 del `design-review`.
+
+**Por qué la regla de arriba dejaba pasar esto.** Decía que declara familia el bloque que se
+pinta su propia superficie «un velo `color-mix` **en vez de la utilidad**», lo que se lee
+como que usar la utilidad basta. Y `bg-foreground` **es** una utilidad. Pero `globals.css`
+solo resuelve las que nombra —`bg-card`, `bg-popover`, `bg-muted`, `bg-secondary`,
+`bg-accent`, `bg-background`— y **`bg-foreground` no está en esa lista**: la familia
+invertida la enciende únicamente `[data-surface="inverted"]`. El paréntesis que quería dar
+un ejemplo acabó marcando un límite falso.
+
+**Y lo que lo convierte en hallazgo de verdad: el sitio ya PUBLICABA la otra cifra.**
+`lib/design-values.ts` declara `mutedOnInverted: { light: 10,32, dark: 9,89 }` —el resultado
+de la fórmula de la capa, 85% hacia el fondo— mientras esta banda pintaba **9,24 y 8,31**.
+Las dos parejas pasan AAA, así que ningún gate podía verlo: el censo mide lo que se pinta y
+lo aprobaba, y nada compara lo pintado con lo publicado. Lo que estaba mal no era el
+contraste, era que la página de Accesibilidad publicaba un número que esa banda no pintaba.
+Tras declarar la superficie mide exactamente 10,32 y 9,89.
+
+*La lección reutilizable: una cifra publicada puede describir la fórmula del sistema mientras
+un punto de uso pinta otra cosa, y si las dos pasan el umbral no hay gate que lo note.*
+
+### El ancla que no valía
+
+Al medir la banda, la primera pasada dio **13,73** donde eran **9,24**. El metro estaba mal, y
+había pasado su validación: reprodujo el ancla de texto principal en 13,79 exacto.
+
+El motivo es que **los cuatro anclajes de §Cómo medir son OPACOS** —texto principal y la
+bolita del switch—, y lo que estaba midiendo llevaba **alfa**. Leer un color con alfa
+pintándolo sobre un canvas vacío devuelve el color puro sin componer, así que el metro
+informaba del `--background` a pelo en vez de su mezcla con la banda. El ancla opaca no
+ejercita ese camino y por eso lo dio por bueno.
+
+**El arreglo: una segunda ancla que sí lo ejercite.** Negro al 50% sobre blanco tiene que dar
+**4,00**. Con las dos, la medición correcta salió a la primera: 9,24 / 8,31 antes y
+10,32 / 9,89 después.
+
+Es el punto 1 de §Cómo medir aplicado a sí mismo: *valida el metro antes de creerte el
+hallazgo* — y la validación solo vale si el caso de prueba se parece al caso real. Un ancla
+que no toca el mecanismo sospechoso no valida nada, solo tranquiliza.
