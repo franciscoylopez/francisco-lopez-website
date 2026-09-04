@@ -237,6 +237,7 @@
 - D199 · El sello de medición guarda el instrumento, y avisa en vez de restar cuando cambia
 - D200 · El «visto» espera a que haya alguien delante, y la serie se parte ahí
 - D201 · Un par que cruza la frontera de 24px no ha desaparecido, y el diff del censo lo dice aparte
+- D202 · Lo del primer pliegue entra al CARGAR, no al hacer scroll, y un `transform` que colisiona no da error
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13016,3 +13017,68 @@ desaparición—.
 continua, el diff que la compara hereda el ruido de la frontera. El arreglo no suele ser mover
 la frontera —eso solo la cambia de sitio— sino que el comparador sepa qué parte de la clave es
 identidad y cuál es veredicto.*
+
+## D202 · Lo del primer pliegue entra al CARGAR, no al hacer scroll, y un `transform` que colisiona no da error — 2026-09-04
+
+**Decisión.** Este sitio tiene **dos mecanismos de entrada y significan cosas distintas**, así
+que la pregunta al animar algo que aparece no es cuál usar sino **cuándo entra**:
+
+- **`data-reveal` es «entra al ENTRAR en viewport».** Lo conduce `reveal-root.tsx`, y por eso
+  marca como mostrado todo lo que ya está en pantalla ANTES de encender `reveal-on` (D47). Lo
+  del primer pliegue no entra: ya está.
+- **`@keyframes` con `animation-fill-mode: backwards` es «entra al CARGAR».** Sin JS y sin
+  esperar a la hidratación. Ya eran tres —`punto-cae` (D137), `consent-in` y `split-bloom`—
+  antes de que hiciera falta nombrar la regla; `.entrada-pliegue` es la cuarta.
+
+**Contexto.** Francisco vio que la entrada del prototipo de una composición de hero no se
+reproducía en el sitio servido. No era un fallo de la pieza: **nada del primer pliegue anima,
+en ninguna página**, y las cuatro composiciones del sistema llevaban un `transitionDelay`
+escalonado que era inerte desde que se escribió. La ficha proponía una excepción dentro del
+island —un marcador que el bucle de premarcado saltara—, y **eso no consigue lo que promete**:
+el HTML servido no lleva `opacity: 0`, la pone `reveal-on` y llega con la hidratación, así que
+el elemento se pinta, PARPADEA a cero al hidratar y vuelve. Es el síntoma que quitó D47, sin su
+coste de métrica.
+
+**`backwards`, no `both`.** Los dos pintan igual y la diferencia es lo que queda después. `both`
+retiene el último fotograma indefinidamente, y una animación gana al resto de la cascada: deja
+`transform: none` fijado en el elemento, así que una utilidad de `transform` añadida ahí más
+adelante no se aplicaría **sin dar un error**. `backwards` conserva lo único necesario —el
+primer fotograma aplicado antes de arrancar, que es lo que evita el parpadeo durante el
+retardo— y al terminar devuelve el elemento a su estilo normal. Comprobado sobre el build
+servido: opacidad 0 al vuelo, 1 en reposo, y un `transform` puesto después **se aplica**
+(`matrix(0.707…)`) donde con `both` salía `none`.
+
+**Y no toca el LCP, comprobado antes de escribirlo.** En las cuatro páginas y en los dos
+viewports (1920×1080 y 412×823 a 1,75) el elemento LCP es la **entradilla**, el `<p>` de la
+columna de texto, nunca la composición; medido con `PerformanceObserver`. La entradilla sigue
+en `data-reveal` y sigue premarcada. Una composición que empieza en `opacity: 0` **sale** de la
+lista de candidatos, que sobre el LCP solo puede ser neutro o bueno.
+
+### La otra mitad: un `transform` que colisiona no avisa
+
+**Mordió DOS veces el mismo día, por dos mecanismos distintos**, y en las dos el síntoma fue el
+mismo: la animación se aplica, su progreso avanza, y en pantalla no se mueve nada.
+
+1. **Un `transform` en el punto de uso gana a cualquier hoja.** Las fichas de las composiciones
+   de Design System y de Accesibilidad llevaban `style={{ transform: "rotate(6deg)" }}`, así que
+   el `translateY` del reveal llevaba muerto ahí desde que se escribieron: solo podían fundirse.
+2. **`.reveal-on [data-reveal]` gana por especificidad a una clase suelta** (dos clases contra
+   una). El filete de las bandas invertidas ES el `[data-reveal]`, así que el `transform:
+   scaleX(var(--rp))` que le daba el gesto de Hitos volvía a `none`: `--rp` recorría 0 → 1 y el
+   filete se quedaba quieto y entero, 56px pintados en las cuatro paradas del recorrido.
+
+**El arreglo es la propiedad individual** —`rotate:`, `scale:`, `translate:`—, que **compone**
+con `transform` en vez de pelearse: el orden especificado es `translate` → `rotate` → `scale` →
+`transform`. El giro pasó a `rotate:` y el crecimiento del filete a `scale:`.
+
+**Y el límite, que es lo que decide cuál de las cuatro queda libre para animar:** las utilidades
+de traslación de Tailwind v4 —`-translate-y-1/2`, que es como se centra la composición del
+Brand Kit— **compilan a la propiedad `translate`**, no a `transform`. Así que en este sitio la
+propiedad libre para una entrada es `transform`, y las individuales se reservan para lo que el
+punto de uso ya estaba escribiendo a mano.
+
+*Lo reutilizable, y por eso está aquí y no en un comentario: una colisión de `transform` no
+produce ni un error de compilación ni un aviso en consola, y el elemento sigue visible. La
+única forma de cazarla es medir la propiedad pintada en el elemento real, no leer el JSX ni
+confiar en que la animación exista: en los dos casos la animación existía y su progreso era
+correcto.*
