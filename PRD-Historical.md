@@ -97,6 +97,8 @@
 - [El cierre de «Agentes» — 2026-08-31](#el-cierre-de-agentes--2026-08-31)
 - [El cierre de «Distribución» y el `method-review` XI — 2026-09-01](#el-cierre-de-distribución-y-el-method-review-xi--2026-09-01)
 - [El cierre de «Higiene»: la brecha de consentimiento deja de estar medida — 2026-09-04](#el-cierre-de-higiene-la-brecha-de-consentimiento-deja-de-estar-medida--2026-09-04)
+- [El `method-review` XII: el andamiaje creció un 29 % y los indicadores no se movieron — 2026-09-04](#el-method-review-xii-el-andamiaje-creció-un-29-%-y-los-indicadores-no-se-movieron--2026-09-04)
+- [Abre «Cierre V3» — 2026-09-04](#abre-cierre-v3--2026-09-04)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4430,3 +4432,73 @@ después**: el mecanismo de GA4, la versión del instrumento en el sello y el de
 limpio son las tres de antes; cuál es la brecha de verdad, y con ella la reescritura de §7,
 es de después, porque escribirla con tráfico residual sería poner otra frase sin medir, que
 es como llegó la que había.
+
+## El `method-review` XII: el andamiaje creció un 29 % y los indicadores no se movieron — 2026-09-04
+
+**El disparo se hizo con las notas de Francisco sin leer**, y convergió en uno. Él había
+anotado *«sigue apareciendo muchooooos fallos de PR run Failed»*; la medición dice lo mismo
+desde dentro. El hook de regeneradores que construyó la tanda 1 de «Higiene» entró el
+2026-09-02 a las 13:31 sobre la medida de que 10 de 14 rojos eran gates de artefacto derivado,
+y la tasa **no se movió**: 20,8 % antes (5 de 24), **21,4 %** después (12 de 56), con los
+mismos tres gates dominando. El porqué está en la cabecera del propio hook —*no arregla nada
+por su cuenta, nombra*—, así que arregló el lado que PRODUCE la señal y dejó intacto el que la
+CONSUME. Séptima instancia de esa familia, y va a P72.164.
+
+**La cifra que ordena el resto:** `scripts/` pasó de 15.593 a 20.150 líneas, o sea **5,89
+líneas de verificación por cada línea de producto** en el sprint, contra un umbral rojo de 3.
+Se mide y no suspende, así que va a P72.165.
+
+**Se retiró el indicador «% Infra del sprint»**, que decía 28,6 % verde sobre el mismo sprint
+que la fila de líneas suspende: «Higiene» etiquetó su andamiaje como `Código`, que es honesto y
+lo deja ciego. Esa fila había sustituido a «sprint de método abierto en el ciclo» *por leer el
+NOMBRE*, y heredó el defecto un nivel más abajo, leyendo la ETIQUETA.
+
+**DOS CONCLUSIONES DEL DISPARO SE CAYERON AL EJECUTARLAS**, que es la revisión funcionando y
+por eso se anotan. La primera: «18 fechas para retirar» pesaban **21 palabras**, porque aquí la
+convención es fechar la *regla viva*; el paso 4 del manual queda corregido para medir el peso y
+ordenar por duplicación, no por tamaño. La segunda, más grande: «el objetivo de 11.400 no se ha
+cumplido nunca» es falso — es una **escalera** de escalones de 200 que baja al alcanzarse
+(12.000 ✓, 11.800 ✓ con 11.794, 11.600 ✓ con 11.455) y el vigente tenía cinco días. Y ya se
+había intentado tumbar una vez con ese mismo argumento (P68.7405), también en falso: el escalón
+esperaba una retirada estructural.
+
+**Lo que la retirada de apertura sí valió, y dónde se acabó.** El corte limpio estaba en
+`BRAND.md` §Cómo se escribe una regla, que narraba los casos que su propio histórico ya
+contaba: su regla 5 incumplida por ella misma. **−59 palabras, margen 14 → 73.** Lo siguiente
+por peso son reglas que se aplican en cada censo, no historia, así que ahí se acabaron los
+cortes limpios — el próximo que busque empieza por duplicación y no por tamaño. Y la propia
+skill se pagó su sitio: añadir el disparo XII dejó la suma de skills en **−251 de holgura**, y
+se retiraron nueve narraciones que ya viven en este archivo, hasta dejarla en **+3 palabras
+netas** en todo el ciclo.
+
+**El informe completo:**
+<https://claude.ai/code/artifact/f12a03ec-b14c-443d-bd6c-305bb1280277>
+
+## Abre «Cierre V3» — 2026-09-04
+
+Dieciséis tareas, con fecha de cierre declarada por Francisco: **el 8 de septiembre**. Entran
+las once que quedaban abiertas en V3 más **cinco de sus propias notas** —el hero de
+`/trayectoria`, los botones de compartir del artículo, un aviso nuevo de PSI, la imagen de Qlty
+y la transición de las barras moradas—. Quedan fuera `74.5` **por fecha**, porque necesita el
+dato del lanzamiento del 10, y `80.1`, `95` y `95.5` **por versión**. De V4 entra solo el
+README de perfil, que pasa a V3 porque se construye en esta ventana.
+
+**Y por primera vez en la serie, el cupo de `General` se cumplió de verdad.** El embalse cae de
+8 a 2 porque el sprint se llevó **seis**, no por absorción de un bloque entero como hizo
+«Higiene». Cuatro cierres seguidos lo habían dejado a cero, y el `SELLO_GENERAL` lo decía en
+cada uno; este es el primer dato en contra de esa serie. Francisco confirmó al abrir que el
+cupo se sostiene.
+
+**Tres tandas, agrupadas por lo que comparte SESIÓN** y no por tamaño: *el metro* (5, todo lo
+que mide y lo único con fecha real), *lo que se ve* (6, que comparten capa y sobre todo un solo
+`design-review` y un solo `/review-animations` al cerrar, en vez de seis) y *andamiaje y lo que
+queda* (5, con los slugs en inglés la última a propósito: es la única L, lleva una decisión
+dentro y es la candidata natural a caerse si el 8 llega antes).
+
+**El sello de apertura, con las tres cifras y un error corregido.** Documentos 11.686 → 11.627
+(−59), skills 20.493 → 20.483 (−10), `scripts/` 20.303 → 20.324 (+21). El ámbar de `scripts/`
+se deja encendido a propósito: no había candidato de retirada sin inventárselo, que es como se
+gana un verde falso. Y la primera versión del sello **medía con otro instrumento** —`git
+ls-files | wc -l` (20.169) contra un guardián que cuenta con su propia función (20.303), 134 de
+diferencia y una deriva de +150 que no existía—, que es exactamente el fallo que este mismo
+`method-review` acababa de documentar en el sello de medición, cometido en el commit siguiente.
