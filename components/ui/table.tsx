@@ -136,7 +136,28 @@ export function DataTable({
 }) {
   return (
     <div className={cn(PANEL, className)}>
-      <div className="overflow-x-auto">
+      {/* LA REGIÓN QUE SCROLLEA ES OPERABLE CON TECLADO (2026-09-04, design-review).
+          Misma forma que el panel del artefacto en `deep-dive.tsx`, y por la misma
+          razón: lo que se desplaza con el dedo tiene que poder desplazarse con las
+          flechas, o el contenido que queda fuera solo existe para quien usa ratón
+          (WCAG 2.1.1, nivel A). El `<caption>` de abajo CUENTA la tabla; no la mueve.
+
+          Medido en `/cookies` a 390×844 antes de esto: 572px de contenido dentro de
+          348px, `tabindex` nulo y `focusable: false`. axe lo marcaba
+          `scrollable-region-focusable`, impacto *serious*.
+
+          VA SIEMPRE, NO SOLO CUANDO `minWidth` ESTÁ PUESTO, y es deliberado: hoy la
+          única que scrollea es la de cookies, pero eso depende del CONTENIDO, no de
+          la prop — el día que una columna del Design System crezca, esa tabla
+          empieza a desbordar y se quedaría sin la parada de tabulación en silencio.
+          El precio es un tab stop en las tablas que caben; el otro reparto es una
+          regresión que no avisa. */}
+      <div
+        className="overflow-x-auto"
+        tabIndex={0}
+        role="group"
+        aria-label={caption}
+      >
         <table
           className="w-full border-collapse text-left"
           style={minWidth ? { minWidth } : undefined}
