@@ -86,8 +86,23 @@ export function useCopyToClipboard(resetMs = 1800) {
  *
  * `aria-hidden` porque el `aria-live` del control ya lo anuncia: sin él, un lector
  * de pantalla lo diría dos veces.
+ *
+ * SE EXPORTA DESDE P72.48, y con una regla que antes no estaba escrita porque
+ * solo había una familia de controles que copiaba. Ahora hay dos —los valores
+ * del sistema y el enlace del artículo— y la regla que las iguala mira la FORMA
+ * del control, no la página:
+ *
+ *   · **Solo icono → confirma la pastilla.** Es el caso que escribió el párrafo
+ *     de arriba: un glifo que cambia dice que algo pasó y no dice qué.
+ *   · **Con etiqueta visible → confirma la etiqueta**, y la pastilla sobra: el
+ *     botón ya pone «Copiado» donde antes ponía «Copiar enlace». Dos avisos del
+ *     mismo hecho a diez píxeles uno de otro no informan el doble.
+ *
+ * Lo que NO depende de la forma es el icono de éxito: `Check` en todos, que es
+ * lo que significa «hecho». El artículo ponía `Copy` ahí, o sea el icono con el
+ * que el resto del sitio dice «aún no has copiado».
  */
-function Confirm({
+export function Confirm({
   text,
   on,
   onInverted,

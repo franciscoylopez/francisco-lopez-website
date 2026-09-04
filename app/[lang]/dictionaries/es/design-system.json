@@ -894,9 +894,9 @@
     "progressAriaLabel": "Progreso de lectura del artículo de muestra",
     "shareLabel": "Compartir",
     "shareCopyLabel": "Copiar enlace",
-    "shareCopiedLabel": "Enlace copiado",
+    "shareCopiedLabel": "Copiado",
     "shareCopiedAnnounce": "Enlace copiado al portapapeles",
-    "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
+    "shareUnavailableAnnounce": "Compartir no está disponible: enlace copiado",
     "railAriaLabel": "Riel de secciones (espécimen)",
     "railHint": "Igual que en la página real, pero contenidos a este panel: fuera de él van fijos a la ventana."
   }

@@ -894,9 +894,9 @@
     "progressAriaLabel": "Reading progress of the sample article",
     "shareLabel": "Share",
     "shareCopyLabel": "Copy link",
-    "shareCopiedLabel": "Link copied",
+    "shareCopiedLabel": "Copied",
     "shareCopiedAnnounce": "Link copied to clipboard",
-    "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
+    "shareUnavailableAnnounce": "Sharing isn't available: link copied instead",
     "railAriaLabel": "Section rail (specimen)",
     "railHint": "Just like the real page, but contained to this panel: outside it they're pinned to the window."
   }
