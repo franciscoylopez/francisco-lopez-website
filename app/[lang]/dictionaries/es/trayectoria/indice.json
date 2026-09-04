@@ -11,26 +11,8 @@
   "statExit": "Exit",
   "statSectores": "Sectores",
   "intro": {
-    "eyebrow": "Cómo se leen",
-    "title": "Las cinco siguen el mismo orden",
-    "partes": [
-      {
-        "rotulo": "Contexto",
-        "texto": "Qué había cuando llegué: el equipo, el producto y el problema que nadie había cerrado."
-      },
-      {
-        "rotulo": "Decisiones",
-        "texto": "Qué elegí y qué descarté, con el criterio de entonces y no con el de ahora."
-      },
-      {
-        "rotulo": "Cifras",
-        "texto": "Los números con su ventana acotada: cuánto, en cuánto tiempo y contra qué base."
-      },
-      {
-        "rotulo": "Aprendizajes",
-        "texto": "También los de lo que no salió, que son los que dicen cómo se decide."
-      }
-    ]
+    "eyebrow": "Índice",
+    "note": "Todas siguen el mismo orden: contexto, decisiones, cifras acotadas y aprendizajes. Cada una se lee suelta, en el orden que quieras."
   },
   "cta": "Descargar CV",
   "ctaNota": "El resto de la trayectoria (agencia y Marketing & Growth) está en la sección Trayectoria de la portada y en el CV."

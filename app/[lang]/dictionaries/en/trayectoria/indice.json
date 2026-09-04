@@ -11,26 +11,8 @@
   "statExit": "Exit",
   "statSectores": "Sectors",
   "intro": {
-    "eyebrow": "How to read them",
-    "title": "All five follow the same order",
-    "partes": [
-      {
-        "rotulo": "Context",
-        "texto": "What I found when I arrived: the team, the product and the problem nobody had closed."
-      },
-      {
-        "rotulo": "Decisions",
-        "texto": "What I chose and what I ruled out, judged by what I knew then and not by what I know now."
-      },
-      {
-        "rotulo": "Figures",
-        "texto": "The numbers with their window stated: how much, over how long and against what baseline."
-      },
-      {
-        "rotulo": "Takeaways",
-        "texto": "Including the ones from what did not work, which are the ones that say how you decide."
-      }
-    ]
+    "eyebrow": "Index",
+    "note": "They all follow the same order: context, decisions, figures with their window stated, and takeaways. Each one reads on its own, in whatever order you like."
   },
   "cta": "Download CV",
   "ctaNota": "The rest of my career (agency work and Marketing & Growth) is in the Career section of the home page and in the CV."

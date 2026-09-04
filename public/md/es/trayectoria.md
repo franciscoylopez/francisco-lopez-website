@@ -31,22 +31,9 @@ Exit
 
 Sectores
 
-Cómo se leen
+Índice
 
-## Las cinco siguen el mismo orden
-
-- Contexto
-  
-  Qué había cuando llegué: el equipo, el producto y el problema que nadie había cerrado.
-- Decisiones
-  
-  Qué elegí y qué descarté, con el criterio de entonces y no con el de ahora.
-- Cifras
-  
-  Los números con su ventana acotada: cuánto, en cuánto tiempo y contra qué base.
-- Aprendizajes
-  
-  También los de lo que no salió, que son los que dicen cómo se decide.
+Todas siguen el mismo orden: contexto, decisiones, cifras acotadas y aprendizajes. Cada una se lee suelta, en el orden que quieras.
 
 - [Emendu · SaaS B2B · IT Management · De vender a mano a un SaaS con canal propio · Product Manager · Feb 2025 (2025-02) - Actualidad](https://franciscolopez.es/trayectoria/emendu)
 - [KUOTIP · SaaS B2B2C · Customer Reviews · La oportunidad perdida de cambiar una industria · Cofounder & Product · Feb 2024 (2024-02) - Dic 2024 (2024-12)](https://franciscolopez.es/trayectoria/kuotip)

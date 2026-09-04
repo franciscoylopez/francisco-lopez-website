@@ -8,12 +8,12 @@ import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
 import { factsOf } from "@/content/experience-copy";
 import { actionVariants } from "@/components/ui/action";
 import {
-  LEADING,
-  SectionHeader,
   dataLabelVariants,
+  eyebrowVariants,
   titleVariants,
 } from "@/components/ui/heading";
-import { PROSE, SECTION, WRAP } from "@/components/ui/layout";
+import { SECTION, WRAP } from "@/components/ui/layout";
+import { IndexNote } from "@/components/ui/section-index";
 import { Stat } from "@/components/ui/stat-row";
 import { type Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
@@ -359,51 +359,29 @@ export function TrayectoriaIndice({
           que la sección que sigue al pliegue en Contacto. */}
       <section className={SECTION}>
         <div className={WRAP}>
-          {/* LA INTRO ES ESTRUCTURA, NO PROSA, y esa es la única forma de que
-              diga algo. La entradilla del hero ya hacía de intro —anunciaba la
-              historia entera, las cifras acotadas y los aprendizajes—, así que
-              un párrafo aquí habría repetido esas mismas tres cosas casi palabra
-              por palabra. Lo que la entradilla NO puede decir sin alargarse es
-              en qué ORDEN aparecen dentro de cada página, y eso es lo que hace
-              navegables las cinco.
+          {/* LA INTRO ES UNA LÍNEA, NO UN BLOQUE. La primera versión era una
+              cabecera de sección con cuatro columnas rotuladas —contexto,
+              decisiones, cifras, aprendizajes— y el problema no era el copy: era
+              que un bloque de ese alto empuja la rejilla fuera de la pantalla, y
+              lo que la página tiene que enseñar son las cinco tarjetas.
 
-              Los cuatro rótulos no se inventan aquí: son las secciones que ya
-              tiene todo deep-dive. */}
-          {/* El hueco de la cabecera a sus cuatro partes es MÁS CORTO que el de
-              las partes a la rejilla, y no es estética: con los dos iguales
-              —`--section-y` en ambos— la cabecera y sus partes se leían como dos
-              bloques sueltos en vez de como uno. El espacio agrupa. */}
-          <header
-            data-reveal
-            className={cn(PROSE, "mb-[clamp(2.5rem,5vw,3.5rem)]")}
-          >
-            <SectionHeader
-              eyebrow={dict.intro.eyebrow}
-              title={dict.intro.title}
-              size="section"
-            />
-          </header>
+              ASÍ QUE SE USA LA PIEZA QUE YA RESUELVE ESTO: `IndexNote`, la frase
+              que orienta al lector bajo el eyebrow de un índice, la misma que
+              usan el Brand Kit, el Design System, Accesibilidad y el artículo. Y
+              aquí la rejilla de tarjetas HACE de lista del índice, así que la
+              pieza entera (`SectionIndex`) no encaja: repetiría en celdas lo que
+              está justo debajo en tarjetas.
 
-          <ul
-            data-reveal
-            className="mb-[var(--section-y)] grid list-none grid-cols-1 gap-x-[var(--gutter)] gap-y-8 p-0 sm:grid-cols-2 lg:grid-cols-4"
-          >
-            {dict.intro.partes.map((parte) => (
-              <li key={parte.rotulo} className="m-0">
-                <p className={cn(dataLabelVariants(), "mb-[0.6rem]")}>
-                  {parte.rotulo}
-                </p>
-                <p
-                  className={cn(
-                    LEADING.prose,
-                    "text-muted-foreground m-0 text-[0.95rem]",
-                  )}
-                >
-                  {parte.texto}
-                </p>
-              </li>
-            ))}
-          </ul>
+              SIN FIGURA, y no es un olvido: la única cifra que cabría —cuántos
+              casos hay— ya la publica la fila del hero, y el `·` de `IndexNote`
+              existe para separar figuras DISTINTAS. El Brand Kit puede poner «6
+              secciones» porque sus cifras de hero son otras. */}
+          <div className="mb-[clamp(2.5rem,5vw,3.5rem)]">
+            <p data-reveal className={cn(eyebrowVariants(), "mb-3")}>
+              {dict.intro.eyebrow}
+            </p>
+            <IndexNote note={dict.intro.note} figures={[]} />
+          </div>
 
           <ul
             data-reveal

@@ -31,22 +31,9 @@ Exit
 
 Sectors
 
-How to read them
+Index
 
-## All five follow the same order
-
-- Context
-  
-  What I found when I arrived: the team, the product and the problem nobody had closed.
-- Decisions
-  
-  What I chose and what I ruled out, judged by what I knew then and not by what I know now.
-- Figures
-  
-  The numbers with their window stated: how much, over how long and against what baseline.
-- Takeaways
-  
-  Including the ones from what did not work, which are the ones that say how you decide.
+They all follow the same order: context, decisions, figures with their window stated, and takeaways. Each one reads on its own, in whatever order you like.
 
 - [Emendu · B2B SaaS · IT Management · From manual sales to a SaaS with its own channel · Product Manager · Feb 2025 (2025-02) - Present](https://franciscolopez.es/en/trayectoria/emendu)
 - [KUOTIP · B2B2C SaaS · Customer Reviews · The missed chance to change an industry · Cofounder & Product · Feb 2024 (2024-02) - Dec 2024 (2024-12)](https://franciscolopez.es/en/trayectoria/kuotip)
