@@ -77,7 +77,7 @@ export type Movimiento = { fecha: string; valor: number; motivo: string };
  * él mismo acababa de escribir. Un cierre que documenta lo que aprendió es el sitio
  * más probable del próximo duplicado, no el menos.
  */
-export const CICLO_ABIERTO = "2026-09-02";
+export const CICLO_ABIERTO = "2026-09-04";
 
 /** El techo vigente es el último movimiento, nunca un número escrito aparte. */
 export function vigente(historial: Movimiento[]): number {

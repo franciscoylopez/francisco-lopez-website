@@ -71,15 +71,36 @@ const SELLO_CICLO: {
   scripts: Retirada;
 } = {
   // Tiene que coincidir con `CICLO_ABIERTO`: es lo que obliga a volver a medir.
-  fecha: "2026-09-02",
-  cierra: "Distribución",
-  // Medido en el cruce: `0eb35ed` (lo que dejó «Distribución») → `221c584` (el
-  // commit que cierra y abre, con la retirada dentro).
-  documentos: { antes: 11_690, despues: 11_683 },
-  skills: { antes: 20_438, despues: 20_480 },
+  fecha: "2026-09-04",
+  cierra: "Higiene",
+  // Medido en el cruce: `d11d65d` (lo que dejó «Higiene») → la retirada de
+  // apertura del `method-review` XII.
+  //
+  // LOS DOCUMENTOS RETIRARON CON UN SOLO CORTE, y conviene saber cuál: la sección
+  // de `BRAND.md` que enseña a escribir reglas narraba los casos que su propio
+  // histórico ya contaba, o sea su regla 5 incumplida por ella misma. −59. Y ahí
+  // se acabaron los cortes limpios: lo siguiente por peso son reglas que se
+  // aplican en cada censo, no historia. El próximo que busque empieza por
+  // duplicación, no por tamaño.
+  documentos: { antes: 11_686, despues: 11_627 },
+  // Las skills retiraron PORQUE NO CABÍAN: añadir el disparo XII dejó la suma en
+  // −251 de holgura, así que se retiraron nueve narraciones que ya viven en
+  // `PRD-Historical`. Retirada real, disparada por el rojo y no por la regla.
+  skills: { antes: 20_493, despues: 20_483 },
   // En LÍNEAS, no en palabras: `scripts/` es código, y su peso no se lee, se
   // mantiene. La unidad va dicha en el informe para que nadie sume las tres.
-  scripts: { antes: 15_623, despues: 15_658 },
+  //
+  // Y SE MIDE CON EL CONTADOR DE ESTE ARCHIVO, no con `git ls-files | wc -l`, que
+  // da 134 líneas menos porque no es el mismo conjunto de ficheros. Sellar con un
+  // instrumento y comparar con otro inventa una deriva que no existe — el mismo
+  // fallo que el `method-review` XII acababa de documentar en el sello de medición.
+  //
+  // ESTE CICLO NO RETIRÓ DE `scripts/`, Y EL ÁMBAR DICE LA VERDAD. No se
+  // identificó ningún candidato sin inventárselo, que es justo cómo se gana un
+  // verde falso. Lo que sí salió es la tarea que le pone listón: P72.165, dentro
+  // de «Cierre V3» — el volumen se mide desde D28 y nunca ha suspendido, y en
+  // «Higiene» creció un 29 % sin que nada se pusiera rojo.
+  scripts: { antes: 20_303, despues: 20_324 },
 };
 
 /**
