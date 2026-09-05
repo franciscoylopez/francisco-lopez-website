@@ -133,7 +133,7 @@
       },
       {
         "idx": "(05)",
-        "name": "Career",
+        "name": "Experience",
         "h": "clamp(9rem,20vw,13rem)"
       },
       {
@@ -291,7 +291,7 @@
       {
         "size": "section",
         "eyebrow": "Journey",
-        "sample": "Career",
+        "sample": "Experience",
         "use": "The h2 that opens a section."
       },
       {
@@ -323,7 +323,7 @@
     "labelLead": "They look alike and do different jobs, so they are two pieces: one opens a section paired with a headline, the other labels a value inside the content.",
     "labelEyebrowKicker": "Opens a section",
     "labelEyebrowRule": "It always sits above a headline, and the gap between them comes from the size of the headline below it.",
-    "labelEyebrowSample": "Career",
+    "labelEyebrowSample": "Experience",
     "labelEyebrowTitle": "Ten years of product",
     "labelDataKicker": "Labels a value",
     "labelDataRule": "With no headline beside it there is no gap to derive: the margin is set by whoever uses it. It runs a point smaller and less open.",
