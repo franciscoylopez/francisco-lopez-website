@@ -40,14 +40,20 @@ import { CICLO_ABIERTO } from "./presupuesto";
  *   `General` y `scripts/`. Se vigilan aquí porque el mismo mecanismo las alcanza,
  *   pero ponerlas en rojo sería inventar la regla desde el guardián en vez de
  *   portarla.
- * · **`scripts/` sí está en la regla, y aun así avisa**, por una razón medida: **la
+ * · **`scripts/` sí está en la regla, y aun así avisa AQUÍ**, por una razón medida: **la
  *   propia ceremonia de apertura escribe ahí**. Los +35 de esta apertura son
  *   exactamente los dos sellos que el ritual exige —`CICLO_ABIERTO` en `presupuesto.ts` y
  *   `SELLO_GENERAL` en `check-tablero.ts`—, y añadir un guardián cuesta líneas: esta
- *   misma tanda lleva +734. Un rojo aquí significaría «no se puede añadir un guardián
- *   sin borrar otro», que en un proyecto cuyo método SON los guardianes es la regla
- *   equivocada. Lo que sí hace falta es que el número esté a la vista y se vuelva a
+ *   misma tanda lleva +734. Un rojo EN ESTE SELLO significaría «no se puede añadir un
+ *   guardián sin borrar otro», que en un proyecto cuyo método SON los guardianes es la
+ *   regla equivocada. Lo que sí hace falta es que el número esté a la vista y se vuelva a
  *   medir en cada apertura, que es lo que este sello compra.
+ *
+ *   **Y ese argumento ya no vale como excusa para no tener listón** (2026-09-05, D205).
+ *   Lo que no se puede es medir el volumen contra SÍ MISMO; contra el producto sí, y ahí
+ *   un guardián nuevo cabe si el producto también creció. Esa es la quinta mitad,
+ *   `verificacion.ts`, y suspende. Esta sigue midiendo otra cosa —la retirada de la
+ *   apertura— y con otro instrumento, así que sigue avisando.
  *
  * **Hoy el ámbar está encendido y dice algo cierto:** de los tres corpus, la apertura
  * de «Higiene» retiró en UNO. Los documentos, −7. Las skills, +42 palabras en el
@@ -97,9 +103,10 @@ const SELLO_CICLO: {
   //
   // ESTE CICLO NO RETIRÓ DE `scripts/`, Y EL ÁMBAR DICE LA VERDAD. No se
   // identificó ningún candidato sin inventárselo, que es justo cómo se gana un
-  // verde falso. Lo que sí salió es la tarea que le pone listón: P72.165, dentro
-  // de «Cierre V3» — el volumen se mide desde D28 y nunca ha suspendido, y en
-  // «Higiene» creció un 29 % sin que nada se pusiera rojo.
+  // verde falso. Lo que sí salió es la tarea que le pone listón: P72.53, dentro
+  // de «Cierre V3» — el volumen se medía desde D28 y no había suspendido nunca, y
+  // en «Higiene» creció un 29 % sin que nada se pusiera rojo. **Hecha el
+  // 2026-09-05**: es la quinta mitad, y desde D205 sí suspende.
   scripts: { antes: 20_303, despues: 20_324 },
 };
 
