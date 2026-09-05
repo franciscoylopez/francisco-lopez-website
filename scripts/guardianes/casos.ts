@@ -246,6 +246,17 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replace(/\n {2}"cookies",/, ""),
   },
   {
+    guardian: "check:rutas",
+    rotura: "el copy enlaza a una ruta que el registro ya no publica",
+    archivo: "app/[lang]/dictionaries/en/como-se-ha-creado.json",
+    // LA SEGUNDA MITAD DE ESTE GUARDIÁN, y no la misma rotura con otra ropa: la
+    // de arriba muerde el REGISTRO y esta muerde el COPY, que es la superficie
+    // sin tipo. El caso es literal —el que encontró el `sprint-review` de «Cierre
+    // V3»— y por eso vale como caso malo: la ruta vieja EXISTE, responde 308 y no
+    // rompe nada visible, así que un detector que mirase «¿resuelve?» aprobaría.
+    mutar: (o) => o.replace("/en/accessibility", "/en/accesibilidad"),
+  },
+  {
     guardian: "check:skills",
     rotura: "una skill nombra un archivo que ya no existe",
     archivo: ".claude/skills/close-session/SKILL.md",

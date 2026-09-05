@@ -82,7 +82,7 @@ The same scroll, read at two speeds: a scanning reader only reaches the first st
 
 - **The homepage has a safety net for the fast reader.** Right below the cover come five milestones, on one screen and with no scrolling: that's what answers «role, seniority and stack» to someone who'll be here ten seconds. What follows, how I work, the track record, the tools and the training, isn't talking to that person any more: it unfolds for whoever keeps going down.
 - **And every experience page repeats the mechanism inside itself.** The track record index links to each one, but the double reading isn't in that jump: it's inside the page. It opens with the facts of the role, and the first thing you read is "In a minute", a handful of bullets answering what I did there without having to scroll. Below that sits what a fast reader doesn't need: the story, the specific case and the takeaways.
-- **And the three system pages open the same way, whatever screen you're on.** The Brand Kit, the [Design System](https://franciscolopez.es/en/design-system) and the [accessibility statement](https://franciscolopez.es/en/accesibilidad) start with a lead paragraph and a row of key figures, and the detail comes after. That row isn't each page's own call: it's a piece of the system that exists for exactly this, so all three behave the same without anyone having to remember.
+- **And the three system pages open the same way, whatever screen you're on.** The Brand Kit, the [Design System](https://franciscolopez.es/en/design-system) and the [accessibility statement](https://franciscolopez.es/en/accessibility) start with a lead paragraph and a row of key figures, and the detail comes after. That row isn't each page's own call: it's a piece of the system that exists for exactly this, so all three behave the same without anyone having to remember.
 
 ### What isn't here (yet), and why
 
@@ -550,7 +550,7 @@ I already had the first version running, a brand created, a [Design System](http
 
 Meeting WCAG AA wasn't the goal: it's a guaranteed floor. From there I work toward AAA wherever it's achievable, in both themes, at rest and also while the cursor is hovering, which is where almost nobody measures.
 
-The European Accessibility Act doesn't apply to a personal website, only to e-commerce, banking or transport, but I do follow its technical reference standard: EN 301 549, which points back to WCAG. The full reasoning is on the [accessibility page](https://franciscolopez.es/en/accesibilidad).
+The European Accessibility Act doesn't apply to a personal website, only to e-commerce, banking or transport, but I do follow its technical reference standard: EN 301 549, which points back to WCAG. The full reasoning is on the [accessibility page](https://franciscolopez.es/en/accessibility).
 
 Contrast · live data · `lib/design-values.ts`
 
@@ -595,7 +595,7 @@ And the rest isn't that the site fell short. It's that getting there meant fixin
 
 ### The layer that can't be automated
 
-I walked the entire site with [NVDA](https://www.nvaccess.org/), a screen reader, and it caught things that break no rule at all and that no scanner could ever flag: a key that didn't close what it looked like it should close, a change that happened with no announcement to someone who can't see it. What it found is published on the site's own [accessibility page](https://franciscolopez.es/en/accesibilidad), named and dated, alongside what I haven't fixed yet. An accessibility statement that only says what's compliant isn't a statement: it's a cover page.
+I walked the entire site with [NVDA](https://www.nvaccess.org/), a screen reader, and it caught things that break no rule at all and that no scanner could ever flag: a key that didn't close what it looked like it should close, a change that happened with no announcement to someone who can't see it. What it found is published on the site's own [accessibility page](https://franciscolopez.es/en/accessibility), named and dated, alongside what I haven't fixed yet. An accessibility statement that only says what's compliant isn't a statement: it's a cover page.
 
 Each verification layer catches what the one before it can't see. Only the last one, a person, catches what breaks no rule at all.
 

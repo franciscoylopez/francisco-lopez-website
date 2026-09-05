@@ -11,9 +11,10 @@ import {
 } from "@/lib/page-route";
 import { getCommon, getSobreMi } from "../dictionaries";
 
-// Slug único para ambos locales (`/sobre-mi`, `/en/sobre-mi`), como el resto de
-// páginas propias del sitio (brand-kit, design-system, cookies): el segmento
-// estático no se localiza. Sitio ES-first (D2), así que el slug va en español.
+// EL SLUG INTERNO, QUE ES EL DE LA CARPETA y va en español porque el sitio es
+// ES-first (D2). No es la ruta pública en inglés: desde P72.56 esta misma
+// página se sirve en `/en/about`, y quien traduce es `SLUGS_EN` de
+// `lib/routes.ts`. Escribir aquí la ruta sería la segunda copia de ese mapa.
 const SLUG = "sobre-mi";
 
 export function generateStaticParams() {

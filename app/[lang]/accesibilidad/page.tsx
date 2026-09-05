@@ -11,9 +11,10 @@ import {
 } from "@/lib/page-route";
 import { getCommon, getAccesibilidad } from "../dictionaries";
 
-// Slug único para ambos locales (`/accesibilidad`, `/en/accesibilidad`), como el
-// resto de páginas propias (brand-kit, design-system, cookies): el segmento estático
-// no se localiza. Sitio ES-first (D2), así que el slug va en español.
+// EL SLUG INTERNO, QUE ES EL DE LA CARPETA y va en español porque el sitio es
+// ES-first (D2). No es la ruta pública en inglés: desde P72.56 esta misma
+// página se sirve en `/en/accessibility`, y quien traduce es `SLUGS_EN` de
+// `lib/routes.ts`. Escribir aquí la ruta sería la segunda copia de ese mapa.
 const SLUG = "accesibilidad";
 
 export function generateStaticParams() {

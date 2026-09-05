@@ -55,9 +55,15 @@ jobs:
           # artefacto que se suba desde el workspace.
           persist-credentials: false
 
+      # LA VERSIÓN DE NODE NO SE ESCRIBE AQUÍ: sale de `.nvmrc`, que es la única
+      # cifra (sprint-review de «Cierre V3», 2026-09-05). Estaba escrita en dos
+      # sitios con valores DISTINTOS y nadie lo sabía: aquí ponía 22 y Vercel
+      # construye producción con 24.x, así que el verde de CI era una afirmación
+      # sobre un runtime que no es el que despliega. `engines` de package.json
+      # declara el suelo; esto y Vercel leen el mismo número.
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
         with:
-          node-version: 22
+          node-version-file: ".nvmrc"
           cache: npm
 
       - name: Install dependencies
