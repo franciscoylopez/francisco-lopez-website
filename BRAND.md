@@ -73,9 +73,11 @@ Lo que hay que saber al escribir UI:
   lo que hace falta para que se lea. Un `opacity` además el censo no lo ve, así que su cifra
   sale de un color que nadie ha pintado (**D127**).
 - **Si un bloque se pinta su PROPIA superficie** —un velo `color-mix`, o una utilidad que
-  `globals.css` no resuelva—, tiene que declarar a qué familia pertenece con
-  `data-surface="card" | "muted" | "inverted" | "page"`. Sin eso la capa no puede verlo, y
-  **`bg-foreground` no está entre las resueltas** *(2026-09-04)*.
+  `globals.css` no resuelva—, declara **dos** cosas, y con una no basta: su familia, con
+  `data-surface="card" | "muted" | "inverted" | "page"`, para que la capa le recalcule el
+  atenuado; y **su primer plano**, porque el texto no hereda de la superficie que uno pinta,
+  sino de la que tiene encima en el DOM. Sin lo primero la capa no lo ve; sin lo segundo el
+  texto sale exactamente del color del fondo y cada hijo acaba escribiéndose un color a mano.
   **Salvo un velo casi transparente**: al 86% manda la superficie de debajo, ya heredada.
 - **Una superficie también cambia por ESTADO, no solo por clase o por atributo** (D61).
   `hover:bg-muted` **no** compila a `.bg-muted`: compila a `.hover\:bg-muted:hover`, y dentro
@@ -101,13 +103,9 @@ estados incluidos. Lo lleva todo lo que se pulsa y dibuja caja neutra; lo bordea
 no lo necesita. La mezcla **conmuta con el tema**, como `--primary-on-inverted`: un porcentaje
 fijo no llega a las dos superficies a la vez.
 
-**Y son DOS mezclas, que conmutan en direcciones opuestas** *(2026-08-28)*: sobre una banda
-invertida el contorno se construye desde el fondo del **otro** tema, así que la calibración que
-sirve ahí es también la del otro. Al escribir UI no cambia nada —sigue siendo
-`border-control-edge` y lo resuelve la superficie—; se anota porque un solo porcentaje es justo
-lo que parece razonable y no lo es.
-
-*(Cifras, barrido de mezcla y por qué esto pasó año y medio invisible, en
+*(Son DOS mezclas y conmutan en direcciones opuestas, pero al escribir UI no cambia nada:
+sigue siendo `border-control-edge` y lo resuelve la superficie. Cifras, barrido de mezcla,
+la banda invertida y por qué esto pasó año y medio invisible, en
 [`BRAND-historical.md`](./BRAND-historical.md) §El contorno de un control; componente y metro en
 `DECISIONS.md` D97.)*
 

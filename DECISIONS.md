@@ -238,6 +238,7 @@
 - D200 · El «visto» espera a que haya alguien delante, y la serie se parte ahí
 - D201 · Un par que cruza la frontera de 24px no ha desaparecido, y el diff del censo lo dice aparte
 - D202 · Lo del primer pliegue entra al CARGAR, no al hacer scroll, y un `transform` que colisiona no da error
+- D203 · Un `opacity: 0` que declara transición de opacidad no está oculto: está esperando turno
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13082,3 +13083,50 @@ produce ni un error de compilación ni un aviso en consola, y el elemento sigue 
 única forma de cazarla es medir la propiedad pintada en el elemento real, no leer el JSX ni
 confiar en que la animación exista: en los dos casos la animación existía y su progreso era
 correcto.*
+
+## D203 · Un `opacity: 0` que declara transición de opacidad no está oculto: está esperando turno — 2026-09-05
+
+**Decisión.** El censo deja de descartar un elemento por medir cero de opacidad **cuando ese
+elemento declara una transición sobre `opacity`**. `paintsText`, en
+`scripts/design-review/censo/04-dom.js`, pasa de `opacity === 0 → fuera` a
+`opacity === 0 && no declara transición de opacidad → fuera`. El filtro de **contornos de
+control** (`esVisible`, en el mismo archivo) **no se toca**: un control a opacidad cero sí
+está oculto de verdad, no hay nada que pulsar, y relajarlo ahí metería controles que no se
+pintan.
+
+**Contexto.** Lo encontró el `design-review` de la tanda 2. La pastilla de confirmación de
+`ui/copy-button.tsx` —la que dice «Copiado»— vive en `opacity-0` en reposo y solo sube al
+pulsar. Su estado es de **React**, no una regla `:hover` que el censo pueda aplicar sobre un
+clon, que es como cubre la otra mitad de los estados. Resultado: **no la había medido nunca**,
+en ninguna de sus cuatro superficies. Y el comentario del componente afirmaba lo contrario,
+«ya medido por el censo», que es la clase de frase que convierte un hueco en un aprobado.
+
+**El par estaba bien, y eso no salva la regla.** Medido a mano con el metro validado contra
+las anclas: **15,32 en oscuro y 13,79 en claro**, o sea el par principal invertido, a 11,52px,
+cuyo umbral AAA es 7. Pero eso se supo mirándolo, no midiéndolo. P72.48 acababa de convertir
+la pastilla en pieza compartida por cuatro superficies (Brand Kit, panel de tokens invertido,
+riel del artículo y dock flotante), así que quien le pusiera un tinte, un borde o texto
+atenuado no habría recibido ningún rojo.
+
+**Por qué no mete ruido, contado antes de tocar el filtro y no después.** La objeción obvia es
+que `[data-reveal]` sin mostrar también está a `opacity: 0` **con** transición de opacidad, así
+que la puerta se abriría a media página y el sello se volvería dependiente de la posición del
+scroll. No ocurre: `mostrarReveals` (`01-motion.js`) enciende **todos** los reveals antes de
+medir, y lo hace a mano y no por scroll justo para ser determinista (P50.79). Cuando este
+filtro corre ya no queda ningún `[data-reveal]` apagado, y lo único que entra por esta puerta
+es lo que **nunca se enciende solo**. Medido sobre el build servido: en `/brand-kit` son
+**9 elementos y los 9 son la pastilla**.
+
+**Qué cambia en el sello, y por qué no cambió lo que se esperaba.** El inventario guarda pares
+**únicos**, no elementos, y el de la pastilla es el principal invertido, que ya estaba. Así que
+el total no se movió: 402 antes, 402 después. Lo que compra la decisión es hacia delante, no
+una cifra nueva hoy.
+
+*(La otra mitad de la sesión sí movió el total: al quitar los cuatro `color-mix` escritos a
+mano del panel de tokens, el trinquete avisó de **cuatro pares desaparecidos** con la huella
+intacta —dos por tema, exactamente los cuatro colores que ya no se pintan— y se re-selló con
+`--inventario-nuevo`: 402 → **398**. Es el modo de fallo que D90 puso a vigilar, funcionando.)*
+
+**Lo que sigue fuera.** Un estado que solo existe tras un gesto y **no** declara transición de
+opacidad —un panel que se monta y desmonta, un `hidden` que se quita— sigue sin entrar. Para
+eso haría falta que el censo condujera la interfaz, y eso es otra cosa: mide, no navega.

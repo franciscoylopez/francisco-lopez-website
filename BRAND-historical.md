@@ -53,6 +53,7 @@ Partido el **2026-08-09** (P37.685).
 - [Las dos excepciones que salieron](#las-dos-excepciones-que-salieron)
 - [El velo que no declara superficie, y por qué la regla prometía de más (2026-08-27)](#el-velo-que-no-declara-superficie-y-por-qué-la-regla-prometía-de-más-2026-08-27)
 - [La banda que publicaba una cifra y pintaba otra, y el ancla que no valía (2026-09-04)](#la-banda-que-publicaba-una-cifra-y-pintaba-otra-y-el-ancla-que-no-valía-2026-09-04)
+- [La superficie que se pintaba sin primer plano, y los cuatro colores que eso obligaba a escribir (2026-09-05)](#la-superficie-que-se-pintaba-sin-primer-plano-y-los-cuatro-colores-que-eso-obligaba-a-escribir-2026-09-05)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -1132,3 +1133,51 @@ ejercita ese camino y por eso lo dio por bueno.
 Es el punto 1 de §Cómo medir aplicado a sí mismo: *valida el metro antes de creerte el
 hallazgo* — y la validación solo vale si el caso de prueba se parece al caso real. Un ancla
 que no toca el mecanismo sospechoso no valida nada, solo tranquiliza.
+
+## La superficie que se pintaba sin primer plano, y los cuatro colores que eso obligaba a escribir (2026-09-05)
+
+El `design-review` de la tanda 2 lo encontró como un incumplimiento pequeño: el panel de
+tokens de `/design-system` era **el único archivo del sitio** que se escribía su propio
+atenuado, cuatro veces, mezclando hacia `transparent` (75% en los dos rótulos, 82% en el
+valor del token, 18% en el filete de la cabecera). Y encima de una superficie que **ya
+declaraba** `data-surface="inverted"`, o sea justo donde `text-muted-foreground` resuelve
+solo desde D39. Parecía un descuido con nombre y apellidos.
+
+**No lo era, y lo dijo la medición.** El `color` computado del panel valía **exactamente lo
+mismo** que su `background-color`: `lab(14.81 …)` sobre `lab(14.81 …)` en claro,
+`lab(96.01 …)` sobre `lab(96.01 …)` en oscuro. El panel se pintaba `--foreground` de fondo
+con un `style` inline y no declaraba ningún color de texto, así que sus hijos heredaban el
+`--foreground` de la página: el mismo color que el fondo que acababa de pintarse. **Todo
+texto de dentro era invisible hasta que alguien le escribía un color a mano.** Los cuatro
+`color-mix` no eran un descuido: eran la única salida que la pieza dejaba.
+
+La regla que faltaba en `BRAND.md` no era «no elijas el atenuado» —esa ya estaba, y se
+estaba incumpliendo porque no se podía cumplir—, sino la anterior: **una superficie que se
+pinta declara también su primer plano**. Es §Controles con dos fondos aplicado a una caja en
+vez de a un control: la pieza es el `foreground` de su propio carril, y en un carril
+invertido ese foreground es `--background`.
+
+Con `text-background` en el panel, los cuatro caen solos: el filete vuelve a `border-border`,
+los dos rótulos a `text-muted-foreground` y el valor del token a heredar.
+
+**Y no se unificaron los dos porcentajes, que se parecían y no eran lo mismo** (regla 4 de
+§Cómo se escribe una regla): el 75% era un **rótulo** y el 82% el **contenido** del bloque de
+código. Dos papeles, y el sistema ya tiene dos cosas distintas para ellos —el atenuado y el
+primer plano—, así que igualarlos habría aplanado la jerarquía del panel.
+
+Medido después, con el metro validado contra las anclas:
+
+| | claro | oscuro |
+|---|---|---|
+| rótulos (12 y 10,88px, umbral AAA 7) | 10,32 | 9,89 |
+| valor del token (16px) | 13,79 | 15,32 |
+
+**Lo que confirmó que el cambio hacía lo que decía fue el trinquete del censo**, no la
+captura: avisó de que **cuatro pares habían DESAPARECIDO** con la huella intacta —dos por
+tema— y eran exactamente los cuatro colores que ya no se pintan. Como no eran tokens, la
+huella no podía enterarse; por eso el inventario existe. Re-sellado con `--inventario-nuevo`:
+402 → 398 pares.
+
+*(Absorbe la cláusula fechada que decía que `bg-foreground` no está entre las superficies
+resueltas: con la superficie declarando su primer plano, eso deja de ser lo que hay que
+recordar.)*
