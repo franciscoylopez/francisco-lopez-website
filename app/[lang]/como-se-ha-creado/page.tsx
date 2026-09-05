@@ -12,8 +12,10 @@ import {
 import { techArticleLd } from "@/lib/structured-data";
 import { getCommon, getComoSeHaCreado } from "../dictionaries";
 
-// Slug único para los dos locales, como el resto de páginas propias del sitio
-// (D2: sitio ES-first, el segmento no se traduce).
+// EL SLUG INTERNO, QUE ES EL DE LA CARPETA y va en español porque el sitio es
+// ES-first (D2). No es la ruta pública en inglés: desde P72.56 esta misma
+// página se sirve en `/en/how-it-was-built`, y quien traduce es `SLUGS_EN` de
+// `lib/routes.ts`. Escribir aquí la ruta sería la segunda copia de ese mapa.
 const SLUG = "como-se-ha-creado";
 
 export function generateStaticParams() {

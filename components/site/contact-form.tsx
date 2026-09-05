@@ -37,7 +37,7 @@ import { titleVariants } from "@/components/ui/heading";
 //
 // LOS MENSAJES DE ERROR SALEN DEL DICCIONARIO, no del validador: la validación
 // devuelve códigos y aquí se traducen. Es lo que evita que media página hable
-// español en `/en/contacto`, y es donde se olvida el i18n de un formulario.
+// español en `/en/contact`, y es donde se olvida el i18n de un formulario.
 
 const EMPTY: ContactValues = { nombre: "", email: "", mensaje: "" };
 

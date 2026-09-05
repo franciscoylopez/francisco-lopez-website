@@ -43,6 +43,7 @@ import {
   PAGE_SLUGS,
   publicSlug,
 } from "../lib/routes";
+import { COPY, revisaEnlacesDeCopy } from "./rutas/enlaces-de-copy";
 
 /** La raíz del App Router por locale. Todo lo que hay debajo es una página. */
 const RAIZ = join("app", "[lang]");
@@ -187,6 +188,14 @@ for (const slug of PAGE_SLUGS) {
   }
 }
 
+// 1 ter · Ningún enlace del COPY apunta fuera del registro (sprint-review de
+// «Cierre V3», 2026-09-05). La sexta consumidora del registro, y la única sin
+// red: `check:enlaces` mira solo las URLs externas y las dos mitades de aquí
+// arriba miran el registro contra el disco. El porqué, el alcance y el caso que
+// lo escribió, en `scripts/rutas/enlaces-de-copy.ts`.
+const copy = revisaEnlacesDeCopy();
+for (const p of copy.problemas) fallo(p);
+
 // 2 · Las consumidoras siguen leyendo del registro.
 let nConsumidoras = 0;
 for (const { archivo, rompe } of CONSUMIDORAS) {
@@ -220,13 +229,19 @@ console.log(
   `check:rutas — ${disco.size - nDerivadas} rutas estáticas contrastadas contra el disco · ` +
     `${nDerivadas} del deep-dive derivadas de EXPERIENCES (no hay dos listas que puedan diferir) · ` +
     `${nRoundTrip} viajes de ida y vuelta público↔interno · ` +
+    `${copy.nEnlaces} enlaces de página en ${copy.nArchivos} archivos de copy · ` +
     `${nConsumidoras} consumidoras`,
 );
 
-if (disco.size === 0 || nConsumidoras === 0 || nRoundTrip === 0) {
+if (
+  disco.size === 0 ||
+  nConsumidoras === 0 ||
+  nRoundTrip === 0 ||
+  copy.nArchivos === 0
+) {
   console.error(
     "\n✗ El guardián no ha mirado nada. Una lista de problemas vacía no es un aprobado: " +
-      `revisa que \`${RAIZ}\` siga siendo la raíz del App Router.`,
+      `revisa que \`${RAIZ}\` siga siendo la raíz del App Router, y que ${COPY.join(" y ")} sigan teniendo el copy.`,
   );
   process.exit(1);
 }

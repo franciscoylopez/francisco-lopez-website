@@ -7,7 +7,7 @@
 // ocurrir en el servidor: se traduce igual que el resto. Así que la validación
 // dice QUÉ falla (`required`, `email`, `short`…) y el diccionario de la página
 // pone las palabras, en ES y en EN. Es lo que evita que la mitad del formulario
-// hable español cuando el visitante está en `/en/contacto`.
+// hable español cuando el visitante está en `/en/contact`.
 //
 // POR QUÉ LA MISMA FUNCIÓN EN LOS DOS LADOS. La del cliente existe para no
 // mandar un viaje al servidor por un campo vacío; la del servidor existe porque

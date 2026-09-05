@@ -141,11 +141,33 @@ const HORAS_FRESCURA = 12;
  *   Y LA LECTURA HONESTA DEL −15: este guardián mide el neto, y un neto que baja
  *   por absorción no dice que el método drene. Dice que se movió un embalse de
  *   sitio. La prueba de que el cupo funciona sigue pendiente, y ahora sin la
- *   operación grande disponible para taparlo. */
+ *   operación grande disponible para taparlo.
+ *
+ * · 2026-09-05 · cierre de «Cierre V3» · 1. **−7, y por primera vez en la serie
+ *   el signo lo pone el CUPO y no una operación de una sola vez.** «Cierre V3»
+ *   se llevó **seis** de `General` al abrirse —el compromiso explícito que las
+ *   cuatro entradas anteriores venían pidiendo— y devolvió una (ESLint 10, al
+ *   descartarse por cuarta re-verificación). 8 − 6 − 1 = 1.
+ *
+ *   Y LA OTRA MITAD, que es la que faltaba desde el 2026-08-31: **su
+ *   `sprint-review` no añadió NINGUNA a `General`**. No por contenerse: por
+ *   ejecutarlas. De los cuatro hallazgos, tres se hicieron dentro del propio PR
+ *   de cierre —el copy que enlazaba a una ruta movida, el guardián que faltaba
+ *   sobre esa consumidora, y la versión de Node escrita dos veces con valores
+ *   distintos— y el cuarto nació en `Lanzamiento`, con fecha, porque necesita el
+ *   deploy. Cero netas transversales.
+ *
+ *   LO QUE ESTO PRUEBA, Y LO QUE NO. Prueba lo que «Higiene» no pudo: que el
+ *   embalse baja sin absorber el bloque entero, con la palanca ordinaria. **No
+ *   prueba que 1 sea un suelo sostenible** — es el número más bajo de la serie y
+ *   lo dejó un cierre que ejecutó en vez de tarear, que no es la operación
+ *   normal de un `sprint-review`. Si el próximo vuelve a escribir tres o cuatro,
+ *   el 1 sube a 4 sin que nada haya ido mal. El dato a vigilar no es el nivel:
+ *   es si el sprint siguiente vuelve a comprometer cupo. */
 const SELLO_GENERAL: Sello = {
-  fecha: "2026-09-04",
-  cierre: "Higiene",
-  abiertas: 8,
+  fecha: "2026-09-05",
+  cierre: "Cierre V3",
+  abiertas: 1,
 };
 
 /**

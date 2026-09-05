@@ -36,7 +36,10 @@ type Getter<T> = (lang: Locale) => Promise<T>;
 
 /**
  * Las variantes estáticas de una página: un locale, y nada más. Idéntico en las
- * catorce, porque el segmento tras el locale no se localiza (D2).
+ * catorce, y desde P72.56 conviene decir por qué, porque el motivo cambió: no es
+ * que el segmento tras el locale no se localice —el inglés SÍ traduce su ruta
+ * pública—, es que aquí el segmento es la CARPETA, y la carpeta no cambia de
+ * idioma. `/en/about` la sirve `app/[lang]/sobre-mi/`, reescrita por el proxy.
  */
 export function paramsPorLocale() {
   return locales.map((lang) => ({ lang }));
