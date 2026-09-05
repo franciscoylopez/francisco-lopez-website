@@ -1,7 +1,7 @@
 import { actionVariants } from "@/components/ui/action";
 import { chromeLinkVariants } from "@/components/ui/chrome";
 import { Logo } from "@/components/ui/logo";
-import { GITHUB_URL, LINKEDIN_URL } from "@/lib/contact";
+import { GITHUB_PROFILE_URL, LINKEDIN_URL } from "@/lib/contact";
 import { pagePath, type Locale } from "@/lib/i18n/config";
 import type { StaticPageSlug } from "@/lib/routes";
 import { cn } from "@/lib/utils";
@@ -172,10 +172,23 @@ export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
           {/* Los dos canales de icono. El suelo táctil de 44px lo pone la
               variante `icon` y no depende de que nadie se acuerde (P37.595,
               cuando estaban a 40×40); el hueco de 0,25rem deja sus dos áreas
-              separadas sin que la pareja se lea como dos bloques distintos. */}
+              separadas sin que la pareja se lea como dos bloques distintos.
+
+              LOS DOS APUNTAN A LA PERSONA, NO A UNA OBRA SUYA *(P72.555,
+              2026-09-05)*. Es `GITHUB_PROFILE_URL` y no `GITHUB_URL` por la
+              misma distinción que `lib/contact.ts` dejó escrita en P68.747 y
+              que el `sameAs` del JSON-LD ya aplica: al lado de LinkedIn, que
+              es el perfil, el repositorio dejaba la pareja coja. El código del
+              sitio no se queda sin puerta — lo enlazan el artículo, cada nota
+              al pie que apunta a un archivo de `main` y la propia tabla del
+              README del perfil. */}
           <div className="flex flex-none items-center gap-1 md:justify-self-end">
             {[
-              { href: GITHUB_URL, label: dict.githubAria, Icon: GithubIcon },
+              {
+                href: GITHUB_PROFILE_URL,
+                label: dict.githubAria,
+                Icon: GithubIcon,
+              },
               {
                 href: LINKEDIN_URL,
                 label: dict.linkedinAria,

@@ -523,7 +523,7 @@ Portada del repositorio
 
 La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.
 
-Dónde vive [github.com/franciscoylopez](https://github.com/franciscoylopez)
+Dónde vive [github.com/franciscoylopez/francisco-lopez-website](https://github.com/franciscoylopez/francisco-lopez-website)
 
 5 de 6
 

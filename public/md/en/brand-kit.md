@@ -523,7 +523,7 @@ Repository cover
 
 The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.
 
-Where it lives [github.com/franciscoylopez](https://github.com/franciscoylopez)
+Where it lives [github.com/franciscoylopez/francisco-lopez-website](https://github.com/franciscoylopez/francisco-lopez-website)
 
 5 of 6
 
