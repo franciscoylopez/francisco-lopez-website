@@ -239,6 +239,7 @@
 - D201 · Un par que cruza la frontera de 24px no ha desaparecido, y el diff del censo lo dice aparte
 - D202 · Lo del primer pliegue entra al CARGAR, no al hacer scroll, y un `transform` que colisiona no da error
 - D203 · Un `opacity: 0` que declara transición de opacidad no está oculto: está esperando turno
+- D204 · Un aviso no baja los rojos si después se empuja igual: el gate de artefacto derivado se muda al push, y el sello avisa al editar su fuente
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13130,3 +13131,62 @@ intacta —dos por tema, exactamente los cuatro colores que ya no se pintan— y
 **Lo que sigue fuera.** Un estado que solo existe tras un gesto y **no** declara transición de
 opacidad —un panel que se monta y desmonta, un `hidden` que se quita— sigue sin entrar. Para
 eso haría falta que el censo condujera la interfaz, y eso es otra cosa: mide, no navega.
+
+## D204 · Un aviso no baja los rojos si después se empuja igual: el gate de artefacto derivado se muda al push, y el sello avisa al editar su fuente — 2026-09-05
+
+**Decisión.** Los cuatro gates de artefacto derivado —`check:indices`, `check:articulo`,
+`check:accesibilidad` y `md:anclas`— pasan a tener **tres disparadores en vez de uno**, y cada
+uno hace lo único que en su momento se puede hacer:
+
+1. **Al parar** (`Stop`), lo que ya había desde el 2026-09-02: regenera lo derivado puro y
+   nombra los sellos en rojo. Enterarse pronto.
+2. **Al empujar** (`pre-push`), nuevo: **aborta el push** si alguno está en rojo. Es el único
+   de los tres que puede impedir que un run rojo exista.
+3. **Al editar un documento declarado como fuente de un sello** (`PostToolUse`), nuevo: corre
+   ese sello y, si está en rojo, dice qué sección hay que releer, **una vez por episodio**.
+
+**El porqué, medido.** El hook de Stop entró sobre la medida de que 10 de 14 runs rojos eran uno
+de estos gates, y la tasa **no se movió**: 20,8 % antes (5 de 24), 21,4 % después (12 de 56), con
+los mismos tres dominando (markdown 3, accesibilidad 3, artículo 2). El guardián funcionaba; lo
+que falló fue el **disparador**. Avisar al parar convierte «enterarse en CI diez minutos después»
+en «enterarse al parar», que es una mejora de latencia real y **no puede** bajar los rojos si
+después se empuja igual: es la familia «arreglar la mitad que se abre» —se resolvió el lado que
+PRODUCE la señal y quedó intacto el que la CONSUME—, séptima instancia.
+
+**Y por qué además al editar, que es lo que no arregla el push.** Quien mueve una fuente casi
+nunca sabe que hay un párrafo colgando de ella: se corrige una cifra de `PRD-Live` §7 o se
+compacta una sección de `BRAND.md`, y la sección del artículo que dependía de eso se entera al
+cerrar el turno, cuando la edición ya está hecha y el motivo por el que se hizo, medio olvidado.
+Las dos veces que el hook de Stop mordió el 2026-09-04 fueron exactamente eso. Es la regla 1 de
+`BRAND.md` §Cómo se escribe una regla aplicada dos veces: el disparador mira **donde** ocurre la
+cosa —el push, para el daño; la edición, para la duda—.
+
+**Cómo se instala el pre-push, que es la parte que no es obvia.** Un hook de git no está
+versionado, así que el que se commitea es un shim de tres líneas en `.githooks/pre-push` y lo
+instala `core.hooksPath`, que pone el `prepare` de `package.json` en cada `npm install`. El hook
+de verdad es Node y vive en `scripts/hooks/` con los otros tres. Los cuatro carriles los
+comparten el de Stop y el de push desde `scripts/hooks/regeneradores.mjs`: escritos dos veces
+acabarían diciendo dos cosas, y el que se quedara corto sería justo el que bloquea.
+
+**Lo que NO cubre, dicho para que no se dé por cubierto.**
+
+- **`md:verificar` entero.** Tarda 46 s y lee `.next/server/app`, así que sobre un build viejo da
+  un verde falso: en honestidad hay que sumarle el build. Corre su caso dominante, `md:anclas`,
+  que es por donde se rompen siete de cada catorce. El markdown completo lo sigue certificando CI.
+- **Los rojos que no son de artefacto derivado** (contexto, trinquete de deuda). Esos son gates
+  haciendo su trabajo, y el problema nunca fue el listón.
+- **El árbol que se empuja.** El pre-push mira el árbol de trabajo, no los commits que viajan. En
+  este repo se empuja lo que se acaba de commitear, así que la diferencia es teórica.
+- **La puerta de salida es explícita y se queda:** `git push --no-verify`. Un techo que se ablanda
+  solo es peor que uno que se salta a mano y deja rastro en el comando.
+
+**El criterio de cierre de la tarea que lo pidió incluye una segunda mitad que aquí no se puede
+afirmar:** que la tasa de runs rojos baje del 15 % en la ventana siguiente. Se mide en el próximo
+`method-review`, sobre su fila.
+
+**La primera vez que mordió fue contra su propio autor.** El pre-push, recién escrito, abortó el
+primer push de la tanda: los tres archivos nuevos de `scripts/hooks/` movieron la dependencia
+`scripts/hooks/` de la sección s06 del artículo, cuyo párrafo decía **«dos se disparan solas
+mientras escribo»** habiendo cuatro hooks en disco. Se corrigió el copy ES y EN y se selló. Un
+gate que se estrena cazando la afirmación que él mismo acababa de volver falsa es la mejor
+validación que se le puede pedir.

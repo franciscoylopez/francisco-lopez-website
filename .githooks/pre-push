@@ -1,0 +1,5 @@
+#!/bin/sh
+# El hook de verdad es Node y vive en `scripts/hooks/` con los otros tres; esto es
+# el único trozo que git sabe ejecutar. Se instala con `core.hooksPath`, que lo
+# pone el `prepare` de `package.json` en cada `npm install`.
+exec node "$(dirname "$0")/../scripts/hooks/pre-push.mjs"

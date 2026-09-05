@@ -574,7 +574,7 @@
         { "type": "h3", "text": "Y las que no se ven" },
         {
           "type": "p",
-          "text": "Todo lo anterior se nota porque produce algo que se mira. Las que más me han ahorrado no se ven en ninguna parte. Dos se disparan solas **mientras escribo**, en cuanto se toca un archivo: una lo formatea, y la otra lanza el guardián de color, pero solo cuando esa edición concreta ha podido romper el invariante. Ninguna de las dos añade nada al sitio; las dos existen porque el trabajo que hacen dependía de que yo me acordara, y acordarse no es un mecanismo."
+          "text": "Todo lo anterior se nota porque produce algo que se mira. Las que más me han ahorrado no se ven en ninguna parte. Tres se disparan solas **mientras escribo**, en cuanto se toca un archivo: una lo formatea, otra lanza el guardián de color cuando esa edición concreta ha podido romper el invariante, y la tercera avisa cuando el documento que acabo de tocar es la fuente de la que cuelga un párrafo de esta misma página. Y una cuarta espera al final del todo: no deja empujar una rama con uno de esos sellos en rojo, porque avisar sin impedir dejó la tasa de integraciones rojas exactamente donde estaba. Ninguna añade nada al sitio; existen porque el trabajo que hacen dependía de que yo me acordara, y acordarse no es un mecanismo."
         },
         {
           "type": "p",

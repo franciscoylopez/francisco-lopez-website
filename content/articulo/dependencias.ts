@@ -164,8 +164,10 @@ export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
     "scripts/indices.ts",
     // Las automatizaciones que el texto llama «las que no se ven»: los hooks que
     // se disparan al editar y quién cierra los PR de dependencias. Del
-    // directorio de hooks se hashea la LISTA: lo que el artículo afirma es que
-    // son dos, no qué hace cada uno.
+    // directorio de hooks se hashea la LISTA: lo que el artículo afirma es
+    // CUÁNTOS hay y en qué momento se disparan, no qué hace cada uno. Y mordió
+    // el 2026-09-05 (P72.52): el párrafo decía «dos» con cuatro en disco, y
+    // quien lo dijo fue el propio hook de pre-push que acababa de romperlo.
     "scripts/hooks/",
     ".github/workflows/dependabot-automerge.yml",
   ],

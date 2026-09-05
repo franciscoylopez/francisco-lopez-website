@@ -80,38 +80,12 @@
 // SIGUE SIN ARREGLAR NADA POR SU CUENTA: dice qué está rojo y con qué comando se
 // resuelve. Sellar sin mirar congelaría el fallo, que es el motivo de siempre.
 
-import { spawn } from "node:child_process";
-import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+// LOS CUATRO CARRILES VIVEN EN `regeneradores.mjs` desde el 2026-09-05 (P72.52),
+// porque el hook de pre-push mira exactamente el mismo conjunto. Lo que queda aquí
+// es lo propio del momento de PARAR: que se regenera lo automático y que se
+// bloquea una vez.
 
-const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
-
-/**
- * Se lanza por `npm run <script>` y no por el binario de `tsx`, al revés que
- * `format-stop.mjs`. Ahí el argumento era tener el mismo binario y la misma
- * config que CI; aquí el nombre del script ES la config —package.json ya dice
- * qué archivo y con qué banderas—, así que resolverlo a mano sería la segunda
- * fuente de verdad. El peaje de arranque de npm se paga una vez porque los
- * cuatro corren en paralelo.
- */
-// Comando entero en una cadena y no `(binario, args[])`: con `shell: true`, pasar
-// args por separado saca un DeprecationWarning de Node (DEP0190) porque no los
-// escapa. Aquí no hay nada que escapar —los nombres salen de `CARRILES`, que es
-// una constante de este archivo— pero un aviso en cada parada es exactamente el
-// ruido que un hook de cierre no puede permitirse.
-const correr = (script) =>
-  new Promise((cumplir) => {
-    const proc = spawn(`npm run --silent ${script}`, {
-      cwd: ROOT,
-      shell: true,
-      windowsHide: true,
-    });
-    let salida = "";
-    proc.stdout.on("data", (d) => (salida += d));
-    proc.stderr.on("data", (d) => (salida += d));
-    proc.on("error", () => cumplir({ script, codigo: null, salida }));
-    proc.on("close", (codigo) => cumplir({ script, codigo, salida }));
-  });
+import { revisaCarriles } from "./regeneradores.mjs";
 
 /** Lee el JSON del evento por stdin. Sin entrada válida, no hay nada que hacer. */
 const leerEvento = async () => {
@@ -127,67 +101,7 @@ const leerEvento = async () => {
 const evento = await leerEvento();
 if (evento?.stop_hook_active) process.exit(0);
 
-/**
- * Qué hacer con cada rojo. `arregla` es el comando que lo resuelve; `automatico`
- * dice si este hook puede lanzarlo por su cuenta, que es la partición entera de
- * arriba: solo el derivado puro puede.
- */
-const CARRILES = [
-  {
-    script: "check:indices",
-    automatico: "indices",
-    que: "los índices derivados de las cabeceras",
-  },
-  {
-    script: "check:articulo",
-    arregla: "npm run articulo:novedades (y después articulo:sellar)",
-    que: "el sello de «Cómo se ha creado esta página»",
-  },
-  {
-    script: "check:accesibilidad",
-    arregla: "npm run accesibilidad:sellar, tras comprobar el bloque",
-    que: "el sello de /accesibilidad",
-  },
-  {
-    script: "md:anclas",
-    arregla: "npm run build && npm run md",
-    que: "las anclas de decisión del markdown",
-  },
-];
-
-const resultados = await Promise.all(CARRILES.map((c) => correr(c.script)));
-
-const avisos = [];
-
-for (const [i, { codigo, salida }] of resultados.entries()) {
-  const carril = CARRILES[i];
-  if (codigo === 0) continue;
-
-  if (carril.automatico) {
-    const arreglo = await correr(carril.automatico);
-    avisos.push(
-      arreglo.codigo === 0
-        ? `${carril.que} estaban viejos y se han regenerado (npm run ${carril.automatico}).`
-        : `${carril.que} están viejos y \`npm run ${carril.automatico}\` no ha podido arreglarlo.`,
-    );
-    continue;
-  }
-
-  // La primera línea del guardián que nombra el problema, para no volcar aquí su
-  // informe entero: quien quiera el detalle relanza el comando.
-  const motivo = salida
-    .split(/\r?\n/)
-    .map((l) => l.trim())
-    .filter(Boolean)
-    .find((l) => !l.startsWith(">") && !l.startsWith("npm"))
-    ?.replace(/[.·:\s]+$/, "");
-
-  avisos.push(
-    `${carril.que} está en rojo${motivo ? `: ${motivo}` : ""}. ` +
-      `Lo arregla \`${carril.arregla}\`, y no lo hace este hook a propósito: ` +
-      "sellar sin mirar congelaría el fallo.",
-  );
-}
+const avisos = await revisaCarriles({ regenera: true });
 
 if (avisos.length > 0) {
   // stderr + exit 2: el único canal que le llega al modelo, que es quien
@@ -195,7 +109,7 @@ if (avisos.length > 0) {
   process.stderr.write(
     "Artefactos derivados al cierre — " +
       avisos.join(" · ") +
-      " (CI lo vería igual, diez minutos más tarde).\n",
+      " (y el pre-push no dejará empujar con esto en rojo).\n",
   );
   process.exit(2);
 }
