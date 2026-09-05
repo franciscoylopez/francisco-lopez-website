@@ -149,13 +149,19 @@ const HORAS_FRESCURA = 12;
  *   cuatro entradas anteriores venían pidiendo— y devolvió una (ESLint 10, al
  *   descartarse por cuarta re-verificación). 8 − 6 − 1 = 1.
  *
- *   Y LA OTRA MITAD, que es la que faltaba desde el 2026-08-31: **su
- *   `sprint-review` no añadió NINGUNA a `General`**. No por contenerse: por
- *   ejecutarlas. De los cuatro hallazgos, tres se hicieron dentro del propio PR
- *   de cierre —el copy que enlazaba a una ruta movida, el guardián que faltaba
- *   sobre esa consumidora, y la versión de Node escrita dos veces con valores
- *   distintos— y el cuarto nació en `Lanzamiento`, con fecha, porque necesita el
- *   deploy. Cero netas transversales.
+ *   Y LA OTRA MITAD: **su `sprint-review` añadió UNA sola a `General`**, y no
+ *   por contenerse: porque ejecutó el resto. De los cuatro hallazgos, tres se
+ *   hicieron dentro del propio PR de cierre —el copy que enlazaba a una ruta
+ *   movida, el guardián que faltaba sobre esa consumidora, y la versión de Node
+ *   escrita dos veces con valores distintos— y el cuarto nació en `Lanzamiento`,
+ *   con fecha, porque necesita el deploy. La que sí cayó aquí es la de Qlty
+ *   Cloud, que entró **después** de que Francisco confirmara el 90 % de minutos.
+ *
+ *   Y ESA ES LA TRAMPA DEL 2026-08-30 OTRA VEZ, cazada esta vez: el sello se
+ *   puso en 1 y la tarea de Qlty llegó minutos después, así que 1 fue un número
+ *   que no existió en ningún momento. Se corrige a 2 en vez de dejarlo. **La
+ *   regla no es «sella al final», que ya estaba escrita y no bastó: es que
+ *   mientras el cierre siga abierto, cualquier tarea nueva obliga a re-sellar.**
  *
  *   LO QUE ESTO PRUEBA, Y LO QUE NO. Prueba lo que «Higiene» no pudo: que el
  *   embalse baja sin absorber el bloque entero, con la palanca ordinaria. **No
@@ -167,7 +173,7 @@ const HORAS_FRESCURA = 12;
 const SELLO_GENERAL: Sello = {
   fecha: "2026-09-05",
   cierre: "Cierre V3",
-  abiertas: 1,
+  abiertas: 2,
 };
 
 /**
