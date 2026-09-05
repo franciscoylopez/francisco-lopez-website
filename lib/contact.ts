@@ -23,13 +23,18 @@ export const GITHUB_URL =
  * Schema.org define como «la URL de una página que identifica INEQUÍVOCAMENTE a
  * la entidad», llevaba el repositorio.
  *
- * Y AQUÍ YA HABÍA UNA PISTA DE QUE FALTABA: la constante de abajo se llamaba
- * `GITHUB_DISPLAY`, vivía pegada a `GITHUB_URL` y decía el perfil, no el repo.
- * Era la etiqueta de una URL que no estaba, y no la usaba nadie desde que se
+ * Y AQUÍ YA HABÍA UNA PISTA DE QUE FALTABA: la constante que acompañaba a esta se
+ * llamaba `GITHUB_DISPLAY`, vivía pegada a `GITHUB_URL` y decía el perfil, no el
+ * repo. Era la etiqueta de una URL que no estaba, y no la usaba nadie desde que se
  * escribió.
+ *
+ * SE RETIRÓ el 2026-09-05, al cerrar la sesión que publicó el perfil. Sobrevivió
+ * renombrada a `GITHUB_PROFILE_DISPLAY` y siguió sin un solo consumidor: la URL
+ * ya existe y la consumen el footer y `structured-data`, pero su ETIQUETA no la
+ * pinta nadie —el footer usa un icono—. Una constante exportada que nadie importa
+ * es una promesa de que algo la usa.
  */
 export const GITHUB_PROFILE_URL = "https://github.com/franciscoylopez";
-export const GITHUB_PROFILE_DISPLAY = "github.com/franciscoylopez";
 
 /**
  * El `mailto:` del sitio, con asunto OPCIONAL. El asunto entra por parámetro y
