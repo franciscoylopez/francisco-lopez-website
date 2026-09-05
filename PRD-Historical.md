@@ -100,6 +100,7 @@
 - [El `method-review` XII: el andamiaje creció un 29 % y los indicadores no se movieron — 2026-09-04](#el-method-review-xii-el-andamiaje-creció-un-29-%-y-los-indicadores-no-se-movieron--2026-09-04)
 - [Abre «Cierre V3» — 2026-09-04](#abre-cierre-v3--2026-09-04)
 - [Por qué Trayectoria entró en el nav, y qué costó meterla — 2026-09-04](#por-qué-trayectoria-entró-en-el-nav-y-qué-costó-meterla--2026-09-04)
+- [El perfil de GitHub se publica, y por qué no es una quinta superficie de marca — 2026-09-05](#el-perfil-de-github-se-publica-y-por-qué-no-es-una-quinta-superficie-de-marca--2026-09-05)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4551,3 +4552,41 @@ MAGNITUDES caza algo real, y el archivo es el peor del repositorio, el mismo que
 publica como hotspot número uno en su captura de Qlty. La respuesta no fue subir el sello: los
 ocho enlaces eran dos listas escritas dos veces, se factorizaron a una, el archivo bajó a 40 y
 `gate:html` probó que el refactor no movía un byte de las 28 variantes.*
+
+## El perfil de GitHub se publica, y por qué no es una quinta superficie de marca — 2026-09-05
+
+Se publicó **`github.com/franciscoylopez`** (P72.55). Es un repositorio aparte
+—`franciscoylopez/franciscoylopez`, el nombre que GitHub exige para que el README salga en la
+primera pantalla del perfil— y vive fuera de este repo, en `01proyectos/perfil-github`, hermana
+de la carpeta del sitio. Banner por tema con `<picture>` y `prefers-color-scheme`, que es como
+se resuelve fuera lo que dentro resuelven los tokens; sin widgets de terceros y sin cifras que
+caduquen, porque un número ahí no lo vigila ningún guardián.
+
+**La revisión de Francisco sobre el borrador**, aplicada antes de publicar: el banner pasa a dos
+líneas, la intro la reescribió entera, la tabla gana dos filas —el proceso de seis etapas y el
+design system—, el par idioma fuente/secundarios deja de nombrar el español y el inglés, y
+«Qué busco» pasa a «Contacto». **Ese último cambio se llevó el párrafo del ICP**, que hacía de
+filtro diciendo a quién le interesa escribir; se retiró a sabiendas y queda escrito en
+`COMO-PUBLICARLO.md` por si el perfil acaba recibiendo contactos que no encajan.
+
+**Y la decisión que toca a este documento: el perfil NO es una quinta superficie de marca.**
+La pregunta era legítima, porque lleva el mismo titular del Hero y el mismo monograma que las
+cuatro de §4. Francisco la cerró en sentido contrario: el perfil está **una capa por encima de
+este proyecto**. Hoy solo habla de `franciscolopez.es`, pero va a ir recogiendo otros proyectos,
+así que es la capa de la persona y no una superficie de esta web. Por eso las de §4 siguen
+siendo cuatro y no se abrió tarea para añadirlo al Brand Kit.
+
+**Lo que sí arrastró al sitio, y sí se hizo (P72.555):** publicar el perfil dejó al sitio con
+dos URLs de GitHub que significan cosas distintas —la distinción que `lib/contact.ts` escribió
+en P68.747, `GITHUB_URL` es una obra y `GITHUB_PROFILE_URL` es él—, y dos superficies la tenían
+cruzada. El icono del footer apuntaba al repositorio teniendo al lado el de LinkedIn apuntando
+al perfil, con la pareja coja; y la ficha «Portada del repositorio» del Brand Kit describía la
+tarjeta que enseña GitHub al compartir el REPO mientras enlazaba al PERFIL. El `sameAs` del
+JSON-LD era el único que ya la aplicaba.
+
+*Queda anotado, y es anterior a todo esto: el Brand Kit dice «Tres piezas» fuera del sitio y §4
+dice cuatro. Faltan los carruseles de la serie.*
+
+*Y baja aquí, desde `PRD-Live` §4, la frase que era juicio y no spec en presente: «La más fuerte
+es la cuarta: los carruseles no colocan un lockup sobre una plantilla ajena, llevan el sistema
+entero, gobernado por una plantilla que cada pieza reutiliza sin tocar».*

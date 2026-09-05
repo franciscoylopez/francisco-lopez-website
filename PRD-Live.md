@@ -62,9 +62,7 @@ cada página—. Lo que no existe no se cataloga: ni MCP, ni agentes, ni skills,
 
 **La marca no termina en el dominio.** Cuatro superficies fuera del sitio —firma de
 email, banner de LinkedIn, portada del repositorio y los carruseles de la serie—
-comparten el titular del Hero, «Del discovery al dato», y el mismo monograma. **La más
-fuerte es la cuarta**: los carruseles no colocan un lockup sobre una plantilla ajena,
-llevan el sistema entero, gobernado por una plantilla que cada pieza reutiliza sin tocar.
+comparten el titular del Hero, «Del discovery al dato», y el mismo monograma.
 
 La apertura de **Sobre mí es un vídeo**: se reproduce una vez y se queda en su último
 fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
