@@ -1,5 +1,5 @@
 ---
-canonical: https://franciscolopez.es/en/contacto
+canonical: https://franciscolopez.es/en/contact
 lang: en
 title: Let's talk
 description: Write to me through the form, by email or by phone. Reply within 24 hours.

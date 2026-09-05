@@ -40,7 +40,10 @@ export function revisarNegociacion(): void {
     { path: "/sobre-mi", lang: "es", slug: "sobre-mi" },
     { path: "/trayectoria/emendu", lang: "es", slug: "trayectoria/emendu" },
     { path: "/en", lang: "en", slug: "" },
-    { path: "/en/sobre-mi", lang: "en", slug: "sobre-mi" },
+    // LA RUTA PÚBLICA, no la carpeta (P72.56): es el caso que comprueba que el
+    // proxy cruza las dos fronteras a la vez —`/en/about` es una página del
+    // registro llamada `sobre-mi`, y su espejo se llama `about.md`—.
+    { path: "/en/about", lang: "en", slug: "sobre-mi" },
   ];
 
   for (const { path, lang, slug } of casos) {

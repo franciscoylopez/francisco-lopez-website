@@ -11,7 +11,7 @@
 import { join } from "node:path";
 
 import { defaultLocale, type Locale } from "../../lib/i18n/config";
-import { type PageSlug } from "../../lib/routes";
+import { type PageSlug, publicSlug } from "../../lib/routes";
 import { SITE_URL } from "../../lib/site";
 
 /** Dónde deja Next el cuerpo de una ruta estática de texto. Ver `check:marco`. */
@@ -33,7 +33,14 @@ export function urlDe(lang: Locale, slug: PageSlug): string {
 /**
  * La silueta del markdown de una variante, la misma que `rutaMarkdown` del proxy
  * y que `npm run md`: la home es `<locale>.md` y no `<locale>/index.md`.
+ *
+ * Y POR EL SLUG PÚBLICO desde P72.56: el espejo de `/en/about` es
+ * `/md/en/about.md`, porque lo que `es/llms.json` promete es «la misma ruta que
+ * la página». Se escribe aquí otra vez a propósito, igual que `ADIVINADAS`: este
+ * guardián no importa la implementación que vigila — comparar el código consigo
+ * mismo aprobaría siempre.
  */
 export function rutaMd(lang: Locale, slug: PageSlug): string {
-  return `/md/${lang}${slug ? `/${slug}` : ""}.md`;
+  const publico = publicSlug(lang, slug);
+  return `/md/${lang}${publico ? `/${publico}` : ""}.md`;
 }

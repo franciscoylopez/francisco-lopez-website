@@ -122,7 +122,7 @@ Ten years leading product in B2B and B2C SaaS, from founder with an exit to Prod
 
 Feb 2025 (2025-02) - Present
 
-[Product Manager](https://franciscolopez.es/en/trayectoria/emendu)
+[Product Manager](https://franciscolopez.es/en/career/emendu)
 
 Emendu
 
@@ -130,7 +130,7 @@ Turned a newly built SaaS into the company's business model: redefined the ICP, 
 
 Feb 2024 (2024-02) - Dec 2024 (2024-12)
 
-[Cofounder & Product](https://franciscolopez.es/en/trayectoria/kuotip)
+[Cofounder & Product](https://franciscolopez.es/en/career/kuotip)
 
 KUOTIP
 
@@ -138,7 +138,7 @@ Validated review fraud with users and brands before building anything; defined t
 
 Jan 2022 (2022-01) - Dec 2023 (2023-12)
 
-[Product Lead](https://franciscolopez.es/en/trayectoria/indya)
+[Product Lead](https://franciscolopez.es/en/career/indya)
 
 INDYA
 
@@ -146,7 +146,7 @@ Organised growth around the lifecycle rather than features: monthly churn from 1
 
 Oct 2021 (2021-10) - Dec 2021 (2021-12)
 
-[Product Manager](https://franciscolopez.es/en/trayectoria/freepik)
+[Product Manager](https://franciscolopez.es/en/career/freepik)
 
 Freepik
 
@@ -160,7 +160,7 @@ One venture · two roles
 
 May 2016 (2016-05) - Oct 2021 (2021-10)
 
-[Cofounder & Product](https://franciscolopez.es/en/trayectoria/thetool)
+[Cofounder & Product](https://franciscolopez.es/en/career/thetool)
 
 TheTool
 
@@ -308,4 +308,4 @@ The next step
 
 If product sits at the core of your company and you're building genuinely great experiences for your users through discovery, applied AI and data, I think we'd be a good fit. Senior Product Manager with 10+ years in B2B and B2C SaaS, happy working remote or hybrid, based in Spain. Write to me and let's talk.
 
-[Get in touch](https://franciscolopez.es/en/contacto)
+[Get in touch](https://franciscolopez.es/en/contact)

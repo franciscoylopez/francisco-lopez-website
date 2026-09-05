@@ -1,5 +1,5 @@
 ---
-canonical: https://franciscolopez.es/en/sobre-mi
+canonical: https://franciscolopez.es/en/about
 lang: en
 title: About me
 description: "The person behind the PM: how I ended up in Product from marketing and growth, baking, the mountains, and where I'm headed now."
@@ -61,4 +61,4 @@ If you've made it this far, you know me a little better now (and thank you for t
 
 So… why don't we talk?
 
-[Get in touch](https://franciscolopez.es/en/contacto)
+[Get in touch](https://franciscolopez.es/en/contact)

@@ -41,7 +41,7 @@ import { JSDOM } from "jsdom";
 
 import { locales, pagePath, type Locale } from "../../lib/i18n/config";
 import { PAGE_MODIFIED } from "../../lib/page-modified";
-import { PAGE_SLUGS, type PageSlug } from "../../lib/routes";
+import { PAGE_SLUGS, type PageSlug, publicSlug } from "../../lib/routes";
 import { SITE_DOMAIN } from "../../lib/site";
 
 import { ElementoDesconocido } from "./contrato";
@@ -82,8 +82,21 @@ function mdEnDisco(raiz: string): string[] {
   return out;
 }
 
-const rutaMd = (lang: Locale, slug: PageSlug) =>
-  join(RAIZ_MD, `${lang}${slug ? `/${slug}` : ""}.md`);
+/**
+ * EL ARCHIVO SE LLAMA POR EL SLUG PÚBLICO, NO POR EL DE LA CARPETA (P72.56).
+ *
+ * `rutaHtml` lee del prerender, que vive en el slug INTERNO
+ * (`.next/server/app/en/sobre-mi.html`), y esto escribe el espejo, que vive en el
+ * PÚBLICO (`public/md/en/about.md`). Es la única asimetría del script y es
+ * deliberada: D158 publica `/md/<locale>/<pagina>.md` como la vía estable, así
+ * que el nombre del archivo tiene que ser el de la página que refleja. Con el
+ * slug interno, `/en/about` se serviría desde `about.md` según el proxy y el
+ * archivo se llamaría `sobre-mi.md`: el par dejaría de leerse como un par.
+ */
+const rutaMd = (lang: Locale, slug: PageSlug) => {
+  const publico = publicSlug(lang, slug);
+  return join(RAIZ_MD, `${lang}${publico ? `/${publico}` : ""}.md`);
+};
 
 /** La URL pública de la variante, que es lo que el markdown declara. */
 const urlDe = (lang: Locale, slug: PageSlug) => BASE + pagePath(lang, slug);

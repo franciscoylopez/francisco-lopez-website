@@ -1,5 +1,5 @@
 ---
-canonical: https://franciscolopez.es/en/trayectoria/kuotip
+canonical: https://franciscolopez.es/en/career/kuotip
 lang: en
 title: The missed chance to change an industry
 description: "Co-founder of a project to fix online reviews: validating both sides of the market, an MVP with voice-based identity and AI summaries, and the decision to stop on the agreed terms."
@@ -7,7 +7,7 @@ last-updated: 2026-08-17
 ---
 
 1. [Home](https://franciscolopez.es/en)
-2. [Experience](https://franciscolopez.es/en/trayectoria)
+2. [Experience](https://franciscolopez.es/en/career)
 3. KUOTIP
 
 KUOTIP · B2B2C SaaS · Customer Reviews
@@ -85,4 +85,4 @@ So we stayed true to what we had agreed and moved on to other projects.
 
 Keep reading
 
-[Previous role · INDYA · Product Lead · Jan 2022 - Dec 2023](https://franciscolopez.es/en/trayectoria/indya) · [Next role · Emendu · Product Manager · Feb 2025 - Present](https://franciscolopez.es/en/trayectoria/emendu)
+[Previous role · INDYA · Product Lead · Jan 2022 - Dec 2023](https://franciscolopez.es/en/career/indya) · [Next role · Emendu · Product Manager · Feb 2025 - Present](https://franciscolopez.es/en/career/emendu)

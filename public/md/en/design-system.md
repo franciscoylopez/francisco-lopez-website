@@ -931,7 +931,7 @@ The end of the content before the footer: where you go from here, with the same 
 
 Keep reading
 
-[Previous role · KUOTIP · A real link: the arrow goes first and points left, which reads as going back without reading the label.](https://franciscolopez.es/en/trayectoria/kuotip)
+[Previous role · KUOTIP · A real link: the arrow goes first and points left, which reads as going back without reading the label.](https://franciscolopez.es/en/career/kuotip)
 
 Next role
 
@@ -1127,4 +1127,4 @@ They're an enhancement, not a requirement: the server index already covers navig
 
 From the same system
 
-[Brand Kit · The identity: the logo and its geometry, the two-layer palette, the typography and the rules that govern its use.](https://franciscolopez.es/en/brand-kit) · [Accessibility · The public statement: the conformance level the site meets and how to report a problem.](https://franciscolopez.es/en/accesibilidad)
+[Brand Kit · The identity: the logo and its geometry, the two-layer palette, the typography and the rules that govern its use.](https://franciscolopez.es/en/brand-kit) · [Accessibility · The public statement: the conformance level the site meets and how to report a problem.](https://franciscolopez.es/en/accessibility)

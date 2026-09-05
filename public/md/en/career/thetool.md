@@ -1,5 +1,5 @@
 ---
-canonical: https://franciscolopez.es/en/trayectoria/thetool
+canonical: https://franciscolopez.es/en/career/thetool
 lang: en
 title: From a tool that did not exist to an exit
 description: "Co-founder and product lead of an ASO tool: from an MVP funded by the agency that incubated it to a European nomination and the acquisition by AppRadar in 2021."
@@ -7,7 +7,7 @@ last-updated: 2026-08-17
 ---
 
 1. [Home](https://franciscolopez.es/en)
-2. [Experience](https://franciscolopez.es/en/trayectoria)
+2. [Experience](https://franciscolopez.es/en/career)
 3. TheTool
 
 TheTool · B2B SaaS · ASO
@@ -116,4 +116,4 @@ By the time Google released it and the other tools started adopting it, we alrea
 
 Keep reading
 
-[Next role · Freepik · Product Manager · Oct 2021 - Dec 2021](https://franciscolopez.es/en/trayectoria/freepik)
+[Next role · Freepik · Product Manager · Oct 2021 - Dec 2021](https://franciscolopez.es/en/career/freepik)

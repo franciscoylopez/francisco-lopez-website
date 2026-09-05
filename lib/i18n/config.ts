@@ -4,6 +4,8 @@
 // D2: español SIN prefijo (raíz `/`), inglés en `/en`. defaultLocale = es,
 // prefijo as-needed. La TRADUCCIÓN a inglés es V2; la ARQUITECTURA, desde ya.
 
+import { publicSlug } from "../routes";
+
 export const locales = ["es", "en"] as const;
 
 export type Locale = (typeof locales)[number];
@@ -19,9 +21,18 @@ export function isLocale(value: string): value is Locale {
 // slug, la home. Fuente única del emparejamiento ruta↔locale: de aquí salen el
 // canonical, los tres `hreflang` y el enlace del logo al inicio, que antes eran
 // cinco copias por página del ternario `lang === "es" ? … : …` (D45).
+//
+// EL `slug` QUE ENTRA ES EL INTERNO —el de la carpeta de `app/[lang]/`— Y LO QUE
+// SALE ES LA RUTA PÚBLICA (P72.56). Desde que el inglés traduce sus slugs, las
+// dos dejaron de ser la misma cadena: `pagePath("en", "sobre-mi")` da
+// `/en/about`. Traducir AQUÍ y no en cada consumidora es lo que hace que el
+// canonical, los `hreflang`, el sitemap, `/llms.txt`, el catálogo ARD y los otros
+// ~25 consumidores se muden solos; quien necesite el camino de vuelta tiene
+// `internalSlug`.
 export function pagePath(lang: Locale, slug = ""): string {
   const prefix = lang === defaultLocale ? "" : `/${lang}`;
-  return slug ? `${prefix}/${slug}` : prefix || "/";
+  const publico = publicSlug(lang, slug);
+  return publico ? `${prefix}/${publico}` : prefix || "/";
 }
 
 // Ruta del PDF del CV por locale (D22): ES → -es.pdf, EN → -en.pdf. Ambos assets

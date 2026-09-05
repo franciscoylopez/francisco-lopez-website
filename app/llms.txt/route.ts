@@ -1,5 +1,5 @@
 import { EMAIL, LINKEDIN_URL, PHONE_TEL } from "@/lib/contact";
-import { cvPath } from "@/lib/i18n/config";
+import { cvPath, pagePath } from "@/lib/i18n/config";
 import { SITE_URL } from "@/lib/site";
 import { STATIC_PAGE_SLUGS, type StaticPageSlug } from "@/lib/routes";
 import { factsOf, shortOf } from "@/content/experience-copy";
@@ -201,9 +201,12 @@ function cuandoUsar(): string {
 function pageList(): string {
   return STATIC_PAGE_SLUGS.map((slug) => {
     const { title, description } = META[slug];
-    const path = slug ? `/${slug}` : "";
-    const urlEs = `${SITE_URL}${path || "/"}`;
-    const urlEn = `${SITE_URL}/en${path}`;
+    // LAS DOS RUTAS POR `pagePath` (P72.56). La inglesa se componía aquí como
+    // `/en` + la ruta española, y eso dejó de ser cierto cuando el inglés tradujo
+    // sus slugs: el índice para modelos habría publicado catorce enlaces a
+    // redirecciones. Es el mismo prefijo escrito a mano que había en el nav.
+    const urlEs = `${SITE_URL}${pagePath("es", slug)}`;
+    const urlEn = `${SITE_URL}${pagePath("en", slug)}`;
     return `- [${title}](${urlEs}) ([EN](${urlEn})): ${description}`;
   }).join("\n");
 }

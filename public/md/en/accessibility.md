@@ -1,5 +1,5 @@
 ---
-canonical: https://franciscolopez.es/en/accesibilidad
+canonical: https://franciscolopez.es/en/accessibility
 lang: en
 title: Accessibility
 description: "How this site is built to be usable by everyone: WCAG 2.2 AA met, a colour system at AAA, what gets inherited from the component layer, and what the manual screen reader pass turned up."

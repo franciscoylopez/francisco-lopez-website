@@ -22,7 +22,7 @@
 // Las del deep-dive no se escriben en ninguno de los dos sitios: salen de
 // `EXPERIENCES`, la misma fuente de `generateStaticParams` (D44).
 
-import { EXPERIENCES, type ExperienceSlug } from "@/content/experiences";
+import { EXPERIENCES, type ExperienceSlug } from "../content/experiences";
 
 /**
  * Las páginas estáticas, en el orden en que se publican. El slug es el segmento
@@ -43,6 +43,80 @@ export const STATIC_PAGE_SLUGS = [
 
 /** Una página estática, como unión de literales. */
 export type StaticPageSlug = (typeof STATIC_PAGE_SLUGS)[number];
+
+/**
+ * EL SLUG PÚBLICO EN INGLÉS, que desde P72.56 ya no es el interno.
+ *
+ * POR QUÉ EXISTE. Hasta hoy `/en/sobre-mi` servía la página inglesa con una ruta
+ * española, y eso no estaba decidido: se decidió para el deep-dive —los slugs son
+ * NOMBRES DE EMPRESA, neutros al idioma (`PRD-Historical.md` §1297)— y se heredó
+ * para todo lo demás sin que nadie pesara `/en/contacto` contra `/en/contact`. El
+ * coste ya se había pagado una vez sin subirlo a decisión: D166 parcheó con diez
+ * alias que `/about`, `/privacy` y `/contact` dieran 404.
+ *
+ * EN EL APP ROUTER LA CARPETA ES EL SLUG, así que la ruta pública deja de ser la
+ * interna y hace falta esta indirección: `app/[lang]/sobre-mi/` sigue siendo la
+ * carpeta, y `proxy.ts` reescribe `/en/about` hacia ella.
+ *
+ * ES TOTAL Y NO PARCIAL A PROPÓSITO. Con `Partial` una página nueva heredaría el
+ * slug español en silencio, que es exactamente el fallo que esto viene a cerrar:
+ * el tipo obliga a DECIDIR, aunque la decisión sea «se llama igual». Los tres que
+ * repiten valor no son descuidos —`brand-kit` y `design-system` se llaman así
+ * también en español, y `cookies` es legible en inglés—; su porqué está en la
+ * ficha y en `DECISIONS.md`.
+ *
+ * EL ESPAÑOL NO TIENE MAPA: es la fuente de verdad y su slug público ES el
+ * interno. Un `Record` de identidad solo daría dos sitios donde escribir lo mismo.
+ */
+const SLUGS_EN: Record<StaticPageSlug, string> = {
+  "": "",
+  "sobre-mi": "about",
+  trayectoria: "career",
+  "brand-kit": "brand-kit",
+  "design-system": "design-system",
+  accesibilidad: "accessibility",
+  cookies: "cookies",
+  contacto: "contact",
+  "como-se-ha-creado": "how-it-was-built",
+};
+
+/** El camino de vuelta. Los slugs que no se traducen se mapean a sí mismos. */
+const INTERNOS_EN = new Map(
+  Object.entries(SLUGS_EN).map(([interno, publico]) => [publico, interno]),
+);
+
+/**
+ * SOLO SE TRADUCE EL PRIMER SEGMENTO, y es la regla entera: en
+ * `trayectoria/emendu` el padre se muda a `career` y el nombre de la empresa no
+ * se toca nunca. Es lo que §1297 decidió y sigue siendo cierto — traducir
+ * «Emendu» no significaría nada.
+ */
+function traduce(slug: string, tabla: (cabeza: string) => string): string {
+  if (!slug) return slug;
+  const [cabeza = "", ...resto] = slug.split("/");
+  return [tabla(cabeza), ...resto].join("/");
+}
+
+/** El slug interno (el de la carpeta) visto desde fuera, en el idioma que toca. */
+export function publicSlug(lang: string, slug: string): string {
+  if (lang !== "en") return slug;
+  return traduce(slug, (c) => SLUGS_EN[c as StaticPageSlug] ?? c);
+}
+
+/**
+ * El camino inverso: de la ruta que pide el navegador a la carpeta que la sirve.
+ *
+ * ACEPTA LAS DOS FORMAS, Y NO ES LAXITUD. `usePathname()` devuelve la ruta
+ * INTERNA en el prerender —donde la página se generó como `/en/sobre-mi`— y la
+ * PÚBLICA en runtime, después del rewrite. El nav compara con esto en los dos
+ * momentos, así que un mapa que solo entendiera la pública apagaría el estado
+ * «estás aquí» justo en las páginas traducidas. Un slug que no está en la tabla
+ * se devuelve tal cual: ya era interno.
+ */
+export function internalSlug(lang: string, slug: string): string {
+  if (lang !== "en") return slug;
+  return traduce(slug, (c) => INTERNOS_EN.get(c) ?? c);
+}
 
 /**
  * Las tarjetas OG que `/api/og` sabe pintar: `home` más toda página estática que

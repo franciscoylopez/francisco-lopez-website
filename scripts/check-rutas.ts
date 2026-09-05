@@ -37,7 +37,12 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { DEEP_DIVE_SLUGS, PAGE_SLUGS } from "../lib/routes";
+import {
+  DEEP_DIVE_SLUGS,
+  internalSlug,
+  PAGE_SLUGS,
+  publicSlug,
+} from "../lib/routes";
 
 /** La raíz del App Router por locale. Todo lo que hay debajo es una página. */
 const RAIZ = join("app", "[lang]");
@@ -147,6 +152,41 @@ for (const ruta of registro) {
   }
 }
 
+// 1 bis · El slug público y el interno se corresponden 1:1 (P72.56).
+//
+// QUÉ AÑADE SOBRE EL TIPO. `SLUGS_EN` es un `Record` total, así que el compilador
+// ya impide que a una página le FALTE su slug público. Lo que no puede ver es una
+// COLISIÓN: dos páginas con el mismo público dejan una inalcanzable, y un público
+// que coincide con el interno de OTRA página vuelve ambiguo el camino de vuelta —
+// y de ese camino dependen el rewrite del proxy y el estado «estás aquí» del nav.
+//
+// Se comprueba con el viaje de ida y vuelta, que es lo que caza las dos a la vez:
+// traducir y destraducir tiene que devolver el slug de partida.
+let nRoundTrip = 0;
+const publicos = new Map<string, string>();
+for (const slug of PAGE_SLUGS) {
+  for (const lang of ["es", "en"] as const) {
+    nRoundTrip++;
+    const publico = publicSlug(lang, slug);
+    const vuelta = internalSlug(lang, publico);
+    if (vuelta !== slug) {
+      fallo(
+        `«${slug || "(home)"}» en ${lang} sale como «${publico || "(home)"}» y vuelve como «${vuelta || "(home)"}». ` +
+          `Casi siempre es una COLISIÓN: ese slug público es el interno de otra página, así que el proxy la reescribiría a la carpeta equivocada.`,
+      );
+    }
+    if (lang !== "en") continue;
+    const duenoPrevio = publicos.get(publico);
+    if (duenoPrevio !== undefined) {
+      fallo(
+        `«${slug || "(home)"}» y «${duenoPrevio || "(home)"}» comparten el slug público inglés «${publico || "(home)"}». ` +
+          `Una de las dos queda inalcanzable en /en.`,
+      );
+    }
+    publicos.set(publico, slug);
+  }
+}
+
 // 2 · Las consumidoras siguen leyendo del registro.
 let nConsumidoras = 0;
 for (const { archivo, rompe } of CONSUMIDORAS) {
@@ -179,10 +219,11 @@ const nDerivadas = DEEP_DIVE_SLUGS.length;
 console.log(
   `check:rutas — ${disco.size - nDerivadas} rutas estáticas contrastadas contra el disco · ` +
     `${nDerivadas} del deep-dive derivadas de EXPERIENCES (no hay dos listas que puedan diferir) · ` +
+    `${nRoundTrip} viajes de ida y vuelta público↔interno · ` +
     `${nConsumidoras} consumidoras`,
 );
 
-if (disco.size === 0 || nConsumidoras === 0) {
+if (disco.size === 0 || nConsumidoras === 0 || nRoundTrip === 0) {
   console.error(
     "\n✗ El guardián no ha mirado nada. Una lista de problemas vacía no es un aprobado: " +
       `revisa que \`${RAIZ}\` siga siendo la raíz del App Router.`,
