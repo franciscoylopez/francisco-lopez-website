@@ -74,35 +74,33 @@ export function Rejilla({
           // el ojo saltando de la propiedad a su valor. En la sección anterior a
           // la fusión tenía tarjetas al lado que le fijaban este ancho; al
           // quedarse solo se estiró, y así se veía.
-          className="border-border max-w-[38rem] overflow-hidden rounded-xl border"
+          //
+          // `text-background` ES EL ARREGLO DE FONDO *(P72.515)*. El panel se
+          // pintaba su superficie y no declaraba su primer plano, así que su
+          // `color` computado valía exactamente lo mismo que su
+          // `background-color` (medido) y CUALQUIER texto de dentro era
+          // invisible hasta que alguien le escribía un color a mano. Por eso
+          // había cuatro `color-mix` sueltos aquí: no eran un descuido, eran la
+          // única salida que dejaba la pieza.
+          //
+          // Es §Controles con dos fondos de `BRAND.md` aplicado a una
+          // superficie: la pieza es el `foreground` de su propio carril, y en un
+          // carril invertido ese foreground es `--background`. Con eso puesto,
+          // el atenuado vuelve a ser `text-muted-foreground` —que sobre esta
+          // superficie ya resuelve solo, porque el panel declara su familia con
+          // `data-surface`— y el contenido, a heredar.
+          className="border-border text-background max-w-[38rem] overflow-hidden rounded-xl border"
           style={{ background: "var(--foreground)" }}
         >
           {/* El botón de copiar mide 44px de suelo táctil, así que la cabecera
               del panel baja su relleno vertical para no crecer con él: el
               objetivo se conserva entero, la caja casi no se entera. */}
-          <div
-            className="flex items-center justify-between gap-4 py-[0.4rem] pr-[0.4rem] pl-5"
-            style={{
-              borderBottom:
-                "1px solid color-mix(in oklch,var(--background),transparent 82%)",
-            }}
-          >
-            <span
-              className="font-mono text-[0.75rem]"
-              style={{
-                color: "color-mix(in oklch,var(--background),transparent 25%)",
-              }}
-            >
+          <div className="border-border flex items-center justify-between gap-4 border-b py-[0.4rem] pr-[0.4rem] pl-5">
+            <span className="text-muted-foreground font-mono text-[0.75rem]">
               {t.copyLabel}
             </span>
             <span className="flex items-center gap-1">
-              <span
-                className="text-[0.68rem] tracking-[0.06em] uppercase"
-                style={{
-                  color:
-                    "color-mix(in oklch,var(--background),transparent 25%)",
-                }}
-              >
+              <span className="text-muted-foreground text-[0.68rem] tracking-[0.06em] uppercase">
                 {t.copyHint}
               </span>
               <CopyButton
@@ -128,14 +126,13 @@ export function Rejilla({
                 <span style={{ color: "var(--primary-on-inverted)" }}>
                   {tok.name}:
                 </span>
-                <span
-                  style={{
-                    color:
-                      "color-mix(in oklch,var(--background),transparent 18%)",
-                  }}
-                >
-                  {tok.value};
-                </span>
+                {/* El valor HEREDA, y no se atenúa: es el contenido del bloque
+                    de código, no un rótulo. Iba a un 82% escrito a mano, que es
+                    otra cosa que el atenuado del sistema —el rótulo va al 75%—:
+                    dos porcentajes parecidos que significaban cosas distintas
+                    (regla 4 de `BRAND.md`). Ahora el rótulo es
+                    `text-muted-foreground` y esto, el primer plano del panel. */}
+                <span>{tok.value};</span>
               </div>
             ))}
           </div>
