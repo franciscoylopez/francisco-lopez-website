@@ -212,17 +212,20 @@ export function Aplicaciones({
                 <span className="text-foreground font-semibold">
                   {t.fueraWhere}
                 </span>{" "}
+                {/* Y NO VA EN MONOESPACIADA *(2026-09-05)*. Iba, porque las dos
+                    fichas enlazadas escribían su URL entera, y una URL sí es un
+                    valor técnico. Pero `github.com/franciscoylopez/francisco-lopez-website`
+                    son 46 caracteres y se partía por la mitad dentro de la ficha,
+                    y el `[overflow-wrap:anywhere]` era el parche de eso. Ahora
+                    las tres contestan «dónde vive» en prosa —que es lo que la
+                    primera ya hacía, monoespaciada y desentonando—, así que la
+                    causa del corte desaparece con la mono y con el parche. */}
                 {item.href ? (
-                  <a
-                    href={item.href}
-                    className="link-content font-mono [overflow-wrap:anywhere]"
-                  >
+                  <a href={item.href} className="link-content">
                     {item.where}
                   </a>
                 ) : (
-                  <span className="text-muted-foreground font-mono">
-                    {item.where}
-                  </span>
+                  <span className="text-muted-foreground">{item.where}</span>
                 )}
               </p>
             </div>

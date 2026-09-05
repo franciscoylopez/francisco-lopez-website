@@ -517,13 +517,13 @@ Banner de LinkedIn
 
 1584 × 396 sobre el fondo oscuro del sitio, con el titular del Hero y el dominio. La esquina inferior izquierda va vacía a propósito: ahí LinkedIn superpone la foto de perfil, así que el banner no la lleva.
 
-Dónde vive [linkedin.com/in/franciscolopez1975](https://www.linkedin.com/in/franciscolopez1975)
+Dónde vive [LinkedIn, en la cabecera del perfil](https://www.linkedin.com/in/franciscolopez1975)
 
 Portada del repositorio
 
 La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.
 
-Dónde vive [github.com/franciscoylopez/francisco-lopez-website](https://github.com/franciscoylopez/francisco-lopez-website)
+Dónde vive [GitHub, en los ajustes del repositorio](https://github.com/franciscoylopez/francisco-lopez-website)
 
 5 de 6
 

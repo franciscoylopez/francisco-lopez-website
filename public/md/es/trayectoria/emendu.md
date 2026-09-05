@@ -81,7 +81,7 @@ Hoy la fase 2 (el MDM) está en desarrollo y la apificación avanza módulo a m�
 
 ## 03. El partnership con Sesame HR
 
-Sesame HR es uno de los mayores actores de software de RRHH en España, y la propuesta tenía doble sentido: sus clientes podrían pedir y gestionar el equipo de un empleado nuevo **desde el mismo sitio donde ya lo dan de alta**; nosotros ganaríamos un canal B2B dentro del flujo de trabajo nativo del cliente. El objetivo operativo no cambió: cambió la arquitectura, y el plazo lo ponía otro.
+Sesame HR es uno de los mayores actores de software de RRHH en España, y la propuesta tenía doble sentido: sus clientes podrían pedir y gestionar el equipo de un empleado nuevo **desde el mismo sitio donde ya lo dan de alta**; nosotros ganaríamos un canal B2B dentro del flujo de trabajo nativo del cliente. El objetivo operativo no cambió: cambió la arquitectura, [el resultado fue un éxito](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html) y el proceso ahora te lo cuento.
 
 **Discovery en tres frentes, para digitalizar sin parar la operación en marcha.** Dentro: entrevistas con Operaciones, Ventas y Account Managers para mapear cada tarea manual. Fuera: el mapa de dependencias del que cuelga una operación de renting: entidades financieras, proveedores de hardware, verificación de identidad, aseguradoras, firma digital. Y Sesame: sus flujos y el enfoque con el que querían ofrecer el servicio.
 
@@ -107,7 +107,7 @@ El flujo principal: todo el proceso en una sola vista. El equipo de desarrollo, 
   
   de los procesos automatizados de punta a punta, con la apificación aún en curso
 
-Fase 1 entregada en **7 semanas de producto**, con entregas semanales; el desarrollo posterior ya está en producción. Fase 2, **5 semanas de producto**, hoy en desarrollo. El sistema de documentación, el prototipo y la lógica de negocio quedaron validados por el partner en la primera entrega. El acuerdo [se anunció en prensa](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html).
+Fase 1 entregada en **7 semanas de producto**, con entregas semanales; el desarrollo posterior ya está en producción. Fase 2, **5 semanas de producto**, hoy en desarrollo. El sistema de documentación, el prototipo y la lógica de negocio quedaron validados por el partner en la primera entrega.
 
 Y un resultado que no es una cifra: los cambios de proceso **dejaron de diseñarse alrededor de lo que cada área hacía a mano** y pasan a diseñarse desde el backoffice.
 
