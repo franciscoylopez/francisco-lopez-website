@@ -43,4 +43,4 @@ They all follow the same order: context, decisions, figures with their window st
 
 [Download CV](https://franciscolopez.es/cv/francisco-lopez-cv-en.pdf)
 
-The rest of my career (agency work and Marketing & Growth) is in the Career section of the home page and in the CV.
+The rest of my career (agency work and Marketing & Growth) is in the Experience section of the home page and in the CV.
