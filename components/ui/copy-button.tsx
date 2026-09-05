@@ -86,8 +86,23 @@ export function useCopyToClipboard(resetMs = 1800) {
  *
  * `aria-hidden` porque el `aria-live` del control ya lo anuncia: sin él, un lector
  * de pantalla lo diría dos veces.
+ *
+ * SE EXPORTA DESDE P72.48, y con una regla que antes no estaba escrita porque
+ * solo había una familia de controles que copiaba. Ahora hay dos —los valores
+ * del sistema y el enlace del artículo— y la regla que las iguala mira la FORMA
+ * del control, no la página:
+ *
+ *   · **Solo icono → confirma la pastilla.** Es el caso que escribió el párrafo
+ *     de arriba: un glifo que cambia dice que algo pasó y no dice qué.
+ *   · **Con etiqueta visible → confirma la etiqueta**, y la pastilla sobra: el
+ *     botón ya pone «Copiado» donde antes ponía «Copiar enlace». Dos avisos del
+ *     mismo hecho a diez píxeles uno de otro no informan el doble.
+ *
+ * Lo que NO depende de la forma es el icono de éxito: `Check` en todos, que es
+ * lo que significa «hecho». El artículo ponía `Copy` ahí, o sea el icono con el
+ * que el resto del sitio dice «aún no has copiado».
  */
-function Confirm({
+export function Confirm({
   text,
   on,
   onInverted,
@@ -105,12 +120,29 @@ function Confirm({
         // SIN `motion-reduce:transition-none` A PROPOSITO (P74.36): esto es
         // opacidad y nada mas, y con movimiento reducido se retira lo que
         // desplaza o escala, no lo que se funde.
-        "pointer-events-none absolute right-0 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150",
+        // `ease-entrance` explícito: sin él, `transition-opacity` resuelve al
+        // ease-in-out por defecto de Tailwind, y esto es una ENTRADA (D135). Los
+        // 150 ms sí son suyos: es el escalón de «microinteracción» que publica
+        // la tabla del Design System, y D135 solo pone techo, no suelo.
+        "ease-entrance pointer-events-none absolute right-0 rounded-md px-2 py-[0.2rem] text-[0.72rem] font-medium whitespace-nowrap transition-opacity duration-150",
         placement === "above" ? "bottom-full mb-1" : "top-full mt-1",
         // La pastilla se apoya en el carril contrario al del control, igual que
         // hace `onInverted`: sobre la banda invertida el fondo de la página ES
         // `--foreground`, así que vuelve a `--background` para verse. Es el par
-        // de texto principal en los dos casos, ya medido por el censo.
+        // de texto principal en los dos casos.
+        //
+        // Y ESO ES SEGURO POR CONSTRUCCIÓN, NO PORQUE EL CENSO LO MIRARA: aquí
+        // ponía «ya medido por el censo» y era falso. El censo descartaba todo
+        // lo que estuviera a `opacity: 0` —y esta pastilla lo está en reposo—,
+        // así que no la había visto nunca en sus cuatro superficies. Medido a
+        // mano en el design-review del 2026-09-05, con el metro validado contra
+        // las anclas: **15,32 en oscuro y 13,79 en claro**, o sea el par
+        // principal invertido, a 11,52px, cuyo umbral AAA es 7.
+        //
+        // Ya no hace falta acordarse: el filtro de `censo/04-dom.js` deja pasar
+        // lo que está a cero PERO declara transición de opacidad (P72.511), que
+        // es esta pastilla y poco más. Si alguien le pone un tinte, el censo lo
+        // verá.
         onInverted
           ? "bg-background text-foreground"
           : "bg-foreground text-background",

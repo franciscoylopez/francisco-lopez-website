@@ -517,16 +517,30 @@ Las duraciones no se eligen por gusto: cada una corresponde a un tipo de cambio 
 
 250ms · Cambios de estado: acordeones, tabs.
 
-280ms · Scroll-reveal de entrada de sección.
+280ms · Entradas: el reveal al hacer scroll y la apertura al cargar.
+
+scroll · El filete que crece no tiene duración: lo lleva la rueda.
 
 easing · cubic-bezier(0, 0, .2, 1): ease-out al entrar.
 
 - Reveal = fundido + subida de 14px, una vez al entrar en viewport y nunca en bucle. Un grupo que entra junto escalona sus piezas (80ms en esta demo).
-- prefers-reduced-motion: se desactivan transformaciones y auto-scroll. El contenido aparece siempre, aunque falle el JS.
+- Con movimiento reducido se retira lo que desplaza o escala, y el fundido se queda, más corto. Solo se apaga entera la que va acoplada al scroll. El contenido aparece siempre, aunque falle el JS.
 
 Demo de scroll-reveal
 
 Repetir ▸
+
+### Dos puertas de entrada, y no dicen lo mismo
+
+- Al hacer scroll, para lo que todavía no está en pantalla. Lo que ya se ve al cargar no entra por aquí, porque no ha entrado: arrancarlo oculto retrasaría la métrica de carga.
+- Al cargar, para lo decorativo del primer pliegue, que sí aparece de golpe. Son las composiciones de estas cuatro portadas y el punto final del titular de la portada.
+- Y una tercera que no es una entrada: va acoplada al scroll y no tiene duración propia, porque la posición manda. Es el filete que crece bajo los años de los hitos.
+
+La tercera se ve sin pulsar nada: el filete morado que abre cada bloque de esta página crece al llegar a él.
+
+Demo de entrada al cargar
+
+Repetir la entrada ▸
 
 ### Transición del nav · compartida por todo el sitio
 

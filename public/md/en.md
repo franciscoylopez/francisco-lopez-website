@@ -112,7 +112,7 @@ Before that, years acquiring users; before measuring product, I understood how t
 
 Journey
 
-## Career
+## Experience
 
 Product
 

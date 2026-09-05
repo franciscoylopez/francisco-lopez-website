@@ -395,7 +395,11 @@
       },
       {
         "k": "280ms",
-        "v": "Scroll-reveal de entrada de sección."
+        "v": "Entradas: el reveal al hacer scroll y la apertura al cargar."
+      },
+      {
+        "k": "scroll",
+        "v": "El filete que crece no tiene duración: lo lleva la rueda."
       },
       {
         "k": "easing",
@@ -404,10 +408,19 @@
     ],
     "bullets": [
       "Reveal = fundido + subida de 14px, una vez al entrar en viewport y nunca en bucle. Un grupo que entra junto escalona sus piezas (80ms en esta demo).",
-      "prefers-reduced-motion: se desactivan transformaciones y auto-scroll. El contenido aparece siempre, aunque falle el JS."
+      "Con movimiento reducido se retira lo que desplaza o escala, y el fundido se queda, más corto. Solo se apaga entera la que va acoplada al scroll. El contenido aparece siempre, aunque falle el JS."
     ],
     "demoLabel": "Demo de scroll-reveal",
     "replay": "Repetir ▸",
+    "puertasTitle": "Dos puertas de entrada, y no dicen lo mismo",
+    "puertasBullets": [
+      "Al hacer scroll, para lo que todavía no está en pantalla. Lo que ya se ve al cargar no entra por aquí, porque no ha entrado: arrancarlo oculto retrasaría la métrica de carga.",
+      "Al cargar, para lo decorativo del primer pliegue, que sí aparece de golpe. Son las composiciones de estas cuatro portadas y el punto final del titular de la portada.",
+      "Y una tercera que no es una entrada: va acoplada al scroll y no tiene duración propia, porque la posición manda. Es el filete que crece bajo los años de los hitos."
+    ],
+    "puertasDemoLabel": "Demo de entrada al cargar",
+    "puertasReplay": "Repetir la entrada ▸",
+    "puertasFoot": "La tercera se ve sin pulsar nada: el filete morado que abre cada bloque de esta página crece al llegar a él.",
     "navTitle": "Transición del nav · compartida por todo el sitio",
     "navBullets": [
       "Símbolo 48 → 28px, de forma continua con el scroll. La barra mantiene su alto: animarlo repintaba una franja opaca de ancho completo en cada paso.",
@@ -894,9 +907,9 @@
     "progressAriaLabel": "Progreso de lectura del artículo de muestra",
     "shareLabel": "Compartir",
     "shareCopyLabel": "Copiar enlace",
-    "shareCopiedLabel": "Enlace copiado",
+    "shareCopiedLabel": "Copiado",
     "shareCopiedAnnounce": "Enlace copiado al portapapeles",
-    "shareUnavailableAnnounce": "Compartir no está disponible; el enlace se copió en su lugar",
+    "shareUnavailableAnnounce": "Compartir no está disponible: enlace copiado",
     "railAriaLabel": "Riel de secciones (espécimen)",
     "railHint": "Igual que en la página real, pero contenidos a este panel: fuera de él van fijos a la ventana."
   }

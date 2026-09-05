@@ -1,7 +1,35 @@
+/**
+ * UN `opacity: 0` QUE DECLARA TRANSICIÓN DE OPACIDAD NO ESTÁ OCULTO: ESTÁ
+ * ESPERANDO SU TURNO *(P72.511, 2026-09-05)*.
+ *
+ * El filtro descartaba todo lo que midiera cero de opacidad, y eso dejaba fuera
+ * a la pastilla de confirmación de `ui/copy-button.tsx` —la que dice «Copiado»—,
+ * que vive en `opacity-0` y solo sube al pulsar. Su estado es de React, no una
+ * regla `:hover` que este censo pueda aplicar sobre un clon, así que **no se
+ * había medido nunca, en ninguna de sus cuatro superficies**. El par resultó
+ * estar bien (15,32 en oscuro, 13,79 en claro, medidos a mano en el
+ * design-review), pero eso se supo mirándolo, no midiéndolo: el metro seguía
+ * devolviendo lista limpia y habría seguido devolviéndola con cualquier tinte
+ * encima.
+ *
+ * POR QUÉ NO METE RUIDO, contado antes de tocarlo y no después: `mostrarReveals`
+ * enciende TODOS los reveals, y lo hace a mano y no por scroll justo para ser
+ * determinista (ver `01-motion.js`). Así que cuando este filtro corre ya no
+ * quedan `[data-reveal]` apagados, y lo único que entra por esta puerta es lo
+ * que nunca se enciende solo. Medido sobre el build servido: en `/brand-kit`
+ * son **9 elementos y los 9 son la pastilla**; sin encender los reveals, en
+ * `/como-se-ha-creado` entrarían 4 más, y son justo los que el censo real ya
+ * habría encendido.
+ *
+ * LO QUE NO SE TOCA, y no es olvido: `esVisible`, el filtro de los CONTORNOS de
+ * control más abajo. Un control a opacidad cero sí está oculto de verdad —no hay
+ * nada que pulsar— y relajarlo ahí metería controles que no se pintan.
+ */
 function paintsText(el) {
   const cs = getComputedStyle(el);
   if (cs.visibility === "hidden" || cs.display === "none") return false;
-  if (parseFloat(cs.opacity) === 0) return false;
+  if (parseFloat(cs.opacity) === 0 && !/opacity/.test(cs.transitionProperty))
+    return false;
   if (!el.getClientRects().length) return false;
   return [...el.childNodes].some(
     (n) => n.nodeType === 3 && n.textContent.trim().length > 0,

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 
 import { actionVariants } from "@/components/ui/action";
 import { SectionHeader } from "@/components/ui/heading";
@@ -87,7 +87,12 @@ export function GridDemo({
           <div className="relative">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 grid grid-cols-12 gap-[var(--gutter)] transition-opacity duration-300"
+              // 280 ms y la curva del sistema, no 300 ms y la de Tailwind
+              // (P72.513). La rejilla APARECE, así que es una entrada y toma el
+              // techo de D135; y 300 no estaba en la tabla que esta misma página
+              // publica tres secciones más abajo. Una demo del sistema no lleva
+              // cifras propias.
+              className="ease-entrance pointer-events-none absolute inset-0 grid grid-cols-12 gap-[var(--gutter)] transition-opacity duration-280"
               style={{ opacity: show ? 1 : 0 }}
             >
               {COLS.map((_, i) => (
@@ -209,6 +214,76 @@ export function RevealDemo({
   );
 }
 
+/**
+ * (05) LA OTRA PUERTA DE ENTRADA: la que entra AL CARGAR *(P72.512)*.
+ *
+ * Hermana de `RevealDemo`, y separada de ella a propósito: son dos mecanismos
+ * distintos y la sección existe para que se note (D202). Aquélla demuestra
+ * `data-reveal`, que espera a que el elemento entre en viewport; ésta demuestra
+ * `.entrada-pliegue`, que no espera a nada porque lo suyo ya está en pantalla.
+ *
+ * USA LA CLASE REAL, no una copia con las mismas cifras: es la misma regla de
+ * `globals.css` que corre en las cuatro portadas del sistema, retardo escalonado
+ * incluido. Si algún día cambia la curva o la duración, esta demo cambia con
+ * ella; con una recreación, publicaría un movimiento que el sitio ya no tiene.
+ *
+ * REBOBINAR ES QUITAR LA CLASE, NO TOCAR LA TRANSICIÓN. Aquí el movimiento es un
+ * `@keyframes`, no una transición, así que el problema de `RevealDemo` —que al
+ * quitar el estado arrancaba un fundido hacia fuera— no existe: se retira la
+ * clase, se fuerza el reflow y se vuelve a poner. El navegador reinicia la
+ * animación desde su primer fotograma.
+ */
+export function EntradaDemo({
+  demoLabel,
+  replayLabel,
+}: {
+  demoLabel: string;
+  replayLabel: string;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  const replay = () => {
+    const demo = ref.current;
+    if (!demo) return;
+    const items = demo.querySelectorAll<HTMLElement>(".demo-entrada");
+    items.forEach((el) => el.classList.remove("entrada-pliegue"));
+    void demo.offsetWidth;
+    items.forEach((el) => el.classList.add("entrada-pliegue"));
+  };
+
+  return (
+    <div className={cn(PANEL, "p-6")}>
+      <div className="mb-4 flex items-center justify-between">
+        <span className="text-muted-foreground text-[0.8rem]">{demoLabel}</span>
+        <button
+          type="button"
+          onClick={replay}
+          className={actionVariants({ variant: "outline-neutral", size: "sm" })}
+        >
+          {replayLabel}
+        </button>
+      </div>
+      {/* Tres fichas escalonadas, que es la forma que tiene el mecanismo en las
+          portadas: el retardo va por variable para que la regla de movimiento
+          reducido pueda anularlo (globals.css §Entrada del pliegue). */}
+      <div ref={ref} className="flex items-end gap-[0.6rem]">
+        {["0s", "0.08s", "0.16s"].map((retardo, i) => (
+          <div
+            key={retardo}
+            className="demo-entrada entrada-pliegue bg-muted flex-1 rounded-md"
+            style={
+              {
+                height: `${4.6 - i * 0.7}rem`,
+                "--retardo-entrada": retardo,
+              } as CSSProperties
+            }
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 type SkeletonRow = { idx: string; name: string; h: string };
 
 // (09) Esqueleto navegable — tabs de dispositivo que reencuadran la maqueta. Los
@@ -274,7 +349,12 @@ export function DevicePreview({
       </div>
       <div className="flex justify-center">
         <div
-          className="border-border bg-background w-full overflow-hidden rounded-2xl border transition-[max-width] duration-300"
+          // 250 ms: el escalón de «cambios de estado» de la tabla publicada.
+          // Esto NO es una entrada —el marco ya está, solo cambia de ancho—, así
+          // que no le toca el techo de la entrada; lo que le tocaba era no
+          // inventarse un 300 que la tabla no tiene (P72.513). La curva sí es la
+          // del sistema: el sitio declara una.
+          className="border-border bg-background ease-entrance w-full overflow-hidden rounded-2xl border transition-[max-width] duration-250"
           style={{ maxWidth }}
         >
           <div className="border-border flex items-center justify-between border-b px-5 py-[0.85rem]">

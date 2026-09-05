@@ -58,6 +58,16 @@ export interface Experience {
    */
   desde: string;
   hasta: string | null;
+  /**
+   * La experiencia terminó en un exit. Es un campo del DATO y no una cadena de
+   * copy por el mismo motivo que el logo y las fechas: la afirmación ya se hace
+   * en tres sitios —el chip de Hitos, el CV y el deep-dive— y escribirla otra
+   * vez en la fila de cifras del índice sería la cuarta copia del mismo hecho,
+   * que es exactamente el modo de fallo que este módulo existe para matar.
+   *
+   * Se omite donde no aplica, que es en las siete restantes.
+   */
+  exit?: boolean;
 }
 
 // `as const satisfies` y no `: Experience[]`: la anotación clásica borraba los
@@ -101,6 +111,7 @@ export const EXPERIENCES = [
     logo: "companies/thetool",
     desde: "2016-05",
     hasta: "2021-10",
+    exit: true,
   },
   {
     company: "PICKASO",

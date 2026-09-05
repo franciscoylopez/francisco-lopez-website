@@ -54,6 +54,23 @@
   --color-brand-purple-accent: var(--brand-purple-accent);
   --color-progress-ink: var(--progress-ink);
 
+  /* LA CURVA DE LAS ENTRADAS, COMO UTILIDAD *(P72.513)*. Vivía solo en `:root`,
+     así que era `var(--ease-entrance)` dentro de `globals.css` y NADA en el punto
+     de uso: una utilidad `transition-*` sin `ease-*` resuelve a
+     `--default-transition-timing-function`, o sea al ease-in-out de Tailwind, que
+     es exactamente la curva que D135 no quiere para algo que aparece. Medido en
+     la hoja servida: `.transition-opacity` compila a
+     `transition-timing-function: var(--tw-ease, var(--default-transition-timing-function))`.
+     Declarada aquí, Tailwind genera `ease-entrance` y el punto de uso puede
+     escribir la utilidad en vez de la sintaxis de escape (CLAUDE.md §Una sola
+     notación por token).
+     SE MUEVE, NO SE COPIA: `@theme` ya emite la variable a `:root`, así que los
+     `var(--ease-entrance)` de esta misma hoja siguen resolviendo igual. Y no hay
+     `duration-entrance` que valga: `--duration-*` no es un espacio de nombres de
+     Tailwind v4, así que las duraciones siguen siendo la utilidad numérica de la
+     tabla que publica el Design System. */
+  --ease-entrance: cubic-bezier(0, 0, 0.2, 1);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -87,7 +104,8 @@
          La duración es el techo de la entrada, no su mínimo: los 280 ms son para
          el recorrido más largo que hace el sitio (el fade-up de 14px); una
          entrada más corta puede ir por debajo, nunca por encima. */
-  --ease-entrance: cubic-bezier(0, 0, 0.2, 1);
+  /* `--ease-entrance` ya no se declara aquí: subió a `@theme` para que exista la
+     utilidad `ease-entrance`, y desde allí se emite igual a `:root`. */
   --duration-entrance: 0.28s;
 
   /* --- Neutros + superficies (blanco hueso / gris) --- */
@@ -511,6 +529,89 @@
   }
 }
 
+/* === ENTRADA DEL PLIEGUE (P72.466) · lo que entra AL CARGAR, no al hacer scroll ===
+
+   NO ES UN SEGUNDO MECANISMO DE ENTRADA: es el otro que ya había. `data-reveal`
+   significa «entra al ENTRAR en viewport», y por eso el island marca como
+   mostrado todo lo que ya está en pantalla ANTES de encender `reveal-on`
+   (P44/D47, 2.090 ms de retraso de renderizado). Lo del primer pliegue no entra:
+   ya está. Así que una composición del pliegue no puede animar por ahí, y eso no
+   es un fallo suyo.
+
+   LO QUE ENTRA AL CARGAR YA TENÍA SU FORMA en esta hoja: `punto-cae` (el punto
+   del titular de la home, D137), `consent-in` y `split-bloom`. Las tres son
+   `@keyframes` con `both`, sin JS y sin esperar a la hidratación. Ésta es la
+   cuarta y su caso es el mismo que el del punto: un elemento decorativo del
+   primer pliegue que aparece al cargar mientras el contenido de alrededor no.
+
+   POR QUÉ NO SE HIZO CON UNA EXCEPCIÓN DENTRO DEL ISLAND, que era la otra
+   dirección de la ficha: el HTML servido no lleva `opacity: 0` —la pone
+   `reveal-on`, que llega con la hidratación—, así que saltarse el premarcado no
+   consigue que el elemento empiece oculto. Consigue que se pinte, PARPADEE a
+   cero al hidratar y vuelva. Es el síntoma que quitó D47, sin su coste de
+   métrica.
+
+   Y NO TOCA EL LCP, comprobado antes de escribirlo y no supuesto: en las cuatro
+   páginas y en los dos viewports (1920×1080 y 412×823 a 1,75) el elemento LCP es
+   la ENTRADILLA, el `<p>` de la columna de texto, nunca la composición. Medido
+   con `PerformanceObserver` sobre el build servido. Si alguna composición gana
+   una imagen algún día, esto hay que volver a mirarlo.
+
+   EL GIRO DE LAS FICHAS VA EN `rotate`, NO EN `transform`. Un `transform` en el
+   punto de uso gana a cualquier hoja, y era lo que tenía muerto el `translateY`
+   del reveal en Design System y en Accesibilidad desde que se escribieron: sus
+   fichas solo podían fundirse. Con la propiedad individual `rotate` las dos
+   cosas componen. La entrada, en cambio, se queda en `transform` a propósito:
+   las utilidades de traslación de Tailwind v4 —`-translate-y-1/2`, que es como
+   se centra la composición del Brand Kit— compilan a la propiedad `translate`,
+   y animar ahí se las llevaría por delante. */
+/* `backwards` Y NO `both`, que es lo que la revisión de motion cambió. Los dos
+   pintan igual; la diferencia es lo que queda DESPUÉS. `both` retiene el último
+   fotograma para siempre, y una animación gana al resto de la cascada: con él,
+   la regla dejaba `transform: none` fijado en el elemento y cualquier utilidad
+   de `transform` que alguien añadiera aquí más adelante no se aplicaría, sin dar
+   un error. `backwards` conserva lo único que hacía falta —el primer fotograma
+   aplicado ANTES de arrancar, que es lo que impide el parpadeo durante el
+   retardo— y al terminar devuelve el elemento a su estilo normal, que ya es
+   opacidad 1 y sin transformar.
+   (Sus tres hermanas de esta hoja —`punto-cae`, `consent-in`, `split-bloom`—
+   siguen en `both` y comparten el rasgo. No se tocan aquí: ninguna está en un
+   elemento que vaya a recibir utilidades, y cambiarlas de paso sería meter tres
+   cambios sin medir en un commit de dos.) */
+.entrada-pliegue {
+  animation: entrada-pliegue var(--duration-entrance) var(--ease-entrance)
+    var(--retardo-entrada, 0s) backwards;
+}
+@keyframes entrada-pliegue {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* D136: se retira el desplazamiento y se conserva el fundido, más corto. Y el
+   escalonado se cierra, que es la mitad que no se ve venir: un retardo es una
+   espera, y a quien ha pedido menos movimiento el vestíbulo le sobra igual que
+   el desplazamiento (es lo que ya hace `split-bloom`). Por eso el retardo entra
+   por variable y no por `style` inline — así esta regla puede anularlo. */
+@media (prefers-reduced-motion: reduce) {
+  .entrada-pliegue {
+    animation-name: entrada-pliegue-quieta;
+    animation-duration: 0.16s;
+    animation-delay: 0s;
+  }
+}
+@keyframes entrada-pliegue-quieta {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
 /* Banner de consentimiento (P22): entra una vez con fade-up. Sin bucle; respeta
    reduced-motion (PRD §6). */
 @keyframes consent-in {
@@ -990,6 +1091,9 @@
   block-size: 2px;
   inline-size: 3.5rem;
 }
+/* AQUÍ SOLO ESTÁ LA GEOMETRÍA. El filete además CRECE al cruzar, con el mismo
+   `gesto-fila` que el de Hitos, y eso vive abajo, en §Estratos, junto al gesto
+   que reutiliza — no aquí, para que el gesto se lea de una vez y en un sitio. */
 
 .link-content {
   color: var(--foreground);
@@ -1465,3 +1569,53 @@
    amortiguar una lectura la convertiría en
    un indicador que miente (D136). El único desplazamiento del gesto vivía en
    «Registro», que se descarta con él. */
+
+/* ── El MISMO gesto en el filete de las dos bandas invertidas (P72.49). No es
+      «una animación parecida»: es `gesto-fila` y `--rp`, los de arriba, sin una
+      cifra nueva. Lo pidió Francisco viendo Hitos: «la misma transición que hay
+      en los años, en las barras horizontales moradas de las franjas».
+
+      ENCAJA PORQUE EL RECURSO YA ERA COMÚN. `.band-rule` es la misma geometría
+      en la banda-manifiesto de la home y en la apertura de bloque de las páginas
+      del sistema (P68.7117), así que el gesto entra por la clase y llega a las
+      dos a la vez. Y las dos ya llevaban `data-reveal`, igual que `.hito-fila`:
+      la combinación —fundido al entrar, crecimiento acoplado al scroll— es
+      exactamente la de Hitos, no una versión suya.
+
+      LA FICHA PEDÍA `--ease-entrance` Y `--duration-entrance`, Y ESO HABRÍA SIDO
+      OTRA COSA: el filete de Hitos no tiene curva de entrada ni duración, es
+      `linear` y lo conduce la posición del scroll. Copiar los tokens de entrada
+      habría dado una animación distinta con el nombre de ésta.
+
+      Y AQUÍ SÍ HAY QUE AMORTIGUAR, que es lo único que cambia respecto al
+      original. Arriba está escrito que en Hitos no hay nada que amortiguar
+      porque aquel filete expresa ESTADO —cuánto llevas leído— y frenarlo sería
+      un indicador que miente. Éste no informa de nada: va `aria-hidden` y es
+      mobiliario. O sea que es justo la animación acoplada al scroll que nombra
+      WCAG 2.3.3, y con movimiento reducido se apaga entera y el filete se queda
+      quieto y completo (D136). No se acorta: no hay nada que acortar cuando lo
+      que se retira ES el gesto. ── */
+@supports (animation-timeline: view()) {
+  .band-rule {
+    transform-origin: left;
+    /* `scale`, LA PROPIEDAD INDIVIDUAL, Y NO `transform` — y esto no es estilo,
+       es la única forma de que se vea. El original puede usar `transform`
+       porque lo pinta un `::after`, que no es `[data-reveal]`. Aquí el filete
+       ES el `[data-reveal]`, así que `.reveal-on [data-reveal]` —dos clases de
+       especificidad contra una— le gana y lo devuelve a `none`. Escrito con
+       `transform` el gesto se aplicaba, `--rp` recorría 0 → 1 y el filete se
+       quedaba quieto y entero: medido, 56px pintados en las cuatro paradas del
+       recorrido. La propiedad individual compone con el `translateY` del
+       reveal en vez de pelearse con él. */
+    scale: var(--rp) 1;
+    animation: gesto-fila linear both;
+    animation-timeline: view();
+    animation-range: entry 25% cover 45%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .band-rule {
+      scale: none;
+      animation: none;
+    }
+  }
+}

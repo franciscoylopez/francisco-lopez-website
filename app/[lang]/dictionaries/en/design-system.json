@@ -133,7 +133,7 @@
       },
       {
         "idx": "(05)",
-        "name": "Career",
+        "name": "Experience",
         "h": "clamp(9rem,20vw,13rem)"
       },
       {
@@ -291,7 +291,7 @@
       {
         "size": "section",
         "eyebrow": "Journey",
-        "sample": "Career",
+        "sample": "Experience",
         "use": "The h2 that opens a section."
       },
       {
@@ -323,7 +323,7 @@
     "labelLead": "They look alike and do different jobs, so they are two pieces: one opens a section paired with a headline, the other labels a value inside the content.",
     "labelEyebrowKicker": "Opens a section",
     "labelEyebrowRule": "It always sits above a headline, and the gap between them comes from the size of the headline below it.",
-    "labelEyebrowSample": "Career",
+    "labelEyebrowSample": "Experience",
     "labelEyebrowTitle": "Ten years of product",
     "labelDataKicker": "Labels a value",
     "labelDataRule": "With no headline beside it there is no gap to derive: the margin is set by whoever uses it. It runs a point smaller and less open.",
@@ -395,7 +395,11 @@
       },
       {
         "k": "280ms",
-        "v": "Section scroll-reveal on entry."
+        "v": "Entrances: the reveal on scroll and the opening on load."
+      },
+      {
+        "k": "scroll",
+        "v": "The rule that grows has no duration: the wheel drives it."
       },
       {
         "k": "easing",
@@ -404,8 +408,17 @@
     ],
     "bullets": [
       "Reveal = fade + 14px rise, once on entering the viewport and never on a loop. A group entering together staggers its pieces (80ms in this demo).",
-      "prefers-reduced-motion: transforms and auto-scroll are disabled. Content always appears, even if the JS fails."
+      "Under reduced motion, whatever shifts or scales is removed and the fade stays, shorter. Only the one tied to the scroll is turned off entirely. Content always appears, even if the JS fails."
     ],
+    "puertasTitle": "Two ways in, and they don't say the same thing",
+    "puertasBullets": [
+      "On scroll, for whatever isn't on screen yet. What is already visible on load doesn't come in this way, because it hasn't come in: starting it hidden would delay the load metric.",
+      "On load, for the decorative pieces of the first fold, which do appear at once. They are the compositions of these four covers and the full stop of the home headline.",
+      "And a third one that isn't an entrance: it's tied to the scroll and has no duration of its own, because position is what drives it. It's the rule growing under the years of the milestones."
+    ],
+    "puertasDemoLabel": "Entrance on load",
+    "puertasReplay": "Replay the entrance ▸",
+    "puertasFoot": "You can see the third one without pressing anything: the purple rule that opens each block on this page grows as you reach it.",
     "demoLabel": "Scroll-reveal demo",
     "replay": "Replay ▸",
     "navTitle": "Nav transition · shared across the whole site",
@@ -894,9 +907,9 @@
     "progressAriaLabel": "Reading progress of the sample article",
     "shareLabel": "Share",
     "shareCopyLabel": "Copy link",
-    "shareCopiedLabel": "Link copied",
+    "shareCopiedLabel": "Copied",
     "shareCopiedAnnounce": "Link copied to clipboard",
-    "shareUnavailableAnnounce": "Sharing isn't available; the link was copied instead",
+    "shareUnavailableAnnounce": "Sharing isn't available: link copied instead",
     "railAriaLabel": "Section rail (specimen)",
     "railHint": "Just like the real page, but contained to this panel: outside it they're pinned to the window."
   }

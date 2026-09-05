@@ -66,6 +66,14 @@ export function ArticuloLargo({
       ordinal: `0${i + 1}`,
       label: t.indexItems[i] ?? "",
     }));
+  // LAS CADENAS DEL ESPÉCIMEN SON LAS DEL ARTÍCULO, palabra por palabra
+  // (P72.48). Tienen que estar duplicadas —cada página carga su rama del
+  // diccionario (D48) y ésta no puede importar la del artículo—, pero decían
+  // otra cosa: «Enlace copiado» aquí contra «Copiado» allí, y dos redacciones
+  // distintas del aviso de compartir no disponible. Un espécimen que enseña un
+  // control con copy que ese control no tiene está enseñando otro control, que
+  // es justo lo que esta página existe para no hacer. Al tocar una, se tocan
+  // las dos.
   const shareStrings = {
     copyLabel: t.shareCopyLabel,
     copiedLabel: t.shareCopiedLabel,

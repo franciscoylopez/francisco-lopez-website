@@ -156,7 +156,7 @@ Mobile
 
 (04) · Beyond the PM
 
-(05) · Career
+(05) · Experience
 
 (06) · Education
 
@@ -365,7 +365,7 @@ Where it's used · The h1 of long-read pages.
 
 Journey
 
-Career
+Experience
 
 gap · mb-3
 
@@ -411,7 +411,7 @@ Where it's used · One step below: a supporting block inside a section.
 
 They look alike and do different jobs, so they are two pieces: one opens a section paired with a headline, the other labels a value inside the content.
 
-Career
+Experience
 
 Ten years of product
 
@@ -517,16 +517,30 @@ Durations aren't picked by taste: each one matches a kind of change on screen.
 
 250ms · State changes: accordions, tabs.
 
-280ms · Section scroll-reveal on entry.
+280ms · Entrances: the reveal on scroll and the opening on load.
+
+scroll · The rule that grows has no duration: the wheel drives it.
 
 easing · cubic-bezier(0, 0, .2, 1): ease-out on entry.
 
 - Reveal = fade + 14px rise, once on entering the viewport and never on a loop. A group entering together staggers its pieces (80ms in this demo).
-- prefers-reduced-motion: transforms and auto-scroll are disabled. Content always appears, even if the JS fails.
+- Under reduced motion, whatever shifts or scales is removed and the fade stays, shorter. Only the one tied to the scroll is turned off entirely. Content always appears, even if the JS fails.
 
 Scroll-reveal demo
 
 Replay ▸
+
+### Two ways in, and they don't say the same thing
+
+- On scroll, for whatever isn't on screen yet. What is already visible on load doesn't come in this way, because it hasn't come in: starting it hidden would delay the load metric.
+- On load, for the decorative pieces of the first fold, which do appear at once. They are the compositions of these four covers and the full stop of the home headline.
+- And a third one that isn't an entrance: it's tied to the scroll and has no duration of its own, because position is what drives it. It's the rule growing under the years of the milestones.
+
+You can see the third one without pressing anything: the purple rule that opens each block on this page grows as you reach it.
+
+Entrance on load
+
+Replay the entrance ▸
 
 ### Nav transition · shared across the whole site
 

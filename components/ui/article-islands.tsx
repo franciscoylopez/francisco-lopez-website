@@ -2,11 +2,11 @@
 
 // @pieza artículo · design-system/12-articulo.tsx · Las islas de cliente del texto largo: barra de progreso, copiar enlace y compartir.
 
-import { Copy, Link2, Share2 } from "lucide-react";
+import { Check, Link2, Share2 } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import { actionVariants } from "@/components/ui/action";
-import { useCopyToClipboard } from "@/components/ui/copy-button";
+import { Confirm, useCopyToClipboard } from "@/components/ui/copy-button";
 import { cn } from "@/lib/utils";
 
 // `FloatingShare` navega las MISMAS paradas que el riel, así que comparte su tipo
@@ -147,7 +147,7 @@ export function ShareActions({
    * superficie desde D97—; lo que queda es el relleno, que la capa no cubre. */
   onInverted?: boolean;
 }) {
-  const { copyText, announce, share, copyLink } = useShareLink({
+  const { copyText, copied, announce, share, copyLink } = useShareLink({
     copyLabel,
     copiedLabel,
     copiedAnnounce,
@@ -173,12 +173,13 @@ export function ShareActions({
         <Share2 aria-hidden="true" />
         {shareLabel}
       </button>
+      {/* CON ETIQUETA, ASÍ QUE NO LLEVA PASTILLA (P72.48). La confirmación es
+          que el botón pasa a poner «Copiado»; la pastilla `Confirm` es para el
+          control solo-icono, que no tiene dónde decirlo. El icono de éxito sí
+          es el mismo que en todo el sitio: `Check`. La regla entera, en
+          `copy-button.tsx` §Confirm. */}
       <button type="button" onClick={copyLink} className={btnClass}>
-        {copyText === copyLabel ? (
-          <Link2 aria-hidden="true" />
-        ) : (
-          <Copy aria-hidden="true" />
-        )}
+        {copied ? <Check aria-hidden="true" /> : <Link2 aria-hidden="true" />}
         {copyText}
       </button>
       <p aria-live="polite" className="sr-only">
@@ -236,14 +237,30 @@ export function FloatingShare({
       >
         <Share2 aria-hidden="true" />
       </button>
-      <button
-        type="button"
-        onClick={copyLink}
-        className={btnClass}
-        aria-label={copied ? copiedLabel : copyLabel}
-      >
-        {copied ? <Copy aria-hidden="true" /> : <Link2 aria-hidden="true" />}
-      </button>
+      {/* SOLO ICONO, ASÍ QUE CONFIRMA LA PASTILLA (P72.48) — la misma que los
+          controles de copiar del Brand Kit y del Design System, importada, no
+          replicada. Antes, el único aviso visible era que el glifo pasaba de
+          `Link2` a `Copy`: o sea que al copiar se ponía el icono con el que el
+          resto del sitio dice «aún no has copiado». Quien no ve la pantalla ya
+          tenía la frase entera por `aria-live`; quien la ve, nada.
+
+          `below` y no `above`: encima está el botón de compartir, a 8px. */}
+      <span className="relative inline-flex">
+        <button
+          type="button"
+          onClick={copyLink}
+          className={btnClass}
+          aria-label={copied ? copiedLabel : copyLabel}
+        >
+          {copied ? <Check aria-hidden="true" /> : <Link2 aria-hidden="true" />}
+        </button>
+        <Confirm
+          text={copiedLabel}
+          on={copied}
+          onInverted={false}
+          placement="below"
+        />
+      </span>
       <p aria-live="polite" className="sr-only">
         {announce}
       </p>

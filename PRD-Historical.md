@@ -99,6 +99,7 @@
 - [El cierre de «Higiene»: la brecha de consentimiento deja de estar medida — 2026-09-04](#el-cierre-de-higiene-la-brecha-de-consentimiento-deja-de-estar-medida--2026-09-04)
 - [El `method-review` XII: el andamiaje creció un 29 % y los indicadores no se movieron — 2026-09-04](#el-method-review-xii-el-andamiaje-creció-un-29-%-y-los-indicadores-no-se-movieron--2026-09-04)
 - [Abre «Cierre V3» — 2026-09-04](#abre-cierre-v3--2026-09-04)
+- [Por qué Trayectoria entró en el nav, y qué costó meterla — 2026-09-04](#por-qué-trayectoria-entró-en-el-nav-y-qué-costó-meterla--2026-09-04)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4509,3 +4510,44 @@ gana un verde falso. Y la primera versión del sello **medía con otro instrumen
 ls-files | wc -l` (20.169) contra un guardián que cuenta con su propia función (20.303), 134 de
 diferencia y una deriva de +150 que no existía—, que es exactamente el fallo que este mismo
 `method-review` acababa de documentar en el sello de medición, cometido en el commit siguiente.
+
+## Por qué Trayectoria entró en el nav, y qué costó meterla — 2026-09-04
+
+**`/trayectoria` era la única página huérfana del sitio.** Medido sobre el HTML servido de las
+catorce, no leyendo el JSX: recibía **cinco enlaces entrantes y los cinco eran el breadcrumb de
+sus propios hijos**. Cero desde la home, cero desde el footer, cero desde ningún sitio. Estaba
+en el sitemap y no había forma de llegar sin entrar antes a un caso. Lo vio Francisco al mejorar
+la página, no un gate: ninguno vigila el grafo de enlaces internos.
+
+**El orden nuevo cuenta un recorrido**, y cambia el de P67 —que era CV · Contacto · Sobre mí, «de
+la acción más buscada a la más de contexto»—. Ahora es CV · Trayectoria · Sobre mí · Contacto:
+las credenciales, lo que se ha hecho, quién lo hizo y cómo hablar. Contacto se queda en el
+extremo a propósito, que es donde termina esa lectura, y se decidió sabiendo que es la métrica
+primaria: con n=1 no hay serie que romper, así que hacerlo **antes** del lanzamiento del 10 es
+lo que evita cambiar el menú a mitad de la única cohorte que va a medir algo.
+
+**Y la fila del nav estaba llena, que es lo que no se ve leyendo el código.** El cuarto enlace
+suma 103px y el contenido pasa de 627 a 730: a 768 **desborda 48px** —el toggle de tema se sale
+de la pantalla y el sitio entero scrollea en horizontal—, a 800 desborda 18 y en inglés a 768
+desborda 12. Los cuatro no caben por debajo de ~810px.
+
+Las tres salidas, medidas con los cuatro enlaces puestos y **enseñadas en captura antes de
+decidir**, que es lo que hizo la decisión de Francisco y no una tabla:
+
+| | Cabe a 768 | Holgura | Qué cuesta |
+|---|---|---|---|
+| Colapsar el menú en `lg` | no, va a hamburguesa | — | 768–1023 pierde los cuatro, incluido «Descargar CV», que es uno de los tres puntos de descarga medidos |
+| «Descargar CV» → «CV» | sí | 25px | Etiqueta más pobre y poco margen para un cambio futuro |
+| **Soltar el wordmark 768–1023** | sí | **38px, los mismos que hoy** | Un elemento de marca en esa franja |
+
+Eligió soltar el wordmark. **No es una excepción nueva:** son 168px que no encogen, encogerlos o
+recortarlos lo prohíbe la regla 6 de `BRAND-logo.md`, esta barra ya lo suelta al hacer scroll y
+el footer no lo lleva nunca. La tabla de uso pasa a declarar sus **dos ventanas** —`<360` desde
+el 2026-08-22 y `768–1023` desde hoy— con su medida y su porqué.
+
+*Lo que se llevó por delante, y es el hallazgo de método: el trinquete de deuda puso el CI en
+rojo porque `nav.tsx` subía de 43 a 46 de complejidad. Es la primera vez que su mitad de
+MAGNITUDES caza algo real, y el archivo es el peor del repositorio, el mismo que el artículo
+publica como hotspot número uno en su captura de Qlty. La respuesta no fue subir el sello: los
+ocho enlaces eran dos listas escritas dos veces, se factorizaron a una, el archivo bajó a 40 y
+`gate:html` probó que el refactor no movía un byte de las 28 variantes.*

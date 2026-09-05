@@ -1,7 +1,7 @@
 ---
 canonical: https://franciscolopez.es/trayectoria
 lang: es
-title: Cinco experiencias, contadas por dentro
+title: Mi Trayectoria
 description: "Cinco experiencias de producto contadas por dentro: el contexto que había, las decisiones que tomé y lo que salió. Emendu, KUOTIP, INDYA, Freepik y TheTool."
 last-updated: 2026-08-18
 ---
@@ -9,11 +9,31 @@ last-updated: 2026-08-18
 1. [Inicio](https://franciscolopez.es/)
 2. Trayectoria
 
-Trayectoria
+Experiencia
 
-# Cinco experiencias, contadas por dentro
+# Mi Trayectoria
 
-Un CV cabe en dos páginas porque deja fuera lo que de verdad se juzga: qué había cuando llegué, qué decidí y qué pasó después. Cada una de estas cinco tiene su página con esa historia entera, con las cifras acotadas y con los aprendizajes, también de lo que no salió.
+Un CV cabe en dos páginas porque deja fuera lo que de verdad se juzga: no lo que hiciste, sino por qué decidiste eso y no otra cosa. Estas cinco lo cuentan entero, con lo que salió y con lo que no.
+
+5
+
+Casos con página
+
+10
+
+Años de producto
+
+1
+
+Exit
+
+5
+
+Sectores
+
+Índice
+
+Todas siguen el mismo orden: contexto, decisiones, cifras acotadas y aprendizajes. Cada una se lee suelta, en el orden que quieras.
 
 - [Emendu · SaaS B2B · IT Management · De vender a mano a un SaaS con canal propio · Product Manager · Feb 2025 (2025-02) - Actualidad](https://franciscolopez.es/trayectoria/emendu)
 - [KUOTIP · SaaS B2B2C · Customer Reviews · La oportunidad perdida de cambiar una industria · Cofounder & Product · Feb 2024 (2024-02) - Dic 2024 (2024-12)](https://franciscolopez.es/trayectoria/kuotip)

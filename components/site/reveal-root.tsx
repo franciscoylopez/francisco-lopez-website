@@ -21,6 +21,14 @@ import { useEffect, useRef, type ReactNode } from "react";
 // Lo que ya estaba ahí al cargar no ha entrado. El efecto visible —que el primer
 // pliegue deja de hacer fade-up— es el precio, y no hay forma de evitarlo: un
 // elemento que empieza en `opacity: 0` retrasa el LCP por definición.
+//
+// LO QUE SÍ PUEDE ENTRAR EN EL PLIEGUE VA POR OTRA PUERTA, y esta cabecera no lo
+// decía: quien llegaba aquí queriendo animar algo de arriba se quedaba sin
+// salida. `data-reveal` significa «entra al ENTRAR en viewport»; para «entra al
+// CARGAR» está `.entrada-pliegue` en `globals.css`, un `@keyframes` con
+// `backwards` que no espera a la hidratación y que por eso NO puede sustituirse
+// por una excepción de este bucle. El porqué entero, y la trampa del `transform`
+// que se lleva por delante media animación sin dar un error, en D202.
 export function RevealRoot({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
 

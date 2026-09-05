@@ -1,3 +1,5 @@
+import { type CSSProperties } from "react";
+
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { Badge } from "@/components/ui/badge";
 import { CheckPill } from "@/components/ui/check-pill";
@@ -65,9 +67,10 @@ function HeroComposition() {
       <div className="relative hidden h-60 w-[min(25rem,100%)] md:block">
         {/* atrás: contraste medido */}
         <div
-          data-reveal
-          className="border-border bg-background absolute top-0 right-2 w-[9.5rem] rounded-[14px] border p-[0.9rem]"
-          style={{ transform: "rotate(6deg)", transitionDelay: "0.08s" }}
+          className="entrada-pliegue border-border bg-background absolute top-0 right-2 w-[9.5rem] rounded-[14px] border p-[0.9rem]"
+          style={
+            { rotate: "6deg", "--retardo-entrada": "0.08s" } as CSSProperties
+          }
         >
           <div className="text-muted-foreground font-mono text-[0.6rem] tracking-[0.05em] uppercase">
             Contraste
@@ -81,9 +84,10 @@ function HeroComposition() {
         </div>
         {/* medio: checklist */}
         <div
-          data-reveal
-          className="border-border bg-background absolute top-16 right-20 flex w-[11rem] flex-col gap-[0.55rem] rounded-[14px] border p-[0.95rem]"
-          style={{ transform: "rotate(-4deg)", transitionDelay: "0.16s" }}
+          className="entrada-pliegue border-border bg-background absolute top-16 right-20 flex w-[11rem] flex-col gap-[0.55rem] rounded-[14px] border p-[0.95rem]"
+          style={
+            { rotate: "-4deg", "--retardo-entrada": "0.16s" } as CSSProperties
+          }
         >
           {[100, 82, 94].map((w, i) => (
             <div key={i} className="flex items-center gap-[0.55rem]">
@@ -97,9 +101,10 @@ function HeroComposition() {
         </div>
         {/* delante: anillo de foco */}
         <div
-          data-reveal
-          className="absolute top-[10.5rem] left-0"
-          style={{ transform: "rotate(2deg)", transitionDelay: "0.24s" }}
+          className="entrada-pliegue absolute top-[10.5rem] left-0"
+          style={
+            { rotate: "2deg", "--retardo-entrada": "0.24s" } as CSSProperties
+          }
         >
           <div className="ring-primary ring-offset-background rounded-[13px] ring-2 ring-offset-2">
             <div className="border-border bg-background flex items-center gap-[0.6rem] rounded-[13px] border px-[1.1rem] py-[0.8rem]">
@@ -114,7 +119,7 @@ function HeroComposition() {
       </div>
       {/* móvil: solo la muestra de foco */}
       <div className="md:hidden">
-        <div className="ring-primary ring-offset-background rounded-[13px] ring-2 ring-offset-2">
+        <div className="entrada-pliegue ring-primary ring-offset-background rounded-[13px] ring-2 ring-offset-2">
           <div className="border-border bg-background flex items-center gap-[0.6rem] rounded-[13px] border px-[1.1rem] py-[0.8rem]">
             <span className="bg-primary h-[0.55rem] w-[0.55rem] flex-none rounded-full" />
             <span className="bg-foreground h-[0.42rem] w-[5.5rem] rounded-full opacity-70" />
