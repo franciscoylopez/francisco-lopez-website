@@ -158,17 +158,19 @@ export function proxy(request: NextRequest) {
       return conVary(NextResponse.rewrite(url));
     }
 
-    if (interno !== publico) {
-      const url = request.nextUrl.clone();
-      url.pathname = `/en/${interno}`;
-      return conVary(
-        NextResponse.rewrite(url, {
-          request: { headers: withLocale(request, "en") },
-        }),
-      );
-    }
+    // UN SOLO RETORNO, y no es cosmética: las dos ramas no son dos caminos, son
+    // la MISMA respuesta con o sin cambio de carpeta. La página inglesa se sirve
+    // igual en los dos casos —mismo locale en la cabecera, mismo `Vary`—; lo
+    // único que cambia es si hay que mandar la petición a otra carpeta porque el
+    // slug se traduce. Escrito como dos returns, el trinquete de deuda lo cazó
+    // como una rama más en un archivo que ya vigila.
+    const peticion = { request: { headers: withLocale(request, "en") } };
+    const destino = request.nextUrl.clone();
+    destino.pathname = `/en/${interno}`;
     return conVary(
-      NextResponse.next({ request: { headers: withLocale(request, "en") } }),
+      interno === publico
+        ? NextResponse.next(peticion)
+        : NextResponse.rewrite(destino, peticion),
     );
   }
 
