@@ -454,7 +454,7 @@ export const PAGE_COUNT = PAGE_SLUGS.length;
  * porque nada ataba la prosa al inventario (P50.73).
  */
 export const GUARDIAN_COUNT = 24;
-export const GUARDIAN_CASE_COUNT = 57;
+export const GUARDIAN_CASE_COUNT = 58;
 
 /**
  * Sustituye `{paginas}` en el copy, como `fillRatios` hace con `{par.tema}`.
@@ -493,7 +493,7 @@ export const LAST_COOKIES_UPDATE = "2026-08-31";
  * Google, y tarde.
  */
 export const ARTICLE_PUBLISHED = "2026-08-21";
-export const ARTICLE_UPDATED = "2026-09-04";
+export const ARTICLE_UPDATED = "2026-09-05";
 
 // `fillDate` vivía aquí y se retiró en P67.6: la fecha se pinta dentro de un
 // `<time datetime>`, y una función que devuelve `string` no puede llevar un

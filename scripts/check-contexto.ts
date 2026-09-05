@@ -43,12 +43,20 @@ import { revisaApertura } from "./contexto/apertura";
 import { revisaDocumentos } from "./contexto/documentos";
 import { revisaSkills } from "./contexto/skills";
 import { revisaTechos } from "./contexto/techos";
+import { revisaVerificacion } from "./contexto/verificacion";
 
-// LAS CUATRO MITADES ESTABAN NUMERADAS AQUÍ DENTRO desde que existen, así que
-// la costura no había que inventarla (D148/D187). Cada una vive en su módulo y
-// esto es el orden en que corren — que importa: las dos últimas necesitan las
-// cifras que miden las dos primeras.
+// LAS MITADES ESTABAN NUMERADAS AQUÍ DENTRO desde que existen, así que la costura
+// no había que inventarla (D148/D187). Cada una vive en su módulo y esto es el
+// orden en que corren — que importa: `revisaApertura` necesita las cifras que
+// miden las dos primeras.
+//
+// LA QUINTA (2026-09-05, P72.53) NO MIDE PALABRAS SINO LÍNEAS DE CÓDIGO, y aun así
+// su sitio es este: lo que vigila `check:contexto` no es el texto, es **el peso de
+// lo que este método arrastra**, y `scripts/` es el tercer corpus que la regla de
+// retirada de `CLAUDE.md` nombra. Era además el único de los tres que se medía sin
+// suspender nunca.
 const total = revisaDocumentos();
 const sumaSkills = revisaSkills();
 revisaTechos();
 revisaApertura(total, sumaSkills);
+revisaVerificacion();

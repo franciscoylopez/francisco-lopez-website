@@ -248,7 +248,7 @@ las va a aplicar, no a datar.
 | Veces que se movió un techo en el ciclo | **0** de 3 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
 | Margen del presupuesto de contexto | **73** 🔴 | ≥ 400 | < 100 | `check:contexto` |
 | Suma de skills a demanda | **holgura 7** 🔴 | ≤ techo | > techo | `check:contexto` |
-| Verificación ÷ producto | **0,716** 🔴 | ≤ 0,45 | > 0,55 | ver la operación exacta abajo |
+| Verificación ÷ producto | **0,716** 🔴 | ≤ 0,45 | > 0,55 | `check:contexto` (quinta sección) desde D205 |
 | Verificación ÷ producto DEL SPRINT | **5,89 : 1** 🔴 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
 | Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 | `design-review` |
 

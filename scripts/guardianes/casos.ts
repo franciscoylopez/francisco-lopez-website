@@ -202,6 +202,22 @@ export const CASOS: Caso[] = [
       ),
   },
   {
+    // La QUINTA mitad del presupuesto (2026-09-05, P72.53): el volumen de
+    // `scripts/` medido contra el producto. Era el único corpus de la regla de
+    // retirada que se publicaba sin suspender nunca — creció un 29 % en un sprint
+    // y lo único que pasó fue un ámbar.
+    //
+    // POR FORMA Y NO POR VALOR, que es la lección de los dos casos de aquí arriba:
+    // el techo baja por diseño cada vez que se aprieta el trinquete, así que un
+    // literal dejaría de morder en el primer apretón. Se empareja la ESTRUCTURA
+    // del historial y se pone un techo por debajo del ratio real, que es
+    // exactamente «el andamiaje pesa demasiado».
+    guardian: "check:contexto",
+    rotura: "el andamiaje crece por encima de su ratio contra el producto",
+    archivo: "scripts/contexto/verificacion.ts",
+    mutar: (o) => o.replace(/valor: 0\.\d+,/g, "valor: 0.4,"),
+  },
+  {
     guardian: "check:indices",
     rotura: "una pieza de components/ui/ se queda sin declarar su línea",
     // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja
