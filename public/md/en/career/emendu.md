@@ -81,7 +81,7 @@ Phase 2 (MDM) is in development today and the API work advances module by module
 
 ## 03. The Sesame HR partnership
 
-Sesame HR is one of the largest HR software players in Spain, and the proposal cut both ways: their customers could request and manage a new employee's equipment **from the same place where they already onboard them**; we would gain a B2B channel inside the customer's native workflow. The operational goal did not change: the architecture did, and the deadline was set by someone else.
+Sesame HR is one of the largest HR software players in Spain, and the proposal cut both ways: their customers could request and manage a new employee's equipment **from the same place where they already onboard them**; we would gain a B2B channel inside the customer's native workflow. The operational goal did not change: the architecture did, [the outcome was a success](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html) and here is how it went.
 
 **Discovery on three fronts, to digitise without stopping a live operation.** Inside: interviews with Operations, Sales and Account Managers to map every manual task. Outside: the dependency map a renting operation hangs from: financial institutions, hardware suppliers, identity verification, insurers, digital signature. And Sesame: their flows and the approach they wanted for the service.
 
@@ -107,7 +107,7 @@ The main flow: the whole process in a single view. The engineering team, which h
   
   of processes automated end to end, with the API work still ongoing
 
-Phase 1 delivered in **7 product weeks**, with weekly releases; the development that followed is already in production. Phase 2, **5 product weeks**, in development today. The documentation system, the prototype and the business logic were validated by the partner on the first delivery. The partnership [was announced in the Spanish press](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html).
+Phase 1 delivered in **7 product weeks**, with weekly releases; the development that followed is already in production. Phase 2, **5 product weeks**, in development today. The documentation system, the prototype and the business logic were validated by the partner on the first delivery.
 
 And one result that is not a figure: process changes **stopped being designed around what each area did by hand** and are now designed from the backoffice.
 

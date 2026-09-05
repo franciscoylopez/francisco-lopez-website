@@ -517,13 +517,13 @@ LinkedIn banner
 
 1584 × 396 over the site's dark background, with the Hero headline and the domain. The bottom-left corner is left empty on purpose: that is where LinkedIn lays the profile photo, so the banner doesn't carry one.
 
-Where it lives [linkedin.com/in/franciscolopez1975](https://www.linkedin.com/in/franciscolopez1975)
+Where it lives [LinkedIn, at the top of the profile](https://www.linkedin.com/in/franciscolopez1975)
 
 Repository cover
 
 The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.
 
-Where it lives [github.com/franciscoylopez/francisco-lopez-website](https://github.com/franciscoylopez/francisco-lopez-website)
+Where it lives [GitHub, in the repository settings](https://github.com/franciscoylopez/francisco-lopez-website)
 
 5 of 6
 

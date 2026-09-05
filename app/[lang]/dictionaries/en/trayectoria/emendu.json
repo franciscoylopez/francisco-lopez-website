@@ -49,7 +49,7 @@
   "caso": {
     "title": "The Sesame HR partnership",
     "paras": [
-      "Sesame HR is one of the largest HR software players in Spain, and the proposal cut both ways: their customers could request and manage a new employee's equipment **from the same place where they already onboard them**; we would gain a B2B channel inside the customer's native workflow. The operational goal did not change: the architecture did, and the deadline was set by someone else.",
+      "Sesame HR is one of the largest HR software players in Spain, and the proposal cut both ways: their customers could request and manage a new employee's equipment **from the same place where they already onboard them**; we would gain a B2B channel inside the customer's native workflow. The operational goal did not change: the architecture did, [the outcome was a success](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html) and here is how it went.",
       "**Discovery on three fronts, to digitise without stopping a live operation.** Inside: interviews with Operations, Sales and Account Managers to map every manual task. Outside: the dependency map a renting operation hangs from: financial institutions, hardware suppliers, identity verification, insurers, digital signature. And Sesame: their flows and the approach they wanted for the service.",
       "**The technical decision was a transition, not a rewrite.** A single backoffice behind an API, fed in the first phase by the internal team (*human in the loop*) so that traceability did not wait for the integrations; that backoffice as LISA's brain and data source; and progressive API work, each external tool removing one manual step. To hit the partner's deadline I scoped it down: **phase 1, renting end to end**; MDM to phase 2.",
       "**The artefacts.** A product spec with features, data contracts and sub-processes; **flow diagrams as code** with their states and transitions (the engineering team had just joined, and a state diagram leaves no room for interpretation where a list of requirements does); and a **navigable HTML prototype, low fidelity and with no UI**, which became the only shared language of four audiences at once: engineering, Operations and Sales, Sesame, and product."
@@ -78,7 +78,7 @@
       ]
     },
     "cierre": [
-      "Phase 1 delivered in **7 product weeks**, with weekly releases; the development that followed is already in production. Phase 2, **5 product weeks**, in development today. The documentation system, the prototype and the business logic were validated by the partner on the first delivery. The partnership [was announced in the Spanish press](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html).",
+      "Phase 1 delivered in **7 product weeks**, with weekly releases; the development that followed is already in production. Phase 2, **5 product weeks**, in development today. The documentation system, the prototype and the business logic were validated by the partner on the first delivery.",
       "And one result that is not a figure: process changes **stopped being designed around what each area did by hand** and are now designed from the backoffice."
     ]
   },
