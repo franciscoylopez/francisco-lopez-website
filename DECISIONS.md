@@ -13352,3 +13352,32 @@ añadió.
 devuelven 308 a la nueva correcta, las catorce nuevas 200, las catorce españolas siguen en 200, los
 nueve alias resuelven, el canal markdown responde por URL explícita y por `Accept`, y el conmutador
 de idioma cruza en los dos sentidos. `check:marco` en verde sobre las 28.
+
+### Y el espejo markdown se quedó fuera de las redirecciones — corregido el mismo día
+
+**Lo encontró la comprobación en producción, después del merge.** Los archivos se renombraron al
+slug público y las páginas quedaron redirigidas, pero **`/md/en/sobre-mi.md` devolvía 404**: las
+diez rutas markdown viejas se quedaron sin redirección. Va contra el criterio de cierre que la
+propia tarea había escrito —*«ninguna URL vieja devolviendo 404»*—, y el párrafo de arriba lo daba
+por cubierto nombrando el canal markdown cuando lo comprobado eran las rutas **nuevas**.
+
+**Ningún gate podía cazarlo, y merece decirse por qué.** `md:verificar` comprueba que estén los
+archivos que tocan y que no sobre ninguno; **una ruta que se fue no deja hueco que mirar**. Es el
+mismo modo de fallo que D59 llamó *«una lista incompleta no es un error de compilación»*, aplicado
+al reverso: una lista **completa** tampoco dice nada de lo que ya no está en ella.
+
+**Cuánto pesaba, medido y no estimado: poco.** Nada anuncia esas URL concretas — el catálogo ARD
+lista solo `/md/es.md` y `/md/en.md`, que no cambiaron, y `es/llms.json` publica el **patrón**, no
+la lista. La exposición era un agente que hubiera cacheado una de las diez antes de ese día.
+
+**El arreglo va por `PAGE_SLUGS` y no por un patrón con comodín**, a propósito: son diez rutas
+literales, y un `:empresa.md` depende de cómo parsee el punto el enrutador. Y como la ruta vieja se
+deriva del slug **interno**, que no cambia nunca, la redirección sigue valiendo si mañana se vuelve
+a traducir un slug.
+
+**No lleva guardián nuevo, y es una decisión.** Las dos mitades —el nombre del archivo y la
+redirección— salen ya del mismo `publicSlug` sobre la misma lista, así que no pueden divergir. Un
+guardián que las comparase estaría comparando la configuración consigo misma, que es lo que
+`scripts/agentes/manifiesto.ts` nombra como el metro que aprueba siempre. Lo que sí queda escrito
+es la lección: **al renombrar una ruta pública, sus derivados se mudan con ella** — el espejo
+markdown, y cualquier otro que nazca.

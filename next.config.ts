@@ -4,7 +4,12 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 // Rutas relativas y no el alias `@/`: este archivo lo carga Next con su propio
 // cargador, antes de que los `paths` del tsconfig estén en juego.
 import { pagePath } from "./lib/i18n/config";
-import { STATIC_PAGE_SLUGS, type StaticPageSlug } from "./lib/routes";
+import {
+  PAGE_SLUGS,
+  publicSlug,
+  STATIC_PAGE_SLUGS,
+  type StaticPageSlug,
+} from "./lib/routes";
 
 // Content-Security-Policy — Fase 2 «A+ barato» (tarea 37.9). Mantiene `'unsafe-inline'`
 // en script-src (los scripts inline del sitio: consent-init, init de tema, loader de GTM),
@@ -219,6 +224,26 @@ const nextConfig: NextConfig = {
         if (!slug) return [];
         const vieja = `/en/${slug}`;
         const nueva = pagePath("en", slug);
+        return nueva === vieja
+          ? []
+          : [{ source: vieja, destination: nueva, permanent: true }];
+      }),
+      // Y EL ESPEJO MARKDOWN SE MUDA CON ELLAS, que es la mitad que faltaba
+      // *(2026-09-05, encontrado comprobando producción tras el merge de P72.56)*.
+      // Los archivos se renombraron al slug público y las páginas quedaron
+      // redirigidas, pero `/md/en/sobre-mi.md` se quedó devolviendo **404** —
+      // contra el criterio de cierre de la propia tarea, que era que ninguna URL
+      // vieja lo hiciera. `md:verificar` no podía cazarlo: comprueba que estén
+      // los archivos que tocan, no que los que se fueron dejen rastro.
+      //
+      // Va por PAGE_SLUGS y no por un patrón con comodín a propósito: son diez
+      // rutas literales, y un `:empresa.md` depende de cómo parsee el punto el
+      // enrutador. Y como la ruta vieja se deriva del slug INTERNO, que no cambia
+      // nunca, esto sigue valiendo si mañana se vuelve a traducir un slug.
+      ...PAGE_SLUGS.flatMap((slug) => {
+        if (!slug) return [];
+        const vieja = `/md/en/${slug}.md`;
+        const nueva = `/md/en/${publicSlug("en", slug)}.md`;
         return nueva === vieja
           ? []
           : [{ source: vieja, destination: nueva, permanent: true }];
