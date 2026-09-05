@@ -54,6 +54,23 @@
   --color-brand-purple-accent: var(--brand-purple-accent);
   --color-progress-ink: var(--progress-ink);
 
+  /* LA CURVA DE LAS ENTRADAS, COMO UTILIDAD *(P72.513)*. Vivía solo en `:root`,
+     así que era `var(--ease-entrance)` dentro de `globals.css` y NADA en el punto
+     de uso: una utilidad `transition-*` sin `ease-*` resuelve a
+     `--default-transition-timing-function`, o sea al ease-in-out de Tailwind, que
+     es exactamente la curva que D135 no quiere para algo que aparece. Medido en
+     la hoja servida: `.transition-opacity` compila a
+     `transition-timing-function: var(--tw-ease, var(--default-transition-timing-function))`.
+     Declarada aquí, Tailwind genera `ease-entrance` y el punto de uso puede
+     escribir la utilidad en vez de la sintaxis de escape (CLAUDE.md §Una sola
+     notación por token).
+     SE MUEVE, NO SE COPIA: `@theme` ya emite la variable a `:root`, así que los
+     `var(--ease-entrance)` de esta misma hoja siguen resolviendo igual. Y no hay
+     `duration-entrance` que valga: `--duration-*` no es un espacio de nombres de
+     Tailwind v4, así que las duraciones siguen siendo la utilidad numérica de la
+     tabla que publica el Design System. */
+  --ease-entrance: cubic-bezier(0, 0, 0.2, 1);
+
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -87,7 +104,8 @@
          La duración es el techo de la entrada, no su mínimo: los 280 ms son para
          el recorrido más largo que hace el sitio (el fade-up de 14px); una
          entrada más corta puede ir por debajo, nunca por encima. */
-  --ease-entrance: cubic-bezier(0, 0, 0.2, 1);
+  /* `--ease-entrance` ya no se declara aquí: subió a `@theme` para que exista la
+     utilidad `ease-entrance`, y desde allí se emite igual a `:root`. */
   --duration-entrance: 0.28s;
 
   /* --- Neutros + superficies (blanco hueso / gris) --- */

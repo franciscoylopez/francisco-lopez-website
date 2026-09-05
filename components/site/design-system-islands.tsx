@@ -87,7 +87,12 @@ export function GridDemo({
           <div className="relative">
             <div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-0 grid grid-cols-12 gap-[var(--gutter)] transition-opacity duration-300"
+              // 280 ms y la curva del sistema, no 300 ms y la de Tailwind
+              // (P72.513). La rejilla APARECE, así que es una entrada y toma el
+              // techo de D135; y 300 no estaba en la tabla que esta misma página
+              // publica tres secciones más abajo. Una demo del sistema no lleva
+              // cifras propias.
+              className="ease-entrance pointer-events-none absolute inset-0 grid grid-cols-12 gap-[var(--gutter)] transition-opacity duration-280"
               style={{ opacity: show ? 1 : 0 }}
             >
               {COLS.map((_, i) => (
@@ -344,7 +349,12 @@ export function DevicePreview({
       </div>
       <div className="flex justify-center">
         <div
-          className="border-border bg-background w-full overflow-hidden rounded-2xl border transition-[max-width] duration-300"
+          // 250 ms: el escalón de «cambios de estado» de la tabla publicada.
+          // Esto NO es una entrada —el marco ya está, solo cambia de ancho—, así
+          // que no le toca el techo de la entrada; lo que le tocaba era no
+          // inventarse un 300 que la tabla no tiene (P72.513). La curva sí es la
+          // del sistema: el sitio declara una.
+          className="border-border bg-background ease-entrance w-full overflow-hidden rounded-2xl border transition-[max-width] duration-250"
           style={{ maxWidth }}
         >
           <div className="border-border flex items-center justify-between border-b px-5 py-[0.85rem]">
