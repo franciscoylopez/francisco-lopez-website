@@ -125,7 +125,20 @@ export function Confirm({
         // La pastilla se apoya en el carril contrario al del control, igual que
         // hace `onInverted`: sobre la banda invertida el fondo de la página ES
         // `--foreground`, así que vuelve a `--background` para verse. Es el par
-        // de texto principal en los dos casos, ya medido por el censo.
+        // de texto principal en los dos casos.
+        //
+        // Y ESO ES SEGURO POR CONSTRUCCIÓN, NO PORQUE EL CENSO LO MIRARA: aquí
+        // ponía «ya medido por el censo» y era falso. El censo descartaba todo
+        // lo que estuviera a `opacity: 0` —y esta pastilla lo está en reposo—,
+        // así que no la había visto nunca en sus cuatro superficies. Medido a
+        // mano en el design-review del 2026-09-05, con el metro validado contra
+        // las anclas: **15,32 en oscuro y 13,79 en claro**, o sea el par
+        // principal invertido, a 11,52px, cuyo umbral AAA es 7.
+        //
+        // Ya no hace falta acordarse: el filtro de `censo/04-dom.js` deja pasar
+        // lo que está a cero PERO declara transición de opacidad (P72.511), que
+        // es esta pastilla y poco más. Si alguien le pone un tinte, el censo lo
+        // verá.
         onInverted
           ? "bg-background text-foreground"
           : "bg-foreground text-background",
