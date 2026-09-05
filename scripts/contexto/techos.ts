@@ -1,6 +1,7 @@
 import { CICLO_ABIERTO, movimientosDelCiclo } from "./presupuesto";
 import { HISTORIAL_TECHO } from "./documentos";
 import { HISTORIAL_TECHO_SKILL, HISTORIAL_TECHO_SUMA } from "./skills";
+import { HISTORIAL_TECHO_VERIFICACION } from "./verificacion";
 
 /* ─────────────────────────────────────────────────────────────────────────────
  * TERCERA MITAD: ¿SE HA MOVIDO ALGÚN TECHO EN ESTE CICLO? (2026-08-28, P50.72).
@@ -18,6 +19,13 @@ export function revisaTechos(): void {
     { nombre: "documentos", historial: HISTORIAL_TECHO },
     { nombre: "skill (entrada)", historial: HISTORIAL_TECHO_SKILL },
     { nombre: "skills (suma)", historial: HISTORIAL_TECHO_SUMA },
+    // El cuarto desde el 2026-09-05 (P72.53). Entra aquí y no se vigila a sí
+    // mismo por la razón de siempre: un techo cuyo movimiento solo mira su propio
+    // archivo es un termómetro que se repinta.
+    {
+      nombre: "verificación ÷ producto",
+      historial: HISTORIAL_TECHO_VERIFICACION,
+    },
   ];
 
   const movidos = TECHOS.map((t) => ({

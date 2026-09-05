@@ -86,10 +86,19 @@ export function vigente(historial: Movimiento[]): number {
   return ultimo.valor;
 }
 
-/** Los de este ciclo. El de apertura cuenta: mover el techo el día que se abre la
- *  etapa es exactamente el reflejo que esto vigila. */
+/**
+ * Los de este ciclo. El de apertura cuenta: mover el techo el día que se abre la
+ * etapa es exactamente el reflejo que esto vigila.
+ *
+ * LA PRIMERA ENTRADA NO ES UN MOVIMIENTO (2026-09-05, P72.53): es el nacimiento
+ * del techo, y un techo no puede perseguir a un dato antes de existir. Sin esto,
+ * estrenar un techo dentro del ciclo pinta un ámbar que dice «el trinquete está
+ * apretando» sobre algo que no ha apretado nada — un falso positivo en la fila que
+ * el `method-review` lee para saber si un umbral persigue al dato. Los otros tres
+ * historiales nacieron en agosto, así que esto no cambia ninguna cuenta vigente.
+ */
 export function movimientosDelCiclo(historial: Movimiento[]): Movimiento[] {
-  return historial.filter((m) => m.fecha >= CICLO_ABIERTO);
+  return historial.slice(1).filter((m) => m.fecha >= CICLO_ABIERTO);
 }
 
 /** Palabras «de verdad»: sin bloques de código, que no son prosa que haya que leer. */

@@ -240,6 +240,7 @@
 - D202 · Lo del primer pliegue entra al CARGAR, no al hacer scroll, y un `transform` que colisiona no da error
 - D203 · Un `opacity: 0` que declara transición de opacidad no está oculto: está esperando turno
 - D204 · Un aviso no baja los rojos si después se empuja igual: el gate de artefacto derivado se muda al push, y el sello avisa al editar su fuente
+- D205 · El volumen del andamiaje se mide contra el producto, no contra sí mismo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13190,3 +13191,55 @@ primer push de la tanda: los tres archivos nuevos de `scripts/hooks/` movieron l
 mientras escribo»** habiendo cuatro hooks en disco. Se corrigió el copy ES y EN y se selló. Un
 gate que se estrena cazando la afirmación que él mismo acababa de volver falsa es la mejor
 validación que se le puede pedir.
+
+## D205 · El volumen del andamiaje se mide contra el producto, no contra sí mismo — 2026-09-05
+
+**Decisión.** `check:contexto` gana una quinta mitad: **`scripts/` ÷ (`app` + `components` +
+`lib` + `content`)**, en líneas de archivos rastreados, con techo que suspende
+(`HISTORIAL_TECHO_VERIFICACION`, nace en **0,74** con 0,7179 medidos) y objetivo que solo publica
+la distancia (**0,68**, escalera de 0,02 hacia el 0,55 de la fila del `method-review`).
+
+**El porqué, medido.** `scripts/` era **el único eje del proyecto que nadie frena**. Se mide
+desde D28 y no ha suspendido nunca: en «Higiene» creció **+4.557 líneas (+29 %)** y 76 archivos,
+y lo único que ocurrió fue que la cuarta mitad imprimió el número en ámbar. `check:deuda` vigila
+la COMPLEJIDAD y cuadra exacto (21 *smells*); el VOLUMEN se publicaba y ya.
+
+**Por qué ratio y no trinquete, que es la pregunta que había que contestar antes de escribir el
+umbral.** Un trinquete contra un sello —la forma de `check:deuda`— tiene aquí un modo de fallo
+descalificador: **partir un archivo en tres sube el recuento sin añadir nada**, así que
+castigaría la descomposición legítima exactamente igual que la hinchazón. Y buena parte del +29 %
+ES descomposición: es lo que bajó los *smells* de 71 a 21. El ratio sobrevive al crecimiento del
+proyecto y distingue **crecer** de **hincharse**.
+
+**Y contesta la objeción que estaba escrita contra ponerlo en rojo.** `scripts/contexto/apertura.ts`
+razonaba que un rojo aquí significaría *«no se puede añadir un guardián sin borrar otro, que en un
+proyecto cuyo método SON los guardianes es la regla equivocada»*. Contra un ratio sí se puede: un
+guardián nuevo cabe si el producto también creció. Lo que no cabe es andamiaje cuando el producto
+lleva un sprint quieto. El aviso de esa cuarta mitad se queda como estaba, porque mide otra cosa
+—la retirada de la apertura— y con otro instrumento.
+
+**La operación es la del `method-review`, literal.** Se reconstruyó allí y **tres definiciones
+razonables daban 0,47, 0,52 y 0,62 sobre el mismo árbol**, así que la que vale es la publicada:
+archivos RASTREADOS (si no, entra `scripts/.poda/`, que git ignora), extensiones `.ts .tsx .js
+.mjs`, numerador `scripts/` sola, denominador `app + components + lib + content`. **`tests/` queda
+fuera del numerador a propósito**: un test prueba el producto, un guardián vigila el método. Y por
+eso **no reusa el contador de `apertura.ts`**, que recorre el disco y suma también `.cjs`: son dos
+instrumentos, y ese mismo archivo documenta lo que pasa al mezclarlos —*sellar con un instrumento
+y comparar con otro inventa una deriva que no existe*—.
+
+**Nace en verde, como todos los de ese archivo.** *«Un gate que nace en rojo se acaba subiendo
+hasta que no significa nada.»* La holgura del techo son ~640 líneas de `scripts/`: un guardián con
+su módulo y su caso malo, y no otro «Higiene» entero sin enterarse. La cifra del `motivo` es la
+que devolvió el comando, no una previsión — que es la regla que la cabecera de
+`scripts/contexto/documentos.ts` escribió tras equivocarse en tres cifras seguidas.
+
+**Un cambio pequeño y transversal que venía dentro.** `movimientosDelCiclo` ignora la **primera**
+entrada de un historial: nacer no es moverse. Sin eso, estrenar un techo dentro de un ciclo pinta
+un ámbar de «el trinquete está apretando» sobre algo que no ha apretado nada, y eso es un falso
+positivo justo en la fila que el `method-review` lee para saber si un umbral persigue al dato. Los
+otros tres historiales nacieron en agosto, así que no mueve ninguna cuenta vigente.
+
+**Lo que NO hace, dicho para que no se dé por cubierto.** No pide borrar nada, y menos deshacer
+una descomposición. No mira la calidad de lo que hay en `scripts/` —eso es `check:deuda`— ni si un
+guardián sirve para algo. Y no puede distinguir un guardián nuevo de 600 líneas de refactor: las
+tres preguntas que imprime al fallar son criterio, y las contesta una persona.
