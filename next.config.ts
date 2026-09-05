@@ -1,6 +1,11 @@
 import type { NextConfig } from "next";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 
+// Rutas relativas y no el alias `@/`: este archivo lo carga Next con su propio
+// cargador, antes de que los `paths` del tsconfig estén en juego.
+import { pagePath } from "./lib/i18n/config";
+import { STATIC_PAGE_SLUGS, type StaticPageSlug } from "./lib/routes";
+
 // Content-Security-Policy — Fase 2 «A+ barato» (tarea 37.9). Mantiene `'unsafe-inline'`
 // en script-src (los scripts inline del sitio: consent-init, init de tema, loader de GTM),
 // así que NO es protección de XSS fuerte — eso sería la CSP estricta con nonces, diferida
@@ -175,18 +180,56 @@ const nextConfig: NextConfig = {
   // día `/about` fuera una página de verdad, un 308 cacheado la haría
   // inalcanzable para quien ya hubiera pasado por aquí.
   async redirects() {
-    const alias: [string, string][] = [
-      ["/about", "/sobre-mi"],
-      ["/about-me", "/sobre-mi"],
-      ["/privacy", "/cookies"],
-      ["/privacidad", "/cookies"],
-      ["/contact", "/contacto"],
+    // EL ALIAS APUNTA A UN SLUG INTERNO, NO A UNA RUTA (P72.56). Desde que el
+    // inglés traduce sus slugs, `/sobre-mi` y `/en/about` son la misma página con
+    // dos rutas, y quien las sabe es `pagePath`. Escribir la ruta aquí sería la
+    // segunda copia del mapa.
+    const alias: [string, StaticPageSlug][] = [
+      ["/about", "sobre-mi"],
+      ["/about-me", "sobre-mi"],
+      ["/privacy", "cookies"],
+      ["/privacidad", "cookies"],
+      ["/contact", "contacto"],
     ];
     return [
-      ...alias.flatMap(([desde, hacia]) => [
-        { source: desde, destination: hacia, permanent: false },
-        { source: `/en${desde}`, destination: `/en${hacia}`, permanent: false },
-      ]),
+      ...alias.flatMap(([desde, slug]) => {
+        const es = {
+          source: desde,
+          destination: pagePath("es", slug),
+          permanent: false,
+        };
+        const enDesde = `/en${desde}`;
+        const enHacia = pagePath("en", slug);
+        // UN ALIAS QUE COINCIDE CON SU DESTINO SE CAE SOLO, y esto es la trampa
+        // nº1 de la ficha resuelta por construcción: `/en/about` y `/en/contact`
+        // ya no son atajos hacia otra página, SON la página. Dejarlos vivos las
+        // haría inalcanzables — un redirect hacia sí mismas. Filtrarlo aquí, en
+        // vez de borrar dos líneas, es lo que evita que vuelva a pasar el día que
+        // se traduzca un slug más.
+        return enDesde === enHacia
+          ? [es]
+          : [es, { source: enDesde, destination: enHacia, permanent: false }];
+      }),
+      // LAS RUTAS EN QUE SE MUDAN, con 301 PERMANENTE — y aquí sí, al revés que
+      // los alias de arriba. Un alias es una comodidad reversible; esto es un
+      // canónico que ha cambiado de sitio, que es justo el caso para el que el
+      // 308 existe. Se derivan del registro: si mañana se traduce otro slug, su
+      // redirección nace sola.
+      ...STATIC_PAGE_SLUGS.flatMap((slug) => {
+        if (!slug) return [];
+        const vieja = `/en/${slug}`;
+        const nueva = pagePath("en", slug);
+        return nueva === vieja
+          ? []
+          : [{ source: vieja, destination: nueva, permanent: true }];
+      }),
+      // Y el deep-dive, donde se muda el segmento PADRE y nunca el nombre de la
+      // empresa (`PRD-Historical.md` §1297).
+      {
+        source: "/en/trayectoria/:empresa",
+        destination: `${pagePath("en", "trayectoria")}/:empresa`,
+        permanent: true,
+      },
       // `/agents.md` — LA MISMA IDEA, PARA EL LECTOR QUE NO ES UNA PERSONA
       // *(P68.748, 2026-08-31)*. Un escáner de agentes prueba tres rutas para
       // encontrar «la documentación para agentes de este sitio»: `/agents.md`,

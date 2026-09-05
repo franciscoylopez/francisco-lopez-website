@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { locales, defaultLocale } from "../../lib/i18n/config";
+import { locales, pagePath } from "../../lib/i18n/config";
 import { PAGE_SLUGS } from "../../lib/routes";
 import { fallo, vistos } from "./informe";
 
@@ -154,17 +154,25 @@ export function revisarCabeceras(): void {
  * fuera una página de verdad, un 308 cacheado la haría inalcanzable para quien ya
  * hubiera pasado por aquí.
  */
+/*
+ * Y DOS DE LOS DIEZ SE HAN CAÍDO DE LA LISTA PORQUE YA NO SON ALIAS *(P72.56)*.
+ * `/en/about` y `/en/contact` son ahora LA PÁGINA: el inglés traduce sus slugs,
+ * así que las dos rutas que un escáner adivina resuelven directas, con un 200 en
+ * vez de un 307. No es cobertura perdida —las cubre `check:marco` sobre las 28
+ * variantes— y es justamente el caso que la nota de arriba anticipaba: «el día
+ * que `/about` fuera una página de verdad, un 308 cacheado la haría
+ * inalcanzable». Por eso aquellos eran 307 y por eso hoy se pueden retirar
+ * limpiamente.
+ */
 const ADIVINADAS: [string, string][] = [
   ["/about", "/sobre-mi"],
   ["/about-me", "/sobre-mi"],
   ["/privacy", "/cookies"],
   ["/privacidad", "/cookies"],
   ["/contact", "/contacto"],
-  ["/en/about", "/en/sobre-mi"],
-  ["/en/about-me", "/en/sobre-mi"],
+  ["/en/about-me", "/en/about"],
   ["/en/privacy", "/en/cookies"],
   ["/en/privacidad", "/en/cookies"],
-  ["/en/contact", "/en/contacto"],
   // La ruta de descubrimiento para agentes. Apunta a `/llms.txt`, que no es una
   // página del registro: es el índice que ya contesta lo que la ruta pregunta.
   ["/agents.md", "/llms.txt"],
@@ -207,11 +215,15 @@ export function revisarAlias(): void {
 function destinosQueExisten(): Set<string> {
   return new Set<string>([
     "/llms.txt",
+    // POR `pagePath` Y NO A MANO (P72.56). Esto reconstruía la ruta pegándole el
+    // prefijo de locale al slug, y desde que el inglés traduce sus slugs esa
+    // cuenta da rutas que ya no existen: daba `/en/sobre-mi` por buena y `/en/about`
+    // por 404, o sea justo al revés. No rompe la independencia del guardián —la
+    // lista de páginas ya salía del registro—: lo que se deriva es CUÁL es la ruta
+    // de una página, no la decisión de qué alias debe haber, que sigue escrita
+    // arriba a mano.
     ...locales.flatMap((lang) =>
-      PAGE_SLUGS.map((slug) => {
-        const path = slug ? `/${slug}` : "";
-        return lang === defaultLocale ? path || "/" : `/${lang}${path}`;
-      }),
+      PAGE_SLUGS.map((slug) => pagePath(lang, slug)),
     ),
   ]);
 }

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { defaultLocale, type Locale } from "@/lib/i18n/config";
 import { cuerpo404 } from "@/lib/md-404";
-import { PAGE_SLUGS } from "@/lib/routes";
+import { internalSlug, PAGE_SLUGS } from "@/lib/routes";
 
 // D3: Next 16 renombra `middleware` → `proxy` (misma funcionalidad). El propio
 // doc de i18n del paquete usa `export function proxy`.
@@ -139,15 +139,38 @@ export function proxy(request: NextRequest) {
   const markdown = quiereMarkdown(request);
 
   if (pathname === "/en" || pathname.startsWith("/en/")) {
+    // DE LA RUTA PÚBLICA A LA CARPETA QUE LA SIRVE (P72.56). El inglés traduce
+    // sus slugs —`/en/about`— y en el App Router la carpeta ES el slug, que
+    // sigue siendo el español (`app/[lang]/sobre-mi/`). Aquí se cruza esa
+    // frontera, y es el único sitio donde se cruza.
+    const resto = pathname.slice("/en".length);
+    const publico = slugDe(resto);
+    const interno = internalSlug("en", publico);
+
     if (markdown) {
-      const resto = pathname.slice("/en".length);
-      if (!PAGINAS.has(slugDe(resto))) return markdown404("en", pathname);
+      // El registro guarda slugs INTERNOS, así que se pregunta por el traducido.
+      // El ARCHIVO, en cambio, se llama por el público: `/md/en/about.md` es el
+      // espejo de `/en/about`, y esa correspondencia es lo que hace legible la
+      // vía estable de D158.
+      if (!PAGINAS.has(interno)) return markdown404("en", pathname);
       const url = request.nextUrl.clone();
       url.pathname = rutaMarkdown("en", resto);
       return conVary(NextResponse.rewrite(url));
     }
+
+    // UN SOLO RETORNO, y no es cosmética: las dos ramas no son dos caminos, son
+    // la MISMA respuesta con o sin cambio de carpeta. La página inglesa se sirve
+    // igual en los dos casos —mismo locale en la cabecera, mismo `Vary`—; lo
+    // único que cambia es si hay que mandar la petición a otra carpeta porque el
+    // slug se traduce. Escrito como dos returns, el trinquete de deuda lo cazó
+    // como una rama más en un archivo que ya vigila.
+    const peticion = { request: { headers: withLocale(request, "en") } };
+    const destino = request.nextUrl.clone();
+    destino.pathname = `/en/${interno}`;
     return conVary(
-      NextResponse.next({ request: { headers: withLocale(request, "en") } }),
+      interno === publico
+        ? NextResponse.next(peticion)
+        : NextResponse.rewrite(destino, peticion),
     );
   }
 

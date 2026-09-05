@@ -13,7 +13,7 @@ import { Tile } from "@/components/ui/tile";
 import { BrandLogoBox } from "../brand-logo-box";
 import { BlockOpener } from "@/components/ui/block-opener";
 import { fillRatios } from "@/lib/design-values";
-import { type Locale } from "@/lib/i18n/config";
+import { type Locale, pagePath } from "@/lib/i18n/config";
 
 import { cn } from "@/lib/utils";
 import { GroupHead, SpecimenCard, type SeccionMarco } from "./shared";
@@ -64,18 +64,21 @@ export function Composicion({
   };
   lang: Locale;
 }) {
-  const base = lang === "es" ? "" : `/${lang}`;
-
   // Los dos estados de un destino, que son los dos que el sitio pinta: el que
   // enlaza y el que todavía no existe. El enlace es REAL, como todo en esta
   // página: una demo con `href="#"` no comprobaría ni el foco ni el hover.
+  //
+  // Y REAL INCLUYE LA RUTA (P72.56): sale de `pagePath`, no de un prefijo de
+  // locale pegado a mano. Con el prefijo, la demo inglesa apuntaba a
+  // `/en/trayectoria/kuotip`, que desde que el inglés traduce sus slugs es una
+  // redirección — una demo que enseña un enlace roto no demuestra nada.
   const demoItems: CloserItem[] = [
     {
       key: "back",
       kicker: t.demoBackKicker,
       name: t.demoBackName,
       desc: t.demoBackDesc,
-      href: `${base}/trayectoria/kuotip`,
+      href: pagePath(lang, "trayectoria/kuotip"),
       direction: "back",
     },
     {

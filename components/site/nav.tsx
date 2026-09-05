@@ -8,7 +8,8 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { actionVariants } from "@/components/ui/action";
 import { chromeLinkVariants } from "@/components/ui/chrome";
 import { Logo } from "@/components/ui/logo";
-import { cvPath, type Locale } from "@/lib/i18n/config";
+import { cvPath, type Locale, pagePath } from "@/lib/i18n/config";
+import { internalSlug } from "@/lib/routes";
 import { cn } from "@/lib/utils";
 import { WRAP } from "@/components/ui/layout";
 
@@ -151,9 +152,13 @@ export function Nav({
   // cvPath). Las otras apariciones del CV en el home (CTA de Trayectoria y
   // Contacto) lo resuelven igual desde la página.
   const cvHref = cvPath(lang);
-  const trayectoriaHref = `${lang === "es" ? "" : `/${lang}`}/trayectoria`;
-  const sobreMiHref = `${lang === "es" ? "" : `/${lang}`}/sobre-mi`;
-  const contactoHref = `${lang === "es" ? "" : `/${lang}`}/contacto`;
+  // POR `pagePath` Y NO A MANO (P72.56). Estos tres construían el prefijo de
+  // locale con su propio ternario, que era una copia del de `pagePath` — y desde
+  // que el inglés traduce sus slugs habría sido además una copia FALSA: el nav
+  // habría enlazado a `/en/sobre-mi`, que ya solo es una redirección.
+  const trayectoriaHref = pagePath(lang, "trayectoria");
+  const sobreMiHref = pagePath(lang, "sobre-mi");
+  const contactoHref = pagePath(lang, "contacto");
   const { resolvedTheme, setTheme } = useTheme();
   const pathname = usePathname() || "/";
   const [p, setP] = useState(0);
@@ -172,14 +177,22 @@ export function Nav({
   // en runtime el ES va sin prefijo (/...). Quitando /es|/en el subpath es el
   // mismo en ambos casos → sin desajuste de hidratación.
   const subpath = pathname.replace(/^\/(es|en)(?=\/|$)/, "") || "/";
-  const altHref =
-    lang === "en" ? subpath : subpath === "/" ? "/en" : `/en${subpath}`;
-  const isSobreMi = subpath === "/sobre-mi";
-  const isContacto = subpath === "/contacto";
+  // EL SLUG INTERNO, QUE ES LO ÚNICO IGUAL EN LOS DOS IDIOMAS Y EN LOS DOS
+  // MOMENTOS (P72.56). Comparar la RUTA dejó de valer cuando el inglés tradujo
+  // sus slugs, y por partida doble: `/en/about` no es `/sobre-mi`, y además
+  // `usePathname()` trae la ruta interna en el prerender y la pública en runtime
+  // —el rewrite del proxy pasa por medio—, así que la misma página daba dos
+  // cadenas distintas. `internalSlug` acepta las dos formas y devuelve una.
+  const slugActual = internalSlug(lang, subpath.replace(/^\/|\/+$/g, ""));
+  // El conmutador de idioma sale del mismo slug, así que la página se conserva
+  // aunque su ruta cambie de nombre al cruzar: `/en/about` ↔ `/sobre-mi`.
+  const altHref = pagePath(lang === "en" ? "es" : "en", slugActual);
+  const isSobreMi = slugActual === "sobre-mi";
+  const isContacto = slugActual === "contacto";
   // SOLO EL ÍNDICE, no los cinco casos: `aria-current="page"` dice «estás en
   // ESTA página», no «estás en esta rama». En `/trayectoria/emendu` quien indica
   // dónde estás es el breadcrumb, que para eso lleva los tres niveles.
-  const isTrayectoria = subpath === "/trayectoria";
+  const isTrayectoria = slugActual === "trayectoria";
 
   /**
    * LAS PÁGINAS DEL NAV, EN SU ORDEN, Y ESCRITAS UNA VEZ (P72.505). Las pintan

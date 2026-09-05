@@ -241,6 +241,7 @@
 - D203 · Un `opacity: 0` que declara transición de opacidad no está oculto: está esperando turno
 - D204 · Un aviso no baja los rojos si después se empuja igual: el gate de artefacto derivado se muda al push, y el sello avisa al editar su fuente
 - D205 · El volumen del andamiaje se mide contra el producto, no contra sí mismo
+- D206 · La ruta pública deja de ser la carpeta: el inglés traduce sus slugs
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13243,3 +13244,111 @@ otros tres historiales nacieron en agosto, así que no mueve ninguna cuenta vige
 una descomposición. No mira la calidad de lo que hay en `scripts/` —eso es `check:deuda`— ni si un
 guardián sirve para algo. Y no puede distinguir un guardián nuevo de 600 líneas de refactor: las
 tres preguntas que imprime al fallar son criterio, y las contesta una persona.
+
+## D206 · La ruta pública deja de ser la carpeta: el inglés traduce sus slugs — 2026-09-05
+
+**La pregunta la trajo Francisco:** *«Todos los slugs están en castellano, los de inglés deberían
+estar en inglés ¿no? ¿Hay algún motivo por el que nos interese hacerlo así?»* Y contestarla era el
+primer entregable, porque la respuesta podía ser que sí lo había.
+
+**Mitad decidido, mitad heredado, y esa es la parte que importa.** Decidido está el deep-dive:
+`PRD-Historical.md` §1297 escribió que *«el sitio no traduce segmentos de ruta»* sobre slugs que
+son **nombres de empresa, neutros al idioma**, y para `emendu` o `thetool` eso sigue siendo
+incontestable. Lo heredado son las páginas: esa frase se quedó como si fuera regla general y **no
+hay ningún sitio donde alguien pesara `/en/contacto` contra `/en/contact`**.
+
+**Y el coste ya se había pagado una vez sin subirlo a decisión.** D166: `/about`, `/privacy` y
+`/contact` daban 404 *«porque los slugs son españoles en los dos idiomas»* → diez redirecciones.
+La consecuencia se detectó, se parcheó, y la causa se quedó sin discutir. Es el patrón que
+`BRAND.md` §Cómo se escribe una regla llama nota en vez de regla.
+
+**Decisión de Francisco: sí se traducen.** *«Es un error de criterio, que es justo lo que esta web
+hace público.»*
+
+### Qué se traduce, y de dónde sale cada slug
+
+**El slug no se inventa: sale del breadcrumb que la página inglesa ya publica**, así que queda
+atado al copy revisado (D20) y no a la ocurrencia de quien implemente. `sobre-mi` → `about` ·
+`trayectoria` → `career` · `accesibilidad` → `accessibility` · `contacto` → `contact` ·
+`como-se-ha-creado` → `how-it-was-built`.
+
+**Y tres NO se traducen, que no es una excepción sino la misma regla.** `brand-kit` y
+`design-system` ya se llaman así en español —ese *es* su nombre—, y `cookies` es legible en inglés.
+Los cinco slugs de empresa tampoco: se muda el **segmento padre** (`/en/career/emendu`) y el nombre
+nunca, que es §1297 intacto.
+
+### El coste real, que la ficha no nombraba al abrirse
+
+**En el App Router la carpeta ES el slug.** No hay forma de servir `/en/about` desde
+`app/[lang]/sobre-mi/` sin que la **ruta pública deje de ser la ruta interna**: hace falta un mapa
+y un rewrite, y esa indirección la pagan también todas las páginas futuras. Ese es el precio, y se
+paga a sabiendas.
+
+**Dónde vive cada mitad.** El mapa en `lib/routes.ts` (`SLUGS_EN`, más `publicSlug` e
+`internalSlug`), la traducción de salida dentro de **`pagePath`** —que es lo que hace que canonical,
+los tres `hreflang`, el sitemap, `/llms.txt`, el catálogo ARD y ~25 consumidores más se muden
+solos— y el cruce de vuelta en **`proxy.ts`**, en el único sitio donde se cruza.
+
+**`SLUGS_EN` es un `Record` TOTAL y no `Partial`**, y es deliberado: con `Partial`, una página nueva
+heredaría el slug español en silencio, que es exactamente el fallo que esto cierra. El tipo obliga a
+decidir aunque la decisión sea «se llama igual». **El español no tiene mapa**: es la fuente de
+verdad y su slug público *es* el interno.
+
+**`internalSlug` acepta las dos formas, y no es laxitud.** `usePathname()` devuelve la ruta interna
+en el prerender y la pública en runtime, con el rewrite por medio: el nav pregunta por la misma
+página con dos cadenas distintas. Un mapa que solo entendiera la pública apagaría el estado «estás
+aquí» justo en las páginas traducidas.
+
+### Lo que de verdad costó: siete sitios que construían la ruta a mano
+
+La ficha nombraba tres trampas y las tres estaban. **Aparecieron cuatro más, y las siete comparten
+una sola firma: el prefijo de locale escrito a mano** (`lang === "es" ? "" : "/" + lang`) en vez de
+`pagePath`. Mientras los slugs eran iguales en los dos idiomas esa copia era inofensiva; al
+traducirlos pasó a ser una copia **falsa**.
+
+| Dónde | Qué hacía |
+|---|---|
+| `next.config.ts` | `/en/about` y `/en/contact` eran alias 307 y pasan a **ser** la página: el alias se habría comido su propia página |
+| `nav.tsx`, conmutador | Reusaba el subpath tal cual para el otro idioma |
+| `nav.tsx`, estado activo | Comparaba rutas literales, `isTrayectoria` incluido (lo añadió P72.505 después de escribirse la ficha) |
+| `nav.tsx`, los tres `href` | Prefijo a mano: habría enlazado a rutas que ya solo son redirecciones |
+| `app/llms.txt/route.ts` | `urlEn = "/en" + path`: catorce enlaces del índice para modelos apuntando a 301 |
+| `related-pages.tsx` | Las tres páginas del sistema enlazadas entre sí a través de un 301 en inglés |
+| `design-system/10-composicion.tsx` | La demo enlaza de verdad, y en inglés enlazaba a un 301 |
+
+**La trampa del alias se resolvió por construcción, no borrando dos líneas.** Los alias apuntan
+ahora a un **slug interno** y el que coincide con su destino **se filtra solo**, así que el día que
+se traduzca otro slug pasará lo mismo sin que nadie se acuerde. Y aquellos alias eran **307 y no
+308** precisamente por esto: su propio comentario escribió *«el día que `/about` fuera una página de
+verdad, un 308 cacheado la haría inalcanzable»*. Hoy se retiran limpiamente porque aquella nota se
+cumplió.
+
+**Las rutas que se mudan sí son 308 permanentes**, y también derivadas del registro: un canónico que
+cambia de sitio es justo el caso para el que existe el 308.
+
+### El espejo markdown se llama por el slug público
+
+`public/md/en/about.md`, no `sobre-mi.md`. Lo decide una frase que ya estaba escrita: `es/llms.json`
+publica el patrón como *«/md/&lt;idioma&gt;/&lt;misma ruta que la página&gt;.md»*, así que con el
+slug interno esa promesa pasaría a ser falsa. `extraer.ts` lee del prerender por slug interno y
+escribe por público; la asimetría está escrita en el propio archivo.
+
+**Y el generador se comportó:** escribió los nombres nuevos y **marcó los diez viejos como
+huérfanos** en vez de dejarlos servidos por negociación de `Accept`, que es la mitad que P68.8 le
+añadió.
+
+### Qué lo vigila
+
+- **`check:rutas`** gana el **viaje de ida y vuelta** público↔interno sobre las 28 variantes. El
+  tipo ya impide que a una página le FALTE su slug público; lo que no puede ver es una **colisión**,
+  y el viaje de ida y vuelta caza las dos formas que tiene de ocurrir. **Validado metiéndole una a
+  propósito** (`cookies → about`): rojo con los dos mensajes correctos.
+- **`tests/slugs.test.ts`**, 10 casos, con el malo: un slug que no es de este sitio sale tal cual,
+  que es lo que permite al proxy mandarlo al 404 en vez de reescribirlo a una carpeta inexistente.
+- **`check:agentes`** actualizó su tabla de rutas adivinadas, que **es la decisión y no una copia de
+  `next.config.ts`** — comparar la configuración consigo misma aprobaría siempre.
+
+**Comprobado sobre el sitio servido, ruta a ruta y no de memoria:** las diez rutas EN viejas
+devuelven 308 a la nueva correcta, las catorce nuevas 200, las catorce españolas siguen en 200, los
+nueve alias resuelven, el canal markdown responde por URL explícita y por `Accept`, y el conmutador
+de idioma cruza en los dos sentidos. `check:marco` en verde sobre las 28.

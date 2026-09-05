@@ -625,4 +625,4 @@ The page documenting color was the one that had it wrong: bone, dark and the two
 
 From the same system
 
-[Design System · The skeleton: grid, layout tokens, vertical rhythm, typography, motion and measured accessibility.](https://franciscolopez.es/en/design-system) · [Accessibility · The public statement: the conformance level the site meets and how to report a problem.](https://franciscolopez.es/en/accesibilidad)
+[Design System · The skeleton: grid, layout tokens, vertical rhythm, typography, motion and measured accessibility.](https://franciscolopez.es/en/design-system) · [Accessibility · The public statement: the conformance level the site meets and how to report a problem.](https://franciscolopez.es/en/accessibility)
