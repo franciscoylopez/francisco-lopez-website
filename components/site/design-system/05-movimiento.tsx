@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { RevealDemo } from "../design-system-islands";
+import { EntradaDemo, RevealDemo } from "../design-system-islands";
 import type { SeccionMarco } from "./shared";
 
 /* ===================== MOVIMIENTO ===================== */
@@ -116,6 +116,47 @@ export function Movimiento({
           </div>
           <div className="min-w-[min(100%,16rem)] flex-[1_1_18rem]">
             <RevealDemo demoLabel={t.demoLabel} replayLabel={t.replay} />
+          </div>
+        </div>
+
+        {/* LAS DOS PUERTAS DE ENTRADA (P72.512). Esta sección publicaba UN
+            mecanismo de entrada y el sitio tiene dos, más una tercera cosa que
+            no es una entrada sino un gesto acoplado al scroll. El design-review
+            lo midió: 36 elementos entran al cargar en las cuatro portadas del
+            sistema —incluida la de esta misma página, ocho de ellos, mientras
+            el párrafo de arriba decía que las entradas ocurren al hacer
+            scroll— y 20 filetes crecen con la posición del scroll.
+
+            LA TERCERA NO LLEVA DEMO, y no es un hueco: se ve sin pulsar nada,
+            porque el filete de cada bloque de esta página ES esa animación. Es
+            el mismo argumento del `navFoot` de aquí abajo. */}
+        <div className="border-border mt-11 border-t border-dashed pt-9">
+          <h3 className={cn(titleVariants({ size: "sub-sm" }), "mb-5")}>
+            {t.puertasTitle}
+          </h3>
+          <div className="flex flex-wrap gap-10">
+            <div className="min-w-[min(100%,18rem)] flex-[1_1_20rem]">
+              <ul className="text-muted-foreground m-0 flex list-disc flex-col gap-[0.55rem] pl-[1.1rem] text-[0.9rem] leading-[1.6]">
+                {t.puertasBullets.map((b) => (
+                  <li key={b}>{b}</li>
+                ))}
+              </ul>
+              <p className="text-muted-foreground m-0 mt-[0.9rem] text-[0.8rem]">
+                {t.puertasFoot}
+              </p>
+            </div>
+            <div className="min-w-[min(100%,16rem)] flex-[1_1_18rem]">
+              {/* ETIQUETA PROPIA, NO `t.replay`. Con la del scroll-reveal, la
+                  sección se quedaba con DOS botones llamados «Repetir ▸» y
+                  nada que los distinga salvo dónde están. Se vio midiendo: la
+                  comprobación de que la demo reproduce clicó el otro botón y
+                  dio un falso negativo. Si confunde a un `querySelector`,
+                  confunde a quien navega por la lista de controles. */}
+              <EntradaDemo
+                demoLabel={t.puertasDemoLabel}
+                replayLabel={t.puertasReplay}
+              />
+            </div>
           </div>
         </div>
 
