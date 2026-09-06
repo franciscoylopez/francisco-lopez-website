@@ -11,6 +11,7 @@ import {
   type Aviso,
   type Estrategia,
   type Fallo,
+  MAQUINA_DE_REFERENCIA,
   type Medicion,
   ms,
 } from "./medicion";
@@ -18,6 +19,19 @@ import {
 /** El nombre de una estrategia, en castellano, para los mensajes. */
 export const enCastellano = (e: Estrategia) =>
   e === "mobile" ? "móvil" : "escritorio";
+
+/**
+ * La velocidad del runner, y CUÁNTAS VECES más lento que la máquina de
+ * referencia — que es la mitad que hace legible el número. `bi 324` no dice nada
+ * a quien lo lee por primera vez; «×9,6 más lento» sí, y es la diferencia entre
+ * leer una nota baja y abrir una tarea de investigación por ella (ver
+ * `medicion.ts` §MAQUINA_DE_REFERENCIA).
+ */
+export function laMaquina(bi: number | null): string {
+  if (bi === null) return "máquina: no informada";
+  const veces = MAQUINA_DE_REFERENCIA / bi;
+  return `máquina ${bi} (×${veces.toFixed(1)} más lenta que la de referencia)`;
+}
 
 /** Un aviso en una línea, sin dejar colgando el guion cuando no hay ahorro. */
 export const enLinea = (av: Aviso) =>
@@ -29,6 +43,7 @@ export function imprimeDetalle(m: Medicion) {
     `\n─── ${enCastellano(m.estrategia).toUpperCase()} ───────────────────────────────`,
   );
   console.log(`  Rendimiento: ${m.nota}/100   (medido ${m.medido})`);
+  console.log(`  ${laMaquina(m.maquina)}`);
   for (const { etiqueta, valor } of m.metricas) {
     console.log(`  ${etiqueta.padEnd(12)} ${valor}`);
   }
@@ -110,6 +125,34 @@ export function imprimeAgregado(medidas: Medicion[], totalPaginas: number) {
  * tabla vacía puede ser un aprobado o una pasada que no midió nada, y desde fuera
  * se leen igual (D38/D57/D60/D63).
  */
+/**
+ * EN QUÉ MÁQUINAS SE MIDIÓ LA PASADA ENTERA, que es lo que dice si un rango bajo
+ * es del sitio o del día *(P72.6)*. Va después del veredicto y no antes: no
+ * cambia si se sella, informa de con qué se selló.
+ *
+ * Y publica CUÁNTAS traen el dato, por la regla de la casa: un metro que devuelve
+ * una lista vacía parece un aprobado, así que decir «0 de 84 informaron» es una
+ * salida válida y «no salió nada» no lo es.
+ */
+function imprimeMaquinas(medidas: Medicion[]) {
+  const bis = medidas
+    .map((m) => m.maquina)
+    .filter((b): b is number => b !== null);
+  if (!bis.length) {
+    console.log(
+      `  Máquinas: 0 de ${medidas.length} mediciones traen benchmarkIndex.\n`,
+    );
+    return;
+  }
+  const min = Math.min(...bis);
+  const max = Math.max(...bis);
+  const media = Math.round(bis.reduce((a, b) => a + b, 0) / bis.length);
+  console.log(
+    `  Máquinas que midieron: ${min}-${max} (media ${media}) en ${bis.length} de ${medidas.length} mediciones.\n` +
+      `  Referencia ${MAQUINA_DE_REFERENCIA}: la media de esta pasada es ×${(MAQUINA_DE_REFERENCIA / media).toFixed(1)} más lenta.\n`,
+  );
+}
+
 export function imprimeResumen(
   medidas: Medicion[],
   fallos: Fallo[],
@@ -132,6 +175,8 @@ export function imprimeResumen(
       `${tomas > 1 ? `, mediana de ${tomas} tomas` : ""}), ` +
       `${fallos.length} llamada(s) fallida(s) · ${resumen.join(" · ")}\n`,
   );
+
+  imprimeMaquinas(medidas);
 
   if (!fallos.length) return;
   for (const f of fallos) {

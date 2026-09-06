@@ -86,6 +86,30 @@ export interface Aviso {
   ahorro: string;
 }
 
+/**
+ * LO RÁPIDA QUE ERA LA MÁQUINA QUE MIDIÓ, que es lo que hacía ininterpretable a
+ * todo lo demás *(2026-09-06, P72.6)*.
+ *
+ * Lighthouse no mide el sitio: mide el sitio EN EL RUNNER QUE LE TOCA, y encima
+ * le aplica un 4× de castigo de CPU. `benchmarkIndex` es su propia medida de esa
+ * máquina, y sin ella una nota no se puede leer. Con diez análisis de la misma
+ * página, el mismo día y el mismo build:
+ *
+ *     benchmarkIndex 167 … 818     nota 57 … 97     TBT 1038 … 113 ms
+ *     r(benchmarkIndex, TBT) = −0,908     ·     FCP plano: 922-993 ms
+ *
+ * El FCP no se movió en ninguna de las diez —la parte de red del sitio es
+ * estable— y el TBT siguió a la CPU prestada casi linealmente. Como la curva de
+ * TBT vale 1,0 hasta 200 ms y 0,5 a los 600, y este sitio vive en 160-230, un
+ * runner a la mitad de velocidad cuesta siete puntos SIN QUE NADA CAMBIE.
+ *
+ * ESCALA, para que el número signifique algo: la máquina de desarrollo marca
+ * ~3100. Los runners de Google ese día dieron 167-818, o sea entre 4 y 19 veces
+ * más lentos. Se imprime siempre, y por eso: un 58 con su `bi` al lado se explica
+ * solo, y un 58 sin él abre una tarea de investigación. Abrió cuatro.
+ */
+export const MAQUINA_DE_REFERENCIA = 3100;
+
 /** El resultado de UNA llamada. `mide` ya no imprime: eso lo decide cada modo. */
 export interface Medicion {
   url: string;
@@ -93,6 +117,8 @@ export interface Medicion {
   estrategia: Estrategia;
   nota: number;
   medido: string;
+  /** `benchmarkIndex` del runner. `null` si la respuesta no lo trae. */
+  maquina: number | null;
   metricas: { etiqueta: string; valor: string }[];
   fases: FaseLcp[] | null;
   avisos: Aviso[];
@@ -126,6 +152,7 @@ export async function mide(
   const j = (await res.json()) as {
     lighthouseResult: {
       fetchTime: string;
+      environment?: { benchmarkIndex?: number };
       categories: { performance: { score: number } };
       audits: Record<string, Auditoria>;
     };
@@ -184,6 +211,9 @@ export async function mide(
     estrategia,
     nota: Math.round(lh.categories.performance.score * 100),
     medido: new Date(lh.fetchTime).toLocaleString("es-ES"),
+    maquina: lh.environment?.benchmarkIndex
+      ? Math.round(lh.environment.benchmarkIndex)
+      : null,
     metricas,
     fases: tabla?.items?.length ? tabla.items : null,
     avisos,
