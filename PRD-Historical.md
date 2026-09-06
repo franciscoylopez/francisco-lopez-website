@@ -101,6 +101,7 @@
 - [Abre «Cierre V3» — 2026-09-04](#abre-cierre-v3--2026-09-04)
 - [Por qué Trayectoria entró en el nav, y qué costó meterla — 2026-09-04](#por-qué-trayectoria-entró-en-el-nav-y-qué-costó-meterla--2026-09-04)
 - [El perfil de GitHub se publica, y por qué no es una quinta superficie de marca — 2026-09-05](#el-perfil-de-github-se-publica-y-por-qué-no-es-una-quinta-superficie-de-marca--2026-09-05)
+- [El `method-review` XIII: el arreglo funcionó y la bandeja iba con dos días de retraso — 2026-09-06](#el-method-review-xiii-el-arreglo-funcionó-y-la-bandeja-iba-con-dos-días-de-retraso--2026-09-06)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4590,3 +4591,55 @@ dice cuatro. Faltan los carruseles de la serie.*
 *Y baja aquí, desde `PRD-Live` §4, la frase que era juicio y no spec en presente: «La más fuerte
 es la cuarta: los carruseles no colocan un lockup sobre una plantilla ajena, llevan el sistema
 entero, gobernado por una plantilla que cada pieza reutiliza sin tocar».*
+
+## El `method-review` XIII: el arreglo funcionó y la bandeja iba con dos días de retraso — 2026-09-06
+
+Informe completo: [artefacto del disparo XIII](https://claude.ai/code/artifact/26d9a3af-7e11-4551-ad24-88318d2df6c1).
+
+**Lo abrió Francisco con un dato, no con una intuición:** «seguimos teniendo muchos PR run
+failed», y una captura de su bandeja de GitHub con diez avisos. La medición independiente
+convergió exacto con ella —tanda 2 = 5 rojos, tanda 1 = 3— y luego dijo lo contrario de lo que
+la bandeja sugería.
+
+**Partida la ventana de 80 runs por la fecha en que aterrizó el hook de P72.52 (5-sept 15:35):
+21,0 % antes (13/62) y 5,6 % después (1/18).** Nueve de los diez avisos eran del día 4 o
+anteriores. El arreglo había funcionado y lo que se veía era el embalse de notificaciones
+previas. Contando solo runs de PR, 27,1 % → 11,1 %. Y el dato no venía contaminado por la
+sesión del propio disparo: 16 de esos 18 runs eran de la sesión anterior de Francisco.
+
+**El hallazgo que sí quedó, y es de la familia «Arreglar la mitad que se abre» (octava):** los
+catorce rojos se reparten en «Markdown al día» 6 y «Trinquete de deuda» 5 —once de catorce, el
+79 %— y el hook excluía **los dos** por diseño. El argumento escrito para el trinquete era
+correcto y contestaba otra pregunta: *«el problema nunca fue el listón»*. Nadie discutía el
+listón; se discutía si el autor se entera antes de empujar o diez minutos después. El único
+rojo posterior al hook fue exactamente él.
+
+**La otra mitad del plan se cerró con un «no» medido.** El hook justifica correr `md:anclas` en
+vez de `md:verificar` con un «siete de cada catorce» que nadie había reproducido. Se reprodujo:
+de los once commits que regeneraron el markdown del artículo en la ventana, **nueve llevaban
+anclas y seis eran solo anclas**. La premisa se sostiene, no se tocó nada, y el «no» quedó
+escrito en la cabecera del hook con su cifra — que es lo que impide que la próxima revisión
+vuelva a investigarlo.
+
+**Dos correcciones del propio disparo, anotadas porque la revisión funcionando es esto:**
+
+1. **«28 ramas fusionadas vivas» eran 9.** Se contaron cruzando `gh pr list` contra
+   `git branch -r` sin podar, y las refs locales de seguimiento no caducan solas. La verdad del
+   remoto es `git ls-remote`. El metro dio una lista *más larga* que la real, así que no pareció
+   un fallo.
+2. **Una fila de la tabla de umbrales estaba mal marcada.** «Suma de skills» venía en rojo con
+   holgura 7, y su propio umbral dice verde ≤ techo. Era un juicio metido en la casilla de un
+   umbral que dice otra cosa.
+
+**Y la tensión que el disparo tuvo que resolver sobre sí mismo:** la skill manda actualizar su
+catálogo —«es lo único que tiene que crecer»— y el presupuesto de skills tenía **16 palabras**
+de holgura. Se resolvió como pide el método y no pidiendo techo: retirando el relato de tres
+disparos anteriores, que ya vive aquí, y dejando en la skill solo sus reglas. Neto **−70
+palabras**, holgura de 16 a 86. Es la familia «Añadir sin retirar» (sexta) contestada en el
+mismo movimiento que la nombra.
+
+**Lo que se ejecutó, el mismo día:** `check:deuda` entra como quinto carril del hook,
+`soloPush` porque cuesta 2,7 s de los 2,8 del hook entero, y sin bloquear cuando falta `qlty`
+—vía un código de salida propio, no el texto del mensaje—. El trinquete cazó la propia
+`revisaCarriles` en el commit que lo añadía, y la deuda se quitó aplanándola en vez de
+re-sellar.

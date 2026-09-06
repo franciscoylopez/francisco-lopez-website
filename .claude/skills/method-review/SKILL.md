@@ -13,7 +13,7 @@ description: >
 # Revisión de metodología — entre sprints
 
 Un técnico que **acaba de ver este método por primera vez** lo audita buscando margen. Lo que
-sigue es lo que once disparos aprendieron al ejecutarse.
+sigue es lo que los disparos anteriores aprendieron al ejecutarse.
 
 > **Y aquí mismo, la primera lección de su propio catálogo** *(corregido en el cuarto disparo,
 > 2026-08-23)*. Esta línea presumía «una reducción del 35% del contexto de arranque»; el total
@@ -189,13 +189,13 @@ sabes el remedio; si no encaja, es una familia nueva y **se añade a esta lista*
 | **El artefacto commiteado que se queda viejo** | Una copia derivada de una fuente, sin nada que las ate (D60) | 3 |
 | **La regla sin portador** | Declarada en un documento y sin sitio donde se trabaje | **10** |
 | **La cifra apuntada que caduca** | Un número en prosa que envejece sin avisar (D67) | 5 |
-| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **7** |
+| **Arreglar la mitad que se abre** | Un arreglo real que resuelve el lado que PRODUCE el problema y deja intacto el que lo CONSUME | **8** |
 | **La pieza que nace fuera de la capa** | Algo creado fuera de la cascada pierde en silencio lo que la cascada garantizaba, y nada lo detecta porque los guardianes miran el RESULTADO y no la PROCEDENCIA | **3** |
 | **El arreglo que se quedó en su archivo** | Un defecto de familia conocida se corrige **donde se encontró**, la regla se escribe, y sus hermanos siguen vivos en archivos vecinos porque nadie los buscó. Firma: el mismo repo contiene la lección escrita **y** su incumplimiento, a un directorio de distancia | **3** |
 | **El marcador escrito donde no se ve** | El estado en el cuerpo y no en la cabecera que llega al índice | 1 |
 | **El umbral que persigue al dato** | Un techo que se reescribe para seguir a lo que mide, así que nunca se incumple y nunca obliga. Firma: cambia más a menudo que la cosa medida, y su distancia al dato es constante | **2** |
 | **El dato que persigue al techo** | El techo **no** se mueve y la medida vive pegada a él, porque retirar solo se dispara al cruzarlo. Firma: el objetivo no se ha cumplido **nunca** | **1** |
-| **Añadir sin retirar** | Algo del método crece porque **nada programa la retirada**: solo hay techo, y retirar es siempre una reacción al rojo. Nació mirando documentos (D69) y el décimo disparo la encontró en tres órganos a la vez | **5** |
+| **Añadir sin retirar** | Algo del método crece porque **nada programa la retirada**: solo hay techo, y retirar es siempre una reacción al rojo. Nació mirando documentos (D69) y el décimo disparo la encontró en tres órganos a la vez | **6** |
 
 > **El RELATO de cada disparo —qué encontró, con quién convergió y qué se cerró— vive en
 > `PRD-Historical.md`, con su informe enlazado.** Aquí solo la tabla de arriba y las reglas que
@@ -229,6 +229,10 @@ las va a aplicar, no a datar.
   devuelve cero es un aprobado, y esta skill ya publicó dos falsos.
 - **Al medir sobre `git log`, el registro es el COMMIT**: `RS` en el separador, nunca `grep -c`.
 - **Un comando publicado aquí también caduca.**
+- **Una bandeja de avisos no es una tasa.** Los diez «PR run failed» que abrieron el XIII eran
+  nueve anteriores al arreglo: mide la ventana, y pártela por la fecha en que aterrizó.
+- **Antes de contar refs de git, poda.** `git branch -r` es caché local y no caduca sola; la
+  verdad del remoto es `git ls-remote`. Contar sin podar infló 9 ramas hasta 28.
 - **Lo que se apunta como hipótesis se escribe como hipótesis.** Una sospecha dada por causa
   envejece igual de mal que una cifra, y redirige la investigación.
 - **El sello se pone DESPUÉS de crear las tareas del propio `sprint-review`, sobre un volcado
@@ -239,37 +243,26 @@ las va a aplicar, no a datar.
 - **Cuando el techo de algo lleve dos ciclos sin dejar trabajar, la pregunta ya no es cuánto
   recortar: es qué gobierna el número.**
 
-**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-09-01, tras «Distribución»)*:
+**Los umbrales vigentes, para el cierre siguiente** *(hoy = 2026-09-06, tras «Cierre V3»)*:
 
 | Indicador | Hoy | Verde | Rojo | Comando |
 | :-- | :-- | :-- | :-- | :-- |
-| **Runs de CI en rojo** | **21,3 %** (17/80) 🔴 | ≤ 5 % | ≥ 15 % | `gh run list --workflow=CI --json conclusion` |
-| Variación neta de `General` por sprint | **−15** (23 → 8) 🟢 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
-| Veces que se movió un techo en el ciclo | **0** de 3 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
-| Margen del presupuesto de contexto | **73** 🔴 | ≥ 400 | < 100 | `check:contexto` |
-| Suma de skills a demanda | **holgura 7** 🔴 | ≤ techo | > techo | `check:contexto` |
-| Verificación ÷ producto | **0,716** 🔴 | ≤ 0,45 | > 0,55 | `check:contexto` (quinta sección) desde D205 |
-| Verificación ÷ producto DEL SPRINT | **5,89 : 1** 🔴 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
-| Hallazgos de `design-review` cuya regla ya existía | **2 de 3** 🟡 | ≤ 1 | ≥ 3 | `design-review` |
+| **Runs de CI en rojo** | **17,5 %** (14/80) 🔴 · **5,6 %** tras el hook | ≤ 5 % | ≥ 15 % | `gh run list --workflow=CI --json conclusion` |
+| Variación neta de `General` por sprint | **−6** (8 → 2) 🟢 | ≤ 0 | ≥ +4 | `SELLO_GENERAL` de `check-tablero.ts` |
+| Veces que se movió un techo en el ciclo | **0** de 4 🟢 | 0 | ≥ 2 | `check:contexto` (última sección) |
+| Margen del presupuesto de contexto | **35** 🔴 | ≥ 400 | < 100 | `check:contexto` |
+| Suma de skills a demanda | **holgura 16** 🟢 | ≤ techo | > techo | `check:contexto` |
+| Verificación ÷ producto | **0,7245** 🔴 | ≤ 0,45 | > 0,55 | `check:contexto` (quinta sección) desde D205 |
+| Verificación ÷ producto DEL SPRINT | **0,70 : 1** 🟢 | ≤ 1,5 | ≥ 3 | `git diff --shortstat <base> HEAD -- <área>` |
+| Hallazgos de `design-review` cuya regla ya existía | no se disparó | ≤ 1 | ≥ 3 | `design-review` |
 
-*Se retira «% Infra del sprint que cierra» (2026-09-04): decía **28,6 % verde** sobre el mismo
-sprint en que la fila de líneas decía **5,89:1 rojo**, porque «Higiene» etiquetó su andamiaje
-como `Código` —honesto, y ciego—. Sustituyó a «sprint de método abierto en el ciclo» por leer
-el NOMBRE, y heredó el defecto un nivel más abajo: leía la ETIQUETA. **Una fila que se puede
-poner verde eligiendo bien la etiqueta no mide nada**; la de líneas no se puede.*
-
-*El margen se desatascó en el disparo XII —14 → 73— con **un solo corte**: la sección de
-`BRAND.md` que narraba los casos que su propio histórico ya contaba, o sea su regla 5 aplicada
-a sí misma. **Y ahí se acabaron los cortes limpios**: lo siguiente en la lista por peso son
-reglas que se aplican en cada censo, no historia narrada. Quien busque la próxima retirada
-empieza por duplicación, no por tamaño.*
-
-*Y **el objetivo NO se discute, aunque parezca incumplido** — se intentó dos veces y las dos
-estaban mal. Es una ESCALERA de escalones de 200 que baja al alcanzarse: 12.000 ✓, 11.800 ✓
-(11.794), 11.600 ✓ (11.455), y 11.400 vigente desde el 2026-08-30. P68.7405 argumentó «11.600
-no se alcanzó nunca» y era falso: esperaba una retirada estructural. El disparo XII repitió el
-argumento sobre el 11.400 con cinco días de vida. **Antes de proponer retirar un objetivo, lee
-su historial de escalones**: la cabecera de `scripts/contexto/documentos.ts` lo lleva entero.*
+*Tres reglas que dejaron filas retiradas o discutidas, sin su relato — que vive en
+`PRD-Historical.md`: **una fila que se puede poner verde eligiendo bien la etiqueta no mide
+nada** (así cayó «% Infra del sprint»); **al heredar una tabla se auditan también sus filas**,
+porque una venía marcada en rojo por debajo de su propio umbral; y **el objetivo del contexto
+NO se discute** — es una escalera que baja al alcanzarse, y su historial está en
+`scripts/contexto/documentos.ts`. Los cortes limpios de ese presupuesto se acabaron: lo que
+queda por peso son reglas que se aplican, no historia narrada.*
 
 *Las dos filas de `check:contexto` van en su vara, que **descuenta los bloques de código**. La
 suma de skills no lleva cifra a propósito: la mueve esta misma skill al escribirse.*
