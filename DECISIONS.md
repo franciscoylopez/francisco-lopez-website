@@ -244,6 +244,7 @@
 - D206 · La ruta pública deja de ser la carpeta: el inglés traduce sus slugs
 - D207 · La versión de Node estaba escrita dos veces y con valores distintos: CI validaba un runtime que no despliega
 - D208 · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal
+- D209 · Una nota de PageSpeed sin la máquina que la sacó no se puede leer: `psi` publica el `benchmarkIndex`
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13499,3 +13500,50 @@ su `$schema` no necesita instalar nada, y el `ignoreCommand` corre **antes** del
 ese momento no hay `node_modules`, así que el script tampoco puede ser `.ts` con `tsx` — es
 `.mjs` con node pelado, y por eso las reglas se prueban desde vitest importando la función pura
 en vez de ejecutando el script.
+
+## D209 · Una nota de PageSpeed sin la máquina que la sacó no se puede leer: `psi` publica el `benchmarkIndex` — 2026-09-06
+
+**Decisión.** `psi` imprime, junto a cada nota, el `benchmarkIndex` del runner que la midió y
+cuántas veces más lento fue que la máquina de referencia (`MAQUINA_DE_REFERENCIA = 3100`, la de
+desarrollo). El resumen del modo registro añade el rango de la pasada entera y **cuántas de las
+mediciones traen el dato**, por la regla de la casa: una lista vacía no puede parecer un aprobado.
+
+**El porqué, medido.** Lighthouse no mide el sitio: mide el sitio **en la máquina que le toca**,
+y encima le aplica un 4× de castigo de CPU. `environment.benchmarkIndex` es su propia medida de
+esa máquina y venía en la respuesta de la API desde el primer commit del script sin que nadie la
+leyera. Diez análisis de `/sobre-mi`, mismo día y mismo build:
+
+| benchmarkIndex | nota | TBT | FCP |
+|---|---|---|---|
+| 818 | 97 | 113 ms | 928 ms |
+| 486 | 89 | 287 ms | 944 ms |
+| 431 | 85 | 462 ms | 943 ms |
+| 324 | 77 | 833 ms | 955 ms |
+| 167 | 75 | 982 ms | 940 ms |
+
+    r(benchmarkIndex, TBT) = -0,908
+    FCP: plano, 922-993 ms en las diez
+
+**La parte de red del sitio no se mueve; el TBT sigue a la CPU prestada casi linealmente.** Y la
+escala es lo que lo cierra: la máquina de desarrollo marca ~3.100 y los runners de ese día dieron
+167-818, entre **4 y 19 veces más lentos**.
+
+**Por qué eso hace saltar la nota tanto:** la curva de TBT vale 1,0 hasta 200 ms y 0,5 a los 600,
+y este sitio vive en **160-230 ms**. Está justo en la rodilla, así que un runner a la mitad de
+velocidad cuesta **siete puntos** sin que nada cambie, y uno cinco veces más lento, **veinte**.
+Es también por qué los avisos «aparecen y desaparecen»: los que se miden en segundos
+—`Minimiza el trabajo del hilo principal`, `Reduce el tiempo de ejecución de JavaScript`, TBT,
+`Forced reflow`— cruzan su umbral con la máquina, no con el código. Los que se miden en **bytes o
+peticiones** no se mueven nunca.
+
+**Lo que costó no tenerlo.** Cuatro fichas de investigación entre el 4 y el 6 de septiembre
+persiguiendo notas bajas de la misma página sobre el mismo build, y dentro de la última, medio
+día de análisis construido sobre una línea base contaminada. **Un 58 con su `benchmarkIndex` al
+lado se explica solo; un 58 sin él abre una tarea.** Es el mismo defecto que D84 persigue en el
+artículo y que `BRAND.md` §Cómo medir nombra en su punto 1, aplicado a un instrumento propio: la
+cifra estaba, faltaba el metro que la hace legible.
+
+**Y lo que NO arregla, dicho para no prometer de más.** No mejora la nota ni abre la ventana de
+la flota. Tampoco vale como umbral automático: no se rechaza una medición por venir de un runner
+lento, porque entonces el instrumento decidiría qué dato le gusta. Informa; el juicio sigue
+siendo de quien lee.

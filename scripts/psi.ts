@@ -178,7 +178,13 @@ async function midePagina({
     try {
       const m = await mide(url, estrategia, key);
       medidas.push(m);
-      notas.push(`${enCastellano(estrategia)} ${String(m.nota).padStart(3)}`);
+      // La nota va con la máquina que la sacó, no sin ella (P72.6): sin el
+      // `benchmarkIndex` al lado, una fila baja no se distingue de una regresión
+      // y abre una tarea. Ver `psi/medicion.ts` §MAQUINA_DE_REFERENCIA.
+      notas.push(
+        `${enCastellano(estrategia)} ${String(m.nota).padStart(3)}` +
+          ` (m ${m.maquina ?? "?"})`,
+      );
       for (const aviso of m.avisos) avisos.push({ estrategia, aviso });
     } catch (e) {
       fallos.push({
