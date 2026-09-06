@@ -270,8 +270,10 @@ qlty smells --upstream main # los hallazgos que el PR cuenta, en local (D86)
 > **`npm run psi`** necesita una **URL pública** (el Preview de Vercel o producción, nunca
 > localhost) y una clave gratuita de la API en `PSI_API_KEY` — ver [`.env.example`](./.env.example).
 > Imprime la nota, las métricas, el **desglose del LCP por fases** y los avisos que no pasan.
-> La primera línea es la **huella del despliegue**: si no cambió tras un push, estás midiendo
-> el build anterior.
+> La primera línea es la **huella del despliegue**: si no cambió tras un push, o estás midiendo
+> el build anterior, o **ese push no generó despliegue a propósito** — desde `D208` un commit que
+> no toca nada que el sitio sirva se salta el build, y quien lo dice es el log de Vercel
+> (`[ignoreCommand] … SE SALTA`).
 
 > El **gate de HTML** necesita el sitio servido (`npm run build && npm start`), y la línea
 > base y la comprobación tienen que salir del mismo modo: dev y prod emiten HTML distinto.
@@ -427,6 +429,10 @@ El «porqué» vive en documentos dedicados, partidos por una regla que **no es 
 
 Vercel, con **previews por rama y por PR**, y `main` = producción ([franciscolopez.es](https://franciscolopez.es)).
 Flujo: ramas cortas → PR → merge (squash si trae un commit, rebase si trae varios) → tag `vX.Y.Z` por release.
+**No todo commit despliega:** el `ignoreCommand` de `vercel.json` se salta el build cuando el
+commit no toca nada que el sitio sirva (`D208`). Y la retención del proyecto borra sola —preview
+a 7 días, producción a 30, con los últimos 10 de producción a salvo—, así que un Preview viejo
+puede haber dejado de existir.
 
 ---
 
