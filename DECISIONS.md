@@ -243,6 +243,7 @@
 - D205 · El volumen del andamiaje se mide contra el producto, no contra sí mismo
 - D206 · La ruta pública deja de ser la carpeta: el inglés traduce sus slugs
 - D207 · La versión de Node estaba escrita dos veces y con valores distintos: CI validaba un runtime que no despliega
+- D208 · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13419,3 +13420,82 @@ Vercel, es el único que queda fuera del repo—.
 **La familia.** «La misma cosa escrita en dos sitios» (D38, D59, D72), y esta vez con el
 agravante de que las dos copias **no decían lo mismo** y aun así todo estaba verde. Un
 guardián que valida el runtime equivocado no falla: aprueba.
+
+## D208 · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal — 2026-09-06
+
+**Decisión.** Nace `vercel.json` con un solo campo, `ignoreCommand`, que apunta a
+`scripts/vercel/ignorar-build.mjs`: el commit que no toca nada que el sitio sirva **no genera
+despliegue**. La regla es **denegar por defecto** —se salta el build solo si TODAS las rutas
+tocadas están en una lista de lo que nadie sirve—, y su caso malo vive en
+`tests/ignorar-build.test.ts`.
+
+**El porqué, y lo primero es que el diagnóstico de la ficha estaba al revés.** Vercel avisó de
+que el equipo gratuito había llegado al **100 % de Deployment Storage**; el panel de Usage
+decía **11,12 GB**, ya por encima del tope de 10. Lo que parecía la solución —borrar los ~700
+despliegues acumulados— resultó ser lo que menos cambia, porque **el proyecto ya tiene política
+de retención y ya borra solo**:
+
+| Ajuste del proyecto | Valor |
+|---|---|
+| `deploymentExpiration.expirationDays` (y producción, cancelados y errores) | **30** |
+| `deploymentsToKeep` | **10** |
+
+Y se comprueba sin creerse el ajuste: el censo completo de la API —**752 despliegues exactos**,
+no la horquilla de 700-1.150— **empieza el 2026-08-08**, veintinueve días antes de la medición,
+cuando el proyecto se creó el 2026-07-26 y entre esas dos fechas hubo 97 commits en `main`. Lo
+de julio no está porque ya lo borró Vercel.
+
+O sea: **el embalse está en régimen permanente**, 25,9 despliegues/día × 30 días ≈ 752 ≈ 11,12
+GB (~14,8 MB cada uno). Borrar hoy los 560 de preview lo baja a ~2,8 GB y **lo vuelve a subir
+en un mes**. Lo único que mueve el nivel de forma permanente es bajar el caudal o acortar la
+retención.
+
+**La medida, que también estaba mal, y por un motivo que vale para más cosas.** La ficha había
+medido «23 de los últimos 80 commits (el 29 %) no tocan nada que el sitio sirva: docs de raíz,
+`.claude/`, `.github/`, `scripts/`, sellos». Es falso, porque **el sitio lee del disco al
+construir, y no solo de `app/`**:
+
+| Ruta que parece método | Quién la lee al construir |
+|---|---|
+| `DECISIONS.md` | `lib/decisions.ts` — la página del artículo |
+| `.github/workflows/ci.yml` | `lib/figures.ts` — la figura que cuenta los pasos de CI |
+| `content/**` | los sellos de psi, agentes, md y el artefacto |
+| `assets/fonts`, `public/**` | `app/api/og`, `app/api/kit` |
+
+Las dos primeras son la trampa: viven **dentro** de sitios que sí son ignorables enteros. Con
+ellas fuera de la lista, la cifra real, medida sobre los 752 despliegues del censo y no sobre
+una muestra de commits:
+
+| Escenario | Despliegues que se saltarían |
+|---|---|
+| El filtro tal como entra | **79 de 544 medidos (14,5 %)** · sobre los 746 con objeto en el repo, **10,6 %** |
+| Si `DECISIONS.md` no lo leyera el build | 125 (23,0 %) |
+| Si `ci.yml` no lo leyera el build | 82 (15,1 %) |
+
+La horquilla 10,6-14,5 % es porque no se sabe si `VERCEL_GIT_PREVIOUS_SHA` existe en el primer
+despliegue de una rama; en el peor caso, esos 201 construyen siempre. **`DECISIONS.md` él solo
+cuesta 8,5 puntos** — si algún día se quiere, la salida es sellarlo a `content/` como ya se
+hace con psi y agentes, y no está hecho porque sería una segunda copia de la fuente de verdad.
+
+**El riesgo, escrito antes de construirlo.** Un filtro mal ajustado **deja de desplegar un
+cambio real en silencio**, que es peor que el problema que resuelve. De ahí tres cosas, y no
+una: (1) la lista es un permiso explícito, así que una carpeta nueva construye; (2) si
+`VERCEL_GIT_PREVIOUS_SHA` falta, si el SHA no está en el clon superficial o si el diff sale
+vacío, **se construye**; (3) el test no solo prueba las reglas: **escanea `lib/` y `app/`
+buscando literales de ruta y falla si alguno cae en la lista de ignorables**. Ese tercero es el
+que impide que la lista se quede corta el día que una página lea un séptimo archivo — el
+disparador mira donde ocurre la cosa, no donde uno se acuerda (`BRAND.md` §Cómo se escribe una
+regla, regla 1).
+
+**Lo que NO resuelve, dicho para que no se dé por cerrado.** Con el caudal a 22-23/día el
+régimen permanente queda en **9,5-9,9 GB**: por debajo del tope y sin margen. La otra mitad
+—purga inmediata y/o acortar la retención de preview— es decisión de Francisco y vive en la
+ficha, no aquí. Y `ignoreCommand` **no es un gate**: nada en CI comprueba que el filtro sigue
+acertando en Vercel; lo que se comprueba es la regla.
+
+**Por qué `vercel.json` y no `vercel.ts`.** El `vercel.ts` que recomienda hoy la plataforma
+necesita `@vercel/config` como dependencia, y aquí el archivo tiene **un campo**. Un JSON con
+su `$schema` no necesita instalar nada, y el `ignoreCommand` corre **antes** del install: en
+ese momento no hay `node_modules`, así que el script tampoco puede ser `.ts` con `tsx` — es
+`.mjs` con node pelado, y por eso las reglas se prueban desde vitest importando la función pura
+en vez de ejecutando el script.

@@ -337,6 +337,7 @@ lib/                   i18n (fuente única de ruta↔locale), page-meta (D45), s
                        page-modified (cuándo cambió el contenido de cada página: la leen el
                        sitemap y el frontmatter del markdown, D165) y utils
 proxy.ts               Enrutado de locale (Next 16 renombra middleware → proxy)
+vercel.json            Un solo campo, `ignoreCommand`: qué commit no genera despliegue (D208)
 public/                Assets: logo-kit, cv, img, og, video, favicons
 brand-assets/          Piezas de marca fuera de la web — no se despliega
 
@@ -367,6 +368,10 @@ scripts/page-html-diff.ts  Gate de refactor: el HTML servido de las páginas del
                            en sus dos idiomas, no puede cambiar
 scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio sirve. Aborta si
                            queda UN solo color literal: busca la ausencia (D54)
+scripts/vercel/            El filtro del `ignoreCommand`: si el commit no toca nada que el
+                           sitio sirva, no hay despliegue. Corre en Vercel ANTES del install
+                           —node pelado, sin tsx— y deniega por defecto, porque el fallo caro
+                           no es construir de más sino dejar de desplegar en silencio (D208)
 
 scripts/hooks/             Los que se disparan solos. Dos al EDITAR (Prettier y el guardián
                            de color, este solo cuando la edición ha podido romper el
