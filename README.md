@@ -155,7 +155,7 @@ npm run dev        # http://localhost:3000
 ```
 
 > `npm install` apunta además `core.hooksPath` a `.githooks/`, así que a partir de ahí
-> **un `git push` se aborta** si uno de los cuatro gates de artefacto derivado está en rojo
+> **un `git push` se aborta** si uno de los gates que corre está en rojo
 > (`D204`). Es lo mismo que diría CI diez minutos después. La salida explícita, cuando hace
 > falta, es `git push --no-verify`.
 
@@ -371,8 +371,9 @@ scripts/artefacto-svg.ts   Traductor del export de Mermaid al SVG que el sitio s
 scripts/hooks/             Los que se disparan solos. Dos al EDITAR (Prettier y el guardián
                            de color, este solo cuando la edición ha podido romper el
                            invariante), uno al CERRAR el turno y uno al EMPUJAR, que sí
-                           bloquea: los cuatro gates de artefacto derivado no llegan a CI en
-                           rojo (D204). El de push lo instala `core.hooksPath`
+                           bloquea: lo que ese hook mira no llega a CI en rojo (D204, D207). Cuáles
+                           son se leen en `regeneradores.mjs`; el de push lo instala
+                           `core.hooksPath`
 
 .github/workflows/     ci.yml, el gate de calidad de cada PR · dependabot-automerge.yml, que
                        decide quién CIERRA los PR de dependencias (D92)

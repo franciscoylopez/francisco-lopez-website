@@ -242,6 +242,7 @@
 - D204 · Un aviso no baja los rojos si después se empuja igual: el gate de artefacto derivado se muda al push, y el sello avisa al editar su fuente
 - D205 · El volumen del andamiaje se mide contra el producto, no contra sí mismo
 - D206 · La ruta pública deja de ser la carpeta: el inglés traduce sus slugs
+- D207 · La versión de Node estaba escrita dos veces y con valores distintos: CI validaba un runtime que no despliega
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13381,3 +13382,40 @@ guardián que las comparase estaría comparando la configuración consigo misma,
 `scripts/agentes/manifiesto.ts` nombra como el metro que aprueba siempre. Lo que sí queda escrito
 es la lección: **al renombrar una ruta pública, sus derivados se mudan con ella** — el espejo
 markdown, y cualquier otro que nazca.
+
+## D207 · La versión de Node estaba escrita dos veces y con valores distintos: CI validaba un runtime que no despliega — 2026-09-06
+
+**Decisión.** La versión de Node deja de escribirse en cada superficie y pasa a ser **una sola
+cifra, `.nvmrc`**. CI la lee con `node-version-file` en vez de tenerla escrita, `package.json`
+declara el suelo con `"engines": { "node": ">=24" }`, y Vercel ya usaba ese major. Subirla es
+un cambio de una línea, visible en el diff.
+
+**El porqué, y es peor que «no estaba declarada».** El `sprint-review` de «Cierre V3» abrió el
+hallazgo como una ausencia: ni `engines`, ni `.nvmrc`, ni `.node-version`. Al **comprobarlo en
+vez de suponerlo** —regla de `CLAUDE.md` sobre supuestos de infraestructura— resultó ser otra
+cosa:
+
+| Superficie | Node |
+|---|---|
+| `.github/workflows/ci.yml` (`node-version: 22`) | **22** |
+| Vercel, proyecto `francisco-lopez-website` (`nodeVersion`) | **24.x** |
+| La máquina de trabajo | 24 |
+
+O sea: **el verde de CI era una afirmación sobre un runtime que no es el que construye
+producción.** Veintinueve pasos de gate, todos verdes, todos sobre un Node que Vercel no usa.
+Y encajaba con una señal que llevaba ahí semanas sin que nadie la leyera: `@types/node` en la
+**26.x**, describiendo un Node más nuevo que el que validaba.
+
+**Por qué 24 y no 22.** No se introduce un runtime nuevo: se acerca CI al que **ya** despliega.
+El build completo se verificó en Node 24 antes de mover nada, y `engines` declara el suelo que
+de verdad se prueba — prometer `>=22` sin que nadie vuelva a validar 22 sería el verde falso
+que este repo persigue, con otra forma.
+
+**Lo que deja fuera, dicho para que no se dé por cubierto.** Nada comprueba que las tres
+superficies sigan cuadrando: si alguien cambia el major en el panel de Vercel, `.nvmrc` no se
+entera. La red no es un guardián, es que ya no hay dos sitios donde escribirlo —y el tercero,
+Vercel, es el único que queda fuera del repo—.
+
+**La familia.** «La misma cosa escrita en dos sitios» (D38, D59, D72), y esta vez con el
+agravante de que las dos copias **no decían lo mismo** y aun así todo estaba verde. Un
+guardián que valida el runtime equivocado no falla: aprueba.
