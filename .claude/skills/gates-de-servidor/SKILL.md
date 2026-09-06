@@ -144,10 +144,13 @@ npm run psi -- --registro   # la nota de PageSpeed — CONTRA PRODUCCIÓN, no co
   `npm run color-solo -- --caso-malo` invierte el veredicto y suspende si NO caza el par que
   la página se fabrica. Un guardián cuyo resultado normal es cero se rompe sin que nadie lo
   note.
-- **`psi`**: **mira la tabla de dispersión antes de commitear.** Si un par se mueve veinte
-  puntos entre tomas, la mediana es la mejor cifra disponible pero el sitio tiene algo que
-  mirar. `--tomas=1` existe para tantear sobre un Preview y **no sella**, a propósito. *(Por
-  qué hacen falta tres tomas, con las cifras de variabilidad medidas: D145.)*
+- **`psi`**: ante dispersión, **mira la MÁQUINA antes que el sitio** *(corregido el
+  2026-09-06: esta línea mandaba mirar el sitio y es falso; costó dos días — D209)*. Cada
+  nota sale con el `benchmarkIndex` del runner (`móvil 77 (m 324)`) y el resumen publica el
+  rango. Máquinas dispares → es la flota; máquinas parecidas y notas dispares → ahí sí, el
+  sitio. Y al leer los avisos: lo que se mide en **segundos** es del runner, lo que se mide
+  en **bytes o peticiones** es del sitio. `--tomas=1` tantea sobre un Preview y **no sella**,
+  a propósito. *(Las cifras, en D209; por qué tres tomas, D145.)*
 
 ## Paso 5 · Lo que deja detrás
 

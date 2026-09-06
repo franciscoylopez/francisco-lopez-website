@@ -227,7 +227,10 @@ npm run articulo:novedades  # QUÉ cambió en cada dependencia del artículo des
 npm run psi -- <url>        # PageSpeed de UNA página: nota, métricas y desglose del LCP (D49)
 npm run psi -- --registro   # …y de todas las del registro, con el agregado de avisos (D99).
                             # Al terminar SELLA el rango en content/psi/ y el artículo lo
-                            # publica con su fecha; una pasada parcial no sella (D102)
+                            # publica con su fecha; una pasada parcial no sella (D102).
+                            # Cada nota sale con la MÁQUINA que la midió: sin el
+                            # benchmarkIndex del runner, una nota baja no se distingue
+                            # de una regresión (D209)
 npm run agentes:sellar      # la nota de preparación agéntica de ora.ai contra producción, sellada
                             # en content/agentes/. Se niega con un informe de caché (D167)
 npm run censo               # censo de contraste: todas las páginas × 2 temas, servidas (D85)
