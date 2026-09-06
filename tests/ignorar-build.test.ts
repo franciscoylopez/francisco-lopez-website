@@ -36,6 +36,8 @@ describe("lo que no sirve nadie se salta", () => {
     ["scripts/psi.ts"],
     ["scripts/vercel/ignorar-build.mjs"],
     ["tests/tablero.test.ts"],
+    ["content/accesibilidad/accesibilidad.huella"],
+    ["content/articulo/articulo.huella"],
     [".prettierrc.json"],
     ["LICENSE"],
   ])("%s no la sirve el sitio", (ruta) => {
@@ -65,6 +67,8 @@ describe("el caso malo: lo que parece método y el build LEE", () => {
     ["content/agentes/registro.json"],
     ["content/md/registro.json"],
     ["content/artefactos/emendu-mdm.svg"],
+    // El sello del CV está bajo `public/`, que se copia tal cual al CDN.
+    ["public/cv/cv.huella"],
     // El markdown servido y los assets.
     ["public/md/es/index.md"],
     ["public/logo-kit/README.md"],

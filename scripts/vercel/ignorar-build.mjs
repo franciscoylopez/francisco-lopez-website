@@ -48,6 +48,13 @@ export const IGNORABLES = [
   /^scripts\//, // gates, generadores y sellos: corren fuera del build
   /^tests\//, // vitest
   /^[^/]+\.md$/, // los `.md` de la raíz (menos `DECISIONS.md`)
+  // Los sellos de `content/`: los escriben y los leen los guardianes, y ninguna
+  // página los abre. Importa porque **un commit de documentación arrastra uno**
+  // —tocar `GATES.md` mueve el de `/accesibilidad`— y sin esta línea ese commit
+  // construiría por un archivo que nadie sirve. `public/cv/cv.huella` se queda
+  // FUERA a propósito: lo de `public/` se copia tal cual al CDN, y ahí saltarse
+  // el build sí deja servido un archivo viejo.
+  /^content\/.*\.huella$/,
   /^\.gitignore$/,
   /^\.gitattributes$/,
   /^\.prettierignore$/,
