@@ -101,7 +101,7 @@ const leerEvento = async () => {
 const evento = await leerEvento();
 if (evento?.stop_hook_active) process.exit(0);
 
-const avisos = await revisaCarriles({ regenera: true });
+const { avisos } = await revisaCarriles({ regenera: true });
 
 if (avisos.length > 0) {
   // stderr + exit 2: el único canal que le llega al modelo, que es quien

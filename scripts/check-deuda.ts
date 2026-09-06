@@ -69,11 +69,53 @@ const MAGNITUD = /\((?:count|mass|level) = (\d+)\)/;
  * La medición. `--all` y no el modo diff: lo que se compara es el TOTAL del repo
  * contra el total sellado, que es lo único que responde «¿ha subido?».
  */
+/**
+ * La frase que dice «no he podido medir», y por qué es una constante exportada.
+ * El hook de pre-push la reconoce para NO bloquear un push por una herramienta
+ * que falta en la máquina, que no es un problema del código; CI, donde la acción
+ * de Qlty la instala, sigue viendo un rojo normal. **Un guardián que no puede
+ * medir no aprueba** —ese es el modo de fallo de esta casa, seis veces— pero sí
+ * puede decir con qué palabras ha fallado, que es lo que permite tratarlo
+ * distinto donde tiene sentido.
+ */
+export const SIN_HERRAMIENTA = "qlty no está instalado en esta máquina";
+
+/**
+ * Y SALE CON UN CÓDIGO PROPIO, no con el 1 de siempre. El hook de pre-push tiene
+ * que distinguir «la deuda sube» —que bloquea— de «no he podido medir», que es un
+ * problema de la máquina y no del código. Un código de salida es un contrato de
+ * una línea; reconocerlo por el texto del mensaje sería la misma frase escrita en
+ * dos sitios, y `BRAND.md` §Cómo se escribe una regla ya dice cómo acaba eso.
+ *
+ * CI no nota la diferencia y no debe notarla: cualquier salida distinta de 0 pone
+ * el paso en rojo, que es lo correcto en la única máquina donde la herramienta
+ * está garantizada.
+ */
+export const CODIGO_SIN_HERRAMIENTA = 3;
+
 function medir(): Hallazgo[] {
-  const sarif = execFileSync("qlty", ["smells", "--all", "--sarif"], {
-    encoding: "utf8",
-    maxBuffer: 64 * 1024 * 1024,
-  });
+  let sarif: string;
+  try {
+    sarif = execFileSync("qlty", ["smells", "--all", "--sarif"], {
+      encoding: "utf8",
+      maxBuffer: 64 * 1024 * 1024,
+    });
+  } catch (e) {
+    // ENOENT es «el binario no está»; cualquier otro fallo es de la medición y se
+    // deja subir, porque ahí el trinquete sí tiene algo que decir.
+    if ((e as NodeJS.ErrnoException)?.code !== "ENOENT") throw e;
+    console.error(
+      [
+        "",
+        `check:deuda — ${SIN_HERRAMIENTA}, así que la deuda NO se ha medido.`,
+        "",
+        "No es un aprobado: sin la herramienta este gate no puede decir nada.",
+        "Se instala con `curl https://qlty.sh | sh`; en CI lo pone la acción de Qlty.",
+        "",
+      ].join("\n"),
+    );
+    process.exit(CODIGO_SIN_HERRAMIENTA);
+  }
   const doc = JSON.parse(sarif) as {
     runs: {
       results: {
