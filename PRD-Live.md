@@ -264,9 +264,6 @@ hoy descartada porque no hay agente: el día que lo haya, es la puerta por la qu
 encuentra, y una entrada más del catálogo (D166).
 
 **Su corpus tiene un límite fijado antes de que exista el agente: lo que no va por escrito
-en el sitio, tampoco va aquí.** Un agente público publica igual que una página, y además
-responde sin Francisco delante y en frases que no puede revisar, así que no sirve como
-papelera de lo que se cuenta en una entrevista y no en abierto (motivos de salida,
-problemas internos, límites de un equipo). **V4 absorbe profundidad sobre lo que ya es
-público, no discreción.**
+en el sitio, tampoco va aquí.** V4 absorbe profundidad sobre lo que ya es público, no
+discreción; el porqué, en `PRD-Historical.md`.
 
