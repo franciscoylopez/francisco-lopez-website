@@ -26,14 +26,24 @@
 //   · **`md:verificar` entero**, que tarda 46 s y encima lee `.next/server/app`:
 //     sobre un build viejo da un verde falso, así que en honestidad hay que
 //     sumarle el build. Corre su caso dominante (`md:anclas`, milisegundos y sin
-//     build), que es por donde se rompen siete de cada catorce. El markdown
-//     completo lo sigue certificando CI.
-//   · **Los rojos que no son de artefacto derivado** (contexto, trinquete de
-//     deuda): esos son gates haciendo su trabajo, y el problema nunca fue el
-//     listón.
+//     build). **Y la cifra que lo justifica ya está medida** (method-review XIII):
+//     de los once commits que regeneraron el markdown del artículo entre el 3 y el
+//     5 de septiembre, **nueve llevaban anclas** —seis eran SOLO anclas— así que
+//     `md:anclas` los habría cazado todos. Lo que se le escapa es el copy puro en
+//     páginas sin anclas, y eso lo sigue certificando CI.
 //   · **El árbol que se empuja.** Mira el árbol de trabajo, no los commits que
 //     viajan. En este repo se empuja lo que se acaba de commitear, así que la
 //     diferencia es teórica; si algún día deja de serlo, lo dirá CI.
+//
+// LO QUE ENTRÓ DESPUÉS, Y POR QUÉ ESTA CABECERA SE EQUIVOCABA (method-review XIII,
+// 2026-09-06). Aquí decía que el **trinquete de deuda** se quedaba fuera porque
+// «esos son gates haciendo su trabajo, y el problema nunca fue el listón». Es
+// cierto y contesta otra pregunta: nadie discutía el listón, se discutía si el
+// autor se entera antes de empujar o diez minutos después. Medidos 80 runs de CI,
+// **14 en rojo y 5 de ellos son el trinquete** —el segundo paso más rojo del
+// repo—, y el único rojo posterior a este hook fue exactamente él. Entra como
+// quinto carril, `soloPush` porque cuesta 2,7 s y una tanda tiene muchos más
+// `Stop` que `push`.
 
 import { revisaCarriles } from "./regeneradores.mjs";
 
@@ -60,12 +70,15 @@ const soloBorrados = async () => {
 
 if (await soloBorrados()) process.exit(0);
 
-const avisos = await revisaCarriles({ regenera: false });
+const { avisos, mirados } = await revisaCarriles({
+  regenera: false,
+  incluyePush: true,
+});
 
 // El metro afirma cuánto ha mirado: sin esta línea, un pre-push que no encontrara
 // ningún carril se vería exactamente igual que uno que los pasó todos.
 console.log(
-  `pre-push — 4 gates de artefacto derivado comprobados · ${avisos.length} en rojo.`,
+  `pre-push — ${mirados} gates comprobados · ${avisos.length} en rojo.`,
 );
 
 if (avisos.length > 0) {
