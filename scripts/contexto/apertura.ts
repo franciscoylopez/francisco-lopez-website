@@ -77,37 +77,43 @@ const SELLO_CICLO: {
   scripts: Retirada;
 } = {
   // Tiene que coincidir con `CICLO_ABIERTO`: es lo que obliga a volver a medir.
-  fecha: "2026-09-04",
-  cierra: "Higiene",
-  // Medido en el cruce: `d11d65d` (lo que dejó «Higiene») → la retirada de
-  // apertura del `method-review` XII.
+  fecha: "2026-09-06",
+  cierra: "Cierre V3",
+  // Medido en el cruce: `7928fb8` (lo que dejó «Cierre V3», con su ritual entero)
+  // → la retirada de apertura del `method-review` XIII. Todo lo posterior a ese
+  // commit —el hook, el catálogo y este corte— es ceremonia de apertura.
   //
-  // LOS DOCUMENTOS RETIRARON CON UN SOLO CORTE, y conviene saber cuál: la sección
-  // de `BRAND.md` que enseña a escribir reglas narraba los casos que su propio
-  // histórico ya contaba, o sea su regla 5 incumplida por ella misma. −59. Y ahí
-  // se acabaron los cortes limpios: lo siguiente por peso son reglas que se
-  // aplican en cada censo, no historia. El próximo que busque empieza por
-  // duplicación, no por tamaño.
-  documentos: { antes: 11_686, despues: 11_627 },
-  // Las skills retiraron PORQUE NO CABÍAN: añadir el disparo XII dejó la suma en
-  // −251 de holgura, así que se retiraron nueve narraciones que ya viven en
-  // `PRD-Historical`. Retirada real, disparada por el rojo y no por la regla.
-  skills: { antes: 20_493, despues: 20_483 },
+  // LOS DOCUMENTOS RETIRARON CON DOS CORTES, y los dos salieron de buscar
+  // DUPLICACIÓN y no tamaño, que es lo que la entrada anterior dejó pedido:
+  //
+  //   · `CLAUDE.md`, el mecanismo del neto de `General` («verde ≤ 0 · rojo ≥ +4»).
+  //     Lo porta `check-tablero.ts`, que además lo APLICA, así que aquí era la
+  //     misma decisión escrita dos veces. Se queda la regla que nadie enforce —el
+  //     cupo de 3-4— y el mecanismo pasa a ser un puntero.
+  //   · `PRD-Live` §V4, el argumento del límite del corpus. La regla se queda; el
+  //     porqué ya estaba entero en `PRD-Historical.md`.
+  //
+  // −78 en total, y el margen pasa de 35 a 113. Se encontraron midiendo
+  // 7-gramas de los tres documentos contra los seis que no se `@`-importan: el
+  // método que la entrada anterior no tenía cuando dijo «se acabaron los cortes
+  // limpios». No se acabaron; faltaba cómo buscarlos.
+  documentos: { antes: 11_665, despues: 11_587 },
+  // Las skills retiraron POR LA MISMA TENSIÓN de siempre y esta vez a favor: el
+  // XIII tenía que crecer su catálogo con 16 palabras de holgura, así que bajó a
+  // `PRD-Historical` el relato de tres disparos y dejó arriba solo sus reglas.
+  // Neto −70 con las dos reglas nuevas ya dentro.
+  skills: { antes: 20_484, despues: 20_414 },
   // En LÍNEAS, no en palabras: `scripts/` es código, y su peso no se lee, se
   // mantiene. La unidad va dicha en el informe para que nadie sume las tres.
   //
-  // Y SE MIDE CON EL CONTADOR DE ESTE ARCHIVO, no con `git ls-files | wc -l`, que
-  // da 134 líneas menos porque no es el mismo conjunto de ficheros. Sellar con un
-  // instrumento y comparar con otro inventa una deriva que no existe — el mismo
-  // fallo que el `method-review` XII acababa de documentar en el sello de medición.
-  //
-  // ESTE CICLO NO RETIRÓ DE `scripts/`, Y EL ÁMBAR DICE LA VERDAD. No se
-  // identificó ningún candidato sin inventárselo, que es justo cómo se gana un
-  // verde falso. Lo que sí salió es la tarea que le pone listón: P72.53, dentro
-  // de «Cierre V3» — el volumen se medía desde D28 y no había suspendido nunca, y
-  // en «Higiene» creció un 29 % sin que nada se pusiera rojo. **Hecha el
-  // 2026-09-05**: es la quinta mitad, y desde D205 sí suspende.
-  scripts: { antes: 20_303, despues: 20_324 },
+  // ESTE CICLO TAMPOCO RETIRÓ DE `scripts/`, Y SUBIÓ: +120 líneas, que son el
+  // quinto carril del hook de pre-push y el manejo de «falta qlty». El ámbar dice
+  // la verdad y no se maquilla. Lo que sí hay ahora, y no había en el ciclo
+  // anterior, es un listón que suspende: la quinta mitad (`verificacion.ts`),
+  // hoy en 0,7286 contra un techo de 0,7400. La holgura que queda son ~330
+  // líneas de andamiaje, así que la próxima apertura ya no puede limitarse a
+  // decir que no encontró candidato.
+  scripts: { antes: 21_226, despues: 21_346 },
 };
 
 /**
