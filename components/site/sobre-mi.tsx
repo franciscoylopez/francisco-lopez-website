@@ -221,8 +221,27 @@ export function SobreMi({
               // El `catch` no es decoración: un navegador puede rechazar la
               // reproducción y una promesa sin capturar dejaría un error en
               // consola de una página que funciona (se queda el póster).
+              //
+              // Y EL `play()` ESPERA A `load` *(2026-09-06, P72.6)*. Este script
+              // es inline y va justo detrás del `<video>`, así que se ejecutaba
+              // DURANTE EL PARSEO del HTML: `play()` arrancaba la descarga de los
+              // 370 KB del .webm compitiendo con el CSS, las dos fuentes (89 KB)
+              // y el propio póster —que es el elemento LCP de esta página y que
+              // el `preload` de arriba marca como prioritario—. En la 4G simulada
+              // de PageSpeed eso son ~1,85 s de descarga metidos en la ruta
+              // crítica para algo que nadie está mirando todavía.
+              //
+              // Medido con Lighthouse local, n=3, bloqueando el .webm: mediana
+              // 93 → 94, LCP −107 ms, TBT −50 ms. Es UN PUNTO, dicho con su
+              // tamaño: no arregla las notas bajas de PSI —esas las explica la
+              // CPU del runner, no esta página— pero es real y sale gratis.
+              //
+              // La guarda de `readyState` no es paranoia: si el navegador
+              // restaura desde bfcache, `load` ya ha ocurrido y el oyente no se
+              // dispararía nunca, así que la apertura se quedaría congelada en el
+              // póster sin que nada fallara.
               dangerouslySetInnerHTML={{
-                __html: `{const v=document.getElementById(${JSON.stringify(APERTURA_ID)});if(v&&!matchMedia("(prefers-reduced-motion: reduce)").matches)v.play().catch(()=>{})}`,
+                __html: `{const a=()=>{const v=document.getElementById(${JSON.stringify(APERTURA_ID)});if(v&&!matchMedia("(prefers-reduced-motion: reduce)").matches)v.play().catch(()=>{})};if(document.readyState==="complete")a();else addEventListener("load",a,{once:true})}`,
               }}
             />
             <noscript>
