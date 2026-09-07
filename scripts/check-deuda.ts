@@ -29,7 +29,9 @@
 // mismo motivo por el que este repo sella el censo, la medición y `General`.
 
 import { execFileSync } from "node:child_process";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
+
+import { escribeSelloJson } from "./sellos";
 
 const SELLO = "scripts/.deuda-sello.json";
 const SELLAR = process.argv.includes("--sellar");
@@ -218,7 +220,7 @@ if (SELLAR) {
     }).trim(),
     fecha: new Date().toISOString().slice(0, 10),
   };
-  writeFileSync(SELLO, `${JSON.stringify(sello, null, 2)}\n`);
+  escribeSelloJson(SELLO, sello);
   console.log(linea);
   console.log(`✓ Sello actualizado → ${SELLO} (total ${sello.total}).`);
   process.exit(0);

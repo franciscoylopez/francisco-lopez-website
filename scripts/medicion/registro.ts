@@ -26,8 +26,9 @@
  * LO QUE NO PROMETE. No dice que la medición esté bien: dice qué se leyó, cuándo y
  * qué no. Juzgarlo sigue siendo del cierre.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+
+import { escribeSelloJson } from "../sellos";
 
 export const MEDICION_REGISTRO = "scripts/medicion/registro.json";
 
@@ -81,8 +82,7 @@ export function leeRegistro(): RegistroMedicion | null {
 }
 
 export function escribeRegistro(registro: RegistroMedicion): void {
-  mkdirSync(dirname(MEDICION_REGISTRO), { recursive: true });
-  writeFileSync(MEDICION_REGISTRO, `${JSON.stringify(registro, null, 2)}\n`);
+  escribeSelloJson(MEDICION_REGISTRO, registro);
 }
 
 /**

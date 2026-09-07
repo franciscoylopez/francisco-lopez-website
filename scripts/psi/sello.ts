@@ -13,9 +13,8 @@
  * pintar y necesita producción, así que la cifra no puede derivarse al construir;
  * lo que sí puede es no envejecer en silencio.
  */
-import { writeFileSync } from "node:fs";
-
 import { PSI_REGISTRO } from "../../lib/figures";
+import { escribeSelloJson } from "../sellos";
 import type { Estrategia, Medicion } from "./medicion";
 import type { Consolidada } from "./muestreo";
 
@@ -104,7 +103,7 @@ export function sella(p: Pasada): void {
     escritorio: rango("desktop"),
   };
 
-  writeFileSync(PSI_REGISTRO, `${JSON.stringify(registro, null, 2)}\n`);
+  escribeSelloJson(PSI_REGISTRO, registro);
   console.log(
     `\n  Sellado en ${PSI_REGISTRO} — ${registro.escritorio.min}-${registro.escritorio.max} escritorio · ` +
       `${registro.movil.min}-${registro.movil.max} móvil, ${p.totalPaginas} páginas, ` +

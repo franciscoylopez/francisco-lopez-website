@@ -25,9 +25,8 @@
  * nota sacada de un análisis a medias, de un Preview o de la caché se lee igual
  * que una buena y es falsa. Dice por qué no ha sellado y deja el sello anterior.
  */
-import { writeFileSync } from "node:fs";
-
 import { AGENTES_REGISTRO } from "../lib/figures";
+import { escribeSelloJson } from "./sellos";
 
 /** El sitio que describe el sello. Medir otro no lo cambia. */
 const PRODUCCION = "https://franciscolopez.es";
@@ -121,7 +120,7 @@ async function main() {
     noAplican,
   };
 
-  writeFileSync(AGENTES_REGISTRO, `${JSON.stringify(registro, null, 2)}\n`);
+  escribeSelloJson(AGENTES_REGISTRO, registro);
   console.log(
     `  Sellado en ${AGENTES_REGISTRO} — ${registro.nota}/100, grado ${registro.grado}, ` +
       `${registro.checks} comprobaciones (${noAplican} no aplican), ${registro.fecha}.`,
