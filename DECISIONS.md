@@ -245,6 +245,7 @@
 - D207 · La versión de Node estaba escrita dos veces y con valores distintos: CI validaba un runtime que no despliega
 - D208 · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal
 - D209 · Una nota de PageSpeed sin la máquina que la sacó no se puede leer: `psi` publica el `benchmarkIndex`
+- D210 · Un sello se escribe con el formato que su gate le va a exigir, y eso lo garantiza el binario de prettier, no un `JSON.stringify`
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13547,3 +13548,58 @@ cifra estaba, faltaba el metro que la hace legible.
 la flota. Tampoco vale como umbral automático: no se rechaza una medición por venir de un runner
 lento, porque entonces el instrumento decidiría qué dato le gusta. Informa; el juicio sigue
 siendo de quien lee.
+
+## D210 · Un sello se escribe con el formato que su gate le va a exigir, y eso lo garantiza el binario de prettier, no un `JSON.stringify` — 2026-09-07
+
+**Decisión.** Ningún sello de este repo se serializa a mano. Se escribe con
+`escribeSelloJson(ruta, valor)` (`scripts/sellos.ts`), que vuelca el JSON y lo pasa por el
+**binario** de prettier antes de darlo por escrito. Lo usan los seis: deuda, psi, agentes,
+medición, peso del markdown e inventario del censo.
+
+**El porqué, medido.** `npm run deuda:sellar` escribía `scripts/.deuda-sello.json` con
+`JSON.stringify(x, null, 2)`, y el paso siguiente de CI —`prettier --check` sobre todo el
+repo— lo marcaba en rojo **siempre**: 90 líneas escritas contra 56 formateadas. Y difiere
+**una sola cosa**, no el formato entero:
+
+    - "qlty:function-complexity|components/site/contact-form.tsx": [
+    -   32
+    - ],
+    + "qlty:function-complexity|components/site/contact-form.tsx": [32],
+
+`JSON.stringify` rompe siempre un array en varias líneas; Prettier lo colapsa si cabe en el
+ancho. Las 34 líneas de diferencia son eso repetido. **Y el momento importa:** el trinquete de
+D186 está diseñado para que re-sellar sea una decisión rara y visible, que es justo cuando
+cobraba una vuelta de CI ajena a la deuda. El gate conocía el arreglo y no lo aplicaba.
+
+**Por qué un helper y no seis parches.** El patrón está copiado en seis escritores. Hoy solo
+falla el de deuda, porque es el único cuyo JSON lleva arrays cortos; los otros cinco están a
+un campo de distancia de fallar igual. Se arregla el patrón.
+
+**Por qué el BINARIO y no la API, que es lo que va a intentar el siguiente que lo toque.** La
+API de Prettier 3 es **async**, y tres de los seis escritores cuelgan de código de módulo que
+`tsx` compila a CJS, donde no hay `await` de primer nivel:
+
+    ERROR: Top-level await is currently not supported with the "cjs" output format
+
+O sea que usar la API obligaba a reestructurar `check-deuda.ts`, `censo.ts` y `md/extraer.ts`
+para cambiar una línea en cada uno — y ese refactor sí podía mover el trinquete que este
+arreglo existe para no molestar. El binario, además, da algo que la API no: formatea **por
+definición** igual que el `format:check` de CI, misma config y mismo `.prettierignore`, así
+que las dos mitades del contrato no pueden separarse. Cuesta un subproceso en una operación
+rara. Y si prettier no está, revienta diciéndolo: un sello a medio formatear no rompe nada hoy
+y pone el CI en rojo mañana.
+
+**Un byte NUL hace que `grep` omita un archivo entero sin decirlo, y es la misma familia por
+sexta vez.** La ficha de esta tarea afirmaba cuatro escritores, y son seis. Uno se escapó por
+partir la llamada en varias líneas; el otro, `scripts/censo/inventario.ts`, porque llevaba un
+**byte NUL literal** dentro de un template —centinela deliberado de `identidad()`, escrito
+como byte crudo en vez de secuencia de escape—. Con un NUL dentro, `grep` clasifica el archivo
+como binario y **lo salta en silencio**: ni error, ni aviso, ni la línea. Un inventario hecho
+por `grep` sobre ese árbol devuelve una lista corta con pinta de completa, que es exactamente
+el modo de fallo de D38, D57, D60 y D63. Pasa a secuencia de escape: mismo valor en ejecución,
+archivo visible para las herramientas.
+
+**Lo que NO arregla, dicho para no prometer de más.** `porArea` se sigue serializando en orden
+de inserción de qlty, así que dos sellos de la misma deuda pueden dar un diff de dos líneas.
+El gate no lo compara —mira `total`, `hallazgos` y `magnitudes`—, o sea que es ruido en el
+diff y no un agujero.
