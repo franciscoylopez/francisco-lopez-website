@@ -31,8 +31,10 @@
  * de la que habla el párrafo; la EN pesa otra cosa y publicar dos cifras para la
  * misma afirmación sería inventarse un matiz que el texto no hace.
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+
+import { escribeSelloJson } from "../sellos";
 
 const REGISTRO_PESO = join("content", "md", "registro.json");
 
@@ -115,12 +117,7 @@ export function sellaPeso(
     markdown,
     veces,
   };
-  mkdirSync(dirname(REGISTRO_PESO), { recursive: true });
-  writeFileSync(
-    REGISTRO_PESO,
-    JSON.stringify(registro, null, 2) + "\n",
-    "utf8",
-  );
+  escribeSelloJson(REGISTRO_PESO, registro);
   return {
     linea: `  · portada: ${ratio}× (${html} B / ${markdown} B) — sello ${previo ? `movido de «más de ${previo.veces}» a` : "nuevo en"} «más de ${veces}»`,
   };
