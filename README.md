@@ -359,6 +359,9 @@ scripts/check-*.ts         Los guardianes de CI. Todos comparten dos reglas de m
                            y el informe (D187, D196). Cuáles son no se escribe aquí: se
                            ven en `scripts/`, y la lista que había ya había caducado
 scripts/indices.ts         Genera los índices de markdown derivados de sus cabeceras (D69)
+scripts/sellos.ts          La única vía por la que se escribe un sello: vuelca el JSON y lo
+                           pasa por el binario de prettier, porque el `format:check` de CI
+                           mira también los sellos y el serializador de Node no coincide (D210)
 scripts/inventario.ts      El inventario de components/ui/ y la política de qué se publica
 scripts/check-guardianes.ts  Un caso malo conocido por guardián. Muta archivos para
                            provocar el fallo, así que exige árbol limpio y restaura (D70)
