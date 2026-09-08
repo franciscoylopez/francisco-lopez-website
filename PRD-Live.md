@@ -51,7 +51,8 @@ Hitos, justo debajo del Hero, es la red de seguridad para el lector rápido.
 
 Y con ellas: **CV en PDF bilingüe** descargable (§6) · **SEO técnico y Open Graph** por
 página · **medición** (GA4/GTM y Clarity, con Vercel Web Analytics aparte; **solo Clarity y
-las cookies esperan al consentimiento**, D170/D198) ·
+las cookies esperan al consentimiento**, y el ping sin cookies de GA4 va **declarado** en
+`/cookies` como la segunda excepción escrita al criterio propio, D170/D198/D211) ·
 **dominio propio** · **páginas 404/500 de marca e i18n** · **cabeceras de seguridad**.
 
 **Cada página se sirve también en markdown** para quien la lea con un agente: el `<main>` sin

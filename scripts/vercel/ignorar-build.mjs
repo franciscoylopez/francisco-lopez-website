@@ -4,9 +4,15 @@
 //
 // POR QUÉ EXISTE (2026-09-06, P72.595). El Deployment Storage del equipo llegó al
 // 100 %. No es caudal ni son los assets (`public/` entero son 3 MB): es el NÚMERO
-// de despliegues conservados, ~26 al día. El proyecto ya retiene 30 días y borra
-// solo, así que el embalse está en régimen permanente y solo baja de dos maneras:
-// borrando lo de ahora, que se rellena, o generando menos. Esto es lo segundo.
+// de despliegues conservados, ~26 al día. El proyecto ya retiene y borra solo
+// (preview 7 días · producción 30 · cancelados 1 · errores 7 · `deploymentsToKeep`
+// 10), así que el embalse está en régimen permanente. Esto baja el caudal.
+//
+// Y AQUÍ PONÍA QUE TAMBIÉN SE PODÍA BAJAR BORRANDO. **Medido el 2026-09-08
+// (P72.625, D212): no.** Se purgaron 409 preview y el nivel pasó de 11,12 GB con
+// 752 despliegues a 11,51 GB con 319. Subió. Por qué borrar no libera sigue
+// abierto, pero la consecuencia para este archivo ya no lo está: **generar menos
+// es la única palanca comprobada.**
 //
 // CORRE ANTES DE `npm install`, así que aquí no hay `tsx`, ni dependencias, ni
 // TypeScript: node pelado y `.mjs`. Por eso las reglas se prueban desde vitest
