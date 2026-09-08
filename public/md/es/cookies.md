@@ -15,7 +15,7 @@ Legal
 
 Última actualización: 31 de agosto de 2026 (2026-08-31)
 
-Aquí te cuento dos cosas: qué hago con tus datos si te pones en contacto conmigo, y qué cookies usa esta web. En las dos, el mismo criterio: el mínimo, con nombres y plazos concretos, y ninguna cookie de analítica sin tu consentimiento.
+Aquí te cuento dos cosas: qué hago con tus datos si te pones en contacto conmigo, y qué cookies usa esta web. En las dos, el mismo criterio: el mínimo, con nombres y plazos concretos, y ninguna cookie de analítica sin tu consentimiento. Lo poco que se mide sin cookies antes de que decidas también está aquí, con su nombre.
 
 ## Tus datos cuando me escribes
 
@@ -69,15 +69,17 @@ Este es el detalle de lo que puede cargarse, agrupado por categoría:
 
 ## Base legal
 
-Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las de analítica solo se cargan con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web.
+Las cookies necesarias se cargan para que la web funcione y no requieren consentimiento. Las cookies de analítica solo se escriben con tu consentimiento previo, que puedes dar, denegar o retirar cuando quieras, sin que afecte al funcionamiento de la web. Lo que se mide sin cookies antes de que decidas te lo cuento justo aquí debajo.
 
-## Lo que se mide antes de que decidas, que son dos cosas
+## Lo que se mide antes de que decidas, que son tres cosas
 
 La primera es un contador: cuento que has visto este aviso y qué elegiste. Agregado, la primera vez y solo una vez por navegador, y lo lleva [Upstash](https://upstash.com/trust/privacy.pdf). No guarda tu dirección IP, ni cookies, ni nada que permita identificarte: son tres números que suben. Por eso no te pido permiso para él, porque no hay ningún dato personal que tratar.
 
 La segunda sí trata datos, y es la que quiero explicarte sin adornos: **[Vercel Web Analytics](https://vercel.com/legal/privacy-policy)**, que cuenta las páginas que se visitan. No usa cookies y no guarda nada en tu dispositivo, pero para no contarte dos veces el mismo día calcula un identificador temporal a partir de tu dirección IP y de tu navegador. Ese identificador se regenera cada día y la IP no se conserva. De ahí salen el país, el tipo de dispositivo y la página vista; nada que te señale a ti.
 
-Y la parte incómoda, que prefiero decir yo: **este sitio presume de pedir permiso a todo el mundo, y esto no lo pide.** La ley no lo exige (sin cookies ni almacenamiento en tu equipo, el consentimiento previo del artículo 22.2 de la LSSI no aplica, y la base legal es mi interés legítimo del artículo 6.1.f del RGPD en saber cuánta gente lee esto), pero es una excepción a mi propio criterio y no a la norma. La razón es que la analítica con permiso solo ve a quien acepta, así que no puede decirme cuánta gente hay realmente. Si no te parece bien, [escríbeme](#contacto) y dejo de contarte: es el derecho de oposición de más arriba y lo respeto sin pedir explicaciones.
+La tercera es **[Google Analytics](https://policies.google.com/technologies/partner-sites)**, y es la que menos esperaba encontrarme: el contenedor de Google se carga con la página, así que manda un aviso de visita antes de que hayas decidido nada. Sin tu permiso va sin cookies y sin guardar nada en tu equipo, y cada carga cuenta como un visitante nuevo, así que no enlaza esta visita con ninguna anterior tuya. De ahí salen la página que estás viendo, los datos básicos de tu navegador y tu dirección IP, de la que Google deduce el país. Solo si aceptas se escriben las cookies que sí te reconocen entre visitas, y solo entonces carga Clarity.
+
+Y la parte incómoda, que prefiero decir yo: **este sitio presume de pedir permiso a todo el mundo, y las dos últimas no lo piden.** La ley no lo exige (sin cookies ni almacenamiento en tu equipo, el consentimiento previo del artículo 22.2 de la LSSI no aplica, y la base legal es mi interés legítimo del artículo 6.1.f del RGPD en saber cuánta gente lee esto), pero es una excepción a mi propio criterio y no a la norma. La razón es que quiero saber cuánta gente lee esto, y una medición que solo ve a quien acepta no me lo puede decir. Si no te parece bien, [escríbeme](#contacto) y dejo de contarte: es el derecho de oposición de más arriba y lo respeto sin pedir explicaciones.
 
 ## Cómo gestionar o retirar tu consentimiento
 
@@ -89,7 +91,7 @@ También puedes bloquear o borrar cookies desde la configuración de tu navegado
 
 ## Terceros
 
-La analítica que requiere tu consentimiento la proporcionan Google (Google Tag Manager y Google Analytics) y Microsoft (Clarity), que tratan los datos conforme a sus propias políticas. Puedes consultarlas en [las políticas de privacidad de Google](https://policies.google.com/technologies/partner-sites) y en [la declaración de privacidad de Microsoft](https://privacy.microsoft.com/privacystatement).
+La analítica la proporcionan Google (Google Tag Manager y Google Analytics) y Microsoft (Clarity), que tratan los datos conforme a sus propias políticas. Clarity solo carga con tu consentimiento; de Google sale además, sin él, el aviso de visita sin cookies que te explico más arriba. Puedes consultarlas en [las políticas de privacidad de Google](https://policies.google.com/technologies/partner-sites) y en [la declaración de privacidad de Microsoft](https://privacy.microsoft.com/privacystatement).
 
 ## Vídeo incrustado
 

@@ -243,9 +243,11 @@
 - D205 · El volumen del andamiaje se mide contra el producto, no contra sí mismo
 - D206 · La ruta pública deja de ser la carpeta: el inglés traduce sus slugs
 - D207 · La versión de Node estaba escrita dos veces y con valores distintos: CI validaba un runtime que no despliega
-- D208 · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal
+- D208 (su aritmética, corregida por D212) · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal
 - D209 · Una nota de PageSpeed sin la máquina que la sacó no se puede leer: `psi` publica el `benchmarkIndex`
 - D210 · Un sello se escribe con el formato que su gate le va a exigir, y eso lo garantiza el binario de prettier, no un `JSON.stringify`
+- D211 · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban
+- D212 · El embalse no bajó al purgarlo, y la aritmética que decía que sí no reconcilia por ningún lado
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13423,7 +13425,7 @@ Vercel, es el único que queda fuera del repo—.
 agravante de que las dos copias **no decían lo mismo** y aun así todo estaba verde. Un
 guardián que valida el runtime equivocado no falla: aprueba.
 
-## D208 · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal — 2026-09-06
+## D208 (su aritmética, corregida por D212) · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal — 2026-09-06
 
 **Decisión.** Nace `vercel.json` con un solo campo, `ignoreCommand`, que apunta a
 `scripts/vercel/ignorar-build.mjs`: el commit que no toca nada que el sitio sirva **no genera
@@ -13603,3 +13605,145 @@ archivo visible para las herramientas.
 de inserción de qlty, así que dos sellos de la misma deuda pueden dar un diff de dos líneas.
 El gate no lo compara —mira `total`, `hallazgos` y `magnitudes`—, o sea que es ruido en el
 diff y no un agujero.
+
+## D211 · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban — 2026-09-08
+
+**Decisión.** El ping sin cookies que GA4 recibe de todo el mundo (D198) **se declara en
+`/cookies`** como excepción escrita al criterio propio, **igual que Vercel Web Analytics**
+(D170), y **el gate de GTM no se toca**: sigue siendo de entorno. Si además pasa a depender del
+consentimiento es una decisión posterior, con ficha propia, **después del pico del
+lanzamiento**.
+
+**El orden es el motivo entero.** Las dos salidas coherentes que planteaba la ficha —cerrar el
+gate o declararlo— cierran la misma incoherencia, y solo se diferencian en qué destruyen.
+Cerrarlo el 9 mata la única serie de volumen que existe justo el día antes de que haya volumen
+que medir; declararlo no cuesta ninguna medición. Así que se hacen las dos, en el orden en que
+no se estorban: **primero la que no destruye nada.** El +3 de mediana de PageSpeed que se
+llevaría cerrar el gate (296 KB y 419 ms de GTM+GA4, medidos en P72.62) sigue disponible
+después, y **no puede ser el motivo**: D198 decidió a propósito que la cifra del lanzamiento no
+se deflacte por consentimiento.
+
+### Lo que no estaba en la ficha: había una frase publicada que ya era falsa
+
+`counterBody3` justificaba la excepción de Vercel Web Analytics diciendo *«la analítica con
+permiso solo ve a quien acepta, así que no puede decirme cuánta gente hay realmente»*. **D198
+la invalidó cuatro días antes** y nadie fue a buscarla: la analítica con permiso de este sitio
+ve a todo el mundo, porque el permiso nunca gobernó el envío. Así que esto no era un hueco por
+rellenar, era **una corrección pendiente**, y habría salido del sitio tal cual con cualquiera de
+las dos salidas.
+
+La razón que sí se sostiene, y que es la que queda escrita, es **hipotética y no descriptiva**:
+*quiero saber cuánta gente lee esto, y una medición que solo ve a quien acepta no me lo puede
+decir*. Vale igual antes y después de cerrar el gate, que es la prueba de que la anterior estaba
+describiendo un estado del mundo en vez de un criterio.
+
+### Las cuatro frases que tocaba mover, y por qué son cuatro y no una
+
+D170 anotó que el `lead` y `whatBody` sobrevivían «en lectura literal» y avisó de que *esa clase
+de frase aguanta una vez y no dos*. Esta era la segunda, así que se pagan todas:
+
+| Dónde | Decía | Por qué se movía |
+|---|---|---|
+| `counterHeading` | «que son dos cosas» | Son **tres** |
+| `counterBody3` | la razón invalidada | Ver arriba; pasa a `counterBody4` reescrita, y el hueco lo ocupa la declaración de GA4 |
+| `legalBody` | «Las de analítica solo se **cargan** con tu consentimiento previo» | Es justo la frontera que D198 midió: cargar no es escribir. Pasa a «solo se **escriben**», y apunta al apartado de al lado |
+| `thirdBody` | «La analítica **que requiere tu consentimiento** la proporcionan Google … y Microsoft» | Google está ahora en los dos lados del consentimiento, así que el adjetivo repartía mal |
+| `lead` | «ninguna cookie de analítica sin tu consentimiento» | **Se queda**, porque es cierto al pie de la letra. Lo que se le añade es la frase que quita la implicatura: lo que se mide sin cookies también está en la página |
+
+**`whatBody` es el único que no se toca**: define qué es una cookie, y ahí el sujeto de la frase
+ya es la cookie y no la medición.
+
+### Lo que esto deja abierto a propósito
+
+- **Cerrar el gate de GTM.** Ficha nueva, posterior al lanzamiento del 10.
+- **Si Vercel Web Analytics sigue aportando algo.** D170 lo justificó con que «detrás del
+  consentimiento no aportaría nada sobre GA4, mismo denominador, mismo sesgo», y esa premisa
+  suponía que GA4 **sí** estaba deflactado. No lo está, así que el solape entre las dos es mayor
+  del que dice D170. No se resuelve aquí porque cambia con la decisión del gate: si GTM acaba
+  gateado, Vercel vuelve a ser lo único que ve al que no consiente y la premisa de D170 se
+  restaura sola.
+
+## D212 · El embalse no bajó al purgarlo, y la aritmética que decía que sí no reconcilia por ningún lado — 2026-09-08
+
+**Decisión.** Queda escrito, con la cifra al lado, que **purgar despliegues no baja el Deployment
+Storage**: el 6-09 el panel marcaba **11,12 GB con 752 despliegues**, se borraron **409** preview
+de más de 7 días, y el 7-09 —el último punto que el panel tiene calculado— marca **11,51 GB**.
+Subió. La conclusión de D208 («lo que sobra es el caudal, no el embalse») **se refuerza**; lo que
+se corrige es su **aritmética**, que daba el número por entendido cuando no lo estaba.
+
+**Lo que la ficha P72.625 daba por hecho y era falso.** Estimaba el estado posterior a la purga
+en **~5,1 GB** por regla de tres (11,12 × 343/752). No es que se quede corta: **va en la
+dirección contraria**. Y la propia ficha había escrito el criterio de refutación —*«si el panel
+no dice algo cercano a 5, la proporción no vale y hay que saber por qué»*—, que es lo único que
+hizo que esto se mirase.
+
+### El instrumento, validado antes de creerse el hallazgo
+
+Dos cosas del panel no se podían dar por buenas, y las dos se comprobaron:
+
+1. **El titular decía `0 B` con 319 despliegues vivos**, que es imposible. Es el punto de hoy sin
+   calcular, no un dato. *Un metro que devuelve cero parece un aprobado.*
+2. **La curva no baja NUNCA** en 30 días, con una retención que borra a diario. Eso es la firma de
+   una métrica **acumulada sobre la ventana**, no de un nivel, y si lo fuera el número no se podría
+   comparar con ningún tope. Se separó cambiando el rango a 7 días: **muestra los mismos valores,
+   recortados**. O sea que **es un nivel**, y la ausencia de dientes de sierra queda sin explicar.
+
+### La aritmética que no reconcilia, y que es el verdadero hallazgo
+
+Para una métrica de nivel, estas dos lecturas no pueden ser las dos ciertas:
+
+| Momento | Despliegues | Storage | Por despliegue |
+|---|---|---|---|
+| 6-09, antes de purgar | 752 | 11,12 GB | **14,79 MB** |
+| 7-09, después de purgar | 318 + 1 | 11,51 GB | **36,15 MB** |
+
+Desaparecen 434 despliegues del censo de la API —**comprobado: la API ya solo devuelve 319**, así
+que el borrado ocurrió— y el nivel sube 0,39 GB. Con el caudal de esos dos días (≈23/día) lo nuevo
+aporta del orden de 1,7 GB, así que ni «no libera nada» ni «libera proporcionalmente» cuadran con
+lo observado.
+
+**Por qué esto importa más que la cifra.** D208 construyó su modelo de régimen permanente sobre
+los 14,79 MB/despliegue —*«25,9 despliegues/día × 30 días ≈ 752 ≈ 11,12 GB»*— y lo usó para
+proyectar 9,5-9,9 GB con el caudal reducido. **Ese modelo se apoya en un cociente que hoy vale
+2,4× más.** La decisión de D208 (el `ignoreCommand`) no se toca: es correcta y la valida el
+apartado siguiente. Lo que no se sostiene es la proyección.
+
+### Lo que sí quedó medido, y era la otra mitad de la ficha
+
+**Un despliegue `CANCELED` por `ignoreCommand` no escribe una sola salida de build.** Comparando
+el objeto de `/v13/deployments` de un cancelado (`dpl_CDTiCVSLZUtq5kmk8b9JxqN67ufR`, 7-09, `main`)
+contra el último `READY`:
+
+| | CANCELED | READY |
+|---|---|---|
+| `lambdas[0].output` | `[]` | 60+ registros de función |
+| De `buildingAt` al final | **3,7 s** (`canceledAt`) | 37,5 s (`ready`) |
+
+El contenedor arranca, el `ignoreCommand` dice que no y se aborta antes de producir nada. Con la
+retención de cancelados en 1 día nunca hay más de un puñado: el censo de hoy tiene **4**. La
+premisa que sostiene el ahorro de D208 se sostiene.
+
+*(Lo que la API no da es un tamaño por despliegue: `/v6/deployments/{id}/files` responde 404 en los
+dos. La prueba es la **ausencia de salidas**, no un cero en bytes.)*
+
+### Dos cosas más que salieron de mirar, y no estaban en la ficha
+
+- **La retención de errores no era la que decía la ficha.** Daba por «verificado por API»
+  `preview 7 · producción 30 · cancelados 1 · errores 1 · deploymentsToKeep 10`. La API de hoy, y
+  es idéntica en los **dos** proyectos del equipo: `expirationDaysErrored` es **7**, no 1. Cuatro
+  de cinco coinciden. **Y esos valores aplicados solo vivían en una ficha de Notion**, que es lo
+  que hizo que el error durase: D208 documenta el estado *anterior* al cambio de retención.
+- **Todo el embalse es del sitio.** El segundo proyecto del equipo, `mdm-lowfi-v20`, pesa
+  **950,22 kB** con un único despliegue.
+
+### Lo que queda abierto, dicho para que no se dé por cerrado
+
+**Por qué borrar 434 despliegues no bajó el nivel.** Los candidatos son que Vercel libere con
+retraso (recolección diferida) o que el borrado no libere porque el contenido está deduplicado y
+sigue referenciado. **No se decide con más razonamiento: se decide volviendo a mirar el panel
+dentro de unos días**, que cuesta un vistazo. Tiene ficha.
+
+**El método que hay que quedarse.** La ficha traía un número estimado por regla de tres y
+presentado como si fuera una medida (*«~5,1 GB»*, entre paréntesis «es una estimación
+proporcional»). Lo que la salvó fue haber escrito **el criterio de refutación en la misma frase**.
+Sin ese «si el panel no dice algo cercano a 5», la estimación se habría heredado como dato.

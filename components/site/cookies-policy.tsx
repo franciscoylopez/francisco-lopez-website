@@ -26,7 +26,8 @@ const MICROSOFT_PRIVACY_URL = "https://privacy.microsoft.com/privacystatement";
 
 // Página de política de cookies / aviso de privacidad (P23). Documenta lo que la web
 // carga HOY: el almacenamiento de consentimiento (localStorage), el contenedor de
-// Google Tag Manager y, bajo consentimiento, Google Analytics + Microsoft Clarity (P37).
+// Google Tag Manager (que carga y EMITE sin consentimiento, sin cookies: D198/D211) y,
+// bajo consentimiento, las cookies de Google Analytics + Microsoft Clarity (P37).
 //
 // MANTENIMIENTO: al añadir una herramienta nueva que use cookies o almacenamiento,
 // hay que AÑADIR su fila a la tabla y actualizar la fecha de `updated` en el
@@ -208,10 +209,15 @@ export function CookiesPolicy({
                 que nada se carga sin su permiso — no al final, entre los
                 terceros, donde parecería una nota al pie. */}
             <Section heading={t.counterHeading}>
-              {/* Con `Rich` y no texto plano: los tres párrafos llevan enlaces a
-                  las políticas de los dos proveedores y a la sección de contacto
-                  de esta misma página, que es la vía de oposición que el tercero
-                  ofrece. Un enlace ahí no es adorno: es el mecanismo. */}
+              {/* Con `Rich` y no texto plano: los cuatro párrafos llevan enlaces
+                  a las políticas de los tres proveedores y a la sección de
+                  contacto de esta misma página, que es la vía de oposición que el
+                  tercero ofrece. Un enlace ahí no es adorno: es el mecanismo.
+
+                  SON CUATRO DESDE P72.62 (D211): el tercero declara el ping sin
+                  cookies que GA4 recibe antes de que nadie decida (D198), y el
+                  cuarto es la parte incómoda, que ahora cubre a los DOS que no
+                  piden permiso y no solo a Vercel Web Analytics (D170). */}
               <p>
                 <Rich text={t.counterBody} />
               </p>
@@ -220,6 +226,9 @@ export function CookiesPolicy({
               </p>
               <p>
                 <Rich text={t.counterBody3} />
+              </p>
+              <p>
+                <Rich text={t.counterBody4} />
               </p>
             </Section>
 
