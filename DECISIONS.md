@@ -246,6 +246,7 @@
 - D208 · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal
 - D209 · Una nota de PageSpeed sin la máquina que la sacó no se puede leer: `psi` publica el `benchmarkIndex`
 - D210 · Un sello se escribe con el formato que su gate le va a exigir, y eso lo garantiza el binario de prettier, no un `JSON.stringify`
+- D211 · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13603,3 +13604,60 @@ archivo visible para las herramientas.
 de inserción de qlty, así que dos sellos de la misma deuda pueden dar un diff de dos líneas.
 El gate no lo compara —mira `total`, `hallazgos` y `magnitudes`—, o sea que es ruido en el
 diff y no un agujero.
+
+## D211 · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban — 2026-09-08
+
+**Decisión.** El ping sin cookies que GA4 recibe de todo el mundo (D198) **se declara en
+`/cookies`** como excepción escrita al criterio propio, **igual que Vercel Web Analytics**
+(D170), y **el gate de GTM no se toca**: sigue siendo de entorno. Si además pasa a depender del
+consentimiento es una decisión posterior, con ficha propia, **después del pico del
+lanzamiento**.
+
+**El orden es el motivo entero.** Las dos salidas coherentes que planteaba la ficha —cerrar el
+gate o declararlo— cierran la misma incoherencia, y solo se diferencian en qué destruyen.
+Cerrarlo el 9 mata la única serie de volumen que existe justo el día antes de que haya volumen
+que medir; declararlo no cuesta ninguna medición. Así que se hacen las dos, en el orden en que
+no se estorban: **primero la que no destruye nada.** El +3 de mediana de PageSpeed que se
+llevaría cerrar el gate (296 KB y 419 ms de GTM+GA4, medidos en P72.62) sigue disponible
+después, y **no puede ser el motivo**: D198 decidió a propósito que la cifra del lanzamiento no
+se deflacte por consentimiento.
+
+### Lo que no estaba en la ficha: había una frase publicada que ya era falsa
+
+`counterBody3` justificaba la excepción de Vercel Web Analytics diciendo *«la analítica con
+permiso solo ve a quien acepta, así que no puede decirme cuánta gente hay realmente»*. **D198
+la invalidó cuatro días antes** y nadie fue a buscarla: la analítica con permiso de este sitio
+ve a todo el mundo, porque el permiso nunca gobernó el envío. Así que esto no era un hueco por
+rellenar, era **una corrección pendiente**, y habría salido del sitio tal cual con cualquiera de
+las dos salidas.
+
+La razón que sí se sostiene, y que es la que queda escrita, es **hipotética y no descriptiva**:
+*quiero saber cuánta gente lee esto, y una medición que solo ve a quien acepta no me lo puede
+decir*. Vale igual antes y después de cerrar el gate, que es la prueba de que la anterior estaba
+describiendo un estado del mundo en vez de un criterio.
+
+### Las cuatro frases que tocaba mover, y por qué son cuatro y no una
+
+D170 anotó que el `lead` y `whatBody` sobrevivían «en lectura literal» y avisó de que *esa clase
+de frase aguanta una vez y no dos*. Esta era la segunda, así que se pagan todas:
+
+| Dónde | Decía | Por qué se movía |
+|---|---|---|
+| `counterHeading` | «que son dos cosas» | Son **tres** |
+| `counterBody3` | la razón invalidada | Ver arriba; pasa a `counterBody4` reescrita, y el hueco lo ocupa la declaración de GA4 |
+| `legalBody` | «Las de analítica solo se **cargan** con tu consentimiento previo» | Es justo la frontera que D198 midió: cargar no es escribir. Pasa a «solo se **escriben**», y apunta al apartado de al lado |
+| `thirdBody` | «La analítica **que requiere tu consentimiento** la proporcionan Google … y Microsoft» | Google está ahora en los dos lados del consentimiento, así que el adjetivo repartía mal |
+| `lead` | «ninguna cookie de analítica sin tu consentimiento» | **Se queda**, porque es cierto al pie de la letra. Lo que se le añade es la frase que quita la implicatura: lo que se mide sin cookies también está en la página |
+
+**`whatBody` es el único que no se toca**: define qué es una cookie, y ahí el sujeto de la frase
+ya es la cookie y no la medición.
+
+### Lo que esto deja abierto a propósito
+
+- **Cerrar el gate de GTM.** Ficha nueva, posterior al lanzamiento del 10.
+- **Si Vercel Web Analytics sigue aportando algo.** D170 lo justificó con que «detrás del
+  consentimiento no aportaría nada sobre GA4, mismo denominador, mismo sesgo», y esa premisa
+  suponía que GA4 **sí** estaba deflactado. No lo está, así que el solape entre las dos es mayor
+  del que dice D170. No se resuelve aquí porque cambia con la decisión del gate: si GTM acaba
+  gateado, Vercel vuelve a ser lo único que ve al que no consiente y la premisa de D170 se
+  restaura sola.
