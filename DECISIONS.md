@@ -13796,6 +13796,21 @@ que **desde fuera puede no ser contestable**, y lo que queda no es medir más, e
 por encima del tope de 10 GB del plan (que hasta hoy no ha bloqueado ningún despliegue) o
 preguntarle a Vercel. **Eso es decisión de Francisco, no un hallazgo.**
 
+**DECIDIDO EL 2026-09-12: se vive por encima del tope, de momento.** No se pregunta a Vercel y
+no se vuelve a purgar. El motivo es que **el tope no está haciendo nada**: lleva desde el 6 de
+septiembre por encima de 10 GB y no ha bloqueado un solo despliegue, así que el coste real de
+estar fuera de límite es hoy cero y el de investigarlo no.
+
+**Y lo que reabre esto NO es una cifra más alta: es un despliegue que falle por cuota.** La
+diferencia importa, porque volver a mirar el número en unos días es exactamente lo que este
+D-entry acaba de demostrar que no informa de nada — el nivel no se mueve, se mire cuando se
+mire. Por eso **no nace tarea con fecha**: el disparador es un evento, y es ruidoso (un deploy
+rojo, un aviso de Vercel), no algo que se pueda pasar por alto en silencio.
+
+*(La otra mitad de la asimetría, para que la decisión no se lea como pereza: si el tope llegara
+a morder, la palanca tampoco sería purgar — eso ya está medido aquí. Sería preguntar, o cambiar
+de plan. Ninguna de las dos se abarata por hacerla hoy.)*
+
 **Lo que se midió y lo que no, para no leerlo de más.** El recuento es firme: `vercel list`
 paginado hasta agotarlo, 221 en tres páginas. El GB sale de la **tarjeta resumen** del panel, no
 del tooltip del gráfico que pedía la ficha — el bloque de Deployment Storage no llegó a
