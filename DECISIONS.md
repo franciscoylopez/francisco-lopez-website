@@ -13768,6 +13768,47 @@ retraso (recolección diferida) o que el borrado no libere porque el contenido e
 sigue referenciado. **No se decide con más razonamiento: se decide volviendo a mirar el panel
 dentro de unos días**, que cuesta un vistazo. Tiene ficha.
 
+### CONTESTADO EL 2026-09-12 (P74.56): es el candidato 2, y con más fuerza de la que la pregunta pedía
+
+**El nivel no ha bajado, y entretanto el recuento ha seguido cayendo solo.** La retención ha ido
+expirando despliegues sin que nadie tocara nada, así que hay una segunda observación gratis:
+
+| Fecha | Despliegues | Deployment Storage |
+|---|---|---|
+| 2026-09-06 (antes de purgar) | 752 | 11,12 GB |
+| 2026-09-07 (tras purgar 433) | 319 | 11,51 GB |
+| **2026-09-12** | **221** | **11,25 GB** |
+
+El recuento ha caído un **31 %** en cinco días y el nivel se ha movido un **2,3 %** — y hacia
+abajo menos de lo que subió cuando se purgó. **Borrar despliegues no libera espacio**, ni de
+golpe ni con cinco días de recolección diferida. Queda descartado el candidato 1.
+
+**Y eso tumba algo más que la pregunta: tumba la UNIDAD.** «MB por despliegue» ha ido
+14,79 → 36,15 → **52,1**, y las tres veces porque el denominador encogía, no porque cada
+despliegue pese más. Un cociente cuyo numerador no responde al denominador no es una tasa: es
+una división. Así que la proyección de régimen permanente de **D208** (9,5-9,9 GB) no hay que
+rehacerla con otro número — **no tiene base**, porque está construida sobre esa unidad.
+
+**Consecuencia incómoda y honesta: hoy no se conoce ninguna palanca demostrada.** Purgar no baja
+el nivel, y expirar tampoco; del caudal solo se sabe que en cinco días no lo movió. Vercel no
+publica un desglose de qué compone el embalse —`/v6/deployments/{id}/files` sigue en 404— así
+que **desde fuera puede no ser contestable**, y lo que queda no es medir más, es decidir: vivir
+por encima del tope de 10 GB del plan (que hasta hoy no ha bloqueado ningún despliegue) o
+preguntarle a Vercel. **Eso es decisión de Francisco, no un hallazgo.**
+
+**Lo que se midió y lo que no, para no leerlo de más.** El recuento es firme: `vercel list`
+paginado hasta agotarlo, 221 en tres páginas. El GB sale de la **tarjeta resumen** del panel, no
+del tooltip del gráfico que pedía la ficha — el bloque de Deployment Storage no llegó a
+renderizarse en la pestaña automatizada. La tarjeta **no es un máximo del ciclo**, y eso sí está
+comprobado: el ciclo va del 13-08 al 12-09 y contiene el 11,51 del 7-09, así que un máximo
+marcaría 11,51 y marca 11,25. Se comporta como el último punto calculado, que es justo lo que la
+ficha quería leer. Confirmarlo con el tooltip cuesta un vistazo y no cambia el signo: entre
+11,25 y «~4-5 GB» no hay ambigüedad posible.
+
+*(Y una vía nueva para la próxima: el panel se alimenta de `vercel.com/api/v2/usage`, que con
+cookie de sesión responde 200 — pero solo devuelve los límites del ciclo de facturación. La
+serie diaria la pide otro endpoint que solo se dispara cuando la sección entra en pantalla.)*
+
 **El método que hay que quedarse.** La ficha traía un número estimado por regla de tres y
 presentado como si fuera una medida (*«~5,1 GB»*, entre paréntesis «es una estimación
 proporcional»). Lo que la salvó fue haber escrito **el criterio de refutación en la misma frase**.
