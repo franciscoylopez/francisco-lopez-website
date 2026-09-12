@@ -4,6 +4,7 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 // Rutas relativas y no el alias `@/`: este archivo lo carga Next con su propio
 // cargador, antes de que los `paths` del tsconfig estén en juego.
 import { pagePath } from "./lib/i18n/config";
+import { HREF_KIT } from "./lib/logo-kit";
 import {
   PAGE_SLUGS,
   publicSlug,
@@ -278,6 +279,22 @@ const nextConfig: NextConfig = {
       // segunda versión que pueda divergir de nada. Quien lo siga aterriza en
       // `/llms.txt`, que se presenta a sí mismo en su primera línea.
       { source: "/agents.md", destination: "/llms.txt", permanent: false },
+      // EL ZIP DEL KIT TAMBIÉN SE MUDÓ, y por el mismo criterio de cierre que
+      // escribió P72.56: **ninguna URL vieja puede quedarse en 404**
+      // *(2026-09-12, P72.64/D213)*. `/api/kit` pasó a `/api/kit.zip` porque la
+      // extensión es lo que hace que GA4 cuente la descarga, y comprobado en el
+      // build: la ruta vieja devolvía la 404 de marca.
+      //
+      // `permanent: true`, como las otras mudanzas de canónico: no es un alias de
+      // comodidad, es el mismo archivo en otro sitio y no va a volver.
+      //
+      // ES BARATO Y CASI NADIE LO VA A USAR, y las dos cosas importan. La URL
+      // vivió quince días, no la enlaza ningún artefacto —ni el markdown servido,
+      // ni los catálogos, ni los carruseles, ni el repo del perfil—, así que lo
+      // único que puede apuntar ahí es un «copiar enlace» de esas dos semanas.
+      // Que sea improbable no lo hace ignorable: el fallo sería silencioso y del
+      // lado de quien descarga.
+      { source: "/api/kit", destination: HREF_KIT, permanent: true },
     ];
   },
   // Next emite `x-powered-by: Next.js` por defecto, que anuncia el stack a cualquiera

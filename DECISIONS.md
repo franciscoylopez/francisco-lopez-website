@@ -248,6 +248,7 @@
 - D210 · Un sello se escribe con el formato que su gate le va a exigir, y eso lo garantiza el binario de prettier, no un `JSON.stringify`
 - D211 · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban
 - D212 · El embalse no bajó al purgarlo, y la aritmética que decía que sí no reconcilia por ningún lado
+- D213 · La extensión de una ruta es instrumento de medida: `/api/kit` no podía disparar `file_download`
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7274,7 +7275,7 @@ diferencia entera entre esto y lo anterior es que ahora **se dice**.
 De paso caen cuatro anclas que eran **URLs repetidas**: el panel de OG en `05-aplicaciones.tsx`
 volvía a ofrecer el SVG y el PNG 1024 del lockup split que ya ofrecía su tarjeta en la 02.
 
-**El ZIP se genera en el BUILD y no se commitea.** `app/api/kit/route.ts` con
+**El ZIP se genera en el BUILD y no se commitea.** `app/api/kit.zip/route.ts` con
 `dynamic = "force-static"`: Next lo ejecuta una vez al construir leyendo `public/logo-kit/` y
 sirve el resultado como asset estático. La propiedad que se compra es la que importa: **no
 puede quedarse viejo por construcción**. Nada de binario de 642 KB en git recommiteado entero
@@ -7363,6 +7364,30 @@ bajar exactamente el PNG 512 en tinta clara. GA4 captura descargas de fábrica, 
 `file_download` de `/brand-kit` diría si alguien lo hacía alguna vez. No se consultó antes de
 decidir. Si el dato dijera que sí, la respuesta no es volver a las 49 anclas: es que a esa
 pieza le falta tarjeta.
+
+**Se midió el 2026-09-12 (P72.63), y la respuesta es NO.** Con el evento filtrado a
+`file_download` y desglose por `link_url`, sobre **toda** la ventana que GA4 puede servir
+(28 jul - 11 sept 2026), hay **6 eventos y los seis son el CV**
+(`/cv/francisco-lopez-cv-es.pdf`: cinco desde `/` y uno desde `/en`, el 28, 29 y 30 de julio
+y el 3 de agosto). **Ni uno solo de `/brand-kit`**, ni antes del deploy ni después. Y no es
+que nadie pasara por allí: en la ventana **anterior** al deploy (28 jul - 25 ago) el kit tuvo
+**22 vistas de 6 usuarios**, con 1 min 56 s de interacción media en la ES; en la **posterior**
+(29 ago - 11 sept), 2 vistas. Así que se miró, se puede contestar, y por la regla de arriba no
+hay revert ni tarjeta nueva.
+
+**Las dos cosas que acotan esa respuesta, escritas para no leerla de más.** La primera: la
+**conservación de datos de evento de la propiedad está en 2 meses**, el valor por defecto, así
+que el «antes» medible son 29 días y no la vida entera de las 49 anclas — lo anterior al 28 de
+julio **no existe** en GA4, que no es lo mismo que estar vacío. La segunda: de las 8 anclas de
+hoy, **7 podían disparar el evento y el ZIP no**, porque `/api/kit` no tenía extensión, así que
+justo sobre la pieza que concentra las variaciones la medición estuvo ciega todo el tiempo que
+cubre esta lectura. Se arregló el mismo día, **D213**, y desde ahí la serie del ZIP empieza de
+cero: no hay «antes» que recuperar.
+
+**Y una cifra de la lectura anterior queda corregida:** al cerrar «Distribución» se escribió
+que «Descargar CV tampoco produce un solo evento». Era el artefacto de la ventana elegida
+(4-31 ago): las seis descargas del CV caen entre el 28 de julio y el 3 de agosto. El CV **sí**
+registra descargas; el Brand Kit no lo ha hecho nunca.
 
 ---
 
@@ -13464,7 +13489,7 @@ construir, y no solo de `app/`**:
 | `DECISIONS.md` | `lib/decisions.ts` — la página del artículo |
 | `.github/workflows/ci.yml` | `lib/figures.ts` — la figura que cuenta los pasos de CI |
 | `content/**` | los sellos de psi, agentes, md y el artefacto |
-| `assets/fonts`, `public/**` | `app/api/og`, `app/api/kit` |
+| `assets/fonts`, `public/**` | `app/api/og`, `app/api/kit.zip` |
 
 Las dos primeras son la trampa: viven **dentro** de sitios que sí son ignorables enteros. Con
 ellas fuera de la lista, la cifra real, medida sobre los 752 despliegues del censo y no sobre
@@ -13743,7 +13768,122 @@ retraso (recolección diferida) o que el borrado no libere porque el contenido e
 sigue referenciado. **No se decide con más razonamiento: se decide volviendo a mirar el panel
 dentro de unos días**, que cuesta un vistazo. Tiene ficha.
 
+### CONTESTADO EL 2026-09-12 (P74.56): es el candidato 2, y con más fuerza de la que la pregunta pedía
+
+**El nivel no ha bajado, y entretanto el recuento ha seguido cayendo solo.** La retención ha ido
+expirando despliegues sin que nadie tocara nada, así que hay una segunda observación gratis:
+
+| Fecha | Despliegues | Deployment Storage |
+|---|---|---|
+| 2026-09-06 (antes de purgar) | 752 | 11,12 GB |
+| 2026-09-07 (tras purgar 433) | 319 | 11,51 GB |
+| **2026-09-12** | **221** | **11,25 GB** |
+
+El recuento ha caído un **31 %** en cinco días y el nivel se ha movido un **2,3 %** — y hacia
+abajo menos de lo que subió cuando se purgó. **Borrar despliegues no libera espacio**, ni de
+golpe ni con cinco días de recolección diferida. Queda descartado el candidato 1.
+
+**Y eso tumba algo más que la pregunta: tumba la UNIDAD.** «MB por despliegue» ha ido
+14,79 → 36,15 → **52,1**, y las tres veces porque el denominador encogía, no porque cada
+despliegue pese más. Un cociente cuyo numerador no responde al denominador no es una tasa: es
+una división. Así que la proyección de régimen permanente de **D208** (9,5-9,9 GB) no hay que
+rehacerla con otro número — **no tiene base**, porque está construida sobre esa unidad.
+
+**Consecuencia incómoda y honesta: hoy no se conoce ninguna palanca demostrada.** Purgar no baja
+el nivel, y expirar tampoco; del caudal solo se sabe que en cinco días no lo movió. Vercel no
+publica un desglose de qué compone el embalse —`/v6/deployments/{id}/files` sigue en 404— así
+que **desde fuera puede no ser contestable**, y lo que queda no es medir más, es decidir: vivir
+por encima del tope de 10 GB del plan (que hasta hoy no ha bloqueado ningún despliegue) o
+preguntarle a Vercel. **Eso es decisión de Francisco, no un hallazgo.**
+
+**DECIDIDO EL 2026-09-12: se vive por encima del tope, de momento.** No se pregunta a Vercel y
+no se vuelve a purgar. El motivo es que **el tope no está haciendo nada**: lleva desde el 6 de
+septiembre por encima de 10 GB y no ha bloqueado un solo despliegue, así que el coste real de
+estar fuera de límite es hoy cero y el de investigarlo no.
+
+**Y lo que reabre esto NO es una cifra más alta: es un despliegue que falle por cuota.** La
+diferencia importa, porque volver a mirar el número en unos días es exactamente lo que este
+D-entry acaba de demostrar que no informa de nada — el nivel no se mueve, se mire cuando se
+mire. Por eso **no nace tarea con fecha**: el disparador es un evento, y es ruidoso (un deploy
+rojo, un aviso de Vercel), no algo que se pueda pasar por alto en silencio.
+
+*(La otra mitad de la asimetría, para que la decisión no se lea como pereza: si el tope llegara
+a morder, la palanca tampoco sería purgar — eso ya está medido aquí. Sería preguntar, o cambiar
+de plan. Ninguna de las dos se abarata por hacerla hoy.)*
+
+**Lo que se midió y lo que no, para no leerlo de más.** El recuento es firme: `vercel list`
+paginado hasta agotarlo, 221 en tres páginas. El GB sale de la **tarjeta resumen** del panel, no
+del tooltip del gráfico que pedía la ficha — el bloque de Deployment Storage no llegó a
+renderizarse en la pestaña automatizada. La tarjeta **no es un máximo del ciclo**, y eso sí está
+comprobado: el ciclo va del 13-08 al 12-09 y contiene el 11,51 del 7-09, así que un máximo
+marcaría 11,51 y marca 11,25. Se comporta como el último punto calculado, que es justo lo que la
+ficha quería leer. Confirmarlo con el tooltip cuesta un vistazo y no cambia el signo: entre
+11,25 y «~4-5 GB» no hay ambigüedad posible.
+
+*(Y una vía nueva para la próxima: el panel se alimenta de `vercel.com/api/v2/usage`, que con
+cookie de sesión responde 200 — pero solo devuelve los límites del ciclo de facturación. La
+serie diaria la pide otro endpoint que solo se dispara cuando la sección entra en pantalla.)*
+
 **El método que hay que quedarse.** La ficha traía un número estimado por regla de tres y
 presentado como si fuera una medida (*«~5,1 GB»*, entre paréntesis «es una estimación
 proporcional»). Lo que la salvó fue haber escrito **el criterio de refutación en la misma frase**.
 Sin ese «si el panel no dice algo cercano a 5», la estimación se habría heredado como dato.
+
+---
+
+## D213 · La extensión de una ruta es instrumento de medida: `/api/kit` no podía disparar `file_download` — 2026-09-12
+
+**Fecha:** 2026-09-12 · **Contexto:** sprint «Lanzamiento», P72.64 · **Estado:** aceptada
+
+**El hecho, verificado sin tráfico.** La medición mejorada de GA4 dispara `file_download` al
+pulsar un enlace cuya URL **acaba en una extensión conocida** de archivo, y lo decide leyendo
+el `href` en el cliente: no mira el `Content-Type` ni el `Content-Disposition` que la ruta ya
+enviaba. `/api/kit` no tiene extensión, así que en el ZIP del Brand Kit ese evento **no podía
+dispararse nunca** — no es que se dejara de mirar el dato: es que ese dato no existía por cómo
+estaba escrito el enlace.
+
+**Y no era el ajuste apagado, que es la hipótesis barata.** «Descargas de archivos» está
+encendida en *Admin → Flujos de datos → Medición mejorada*, y hay **control positivo** en la
+misma ventana: `scroll` y `form_start`, también de medición mejorada, sí llegan. El canal
+funciona de extremo a extremo; lo que no encajaba era la URL. El resto de descargas del sitio
+—el CV (`.pdf`) y las piezas sueltas del kit (`.svg`, `.ico`)— sí la tienen y sí cuentan
+(D119, la medición del 2026-09-12).
+
+**La decisión: el segmento pasa a llamarse `kit.zip`** (`app/api/kit.zip/route.ts`, y
+`HREF_KIT` con él). Un nombre de carpeta con punto es un segmento de ruta válido en el App
+Router, el matcher de `proxy.ts` sigue excluyendo `api`, y el ZIP se sigue generando en el
+build con `force-static`: no cambia nada del contenedor ni del registro.
+
+**Lo que se descartó, que es donde está el criterio.** La alternativa era **cablear el evento a
+mano** en el clic, como ya se hace con `mailto:`/`tel:` en `lib/analytics.ts`. Funciona y no
+depende de cómo GA4 decida qué es un archivo, pero cuesta JS de cliente en una página que hoy
+no lo necesita y, sobre todo, **rompe la propiedad que D19 eligió a propósito**: que estas dos
+métricas secundarias salgan *de fábrica*, sin transporte propio que mantener ni que auditar. Se
+descartó también un alias por `rewrite` en `next.config.ts`: deja dos URL vivas para un solo
+archivo a cambio de conservar un nombre de carpeta que no aporta nada.
+
+**Y el corolario, que es lo único reutilizable de aquí: en una descarga, la extensión de la URL
+es parte del instrumento, no del nombre.** Está escrito en la cabecera de la ruta y en
+`HREF_KIT` porque el modo de fallo es que alguien la quite por parecerle ruido, y entonces la
+medición se apaga **sin que nada se ponga rojo**. No hay guardián: lo que hay es el aviso en los
+dos sitios donde se lee.
+
+**Y la ruta vieja no se queda en 404, que es el criterio de cierre que ya escribió P72.56.**
+Comprobado sobre el build antes de decidir: `/api/kit` devolvía la 404 de marca. Así que
+`next.config.ts` lleva `/api/kit → /api/kit.zip` con `permanent: true`, el mismo trato que las
+otras mudanzas de canónico de ese bloque —no es un alias de comodidad, es el mismo archivo en
+otro sitio y no va a volver— y con el destino **importado de `HREF_KIT`**, para no escribir el
+mapa dos veces.
+
+**Y eso no contradice el `rewrite` descartado arriba, aunque se parezcan.** Un *rewrite* habría
+dejado **dos URL sirviendo el archivo**, y la vieja sin extensión seguiría siendo una descarga
+que no se cuenta; la redirección deja **una sola canónica** y manda a ella a quien llegue por la
+otra. La probabilidad es baja —la URL vivió quince días y no la enlaza ningún artefacto: ni el
+markdown servido, ni `/llms.txt`, ni `ard.json`, ni el sitemap, ni los carruseles, ni el repo
+del perfil, todos comprobados— pero el fallo sería **silencioso y del lado de quien descarga**,
+y cuesta una línea.
+
+**Lo que esto NO arregla.** El «antes» no existe —el ZIP nunca ha podido medirse—, así que esto
+no recupera un histórico: **abre una serie**. Y el filtro *Internal Traffic* de la propiedad
+excluye lo que salga de la máquina de Francisco (`tt=internal`), así que probarlo en local no
+produce el evento que se busca: la comprobación de que llega es del primer visitante real.

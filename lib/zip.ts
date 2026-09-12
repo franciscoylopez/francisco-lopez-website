@@ -3,7 +3,7 @@
  *
  * POR QUÉ EXISTE. El Brand Kit sirve su kit completo como un solo archivo, y ese
  * archivo se genera EN EL BUILD leyendo `public/logo-kit/` (ver
- * `app/api/kit/route.ts`). Node trae `zlib` con `deflateRawSync` y `crc32`, que es
+ * `app/api/kit.zip/route.ts`). Node trae `zlib` con `deflateRawSync` y `crc32`, que es
  * todo lo que hace falta: lo único que no trae es el CONTENEDOR, y el contenedor
  * son tres estructuras de campos fijos. Escribirlas cuesta menos que sumar un
  * árbol de dependencias a un repositorio público por algo que se usa una vez.
