@@ -1,5 +1,16 @@
 /**
- * El kit de marca completo, en un archivo — `/api/kit`.
+ * El kit de marca completo, en un archivo — `/api/kit.zip`.
+ *
+ * LA EXTENSIÓN DEL SEGMENTO ES FUNCIONAL, NO DECORACIÓN (2026-09-12, P72.64). La
+ * medición mejorada de GA4 dispara `file_download` al pulsar un enlace cuya URL
+ * termina en una extensión conocida de archivo, y lo decide **leyendo el `href`**:
+ * no mira el `Content-Type` ni el `Content-Disposition` de aquí abajo, que existen
+ * y no le sirven. Mientras esto se llamó `/api/kit` el evento **no podía dispararse
+ * nunca**, así que el ZIP era la única descarga del sitio invisible para la
+ * analítica — y su cero se leyó durante tres cierres como «nadie lo descarga».
+ * Renombrar el segmento a `kit.zip` es lo que conserva la propiedad que D19 eligió
+ * a propósito: que el evento salga **de fábrica**, sin JS de cliente que mantener.
+ * Si alguien limpia el `.zip` del nombre por parecerle ruido, apaga la medición.
  *
  * SE GENERA EN EL BUILD, NO SE COMMITEA. `force-static` hace que Next ejecute esto
  * una vez al construir y sirva el resultado como asset estático. La consecuencia es
@@ -54,7 +65,7 @@ export function GET() {
     // Un kit vacío se descargaría sin dar error y nadie se enteraría hasta que
     // alguien lo abriera. Mejor romper el build.
     throw new Error(
-      `/api/kit: no hay ni un archivo bajo \`${RAIZ_KIT}\`. El kit no puede ser un ZIP vacío.`,
+      `/api/kit.zip: no hay ni un archivo bajo \`${RAIZ_KIT}\`. El kit no puede ser un ZIP vacío.`,
     );
   }
 

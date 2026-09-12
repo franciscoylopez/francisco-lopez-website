@@ -43,8 +43,14 @@ export const RAIZ_KIT = "public/logo-kit";
 /** Nombre del ZIP y de su carpeta raíz al descomprimir. */
 export const CARPETA_KIT = "francisco-lopez-brand-kit";
 
-/** La ruta que descarga el kit completo. La sirve `app/api/kit/route.ts`. */
-export const HREF_KIT = "/api/kit";
+/**
+ * La ruta que descarga el kit completo. La sirve `app/api/kit.zip/route.ts`.
+ *
+ * El `.zip` del final **no es cosmético**: es lo único que hace que GA4 cuente la
+ * descarga, porque la medición mejorada decide leyendo la extensión del `href`. El
+ * porqué completo está en la cabecera de la ruta.
+ */
+export const HREF_KIT = "/api/kit.zip";
 
 export type Tinta = "oscura" | "clara";
 

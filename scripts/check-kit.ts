@@ -4,7 +4,7 @@
  * QUÉ PROTEGE. `lib/logo-kit.ts` declara dos cosas: lo que la página ofrece suelto o
  * referencia, y lo que viaja dentro del ZIP sin tener tarjeta propia. El ZIP en sí no
  * puede desincronizarse (se genera en el build leyendo el directorio, ver
- * `app/api/kit/route.ts`), pero el REGISTRO sí, y de tres maneras que ningún tipo ve:
+ * `app/api/kit.zip/route.ts`), pero el REGISTRO sí, y de tres maneras que ningún tipo ve:
  *
  *   1. Una ruta declarada cuyo archivo ya no está. La página serviría un 404 desde un
  *      chip que se ve perfectamente bien.

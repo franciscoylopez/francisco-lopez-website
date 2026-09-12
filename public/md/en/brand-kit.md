@@ -79,7 +79,7 @@ The whole brand, packed
 
 Everything you need to put this brand anywhere: the 1024, 512 and 256 px PNGs, both inks and the favicon. In a single file.
 
-[Download the kit](https://franciscolopez.es/api/kit)
+[Download the kit](https://franciscolopez.es/api/kit.zip)
 
 Symbol · Split
 

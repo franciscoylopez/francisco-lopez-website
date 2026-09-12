@@ -79,7 +79,7 @@ Llévate la marca entera
 
 Todo lo que hace falta para poner esta marca en cualquier sitio: los PNG de 1024, 512 y 256 px, las dos tintas y el favicon. En un solo archivo.
 
-[Descargar el kit](https://franciscolopez.es/api/kit)
+[Descargar el kit](https://franciscolopez.es/api/kit.zip)
 
 Símbolo · Split
 

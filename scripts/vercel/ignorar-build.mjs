@@ -32,7 +32,7 @@
 //   · `DECISIONS.md`               → `lib/decisions.ts` (la página del artículo)
 //   · `.github/workflows/ci.yml`   → `lib/figures.ts` (la figura de los gates)
 //   · `content/**`                 → registros de psi, agentes, md y artefactos
-//   · `assets/fonts`, `public/**`  → `app/api/og`, `app/api/kit`
+//   · `assets/fonts`, `public/**`  → `app/api/og`, `app/api/kit.zip`
 //
 // Los dos primeros son la trampa: viven dentro de sitios que sí son ignorables
 // enteros, así que van nombrados uno a uno. **Si mañana una página lee otro
