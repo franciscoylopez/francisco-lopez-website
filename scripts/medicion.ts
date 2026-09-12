@@ -53,14 +53,21 @@ import {
 } from "./medicion/registro";
 
 /**
- * Lo que hoy se sabe del metro de GA4, y no es poco: **la propiedad excluye el
+ * Lo que hoy se sabe del metro de GA4, y no es poco. **La propiedad excluye el
  * tráfico interno** con un filtro activo, así que nada lanzado desde la máquina de
- * Francisco entra en estas cifras; y **cuenta el tráfico que no consiente**, como
- * un usuario nuevo por carga (D198). Las dos cosas cambian lo que la cifra
- * significa, así que las dos son el instrumento y no una nota al pie.
+ * Francisco entra en estas cifras. **Cuenta el tráfico que no consiente**, como un
+ * usuario nuevo por carga (D198). Y **conserva los eventos 14 meses** desde el
+ * 2026-09-12: hasta esa fecha eran 2, el valor por defecto, y eso no limitaba la
+ * ventana de una cifra pero sí **hasta dónde podía mirar hacia atrás** una consulta
+ * — el «antes» de D119 se quedó en 29 días por esto, no por falta de tráfico.
+ *
+ * Las tres cambian lo que la cifra significa, así que las tres son el instrumento y
+ * no una nota al pie. Al cambiar esta línea, la comparación del próximo cierre
+ * avisará de que los dos sellos no comparten metro (D199) — **que es lo correcto**:
+ * no lo comparten.
  */
 const INSTRUMENTO_GA4 =
-  "GA4 · ventana 28 días · filtro Internal Traffic activo · cuenta pings sin consentimiento (D198)";
+  "GA4 · ventana 28 días · filtro Internal Traffic activo · cuenta pings sin consentimiento (D198) · conservación de eventos 14 meses";
 
 const bandera = (nombre: string): string | undefined =>
   process.argv.find((a) => a.startsWith(`--${nombre}=`))?.split("=")[1];

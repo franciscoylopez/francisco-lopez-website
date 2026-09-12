@@ -13886,4 +13886,11 @@ y cuesta una línea.
 **Lo que esto NO arregla.** El «antes» no existe —el ZIP nunca ha podido medirse—, así que esto
 no recupera un histórico: **abre una serie**. Y el filtro *Internal Traffic* de la propiedad
 excluye lo que salga de la máquina de Francisco (`tt=internal`), así que probarlo en local no
-produce el evento que se busca: la comprobación de que llega es del primer visitante real.
+produce el evento que se busca.
+
+**Y por eso la verificación no es una tarea, es un favor.** Francisco le pide a alguien que
+descargue el kit desde su casa; si el evento aparece, el arreglo está probado, y si no aparece,
+esto se reabre. Es el mismo trato que la decisión de D212 de aquí al lado: **el disparador es un
+hecho, no una fecha**. Abrir ficha para «mirar GA4 dentro de un mes» sería programar una lectura
+que puede salir vacía por falta de tráfico y no por el arreglo, que es exactamente el error de
+ventana que D119 documenta tres veces.
