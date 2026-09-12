@@ -13812,6 +13812,21 @@ es parte del instrumento, no del nombre.** Está escrito en la cabecera de la ru
 medición se apaga **sin que nada se ponga rojo**. No hay guardián: lo que hay es el aviso en los
 dos sitios donde se lee.
 
+**Y la ruta vieja no se queda en 404, que es el criterio de cierre que ya escribió P72.56.**
+Comprobado sobre el build antes de decidir: `/api/kit` devolvía la 404 de marca. Así que
+`next.config.ts` lleva `/api/kit → /api/kit.zip` con `permanent: true`, el mismo trato que las
+otras mudanzas de canónico de ese bloque —no es un alias de comodidad, es el mismo archivo en
+otro sitio y no va a volver— y con el destino **importado de `HREF_KIT`**, para no escribir el
+mapa dos veces.
+
+**Y eso no contradice el `rewrite` descartado arriba, aunque se parezcan.** Un *rewrite* habría
+dejado **dos URL sirviendo el archivo**, y la vieja sin extensión seguiría siendo una descarga
+que no se cuenta; la redirección deja **una sola canónica** y manda a ella a quien llegue por la
+otra. La probabilidad es baja —la URL vivió quince días y no la enlaza ningún artefacto: ni el
+markdown servido, ni `/llms.txt`, ni `ard.json`, ni el sitemap, ni los carruseles, ni el repo
+del perfil, todos comprobados— pero el fallo sería **silencioso y del lado de quien descarga**,
+y cuesta una línea.
+
 **Lo que esto NO arregla.** El «antes» no existe —el ZIP nunca ha podido medirse—, así que esto
 no recupera un histórico: **abre una serie**. Y el filtro *Internal Traffic* de la propiedad
 excluye lo que salga de la máquina de Francisco (`tt=internal`), así que probarlo en local no
