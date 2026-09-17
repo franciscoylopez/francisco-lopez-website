@@ -11,6 +11,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  avisosVencidos,
   medirGeneral,
   revisarTablero,
   type Sello,
@@ -280,5 +281,33 @@ describe("sprintActivo", () => {
     expect(
       sprintActivo(SANO.map((t) => ({ ...t, estado: "Sin empezar" }))),
     ).toBeNull();
+  });
+});
+
+describe("avisos de seguridad (method-review XIV)", () => {
+  const hoy = new Date("2026-09-17T12:00:00Z");
+
+  it("un aviso alto de más de dos días sale; uno reciente o moderado, no", () => {
+    const vencidos = avisosVencidos(
+      [
+        {
+          paquete: "nodemailer",
+          severidad: "high",
+          abierto: "2026-09-10T00:00:00Z",
+        },
+        {
+          paquete: "sharp",
+          severidad: "high",
+          abierto: "2026-09-16T00:00:00Z",
+        },
+        { paquete: "qs", severidad: "medium", abierto: "2026-09-02T00:00:00Z" },
+      ],
+      hoy,
+    );
+    expect(vencidos.map((a) => a.paquete)).toEqual(["nodemailer"]);
+  });
+
+  it("sin avisos no hay vencidos", () => {
+    expect(avisosVencidos([], hoy)).toEqual([]);
   });
 });
