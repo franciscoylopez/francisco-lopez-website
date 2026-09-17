@@ -763,7 +763,7 @@
           "type": "diagram",
           "id": "s08",
           "side": "center",
-          "caption": "Without consent exactly one third-party request goes out: analytics, with no cookies. The heatmap and the video don't show up until you accept and click."
+          "caption": "Without consent no third-party request goes out. Analytics, the heatmap and the video don't show up until you accept and click."
         },
         {
           "type": "h3",

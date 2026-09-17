@@ -167,9 +167,11 @@ export default async function RootLayout({
             un modal con cuatro botones y un switch que solo existía en
             producción, imposible de revisar antes de publicarlo. */}
         <ConsentBanner dict={dict.consent} lang={lang} />
-        {/* Analítica solo en producción (D13). ConsentInit va antes que GTM
-            (beforeInteractive) para fijar el default denegado; sin contenedor que
-            lo lea no tiene nada que hacer, así que comparte gate con él. */}
+        {/* Analítica solo en producción (D13), y el contenedor solo se inyecta con
+            consentimiento de analítica: ese segundo gate vive dentro de
+            <GoogleTagManager> porque la decisión está en el navegador (D214).
+            ConsentInit sigue fijando el default denegado para cuando cargue, y
+            sin contenedor que lo lea no hace nada, así que comparte gate con él. */}
         {GTM_ID && (
           <>
             <ConsentInit />
