@@ -77,6 +77,10 @@ export function readConsent(): StoredConsent | null {
   }
 }
 
+// Aviso de que la analítica acaba de concederse: es lo que inyecta GTM en la misma
+// visita (P74.55, D214). El contenedor no se carga sin él.
+export const ANALYTICS_GRANTED_EVENT = "flm:analytics-granted";
+
 // Persiste la decisión y la aplica al Consent Mode en un solo paso.
 export function saveConsent(choice: ConsentChoice): void {
   if (typeof window !== "undefined") {
@@ -92,6 +96,9 @@ export function saveConsent(choice: ConsentChoice): void {
     }
   }
   applyConsent(choice);
+  if (choice.analytics && typeof window !== "undefined") {
+    window.dispatchEvent(new CustomEvent(ANALYTICS_GRANTED_EVENT));
+  }
 }
 
 // Evento que abre el panel de preferencias desde fuera del banner (enlace del
