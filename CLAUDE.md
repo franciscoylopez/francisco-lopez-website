@@ -88,7 +88,7 @@ Una etapa **se cierra** cuando todas sus tareas están en Listo/Archivado, o cua
 
 **Tres sellos se ponen a mano en ese cruce:** al cerrar —y **después** de crear las tareas del propio `sprint-review`, sobre un volcado nuevo—, `SELLO_GENERAL` (`check-tablero.ts`) y el de medición (`npm run medicion -- --sellar`, D176); al abrir, `CICLO_ABIERTO` (`check-contexto.ts`). Sin eso miden contra una etapa que ya no es, o contra un número que nunca existió.
 
-**Y ABRIR EMPIEZA RETIRANDO, EN LOTE Y ANTES DE AÑADIR NADA** *(2026-08-31)*: del conjunto `@`-importado, de `General` y de `scripts/`, los tres sitios donde este método solo tiene techo. **Durante el sprint no se negocia:** si algo no cabe, entra, y la apertura siguiente lo paga. El candidato **no es el bloque más grande, es el DUPLICADO**. Porqué, medida y el caso que lo escribió, en `CLAUDE-historical.md`.
+**Y ABRIR EMPIEZA RETIRANDO, EN LOTE Y ANTES DE AÑADIR NADA** *(2026-08-31)*: del conjunto `@`-importado, de las skills, de `General` y de `scripts/`, **hasta un número** *(2026-09-17)*: margen ≥ 100 palabras en documentos y ≥ 300 en skills. **Durante el sprint no se negocia:** si algo no cabe, entra, y la apertura siguiente lo paga. El candidato es el **DUPLICADO**, no el bloque grande. Porqué y casos, en `CLAUDE-historical.md`.
 
 **Y lo que el cierre APRENDE va al histórico**; aquí solo sube lo que cambia una regla activa. Si no, el ciclo gasta siempre e ingresa solo a veces, y el margen únicamente baja: de 133 a 10 en un ciclo *(2026-09-01)*.
 

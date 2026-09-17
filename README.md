@@ -431,6 +431,8 @@ El «porqué» vive en documentos dedicados, partidos por una regla que **no es 
 
 **Nada tiene copia en otro sitio.** El repositorio es la única fuente de la documentación: no hay espejos, y los índices se derivan en vez de escribirse. Es la misma regla que gobierna el código de este sitio —una cosa, un sitio— aplicada a lo que se dice sobre él, y por el mismo motivo: *la misma cosa escrita en dos sitios acaba diciendo dos cosas.*
 
+**Para leerla, Obsidian sirve abriendo la raíz del repo como vault** (`.obsidian/` está en `.gitignore`). Con una condición: en los `.md` del repo los enlaces van en markdown estándar, `[texto](./archivo.md)`, nunca `[[wikilink]]`, que GitHub y los scripts que leen estos documentos no entienden.
+
 ## Despliegue
 
 Vercel, con **previews por rama y por PR**, y `main` = producción ([franciscolopez.es](https://franciscolopez.es)).
