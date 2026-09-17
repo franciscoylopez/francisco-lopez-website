@@ -4654,7 +4654,7 @@ bandeja de Francisco contra GA4.
 | Ventana | Correos del formulario | `contact_submit` en GA4 |
 |---|---|---|
 | 10-16 sept (lanzamiento) | **1**, el 16, spam comercial | **1**, el 16, con su `form_start` |
-| 23-26 ago | —, sin correo en la captura | 1, con su `form_start` |
+| 23 ago, 23:11 | 1, **prueba de Francisco**, borrada | 1, con su `form_start` |
 | 27-28 ago | **3**, spam | **0**, y **0 eventos de cualquier tipo** esos dos días |
 
 **En el pico no hay brecha, y tampoco hay contacto.** El único envío de la semana se contó y
@@ -4670,9 +4670,14 @@ La gráfica diaria va plana del 26 al 31 de agosto, y eso es más compatible con
 que parece. Lo separaría la curva diaria de Vercel Web Analytics en esos días, que solo se lee a
 mano en el panel.
 
-**El envío del 23-26 de agosto no aparece en la captura de la bandeja**, y esta sección lo había
-dado por *una persona* (móvil Android, `form_start` el mismo día). Sin su correo delante no se
-puede decir si fue un contacto, una prueba propia o un envío que no llegó.
+**El envío del 23 de agosto era una prueba de Francisco**, desde el móvil, para ver que todo
+funcionaba; no salía en la bandeja porque estaba en la papelera. La sección de agosto lo dio por
+*una persona* (Android, `form_start` el mismo día), y lo era, pero no un contacto. **Así que en
+los 28 días hasta el lanzamiento incluido, los dos `contact_submit` son una prueba propia y un
+spam: cero contactos legítimos.** Y deja una trampa a la vista: el filtro de tráfico interno va
+por la IP de casa, así que **una prueba desde el móvil entra en GA4 como envío real**. Es el mismo
+hueco que el 3 de agosto con `contact_click`, y la regla de entonces (aceptar solo mientras se
+verifica, y anotar el día) no alcanza: aquí el ping sale sin aceptar (D198).
 
 **Una observación que no es hallazgo:** el contador de consentimiento sumó 89 «vistos» entre el
 5 y el 17 de septiembre, y GA4 cuenta 42 usuarios del 10 al 16. Las ventanas no coinciden, así
