@@ -169,10 +169,15 @@ const HORAS_FRESCURA = 12;
  *   lo dejó un cierre que ejecutó en vez de tarear, que no es la operación
  *   normal de un `sprint-review`. Si el próximo vuelve a escribir tres o cuatro,
  *   el 1 sube a 4 sin que nada haya ido mal. El dato a vigilar no es el nivel:
- *   es si el sprint siguiente vuelve a comprometer cupo. */
+ *   es si el sprint siguiente vuelve a comprometer cupo.
+ *
+ *   2026-09-17, CIERRE DE «LANZAMIENTO»: 2 → 2, y otra vez porque el sprint-review
+ *   EJECUTÓ en vez de tarear. De sus hallazgos, cuatro se hicieron en el propio
+ *   PR (#304), uno se descartó con medida y el único que queda nació en su bloque,
+ *   `Distribución`, no aquí. Sellado sobre el volcado posterior a crearla. */
 const SELLO_GENERAL: Sello = {
-  fecha: "2026-09-05",
-  cierre: "Cierre V3",
+  fecha: "2026-09-17",
+  cierre: "Lanzamiento",
   abiertas: 2,
 };
 

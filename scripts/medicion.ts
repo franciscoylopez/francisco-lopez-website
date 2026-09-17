@@ -18,7 +18,7 @@
  *
  *   npm run medicion -- --sellar --etapa=Higiene \
  *     --ventana=2026-08-05..2026-09-02 \
- *     --ga4-eventos=240 --ga4-usuarios=39 --primaria=1
+ *     --ga4-eventos=240 --ga4-usuarios=39 --primaria=1 --ga4-descargas=4
  *     Escribe el sello. Exige ventana y etapa: una cifra de analítica sin su
  *     ventana no significa nada, y dos sellos sin etapa no se ordenan.
  *
@@ -140,8 +140,14 @@ async function main() {
   const eventos = numero("ga4-eventos");
   const usuarios = numero("ga4-usuarios");
   const primaria = numero("primaria");
+  // La descarga del CV es secundaria del PRD §7 y ningún sello la llevaba: el
+  // cierre de «Lanzamiento» la leyó en GA4 y no tuvo contra qué compararla.
+  const descargas = numero("ga4-descargas");
   fuentes.push(
-    eventos === undefined && usuarios === undefined && primaria === undefined
+    eventos === undefined &&
+      usuarios === undefined &&
+      primaria === undefined &&
+      descargas === undefined
       ? {
           fuente: "ga4",
           estado: "ilegible",
@@ -161,6 +167,7 @@ async function main() {
             eventos: eventos ?? null,
             usuarios: usuarios ?? null,
             contact_submit: primaria ?? null,
+            file_download: descargas ?? null,
           },
         },
   );

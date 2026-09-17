@@ -1,20 +1,21 @@
 {
-  "fecha": "2026-09-05",
+  "fecha": "2026-09-17",
   "ventana": {
-    "desde": "2026-08-08",
-    "hasta": "2026-09-04"
+    "desde": "2026-08-20",
+    "hasta": "2026-09-16"
   },
-  "etapa": "Cierre V3",
+  "etapa": "Lanzamiento",
   "fuentes": [
     {
       "fuente": "ga4",
       "estado": "leida",
       "aMano": true,
-      "instrumento": "GA4 · ventana 28 días · filtro Internal Traffic activo · cuenta pings sin consentimiento (D198)",
+      "instrumento": "GA4 · ventana 28 días · filtro Internal Traffic activo · cuenta pings sin consentimiento (D198): ventana anterior a D214 · conservación de eventos 14 meses",
       "cifras": {
-        "eventos": 258,
-        "usuarios": 45,
-        "contact_submit": 1
+        "eventos": 603,
+        "usuarios": 84,
+        "contact_submit": 2,
+        "file_download": 4
       }
     },
     {
@@ -27,10 +28,10 @@
       "estado": "leida",
       "instrumento": "techo 100/h por IP · visto tras interacción",
       "cifras": {
-        "visto": 73,
-        "aceptado": 1,
-        "rechazado": 0,
-        "tasa_pct": 1.4
+        "visto": 163,
+        "aceptado": 37,
+        "rechazado": 21,
+        "tasa_pct": 22.7
       }
     },
     {
