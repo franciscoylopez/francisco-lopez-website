@@ -102,6 +102,7 @@
 - [Por qué Trayectoria entró en el nav, y qué costó meterla — 2026-09-04](#por-qué-trayectoria-entró-en-el-nav-y-qué-costó-meterla--2026-09-04)
 - [El perfil de GitHub se publica, y por qué no es una quinta superficie de marca — 2026-09-05](#el-perfil-de-github-se-publica-y-por-qué-no-es-una-quinta-superficie-de-marca--2026-09-05)
 - [El `method-review` XIII: el arreglo funcionó y la bandeja iba con dos días de retraso — 2026-09-06](#el-method-review-xiii-el-arreglo-funcionó-y-la-bandeja-iba-con-dos-días-de-retraso--2026-09-06)
+- [La brecha de la primaria, leída sobre el lanzamiento: cero, y sobre spam — 2026-09-17](#la-brecha-de-la-primaria-leída-sobre-el-lanzamiento-cero-y-sobre-spam--2026-09-17)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4643,3 +4644,42 @@ mismo movimiento que la nombra.
 —vía un código de salida propio, no el texto del mensaje—. El trinquete cazó la propia
 `revisaCarriles` en el commit que lo añadía, y la deuda se quitó aplanándola en vez de
 re-sellar.
+
+## La brecha de la primaria, leída sobre el lanzamiento: cero, y sobre spam — 2026-09-17
+
+`PRD-Live` §7 dejó escrito el 2026-09-04 que *cuánto vale la cifra de verdad se reescribe con
+el dato del lanzamiento*. La pieza central salió el jueves 10; esto es esa lectura, con la
+bandeja de Francisco contra GA4.
+
+| Ventana | Correos del formulario | `contact_submit` en GA4 |
+|---|---|---|
+| 10-16 sept (lanzamiento) | **1**, el 16, spam comercial | **1**, el 16, con su `form_start` |
+| 23-26 ago | —, sin correo en la captura | 1, con su `form_start` |
+| 27-28 ago | **3**, spam | **0**, y **0 eventos de cualquier tipo** esos dos días |
+
+**En el pico no hay brecha, y tampoco hay contacto.** El único envío de la semana se contó y
+era un anuncio de publicación en periódicos. Que lleve `form_start` delante dice que se rellenó
+en un navegador que ejecutó la página, no que fuera una persona interesada.
+
+**La explicación de agosto estaba mal, y D198 ya lo implicaba.** Esta misma sección de agosto
+atribuyó los tres correos sin contar al consentimiento: *sin aceptar no carga GTM*. D198 midió
+después que GTM carga y emite igual, así que esa causa no puede ser. Lo que sí se ve ahora es
+que esos dos días GA4 no tiene **ni un `page_view`**. Hay dos lecturas y **ninguna está
+comprobada**: un bot que manda el formulario sin cargar la página, o un hueco de GA4 esos días.
+La gráfica diaria va plana del 26 al 31 de agosto, y eso es más compatible con lo segundo de lo
+que parece. Lo separaría la curva diaria de Vercel Web Analytics en esos días, que solo se lee a
+mano en el panel.
+
+**El envío del 23-26 de agosto no aparece en la captura de la bandeja**, y esta sección lo había
+dado por *una persona* (móvil Android, `form_start` el mismo día). Sin su correo delante no se
+puede decir si fue un contacto, una prueba propia o un envío que no llegó.
+
+**Una observación que no es hallazgo:** el contador de consentimiento sumó 89 «vistos» entre el
+5 y el 17 de septiembre, y GA4 cuenta 42 usuarios del 10 al 16. Las ventanas no coinciden, así
+que no se resta. Si al sellar el cierre la diferencia se sostiene con la misma ventana, el
+candidato natural son los bloqueadores, y sería la primera cifra del hueco que §7 declara sin
+medir.
+
+**Lo que cambia en §7:** deja de leer la primaria contra el consentimiento y la lee contra lo
+único que de verdad falla, que un envío no pase por la página. La bandeja manda sobre GA4, y las
+cifras de volumen salen del sello, no del párrafo.
