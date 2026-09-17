@@ -163,7 +163,7 @@ lee las páginas del **registro**, así que una página nueva entra sin que nadi
 ### Cómo se verifica lo que no ve un compilador
 
 > **El contrato de cada gate —qué garantiza, qué deja fuera y dónde corre— vive en
-> [`GATES.md`](./GATES.md)**, una fila por gate. Se consulta a demanda y **nunca se
+> [`GATES.md`](./GATES.md)**, una fila por cada gate cuyo nombre no lo dice todo. Se consulta a demanda y **nunca se
 > `@`-importa**: no hace falta para aplicar ninguna regla, solo cuando un check sale rojo
 > diciendo su nombre o cuando hay que decidir si un gate nuevo hace falta (D163).
 

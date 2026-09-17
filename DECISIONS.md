@@ -13955,3 +13955,8 @@ y Vercel son del mismo origen).
 **Lo que no se tocó a propósito:** el cierre del artículo dice que *el gestor de etiquetas carga
 con el consentimiento puesto en «no» por defecto*. Ya no carga, pero ese bloque está congelado
 hasta que Francisco decida editarlo, así que se señala y no se reescribe.
+
+**Cierre del sprint (2026-09-17, sprint-review).** Dos restos que se llevó el `<noscript>`: la CSP
+quita `https://www.googletagmanager.com` de `frame-src`, que solo existía por su iframe (P74.59), y
+Francisco decide editar el cierre del artículo, que ahora dice que el gestor no se carga hasta
+aceptar (P74.595).

@@ -36,12 +36,13 @@ const csp = [
   "connect-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.clarity.ms https://*.clarity.ms",
   // Pixel de GA + el beacon de imagen de Clarity (c.clarity.ms/c.gif) + data: para imágenes inline.
   "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://*.clarity.ms",
-  // 'unsafe-inline' para los style attributes inline (transiciones del nav, reveals, iframe de GTM).
+  // 'unsafe-inline' para los style attributes inline (transiciones del nav, reveals).
   "style-src 'self' 'unsafe-inline'",
   // next/font auto-hospeda las fuentes; no hay orígenes externos de fuentes.
   "font-src 'self'",
-  // <noscript> de GTM inyecta un iframe a googletagmanager/ns.html; y el vídeo de
-  // Pau Gasol del deep-dive de INDYA se incrusta desde youtube-nocookie (§43).
+  // El único iframe del sitio es el vídeo de Pau Gasol del deep-dive de INDYA, que
+  // se incrusta desde youtube-nocookie (§43). `googletagmanager` estuvo aquí por el
+  // iframe del <noscript> de GTM, y salió con él (D214, P74.59).
   //
   // ES `youtube-nocookie.com` Y NO `youtube.com`, y la diferencia no es cosmética:
   // el dominio normal escribe cookies de publicidad en cuanto se pinta el iframe;
@@ -50,7 +51,7 @@ const csp = [
   // SIN una sola petición a Google mientras nadie pulse. Primera ampliación de la
   // CSP desde Clarity (D32) y con su mismo criterio: se añade el origen exacto que
   // hace falta, no el comodín.
-  "frame-src https://www.googletagmanager.com https://www.youtube-nocookie.com",
+  "frame-src https://www.youtube-nocookie.com",
 ].join("; ");
 
 // Cabeceras de seguridad — Fase 1 (tarea 30.4): las triviales y sin riesgo.

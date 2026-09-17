@@ -248,13 +248,19 @@ describe("sendContactMessage", () => {
   });
 
   describe("cuando no se puede enviar", () => {
-    it("sin contraseña de aplicación no abre el transporte y lo dice", async () => {
+    it("sin contraseña de aplicación no abre el transporte y lo dice en el log", async () => {
       vi.stubEnv("GMAIL_APP_PASSWORD", "");
+      const log = vi.spyOn(console, "error").mockImplementation(() => {});
 
       await expect(
         sendContactMessage(VALIDO, { locale: "es" }),
       ).resolves.toEqual({ ok: false, reason: "missing-credentials" });
       expect(captura.opciones).toHaveLength(0);
+      // Sin esta línea, «nadie escribe» y «se perdió la variable» se ven igual (P74.58).
+      expect(log).toHaveBeenCalledWith(
+        expect.stringContaining("GMAIL_APP_PASSWORD"),
+      );
+      log.mockRestore();
     });
 
     it("si el SMTP falla, el detalle se queda en el log y no sale del servidor", async () => {
