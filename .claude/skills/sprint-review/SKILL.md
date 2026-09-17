@@ -91,12 +91,14 @@ una etapa no se cierra sin haberlas escrito.
    **Y DESDE EL 2026-08-31 EL PANEL Y GA4 YA NO SON TODA LA MEDICIÓN** (D168/D169/D170). Dos
    fuentes más, y ninguna depende del consentimiento: **Vercel Web Analytics** (volumen
    absoluto, en el panel de Vercel) y **`npm run consentimiento`**, que da la tasa de
-   aceptación. Y GA4 **no** está deflactado por consentimiento (D198): cuenta a quien no
-   acepta, un usuario nuevo por carga. Ojo al denominador del contador: solo ve visitantes
-   NUEVOS **que interactuaron** (D200).
-   **Y la primaria se busca aunque no esté en el panel**: `contact_submit` llevaba desde el
-   2026-08-24 contando y ningún marcador la enseñaba, así que leer solo el panel habría dado
-   «cero» donde el dato decía «la cadena funciona» (D71, cierre del sprint 4).
+   aceptación. **GA4 solo ve a quien acepta desde el 2026-09-17** (D214); hasta ese día
+   contaba también al que no, un usuario nuevo por carga (D198), así que **una ventana que
+   cruce esa fecha no se compara con nada**. Ojo al denominador del contador: solo ve
+   visitantes NUEVOS **que interactuaron** (D200).
+   **Y cuántos contactos hay lo dice la BANDEJA, no GA4** (P74.5): `contact_submit` no ve un
+   envío que no pase por la página, y el del lanzamiento era spam. Se cruza cada evento con
+   su correo por día; y una prueba propia desde el móvil entra en GA4 como envío real, porque
+   el filtro interno va por la IP de casa.
 2. **¿Ha cambiado algo desde el cierre anterior?** Sin el número anterior no hay lectura, así
    que cada cierre deja el suyo apuntado para el siguiente.
 3. **¿Hay algo aquí que cambie una prioridad del tablero?** Si la respuesta es **no**, dilo
