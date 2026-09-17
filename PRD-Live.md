@@ -213,10 +213,12 @@ toolkit) se leen del diccionario i18n; el CV solo autora el texto rico. Se regen
   cuando el servidor confirma y no al pulsar. El porqué del cambio, en `PRD-Historical.md`.
   El transporte está entero y en GA4 es **evento clave**, sin serie anterior a la marca. Cómo
   se audita la mitad que vive fuera del repo, en D71.
-  **GA4 no está deflactado por consentimiento** (D198), así que su cifra ya no es un índice
-  relativo: la brecha que D168 daba por desconocida no era tal. En agosto llegaron **4
-  correos y se contó 1** (D168/D176; el caso, en `PRD-Historical.md`). **Cuánto vale la
-  cifra de verdad se reescribe con el dato del lanzamiento.**
+  **La brecha en la semana del lanzamiento (10-16 sept 2026): cero.** Llegó **1 correo y se
+  contó 1**, y **era spam**: la primaria sigue sin un contacto legítimo que juzgar.
+  **Lo que GA4 no ve no es a quien no consiente (D198), sino el envío que no pasa por una
+  página que la cargue**, y quien bloquea GTM. Así que **cuántos contactos hay lo dice la
+  bandeja**; las cifras de volumen salen del sello (D176), no de aquí. Los tres de agosto sin
+  contar, y por qué su causa sigue abierta, en `PRD-Historical.md`.
   **«Confirma» es el envío que manda correo, no los dos filtros que callan a un bot**: lo decide
   `cuentaComoEnvio` en `lib/contact-form.ts`, donde la regla tiene tests y caso malo (D153).
 - **Secundarias**: los `tel:` y `mailto:` que quedan, Descargar CV (3 puntos: nav, CTA de
