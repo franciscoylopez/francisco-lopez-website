@@ -759,7 +759,7 @@
           "type": "diagram",
           "id": "s08",
           "side": "center",
-          "caption": "Sin consentimiento sale una sola petición a terceros: la analítica, sin cookies. El mapa de calor y el vídeo no aparecen hasta que aceptas y pulsas."
+          "caption": "Sin consentimiento no sale ninguna petición a terceros. La analítica, el mapa de calor y el vídeo no aparecen hasta que aceptas y pulsas."
         },
         {
           "type": "h3",

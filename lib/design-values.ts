@@ -473,7 +473,7 @@ export function fillPages(text: string, locale: Locale): string {
  * de arriba: fecha lo que CAMBIÓ, no lo que se midió. Comparten mecanismo, no
  * significado, y unificarlas haría que tocar el censo moviera una fecha legal.
  */
-export const LAST_COOKIES_UPDATE = "2026-08-31";
+export const LAST_COOKIES_UPDATE = "2026-09-17";
 
 /**
  * Cuándo se publicó y cuándo se revisó por última vez «Cómo se ha creado esta
@@ -493,7 +493,7 @@ export const LAST_COOKIES_UPDATE = "2026-08-31";
  * Google, y tarde.
  */
 export const ARTICLE_PUBLISHED = "2026-08-21";
-export const ARTICLE_UPDATED = "2026-09-05";
+export const ARTICLE_UPDATED = "2026-09-17";
 
 // `fillDate` vivía aquí y se retiró en P67.6: la fecha se pinta dentro de un
 // `<time datetime>`, y una función que devuelve `string` no puede llevar un

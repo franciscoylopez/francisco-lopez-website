@@ -246,9 +246,10 @@
 - D208 (su aritmética, corregida por D212) · El Deployment Storage no se arregla borrando: el embalse ya expira solo, y lo que sobra es el caudal
 - D209 · Una nota de PageSpeed sin la máquina que la sacó no se puede leer: `psi` publica el `benchmarkIndex`
 - D210 · Un sello se escribe con el formato que su gate le va a exigir, y eso lo garantiza el binario de prettier, no un `JSON.stringify`
-- D211 · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban
+- D211 (completada por D214) · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban
 - D212 · El embalse no bajó al purgarlo, y la aritmética que decía que sí no reconcilia por ningún lado
 - D213 · La extensión de una ruta es instrumento de medida: `/api/kit` no podía disparar `file_download`
+- D214 · El gate de GTM pasa a depender del consentimiento, y la primaria ya no era el motivo para no hacerlo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -13631,7 +13632,7 @@ de inserción de qlty, así que dos sellos de la misma deuda pueden dar un diff 
 El gate no lo compara —mira `total`, `hallazgos` y `magnitudes`—, o sea que es ruido en el
 diff y no un agujero.
 
-## D211 · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban — 2026-09-08
+## D211 (completada por D214) · La postura se declara antes que el gate se cierre, porque cambiar el gate y leer el pico se estorban — 2026-09-08
 
 **Decisión.** El ping sin cookies que GA4 recibe de todo el mundo (D198) **se declara en
 `/cookies`** como excepción escrita al criterio propio, **igual que Vercel Web Analytics**
@@ -13894,3 +13895,63 @@ esto se reabre. Es el mismo trato que la decisión de D212 de aquí al lado: **e
 hecho, no una fecha**. Abrir ficha para «mirar GA4 dentro de un mes» sería programar una lectura
 que puede salir vacía por falta de tráfico y no por el arreglo, que es exactamente el error de
 ventana que D119 documenta tres veces.
+
+## D214 · El gate de GTM pasa a depender del consentimiento, y la primaria ya no era el motivo para no hacerlo — 2026-09-17
+
+**Fecha:** 2026-09-17 · **Contexto:** sprint «Lanzamiento», P74.55 · **Estado:** aceptada
+
+**Decisión.** El contenedor de Google Tag Manager **solo se inyecta si hay consentimiento de
+analítica**: por una decisión ya guardada, o al aceptar en la misma visita. Sin aceptar no sale
+**ninguna petición a Google**. El ping sin cookies que D198 midió y D211 declaró en `/cookies`
+desaparece, y el sitio vuelve a tener **una sola** excepción escrita a su propia postura: Vercel
+Web Analytics (D170). Lo decidió Francisco con la balanza de abajo delante.
+
+### Por qué ahora, y por qué la ficha pesaba al revés
+
+D211 lo aplazó por calendario: cerrarlo antes del 10 mataba la única serie de volumen justo antes
+del pico. El pico está leído (P74.5), y los dos contrapesos que la ficha del 8-09 ponía en contra
+**no aguantaron el dato**:
+
+| La ficha decía | El 2026-09-17 |
+|---|---|
+| La tasa de consentimiento es casi cero (D168) | **22,2 %** (36 de 162), `npm run medicion` |
+| Se corta la única serie de volumen | El volumen lo da **Vercel Web Analytics**, que ve a todo el mundo desde el 31-08 |
+| — | La primaria **ya no se lee en GA4**: los contactos los cuenta la bandeja (P74.5) |
+
+**El rendimiento no es el motivo** (D198/D211 lo fijaron así): los +3 de mediana de PageSpeed
+medidos en P72.62 son un efecto lateral, y el sello de `psi` se renueva después del despliegue.
+
+### Cómo queda el cableado
+
+- **`GoogleTagManager` es una isla que decide en el navegador**, porque la decisión vive en
+  `localStorage`. Lee `readConsent()` al montar y escucha `ANALYTICS_GRANTED_EVENT`, que emite
+  `saveConsent` cuando la elección incluye analítica. El gate de entorno (D13) se queda en el
+  layout: son dos gates y cada uno vive donde está su dato.
+- **Sale el `<noscript>` con el iframe de GTM.** Sin JS no hay forma de consentir, así que ese
+  iframe era una petición a Google sin permiso por construcción.
+- **`ConsentInit` se queda**: el default denegado y la decisión previa siguen haciendo falta para
+  cuando el contenedor carga.
+- **Retirar el consentimiento no descarga GTM en esa visita**: un script cargado no se descarga.
+  Actúa el `consent update` denegado que ya empujaba `applyConsent`, y en la carga siguiente no
+  se inyecta.
+
+### Lo que se pierde, escrito para no descubrirlo después
+
+- **La serie de GA4 se parte el día del despliegue.** Antes, cada carga sin consentir era un
+  usuario nuevo (D198); después, GA4 solo ve a quien acepta. Nada de antes se resta con nada de
+  después, y el sello de medición lo tiene que llevar en su instrumento (D199).
+- **Las secundarias pasan a verse solo en quien acepta**: descarga del CV y profundidad de
+  scroll. Vercel Web Analytics no las recoge en plan Hobby, que no tiene eventos propios.
+
+### Lo que se movió con él
+
+`/cookies` ES y EN vuelve a «dos cosas»: `counterBody4` sale, la parte incómoda cubre solo a
+Vercel, `thirdBody` recupera «que requiere tu consentimiento», `legalBody` dice «se carga» otra
+vez porque ya es cierto al pie de la letra, y la fila del contenedor pasa de «Necesaria» a
+«Analítica». Fecha legal a 2026-09-17. **Y el artículo**: la figura de §s07 y su pie decían que
+sin consentimiento sale una petición a terceros, la analítica; ahora no sale ninguna (el contador
+y Vercel son del mismo origen).
+
+**Lo que no se tocó a propósito:** el cierre del artículo dice que *el gestor de etiquetas carga
+con el consentimiento puesto en «no» por defecto*. Ya no carga, pero ese bloque está congelado
+hasta que Francisco decida editarlo, así que se señala y no se reescribe.
