@@ -285,6 +285,17 @@ del techo**. No se fabricó una retirada a destiempo para cuadrarlo, y eso es de
 retirada reactiva es exactamente la patología que esta regla corrige.** La primera aplicación
 de verdad es la apertura siguiente, y esas 28 palabras son la razón de que no se pueda saltar.
 
+**Y el 2026-09-17 la retirada gana un número** (method-review XIV). Retirar «lo que se
+encuentre» equilibró el ciclo en cero: la apertura de «Lanzamiento» quitó 78 palabras y el
+sprint añadió 84, así que cerró con **29 de margen en documentos y 2 de holgura en skills**, y
+la proporción de verificación a 70 líneas de su techo. Los tres a la vez. La nota de Francisco
+llegó por el mismo sitio que la de agosto —*«el tema de presupuesto y alcanzar el techo
+recurrentemente»*— y preguntaba si ADRs, Obsidian o Graphify lo habrían evitado. Medido: no,
+porque `DECISIONS.md` ya no se carga y lo que se llena son las reglas y las skills; el
+formato no cambia el caudal. Lo que sí lo cambia es que la apertura no termine hasta dejar
+**margen ≥ 100 en documentos y ≥ 300 en skills**, que es lo que un sprint de este ritmo
+consume.
+
 ---
 
 ## La fase que faltaba: refinar la ficha con preguntas — 2026-09-03

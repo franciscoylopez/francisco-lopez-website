@@ -103,6 +103,7 @@
 - [El perfil de GitHub se publica, y por qué no es una quinta superficie de marca — 2026-09-05](#el-perfil-de-github-se-publica-y-por-qué-no-es-una-quinta-superficie-de-marca--2026-09-05)
 - [El `method-review` XIII: el arreglo funcionó y la bandeja iba con dos días de retraso — 2026-09-06](#el-method-review-xiii-el-arreglo-funcionó-y-la-bandeja-iba-con-dos-días-de-retraso--2026-09-06)
 - [La brecha de la primaria, leída sobre el lanzamiento: cero, y sobre spam — 2026-09-17](#la-brecha-de-la-primaria-leída-sobre-el-lanzamiento-cero-y-sobre-spam--2026-09-17)
+- [El `method-review` XIV: tres techos llenos a la vez, y un cambio de contrato sin barrido — 2026-09-17](#el-method-review-xiv-tres-techos-llenos-a-la-vez-y-un-cambio-de-contrato-sin-barrido--2026-09-17)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4690,3 +4691,30 @@ medir.
 **Lo que cambia en §7:** deja de leer la primaria contra el consentimiento y la lee contra lo
 único que de verdad falla, que un envío no pase por la página. La bandeja manda sobre GA4, y las
 cifras de volumen salen del sello, no del párrafo.
+
+## El `method-review` XIV: tres techos llenos a la vez, y un cambio de contrato sin barrido — 2026-09-17
+
+Informe completo: [artefacto del disparo XIV](https://claude.ai/artifact/HmNWERo5gs6gV7fdo3gzbd).
+
+**Lo sano, medido:** CI en rojo 1 de 54 runs del sprint, `General` ±0, ningún techo movido,
+los 24 guardianes rechazan sus 59 casos y el bucle de medición se cerró con datos (D214 se
+decidió con la tasa de consentimiento; P74.5, contra la bandeja).
+
+**Lo que encontró.** La apertura de «Lanzamiento» retiró 78 palabras y el sprint añadió 84:
+cerró con margen 29 en documentos, holgura 2 en skills y la verificación a 70 líneas de su
+techo, y el sprint escribió 3,8 líneas de `scripts/` por cada una de producto. Y D214 dejó
+cuatro consumidores viejos en cuatro sitios —README y skill, cierre del artículo, `frame-src`,
+la columna de visitas de la serie de LinkedIn—, cazados uno a uno y el último por nadie. Los
+avisos de seguridad esperaron la cadencia del sprint: `nodemailer` 7 días, `qs` 15.
+
+**La nota de Francisco convergió con el primer hallazgo** y preguntaba por ADRs, Obsidian y
+Graphify. Medido: los ADR no tocan el presupuesto que se llena (`DECISIONS.md` ya no se carga)
+y quedan aparcados por decisión suya. **Graphify** se instaló y se validó contra el caso
+conocido: en modo código (local, sin LLM) encuentra **0 de los 4** consumidores de D214, porque
+el grafo solo ve imports y llamadas, no la cadena de la CSP ni los `.md` ni los diccionarios.
+**Obsidian** se instaló como lector del repo, con `.obsidian/` fuera de git.
+
+**Lo que dejó:** la apertura retira hasta un número (margen ≥ 100 en documentos y ≥ 300 en
+skills, `CLAUDE.md`), la familia «El disparador en el momento equivocado» y dos indicadores
+nuevos. Y dos tareas en `General`: `check:tablero` avisa de los avisos de seguridad abiertos
+(P74.63) y las D-entries que retiran algo escriben su barrido (P74.64).

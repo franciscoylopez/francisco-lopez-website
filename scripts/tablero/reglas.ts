@@ -75,6 +75,23 @@ export const BLOQUE_TRANSVERSAL = "General";
 export const VARIACION_ROJA = 4;
 
 /**
+ * Cuántos días puede esperar un aviso ALTO de Dependabot. El drenaje de D164 va al
+ * cierre del sprint, y en «Lanzamiento» eso fue `nodemailer` 7 días con el PR en
+ * verde (method-review XIV). Se juzga al empezar cada sesión, no al cerrar.
+ */
+export const DIAS_AVISO_ALTO = 2;
+
+export type Aviso = { paquete: string; severidad: string; abierto: string };
+
+export function avisosVencidos(avisos: Aviso[], hoy: Date): Aviso[] {
+  return avisos.filter(
+    (a) =>
+      (a.severidad === "high" || a.severidad === "critical") &&
+      (hoy.getTime() - Date.parse(a.abierto)) / 864e5 > DIAS_AVISO_ALTO,
+  );
+}
+
+/**
  * El tamaño de `General` en el cierre anterior. Es un valor que solo cambia al
  * cerrar una etapa, así que no necesita almacén: vive como constante fechada en
  * `check-tablero.ts`, igual que `check:contexto` guarda ahí su techo. Aquí solo

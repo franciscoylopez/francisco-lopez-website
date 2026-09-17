@@ -33,10 +33,14 @@
  * diciendo qué falta, porque un guardián que se salta solo es el modo de fallo de
  * todos los de este repo.
  */
+import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync, statSync } from "node:fs";
 
 import {
+  type Aviso,
+  avisosVencidos,
   BLOQUE_TRANSVERSAL,
+  DIAS_AVISO_ALTO,
   EN_EJECUCION,
   medirGeneral,
   revisarTablero,
@@ -289,7 +293,38 @@ if (bloqueadas > 0) {
   );
 }
 
-if (hallazgos.length === 0) {
+// LOS AVISOS DE SEGURIDAD, aquí porque esto se lanza al empezar cada sesión. Sin
+// poder leerlos no se aprueba: un cero por falta de permiso parece un aprobado.
+let avisos: Aviso[];
+try {
+  avisos = JSON.parse(
+    execFileSync(
+      "gh",
+      [
+        "api",
+        "repos/{owner}/{repo}/dependabot/alerts?state=open&per_page=100",
+        "--jq",
+        "[.[] | {paquete: .dependency.package.name, severidad: .security_advisory.severity, abierto: .created_at}]",
+      ],
+      { encoding: "utf8" },
+    ),
+  ) as Aviso[];
+} catch {
+  console.error(
+    "\ncheck:tablero — no se pueden leer los avisos de Dependabot (gh api).\n",
+  );
+  process.exit(1);
+}
+const vencidos = avisosVencidos(avisos, new Date());
+console.log(
+  `  · ${avisos.length} aviso(s) de seguridad abierto(s) · ${vencidos.length} alto(s) con más de ${DIAS_AVISO_ALTO} días`,
+);
+for (const a of vencidos)
+  console.error(
+    `      ${a.paquete} (${a.severidad}) desde ${a.abierto.slice(0, 10)}`,
+  );
+
+if (hallazgos.length === 0 && vencidos.length === 0) {
   console.log(
     "✓ Prioridades únicas, estados dentro del sprint activo, Área en todas y el\n" +
       "  embalse transversal sin crecer por encima del umbral.\n",
@@ -297,6 +332,12 @@ if (hallazgos.length === 0) {
   process.exit(0);
 }
 
+if (hallazgos.length === 0) {
+  console.error(
+    "\n  Un aviso alto no espera al cierre del sprint (D164): se mergea su PR ya.\n",
+  );
+  process.exit(1);
+}
 console.error(`\n  ${hallazgos.length} hallazgo(s):\n`);
 for (const h of hallazgos) {
   console.error(`  · [${h.regla}] ${h.mensaje}`);

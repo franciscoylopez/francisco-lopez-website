@@ -70,3 +70,9 @@ next-env.d.ts
 # El HTML intermedio del generador de carruseles: se escribe junto al slides.mjs
 # para poder depurar una lámina, y solo cae dentro del repo con el caso malo.
 scripts/carrusel/carrusel.html
+
+# Herramientas de lectura locales (P74.65, P74.66): el vault de Obsidian y el grafo
+# de Graphify son de quien los abre, no del repo. Un grafo commiteado sería un
+# artefacto derivado sin regenerador (D60).
+.obsidian/
+graphify-out/
