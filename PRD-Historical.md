@@ -4667,8 +4667,10 @@ después que GTM carga y emite igual, así que esa causa no puede ser. Lo que s�
 que esos dos días GA4 no tiene **ni un `page_view`**. Hay dos lecturas y **ninguna está
 comprobada**: un bot que manda el formulario sin cargar la página, o un hueco de GA4 esos días.
 La gráfica diaria va plana del 26 al 31 de agosto, y eso es más compatible con lo segundo de lo
-que parece. Lo separaría la curva diaria de Vercel Web Analytics en esos días, que solo se lee a
-mano en el panel.
+que parece. **Y no hay instrumento que lo separe:** Vercel Web Analytics entró el 31 de agosto
+(`b33061d`, D170) y su curva empieza ese día con 1 visitante, así que los días 27 y 28 no tiene
+nada que decir. Se queda sin contestar, y no se tarea: no hay de dónde leerlo. Si vuelve a pasar,
+las dos analíticas ya se solapan y basta con cruzar el día.
 
 **El envío del 23 de agosto era una prueba de Francisco**, desde el móvil, para ver que todo
 funcionaba; no salía en la bandeja porque estaba en la papelera. La sección de agosto lo dio por
