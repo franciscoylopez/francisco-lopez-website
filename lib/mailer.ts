@@ -32,7 +32,9 @@ const SMTP_PORT = 587; // STARTTLS. El 465 (TLS directo) también vale; este via
 /**
  * La contraseña de aplicación de Google. NO es la contraseña de la cuenta:
  * requiere 2FA y se genera en https://myaccount.google.com/apppasswords.
- * Sin ella el módulo no envía y lo dice; nunca falla en silencio.
+ * Sin ella el módulo no envía, y lo dice en el log: al visitante solo le llega un
+ * «no ha salido», así que sin esa línea «nadie escribe» y «se perdió la variable»
+ * se verían igual en Vercel (P74.58).
  */
 function credentials(): { user: string; pass: string } | null {
   const pass = process.env.GMAIL_APP_PASSWORD;
@@ -57,7 +59,10 @@ export async function sendContactMessage(
   meta: { locale: string },
 ): Promise<SendResult> {
   const creds = credentials();
-  if (!creds) return { ok: false, reason: "missing-credentials" };
+  if (!creds) {
+    console.error("[contacto] no se envía: falta GMAIL_APP_PASSWORD");
+    return { ok: false, reason: "missing-credentials" };
+  }
 
   const from = header(creds.user);
   const replyTo = header(values.email);
