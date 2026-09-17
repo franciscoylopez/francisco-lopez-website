@@ -491,9 +491,9 @@ The technical SEO is done page by page. Each of the fourteen pages carries its o
 
 **And speed, which is also SEO.** The non-functional target is a minimum of 90 on PageSpeed, desktop and mobile. It isn't a frozen screenshot: you can rerun it anytime against production.
 
-Performance · PageSpeed · `npm run psi · 30 August 2026`
+Performance · PageSpeed · `npm run psi · 17 September 2026`
 
-97-100 desktop · 93-99 mobile
+100 desktop · 95-99 mobile
 
 [See the report](https://pagespeed.web.dev/analysis?url=https://franciscolopez.es)
 

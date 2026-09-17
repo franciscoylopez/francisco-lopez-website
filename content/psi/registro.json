@@ -1,13 +1,13 @@
 {
-  "fecha": "2026-08-30",
+  "fecha": "2026-09-17",
   "paginas": 14,
   "tomas": 3,
   "movil": {
-    "min": 93,
+    "min": 95,
     "max": 99
   },
   "escritorio": {
-    "min": 97,
+    "min": 100,
     "max": 100
   }
 }
