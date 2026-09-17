@@ -491,9 +491,9 @@ El SEO técnico está hecho página a página. Cada una de las catorce páginas 
 
 **Y la velocidad, que también es SEO.** El objetivo no funcional es un mínimo de 90 en PageSpeed, en escritorio y en móvil. No es una captura fija: se puede repetir en cualquier momento contra producción.
 
-Rendimiento · PageSpeed · `npm run psi · 30 de agosto de 2026`
+Rendimiento · PageSpeed · `npm run psi · 17 de septiembre de 2026`
 
-97-100 escritorio · 93-99 móvil
+100 escritorio · 95-99 móvil
 
 [Ver el informe](https://pagespeed.web.dev/analysis?url=https://franciscolopez.es)
 
