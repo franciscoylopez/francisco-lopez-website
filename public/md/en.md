@@ -12,7 +12,7 @@ Senior Product Manager · UX · SaaS · AI · Builder
 
 I research, prototype, build and measure.
 
-![Portrait of Francisco López](https://franciscolopez.es/_next/image?url=%2Fimg%2Ffrancisco-hero-estudio-4x5.webp&w=3840&q=75)
+![Portrait of Francisco López](https://franciscolopez.es/_next/image?url=%2Fimg%2Ffrancisco-hero-muro-4x5.webp&w=3840&q=75)
 
 Key moments
 
