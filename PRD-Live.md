@@ -186,8 +186,7 @@ GTM/GA4, Clarity (D32) y `youtube-nocookie` (D55). **Vercel Web Analytics no abr
 es del mismo origen (D170). Se mantiene `'unsafe-inline'` **por coste medido**: el nonce cuesta
 el prerenderizado de las catorce (D26), así que va con V4.
 
-El **repositorio es público por diseño** (temporalmente privado desde el 2026-09-24, hasta rehacerlo
-con la historia desde cero, D216), con `LICENSE` explícito («público para consulta, no código
+El **repositorio es público por diseño** (rehecho con la historia desde cero el 2026-10-12, D217), con `LICENSE` explícito («público para consulta, no código
 abierto») y esa misma frase en formato máquina en `robots.txt`: preferencia, no control de
 acceso (D160).
 

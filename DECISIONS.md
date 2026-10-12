@@ -14097,3 +14097,13 @@ distingue por el `repoId`, no por el nombre: tras renombrar, Vercel seguía most
 apuntando al repo viejo), el acceso de las apps de Vercel y Qlty, los ajustes del repo —solo squash y
 rebase, ahora también en el propio ajuste y no solo en el ruleset—, los temas, las alertas de
 Dependabot, la imagen de portada y el ancla del perfil. No había secretos, variables ni webhooks.
+
+**Público otra vez, y la protección en el mismo segundo.** El ruleset solo se puede crear con el repo
+público, así que el orden lo dicta el plan: visibilidad pública a las 10:05:23 UTC y el ruleset de
+D68, recreado desde su texto, a las 10:05:24 —«main protegida», PR obligatorio con 0 aprobaciones,
+`calidad y build` requerido, sin borrado ni force-push, solo squash y rebase, sin bypass—. **Validado
+disparándolo**, como D68: un push directo a `main` con un commit real sale rechazado con `GH013` y
+`main` no se mueve. Después, `allow_auto_merge` y el workflow de automerge, por ese orden: sin la
+protección delante, el automerge vuelve a ser lo que fue durante dos semanas. Y, sin sesión, los 57
+enlaces a GitHub del sitio responden, y las 84 anclas `#L` a este archivo caen en la cabecera de su
+decisión.
