@@ -12320,9 +12320,11 @@ de referencia —cabeza al 51% del alto— la cabeza sola es un cuadrado de **~2
 a los que el PDF lo pinta, eso son **215 dpi**, por debajo de los 300 de imprenta. Barrido el
 repo: no hay ninguna versión mayor de esa foto.
 
-El byline está a **430×430** y ya viene centrado en la cara. De ahí se extraen **400×400** en
-(20, 25), calibrados contra el avatar anterior: cabeza al 51% del alto y un 5% de aire por
-encima del pelo.
+**Desde la foto nueva (2026-10-12, P74.695), byline y CV salen del MISMO recorte cuadrado del
+original** (`fran-avatar-black-wall`, 1086×1448), no el uno del otro: el byline a 430 y el CV a
+400, con la cabeza a un ~60% del lado. Se cerró respecto al 48% que tenía el byline anterior
+porque **se pinta a 44px**, y con una foto oscura la cara no se leía a ese tamaño. Lo que esta
+decisión protege sigue igual: los dos son derivados del mismo original y no pueden divergir.
 
 ### Se escribe SIN reescalar, que es lo contrario de lo que parecía obvio
 
