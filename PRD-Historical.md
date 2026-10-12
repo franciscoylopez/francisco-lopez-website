@@ -109,6 +109,7 @@
 - [El `method-review` XIII: el arreglo funcionó y la bandeja iba con dos días de retraso — 2026-09-06](#el-method-review-xiii-el-arreglo-funcionó-y-la-bandeja-iba-con-dos-días-de-retraso--2026-09-06)
 - [La brecha de la primaria, leída sobre el lanzamiento: cero, y sobre spam — 2026-09-17](#la-brecha-de-la-primaria-leída-sobre-el-lanzamiento-cero-y-sobre-spam--2026-09-17)
 - [El `method-review` XIV: tres techos llenos a la vez, y un cambio de contrato sin barrido — 2026-09-17](#el-method-review-xiv-tres-techos-llenos-a-la-vez-y-un-cambio-de-contrato-sin-barrido--2026-09-17)
+- [Foto nueva del Hero, y es un plano más cercano a propósito — 2026-10-12](#foto-nueva-del-hero-y-es-un-plano-más-cercano-a-propósito--2026-10-12)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4721,3 +4722,23 @@ el grafo solo ve imports y llamadas, no la cadena de la CSP ni los `.md` ni los 
 skills, `CLAUDE.md`), la familia «El disparador en el momento equivocado» y dos indicadores
 nuevos. Y dos tareas en `General`: `check:tablero` avisa de los avisos de seguridad abiertos
 (P74.63) y las D-entries que retiran algo escriben su barrido (P74.64).
+
+---
+
+## Foto nueva del Hero, y es un plano más cercano a propósito — 2026-10-12
+
+**Qué cambió.** La foto de estudio con camisa blanca (sentado, casi de cuerpo entero) se
+sustituye por `fran-avatar-black-wall`: camiseta negra sobre un muro oscuro, plano medio con los
+brazos cruzados. Un solo original para los **cuatro** sitios donde sale el retrato: la portada,
+la firma de autor del artículo, el CV y la tarjeta OG de la home. Francisco pidió tres; la
+tarjeta OG llevaba la misma foto y dejarla habría publicado dos retratos distintos.
+
+**El encuadre es más cercano, y se aceptó así.** La caja de la portada mide lo mismo al píxel en
+todos los anchos; lo que cambia es la persona dentro: la cabeza pasa del 21% al 30% del alto. El
+original ya llega casi entero al recorte 4:5, así que no hay más fondo que ganar sin ampliar el
+lienzo de la foto. Francisco lo vio en la preview y lo prefirió así.
+
+**De paso, la portada dejó de salir blanda en pantallas densas:** el original anterior medía
+614px y el optimizador no amplía; el nuevo máster es de 880×1100, y aun así lo que se descarga
+pesa lo mismo o menos (15 KB a 640px frente a 19). El detalle de cada recorte, en el commit de
+P74.695 y en D192.
