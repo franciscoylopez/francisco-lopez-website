@@ -501,15 +501,15 @@ SEO 100 · Accesibilidad 100 · Buenas prácticas 100
 
 GEO es la otra mitad, y las siglas son de _Generative Engine Optimization_: que el sitio lo pueda leer y citar un asistente, no solo indexarlo un buscador. Un asistente no navega, pide el contenido y lo cita. Así que cada página se sirve también en **markdown**, con el texto y sin el andamiaje de alrededor, y así la portada pesa más de **30 veces menos**. Hay un archivo llms.txt que dice quién soy y cuándo tiene sentido traer esta fuente a una conversación, un catálogo en /.well-known/ard.json con los recursos que el sitio ofrece a una máquina, y una línea en el robots.txt que dice lo mismo que la licencia del repositorio: se puede indexar, se puede leer para responder citando, no se puede usar para entrenar.
 
-Lo que el sitio no tiene tampoco lo anuncia: no hay servidor MCP, ni API, ni catálogo de habilidades, ni tarjeta de agente, así que ninguno de esos formatos se publica. **Un catálogo de API sin API no es estar preparado para agentes, es mentir en un formato que una máquina sabe leer.** Eso deja casillas vacías a propósito, y por eso esta nota se lee distinto de la de arriba: de las 125 comprobaciones del informe, 60 miden superficies que aquí no existen. Es una foto de dónde está el sitio, no un objetivo que me haya puesto.
+Lo que el sitio no tiene tampoco lo anuncia: no hay servidor MCP, ni API, ni catálogo de habilidades, ni tarjeta de agente, así que ninguno de esos formatos se publica. **Un catálogo de API sin API no es estar preparado para agentes, es mentir en un formato que una máquina sabe leer.** Eso deja casillas vacías a propósito, y por eso esta nota se lee distinto de la de arriba: de las 132 comprobaciones del informe, 66 miden superficies que aquí no existen. Es una foto de dónde está el sitio, no un objetivo que me haya puesto.
 
-Agentes · ora.ai · `npm run agentes:sellar · 31 de agosto de 2026`
+Agentes · ora.ai · `npm run agentes:sellar · 12 de octubre de 2026`
 
-78 sobre 100
+85 sobre 100
 
 [Ver el informe](https://ora.ai/score/franciscolopez.es)
 
-Grado B · 125 comprobaciones · 60 no aplican
+Grado B · 132 comprobaciones · 66 no aplican
 
 ### La deuda que el analizador sí encontró
 
