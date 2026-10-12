@@ -551,11 +551,13 @@ export const CASOS: Caso[] = [
     guardian: "check:accesibilidad",
     rotura:
       "cambia una fuente que /accesibilidad describe y su bloque no se revisa",
-    // `lib/figures.ts` es dependencia de los «Límites», que es donde la página
-    // dice que dos diagramas se miden y no se juzgan. El día que se rediseñen
-    // (P68.593) esa tarjeta pasa a mentir, y este es el escenario real.
-    archivo: "lib/figures.ts",
-    mutar: append("\n// cambio en las figuras que la página describe\n"),
+    // `content/cv/` es dependencia de los «Límites», que es donde la página
+    // dice qué cumple el CV en PDF y qué no. Si el CV cambia, esa tarjeta puede
+    // pasar a mentir. Hasta P74.68 este caso mordía `lib/figures.ts`, por una
+    // tarjeta de diagramas que siguió publicada después de que su límite se
+    // cerrara: es exactamente el escenario que el caso protege.
+    archivo: "content/cv/content.es.ts",
+    mutar: append("\n// cambio en el CV que la página describe\n"),
   },
   {
     guardian: "check:accesibilidad",
