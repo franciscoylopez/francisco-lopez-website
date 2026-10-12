@@ -333,7 +333,7 @@ export function ComoSeHaCreado({
               <ByLine
                 name={t.hero.bylineName}
                 role={t.hero.bylineRole}
-                photoSrc="/img/francisco-como-se-ha-creado-byline-1x1.webp"
+                photoSrc="/img/francisco-como-se-ha-creado-byline-muro-1x1.webp"
                 photoAlt={t.hero.bylinePhotoAlt}
               />
               <ShareActions

@@ -17,7 +17,7 @@ In this article you can see everything that led me to build this page: the reaso
 
 A small adventure in learning and judgment, from strategy to UX, from UX to design, and from design to code.
 
-![Portrait of Francisco López](https://franciscolopez.es/_next/image?url=%2Fimg%2Ffrancisco-como-se-ha-creado-byline-1x1.webp&w=3840&q=75)
+![Portrait of Francisco López](https://franciscolopez.es/_next/image?url=%2Fimg%2Ffrancisco-como-se-ha-creado-byline-muro-1x1.webp&w=3840&q=75)
 
 Francisco López
 

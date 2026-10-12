@@ -17,7 +17,7 @@ En este artículo puedes ver todo lo que me ha llevado a montar esta página: el
 
 Una pequeña aventura de aprendizaje y criterio, de estrategia a UX, de UX a diseño y de diseño a código.
 
-![Retrato de Francisco López](https://franciscolopez.es/_next/image?url=%2Fimg%2Ffrancisco-como-se-ha-creado-byline-1x1.webp&w=3840&q=75)
+![Retrato de Francisco López](https://franciscolopez.es/_next/image?url=%2Fimg%2Ffrancisco-como-se-ha-creado-byline-muro-1x1.webp&w=3840&q=75)
 
 Francisco López
 

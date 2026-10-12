@@ -83,22 +83,20 @@ export function Hero({ dict }: { dict: HeroDict }) {
                   el build servido; por encima de 768 manda el alto
                   (`min(34rem,64svh)`) y el ancho real tope es 433, así que 440.
 
-                  HOY NO COSTABA UN BYTE, y por eso llevaba ahí desde el primer
-                  día sin que ningún gate lo viera: el original tiene 614px de
-                  ancho y el optimizador de Next no amplía, así que pidiera el
-                  navegador `w=750` o `w=640` recibía el mismo archivo. Lo que
-                  arregla esto es el día que la foto se cambie por un original
-                  más grande —ya ha pasado dos veces— y de golpe cada móvil se
-                  baje el candidato de 1080 para pintar 358.
+                  CUANDO SE ESCRIBIÓ NO COSTABA UN BYTE: el original tenía 614px
+                  de ancho y el optimizador de Next no amplía, así que pidiera el
+                  navegador `w=750` o `w=640` recibía el mismo archivo. Desde
+                  P74.695 el original mide 880×1100 (los 440 de arriba a DPR 2),
+                  y es ahora cuando este `sizes` decide: sin él, cada móvil se
+                  bajaría el candidato de 1080 para pintar 358.
 
                   NO QUITA EL AVISO DE PSI, y eso está comprobado: «Improve image
-                  delivery, 12 KiB» compara los 614×768 que se sirven contra los
-                  357×446 que se PINTAN, sin mirar el DPR — a 1,75 harían falta
-                  625, o sea más de los que hay. Servir lo que pide dejaría la
-                  foto blanda en cualquier móvil moderno. El desglose entero, en
-                  la ficha de P72.50. */}
+                  delivery» compara lo que se sirve contra los 357×446 que se
+                  PINTAN, sin mirar el DPR — a 1,75 hacen falta 625. Servir lo que
+                  pide dejaría la foto blanda en cualquier móvil moderno. El
+                  desglose entero, en la ficha de P72.50. */}
               <Image
-                src="/img/francisco-hero-estudio-4x5.webp"
+                src="/img/francisco-hero-muro-4x5.webp"
                 alt={dict.photoAlt}
                 fill
                 fetchPriority="high"
