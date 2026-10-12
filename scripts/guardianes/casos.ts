@@ -551,11 +551,22 @@ export const CASOS: Caso[] = [
     guardian: "check:accesibilidad",
     rotura:
       "cambia una fuente que /accesibilidad describe y su bloque no se revisa",
-    // `lib/figures.ts` es dependencia de los «Límites», que es donde la página
-    // dice que dos diagramas se miden y no se juzgan. El día que se rediseñen
-    // (P68.593) esa tarjeta pasa a mentir, y este es el escenario real.
-    archivo: "lib/figures.ts",
-    mutar: append("\n// cambio en las figuras que la página describe\n"),
+    // D124 es el suelo que /accesibilidad publica en «Rótulos de figuras» (11px
+    // pintados a 360). Si esa decisión cambia, la frase pasa a mentir.
+    //
+    // Hasta P74.68 este caso mordía `lib/figures.ts`, por una tarjeta de
+    // «Límites» sobre dos diagramas que siguió publicada después de que su
+    // límite se cerrara, que es justo el escenario que el caso protege. No se
+    // movió a las fuentes que le quedan a «Límites» porque las dos son
+    // DIRECTORIOS, y de un directorio la huella sella la lista de archivos, no
+    // su contenido: un cambio dentro de un archivo no lo mordería. Se probó, y
+    // el arnés lo rechazó.
+    archivo: "DECISIONS.md",
+    mutar: (o) =>
+      o.replace(
+        /(## D124 · [^\n]*\n)/,
+        "$1\nEl suelo del rótulo baja a 320.\n",
+      ),
   },
   {
     guardian: "check:accesibilidad",

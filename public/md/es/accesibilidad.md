@@ -292,10 +292,6 @@ La prueba a mano se ha hecho con NVDA sobre Chrome. Ni VoiceOver, ni JAWS, ni Ta
 
 Por debajo de 320 píxeles de ancho, tres páginas se desbordan en horizontal. No es la carpintería: son palabras largas que no caben en una columna de 240. Medido a 280 y pendiente.
 
-### Dos diagramas que se miden y no se juzgan
-
-La comprobación que mide los rótulos de las figuras se abstiene en dos: son diagramas anchos que se desplazan en horizontal en vez de encogerse, así que su tamaño no lo decide el ancho de la pantalla. Sus rótulos acaban pintados a 5 píxeles, y eso es demasiado pequeño. La solución no es estrecharlos sino volver a dibujarlos, y está pendiente.
-
 ### CV en PDF
 
 Es texto seleccionable y etiquetado, pero un PDF nunca iguala a una página web en accesibilidad. Si lo necesitas en otro formato, escríbeme.

@@ -73,12 +73,16 @@ export const DEPENDENCIAS: Record<BloqueId, readonly string[]> = {
 
   // La lista de herramientas y el arnés que las vigila. `casos.ts` es la fuente
   // de las dos cifras de la nota; `ci.yml` decide cuáles corren solas y cuáles
-  // se lanzan a mano, que es justo lo que el párrafo explica.
+  // se lanzan a mano, que es justo lo que el párrafo explica. D124 es el suelo
+  // de «Rótulos de figuras» (11px pintados a 360); estuvo en `limits` mientras
+  // allí había una tarjeta de diagramas, y al retirarla (P74.68) se vino aquí,
+  // que es la frase que lo sigue afirmando.
   verify: [
     "scripts/guardianes/casos.ts",
     ".github/workflows/ci.yml",
     "GATES.md#Cómo se verifica lo que no ve un compilador",
     "scripts/design-review/censo/",
+    "DECISIONS.md#D124",
   ],
 
   // El punto ciego: la pasada con NVDA, las cinco cosas que ninguna herramienta
@@ -88,10 +92,5 @@ export const DEPENDENCIAS: Record<BloqueId, readonly string[]> = {
   // Los límites. Cada uno se cierra con una tarea, y cerrarla deja la tarjeta
   // mintiendo: por eso este bloque es el que más se mueve y el que más falta
   // hacía vigilar.
-  limits: [
-    "scripts/design-review/censo/",
-    "lib/figures.ts",
-    "DECISIONS.md#D124",
-    "content/cv/",
-  ],
+  limits: ["scripts/design-review/censo/", "content/cv/"],
 };

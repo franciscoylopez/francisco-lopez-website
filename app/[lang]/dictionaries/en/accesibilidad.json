@@ -250,10 +250,6 @@
         "body": "Below 320 pixels wide, three pages overflow horizontally. It isn't the layout scaffolding: they're long words that don't fit in a 240 pixel column. Measured at 280 and pending."
       },
       {
-        "title": "Two diagrams measured but not judged",
-        "body": "The check that measures figure labels abstains on two of them: they're wide diagrams that scroll horizontally instead of shrinking, so their size isn't decided by the width of the screen. Their labels end up painted at 5 pixels, and that is too small. The fix isn't to narrow them but to redraw them, and it's pending."
-      },
-      {
         "title": "CV as a PDF",
         "body": "It's selectable, tagged text, but a PDF never matches a web page for accessibility. If you need it in another format, write to me."
       }
