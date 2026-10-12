@@ -41,6 +41,15 @@ updates:
       # Se ignoran los bumps mayores hasta que Next soporte oficialmente TS 7.
       - dependency-name: "typescript"
         update-types: ["version-update:semver-major"]
+      # ESLint 10 lo bloquea upstream (D151): `eslint-plugin-react`, que llega por
+      # `eslint-config-next`, no carga con él («contextOrFilename.getFilename is not a
+      # function»). Cada lunes reabría el mismo PR en rojo, y en el repo anterior uno
+      # entró así con la protección de `main` caída (D217). Se quita esta entrada
+      # cuando `eslint-config-next` declare soporte para ESLint 10 (P74.65).
+      - dependency-name: "eslint"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
     groups:
       # Agrupa el ecosistema Next en un solo PR para no fragmentar los bumps acoplados
       # (next, eslint-config-next, @next/*, react/react-dom).
