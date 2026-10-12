@@ -257,7 +257,8 @@
 - D213 · La extensión de una ruta es instrumento de medida: `/api/kit` no podía disparar `file_download`
 - D214 · El gate de GTM pasa a depender del consentimiento, y la primaria ya no era el motivo para no hacerlo
 - D215 (contesta a D212) · El Deployment Storage no es un nivel, es una integral: por eso borrar nunca lo bajó
-- D216 · Solo el dominio propio es público: las URLs `*.vercel.app` piden sesión
+- D216 (completada por D217) · Solo el dominio propio es público: las URLs `*.vercel.app` piden sesión
+- D217 (completa a D216) · El repositorio se rehace con la historia desde cero, y mientras fue privado `main` no tuvo protección
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -14028,7 +14029,7 @@ este sitio libera al pararse se lo va a comer aquel.
 
 ---
 
-## D216 · Solo el dominio propio es público: las URLs `*.vercel.app` piden sesión — 2026-09-24
+## D216 (completada por D217) · Solo el dominio propio es público: las URLs `*.vercel.app` piden sesión — 2026-09-24
 
 **Decisión.** La protección de despliegues de Vercel pasa a **`all_except_custom_domains`**
 («Standard Protection»): toda URL `*.vercel.app` —vistas previas, alias de rama y la URL propia de
@@ -14054,3 +14055,45 @@ para ver una vista previa hay que tener sesión en Vercel, y `agent-browser` no 
 cero; vuelve a público al terminar (D160 sigue siendo el criterio). Mientras dure, el CI consume del
 cupo de minutos de Actions del plan gratuito, y los enlaces del artículo a GitHub no resuelven para
 quien no sea el propietario.
+
+---
+
+## D217 (completa a D216) · El repositorio se rehace con la historia desde cero, y mientras fue privado `main` no tuvo protección — 2026-10-12
+
+**Decisión.** El repositorio se rehízo con **un único commit** del estado de `main`, en vez de reescribir
+la historia del anterior. Antes, `DECISIONS.md` y `PRD-Historical.md` se reescribieron en neutro donde
+contaban lo que la web ya había retirado al revisarse un caso: lo que la web no cuenta, tampoco lo
+cuenta el registro. El anterior queda **privado y archivado** como `francisco-lopez-website-archivo`;
+el nuevo conserva el nombre.
+
+**Por qué un repo nuevo y no reescribir la historia.** Un `filter-repo` limpia los commits, pero GitHub
+guarda cada PR en `refs/pull/*`, que el propietario no puede borrar, con sus diffs y sus descripciones.
+Solo un repo nuevo hace que esa historia deje de existir en GitHub. Lo que ya estuviera fuera —clones,
+cachés— no se puede recuperar, y no entra en el alcance.
+
+**Por qué el mismo nombre.** El artículo enlaza el repo **63 veces, todas a `blob/main/...`** —45 a
+este archivo— y ninguna a un PR ni a un commit. Con el mismo nombre siguen resolviendo sin tocar
+código, igual que el Brand Kit, el `isBasedOn` del JSON-LD, el README y el perfil. Y las anclas de
+línea no se rompen al reescribir: `repoHref` las deriva de la cabecera de cada decisión al compilar, y
+el markdown servido las recalcula con `npm run md`, que es lo que pasó en el PR de la limpieza.
+
+**Lo que se pierde, y se acepta.** Los PR y los commits anteriores. Los números de PR que citan los
+documentos quedan como referencia histórica, con una nota en su cabecera: en este repo esos números
+los reutilizan PR nuevos. El porqué que antes vivía en los mensajes de commit está en estos dos
+documentos.
+
+**El hallazgo: con el repo privado, `main` no tuvo protección.** El plan gratuito no admite rulesets
+en un repo privado (la API devuelve 403), así que el de D68 dejó de aplicarse en cuanto se hizo
+privado. Y el automerge de Dependabot usa `--auto`, que **espera a la protección**: sin ella no
+esperó a nada, y tres PR (un bump de la acción de Qlty, ESLint 10 y `tsx`) entraron con
+`calidad y build` en rojo. `main` estuvo roto dos semanas —ESLint 10 tumba el lint, el bloqueo
+upstream de D151— sin que nada lo dijera, porque el aviso era el propio CI que se estaba saltando. Se
+revirtió ESLint 10 y **se pausó el workflow de automerge** hasta tener el ruleset de vuelta. *Una
+regla que se apoya en otra hereda sus caídas*: el automerge no era seguro por sí mismo, lo era
+porque existía D68.
+
+**Lo que no viaja con el código y hubo que rehacer a mano:** la conexión del proyecto de Vercel (se
+distingue por el `repoId`, no por el nombre: tras renombrar, Vercel seguía mostrando el de siempre
+apuntando al repo viejo), el acceso de las apps de Vercel y Qlty, los ajustes del repo —solo squash y
+rebase, ahora también en el propio ajuste y no solo en el ruleset—, los temas, las alertas de
+Dependabot, la imagen de portada y el ancla del perfil. No había secretos, variables ni webhooks.
