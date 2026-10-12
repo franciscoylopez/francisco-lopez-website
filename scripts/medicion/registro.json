@@ -1,0 +1,43 @@
+{
+  "fecha": "2026-09-17",
+  "ventana": {
+    "desde": "2026-08-20",
+    "hasta": "2026-09-16"
+  },
+  "etapa": "Lanzamiento",
+  "fuentes": [
+    {
+      "fuente": "ga4",
+      "estado": "leida",
+      "aMano": true,
+      "instrumento": "GA4 · ventana 28 días · filtro Internal Traffic activo · cuenta pings sin consentimiento (D198): ventana anterior a D214 · conservación de eventos 14 meses",
+      "cifras": {
+        "eventos": 603,
+        "usuarios": 84,
+        "contact_submit": 2,
+        "file_download": 4
+      }
+    },
+    {
+      "fuente": "looker",
+      "estado": "no-aporta",
+      "motivo": "publica «número de eventos», un subconjunto de lo que da GA4; y su canvas no pinta en pestaña automatizada"
+    },
+    {
+      "fuente": "consentimiento",
+      "estado": "leida",
+      "instrumento": "techo 100/h por IP · visto tras interacción",
+      "cifras": {
+        "visto": 163,
+        "aceptado": 37,
+        "rechazado": 21,
+        "tasa_pct": 22.7
+      }
+    },
+    {
+      "fuente": "vercel-web-analytics",
+      "estado": "ilegible",
+      "motivo": "la API contesta 404 en plan Hobby — la cifra existe y solo se lee a mano en el panel de Vercel (comprobado 2026-09-02 por dos caminos)"
+    }
+  ]
+}

@@ -1,0 +1,916 @@
+{
+  "meta": {
+    "title": "Design System · Francisco López",
+    "description": "El esqueleto compartido por todas las páginas del sitio: rejilla, tokens de layout, ritmo vertical, jerarquía tipográfica, claro/oscuro, movimiento y la medición completa de accesibilidad."
+  },
+  "crumb": "Design System",
+  "hero": {
+    "kicker": "Fundamentos de diseño",
+    "title": "Design System",
+    "lead": "Un sistema de diseño no está para que todo se parezca: está para que una decisión se tome una sola vez. Cambiar aquí el hover de un botón o su objetivo táctil llega a todas las páginas a la vez.",
+    "statContainer": "Ancho máximo del contenedor",
+    "statBreakpoints": "Breakpoints",
+    "statMeasure": "Medida de lectura (~91 car.)",
+    "statA11y": "Objetivo de accesibilidad"
+  },
+  "indice": {
+    "kicker": "Índice",
+    "note": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras.",
+    "sectionsSuffix": "secciones",
+    "ariaLabel": "Índice del Design System",
+    "closerLabel": "Índice",
+    "closerAriaLabel": "Entre secciones",
+    "nextLabel": "Siguiente:",
+    "of": "de"
+  },
+  "demoSufijo": "demostración",
+  "bloques": {
+    "fundamentos": {
+      "title": "Fundamentos",
+      "lead": "Las cinco decisiones de las que cuelga cada pieza del sistema. Se toman una vez y llegan a todas las páginas a la vez."
+    },
+    "piezas": {
+      "title": "Piezas",
+      "lead": "El catálogo de lo que se pulsa y lo que rotula. Ninguna se escribe con clases sueltas: si un caso no encaja en una variante, se crea la variante."
+    },
+    "composicion": {
+      "title": "Composición",
+      "lead": "Cómo se monta una página con todo lo anterior, y el criterio de accesibilidad con el que se cierra cada una."
+    },
+    "excepcion": {
+      "title": "La excepción",
+      "lead": "El texto largo tiene su propia forma, y va el último a propósito: es lo que el núcleo no cubre, así que cierra."
+    }
+  },
+  "rejilla": {
+    "indexLabel": "Rejilla y medidas",
+    "title": "Ancha para maquetar, estrecha para leer",
+    "lead": "Doce columnas, un contenedor que tope en 1360 y una medida de lectura que nunca lo usa entero. Lo que se maqueta en el sitio se apoya en estos tres números.",
+    "showGrid": "Mostrar rejilla",
+    "hideGrid": "Ocultar rejilla",
+    "baseLabel": "Rejilla base:",
+    "baseVal": "12 columnas",
+    "gutterLabel": "Medianil:",
+    "hint": "La franja marca las 12 columnas; el botón de arriba la alterna.",
+    "cards": [
+      {
+        "title": "Medida de lectura",
+        "body": "El texto corrido no pasa de 42rem (~91 caracteres) aunque el contenedor sea ancho. Queda por encima de la medida clásica a propósito."
+      },
+      {
+        "title": "Márgenes",
+        "body": "clamp(1.25rem, 5vw, 2.5rem): 20px en móvil, 40px en escritorio. Por encima de xl crecen ellos, nunca el contenido."
+      }
+    ],
+    "tokensTitle": "Lo que este sistema le añade a Tailwind",
+    "tokensLead": "Los tokens que la escala de Tailwind no trae. Viven en el :root del sitio, así que cambiar uno lo cambia en todas las páginas a la vez.",
+    "copyLabel": ":root { }",
+    "copyHint": "Copia de un vistazo",
+    "copyAria": "Copiar el bloque de tokens de layout",
+    "copiedAnnounce": "Bloque de tokens copiado al portapapeles",
+    "copiedLabel": "Copiado",
+    "bpTitle": "Los cortes",
+    "bpLead": "Coinciden con la escala de Tailwind. Entre uno y el siguiente no salta nada: la tipografía y el espaciado interpolan con clamp().",
+    "cols": {
+      "token": "Token / min-width",
+      "ctx": "Contexto",
+      "change": "Qué cambia"
+    },
+    "rows": [
+      {
+        "token": "base",
+        "ctx": "Móvil",
+        "change": "Una columna, todo apilado. Tipografía en el mínimo del clamp."
+      },
+      {
+        "token": "sm",
+        "ctx": "Móvil grande",
+        "change": "Botones y metadatos en fila; sigue una columna."
+      },
+      {
+        "token": "md",
+        "ctx": "Tablet",
+        "change": "Aparece la retícula a dos columnas y los márgenes crecen."
+      },
+      {
+        "token": "lg",
+        "ctx": "Escritorio",
+        "change": "Rejilla de 12 completa y grupos de tres tarjetas."
+      },
+      {
+        "token": "xl",
+        "ctx": "Escritorio amplio",
+        "change": "Contenedor al tope; los márgenes absorben el ancho extra."
+      }
+    ],
+    "esqTitle": "El esqueleto de la home",
+    "esqLead": "La misma página sin contenido: solo el ritmo vertical y la retícula que comparten sus secciones.",
+    "mobileNote": "Se muestra la versión móvil; la comparativa entre dispositivos necesita una pantalla ancha.",
+    "devGroupLabel": "Vista previa por dispositivo",
+    "devFull": "Escritorio",
+    "devTablet": "Tablet",
+    "devMobile": "Móvil",
+    "esqRows": [
+      {
+        "idx": "(01)",
+        "name": "Hero",
+        "h": "clamp(9rem,22vw,15rem)"
+      },
+      {
+        "idx": "(02)",
+        "name": "Hitos",
+        "h": "clamp(11rem,26vw,18rem)"
+      },
+      {
+        "idx": "(03)",
+        "name": "Cómo trabajo",
+        "h": "clamp(8rem,18vw,12rem)"
+      },
+      {
+        "idx": "(04)",
+        "name": "Más allá del PM",
+        "h": "clamp(8rem,18vw,12rem)"
+      },
+      {
+        "idx": "(05)",
+        "name": "Trayectoria",
+        "h": "clamp(9rem,20vw,13rem)"
+      },
+      {
+        "idx": "(06)",
+        "name": "Formación",
+        "h": "clamp(7rem,16vw,10rem)"
+      },
+      {
+        "idx": "(07)",
+        "name": "Toolkit",
+        "h": "clamp(9rem,20vw,13rem)"
+      },
+      {
+        "idx": "(08)",
+        "name": "Contacto",
+        "h": "clamp(8rem,18vw,12rem)"
+      }
+    ]
+  },
+  "ritmo": {
+    "indexLabel": "Ritmo y espaciado",
+    "title": "El aire es la herramienta de jerarquía",
+    "lead": "Escala de base 4px (Tailwind).",
+    "scaleTitle": "Escala de espaciado",
+    "rhythmTitle": "Ritmo entre secciones",
+    "rhythm": [
+      "Entre secciones mayores: --section-y, de 72px en móvil a 144px en escritorio.",
+      "Título de sección → contenido: 40px (2.5rem).",
+      "Entre bloques dentro de sección: 24–32px. Divisor hairline opcional.",
+      "Cada sección abre con un divisor de 1px var(--border) a todo el ancho."
+    ]
+  },
+  "tipografia": {
+    "indexLabel": "Tipografía y cabeceras",
+    "title": "El tamaño lo decide el ancho, no el dispositivo",
+    "lead": "Bricolage Grotesque para titulares, Inter para texto y UI. Móvil es el mínimo del clamp; escritorio, el máximo.",
+    "cols": {
+      "level": "Nivel",
+      "font": "Fuente",
+      "desktop": "Escritorio",
+      "mobile": "Móvil",
+      "lh": "Interlineado",
+      "use": "Uso"
+    },
+    "rows": [
+      {
+        "name": "Display",
+        "font": "Bricolage 600",
+        "desktop": "80px / 5rem",
+        "mobile": "44px",
+        "lh": "1.0",
+        "use": "Solo Hero",
+        "sample": "Discovery",
+        "kind": "display"
+      },
+      {
+        "name": "H1",
+        "font": "Bricolage 600",
+        "desktop": "52px / 3.25rem",
+        "mobile": "32px",
+        "lh": "1.05",
+        "use": "Título de sección",
+        "sample": "Hitos",
+        "kind": "h1"
+      },
+      {
+        "name": "H2",
+        "font": "Bricolage 600",
+        "desktop": "32px / 2rem",
+        "mobile": "24px",
+        "lh": "1.15",
+        "use": "Subsección",
+        "sample": "Cómo trabajo",
+        "kind": "h2"
+      },
+      {
+        "name": "H3",
+        "font": "Bricolage 600",
+        "desktop": "20px / 1.25rem",
+        "mobile": "18px",
+        "lh": "1.3",
+        "use": "Título de tarjeta / caso",
+        "sample": "TheTool · SaaS B2B",
+        "kind": "h3"
+      },
+      {
+        "name": "H4",
+        "font": "Bricolage 600",
+        "desktop": "16px / 1rem",
+        "mobile": "16px",
+        "lh": "1.4",
+        "use": "Encabezado menor",
+        "sample": "Resultados",
+        "kind": "h4"
+      },
+      {
+        "name": "Body L",
+        "font": "Inter 400",
+        "desktop": "19,2px / 1.2rem",
+        "mobile": "17px",
+        "lh": "1.6",
+        "use": "Subheadline, intro",
+        "sample": "Investigo, prototipo, construyo y mido.",
+        "kind": "bodyL"
+      },
+      {
+        "name": "Body",
+        "font": "Inter 400",
+        "desktop": "16px / 1rem",
+        "mobile": "16px",
+        "lh": "1.65",
+        "use": "Texto corrido (máx 42rem)",
+        "sample": "Senior Product Manager con más de 10 años en SaaS B2B y B2C.",
+        "kind": "body"
+      },
+      {
+        "name": "Small / meta",
+        "font": "Inter 400–500",
+        "desktop": "14px",
+        "mobile": "14px",
+        "lh": "1.5",
+        "use": "Fechas, pies, etiquetas",
+        "sample": "Cofundador & PM · May 2016 – Oct 2021",
+        "kind": "small"
+      },
+      {
+        "name": "Eyebrow",
+        "font": "Inter 600 · UPPER",
+        "desktop": "13px",
+        "mobile": "13px",
+        "lh": "1.4",
+        "use": "Kicker sobre título",
+        "sample": "SENIOR PRODUCT MANAGER · UX · SAAS",
+        "kind": "eyebrow"
+      }
+    ],
+    "sizesTitle": "La cabecera que la aplica",
+    "sizesLead": "Un rótulo corto encima y un titular debajo. Salen de una sola pieza, así que el tamaño del titular decide también el hueco que los separa.",
+    "sizesCols": {
+      "use": "Dónde se usa"
+    },
+    "sizes": [
+      {
+        "size": "page",
+        "eyebrow": "Fundamentos de diseño",
+        "sample": "Design System",
+        "use": "El h1 que abre una página."
+      },
+      {
+        "size": "page-sm",
+        "eyebrow": "Quién hay detrás",
+        "sample": "Sobre mí",
+        "use": "El h1 de las páginas de lectura larga."
+      },
+      {
+        "size": "section",
+        "eyebrow": "Recorrido",
+        "sample": "Trayectoria",
+        "use": "El h2 que abre una sección."
+      },
+      {
+        "size": "section-sm",
+        "eyebrow": "Capa de cabecera",
+        "sample": "Cabeceras",
+        "use": "Sección de un índice largo, como las de esta página."
+      },
+      {
+        "size": "card",
+        "eyebrow": "",
+        "sample": "Discovery",
+        "use": "El titular de una pieza dentro de una rejilla."
+      },
+      {
+        "size": "sub",
+        "eyebrow": "",
+        "sample": "El producto que ya existía",
+        "use": "El h3 de un subapartado, sin rótulo encima."
+      },
+      {
+        "size": "sub-sm",
+        "eyebrow": "",
+        "sample": "Antes y después",
+        "use": "El escalón por debajo: un bloque de apoyo dentro de una sección."
+      }
+    ],
+    "labelTitle": "El otro rótulo en versalitas, que no es este",
+    "labelLead": "Se parecen y hacen cosas distintas, así que son dos piezas: una abre una sección emparejada con un titular, la otra rotula un dato dentro del contenido.",
+    "labelEyebrowKicker": "Abre una sección",
+    "labelEyebrowRule": "Va siempre encima de un titular, y el hueco que los separa lo pone el tamaño del titular que tiene debajo.",
+    "labelEyebrowSample": "Trayectoria",
+    "labelEyebrowTitle": "Diez años de producto",
+    "labelDataKicker": "Rotula un dato",
+    "labelDataRule": "Sin titular al lado no hay hueco que derivar: el margen lo pone quien la usa. Va un punto más pequeña y menos abierta.",
+    "labelDataSample": "Duración",
+    "labelDataValue": "5 años y 6 meses",
+    "statTitle": "Debajo del titular, la fila de cifras",
+    "statLead": "Cuando una apertura resume algo en datos, la fila no la monta la página: la trae una pieza con su filete, su hueco y su rejilla.",
+    "stat": {
+      "kicker": "Fila de cifras",
+      "cls": "StatRow · Stat",
+      "rule": "StatRow pone el filete, el hueco y la rejilla que reparte las columnas. Stat pone la cifra, su unidad y la etiqueta de debajo.",
+      "labels": {
+        "container": "Ancho máximo del contenedor",
+        "breakpointsUnit": "breakpoints",
+        "contrast": "Suelo y objetivo de contraste"
+      }
+    },
+    "ruleTitle": "Qué decide la variante y qué el punto de uso",
+    "rule": [
+      "El tamaño elige el hueco entre rótulo y titular, y también el interlineado.",
+      "El punto de uso solo pone lo que depende del contenido: el ancho máximo, o el equilibrio de un titular que parte mal.",
+      "Los siete tamaños no son deriva sino jerarquía: el h1 que abre una página no es el h2 que abre una sección."
+    ]
+  },
+  "claroscuro": {
+    "indexLabel": "Claro y oscuro",
+    "title": "La profundidad la dan los filetes, no las sombras",
+    "lead": "Mismo esqueleto y misma jerarquía de superficies: fondo → tarjeta → borde. El claro es papel cálido; el oscuro, azul profundo.",
+    "lightLabel": "Modo claro",
+    "darkLabel": "Modo oscuro",
+    "sampleHeadline": "Del discovery al dato.",
+    "cta": "Descargar CV",
+    "toneTitle": "El gris atenuado lo pone la superficie",
+    "toneLead": "Los dos rótulos de abajo salen de la misma clase, sin nada que los distinga donde se usan. Se pintan distinto porque el fondo que tienen debajo es otro.",
+    "tones": [
+      {
+        "surface": "--background",
+        "label": "Fundamentos de diseño",
+        "sample": "Sobre el fondo de la página",
+        "note": "El gris del sistema, calibrado contra este fondo y solo contra él."
+      },
+      {
+        "surface": "--muted",
+        "label": "El siguiente paso",
+        "sample": "Sobre la franja de contacto",
+        "note": "Encima de cualquier otra superficie se recalcula: se mezcla un 85% hacia el fondo de debajo. No hay que pedirlo."
+      }
+    ],
+    "ruleTitle": "Regla de color",
+    "rule": [
+      "primary es el único color de acción. secondary, muted y accent se quedan neutros.",
+      "Los enlaces van en dos reglas: primary en el contenido; foreground o muted-foreground en la navegación de chrome.",
+      "Los tonos de marca decoran o firman el logo. Splits y pasteles, nunca como texto."
+    ],
+    "ruleFoot": "Usa el conmutador de la cabecera para ver esta misma página en ambos modos."
+  },
+  "movimiento": {
+    "indexLabel": "Movimiento",
+    "title": "Sobrio: nunca compite con el contenido",
+    "lead": "Las duraciones no se eligen por gusto: cada una corresponde a un tipo de cambio en pantalla.",
+    "timings": [
+      {
+        "k": "150ms",
+        "v": "Microinteracciones: hover, foco, botones."
+      },
+      {
+        "k": "250ms",
+        "v": "Cambios de estado: acordeones, tabs."
+      },
+      {
+        "k": "280ms",
+        "v": "Entradas: el reveal al hacer scroll y la apertura al cargar."
+      },
+      {
+        "k": "scroll",
+        "v": "El filete que crece no tiene duración: lo lleva la rueda."
+      },
+      {
+        "k": "easing",
+        "v": "cubic-bezier(0, 0, .2, 1): ease-out al entrar."
+      }
+    ],
+    "bullets": [
+      "Reveal = fundido + subida de 14px, una vez al entrar en viewport y nunca en bucle. Un grupo que entra junto escalona sus piezas (80ms en esta demo).",
+      "Con movimiento reducido se retira lo que desplaza o escala, y el fundido se queda, más corto. Solo se apaga entera la que va acoplada al scroll. El contenido aparece siempre, aunque falle el JS."
+    ],
+    "demoLabel": "Demo de scroll-reveal",
+    "replay": "Repetir ▸",
+    "puertasTitle": "Dos puertas de entrada, y no dicen lo mismo",
+    "puertasBullets": [
+      "Al hacer scroll, para lo que todavía no está en pantalla. Lo que ya se ve al cargar no entra por aquí, porque no ha entrado: arrancarlo oculto retrasaría la métrica de carga.",
+      "Al cargar, para lo decorativo del primer pliegue, que sí aparece de golpe. Son las composiciones de estas cuatro portadas y el punto final del titular de la portada.",
+      "Y una tercera que no es una entrada: va acoplada al scroll y no tiene duración propia, porque la posición manda. Es el filete que crece bajo los años de los hitos."
+    ],
+    "puertasDemoLabel": "Demo de entrada al cargar",
+    "puertasReplay": "Repetir la entrada ▸",
+    "puertasFoot": "La tercera se ve sin pulsar nada: el filete morado que abre cada bloque de esta página crece al llegar a él.",
+    "navTitle": "Transición del nav · compartida por todo el sitio",
+    "navBullets": [
+      "Símbolo 48 → 28px, de forma continua con el scroll. La barra mantiene su alto: animarlo repintaba una franja opaca de ancho completo en cada paso.",
+      "Las capas de color del split se extinguen antes de que el símbolo baje de 48px: nunca pasa por un estado de mala registración.",
+      "El wordmark se desvanece en opacidad sin recortar glifos: el hueco solo se colapsa cuando ya es invisible.",
+      "Con movimiento reducido, salto entre estados, sin interpolar."
+    ],
+    "navState1": "al cargar · símbolo 48px · split",
+    "navState2": "con scroll · símbolo 28px · flat",
+    "navFoot": "Es la transición que ves ahora mismo en la cabecera de esta página."
+  },
+  "enlaces": {
+    "indexLabel": "Enlaces",
+    "title": "Lo decide su función, no dónde cae",
+    "lead": "Si es contenido, el cian aparece como recompensa de la interacción. Si su bloque entero ya es navegación, el cian no distingue nada y sobra.",
+    "hint": "Pasa el cursor por encima ▸",
+    "cases": [
+      {
+        "kicker": "Contenido",
+        "cls": ".link-content",
+        "rule": "En reposo, texto en foreground con un subrayado fino en primary. Con cursor o foco, un relleno sólido crece de abajo arriba y el texto se invierte.",
+        "note": "Reutiliza el par de contraste ya verificado de «texto sobre botón» en vez de inventar uno nuevo."
+      },
+      {
+        "kicker": "Chrome de navegación",
+        "cls": ".link-chrome",
+        "rule": "Nav, breadcrumb, footer y menús: foreground o muted-foreground, nunca primary. En hover y foco, una pastilla de fondo muted.",
+        "note": "Se leen como enlace por su posición, y la pastilla funciona igual sin distinguir tonos."
+      },
+      {
+        "kicker": "Chrome solo icono",
+        "cls": ".icon-chrome",
+        "rule": "Toggle de tema, menú y redes: la misma pastilla que el resto del chrome, ocupando los 44px completos del objetivo táctil.",
+        "note": "Un control sin etiqueta necesita la misma afordancia que uno con texto."
+      },
+      {
+        "kicker": "Sobre banda invertida",
+        "cls": ".link-content · data-surface",
+        "rule": "Ahí el color de texto de la página ES el fondo, así que el enlace no elige su color: lo resuelve la banda, que declara qué superficie es.",
+        "note": "Los tres colores son los del otro tema, no valores nuevos. La superficie manda sobre la variante."
+      }
+    ],
+    "invertedKicker": "Contenido, sobre banda invertida",
+    "demoInvertedBefore": "Una banda invertida es la que se pinta con el color del texto y escribe encima con el del fondo. Dentro,",
+    "demoInvertedLink": "un enlace de contenido",
+    "demoInvertedAfter": "sigue comportándose igual: subrayado fino en reposo y relleno sólido al pasar por encima.",
+    "demoContentBefore": "Cada decisión de esta página está",
+    "demoContentLink": "documentada y medida",
+    "demoContentAfter": "antes de llegar al código.",
+    "demoChromeItems": ["Inicio", "Sobre mí", "Brand Kit"],
+    "ruleTitle": "Por qué el cian no vive en el texto",
+    "rule": [
+      "El cian es el único color de acción del sistema: si además tiñe todo enlace en reposo, deja de señalar nada.",
+      "Reservarlo al momento de la interacción lo devuelve a ser una señal, no un color de párrafo.",
+      "Ningún estado se codifica solo por color: subrayado, relleno y pastilla son cambios de forma."
+    ],
+    "ruleFoot": "El tono del chrome tampoco es decoración: el secundario sube a foreground en el mismo gesto en que aparece la pastilla, porque sin ese salto el par cae a AA justo en hover."
+  },
+  "botones": {
+    "indexLabel": "Botones y acciones",
+    "title": "Un botón no elige su aspecto: lo elige su papel",
+    "lead": "Cuántas acciones compiten a su lado, y si lleva estado, deciden la variante. La variante ya trae resueltos el hover, el foco y el objetivo táctil.",
+    "hint": "Pasa el cursor por encima ▸",
+    "cases": [
+      {
+        "kicker": "Acción destacada",
+        "cls": "solid",
+        "rule": "El único relleno cian de la pantalla. En hover el relleno se mezcla hacia el color de texto en vez de aclararse, que es lo que sube el contraste en lugar de bajarlo."
+      },
+      {
+        "kicker": "Acción de contenido",
+        "cls": "outline-primary",
+        "rule": "Cian en el borde y el texto, que en hover pasa a relleno pleno. Para acciones que viven solas, sin otro botón al lado con el que competir."
+      },
+      {
+        "kicker": "Utilidad",
+        "cls": "outline-neutral · ghost",
+        "rule": "Sin cian: borde neutro o sin caja, y pastilla gris en hover. Es lo que lleva un botón que convive con un sólido en el mismo grupo.",
+        "note": "Con cian, dos botones del mismo grupo reclamarían ser la acción principal."
+      },
+      {
+        "kicker": "Interruptor",
+        "cls": "toggle-primary",
+        "rule": "Un control suelto que enciende algo que no estaba. Encendido, relleno pleno; apagado, borde cian con un tinte en hover, nunca el relleno.",
+        "note": "Con relleno, el apagado en hover se vería igual que el encendido y el control dejaría de decir en qué estado está."
+      },
+      {
+        "kicker": "Grupo de alternativas",
+        "cls": "toggle-neutral",
+        "rule": "Varios segmentos de los que exactamente uno está activo. El activo va en cian sólido; el resto, en neutro.",
+        "note": "Pintarlos todos de cian no distingue nada y se come la sección."
+      },
+      {
+        "kicker": "Solo icono",
+        "cls": "icon",
+        "rule": "Controles sin etiqueta: la misma pastilla que el resto del chrome, ocupando los 44px completos del objetivo táctil."
+      },
+      {
+        "kicker": "Tarjeta pulsable",
+        "cls": "card",
+        "rule": "Cuando lo que se pulsa es la caja entera y no un renglón: fondo de tarjeta, pastilla gris en hover y padding de caja en vez de padding de botón."
+      },
+      {
+        "kicker": "Sobre una imagen",
+        "cls": ".video-facade",
+        "rule": "El fondo lo decide la foto, así que el control no puede fijar su color. Un velo lo separa de la imagen y el disco va en dos tonos, para que su borde interior no dependa de lo que haya debajo.",
+        "note": "El velo es del color del fondo, nunca negro: el negro arregla un tema y empeora el otro."
+      }
+    ],
+    "demoSolid": "Contacta conmigo",
+    "demoOutlinePrimary": "Descargar CV",
+    "demoNeutral": "Cancelar",
+    "demoGhost": "Preferencias",
+    "demoSegments": ["Escritorio", "Tablet", "Móvil"],
+    "stateOn": "Activo",
+    "stateOff": "Inactivo",
+    "demoCardLabel": "Correo",
+    "demoCardValue": "hola@ejemplo.com",
+    "focusShow": "Ver el anillo de foco",
+    "focusHide": "Ocultar el anillo de foco",
+    "demoVideoTitle": "TheTool, la herramienta de App Store Optimization",
+    "demoPlayLabel": "Reproducir el vídeo",
+    "iconTitle": "Cuándo una acción lleva icono",
+    "iconRule": [
+      "Una sola pregunta: ¿esta acción saca de la página? Descargar un archivo, abrir el correo o el teléfono, o irse a otro sitio web llevan icono.",
+      "Lo que ocurre dentro de la página va sin él: aceptar, guardar, cerrar, elegir una pestaña o navegar por el sitio.",
+      "Va delante de la etiqueta, porque clasifica la acción. Solo en el sólido va detrás y avanza dos píxeles en hover: ahí marca la dirección del viaje."
+    ],
+    "iconFoot": "El tamaño, el hueco y el lado los pone la variante, no cada uso. En el punto de uso se escribe el icono y nada más.",
+    "ruleTitle": "Por qué esto es un componente y no una convención",
+    "rule": [
+      "Ningún control se escribe con clases sueltas. Si un caso no encaja en ninguna variante, se crea la variante; si es una excepción, se documenta con fecha.",
+      "Cambiar un hover es cambiar una línea, y llega a todos los botones del sitio a la vez.",
+      "El foco no lo declara ninguna variante: lo pone una sola regla global, la misma para todo el sitio."
+    ]
+  },
+  "etiquetas": {
+    "indexLabel": "Etiquetas",
+    "title": "Rotula, no se pulsa",
+    "lead": "No sale de la capa de acción: no tiene estado, ni hover, ni objetivo táctil. Solo tiene que leerse.",
+    "hint": "Son las mismas etiquetas que usa el sitio: si una cambia, esta sección cambia con ella.",
+    "cases": [
+      {
+        "kicker": "Sin carga",
+        "cls": "neutral",
+        "demo": ["Fijo", "Próximamente"],
+        "rule": "Lo que acompaña sin destacar: un estado, una nota al margen, la mitad apagada de un par.",
+        "note": "Su texto no puede ser el gris del sistema, calibrado contra el fondo de la página: encima de la pastilla se queda en 6,44:1."
+      },
+      {
+        "kicker": "Dato verificado",
+        "cls": "cyan",
+        "demo": ["AAA", "Conmuta"],
+        "rule": "Velo de cian para lo que se ha medido o lo que se cumple. El cian está en el fondo; en el texto, nunca."
+      },
+      {
+        "kicker": "Distintivo de marca",
+        "cls": "purple",
+        "demo": ["Exit", "Split"],
+        "rule": "Velo de morado para lo que señala una singularidad: un hito de la trayectoria, una variante del logo.",
+        "note": "El morado es decorativo y nunca color de acción, así que aquí solo puede aparecer como relleno."
+      },
+      {
+        "kicker": "Tres registros",
+        "cls": "label · value · code",
+        "demo": ["Exit", "Split"],
+        "rule": "Versalitas para un rótulo de estado, caja normal para un dato en prosa, monoespaciada para un valor técnico.",
+        "note": "Es lo único que cambia de una etiqueta a otra: alto, cuerpo, radio y padding son los mismos para todas."
+      }
+    ],
+    "ruleTitle": "Por qué es una capa aparte",
+    "rule": [
+      "Una etiqueta no es una acción: no se pulsa. Media base de un botón (suelo táctil, anillo de foco, estados) no significaría nada aquí.",
+      "Una diferencia que significa algo es una variante; una que no significa nada es un valor a unificar."
+    ],
+    "ruleFoot": "El texto de las dos teñidas es el color de texto normal, no el del velo. Es lo que las lleva a {badgeTinted.light} en claro y {badgeTinted.dark} en oscuro; teñido se quedaban en 6,07 y 5,46."
+  },
+  "formulario": {
+    "indexLabel": "Formulario",
+    "title": "La primera superficie que recibe, no la que enseña",
+    "lead": "Un campo no es un botón pequeño: tiene etiqueta, tiene estado de error, y tiene que decirlo en voz alta.",
+    "fieldTitle": "El campo",
+    "fieldLead": "Etiqueta y control son una sola pieza, y el suelo táctil vive en el control, que es donde se pulsa.",
+    "fieldKicker": "En reposo",
+    "fieldRule": "La etiqueta va siempre visible y unida al campo, nunca dentro como texto de ayuda: un marcador de posición desaparece al escribir y deja el campo sin nombre.",
+    "fieldNote": "Alto mínimo de 44px, el mismo suelo táctil que los botones. El anillo de foco lo pone la regla global.",
+    "errorKicker": "Con error",
+    "errorRule": "El mensaje se ata al campo, así que un lector de pantalla lo oye al llegar a él y no solo al intentar enviar.",
+    "errorNote": "El borde rojo y el icono marcan la forma; el texto va en el color normal.",
+    "summaryTitle": "Cuando el envío falla",
+    "summaryLead": "Un aviso que se anuncia solo, sin robar el foco, y que enumera qué campos hay que revisar.",
+    "summaryKicker": "Resumen de errores",
+    "summaryRule": "Aparece al intentar enviar y se anuncia como alerta. El foco lo mueve el formulario al primer campo que falla: dos saltos a la vez dejarían al lector sin saber dónde está.",
+    "demoLabel": "Correo",
+    "demoPlaceholder": "marta@empresa.com",
+    "demoError": "Ese correo no parece completo. Revisa la parte de después de la arroba.",
+    "demoSummary": "Revisa estos campos antes de enviar:",
+    "demoSummaryItems": ["Nombre", "Correo"],
+    "redTitle": "El rojo no es color de texto",
+    "redRule": [
+      "El rojo del sistema mide 4,31:1 sobre el fondo claro: no llega al mínimo que pide un texto.",
+      "Así que el mensaje va en el color de texto normal, y el rojo se queda en el borde y el icono, donde el umbral es más bajo.",
+      "De regalo, el error deja de estar codificado solo por color."
+    ],
+    "serverTitle": "Lo que valida de verdad es el servidor",
+    "serverRule": [
+      "La validación del navegador existe para no gastar un viaje en un campo vacío, no para decidir.",
+      "La misma regla corre en el servidor, porque quien envía a mano no ha ejecutado la del navegador.",
+      "Y devuelve códigos, no frases: las palabras las pone el diccionario, en los dos idiomas."
+    ]
+  },
+  "composicion": {
+    "indexLabel": "Composición de página",
+    "title": "Ni controles ni texto: las cajas con las que se monta una página",
+    "lead": "Una tabla, una nota al margen y el remate del final. Las tres suben a la capa porque su formato es lo que no puede divergir de una página a otra.",
+    "dataTitle": "La tabla",
+    "dataLead": "Marcado de tabla de verdad, y no es cosmética: sin celdas atadas a su columna, las trece filas de cifras del censo se leen como una ristra de números sin saber cuál es cada tema.",
+    "demoCols": {
+      "part": "Pieza",
+      "markup": "Marcado",
+      "what": "Qué resuelve"
+    },
+    "demoRows": [
+      {
+        "part": "Nombre de la tabla",
+        "markup": "caption",
+        "what": "Dice qué es la tabla a quien no la ve. No se pinta: el titular de encima ya lo dice."
+      },
+      {
+        "part": "Cabecera de columna",
+        "markup": "th scope=col",
+        "what": "Una sola definición para las cinco tablas del sistema."
+      },
+      {
+        "part": "Nombre de la fila",
+        "markup": "th scope=row",
+        "what": "Ata cada cifra a su fila: «Atenuado sobre card, claro, {mutedOnCard.light}» en vez de tres números sueltos."
+      },
+      {
+        "part": "Ancho de columna",
+        "markup": "colgroup",
+        "what": "Se declara una vez, y no en dos sitios que hay que hacer coincidir."
+      }
+    ],
+    "noteTitle": "La nota al margen",
+    "noteLead": "Una medida, el resultado de una herramienta, una regla que conviene decir aparte: lo que una página cuenta fuera del cuerpo del texto.",
+    "noteKicker": "Con párrafo",
+    "noteRule": "Un título y su explicación sobre la superficie de tarjeta. El gris del cuerpo no lo elige esta pieza: lo resuelve el fondo donde cae.",
+    "noteNote": "Admite tres cuerpos y se combinan: párrafo, lista y un pie más pequeño.",
+    "monoKicker": "Título en monoespaciada",
+    "monoRule": "Cuando el título es el nombre de un token, de un archivo o de una herramienta, va en monoespaciada: así se lee como lo que es, un identificador y no una frase.",
+    "demoNoteTitle": "Un valor no es copy",
+    "demoNoteBody": "Si una sección publica una cifra del sistema, sale del archivo de valores y nunca del diccionario. La regla para distinguirlos es literal: si la entrada en español y la inglesa son idénticas carácter a carácter, es un valor con dos copias.",
+    "demoMonoTitle": "--measure",
+    "demoMonoBullets": [
+      "El ancho de la columna de lectura, medido en caracteres y no en píxeles.",
+      "Lo usan las entradillas de sección y el cuerpo de los artículos.",
+      "Cambiarlo mueve el ritmo de todas las páginas a la vez, que es justo para lo que existe."
+    ],
+    "demoMonoFoot": "Se publica entero en la sección de tokens de layout, con su valor y su motivo.",
+    "navIndexTitle": "El índice de una página con paradas",
+    "navIndexLead": "La rejilla que abre el recorrido, justo debajo del hero, y esta misma la lleva. La familia tiene tres piezas: esta, el cierre de sección que va más abajo, y el riel fijo, que no vive aquí porque se publica en la sección del artículo largo, la única página que lo usa.",
+    "navCloserTitle": "El cierre de una sección",
+    "navCloserLead": "El pie de cada parada, y por eso va aquí y no arriba: dice en cuál está el lector, cómo vuelve al índice y qué viene después. Es la hermana de peldaño del cierre de página, que se publica justo debajo.",
+    "navIndexKicker": "El mapa",
+    "navIndexRule": "Rejilla de paradas pintada en servidor: se navega sin JavaScript.",
+    "navIndexNote": "La tercera línea de cada celda es libre y opcional. El artículo pone ahí su tiempo por sección; en una página de especímenes no hay prosa que cronometrar, así que va vacía.",
+    "navIndexDemoKicker": "Índice",
+    "navIndexDemoAria": "Índice (espécimen)",
+    "navIndexDemoNote": "Cada sección cierra sola: se puede leer por trozos, en el orden que quieras.",
+    "navIndexDemoSuffix": "secciones",
+    "navCloserKicker": "El pie de cada parada",
+    "navCloserRule": "Dónde estás, la vuelta al índice y la parada siguiente.",
+    "navCloserNote": "Los puntos son decorativos: la posición va además en texto, que es lo que cumple el punto 6 del checklist. La etiqueta lleva la posición dentro para que doce cierres no compartan nombre.",
+    "navCloserIndexLabel": "Índice",
+    "navCloserNextLabel": "Siguiente parada",
+    "navCloserPositionLabel": "2 de 3",
+    "navCloserAria": "Entre secciones (espécimen)",
+    "closerTitle": "El cierre de página",
+    "closerLead": "El remate del contenido antes del pie: a dónde se va desde aquí, con el mismo formato en todas las páginas.",
+    "closerKicker": "Dos destinos",
+    "closerRule": "Sube entero a la capa, y no solo la tarjeta: el ritmo vertical, el filete de arriba y el hueco del rótulo son lo que tiene que no divergir.",
+    "closerNote": "La flecha empuja hacia donde apunta, y el empujón se apaga con movimiento reducido. Un destino que aún no existe se dibuja punteado y apagado.",
+    "demoCloserEyebrow": "Seguir leyendo",
+    "demoBackKicker": "Experiencia anterior",
+    "demoBackName": "KUOTIP",
+    "demoBackDesc": "Enlace real: la flecha va delante y apunta a la izquierda, que es lo que se lee como volver sin leer el rótulo.",
+    "demoSoonKicker": "Experiencia siguiente",
+    "demoSoonName": "Un destino que aún no existe",
+    "demoSoonDesc": "Sin enlace, la tarjeta se dibuja punteada y apagada. Es lo que le pasa a la experiencia más reciente, que nunca tiene una siguiente.",
+    "demoSoonBadge": "Próximamente",
+    "ruleTitle": "El formato sube entero, no solo la caja",
+    "rule": [
+      "Lo que tiene que no divergir es el remate completo, no el aspecto de una tarjeta.",
+      "El bloque no sabe nada de este sitio: recibe un rótulo y una lista de destinos.",
+      "Quién es hermana de quién lo deciden sus llamadores, que sí lo saben."
+    ],
+    "ruleFoot": "Es la frontera que decide dónde vive una pieza: si sabe algo de este sitio, no es del sistema.",
+    "tileTitle": "La casilla: una sola caja para un logo o un ordinal",
+    "tileLead": "Es la pieza más pequeña de esta familia y la que peor se portaba: la misma caja se pintaba a dos tallas y con dos rellenos según quién la escribiera. Ahora el tamaño y el relleno viven en la pieza, así que no hay dónde discrepar.",
+    "tileLogoKicker": "Con un logo dentro",
+    "tileLogoRule": "Logos de empresa, herramienta o institución, en monocromo y con cambio claro/oscuro por CSS. Se anuncian como decorativos: el nombre ya está escrito al lado.",
+    "tileLogoNote": "El envoltorio sabe dónde viven los assets del sitio; la caja no sabe nada y por eso es la que sube a la capa.",
+    "tileNumKicker": "Con un ordinal dentro",
+    "tileNumRule": "El número de una etapa en «Cómo trabajo». Misma caja, mismo relleno y mismo tamaño que la del logo: la única diferencia es lo que lleva dentro.",
+    "tileNumNote": "Este sí se anuncia, a diferencia del logo: el orden de las etapas es información, no adorno.",
+    "blockTitle": "La apertura de un bloque",
+    "blockLead": "Doce secciones seguidas no dicen dónde acaba una familia y empieza otra. La banda lo dice, y de paso enseña qué lleva dentro.",
+    "blockKicker": "Apertura de bloque",
+    "blockRule": "Fondo invertido y tipo sola. Nunca se tiñe una sección existente: las de aquí son galerías y dan por hecho el fondo de página.",
+    "blockNote": "La banda de abajo no es una recreación: es la que abre el bloque «Piezas» de esta misma página."
+  },
+  "accesibilidad": {
+    "indexLabel": "Checklist de cierre",
+    "title": "AA es el suelo, no el objetivo",
+    "lead": "La lista con la que se cierra cada página. Es el criterio interno de construcción; la declaración pública de conformidad vive en la página de Accesibilidad.",
+    "contrastTitle": "Contraste medido",
+    "contrastCols": {
+      "measure": "Medición",
+      "light": "Claro",
+      "dark": "Oscuro"
+    },
+    "contrastRows": [
+      {
+        "id": "bodyText",
+        "label": "Texto principal",
+        "note": "foreground sobre background"
+      },
+      {
+        "id": "primaryText",
+        "label": "primary como texto",
+        "note": "enlaces y acento"
+      },
+      {
+        "id": "buttonText",
+        "label": "Texto sobre botón",
+        "note": "primary-foreground sobre primary"
+      },
+      {
+        "id": "solidHover",
+        "label": "Hover del botón sólido",
+        "note": "el relleno se mezcla hacia foreground"
+      },
+      {
+        "id": "toggleHover",
+        "label": "Hover del toggle apagado",
+        "note": "el estado con menos margen del sistema"
+      },
+      {
+        "id": "chromeHover",
+        "label": "Hover del chrome secundario",
+        "note": "el texto sube a foreground con la pastilla"
+      },
+      {
+        "id": "mutedForeground",
+        "label": "Atenuado sobre background",
+        "note": "el token tal cual: está calibrado contra este fondo"
+      },
+      {
+        "id": "mutedOnCard",
+        "label": "Atenuado sobre card",
+        "note": "tarjetas y paneles: se recalcula contra su propio fondo"
+      },
+      {
+        "id": "badgeNeutral",
+        "label": "Atenuado sobre muted",
+        "note": "la franja de contacto y la etiqueta neutra"
+      },
+      {
+        "id": "mutedOnInverted",
+        "label": "Atenuado sobre fondo invertido",
+        "note": "se construye desde el otro extremo, como el cian invertido"
+      },
+      {
+        "id": "badgeTinted",
+        "label": "Etiqueta teñida",
+        "note": "la peor de las dos, cian y morado"
+      },
+      {
+        "id": "switchKnobOff",
+        "label": "Bolita del switch apagada",
+        "note": "foreground sobre su propio carril; encendida reusa el par del botón"
+      },
+      {
+        "id": "purpleAccent",
+        "label": "brand-purple-accent",
+        "note": "Sobre fondo invertido; conmuta con el tema para llegar a AAA"
+      }
+    ],
+    "contrastNote": "Todos los pares de texto del sistema alcanzan AAA en claro y en oscuro, y no solo en reposo: también en hover, que es donde suele escaparse. Sin excepciones.",
+    "checklistTitle": "Checklist de cierre",
+    "checklist": [
+      "Contraste medido, con cifra, en ambos temas. AA es el suelo no negociable; AAA siempre que se alcance sin coste visual.",
+      "Foco visible: anillo de 2px con var(--ring) y offset de 2px en todo elemento interactivo. Nunca outline:none sin sustituto.",
+      "Objetivos táctiles de 44×44px como mínimo, también en controles pequeños como el breadcrumb o el toggle de tema.",
+      "Un solo h1 por página y jerarquía h2–h4 sin saltos. El orden de lectura es el orden del DOM.",
+      "Breadcrumb en toda página interna, con <nav aria-label>, lista ordenada y aria-current=\"page\" en el nivel actual.",
+      "Nada codificado solo por color: todo estado o categoría que se distinga por color lleva además texto o forma.",
+      "prefers-reduced-motion respetado en toda animación.",
+      "Alternativas textuales: alt y etiquetas donde informan, aria-hidden en lo decorativo.",
+      "Vía de escape del teclado: un enlace de salto al contenido como primer elemento focalizable de la página, con destino real (<main> con tabindex=\"-1\"). Ninguna herramienta automática lo detecta: su regla de bypass se da por satisfecha con landmarks o encabezados."
+    ]
+  },
+  "articulo": {
+    "indexLabel": "Artículo largo",
+    "title": "La forma para texto largo con paradas",
+    "lead": "Once secciones y varios miles de palabras necesitan piezas que el resto del sitio no usa. Es una capa aparte, no la octava del núcleo.",
+    "groups": {
+      "portada": {
+        "title": "La portada del artículo",
+        "lead": "Lo que solo aparece una vez, al principio: quién firma y cómo se comparte."
+      },
+      "parada": {
+        "title": "La apertura de cada parada",
+        "lead": "Una sola pieza, repetida once veces. Es lo que hace que todas las secciones se reconozcan como la misma."
+      },
+      "cuerpo": {
+        "title": "Lo que flota junto al texto",
+        "lead": "Piezas que no cortan la columna: se colocan a un lado y el texto sigue alrededor."
+      },
+      "islas": {
+        "title": "Lo que no se va con el scroll",
+        "lead": "Las tres islas de cliente, fijas a la ventana. Aquí se demuestran juntas dentro de una caja."
+      }
+    },
+    "fichas": {
+      "portada": {
+        "kicker": "Portada",
+        "cls": "<ByLine> · <ShareActions>",
+        "rule": "Autoría y compartir, resueltas en la misma fila de apertura.",
+        "note": "Un artículo firmado dice quién lo firma en la apertura, no en el pie. Y sin `navigator.share` el botón copia el enlace igualmente."
+      },
+      "cover": {
+        "kicker": "Portada de sección",
+        "cls": "<SectionCover>",
+        "rule": "Rótulo y titular a la izquierda; a la derecha, el ordinal ilustrado con su meta-línea debajo."
+      },
+      "citas": {
+        "kicker": "Citas",
+        "cls": "<Pullquote> · <Pull>",
+        "rule": "La destacada para la lectura, con filetes arriba y abajo; la menor solo acompaña, con un filete más leve del mismo morado en el canto.",
+        "note": "El morado aquí es ornamento, no información. Y cuando las dos caen en la misma sección, flotan a lados contrarios."
+      },
+      "diagram": {
+        "kicker": "Diagrama",
+        "cls": "<DiagramPanel>",
+        "rule": "El marco de un diagrama propio o de un artefacto real, con su pie. El dibujo lo aporta la página.",
+        "note": "Sin flotar ocupa el ancho completo de la columna: un panel no es prosa."
+      },
+      "livestat": {
+        "kicker": "Dato en vivo",
+        "cls": "<LiveStat>",
+        "rule": "Una cifra que no se escribe en el diccionario: se enlaza a la página que la publica de verdad."
+      },
+      "islas": {
+        "kicker": "Las tres islas",
+        "cls": "<ReadingProgress> · <SectionRail> · <FloatingShare>",
+        "rule": "La barra de progreso del borde superior, el índice flotante con la parada activa, y el dock de compartir a la derecha.",
+        "note": "Son mejora, no requisito: el índice de servidor ya cubre la navegación si el observador no llega a arrancar."
+      }
+    },
+    "ruleTitle": "Qué es esta capa y qué no",
+    "rule": [
+      "Ninguna de estas piezas sabe nada de este sitio: reciben texto y enlaces, no copy propio ni rutas.",
+      "No es una octava pieza del núcleo: es una capa aparte, para texto largo con paradas.",
+      "Los especímenes son las piezas reales importadas, con contenido de muestra: si una cambia, esta sección cambia con ella."
+    ],
+    "coverKicker": "05 — Espécimen",
+    "coverTitle": "El ordinal ilustrado abre cada sección",
+    "coverMeta": "5 de 11 · 3 min",
+    "pullquote": "Una regla que hay que recordar es una regla que se incumple.",
+    "pull": "El registro de por qué se pensó otra cosa vale más que la coherencia retroactiva.",
+    "liveStatLabel": "Ejemplo · dato en vivo",
+    "liveStatSource": "lib/design-values.ts",
+    "liveStatValue": "AAA en las {paginas} páginas",
+    "liveStatLink": "Ver el censo medido",
+    "repoLabel": "ENLACE ·",
+    "repoText": "Las decisiones D39, D41 y D73, en ",
+    "pieSample": "…y por eso la sección termina aquí, con la prueba y la salida hacia la siguiente.",
+    "bylineName": "Francisco López",
+    "bylineRole": "Senior Product Manager",
+    "indexItems": ["Por qué existe", "Cómo se trabaja", "La marca"],
+    "diagramCaption": "Un diagrama real de la página, con sus mismos tokens de color.",
+    "progressAriaLabel": "Progreso de lectura del artículo de muestra",
+    "shareLabel": "Compartir",
+    "shareCopyLabel": "Copiar enlace",
+    "shareCopiedLabel": "Copiado",
+    "shareCopiedAnnounce": "Enlace copiado al portapapeles",
+    "shareUnavailableAnnounce": "Compartir no está disponible: enlace copiado",
+    "railAriaLabel": "Riel de secciones (espécimen)",
+    "railHint": "Igual que en la página real, pero contenidos a este panel: fuera de él van fijos a la ventana."
+  }
+}

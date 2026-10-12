@@ -1,0 +1,271 @@
+/**
+ * De qué depende cada sección de «Cómo se ha creado esta página».
+ *
+ * POR QUÉ EXISTE. El artículo cuenta el estado del proyecto, y el proyecto sigue
+ * cambiando. Tres clases de afirmación caducan, y ninguna avisa al caducar:
+ *
+ *   1. **La cifra contable** — «AAA en las doce páginas», cuando son trece por
+ *      idioma desde que existe el propio artículo. Ya era falsa el día que se
+ *      escribió esto.
+ *   2. **El estado del producto** — «No hay formulario de contacto», que muere el
+ *      día que exista Contacto ampliada.
+ *   3. **La medición externa** — «B+, 80 sobre 100» del HTTP Observatory, que
+ *      muere con la CSP estricta (P64.5).
+ *
+ * Ninguna la ve un compilador, ninguna la ve `check:raya`, y `sprint-review`
+ * dispara al CERRAR etapa — semanas después de que el artículo pasara a mentir.
+ * Es el fallo de disparador que nombra `BRAND.md` §Cómo se escribe una regla:
+ * una condición que se comprueba en el momento equivocado no es una regla.
+ *
+ * QUÉ HACE ESTO. Cada sección declara de qué depende. `npm run check:articulo`
+ * sella el estado de esas dependencias; cuando una cambia, CI sale rojo NOMBRANDO
+ * la sección, en el PR que introduce el cambio. O se actualiza el texto, o se
+ * re-sella con `npm run articulo:sellar` porque el cambio no le afectaba.
+ *
+ * No decide si el texto es falso: no puede. Decide que **alguien tiene que
+ * mirarlo**, que es lo que hoy no hace nadie.
+ *
+ * POR QUÉ AQUÍ Y NO EN EL DICCIONARIO. Es la regla de D44: lo que de una
+ * experiencia no es copy vive en `content/`. Una dependencia no se traduce.
+ *
+ * GRANULARIDAD, que es lo que separa un guardián de una alarma que se ignora.
+ * `DECISIONS.md` cambia en casi cada sesión, así que hashearlo entero daría rojo
+ * siempre y a la tercera vez nadie lo leería. Por eso se depende de la ENTRADA
+ * (`DECISIONS.md#D26`) y de la SECCIÓN de un `.md` (`PRD-Live.md#7.`), no del
+ * archivo. Y de un directorio se hashea la LISTA de archivos, no su contenido:
+ * lo que el artículo afirma de `components/ui/` es cuántas piezas hay, no qué
+ * dice cada una.
+ *
+ * LO QUE NO CUBRE, dicho para que no se dé por cubierto:
+ *
+ * - **`package.json`.** El artículo nombra versiones («Next 16», «Tailwind v4»)
+ *   y un salto de major debería avisar, pero los bumps de Dependabot tocan ese
+ *   archivo cada semana. Meterlo convertiría el guardián en ruido, que es peor
+ *   que no tenerlo. Un salto de major se nota por otras vías.
+ * - **Que el texto diga la verdad.** Esto detecta que la FUENTE se movió, no que
+ *   el párrafo se haya vuelto falso. Lo segundo lo decide una persona.
+ * - **Lo que el artículo afirma y no tiene fuente en el repo** (una impresión,
+ *   una anécdota). No hay nada que sellar ahí, y está bien: no caduca.
+ */
+
+/** Las doce secciones, en el orden en que se leen. El guardián comprueba que
+ *  esta lista y la del diccionario son la misma: una sección nueva sin declarar
+ *  dependencias no pasa. */
+export const SECCIONES = [
+  "s01",
+  "s02",
+  "s03",
+  "s04",
+  "s05",
+  "s06",
+  "s07",
+  "s08",
+  "s09",
+  "s10",
+  "s11",
+  "s12",
+] as const;
+
+export type SeccionId = (typeof SECCIONES)[number];
+
+/**
+ * CUÁLES SON LAS FORMAS DE UNA DEPENDENCIA lo dice `scripts/dependencias/huella.ts`,
+ * que es quien las resuelve. Aquí no se copian: la lista ya caducó una vez, el día
+ * que D193 añadió la cuarta.
+ */
+export type Dependencia = string;
+
+export const DEPENDENCIAS: Record<SeccionId, Dependencia[]> = {
+  // «Una web no demuestra criterio por existir» — los dos lectores, la métrica
+  // de contacto, por qué no hay formulario y qué experiencias tienen página.
+  s01: [
+    "PRD-Live.md#2. Audiencia",
+    "PRD-Live.md#7. Métricas de éxito",
+    "DECISIONS.md#D29",
+    "lib/routes.ts",
+    // Desde el 2026-08-29 el texto sitúa la doble lectura DENTRO de la página de
+    // experiencia y nombra su orden: los datos del puesto, «En un minuto», y el
+    // resto debajo. La forma la fija D53 y la lista de rótulos vive en el
+    // diccionario común, que es pequeño y cambia solo cuando cambia la forma —
+    // hashear `deep-dive.tsx` entero mandaría a releer esto en cada retoque de
+    // maquetación, que es justo el ruido que D103 quitó.
+    "DECISIONS.md#D53",
+    "app/[lang]/dictionaries/es/trayectoria/comun.json",
+  ],
+
+  // «Del brief al tablero» — el proceso, el registro de decisiones, el ciclo de
+  // ramas y qué protege a `main`.
+  s02: ["DECISIONS.md#D10", "DECISIONS.md#D12", "DECISIONS.md#D68"],
+
+  // «La marca, antes que la primera línea de código» — las dos capas, el split,
+  // la tipografía. Depende de `BRAND.md` ENTERO a propósito: es exactamente el
+  // archivo cuya evolución preocupa, y cambia una o dos veces por sprint.
+  s03: ["BRAND.md", "BRAND-logo.md"],
+
+  // «El stack, y por qué ese» — Next, i18n, la frontera servidor/cliente,
+  // shadcn sin usar, y por qué entra una herramienta externa. Las versiones
+  // concretas no están selladas (ver «lo que no cubre», arriba).
+  //
+  // D34 (`@layer`) y D100 (el `space-y` dentro de `:where()`) SALIERON el
+  // 2026-08-29 con las «tres sorpresas de estrenar versión»: el capítulo pasó
+  // a contar por qué se eligió cada pieza y ya no narra ninguna de las dos, así
+  // que mandar a releer esta sección cuando se muevan sería ruido. D7 entra por
+  // lo contrario: la afirmación de que aquí lo interactivo es la excepción es
+  // nueva, y es suya.
+  s04: [
+    "DECISIONS.md#D2",
+    "DECISIONS.md#D3",
+    "DECISIONS.md#D6",
+    "DECISIONS.md#D7",
+    "DECISIONS.md#D51",
+  ],
+
+  // «El sistema de componentes» — la cascada y las OCHO piezas. El directorio
+  // por su lista de archivos: es la cifra que el texto publica.
+  s05: [
+    "DECISIONS.md#D36",
+    "DECISIONS.md#D40",
+    "DECISIONS.md#D45",
+    "DECISIONS.md#D46",
+    "DECISIONS.md#D72",
+    "components/ui/",
+    "CLAUDE.md#Regla de construcción",
+    // El texto publica una CIFRA de puntos del checklist («cuatro de los nueve»),
+    // y esa lista vive fuera de este archivo: añadir o quitar un punto tiene que
+    // mandar a releer la sección. Sin esto, P70.01 habría dejado el artículo
+    // diciendo «ocho» con nueve publicados, y el guardián no lo habría dicho.
+    "CLAUDE.md#Checklist de accesibilidad",
+  ],
+
+  // «Los componentes no se escriben a mano, y los datos tampoco» — el CV
+  // generado, las tres longitudes de cada experiencia, el inventario de piezas
+  // derivado del disco y el sellado de este mismo artículo. El guardián de
+  // copy por experiencia es la fuente de la regla de las tres longitudes; el
+  // README de `components/ui/` es el inventario que el texto dice que nadie
+  // mantiene a mano, así que si deja de estar derivado, hay que releer esto.
+  s06: [
+    "DECISIONS.md#D22",
+    "DECISIONS.md#D84",
+    "DECISIONS.md#D89",
+    "scripts/check-experience-copy.ts",
+    // EL CRITERIO SE MUDÓ Y LA DECLARACIÓN LE SIGUE (2026-09-03, P72.32). Al
+    // partir el guardián, la regla de las tres longitudes —y la comparación de
+    // cifras entre el CV y el deep-dive, que es lo que este texto afirma— dejó de
+    // vivir en el archivo de arriba. Sin esto, la declaración seguiría vigilando
+    // un archivo que ya no contiene lo que vigilaba: el mismo radio de acción que
+    // D187 encontró al mover el censo. Van los dos: el DIRECTORIO caza una pieza
+    // nueva (se hashea su lista) y el archivo, que el cambio de la regla se vea.
+    "scripts/experiencias/",
+    "scripts/experiencias/bullets.ts",
+    "components/ui/README.md",
+    // Desde el 2026-08-29 el texto no solo dice que el inventario se deriva:
+    // describe el FORMATO de la primera línea (grupo · publicación · frase) y
+    // los tres grupos. Eso vive en el generador, no en el README que produce.
+    "scripts/indices.ts",
+    // Las automatizaciones que el texto llama «las que no se ven»: los hooks que
+    // se disparan al editar y quién cierra los PR de dependencias. Del
+    // directorio de hooks se hashea la LISTA: lo que el artículo afirma es
+    // CUÁNTOS hay y en qué momento se disparan, no qué hace cada uno. Y mordió
+    // el 2026-09-05 (P72.52): el párrafo decía «dos» con cuatro en disco, y
+    // quien lo dijo fue el propio hook de pre-push que acababa de romperlo.
+    "scripts/hooks/",
+    ".github/workflows/dependabot-automerge.yml",
+  ],
+
+  // «Del diseño al código» — la fuente de diseño y su traducción.
+  s07: ["DECISIONS.md#D1"],
+
+  // «Lo que no se ve: seguridad, alojamiento y la deuda que no se acumuló» — las
+  // cabeceras servidas, la CSP y la nota del HTTP Observatory. Es la sección que
+  // P64.5 (CSP estricta con nonces) va a invalidar, y la primera prueba real de
+  // que este mecanismo sirve.
+  s08: [
+    "DECISIONS.md#D13",
+    "DECISIONS.md#D15",
+    "DECISIONS.md#D26",
+    "DECISIONS.md#D27",
+    "DECISIONS.md#D32",
+    "DECISIONS.md#D55",
+    "next.config.ts",
+    // Desde el 2026-08-31 la sección tiene un apartado de SEO y GEO, y estas son
+    // sus fuentes. Las tres primeras son la mitad de SEO: la metadata que deriva
+    // `pageMetadata` (canonical, los tres `hreflang`, la tarjeta OG), el registro
+    // del que salen el sitemap y `robots.txt`, y los tipos de Schema.org que el
+    // texto enumera página a página. `lib/routes.ts` entra además porque el
+    // párrafo publica una CIFRA de páginas vía `{paginas}`.
+    "DECISIONS.md#D45",
+    "DECISIONS.md#D72",
+    "lib/routes.ts",
+    "lib/structured-data.ts",
+    // Y la mitad de GEO: el canal markdown con su cifra de bytes, la línea de
+    // Content Signals (que vive en `app/robots.ts`, donde alguien la cambiaría),
+    // el catálogo ARD, y las dos entradas que sostienen el párrafo de lo que NO
+    // se publica: el criterio del `api-catalog` sin API y el descarte de la
+    // tarjeta A2A. D157 sostiene además la última frase, la que dice que esta
+    // nota no es un objetivo de este proyecto.
+    "DECISIONS.md#D157",
+    "DECISIONS.md#D158",
+    "DECISIONS.md#D160",
+    "DECISIONS.md#D166",
+    "app/robots.ts",
+  ],
+
+  // «AA es el suelo, y el metro estuvo mal calibrado tres veces» — el censo, las
+  // cifras publicadas y la pasada con lector de pantalla.
+  s09: [
+    "DECISIONS.md#D39",
+    "DECISIONS.md#D41",
+    "DECISIONS.md#D52",
+    "DECISIONS.md#D61",
+    "DECISIONS.md#D73",
+    "scripts/design-review/censo/",
+    // El símbolo, no el archivo (D193): lo que esta sección afirma es la tabla
+    // de contraste y el recuento de páginas, no todo lo que `design-values.ts`
+    // guarda por ser fuente única.
+    "lib/design-values.ts#CONTRAST",
+    "lib/design-values.ts#PAGE_COUNT",
+    // El texto publica una CIFRA de páginas («AAA en las catorce páginas»), así
+    // que añadir una tiene que mandar a releer esta sección.
+    "lib/routes.ts",
+    // Y una cifra de puntos del checklist, igual que en s05.
+    "CLAUDE.md#Checklist de accesibilidad",
+  ],
+
+  // «Qué revisa una IA y qué no» — los pasos de CI (una cifra en el texto), los
+  // guardianes y los skills. El workflow y el directorio de skills son la
+  // fuente de las dos cifras que publica.
+  s10: [
+    "DECISIONS.md#D37",
+    "DECISIONS.md#D63",
+    "DECISIONS.md#D67",
+    "DECISIONS.md#D70",
+    "DECISIONS.md#D72",
+    ".github/workflows/ci.yml",
+    // El dibujo de los pasos, fuera del componente desde P68.495. El RECUENTO ya
+    // no puede divergir —lo deriva `lib/figures.ts` de `ci.yml` y lo compara
+    // `check:articulo`—, pero el agrupado por rol y la categoría de cada paso son
+    // editoriales, y de ellos sí depende la frase «la mayoría busca la ausencia».
+    "content/articulo/ci-steps.ts",
+    ".claude/skills/",
+  ],
+
+  // «Lo que salió mal, y qué tenían todos en común» — los fallos y la regla que
+  // salió de cada uno.
+  s11: [
+    "DECISIONS.md#D60",
+    "DECISIONS.md#D63",
+    "DECISIONS.md#D70",
+    "BRAND.md#Cómo se escribe una regla aquí",
+  ],
+
+  // «Ahora empieza lo bueno» — el consentimiento, la política de cookies, la
+  // medición y qué viene después.
+  s12: [
+    "DECISIONS.md#D17",
+    "DECISIONS.md#D18",
+    "DECISIONS.md#D31",
+    "DECISIONS.md#D71",
+    "PRD-Live.md#7. Métricas de éxito",
+    "PRD-Live.md#9. Alcance por versión",
+  ],
+};

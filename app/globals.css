@@ -1,0 +1,1621 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-bricolage);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-control-edge: var(--control-edge);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  /* La utilidad `text-muted-foreground` NO lee el token directamente: lee
+     `--surface-dim`, que es el atenuado de la superficie donde cae el texto.
+     Sobre `--background` vale exactamente `--muted-foreground`; sobre las demás
+     se recalcula. Ver el bloque «Atenuado sensible a la superficie» abajo. */
+  --color-muted-foreground: var(--surface-dim);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* utilidades de marca: bg-brand-cyan, text-brand-purple-soft, etc. */
+  --color-brand-cyan: var(--brand-cyan);
+  --color-brand-purple: var(--brand-purple);
+  --color-brand-cyan-soft: var(--brand-cyan-soft);
+  --color-brand-purple-soft: var(--brand-purple-soft);
+  --color-brand-cyan-split: var(--brand-cyan-split);
+  --color-brand-purple-split: var(--brand-purple-split);
+  --color-brand-purple-accent: var(--brand-purple-accent);
+  --color-progress-ink: var(--progress-ink);
+
+  /* LA CURVA DE LAS ENTRADAS, COMO UTILIDAD *(P72.513)*. Vivía solo en `:root`,
+     así que era `var(--ease-entrance)` dentro de `globals.css` y NADA en el punto
+     de uso: una utilidad `transition-*` sin `ease-*` resuelve a
+     `--default-transition-timing-function`, o sea al ease-in-out de Tailwind, que
+     es exactamente la curva que D135 no quiere para algo que aparece. Medido en
+     la hoja servida: `.transition-opacity` compila a
+     `transition-timing-function: var(--tw-ease, var(--default-transition-timing-function))`.
+     Declarada aquí, Tailwind genera `ease-entrance` y el punto de uso puede
+     escribir la utilidad en vez de la sintaxis de escape (CLAUDE.md §Una sola
+     notación por token).
+     SE MUEVE, NO SE COPIA: `@theme` ya emite la variable a `:root`, así que los
+     `var(--ease-entrance)` de esta misma hoja siguen resolviendo igual. Y no hay
+     `duration-entrance` que valga: `--duration-*` no es un espacio de nombres de
+     Tailwind v4, así que las duraciones siguen siendo la utilidad numérica de la
+     tabla que publica el Design System. */
+  --ease-entrance: cubic-bezier(0, 0, 0.2, 1);
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  --radius: 0.625rem;
+  color-scheme: light;
+
+  /* --- Tokens de layout (Design System §20 · trasladados 2026-07-26, D4;
+         valores confirmados contra Web personal.dc.html) --- */
+  --container: 1360px; /* ancho máx. del grid de 12 columnas */
+  --measure: 42rem; /* medida de lectura (~91 car. en Inter) */
+  --section-y: clamp(4.5rem, 9vw, 9rem); /* ritmo vertical: 72 → 144px */
+  --page-x: clamp(1.25rem, 5vw, 2.5rem); /* gutter de página: 20 → 40px */
+  --gutter: clamp(
+    1rem,
+    2.2vw,
+    1.5rem
+  ); /* separación entre columnas: 16 → 24px */
+
+  /* --- Tokens de motion: el listón de una ENTRADA (P74.35) ---
+         Estaban escritos a mano en cada declaración, y así fue como la curva
+         *standard* de Material —que es ease-in-OUT— llegó a siete sitios
+         copiándose siempre de la de al lado. Un elemento que ENTRA no tiene por
+         qué acelerar: ya viene lanzado, así que la curva es ease-out pura.
+         La duración es el techo de la entrada, no su mínimo: los 280 ms son para
+         el recorrido más largo que hace el sitio (el fade-up de 14px); una
+         entrada más corta puede ir por debajo, nunca por encima. */
+  /* `--ease-entrance` ya no se declara aquí: subió a `@theme` para que exista la
+     utilidad `ease-entrance`, y desde allí se emite igual a `:root`. */
+  --duration-entrance: 0.28s;
+
+  /* --- Neutros + superficies (blanco hueso / gris) --- */
+  --background: oklch(0.9653 0.0102 81.8); /* #F7F3EC blanco hueso */
+  --foreground: oklch(0.2657 0.0118 248.27); /* #21262B gris oscuro  */
+  --card: oklch(0.9855 0.0057 84.57);
+  --card-foreground: oklch(0.2657 0.0118 248.27);
+  --popover: oklch(0.9855 0.0057 84.57);
+  --popover-foreground: oklch(0.2657 0.0118 248.27);
+
+  /* --- Acción: cian primario --- */
+  /* Se pinta como #005859 (este oklch cae algo FUERA del gamut sRGB, así que el
+     navegador lo recorta; el hex es el color resultante, no el nominal).
+     Medido 2026-08-04 (P37.5985): 7,47:1 como texto sobre --background y 7,93:1
+     sobre boton. AAA en ambos, con margen. (P37.598 habia publicado 7,43 y 7,88
+     para este mismo token; al re-medirlas salieron unas centesimas mas altas.)
+     Bajó de L 0.43 a L 0.41 porque el anterior —que se pintaba como #005E5F— daba
+     6,86:1 como texto: AA, no AAA, mientras la web publicaba 7,01. El hex que
+     documentaba BRAND.md SÍ era el correcto; lo que estaba mal era la cifra.
+     Cuidado al medir esto: un color fuera de gamut sale con componentes negativas
+     en `color(srgb ...)`, y leerlas sin recortar da un valor que no existe. */
+  --primary: oklch(0.41 0.0886 194.82); /* se pinta #005859 */
+  --primary-foreground: oklch(0.9855 0.0057 84.57);
+
+  /* --- Secundarios/mudos: NEUTROS a propósito (no marca) --- */
+  --secondary: oklch(0.9316 0.0128 86.83);
+  --secondary-foreground: oklch(0.2657 0.0118 248.27);
+  --muted: oklch(0.9316 0.0128 86.83);
+  --muted-foreground: oklch(
+    0.4365 0.0064 95.19
+  ); /* AAA (7,10:1) sobre --background claro; a 0.4815 se quedaba en 5,87 */
+  --accent: oklch(0.9316 0.0128 86.83);
+  --accent-foreground: oklch(0.2657 0.0118 248.27);
+
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* El filete tal como se autoró, y la referencia contra la que se calibra todo lo
+     demás: 1,21:1 sobre `--background`. Lo consume `--border`, que desde P68.749 se
+     recalcula por superficie (más abajo). El `-base` es lo que permite volver a este
+     valor dentro de una superficie, igual que `--surface-dim` vuelve a
+     `--muted-foreground`. */
+  --border-base: oklch(0.901 0.0142 88.69);
+  --border: var(--border-base);
+  --border-mix: 11%;
+  --border-mix-inverted: 7%;
+  /* Token de la base de shadcn, hoy SIN USAR: el borde de un campo lo pone
+     `--control-edge`, que se deriva de la superficie y llega al 3:1 de WCAG
+     1.4.11. Se conserva por no tocar la base, pero no lo consume nadie — y
+     nombrarlo como si gobernara los campos fue parte de cómo el borde real pasó
+     año y medio a 1,21:1. */
+  --input: oklch(0.901 0.0142 88.69);
+  --control-edge-mix: 60%;
+  /* La invertida necesita su propio número, y por el mismo motivo que
+     `--border-mix-inverted`: ahí la banda es `--foreground`, o sea el fondo del
+     OTRO tema, así que la calibración que sirve es la del otro tema. Con el 60%
+     de aquí el contorno sale a 5,89 (holgado pero más duro que el ~4 que busca
+     el resto de la familia); con el 45%, a 3,96. */
+  --control-edge-mix-inverted: 45%;
+  --ring: oklch(0.41 0.0886 194.82); /* foco = cian primario */
+
+  --chart-1: var(--brand-cyan);
+  --chart-2: var(--brand-purple);
+  --chart-3: var(--brand-cyan-soft);
+  --chart-4: var(--brand-purple-soft);
+  --chart-5: oklch(0.4815 0.0064 95.19);
+
+  /* --- Sidebar: adaptada a la marca (no neutra) --- */
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--secondary);
+  --sidebar-accent-foreground: var(--secondary-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* --- CAPA DE MARCA (decorativo / logo, NO tocar por shadcn) --- */
+  --brand-cyan: oklch(
+    0.41 0.0886 194.82
+  ); /* se pinta #005859 — identico a primary a proposito */
+  --brand-purple: oklch(0.6889 0.1581 289.96); /* #9B87F5 */
+  --brand-cyan-soft: oklch(0.8694 0.0592 192.12); /* #A7E1DE pastel */
+  --brand-purple-soft: oklch(0.8151 0.0776 295.46); /* #C6B9F0 pastel */
+  --brand-cyan-split: oklch(0.7242 0.1208 194.82); /* #16BDBD split   */
+  --brand-purple-split: oklch(0.6889 0.1581 289.96); /* #9B87F5 split   */
+  /* Morado legible sobre fondos INVERTIDOS (bloques cuyo fondo es `--foreground`):
+     hoy, la palabra «Exit» y su filete en la banda de manifiesto. CONMUTA con el
+     tema, y no es una preferencia: el fondo de esa banda ES `--foreground`, así que
+     salta de carbón (luminancia 0,019) a hueso (0,899) al cambiar de tema. Aquí va
+     el morado CLARO, porque en tema claro la banda es la oscura.
+
+     POR QUÉ NO PUEDE SER FIJO — el techo está calculado, no estimado. Un solo color
+     que sirva a las dos superficies no puede pasar de √13,79 = 3,71:1, la media
+     geométrica de los dos contrastes. AAA-large exigiría una luminancia ≥0,2598 y
+     ≤0,1610 A LA VEZ: ventana vacía, y para cualquier tono — no es cosa del morado.
+     El valor anterior —`oklch(0.62 0.16 290)` fijo, 3,96 claro y 3,49 oscuro— estaba
+     justo EN ese óptimo: no se eligió mal, se eligió lo mejor de un problema sin
+     solución. Corregido en P37.657 aplicándole el tratamiento de
+     `--primary-on-inverted`, que es su hermano y ya lo decía en el comentario de
+     abajo: el cian conmutó y funcionó; el morado se quedó fijo y topó con el techo.
+     Ahora 7,04 en claro y 7,21 en oscuro — AAA de texto normal, sin la coletilla
+     «solo texto grande» que arrastraba desde que existe. */
+  --brand-purple-accent: oklch(
+    0.78 0.16 290
+  ); /* se pinta #B7A3FF sobre carbón */
+
+  /* Morado de la barra de progreso de «Cómo se ha creado» (P60). Mismo
+     mecanismo que `--brand-purple-accent` —un color fijo no puede pasar 3:1
+     contra las dos superficies opuestas (BRAND.md §El morado como gráfico)—
+     pero con los papeles INVERTIDOS: la barra vive sobre `--background`
+     directamente, no sobre una banda invertida, así que en claro necesita el
+     morado OSCURO (0.45) y en oscuro el CLARO (0.78) — justo al revés que
+     `--brand-purple-accent`, que vive sobre bandas invertidas. Documentado en
+     BRAND.md §Color, 2026-08-21. */
+  --progress-ink: oklch(0.45 0.16 290);
+
+  /* Cian legible sobre fondos INVERTIDOS (bloques cuyo fondo es `--foreground`).
+     Es, literalmente, el cian del OTRO tema: sobre una superficie invertida el
+     "primer plano" es `--background`, así que el acento tiene que ser el que ese
+     otro tema ya tiene calibrado. Un cian fijo no puede servir para los dos casos
+     —necesita ser claro sobre carbón y oscuro sobre hueso—, que es la misma
+     imposibilidad de la bolita del switch (P37.593). Hermano de
+     `--brand-purple-accent`, que existe por esta misma razón.
+     Añadido en P37.598: el bloque de código del Design System pintaba los nombres
+     de token con `--brand-cyan-split` FIJO y, al invertirse el panel en tema
+     oscuro, daba 2,09:1 — fallo AA y, además, uso del split del logo como texto de
+     UI, que BRAND.md prohíbe. */
+  --primary-on-inverted: oklch(
+    0.7626 0.1156 191.46
+  ); /* el cian del tema oscuro */
+
+  /* Y lo que se LEE encima de ese cian, por el mismo argumento (P70.18). El
+     enlace de contenido, al pasar el cursor, se rellena de `--primary` y pone el
+     texto en `--primary-foreground`; sobre una banda invertida el relleno pasa a
+     ser `--primary-on-inverted`, así que el texto tiene que ser el
+     `--primary-foreground` DEL OTRO TEMA. No hay que medirlo de nuevo: son
+     exactamente los dos mismos colores del par «texto sobre botón» que el censo
+     ya da por bueno (7,93:1 claro / 8,36:1 oscuro), solo que intercambiados por
+     tema. Un valor fijo tendría el mismo techo que topó `--brand-purple-accent`.
+     Existe como token y no escrito en la regla porque el valor lo tiene UN sitio,
+     que es lo que hace que un cambio del cian llegue solo a los dos casos. */
+  --primary-foreground-on-inverted: oklch(0.2283 0.0098 248.26);
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: oklch(0.2283 0.0098 248.26); /* #191D21 */
+  --foreground: oklch(0.9653 0.0102 81.8); /* #F7F3EC */
+  --card: oklch(0.2657 0.0118 248.27); /* #21262B */
+  --card-foreground: oklch(0.9653 0.0102 81.8);
+  --popover: oklch(0.2657 0.0118 248.27);
+  --popover-foreground: oklch(0.9653 0.0102 81.8);
+
+  /* cian aclarado para no apagarse sobre fondo oscuro */
+  --primary: oklch(0.7626 0.1156 191.46); /* #3FC9C4 */
+  --primary-foreground: oklch(0.2283 0.0098 248.26);
+
+  --secondary: oklch(0.3063 0.0152 252.34);
+  --secondary-foreground: oklch(0.9653 0.0102 81.8);
+  --muted: oklch(0.3063 0.0152 252.34);
+  --muted-foreground: oklch(
+    0.7295 0.0116 95.22
+  ); /* AAA (7,12:1) sobre --background oscuro; a 0.7245 se quedaba en 6,95 */
+  --accent: oklch(0.3063 0.0152 252.34);
+  --accent-foreground: oklch(0.9653 0.0102 81.8);
+
+  --destructive: oklch(0.704 0.191 22.216);
+
+  --border-base: oklch(0.3252 0.0157 248.31);
+  --input: oklch(0.3252 0.0157 248.31);
+  --control-edge-mix: 45%;
+  /* Y aquí está el que importa: con el 45% del propio tema, el contorno sobre la
+     banda invertida sale a 2,78 — POR DEBAJO del 3:1 de WCAG 1.4.11. Pasó
+     desapercibido porque la regla invertida no tenía ocupante: su único
+     candidato, el compartir de la apertura del artículo, se pintaba el borde a
+     mano. Con el 60%, 4,30. */
+  --control-edge-mix-inverted: 60%;
+  /* La mezcla del filete NO conmuta con el tema, y eso es un resultado, no un
+     descuido: el barrido dio 11% en los dos. Es la diferencia con
+     `--control-edge-mix` (60/45), y sale de que aquí no hay umbral que alcanzar
+     sino una referencia que reproducir — y la referencia ya conmuta sola, porque
+     es el propio `--border-base` contra el fondo de cada tema. La invertida sí
+     necesita su número, y en los dos temas tira en direcciones opuestas. */
+  --border-mix-inverted: 15%;
+  --ring: oklch(0.7626 0.1156 191.46);
+
+  --chart-1: var(--brand-cyan);
+  --chart-2: var(--brand-purple);
+  --chart-3: var(--brand-cyan-soft);
+  --chart-4: var(--brand-purple-soft);
+  --chart-5: oklch(0.7245 0.0116 95.22);
+
+  /* --- Sidebar: adaptada a la marca (no neutra) --- */
+  --sidebar: var(--card);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--secondary);
+  --sidebar-accent-foreground: var(--secondary-foreground);
+  --sidebar-border: var(--border);
+  --sidebar-ring: var(--ring);
+
+  /* Marca: el cian sube de luminosidad en oscuro; el resto se mantiene */
+  --brand-cyan: oklch(0.7626 0.1156 191.46);
+  --brand-purple: oklch(0.6889 0.1581 289.96);
+  --brand-cyan-soft: oklch(0.8694 0.0592 192.12);
+  --brand-purple-soft: oklch(0.8151 0.0776 295.46);
+  --brand-cyan-split: oklch(0.7242 0.1208 194.82);
+  --brand-purple-split: oklch(0.6889 0.1581 289.96);
+  /* El morado OSCURO: en tema oscuro la banda invertida es la de fondo hueso.
+     Mismo motivo y mismo cálculo que en claro (ver arriba). Se pinta #583DA6. */
+  --brand-purple-accent: oklch(0.45 0.16 290);
+  --primary-on-inverted: oklch(0.41 0.0886 194.82); /* el cian del tema claro */
+  --primary-foreground-on-inverted: oklch(0.9855 0.0057 84.57);
+  /* El morado CLARO de la barra de progreso: en oscuro el fondo de página es
+     carbón, así que necesita el morado que se lee sobre carbón (ver la nota en
+     :root). */
+  --progress-ink: oklch(0.78 0.16 290);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* EL EQUILIBRADO DE LÍNEA VA EN LA CAPA, NO EN EL CALL SITE (P68.7116).
+     `text-wrap: balance` reparte las líneas de un titular para que la última no
+     quede huérfana. Estaba escrito a mano en el punto de uso —29 veces entre
+     `text-balance` y `text-pretty`, en 20 archivos— y aun así faltaba justo
+     donde se medía el peor caso: los `h2` de banda de `ui/block-opener.tsx`, con
+     la última línea al 30% de la primera a 390px en `/accesibilidad`.
+
+     POR QUÉ EL DEFECTO SOLO SALÍA EN UNA DE LAS TRES HERMANAS, que es la parte
+     que dice dónde va el arreglo: el componente es el mismo, y lo que diverge es
+     el REGISTRO DEL COPY. Design System y Brand Kit le dan sintagmas cortos
+     («Fundamentos», «Piezas») que nunca rompen; Accesibilidad le da oraciones con
+     coma. Una propiedad que hace falta o no según lo que alguien escriba en el
+     diccionario no puede vivir en el punto de uso: no hay forma de acordarse.
+
+     SOBRE EL ELEMENTO Y NO SOBRE LA VARIANTE, porque no todos los titulares del
+     sitio pasan por `titleVariants` — los de `system-message`, `global-not-found`
+     y las bandas los escriben sus bloques. El selector ya existía aquí para la
+     familia tipográfica, así que el equilibrado entra por la misma puerta. */
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  /* Y `pretty` para el texto corrido, que es OTRA propiedad y no la misma con
+     otro nombre: `balance` iguala el largo de TODAS las líneas de un bloque corto
+     y solo tiene sentido en un titular; `pretty` deja el párrafo como está y se
+     limita a impedir que la última línea quede en una palabra suelta. Aplicarle
+     `balance` a un párrafo de doce líneas no haría nada —los navegadores lo
+     ignoran por encima de cuatro o seis— y aplicarle `pretty` a un titular
+     desperdicia la mitad del arreglo.
+
+     Los navegadores que no lo implementan se quedan en `wrap`, que es lo que hay
+     hoy: mejora progresiva, sin fallback que escribir. */
+  p,
+  li,
+  figcaption,
+  dd,
+  blockquote {
+    text-wrap: pretty;
+  }
+  /* Foco visible AA (checklist a11y §20, punto 2): anillo de 2px + offset 2px.
+     El segundo selector es el SIMULADOR de foco de §09 del Design System
+     (P70.25). El anillo que enseña es LITERALMENTE este, no una copia con los
+     mismos valores: se añade aquí el selector en vez de redeclarar el `outline`
+     en otro sitio, y así una demo que miente deja de ser posible por
+     construcción. Es el mismo motivo por el que los especímenes de esa sección
+     son los `actionVariants` reales y no un facsímil.
+
+     LA ESPECIFICIDAD ESTÁ IGUALADA A PROPÓSITO, y es la parte delicada. La
+     regla trae `border-radius: 3px`, que en un control REAL nunca se aplica:
+     `:focus-visible` pesa (0,1,0), lo mismo que `rounded-md`, y las utilidades
+     van después en la cascada. Un selector descendente normal pesaría (0,2,0),
+     ganaría, y el simulador redondearía los botones a 3px mientras el foco de
+     verdad los deja en 8. El `:where()` no aporta especificidad, así que
+     `[data-specimen-demo] > *` se queda también en (0,1,0) y pierde contra las
+     utilidades exactamente igual que el foco real. */
+  :focus-visible,
+  :where([data-focus-sim="on"]) [data-specimen-demo] > * {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  /* Quita el retardo de ~300 ms que el navegador móvil se guarda por si el toque
+     era un doble tap de zoom. No cambia nada visible: cambia cuánto tarda en
+     responder cada control del sitio en un teléfono. Va sobre lo accionable y no
+     sobre `*` a propósito — en el cuerpo del texto el doble tap para acercar es
+     una afordancia legítima, y quitarla ahí sí sería un problema de
+     accesibilidad. (Web Interface Guidelines, 2026-08-19.) */
+  a,
+  button,
+  summary,
+  [role="button"],
+  label,
+  input,
+  select,
+  textarea {
+    touch-action: manipulation;
+
+    /* EL DESTELLO DEL TOQUE SE DECLARA, NO SE APAGA (P68.7116). Sin esta línea
+       cada navegador móvil pinta el suyo —un rectángulo gris o azul del sistema—
+       sobre cada control del sitio, y ese color no es de esta marca. Apagarlo con
+       `transparent` sería la otra respuesta y es peor: en un teléfono el hover no
+       existe, así que el destello es la ÚNICA confirmación de que el toque se ha
+       registrado, y quitarla deja al control mudo hasta que la página responde.
+
+       Así que se tiñe de `--primary`, que es el color de acción de `BRAND.md`, y
+       conmuta con el tema solo porque el token ya lo hace. El 18% es velo: tiene
+       que leerse como un destello y no como un estado. No hay umbral WCAG que
+       cumplir aquí —es transitorio y no delimita el control—, así que la cifra es
+       de expresión, no de contraste. */
+    -webkit-tap-highlight-color: color-mix(
+      in srgb,
+      var(--primary) 18%,
+      transparent
+    );
+  }
+
+  /* El scroll dentro del diálogo de preferencias no se encadena al documento de
+     debajo. Sin esto, al llegar al final del panel el gesto sigue moviendo la
+     página que hay detrás del modal. */
+  dialog {
+    overscroll-behavior: contain;
+  }
+}
+
+/* === Capa de motion (PRD §6/§21) — "una vez al entrar en viewport, nunca en
+   bucle". La clase `reveal-on` la añade el island de cliente solo si NO hay
+   prefers-reduced-motion; sin JS o con reduced-motion, el contenido se queda
+   visible (opacity:1), nunca oculto. === */
+/* Duraba 600 ms, el doble del listón, y con la curva equivocada (P74.35). No era
+   solo estético: este mismo reveal se comió el LCP de la home una vez, porque la
+   foto del hero YA PINTADA se ocultaba al hidratar para volver con la transición
+   (D47 rescató 1.000 ms arreglando el orden; la duración seguía intacta). */
+.reveal-on [data-reveal] {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity var(--duration-entrance) var(--ease-entrance),
+    transform var(--duration-entrance) var(--ease-entrance);
+}
+.reveal-on [data-reveal][data-shown] {
+  opacity: 1;
+  transform: none;
+}
+/* Chip EXIT: entra con retardo tras el reveal de su fila (PRD §21). El retardo ES
+   la duración del reveal, no un número suelto: así «tras» sigue significando lo
+   mismo si la entrada vuelve a cambiar de duración. */
+.reveal-on [data-reveal] .exit-chip {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 0.25s var(--ease-entrance) var(--duration-entrance),
+    transform 0.25s var(--ease-entrance) var(--duration-entrance);
+}
+.reveal-on [data-reveal][data-shown] .exit-chip {
+  opacity: 1;
+  transform: none;
+}
+/* Diagramas de nodos/líneas (el artículo, y desde P70.101 también la sección
+   de herencia de `/accesibilidad`): además del
+   fade-up del marco (`data-reveal` en `DiagramPanel`), cada pieza interna
+   entra atenuada y un barrido secuencial la lleva a opacidad plena —
+   «Realce», la dirección elegida en el prototipo de la Tanda 3 sobre las
+   tres que se compararon (D79). `--i` (el orden narrativo de la pieza, no
+   su posición en el DOM) fija el retardo del barrido. Sin `.reveal-on`
+   —sin JS, o `prefers-reduced-motion`— cada `.rlz` es opacidad 1 desde el
+   primer render: el barrido es un extra, nunca la única vía de ver el
+   diagrama completo. */
+.rlz {
+  opacity: 1;
+}
+.reveal-on .diagram-realce .rlz {
+  opacity: 0.34;
+  transition: opacity var(--duration-entrance) var(--ease-entrance);
+}
+.reveal-on .diagram-realce[data-shown] .rlz {
+  opacity: 1;
+  transition-delay: calc(var(--i, 0) * 130ms);
+}
+
+/* AQUÍ HABÍA UN OVERRIDE DEL REVEAL Y NO CASABA CON NADA (P74.36). Devolvía
+   `opacity: 1 !important` a `.reveal-on [data-reveal]` con movimiento reducido, y
+   `.reveal-on` NO EXISTE en ese caso: el island hace `if (reduce) return` antes de
+   añadir la clase. Medido sobre el sitio servido con reduced-motion activo: 0
+   elementos con `.reveal-on`, 0 coincidencias de la regla, 34 `[data-reveal]` en
+   opacidad 1 y sin transición. La protección la da el island, no el CSS, y tenerla
+   escrita dos veces hacía creer que el reveal se apagaba **aquí**.
+
+   EL REVEAL ES EL ÚNICO FUNDIDO QUE NO SE CONSERVA, y el motivo NO es el LCP.
+   Se escribió que serían «34 elementos volviendo a opacity 0», y es falso: el orden
+   de D47 marca el primer pliegue como `data-shown` ANTES de encender la clase, y
+   eso protege al elemento LCP de todo el mundo, no solo de quien no ha pedido nada.
+   Serían los 30 de debajo del pliegue, que no tocan la métrica.
+
+   El motivo real es que este es el único efecto ACOPLADO AL SCROLL, y WCAG 2.3.3
+   habla justamente de la animación que dispara la interacción. Los otros fundidos
+   que sí se conservan ocurren una vez y no los pide el usuario: el «0» del 404 y el
+   banner entran al cargar; los de hover son discretos y duran lo que un gesto. Este
+   se repite treinta veces mientras alguien baja por la página, y a quien ha pedido
+   menos movimiento eso es exactamente lo que le sobra.
+   El scroll suave se queda apagado, que es lo único que esta regla apagaba. */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* === ENTRADA DEL PLIEGUE (P72.466) · lo que entra AL CARGAR, no al hacer scroll ===
+
+   NO ES UN SEGUNDO MECANISMO DE ENTRADA: es el otro que ya había. `data-reveal`
+   significa «entra al ENTRAR en viewport», y por eso el island marca como
+   mostrado todo lo que ya está en pantalla ANTES de encender `reveal-on`
+   (P44/D47, 2.090 ms de retraso de renderizado). Lo del primer pliegue no entra:
+   ya está. Así que una composición del pliegue no puede animar por ahí, y eso no
+   es un fallo suyo.
+
+   LO QUE ENTRA AL CARGAR YA TENÍA SU FORMA en esta hoja: `punto-cae` (el punto
+   del titular de la home, D137), `consent-in` y `split-bloom`. Las tres son
+   `@keyframes` con `both`, sin JS y sin esperar a la hidratación. Ésta es la
+   cuarta y su caso es el mismo que el del punto: un elemento decorativo del
+   primer pliegue que aparece al cargar mientras el contenido de alrededor no.
+
+   POR QUÉ NO SE HIZO CON UNA EXCEPCIÓN DENTRO DEL ISLAND, que era la otra
+   dirección de la ficha: el HTML servido no lleva `opacity: 0` —la pone
+   `reveal-on`, que llega con la hidratación—, así que saltarse el premarcado no
+   consigue que el elemento empiece oculto. Consigue que se pinte, PARPADEE a
+   cero al hidratar y vuelva. Es el síntoma que quitó D47, sin su coste de
+   métrica.
+
+   Y NO TOCA EL LCP, comprobado antes de escribirlo y no supuesto: en las cuatro
+   páginas y en los dos viewports (1920×1080 y 412×823 a 1,75) el elemento LCP es
+   la ENTRADILLA, el `<p>` de la columna de texto, nunca la composición. Medido
+   con `PerformanceObserver` sobre el build servido. Si alguna composición gana
+   una imagen algún día, esto hay que volver a mirarlo.
+
+   EL GIRO DE LAS FICHAS VA EN `rotate`, NO EN `transform`. Un `transform` en el
+   punto de uso gana a cualquier hoja, y era lo que tenía muerto el `translateY`
+   del reveal en Design System y en Accesibilidad desde que se escribieron: sus
+   fichas solo podían fundirse. Con la propiedad individual `rotate` las dos
+   cosas componen. La entrada, en cambio, se queda en `transform` a propósito:
+   las utilidades de traslación de Tailwind v4 —`-translate-y-1/2`, que es como
+   se centra la composición del Brand Kit— compilan a la propiedad `translate`,
+   y animar ahí se las llevaría por delante. */
+/* `backwards` Y NO `both`, que es lo que la revisión de motion cambió. Los dos
+   pintan igual; la diferencia es lo que queda DESPUÉS. `both` retiene el último
+   fotograma para siempre, y una animación gana al resto de la cascada: con él,
+   la regla dejaba `transform: none` fijado en el elemento y cualquier utilidad
+   de `transform` que alguien añadiera aquí más adelante no se aplicaría, sin dar
+   un error. `backwards` conserva lo único que hacía falta —el primer fotograma
+   aplicado ANTES de arrancar, que es lo que impide el parpadeo durante el
+   retardo— y al terminar devuelve el elemento a su estilo normal, que ya es
+   opacidad 1 y sin transformar.
+   (Sus tres hermanas de esta hoja —`punto-cae`, `consent-in`, `split-bloom`—
+   siguen en `both` y comparten el rasgo. No se tocan aquí: ninguna está en un
+   elemento que vaya a recibir utilidades, y cambiarlas de paso sería meter tres
+   cambios sin medir en un commit de dos.) */
+.entrada-pliegue {
+  animation: entrada-pliegue var(--duration-entrance) var(--ease-entrance)
+    var(--retardo-entrada, 0s) backwards;
+}
+@keyframes entrada-pliegue {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* D136: se retira el desplazamiento y se conserva el fundido, más corto. Y el
+   escalonado se cierra, que es la mitad que no se ve venir: un retardo es una
+   espera, y a quien ha pedido menos movimiento el vestíbulo le sobra igual que
+   el desplazamiento (es lo que ya hace `split-bloom`). Por eso el retardo entra
+   por variable y no por `style` inline — así esta regla puede anularlo. */
+@media (prefers-reduced-motion: reduce) {
+  .entrada-pliegue {
+    animation-name: entrada-pliegue-quieta;
+    animation-duration: 0.16s;
+    animation-delay: 0s;
+  }
+}
+@keyframes entrada-pliegue-quieta {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+/* Banner de consentimiento (P22): entra una vez con fade-up. Sin bucle; respeta
+   reduced-motion (PRD §6). */
+@keyframes consent-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+/* El mismo recorrido sin el desplazamiento, para movimiento reducido (P74.36).
+   Lo que molesta a quien activa ese ajuste es el vestíbulo, no que algo aparezca:
+   se va el `translateY`, se queda el fundido. */
+@keyframes consent-in-quiet {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.consent-enter {
+  animation: consent-in var(--duration-entrance) var(--ease-entrance) both;
+}
+@media (prefers-reduced-motion: reduce) {
+  /* Solo el nombre: la duración, la curva y el `both` los sigue poniendo la
+     abreviada de arriba, así que el banner no puede quedarse con dos ritmos. */
+  .consent-enter {
+    animation-name: consent-in-quiet;
+  }
+}
+
+/* 404 — el "0" del número hace "florecer" la firma: las capas de color del split (el
+   <g> de los anillos cian/morado) suben su opacidad sobre el aro base, que ya está
+   visible. Puro CSS (sin JS/rAF): corre en la carga sin depender de hidratación.
+   ES DE LAS POCAS QUE SIGUEN CORRIENDO CON MOVIMIENTO REDUCIDO, y con motivo
+   (P74.36): el «florecer» es opacidad de principio a fin, sin una sola propiedad
+   que desplace o escale, así que no hay nada vestibular que retirar. Apagarla era
+   quitar información gratis.
+   ES LA ÚNICA ENTRADA QUE SE QUEDA POR ENCIMA DEL LISTÓN, y con motivo (P74.35):
+   no es una entrada de contenido sino el gesto de marca de una página de error,
+   donde no compite con nada porque no hay nada más que leer. Su curva ya era
+   ease-out (easeOutQuint), así que no entraba en el arreglo de la curva. */
+@keyframes split-bloom {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.split-zero > g {
+  animation: split-bloom 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
+}
+/* Y SE CONSERVA MÁS CORTO, que es la otra mitad de la regla: «más suave» no es solo
+   «sin desplazamiento», también es «sin hacer esperar». Novecientos milisegundos de
+   florecer son un gesto de marca para quien no ha pedido nada; para quien sí, son
+   una espera. Solo la duración y el retardo: el fundido, la curva y el `both` los
+   sigue poniendo la abreviada de arriba. */
+@media (prefers-reduced-motion: reduce) {
+  .split-zero > g {
+    animation-duration: 0.2s;
+    animation-delay: 0s;
+  }
+}
+/* Hitos — fila responsive (D7: en CSS, no en JS). Móvil: grid que apila el
+   impacto bajo el nombre. ≥768px (md): flex, todo en una fila. */
+.hitos-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "idx name year"
+    "impact impact impact";
+  gap: 0.35rem 0.9rem;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .hitos-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.85rem 1.5rem;
+    grid-template-areas: none;
+  }
+}
+
+/* Trayectoria — filas fecha / contenido / logo. Móvil: una columna apilada, el
+   logo se oculta. ≥768px (md): tres columnas (D7). */
+.tray-grid,
+.tray-grid-nested {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.4rem;
+  align-items: start;
+}
+@media (min-width: 768px) {
+  .tray-grid {
+    grid-template-columns: minmax(0, 10.5rem) minmax(0, 1fr) auto;
+    gap: clamp(1rem, 4vw, 3rem);
+  }
+  .tray-grid-nested {
+    grid-template-columns: minmax(0, 9.5rem) minmax(0, 1fr) auto;
+    gap: clamp(0.75rem, 3vw, 2rem);
+  }
+}
+
+/* ATENUADO SENSIBLE A LA SUPERFICIE — la aplicación general de D30 (P37.6565).
+   `--muted-foreground` está calibrado contra `--background` y solo contra él
+   (AAA: 7,10:1 claro / 7,12:1 oscuro). Encima de cualquier otra superficie la
+   cifra cambia, y no siempre a mejor: sobre `--card` da 7,53 en claro pero
+   **6,40 en oscuro**, y sobre `--muted` 6,42 / 5,59. La asimetría es la parte
+   que hay que entender: `--card` es más claro que `--background` en LOS DOS
+   temas, así que en claro se aleja del texto oscuro (sube) y en oscuro se acerca
+   al texto claro (baja). La misma jerarquía de superficies ayuda en un tema y
+   estorba en el otro — por eso no hay un token fijo que valga para las dos.
+
+   Esta regla ya existía y ya estaba resuelta DOS veces, cada una por su cuenta:
+   `--contact-dim` para la franja de contacto (P37.55) y un `color-mix` escrito a
+   mano dentro de la etiqueta neutra (P37.655). Las dos con la misma fórmula, y
+   ninguna de las dos cubría `--card`, que es la superficie no-`--background` más
+   común del sitio: 11 elementos solo en la home y al menos uno en cada una de las
+   seis páginas. Se generaliza aquí, así que el atenuado deja de ser algo que un
+   call site tiene que acordarse de pedir.
+
+   LA FÓRMULA es la de D30 y no se elige por superficie: el texto se mezcla un 85%
+   hacia el fondo que tiene DEBAJO. Al ser relativa se ajusta sola al tema (en
+   claro oscurece, en oscuro aclara) y no necesita un número por superficie. El 80%
+   ya se quedaba en 6,99:1 sobre `--muted` en claro; el 85% deja AAA con margen en
+   los cuatro cruces.
+
+   POR QUÉ VA EN EL TOKEN Y NO EN UNA CLASE: `.contact-dim` había que escribirla en
+   el punto de uso, así que solo protegía a quien se acordaba —y el sitio tiene 141
+   usos de `text-muted-foreground`—. Aquí la utilidad de siempre resuelve al color
+   correcto por el mero hecho de estar dentro de la superficie, y una tarjeta nueva
+   nace bien sin que nadie lo pida. Es lo que hace que la accesibilidad se herede.
+
+   Nota de cascada 1: `@theme inline` sustituye el token al compilar, así que
+   `text-muted-foreground` compila a `color: var(--surface-dim)` y basta con
+   redefinir la variable en la superficie. Redefinir `--muted-foreground` NO
+   funcionaría: el valor de una custom property se hereda ya sustituido, así que
+   el descendiente vería el que se resolvió en `:root`.
+
+   Nota de cascada 2, y es la que hay que tener presente al añadir superficies:
+   `data-surface` ES PARA LO QUE PINTA SU PROPIA SUPERFICIE. La utilidad cubre el
+   caso normal, pero el sitio tiene velos translúcidos escritos a mano —`--card` al
+   45% bajo una fila cebra, al 55% bajo la sección del esqueleto, el chip numerado
+   de «Cómo trabajo»— que son esa misma superficie y no llevan su clase, así que
+   la regla no podía verlos: se quedaban con el atenuado de la página y caían a
+   6,73–6,80 en oscuro. El atributo dice a qué FAMILIA pertenece la superficie que
+   ese elemento se pinta, que es justo lo que la clase ya no cuenta. Es el fallo de
+   disparador que describe `BRAND.md` §Cómo se escribe una regla: la condición
+   miraba a la clase y la cosa ocurría en el estilo inline. */
+:root {
+  --surface-dim: var(--muted-foreground);
+}
+.bg-card,
+.bg-popover,
+[data-surface="card"] {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--card));
+}
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+[data-surface="muted"] {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
+}
+/* Nota de cascada 3, y es la que le faltaba a este bloque: UNA SUPERFICIE TAMBIÉN
+   PUEDE CAMBIAR POR ESTADO, no solo por clase o por atributo. Las reglas de arriba
+   miran a `.bg-muted`, pero `hover:bg-muted` compila a `.hover\:bg-muted:hover`
+   —otro selector, y además dentro de `@media (hover: hover)`—, así que una tarjeta
+   que se aclara al pasar el cursor cambiaba de fondo SIN recalcular su atenuado: el
+   texto se quedaba con el valor derivado de `--card` encima de un fondo que ya era
+   `--muted`.
+
+   Medido antes de tocar nada, en el rótulo de la tarjeta de cierre (`ui/page-closer.tsx`,
+   que es el cierre de las doce páginas): reposo 9,14 → hover **7,79 claro / 9,01
+   oscuro**, donde el valor correcto de esa superficie es el `mutedOnMuted` que el
+   sitio YA publica, 8,17 / 9,17. No llegaba a incumplimiento —AAA aguanta— pero era
+   la holgura de hover más fina del sitio (0,79) y, sobre todo, era D39 fallando en
+   silencio en un eje entero: el que solo existe mientras el cursor está encima, que
+   es justo donde el censo tiene su punto ciego histórico.
+
+   Va aquí y no en los dos call sites por la razón de siempre: `data-surface` es
+   ESTÁTICO y no puede describir una superficie que cambia con el estado, así que
+   declararlo en la tarjeta no habría servido. Se arregla la capa.
+
+   Se cubre también `focus-visible:bg-muted` —el mismo cambio de superficie por la
+   otra puerta, que usan `outline-neutral` y `ghost` en `action.tsx`— aunque hoy
+   ningún control con ese estado lleve texto atenuado: es la misma decisión, y
+   dejarla a medias es cómo vuelve el fallo. El `@media` replica el de la utilidad
+   para no encender el hover en pantallas táctiles, donde se queda pegado. */
+@media (hover: hover) {
+  .hover\:bg-muted:hover {
+    --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
+  }
+}
+.focus-visible\:bg-muted:focus-visible {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--muted));
+}
+/* Superficie INVERTIDA (fondo = `--foreground`): ahí el primer plano es
+   `--background`, así que el atenuado se construye con la misma fórmula pero
+   partiendo del otro extremo. Hermano de `--primary-on-inverted`, que existe por
+   esta misma razón, y sustituye a los `color-mix(--background, transparent N%)`
+   que el panel de tokens escribía a ojo — uno de ellos daba 4,33:1 en oscuro, por
+   debajo de AA. */
+[data-surface="inverted"] {
+  --surface-dim: color-mix(in srgb, var(--background) 85%, var(--foreground));
+}
+/* Vuelta al valor de siempre para el bloque que se apoya otra vez en el fondo de
+   la página dentro de una superficie (una caja `bg-background` dentro de un panel).
+   Sin esta línea heredaría el atenuado de la tarjeta que lo envuelve. */
+.bg-background,
+[data-surface="page"] {
+  --surface-dim: var(--muted-foreground);
+}
+
+/* ── EL CONTORNO DE UN CONTROL LO PONE SU SUPERFICIE (2026-08-23) ────────────
+   Hermano exacto de `--surface-dim` de aquí arriba, y por el mismo motivo, en el
+   otro criterio: `--surface-dim` existe porque el texto ATENUADO tiene que
+   recalcularse contra el fondo donde cae; esto existe porque el CONTORNO de un
+   control tiene que hacer lo mismo, y con otro umbral.
+
+   POR QUÉ NO VALÍA `--border`. Un solo token servía dos decisiones con
+   requisitos distintos: el **filete decorativo** (divisores, hairlines, el borde
+   de una tarjeta que no se pulsa), que no tiene umbral de WCAG, y el **contorno
+   de un control**, al que 1.4.11 le pide 3:1 porque es la información visual que
+   permite reconocerlo COMO control. Con los dos en el mismo valor, el filete
+   mandaba: 1,21:1 en claro y 1,36 en oscuro, o sea menos de la mitad del umbral,
+   en el campo del formulario, el toggle de tema, los dos iconos del footer y la
+   tarjeta pulsable del cierre de cada página. Desde V1 y sin que nada avisara,
+   porque **axe no implementa 1.4.11** y el censo medía pares de texto (2026-08-23;
+   el segundo pase de `scripts/design-review/contrast-census.js` ya lo mide).
+
+   Es `BRAND.md` §Cómo se escribe una regla nº4 al revés: la regla avisa de no
+   unificar dos valores que se parecen sin mirar si significan cosas distintas, y
+   aquí ya estaban unificados de nacimiento. Se separan, no se sube `--border`:
+   subirlo endurecería cada hairline del sitio para arreglar los controles.
+
+   LA MEZCLA CONMUTA CON EL TEMA (60% claro / 45% oscuro) y no es un capricho: un
+   porcentaje fijo no llega a las dos superficies a la vez. Mismo patrón que
+   `--primary-on-inverted`, `--brand-purple-accent` y `progress-ink`. Medido sobre
+   el píxel pintado: claro 4,00 sobre `--background` · 4,08 sobre `--card` · 3,85
+   sobre `--muted`; oscuro 4,11 · 3,96 · 3,74. El mínimo para 3:1 era 55% y 40%;
+   se deja un escalón de holgura para que un retoque de paleta no lo tumbe.
+
+   AL ESCRIBIR UI NO HAY QUE ELEGIRLO: se escribe `border-control-edge` en la
+   VARIANTE (nunca en el call site) y la superficie de debajo resuelve el color,
+   incluidos los cambios de superficie por estado que ya cubren los bloques de
+   `hover:` y `focus-visible:` de aquí arriba. */
+:root {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--background)
+  );
+}
+.bg-card,
+.bg-popover,
+[data-surface="card"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--card)
+  );
+}
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+[data-surface="muted"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--muted)
+  );
+}
+@media (hover: hover) {
+  .hover\:bg-muted:hover {
+    --control-edge: color-mix(
+      in srgb,
+      var(--foreground) var(--control-edge-mix),
+      var(--muted)
+    );
+  }
+}
+.focus-visible\:bg-muted:focus-visible {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--muted)
+  );
+}
+/* En una banda invertida el primer plano es `--background`, así que el contorno
+   se construye desde el otro extremo — igual que hace `--surface-dim`. Y con su
+   PROPIA proporción, que conmuta al revés que la de arriba: medido sobre el píxel
+   pintado, claro 3,96 y oscuro 4,30 contra la banda. */
+[data-surface="inverted"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--background) var(--control-edge-mix-inverted),
+    var(--foreground)
+  );
+}
+.bg-background,
+[data-surface="page"] {
+  --control-edge: color-mix(
+    in srgb,
+    var(--foreground) var(--control-edge-mix),
+    var(--background)
+  );
+}
+
+/* ── Y EL FILETE, QUE ERA EL TERCERO DE LA FAMILIA (2026-08-27, P68.749) ─────
+   `--surface-dim` se recalcula por superficie desde D39 y `--control-edge` desde
+   D97. `--border` era el único de los tres definido UNA VEZ POR TEMA, calibrado
+   contra `--background` y solo contra él. El resultado es que el mismo filete se
+   veía distinto según dónde cayera, medido sobre el píxel pintado:
+
+     Superficie      claro          oscuro
+     página (ref.)   1,21           1,36
+     tarjeta         1,29           1,23
+     muted           1,10           1,07
+     BANDA INVERTIDA 11,35          11,23   ← ocho veces la referencia
+
+   LA INVERTIDA ES EL HALLAZGO, y no estaba en la tarea. Sin regla, un elemento con
+   `border-border` dentro de una banda hereda el filete de la PÁGINA: un hairline
+   casi blanco sobre carbón, o casi negro sobre hueso. No es que se difumine, es que
+   grita. Hoy no hay ni un ocupante —medido: cero en las ocho páginas—, así que es
+   deuda latente, pero es la que más lejos estaba.
+
+   NO ES LATENTE EN TARJETA, que es donde la ficha decía que no afectaba a nada:
+   249 elementos de las ocho páginas dibujan su `border-border` DENTRO de una
+   superficie de tarjeta. En claro eran un pelo más marcados que la referencia
+   (1,29 frente a 1,21) y en OSCURO un tercio menos (1,23 frente a 1,36), que es
+   una debilidad real y ya enviada.
+
+   LA FORMA LA DECIDE EL PRECEDENTE, no el gusto: `--surface-dim` conserva su valor
+   de autor en `:root` (`var(--muted-foreground)`) y solo mezcla en las demás
+   superficies, mientras que `--control-edge` mezcla también en `:root` porque nació
+   sin valor previo. `--border` tiene valor de autor, así que va por el primer
+   camino: `--border-base` se queda intacto y la mezcla solo entra donde el fondo
+   deja de ser el de la página. Ni un filete de página se mueve.
+
+   EL 11% SALE DE UN BARRIDO, no de una intuición, y el objetivo no es un umbral
+   —un filete decorativo no tiene ninguno— sino REPRODUCIR la referencia de su
+   propio tema. Del 8% al 20%, en las dos superficies y los dos temas, el 11% es el
+   que deja las cuatro cifras dentro de ±0,03 de su referencia, y del lado de arriba
+   a propósito: el modo de fallo que esto arregla es un filete que se borra.
+
+     Superficie      claro          oscuro
+     tarjeta         1,29 → 1,23    1,23 → 1,39
+     muted           1,10 → 1,22    1,07 → 1,38
+     invertida       11,35 → 1,22   11,23 → 1,35
+
+   Y OJO A D61 AL LEER ESTE BLOQUE: `hover:bg-muted` no compila a `.bg-muted`, así
+   que el eje de ESTADO va aparte o el arreglo se escapa por donde ya se escapó una
+   vez. Se cubren las dos puertas, igual que arriba. */
+.bg-card,
+.bg-popover,
+[data-surface="card"] {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--card)
+  );
+}
+.bg-muted,
+.bg-secondary,
+.bg-accent,
+[data-surface="muted"] {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--muted)
+  );
+}
+@media (hover: hover) {
+  .hover\:bg-muted:hover {
+    --border: color-mix(
+      in srgb,
+      var(--foreground) var(--border-mix),
+      var(--muted)
+    );
+  }
+}
+.focus-visible\:bg-muted:focus-visible {
+  --border: color-mix(
+    in srgb,
+    var(--foreground) var(--border-mix),
+    var(--muted)
+  );
+}
+/* En una banda invertida el primer plano es `--background`, así que la mezcla parte
+   del otro extremo. Aquí la proporción SÍ conmuta con el tema —7% claro, 15%
+   oscuro— y en direcciones opuestas: es el único de los cuatro casos donde un solo
+   número no sirve, porque los dos `--foreground` no son simétricos en luminancia. */
+[data-surface="inverted"] {
+  --border: color-mix(
+    in srgb,
+    var(--background) var(--border-mix-inverted),
+    var(--foreground)
+  );
+}
+/* Vuelta al filete de autor para la caja que se apoya otra vez en el fondo de la
+   página dentro de una superficie. Sin esto heredaría la mezcla de la tarjeta que
+   la envuelve — y `.bg-background` dentro de `.bg-card` existe de verdad: los
+   especímenes del Design System lo hacen. */
+.bg-background,
+[data-surface="page"] {
+  --border: var(--border-base);
+}
+
+/* El CTA de email tenía aquí `.contact-cta` / `.contact-cta-icon`, y en P37.5988 se
+   borraron las dos. P37.592 ya les había quitado el hover del relleno (se lo lleva
+   la variante `solid`) y lo único que quedaba era el empujón de 2px del icono, que
+   se describía a sí mismo como «propio de este CTA y de ningún otro» — y por eso la
+   DEMO de ese mismo botón en el Design System no lo tenía: la página que documenta
+   la variante enseñaba un botón que no era el del sitio. Ahora el empujón es de la
+   variante `solid`, así que lo hereda cualquier sólido con icono, demo incluida.
+
+   Regla de la que sale: el icono marca que la acción saca al usuario de la página
+   (descarga, otra app, otro sitio). Vive en `components/ui/action.tsx`. */
+
+/* Aquí vivió `.table-band`, la cebra de las tablas de espécimen, entre dos ratos
+   del 2026-08-09 (P37.658). Se borró al MEDIRLA: el velo daba un salto de ΔL*
+   **1,02 en claro** y 2,02 en oscuro, contra los 3,89 / 9,04 de la pastilla de
+   hover, que es el escalón que este proyecto usa como referencia de «esto se ve».
+   O sea que no estaba agrupando filas —que era su única justificación—: estaba
+   poniendo un tinte por debajo del umbral, y así es como se detectó, porque se leía
+   como que algo no cuadraba. El separador de tabla del sistema es el filete, uno y
+   solo uno. Ver `components/ui/table.tsx`. */
+
+/* Iconos de los canales de chrome (teléfono, LinkedIn y CV de la franja de
+   contacto, CV del nav y de su menú móvil). Son enlaces de texto, no salen de
+   `actionVariants`, así que su tamaño se resuelve aquí — un solo sitio, como el de
+   las acciones con caja lo resuelve `size`. Antes estaba escrito a mano en cada
+   uso y había 15, 17 y 18px conviviendo sin que la diferencia significara nada.
+   `flex-none` porque el icono no debe encogerse cuando la etiqueta es larga. */
+.link-chrome svg {
+  width: 17px;
+  height: 17px;
+  flex: none;
+}
+
+/* Enlaces de contenido — reposo neutro (`foreground`), el cian entra al interactuar.
+   Sustituye a "texto en `primary` siempre" (BRAND.md, matizado 2026-08-04 / P37.55):
+   relleno sólido que crece desde abajo + texto invertido a `primary-foreground` en
+   hover/focus, reutilizando el par ya verificado AAA de "texto sobre botón"
+   (7,93:1 claro / 8,36:1 oscuro). `box-decoration-break: clone` para que el relleno
+   no se rompa si la frase del enlace cae partida en dos líneas.
+   Sin `@layer` a propósito (como `.contact-cta` arriba): en Tailwind v4 una clase
+   sin capa gana siempre a las utilidades, así que si algún día un caller mezcla
+   esta clase con `px-*`/`py-*` propios, gana esta — hay que evitar esa combinación
+   en vez de confiar en la cascada. */
+/* EL FILETE DE UNA BANDA INVERTIDA (P68.7117, 2026-08-27).
+   Nace al aparecer su SEGUNDO call site, que es cuando la copia empieza a poder
+   derivar: lo estrenó la banda-manifiesto de la home y ahora lo lleva también la
+   banda que abre un bloque de secciones. La homogeneidad entre las dos bandas es
+   justo el motivo del cambio, así que escribirlo dos veces se cargaría el motivo.
+
+   ES EL ÚNICO SITIO DEL SITIO DONDE EL MORADO ES ESTRUCTURA Y NO DATO, y por eso
+   puede serlo: `--brand-purple-accent` existe exactamente para fondos invertidos y
+   conmuta con el tema (un color fijo no pasa de 3,71:1 contra las dos superficies
+   a la vez). Aquí además no hay umbral que cumplir — va `aria-hidden`, no lleva
+   información y no delimita ningún control, así que cae en «detalles» de §Color y
+   no en el 3:1 de WCAG 1.4.11 que sí le tocaría a un gráfico que hay que entender.
+
+   LO QUE NO DECLARA, Y NO ES UN OLVIDO: el MARGEN. El ritmo vertical es una
+   propiedad del bloque que lo aloja, no del filete — el manifiesto respira más que
+   la banda de bloque porque su titular es mayor. Es la regla 4 de `BRAND.md`: dos
+   valores que se parecen y significan cosas distintas no se unifican. Y ojo, que
+   esta clase va SIN `@layer`, así que si algún día declarara margen ganaría a
+   cualquier `my-*` del call site sin avisar. */
+.band-rule {
+  background: var(--brand-purple-accent);
+  block-size: 2px;
+  inline-size: 3.5rem;
+}
+/* AQUÍ SOLO ESTÁ LA GEOMETRÍA. El filete además CRECE al cruzar, con el mismo
+   `gesto-fila` que el de Hitos, y eso vive abajo, en §Estratos, junto al gesto
+   que reutiliza — no aquí, para que el gesto se lea de una vez y en un sitio. */
+
+.link-content {
+  color: var(--foreground);
+  border-radius: 4px;
+  padding: 0.05em 0.3em;
+  margin: 0 -0.3em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  background-image: linear-gradient(var(--primary), var(--primary));
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 0%;
+  /* EL SUBRAYADO ES DE LA BASE desde el 2026-08-23, no de un modificador. Vivía
+     en `.link-content--underline` porque había un caso sin él: los enlaces de
+     icono + etiqueta de `ContactSecondary`, donde el glifo ya hacía de
+     afordancia y el subrayado sobraba bajo él. Ese caso se retiró con la página
+     de Contacto (P67) y el modificador se quedó con CERO usos propios: los diez
+     call sites del sitio lo escribían siempre. Una distinción sin caso no es una
+     distinción, así que se fusiona. Si vuelve a aparecer un enlace de contenido
+     con icono, vuelve el modificador — con su caso delante. */
+  text-decoration: underline;
+  text-decoration-color: var(--primary);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  /* SUMABA 380 ms —300 de relleno + 80 de retardo del color— y el listón de una
+     entrada es 300 (P74.35). Ahora suma 280: el relleno y el color duran 220 ms
+     y el color entra 60 ms después, que es lo que hace falta para que el texto
+     no cambie antes de tener detrás con qué leerse.
+
+     Y EL RELLENO SE QUEDA EN `background-size`, que repinta, con motivo. La
+     alternativa de compositor —un pseudoelemento con `transform: scaleY()`— no
+     puede dar este gesto: un enlace de contenido parte a mitad de párrafo, y lo
+     que hace que el relleno crezca por SEPARADO en cada línea es
+     `box-decoration-break: clone`, que es de fondo y de borde, no de hijos. Un
+     `::before` absoluto se dibujaría una sola vez sobre la caja entera. El
+     gesto de marca (`BRAND.md` §Enlaces) manda sobre el ahorro de repintado, y
+     el repintado es de un renglón de texto en hover, no de una sección. */
+  transition:
+    background-size 0.16s var(--ease-entrance),
+    color 0.16s ease 0.04s,
+    text-decoration-color 0.12s ease;
+}
+/* EL FOCO NO PASA POR LA PUERTA. El hover se cierra a punteros finos porque en
+   táctil el tap dispara un hover falso Y SE QUEDA PEGADO: al volver atrás, el
+   enlace sigue relleno de cian. `:focus-visible` es la misma pintura por otra
+   vía —la del teclado—, así que vive fuera y no depende del tipo de puntero. */
+.link-content:focus-visible {
+  background-size: 100% 100%;
+  color: var(--primary-foreground);
+  text-decoration-color: transparent;
+}
+@media (hover: hover) and (pointer: fine) {
+  .link-content:hover {
+    background-size: 100% 100%;
+    color: var(--primary-foreground);
+    text-decoration-color: transparent;
+  }
+}
+/* La contraparte invertida (P70.18). `.link-content` fija `color: var(--foreground)`
+   y sobre una banda invertida `--foreground` ES EL FONDO: el enlace se pintaba del
+   color de la banda y desaparecía, dejando flotando solo el subrayado cian. No se ve
+   leyendo el CSS; se vio poniendo los canales de contacto sobre una banda (P66).
+
+   LO RESUELVE LA SUPERFICIE, NO UN MODIFICADOR, y esa es la diferencia con lo que
+   proponía la ficha. La capa de chrome lo lleva en un eje `tone` porque su variante
+   se elige al escribirla; aquí el enlace vive DENTRO de la prosa del diccionario y
+   quien lo escribe no sabe sobre qué fondo va a caer. Es el mismo argumento que
+   `--surface-dim` (D39), `--chrome-hover-bg` y `--control-edge` (D97): no se elige
+   el color en el punto de uso, lo resuelve el fondo donde cae. Así una banda que se
+   declara `data-surface="inverted"` arregla sus enlaces sin que nadie se acuerde.
+
+   LOS TRES COLORES SON EL PAR DEL OTRO TEMA, no valores nuevos: texto en
+   `--background` (que es el primer plano de esta superficie), acento en
+   `--primary-on-inverted` (el cian del otro tema, que ya existía) y, encima del
+   relleno, `--primary-foreground-on-inverted`. Por eso el contraste en hover es
+   idéntico al del par «texto sobre botón» ya verificado, con los temas cambiados. */
+[data-surface="inverted"] .link-content {
+  color: var(--background);
+  background-image: linear-gradient(
+    var(--primary-on-inverted),
+    var(--primary-on-inverted)
+  );
+  text-decoration-color: var(--primary-on-inverted);
+}
+/* La misma puerta que arriba, por el mismo motivo: si el hover de la banda
+   invertida no se cerrara a punteros finos, el tap dejaría el enlace en el color
+   del estado relleno mientras el relleno ya se ha ido. */
+[data-surface="inverted"] .link-content:focus-visible {
+  color: var(--primary-foreground-on-inverted);
+}
+@media (hover: hover) and (pointer: fine) {
+  [data-surface="inverted"] .link-content:hover {
+    color: var(--primary-foreground-on-inverted);
+  }
+}
+
+/* Enlaces de chrome (nav/breadcrumb/footer) — nunca `primary`, ni en texto ni en
+   fondo (BRAND.md). Pastilla en hover/focus, sin depender del color. No lleva
+   padding/margin propio (a diferencia de `.link-content`): cada caller ya trae su
+   propia utilidad de espaciado (`px-[0.85rem]` en nav, etc.) y, al no estar en
+   `@layer`, esta clase la pisaría si la trajera. La pastilla usa la caja que ya
+   define cada componente.
+   `--chrome-hover-bg` sensible al fondo, mismo patrón que `--surface-dim` arriba:
+   por defecto `--muted` (nav/breadcrumb/footer, sobre `--background`), y
+   recalculado en las superficies donde ese valor por defecto se volvería invisible
+   por ser del mismo color que el fondo.
+
+   AQUÍ HABÍA UNA RAMA PARA `.contact-band`, y se retiró el 2026-08-23 al quedarse
+   sin caso. Existía porque `ContactSecondary` —la fila de teléfono, LinkedIn y CV
+   bajo el CTA— llevaba tratamiento de chrome DENTRO de esa banda, cuyo fondo ya es
+   `--muted`. Esa fila se retiró con la página de Contacto (P67): la franja hoy solo
+   tiene su cabecera y un botón sólido, así que no queda un solo enlace de chrome
+   dentro de `.contact-band` y la rama era código muerto con documentación viva.
+   Si vuelve a entrar chrome en una banda `--muted`, vuelve la rama: se mezclaba
+   `--foreground` al 10% sobre la propia banda —no `--card`, que se veía como un
+   recuadro blanco suelto—, mismo sentido y proporción que la de abajo. */
+:root {
+  --chrome-hover-bg: var(--muted);
+}
+/* Mismo problema, banda invertida (P60, design-review): el fondo local es
+   `--foreground` y el texto de `tone: "inverted"` sube a `--background` en
+   hover, así que el pill por defecto (`--muted`) quedaba casi del mismo tono
+   que ese texto — 1,11:1 en claro, 1,27:1 en oscuro. Se mezcla un 10% de
+   `--background` sobre `--foreground`, la misma proporción y sentido que
+   `.contact-band` (un paso hacia el extremo opuesto del propio fondo). */
+[data-surface="inverted"] {
+  --chrome-hover-bg: color-mix(
+    in srgb,
+    var(--background) 10%,
+    var(--foreground)
+  );
+}
+/* Solo el ASPECTO de la pastilla: el color de reposo, el de hover (sensible al
+   fondo vía `--chrome-hover-bg`) y la transición, con sus dos extremos en la misma
+   regla (D35). Las MÉTRICAS —suelo táctil, padding, márgenes compensatorios— ya no
+   están aquí ni en los call sites: las pone `chromeLinkVariants`
+   (`components/ui/chrome.tsx`, P37.656).
+
+   El `border-radius: 7px` que había aquí se borró en esa misma tarea: era un píxel
+   menos que el `rounded-md` (8px) de todo lo demás sin que la diferencia significara
+   nada (hallazgo de P37.5996). Ahora lo trae la base de la variante con la utilidad
+   del token, que es la notación única de `CLAUDE.md` — y como esta clase va sin
+   `@layer` (D34), dejar el valor aquí habría seguido ganándole a la utilidad. */
+.link-chrome {
+  background-color: transparent;
+  transition: background-color 0.18s var(--ease-entrance);
+}
+/* LA PASTILLA DE HOVER LLEVA PUERTA DE PUNTERO, Y EL FOCO NO *(P82)*. Sin ella,
+   en un dispositivo táctil el `:hover` se queda pegado tras el toque hasta que se
+   toca en otro sitio, así que el control se queda encendido sin que nadie lo esté
+   señalando. Se nota justo en los que no navegan: el toggle de tema y la
+   hamburguesa, donde tras el toque te quedas en la misma página.
+
+   Y ERA UNA INCOHERENCIA, NO UNA PREFERENCIA: el resto del sitio ya está gateado
+   por construcción, porque Tailwind compila `hover:` dentro de
+   `@media (hover: hover)` — y este archivo ya replica ese media query a mano dos
+   veces, para recalcular `--surface-dim` y `--control-edge`. Las únicas dos
+   superficies de hover sin puerta eran estas dos, que son las escritas a mano.
+
+   POR ESO SE PARTE EL SELECTOR EN VEZ DE ENVOLVER LA REGLA: `:hover` y
+   `:focus-visible` compartían declaración, y meter las dos dentro del media query
+   dejaría sin fondo de foco a quien navega con teclado en un táctil. Es el mismo
+   reparto que las otras dos réplicas de aquí arriba.
+
+   La declaración de reposo NO se toca, que es lo que pide D35: los dos extremos de
+   la transición siguen en la regla que la declara. */
+@media (hover: hover) {
+  .link-chrome:hover {
+    background-color: var(--chrome-hover-bg);
+  }
+}
+.link-chrome:focus-visible {
+  background-color: var(--chrome-hover-bg);
+}
+/* Controles de chrome solo-icono (toggle de tema, hamburguesa, LinkedIn del
+   footer): mismo hover de pastilla que `.link-chrome` (P37.57). El fondo de
+   reposo vive aquí, no en la utilidad `bg-card` del punto de uso.
+
+   El valor POR DEFECTO es `--card`, que es el caso común: un control de icono
+   que se apoya en `--background`. Solo escribe algo el que vive sobre un card
+   —hoy el cierre del diálogo de consentimiento, que pasa `--background`—, o
+   sea, la excepción de verdad. Antes el defecto era `transparent` y los seis
+   call sites sobre `--background` repetían `[--icon-chrome-bg:var(--card)]`
+   a mano; el LinkedIn del footer se olvidó de escribirlo y se quedó SIN caja
+   en reposo, con el mismo aspecto en los dos temas que los demás tenían solo
+   por acordarse (P37.5989). El defecto no lo usaba nadie a propósito: era la
+   trampa donde caía el que no se acordaba.
+
+   Que viva aquí y no en una utilidad del punto de uso NO es de cascada —una
+   clase sin `@layer` sí gana a las utilidades,
+   D34 se sostiene— sino de transición: con el reposo en `bg-card` y el hover
+   aquí, `transition: background-color` dejaba el elemento clavado en el color
+   de reposo y el hover no llegaba nunca (medido en Chrome; al quitar la
+   transición en caliente, sin mover el ratón, saltaba al color de hover al
+   instante). Los dos extremos de una transición tienen que pertenecer a la
+   misma regla que la declara. Ver D35. */
+.icon-chrome {
+  background-color: var(--icon-chrome-bg, var(--card));
+  transition: background-color 0.18s var(--ease-entrance);
+}
+/* La misma puerta de puntero que `.link-chrome`, y por lo mismo. */
+@media (hover: hover) {
+  .icon-chrome:hover {
+    background-color: var(--chrome-hover-bg);
+  }
+}
+.icon-chrome:focus-visible {
+  background-color: var(--chrome-hover-bg);
+}
+/* Facade del vídeo incrustado (`components/ui/video-embed.tsx`, P48). El aspecto
+   vive aquí y no en clases sueltas del punto de uso por D35: los dos extremos de
+   cada transición tienen que pertenecer a la regla que la declara.
+
+   El disco de play es `--primary` con su `--primary-foreground` encima, y es el
+   uso correcto del cian: reproducir es una ACCIÓN, no decoración.
+
+   POR QUÉ EL PÓSTER LLEVA VELO, Y POR QUÉ EL VELO ES `--background` Y NO NEGRO.
+   Un control de color FIJO sobre un póster ARBITRARIO no puede garantizar el 3:1
+   que WCAG 1.4.11 pide a un componente, y no es teoría: el póster de TheTool es el
+   teal de su marca, casi el cian del sitio, y sin velo el disco medía **2,81 en
+   oscuro y 2,59 en claro** contra él. Un velo NEGRO arregla oscuro y empeora
+   claro, que es la firma de D41 —un valor fijo no sirve a dos superficies
+   opuestas—. El velo del FONDO sí sirve: oscurece en oscuro y aclara en claro, o
+   sea aleja el póster del disco en los DOS temas, que es lo que hace falta.
+
+   EL 0,35 ESTÁ MEDIDO, NO ELEGIDO. Barrido sobre los píxeles que el navegador
+   pinta —no sobre el modelo, que se equivocó por partir de un teal más oscuro que
+   el real—, con el póster de TheTool:
+
+     velo   oscuro   claro
+     0,25    3,05     2,85  ✗
+     0,30    3,23     3,00  ← justo en el umbral, sin holgura
+     0,35    3,50     3,22  ✔
+     0,40    3,76     3,44
+
+   Y ENCIMA EL DISCO LLEVA ANILLO, porque el velo solo no cubre cualquier póster.
+   El control es de DOS TONOS —disco `--primary` + anillo `--primary-foreground`—
+   y eso hace que SIEMPRE haya un borde que pasa, aunque cambie cuál según el
+   póster y el tema. Medido sobre los dos pósters reales, con el velo puesto:
+
+     página   tema     disco/póster   anillo/póster   anillo/disco
+     TheTool  oscuro     3,50 ✔          2,39            8,36
+     TheTool  claro      3,22 ✔          2,46            7,93
+     INDYA    oscuro     2,73            3,06 ✔          8,36
+     INDYA    claro      3,97 ✔          2,00            7,93
+
+   El de INDYA en oscuro lo salva el ANILLO, no el disco: su póster es un tono
+   piel/madera de luminancia media, justo la zona donde el cian claro del tema
+   oscuro se le acerca. Ese caso es la razón de que el anillo exista.
+
+   El borde interno anillo/disco es **8,36 / 7,93 siempre**, porque es un par de
+   tokens del sistema y no depende de lo que haya detrás. Mismo principio que
+   `BRAND.md` §Controles con dos fondos: la pieza se define contra su propio
+   carril, no contra el fondo que le toque. */
+.video-facade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--background);
+  opacity: 0.35;
+  transition: opacity 0.2s ease;
+}
+.video-facade:hover::after,
+.video-facade:focus-visible::after {
+  opacity: 0;
+}
+/* El `translate(-50%,-50%)` del centrado vive AQUÍ y no en las utilidades
+   `-translate-x-1/2 -translate-y-1/2` del punto de uso, que es justo el fallo que
+   D35 describe: con el reposo en una utilidad y el hover en esta regla, el
+   `transform` del hover sustituye al del centrado entero y el disco daría un salto
+   al esquinazo antes de escalar. Los dos extremos, en la misma regla. */
+.video-play {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  /* El anillo va en `box-shadow` y no en `border` para no entrar en la caja: el
+     centrado es geométrico y un borde de 3px lo descuadraría 3px. */
+  box-shadow: 0 0 0 3px var(--primary-foreground);
+  /* Por encima del velo, que es un `::after` del botón y por tanto se pinta
+     después de los hijos. */
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  transition: transform 0.2s ease;
+}
+.video-facade:hover .video-play,
+.video-facade:focus-visible .video-play {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+/* El velo (`::after`) es opacidad y se queda; el disco ESCALA, y eso si se
+   retira (P74.36). Es el reparto por propiedad dentro de una misma pieza. */
+@media (prefers-reduced-motion: reduce) {
+  .video-play {
+    transition: none;
+  }
+}
+
+/* ── EL MENÚ DE «COPIAR CUÁL» (P70.36) ──────────────────────────────────────
+   La caja del `popover` de `CopyChoice`. Va aquí y no en el componente por la
+   razón de siempre: una clase de `globals.css` es tan capa como una variante, y
+   el posicionamiento anclado necesita CSS que Tailwind no genera.
+
+   `position-anchor` empareja con el `anchor-name` que el disparador declara en
+   línea —el nombre lleva el `useId` del componente, así que no se puede escribir
+   aquí—. Con `position-try-fallbacks` el menú se voltea arriba cuando abajo no
+   cabe, que en la última fila de la rejilla de color es el caso normal.
+
+   SIN SOPORTE DE ANCLAJE el popover se centra en la pantalla y no se rompe nada:
+   sigue etiquetado, sigue copiando y sigue cerrándose con `Esc` y al pulsar
+   fuera, porque todo eso lo da `popover` y no el posicionamiento. Se pierde la
+   relación espacial con su botón, y esa es toda la degradación. */
+.copy-menu {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0.25rem;
+  min-width: 12rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 14%);
+  top: anchor(bottom);
+  right: anchor(right);
+  margin-top: 6px;
+  position-try-fallbacks: flip-block;
+}
+/* El menú es su propia superficie, así que su atenuado se recalcula contra
+   `--card` como el de cualquier tarjeta (D39). */
+.copy-menu {
+  --surface-dim: color-mix(in srgb, var(--foreground) 85%, var(--card));
+}
+@supports not (top: anchor(bottom)) {
+  .copy-menu {
+    top: 50%;
+    left: 50%;
+    translate: -50% -50%;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   P81 · GESTO DE MARCA — son DOS piezas y no la misma, y conviene saber cuál es
+   cuál: el punto del titular es la FIRMA (el momento memorable que P81 pedía) y
+   «Estratos», aquí abajo, es la TEXTURA de Hitos. Dos firmas compitiendo serían
+   peor que ninguna, así que esta se subordina a aquella.
+
+   Se eligieron viéndolas, no razonándolas: tres direcciones para la textura
+   —«Recorrido», «Estratos» y «Registro»— y cuatro formas de aterrizar para el
+   punto. Lo descartado y su porqué, en DECISIONS.md.
+
+   El progreso de cada fila es UN número, 0 a 1, que escribe el scroll. Todo lo
+   visual lo lee de ahí, así que no hay dos fuentes que puedan discrepar.
+   ═══════════════════════════════════════════════════════════════════════════ */
+/* ── LA FIRMA · el punto de «Del discovery al dato.» cae y se asienta ──
+   Es el único gesto del sitio que existe para ser RECORDADO, y por eso es el
+   único que se sale del listón de 300 ms: 420. Mismo tipo de excepción que el
+   florecer del 404, y con la misma coartada medida — ocurre UNA vez, al cargar,
+   y no compite con nada porque el titular ya está pintado.
+
+   DOS CURVAS, Y LA PRIMERA ROMPE UNA REGLA A PROPÓSITO. El catálogo de motion
+   prohíbe `ease-in` en UI, y `cubic-bezier(.55,0,1,.45)` es exactamente eso: una
+   curva que acelera. Se usa igual, y este es el único sitio del sitio donde se
+   usa, porque aquí describe algo real —lo que cae, acelera— y porque el tramo
+   acelerado es menos de la mitad del gesto: el aterrizaje, que es donde mira el
+   ojo, sí decelera. Con un ease-out en la bajada el punto no cae, frena, y
+   parece un ascensor. El rebote es 0,20, dentro del 0,1–0,3 que el mismo
+   catálogo da por sobrio.
+
+   EL TITULAR NO NACE INVISIBLE, que es la restricción dura: solo se anima el
+   `span` del punto, nunca el h1. El LCP de la home es la foto, y esto no lo
+   toca. Y el punto ocupa su hueco desde el primer frame —`inline-block` con la
+   línea base explícita, y solo `transform`/`opacity`—, así que no hay CLS:
+   medido, la caja del h1 y la posición del subtítulo no se mueven ni un píxel.
+
+   LA TINTA ES `--progress-ink`, el morado calibrado para texto grande sobre
+   `--background`. Un punto es un detalle tipográfico, no un gráfico que haya que
+   entender, así que §Color deja entrar el morado; y aun así llega a AAA por el
+   umbral ESTRICTO: 7,21 en claro y 7,83 en oscuro, medidos sobre el píxel
+   pintado con el metro validado contra los anclajes de 13,79 y 15,32. */
+.punto-firma {
+  display: inline-block;
+  vertical-align: baseline;
+  color: var(--progress-ink);
+  animation: punto-cae 420ms both;
+}
+@keyframes punto-cae {
+  0% {
+    transform: translateY(-0.85em);
+    opacity: 0;
+    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+  }
+  46% {
+    transform: translateY(0);
+    opacity: 1;
+    animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
+  }
+  68% {
+    transform: translateY(-0.1em);
+  }
+  86% {
+    transform: translateY(0.012em);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+/* Se retira el desplazamiento y el rebote; se conserva el fundido, y más corto
+   (D136). El punto sigue apareciendo: lo que se va es la caída. */
+@media (prefers-reduced-motion: reduce) {
+  .punto-firma {
+    animation: punto-entra 160ms var(--ease-entrance) both;
+  }
+}
+@keyframes punto-entra {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@property --rp {
+  syntax: "<number>";
+  inherits: true;
+  /* CERO, NO UNO, y el motivo es el que se me escapó a la primera. Un valor por
+     defecto de 1 parece lo sensato —«si no puedes animarlo, enseña el estado
+     final»— y es correcto para una animación que VA a correr. Pero en un motor
+     sin `animation-timeline` la animación no existe, y ahí el estado final no es
+     un final: es un adorno permanente. Con 1, Firefox pintaba los cinco años con
+     su filete cian a la vez, para siempre, y un diseño que nadie aprobó.
+     Con 0 no se dibuja nada y la página queda como está hoy, que es lo que la
+     mejora progresiva significa: se pierde el adorno, no se gana otro. */
+  initial-value: 0;
+}
+@keyframes gesto-fila {
+  from {
+    --rp: 0;
+  }
+  to {
+    --rp: 1;
+  }
+}
+
+/* ── «Estratos» · el eje de años ya estaba en la fila; el gesto lo hace regla.
+      NINGÚN texto se atenúa: la lectura no se toca, que es lo que separa esto
+      de un fundido por scroll.
+
+      TODO LO QUE PINTA VIVE DENTRO DEL `@supports`, no solo la animación. Es la
+      otra mitad de la nota de arriba: si las reglas que dibujan quedan fuera, el
+      navegador sin soporte las aplica igual y solo se queda sin el movimiento. ── */
+@supports (animation-timeline: view()) {
+  .hito-fila {
+    animation: gesto-fila linear both;
+    animation-timeline: view();
+    animation-range: entry 25% cover 45%;
+  }
+  .hito-anio {
+    position: relative;
+  }
+  .hito-anio::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -6px;
+    height: 2px;
+    background: var(--primary);
+    transform-origin: left;
+    transform: scaleX(var(--rp));
+  }
+}
+
+/* MOVIMIENTO REDUCIDO: AQUÍ NO HAY NADA QUE AMORTIGUAR, y por eso no hay regla.
+   Lo que queda no desplaza ni escala nada: el filete del año expresa ESTADO, y
+   amortiguar una lectura la convertiría en
+   un indicador que miente (D136). El único desplazamiento del gesto vivía en
+   «Registro», que se descarta con él. */
+
+/* ── El MISMO gesto en el filete de las dos bandas invertidas (P72.49). No es
+      «una animación parecida»: es `gesto-fila` y `--rp`, los de arriba, sin una
+      cifra nueva. Lo pidió Francisco viendo Hitos: «la misma transición que hay
+      en los años, en las barras horizontales moradas de las franjas».
+
+      ENCAJA PORQUE EL RECURSO YA ERA COMÚN. `.band-rule` es la misma geometría
+      en la banda-manifiesto de la home y en la apertura de bloque de las páginas
+      del sistema (P68.7117), así que el gesto entra por la clase y llega a las
+      dos a la vez. Y las dos ya llevaban `data-reveal`, igual que `.hito-fila`:
+      la combinación —fundido al entrar, crecimiento acoplado al scroll— es
+      exactamente la de Hitos, no una versión suya.
+
+      LA FICHA PEDÍA `--ease-entrance` Y `--duration-entrance`, Y ESO HABRÍA SIDO
+      OTRA COSA: el filete de Hitos no tiene curva de entrada ni duración, es
+      `linear` y lo conduce la posición del scroll. Copiar los tokens de entrada
+      habría dado una animación distinta con el nombre de ésta.
+
+      Y AQUÍ SÍ HAY QUE AMORTIGUAR, que es lo único que cambia respecto al
+      original. Arriba está escrito que en Hitos no hay nada que amortiguar
+      porque aquel filete expresa ESTADO —cuánto llevas leído— y frenarlo sería
+      un indicador que miente. Éste no informa de nada: va `aria-hidden` y es
+      mobiliario. O sea que es justo la animación acoplada al scroll que nombra
+      WCAG 2.3.3, y con movimiento reducido se apaga entera y el filete se queda
+      quieto y completo (D136). No se acorta: no hay nada que acortar cuando lo
+      que se retira ES el gesto. ── */
+@supports (animation-timeline: view()) {
+  .band-rule {
+    transform-origin: left;
+    /* `scale`, LA PROPIEDAD INDIVIDUAL, Y NO `transform` — y esto no es estilo,
+       es la única forma de que se vea. El original puede usar `transform`
+       porque lo pinta un `::after`, que no es `[data-reveal]`. Aquí el filete
+       ES el `[data-reveal]`, así que `.reveal-on [data-reveal]` —dos clases de
+       especificidad contra una— le gana y lo devuelve a `none`. Escrito con
+       `transform` el gesto se aplicaba, `--rp` recorría 0 → 1 y el filete se
+       quedaba quieto y entero: medido, 56px pintados en las cuatro paradas del
+       recorrido. La propiedad individual compone con el `translateY` del
+       reveal en vez de pelearse con él. */
+    scale: var(--rp) 1;
+    animation: gesto-fila linear both;
+    animation-timeline: view();
+    animation-range: entry 25% cover 45%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .band-rule {
+      scale: none;
+      animation: none;
+    }
+  }
+}

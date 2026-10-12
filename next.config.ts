@@ -1,0 +1,406 @@
+import type { NextConfig } from "next";
+import withBundleAnalyzer from "@next/bundle-analyzer";
+
+// Rutas relativas y no el alias `@/`: este archivo lo carga Next con su propio
+// cargador, antes de que los `paths` del tsconfig estén en juego.
+import { pagePath } from "./lib/i18n/config";
+import { HREF_KIT } from "./lib/logo-kit";
+import {
+  PAGE_SLUGS,
+  publicSlug,
+  STATIC_PAGE_SLUGS,
+  type StaticPageSlug,
+} from "./lib/routes";
+
+// Content-Security-Policy — Fase 2 «A+ barato» (tarea 37.9). Mantiene `'unsafe-inline'`
+// en script-src (los scripts inline del sitio: consent-init, init de tema, loader de GTM),
+// así que NO es protección de XSS fuerte — eso sería la CSP estricta con nonces, diferida
+// a V4 con la IA conversacional, o antes si Contacto ampliada incorpora un endpoint
+// externo (D26; la fecha la fija `PRD-Live.md` §5, que es donde vive el alcance por
+// versión). Lo que sí aporta, gratis y sin romper nada: bloquear <object>/<embed>
+// (object-src 'none'), fijar la base de URLs (base-uri 'self'), limitar destinos de
+// formularios (form-action 'self') y prohibir el embedding (frame-ancestors 'none'). El
+// allowlist de GTM/GA4 (script/connect/img/frame) evita romper la analítica. Sube
+// securityheaders.com de A a A+.
+const csp = [
+  "default-src 'self'",
+  "base-uri 'self'",
+  "object-src 'none'",
+  "form-action 'self'",
+  "frame-ancestors 'none'",
+  // gtm.js se sirve desde googletagmanager; el tag de Clarity (P37) se sirve desde clarity.ms;
+  // 'unsafe-inline' cubre los scripts inline del sitio.
+  "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://*.googletagmanager.com https://www.clarity.ms https://*.clarity.ms",
+  // GA4 envía las medidas (beacon/fetch) a *.google-analytics.com y *.analytics.google.com;
+  // Clarity envía sus grabaciones/heatmaps a *.clarity.ms.
+  "connect-src 'self' https://www.googletagmanager.com https://*.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com https://www.clarity.ms https://*.clarity.ms",
+  // Pixel de GA + el beacon de imagen de Clarity (c.clarity.ms/c.gif) + data: para imágenes inline.
+  "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com https://*.clarity.ms",
+  // 'unsafe-inline' para los style attributes inline (transiciones del nav, reveals).
+  "style-src 'self' 'unsafe-inline'",
+  // next/font auto-hospeda las fuentes; no hay orígenes externos de fuentes.
+  "font-src 'self'",
+  // El único iframe del sitio es el vídeo de Pau Gasol del deep-dive de INDYA, que
+  // se incrusta desde youtube-nocookie (§43). `googletagmanager` estuvo aquí por el
+  // iframe del <noscript> de GTM, y salió con él (D214, P74.59).
+  //
+  // ES `youtube-nocookie.com` Y NO `youtube.com`, y la diferencia no es cosmética:
+  // el dominio normal escribe cookies de publicidad en cuanto se pinta el iframe;
+  // el `-nocookie` no toca almacenamiento hasta que alguien le da al play. Junto
+  // con el facade —el iframe no existe en el DOM hasta el clic— eso deja la página
+  // SIN una sola petición a Google mientras nadie pulse. Primera ampliación de la
+  // CSP desde Clarity (D32) y con su mismo criterio: se añade el origen exacto que
+  // hace falta, no el comodín.
+  "frame-src https://www.youtube-nocookie.com",
+].join("; ");
+
+// Cabeceras de seguridad — Fase 1 (tarea 30.4): las triviales y sin riesgo.
+//
+// LA JUSTIFICACIÓN ORIGINAL CADUCÓ EL 2026-08-23, y se sustituye aquí en vez de
+// anotarse al pie (P50.81): decía «portfolio estático, sin auth, sin formularios ni
+// input de usuario», y desde ese día `/contacto` recibe algo escrito por otra
+// persona. `DECISIONS.md` ya se había corregido (D95); el comentario vivo que
+// gobierna la CSP, no — que es el que alguien va a leer la próxima vez que se
+// plantee tocarla.
+//
+// EL RIESGO SIGUE SIENDO BAJO, y ahora por otro motivo: no hay auth ni base de
+// datos, y la única superficie de entrada es un formulario que se envía por Server
+// Action del MISMO origen, así que `form-action 'self'` ya lo cubría y las
+// cabeceras servidas no cambiaron. Lo que cambió es el razonamiento.
+const securityHeaders = [
+  // No adivinar el MIME: evita que un recurso servido como texto se ejecute como script.
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  // Nadie puede embeber el sitio en un <iframe> (anti-clickjacking). No se enmarca a sí mismo.
+  { key: "X-Frame-Options", value: "DENY" },
+  // Referer completo solo dentro del propio origen; a orígenes externos, solo el origen.
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  // Desactiva APIs potentes que el sitio no usa.
+  {
+    key: "Permissions-Policy",
+    value: "camera=(), microphone=(), geolocation=()",
+  },
+  // Fuerza HTTPS durante 2 años, subdominios incluidos. Sin `preload` de momento
+  // (entrar en la lista de preload es difícil de revertir; se puede añadir después).
+  {
+    key: "Strict-Transport-Security",
+    value: "max-age=63072000; includeSubDomains",
+  },
+  // La CSP solo se sirve en builds de producción (incluye el preview de Vercel). En
+  // `next dev` se omite: el HMR usa `eval` y 'unsafe-eval' no debe entrar en la política.
+  ...(process.env.NODE_ENV === "production"
+    ? [{ key: "Content-Security-Policy", value: csp }]
+    : []),
+];
+
+// `Vary: Accept`, desde que el proxy negocia markdown (P67.2): la misma URL puede
+// devolver HTML o markdown, así que una caché compartida necesita saberlo.
+//
+// Y HASTA DÓNDE LLEGA, QUE ES LO QUE HAY QUE SABER AL LEER ESTO — reescrito el
+// 2026-08-31 con la regla acotada, porque el párrafo anterior describía la ancha y
+// ya no era cierto. **Esta configuración no pone el `Vary` de ninguna respuesta
+// que un agente vaya a ver.** A las 28 páginas prerenderizadas nunca llegó: una
+// página servida del prerender (`x-nextjs-cache: HIT`, `x-nextjs-prerender: 1`)
+// lleva el `Vary` que escribe Next y ni esto ni el proxy pueden añadirle nada. Y
+// a los `.md` y a los route handlers ya no llega **a propósito**: esas URLs
+// devuelven siempre lo mismo, así que no negocian (P68.742).
+//
+// EL `Vary` DE LO QUE SÍ SE NEGOCIA LO PONE `conVary()` EN EL PROXY, y eso está
+// medido: `/`, `/sobre-mi` y `/en/sobre-mi` pedidas con `Accept: text/markdown`
+// —y una ruta inexistente— responden `Vary: Accept` con esta regla acotada igual
+// que con la ancha.
+//
+// ASÍ QUE ESTA REGLA HOY ES REDUNDANTE, y se dice en vez de disimularlo: su
+// `source` es la misma silueta que el `matcher` del proxy, así que no hay ninguna
+// ruta que la necesite y que el proxy no cubra ya. Se queda por dos motivos
+// pequeños y uno no vale para siempre: declara **dónde** ocurre la negociación,
+// junto a la regla de seguridad de la que se separó; y es lo que hace que
+// `check:agentes` pueda comprobar sobre el manifiesto que la cabecera NO cae
+// sobre los assets, que era el defecto de verdad. El día que estorbe, se retira
+// y el guardián se queda con esa mitad, que es la que tiene valor.
+//
+// POR ESO EL CONTRATO NO SE APOYA EN ESTA CABECERA. La vía estable para un agente
+// es la URL explícita `/md/<locale>/<pagina>.md`, que llms.txt anuncia; la
+// negociación por `Accept` es la comodidad que los dos escáneres piden, y detrás
+// de una caché compartida que ya tenga guardado el HTML puede no llegar. Está
+// dicho así en D158 y en `llms.txt`, en vez de prometer de más.
+const varyHeader = [{ key: "Vary", value: "Accept" }];
+
+/**
+ * DÓNDE SE NEGOCIA DE VERDAD, que hasta el 2026-08-30 era «en todas partes»
+ * *(P68.742, hallazgo del code-review del sprint)*. Las dos cabeceras iban en la
+ * MISMA regla, `/:path*`, así que `Vary: Accept` caía también sobre cosas que no
+ * negocian nada: las tarjetas OG, los dos PDF del CV y las fuentes.
+ *
+ * NO ES INCORRECCIÓN, ES COSTE, y por eso llevaba un sprint sin verse. Una caché
+ * compartida keyea por el `Vary`, y el `Accept` de un asset varía por familia de
+ * navegador (`image/avif,image/webp,*​/*` y sus variantes): un archivo inmutable
+ * pasaba a tener una copia guardada por familia en vez de una.
+ *
+ * MEDIDO CONTRA `next start` ANTES DE TOCAR NADA, que es lo que no se hizo al
+ * encontrarlo. `/og/og-home-600x630.jpg`, `/cv/francisco-lopez-cv-es.pdf` y una
+ * `.woff2` de `_next/static/media` respondían las tres `Vary: Accept`, y ninguna
+ * de las tres puede devolver dos cuerpos distintos.
+ *
+ * ES EL MISMO RECORTE QUE EL `matcher` DEL PROXY, y no por parecido: la
+ * negociación la hace `proxy()`, así que donde el proxy no corre no hay dos
+ * cuerpos posibles. Fuera quedan `_next`, `api` y toda ruta con extensión de
+ * archivo, que es exactamente la lista de arriba. Dentro quedan las 28 páginas y
+ * las rutas inexistentes, que también se negocian (el 404 en markdown de D161).
+ *
+ * LAS DE SEGURIDAD NO SE MUEVEN: siguen en `/:path*`, sobre todas las respuestas.
+ * Partir la regla en dos es justo lo que permite acotar una sin arrastrar la otra.
+ *
+ * Y LO VIGILA `check:agentes` SOBRE `routes-manifest.json`, no aquí: el manifiesto
+ * trae la regex ya compilada de cada regla, así que el guardián puede probar rutas
+ * de ejemplo contra ella en vez de leer este archivo. Si alguien vuelve a fundir
+ * las dos reglas, lo dice la tarjeta OG.
+ */
+const NEGOCIAN = "/((?!_next|api|.*\\..*).*)";
+
+const nextConfig: NextConfig = {
+  async headers() {
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      { source: NEGOCIAN, headers: varyHeader },
+    ];
+  },
+  // LAS RUTAS QUE UN AGENTE ADIVINA (2026-08-30). No es SEO ni son URLs viejas:
+  // un agente que quiere verificar quién hay detrás de un sitio prueba
+  // `/about`, `/privacy` y `/contact` ANTES de leer el sitemap, porque es la
+  // convención de la web en inglés. Aquí los slugs son españoles en los dos
+  // idiomas —decisión de contenido, no descuido—, así que esas tres pruebas
+  // daban 404 y el sitio parecía no tener páginas de confianza. Se vio en la
+  // traza de un escáner: pidió `/es/servicios` y `/en/services`, que no existen
+  // ni existirán, y dio por no verificadas «About» y «Privacy», que sí.
+  //
+  // SON REDIRECCIONES Y NO PÁGINAS: no se duplica contenido ni se añade nada al
+  // sitemap, que sigue listando solo las 28 variantes canónicas.
+  //
+  // VAN AQUÍ Y NO EN `proxy.ts` por dos motivos, y el orden importa: la doc de
+  // Next recomienda `redirects` para lo estático y deja el proxy para lo que
+  // necesita datos de la petición, y en la cadena de ejecución `redirects` (2)
+  // corre ANTES que el proxy (3) — así que estas rutas ni siquiera llegan a la
+  // rama que las reescribiría a un `/es/about` inexistente.
+  //
+  // `permanent: false` (307) A PROPÓSITO: un 308 se cachea para siempre en el
+  // navegador, y estos alias son una comodidad reversible, no un canónico. Si un
+  // día `/about` fuera una página de verdad, un 308 cacheado la haría
+  // inalcanzable para quien ya hubiera pasado por aquí.
+  async redirects() {
+    // EL ALIAS APUNTA A UN SLUG INTERNO, NO A UNA RUTA (P72.56). Desde que el
+    // inglés traduce sus slugs, `/sobre-mi` y `/en/about` son la misma página con
+    // dos rutas, y quien las sabe es `pagePath`. Escribir la ruta aquí sería la
+    // segunda copia del mapa.
+    const alias: [string, StaticPageSlug][] = [
+      ["/about", "sobre-mi"],
+      ["/about-me", "sobre-mi"],
+      ["/privacy", "cookies"],
+      ["/privacidad", "cookies"],
+      ["/contact", "contacto"],
+    ];
+    return [
+      ...alias.flatMap(([desde, slug]) => {
+        const es = {
+          source: desde,
+          destination: pagePath("es", slug),
+          permanent: false,
+        };
+        const enDesde = `/en${desde}`;
+        const enHacia = pagePath("en", slug);
+        // UN ALIAS QUE COINCIDE CON SU DESTINO SE CAE SOLO, y esto es la trampa
+        // nº1 de la ficha resuelta por construcción: `/en/about` y `/en/contact`
+        // ya no son atajos hacia otra página, SON la página. Dejarlos vivos las
+        // haría inalcanzables — un redirect hacia sí mismas. Filtrarlo aquí, en
+        // vez de borrar dos líneas, es lo que evita que vuelva a pasar el día que
+        // se traduzca un slug más.
+        return enDesde === enHacia
+          ? [es]
+          : [es, { source: enDesde, destination: enHacia, permanent: false }];
+      }),
+      // LAS RUTAS EN QUE SE MUDAN, con 301 PERMANENTE — y aquí sí, al revés que
+      // los alias de arriba. Un alias es una comodidad reversible; esto es un
+      // canónico que ha cambiado de sitio, que es justo el caso para el que el
+      // 308 existe. Se derivan del registro: si mañana se traduce otro slug, su
+      // redirección nace sola.
+      ...STATIC_PAGE_SLUGS.flatMap((slug) => {
+        if (!slug) return [];
+        const vieja = `/en/${slug}`;
+        const nueva = pagePath("en", slug);
+        return nueva === vieja
+          ? []
+          : [{ source: vieja, destination: nueva, permanent: true }];
+      }),
+      // Y EL ESPEJO MARKDOWN SE MUDA CON ELLAS, que es la mitad que faltaba
+      // *(2026-09-05, encontrado comprobando producción tras el merge de P72.56)*.
+      // Los archivos se renombraron al slug público y las páginas quedaron
+      // redirigidas, pero `/md/en/sobre-mi.md` se quedó devolviendo **404** —
+      // contra el criterio de cierre de la propia tarea, que era que ninguna URL
+      // vieja lo hiciera. `md:verificar` no podía cazarlo: comprueba que estén
+      // los archivos que tocan, no que los que se fueron dejen rastro.
+      //
+      // Va por PAGE_SLUGS y no por un patrón con comodín a propósito: son diez
+      // rutas literales, y un `:empresa.md` depende de cómo parsee el punto el
+      // enrutador. Y como la ruta vieja se deriva del slug INTERNO, que no cambia
+      // nunca, esto sigue valiendo si mañana se vuelve a traducir un slug.
+      ...PAGE_SLUGS.flatMap((slug) => {
+        if (!slug) return [];
+        const vieja = `/md/en/${slug}.md`;
+        const nueva = `/md/en/${publicSlug("en", slug)}.md`;
+        return nueva === vieja
+          ? []
+          : [{ source: vieja, destination: nueva, permanent: true }];
+      }),
+      // Y el deep-dive, donde se muda el segmento PADRE y nunca el nombre de la
+      // empresa (`PRD-Historical.md` §1297).
+      {
+        source: "/en/trayectoria/:empresa",
+        destination: `${pagePath("en", "trayectoria")}/:empresa`,
+        permanent: true,
+      },
+      // `/agents.md` — LA MISMA IDEA, PARA EL LECTOR QUE NO ES UNA PERSONA
+      // *(P68.748, 2026-08-31)*. Un escáner de agentes prueba tres rutas para
+      // encontrar «la documentación para agentes de este sitio»: `/agents.md`,
+      // `/.well-known/agent-skills` y `/skills.sh`. Las tres daban 404.
+      //
+      // ENTRA UNA, Y LAS OTRAS DOS NO. Las dos que faltan son índices de SKILLS
+      // EJECUTABLES, y aquí no hay ninguna: publicarlas sería el `api-catalog`
+      // sin API de D157 — mentir en un formato que un agente sabe leer. La que
+      // entra apunta a contenido que YA existe y no inventa superficie, que es la
+      // condición que hizo baratos los cinco alias de arriba.
+      //
+      // CONSECUENCIA ACEPTADA POR ESCRITO: el check se queda en 1/2 como mucho, y
+      // en 0/2 si exige las tres. Mismo trato que el 50% del nodo `Organization`
+      // en D161.
+      //
+      // NO SE CONFUNDE CON EL `AGENTS.md` DE LA RAÍZ DEL REPO, y conviene decir
+      // por qué: aquel lo escribe `next dev` y va dirigido a quien PROGRAMA aquí;
+      // esto va dirigido a quien LEE el sitio. Son dos audiencias que solo se
+      // solapan en quien mire las dos cosas, y el riesgo se acota solo porque
+      // esto es un alias: nunca sirve un documento propio, así que no hay una
+      // segunda versión que pueda divergir de nada. Quien lo siga aterriza en
+      // `/llms.txt`, que se presenta a sí mismo en su primera línea.
+      { source: "/agents.md", destination: "/llms.txt", permanent: false },
+      // EL ZIP DEL KIT TAMBIÉN SE MUDÓ, y por el mismo criterio de cierre que
+      // escribió P72.56: **ninguna URL vieja puede quedarse en 404**
+      // *(2026-09-12, P72.64/D213)*. `/api/kit` pasó a `/api/kit.zip` porque la
+      // extensión es lo que hace que GA4 cuente la descarga, y comprobado en el
+      // build: la ruta vieja devolvía la 404 de marca.
+      //
+      // `permanent: true`, como las otras mudanzas de canónico: no es un alias de
+      // comodidad, es el mismo archivo en otro sitio y no va a volver.
+      //
+      // ES BARATO Y CASI NADIE LO VA A USAR, y las dos cosas importan. La URL
+      // vivió quince días, no la enlaza ningún artefacto —ni el markdown servido,
+      // ni los catálogos, ni los carruseles, ni el repo del perfil—, así que lo
+      // único que puede apuntar ahí es un «copiar enlace» de esas dos semanas.
+      // Que sea improbable no lo hace ignorable: el fallo sería silencioso y del
+      // lado de quien descarga.
+      { source: "/api/kit", destination: HREF_KIT, permanent: true },
+    ];
+  },
+  // Next emite `x-powered-by: Next.js` por defecto, que anuncia el stack a cualquiera
+  // que mire las cabeceras y no aporta nada. Va aquí, junto a `headers()`, porque es
+  // lo mismo: qué se sirve en la respuesta.
+  poweredByHeader: false,
+  images: {
+    // UN ANCHO DE 384 QUE NO ESTABA, y por eso las dos fotos de «Sobre mí» se
+    // servían a 640 dentro de una caja de 382 (P70.28).
+    //
+    // La causa NO es el `sizes` de esas fotos, que ya declara `384px` en
+    // escritorio. Es que `next/image`, cuando el `sizes` contiene ALGÚN valor en
+    // `vw` —el suyo lleva `100vw` para el móvil—, descarta del `srcset` todo
+    // candidato por debajo de `deviceSizes[0] × el vw más pequeño`. Con el
+    // reparto por defecto eso es 640, así que el `384px` de escritorio no tenía
+    // a qué apuntar: el candidato más pequeño que existía era 640, y 640 píxeles
+    // en una caja de 382 son 1,7× los que hacen falta.
+    //
+    // La palanca correcta es `deviceSizes`, no `imageSizes`: `imageSizes` se
+    // concatena pero cae dentro del mismo filtro, así que sus 384 tampoco
+    // sobrevivían. Bajando el suelo a 384 el filtro deja pasar el candidato y el
+    // navegador elige por lo que necesita, como siempre.
+    //
+    // No quita ningún ancho: solo AÑADE uno por debajo, así que ninguna imagen
+    // del sitio puede empeorar — como mucho, pedir menos.
+    //
+    // Y UN 672 QUE TAMPOCO ESTABA (P84.1, 2026-08-29), por el mismo motivo un
+    // peldaño más arriba. La caja de las fotos de «Sobre mí» mide 384 CSS px
+    // como mucho (`max-w-[24rem]`), y en el móvil de referencia de Lighthouse
+    // —412×823 con DPR 1,75— eso son 672 píxeles reales exactos. El salto
+    // 640 → 750 del reparto por defecto no tiene nada ahí, así que el navegador
+    // se bajaba 750 para pintar 645: 25,7% de píxeles de más y 13,6 KiB. Como
+    // el 384, solo AÑADE un ancho: ninguna imagen puede empeorar.
+    deviceSizes: [384, 640, 672, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    // La doc pide que todos los `imageSizes` sean MENORES que el menor
+    // `deviceSizes`. Al bajar el suelo a 384, el 384 que traía por defecto deja
+    // de cumplirlo; se retira y el resto se queda igual.
+    imageSizes: [32, 48, 64, 96, 128, 256],
+  },
+  // La ruta /api/og lee las fuentes (assets/fonts) y la foto (public/og) con fs en
+  // runtime. El file-tracing no detecta el join dinámico con process.cwd(), así que
+  // se fuerza su inclusión en el bundle serverless para que no falle en Vercel.
+  outputFileTracingIncludes: {
+    "/api/og": ["./assets/fonts/**", "./public/og/og-home-600x630.jpg"],
+  },
+  // Y LA CARA B DEL MISMO PROBLEMA, EN `/api/kit.zip` *(2026-09-20, D215)*. Ahí el
+  // `join(process.cwd(), RAIZ_KIT)` tampoco se resuelve estáticamente —`RAIZ_KIT`
+  // viene importada de `lib/logo-kit.ts`, así que el análisis ve una variable—, pero
+  // la consecuencia es la contraria: en vez de quedarse corto, el tracer se pasa y
+  // **traza el proyecto entero**. El propio build lo venía avisando en cada pasada
+  // («Dynamic filesystem access causes tracing of the whole project») sin que nadie
+  // lo leyera.
+  //
+  // MEDIDO, QUE ES LO QUE JUSTIFICA LA LISTA: 711 archivos y 10,5 MB en la traza de
+  // esta ruta, contra 159 y 2,5 MB de una página normal. De esos, **8,04 MB son
+  // lastre que llega a Vercel**: `DECISIONS.md` (0,92), `package-lock.json` (0,51),
+  // `PRD-Historical.md` (0,42), `public/img`, `public/md`, `public/video`,
+  // `public/cv`, `public/logos`, y `components/` y `app/` enteros. Nada de eso lo
+  // abre el ZIP.
+  //
+  // `public/logo-kit` SE QUEDA DENTRO A PROPÓSITO, y es la única decisión de aquí
+  // que no es obvia. La ruta es `force-static`: se ejecuta al construir, cuando el
+  // repo está en disco, y lo que se sirve es el cuerpo prerenderizado, así que el
+  // lambda no necesita leer nada. Excluirlo también ahorraría 0,72 MB más. No se
+  // hace porque la doc de Vercel avisa de que excluir un archivo necesario **rompe
+  // en runtime con el build en verde**, y dejar dentro lo único que la función
+  // abriría es lo que hace que ese fallo no pueda ocurrir. 0,72 MB por no tener que
+  // razonar sobre cuándo se invoca un `force-static` es barato.
+  //
+  // POR QUÉ AQUÍ Y NO ESCRIBIENDO LA RUTA LITERAL EN EL `join`, que es lo primero
+  // que sugiere el aviso: `RAIZ_KIT` tiene DOS consumidores, este route y
+  // `scripts/check-kit.ts`, que es el guardián que valida la ruta. Un literal en el
+  // route sería la segunda copia de la constante —regla 5 de `BRAND.md`— y encima
+  // una que `check:kit` no podría cazar, porque lee la constante y no el route.
+  outputFileTracingExcludes: {
+    "/api/kit.zip": [
+      "./app/**",
+      "./components/**",
+      "./content/**",
+      "./scripts/**",
+      "./assets/**",
+      "./public/img/**",
+      "./public/md/**",
+      "./public/video/**",
+      "./public/cv/**",
+      "./public/logos/**",
+      "./public/og/**",
+      "./*.md",
+      "./package-lock.json",
+    ],
+  },
+  experimental: {
+    // 404 global para URLs no coincidentes (app/global-not-found.tsx). Es la vía que
+    // recomienda la doc de Next cuando el root layout es un segmento dinámico de
+    // nivel superior (app/[lang]/layout.tsx): no se puede componer un not-found
+    // consistente con layout+not-found anidados, así que se sirve una página 404
+    // completa a nivel de enrutado. Ver not-found.md del paquete.
+    globalNotFound: true,
+  },
+};
+
+// Vigilancia del peso del JS de cliente (D11). Se activa con `ANALYZE=true npm run build`;
+// en un build normal es un no-op.
+const bundleAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === "true",
+});
+
+export default bundleAnalyzer(nextConfig);

@@ -1,0 +1,19 @@
+{
+  "meta": {
+    "title": "Experience · Francisco López",
+    "description": "Five product experiences told from the inside: the context I found, the decisions I made and how they turned out. Emendu, KUOTIP, INDYA, Freepik and TheTool."
+  },
+  "eyebrow": "Career",
+  "title": "My Experience",
+  "lead": "A CV fits on two pages because it leaves out what actually gets judged: not what you did, but why you chose that and not something else. These five tell the whole thing, including what did not work.",
+  "statCasos": "Cases with a page",
+  "statAnios": "Years in product",
+  "statExit": "Exit",
+  "statSectores": "Sectors",
+  "intro": {
+    "eyebrow": "Index",
+    "note": "They all follow the same order: context, decisions, figures with their window stated, and takeaways. Each one reads on its own, in whatever order you like."
+  },
+  "cta": "Download CV",
+  "ctaNota": "The rest of my career (agency work and Marketing & Growth) is in the Experience section of the home page and in the CV."
+}

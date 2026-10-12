@@ -1,0 +1,62 @@
+# Escaneo automatizado de dependencias (tarea P30.5).
+# Dependabot abre PRs cuando hay avisos de seguridad o versiones nuevas, para que la
+# deuda de deps se detecte sola y no dependa de acordarse de correr `npm audit`.
+# Coherente con el argumento de rigor técnico del sitio (PRD §1).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    # PERIODO DE REPOSO (2026-08-19). El riesgo de este repo no es el CANAL: se
+    # comprobó y está en `latest`, no en canary ni beta —next 16.3.1, react 19.2.8 y
+    # tailwind 4.3.3 son exactamente latest, y next/react van anclados sin caret—.
+    # El riesgo es el TIEMPO: Dependabot saltaba a la versión nueva la semana en que
+    # salía, con CI como única puerta. Y ya mordió una vez (el PR #47 de TypeScript 7
+    # rompía el build), aunque ahí el fallo fue RUIDOSO. Un cambio de comportamiento
+    # en el render, no en la compilación, pasaría CI entero: ninguno de sus pasos
+    # mira la página servida, porque `gate:html` no está en CI a propósito.
+    # (Aquí decía «los doce checks» con veintisiete pasos en `ci.yml`. La cifra no
+    # hacía falta para el argumento y se retira, como en `ci.yml` y en el workflow
+    # de automerge: los tres recuentos se corrigieron juntos el 2026-08-31.)
+    # Los parches no esperan, y las actualizaciones de SEGURIDAD son otro mecanismo
+    # (alertas), así que este reposo no las retrasa.
+    #
+    # QUIÉN LOS CIERRA ES LA OTRA MITAD, y está en `.github/workflows/dependabot-automerge.yml`.
+    # Esto de aquí controla cuántos se abren y cuándo; sin la otra mitad la cola se repone
+    # cada lunes y nadie la vacía — pasó, y son tres días con cuatro PR en verde (D91/D92).
+    cooldown:
+      semver-major-days: 14
+      semver-minor-days: 7
+      semver-patch-days: 0
+    # Prefijos alineados con Conventional Commits del repo (DECISIONS D12).
+    commit-message:
+      prefix: chore
+      prefix-development: chore
+    ignore:
+      # TypeScript 7.x es el nuevo compilador nativo (Go), aún preview: no expone la
+      # API de compilador que Next 16 necesita y rompe el build (Dependabot PR #47).
+      # Se ignoran los bumps mayores hasta que Next soporte oficialmente TS 7.
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Agrupa el ecosistema Next en un solo PR para no fragmentar los bumps acoplados
+      # (next, eslint-config-next, @next/*, react/react-dom).
+      next:
+        patterns:
+          - "next"
+          - "eslint-config-next"
+          - "@next/*"
+          - "react"
+          - "react-dom"
+
+  # Mantener al día las propias GitHub Actions (checkout, setup-node…) del CI.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: ci

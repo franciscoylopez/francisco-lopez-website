@@ -1,0 +1,134 @@
+/**
+ * DE QUÉ CONJUNTO HABLA EL CENSO — el inventario, no el total.
+ *
+ * EL HECHO QUE LO ESCRIBIÓ (P72.15, 2026-09-02). D127 dejó anotado el 2026-08-27
+ * que «tras el arreglo el censo pasó de 408 a 414 pares». Al correrlo al día
+ * siguiente, **sobre el mismo contenido**, dio **391**. La atribución costó dos
+ * builds y descartó las dos hipótesis obvias: ninguno de los tres commits de la
+ * tanda lo causaba, y dentro de una misma sesión el número era estable.
+ *
+ * POR QUÉ NO ES COSMÉTICO. El censo sostiene la afirmación publicada de
+ * `PRD-Live` §5 —«cero pares bajo AAA en las catorce × 2 temas»—. Si el conjunto
+ * que mide varía un 6 % entre sesiones sin que el sitio cambie, el veredicto es
+ * sobre un conjunto que no sabemos cuál es. **Un par que hoy no está en la lista
+ * no está aprobado: está sin mirar.** Es la familia de D38, D57, D60 y D63.
+ *
+ * LA CAUSA, y por eso este archivo viene con un arreglo al lado. El diálogo de
+ * consentimiento aporta pares y **su estado dependía del `localStorage` del
+ * navegador que conducía la pasada**: si en esa sesión alguien ya había aceptado,
+ * el diálogo no se pintaba y sus pares desaparecían de las catorce páginas a la
+ * vez. El censo ahora lo DECIDE en vez de heredarlo (`censo.ts`: se limpia el
+ * almacenamiento y se recarga antes de medir), así que el diálogo entra siempre.
+ *
+ * QUÉ HACE ESTE MÓDULO, que es la otra mitad: guarda la lista de claves de cada
+ * corrida y la compara con la anterior. Dos corridas del mismo contenido tienen
+ * que dar el mismo conjunto; si no, el diff dice **qué par entró o salió**, que
+ * es lo que el 2026-08-27 no se pudo decir.
+ *
+ * Y LA ASIMETRÍA DEL VEREDICTO. Un par que APARECE es cobertura nueva y puede
+ * venir de un cambio de contenido legítimo: se informa. Un par que DESAPARECE con
+ * la huella intacta es el metro viendo menos, que es el modo de fallo de la casa:
+ * eso sí suspende. Un guardián que da falsas alarmas es un guardián que se
+ * ignora, así que solo salta en la dirección peligrosa.
+ */
+import { existsSync, readFileSync } from "node:fs";
+
+import { escribeSelloJson } from "../sellos";
+
+export const INVENTARIO_PATH = "scripts/censo/inventario.json";
+
+export interface Corrida {
+  pagina: string;
+  tema: string;
+  claves: string[];
+}
+
+export interface Inventario {
+  fecha: string;
+  /** La huella de tokens/superficies/animaciones cuando se tomó. */
+  huella: string;
+  total: number;
+  corridas: Corrida[];
+}
+
+export function leeInventario(): Inventario | null {
+  if (!existsSync(INVENTARIO_PATH)) return null;
+  return JSON.parse(readFileSync(INVENTARIO_PATH, "utf8")) as Inventario;
+}
+
+export function escribeInventario(inv: Inventario): void {
+  escribeSelloJson(INVENTARIO_PATH, inv);
+}
+
+export interface Diferencia {
+  corrida: string;
+  entraron: string[];
+  salieron: string[];
+  /**
+   * Ni entró ni salió: **el mismo par cruzó la frontera de «texto grande»** y por
+   * eso su clave cambió de último segmento. Se informa aparte y no suspende.
+   */
+  bascularon: { antes: string; ahora: string }[];
+}
+
+/**
+ * La identidad de un par SIN su umbral: `estado|fg|bg`.
+ *
+ * LA CLAVE LLEVA EL UMBRAL DERIVADO —`06-pares.js` lo mete a propósito, para que
+ * dos textos del mismo color sobre el mismo fondo no colapsen y el pequeño, que es
+ * el que puede fallar, no desaparezca— y ese umbral sale de un `px >= 24` aplicado
+ * a un tamaño CONTINUO. Cinco titulares de `/trayectoria` miden exactamente
+ * `24.00px` con peso 600 porque su tamaño sale de un `clamp()` con `vw`: una
+ * diferencia subpíxel en el ancho de la ventana bascula el bucket entre `4.5` y
+ * `7`, y el diff veía desaparecer dos pares que nadie había tocado.
+ *
+ * Si el último segmento se le quita, lo que queda **no depende del tamaño** y por
+ * tanto no puede bascular.
+ */
+const identidad = (k: string): string => {
+  const corte = k.lastIndexOf("|");
+  // Sin separador no hay identidad que extraer: se devuelve algo que no puede
+  // emparejar con nada. Un metro que empareja de más es peor que uno que no
+  // empareja: escondería una desaparición de verdad.
+  return corte < 0 ? `${k}\u0000` : k.slice(0, corte);
+};
+
+/**
+ * Qué cambió entre dos inventarios, corrida a corrida.
+ *
+ * LA BASCULACIÓN NO ES UNA DESAPARICIÓN *(2026-09-04, D201)*, y distinguirlas no
+ * afloja el guardián: para que un par cuente como basculado tiene que estar **su
+ * gemelo presente** en la corrida nueva, con el mismo estado y los mismos dos
+ * colores. Si de verdad desapareció, no hay gemelo y sigue suspendiendo.
+ */
+export function compara(antes: Inventario, ahora: Inventario): Diferencia[] {
+  const clave = (c: Corrida) => `${c.pagina} · ${c.tema}`;
+  const previas = new Map(
+    antes.corridas.map((c) => [clave(c), new Set(c.claves)]),
+  );
+
+  const diffs: Diferencia[] = [];
+  for (const c of ahora.corridas) {
+    const previa = previas.get(clave(c));
+    if (!previa) continue;
+    const actual = new Set(c.claves);
+    const entraronCrudo = [...actual].filter((k) => !previa.has(k));
+    const salieronCrudo = [...previa].filter((k) => !actual.has(k));
+
+    const idEntraron = new Map(entraronCrudo.map((k) => [identidad(k), k]));
+    const bascularon: { antes: string; ahora: string }[] = [];
+    for (const k of salieronCrudo) {
+      const gemelo = idEntraron.get(identidad(k));
+      if (gemelo) bascularon.push({ antes: k, ahora: gemelo });
+    }
+    const basculadas = new Set(bascularon.flatMap((b) => [b.antes, b.ahora]));
+
+    const entraron = entraronCrudo.filter((k) => !basculadas.has(k));
+    const salieron = salieronCrudo.filter((k) => !basculadas.has(k));
+
+    if (entraron.length || salieron.length || bascularon.length) {
+      diffs.push({ corrida: clave(c), entraron, salieron, bascularon });
+    }
+  }
+  return diffs;
+}

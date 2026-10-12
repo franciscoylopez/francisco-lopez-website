@@ -1,0 +1,22 @@
+{
+  "datosLabels": {
+    "rol": "Role",
+    "periodo": "Period",
+    "sector": "Sector",
+    "tamano": "Team size",
+    "reporting": "Reporting"
+  },
+  "secciones": {
+    "minuto": "In a minute",
+    "historia": "The story",
+    "caso": "The case",
+    "aprendizajes": "Takeaways"
+  },
+  "crumbIndice": "Experience",
+  "nav": {
+    "eyebrow": "Keep reading",
+    "anterior": "Previous role",
+    "siguiente": "Next role",
+    "proximamente": "Coming soon"
+  }
+}

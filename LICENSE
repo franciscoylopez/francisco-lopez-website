@@ -1,0 +1,29 @@
+Copyright (c) 2026 Francisco Javier López Martínez. Todos los derechos reservados.
+All rights reserved.
+
+Este repositorio es PÚBLICO PARA CONSULTA, no de código abierto. Se publica para que
+el trabajo pueda examinarse: leer el código, entender las decisiones y comprobar lo
+que la web afirma sobre sí misma.
+
+No se concede ninguna licencia, expresa ni implícita, para usar, copiar, modificar,
+fusionar, publicar, distribuir, sublicenciar ni vender copias de este software o de
+su contenido, ni para crear obras derivadas a partir de ellos.
+
+Queda comprendido en lo anterior, y se hace explícito por ser lo que más se copia:
+
+  - El sistema de marca: logotipo, la firma «split», paleta, tipografía y los
+    documentos que los definen (BRAND.md, BRAND-historical.md, BRAND-logo.md) y los
+    assets de public/logo-kit/ y brand-assets/.
+  - Los textos del sitio, en español y en inglés, incluidos los diccionarios de
+    app/[lang]/dictionaries/ y el contenido de content/.
+  - Las fotografías y los vídeos de public/img/ y public/video/, y el CV de public/cv/.
+
+Las dependencias de terceros conservan sus propias licencias, que no se ven afectadas
+por este aviso.
+
+¿Quieres reutilizar algo? Escribe: franciscojavier.lopezmartinez@gmail.com. La
+respuesta por defecto a una petición razonable y concreta es que sí.
+
+EL SOFTWARE SE PROPORCIONA «TAL CUAL», SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O
+IMPLÍCITA, INCLUIDAS ENTRE OTRAS LAS DE COMERCIABILIDAD, IDONEIDAD PARA UN FIN
+DETERMINADO Y NO INFRACCIÓN.

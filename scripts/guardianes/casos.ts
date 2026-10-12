@@ -1,0 +1,896 @@
+/**
+ * El inventario de casos malos — lo ejecuta `scripts/check-guardianes.ts`.
+ *
+ * POR QUÉ ESTÁ APARTE (2026-08-28, P50.73). Misma partición que
+ * `scripts/tablero/reglas.ts`: el archivo de al lado es E/S —muta archivos, corre
+ * comandos, restaura el árbol— y esto es DATO. Partirlo compró un lector nuevo:
+ * `check:accesibilidad` cuenta desde aquí cuántos guardianes y cuántos casos hay,
+ * que son dos cifras que la página `/accesibilidad` publica en prosa, sin tener
+ * que arrancar la maquinaria que los dispara.
+ *
+ * Y esas dos cifras ya estaban caducadas cuando se partió: la página decía
+ * «catorce comprobaciones y veintitrés errores fingidos» habiendo QUINCE y
+ * VEINTISIETE. Nadie las movió al añadir un caso, porque nada las ataba.
+ */
+export type Caso = {
+  guardian: string;
+  /** Qué se rompe, en una línea, para que el informe se lea sin abrir el código. */
+  rotura: string;
+  /**
+   * Qué se rompe. Normalmente un archivo FUENTE; en `check:marco`, el HTML del
+   * build, que es su entrada de verdad. Rastreado o no: se restaura desde memoria.
+   */
+  archivo: string;
+} & (
+  | {
+      binario?: false;
+      /** Del contenido original al mutado. */
+      mutar: (original: string) => string;
+    }
+  | {
+      /**
+       * EL ARCHIVO SE LEE Y SE RESTAURA COMO BYTES (2026-08-30, P68.737). Un caso
+       * de texto pasa por `utf8` en los dos sentidos, y eso a un PNG lo destroza:
+       * volvería «restaurado» y distinto, y el arnés lo cazaría al final como que
+       * no ha sabido limpiar. Lo trajo `check:kit`, cuyo caso interesante —un
+       * binario roto que cuadra los nombres igual de bien que el bueno— no se
+       * puede fingir desde ningún archivo de texto.
+       */
+      binario: true;
+      /** Del contenido original al mutado, en bytes. */
+      mutar: (original: Buffer) => Buffer;
+    }
+);
+
+/** Añade texto al final. Sirve para los que miran un archivo entero. */
+const append = (texto: string) => (o: string) => o + texto;
+
+export const CASOS: Caso[] = [
+  {
+    guardian: "check:raya",
+    rotura: "una raya en una cadena de copy del diccionario",
+    archivo: "app/[lang]/dictionaries/es/common.json",
+    mutar: (o) => o.replace(/"([^"]{12,})"(\s*[,}])/, '"$1 — con raya"$2'),
+  },
+  {
+    guardian: "check:palette",
+    rotura: "un hex de token copiado a mano en un `.mjs`",
+    // EL CASO MUTA UN `.mjs` Y NO UN `.ts` *(P72.07, 2026-09-02)*, que es donde
+    // estaba el hueco: el barrido de copias filtraba por `.ts` y `.tsx`, así que
+    // diez hexes de token vivieron en `scripts/carrusel/plantilla.mjs` sin que
+    // nadie los viera. Y un caso malo escrito sobre un `.ts` seguía pasando con la
+    // regex vieja, o sea que el caso malo tenía el mismo punto ciego que el
+    // guardián. Ahora ejerce la extensión que se acaba de abrir.
+    archivo: "scripts/carrusel/plantilla.mjs",
+    mutar: append(
+      '\n// #005859 copiado a mano donde no toca\nexport const MAL = "#005859";\n',
+    ),
+  },
+  {
+    guardian: "check:palette",
+    rotura: "aparece una animación propia y el censo no la ha visto (D90)",
+    // Un `@keyframes` es la tercera rama de la condición de re-medir de la DoD, y
+    // la más limpia de mutar: cambia la huella del censo sin tocar ningún token,
+    // así que lo que se comprueba es exactamente este control y no otro.
+    archivo: "app/globals.css",
+    mutar: append(
+      "\n@keyframes guardian-de-mentira {\n  to { opacity: 1; }\n}\n",
+    ),
+  },
+  {
+    guardian: "check:experiencias",
+    rotura: "un bullet que existe en ES y no en EN",
+    archivo: "content/experience-copy/en.ts",
+    // Se quita un bullet entero, que rompe la PARIDAD ES↔EN. No es un caso malo
+    // cualquiera: .qlty/qlty.toml excluye estos dos archivos del análisis de
+    // duplicación con el argumento de que su duplicación estructural es
+    // «exactamente la propiedad que check:experiencias existe para GARANTIZAR».
+    // O sea que un informe de calidad se apoya en este guardián, y hasta hoy
+    // nadie había comprobado que supiera fallar.
+    mutar: (o) => o.replace(/\n {6}\{\n {8}cv: [\s\S]*?\n {6}\},/, ""),
+  },
+  {
+    guardian: "check:cv",
+    rotura: "el contenido del CV cambia y los PDFs no se regeneran",
+    archivo: "content/cv/content.es.ts",
+    mutar: (o) => o.replace(/"([A-Za-zÁÉÍÓÚáéíóúñ]{6,})"/, '"$1X"'),
+  },
+  {
+    guardian: "check:contexto",
+    rotura: "un @-importado engorda por encima del techo",
+    archivo: "PRD-Live.md",
+    mutar: append("\n" + "relleno ".repeat(4000) + "\n"),
+  },
+  {
+    // La OTRA mitad del presupuesto (P68.67). Sin este caso, la mitad que
+    // vigila las skills podría no mirar ninguna y seguir pareciendo un
+    // aprobado, que es el modo de fallo que este archivo entero existe para
+    // cazar.
+    guardian: "check:contexto",
+    rotura: "una skill engorda por encima de su techo por entrada",
+    archivo: ".claude/skills/gates-de-servidor/SKILL.md",
+    mutar: append("\n" + "relleno ".repeat(7000) + "\n"),
+  },
+  {
+    // La TERCERA mitad del presupuesto (P68.5907): el techo a la SUMA de skills,
+    // que es lo que impide que retirar de un documento sea una mudanza.
+    //
+    // El caso tiene que engordar el conjunto SIN cruzar el techo por entrada, o
+    // el guardián saldría rojo por el control de al lado y este quedaría sin
+    // probar — que es exactamente el modo de fallo que este archivo combate. Por
+    // eso el relleno se calcula desde el tamaño real del archivo y lo deja en
+    // ~3.900 palabras, por debajo del techo (4.600) y del objetivo (4.500) por
+    // entrada. Si algún día la skill ya midiera más que eso, el relleno sale cero
+    // y el caso falla RUIDOSAMENTE (el guardián no dice que no), que es la
+    // dirección correcta de fallo.
+    guardian: "check:contexto",
+    rotura: "la suma de skills engorda por encima del techo del conjunto",
+    archivo: ".claude/skills/sprint-review/SKILL.md",
+    mutar: (o) => {
+      const falta = 3_900 - o.split(/\s+/).filter(Boolean).length;
+      return o + "\n" + "relleno ".repeat(Math.max(0, falta)) + "\n";
+    },
+  },
+  {
+    // La CUARTA mitad del presupuesto (P50.72): no el dato contra el umbral, sino
+    // el UMBRAL. Los tres techos se movieron siete veces en nueve días y nadie
+    // estaba apuntado a eso; la métrica que lo abrió es que retirar 651 palabras
+    // de verdad compró 7 de margen, porque el techo bajó 400 en el mismo commit.
+    //
+    // Se muerde la apertura del ciclo, no el historial: retrasarla mete los siete
+    // movimientos reales dentro de la ventana y el contador tiene que salir rojo.
+    // Mutar el historial en su lugar sería inventar un movimiento que no ocurrió,
+    // y este caso vale más contando los que sí.
+    guardian: "check:contexto",
+    rotura:
+      "un techo se mueve dos veces en el mismo ciclo y el contador no lo ve",
+    //
+    // LA FECHA VA POR REGEX Y NO LITERAL, y es la corrección de un caso que nació
+    // caducando: llevaba `"2026-08-28"` escrito a mano, así que dejó de morder en
+    // cuanto se abrió el sprint siguiente y `CICLO_ABIERTO` pasó al 29. Es el peor
+    // momento posible para perder los dientes —abrir una etapa es justo cuando se
+    // mueve un techo—, y lo cazó CI y no una lectura. Un caso malo cuyo anclaje es
+    // un valor que cambia por diseño tiene que emparejar la FORMA, nunca el valor.
+    //
+    // Y EL ARCHIVO CAMBIÓ AL PARTIR EL GUARDIÁN (2026-09-03, P72.32): `CICLO_ABIERTO`
+    // vive ahora en `contexto/presupuesto.ts`. Lo cazó el arnés con «NO SE PUDO
+    // ROMPER», que es exactamente la salida que existe para esto — un caso malo que
+    // muta un archivo donde ya no está lo que muta se salta en silencio en cualquier
+    // otro diseño.
+    archivo: "scripts/contexto/presupuesto.ts",
+    mutar: (o) =>
+      o.replace(
+        /const CICLO_ABIERTO = "\d{4}-\d{2}-\d{2}";/,
+        'const CICLO_ABIERTO = "2026-08-01";',
+      ),
+  },
+  {
+    guardian: "check:contexto",
+    rotura:
+      "la apertura de un ciclo no retira nada y el sello sale verde igual",
+    // POR FORMA Y NO POR VALOR, que es la lección del caso de aquí arriba: los dos
+    // números del sello cambian en cada apertura por diseño, así que el mutador
+    // empareja la ESTRUCTURA —`antes`/`despues` del corpus de documentos— y copia
+    // el primero sobre el segundo. Eso es exactamente «no se retiró»: el caso que
+    // dejó el margen de contexto en 10 sin cruzar ningún techo.
+    archivo: "scripts/contexto/apertura.ts",
+    mutar: (o) =>
+      o.replace(
+        /documentos: \{ antes: ([\d_]+), despues: [\d_]+ \}/,
+        "documentos: { antes: $1, despues: $1 }",
+      ),
+  },
+  {
+    guardian: "check:contexto",
+    rotura:
+      "se abre un ciclo nuevo y el sello sigue midiendo contra el anterior",
+    // La otra mitad, y la que le da los dientes a la primera: los dos números se
+    // miden A MANO, así que lo único que impide que se queden viejos es que el
+    // sello lleve la fecha del ciclo abierto. Se muta la del sello y no
+    // `CICLO_ABIERTO`, que ya tiene su propio caso arriba.
+    archivo: "scripts/contexto/apertura.ts",
+    mutar: (o) =>
+      o.replace(
+        /fecha: "\d{4}-\d{2}-\d{2}",\n {2}cierra:/,
+        'fecha: "2026-01-01",\n  cierra:',
+      ),
+  },
+  {
+    // La QUINTA mitad del presupuesto (2026-09-05, P72.53): el volumen de
+    // `scripts/` medido contra el producto. Era el único corpus de la regla de
+    // retirada que se publicaba sin suspender nunca — creció un 29 % en un sprint
+    // y lo único que pasó fue un ámbar.
+    //
+    // POR FORMA Y NO POR VALOR, que es la lección de los dos casos de aquí arriba:
+    // el techo baja por diseño cada vez que se aprieta el trinquete, así que un
+    // literal dejaría de morder en el primer apretón. Se empareja la ESTRUCTURA
+    // del historial y se pone un techo por debajo del ratio real, que es
+    // exactamente «el andamiaje pesa demasiado».
+    guardian: "check:contexto",
+    rotura: "el andamiaje crece por encima de su ratio contra el producto",
+    archivo: "scripts/contexto/verificacion.ts",
+    mutar: (o) => o.replace(/valor: 0\.\d+,/g, "valor: 0.4,"),
+  },
+  {
+    guardian: "check:indices",
+    rotura: "una pieza de components/ui/ se queda sin declarar su línea",
+    // El caso de verdad es una pieza NUEVA sin declarar, pero el mutador trabaja
+    // sobre archivos que ya existen: quitarle la línea a una es la misma
+    // ausencia, y la que el check tiene que ver.
+    archivo: "components/ui/rich.tsx",
+    mutar: (o) => o.replace(/^\/\/ @pieza .*$\n/m, ""),
+  },
+  {
+    guardian: "check:indices",
+    rotura: "una decisión se queda sin línea en el índice",
+    // El índice vive en la cabecera del propio archivo desde D88. La entrada del
+    // índice empieza por `- D33 ·`; la cabecera de la decisión, por `## D33 ·`,
+    // así que la mutación quita la línea del índice y no la sección.
+    archivo: "DECISIONS.md",
+    mutar: (o) => o.replace(/^- D33 · .*$/m, ""),
+  },
+  {
+    guardian: "check:rutas",
+    rotura: "una página que existe en disco y no está en el registro",
+    archivo: "lib/routes.ts",
+    // Se borra un slug de STATIC_PAGE_SLUGS. En el repo de verdad eso además no
+    // compilaría —los dos Record del sitemap y de llms.txt dejarían de ser
+    // exhaustivos—, pero el guardián corre con tsx, que transpila sin comprobar
+    // tipos: aquí se mide lo que ve él, que es el disco contra el registro.
+    mutar: (o) => o.replace(/\n {2}"cookies",/, ""),
+  },
+  {
+    guardian: "check:rutas",
+    rotura: "el copy enlaza a una ruta que el registro ya no publica",
+    archivo: "app/[lang]/dictionaries/en/como-se-ha-creado.json",
+    // LA SEGUNDA MITAD DE ESTE GUARDIÁN, y no la misma rotura con otra ropa: la
+    // de arriba muerde el REGISTRO y esta muerde el COPY, que es la superficie
+    // sin tipo. El caso es literal —el que encontró el `sprint-review` de «Cierre
+    // V3»— y por eso vale como caso malo: la ruta vieja EXISTE, responde 308 y no
+    // rompe nada visible, así que un detector que mirase «¿resuelve?» aprobaría.
+    mutar: (o) => o.replace("/en/accessibility", "/en/accesibilidad"),
+  },
+  {
+    guardian: "check:skills",
+    rotura: "una skill nombra un archivo que ya no existe",
+    archivo: ".claude/skills/close-session/SKILL.md",
+    mutar: append("\nVer `lib/esto-no-existe.ts` para el detalle.\n"),
+  },
+  {
+    guardian: "check:marco",
+    rotura: "una página se queda sin enlace de salto (WCAG 2.4.1, nivel A)",
+    // ÚNICO CASO QUE MUERDE UN ARTEFACTO DEL BUILD y no un archivo fuente, y es a
+    // propósito: la ENTRADA de este guardián es el HTML que el sitio emite, no el
+    // código que lo genera. Romper el componente no se vería sin volver a
+    // construir —dos minutos por caso—, y sobre todo probaría otra cosa: que el
+    // build propaga el cambio, no que el detector sabe verlo.
+    //
+    // El archivo está en `.gitignore`, así que el `git status` de arriba y el de
+    // abajo no lo ven; la restauración es la misma de siempre, desde memoria.
+    archivo: ".next/server/app/es.html",
+    mutar: (o) => o.replace(/<a href="#main"[\s\S]*?<\/a>/, ""),
+  },
+  {
+    guardian: "check:marco",
+    rotura: "una página publica la tarjeta OG de la home en vez de la suya",
+    // El caso malo NO es inventado: es lo que `/contacto` hacía en producción
+    // desde el sprint 3 hasta P70.03. D72 derivó el TIPO de tarjeta del registro
+    // y dejó el DESPACHO escrito a mano, así que la página del embudo compilaba,
+    // pasaba `check:rutas` y publicaba «Del discovery al dato» a quien pegara su
+    // enlace en LinkedIn. Tercer caso que muerde el build, por lo de siempre: la
+    // entrada de este guardián es el HTML emitido.
+    archivo: ".next/server/app/es/contacto.html",
+    mutar: (o) => o.replaceAll("card=contacto", "card=home"),
+  },
+  {
+    guardian: "check:marco",
+    rotura:
+      "un artículo se sirve dentro de un `<section>` mientras su `og:type` dice `article`",
+    // El caso malo es el estado del sitio hasta P67.6: seis páginas declaraban
+    // `og:type: "article"` —y una además `TechArticle` en su JSON-LD— y ninguna
+    // servía un `<article>`. Dos capas de la misma página afirmando cosas
+    // distintas, y nada que las cruzara. Muerde el build por lo de siempre: lo
+    // que este guardián mira es el HTML emitido.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) =>
+      o.replace("<article>", "<section>").replace("</article>", "</section>"),
+  },
+  {
+    guardian: "check:marco",
+    rotura:
+      "dos enlaces con el mismo nombre accesible llevan a sitios distintos (WCAG 2.4.9)",
+    // LA FAMILIA ES REAL: el barrido de P72.235 encontró dieciséis pares así en
+    // cuatro patrones, y el más caro era justo este —un segundo enlace de descarga
+    // que se llama igual que el del nav y baja otro archivo—, porque fuera de
+    // contexto los dos se anuncian «Descargar CV» y no hay forma de saber cuál es
+    // cuál.
+    //
+    // SE AÑADE UN ENLACE en vez de retocar uno existente: mover un `href` haría
+    // que dos nombres DISTINTOS apuntaran al mismo sitio, que es el defecto
+    // contrario y no lo que esto agrupa. Muerde el build por lo de siempre: lo que
+    // este guardián mira es el HTML emitido.
+    //
+    // Y VA DENTRO DEL `<main>`, no antes de `</body>`: fuera de un landmark axe
+    // levanta además su regla `region`, y el caso pasaría a probar dos cosas a la
+    // vez. Lo que aquí se prueba es que el detector de nombres tiene dientes.
+    archivo: ".next/server/app/es.html",
+    mutar: (o) =>
+      o.replace("</main>", '<a href="/cv-viejo.pdf">Descargar CV</a></main>'),
+  },
+  {
+    guardian: "check:marco",
+    rotura: "un trozo de una página cualquiera se envuelve en un `<article>`",
+    // LA VUELTA de la invariante, y no es simetría por gusto: sin ella, envolver
+    // media página de más pasaría igual de verde. `<article>` significa
+    // «contenido autónomo y redistribuible»; repartido por una página que no lo
+    // es, deja de decir nada.
+    archivo: ".next/server/app/es/contacto.html",
+    mutar: (o) => o.replace("<main ", "<article></article><main "),
+  },
+  {
+    guardian: "check:marco",
+    rotura:
+      "un título de chrome vuelve a encabezar la página por delante del `h1`",
+    // EL CASO MALO ES EL ESTADO DE PRODUCCIÓN HASTA EL 2026-08-30, literal: el
+    // diálogo de consentimiento vive en el layout y titulaba con `h2`, así que
+    // las 28 variantes abrían con «Preferencias de cookies» y no con su `h1`.
+    //
+    // Y ES EL CASO QUE JUSTIFICA LA REGLA NUEVA, porque los tres guardianes que
+    // ya había lo daban por bueno: hay un solo `h1` y no está vacío, y
+    // `heading-order` de axe mira saltos hacia ABAJO (h2 → h4) mientras que
+    // h2 → h1 baja de nivel, que es legal. Lo cazó un escáner externo leyendo el
+    // HTML servido. Muerde el build por lo de siempre: lo que este guardián mira
+    // es el HTML emitido.
+    archivo: ".next/server/app/es/contacto.html",
+    mutar: (o) => o.replace("<main ", "<h2>Preferencias de cookies</h2><main "),
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "`llms.txt` deja de nombrar una página del registro",
+    // El modo de fallo REAL, y el que este archivo ya tuvo: las cinco páginas del
+    // deep-dive existían y `llms.txt` no las enlazaba, así que un modelo que
+    // leyera el índice no podía descubrir el contenido más profundo del sitio
+    // (P50). El tipo impide olvidar una página al compilar; esto comprueba que
+    // además LLEGÓ al texto, que es otra cosa. Muerde el artefacto del build
+    // porque es ahí donde el archivo existe de verdad.
+    archivo: ".next/server/app/llms.txt.body",
+    mutar: (o) =>
+      o.replace(
+        new RegExp("https?://[^\\s)]*/cookies"),
+        "https://ejemplo.test/x",
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura:
+      "el proxy deja de poner `Vary: Accept` y una caché mezcla los dos cuerpos",
+    // La misma URL devuelve HTML o markdown según el `Accept`, así que sin
+    // `Vary` una caché compartida le sirve a una persona el markdown que pidió un
+    // agente, o al revés. No se ve en el prerender —el HTML no sabe con qué
+    // cabeceras se sirvió—, así que el guardián EJECUTA `proxy()` y por eso este
+    // caso muerde el código del proxy y no un artefacto.
+    archivo: "proxy.ts",
+    mutar: (o) =>
+      o.replace(
+        'if (!partes.some((v) => v.toLowerCase() === "accept")) partes.push("Accept");',
+        "",
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura:
+      "`ai-train` pasa a `yes` y contradice al `LICENSE` en un archivo que nadie abre",
+    // De las tres Content Signals (P67.8) esta es la única que alguien podría
+    // cambiar por parecer más abierto, y es justo la que no se puede: el
+    // `LICENSE` nombra los textos del sitio y `content/` entre lo que NO se
+    // licencia para obras derivadas. Un `yes` aquí no es una preferencia
+    // distinta, es una contradicción publicada — y viviría en un `robots.txt`,
+    // que es un archivo que nadie vuelve a leer después de escribirlo.
+    archivo: "app/robots.ts",
+    // APUNTA A LA DIRECTIVA, NO A LA CADENA. `ai-train=no` aparece dos veces en ese
+    // archivo —primero en el comentario que la explica, después en la línea que se
+    // sirve— y `String.replace` cambia la PRIMERA. Con la cadena suelta, el caso
+    // mutaba el comentario, el `robots.txt` salía intacto y el arnés acusaba de
+    // desdentado a un guardián que estaba bien. Lo cazó CI, y el arnés no podía:
+    // comprueba que la mutación cambie el archivo, y el archivo cambiaba.
+    mutar: (o) =>
+      o.replace(
+        '"Content-Signal": "ai-train=no',
+        '"Content-Signal": "ai-train=yes',
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "robots.txt se abre en todos los entornos y un preview se indexa",
+    // La salida fácil el día que el gate diera rojo sería quitarle a `robots()` su
+    // gateo por entorno. Entonces un deployment de rama entraría en el índice, que
+    // es justo lo que D13 evita. Por eso el guardián comprueba los DOS entornos y
+    // no solo el bueno: certificar solo producción dejaría esta puerta abierta.
+    archivo: "app/robots.ts",
+    mutar: (o) =>
+      o.replace(
+        'const isProduction = process.env.VERCEL_ENV === "production";',
+        "const isProduction = true;",
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura:
+      "`Vary: Accept` vuelve a caer sobre las tarjetas OG, los PDF y las fuentes",
+    // El estado real hasta P68.742: las cabeceras de seguridad y el `Vary` iban en
+    // la MISMA regla de `headers()`, así que la segunda llegaba a assets que no
+    // negocian nada y una caché compartida guardaba una copia por familia de
+    // navegador. No da error en ninguna parte —es coste, no incorrección—, y por
+    // eso el caso malo es el único que puede defenderlo.
+    //
+    // MUERDE EL MANIFIESTO Y NO `next.config.ts`, porque es donde el guardián
+    // mira: la regex compilada que el servidor usa para decidir qué cabeceras
+    // pone. Se le devuelve al `Vary` la regla ancha, que es exactamente la
+    // regresión.
+    archivo: ".next/routes-manifest.json",
+    mutar: (o) => {
+      const m = JSON.parse(o) as {
+        headers: { source: string; regex: string; headers: unknown[] }[];
+      };
+      const ancha = m.headers.find((r) => r.source === "/:path*");
+      const vary = m.headers.find((r) =>
+        (r.headers as { key: string }[]).some(
+          (h) => h.key.toLowerCase() === "vary",
+        ),
+      );
+      if (!ancha || !vary)
+        throw new Error("el manifiesto no tiene las dos reglas");
+      vary.regex = ancha.regex;
+      return JSON.stringify(m);
+    },
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "se cae un alias y la ruta que un agente adivina vuelve a dar 404",
+    // Los diez alias de D161 y el `/agents.md` de P68.748 se comprobaron a mano el
+    // día que se escribieron y no los miraba nadie — que es el modo de fallo del
+    // que avisa `BRAND.md` §Cómo se escribe una regla, punto 2. Se retira el
+    // primero del manifiesto, que es lo que pasaría si alguien tocara
+    // `redirects()` sin darse cuenta de para quién estaban.
+    archivo: ".next/routes-manifest.json",
+    mutar: (o) => {
+      const m = JSON.parse(o) as {
+        redirects: { source: string }[];
+      };
+      m.redirects = m.redirects.filter((r) => r.source !== "/agents.md");
+      return JSON.stringify(m);
+    },
+  },
+  {
+    guardian: "md:verificar",
+    rotura:
+      "el markdown commiteado de una página deja de decir lo que dice la página",
+    // El modo de fallo REAL de un artefacto derivado: nadie lo regenera después
+    // de tocar el copy, y se queda diciendo lo de antes en silencio. Se rompe el
+    // artefacto y no la página, que es la dirección en que esto se estropea.
+    archivo: "public/md/es/contacto.md",
+    mutar: append("\nUn párrafo que la página no dice.\n"),
+  },
+  {
+    guardian: "md:verificar",
+    rotura: "el frontmatter se queda viejo aunque el cuerpo esté al día",
+    // LA OTRA MITAD DEL ARTEFACTO *(P68.746, 2026-08-31)*. Desde que la cabecera
+    // lleva `description` y `last-updated`, el markdown puede quedarse atrás sin
+    // que el cuerpo cambie ni una palabra: se retoca la descripción de la página
+    // —o se sube la fecha del artículo— y el `.md` sigue anunciando lo de antes.
+    // Y es la mitad que MÁS calla, porque el texto de debajo sigue siendo
+    // correcto: lo que engaña es la ficha, que es justo lo que un agente lee para
+    // decidir si esta fuente entra en la conversación.
+    //
+    // Se muerde la fecha y no la descripción a propósito: `last-updated` es el
+    // campo cuyo modo de fallo —quedarse congelado— ya le pasó a este proyecto
+    // con `ARTICLE_UPDATED` (doce commits, D84).
+    archivo: "public/md/es/como-se-ha-creado.md",
+    mutar: (o) => o.replace(/^last-updated: .*$/m, "last-updated: 2026-01-01"),
+  },
+  {
+    guardian: "md:anclas",
+    rotura:
+      "una entrada nueva de DECISIONS.md desplaza las anclas que el markdown cita",
+    // EL CASO REAL, Y ES CASI TODO PR (P72.05). No hace falta tocar el artículo:
+    // basta con que `DECISIONS.md` crezca por arriba —una entrada nueva alarga el
+    // índice de su cabecera— para que TODAS las líneas de abajo se muevan y las
+    // 90 anclas del markdown commiteado apunten a la decisión de al lado. Se
+    // muerde ahí, en el archivo citado y no en el que cita, porque esa es la
+    // dirección en la que esto se estropea de verdad.
+    //
+    // Y es el caso que separa a este guardián de `md:verificar`: aquel lo ve
+    // también, pero tras 46 s y un build. Si algún día dejan de ser anclas por
+    // línea, este caso malo es lo primero que hay que releer.
+    archivo: "DECISIONS.md",
+    mutar: (o) =>
+      o.replace("\n## D", "\n\nUna línea que empuja el archivo.\n\n## D"),
+  },
+  {
+    guardian: "check:articulo",
+    rotura: "cambia el copy del artículo y la fecha que ve Google no se mueve",
+    // El caso malo es el estado real hasta P70.04: `ARTICLE_UPDATED` pasó DOCE
+    // commits congelada en el 21 de agosto, uno de ellos con un capítulo nuevo,
+    // mientras el JSON-LD y el sitemap le decían a Google que el artículo no se
+    // tocaba. No lo vio nadie porque el `ByLine` no pinta fecha.
+    archivo: "app/[lang]/dictionaries/es/como-se-ha-creado.json",
+    mutar: (o) =>
+      o.replace('"text": "', '"text": "Un párrafo nuevo del artículo. '),
+  },
+  {
+    guardian: "test",
+    rotura: "el umbral de «enlace muerto» vuelve a tragarse el escudo antibot",
+    // `check:enlaces` corre FUERA de CI porque sale a la red, así que aquí se
+    // muerde su criterio, como con el tablero. Y la rotura es el fallo REAL que
+    // tuvo el día que se escribió: `999 >= 500` puntuaba el perfil de LinkedIn
+    // como caído. Un umbral mal aplicado inventa hallazgos igual que un metro mal
+    // calibrado.
+    archivo: "scripts/enlaces/reglas.ts",
+    mutar: (o) =>
+      o.replace(
+        'if (status < 100 || status >= 600) return "no concluyente";',
+        "",
+      ),
+  },
+  {
+    guardian: "test",
+    rotura: "la métrica primaria vuelve a sumar los dos filtros que callan",
+    // El defecto real, encontrado en el check de medición del cierre de
+    // «Drenaje»: `contact_submit` se disparaba con `status === "sent"`, y ese
+    // estado tiene tres causas de las que solo una manda correo. Con la primaria
+    // en n=1, un falso positivo la deja en cero. La regla vive en `lib/` en vez
+    // de dentro del `useEffect` precisamente para que se le pueda hacer esto.
+    archivo: "lib/contact-form.ts",
+    mutar: (o) =>
+      o.replace(
+        'return state.status === "sent" && state.contabiliza !== false;',
+        'return state.status === "sent";',
+      ),
+  },
+  {
+    guardian: "check:accesibilidad",
+    rotura:
+      "cambia una fuente que /accesibilidad describe y su bloque no se revisa",
+    // `lib/figures.ts` es dependencia de los «Límites», que es donde la página
+    // dice que dos diagramas se miden y no se juzgan. El día que se rediseñen
+    // (P68.593) esa tarjeta pasa a mentir, y este es el escenario real.
+    archivo: "lib/figures.ts",
+    mutar: append("\n// cambio en las figuras que la página describe\n"),
+  },
+  {
+    guardian: "check:accesibilidad",
+    rotura:
+      "la página publica un recuento de guardianes que ya no es el que hay",
+    // EL CASO QUE ABRIÓ LA TAREA, y no es hipotético: decía «catorce
+    // comprobaciones y veintitrés errores fingidos» habiendo quince y
+    // veintisiete. Se muerde la cifra publicada, que es la que un visitante lee.
+    //
+    // DISPARABA DOS REGLAS A LA VEZ Y AHORA SOLO UNA, que es la mejora de D193:
+    // hasta el 2026-09-03 `conformance` declaraba `lib/design-values.ts` entero,
+    // así que morder aquí encendía también su sello sin que ninguna cifra de ese
+    // bloque se hubiera movido. Ahora declara los dos símbolos que usa y este
+    // caso prueba lo que dice que prueba: la regla del RECUENTO, con su red en el
+    // informe, que imprime las dos cifras enfrentadas.
+    archivo: "lib/design-values.ts",
+    mutar: (o) =>
+      o.replace(
+        "export const GUARDIAN_CASE_COUNT = ",
+        "export const GUARDIAN_CASE_COUNT = 99; //",
+      ),
+  },
+  {
+    guardian: "check:accesibilidad",
+    rotura:
+      "cambia una cifra de contraste que la página publica y su bloque no se revisa",
+    // LA OTRA MITAD DE D193, la que el caso de arriba dejó de cubrir: que la
+    // dependencia a nivel de SÍMBOLO tenga dientes de verdad, sobre el archivo y
+    // el guardián reales. La mitad negativa —que mover `LAST_COOKIES_UPDATE` no
+    // encienda nada— no se puede escribir aquí, porque este arnés solo sabe pedir
+    // rojo; vive en `tests/dependencias-huella.test.ts`.
+    archivo: "lib/design-values.ts",
+    mutar: (o) => o.replace("bodyText:", "bodyTextMovido:"),
+  },
+  {
+    guardian: "check:og",
+    rotura: "el copy de la página cambia y su tarjeta OG se queda con el viejo",
+    // EL CASO REAL, no uno inventado: al afilar el kicker del Hero (P83), cambiar
+    // esa cadena eran TRES sitios y el tercero solo apareció por un grep a mano.
+    // Se muerde el diccionario y no la tabla de la tarjeta, que es la dirección en
+    // que ocurre: el copy se edita donde se lee.
+    archivo: "app/[lang]/dictionaries/es/home.json",
+    mutar: (o) => o.replace("Del discovery al dato.", "Del discovery al dato"),
+  },
+  {
+    guardian: "check:marcas",
+    rotura: 'un nombre propio se pinta suelto, sin `translate="no"`',
+    // Tercer caso que muerde el build, por lo de siempre: la entrada de este
+    // guardián es el HTML emitido. Y la rotura es EXACTAMENTE el estado del
+    // sitio hasta P70.12 — `translate` no aparecía ni una vez en todo el repo—,
+    // así que quitarle el atributo a una aparición reproduce el fallo real y no
+    // uno inventado. Se muerde una sola: el guardián tiene que cazar la que
+    // falta, no notar que faltan todas.
+    archivo: ".next/server/app/es/trayectoria.html",
+    mutar: (o) => o.replace('<span translate="no">', "<span>"),
+  },
+  {
+    guardian: "check:figuras",
+    rotura:
+      "un diagrama se queda con el tope más estrecho que su propio lienzo",
+    // Segundo caso que muerde el build, por la misma razón que el de arriba: la
+    // entrada de este guardián es el HTML emitido. Y la rotura elegida NO es
+    // inventada — es exactamente el fallo que tenían s01, s03 y s09 antes de
+    // P68.59: un `max-w` por debajo del `viewBox` es una escala <1 permanente,
+    // así que el rótulo no llega a 11px pintados ni con toda la pantalla.
+    // Con 300 sobre un lienzo de 540, el rótulo de 11 unidades cae a 6,1px.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) => o.replace("max-w-[540px]", "max-w-[300px]"),
+  },
+  {
+    guardian: "check:articulo",
+    rotura:
+      "cambia una fuente que el artículo describe y su sección no se revisa",
+    // `next.config.ts` es dependencia de la §07 («seguridad, alojamiento y la
+    // deuda que no se acumuló»), que es exactamente la sección que va a
+    // invalidar la CSP estricta con nonces (P64.5). El caso malo es el escenario
+    // real, no uno inventado.
+    archivo: "next.config.ts",
+    mutar: append("\n// cambio en las cabeceras que el artículo describe\n"),
+  },
+  {
+    guardian: "check:articulo",
+    rotura: "una cita vuelve a guardar su línea a mano en el diccionario",
+    // La regresión de la capa 1. Una línea escrita a mano no rompe nada visible
+    // —el enlace sigue abriendo el archivo, solo que en el párrafo equivocado—,
+    // que es cómo 27 de 38 citas llevaban días apuntando diez líneas arriba.
+    archivo: "app/[lang]/dictionaries/es/como-se-ha-creado.json",
+    mutar: (o) =>
+      o.replace(
+        /\{ "label": "D29", "path": "DECISIONS\.md" \}/,
+        '{ "label": "D29", "path": "DECISIONS.md", "line": 844 }',
+      ),
+  },
+  {
+    guardian: "check:articulo",
+    rotura: "un «dato en vivo» vuelve a tener su cifra tecleada",
+    // La regresión de P68.495. La pieza se llama `livestat` y su etiqueta dice
+    // «dato en vivo»; dos de los tres lo prometían con un número a mano, y los
+    // dos ya mentían cuando alguien los leyó. Nada se rompe al teclearlo: se
+    // publica una cifra que envejece sola.
+    archivo: "app/[lang]/dictionaries/es/como-se-ha-creado.json",
+    mutar: (o) =>
+      o.replace(
+        '"value": "{piezasNucleo} piezas + capa de página"',
+        '"value": "Ocho piezas + capa de página"',
+      ),
+  },
+  {
+    guardian: "check:articulo",
+    rotura: "el diagrama de CI se queda un paso corto respecto al workflow",
+    // El pie deriva su cifra de `ci.yml` y las pastillas son un dibujo: sin la
+    // comparación, un paso nuevo movería el pie y dejaría el diagrama corto sin
+    // que se rompiera nada. Muerde la lista ES; el guardián mira los dos idiomas.
+    archivo: "content/articulo/ci-steps.ts",
+    mutar: (o) => o.replace('          { n: "Tests", cat: "patron" },\n', ""),
+  },
+  {
+    guardian: "test",
+    rotura:
+      "el Reply-To vuelve a componerse concatenando y cuela una segunda dirección",
+    // El arnés de tests entra aquí en cuanto entra en CI (P68.494): a partir de
+    // ese momento es un gate, y un gate cuyo modo de fallo es una luz verde
+    // necesita su caso malo como cualquier otro. El caso es la regresión de
+    // P68.47 literal, que es el bug que motivó escribir los tests.
+    archivo: "lib/mailer.ts",
+    mutar: (o) =>
+      o.replace(
+        "replyTo: { name: nombre, address: replyTo },",
+        "replyTo: `${nombre} <${replyTo}>`,",
+      ),
+  },
+  {
+    guardian: "test",
+    rotura: "la unicidad de prioridades del tablero deja pasar un par repetido",
+    // `check:tablero` corre fuera de CI porque leer Notion necesita su MCP, así
+    // que aquí no se le puede mutar la entrada: no hay volcado que romper. Lo que
+    // sí está en el repo es su CRITERIO, y es lo que se muerde — con la rotura
+    // exacta que lo dejaría ciego al caso que lo motivó, dos tareas con 69,93.
+    archivo: "scripts/tablero/reglas.ts",
+    // HA CADUCADO UNA VEZ (2026-08-28): apuntaba a `if (grupo.length > 1) {`, y
+    // partir `revisarTablero` en una función por regla dejó esa línea como un
+    // `.filter()`. La mutación dejó de mutar el mismo día que se escribió el
+    // refactor, y la cazó este script — que es para lo que existe.
+    mutar: (o) =>
+      o.replace(
+        ".filter(([, grupo]) => grupo.length > 1)",
+        ".filter(([, grupo]) => grupo.length > 2)",
+      ),
+  },
+  {
+    guardian: "test",
+    rotura:
+      "el umbral del embalse transversal sube y `General` puede crecer sin avisar",
+    // La otra mitad del criterio del tablero, y la que más fácil se queda muda: el
+    // cupo de `General` llevaba un sprint escrito SIN instrumento, así que aquí lo
+    // que se muerde es el número que decide si el neto es ruido o alarma. Con el
+    // umbral por las nubes el guardián sigue imprimiendo su línea —que es lo que
+    // lo haría parecer vivo— y ya no rechaza nada.
+    archivo: "scripts/tablero/reglas.ts",
+    mutar: (o) =>
+      o.replace(
+        "export const VARIACION_ROJA = 4;",
+        "export const VARIACION_ROJA = 400;",
+      ),
+  },
+  {
+    guardian: "check:excepciones",
+    rotura: "un control a mano se queda sin su marca `@fuera-de-capa`",
+    // Se le quita la marca al switch del consentimiento, que es un control a mano
+    // real y declarado en BRAND.md.
+    //
+    // HA CADUCADO DOS VECES, Y LAS DOS POR EL MISMO MOTIVO: el archivo elegido dejó
+    // de tener marca porque su pieza SALIÓ de la lista de excepciones. Apuntaba a
+    // `page-closer.tsx` y P70.15 lo sacó a la variante `card` (2026-08-25);
+    // apuntaba después a `article.tsx` y P70.38 se llevó la celda del índice a
+    // `indexCellVariants` (2026-08-26). Las dos veces la mutación dejó de mutar y
+    // las dos las cazó este script — que es exactamente para lo que existe: un caso
+    // malo que ya no muerde puntúa como verde.
+    //
+    // LA LECCIÓN, que ya no es «prefiere el que no está tareado» sino algo más
+    // fuerte: **la lista de excepciones es la peor fuente posible de un caso malo,
+    // porque su razón de ser es vaciarse**. Cada excepción que se cierra —que es
+    // trabajo bueno— rompe este caso. De los dos que quedan, el switch es el más
+    // estable: su motivo declarado no es «falta una variante» (que alguien puede
+    // crear) sino que la cascada **aplica hacia delante y no hacia atrás**, así que
+    // no sale por hacer bien el trabajo, solo si se rehace el banner entero.
+    archivo: "components/site/consent-banner.tsx",
+    mutar: (o) => o.replace("@fuera-de-capa:", "control a mano:"),
+  },
+  {
+    guardian: "lint",
+    rotura:
+      "una variable sin usar dentro de `scripts/`, que hasta P50.80 no miraba nadie",
+    // EL CASO MALO ES EL AGUJERO QUE SE ACABA DE CERRAR (2026-08-28, P50.80).
+    // `eslint.config.mjs` ignoraba `scripts/**` entero — 8.446 líneas, el 30% del
+    // código del repo, más que `lib/` y `app/` juntos— y el ignore es una línea:
+    // vuelve a ponerse sin querer con la misma facilidad con la que se quitó, y su
+    // modo de fallo es un `npm run lint` en verde que no ha mirado nada.
+    //
+    // POR QUÉ ESTE ARCHIVO Y NO OTRO: se muta el censo porque es el andamiaje que
+    // más caro sale que se rompa en silencio, y porque una variable sin usar es lo
+    // MÍNIMO que una config viva tiene que cazar. Si esto pasa en verde, es que
+    // `scripts/` ha vuelto a quedarse fuera.
+    archivo: "scripts/censo.ts",
+    mutar: append("\nconst sinUsarGuardian = 1;\n"),
+  },
+  // --- `check:kit`, tres casos (2026-08-30, P68.737 + P85.2) ---------------
+  //
+  // Era el ÚNICO guardián de ausencia de CI sin caso malo: se escribió con D119 y
+  // nadie le puso ninguno. Y de los que más fácil se quedan mudos, porque recorre
+  // un directorio y lo compara con un registro. Tenía ya media defensa hecha
+  // —falla explícitamente si no encuentra `RAIZ_KIT`, para no aprobar mirando
+  // cero—, pero nadie comprobaba que RECHAZARA el caso para el que se escribió.
+  //
+  // Van tres porque el guardián promete tres cosas distintas, y un caso por
+  // dirección es lo que impide que arreglar una tape a las otras dos.
+  {
+    guardian: "check:kit",
+    rotura: "una ruta declarada cuyo archivo no está en disco",
+    // SE MUTA EL REGISTRO, NO EL DISCO, y la comparación que se ejerce es la
+    // misma: `declarado ∉ disco`. Borrar el archivo daría el mismo rojo, pero el
+    // arnés restaura CONTENIDO y no existencia, así que un caso que borra no
+    // sabría devolverlo. Es el caso que originó los diez huérfanos de P70.27
+    // visto desde el otro lado.
+    archivo: "lib/logo-kit.ts",
+    mutar: (o) =>
+      o.replace(
+        '  "/logo-kit/svg/lockup-mono-negro.svg",',
+        '  "/logo-kit/svg/lockup-mono-negro.svg",\n  "/logo-kit/svg/pieza-que-no-existe.svg",',
+      ),
+  },
+  {
+    guardian: "check:kit",
+    rotura: "un archivo en disco que ya no lo declara nadie",
+    // La dirección contraria, que es la que de verdad dejó pasar a los huérfanos:
+    // se retira una declaración y el archivo real se queda sin quién lo cuente.
+    archivo: "lib/logo-kit.ts",
+    mutar: (o) =>
+      o.replace('  "/logo-kit/favicon/favicon-claro-48.png",\n', ""),
+  },
+  {
+    guardian: "check:kit",
+    rotura: "un PNG que cuadra su nombre y ya no es una imagen",
+    // EL CASO QUE OBLIGÓ A QUE EL ARNÉS SUPIERA DE BYTES. Hasta P85.2 el guardián
+    // cuadraba nombres, y un binario roto los cuadra igual de bien que el bueno:
+    // es el fallo que se ve perfectamente bien desde la página y se descarga
+    // roto. Truncar el PNG por la mitad no cambia ni su ruta ni su nombre, así
+    // que este caso no puede salir rojo por ninguna de las dos comprobaciones de
+    // arriba — solo por la de contenido.
+    archivo: "public/logo-kit/png/simbolo-plano-tintaOscura-512.png",
+    binario: true,
+    mutar: (o) => o.subarray(0, Math.floor(o.length / 2)),
+  },
+  {
+    guardian: "check:marco",
+    rotura:
+      "el `author` de un tipo elegible vuelve a cruzar de página con el `@id` pelado",
+    // EL CASO ES LITERALMENTE EL DE P60.99 (D87): la Rich Results Test veía el
+    // `author` del artículo como un `Thing` anónimo, y `check:marco` daba verde
+    // sobre lo mismo porque resuelve los `@id` contra TODO el sitio. Se le dieron
+    // `name` y `url` junto al `@id`; esto comprueba que si alguien vuelve a
+    // quitárselos, alguien lo dice. Cuarto caso que muerde el build, por lo de
+    // siempre: la entrada de este guardián es el HTML emitido.
+    archivo: ".next/server/app/es/como-se-ha-creado.html",
+    mutar: (o) =>
+      o.replace(
+        /"author":\{"@type":"Person","@id":"([^"]+)","name":"[^"]*","url":"[^"]*"\}/,
+        '"author":{"@id":"$1"}',
+      ),
+  },
+  {
+    guardian: "check:agentes",
+    rotura: "una entrada del catálogo ARD apunta a un archivo que ya no existe",
+    // EL MODO DE FALLO QUE HACE QUE UN CATÁLOGO SEA PEOR QUE NINGUNO. La lista de
+    // recursos es una promesa que se cumple una petición después: una entrada que
+    // apunta a un archivo renombrado le cuesta al agente esa petición y le hace
+    // desconfiar del resto, y no da error en ninguna parte —el JSON sigue siendo
+    // válido y la entrada sigue cumpliendo el modelo del conformance—.
+    //
+    // MUERDE EL ARTEFACTO Y NO `lib/ard.ts`, quinto caso que lo hace, y aquí no es
+    // una preferencia: el guardián lee el cuerpo que el build prerenderiza, así
+    // que una mutación del generador no llegaría a lo que él mira y el arnés
+    // acusaría de desdentado a un guardián que está bien.
+    archivo: ".next/server/app/.well-known/ard.json.body",
+    mutar: (o) => o.replace('/md/es.md"', '/md/es-que-ya-no-existe.md"'),
+  },
+  {
+    guardian: "check:deuda",
+    rotura:
+      "el sello de deuda se afloja para que un PR que empeora salga verde",
+    // EL MODO DE FALLO DE UN TRINQUETE ES SU PROPIO SELLO. El gate compara el total
+    // que mide Qlty contra un número guardado, así que la forma de desactivarlo no
+    // es tocar el script: es subir el número. Y eso no rompe nada visible — el
+    // archivo sigue siendo JSON válido, el check sigue saliendo verde, y la deuda
+    // que el gate existía para frenar entra sin que nadie la vea.
+    //
+    // El caso malo lo mueve HACIA ARRIBA a propósito, que es la dirección peligrosa:
+    // con el sello inflado, el guardián tiene que seguir sabiendo decir que no. Si
+    // pasara, este gate sería el adorno que su propia cabecera dice no ser.
+    archivo: "scripts/.deuda-sello.json",
+    mutar: (o) => o.replace(/"total": (\d+)/, (_, n) => `"total": ${+n + 50}`),
+  },
+  {
+    guardian: "check:deuda",
+    rotura:
+      "una magnitud sellada se infla y la deuda crece dentro de un archivo ya marcado",
+    // LA OTRA MITAD DEL MISMO TRINQUETE, Y LA QUE EL CASO DE ARRIBA NO PODÍA PROBAR
+    // (2026-09-03, P72.32). Aquel mueve el RECUENTO, que es lo que el gate sabía
+    // comparar; este mueve una CIFRA dejando el recuento intacto, que es justo el
+    // hueco que D187 dejó escrito para no prometer de más: dentro de un archivo que
+    // ya está marcado, la complejidad podía crecer sin que nada se moviera.
+    //
+    // Contra el gate anterior este caso pasaba en verde SIN TOCAR NADA MÁS, que es
+    // lo que lo hace un caso y no un duplicado del de arriba. Y muerde la primera
+    // magnitud que encuentre, no una clave nombrada: las claves de `scripts/` son
+    // justo las que este sprint está vaciando, y un caso malo que se queda sin
+    // material acusa al guardián de algo que no ha hecho.
+    archivo: "scripts/.deuda-sello.json",
+    mutar: (o) =>
+      o.replace(
+        /("magnitudes":[\s\S]*?\[\s*)(\d+)/,
+        (_, pre: string, n: string) => `${pre}${+n + 20}`,
+      ),
+  },
+  {
+    guardian: "check:capturas",
+    rotura:
+      "cambia el titular del Hero y la portada del repo público lo enseña viejo",
+    // EL CASO REAL Y EL PEOR, porque el titular sale en las TRES capturas: en el
+    // banner sin punto y en las dos de la home con él. Se muerde el DICCIONARIO,
+    // que es la fuente, y no la transcripción, que es lo que la imagen dice: al
+    // revés el guardián saldría rojo igual sin probar nada, porque no
+    // distinguiría entre «el sitio cambió» y «alguien tocó la nota».
+    archivo: "app/[lang]/dictionaries/es/home.json",
+    mutar: (o) =>
+      o.replace("Del discovery al dato.", "Del discovery al impacto."),
+  },
+];

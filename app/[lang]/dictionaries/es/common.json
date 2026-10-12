@@ -1,0 +1,89 @@
+{
+  "meta": {
+    "title": "Francisco López · Senior Product Manager",
+    "description": "Senior Product Manager con más de 10 años en SaaS B2B y B2C, y un exit (TheTool → AppRadar). Del discovery al dato: investigo, prototipo, construyo y mido."
+  },
+  "nav": {
+    "skipToContent": "Saltar al contenido",
+    "homeAria": "Inicio · Francisco López",
+    "downloadCv": "Descargar CV",
+    "trayectoria": "Trayectoria",
+    "contacto": "Contacto",
+    "sobreMi": "Sobre mí",
+    "navLabel": "Principal",
+    "menu": "Menú",
+    "toggleThemeToDark": "Cambiar a tema oscuro",
+    "toggleThemeToLight": "Cambiar a tema claro",
+    "switchLanguage": "Ver en inglés",
+    "switchLanguageShort": "EN"
+  },
+  "footer": {
+    "navLabel": "Pie de página",
+    "copyright": "© 2026. Todos los derechos reservados.",
+    "comoSeHaCreado": "El Making of",
+    "brandKit": "Brand Kit",
+    "designSystem": "Design System",
+    "accesibilidad": "Accesibilidad",
+    "cookies": "Privacidad y cookies",
+    "linkedinAria": "LinkedIn",
+    "githubAria": "GitHub"
+  },
+  "breadcrumb": {
+    "routeLabel": "Ruta",
+    "home": "Inicio"
+  },
+  "related": {
+    "eyebrow": "Del mismo sistema",
+    "comingSoon": "Próximamente",
+    "pages": {
+      "brandKit": {
+        "name": "Brand Kit",
+        "desc": "La identidad: el logo y su geometría, la paleta de dos capas, la tipografía y las reglas que gobiernan su uso."
+      },
+      "designSystem": {
+        "name": "Design System",
+        "desc": "El esqueleto: rejilla, tokens de layout, ritmo vertical, tipografía, motion y la accesibilidad medida."
+      },
+      "accesibilidad": {
+        "name": "Accesibilidad",
+        "desc": "La declaración pública: el nivel de conformidad que cumple el sitio y cómo reportar un problema."
+      }
+    }
+  },
+  "consent": {
+    "region": "Consentimiento de cookies",
+    "title": "Tu privacidad",
+    "description": "Uso cookies de analítica para entender cómo se usa la web y mejorarla. Puedes aceptarlas todas, rechazarlas o elegir qué permites.",
+    "policyLink": "Consulta la política de cookies",
+    "acceptAll": "Aceptar todo",
+    "rejectAll": "Rechazar todo",
+    "preferences": "Preferencias",
+    "savePreferences": "Guardar preferencias",
+    "close": "Cerrar",
+    "prefs": {
+      "title": "Preferencias de cookies",
+      "intro": "Elige qué categorías permites. Las necesarias no se pueden desactivar."
+    },
+    "categories": {
+      "necessary": {
+        "title": "Necesarias",
+        "description": "Imprescindibles para que la web funcione. No guardan datos personales ni requieren consentimiento.",
+        "badge": "Siempre activas"
+      },
+      "analytics": {
+        "title": "Analíticas",
+        "description": "Miden de forma agregada cómo se usa la web (páginas vistas, clics) para mejorarla. Google Analytics."
+      },
+      "marketing": {
+        "title": "Marketing",
+        "description": "Permiten personalizar y medir campañas. Hoy no se usan; el control queda disponible por si se activan."
+      }
+    }
+  },
+  "contacto": {
+    "eyebrow": "El siguiente paso",
+    "title": "¿Hablamos?",
+    "intro": "Si en tu empresa el producto está en el centro y construís experiencias increíbles para vuestros usuarios a través del discovery, la IA aplicada y el dato, creo que encajamos. Senior Product Manager con 10+ años en SaaS B2B y B2C, cómodo en remoto o híbrido desde España. Escríbeme y hablamos.",
+    "emailCta": "Contacta conmigo"
+  }
+}

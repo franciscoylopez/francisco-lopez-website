@@ -1,0 +1,21 @@
+.next
+node_modules
+public
+*.pdf
+package-lock.json
+
+# Docs mantenidos a mano (fuente de verdad) — no reformatear
+*.md
+
+# NOTA (2026-08-19): aquí estuvo `scripts`, y era un punto ciego doble. No solo
+# dejaba fuera del `format:check` de CI a ~3.000 líneas de guardianes y
+# generadores: además hacía que `prettier --check "scripts/**"` contestara «All
+# matched files use Prettier code style!» sobre CERO archivos, porque prettier
+# aplica el ignore también a las rutas explícitas y reutiliza el mismo mensaje de
+# éxito con la lista vacía. Es la quinta aparición de «un metro que devuelve lista
+# vacía parece un aprobado». Se retira: los scripts son código de este repo y se
+# formatean como el resto. Si algún día hay que volver a excluir algo de aquí,
+# excluir el archivo concreto y nunca un directorio entero.
+
+# Fuente de diseño (export fiel de Claude Design) — no reformatear
+design

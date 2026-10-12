@@ -1,0 +1,346 @@
+name: CI
+
+# Gate de calidad en cada PR a main: impide meter a main código que no compila, no pasa
+# el linter, no está formateado, o que rompe una de las cosas que este repo ha decidido
+# vigilar. Coherente con el argumento de rigor técnico del sitio (PRD §1).
+#
+# QUÉ PASOS SON, NO SE ESCRIBE AQUÍ. Se leen abajo, que es donde no pueden mentir: esta
+# cabecera enumeró cinco durante once pasos, mientras el comentario del `name:` —treinta
+# líneas más abajo— argumentaba justo eso. La regla estaba escrita y el mismo archivo la
+# incumplía.
+#
+# `format:check` entra aquí en P37.5991, cuando dejó de estar rojo por defecto: con
+# CRLF en el working tree reportaba 57 falsos positivos, así que meterlo en CI habría
+# sido bloquear todos los PR por ruido. Un check solo sirve de gate si su verde
+# significa algo — y solo se mantiene verde si algo lo comprueba.
+
+on:
+  pull_request:
+    branches: [main]
+  # También en push directo a main como red de seguridad (hotfixes, merges de otras vías).
+  push:
+    branches: [main]
+
+# El GITHUB_TOKEN de este workflow solo necesita leer el repo: aquí no se publica
+# nada, no se escriben comentarios ni releases. Sin este bloque hereda los permisos
+# por defecto del repositorio, que pueden ser de escritura.
+permissions:
+  contents: read
+
+# Un push nuevo a la misma rama cancela el run anterior en curso.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    # El nombre NO enumera los pasos. Enumerarlos deriva por construcción: decía
+    # «format · typecheck · lint · palette · build» cuando ya había ocho, así que
+    # llevaba tres pasos sin nombrar (experiencias, CV y raya). Los pasos se leen
+    # abajo, que es donde no pueden mentir.
+    name: calidad y build
+    runs-on: ubuntu-latest
+    steps:
+      # Las acciones se fijan por SHA de commit, no por tag: un tag es un puntero
+      # movible, así que `@v7` es «lo que su dueño diga hoy». Dependabot mantiene el
+      # SHA al día y actualiza el comentario de versión con él.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Historia completa: el paso «Qué toca este PR» compara el copy y los
+          # sellos contra la base, y con el checkout somero (depth 1) no habría
+          # contra qué comparar — diría «no cambia nada», que es el verde falso.
+          fetch-depth: 0
+          # checkout deja el token en .git/config para que pasos posteriores puedan
+          # usarlo. Aquí ninguno lo necesita, y ese fichero viaja dentro de cualquier
+          # artefacto que se suba desde el workspace.
+          persist-credentials: false
+
+      # LA VERSIÓN DE NODE NO SE ESCRIBE AQUÍ: sale de `.nvmrc`, que es la única
+      # cifra (sprint-review de «Cierre V3», 2026-09-05). Estaba escrita en dos
+      # sitios con valores DISTINTOS y nadie lo sabía: aquí ponía 22 y Vercel
+      # construye producción con 24.x, así que el verde de CI era una afirmación
+      # sobre un runtime que no es el que despliega. `engines` de package.json
+      # declara el suelo; esto y Vercel leen el mismo número.
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: ".nvmrc"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Format
+        run: npm run format:check
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Lint
+        run: npm run lint
+
+      # El arnés de tests (P68.494). Va aquí, con los pasos que miran el código
+      # fuente y antes de los que miran artefactos derivados, porque eso es lo
+      # que prueba: la primera lógica de negocio real del sitio —la validación
+      # del formulario, el saneado de cabeceras del correo y las decisiones de la
+      # Server Action—, que es también la única superficie que recibe algo
+      # escrito por otra persona.
+      #
+      # ENTRA EN CI Y NO A DEMANDA, al revés que `psi` o el censo: no necesita
+      # navegador ni red —el transporte SMTP se sustituye por el
+      # `streamTransport` de nodemailer— y tarda menos de un segundo. Un test que
+      # no corre en cada PR no es un guardián, es documentación.
+      #
+      # Y como cualquier otro gate de este repo, tiene su caso malo en
+      # `check:guardianes`: el modo de fallo de una suite verde es indistinguible
+      # del de una suite que no prueba nada (D70).
+      - name: Tests
+        run: npm test
+
+      # Compara la paleta de lib/design-values.ts con la de app/globals.css. Va
+      # aquí porque es el único sitio donde se puede ver: el mock de tema del Design
+      # System y las imágenes OG copian valores de token a mano por necesidad —pintan
+      # la paleta contraria a la vigente, o las genera Satori, que no lee CSS vars— y
+      # una copia que diverge no la detectan ni axe, ni el typecheck, ni el ojo.
+      #
+      # Y desde D90 mira una segunda cosa de la misma familia: si ha aparecido un
+      # token de color, una superficie o una animación que el censo de contraste
+      # NO ha visto. El censo no puede correr aquí —necesita navegador (D85)—,
+      # pero comparar su sello sí, y eso convierte la condición de re-medir de la
+      # DoD en un rojo con nombre en vez de un párrafo que hay que acordarse de
+      # leer.
+      - name: Palette
+        run: npm run check:palette
+
+      # De una experiencia se cuenta lo mismo en tres longitudes —la frase de
+      # Trayectoria, el bullet del CV y su gemelo del deep-dive— y ahora viven en
+      # el mismo objeto (P48.5). Lo que la estructura no puede garantizar lo
+      # comprueba esto: que ES y EN tengan la misma cobertura, que tenga versión
+      # larga quien tiene página, y que una cifra no viva en una longitud y falte
+      # en la otra. Mismo giro que la paleta —se busca la AUSENCIA, no el patrón—
+      # y por la misma razón: ocho divergencias reales que no veía nadie.
+      - name: Experiencias
+        run: npm run check:experiencias
+
+      # Los PDFs del CV son un artefacto COMMITEADO, así que la fuente única no
+      # basta: garantiza que no haya dos verdades, no que la copia impresa esté al
+      # día. El 2026-08-18 un cambio de sector en `content/experience-copy/` dejó
+      # los dos PDFs viejos y no lo vio nada — ni el typecheck, ni el linter, ni
+      # `gate:html`, ni `check:experiencias`. Esto compara la huella de lo que
+      # ENTRA en el CV contra el sello que dejó la última generación (el PDF en sí
+      # no es determinista, así que comparar bytes no sirve; está medido).
+      - name: CV al día
+        run: npm run check:cv
+
+      # El 2026-08-18 se barrieron 357 rayas (—) del copy servido: es una señal
+      # visual de texto escrito por IA y casi nunca decía nada que no dijera una
+      # coma. Un barrido sin guardián se deshace solo, y el bloque siguiente
+      # («Cómo se ha creado esta página») es el que más copy nuevo escribe. Mismo
+      # giro que la paleta y las experiencias —se busca la AUSENCIA— y con las dos
+      # únicas excepciones escritas: el ordinal de una cabecera (D43) y la celda
+      # «no aplica» de una tabla. No mira comentarios ni `*.md`, a propósito.
+      - name: Raya en el copy
+        run: npm run check:raya
+
+      # Techo al contexto que se `@`-importa en cada sesión. D28 escribió el
+      # régimen y no le puso ni cifra ni guardián, así que se cumplió cuatro días:
+      # de 9.275 palabras a 19.805 en diez. Esto es coste fijo de cada arranque.
+      - name: Contexto de arranque
+        run: npm run check:contexto
+
+      # Las skills CADUCAN PEOR que los `.md` porque se siguen en vez de leerse
+      # (D60: `update-cv` acumuló nueve afirmaciones falsas en un día). Comprueba
+      # la parte mecánica: que las rutas y los `npm run` que nombran existan.
+      - name: Skills al día
+        run: npm run check:skills
+
+      # La mitad «a demanda» del régimen de contexto (D28) son ~97.000 palabras, y
+      # solo funciona si se sabe QUÉ HAY dentro sin cargarlo. Los tres índices se
+      # derivan de las cabeceras y los tres viven en la cabecera de su propio
+      # archivo, para no costar nada en el arranque: el de decisiones estaba dentro
+      # de `CLAUDE.md` y era el único que crecía sin límite (D88).
+      - name: Índices derivados
+        run: npm run check:indices
+
+      # La lista de excepciones de BRAND.md —los controles escritos a mano— se
+      # llevaba de memoria, y al derivarla del disco por primera vez estaba mal por
+      # los dos lados: nombraba una que no lo era y le faltaba otra, escrita tres
+      # veces. Ahora cada control fuera de la capa lleva su marca `@fuera-de-capa` y
+      # el documento tiene que nombrarlo; se comprueba en las dos direcciones (D109).
+      - name: Excepciones de la capa de controles
+        run: npm run check:excepciones
+
+      # «Qué páginas tiene este sitio» estaba escrito a mano en TRES sitios —el
+      # sitemap, este gate de HTML y /llms.txt— y en ninguno fallaba de forma
+      # visible: la página no existe para Google, el gate deja de cubrirla en
+      # silencio, y no aparece en el índice para modelos. Ahora la lista es una
+      # (lib/routes.ts) y esto comprueba que cuadre con app/[lang]/**/page.tsx,
+      # que es el único sitio donde una página existe de verdad (D72).
+      - name: Rutas registradas
+        run: npm run check:rutas
+
+      # El kit de marca se genera en el build leyendo public/logo-kit/, así que el
+      # ZIP no puede quedarse viejo. Lo que sí puede derivar es el REGISTRO: una
+      # ruta declarada cuyo archivo ya no está sería un 404 desde un chip que se ve
+      # perfectamente bien, y un archivo en disco que no declara nadie viajaría
+      # dentro del kit sin que ninguna página lo mencione. Es literalmente cómo
+      # aparecieron los diez huérfanos que encontró P70.27: nadie los metió a
+      # propósito, simplemente nunca hubo nada que los contara (D119).
+      - name: Registro del kit de marca
+        run: npm run check:kit
+
+      # Las tres capturas de `.github/assets/` son artefactos commiteados sin
+      # huella, y desde el 2026-08-19 el repositorio es PÚBLICO: esa portada es lo
+      # primero que ve quien llega. No se sella el render —una captura no es
+      # determinista, y el HTML de la home se mueve casi cada tanda sin que la
+      # imagen deje de ser correcta—: se declara cada frase que la imagen enseña y
+      # se contrasta con su fuente viva. Corre aquí, con los de fuente, porque no
+      # necesita el build.
+      - name: Capturas del README al día
+        run: npm run check:capturas
+
+      # «Cómo se ha creado esta página» describe un proyecto que sigue cambiando, y
+      # sus afirmaciones caducan sin avisar: la cifra de páginas ya iba una por
+      # detrás, y 27 de sus 38 permalinks a DECISIONS.md apuntaban diez líneas
+      # arriba desde que un addendum de D26 desplazó el archivo. Cada sección
+      # declara de qué depende y lleva su sello; cuando una fuente se mueve, esto
+      # sale rojo NOMBRANDO la sección, en el PR que la mueve — no al cerrar la
+      # etapa, que es cuando lo vería `sprint-review` (D84).
+      - name: Artículo al día
+        run: npm run check:articulo
+
+      # Y la OTRA página que publica afirmaciones verificables sobre el propio
+      # repo. Mismo aparato y misma razón: la frase «aún no hay formulario»
+      # sobrevivió tres días al sprint que construyó el formulario, y se encontró
+      # de casualidad leyendo la página. Comprueba además que las dos cifras del
+      # arnés que escribe en prosa cuadran con los casos que hay (P50.73).
+      - name: Accesibilidad al día
+        run: npm run check:accesibilidad
+
+      # Las dieciséis cadenas de las tarjetas OG repiten copy del diccionario, y
+      # nada las comparaba: al afilar el kicker del Hero, cambiarlo eran TRES sitios
+      # y el tercero solo apareció por un grep a mano. Es lo que se ve al compartir
+      # el sitio, y el único texto que no mira nadie (P50.75).
+      - name: Tarjetas OG al día
+        run: npm run check:og
+
+      # LO QUE FRANCISCO PIDIÓ: que el PR diga, antes de mergear, qué secciones
+      # publicadas toca — y que distinga «cambió el copy» (hay que leerlo) de «se
+      # movió una dependencia» (casi nunca). Las dos piezas existían y ninguna
+      # llegaba: `articulo:novedades` no estaba en CI, y `check:articulo` en verde
+      # no nombra ninguna sección. Escribe en el RESUMEN del job, que es donde se
+      # lee un PR, y NUNCA falla: un aviso que puede poner un PR en rojo se acaba
+      # silenciando (P50.76).
+      - name: Qué secciones publicadas toca este PR
+        if: github.event_name == 'pull_request'
+        # La base va por ENTORNO y no interpolada en el `run:`: un `${{ }}` dentro de
+        # la línea de comando es el vector de inyección clásico de Actions, y
+        # además dejaría el paso fuera del recuento que el artículo dibuja, que
+        # busca `run: npm run <script>` a final de línea.
+        env:
+          BASE_REF: ${{ github.event.pull_request.base.sha }}
+        run: npm run novedades
+
+      # TRINQUETE DE DEUDA (P72.19, D186): ningún PR puede subir la cifra que mide
+      # Qlty. No hay número objetivo —hay funciones complejas porque el problema lo
+      # es, y partirlas para bajar un contador las empeora—: lo que se prohíbe es
+      # EMPEORAR. Lo que hay se acepta; lo que se añada, no, salvo re-sello a
+      # propósito que salga en el diff.
+      #
+      # Existe por una medida: entre el 2026-08-31 y el 2026-09-02 la deuda pasó de
+      # 51 hallazgos a 71, y los VEINTE de diferencia estaban todos en `scripts/` —
+      # el producto no se movió un punto. No era un problema de stock sino de
+      # crecimiento, y eso un refactor no lo arregla: lo retrasa un sprint.
+      #
+      # NO es `qlty smells --upstream main`, que fue lo primero que se probó: ese
+      # modo mira los archivos que toca el PR y reporta los defectos que ya había en
+      # ellos, y sale con código 0. Mide otra cosa. El porqué, en `check-deuda.ts`.
+      #
+      # Va DELANTE del build porque no lo necesita: lee el código fuente.
+      - name: Instalar Qlty
+        uses: qltysh/qlty-action/install@c9b09987143d1e4ac955f4803c7bea742102feb5 # v2.4.0
+
+      - name: Trinquete de deuda
+        run: npm run check:deuda
+
+      - name: Build
+        run: npm run build
+
+      # Los dos pasos que miden el HTML que el sitio EMITE, no el código que lo
+      # genera, así que van detrás del build y no delante.
+      #
+      # El criterio de cierre de página nueva —los 8 puntos de accesibilidad, el
+      # enlace de salto, el SEO y su JSON-LD— se cumplía A MANO y dependía de
+      # acordarse, que es el patrón que BRAND.md §Cómo se escribe una regla nombra
+      # como el que produce drift. La mitad ya no se puede romper: pageMetadata y
+      # PageShell la DERIVAN (D45). Esto mira la otra mitad: lo que pone quien
+      # ESCRIBE la página, que la derivación LLEGÓ —los helpers son opt-in, y una
+      # página que se escriba su metadata a mano compila igual— y que las
+      # referencias `@id` entre páginas resuelven, cosa que ningún validador
+      # externo hace. Contraste y objetivo táctil NO están: necesitan navegador y
+      # tema, los cubre viewport-verifier (D52), y además se HEREDAN de la capa de
+      # componentes. Cuesta segundos porque lee el prerender, y por eso puede
+      # correr en cada PR en vez de ser un nightly.
+      - name: Marco de página
+        run: npm run check:marco
+
+      # El markdown de `public/md/` es un ARTEFACTO DERIVADO del prerender (P67.2,
+      # D158): se genera con `npm run md` y se commitea, porque negociar `Accept`
+      # dentro de una página la haría dinámica y las 28 variantes tienen que seguir
+      # siendo estáticas (D48). Un artefacto commiteado se queda viejo en silencio
+      # —familia D60—, así que nace con su guardián el MISMO día y no cuatro
+      # después como `check:kit`. Vuelve a convertir el prerender y compara: si el
+      # copy de una página cambió y nadie regeneró, esto sale rojo nombrando la
+      # variante.
+      - name: Markdown al día
+        run: npm run md:verificar
+
+      # El rótulo PINTADO de toda figura con lienzo escalado (P68.59). Un
+      # `text-[11px]` dentro de un `viewBox` son 11 unidades de dibujo, no 11
+      # píxeles: los siete diagramas del artículo llevaban desde que existen
+      # pintando entre 5,0 y 8,2px a 360 y no lo vio nadie, porque cae justo en
+      # el hueco de tres metros —`viewport-verifier` mira desbordamientos, axe no
+      # mide tamaño de texto, y el `font-size` computado dice 11 en todos los
+      # viewports—. Va aquí y no en el censo, que es donde la tarea lo suponía,
+      # porque NO necesita navegador: el `viewBox`, el tope, el umbral de la
+      # container query y el tamaño de cada rótulo están en el prerender.
+      - name: Rótulo de las figuras
+        run: npm run check:figuras
+
+      # Que los nombres propios lleguen al HTML marcados como no traducibles
+      # (P70.12). El traductor automático de Chrome convierte «TheTool» en «La
+      # Herramienta» y «Miss Conversion» en «Señorita Conversión», y este sitio es
+      # bilingüe: la traducción se ofrece de verdad, y el argumento entero son esos
+      # nombres. Lo pone una capa —el copy no lleva el atributo escrito— y por eso
+      # hay que comprobar que LLEGA: los helpers son opt-in, así que una página que
+      # pinte un nombre sin pasar por `Rich` ni por `<Marcas>` compila igual. Busca
+      # la AUSENCIA: recorre los nodos de texto y exige un ancestro con
+      # `translate="no"`, en vez de contar cuántos hay. Lee el prerender, así que
+      # va detrás del build y cuesta segundos.
+      - name: Nombres propios sin traducir
+        run: npm run check:marcas
+
+      # Lo que este sitio le PROMETE a un agente (P68). Nace de una pregunta con
+      # respuesta incómoda: no, los dos escáneres de agentes no se enganchan a la
+      # rutina, y no deberían. Su nota mezcla lo que aplica con lo que no —un
+      # 20/100 donde doce checks son de superficies que el sitio no tiene— y sus
+      # reglas son borradores que cambian sin avisar, así que el gate se pondría
+      # rojo o verde por algo que no hemos decidido. Un escáner es DESCUBRIMIENTO;
+      # la rutina es un guardián nuestro sobre las invariantes que este sprint
+      # adoptó. Mira en tres sitios distintos a propósito: el ARTEFACTO de
+      # llms.txt, el proxy EJECUTADO (una cabecera no está en el prerender) y
+      # `robots()` con sus dos entornos, porque el robots.txt que se construye en
+      # CI es el de NO producción (D13) y leerlo daría por bueno un Disallow.
+      - name: Promesas a los agentes
+        run: npm run check:agentes
+
+      # Y el que mira a todos los demás: a cada guardián le pasa un caso malo
+      # conocido y comprueba que lo RECHAZA. Es lo contrario de un test de que
+      # funciona — el modo de fallo de un guardián es una luz verde, y el censo de
+      # contraste se rompió así dos veces en silencio (D70). Nació FUERA de CI
+      # porque muta archivos rastreados para provocar el fallo, y eso sale caro en
+      # un árbol de trabajo con cosas dentro; en un runner que se tira al terminar,
+      # no. Exige árbol limpio, restaura desde memoria y falla si queda algo movido.
+      # Va el ÚLTIMO desde P58.5: su caso de `check:marco` muerde el HTML del
+      # build, que es la entrada de ese guardián, y sin `.next` no se podría probar.
+      - name: Guardianes con dientes
+        run: npm run check:guardianes
