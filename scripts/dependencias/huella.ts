@@ -165,6 +165,27 @@ export const DEL_DISCO: Fuente = {
       : undefined,
 };
 
+/**
+ * Un workflow sin la VERSIÓN de sus acciones (2026-10-12, P74.65).
+ *
+ * `ci.yml` es dependencia sellada del artículo (§s10) y de `/accesibilidad`, y
+ * cada PR de Dependabot del ecosistema `github-actions` solo cambia un pin
+ * —`uses: actions/setup-node@<sha> # v7.1.0`—. Hasheado entero, cada uno salía
+ * rojo con cero hallazgos dentro: ninguno de los dos textos cita una versión de
+ * acción. Es el ruido que enseña a sellar sin mirar (D193), y en el repo anterior
+ * dejó entrar en rojo el bump de la acción de Qlty.
+ *
+ * QUÉ SIGUE MOVIENDO EL SELLO: todo lo demás. Un paso nuevo, uno renombrado o
+ * una acción CAMBIADA por otra —el `owner/repo` se queda en el hash— son justo lo
+ * que cuentan esos textos. Solo se quita lo que va detrás de la `@`.
+ */
+export function sinPinDeAcciones(texto: string): string {
+  return texto.replace(
+    /^(\s*(?:-\s+)?uses:\s*[^@\s#]+)@\S+(?:[ \t]+#.*)?$/gm,
+    "$1@<pin>",
+  );
+}
+
 export function contenidoDesde(
   dep: Dependencia,
   fuente: Fuente,
@@ -177,8 +198,11 @@ export function contenidoDesde(
 
   const [ruta, fragmento] = dep.split("#");
   if (!ruta) return undefined;
-  const texto = fuente.leer(ruta);
-  if (texto === undefined) return undefined;
+  const leido = fuente.leer(ruta);
+  if (leido === undefined) return undefined;
+  const texto = ruta.startsWith(".github/workflows/")
+    ? sinPinDeAcciones(leido)
+    : leido;
   if (!fragmento) return texto;
 
   // Qué significa el `#` lo decide la EXTENSIÓN, no una heurística sobre el

@@ -673,6 +673,17 @@ export const CASOS: Caso[] = [
     mutar: (o) => o.replace('          { n: "Tests", cat: "patron" },\n', ""),
   },
   {
+    guardian: "check:articulo",
+    rotura: "el CI cambia una acción por otra, no solo su versión",
+    // Desde P74.65 la huella de un workflow ignora el pin de cada acción
+    // (`sinPinDeAcciones`), para que un bump de Dependabot no salga rojo. Este
+    // caso es el límite de esa tolerancia: el `owner/repo` sí se queda en el
+    // hash, y si un día la expresión regular se come también el nombre, el
+    // artículo dejaría de enterarse de que su CI ya es otro.
+    archivo: ".github/workflows/ci.yml",
+    mutar: (o) => o.replace("actions/setup-node@", "actions/otra-accion@"),
+  },
+  {
     guardian: "test",
     rotura:
       "el Reply-To vuelve a componerse concatenando y cuela una segunda dirección",
