@@ -501,15 +501,15 @@ SEO 100 · Accessibility 100 · Best practices 100
 
 GEO is the other half, and it stands for _Generative Engine Optimization_: making the site readable and quotable by an assistant, not just indexable by a search engine. An assistant doesn't browse, it fetches the content and cites it. So every page is also served as **markdown**, with the text and none of the scaffolding around it, which makes the home page more than **30 times lighter**. There's an llms.txt file that says who I am and when it makes sense to bring this source into a conversation, a catalogue at /.well-known/ard.json with the resources the site offers a machine, and a line in robots.txt saying the same thing the repository licence says: it can be indexed, it can be read to answer while citing it, it can't be used for training.
 
-What the site doesn't have, it doesn't advertise either: there's no MCP server, no API, no skills catalogue and no agent card, so none of those formats get published. **An API catalogue without an API isn't being ready for agents, it's lying in a format a machine knows how to read.** That leaves boxes deliberately empty, and it's why this number reads differently from the one above: of the report's 125 checks, 60 measure surfaces that don't exist here. It's a snapshot of where the site is, not a target I set myself.
+What the site doesn't have, it doesn't advertise either: there's no MCP server, no API, no skills catalogue and no agent card, so none of those formats get published. **An API catalogue without an API isn't being ready for agents, it's lying in a format a machine knows how to read.** That leaves boxes deliberately empty, and it's why this number reads differently from the one above: of the report's 132 checks, 66 measure surfaces that don't exist here. It's a snapshot of where the site is, not a target I set myself.
 
-Agents · ora.ai · `npm run agentes:sellar · 31 August 2026`
+Agents · ora.ai · `npm run agentes:sellar · 12 October 2026`
 
-78 out of 100
+85 out of 100
 
 [See the report](https://ora.ai/score/franciscolopez.es)
 
-Grade B · 125 checks · 60 not applicable
+Grade B · 132 checks · 66 not applicable
 
 ### The debt the analyzer actually found
 
