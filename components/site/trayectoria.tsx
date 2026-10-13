@@ -294,9 +294,12 @@ export function Trayectoria({
 
         {/* Bloque Experiencia previa */}
         <div aria-hidden="true" className="h-[clamp(3.5rem,7vw,6rem)]" />
+        {/* Cambio de bloque dentro de la sección: mismo nivel que un corte entre
+            secciones, así que lleva el mismo separador (`.section-sep`), no un
+            filete propio. */}
         <div
           aria-hidden="true"
-          className="border-foreground mb-[clamp(2rem,4vw,3rem)] border-t-2 opacity-[0.28]"
+          className="section-sep mb-[clamp(2rem,4vw,3rem)]"
         />
         <p data-reveal className={cn(dataLabelVariants(), "mb-2")}>
           {dict.previoLabel}
