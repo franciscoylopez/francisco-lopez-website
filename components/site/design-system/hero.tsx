@@ -55,7 +55,17 @@ const RADIOS = [
 const T_COTAS = 13;
 
 /** Las cotas de la ficha, por fuera: su ancho arriba y su alto a la derecha. */
-function Cotas({ ancho, alto }: { ancho: number; alto: number }) {
+function Cotas({
+  ancho,
+  alto,
+  minimo,
+}: {
+  ancho: number;
+  alto: number;
+  /** `min-w-[Npx]` del lienzo de las cotas (ancho + 68), escrito entero: le
+   *  dice a `check:figuras` que se pinta a su ancho y no se encoge. */
+  minimo: string;
+}) {
   const M = 34;
   const y = -14;
   const x = ancho + 14;
@@ -85,7 +95,7 @@ function Cotas({ ancho, alto }: { ancho: number; alto: number }) {
       width={ancho + 2 * M}
       height={alto + 2 * M}
       fill="none"
-      className="pointer-events-none absolute z-[1]"
+      className={cn("pointer-events-none absolute z-[1]", minimo)}
       style={{ left: -M, top: -M }}
     >
       {/* el ancho: líneas de referencia, la cota y sus topes oblicuos */}
@@ -136,10 +146,12 @@ function Ficha({
   ancho,
   alto,
   completa,
+  minimo,
 }: {
   ancho: number;
   alto: number;
   completa: boolean;
+  minimo: string;
 }) {
   const tipo = completa ? TIPO : TIPO.slice(1);
   const espacio = completa ? SPACING_SCALE : SPACING_SCALE.slice(0, 7);
@@ -231,7 +243,7 @@ function Ficha({
           ))}
         </div>
       </div>
-      <Cotas ancho={ancho} alto={alto} />
+      <Cotas ancho={ancho} alto={alto} minimo={minimo} />
     </div>
   );
 }
@@ -246,10 +258,10 @@ function HeroComposition() {
       className="flex flex-[1_1_26rem] items-center justify-center pt-8 max-md:overflow-x-clip md:pt-0"
     >
       <div className="md:hidden">
-        <Ficha ancho={240} alto={176} completa={false} />
+        <Ficha ancho={240} alto={176} completa={false} minimo="min-w-[308px]" />
       </div>
       <div className="hidden md:block">
-        <Ficha ancho={336} alto={224} completa />
+        <Ficha ancho={336} alto={224} completa minimo="min-w-[404px]" />
       </div>
     </div>
   );

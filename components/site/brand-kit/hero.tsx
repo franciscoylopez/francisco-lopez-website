@@ -129,10 +129,14 @@ function Reticula({
   ancho,
   alto,
   completa,
+  minimo,
 }: {
   ancho: number;
   alto: number;
   completa: boolean;
+  /** `min-w-[Npx]` con el mismo ancho, escrito entero: le dice a
+   *  `check:figuras` que este lienzo se pinta a su ancho y no se encoge. */
+  minimo: string;
 }) {
   const k = (alto - 58) / ALTO;
   const cx = ancho / 2 + 10;
@@ -161,7 +165,7 @@ function Reticula({
       width={ancho}
       height={alto}
       fill="none"
-      className="block"
+      className={cn("block", minimo)}
     >
       <g className="construye-fondo" stroke="var(--border)" strokeWidth={1}>
         {lineas.map(([x1, y1, x2, y2], n) => (
@@ -352,10 +356,20 @@ export function Hero({
           <Flanco lado="der" />
           <div className="entrada-pliegue border-foreground bg-background relative z-[2] overflow-hidden rounded-[14px] border">
             <div className="md:hidden">
-              <Reticula ancho={240} alto={176} completa={false} />
+              <Reticula
+                ancho={240}
+                alto={176}
+                completa={false}
+                minimo="min-w-[240px]"
+              />
             </div>
             <div className="hidden md:block">
-              <Reticula ancho={336} alto={224} completa />
+              <Reticula
+                ancho={336}
+                alto={224}
+                completa
+                minimo="min-w-[336px]"
+              />
             </div>
           </div>
         </div>
