@@ -647,12 +647,17 @@
    una animación de `transform` en una pieza dentro de ellas se llevaría el giro
    por delante si algún día la pieza lo tuviera. La propiedad individual compone.
 
-   EL CURSOR ANIMA `left` Y LA LÍNEA `clip-path`, y ninguna de las dos es
-   propiedad de compositor en todos los navegadores. Es a sabiendas: son
-   elementos de pocos píxeles, una vez por carga y en saltos de siete pasos, así
-   que pintan siete veces cada uno. Revelar con `scaleX` sí iría al compositor,
-   pero deforma los extremos redondeados, que es lo que hace que se lea como
-   línea. */
+   EL CURSOR VA POR `translate`, NO POR `left` (revisión de motion, 2026-10-13).
+   El `::after` mide lo que la línea y pinta el cursor en sus 2px de la
+   derecha; arranca desplazado su propio ancho hacia la izquierda y vuelve a 0.
+   Un porcentaje de `translate` es del propio elemento, y por eso tiene que
+   medir lo que la línea: con 2px de ancho, el 100% serían 2px.
+
+   LA LÍNEA SÍ ANIMA `clip-path`, que no va al compositor en todos los
+   navegadores, y es a sabiendas: son elementos de pocos píxeles, una vez por
+   carga y en saltos de siete pasos, así que se pintan siete veces cada uno.
+   Revelar con `scaleX` iría al compositor, pero deforma los extremos
+   redondeados, que es lo que hace que se lea como línea. */
 :root {
   --construye-paso: 80ms;
   --construye-tras: 0.12s;
@@ -686,12 +691,12 @@
 .construye-linea::after {
   content: "";
   position: absolute;
-  top: -3px;
-  bottom: -3px;
-  left: 0;
-  width: 2px;
-  border-radius: 1px;
-  background: var(--construye-cursor);
+  inset: -3px 0;
+  background: linear-gradient(
+    to left,
+    var(--construye-cursor) 2px,
+    transparent 2px
+  );
   opacity: 0;
   pointer-events: none;
   animation:
@@ -722,10 +727,10 @@
 }
 @keyframes construye-cursor {
   from {
-    left: 0;
+    translate: -100% 0;
   }
   to {
-    left: 100%;
+    translate: 0 0;
   }
 }
 @keyframes construye-cursor-luz {
