@@ -55,8 +55,11 @@ Así que en un gráfico **el cian lleva la información y lo que no llega se ate
 además el trazo y la etiqueta, que es lo que cumple el punto 6 del checklist sin depender del
 color.
 
-*(Las cifras y la asimetría entre temas, en [`BRAND-historical.md`](./BRAND-historical.md)
-§El morado como gráfico.)*
+**Excepciones** *(2026-10-13)*, en `--brand-purple`: cotas del Design System (cifra,
+`--muted-foreground`) y barras sin dato de Trayectoria.
+
+*(Cifras y excepciones, en [`BRAND-historical.md`](./BRAND-historical.md) §El morado como
+gráfico y §Las excepciones moradas.)*
 
 ### El atenuado lo pone la superficie, no el punto de uso
 

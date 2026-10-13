@@ -35,6 +35,25 @@ type LogoProps = ConWordmark & {
   className?: string;
 };
 
+/**
+ * LA GEOMETRÍA DEL MONOGRAMA, en unidades del `viewBox`. Vive aquí y se exporta
+ * porque hay un segundo lector: la retícula de la apertura del Brand Kit, que
+ * ACOTA el logo (radio, trazo, base, alto) y no puede permitirse acotar una
+ * copia que se haya quedado atrás. Las cotas se derivan de estas cifras.
+ */
+export const MONOGRAMA = {
+  cx: 60,
+  cy: 46,
+  r: 26,
+  trazo: 6,
+  base: { x: 42, y: 82, w: 36, h: 5, rx: 2.5 },
+  /** El desplazamiento de cada capa del split respecto al aro. */
+  cian: { dx: -3, dy: -2 },
+  morado: { dx: 3, dy: 2 },
+} as const;
+
+const M = MONOGRAMA;
+
 /** La proporción wordmark/símbolo del lockup compuesto en UI (regla 5: 40-45%). */
 const RATIO_WORDMARK = 0.45;
 
@@ -70,23 +89,36 @@ export function Logo({
         {showSplit && (
           <g style={driven ? { opacity: splitOpacity } : undefined}>
             <circle
-              cx="57"
-              cy="44"
-              r="26"
+              cx={M.cx + M.cian.dx}
+              cy={M.cy + M.cian.dy}
+              r={M.r}
               stroke="var(--brand-cyan-split)"
-              strokeWidth="6"
+              strokeWidth={M.trazo}
             />
             <circle
-              cx="63"
-              cy="48"
-              r="26"
+              cx={M.cx + M.morado.dx}
+              cy={M.cy + M.morado.dy}
+              r={M.r}
               stroke="var(--brand-purple-split)"
-              strokeWidth="6"
+              strokeWidth={M.trazo}
             />
           </g>
         )}
-        <circle cx="60" cy="46" r="26" stroke={shapeColor} strokeWidth="6" />
-        <rect x="42" y="82" width="36" height="5" rx="2.5" fill={shapeColor} />
+        <circle
+          cx={M.cx}
+          cy={M.cy}
+          r={M.r}
+          stroke={shapeColor}
+          strokeWidth={M.trazo}
+        />
+        <rect
+          x={M.base.x}
+          y={M.base.y}
+          width={M.base.w}
+          height={M.base.h}
+          rx={M.base.rx}
+          fill={shapeColor}
+        />
       </svg>
       {showWordmark && (
         // El tamaño sale de la altura del símbolo por `RATIO_WORDMARK`, no de

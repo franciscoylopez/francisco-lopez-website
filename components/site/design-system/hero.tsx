@@ -1,13 +1,13 @@
-import { type CSSProperties } from "react";
-
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { LineaEscrita, turno } from "@/components/ui/construye";
+import { titleVariants } from "@/components/ui/heading";
 import { Stat } from "@/components/ui/stat-row";
 import {
   BREAKPOINT_COUNT,
   BREAKPOINTS,
   CONTAINER_PX,
   MEASURE_REM,
+  SPACING_SCALE,
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 
@@ -15,125 +15,253 @@ import { type BreadcrumbDict } from "../breadcrumb";
 import { SystemPageOpening } from "../system-page-opening";
 
 /* ===================== HERO ===================== */
-// LO DE DENTRO DE CADA MARCO SE CONSTRUYE AL CARGAR (2026-10-13): primero las
-// doce columnas de la rejilla, a medio paso, luego el titular y las líneas. El
-// `i` de cada pieza es su turno; el reloj lo pone el marco. Mecanismo en
-// `globals.css` §La ficha que se construye.
+// LA HOJA DE ESPECIFICACIÓN, ACOTADA (2026-10-13). Sustituye a las tres
+// maquetas con rejilla, que se leían como un wireframe cualquiera. Elegida con
+// `/prototype` frente a una pieza despiezada y a la rejilla con bloques: una
+// ficha con las escalas reales del sistema —la tipográfica, la de espaciado y
+// los radios— y, fuera de ella, sus cotas en morado, que es lo que la separa de
+// la retícula del Brand Kit sin dejar de ser de la misma familia.
+//
+// EL MORADO DE LAS COTAS ES UNA EXCEPCIÓN DECIDIDA, no un descuido: está
+// escrita con fecha en `BRAND.md` §El morado decorativo no vale como elemento
+// gráfico. La cifra que se lee va en `text-muted-foreground`; la línea solo
+// dibuja.
+//
+// LAS CIFRAS NO SE ESCRIBEN. La tipográfica sale del techo de cada `clamp` de
+// `titleVariants`; la de espaciado, de `SPACING_SCALE`; los radios son las
+// utilidades reales (`rounded-sm`…`rounded-xl`), y las cotas, del tamaño con el
+// que se dibuja la propia ficha.
+//
+// SE CONSTRUYE AL CARGAR: los peldaños «Aa», las barras de espaciado que se
+// escriben, los radios y, al final, las cotas. Mecanismo en `globals.css`
+// §La ficha que se construye.
 
-/** El marco del frente, el mismo en escritorio y en móvil salvo cuántas líneas
- *  lleva cada columna y cuánto mide la segunda. */
-function MarcoRejilla({ anchos }: { anchos: string[] }) {
+/** El techo de un titular, en px: el tercer término de su `clamp`. */
+function techo(size: "page" | "section" | "sub" | "card") {
+  const m = /clamp\([^,]+,[^,]+,([\d.]+)rem\)/.exec(titleVariants({ size }));
+  return m ? Number(m[1]) * 16 : 0;
+}
+const TIPO = (["page", "section", "sub", "card"] as const).map(techo);
+
+/** Las clases escritas enteras: Tailwind no ve una clase interpolada. */
+const RADIOS = [
+  ["sm", "rounded-sm"],
+  ["md", "rounded-md"],
+  ["lg", "rounded-lg"],
+  ["xl", "rounded-xl"],
+] as const;
+
+/** Turno de la primera cota: van al final, con la ficha ya construida. */
+const T_COTAS = 13;
+
+/** Las cotas de la ficha, por fuera: su ancho arriba y su alto a la derecha. */
+function Cotas({
+  ancho,
+  alto,
+  minimo,
+}: {
+  ancho: number;
+  alto: number;
+  /** `min-w-[Npx]` del lienzo de las cotas (ancho + 68), escrito entero: le
+   *  dice a `check:figuras` que se pinta a su ancho y no se encoge. */
+  minimo: string;
+}) {
+  const M = 34;
+  const y = -14;
+  const x = ancho + 14;
+  type Punto = readonly [number, number];
+  const linea = (
+    [x1, y1]: Punto,
+    [x2, y2]: Punto,
+    i: number,
+    tenue = false,
+  ) => (
+    <line
+      className="construye-traza"
+      pathLength={1}
+      style={turno(i)}
+      x1={x1}
+      y1={y1}
+      x2={x2}
+      y2={y2}
+      stroke="var(--brand-purple)"
+      strokeOpacity={tenue ? 0.6 : 1}
+      strokeWidth={1}
+    />
+  );
   return (
-    <>
-      <div className="absolute inset-[0.6rem] grid grid-cols-12 gap-[2px]">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <div
-            key={i}
-            className="construye-barra bg-brand-cyan-soft rounded-[1px]"
-            style={turno(i * 0.5)}
-          />
-        ))}
-      </div>
-      <div className="relative flex flex-col gap-[0.6rem] p-[0.8rem]">
-        <LineaEscrita
-          i={6}
-          ancho="45%"
-          className="bg-foreground h-[0.55rem] rounded-full"
-        />
-        <div className="grid grid-cols-2 gap-[0.7rem]">
-          {[0, 1].map((col) => (
-            <div key={col} className="flex flex-col gap-[0.4rem]">
-              {anchos.map((ancho, k) => (
+    <svg
+      viewBox={`${-M} ${-M} ${ancho + 2 * M} ${alto + 2 * M}`}
+      width={ancho + 2 * M}
+      height={alto + 2 * M}
+      fill="none"
+      className={cn("pointer-events-none absolute z-[1]", minimo)}
+      style={{ left: -M, top: -M }}
+    >
+      {/* el ancho: líneas de referencia, la cota y sus topes oblicuos */}
+      {linea([0, -4], [0, y - 6], T_COTAS, true)}
+      {linea([ancho, -4], [ancho, y - 6], T_COTAS, true)}
+      {linea([0, y], [ancho, y], T_COTAS + 0.5)}
+      {linea([-4, y + 4], [4, y - 4], T_COTAS + 0.5)}
+      {linea([ancho - 4, y + 4], [ancho + 4, y - 4], T_COTAS + 0.5)}
+      <text
+        className="construye-pieza fill-muted-foreground font-mono"
+        style={turno(T_COTAS + 1)}
+        x={ancho / 2}
+        y={y - 6}
+        textAnchor="middle"
+        fontSize={11}
+      >
+        {ancho}
+      </text>
+      {/* el alto */}
+      {linea([ancho + 4, 0], [x + 6, 0], T_COTAS + 1.5, true)}
+      {linea([ancho + 4, alto], [x + 6, alto], T_COTAS + 1.5, true)}
+      {linea([x, 0], [x, alto], T_COTAS + 2)}
+      {linea([x - 4, 4], [x + 4, -4], T_COTAS + 2)}
+      {linea([x - 4, alto + 4], [x + 4, alto - 4], T_COTAS + 2)}
+      {/* El giro va en un grupo: en el texto, el `transform-box: fill-box`
+          de las piezas reinterpretaría el centro del `rotate`. */}
+      <g transform={`rotate(90 ${x + 6} ${alto / 2})`}>
+        <text
+          className="construye-pieza fill-muted-foreground font-mono"
+          style={turno(T_COTAS + 2.5)}
+          x={x + 6}
+          y={alto / 2}
+          textAnchor="middle"
+          fontSize={11}
+        >
+          {alto}
+        </text>
+      </g>
+    </svg>
+  );
+}
+
+/**
+ * La ficha a su tamaño. `completa` es la de escritorio: el peldaño de 80, la
+ * escala de espaciado entera y las etiquetas que en móvil no caben.
+ */
+function Ficha({
+  ancho,
+  alto,
+  completa,
+  minimo,
+}: {
+  ancho: number;
+  alto: number;
+  completa: boolean;
+  minimo: string;
+}) {
+  const tipo = completa ? TIPO : TIPO.slice(1);
+  const espacio = completa ? SPACING_SCALE : SPACING_SCALE.slice(0, 7);
+  return (
+    <div className="relative" style={{ width: ancho, height: alto }}>
+      <div
+        className={cn(
+          "entrada-pliegue border-foreground bg-background relative z-[2] grid h-full grid-cols-[auto_1fr] grid-rows-[1fr_auto] overflow-hidden rounded-[14px] border",
+          completa
+            ? "gap-x-[26px] gap-y-3 px-5 py-3"
+            : "gap-x-[18px] gap-y-[10px] px-4 py-[14px]",
+        )}
+      >
+        <div
+          className={cn(
+            "flex flex-col justify-center",
+            completa ? "gap-2" : "gap-1.5",
+          )}
+        >
+          {tipo.map((px, k) => (
+            <div key={px} className="flex items-baseline gap-2">
+              <span
+                className="construye-pieza font-display leading-[0.9] font-semibold"
+                style={{
+                  ...turno(k),
+                  fontSize: Math.round(px * (completa ? 0.5 : 0.42)),
+                }}
+              >
+                Aa
+              </span>
+              <LineaEscrita
+                i={k + 0.5}
+                className="text-muted-foreground font-mono text-[11px] leading-none"
+              >
+                {px}
+              </LineaEscrita>
+            </div>
+          ))}
+        </div>
+        <div
+          className={cn(
+            "flex flex-col justify-center",
+            completa ? "gap-[3px]" : "gap-[5px]",
+          )}
+        >
+          {espacio.map(({ name, px }, k) => (
+            <div key={name} className="flex items-center gap-2">
+              <LineaEscrita
+                i={4 + k * 0.6}
+                ancho={`${Math.round(px * (completa ? 0.78 : 0.62))}px`}
+                className="bg-brand-cyan h-[5px] rounded-[2px]"
+              />
+              {completa && (
+                <span
+                  className="construye-pieza text-muted-foreground font-mono text-[11px] leading-none"
+                  style={turno(4.3 + k * 0.6)}
+                >
+                  {px}
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+        <div
+          className={cn(
+            "border-border col-span-full flex border-t pt-2",
+            completa ? "gap-[22px]" : "gap-[14px]",
+          )}
+        >
+          {RADIOS.map(([nombre, clase], k) => (
+            <div key={nombre} className="flex items-center gap-1.5">
+              <span
+                className={cn(
+                  "construye-pieza border-foreground border-[1.5px]",
+                  clase,
+                  completa ? "size-6" : "size-[22px]",
+                )}
+                style={turno(10 + k)}
+              />
+              {completa && (
                 <LineaEscrita
-                  key={k}
-                  i={7 + col * anchos.length + k}
-                  ancho={ancho}
-                  className="bg-foreground h-[0.32rem] rounded-full opacity-55"
-                />
-              ))}
+                  i={10.5 + k}
+                  className="text-muted-foreground font-mono text-[11px] leading-none"
+                >
+                  {nombre}
+                </LineaEscrita>
+              )}
             </div>
           ))}
         </div>
       </div>
-    </>
+      <Cotas ancho={ancho} alto={alto} minimo={minimo} />
+    </div>
   );
 }
 
-// Composición decorativa del hero: tres marcos de página escalonados con la
-// rejilla de 12 columnas visible en el frente. Solo desktop; en móvil, un marco.
+// Composición decorativa. En móvil, `pt-8` deja sitio a la cota de arriba, que
+// sale de la ficha, y `overflow-x-clip` impide que la de la derecha desborde la
+// página a 320px.
 function HeroComposition() {
   return (
     <div
       aria-hidden="true"
-      className="flex flex-[1_1_26rem] items-center justify-center"
+      className="flex flex-[1_1_26rem] items-center justify-center pt-8 max-md:overflow-x-clip md:pt-0"
     >
-      {/* desktop */}
-      {/* 17rem = 272px, no 20 (320). Aquí NO había hueco muerto —los tres
-          marcos se solapaban de forma continua— así que compactar es solaparlos
-          un poco más: el segundo sube de top-12 a top-8. El motivo es el mismo
-          que en Accesibilidad: mientras la ilustración sea más alta que la
-          columna de texto, es ELLA la que decide dónde cae la fila de datos, y
-          entonces cada página la pone a una altura distinta. */}
-      <div className="relative hidden h-[17rem] w-[min(25rem,100%)] md:block">
-        <div
-          className="entrada-pliegue construye-fondo border-border bg-background absolute top-0 right-4 flex h-[12.5rem] w-[6.5rem] flex-col gap-[0.4rem] rounded-[12px] border p-[0.7rem]"
-          style={
-            { rotate: "6deg", "--retardo-entrada": "0.08s" } as CSSProperties
-          }
-        >
-          {["60%", "100%", "92%", "97%", "88%"].map((w, i) => (
-            <LineaEscrita
-              key={i}
-              i={i}
-              ancho={w}
-              className={cn(
-                "bg-muted rounded-full",
-                i === 0 ? "h-[0.4rem]" : "h-[0.3rem]",
-              )}
-            />
-          ))}
-        </div>
-        <div
-          className="entrada-pliegue construye-fondo border-border bg-background absolute top-8 right-10 h-56 w-44 rounded-[14px] border p-[0.85rem]"
-          style={
-            { rotate: "-4deg", "--retardo-entrada": "0.16s" } as CSSProperties
-          }
-        >
-          <LineaEscrita
-            i={0}
-            ancho="45%"
-            caja="mb-[0.55rem]"
-            className="bg-muted h-[0.5rem] rounded-full"
-          />
-          <div className="grid grid-cols-2 gap-[0.55rem]">
-            {[0, 1].map((col) => (
-              <div key={col} className="flex flex-col gap-[0.35rem]">
-                {["100%", "85%", "100%"].map((w, k) => (
-                  <LineaEscrita
-                    key={k}
-                    i={1 + col * 3 + k}
-                    ancho={w}
-                    className="bg-muted h-[0.3rem] rounded-full"
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
-        <div
-          className="entrada-pliegue border-foreground bg-background absolute bottom-2 left-0 h-[11.5rem] w-[15.5rem] overflow-hidden rounded-[14px] border"
-          style={
-            { rotate: "2deg", "--retardo-entrada": "0.24s" } as CSSProperties
-          }
-        >
-          <MarcoRejilla anchos={["100%", "85%", "100%"]} />
-        </div>
+      <div className="md:hidden">
+        <Ficha ancho={240} alto={176} completa={false} minimo="min-w-[308px]" />
       </div>
-      {/* mobile */}
-      <div className="relative mx-auto h-[11.5rem] w-[min(16rem,100%)] md:hidden">
-        <div className="entrada-pliegue border-foreground bg-background absolute inset-0 overflow-hidden rounded-[14px] border">
-          <MarcoRejilla anchos={["100%", "80%"]} />
-        </div>
+      <div className="hidden md:block">
+        <Ficha ancho={336} alto={224} completa minimo="min-w-[404px]" />
       </div>
     </div>
   );

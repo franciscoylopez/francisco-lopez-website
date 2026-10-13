@@ -674,6 +674,8 @@
 .construye-linea,
 .construye-pieza,
 .construye-barra,
+.construye-traza,
+.construye-abre,
 .construye-linea::after {
   --construye-retardo: calc(
     var(--retardo-entrada, 0s) + var(--construye-tras) + var(--i, 0) *
@@ -763,14 +765,63 @@
     scale: 1;
   }
 }
-/* D136: el barrido, la escala, los saltos, el cursor y el escalonado son
+/* LOS DOS GESTOS DEL DIBUJO (2026-10-13), que pidió la retícula del Brand Kit:
+   un monograma no se escribe, se TRAZA, y su split no aparece, se ABRE.
+
+   `construye-traza` dibuja un trazo SVG de punta a punta: el aro, una cota, una
+   línea de retícula. El elemento lleva `pathLength="1"`, así que la cifra vale
+   para cualquier longitud. EL `dasharray` VIVE SOLO DENTRO DE LA ANIMACIÓN:
+   fijado en el elemento deja una costura de un píxel en la junta del aro, que
+   se vio en el prototipo. `stroke-dashoffset` no va al compositor; es la misma
+   cuenta que el `clip-path` de la línea: pocos elementos y una vez por carga.
+
+   `construye-abre` saca las dos capas del split de detrás del aro hacia su
+   sitio. El camino lo pone el punto de uso en `--dx`/`--dy` (el inverso del
+   desplazamiento de la capa), porque depende de la escala del dibujo; la
+   duración y la curva, no. Va por `translate` y opacidad: compositor. */
+svg .construye-pieza,
+svg .construye-abre {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.construye-traza {
+  animation: construye-traza var(--construye-duracion) var(--ease-entrance)
+    var(--construye-retardo) backwards;
+}
+.construye-abre {
+  animation: construye-abre var(--construye-duracion) var(--ease-entrance)
+    var(--construye-retardo) backwards;
+}
+@keyframes construye-traza {
+  from {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes construye-abre {
+  from {
+    opacity: 0;
+    translate: var(--dx) var(--dy);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+/* D136: el barrido, la escala, los saltos, el cursor, el trazo, la apertura del split y el escalonado son
    movimiento, así que se van enteros. Lo que se queda es el fundido de la ficha,
    que ya pone `.entrada-pliegue`. */
 @media (prefers-reduced-motion: reduce) {
   .construye-linea > *,
   .construye-linea::after,
   .construye-pieza,
-  .construye-barra {
+  .construye-barra,
+  .construye-traza,
+  .construye-abre {
     animation: none;
   }
 }
