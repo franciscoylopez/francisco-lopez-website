@@ -136,10 +136,7 @@ export function SectionIndex({
 }) {
   return (
     <nav aria-label={ariaLabel} data-reveal>
-      {/* Borde transparente y no quitado (EXPERIMENTO, rama exp/separador-desvanecido):
-          el filete duplicaba el borde superior de la rejilla, 12px más abajo; así
-          desaparece la línea sin mover un píxel del layout. */}
-      <div className="flex items-baseline justify-between gap-3 border-b border-transparent px-1 pb-3">
+      <div className="border-border flex items-baseline justify-between gap-3 border-b px-1 pb-3">
         <p className={cn(eyebrowVariants(), "m-0")}>{kicker}</p>
         {aside ? (
           <span
@@ -277,10 +274,7 @@ export function SectionCloser({
     // accesible exacto, y aquí hay uno por sección.
     <nav
       aria-label={`${ariaLabel} · ${positionLabel}`}
-      // Justo detrás del pie de repositorio (`data-strip`), ese pie ya trae el
-      // filete: sin esto eran dos líneas seguidas (EXPERIMENTO, rama
-      // exp/separador-desvanecido).
-      className="border-border mt-[2.5rem] flex flex-wrap items-center gap-x-4 gap-y-3 border-t pt-5 [[data-strip]+&]:mt-5 [[data-strip]+&]:border-t-0 [[data-strip]+&]:pt-0"
+      className="border-border mt-[2.5rem] flex flex-wrap items-center gap-x-4 gap-y-3 border-t pt-5"
     >
       <p
         className={cn(

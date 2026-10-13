@@ -76,9 +76,7 @@ export function StatRow({ children }: { children: ReactNode }) {
   return (
     <div
       data-reveal
-      // `border-transparent` (EXPERIMENTO, rama exp/separador-desvanecido): sin
-      // filete visible, pero el px se queda para no tocar la aritmética del pliegue.
-      className="mt-[clamp(3rem,6vw,4.5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-[var(--gutter)] border-t border-transparent pt-8 [@media(max-height:43.75rem)]:mt-8"
+      className="border-border mt-[clamp(3rem,6vw,4.5rem)] grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,11rem),1fr))] gap-[var(--gutter)] border-t pt-8 [@media(max-height:43.75rem)]:mt-8"
     >
       {children}
     </div>
