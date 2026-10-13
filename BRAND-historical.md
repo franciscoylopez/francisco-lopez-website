@@ -1216,3 +1216,30 @@ lo hace, el primer sospechoso es este separador.
 bloques (el subrayado de «Índice», la navegación de sección del artículo detrás
 del pie de repositorio, la fila de cifras de las aperturas). Estuvo en la misma
 rama y Francisco decidió quedarse solo con el separador.
+
+### Y los filetes de contenido, que se desvanecen desde el texto (2026-10-13)
+
+Con el separador de sección ya corto y desvanecido, Francisco pidió probar lo mismo
+en los filetes de contenido: arrancan plenos donde empieza el texto y se apagan
+hacia la derecha, con el mismo color (`--border`) y el mismo 1px. Se probó en un
+prototipo y después en la preview, con iconos y años reales, porque el prototipo
+no los cargaba y era justo lo que había que ver.
+
+Lo que salió de mirarlo en pantalla, no de razonarlo:
+
+- **Funciona en las líneas sueltas entre bloques** (fila de cifras, rótulo del
+  índice, navegación de sección): siguen separando y dejan de leerse como rejilla.
+  En móvil quitar peso bastó sin quitar líneas, contra lo que se había previsto.
+- **No funciona en lo que es una tabla aunque no lo sea** (Hitos, con cabecera de
+  columnas): la línea entera es la que ata el año a su fila. Sale con `.rule-full`.
+  Trayectoria sí lo aguanta: el logo a la derecha es una pieza con caja propia.
+- **Excluir todos los `footer` fue un error:** el pie «Enlace» del artículo quedó
+  entero junto a la navegación ya desvanecida, tres tipos de línea en 300px en
+  móvil. Solo queda fuera el footer del sitio (`data-site-footer`).
+- **Dos cortes de bloque no seguían ningún patrón** y pasaron a `.section-sep`: el
+  cierre de página (filete a ancho de pantalla) y el cambio de bloque de
+  Trayectoria (2px en color de texto con `opacity` al 28%, que además el censo no
+  ve, D127).
+
+Queda un sistema de cuatro: trazo centrado para secciones y bloques, filete
+desvanecido para contenido, filete entero para lo tabular y borde para las cajas.
