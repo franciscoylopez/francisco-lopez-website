@@ -1,11 +1,11 @@
 {
-  "total": 20,
+  "total": 18,
   "porArea": {
-    "raíz": 1,
-    "components/": 11,
+    "components/": 9,
     "scripts/": 4,
-    "lib/": 2,
-    "app/": 2
+    "raíz": 1,
+    "app/": 2,
+    "lib/": 2
   },
   "hallazgos": [
     "qlty:function-complexity|components/site/contact-form.tsx",
@@ -22,8 +22,6 @@
     "qlty:return-statements|scripts/psi/sello.ts",
     "qlty:similar-code|app/[lang]/brand-kit/page.tsx",
     "qlty:similar-code|app/[lang]/design-system/page.tsx",
-    "qlty:similar-code|components/site/brand-kit/06-uso.tsx",
-    "qlty:similar-code|components/site/brand-kit/hero.tsx",
     "qlty:similar-code|components/site/como-se-ha-creado-diagrams/04-stack.tsx",
     "qlty:similar-code|lib/ard.ts"
   ],
@@ -44,13 +42,11 @@
     "qlty:return-statements|scripts/psi/sello.ts": [7],
     "qlty:similar-code|app/[lang]/brand-kit/page.tsx": [160],
     "qlty:similar-code|app/[lang]/design-system/page.tsx": [160],
-    "qlty:similar-code|components/site/brand-kit/06-uso.tsx": [77],
-    "qlty:similar-code|components/site/brand-kit/hero.tsx": [77],
     "qlty:similar-code|components/site/como-se-ha-creado-diagrams/04-stack.tsx": [
       94, 94
     ],
     "qlty:similar-code|lib/ard.ts": [68, 68]
   },
-  "commit": "1097ef0be49624860d04c4453e9d735b259d87fc",
-  "fecha": "2026-09-05"
+  "commit": "f4541b946cc26e10b322bfc4c324e0f3a3938007",
+  "fecha": "2026-10-13"
 }
