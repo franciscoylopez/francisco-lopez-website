@@ -59,11 +59,10 @@ function Cotas({ ancho, alto }: { ancho: number; alto: number }) {
   const M = 34;
   const y = -14;
   const x = ancho + 14;
+  type Punto = readonly [number, number];
   const linea = (
-    x1: number,
-    y1: number,
-    x2: number,
-    y2: number,
+    [x1, y1]: Punto,
+    [x2, y2]: Punto,
     i: number,
     tenue = false,
   ) => (
@@ -90,11 +89,11 @@ function Cotas({ ancho, alto }: { ancho: number; alto: number }) {
       style={{ left: -M, top: -M }}
     >
       {/* el ancho: líneas de referencia, la cota y sus topes oblicuos */}
-      {linea(0, -4, 0, y - 6, T_COTAS, true)}
-      {linea(ancho, -4, ancho, y - 6, T_COTAS, true)}
-      {linea(0, y, ancho, y, T_COTAS + 0.5)}
-      {linea(-4, y + 4, 4, y - 4, T_COTAS + 0.5)}
-      {linea(ancho - 4, y + 4, ancho + 4, y - 4, T_COTAS + 0.5)}
+      {linea([0, -4], [0, y - 6], T_COTAS, true)}
+      {linea([ancho, -4], [ancho, y - 6], T_COTAS, true)}
+      {linea([0, y], [ancho, y], T_COTAS + 0.5)}
+      {linea([-4, y + 4], [4, y - 4], T_COTAS + 0.5)}
+      {linea([ancho - 4, y + 4], [ancho + 4, y - 4], T_COTAS + 0.5)}
       <text
         className="construye-pieza fill-muted-foreground font-mono"
         style={turno(T_COTAS + 1)}
@@ -106,11 +105,11 @@ function Cotas({ ancho, alto }: { ancho: number; alto: number }) {
         {ancho}
       </text>
       {/* el alto */}
-      {linea(ancho + 4, 0, x + 6, 0, T_COTAS + 1.5, true)}
-      {linea(ancho + 4, alto, x + 6, alto, T_COTAS + 1.5, true)}
-      {linea(x, 0, x, alto, T_COTAS + 2)}
-      {linea(x - 4, 4, x + 4, -4, T_COTAS + 2)}
-      {linea(x - 4, alto + 4, x + 4, alto - 4, T_COTAS + 2)}
+      {linea([ancho + 4, 0], [x + 6, 0], T_COTAS + 1.5, true)}
+      {linea([ancho + 4, alto], [x + 6, alto], T_COTAS + 1.5, true)}
+      {linea([x, 0], [x, alto], T_COTAS + 2)}
+      {linea([x - 4, 4], [x + 4, -4], T_COTAS + 2)}
+      {linea([x - 4, alto + 4], [x + 4, alto - 4], T_COTAS + 2)}
       {/* El giro va en un grupo: en el texto, el `transform-box: fill-box`
           de las piezas reinterpretaría el centro del `rotate`. */}
       <g transform={`rotate(90 ${x + 6} ${alto / 2})`}>
