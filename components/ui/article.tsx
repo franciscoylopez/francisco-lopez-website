@@ -568,6 +568,7 @@ export function RepoStrip({
 }) {
   return (
     <footer
+      data-strip
       className={cn(
         "border-border mt-[2.5rem] flex flex-wrap items-baseline gap-x-2 gap-y-1 border-t pt-5 text-[0.92rem]",
         LEADING.meta,
