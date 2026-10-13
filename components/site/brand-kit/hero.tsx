@@ -1,6 +1,7 @@
 import { type CSSProperties } from "react";
 
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { LineaEscrita, turno } from "@/components/ui/construye";
 import { Stat } from "@/components/ui/stat-row";
 import {
   COLOR_TOKEN_COUNT,
@@ -15,13 +16,24 @@ import { Glyph } from "./shared";
 /* ===================== HERO ===================== */
 // Composición decorativa del hero: ventana de navegador con el chrome a trazo
 // invertido sobre una superficie foreground. Reproduce la anatomía del logo.
+//
+// SE CONSTRUYE AL CARGAR (2026-10-13): pestaña, barra de direcciones, nav y
+// contenido, por ese orden; el nombre del nav se escribe de verdad. Como la
+// superficie es la invertida, el cursor pasa a `--primary-on-inverted`: el cian
+// estándar no se ve sobre ella. Mecanismo en `globals.css` §La ficha que se
+// construye.
 function BrowserMockup() {
   const line = (t: number) =>
     `color-mix(in srgb, var(--background), transparent ${t}%)`;
   return (
     <div
       className="entrada-pliegue relative z-[2] w-full overflow-hidden rounded-[12px]"
-      style={{ background: "var(--foreground)" }}
+      style={
+        {
+          background: "var(--foreground)",
+          "--construye-cursor": "var(--primary-on-inverted)",
+        } as CSSProperties
+      }
     >
       {/* pestañas */}
       <div
@@ -41,7 +53,8 @@ function BrowserMockup() {
             width="12"
             height="14"
             fill="none"
-            className="block flex-none"
+            className="construye-pieza block flex-none"
+            style={turno(0)}
             aria-hidden="true"
           >
             <circle
@@ -60,8 +73,10 @@ function BrowserMockup() {
               fill="var(--background)"
             />
           </svg>
-          <span
-            className="h-[2px] w-[44px] rounded-[1px]"
+          <LineaEscrita
+            i={1}
+            ancho="44px"
+            className="h-[2px] rounded-[1px]"
             style={{ background: line(45) }}
           />
         </div>
@@ -71,8 +86,10 @@ function BrowserMockup() {
         className="flex h-[28px] items-center px-3"
         style={{ borderBottom: `1px solid ${line(72)}` }}
       >
-        <span
-          className="h-[13px] flex-1 rounded-[6.5px]"
+        <LineaEscrita
+          i={2}
+          caja="flex-1"
+          className="h-[13px] rounded-[6.5px]"
           style={{ border: `1px solid ${line(55)}` }}
         />
       </div>
@@ -87,7 +104,8 @@ function BrowserMockup() {
             width="18"
             height="20"
             fill="none"
-            className="block flex-none overflow-visible"
+            className="construye-pieza block flex-none overflow-visible"
+            style={turno(3)}
             aria-hidden="true"
           >
             <circle
@@ -120,35 +138,40 @@ function BrowserMockup() {
               fill="var(--background)"
             />
           </svg>
-          <span
+          <LineaEscrita
+            i={4}
             className="font-display text-[9px] leading-none font-semibold tracking-[-0.01em]"
             style={{ color: "var(--background)" }}
           >
             Francisco López
-          </span>
+          </LineaEscrita>
         </span>
         <span className="inline-flex items-center gap-[6px]">
           <span
-            className="h-[12px] w-[40px] rounded-[6px]"
-            style={{ border: `1px solid ${line(45)}` }}
+            className="construye-pieza h-[12px] w-[40px] rounded-[6px]"
+            style={{ ...turno(5), border: `1px solid ${line(45)}` }}
           />
           <span
-            className="h-[12px] w-[12px] rounded-[4px]"
-            style={{ border: `1px solid ${line(45)}` }}
+            className="construye-pieza h-[12px] w-[12px] rounded-[4px]"
+            style={{ ...turno(6), border: `1px solid ${line(45)}` }}
           />
         </span>
       </div>
       {/* contenido esquemático */}
       <div className="flex flex-col gap-[13px] px-[14px] pt-5 pb-6">
-        <span
-          className="h-[3px] w-[46%] rounded-[1.5px]"
+        <LineaEscrita
+          i={7}
+          ancho="46%"
+          className="h-[3px] rounded-[1.5px]"
           style={{ background: line(30) }}
         />
         {["90%", "78%", "84%", "62%"].map((w, i) => (
-          <span
+          <LineaEscrita
             key={i}
+            i={8 + i}
+            ancho={w}
             className="h-[2px] rounded-[1px]"
-            style={{ width: w, background: line(58) }}
+            style={{ background: line(58) }}
           />
         ))}
       </div>
@@ -206,25 +229,29 @@ export function Hero({
       >
         <div className="relative w-[min(21rem,100%)]">
           <div
-            className="entrada-pliegue absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+            className="entrada-pliegue construye-fondo absolute top-1/2 left-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
             style={{ "--retardo-entrada": "0.08s" } as CSSProperties}
           >
             <div
               className="bg-brand-cyan-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
               style={{ transform: "rotate(-6deg)" }}
             >
-              <Glyph variant="flat" h={27} />
+              <span className="construye-pieza block" style={turno(0)}>
+                <Glyph variant="flat" h={27} />
+              </span>
             </div>
           </div>
           <div
-            className="entrada-pliegue absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
+            className="entrada-pliegue construye-fondo absolute top-1/2 right-[-2.75rem] z-[1] hidden -translate-y-1/2 md:block"
             style={{ "--retardo-entrada": "0.16s" } as CSSProperties}
           >
             <div
               className="bg-brand-purple-soft flex h-[10.5rem] w-[7.5rem] items-center justify-center rounded-xl"
               style={{ transform: "rotate(6deg)" }}
             >
-              <Glyph variant="flat" h={27} />
+              <span className="construye-pieza block" style={turno(0)}>
+                <Glyph variant="flat" h={27} />
+              </span>
             </div>
           </div>
           <BrowserMockup />

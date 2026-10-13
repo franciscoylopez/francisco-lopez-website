@@ -612,6 +612,159 @@
     opacity: 1;
   }
 }
+
+/* === LA FICHA QUE SE CONSTRUYE (2026-10-13) · lo de DENTRO de una ficha del pliegue ===
+
+   `.entrada-pliegue` mete la ficha ENTERA; esto la monta por dentro una vez que
+   ha entrado: las líneas se escriben a saltos con un cursor que las recorre, y
+   las piezas (iconos, marcas, barras) aparecen de una en una. Se eligió con
+   `/prototype` entre cuatro direcciones (escritura continua, esqueleto que
+   carga, ensamblaje); ganó la máquina de escribir, ritmo pausado. El porqué: en
+   móvil cada apertura enseña UNA sola ficha, y con un fundido de 280 ms se
+   quedaba pobre.
+
+   MISMA PUERTA QUE `.entrada-pliegue`, y por lo mismo: `@keyframes` con
+   `backwards`, sin JS, sin esperar a la hidratación. Y no toca el LCP por la
+   misma razón medida allí: el LCP de estas páginas es la entradilla.
+
+   EL RELOJ LO HEREDA DE LA FICHA. El retardo de cada pieza es el
+   `--retardo-entrada` de la ficha que la contiene (llega por herencia), más
+   `--construye-tras` —la ficha tiene que estar casi entera antes de escribir
+   dentro—, más su índice por el paso. En el punto de uso solo se escribe el
+   índice (`--i`), nunca una cifra: es la regla de D135.
+
+   CADA PIEZA DURA `--duration-entrance` (el techo de D135); lo que pasa del
+   techo es la CASCADA, y con motivo: es una secuencia de entradas, no una
+   entrada larga. Con el paso de 80 ms, una ficha de once piezas termina hacia
+   1,2 s de la carga.
+
+   LAS FICHAS DE FONDO van con `.construye-fondo`: mitad de paso, piezas más
+   cortas y sin cursor. Se escriben a la vez que las de delante pero no compiten
+   con ellas.
+
+   POR QUÉ `scale` Y NO `transform`: es la trampa que ya documenta la entrada
+   del pliegue. Las fichas giran con `rotate` o con un `transform` en línea, y
+   una animación de `transform` en una pieza dentro de ellas se llevaría el giro
+   por delante si algún día la pieza lo tuviera. La propiedad individual compone.
+
+   EL CURSOR ANIMA `left`, que no es de compositor. Es un elemento de 2×9 px
+   que vive 280 ms por línea; medirlo cuesta más que lo que podría costar. */
+:root {
+  --construye-paso: 80ms;
+  --construye-tras: 0.12s;
+  --construye-duracion: var(--duration-entrance);
+  --construye-saltos: steps(7, end);
+  /* El cursor es decorativo (capa de marca). Sobre una superficie invertida el
+     cian estándar no se ve: la ficha lo cambia por `--primary-on-inverted`. */
+  --construye-cursor: var(--brand-cyan);
+}
+.construye-fondo {
+  --construye-paso: 40ms;
+  --construye-duracion: calc(var(--duration-entrance) * 0.7);
+}
+.construye-linea,
+.construye-pieza,
+.construye-barra,
+.construye-linea::after {
+  --construye-retardo: calc(
+    var(--retardo-entrada, 0s) + var(--construye-tras) + var(--i, 0) *
+      var(--construye-paso)
+  );
+}
+.construye-linea {
+  position: relative;
+  display: block;
+}
+.construye-linea > * {
+  animation: construye-escribe var(--construye-duracion) var(--construye-saltos)
+    var(--construye-retardo) backwards;
+}
+.construye-linea::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 0;
+  width: 2px;
+  border-radius: 1px;
+  background: var(--construye-cursor);
+  opacity: 0;
+  pointer-events: none;
+  animation:
+    construye-cursor var(--construye-duracion) var(--construye-saltos)
+      var(--construye-retardo) backwards,
+    construye-cursor-luz var(--construye-duracion) linear
+      var(--construye-retardo) backwards;
+}
+.construye-fondo .construye-linea::after {
+  content: none;
+}
+.construye-pieza {
+  animation: construye-aparece var(--construye-duracion) var(--ease-entrance)
+    var(--construye-retardo) backwards;
+}
+.construye-barra {
+  transform-origin: bottom;
+  animation: construye-crece var(--construye-duracion) var(--ease-entrance)
+    var(--construye-retardo) backwards;
+}
+@keyframes construye-escribe {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+@keyframes construye-cursor {
+  from {
+    left: 0;
+  }
+  to {
+    left: 100%;
+  }
+}
+@keyframes construye-cursor-luz {
+  0% {
+    opacity: 0;
+  }
+  4%,
+  82% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes construye-aparece {
+  from {
+    opacity: 0;
+    scale: 0.85;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+@keyframes construye-crece {
+  from {
+    scale: 1 0;
+  }
+  to {
+    scale: 1;
+  }
+}
+/* D136: el barrido, la escala, los saltos, el cursor y el escalonado son
+   movimiento, así que se van enteros. Lo que se queda es el fundido de la ficha,
+   que ya pone `.entrada-pliegue`. */
+@media (prefers-reduced-motion: reduce) {
+  .construye-linea > *,
+  .construye-linea::after,
+  .construye-pieza,
+  .construye-barra {
+    animation: none;
+  }
+}
 /* Banner de consentimiento (P22): entra una vez con fade-up. Sin bucle; respeta
    reduced-motion (PRD §6). */
 @keyframes consent-in {

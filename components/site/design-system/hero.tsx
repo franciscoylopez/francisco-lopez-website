@@ -1,6 +1,7 @@
 import { type CSSProperties } from "react";
 
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { LineaEscrita, turno } from "@/components/ui/construye";
 import { Stat } from "@/components/ui/stat-row";
 import {
   BREAKPOINT_COUNT,
@@ -8,11 +9,56 @@ import {
   CONTAINER_PX,
   MEASURE_REM,
 } from "@/lib/design-values";
+import { cn } from "@/lib/utils";
 
 import { type BreadcrumbDict } from "../breadcrumb";
 import { SystemPageOpening } from "../system-page-opening";
 
 /* ===================== HERO ===================== */
+// LO DE DENTRO DE CADA MARCO SE CONSTRUYE AL CARGAR (2026-10-13): primero las
+// doce columnas de la rejilla, a medio paso, luego el titular y las líneas. El
+// `i` de cada pieza es su turno; el reloj lo pone el marco. Mecanismo en
+// `globals.css` §La ficha que se construye.
+
+/** El marco del frente, el mismo en escritorio y en móvil salvo cuántas líneas
+ *  lleva cada columna y cuánto mide la segunda. */
+function MarcoRejilla({ anchos }: { anchos: string[] }) {
+  return (
+    <>
+      <div className="absolute inset-[0.6rem] grid grid-cols-12 gap-[2px]">
+        {Array.from({ length: 12 }).map((_, i) => (
+          <div
+            key={i}
+            className="construye-barra bg-brand-cyan-soft rounded-[1px]"
+            style={turno(i * 0.5)}
+          />
+        ))}
+      </div>
+      <div className="relative flex flex-col gap-[0.6rem] p-[0.8rem]">
+        <LineaEscrita
+          i={6}
+          ancho="45%"
+          className="bg-foreground h-[0.55rem] rounded-full"
+        />
+        <div className="grid grid-cols-2 gap-[0.7rem]">
+          {[0, 1].map((col) => (
+            <div key={col} className="flex flex-col gap-[0.4rem]">
+              {anchos.map((ancho, k) => (
+                <LineaEscrita
+                  key={k}
+                  i={7 + col * anchos.length + k}
+                  ancho={ancho}
+                  className="bg-foreground h-[0.32rem] rounded-full opacity-55"
+                />
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+}
+
 // Composición decorativa del hero: tres marcos de página escalonados con la
 // rejilla de 12 columnas visible en el frente. Solo desktop; en móvil, un marco.
 function HeroComposition() {
@@ -30,32 +76,46 @@ function HeroComposition() {
           entonces cada página la pone a una altura distinta. */}
       <div className="relative hidden h-[17rem] w-[min(25rem,100%)] md:block">
         <div
-          className="entrada-pliegue border-border bg-background absolute top-0 right-4 flex h-[12.5rem] w-[6.5rem] flex-col gap-[0.4rem] rounded-[12px] border p-[0.7rem]"
+          className="entrada-pliegue construye-fondo border-border bg-background absolute top-0 right-4 flex h-[12.5rem] w-[6.5rem] flex-col gap-[0.4rem] rounded-[12px] border p-[0.7rem]"
           style={
             { rotate: "6deg", "--retardo-entrada": "0.08s" } as CSSProperties
           }
         >
           {["60%", "100%", "92%", "97%", "88%"].map((w, i) => (
-            <div
+            <LineaEscrita
               key={i}
-              className="bg-muted h-[0.3rem] rounded-full first:h-[0.4rem]"
-              style={{ width: w }}
+              i={i}
+              ancho={w}
+              className={cn(
+                "bg-muted rounded-full",
+                i === 0 ? "h-[0.4rem]" : "h-[0.3rem]",
+              )}
             />
           ))}
         </div>
         <div
-          className="entrada-pliegue border-border bg-background absolute top-8 right-10 h-56 w-44 rounded-[14px] border p-[0.85rem]"
+          className="entrada-pliegue construye-fondo border-border bg-background absolute top-8 right-10 h-56 w-44 rounded-[14px] border p-[0.85rem]"
           style={
             { rotate: "-4deg", "--retardo-entrada": "0.16s" } as CSSProperties
           }
         >
-          <div className="bg-muted mb-[0.55rem] h-[0.5rem] w-[45%] rounded-full" />
+          <LineaEscrita
+            i={0}
+            ancho="45%"
+            caja="mb-[0.55rem]"
+            className="bg-muted h-[0.5rem] rounded-full"
+          />
           <div className="grid grid-cols-2 gap-[0.55rem]">
             {[0, 1].map((col) => (
               <div key={col} className="flex flex-col gap-[0.35rem]">
-                <div className="bg-muted h-[0.3rem] rounded-full" />
-                <div className="bg-muted h-[0.3rem] w-[85%] rounded-full" />
-                <div className="bg-muted h-[0.3rem] rounded-full" />
+                {["100%", "85%", "100%"].map((w, k) => (
+                  <LineaEscrita
+                    key={k}
+                    i={1 + col * 3 + k}
+                    ancho={w}
+                    className="bg-muted h-[0.3rem] rounded-full"
+                  />
+                ))}
               </div>
             ))}
           </div>
@@ -66,44 +126,13 @@ function HeroComposition() {
             { rotate: "2deg", "--retardo-entrada": "0.24s" } as CSSProperties
           }
         >
-          <div className="absolute inset-[0.6rem] grid grid-cols-12 gap-[2px]">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i} className="bg-brand-cyan-soft rounded-[1px]" />
-            ))}
-          </div>
-          <div className="relative flex flex-col gap-[0.6rem] p-[0.8rem]">
-            <div className="bg-foreground h-[0.55rem] w-[45%] rounded-full" />
-            <div className="grid grid-cols-2 gap-[0.7rem]">
-              {[0, 1].map((col) => (
-                <div key={col} className="flex flex-col gap-[0.4rem]">
-                  <div className="bg-foreground h-[0.32rem] rounded-full opacity-55" />
-                  <div className="bg-foreground h-[0.32rem] w-[85%] rounded-full opacity-55" />
-                  <div className="bg-foreground h-[0.32rem] rounded-full opacity-55" />
-                </div>
-              ))}
-            </div>
-          </div>
+          <MarcoRejilla anchos={["100%", "85%", "100%"]} />
         </div>
       </div>
       {/* mobile */}
       <div className="relative mx-auto h-[11.5rem] w-[min(16rem,100%)] md:hidden">
         <div className="entrada-pliegue border-foreground bg-background absolute inset-0 overflow-hidden rounded-[14px] border">
-          <div className="absolute inset-[0.6rem] grid grid-cols-12 gap-[2px]">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div key={i} className="bg-brand-cyan-soft rounded-[1px]" />
-            ))}
-          </div>
-          <div className="relative flex flex-col gap-[0.6rem] p-[0.8rem]">
-            <div className="bg-foreground h-[0.55rem] w-[45%] rounded-full" />
-            <div className="grid grid-cols-2 gap-[0.7rem]">
-              {[0, 1].map((col) => (
-                <div key={col} className="flex flex-col gap-[0.4rem]">
-                  <div className="bg-foreground h-[0.32rem] rounded-full opacity-55" />
-                  <div className="bg-foreground h-[0.32rem] w-[80%] rounded-full opacity-55" />
-                </div>
-              ))}
-            </div>
-          </div>
+          <MarcoRejilla anchos={["100%", "80%"]} />
         </div>
       </div>
     </div>
