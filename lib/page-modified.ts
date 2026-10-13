@@ -43,7 +43,7 @@ const ESTATICAS: Record<StaticPageSlug, string> = {
 
 /** Las cinco del deep-dive. La lista de cuáles son sale de `EXPERIENCES` (D44). */
 const DEEP_DIVE: Record<ExperienceSlug, string> = {
-  emendu: "2026-08-18",
+  emendu: "2026-10-13",
   kuotip: "2026-08-17",
   indya: "2026-08-18",
   freepik: "2026-08-17",
