@@ -1620,12 +1620,14 @@
   }
 }
 
-/* ── Separador de sección · EXPERIMENTO (rama exp/separador-desvanecido) ──
+/* ── Separador de sección (2026-10-13) ──
    Sustituye al filete de 1px a ancho completo de `SECTION`, que pesaba igual que
-   los filetes de filas y tablas. Trazo corto (8rem), centrado, que se desvanece
-   hacia los dos lados, en `--progress-ink` mezclado al 25% con el fondo: decorativo,
-   sin requisito de contraste. Elegido en el prototipo de separadores; está en rama
-   para revisarlo en el sitio entero antes de decidir si se queda. */
+   los filetes de filas y tablas: todo separaba igual y la línea dejaba de decir
+   dónde empieza algo. Trazo corto (8rem), centrado, que se desvanece hacia los dos
+   lados, en `--progress-ink` mezclado al 25% con el fondo: decorativo, sin
+   requisito de contraste. Se eligió viéndolo, en un prototipo sobre las páginas
+   servidas y luego en la preview del sitio entero; lo descartado, en
+   BRAND-historical.md. Los filetes de DENTRO de los bloques no cambian. */
 .section-sep {
   position: relative;
 }
