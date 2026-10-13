@@ -1619,3 +1619,29 @@
     }
   }
 }
+
+/* ── Separador de sección · EXPERIMENTO (rama exp/separador-desvanecido) ──
+   Sustituye al filete de 1px a ancho completo de `SECTION`, que pesaba igual que
+   los filetes de filas y tablas. Trazo corto (8rem), centrado, que se desvanece
+   hacia los dos lados, en `--progress-ink` mezclado al 25% con el fondo: decorativo,
+   sin requisito de contraste. Elegido en el prototipo de separadores; está en rama
+   para revisarlo en el sitio entero antes de decidir si se queda. */
+.section-sep {
+  position: relative;
+}
+.section-sep::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: 8rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--progress-ink) 25%, var(--background)),
+    transparent
+  );
+  pointer-events: none;
+}
