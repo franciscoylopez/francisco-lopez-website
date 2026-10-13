@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
+import { LineaEscrita, turno } from "@/components/ui/construye";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { EntradaDemo, RevealDemo } from "../design-system-islands";
@@ -73,6 +74,37 @@ function NavGlyph({ variant, h }: { variant: "split" | "flat"; h: number }) {
         fill="var(--foreground)"
       />
     </svg>
+  );
+}
+
+// LA FICHA QUE SE CONSTRUYE, publicada con la pieza real (`ui/construye.tsx`)
+// y las clases reales de `globals.css`: es la de las cuatro portadas a escala
+// de demo. Dos líneas que se escriben y cuatro barras que llegan de una en una.
+function FichaConstruida() {
+  return (
+    <div className="flex h-full flex-col justify-between p-3">
+      <div className="flex flex-col gap-[6px]">
+        <LineaEscrita
+          i={0}
+          ancho="78%"
+          className="bg-foreground h-[7px] rounded-[3px]"
+        />
+        <LineaEscrita
+          i={1}
+          ancho="56%"
+          className="bg-foreground h-[5px] rounded-[3px]"
+        />
+      </div>
+      <div className="flex items-end gap-[5px]">
+        {[9, 15, 12, 21].map((alto, k) => (
+          <span
+            key={alto}
+            className="construye-barra bg-brand-cyan block w-[8px] rounded-[2px]"
+            style={{ ...turno(2 + k), height: alto }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
@@ -155,6 +187,7 @@ export function Movimiento({
               <EntradaDemo
                 demoLabel={t.puertasDemoLabel}
                 replayLabel={t.puertasReplay}
+                ficha={<FichaConstruida />}
               />
             </div>
           </div>

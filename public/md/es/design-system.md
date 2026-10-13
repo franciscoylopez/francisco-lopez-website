@@ -533,7 +533,7 @@ Repetir ▸
 ### Dos puertas de entrada, y no dicen lo mismo
 
 - Al hacer scroll, para lo que todavía no está en pantalla. Lo que ya se ve al cargar no entra por aquí, porque no ha entrado: arrancarlo oculto retrasaría la métrica de carga.
-- Al cargar, para lo decorativo del primer pliegue, que sí aparece de golpe. Son las composiciones de estas cuatro portadas y el punto final del titular de la portada.
+- Al cargar, para lo decorativo del primer pliegue, que sí aparece de golpe. Son las composiciones de estas cuatro portadas y el punto final del titular de la portada. Las fichas, además, se construyen por dentro: las líneas se escriben a saltos y las piezas llegan de una en una.
 - Y una tercera que no es una entrada: va acoplada al scroll y no tiene duración propia, porque la posición manda. Es el filete que crece bajo los años de los hitos.
 
 La tercera se ve sin pulsar nada: el filete morado que abre cada bloque de esta página crece al llegar a él.

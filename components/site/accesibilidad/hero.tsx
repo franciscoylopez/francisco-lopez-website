@@ -3,6 +3,7 @@ import { type CSSProperties } from "react";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { Badge } from "@/components/ui/badge";
 import { CheckPill } from "@/components/ui/check-pill";
+import { LineaEscrita, turno } from "@/components/ui/construye";
 import { Stat } from "@/components/ui/stat-row";
 
 import { type BreadcrumbDict } from "../breadcrumb";
@@ -48,6 +49,25 @@ export function Hero({
   );
 }
 
+// La muestra de foco, la misma en escritorio y en móvil. Se construye al cargar
+// (2026-10-13): el punto y luego la línea, que se escribe. Mecanismo en
+// `globals.css` §La ficha que se construye.
+function MuestraFoco() {
+  return (
+    <div className="border-border bg-background flex items-center gap-[0.6rem] rounded-[13px] border px-[1.1rem] py-[0.8rem]">
+      <span
+        className="construye-pieza bg-primary h-[0.55rem] w-[0.55rem] flex-none rounded-full"
+        style={turno(0)}
+      />
+      <LineaEscrita
+        i={1}
+        ancho="5.5rem"
+        className="bg-foreground h-[0.42rem] rounded-full opacity-70"
+      />
+    </div>
+  );
+}
+
 // Composición del hero (decorativa, aria-hidden): tres piezas superpuestas que
 // ilustran de qué habla la página —una tarjeta de contraste medido, una checklist
 // con marcas, y una muestra del anillo de foco de 2px— con el mismo tratamiento de
@@ -67,34 +87,45 @@ function HeroComposition() {
       <div className="relative hidden h-60 w-[min(25rem,100%)] md:block">
         {/* atrás: contraste medido */}
         <div
-          className="entrada-pliegue border-border bg-background absolute top-0 right-2 w-[9.5rem] rounded-[14px] border p-[0.9rem]"
+          className="entrada-pliegue construye-fondo border-border bg-background absolute top-0 right-2 w-[9.5rem] rounded-[14px] border p-[0.9rem]"
           style={
             { rotate: "6deg", "--retardo-entrada": "0.08s" } as CSSProperties
           }
         >
-          <div className="text-muted-foreground font-mono text-[0.6rem] tracking-[0.05em] uppercase">
+          <div
+            className="construye-pieza text-muted-foreground font-mono text-[0.6rem] tracking-[0.05em] uppercase"
+            style={turno(0)}
+          >
             Contraste
           </div>
-          <div className="font-display text-foreground mt-1 text-[2rem] leading-none">
+          <div
+            className="construye-pieza font-display text-foreground mt-1 text-[2rem] leading-none"
+            style={turno(1)}
+          >
             AAA
           </div>
-          <Badge tone="cyan" kind="code" className="mt-2">
-            13,79:1
-          </Badge>
+          <div className="construye-pieza mt-2" style={turno(2)}>
+            <Badge tone="cyan" kind="code">
+              13,79:1
+            </Badge>
+          </div>
         </div>
         {/* medio: checklist */}
         <div
-          className="entrada-pliegue border-border bg-background absolute top-16 right-20 flex w-[11rem] flex-col gap-[0.55rem] rounded-[14px] border p-[0.95rem]"
+          className="entrada-pliegue construye-fondo border-border bg-background absolute top-16 right-20 flex w-[11rem] flex-col gap-[0.55rem] rounded-[14px] border p-[0.95rem]"
           style={
             { rotate: "-4deg", "--retardo-entrada": "0.16s" } as CSSProperties
           }
         >
           {[100, 82, 94].map((w, i) => (
             <div key={i} className="flex items-center gap-[0.55rem]">
-              <CheckPill size="sm" />
-              <div
+              <span className="construye-pieza" style={turno(i * 2)}>
+                <CheckPill size="sm" />
+              </span>
+              <LineaEscrita
+                i={i * 2 + 1}
+                ancho={`${w}%`}
                 className="bg-muted h-[0.32rem] rounded-full"
-                style={{ width: `${w}%` }}
               />
             </div>
           ))}
@@ -107,12 +138,12 @@ function HeroComposition() {
           }
         >
           <div className="ring-primary ring-offset-background rounded-[13px] ring-2 ring-offset-2">
-            <div className="border-border bg-background flex items-center gap-[0.6rem] rounded-[13px] border px-[1.1rem] py-[0.8rem]">
-              <span className="bg-primary h-[0.55rem] w-[0.55rem] flex-none rounded-full" />
-              <span className="bg-foreground h-[0.42rem] w-[5.5rem] rounded-full opacity-70" />
-            </div>
+            <MuestraFoco />
           </div>
-          <div className="text-muted-foreground mt-[0.55rem] pl-[0.2rem] font-mono text-[0.6rem]">
+          <div
+            className="construye-pieza text-muted-foreground mt-[0.55rem] pl-[0.2rem] font-mono text-[0.6rem]"
+            style={turno(2)}
+          >
             focus · 2px
           </div>
         </div>
@@ -120,10 +151,7 @@ function HeroComposition() {
       {/* móvil: solo la muestra de foco */}
       <div className="md:hidden">
         <div className="entrada-pliegue ring-primary ring-offset-background rounded-[13px] ring-2 ring-offset-2">
-          <div className="border-border bg-background flex items-center gap-[0.6rem] rounded-[13px] border px-[1.1rem] py-[0.8rem]">
-            <span className="bg-primary h-[0.55rem] w-[0.55rem] flex-none rounded-full" />
-            <span className="bg-foreground h-[0.42rem] w-[5.5rem] rounded-full opacity-70" />
-          </div>
+          <MuestraFoco />
         </div>
       </div>
     </div>

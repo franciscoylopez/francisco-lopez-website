@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 import { actionVariants } from "@/components/ui/action";
 import { SectionHeader } from "@/components/ui/heading";
@@ -227,29 +227,30 @@ export function RevealDemo({
  * incluido. Si algún día cambia la curva o la duración, esta demo cambia con
  * ella; con una recreación, publicaría un movimiento que el sitio ya no tiene.
  *
- * REBOBINAR ES QUITAR LA CLASE, NO TOCAR LA TRANSICIÓN. Aquí el movimiento es un
- * `@keyframes`, no una transición, así que el problema de `RevealDemo` —que al
- * quitar el estado arrancaba un fundido hacia fuera— no existe: se retira la
- * clase, se fuerza el reflow y se vuelve a poner. El navegador reinicia la
- * animación desde su primer fotograma.
+ * REBOBINAR ES MONTAR DE NUEVO, NO TOCAR LA TRANSICIÓN. Aquí el movimiento es
+ * un `@keyframes`, no una transición, así que el problema de `RevealDemo` —que
+ * al quitar el estado arrancaba un fundido hacia fuera— no existe. Antes se
+ * retiraba la clase y se volvía a poner; desde que la primera ficha se
+ * CONSTRUYE por dentro (2026-10-13) eso ya no basta, porque las piezas de
+ * dentro tienen sus propias animaciones y no se reiniciaban. Una `key` nueva
+ * vuelve a montar la fila entera y el navegador arranca todo desde el primer
+ * fotograma.
+ *
+ * `ficha` es el contenido de la primera: la pieza real de `ui/construye.tsx`,
+ * que pasa desde el componente de servidor para que la sección que la publica
+ * sea también la que la importa.
  */
 export function EntradaDemo({
   demoLabel,
   replayLabel,
+  ficha,
 }: {
   demoLabel: string;
   replayLabel: string;
+  ficha: ReactNode;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-
-  const replay = () => {
-    const demo = ref.current;
-    if (!demo) return;
-    const items = demo.querySelectorAll<HTMLElement>(".demo-entrada");
-    items.forEach((el) => el.classList.remove("entrada-pliegue"));
-    void demo.offsetWidth;
-    items.forEach((el) => el.classList.add("entrada-pliegue"));
-  };
+  const [vuelta, setVuelta] = useState(0);
+  const replay = () => setVuelta((v) => v + 1);
 
   return (
     <div className={cn(PANEL, "p-6")}>
@@ -266,18 +267,24 @@ export function EntradaDemo({
       {/* Tres fichas escalonadas, que es la forma que tiene el mecanismo en las
           portadas: el retardo va por variable para que la regla de movimiento
           reducido pueda anularlo (globals.css §Entrada del pliegue). */}
-      <div ref={ref} className="flex items-end gap-[0.6rem]">
+      <div
+        key={vuelta}
+        aria-hidden="true"
+        className="flex items-end gap-[0.6rem]"
+      >
         {["0s", "0.08s", "0.16s"].map((retardo, i) => (
           <div
             key={retardo}
-            className="demo-entrada entrada-pliegue bg-muted flex-1 rounded-md"
+            className="entrada-pliegue bg-muted flex-1 rounded-md"
             style={
               {
                 height: `${4.6 - i * 0.7}rem`,
                 "--retardo-entrada": retardo,
               } as CSSProperties
             }
-          />
+          >
+            {i === 0 ? ficha : null}
+          </div>
         ))}
       </div>
     </div>

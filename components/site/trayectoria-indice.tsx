@@ -14,6 +14,7 @@ import {
   titleVariants,
 } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
+import { LineaEscrita, turno } from "@/components/ui/construye";
 import { IndexNote } from "@/components/ui/section-index";
 import { Stat } from "@/components/ui/stat-row";
 import { type Locale } from "@/lib/i18n/config";
@@ -133,14 +134,17 @@ const FICHA =
   "border-border h-[186px] w-[140px] rounded-[14px] border p-[14px]";
 const LINEA = "h-[5px] rounded-[3px]";
 
-function Barras() {
+// LA FICHA SE CONSTRUYE AL CARGAR (2026-10-13): el orden de la cascada es el
+// `i` de cada pieza —icono, rótulo, titular, cuerpo y barras—, y el reloj lo
+// pone la ficha. Mecanismo y porqué en `globals.css` §La ficha que se construye.
+function Barras({ desde }: { desde: number }) {
   return (
     <div className="flex items-end gap-[5px]">
-      {[9, 15, 12, 21].map((alto) => (
+      {[9, 15, 12, 21].map((alto, k) => (
         <span
           key={alto}
-          className="bg-brand-cyan block w-[8px] rounded-[2px]"
-          style={{ height: alto }}
+          className="construye-barra bg-brand-cyan block w-[8px] rounded-[2px]"
+          style={{ ...turno(desde + k), height: alto }}
         />
       ))}
     </div>
@@ -151,14 +155,18 @@ function Dorso() {
   return (
     <>
       <div className="mb-[14px] flex justify-end">
-        <div className="bg-muted size-[26px] rounded-[8px]" />
+        <div
+          className="construye-pieza bg-muted size-[26px] rounded-[8px]"
+          style={turno(0)}
+        />
       </div>
       <div className="flex flex-col gap-[6px]">
-        {["70%", "100%", "88%", "95%", "60%"].map((ancho) => (
-          <div
+        {["70%", "100%", "88%", "95%", "60%"].map((ancho, k) => (
+          <LineaEscrita
             key={ancho}
+            i={1 + k}
+            ancho={ancho}
             className={cn(LINEA, "bg-muted")}
-            style={{ width: ancho }}
           />
         ))}
       </div>
@@ -170,28 +178,38 @@ function Frente() {
   return (
     <>
       <div className="mb-[12px] flex items-start justify-between gap-[10px]">
-        <div className={cn(LINEA, "bg-muted mt-[10px] w-[64px]")} />
-        <div className="bg-brand-cyan-soft size-[26px] rounded-[8px]" />
+        <LineaEscrita
+          i={1}
+          ancho="64px"
+          caja="mt-[10px]"
+          className={cn(LINEA, "bg-muted")}
+        />
+        <div
+          className="construye-pieza bg-brand-cyan-soft size-[26px] rounded-[8px]"
+          style={turno(0)}
+        />
       </div>
       <div className="mb-[18px] flex flex-col gap-[6px]">
-        {["92%", "64%"].map((ancho) => (
-          <div
+        {["92%", "64%"].map((ancho, k) => (
+          <LineaEscrita
             key={ancho}
+            i={2 + k}
+            ancho={ancho}
             className="bg-foreground h-[7px] rounded-[3px]"
-            style={{ width: ancho }}
           />
         ))}
       </div>
       <div className="mb-[16px] flex flex-col gap-[6px]">
-        {["100%", "82%", "94%"].map((ancho) => (
-          <div
+        {["100%", "82%", "94%"].map((ancho, k) => (
+          <LineaEscrita
             key={ancho}
+            i={4 + k}
+            ancho={ancho}
             className={cn(LINEA, "bg-foreground")}
-            style={{ width: ancho }}
           />
         ))}
       </div>
-      <Barras />
+      <Barras desde={7} />
     </>
   );
 }
@@ -248,7 +266,7 @@ function HeroComposition() {
                 FICHA,
                 giro === 0
                   ? "border-foreground bg-background"
-                  : "bg-transparent",
+                  : "construye-fondo bg-transparent",
               )}
               style={{
                 transformOrigin: PIVOTE,

@@ -533,7 +533,7 @@ Replay ▸
 ### Two ways in, and they don't say the same thing
 
 - On scroll, for whatever isn't on screen yet. What is already visible on load doesn't come in this way, because it hasn't come in: starting it hidden would delay the load metric.
-- On load, for the decorative pieces of the first fold, which do appear at once. They are the compositions of these four covers and the full stop of the home headline.
+- On load, for the decorative pieces of the first fold, which do appear at once. They are the compositions of these four covers and the full stop of the home headline. The cards also build themselves from the inside: the lines type out in steps and the pieces arrive one at a time.
 - And a third one that isn't an entrance: it's tied to the scroll and has no duration of its own, because position is what drives it. It's the rule growing under the years of the milestones.
 
 You can see the third one without pressing anything: the purple rule that opens each block on this page grows as you reach it.
