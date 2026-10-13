@@ -259,6 +259,7 @@
 - D215 (contesta a D212) · El Deployment Storage no es un nivel, es una integral: por eso borrar nunca lo bajó
 - D216 (completada por D217) · Solo el dominio propio es público: las URLs `*.vercel.app` piden sesión
 - D217 (completa a D216) · El repositorio se rehace con la historia desde cero, y mientras fue privado `main` no tuvo protección
+- D218 · La ficha del pliegue se construye al cargar: una capa de CSS, una pieza, y las cifras del dibujo salen del sistema
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -14109,3 +14110,44 @@ disparándolo**, como D68: un push directo a `main` con un commit real sale rech
 protección delante, el automerge vuelve a ser lo que fue durante dos semanas. Y, sin sesión, los 57
 enlaces a GitHub del sitio responden, y las 84 anclas `#L` a este archivo caen en la cabecera de su
 decisión.
+
+---
+
+## D218 · La ficha del pliegue se construye al cargar: una capa de CSS, una pieza, y las cifras del dibujo salen del sistema — 2026-10-13
+
+**Decisión.** Las composiciones de las cuatro aperturas (Trayectoria, Brand Kit, Design System y
+Accesibilidad) se montan por dentro al cargar. Las líneas se escriben a saltos con un cursor, las piezas
+llegan de una en una y los trazos SVG se dibujan. Es **una capa en `globals.css`** (§La ficha que se
+construye), hermana de `.entrada-pliegue`, con cinco clases: `construye-linea`, `-pieza`, `-barra`,
+`-traza` y `-abre`, más el modificador `construye-fondo` (mitad de paso y sin cursor). La única pieza con
+markup propio es `ui/construye.tsx` (`LineaEscrita`), publicada en Design System §Movimiento.
+
+**El reloj se hereda, no se escribe.** El retardo de cada pieza es el `--retardo-entrada` de su ficha
+más `--construye-tras` más su índice por el paso (80 ms; 40 en las de fondo). En el punto de uso solo se
+escribe el índice (`turno(i)`), que es lo que pide D135. Cada pieza dura `--duration-entrance`; lo que
+pasa del techo es la cascada, que es una secuencia de entradas y no una entrada larga.
+
+**Propiedades individuales, no `transform`.** Las piezas animan `scale` y el cursor `translate`, porque
+las fichas giran con `rotate` o con un `transform` en línea y una animación de `transform` se llevaría el
+giro. El cursor iba por `left` y lo cambió `/review-animations`. Quedan fuera del compositor, a
+sabiendas, el `clip-path` de la línea y el `stroke-dashoffset` del trazo: pocos píxeles, una vez por
+carga. El `stroke-dasharray` vive solo dentro de la animación porque, fijado, dejaba una costura en la
+junta del aro.
+
+**Movimiento reducido (D136):** se retiran el barrido, la escala, los saltos, el cursor, el trazo, el
+split y el escalonado. Queda el fundido de 160 ms de la ficha.
+
+**Las cifras de los dibujos no se escriben.** La retícula del Brand Kit acota `MONOGRAMA`, que
+`ui/logo.tsx` exporta y usa él mismo. La hoja del Design System lee el techo de cada `clamp` de
+`titleVariants`, `SPACING_SCALE` y las utilidades de radio. La escala de Accesibilidad dibuja
+`WCAG_TEXTO`, los mismos umbrales que lee `wcagLevel`, y el par `bodyText` en su tema y en su idioma
+(`ratioText`). Así, si el sistema cambia, el dibujo que lo enseña cambia con él (D38).
+
+**Un lienzo de ancho fijo lo declara.** `check:figuras` juzga un SVG sin ancho declarado como si
+pudiera encogerse al hueco de 284 px. Los de las aperturas se dibujan a su ancho exacto, y lo dicen con
+un `min-w-[Npx]` del mismo ancho, escrito entero (GATES.md).
+
+**Lo que costó, y a quién.** Dos excepciones de marca decididas por Francisco: las cotas del Design
+System y las barras sin dato de Trayectoria van en `--brand-purple` (`BRAND.md`, con su porqué en
+`BRAND-historical.md` §Las excepciones moradas). Con ellas, el contexto de arranque quedó en 11700, justo
+en el techo: la próxima apertura de sprint tiene que retirar.
