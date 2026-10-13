@@ -941,7 +941,7 @@ Sin enlace, la tarjeta se dibuja punteada y apagada. Es lo que le pasa a la expe
 
 Dos destinos · `PageCloser`
 
-Sube entero a la capa, y no solo la tarjeta: el ritmo vertical, el filete de arriba y el hueco del rótulo son lo que tiene que no divergir.
+Sube entero a la capa, y no solo la tarjeta: el ritmo vertical, el separador de arriba y el hueco del rótulo son lo que tiene que no divergir.
 
 La flecha empuja hacia donde apunta, y el empujón se apaga con movimiento reducido. Un destino que aún no existe se dibuja punteado y apagado.
 

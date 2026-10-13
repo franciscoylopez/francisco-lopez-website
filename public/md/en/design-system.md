@@ -941,7 +941,7 @@ With no link, the card is drawn dotted and dimmed. It's what happens to the most
 
 Two destinations · `PageCloser`
 
-The whole thing moves up to the layer, not just the card: the vertical rhythm, the hairline above and the gap for the label are what must not diverge.
+The whole thing moves up to the layer, not just the card: the vertical rhythm, the divider above and the gap for the label are what must not diverge.
 
 The arrow nudges toward where it points, and the nudge is off under reduced motion. A destination that doesn't exist yet is drawn dotted and dimmed.
 
