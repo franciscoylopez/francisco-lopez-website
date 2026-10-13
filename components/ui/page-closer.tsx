@@ -125,7 +125,7 @@ export function PageCloser({
   labelId?: string;
 }) {
   return (
-    <section className="border-border border-t">
+    <section className="section-sep">
       <nav
         data-reveal
         aria-labelledby={labelId}

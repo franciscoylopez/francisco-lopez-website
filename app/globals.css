@@ -1652,18 +1652,20 @@
    Los filetes de una sola cara (filas, cabeceras de bloque, la fila de cifras) arrancan
    plenos donde empieza el texto y se apagan hacia la derecha. Mismo color (`--border`, el
    que resuelve cada superficie) y mismo 1px. Quedan fuera las cajas (borde en más de una
-   cara), los discontinuos, las tablas, la cabecera fija, los diálogos y los `footer`
-   (el del sitio y el pie de repositorio del artículo). */
+   cara), los discontinuos, las tablas, la cabecera fija, los diálogos y el footer del
+   sitio. Y `.rule-full`, para lo que funciona como tabla sin serlo (Hitos): ahí la
+   línea entera es la que ata el dato de la derecha a su fila. */
 .border-border:is(.border-b, .border-t):not(
     .border,
     .border-l,
     .border-r,
     .border-x,
     .border-dashed,
+    .rule-full,
     th,
     td,
     tr,
-    footer,
+    [data-site-footer],
     header,
     table *,
     header *,

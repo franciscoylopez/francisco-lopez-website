@@ -70,7 +70,7 @@ const FAMILIA: readonly { slug: StaticPageSlug; label: EtiquetaDePagina }[] = [
 // cero pares de color nuevos.
 export function Footer({ dict, lang }: { dict: FooterDict; lang: Locale }) {
   return (
-    <footer className="border-border border-t">
+    <footer data-site-footer className="border-border border-t">
       <div className={cn(WRAP, "py-[clamp(1.75rem,3.5vw,2.5rem)]")}>
         <div className="flex flex-col items-center gap-5 md:grid md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-x-8">
           <div className="text-foreground flex items-center md:justify-self-start">

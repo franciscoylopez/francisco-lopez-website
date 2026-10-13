@@ -41,7 +41,7 @@ function Row({
   return (
     <div
       data-reveal
-      className="hito-fila hitos-row border-border border-b [padding-block:clamp(1.15rem,2.4vw,1.6rem)]"
+      className="hito-fila hitos-row rule-full border-border border-b [padding-block:clamp(1.15rem,2.4vw,1.6rem)]"
     >
       <span className="text-muted-foreground w-10 shrink-0 font-mono text-[0.8rem] [grid-area:idx]">
         {idx}
@@ -152,7 +152,7 @@ export function Hitos({ dict }: { dict: HitosDict }) {
           data-reveal
           className={cn(
             dataLabelVariants(),
-            "border-border hidden items-center gap-x-6 border-b pb-3 md:flex",
+            "rule-full border-border hidden items-center gap-x-6 border-b pb-3 md:flex",
           )}
         >
           <span className="w-10 shrink-0" />
