@@ -55,14 +55,11 @@ Así que en un gráfico **el cian lleva la información y lo que no llega se ate
 además el trazo y la etiqueta, que es lo que cumple el punto 6 del checklist sin depender del
 color.
 
-*(Las cifras y la asimetría entre temas, en [`BRAND-historical.md`](./BRAND-historical.md)
-§El morado como gráfico.)*
+**Excepción** *(2026-10-13)*: cotas del Design System en `--brand-purple`; su cifra, en
+`--muted-foreground`.
 
-**Excepción, decidida por Francisco** *(2026-10-13)*: las **líneas de acotación** de la
-apertura del Design System van en `--brand-purple`. Se sostiene porque la cifra de cada cota,
-que es la información, va en `--muted-foreground`; la línea solo dibuja. No se extiende a
-ninguna línea que tenga que leerse sin su cifra al lado. *(Por qué, en
-[`BRAND-historical.md`](./BRAND-historical.md) §Las cotas moradas del Design System.)*
+*(Cifras, asimetría entre temas y excepción, en [`BRAND-historical.md`](./BRAND-historical.md)
+§El morado como gráfico y §Las cotas moradas.)*
 
 ### El atenuado lo pone la superficie, no el punto de uso
 

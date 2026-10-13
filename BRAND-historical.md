@@ -55,7 +55,7 @@ Partido el **2026-08-09** (P37.685).
 - [La banda que publicaba una cifra y pintaba otra, y el ancla que no valía (2026-09-04)](#la-banda-que-publicaba-una-cifra-y-pintaba-otra-y-el-ancla-que-no-valía-2026-09-04)
 - [La superficie que se pintaba sin primer plano, y los cuatro colores que eso obligaba a escribir (2026-09-05)](#la-superficie-que-se-pintaba-sin-primer-plano-y-los-cuatro-colores-que-eso-obligaba-a-escribir-2026-09-05)
 - [El separador de sección que pesaba igual que una fila (2026-10-13)](#el-separador-de-sección-que-pesaba-igual-que-una-fila-2026-10-13)
-- [Las cotas moradas del Design System (2026-10-13)](#las-cotas-moradas-del-design-system-2026-10-13)
+- [Las cotas moradas (2026-10-13)](#las-cotas-moradas-2026-10-13)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -1245,7 +1245,7 @@ Lo que salió de mirarlo en pantalla, no de razonarlo:
 Queda un sistema de cuatro: trazo centrado para secciones y bloques, filete
 desvanecido para contenido, filete entero para lo tabular y borde para las cajas.
 
-## Las cotas moradas del Design System (2026-10-13)
+## Las cotas moradas (2026-10-13)
 
 Al redibujar las aperturas para que cada una hablara de su tema, la del Design System
 quedó como una hoja de especificación. Para no repetir los flancos pastel del Brand
