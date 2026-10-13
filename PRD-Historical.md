@@ -110,6 +110,7 @@
 - [La brecha de la primaria, leída sobre el lanzamiento: cero, y sobre spam — 2026-09-17](#la-brecha-de-la-primaria-leída-sobre-el-lanzamiento-cero-y-sobre-spam--2026-09-17)
 - [El `method-review` XIV: tres techos llenos a la vez, y un cambio de contrato sin barrido — 2026-09-17](#el-method-review-xiv-tres-techos-llenos-a-la-vez-y-un-cambio-de-contrato-sin-barrido--2026-09-17)
 - [Foto nueva del Hero, y es un plano más cercano a propósito — 2026-10-12](#foto-nueva-del-hero-y-es-un-plano-más-cercano-a-propósito--2026-10-12)
+- [Las aperturas dibujan su tema y se construyen al cargar — 2026-10-13](#las-aperturas-dibujan-su-tema-y-se-construyen-al-cargar--2026-10-13)
 <!-- FIN ÍNDICE -->
 
 ## 1. Resumen ejecutivo
@@ -4742,3 +4743,34 @@ lienzo de la foto. Francisco lo vio en la preview y lo prefirió así.
 614px y el optimizador no amplía; el nuevo máster es de 880×1100, y aun así lo que se descarga
 pesa lo mismo o menos (15 KB a 640px frente a 19). El detalle de cada recorte, en el commit de
 P74.695 y en D192.
+
+---
+
+## Las aperturas dibujan su tema y se construyen al cargar — 2026-10-13
+
+**El punto de partida.** Francisco quería más peso en las animaciones de las aperturas y, sobre todo,
+en móvil, donde cada una enseñaba una sola ficha con un fundido de 280 ms y se quedaba pobre. Primero
+se resolvió el movimiento: con `/prototype` se compararon cuatro maneras de construir la ficha de
+Trayectoria y ganó la máquina de escribir, con ritmo pausado y el abanico de fondo construyéndose
+también. Se aplicó a las cuatro aperturas (D218).
+
+**Al revisarlo apareció el problema de fondo.** La ficha de Trayectoria se lee como un CV; las del
+Brand Kit (un navegador con su nav) y del Design System (tres maquetas con rejilla) eran interfaces
+que servían para cualquier tema. Se redibujaron una a una, cada una con su prototipo:
+
+- **Brand Kit:** la retícula de construcción del monograma, con sus cotas y las dos tarjetas pastel de
+  antes como flancos, que ahora salen también en móvil. Perdieron la hoja de marca y la escala del logo.
+- **Design System:** una hoja de especificación con las escalas reales y, para no repetir los flancos
+  del Brand Kit, sus cotas por fuera en morado. Ganó frente a la pieza despiezada y la rejilla con
+  bloques, y las cotas frente a reglas y guías.
+- **Accesibilidad:** Francisco prefirió conservar el trío de escritorio, cambiando solo la tarjeta de
+  contraste por una que enseña dónde cae la cifra en la escala de WCAG, y que las tres entraran en
+  cascada. En móvil, esa tarjeta sustituye a la píldora de foco.
+- **Trayectoria:** el escritorio se quedó como estaba salvo las barras, que pasan a morado; en móvil,
+  la ficha apaisada gana dos dorsos girados y la pastel detrás.
+
+**Los dos morados son excepciones escritas** (`BRAND.md`): el morado no llega al 3:1 como gráfico, y en
+los dos casos se admite porque la línea no lleva el dato. El porqué, en `BRAND-historical.md`.
+
+Salió en un solo PR con las cuatro aperturas, sin pasar `/review-animations` sobre él: Francisco pidió
+subirlo con los gates en verde.
