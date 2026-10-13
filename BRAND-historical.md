@@ -55,7 +55,7 @@ Partido el **2026-08-09** (P37.685).
 - [La banda que publicaba una cifra y pintaba otra, y el ancla que no valía (2026-09-04)](#la-banda-que-publicaba-una-cifra-y-pintaba-otra-y-el-ancla-que-no-valía-2026-09-04)
 - [La superficie que se pintaba sin primer plano, y los cuatro colores que eso obligaba a escribir (2026-09-05)](#la-superficie-que-se-pintaba-sin-primer-plano-y-los-cuatro-colores-que-eso-obligaba-a-escribir-2026-09-05)
 - [El separador de sección que pesaba igual que una fila (2026-10-13)](#el-separador-de-sección-que-pesaba-igual-que-una-fila-2026-10-13)
-- [Las cotas moradas (2026-10-13)](#las-cotas-moradas-2026-10-13)
+- [Las excepciones moradas (2026-10-13)](#las-excepciones-moradas-2026-10-13)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -1245,7 +1245,7 @@ Lo que salió de mirarlo en pantalla, no de razonarlo:
 Queda un sistema de cuatro: trazo centrado para secciones y bloques, filete
 desvanecido para contenido, filete entero para lo tabular y borde para las cajas.
 
-## Las cotas moradas (2026-10-13)
+## Las excepciones moradas (2026-10-13)
 
 Al redibujar las aperturas para que cada una hablara de su tema, la del Design System
 quedó como una hoja de especificación. Para no repetir los flancos pastel del Brand
@@ -1263,3 +1263,10 @@ haya que leer sin cifra al lado sigue la regla, y va en cian.
 
 Lo que ganó además: el morado separa esta apertura de la retícula del Brand Kit, que acota
 en cian el monograma, sin sacarla de la misma familia.
+
+**La segunda, el mismo día: las barras de la ficha de Trayectoria.** Al revisar esa
+apertura, Francisco pidió pasar a morado uno de sus tres elementos en cian, y eligió las
+cuatro barras. Son un gráfico, así que la regla las dejaría en cian. Se admiten por lo
+mismo que las cotas: **no cuentan ningún dato**, son el dibujo de «una gráfica» dentro de
+una ficha esquemática. El límite es el mismo: el día que esas barras representen una
+cifra, vuelven al cian.

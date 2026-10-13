@@ -132,18 +132,26 @@ const PIVOTE = "50% 128%";
 
 const FICHA =
   "border-border h-[186px] w-[140px] rounded-[14px] border p-[14px]";
+/** El dorso de los lados en móvil: la misma ficha, a la escala de la apaisada. */
+const FICHA_MOVIL =
+  "border-border bg-background h-[150px] w-[112px] rounded-[14px] border p-[12px]";
 const LINEA = "h-[5px] rounded-[3px]";
 
 // LA FICHA SE CONSTRUYE AL CARGAR (2026-10-13): el orden de la cascada es el
 // `i` de cada pieza —icono, rótulo, titular, cuerpo y barras—, y el reloj lo
 // pone la ficha. Mecanismo y porqué en `globals.css` §La ficha que se construye.
+//
+// LAS BARRAS VAN EN MORADO (2026-10-13), el único verde de la ficha que pasa a
+// la otra mitad de la marca. Es una excepción escrita en `BRAND.md`: el morado
+// no llega al 3:1 como gráfico en tema claro, y se admite porque estas barras
+// no cuentan ningún dato. Si un día lo cuentan, vuelven al cian.
 function Barras({ desde }: { desde: number }) {
   return (
     <div className="flex items-end gap-[5px]">
       {[9, 15, 12, 21].map((alto, k) => (
         <span
           key={alto}
-          className="construye-barra bg-brand-cyan block w-[8px] rounded-[2px]"
+          className="construye-barra bg-brand-purple block w-[8px] rounded-[2px]"
           style={{ ...turno(desde + k), height: alto }}
         />
       ))}
@@ -218,7 +226,7 @@ function HeroComposition() {
   return (
     <div
       aria-hidden="true"
-      className="flex flex-[1_1_26rem] items-center justify-center"
+      className="flex flex-[1_1_26rem] items-center justify-center max-md:overflow-x-clip"
     >
       {/* escritorio */}
       <div className="relative hidden h-60 w-[min(25rem,100%)] md:block">
@@ -279,10 +287,44 @@ function HeroComposition() {
         ))}
       </div>
 
-      {/* móvil: una sola ficha, como hace Design System con su marco. Cinco
-          giradas a este ancho se pisan y no se lee ninguna. */}
-      <div className="relative mx-auto h-[11.5rem] w-[min(16rem,100%)] md:hidden">
-        <div className="entrada-pliegue border-foreground bg-background absolute inset-0 rounded-[14px] border p-[14px]">
+      {/* MÓVIL: EL ABANICO ABIERTO (2026-10-13). Cinco fichas giradas a este
+          ancho se pisan y no se lee ninguna, así que la de delante sigue siendo
+          la apaisada; pero sola se quedaba pobre, que era lo que pasaba en las
+          cuatro aperturas. Ahora asoman detrás dos dorsos girados y la pastel,
+          con la misma entrada en cascada que el escritorio. Elegido con
+          `/prototype` frente al abanico entero a escala y a una pila de cantos.
+          Los lados sobresalen de la ficha: el `overflow-x-clip` del
+          contenedor impide que a 320px desborden la página. */}
+      <div className="relative mx-auto w-[min(16rem,100%)] py-3 md:hidden">
+        <div
+          className="entrada-pliegue absolute top-1/2 left-1/2 z-0 -translate-x-1/2 -translate-y-1/2"
+          style={{ "--retardo-entrada": "0.04s" } as CSSProperties}
+        >
+          <div
+            className="bg-brand-cyan-soft h-[12.5rem] w-[9rem] rounded-[14px]"
+            style={{ rotate: "-14deg" }}
+          />
+        </div>
+        {(
+          [
+            ["left-[-1.4rem]", "-9deg", "0.08s"],
+            ["right-[-1.4rem]", "9deg", "0.16s"],
+          ] as const
+        ).map(([lado, giro, retardo]) => (
+          <div
+            key={lado}
+            className={cn(
+              "entrada-pliegue construye-fondo absolute top-1/2 z-[1] -translate-y-1/2",
+              lado,
+            )}
+            style={{ "--retardo-entrada": retardo } as CSSProperties}
+          >
+            <div className={FICHA_MOVIL} style={{ rotate: giro }}>
+              <Dorso />
+            </div>
+          </div>
+        ))}
+        <div className="entrada-pliegue border-foreground bg-background relative z-[3] h-[11.5rem] rounded-[14px] border p-[14px]">
           <Frente />
         </div>
       </div>
