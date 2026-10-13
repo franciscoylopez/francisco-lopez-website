@@ -517,6 +517,10 @@ export function ratioOf(id: ContrastId, theme: Theme): number {
   return theme === "dark" ? (m.dark ?? m.light) : m.light;
 }
 
+/** Los umbrales de WCAG para texto normal. Los lee `wcagLevel` y los dibuja la
+ *  escala de la apertura de Accesibilidad, así que no pueden decir dos cosas. */
+export const WCAG_TEXTO = { AA: 4.5, AAA: 7 } as const;
+
 /**
  * El nivel WCAG que alcanza una cifra. Se deriva porque es una función del número
  * —7:1 y 4,5:1 para texto normal; 4,5:1 y 3:1 para texto grande—, no un juicio.
@@ -530,8 +534,8 @@ export function wcagLevel(
     if (ratio >= 4.5) return "AAA";
     return ratio >= 3 ? "AA-large" : null;
   }
-  if (ratio >= 7) return "AAA";
-  return ratio >= 4.5 ? "AA" : null;
+  if (ratio >= WCAG_TEXTO.AAA) return "AAA";
+  return ratio >= WCAG_TEXTO.AA ? "AA" : null;
 }
 
 /** El nivel de un par del censo en un tema. */

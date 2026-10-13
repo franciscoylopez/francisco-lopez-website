@@ -153,6 +153,7 @@ export function Accesibilidad({
           crumb={t.crumb}
           breadcrumb={breadcrumb}
           homeHref={homeHref}
+          lang={lang}
         />
       }
       t={t}
