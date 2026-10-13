@@ -3,7 +3,7 @@ canonical: https://franciscolopez.es/en/career/emendu
 lang: en
 title: From selling devices to a SaaS with its own channel
 description: "End-to-end product strategy in a B2B IT Management SaaS: redefining the ICP with discovery outside the sales pipeline, optimising the digitisation of the operation and opening a channel through the Sesame HR partnership."
-last-updated: 2026-08-18
+last-updated: 2026-10-13
 ---
 
 1. [Home](https://franciscolopez.es/en)
@@ -50,41 +50,35 @@ Member of the leadership team
 
 ### Validating who the SaaS was for
 
-Emendu was a **sales-led company with a SaaS on top**, and the brief was not to manage a roadmap: it was to scale up a newly created SaaS within the company.
+Emendu was a **sales-led company with a SaaS on top**, and the brief was not to manage a roadmap: it was to scale up a newly created SaaS within the company. The first step was validating who it was really for. To do that I joined the sales team in **more than 20 meetings** and interviewed **10 companies that were not in the pipeline**.
 
-The first step was validating who it was really for. To do that I joined the sales team in **more than 20 meetings** and interviewed **10 companies that were not in the pipeline**.
-
-That discovery produced a new ICP, and with it the whole 2025 roadmap: evolving the SaaS towards that customer's needs, reorienting LISA and rewriting the product's language for the people who would actually use it.
+That discovery produced a new ICP, and with it the whole 2025 roadmap: evolving the SaaS towards that customer's needs, reorienting **LISA**, our AI agent, and rewriting the product's language for the people who would actually use it.
 
 ### An in-house engineering team
 
-The next step was iterating on how it was built. I pushed for an **in-house engineering team**, and hiring the **Tech Lead** brought a technical roadmap with order and dates.
+The next step was iterating on how it was built. I drove the move from an external development agency to an **in-house engineering team**, and hiring the **Tech Lead** brought a technical roadmap with order and dates.
 
 ### When you want to reach further, you build it
 
-With the engineering team focused on the roadmap, I wanted to reach further: what internal stakeholders were asking for, I built myself with **Claude Code**, internal tools for Sales, for Account Managers and for the rest of the company. Not for me: each piece has its own team.
+With the engineering team focused on the roadmap, I wanted to reach further: what internal stakeholders were asking for, I built myself with **Claude Code**. I created internal tools for Sales, for Account Managers and for the rest of the company. Not for me: each piece has its own team.
 
-It is also where AI stopped being a lookup tool. Analysing interviews with AI let me review not only the user but **myself as an interviewer**; v0 put working prototypes in customers' hands in the time it used to take to describe them.
+At Emendu, AI became part of the method. We reshaped LISA around SaaS management. **Working prototypes** became a key piece in how the product evolved, not only internally: they also let us put our ideas in customers' hands. And analysing interviews let me review not only the user but **myself as an interviewer**.
 
 ### From efficiency to channel
 
-With the technical roadmap on the table, **Sesame HR** appeared, and it changed the nature of the project. Until then, optimising the digitisation of the operation was an **efficiency** project, with a known ceiling.
+With the 2025 roadmap on the table, **Sesame HR** appeared, and it changed the nature of the project. Until then, optimising the digitisation of the operation was an **efficiency** project, but a partnership changes it at the root: the operation stops being only ours and has to work from inside someone else's product too.
 
-A partnership changes it at the root: the operation stops being only ours and has to work from inside someone else's product too.
-
-03 — The case
-
-## 03. The Sesame HR partnership
-
-Sesame HR is one of the largest HR software players in Spain, and [the alliance](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html) brought Emendu's device management into its platform. What follows is how the work was done inside.
+Sesame HR is one of the largest HR software players in Spain, and the partnership brought Emendu's device management into its platform. What follows is how the work was done inside.
 
 **Internal and external discovery, to approach the operation with a new lens.** Interviews with Operations, Sales and Account Managers, and with external sources too.
 
-From there came a **product spec** with features and sub-processes; **flow diagrams as code** with their states and transitions, because a state diagram leaves no room for interpretation where a list of requirements does; and a **navigable HTML prototype, low fidelity and with no UI**, which became the only shared language of four audiences at once: engineering, Operations and Sales, the partner, and product.
+From there came a **product spec** with features and sub-processes; **flow diagrams as code** with their states and transitions, because a state diagram leaves no room for interpretation where a list of requirements does; and a **navigable, low-fidelity HTML prototype**, which became the only shared language of four audiences at once: engineering, Operations and Sales, the partner, and product.
 
-04 — Takeaways
+The result: [a win](https://www.economiadigital.es/valencia/empresas/sesame-alia-emendu-suma-gestion-dispositivos-tecnologicos-empresa-plataforma-rrhh.html) that few startups pull off.
 
-## 04. Three takeaways
+03 — Takeaways
+
+## 03. Three takeaways
 
 1. **A navigable prototype aligns better than a long specification.** With an external partner and several teams at once, a low-fidelity HTML did in days what a document would not have done in weeks.
 2. **Optimising the digitisation of a process means designing it from the system.** It is not about writing code: it is about the operation and the system iterating together, instead of the system merely documenting the operation.
