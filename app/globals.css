@@ -1647,3 +1647,27 @@
   );
   pointer-events: none;
 }
+
+/* ── Filetes de contenido desvanecidos · EXPERIMENTO (rama exp/filetes-desvanecidos) ──
+   Los filetes de una sola cara (filas, cabeceras de bloque, la fila de cifras) arrancan
+   plenos donde empieza el texto y se apagan hacia la derecha. Mismo color (`--border`, el
+   que resuelve cada superficie) y mismo 1px. Quedan fuera las cajas (borde en más de una
+   cara), los discontinuos, las tablas, la cabecera fija, los diálogos y los `footer`
+   (el del sitio y el pie de repositorio del artículo). */
+.border-border:is(.border-b, .border-t):not(
+    .border,
+    .border-l,
+    .border-r,
+    .border-x,
+    .border-dashed,
+    th,
+    td,
+    tr,
+    footer,
+    header,
+    table *,
+    header *,
+    dialog *
+  ) {
+  border-image: linear-gradient(90deg, var(--border), transparent) 1;
+}
