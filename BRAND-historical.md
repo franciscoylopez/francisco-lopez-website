@@ -54,6 +54,7 @@ Partido el **2026-08-09** (P37.685).
 - [El velo que no declara superficie, y por qué la regla prometía de más (2026-08-27)](#el-velo-que-no-declara-superficie-y-por-qué-la-regla-prometía-de-más-2026-08-27)
 - [La banda que publicaba una cifra y pintaba otra, y el ancla que no valía (2026-09-04)](#la-banda-que-publicaba-una-cifra-y-pintaba-otra-y-el-ancla-que-no-valía-2026-09-04)
 - [La superficie que se pintaba sin primer plano, y los cuatro colores que eso obligaba a escribir (2026-09-05)](#la-superficie-que-se-pintaba-sin-primer-plano-y-los-cuatro-colores-que-eso-obligaba-a-escribir-2026-09-05)
+- [El separador de sección que pesaba igual que una fila (2026-10-13)](#el-separador-de-sección-que-pesaba-igual-que-una-fila-2026-10-13)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -1181,3 +1182,37 @@ huella no podía enterarse; por eso el inventario existe. Re-sellado con `--inve
 *(Absorbe la cláusula fechada que decía que `bg-foreground` no está entre las superficies
 resueltas: con la superficie declarando su primer plano, eso deja de ser lo que hay que
 recordar.)*
+
+## El separador de sección que pesaba igual que una fila (2026-10-13)
+
+El filete que abría cada sección (`SECTION`) era el mismo de 1px a ancho completo
+que separa filas, tablas y la cabecera del índice. En móvil se juntaban hasta
+cuatro en unos 400px (la apertura del Brand Kit: fila de cifras, sección, rótulo
+del índice, rejilla), y como todos pesaban igual el corte entre secciones, que es
+el importante, no se distinguía. Lo señaló Francisco mirando la página.
+
+Se decidió sobre un prototipo con el HTML y el CSS servidos de la home y del
+artículo, en móvil y escritorio y en los dos temas, y después en la preview del
+sitio entero. Lo que se probó y por qué no:
+
+- **Solo espacio, sin línea:** limpio en escritorio, pero en móvil las secciones
+  se funden. Descartado antes de prototipar.
+- **Trazo corto de marca (48×3px, cian, alineado al texto):** no encajó; y abrió
+  la duda de por qué cian si no hay interacción. El token era el decorativo
+  (`brand-cyan`, no `primary`), pero el ojo lo lee como acción igual.
+- **Filete reforzado (2px, `--control-edge`, ancho completo):** demasiado evidente.
+- **Rotulado (la línea nace a la derecha del rótulo de la sección):** no todas
+  las secciones tienen rótulo, y en el índice se juntaba con su propio filete.
+- **Punto de 7px:** demasiado poco en móvil.
+- **Desvanecido:** el elegido, en su variante centrada, corta (8rem), 1px y en
+  `--progress-ink` al 25% sobre el fondo («muy suave»).
+
+**El riesgo que se aceptó a sabiendas:** el morado es la firma del punto del
+titular, y `globals.css` deja escrito que dos firmas compitiendo serían peor que
+ninguna. Al 25% y en un trazo que se desvanece no se lee como firma; si algún día
+lo hace, el primer sospechoso es este separador.
+
+**Lo que se probó y NO se aplicó:** quitar los filetes duplicados de dentro de los
+bloques (el subrayado de «Índice», la navegación de sección del artículo detrás
+del pie de repositorio, la fila de cifras de las aperturas). Estuvo en la misma
+rama y Francisco decidió quedarse solo con el separador.

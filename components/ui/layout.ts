@@ -16,8 +16,8 @@
 /** Contenedor de página: centra al ancho del grid y aplica el gutter lateral. */
 export const WRAP = "mx-auto max-w-[var(--container)] px-[var(--page-x)]";
 
-/** Sección de página: filete superior + ritmo vertical del sistema. */
-export const SECTION = "border-border border-t py-[var(--section-y)]";
+/** Sección de página: separador superior (`.section-sep`, globals.css) + ritmo vertical del sistema. */
+export const SECTION = "section-sep py-[var(--section-y)]";
 
 /**
  * Fila de la apertura: columna de texto a la izquierda, ilustración a la derecha.
