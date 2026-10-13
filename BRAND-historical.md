@@ -55,6 +55,7 @@ Partido el **2026-08-09** (P37.685).
 - [La banda que publicaba una cifra y pintaba otra, y el ancla que no valía (2026-09-04)](#la-banda-que-publicaba-una-cifra-y-pintaba-otra-y-el-ancla-que-no-valía-2026-09-04)
 - [La superficie que se pintaba sin primer plano, y los cuatro colores que eso obligaba a escribir (2026-09-05)](#la-superficie-que-se-pintaba-sin-primer-plano-y-los-cuatro-colores-que-eso-obligaba-a-escribir-2026-09-05)
 - [El separador de sección que pesaba igual que una fila (2026-10-13)](#el-separador-de-sección-que-pesaba-igual-que-una-fila-2026-10-13)
+- [Las cotas moradas del Design System (2026-10-13)](#las-cotas-moradas-del-design-system-2026-10-13)
 <!-- FIN ÍNDICE -->
 
 ## Color — regla de las dos capas
@@ -1243,3 +1244,22 @@ Lo que salió de mirarlo en pantalla, no de razonarlo:
 
 Queda un sistema de cuatro: trazo centrado para secciones y bloques, filete
 desvanecido para contenido, filete entero para lo tabular y borde para las cajas.
+
+## Las cotas moradas del Design System (2026-10-13)
+
+Al redibujar las aperturas para que cada una hablara de su tema, la del Design System
+quedó como una hoja de especificación. Para no repetir los flancos pastel del Brand
+Kit, Francisco pidió medirla desde fuera, con cotas, y en morado.
+
+El prototipo enseñó los dos colores lado a lado. **En tema claro el morado se queda
+pálido**, como predice §El morado como gráfico: no llega al 3:1 que WCAG 1.4.11 pide a un
+gráfico que hay que entender, y el cian sí. Aun así, Francisco eligió el morado.
+
+**Por qué se admite, y hasta dónde:** en una cota, lo que hay que entender es la cifra, y
+la cifra va en `--muted-foreground`, que está en AAA. La línea solo dice «esto es lo que
+se mide», y eso lo dicen también su posición y sus topes. Así que no es un gráfico que
+dependa del color para leerse. La excepción vale **para eso y nada más**: una línea que
+haya que leer sin cifra al lado sigue la regla, y va en cian.
+
+Lo que ganó además: el morado separa esta apertura de la retícula del Brand Kit, que acota
+en cian el monograma, sin sacarla de la misma familia.

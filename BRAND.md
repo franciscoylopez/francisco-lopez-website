@@ -58,6 +58,12 @@ color.
 *(Las cifras y la asimetría entre temas, en [`BRAND-historical.md`](./BRAND-historical.md)
 §El morado como gráfico.)*
 
+**Excepción, decidida por Francisco** *(2026-10-13)*: las **líneas de acotación** de la
+apertura del Design System van en `--brand-purple`. Se sostiene porque la cifra de cada cota,
+que es la información, va en `--muted-foreground`; la línea solo dibuja. No se extiende a
+ninguna línea que tenga que leerse sin su cifra al lado. *(Por qué, en
+[`BRAND-historical.md`](./BRAND-historical.md) §Las cotas moradas del Design System.)*
+
 ### El atenuado lo pone la superficie, no el punto de uso
 
 `--muted-foreground` está calibrado contra `--background` **y solo contra él**. Encima de
