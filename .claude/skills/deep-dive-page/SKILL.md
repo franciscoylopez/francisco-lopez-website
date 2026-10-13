@@ -134,8 +134,8 @@ ejecutándola cinco veces.
   experiencia de tres meses y una de cinco años y medio no pueden llevar los
   mismos epígrafes sin que la corta salga medio vacía. Lo que las homogeneiza es
   el marco y la longitud, **no los títulos**. Entre 3 y 4 bloques en las cinco.
-- **El caso** — opcional, «donde hay historia de verdad». Freepik y KUOTIP no lo
-  llevan y **esa ausencia es del formato, no un hueco por rellenar**.
+- **El caso** — opcional, «donde hay historia de verdad». No todas lo llevan, y
+  **esa ausencia es del formato, no un hueco por rellenar**.
 - **Aprendizajes** — 3 sin caso, 4 con caso, en las cinco. No estaba escrito en
   ningún sitio: es lo que salió, y sirve de vara.
 
