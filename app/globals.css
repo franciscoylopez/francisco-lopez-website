@@ -1648,13 +1648,15 @@
   pointer-events: none;
 }
 
-/* ── Filetes de contenido desvanecidos · EXPERIMENTO (rama exp/filetes-desvanecidos) ──
+/* ── Filetes de contenido desvanecidos (2026-10-13) ──
    Los filetes de una sola cara (filas, cabeceras de bloque, la fila de cifras) arrancan
    plenos donde empieza el texto y se apagan hacia la derecha. Mismo color (`--border`, el
    que resuelve cada superficie) y mismo 1px. Quedan fuera las cajas (borde en más de una
    cara), los discontinuos, las tablas, la cabecera fija, los diálogos y el footer del
    sitio. Y `.rule-full`, para lo que funciona como tabla sin serlo (Hitos): ahí la
-   línea entera es la que ata el dato de la derecha a su fila. */
+   línea entera es la que ata el dato de la derecha a su fila. Junto con `.section-sep`
+   deja dos tipos de línea: el trazo centrado corta secciones y bloques, el filete
+   desvanecido separa contenido. Porqué y lo descartado, en BRAND-historical.md. */
 .border-border:is(.border-b, .border-t):not(
     .border,
     .border-l,
