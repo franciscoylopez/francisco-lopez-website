@@ -81,7 +81,7 @@ The [European Accessibility Act](https://eur-lex.europa.eu/eli/dir/2019/882/oj) 
 
 1 of 8
 
-[Contents](#indice) · [Next: 02 · What's been done](#s02)
+[Contents](#indice)
 
 02 — What's been done
 
@@ -139,7 +139,7 @@ Of these nine points, four are not checked page by page, and that is exactly the
 
 2 of 8
 
-[Contents](#indice) · [Next: 03 · Inherited accessibility](#s03)
+[Contents](#indice)
 
 03 — Inherited accessibility
 
@@ -177,7 +177,7 @@ Eight pieces in the core, and none is written by hand
 
 3 of 8
 
-[Contents](#indice) · [Next: 04 · Verification](#s04)
+[Contents](#indice)
 
 04 — Verification
 
@@ -233,7 +233,7 @@ They don't all fit in the same place, and saying so matters. The ones that only 
 
 4 of 8
 
-[Contents](#indice) · [Next: 05 · The blind spot](#s05)
+[Contents](#indice)
 
 ## Where it falls short, and how that is said
 
@@ -272,7 +272,7 @@ What this pass doesn't cover is right below, in the limits: one screen reader ([
 
 5 of 8
 
-[Contents](#indice) · [Next: 06 · Limits](#s06)
+[Contents](#indice)
 
 06 — Limits
 
@@ -300,7 +300,7 @@ None of this is here for completeness. A limits section that only says «continu
 
 6 of 8
 
-[Contents](#indice) · [Next: 07 · The word](#s07)
+[Contents](#indice)
 
 07 — The word
 
@@ -314,7 +314,7 @@ A11y is the shorthand web development uses for the word accessibility. It's buil
 
 7 of 8
 
-[Contents](#indice) · [Next: 08 · Contact](#s08)
+[Contents](#indice)
 
 08 — Contact
 

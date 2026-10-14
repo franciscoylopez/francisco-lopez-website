@@ -58,7 +58,7 @@ export type SeccionMarco = {
   id: string;
   /** El eyebrow ya compuesto: «01 — Rejilla y medidas» (D43). */
   kicker: string;
-  /** El `SectionCloser` ya montado, con su posición y su siguiente parada. */
+  /** El `SectionCloser` ya montado, con su posición. */
   closer: ReactNode;
 };
 
@@ -232,9 +232,17 @@ export function IndexNote({
 
 /* ───────────────────────── SectionCloser ───────────────────────── */
 
-/** La transición entre secciones: puntos de posición + vuelta al índice +
- * siguiente parada. Los puntos son decorativos —«N de M» ya lo dice en
- * texto—, así que no repiten la info por color (punto 6 del checklist).
+/** La transición entre secciones: puntos de posición + vuelta al índice. Los
+ * puntos son decorativos —«N de M» ya lo dice en texto—, así que no repiten la
+ * info por color (punto 6 del checklist).
+ *
+ * SIN «SIGUIENTE» (2026-10-14). Llevaba un tercer enlace, «Siguiente: NN ·
+ * Título», y se retiró: su destino es el título que empieza ~150 px más abajo,
+ * con el mismo ordinal y el mismo texto, así que no llevaba a ningún sitio que
+ * no estuviera ya a la vista. En móvil además bajaba a una segunda línea y
+ * doblaba el alto del pie. Teclado y lector tampoco lo pierden: el siguiente
+ * foco y el siguiente encabezado ya son esa sección. El índice sí se queda,
+ * porque lleva a algo lejano.
  *
  * Se llamaba `ChapterNav`. Es el «cierre de bloque», y su hermana de nombre es
  * `PageCloser`: una cierra la página, esta cierra una sección. */
@@ -243,8 +251,6 @@ export function SectionCloser({
   total,
   indexLabel,
   indexHref,
-  nextLabel,
-  nextHref,
   positionLabel,
   ariaLabel,
 }: {
@@ -252,9 +258,6 @@ export function SectionCloser({
   total: number;
   indexLabel: string;
   indexHref: string;
-  /** Sin `nextHref` (el cierre, que no tiene «siguiente»), no se lee. */
-  nextLabel?: string;
-  nextHref?: string;
   positionLabel: string;
   /**
    * EL NOMBRE ACCESIBLE, que llevaba «Entre secciones» LITERAL en el componente
@@ -309,14 +312,6 @@ export function SectionCloser({
       >
         {indexLabel}
       </a>
-      {nextHref ? (
-        <a
-          href={nextHref}
-          className={chromeLinkVariants({ shape: "inline", tone: "default" })}
-        >
-          {nextLabel}
-        </a>
-      ) : null}
     </nav>
   );
 }
@@ -350,7 +345,6 @@ export type IndiceDict = RecorridoDict & {
 /** El copy que el recorrido necesita, y que la pieza no puede inventarse. */
 export type RecorridoDict = {
   closerLabel: string;
-  nextLabel: string;
   of: string;
   closerAriaLabel: string;
 };
@@ -408,7 +402,6 @@ export function construirRecorrido<K extends string>(
 
   const marcos = Object.fromEntries(
     paradas.map((parada, i) => {
-      const siguiente = paradas[i + 1];
       const marco: SeccionMarco = {
         id: parada.id,
         kicker: `${parada.ordinal} — ${parada.label}`,
@@ -418,12 +411,6 @@ export function construirRecorrido<K extends string>(
             total={paradas.length}
             indexLabel={indice.closerLabel}
             indexHref={`#${anclaIndice}`}
-            nextLabel={
-              siguiente
-                ? `${indice.nextLabel} ${siguiente.ordinal} · ${siguiente.label}`
-                : undefined
-            }
-            nextHref={siguiente ? `#${siguiente.id}` : undefined}
             ariaLabel={indice.closerAriaLabel}
             positionLabel={`${i + 1} ${indice.of} ${paradas.length}`}
           />

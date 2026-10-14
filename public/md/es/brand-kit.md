@@ -67,7 +67,7 @@ Tres trazos apilados sin blend. Solo a ≥48px, donde el color se lee como capa.
 
 1 de 6
 
-[Índice](#indice) · [Siguiente: 02 · Logotipo](#s02)
+[Índice](#indice)
 
 02 — Logotipo
 
@@ -278,7 +278,7 @@ Funciona
 
 2 de 6
 
-[Índice](#indice) · [Siguiente: 03 · Color](#s03)
+[Índice](#indice)
 
 03 — Color
 
@@ -432,7 +432,7 @@ Los pasteles nunca como color de texto. Son fondos. Si va texto sobre un pastel,
 
 3 de 6
 
-[Índice](#indice) · [Siguiente: 04 · Tipografía](#s04)
+[Índice](#indice)
 
 04 — Tipografía
 
@@ -462,7 +462,7 @@ ABCDEFGHIJKLM abcdefghijklm 0123456789
 
 4 de 6
 
-[Índice](#indice) · [Siguiente: 05 · Aplicaciones](#s05)
+[Índice](#indice)
 
 ## Cómo se usa
 
@@ -527,7 +527,7 @@ Dónde vive [GitHub, en los ajustes del repositorio](https://github.com/francisc
 
 5 de 6
 
-[Índice](#indice) · [Siguiente: 06 · Uso correcto e incorrecto](#s06)
+[Índice](#indice)
 
 06 — Uso correcto e incorrecto
 

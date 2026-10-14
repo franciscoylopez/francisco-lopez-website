@@ -52,7 +52,6 @@
   "progress": { "ariaLabel": "Reading progress" },
   "chapterNav": {
     "indexLabel": "Contents",
-    "nextLabel": "Next:",
     "ariaLabel": "Between sections"
   },
   "sectionMeta": { "of": "of" },

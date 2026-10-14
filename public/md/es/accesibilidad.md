@@ -81,7 +81,7 @@ La [Ley Europea de Accesibilidad](https://eur-lex.europa.eu/eli/dir/2019/882/oj)
 
 1 de 8
 
-[Índice](#indice) · [Siguiente: 02 · Qué se ha hecho](#s02)
+[Índice](#indice)
 
 02 — Qué se ha hecho
 
@@ -139,7 +139,7 @@ De estos nueve puntos, cuatro no se comprueban página a página, y ese es justo
 
 2 de 8
 
-[Índice](#indice) · [Siguiente: 03 · Accesibilidad heredada](#s03)
+[Índice](#indice)
 
 03 — Accesibilidad heredada
 
@@ -177,7 +177,7 @@ Ocho piezas en el núcleo, y ninguna se escribe a mano
 
 3 de 8
 
-[Índice](#indice) · [Siguiente: 04 · Verificación](#s04)
+[Índice](#indice)
 
 04 — Verificación
 
@@ -233,7 +233,7 @@ No todas caben en el mismo sitio, y decirlo importa. Las que solo necesitan leer
 
 4 de 8
 
-[Índice](#indice) · [Siguiente: 05 · El punto ciego](#s05)
+[Índice](#indice)
 
 ## Dónde no llega, y cómo decirlo
 
@@ -272,7 +272,7 @@ Lo que esta prueba no cubre está justo debajo, en los límites: un solo lector 
 
 5 de 8
 
-[Índice](#indice) · [Siguiente: 06 · Límites](#s06)
+[Índice](#indice)
 
 06 — Límites
 
@@ -300,7 +300,7 @@ Nada de esto está aquí por completismo. Un apartado de límites que solo dice 
 
 6 de 8
 
-[Índice](#indice) · [Siguiente: 07 · El término](#s07)
+[Índice](#indice)
 
 07 — El término
 
@@ -314,7 +314,7 @@ A11y es la abreviatura que el desarrollo web usa para la palabra inglesa accessi
 
 7 de 8
 
-[Índice](#indice) · [Siguiente: 08 · Contacto](#s08)
+[Índice](#indice)
 
 08 — Contacto
 

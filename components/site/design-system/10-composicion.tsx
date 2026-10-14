@@ -296,8 +296,6 @@ export function Composicion({
             total={3}
             indexLabel={t.navCloserIndexLabel}
             indexHref="#indice"
-            nextLabel={t.navCloserNextLabel}
-            nextHref={`#${paradas[0]?.id ?? "indice"}`}
             ariaLabel={t.navCloserAria}
             positionLabel={t.navCloserPositionLabel}
           />

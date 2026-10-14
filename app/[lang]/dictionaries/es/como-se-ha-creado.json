@@ -52,7 +52,6 @@
   "progress": { "ariaLabel": "Progreso de lectura" },
   "chapterNav": {
     "indexLabel": "Índice",
-    "nextLabel": "Siguiente:",
     "ariaLabel": "Entre secciones"
   },
   "sectionMeta": { "of": "de" },
