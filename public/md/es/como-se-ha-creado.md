@@ -106,7 +106,7 @@ ENLACE ·
 
 1 de 12
 
-[Índice](#indice) · [Siguiente: 02 · Cómo se trabaja](#s02)
+[Índice](#indice)
 
 2 de 12 · 4 min
 
@@ -167,7 +167,7 @@ El apartado de seguimiento de tareas de [CLAUDE.md](https://github.com/francisco
 
 2 de 12
 
-[Índice](#indice) · [Siguiente: 03 · La marca](#s03)
+[Índice](#indice)
 
 3 de 12 · 4 min
 
@@ -219,7 +219,7 @@ ENLACE ·
 
 3 de 12
 
-[Índice](#indice) · [Siguiente: 04 · El stack](#s04)
+[Índice](#indice)
 
 4 de 12 · 5 min
 
@@ -265,7 +265,7 @@ Decisiones [D2](https://github.com/franciscoylopez/francisco-lopez-website/blob/
 
 4 de 12
 
-[Índice](#indice) · [Siguiente: 05 · El sistema de componentes](#s05)
+[Índice](#indice)
 
 5 de 12 · 4 min
 
@@ -329,7 +329,7 @@ Decisiones [D36](https://github.com/franciscoylopez/francisco-lopez-website/blob
 
 5 de 12
 
-[Índice](#indice) · [Siguiente: 06 · Automatizaciones](#s06)
+[Índice](#indice)
 
 6 de 12 · 6 min
 
@@ -381,7 +381,7 @@ Decisiones [D22](https://github.com/franciscoylopez/francisco-lopez-website/blob
 
 6 de 12
 
-[Índice](#indice) · [Siguiente: 07 · Del diseño al código](#s07)
+[Índice](#indice)
 
 7 de 12 · 4 min
 
@@ -428,7 +428,7 @@ Decisión [D1](https://github.com/franciscoylopez/francisco-lopez-website/blob/m
 
 7 de 12
 
-[Índice](#indice) · [Siguiente: 08 · Seguridad, SEO y alojamiento](#s08)
+[Índice](#indice)
 
 8 de 12 · 9 min
 
@@ -536,7 +536,7 @@ Decisiones [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob
 
 8 de 12
 
-[Índice](#indice) · [Siguiente: 09 · Accesibilidad](#s09)
+[Índice](#indice)
 
 9 de 12 · 7 min
 
@@ -605,7 +605,7 @@ Decisiones [D39](https://github.com/franciscoylopez/francisco-lopez-website/blob
 
 9 de 12
 
-[Índice](#indice) · [Siguiente: 10 · Qué revisa una IA](#s10)
+[Índice](#indice)
 
 10 de 12 · 4 min
 
@@ -656,7 +656,7 @@ Decisiones [D37](https://github.com/franciscoylopez/francisco-lopez-website/blob
 
 10 de 12
 
-[Índice](#indice) · [Siguiente: 11 · Lo que salió mal](#s11)
+[Índice](#indice)
 
 11 de 12 · 3 min
 
@@ -688,7 +688,7 @@ El apartado «Cómo se escribe una regla aquí» de [BRAND.md](https://github.co
 
 11 de 12
 
-[Índice](#indice) · [Siguiente: 12 · Ahora empieza lo bueno](#s12)
+[Índice](#indice)
 
 12 de 12 · 3 min
 

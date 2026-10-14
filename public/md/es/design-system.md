@@ -166,7 +166,7 @@ Móvil
 
 1 de 12
 
-[Índice](#indice) · [Siguiente: 02 · Ritmo y espaciado](#s02)
+[Índice](#indice)
 
 02 — Ritmo y espaciado
 
@@ -205,7 +205,7 @@ xl · 48px
 
 2 de 12
 
-[Índice](#indice) · [Siguiente: 03 · Tipografía y cabeceras](#s03)
+[Índice](#indice)
 
 03 — Tipografía y cabeceras
 
@@ -455,7 +455,7 @@ StatRow pone el filete, el hueco y la rejilla que reparte las columnas. Stat pon
 
 3 de 12
 
-[Índice](#indice) · [Siguiente: 04 · Claro y oscuro](#s04)
+[Índice](#indice)
 
 04 — Claro y oscuro
 
@@ -505,7 +505,7 @@ Encima de cualquier otra superficie se recalcula: se mezcla un 85% hacia el fond
 
 4 de 12
 
-[Índice](#indice) · [Siguiente: 05 · Movimiento](#s05)
+[Índice](#indice)
 
 05 — Movimiento
 
@@ -557,7 +557,7 @@ Es la transición que ves ahora mismo en la cabecera de esta página.
 
 5 de 12
 
-[Índice](#indice) · [Siguiente: 06 · Enlaces](#s06)
+[Índice](#indice)
 
 ## Piezas
 
@@ -616,7 +616,7 @@ El tono del chrome tampoco es decoración: el secundario sube a foreground en el
 
 6 de 12
 
-[Índice](#indice) · [Siguiente: 07 · Botones y acciones](#s07)
+[Índice](#indice)
 
 07 — Botones y acciones
 
@@ -696,7 +696,7 @@ El tamaño, el hueco y el lado los pone la variante, no cada uso. En el punto de
 
 7 de 12
 
-[Índice](#indice) · [Siguiente: 08 · Etiquetas](#s08)
+[Índice](#indice)
 
 08 — Etiquetas
 
@@ -745,7 +745,7 @@ El texto de las dos teñidas es el color de texto normal, no el del velo. Es lo 
 
 8 de 12
 
-[Índice](#indice) · [Siguiente: 09 · Formulario](#s09)
+[Índice](#indice)
 
 09 — Formulario
 
@@ -802,7 +802,7 @@ Aparece al intentar enviar y se anuncia como alerta. El foco lo mueve el formula
 
 9 de 12
 
-[Índice](#indice) · [Siguiente: 10 · Composición de página](#s10)
+[Índice](#indice)
 
 ## Composición
 
@@ -913,15 +913,15 @@ Este sí se anuncia, a diferencia del logo: el orden de las etapas es informaci�
 
 ### El cierre de una sección
 
-El pie de cada parada, y por eso va aquí y no arriba: dice en cuál está el lector, cómo vuelve al índice y qué viene después. Es la hermana de peldaño del cierre de página, que se publica justo debajo.
+El pie de cada parada, y por eso va aquí y no arriba: dice en cuál está el lector y cómo vuelve al índice. Es la hermana de peldaño del cierre de página, que se publica justo debajo.
 
 2 de 3
 
-[Índice](#indice) · [Siguiente parada](#s01)
+[Índice](#indice)
 
 El pie de cada parada · `SectionCloser`
 
-Dónde estás, la vuelta al índice y la parada siguiente.
+Dónde estás y la vuelta al índice. La parada siguiente no se enlaza: empieza justo debajo.
 
 Los puntos son decorativos: la posición va además en texto, que es lo que cumple el punto 6 del checklist. La etiqueta lleva la posición dentro para que doce cierres no compartan nombre.
 
@@ -955,7 +955,7 @@ Es la frontera que decide dónde vive una pieza: si sabe algo de este sitio, no 
 
 10 de 12
 
-[Índice](#indice) · [Siguiente: 11 · Checklist de cierre](#s11)
+[Índice](#indice)
 
 11 — Checklist de cierre
 
@@ -1017,7 +1017,7 @@ Todos los pares de texto del sistema alcanzan AAA en claro y en oscuro, y no sol
 
 11 de 12
 
-[Índice](#indice) · [Siguiente: 12 · Artículo largo](#s12)
+[Índice](#indice)
 
 ## La excepción
 

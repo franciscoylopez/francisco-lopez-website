@@ -166,7 +166,7 @@ Mobile
 
 1 of 12
 
-[Contents](#indice) · [Next: 02 · Rhythm and spacing](#s02)
+[Contents](#indice)
 
 02 — Rhythm and spacing
 
@@ -205,7 +205,7 @@ xl · 48px
 
 2 of 12
 
-[Contents](#indice) · [Next: 03 · Type and headers](#s03)
+[Contents](#indice)
 
 03 — Type and headers
 
@@ -455,7 +455,7 @@ StatRow sets the hairline, the gap and the grid that splits the columns. Stat se
 
 3 of 12
 
-[Contents](#indice) · [Next: 04 · Light and dark](#s04)
+[Contents](#indice)
 
 04 — Light and dark
 
@@ -505,7 +505,7 @@ Over any other surface it is recomputed: it blends 85% into the background under
 
 4 of 12
 
-[Contents](#indice) · [Next: 05 · Motion](#s05)
+[Contents](#indice)
 
 05 — Motion
 
@@ -557,7 +557,7 @@ It's the transition you're seeing right now in this page's header.
 
 5 of 12
 
-[Contents](#indice) · [Next: 06 · Links](#s06)
+[Contents](#indice)
 
 ## Pieces
 
@@ -616,7 +616,7 @@ The chrome's tone isn't decoration either: the secondary one lifts to foreground
 
 6 of 12
 
-[Contents](#indice) · [Next: 07 · Buttons and actions](#s07)
+[Contents](#indice)
 
 07 — Buttons and actions
 
@@ -696,7 +696,7 @@ Size, gap and side are set by the variant, not by each use. At the call site you
 
 7 of 12
 
-[Contents](#indice) · [Next: 08 · Labels](#s08)
+[Contents](#indice)
 
 08 — Labels
 
@@ -745,7 +745,7 @@ The text of both tinted ones is the ordinary text colour, not the wash's. That's
 
 8 of 12
 
-[Contents](#indice) · [Next: 09 · Form](#s09)
+[Contents](#indice)
 
 09 — Form
 
@@ -802,7 +802,7 @@ It appears when you try to send and is announced as an alert. Focus is moved by 
 
 9 of 12
 
-[Contents](#indice) · [Next: 10 · Page composition](#s10)
+[Contents](#indice)
 
 ## Composition
 
@@ -913,15 +913,15 @@ This one is announced, unlike the logo: the order of the stages is information, 
 
 ### The closing of a section
 
-The foot of every stop, which is why it sits here and not above: it says which one the reader is in, how to get back to the contents, and what comes next. It is the step-sibling of the page closer, published right below.
+The foot of every stop, which is why it sits here and not above: it says which one the reader is in and how to get back to the contents. It is the step-sibling of the page closer, published right below.
 
 2 of 3
 
-[Contents](#indice) · [Next stop](#s01)
+[Contents](#indice)
 
 The foot of every stop · `SectionCloser`
 
-Where you are, the way back to the contents, and the next stop.
+Where you are and the way back to the contents. The next stop is not linked: it starts right below.
 
 The dots are decorative: the position is spelled out in text too, which is what satisfies point 6 of the checklist. The label carries that position so twelve footers never share a name.
 
@@ -955,7 +955,7 @@ It's the boundary that decides where a piece lives: if it knows something about 
 
 10 of 12
 
-[Contents](#indice) · [Next: 11 · Closing checklist](#s11)
+[Contents](#indice)
 
 11 — Closing checklist
 
@@ -1017,7 +1017,7 @@ Every text pair in the system reaches AAA in light and in dark, and not only at 
 
 11 of 12
 
-[Contents](#indice) · [Next: 12 · Long article](#s12)
+[Contents](#indice)
 
 ## The exception
 

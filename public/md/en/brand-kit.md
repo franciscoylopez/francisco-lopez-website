@@ -67,7 +67,7 @@ Three stacked strokes, no blend. Only at ≥48px, where color reads as a layer.
 
 1 of 6
 
-[Contents](#indice) · [Next: 02 · Logotype](#s02)
+[Contents](#indice)
 
 02 — Logotype
 
@@ -278,7 +278,7 @@ Works
 
 2 of 6
 
-[Contents](#indice) · [Next: 03 · Color](#s03)
+[Contents](#indice)
 
 03 — Color
 
@@ -432,7 +432,7 @@ Pastels never as text color. They're backgrounds. If text goes over a pastel, al
 
 3 of 6
 
-[Contents](#indice) · [Next: 04 · Typography](#s04)
+[Contents](#indice)
 
 04 — Typography
 
@@ -462,7 +462,7 @@ ABCDEFGHIJKLM abcdefghijklm 0123456789
 
 4 of 6
 
-[Contents](#indice) · [Next: 05 · Applications](#s05)
+[Contents](#indice)
 
 ## How it is used
 
@@ -527,7 +527,7 @@ Where it lives [GitHub, in the repository settings](https://github.com/francisco
 
 5 of 6
 
-[Contents](#indice) · [Next: 06 · Correct and incorrect use](#s06)
+[Contents](#indice)
 
 06 — Correct and incorrect use
 

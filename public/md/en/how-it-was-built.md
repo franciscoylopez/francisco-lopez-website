@@ -106,7 +106,7 @@ LINK ·
 
 1 of 12
 
-[Contents](#indice) · [Next: 02 · How I work](#s02)
+[Contents](#indice)
 
 2 of 12 · 4 min
 
@@ -167,7 +167,7 @@ The task-tracking section of [CLAUDE.md](https://github.com/franciscoylopez/fran
 
 2 of 12
 
-[Contents](#indice) · [Next: 03 · The brand](#s03)
+[Contents](#indice)
 
 3 of 12 · 4 min
 
@@ -219,7 +219,7 @@ LINK ·
 
 3 of 12
 
-[Contents](#indice) · [Next: 04 · The stack](#s04)
+[Contents](#indice)
 
 4 of 12 · 5 min
 
@@ -265,7 +265,7 @@ Decisions [D2](https://github.com/franciscoylopez/francisco-lopez-website/blob/m
 
 4 of 12
 
-[Contents](#indice) · [Next: 05 · The component system](#s05)
+[Contents](#indice)
 
 5 of 12 · 4 min
 
@@ -329,7 +329,7 @@ Decisions [D36](https://github.com/franciscoylopez/francisco-lopez-website/blob/
 
 5 of 12
 
-[Contents](#indice) · [Next: 06 · Automation](#s06)
+[Contents](#indice)
 
 6 of 12 · 6 min
 
@@ -381,7 +381,7 @@ Decisions [D22](https://github.com/franciscoylopez/francisco-lopez-website/blob/
 
 6 of 12
 
-[Contents](#indice) · [Next: 07 · From design to code](#s07)
+[Contents](#indice)
 
 7 of 12 · 4 min
 
@@ -428,7 +428,7 @@ Decision [D1](https://github.com/franciscoylopez/francisco-lopez-website/blob/ma
 
 7 of 12
 
-[Contents](#indice) · [Next: 08 · Security, SEO and hosting](#s08)
+[Contents](#indice)
 
 8 of 12 · 9 min
 
@@ -536,7 +536,7 @@ Decisions [D13](https://github.com/franciscoylopez/francisco-lopez-website/blob/
 
 8 of 12
 
-[Contents](#indice) · [Next: 09 · Accessibility](#s09)
+[Contents](#indice)
 
 9 of 12 · 7 min
 
@@ -605,7 +605,7 @@ Decisions [D39](https://github.com/franciscoylopez/francisco-lopez-website/blob/
 
 9 of 12
 
-[Contents](#indice) · [Next: 10 · What an AI reviews](#s10)
+[Contents](#indice)
 
 10 of 12 · 4 min
 
@@ -656,7 +656,7 @@ Decisions [D37](https://github.com/franciscoylopez/francisco-lopez-website/blob/
 
 10 of 12
 
-[Contents](#indice) · [Next: 11 · What went wrong](#s11)
+[Contents](#indice)
 
 11 of 12 · 3 min
 
@@ -688,7 +688,7 @@ The "How a rule gets written here" section of [BRAND.md](https://github.com/fran
 
 11 of 12
 
-[Contents](#indice) · [Next: 12 · Now the good part starts](#s12)
+[Contents](#indice)
 
 12 of 12 · 3 min
 
