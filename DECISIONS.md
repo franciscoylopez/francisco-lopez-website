@@ -260,6 +260,7 @@
 - D216 (completada por D217) · Solo el dominio propio es público: las URLs `*.vercel.app` piden sesión
 - D217 (completa a D216) · El repositorio se rehace con la historia desde cero, y mientras fue privado `main` no tuvo protección
 - D218 · La ficha del pliegue se construye al cargar: una capa de CSS, una pieza, y las cifras del dibujo salen del sistema
+- D219 · El cierre de sección pierde el «Siguiente»: enlazaba a lo que ya estaba a la vista
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -7521,7 +7522,8 @@ axe no lo ve porque no evalúa qué elemento recibe el clic).
 **El coste, que es real.** El Design System pierde algo: doce secciones son largas y ahí el
 riel funcionaba. Lo asumible es que el **recorrido** no se pierde —cada sección conserva su
 cierre con «7 de 12 · Índice · Siguiente: 08»—, así que se recorre entera sin volver a subir.
-Se pierde el indicador siempre visible, no la navegación. Y tenía que ser en las tres: dejarlo
+Se pierde el indicador siempre visible, no la navegación. *(El «Siguiente» se retiró el 2026-10-14, D219; el
+argumento sigue en pie, porque el recorrido es el scroll y el pie conserva «7 de 12 · Índice».)* Y tenía que ser en las tres: dejarlo
 solo en el Design System rompería el «si lo hacemos, lo hacemos en las tres» con el que se
 abrió la tanda.
 
@@ -14151,3 +14153,21 @@ un `min-w-[Npx]` del mismo ancho, escrito entero (GATES.md).
 System y las barras sin dato de Trayectoria van en `--brand-purple` (`BRAND.md`, con su porqué en
 `BRAND-historical.md` §Las excepciones moradas). Con ellas, el contexto de arranque quedó en 11700, justo
 en el techo: la próxima apertura de sprint tiene que retirar.
+
+## D219 · El cierre de sección pierde el «Siguiente»: enlazaba a lo que ya estaba a la vista — 2026-10-14
+
+**Decisión.** `SectionCloser` (`ui/section-index.tsx`) se queda con dos elementos: la posición
+(puntos + «N de M») y la vuelta al «Índice». Sale el tercero, «Siguiente: NN · Título», y con él las
+props `nextLabel`/`nextHref`, su cálculo en `construirRecorrido` y en el bucle del artículo, y las
+claves del diccionario. Como la pieza es una, el cambio llega a las cuatro páginas con paradas:
+artículo, Design System, Brand Kit y Accesibilidad.
+
+**Por qué.** Lo propuso Francisco mirando el artículo en móvil. El destino del enlace es el título
+que empieza ~150 px más abajo, con el mismo ordinal y el mismo texto, así que no lleva a ningún
+sitio que no esté ya a la vista. Y no es gratis: en móvil el `flex-wrap` lo bajaba a una segunda
+línea y doblaba el alto del pie. Teclado y lector tampoco lo pierden, porque el siguiente foco y el
+siguiente encabezado ya son esa sección. El índice sí se queda: lleva a algo lejano, que es justo lo
+que no se ve.
+
+**Lo que no cambia.** D123 contaba con el pie para no perder el recorrido al quitar el riel; el
+recorrido sigue siendo el scroll, y el pie sigue diciendo dónde se está.
