@@ -476,10 +476,6 @@ export function ComoSeHaCreado({
                 total={totalSections}
                 indexLabel={t.chapterNav.indexLabel}
                 indexHref="#indice"
-                nextLabel={`${t.chapterNav.nextLabel} ${
-                  t.sections[i + 1]?.ordinal ?? t.closing.ordinal
-                } · ${t.sections[i + 1]?.indexLabel ?? t.closing.indexLabel}`}
-                nextHref={`#${t.sections[i + 1]?.id ?? t.closing.id}`}
                 ariaLabel={t.chapterNav.ariaLabel}
                 positionLabel={`${position} ${t.sectionMeta.of} ${totalSections}`}
               />
