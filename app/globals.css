@@ -1671,9 +1671,13 @@ svg .construye-abre {
    EN PRUEBA (2026-10-15), en una rama para verlo en la home servida. Sustituye a
    la «Caída» de D137, que era el único gesto del sitio que llegaba desde fuera de
    su sitio: todo lo demás se construye donde vive (las aperturas, D218). Aquí las
-   dos capas del split —cian y morada— entran desplazadas como en el monograma
-   (`logo.tsx`: cian arriba a la izquierda, morado abajo a la derecha, 3:2) y casan
-   en un solo punto, que se queda con la tinta de siempre.
+   dos capas del split —cian y morada— entran desplazadas y casan en un solo
+   punto, que se queda con la tinta de siempre.
+
+   LA DIRECCIÓN NO ES LA DEL MONOGRAMA, a propósito. Se probó la de `logo.tsx`
+   (cian arriba a la izquierda, morado abajo a la derecha) y el cian pasaba por
+   encima de la «o» de «dato» al arrancar. Con el cian por la izquierda y algo
+   bajo, y el morado por la derecha y algo alto, ninguna capa pisa el titular.
 
    DOS TIEMPOS DENTRO DEL TECHO DE D135, no una entrada de 420 ms: las capas
    registran en `--duration-entrance` (el gesto `construye-abre`) y se sueltan en
@@ -1724,13 +1728,13 @@ svg .construye-abre {
 }
 .punto-firma::before {
   color: var(--brand-cyan-split);
-  --dx: -0.15em;
-  --dy: -0.1em;
+  --dx: -0.16em;
+  --dy: 0.05em;
 }
 .punto-firma::after {
   color: var(--brand-purple-split);
-  --dx: 0.15em;
-  --dy: 0.1em;
+  --dx: 0.16em;
+  --dy: -0.05em;
 }
 @keyframes punto-registra {
   from {
