@@ -505,7 +505,19 @@ El sufijo del PNG nombra la tinta, no el fondo. tintaOscura va sobre fondos clar
 
 ### Fuera del sitio
 
-Tres piezas que no viven en este dominio y llevan la misma marca. Son la prueba que un sistema solo puede dar fuera de su propia página, y por eso no hay nada que bajar aquí: ninguna se coloca aquí. Las tres se versionan con el repositorio, que es lo que impide que existan dos verdades.
+Las piezas que no viven en este dominio y llevan la misma marca. Son la prueba que un sistema solo puede dar fuera de su propia página, y por eso no hay nada que bajar aquí: ninguna se coloca aquí. El aspecto de todas sale de este código: versionado junto a él, en el repositorio del perfil o capturado de las propias páginas. Es lo que impide que existan dos verdades.
+
+Perfil de GitHub
+
+Dos banners, uno por tema, con el titular del Hero. GitHub sirve el perfil en claro y en oscuro sin exponer ningún token que conmute, así que el README elige la imagen según el tema de quien lo lee: lo más cerca que se puede estar, fuera de aquí, de lo que hacen los tokens del sitio.
+
+Dónde vive [GitHub, en la cabecera del perfil](https://github.com/franciscoylopez)
+
+Portada del repositorio
+
+La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.
+
+Dónde vive [GitHub, en los ajustes del repositorio](https://github.com/franciscoylopez/francisco-lopez-website)
 
 Firma de email
 
@@ -519,11 +531,17 @@ Banner de LinkedIn
 
 Dónde vive [LinkedIn, en la cabecera del perfil](https://www.linkedin.com/in/franciscolopez1975)
 
-Portada del repositorio
+Carruseles de LinkedIn
 
-La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.
+Las láminas de la serie, sobre el tema oscuro del sitio, con sus dos tipografías y el monograma con split. Los colores no se copian: el generador los lee de la misma fuente que este Brand Kit. Y antes de exportar comprueba que ningún bloque se salga de su lámina ni empuje la firma fuera del pie.
 
-Dónde vive [GitHub, en los ajustes del repositorio](https://github.com/franciscoylopez/francisco-lopez-website)
+Dónde vive [LinkedIn, en las publicaciones de la serie](https://www.linkedin.com/feed/update/urn:li:activity:7502988921597849601/)
+
+Vídeo de las aperturas
+
+Las ilustraciones que abren Brand Kit, Design System, Accesibilidad y Trayectoria, en bucle y en 4:5. No se redibujaron para el vídeo: se capturaron de las páginas en producción, fotograma a fotograma y con el reloj de las animaciones parado, así que lo que se ve es exactamente lo que sirve el sitio.
+
+Dónde vive [LinkedIn, en la publicación del vídeo](https://www.linkedin.com/feed/update/urn:li:activity:7516392465130569728/)
 
 5 de 6
 

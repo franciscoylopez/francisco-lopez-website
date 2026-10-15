@@ -177,7 +177,7 @@ export function Aplicaciones({
         </p>
         <div
           data-reveal
-          className="grid [grid-template-columns:repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-[var(--gutter)]"
+          className="grid [grid-template-columns:repeat(auto-fit,minmax(max(min(100%,15rem),calc((100%-2*var(--gutter))/3)),1fr))] gap-[var(--gutter)]"
         >
           {t.fueraItems.map((item) => (
             <div
@@ -193,21 +193,27 @@ export function Aplicaciones({
               <p className="text-muted-foreground m-0 mb-[1.2rem] text-[0.88rem] leading-[1.55]">
                 {item.desc}
               </p>
-              {/* El «dónde» va al pie y con `mt-auto` para que las tres fichas
-                  lo alineen aunque sus descripciones midan distinto.
+              {/* El «dónde» va al pie y con `mt-auto` para que las fichas lo
+                  alineen aunque sus descripciones midan distinto.
 
-                  Y ES ENLACE SOLO EN DOS DE LAS TRES, que es la parte que no se
-                  ve leyendo el copy *(2026-08-31)*. El rótulo hace un trabajo y
-                  las tres fichas lo contestan distinto: el banner VIVE en un
-                  perfil y la portada en un repositorio —los dos, sitios a los
-                  que se puede ir—, pero la firma vive en los ajustes de un
-                  cliente de correo, que no son una URL de nadie. Así que el
-                  destino es un campo aparte y opcional: `href: null` no es un
-                  hueco por rellenar, es la respuesta correcta para esa ficha.
+                  Y NO TODAS SON ENLACE, que es la parte que no se ve leyendo el
+                  copy *(2026-08-31)*. El rótulo hace un trabajo y cada ficha lo
+                  contesta distinto: las demás VIVEN en un perfil, un repositorio
+                  o una publicación —sitios a los que se puede ir—, pero la firma
+                  vive en los ajustes de un cliente de correo, que no son una URL
+                  de nadie. Así que el destino es un campo aparte y opcional:
+                  `href: null` no es un hueco por rellenar, es la respuesta
+                  correcta para esa ficha.
 
-                  Sin eso, la alternativa era enlazar las tres inventándole un
-                  destino a la primera, o no enlazar ninguna — que es lo que
-                  había, y dejaba dos URLs pintadas como texto muerto. */}
+                  Sin eso, la alternativa era enlazarlas todas inventándole un
+                  destino a la firma, o no enlazar ninguna — que es lo que había,
+                  y dejaba dos URLs pintadas como texto muerto.
+
+                  Y COMO MUCHO TRES COLUMNAS *(2026-10-15)*: con `auto-fit` solo,
+                  a 1440 caben cuatro y la quinta ficha se quedaba sola en su
+                  fila. El `max()` sube el mínimo de cada pista a un tercio del
+                  ancho, así que en escritorio salen 3 + 3, a ~800 px dos y en
+                  móvil una. */}
               <p className="m-0 mt-auto text-[0.8rem] leading-[1.5]">
                 <span className="text-foreground font-semibold">
                   {t.fueraWhere}
