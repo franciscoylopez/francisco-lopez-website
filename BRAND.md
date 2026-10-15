@@ -112,6 +112,13 @@ la banda invertida y por qué esto pasó año y medio invisible, en
 [`BRAND-historical.md`](./BRAND-historical.md) §El contorno de un control; componente y metro en
 `DECISIONS.md` D97.)*
 
+### Las líneas son cuatro, y las pone la capa *(2026-10-13)*
+
+**Trazo centrado** (`.section-sep`, en `SECTION`) entre secciones y bloques · **filete
+desvanecido** entre contenidos, que `globals.css` pone a todo `border-border` de una cara ·
+**filete entero** (`.rule-full`) en lo tabular sin tabla · **borde** en las cajas. Porqué, en
+`BRAND-historical.md` §El separador de sección.
+
 ### Enlaces: depende de si son contenido o chrome
 
 - **Contenido** (dentro del cuerpo de una sección, en medio del texto): en reposo, texto en
@@ -282,15 +289,10 @@ el switch del consentimiento, aquí debajo).
 ### Cómo se hace el censo de pares
 
 **Recorriendo el DOM de la página servida, no leyendo `globals.css`, y con los estados
-incluidos.** Un par que solo aparece al **componer** —un velo `color-mix` sobre la superficie
-de debajo, o una pastilla de hover— no está en ninguna lista de tokens, así que un inventario
-hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script está escrito:
-`scripts/design-review/censo/`.
-
-> **Publica cuántas reglas `:hover` ha indexado, cuántos pares ha medido y cuántos ha
-> compuesto**, porque *un metro que devuelve una lista vacía parece un aprobado*. Los fallos
-> que lo escribieron, en [`BRAND-historical.md`](./BRAND-historical.md) §El censo de
-> contraste se rompió dos veces.
+incluidos:** un par que solo aparece al componer (un velo, una pastilla de hover) no está en
+ninguna lista de tokens. Lo hace `scripts/design-review/censo/`, que publica cuánto ha mirado
+(los fallos que lo escribieron, en [`BRAND-historical.md`](./BRAND-historical.md) §El censo de
+contraste se rompió dos veces).
 
 
 ### Cómo medir sin equivocarse
@@ -330,7 +332,7 @@ hecho leyendo el CSS no puede encontrarlo por muy cuidadoso que sea. El script e
 
 ## Modo oscuro
 
-Obligatorio en toda UI. Los pasteles se mantienen entre temas; solo el cian primario cambia (se aclara en oscuro). Nunca hardcodees hex: usa siempre los tokens, que ya conmutan.
+Obligatorio en toda UI. Los pasteles se mantienen entre temas; solo el cian primario cambia (se aclara en oscuro). Los tokens ya conmutan.
 
 ## Qué cuestionar
 

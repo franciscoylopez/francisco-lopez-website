@@ -161,8 +161,27 @@
     "rhythm": [
       "Between major sections: --section-y, from 72px on mobile to 144px on desktop.",
       "Section title → content: 40px (2.5rem).",
-      "Between blocks within a section: 24–32px. Optional hairline divider.",
-      "Every section opens with a 1px var(--border) divider full width."
+      "Between blocks within a section: 24–32px.",
+      "Every section opens with a short, centred stroke that fades out to both sides: it marks the break without weighing as much as a row."
+    ],
+    "linesTitle": "Four kinds of line",
+    "lines": [
+      {
+        "name": "Centred stroke",
+        "body": "Between sections and blocks. The section brings it with it: nobody writes it."
+      },
+      {
+        "name": "Faded rule",
+        "body": "Between pieces of content. It starts where the text starts and fades out; the layer applies it to every one-sided rule."
+      },
+      {
+        "name": "Full rule",
+        "body": "For what works as a table without being one: the line ties each value to its row."
+      },
+      {
+        "name": "Border",
+        "body": "For boxes: cards, panels and fields."
+      }
     ]
   },
   "tipografia": {
