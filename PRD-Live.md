@@ -60,10 +60,8 @@ el HTML de alrededor, por URL explícita (`/md/<locale>/<pagina>.md`, la vía es
 **catalogados** en `/.well-known/ard.json` —con su gemela `ai-catalog.json` y un `rel="ard"` en
 cada página—. Lo que no existe no se cataloga: ni MCP, ni agentes, ni skills, ni API (D166).
 
-**La marca no termina en el dominio.** Cinco superficies fuera del sitio —firma de
-email, banner de LinkedIn, portada del repositorio, los carruseles de la serie y el
-**perfil de GitHub**— comparten el titular del Hero, «Del discovery al dato», y el mismo
-monograma.
+**La marca no termina en el dominio.** Las piezas que la llevan fuera del sitio, con el
+mismo monograma, las publica el Brand Kit en «Fuera del sitio».
 
 La apertura de **Sobre mí es un vídeo**: se reproduce una vez y se queda en su último
 fotograma; con `prefers-reduced-motion` se sirve una imagen quieta y el vídeo **no se
