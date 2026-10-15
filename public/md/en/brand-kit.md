@@ -505,7 +505,7 @@ The PNG suffix names the ink, not the background. tintaOscura (dark ink) goes ov
 
 ### Off the site
 
-Three pieces that don't live on this domain and carry the same brand. They are the proof a system can only give away from its own page, and that is why there is nothing to download here: none of them is placed here. All three are versioned with the repository, which is what stops two versions of the truth from existing.
+The pieces that don't live on this domain and carry the same brand. They are the proof a system can only give away from its own page, and that is why there is nothing to download here: none of them is placed here. The look of every one comes from this code: versioned next to it, in the profile's own repository or captured from the pages themselves. That is what stops two versions of the truth from existing.
 
 Email signature
 
@@ -524,6 +524,24 @@ Repository cover
 The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.
 
 Where it lives [GitHub, in the repository settings](https://github.com/franciscoylopez/francisco-lopez-website)
+
+LinkedIn carousels
+
+The slides of the series, on the site's dark theme, with its two typefaces and the split monogram. The colors aren't copied: the generator reads them from the same source as this Brand Kit. And before exporting it checks that no block spills out of its slide or pushes the signature off the footer.
+
+Where it lives [LinkedIn, in the posts of the series](https://www.linkedin.com/feed/update/urn:li:activity:7502988921597849601/)
+
+Openings video
+
+The illustrations that open the Brand Kit, Design System, Accessibility and Experience pages, looped and in 4:5. They weren't redrawn for the video: they were captured from the live pages, frame by frame with the animation clock stopped, so what you see is exactly what the site serves.
+
+Where it lives [LinkedIn, in the video's post](https://www.linkedin.com/feed/update/urn:li:activity:7516392465130569728/)
+
+GitHub profile
+
+Two banners, one per theme, with the Hero headline. GitHub serves the profile in light and dark without exposing any token that switches, so the README picks the image by the reader's theme: the closest anything outside this site can get to what its tokens do.
+
+Where it lives [GitHub, at the top of the profile](https://github.com/franciscoylopez)
 
 5 of 6
 
