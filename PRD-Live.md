@@ -76,8 +76,7 @@ descarga** (D65).
    menú, y entre 768 y 1023 el logo va sin wordmark para que quepan (`BRAND-logo.md`
    §Tabla de uso).
 2. **Hero** — foto, headline "Del discovery al dato", subheadline; sin CTA propio. **El
-   punto final del titular es la firma de marca** (D137): cae y se asienta al cargar, en
-   morado.
+   punto final del titular es la firma de marca**: se construye al cargar (D137, D221).
 3. **Hitos** — 5 reconocimientos, cronológico descendente; chip "Exit" en el de TheTool.
    Un filete crece bajo cada año conforme la fila cruza: es la **textura** que acompaña a
    la firma (D137).
@@ -120,8 +119,7 @@ cero strings hardcodeados. Detalle en `README.md` y `DECISIONS.md`.
 
 ### Marca
 
-Regla de dos capas (cian = único color de acción; morado decorativo con cuentagotas),
-tipografía Bricolage/Inter, logo con split. Detalle en `BRAND.md`.
+Vive entera en `BRAND.md`, que se carga con este documento.
 
 ### Capa de componentes — un núcleo de ocho
 

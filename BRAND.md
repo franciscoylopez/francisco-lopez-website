@@ -343,7 +343,7 @@ Si una petición de UI implica meter un color de marca en un slot semántico neu
 Componente: `components/ui/logo.tsx` → `<Logo />` (variantes `split`/`flat`, props `showWordmark`/`forceColor`; hereda claro/oscuro por tokens).
 
 **Reglas mínimas siempre activas:**
-- El **split es la firma de marca**: solo en el logo/monograma y solo a **≥48px** (por debajo, `flat`). Nunca en UI general, texto fino ni iconos.
+- El **split es la firma de marca**: solo en el logo/monograma y solo a **≥48px** (por debajo, `flat`). Nunca en UI general, texto fino ni iconos. **Excepción** (D221): la entrada del punto del titular.
 - Colores del split: `brand-cyan-split` (#16BDBD) + `brand-purple-split` (#9B87F5). No tienen requisito de contraste; **no se tocan**.
 - Tamaño mínimo del componente: 24px. El favicon 16px usa asset propio, no el componente reescalado.
 

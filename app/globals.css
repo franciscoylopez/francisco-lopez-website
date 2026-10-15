@@ -538,9 +538,9 @@
    ya está. Así que una composición del pliegue no puede animar por ahí, y eso no
    es un fallo suyo.
 
-   LO QUE ENTRA AL CARGAR YA TENÍA SU FORMA en esta hoja: `punto-cae` (el punto
-   del titular de la home, D137), `consent-in` y `split-bloom`. Las tres son
-   `@keyframes` con `both`, sin JS y sin esperar a la hidratación. Ésta es la
+   LO QUE ENTRA AL CARGAR YA TENÍA SU FORMA en esta hoja: el punto del titular
+   de la home (D137, hoy `punto-registra`, D221), `consent-in` y `split-bloom`.
+   Las tres son `@keyframes` sin JS y sin esperar a la hidratación. Ésta es la
    cuarta y su caso es el mismo que el del punto: un elemento decorativo del
    primer pliegue que aparece al cargar mientras el contenido de alrededor no.
 
@@ -574,10 +574,10 @@
    aplicado ANTES de arrancar, que es lo que impide el parpadeo durante el
    retardo— y al terminar devuelve el elemento a su estilo normal, que ya es
    opacidad 1 y sin transformar.
-   (Sus tres hermanas de esta hoja —`punto-cae`, `consent-in`, `split-bloom`—
-   siguen en `both` y comparten el rasgo. No se tocan aquí: ninguna está en un
-   elemento que vaya a recibir utilidades, y cambiarlas de paso sería meter tres
-   cambios sin medir en un commit de dos.) */
+   (Sus hermanas `consent-in` y `split-bloom` siguen en `both` y comparten el
+   rasgo. No se tocan aquí: ninguna está en un elemento que vaya a recibir
+   utilidades. El punto del titular ya no: desde D221 su glifo va en
+   `backwards`, y en `both` solo quedan sus capas, que son pseudoelementos.) */
 .entrada-pliegue {
   animation: entrada-pliegue var(--duration-entrance) var(--ease-entrance)
     var(--retardo-entrada, 0s) backwards;
@@ -1667,64 +1667,110 @@ svg .construye-abre {
    El progreso de cada fila es UN número, 0 a 1, que escribe el scroll. Todo lo
    visual lo lee de ahí, así que no hay dos fuentes que puedan discrepar.
    ═══════════════════════════════════════════════════════════════════════════ */
-/* ── LA FIRMA · el punto de «Del discovery al dato.» cae y se asienta ──
-   Es el único gesto del sitio que existe para ser RECORDADO, y por eso es el
-   único que se sale del listón de 300 ms: 420. Mismo tipo de excepción que el
-   florecer del 404, y con la misma coartada medida — ocurre UNA vez, al cargar,
-   y no compite con nada porque el titular ya está pintado.
+/* ── LA FIRMA · el punto de «Del discovery al dato.» se REGISTRA ──
+   EN PRUEBA (2026-10-15), en una rama para verlo en la home servida. Sustituye a
+   la «Caída» de D137, que era el único gesto del sitio que llegaba desde fuera de
+   su sitio: todo lo demás se construye donde vive (las aperturas, D218). Aquí las
+   dos capas del split —cian y morada— entran desplazadas y casan en un solo
+   punto, que se queda con la tinta de siempre.
 
-   DOS CURVAS, Y LA PRIMERA ROMPE UNA REGLA A PROPÓSITO. El catálogo de motion
-   prohíbe `ease-in` en UI, y `cubic-bezier(.55,0,1,.45)` es exactamente eso: una
-   curva que acelera. Se usa igual, y este es el único sitio del sitio donde se
-   usa, porque aquí describe algo real —lo que cae, acelera— y porque el tramo
-   acelerado es menos de la mitad del gesto: el aterrizaje, que es donde mira el
-   ojo, sí decelera. Con un ease-out en la bajada el punto no cae, frena, y
-   parece un ascensor. El rebote es 0,20, dentro del 0,1–0,3 que el mismo
-   catálogo da por sobrio.
+   LA DIRECCIÓN NO ES LA DEL MONOGRAMA, a propósito. Se probó la de `logo.tsx`
+   (cian arriba a la izquierda, morado abajo a la derecha) y el cian pasaba por
+   encima de la «o» de «dato» al arrancar. Con el cian por la izquierda y algo
+   bajo, y el morado por la derecha y algo alto, ninguna capa pisa el titular.
 
-   EL TITULAR NO NACE INVISIBLE, que es la restricción dura: solo se anima el
-   `span` del punto, nunca el h1. El LCP de la home es la foto, y esto no lo
-   toca. Y el punto ocupa su hueco desde el primer frame —`inline-block` con la
-   línea base explícita, y solo `transform`/`opacity`—, así que no hay CLS:
-   medido, la caja del h1 y la posición del subtítulo no se mueven ni un píxel.
+   DOS TIEMPOS DENTRO DEL TECHO DE D135, no una entrada de 420 ms: las capas
+   registran en `--duration-entrance` (el gesto `construye-abre`) y se sueltan en
+   la mitad mientras el glifo se rellena. Es una cascada, como las fichas.
 
-   LA TINTA ES `--progress-ink`, el morado calibrado para texto grande sobre
-   `--background`. Un punto es un detalle tipográfico, no un gráfico que haya que
-   entender, así que §Color deja entrar el morado; y aun así llega a AAA por el
-   umbral ESTRICTO: 7,21 en claro y 7,83 en oscuro, medidos sobre el píxel
-   pintado con el metro validado contra los anclajes de 13,79 y 15,32. */
+   LAS CAPAS SON PSEUDOELEMENTOS, no `span`: un punto de más en el DOM sería texto
+   del h1 para un buscador y para el markdown, aunque fuera `aria-hidden`. El
+   `content` de un `::before` no entra en el texto del documento.
+
+   LA OPACIDAD LA LLEVAN DOS ANIMACIONES, y por eso los modos de relleno son
+   distintos: `registra` va con `both` (invisible antes, visible al casar) y
+   `suelta` solo con `forwards`. Con `backwards` en la segunda, su primer fotograma
+   (opacidad 1) taparía el arranque de la primera durante el retardo.
+
+   EL GLIFO APARECE POR SU COLOR, NO POR SU OPACIDAD: las capas son sus
+   pseudoelementos, y una opacidad 0 en el punto las arrastraría con él durante
+   todo el registro. Con `color: transparent` el glifo no se ve y las capas, que
+   declaran su propio color, sí.
+
+   EL TITULAR NO NACE INVISIBLE, que es la restricción dura de D137: solo se anima
+   el `span` del punto y sus capas. Y no hay CLS: `inline-block` con la línea base
+   explícita, y solo `translate`/`opacity`.
+
+   LA TINTA ES `--progress-ink` (7,21 en claro y 7,83 en oscuro, D137). Los colores
+   del split solo se ven durante el gesto y nunca en reposo; aun así, salir del
+   logo pide su excepción escrita en `BRAND.md` si esto se queda. */
 .punto-firma {
+  position: relative;
   display: inline-block;
   vertical-align: baseline;
   color: var(--progress-ink);
-  animation: punto-cae 420ms both;
+  animation: punto-tinta calc(var(--duration-entrance) * 0.5)
+    var(--ease-entrance) calc(var(--construye-tras) + var(--duration-entrance))
+    backwards;
 }
-@keyframes punto-cae {
-  0% {
-    transform: translateY(-0.85em);
+.punto-firma::before,
+.punto-firma::after {
+  content: ".";
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  animation:
+    punto-registra var(--duration-entrance) var(--ease-entrance)
+      var(--construye-tras) both,
+    punto-suelta calc(var(--duration-entrance) * 0.5) var(--ease-entrance)
+      calc(var(--construye-tras) + var(--duration-entrance)) forwards;
+}
+.punto-firma::before {
+  color: var(--brand-cyan-split);
+  --dx: -0.16em;
+  --dy: 0.05em;
+}
+.punto-firma::after {
+  color: var(--brand-purple-split);
+  --dx: 0.16em;
+  --dy: -0.05em;
+}
+@keyframes punto-registra {
+  from {
     opacity: 0;
-    animation-timing-function: cubic-bezier(0.55, 0, 1, 0.45);
+    translate: var(--dx) var(--dy);
   }
-  46% {
-    transform: translateY(0);
+  30% {
     opacity: 1;
-    animation-timing-function: cubic-bezier(0.33, 0, 0.2, 1);
   }
-  68% {
-    transform: translateY(-0.1em);
-  }
-  86% {
-    transform: translateY(0.012em);
-  }
-  100% {
-    transform: translateY(0);
+  to {
+    opacity: 1;
+    translate: 0 0;
   }
 }
-/* Se retira el desplazamiento y el rebote; se conserva el fundido, y más corto
-   (D136). El punto sigue apareciendo: lo que se va es la caída. */
+@keyframes punto-suelta {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+/* D136: el desplazamiento de las capas se va entero; queda el fundido del punto,
+   corto. */
 @media (prefers-reduced-motion: reduce) {
   .punto-firma {
     animation: punto-entra 160ms var(--ease-entrance) both;
+  }
+  .punto-firma::before,
+  .punto-firma::after {
+    content: none;
+  }
+}
+@keyframes punto-tinta {
+  from {
+    color: transparent;
   }
 }
 @keyframes punto-entra {
