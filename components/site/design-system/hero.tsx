@@ -8,6 +8,7 @@ import {
   CONTAINER_PX,
   MEASURE_REM,
   SPACING_SCALE,
+  OBJETIVO_A11Y,
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 
@@ -307,7 +308,7 @@ export function Hero({
               .join(" · ")}
           />
           <Stat value={String(MEASURE_REM)} unit="rem" label={t.statMeasure} />
-          <Stat value="AA→AAA" label={t.statA11y} />
+          <Stat value={OBJETIVO_A11Y} label={t.statA11y} />
         </>
       }
     >

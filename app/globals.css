@@ -663,13 +663,19 @@
   --construye-tras: 0.12s;
   --construye-duracion: var(--duration-entrance);
   --construye-saltos: steps(7, end);
-  /* El cursor es decorativo (capa de marca). Sobre una superficie invertida el
-     cian estándar no se ve: la ficha lo cambia por `--primary-on-inverted`. */
+  /* El paso y la duración de una ficha de FONDO, con nombre propio porque los lee
+     también `trasFicha` (`ui/construye.tsx`) para encadenar una ficha detrás de
+     otra sin escribir segundos a mano. */
+  --construye-paso-fondo: 40ms;
+  --construye-duracion-fondo: calc(var(--duration-entrance) * 0.7);
+  /* El cursor es decorativo (capa de marca). Hoy ninguna ficha va sobre una
+     superficie invertida; la que vaya tendrá que cambiarlo por
+     `--primary-on-inverted`, porque ahí el cian estándar no se ve. */
   --construye-cursor: var(--brand-cyan);
 }
 .construye-fondo {
-  --construye-paso: 40ms;
-  --construye-duracion: calc(var(--duration-entrance) * 0.7);
+  --construye-paso: var(--construye-paso-fondo);
+  --construye-duracion: var(--construye-duracion-fondo);
 }
 .construye-linea,
 .construye-pieza,
@@ -707,6 +713,9 @@
     construye-cursor-luz var(--construye-duracion) linear
       var(--construye-retardo) backwards;
 }
+/* `linear` en `construye-cursor-luz` a propósito (D135): no es una entrada sino
+   un interruptor, y su forma la dan las paradas del keyframe (enciende al 4%,
+   apaga del 82% al final). Una curva deformaría esos instantes. */
 .construye-fondo .construye-linea::after {
   content: none;
 }

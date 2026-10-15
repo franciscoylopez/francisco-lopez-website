@@ -17,6 +17,7 @@ import {
   BREAKPOINT_COUNT,
   BREAKPOINTS,
   CONTAINER_PX,
+  OBJETIVO_A11Y,
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 import { GroupHead, SpecimenCard, TypeMeta, type SeccionMarco } from "./shared";
@@ -211,7 +212,7 @@ export function Tipografia({
               .map((b) => b.min)
               .join(" · ")}
           />
-          <Stat value="AA→AAA" label={t.stat.labels.contrast} />
+          <Stat value={OBJETIVO_A11Y} label={t.stat.labels.contrast} />
         </StatRow>
         <div className={cn(PAIR, "mt-8")}>
           <SpecimenCard

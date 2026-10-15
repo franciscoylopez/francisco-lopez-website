@@ -8,6 +8,7 @@ import {
   COLOR_TOKEN_COUNT,
   SPLIT_MIN_PX,
   TYPE_FAMILIES,
+  OBJETIVO_A11Y,
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 
@@ -349,7 +350,7 @@ export function Hero({
           <Stat value={String(COLOR_TOKEN_COUNT)} label={t.statColor} />
           <Stat value={String(TYPE_FAMILIES.length)} label={t.statTipografia} />
           <Stat value={String(SPLIT_MIN_PX)} unit="px" label={t.statSplit} />
-          <Stat value="AA→AAA" label={t.statA11y} />
+          <Stat value={OBJETIVO_A11Y} label={t.statA11y} />
         </>
       }
     >
