@@ -301,6 +301,18 @@
     "fueraWhere": "Dónde vive",
     "fueraItems": [
       {
+        "title": "Perfil de GitHub",
+        "desc": "Dos banners, uno por tema, con el titular del Hero. GitHub sirve el perfil en claro y en oscuro sin exponer ningún token que conmute, así que el README elige la imagen según el tema de quien lo lee: lo más cerca que se puede estar, fuera de aquí, de lo que hacen los tokens del sitio.",
+        "where": "GitHub, en la cabecera del perfil",
+        "href": "https://github.com/franciscoylopez"
+      },
+      {
+        "title": "Portada del repositorio",
+        "desc": "La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.",
+        "where": "GitHub, en los ajustes del repositorio",
+        "href": "https://github.com/franciscoylopez/francisco-lopez-website"
+      },
+      {
         "title": "Firma de email",
         "desc": "Símbolo split a 75px, el nombre en negrita y los dos canales, separados por un filete vertical. Va en tabla y con los estilos en línea, que es lo único que sobrevive intacto a un cliente de correo, y las imágenes por URL absoluta a este dominio porque los data-URI los capa Gmail.",
         "where": "Gmail, pegada en sus ajustes de firma",
@@ -313,12 +325,6 @@
         "href": "https://www.linkedin.com/in/franciscolopez1975"
       },
       {
-        "title": "Portada del repositorio",
-        "desc": "La tarjeta que enseña GitHub al compartir el repo, con ese mismo titular. No lleva ni una cifra: la sirve GitHub desde sus ajustes y no acepta una URL, así que nada podría mantenerla al día. Un dato que no puede tener guardián no es un dato, es una promesa.",
-        "where": "GitHub, en los ajustes del repositorio",
-        "href": "https://github.com/franciscoylopez/francisco-lopez-website"
-      },
-      {
         "title": "Carruseles de LinkedIn",
         "desc": "Las láminas de la serie, sobre el tema oscuro del sitio, con sus dos tipografías y el monograma con split. Los colores no se copian: el generador los lee de la misma fuente que este Brand Kit. Y antes de exportar comprueba que ningún bloque se salga de su lámina ni empuje la firma fuera del pie.",
         "where": "LinkedIn, en las publicaciones de la serie",
@@ -329,12 +335,6 @@
         "desc": "Las ilustraciones que abren Brand Kit, Design System, Accesibilidad y Trayectoria, en bucle y en 4:5. No se redibujaron para el vídeo: se capturaron de las páginas en producción, fotograma a fotograma y con el reloj de las animaciones parado, así que lo que se ve es exactamente lo que sirve el sitio.",
         "where": "LinkedIn, en la publicación del vídeo",
         "href": "https://www.linkedin.com/feed/update/urn:li:activity:7516392465130569728/"
-      },
-      {
-        "title": "Perfil de GitHub",
-        "desc": "Dos banners, uno por tema, con el titular del Hero. GitHub sirve el perfil en claro y en oscuro sin exponer ningún token que conmute, así que el README elige la imagen según el tema de quien lo lee: lo más cerca que se puede estar, fuera de aquí, de lo que hacen los tokens del sitio.",
-        "where": "GitHub, en la cabecera del perfil",
-        "href": "https://github.com/franciscoylopez"
       }
     ]
   },

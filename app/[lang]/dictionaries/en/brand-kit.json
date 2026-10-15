@@ -301,6 +301,18 @@
     "fueraWhere": "Where it lives",
     "fueraItems": [
       {
+        "title": "GitHub profile",
+        "desc": "Two banners, one per theme, with the Hero headline. GitHub serves the profile in light and dark without exposing any token that switches, so the README picks the image by the reader's theme: the closest anything outside this site can get to what its tokens do.",
+        "where": "GitHub, at the top of the profile",
+        "href": "https://github.com/franciscoylopez"
+      },
+      {
+        "title": "Repository cover",
+        "desc": "The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.",
+        "where": "GitHub, in the repository settings",
+        "href": "https://github.com/franciscoylopez/francisco-lopez-website"
+      },
+      {
         "title": "Email signature",
         "desc": "The split symbol at 75px, the name in bold and the two channels, split by a vertical rule. It is built as a table with inline styles, the only thing an email client leaves intact, and the images point at absolute URLs on this domain because Gmail strips data URIs.",
         "where": "Gmail, pasted into its signature settings",
@@ -313,12 +325,6 @@
         "href": "https://www.linkedin.com/in/franciscolopez1975"
       },
       {
-        "title": "Repository cover",
-        "desc": "The card GitHub shows when the repo is shared, with that same headline. It carries no figures at all: GitHub serves it from its settings and won't take a URL, so nothing could keep it current. A figure that can't have a guardian isn't a figure, it's a promise.",
-        "where": "GitHub, in the repository settings",
-        "href": "https://github.com/franciscoylopez/francisco-lopez-website"
-      },
-      {
         "title": "LinkedIn carousels",
         "desc": "The slides of the series, on the site's dark theme, with its two typefaces and the split monogram. The colors aren't copied: the generator reads them from the same source as this Brand Kit. And before exporting it checks that no block spills out of its slide or pushes the signature off the footer.",
         "where": "LinkedIn, in the posts of the series",
@@ -329,12 +335,6 @@
         "desc": "The illustrations that open the Brand Kit, Design System, Accessibility and Experience pages, looped and in 4:5. They weren't redrawn for the video: they were captured from the live pages, frame by frame with the animation clock stopped, so what you see is exactly what the site serves.",
         "where": "LinkedIn, in the video's post",
         "href": "https://www.linkedin.com/feed/update/urn:li:activity:7516392465130569728/"
-      },
-      {
-        "title": "GitHub profile",
-        "desc": "Two banners, one per theme, with the Hero headline. GitHub serves the profile in light and dark without exposing any token that switches, so the README picks the image by the reader's theme: the closest anything outside this site can get to what its tokens do.",
-        "where": "GitHub, at the top of the profile",
-        "href": "https://github.com/franciscoylopez"
       }
     ]
   },
