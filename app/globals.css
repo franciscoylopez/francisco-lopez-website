@@ -1705,8 +1705,9 @@ svg .construye-abre {
   display: inline-block;
   vertical-align: baseline;
   color: var(--progress-ink);
-  animation: punto-tinta calc(var(--duration-entrance) * 0.5) var(--ease-entrance)
-    calc(var(--construye-tras) + var(--duration-entrance)) backwards;
+  animation: punto-tinta calc(var(--duration-entrance) * 0.5)
+    var(--ease-entrance) calc(var(--construye-tras) + var(--duration-entrance))
+    backwards;
 }
 .punto-firma::before,
 .punto-firma::after {
