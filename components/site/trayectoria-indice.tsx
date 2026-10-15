@@ -14,7 +14,11 @@ import {
   titleVariants,
 } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
-import { LineaEscrita, turno } from "@/components/ui/construye";
+import {
+  BarrasConstruidas,
+  LineaEscrita,
+  turno,
+} from "@/components/ui/construye";
 import { IndexNote } from "@/components/ui/section-index";
 import { Stat } from "@/components/ui/stat-row";
 import { type Locale } from "@/lib/i18n/config";
@@ -141,24 +145,8 @@ const LINEA = "h-[5px] rounded-[3px]";
 // `i` de cada pieza —icono, rótulo, titular, cuerpo y barras—, y el reloj lo
 // pone la ficha. Mecanismo y porqué en `globals.css` §La ficha que se construye.
 //
-// LAS BARRAS VAN EN MORADO (2026-10-13), el único verde de la ficha que pasa a
-// la otra mitad de la marca. Es una excepción escrita en `BRAND.md`: el morado
-// no llega al 3:1 como gráfico en tema claro, y se admite porque estas barras
-// no cuentan ningún dato. Si un día lo cuentan, vuelven al cian.
-function Barras({ desde }: { desde: number }) {
-  return (
-    <div className="flex items-end gap-[5px]">
-      {[9, 15, 12, 21].map((alto, k) => (
-        <span
-          key={alto}
-          className="construye-barra bg-brand-purple block w-[8px] rounded-[2px]"
-          style={{ ...turno(desde + k), height: alto }}
-        />
-      ))}
-    </div>
-  );
-}
-
+// Las barras salen de `ui/construye.tsx` (`BarrasConstruidas`), con su excepción
+// morada escrita allí: las enseña también el Design System §Movimiento.
 function Dorso() {
   return (
     <>
@@ -217,7 +205,7 @@ function Frente() {
           />
         ))}
       </div>
-      <Barras desde={7} />
+      <BarrasConstruidas desde={7} />
     </>
   );
 }

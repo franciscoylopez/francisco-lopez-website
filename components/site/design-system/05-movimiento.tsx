@@ -1,6 +1,10 @@
 import { cn } from "@/lib/utils";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
-import { LineaEscrita, turno } from "@/components/ui/construye";
+import {
+  BarrasConstruidas,
+  LineaEscrita,
+  turno,
+} from "@/components/ui/construye";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
 import { SECTION, WRAP } from "@/components/ui/layout";
 import { EntradaDemo, RevealDemo } from "../design-system-islands";
@@ -77,33 +81,35 @@ function NavGlyph({ variant, h }: { variant: "split" | "flat"; h: number }) {
   );
 }
 
-// LA FICHA QUE SE CONSTRUYE, publicada con la pieza real (`ui/construye.tsx`)
-// y las clases reales de `globals.css`: es la de las cuatro portadas a escala
-// de demo. Dos líneas que se escriben y cuatro barras que llegan de una en una.
+// LA FICHA QUE SE CONSTRUYE, publicada con las piezas reales (`ui/construye.tsx`)
+// y las clases reales de `globals.css`, a escala de demo: una pieza que aparece,
+// dos líneas que se escriben y las barras de Trayectoria, que llegan de una en una.
+// La pieza va en `bg-background` y no en `bg-muted` como en la portada: aquí la
+// ficha ES `bg-muted`, y la pieza desaparecería.
+// El trazo y la apertura del split no caben en una ficha de este tamaño: se ven
+// en la apertura del Brand Kit, que es su único uso.
 function FichaConstruida() {
   return (
     <div className="flex h-full flex-col justify-between p-3">
-      <div className="flex flex-col gap-[6px]">
-        <LineaEscrita
-          i={0}
-          ancho="78%"
-          className="bg-foreground h-[7px] rounded-[3px]"
-        />
-        <LineaEscrita
-          i={1}
-          ancho="56%"
-          className="bg-foreground h-[5px] rounded-[3px]"
-        />
-      </div>
-      <div className="flex items-end gap-[5px]">
-        {[9, 15, 12, 21].map((alto, k) => (
-          <span
-            key={alto}
-            className="construye-barra bg-brand-cyan block w-[8px] rounded-[2px]"
-            style={{ ...turno(2 + k), height: alto }}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex flex-1 flex-col gap-[6px]">
+          <LineaEscrita
+            i={1}
+            ancho="78%"
+            className="bg-foreground h-[7px] rounded-[3px]"
           />
-        ))}
+          <LineaEscrita
+            i={2}
+            ancho="56%"
+            className="bg-foreground h-[5px] rounded-[3px]"
+          />
+        </div>
+        <div
+          className="construye-pieza bg-background size-[22px] rounded-[7px]"
+          style={turno(0)}
+        />
       </div>
+      <BarrasConstruidas desde={3} />
     </div>
   );
 }

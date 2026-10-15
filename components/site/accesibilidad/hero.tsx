@@ -3,7 +3,7 @@ import { type CSSProperties } from "react";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { Badge } from "@/components/ui/badge";
 import { CheckPill } from "@/components/ui/check-pill";
-import { LineaEscrita, turno } from "@/components/ui/construye";
+import { LineaEscrita, trasFicha, turno } from "@/components/ui/construye";
 import { Stat } from "@/components/ui/stat-row";
 import {
   levelOf,
@@ -280,9 +280,15 @@ function MuestraFoco() {
 // disposición de antes el checklist y el foco la tapaban.
 //
 // Y EN CASCADA: cada tarjeta entra cuando la anterior casi ha terminado de
-// construirse (0,04 · 0,55 · 1,05 s), no las tres a la vez como antes (0,08 ·
-// 0,16 · 0,24). Lo pidió Francisco al verlo. Con movimiento reducido los
+// construirse, no las tres a la vez como antes (0,08 · 0,16 · 0,24). Lo pidió
+// Francisco al verlo. Los retardos salen de `trasFicha`: la anterior más lo que
+// tarda en terminar su pieza 5, que en la del contraste es casi el final (llega
+// a 6,5) y en el checklist es el final. Unos 0,56 y 1,07 s. Con movimiento reducido los
 // retardos se anulan (`.entrada-pliegue`, D136), así que esa versión no espera.
+const RETARDO_CONTRASTE = "0.04s";
+const RETARDO_CHECKLIST = trasFicha(RETARDO_CONTRASTE, 5);
+const RETARDO_FOCO = trasFicha(RETARDO_CHECKLIST, 5);
+
 function HeroComposition({ lang }: { lang: Locale }) {
   return (
     <div
@@ -295,7 +301,10 @@ function HeroComposition({ lang }: { lang: Locale }) {
         <div
           className="entrada-pliegue construye-fondo border-border bg-background absolute top-0 right-0 w-[13.5rem] rounded-[14px] border p-[0.9rem]"
           style={
-            { rotate: "5deg", "--retardo-entrada": "0.04s" } as CSSProperties
+            {
+              rotate: "5deg",
+              "--retardo-entrada": RETARDO_CONTRASTE,
+            } as CSSProperties
           }
         >
           <TarjetaContraste compacta lang={lang} />
@@ -304,7 +313,10 @@ function HeroComposition({ lang }: { lang: Locale }) {
         <div
           className="entrada-pliegue construye-fondo border-border bg-background absolute top-[5.25rem] left-0 flex w-[11rem] flex-col gap-[0.55rem] rounded-[14px] border p-[0.95rem]"
           style={
-            { rotate: "-4deg", "--retardo-entrada": "0.55s" } as CSSProperties
+            {
+              rotate: "-4deg",
+              "--retardo-entrada": RETARDO_CHECKLIST,
+            } as CSSProperties
           }
         >
           {[100, 82, 94].map((w, i) => (
@@ -324,7 +336,10 @@ function HeroComposition({ lang }: { lang: Locale }) {
         <div
           className="entrada-pliegue absolute top-[11rem] right-6"
           style={
-            { rotate: "2deg", "--retardo-entrada": "1.05s" } as CSSProperties
+            {
+              rotate: "2deg",
+              "--retardo-entrada": RETARDO_FOCO,
+            } as CSSProperties
           }
         >
           <div className="ring-primary ring-offset-background rounded-[13px] ring-2 ring-offset-2">

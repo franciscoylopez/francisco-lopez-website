@@ -1,11 +1,19 @@
 import { cn } from "@/lib/utils";
 import { type Dictionary } from "@/app/[lang]/dictionaries";
 import { SectionHeader, titleVariants } from "@/components/ui/heading";
-import { PANEL, SECTION, WRAP } from "@/components/ui/layout";
+import { CARD, PANEL, SECTION, WRAP } from "@/components/ui/layout";
 import { SECTION_Y_RANGE_PX, SPACING_SCALE } from "@/lib/design-values";
 
 /* ===================== RITMO ===================== */
 import type { SeccionMarco } from "./shared";
+
+/** Las clases de los cuatro tipos de línea, en el orden de `ritmo.lines`. */
+const LINEAS = [
+  "section-sep",
+  "border-border border-t",
+  "border-border rule-full border-t",
+  cn(CARD, "h-full"),
+];
 
 export function Ritmo({
   t,
@@ -78,6 +86,24 @@ export function Ritmo({
             </ul>
           </div>
         </div>
+        {/* Los cuatro tipos de línea, cada uno con la clase que lo pinta en el sitio
+            (BRAND.md §Las líneas son cuatro): si la capa cambia, la muestra cambia. */}
+        <h3 className={cn(titleVariants({ size: "sub-sm" }), "mt-14 mb-6")}>
+          {t.linesTitle}
+        </h3>
+        <ul className="m-0 grid list-none gap-8 p-0 sm:grid-cols-2 lg:grid-cols-4">
+          {t.lines.map((l, i) => (
+            <li key={l.name}>
+              <div className="flex h-10 items-center" aria-hidden="true">
+                <div className={cn("w-full", LINEAS[i])} />
+              </div>
+              <p className="m-0 mt-3 text-[0.9rem] font-medium">{l.name}</p>
+              <p className="text-muted-foreground m-0 mt-1 text-[0.85rem]">
+                {l.body}
+              </p>
+            </li>
+          ))}
+        </ul>
         {marco.closer}
       </div>
     </section>

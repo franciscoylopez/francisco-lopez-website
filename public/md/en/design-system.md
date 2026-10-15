@@ -200,8 +200,23 @@ xl · 48px
 
 - Between major sections: --section-y, from 72px on mobile to 144px on desktop.
 - Section title → content: 40px (2.5rem).
-- Between blocks within a section: 24–32px. Optional hairline divider.
-- Every section opens with a 1px var(--border) divider full width.
+- Between blocks within a section: 24–32px.
+- Every section opens with a short, centred stroke that fades out to both sides: it marks the break without weighing as much as a row.
+
+### Four kinds of line
+
+- Centred stroke
+  
+  Between sections and blocks. The section brings it with it: nobody writes it.
+- Faded rule
+  
+  Between pieces of content. It starts where the text starts and fades out; the layer applies it to every one-sided rule.
+- Full rule
+  
+  For what works as a table without being one: the line ties each value to its row.
+- Border
+  
+  For boxes: cards, panels and fields.
 
 2 of 12
 

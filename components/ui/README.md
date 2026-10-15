@@ -28,7 +28,7 @@
 ### primitiva · 15
 - **`block-opener.tsx`** — La banda que abre un bloque de secciones: qué las agrupa y cuáles son. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*
 - **`check-pill.tsx`** — La marca de verificación de un checklist: pastilla teñida y su check. *([design-system/11-accesibilidad](../site/design-system/11-accesibilidad.tsx))*
-- **`construye.tsx`** — La línea que se escribe dentro de una ficha del pliegue, con su cursor. *([design-system/05-movimiento](../site/design-system/05-movimiento.tsx))*
+- **`construye.tsx`** — La línea que se escribe dentro de una ficha del pliegue, las barras que llegan de una en una y el reloj que encadena fichas. *([design-system/05-movimiento](../site/design-system/05-movimiento.tsx))*
 - **`copy-button.tsx`** — Copiar un valor al portapapeles: directo si hay uno, con menú si hay dos. *([design-system/01-rejilla](../site/design-system/01-rejilla.tsx))*
 - **`icons.tsx`** — Los iconos que lucide no trae (LinkedIn, GitHub), con la regla de autoría propia. *([brand-kit/06-uso](../site/brand-kit/06-uso.tsx))*
 - **`info-card.tsx`** — La tarjeta de nota: un título y su explicación, al margen del cuerpo. *([design-system/10-composicion](../site/design-system/10-composicion.tsx))*

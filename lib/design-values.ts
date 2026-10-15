@@ -521,6 +521,13 @@ export function ratioOf(id: ContrastId, theme: Theme): number {
  *  escala de la apertura de Accesibilidad, así que no pueden decir dos cosas. */
 export const WCAG_TEXTO = { AA: 4.5, AAA: 7 } as const;
 
+/** Y los de texto grande (≥24px, o ≥18,66px con peso ≥700), que bajan un escalón. */
+export const WCAG_TEXTO_GRANDE = { AA: 3, AAA: 4.5 } as const;
+
+/** El objetivo que publican las aperturas: AA de suelo, AAA donde se alcance
+ *  (BRAND.md §Accesibilidad). Estaba escrito a mano en tres cifras de tres páginas. */
+export const OBJETIVO_A11Y = "AA→AAA";
+
 /**
  * El nivel WCAG que alcanza una cifra. Se deriva porque es una función del número
  * —7:1 y 4,5:1 para texto normal; 4,5:1 y 3:1 para texto grande—, no un juicio.
@@ -531,8 +538,8 @@ export function wcagLevel(
   size?: "large",
 ): "AAA" | "AA" | "AA-large" | null {
   if (size === "large") {
-    if (ratio >= 4.5) return "AAA";
-    return ratio >= 3 ? "AA-large" : null;
+    if (ratio >= WCAG_TEXTO_GRANDE.AAA) return "AAA";
+    return ratio >= WCAG_TEXTO_GRANDE.AA ? "AA-large" : null;
   }
   if (ratio >= WCAG_TEXTO.AAA) return "AAA";
   return ratio >= WCAG_TEXTO.AA ? "AA" : null;

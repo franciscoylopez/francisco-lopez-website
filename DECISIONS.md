@@ -261,6 +261,7 @@
 - D217 (completa a D216) · El repositorio se rehace con la historia desde cero, y mientras fue privado `main` no tuvo protección
 - D218 · La ficha del pliegue se construye al cargar: una capa de CSS, una pieza, y las cifras del dibujo salen del sistema
 - D219 · El cierre de sección pierde el «Siguiente»: enlazaba a lo que ya estaba a la vista
+- D220 · El sistema de líneas sube a regla y a sección: el Design System seguía publicando el filete viejo
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -14171,3 +14172,23 @@ que no se ve.
 
 **Lo que no cambia.** D123 contaba con el pie para no perder el recorrido al quitar el riel; el
 recorrido sigue siendo el scroll, y el pie sigue diciendo dónde se está.
+
+## D220 · El sistema de líneas sube a regla y a sección: el Design System seguía publicando el filete viejo — 2026-10-15
+
+**Decisión.** Los cuatro tipos de línea que dejaron #26 y #27 (trazo centrado `.section-sep`, filete
+desvanecido, `.rule-full` y borde de caja) pasan a regla en presente en `BRAND.md` §Las líneas son
+cuatro, y el Design System §Ritmo los publica con las clases reales del sitio. El copy de §Ritmo deja
+de decir «un divisor de 1px a todo el ancho» en ES y EN.
+
+**Por qué.** Lo encontró el `design-review` del 2026-10-15. La capa y el uso estaban; la regla vivía
+solo en `BRAND-historical.md`, y la sección publicada enseñaba lo contrario de lo que el sitio pinta.
+Es el recorrido regla → capa → sección → uso parado en la mitad.
+
+**El selector implícito se queda.** El filete desvanecido lo pone `globals.css` a todo `border-border`
+de una cara, y lo que hay que recordar es la excepción (`.rule-full`), no la regla. Se valoró hacerlo
+explícito y se descartó: el valor por defecto tiene que ser el caso mayoritario, y lo es por mucho
+(34 líneas de clases frente a un solo componente, Hitos). Lo que lo hace seguro es que la excepción esté escrita y publicada.
+
+**Lo que costó.** El contexto de arranque estaba en su techo (11700), así que la regla entra
+retirando de `BRAND.md` lo duplicado: el porqué del censo, que ya está en `BRAND-historical.md`, y el
+«nunca hex» de §Modo oscuro, que ya dicen §Stack y `CLAUDE.md`.

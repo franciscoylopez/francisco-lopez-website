@@ -8,6 +8,7 @@ import {
   CONTAINER_PX,
   MEASURE_REM,
   SPACING_SCALE,
+  OBJETIVO_A11Y,
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 
@@ -250,14 +251,16 @@ function Ficha({
 
 // Composición decorativa. En móvil, `pt-8` deja sitio a la cota de arriba, que
 // sale de la ficha, y `overflow-x-clip` impide que la de la derecha desborde la
-// página a 320px.
+// página a 320px. El `pr-7` de la ficha móvil centra la ficha CON su cota de la
+// derecha (~26px fuera de ella), no la ficha sola: centrada sola, a 320 la cota
+// caía en x=297-310 y el clip se la comía.
 function HeroComposition() {
   return (
     <div
       aria-hidden="true"
       className="flex flex-[1_1_26rem] items-center justify-center pt-8 max-md:overflow-x-clip md:pt-0"
     >
-      <div className="md:hidden">
+      <div className="pr-7 md:hidden">
         <Ficha ancho={240} alto={176} completa={false} minimo="min-w-[308px]" />
       </div>
       <div className="hidden md:block">
@@ -305,7 +308,7 @@ export function Hero({
               .join(" · ")}
           />
           <Stat value={String(MEASURE_REM)} unit="rem" label={t.statMeasure} />
-          <Stat value="AA→AAA" label={t.statA11y} />
+          <Stat value={OBJETIVO_A11Y} label={t.statA11y} />
         </>
       }
     >

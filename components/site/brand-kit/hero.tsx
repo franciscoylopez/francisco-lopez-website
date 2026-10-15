@@ -8,6 +8,7 @@ import {
   COLOR_TOKEN_COUNT,
   SPLIT_MIN_PX,
   TYPE_FAMILIES,
+  OBJETIVO_A11Y,
 } from "@/lib/design-values";
 import { cn } from "@/lib/utils";
 
@@ -235,7 +236,10 @@ function Reticula({
       <Cota x1={c.x} y1={c.y - 6} x2={c.x} y2={c.y + 6} i={T0} />
       {/* el radio */}
       <Cota x1={c.x} y1={c.y} x2={c.x + r} y2={c.y} i={T0 + 4} />
-      <Rotulo x={c.x + r / 2} y={c.y - 6} i={T0 + 4.5}>
+      {/* Arranca justo pasado el brazo de la cruz del centro, no centrado en
+          el radio: centrado, en la ficha móvil tocaba la cara interior del
+          split cian, que asoma por dentro del aro a la derecha. */}
+      <Rotulo x={c.x + 7} y={c.y - 6} i={T0 + 4.5} ancla="start">
         {`r ${M.r}`}
       </Rotulo>
       {/* la base */}
@@ -260,7 +264,14 @@ function Reticula({
         <>
           <Cota x1={xTrazo} y1={c.y} x2={xTrazo + trazo} y2={c.y} i={T0 + 7} />
           <Topes a={xTrazo} b={xTrazo + trazo} en={c.y} horizontal i={T0 + 7} />
-          <Rotulo x={xTrazo - 5} y={c.y - 6} i={T0 + 7.5} ancla="end">
+          {/* El rótulo se aparta de la capa que más asoma por la izquierda (el
+              split cian), no del aro: contra el aro pisaba ~2px del cian. */}
+          <Rotulo
+            x={xTrazo + Math.min(M.cian.dx, M.morado.dx, 0) * k - 5}
+            y={c.y - 6}
+            i={T0 + 7.5}
+            ancla="end"
+          >
             {M.trazo}
           </Rotulo>
         </>
@@ -339,7 +350,7 @@ export function Hero({
           <Stat value={String(COLOR_TOKEN_COUNT)} label={t.statColor} />
           <Stat value={String(TYPE_FAMILIES.length)} label={t.statTipografia} />
           <Stat value={String(SPLIT_MIN_PX)} unit="px" label={t.statSplit} />
-          <Stat value="AA→AAA" label={t.statA11y} />
+          <Stat value={OBJETIVO_A11Y} label={t.statA11y} />
         </>
       }
     >
