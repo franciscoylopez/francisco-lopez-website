@@ -200,8 +200,23 @@ xl · 48px
 
 - Entre secciones mayores: --section-y, de 72px en móvil a 144px en escritorio.
 - Título de sección → contenido: 40px (2.5rem).
-- Entre bloques dentro de sección: 24–32px. Divisor hairline opcional.
-- Cada sección abre con un divisor de 1px var(--border) a todo el ancho.
+- Entre bloques dentro de sección: 24–32px.
+- Cada sección abre con un trazo corto y centrado que se desvanece hacia los lados: corta sin pesar como una fila.
+
+### Cuatro tipos de línea
+
+- Trazo centrado
+  
+  Entre secciones y bloques. Lo trae la sección: no se escribe.
+- Filete desvanecido
+  
+  Entre contenidos. Arranca donde empieza el texto y se apaga; la capa se lo pone a todo filete de una cara.
+- Filete entero
+  
+  En lo que funciona como tabla sin serlo: la línea ata el dato a su fila.
+- Borde
+  
+  Para las cajas: tarjetas, paneles y campos.
 
 2 de 12
 
