@@ -538,9 +538,9 @@
    ya está. Así que una composición del pliegue no puede animar por ahí, y eso no
    es un fallo suyo.
 
-   LO QUE ENTRA AL CARGAR YA TENÍA SU FORMA en esta hoja: `punto-cae` (el punto
-   del titular de la home, D137), `consent-in` y `split-bloom`. Las tres son
-   `@keyframes` con `both`, sin JS y sin esperar a la hidratación. Ésta es la
+   LO QUE ENTRA AL CARGAR YA TENÍA SU FORMA en esta hoja: el punto del titular
+   de la home (D137, hoy `punto-registra`, D221), `consent-in` y `split-bloom`.
+   Las tres son `@keyframes` sin JS y sin esperar a la hidratación. Ésta es la
    cuarta y su caso es el mismo que el del punto: un elemento decorativo del
    primer pliegue que aparece al cargar mientras el contenido de alrededor no.
 
@@ -574,10 +574,10 @@
    aplicado ANTES de arrancar, que es lo que impide el parpadeo durante el
    retardo— y al terminar devuelve el elemento a su estilo normal, que ya es
    opacidad 1 y sin transformar.
-   (Sus tres hermanas de esta hoja —`punto-cae`, `consent-in`, `split-bloom`—
-   siguen en `both` y comparten el rasgo. No se tocan aquí: ninguna está en un
-   elemento que vaya a recibir utilidades, y cambiarlas de paso sería meter tres
-   cambios sin medir en un commit de dos.) */
+   (Sus hermanas `consent-in` y `split-bloom` siguen en `both` y comparten el
+   rasgo. No se tocan aquí: ninguna está en un elemento que vaya a recibir
+   utilidades. El punto del titular ya no: desde D221 su glifo va en
+   `backwards`, y en `both` solo quedan sus capas, que son pseudoelementos.) */
 .entrada-pliegue {
   animation: entrada-pliegue var(--duration-entrance) var(--ease-entrance)
     var(--retardo-entrada, 0s) backwards;

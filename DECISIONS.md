@@ -178,7 +178,7 @@
 - D134 · El nodo WebSite existe, y con él el isPartOf que el código esperaba
 - D135 · El listón de una entrada baja a la capa, y la demo que lo publicaba deja de tener cifras propias
 - D136 · `prefers-reduced-motion` retira lo que desplaza, no lo que se funde
-- D137 · El gesto de marca son dos piezas, y una manda sobre la otra
+- D137 (la caída, superada por D221) · El gesto de marca son dos piezas, y una manda sobre la otra
 - D138 · El cupo de `General` no se puede comprobar, y lo que sí se mide es el embalse
 - D139 · Un trinquete cuyo trinquete se mueve es un termómetro que se repinta
 - D140 · La página de accesibilidad tiene el guardián del artículo, y el aparato sale a un sitio compartido
@@ -262,6 +262,7 @@
 - D218 · La ficha del pliegue se construye al cargar: una capa de CSS, una pieza, y las cifras del dibujo salen del sistema
 - D219 · El cierre de sección pierde el «Siguiente»: enlazaba a lo que ya estaba a la vista
 - D220 · El sistema de líneas sube a regla y a sección: el Design System seguía publicando el filete viejo
+- D221 · El punto de la firma deja de caer y se registra: el único gesto que llegaba desde fuera de su sitio
 <!-- FIN ÍNDICE -->
 
 ## D1 (superado en V2+) · El diseño se traduce, no se copia — 2026-07-24
@@ -8337,7 +8338,7 @@ quedar pendiente: **28 corridas, 414 pares de texto y 300 contornos, metro valid
 28, cero bajo AAA y cero por debajo del 3:1.** `LAST_A11Y_REVIEW` ya estaba en la fecha de
 hoy y no se toca.
 
-## D137 · El gesto de marca son dos piezas, y una manda sobre la otra — 2026-08-27
+## D137 (la caída, superada por D221) · El gesto de marca son dos piezas, y una manda sobre la otra — 2026-08-27
 
 **La firma es el punto de «Del discovery al dato.», que cae y se asienta. La textura es
 «Estratos», el filete que crece bajo el año en Hitos.** No son dos gestos: son uno y su
@@ -14192,3 +14193,50 @@ explícito y se descartó: el valor por defecto tiene que ser el caso mayoritari
 **Lo que costó.** El contexto de arranque estaba en su techo (11700), así que la regla entra
 retirando de `BRAND.md` lo duplicado: el porqué del censo, que ya está en `BRAND-historical.md`, y el
 «nunca hex» de §Modo oscuro, que ya dicen §Stack y `CLAUDE.md`.
+
+---
+
+## D221 · El punto de la firma deja de caer y se registra: el único gesto que llegaba desde fuera de su sitio — 2026-10-15
+
+**Decisión.** El punto de «Del discovery al dato.» sigue siendo la firma (D137), pero cambia cómo
+llega. Ya no cae ni rebota: **las dos capas del split, cian y morada, entran desplazadas y casan en un
+solo punto**, que se queda con la tinta de siempre (`--progress-ink`). La textura de Hitos no cambia.
+
+**Por qué.** Lo señaló Francisco: desde D218 todo lo que entra al cargar **se construye donde vive**
+(las líneas se escriben, las barras crecen, el aro se traza, el split se abre), y el punto era el único
+gesto que llegaba desde fuera de su sitio. La caída se eligió en D137 cuando ese vocabulario no
+existía; con él, desentonaba.
+
+### Se eligió viéndolo, en dos sitios
+
+Un prototipo con los tokens reales y seis direcciones, todas sacadas de los gestos de las aperturas:
+**Trazo** (`construye-traza`, el aro del monograma), **Registro** (`construye-abre`, el split),
+**Escrito** (el cursor de las fichas), y tres mezclas de trazo y color (**Trazo partido**,
+**Degradado en el trazo** y **Viraje**). Las mezclas no mejoraban a sus partes. Ganó Registro, y se
+confirmó **montado en la home de una preview**, no en el prototipo.
+
+**La dirección no es la del monograma, y se probó.** Con la de `logo.tsx` (cian arriba a la izquierda,
+morado abajo a la derecha) el cian pasaba por encima de la «o» de «dato» al arrancar. Se volvió a la
+del prototipo: cian por la izquierda y algo bajo, morado por la derecha y algo alto.
+
+### Lo que tiene de particular
+
+- **Dos tiempos dentro del techo de D135**, no los 420 ms de la caída: las capas registran en
+  `--duration-entrance` y se sueltan en la mitad mientras aparece el glifo. **Desaparece la excepción
+  de duración** que la caída tenía escrita.
+- **Las capas son pseudoelementos.** Un punto de más en el DOM sería texto del h1 para un buscador y
+  para el markdown (D158), aunque fuera `aria-hidden`.
+- **El glifo aparece por su color, no por su opacidad.** La primera versión animaba la opacidad del
+  punto, y las capas, que son sus hijas, desaparecían con él durante todo el registro: el gesto no se
+  veía. Se encontró congelando la animación fotograma a fotograma en el build servido.
+- **El split sale del logo**, y eso pide excepción escrita en `BRAND.md` §Logo. Se acota a lo que es:
+  solo durante el gesto, nunca en reposo.
+- **D137 descartó «Registro» como textura**, porque su reposo, un símbolo a medio registrar, parecía un
+  error de impresión. Aquí no hay reposo desregistrado: el desajuste dura 280 ms y termina limpio.
+
+**Lo que se aceptó al verlo:** en tema claro el morado del split (claro) da paso al `--progress-ink`
+(oscuro), y el punto cambia de tono al casar. En oscuro apenas se nota. Francisco lo dio por bueno en la
+preview.
+
+**Verificado:** el censo, con dos animaciones más (15 → 17): 28 corridas, 394 pares y 330 contornos, cero bajo AAA y cero bajo el 3:1, metro validado en las 28. `LAST_A11Y_REVIEW` NO se mueve: le faltan las dos pasadas manuales (D38). Queda para Francisco `/review-animations`,
+que solo puede lanzar él.
