@@ -55,13 +55,16 @@
  *   pintado bajo la caja del texto. Aquí se CUENTAN y se listan, no se juzgan.
  * - **Lo que está detrás de una interacción**: pestañas sin abrir, diálogos sin
  *   invocar. El censo ve el DOM que hay, no el que podría haber.
- * - **Un solo viewport.** El censo mide colores, que no dependen del ancho; el
- *   pliegue y el objetivo táctil son de `viewport-verifier` (D52).
+ * - **Un solo viewport, y FIJO** (`VIEWPORT`, abajo). El color no depende del
+ *   ancho, pero el UMBRAL sí: un titular con `clamp()` cambia de tamaño con él y
+ *   cruza la frontera de 24px de WCAG (D41). El pliegue y el objetivo táctil son
+ *   de `viewport-verifier` (D52).
  */
 
 import { locales, pagePath } from "../lib/i18n/config";
 import { PAGE_SLUGS } from "../lib/routes";
 import { juzgaCorrida, mideCorrida } from "./censo/corrida";
+import { ab } from "./navegador/agent-browser";
 import { HUELLA_PATH, huella, sellar } from "./censo/huella";
 import { guionDelCenso } from "./design-review/guion";
 import {
@@ -134,6 +137,19 @@ const inventario: Corrida[] = [];
 console.log(
   `censo — ${PAGE_SLUGS.length} páginas × ${TEMAS.length} temas sobre ${BASE}\n`,
 );
+
+/**
+ * EL VIEWPORT SE FIJA, NO SE HEREDA (design-review del 2026-10-15). La pasada
+ * medía al ancho que tuviera el daemon, y `titleVariants.card` tiene el techo de
+ * su `clamp()` justo en 24px: a 1262 pinta 23,98, pasa de texto grande a normal y
+ * el inventario daba dos pares «desaparecidos» sin que nada hubiera cambiado. Es
+ * el mismo fallo que el consentimiento heredado de `corrida.ts`: un estado del
+ * navegador que decide el resultado sin que nadie lo vea. Se abre antes de fijarlo
+ * porque `set viewport` sin página abierta se cuelga (lo cuenta `pliegue.ts`).
+ */
+const VIEWPORT = ["1440", "900"] as const;
+ab(["open", `${BASE}${pagePath(LOCALE, PAGINAS[0]!)}`]);
+ab(["set", "viewport", ...VIEWPORT]);
 
 for (const slug of PAGINAS) {
   const ruta = pagePath(LOCALE, slug);
